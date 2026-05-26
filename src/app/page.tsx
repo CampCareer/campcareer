@@ -1,101 +1,90 @@
-import Image from "next/image";
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { ArrowRight, Globe, GraduationCap, BarChart3 } from "lucide-react"
+
+const stats = [
+  { value: "5",    label: "Countries",       icon: Globe },
+  { value: "50+",  label: "Degrees",         icon: GraduationCap },
+  { value: "Real", label: "Salary Data",     icon: BarChart3 },
+]
+
+const countries = ["🇦🇺 Australia", "🇬🇧 UK", "🇨🇦 Canada", "🇮🇪 Ireland", "🇺🇸 USA"]
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="flex flex-col items-center justify-center min-h-full px-6 py-24">
+      <div className="max-w-2xl w-full mx-auto text-center">
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+        {/* Badge */}
+        <div className="inline-flex items-center gap-2 bg-indigo-50 text-indigo-600 text-xs font-medium px-3 py-1.5 rounded-full mb-8 border border-indigo-100">
+          <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
+          Data-driven career decisions
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        {/* Hero heading */}
+        <h1 className="text-5xl font-bold text-slate-900 leading-tight tracking-tight">
+          Find Your Best Country.
+          <br />
+          <span className="text-indigo-500">With Data, Not Emotions.</span>
+        </h1>
+
+        {/* Subtext */}
+        <p className="mt-6 text-lg text-slate-500 leading-relaxed">
+          Compare graduate salaries, tax, and cost of living across{" "}
+          <span className="text-slate-700 font-medium">
+            Australia, UK, Canada, Ireland & USA
+          </span>
+        </p>
+
+        {/* CTA */}
+        <div className="mt-10 flex items-center justify-center gap-3">
+          <Button
+            asChild
+            size="lg"
+            className="bg-indigo-500 hover:bg-indigo-600 text-white px-8 rounded-xl gap-2"
+          >
+            <Link href="/roi">
+              Explore ROI
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </Button>
+          <Button asChild variant="ghost" size="lg" className="text-slate-600 rounded-xl">
+            <Link href="/compare">Compare Countries</Link>
+          </Button>
+        </div>
+
+        {/* Country pills */}
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
+          {countries.map((c) => (
+            <span
+              key={c}
+              className="text-xs bg-white border border-slate-200 text-slate-600 px-3 py-1 rounded-full"
+            >
+              {c}
+            </span>
+          ))}
+        </div>
+
+        {/* Divider */}
+        <div className="mt-16 border-t border-slate-200" />
+
+        {/* Stats */}
+        <div className="mt-12 grid grid-cols-3 gap-6">
+          {stats.map(({ value, label, icon: Icon }) => (
+            <div
+              key={label}
+              className="flex flex-col items-center gap-2 bg-white border border-slate-200 rounded-2xl px-6 py-6 shadow-sm"
+            >
+              <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center">
+                <Icon className="w-5 h-5 text-indigo-500" />
+              </div>
+              <span className="text-3xl font-bold text-slate-900">{value}</span>
+              <span className="text-sm text-slate-500">{label}</span>
+            </div>
+          ))}
+        </div>
+
+      </div>
     </div>
-  );
+  )
 }
