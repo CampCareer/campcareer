@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils"
 
 const navItems = [
   { label: "Dashboard",       href: "/",         icon: LayoutDashboard },
-  { label: "ROI Explorer",    href: "/roi",       icon: TrendingUp },
+  { label: "ROI Explorer",    href: "/roi-explorer", icon: TrendingUp },
   { label: "Country Compare", href: "/compare",   icon: Globe },
   { label: "Checklist",       href: "/checklist", icon: CheckSquare },
   { label: "Timeline",        href: "/timeline",  icon: Calendar },

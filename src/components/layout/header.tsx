@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 
 const pageTitles: Record<string, string> = {
   "/":          "Dashboard",
-  "/roi":       "ROI Explorer",
+  "/roi-explorer": "ROI Explorer",
   "/compare":   "Country Compare",
   "/checklist": "Checklist",
   "/timeline":  "Timeline",
