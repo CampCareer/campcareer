@@ -14,7 +14,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import {
   DollarSign,
   Home,
@@ -165,7 +164,7 @@ export default function ROIExplorerPage() {
                 <Globe className="w-3.5 h-3.5 text-slate-400" />
                 Country
               </label>
-              <Select value={country} onValueChange={setCountry}>
+              <Select value={country} onValueChange={(v) => setCountry(v ?? "")}>
                 <SelectTrigger className="w-full h-10 rounded-xl border-slate-200 text-sm">
                   <SelectValue placeholder="Select country…" />
                 </SelectTrigger>
@@ -185,7 +184,7 @@ export default function ROIExplorerPage() {
                 <GraduationCap className="w-3.5 h-3.5 text-slate-400" />
                 Degree / Major
               </label>
-              <Select value={major} onValueChange={setMajor}>
+              <Select value={major} onValueChange={(v) => setMajor(v ?? "")}>
                 <SelectTrigger className="w-full h-10 rounded-xl border-slate-200 text-sm">
                   <SelectValue placeholder="Select major…" />
                 </SelectTrigger>
