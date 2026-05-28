@@ -27,6 +27,16 @@ export type College = {
   median_earnings: number | null
 }
 
+export type City = {
+  id: string
+  city_slug: string
+  name: string
+  state: string
+  cost_of_living_index: number | null
+  rent_median: number | null
+  synced_at: string | null
+}
+
 export type RoiExplorer = {
   id: string
   roi_score: number
