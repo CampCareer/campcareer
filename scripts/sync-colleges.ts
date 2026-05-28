@@ -25,11 +25,11 @@ const FIELDS = [
   'school.state',
   'school.city',
   'school.ownership',
-  'admissions.admission_rate.overall',
-  'student.size',
-  'cost.avg_net_price.overall',
-  'completion.rate_suppressed.overall',
-  'earnings.10_yrs_after_entry.median',
+  'latest.admissions.admission_rate.overall',
+  'latest.student.size',
+  'latest.cost.avg_net_price.overall',
+  'latest.completion.rate_suppressed.overall',
+  'latest.earnings.10_yrs_after_entry.median',
 ].join(',')
 
 type OwnershipCode = 1 | 2 | 3
