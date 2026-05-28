@@ -14,6 +14,7 @@ const SORT_ASCENDING: Record<SortField, boolean> = {
 export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl
   const state = searchParams.get('state') ?? 'CA'
+  const field = searchParams.get('field') ?? ''
   const limit = Math.min(parseInt(searchParams.get('limit') ?? '50', 10), 200)
   const sortParam = searchParams.get('sort') ?? 'roi_score'
 
@@ -22,13 +23,19 @@ export async function GET(req: NextRequest) {
     : 'roi_score'
 
   try {
-    const { data, count, error } = await supabase
+    let query = supabase
       .from('roi_explorer')
       .select('*', { count: 'exact' })
       .eq('college_state', state)
       .eq('city_state', state)
       .gt('roi_score', 0)
       .gt('payback_years', 0)
+
+    if (field) {
+      query = query.eq('field_name', field)
+    }
+
+    const { data, count, error } = await query
       .order(sort, { ascending: SORT_ASCENDING[sort] })
       .limit(limit)
 
