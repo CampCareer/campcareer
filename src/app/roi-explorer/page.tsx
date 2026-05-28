@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import {
   Select,
   SelectContent,
@@ -12,7 +12,7 @@ import {
   Card,
   CardContent,
 } from "@/components/ui/card"
-import { TrendingUp } from "lucide-react"
+import { TrendingUp, X } from "lucide-react"
 
 type RoiRow = {
   college_id: string
@@ -21,6 +21,7 @@ type RoiRow = {
   city_id: string
   city_name: string
   city_state: string
+  field_name: string
   roi_score: number
   net_salary: number
   payback_years: number
@@ -91,14 +92,18 @@ const US_STATES = [
   { abbr: "WY", name: "Wyoming" },
 ] as const
 
+function trimDot(s: string) {
+  return s.endsWith('.') ? s.slice(0, -1) : s
+}
+
 function fmtUSD(n: number) {
   return `$${Math.round(n).toLocaleString()}`
 }
 
-function SkeletonRow() {
+function SkeletonRow({ cols }: { cols: number }) {
   return (
     <tr>
-      {Array.from({ length: 7 }).map((_, i) => (
+      {Array.from({ length: cols }).map((_, i) => (
         <td key={i} className="px-4 py-3">
           <div className="h-4 rounded bg-slate-100 animate-pulse" />
         </td>
@@ -107,8 +112,114 @@ function SkeletonRow() {
   )
 }
 
+function FieldCombobox({
+  value,
+  onChange,
+}: {
+  value: string
+  onChange: (v: string) => void
+}) {
+  const [input, setInput] = useState(value ? trimDot(value) : "")
+  const [options, setOptions] = useState<string[]>([])
+  const [open, setOpen] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    function handler(e: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handler)
+    return () => document.removeEventListener("mousedown", handler)
+  }, [])
+
+  // Keep input in sync when value is cleared externally
+  useEffect(() => {
+    if (!value) setInput("")
+  }, [value])
+
+  // Debounced autocomplete fetch
+  useEffect(() => {
+    if (!input.trim()) {
+      setOptions([])
+      setOpen(false)
+      return
+    }
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/roi/fields?q=${encodeURIComponent(input)}`)
+        const json = await res.json()
+        setOptions(json.fields ?? [])
+        setOpen(true)
+      } catch {
+        // ignore
+      }
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [input])
+
+  function handleSelect(f: string) {
+    setInput(trimDot(f))
+    onChange(f)
+    setOpen(false)
+  }
+
+  function handleClear() {
+    setInput("")
+    onChange("")
+    setOptions([])
+    setOpen(false)
+  }
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setInput(e.target.value)
+    if (!e.target.value) onChange("")
+  }
+
+  return (
+    <div ref={containerRef} className="relative">
+      <div className="relative flex items-center">
+        <input
+          type="text"
+          value={input}
+          onChange={handleChange}
+          onFocus={() => options.length > 0 && setOpen(true)}
+          placeholder="Search field of study…"
+          className="w-64 h-10 rounded-xl border border-slate-200 px-3 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 bg-white"
+        />
+        {input && (
+          <button
+            onClick={handleClear}
+            className="absolute right-2.5 text-slate-400 hover:text-slate-600"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
+        )}
+      </div>
+
+      {open && options.length > 0 && (
+        <div className="absolute z-50 mt-1 w-full min-w-[280px] rounded-xl border border-slate-200 bg-white shadow-lg max-h-60 overflow-y-auto">
+          {options.map((f) => (
+            <button
+              key={f}
+              onMouseDown={(e) => e.preventDefault()} // prevent input blur before click
+              onClick={() => handleSelect(f)}
+              className="w-full px-3 py-2 text-left text-sm hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 transition-colors"
+            >
+              {trimDot(f)}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function ROIExplorerPage() {
   const [state, setState] = useState("CA")
+  const [field, setField] = useState("")
   const [sort, setSort]   = useState("roi_score")
   const [limit, setLimit] = useState(50)
   const [data, setData]   = useState<RoiRow[]>([])
@@ -122,7 +233,10 @@ export default function ROIExplorerPage() {
     setLoading(true)
     setError(null)
 
-    fetch(`/api/roi?state=${state}&limit=${limit}&sort=${sort}`)
+    const params = new URLSearchParams({ state, limit: String(limit), sort })
+    if (field) params.set("field", field)
+
+    fetch(`/api/roi?${params}`)
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
         return res.json()
@@ -134,7 +248,18 @@ export default function ROIExplorerPage() {
       })
       .catch((err: Error) => setError(err.message))
       .finally(() => setLoading(false))
-  }, [state, sort, limit])
+  }, [state, field, sort, limit])
+
+  const TABLE_COLS = [
+    ["College",     "text-left"],
+    ["Field",       "text-left"],
+    ["City",        "text-left"],
+    ["ROI Score",   "text-right"],
+    ["Net Salary",  "text-right"],
+    ["Payback",     "text-right"],
+    ["Tuition",     "text-right"],
+    ["Grad Rate",   "text-right"],
+  ] as const
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-10 space-y-8">
@@ -168,6 +293,11 @@ export default function ROIExplorerPage() {
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-slate-600">Field of Study</label>
+              <FieldCombobox value={field} onChange={setField} />
             </div>
 
             <div className="space-y-1.5">
@@ -222,15 +352,7 @@ export default function ROIExplorerPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-200">
-                  {[
-                    ["College",     "text-left"],
-                    ["City",        "text-left"],
-                    ["ROI Score",   "text-right"],
-                    ["Net Salary",  "text-right"],
-                    ["Payback",     "text-right"],
-                    ["Tuition",     "text-right"],
-                    ["Grad Rate",   "text-right"],
-                  ].map(([label, align]) => (
+                  {TABLE_COLS.map(([label, align]) => (
                     <th
                       key={label}
                       className={`px-4 py-3 ${align} text-xs font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap`}
@@ -242,11 +364,16 @@ export default function ROIExplorerPage() {
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {loading
-                  ? Array.from({ length: 8 }).map((_, i) => <SkeletonRow key={i} />)
+                  ? Array.from({ length: 8 }).map((_, i) => (
+                      <SkeletonRow key={i} cols={TABLE_COLS.length} />
+                    ))
                   : data.map((row) => (
-                    <tr key={`${row.college_id}-${row.city_id}`} className="hover:bg-slate-50 transition-colors">
-                      <td className="px-4 py-3 font-medium text-slate-800 max-w-[220px] truncate">
+                    <tr key={`${row.college_id}-${row.city_id}-${row.field_name}`} className="hover:bg-slate-50 transition-colors">
+                      <td className="px-4 py-3 font-medium text-slate-800 max-w-[200px] truncate">
                         {row.college_name}
+                      </td>
+                      <td className="px-4 py-3 text-slate-600 max-w-[180px] truncate">
+                        {trimDot(row.field_name)}
                       </td>
                       <td className="px-4 py-3 text-slate-500 whitespace-nowrap">
                         {row.city_name}

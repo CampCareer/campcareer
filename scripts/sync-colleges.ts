@@ -56,7 +56,6 @@ interface ScorecardResult {
 async function fetchPage(page: number, perPage: number = 100): Promise<{ results: ScorecardResult[]; total: number }> {
   const params = new URLSearchParams({
     api_key: API_KEY!,
-    'school.state': 'CA',
     fields: FIELDS,
     per_page: String(perPage),
     page: String(page),
@@ -95,7 +94,7 @@ async function main() {
   let total = Infinity
   let synced = 0
 
-  console.log('Starting College Scorecard sync (state=CA)...')
+  console.log('Starting College Scorecard sync (all US)...')
 
   while (page * PER_PAGE < total) {
     const { results, total: fetchedTotal } = await fetchPage(page, PER_PAGE)
