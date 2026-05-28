@@ -21,7 +21,7 @@ type RoiRow = {
   city_id: string
   city_name: string
   city_state: string
-  field_name: string
+  field_name: string | null
   roi_score: number
   net_salary: number
   payback_years: number
@@ -92,7 +92,8 @@ const US_STATES = [
   { abbr: "WY", name: "Wyoming" },
 ] as const
 
-function trimDot(s: string) {
+function trimDot(s: string | null) {
+  if (!s) return '—'
   return s.endsWith('.') ? s.slice(0, -1) : s
 }
 
