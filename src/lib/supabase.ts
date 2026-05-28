@@ -24,6 +24,7 @@ export type College = {
   admission_rate: number
   graduation_rate: number
   avg_net_price: number
+  median_earnings: number | null
 }
 
 export type RoiExplorer = {
