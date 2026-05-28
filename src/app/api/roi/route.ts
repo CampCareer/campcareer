@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
     : 'roi_score'
 
   try {
-    let query = field
+    const query = field
       ? supabase
           .from('roi_explorer_by_field')
           .select('*', { count: 'exact' })
