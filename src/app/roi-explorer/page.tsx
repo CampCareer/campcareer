@@ -38,7 +38,6 @@ const SORT_OPTIONS = [
 const LIMIT_OPTIONS = [20, 50, 100] as const
 
 const US_STATES = [
-  { abbr: "ALL", name: "All States" },
   { abbr: "AL", name: "Alabama" },
   { abbr: "AK", name: "Alaska" },
   { abbr: "AZ", name: "Arizona" },
@@ -118,7 +117,6 @@ export default function ROIExplorerPage() {
   const [error, setError]     = useState<string | null>(null)
 
   const stateName = US_STATES.find((s) => s.abbr === state)?.name ?? state
-  const isAll = state === "ALL"
 
   useEffect(() => {
     setLoading(true)
@@ -145,13 +143,11 @@ export default function ROIExplorerPage() {
       <div>
         <div className="inline-flex items-center gap-2 bg-indigo-50 text-indigo-600 text-xs font-medium px-3 py-1.5 rounded-full mb-4 border border-indigo-100">
           <TrendingUp className="w-3 h-3" />
-          Live data · {isAll ? "US colleges" : `${stateName} colleges`}
+          Live data · {stateName} colleges
         </div>
         <h1 className="text-3xl font-bold text-slate-900 tracking-tight">ROI Explorer</h1>
         <p className="mt-2 text-slate-500 text-sm leading-relaxed">
-          {isAll
-            ? "Compare return on investment across all US colleges and cities."
-            : `Compare return on investment across ${stateName} colleges and cities.`}
+          Compare return on investment across {stateName} colleges and cities.
         </p>
       </div>
 
