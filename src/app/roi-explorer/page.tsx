@@ -98,7 +98,7 @@ export default function ROIExplorerPage() {
 
             <div className="space-y-1.5">
               <label className="text-xs font-medium text-slate-600">Sort by</label>
-              <Select value={sort} onValueChange={setSort}>
+              <Select value={sort} onValueChange={(v) => v && setSort(v)}>
                 <SelectTrigger className="w-44 h-10 rounded-xl border-slate-200 text-sm">
                   <SelectValue />
                 </SelectTrigger>
@@ -112,7 +112,7 @@ export default function ROIExplorerPage() {
 
             <div className="space-y-1.5">
               <label className="text-xs font-medium text-slate-600">Results</label>
-              <Select value={String(limit)} onValueChange={(v) => setLimit(Number(v))}>
+              <Select value={String(limit)} onValueChange={(v) => v && setLimit(Number(v))}>
                 <SelectTrigger className="w-28 h-10 rounded-xl border-slate-200 text-sm">
                   <SelectValue />
                 </SelectTrigger>
