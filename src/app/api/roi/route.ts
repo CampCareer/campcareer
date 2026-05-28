@@ -1,0 +1,47 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { supabase } from '@/lib/supabase'
+
+const VALID_SORT_FIELDS = ['roi_score', 'payback_years', 'net_salary'] as const
+type SortField = typeof VALID_SORT_FIELDS[number]
+
+// payback_years: ascending (fewer years = better), others: descending
+const SORT_ASCENDING: Record<SortField, boolean> = {
+  roi_score: false,
+  net_salary: false,
+  payback_years: true,
+}
+
+export async function GET(req: NextRequest) {
+  const { searchParams } = req.nextUrl
+  const state = searchParams.get('state') ?? 'CA'
+  const field = searchParams.get('field')
+  const limit = Math.min(parseInt(searchParams.get('limit') ?? '50', 10), 200)
+  const sortParam = searchParams.get('sort') ?? 'roi_score'
+
+  const sort: SortField = VALID_SORT_FIELDS.includes(sortParam as SortField)
+    ? (sortParam as SortField)
+    : 'roi_score'
+
+  try {
+    let query = supabase
+      .from('roi_explorer')
+      .select('*', { count: 'exact' })
+      .eq('college_state', state)
+      .order(sort, { ascending: SORT_ASCENDING[sort] })
+      .limit(limit)
+
+    if (field) {
+      query = query.eq('field_name', field)
+    }
+
+    const { data, count, error } = await query
+
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 })
+    }
+
+    return NextResponse.json({ data, count })
+  } catch (err) {
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
+}
