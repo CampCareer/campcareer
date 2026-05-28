@@ -23,17 +23,21 @@ export async function GET(req: NextRequest) {
     : 'roi_score'
 
   try {
-    let query = supabase
-      .from('roi_explorer')
-      .select('*', { count: 'exact' })
-      .eq('college_state', state)
-      .eq('city_state', state)
-      .gt('roi_score', 0)
-      .gt('payback_years', 0)
-
-    if (field) {
-      query = query.eq('field_name', field)
-    }
+    let query = field
+      ? supabase
+          .from('roi_explorer_by_field')
+          .select('*', { count: 'exact' })
+          .eq('college_state', state)
+          .ilike('field_name', `%${field}%`)
+          .gt('roi_score', 0)
+          .gt('payback_years', 0)
+      : supabase
+          .from('roi_explorer')
+          .select('*', { count: 'exact' })
+          .eq('college_state', state)
+          .eq('city_state', state)
+          .gt('roi_score', 0)
+          .gt('payback_years', 0)
 
     const { data, count, error } = await query
       .order(sort, { ascending: SORT_ASCENDING[sort] })
