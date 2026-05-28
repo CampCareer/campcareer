@@ -18,6 +18,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
 
 type College = {
   id: string
+  state: string
   median_earnings: number
   avg_net_price: number
   graduation_rate: number
@@ -26,6 +27,7 @@ type College = {
 
 type City = {
   id: string
+  state: string
   rent_median: number
 }
 
@@ -104,22 +106,23 @@ function calcSnapshot(college: College, city: City): Snapshot | null {
 }
 
 async function main() {
-  console.log('Clearing roi_snapshots...')
-  const { error: delError } = await supabase
-    .from('roi_snapshots')
-    .delete()
-    .not('id', 'is', null)
-  if (delError) {
-    console.error('Delete error:', delError.message)
+  console.log('Truncating roi_snapshots...')
+  const { error: truncError } = await supabase.rpc('truncate_roi_snapshots')
+  if (truncError) {
+    console.error('Truncate error:', truncError.message)
+    console.error('  → Run this in Supabase SQL Editor first:')
+    console.error('    CREATE OR REPLACE FUNCTION truncate_roi_snapshots()')
+    console.error('    RETURNS void LANGUAGE plpgsql SECURITY DEFINER AS')
+    console.error("    $$ BEGIN TRUNCATE TABLE roi_snapshots; END; $$;")
     process.exit(1)
   }
-  console.log('  Cleared.')
+  console.log('  Truncated.')
 
-  console.log('Fetching CA colleges...')
+  console.log('Fetching all colleges...')
   const allColleges = await fetchAll<College & { median_earnings: number | null; avg_net_price: number | null; graduation_rate: number | null; enrollment: number | null }>(
     'colleges',
-    'id,median_earnings,avg_net_price,graduation_rate,enrollment',
-    { state: 'CA' },
+    'id,state,median_earnings,avg_net_price,graduation_rate,enrollment',
+    {},
   )
   const colleges = allColleges.filter(
     (c) =>
@@ -130,45 +133,59 @@ async function main() {
   ) as College[]
   console.log(`  ${colleges.length} colleges after quality filter (out of ${allColleges.length})`)
 
-  console.log('Fetching CA cities...')
+  console.log('Fetching all cities...')
   const allCities = await fetchAll<City & { rent_median: number | null }>(
     'cities',
-    'id,rent_median',
-    { state: 'CA' },
+    'id,state,rent_median',
+    {},
   )
   const cities = allCities.filter((c) => c.rent_median != null) as City[]
   console.log(`  ${cities.length} cities with rent data (out of ${allCities.length})`)
 
-  console.log('Calculating ROI snapshots...')
-  const snapshots: Snapshot[] = []
-  for (const college of colleges) {
-    for (const city of cities) {
-      const snapshot = calcSnapshot(college, city)
-      if (snapshot) snapshots.push(snapshot)
-    }
+  // Group cities by state for O(1) lookup
+  const citiesByState = new Map<string, City[]>()
+  for (const city of cities) {
+    const list = citiesByState.get(city.state) ?? []
+    list.push(city)
+    citiesByState.set(city.state, list)
   }
-  console.log(`  ${snapshots.length} valid snapshots (skipped ${colleges.length * cities.length - snapshots.length} with net_salary ≤ 0)`)
 
+  console.log('Calculating and upserting ROI snapshots (same-state matching)...')
   const BATCH = 500
   let upserted = 0
-  console.log('Upserting to roi_snapshots...')
+  let skipped = 0
 
-  for (let i = 0; i < snapshots.length; i += BATCH) {
-    const chunk = snapshots.slice(i, i + BATCH)
-    const { error } = await supabase
-      .from('roi_snapshots')
-      .upsert(chunk, { onConflict: 'college_id,city_id' })
+  for (let ci = 0; ci < colleges.length; ci++) {
+    const college = colleges[ci]
+    const stateCities = citiesByState.get(college.state) ?? []
+    const snapshots: Snapshot[] = []
 
-    if (error) {
-      console.error('Upsert error:', error.message)
-      process.exit(1)
+    for (const city of stateCities) {
+      const snapshot = calcSnapshot(college, city)
+      if (snapshot) snapshots.push(snapshot)
+      else skipped++
     }
 
-    upserted += chunk.length
-    process.stdout.write(`\r  ${upserted} / ${snapshots.length}`)
+    for (let i = 0; i < snapshots.length; i += BATCH) {
+      const chunk = snapshots.slice(i, i + BATCH)
+      const { error } = await supabase
+        .from('roi_snapshots')
+        .upsert(chunk, { onConflict: 'college_id,city_id' })
+
+      if (error) {
+        console.error('Upsert error:', error.message)
+        process.exit(1)
+      }
+
+      upserted += chunk.length
+    }
+
+    if ((ci + 1) % 100 === 0 || ci === colleges.length - 1) {
+      process.stdout.write(`\r  College ${ci + 1}/${colleges.length} — saved ${upserted} snapshots`)
+    }
   }
 
-  console.log(`\nDone. Saved ${upserted} ROI snapshots.`)
+  console.log(`\nDone. Saved ${upserted} ROI snapshots (skipped ${skipped} with net_salary ≤ 0).`)
 }
 
 main().catch((err) => {
