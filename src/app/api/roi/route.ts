@@ -21,16 +21,24 @@ export async function GET(req: NextRequest) {
     ? (sortParam as SortField)
     : 'roi_score'
 
+  const isAll = state === 'ALL'
+
   try {
-    const { data, count, error } = await supabase
+    let query = supabase
       .from('roi_explorer')
       .select('*', { count: 'exact' })
-      .eq('college_state', state)
-      .eq('city_state', state)
       .gt('roi_score', 0)
       .gt('payback_years', 0)
       .order(sort, { ascending: SORT_ASCENDING[sort] })
       .limit(limit)
+
+    if (isAll) {
+      query = query.eq('same_state', true)
+    } else {
+      query = query.eq('college_state', state).eq('city_state', state)
+    }
+
+    const { data, count, error } = await query
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 })
