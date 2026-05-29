@@ -89,15 +89,13 @@ function FieldCombobox({
       return
     }
     const t = setTimeout(async () => {
-      // Always propagate the typed value so parent search fires without needing dropdown
-      onChangeRef.current(input.trim())
       try {
         const res = await fetch(`/api/roi/fields?q=${encodeURIComponent(input)}`)
         const json = await res.json()
         setOptions(json.fields ?? [])
         if (json.fields?.length > 0) setOpen(true)
       } catch { /* ignore */ }
-    }, 400)
+    }, 300)
     return () => clearTimeout(t)
   }, [input])
 
@@ -111,6 +109,21 @@ function FieldCombobox({
     setInput(""); onChangeRef.current(""); setOptions([]); setOpen(false)
   }
 
+  // Confirm with Enter key when dropdown is closed or no match is highlighted
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter") {
+      if (open && options.length > 0) {
+        // Select the first suggestion on Enter
+        handleSelect(options[0])
+      } else if (input.trim()) {
+        onChangeRef.current(input.trim())
+        setOpen(false)
+      }
+    } else if (e.key === "Escape") {
+      setOpen(false)
+    }
+  }
+
   return (
     <div ref={containerRef} className="relative">
       <div className="relative flex items-center">
@@ -119,13 +132,8 @@ function FieldCombobox({
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onFocus={() => options.length > 0 && setOpen(true)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && input.trim()) {
-              onChangeRef.current(input.trim())
-              setOpen(false)
-            }
-          }}
-          placeholder="e.g. Computer Science, Business…"
+          onKeyDown={handleKeyDown}
+          placeholder="Search field of study…"
           className="w-80 h-11 rounded-xl border border-slate-200 px-4 pr-9 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 bg-white shadow-sm"
         />
         {input && (
@@ -361,9 +369,9 @@ function CompareContent() {
       {!field && !loading && (
         <div className="rounded-xl border border-dashed border-slate-200 bg-white py-20 text-center">
           <BarChart2 className="w-10 h-10 text-slate-200 mx-auto mb-3" />
-          <p className="text-slate-500 text-sm font-medium">Select a field to compare across countries</p>
+          <p className="text-slate-500 text-sm font-medium">Search and select a field to compare across countries</p>
           <p className="text-slate-400 text-xs mt-1">
-            Try &ldquo;Computer Science&rdquo;, &ldquo;Business&rdquo;, or &ldquo;Nursing&rdquo;
+            Type a field name, then pick from the suggestions or press Enter
           </p>
         </div>
       )}
