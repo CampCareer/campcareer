@@ -13,8 +13,10 @@ const SORT_ASCENDING: Record<SortField, boolean> = {
 
 export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl
-  const country = searchParams.get('country') === 'au' ? 'au' : 'us'
-  const state = searchParams.get('state') ?? (country === 'au' ? 'NSW' : 'CA')
+  const countryParam = searchParams.get('country')
+  const country = countryParam === 'au' ? 'au' : countryParam === 'ca' ? 'ca' : 'us'
+  const defaultState = country === 'au' ? 'NSW' : country === 'ca' ? 'ON' : 'CA'
+  const state = searchParams.get('state') ?? defaultState
   const field = searchParams.get('field') ?? ''
   const limit = Math.min(parseInt(searchParams.get('limit') ?? '50', 10), 200)
   const sortParam = searchParams.get('sort') ?? 'roi_score'
@@ -27,6 +29,13 @@ export async function GET(req: NextRequest) {
     const query = country === 'au'
       ? supabase
           .from('roi_explorer_au')
+          .select('*', { count: 'exact' })
+          .eq('college_state', state)
+          .gt('roi_score', 0)
+          .gt('payback_years', 0)
+      : country === 'ca'
+      ? supabase
+          .from('roi_explorer_ca')
           .select('*', { count: 'exact' })
           .eq('college_state', state)
           .gt('roi_score', 0)
