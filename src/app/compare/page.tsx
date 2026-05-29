@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, Suspense } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import dynamic from "next/dynamic"
 import Link from "next/link"
-import { TrendingUp, X, ArrowRight, BarChart2 } from "lucide-react"
+import { TrendingUp, X, ArrowRight, BarChart2, Search } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import type { ChartEntry } from "./bar-chart"
 
@@ -54,6 +54,8 @@ function trimDot(s: string | null) {
 
 // ── FieldCombobox ─────────────────────────────────────────────────────────────
 
+const MIN_CHARS = 3   // dropdown opens only after this many characters
+
 function FieldCombobox({
   value,
   onChange,
@@ -61,14 +63,15 @@ function FieldCombobox({
   value: string
   onChange: (v: string) => void
 }) {
-  const [input, setInput] = useState(value ? trimDot(value) : "")
+  const [input, setInput]     = useState(value ? trimDot(value) : "")
   const [options, setOptions] = useState<string[]>([])
-  const [open, setOpen] = useState(false)
-  const containerRef = useRef<HTMLDivElement>(null)
-  // Keep a stable ref to onChange so the debounce effect doesn't need it as a dep
+  const [open, setOpen]       = useState(false)
+  const containerRef          = useRef<HTMLDivElement>(null)
+  // Stable ref so debounce/handlers don't need onChange in their dep arrays
   const onChangeRef = useRef(onChange)
   onChangeRef.current = onChange
 
+  // Close dropdown on outside click
   useEffect(() => {
     function handler(e: MouseEvent) {
       if (containerRef.current && !containerRef.current.contains(e.target as Node))
@@ -78,72 +81,111 @@ function FieldCombobox({
     return () => document.removeEventListener("mousedown", handler)
   }, [])
 
+  // Sync input when parent clears value externally
   useEffect(() => {
     if (!value) setInput("")
   }, [value])
 
+  // Autocomplete-only debounce — never fires comparison, just fetches suggestions
   useEffect(() => {
-    if (!input.trim()) {
-      setOptions([]); setOpen(false)
-      onChangeRef.current("")
+    const trimmed = input.trim()
+    if (trimmed.length < MIN_CHARS) {
+      setOptions([])
+      setOpen(false)
       return
     }
     const t = setTimeout(async () => {
       try {
-        const res = await fetch(`/api/roi/fields?q=${encodeURIComponent(input)}`)
+        const res  = await fetch(`/api/roi/fields?q=${encodeURIComponent(trimmed)}`)
         const json = await res.json()
-        setOptions(json.fields ?? [])
-        if (json.fields?.length > 0) setOpen(true)
+        const fields: string[] = json.fields ?? []
+        setOptions(fields)
+        setOpen(fields.length > 0)
       } catch { /* ignore */ }
     }, 300)
     return () => clearTimeout(t)
   }, [input])
 
+  // Commit a confirmed field to the parent (fires comparison)
+  function commit(f: string) {
+    const clean = f.trim()
+    if (!clean) return
+    onChangeRef.current(clean)
+  }
+
+  // User picks from dropdown — immediate commit
   function handleSelect(f: string) {
     setInput(trimDot(f))
-    onChangeRef.current(f)
     setOpen(false)
+    commit(f)
   }
 
+  // X button — clear everything including parent comparison state
   function handleClear() {
-    setInput(""); onChangeRef.current(""); setOptions([]); setOpen(false)
+    setInput("")
+    setOptions([])
+    setOpen(false)
+    onChangeRef.current("")
   }
 
-  // Confirm with Enter key when dropdown is closed or no match is highlighted
+  // Keyboard: Enter confirms first suggestion (if open) or current text (≥ MIN_CHARS)
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
+      e.preventDefault()
       if (open && options.length > 0) {
-        // Select the first suggestion on Enter
         handleSelect(options[0])
-      } else if (input.trim()) {
-        onChangeRef.current(input.trim())
+      } else if (input.trim().length >= MIN_CHARS) {
         setOpen(false)
+        commit(input)
       }
     } else if (e.key === "Escape") {
       setOpen(false)
     }
   }
 
+  const canSearch = input.trim().length >= MIN_CHARS
+
   return (
     <div ref={containerRef} className="relative">
-      <div className="relative flex items-center">
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onFocus={() => options.length > 0 && setOpen(true)}
-          onKeyDown={handleKeyDown}
-          placeholder="Search field of study…"
-          className="w-80 h-11 rounded-xl border border-slate-200 px-4 pr-9 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 bg-white shadow-sm"
-        />
-        {input && (
-          <button onClick={handleClear} className="absolute right-3 text-slate-400 hover:text-slate-600">
-            <X className="w-3.5 h-3.5" />
-          </button>
-        )}
+      <div className="flex items-center gap-2">
+
+        {/* Text input with inline clear button */}
+        <div className="relative">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onFocus={() => options.length > 0 && setOpen(true)}
+            onKeyDown={handleKeyDown}
+            placeholder="e.g. Computer Science, Nursing…"
+            className="w-72 h-11 rounded-xl border border-slate-200 px-4 pr-9 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 bg-white shadow-sm"
+          />
+          {input && (
+            <button
+              onClick={handleClear}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
+        </div>
+
+        {/* Explicit Compare / Search button */}
+        <button
+          onClick={() => { if (canSearch) { setOpen(false); commit(input) } }}
+          disabled={!canSearch}
+          className="inline-flex items-center gap-1.5 h-11 px-4 rounded-xl text-sm font-medium transition-colors
+            bg-indigo-600 text-white hover:bg-indigo-700
+            disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed"
+        >
+          <Search className="w-3.5 h-3.5" />
+          Compare
+        </button>
       </div>
+
+      {/* Autocomplete dropdown */}
       {open && options.length > 0 && (
-        <div className="absolute z-50 mt-1 w-full min-w-[320px] rounded-xl border border-slate-200 bg-white shadow-lg max-h-60 overflow-y-auto">
+        <div className="absolute z-50 top-full mt-1 w-72 rounded-xl border border-slate-200 bg-white shadow-lg max-h-60 overflow-y-auto">
           {options.map((f) => (
             <button
               key={f}
@@ -369,9 +411,9 @@ function CompareContent() {
       {!field && !loading && (
         <div className="rounded-xl border border-dashed border-slate-200 bg-white py-20 text-center">
           <BarChart2 className="w-10 h-10 text-slate-200 mx-auto mb-3" />
-          <p className="text-slate-500 text-sm font-medium">Search and select a field to compare across countries</p>
+          <p className="text-slate-500 text-sm font-medium">Search a field to compare across countries</p>
           <p className="text-slate-400 text-xs mt-1">
-            Type a field name, then pick from the suggestions or press Enter
+            Type 3+ characters → pick from suggestions or press Enter / Compare
           </p>
         </div>
       )}
