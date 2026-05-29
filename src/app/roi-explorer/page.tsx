@@ -103,9 +103,23 @@ const AU_STATES = [
   { abbr: "NT",  name: "Northern Territory" },
 ] as const
 
+const CA_PROVINCES = [
+  { abbr: "ON", name: "Ontario" },
+  { abbr: "BC", name: "British Columbia" },
+  { abbr: "QC", name: "Quebec" },
+  { abbr: "AB", name: "Alberta" },
+  { abbr: "MB", name: "Manitoba" },
+  { abbr: "NS", name: "Nova Scotia" },
+  { abbr: "NB", name: "New Brunswick" },
+  { abbr: "SK", name: "Saskatchewan" },
+  { abbr: "NL", name: "Newfoundland and Labrador" },
+  { abbr: "PE", name: "Prince Edward Island" },
+] as const
+
 const COUNTRY_OPTIONS = [
   { value: "us", label: "🇺🇸 United States" },
   { value: "au", label: "🇦🇺 Australia" },
+  { value: "ca", label: "🇨🇦 Canada" },
 ] as const
 
 function trimDot(s: string | null) {
@@ -235,7 +249,7 @@ function FieldCombobox({
 }
 
 export default function ROIExplorerPage() {
-  const [country, setCountry] = useState<"us" | "au">("us")
+  const [country, setCountry] = useState<"us" | "au" | "ca">("us")
   const [state, setState] = useState("CA")
   const [field, setField] = useState("")
   const [sort, setSort]   = useState("roi_score")
@@ -245,13 +259,14 @@ export default function ROIExplorerPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError]     = useState<string | null>(null)
 
-  const stateList = country === "au" ? AU_STATES : US_STATES
+  const stateList = country === "au" ? AU_STATES : country === "ca" ? CA_PROVINCES : US_STATES
   const stateName = stateList.find((s) => s.abbr === state)?.name ?? state
+  const stateLabel = country === "ca" ? "Province" : "State"
 
   function handleCountryChange(v: string) {
-    const c = v as "us" | "au"
+    const c = v as "us" | "au" | "ca"
     setCountry(c)
-    setState(c === "au" ? "NSW" : "CA")
+    setState(c === "au" ? "NSW" : c === "ca" ? "ON" : "CA")
     setField("")
   }
 
@@ -294,7 +309,7 @@ export default function ROIExplorerPage() {
       <div>
         <div className="inline-flex items-center gap-2 bg-indigo-50 text-indigo-600 text-xs font-medium px-3 py-1.5 rounded-full mb-4 border border-indigo-100">
           <TrendingUp className="w-3 h-3" />
-          Live data · {stateName} {country === "au" ? "universities" : "colleges"}
+          Live data · {stateName} {country === "us" ? "colleges" : "universities"}
         </div>
         <h1 className="text-3xl font-bold text-slate-900 tracking-tight">ROI Explorer</h1>
         <p className="mt-2 text-slate-500 text-sm leading-relaxed">
@@ -322,7 +337,7 @@ export default function ROIExplorerPage() {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-slate-600">State</label>
+              <label className="text-xs font-medium text-slate-600">{stateLabel}</label>
               <Select value={state} onValueChange={(v) => v && setState(v)}>
                 <SelectTrigger className="w-52 h-10 rounded-xl border-slate-200 text-sm">
                   <SelectValue />
