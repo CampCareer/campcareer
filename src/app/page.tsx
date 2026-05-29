@@ -43,7 +43,7 @@ export default function Home() {
             size="lg"
             className="bg-indigo-500 hover:bg-indigo-600 text-white px-8 rounded-xl gap-2"
           >
-            <Link href="/roi">
+            <Link href="/roi-explorer">
               Explore ROI
               <ArrowRight className="w-4 h-4" />
             </Link>
