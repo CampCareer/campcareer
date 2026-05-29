@@ -316,24 +316,38 @@ function ROIExplorerContent() {
   }
 
   useEffect(() => {
+    let cancelled = false
+    const controller = new AbortController()
+
     setLoading(true)
     setError(null)
 
     const params = new URLSearchParams({ country, state, limit: String(limit), sort })
     if (field && country === "us") params.set("field", field)
 
-    fetch(`/api/roi?${params}`)
+    fetch(`/api/roi?${params}`, { signal: controller.signal })
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
         return res.json()
       })
       .then((json) => {
+        if (cancelled) return          // discard if superseded
         if (json.error) throw new Error(json.error)
         setData(json.data ?? [])
         setCount(json.count ?? 0)
       })
-      .catch((err: Error) => setError(err.message))
-      .finally(() => setLoading(false))
+      .catch((err: Error) => {
+        if (cancelled) return
+        if (err.name !== 'AbortError') setError(err.message)
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false)
+      })
+
+    return () => {
+      cancelled = true
+      controller.abort()
+    }
   }, [country, state, field, sort, limit])
 
   const TABLE_COLS = [
@@ -471,8 +485,8 @@ function ROIExplorerContent() {
                   ? Array.from({ length: 8 }).map((_, i) => (
                       <SkeletonRow key={i} cols={TABLE_COLS.length} />
                     ))
-                  : data.map((row) => (
-                    <tr key={`${row.college_id}-${row.city_id}-${row.field_name}`} className="hover:bg-slate-50 transition-colors">
+                  : data.map((row, i) => (
+                    <tr key={`${i}-${row.college_id}-${row.city_id ?? ''}-${row.field_name ?? ''}`} className="hover:bg-slate-50 transition-colors">
                       <td className="px-4 py-3 font-medium text-slate-800 max-w-[200px] truncate">
                         {row.college_name}
                       </td>
