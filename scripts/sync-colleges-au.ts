@@ -1,6 +1,5 @@
 import * as dotenv from 'dotenv'
 import * as path from 'path'
-import * as fs from 'fs'
 import * as https from 'https'
 import * as http from 'http'
 import AdmZip from 'adm-zip'
@@ -20,6 +19,30 @@ if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
 }
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
+
+// institution_id slug → { avg_net_price, graduation_rate }
+// Slugs are derived from QILT names (e.g. "The University of Melbourne" → "the-university-of-melbourne")
+const HARDCODED_TUITION: Record<string, { avg_net_price: number; graduation_rate: number }> = {
+  'the-university-of-melbourne':        { avg_net_price: 42000, graduation_rate: 0.85 },
+  'the-university-of-sydney':           { avg_net_price: 44000, graduation_rate: 0.84 },
+  'the-australian-national-university': { avg_net_price: 41000, graduation_rate: 0.83 },
+  'the-university-of-queensland':       { avg_net_price: 38000, graduation_rate: 0.82 },
+  'university-of-new-south-wales':      { avg_net_price: 43000, graduation_rate: 0.84 },
+  'monash-university':                  { avg_net_price: 38000, graduation_rate: 0.81 },
+  'the-university-of-western-australia':{ avg_net_price: 36000, graduation_rate: 0.80 },
+  'the-university-of-adelaide':         { avg_net_price: 35000, graduation_rate: 0.79 },
+  'university-of-technology-sydney':    { avg_net_price: 36000, graduation_rate: 0.78 },
+  'rmit-university':                    { avg_net_price: 33000, graduation_rate: 0.75 },
+  'queensland-university-of-technology':{ avg_net_price: 32000, graduation_rate: 0.76 },
+  'university-of-wollongong':           { avg_net_price: 30000, graduation_rate: 0.77 },
+  'macquarie-university':               { avg_net_price: 37000, graduation_rate: 0.79 },
+  'deakin-university':                  { avg_net_price: 30000, graduation_rate: 0.74 },
+  'griffith-university':                { avg_net_price: 29000, graduation_rate: 0.73 },
+  'la-trobe-university':                { avg_net_price: 28000, graduation_rate: 0.72 },
+  'university-of-newcastle':            { avg_net_price: 28000, graduation_rate: 0.74 },
+  'curtin-university':                  { avg_net_price: 30000, graduation_rate: 0.73 },
+}
+const DEFAULT_TUITION = { avg_net_price: 27000, graduation_rate: 0.70 }
 
 const QILT_ZIP_URL =
   'https://www.qilt.edu.au/docs/default-source/default-document-library/gos_2024_national_report_tables.zip'
@@ -169,10 +192,56 @@ async function main() {
   }
 
   console.log(`Done. Upserted ${records.length} rows into colleges_au.`)
+
+  // Step 2: update avg_net_price & graduation_rate
+  console.log('\nUpdating avg_net_price and graduation_rate...')
+  let updated = 0
+  let defaulted = 0
+
   for (const r of records) {
-    console.log(
-      `  ${r.institution_id} | ${r.state ?? 'N/A'} | earnings: ${r.median_earnings}`
-    )
+    const patch = HARDCODED_TUITION[r.institution_id] ?? DEFAULT_TUITION
+    const { error: updateError } = await supabase
+      .from('colleges_au')
+      .update(patch)
+      .eq('institution_id', r.institution_id)
+
+    if (updateError) {
+      console.error(`  Update failed for ${r.institution_id}: ${updateError.message}`)
+      process.exit(1)
+    }
+
+    if (HARDCODED_TUITION[r.institution_id]) {
+      console.log(`  [named]   ${r.institution_id} → $${patch.avg_net_price} / ${patch.graduation_rate}`)
+      updated++
+    } else {
+      defaulted++
+    }
+  }
+  console.log(`Updated: ${updated} named, ${defaulted} defaulted (avg_net_price: $${DEFAULT_TUITION.avg_net_price}, grad_rate: ${DEFAULT_TUITION.graduation_rate})`)
+
+  // Step 3: refresh materialized view
+  console.log('\nRefreshing materialized view roi_explorer_au...')
+  const projectRef = SUPABASE_URL!.match(/https:\/\/([^.]+)/)?.[1]
+  if (!projectRef) throw new Error('Cannot parse project ref from SUPABASE_URL')
+
+  const refreshRes = await fetch(
+    `https://api.supabase.com/v1/projects/${projectRef}/database/query`,
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.SUPABASE_ACCESS_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query: 'REFRESH MATERIALIZED VIEW roi_explorer_au;' }),
+    }
+  )
+
+  if (!refreshRes.ok) {
+    const body = await refreshRes.text()
+    console.warn(`  Warning: Could not refresh view (${refreshRes.status}): ${body}`)
+    console.warn('  Run manually: REFRESH MATERIALIZED VIEW roi_explorer_au;')
+  } else {
+    console.log('  roi_explorer_au refreshed.')
   }
 }
 
