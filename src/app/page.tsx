@@ -8,7 +8,13 @@ const stats = [
   { value: "Real", label: "Salary Data",     icon: BarChart3 },
 ]
 
-const countries = ["🇦🇺 Australia", "🇬🇧 UK", "🇨🇦 Canada", "🇮🇪 Ireland", "🇺🇸 USA"]
+const COUNTRY_PILLS = [
+  { label: "🇦🇺 Australia", code: "au" },
+  { label: "🇬🇧 UK",        code: "uk" },
+  { label: "🇨🇦 Canada",    code: "ca" },
+  { label: "🇮🇪 Ireland",   code: "ie" },
+  { label: "🇺🇸 USA",       code: "us" },
+]
 
 export default function Home() {
   return (
@@ -55,13 +61,14 @@ export default function Home() {
 
         {/* Country pills */}
         <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
-          {countries.map((c) => (
-            <span
-              key={c}
-              className="text-xs bg-white border border-slate-200 text-slate-600 px-3 py-1 rounded-full"
+          {COUNTRY_PILLS.map(({ label, code }) => (
+            <Link
+              key={code}
+              href={`/roi-explorer?country=${code}`}
+              className="text-xs bg-white border border-slate-200 text-slate-600 px-3 py-1 rounded-full hover:bg-indigo-50 hover:border-indigo-200 hover:text-indigo-600 transition-colors cursor-pointer"
             >
-              {c}
-            </span>
+              {label}
+            </Link>
           ))}
         </div>
 
