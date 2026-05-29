@@ -166,7 +166,7 @@ async function main() {
     for (let i = 0; i < deduped.length; i += BATCH) {
       const chunk = deduped.slice(i, i + BATCH)
       const { error } = await supabase
-        .from('cities')
+        .from('cities_us')
         .upsert(chunk, { onConflict: 'city_slug' })
 
       if (error) {

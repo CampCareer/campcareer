@@ -109,7 +109,7 @@ async function main() {
     const rows = results.map(transform)
 
     const { error } = await supabase
-      .from('colleges')
+      .from('colleges_us')
       .upsert(rows, { onConflict: 'unit_id' })
 
     if (error) {
