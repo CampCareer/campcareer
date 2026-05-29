@@ -8,10 +8,12 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ fields: [] })
   }
 
+  // programs table does not exist — query distinct field_name from the US ROI view
   const { data, error } = await supabase
-    .from('programs')
+    .from('roi_explorer_by_field_us')
     .select('field_name')
     .ilike('field_name', `%${q}%`)
+    .not('field_name', 'is', null)
     .limit(500)
 
   if (error) {
@@ -21,9 +23,10 @@ export async function GET(req: NextRequest) {
   const seen = new Set<string>()
   const unique: string[] = []
   for (const r of data) {
-    if (!seen.has(r.field_name)) {
-      seen.add(r.field_name)
-      unique.push(r.field_name)
+    const name = r.field_name as string | null
+    if (name && !seen.has(name)) {
+      seen.add(name)
+      unique.push(name)
     }
   }
   unique.sort()

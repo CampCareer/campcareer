@@ -393,7 +393,7 @@ function ROIExplorerContent() {
       </div>
 
       {/* Filters */}
-      <Card className="shadow-sm">
+      <Card className="shadow-sm overflow-visible">
         <CardContent className="pt-4 pb-5">
           <div className="flex flex-wrap items-end gap-4">
 
