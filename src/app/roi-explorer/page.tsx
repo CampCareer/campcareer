@@ -116,10 +116,26 @@ const CA_PROVINCES = [
   { abbr: "PE", name: "Prince Edward Island" },
 ] as const
 
+const UK_REGIONS = [
+  { abbr: "London",           name: "London" },
+  { abbr: "South East",       name: "South East" },
+  { abbr: "Scotland",         name: "Scotland" },
+  { abbr: "North West",       name: "North West" },
+  { abbr: "Yorkshire",        name: "Yorkshire" },
+  { abbr: "West Midlands",    name: "West Midlands" },
+  { abbr: "South West",       name: "South West" },
+  { abbr: "East Midlands",    name: "East Midlands" },
+  { abbr: "North East",       name: "North East" },
+  { abbr: "East",             name: "East of England" },
+  { abbr: "Wales",            name: "Wales" },
+  { abbr: "Northern Ireland", name: "Northern Ireland" },
+] as const
+
 const COUNTRY_OPTIONS = [
   { value: "us", label: "🇺🇸 United States" },
   { value: "au", label: "🇦🇺 Australia" },
   { value: "ca", label: "🇨🇦 Canada" },
+  { value: "uk", label: "🇬🇧 United Kingdom" },
 ] as const
 
 function trimDot(s: string | null) {
@@ -249,7 +265,7 @@ function FieldCombobox({
 }
 
 export default function ROIExplorerPage() {
-  const [country, setCountry] = useState<"us" | "au" | "ca">("us")
+  const [country, setCountry] = useState<"us" | "au" | "ca" | "uk">("us")
   const [state, setState] = useState("CA")
   const [field, setField] = useState("")
   const [sort, setSort]   = useState("roi_score")
@@ -259,14 +275,17 @@ export default function ROIExplorerPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError]     = useState<string | null>(null)
 
-  const stateList = country === "au" ? AU_STATES : country === "ca" ? CA_PROVINCES : US_STATES
+  const stateList = country === "au" ? AU_STATES
+    : country === "ca" ? CA_PROVINCES
+    : country === "uk" ? UK_REGIONS
+    : US_STATES
   const stateName = stateList.find((s) => s.abbr === state)?.name ?? state
-  const stateLabel = country === "ca" ? "Province" : "State"
+  const stateLabel = country === "ca" ? "Province" : country === "uk" ? "Region" : "State"
 
   function handleCountryChange(v: string) {
-    const c = v as "us" | "au" | "ca"
+    const c = v as "us" | "au" | "ca" | "uk"
     setCountry(c)
-    setState(c === "au" ? "NSW" : c === "ca" ? "ON" : "CA")
+    setState(c === "au" ? "NSW" : c === "ca" ? "ON" : c === "uk" ? "London" : "CA")
     setField("")
   }
 
@@ -313,7 +332,7 @@ export default function ROIExplorerPage() {
         </div>
         <h1 className="text-3xl font-bold text-slate-900 tracking-tight">ROI Explorer</h1>
         <p className="mt-2 text-slate-500 text-sm leading-relaxed">
-          Compare return on investment across {stateName} colleges and cities.
+          Compare return on investment across {stateName} {country === "us" ? "colleges" : "universities"} and cities.
         </p>
       </div>
 
