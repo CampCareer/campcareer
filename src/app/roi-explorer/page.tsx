@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, Suspense } from "react"
+import { useSearchParams } from "next/navigation"
 import {
   Select,
   SelectContent,
@@ -272,9 +273,22 @@ function FieldCombobox({
   )
 }
 
-export default function ROIExplorerPage() {
-  const [country, setCountry] = useState<"us" | "au" | "ca" | "uk" | "ie">("us")
-  const [state, setState] = useState("CA")
+const VALID_COUNTRIES = ['us', 'au', 'ca', 'uk', 'ie'] as const
+type Country = typeof VALID_COUNTRIES[number]
+
+const DEFAULT_STATE: Record<Country, string> = {
+  us: 'CA', au: 'NSW', ca: 'ON', uk: 'London', ie: 'Leinster',
+}
+
+function ROIExplorerContent() {
+  const searchParams = useSearchParams()
+  const paramCountry = searchParams.get('country') as Country | null
+  const initialCountry: Country = paramCountry && VALID_COUNTRIES.includes(paramCountry)
+    ? paramCountry
+    : 'us'
+
+  const [country, setCountry] = useState<Country>(initialCountry)
+  const [state, setState] = useState(DEFAULT_STATE[initialCountry])
   const [field, setField] = useState("")
   const [sort, setSort]   = useState("roi_score")
   const [limit, setLimit] = useState(50)
@@ -493,5 +507,13 @@ export default function ROIExplorerPage() {
       )}
 
     </div>
+  )
+}
+
+export default function ROIExplorerPage() {
+  return (
+    <Suspense>
+      <ROIExplorerContent />
+    </Suspense>
   )
 }
