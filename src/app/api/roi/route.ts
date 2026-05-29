@@ -25,14 +25,14 @@ export async function GET(req: NextRequest) {
   try {
     const query = field
       ? supabase
-          .from('roi_explorer_by_field')
+          .from('roi_explorer_by_field_us')
           .select('*', { count: 'exact' })
           .eq('college_state', state)
           .ilike('field_name', `%${field}%`)
           .gt('roi_score', 0)
           .gt('payback_years', 0)
       : supabase
-          .from('roi_explorer')
+          .from('roi_explorer_us')
           .select('*', { count: 'exact' })
           .eq('college_state', state)
           .gt('roi_score', 0)

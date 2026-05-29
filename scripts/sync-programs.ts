@@ -89,7 +89,7 @@ async function loadCollegeIdMap(): Promise<Map<string, string | number>> {
 
   while (true) {
     const { data, error } = await supabase
-      .from('colleges')
+      .from('colleges_us')
       .select('id, unit_id')
       .range(from, from + batchSize - 1)
 
@@ -177,7 +177,7 @@ async function main() {
 
     if (dedupedRows.length > 0) {
       const { error } = await supabase
-        .from('programs')
+        .from('programs_us')
         .upsert(dedupedRows, { onConflict: 'college_id,cip_code' })
 
       if (error) {
