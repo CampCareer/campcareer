@@ -23,6 +23,7 @@ type CountryStats = {
   avg_payback: number
   top3: Top3Item[]
   count: number
+  field_data_available: boolean
 }
 
 const COUNTRIES = ["us", "au", "ca", "uk", "ie"] as const
@@ -317,6 +318,13 @@ function CountryCard({
                 <ArrowRight className="w-3 h-3" />
               </Link>
             </div>
+
+            {/* Field data notice for non-US countries */}
+            {!stats.field_data_available && (
+              <p className="text-[10px] text-slate-400 text-center pt-0.5 leading-tight">
+                Field data not available — showing overall ROI
+              </p>
+            )}
           </>
         )}
       </CardContent>
