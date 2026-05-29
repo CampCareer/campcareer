@@ -35,7 +35,6 @@ export async function GET(req: NextRequest) {
           .from('roi_explorer')
           .select('*', { count: 'exact' })
           .eq('college_state', state)
-          .eq('city_state', state)
           .gt('roi_score', 0)
           .gt('payback_years', 0)
 
