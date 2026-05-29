@@ -147,13 +147,26 @@ const COUNTRY_OPTIONS = [
   { value: "ie", label: "🇮🇪 Ireland" },
 ] as const
 
+// ── Currency helpers ─────────────────────────────────────────────────────────
+
+const CURRENCY: Record<string, { symbol: string; code: string }> = {
+  us: { symbol: '$',  code: 'USD' },
+  au: { symbol: 'A$', code: 'AUD' },
+  ca: { symbol: 'C$', code: 'CAD' },
+  uk: { symbol: '£',  code: 'GBP' },
+  ie: { symbol: '€',  code: 'EUR' },
+}
+
+function formatCurrency(value: number, country: string): string {
+  const { symbol } = CURRENCY[country] ?? CURRENCY.us
+  return `${symbol}${Math.round(value).toLocaleString()}`
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 function trimDot(s: string | null) {
   if (!s) return '—'
   return s.endsWith('.') ? s.slice(0, -1) : s
-}
-
-function fmtUSD(n: number) {
-  return `$${Math.round(n).toLocaleString()}`
 }
 
 function SkeletonRow({ cols }: { cols: number }) {
@@ -350,15 +363,17 @@ function ROIExplorerContent() {
     }
   }, [country, state, field, sort, limit])
 
+  const currencyCode = CURRENCY[country]?.code ?? 'USD'
+
   const TABLE_COLS = [
-    ["College",     "text-left"],
-    ["Field",       "text-left"],
-    ["City",        "text-left"],
-    ["ROI Score",   "text-right"],
-    ["Net Salary",  "text-right"],
-    ["Payback",     "text-right"],
-    ["Tuition",     "text-right"],
-    ["Grad Rate",   "text-right"],
+    ["College",                        "text-left"],
+    ["Field",                          "text-left"],
+    ["City",                           "text-left"],
+    ["ROI Score",                      "text-right"],
+    [`Net Salary (${currencyCode})`,   "text-right"],
+    ["Payback",                        "text-right"],
+    [`Tuition (${currencyCode})`,      "text-right"],
+    ["Grad Rate",                      "text-right"],
   ] as const
 
   return (
@@ -502,13 +517,13 @@ function ROIExplorerContent() {
                         </span>
                       </td>
                       <td className="px-4 py-3 text-right font-medium text-slate-700 whitespace-nowrap">
-                        {fmtUSD(row.net_salary)}
+                        {formatCurrency(row.net_salary, country)}
                       </td>
                       <td className="px-4 py-3 text-right text-slate-600 whitespace-nowrap">
                         {row.payback_years}년
                       </td>
                       <td className="px-4 py-3 text-right text-slate-600 whitespace-nowrap">
-                        {fmtUSD(row.tuition)}
+                        {formatCurrency(row.tuition, country)}<span className="text-slate-400 text-xs">/yr</span>
                       </td>
                       <td className="px-4 py-3 text-right text-slate-600 whitespace-nowrap">
                         {(row.graduation_rate * 100).toFixed(1)}%
