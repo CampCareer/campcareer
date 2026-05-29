@@ -92,6 +92,22 @@ const US_STATES = [
   { abbr: "WY", name: "Wyoming" },
 ] as const
 
+const AU_STATES = [
+  { abbr: "NSW", name: "New South Wales" },
+  { abbr: "VIC", name: "Victoria" },
+  { abbr: "QLD", name: "Queensland" },
+  { abbr: "WA",  name: "Western Australia" },
+  { abbr: "SA",  name: "South Australia" },
+  { abbr: "ACT", name: "Australian Capital Territory" },
+  { abbr: "TAS", name: "Tasmania" },
+  { abbr: "NT",  name: "Northern Territory" },
+] as const
+
+const COUNTRY_OPTIONS = [
+  { value: "us", label: "🇺🇸 United States" },
+  { value: "au", label: "🇦🇺 Australia" },
+] as const
+
 function trimDot(s: string | null) {
   if (!s) return '—'
   return s.endsWith('.') ? s.slice(0, -1) : s
@@ -219,6 +235,7 @@ function FieldCombobox({
 }
 
 export default function ROIExplorerPage() {
+  const [country, setCountry] = useState<"us" | "au">("us")
   const [state, setState] = useState("CA")
   const [field, setField] = useState("")
   const [sort, setSort]   = useState("roi_score")
@@ -228,14 +245,22 @@ export default function ROIExplorerPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError]     = useState<string | null>(null)
 
-  const stateName = US_STATES.find((s) => s.abbr === state)?.name ?? state
+  const stateList = country === "au" ? AU_STATES : US_STATES
+  const stateName = stateList.find((s) => s.abbr === state)?.name ?? state
+
+  function handleCountryChange(v: string) {
+    const c = v as "us" | "au"
+    setCountry(c)
+    setState(c === "au" ? "NSW" : "CA")
+    setField("")
+  }
 
   useEffect(() => {
     setLoading(true)
     setError(null)
 
-    const params = new URLSearchParams({ state, limit: String(limit), sort })
-    if (field) params.set("field", field)
+    const params = new URLSearchParams({ country, state, limit: String(limit), sort })
+    if (field && country === "us") params.set("field", field)
 
     fetch(`/api/roi?${params}`)
       .then((res) => {
@@ -249,7 +274,7 @@ export default function ROIExplorerPage() {
       })
       .catch((err: Error) => setError(err.message))
       .finally(() => setLoading(false))
-  }, [state, field, sort, limit])
+  }, [country, state, field, sort, limit])
 
   const TABLE_COLS = [
     ["College",     "text-left"],
@@ -269,7 +294,7 @@ export default function ROIExplorerPage() {
       <div>
         <div className="inline-flex items-center gap-2 bg-indigo-50 text-indigo-600 text-xs font-medium px-3 py-1.5 rounded-full mb-4 border border-indigo-100">
           <TrendingUp className="w-3 h-3" />
-          Live data · {stateName} colleges
+          Live data · {stateName} {country === "au" ? "universities" : "colleges"}
         </div>
         <h1 className="text-3xl font-bold text-slate-900 tracking-tight">ROI Explorer</h1>
         <p className="mt-2 text-slate-500 text-sm leading-relaxed">
@@ -283,23 +308,39 @@ export default function ROIExplorerPage() {
           <div className="flex flex-wrap items-end gap-4">
 
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-slate-600">State</label>
-              <Select value={state} onValueChange={(v) => v && setState(v)}>
-                <SelectTrigger className="w-52 h-10 rounded-xl border-slate-200 text-sm">
+              <label className="text-xs font-medium text-slate-600">Country</label>
+              <Select value={country} onValueChange={(v) => v && handleCountryChange(v)}>
+                <SelectTrigger className="w-44 h-10 rounded-xl border-slate-200 text-sm">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {US_STATES.map((s) => (
-                    <SelectItem key={s.abbr} value={s.abbr}>{s.abbr} — {s.name}</SelectItem>
+                  {COUNTRY_OPTIONS.map((c) => (
+                    <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-slate-600">Field of Study</label>
-              <FieldCombobox value={field} onChange={setField} />
+              <label className="text-xs font-medium text-slate-600">State</label>
+              <Select value={state} onValueChange={(v) => v && setState(v)}>
+                <SelectTrigger className="w-52 h-10 rounded-xl border-slate-200 text-sm">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {stateList.map((s) => (
+                    <SelectItem key={s.abbr} value={s.abbr}>{s.abbr} — {s.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
+
+            {country === "us" && (
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-slate-600">Field of Study</label>
+                <FieldCombobox value={field} onChange={setField} />
+              </div>
+            )}
 
             <div className="space-y-1.5">
               <label className="text-xs font-medium text-slate-600">Sort by</label>
