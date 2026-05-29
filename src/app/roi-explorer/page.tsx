@@ -131,11 +131,19 @@ const UK_REGIONS = [
   { abbr: "Northern Ireland", name: "Northern Ireland" },
 ] as const
 
+const IE_PROVINCES = [
+  { abbr: "Leinster", name: "Leinster" },
+  { abbr: "Munster",  name: "Munster" },
+  { abbr: "Connacht", name: "Connacht" },
+  { abbr: "Ulster",   name: "Ulster" },
+] as const
+
 const COUNTRY_OPTIONS = [
   { value: "us", label: "🇺🇸 United States" },
   { value: "au", label: "🇦🇺 Australia" },
   { value: "ca", label: "🇨🇦 Canada" },
   { value: "uk", label: "🇬🇧 United Kingdom" },
+  { value: "ie", label: "🇮🇪 Ireland" },
 ] as const
 
 function trimDot(s: string | null) {
@@ -265,7 +273,7 @@ function FieldCombobox({
 }
 
 export default function ROIExplorerPage() {
-  const [country, setCountry] = useState<"us" | "au" | "ca" | "uk">("us")
+  const [country, setCountry] = useState<"us" | "au" | "ca" | "uk" | "ie">("us")
   const [state, setState] = useState("CA")
   const [field, setField] = useState("")
   const [sort, setSort]   = useState("roi_score")
@@ -278,14 +286,18 @@ export default function ROIExplorerPage() {
   const stateList = country === "au" ? AU_STATES
     : country === "ca" ? CA_PROVINCES
     : country === "uk" ? UK_REGIONS
+    : country === "ie" ? IE_PROVINCES
     : US_STATES
   const stateName = stateList.find((s) => s.abbr === state)?.name ?? state
-  const stateLabel = country === "ca" ? "Province" : country === "uk" ? "Region" : "State"
+  const stateLabel = country === "ca" ? "Province"
+    : country === "uk" ? "Region"
+    : country === "ie" ? "Province"
+    : "State"
 
   function handleCountryChange(v: string) {
-    const c = v as "us" | "au" | "ca" | "uk"
+    const c = v as "us" | "au" | "ca" | "uk" | "ie"
     setCountry(c)
-    setState(c === "au" ? "NSW" : c === "ca" ? "ON" : c === "uk" ? "London" : "CA")
+    setState(c === "au" ? "NSW" : c === "ca" ? "ON" : c === "uk" ? "London" : c === "ie" ? "Leinster" : "CA")
     setField("")
   }
 
