@@ -371,7 +371,9 @@ function ROIExplorerContent() {
               <label className="text-xs font-medium text-slate-600">Country</label>
               <Select value={country} onValueChange={(v) => v && handleCountryChange(v)}>
                 <SelectTrigger className="w-44 h-10 rounded-xl border-slate-200 text-sm">
-                  <SelectValue />
+                  <SelectValue>
+                    {COUNTRY_OPTIONS.find((c) => c.value === country)?.label ?? country}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {COUNTRY_OPTIONS.map((c) => (
