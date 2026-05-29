@@ -17,10 +17,12 @@ export async function GET(req: NextRequest) {
   const country = countryParam === 'au' ? 'au'
     : countryParam === 'ca' ? 'ca'
     : countryParam === 'uk' ? 'uk'
+    : countryParam === 'ie' ? 'ie'
     : 'us'
   const defaultState = country === 'au' ? 'NSW'
     : country === 'ca' ? 'ON'
     : country === 'uk' ? 'London'
+    : country === 'ie' ? 'Leinster'
     : 'CA'
   const state = searchParams.get('state') ?? defaultState
   const field = searchParams.get('field') ?? ''
@@ -49,6 +51,13 @@ export async function GET(req: NextRequest) {
       : country === 'uk'
       ? supabase
           .from('roi_explorer_uk')
+          .select('*', { count: 'exact' })
+          .eq('college_state', state)
+          .gt('roi_score', 0)
+          .gt('payback_years', 0)
+      : country === 'ie'
+      ? supabase
+          .from('roi_explorer_ie')
           .select('*', { count: 'exact' })
           .eq('college_state', state)
           .gt('roi_score', 0)
