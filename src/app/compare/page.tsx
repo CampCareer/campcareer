@@ -65,6 +65,9 @@ function FieldCombobox({
   const [options, setOptions] = useState<string[]>([])
   const [open, setOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+  // Keep a stable ref to onChange so the debounce effect doesn't need it as a dep
+  const onChangeRef = useRef(onChange)
+  onChangeRef.current = onChange
 
   useEffect(() => {
     function handler(e: MouseEvent) {
@@ -80,26 +83,32 @@ function FieldCombobox({
   }, [value])
 
   useEffect(() => {
-    if (!input.trim()) { setOptions([]); setOpen(false); return }
+    if (!input.trim()) {
+      setOptions([]); setOpen(false)
+      onChangeRef.current("")
+      return
+    }
     const t = setTimeout(async () => {
+      // Always propagate the typed value so parent search fires without needing dropdown
+      onChangeRef.current(input.trim())
       try {
         const res = await fetch(`/api/roi/fields?q=${encodeURIComponent(input)}`)
         const json = await res.json()
         setOptions(json.fields ?? [])
-        setOpen(true)
+        if (json.fields?.length > 0) setOpen(true)
       } catch { /* ignore */ }
-    }, 300)
+    }, 400)
     return () => clearTimeout(t)
   }, [input])
 
   function handleSelect(f: string) {
     setInput(trimDot(f))
-    onChange(f)
+    onChangeRef.current(f)
     setOpen(false)
   }
 
   function handleClear() {
-    setInput(""); onChange(""); setOptions([]); setOpen(false)
+    setInput(""); onChangeRef.current(""); setOptions([]); setOpen(false)
   }
 
   return (
@@ -108,8 +117,14 @@ function FieldCombobox({
         <input
           type="text"
           value={input}
-          onChange={(e) => { setInput(e.target.value); if (!e.target.value) onChange("") }}
+          onChange={(e) => setInput(e.target.value)}
           onFocus={() => options.length > 0 && setOpen(true)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && input.trim()) {
+              onChangeRef.current(input.trim())
+              setOpen(false)
+            }
+          }}
           placeholder="e.g. Computer Science, Business…"
           className="w-80 h-11 rounded-xl border border-slate-200 px-4 pr-9 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 bg-white shadow-sm"
         />
