@@ -13,7 +13,8 @@ const SORT_ASCENDING: Record<SortField, boolean> = {
 
 export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl
-  const state = searchParams.get('state') ?? 'CA'
+  const country = searchParams.get('country') === 'au' ? 'au' : 'us'
+  const state = searchParams.get('state') ?? (country === 'au' ? 'NSW' : 'CA')
   const field = searchParams.get('field') ?? ''
   const limit = Math.min(parseInt(searchParams.get('limit') ?? '50', 10), 200)
   const sortParam = searchParams.get('sort') ?? 'roi_score'
@@ -23,20 +24,27 @@ export async function GET(req: NextRequest) {
     : 'roi_score'
 
   try {
-    const query = field
+    const query = country === 'au'
       ? supabase
-          .from('roi_explorer_by_field_us')
-          .select('*', { count: 'exact' })
-          .eq('college_state', state)
-          .ilike('field_name', `%${field}%`)
-          .gt('roi_score', 0)
-          .gt('payback_years', 0)
-      : supabase
-          .from('roi_explorer_us')
+          .from('roi_explorer_au')
           .select('*', { count: 'exact' })
           .eq('college_state', state)
           .gt('roi_score', 0)
           .gt('payback_years', 0)
+      : field
+        ? supabase
+            .from('roi_explorer_by_field_us')
+            .select('*', { count: 'exact' })
+            .eq('college_state', state)
+            .ilike('field_name', `%${field}%`)
+            .gt('roi_score', 0)
+            .gt('payback_years', 0)
+        : supabase
+            .from('roi_explorer_us')
+            .select('*', { count: 'exact' })
+            .eq('college_state', state)
+            .gt('roi_score', 0)
+            .gt('payback_years', 0)
 
     const { data, count, error } = await query
       .order(sort, { ascending: SORT_ASCENDING[sort] })
