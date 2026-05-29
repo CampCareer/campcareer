@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
+import Link from "next/link"
 import {
   Select,
   SelectContent,
@@ -503,7 +504,12 @@ function ROIExplorerContent() {
                   : data.map((row, i) => (
                     <tr key={`${i}-${row.college_id}-${row.city_id ?? ''}-${row.field_name ?? ''}`} className="hover:bg-slate-50 transition-colors">
                       <td className="px-4 py-3 font-medium text-slate-800 max-w-[200px] truncate">
-                        {row.college_name}
+                        <Link
+                          href={`/roi-explorer/${row.college_id}?country=${country}`}
+                          className="hover:text-indigo-600 hover:underline transition-colors"
+                        >
+                          {row.college_name}
+                        </Link>
                       </td>
                       <td className="px-4 py-3 text-slate-600 max-w-[180px] truncate">
                         {trimDot(row.field_name)}

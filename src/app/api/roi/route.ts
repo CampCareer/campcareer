@@ -11,6 +11,16 @@ const SORT_ASCENDING: Record<SortField, boolean> = {
   payback_years: true,
 }
 
+function getTableName(country: string, field: string, byCollegeId: boolean): string {
+  if (country === 'au') return 'roi_explorer_au'
+  if (country === 'ca') return 'roi_explorer_ca'
+  if (country === 'uk') return 'roi_explorer_uk'
+  if (country === 'ie') return 'roi_explorer_ie'
+  // US: field view only for field searches without college_id filter
+  if (field && !byCollegeId) return 'roi_explorer_by_field_us'
+  return 'roi_explorer_us'
+}
+
 export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl
   const countryParam = searchParams.get('country')
@@ -24,58 +34,36 @@ export async function GET(req: NextRequest) {
     : country === 'uk' ? 'London'
     : country === 'ie' ? 'Leinster'
     : 'CA'
-  const state = searchParams.get('state') ?? defaultState
+  const stateParam = searchParams.get('state') ?? ''
+  const state = (stateParam === 'ALL_STATES' || !stateParam) ? defaultState : stateParam
   const field = searchParams.get('field') ?? ''
-  const limit = Math.min(parseInt(searchParams.get('limit') ?? '50', 10), 200)
+  const collegeId = searchParams.get('college_id') ?? ''
+  const limit = Math.min(parseInt(searchParams.get('limit') ?? '50', 10), 500)
   const sortParam = searchParams.get('sort') ?? 'roi_score'
 
   const sort: SortField = VALID_SORT_FIELDS.includes(sortParam as SortField)
     ? (sortParam as SortField)
     : 'roi_score'
 
+  const tableName = getTableName(country, field, !!collegeId)
+
   try {
-    const query = country === 'au'
-      ? supabase
-          .from('roi_explorer_au')
-          .select('*', { count: 'exact' })
-          .eq('college_state', state)
-          .gt('roi_score', 0)
-          .gt('payback_years', 0)
-      : country === 'ca'
-      ? supabase
-          .from('roi_explorer_ca')
-          .select('*', { count: 'exact' })
-          .eq('college_state', state)
-          .gt('roi_score', 0)
-          .gt('payback_years', 0)
-      : country === 'uk'
-      ? supabase
-          .from('roi_explorer_uk')
-          .select('*', { count: 'exact' })
-          .eq('college_state', state)
-          .gt('roi_score', 0)
-          .gt('payback_years', 0)
-      : country === 'ie'
-      ? supabase
-          .from('roi_explorer_ie')
-          .select('*', { count: 'exact' })
-          .eq('college_state', state)
-          .gt('roi_score', 0)
-          .gt('payback_years', 0)
-      : field
-        ? supabase
-            .from('roi_explorer_by_field_us')
-            .select('*', { count: 'exact' })
-            .eq('college_state', state)
-            .ilike('field_name', `%${field}%`)
-            .gt('roi_score', 0)
-            .gt('payback_years', 0)
-        : supabase
-            .from('roi_explorer_us')
-            .select('*', { count: 'exact' })
-            .eq('college_state', state)
-            .gt('roi_score', 0)
-            .gt('payback_years', 0)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let query: any = supabase
+      .from(tableName)
+      .select('*', { count: 'exact' })
+      .gt('roi_score', 0)
+      .gt('payback_years', 0)
+
+    if (collegeId) {
+      // college detail: return all city combinations for this college
+      query = query.eq('college_id', collegeId)
+    } else {
+      query = query.eq('college_state', state)
+      if (field && country === 'us') {
+        query = query.ilike('field_name', `%${field}%`)
+      }
+    }
 
     const { data, count, error } = await query
       .order(sort, { ascending: SORT_ASCENDING[sort] })
