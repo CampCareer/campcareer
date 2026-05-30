@@ -454,7 +454,7 @@ function ROIExplorerContent() {
 
             <div className="space-y-1.5">
               <label className="text-xs font-medium text-slate-600">Field of Study</label>
-              {country === "us" || country === "ie" || country === "au" || country === "ca" ? (
+              {country === "us" || country === "ie" || country === "au" || country === "ca" || country === "uk" ? (
                 <FieldCombobox value={field} onChange={setField} country={country} />
               ) : (
                 <div title="Field-level data not available for this country">
