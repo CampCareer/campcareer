@@ -427,12 +427,20 @@ function ROIExplorerContent() {
               </Select>
             </div>
 
-            {country === "us" && (
-              <div className="space-y-1.5">
-                <label className="text-xs font-medium text-slate-600">Field of Study</label>
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-slate-600">Field of Study</label>
+              {country === "us" ? (
                 <FieldCombobox value={field} onChange={setField} />
-              </div>
-            )}
+              ) : (
+                <div title="Field-level data not available for this country">
+                  <input
+                    disabled
+                    placeholder="Not available for this country"
+                    className="w-64 h-10 rounded-xl border border-slate-200 px-3 text-sm bg-slate-50 text-slate-400 cursor-not-allowed"
+                  />
+                </div>
+              )}
+            </div>
 
             <div className="space-y-1.5">
               <label className="text-xs font-medium text-slate-600">Sort by</label>
