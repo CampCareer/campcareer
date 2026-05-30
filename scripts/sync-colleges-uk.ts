@@ -41,7 +41,7 @@ const HESA_URL =
   'https://www.hesa.ac.uk/news/17-07-2025/sb272-higher-education-graduate-outcomes-statistics/salary'
 
 const LEO_URL =
-  'https://explore-education-statistics.service.gov.uk/find-statistics/leo-graduate-and-postgraduate-outcomes/2022-23'
+  'https://explore-education-statistics.service.gov.uk/find-statistics/graduate-outcomes-leo-provider-level-data/2022-23'
 
 // ── HTTP download ─────────────────────────────────────────────────────────────
 
@@ -105,8 +105,22 @@ function parseSalary(raw: string | undefined): number {
 // ── Fuzzy name matching ───────────────────────────────────────────────────────
 
 // Meaningful words only — skip words that appear in almost every institution name
+// Note: "college" is NOT excluded because "University College X" ≠ "University of X"
 const NOISE = new Set(['university', 'the', 'of', 'and', 'in', 'at', 'for',
-  'college', 'school', 'institute', 'higher', 'education'])
+  'school', 'institute', 'higher', 'education'])
+
+// Manual aliases for institutions whose LEO UKPRN name differs significantly
+// from the common name stored in our DB.
+const NAME_ALIASES: Record<string, string> = {
+  'imperial college london':
+    'Imperial College of Science, Technology and Medicine',
+  'city, university of london':
+    "City St George's, University of London",
+  'royal holloway, university of london':
+    'Royal Holloway and Bedford New College',
+  'newcastle university':
+    'University of Newcastle Upon Tyne',
+}
 
 function wordTokens(s: string): string[] {
   return Array.from(
@@ -127,12 +141,20 @@ function overlapScore(a: string, b: string): number {
   return n / Math.max(wa.length, wb.size)
 }
 
-// Returns the best-matching earnings value, or null if score < threshold
+// Returns the best-matching earnings value, or null if score < threshold.
+// Checks NAME_ALIASES first, then falls back to fuzzy word-overlap scoring.
 function findEarnings(
   collegeName: string,
   map: Map<string, number>,
   threshold = 0.55,
 ): { earnings: number; key: string; score: number } | null {
+  // Check manual alias first — direct map lookup, no fuzzy needed
+  const alias = NAME_ALIASES[collegeName.toLowerCase()]
+  if (alias) {
+    const earnings = map.get(alias)
+    if (earnings !== undefined) return { earnings, key: alias, score: 1.0 }
+  }
+
   let best: { earnings: number; key: string; score: number } | null = null
   map.forEach((earnings, key) => {
     const s = overlapScore(collegeName, key)
@@ -207,11 +229,15 @@ async function scrapeHesa(): Promise<Map<string, number> | null> {
     console.log(`\n[HESA] Navigating to: ${HESA_URL}`)
     browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] })
     const page = await browser.newPage()
-    await page.goto(HESA_URL, { waitUntil: 'networkidle', timeout: 40000 })
+    // networkidle often times out on HESA — domcontentloaded is sufficient
+    await page.goto(HESA_URL, { waitUntil: 'domcontentloaded', timeout: 40000 })
 
     // Dismiss cookie consent if present
     const consent = page.locator('button').filter({ hasText: /accept|agree/i })
     if (await consent.count() > 0) await consent.first().click().catch(() => {})
+
+    // Wait up to 15s for any download link to appear in the DOM
+    await page.waitForSelector('a[href*=".zip"], a[href*="download"]', { timeout: 15000 }).catch(() => {})
 
     // Find the zip download link — try a few text patterns
     const linkPatterns = [
@@ -246,66 +272,128 @@ async function scrapeHesa(): Promise<Map<string, number> | null> {
 
 // ── Source 2: LEO 2022-23 ─────────────────────────────────────────────────────
 
-const LEO_NAME_COLS = [
-  'provider_name', 'provider name', 'institution_name', 'institution name',
-  'he provider', 'ukprn_name',
-]
-const LEO_EARNINGS_COLS = [
-  'p50_earnings', 'earnings_p50', 'median_earnings', 'median earnings',
-  'salary_p50', 'p50', 'annualised_salary_p50',
-]
+/**
+ * The LEO provider-level ZIP contains a nested ZIP:
+ *   supporting-files/leo_provider_dashboard_underlying_data.zip
+ * which in turn contains a large CSV (~750 MB uncompressed):
+ *   provider_data_YYYYMMDD.csv
+ *
+ * Columns of interest:
+ *   tax_year, academic_year, YAG, home_region_code, current_region_code,
+ *   provider_name, cah2_subject_name, characteristic_value,
+ *   earnings_median
+ *
+ * Filters applied:
+ *   YAG = 1 (1 year after graduation)
+ *   home_region_code = Total  (no home-region split)
+ *   current_region_code = Total
+ *   cah2_subject_name = Total  (all subjects)
+ *   characteristic_value = All graduates
+ *   provider_name ≠ Total  (exclude national aggregate rows)
+ *
+ * For each provider, keep the row from the most recent tax_year.
+ */
+function parseLeoProviderCSVBuffer(csvBuf: Buffer): Map<string, number> | null {
+  // ── find header line ───────────────────────────────────────────────────────
+  let headerEnd = 0
+  for (let i = 0; i < csvBuf.length; i++) {
+    if (csvBuf[i] === 0x0A) { headerEnd = i; break }
+  }
+  if (!headerEnd) return null
 
-function parseLeoZip(buf: Buffer): Map<string, number> | null {
-  const zip = new AdmZip(buf)
-  const csvEntries = zip.getEntries()
-    .filter(e => !e.isDirectory && e.entryName.toLowerCase().endsWith('.csv'))
+  const headerRaw = csvBuf.slice(0, headerEnd).toString('utf8').replace(/\r$/, '')
+  const headers = splitCSVRow(headerRaw).map(h => h.replace(/^"|"$/g, '').trim().toLowerCase())
 
-  // Prefer files with "provider" or "institution" in the name
-  const sorted = [
-    ...csvEntries.filter(e => /provider|institution/i.test(e.entryName)),
-    ...csvEntries.filter(e => !/provider|institution/i.test(e.entryName)),
-  ]
+  const idx = (name: string) => headers.indexOf(name)
+  const iProvider  = idx('provider_name')
+  const iEarnings  = idx('earnings_median')
+  const iTaxYear   = idx('tax_year')
+  const iYAG       = idx('yag')
+  const iHomeReg   = idx('home_region_code')
+  const iCurrReg   = idx('current_region_code')
+  const iSubject   = idx('cah2_subject_name')
+  const iCharVal   = idx('characteristic_value')
 
-  for (const entry of sorted) {
-    const text = entry.getData().toString('utf8').replace(/^﻿/, '')
-    const rows = parseCSV(text)
-    if (rows.length < 5) continue
+  if (iProvider < 0 || iEarnings < 0) {
+    console.warn('  [LEO] provider_name or earnings_median column not found')
+    return null
+  }
 
-    const keys = Object.keys(rows[0])
-    const nameCol     = LEO_NAME_COLS.find(c => keys.includes(c))
-    const earningsCol = LEO_EARNINGS_COLS.find(c => keys.includes(c))
-    if (!nameCol || !earningsCol) continue
+  // ── line-by-line parse (avoids huge string allocation) ────────────────────
+  const byProvider = new Map<string, { earnings: number; taxYear: string }>()
+  let lineStart = headerEnd + 1
 
-    // Filter for 1-year-after-graduation if there's a year column
-    const yearCol = keys.find(k =>
-      /year.*graduation|grad.*year|year_after|years_after|tax_year/i.test(k))
-    let targetRows = rows
-    if (yearCol) {
-      const oneYear = rows.filter(r => /^1$|^1 year|year 1/i.test(r[yearCol] ?? ''))
-      if (oneYear.length > 0) targetRows = oneYear
-    }
+  for (let i = lineStart; i <= csvBuf.length; i++) {
+    if (i === csvBuf.length || csvBuf[i] === 0x0A) {
+      let end = i
+      if (end > lineStart && csvBuf[end - 1] === 0x0D) end--
+      if (end > lineStart) {
+        const line = csvBuf.slice(lineStart, end).toString('utf8')
+        const vals = splitCSVRow(line).map(v => v.replace(/^"|"$/g, '').trim())
 
-    // Aggregate: mean-of-medians per provider (handles subject breakdowns)
-    const totals = new Map<string, { sum: number; n: number }>()
-    for (const row of targetRows) {
-      const name     = row[nameCol]?.trim()
-      const earnings = parseSalary(row[earningsCol])
-      if (name && !isNaN(earnings) && earnings >= 10000 && earnings <= 300000) {
-        const prev = totals.get(name) ?? { sum: 0, n: 0 }
-        totals.set(name, { sum: prev.sum + earnings, n: prev.n + 1 })
+        const provider = vals[iProvider] ?? ''
+        if (!provider || provider === 'Total') { lineStart = i + 1; continue }
+
+        // Apply filters
+        if (iYAG      >= 0 && vals[iYAG]      !== '1')             { lineStart = i + 1; continue }
+        if (iHomeReg  >= 0 && vals[iHomeReg]   !== 'Total')         { lineStart = i + 1; continue }
+        if (iCurrReg  >= 0 && vals[iCurrReg]   !== 'Total')         { lineStart = i + 1; continue }
+        if (iSubject  >= 0 && vals[iSubject]   !== 'Total')         { lineStart = i + 1; continue }
+        if (iCharVal  >= 0 && vals[iCharVal]   !== 'All graduates') { lineStart = i + 1; continue }
+
+        const taxYear  = vals[iTaxYear] ?? ''
+        const earnings = parseSalary(vals[iEarnings])
+        if (isNaN(earnings) || earnings < 10000 || earnings > 300000) { lineStart = i + 1; continue }
+
+        const existing = byProvider.get(provider)
+        if (!existing || taxYear > existing.taxYear)
+          byProvider.set(provider, { earnings, taxYear })
       }
-    }
-
-    const map = new Map<string, number>()
-    totals.forEach(({ sum, n }, name) => map.set(name, Math.round(sum / n)))
-
-    if (map.size >= 5) {
-      console.log(`  [LEO] Parsed ${map.size} providers from ${path.basename(entry.entryName)}`)
-      return map
+      lineStart = i + 1
     }
   }
 
-  console.warn('  [LEO] No usable provider-earnings CSV found in the ZIP')
+  if (byProvider.size < 5) return null
+
+  const map = new Map<string, number>()
+  byProvider.forEach(({ earnings }, name) => map.set(name, earnings))
+  console.log(`  [LEO] Parsed ${map.size} providers (most recent year per provider)`)
+  return map
+}
+
+function parseLeoZip(outerBuf: Buffer): Map<string, number> | null {
+  const outer = new AdmZip(outerBuf)
+
+  // Try the nested dashboard ZIP first
+  const innerEntry = outer.getEntry('supporting-files/leo_provider_dashboard_underlying_data.zip')
+  if (innerEntry) {
+    console.log('  [LEO] Extracting nested ZIP...')
+    const inner = new AdmZip(innerEntry.getData())
+    const csvEntry = inner.getEntries().find(
+      e => !e.isDirectory && /provider_data.*\.csv$/i.test(e.entryName)
+    )
+    if (csvEntry) {
+      console.log(`  [LEO] Parsing ${path.basename(csvEntry.entryName)} (${(csvEntry.header.size / 1024 / 1024).toFixed(0)} MB)...`)
+      const result = parseLeoProviderCSVBuffer(csvEntry.getData())
+      if (result) return result
+    }
+  }
+
+  // Fallback: look for a regular CSV with provider_name + earnings_median columns
+  const csvEntries = outer.getEntries()
+    .filter(e => !e.isDirectory && e.entryName.toLowerCase().endsWith('.csv'))
+
+  for (const entry of csvEntries) {
+    const snippet = entry.getData().slice(0, 1024).toString('utf8').replace(/^﻿/, '')
+    const headerLine = snippet.split('\n')[0]
+    if (!headerLine.includes('provider_name') && !headerLine.includes('provider name')) continue
+    if (!headerLine.includes('earnings') && !headerLine.includes('salary')) continue
+
+    const result = parseLeoProviderCSVBuffer(entry.getData())
+    if (result) return result
+  }
+
+  console.warn('  [LEO] No usable provider-earnings data found in the ZIP')
   return null
 }
 
@@ -315,7 +403,7 @@ async function scrapeLeo(): Promise<Map<string, number> | null> {
     console.log(`\n[LEO] Navigating to: ${LEO_URL}`)
     browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] })
     const page = await browser.newPage()
-    await page.goto(LEO_URL, { waitUntil: 'networkidle', timeout: 40000 })
+    await page.goto(LEO_URL, { waitUntil: 'domcontentloaded', timeout: 40000 })
 
     const consent = page.locator('button').filter({ hasText: /accept|agree/i })
     if (await consent.count() > 0) await consent.first().click().catch(() => {})
@@ -455,12 +543,18 @@ async function main() {
     process.exit(1)
   }
 
-  // Upsert only median_earnings + synced_at for matched rows
-  const { error: upsertErr } = await supabase
-    .from('colleges_uk')
-    .upsert(patches, { onConflict: 'institution_id' })
-
-  if (upsertErr) { console.error('Upsert error:', upsertErr.message); process.exit(1) }
+  // Update only median_earnings + synced_at — use individual updates to avoid
+  // upsert's implicit INSERT which fails the NOT NULL constraint on other columns.
+  const updateResults = await Promise.all(
+    patches.map(p =>
+      supabase
+        .from('colleges_uk')
+        .update({ median_earnings: p.median_earnings, synced_at: p.synced_at })
+        .eq('institution_id', p.institution_id)
+    )
+  )
+  const updateErr = updateResults.find(r => r.error)?.error
+  if (updateErr) { console.error('Update error:', updateErr.message); process.exit(1) }
 
   // ── Step 4: refresh materialized view ────────────────────────────────────
 
