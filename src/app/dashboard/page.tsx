@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowRight, TrendingUp, Globe, CheckSquare, CalendarDays } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 
 // ── 시간대별 인사 (서버 사이드) ────────────────────────────────────────────────
 
