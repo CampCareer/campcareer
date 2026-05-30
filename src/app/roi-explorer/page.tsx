@@ -397,7 +397,26 @@ function ROIExplorerContent() {
           <TrendingUp className="w-3 h-3" />
           Live data · {stateName} {country === "us" ? "colleges" : "universities"}
         </div>
-        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">ROI Explorer</h1>
+        <div className="flex items-center gap-4 mt-1">
+          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">ROI Explorer</h1>
+          {country === "us" && (
+            <div className="flex items-center gap-1">
+              {(["early", "mid", "senior"] as const).map((stage) => (
+                <button
+                  key={stage}
+                  onClick={() => setCareerStage(stage)}
+                  className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors whitespace-nowrap ${
+                    careerStage === stage
+                      ? "bg-indigo-600 text-white"
+                      : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50"
+                  }`}
+                >
+                  {stage === "early" ? "Early (1yr)" : stage === "mid" ? "Mid (4yr)" : "Senior (10yr)"}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
         <p className="mt-2 text-slate-500 text-sm leading-relaxed">
           Compare return on investment across {stateName} {country === "us" ? "colleges" : "universities"} and cities.
         </p>
@@ -471,29 +490,6 @@ function ROIExplorerContent() {
                 </div>
               )}
             </div>
-
-            {country === "us" && (
-              <div className="space-y-1.5">
-                <label className="text-xs font-medium text-slate-600">Career Stage</label>
-                <div className="flex h-10 rounded-xl border border-slate-200 overflow-hidden">
-                  {(["early", "mid", "senior"] as const).map((stage, i) => (
-                    <button
-                      key={stage}
-                      onClick={() => setCareerStage(stage)}
-                      className={`px-3 text-xs font-medium transition-colors whitespace-nowrap ${
-                        i > 0 ? "border-l border-slate-200" : ""
-                      } ${
-                        careerStage === stage
-                          ? "bg-indigo-600 text-white"
-                          : "bg-white text-slate-600 hover:bg-slate-50"
-                      }`}
-                    >
-                      {stage === "early" ? "Early (1yr)" : stage === "mid" ? "Mid (4yr)" : "Senior (10yr)"}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
 
             <div className="space-y-1.5">
               <label className="text-xs font-medium text-slate-600">Sort by</label>
