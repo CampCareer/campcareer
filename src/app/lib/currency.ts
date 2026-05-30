@@ -8,15 +8,13 @@ export type ExchangeRates = {
 }
 
 /**
- * Fetches latest exchange rates from frankfurter.app.
- * Base currency is USD; rates for AUD, CAD, GBP, EUR are included.
+ * Fetches latest exchange rates via our internal proxy route.
+ * Proxying avoids CORS issues — api.frankfurter.dev lacks Access-Control-Allow-Origin.
+ * Base is USD; rates for AUD, CAD, GBP, EUR are returned.
  */
 export async function getExchangeRates(): Promise<ExchangeRates> {
-  const res = await fetch(
-    "https://api.frankfurter.app/latest?from=USD&to=AUD,CAD,GBP,EUR",
-    { cache: "no-store" },
-  )
-  if (!res.ok) throw new Error(`Frankfurter API error: ${res.status}`)
+  const res = await fetch("/api/exchange-rates")
+  if (!res.ok) throw new Error(`Exchange rate API error: ${res.status}`)
   return res.json() as Promise<ExchangeRates>
 }
 
