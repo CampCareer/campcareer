@@ -33,6 +33,17 @@ export async function GET(req: NextRequest) {
 
     if (error) return NextResponse.json({ error: error.message }, { status: 500 })
     rawNames = data.map((r) => r.field_name as string | null)
+  } else if (country === 'ca') {
+    // CA: field_name from the CA ROI view
+    const { data, error } = await supabase
+      .from('roi_explorer_ca')
+      .select('field_name')
+      .ilike('field_name', `%${q}%`)
+      .not('field_name', 'is', null)
+      .limit(500)
+
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+    rawNames = data.map((r) => r.field_name as string | null)
   } else {
     // US (default): field_name from the field-level ROI view
     const { data, error } = await supabase
