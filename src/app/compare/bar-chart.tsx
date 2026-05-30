@@ -13,14 +13,36 @@ import {
 
 export interface ChartEntry {
   country: string
-  roi: number
+  value: number
   color: string
 }
 
-// recharts 3.x: per-bar fill via `fill` accessor on <Bar> avoids Cell rendering issues
-export default function CompareBarChart({ data }: { data: ChartEntry[] }) {
-  const maxRoi = Math.max(...data.map((d) => d.roi), 1)
-  const domainMax = Math.ceil((maxRoi * 1.15) / 10) * 10
+interface Props {
+  data: ChartEntry[]
+  valueLabel?: string
+  formatValue?: (v: number) => string
+  formatTick?: (v: number) => string
+}
+
+export default function CompareBarChart({
+  data,
+  valueLabel = "Avg ROI Score",
+  formatValue = (v) => v.toFixed(1),
+  formatTick,
+}: Props) {
+  const maxVal = Math.max(...data.map((d) => d.value), 1)
+
+  // For salary values (large numbers) auto-scale to K; for small values keep as-is
+  const isSalary = maxVal > 500
+  const domainMax = isSalary
+    ? Math.ceil((maxVal * 1.15) / 5000) * 5000
+    : Math.ceil((maxVal * 1.15) / 10) * 10
+
+  const defaultTick = isSalary
+    ? (v: number) => `${Math.round(v / 1000)}K`
+    : (v: number) => v.toFixed(0)
+
+  const tickFmt = formatTick ?? defaultTick
 
   return (
     <ResponsiveContainer width="100%" height={240}>
@@ -34,10 +56,11 @@ export default function CompareBarChart({ data }: { data: ChartEntry[] }) {
         />
         <YAxis
           domain={[0, domainMax]}
+          tickFormatter={tickFmt}
           tick={{ fontSize: 11, fill: "#94a3b8" }}
           axisLine={false}
           tickLine={false}
-          width={36}
+          width={40}
         />
         <Tooltip
           contentStyle={{
@@ -46,10 +69,10 @@ export default function CompareBarChart({ data }: { data: ChartEntry[] }) {
             boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
             fontSize: "12px",
           }}
-          formatter={(value) => [Number(value).toFixed(1), "Avg ROI Score"]}
+          formatter={(v) => [formatValue(Number(v)), valueLabel]}
           cursor={{ fill: "rgba(99,102,241,0.05)" }}
         />
-        <Bar dataKey="roi" radius={[6, 6, 0, 0]} isAnimationActive={false}>
+        <Bar dataKey="value" radius={[6, 6, 0, 0]} isAnimationActive={false}>
           {data.map((entry, i) => (
             <Cell key={i} fill={entry.color} />
           ))}

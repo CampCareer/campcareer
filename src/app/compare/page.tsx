@@ -6,6 +6,12 @@ import dynamic from "next/dynamic"
 import Link from "next/link"
 import { TrendingUp, X, ArrowRight, BarChart2, Search } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
+import {
+  getExchangeRates,
+  convertToBase,
+  type SupportedCurrency,
+  type ExchangeRates,
+} from "@/app/lib/currency"
 import type { ChartEntry } from "./bar-chart"
 
 const CompareBarChart = dynamic(() => import("./bar-chart"), {
@@ -35,17 +41,27 @@ type CompareData = Record<Country, CountryStats>
 
 const COUNTRY_CONFIG: Record<
   Country,
-  { flag: string; name: string; color: string; currency: string }
+  { flag: string; name: string; color: string; currency: SupportedCurrency }
 > = {
-  us: { flag: "🇺🇸", name: "United States",  color: "#6366f1", currency: "$"  },
-  au: { flag: "🇦🇺", name: "Australia",      color: "#10b981", currency: "A$" },
-  ca: { flag: "🇨🇦", name: "Canada",         color: "#f43f5e", currency: "C$" },
-  uk: { flag: "🇬🇧", name: "United Kingdom", color: "#3b82f6", currency: "£"  },
-  ie: { flag: "🇮🇪", name: "Ireland",        color: "#f59e0b", currency: "€"  },
+  us: { flag: "🇺🇸", name: "United States",  color: "#6366f1", currency: "USD" },
+  au: { flag: "🇦🇺", name: "Australia",      color: "#10b981", currency: "AUD" },
+  ca: { flag: "🇨🇦", name: "Canada",         color: "#f43f5e", currency: "CAD" },
+  uk: { flag: "🇬🇧", name: "United Kingdom", color: "#3b82f6", currency: "GBP" },
+  ie: { flag: "🇮🇪", name: "Ireland",        color: "#f59e0b", currency: "EUR" },
 }
 
-function fmt(value: number, currency: string) {
-  return `${currency}${Math.round(value).toLocaleString()}`
+const BASE_CURRENCIES: { code: SupportedCurrency; symbol: string; flag: string }[] = [
+  { code: "USD", symbol: "$",  flag: "🇺🇸" },
+  { code: "EUR", symbol: "€",  flag: "🇪🇺" },
+  { code: "GBP", symbol: "£",  flag: "🇬🇧" },
+]
+
+const CURRENCY_SYMBOL: Record<SupportedCurrency, string> = {
+  USD: "$", AUD: "A$", CAD: "C$", GBP: "£", EUR: "€",
+}
+
+function fmtSalary(amount: number, symbol: string) {
+  return `${symbol}${Math.round(amount).toLocaleString()}`
 }
 
 function trimDot(s: string | null) {
@@ -55,7 +71,7 @@ function trimDot(s: string | null) {
 
 // ── FieldCombobox ─────────────────────────────────────────────────────────────
 
-const MIN_CHARS = 3   // dropdown opens only after this many characters
+const MIN_CHARS = 3
 
 function FieldCombobox({
   value,
@@ -68,11 +84,9 @@ function FieldCombobox({
   const [options, setOptions] = useState<string[]>([])
   const [open, setOpen]       = useState(false)
   const containerRef          = useRef<HTMLDivElement>(null)
-  // Stable ref so debounce/handlers don't need onChange in their dep arrays
   const onChangeRef = useRef(onChange)
   onChangeRef.current = onChange
 
-  // Close dropdown on outside click
   useEffect(() => {
     function handler(e: MouseEvent) {
       if (containerRef.current && !containerRef.current.contains(e.target as Node))
@@ -82,19 +96,13 @@ function FieldCombobox({
     return () => document.removeEventListener("mousedown", handler)
   }, [])
 
-  // Sync input when parent clears value externally
   useEffect(() => {
     if (!value) setInput("")
   }, [value])
 
-  // Autocomplete-only debounce — never fires comparison, just fetches suggestions
   useEffect(() => {
     const trimmed = input.trim()
-    if (trimmed.length < MIN_CHARS) {
-      setOptions([])
-      setOpen(false)
-      return
-    }
+    if (trimmed.length < MIN_CHARS) { setOptions([]); setOpen(false); return }
     const t = setTimeout(async () => {
       try {
         const res  = await fetch(`/api/roi/fields?q=${encodeURIComponent(trimmed)}`)
@@ -107,21 +115,18 @@ function FieldCombobox({
     return () => clearTimeout(t)
   }, [input])
 
-  // Commit a confirmed field to the parent (fires comparison)
   function commit(f: string) {
     const clean = f.trim()
     if (!clean) return
     onChangeRef.current(clean)
   }
 
-  // User picks from dropdown — immediate commit
   function handleSelect(f: string) {
     setInput(trimDot(f))
     setOpen(false)
     commit(f)
   }
 
-  // X button — clear everything including parent comparison state
   function handleClear() {
     setInput("")
     setOptions([])
@@ -129,16 +134,11 @@ function FieldCombobox({
     onChangeRef.current("")
   }
 
-  // Keyboard: Enter confirms first suggestion (if open) or current text (≥ MIN_CHARS)
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
       e.preventDefault()
-      if (open && options.length > 0) {
-        handleSelect(options[0])
-      } else if (input.trim().length >= MIN_CHARS) {
-        setOpen(false)
-        commit(input)
-      }
+      if (open && options.length > 0) handleSelect(options[0])
+      else if (input.trim().length >= MIN_CHARS) { setOpen(false); commit(input) }
     } else if (e.key === "Escape") {
       setOpen(false)
     }
@@ -149,8 +149,6 @@ function FieldCombobox({
   return (
     <div ref={containerRef} className="relative">
       <div className="flex items-center gap-2">
-
-        {/* Text input with inline clear button */}
         <div className="relative">
           <input
             type="text"
@@ -170,8 +168,6 @@ function FieldCombobox({
             </button>
           )}
         </div>
-
-        {/* Explicit Compare / Search button */}
         <button
           onClick={() => { if (canSearch) { setOpen(false); commit(input) } }}
           disabled={!canSearch}
@@ -184,7 +180,6 @@ function FieldCombobox({
         </button>
       </div>
 
-      {/* Autocomplete dropdown */}
       {open && options.length > 0 && (
         <div className="absolute z-50 top-full mt-1 w-72 rounded-xl border border-slate-200 bg-white shadow-lg max-h-60 overflow-y-auto">
           {options.map((f) => (
@@ -199,6 +194,35 @@ function FieldCombobox({
           ))}
         </div>
       )}
+    </div>
+  )
+}
+
+// ── Currency Selector ─────────────────────────────────────────────────────────
+
+function CurrencySelector({
+  value,
+  onChange,
+}: {
+  value: SupportedCurrency
+  onChange: (c: SupportedCurrency) => void
+}) {
+  return (
+    <div className="inline-flex items-center gap-1 bg-slate-100 rounded-xl p-1">
+      {BASE_CURRENCIES.map(({ code, symbol, flag }) => (
+        <button
+          key={code}
+          onClick={() => onChange(code)}
+          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+            value === code
+              ? "bg-white text-slate-800 shadow-sm"
+              : "text-slate-500 hover:text-slate-700"
+          }`}
+        >
+          <span>{flag}</span>
+          {symbol} {code}
+        </button>
+      ))}
     </div>
   )
 }
@@ -227,13 +251,22 @@ function CountryCard({
   country,
   stats,
   field,
+  baseCurrency,
+  rates,
 }: {
   country: Country
   stats: CountryStats
   field: string
+  baseCurrency: SupportedCurrency
+  rates: ExchangeRates["rates"] | null
 }) {
-  const cfg = COUNTRY_CONFIG[country]
+  const cfg    = COUNTRY_CONFIG[country]
   const hasData = stats.count > 0
+
+  const convertedSalary = rates
+    ? convertToBase(stats.avg_salary, cfg.currency, rates, baseCurrency)
+    : stats.avg_salary
+  const salarySymbol = rates ? CURRENCY_SYMBOL[baseCurrency] : CURRENCY_SYMBOL[cfg.currency]
 
   return (
     <Card className="flex flex-col overflow-hidden">
@@ -294,9 +327,11 @@ function CountryCard({
                 </p>
               </div>
               <div>
-                <p className="text-[10px] font-medium text-slate-400 uppercase tracking-wide">Avg Salary</p>
+                <p className="text-[10px] font-medium text-slate-400 uppercase tracking-wide">
+                  Avg Salary
+                </p>
                 <p className="text-sm font-semibold text-slate-700 leading-tight">
-                  {fmt(stats.avg_salary, cfg.currency)}
+                  {fmtSalary(convertedSalary, salarySymbol)}
                 </p>
               </div>
               <div>
@@ -338,14 +373,23 @@ function CompareContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
 
-  const [field, setField] = useState(searchParams.get("field") ?? "")
-  const [data, setData] = useState<CompareData | null>(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [field, setField]             = useState(searchParams.get("field") ?? "")
+  const [data, setData]               = useState<CompareData | null>(null)
+  const [loading, setLoading]         = useState(false)
+  const [error, setError]             = useState<string | null>(null)
+  const [baseCurrency, setBaseCurrency] = useState<SupportedCurrency>("USD")
+  const [rates, setRates]             = useState<ExchangeRates["rates"] | null>(null)
+  const [ratesDate, setRatesDate]     = useState<string | null>(null)
+
+  // Fetch exchange rates once on mount
+  useEffect(() => {
+    getExchangeRates()
+      .then((r) => { setRates(r.rates); setRatesDate(r.date) })
+      .catch(() => { /* gracefully degrade to local currencies */ })
+  }, [])
 
   function handleFieldChange(v: string) {
     setField(v)
-    // Sync to URL for shareability
     const url = new URL(window.location.href)
     if (v) url.searchParams.set("field", v)
     else url.searchParams.delete("field")
@@ -371,31 +415,52 @@ function CompareContent() {
     return () => ctrl.abort()
   }, [field])
 
+  // Chart: converted avg_salary per country (falls back to avg_roi if rates not ready)
   const chartData: ChartEntry[] = data
-    ? COUNTRIES.map((c) => ({
-        country: COUNTRY_CONFIG[c].flag + " " + c.toUpperCase(),
-        roi: data[c].avg_roi,
-        color: COUNTRY_CONFIG[c].color,
-      }))
+    ? COUNTRIES.map((c) => {
+        const cfg = COUNTRY_CONFIG[c]
+        const value = rates
+          ? convertToBase(data[c].avg_salary, cfg.currency, rates, baseCurrency)
+          : data[c].avg_roi
+        return { country: cfg.flag + " " + c.toUpperCase(), value, color: cfg.color }
+      })
     : []
 
   const hasAnyData = data && COUNTRIES.some((c) => data[c].count > 0)
+
+  const chartLabel = rates
+    ? `Avg Net Salary (${baseCurrency})`
+    : "Avg ROI Score"
+
+  const chartFormatValue = rates
+    ? (v: number) => `${CURRENCY_SYMBOL[baseCurrency]}${Math.round(v).toLocaleString()}`
+    : (v: number) => v.toFixed(1)
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-10 space-y-8">
 
       {/* Header */}
-      <div>
-        <div className="inline-flex items-center gap-2 bg-indigo-50 text-indigo-600 text-xs font-medium px-3 py-1.5 rounded-full mb-4 border border-indigo-100">
-          <TrendingUp className="w-3 h-3" />
-          5-country comparison
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <div className="inline-flex items-center gap-2 bg-indigo-50 text-indigo-600 text-xs font-medium px-3 py-1.5 rounded-full mb-4 border border-indigo-100">
+            <TrendingUp className="w-3 h-3" />
+            5-country comparison
+          </div>
+          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
+            Compare by Field of Study
+          </h1>
+          <p className="mt-2 text-slate-500 text-sm">
+            Pick a field and see ROI across all 5 countries side by side.
+          </p>
         </div>
-        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
-          Compare by Field of Study
-        </h1>
-        <p className="mt-2 text-slate-500 text-sm">
-          Pick a field and see ROI across all 5 countries side by side.
-        </p>
+
+        {/* Currency selector */}
+        <div className="pt-1">
+          <p className="text-[11px] text-slate-400 mb-1.5 font-medium uppercase tracking-wide">
+            Display currency
+          </p>
+          <CurrencySelector value={baseCurrency} onChange={setBaseCurrency} />
+        </div>
       </div>
 
       {/* Search */}
@@ -437,6 +502,8 @@ function CompareContent() {
                   country={c}
                   stats={data![c]}
                   field={field}
+                  baseCurrency={baseCurrency}
+                  rates={rates}
                 />
               ))}
         </div>
@@ -446,13 +513,34 @@ function CompareContent() {
       {!loading && hasAnyData && (
         <div>
           <h2 className="text-lg font-semibold text-slate-800 mb-3">
-            Average ROI Score by Country
+            {rates
+              ? `Avg Net Salary by Country (${baseCurrency})`
+              : "Average ROI Score by Country"}
           </h2>
           <Card>
             <CardContent className="pt-5 pb-4">
-              <CompareBarChart data={chartData} />
+              <CompareBarChart
+                data={chartData}
+                valueLabel={chartLabel}
+                formatValue={chartFormatValue}
+              />
             </CardContent>
           </Card>
+
+          {/* Exchange rate attribution */}
+          {rates && ratesDate && (
+            <p className="mt-2 text-[11px] text-slate-400 text-right">
+              Exchange rates as of {ratesDate} · Source:{" "}
+              <a
+                href="https://www.frankfurter.app"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline hover:text-slate-600"
+              >
+                frankfurter.app
+              </a>
+            </p>
+          )}
         </div>
       )}
 
