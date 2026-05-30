@@ -12,7 +12,7 @@ const SORT_ASCENDING: Record<SortField, boolean> = {
   avg_cao_points: false,
 }
 
-function getTableName(country: string, _field: string, _byCollegeId: boolean): string {
+function getTableName(country: string): string {
   if (country === 'au') return 'roi_explorer_au'
   if (country === 'ca') return 'roi_explorer_ca'
   if (country === 'uk') return 'roi_explorer_uk'
@@ -52,7 +52,7 @@ export async function GET(req: NextRequest) {
     ? (careerStage === 'mid' ? 'roi_score_mid' : careerStage === 'senior' ? 'roi_score_senior' : 'roi_score')
     : sort
 
-  const tableName = getTableName(country, field, !!collegeId)
+  const tableName = getTableName(country)
 
   try {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
