@@ -1,4 +1,4 @@
-# merge_to_supabase.py — qualifax_raw.json → courses_ie upsert
+# merge_to_supabase.py — qualifax_raw_all_levels.json → courses_ie upsert
 #
 # 수정 사항 (원본 대비):
 #   - programs_ie → courses_ie  (이전 단계에서 생성한 테이블)
@@ -29,14 +29,14 @@ supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 # ── upsert ────────────────────────────────────────────────────────────────────
 
 def upsert_programs():
-    raw_path = Path(__file__).parent.parent / "qualifax_raw.json"
+    raw_path = Path(__file__).parent.parent / "qualifax_raw_all_levels.json"
     if not raw_path.exists():
-        print("❌ qualifax_raw.json 없음 — scraper_qualifax.py 먼저 실행하세요")
+        print("❌ qualifax_raw_all_levels.json 없음 — scraper_qualifax.py 먼저 실행하세요")
         return
 
     with open(raw_path, encoding="utf-8") as f:
         programs = json.load(f)
-    print(f"📂 qualifax_raw.json 로드: {len(programs)}개\n")
+    print(f"📂 qualifax_raw_all_levels.json 로드: {len(programs)}개\n")
 
     # colleges_ie 매핑 (institution_id 보완용)
     res = supabase.table("colleges_ie").select("institution_id, name").execute()

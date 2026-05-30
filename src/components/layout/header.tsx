@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 
 const pageTitles: Record<string, string> = {
-  "/":          "Dashboard",
+  "/dashboard": "Dashboard",
   "/roi-explorer": "ROI Explorer",
   "/compare":   "Country Compare",
   "/checklist": "Checklist",
