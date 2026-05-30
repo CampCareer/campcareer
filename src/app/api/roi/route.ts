@@ -12,13 +12,12 @@ const SORT_ASCENDING: Record<SortField, boolean> = {
   avg_cao_points: false,
 }
 
-function getTableName(country: string, field: string, byCollegeId: boolean): string {
+function getTableName(country: string, _field: string, _byCollegeId: boolean): string {
   if (country === 'au') return 'roi_explorer_au'
   if (country === 'ca') return 'roi_explorer_ca'
   if (country === 'uk') return 'roi_explorer_uk'
   if (country === 'ie') return 'roi_explorer_ie'
-  // US: field view only for field searches without college_id filter
-  if (field && !byCollegeId) return 'roi_explorer_by_field_us'
+  // Always use roi_explorer_us for US — roi_explorer_by_field_us lacks mid/senior columns
   return 'roi_explorer_us'
 }
 
