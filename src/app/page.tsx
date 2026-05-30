@@ -1,101 +1,50 @@
-import { supabase } from "@/lib/supabase"
 import Link from "next/link"
 import {
   ArrowRight,
-  CheckCircle2,
   TrendingUp,
   Globe,
   CheckSquare,
   CalendarDays,
 } from "lucide-react"
 
-// ── 타입 ─────────────────────────────────────────────────────────────────────
+// ── 목업 샘플 데이터 (정적) ────────────────────────────────────────────────────
 
-type RoiRow = {
-  college_name: string
-  roi_score: number
-  net_salary: number
-  payback_years: number
-}
-
-type NumericRoiKey = "roi_score" | "net_salary" | "payback_years"
-
-type CountryCard = {
-  flag: string
-  name: string
-  currency: string
-  country: string
-  rows: RoiRow[]
-  avgRoi: number | null
-  avgSalary: number | null
-  avgPayback: number | null
-}
-
-// ── 유틸 ─────────────────────────────────────────────────────────────────────
-
-function mean(rows: RoiRow[], key: NumericRoiKey): number | null {
-  if (!rows.length) return null
-  const vals = rows.map((r) => r[key]).filter((v) => v != null) as number[]
-  if (!vals.length) return null
-  return vals.reduce((s, v) => s + v, 0) / vals.length
-}
-
-function fmtRoi(v: number | null) {
-  return v == null ? "—" : v.toFixed(1)
-}
-function fmtSalary(v: number | null, prefix: string) {
-  return v == null ? "—" : `${prefix}${Math.round(v / 1000)}k`
-}
-function fmtPayback(v: number | null) {
-  return v == null ? "—" : `${v.toFixed(1)}yr`
-}
-
-// ── 데이터 fetch ──────────────────────────────────────────────────────────────
-
-async function getCountryCards(): Promise<CountryCard[]> {
-  const base = (table: string) =>
-    supabase
-      .from(table)
-      .select("college_name,roi_score,net_salary,payback_years")
-      .gt("roi_score", 0)
-      .order("roi_score", { ascending: false, nullsFirst: false })
-      .limit(3)
-
-  const [us, ie, uk] = await Promise.all([
-    base("roi_explorer_us").eq("college_state", "CA"),
-    base("roi_explorer_ie").eq("college_state", "Leinster").eq("nfq_level", 8),
-    base("roi_explorer_uk").eq("college_state", "London"),
-  ])
-
-  const build = (
-    flag: string,
-    name: string,
-    currency: string,
-    country: string,
-    raw: RoiRow[] | null,
-  ): CountryCard => {
-    const rows = raw ?? []
-    return {
-      flag, name, currency, country, rows,
-      avgRoi:     mean(rows, "roi_score"),
-      avgSalary:  mean(rows, "net_salary"),
-      avgPayback: mean(rows, "payback_years"),
-    }
-  }
-
-  return [
-    build("🇺🇸", "USA",     "$", "us", us.data as RoiRow[] | null),
-    build("🇮🇪", "Ireland", "€", "ie", ie.data as RoiRow[] | null),
-    build("🇬🇧", "UK",      "£", "uk", uk.data as RoiRow[] | null),
-  ]
-}
+const MOCK_ROWS = [
+  {
+    flag: "🇺🇸",
+    college: "Stanford University",
+    field: "Computer Science",
+    roi: 158.9,
+    salary: "$95k",
+    payback: "1.0yr",
+    roiClass: "text-emerald-700 bg-emerald-50",
+  },
+  {
+    flag: "🇮🇪",
+    college: "Trinity College Dublin",
+    field: "Computer Science",
+    roi: 68.4,
+    salary: "€25.5k",
+    payback: "2.3yr",
+    roiClass: "text-amber-700 bg-amber-50",
+  },
+  {
+    flag: "🇨🇦",
+    college: "University of Toronto",
+    field: "Computer Science",
+    roi: 52.1,
+    salary: "CA$38k",
+    payback: "3.0yr",
+    roiClass: "text-orange-700 bg-orange-50",
+  },
+]
 
 // ── 상수 ─────────────────────────────────────────────────────────────────────
 
 const STATS = [
-  { value: "5",      label: "Countries",      sub: "US · AU · CA · UK · IE" },
+  { value: "5",      label: "Countries",       sub: "US · AU · CA · UK · IE" },
   { value: "2,860+", label: "Courses tracked", sub: "" },
-  { value: "Real",   label: "Salary Data",    sub: "HEA · College Scorecard" },
+  { value: "Real",   label: "Salary Data",     sub: "HEA · College Scorecard" },
 ]
 
 const FEATURES = [
@@ -125,22 +74,14 @@ const FEATURES = [
   },
 ]
 
-const TRUST = [
-  "Official government data sources",
-  "2,860+ courses tracked",
-  "Updated 2024-2025",
-]
-
 // ── 컴포넌트 ──────────────────────────────────────────────────────────────────
 
-export default async function LandingPage() {
-  const countryCards = await getCountryCards()
-
+export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-white text-slate-900">
+    <div className="bg-white text-slate-900">
 
       {/* ── 네비게이션 ── */}
-      <header className="fixed top-0 inset-x-0 z-50 bg-white/90 backdrop-blur-sm border-b border-slate-100">
+      <header className="fixed top-0 inset-x-0 z-50 bg-slate-900/90 backdrop-blur-sm border-b border-slate-800">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
 
           {/* 로고 */}
@@ -148,29 +89,20 @@ export default async function LandingPage() {
             <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center">
               <span className="text-white text-xs font-bold">CC</span>
             </div>
-            <span className="font-semibold text-slate-900 text-base tracking-tight">
+            <span className="font-semibold text-white text-base tracking-tight">
               CampCareer
             </span>
           </Link>
 
           {/* 중앙 메뉴 */}
           <nav className="hidden md:flex items-center gap-8">
-            <Link
-              href="/roi-explorer"
-              className="text-sm text-slate-600 hover:text-indigo-600 transition-colors"
-            >
+            <Link href="/roi-explorer" className="text-sm text-slate-400 hover:text-white transition-colors">
               Explore
             </Link>
-            <Link
-              href="/compare"
-              className="text-sm text-slate-600 hover:text-indigo-600 transition-colors"
-            >
+            <Link href="/compare" className="text-sm text-slate-400 hover:text-white transition-colors">
               Compare
             </Link>
-            <Link
-              href="#how-it-works"
-              className="text-sm text-slate-600 hover:text-indigo-600 transition-colors"
-            >
+            <Link href="#how-it-works" className="text-sm text-slate-400 hover:text-white transition-colors">
               How it works
             </Link>
           </nav>
@@ -179,7 +111,7 @@ export default async function LandingPage() {
           <div className="flex items-center gap-3">
             <Link
               href="#"
-              className="hidden sm:block text-sm text-slate-600 hover:text-slate-900 px-3 py-1.5 rounded-lg hover:bg-slate-100 transition-colors"
+              className="hidden sm:block text-sm text-slate-400 hover:text-white px-3 py-1.5 rounded-lg hover:bg-slate-800 transition-colors"
             >
               Sign In
             </Link>
@@ -193,127 +125,129 @@ export default async function LandingPage() {
         </div>
       </header>
 
-      {/* ── 히어로 ── */}
-      <section className="min-h-screen flex items-center pt-16">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center py-24 lg:py-32">
+      {/* ── 히어로 (정확히 100vh) ── */}
+      <section className="relative h-screen bg-gradient-to-b from-slate-900 via-slate-900 to-indigo-950 flex flex-col overflow-hidden pt-16">
 
-            {/* 왼쪽: 카피 */}
-            <div className="space-y-8">
-              {/* 배지 */}
-              <div className="inline-flex items-center gap-2 bg-indigo-50 text-indigo-600 text-xs font-medium px-3 py-1.5 rounded-full border border-indigo-100">
-                <span className="text-base">🎓</span>
-                Data-driven study abroad decisions
+        {/* 텍스트 블록 */}
+        <div className="flex flex-col items-center text-center px-6 pt-10 shrink-0">
+
+          {/* 상단 배지 */}
+          <div className="inline-flex items-center gap-2 bg-slate-800/80 border border-slate-700/60 text-slate-400 text-xs px-3.5 py-1.5 rounded-full mb-6">
+            🎓&nbsp; 5 countries · 2,860+ courses · Real salary data
+          </div>
+
+          {/* 메인 헤드라인 */}
+          <h1 className="text-5xl lg:text-[3.75rem] font-bold text-white leading-[1.08] tracking-tight mb-4">
+            Find Your Best Country
+            <br className="hidden sm:block" />
+            {" "}to Study Abroad.
+          </h1>
+
+          {/* 서브 헤드라인 */}
+          <p className="text-xl lg:text-2xl font-semibold text-indigo-300 mb-4">
+            With Data, Not Guesswork.
+          </p>
+
+          {/* 설명 텍스트 */}
+          <p className="text-sm text-slate-400 max-w-md leading-relaxed mb-8">
+            Compare graduate salaries, tuition, and ROI across
+            <br className="hidden sm:block" />
+            {" "}USA, Ireland, UK, Canada &amp; Australia.
+          </p>
+
+          {/* CTA 버튼 */}
+          <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
+            <Link
+              href="/roi-explorer"
+              className="inline-flex items-center gap-2 bg-white hover:bg-slate-100 text-slate-900 font-semibold px-5 py-2.5 rounded-xl transition-colors text-sm"
+            >
+              Explore ROI <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link
+              href="/compare"
+              className="inline-flex items-center border border-slate-600 hover:border-slate-500 hover:bg-slate-800/60 text-white font-medium px-5 py-2.5 rounded-xl transition-colors text-sm"
+            >
+              Compare Countries
+            </Link>
+          </div>
+        </div>
+
+        {/* ── 제품 목업 (남은 공간 채우고 하단 자연스럽게 잘림) ── */}
+        <div className="flex-1 w-full max-w-3xl mx-auto px-6 min-h-0">
+          <div className="bg-white rounded-t-2xl shadow-[0_-4px_48px_rgba(99,102,241,0.22)] overflow-hidden border border-white/10">
+
+            {/* 브라우저 크롬 바 */}
+            <div className="flex items-center gap-2 px-4 py-2.5 bg-slate-50 border-b border-slate-200">
+              <span className="w-3 h-3 rounded-full bg-red-400/70" />
+              <span className="w-3 h-3 rounded-full bg-amber-400/70" />
+              <span className="w-3 h-3 rounded-full bg-emerald-400/70" />
+              <div className="flex items-center gap-1.5 ml-3">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-xs font-medium text-slate-600">Live ROI Explorer</span>
               </div>
-
-              {/* H1 */}
-              <h1 className="text-5xl lg:text-[3.5rem] font-bold text-slate-900 leading-[1.1] tracking-tight">
-                Choose Your Study Abroad Path Based on Career Outcomes,{" "}
-                <span className="text-indigo-600">Not Guesswork</span>
-              </h1>
-
-              {/* 서브텍스트 */}
-              <p className="text-xl text-slate-500 leading-relaxed max-w-lg">
-                Compare countries, universities, and degrees by real salary data,
-                employment rates, and ROI — across 5 countries.
-              </p>
-
-              {/* CTA 버튼 */}
-              <div className="flex flex-wrap gap-4">
-                <Link
-                  href="/roi-explorer"
-                  className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-3 rounded-xl transition-colors"
-                >
-                  Compare Career ROI
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-                <Link
-                  href="/compare"
-                  className="inline-flex items-center gap-2 border border-slate-200 hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-600 text-slate-700 font-medium px-6 py-3 rounded-xl transition-colors"
-                >
-                  Explore Countries
-                </Link>
-              </div>
-
-              {/* 신뢰 지표 */}
-              <div className="flex flex-col gap-2.5 pt-2">
-                {TRUST.map((t) => (
-                  <div key={t} className="flex items-center gap-2 text-sm text-slate-500">
-                    <CheckCircle2 className="w-4 h-4 text-indigo-500 shrink-0" />
-                    {t}
-                  </div>
-                ))}
-              </div>
+              <span className="ml-auto text-xs text-slate-400 hidden sm:block">
+                campcareer.com/roi-explorer
+              </span>
             </div>
 
-            {/* 오른쪽: 라이브 국가 카드 */}
-            <div className="flex flex-col gap-4">
-              {countryCards.map((card) => (
-                <div
-                  key={card.name}
-                  className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:border-indigo-200 transition-all"
-                >
-                  {/* 카드 헤더 */}
-                  <div className="flex items-center justify-between px-5 pt-4 pb-3">
-                    <div className="flex items-center gap-2.5">
-                      <span className="text-2xl leading-none">{card.flag}</span>
-                      <span className="font-semibold text-slate-900">{card.name}</span>
-                    </div>
-                    <span className="text-[11px] text-slate-400 bg-slate-50 border border-slate-100 px-2 py-1 rounded-full">
-                      Top 3 universities
-                    </span>
-                  </div>
-
-                  {/* 대학 리스트 */}
-                  <div className="divide-y divide-slate-100">
-                    {card.rows.map((row, idx) => (
-                      <div key={idx} className="flex items-start gap-3 px-5 py-2.5">
-                        <span className="mt-0.5 w-5 h-5 rounded-full bg-indigo-100 text-indigo-600 text-[11px] font-bold flex items-center justify-center shrink-0">
-                          {idx + 1}
-                        </span>
-                        <div className="min-w-0">
-                          <p className="text-sm font-medium text-slate-800 truncate">
-                            {row.college_name ?? "—"}
-                          </p>
-                          <p className="text-xs text-slate-400 mt-0.5">
-                            ROI {fmtRoi(row.roi_score)}
-                            {" · "}
-                            {fmtSalary(row.net_salary, card.currency)} net
-                            {" · "}
-                            {fmtPayback(row.payback_years)}
-                          </p>
+            {/* 테이블 */}
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="bg-slate-50/80 border-b border-slate-100">
+                    <th className="text-left px-4 py-2.5 text-xs font-medium text-slate-400 whitespace-nowrap">
+                      College
+                    </th>
+                    <th className="text-left px-4 py-2.5 text-xs font-medium text-slate-400 whitespace-nowrap hidden sm:table-cell">
+                      Field
+                    </th>
+                    <th className="text-right px-4 py-2.5 text-xs font-medium text-slate-400 whitespace-nowrap">
+                      ROI Score ↓
+                    </th>
+                    <th className="text-right px-4 py-2.5 text-xs font-medium text-slate-400 whitespace-nowrap">
+                      Net Salary
+                    </th>
+                    <th className="text-right px-4 py-2.5 text-xs font-medium text-slate-400 whitespace-nowrap hidden md:table-cell">
+                      Payback
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {MOCK_ROWS.map((row, i) => (
+                    <tr key={i} className={i % 2 === 0 ? "bg-white" : "bg-slate-50/40"}>
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-2">
+                          <span className="text-base leading-none">{row.flag}</span>
+                          <span className="font-medium text-slate-800 whitespace-nowrap">
+                            {row.college}
+                          </span>
                         </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Avg 요약 row */}
-                  <div className="flex items-center gap-3 px-5 py-3 bg-slate-50 border-t border-slate-100">
-                    <span className="text-xs text-slate-400 font-medium shrink-0">Avg</span>
-                    <div className="flex items-center gap-3 text-xs font-semibold text-slate-700">
-                      <span>ROI {fmtRoi(card.avgRoi)}</span>
-                      <span className="text-slate-300">·</span>
-                      <span>Net {fmtSalary(card.avgSalary, card.currency)}</span>
-                      <span className="text-slate-300">·</span>
-                      <span>{fmtPayback(card.avgPayback)}</span>
-                    </div>
-                  </div>
-
-                  {/* 링크 */}
-                  <div className="px-5 py-3 border-t border-slate-100">
-                    <Link
-                      href={`/roi-explorer?country=${card.country}`}
-                      className="inline-flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-700 font-medium transition-colors"
-                    >
-                      View all {card.name} universities <ArrowRight className="w-3 h-3" />
-                    </Link>
-                  </div>
-                </div>
-              ))}
+                      </td>
+                      <td className="px-4 py-3 text-slate-500 hidden sm:table-cell whitespace-nowrap">
+                        {row.field}
+                      </td>
+                      <td className="px-4 py-3 text-right">
+                        <span className={`inline-block px-2 py-0.5 rounded-md text-xs font-bold ${row.roiClass}`}>
+                          {row.roi}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-right font-medium text-slate-700 whitespace-nowrap">
+                        {row.salary}
+                      </td>
+                      <td className="px-4 py-3 text-right text-slate-500 hidden md:table-cell whitespace-nowrap">
+                        {row.payback}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
 
           </div>
         </div>
+
+        {/* 하단 페이드 오버레이 */}
+        <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-indigo-950 via-indigo-950/70 to-transparent pointer-events-none" />
       </section>
 
       {/* ── Stats ── */}
