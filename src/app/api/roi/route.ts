@@ -67,7 +67,7 @@ export async function GET(req: NextRequest) {
     }
 
     const { data, count, error } = await query
-      .order(sort, { ascending: SORT_ASCENDING[sort] })
+      .order(sort, { ascending: SORT_ASCENDING[sort], nullsFirst: false })
       .limit(limit)
 
     if (error) {

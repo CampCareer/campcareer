@@ -2,9 +2,9 @@
 #
 # 전략:
 #   1. /courses?items_per_page=100&page=N 페이지를 순회해 코스 URL 수집
-#   2. NFQ Level 8 (Honours Bachelor, Higher Education CAO) 코스만 필터
+#   2. NFQ Level 6, 7, 8, 9 코스만 필터
 #   3. 각 상세 페이지에서 Provider·Location·Duration·CAO Points 파싱
-#   4. qualifax_raw.json 저장 (Supabase 업서트는 별도 스텝)
+#   4. qualifax_raw_all_levels.json 저장 (Supabase 업서트는 별도 스텝)
 #
 # pip install requests beautifulsoup4 supabase python-dotenv
 
@@ -192,15 +192,18 @@ def scrape_all():
     all_courses = get_all_listings(max_pages=50)
     print(f"\n전체 {len(all_courses)}개 코스 수집")
 
-    # Level 8 (Honours Bachelor) 필터
-    level8 = [c for c in all_courses if c.get("nfq_level") == 8]
-    print(f"NFQ Level 8 필터 후: {len(level8)}개")
+    # Level 6, 7, 8, 9 필터
+    level_filtered = [c for c in all_courses if c.get("nfq_level") in {6, 7, 8, 9}]
+    print(f"NFQ Level 6-9 필터 후: {len(level_filtered)}개")
+    for lvl in [6, 7, 8, 9]:
+        cnt = sum(1 for c in level_filtered if c.get("nfq_level") == lvl)
+        print(f"  Level {lvl}: {cnt}개")
 
     # 상세 파싱
     print("\n[STEP 2] 상세 페이지 파싱")
     results = []
-    for i, course in enumerate(level8, 1):
-        print(f"  [{i}/{len(level8)}] {course['title'][:60]}")
+    for i, course in enumerate(level_filtered, 1):
+        print(f"  [{i}/{len(level_filtered)}] (Level {course.get('nfq_level')}) {course['title'][:55]}")
         detail = get_course_detail(course["url"])
         record = {**course, **detail}
 
@@ -211,7 +214,7 @@ def scrape_all():
         results.append(record)
         time.sleep(0.4)
 
-    print(f"\n✅ 총 {len(results)}개 Level 8 코스 수집 완료")
+    print(f"\n✅ 총 {len(results)}개 Level 6-9 코스 수집 완료")
     return results
 
 
@@ -225,6 +228,6 @@ if __name__ == "__main__":
     print(f"  colleges_ie 매칭: {matched}/{len(data)}")
     print(f"  CAO Points 있음: {with_points}/{len(data)}")
 
-    with open("qualifax_raw.json", "w", encoding="utf-8") as f:
+    with open("qualifax_raw_all_levels.json", "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
-    print("💾 qualifax_raw.json 저장 완료")
+    print("💾 qualifax_raw_all_levels.json 저장 완료")
