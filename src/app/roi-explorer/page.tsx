@@ -30,6 +30,9 @@ type RoiRow = {
   tuition: number
   graduation_rate: number
   median_earnings: number
+  avg_cao_points: number | null
+  min_cao_points: number | null
+  max_cao_points: number | null
 }
 
 const SORT_OPTIONS = [
@@ -377,7 +380,8 @@ function ROIExplorerContent() {
     ["Payback",                        "text-right"],
     [`Tuition (${currencyCode})`,      "text-right"],
     ["Grad Rate",                      "text-right"],
-  ] as const
+    ...(country === "ie" ? [["Admission", "text-right"] as const] : []),
+  ]
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-10 space-y-8">
@@ -563,6 +567,25 @@ function ROIExplorerContent() {
                       <td className="px-4 py-3 text-right text-slate-600 whitespace-nowrap">
                         {(row.graduation_rate * 100).toFixed(1)}%
                       </td>
+                      {country === "ie" && (
+                        <td className="px-4 py-3 text-right">
+                          {row.avg_cao_points ? (
+                            <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                              row.avg_cao_points >= 560
+                                ? "bg-red-100 text-red-700"
+                                : row.avg_cao_points >= 450
+                                ? "bg-amber-100 text-amber-700"
+                                : row.avg_cao_points >= 350
+                                ? "bg-green-100 text-green-700"
+                                : "bg-slate-100 text-slate-600"
+                            }`}>
+                              {row.avg_cao_points}pts
+                            </span>
+                          ) : (
+                            <span className="text-slate-300 text-xs">—</span>
+                          )}
+                        </td>
+                      )}
                     </tr>
                   ))
                 }
