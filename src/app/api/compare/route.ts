@@ -60,8 +60,8 @@ export async function GET(req: NextRequest) {
           return [country, { ...summarise(data), field_data_available: true }]
         }
 
-        // AU / CA / UK / IE — no field_name column, return overall top 3
-        const { data } = await supabase
+        // AU / CA / UK / IE — filter by field_name if provided
+        let query = supabase
           .from(NON_US_TABLE[country])
           .select('college_id, college_name, roi_score, net_salary, payback_years')
           .gt('roi_score', 0)
@@ -69,8 +69,14 @@ export async function GET(req: NextRequest) {
           .order('roi_score', { ascending: false })
           .limit(100)
 
+        const hasField = field.trim().length > 0
+        if (hasField) {
+          query = query.ilike('field_name', `%${field}%`)
+        }
+
+        const { data } = await query
         if (!data || data.length === 0) return [country, EMPTY]
-        return [country, { ...summarise(data), field_data_available: false }]
+        return [country, { ...summarise(data), field_data_available: hasField }]
       })
     )
 
