@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 
-const VALID_SORT_FIELDS = ['roi_score', 'payback_years', 'net_salary'] as const
+const VALID_SORT_FIELDS = ['roi_score', 'payback_years', 'net_salary', 'avg_cao_points'] as const
 type SortField = typeof VALID_SORT_FIELDS[number]
 
 // payback_years: ascending (fewer years = better), others: descending
@@ -9,6 +9,7 @@ const SORT_ASCENDING: Record<SortField, boolean> = {
   roi_score: false,
   net_salary: false,
   payback_years: true,
+  avg_cao_points: false,
 }
 
 function getTableName(country: string, field: string, byCollegeId: boolean): string {

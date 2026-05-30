@@ -477,6 +477,9 @@ function ROIExplorerContent() {
                   {SORT_OPTIONS.map((o) => (
                     <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
                   ))}
+                  {country === "ie" && (
+                    <SelectItem value="avg_cao_points">Admission (CAO pts)</SelectItem>
+                  )}
                 </SelectContent>
               </Select>
             </div>
