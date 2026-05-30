@@ -39,6 +39,7 @@ export async function GET(req: NextRequest) {
   const state = (stateParam === 'ALL_STATES' || !stateParam) ? defaultState : stateParam
   const field = searchParams.get('field') ?? ''
   const collegeId = searchParams.get('college_id') ?? ''
+  const nfqLevelParam = searchParams.get('nfq_level')
   const limit = Math.min(parseInt(searchParams.get('limit') ?? '50', 10), 500)
   const sortParam = searchParams.get('sort') ?? 'roi_score'
 
@@ -63,6 +64,9 @@ export async function GET(req: NextRequest) {
       query = query.eq('college_state', state)
       if (field) {
         query = query.ilike('field_name', `%${field}%`)
+      }
+      if (country === 'ie' && nfqLevelParam) {
+        query = query.eq('nfq_level', parseInt(nfqLevelParam, 10))
       }
     }
 

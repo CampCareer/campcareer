@@ -11,22 +11,30 @@ import {
 
 // ── 타입 ─────────────────────────────────────────────────────────────────────
 
-type RoiRow = { roi_score: number; net_salary: number; payback_years: number }
+type RoiRow = {
+  college_name: string
+  roi_score: number
+  net_salary: number
+  payback_years: number
+}
+
+type NumericRoiKey = "roi_score" | "net_salary" | "payback_years"
 
 type CountryCard = {
   flag: string
   name: string
   currency: string
+  country: string
+  rows: RoiRow[]
   avgRoi: number | null
   avgSalary: number | null
   avgPayback: number | null
-  href: string
 }
 
 // ── 유틸 ─────────────────────────────────────────────────────────────────────
 
-function mean(rows: RoiRow[] | null, key: keyof RoiRow): number | null {
-  if (!rows?.length) return null
+function mean(rows: RoiRow[], key: NumericRoiKey): number | null {
+  if (!rows.length) return null
   const vals = rows.map((r) => r[key]).filter((v) => v != null) as number[]
   if (!vals.length) return null
   return vals.reduce((s, v) => s + v, 0) / vals.length
@@ -39,46 +47,46 @@ function fmtSalary(v: number | null, prefix: string) {
   return v == null ? "—" : `${prefix}${Math.round(v / 1000)}k`
 }
 function fmtPayback(v: number | null) {
-  return v == null ? "—" : `${v.toFixed(1)} yrs`
+  return v == null ? "—" : `${v.toFixed(1)}yr`
 }
 
 // ── 데이터 fetch ──────────────────────────────────────────────────────────────
 
 async function getCountryCards(): Promise<CountryCard[]> {
-  const query = (table: string) =>
+  const base = (table: string) =>
     supabase
       .from(table)
-      .select("roi_score,net_salary,payback_years")
+      .select("college_name,roi_score,net_salary,payback_years")
       .gt("roi_score", 0)
-      .order("roi_score", { ascending: false })
+      .order("roi_score", { ascending: false, nullsFirst: false })
       .limit(3)
 
   const [us, ie, uk] = await Promise.all([
-    query("roi_explorer_us"),
-    query("roi_explorer_ie"),
-    query("roi_explorer_uk"),
+    base("roi_explorer_us").eq("college_state", "CA"),
+    base("roi_explorer_ie").eq("college_state", "Leinster").eq("nfq_level", 8),
+    base("roi_explorer_uk").eq("college_state", "London"),
   ])
 
   const build = (
     flag: string,
     name: string,
     currency: string,
-    rows: RoiRow[] | null,
     country: string,
-  ): CountryCard => ({
-    flag,
-    name,
-    currency,
-    avgRoi: mean(rows, "roi_score"),
-    avgSalary: mean(rows, "net_salary"),
-    avgPayback: mean(rows, "payback_years"),
-    href: `/roi-explorer?country=${country}`,
-  })
+    raw: RoiRow[] | null,
+  ): CountryCard => {
+    const rows = raw ?? []
+    return {
+      flag, name, currency, country, rows,
+      avgRoi:     mean(rows, "roi_score"),
+      avgSalary:  mean(rows, "net_salary"),
+      avgPayback: mean(rows, "payback_years"),
+    }
+  }
 
   return [
-    build("🇺🇸", "USA",     "$", us.data as RoiRow[] | null, "us"),
-    build("🇮🇪", "Ireland", "€", ie.data as RoiRow[] | null, "ie"),
-    build("🇬🇧", "UK",      "£", uk.data as RoiRow[] | null, "uk"),
+    build("🇺🇸", "USA",     "$", "us", us.data as RoiRow[] | null),
+    build("🇮🇪", "Ireland", "€", "ie", ie.data as RoiRow[] | null),
+    build("🇬🇧", "UK",      "£", "uk", uk.data as RoiRow[] | null),
   ]
 }
 
@@ -243,48 +251,63 @@ export default async function LandingPage() {
               {countryCards.map((card) => (
                 <div
                   key={card.name}
-                  className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all"
+                  className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:border-indigo-200 transition-all"
                 >
-                  {/* 헤더 */}
-                  <div className="flex items-center justify-between mb-4">
+                  {/* 카드 헤더 */}
+                  <div className="flex items-center justify-between px-5 pt-4 pb-3">
                     <div className="flex items-center gap-2.5">
                       <span className="text-2xl leading-none">{card.flag}</span>
                       <span className="font-semibold text-slate-900">{card.name}</span>
                     </div>
                     <span className="text-[11px] text-slate-400 bg-slate-50 border border-slate-100 px-2 py-1 rounded-full">
-                      Top 3 avg
+                      Top 3 universities
                     </span>
                   </div>
 
-                  {/* 지표 그리드 */}
-                  <div className="grid grid-cols-3 gap-3 mb-4">
-                    <div className="text-center bg-slate-50 rounded-xl py-3">
-                      <p className="text-[11px] text-slate-400 mb-1">AVG ROI Score</p>
-                      <p className="text-xl font-bold text-slate-900">
-                        {fmtRoi(card.avgRoi)}
-                      </p>
-                    </div>
-                    <div className="text-center bg-slate-50 rounded-xl py-3">
-                      <p className="text-[11px] text-slate-400 mb-1">Net Salary</p>
-                      <p className="text-xl font-bold text-slate-900">
-                        {fmtSalary(card.avgSalary, card.currency)}
-                      </p>
-                    </div>
-                    <div className="text-center bg-slate-50 rounded-xl py-3">
-                      <p className="text-[11px] text-slate-400 mb-1">Payback</p>
-                      <p className="text-xl font-bold text-slate-900">
-                        {fmtPayback(card.avgPayback)}
-                      </p>
+                  {/* 대학 리스트 */}
+                  <div className="divide-y divide-slate-100">
+                    {card.rows.map((row, idx) => (
+                      <div key={idx} className="flex items-start gap-3 px-5 py-2.5">
+                        <span className="mt-0.5 w-5 h-5 rounded-full bg-indigo-100 text-indigo-600 text-[11px] font-bold flex items-center justify-center shrink-0">
+                          {idx + 1}
+                        </span>
+                        <div className="min-w-0">
+                          <p className="text-sm font-medium text-slate-800 truncate">
+                            {row.college_name ?? "—"}
+                          </p>
+                          <p className="text-xs text-slate-400 mt-0.5">
+                            ROI {fmtRoi(row.roi_score)}
+                            {" · "}
+                            {fmtSalary(row.net_salary, card.currency)} net
+                            {" · "}
+                            {fmtPayback(row.payback_years)}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Avg 요약 row */}
+                  <div className="flex items-center gap-3 px-5 py-3 bg-slate-50 border-t border-slate-100">
+                    <span className="text-xs text-slate-400 font-medium shrink-0">Avg</span>
+                    <div className="flex items-center gap-3 text-xs font-semibold text-slate-700">
+                      <span>ROI {fmtRoi(card.avgRoi)}</span>
+                      <span className="text-slate-300">·</span>
+                      <span>Net {fmtSalary(card.avgSalary, card.currency)}</span>
+                      <span className="text-slate-300">·</span>
+                      <span>{fmtPayback(card.avgPayback)}</span>
                     </div>
                   </div>
 
                   {/* 링크 */}
-                  <Link
-                    href={card.href}
-                    className="inline-flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-700 font-medium transition-colors"
-                  >
-                    View full comparison <ArrowRight className="w-3 h-3" />
-                  </Link>
+                  <div className="px-5 py-3 border-t border-slate-100">
+                    <Link
+                      href={`/roi-explorer?country=${card.country}`}
+                      className="inline-flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-700 font-medium transition-colors"
+                    >
+                      View all {card.name} universities <ArrowRight className="w-3 h-3" />
+                    </Link>
+                  </div>
                 </div>
               ))}
             </div>
