@@ -60,7 +60,7 @@ export async function GET(req: NextRequest) {
       query = query.eq('college_id', collegeId)
     } else {
       query = query.eq('college_state', state)
-      if (field && country === 'us') {
+      if (field) {
         query = query.ilike('field_name', `%${field}%`)
       }
     }

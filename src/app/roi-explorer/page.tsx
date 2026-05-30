@@ -185,9 +185,11 @@ function SkeletonRow({ cols }: { cols: number }) {
 function FieldCombobox({
   value,
   onChange,
+  country = "us",
 }: {
   value: string
   onChange: (v: string) => void
+  country?: string
 }) {
   const [input, setInput] = useState(value ? trimDot(value) : "")
   const [options, setOptions] = useState<string[]>([])
@@ -219,7 +221,7 @@ function FieldCombobox({
     }
     const timer = setTimeout(async () => {
       try {
-        const res = await fetch(`/api/roi/fields?q=${encodeURIComponent(input)}`)
+        const res = await fetch(`/api/roi/fields?q=${encodeURIComponent(input)}&country=${country}`)
         const json = await res.json()
         setOptions(json.fields ?? [])
         setOpen(true)
@@ -337,7 +339,7 @@ function ROIExplorerContent() {
     setError(null)
 
     const params = new URLSearchParams({ country, state, limit: String(limit), sort })
-    if (field && country === "us") params.set("field", field)
+    if (field) params.set("field", field)
 
     fetch(`/api/roi?${params}`, { signal: controller.signal })
       .then((res) => {
@@ -429,8 +431,8 @@ function ROIExplorerContent() {
 
             <div className="space-y-1.5">
               <label className="text-xs font-medium text-slate-600">Field of Study</label>
-              {country === "us" ? (
-                <FieldCombobox value={field} onChange={setField} />
+              {country === "us" || country === "ie" ? (
+                <FieldCombobox value={field} onChange={setField} country={country} />
               ) : (
                 <div title="Field-level data not available for this country">
                   <input

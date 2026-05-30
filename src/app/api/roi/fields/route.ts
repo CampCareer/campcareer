@@ -2,31 +2,46 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 
 export async function GET(req: NextRequest) {
-  const q = req.nextUrl.searchParams.get('q') ?? ''
+  const q       = req.nextUrl.searchParams.get('q') ?? ''
+  const country = req.nextUrl.searchParams.get('country') ?? 'us'
 
   if (!q.trim()) {
     return NextResponse.json({ fields: [] })
   }
 
-  // programs table does not exist — query distinct field_name from the US ROI view
-  const { data, error } = await supabase
-    .from('roi_explorer_by_field_us')
-    .select('field_name')
-    .ilike('field_name', `%${q}%`)
-    .not('field_name', 'is', null)
-    .limit(500)
+  let rawNames: (string | null)[]
 
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+  if (country === 'ie') {
+    // IE: courses_ie.title (Qualifax course titles as field-of-study proxy)
+    const { data, error } = await supabase
+      .from('courses_ie')
+      .select('title')
+      .ilike('title', `%${q}%`)
+      .not('title', 'is', null)
+      .limit(500)
+
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+    rawNames = data.map((r) => r.title as string | null)
+  } else {
+    // US (default): field_name from the field-level ROI view
+    const { data, error } = await supabase
+      .from('roi_explorer_by_field_us')
+      .select('field_name')
+      .ilike('field_name', `%${q}%`)
+      .not('field_name', 'is', null)
+      .limit(500)
+
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+    rawNames = data.map((r) => r.field_name as string | null)
   }
 
   const seen = new Set<string>()
   const unique: string[] = []
-  for (const r of data) {
-    const name = r.field_name as string | null
-    if (name && !seen.has(name)) {
-      seen.add(name)
-      unique.push(name)
+  for (const name of rawNames) {
+    const clean = name ? (country === 'us' ? name : name) : null
+    if (clean && !seen.has(clean)) {
+      seen.add(clean)
+      unique.push(clean)
     }
   }
   unique.sort()
