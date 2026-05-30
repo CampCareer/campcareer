@@ -7,8 +7,8 @@ import { Header } from "./header"
 export function LayoutShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
 
-  // 랜딩 페이지는 사이드바·헤더 없이 풀스크린
-  if (pathname === "/") {
+  // 랜딩·로그인 페이지는 사이드바·헤더 없이 풀스크린
+  if (pathname === "/" || pathname === "/login") {
     return <>{children}</>
   }
 

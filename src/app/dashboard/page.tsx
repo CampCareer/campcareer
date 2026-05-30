@@ -1,97 +1,145 @@
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { ArrowRight, Globe, GraduationCap, BarChart3 } from "lucide-react"
+import { ArrowRight, TrendingUp, Globe, CheckSquare, CalendarDays } from "lucide-react"
 
-const stats = [
-  { value: "5",    label: "Countries",       icon: Globe },
-  { value: "50+",  label: "Degrees",         icon: GraduationCap },
-  { value: "Real", label: "Salary Data",     icon: BarChart3 },
+// ── 시간대별 인사 (서버 사이드) ────────────────────────────────────────────────
+
+function getGreeting(): string {
+  const hour = new Date().getUTCHours()
+  if (hour < 12) return "Good morning"
+  if (hour < 18) return "Good afternoon"
+  return "Good evening"
+}
+
+// ── 상수 ─────────────────────────────────────────────────────────────────────
+
+const QUICK_STATS = [
+  { emoji: "🌍", label: "Countries Available", value: "5" },
+  { emoji: "📚", label: "Courses Tracked",     value: "2,860+" },
+  { emoji: "📊", label: "Last Updated",        value: "May 2026" },
 ]
 
-const COUNTRY_PILLS = [
-  { label: "🇦🇺 Australia", code: "au" },
-  { label: "🇬🇧 UK",        code: "uk" },
-  { label: "🇨🇦 Canada",    code: "ca" },
-  { label: "🇮🇪 Ireland",   code: "ie" },
-  { label: "🇺🇸 USA",       code: "us" },
+const FEATURE_CARDS = [
+  {
+    emoji: "📈",
+    title: "ROI Explorer",
+    desc: "Find best ROI by country",
+    href: "/roi-explorer",
+    accent: "bg-indigo-50 border-indigo-100 hover:border-indigo-300",
+    iconBg: "bg-indigo-100",
+    iconText: "text-indigo-600",
+  },
+  {
+    emoji: "🌐",
+    title: "Country Compare",
+    desc: "Side-by-side comparison",
+    href: "/compare",
+    accent: "bg-sky-50 border-sky-100 hover:border-sky-300",
+    iconBg: "bg-sky-100",
+    iconText: "text-sky-600",
+  },
+  {
+    emoji: "✅",
+    title: "Checklist",
+    desc: "Track your application",
+    href: "/checklist",
+    accent: "bg-emerald-50 border-emerald-100 hover:border-emerald-300",
+    iconBg: "bg-emerald-100",
+    iconText: "text-emerald-600",
+  },
+  {
+    emoji: "📅",
+    title: "Timeline",
+    desc: "Plan your journey",
+    href: "/timeline",
+    accent: "bg-amber-50 border-amber-100 hover:border-amber-300",
+    iconBg: "bg-amber-100",
+    iconText: "text-amber-600",
+  },
 ]
+
+// ── 컴포넌트 ──────────────────────────────────────────────────────────────────
 
 export default function Dashboard() {
+  const greeting = getGreeting()
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-full px-6 py-24">
-      <div className="max-w-2xl w-full mx-auto text-center">
+    <div className="max-w-5xl mx-auto px-6 py-8 space-y-8">
 
-        {/* Badge */}
-        <div className="inline-flex items-center gap-2 bg-indigo-50 text-indigo-600 text-xs font-medium px-3 py-1.5 rounded-full mb-8 border border-indigo-100">
-          <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
-          Data-driven career decisions
-        </div>
-
-        {/* Hero heading */}
-        <h1 className="text-5xl font-bold text-slate-900 leading-tight tracking-tight">
-          Find Your Best Country.
-          <br />
-          <span className="text-indigo-500">With Data, Not Emotions.</span>
+      {/* ── 헤더 ── */}
+      <div>
+        <h1 className="text-2xl font-bold text-slate-900">
+          {greeting} 👋
         </h1>
-
-        {/* Subtext */}
-        <p className="mt-6 text-lg text-slate-500 leading-relaxed">
-          Compare graduate salaries, tax, and cost of living across{" "}
-          <span className="text-slate-700 font-medium">
-            Australia, UK, Canada, Ireland & USA
-          </span>
+        <p className="text-slate-500 mt-1 text-sm">
+          Here&apos;s your study abroad overview
         </p>
-
-        {/* CTA */}
-        <div className="mt-10 flex items-center justify-center gap-3">
-          <Button
-            asChild
-            size="lg"
-            className="bg-indigo-500 hover:bg-indigo-600 text-white px-8 rounded-xl gap-2"
-          >
-            <Link href="/roi-explorer">
-              Explore ROI
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </Button>
-          <Button asChild variant="ghost" size="lg" className="text-slate-600 rounded-xl">
-            <Link href="/compare">Compare Countries</Link>
-          </Button>
-        </div>
-
-        {/* Country pills */}
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
-          {COUNTRY_PILLS.map(({ label, code }) => (
-            <Link
-              key={code}
-              href={`/roi-explorer?country=${code}`}
-              className="text-xs bg-white border border-slate-200 text-slate-600 px-3 py-1 rounded-full hover:bg-indigo-50 hover:border-indigo-200 hover:text-indigo-600 transition-colors cursor-pointer"
-            >
-              {label}
-            </Link>
-          ))}
-        </div>
-
-        {/* Divider */}
-        <div className="mt-16 border-t border-slate-200" />
-
-        {/* Stats */}
-        <div className="mt-12 grid grid-cols-3 gap-6">
-          {stats.map(({ value, label, icon: Icon }) => (
-            <div
-              key={label}
-              className="flex flex-col items-center gap-2 bg-white border border-slate-200 rounded-2xl px-6 py-6 shadow-sm"
-            >
-              <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center">
-                <Icon className="w-5 h-5 text-indigo-500" />
-              </div>
-              <span className="text-3xl font-bold text-slate-900">{value}</span>
-              <span className="text-sm text-slate-500">{label}</span>
-            </div>
-          ))}
-        </div>
-
       </div>
+
+      {/* ── Quick Stats ── */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {QUICK_STATS.map((s) => (
+          <div
+            key={s.label}
+            className="bg-white border border-slate-200 rounded-2xl px-5 py-4 flex items-center gap-4 shadow-sm"
+          >
+            <span className="text-2xl leading-none">{s.emoji}</span>
+            <div>
+              <p className="text-xs text-slate-400 font-medium">{s.label}</p>
+              <p className="text-xl font-bold text-slate-900 mt-0.5">{s.value}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* ── Jump back in ── */}
+      <div>
+        <h2 className="text-base font-semibold text-slate-900 mb-3">
+          Jump back in
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {FEATURE_CARDS.map((card) => (
+            <Link
+              key={card.title}
+              href={card.href}
+              className={`group flex flex-col gap-3 border rounded-2xl p-5 transition-all duration-200 hover:scale-105 hover:shadow-md ${card.accent}`}
+            >
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl ${card.iconBg}`}>
+                {card.emoji}
+              </div>
+              <div>
+                <p className={`text-sm font-semibold text-slate-800 mb-0.5`}>
+                  {card.title}
+                </p>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  {card.desc}
+                </p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Featured Insight ── */}
+      <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-6">
+        <p className="text-xs font-semibold text-indigo-600 mb-2 uppercase tracking-wide">
+          💡 Did you know?
+        </p>
+        <h3 className="text-lg font-bold text-slate-900 mb-2 leading-snug">
+          Irish CS graduates earn €45k on average.
+        </h3>
+        <p className="text-sm text-slate-600 leading-relaxed mb-5">
+          Regional universities offer 2× better ROI than Dublin universities
+          — backed by HEA graduate outcome data.
+        </p>
+        <Link
+          href="/roi-explorer?country=ie"
+          className="inline-flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors"
+        >
+          Explore Ireland ROI
+          <ArrowRight className="w-3.5 h-3.5" />
+        </Link>
+      </div>
+
     </div>
   )
 }
