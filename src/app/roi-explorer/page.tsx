@@ -392,6 +392,25 @@ function ROIExplorerContent() {
         <p className="mt-2 text-slate-500 text-sm leading-relaxed">
           Compare return on investment across {stateName} {country === "us" ? "colleges" : "universities"} and cities.
         </p>
+
+        {country === "ie" && (
+          <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 text-amber-700 text-xs px-3 py-2 rounded-lg mt-3 max-w-2xl">
+            <span className="mt-0.5">📊</span>
+            <span>
+              Field earnings based on{" "}
+              <a
+                href="https://hea.ie/statistics/graduate-outcomes/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline font-medium hover:text-amber-900"
+              >
+                HEA Graduate Outcomes Survey 2023
+              </a>
+              {" "}— national averages by field of study.
+              College-specific earnings data is not publicly available in Ireland.
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Filters */}
