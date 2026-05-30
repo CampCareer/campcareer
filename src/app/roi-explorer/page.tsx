@@ -33,6 +33,8 @@ type RoiRow = {
   avg_cao_points: number | null
   min_cao_points: number | null
   max_cao_points: number | null
+  roi_score_mid: number | null
+  roi_score_senior: number | null
 }
 
 const SORT_OPTIONS = [
@@ -311,6 +313,7 @@ function ROIExplorerContent() {
   const [field, setField] = useState("")
   const [sort, setSort]   = useState("roi_score")
   const [limit, setLimit] = useState(50)
+  const [careerStage, setCareerStage] = useState<'early' | 'mid' | 'senior'>('early')
   const [data, setData]   = useState<RoiRow[]>([])
   const [count, setCount] = useState(0)
   const [loading, setLoading] = useState(true)
@@ -332,6 +335,7 @@ function ROIExplorerContent() {
     setCountry(c)
     setState(c === "au" ? "NSW" : c === "ca" ? "ON" : c === "uk" ? "London" : c === "ie" ? "Leinster" : "CA")
     setField("")
+    setCareerStage("early")
   }
 
   useEffect(() => {
@@ -343,6 +347,7 @@ function ROIExplorerContent() {
 
     const params = new URLSearchParams({ country, state, limit: String(limit), sort })
     if (field) params.set("field", field)
+    if (country === "us" && careerStage !== "early") params.set("career_stage", careerStage)
 
     fetch(`/api/roi?${params}`, { signal: controller.signal })
       .then((res) => {
@@ -367,7 +372,7 @@ function ROIExplorerContent() {
       cancelled = true
       controller.abort()
     }
-  }, [country, state, field, sort, limit])
+  }, [country, state, field, sort, limit, careerStage])
 
   const currencyCode = CURRENCY[country]?.code ?? 'USD'
 
@@ -375,7 +380,7 @@ function ROIExplorerContent() {
     ["College",                        "text-left"],
     ["Field",                          "text-left"],
     ["City",                           "text-left"],
-    ["ROI Score",                      "text-right"],
+    [country === "us" ? `ROI Score (${careerStage === "early" ? "Early Career" : careerStage === "mid" ? "Mid Career" : "Senior"})` : "ROI Score", "text-right"],
     [`Net Salary (${currencyCode})`,   "text-right"],
     ["Payback",                        "text-right"],
     [`Tuition (${currencyCode})`,      "text-right"],
@@ -467,6 +472,29 @@ function ROIExplorerContent() {
               )}
             </div>
 
+            {country === "us" && (
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-slate-600">Career Stage</label>
+                <div className="flex h-10 rounded-xl border border-slate-200 overflow-hidden">
+                  {(["early", "mid", "senior"] as const).map((stage, i) => (
+                    <button
+                      key={stage}
+                      onClick={() => setCareerStage(stage)}
+                      className={`px-3 text-xs font-medium transition-colors whitespace-nowrap ${
+                        i > 0 ? "border-l border-slate-200" : ""
+                      } ${
+                        careerStage === stage
+                          ? "bg-indigo-600 text-white"
+                          : "bg-white text-slate-600 hover:bg-slate-50"
+                      }`}
+                    >
+                      {stage === "early" ? "Early (1yr)" : stage === "mid" ? "Mid (4yr)" : "Senior (10yr)"}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div className="space-y-1.5">
               <label className="text-xs font-medium text-slate-600">Sort by</label>
               <Select value={sort} onValueChange={(v) => v && setSort(v)}>
@@ -555,7 +583,11 @@ function ROIExplorerContent() {
                       </td>
                       <td className="px-4 py-3 text-right">
                         <span className="font-semibold text-indigo-600">
-                          {row.roi_score.toFixed(1)}
+                          {country === "us" && careerStage === "mid"
+                            ? (row.roi_score_mid ?? row.roi_score).toFixed(1)
+                            : country === "us" && careerStage === "senior"
+                            ? (row.roi_score_senior ?? row.roi_score).toFixed(1)
+                            : row.roi_score.toFixed(1)}
                         </span>
                       </td>
                       <td className="px-4 py-3 text-right font-medium text-slate-700 whitespace-nowrap">

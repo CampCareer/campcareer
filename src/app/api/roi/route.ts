@@ -42,10 +42,16 @@ export async function GET(req: NextRequest) {
   const nfqLevelParam = searchParams.get('nfq_level')
   const limit = Math.min(parseInt(searchParams.get('limit') ?? '50', 10), 500)
   const sortParam = searchParams.get('sort') ?? 'roi_score'
+  const careerStage = searchParams.get('career_stage') ?? 'early' // early | mid | senior
 
   const sort: SortField = VALID_SORT_FIELDS.includes(sortParam as SortField)
     ? (sortParam as SortField)
     : 'roi_score'
+
+  // US only: map career stage to the corresponding roi_score column
+  const effectiveSort: string = (country === 'us' && sort === 'roi_score')
+    ? (careerStage === 'mid' ? 'roi_score_mid' : careerStage === 'senior' ? 'roi_score_senior' : 'roi_score')
+    : sort
 
   const tableName = getTableName(country, field, !!collegeId)
 
@@ -56,6 +62,11 @@ export async function GET(req: NextRequest) {
       .select('*', { count: 'exact' })
       .gt('roi_score', 0)
       .gt('payback_years', 0)
+
+    // For US mid/senior stages, also exclude rows where the target column is null/zero
+    if (country === 'us' && effectiveSort !== 'roi_score') {
+      query = query.gt(effectiveSort, 0)
+    }
 
     if (collegeId) {
       // college detail: return all city combinations for this college
@@ -71,7 +82,7 @@ export async function GET(req: NextRequest) {
     }
 
     const { data, count, error } = await query
-      .order(sort, { ascending: SORT_ASCENDING[sort], nullsFirst: false })
+      .order(effectiveSort, { ascending: SORT_ASCENDING[sort], nullsFirst: false })
       .limit(limit)
 
     if (error) {
