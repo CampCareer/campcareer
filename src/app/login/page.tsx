@@ -42,12 +42,22 @@ export default function LoginPage() {
     setError(null)
 
     if (mode === 'signin') {
-      const { error } = await supabase.auth.signInWithPassword({ email, password })
+      const { error, data } = await supabase.auth.signInWithPassword({ email, password })
       if (error) {
         setError(error.message)
         setIsLoading(false)
       } else {
-        router.push('/dashboard')
+        // 온보딩 완료 여부 확인
+        const { data: prefs } = await supabase
+          .from('user_preferences')
+          .select('id')
+          .eq('id', data.user!.id)
+          .single()
+        if (!prefs) {
+          router.push('/onboarding')
+        } else {
+          router.push('/dashboard')
+        }
         router.refresh()
       }
     } else {
