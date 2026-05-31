@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase-client'
-import { ArrowRight, Check } from 'lucide-react'
+import { ArrowRight, Check, Share2, Copy, CheckCheck } from 'lucide-react'
 
 type Step = 1 | 2 | 3 | 4 | 5
 type Goal = 'visa' | 'pr' | 'study'
@@ -82,6 +82,7 @@ export default function OnboardingPage() {
   const [english, setEnglish] = useState<English | null>(null)
   const [saving, setSaving] = useState(false)
   const [result, setResult] = useState<{ country: string; flag: string; reasons: string[] } | null>(null)
+  const [copied, setCopied] = useState(false)
 
   async function handleFinish(env: Environment) {
     if (!goal || !budget || !english) return
@@ -102,6 +103,26 @@ export default function OnboardingPage() {
       })
     }
     setSaving(false)
+  }
+
+  function handleShare() {
+    if (!result) return
+    const text = `🎓 My best country for studying abroad is ${result.flag} ${COUNTRY_NAME[result.country]}!\n\n✅ ${result.reasons.join('\n✅ ')}\n\nFind your best country → campcareer.com`
+    if (navigator.share) {
+      navigator.share({ title: 'CampCareer', text })
+    } else {
+      navigator.clipboard.writeText(text).then(() => {
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2000)
+      })
+    }
+  }
+
+  function handleTwitterShare() {
+    if (!result) return
+    const text = `My best country for studying abroad is ${result.flag} ${COUNTRY_NAME[result.country]}!\n\n✅ ${result.reasons[0]}\n✅ ${result.reasons[1]}\n\nFind yours → campcareer.com`
+    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`
+    window.open(url, '_blank')
   }
 
   const STEPS_TOTAL = 4
@@ -140,6 +161,26 @@ export default function OnboardingPage() {
                 <p className="text-base text-slate-700 font-medium">{r}</p>
               </div>
             ))}
+          </div>
+
+          {/* 공유 버튼 */}
+          <div className="w-full max-w-md flex gap-3 mb-4">
+            <button
+              onClick={handleTwitterShare}
+              className="flex-1 flex items-center justify-center gap-2 border-2 border-slate-200 hover:border-slate-300 text-slate-700 font-semibold py-3.5 rounded-2xl transition-colors text-sm bg-white"
+            >
+              <span className="font-black text-base" style={{ color: '#000' }}>𝕏</span>
+              Share on X
+            </button>
+            <button
+              onClick={handleShare}
+              className="flex-1 flex items-center justify-center gap-2 border-2 border-slate-200 hover:border-slate-300 text-slate-700 font-semibold py-3.5 rounded-2xl transition-colors text-sm bg-white"
+            >
+              {copied
+                ? <><CheckCheck className="w-4 h-4 text-emerald-500" /> Copied!</>
+                : <><Copy className="w-4 h-4" /> Copy Result</>
+              }
+            </button>
           </div>
 
           <button
