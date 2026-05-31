@@ -47,6 +47,9 @@ type RoiRow = {
   max_cao_points: number | null
   roi_score_mid: number | null
   roi_score_senior: number | null
+  gross_salary: number | null
+  tax_amount: number | null
+  net_salary_after_tax: number | null
 }
 
 const SORT_OPTIONS = [
@@ -333,6 +336,7 @@ function ROIExplorerContent() {
   const [user, setUser] = useState<User | null>(null)
   const [savedIds, setSavedIds] = useState<Set<string>>(new Set())
   const supabase = createClient()
+  const [showAfterTax, setShowAfterTax] = useState(false)
   const [graphField, setGraphField] = useState("")
   const [graphData, setGraphData] = useState<{ year: string; salary: number }[]>([])
   const [graphLoading, setGraphLoading] = useState(false)
@@ -485,7 +489,7 @@ function ROIExplorerContent() {
     ["Field",                          "text-left"],
     ["City",                           "text-left"],
     [country === "us" ? `ROI Score (${careerStage === "early" ? "Early Career" : careerStage === "mid" ? "Mid Career" : "Senior"})` : "ROI Score", "text-right"],
-    [`Net Salary (${currencyCode})`,   "text-right"],
+    [showAfterTax ? `After-Tax Salary (${currencyCode})` : `Gross Salary (${currencyCode})`, "text-right"],
     ["Payback",                        "text-right"],
     [`Tuition (${currencyCode})`,      "text-right"],
     ["Grad Rate",                      "text-right"],
@@ -525,6 +529,27 @@ function ROIExplorerContent() {
         <p className="mt-2 text-slate-500 text-sm leading-relaxed">
           Compare return on investment across {stateName} {country === "us" ? "colleges" : "universities"} and cities.
         </p>
+
+        {/* 세전/세후 토글 */}
+        <div className="flex items-center gap-2 mt-3">
+          <span className="text-xs text-slate-500">Gross</span>
+          <button
+            onClick={() => setShowAfterTax((v) => !v)}
+            className={`relative w-10 h-5 rounded-full transition-colors ${
+              showAfterTax ? "bg-indigo-600" : "bg-slate-200"
+            }`}
+          >
+            <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${
+              showAfterTax ? "translate-x-5" : "translate-x-0"
+            }`} />
+          </button>
+          <span className="text-xs text-slate-500">After Tax</span>
+          {showAfterTax && (
+            <span className="text-xs text-indigo-600 font-medium bg-indigo-50 px-2 py-0.5 rounded-full">
+              Estimated · {country.toUpperCase()} tax rules applied
+            </span>
+          )}
+        </div>
 
         {country === "ie" && (
           <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 text-amber-700 text-xs px-3 py-2 rounded-lg mt-3 max-w-2xl">
@@ -763,7 +788,20 @@ function ROIExplorerContent() {
                         </span>
                       </td>
                       <td className="px-4 py-3 text-right font-medium text-slate-700 whitespace-nowrap">
-                        {formatCurrency(row.net_salary, country)}
+                        <div className="flex flex-col items-end">
+                          {showAfterTax ? (
+                            <>
+                              <span>{formatCurrency(row.net_salary_after_tax ?? row.net_salary, country)}</span>
+                              {row.tax_amount && (
+                                <span className="text-xs text-red-400">
+                                  -{formatCurrency(row.tax_amount, country)} tax
+                                </span>
+                              )}
+                            </>
+                          ) : (
+                            <span>{formatCurrency(row.gross_salary ?? row.net_salary, country)}</span>
+                          )}
+                        </div>
                       </td>
                       <td className="px-4 py-3 text-right text-slate-600 whitespace-nowrap">
                         {row.payback_years}년
