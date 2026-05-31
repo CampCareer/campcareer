@@ -40,7 +40,40 @@ export default function ChecklistPage() {
   const [fromCache, setFromCache] = useState(false)
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => setUser(data.user))
+    supabase.auth.getUser().then(async ({ data }) => {
+      setUser(data.user)
+      if (!data.user) return
+
+      // 마지막 저장된 체크리스트 자동 로드
+      const { data: progress } = await supabase
+        .from('user_checklist_progress')
+        .select('country, visa_type, checked_items')
+        .eq('user_id', data.user.id)
+        .order('updated_at', { ascending: false })
+        .limit(1)
+        .single()
+
+      if (!progress) return
+
+      // 마지막 나라/비자 세팅
+      setCountry(progress.country)
+      setVisaType(progress.visa_type)
+      setCheckedIds(new Set(progress.checked_items as string[]))
+
+      // 캐시에서 체크리스트 아이템 로드
+      const { data: cached } = await supabase
+        .from('checklist_cache')
+        .select('items')
+        .eq('country', progress.country)
+        .eq('visa_type', progress.visa_type)
+        .single()
+
+      if (cached?.items) {
+        setItems(cached.items as ChecklistItem[])
+        setGenerated(true)
+        setFromCache(true)
+      }
+    })
   }, [])
 
   // 유저 진행상황 로드
@@ -162,6 +195,11 @@ export default function ChecklistPage() {
           </div>
         </div>
 
+        {generated && (
+          <p className="text-xs text-center text-slate-400 -mb-2">
+            Your progress is auto-saved. Regenerate to refresh the checklist.
+          </p>
+        )}
         <button
           onClick={handleGenerate}
           disabled={loading}
@@ -169,6 +207,8 @@ export default function ChecklistPage() {
         >
           {loading ? (
             <><Loader2 className="w-4 h-4 animate-spin" /> Generating checklist...</>
+          ) : generated ? (
+            <><Sparkles className="w-4 h-4" /> Regenerate Checklist</>
           ) : (
             <><Sparkles className="w-4 h-4" /> Generate Checklist</>
           )}
