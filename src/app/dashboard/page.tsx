@@ -1,313 +1,313 @@
 'use client'
 
-import { useEffect, useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
-import { ArrowRight, Bookmark, ExternalLink } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { Search, Bookmark, ArrowRight, TrendingUp } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
-import type { User } from "@supabase/supabase-js"
 
-function getGreeting(): string {
-  const hour = new Date().getHours()
-  if (hour < 12) return "Good morning"
-  if (hour < 18) return "Good afternoon"
-  return "Good evening"
-}
-
-const QUICK_STATS = [
-  { emoji: "🌍", label: "Countries Available", value: "5" },
-  { emoji: "📚", label: "Courses Tracked",     value: "2,860+" },
-  { emoji: "📊", label: "Last Updated",        value: "May 2026" },
-]
-
-const COUNTRY_ROI_LINK: Record<string, { href: string; label: string; emoji: string; desc: string }> = {
-  IE: { href: '/roi-explorer?country=ie', label: 'Explore Ireland ROI',   emoji: '🇮🇪', desc: 'Irish CS graduates earn €45k on average. Regional universities offer 2× better ROI than Dublin.' },
-  AU: { href: '/roi-explorer?country=au', label: 'Explore Australia ROI', emoji: '🇦🇺', desc: 'Australian graduates earn A$65k+ on average. CRICOS-accredited universities offer strong ROI.' },
-  CA: { href: '/roi-explorer?country=ca', label: 'Explore Canada ROI',    emoji: '🇨🇦', desc: 'Canadian graduates benefit from PGWP and Express Entry. Toronto and Vancouver lead in earnings.' },
-  UK: { href: '/roi-explorer?country=uk', label: 'Explore UK ROI',        emoji: '🇬🇧', desc: 'UK graduates earn £30k+ on average. Graduate Route visa offers 2 years post-study work.' },
-  US: { href: '/roi-explorer?country=us', label: 'Explore US ROI',        emoji: '🇺🇸', desc: 'US STEM graduates earn $75k+ on average. OPT extension offers up to 3 years work experience.' },
-}
-
-const FEATURE_CARDS = [
-  {
-    emoji: "📈",
-    title: "ROI Explorer",
-    desc: "Find best ROI by country",
-    href: "/roi-explorer",
-    accent: "bg-indigo-50 border-indigo-100 hover:border-indigo-300",
-    iconBg: "bg-indigo-100",
-  },
-  {
-    emoji: "🌐",
-    title: "Country Compare",
-    desc: "Side-by-side comparison",
-    href: "/compare",
-    accent: "bg-sky-50 border-sky-100 hover:border-sky-300",
-    iconBg: "bg-sky-100",
-  },
-  {
-    emoji: "✅",
-    title: "Checklist",
-    desc: "Track your application",
-    href: "/checklist",
-    accent: "bg-emerald-50 border-emerald-100 hover:border-emerald-300",
-    iconBg: "bg-emerald-100",
-  },
-  {
-    emoji: "📅",
-    title: "Timeline",
-    desc: "Plan your journey",
-    href: "/timeline",
-    accent: "bg-amber-50 border-amber-100 hover:border-amber-300",
-    iconBg: "bg-amber-100",
-  },
-]
-
-const COUNTRY_FLAG: Record<string, string> = {
-  US: "🇺🇸", AU: "🇦🇺", CA: "🇨🇦", UK: "🇬🇧", IE: "🇮🇪",
-}
-
-const CURRENCY_SYMBOL: Record<string, string> = {
-  US: "$", AU: "A$", CA: "C$", UK: "£", IE: "€",
-}
-
-type SavedCourse = {
-  id: string
-  country: string
-  course_id: string
+type RoiRow = {
+  college_id: string
   college_name: string
+  college_state: string
   field_name: string | null
-  tuition: number | null
-  created_at: string
+  roi_score: number
+  net_salary: number
+  gross_salary: number | null
+  tax_amount: number | null
+  net_salary_after_tax: number | null
+  payback_years: number
+  tuition: number
+  graduation_rate: number
+}
+
+const COUNTRIES = [
+  { value: "us", label: "🇺🇸 United States", currency: "$" },
+  { value: "au", label: "🇦🇺 Australia",     currency: "A$" },
+  { value: "ca", label: "🇨🇦 Canada",        currency: "C$" },
+  { value: "uk", label: "🇬🇧 United Kingdom", currency: "£" },
+  { value: "ie", label: "🇮🇪 Ireland",        currency: "€" },
+]
+
+const DEFAULT_STATE: Record<string, string> = {
+  us: "CA", au: "NSW", ca: "ON", uk: "London", ie: "Leinster",
+}
+
+function fmt(value: number, currency: string): string {
+  return `${currency}${Math.round(value).toLocaleString()}`
+}
+
+function trimDot(s: string | null) {
+  if (!s) return "—"
+  return s.endsWith(".") ? s.slice(0, -1) : s
 }
 
 export default function Dashboard() {
-  const greeting = getGreeting()
+  const router = useRouter()
   const supabase = createClient()
-  const [user, setUser] = useState<User | null>(null)
-  const [saved, setSaved] = useState<SavedCourse[]>([])
-  const [loadingSaved, setLoadingSaved] = useState(true)
+  const [country, setCountry] = useState("ie")
+  const [field, setField] = useState("")
+  const [fieldInput, setFieldInput] = useState("")
+  const [fieldOptions, setFieldOptions] = useState<string[]>([])
+  const [fieldOpen, setFieldOpen] = useState(false)
+  const [data, setData] = useState<RoiRow[]>([])
+  const [loading, setLoading] = useState(true)
+  const [savedIds, setSavedIds] = useState<Set<string>>(new Set())
+  const [userId, setUserId] = useState<string | null>(null)
   const [recommendedCountry, setRecommendedCountry] = useState<string | null>(null)
+  const fieldRef = useRef<HTMLDivElement>(null)
 
+  const currencySymbol = COUNTRIES.find(c => c.value === country)?.currency ?? "$"
+
+  // 유저 + 추천 나라 로드
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
-      setUser(data.user)
-      if (data.user) {
-        supabase
-          .from('user_preferences')
-          .select('recommended_country')
-          .eq('id', data.user.id)
-          .single()
-          .then(({ data: prefs }) => {
-            if (prefs?.recommended_country) {
-              setRecommendedCountry(prefs.recommended_country)
-            }
-          })
-      }
+      if (!data.user) return
+      setUserId(data.user.id)
+      supabase
+        .from("user_preferences")
+        .select("recommended_country")
+        .eq("id", data.user.id)
+        .single()
+        .then(({ data: prefs }) => {
+          if (prefs?.recommended_country) {
+            const c = prefs.recommended_country.toLowerCase()
+            setRecommendedCountry(c)
+            setCountry(c)
+          }
+        })
+      supabase
+        .from("saved_courses")
+        .select("course_id")
+        .eq("user_id", data.user.id)
+        .then(({ data: saved }) => {
+          if (saved) setSavedIds(new Set(saved.map((r) => r.course_id)))
+        })
     })
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
-      setUser(session?.user ?? null)
-    })
-    return () => subscription.unsubscribe()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // 필드 자동완성
+  useEffect(() => {
+    const container = fieldRef.current
+    if (!container) return
+    function handler(e: MouseEvent) {
+      if (!container!.contains(e.target as Node)) setFieldOpen(false)
+    }
+    document.addEventListener("mousedown", handler)
+    return () => document.removeEventListener("mousedown", handler)
   }, [])
 
   useEffect(() => {
-    if (!user) { setLoadingSaved(false); return }
-    supabase
-      .from("saved_courses")
-      .select("*")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false })
-      .limit(6)
-      .then(({ data }) => {
-        setSaved(data ?? [])
-        setLoadingSaved(false)
-      })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user])
+    if (!fieldInput.trim()) { setFieldOptions([]); setFieldOpen(false); return }
+    const timer = setTimeout(async () => {
+      const res = await fetch(`/api/roi/fields?q=${encodeURIComponent(fieldInput)}&country=${country}`)
+      const json = await res.json()
+      setFieldOptions(json.fields ?? [])
+      setFieldOpen(true)
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [fieldInput, country])
 
-  async function handleRemove(id: string) {
-    await supabase.from("saved_courses").delete().eq("id", id)
-    setSaved((prev) => prev.filter((s) => s.id !== id))
+  // ROI 데이터 로드
+  useEffect(() => {
+    setLoading(true)
+    const params = new URLSearchParams({
+      country,
+      state: DEFAULT_STATE[country] ?? "CA",
+      limit: "8",
+      sort: "roi_score",
+    })
+    if (field) params.set("field", field)
+    fetch(`/api/roi?${params}`)
+      .then(r => r.json())
+      .then(json => { setData(json.data ?? []); setLoading(false) })
+      .catch(() => setLoading(false))
+  }, [country, field])
+
+  async function toggleSave(row: RoiRow) {
+    if (!userId) { router.push("/login"); return }
+    const isSaved = savedIds.has(row.college_id)
+    if (isSaved) {
+      await supabase.from("saved_courses").delete()
+        .eq("user_id", userId).eq("course_id", row.college_id)
+      setSavedIds(prev => { const n = new Set(prev); n.delete(row.college_id); return n })
+    } else {
+      await supabase.from("saved_courses").upsert({
+        user_id: userId,
+        country: country.toUpperCase(),
+        course_id: row.college_id,
+        college_name: row.college_name,
+        field_name: row.field_name ?? "",
+        tuition: row.tuition,
+      })
+      setSavedIds(prev => new Set(prev).add(row.college_id))
+    }
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-8 space-y-8">
+    <div className="max-w-4xl mx-auto px-6 py-16 space-y-12">
 
       {/* 헤더 */}
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">
-          {greeting}{user ? ` 👋` : " 👋"}
+        <h1 className="text-4xl font-bold text-slate-900 tracking-tight leading-tight">
+          Find your best<br />university.
         </h1>
-        <p className="text-slate-500 mt-1 text-sm">
-          {user ? user.email : "Here's your study abroad overview"}
+        <p className="text-slate-400 mt-3 text-base">
+          Real salary data across 5 countries. No guesswork.
         </p>
       </div>
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {QUICK_STATS.map((s) => (
-          <div
-            key={s.label}
-            className="bg-white border border-slate-200 rounded-2xl px-5 py-4 flex items-center gap-4 shadow-sm"
+      {/* 검색 바 */}
+      <div className="flex flex-col sm:flex-row gap-3">
+
+        {/* 국가 선택 */}
+        <div className="relative">
+          <select
+            value={country}
+            onChange={e => { setCountry(e.target.value); setField(""); setFieldInput("") }}
+            className="h-12 pl-4 pr-10 rounded-xl border border-slate-200 bg-white text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-300 appearance-none cursor-pointer w-full sm:w-48"
           >
-            <span className="text-2xl leading-none">{s.emoji}</span>
-            <div>
-              <p className="text-xs text-slate-400 font-medium">{s.label}</p>
-              <p className="text-xl font-bold text-slate-900 mt-0.5">{s.value}</p>
-            </div>
+            {COUNTRIES.map(c => (
+              <option key={c.value} value={c.value}>{c.label}</option>
+            ))}
+          </select>
+          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-xs">▼</span>
+        </div>
+
+        {/* 필드 검색 */}
+        <div ref={fieldRef} className="relative flex-1">
+          <div className="relative flex items-center">
+            <Search className="absolute left-3.5 w-4 h-4 text-slate-400 pointer-events-none" />
+            <input
+              type="text"
+              value={fieldInput}
+              onChange={e => { setFieldInput(e.target.value); if (!e.target.value) setField("") }}
+              placeholder="Search field of study — Computer Science, Nursing..."
+              className="w-full h-12 pl-10 pr-4 rounded-xl border border-slate-200 bg-white text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+            />
           </div>
-        ))}
+          {fieldOpen && fieldOptions.length > 0 && (
+            <div className="absolute z-50 mt-1 w-full rounded-xl border border-slate-200 bg-white shadow-lg max-h-60 overflow-y-auto">
+              {fieldOptions.map(f => (
+                <button
+                  key={f}
+                  onMouseDown={e => e.preventDefault()}
+                  onClick={() => { setField(f); setFieldInput(trimDot(f)); setFieldOpen(false) }}
+                  className="w-full px-4 py-2.5 text-left text-sm hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 transition-colors"
+                >
+                  {trimDot(f)}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* 저장된 코스 */}
+      {/* 결과 */}
       <div>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-base font-semibold text-slate-900 flex items-center gap-2">
-            <Bookmark className="w-4 h-4 text-indigo-500" />
-            Saved Courses
-          </h2>
+        <div className="flex items-center justify-between mb-4">
+          <p className="text-xs font-medium text-slate-400 uppercase tracking-wide">
+            Top results · {COUNTRIES.find(c => c.value === country)?.label}
+            {field ? ` · ${trimDot(field)}` : ""}
+          </p>
           <Link
-            href="/roi-explorer"
-            className="text-xs text-indigo-600 hover:text-indigo-700 flex items-center gap-1"
+            href={`/roi-explorer?country=${country}${field ? `&field=${encodeURIComponent(field)}` : ""}`}
+            className="text-xs text-indigo-600 hover:text-indigo-700 flex items-center gap-1 font-medium"
           >
-            Browse more <ArrowRight className="w-3 h-3" />
+            View all <ArrowRight className="w-3 h-3" />
           </Link>
         </div>
 
-        {!user ? (
-          <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 text-center">
-            <p className="text-sm text-slate-500 mb-3">Sign in to save courses</p>
-            <Link
-              href="/login"
-              className="inline-flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors"
-            >
-              Sign In
-            </Link>
-          </div>
-        ) : loadingSaved ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="h-24 rounded-2xl bg-slate-100 animate-pulse" />
+        {/* 로딩 */}
+        {loading && (
+          <div className="space-y-3">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="h-16 rounded-xl bg-slate-100 animate-pulse" />
             ))}
           </div>
-        ) : saved.length === 0 ? (
-          <div className="bg-slate-50 border border-dashed border-slate-300 rounded-2xl p-6 text-center">
-            <p className="text-sm text-slate-400">No saved courses yet</p>
-            <Link
-              href="/roi-explorer"
-              className="inline-flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-700 mt-2"
-            >
-              Explore ROI <ArrowRight className="w-3 h-3" />
-            </Link>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {saved.map((course) => (
+        )}
+
+        {/* 결과 리스트 */}
+        {!loading && (
+          <div className="divide-y divide-slate-100 border border-slate-200 rounded-2xl overflow-hidden bg-white">
+            {data.length === 0 ? (
+              <div className="py-12 text-center text-sm text-slate-400">
+                No results found. Try a different field or country.
+              </div>
+            ) : data.map((row, i) => (
               <div
-                key={course.id}
-                className="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col gap-2 shadow-sm hover:border-indigo-200 transition-colors"
+                key={`${row.college_id}-${i}`}
+                className="flex items-center justify-between px-5 py-4 hover:bg-slate-50 transition-colors group"
               >
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-base leading-none">
-                      {COUNTRY_FLAG[course.country] ?? "🌍"}
-                    </span>
-                    <span className="text-xs font-medium text-slate-500">
-                      {course.country}
-                    </span>
+                <div className="flex items-center gap-4 min-w-0">
+                  {/* 순위 */}
+                  <span className="text-xs font-mono text-slate-300 w-4 shrink-0">{i + 1}</span>
+
+                  {/* 대학 정보 */}
+                  <div className="min-w-0">
+                    <Link
+                      href={`/roi-explorer/${row.college_id}?country=${country}`}
+                      className="text-sm font-semibold text-slate-800 hover:text-indigo-600 transition-colors truncate block"
+                    >
+                      {row.college_name}
+                    </Link>
+                    <p className="text-xs text-slate-400 mt-0.5 truncate">
+                      {trimDot(row.field_name)}
+                      {row.college_state ? ` · ${row.college_state}` : ""}
+                    </p>
+                  </div>
+                </div>
+
+                {/* 오른쪽 메트릭 */}
+                <div className="flex items-center gap-6 shrink-0 ml-4">
+                  <div className="text-right hidden sm:block">
+                    <p className="text-xs text-slate-400">ROI</p>
+                    <p className="text-sm font-bold text-indigo-600">{row.roi_score.toFixed(1)}</p>
+                  </div>
+                  <div className="text-right hidden md:block">
+                    <p className="text-xs text-slate-400">Salary</p>
+                    <p className="text-sm font-semibold text-slate-700">
+                      {fmt(row.gross_salary ?? row.net_salary, currencySymbol)}
+                    </p>
+                  </div>
+                  <div className="text-right hidden md:block">
+                    <p className="text-xs text-slate-400">Tuition</p>
+                    <p className="text-sm text-slate-500">
+                      {fmt(row.tuition, currencySymbol)}<span className="text-xs text-slate-400">/yr</span>
+                    </p>
                   </div>
                   <button
-                    onClick={() => handleRemove(course.id)}
-                    className="text-slate-300 hover:text-red-400 transition-colors"
-                    title="Remove"
+                    onClick={() => toggleSave(row)}
+                    className={`p-1.5 rounded-lg transition-colors ${
+                      savedIds.has(row.college_id)
+                        ? "text-indigo-600 bg-indigo-50"
+                        : "text-slate-300 hover:text-slate-500 hover:bg-slate-100"
+                    }`}
                   >
-                    <Bookmark className="w-3.5 h-3.5" fill="currentColor" />
+                    <Bookmark
+                      className="w-4 h-4"
+                      fill={savedIds.has(row.college_id) ? "currentColor" : "none"}
+                    />
                   </button>
-                </div>
-
-                <div>
-                  <p className="text-sm font-semibold text-slate-800 leading-snug line-clamp-1">
-                    {course.college_name}
-                  </p>
-                  {course.field_name && (
-                    <p className="text-xs text-slate-400 mt-0.5 line-clamp-1">
-                      {course.field_name}
-                    </p>
-                  )}
-                </div>
-
-                <div className="flex items-center justify-between mt-auto">
-                  {course.tuition ? (
-                    <span className="text-xs text-slate-500">
-                      {CURRENCY_SYMBOL[course.country] ?? "$"}
-                      {Math.round(course.tuition).toLocaleString()}/yr
-                    </span>
-                  ) : (
-                    <span />
-                  )}
-                  <Link
-                    href={`/roi-explorer/${course.course_id}?country=${course.country.toLowerCase()}`}
-                    className="inline-flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-700"
-                  >
-                    View <ExternalLink className="w-3 h-3" />
-                  </Link>
                 </div>
               </div>
             ))}
           </div>
         )}
-      </div>
 
-      {/* Jump back in */}
-      <div>
-        <h2 className="text-base font-semibold text-slate-900 mb-3">
-          Jump back in
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {FEATURE_CARDS.map((card) => (
-            <Link
-              key={card.title}
-              href={card.href}
-              className={`group flex flex-col gap-3 border rounded-2xl p-5 transition-all duration-200 hover:scale-105 hover:shadow-md ${card.accent}`}
-            >
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl ${card.iconBg}`}>
-                {card.emoji}
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-slate-800 mb-0.5">{card.title}</p>
-                <p className="text-xs text-slate-500 leading-relaxed">{card.desc}</p>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-
-      {/* Featured Insight — 온보딩 추천 나라 기반 */}
-      {(() => {
-        const key = recommendedCountry ?? 'IE'
-        const insight = COUNTRY_ROI_LINK[key] ?? COUNTRY_ROI_LINK['IE']
-        return (
-          <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-6">
-            <p className="text-xs font-semibold text-indigo-600 mb-2 uppercase tracking-wide">
-              {insight.emoji} Your recommended country
+        {/* 추천 나라 배지 */}
+        {recommendedCountry && recommendedCountry === country && (
+          <div className="flex items-center gap-2 mt-4">
+            <TrendingUp className="w-3.5 h-3.5 text-indigo-400" />
+            <p className="text-xs text-slate-400">
+              Showing your recommended country from onboarding.{" "}
+              <Link href="/onboarding" className="text-indigo-500 hover:underline">
+                Retake quiz
+              </Link>
             </p>
-            <h3 className="text-lg font-bold text-slate-900 mb-2 leading-snug">
-              {insight.desc.split('.')[0]}.
-            </h3>
-            <p className="text-sm text-slate-600 leading-relaxed mb-5">
-              {insight.desc.split('.').slice(1).join('.').trim()}
-            </p>
-            <Link
-              href={insight.href}
-              className="inline-flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors"
-            >
-              {insight.label}
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
           </div>
-        )
-      })()}
+        )}
+      </div>
 
     </div>
   )
