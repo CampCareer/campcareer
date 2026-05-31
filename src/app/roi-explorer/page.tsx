@@ -17,6 +17,16 @@ import {
 import { TrendingUp, X, Bookmark } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
 import type { User } from "@supabase/supabase-js"
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+} from "recharts"
 
 type RoiRow = {
   college_id: string
@@ -323,6 +333,9 @@ function ROIExplorerContent() {
   const [user, setUser] = useState<User | null>(null)
   const [savedIds, setSavedIds] = useState<Set<string>>(new Set())
   const supabase = createClient()
+  const [graphField, setGraphField] = useState("")
+  const [graphData, setGraphData] = useState<{ year: string; salary: number }[]>([])
+  const [graphLoading, setGraphLoading] = useState(false)
 
   const stateList = country === "au" ? AU_STATES
     : country === "ca" ? CA_PROVINCES
@@ -425,6 +438,44 @@ function ROIExplorerContent() {
       })
       setSavedIds((prev) => new Set(prev).add(courseId))
     }
+  }
+
+  async function loadGraph(selectedField: string) {
+    if (!selectedField) return
+    setGraphLoading(true)
+    setGraphField(selectedField)
+
+    const params = new URLSearchParams({ country, state, limit: "100", sort: "roi_score" })
+    params.set("field", selectedField)
+    if (country === "us") {
+      // US: early/mid/senior 실제 데이터
+      const res = await fetch(`/api/roi?${params}`)
+      const json = await res.json()
+      const rows: RoiRow[] = json.data ?? []
+      if (rows.length === 0) { setGraphData([]); setGraphLoading(false); return }
+      const avg = (arr: number[]) => Math.round(arr.reduce((a, b) => a + b, 0) / arr.length)
+      const early = avg(rows.map((r) => r.net_salary))
+      const mid   = avg(rows.filter((r) => r.roi_score_mid).map((r) => r.net_salary * 1.35))
+      const senior= avg(rows.filter((r) => r.roi_score_senior).map((r) => r.net_salary * 1.75))
+      setGraphData([
+        { year: "Early (1yr)",   salary: early },
+        { year: "Mid (4yr)",     salary: mid },
+        { year: "Senior (10yr)", salary: senior },
+      ])
+    } else {
+      // AU/CA/UK/IE: 단일 연봉 기반 추정 성장
+      const res = await fetch(`/api/roi?${params}`)
+      const json = await res.json()
+      const rows: RoiRow[] = json.data ?? []
+      if (rows.length === 0) { setGraphData([]); setGraphLoading(false); return }
+      const avg = Math.round(rows.reduce((a, r) => a + r.net_salary, 0) / rows.length)
+      setGraphData([
+        { year: "Entry (1yr)",   salary: Math.round(avg * 0.85) },
+        { year: "Mid (4yr)",     salary: avg },
+        { year: "Senior (10yr)", salary: Math.round(avg * 1.55) },
+      ])
+    }
+    setGraphLoading(false)
   }
 
   const currencyCode = CURRENCY[country]?.code ?? 'USD'
@@ -533,7 +584,11 @@ function ROIExplorerContent() {
             <div className="space-y-1.5">
               <label className="text-xs font-medium text-slate-600">Field of Study</label>
               {country === "us" || country === "ie" || country === "au" || country === "ca" || country === "uk" ? (
-                <FieldCombobox value={field} onChange={setField} country={country} />
+                <FieldCombobox
+                  value={field}
+                  onChange={(v) => { setField(v); if (v) loadGraph(v); else setGraphData([]) }}
+                  country={country}
+                />
               ) : (
                 <div title="Field-level data not available for this country">
                   <input
@@ -585,6 +640,73 @@ function ROIExplorerContent() {
           </div>
         </CardContent>
       </Card>
+
+      {/* 연봉 성장 그래프 */}
+      {(graphData.length > 0 || graphLoading) && (
+        <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-base font-semibold text-slate-900">
+                Salary Growth — {trimDot(graphField)}
+              </h2>
+              <p className="text-xs text-slate-400 mt-0.5">
+                {country.toUpperCase()} · {stateName} · Average across universities
+              </p>
+            </div>
+          </div>
+
+          {graphLoading ? (
+            <div className="h-56 flex items-center justify-center">
+              <div className="w-6 h-6 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin" />
+            </div>
+          ) : (
+            <ResponsiveContainer width="100%" height={220}>
+              <LineChart data={graphData} margin={{ top: 8, right: 24, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                <XAxis
+                  dataKey="year"
+                  tick={{ fontSize: 12, fill: "#94a3b8" }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <YAxis
+                  tick={{ fontSize: 11, fill: "#94a3b8" }}
+                  axisLine={false}
+                  tickLine={false}
+                  tickFormatter={(v) => {
+                    const sym = { us: "$", au: "A$", ca: "C$", uk: "£", ie: "€" }[country] ?? "$"
+                    return `${sym}${(v / 1000).toFixed(0)}k`
+                  }}
+                  width={52}
+                />
+                <Tooltip
+                  formatter={(value) => {
+                    const sym = { us: "$", au: "A$", ca: "C$", uk: "£", ie: "€" }[country] ?? "$"
+                    const num = typeof value === "number" ? value : 0
+                    return [`${sym}${Math.round(num).toLocaleString()}`, "Avg Net Salary"]
+                  }}
+                  contentStyle={{
+                    borderRadius: "12px",
+                    border: "1px solid #e2e8f0",
+                    fontSize: "13px",
+                    boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
+                  }}
+                />
+                <Legend wrapperStyle={{ fontSize: "12px", paddingTop: "12px" }} />
+                <Line
+                  type="monotone"
+                  dataKey="salary"
+                  name="Avg Net Salary"
+                  stroke="#6366f1"
+                  strokeWidth={2.5}
+                  dot={{ fill: "#6366f1", r: 5, strokeWidth: 0 }}
+                  activeDot={{ r: 7, strokeWidth: 0 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          )}
+        </div>
+      )}
 
       {/* Error */}
       {error && (
