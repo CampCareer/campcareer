@@ -25,7 +25,7 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { user: _user } } = await supabase.auth.getUser()
 
   // 로그인 필요한 페이지 보호 (추후 추가)
   // if (!user && request.nextUrl.pathname.startsWith('/dashboard')) {

@@ -235,7 +235,7 @@ function FieldCombobox({
       }
     }, 300)
     return () => clearTimeout(timer)
-  }, [input])
+  }, [input, country])
 
   function handleSelect(f: string) {
     setInput(trimDot(f))
