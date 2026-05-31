@@ -25,12 +25,13 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  await supabase.auth.getUser()
+  const { data: { user } } = await supabase.auth.getUser()
 
-  // 로그인 필요한 페이지 보호 (추후 추가)
-  // if (!user && request.nextUrl.pathname.startsWith('/dashboard')) {
-  //   return NextResponse.redirect(new URL('/login', request.url))
-  // }
+  // 로그인 필요한 페이지 보호
+  const protectedPaths = ['/dashboard', '/saved', '/onboarding']
+  if (!user && protectedPaths.some(p => request.nextUrl.pathname.startsWith(p))) {
+    return NextResponse.redirect(new URL('/login', request.url))
+  }
 
   return supabaseResponse
 }
