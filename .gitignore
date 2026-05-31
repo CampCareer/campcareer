@@ -37,6 +37,11 @@ next-env.d.ts
 
 # script output / raw data files
 *_raw.json
+*_raw*.json
 *_raw.xlsx
+*_raw*.xlsx
+*_processed.json
+cricos_*.json
+cricos_*.xlsx
 hea_*.json
 supabase/.temp/

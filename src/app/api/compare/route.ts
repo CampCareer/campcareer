@@ -1,6 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 
+const FIELD_ALIASES: Record<string, string> = {
+  'computational': 'computer',
+  'computational science': 'computer science',
+  'information technology': 'computer',
+  'software engineering': 'software',
+  'data science': 'computer and information',
+  'artificial intelligence': 'computer and information',
+  'nursing.': 'registered nursing',
+  'nursing': 'registered nursing',
+}
+
 const COUNTRIES = ['us', 'au', 'ca', 'uk', 'ie'] as const
 type Country = typeof COUNTRIES[number]
 
@@ -75,6 +86,34 @@ export async function GET(req: NextRequest) {
         }
 
         const { data } = await query
+
+        // fallback: 결과 없으면 첫 키워드로 재검색
+        if ((!data || data.length === 0) && hasField) {
+          const lowerField = field.toLowerCase().replace(/\.$/, '')
+          const aliasKeyword = FIELD_ALIASES[lowerField]
+            ?? FIELD_ALIASES[Object.keys(FIELD_ALIASES).find(k => lowerField.includes(k)) ?? '']
+
+          const keyword = aliasKeyword
+            ?? field.split(/[\s,]+/).find(w =>
+                w.length > 3 &&
+                !['and','the','of','for','in','other','general','sciences','studies'].includes(w.toLowerCase())
+              )
+            ?? field
+
+          const { data: fallbackData } = await supabase
+            .from(NON_US_TABLE[country])
+            .select('college_id, college_name, roi_score, net_salary, payback_years')
+            .gt('roi_score', 0)
+            .gt('payback_years', 0)
+            .ilike('field_name', `%${keyword}%`)
+            .order('roi_score', { ascending: false })
+            .limit(100)
+
+          if (fallbackData && fallbackData.length > 0) {
+            return [country, { ...summarise(fallbackData), field_data_available: true }]
+          }
+        }
+
         if (!data || data.length === 0) return [country, EMPTY]
         return [country, { ...summarise(data), field_data_available: hasField }]
       })
