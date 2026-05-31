@@ -83,7 +83,7 @@ export default function ChecklistPage() {
 
   async function toggleCheck(id: string) {
     const next = new Set(checkedIds)
-    next.has(id) ? next.delete(id) : next.add(id)
+    if (next.has(id)) { next.delete(id) } else { next.add(id) }
     setCheckedIds(next)
 
     if (!user) return
@@ -101,7 +101,7 @@ export default function ChecklistPage() {
   function toggleCollapse(category: string) {
     setCollapsed(prev => {
       const next = new Set(prev)
-      next.has(category) ? next.delete(category) : next.add(category)
+      if (next.has(category)) { next.delete(category) } else { next.add(category) }
       return next
     })
   }
