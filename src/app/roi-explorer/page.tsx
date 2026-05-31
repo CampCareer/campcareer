@@ -14,7 +14,7 @@ import {
   Card,
   CardContent,
 } from "@/components/ui/card"
-import { TrendingUp, X, Bookmark } from "lucide-react"
+import { TrendingUp, X, Bookmark, Copy, CheckCheck } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
 import type { User } from "@supabase/supabase-js"
 import {
@@ -338,6 +338,7 @@ function ROIExplorerContent() {
   const supabase = createClient()
   const [showAfterTax, setShowAfterTax] = useState(false)
   const [graphField, setGraphField] = useState("")
+  const [copied, setCopied] = useState(false)
   const [graphData, setGraphData] = useState<{ year: string; salary: number }[]>([])
   const [graphLoading, setGraphLoading] = useState(false)
 
@@ -444,6 +445,46 @@ function ROIExplorerContent() {
     }
   }
 
+  function handleShare() {
+    const url = new URL(window.location.href)
+    url.searchParams.set('country', country)
+    url.searchParams.set('state', state)
+    if (field) url.searchParams.set('field', field)
+    const shareUrl = url.toString()
+
+    const text = `🎓 Study abroad ROI data for ${COUNTRY_OPTIONS.find(c => c.value === country)?.label ?? country}${field ? ` — ${trimDot(field)}` : ''}\n\nCheck real salary & ROI data → ${shareUrl}`
+
+    if (navigator.share) {
+      navigator.share({ title: 'CampCareer ROI Explorer', text, url: shareUrl })
+    } else {
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2000)
+      })
+    }
+  }
+
+  function handleTwitterShare() {
+    if (!field) {
+      const url = new URL(window.location.href)
+      url.searchParams.set('country', country)
+      url.searchParams.set('state', state)
+      const shareUrl = url.toString()
+      const countryLabel = COUNTRY_OPTIONS.find(c => c.value === country)?.label ?? country
+      const text = `📊 Study abroad ROI data for ${countryLabel} — compare universities by salary & ROI\n\n${shareUrl}`
+      window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank')
+    } else {
+      const url = new URL(window.location.href)
+      url.searchParams.set('country', country)
+      url.searchParams.set('state', state)
+      url.searchParams.set('field', field)
+      const shareUrl = url.toString()
+      const countryLabel = COUNTRY_OPTIONS.find(c => c.value === country)?.label ?? country
+      const text = `📊 ${trimDot(field)} ROI in ${countryLabel} — real salary & tuition data\n\n${shareUrl}`
+      window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank')
+    }
+  }
+
   async function loadGraph(selectedField: string) {
     if (!selectedField) return
     setGraphLoading(true)
@@ -506,25 +547,46 @@ function ROIExplorerContent() {
           <TrendingUp className="w-3 h-3" />
           Live data · {stateName} {country === "us" ? "colleges" : "universities"}
         </div>
-        <div className="flex items-center gap-4 mt-1">
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">ROI Explorer</h1>
-          {country === "us" && (
-            <div className="flex items-center gap-1">
-              {(["early", "mid", "senior"] as const).map((stage) => (
-                <button
-                  key={stage}
-                  onClick={() => setCareerStage(stage)}
-                  className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors whitespace-nowrap ${
-                    careerStage === stage
-                      ? "bg-indigo-600 text-white"
-                      : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50"
-                  }`}
-                >
-                  {stage === "early" ? "Early (1yr)" : stage === "mid" ? "Mid (4yr)" : "Senior (10yr)"}
-                </button>
-              ))}
-            </div>
-          )}
+        <div className="flex items-center justify-between mt-1">
+          <div className="flex items-center gap-4">
+            <h1 className="text-3xl font-bold text-slate-900 tracking-tight">ROI Explorer</h1>
+            {country === "us" && (
+              <div className="flex items-center gap-1">
+                {(["early", "mid", "senior"] as const).map((stage) => (
+                  <button
+                    key={stage}
+                    onClick={() => setCareerStage(stage)}
+                    className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors whitespace-nowrap ${
+                      careerStage === stage
+                        ? "bg-indigo-600 text-white"
+                        : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50"
+                    }`}
+                  >
+                    {stage === "early" ? "Early (1yr)" : stage === "mid" ? "Mid (4yr)" : "Senior (10yr)"}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+          {/* 공유 버튼 */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleTwitterShare}
+              className="hidden sm:flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-slate-800 border border-slate-200 hover:border-slate-300 px-3 py-1.5 rounded-lg transition-colors bg-white"
+            >
+              <span className="font-black text-xs">𝕏</span>
+              Share
+            </button>
+            <button
+              onClick={handleShare}
+              className="flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-slate-800 border border-slate-200 hover:border-slate-300 px-3 py-1.5 rounded-lg transition-colors bg-white"
+            >
+              {copied
+                ? <><CheckCheck className="w-3.5 h-3.5 text-emerald-500" /> Copied!</>
+                : <><Copy className="w-3.5 h-3.5" /> Copy link</>
+              }
+            </button>
+          </div>
         </div>
         <p className="mt-2 text-slate-500 text-sm leading-relaxed">
           Compare return on investment across {stateName} {country === "us" ? "colleges" : "universities"} and cities.
