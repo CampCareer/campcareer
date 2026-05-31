@@ -9,6 +9,7 @@ import {
   CheckSquare,
   Calendar,
   Bookmark,
+  BookOpen,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -19,6 +20,7 @@ const navItems = [
   { label: "Country Compare", href: "/compare",   icon: Globe },
   { label: "Checklist",       href: "/checklist", icon: CheckSquare },
   { label: "Timeline",        href: "/timeline",  icon: Calendar },
+  { label: "Blog",            href: "/blog",      icon: BookOpen },
 ]
 
 export function Sidebar() {
