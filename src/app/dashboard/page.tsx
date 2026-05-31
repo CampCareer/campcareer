@@ -19,6 +19,14 @@ const QUICK_STATS = [
   { emoji: "📊", label: "Last Updated",        value: "May 2026" },
 ]
 
+const COUNTRY_ROI_LINK: Record<string, { href: string; label: string; emoji: string; desc: string }> = {
+  IE: { href: '/roi-explorer?country=ie', label: 'Explore Ireland ROI',   emoji: '🇮🇪', desc: 'Irish CS graduates earn €45k on average. Regional universities offer 2× better ROI than Dublin.' },
+  AU: { href: '/roi-explorer?country=au', label: 'Explore Australia ROI', emoji: '🇦🇺', desc: 'Australian graduates earn A$65k+ on average. CRICOS-accredited universities offer strong ROI.' },
+  CA: { href: '/roi-explorer?country=ca', label: 'Explore Canada ROI',    emoji: '🇨🇦', desc: 'Canadian graduates benefit from PGWP and Express Entry. Toronto and Vancouver lead in earnings.' },
+  UK: { href: '/roi-explorer?country=uk', label: 'Explore UK ROI',        emoji: '🇬🇧', desc: 'UK graduates earn £30k+ on average. Graduate Route visa offers 2 years post-study work.' },
+  US: { href: '/roi-explorer?country=us', label: 'Explore US ROI',        emoji: '🇺🇸', desc: 'US STEM graduates earn $75k+ on average. OPT extension offers up to 3 years work experience.' },
+}
+
 const FEATURE_CARDS = [
   {
     emoji: "📈",
@@ -78,9 +86,24 @@ export default function Dashboard() {
   const [user, setUser] = useState<User | null>(null)
   const [saved, setSaved] = useState<SavedCourse[]>([])
   const [loadingSaved, setLoadingSaved] = useState(true)
+  const [recommendedCountry, setRecommendedCountry] = useState<string | null>(null)
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => setUser(data.user))
+    supabase.auth.getUser().then(({ data }) => {
+      setUser(data.user)
+      if (data.user) {
+        supabase
+          .from('user_preferences')
+          .select('recommended_country')
+          .eq('id', data.user.id)
+          .single()
+          .then(({ data: prefs }) => {
+            if (prefs?.recommended_country) {
+              setRecommendedCountry(prefs.recommended_country)
+            }
+          })
+      }
+    })
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
       setUser(session?.user ?? null)
     })
@@ -260,26 +283,31 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Featured Insight */}
-      <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-6">
-        <p className="text-xs font-semibold text-indigo-600 mb-2 uppercase tracking-wide">
-          💡 Did you know?
-        </p>
-        <h3 className="text-lg font-bold text-slate-900 mb-2 leading-snug">
-          Irish CS graduates earn €45k on average.
-        </h3>
-        <p className="text-sm text-slate-600 leading-relaxed mb-5">
-          Regional universities offer 2× better ROI than Dublin universities
-          — backed by HEA graduate outcome data.
-        </p>
-        <Link
-          href="/roi-explorer?country=ie"
-          className="inline-flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors"
-        >
-          Explore Ireland ROI
-          <ArrowRight className="w-3.5 h-3.5" />
-        </Link>
-      </div>
+      {/* Featured Insight — 온보딩 추천 나라 기반 */}
+      {(() => {
+        const key = recommendedCountry ?? 'IE'
+        const insight = COUNTRY_ROI_LINK[key] ?? COUNTRY_ROI_LINK['IE']
+        return (
+          <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-6">
+            <p className="text-xs font-semibold text-indigo-600 mb-2 uppercase tracking-wide">
+              {insight.emoji} Your recommended country
+            </p>
+            <h3 className="text-lg font-bold text-slate-900 mb-2 leading-snug">
+              {insight.desc.split('.')[0]}.
+            </h3>
+            <p className="text-sm text-slate-600 leading-relaxed mb-5">
+              {insight.desc.split('.').slice(1).join('.').trim()}
+            </p>
+            <Link
+              href={insight.href}
+              className="inline-flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors"
+            >
+              {insight.label}
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        )
+      })()}
 
     </div>
   )
