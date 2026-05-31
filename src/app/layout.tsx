@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { Analytics } from "@vercel/analytics/next"
 import localFont from "next/font/local"
 import "./globals.css"
 import { LayoutShell } from "@/components/layout/layout-shell"
@@ -28,6 +29,7 @@ export default function RootLayout({
     <html lang="ko">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <LayoutShell>{children}</LayoutShell>
+        <Analytics />
       </body>
     </html>
   )
