@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase-client'
-import { ArrowRight, Check, Share2, Copy, CheckCheck } from 'lucide-react'
+import { ArrowRight, Check, Copy, CheckCheck } from 'lucide-react'
 
 type Step = 1 | 2 | 3 | 4 | 5
 type Goal = 'visa' | 'pr' | 'study'
