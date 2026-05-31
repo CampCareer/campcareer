@@ -14,7 +14,9 @@ import {
   Card,
   CardContent,
 } from "@/components/ui/card"
-import { TrendingUp, X } from "lucide-react"
+import { TrendingUp, X, Bookmark } from "lucide-react"
+import { createClient } from "@/lib/supabase-client"
+import type { User } from "@supabase/supabase-js"
 
 type RoiRow = {
   college_id: string
@@ -318,6 +320,9 @@ function ROIExplorerContent() {
   const [count, setCount] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError]     = useState<string | null>(null)
+  const [user, setUser] = useState<User | null>(null)
+  const [savedIds, setSavedIds] = useState<Set<string>>(new Set())
+  const supabase = createClient()
 
   const stateList = country === "au" ? AU_STATES
     : country === "ca" ? CA_PROVINCES
@@ -374,6 +379,54 @@ function ROIExplorerContent() {
     }
   }, [country, state, field, sort, limit, careerStage])
 
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setUser(data.user))
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
+      setUser(session?.user ?? null)
+    })
+    return () => subscription.unsubscribe()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    if (!user) { setSavedIds(new Set()); return }
+    supabase
+      .from("saved_courses")
+      .select("course_id")
+      .eq("user_id", user.id)
+      .eq("country", country.toUpperCase())
+      .then(({ data }) => {
+        if (data) setSavedIds(new Set(data.map((r) => r.course_id)))
+      })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, country])
+
+  async function toggleSave(row: RoiRow) {
+    if (!user) { window.location.href = "/login"; return }
+    const courseId = row.college_id
+    const isSaved = savedIds.has(courseId)
+    if (isSaved) {
+      await supabase
+        .from("saved_courses")
+        .delete()
+        .eq("user_id", user.id)
+        .eq("country", country.toUpperCase())
+        .eq("course_id", courseId)
+      setSavedIds((prev) => { const next = new Set(prev); next.delete(courseId); return next })
+    } else {
+      await supabase.from("saved_courses").upsert({
+        user_id: user.id,
+        country: country.toUpperCase(),
+        course_id: courseId,
+        course_name: row.field_name ?? "",
+        college_name: row.college_name,
+        field_name: row.field_name ?? "",
+        tuition: row.tuition,
+      })
+      setSavedIds((prev) => new Set(prev).add(courseId))
+    }
+  }
+
   const currencyCode = CURRENCY[country]?.code ?? 'USD'
 
   const TABLE_COLS = [
@@ -386,6 +439,7 @@ function ROIExplorerContent() {
     [`Tuition (${currencyCode})`,      "text-right"],
     ["Grad Rate",                      "text-right"],
     ...(country === "ie" ? [["Admission", "text-right"] as const] : []),
+    ["", "text-right"],
   ]
 
   return (
@@ -617,6 +671,19 @@ function ROIExplorerContent() {
                           )}
                         </td>
                       )}
+                      <td className="px-4 py-3 text-right">
+                        <button
+                          onClick={() => toggleSave(row)}
+                          className={`p-1.5 rounded-lg transition-colors ${
+                            savedIds.has(row.college_id)
+                              ? "text-indigo-600 bg-indigo-50 hover:bg-indigo-100"
+                              : "text-slate-300 hover:text-slate-500 hover:bg-slate-100"
+                          }`}
+                          title={savedIds.has(row.college_id) ? "Remove from saved" : "Save"}
+                        >
+                          <Bookmark className="w-4 h-4" fill={savedIds.has(row.college_id) ? "currentColor" : "none"} />
+                        </button>
+                      </td>
                     </tr>
                   ))
                 }
