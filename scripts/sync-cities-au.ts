@@ -16,17 +16,18 @@ if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
 
+// ABS 2025 최신 수치 (주당 중간 월세 × 4.33)
 const CITIES = [
-  { name: 'Sydney',      state: 'NSW', rent_median: 2800, cost_of_living_index: 95 },
-  { name: 'Melbourne',   state: 'VIC', rent_median: 2200, cost_of_living_index: 88 },
-  { name: 'Brisbane',    state: 'QLD', rent_median: 2100, cost_of_living_index: 82 },
-  { name: 'Perth',       state: 'WA',  rent_median: 2000, cost_of_living_index: 80 },
-  { name: 'Adelaide',    state: 'SA',  rent_median: 1700, cost_of_living_index: 75 },
-  { name: 'Canberra',    state: 'ACT', rent_median: 2400, cost_of_living_index: 85 },
-  { name: 'Hobart',      state: 'TAS', rent_median: 1800, cost_of_living_index: 78 },
-  { name: 'Darwin',      state: 'NT',  rent_median: 1900, cost_of_living_index: 80 },
-  { name: 'Gold Coast',  state: 'QLD', rent_median: 2000, cost_of_living_index: 80 },
-  { name: 'Newcastle',   state: 'NSW', rent_median: 1800, cost_of_living_index: 76 },
+  { name: 'Sydney',      state: 'NSW', rent_median: 2817, cost_of_living_index: 96 },
+  { name: 'Melbourne',   state: 'VIC', rent_median: 2383, cost_of_living_index: 88 },
+  { name: 'Brisbane',    state: 'QLD', rent_median: 2513, cost_of_living_index: 85 },
+  { name: 'Perth',       state: 'WA',  rent_median: 2656, cost_of_living_index: 90 },
+  { name: 'Adelaide',    state: 'SA',  rent_median: 1863, cost_of_living_index: 76 },
+  { name: 'Canberra',    state: 'ACT', rent_median: 2817, cost_of_living_index: 88 },
+  { name: 'Hobart',      state: 'TAS', rent_median: 1863, cost_of_living_index: 75 },
+  { name: 'Darwin',      state: 'NT',  rent_median: 2383, cost_of_living_index: 82 },
+  { name: 'Gold Coast',  state: 'QLD', rent_median: 2600, cost_of_living_index: 84 },
+  { name: 'Newcastle',   state: 'NSW', rent_median: 2253, cost_of_living_index: 79 },
 ]
 
 async function main() {

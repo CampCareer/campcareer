@@ -16,18 +16,18 @@ if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
 
-// GBP — Numbeo / ONS 2024 estimates
+// GBP — ONS / Homelet Rental Index 2025 (monthly median)
 const CITIES = [
-  { name: 'London',       region: 'London',        rent_median: 2200, cost_of_living_index: 98 },
-  { name: 'Manchester',   region: 'North West',    rent_median: 1100, cost_of_living_index: 75 },
-  { name: 'Birmingham',   region: 'West Midlands', rent_median: 1000, cost_of_living_index: 72 },
-  { name: 'Edinburgh',    region: 'Scotland',      rent_median: 1300, cost_of_living_index: 80 },
-  { name: 'Bristol',      region: 'South West',    rent_median: 1200, cost_of_living_index: 78 },
-  { name: 'Leeds',        region: 'Yorkshire',     rent_median:  900, cost_of_living_index: 70 },
-  { name: 'Glasgow',      region: 'Scotland',      rent_median: 1000, cost_of_living_index: 72 },
-  { name: 'Nottingham',   region: 'East Midlands', rent_median:  850, cost_of_living_index: 68 },
-  { name: 'Sheffield',    region: 'Yorkshire',     rent_median:  800, cost_of_living_index: 66 },
-  { name: 'Liverpool',    region: 'North West',    rent_median:  850, cost_of_living_index: 68 },
+  { name: 'London',       region: 'London',        rent_median: 2700, cost_of_living_index: 99 },
+  { name: 'Manchester',   region: 'North West',    rent_median: 1350, cost_of_living_index: 78 },
+  { name: 'Birmingham',   region: 'West Midlands', rent_median:  950, cost_of_living_index: 72 },
+  { name: 'Edinburgh',    region: 'Scotland',      rent_median: 1600, cost_of_living_index: 83 },
+  { name: 'Bristol',      region: 'South West',    rent_median: 1550, cost_of_living_index: 82 },
+  { name: 'Leeds',        region: 'Yorkshire',     rent_median: 1050, cost_of_living_index: 72 },
+  { name: 'Glasgow',      region: 'Scotland',      rent_median: 1150, cost_of_living_index: 74 },
+  { name: 'Nottingham',   region: 'East Midlands', rent_median:  950, cost_of_living_index: 68 },
+  { name: 'Sheffield',    region: 'Yorkshire',     rent_median:  900, cost_of_living_index: 67 },
+  { name: 'Liverpool',    region: 'North West',    rent_median:  950, cost_of_living_index: 69 },
 ]
 
 async function main() {

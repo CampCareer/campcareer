@@ -16,13 +16,18 @@ if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
 
-// EUR — Daft.ie / Numbeo 2024 estimates
+// EUR — RTB / Daft.ie Rental Report 2025 (monthly median)
 const CITIES = [
-  { name: 'Dublin',   province: 'Leinster',  rent_median: 2200, cost_of_living_index: 95 },
-  { name: 'Cork',     province: 'Munster',   rent_median: 1600, cost_of_living_index: 78 },
-  { name: 'Galway',   province: 'Connacht',  rent_median: 1500, cost_of_living_index: 75 },
-  { name: 'Limerick', province: 'Munster',   rent_median: 1300, cost_of_living_index: 70 },
-  { name: 'Waterford',province: 'Leinster',  rent_median: 1100, cost_of_living_index: 65 },
+  { name: 'Dublin',    province: 'Leinster', rent_median: 2450, cost_of_living_index: 97 },
+  { name: 'Cork',      province: 'Munster',  rent_median: 1800, cost_of_living_index: 80 },
+  { name: 'Galway',    province: 'Connacht', rent_median: 1650, cost_of_living_index: 77 },
+  { name: 'Limerick',  province: 'Munster',  rent_median: 1450, cost_of_living_index: 72 },
+  { name: 'Waterford', province: 'Leinster', rent_median: 1250, cost_of_living_index: 67 },
+  { name: 'Drogheda',  province: 'Leinster', rent_median: 1400, cost_of_living_index: 70 },
+  { name: 'Kilkenny',  province: 'Leinster', rent_median: 1200, cost_of_living_index: 65 },
+  { name: 'Sligo',     province: 'Connacht', rent_median: 1100, cost_of_living_index: 62 },
+  { name: 'Athlone',   province: 'Leinster', rent_median: 1150, cost_of_living_index: 63 },
+  { name: 'Wexford',   province: 'Leinster', rent_median: 1200, cost_of_living_index: 64 },
 ]
 
 async function main() {

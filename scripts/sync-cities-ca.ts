@@ -16,18 +16,18 @@ if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
 
-// CAD — Numbeo / CMHC 2024 estimates
+// CAD — Statistics Canada / CMHC Q1 2025 (2-bedroom asking rent)
 const CITIES = [
-  { name: 'Toronto',       province: 'ON', rent_median: 2400, cost_of_living_index: 88 },
-  { name: 'Vancouver',     province: 'BC', rent_median: 2800, cost_of_living_index: 92 },
-  { name: 'Montreal',      province: 'QC', rent_median: 1600, cost_of_living_index: 72 },
-  { name: 'Calgary',       province: 'AB', rent_median: 1900, cost_of_living_index: 80 },
-  { name: 'Ottawa',        province: 'ON', rent_median: 2000, cost_of_living_index: 78 },
-  { name: 'Edmonton',      province: 'AB', rent_median: 1600, cost_of_living_index: 74 },
-  { name: 'Winnipeg',      province: 'MB', rent_median: 1400, cost_of_living_index: 68 },
-  { name: 'Halifax',       province: 'NS', rent_median: 1700, cost_of_living_index: 72 },
-  { name: 'Quebec City',   province: 'QC', rent_median: 1300, cost_of_living_index: 65 },
-  { name: 'Waterloo',      province: 'ON', rent_median: 1800, cost_of_living_index: 75 },
+  { name: 'Toronto',       province: 'ON', rent_median: 2690, cost_of_living_index: 90 },
+  { name: 'Vancouver',     province: 'BC', rent_median: 3170, cost_of_living_index: 96 },
+  { name: 'Montreal',      province: 'QC', rent_median: 1930, cost_of_living_index: 75 },
+  { name: 'Calgary',       province: 'AB', rent_median: 1897, cost_of_living_index: 78 },
+  { name: 'Ottawa',        province: 'ON', rent_median: 2490, cost_of_living_index: 82 },
+  { name: 'Edmonton',      province: 'AB', rent_median: 1573, cost_of_living_index: 72 },
+  { name: 'Winnipeg',      province: 'MB', rent_median: 1450, cost_of_living_index: 67 },
+  { name: 'Halifax',       province: 'NS', rent_median: 1900, cost_of_living_index: 74 },
+  { name: 'Quebec City',   province: 'QC', rent_median: 1400, cost_of_living_index: 64 },
+  { name: 'Waterloo',      province: 'ON', rent_median: 1950, cost_of_living_index: 76 },
 ]
 
 async function main() {
