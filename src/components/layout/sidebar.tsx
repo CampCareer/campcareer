@@ -28,7 +28,7 @@ export function Sidebar() {
     <aside className="fixed left-0 top-0 h-full w-60 bg-slate-900 flex flex-col z-40">
       {/* Logo */}
       <div className="px-5 py-5 border-b border-slate-800">
-        <Link href="/" className="flex items-center gap-2.5">
+        <Link href="/dashboard" className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-lg bg-indigo-500 flex items-center justify-center shrink-0">
             <span className="text-white text-xs font-bold">CC</span>
           </div>
