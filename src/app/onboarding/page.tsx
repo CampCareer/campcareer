@@ -123,7 +123,6 @@ export default function OnboardingPage() {
   const [goal, setGoal] = useState<Goal | null>(null)
   const [budget, setBudget] = useState<Budget | null>(null)
   const [english, setEnglish] = useState<English | null>(null)
-  const [environment, setEnvironment] = useState<Environment | null>(null)
   const [saving, setSaving] = useState(false)
   const [result, setResult] = useState<{ country: string; flag: string; reasons: string[] } | null>(null)
 
@@ -135,7 +134,6 @@ export default function OnboardingPage() {
     setSaving(true)
     const rec = recommend(goal, budget, english, env)
     setResult(rec)
-    setEnvironment(env)
     setStep(5 as Step)
 
     const { data: { user } } = await supabase.auth.getUser()
