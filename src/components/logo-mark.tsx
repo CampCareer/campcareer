@@ -1,12 +1,9 @@
 'use client'
 
 export function LogoMark({ size = 32 }: { size?: number }) {
-  const r = Math.round(size * 0.18)
-  const fs = Math.round(size * 0.86)
-  const shadowX = Math.round(size * 0.57)
-  const shadowY = Math.round(size * 0.83)
-  const mainX = Math.round(size * 0.50)
-  const mainY = Math.round(size * 0.76)
+  const rx = Math.round(size * 0.18)
+  const fs = Math.round(size * 0.76)
+  const center = size / 2
 
   return (
     <svg
@@ -17,28 +14,30 @@ export function LogoMark({ size = 32 }: { size?: number }) {
       aria-label="CampCareer logo"
       role="img"
     >
-      <rect width={size} height={size} rx={r} fill="#1938b0" />
+      <rect width={size} height={size} rx={rx} fill="#1d4ed8" />
+      {/* shadow C — offset 오른쪽 아래 */}
       <text
-        x={shadowX}
-        y={shadowY}
+        x={center + size * 0.07}
+        y={center + size * 0.07}
         fontFamily="-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif"
         fontSize={fs}
         fontWeight={800}
-        fill="#142b93"
+        fill="#1e3a8a"
         textAnchor="middle"
-        dominantBaseline="auto"
+        dominantBaseline="middle"
       >
         C
       </text>
+      {/* main C — 정중앙 */}
       <text
-        x={mainX}
-        y={mainY}
+        x={center}
+        y={center}
         fontFamily="-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif"
         fontSize={fs}
         fontWeight={800}
         fill="white"
         textAnchor="middle"
-        dominantBaseline="auto"
+        dominantBaseline="middle"
       >
         C
       </text>
