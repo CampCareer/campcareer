@@ -12,19 +12,22 @@ import {
   BookOpen,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useTranslations } from "@/lib/i18n/locale-provider"
+import type { Dictionary } from "@/lib/i18n/dictionaries"
 
-const navItems = [
-  { label: "Dashboard",       href: "/dashboard", icon: LayoutDashboard },
-  { label: "Saved",           href: "/saved",     icon: Bookmark },
-  { label: "ROI Explorer",    href: "/roi-explorer", icon: TrendingUp },
-  { label: "Country Compare", href: "/compare",   icon: Globe },
-  { label: "Checklist",       href: "/checklist", icon: CheckSquare },
-  { label: "Timeline",        href: "/timeline",  icon: Calendar },
-  { label: "Blog",            href: "/blog",      icon: BookOpen },
+const navItems: { key: keyof Dictionary["nav"]; href: string; icon: typeof LayoutDashboard }[] = [
+  { key: "dashboard",   href: "/dashboard",    icon: LayoutDashboard },
+  { key: "saved",       href: "/saved",        icon: Bookmark },
+  { key: "roiExplorer", href: "/roi-explorer", icon: TrendingUp },
+  { key: "compare",     href: "/compare",      icon: Globe },
+  { key: "checklist",   href: "/checklist",    icon: CheckSquare },
+  { key: "timeline",    href: "/timeline",     icon: Calendar },
+  { key: "blog",        href: "/blog",         icon: BookOpen },
 ]
 
 export function Sidebar() {
   const pathname = usePathname()
+  const t = useTranslations()
 
   return (
     <aside className="fixed left-0 top-0 h-full w-60 bg-slate-900 flex flex-col z-40">
@@ -61,7 +64,7 @@ export function Sidebar() {
                   )}
                 >
                   <Icon className="w-4 h-4 shrink-0" />
-                  {item.label}
+                  {t.nav[item.key]}
                 </Link>
               </li>
             )

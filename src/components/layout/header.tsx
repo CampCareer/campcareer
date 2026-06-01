@@ -4,6 +4,8 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase-client'
+import { LanguageToggle } from '@/components/language-toggle'
+import { useTranslations } from '@/lib/i18n/locale-provider'
 import type { User } from '@supabase/supabase-js'
 
 const pageTitles: Record<string, string> = {
@@ -18,6 +20,7 @@ export function Header() {
   const pathname = usePathname()
   const router = useRouter()
   const title = pageTitles[pathname] ?? 'CampCareer'
+  const t = useTranslations()
   const supabase = createClient()
   const [user, setUser] = useState<User | null>(null)
 
@@ -40,30 +43,33 @@ export function Header() {
     <header className="h-14 border-b border-slate-200 bg-white flex items-center justify-between px-6 shrink-0">
       <h1 className="font-semibold text-slate-800 text-sm">{title}</h1>
 
-      {user ? (
-        <div className="flex items-center gap-3">
-          <span className="text-xs text-slate-500 hidden sm:block">
-            {user.email}
-          </span>
+      <div className="flex items-center gap-3">
+        <LanguageToggle />
+        {user ? (
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-slate-500 hidden sm:block">
+              {user.email}
+            </span>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleSignOut}
+              className="border-slate-200 text-slate-600 hover:bg-slate-50"
+            >
+              {t.common.signOut}
+            </Button>
+          </div>
+        ) : (
           <Button
             variant="outline"
             size="sm"
-            onClick={handleSignOut}
-            className="border-slate-200 text-slate-600 hover:bg-slate-50"
+            onClick={() => router.push('/login')}
+            className="border-indigo-200 text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700"
           >
-            Sign Out
+            {t.common.signIn}
           </Button>
-        </div>
-      ) : (
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => router.push('/login')}
-          className="border-indigo-200 text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700"
-        >
-          Sign In
-        </Button>
-      )}
+        )}
+      </div>
     </header>
   )
 }
