@@ -91,7 +91,7 @@ export default function ChecklistPage() {
           setCheckedIds(new Set(data.checked_items as string[]))
         }
       })
-  }, [user, generated])
+  }, [user, generated, country, visaType])
 
   async function handleGenerate() {
     setLoading(true)
@@ -110,6 +110,18 @@ export default function ChecklistPage() {
       setItems(json.items)
       setFromCache(json.cached ?? false)
       setGenerated(true)
+
+      // 저장된 진행상황 복원 (캐시 즉시 로드/재생성 시에도 체크 상태 유지)
+      if (user) {
+        const { data: prog } = await supabase
+          .from('user_checklist_progress')
+          .select('checked_items')
+          .eq('user_id', user.id)
+          .eq('country', country)
+          .eq('visa_type', visaType)
+          .maybeSingle()
+        setCheckedIds(new Set((prog?.checked_items as string[] | undefined) ?? []))
+      }
     }
     setLoading(false)
   }

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
+import { withStableIds } from '@/lib/checklist-id'
 
 const VISA_PROMPTS: Record<string, string> = {
   'student':        'student visa / study permit',
@@ -23,7 +24,7 @@ export async function POST(req: NextRequest) {
     .single()
 
   if (cached) {
-    return NextResponse.json({ items: cached.items, cached: true })
+    return NextResponse.json({ items: withStableIds(cached.items), cached: true })
   }
 
   // 2. Claude API 호출
@@ -36,7 +37,6 @@ export async function POST(req: NextRequest) {
 Return ONLY a JSON array (no markdown, no explanation) with this exact structure:
 [
   {
-    "id": "unique_id_string",
     "category": "Category Name",
     "task": "Specific task description",
     "required": true,
@@ -83,10 +83,13 @@ Include 20-25 items total. Be specific to ${countryName[country] ?? country} req
     return NextResponse.json({ error: 'Failed to parse response' }, { status: 500 })
   }
 
-  // 3. 캐시 저장
+  // Claude가 준 id를 무시하고 결정적 id로 정규화
+  const stableItems = withStableIds(items)
+
+  // 3. 캐시 저장 (저장 데이터와 리턴 데이터를 동일하게)
   await supabaseAdmin
     .from('checklist_cache')
-    .upsert({ country, visa_type, items })
+    .upsert({ country, visa_type, items: stableItems })
 
-  return NextResponse.json({ items, cached: false })
+  return NextResponse.json({ items: stableItems, cached: false })
 }
