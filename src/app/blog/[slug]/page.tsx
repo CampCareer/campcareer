@@ -15,6 +15,148 @@ type Post = {
 }
 
 const POSTS: Record<string, Post> = {
+  "cost-of-studying-in-ireland-2026": {
+    slug: "cost-of-studying-in-ireland-2026",
+    title: "How Much Does It Cost to Study in Ireland in 2026? A Complete Breakdown",
+    description: "Tuition, the reduced student contribution charge, city-by-city living costs, visa funds, and the Stamp 1G payoff — the full 2026 cost picture for international students.",
+    date: "June 1, 2026",
+    readTime: "8 min",
+    tag: "Ireland",
+    tagColor: "bg-emerald-100 text-emerald-700",
+    content: (
+      <div className="prose prose-slate max-w-none">
+        <p className="text-xl text-slate-600 leading-relaxed mb-8">
+          Ireland keeps climbing international students&apos; shortlists — English-speaking, EU-based, and home to the European HQs of Google, Meta, Stripe and more. But &quot;how much does it actually cost?&quot; rarely gets a straight answer. Here is the full 2026 picture: tuition, fees, living costs by city, the money you must prove for your visa, and why the numbers can still pay off.
+        </p>
+
+        <div className="bg-slate-50 rounded-2xl p-6 my-8 not-prose">
+          <h3 className="text-base font-bold text-slate-900 mb-4">TL;DR — One Year, All In (Non-EU)</h3>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between bg-white rounded-xl px-4 py-3 border border-slate-200">
+              <span className="text-sm font-medium text-slate-700">Tuition (varies by course)</span>
+              <span className="text-sm font-bold text-slate-800">€10,000 – €35,000</span>
+            </div>
+            <div className="flex items-center justify-between bg-white rounded-xl px-4 py-3 border border-slate-200">
+              <span className="text-sm font-medium text-slate-700">Living costs (varies by city)</span>
+              <span className="text-sm font-bold text-slate-800">€9,000 – €18,000</span>
+            </div>
+            <div className="flex items-center justify-between bg-white rounded-xl px-4 py-3 border border-slate-200">
+              <span className="text-sm font-medium text-slate-700">Realistic total per year</span>
+              <span className="text-sm font-bold text-indigo-600">€19,000 – €50,000+</span>
+            </div>
+          </div>
+          <p className="text-xs text-slate-400 mt-3">Wide range because course and city drive most of the variation. Read on for the breakdown.</p>
+        </div>
+
+        <h2>1. Tuition fees: course matters more than university</h2>
+        <p>
+          Non-EU (international) students pay full tuition at every Irish university — there is no subsidy. For the 2026/27 year, undergraduate fees broadly run <strong>€10,000–€25,000</strong>, and taught master&apos;s programmes <strong>€10,000–€35,000</strong>. The biggest driver isn&apos;t prestige, it&apos;s the field: STEM, business, data, and health sit at the top of the range, while arts, humanities and social sciences sit lower. Medicine is in a league of its own, often <strong>€50,000–€65,000</strong> a year.
+        </p>
+        <p>
+          A practical note for budget-conscious students: institutions like the University of Limerick, Dublin City University and Maynooth University often run strongly industry-aligned programmes at meaningfully lower fees than Trinity College Dublin or UCD.
+        </p>
+
+        <h2>2. The student contribution charge — lower in 2026</h2>
+        <p>
+          Separate from tuition, Irish universities levy an annual <strong>student contribution charge</strong> for exams, registration and campus services. It had reached around €3,000 per year. A timely change for 2026: <strong>from January 2026 the charge is being reduced to €2,500</strong>. EU-status students may get up to 100% relief depending on household income; most non-EU students will see it folded into (or added on top of) their tuition, so check exactly how your institution handles it.
+        </p>
+
+        <h2>3. Living costs: the city is the variable</h2>
+        <p>
+          After tuition, accommodation is the single biggest line — and it swings hard by city. Dublin&apos;s official student bodies estimate <strong>€1,264–€2,077 per month</strong> all-in for students living away from home, with rent the dominant cost. Regional cities are materially cheaper.
+        </p>
+
+        <div className="bg-slate-50 rounded-2xl p-6 my-8 not-prose">
+          <h3 className="text-base font-bold text-slate-900 mb-4">Typical Monthly Living Cost by City (2026)</h3>
+          <div className="space-y-3">
+            {[
+              { city: "Dublin",   total: "€1,500 – €2,100/mo", note: "Highest rent; most jobs" },
+              { city: "Cork",     total: "€1,100 – €1,500/mo", note: "Strong pharma/tech base" },
+              { city: "Galway",   total: "€1,050 – €1,450/mo", note: "Smaller, student-friendly" },
+              { city: "Limerick", total: "€950 – €1,300/mo",   note: "Best value of the four" },
+            ].map((row) => (
+              <div key={row.city} className="flex items-center justify-between bg-white rounded-xl px-4 py-3 border border-slate-200">
+                <div>
+                  <p className="text-sm font-semibold text-slate-800">{row.city}</p>
+                  <p className="text-xs text-slate-400">{row.note}</p>
+                </div>
+                <span className="text-sm font-bold text-indigo-600">{row.total}</span>
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-slate-400 mt-3">All-in estimate (rent, food, transport, essentials). Rent is the main swing factor.</p>
+        </div>
+
+        <p>
+          The takeaway: a cheaper city can offset a chunk of tuition. CampCareer tracks live city-level rent across Irish cities — including smaller ones like Drogheda and Kilkenny — so you can see net cost, not just the brochure number.
+        </p>
+
+        <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-6 my-8 not-prose">
+          <p className="text-sm font-semibold text-indigo-700 mb-2">🔍 See real Ireland ROI by city &amp; field</p>
+          <p className="text-sm text-slate-600 mb-4">
+            Compare Irish courses by ROI score, graduate salary, tuition and city rent — so the cheapest sticker price isn&apos;t mistaken for the best value.
+          </p>
+          <Link
+            href="/roi-explorer?country=ie"
+            className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-colors"
+          >
+            Explore Ireland ROI <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+
+        <h2>4. The visa money: what you must prove</h2>
+        <p>
+          Beyond paying for it, you must <em>prove</em> you can afford it for the D-Study visa (Stamp 2). For 2026 the Irish Immigration Service requires:
+        </p>
+        <ul>
+          <li>Evidence of <strong>at least €10,000</strong> available for living costs for your first year (and the same for each additional year)</li>
+          <li>Proof that at least <strong>€6,000 of tuition</strong> has been paid (or the full amount if your fees are lower)</li>
+          <li>Private medical insurance covering accident and illness</li>
+        </ul>
+        <p>
+          So a one-year master&apos;s with €15,000 tuition typically means showing roughly <strong>€25,000</strong> in accessible funds. After arrival you register for an Irish Residence Permit (IRP) within 90 days, which costs <strong>€300</strong>. Funds should be genuinely liquid and held in your (or your sponsor&apos;s) account well ahead of filing — credit limits and last-minute deposits are red flags.
+        </p>
+
+        <h2>5. The payoff: Stamp 1G and the EU job market</h2>
+        <p>
+          Here is why the cost can still make sense. Under the Third Level Graduate Programme, non-EU graduates get a <strong>Stamp 1G</strong> stay-back: <strong>12 months</strong> for an honours bachelor&apos;s (Level 8) and <strong>24 months</strong> for a master&apos;s or PhD (Level 9+). No employer sponsorship, no salary threshold, full 40-hour work rights — you apply within six months of your results.
+        </p>
+        <p>
+          That two-year window for master&apos;s graduates is the real prize: time to land a role in Dublin&apos;s tech and pharma cluster (Google, Meta, Apple, LinkedIn, Microsoft, Salesforce, Stripe all have a presence), then transition to a Critical Skills or General Employment Permit. Most qualifying tech roles clear the salary bar comfortably.
+        </p>
+
+        <h2>So — is it worth it?</h2>
+        <p>
+          Ireland is rarely the cheapest option up front, but it pairs competitive graduate salaries with a generous post-study stay-back and access to the wider EU labour market. The smartest move is to weigh tuition <em>and</em> city rent <em>and</em> expected salary together — which is exactly the calculation CampCareer is built for.
+        </p>
+
+        <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-6 my-8 not-prose">
+          <p className="text-sm font-semibold text-indigo-700 mb-2">🎯 Plan your Ireland application end-to-end</p>
+          <p className="text-sm text-slate-600 mb-4">
+            Build a visa checklist for Ireland, set your intake date, and track every deadline from offer to arrival.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="/checklist"
+              className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-colors"
+            >
+              Build my checklist <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link
+              href="/timeline"
+              className="inline-flex items-center gap-2 bg-white border border-indigo-200 hover:bg-indigo-50 text-indigo-700 text-sm font-semibold px-4 py-2.5 rounded-xl transition-colors"
+            >
+              Set my timeline
+            </Link>
+          </div>
+        </div>
+
+        <p className="text-xs text-slate-400 mt-8">
+          Sources: Irish Immigration Service (ISD) D-Study visa policy; Third Level Graduate Programme guidance; TU Dublin cost-of-living guide; university fee schedules (2026/27). Figures are indicative ranges and change yearly — always confirm on official sources before applying.
+        </p>
+      </div>
+    ),
+  },
   "ireland-cs-graduate-salary-2025": {
     slug: "ireland-cs-graduate-salary-2025",
     title: "Ireland Computer Science Graduate Salary 2025: The Complete Guide",

@@ -10,6 +10,15 @@ export const metadata: Metadata = {
 
 const POSTS = [
   {
+    slug: "cost-of-studying-in-ireland-2026",
+    title: "How Much Does It Cost to Study in Ireland in 2026? A Complete Breakdown",
+    excerpt: "Tuition, the reduced student contribution charge, city-by-city living costs, visa funds, and the Stamp 1G payoff — the full 2026 cost picture for international students.",
+    date: "2026-06-01",
+    readTime: "8 min",
+    tag: "Ireland",
+    tagColor: "bg-emerald-100 text-emerald-700",
+  },
+  {
     slug: "ireland-cs-graduate-salary-2025",
     title: "Ireland Computer Science Graduate Salary 2025: The Complete Guide",
     excerpt: "Irish CS graduates earn €45,000 on average. We break down salaries by university, city, and career stage using HEA government data.",
