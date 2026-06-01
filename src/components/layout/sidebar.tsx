@@ -35,7 +35,7 @@ export function Sidebar() {
       {/* Logo */}
       <div className="px-5 py-5 border-b border-slate-200">
         <Link href="/dashboard" className="flex items-center gap-2.5">
-          <LogoMark size={32} />
+          <LogoMark size={36} />
           <span className="text-slate-900 font-semibold text-base tracking-tight">
             CampCareer
           </span>
