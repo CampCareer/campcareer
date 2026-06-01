@@ -12,7 +12,7 @@ const POSTS = [
   {
     slug: "cost-of-studying-in-ireland-2026",
     title: "How Much Does It Cost to Study in Ireland in 2026? A Complete Breakdown",
-    excerpt: "Tuition, the reduced student contribution charge, city-by-city living costs, visa funds, and the Stamp 1G payoff — the full 2026 cost picture for international students.",
+    excerpt: "I moved to Dublin via Germany and nearly picked Limerick instead. Here's what studying in Ireland actually costs in 2026 — the accommodation timing trick nobody tells you, the €1,000 studio vs €1,300 shared room reality, and whether it's worth it.",
     date: "2026-06-01",
     readTime: "8 min",
     tag: "Ireland",
