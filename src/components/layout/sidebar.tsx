@@ -26,27 +26,42 @@ const navItems: { key: keyof Dictionary["nav"]; href: string; icon: typeof Layou
   { key: "blog",        href: "/blog",         icon: BookOpen },
 ]
 
-export function Sidebar() {
+export function Sidebar({ collapsed = false }: { collapsed?: boolean }) {
   const pathname = usePathname()
   const t = useTranslations()
 
   return (
-    <aside className="fixed left-0 top-0 h-full w-60 bg-[#FAFAFA] border-r border-slate-200 flex flex-col z-40">
+    <aside
+      className={cn(
+        "fixed left-0 top-0 h-full bg-[#FAFAFA] border-r border-slate-200 flex flex-col z-40 transition-all duration-200",
+        collapsed ? "w-16" : "w-60"
+      )}
+    >
       {/* Logo */}
       <div className="px-5 py-5 border-b border-slate-200">
-        <Link href="/dashboard" className="flex items-center gap-2.5">
+        <Link
+          href="/dashboard"
+          className={cn(
+            "flex items-center gap-2.5",
+            collapsed && "justify-center"
+          )}
+        >
           <LogoMark size={36} />
-          <span className="text-slate-900 font-semibold text-base tracking-tight">
-            CampCareer
-          </span>
+          {!collapsed && (
+            <span className="text-slate-900 font-semibold text-base tracking-tight">
+              CampCareer
+            </span>
+          )}
         </Link>
       </div>
 
       {/* Navigation */}
       <nav className="flex-1 px-3 py-4">
-        <p className="px-3 mb-2 text-xs font-medium text-slate-400 uppercase tracking-wider">
-          Menu
-        </p>
+        {!collapsed && (
+          <p className="px-3 mb-2 text-xs font-medium text-slate-400 uppercase tracking-wider">
+            Menu
+          </p>
+        )}
         <ul className="space-y-0.5">
           {navItems.map((item) => {
             const Icon = item.icon
@@ -55,15 +70,17 @@ export function Sidebar() {
               <li key={item.href}>
                 <Link
                   href={item.href}
+                  title={t.nav[item.key]}
                   className={cn(
                     "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
+                    collapsed && "justify-center",
                     isActive
                       ? "bg-indigo-50 text-indigo-600"
                       : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
                   )}
                 >
                   <Icon className="w-4 h-4 shrink-0" />
-                  {t.nav[item.key]}
+                  {!collapsed && t.nav[item.key]}
                 </Link>
               </li>
             )
@@ -72,9 +89,11 @@ export function Sidebar() {
       </nav>
 
       {/* Footer */}
-      <div className="px-5 py-4 border-t border-slate-200">
-        <p className="text-xs text-slate-400">© 2025 CampCareer</p>
-      </div>
+      {!collapsed && (
+        <div className="px-5 py-4 border-t border-slate-200">
+          <p className="text-xs text-slate-400">© 2025 CampCareer</p>
+        </div>
+      )}
     </aside>
   )
 }
