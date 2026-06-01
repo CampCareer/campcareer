@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Search, Bookmark, ArrowRight, X, CheckSquare } from "lucide-react"
+import { Search, Bookmark, ArrowRight, X, CheckSquare, Compass } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
 
 type RoiRow = {
@@ -55,28 +55,71 @@ export default function Dashboard() {
   const [userId, setUserId] = useState<string | null>(null)
   const fieldRef = useRef<HTMLDivElement>(null)
 
-  const currentCountry = COUNTRIES.find(c => c.value === country)!
+  // "Your next steps" 카드용 상태
+  const [recommendedCountry, setRecommendedCountry] = useState<string | null>(null)
+  const [checklistProgress, setChecklistProgress] = useState<
+    { completed: number; total: number; country?: string; visaType?: string } | null
+  >(null)
+  const [stepsLoading, setStepsLoading] = useState(true)
 
-  // 유저 로드
+  const currentCountry = COUNTRIES.find(c => c.value === country)!
+  const savedCount = savedIds.size
+
+  // 유저 로드 + "Your next steps" 데이터
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      if (!data.user) return
-      setUserId(data.user.id)
-      supabase
-        .from("user_preferences")
-        .select("recommended_country")
-        .eq("id", data.user.id)
-        .single()
-        .then(({ data: prefs }) => {
-          if (prefs?.recommended_country) setCountry(prefs.recommended_country.toLowerCase())
+    supabase.auth.getUser().then(async ({ data }) => {
+      if (!data.user) { setStepsLoading(false); return }
+      const uid = data.user.id
+      setUserId(uid)
+
+      // 추천 국가 / 저장 코스 / 최근 체크리스트 진행상황을 병렬 로드
+      const [prefsRes, savedRes, progressRes] = await Promise.all([
+        supabase
+          .from("user_preferences")
+          .select("recommended_country")
+          .eq("id", uid)
+          .maybeSingle(),
+        supabase
+          .from("saved_courses")
+          .select("course_id")
+          .eq("user_id", uid),
+        supabase
+          .from("user_checklist_progress")
+          .select("country, visa_type, checked_items")
+          .eq("user_id", uid)
+          .order("updated_at", { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+      ])
+
+      const rec = prefsRes.data?.recommended_country ?? null
+      if (rec) {
+        setRecommendedCountry(rec)
+        setCountry(rec.toLowerCase())
+      }
+
+      if (savedRes.data) setSavedIds(new Set(savedRes.data.map((r) => r.course_id)))
+
+      const progress = progressRes.data
+      if (progress?.checked_items) {
+        const completed = (progress.checked_items as string[]).length
+        // 전체 항목 수(분모)는 해당 country+visa_type 조합의 캐시 항목 길이
+        const { data: cached } = await supabase
+          .from("checklist_cache")
+          .select("items")
+          .eq("country", progress.country)
+          .eq("visa_type", progress.visa_type)
+          .maybeSingle()
+        const total = Array.isArray(cached?.items) ? (cached!.items as unknown[]).length : 0
+        setChecklistProgress({
+          completed,
+          total,
+          country: progress.country,
+          visaType: progress.visa_type,
         })
-      supabase
-        .from("saved_courses")
-        .select("course_id")
-        .eq("user_id", data.user.id)
-        .then(({ data: saved }) => {
-          if (saved) setSavedIds(new Set(saved.map((r) => r.course_id)))
-        })
+      }
+
+      setStepsLoading(false)
     })
   }, [])
 
@@ -243,59 +286,108 @@ export default function Dashboard() {
             </div>
           )}
 
-          {/* Your next steps (정적, 2단계에서 실제 데이터 연결 예정) */}
-          {!searched && (
-            <div className="mt-12">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-sm font-semibold text-slate-900">Your next steps</h2>
-                <span className="text-xs text-slate-400">Pick up where you left off</span>
+          {/* Your next steps (실제 Supabase 데이터) */}
+          {!searched && (() => {
+            const recMeta = recommendedCountry
+              ? COUNTRIES.find(c => c.value === recommendedCountry.toLowerCase())
+              : null
+            const recFlag = recMeta ? recMeta.label.split(" ")[0] : ""
+            const recName = recMeta ? recMeta.label.split(" ").slice(1).join(" ") : ""
+            const cardClass = "group rounded-xl border border-slate-200 bg-slate-50 p-4 hover:bg-white hover:shadow-md hover:border-slate-300 transition-all"
+
+            return (
+              <div className="mt-12">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-sm font-semibold text-slate-900">Your next steps</h2>
+                  <span className="text-xs text-slate-400">Pick up where you left off</span>
+                </div>
+
+                {stepsLoading ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    {Array.from({ length: 3 }).map((_, i) => (
+                      <div key={i} className="h-[104px] rounded-xl bg-slate-100 animate-pulse" />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+
+                    {/* 카드1 — Recommended */}
+                    {recMeta ? (
+                      <Link href={`/roi-explorer?country=${recommendedCountry!.toLowerCase()}`} className={cardClass}>
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-lg">{recFlag}</span>
+                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Recommended</span>
+                        </div>
+                        <p className="text-sm font-semibold text-slate-900 mb-0.5">{recName}</p>
+                        <p className="text-xs text-slate-500">Based on your goals</p>
+                      </Link>
+                    ) : (
+                      <Link href="/onboarding" className={cardClass}>
+                        <div className="flex items-center gap-2 mb-2">
+                          <Compass className="w-4 h-4 text-slate-400" />
+                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Get started</span>
+                        </div>
+                        <p className="text-sm font-semibold text-slate-900 mb-0.5">Take the quiz</p>
+                        <p className="text-xs text-slate-500">Find your best-fit country</p>
+                      </Link>
+                    )}
+
+                    {/* 카드2 — Checklist */}
+                    {checklistProgress && checklistProgress.total > 0 ? (
+                      <Link href="/checklist" className={cardClass}>
+                        <div className="flex items-center gap-2 mb-2">
+                          <CheckSquare className="w-4 h-4 text-slate-400" />
+                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Checklist</span>
+                        </div>
+                        <p className="text-sm font-semibold text-slate-900 mb-2">
+                          {checklistProgress.completed} of {checklistProgress.total} completed
+                        </p>
+                        <div className="h-1.5 rounded-full bg-slate-200 overflow-hidden">
+                          <div
+                            className="h-full bg-indigo-500 rounded-full"
+                            style={{ width: `${(checklistProgress.completed / checklistProgress.total) * 100}%` }}
+                          />
+                        </div>
+                      </Link>
+                    ) : (
+                      <Link href="/checklist" className={cardClass}>
+                        <div className="flex items-center gap-2 mb-2">
+                          <CheckSquare className="w-4 h-4 text-slate-400" />
+                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Checklist</span>
+                        </div>
+                        <p className="text-sm font-semibold text-slate-900 mb-0.5">Start your checklist</p>
+                        <p className="text-xs text-slate-500">Track every requirement</p>
+                      </Link>
+                    )}
+
+                    {/* 카드3 — Saved */}
+                    {savedCount > 0 ? (
+                      <Link href="/saved" className={cardClass}>
+                        <div className="flex items-center gap-2 mb-2">
+                          <Bookmark className="w-4 h-4 text-slate-400" />
+                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Saved</span>
+                        </div>
+                        <p className="text-sm font-semibold text-slate-900 mb-0.5">
+                          {savedCount} saved course{savedCount > 1 ? "s" : ""}
+                        </p>
+                        <p className="text-xs text-slate-500">View all</p>
+                      </Link>
+                    ) : (
+                      <Link href="/roi-explorer" className={cardClass}>
+                        <div className="flex items-center gap-2 mb-2">
+                          <Bookmark className="w-4 h-4 text-slate-400" />
+                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Saved</span>
+                        </div>
+                        <p className="text-sm font-semibold text-slate-900 mb-0.5">Nothing saved yet</p>
+                        <p className="text-xs text-slate-500">Browse the ROI Explorer</p>
+                      </Link>
+                    )}
+
+                  </div>
+                )}
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-
-                {/* TODO(2단계): user_preferences.recommended_country 연결 */}
-                <Link
-                  href="/onboarding"
-                  className="group rounded-xl border border-slate-200 bg-slate-50 p-4 hover:bg-white hover:shadow-md hover:border-slate-300 transition-all"
-                >
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-lg">🇮🇪</span>
-                    <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Recommended</span>
-                  </div>
-                  <p className="text-sm font-semibold text-slate-900 mb-0.5">Ireland</p>
-                  <p className="text-xs text-slate-500">Based on your goals</p>
-                </Link>
-
-                {/* TODO(2단계): user_checklist_progress 연결 */}
-                <Link
-                  href="/checklist"
-                  className="group rounded-xl border border-slate-200 bg-slate-50 p-4 hover:bg-white hover:shadow-md hover:border-slate-300 transition-all"
-                >
-                  <div className="flex items-center gap-2 mb-2">
-                    <CheckSquare className="w-4 h-4 text-slate-400" />
-                    <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Checklist</span>
-                  </div>
-                  <p className="text-sm font-semibold text-slate-900 mb-2">3 of 24 completed</p>
-                  <div className="h-1.5 rounded-full bg-slate-200 overflow-hidden">
-                    <div className="h-full bg-indigo-500 rounded-full" style={{ width: "12.5%" }} />
-                  </div>
-                </Link>
-
-                {/* TODO(2단계): saved_courses count 연결 */}
-                <Link
-                  href="/saved"
-                  className="group rounded-xl border border-slate-200 bg-slate-50 p-4 hover:bg-white hover:shadow-md hover:border-slate-300 transition-all"
-                >
-                  <div className="flex items-center gap-2 mb-2">
-                    <Bookmark className="w-4 h-4 text-slate-400" />
-                    <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Saved</span>
-                  </div>
-                  <p className="text-sm font-semibold text-slate-900 mb-0.5">View all</p>
-                  <p className="text-xs text-slate-500">Your saved courses</p>
-                </Link>
-
-              </div>
-            </div>
-          )}
+            )
+          })()}
         </div>
       </div>
 
