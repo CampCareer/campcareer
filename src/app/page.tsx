@@ -8,6 +8,7 @@ import {
 } from "lucide-react"
 import { getTranslations } from "@/lib/i18n/server"
 import { LanguageToggle } from "@/components/language-toggle"
+import { LogoMark } from "@/components/logo-mark"
 
 // ── 목업 샘플 데이터 (정적, 번역 제외) ────────────────────────────────────────
 
@@ -69,9 +70,7 @@ export default function LandingPage() {
 
           {/* 로고 */}
           <Link href="/" className="flex items-center gap-2.5 shrink-0">
-            <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center">
-              <span className="text-white text-xs font-bold">CC</span>
-            </div>
+            <LogoMark size={32} />
             <span className="font-semibold text-white text-base tracking-tight">
               CampCareer
             </span>
