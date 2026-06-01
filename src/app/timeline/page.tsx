@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from "react"
-import { CheckCircle2, Circle, ChevronDown, ChevronUp, Pencil } from "lucide-react"
+import { CheckCircle2, Circle, ChevronDown, ChevronUp, Pencil, Clock } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
 import type { User } from "@supabase/supabase-js"
 
@@ -13,6 +13,8 @@ type Task = {
 type Phase = {
   id: string
   month: string
+  startMonthsBefore: number
+  endMonthsBefore: number
   title: string
   color: string
   bg: string
@@ -24,6 +26,8 @@ const INITIAL_PHASES: Phase[] = [
   {
     id: "p1",
     month: "18–12 months before",
+    startMonthsBefore: 18,
+    endMonthsBefore: 12,
     title: "Research & Decision",
     color: "text-violet-600",
     bg: "bg-violet-50",
@@ -39,6 +43,8 @@ const INITIAL_PHASES: Phase[] = [
   {
     id: "p2",
     month: "12–9 months before",
+    startMonthsBefore: 12,
+    endMonthsBefore: 9,
     title: "Test Prep & Shortlisting",
     color: "text-blue-600",
     bg: "bg-blue-50",
@@ -54,6 +60,8 @@ const INITIAL_PHASES: Phase[] = [
   {
     id: "p3",
     month: "9–6 months before",
+    startMonthsBefore: 9,
+    endMonthsBefore: 6,
     title: "Application Prep",
     color: "text-indigo-600",
     bg: "bg-indigo-50",
@@ -69,6 +77,8 @@ const INITIAL_PHASES: Phase[] = [
   {
     id: "p4",
     month: "6–3 months before",
+    startMonthsBefore: 6,
+    endMonthsBefore: 3,
     title: "Submit Applications",
     color: "text-sky-600",
     bg: "bg-sky-50",
@@ -84,6 +94,8 @@ const INITIAL_PHASES: Phase[] = [
   {
     id: "p5",
     month: "3–1 months before",
+    startMonthsBefore: 3,
+    endMonthsBefore: 1,
     title: "Pre-Departure",
     color: "text-emerald-600",
     bg: "bg-emerald-50",
@@ -100,6 +112,8 @@ const INITIAL_PHASES: Phase[] = [
   {
     id: "p6",
     month: "Arrival",
+    startMonthsBefore: 1,
+    endMonthsBefore: 0,
     title: "Settle In",
     color: "text-amber-600",
     bg: "bg-amber-50",
@@ -175,6 +189,52 @@ function fmtDate(dateStr: string): string {
   })
 }
 
+// target_date 기준 N개월 전 날짜
+function subMonths(date: Date, months: number): Date {
+  const d = new Date(date)
+  d.setMonth(d.getMonth() - months)
+  return d
+}
+
+function toISODate(d: Date): string {
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, "0")
+  const day = String(d.getDate()).padStart(2, "0")
+  return `${y}-${m}-${day}`
+}
+
+// 날짜 범위 라벨: 같은 해면 "Mar – Sep 2025", 다르면 "Sep 2025 – Mar 2026"
+function fmtRange(start: Date, end: Date): string {
+  const sM = start.toLocaleDateString("en-US", { month: "short" })
+  const eM = end.toLocaleDateString("en-US", { month: "short" })
+  const sY = start.getFullYear()
+  const eY = end.getFullYear()
+  return sY === eY ? `${sM} – ${eM} ${eY}` : `${sM} ${sY} – ${eM} ${eY}`
+}
+
+// 오늘로부터 남은 일수 (날짜만 비교)
+function daysUntil(dateStr: string): number {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const t = parseLocalDate(dateStr)
+  t.setHours(0, 0, 0, 0)
+  return Math.ceil((t.getTime() - today.getTime()) / 86400000)
+}
+
+// 현재 단계 = deadline(endMonthsBefore 시점)이 오늘 이후인 "가장 이른" 단계.
+// 모든 단계가 지났으면 null.
+function currentPhaseId(targetDate: string): string | null {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const target = parseLocalDate(targetDate)
+  for (const p of INITIAL_PHASES) {
+    const dl = subMonths(target, p.endMonthsBefore)
+    dl.setHours(0, 0, 0, 0)
+    if (dl.getTime() >= today.getTime()) return p.id
+  }
+  return null
+}
+
 export default function TimelinePage() {
   const supabase = createClient()
   const [user, setUser] = useState<User | null>(null)
@@ -216,6 +276,11 @@ export default function TimelinePage() {
           dream_school: row.dream_school ?? null,
           dream_field: row.dream_field ?? null,
         })
+        // 현재 단계만 펼치고 나머지는 접은 상태로 시작
+        if (row.target_date) {
+          const cur = currentPhaseId(row.target_date)
+          setCollapsed(new Set(INITIAL_PHASES.filter((p) => p.id !== cur).map((p) => p.id)))
+        }
       }
     })
   }, [])
@@ -245,6 +310,11 @@ export default function TimelinePage() {
       )
     setGoal(nextGoal)
     setShowGoalForm(false)
+    // 현재 단계만 펼치고 나머지는 접기
+    if (target_date) {
+      const cur = currentPhaseId(target_date)
+      setCollapsed(new Set(INITIAL_PHASES.filter((p) => p.id !== cur).map((p) => p.id)))
+    }
   }
 
   function openGoalForm() {
@@ -290,8 +360,137 @@ export default function TimelinePage() {
   const doneTasks  = INITIAL_PHASES.reduce((acc, p) => acc + p.tasks.filter((t) => checkedIds.has(t.id)).length, 0)
   const progress   = Math.round((doneTasks / totalTasks) * 100)
 
+  // ── 날짜 역산 스케줄 (goal.target_date 있을 때만) ──
+  const targetDateStr = goal?.target_date || null
+  const curId = targetDateStr ? currentPhaseId(targetDateStr) : null
+
+  type Sched = {
+    deadline: Date
+    deadlineStr: string
+    status: "past" | "current" | "upcoming"
+    range: string
+  }
+  const schedule: Record<string, Sched> = {}
+  if (targetDateStr) {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    const target = parseLocalDate(targetDateStr)
+    for (const p of INITIAL_PHASES) {
+      const ws = subMonths(target, p.startMonthsBefore); ws.setHours(0, 0, 0, 0)
+      const dl = subMonths(target, p.endMonthsBefore);   dl.setHours(0, 0, 0, 0)
+      const status: Sched["status"] =
+        dl.getTime() < today.getTime() ? "past" : p.id === curId ? "current" : "upcoming"
+      schedule[p.id] = { deadline: dl, deadlineStr: toISODate(dl), status, range: fmtRange(ws, dl) }
+    }
+  }
+
+  // 다가오는 마감: 오늘 이후(past 아님)인 단계만 가까운 순
+  const upcoming = targetDateStr
+    ? INITIAL_PHASES
+        .filter((p) => schedule[p.id]?.status !== "past")
+        .sort((a, b) => schedule[a.id].deadline.getTime() - schedule[b.id].deadline.getTime())
+    : []
+
+  const currentTitle = curId
+    ? INITIAL_PHASES.find((p) => p.id === curId)?.title ?? "—"
+    : targetDateStr ? "All stages passed" : "—"
+
+  function ddayBadgeClass(dateStr: string): string {
+    const d = daysUntil(dateStr)
+    if (d <= 14) return "bg-red-50 text-red-600"
+    if (d <= 30) return "bg-amber-50 text-amber-600"
+    return "bg-slate-100 text-slate-500"
+  }
+
+  function renderPhaseCard(phase: Phase, idx: number) {
+    const isCollapsed = collapsed.has(phase.id)
+    const doneCount = phase.tasks.filter((t) => checkedIds.has(t.id)).length
+    const allDone = doneCount === phase.tasks.length
+    const sch = schedule[phase.id]
+    const status = sch?.status
+    const subtitle = sch ? sch.range : phase.month
+
+    const ringCls = status === "current" ? "ring-2 ring-indigo-400" : ""
+    const dimCls = status === "past" ? "opacity-60" : allDone ? "opacity-70" : ""
+
+    return (
+      <div
+        key={phase.id}
+        className={`border rounded-2xl overflow-hidden shadow-sm ${phase.border} ${ringCls} ${dimCls}`}
+      >
+        {/* 페이즈 헤더 */}
+        <button
+          onClick={() => toggleCollapse(phase.id)}
+          className={`w-full flex items-center justify-between px-5 py-4 ${phase.bg} transition-colors`}
+        >
+          <div className="flex items-center gap-3">
+            <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white ${
+              allDone ? "bg-emerald-500" : status === "current" ? "bg-indigo-500" : "bg-slate-300"
+            }`}>
+              {allDone ? "✓" : idx + 1}
+            </div>
+            <div className="text-left">
+              <div className="flex items-center gap-2">
+                <p className={`text-sm font-semibold ${phase.color}`}>{phase.title}</p>
+                {status === "current" && (
+                  <span className="rounded-full px-2 py-0.5 text-[10px] font-semibold bg-indigo-100 text-indigo-700">
+                    Current
+                  </span>
+                )}
+                {status === "past" && (
+                  allDone ? (
+                    <span className="rounded-full px-2 py-0.5 text-[10px] font-semibold bg-emerald-100 text-emerald-700">
+                      Done
+                    </span>
+                  ) : (
+                    <span className="rounded-full px-2 py-0.5 text-[10px] font-semibold bg-red-100 text-red-600">
+                      Past due
+                    </span>
+                  )
+                )}
+              </div>
+              <p className="text-xs text-slate-400">{subtitle}</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-slate-500">{doneCount}/{phase.tasks.length}</span>
+            {isCollapsed
+              ? <ChevronDown className="w-4 h-4 text-slate-400" />
+              : <ChevronUp className="w-4 h-4 text-slate-400" />
+            }
+          </div>
+        </button>
+
+        {/* 태스크 목록 */}
+        {!isCollapsed && (
+          <ul className="bg-white divide-y divide-slate-100">
+            {phase.tasks.map((task) => {
+              const isDone = checkedIds.has(task.id)
+              return (
+                <li key={task.id}>
+                  <button
+                    onClick={() => toggleTask(task.id)}
+                    className="w-full flex items-center gap-3 px-5 py-3.5 hover:bg-slate-50 transition-colors text-left"
+                  >
+                    {isDone
+                      ? <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
+                      : <Circle className="w-5 h-5 text-slate-300 shrink-0" />
+                    }
+                    <span className={`text-sm ${isDone ? "line-through text-slate-400" : "text-slate-700"}`}>
+                      {task.label}
+                    </span>
+                  </button>
+                </li>
+              )
+            })}
+          </ul>
+        )}
+      </div>
+    )
+  }
+
   return (
-    <div className="max-w-3xl mx-auto px-6 py-10 space-y-8">
+    <div className="max-w-6xl mx-auto px-6 py-10 space-y-8">
 
       {/* 목표 카드 (설정됨) 또는 목표 설정 폼 (미설정/편집) */}
       {goalIsSet && !showGoalForm ? (
@@ -433,86 +632,78 @@ export default function TimelinePage() {
         </div>
       )}
 
-      {/* 진행률 */}
-      <div className="bg-white border border-slate-200 rounded-2xl px-6 py-5 shadow-sm">
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-sm font-semibold text-slate-700">Overall Progress</span>
-          <span className="text-sm font-bold text-indigo-600">{doneTasks} / {totalTasks} tasks</span>
-        </div>
-        <div className="w-full bg-slate-100 rounded-full h-2.5">
-          <div
-            className="bg-indigo-600 h-2.5 rounded-full transition-all duration-500"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-        <p className="text-xs text-slate-400 mt-2">{progress}% complete</p>
-      </div>
-
-      {/* 타임라인 */}
-      <div className="space-y-4">
-        {INITIAL_PHASES.map((phase, idx) => {
-          const isCollapsed = collapsed.has(phase.id)
-          const doneCount = phase.tasks.filter((t) => checkedIds.has(t.id)).length
-          const allDone = doneCount === phase.tasks.length
-
-          return (
-            <div
-              key={phase.id}
-              className={`border rounded-2xl overflow-hidden shadow-sm ${phase.border} ${allDone ? "opacity-70" : ""}`}
-            >
-              {/* 페이즈 헤더 */}
-              <button
-                onClick={() => toggleCollapse(phase.id)}
-                className={`w-full flex items-center justify-between px-5 py-4 ${phase.bg} transition-colors`}
-              >
-                <div className="flex items-center gap-3">
-                  <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white ${
-                    allDone ? "bg-emerald-500" : "bg-slate-300"
-                  }`}>
-                    {allDone ? "✓" : idx + 1}
-                  </div>
-                  <div className="text-left">
-                    <p className={`text-sm font-semibold ${phase.color}`}>{phase.title}</p>
-                    <p className="text-xs text-slate-400">{phase.month}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="text-xs text-slate-500">{doneCount}/{phase.tasks.length}</span>
-                  {isCollapsed
-                    ? <ChevronDown className="w-4 h-4 text-slate-400" />
-                    : <ChevronUp className="w-4 h-4 text-slate-400" />
-                  }
-                </div>
-              </button>
-
-              {/* 태스크 목록 */}
-              {!isCollapsed && (
-                <ul className="bg-white divide-y divide-slate-100">
-                  {phase.tasks.map((task) => {
-                    const isDone = checkedIds.has(task.id)
-                    return (
-                      <li key={task.id}>
-                        <button
-                          onClick={() => toggleTask(task.id)}
-                          className="w-full flex items-center gap-3 px-5 py-3.5 hover:bg-slate-50 transition-colors text-left"
-                        >
-                          {isDone
-                            ? <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
-                            : <Circle className="w-5 h-5 text-slate-300 shrink-0" />
-                          }
-                          <span className={`text-sm ${isDone ? "line-through text-slate-400" : "text-slate-700"}`}>
-                            {task.label}
-                          </span>
-                        </button>
-                      </li>
-                    )
-                  })}
-                </ul>
-              )}
+      {goalIsSet ? (
+        <>
+          {/* 요약 통계 바 */}
+          <div className="bg-white border border-slate-200 rounded-2xl px-6 py-5 shadow-sm grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div>
+              <p className="text-xs text-slate-400 uppercase tracking-wide mb-1">Tasks</p>
+              <p className="text-lg font-bold text-slate-900">
+                {doneTasks} <span className="text-sm font-medium text-slate-400">/ {totalTasks} completed</span>
+              </p>
             </div>
-          )
-        })}
-      </div>
+            <div>
+              <p className="text-xs text-slate-400 uppercase tracking-wide mb-1">Progress</p>
+              <p className="text-lg font-bold text-indigo-600">{progress}%</p>
+              <div className="mt-1.5 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-indigo-600 rounded-full transition-all duration-500"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+            </div>
+            <div>
+              <p className="text-xs text-slate-400 uppercase tracking-wide mb-1">Now</p>
+              <p className="text-lg font-bold text-slate-900 truncate">{currentTitle}</p>
+            </div>
+          </div>
+
+          {/* 2단 그리드 */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* 왼쪽: 단계 카드 */}
+            <div className="lg:col-span-2 space-y-4">
+              {INITIAL_PHASES.map((phase, idx) => renderPhaseCard(phase, idx))}
+            </div>
+
+            {/* 오른쪽: 다가오는 마감 */}
+            <div className="lg:col-span-1">
+              <div className="lg:sticky lg:top-6 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+                <div className="flex items-center gap-2 mb-4">
+                  <Clock className="w-4 h-4 text-slate-400" />
+                  <h3 className="text-sm font-semibold text-slate-900">Upcoming deadlines</h3>
+                </div>
+                {upcoming.length === 0 ? (
+                  <p className="text-sm text-slate-400 leading-relaxed">
+                    All deadlines passed — focus on arrival 🎉
+                  </p>
+                ) : (
+                  <ul className="space-y-2.5">
+                    {upcoming.map((p) => {
+                      const sch = schedule[p.id]
+                      return (
+                        <li key={p.id} className="flex items-center justify-between gap-3">
+                          <div className="min-w-0">
+                            <p className="text-sm font-medium text-slate-700 truncate">{p.title}</p>
+                            <p className="text-xs text-slate-400">{fmtDate(sch.deadlineStr)}</p>
+                          </div>
+                          <span className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-semibold ${ddayBadgeClass(sch.deadlineStr)}`}>
+                            {calcDday(sch.deadlineStr)}
+                          </span>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                )}
+              </div>
+            </div>
+          </div>
+        </>
+      ) : (
+        /* 목표 미설정: 기존 단일 컬럼 리스트 (month 문자열, 역산 비활성) */
+        <div className="space-y-4">
+          {INITIAL_PHASES.map((phase, idx) => renderPhaseCard(phase, idx))}
+        </div>
+      )}
 
     </div>
   )
