@@ -12,6 +12,7 @@ import {
   BookOpen,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { LogoMark } from "@/components/logo-mark"
 import { useTranslations } from "@/lib/i18n/locale-provider"
 import type { Dictionary } from "@/lib/i18n/dictionaries"
 
@@ -34,9 +35,7 @@ export function Sidebar() {
       {/* Logo */}
       <div className="px-5 py-5 border-b border-slate-200">
         <Link href="/dashboard" className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-indigo-500 flex items-center justify-center shrink-0">
-            <span className="text-white text-xs font-bold">CC</span>
-          </div>
+          <LogoMark size={32} />
           <span className="text-slate-900 font-semibold text-base tracking-tight">
             CampCareer
           </span>
