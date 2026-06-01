@@ -3,8 +3,9 @@
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Search, Bookmark, ArrowRight, X, CheckSquare, Compass } from "lucide-react"
+import { Search, Bookmark, ArrowRight, X, CheckSquare, Compass, CalendarClock } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
+import { calcDdayNumber, currentPhaseTitle } from "@/lib/timeline-schedule"
 
 type RoiRow = {
   college_id: string
@@ -60,6 +61,9 @@ export default function Dashboard() {
   const [checklistProgress, setChecklistProgress] = useState<
     { completed: number; total: number; country?: string; visaType?: string } | null
   >(null)
+  const [timelineInfo, setTimelineInfo] = useState<
+    { targetDate: string; dday: number; currentPhaseTitle: string | null } | null
+  >(null)
   const [stepsLoading, setStepsLoading] = useState(true)
 
   const currentCountry = COUNTRIES.find(c => c.value === country)!
@@ -72,8 +76,8 @@ export default function Dashboard() {
       const uid = data.user.id
       setUserId(uid)
 
-      // 추천 국가 / 저장 코스 / 최근 체크리스트 진행상황을 병렬 로드
-      const [prefsRes, savedRes, progressRes] = await Promise.all([
+      // 추천 국가 / 저장 코스 / 최근 체크리스트 진행상황 / 타임라인 목표를 병렬 로드
+      const [prefsRes, savedRes, progressRes, timelineRes] = await Promise.all([
         supabase
           .from("user_preferences")
           .select("recommended_country")
@@ -90,6 +94,11 @@ export default function Dashboard() {
           .order("updated_at", { ascending: false })
           .limit(1)
           .maybeSingle(),
+        supabase
+          .from("user_timeline")
+          .select("target_date")
+          .eq("user_id", uid)
+          .maybeSingle(),
       ])
 
       const rec = prefsRes.data?.recommended_country ?? null
@@ -99,6 +108,16 @@ export default function Dashboard() {
       }
 
       if (savedRes.data) setSavedIds(new Set(savedRes.data.map((r) => r.course_id)))
+
+      // 타임라인 목표(카드1): target_date 있으면 D-day + 현재 단계 제목
+      const targetDate = (timelineRes.data as { target_date: string | null } | null)?.target_date ?? null
+      if (targetDate) {
+        setTimelineInfo({
+          targetDate,
+          dday: calcDdayNumber(targetDate),
+          currentPhaseTitle: currentPhaseTitle(targetDate),
+        })
+      }
 
       const progress = progressRes.data
       if (progress?.checked_items) {
@@ -294,6 +313,13 @@ export default function Dashboard() {
             const recFlag = recMeta ? recMeta.label.split(" ")[0] : ""
             const recName = recMeta ? recMeta.label.split(" ").slice(1).join(" ") : ""
             const cardClass = "group rounded-xl border border-slate-200 bg-slate-50 p-4 hover:bg-white hover:shadow-md hover:border-slate-300 transition-all"
+            const ddayLabel = timelineInfo
+              ? timelineInfo.dday > 0
+                ? `D-${timelineInfo.dday}`
+                : timelineInfo.dday === 0
+                ? "D-Day"
+                : `D+${Math.abs(timelineInfo.dday)}`
+              : ""
 
             return (
               <div className="mt-12">
@@ -311,15 +337,26 @@ export default function Dashboard() {
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
 
-                    {/* 카드1 — Recommended */}
-                    {recMeta ? (
-                      <Link href={`/roi-explorer?country=${recommendedCountry!.toLowerCase()}`} className={cardClass}>
+                    {/* 카드1 — 타임라인 D-day → 추천국가 → 온보딩으로 진화 */}
+                    {timelineInfo ? (
+                      <Link href="/timeline" className={cardClass}>
+                        <div className="flex items-center gap-2 mb-2">
+                          <CalendarClock className="w-4 h-4 text-slate-400" />
+                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Timeline</span>
+                        </div>
+                        <p className="text-lg font-bold text-indigo-600 mb-0.5 leading-none">{ddayLabel}</p>
+                        <p className="text-xs text-slate-500 truncate mt-1">
+                          {timelineInfo.currentPhaseTitle ?? "On track"}
+                        </p>
+                      </Link>
+                    ) : recMeta ? (
+                      <Link href="/timeline" className={cardClass}>
                         <div className="flex items-center gap-2 mb-2">
                           <span className="text-lg">{recFlag}</span>
                           <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Recommended</span>
                         </div>
                         <p className="text-sm font-semibold text-slate-900 mb-0.5">{recName}</p>
-                        <p className="text-xs text-slate-500">Based on your goals</p>
+                        <p className="text-xs text-slate-500">Set your timeline</p>
                       </Link>
                     ) : (
                       <Link href="/onboarding" className={cardClass}>
