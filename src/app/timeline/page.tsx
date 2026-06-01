@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from "react"
-import { CheckCircle2, Circle, ChevronDown, ChevronUp } from "lucide-react"
+import { CheckCircle2, Circle, ChevronDown, ChevronUp, Pencil } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
 import type { User } from "@supabase/supabase-js"
 
@@ -114,27 +114,156 @@ const INITIAL_PHASES: Phase[] = [
   },
 ]
 
+const COUNTRIES = [
+  { value: "IE", label: "🇮🇪 Ireland",        flag: "🇮🇪", name: "Ireland" },
+  { value: "AU", label: "🇦🇺 Australia",      flag: "🇦🇺", name: "Australia" },
+  { value: "CA", label: "🇨🇦 Canada",         flag: "🇨🇦", name: "Canada" },
+  { value: "UK", label: "🇬🇧 United Kingdom",  flag: "🇬🇧", name: "United Kingdom" },
+  { value: "US", label: "🇺🇸 United States",   flag: "🇺🇸", name: "United States" },
+]
+
+const INTAKE_OPTIONS = [
+  { value: "2026-spring", label: "2026 Spring", month: 1, day: 15 },
+  { value: "2026-fall",   label: "2026 Fall",   month: 9, day: 1 },
+  { value: "2027-spring", label: "2027 Spring", month: 1, day: 15 },
+  { value: "2027-fall",   label: "2027 Fall",   month: 9, day: 1 },
+  { value: "2028-spring", label: "2028 Spring", month: 1, day: 15 },
+  { value: "2028-fall",   label: "2028 Fall",   month: 9, day: 1 },
+]
+
+type Goal = {
+  target_country: string
+  target_intake: string
+  target_date: string | null
+  dream_school: string | null
+  dream_field: string | null
+}
+
+// intake 프리셋 → 'YYYY-MM-DD' 대표 날짜
+function intakeToDate(intakeValue: string): string {
+  const opt = INTAKE_OPTIONS.find((o) => o.value === intakeValue)
+  if (!opt) return ""
+  const year = parseInt(intakeValue.slice(0, 4), 10)
+  const mm = String(opt.month).padStart(2, "0")
+  const dd = String(opt.day).padStart(2, "0")
+  return `${year}-${mm}-${dd}`
+}
+
+// 'YYYY-MM-DD'를 로컬 Date로 (타임존 UTC 파싱 회피)
+function parseLocalDate(dateStr: string): Date {
+  const [y, m, d] = dateStr.split("-").map(Number)
+  return new Date(y, m - 1, d)
+}
+
+// D-day 문자열 (날짜만 비교, 시분초 무시)
+function calcDday(targetDate: string): string {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const target = parseLocalDate(targetDate)
+  target.setHours(0, 0, 0, 0)
+  const diff = Math.ceil((target.getTime() - today.getTime()) / 86400000)
+  if (diff > 0) return `D-${diff}`
+  if (diff === 0) return "D-Day"
+  return `D+${Math.abs(diff)}`
+}
+
+function fmtDate(dateStr: string): string {
+  return parseLocalDate(dateStr).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  })
+}
+
 export default function TimelinePage() {
   const supabase = createClient()
   const [user, setUser] = useState<User | null>(null)
   const [checkedIds, setCheckedIds] = useState<Set<string>>(new Set())
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set())
 
-  // 로드/복원
+  // 목표(미니 온보딩)
+  const [goal, setGoal] = useState<Goal | null>(null)
+  const [showGoalForm, setShowGoalForm] = useState(false)
+
+  // 폼 입력용 임시 state
+  const [fCountry, setFCountry] = useState("IE")
+  const [fIntake, setFIntake] = useState("2026-fall")
+  const [fUseExact, setFUseExact] = useState(false)
+  const [fExactDate, setFExactDate] = useState("")
+  const [fSchool, setFSchool] = useState("")
+  const [fField, setFField] = useState("")
+
+  const goalIsSet = !!(goal && goal.target_country && goal.target_intake)
+
+  // 로드/복원 (진행상황 + 목표)
   useEffect(() => {
     supabase.auth.getUser().then(async ({ data }) => {
       setUser(data.user)
       if (!data.user) return
       const { data: row } = await supabase
         .from('user_timeline')
-        .select('checked_tasks')
+        .select('checked_tasks, target_country, target_intake, target_date, dream_school, dream_field')
         .eq('user_id', data.user.id)
         .maybeSingle()
       if (row?.checked_tasks) {
         setCheckedIds(new Set(row.checked_tasks as string[]))
       }
+      if (row?.target_country && row?.target_intake) {
+        setGoal({
+          target_country: row.target_country,
+          target_intake: row.target_intake,
+          target_date: row.target_date ?? null,
+          dream_school: row.dream_school ?? null,
+          dream_field: row.dream_field ?? null,
+        })
+      }
     })
   }, [])
+
+  async function handleSaveGoal() {
+    if (!user) return
+    const target_date = fUseExact && fExactDate ? fExactDate : intakeToDate(fIntake)
+    const nextGoal: Goal = {
+      target_country: fCountry,
+      target_intake: fIntake,
+      target_date,
+      dream_school: fSchool.trim() || null,
+      dream_field: fField.trim() || null,
+    }
+    // ★ checked_tasks 보존: 현재 state(로드/복원된 최신값)를 함께 upsert해
+    //    INSERT(첫 목표 설정)·UPDATE 양쪽에서 진행상황이 절대 날아가지 않게 한다.
+    await supabase
+      .from('user_timeline')
+      .upsert(
+        {
+          user_id: user.id,
+          ...nextGoal,
+          checked_tasks: Array.from(checkedIds),
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: 'user_id' }
+      )
+    setGoal(nextGoal)
+    setShowGoalForm(false)
+  }
+
+  function openGoalForm() {
+    if (goal) {
+      setFCountry(goal.target_country || "IE")
+      setFIntake(goal.target_intake || "2026-fall")
+      const intakeDate = intakeToDate(goal.target_intake)
+      if (goal.target_date && goal.target_date !== intakeDate) {
+        setFUseExact(true)
+        setFExactDate(goal.target_date)
+      } else {
+        setFUseExact(false)
+        setFExactDate("")
+      }
+      setFSchool(goal.dream_school || "")
+      setFField(goal.dream_field || "")
+    }
+    setShowGoalForm(true)
+  }
 
   async function toggleTask(taskId: string) {
     const next = new Set(checkedIds)
@@ -164,11 +293,145 @@ export default function TimelinePage() {
   return (
     <div className="max-w-3xl mx-auto px-6 py-10 space-y-8">
 
-      {/* 헤더 */}
-      <div>
-        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Study Abroad Timeline</h1>
-        <p className="text-slate-500 text-sm mt-2">Your 12–18 month preparation plan</p>
-      </div>
+      {/* 목표 카드 (설정됨) 또는 목표 설정 폼 (미설정/편집) */}
+      {goalIsSet && !showGoalForm ? (
+        (() => {
+          const c = COUNTRIES.find((x) => x.value === goal!.target_country)
+          const intakeLabel =
+            INTAKE_OPTIONS.find((o) => o.value === goal!.target_intake)?.label ?? goal!.target_intake
+          const primary = goal!.dream_school || c?.name || goal!.target_country
+          return (
+            <div className="bg-white border border-slate-200 rounded-2xl px-6 py-5 shadow-sm flex items-start justify-between gap-4">
+              <div className="min-w-0">
+                <p className="text-base font-bold text-slate-900 truncate">
+                  {c?.flag ? `${c.flag} ` : ""}{primary}
+                  {goal!.dream_field ? <span className="text-slate-500"> · {goal!.dream_field}</span> : null}
+                </p>
+                <p className="text-sm text-slate-500 mt-1">
+                  Target: <span className="font-medium text-slate-700">{intakeLabel}</span>
+                  {goal!.target_date && (
+                    <span className="text-slate-400"> · {fmtDate(goal!.target_date)}</span>
+                  )}
+                </p>
+              </div>
+              <div className="flex flex-col items-end gap-2 shrink-0">
+                {goal!.target_date && (
+                  <span className="text-xl font-bold text-indigo-600 leading-none">
+                    {calcDday(goal!.target_date)}
+                  </span>
+                )}
+                <button
+                  onClick={openGoalForm}
+                  className="inline-flex items-center gap-1 text-xs font-medium text-slate-500 hover:text-indigo-600 transition-colors"
+                >
+                  <Pencil className="w-3.5 h-3.5" /> Edit
+                </button>
+              </div>
+            </div>
+          )
+        })()
+      ) : (
+        <div className="bg-white border border-slate-200 rounded-2xl px-6 py-6 shadow-sm space-y-5">
+          <div>
+            <h2 className="text-lg font-bold text-slate-900">
+              {goalIsSet ? "Update your goal" : "Set your goal"}
+            </h2>
+            <p className="text-sm text-slate-500 mt-1">We&apos;ll build your timeline around it.</p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Destination */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-slate-600">Destination</label>
+              <select
+                value={fCountry}
+                onChange={(e) => setFCountry(e.target.value)}
+                className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-white"
+              >
+                {COUNTRIES.map((c) => (
+                  <option key={c.value} value={c.value}>{c.label}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Target intake */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-slate-600">Target intake</label>
+              <select
+                value={fIntake}
+                onChange={(e) => setFIntake(e.target.value)}
+                className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-white"
+              >
+                {INTAKE_OPTIONS.map((o) => (
+                  <option key={o.value} value={o.value}>{o.label}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* 정밀 날짜 (선택) */}
+          <div>
+            <label className="flex items-center gap-2 text-sm text-slate-600 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={fUseExact}
+                onChange={(e) => setFUseExact(e.target.checked)}
+                className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-300"
+              />
+              Know your exact start date?
+            </label>
+            {fUseExact && (
+              <input
+                type="date"
+                value={fExactDate}
+                onChange={(e) => setFExactDate(e.target.value)}
+                className="mt-2 w-full sm:w-56 h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-white"
+              />
+            )}
+          </div>
+
+          {/* Dream school / field (선택) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-slate-600">Dream school (optional)</label>
+              <input
+                type="text"
+                value={fSchool}
+                onChange={(e) => setFSchool(e.target.value)}
+                placeholder="Trinity College Dublin"
+                className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-white"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-slate-600">Dream field (optional)</label>
+              <input
+                type="text"
+                value={fField}
+                onChange={(e) => setFField(e.target.value)}
+                placeholder="Computer Science"
+                className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-white"
+              />
+            </div>
+          </div>
+
+          <div className="flex gap-2">
+            <button
+              onClick={handleSaveGoal}
+              className="flex-1 sm:flex-none bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2.5 rounded-xl transition-colors text-sm"
+            >
+              {goalIsSet ? "Update goal" : "Set goal"}
+            </button>
+            {goalIsSet && (
+              <button
+                onClick={() => setShowGoalForm(false)}
+                className="px-5 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors text-sm font-medium"
+              >
+                Cancel
+              </button>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* 진행률 */}
       <div className="bg-white border border-slate-200 rounded-2xl px-6 py-5 shadow-sm">
