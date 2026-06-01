@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from "react"
-import { CheckCircle2, Circle, ChevronDown, ChevronUp, Pencil, Clock } from "lucide-react"
+import { CheckCircle2, Circle, ChevronDown, ChevronUp, Pencil, Clock, History } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
 import type { User } from "@supabase/supabase-js"
 
@@ -244,6 +244,7 @@ export default function TimelinePage() {
   // 목표(미니 온보딩)
   const [goal, setGoal] = useState<Goal | null>(null)
   const [showGoalForm, setShowGoalForm] = useState(false)
+  const [pastGroupOpen, setPastGroupOpen] = useState(false)
 
   // 폼 입력용 임시 state
   const [fCountry, setFCountry] = useState("IE")
@@ -280,6 +281,8 @@ export default function TimelinePage() {
         if (row.target_date) {
           const cur = currentPhaseId(row.target_date)
           setCollapsed(new Set(INITIAL_PHASES.filter((p) => p.id !== cur).map((p) => p.id)))
+          // current가 없으면(모든 단계 past) past 그룹을 기본 펼침
+          setPastGroupOpen(cur === null)
         }
       }
     })
@@ -314,6 +317,8 @@ export default function TimelinePage() {
     if (target_date) {
       const cur = currentPhaseId(target_date)
       setCollapsed(new Set(INITIAL_PHASES.filter((p) => p.id !== cur).map((p) => p.id)))
+      // current가 없으면(모든 단계 past) past 그룹을 기본 펼침
+      setPastGroupOpen(cur === null)
     }
   }
 
@@ -390,6 +395,11 @@ export default function TimelinePage() {
         .filter((p) => schedule[p.id]?.status !== "past")
         .sort((a, b) => schedule[a.id].deadline.getTime() - schedule[b.id].deadline.getTime())
     : []
+
+  // 왼쪽 칼럼 재배치용 단계 분류 (INITIAL_PHASES가 이미 시간순이므로 순서 보존)
+  const currentPhases  = targetDateStr ? INITIAL_PHASES.filter((p) => schedule[p.id]?.status === "current") : []
+  const upcomingPhases = targetDateStr ? INITIAL_PHASES.filter((p) => schedule[p.id]?.status === "upcoming") : []
+  const pastPhases     = targetDateStr ? INITIAL_PHASES.filter((p) => schedule[p.id]?.status === "past") : []
 
   const currentTitle = curId
     ? INITIAL_PHASES.find((p) => p.id === curId)?.title ?? "—"
@@ -660,9 +670,46 @@ export default function TimelinePage() {
 
           {/* 2단 그리드 */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* 왼쪽: 단계 카드 */}
+            {/* 왼쪽: 단계 카드 (현재 → 미래 → 지난 단계 그룹 순) */}
             <div className="lg:col-span-2 space-y-4">
-              {INITIAL_PHASES.map((phase, idx) => renderPhaseCard(phase, idx))}
+              {/* 모든 단계가 past인 경우 안내 */}
+              {curId === null && (
+                <div className="bg-white border border-slate-200 rounded-2xl px-5 py-4 shadow-sm text-sm text-slate-500">
+                  All phases are past — focus on arrival 🎉
+                </div>
+              )}
+
+              {/* (1) 현재 단계 (펼친 상태, 최상단 강조) */}
+              {currentPhases.map((phase) => renderPhaseCard(phase, INITIAL_PHASES.indexOf(phase)))}
+
+              {/* (2) 미래 단계들 (시간순, 접힘 기본) */}
+              {upcomingPhases.map((phase) => renderPhaseCard(phase, INITIAL_PHASES.indexOf(phase)))}
+
+              {/* (3) 지난 단계 접이식 그룹 */}
+              {pastPhases.length > 0 && (
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 overflow-hidden">
+                  <button
+                    onClick={() => setPastGroupOpen((v) => !v)}
+                    className="w-full flex items-center justify-between px-5 py-3 hover:bg-slate-100 transition-colors"
+                  >
+                    <div className="flex items-center gap-2 text-slate-500">
+                      <History className="w-4 h-4" />
+                      <span className="text-sm font-medium">
+                        {pastPhases.length} past phase{pastPhases.length > 1 ? "s" : ""}
+                      </span>
+                    </div>
+                    {pastGroupOpen
+                      ? <ChevronUp className="w-4 h-4 text-slate-400" />
+                      : <ChevronDown className="w-4 h-4 text-slate-400" />
+                    }
+                  </button>
+                  {pastGroupOpen && (
+                    <div className="px-3 pb-3 pt-1 space-y-3">
+                      {pastPhases.map((phase) => renderPhaseCard(phase, INITIAL_PHASES.indexOf(phase)))}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* 오른쪽: 다가오는 마감 */}
