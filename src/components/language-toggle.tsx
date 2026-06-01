@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { useLocale } from '@/lib/i18n/locale-provider'
 import { LOCALE_COOKIE, type Locale } from '@/lib/i18n/config'
 
-export function LanguageToggle() {
+export function LanguageToggle({ className }: { className?: string }) {
   const router = useRouter()
   const locale = useLocale()
   const next: Locale = locale === 'ko' ? 'en' : 'ko'
@@ -22,7 +22,7 @@ export function LanguageToggle() {
       size="sm"
       onClick={() => switchTo(next)}
       aria-label="Toggle language"
-      className="text-slate-600 hover:bg-slate-50"
+      className={className ?? 'text-slate-600 hover:bg-slate-50'}
     >
       {locale === 'ko' ? 'EN' : '한국어'}
     </Button>

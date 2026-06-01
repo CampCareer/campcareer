@@ -6,8 +6,10 @@ import {
   CheckSquare,
   CalendarDays,
 } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
+import { LanguageToggle } from "@/components/language-toggle"
 
-// ── 목업 샘플 데이터 (정적) ────────────────────────────────────────────────────
+// ── 목업 샘플 데이터 (정적, 번역 제외) ────────────────────────────────────────
 
 const MOCK_ROWS = [
   {
@@ -39,44 +41,25 @@ const MOCK_ROWS = [
   },
 ]
 
-// ── 상수 ─────────────────────────────────────────────────────────────────────
-
-const STATS = [
-  { value: "5",      label: "Countries",       sub: "US · AU · CA · UK · IE" },
-  { value: "2,860+", label: "Courses tracked", sub: "" },
-  { value: "Real",   label: "Salary Data",     sub: "HEA · College Scorecard" },
-]
-
-const FEATURES = [
-  {
-    icon: TrendingUp,
-    title: "ROI Explorer",
-    desc: "Compare universities by real return on investment",
-    href: "/roi-explorer",
-  },
-  {
-    icon: Globe,
-    title: "Country Compare",
-    desc: "Side-by-side 5-country analysis",
-    href: "/compare",
-  },
-  {
-    icon: CheckSquare,
-    title: "Application Checklist",
-    desc: "Never miss a deadline",
-    href: "/checklist",
-  },
-  {
-    icon: CalendarDays,
-    title: "Timeline",
-    desc: "Plan your entire journey",
-    href: "/timeline",
-  },
-]
-
 // ── 컴포넌트 ──────────────────────────────────────────────────────────────────
 
 export default function LandingPage() {
+  const t = getTranslations()
+  const tl = t.landing
+
+  const STATS = [
+    { value: "5",      label: tl.stats.countries,     sub: "US · AU · CA · UK · IE" },
+    { value: "2,860+", label: tl.stats.coursesTracked, sub: "" },
+    { value: "Real",   label: tl.stats.salaryData,     sub: "HEA · College Scorecard" },
+  ]
+
+  const FEATURES = [
+    { icon: TrendingUp,  title: tl.features.roiTitle,       desc: tl.features.roiDesc,       href: "/roi-explorer" },
+    { icon: Globe,       title: tl.features.compareTitle,    desc: tl.features.compareDesc,   href: "/compare" },
+    { icon: CheckSquare, title: tl.features.checklistTitle,  desc: tl.features.checklistDesc, href: "/checklist" },
+    { icon: CalendarDays,title: tl.features.timelineTitle,   desc: tl.features.timelineDesc,  href: "/timeline" },
+  ]
+
   return (
     <div className="bg-white text-slate-900">
 
@@ -97,29 +80,30 @@ export default function LandingPage() {
           {/* 중앙 메뉴 */}
           <nav className="hidden md:flex items-center gap-8">
             <Link href="/roi-explorer" className="text-sm text-slate-400 hover:text-white transition-colors">
-              Explore
+              {tl.nav.explore}
             </Link>
             <Link href="/compare" className="text-sm text-slate-400 hover:text-white transition-colors">
-              Compare
+              {tl.nav.compare}
             </Link>
             <Link href="#how-it-works" className="text-sm text-slate-400 hover:text-white transition-colors">
-              How it works
+              {tl.nav.howItWorks}
             </Link>
           </nav>
 
           {/* 우측 버튼 */}
           <div className="flex items-center gap-3">
+            <LanguageToggle className="text-slate-400 hover:text-white hover:bg-slate-800" />
             <Link
               href="/login"
               className="hidden sm:block text-sm text-slate-400 hover:text-white px-3 py-1.5 rounded-lg hover:bg-slate-800 transition-colors"
             >
-              Sign In
+              {tl.nav.signIn}
             </Link>
             <Link
               href="/roi-explorer"
               className="text-sm font-medium bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition-colors"
             >
-              Get Started
+              {tl.nav.getStarted}
             </Link>
           </div>
         </div>
@@ -133,26 +117,24 @@ export default function LandingPage() {
 
           {/* 상단 배지 */}
           <div className="inline-flex items-center gap-2 bg-slate-800/80 border border-slate-700/60 text-slate-400 text-xs px-3.5 py-1.5 rounded-full mb-6">
-            🎓&nbsp; 5 countries · 2,860+ courses · Real salary data
+            🎓&nbsp; {tl.hero.badge}
           </div>
 
           {/* 메인 헤드라인 */}
           <h1 className="text-5xl lg:text-[3.75rem] font-bold text-white leading-[1.08] tracking-tight mb-4">
-            Find Your Best Country
+            {tl.hero.headlineLine1}
             <br className="hidden sm:block" />
-            {" "}to Study Abroad.
+            {" "}{tl.hero.headlineLine2}
           </h1>
 
           {/* 서브 헤드라인 */}
           <p className="text-xl lg:text-2xl font-semibold text-indigo-300 mb-4">
-            With Data, Not Guesswork.
+            {tl.hero.subheadline}
           </p>
 
           {/* 설명 텍스트 */}
           <p className="text-sm text-slate-400 max-w-md leading-relaxed mb-8">
-            Compare graduate salaries, tuition, and ROI across
-            <br className="hidden sm:block" />
-            {" "}USA, Ireland, UK, Canada &amp; Australia.
+            {tl.hero.description}
           </p>
 
           {/* CTA 버튼 */}
@@ -161,13 +143,13 @@ export default function LandingPage() {
               href="/roi-explorer"
               className="inline-flex items-center gap-2 bg-white hover:bg-slate-100 text-slate-900 font-semibold px-5 py-2.5 rounded-xl transition-colors text-sm"
             >
-              Explore ROI <ArrowRight className="w-4 h-4" />
+              {tl.hero.ctaExplore} <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
               href="/compare"
               className="inline-flex items-center border border-slate-600 hover:border-slate-500 hover:bg-slate-800/60 text-white font-medium px-5 py-2.5 rounded-xl transition-colors text-sm"
             >
-              Compare Countries
+              {tl.hero.ctaCompare}
             </Link>
           </div>
         </div>
@@ -183,7 +165,7 @@ export default function LandingPage() {
               <span className="w-3 h-3 rounded-full bg-emerald-400/70" />
               <div className="flex items-center gap-1.5 ml-3">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-xs font-medium text-slate-600">Live ROI Explorer</span>
+                <span className="text-xs font-medium text-slate-600">{tl.hero.mockBadge}</span>
               </div>
               <span className="ml-auto text-xs text-slate-400 hidden sm:block">
                 campcareer.com/roi-explorer
@@ -270,16 +252,16 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-slate-900">
-              Powerful tools for every step
+              {tl.features.sectionTitle}
             </h2>
             <p className="mt-4 text-lg text-slate-500">
-              Everything you need to choose your study abroad path with confidence
+              {tl.features.sectionSubtitle}
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {FEATURES.map((f) => (
               <Link
-                key={f.title}
+                key={f.href}
                 href={f.href}
                 className="group bg-white border border-slate-200 rounded-2xl p-6 hover:border-indigo-200 hover:shadow-md transition-all"
               >
@@ -298,13 +280,13 @@ export default function LandingPage() {
       <section className="py-24 bg-indigo-600">
         <div className="max-w-3xl mx-auto px-6 text-center">
           <h2 className="text-4xl font-bold text-white mb-8">
-            Ready to make a data-driven decision?
+            {tl.cta.title}
           </h2>
           <Link
             href="/roi-explorer"
             className="inline-flex items-center gap-2 bg-white hover:bg-indigo-50 text-indigo-600 font-semibold px-8 py-4 rounded-xl transition-colors text-lg"
           >
-            Start Exploring
+            {tl.cta.button}
             <ArrowRight className="w-5 h-5" />
           </Link>
         </div>
@@ -313,8 +295,8 @@ export default function LandingPage() {
       {/* ── 푸터 ── */}
       <footer className="py-8 border-t border-slate-200">
         <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-slate-400">
-          <span>© 2025 CampCareer</span>
-          <span>Data sources: HEA · College Scorecard · HESA</span>
+          <span>{tl.footer.copyright}</span>
+          <span>{tl.footer.dataSources}</span>
         </div>
       </footer>
 
