@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Search, Bookmark, ArrowRight, X } from "lucide-react"
+import { Search, Bookmark, ArrowRight, X, CheckSquare } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
 
 type RoiRow = {
@@ -149,17 +149,17 @@ export default function Dashboard() {
     <div className="min-h-[calc(100vh-56px)] flex flex-col">
 
       {/* 히어로 검색 영역 */}
-      <div className={`flex flex-col items-center justify-center px-6 transition-all duration-500 ${
-        searched ? "pt-16 pb-8" : "flex-1 pb-24"
+      <div className={`flex flex-col items-center px-6 transition-all duration-500 ${
+        searched ? "justify-center pt-16 pb-8" : "pt-20 pb-12"
       }`}>
 
         {/* 헤드라인 */}
         {!searched && (
-          <div className="text-center mb-12">
-            <h1 className="text-5xl font-bold text-slate-900 tracking-tight leading-[1.1] mb-4">
-              Find your best<br />university abroad.
+          <div className="text-center mb-8">
+            <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight leading-[1.15] mb-3">
+              Find your best university abroad.
             </h1>
-            <p className="text-lg text-slate-400">
+            <p className="text-base text-slate-500">
               Real salary data across 5 countries. No guesswork.
             </p>
           </div>
@@ -240,6 +240,60 @@ export default function Dashboard() {
                   {tag}
                 </button>
               ))}
+            </div>
+          )}
+
+          {/* Your next steps (정적, 2단계에서 실제 데이터 연결 예정) */}
+          {!searched && (
+            <div className="mt-12">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-sm font-semibold text-slate-900">Your next steps</h2>
+                <span className="text-xs text-slate-400">Pick up where you left off</span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+
+                {/* TODO(2단계): user_preferences.recommended_country 연결 */}
+                <Link
+                  href="/onboarding"
+                  className="group rounded-xl border border-slate-200 bg-slate-50 p-4 hover:bg-white hover:shadow-md hover:border-slate-300 transition-all"
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-lg">🇮🇪</span>
+                    <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Recommended</span>
+                  </div>
+                  <p className="text-sm font-semibold text-slate-900 mb-0.5">Ireland</p>
+                  <p className="text-xs text-slate-500">Based on your goals</p>
+                </Link>
+
+                {/* TODO(2단계): user_checklist_progress 연결 */}
+                <Link
+                  href="/checklist"
+                  className="group rounded-xl border border-slate-200 bg-slate-50 p-4 hover:bg-white hover:shadow-md hover:border-slate-300 transition-all"
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <CheckSquare className="w-4 h-4 text-slate-400" />
+                    <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Checklist</span>
+                  </div>
+                  <p className="text-sm font-semibold text-slate-900 mb-2">3 of 24 completed</p>
+                  <div className="h-1.5 rounded-full bg-slate-200 overflow-hidden">
+                    <div className="h-full bg-indigo-500 rounded-full" style={{ width: "12.5%" }} />
+                  </div>
+                </Link>
+
+                {/* TODO(2단계): saved_courses count 연결 */}
+                <Link
+                  href="/saved"
+                  className="group rounded-xl border border-slate-200 bg-slate-50 p-4 hover:bg-white hover:shadow-md hover:border-slate-300 transition-all"
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <Bookmark className="w-4 h-4 text-slate-400" />
+                    <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Saved</span>
+                  </div>
+                  <p className="text-sm font-semibold text-slate-900 mb-0.5">View all</p>
+                  <p className="text-xs text-slate-500">Your saved courses</p>
+                </Link>
+
+              </div>
             </div>
           )}
         </div>
