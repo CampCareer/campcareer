@@ -3,6 +3,8 @@ import { Analytics } from "@vercel/analytics/react"
 import localFont from "next/font/local"
 import "./globals.css"
 import { LayoutShell } from "@/components/layout/layout-shell"
+import { getLocale } from "@/lib/i18n/server"
+import { LocaleProvider } from "@/lib/i18n/locale-provider"
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -54,10 +56,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const locale = getLocale()
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <LayoutShell>{children}</LayoutShell>
+        <LocaleProvider locale={locale}>
+          <LayoutShell>{children}</LayoutShell>
+        </LocaleProvider>
         <Analytics />
       </body>
     </html>
