@@ -134,13 +134,16 @@ export default function ChecklistPage() {
     if (!user) return
     await supabase
       .from('user_checklist_progress')
-      .upsert({
-        user_id: user.id,
-        country,
-        visa_type: visaType,
-        checked_items: Array.from(next),
-        updated_at: new Date().toISOString(),
-      })
+      .upsert(
+        {
+          user_id: user.id,
+          country,
+          visa_type: visaType,
+          checked_items: Array.from(next),
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: 'user_id,country,visa_type' }
+      )
   }
 
   function toggleCollapse(category: string) {
