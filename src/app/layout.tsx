@@ -28,6 +28,10 @@ export const metadata: Metadata = {
   creator: "CampCareer",
   metadataBase: new URL("https://www.campcareer.com"),
   alternates: { canonical: "/" },
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
