@@ -2,12 +2,11 @@
 
 export function LogoMark({ size = 36 }: { size?: number }) {
   const rx = Math.round(size * 0.19)
+  const fs = size * 0.86
   const cx = size / 2
-  const cy = size / 2
-  const r = size * 0.26
-  const sw = size * 0.145
-  const openX = r * Math.cos(Math.PI / 5.5)
-  const openY = r * Math.sin(Math.PI / 5.5)
+  // 대문자 C의 시각적 중심을 배지 중앙에 맞추는 baseline y
+  const baseY = size * 0.5 + fs * 0.35
+  // 그림자 C 오프셋
   const ox = size * 0.06
   const oy = size * 0.06
 
@@ -21,22 +20,30 @@ export function LogoMark({ size = 36 }: { size?: number }) {
       role="img"
     >
       <rect width={size} height={size} rx={rx} fill="#1d4ed8" />
-      {/* shadow C — 오른쪽 아래 오프셋 */}
-      <path
-        d={`M ${cx + ox + openX},${cy + oy - openY} A ${r},${r} 0 1,0 ${cx + ox + openX},${cy + oy + openY}`}
-        fill="none"
-        stroke="#1e3a8a"
-        strokeWidth={sw}
-        strokeLinecap="round"
-      />
-      {/* main C — 정중앙 */}
-      <path
-        d={`M ${cx + openX},${cy - openY} A ${r},${r} 0 1,0 ${cx + openX},${cy + openY}`}
-        fill="none"
-        stroke="white"
-        strokeWidth={sw}
-        strokeLinecap="round"
-      />
+      {/* shadow C */}
+      <text
+        x={cx + ox}
+        y={baseY + oy}
+        fontFamily="-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif"
+        fontSize={fs}
+        fontWeight={800}
+        fill="#1e3a8a"
+        textAnchor="middle"
+      >
+        C
+      </text>
+      {/* main C */}
+      <text
+        x={cx}
+        y={baseY}
+        fontFamily="-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif"
+        fontSize={fs}
+        fontWeight={800}
+        fill="white"
+        textAnchor="middle"
+      >
+        C
+      </text>
     </svg>
   )
 }
