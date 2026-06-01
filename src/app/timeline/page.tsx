@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { CheckCircle2, Circle, ChevronDown, ChevronUp, Pencil, Clock, History } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
+import { parseLocalDate, subMonths, currentPhaseId } from "@/lib/timeline-schedule"
 import type { User } from "@supabase/supabase-js"
 
 type Task = {
@@ -163,12 +164,6 @@ function intakeToDate(intakeValue: string): string {
   return `${year}-${mm}-${dd}`
 }
 
-// 'YYYY-MM-DD'를 로컬 Date로 (타임존 UTC 파싱 회피)
-function parseLocalDate(dateStr: string): Date {
-  const [y, m, d] = dateStr.split("-").map(Number)
-  return new Date(y, m - 1, d)
-}
-
 // D-day 문자열 (날짜만 비교, 시분초 무시)
 function calcDday(targetDate: string): string {
   const today = new Date()
@@ -187,13 +182,6 @@ function fmtDate(dateStr: string): string {
     day: "numeric",
     year: "numeric",
   })
-}
-
-// target_date 기준 N개월 전 날짜
-function subMonths(date: Date, months: number): Date {
-  const d = new Date(date)
-  d.setMonth(d.getMonth() - months)
-  return d
 }
 
 function toISODate(d: Date): string {
@@ -219,20 +207,6 @@ function daysUntil(dateStr: string): number {
   const t = parseLocalDate(dateStr)
   t.setHours(0, 0, 0, 0)
   return Math.ceil((t.getTime() - today.getTime()) / 86400000)
-}
-
-// 현재 단계 = deadline(endMonthsBefore 시점)이 오늘 이후인 "가장 이른" 단계.
-// 모든 단계가 지났으면 null.
-function currentPhaseId(targetDate: string): string | null {
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-  const target = parseLocalDate(targetDate)
-  for (const p of INITIAL_PHASES) {
-    const dl = subMonths(target, p.endMonthsBefore)
-    dl.setHours(0, 0, 0, 0)
-    if (dl.getTime() >= today.getTime()) return p.id
-  }
-  return null
 }
 
 export default function TimelinePage() {
