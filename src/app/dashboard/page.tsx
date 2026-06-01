@@ -212,23 +212,23 @@ export default function Dashboard() {
 
       {/* 히어로 검색 영역 */}
       <div className={`flex flex-col items-center px-6 transition-all duration-500 ${
-        searched ? "justify-center pt-16 pb-8" : "pt-20 pb-12"
+        searched ? "justify-center pt-16 pb-8" : "pt-16 pb-12"
       }`}>
 
         {/* 헤드라인 */}
         {!searched && (
-          <div className="text-center mb-8">
-            <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight leading-[1.15] mb-3">
+          <div className="text-center mb-10">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 tracking-tight leading-[1.1] mb-3">
               Find your best university abroad.
             </h1>
-            <p className="text-base text-slate-500">
+            <p className="text-lg text-slate-500">
               Real salary data across 5 countries. No guesswork.
             </p>
           </div>
         )}
 
         {/* 검색 박스 */}
-        <div className="w-full max-w-2xl">
+        <div className="w-full max-w-3xl">
           <div className="flex flex-col sm:flex-row gap-0 border-2 border-slate-200 rounded-2xl overflow-visible bg-white focus-within:border-indigo-400 transition-colors shadow-sm">
 
             {/* 국가 선택 */}
@@ -236,7 +236,7 @@ export default function Dashboard() {
               <select
                 value={country}
                 onChange={e => { setCountry(e.target.value); setField(""); setFieldInput(""); setData([]); setSearched(false) }}
-                className="h-14 pl-5 pr-10 bg-transparent text-sm font-semibold text-slate-800 focus:outline-none appearance-none cursor-pointer w-full sm:w-44 border-b-2 sm:border-b-0 sm:border-r-2 border-slate-100"
+                className="h-16 pl-5 pr-10 bg-transparent text-base font-semibold text-slate-800 focus:outline-none appearance-none cursor-pointer w-full sm:w-52 border-b-2 sm:border-b-0 sm:border-r-2 border-slate-100"
               >
                 {COUNTRIES.map(c => (
                   <option key={c.value} value={c.value}>{c.label}</option>
@@ -247,19 +247,19 @@ export default function Dashboard() {
 
             {/* 전공 검색 */}
             <div ref={fieldRef} className="relative flex-1">
-              <div className="flex items-center h-14 px-4 gap-3">
-                <Search className="w-4 h-4 text-slate-400 shrink-0" />
+              <div className="flex items-center h-16 px-4 gap-3">
+                <Search className="w-5 h-5 text-slate-400 shrink-0" />
                 <input
                   type="text"
                   value={fieldInput}
                   onChange={e => { setFieldInput(e.target.value); if (!e.target.value) { setField(""); } }}
                   onKeyDown={e => { if (e.key === "Enter") handleSearch() }}
                   placeholder={currentCountry.placeholder}
-                  className="flex-1 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none bg-transparent"
+                  className="flex-1 text-base text-slate-800 placeholder:text-slate-400 focus:outline-none bg-transparent"
                 />
                 {fieldInput && (
                   <button onClick={handleClear} className="text-slate-300 hover:text-slate-500">
-                    <X className="w-4 h-4" />
+                    <X className="w-5 h-5" />
                   </button>
                 )}
               </div>
@@ -284,7 +284,7 @@ export default function Dashboard() {
             {/* 검색 버튼 */}
             <button
               onClick={handleSearch}
-              className="h-14 px-7 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm transition-colors shrink-0 rounded-b-xl sm:rounded-b-none sm:rounded-r-xl"
+              className="h-16 px-9 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-base transition-colors shrink-0 rounded-b-xl sm:rounded-b-none sm:rounded-r-xl"
             >
               Search
             </button>
@@ -292,12 +292,12 @@ export default function Dashboard() {
 
           {/* 힌트 태그 */}
           {!searched && (
-            <div className="flex flex-wrap gap-2 mt-4 justify-center">
+            <div className="flex flex-wrap gap-2 mt-5 justify-center">
               {["Computer Science", "Nursing", "Business", "Engineering", "Data Science"].map(tag => (
                 <button
                   key={tag}
                   onClick={() => { setFieldInput(tag); setField(tag) }}
-                  className="text-xs px-3 py-1.5 rounded-full border border-slate-200 text-slate-500 hover:border-indigo-300 hover:text-indigo-600 transition-colors bg-white"
+                  className="text-sm px-4 py-2 rounded-full border border-slate-200 text-slate-500 hover:border-indigo-300 hover:text-indigo-600 transition-colors bg-white"
                 >
                   {tag}
                 </button>
@@ -312,7 +312,7 @@ export default function Dashboard() {
               : null
             const recFlag = recMeta ? recMeta.label.split(" ")[0] : ""
             const recName = recMeta ? recMeta.label.split(" ").slice(1).join(" ") : ""
-            const cardClass = "group rounded-xl border border-slate-200 bg-slate-50 p-4 hover:bg-white hover:shadow-md hover:border-slate-300 transition-all"
+            const cardClass = "group rounded-xl border border-slate-200 bg-slate-50 p-5 hover:bg-white hover:shadow-md hover:border-slate-300 transition-all"
             const ddayLabel = timelineInfo
               ? timelineInfo.dday > 0
                 ? `D-${timelineInfo.dday}`
@@ -324,28 +324,28 @@ export default function Dashboard() {
             return (
               <div className="mt-12">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-sm font-semibold text-slate-900">Your next steps</h2>
-                  <span className="text-xs text-slate-400">Pick up where you left off</span>
+                  <h2 className="text-base font-semibold text-slate-900">Your next steps</h2>
+                  <span className="text-sm text-slate-400">Pick up where you left off</span>
                 </div>
 
                 {stepsLoading ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     {Array.from({ length: 3 }).map((_, i) => (
-                      <div key={i} className="h-[104px] rounded-xl bg-slate-100 animate-pulse" />
+                      <div key={i} className="h-[120px] rounded-xl bg-slate-100 animate-pulse" />
                     ))}
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
 
                     {/* 카드1 — 타임라인 D-day → 추천국가 → 온보딩으로 진화 */}
                     {timelineInfo ? (
                       <Link href="/timeline" className={cardClass}>
                         <div className="flex items-center gap-2 mb-2">
-                          <CalendarClock className="w-4 h-4 text-slate-400" />
+                          <CalendarClock className="w-5 h-5 text-slate-400" />
                           <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Timeline</span>
                         </div>
                         <p className="text-lg font-bold text-indigo-600 mb-0.5 leading-none">{ddayLabel}</p>
-                        <p className="text-xs text-slate-500 truncate mt-1">
+                        <p className="text-sm text-slate-500 truncate mt-1">
                           {timelineInfo.currentPhaseTitle ?? "On track"}
                         </p>
                       </Link>
@@ -355,17 +355,17 @@ export default function Dashboard() {
                           <span className="text-lg">{recFlag}</span>
                           <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Recommended</span>
                         </div>
-                        <p className="text-sm font-semibold text-slate-900 mb-0.5">{recName}</p>
-                        <p className="text-xs text-slate-500">Set your timeline</p>
+                        <p className="text-lg font-bold text-slate-900 mb-0.5">{recName}</p>
+                        <p className="text-sm text-slate-500">Set your timeline</p>
                       </Link>
                     ) : (
                       <Link href="/onboarding" className={cardClass}>
                         <div className="flex items-center gap-2 mb-2">
-                          <Compass className="w-4 h-4 text-slate-400" />
+                          <Compass className="w-5 h-5 text-slate-400" />
                           <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Get started</span>
                         </div>
-                        <p className="text-sm font-semibold text-slate-900 mb-0.5">Take the quiz</p>
-                        <p className="text-xs text-slate-500">Find your best-fit country</p>
+                        <p className="text-lg font-bold text-slate-900 mb-0.5">Take the quiz</p>
+                        <p className="text-sm text-slate-500">Find your best-fit country</p>
                       </Link>
                     )}
 
@@ -373,13 +373,13 @@ export default function Dashboard() {
                     {checklistProgress && checklistProgress.total > 0 ? (
                       <Link href="/checklist" className={cardClass}>
                         <div className="flex items-center gap-2 mb-2">
-                          <CheckSquare className="w-4 h-4 text-slate-400" />
+                          <CheckSquare className="w-5 h-5 text-slate-400" />
                           <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Checklist</span>
                         </div>
-                        <p className="text-sm font-semibold text-slate-900 mb-2">
+                        <p className="text-lg font-bold text-slate-900 mb-2">
                           {checklistProgress.completed} of {checklistProgress.total} completed
                         </p>
-                        <div className="h-1.5 rounded-full bg-slate-200 overflow-hidden">
+                        <div className="h-2 rounded-full bg-slate-200 overflow-hidden">
                           <div
                             className="h-full bg-indigo-500 rounded-full"
                             style={{ width: `${(checklistProgress.completed / checklistProgress.total) * 100}%` }}
@@ -389,11 +389,11 @@ export default function Dashboard() {
                     ) : (
                       <Link href="/checklist" className={cardClass}>
                         <div className="flex items-center gap-2 mb-2">
-                          <CheckSquare className="w-4 h-4 text-slate-400" />
+                          <CheckSquare className="w-5 h-5 text-slate-400" />
                           <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Checklist</span>
                         </div>
-                        <p className="text-sm font-semibold text-slate-900 mb-0.5">Start your checklist</p>
-                        <p className="text-xs text-slate-500">Track every requirement</p>
+                        <p className="text-lg font-bold text-slate-900 mb-0.5">Start your checklist</p>
+                        <p className="text-sm text-slate-500">Track every requirement</p>
                       </Link>
                     )}
 
@@ -401,22 +401,22 @@ export default function Dashboard() {
                     {savedCount > 0 ? (
                       <Link href="/saved" className={cardClass}>
                         <div className="flex items-center gap-2 mb-2">
-                          <Bookmark className="w-4 h-4 text-slate-400" />
+                          <Bookmark className="w-5 h-5 text-slate-400" />
                           <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Saved</span>
                         </div>
-                        <p className="text-sm font-semibold text-slate-900 mb-0.5">
+                        <p className="text-lg font-bold text-slate-900 mb-0.5">
                           {savedCount} saved course{savedCount > 1 ? "s" : ""}
                         </p>
-                        <p className="text-xs text-slate-500">View all</p>
+                        <p className="text-sm text-slate-500">View all</p>
                       </Link>
                     ) : (
                       <Link href="/roi-explorer" className={cardClass}>
                         <div className="flex items-center gap-2 mb-2">
-                          <Bookmark className="w-4 h-4 text-slate-400" />
+                          <Bookmark className="w-5 h-5 text-slate-400" />
                           <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Saved</span>
                         </div>
-                        <p className="text-sm font-semibold text-slate-900 mb-0.5">Nothing saved yet</p>
-                        <p className="text-xs text-slate-500">Browse the ROI Explorer</p>
+                        <p className="text-lg font-bold text-slate-900 mb-0.5">Nothing saved yet</p>
+                        <p className="text-sm text-slate-500">Browse the ROI Explorer</p>
                       </Link>
                     )}
 
