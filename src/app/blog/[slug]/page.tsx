@@ -204,7 +204,7 @@ const POSTS: Record<string, Post> = {
     tag: "Ireland",
     tagColor: "bg-emerald-100 text-emerald-700",
     content: (
-      <div className="prose prose-slate max-w-none">
+      <div className="prose prose-slate prose-headings:mt-10 prose-headings:mb-4 max-w-none">
         <p className="text-xl text-slate-600 leading-relaxed mb-8">
           Ireland has quietly become one of the best destinations for international students seeking strong career outcomes. With some of the lowest tuition fees in the English-speaking world and a booming tech sector, Irish CS graduates are in high demand — and their salaries reflect it.
         </p>
@@ -307,7 +307,7 @@ const POSTS: Record<string, Post> = {
     tag: "Comparison",
     tagColor: "bg-blue-100 text-blue-700",
     content: (
-      <div className="prose prose-slate max-w-none">
+      <div className="prose prose-slate prose-headings:mt-10 prose-headings:mb-4 max-w-none">
         <p className="text-xl text-slate-600 leading-relaxed mb-8">
           Australia and Canada are the two most popular English-speaking study destinations outside the UK and US. Both offer post-study work visas, strong job markets, and pathways to permanent residency. But which gives international students a better return on investment?
         </p>
@@ -405,7 +405,7 @@ const POSTS: Record<string, Post> = {
     tag: "United Kingdom",
     tagColor: "bg-violet-100 text-violet-700",
     content: (
-      <div className="prose prose-slate max-w-none">
+      <div className="prose prose-slate prose-headings:mt-10 prose-headings:mb-4 max-w-none">
         <p className="text-xl text-slate-600 leading-relaxed mb-8">
           The UK Graduate Route visa allows international students to stay and work in the UK for 2 years after graduation (3 years for PhD holders). But with high tuition fees and London&apos;s sky-high rents, you need to understand what you&apos;ll actually take home — not just your gross salary.
         </p>
