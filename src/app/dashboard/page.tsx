@@ -172,12 +172,23 @@ export default function Dashboard() {
     const params = new URLSearchParams({
       country,
       state: DEFAULT_STATE[country],
-      limit: "5",
+      limit: "20",
       sort: "roi_score",
     })
     fetch(`/api/roi?${params}`)
       .then(res => res.json())
-      .then(json => { setTopPicks(json.data ?? []); setTopLoading(false) })
+      .then(json => {
+        // college_name 기준 중복 제거 — 같은 학교는 ROI 최고(첫 번째)만 유지
+        const rows: RoiRow[] = json.data ?? []
+        const seen = new Set<string>()
+        const deduped = rows.filter(r => {
+          if (seen.has(r.college_name)) return false
+          seen.add(r.college_name)
+          return true
+        })
+        setTopPicks(deduped.slice(0, 5))
+        setTopLoading(false)
+      })
       .catch(() => { setTopPicks([]); setTopLoading(false) })
   }, [country, searched])
 
