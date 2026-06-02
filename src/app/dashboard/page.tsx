@@ -252,7 +252,17 @@ export default function Dashboard() {
                 <input
                   type="text"
                   value={fieldInput}
-                  onChange={e => { setFieldInput(e.target.value); if (!e.target.value) { setField(""); } }}
+                  onChange={e => {
+                    setFieldInput(e.target.value)
+                    if (!e.target.value) {
+                      setField("")
+                    }
+                    // 입력이 바뀌면 이전 결과 즉시 비움
+                    if (searched) {
+                      setData([])
+                      setSearched(false)
+                    }
+                  }}
                   onKeyDown={e => { if (e.key === "Enter") handleSearch() }}
                   placeholder={currentCountry.placeholder}
                   className="flex-1 text-base text-slate-800 placeholder:text-slate-400 focus:outline-none bg-transparent"
