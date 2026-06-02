@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import { Search, Bookmark, ArrowRight, X, CheckSquare, Compass, CalendarClock } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
 import { calcDdayNumber, currentPhaseTitle } from "@/lib/timeline-schedule"
+import { RoiInfo } from "@/components/roi-info"
 
 type RoiRow = {
   college_id: string
@@ -509,8 +510,9 @@ export default function Dashboard() {
           {!searched && (
             <div className="mt-8">
               <div className="flex items-center justify-between mb-3">
-                <h2 className="text-base font-semibold text-slate-900">
+                <h2 className="text-base font-semibold text-slate-900 inline-flex items-center gap-1.5">
                   Top picks in {currentCountry.label}
+                  <RoiInfo />
                 </h2>
                 <Link
                   href={`/roi-explorer?country=${country}`}
