@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { PanelLeft, PanelLeftClose } from 'lucide-react'
+import { PanelLeft, PanelLeftClose, Menu } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase-client'
 import { LanguageToggle } from '@/components/language-toggle'
@@ -17,7 +17,7 @@ const pageTitles: Record<string, string> = {
   '/timeline': 'Timeline',
 }
 
-export function Header({ onToggleSidebar, collapsed }: { onToggleSidebar?: () => void; collapsed?: boolean }) {
+export function Header({ onToggleSidebar, onToggleMobile, collapsed }: { onToggleSidebar?: () => void; onToggleMobile?: () => void; collapsed?: boolean }) {
   const pathname = usePathname()
   const router = useRouter()
   const title = pageTitles[pathname] ?? 'CampCareer'
@@ -44,9 +44,16 @@ export function Header({ onToggleSidebar, collapsed }: { onToggleSidebar?: () =>
     <header className="h-14 border-b border-slate-200 bg-white flex items-center justify-between px-6 shrink-0">
       <div className="flex items-center gap-3">
         <button
+          onClick={onToggleMobile}
+          aria-label="Open menu"
+          className="md:hidden p-1.5 rounded-lg hover:bg-slate-100 text-slate-500"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+        <button
           onClick={onToggleSidebar}
           aria-label="Toggle sidebar"
-          className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-500"
+          className="hidden md:flex p-1.5 rounded-lg hover:bg-slate-100 text-slate-500"
         >
           {collapsed ? <PanelLeft className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
         </button>
