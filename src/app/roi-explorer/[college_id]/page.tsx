@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, TrendingUp, DollarSign, Clock, GraduationCap } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
+import { RoiInfo } from '@/components/roi-info'
 import { useParams, useSearchParams } from 'next/navigation'
 
 type RoiRow = {
@@ -198,11 +199,12 @@ function CollegeDetailInner() {
 
       {/* 4 Metric Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card>
+        <Card className="overflow-visible">
           <CardContent className="pt-5 pb-5">
             <div className="flex items-center gap-1.5 mb-2">
               <TrendingUp className="w-4 h-4 text-indigo-500" />
               <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">ROI Score</span>
+              <RoiInfo className="ml-auto" />
             </div>
             <p className="text-2xl font-bold text-indigo-600">{best.roi_score.toFixed(1)}</p>
             <p className="text-xs text-slate-400 mt-0.5">best city</p>
