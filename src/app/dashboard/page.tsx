@@ -290,34 +290,26 @@ export default function Dashboard() {
       <div className="flex flex-col px-6 sm:px-8 pt-8 pb-8">
         <div className="w-full max-w-5xl mx-auto">
 
-          {/* 컴팩트 헤더 */}
-          {!searched && (
-            <div className="mb-6">
-              <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-                Find your best university abroad.
-              </h1>
-              <p className="text-sm text-slate-500 mt-1">
-                Real salary data across 5 countries. No guesswork.
-              </p>
-            </div>
-          )}
+          {/* 국가 선택 칩 */}
+          <p className="text-xs font-medium text-slate-400 mb-3">Where do you want to study?</p>
+          <div className="flex flex-wrap gap-2">
+            {COUNTRIES.map(c => (
+              <button
+                key={c.value}
+                onClick={() => { setCountry(c.value); setField(""); setFieldInput(""); setData([]); setSearched(false) }}
+                className={`text-sm font-medium px-4 py-2 rounded-full border transition-colors ${
+                  c.value === country
+                    ? "bg-indigo-600 text-white border-indigo-600"
+                    : "bg-white text-slate-600 border-slate-200 hover:border-indigo-300 hover:text-indigo-600"
+                }`}
+              >
+                {c.label}
+              </button>
+            ))}
+          </div>
 
           {/* 검색 박스 (풀폭) */}
-          <div className="flex flex-col sm:flex-row gap-0 border-2 border-slate-200 rounded-2xl overflow-visible bg-white focus-within:border-indigo-400 transition-colors shadow-sm">
-
-            {/* 국가 선택 */}
-            <div className="relative shrink-0">
-              <select
-                value={country}
-                onChange={e => { setCountry(e.target.value); setField(""); setFieldInput(""); setData([]); setSearched(false) }}
-                className="h-14 pl-5 pr-10 bg-transparent text-base font-semibold text-slate-800 focus:outline-none appearance-none cursor-pointer w-full sm:w-52 border-b-2 sm:border-b-0 sm:border-r-2 border-slate-100"
-              >
-                {COUNTRIES.map(c => (
-                  <option key={c.value} value={c.value}>{c.label}</option>
-                ))}
-              </select>
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-[10px]">▼</span>
-            </div>
+          <div className="flex flex-col sm:flex-row gap-0 border-2 border-slate-200 rounded-2xl overflow-visible bg-white focus-within:border-indigo-400 transition-colors shadow-sm mt-4">
 
             {/* 전공 검색 */}
             <div ref={fieldRef} className="relative flex-1">
