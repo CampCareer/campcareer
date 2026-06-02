@@ -54,6 +54,8 @@ export default function Dashboard() {
   const [searched, setSearched] = useState(false)
   const [savedIds, setSavedIds] = useState<Set<string>>(new Set())
   const [userId, setUserId] = useState<string | null>(null)
+  const [topPicks, setTopPicks] = useState<RoiRow[]>([])
+  const [topLoading, setTopLoading] = useState(true)
   const fieldRef = useRef<HTMLDivElement>(null)
 
   // "Your next steps" 카드용 상태
@@ -163,6 +165,22 @@ export default function Dashboard() {
     return () => clearTimeout(timer)
   }, [fieldInput, country])
 
+  // Top ROI 미리보기: 검색 전(searched=false)일 때 국가별 상위 5개 로드
+  useEffect(() => {
+    if (searched) return
+    setTopLoading(true)
+    const params = new URLSearchParams({
+      country,
+      state: DEFAULT_STATE[country],
+      limit: "5",
+      sort: "roi_score",
+    })
+    fetch(`/api/roi?${params}`)
+      .then(res => res.json())
+      .then(json => { setTopPicks(json.data ?? []); setTopLoading(false) })
+      .catch(() => { setTopPicks([]); setTopLoading(false) })
+  }, [country, searched])
+
   async function handleSearch() {
     setLoading(true)
     setSearched(true)
@@ -207,28 +225,73 @@ export default function Dashboard() {
     setSearched(false)
   }
 
+  // 결과 행 마크업 (검색 결과 + Top ROI picks 양쪽에서 재사용)
+  function renderRoiRow(row: RoiRow, i: number) {
+    return (
+      <div
+        key={`${row.college_id}-${i}`}
+        className="flex items-center justify-between px-5 py-4 hover:bg-slate-50 transition-colors"
+      >
+        <div className="flex items-center gap-4 min-w-0">
+          <span className="text-xs font-mono text-slate-300 w-4 shrink-0">{i + 1}</span>
+          <div className="min-w-0">
+            <Link
+              href={`/roi-explorer/${row.college_id}?country=${country}`}
+              className="text-sm font-semibold text-slate-800 hover:text-indigo-600 transition-colors truncate block"
+            >
+              {row.college_name}
+            </Link>
+            <p className="text-xs text-slate-400 mt-0.5">
+              {trimDot(row.field_name)}{row.college_state ? ` · ${row.college_state}` : ""}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-5 shrink-0 ml-4">
+          <div className="text-right hidden sm:block">
+            <p className="text-[10px] text-slate-400 uppercase tracking-wide">ROI</p>
+            <p className="text-sm font-bold text-indigo-600">{row.roi_score.toFixed(1)}</p>
+          </div>
+          <div className="text-right hidden md:block">
+            <p className="text-[10px] text-slate-400 uppercase tracking-wide">Salary</p>
+            <p className="text-sm font-semibold text-slate-700">
+              {fmt(row.gross_salary ?? row.net_salary, currentCountry.currency)}
+            </p>
+          </div>
+          <button
+            onClick={() => toggleSave(row)}
+            className={`p-1.5 rounded-lg transition-colors ${
+              savedIds.has(row.college_id)
+                ? "text-indigo-600 bg-indigo-50"
+                : "text-slate-300 hover:text-slate-500 hover:bg-slate-100"
+            }`}
+          >
+            <Bookmark className="w-4 h-4" fill={savedIds.has(row.college_id) ? "currentColor" : "none"} />
+          </button>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-[calc(100vh-56px)] flex flex-col">
 
-      {/* 히어로 검색 영역 */}
-      <div className={`flex flex-col items-center px-6 transition-all duration-500 ${
-        searched ? "justify-center pt-16 pb-8" : "pt-16 pb-12"
-      }`}>
+      {/* 히어로 검색 영역 — 슬림한 좌측 정렬 헤더 + 위젯 대시보드 */}
+      <div className="flex flex-col px-6 sm:px-8 pt-8 pb-8">
+        <div className="w-full max-w-5xl mx-auto">
 
-        {/* 헤드라인 */}
-        {!searched && (
-          <div className="text-center mb-10">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 tracking-tight leading-[1.1] mb-3">
-              Find your best university abroad.
-            </h1>
-            <p className="text-lg text-slate-500">
-              Real salary data across 5 countries. No guesswork.
-            </p>
-          </div>
-        )}
+          {/* 컴팩트 헤더 */}
+          {!searched && (
+            <div className="mb-6">
+              <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+                Find your best university abroad.
+              </h1>
+              <p className="text-sm text-slate-500 mt-1">
+                Real salary data across 5 countries. No guesswork.
+              </p>
+            </div>
+          )}
 
-        {/* 검색 박스 */}
-        <div className="w-full max-w-3xl">
+          {/* 검색 박스 (풀폭) */}
           <div className="flex flex-col sm:flex-row gap-0 border-2 border-slate-200 rounded-2xl overflow-visible bg-white focus-within:border-indigo-400 transition-colors shadow-sm">
 
             {/* 국가 선택 */}
@@ -236,7 +299,7 @@ export default function Dashboard() {
               <select
                 value={country}
                 onChange={e => { setCountry(e.target.value); setField(""); setFieldInput(""); setData([]); setSearched(false) }}
-                className="h-16 pl-5 pr-10 bg-transparent text-base font-semibold text-slate-800 focus:outline-none appearance-none cursor-pointer w-full sm:w-52 border-b-2 sm:border-b-0 sm:border-r-2 border-slate-100"
+                className="h-14 pl-5 pr-10 bg-transparent text-base font-semibold text-slate-800 focus:outline-none appearance-none cursor-pointer w-full sm:w-52 border-b-2 sm:border-b-0 sm:border-r-2 border-slate-100"
               >
                 {COUNTRIES.map(c => (
                   <option key={c.value} value={c.value}>{c.label}</option>
@@ -247,7 +310,7 @@ export default function Dashboard() {
 
             {/* 전공 검색 */}
             <div ref={fieldRef} className="relative flex-1">
-              <div className="flex items-center h-16 px-4 gap-3">
+              <div className="flex items-center h-14 px-4 gap-3">
                 <Search className="w-5 h-5 text-slate-400 shrink-0" />
                 <input
                   type="text"
@@ -294,15 +357,15 @@ export default function Dashboard() {
             {/* 검색 버튼 */}
             <button
               onClick={handleSearch}
-              className="h-16 px-9 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-base transition-colors shrink-0 rounded-b-xl sm:rounded-b-none sm:rounded-r-xl"
+              className="h-14 px-9 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-base transition-colors shrink-0 rounded-b-xl sm:rounded-b-none sm:rounded-r-xl"
             >
               Search
             </button>
           </div>
 
-          {/* 힌트 태그 */}
+          {/* 힌트 태그 (좌측 정렬) */}
           {!searched && (
-            <div className="flex flex-wrap gap-2 mt-5 justify-center">
+            <div className="flex flex-wrap gap-2 mt-4">
               {["Computer Science", "Nursing", "Business", "Engineering", "Data Science"].map(tag => (
                 <button
                   key={tag}
@@ -322,7 +385,8 @@ export default function Dashboard() {
               : null
             const recFlag = recMeta ? recMeta.label.split(" ")[0] : ""
             const recName = recMeta ? recMeta.label.split(" ").slice(1).join(" ") : ""
-            const cardClass = "group rounded-xl border border-slate-200 bg-slate-50 p-5 hover:bg-white hover:shadow-md hover:border-slate-300 transition-all"
+            const cardClass = "group rounded-xl border border-slate-200 bg-slate-50 p-6 min-h-[150px] hover:bg-white hover:shadow-md hover:border-slate-300 transition-all"
+            const focalCardClass = "group rounded-xl border border-indigo-100 bg-indigo-50 p-6 min-h-[150px] hover:shadow-md transition-all"
             const ddayLabel = timelineInfo
               ? timelineInfo.dday > 0
                 ? `D-${timelineInfo.dday}`
@@ -332,30 +396,30 @@ export default function Dashboard() {
               : ""
 
             return (
-              <div className="mt-12">
+              <div className="mt-8">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-base font-semibold text-slate-900">Your next steps</h2>
                   <span className="text-sm text-slate-400">Pick up where you left off</span>
                 </div>
 
                 {stepsLoading ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {Array.from({ length: 3 }).map((_, i) => (
-                      <div key={i} className="h-[120px] rounded-xl bg-slate-100 animate-pulse" />
+                      <div key={i} className="h-[150px] rounded-xl bg-slate-100 animate-pulse" />
                     ))}
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
                     {/* 카드1 — 타임라인 D-day → 추천국가 → 온보딩으로 진화 */}
                     {timelineInfo ? (
-                      <Link href="/timeline" className={cardClass}>
+                      <Link href="/timeline" className={focalCardClass}>
                         <div className="flex items-center gap-2 mb-2">
-                          <CalendarClock className="w-5 h-5 text-slate-400" />
-                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Timeline</span>
+                          <CalendarClock className="w-5 h-5 text-indigo-400" />
+                          <span className="text-xs font-medium text-indigo-400 uppercase tracking-wide">Timeline</span>
                         </div>
-                        <p className="text-lg font-bold text-indigo-600 mb-0.5 leading-none">{ddayLabel}</p>
-                        <p className="text-sm text-slate-500 truncate mt-1">
+                        <p className="text-3xl font-bold text-indigo-600 mb-0.5 leading-none">{ddayLabel}</p>
+                        <p className="text-sm text-slate-500 truncate mt-2">
                           {timelineInfo.currentPhaseTitle ?? "On track"}
                         </p>
                       </Link>
@@ -365,7 +429,7 @@ export default function Dashboard() {
                           <span className="text-lg">{recFlag}</span>
                           <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Recommended</span>
                         </div>
-                        <p className="text-lg font-bold text-slate-900 mb-0.5">{recName}</p>
+                        <p className="text-xl font-bold text-slate-900 mb-0.5">{recName}</p>
                         <p className="text-sm text-slate-500">Set your timeline</p>
                       </Link>
                     ) : (
@@ -374,7 +438,7 @@ export default function Dashboard() {
                           <Compass className="w-5 h-5 text-slate-400" />
                           <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Get started</span>
                         </div>
-                        <p className="text-lg font-bold text-slate-900 mb-0.5">Take the quiz</p>
+                        <p className="text-xl font-bold text-slate-900 mb-0.5">Take the quiz</p>
                         <p className="text-sm text-slate-500">Find your best-fit country</p>
                       </Link>
                     )}
@@ -386,8 +450,9 @@ export default function Dashboard() {
                           <CheckSquare className="w-5 h-5 text-slate-400" />
                           <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Checklist</span>
                         </div>
-                        <p className="text-lg font-bold text-slate-900 mb-2">
-                          {checklistProgress.completed} of {checklistProgress.total} completed
+                        <p className="text-3xl font-bold text-slate-900 mb-2 leading-none">
+                          {checklistProgress.completed}
+                          <span className="text-base font-medium text-slate-400"> of {checklistProgress.total} completed</span>
                         </p>
                         <div className="h-2 rounded-full bg-slate-200 overflow-hidden">
                           <div
@@ -402,7 +467,7 @@ export default function Dashboard() {
                           <CheckSquare className="w-5 h-5 text-slate-400" />
                           <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Checklist</span>
                         </div>
-                        <p className="text-lg font-bold text-slate-900 mb-0.5">Start your checklist</p>
+                        <p className="text-xl font-bold text-slate-900 mb-0.5">Start your checklist</p>
                         <p className="text-sm text-slate-500">Track every requirement</p>
                       </Link>
                     )}
@@ -414,10 +479,11 @@ export default function Dashboard() {
                           <Bookmark className="w-5 h-5 text-slate-400" />
                           <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Saved</span>
                         </div>
-                        <p className="text-lg font-bold text-slate-900 mb-0.5">
-                          {savedCount} saved course{savedCount > 1 ? "s" : ""}
+                        <p className="text-3xl font-bold text-slate-900 mb-0.5 leading-none">
+                          {savedCount}
+                          <span className="text-base font-medium text-slate-400"> saved course{savedCount > 1 ? "s" : ""}</span>
                         </p>
-                        <p className="text-sm text-slate-500">View all</p>
+                        <p className="text-sm text-slate-500 mt-2">View all</p>
                       </Link>
                     ) : (
                       <Link href="/roi-explorer" className={cardClass}>
@@ -425,7 +491,7 @@ export default function Dashboard() {
                           <Bookmark className="w-5 h-5 text-slate-400" />
                           <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Saved</span>
                         </div>
-                        <p className="text-lg font-bold text-slate-900 mb-0.5">Nothing saved yet</p>
+                        <p className="text-xl font-bold text-slate-900 mb-0.5">Nothing saved yet</p>
                         <p className="text-sm text-slate-500">Browse the ROI Explorer</p>
                       </Link>
                     )}
@@ -435,6 +501,42 @@ export default function Dashboard() {
               </div>
             )
           })()}
+
+          {/* Top ROI picks (검색 전 미리보기) */}
+          {!searched && (
+            <div className="mt-8">
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-base font-semibold text-slate-900">
+                  Top picks in {currentCountry.label}
+                </h2>
+                <Link
+                  href={`/roi-explorer?country=${country}`}
+                  className="text-xs text-indigo-600 hover:text-indigo-700 flex items-center gap-1 font-medium"
+                >
+                  View all <ArrowRight className="w-3 h-3" />
+                </Link>
+              </div>
+
+              {topLoading ? (
+                <div className="space-y-2">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <div key={i} className="h-16 rounded-xl bg-slate-100 animate-pulse" />
+                  ))}
+                </div>
+              ) : topPicks.length === 0 ? (
+                <Link
+                  href="/roi-explorer"
+                  className="flex items-center justify-center gap-1 py-10 rounded-2xl border border-slate-200 bg-white text-sm font-medium text-indigo-600 hover:text-indigo-700 hover:border-indigo-300 transition-colors"
+                >
+                  Browse the ROI Explorer <ArrowRight className="w-3 h-3" />
+                </Link>
+              ) : (
+                <div className="divide-y divide-slate-100 border border-slate-200 rounded-2xl overflow-hidden bg-white">
+                  {topPicks.map((row, i) => renderRoiRow(row, i))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
@@ -474,49 +576,7 @@ export default function Dashboard() {
                     <p className="text-sm text-slate-400">No results found.</p>
                     <p className="text-xs text-slate-300 mt-1">Try a different field or country.</p>
                   </div>
-                ) : data.map((row, i) => (
-                  <div
-                    key={`${row.college_id}-${i}`}
-                    className="flex items-center justify-between px-5 py-4 hover:bg-slate-50 transition-colors"
-                  >
-                    <div className="flex items-center gap-4 min-w-0">
-                      <span className="text-xs font-mono text-slate-300 w-4 shrink-0">{i + 1}</span>
-                      <div className="min-w-0">
-                        <Link
-                          href={`/roi-explorer/${row.college_id}?country=${country}`}
-                          className="text-sm font-semibold text-slate-800 hover:text-indigo-600 transition-colors truncate block"
-                        >
-                          {row.college_name}
-                        </Link>
-                        <p className="text-xs text-slate-400 mt-0.5">
-                          {trimDot(row.field_name)}{row.college_state ? ` · ${row.college_state}` : ""}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-5 shrink-0 ml-4">
-                      <div className="text-right hidden sm:block">
-                        <p className="text-[10px] text-slate-400 uppercase tracking-wide">ROI</p>
-                        <p className="text-sm font-bold text-indigo-600">{row.roi_score.toFixed(1)}</p>
-                      </div>
-                      <div className="text-right hidden md:block">
-                        <p className="text-[10px] text-slate-400 uppercase tracking-wide">Salary</p>
-                        <p className="text-sm font-semibold text-slate-700">
-                          {fmt(row.gross_salary ?? row.net_salary, currentCountry.currency)}
-                        </p>
-                      </div>
-                      <button
-                        onClick={() => toggleSave(row)}
-                        className={`p-1.5 rounded-lg transition-colors ${
-                          savedIds.has(row.college_id)
-                            ? "text-indigo-600 bg-indigo-50"
-                            : "text-slate-300 hover:text-slate-500 hover:bg-slate-100"
-                        }`}
-                      >
-                        <Bookmark className="w-4 h-4" fill={savedIds.has(row.college_id) ? "currentColor" : "none"} />
-                      </button>
-                    </div>
-                  </div>
-                ))}
+                ) : data.map((row, i) => renderRoiRow(row, i))}
               </div>
             )}
           </div>
