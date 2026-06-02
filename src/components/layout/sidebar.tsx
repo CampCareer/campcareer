@@ -23,6 +23,9 @@ const navItems: { key: keyof Dictionary["nav"]; href: string; icon: typeof Layou
   { key: "compare",     href: "/compare",      icon: Globe },
   { key: "checklist",   href: "/checklist",    icon: CheckSquare },
   { key: "timeline",    href: "/timeline",     icon: Calendar },
+]
+
+const secondaryItems: { key: keyof Dictionary["nav"]; href: string; icon: typeof LayoutDashboard }[] = [
   { key: "blog",        href: "/blog",         icon: BookOpen },
 ]
 
@@ -99,6 +102,34 @@ export function Sidebar({ collapsed = false, mobileOpen = false }: { collapsed?:
           })}
         </ul>
       </nav>
+
+      {/* Secondary */}
+      <div className="px-3 py-2 border-t border-slate-200">
+        <ul className="space-y-0.5">
+          {secondaryItems.map((item) => {
+            const Icon = item.icon
+            const isActive = pathname === item.href
+            return (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  title={t.nav[item.key]}
+                  className={cn(
+                    "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
+                    collapsed && "md:justify-center",
+                    isActive
+                      ? "bg-indigo-50 text-indigo-600"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                  )}
+                >
+                  <Icon className="w-4 h-4 shrink-0" />
+                  <span className={cn(collapsed && "md:hidden")}>{t.nav[item.key]}</span>
+                </Link>
+              </li>
+            )
+          })}
+        </ul>
+      </div>
 
       {/* Footer */}
       <div
