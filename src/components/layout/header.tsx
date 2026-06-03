@@ -15,6 +15,7 @@ const pageTitles: Record<string, string> = {
   '/compare': 'Country Compare',
   '/checklist': 'Checklist',
   '/timeline': 'Timeline',
+  '/career-path': 'Career Map',
 }
 
 export function Header({ onToggleSidebar, onToggleMobile, collapsed }: { onToggleSidebar?: () => void; onToggleMobile?: () => void; collapsed?: boolean }) {

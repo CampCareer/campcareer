@@ -8,6 +8,7 @@ const ko: Dictionary = {
     saved: '즐겨찾기',
     checklist: '체크리스트',
     timeline: '타임라인',
+    careerPath: '커리어 루트맵',
     blog: '블로그',
   },
   common: {
