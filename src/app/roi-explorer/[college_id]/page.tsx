@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, TrendingUp, DollarSign, Clock, GraduationCap } from 'lucide-react'
+import { ArrowLeft, TrendingUp, DollarSign, Clock, GraduationCap, ExternalLink } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { RoiInfo } from '@/components/roi-info'
 import { useParams, useSearchParams } from 'next/navigation'
@@ -180,6 +180,31 @@ function CollegeDetailInner() {
         <p className="text-slate-500 text-sm">
           {best.college_state}
         </p>
+
+        {/* 공식 사이트 링크 */}
+        <div className="flex items-center gap-2 flex-wrap mt-2">
+          <a
+            href={`https://www.google.com/search?q=${encodeURIComponent(best.college_name)}+official+site`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-indigo-600 hover:text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-100 px-3 py-1.5 rounded-full transition-colors"
+          >
+            <ExternalLink className="w-3.5 h-3.5" />
+            Official Website
+          </a>
+          {country === 'au' && (
+            <a
+              href={`https://www.google.com/search?q=${encodeURIComponent(best.college_name)}+CRICOS+registered`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-600 hover:text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-100 px-3 py-1.5 rounded-full transition-colors"
+            >
+              <ExternalLink className="w-3.5 h-3.5" />
+              CRICOS Check
+            </a>
+          )}
+        </div>
+
         <div className="flex items-center gap-2 mt-2">
           <span className="text-xs text-slate-500">Gross</span>
           <button
