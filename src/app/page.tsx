@@ -5,6 +5,8 @@ import {
   Globe,
   CheckSquare,
   CalendarDays,
+  Map,
+  FolderOpen,
 } from "lucide-react"
 import { getTranslations } from "@/lib/i18n/server"
 import { LanguageToggle } from "@/components/language-toggle"
@@ -50,15 +52,47 @@ export default function LandingPage() {
 
   const STATS = [
     { value: "5",      label: tl.stats.countries,     sub: "US · AU · CA · UK · IE" },
-    { value: "2,860+", label: tl.stats.coursesTracked, sub: "" },
-    { value: "Real",   label: tl.stats.salaryData,     sub: "HEA · College Scorecard" },
+    { value: "8,500+", label: tl.stats.coursesTracked, sub: "" },
+    { value: "Real",   label: tl.stats.salaryData,     sub: "HEA · Scorecard · CRICOS · HESA" },
   ]
 
   const FEATURES = [
-    { icon: TrendingUp,  title: tl.features.roiTitle,       desc: tl.features.roiDesc,       href: "/roi-explorer" },
-    { icon: Globe,       title: tl.features.compareTitle,    desc: tl.features.compareDesc,   href: "/compare" },
-    { icon: CheckSquare, title: tl.features.checklistTitle,  desc: tl.features.checklistDesc, href: "/checklist" },
-    { icon: CalendarDays,title: tl.features.timelineTitle,   desc: tl.features.timelineDesc,  href: "/timeline" },
+    {
+      icon: TrendingUp,
+      title: "ROI Explorer",
+      desc: "Compare graduate salaries, tuition, and payback period across 5 countries. Real government data.",
+      href: "/roi-explorer",
+    },
+    {
+      icon: Map,
+      title: "Career Route Map",
+      desc: "AI-powered step-by-step career roadmap — from graduation to PR or your dream role abroad.",
+      href: "/career-path",
+    },
+    {
+      icon: Globe,
+      title: "Country Compare",
+      desc: "See ROI, average salary, and top universities side by side across all 5 countries.",
+      href: "/compare",
+    },
+    {
+      icon: CheckSquare,
+      title: "Visa Checklist",
+      desc: "AI-generated visa and application checklist tailored to your destination and visa type.",
+      href: "/checklist",
+    },
+    {
+      icon: CalendarDays,
+      title: "Timeline Planner",
+      desc: "Date-based countdown with phase-by-phase tasks and upcoming deadline tracker.",
+      href: "/timeline",
+    },
+    {
+      icon: FolderOpen,
+      title: "Document Vault",
+      desc: "Securely store your passport, transcripts, and visa documents — all in one place.",
+      href: "/documents",
+    },
   ]
 
   return (
@@ -99,7 +133,7 @@ export default function LandingPage() {
               {tl.nav.signIn}
             </Link>
             <Link
-              href="/roi-explorer"
+              href="/onboarding"
               className="text-sm font-medium bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition-colors"
             >
               {tl.nav.getStarted}
@@ -139,7 +173,7 @@ export default function LandingPage() {
           {/* CTA 버튼 */}
           <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
             <Link
-              href="/roi-explorer"
+              href="/onboarding"
               className="inline-flex items-center gap-2 bg-white hover:bg-slate-100 text-slate-900 font-semibold px-5 py-2.5 rounded-xl transition-colors text-sm"
             >
               {tl.hero.ctaExplore} <ArrowRight className="w-4 h-4" />
@@ -257,7 +291,7 @@ export default function LandingPage() {
               {tl.features.sectionSubtitle}
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {FEATURES.map((f) => (
               <Link
                 key={f.href}
