@@ -39,29 +39,29 @@ function recommend(
 
   const COUNTRY_META: Record<string, { flag: string; reasons: Record<string, string[]> }> = {
     IE: { flag: '🇮🇪', reasons: {
-      visa:  ['EU 취업 가능', 'Critical Skills 비자 경로', '낮은 학비'],
-      pr:    ['EU 영주권 경로', 'Stamp 4 취득 가능', '낮은 생활비'],
-      study: ['최저 학비 (€10k~)', 'HEA 졸업생 연봉 데이터', '영어권 EU 입문'],
+      visa:  ['EU work permit pathway', 'Critical Skills Employment Permit', 'Low tuition fees'],
+      pr:    ['EU permanent residency route', 'Stamp 4 eligibility', 'Lower cost of living'],
+      study: ['Lowest tuition from €10k/yr', 'HEA graduate salary data', 'English-speaking EU gateway'],
     }},
     AU: { flag: '🇦🇺', reasons: {
-      visa:  ['졸업 후 2~4년 취업 비자', 'CRICOS 인증 8,597개 코스', '높은 졸업생 연봉'],
-      pr:    ['포인트제 영주권 (189/190)', '주정부 스폰서 가능', '숙련직 수요 높음'],
-      study: ['QILT 기반 졸업생 성과 데이터', '다양한 전공 선택', '생활 환경 우수'],
+      visa:  ['2–4 year post-study work visa', '8,597 CRICOS-registered courses', 'High graduate salaries'],
+      pr:    ['Points-based PR (subclass 189/190)', 'State-sponsored nomination available', 'High demand for skilled workers'],
+      study: ['QILT-based graduate outcomes', 'Wide range of study fields', 'High quality of life'],
     }},
     CA: { flag: '🇨🇦', reasons: {
-      visa:  ['PGWP 최대 3년', 'Express Entry 이민 경로', '높은 정착 지원'],
-      pr:    ['Express Entry 최단 영주권', '주정부 이민 프로그램', '안정적 이민 정책'],
-      study: ['합리적 학비', '프랑스어권 선택 가능', '다문화 환경'],
+      visa:  ['PGWP up to 3 years', 'Express Entry immigration pathway', 'Strong settlement support'],
+      pr:    ['Fastest PR via Express Entry', 'Provincial Nominee Programs', 'Stable immigration policy'],
+      study: ['Affordable tuition fees', 'French-speaking options available', 'Multicultural environment'],
     }},
     UK: { flag: '🇬🇧', reasons: {
-      visa:  ['Graduate Route 2년 취업', '글로벌 기업 접근성', 'HESA 연봉 데이터'],
-      pr:    ['Skilled Worker 비자', '5년 후 영주권', '런던 금융 허브'],
-      study: ['Russell Group 명문대', '1년 석사 과정', 'HESA 졸업생 데이터'],
+      visa:  ['Graduate Route: 2-year work visa', 'Access to global companies', 'HESA graduate salary data'],
+      pr:    ['Skilled Worker visa pathway', 'PR eligibility after 5 years', 'London financial hub'],
+      study: ['Russell Group universities', '1-year master\'s programmes', 'HESA graduate outcomes data'],
     }},
     US: { flag: '🇺🇸', reasons: {
-      visa:  ['OPT 최대 3년 (STEM)', '실리콘밸리 취업 기회', '높은 졸업생 연봉'],
-      pr:    ['EB-2/EB-3 취업 영주권', '다양한 이민 경로', '기술직 수요'],
-      study: ['College Scorecard 데이터', '다양한 장학금', '세계 최고 수준 대학'],
+      visa:  ['OPT up to 3 years (STEM)', 'Silicon Valley career opportunities', 'Highest graduate salaries'],
+      pr:    ['EB-2/EB-3 employment-based PR', 'Multiple immigration pathways', 'High demand for tech talent'],
+      study: ['College Scorecard data', 'Wide range of scholarships', 'World-class universities'],
     }},
   }
 
