@@ -129,14 +129,18 @@ export default function DocumentsPage() {
     const { data } = await supabase.storage
       .from('user-documents')
       .createSignedUrl(doc.file_path, 60)
-    if (data?.signedUrl) {
-      const a = document.createElement('a')
-      a.href = data.signedUrl
-      a.download = doc.file_name
-      document.body.appendChild(a)
-      a.click()
-      document.body.removeChild(a)
-    }
+    if (!data?.signedUrl) return
+
+    const response = await fetch(data.signedUrl)
+    const blob = await response.blob()
+    const blobUrl = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = blobUrl
+    a.download = doc.file_name
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(blobUrl)
   }
 
   async function handlePreview(doc: UserDoc) {
