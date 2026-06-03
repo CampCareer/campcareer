@@ -9,6 +9,7 @@ const ko: Dictionary = {
     checklist: '체크리스트',
     timeline: '타임라인',
     careerPath: '커리어 루트맵',
+    documents: '서류 보관함',
     blog: '블로그',
   },
   common: {
