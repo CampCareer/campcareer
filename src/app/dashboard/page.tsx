@@ -259,11 +259,11 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="flex items-center gap-5 shrink-0 ml-4">
-          <div className="text-right hidden sm:block">
+          <div className="text-right">
             <p className="text-[10px] text-slate-400 uppercase tracking-wide">ROI</p>
             <p className="text-sm font-bold text-indigo-600">{row.roi_score.toFixed(1)}</p>
           </div>
-          <div className="text-right hidden md:block">
+          <div className="text-right hidden sm:block">
             <p className="text-[10px] text-slate-400 uppercase tracking-wide">Salary</p>
             <p className="text-sm font-semibold text-slate-700">
               {fmt(row.gross_salary ?? row.net_salary, currentCountry.currency)}
@@ -298,7 +298,7 @@ export default function Dashboard() {
               <button
                 key={c.value}
                 onClick={() => { setCountry(c.value); setField(""); setFieldInput(""); setData([]); setSearched(false) }}
-                className={`text-sm font-medium px-4 py-2 rounded-full border transition-colors ${
+                className={`text-sm font-medium px-4 py-2 rounded-full border transition-colors focus:outline-none ${
                   c.value === country
                     ? "bg-indigo-600 text-white border-indigo-600"
                     : "bg-white text-slate-600 border-slate-200 hover:border-indigo-300 hover:text-indigo-600"
