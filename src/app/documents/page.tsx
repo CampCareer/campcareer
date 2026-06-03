@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react"
 import { createClient } from "@/lib/supabase-client"
 import {
   FolderOpen, Upload, Trash2, Download, FileText,
-  File, Image, FileBadge, Loader2, Plus,
+  File, Image, FileBadge, Loader2, Plus, Eye,
 } from "lucide-react"
 import type { User } from "@supabase/supabase-js"
 
@@ -126,6 +126,20 @@ export default function DocumentsPage() {
   }
 
   async function handleDownload(doc: UserDoc) {
+    const { data } = await supabase.storage
+      .from('user-documents')
+      .createSignedUrl(doc.file_path, 60)
+    if (data?.signedUrl) {
+      const a = document.createElement('a')
+      a.href = data.signedUrl
+      a.download = doc.file_name
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+    }
+  }
+
+  async function handlePreview(doc: UserDoc) {
     const { data } = await supabase.storage
       .from('user-documents')
       .createSignedUrl(doc.file_path, 60)
@@ -291,8 +305,14 @@ export default function DocumentsPage() {
 
                       <div className="flex items-center gap-1 pt-1 border-t border-slate-100">
                         <button
-                          onClick={() => handleDownload(doc)}
+                          onClick={() => handlePreview(doc)}
                           className="flex-1 inline-flex items-center justify-center gap-1.5 text-xs text-slate-600 hover:text-indigo-600 font-medium py-1.5 rounded-lg hover:bg-indigo-50 transition-colors"
+                        >
+                          <Eye className="w-3.5 h-3.5" /> Preview
+                        </button>
+                        <button
+                          onClick={() => handleDownload(doc)}
+                          className="flex-1 inline-flex items-center justify-center gap-1.5 text-xs text-slate-600 hover:text-emerald-600 font-medium py-1.5 rounded-lg hover:bg-emerald-50 transition-colors"
                         >
                           <Download className="w-3.5 h-3.5" /> Download
                         </button>
