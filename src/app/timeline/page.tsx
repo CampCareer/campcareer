@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from "react"
-import { CheckCircle2, Circle, ChevronDown, ChevronUp, Pencil, Clock, History } from "lucide-react"
+import { CheckCircle2, Circle, ChevronDown, ChevronUp, ChevronLeft, ChevronRight, Pencil, Clock, History } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
 import { parseLocalDate, subMonths, currentPhaseId } from "@/lib/timeline-schedule"
 import type { User } from "@supabase/supabase-js"
@@ -209,6 +209,94 @@ function daysUntil(dateStr: string): number {
   return Math.ceil((t.getTime() - today.getTime()) / 86400000)
 }
 
+const MONTH_NAMES = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+const WEEKDAY_NAMES = ["Su","Mo","Tu","We","Th","Fr","Sa"]
+
+function MiniCalendar({ schedule }: { schedule: Record<string, { deadlineStr: string; status: "past" | "current" | "upcoming" }> }) {
+  const [viewYear, setViewYear] = useState(() => new Date().getFullYear())
+  const [viewMonth, setViewMonth] = useState(() => new Date().getMonth())
+
+  function prevMonth() {
+    if (viewMonth === 0) { setViewMonth(11); setViewYear(y => y - 1) }
+    else setViewMonth(m => m - 1)
+  }
+  function nextMonth() {
+    if (viewMonth === 11) { setViewMonth(0); setViewYear(y => y + 1) }
+    else setViewMonth(m => m + 1)
+  }
+
+  const today = new Date()
+  const todayYear = today.getFullYear()
+  const todayMonth = today.getMonth()
+  const todayDate = today.getDate()
+
+  const firstDayOffset = new Date(viewYear, viewMonth, 1).getDay()
+  const totalDays = new Date(viewYear, viewMonth + 1, 0).getDate()
+
+  // day → status for all deadlines in the current view month/year (first hit wins)
+  const deadlineMap = new Map<number, "past" | "current" | "upcoming">()
+  for (const val of Object.values(schedule)) {
+    const parts = val.deadlineStr.split("-")
+    const y = parseInt(parts[0], 10)
+    const m = parseInt(parts[1], 10) - 1
+    const d = parseInt(parts[2], 10)
+    if (y === viewYear && m === viewMonth && !deadlineMap.has(d)) {
+      deadlineMap.set(d, val.status)
+    }
+  }
+
+  return (
+    <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <button onClick={prevMonth} className="p-1 rounded hover:bg-slate-100 text-slate-400">
+          <ChevronLeft className="w-3.5 h-3.5" />
+        </button>
+        <span className="text-xs font-semibold text-slate-700">
+          {MONTH_NAMES[viewMonth]} {viewYear}
+        </span>
+        <button onClick={nextMonth} className="p-1 rounded hover:bg-slate-100 text-slate-400">
+          <ChevronRight className="w-3.5 h-3.5" />
+        </button>
+      </div>
+
+      {/* Weekday headers */}
+      <div className="grid grid-cols-7 mt-2 mb-1">
+        {WEEKDAY_NAMES.map(d => (
+          <div key={d} className="text-[9px] text-slate-400 text-center">{d}</div>
+        ))}
+      </div>
+
+      {/* Days grid */}
+      <div className="grid grid-cols-7 gap-y-0.5">
+        {Array.from({ length: firstDayOffset }).map((_, i) => (
+          <div key={`e${i}`} />
+        ))}
+        {Array.from({ length: totalDays }).map((_, i) => {
+          const day = i + 1
+          const isToday = todayYear === viewYear && todayMonth === viewMonth && todayDate === day
+          const dotStatus = deadlineMap.get(day)
+          return (
+            <div key={day} className="relative flex flex-col items-center">
+              <span className={`w-6 h-6 flex items-center justify-center rounded-full text-[11px] ${
+                isToday ? "bg-indigo-600 text-white font-bold" : "text-slate-600"
+              }`}>
+                {day}
+              </span>
+              {dotStatus && (
+                <div className={`w-1 h-1 rounded-full ${
+                  dotStatus === "current"  ? "bg-indigo-400" :
+                  dotStatus === "upcoming" ? "bg-slate-400"  : "bg-slate-300"
+                }`} />
+              )}
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 export default function TimelinePage() {
   const supabase = createClient()
   const [user, setUser] = useState<User | null>(null)
@@ -408,7 +496,7 @@ export default function TimelinePage() {
           className={`w-full flex items-center justify-between px-5 py-4 ${phase.bg} transition-colors`}
         >
           <div className="flex items-center gap-3">
-            <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white ${
+            <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white relative z-10 ${
               allDone ? "bg-emerald-500" : status === "current" ? "bg-indigo-500" : "bg-slate-300"
             }`}>
               {allDone ? "✓" : idx + 1}
@@ -645,7 +733,8 @@ export default function TimelinePage() {
           {/* 2단 그리드 */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* 왼쪽: 단계 카드 (현재 → 미래 → 지난 단계 그룹 순) */}
-            <div className="lg:col-span-2 space-y-4">
+            <div className="lg:col-span-2 space-y-4 relative">
+              <div className="absolute left-[18px] top-8 bottom-8 w-0.5 bg-slate-200 z-0 pointer-events-none" />
               {/* 모든 단계가 past인 경우 안내 */}
               {curId === null && (
                 <div className="bg-white border border-slate-200 rounded-2xl px-5 py-4 shadow-sm text-sm text-slate-500">
@@ -689,6 +778,9 @@ export default function TimelinePage() {
             {/* 오른쪽: 다가오는 마감 */}
             <div className="lg:col-span-1">
               <div className="lg:sticky lg:top-6 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+                <div className="mb-4">
+                  <MiniCalendar schedule={schedule} />
+                </div>
                 <div className="flex items-center gap-2 mb-4">
                   <Clock className="w-4 h-4 text-slate-400" />
                   <h3 className="text-sm font-semibold text-slate-900">Upcoming deadlines</h3>
