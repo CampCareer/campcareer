@@ -805,6 +805,12 @@ function ROIExplorerContent() {
 
       {/* Table */}
       {!error && (
+        <div>
+          <div className="flex items-center justify-end mb-2">
+            <span className="inline-flex items-center gap-1.5 text-xs text-slate-400">
+              ROI score explained<RoiInfo />
+            </span>
+          </div>
         <div className="rounded-xl border border-slate-200 overflow-hidden shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
@@ -815,9 +821,7 @@ function ROIExplorerContent() {
                       key={label}
                       className={`px-4 py-3 ${align} text-xs font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap`}
                     >
-                      {label.startsWith("ROI Score")
-                        ? <span className="inline-flex items-center gap-1.5">{label}<RoiInfo /></span>
-                        : label}
+                      {label}
                     </th>
                   ))}
                 </tr>
@@ -915,6 +919,7 @@ function ROIExplorerContent() {
               </tbody>
             </table>
           </div>
+        </div>
         </div>
       )}
 
