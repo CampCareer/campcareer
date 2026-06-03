@@ -316,7 +316,7 @@ export default function LandingPage() {
             {tl.cta.title}
           </h2>
           <Link
-            href="/roi-explorer"
+            href="/onboarding"
             className="inline-flex items-center gap-2 bg-white hover:bg-indigo-50 text-indigo-600 font-semibold px-8 py-4 rounded-xl transition-colors text-lg"
           >
             {tl.cta.button}

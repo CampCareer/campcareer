@@ -105,17 +105,12 @@ export default function OnboardingPage() {
     setSaving(false)
   }
 
-  function handleShare() {
+  async function handleCopyToClipboard() {
     if (!result) return
     const text = `🎓 My best country for studying abroad is ${result.flag} ${COUNTRY_NAME[result.country]}!\n\n✅ ${result.reasons.join('\n✅ ')}\n\nFind your best country → campcareer.com`
-    if (navigator.share) {
-      navigator.share({ title: 'CampCareer', text })
-    } else {
-      navigator.clipboard.writeText(text).then(() => {
-        setCopied(true)
-        setTimeout(() => setCopied(false), 2000)
-      })
-    }
+    await navigator.clipboard.writeText(text)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
   }
 
   function handleTwitterShare() {
@@ -173,7 +168,7 @@ export default function OnboardingPage() {
               Share on X
             </button>
             <button
-              onClick={handleShare}
+              onClick={handleCopyToClipboard}
               className="flex-1 flex items-center justify-center gap-2 border-2 border-slate-200 hover:border-slate-300 text-slate-700 font-semibold py-3.5 rounded-2xl transition-colors text-sm bg-white"
             >
               {copied
