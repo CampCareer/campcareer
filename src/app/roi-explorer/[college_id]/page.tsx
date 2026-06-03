@@ -232,7 +232,7 @@ function CollegeDetailInner() {
               <Clock className="w-4 h-4 text-amber-500" />
               <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Payback</span>
             </div>
-            <p className="text-2xl font-bold text-amber-600">{best.payback_years}년</p>
+            <p className="text-2xl font-bold text-amber-600">{best.payback_years} yrs</p>
             <p className="text-xs text-slate-400 mt-0.5">best city</p>
           </CardContent>
         </Card>

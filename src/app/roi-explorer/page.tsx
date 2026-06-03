@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/card"
 import { TrendingUp, X, Bookmark, Copy, CheckCheck } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
+import { RoiInfo } from "@/components/roi-info"
 import type { User } from "@supabase/supabase-js"
 import {
   LineChart,
@@ -814,7 +815,9 @@ function ROIExplorerContent() {
                       key={label}
                       className={`px-4 py-3 ${align} text-xs font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap`}
                     >
-                      {label}
+                      {label.startsWith("ROI Score")
+                        ? <span className="inline-flex items-center gap-1.5">{label}<RoiInfo /></span>
+                        : label}
                     </th>
                   ))}
                 </tr>
@@ -866,7 +869,7 @@ function ROIExplorerContent() {
                         </div>
                       </td>
                       <td className="px-4 py-3 text-right text-slate-600 whitespace-nowrap">
-                        {row.payback_years}년
+                        {row.payback_years} yrs
                       </td>
                       <td className="px-4 py-3 text-right text-slate-600 whitespace-nowrap">
                         {formatCurrency(row.tuition, country)}<span className="text-slate-400 text-xs">/yr</span>
