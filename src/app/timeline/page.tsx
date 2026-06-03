@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from "react"
-import { CheckCircle2, Circle, ChevronDown, ChevronUp, ChevronLeft, ChevronRight, Pencil, Clock, History } from "lucide-react"
+import { CheckCircle2, Circle, ChevronDown, ChevronUp, ChevronLeft, ChevronRight, Pencil, Clock, History, X } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
 import { parseLocalDate, subMonths, currentPhaseId } from "@/lib/timeline-schedule"
 import type { User } from "@supabase/supabase-js"
@@ -212,9 +212,50 @@ function daysUntil(dateStr: string): number {
 const MONTH_NAMES = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
 const WEEKDAY_NAMES = ["Su","Mo","Tu","We","Th","Fr","Sa"]
 
-function MiniCalendar({ schedule }: { schedule: Record<string, { deadlineStr: string; status: "past" | "current" | "upcoming" }> }) {
+type NoteColor = "default" | "red" | "amber" | "indigo"
+type NoteEntry = { content: string; color: NoteColor }
+
+const NOTE_DOT_BG: Record<NoteColor, string> = {
+  default: "bg-slate-400",
+  red:     "bg-red-400",
+  amber:   "bg-amber-400",
+  indigo:  "bg-indigo-400",
+}
+
+function MiniCalendar({
+  schedule,
+  userId,
+}: {
+  schedule: Record<string, { deadlineStr: string; status: "past" | "current" | "upcoming" }>
+  userId: string | null
+}) {
+  const supabase = createClient()
   const [viewYear, setViewYear] = useState(() => new Date().getFullYear())
   const [viewMonth, setViewMonth] = useState(() => new Date().getMonth())
+  const [noteMap, setNoteMap] = useState<Record<string, NoteEntry>>({})
+  const [selectedDate, setSelectedDate] = useState<string | null>(null)
+  const [noteInput, setNoteInput] = useState<NoteEntry>({ content: "", color: "default" })
+  const [saving, setSaving] = useState(false)
+
+  // 노트 로드
+  useEffect(() => {
+    if (!userId) return
+    supabase
+      .from("user_calendar_notes")
+      .select("date,content,color")
+      .eq("user_id", userId)
+      .then(({ data }) => {
+        if (!data) return
+        const map: Record<string, NoteEntry> = {}
+        for (const row of data) {
+          map[row.date as string] = {
+            content: row.content as string,
+            color: (row.color as NoteColor) ?? "default",
+          }
+        }
+        setNoteMap(map)
+      })
+  }, [userId])
 
   function prevMonth() {
     if (viewMonth === 0) { setViewMonth(11); setViewYear(y => y - 1) }
@@ -223,6 +264,37 @@ function MiniCalendar({ schedule }: { schedule: Record<string, { deadlineStr: st
   function nextMonth() {
     if (viewMonth === 11) { setViewMonth(0); setViewYear(y => y + 1) }
     else setViewMonth(m => m + 1)
+  }
+
+  function handleDateClick(dateStr: string) {
+    setSelectedDate(prev => prev === dateStr ? null : dateStr)
+    setNoteInput(noteMap[dateStr] ?? { content: "", color: "default" })
+  }
+
+  async function handleSave() {
+    if (!userId || !selectedDate) return
+    setSaving(true)
+    await supabase.from("user_calendar_notes").upsert(
+      {
+        user_id: userId,
+        date: selectedDate,
+        content: noteInput.content,
+        color: noteInput.color,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: "user_id,date" }
+    )
+    setNoteMap(prev => ({ ...prev, [selectedDate]: { content: noteInput.content, color: noteInput.color } }))
+    setSaving(false)
+    setSelectedDate(null)
+  }
+
+  async function handleDeleteNote() {
+    if (!userId || !selectedDate) return
+    await supabase.from("user_calendar_notes")
+      .delete().eq("user_id", userId).eq("date", selectedDate)
+    setNoteMap(prev => { const n = { ...prev }; delete n[selectedDate!]; return n })
+    setSelectedDate(null)
   }
 
   const today = new Date()
@@ -274,25 +346,93 @@ function MiniCalendar({ schedule }: { schedule: Record<string, { deadlineStr: st
         ))}
         {Array.from({ length: totalDays }).map((_, i) => {
           const day = i + 1
+          const dateStr = `${viewYear}-${String(viewMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`
           const isToday = todayYear === viewYear && todayMonth === viewMonth && todayDate === day
+          const isSelected = selectedDate === dateStr
           const dotStatus = deadlineMap.get(day)
+          const noteEntry = noteMap[dateStr]
           return (
-            <div key={day} className="relative flex flex-col items-center">
+            <button
+              key={day}
+              onClick={() => handleDateClick(dateStr)}
+              className="relative flex flex-col items-center w-full cursor-pointer"
+            >
               <span className={`w-6 h-6 flex items-center justify-center rounded-full text-[11px] ${
                 isToday ? "bg-indigo-600 text-white font-bold" : "text-slate-600"
-              }`}>
+              }${isSelected ? " ring-2 ring-indigo-300" : ""}`}>
                 {day}
               </span>
-              {dotStatus && (
-                <div className={`w-1 h-1 rounded-full ${
-                  dotStatus === "current"  ? "bg-indigo-400" :
-                  dotStatus === "upcoming" ? "bg-slate-400"  : "bg-slate-300"
-                }`} />
-              )}
-            </div>
+              <div className="flex flex-col items-center gap-0.5">
+                {dotStatus && (
+                  <div className={`w-1 h-1 rounded-full ${
+                    dotStatus === "current"  ? "bg-indigo-400" :
+                    dotStatus === "upcoming" ? "bg-slate-400"  : "bg-slate-300"
+                  }`} />
+                )}
+                {noteEntry && (
+                  <div className={`w-1 h-1 rounded-full ${NOTE_DOT_BG[noteEntry.color]}`} />
+                )}
+              </div>
+            </button>
           )
         })}
       </div>
+
+      {/* Note editor */}
+      {selectedDate && (
+        <div className="mt-3 pt-3 border-t border-slate-100">
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-xs font-semibold text-slate-700">
+              {parseLocalDate(selectedDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+            </p>
+            <button onClick={() => setSelectedDate(null)}
+              className="p-0.5 rounded hover:bg-slate-100 text-slate-400">
+              <X className="w-3 h-3" />
+            </button>
+          </div>
+
+          <textarea
+            value={noteInput.content}
+            onChange={e => setNoteInput(p => ({ ...p, content: e.target.value }))}
+            placeholder="Add a note for this day…"
+            rows={3}
+            className="w-full text-xs text-slate-700 placeholder:text-slate-300 border border-slate-200 rounded-lg px-2 py-1.5 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-300"
+          />
+
+          {/* Color picker */}
+          <div className="flex items-center gap-1.5 mt-2">
+            <span className="text-[10px] text-slate-400 mr-0.5">Color</span>
+            {(["default", "red", "amber", "indigo"] as const).map(c => (
+              <button
+                key={c}
+                onClick={() => setNoteInput(p => ({ ...p, color: c }))}
+                className={`w-4 h-4 rounded-full ${NOTE_DOT_BG[c]} transition-all ${
+                  noteInput.color === c ? "ring-2 ring-offset-1 ring-slate-500" : "opacity-50 hover:opacity-100"
+                }`}
+              />
+            ))}
+          </div>
+
+          {/* Save / Delete */}
+          <div className="flex gap-2 mt-2">
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              className="flex-1 text-[11px] font-medium bg-indigo-600 hover:bg-indigo-700 text-white py-1.5 rounded-lg transition-colors disabled:opacity-50"
+            >
+              {saving ? "Saving…" : "Save"}
+            </button>
+            {noteMap[selectedDate] && (
+              <button
+                onClick={handleDeleteNote}
+                className="text-[11px] font-medium text-slate-400 hover:text-red-500 px-2 py-1.5 rounded-lg hover:bg-red-50 transition-colors"
+              >
+                Clear
+              </button>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -779,7 +919,7 @@ export default function TimelinePage() {
             <div className="lg:col-span-1">
               <div className="lg:sticky lg:top-6 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
                 <div className="mb-4">
-                  <MiniCalendar schedule={schedule} />
+                  <MiniCalendar schedule={schedule} userId={user?.id ?? null} />
                 </div>
                 <div className="flex items-center gap-2 mb-4">
                   <Clock className="w-4 h-4 text-slate-400" />
