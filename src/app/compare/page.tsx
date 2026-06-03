@@ -337,7 +337,7 @@ function CountryCard({
               <div>
                 <p className="text-[10px] font-medium text-slate-400 uppercase tracking-wide">Payback</p>
                 <p className="text-sm font-semibold text-slate-700">
-                  {stats.avg_payback.toFixed(1)}년
+                  {stats.avg_payback.toFixed(1)} yrs
                 </p>
               </div>
             </div>
