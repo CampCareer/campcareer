@@ -7,6 +7,7 @@ const en = {
     checklist: 'Checklist',
     timeline: 'Timeline',
     careerPath: 'Career Map',
+    documents: 'Documents',
     blog: 'Blog',
   },
   common: {

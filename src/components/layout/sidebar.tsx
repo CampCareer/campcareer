@@ -11,6 +11,7 @@ import {
   Map,
   Bookmark,
   BookOpen,
+  FolderOpen,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { LogoMark } from "@/components/logo-mark"
@@ -25,6 +26,7 @@ const navItems: { key: keyof Dictionary["nav"]; href: string; icon: typeof Layou
   { key: "checklist",   href: "/checklist",    icon: CheckSquare },
   { key: "timeline",    href: "/timeline",     icon: Calendar },
   { key: "careerPath",  href: "/career-path",  icon: Map },
+  { key: "documents",   href: "/documents",    icon: FolderOpen },
 ]
 
 const secondaryItems: { key: keyof Dictionary["nav"]; href: string; icon: typeof LayoutDashboard }[] = [
