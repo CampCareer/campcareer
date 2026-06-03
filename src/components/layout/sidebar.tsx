@@ -8,6 +8,7 @@ import {
   Globe,
   CheckSquare,
   Calendar,
+  Map,
   Bookmark,
   BookOpen,
 } from "lucide-react"
@@ -23,6 +24,7 @@ const navItems: { key: keyof Dictionary["nav"]; href: string; icon: typeof Layou
   { key: "compare",     href: "/compare",      icon: Globe },
   { key: "checklist",   href: "/checklist",    icon: CheckSquare },
   { key: "timeline",    href: "/timeline",     icon: Calendar },
+  { key: "careerPath",  href: "/career-path",  icon: Map },
 ]
 
 const secondaryItems: { key: keyof Dictionary["nav"]; href: string; icon: typeof LayoutDashboard }[] = [

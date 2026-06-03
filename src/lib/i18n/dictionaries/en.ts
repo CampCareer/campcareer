@@ -6,6 +6,7 @@ const en = {
     saved: 'Saved',
     checklist: 'Checklist',
     timeline: 'Timeline',
+    careerPath: 'Career Map',
     blog: 'Blog',
   },
   common: {
