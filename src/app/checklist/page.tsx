@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase-client'
-import { CheckCircle2, Circle, Loader2, Sparkles, ChevronDown, ChevronUp } from 'lucide-react'
+import { CheckCircle2, Circle, Loader2, Sparkles, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react'
 import type { User } from '@supabase/supabase-js'
 
 type ChecklistItem = {
@@ -11,6 +11,60 @@ type ChecklistItem = {
   task: string
   required: boolean
   note?: string
+}
+
+type AffiliateLink = { label: string; url: string }
+
+function getAffiliateLink(item: ChecklistItem, country: string): AffiliateLink | null {
+  const id = item.id.toLowerCase()
+  const task = item.task.toLowerCase()
+
+  // IELTS / TOEFL
+  if (id.includes('english_proficiency') || task.includes('ielts') || task.includes('toefl')) {
+    return { label: 'Book IELTS', url: 'https://www.ielts.org/book-a-test' }
+  }
+
+  // 건강 보험
+  if (id.includes('health_insurance') || task.includes('health insurance')) {
+    const insuranceUrl: Record<string, string> = {
+      IE: 'https://www.endsleigh.co.uk/international-student-insurance',
+      UK: 'https://www.endsleigh.co.uk/international-student-insurance',
+      AU: 'https://www.allianzcare.com.au/en/students.html',
+      CA: 'https://guard.me',
+      US: 'https://www.iso.com/international-student-insurance',
+    }
+    return {
+      label: 'Get a quote',
+      url: insuranceUrl[country.toUpperCase()] ?? 'https://www.endsleigh.co.uk/international-student-insurance',
+    }
+  }
+
+  // 은행 계좌
+  if (id.includes('bank_account') || task.includes('bank account') || task.includes('banking')) {
+    return { label: 'Open with Wise', url: 'https://wise.com/open-account' }
+  }
+
+  // 비자 신청 공식 사이트
+  if (id.includes('visa_application_form') || task.includes('visa application form')) {
+    const visaUrl: Record<string, string> = {
+      IE: 'https://www.visas.inis.gov.ie',
+      UK: 'https://www.gov.uk/apply-uk-visa',
+      AU: 'https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/student-500',
+      CA: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/study-permit.html',
+      US: 'https://travel.state.gov/content/travel/en/us-visas/study.html',
+    }
+    return {
+      label: 'Official portal',
+      url: visaUrl[country.toUpperCase()] ?? 'https://www.gov.uk/apply-uk-visa',
+    }
+  }
+
+  // 숙소 검색
+  if (id.includes('accommodation') || task.includes('accommodation')) {
+    return { label: 'Find housing', url: 'https://www.uniplaces.com' }
+  }
+
+  return null
 }
 
 const COUNTRIES = [
@@ -317,6 +371,22 @@ export default function ChecklistPage() {
                             {item.note && (
                               <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">{item.note}</p>
                             )}
+                            {(() => {
+                              const affiliate = getAffiliateLink(item, country)
+                              if (!affiliate) return null
+                              return (
+                                <a
+                                  href={affiliate.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  onClick={e => e.stopPropagation()}
+                                  className="inline-flex items-center gap-1 mt-1.5 text-[11px] font-medium text-indigo-600 hover:text-indigo-700 hover:underline"
+                                >
+                                  <ExternalLink className="w-3 h-3" />
+                                  {affiliate.label}
+                                </a>
+                              )
+                            })()}
                           </div>
                         </button>
                       </li>
