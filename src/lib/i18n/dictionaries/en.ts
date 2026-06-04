@@ -59,6 +59,20 @@ const en = {
       tryAnother: 'Try a different field or country.',
     },
   },
+  saved: {
+    signInTitle: 'Sign in to view saved courses',
+    signInDesc: 'Save courses from ROI Explorer and compare them here',
+    signInButton: 'Sign In',
+    pageTitle: 'Saved Courses',
+    courseCount: 'courses saved',
+    courseSingle: 'course saved',
+    compareButton: 'Compare selected',
+    filterAll: 'All',
+    selectHint: '✓ Select 2 or more courses to compare them',
+    emptyTitle: 'No saved courses yet',
+    emptyLink: 'Browse ROI Explorer',
+    viewButton: 'View',
+  },
   landing: {
     nav: {
       explore: 'Explore',
