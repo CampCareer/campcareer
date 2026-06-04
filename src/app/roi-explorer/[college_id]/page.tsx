@@ -6,6 +6,7 @@ import { ArrowLeft, TrendingUp, DollarSign, Clock, GraduationCap, ExternalLink }
 import { Card, CardContent } from '@/components/ui/card'
 import { RoiInfo } from '@/components/roi-info'
 import { useParams, useSearchParams } from 'next/navigation'
+import { useTranslations } from '@/lib/i18n/locale-provider'
 
 type RoiRow = {
   college_id: string
@@ -105,11 +106,13 @@ function calcTax(gross: number, country: Country, state: string): number {
 }
 
 function SchoolTypeBadge({ type }: { type?: string }) {
+  const t = useTranslations()
+  const td = t.roiExplorer.detail
   if (!type) return null
   const map: Record<string, { label: string; cls: string }> = {
-    public:            { label: 'Public',     cls: 'bg-blue-50 text-blue-700 border-blue-200' },
-    private_nonprofit: { label: 'Private',    cls: 'bg-violet-50 text-violet-700 border-violet-200' },
-    private_forprofit: { label: 'For-Profit', cls: 'bg-amber-50 text-amber-700 border-amber-200' },
+    public:            { label: td.schoolPublic,    cls: 'bg-blue-50 text-blue-700 border-blue-200' },
+    private_nonprofit: { label: td.schoolPrivate,   cls: 'bg-violet-50 text-violet-700 border-violet-200' },
+    private_forprofit: { label: td.schoolForProfit, cls: 'bg-amber-50 text-amber-700 border-amber-200' },
   }
   const { label, cls } = map[type] ?? { label: type, cls: 'bg-slate-50 text-slate-600 border-slate-200' }
   return (
@@ -120,6 +123,8 @@ function SchoolTypeBadge({ type }: { type?: string }) {
 }
 
 function CollegeDetailInner() {
+  const t = useTranslations()
+  const td = t.roiExplorer.detail
   const params = useParams()
   const searchParams = useSearchParams()
   const collegeId = params.college_id as string
@@ -148,7 +153,7 @@ function CollegeDetailInner() {
   }
 
   if (rows.length === 0) {
-    return <div className="max-w-5xl mx-auto px-6 py-20 text-slate-500">No data found.</div>
+    return <div className="max-w-5xl mx-auto px-6 py-20 text-slate-500">{td.noData}</div>
   }
 
   const best = rows[0]
@@ -167,7 +172,7 @@ function CollegeDetailInner() {
         className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
-        ROI Explorer
+        {td.backLink}
       </Link>
 
       {/* Header */}
@@ -190,7 +195,7 @@ function CollegeDetailInner() {
             className="inline-flex items-center gap-1.5 text-xs font-medium text-indigo-600 hover:text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-100 px-3 py-1.5 rounded-full transition-colors"
           >
             <ExternalLink className="w-3.5 h-3.5" />
-            Official Website
+            {td.officialWebsite}
           </a>
           {country === 'au' && (
             <a
@@ -200,23 +205,23 @@ function CollegeDetailInner() {
               className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-600 hover:text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-100 px-3 py-1.5 rounded-full transition-colors"
             >
               <ExternalLink className="w-3.5 h-3.5" />
-              CRICOS Check
+              {td.cricosCheck}
             </a>
           )}
         </div>
 
         <div className="flex items-center gap-2 mt-2">
-          <span className="text-xs text-slate-500">Gross</span>
+          <span className="text-xs text-slate-500">{td.gross}</span>
           <button
             onClick={() => setShowAfterTax((v) => !v)}
             className={`relative w-10 h-5 rounded-full transition-colors ${showAfterTax ? 'bg-indigo-600' : 'bg-slate-200'}`}
           >
             <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${showAfterTax ? 'translate-x-5' : 'translate-x-0'}`} />
           </button>
-          <span className="text-xs text-slate-500">After Tax</span>
+          <span className="text-xs text-slate-500">{td.afterTax}</span>
           {showAfterTax && (
             <span className="text-xs text-indigo-600 font-medium bg-indigo-50 px-2 py-0.5 rounded-full">
-              Estimated · {country.toUpperCase()} tax rules
+              {td.taxEstimate.replace('{country}', country.toUpperCase())}
             </span>
           )}
         </div>
@@ -228,11 +233,11 @@ function CollegeDetailInner() {
           <CardContent className="pt-5 pb-5">
             <div className="flex items-center gap-1.5 mb-2">
               <TrendingUp className="w-4 h-4 text-indigo-500" />
-              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">ROI Score</span>
+              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">{td.roiScore}</span>
               <RoiInfo className="ml-auto" />
             </div>
             <p className="text-2xl font-bold text-indigo-600">{best.roi_score.toFixed(1)}</p>
-            <p className="text-xs text-slate-400 mt-0.5">best city</p>
+            <p className="text-xs text-slate-400 mt-0.5">{td.bestCity}</p>
           </CardContent>
         </Card>
 
@@ -240,13 +245,13 @@ function CollegeDetailInner() {
           <CardContent className="pt-5 pb-5">
             <div className="flex items-center gap-1.5 mb-2">
               <DollarSign className="w-4 h-4 text-emerald-500" />
-              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Net Salary</span>
+              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">{td.netSalary}</span>
             </div>
             <p className="text-2xl font-bold text-emerald-600">
               {showAfterTax ? fmt(netAfterTax, country) : fmt(best.net_salary, country)}
             </p>
             <p className="text-xs text-slate-400 mt-0.5">
-              {showAfterTax ? 'after tax' : 'after living costs'} · {currCode}
+              {showAfterTax ? td.afterTaxLabel : td.afterLivingCosts} · {currCode}
             </p>
           </CardContent>
         </Card>
@@ -255,10 +260,10 @@ function CollegeDetailInner() {
           <CardContent className="pt-5 pb-5">
             <div className="flex items-center gap-1.5 mb-2">
               <Clock className="w-4 h-4 text-amber-500" />
-              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Payback</span>
+              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">{td.payback}</span>
             </div>
             <p className="text-2xl font-bold text-amber-600">{best.payback_years} yrs</p>
-            <p className="text-xs text-slate-400 mt-0.5">best city</p>
+            <p className="text-xs text-slate-400 mt-0.5">{td.bestCity}</p>
           </CardContent>
         </Card>
 
@@ -266,34 +271,34 @@ function CollegeDetailInner() {
           <CardContent className="pt-5 pb-5">
             <div className="flex items-center gap-1.5 mb-2">
               <GraduationCap className="w-4 h-4 text-blue-500" />
-              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Grad Rate</span>
+              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">{td.gradRate}</span>
             </div>
             <p className="text-2xl font-bold text-blue-600">{(best.graduation_rate * 100).toFixed(1)}%</p>
-            <p className="text-xs text-slate-400 mt-0.5">graduation</p>
+            <p className="text-xs text-slate-400 mt-0.5">{td.graduation}</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Financial Breakdown */}
       <div>
-        <h2 className="text-lg font-semibold text-slate-800 mb-3">Financial Breakdown</h2>
+        <h2 className="text-lg font-semibold text-slate-800 mb-3">{td.financialBreakdown}</h2>
         <Card>
           <CardContent className="pt-5 pb-6">
             <p className="text-xs text-slate-400 mb-5">
-              Net Salary calculation — based on best-ROI city ({best.city_name})
+              {td.netSalaryCalcPrefix} ({best.city_name})
             </p>
 
             {/* Tuition & Earnings info row */}
             <div className="grid grid-cols-2 gap-4 mb-6 pb-5 border-b border-slate-100">
               <div>
-                <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">Annual Tuition</p>
+                <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">{td.annualTuition}</p>
                 <p className="text-xl font-bold text-slate-800">{fmt(best.tuition, country)}</p>
-                <p className="text-xs text-slate-400 mt-0.5">per year · {fmt(best.tuition * 4, country)} total (4yr)</p>
+                <p className="text-xs text-slate-400 mt-0.5">{td.perYear} · {fmt(best.tuition * 4, country)} {td.totalFourYear}</p>
               </div>
               <div>
-                <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">Median Graduate Earnings</p>
+                <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">{td.medianEarnings}</p>
                 <p className="text-xl font-bold text-slate-800">{fmt(best.median_earnings, country)}</p>
-                <p className="text-xs text-slate-400 mt-0.5">{currCode} / year</p>
+                <p className="text-xs text-slate-400 mt-0.5">{currCode} {td.perYear}</p>
               </div>
             </div>
 
@@ -301,8 +306,8 @@ function CollegeDetailInner() {
             <div className="space-y-3">
               {[
                 {
-                  label: 'Median Graduate Earnings',
-                  sublabel: 'gross income',
+                  label: td.medianEarnings,
+                  sublabel: td.grossIncome,
                   value: best.median_earnings,
                   pct: 100,
                   barColor: 'bg-slate-300',
@@ -310,8 +315,8 @@ function CollegeDetailInner() {
                   sign: '',
                 },
                 ...(showAfterTax ? [{
-                  label: `Income Tax & ${country === 'ie' ? 'USC/PRSI' : country === 'uk' ? 'NI' : country === 'au' ? 'Medicare' : country === 'ca' ? 'CPP/EI' : 'FICA'}`,
-                  sublabel: `${country.toUpperCase()} tax rules · estimated`,
+                  label: `${td.incomeTax} ${country === 'ie' ? 'USC/PRSI' : country === 'uk' ? 'NI' : country === 'au' ? 'Medicare' : country === 'ca' ? 'CPP/EI' : 'FICA'}`,
+                  sublabel: `${country.toUpperCase()} ${td.taxEstimated}`,
                   value: taxAmount,
                   pct: (taxAmount / best.median_earnings) * 100,
                   barColor: 'bg-purple-300',
@@ -319,8 +324,8 @@ function CollegeDetailInner() {
                   sign: '−',
                 }] : []),
                 {
-                  label: 'Annual Rent',
-                  sublabel: 'city average × 12 months',
+                  label: td.annualRent,
+                  sublabel: td.cityAvgMonths,
                   value: annualRent,
                   pct: (annualRent / best.median_earnings) * 100,
                   barColor: 'bg-rose-300',
@@ -328,8 +333,8 @@ function CollegeDetailInner() {
                   sign: '−',
                 },
                 {
-                  label: 'Living Cost',
-                  sublabel: 'rent × 0.4 (utilities, food, etc.)',
+                  label: td.livingCost,
+                  sublabel: td.rentMultiplier,
                   value: livingCost,
                   pct: (livingCost / best.median_earnings) * 100,
                   barColor: 'bg-orange-300',
@@ -362,8 +367,8 @@ function CollegeDetailInner() {
               <div className="border-t-2 border-slate-200 pt-4 mt-2">
                 <div className="flex items-center justify-between">
                   <div>
-                    <span className="text-base font-bold text-slate-900">= Net Salary</span>
-                    <span className="text-xs text-slate-400 ml-2">after rent &amp; living costs</span>
+                    <span className="text-base font-bold text-slate-900">{td.equalNetSalary}</span>
+                    <span className="text-xs text-slate-400 ml-2">{td.afterRentLiving}</span>
                   </div>
                   <span className="text-2xl font-bold text-emerald-600">
                     {fmt(showAfterTax ? netAfterTax : best.net_salary, country)}
@@ -376,7 +381,7 @@ function CollegeDetailInner() {
                   />
                 </div>
                 <p className="text-xs text-slate-400 mt-1.5">
-                  {((best.net_salary / best.median_earnings) * 100).toFixed(1)}% of median earnings retained
+                  {((best.net_salary / best.median_earnings) * 100).toFixed(1)}{td.earningsRetained}
                 </p>
               </div>
             </div>
