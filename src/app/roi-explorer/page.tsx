@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/card"
 import { TrendingUp, X, Bookmark, Copy, CheckCheck } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
+import { useTranslations } from "@/lib/i18n/locale-provider"
 import { RoiInfo } from "@/components/roi-info"
 import type { User } from "@supabase/supabase-js"
 import {
@@ -318,6 +319,8 @@ const DEFAULT_STATE: Record<Country, string> = {
 }
 
 function ROIExplorerContent() {
+  const t = useTranslations()
+  const tr = t.roiExplorer
   const searchParams = useSearchParams()
   const paramCountry = searchParams.get('country') as Country | null
   const initialCountry: Country = paramCountry && VALID_COUNTRIES.includes(paramCountry)
@@ -527,15 +530,15 @@ function ROIExplorerContent() {
   const currencyCode = CURRENCY[country]?.code ?? 'USD'
 
   const TABLE_COLS = [
-    ["College",                        "text-left"],
-    ["Field",                          "text-left"],
-    ["City",                           "text-left"],
-    [country === "us" ? `ROI Score (${careerStage === "early" ? "Early Career" : careerStage === "mid" ? "Mid Career" : "Senior"})` : "ROI Score", "text-right"],
-    [showAfterTax ? `After-Tax Salary (${currencyCode})` : `Gross Salary (${currencyCode})`, "text-right"],
-    ["Payback",                        "text-right"],
-    [`Tuition (${currencyCode})`,      "text-right"],
-    ["Grad Rate",                      "text-right"],
-    ...(country === "ie" ? [["Admission", "text-right"] as const] : []),
+    [tr.colCollege,                    "text-left"],
+    [tr.colField,                      "text-left"],
+    [tr.colCity,                       "text-left"],
+    [country === "us" ? `${tr.colRoiScore} (${careerStage === "early" ? tr.earlyCareer : careerStage === "mid" ? tr.midCareer : tr.seniorCareer})` : tr.colRoiScore, "text-right"],
+    [showAfterTax ? `${tr.colAfterTaxSalary} (${currencyCode})` : `${tr.colGrossSalary} (${currencyCode})`, "text-right"],
+    [tr.colPayback,                    "text-right"],
+    [`${tr.colTuition} (${currencyCode})`, "text-right"],
+    [tr.colGradRate,                   "text-right"],
+    ...(country === "ie" ? [[tr.colAdmission, "text-right"] as const] : []),
     ["", "text-right"],
   ]
 
@@ -546,7 +549,7 @@ function ROIExplorerContent() {
       <div>
         <div className="inline-flex items-center gap-2 bg-indigo-50 text-indigo-600 text-xs font-medium px-3 py-1.5 rounded-full mb-4 border border-indigo-100">
           <TrendingUp className="w-3 h-3" />
-          Live data · {stateName} {country === "us" ? "colleges" : "universities"}
+          {tr.liveData} · {stateName} {country === "us" ? tr.colleges : tr.universities}
         </div>
         <div className="flex items-center justify-between mt-1">
           <div className="flex items-center gap-4">
@@ -563,7 +566,7 @@ function ROIExplorerContent() {
                         : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50"
                     }`}
                   >
-                    {stage === "early" ? "Early (1yr)" : stage === "mid" ? "Mid (4yr)" : "Senior (10yr)"}
+                    {stage === "early" ? tr.earlyCareer : stage === "mid" ? tr.midCareer : tr.seniorCareer}
                   </button>
                 ))}
               </div>
@@ -576,26 +579,26 @@ function ROIExplorerContent() {
               className="hidden sm:flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-slate-800 border border-slate-200 hover:border-slate-300 px-3 py-1.5 rounded-lg transition-colors bg-white"
             >
               <span className="font-black text-xs">𝕏</span>
-              Share
+              {tr.share}
             </button>
             <button
               onClick={handleShare}
               className="flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-slate-800 border border-slate-200 hover:border-slate-300 px-3 py-1.5 rounded-lg transition-colors bg-white"
             >
               {copied
-                ? <><CheckCheck className="w-3.5 h-3.5 text-emerald-500" /> Copied!</>
-                : <><Copy className="w-3.5 h-3.5" /> Copy link</>
+                ? <><CheckCheck className="w-3.5 h-3.5 text-emerald-500" /> {tr.copied}</>
+                : <><Copy className="w-3.5 h-3.5" /> {tr.copyLink}</>
               }
             </button>
           </div>
         </div>
         <p className="mt-2 text-slate-500 text-sm leading-relaxed">
-          Compare return on investment across {stateName} {country === "us" ? "colleges" : "universities"} and cities.
+          {tr.descriptionPrefix} {stateName} {country === "us" ? tr.colleges : tr.universities} {tr.descriptionSuffix}
         </p>
 
         {/* 세전/세후 토글 */}
         <div className="flex items-center gap-2 mt-3">
-          <span className="text-xs text-slate-500">Gross</span>
+          <span className="text-xs text-slate-500">{tr.gross}</span>
           <button
             onClick={() => setShowAfterTax((v) => !v)}
             className={`relative w-10 h-5 rounded-full transition-colors ${
@@ -606,10 +609,10 @@ function ROIExplorerContent() {
               showAfterTax ? "translate-x-5" : "translate-x-0"
             }`} />
           </button>
-          <span className="text-xs text-slate-500">After Tax</span>
+          <span className="text-xs text-slate-500">{tr.afterTax}</span>
           {showAfterTax && (
             <span className="text-xs text-indigo-600 font-medium bg-indigo-50 px-2 py-0.5 rounded-full">
-              Estimated · {country.toUpperCase()} tax rules applied
+              {tr.taxEstimate.replace('{country}', country.toUpperCase())}
             </span>
           )}
         </div>
@@ -640,7 +643,7 @@ function ROIExplorerContent() {
           <div className="flex flex-wrap items-end gap-4">
 
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-slate-600">Country</label>
+              <label className="text-xs font-medium text-slate-600">{tr.filterCountry}</label>
               <Select value={country} onValueChange={(v) => v && handleCountryChange(v)}>
                 <SelectTrigger className="w-44 h-10 rounded-xl border-slate-200 text-sm">
                   <SelectValue>
@@ -670,7 +673,7 @@ function ROIExplorerContent() {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-slate-600">Field of Study</label>
+              <label className="text-xs font-medium text-slate-600">{tr.filterField}</label>
               {country === "us" || country === "ie" || country === "au" || country === "ca" || country === "uk" ? (
                 <FieldCombobox
                   value={field}
@@ -689,7 +692,7 @@ function ROIExplorerContent() {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-slate-600">Sort by</label>
+              <label className="text-xs font-medium text-slate-600">{tr.filterSort}</label>
               <Select value={sort} onValueChange={(v) => v && setSort(v)}>
                 <SelectTrigger className="w-44 h-10 rounded-xl border-slate-200 text-sm">
                   <SelectValue />
@@ -706,14 +709,14 @@ function ROIExplorerContent() {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-slate-600">Results</label>
+              <label className="text-xs font-medium text-slate-600">{tr.filterResults}</label>
               <Select value={String(limit)} onValueChange={(v) => v && setLimit(Number(v))}>
                 <SelectTrigger className="w-28 h-10 rounded-xl border-slate-200 text-sm">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   {LIMIT_OPTIONS.map((n) => (
-                    <SelectItem key={n} value={String(n)}>{n} rows</SelectItem>
+                    <SelectItem key={n} value={String(n)}>{n} {tr.filterRows}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -721,7 +724,7 @@ function ROIExplorerContent() {
 
             {!loading && !error && (
               <p className="text-xs text-slate-400 pb-2.5">
-                {data.length.toLocaleString()} of {count.toLocaleString()} results
+                {data.length.toLocaleString()} {tr.resultsOf} {count.toLocaleString()} {tr.resultsLabel}
               </p>
             )}
 
@@ -735,10 +738,10 @@ function ROIExplorerContent() {
           <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="text-base font-semibold text-slate-900">
-                Salary Growth — {trimDot(graphField)}
+                {tr.salaryGrowth} — {trimDot(graphField)}
               </h2>
               <p className="text-xs text-slate-400 mt-0.5">
-                {country.toUpperCase()} · {stateName} · Average across universities
+                {country.toUpperCase()} · {stateName} · {tr.avgAcrossUniv}
               </p>
             </div>
           </div>
@@ -771,7 +774,7 @@ function ROIExplorerContent() {
                   formatter={(value) => {
                     const sym = { us: "$", au: "A$", ca: "C$", uk: "£", ie: "€" }[country] ?? "$"
                     const num = typeof value === "number" ? value : 0
-                    return [`${sym}${Math.round(num).toLocaleString()}`, "Avg Net Salary"]
+                    return [`${sym}${Math.round(num).toLocaleString()}`, tr.avgNetSalary]
                   }}
                   contentStyle={{
                     borderRadius: "12px",
@@ -784,7 +787,7 @@ function ROIExplorerContent() {
                 <Line
                   type="monotone"
                   dataKey="salary"
-                  name="Avg Net Salary"
+                  name={tr.avgNetSalary}
                   stroke="#6366f1"
                   strokeWidth={2.5}
                   dot={{ fill: "#6366f1", r: 5, strokeWidth: 0 }}
@@ -799,7 +802,7 @@ function ROIExplorerContent() {
       {/* Error */}
       {error && (
         <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
-          Failed to load data: {error}
+          {tr.loadError} {error}
         </div>
       )}
 
@@ -808,7 +811,7 @@ function ROIExplorerContent() {
         <div>
           <div className="flex items-center justify-end mb-2">
             <span className="inline-flex items-center gap-1.5 text-xs text-slate-400">
-              ROI score explained<RoiInfo />
+              {tr.roiExplained}<RoiInfo />
             </span>
           </div>
         <div className="rounded-xl border border-slate-200 overflow-hidden shadow-sm">
