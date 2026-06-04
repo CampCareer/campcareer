@@ -1,3 +1,4 @@
+import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import type { MDXComponents } from "mdx/types"
@@ -119,6 +120,38 @@ function AuthorBox({
   )
 }
 
+function BlogImage({
+  src,
+  alt,
+  caption,
+  priority = false,
+}: {
+  src: string
+  alt: string
+  caption?: string
+  priority?: boolean
+}) {
+  return (
+    <figure className="my-8 not-prose">
+      <div className="relative w-full overflow-hidden rounded-2xl bg-slate-100" style={{ aspectRatio: "16/9" }}>
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          className="object-cover"
+          priority={priority}
+          sizes="(max-width: 768px) 100vw, 720px"
+        />
+      </div>
+      {caption && (
+        <figcaption className="mt-2 text-center text-xs text-slate-400 leading-relaxed">
+          {caption}
+        </figcaption>
+      )}
+    </figure>
+  )
+}
+
 export const mdxComponents: MDXComponents = {
   DataCard,
   DataGrid,
@@ -126,6 +159,10 @@ export const mdxComponents: MDXComponents = {
   Callout,
   CTA,
   AuthorBox,
+  BlogImage,
+  img: ({ src, alt }: { src?: string; alt?: string }) => (
+    <BlogImage src={src ?? ""} alt={alt ?? ""} />
+  ),
   h1: (props) => <h1 className="text-3xl font-bold text-slate-900 mt-10 mb-4 leading-tight" {...props} />,
   h2: (props) => <h2 className="text-2xl font-bold text-slate-900 mt-10 mb-4" {...props} />,
   h3: (props) => <h3 className="text-lg font-semibold text-slate-800 mt-8 mb-3" {...props} />,

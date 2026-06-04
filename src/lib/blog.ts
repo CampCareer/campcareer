@@ -13,8 +13,11 @@ export type PostMeta = {
   tag: string
   tagColor: string
   featured?: boolean
+  heroImage?: string
+  heroImageAlt?: string
   author?: string
   authorRole?: string
+  authorInitials?: string
 }
 
 export function getAllPosts(): PostMeta[] {
