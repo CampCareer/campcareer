@@ -6,6 +6,7 @@ import { useTranslations } from "@/lib/i18n/locale-provider"
 import {
   Map, Loader2, RefreshCw, ChevronDown, ChevronUp,
   Briefcase, Clock, Award, Lightbulb, ArrowRight, Search, X,
+  Share2, ExternalLink, Check,
 } from "lucide-react"
 import type { User } from "@supabase/supabase-js"
 
@@ -92,6 +93,12 @@ export default function CareerPathPage() {
 
   const [savedPaths, setSavedPaths] = useState<SavedPath[]>([])
   const [pathsLoading, setPathsLoading] = useState(true)
+
+  const [showShareModal, setShowShareModal] = useState(false)
+  const [shareCopied, setShareCopied] = useState<'text' | 'link' | null>(null)
+  const [isPublishing, setIsPublishing] = useState(false)
+  const [publicUrl, setPublicUrl] = useState<string | null>(null)
+  const [currentPathId, setCurrentPathId] = useState<string | null>(null)
 
   // 초기 로드
   useEffect(() => {
@@ -199,7 +206,11 @@ export default function CareerPathPage() {
           goal_text: goalText.trim() || null,
           roadmap: json.roadmap,
         }).select('id,country,field,roadmap,generated_at').single()
-        if (saved) setSavedPaths(prev => [saved as SavedPath, ...prev])
+        if (saved) {
+          setSavedPaths(prev => [saved as SavedPath, ...prev])
+          setCurrentPathId((saved as SavedPath).id)
+          setPublicUrl(null)
+        }
       }
       setView('results')
     } catch (err) {
@@ -223,8 +234,48 @@ export default function CareerPathPage() {
     setFieldInput(path.field)
     setCountry(path.country)
     setCollapsed(new Set())
+    setCurrentPathId(path.id)
+    setPublicUrl(null)
     setView('results')
     window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  function buildShareText(): string {
+    if (!roadmap) return ''
+    const prSnippet = roadmap.pr_pathway
+      ? `\n🎯 ${roadmap.pr_pathway.slice(0, 80)}${roadmap.pr_pathway.length > 80 ? '...' : ''}`
+      : ''
+    return `🗺️ ${roadmap.title}\n\n⏱️ ${roadmap.total_duration} · ${roadmap.stages.length} stages${prSnippet}\n\nBuilt with CampCareer\n→ campcareer.com/career-path\n\n#StudyAbroad #CareerMap`
+  }
+
+  function handleShareX() {
+    const text = buildShareText()
+    window.open(
+      `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
+      '_blank'
+    )
+  }
+
+  async function handleCopyText() {
+    const text = buildShareText()
+    await navigator.clipboard.writeText(text)
+    setShareCopied('text')
+    setTimeout(() => setShareCopied(null), 2000)
+  }
+
+  async function handleGetPublicLink() {
+    if (!currentPathId || !user) return
+    setIsPublishing(true)
+    await supabase
+      .from('user_career_paths')
+      .update({ is_public: true })
+      .eq('id', currentPathId)
+    const url = `${window.location.origin}/career-path/share/${currentPathId}`
+    setPublicUrl(url)
+    await navigator.clipboard.writeText(url)
+    setShareCopied('link')
+    setTimeout(() => setShareCopied(null), 2000)
+    setIsPublishing(false)
   }
 
   async function deletePath(id: string) {
@@ -442,6 +493,13 @@ export default function CareerPathPage() {
             }
             {tc.regenerateButton}
           </button>
+          <button
+            onClick={() => setShowShareModal(true)}
+            className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors"
+          >
+            <Share2 className="w-3.5 h-3.5" />
+            {tc.shareButton}
+          </button>
         </div>
       </div>
 
@@ -593,6 +651,87 @@ export default function CareerPathPage() {
         </div>
 
       </div>
+
+      {/* 공유 모달 */}
+      {showShareModal && roadmap && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+          <div
+            className="absolute inset-0 bg-slate-900/40"
+            onClick={() => setShowShareModal(false)}
+          />
+          <div className="relative bg-white rounded-2xl shadow-xl p-6 w-full max-w-md space-y-5">
+            <button
+              onClick={() => setShowShareModal(false)}
+              className="absolute top-4 right-4 p-1.5 rounded-lg hover:bg-slate-100 text-slate-400"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            <div>
+              <h3 className="text-base font-bold text-slate-900">{tc.shareModalTitle}</h3>
+              <p className="text-xs text-slate-500 mt-1">{tc.shareDesc}</p>
+            </div>
+
+            <div className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3">
+              <p className="text-xs text-slate-600 whitespace-pre-line leading-relaxed">
+                {buildShareText()}
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <button
+                onClick={handleShareX}
+                className="w-full flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold py-2.5 rounded-xl transition-colors text-sm"
+              >
+                <span className="font-black text-sm">𝕏</span>
+                {tc.shareOnX}
+              </button>
+
+              <button
+                onClick={handleCopyText}
+                className="w-full flex items-center justify-center gap-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold py-2.5 rounded-xl transition-colors text-sm"
+              >
+                {shareCopied === 'text'
+                  ? <><Check className="w-4 h-4 text-emerald-500" /> {tc.copied}</>
+                  : <>{tc.shareOnThreads}</>
+                }
+              </button>
+
+              <div className="pt-1 border-t border-slate-100">
+                <p className="text-[11px] text-slate-400 mb-2">{tc.publicLinkNote}</p>
+                {publicUrl ? (
+                  <div className="flex items-center gap-2">
+                    <input
+                      readOnly
+                      value={publicUrl}
+                      className="flex-1 text-xs border border-slate-200 rounded-lg px-3 py-2 bg-slate-50 text-slate-600 focus:outline-none"
+                    />
+                    <button
+                      onClick={handleGetPublicLink}
+                      className="shrink-0 inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white transition-colors"
+                    >
+                      {shareCopied === 'link'
+                        ? <Check className="w-3.5 h-3.5" />
+                        : <ExternalLink className="w-3.5 h-3.5" />
+                      }
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={handleGetPublicLink}
+                    disabled={isPublishing || !currentPathId}
+                    className="w-full flex items-center justify-center gap-2 border border-indigo-200 text-indigo-600 hover:bg-indigo-50 font-semibold py-2.5 rounded-xl transition-colors text-sm disabled:opacity-50"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                    {isPublishing ? '...' : tc.copyLink}
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   )
 }
