@@ -4,9 +4,10 @@ import { useState, useEffect, useRef } from "react"
 import { createClient } from "@/lib/supabase-client"
 import {
   FolderOpen, Upload, Trash2, Download, FileText,
-  File, Image, FileBadge, Loader2, Plus, Eye,
+  File, Image, FileBadge, Loader2, Eye,
 } from "lucide-react"
 import type { User } from "@supabase/supabase-js"
+import { useTranslations } from "@/lib/i18n/locale-provider"
 
 type DocCategory = 'passport' | 'transcript' | 'financial' | 'visa' | 'recommendation' | 'other'
 
@@ -20,15 +21,6 @@ type UserDoc = {
   note: string | null
   created_at: string
 }
-
-const CATEGORIES: { value: DocCategory; label: string; emoji: string; color: string }[] = [
-  { value: 'passport',       label: 'Passport & ID',          emoji: '🛂', color: 'bg-blue-50 border-blue-200 text-blue-700' },
-  { value: 'transcript',     label: 'Transcripts',            emoji: '🎓', color: 'bg-violet-50 border-violet-200 text-violet-700' },
-  { value: 'financial',      label: 'Financial Docs',         emoji: '💰', color: 'bg-emerald-50 border-emerald-200 text-emerald-700' },
-  { value: 'visa',           label: 'Visa & Immigration',     emoji: '✈️', color: 'bg-indigo-50 border-indigo-200 text-indigo-700' },
-  { value: 'recommendation', label: 'Recommendation Letters', emoji: '📝', color: 'bg-amber-50 border-amber-200 text-amber-700' },
-  { value: 'other',          label: 'Other',                  emoji: '📁', color: 'bg-slate-50 border-slate-200 text-slate-600' },
-]
 
 function formatBytes(bytes: number | null): string {
   if (!bytes) return ''
@@ -45,6 +37,16 @@ function FileIcon({ mime }: { mime: string | null }) {
 }
 
 export default function DocumentsPage() {
+  const t = useTranslations()
+  const td = t.documents
+  const CATEGORIES: { value: DocCategory; label: string; emoji: string; color: string }[] = [
+    { value: 'passport',       label: td.categories.passport,       emoji: '🛂', color: 'bg-blue-50 border-blue-200 text-blue-700' },
+    { value: 'transcript',     label: td.categories.transcript,     emoji: '🎓', color: 'bg-violet-50 border-violet-200 text-violet-700' },
+    { value: 'financial',      label: td.categories.financial,      emoji: '💰', color: 'bg-emerald-50 border-emerald-200 text-emerald-700' },
+    { value: 'visa',           label: td.categories.visa,           emoji: '✈️', color: 'bg-indigo-50 border-indigo-200 text-indigo-700' },
+    { value: 'recommendation', label: td.categories.recommendation, emoji: '📝', color: 'bg-amber-50 border-amber-200 text-amber-700' },
+    { value: 'other',          label: td.categories.other,          emoji: '📁', color: 'bg-slate-50 border-slate-200 text-slate-600' },
+  ]
   const supabase = createClient()
   const [user, setUser] = useState<User | null>(null)
   const [docs, setDocs] = useState<UserDoc[]>([])
@@ -75,7 +77,7 @@ export default function DocumentsPage() {
   async function uploadFile(file: File) {
     if (!user) return
     if (file.size > 10 * 1024 * 1024) {
-      setError('File too large. Max 10 MB.')
+      setError(td.fileTooLarge)
       return
     }
     setUploading(true)
@@ -164,9 +166,9 @@ export default function DocumentsPage() {
         <div className="flex items-center gap-3">
           <FolderOpen className="w-6 h-6 text-indigo-500 shrink-0" />
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">Documents</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">{td.pageTitle}</h1>
             <p className="text-sm text-slate-500 mt-0.5">
-              Store your visa, academic, and financial documents securely.
+              {td.pageSubtitle}
             </p>
           </div>
         </div>
@@ -174,8 +176,7 @@ export default function DocumentsPage() {
           onClick={() => setShowUpload(v => !v)}
           className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2.5 rounded-xl transition-colors text-sm"
         >
-          <Plus className="w-4 h-4" />
-          Upload File
+          {td.uploadButton}
         </button>
       </div>
 
@@ -185,7 +186,7 @@ export default function DocumentsPage() {
 
           {/* 카테고리 칩 */}
           <div className="space-y-2">
-            <label className="text-xs font-medium text-slate-600">Category</label>
+            <label className="text-xs font-medium text-slate-600">{td.categoryLabel}</label>
             <div className="flex flex-wrap gap-2">
               {CATEGORIES.map(cat => (
                 <button
@@ -205,13 +206,13 @@ export default function DocumentsPage() {
           {/* 노트 */}
           <div className="space-y-1.5">
             <label className="text-xs font-medium text-slate-600">
-              Note <span className="text-slate-400">(optional)</span>
+              {td.noteLabel} <span className="text-slate-400">{td.noteOptional}</span>
             </label>
             <input
               type="text"
               value={uploadNote}
               onChange={e => setUploadNote(e.target.value)}
-              placeholder="e.g. IELTS certificate, valid until 2027"
+              placeholder={td.notePlaceholder}
               className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-white"
             />
           </div>
@@ -235,15 +236,15 @@ export default function DocumentsPage() {
             {uploading ? (
               <div className="flex flex-col items-center gap-2">
                 <Loader2 className="w-8 h-8 text-indigo-400 animate-spin" />
-                <p className="text-sm text-slate-500">Uploading…</p>
+                <p className="text-sm text-slate-500">{td.uploading}</p>
               </div>
             ) : (
               <div className="flex flex-col items-center gap-2">
                 <Upload className="w-8 h-8 text-slate-300" />
                 <p className="text-sm font-medium text-slate-600">
-                  Drag & drop or <span className="text-indigo-600">click to select</span>
+                  {td.dragDrop} <span className="text-indigo-600">{td.clickToSelect}</span>
                 </p>
-                <p className="text-xs text-slate-400">PDF, images, Word docs — max 10 MB</p>
+                <p className="text-xs text-slate-400">{td.fileTypes}</p>
               </div>
             )}
           </div>
@@ -267,8 +268,8 @@ export default function DocumentsPage() {
       {!loading && docs.length === 0 && (
         <div className="bg-slate-50 border border-dashed border-slate-300 rounded-2xl p-16 text-center">
           <FolderOpen className="w-10 h-10 text-slate-300 mx-auto mb-3" />
-          <p className="text-sm text-slate-500 mb-1">No documents yet</p>
-          <p className="text-xs text-slate-400">Upload your passport, transcripts, visa docs, and more.</p>
+          <p className="text-sm text-slate-500 mb-1">{td.emptyTitle}</p>
+          <p className="text-xs text-slate-400">{td.emptySubtitle}</p>
         </div>
       )}
 
@@ -312,13 +313,13 @@ export default function DocumentsPage() {
                           onClick={() => handlePreview(doc)}
                           className="flex-1 inline-flex items-center justify-center gap-1.5 text-xs text-slate-600 hover:text-indigo-600 font-medium py-1.5 rounded-lg hover:bg-indigo-50 transition-colors"
                         >
-                          <Eye className="w-3.5 h-3.5" /> Preview
+                          <Eye className="w-3.5 h-3.5" /> {td.previewButton}
                         </button>
                         <button
                           onClick={() => handleDownload(doc)}
                           className="flex-1 inline-flex items-center justify-center gap-1.5 text-xs text-slate-600 hover:text-emerald-600 font-medium py-1.5 rounded-lg hover:bg-emerald-50 transition-colors"
                         >
-                          <Download className="w-3.5 h-3.5" /> Download
+                          <Download className="w-3.5 h-3.5" /> {td.downloadButton}
                         </button>
                         <button
                           onClick={() => handleDelete(doc)}
