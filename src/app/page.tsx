@@ -57,42 +57,12 @@ export default function LandingPage() {
   ]
 
   const FEATURES = [
-    {
-      icon: TrendingUp,
-      title: "ROI Explorer",
-      desc: "Compare graduate salaries, tuition, and payback period across 5 countries. Real government data.",
-      href: "/roi-explorer",
-    },
-    {
-      icon: Map,
-      title: "Career Route Map",
-      desc: "AI-powered step-by-step career roadmap — from graduation to PR or your dream role abroad.",
-      href: "/career-path",
-    },
-    {
-      icon: Globe,
-      title: "Country Compare",
-      desc: "See ROI, average salary, and top universities side by side across all 5 countries.",
-      href: "/compare",
-    },
-    {
-      icon: CheckSquare,
-      title: "Visa Checklist",
-      desc: "AI-generated visa and application checklist tailored to your destination and visa type.",
-      href: "/checklist",
-    },
-    {
-      icon: CalendarDays,
-      title: "Timeline Planner",
-      desc: "Date-based countdown with phase-by-phase tasks and upcoming deadline tracker.",
-      href: "/timeline",
-    },
-    {
-      icon: FolderOpen,
-      title: "Document Vault",
-      desc: "Securely store your passport, transcripts, and visa documents — all in one place.",
-      href: "/documents",
-    },
+    { icon: TrendingUp,   title: tl.features.roiTitle,        desc: tl.features.roiDesc,        href: "/roi-explorer" },
+    { icon: Map,          title: tl.features.careerMapTitle,  desc: tl.features.careerMapDesc,  href: "/career-path" },
+    { icon: Globe,        title: tl.features.compareTitle,    desc: tl.features.compareDesc,    href: "/compare" },
+    { icon: CheckSquare,  title: tl.features.checklistTitle,  desc: tl.features.checklistDesc,  href: "/checklist" },
+    { icon: CalendarDays, title: tl.features.timelineTitle,   desc: tl.features.timelineDesc,   href: "/timeline" },
+    { icon: FolderOpen,   title: tl.features.documentsTitle,  desc: tl.features.documentsDesc,  href: "/documents" },
   ]
 
   return (
