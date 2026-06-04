@@ -142,7 +142,7 @@ export function Sidebar({ collapsed = false, mobileOpen = false }: { collapsed?:
           collapsed && "md:hidden"
         )}
       >
-        <p className="text-xs text-slate-400">© 2025 CampCareer</p>
+        <p className="text-xs text-slate-400">© 2026 CampCareer</p>
       </div>
     </aside>
   )
