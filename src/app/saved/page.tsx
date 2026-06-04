@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import { Bookmark, ExternalLink, Trash2, ArrowRight, GitCompare } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
+import { useTranslations } from "@/lib/i18n/locale-provider"
 import type { User } from "@supabase/supabase-js"
 
 type SavedCourse = {
@@ -28,6 +29,8 @@ const COUNTRY_OPTIONS = ["ALL", "US", "AU", "CA", "UK", "IE"] as const
 
 export default function SavedPage() {
   const supabase = createClient()
+  const t = useTranslations()
+  const ts = t.saved
   const [user, setUser] = useState<User | null>(null)
   const [saved, setSaved] = useState<SavedCourse[]>([])
   const [loading, setLoading] = useState(true)
@@ -84,13 +87,13 @@ export default function SavedPage() {
     return (
       <div className="max-w-3xl mx-auto px-6 py-20 text-center">
         <Bookmark className="w-10 h-10 text-slate-300 mx-auto mb-4" />
-        <h1 className="text-xl font-bold text-slate-900 mb-2">Sign in to view saved courses</h1>
-        <p className="text-sm text-slate-500 mb-6">Save courses from ROI Explorer and compare them here</p>
+        <h1 className="text-xl font-bold text-slate-900 mb-2">{ts.signInTitle}</h1>
+        <p className="text-sm text-slate-500 mb-6">{ts.signInDesc}</p>
         <Link
           href="/login"
           className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-xl transition-colors text-sm"
         >
-          Sign In <ArrowRight className="w-4 h-4" />
+          {ts.signInButton} <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
     )
@@ -104,10 +107,10 @@ export default function SavedPage() {
         <div>
           <h1 className="text-3xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
             <Bookmark className="w-6 h-6 text-indigo-500" />
-            Saved Courses
+            {ts.pageTitle}
           </h1>
           <p className="text-slate-500 text-sm mt-1">
-            {saved.length} course{saved.length !== 1 ? "s" : ""} saved
+            {saved.length} {ts.courseCount}
           </p>
         </div>
 
@@ -118,7 +121,7 @@ export default function SavedPage() {
             className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2.5 rounded-xl transition-colors text-sm shrink-0"
           >
             <GitCompare className="w-4 h-4" />
-            Compare {selected.size} selected
+            {ts.compareButton} ({selected.size})
           </Link>
         )}
       </div>
@@ -138,7 +141,7 @@ export default function SavedPage() {
                   : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50"
               }`}
             >
-              {c === "ALL" ? "All" : `${COUNTRY_FLAG[c]} ${c}`}
+              {c === "ALL" ? ts.filterAll : `${COUNTRY_FLAG[c]} ${c}`}
               <span className={`ml-1.5 ${filter === c ? "text-indigo-200" : "text-slate-400"}`}>
                 {count}
               </span>
@@ -150,7 +153,7 @@ export default function SavedPage() {
       {/* 선택 안내 */}
       {saved.length > 0 && selected.size < 2 && (
         <p className="text-xs text-slate-400">
-          ✓ Select 2 or more courses to compare them
+          {ts.selectHint}
         </p>
       )}
 
@@ -167,12 +170,12 @@ export default function SavedPage() {
       {!loading && filtered.length === 0 && (
         <div className="bg-slate-50 border border-dashed border-slate-300 rounded-2xl p-12 text-center">
           <Bookmark className="w-8 h-8 text-slate-300 mx-auto mb-3" />
-          <p className="text-sm text-slate-500 mb-1">No saved courses yet</p>
+          <p className="text-sm text-slate-500 mb-1">{ts.emptyTitle}</p>
           <Link
             href="/roi-explorer"
             className="inline-flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-700 mt-2"
           >
-            Browse ROI Explorer <ArrowRight className="w-3 h-3" />
+            {ts.emptyLink} <ArrowRight className="w-3 h-3" />
           </Link>
         </div>
       )}
@@ -243,7 +246,7 @@ export default function SavedPage() {
                     onClick={(e) => e.stopPropagation()}
                     className="inline-flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-700 font-medium"
                   >
-                    View <ExternalLink className="w-3 h-3" />
+                    {ts.viewButton} <ExternalLink className="w-3 h-3" />
                   </Link>
                 </div>
               </div>

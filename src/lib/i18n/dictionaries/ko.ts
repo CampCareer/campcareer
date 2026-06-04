@@ -61,6 +61,20 @@ const ko: Dictionary = {
       tryAnother: '다른 학과나 국가로 검색해보세요.',
     },
   },
+  saved: {
+    signInTitle: '로그인하면 저장된 코스를 볼 수 있어요',
+    signInDesc: 'ROI 탐색기에서 코스를 저장하고 여기서 비교해보세요',
+    signInButton: '로그인',
+    pageTitle: '즐겨찾기',
+    courseCount: '개 코스 저장됨',
+    courseSingle: '개 코스 저장됨',
+    compareButton: '선택 항목 비교',
+    filterAll: '전체',
+    selectHint: '✓ 2개 이상 선택하면 비교할 수 있어요',
+    emptyTitle: '저장된 코스가 없습니다',
+    emptyLink: 'ROI 탐색기 둘러보기',
+    viewButton: '보기',
+  },
   landing: {
     nav: {
       explore: '탐색',
