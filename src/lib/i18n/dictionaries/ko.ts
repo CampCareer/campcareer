@@ -296,10 +296,10 @@ const ko: Dictionary = {
   },
   blog: {
     pageTitle: '유학 인사이트',
-    pageSubtitle: '데이터 기반으로 더 나은 유학 결정을 도와드립니다.',
+    pageSubtitle: '데이터 기반 유학 가이드 — 더 나은 결정을 위해.',
     readTime: '읽기',
-    readMore: '자세히 보기',
-    backToBlog: '블로그로 돌아가기',
+    readMore: '더 보기',
+    backToBlog: '전체 글',
   },
   landing: {
     nav: {
