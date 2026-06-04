@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ArrowLeft, ArrowRight, ExternalLink } from "lucide-react"
+import { getTranslations } from "@/lib/i18n/server"
 
 type Post = {
   slug: string
@@ -199,7 +200,7 @@ const POSTS: Record<string, Post> = {
     slug: "ireland-cs-graduate-salary-2025",
     title: "Ireland Computer Science Graduate Salary 2025: The Complete Guide",
     description: "Irish CS graduates earn €45,000 on average. We break down salaries by university, city, and career stage using HEA government data.",
-    date: "May 31, 2025",
+    date: "May 31, 2026",
     readTime: "5 min",
     tag: "Ireland",
     tagColor: "bg-emerald-100 text-emerald-700",
@@ -302,7 +303,7 @@ const POSTS: Record<string, Post> = {
     slug: "australia-vs-canada-study-abroad-roi",
     title: "Australia vs Canada: Which Has Better ROI for International Students?",
     description: "We compare tuition costs, graduate salaries, visa pathways, and cost of living to find the winner for international students in 2025.",
-    date: "May 31, 2025",
+    date: "May 31, 2026",
     readTime: "7 min",
     tag: "Comparison",
     tagColor: "bg-blue-100 text-blue-700",
@@ -400,7 +401,7 @@ const POSTS: Record<string, Post> = {
     slug: "uk-graduate-route-visa-salary-2025",
     title: "UK Graduate Route Visa 2025: Salaries You Can Expect",
     description: "The UK Graduate Route gives you 2 years to work after graduation. Here's what you can realistically earn by field and city.",
-    date: "May 31, 2025",
+    date: "May 31, 2026",
     readTime: "6 min",
     tag: "United Kingdom",
     tagColor: "bg-violet-100 text-violet-700",
@@ -531,6 +532,8 @@ export function generateStaticParams() {
 }
 
 export default function BlogPostPage({ params }: { params: { slug: string } }) {
+  const t = getTranslations()
+  const tb = t.blog
   const post = POSTS[params.slug]
   if (!post) notFound()
 
@@ -540,7 +543,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         href="/blog"
         className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition-colors mb-8"
       >
-        <ArrowLeft className="w-4 h-4" /> Back to Blog
+        <ArrowLeft className="w-4 h-4" /> {tb.backToBlog}
       </Link>
 
       <div className="mb-8">

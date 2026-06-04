@@ -283,6 +283,13 @@ const en = {
       other: 'Other',
     },
   },
+  blog: {
+    pageTitle: 'Study Abroad Insights',
+    pageSubtitle: 'Data-driven guides to help you make smarter study abroad decisions.',
+    readTime: 'read',
+    readMore: 'Read more',
+    backToBlog: 'Back to Blog',
+  },
   landing: {
     nav: {
       explore: 'Explore',
@@ -327,7 +334,7 @@ const en = {
       button: 'Start Exploring',
     },
     footer: {
-      copyright: '© 2025 CampCareer',
+      copyright: '© 2026 CampCareer',
       dataSources: 'Data sources: HEA · College Scorecard · HESA',
     },
   },

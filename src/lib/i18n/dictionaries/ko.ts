@@ -285,6 +285,13 @@ const ko: Dictionary = {
       other: '기타',
     },
   },
+  blog: {
+    pageTitle: '유학 인사이트',
+    pageSubtitle: '데이터 기반으로 더 나은 유학 결정을 도와드립니다.',
+    readTime: '읽기',
+    readMore: '자세히 보기',
+    backToBlog: '블로그로 돌아가기',
+  },
   landing: {
     nav: {
       explore: '탐색',
@@ -329,7 +336,7 @@ const ko: Dictionary = {
       button: '지금 시작하기',
     },
     footer: {
-      copyright: '© 2025 CampCareer',
+      copyright: '© 2026 CampCareer',
       dataSources: '데이터 출처: HEA · College Scorecard · CRICOS · HESA',
     },
   },
