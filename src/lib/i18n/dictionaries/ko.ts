@@ -173,6 +173,20 @@ const ko: Dictionary = {
     exchangeRatesAs: '환율 기준일',
     exchangeSource: '출처',
   },
+  checklist: {
+    pageTitle: '지원 체크리스트',
+    pageSubtitle: 'AI가 목적지와 비자 타입에 맞는 체크리스트를 생성해드립니다.',
+    destinationLabel: '목적지 국가',
+    visaTypeLabel: '비자 종류',
+    progressSaved: '진행 상황이 자동 저장됩니다. 재생성하면 체크리스트가 새로 만들어집니다.',
+    generateButton: '체크리스트 생성하기',
+    regenerateButton: '체크리스트 재생성',
+    generatingButton: '생성 중...',
+    fromCache: '⚡ 캐시에서 불러옴 — 즉시 로드',
+    overallProgress: '전체 진행률',
+    completed: '완료',
+    optional: '선택',
+  },
   landing: {
     nav: {
       explore: '탐색',

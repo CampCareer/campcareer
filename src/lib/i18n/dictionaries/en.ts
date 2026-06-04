@@ -171,6 +171,20 @@ const en = {
     exchangeRatesAs: 'Exchange rates as of',
     exchangeSource: 'Source',
   },
+  checklist: {
+    pageTitle: 'Application Checklist',
+    pageSubtitle: 'AI-generated visa checklist tailored to your destination and visa type.',
+    destinationLabel: 'Destination Country',
+    visaTypeLabel: 'Visa Type',
+    progressSaved: 'Your progress is auto-saved. Regenerate to refresh the checklist.',
+    generateButton: 'Generate Checklist',
+    regenerateButton: 'Regenerate Checklist',
+    generatingButton: 'Generating checklist...',
+    fromCache: '⚡ Loaded from cache — instant result',
+    overallProgress: 'Overall Progress',
+    completed: 'completed',
+    optional: 'Optional',
+  },
   landing: {
     nav: {
       explore: 'Explore',

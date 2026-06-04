@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase-client'
+import { useTranslations } from '@/lib/i18n/locale-provider'
 import { CheckCircle2, Circle, Loader2, Sparkles, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react'
 import type { User } from '@supabase/supabase-js'
 
@@ -83,6 +84,8 @@ const VISA_TYPES = [
 
 export default function ChecklistPage() {
   const supabase = createClient()
+  const t = useTranslations()
+  const tc = t.checklist
   const [user, setUser] = useState<User | null>(null)
   const [country, setCountry] = useState('IE')
   const [visaType, setVisaType] = useState('student')
@@ -225,10 +228,10 @@ export default function ChecklistPage() {
       {/* 헤더 */}
       <div>
         <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
-          Application Checklist
+          {tc.pageTitle}
         </h1>
         <p className="text-slate-500 text-sm mt-2">
-          AI-generated visa checklist tailored to your destination and visa type.
+          {tc.pageSubtitle}
         </p>
       </div>
 
@@ -237,7 +240,7 @@ export default function ChecklistPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* 국가 */}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-slate-600">Destination Country</label>
+            <label className="text-xs font-medium text-slate-600">{tc.destinationLabel}</label>
             <select
               value={country}
               onChange={e => { setCountry(e.target.value); setGenerated(false) }}
@@ -251,7 +254,7 @@ export default function ChecklistPage() {
 
           {/* 비자 타입 */}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-slate-600">Visa Type</label>
+            <label className="text-xs font-medium text-slate-600">{tc.visaTypeLabel}</label>
             <select
               value={visaType}
               onChange={e => { setVisaType(e.target.value); setGenerated(false) }}
@@ -266,7 +269,7 @@ export default function ChecklistPage() {
 
         {generated && (
           <p className="text-xs text-center text-slate-400 -mb-2">
-            Your progress is auto-saved. Regenerate to refresh the checklist.
+            {tc.progressSaved}
           </p>
         )}
         <button
@@ -275,17 +278,17 @@ export default function ChecklistPage() {
           className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-50 text-sm"
         >
           {loading ? (
-            <><Loader2 className="w-4 h-4 animate-spin" /> Generating checklist...</>
+            <><Loader2 className="w-4 h-4 animate-spin" /> {tc.generatingButton}</>
           ) : generated ? (
-            <><Sparkles className="w-4 h-4" /> Regenerate Checklist</>
+            <><Sparkles className="w-4 h-4" /> {tc.regenerateButton}</>
           ) : (
-            <><Sparkles className="w-4 h-4" /> Generate Checklist</>
+            <><Sparkles className="w-4 h-4" /> {tc.generateButton}</>
           )}
         </button>
 
         {fromCache && generated && (
           <p className="text-xs text-center text-slate-400">
-            ⚡ Loaded from cache — instant result
+            {tc.fromCache}
           </p>
         )}
       </div>
@@ -294,7 +297,7 @@ export default function ChecklistPage() {
       {generated && totalItems > 0 && (
         <div className="bg-white border border-slate-200 rounded-2xl px-6 py-5 shadow-sm">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-semibold text-slate-700">Overall Progress</span>
+            <span className="text-sm font-semibold text-slate-700">{tc.overallProgress}</span>
             <span className="text-sm font-bold text-indigo-600">{checkedCount} / {totalItems}</span>
           </div>
           <div className="w-full bg-slate-100 rounded-full h-2">
@@ -303,7 +306,7 @@ export default function ChecklistPage() {
               style={{ width: `${progress}%` }}
             />
           </div>
-          <p className="text-xs text-slate-400 mt-2">{progress}% complete</p>
+          <p className="text-xs text-slate-400 mt-2">{progress}% {tc.completed}</p>
         </div>
       )}
 
@@ -364,7 +367,7 @@ export default function ChecklistPage() {
                               </span>
                               {!item.required && (
                                 <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-400 font-medium">
-                                  Optional
+                                  {tc.optional}
                                 </span>
                               )}
                             </div>
