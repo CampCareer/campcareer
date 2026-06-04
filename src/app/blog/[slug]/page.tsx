@@ -51,19 +51,6 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         <ArrowLeft className="w-4 h-4" /> {tb.backToBlog}
       </Link>
 
-      {meta.heroImage && (
-        <div className="relative w-full overflow-hidden rounded-2xl bg-slate-100 mb-8" style={{ aspectRatio: "16/9" }}>
-          <Image
-            src={meta.heroImage}
-            alt={meta.heroImageAlt ?? meta.title}
-            fill
-            className="object-cover"
-            priority
-            sizes="(max-width: 768px) 100vw, 720px"
-          />
-        </div>
-      )}
-
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-4 flex-wrap">
           <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${meta.tagColor}`}>
@@ -78,14 +65,42 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         <p className="text-xl text-slate-500 leading-relaxed">{meta.description}</p>
       </div>
 
-      <hr className="border-slate-200 mb-10" />
+      <hr className="border-slate-200 mb-8" />
+
+      {meta.author && (
+        <div className="flex items-center gap-3 mb-6 p-4 bg-slate-50 rounded-xl border border-slate-200">
+          <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center shrink-0">
+            <span className="text-sm font-bold text-indigo-600">
+              {meta.authorInitials ?? meta.author.slice(0, 2).toUpperCase()}
+            </span>
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-slate-900">{meta.author}</p>
+            {meta.authorRole && (
+              <p className="text-xs text-slate-500">{meta.authorRole}</p>
+            )}
+          </div>
+        </div>
+      )}
+
+      {meta.heroImage && (
+        <div
+          className="relative w-full overflow-hidden rounded-2xl bg-slate-100 mb-10"
+          style={{ aspectRatio: "16/9" }}
+        >
+          <Image
+            src={meta.heroImage}
+            alt={meta.heroImageAlt ?? meta.title}
+            fill
+            className="object-cover"
+            priority
+            sizes="(max-width: 768px) 100vw, 720px"
+          />
+        </div>
+      )}
 
       <article>
-        <MDXRemote
-          source={content}
-          components={mdxComponents}
-          options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
-        />
+        <MDXRemote source={content} components={mdxComponents} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
       </article>
 
       <hr className="border-slate-200 mt-12 mb-8" />
