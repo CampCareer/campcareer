@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation"
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import { TrendingUp, X, ArrowRight, BarChart2, Search } from "lucide-react"
+import { useTranslations } from "@/lib/i18n/locale-provider"
 import { Card, CardContent } from "@/components/ui/card"
 import {
   getExchangeRates,
@@ -80,6 +81,8 @@ function FieldCombobox({
   value: string
   onChange: (v: string) => void
 }) {
+  const t = useTranslations()
+  const tc = t.compare
   const [input, setInput]     = useState(value ? trimDot(value) : "")
   const [options, setOptions] = useState<string[]>([])
   const [open, setOpen]       = useState(false)
@@ -156,7 +159,7 @@ function FieldCombobox({
             onChange={(e) => setInput(e.target.value)}
             onFocus={() => options.length > 0 && setOpen(true)}
             onKeyDown={handleKeyDown}
-            placeholder="e.g. Computer Science, Nursing…"
+            placeholder={tc.searchPlaceholder}
             className="w-72 h-11 rounded-xl border border-slate-200 px-4 pr-9 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 bg-white shadow-sm"
           />
           {input && (
@@ -176,7 +179,7 @@ function FieldCombobox({
             disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed"
         >
           <Search className="w-3.5 h-3.5" />
-          Compare
+          {tc.compareButton}
         </button>
       </div>
 
@@ -260,6 +263,8 @@ function CountryCard({
   baseCurrency: SupportedCurrency
   rates: ExchangeRates["rates"] | null
 }) {
+  const t = useTranslations()
+  const tc = t.compare
   const cfg    = COUNTRY_CONFIG[country]
   const hasData = stats.count > 0
 
@@ -279,14 +284,14 @@ function CountryCard({
         <span className="font-semibold text-slate-800 text-sm truncate">{cfg.name}</span>
         {hasData && (
           <span className="ml-auto text-xs text-slate-400 whitespace-nowrap">
-            {stats.count} results
+            {stats.count} {tc.results}
           </span>
         )}
       </div>
 
       <CardContent className="flex-1 pt-3 pb-4 space-y-3">
         {!hasData ? (
-          <p className="text-sm text-slate-400 py-4 text-center">No data found</p>
+          <p className="text-sm text-slate-400 py-4 text-center">{tc.noData}</p>
         ) : (
           <>
             {/* Top 3 colleges */}
@@ -321,23 +326,23 @@ function CountryCard({
             {/* Averages */}
             <div className="grid grid-cols-3 gap-2 text-center">
               <div>
-                <p className="text-[10px] font-medium text-slate-400 uppercase tracking-wide">Avg ROI</p>
+                <p className="text-[10px] font-medium text-slate-400 uppercase tracking-wide">{tc.avgRoi}</p>
                 <p className="text-base font-bold" style={{ color: cfg.color }}>
                   {stats.avg_roi.toFixed(1)}
                 </p>
               </div>
               <div>
                 <p className="text-[10px] font-medium text-slate-400 uppercase tracking-wide">
-                  Avg Salary
+                  {tc.avgSalary}
                 </p>
                 <p className="text-sm font-semibold text-slate-700 leading-tight">
                   {fmtSalary(convertedSalary, salarySymbol)}
                 </p>
               </div>
               <div>
-                <p className="text-[10px] font-medium text-slate-400 uppercase tracking-wide">Payback</p>
+                <p className="text-[10px] font-medium text-slate-400 uppercase tracking-wide">{tc.payback}</p>
                 <p className="text-sm font-semibold text-slate-700">
-                  {stats.avg_payback.toFixed(1)} yrs
+                  {stats.avg_payback.toFixed(1)} {tc.paybackUnit}
                 </p>
               </div>
             </div>
@@ -349,7 +354,7 @@ function CountryCard({
                 className="inline-flex items-center gap-1 text-xs font-medium hover:underline transition-colors"
                 style={{ color: cfg.color }}
               >
-                View All
+                {tc.viewAll}
                 <ArrowRight className="w-3 h-3" />
               </Link>
             </div>
@@ -357,7 +362,7 @@ function CountryCard({
             {/* Field data notice for non-US countries */}
             {!stats.field_data_available && (
               <p className="text-[10px] text-slate-400 text-center pt-0.5 leading-tight">
-                Field data not available — showing overall ROI
+                {tc.fieldNotAvailable}
               </p>
             )}
           </>
@@ -370,6 +375,8 @@ function CountryCard({
 // ── Main Page ─────────────────────────────────────────────────────────────────
 
 function CompareContent() {
+  const t = useTranslations()
+  const tc = t.compare
   const searchParams = useSearchParams()
   const router = useRouter()
 
@@ -429,8 +436,8 @@ function CompareContent() {
   const hasAnyData = data && COUNTRIES.some((c) => data[c].count > 0)
 
   const chartLabel = rates
-    ? `Avg Net Salary (${baseCurrency})`
-    : "Avg ROI Score"
+    ? `${tc.avgSalary} (${baseCurrency})`
+    : tc.avgRoi
 
   const chartFormatValue = rates
     ? (v: number) => `${CURRENCY_SYMBOL[baseCurrency]}${Math.round(v).toLocaleString()}`
@@ -444,20 +451,20 @@ function CompareContent() {
         <div>
           <div className="inline-flex items-center gap-2 bg-indigo-50 text-indigo-600 text-xs font-medium px-3 py-1.5 rounded-full mb-4 border border-indigo-100">
             <TrendingUp className="w-3 h-3" />
-            5-country comparison
+            {tc.badge}
           </div>
           <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
-            Compare by Field of Study
+            {tc.pageTitle}
           </h1>
           <p className="mt-2 text-slate-500 text-sm">
-            Pick a field and see ROI across all 5 countries side by side.
+            {tc.pageSubtitle}
           </p>
         </div>
 
         {/* Currency selector */}
         <div className="pt-1">
           <p className="text-[11px] text-slate-400 mb-1.5 font-medium uppercase tracking-wide">
-            Display currency
+            {tc.displayCurrency}
           </p>
           <CurrencySelector value={baseCurrency} onChange={setBaseCurrency} />
         </div>
@@ -468,7 +475,7 @@ function CompareContent() {
         <FieldCombobox value={field} onChange={handleFieldChange} />
         {field && !loading && (
           <span className="text-xs text-slate-400">
-            Showing results for <span className="font-medium text-slate-600">{trimDot(field)}</span>
+            {tc.showingResults} <span className="font-medium text-slate-600">{trimDot(field)}</span>
           </span>
         )}
       </div>
@@ -476,7 +483,7 @@ function CompareContent() {
       {/* Error */}
       {error && (
         <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
-          Failed to load: {error}
+          {tc.loadError} {error}
         </div>
       )}
 
@@ -484,9 +491,9 @@ function CompareContent() {
       {!field && !loading && (
         <div className="rounded-xl border border-dashed border-slate-200 bg-white py-20 text-center">
           <BarChart2 className="w-10 h-10 text-slate-200 mx-auto mb-3" />
-          <p className="text-slate-500 text-sm font-medium">Search a field to compare across countries</p>
+          <p className="text-slate-500 text-sm font-medium">{tc.emptyTitle}</p>
           <p className="text-slate-400 text-xs mt-1">
-            Type 3+ characters → pick from suggestions or press Enter / Compare
+            {tc.emptySubtitle}
           </p>
         </div>
       )}
@@ -514,8 +521,8 @@ function CompareContent() {
         <div>
           <h2 className="text-lg font-semibold text-slate-800 mb-3">
             {rates
-              ? `Avg Net Salary by Country (${baseCurrency})`
-              : "Average ROI Score by Country"}
+              ? `${tc.avgSalaryByCountry} (${baseCurrency})`
+              : tc.avgRoiByCountry}
           </h2>
           <Card>
             <CardContent className="pt-5 pb-4">
@@ -530,7 +537,7 @@ function CompareContent() {
           {/* Exchange rate attribution */}
           {rates && ratesDate && (
             <p className="mt-2 text-[11px] text-slate-400 text-right">
-              Exchange rates as of {ratesDate} · Source:{" "}
+              {tc.exchangeRatesAs} {ratesDate} · {tc.exchangeSource}:{" "}
               <a
                 href="https://www.frankfurter.app"
                 target="_blank"
