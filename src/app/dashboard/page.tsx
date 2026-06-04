@@ -5,6 +5,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Search, Bookmark, ArrowRight, X, CheckSquare, Compass, CalendarClock } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
+import { useTranslations } from "@/lib/i18n/locale-provider"
 import { calcDdayNumber, currentPhaseTitle } from "@/lib/timeline-schedule"
 import { RoiInfo } from "@/components/roi-info"
 
@@ -19,14 +20,6 @@ type RoiRow = {
   payback_years: number
   tuition: number
 }
-
-const COUNTRIES = [
-  { value: "us", label: "🇺🇸 United States", currency: "$",  placeholder: "e.g. Computer Science, Business..." },
-  { value: "au", label: "🇦🇺 Australia",      currency: "A$", placeholder: "e.g. Nursing, Engineering..." },
-  { value: "ca", label: "🇨🇦 Canada",         currency: "C$", placeholder: "e.g. Computer Science, Finance..." },
-  { value: "uk", label: "🇬🇧 United Kingdom",  currency: "£",  placeholder: "e.g. Law, Medicine, CS..." },
-  { value: "ie", label: "🇮🇪 Ireland",         currency: "€",  placeholder: "e.g. Computer Science, Pharmacy..." },
-]
 
 const DEFAULT_STATE: Record<string, string> = {
   us: "CA", au: "NSW", ca: "ON", uk: "London", ie: "Leinster",
@@ -44,6 +37,16 @@ function trimDot(s: string | null) {
 export default function Dashboard() {
   const router = useRouter()
   const supabase = createClient()
+  const t = useTranslations()
+  const td = t.dashboard
+
+  const COUNTRIES = [
+    { value: "us", label: "🇺🇸 United States", currency: "$",  placeholder: td.searchPlaceholder.us },
+    { value: "au", label: "🇦🇺 Australia",      currency: "A$", placeholder: td.searchPlaceholder.au },
+    { value: "ca", label: "🇨🇦 Canada",         currency: "C$", placeholder: td.searchPlaceholder.ca },
+    { value: "uk", label: "🇬🇧 United Kingdom",  currency: "£",  placeholder: td.searchPlaceholder.uk },
+    { value: "ie", label: "🇮🇪 Ireland",         currency: "€",  placeholder: td.searchPlaceholder.ie },
+  ]
 
   const [country, setCountry] = useState("ie")
   const [fieldInput, setFieldInput] = useState("")
@@ -260,11 +263,11 @@ export default function Dashboard() {
         </div>
         <div className="flex items-center gap-5 shrink-0 ml-4">
           <div className="text-right">
-            <p className="text-[10px] text-slate-400 uppercase tracking-wide">ROI</p>
+            <p className="text-[10px] text-slate-400 uppercase tracking-wide">{td.topPicks.roi}</p>
             <p className="text-sm font-bold text-indigo-600">{row.roi_score.toFixed(1)}</p>
           </div>
           <div className="text-right hidden sm:block">
-            <p className="text-[10px] text-slate-400 uppercase tracking-wide">Salary</p>
+            <p className="text-[10px] text-slate-400 uppercase tracking-wide">{td.topPicks.salary}</p>
             <p className="text-sm font-semibold text-slate-700">
               {fmt(row.gross_salary ?? row.net_salary, currentCountry.currency)}
             </p>
@@ -292,7 +295,7 @@ export default function Dashboard() {
         <div className="w-full max-w-5xl mx-auto">
 
           {/* 국가 선택 칩 */}
-          <p className="text-xs font-medium text-slate-400 mb-3">Where do you want to study?</p>
+          <p className="text-xs font-medium text-slate-400 mb-3">{td.whereToStudy}</p>
           <div className="flex flex-wrap gap-2">
             {COUNTRIES.map(c => (
               <button
@@ -363,7 +366,7 @@ export default function Dashboard() {
               onClick={handleSearch}
               className="h-14 px-9 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-base transition-colors shrink-0 rounded-b-xl sm:rounded-b-none sm:rounded-r-xl"
             >
-              Search
+              {td.searchButton}
             </button>
           </div>
 
@@ -402,8 +405,8 @@ export default function Dashboard() {
             return (
               <div className="mt-8">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-base font-semibold text-slate-900">Your next steps</h2>
-                  <span className="text-sm text-slate-400">Pick up where you left off</span>
+                  <h2 className="text-base font-semibold text-slate-900">{td.nextSteps.title}</h2>
+                  <span className="text-sm text-slate-400">{td.nextSteps.subtitle}</span>
                 </div>
 
                 {stepsLoading ? (
@@ -420,30 +423,30 @@ export default function Dashboard() {
                       <Link href="/timeline" className={focalCardClass}>
                         <div className="flex items-center gap-2 mb-2">
                           <CalendarClock className="w-5 h-5 text-indigo-400" />
-                          <span className="text-xs font-medium text-indigo-400 uppercase tracking-wide">Timeline</span>
+                          <span className="text-xs font-medium text-indigo-400 uppercase tracking-wide">{td.nextSteps.timelineLabel}</span>
                         </div>
                         <p className="text-3xl font-bold text-indigo-600 mb-0.5 leading-none">{ddayLabel}</p>
                         <p className="text-sm text-slate-500 truncate mt-2">
-                          {timelineInfo.currentPhaseTitle ?? "On track"}
+                          {timelineInfo.currentPhaseTitle ?? td.nextSteps.onTrack}
                         </p>
                       </Link>
                     ) : recMeta ? (
                       <Link href="/timeline" className={cardClass}>
                         <div className="flex items-center gap-2 mb-2">
                           <span className="text-lg">{recFlag}</span>
-                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Recommended</span>
+                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">{td.nextSteps.recommendedLabel}</span>
                         </div>
                         <p className="text-xl font-bold text-slate-900 mb-0.5">{recName}</p>
-                        <p className="text-sm text-slate-500">Set your timeline</p>
+                        <p className="text-sm text-slate-500">{td.nextSteps.setTimeline}</p>
                       </Link>
                     ) : (
                       <Link href="/onboarding" className={cardClass}>
                         <div className="flex items-center gap-2 mb-2">
                           <Compass className="w-5 h-5 text-slate-400" />
-                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Get started</span>
+                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">{td.nextSteps.getStartedLabel}</span>
                         </div>
-                        <p className="text-xl font-bold text-slate-900 mb-0.5">Take the quiz</p>
-                        <p className="text-sm text-slate-500">Find your best-fit country</p>
+                        <p className="text-xl font-bold text-slate-900 mb-0.5">{td.nextSteps.takeQuiz}</p>
+                        <p className="text-sm text-slate-500">{td.nextSteps.findCountry}</p>
                       </Link>
                     )}
 
@@ -452,11 +455,11 @@ export default function Dashboard() {
                       <Link href="/checklist" className={cardClass}>
                         <div className="flex items-center gap-2 mb-2">
                           <CheckSquare className="w-5 h-5 text-slate-400" />
-                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Checklist</span>
+                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">{td.nextSteps.checklistLabel}</span>
                         </div>
                         <p className="text-3xl font-bold text-slate-900 mb-2 leading-none">
                           {checklistProgress.completed}
-                          <span className="text-base font-medium text-slate-400"> of {checklistProgress.total} completed</span>
+                          <span className="text-base font-medium text-slate-400"> / {checklistProgress.total} {td.nextSteps.checklistCompleted}</span>
                         </p>
                         <div className="h-2 rounded-full bg-slate-200 overflow-hidden">
                           <div
@@ -469,10 +472,10 @@ export default function Dashboard() {
                       <Link href="/checklist" className={cardClass}>
                         <div className="flex items-center gap-2 mb-2">
                           <CheckSquare className="w-5 h-5 text-slate-400" />
-                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Checklist</span>
+                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">{td.nextSteps.checklistLabel}</span>
                         </div>
-                        <p className="text-xl font-bold text-slate-900 mb-0.5">Start your checklist</p>
-                        <p className="text-sm text-slate-500">Track every requirement</p>
+                        <p className="text-xl font-bold text-slate-900 mb-0.5">{td.nextSteps.startChecklist}</p>
+                        <p className="text-sm text-slate-500">{td.nextSteps.trackRequirements}</p>
                       </Link>
                     )}
 
@@ -481,22 +484,22 @@ export default function Dashboard() {
                       <Link href="/saved" className={cardClass}>
                         <div className="flex items-center gap-2 mb-2">
                           <Bookmark className="w-5 h-5 text-slate-400" />
-                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Saved</span>
+                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">{td.nextSteps.savedLabel}</span>
                         </div>
                         <p className="text-3xl font-bold text-slate-900 mb-0.5 leading-none">
                           {savedCount}
-                          <span className="text-base font-medium text-slate-400"> saved course{savedCount > 1 ? "s" : ""}</span>
+                          <span className="text-base font-medium text-slate-400"> {td.nextSteps.savedCourses}</span>
                         </p>
-                        <p className="text-sm text-slate-500 mt-2">View all</p>
+                        <p className="text-sm text-slate-500 mt-2">{td.nextSteps.viewAll}</p>
                       </Link>
                     ) : (
                       <Link href="/roi-explorer" className={cardClass}>
                         <div className="flex items-center gap-2 mb-2">
                           <Bookmark className="w-5 h-5 text-slate-400" />
-                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Saved</span>
+                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">{td.nextSteps.savedLabel}</span>
                         </div>
-                        <p className="text-xl font-bold text-slate-900 mb-0.5">Nothing saved yet</p>
-                        <p className="text-sm text-slate-500">Browse the ROI Explorer</p>
+                        <p className="text-xl font-bold text-slate-900 mb-0.5">{td.nextSteps.nothingSaved}</p>
+                        <p className="text-sm text-slate-500">{td.nextSteps.browseRoi}</p>
                       </Link>
                     )}
 
@@ -511,14 +514,14 @@ export default function Dashboard() {
             <div className="mt-8">
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-base font-semibold text-slate-900 inline-flex items-center gap-1.5">
-                  Top picks in {currentCountry.label}
+                  {td.topPicks.titlePrefix} {currentCountry.label}
                   <RoiInfo />
                 </h2>
                 <Link
                   href={`/roi-explorer?country=${country}`}
                   className="text-xs text-indigo-600 hover:text-indigo-700 flex items-center gap-1 font-medium"
                 >
-                  View all <ArrowRight className="w-3 h-3" />
+                  {td.topPicks.viewAll} <ArrowRight className="w-3 h-3" />
                 </Link>
               </div>
 
@@ -533,7 +536,7 @@ export default function Dashboard() {
                   href="/roi-explorer"
                   className="flex items-center justify-center gap-1 py-10 rounded-2xl border border-slate-200 bg-white text-sm font-medium text-indigo-600 hover:text-indigo-700 hover:border-indigo-300 transition-colors"
                 >
-                  Browse the ROI Explorer <ArrowRight className="w-3 h-3" />
+                  {td.topPicks.browse} <ArrowRight className="w-3 h-3" />
                 </Link>
               ) : (
                 <div className="divide-y divide-slate-100 border border-slate-200 rounded-2xl overflow-hidden bg-white">
@@ -554,13 +557,13 @@ export default function Dashboard() {
             <div className="flex items-center justify-between mb-3">
               <p className="text-xs font-medium text-slate-400 uppercase tracking-wide">
                 {currentCountry.label}
-                {field ? ` · ${trimDot(field)}` : " · All fields"}
+                {field ? ` · ${trimDot(field)}` : ` · ${td.results.allFields}`}
               </p>
               <Link
                 href={`/roi-explorer?country=${country}${field ? `&field=${encodeURIComponent(field)}` : ""}`}
                 className="text-xs text-indigo-600 hover:text-indigo-700 flex items-center gap-1 font-medium"
               >
-                View all <ArrowRight className="w-3 h-3" />
+                {td.results.viewAll} <ArrowRight className="w-3 h-3" />
               </Link>
             </div>
 
@@ -578,8 +581,8 @@ export default function Dashboard() {
               <div className="divide-y divide-slate-100 border border-slate-200 rounded-2xl overflow-hidden bg-white">
                 {data.length === 0 ? (
                   <div className="py-16 text-center">
-                    <p className="text-sm text-slate-400">No results found.</p>
-                    <p className="text-xs text-slate-300 mt-1">Try a different field or country.</p>
+                    <p className="text-sm text-slate-400">{td.results.noResults}</p>
+                    <p className="text-xs text-slate-300 mt-1">{td.results.tryAnother}</p>
                   </div>
                 ) : data.map((row, i) => renderRoiRow(row, i))}
               </div>
