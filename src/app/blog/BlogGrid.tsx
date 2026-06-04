@@ -3,38 +3,48 @@
 import { useState, useMemo } from "react"
 import Link from "next/link"
 import { ArrowRight, Clock } from "lucide-react"
-import { POSTS, CATEGORY_FILTERS } from "./data"
+import type { PostMeta } from "@/lib/blog"
+
+const CATEGORY_FILTERS = [
+  { label: "All",        value: "all",           emoji: ""    },
+  { label: "Ireland",    value: "Ireland",        emoji: "🇮🇪" },
+  { label: "Australia",  value: "Australia",      emoji: "🇦🇺" },
+  { label: "UK",         value: "United Kingdom", emoji: "🇬🇧" },
+  { label: "Canada",     value: "Canada",         emoji: "🇨🇦" },
+  { label: "USA",        value: "USA",            emoji: "🇺🇸" },
+  { label: "Comparison", value: "Comparison",     emoji: "⚖️"  },
+]
 
 interface BlogGridProps {
+  posts: PostMeta[]
   labels: {
     readTime: string
     readMore: string
   }
 }
 
-export function BlogGrid({ labels }: BlogGridProps) {
+export function BlogGrid({ posts, labels }: BlogGridProps) {
   const [active, setActive] = useState("all")
 
   const filtered = useMemo(
-    () => active === "all" ? POSTS : POSTS.filter(p => p.tag === active),
-    [active]
+    () => active === "all" ? posts : posts.filter(p => p.tag === active),
+    [active, posts]
   )
 
   const counts = useMemo(() =>
     CATEGORY_FILTERS.reduce<Record<string, number>>((acc, cat) => {
       acc[cat.value] = cat.value === "all"
-        ? POSTS.length
-        : POSTS.filter(p => p.tag === cat.value).length
+        ? posts.length
+        : posts.filter(p => p.tag === cat.value).length
       return acc
     }, {}),
-  [])
+  [posts])
 
   const featured = active === "all" ? filtered.find(p => p.featured) : undefined
   const grid = active === "all" ? filtered.filter(p => !p.featured) : filtered
 
   return (
     <>
-      {/* Category filter tabs */}
       <div className="flex gap-2 flex-wrap mb-8">
         {CATEGORY_FILTERS.map(cat => {
           const count = counts[cat.value] ?? 0
@@ -52,9 +62,7 @@ export function BlogGrid({ labels }: BlogGridProps) {
             >
               {cat.emoji && <span aria-hidden="true">{cat.emoji}</span>}
               {cat.label}
-              <span className={`text-xs font-normal tabular-nums ${
-                isActive ? "opacity-60" : "text-slate-400"
-              }`}>
+              <span className={`text-xs font-normal tabular-nums ${isActive ? "opacity-60" : "text-slate-400"}`}>
                 {count}
               </span>
             </button>
@@ -62,19 +70,14 @@ export function BlogGrid({ labels }: BlogGridProps) {
         })}
       </div>
 
-      {/* Featured post — only visible when "All" is selected */}
       {featured && (
         <Link
           href={`/blog/${featured.slug}`}
           className="group block bg-slate-50 border border-slate-200 rounded-2xl p-8 hover:border-indigo-300 hover:shadow-lg transition-all mb-8"
         >
           <div className="flex items-center gap-3 mb-5 flex-wrap">
-            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-700">
-              Featured
-            </span>
-            <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${featured.tagColor}`}>
-              {featured.tag}
-            </span>
+            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-700">Featured</span>
+            <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${featured.tagColor}`}>{featured.tag}</span>
             <div className="flex items-center gap-1 text-xs text-slate-400">
               <Clock className="w-3 h-3" />
               {featured.readTime} {labels.readTime}
@@ -84,16 +87,13 @@ export function BlogGrid({ labels }: BlogGridProps) {
           <h2 className="text-2xl lg:text-3xl font-bold text-slate-900 mb-3 group-hover:text-indigo-700 transition-colors leading-tight max-w-4xl">
             {featured.title}
           </h2>
-          <p className="text-slate-500 leading-relaxed mb-6 max-w-3xl">
-            {featured.excerpt}
-          </p>
+          <p className="text-slate-500 leading-relaxed mb-6 max-w-3xl">{featured.description}</p>
           <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-indigo-600 group-hover:gap-3 transition-all">
             {labels.readMore} <ArrowRight className="w-4 h-4" />
           </span>
         </Link>
       )}
 
-      {/* Posts grid */}
       {grid.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {grid.map(post => (
@@ -103,16 +103,12 @@ export function BlogGrid({ labels }: BlogGridProps) {
               className="group flex flex-col bg-white border border-slate-200 rounded-2xl p-6 hover:border-indigo-200 hover:shadow-md transition-all"
             >
               <div className="mb-3">
-                <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${post.tagColor}`}>
-                  {post.tag}
-                </span>
+                <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${post.tagColor}`}>{post.tag}</span>
               </div>
               <h2 className="text-base font-bold text-slate-900 mb-2 group-hover:text-indigo-700 transition-colors leading-snug line-clamp-3 flex-1">
                 {post.title}
               </h2>
-              <p className="text-slate-400 text-sm leading-relaxed line-clamp-3 mb-4">
-                {post.excerpt}
-              </p>
+              <p className="text-slate-400 text-sm leading-relaxed line-clamp-3 mb-4">{post.description}</p>
               <div className="flex items-center justify-between pt-4 border-t border-slate-100 mt-auto">
                 <div className="flex items-center gap-1 text-xs text-slate-400">
                   <Clock className="w-3 h-3" />
@@ -131,10 +127,7 @@ export function BlogGrid({ labels }: BlogGridProps) {
         <div className="text-center py-24">
           <p className="text-slate-400 text-lg font-medium">No articles yet in this category.</p>
           <p className="text-slate-300 text-sm mt-1">Check back soon.</p>
-          <button
-            onClick={() => setActive("all")}
-            className="mt-5 text-sm font-medium text-indigo-600 hover:underline"
-          >
+          <button onClick={() => setActive("all")} className="mt-5 text-sm font-medium text-indigo-600 hover:underline">
             ← View all articles
           </button>
         </div>

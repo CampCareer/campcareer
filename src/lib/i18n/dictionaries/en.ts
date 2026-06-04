@@ -297,7 +297,7 @@ const en = {
     pageSubtitle: 'Data-driven guides to help you make smarter study abroad decisions.',
     readTime: 'read',
     readMore: 'Read more',
-    backToBlog: 'Back to Blog',
+    backToBlog: 'All articles',
   },
   landing: {
     nav: {

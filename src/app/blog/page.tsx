@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { getTranslations } from "@/lib/i18n/server"
+import { getAllPosts } from "@/lib/blog"
 import { BlogGrid } from "./BlogGrid"
 
 export const metadata: Metadata = {
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
 export default function BlogPage() {
   const t = getTranslations()
   const tb = t.blog
+  const posts = getAllPosts()
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-12">
@@ -23,7 +25,7 @@ export default function BlogPage() {
         </p>
       </div>
 
-      <BlogGrid labels={{ readTime: tb.readTime, readMore: tb.readMore }} />
+      <BlogGrid posts={posts} labels={{ readTime: tb.readTime, readMore: tb.readMore }} />
     </div>
   )
 }
