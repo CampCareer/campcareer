@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase-client'
 import { useTranslations } from '@/lib/i18n/locale-provider'
-import { CheckCircle2, Circle, Loader2, Sparkles, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react'
+import { CheckCircle2, Circle, Loader2, Sparkles, ExternalLink } from 'lucide-react'
 import type { User } from '@supabase/supabase-js'
 
 type ChecklistItem = {
@@ -93,7 +93,7 @@ export default function ChecklistPage() {
   const [checkedIds, setCheckedIds] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState(false)
   const [generated, setGenerated] = useState(false)
-  const [collapsed, setCollapsed] = useState<Set<string>>(new Set())
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [fromCache, setFromCache] = useState(false)
 
   useEffect(() => {
@@ -150,11 +150,25 @@ export default function ChecklistPage() {
       })
   }, [user, generated, country, visaType])
 
+  // 카테고리별 그룹핑
+  const grouped = items.reduce<Record<string, ChecklistItem[]>>((acc, item) => {
+    if (!acc[item.category]) acc[item.category] = []
+    acc[item.category].push(item)
+    return acc
+  }, {})
+
+  // generated 후 첫 카테고리 자동 선택
+  useEffect(() => {
+    if (generated && Object.keys(grouped).length > 0 && !selectedCategory) {
+      setSelectedCategory(Object.keys(grouped)[0])
+    }
+  }, [generated, items])
+
   async function handleGenerate() {
     setLoading(true)
     setGenerated(false)
+    setSelectedCategory(null)
     setCheckedIds(new Set())
-    setCollapsed(new Set())
 
     const res = await fetch('/api/checklist', {
       method: 'POST',
@@ -203,30 +217,15 @@ export default function ChecklistPage() {
       )
   }
 
-  function toggleCollapse(category: string) {
-    setCollapsed(prev => {
-      const next = new Set(prev)
-      if (next.has(category)) { next.delete(category) } else { next.add(category) }
-      return next
-    })
-  }
-
-  // 카테고리별 그룹핑
-  const grouped = items.reduce<Record<string, ChecklistItem[]>>((acc, item) => {
-    if (!acc[item.category]) acc[item.category] = []
-    acc[item.category].push(item)
-    return acc
-  }, {})
-
   const totalItems = items.length
   const checkedCount = checkedIds.size
   const progress = totalItems > 0 ? Math.round((checkedCount / totalItems) * 100) : 0
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-10 space-y-8">
+    <div className="max-w-6xl mx-auto px-6 py-8">
 
       {/* 헤더 */}
-      <div>
+      <div className="mb-6">
         <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
           {tc.pageTitle}
         </h1>
@@ -236,14 +235,14 @@ export default function ChecklistPage() {
       </div>
 
       {/* 설정 카드 */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-5">
+      <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-5 mb-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* 국가 */}
           <div className="space-y-1.5">
             <label className="text-xs font-medium text-slate-600">{tc.destinationLabel}</label>
             <select
               value={country}
-              onChange={e => { setCountry(e.target.value); setGenerated(false) }}
+              onChange={e => { setCountry(e.target.value); setGenerated(false); setSelectedCategory(null) }}
               className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-white"
             >
               {COUNTRIES.map(c => (
@@ -257,7 +256,7 @@ export default function ChecklistPage() {
             <label className="text-xs font-medium text-slate-600">{tc.visaTypeLabel}</label>
             <select
               value={visaType}
-              onChange={e => { setVisaType(e.target.value); setGenerated(false) }}
+              onChange={e => { setVisaType(e.target.value); setGenerated(false); setSelectedCategory(null) }}
               className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-white"
             >
               {VISA_TYPES.map(v => (
@@ -293,112 +292,186 @@ export default function ChecklistPage() {
         )}
       </div>
 
-      {/* 진행률 */}
+      {/* 2단 레이아웃 */}
       {generated && totalItems > 0 && (
-        <div className="bg-white border border-slate-200 rounded-2xl px-6 py-5 shadow-sm">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-semibold text-slate-700">{tc.overallProgress}</span>
-            <span className="text-sm font-bold text-indigo-600">{checkedCount} / {totalItems}</span>
-          </div>
-          <div className="w-full bg-slate-100 rounded-full h-2">
-            <div
-              className="bg-indigo-600 h-2 rounded-full transition-all duration-500"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-          <p className="text-xs text-slate-400 mt-2">{progress}% {tc.completed}</p>
-        </div>
-      )}
+        <div className="flex flex-col lg:flex-row gap-6">
 
-      {/* 체크리스트 */}
-      {generated && (
-        <div className="space-y-4">
-          {Object.entries(grouped).map(([category, categoryItems]) => {
-            const isCollapsed = collapsed.has(category)
-            const doneCount = categoryItems.filter(i => checkedIds.has(i.id)).length
-            const allDone = doneCount === categoryItems.length
+          {/* 왼쪽 — 카테고리 네비 + 진행률 */}
+          <div className="w-full lg:w-64 shrink-0">
 
-            return (
-              <div
-                key={category}
-                className={`border rounded-2xl overflow-hidden shadow-sm transition-opacity ${
-                  allDone ? 'opacity-60' : ''
-                } border-slate-200`}
-              >
+            {/* 모바일: 가로 스크롤 칩 */}
+            <div className="flex lg:hidden overflow-x-auto gap-2 pb-2 mb-2">
+              {Object.entries(grouped).map(([category, categoryItems]) => {
+                const doneCount = categoryItems.filter(i => checkedIds.has(i.id)).length
+                const isSelected = selectedCategory === category
+                return (
+                  <button
+                    key={category}
+                    onClick={() => setSelectedCategory(category)}
+                    className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors whitespace-nowrap
+                      ${isSelected
+                        ? 'bg-indigo-600 text-white border-indigo-600'
+                        : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-300'}`}
+                  >
+                    {category} {doneCount}/{categoryItems.length}
+                  </button>
+                )
+              })}
+            </div>
+
+            {/* 데스크탑: 스티키 사이드바 */}
+            <div className="hidden lg:block">
+              <div className="lg:sticky lg:top-6 space-y-2">
+
+                {/* 전체 진행률 카드 */}
+                <div className="bg-white border border-slate-200 rounded-2xl px-4 py-4 shadow-sm mb-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-semibold text-slate-600">{tc.overallProgress}</span>
+                    <span className="text-xs font-bold text-indigo-600">{checkedCount} / {totalItems}</span>
+                  </div>
+                  <div className="w-full bg-slate-100 rounded-full h-1.5">
+                    <div
+                      className="bg-indigo-600 h-1.5 rounded-full transition-all duration-500"
+                      style={{ width: `${progress}%` }}
+                    />
+                  </div>
+                  <p className="text-xs text-slate-400 mt-1.5">{progress}% {tc.completed}</p>
+                </div>
+
+                {/* 카테고리 목록 */}
+                <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+                  {Object.entries(grouped).map(([category, categoryItems]) => {
+                    const doneCount = categoryItems.filter(i => checkedIds.has(i.id)).length
+                    const allDone = doneCount === categoryItems.length
+                    const isSelected = selectedCategory === category
+                    return (
+                      <button
+                        key={category}
+                        onClick={() => setSelectedCategory(category)}
+                        className={`w-full flex items-center justify-between px-4 py-3 text-left transition-colors border-b border-slate-100 last:border-b-0
+                          ${isSelected
+                            ? 'bg-indigo-50 text-indigo-700'
+                            : 'hover:bg-slate-50 text-slate-700'}`}
+                      >
+                        <div className="flex items-center gap-2 min-w-0">
+                          <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white shrink-0
+                            ${allDone ? 'bg-emerald-500' : isSelected ? 'bg-indigo-500' : 'bg-slate-300'}`}>
+                            {allDone ? '✓' : doneCount > 0 ? doneCount : ''}
+                          </div>
+                          <span className="text-xs font-medium truncate">{category}</span>
+                        </div>
+                        <span className="text-[10px] text-slate-400 shrink-0 ml-2">{doneCount}/{categoryItems.length}</span>
+                      </button>
+                    )
+                  })}
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          {/* 오른쪽 — 선택된 카테고리 아이템 */}
+          <div className="flex-1 min-w-0">
+            {selectedCategory && grouped[selectedCategory] && (
+              <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+
                 {/* 카테고리 헤더 */}
-                <button
-                  onClick={() => toggleCollapse(category)}
-                  className="w-full flex items-center justify-between px-5 py-4 bg-slate-50 hover:bg-slate-100 transition-colors"
-                >
+                <div className="px-5 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-white ${
-                      allDone ? 'bg-emerald-500' : 'bg-slate-300'
-                    }`}>
-                      {allDone ? '✓' : doneCount > 0 ? doneCount : ''}
-                    </div>
-                    <span className="text-sm font-semibold text-slate-700">{category}</span>
+                    {(() => {
+                      const catItems = grouped[selectedCategory]
+                      const doneCount = catItems.filter(i => checkedIds.has(i.id)).length
+                      const allDone = doneCount === catItems.length
+                      return (
+                        <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white
+                          ${allDone ? 'bg-emerald-500' : 'bg-indigo-500'}`}>
+                          {allDone ? '✓' : doneCount}
+                        </div>
+                      )
+                    })()}
+                    <span className="text-sm font-semibold text-slate-700">{selectedCategory}</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-xs text-slate-400">{doneCount}/{categoryItems.length}</span>
-                    {isCollapsed
-                      ? <ChevronDown className="w-4 h-4 text-slate-400" />
-                      : <ChevronUp className="w-4 h-4 text-slate-400" />
-                    }
+                    {(() => {
+                      const cats = Object.keys(grouped)
+                      const idx = cats.indexOf(selectedCategory)
+                      return (
+                        <div className="flex items-center gap-1">
+                          <button
+                            disabled={idx === 0}
+                            onClick={() => setSelectedCategory(cats[idx - 1])}
+                            className="p-1.5 rounded-lg hover:bg-slate-200 text-slate-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors text-xs"
+                          >
+                            ←
+                          </button>
+                          <span className="text-xs text-slate-400">{idx + 1} / {cats.length}</span>
+                          <button
+                            disabled={idx === cats.length - 1}
+                            onClick={() => setSelectedCategory(cats[idx + 1])}
+                            className="p-1.5 rounded-lg hover:bg-slate-200 text-slate-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors text-xs"
+                          >
+                            →
+                          </button>
+                        </div>
+                      )
+                    })()}
+                    <span className="text-xs text-slate-400">
+                      {grouped[selectedCategory].filter(i => checkedIds.has(i.id)).length}/{grouped[selectedCategory].length}
+                    </span>
                   </div>
-                </button>
+                </div>
 
                 {/* 아이템 목록 */}
-                {!isCollapsed && (
-                  <ul className="bg-white divide-y divide-slate-100">
-                    {categoryItems.map(item => (
-                      <li key={item.id}>
-                        <button
-                          onClick={() => toggleCheck(item.id)}
-                          className="w-full flex items-start gap-3 px-5 py-4 hover:bg-slate-50 transition-colors text-left"
-                        >
-                          {checkedIds.has(item.id)
-                            ? <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
-                            : <Circle className="w-5 h-5 text-slate-300 shrink-0 mt-0.5" />
-                          }
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 flex-wrap">
-                              <span className={`text-sm ${checkedIds.has(item.id) ? 'line-through text-slate-400' : 'text-slate-700'}`}>
-                                {item.task}
+                <ul className="bg-white divide-y divide-slate-100">
+                  {grouped[selectedCategory].map(item => (
+                    <li key={item.id}>
+                      <button
+                        onClick={() => toggleCheck(item.id)}
+                        className="w-full flex items-start gap-3 px-5 py-4 hover:bg-slate-50 transition-colors text-left"
+                      >
+                        {checkedIds.has(item.id)
+                          ? <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                          : <Circle className="w-5 h-5 text-slate-300 shrink-0 mt-0.5" />
+                        }
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className={`text-sm ${checkedIds.has(item.id) ? 'line-through text-slate-400' : 'text-slate-700'}`}>
+                              {item.task}
+                            </span>
+                            {!item.required && (
+                              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-400 font-medium">
+                                {tc.optional}
                               </span>
-                              {!item.required && (
-                                <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-400 font-medium">
-                                  {tc.optional}
-                                </span>
-                              )}
-                            </div>
-                            {item.note && (
-                              <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">{item.note}</p>
                             )}
-                            {(() => {
-                              const affiliate = getAffiliateLink(item, country)
-                              if (!affiliate) return null
-                              return (
-                                <a
-                                  href={affiliate.url}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  onClick={e => e.stopPropagation()}
-                                  className="inline-flex items-center gap-1 mt-1.5 text-[11px] font-medium text-indigo-600 hover:text-indigo-700 hover:underline"
-                                >
-                                  <ExternalLink className="w-3 h-3" />
-                                  {affiliate.label}
-                                </a>
-                              )
-                            })()}
                           </div>
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                          {item.note && (
+                            <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">{item.note}</p>
+                          )}
+                          {(() => {
+                            const affiliate = getAffiliateLink(item, country)
+                            if (!affiliate) return null
+                            return (
+                              <a
+                                href={affiliate.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={e => e.stopPropagation()}
+                                className="inline-flex items-center gap-1 mt-1.5 text-[11px] font-medium text-indigo-600 hover:text-indigo-700 hover:underline"
+                              >
+                                <ExternalLink className="w-3 h-3" />
+                                {affiliate.label}
+                              </a>
+                            )
+                          })()}
+                        </div>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            )
-          })}
+            )}
+          </div>
+
         </div>
       )}
 
