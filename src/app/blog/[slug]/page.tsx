@@ -3,6 +3,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ArrowLeft, ExternalLink } from "lucide-react"
 import { MDXRemote } from "next-mdx-remote/rsc"
+import remarkGfm from "remark-gfm"
 import { getAllPosts, getPostBySlug } from "@/lib/blog"
 import { mdxComponents } from "@/components/blog/mdx-components"
 import { getTranslations } from "@/lib/i18n/server"
@@ -66,7 +67,11 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
       <hr className="border-slate-200 mb-10" />
 
       <article>
-        <MDXRemote source={content} components={mdxComponents} />
+        <MDXRemote
+          source={content}
+          components={mdxComponents}
+          options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
+        />
       </article>
 
       <hr className="border-slate-200 mt-12 mb-8" />
