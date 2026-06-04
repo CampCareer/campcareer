@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useMemo } from "react"
+import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight, Clock } from "lucide-react"
 import type { PostMeta } from "@/lib/blog"
@@ -75,6 +76,17 @@ export function BlogGrid({ posts, labels }: BlogGridProps) {
           href={`/blog/${featured.slug}`}
           className="group block bg-slate-50 border border-slate-200 rounded-2xl p-8 hover:border-indigo-300 hover:shadow-lg transition-all mb-8"
         >
+          {featured.heroImage && (
+            <div className="relative w-full overflow-hidden rounded-xl bg-slate-100 mb-6" style={{ aspectRatio: "16/9" }}>
+              <Image
+                src={featured.heroImage}
+                alt={featured.heroImageAlt ?? featured.title}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 1200px"
+              />
+            </div>
+          )}
           <div className="flex items-center gap-3 mb-5 flex-wrap">
             <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-700">Featured</span>
             <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${featured.tagColor}`}>{featured.tag}</span>
@@ -102,6 +114,17 @@ export function BlogGrid({ posts, labels }: BlogGridProps) {
               href={`/blog/${post.slug}`}
               className="group flex flex-col bg-white border border-slate-200 rounded-2xl p-6 hover:border-indigo-200 hover:shadow-md transition-all"
             >
+              {post.heroImage && (
+                <div className="relative w-full overflow-hidden rounded-xl bg-slate-100 mb-4 -mx-0" style={{ aspectRatio: "16/9" }}>
+                  <Image
+                    src={post.heroImage}
+                    alt={post.heroImageAlt ?? post.title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 100vw, 380px"
+                  />
+                </div>
+              )}
               <div className="mb-3">
                 <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${post.tagColor}`}>{post.tag}</span>
               </div>

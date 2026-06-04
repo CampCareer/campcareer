@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ArrowLeft, ExternalLink } from "lucide-react"
+import Image from "next/image"
 import { MDXRemote } from "next-mdx-remote/rsc"
 import remarkGfm from "remark-gfm"
 import { getAllPosts, getPostBySlug } from "@/lib/blog"
@@ -49,6 +50,19 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
       >
         <ArrowLeft className="w-4 h-4" /> {tb.backToBlog}
       </Link>
+
+      {meta.heroImage && (
+        <div className="relative w-full overflow-hidden rounded-2xl bg-slate-100 mb-8" style={{ aspectRatio: "16/9" }}>
+          <Image
+            src={meta.heroImage}
+            alt={meta.heroImageAlt ?? meta.title}
+            fill
+            className="object-cover"
+            priority
+            sizes="(max-width: 768px) 100vw, 720px"
+          />
+        </div>
+      )}
 
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-4 flex-wrap">
