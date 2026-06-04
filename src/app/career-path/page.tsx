@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { createClient } from "@/lib/supabase-client"
+import { useTranslations } from "@/lib/i18n/locale-provider"
 import {
   Map, Loader2, RefreshCw, ChevronDown, ChevronUp,
   Briefcase, Clock, Award, Lightbulb, ArrowRight, Search, X,
@@ -66,6 +67,8 @@ const COUNTRIES_LIST = [
 
 export default function CareerPathPage() {
   const supabase = createClient()
+  const t = useTranslations()
+  const tc = t.careerPath
   const [user, setUser] = useState<User | null>(null)
   const [prefs, setPrefs] = useState<{ country: string; goal: string; english: string } | null>(null)
 
@@ -237,9 +240,12 @@ export default function CareerPathPage() {
         <div className="flex items-center gap-3">
           <Map className="w-6 h-6 text-indigo-500" />
           <div>
-            <h1 className="text-2xl font-bold text-slate-900">Career Route Map</h1>
+            <h1 className="text-2xl font-bold text-slate-900">{tc.pageTitle}</h1>
+            <p className="text-sm text-slate-400 mt-0.5">
+              {prefs?.goal === 'pr' ? tc.pageSubtitlePr : prefs?.goal === 'study' ? tc.pageSubtitleStudy : tc.pageSubtitleVisa}
+            </p>
             <p className="text-sm text-slate-500 mt-0.5">
-              Tell us your situation and we&apos;ll build your personalized roadmap.
+              {tc.onboardingSubtitle}
             </p>
           </div>
         </div>
@@ -248,7 +254,7 @@ export default function CareerPathPage() {
 
           {/* 국가 칩 선택 */}
           <div className="space-y-2">
-            <label className="text-xs font-medium text-slate-600">Target Country</label>
+            <label className="text-xs font-medium text-slate-600">{tc.targetCountryLabel}</label>
             <div className="flex flex-wrap gap-2">
               {COUNTRIES_LIST.map(c => (
                 <button
@@ -267,7 +273,7 @@ export default function CareerPathPage() {
 
           {/* 전공 자동완성 */}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-slate-600">Field of Study</label>
+            <label className="text-xs font-medium text-slate-600">{tc.fieldLabel}</label>
             <div ref={fieldRef} className="relative">
               <div className="flex items-center border border-slate-200 rounded-xl bg-white focus-within:ring-2 focus-within:ring-indigo-300 px-3 h-10">
                 <Search className="w-4 h-4 text-slate-400 shrink-0 mr-2" />
@@ -282,7 +288,7 @@ export default function CareerPathPage() {
                       setFieldOpen(false)
                     }
                   }}
-                  placeholder="e.g. Nursing, Computer Science…"
+                  placeholder={tc.fieldPlaceholder}
                   className="flex-1 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none bg-transparent"
                 />
                 {fieldInput && (
@@ -314,30 +320,30 @@ export default function CareerPathPage() {
           {/* Current Status + Experience */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-slate-600">Current Status</label>
+              <label className="text-xs font-medium text-slate-600">{tc.statusLabel}</label>
               <select
                 value={currentStatus}
                 onChange={e => setCurrentStatus(e.target.value as CurrentStatus)}
                 className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-white"
               >
-                <option value="student">🎓 Currently a student</option>
-                <option value="fresh_grad">🌱 Recent graduate (0–1 yr)</option>
-                <option value="professional">💼 Working professional</option>
-                <option value="career_changer">🔄 Career changer</option>
+                <option value="student">{tc.status.student}</option>
+                <option value="fresh_grad">{tc.status.freshGrad}</option>
+                <option value="professional">{tc.status.professional}</option>
+                <option value="career_changer">{tc.status.careerChanger}</option>
               </select>
             </div>
             {(currentStatus === 'professional' || currentStatus === 'career_changer') && (
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-slate-600">Years of Experience</label>
+                <label className="text-xs font-medium text-slate-600">{tc.experienceLabel}</label>
                 <select
                   value={experience}
                   onChange={e => setExperience(e.target.value)}
                   className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-white"
                 >
-                  <option value="0-1">Less than 1 year</option>
-                  <option value="1-3">1–3 years</option>
-                  <option value="3-5">3–5 years</option>
-                  <option value="5+">5+ years</option>
+                  <option value="0-1">{tc.experience.lessThanOne}</option>
+                  <option value="1-3">{tc.experience.oneToThree}</option>
+                  <option value="3-5">{tc.experience.threeToFive}</option>
+                  <option value="5+">{tc.experience.fivePlus}</option>
                 </select>
               </div>
             )}
@@ -346,13 +352,13 @@ export default function CareerPathPage() {
           {/* Specific goal */}
           <div className="space-y-1.5">
             <label className="text-xs font-medium text-slate-600">
-              Specific goal <span className="text-slate-400">(optional)</span>
+              {tc.goalLabel} <span className="text-slate-400">{tc.goalOptional}</span>
             </label>
             <input
               type="text"
               value={goalText}
               onChange={e => setGoalText(e.target.value)}
-              placeholder="e.g. Become a team lead at a tech company, achieve PR within 5 years…"
+              placeholder={tc.goalPlaceholder}
               className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-white"
             />
           </div>
@@ -367,14 +373,16 @@ export default function CareerPathPage() {
             className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-50 text-sm"
           >
             {loading
-              ? <><Loader2 className="w-4 h-4 animate-spin" /> Generating your route map…</>
-              : <><Map className="w-4 h-4" /> Generate My Route Map</>
+              ? <><Loader2 className="w-4 h-4 animate-spin" /> {tc.generatingButton}</>
+              : roadmap
+              ? <><Map className="w-4 h-4" /> {tc.regenerateButton}</>
+              : <><Map className="w-4 h-4" /> {tc.generateButton}</>
             }
           </button>
 
           {savedPaths.length > 0 && !pathsLoading && (
             <div className="pt-2 border-t border-slate-100">
-              <p className="text-xs text-slate-400 mb-2">Or load a previous route:</p>
+              <p className="text-xs text-slate-400 mb-2">{tc.previousRoutes}</p>
               <div className="space-y-1.5">
                 {savedPaths.slice(0, 3).map(path => (
                   <button
@@ -406,10 +414,10 @@ export default function CareerPathPage() {
           <h2 className="text-lg font-bold text-slate-900 truncate">{roadmap.title}</h2>
           <div className="flex items-center gap-3 mt-1 flex-wrap">
             <span className="text-xs text-slate-500 flex items-center gap-1">
-              <Clock className="w-3.5 h-3.5" /> {roadmap.total_duration}
+              <Clock className="w-3.5 h-3.5" /> {roadmap.total_duration} {tc.totalDuration}
             </span>
             <span className="text-xs text-slate-500 flex items-center gap-1">
-              <Award className="w-3.5 h-3.5" /> {roadmap.stages.length} stages
+              <Award className="w-3.5 h-3.5" /> {roadmap.stages.length} {tc.stages}
             </span>
             <span className="text-xs text-slate-500">
               {COUNTRY_NAME[country]} · {field}
@@ -421,7 +429,7 @@ export default function CareerPathPage() {
             onClick={() => setView('onboarding')}
             className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors"
           >
-            <RefreshCw className="w-3.5 h-3.5" /> Find another route
+            <RefreshCw className="w-3.5 h-3.5" /> {tc.findAnotherRoute}
           </button>
           <button
             onClick={handleGenerate}
@@ -432,7 +440,7 @@ export default function CareerPathPage() {
               ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
               : <RefreshCw className="w-3.5 h-3.5" />
             }
-            Regenerate
+            {tc.regenerateButton}
           </button>
         </div>
       </div>
@@ -477,7 +485,7 @@ export default function CareerPathPage() {
                     <div className="bg-white px-4 py-4 space-y-3 flex-1">
                       <p className="text-sm text-slate-600">{stage.description}</p>
                       <div>
-                        <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1.5">Actions</p>
+                        <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1.5">{tc.actionsLabel}</p>
                         <ul className="space-y-1">
                           {stage.actions.map((action, i) => (
                             <li key={i} className="text-xs text-slate-700 flex items-start gap-1.5">
@@ -489,12 +497,12 @@ export default function CareerPathPage() {
                       </div>
                       <div className="grid grid-cols-2 gap-2">
                         <div className="bg-slate-50 rounded-lg px-2.5 py-2">
-                          <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-wide mb-0.5">Visa</p>
+                          <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-wide mb-0.5">{tc.visaLabel}</p>
                           <p className="text-[11px] font-medium text-slate-700">{stage.visa}</p>
                         </div>
                         {stage.salary_range && (
                           <div className="bg-slate-50 rounded-lg px-2.5 py-2">
-                            <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-wide mb-0.5">Salary</p>
+                            <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-wide mb-0.5">{tc.salaryLabel}</p>
                             <p className="text-[11px] font-medium text-slate-700">{stage.salary_range}</p>
                           </div>
                         )}
@@ -518,7 +526,7 @@ export default function CareerPathPage() {
             {roadmap.pr_pathway && (
               <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-4">
                 <p className="text-xs font-semibold text-indigo-700 mb-1.5 flex items-center gap-1.5">
-                  <Award className="w-3.5 h-3.5" /> PR / Long-term Pathway
+                  <Award className="w-3.5 h-3.5" /> {tc.prPathwayTitle}
                 </p>
                 <p className="text-sm text-indigo-600 leading-relaxed">{roadmap.pr_pathway}</p>
               </div>
@@ -526,7 +534,7 @@ export default function CareerPathPage() {
 
             <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
               <p className="text-xs font-semibold text-slate-700 mb-3 flex items-center gap-1.5">
-                <Briefcase className="w-3.5 h-3.5 text-slate-400" /> Key Considerations
+                <Briefcase className="w-3.5 h-3.5 text-slate-400" /> {tc.considerationsTitle}
               </p>
               <ul className="space-y-2">
                 {roadmap.key_considerations.map((note, i) => (
@@ -557,18 +565,20 @@ export default function CareerPathPage() {
 
             {savedPaths.length > 0 && (
               <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
-                <p className="text-xs font-semibold text-slate-700 mb-3">Saved Routes</p>
+                <p className="text-xs font-semibold text-slate-700 mb-3">{tc.savedRoutesTitle}</p>
                 <div className="space-y-1.5">
                   {savedPaths.map(path => (
                     <div key={path.id} className="flex items-center justify-between gap-2">
                       <button
                         onClick={() => loadSavedPath(path)}
+                        title={tc.loadButton}
                         className="flex-1 text-left text-xs text-slate-600 hover:text-indigo-600 truncate transition-colors py-1"
                       >
                         {path.roadmap.title}
                       </button>
                       <button
                         onClick={() => deletePath(path.id)}
+                        title={tc.deleteButton}
                         className="text-[10px] text-slate-400 hover:text-red-500 transition-colors shrink-0"
                       >
                         ✕
