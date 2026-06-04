@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { CheckCircle2, Circle, ChevronDown, ChevronUp, ChevronLeft, ChevronRight, Pencil, Clock, History, X } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
+import { useTranslations } from "@/lib/i18n/locale-provider"
 import { parseLocalDate, subMonths, currentPhaseId } from "@/lib/timeline-schedule"
 import type { User } from "@supabase/supabase-js"
 
@@ -439,6 +440,8 @@ function MiniCalendar({
 
 export default function TimelinePage() {
   const supabase = createClient()
+  const t = useTranslations()
+  const tt = t.timeline
   const [user, setUser] = useState<User | null>(null)
   const [checkedIds, setCheckedIds] = useState<Set<string>>(new Set())
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set())
@@ -605,7 +608,7 @@ export default function TimelinePage() {
 
   const currentTitle = curId
     ? INITIAL_PHASES.find((p) => p.id === curId)?.title ?? "—"
-    : targetDateStr ? "All stages passed" : "—"
+    : targetDateStr ? tt.allStagesPassed : "—"
 
   function ddayBadgeClass(dateStr: string): string {
     const d = daysUntil(dateStr)
@@ -646,17 +649,17 @@ export default function TimelinePage() {
                 <p className={`text-sm font-semibold ${phase.color}`}>{phase.title}</p>
                 {status === "current" && (
                   <span className="rounded-full px-2 py-0.5 text-[10px] font-semibold bg-indigo-100 text-indigo-700">
-                    Current
+                    {tt.currentBadge}
                   </span>
                 )}
                 {status === "past" && (
                   allDone ? (
                     <span className="rounded-full px-2 py-0.5 text-[10px] font-semibold bg-emerald-100 text-emerald-700">
-                      Done
+                      {tt.doneBadge}
                     </span>
                   ) : (
                     <span className="rounded-full px-2 py-0.5 text-[10px] font-semibold bg-red-100 text-red-600">
-                      Past due
+                      {tt.pastDueBadge}
                     </span>
                   )
                 )}
@@ -719,7 +722,7 @@ export default function TimelinePage() {
                   {goal!.dream_field ? <span className="text-slate-500"> · {goal!.dream_field}</span> : null}
                 </p>
                 <p className="text-sm text-slate-500 mt-1">
-                  Target: <span className="font-medium text-slate-700">{intakeLabel}</span>
+                  {tt.targetLabel} <span className="font-medium text-slate-700">{intakeLabel}</span>
                   {goal!.target_date && (
                     <span className="text-slate-400"> · {fmtDate(goal!.target_date)}</span>
                   )}
@@ -735,7 +738,7 @@ export default function TimelinePage() {
                   onClick={openGoalForm}
                   className="inline-flex items-center gap-1 text-xs font-medium text-slate-500 hover:text-indigo-600 transition-colors"
                 >
-                  <Pencil className="w-3.5 h-3.5" /> Edit
+                  <Pencil className="w-3.5 h-3.5" /> {tt.editButton}
                 </button>
               </div>
             </div>
@@ -745,15 +748,15 @@ export default function TimelinePage() {
         <div className="bg-white border border-slate-200 rounded-2xl px-6 py-6 shadow-sm space-y-5">
           <div>
             <h2 className="text-lg font-bold text-slate-900">
-              {goalIsSet ? "Update your goal" : "Set your goal"}
+              {goalIsSet ? tt.updateGoalTitle : tt.setGoalTitle}
             </h2>
-            <p className="text-sm text-slate-500 mt-1">We&apos;ll build your timeline around it.</p>
+            <p className="text-sm text-slate-500 mt-1">{tt.goalSubtitle}</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Destination */}
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-slate-600">Destination</label>
+              <label className="text-xs font-medium text-slate-600">{tt.destinationLabel}</label>
               <select
                 value={fCountry}
                 onChange={(e) => setFCountry(e.target.value)}
@@ -767,7 +770,7 @@ export default function TimelinePage() {
 
             {/* Target intake */}
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-slate-600">Target intake</label>
+              <label className="text-xs font-medium text-slate-600">{tt.targetIntakeLabel}</label>
               <select
                 value={fIntake}
                 onChange={(e) => setFIntake(e.target.value)}
@@ -789,7 +792,7 @@ export default function TimelinePage() {
                 onChange={(e) => setFUseExact(e.target.checked)}
                 className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-300"
               />
-              Know your exact start date?
+              {tt.exactDateLabel}
             </label>
             {fUseExact && (
               <input
@@ -804,7 +807,7 @@ export default function TimelinePage() {
           {/* Dream school / field (선택) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-slate-600">Dream school (optional)</label>
+              <label className="text-xs font-medium text-slate-600">{tt.dreamSchoolLabel}</label>
               <input
                 type="text"
                 value={fSchool}
@@ -814,7 +817,7 @@ export default function TimelinePage() {
               />
             </div>
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-slate-600">Dream field (optional)</label>
+              <label className="text-xs font-medium text-slate-600">{tt.dreamFieldLabel}</label>
               <input
                 type="text"
                 value={fField}
@@ -830,14 +833,14 @@ export default function TimelinePage() {
               onClick={handleSaveGoal}
               className="flex-1 sm:flex-none bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2.5 rounded-xl transition-colors text-sm"
             >
-              {goalIsSet ? "Update goal" : "Set goal"}
+              {goalIsSet ? tt.updateGoalButton : tt.setGoalButton}
             </button>
             {goalIsSet && (
               <button
                 onClick={() => setShowGoalForm(false)}
                 className="px-5 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors text-sm font-medium"
               >
-                Cancel
+                {tt.cancelButton}
               </button>
             )}
           </div>
@@ -849,13 +852,13 @@ export default function TimelinePage() {
           {/* 요약 통계 바 */}
           <div className="bg-white border border-slate-200 rounded-2xl px-6 py-5 shadow-sm grid grid-cols-1 sm:grid-cols-3 gap-6">
             <div>
-              <p className="text-xs text-slate-400 uppercase tracking-wide mb-1">Tasks</p>
+              <p className="text-xs text-slate-400 uppercase tracking-wide mb-1">{tt.tasksLabel}</p>
               <p className="text-lg font-bold text-slate-900">
-                {doneTasks} <span className="text-sm font-medium text-slate-400">/ {totalTasks} completed</span>
+                {doneTasks} <span className="text-sm font-medium text-slate-400">/ {totalTasks} {tt.tasksCompleted}</span>
               </p>
             </div>
             <div>
-              <p className="text-xs text-slate-400 uppercase tracking-wide mb-1">Progress</p>
+              <p className="text-xs text-slate-400 uppercase tracking-wide mb-1">{tt.progressLabel}</p>
               <p className="text-lg font-bold text-indigo-600">{progress}%</p>
               <div className="mt-1.5 h-1.5 bg-slate-100 rounded-full overflow-hidden">
                 <div
@@ -865,7 +868,7 @@ export default function TimelinePage() {
               </div>
             </div>
             <div>
-              <p className="text-xs text-slate-400 uppercase tracking-wide mb-1">Now</p>
+              <p className="text-xs text-slate-400 uppercase tracking-wide mb-1">{tt.nowLabel}</p>
               <p className="text-lg font-bold text-slate-900 truncate">{currentTitle}</p>
             </div>
           </div>
@@ -878,7 +881,7 @@ export default function TimelinePage() {
               {/* 모든 단계가 past인 경우 안내 */}
               {curId === null && (
                 <div className="bg-white border border-slate-200 rounded-2xl px-5 py-4 shadow-sm text-sm text-slate-500">
-                  All phases are past — focus on arrival 🎉
+                  {tt.allPhasePassed}
                 </div>
               )}
 
@@ -898,7 +901,7 @@ export default function TimelinePage() {
                     <div className="flex items-center gap-2 text-slate-500">
                       <History className="w-4 h-4" />
                       <span className="text-sm font-medium">
-                        {pastPhases.length} past phase{pastPhases.length > 1 ? "s" : ""}
+                        {pastPhases.length}{tt.pastPhases}
                       </span>
                     </div>
                     {pastGroupOpen
@@ -923,11 +926,11 @@ export default function TimelinePage() {
                 </div>
                 <div className="flex items-center gap-2 mb-4">
                   <Clock className="w-4 h-4 text-slate-400" />
-                  <h3 className="text-sm font-semibold text-slate-900">Upcoming deadlines</h3>
+                  <h3 className="text-sm font-semibold text-slate-900">{tt.upcomingDeadlines}</h3>
                 </div>
                 {upcoming.length === 0 ? (
                   <p className="text-sm text-slate-400 leading-relaxed">
-                    All deadlines passed — focus on arrival 🎉
+                    {tt.allDeadlinesPassed}
                   </p>
                 ) : (
                   <ul className="space-y-2.5">
