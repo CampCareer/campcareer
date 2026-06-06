@@ -9,6 +9,7 @@ const en = {
     careerPath: 'Career Map',
     documents: 'Documents',
     blog: 'Blog',
+    games: 'Games',
   },
   common: {
     signIn: 'Sign In',
