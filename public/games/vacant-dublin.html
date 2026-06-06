@@ -327,6 +327,45 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 @keyframes slideDown{from{opacity:0;transform:translateY(-15px)}to{opacity:1;transform:translateY(0)}}
 @keyframes scaleIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+/* PARTNERSHIP */
+.partner-info{background:rgba(30,58,120,.3);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:.55rem .75rem;margin-bottom:.75rem;font-size:13px;color:rgba(255,255,255,.65);line-height:1.8;}
+.chip.disabled{opacity:.3;pointer-events:none;cursor:not-allowed;}
+/* GRADE BADGE HUD */
+.grade-hud{padding:.28rem .55rem;border-radius:5px;font-family:'Press Start 2P',monospace;font-size:10px;flex-shrink:0;}
+.grade-hud.g-gold{background:rgba(255,184,0,.25);border:1px solid var(--gold);color:var(--gold);}
+.grade-hud.g-silver{background:rgba(176,190,197,.2);border:1px solid #B0BEC5;color:#B0BEC5;}
+.grade-hud.g-bronze{background:rgba(161,136,127,.2);border:1px solid #A1887F;color:#A1887F;}
+.grade-hud.g-fail{background:rgba(229,57,53,.2);border:1px solid var(--r);color:var(--r);}
+.grade-hud.g-prog{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.4);}
+/* SEOK STATUS */
+.seok-status{font-size:13px;white-space:nowrap;color:rgba(255,255,255,.7);}
+/* ANNUAL / SCHEDULED EVENT POPUP */
+.ann-bg-ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:547;backdrop-filter:blur(4px);display:none;}
+.ann-pop{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.85);z-index:548;background:linear-gradient(135deg,#1a237e,#283593);border-radius:16px;padding:1.8rem;min-width:340px;max-width:88vw;border:3px solid var(--b);box-shadow:0 20px 60px rgba(0,0,0,.7);opacity:0;pointer-events:none;transition:all .3s cubic-bezier(.34,1.56,.64,1);}
+.ann-pop.on{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1);}
+.ann-title{font-family:'Press Start 2P',monospace;font-size:13px;color:var(--y);text-align:center;margin-bottom:.4rem;line-height:1.6;}
+.ann-body{font-size:14px;color:rgba(255,255,255,.78);text-align:center;line-height:2;margin-bottom:.9rem;}
+.ann-btn{width:100%;padding:.65rem;background:var(--y);color:#0d1642;border:none;border-radius:8px;font-family:'Press Start 2P',monospace;font-size:12px;cursor:pointer;margin-top:.4rem;}
+/* ENDING SCREEN */
+.ending-ov{position:fixed;inset:0;background:rgba(2,4,18,.97);z-index:900;display:none;align-items:center;justify-content:center;backdrop-filter:blur(14px);overflow-y:auto;padding:1rem;}
+.ending-ov.on{display:flex;}
+.ending-box{background:linear-gradient(135deg,#0d1642,#1a237e);border:4px solid var(--gold);border-radius:22px;padding:2.2rem;max-width:680px;width:100%;box-shadow:0 30px 80px rgba(0,0,0,.8);animation:popIn .5s cubic-bezier(.34,1.56,.64,1);text-align:center;}
+.ending-em{font-size:4rem;margin-bottom:.3rem;}
+.ending-title{font-family:'Press Start 2P',monospace;font-size:16px;color:var(--gold);margin-bottom:.25rem;line-height:1.5;}
+.ending-sub{font-size:13px;color:rgba(255,255,255,.45);margin-bottom:1.4rem;}
+.ending-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem;margin-bottom:1.3rem;}
+.e-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:11px;padding:.7rem .45rem;}
+.e-card-nm{font-family:'Press Start 2P',monospace;font-size:8px;color:rgba(255,255,255,.45);margin-bottom:.45rem;line-height:1.6;text-align:center;}
+.e-card-nm.hi{color:var(--y);}
+.e-stat{font-size:12px;color:rgba(255,255,255,.65);margin-bottom:.18rem;line-height:1.5;}
+.e-stat strong{color:#fff;}
+.ending-story{background:rgba(21,101,192,.18);border:1px solid rgba(21,101,192,.3);border-radius:12px;padding:.9rem 1.1rem;margin-bottom:1.2rem;font-size:14px;color:rgba(255,255,255,.85);line-height:2;text-align:left;}
+.ending-btns{display:flex;gap:.55rem;justify-content:center;}
+.ending-btn{padding:.72rem 1.7rem;border:none;border-radius:10px;font-family:'Press Start 2P',monospace;font-size:12px;cursor:pointer;transition:all .2s;}
+.ending-btn.share{background:var(--y);color:#0d1642;}
+.ending-btn.share:hover{background:#ffe57f;}
+.ending-btn.retry{background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.25);color:#fff;}
+.ending-btn.retry:hover{background:rgba(255,255,255,.18);}
 </style>
 </head>
 <body>
@@ -377,7 +416,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
       <div class="mission-grid"><div class="mg">🗺️ 더블린 빈 땅 공략</div><div class="mg">🏗️ 아파트 건설</div><div class="mg">📉 집값 낮추기</div><div class="mg">🏕️ 노숙자 줄이기</div></div>
       <div class="crisis-box">
         <div class="cl">🎯 최종 목표: <strong style="color:var(--gold)">빈(Wien) 모델 달성</strong></div>
-        <div class="cl">📌 현재 더블린 월세 <strong style="color:var(--r)">€2,300</strong> → 목표 <strong style="color:var(--g)">€1,200</strong></div>
+        <div class="cl">📌 현재 더블린 월세 <strong style="color:var(--r)">€2,540</strong> → 목표 <strong style="color:var(--g)">€1,200</strong></div>
         <div class="cl">📌 노숙자 <strong style="color:var(--r)">13,400명</strong> → 목표 <strong style="color:var(--g)">500명</strong></div>
       </div>
     </div>
@@ -421,6 +460,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
     <div id="diff-badge" class="diff-badge badge-easy">😊 EASY</div>
   </div>
   <div class="hud-r">
+    <div id="h-grade" class="grade-hud g-prog">진행중</div>
     <button class="hbtn" onclick="toggleLB()">🏆</button>
     <button class="hbtn" onclick="toggleWien()">🎯</button>
     <button class="hbtn pr" onclick="openShare()">📤</button>
@@ -432,6 +472,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
   <div class="ib">🏕️ 노숙자: <strong id="ib-hl">13,400명</strong></div>
   <div class="ibsep">|</div>
   <div class="ib">🏗 공사중: <strong id="ib-con">0개소</strong></div>
+  <div class="seok-status" id="ib-seok">😰 석준: 겨우 버티는 중...</div>
   <div class="ib-live"><div class="ldot"></div><span>실시간 더블린 주택 위기</span></div>
 </div>
 
@@ -475,6 +516,14 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
       <div class="chip" onclick="setTenure('mixed',this)">⚖ 혼합</div>
       <div class="chip" onclick="setTenure('social',this)">🏘 사회주택</div>
     </div>
+    <div class="clbl">🤝 파트너십</div>
+    <div class="opt-row" id="partner-row">
+      <div class="chip sel" id="pc-solo" onclick="setPartnership('solo',this)">🏗 단독</div>
+      <div class="chip disabled" id="pc-council" onclick="setPartnership('council',this)">🏛 시의회</div>
+      <div class="chip disabled" id="pc-lda" onclick="setPartnership('lda',this)">🏢 LDA</div>
+      <div class="chip disabled" id="pc-investor" onclick="setPartnership('investor',this)">💼 투자자</div>
+    </div>
+    <div class="partner-info" id="partner-info">🏗 단독개발 — 수익 100% 유지</div>
     <div class="sbox">
       <div class="stop"><span class="snm">층수 (Floors)</span><span class="sval" id="fl-v">6F</span></div>
       <input type="range" id="fl-s" min="3" max="20" value="6" oninput="updateFloors(this.value)">
@@ -582,6 +631,28 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
   </div>
 </div>
 
+<!-- ENDING SCREEN -->
+<div class="ending-ov" id="ending-ov">
+  <div class="ending-box">
+    <div class="ending-em" id="ending-em">🥇</div>
+    <div class="ending-title" id="ending-title"></div>
+    <div class="ending-sub" id="ending-sub">2030년 12월 최종 결산</div>
+    <div class="ending-cards" id="ending-cards"></div>
+    <div class="ending-story" id="ending-story"></div>
+    <div class="ending-btns">
+      <button class="ending-btn share" onclick="endingShare()">📤 결과 공유</button>
+      <button class="ending-btn retry" onclick="location.reload()">🔄 다시 도전</button>
+    </div>
+  </div>
+</div>
+<!-- ANNUAL / SCHEDULED EVENT POPUP -->
+<div class="ann-bg-ov" id="ann-bg"></div>
+<div class="ann-pop" id="ann-pop">
+  <div class="ann-title" id="ann-title"></div>
+  <div class="ann-body" id="ann-body"></div>
+  <div class="ev-btns" id="ann-btns" style="gap:.4rem;margin-bottom:.5rem;flex-wrap:wrap;"></div>
+  <button class="ann-btn" id="ann-ok" onclick="closeAnnPop()">확인</button>
+</div>
 <div class="hint" id="hint"><p>🗺 지도의 <span>빈 부지</span>를 클릭해서 개발하세요!</p></div>
 <div class="toast" id="toast"></div>
 
@@ -634,16 +705,21 @@ const UNCLE_LINES={
 };
 
 // STATE
-const BASE_RENT=2300,BASE_HL=13400;
+const BASE_RENT=2540,BASE_HL=13400;
+let dynamicBaseRent=2540;
 let totalHLReduced=0,totalRentDrop=0,totalSocialUnits=0,totalAllUnits=0;
 let cur=null,method='standard',tenure='market',floors=6,difficulty='easy';
+let partnership='solo';
 let budget=50e6,developed=new Set(),bestROI=0,totalHomes=0;
 let pendingScore=null,lbOpen=false,wienOpen=false;
 let evQueue=[],evIdx=0,evCostAccum=0,evMonthsAccum=0;
 let uncleTimer=null,storyScene=0,mapInited=false;
 let gameRunning=false,gameTimer=null,gameSpeed=1,currentMonth=0;
 let monthlyIncome=0;
-let underConstruction=[]; // {siteId,progress,totalMonths,units,netMonthly,hlR,rentR,socialUnits,roi,cost}
+let underConstruction=[];
+let policyEffects={marketMod:1.0,ldaMod:1.0,privateROIMod:1.0,buildCostMod:1.0,socialTimeMod:0};
+let scheduledFired={rpz:false,metrolink:false,ecb:false,election:false};
+let finalGrade='fail'; // {siteId,progress,totalMonths,units,netMonthly,hlR,rentR,socialUnits,roi,cost}
 const COST={standard:420000,modular:294000};
 const UPF=18,MR=2340*12,SR=800*12,VAC=0.05,OPEX=0.25;
 const MONTHS=['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
@@ -651,6 +727,53 @@ const SPEED_MS={1:2000,2:1000,5:400};
 
 function ipUnit(t){if(t==='social')return{hl:2.2,rent:0.019};if(t==='mixed')return{hl:0.9,rent:0.014};return{hl:0.25,rent:0.007};}
 function getConstructionMonths(area,fl){return Math.max(3,Math.min(24,Math.ceil(Math.sqrt(area)*fl*0.7)));}
+
+// GRADE & STATUS HELPERS
+function getCurrentRent(){return Math.max(900,Math.round(dynamicBaseRent-totalRentDrop));}
+function getGrade(){
+  var rent=getCurrentRent(),hl=Math.max(0,BASE_HL-totalHLReduced),sp=totalAllUnits>0?(totalSocialUnits/totalAllUnits):0;
+  if(rent<=1200&&hl<=500&&sp>=0.25)return 'gold';
+  if(rent<=1500&&hl<=2000)return 'silver';
+  if(rent<=1800&&hl<=5000)return 'bronze';
+  return 'fail';
+}
+function updateGradeBadge(){
+  var g=totalHomes>0?getGrade():'prog';
+  var el=document.getElementById('h-grade');if(!el)return;
+  var labels={gold:'🥇 GOLD',silver:'🥈 SILVER',bronze:'🥉 BRONZE',fail:'💔 FAIL',prog:'진행중'};
+  var cls={gold:'g-gold',silver:'g-silver',bronze:'g-bronze',fail:'g-fail',prog:'g-prog'};
+  el.className='grade-hud '+cls[g];el.textContent=labels[g];
+}
+function updateSeokStatus(){
+  var rent=getCurrentRent(),el=document.getElementById('ib-seok');if(!el)return;
+  if(rent>=2300)el.textContent='😰 석준: 겨우 버티는 중...';
+  else if(rent>=2000)el.textContent='😟 석준: 통장 바닥 위기...';
+  else if(rent>=1500)el.textContent='😐 석준: 숨통 트임';
+  else if(rent>=1200)el.textContent='🙂 석준: 살만하다!';
+  else el.textContent='😊 석준: 더블린 정착 성공!';
+}
+
+// PARTNERSHIP
+function setPartnership(p,btn){
+  partnership=p;
+  document.querySelectorAll('#partner-row .chip').forEach(function(b){b.classList.remove('sel');});
+  btn.classList.add('sel');
+  var info={solo:'🏗 단독개발 — 수익 100% 유지',council:'🏛 시의회 — 수익 -20% / 공사 -2개월 / 사회주택 +5%',lda:'🏢 LDA — 수익 -40% / 건설비 -20% / 공사 -3개월 / 사회주택 +10%',investor:'💼 민간투자자 — 수익 +30%'};
+  var el=document.getElementById('partner-info');if(el)el.textContent=info[p]||info.solo;
+  calcAndRender();
+}
+function refreshPartnerChips(){
+  var cc=document.getElementById('pc-council'),lc=document.getElementById('pc-lda'),ic=document.getElementById('pc-investor');
+  if(!cc)return;
+  var ok_c=(tenure==='mixed'||tenure==='social'),ok_l=(tenure==='social'),ok_i=(tenure==='market');
+  cc.classList.toggle('disabled',!ok_c);lc.classList.toggle('disabled',!ok_l);ic.classList.toggle('disabled',!ok_i);
+  var solo=document.getElementById('pc-solo');
+  if(partnership==='council'&&!ok_c){partnership='solo';solo.classList.add('sel');cc.classList.remove('sel');}
+  if(partnership==='lda'&&!ok_l){partnership='solo';solo.classList.add('sel');lc.classList.remove('sel');}
+  if(partnership==='investor'&&!ok_i){partnership='solo';solo.classList.add('sel');ic.classList.remove('sel');}
+  var info={solo:'🏗 단독개발 — 수익 100% 유지',council:'🏛 시의회 — 수익 -20% / 공사 -2개월 / 사회주택 +5%',lda:'🏢 LDA — 수익 -40% / 건설비 -20% / 공사 -3개월 / 사회주택 +10%',investor:'💼 민간투자자 — 수익 +30%'};
+  var pi=document.getElementById('partner-info');if(pi)pi.textContent=info[partnership]||info.solo;
+}
 
 // STAGE
 function fadeOut(el,cb){el.classList.add('fading');setTimeout(()=>{el.classList.add('hidden');el.classList.remove('fading');cb();},400);}
@@ -815,10 +938,19 @@ function setSpeed(s){
 
 function gameTick(){
   currentMonth++;
+  // Game end check: 2030년 12월 = month 72
+  if(currentMonth>=72){pauseGame();showEndingScreen();return;}
   // Update date
   const yr=2025+Math.floor(currentMonth/12);
   const mo=currentMonth%12;
   document.getElementById('h-date').textContent=yr+'년 '+MONTHS[mo];
+  // Annual rent increase (every January after game start)
+  if(currentMonth>0&&currentMonth%12===0){
+    dynamicBaseRent=Math.round(dynamicBaseRent*1.04);
+    showAnnualEvent(currentMonth);
+  }
+  // Scheduled political events
+  checkScheduledEvents(currentMonth);
   // Progress construction
   const toComplete=[];
   underConstruction.forEach(b=>{
@@ -853,6 +985,8 @@ function gameTick(){
   // Update displays
   updateWienPanel();
   checkViennaWin();
+  updateSeokStatus();
+  updateGradeBadge();
 }
 
 function triggerRandomHardEvent(){
@@ -889,14 +1023,14 @@ function completeSite(b){
 }
 
 function updateImpactBar(){
-  const rent=Math.max(1800,Math.round(BASE_RENT-totalRentDrop));
+  const rent=getCurrentRent();
   const hl=Math.max(0,BASE_HL-totalHLReduced);
   document.getElementById('ib-rent').textContent='€'+rent.toLocaleString();
   document.getElementById('ib-hl').textContent=hl.toLocaleString()+'명';
 }
 
 function updateWienPanel(){
-  const rent=Math.max(1800,Math.round(BASE_RENT-totalRentDrop));
+  const rent=getCurrentRent();
   const hl=Math.max(0,BASE_HL-totalHLReduced);
   const socialPct=totalAllUnits>0?Math.round((totalSocialUnits/totalAllUnits)*100):0;
   const rentProg=Math.min(100,Math.round(((BASE_RENT-rent)/(BASE_RENT-1200))*100));
@@ -911,7 +1045,7 @@ function updateWienPanel(){
 }
 
 function checkViennaWin(){
-  const rent=BASE_RENT-totalRentDrop;
+  const rent=getCurrentRent();
   const hl=BASE_HL-totalHLReduced;
   const socialPct=totalAllUnits>0?(totalSocialUnits/totalAllUnits):0;
   if(rent<=1200&&hl<=500&&socialPct>=0.25){
@@ -921,6 +1055,130 @@ function checkViennaWin(){
 완공 세대: ${totalHomes.toLocaleString()}채 · 투입 예산: €${((50e6-budget)/1e6).toFixed(1)}M`;
     document.getElementById('wien-win').classList.add('on');
   }
+}
+
+// ANNUAL EVENT POPUP
+function showAnnualEvent(month){
+  var yr=2025+Math.floor(month/12);
+  var rent=getCurrentRent();
+  var seokSt=rent>=2300?'😰 겨우 버팀':rent>=1500?'😐 숨통 트임':'🙂 살만해!';
+  var yrleft=Math.max(0,5-Math.floor(month/12));
+  document.getElementById('ann-title').textContent=yr+'년 1월 — 연간 월세 현황';
+  document.getElementById('ann-body').innerHTML='더블린 평균 월세 <strong style="color:#FDD835">'+('€'+rent)+'</strong>으로 상승했습니다.<br>'+'석준 상태: '+seokSt+'<br>'+'게임 종료까지 <strong style="color:#FDD835">'+yrleft+'년</strong> 남았습니다.';
+  document.getElementById('ann-btns').innerHTML='';
+  document.getElementById('ann-ok').style.display='block';
+  document.getElementById('ann-bg').style.display='block';
+  document.getElementById('ann-pop').classList.add('on');
+  pauseGame();
+}
+function closeAnnPop(){
+  document.getElementById('ann-bg').style.display='none';
+  document.getElementById('ann-pop').classList.remove('on');
+  if(!document.getElementById('ending-ov').classList.contains('on'))resumeGame();
+}
+// SCHEDULED POLITICAL EVENTS
+function checkScheduledEvents(month){
+  if(month===14&&!scheduledFired.rpz){scheduledFired.rpz=true;showScheduledEvent('rpz');}
+  else if(month===29&&!scheduledFired.metrolink){scheduledFired.metrolink=true;showScheduledEvent('metrolink');}
+  else if(month===44&&!scheduledFired.ecb){scheduledFired.ecb=true;showScheduledEvent('ecb');}
+  else if(month===58&&!scheduledFired.election){scheduledFired.election=true;showScheduledEvent('election');}
+}
+function showScheduledEvent(id){
+  pauseGame();
+  var em='',title='',body='',btns=[];
+  if(id==='rpz'){
+    em='📋';title='임대차 보호법 강화';
+    body='아일랜드 정부가 RPZ(임대가격규제구역) 기준을 강화했습니다.<br>이후 시장가 수익 -8% 또는 사회주택 LDA 보조금 +15% 선택.';
+    btns=[
+      {label:'🏘 정책 환영 (사회주택 보너스)',fn:function(){policyEffects.ldaMod=Math.min(policyEffects.ldaMod*1.15,2.0);closeAnnPop();}},
+      {label:'💰 항의 (시장가 보호, -8% 면제)',fn:function(){policyEffects.marketMod=Math.max(policyEffects.marketMod*0.92,0.5);closeAnnPop();}}
+    ];
+  } else if(id==='metrolink'){
+    em='🚇';title='MetroLink 착공 확정!';
+    body='더블린 지하철 MetroLink 착공이 확정되었습니다!<br>Infirmary Rd, Phibsborough Rd, N Circular Rd 부지는<br>공사비 +20%이지만 완공 후 수익 +25%.';
+    btns=[];
+  } else if(id==='ecb'){
+    em='💸';title='ECB 금리 결정';
+    if(difficulty==='easy'){policyEffects.buildCostMod=Math.max(0.5,policyEffects.buildCostMod*0.95);body='ECB가 금리를 인하했습니다. 신규 건설비 -5%.';}
+    else if(difficulty==='normal'){body='ECB가 금리를 동결했습니다. 영향 없음.';}
+    else{policyEffects.buildCostMod=Math.min(2.0,policyEffects.buildCostMod*1.10);body='ECB가 금리를 인상했습니다! 신규 건설비 +10%.';}
+    btns=[];
+  } else if(id==='election'){
+    em='🗳️';title='아일랜드 총선';
+    body='더블린 주택 위기가 최대 이슈! 어느 정당을 지지하시겠습니까?';
+    btns=[
+      {label:'🏘 사회주택 확대 (LDA +20%, 공기 -2개월)',fn:function(){policyEffects.ldaMod=Math.min(policyEffects.ldaMod*1.2,2.0);policyEffects.socialTimeMod+=2;closeAnnPop();}},
+      {label:'💰 민간개발 촉진 (ROI +15%)',fn:function(){policyEffects.privateROIMod=Math.min(policyEffects.privateROIMod*1.15,2.0);closeAnnPop();}},
+      {label:'🤷 기권',fn:function(){closeAnnPop();}}
+    ];
+  }
+  document.getElementById('ann-title').textContent=em+' '+title;
+  document.getElementById('ann-body').innerHTML=body;
+  var btnsEl=document.getElementById('ann-btns');btnsEl.innerHTML='';
+  if(btns.length){
+    document.getElementById('ann-ok').style.display='none';
+    btns.forEach(function(b){
+      var btn=document.createElement('button');
+      btn.className='ev-ok';btn.style.flex='1';btn.style.fontSize='11px';btn.textContent=b.label;
+      btn.onclick=b.fn;btnsEl.appendChild(btn);
+    });
+  } else {
+    document.getElementById('ann-ok').style.display='block';
+  }
+  document.getElementById('ann-bg').style.display='block';
+  document.getElementById('ann-pop').classList.add('on');
+}
+// ENDING SCREEN
+function showEndingScreen(){
+  finalGrade=getGrade();
+  var rent=getCurrentRent();
+  var hl=Math.max(0,BASE_HL-totalHLReduced);
+  var socialPct=totalAllUnits>0?Math.round((totalSocialUnits/totalAllUnits)*100):0;
+  var emMap={gold:'🥇',silver:'🥈',bronze:'🥉',fail:'💔'};
+  var titleMap={gold:'GOLD 달성 — 빈(Wien) 목표!',silver:'SILVER — 유럽 평균 달성!',bronze:'BRONZE — 그래도 노력했어요',fail:'FAIL — 더블린은 아직도...'};
+  var storyMap={
+    gold:'석준은 2029년 LDA 아파트에 입주했습니다. 월세 €1,100. 박사논문도 제출했어요. 더블린이 조금 달라졌습니다.',
+    silver:'석준은 2030년까지 버텼습니다. 친구 3명과 쉐어하우스에서요. 그래도 텐트촌은 면했어요.',
+    bronze:'석준은 더블린 외곽으로 이사했습니다. 통근 2시간. 그래도 아일랜드를 포기하진 않았어요.',
+    fail:'석준은 2028년 한국으로 돌아갔습니다. 더블린의 빈 땅은 오늘도 비어 있습니다.'
+  };
+  document.getElementById('ending-em').textContent=emMap[finalGrade];
+  document.getElementById('ending-title').textContent=titleMap[finalGrade];
+  document.getElementById('ending-story').textContent=storyMap[finalGrade];
+  var cards=[
+    {nm:'🇮🇪 2025 시작',rent:'€2,540',hl:'13,400명',soc:'~5%',hi:false},
+    {nm:'🏗 2030 나의 결과',rent:'€'+rent,hl:hl.toLocaleString()+'명',soc:socialPct+'%',hi:true},
+    {nm:'🇪🇺 유럽 중앙값',rent:'€1,450',hl:'—',soc:'—',hi:false},
+    {nm:'🇦🇹 빈(Wien)',rent:'€900',hl:'~900명',soc:'60%',hi:false}
+  ];
+  document.getElementById('ending-cards').innerHTML=cards.map(function(c){
+    return '<div class="e-card">'
+      +'<div class="e-card-nm'+(c.hi?' hi':'')+'">'+c.nm+'</div>'
+      +'<div class="e-stat">월세: <strong>'+c.rent+'</strong></div>'
+      +'<div class="e-stat">노숙자: <strong>'+c.hl+'</strong></div>'
+      +'<div class="e-stat">사회주택: <strong>'+c.soc+'</strong></div>'
+      +'</div>';
+  }).join('');
+  document.getElementById('ending-ov').classList.add('on');
+}
+function endingShare(){
+  var rent=getCurrentRent();
+  var gradeEmoji={gold:'🥇',silver:'🥈',bronze:'🥉',fail:'💔'};
+  var storyLine={gold:'석준이 더블린에 정착했어요!',silver:'석준이 간신히 버텼어요.',bronze:'석준은 외곽으로 이사했어요.',fail:'석준은 한국으로 돌아갔습니다.'};
+  var partnerMap={solo:'단독개발',council:'시의회 파트너십',lda:'LDA 파트너십',investor:'민간투자자'};
+  var tenureMap={market:'시장가 위주',mixed:'혼합 임대',social:'사회주택 위주'};
+  var txt='🏗 VACANT DUBLIN 2030 최종 결산!\n\n'
+    +(gradeEmoji[finalGrade]||'💔')+' 등급: '+finalGrade.toUpperCase()+'\n'
+    +'📉 달성 월세: €'+rent+'/월\n'
+    +'🏕️ 노숙자 감소: -'+totalHLReduced+'명\n'
+    +'🏠 완공 세대: '+totalHomes.toLocaleString()+'채\n'
+    +'📊 전략: '+(tenureMap[tenure]||tenure)+' / '+(partnerMap[partnership]||partnership)+'\n\n'
+    +'💬 '+(storyLine[finalGrade]||'')+'\n'
+    +'나는 더블린 집값을 €'+rent+'까지 낮췄다!\n\n'
+    +'👉 '+location.href+'\n'
+    +'#VacantDublin #더블린집값';
+  if(navigator.share)navigator.share({title:'Vacant Dublin 결과',text:txt});
+  else{navigator.clipboard&&navigator.clipboard.writeText(txt);showToast('📊 결과 복사!');}
 }
 
 // DIFFICULTY NOTICE
@@ -948,15 +1206,15 @@ function selectSite(id){
 }
 
 function setMethod(m,btn){method=m;btn.closest('.opt-row').querySelectorAll('.chip').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');calcAndRender();}
-function setTenure(t,btn){tenure=t;btn.closest('.opt-row').querySelectorAll('.chip').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');calcAndRender();}
+function setTenure(t,btn){tenure=t;btn.closest('.opt-row').querySelectorAll('.chip').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');refreshPartnerChips();calcAndRender();}
 function updateFloors(v){floors=parseInt(v);document.getElementById('fl-v').textContent=v+'F';calcAndRender();}
 
 function calcAndRender(){
   if(!cur)return;
   const r=calcSite(cur,method,tenure,floors,difficulty,0,0);
-  const ctMonths=getConstructionMonths(cur.area,floors);
-  document.getElementById('ctime').textContent=ctMonths+'개월';
-  document.getElementById('ctime-info').textContent=`완공 후 월 €${(r.netMonthly/1e3).toFixed(0)}K 수익 시작`;
+  const ctMonths=Math.max(1,getConstructionMonths(cur.area,floors)-(r.timeBonus||0));
+  document.getElementById('ctime').textContent=ctMonths+'개월'+(r.timeBonus>0?' (파트너십 -'+r.timeBonus+'개월)':'');
+  document.getElementById('ctime-info').textContent='완공 후 월 €'+(r.netMonthly/1e3).toFixed(0)+'K 수익 시작';
   document.getElementById('s-u').textContent=r.totalUnits;
   document.getElementById('s-c').textContent='€'+(r.totalInv/1e6).toFixed(1)+'M';
   document.getElementById('s-r').textContent='€'+(r.netMonthly/1e3).toFixed(0)+'K';
@@ -973,7 +1231,7 @@ function calcAndRender(){
   document.getElementById('ip-rent').textContent='-€'+rE+'/월';
   document.getElementById('ip-soc').textContent='+'+socialPctAdd+'%p 기여';
   renderBuilding(Math.max(4,Math.round(cur.area*UPF)),floors);
-  pendingScore={...r,site:cur.name,method,floors,tenure,id:cur.id,diff:difficulty,hlR:hlE,rentR:parseFloat(rE),ctMonths};
+  pendingScore={...r,site:cur.name,method,floors,tenure,partnership,id:cur.id,diff:difficulty,hlR:hlE,rentR:parseFloat(rE),ctMonths};
   if(r.roi<20)showUncle('lowROI');else if(r.roi>80)showUncle('highROI',{roi:r.roi});
 }
 
@@ -981,14 +1239,30 @@ function calcSite(site,m,t,fl,diff,extraCost,extraMonths){
   const upf=Math.max(4,Math.round(site.area*UPF)),totalUnits=upf*fl;
   let bc=totalUnits*COST[m],lc=site.landVal;
   if(diff!=='easy'){lc*=1.075;bc*=1.135;bc+=totalUnits*12000;bc+=45000;}
+  bc*=policyEffects.buildCostMod;
+  // MetroLink cost premium for nearby sites
+  var metroSites=['VS-0011','VS-0048','VS-0055'];
+  var isMetro=scheduledFired.metrolink&&metroSites.indexOf(site.id)>=0;
+  if(isMetro)bc*=1.20;
+  // LDA build cost subsidy
+  if(partnership==='lda'&&t==='social')bc*=0.80;
   let totalInv=bc+lc+extraCost;
   let ar=0;
-  if(t==='market')ar=totalUnits*MR*(1-VAC);
-  else if(t==='mixed'){const mu=Math.round(totalUnits*.7),su=totalUnits-mu;ar=(mu*MR+su*SR)*(1-VAC)+su*75000*.1;}
-  else ar=totalUnits*SR;
+  if(t==='market')ar=totalUnits*MR*(1-VAC)*policyEffects.marketMod;
+  else if(t==='mixed'){var mu=Math.round(totalUnits*.7),su=totalUnits-mu;ar=(mu*MR*policyEffects.marketMod+su*SR)*(1-VAC)+su*75000*.1;}
+  else ar=totalUnits*SR*policyEffects.ldaMod;
+  if(isMetro)ar*=1.25;
+  // Partnership revenue modifiers
+  if(partnership==='council'&&(t==='mixed'||t==='social'))ar*=0.80;
+  if(partnership==='lda'&&t==='social')ar*=0.60;
+  if(partnership==='investor'&&t==='market')ar*=1.30*policyEffects.privateROIMod;
   const netAnnual=ar*(1-OPEX),netMonthly=netAnnual/12;
   const payback=totalInv/netAnnual,p10=netAnnual*10-totalInv,roi=(p10/totalInv)*100;
-  return{bc,totalInv,netAnnual,netMonthly,roi,totalUnits,payback,profit10:p10};
+  // Partnership time bonus
+  var timeBonus=0;
+  if(partnership==='council'&&(t==='mixed'||t==='social'))timeBonus=2+policyEffects.socialTimeMod;
+  if(partnership==='lda'&&t==='social')timeBonus=3+policyEffects.socialTimeMod;
+  return{bc,totalInv,netAnnual,netMonthly,roi,totalUnits,payback,profit10:p10,timeBonus:timeBonus};
 }
 
 const UC={standard:'#E53935',modular:'#FDD835',social:'#42A5F5',mixed:'#66BB6A'};
@@ -1095,10 +1369,23 @@ function shareLink(){
   closeShare();
 }
 function shareScore(){
-  const lines=['🏗 VACANT DUBLIN 플레이 결과!','',`🏠 완공 세대: ${totalHomes.toLocaleString()}채`,`💰 최고 ROI: ${bestROI.toFixed(0)}%`,`🏕️ 노숙자 감소: -${totalHLReduced}명`,`📉 월세 인하: -€${Math.round(totalRentDrop)}/월`,'','🎯 목표: 빈(Wien) 모델 달성',`👉 ${location.href}`,'','#VacantDublin #더블린집값'];
-  const txt=lines.join('\n');
+  var rent=getCurrentRent();
+  var g=finalGrade||getGrade();
+  var gradeEmoji={gold:'🥇',silver:'🥈',bronze:'🥉',fail:'💔'};
+  var partnerMap={solo:'단독개발',council:'시의회',lda:'LDA',investor:'민간투자자'};
+  var tenureMap={market:'시장가 위주',mixed:'혼합 임대',social:'사회주택 위주'};
+  var txt='🏗 VACANT DUBLIN 플레이 결과!\n\n'
+    +(gradeEmoji[g]||'🏗')+' 등급: '+g.toUpperCase()+'\n'
+    +'🏠 완공 세대: '+totalHomes.toLocaleString()+'채\n'
+    +'💰 최고 ROI: '+bestROI.toFixed(0)+'%\n'
+    +'🏕️ 노숙자 감소: -'+totalHLReduced+'명\n'
+    +'📉 달성 월세: €'+rent+'/월\n'
+    +'📊 전략: '+(tenureMap[tenure]||tenure)+' / '+(partnerMap[partnership]||partnership)+'\n\n'
+    +'나는 더블린 집값을 €'+rent+'까지 낮췄다!\n\n'
+    +'👉 '+location.href+'\n'
+    +'#VacantDublin #더블린집값';
   if(navigator.share)navigator.share({title:'Vacant Dublin',text:txt});
-  else{navigator.clipboard?.writeText(txt);showToast('📊 점수 복사!');}
+  else{navigator.clipboard&&navigator.clipboard.writeText(txt);showToast('📊 점수 복사!');}
   closeShare();
 }
 
