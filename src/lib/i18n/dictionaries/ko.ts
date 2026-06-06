@@ -11,6 +11,7 @@ const ko: Dictionary = {
     careerPath: '커리어 루트맵',
     documents: '서류 보관함',
     blog: '블로그',
+    games: '게임',
   },
   common: {
     signIn: '로그인',

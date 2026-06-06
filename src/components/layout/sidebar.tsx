@@ -12,6 +12,7 @@ import {
   Bookmark,
   BookOpen,
   FolderOpen,
+  Gamepad2,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { LogoMark } from "@/components/logo-mark"
@@ -27,6 +28,7 @@ const navItems: { key: keyof Dictionary["nav"]; href: string; icon: typeof Layou
   { key: "timeline",    href: "/timeline",     icon: Calendar },
   { key: "careerPath",  href: "/career-path",  icon: Map },
   { key: "documents",   href: "/documents",    icon: FolderOpen },
+  { key: "games",       href: "/games",        icon: Gamepad2 },
 ]
 
 const secondaryItems: { key: keyof Dictionary["nav"]; href: string; icon: typeof LayoutDashboard }[] = [
