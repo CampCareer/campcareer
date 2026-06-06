@@ -67,3 +67,9 @@
     @apply bg-background text-foreground font-sans;
   }
 }
+
+/* Vacant Dublin — Press Start 2P minimum 10 px */
+.font-pixel {
+  font-family: 'Press Start 2P', monospace;
+  font-size: max(10px, 1em);
+}

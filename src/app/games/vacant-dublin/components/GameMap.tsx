@@ -24,7 +24,7 @@ function makeIcon(s: Site, developed: Set<string>) {
     className: "",
     html: `<div style="display:flex;flex-direction:column;align-items:center;cursor:${built ? "default" : "pointer"}">
       <div style="font-size:1.6rem;filter:drop-shadow(0 2px 5px rgba(0,0,0,.5))">${ico}</div>
-      <div style="background:${color};color:#fff;font-family:'Press Start 2P',monospace;font-size:.38rem;padding:2px 6px;border-radius:3px;margin-top:-3px;box-shadow:0 2px 6px rgba(0,0,0,.4);max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.name}</div>
+      <div style="background:${color};color:#fff;font-family:'Press Start 2P',monospace;font-size:13px;padding:3px 7px;border-radius:4px;margin-top:-3px;box-shadow:0 2px 6px rgba(0,0,0,.4);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.name}</div>
     </div>`,
     iconSize:    [90, 52],
     iconAnchor:  [45, 52],
@@ -112,6 +112,6 @@ export default function GameMap({ sites, developed, onSelectSite, selectedSiteId
   }, [selectedSiteId, sites])
 
   return (
-    <div id="vd-map" className="absolute left-0 right-0 bottom-0" style={{ top: 88 }} />
+    <div id="vd-map" className="absolute left-0 right-0 bottom-0" style={{ top: 108 }} />
   )
 }
