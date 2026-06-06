@@ -660,8 +660,9 @@ function goStage4(){fadeOut(document.getElementById('st-diff'),()=>startGame());
 
 // STORY
 function nextScene(){
-  document.getElementById('sc'+storyScene).classList.add('exit');
-  setTimeout(()=>document.getElementById('sc'+storyScene).classList.remove('active','exit'),400);
+  const cur=storyScene;
+  document.getElementById('sc'+cur).classList.add('exit');
+  setTimeout(()=>document.getElementById('sc'+cur).classList.remove('active','exit'),400);
   storyScene++;
   if(storyScene>=4){goStage3();return;}
   setTimeout(()=>{
