@@ -11,23 +11,19 @@
 :root{--y:#FDD835;--g:#43A047;--r:#E53935;--b:#1E88E5;--navy:#0d1642;--panel:rgba(13,22,66,0.97);--gold:#FFB300;--kr:'Noto Sans KR','Nunito',sans-serif;}
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{height:100%;overflow:hidden;font-family:var(--kr);}
-
-/* STAGE SYSTEM */
 .stage-ov{position:fixed;inset:0;z-index:1000;background:#0d1642;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .4s ease;overflow-y:auto;}
 .stage-ov.hidden{display:none;}
 .stage-ov.fading{opacity:0;pointer-events:none;}
-
 /* SPLASH */
 .sp-emoji{font-size:80px;margin-bottom:1rem;animation:bounce 2s ease-in-out infinite;}
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
-.sp-title{font-family:'Press Start 2P',monospace;font-size:clamp(32px,5vw,56px);color:var(--y);letter-spacing:.06em;text-align:center;line-height:1.3;margin-bottom:1.2rem;text-shadow:0 0 40px rgba(253,216,53,.4);animation:fadeUp .8s ease both;}
-.sp-sub{font-size:20px;color:rgba(255,255,255,.75);margin-bottom:2.5rem;text-align:center;line-height:2;animation:fadeUp .8s ease .3s both;}
-.sp-btn{background:var(--y);color:#0d1642;border:none;border-radius:12px;padding:1.1rem 3rem;font-family:'Press Start 2P',monospace;font-size:20px;cursor:pointer;animation:pulseBtn 2s ease-in-out infinite,fadeUp .8s ease .6s both;transition:transform .2s;}
+.sp-title{font-family:'Press Start 2P',monospace;font-size:clamp(28px,4.5vw,52px);color:var(--y);letter-spacing:.06em;text-align:center;line-height:1.35;margin-bottom:1.2rem;text-shadow:0 0 40px rgba(253,216,53,.4);animation:fadeUp .8s ease both;}
+.sp-sub{font-size:18px;color:rgba(255,255,255,.75);margin-bottom:2.5rem;text-align:center;line-height:2;animation:fadeUp .8s ease .3s both;}
+.sp-btn{background:var(--y);color:#0d1642;border:none;border-radius:12px;padding:1.1rem 3rem;font-family:'Press Start 2P',monospace;font-size:18px;cursor:pointer;animation:pulseBtn 2s ease-in-out infinite,fadeUp .8s ease .6s both;transition:transform .2s;}
 .sp-btn:hover{transform:translateY(-3px);}
 @keyframes pulseBtn{0%,100%{box-shadow:0 6px 30px rgba(253,216,53,.45)}50%{box-shadow:0 10px 50px rgba(253,216,53,.85)}}
-
 /* STORY */
-#stage-story{padding:1rem;}
+#st-story{padding:1rem;}
 .story-wrap{position:relative;width:100%;max-width:640px;min-height:500px;margin:0 auto;}
 .scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.9rem;padding:1.5rem;opacity:0;transform:translateX(60px);pointer-events:none;transition:opacity .4s ease,transform .4s ease;text-align:center;}
 .scene.active{opacity:1;transform:translateX(0);pointer-events:auto;}
@@ -38,18 +34,17 @@ html,body{height:100%;overflow:hidden;font-family:var(--kr);}
 .story-nav{position:fixed;bottom:1.8rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.45rem;z-index:1010;}
 .nxt-btn{background:var(--y);color:#0d1642;border:none;border-radius:8px;padding:.75rem 2.5rem;font-family:'Press Start 2P',monospace;font-size:14px;cursor:pointer;transition:all .2s;}
 .nxt-btn:hover{transform:translateY(-2px);background:#ffe57f;}
-.skp-btn{background:none;border:none;color:rgba(255,255,255,.3);font-size:14px;cursor:pointer;transition:color .2s;font-family:var(--kr);}
+.skp-btn{background:none;border:none;color:rgba(255,255,255,.3);font-size:14px;cursor:pointer;transition:color .2s;}
 .skp-btn:hover{color:rgba(255,255,255,.65);}
-.s-tag{font-size:13px;color:rgba(255,255,255,.38);letter-spacing:.06em;margin-bottom:.2rem;}
-.char-card{display:flex;align-items:center;gap:1rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:.9rem 1.4rem;max-width:380px;width:100%;animation:fadeUp .4s ease .1s both;}
+.s-tag{font-size:13px;color:rgba(255,255,255,.38);letter-spacing:.06em;}
+.char-card{display:flex;align-items:center;gap:1rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:.9rem 1.4rem;max-width:380px;width:100%;animation:fadeUp .5s ease .1s both;}
 .char-em{font-size:2.8rem;}
 .char-nm{font-size:18px;font-weight:900;color:#fff;margin-bottom:3px;text-align:left;}
 .char-role{font-size:13px;color:rgba(255,255,255,.4);text-align:left;}
-.bubble{background:rgba(21,101,192,.45);border:1px solid rgba(255,255,255,.12);border-radius:14px 14px 14px 0;padding:.85rem 1.1rem;max-width:380px;width:100%;font-size:16px;color:rgba(255,255,255,.92);line-height:2;text-align:left;animation:fadeUp .4s ease .4s both;opacity:0;}
-.scene.active .bubble{opacity:1;}
+.bubble{background:rgba(21,101,192,.45);border:1px solid rgba(255,255,255,.12);border-radius:14px 14px 14px 0;padding:.85rem 1.1rem;max-width:380px;width:100%;font-size:16px;color:#fff;line-height:2;text-align:left;animation:fadeUp .5s ease .4s both;}
 .phone{background:#0f172a;border:3px solid #1e293b;border-radius:24px;padding:1rem .9rem;width:260px;box-shadow:0 25px 60px rgba(0,0,0,.65);}
 .ph-bar{background:#1e293b;border-radius:8px;padding:.32rem .7rem;margin-bottom:.6rem;font-size:12px;color:#64748b;}
-.ph-card{background:#1e293b;border-radius:10px;padding:.6rem .75rem;margin-bottom:.4rem;text-align:left;opacity:0;}
+.ph-card{background:#1e293b;border-radius:10px;padding:.6rem .75rem;margin-bottom:.4rem;text-align:left;}
 .scene.active .ph-card:nth-child(1){animation:slideDown .35s ease .2s both;}
 .scene.active .ph-card:nth-child(2){animation:slideDown .35s ease .55s both;}
 .scene.active .ph-card:nth-child(3){animation:slideDown .35s ease .9s both;}
@@ -58,39 +53,36 @@ html,body{height:100%;overflow:hidden;font-family:var(--kr);}
 .ph-price small{font-size:11px;color:#64748b;font-weight:400;}
 .ph-note{font-size:11px;color:#94a3b8;margin-top:2px;}
 .ph-hot{border-left:3px solid #ef4444;}
-.shock-txt{font-size:18px;color:rgba(255,255,255,.92);line-height:2.2;margin-top:.4rem;animation:fadeUp .4s ease 1.3s both;opacity:0;}
-.scene.active .shock-txt{opacity:1;}
+.shock-txt{font-size:18px;color:#fff;line-height:2.2;margin-top:.4rem;animation:fadeUp .4s ease 1.3s both;}
+/* CHAT — FIXED: animation on row, no opacity:0 on bubble */
 .chat-wrap{display:flex;flex-direction:column;gap:.65rem;width:100%;max-width:420px;}
 .chat-row{display:flex;align-items:flex-end;gap:.4rem;}
 .chat-r{flex-direction:row-reverse;}
 .chat-em{font-size:1.5rem;flex-shrink:0;}
-.cbbl{background:#1e3a5f;border-radius:14px 14px 14px 0;padding:.55rem .85rem;font-size:14px;color:rgba(255,255,255,.9);line-height:1.9;max-width:290px;text-align:left;opacity:0;}
+.cbbl{background:#1e3a5f;border-radius:14px 14px 14px 0;padding:.6rem .9rem;font-size:14px;color:#fff;line-height:1.9;max-width:290px;text-align:left;}
 .cbbl.cr{background:#1a3a1a;border-radius:14px 14px 0 14px;border-left:3px solid #4CAF50;}
-.cbbl.ch{background:rgba(21,101,192,.55);}
-.scene.active .c1{animation:fadeUp .3s ease .1s both;}
-.scene.active .c2{animation:fadeUp .3s ease .85s both;}
-.scene.active .c3{animation:fadeUp .3s ease 1.6s both;}
-.uncle-av{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#FB8C00,#FFB300);display:flex;align-items:center;justify-content:center;font-size:2.2rem;border:4px solid #fff;box-shadow:0 8px 30px rgba(251,140,0,.4);animation:scaleIn .5s ease .1s both;opacity:0;}
-.scene.active .uncle-av{opacity:1;}
-.uncle-nm{font-family:'Press Start 2P',monospace;font-size:12px;color:var(--gold);margin-top:.4rem;animation:fadeUp .4s ease .35s both;opacity:0;}
-.scene.active .uncle-nm{opacity:1;}
+.cbbl.ch{background:rgba(21,101,192,.6);}
+.scene.active .c1{animation:fadeUp .35s ease .15s both;}
+.scene.active .c2{animation:fadeUp .35s ease .9s both;}
+.scene.active .c3{animation:fadeUp .35s ease 1.65s both;}
+/* MISSION SCENE */
+.uncle-av{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#FB8C00,#FFB300);display:flex;align-items:center;justify-content:center;font-size:2.2rem;border:4px solid #fff;box-shadow:0 8px 30px rgba(251,140,0,.4);animation:scaleIn .5s ease .1s both;}
+.uncle-nm{font-family:'Press Start 2P',monospace;font-size:12px;color:var(--gold);margin-top:.4rem;animation:fadeUp .4s ease .3s both;}
 .mission-grid{display:grid;grid-template-columns:1fr 1fr;gap:.45rem;width:100%;max-width:380px;margin-top:.4rem;}
-.mg{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:.6rem .8rem;font-size:15px;color:rgba(255,255,255,.85);opacity:0;}
+.mg{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:.6rem .8rem;font-size:15px;color:rgba(255,255,255,.85);}
 .scene.active .mg:nth-child(1){animation:scaleIn .4s ease .4s both;}
 .scene.active .mg:nth-child(2){animation:scaleIn .4s ease .55s both;}
 .scene.active .mg:nth-child(3){animation:scaleIn .4s ease .7s both;}
 .scene.active .mg:nth-child(4){animation:scaleIn .4s ease .85s both;}
-.crisis-box{background:rgba(229,57,53,.08);border:1px solid rgba(229,57,53,.22);border-radius:12px;padding:.8rem 1.1rem;width:100%;max-width:380px;animation:fadeUp .4s ease 1.05s both;opacity:0;}
-.scene.active .crisis-box{opacity:1;}
+.crisis-box{background:rgba(229,57,53,.08);border:1px solid rgba(229,57,53,.22);border-radius:12px;padding:.8rem 1.1rem;width:100%;max-width:380px;animation:fadeUp .4s ease 1.05s both;}
 .cl{font-size:15px;color:rgba(255,255,255,.65);line-height:2.4;text-align:left;}
-
 /* DIFFICULTY */
-.diff-title{font-family:'Press Start 2P',monospace;font-size:22px;color:var(--y);margin-bottom:1.5rem;text-align:center;animation:fadeUp .5s ease both;}
+.diff-title{font-family:'Press Start 2P',monospace;font-size:22px;color:var(--y);margin-bottom:1.5rem;animation:fadeUp .5s ease both;}
 .diff-grid{display:flex;gap:1rem;margin-bottom:2rem;flex-wrap:wrap;justify-content:center;}
-.diff-card{flex:1;min-width:180px;max-width:220px;background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.15);border-radius:14px;padding:1.5rem 1rem;cursor:pointer;transition:all .2s;text-align:center;opacity:0;}
-.diff-card:nth-child(1){animation:scaleIn .4s ease .1s both;}
-.diff-card:nth-child(2){animation:scaleIn .4s ease .25s both;}
-.diff-card:nth-child(3){animation:scaleIn .4s ease .4s both;}
+.diff-card{flex:1;min-width:180px;max-width:220px;background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.15);border-radius:14px;padding:1.5rem 1rem;cursor:pointer;transition:all .2s;text-align:center;animation:scaleIn .4s ease both;}
+.diff-card:nth-child(1){animation-delay:.1s;}
+.diff-card:nth-child(2){animation-delay:.25s;}
+.diff-card:nth-child(3){animation-delay:.4s;}
 .diff-card:hover{border-color:var(--y);transform:translateY(-3px);}
 .diff-card.sel-easy{border-color:#43A047;background:rgba(67,160,71,.18);}
 .diff-card.sel-normal{border-color:#FB8C00;background:rgba(251,140,0,.18);}
@@ -98,46 +90,80 @@ html,body{height:100%;overflow:hidden;font-family:var(--kr);}
 .diff-em{font-size:2.8rem;margin-bottom:.6rem;}
 .diff-nm{font-family:'Press Start 2P',monospace;font-size:13px;color:#fff;margin-bottom:.6rem;}
 .diff-desc{font-size:13px;color:rgba(255,255,255,.45);line-height:1.75;}
-.go-btn{background:linear-gradient(135deg,#FDD835,#FFB300);color:#0d1642;border:none;border-radius:12px;padding:1.1rem 3rem;font-family:'Press Start 2P',monospace;font-size:18px;cursor:pointer;transition:all .2s;opacity:.35;pointer-events:none;animation:fadeUp .5s ease .55s both;}
-.go-btn.on{opacity:1;pointer-events:auto;animation:fadeUp .5s ease .55s both,pulseBtn 2s ease-in-out .8s infinite;}
+.go-btn{background:linear-gradient(135deg,#FDD835,#FFB300);color:#0d1642;border:none;border-radius:12px;padding:1.1rem 3rem;font-family:'Press Start 2P',monospace;font-size:18px;cursor:pointer;transition:all .2s;opacity:.35;pointer-events:none;}
+.go-btn.on{opacity:1;pointer-events:auto;animation:pulseBtn 2s ease-in-out infinite;}
 .go-btn.on:hover{transform:translateY(-3px);}
-
 /* GAME BG */
 body::before{content:'';position:fixed;inset:0;z-index:0;background:linear-gradient(180deg,#1565C0 0%,#42A5F5 38%,#B3E5FC 62%,#E8F5E9 68%,#66BB6A 68%,#4CAF50 100%);}
 .cloud{position:fixed;z-index:1;background:white;border-radius:50px;opacity:.8;animation:drift linear infinite;}
 @keyframes drift{from{transform:translateX(-250px)}to{transform:translateX(110vw)}}
-
 /* HUD */
-.hud{position:fixed;top:0;left:0;right:0;height:68px;z-index:300;background:linear-gradient(135deg,#0d1642,#1a237e);border-bottom:3px solid var(--y);display:flex;align-items:center;padding:0 1rem;gap:.65rem;box-shadow:0 4px 20px rgba(0,0,0,.5);}
+.hud{position:fixed;top:0;left:0;right:0;height:68px;z-index:300;background:linear-gradient(135deg,#0d1642,#1a237e);border-bottom:3px solid var(--y);display:flex;align-items:center;padding:0 1rem;gap:.6rem;box-shadow:0 4px 20px rgba(0,0,0,.5);}
 .hud-logo{font-family:'Press Start 2P',monospace;font-size:11px;color:#fff;line-height:1.5;flex-shrink:0;}
 .hud-logo span{color:var(--y);}
 .hv{width:1px;height:40px;background:rgba(255,255,255,.12);flex-shrink:0;}
-.hs{display:flex;flex-direction:column;align-items:center;min-width:72px;}
-.hval{font-family:'Press Start 2P',monospace;font-size:16px;color:var(--y);}
-.hlbl{font-size:11px;color:rgba(255,255,255,.4);margin-top:3px;text-transform:uppercase;letter-spacing:.04em;}
-.hud-mid{flex:1;display:flex;justify-content:center;align-items:center;}
-.diff-badge{padding:.3rem .75rem;border-radius:6px;font-family:'Press Start 2P',monospace;font-size:12px;font-weight:700;}
+.hs{display:flex;flex-direction:column;align-items:center;min-width:68px;}
+.hval{font-family:'Press Start 2P',monospace;font-size:15px;color:var(--y);}
+.hlbl{font-size:10px;color:rgba(255,255,255,.4);margin-top:3px;text-transform:uppercase;letter-spacing:.04em;}
+.hud-mid{flex:1;display:flex;justify-content:center;align-items:center;gap:.6rem;}
+/* TIME CONTROLS */
+.time-display{font-family:'Press Start 2P',monospace;font-size:12px;color:#fff;letter-spacing:.04em;}
+.time-display span{color:var(--y);}
+.spd-btn{padding:.28rem .55rem;border:2px solid rgba(255,255,255,.25);background:transparent;color:rgba(255,255,255,.5);font-family:'Press Start 2P',monospace;font-size:11px;cursor:pointer;border-radius:4px;transition:all .14s;}
+.spd-btn:hover{border-color:var(--y);color:var(--y);}
+.spd-btn.on{background:var(--y);border-color:var(--y);color:#0d1642;}
+.spd-btn.play-btn{background:rgba(67,160,71,.3);border-color:#43A047;color:#A5D6A7;}
+.spd-btn.play-btn.paused{background:rgba(229,57,53,.3);border-color:#E53935;color:#EF9A9A;}
+.diff-badge{padding:.3rem .65rem;border-radius:6px;font-family:'Press Start 2P',monospace;font-size:11px;font-weight:700;}
 .badge-easy{background:#43A047;color:#fff;}
 .badge-normal{background:#FB8C00;color:#fff;}
 .badge-hard{background:#E53935;color:#fff;}
-.hud-r{display:flex;gap:.4rem;flex-shrink:0;}
-.hbtn{padding:.36rem .72rem;border:2px solid var(--y);background:transparent;color:var(--y);font-family:'Press Start 2P',monospace;font-size:11px;cursor:pointer;border-radius:5px;transition:all .14s;}
+.hud-r{display:flex;gap:.38rem;flex-shrink:0;}
+.hbtn{padding:.32rem .62rem;border:2px solid var(--y);background:transparent;color:var(--y);font-family:'Press Start 2P',monospace;font-size:10px;cursor:pointer;border-radius:5px;transition:all .14s;}
 .hbtn:hover,.hbtn.pr{background:var(--y);color:#0d1642;}
-
 /* IMPACT BAR */
-.impact-bar{position:fixed;top:68px;left:0;right:0;height:36px;z-index:250;background:rgba(8,14,40,.92);border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;padding:0 1.2rem;gap:1.3rem;backdrop-filter:blur(10px);font-size:13px;color:rgba(255,255,255,.45);}
-.ib{display:flex;align-items:center;gap:.25rem;}
+.impact-bar{position:fixed;top:68px;left:0;right:0;height:36px;z-index:250;background:rgba(8,14,40,.92);border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;padding:0 1.2rem;gap:1.2rem;backdrop-filter:blur(10px);font-size:13px;color:rgba(255,255,255,.45);}
+.ib{display:flex;align-items:center;gap:.22rem;}
 .ib strong{color:rgba(255,255,255,.85);}
 .ib.good strong{color:#A5D6A7;}
 .ibsep{color:rgba(255,255,255,.1);}
 .ib-live{margin-left:auto;display:flex;align-items:center;gap:.3rem;}
 .ldot{width:6px;height:6px;background:#E53935;border-radius:50%;animation:blink 1.4s ease-in-out infinite;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.1}}
-
+/* VIENNA PROGRESS PANEL */
+.wien-panel{position:fixed;top:108px;left:50%;transform:translateX(-50%);z-index:200;background:rgba(13,22,66,.92);border:2px solid var(--gold);border-radius:14px;padding:.7rem 1.1rem;backdrop-filter:blur(12px);display:none;min-width:420px;}
+.wien-panel.show{display:block;}
+.wp-title{font-family:'Press Start 2P',monospace;font-size:10px;color:var(--gold);margin-bottom:.5rem;text-align:center;}
+.wp-rows{display:flex;gap:.8rem;}
+.wp-row{flex:1;}
+.wp-lbl{font-size:11px;color:rgba(255,255,255,.45);margin-bottom:3px;display:flex;justify-content:space-between;}
+.wp-lbl span{color:var(--y);}
+.wp-bar{height:7px;background:rgba(255,255,255,.12);border-radius:4px;overflow:hidden;}
+.wp-fill{height:100%;border-radius:4px;transition:width .8s ease;}
+.wp-fill.rent{background:linear-gradient(90deg,#E53935,#FDD835);}
+.wp-fill.hl{background:linear-gradient(90deg,#E53935,#42A5F5);}
+.wp-fill.social{background:linear-gradient(90deg,#1565C0,#43A047);}
 /* MAP */
 #map{position:fixed;top:104px;left:0;right:0;bottom:0;z-index:2;}
 .leaflet-container{background:#B3E5FC !important;}
-
+/* PARCEL MARKERS */
+.parcel-icon{display:flex;flex-direction:column;align-items:center;cursor:pointer;filter:drop-shadow(0 3px 6px rgba(0,0,0,.5));}
+.pl-sign{background:#E53935;border:3px solid #fff;border-radius:8px;padding:4px 8px;text-align:center;min-width:80px;}
+.pl-sign.building{background:#FB8C00;animation:signPulse 1.5s ease-in-out infinite;}
+.pl-sign.done{background:#43A047;cursor:default;}
+@keyframes signPulse{0%,100%{box-shadow:0 0 0 0 rgba(251,140,0,.5)}50%{box-shadow:0 0 0 6px rgba(251,140,0,0)}}
+.pl-years{font-size:9px;color:rgba(255,255,255,.65);}
+.pl-name{font-family:'Press Start 2P',monospace;font-size:9px;color:#fff;line-height:1.4;margin-top:1px;}
+.pl-prog{font-size:9px;color:#FFE082;margin-top:1px;}
+/* Building floors visual */
+.bld-floors{display:flex;flex-direction:column;gap:1px;margin-bottom:2px;align-items:center;}
+.bfl{width:52px;height:7px;border-radius:1px;transition:background .3s;}
+.bfl.done{background:#4fc3f7;box-shadow:inset 1px 1px 0 rgba(255,255,255,.25);}
+.bfl.wip{background:#FDD835;animation:wipFloor .8s ease-in-out infinite alternate;}
+.bfl.ghost{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.15);}
+@keyframes wipFloor{from{opacity:.5}to{opacity:1}}
+.bld-crane{font-size:1.1rem;line-height:1;}
+.bld-done-em{font-size:1.6rem;line-height:1;}
 /* BUILD PANEL */
 .build-panel{position:fixed;top:104px;right:0;bottom:0;width:400px;z-index:200;background:var(--panel);border-left:2px solid rgba(255,255,255,.08);display:flex;flex-direction:column;transform:translateX(400px);transition:transform .35s cubic-bezier(.34,1.56,.64,1);backdrop-filter:blur(14px);}
 .build-panel.open{transform:translateX(0);}
@@ -154,7 +180,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background:linear-gradi
 .bf{display:flex;flex-direction:column;align-items:center;gap:1px;position:relative;z-index:1;}
 .bfr{display:flex;gap:1px;}
 .bu{width:13px;height:9px;border-radius:1px;}
-.bgnd{width:100%;height:4px;background:#4a7a2e;border-radius:1px;position:relative;z-index:1;}
+.bgnd{width:100%;height:4px;background:#4a7a2e;border-radius:1px;z-index:1;}
 .brd{width:110%;height:8px;background:#78909C;position:absolute;bottom:0;left:-5%;}
 .brd::after{content:'';position:absolute;top:50%;left:0;right:0;height:2px;background:repeating-linear-gradient(90deg,white 0,white 10px,transparent 10px,transparent 20px);transform:translateY(-50%);}
 .clbl{font-family:'Press Start 2P',monospace;font-size:10px;color:var(--y);margin-bottom:.5rem;letter-spacing:.04em;}
@@ -174,6 +200,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 .sstat{background:rgba(255,255,255,.05);border-radius:8px;padding:.55rem;border:1px solid rgba(255,255,255,.08);}
 .sv{font-family:'Press Start 2P',monospace;font-size:14px;line-height:1.3;}
 .sl{font-size:11px;color:rgba(255,255,255,.32);margin-top:3px;text-transform:uppercase;}
+/* Construction time estimate box */
+.ctime-box{background:rgba(251,140,0,.1);border:1px solid rgba(251,140,0,.3);border-radius:9px;padding:.6rem .8rem;margin-bottom:.75rem;display:flex;align-items:center;gap:.5rem;}
+.ctime-em{font-size:1.4rem;}
+.ctime-txt{font-size:13px;color:rgba(255,255,255,.75);line-height:1.7;}
+.ctime-months{font-family:'Press Start 2P',monospace;font-size:14px;color:var(--gold);}
 .roi-box{background:linear-gradient(135deg,rgba(255,184,0,.1),rgba(229,57,53,.1));border:2px solid rgba(255,184,0,.3);border-radius:11px;padding:.9rem;text-align:center;margin-bottom:.75rem;}
 .roi-n{font-family:'Press Start 2P',monospace;font-size:36px;line-height:1;margin-bottom:.2rem;}
 .roi-s{font-size:12px;color:rgba(255,255,255,.38);}
@@ -187,7 +218,6 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 .build-btn{width:100%;padding:1rem;border:none;border-radius:10px;background:linear-gradient(135deg,#FDD835,#FFB300);color:#0d1642;font-family:'Press Start 2P',monospace;font-size:16px;cursor:pointer;letter-spacing:.04em;transition:all .2s;box-shadow:0 4px 15px rgba(253,216,53,.28);}
 .build-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(253,216,53,.48);}
 .build-btn:disabled{background:#444;color:#666;cursor:not-allowed;transform:none;box-shadow:none;}
-
 /* LEADERBOARD */
 .lb-panel{position:fixed;top:104px;right:0;bottom:0;width:310px;z-index:200;background:var(--panel);border-left:2px solid rgba(255,255,255,.08);display:flex;flex-direction:column;backdrop-filter:blur(14px);transform:translateX(310px);transition:transform .3s;}
 .lb-panel.open{transform:translateX(0);}
@@ -207,7 +237,6 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 .lb-foot{padding:.65rem 1rem;border-top:1px solid rgba(255,255,255,.07);display:flex;justify-content:space-between;align-items:center;}
 .lb-tv{font-family:'Press Start 2P',monospace;font-size:14px;color:var(--g);}
 .lb-tl{font-size:13px;color:rgba(255,255,255,.3);}
-
 /* UNCLE */
 .uncle-wrap{position:fixed;bottom:1.3rem;left:1.3rem;z-index:150;display:none;align-items:flex-end;gap:.5rem;}
 .uncle-wrap.show{display:flex;}
@@ -217,8 +246,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 .uncle-bbl.show{opacity:1;transform:scale(1);pointer-events:auto;}
 .ub-tag{font-family:'Press Start 2P',monospace;font-size:10px;color:var(--gold);margin-bottom:5px;}
 .ub-txt{font-size:14px;color:rgba(255,255,255,.9);line-height:1.8;}
-
-/* EVENT POPUP */
+/* EVENT */
 .ev-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:499;display:none;backdrop-filter:blur(4px);}
 .ev-bg.on{display:block;}
 .ev-pop{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.8);z-index:500;background:linear-gradient(135deg,#1a237e,#283593);border-radius:16px;padding:2rem;min-width:360px;max-width:92vw;border:3px solid var(--r);box-shadow:0 20px 60px rgba(0,0,0,.7);opacity:0;pointer-events:none;transition:all .3s cubic-bezier(.34,1.56,.64,1);}
@@ -233,77 +261,80 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 .ev-sk{padding:.7rem 1rem;background:rgba(255,255,255,.07);color:rgba(255,255,255,.4);border:2px solid rgba(255,255,255,.12);border-radius:9px;font-family:'Press Start 2P',monospace;font-size:12px;cursor:pointer;}
 .ev-sk:hover{color:#fff;}
 .dl-bar{height:6px;background:rgba(255,255,255,.1);border-radius:3px;margin-top:.55rem;overflow:hidden;}
-.dl-fill{height:100%;background:var(--y);border-radius:3px;animation:fillB 1.5s linear forwards;}
-@keyframes fillB{from{width:0}to{width:100%}}
-
-/* MODAL */
+.dl-fill{height:100%;background:var(--y);border-radius:3px;}
+/* MODALS */
 .mo{position:fixed;inset:0;background:rgba(4,8,25,.88);z-index:600;display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px);}
 .mo.on{display:flex;}
 .mo-box{background:linear-gradient(135deg,#0d1642,#1a237e);border:3px solid var(--y);border-radius:18px;padding:2rem;min-width:380px;max-width:92vw;box-shadow:0 20px 60px rgba(0,0,0,.7);animation:popIn .35s cubic-bezier(.34,1.56,.64,1);}
 @keyframes popIn{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
 .mo-em{font-size:3rem;text-align:center;margin-bottom:.4rem;}
 .mo-ti{font-family:'Press Start 2P',monospace;font-size:14px;color:var(--y);text-align:center;margin-bottom:.3rem;}
-.mo-roi{font-family:'Press Start 2P',monospace;font-size:2.2rem;color:#fff;text-align:center;margin-bottom:.3rem;}
+.mo-roi{font-family:'Press Start 2P',monospace;font-size:2rem;color:#fff;text-align:center;margin-bottom:.3rem;}
 .mo-sub{font-size:14px;color:rgba(255,255,255,.48);text-align:center;margin-bottom:.8rem;line-height:2;white-space:pre-line;}
 .mo-impact{display:grid;grid-template-columns:1fr 1fr;gap:.4rem;background:rgba(67,160,71,.08);border:1px solid rgba(67,160,71,.22);border-radius:10px;padding:.65rem;margin-bottom:1rem;}
 .mi-v{font-family:'Press Start 2P',monospace;font-size:14px;color:#A5D6A7;}
 .mi-l{font-size:11px;color:rgba(255,255,255,.34);margin-top:3px;text-transform:uppercase;}
 .mo-lbl{font-size:12px;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.3rem;}
-.mo-input{width:100%;background:rgba(0,0,0,.35);border:2px solid rgba(255,255,255,.18);border-radius:9px;color:#fff;font-family:'Nunito',sans-serif;font-size:16px;padding:.65rem .9rem;outline:none;margin-bottom:1rem;font-weight:700;}
+.mo-input{width:100%;background:rgba(0,0,0,.35);border:2px solid rgba(255,255,255,.18);border-radius:9px;color:#fff;font-size:16px;padding:.65rem .9rem;outline:none;margin-bottom:1rem;font-weight:700;}
 .mo-input:focus{border-color:var(--y);}
 .mo-btns{display:flex;gap:.5rem;}
 .mo-ok{flex:1;padding:.65rem;background:var(--y);color:#0d1642;border:none;border-radius:9px;font-family:'Press Start 2P',monospace;font-size:12px;cursor:pointer;}
 .mo-ok:hover{background:#ffe57f;}
 .mo-sk{padding:.65rem .9rem;background:rgba(255,255,255,.06);color:rgba(255,255,255,.32);border:2px solid rgba(255,255,255,.1);border-radius:9px;font-family:'Press Start 2P',monospace;font-size:12px;cursor:pointer;}
 .mo-sk:hover{color:#fff;}
-
+/* VIENNA WIN */
+.wien-win{position:fixed;inset:0;background:rgba(4,8,25,.92);z-index:800;display:none;align-items:center;justify-content:center;backdrop-filter:blur(12px);}
+.wien-win.on{display:flex;}
+.ww-box{background:linear-gradient(135deg,#1a237e,#283593,#1a3a1a);border:4px solid var(--gold);border-radius:22px;padding:2.5rem;min-width:440px;max-width:92vw;box-shadow:0 30px 80px rgba(0,0,0,.8);animation:popIn .5s cubic-bezier(.34,1.56,.64,1);text-align:center;}
+.ww-em{font-size:4rem;margin-bottom:.5rem;}
+.ww-title{font-family:'Press Start 2P',monospace;font-size:16px;color:var(--gold);margin-bottom:.4rem;}
+.ww-sub{font-size:16px;color:rgba(255,255,255,.7);margin-bottom:1.5rem;line-height:2;}
+.ww-compare{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:1.5rem;}
+.ww-city{background:rgba(255,255,255,.06);border-radius:12px;padding:.9rem;}
+.ww-city-nm{font-family:'Press Start 2P',monospace;font-size:11px;color:var(--y);margin-bottom:.5rem;}
+.ww-city-nm.wien{color:#A5D6A7;}
+.ww-stat{font-size:13px;color:rgba(255,255,255,.7);margin-bottom:.2rem;}
+.ww-btn{background:var(--gold);color:#0d1642;border:none;border-radius:10px;padding:.9rem 2.5rem;font-family:'Press Start 2P',monospace;font-size:14px;cursor:pointer;}
 /* SHARE */
 .sh-ov{position:fixed;inset:0;background:rgba(4,8,25,.92);z-index:700;display:none;align-items:center;justify-content:center;backdrop-filter:blur(10px);}
 .sh-ov.on{display:flex;}
-.sh-card{background:linear-gradient(135deg,#0d1642,#1a237e,#0a1a50);border:3px solid var(--y);border-radius:22px;padding:2rem;min-width:380px;max-width:92vw;box-shadow:0 20px 60px rgba(0,0,0,.7);animation:popIn .35s cubic-bezier(.34,1.56,.64,1);position:relative;}
+.sh-card{background:linear-gradient(135deg,#0d1642,#1a237e);border:3px solid var(--y);border-radius:22px;padding:2rem;min-width:380px;max-width:92vw;box-shadow:0 20px 60px rgba(0,0,0,.7);animation:popIn .35s cubic-bezier(.34,1.56,.64,1);position:relative;}
 .sh-x{position:absolute;top:.9rem;right:.9rem;background:rgba(255,255,255,.1);border:none;color:rgba(255,255,255,.5);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;}
-.sh-x:hover{color:#fff;}
 .sh-logo{font-family:'Press Start 2P',monospace;font-size:14px;color:var(--y);text-align:center;}
 .sh-tag{font-size:13px;color:rgba(255,255,255,.35);text-align:center;margin-top:.2rem;margin-bottom:1.2rem;}
 .sh-stats{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:1.1rem;}
 .sh-stat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:11px;padding:.75rem;text-align:center;}
-.sh-v{font-family:'Press Start 2P',monospace;font-size:16px;line-height:1.3;}
+.sh-v{font-family:'Press Start 2P',monospace;font-size:15px;line-height:1.3;}
 .sh-l{font-size:12px;color:rgba(255,255,255,.38);margin-top:4px;}
-.sh-msg{font-size:14px;color:rgba(255,255,255,.6);text-align:center;line-height:2;margin-bottom:1.1rem;background:rgba(229,57,53,.07);border:1px solid rgba(229,57,53,.18);border-radius:9px;padding:.75rem;}
+.sh-msg{font-size:13px;color:rgba(255,255,255,.6);text-align:center;line-height:2;margin-bottom:1.1rem;background:rgba(229,57,53,.07);border:1px solid rgba(229,57,53,.18);border-radius:9px;padding:.7rem;}
 .sh-btns{display:flex;gap:.5rem;}
-.sh-link{flex:1;padding:.65rem;background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.2);color:#fff;border-radius:9px;font-family:'Press Start 2P',monospace;font-size:11px;cursor:pointer;transition:all .15s;}
+.sh-link{flex:1;padding:.65rem;background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.2);color:#fff;border-radius:9px;font-family:'Press Start 2P',monospace;font-size:11px;cursor:pointer;}
 .sh-link:hover{background:rgba(255,255,255,.15);}
 .sh-score{flex:1;padding:.65rem;background:var(--y);color:#0d1642;border:none;border-radius:9px;font-family:'Press Start 2P',monospace;font-size:11px;cursor:pointer;}
-.sh-score:hover{background:#ffe57f;}
-
 /* MISC */
-.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(80px);background:linear-gradient(135deg,#1B5E20,#2E7D32);border:2px solid #66BB6A;border-radius:11px;padding:.65rem 1.3rem;z-index:800;font-family:'Press Start 2P',monospace;font-size:12px;color:#fff;transition:transform .4s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;box-shadow:0 8px 30px rgba(0,0,0,.4);}
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(80px);background:linear-gradient(135deg,#1B5E20,#2E7D32);border:2px solid #66BB6A;border-radius:11px;padding:.65rem 1.3rem;z-index:800;font-family:'Press Start 2P',monospace;font-size:12px;color:#fff;transition:transform .4s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;}
 .toast.show{transform:translateX(-50%) translateY(0);}
 .toast.warn{background:linear-gradient(135deg,#B71C1C,#C62828);border-color:#EF9A9A;}
-.bf-ani{position:fixed;pointer-events:none;font-size:2.2rem;z-index:350;animation:floatUp 1.6s ease-out forwards;}
-@keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-90px) scale(1.7)}}
 .hint{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);z-index:150;background:rgba(13,22,66,.92);border:2px solid var(--y);border-radius:12px;padding:.7rem 1.4rem;text-align:center;backdrop-filter:blur(10px);animation:hintFloat 3s ease-in-out infinite;display:none;}
 @keyframes hintFloat{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-5px)}}
 .hint p{font-family:'Press Start 2P',monospace;font-size:13px;color:#fff;line-height:2.2;}
 .hint span{color:var(--y);}
+.income-pop{position:fixed;pointer-events:none;font-family:'Press Start 2P',monospace;font-size:11px;color:#A5D6A7;z-index:350;animation:incomeFloat 2s ease-out forwards;}
+@keyframes incomeFloat{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-60px)}}
 .leaflet-popup-content-wrapper{border-radius:12px !important;border:2px solid var(--y) !important;background:rgba(13,22,66,.97) !important;color:#fff !important;font-family:'Nunito',sans-serif !important;font-size:14px !important;backdrop-filter:blur(10px) !important;}
 .leaflet-popup-tip{background:rgba(13,22,66,.97) !important;}
 .leaflet-popup-close-button{color:rgba(255,255,255,.4) !important;}
-
-/* KEYFRAMES */
 @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 @keyframes slideDown{from{opacity:0;transform:translateY(-15px)}to{opacity:1;transform:translateY(0)}}
 @keyframes scaleIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
 </style>
 </head>
 <body>
-
-<!-- CLOUDS -->
 <div class="cloud" style="width:130px;height:42px;top:75px;left:-250px;animation-duration:38s"></div>
 <div class="cloud" style="width:85px;height:30px;top:105px;left:-250px;animation-duration:52s;animation-delay:12s"></div>
 <div class="cloud" style="width:170px;height:54px;top:85px;left:-250px;animation-duration:45s;animation-delay:25s"></div>
 
-<!-- ═══ STAGE 1: SPLASH ═══ -->
+<!-- STAGE 1: SPLASH -->
 <div id="st-splash" class="stage-ov">
   <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:1rem;">
     <div class="sp-emoji">🏠</div>
@@ -313,79 +344,41 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
   </div>
 </div>
 
-<!-- ═══ STAGE 2: STORY ═══ -->
+<!-- STAGE 2: STORY -->
 <div id="st-story" class="stage-ov hidden">
-  <div class="sdots">
-    <div class="sdot on"></div><div class="sdot"></div><div class="sdot"></div><div class="sdot"></div>
-  </div>
+  <div class="sdots"><div class="sdot on"></div><div class="sdot"></div><div class="sdot"></div><div class="sdot"></div></div>
   <div class="story-wrap">
-    <!-- Scene 1 -->
     <div class="scene active" id="sc0">
       <div class="s-tag">2025년 9월 · 더블린 국제공항 ✈️</div>
-      <div class="char-card">
-        <div class="char-em">🎓</div>
-        <div>
-          <div class="char-nm">김석준 (25세)</div>
-          <div class="char-role">UCD 경영학 박사과정 · 전북 전주 출신</div>
-        </div>
-      </div>
+      <div class="char-card"><div class="char-em">🎓</div><div><div class="char-nm">김석준 (25세)</div><div class="char-role">UCD 경영학 박사과정 · 전북 전주 출신</div></div></div>
       <div class="bubble">"드디어 더블린이다! 🍀<br>꿈에 그리던 아일랜드 유학...<br>일단 집부터 구해야겠어!"</div>
     </div>
-    <!-- Scene 2 -->
     <div class="scene" id="sc1">
       <div class="s-tag">📱 Daft.ie 더블린 매물 검색 중...</div>
       <div class="phone">
-        <div class="ph-bar">🏠 daft.ie &nbsp;·&nbsp; Dublin</div>
-        <div class="ph-card">
-          <div class="ph-type">Studio · Dublin City Centre</div>
-          <div class="ph-price">€2,100<small>/month</small></div>
-          <div class="ph-note">방 1개, 화장실 공유</div>
-        </div>
-        <div class="ph-card">
-          <div class="ph-type">1-Bed · Dublin 4</div>
-          <div class="ph-price">€2,650<small>/month</small></div>
-          <div class="ph-note">즉시 입주 가능</div>
-        </div>
-        <div class="ph-card ph-hot">
-          <div class="ph-type">⚡ Room Share · Dublin 7</div>
-          <div class="ph-price">€1,400<small>/month</small></div>
-          <div class="ph-note">오늘 마감 · 12명 보는 중</div>
-        </div>
+        <div class="ph-bar">🏠 daft.ie · Dublin</div>
+        <div class="ph-card"><div class="ph-type">Studio · Dublin City Centre</div><div class="ph-price">€2,100<small>/month</small></div><div class="ph-note">방 1개, 화장실 공유</div></div>
+        <div class="ph-card"><div class="ph-type">1-Bed · Dublin 4</div><div class="ph-price">€2,650<small>/month</small></div><div class="ph-note">즉시 입주 가능</div></div>
+        <div class="ph-card ph-hot"><div class="ph-type">⚡ Room Share · Dublin 7</div><div class="ph-price">€1,400<small>/month</small></div><div class="ph-note">오늘 마감 · 12명 보는 중</div></div>
       </div>
       <div class="shock-txt">"잠깐... 😱 방 하나에 <strong style="color:var(--y)">월 200만원?!</strong><br>이게 무슨 나라야..."</div>
     </div>
-    <!-- Scene 3 -->
     <div class="scene" id="sc2">
       <div class="s-tag">📞 한국으로 국제전화 연결 중...</div>
       <div class="chat-wrap">
-        <div class="chat-row c1">
-          <div class="chat-em">🎓</div>
-          <div class="cbbl cr">"삼촌... 여기 방 하나에 월세가<br><strong>200만원</strong>이에요. 빈 땅은 그렇게 많다는데..."</div>
-        </div>
-        <div class="chat-row chat-r c2">
-          <div class="chat-em">👷</div>
-          <div class="cbbl">"뭐?! 그 넓은 더블린에 빈 땅이 많은데<br>왜 집을 안 짓는 거야?! 😤"</div>
-        </div>
-        <div class="chat-row chat-r c3">
-          <div class="chat-em">👷</div>
-          <div class="cbbl ch">"<strong style="color:var(--y);font-size:16px">내가 직접 지어드리겠다!!!</strong> 🏗<br>조카 걱정은 안 해도 돼!"</div>
-        </div>
+        <div class="chat-row c1"><div class="chat-em">🎓</div><div class="cbbl cr">"삼촌... 여기 방 하나에 월세가<br><strong>200만원</strong>이에요. 빈 땅은 그렇게 많다는데..."</div></div>
+        <div class="chat-row chat-r c2"><div class="chat-em">👷</div><div class="cbbl">"뭐?! 빈 땅이 많은데<br>왜 집을 안 짓는 거야?! 😤"</div></div>
+        <div class="chat-row chat-r c3"><div class="chat-em">👷</div><div class="cbbl ch">"<strong style="color:var(--y);font-size:16px">내가 직접 지어드리겠다!!!</strong> 🏗<br>조카 걱정은 안 해도 돼!"</div></div>
       </div>
     </div>
-    <!-- Scene 4 -->
     <div class="scene" id="sc3">
       <div class="uncle-av">👷</div>
       <div class="uncle-nm">김건설 삼촌 — 건설사 대표</div>
-      <div class="mission-grid">
-        <div class="mg">🗺️ 더블린 빈 땅 공략</div>
-        <div class="mg">🏗️ 아파트 설계 & 건설</div>
-        <div class="mg">📉 전체 집값 낮추기</div>
-        <div class="mg">🏕️ 노숙자 줄이기</div>
-      </div>
+      <div class="mission-grid"><div class="mg">🗺️ 더블린 빈 땅 공략</div><div class="mg">🏗️ 아파트 건설</div><div class="mg">📉 집값 낮추기</div><div class="mg">🏕️ 노숙자 줄이기</div></div>
       <div class="crisis-box">
-        <div class="cl">📌 더블린 평균 월세 <strong style="color:var(--y)">€2,300/월</strong> (한화 약 330만원)</div>
-        <div class="cl">📌 긴급 노숙자 <strong style="color:var(--r)">13,400명</strong> (2025년 기준)</div>
-        <div class="cl">📌 수년간 방치된 빈 땅 <strong style="color:var(--g)">19곳</strong></div>
+        <div class="cl">🎯 최종 목표: <strong style="color:var(--gold)">빈(Wien) 모델 달성</strong></div>
+        <div class="cl">📌 현재 더블린 월세 <strong style="color:var(--r)">€2,300</strong> → 목표 <strong style="color:var(--g)">€1,200</strong></div>
+        <div class="cl">📌 노숙자 <strong style="color:var(--r)">13,400명</strong> → 목표 <strong style="color:var(--g)">500명</strong></div>
       </div>
     </div>
   </div>
@@ -395,64 +388,80 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
   </div>
 </div>
 
-<!-- ═══ STAGE 3: DIFFICULTY ═══ -->
+<!-- STAGE 3: DIFFICULTY -->
 <div id="st-diff" class="stage-ov hidden">
   <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:1.2rem;padding:2rem;max-width:720px;width:100%;">
     <div class="diff-title">난이도를 선택하세요</div>
     <div class="diff-grid">
-      <div class="diff-card" id="dc-easy" onclick="selDiff('easy')">
-        <div class="diff-em">😊</div>
-        <div class="diff-nm">EASY</div>
-        <div class="diff-desc">세금·장애물 없음<br>건설 전략에만 집중!<br><br><span style="color:rgba(255,255,255,.28)">처음 플레이하는 분 추천</span></div>
-      </div>
-      <div class="diff-card" id="dc-normal" onclick="selDiff('normal')">
-        <div class="diff-em">😤</div>
-        <div class="diff-nm">NORMAL</div>
-        <div class="diff-desc">취득세 7.5%<br>VAT 13.5%, 개발부담금<br>실제 아이리시 세금 적용<br><br><span style="color:rgba(255,255,255,.28)">부동산 관심자 추천</span></div>
-      </div>
-      <div class="diff-card" id="dc-hard" onclick="selDiff('hard')">
-        <div class="diff-em">💀</div>
-        <div class="diff-nm">HARD</div>
-        <div class="diff-desc">모든 세금 +<br>님비·파업·행정지연<br>고고학 발굴 랜덤 이벤트<br><br><span style="color:rgba(255,255,255,.28)">도전을 즐기는 분 추천</span></div>
-      </div>
+      <div class="diff-card" id="dc-easy" onclick="selDiff('easy')"><div class="diff-em">😊</div><div class="diff-nm">EASY</div><div class="diff-desc">세금·장애물 없음<br>건설 전략 집중!<br><br><span style="color:rgba(255,255,255,.28)">처음 플레이하는 분</span></div></div>
+      <div class="diff-card" id="dc-normal" onclick="selDiff('normal')"><div class="diff-em">😤</div><div class="diff-nm">NORMAL</div><div class="diff-desc">취득세 7.5%<br>VAT 13.5%, 개발부담금<br>실제 아이리시 세금<br><br><span style="color:rgba(255,255,255,.28)">부동산 관심자 추천</span></div></div>
+      <div class="diff-card" id="dc-hard" onclick="selDiff('hard')"><div class="diff-em">💀</div><div class="diff-nm">HARD</div><div class="diff-desc">모든 세금 +<br>님비·파업·행정지연<br>랜덤 이벤트<br><br><span style="color:rgba(255,255,255,.28)">도전을 즐기는 분</span></div></div>
     </div>
     <button class="go-btn" id="go-btn" onclick="goStage4()">🏗 건설 시작하기!</button>
   </div>
 </div>
 
-<!-- ═══ STAGE 4: GAME ═══ -->
+<!-- STAGE 4: GAME -->
 <div class="hud" id="hud" style="display:none">
   <div class="hud-logo">VACANT<span>.</span><br>DUBLIN</div>
   <div class="hv"></div>
   <div class="hs"><div class="hval" id="h-roi">—</div><div class="hlbl">Best ROI</div></div>
   <div class="hv"></div>
-  <div class="hs"><div class="hval" id="h-homes" style="color:#A5D6A7">0</div><div class="hlbl">주택 수</div></div>
-  <div class="hv"></div>
-  <div class="hs"><div class="hval" id="h-hl" style="color:#81D4FA">+0</div><div class="hlbl">노숙자↓</div></div>
+  <div class="hs"><div class="hval" id="h-homes" style="color:#A5D6A7">0</div><div class="hlbl">완공 세대</div></div>
   <div class="hv"></div>
   <div class="hs"><div class="hval" id="h-budget" style="color:#90CAF9">€50M</div><div class="hlbl">예산</div></div>
-  <div class="hud-mid"><div id="diff-badge" class="diff-badge badge-easy">😊 EASY</div></div>
+  <div class="hv"></div>
+  <div class="hs"><div class="hval" id="h-income" style="color:#FFE082">€0</div><div class="hlbl">월수익</div></div>
+  <div class="hud-mid">
+    <div class="time-display">📅 <span id="h-date">2025년 1월</span></div>
+    <button class="spd-btn play-btn paused" id="play-btn" onclick="togglePlay()">▶ PLAY</button>
+    <button class="spd-btn" id="spd1" onclick="setSpeed(1)">1x</button>
+    <button class="spd-btn" id="spd2" onclick="setSpeed(2)">2x</button>
+    <button class="spd-btn" id="spd5" onclick="setSpeed(5)">5x</button>
+    <div id="diff-badge" class="diff-badge badge-easy">😊 EASY</div>
+  </div>
   <div class="hud-r">
     <button class="hbtn" onclick="toggleLB()">🏆</button>
-    <button class="hbtn pr" onclick="openShare()">📤 공유</button>
+    <button class="hbtn" onclick="toggleWien()">🎯</button>
+    <button class="hbtn pr" onclick="openShare()">📤</button>
   </div>
 </div>
 <div class="impact-bar" id="impact-bar" style="display:none">
   <div class="ib">🏙️ 더블린 평균 월세: <strong id="ib-rent">€2,300</strong>/월</div>
   <div class="ibsep">|</div>
-  <div class="ib">🏕️ 긴급 노숙자: <strong id="ib-hl">13,400명</strong></div>
-  <div class="ibsep" id="ib-sep2" style="display:none">|</div>
-  <div class="ib good" id="ib-my" style="display:none">📉 내 기여: <strong id="ib-rdrop">-€0</strong> · 노숙자 <strong id="ib-hdrop">-0명</strong></div>
+  <div class="ib">🏕️ 노숙자: <strong id="ib-hl">13,400명</strong></div>
+  <div class="ibsep">|</div>
+  <div class="ib">🏗 공사중: <strong id="ib-con">0개소</strong></div>
   <div class="ib-live"><div class="ldot"></div><span>실시간 더블린 주택 위기</span></div>
 </div>
+
+<!-- VIENNA PROGRESS PANEL -->
+<div class="wien-panel" id="wien-panel">
+  <div class="wp-title">🎯 빈(Wien) 모델 달성 목표</div>
+  <div class="wp-rows">
+    <div class="wp-row">
+      <div class="wp-lbl">평균 월세 <span id="wp-rent-v">€2,300</span></div>
+      <div class="wp-bar"><div class="wp-fill rent" id="wp-rent" style="width:0%"></div></div>
+      <div style="font-size:10px;color:rgba(255,255,255,.3);margin-top:2px">목표: €1,200</div>
+    </div>
+    <div class="wp-row">
+      <div class="wp-lbl">노숙자 수 <span id="wp-hl-v">13,400명</span></div>
+      <div class="wp-bar"><div class="wp-fill hl" id="wp-hl" style="width:0%"></div></div>
+      <div style="font-size:10px;color:rgba(255,255,255,.3);margin-top:2px">목표: 500명</div>
+    </div>
+    <div class="wp-row">
+      <div class="wp-lbl">사회주택 비율 <span id="wp-soc-v">0%</span></div>
+      <div class="wp-bar"><div class="wp-fill social" id="wp-soc" style="width:0%"></div></div>
+      <div style="font-size:10px;color:rgba(255,255,255,.3);margin-top:2px">목표: 25%</div>
+    </div>
+  </div>
+</div>
+
 <div id="map" style="display:none"></div>
+
 <div class="build-panel" id="build-panel">
   <div class="bp-x" onclick="closePanel()">✕</div>
-  <div class="bp-head">
-    <div class="bp-ref" id="bp-ref"></div>
-    <div class="bp-name" id="bp-name"></div>
-    <div class="bp-own" id="bp-own"></div>
-  </div>
+  <div class="bp-head"><div class="bp-ref" id="bp-ref"></div><div class="bp-name" id="bp-name"></div><div class="bp-own" id="bp-own"></div></div>
   <div class="bp-body">
     <div class="bldg-prev"><div class="brd"></div><div class="bf" id="bpf"></div><div class="bgnd"></div></div>
     <div class="clbl">🏗 건설 방식</div>
@@ -471,10 +480,18 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
       <input type="range" id="fl-s" min="3" max="20" value="6" oninput="updateFloors(this.value)">
       <div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.2);margin-top:4px"><span>3F</span><span>20F</span></div>
     </div>
+    <div class="ctime-box">
+      <div class="ctime-em">🏗</div>
+      <div>
+        <div style="font-size:12px;color:rgba(255,255,255,.5);margin-bottom:2px">예상 공사 기간</div>
+        <div class="ctime-months" id="ctime">—</div>
+        <div class="ctime-txt" id="ctime-info">층수가 많을수록 오래 걸려요</div>
+      </div>
+    </div>
     <div class="sgrid">
       <div class="sstat"><div class="sv" id="s-u" style="color:#90CAF9">—</div><div class="sl">세대 수</div></div>
       <div class="sstat"><div class="sv" id="s-c" style="color:#EF9A9A">—</div><div class="sl">총 비용</div></div>
-      <div class="sstat"><div class="sv" id="s-r" style="color:#A5D6A7">—</div><div class="sl">연 순수익</div></div>
+      <div class="sstat"><div class="sv" id="s-r" style="color:#A5D6A7">—</div><div class="sl">월 순수익</div></div>
       <div class="sstat"><div class="sv" id="s-p" style="color:#FFE082">—</div><div class="sl">회수 기간</div></div>
     </div>
     <div class="roi-box">
@@ -486,69 +503,86 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
       <div class="ip-title">🏕️ 사회적 임팩트 예측</div>
       <div class="ip-row">노숙자 감소 <span id="ip-hl">0명</span></div>
       <div class="ip-row">월세 인하 기여 <span id="ip-rent">-€0/월</span></div>
+      <div class="ip-row">사회주택 비율 기여 <span id="ip-soc">0%</span></div>
     </div>
     <div class="dn" id="dn"></div>
     <button class="build-btn" onclick="startBuild()">🏗 건설 시작!</button>
   </div>
 </div>
+
 <div class="lb-panel" id="lb-panel">
-  <div class="lb-head"><div class="lb-title">🏆 LEADERBOARD</div><div class="lb-sub">10년 ROI 기준 · 전 세계 김건설</div></div>
+  <div class="lb-head"><div class="lb-title">🏆 LEADERBOARD</div><div class="lb-sub">10년 ROI 기준</div></div>
   <div class="lb-list" id="lb-list"><div class="lb-empty">아직 없음<br><br>🏗<br><br>먼저 건설하세요!</div></div>
-  <div class="lb-foot"><span class="lb-tl">전체 건설 세대</span><span class="lb-tv" id="lb-tot">0채</span></div>
+  <div class="lb-foot"><span class="lb-tl">전체 완공 세대</span><span class="lb-tv" id="lb-tot">0채</span></div>
 </div>
+
 <div class="uncle-wrap" id="uncle-wrap">
   <div class="uncle-bbl" id="uncle-bbl"><div class="ub-tag">👷 김건설 삼촌</div><div class="ub-txt" id="uncle-txt"></div></div>
   <div class="uncle-circle" onclick="cycleUncle()">👷</div>
 </div>
+
 <div class="ev-bg" id="ev-bg"></div>
 <div class="ev-pop" id="ev-pop">
-  <div class="ev-em" id="ev-em">⚠️</div>
-  <div class="ev-ti" id="ev-ti">OBSTACLE</div>
-  <div class="ev-de" id="ev-de"></div>
-  <div class="ev-im" id="ev-im"></div>
-  <div class="dl-bar"><div class="dl-fill"></div></div>
+  <div class="ev-em" id="ev-em">⚠️</div><div class="ev-ti" id="ev-ti"></div><div class="ev-de" id="ev-de"></div><div class="ev-im" id="ev-im"></div>
+  <div class="dl-bar"><div class="dl-fill" id="dl-fill"></div></div>
   <div class="ev-btns" style="margin-top:.8rem">
     <button class="ev-ok" id="ev-ok" onclick="resolveEvent(true)">✓ 수락하고 계속</button>
     <button class="ev-sk" onclick="resolveEvent(false)">✕ 건설 포기</button>
   </div>
 </div>
+
 <div class="mo" id="mo">
   <div class="mo-box">
-    <div class="mo-em" id="mo-em">🎉</div>
-    <div class="mo-ti">건설 완료!</div>
-    <div class="mo-roi" id="mo-roi"></div>
-    <div class="mo-sub" id="mo-sub"></div>
-    <div class="mo-impact">
-      <div><div class="mi-v" id="mi-hl">0명</div><div class="mi-l">노숙자 감소</div></div>
-      <div><div class="mi-v" id="mi-rent">-€0</div><div class="mi-l">월세 인하 기여</div></div>
-    </div>
+    <div class="mo-em" id="mo-em">🎉</div><div class="mo-ti">건설 시작!</div>
+    <div class="mo-roi" id="mo-roi"></div><div class="mo-sub" id="mo-sub"></div>
+    <div class="mo-impact"><div><div class="mi-v" id="mi-hl">0명</div><div class="mi-l">노숙자 감소 예정</div></div><div><div class="mi-v" id="mi-rent">-€0</div><div class="mi-l">완공 시 월세 인하</div></div></div>
     <div class="mo-lbl">리더보드 닉네임</div>
     <input class="mo-input" id="mo-name" type="text" placeholder="DEVELOPER_01" maxlength="20">
-    <div class="mo-btns">
-      <button class="mo-ok" onclick="saveScore()">▶ 등록</button>
-      <button class="mo-sk" onclick="closeModal()">건너뛰기</button>
-    </div>
+    <div class="mo-btns"><button class="mo-ok" onclick="saveScore()">▶ 등록</button><button class="mo-sk" onclick="closeModal()">건너뛰기</button></div>
   </div>
 </div>
+
+<!-- VIENNA WIN SCREEN -->
+<div class="wien-win" id="wien-win">
+  <div class="ww-box">
+    <div class="ww-em">🏆</div>
+    <div class="ww-title">빈(Wien) 모델 달성!</div>
+    <div class="ww-sub">더블린이 오스트리아 빈처럼<br>살기 좋은 도시가 되었습니다!</div>
+    <div class="ww-compare">
+      <div class="ww-city">
+        <div class="ww-city-nm">🇮🇪 게임 시작 더블린</div>
+        <div class="ww-stat">평균 월세: €2,300</div>
+        <div class="ww-stat">노숙자: 13,400명</div>
+        <div class="ww-stat">사회주택: ~5%</div>
+      </div>
+      <div class="ww-city">
+        <div class="ww-city-nm wien">🇦🇹 오스트리아 빈(Wien)</div>
+        <div class="ww-stat">평균 월세: €800</div>
+        <div class="ww-stat">노숙자: 약 900명</div>
+        <div class="ww-stat">사회주택: 60%</div>
+      </div>
+    </div>
+    <div class="ww-sub" id="ww-result" style="font-size:14px;margin-bottom:1.2rem;"></div>
+    <button class="ww-btn" onclick="document.getElementById('wien-win').classList.remove('on');openShare()">📤 결과 공유하기</button>
+  </div>
+</div>
+
 <div class="sh-ov" id="sh-ov">
   <div class="sh-card">
     <button class="sh-x" onclick="closeShare()">✕</button>
-    <div class="sh-logo">🏗 VACANT DUBLIN</div>
-    <div class="sh-tag">더블린 빈 땅 개발 시뮬레이션</div>
+    <div class="sh-logo">🏗 VACANT DUBLIN</div><div class="sh-tag">더블린 빈 땅 개발 시뮬레이션</div>
     <div class="sh-stats">
-      <div class="sh-stat"><div class="sh-v" id="sh-homes" style="color:#A5D6A7">0채</div><div class="sh-l">🏠 건설한 집</div></div>
+      <div class="sh-stat"><div class="sh-v" id="sh-homes" style="color:#A5D6A7">0채</div><div class="sh-l">🏠 완공 세대</div></div>
       <div class="sh-stat"><div class="sh-v" id="sh-roi" style="color:#FDD835">—</div><div class="sh-l">💰 최고 ROI</div></div>
       <div class="sh-stat"><div class="sh-v" id="sh-hl" style="color:#81D4FA">0명↓</div><div class="sh-l">🏕️ 노숙자 감소</div></div>
-      <div class="sh-stat"><div class="sh-v" id="sh-rent" style="color:#EF9A9A">-€0</div><div class="sh-l">📉 월세 인하 기여</div></div>
+      <div class="sh-stat"><div class="sh-v" id="sh-rent" style="color:#EF9A9A">-€0</div><div class="sh-l">📉 월세 인하</div></div>
     </div>
-    <div class="sh-msg">💡 더블린엔 지금도 <strong style="color:#EF9A9A">13,400명</strong>이 거리에 있어요.<br>수년간 방치된 빈 땅에 직접 아파트를 지어보세요!</div>
-    <div class="sh-btns">
-      <button class="sh-link" onclick="shareLink()">🔗 게임 링크 공유</button>
-      <button class="sh-score" onclick="shareScore()">📊 내 점수 공유</button>
-    </div>
+    <div class="sh-msg">💡 더블린엔 지금도 <strong style="color:#EF9A9A">13,400명</strong>이 거리에 있어요.<br>빈(Wien)처럼 만들 수 있을까요?</div>
+    <div class="sh-btns"><button class="sh-link" onclick="shareLink()">🔗 게임 링크 공유</button><button class="sh-score" onclick="shareScore()">📊 내 점수 공유</button></div>
   </div>
 </div>
-<div class="hint" id="hint"><p>🗺 지도의 <span>📍 빨간 핀</span>을 클릭해서 개발하세요!</p></div>
+
+<div class="hint" id="hint"><p>🗺 지도의 <span>빈 부지</span>를 클릭해서 개발하세요!</p></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -556,74 +590,78 @@ const SITES=[
   {id:"VS-0596",name:"Oscar Traynor Rd",area:4.2,landVal:45e6,type:"Council",owner:"Dublin City Council",years:6,lat:53.3850,lng:-6.2010},
   {id:"VS-0011",name:"Infirmary Rd",area:2.1,landVal:10.5e6,type:"Council",owner:"Dublin City Council",years:8,lat:53.3520,lng:-6.2852},
   {id:"VS-0117",name:"East Wall Rd",area:1.8,landVal:10.5e6,type:"Council",owner:"Dublin City Council",years:8,lat:53.3524,lng:-6.2248},
-  {id:"VS-0800",name:"Paper Mills, Clonskeagh",area:1.5,landVal:10e6,type:"Vacant",owner:"Harley Issuer DAC",years:3,lat:53.3140,lng:-6.2430},
+  {id:"VS-0800",name:"Paper Mills",area:1.5,landVal:10e6,type:"Vacant",owner:"Harley Issuer DAC",years:3,lat:53.3140,lng:-6.2430},
   {id:"VS-0048",name:"Phibsborough Rd",area:0.9,landVal:7.2e6,type:"Vacant",owner:"Bindford Ltd",years:8,lat:53.3674,lng:-6.2706},
-  {id:"VS-0979",name:"East Wall Rd (Port)",area:1.2,landVal:7e6,type:"Vacant",owner:"Dublin Port Co.",years:7,lat:53.3490,lng:-6.2210},
+  {id:"VS-0979",name:"East Wall (Port)",area:1.2,landVal:7e6,type:"Vacant",owner:"Dublin Port Co.",years:7,lat:53.3490,lng:-6.2210},
   {id:"VS-0028",name:"Grand Canal Place",area:0.8,landVal:6e6,type:"Council",owner:"Dublin City Council",years:7,lat:53.3392,lng:-6.2770},
   {id:"VS-0461",name:"Bannow Rd, Cabra",area:0.9,landVal:6e6,type:"Council",owner:"Dublin City Council",years:7,lat:53.3680,lng:-6.2880},
-  {id:"VS-0453",name:"Faussagh Ave",area:0.7,landVal:5.3e6,type:"Vacant",owner:"R&D Dev. (IoM)",years:6,lat:53.3640,lng:-6.2850},
+  {id:"VS-0453",name:"Faussagh Ave",area:0.7,landVal:5.3e6,type:"Vacant",owner:"R&D Dev.",years:6,lat:53.3640,lng:-6.2850},
   {id:"VS-1077",name:"Back Lane, D8",area:0.6,landVal:4.6e6,type:"Vacant",owner:"Redcaps Dev.",years:7,lat:53.3430,lng:-6.2740},
   {id:"VS-0693",name:"Davitt Rd",area:0.7,landVal:4e6,type:"Vacant",owner:"Heidelberg Davitt",years:6,lat:53.3210,lng:-6.3050},
   {id:"VS-0797",name:"Appian Way",area:0.5,landVal:4e6,type:"Vacant",owner:"RGRE Valerys",years:6,lat:53.3270,lng:-6.2500},
   {id:"VS-0019",name:"Watling St",area:0.7,landVal:4.5e6,type:"Council",owner:"Digital Hub Agency",years:8,lat:53.3462,lng:-6.2773},
-  {id:"VS-0542",name:"Jamestown Rd, Finglas",area:0.6,landVal:3.42e6,type:"Vacant",owner:"Jamestown Village",years:6,lat:53.3890,lng:-6.3010},
-  {id:"VS-0402",name:"Shangan Rd, Ballymun",area:0.6,landVal:3.3e6,type:"Council",owner:"Dublin City Council",years:7,lat:53.4020,lng:-6.2720},
+  {id:"VS-0542",name:"Jamestown Rd",area:0.6,landVal:3.42e6,type:"Vacant",owner:"Jamestown Village",years:6,lat:53.3890,lng:-6.3010},
+  {id:"VS-0402",name:"Shangan Rd",area:0.6,landVal:3.3e6,type:"Council",owner:"Dublin City Council",years:7,lat:53.4020,lng:-6.2720},
   {id:"VS-1080",name:"Charles St Great",area:0.4,landVal:3.2e6,type:"Vacant",owner:"Cluid Housing",years:7,lat:53.3508,lng:-6.2580},
   {id:"VS-0124",name:"Aldborough House",area:0.6,landVal:3.5e6,type:"Vacant",owner:"Reliance (IoM)",years:8,lat:53.3563,lng:-6.2498},
   {id:"VS-0055",name:"N Circular Rd",area:0.2,landVal:1.4e6,type:"Vacant",owner:"Lilacstone Ltd",years:8,lat:53.3618,lng:-6.2660},
-  {id:"DS-002",name:"Aungier St (Protected)",area:0.1,landVal:2e6,type:"Derelict",owner:"Unknown",years:5,lat:53.3389,lng:-6.2636},
+  {id:"DS-002",name:"Aungier St",area:0.1,landVal:2e6,type:"Derelict",owner:"Unknown",years:5,lat:53.3389,lng:-6.2636},
 ];
 const OBSTACLES={
   normal:[
-    {emoji:"💶",title:"LAND PURCHASE TAX",desc:"Stamp duty on commercial land purchase applies.",impact:"+ €{val} costs (7.5% stamp duty)",type:"cost",pct:.075},
-    {emoji:"📋",title:"PLANNING PERMISSION",desc:"An Bord Pleanála requires a full planning application.",impact:"⏳ 6-month delay. Build cost up 8%.",type:"cost",pct:.08},
-    {emoji:"🏗",title:"VAT ON CONSTRUCTION",desc:"Irish VAT at 13.5% applies to all construction work.",impact:"+ €{val} VAT added to build cost",type:"cost",pct:.135},
-    {emoji:"💰",title:"DEVELOPMENT LEVY",desc:"Dublin City Council charges a development contribution levy.",impact:"+ €12,000 per unit in levies",type:"perUnit",perUnit:12000},
-    {emoji:"📐",title:"FIRE SAFETY CERT",desc:"A Fire Safety Certificate is required before works begin.",impact:"⏳ 2-month delay. €45,000 compliance cost.",type:"flat",flat:45000},
-    {emoji:"🌊",title:"ENVIRONMENTAL SCREENING",desc:"Your site may be near a flood zone. An EIA is required.",impact:"+ €65,000 EIA cost. 3-month delay.",type:"flat",flat:65000},
+    {emoji:"💶",title:"STAMP DUTY",desc:"Stamp duty on commercial land purchase applies.",impact:"+ €{val} 취득세 (7.5%)",type:"cost",pct:.075},
+    {emoji:"📋",title:"PLANNING DELAY",desc:"An Bord Pleanála requires a full planning application.",impact:"⏳ 공사 기간 +4개월",type:"months",extra:4},
+    {emoji:"🏗",title:"VAT ON CONSTRUCTION",desc:"Irish VAT at 13.5% applies to all construction work.",impact:"+ €{val} 건설 VAT",type:"cost",pct:.135},
+    {emoji:"💰",title:"DEVELOPMENT LEVY",desc:"Dublin City Council charges a development levy.",impact:"+ €12,000 per unit",type:"perUnit",perUnit:12000},
   ],
   hard:[
-    {emoji:"🪧",title:"NIMBY 주민 반대!",desc:"주민 47명이 민원을 제기했습니다. 공청회가 열립니다.",impact:"⏳ 계획 지연 12개월. 법률 비용 €120,000.",type:"flat",flat:120000},
-    {emoji:"⚒",title:"UNION ACTION",desc:"The Building Workers Union has called a work-to-rule.",impact:"⏳ 4-month delay. Build cost up 15%.",type:"cost",pct:.15},
-    {emoji:"🏛",title:"PROTECTED STRUCTURE",desc:"A Victorian wall on-site has a conservation order applied.",impact:"⏳ 8-month hold. Redesign costs €200,000.",type:"flat",flat:200000},
-    {emoji:"📁",title:"행정 적체",desc:"An Bord Pleanála가 업무 과부하 상태. 담당자 병가 중.",impact:"⏳ 18개월 지연. 비용 22% 증가.",type:"cost",pct:.22},
-    {emoji:"💸",title:"INTEREST RATE SPIKE",desc:"ECB가 금리를 또 올렸습니다. 건설 대출 이자가 급증했어요.",impact:"+ 총 금융 비용의 20% 추가.",type:"cost",pct:.20},
-    {emoji:"🏗",title:"시공사 부도",desc:"주요 시공사가 파산했습니다. 재입찰을 진행해야 합니다.",impact:"⏳ 6개월 지연. €180,000 재입찰 비용.",type:"flat",flat:180000},
-    {emoji:"🪨",title:"ARCHAEOLOGICAL FIND",desc:"바이킹 시대 유물이 발견되었습니다.",impact:"⏳ 12개월 발굴 중단. €90,000 비용.",type:"flat",flat:90000},
-    {emoji:"🧾",title:"부동산 횡재세",desc:"정부가 새로운 주거용 토지세를 도입했습니다.",impact:"+ €50,000/년 유휴지 세금.",type:"flat",flat:50000},
+    {emoji:"🪧",title:"NIMBY 주민 반대!",desc:"주민 47명이 민원을 제기했습니다. 공청회!",impact:"⏳ 공사 기간 +12개월. €120,000 법률비용.",type:"both",flat:120000,extra:12},
+    {emoji:"⚒",title:"UNION ACTION",desc:"The Building Workers Union called a work-to-rule.",impact:"⏳ 공사 기간 +4개월. 비용 +15%",type:"both",pct:.15,extra:4},
+    {emoji:"🪨",title:"ARCHAEOLOGICAL FIND",desc:"바이킹 시대 유물 발견! 국립박물관 신고.",impact:"⏳ 공사 중단 +12개월. €90,000.",type:"both",flat:90000,extra:12},
+    {emoji:"📁",title:"행정 적체",desc:"An Bord Pleanála 업무 과부하. 담당자 병가.",impact:"⏳ +18개월 지연. 비용 +22%",type:"both",pct:.22,extra:18},
+    {emoji:"💸",title:"INTEREST RATE SPIKE",desc:"ECB 금리 인상. 건설 대출 이자 급증.",impact:"+ 총 비용의 20% 추가",type:"cost",pct:.20},
   ]
 };
 const UNCLE_LINES={
-  idle:["더블린 집값 왜 이렇게 비싸? 빈 땅은 넘쳐나는데! 빨리 짓자!","아일랜드 정부는 뭐 하는 거야... 한국 같았으면 벌써 올라갔어!","닌비(NIMBY)들 때문에 더블린 집값이 안 내려가는 거야.","석준이가 월 200만원 낸다고? 내가 직접 지어줘야겠어!","핀 클릭해서 빈 땅 골라봐! 방치보다는 짓는 게 낫거든!"],
-  select:{Council:"{years}년 동안 방치?! 공공 용지잖아! 어서 개발하자!",Vacant:"{years}년째 빈 땅... 이런 거 짓는 게 정답이야!",Derelict:"폐건물이네. 철거하고 새로 지으면 딱이야!"},
+  idle:["더블린 집값 왜 이렇게 비싸? 빈 땅은 넘쳐나는데! 빨리 짓자!","게임 시작했으면 ▶ PLAY 눌러야지! 시간이 돈이야!","아일랜드 정부는 뭐 하는 거야... 한국 같았으면 벌써 올라갔어!","빈(Wien) 모델 목표 봤지? 더블린을 바꿔보자!","공사중인 곳이 많을수록 빨리 목표에 다가가!"],
+  select:{Council:"{years}년 동안 공공 용지 방치?! 어서 개발하자!",Vacant:"{years}년째 빈 땅... 짓는 게 정답이야!",Derelict:"폐건물이네. 철거하고 새로 지으면 딱이야!"},
   highROI:["이야~ ROI {roi}%! 역시 내 조카야!","완벽해! {roi}% 수익률이면 석준이 학비도 나오겠는데?"],
-  lowROI:["ROI가 좀 낮네... 층수 더 올리거나 시장가 비율 늘려봐!","이 사이트는 층수를 높여야 수익이 나. 15층 이상 도전해봐!"],
+  lowROI:["ROI가 낮네... 층수 더 올리거나 시장가 비율 늘려봐!","이 사이트는 층수를 높여야 수익이 나. 15층 이상 도전!"],
   nimby:["또 님비야?! 이래서 더블린 집값이 10년째 오르는 거지!"],
-  complete:["완성! {units}채 건설 성공! 석준이 친구들도 살 데 생겼네!","잘했어! 하나하나 지어나가면 더블린 집값 잡을 수 있어!"],
+  complete:["완공! {units}채 건설 성공! 석준이 친구들도 살 데 생겼네!","잘했어! 이제 수익이 매달 들어올 거야!"],
   budget:"예산이 모자라! 모듈러 공법이나 층수 낮춰서 비용 줄여봐!",
+  income:"매달 수익 들어오고 있어! 🎉 더 많은 땅을 개발하자!",
 };
 
+// STATE
 const BASE_RENT=2300,BASE_HL=13400;
-let totalHLReduced=0,totalRentDrop=0;
+let totalHLReduced=0,totalRentDrop=0,totalSocialUnits=0,totalAllUnits=0;
 let cur=null,method='standard',tenure='market',floors=6,difficulty='easy';
 let budget=50e6,developed=new Set(),bestROI=0,totalHomes=0;
-let pendingScore=null,lbOpen=false,evQueue=[],evIdx=0,evCostAccum=0;
+let pendingScore=null,lbOpen=false,wienOpen=false;
+let evQueue=[],evIdx=0,evCostAccum=0,evMonthsAccum=0;
 let uncleTimer=null,storyScene=0,mapInited=false;
+let gameRunning=false,gameTimer=null,gameSpeed=1,currentMonth=0;
+let monthlyIncome=0;
+let underConstruction=[]; // {siteId,progress,totalMonths,units,netMonthly,hlR,rentR,socialUnits,roi,cost}
 const COST={standard:420000,modular:294000};
 const UPF=18,MR=2340*12,SR=800*12,VAC=0.05,OPEX=0.25;
+const MONTHS=['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+const SPEED_MS={1:2000,2:1000,5:400};
 
 function ipUnit(t){if(t==='social')return{hl:2.2,rent:0.019};if(t==='mixed')return{hl:0.9,rent:0.014};return{hl:0.25,rent:0.007};}
+function getConstructionMonths(area,fl){return Math.max(3,Math.min(24,Math.ceil(Math.sqrt(area)*fl*0.7)));}
 
-// STAGE MANAGEMENT
+// STAGE
 function fadeOut(el,cb){el.classList.add('fading');setTimeout(()=>{el.classList.add('hidden');el.classList.remove('fading');cb();},400);}
-function goStage2(){fadeOut(document.getElementById('st-splash'),()=>{document.getElementById('st-story').classList.remove('hidden');});}
-function goStage3(){fadeOut(document.getElementById('st-story'),()=>{document.getElementById('st-diff').classList.remove('hidden');});}
-function goStage4(){fadeOut(document.getElementById('st-diff'),()=>{startGame();});}
+function goStage2(){fadeOut(document.getElementById('st-splash'),()=>document.getElementById('st-story').classList.remove('hidden'));}
+function goStage3(){fadeOut(document.getElementById('st-story'),()=>document.getElementById('st-diff').classList.remove('hidden'));}
+function goStage4(){fadeOut(document.getElementById('st-diff'),()=>startGame());}
 
 // STORY
 function nextScene(){
-  const old=document.getElementById('sc'+storyScene);
-  old.classList.add('exit');setTimeout(()=>{old.classList.remove('active','exit');},400);
+  document.getElementById('sc'+storyScene).classList.add('exit');
+  setTimeout(()=>document.getElementById('sc'+storyScene).classList.remove('active','exit'),400);
   storyScene++;
   if(storyScene>=4){goStage3();return;}
   setTimeout(()=>{
@@ -644,9 +682,11 @@ function selDiff(d){
   b.textContent=d==='easy'?'😊 EASY':d==='normal'?'😤 NORMAL':'💀 HARD';
 }
 
-// START GAME
+// GAME INIT
 let theMap=null;
-const markers={};
+const siteMarkers={};
+const siteRects={};
+
 function startGame(){
   document.getElementById('hud').style.display='flex';
   document.getElementById('impact-bar').style.display='flex';
@@ -664,31 +704,80 @@ function initMap(){
   L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap © CARTO',maxZoom:19}).addTo(theMap);
   L.control.zoom({position:'bottomright'}).addTo(theMap);
   SITES.forEach(s=>{
-    const m=L.marker([s.lat,s.lng],{icon:makeIcon(s)});
-    m.on('click',()=>{if(!developed.has(s.id)){selectSite(s.id);hideHint();}});
+    // Draw parcel rectangle
+    const sz=Math.sqrt(s.area)*0.0009;
+    const rect=L.rectangle([[s.lat-sz,s.lng-sz*1.4],[s.lat+sz,s.lng+sz*1.4]],
+      {color:'#E53935',fillColor:'#E53935',fillOpacity:.22,weight:2,dashArray:'6,4'});
+    rect.on('click',()=>{if(!developed.has(s.id)&&!isUnderCon(s.id)){selectSite(s.id);hideHint();}});
+    rect.addTo(theMap);siteRects[s.id]=rect;
+    // Label marker
+    const m=L.marker([s.lat,s.lng],{icon:makeSiteIcon(s,'vacant',0,0)});
     m.bindPopup(makePopup(s),{maxWidth:280});
-    m.addTo(theMap);markers[s.id]=m;
+    m.on('click',()=>{if(!developed.has(s.id)&&!isUnderCon(s.id)){selectSite(s.id);hideHint();}});
+    m.addTo(theMap);siteMarkers[s.id]=m;
   });
 }
 
-function makeIcon(s){
-  const built=developed.has(s.id);
-  const c=built?'#43A047':{Vacant:'#E53935',Council:'#1E88E5',Derelict:'#FB8C00'}[s.type]||'#E53935';
-  const ico=built?'🏢':'📍';
-  return L.divIcon({className:'',html:`<div style="display:flex;flex-direction:column;align-items:center;cursor:${built?'default':'pointer'}"><div style="font-size:1.7rem;filter:drop-shadow(0 2px 5px rgba(0,0,0,.5))">${ico}</div><div style="background:${c};color:#fff;font-family:'Press Start 2P',monospace;font-size:10px;padding:2px 6px;border-radius:3px;margin-top:-3px;box-shadow:0 2px 6px rgba(0,0,0,.4);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.name}</div></div>`,iconSize:[90,54],iconAnchor:[45,54],popupAnchor:[0,-54]});
+function isUnderCon(id){return underConstruction.some(b=>b.siteId===id);}
+
+function makeSiteIcon(site,state,progress,totalFloors){
+  const sz=Math.max(3,Math.min(9,Math.round(site.area*2.5)));
+  let inner='';
+  if(state==='vacant'){
+    inner=`<div class="pl-sign">
+      <div class="pl-years">${site.years}년 방치</div>
+      <div class="pl-name">${site.name.slice(0,14)}</div>
+      <div style="font-size:9px;color:rgba(255,255,255,.5)">${site.area}ha · 클릭!</div>
+    </div>`;
+  } else if(state==='building'){
+    const doneFloors=Math.floor(progress*totalFloors);
+    let floorHtml='';
+    for(let f=totalFloors-1;f>=0;f--){
+      const cls=f<doneFloors?'done':(f===doneFloors?'wip':'ghost');
+      floorHtml+=`<div class="bfl ${cls}"></div>`;
+    }
+    const pct=Math.round(progress*100);
+    const remaining=Math.ceil((1-progress)*(underConstruction.find(b=>b.siteId===site.id)||{totalMonths:12}).totalMonths);
+    inner=`<div class="pl-sign building">
+      <div class="bld-floors">${floorHtml}</div>
+      <div class="bld-crane">🏗</div>
+      <div class="pl-prog">${pct}% · ${remaining}개월</div>
+    </div>`;
+  } else {
+    let floorHtml='';
+    for(let f=0;f<Math.min(totalFloors,8);f++) floorHtml+=`<div class="bfl done"></div>`;
+    inner=`<div class="pl-sign done">
+      <div class="bld-floors">${floorHtml}</div>
+      <div class="bld-done-em">🏢</div>
+      <div style="font-size:9px;color:#A5D6A7;font-family:'Press Start 2P',monospace">완공!</div>
+    </div>`;
+  }
+  const iconH=state==='vacant'?60:state==='building'?Math.max(70,totalFloors*9+40):Math.min(8,totalFloors)*9+40;
+  return L.divIcon({className:'',html:`<div class="parcel-icon">${inner}</div>`,iconSize:[88,iconH],iconAnchor:[44,iconH]});
 }
 
 function makePopup(s){
   const built=developed.has(s.id);
-  return `<div style="padding:5px"><div style="font-size:12px;color:rgba(255,255,255,.3);margin-bottom:3px">${s.id} · ${s.years}년 방치</div><div style="font-family:'Press Start 2P',monospace;font-size:11px;color:#fff;margin-bottom:6px;line-height:1.6">${s.name}</div><div style="font-size:14px;color:#FDD835;margin-bottom:3px">토지: €${(s.landVal/1e6).toFixed(1)}M</div><div style="font-size:13px;color:rgba(255,255,255,.42);margin-bottom:9px">${s.area}ha · ${s.type} · ${s.owner}</div>${built?'<div style="color:#A5D6A7;font-size:13px">✅ 이미 개발 완료!</div>':`<button onclick="selectSite('${s.id}');hideHint()" style="background:#FDD835;color:#0d1642;border:none;border-radius:7px;padding:.45rem .9rem;font-family:'Press Start 2P',monospace;font-size:11px;cursor:pointer;width:100%">🏗 개발하기</button>`}</div>`;
+  const con=isUnderCon(s.id);
+  return `<div style="padding:5px">
+    <div style="font-size:12px;color:rgba(255,255,255,.3);margin-bottom:3px">${s.id} · ${s.years}년 방치</div>
+    <div style="font-family:'Press Start 2P',monospace;font-size:11px;color:#fff;margin-bottom:6px;line-height:1.6">${s.name}</div>
+    <div style="font-size:14px;color:#FDD835;margin-bottom:3px">토지: €${(s.landVal/1e6).toFixed(1)}M</div>
+    <div style="font-size:13px;color:rgba(255,255,255,.42);margin-bottom:9px">${s.area}ha · ${s.type} · ${s.owner}</div>
+    ${built?'<div style="color:#A5D6A7;font-size:13px">✅ 완공!</div>':
+      con?'<div style="color:#FDD835;font-size:13px">🏗 공사중...</div>':
+      `<button onclick="selectSite('${s.id}');hideHint()" style="background:#FDD835;color:#0d1642;border:none;border-radius:7px;padding:.45rem .9rem;font-family:'Press Start 2P',monospace;font-size:11px;cursor:pointer;width:100%">🏗 개발하기</button>`}
+  </div>`;
 }
 
+// UNCLE
 function showUncle(type,vars={}){
   clearTimeout(uncleTimer);
   let lines;
   if(type==='idle')lines=UNCLE_LINES.idle;
   else if(type==='select'&&cur)lines=[(UNCLE_LINES.select[cur.type]||UNCLE_LINES.select.Vacant)];
   else if(type==='budget')lines=[UNCLE_LINES.budget];
+  else if(type==='income')lines=[UNCLE_LINES.income];
   else if(Array.isArray(UNCLE_LINES[type]))lines=UNCLE_LINES[type];
   else return;
   let line=lines[Math.floor(Math.random()*lines.length)];
@@ -696,29 +785,161 @@ function showUncle(type,vars={}){
   line=line.replace('{roi}',vars.roi?vars.roi.toFixed(0):'?').replace('{units}',vars.units||'?');
   const bbl=document.getElementById('uncle-bbl');
   document.getElementById('uncle-txt').innerHTML=line;
-  bbl.style.opacity='0';bbl.style.transform='scale(0)';
-  bbl.classList.add('show');
+  bbl.style.opacity='0';bbl.style.transform='scale(0)';bbl.classList.add('show');
   requestAnimationFrame(()=>requestAnimationFrame(()=>{bbl.style.opacity='1';bbl.style.transform='scale(1)';}));
   uncleTimer=setTimeout(()=>{bbl.style.opacity='0';bbl.style.transform='scale(0)';setTimeout(()=>bbl.classList.remove('show'),350);},5500);
 }
 function cycleUncle(){showUncle('idle');}
 
+// GAME LOOP
+function togglePlay(){
+  if(gameRunning) pauseGame(); else resumeGame();
+}
+function pauseGame(){
+  clearInterval(gameTimer);gameRunning=false;
+  const b=document.getElementById('play-btn');b.textContent='▶ PLAY';b.classList.add('paused');
+}
+function resumeGame(){
+  clearInterval(gameTimer);
+  gameTimer=setInterval(gameTick,SPEED_MS[gameSpeed]);
+  gameRunning=true;
+  const b=document.getElementById('play-btn');b.textContent='⏸ PAUSE';b.classList.remove('paused');
+}
+function setSpeed(s){
+  gameSpeed=s;
+  ['spd1','spd2','spd5'].forEach(id=>document.getElementById(id).classList.remove('on'));
+  document.getElementById('spd'+s).classList.add('on');
+  if(gameRunning)resumeGame();
+}
+
+function gameTick(){
+  currentMonth++;
+  // Update date
+  const yr=2025+Math.floor(currentMonth/12);
+  const mo=currentMonth%12;
+  document.getElementById('h-date').textContent=yr+'년 '+MONTHS[mo];
+  // Progress construction
+  const toComplete=[];
+  underConstruction.forEach(b=>{
+    b.progress++;
+    const prog=b.progress/b.totalMonths;
+    const site=SITES.find(s=>s.id===b.siteId);
+    if(site)siteMarkers[b.siteId].setIcon(makeSiteIcon(site,'building',Math.min(prog,0.99),b.floors));
+    if(b.progress>=b.totalMonths)toComplete.push(b);
+  });
+  toComplete.forEach(b=>completeSite(b));
+  // Collect income
+  if(monthlyIncome>0){
+    budget+=monthlyIncome;
+    document.getElementById('h-budget').textContent='€'+(budget/1e6).toFixed(1)+'M';
+    // Random income popup
+    if(Math.random()<0.15){
+      const mapEl=document.getElementById('map');
+      const p=document.createElement('div');
+      p.className='income-pop';p.textContent='+€'+(monthlyIncome/1e3).toFixed(0)+'K/월';
+      p.style.left=(mapEl.offsetLeft+mapEl.offsetWidth*0.5+Math.random()*100-50)+'px';
+      p.style.top=(mapEl.offsetTop+mapEl.offsetHeight*0.7)+'px';
+      document.body.appendChild(p);setTimeout(()=>p.remove(),2000);
+    }
+  }
+  // Hard mode random events every 6 months
+  if(difficulty==='hard'&&currentMonth>0&&currentMonth%6===0&&Math.random()<0.25){
+    triggerRandomHardEvent();
+  }
+  // Uncle nudge
+  if(currentMonth%12===0&&monthlyIncome>0)showUncle('income');
+  else if(currentMonth%8===0&&underConstruction.length===0&&!cur)showUncle('idle');
+  // Update displays
+  updateWienPanel();
+  checkViennaWin();
+}
+
+function triggerRandomHardEvent(){
+  const ev=OBSTACLES.hard[Math.floor(Math.random()*OBSTACLES.hard.length)];
+  if(ev.flat&&ev.flat>0){budget-=ev.flat;document.getElementById('h-budget').textContent='€'+(budget/1e6).toFixed(1)+'M';}
+  showToast('⚠ '+ev.title+': '+ev.impact,'warn');
+  showUncle('nimby');
+}
+
+function completeSite(b){
+  underConstruction=underConstruction.filter(x=>x.siteId!==b.siteId);
+  developed.add(b.siteId);
+  totalHomes+=b.units;
+  totalHLReduced+=b.hlR;
+  totalRentDrop+=b.rentR;
+  totalSocialUnits+=(b.tenure==='social'||b.tenure==='mixed')?b.units:0;
+  totalAllUnits+=b.units;
+  if(b.roi>bestROI)bestROI=b.roi;
+  monthlyIncome+=b.netMonthly;
+  const site=SITES.find(s=>s.id===b.siteId);
+  if(site){
+    siteMarkers[b.siteId].setIcon(makeSiteIcon(site,'done',1,b.floors));
+    siteMarkers[b.siteId].bindPopup(makePopup(site));
+    siteRects[b.siteId].setStyle({color:'#43A047',fillColor:'#43A047',fillOpacity:.3,dashArray:null,weight:3});
+  }
+  document.getElementById('h-roi').textContent=bestROI.toFixed(0)+'%';
+  document.getElementById('h-homes').textContent=totalHomes.toLocaleString();
+  document.getElementById('h-income').textContent='€'+(monthlyIncome/1e3).toFixed(0)+'K';
+  document.getElementById('ib-con').textContent=underConstruction.length+'개소';
+  updateImpactBar();
+  updateWienPanel();
+  showToast('🏢 '+site.name+' 완공! '+b.units+'채');
+  showUncle('complete',{units:b.units});
+}
+
+function updateImpactBar(){
+  const rent=Math.max(1800,Math.round(BASE_RENT-totalRentDrop));
+  const hl=Math.max(0,BASE_HL-totalHLReduced);
+  document.getElementById('ib-rent').textContent='€'+rent.toLocaleString();
+  document.getElementById('ib-hl').textContent=hl.toLocaleString()+'명';
+}
+
+function updateWienPanel(){
+  const rent=Math.max(1800,Math.round(BASE_RENT-totalRentDrop));
+  const hl=Math.max(0,BASE_HL-totalHLReduced);
+  const socialPct=totalAllUnits>0?Math.round((totalSocialUnits/totalAllUnits)*100):0;
+  const rentProg=Math.min(100,Math.round(((BASE_RENT-rent)/(BASE_RENT-1200))*100));
+  const hlProg=Math.min(100,Math.round(((BASE_HL-hl)/(BASE_HL-500))*100));
+  const socProg=Math.min(100,Math.round((socialPct/25)*100));
+  document.getElementById('wp-rent-v').textContent='€'+rent;
+  document.getElementById('wp-hl-v').textContent=hl.toLocaleString()+'명';
+  document.getElementById('wp-soc-v').textContent=socialPct+'%';
+  document.getElementById('wp-rent').style.width=rentProg+'%';
+  document.getElementById('wp-hl').style.width=hlProg+'%';
+  document.getElementById('wp-soc').style.width=socProg+'%';
+}
+
+function checkViennaWin(){
+  const rent=BASE_RENT-totalRentDrop;
+  const hl=BASE_HL-totalHLReduced;
+  const socialPct=totalAllUnits>0?(totalSocialUnits/totalAllUnits):0;
+  if(rent<=1200&&hl<=500&&socialPct>=0.25){
+    pauseGame();
+    const yr=2025+Math.floor(currentMonth/12);
+    document.getElementById('ww-result').textContent=`${yr}년 ${currentMonth}개월 만에 달성!
+완공 세대: ${totalHomes.toLocaleString()}채 · 투입 예산: €${((50e6-budget)/1e6).toFixed(1)}M`;
+    document.getElementById('wien-win').classList.add('on');
+  }
+}
+
+// DIFFICULTY NOTICE
 function updateDN(){
   const el=document.getElementById('dn');
   if(difficulty==='easy'){el.style.display='none';return;}
   el.style.display='block';
-  el.innerHTML=difficulty==='normal'?'⚠ <b style="color:#FB8C00">NORMAL:</b> 취득세 7.5%, VAT 13.5%, 개발부담금 등 실제 세금 적용.':'💀 <b style="color:#E53935">HARD:</b> 모든 세금 + 님비·파업·행정지연·고고학 발굴 등 랜덤 이벤트!';
+  el.innerHTML=difficulty==='normal'?'⚠ <b style="color:#FB8C00">NORMAL:</b> 취득세 7.5%, VAT 13.5% 등 실제 세금 적용.':'💀 <b style="color:#E53935">HARD:</b> 모든 세금 + 랜덤 이벤트 + 6개월마다 돌발 변수!';
 }
 
+// SELECT SITE
 function selectSite(id){
-  if(developed.has(id))return;
+  if(developed.has(id)||isUnderCon(id))return;
   cur=SITES.find(s=>s.id===id);if(!cur)return;
   document.getElementById('bp-ref').textContent=cur.id+' · '+cur.years+'년 방치';
   document.getElementById('bp-name').textContent=cur.name;
   document.getElementById('bp-own').textContent=cur.owner+' · '+cur.area+'ha';
   floors=6;document.getElementById('fl-s').value=6;document.getElementById('fl-v').textContent='6F';
   theMap.setView([cur.lat,cur.lng],15,{animate:true});
-  markers[id].openPopup();
+  siteMarkers[id].openPopup();
   document.getElementById('build-panel').classList.add('open');
   if(lbOpen){lbOpen=false;document.getElementById('lb-panel').classList.remove('open');}
   updateDN();calcAndRender();
@@ -731,125 +952,133 @@ function updateFloors(v){floors=parseInt(v);document.getElementById('fl-v').text
 
 function calcAndRender(){
   if(!cur)return;
-  const r=calc(cur,method,tenure,floors,difficulty,0);
+  const r=calcSite(cur,method,tenure,floors,difficulty,0,0);
+  const ctMonths=getConstructionMonths(cur.area,floors);
+  document.getElementById('ctime').textContent=ctMonths+'개월';
+  document.getElementById('ctime-info').textContent=`완공 후 월 €${(r.netMonthly/1e3).toFixed(0)}K 수익 시작`;
   document.getElementById('s-u').textContent=r.totalUnits;
   document.getElementById('s-c').textContent='€'+(r.totalInv/1e6).toFixed(1)+'M';
-  document.getElementById('s-r').textContent='€'+(r.netRev/1e3).toFixed(0)+'K';
+  document.getElementById('s-r').textContent='€'+(r.netMonthly/1e3).toFixed(0)+'K';
   document.getElementById('s-p').textContent=r.payback.toFixed(1)+'yr';
   const rc=r.roi>80?'#A5D6A7':r.roi>30?'#FDD835':r.roi>0?'#fff':'#EF9A9A';
   document.getElementById('roi-n').textContent=r.roi.toFixed(0)+'%';
   document.getElementById('roi-n').style.color=rc;
   document.getElementById('roi-f').style.width=Math.min(100,Math.max(0,r.roi/2))+'%';
   const ip=ipUnit(tenure);
-  document.getElementById('ip-hl').textContent=Math.round(r.totalUnits*ip.hl)+'명';
-  document.getElementById('ip-rent').textContent='-€'+(r.totalUnits*ip.rent).toFixed(0)+'/월';
+  const hlE=Math.round(r.totalUnits*ip.hl);
+  const rE=(r.totalUnits*ip.rent).toFixed(0);
+  const socialPctAdd=tenure==='social'?Math.round((r.totalUnits/(totalAllUnits+r.totalUnits))*100):tenure==='mixed'?Math.round((r.totalUnits*0.3/(totalAllUnits+r.totalUnits))*100):0;
+  document.getElementById('ip-hl').textContent=hlE+'명';
+  document.getElementById('ip-rent').textContent='-€'+rE+'/월';
+  document.getElementById('ip-soc').textContent='+'+socialPctAdd+'%p 기여';
   renderBuilding(Math.max(4,Math.round(cur.area*UPF)),floors);
-  pendingScore={...r,site:cur.name,method,floors,tenure,id:cur.id,diff:difficulty};
+  pendingScore={...r,site:cur.name,method,floors,tenure,id:cur.id,diff:difficulty,hlR:hlE,rentR:parseFloat(rE),ctMonths};
   if(r.roi<20)showUncle('lowROI');else if(r.roi>80)showUncle('highROI',{roi:r.roi});
 }
 
-function calc(site,m,t,fl,diff,extra){
+function calcSite(site,m,t,fl,diff,extraCost,extraMonths){
   const upf=Math.max(4,Math.round(site.area*UPF)),totalUnits=upf*fl;
   let bc=totalUnits*COST[m],lc=site.landVal;
   if(diff!=='easy'){lc*=1.075;bc*=1.135;bc+=totalUnits*12000;bc+=45000;}
-  let totalInv=bc+lc+extra;
+  let totalInv=bc+lc+extraCost;
   let ar=0;
   if(t==='market')ar=totalUnits*MR*(1-VAC);
   else if(t==='mixed'){const mu=Math.round(totalUnits*.7),su=totalUnits-mu;ar=(mu*MR+su*SR)*(1-VAC)+su*75000*.1;}
   else ar=totalUnits*SR;
-  const netRev=ar*(1-OPEX),payback=totalInv/netRev,p10=netRev*10-totalInv,roi=(p10/totalInv)*100;
-  return{bc,totalInv,netRev,roi,totalUnits,payback,profit10:p10};
+  const netAnnual=ar*(1-OPEX),netMonthly=netAnnual/12;
+  const payback=totalInv/netAnnual,p10=netAnnual*10-totalInv,roi=(p10/totalInv)*100;
+  return{bc,totalInv,netAnnual,netMonthly,roi,totalUnits,payback,profit10:p10};
 }
 
 const UC={standard:'#E53935',modular:'#FDD835',social:'#42A5F5',mixed:'#66BB6A'};
 function renderBuilding(cols,fl){
-  cols=Math.min(cols,9);
-  const c=tenure==='social'?UC.social:tenure==='mixed'?UC.mixed:UC[method];
+  cols=Math.min(cols,9);const c=tenure==='social'?UC.social:tenure==='mixed'?UC.mixed:UC[method];
   let h='';
   for(let f=fl-1;f>=0;f--){h+='<div class="bfr">';for(let u=0;u<cols;u++)h+=`<div class="bu" style="background:${c};box-shadow:inset 1px 1px 0 rgba(255,255,255,.25),inset -1px -1px 0 rgba(0,0,0,.2)"></div>`;h+='</div>';}
   document.getElementById('bpf').innerHTML=h;
 }
 
+// BUILD
 function startBuild(){
   if(!pendingScore)return;
   if(pendingScore.totalInv>budget){showToast('❌ 예산 부족! €'+(pendingScore.totalInv/1e6).toFixed(1)+'M 필요','warn');showUncle('budget');return;}
-  if(difficulty==='easy'){finishBuild(0);return;}
+  if(difficulty==='easy'){commitBuild(0,0);return;}
   let pool=[...OBSTACLES.normal];
   if(difficulty==='hard')pool=[...pool,...OBSTACLES.hard];
   pool.sort(()=>Math.random()-.5);
-  evQueue=pool.slice(0,difficulty==='normal'?2:4);
-  evIdx=0;evCostAccum=0;showNextEvent();
+  evQueue=pool.slice(0,difficulty==='normal'?2:3);
+  evIdx=0;evCostAccum=0;evMonthsAccum=0;showNextEvent();
 }
 
 function showNextEvent(){
-  if(evIdx>=evQueue.length){finishBuild(evCostAccum);return;}
+  if(evIdx>=evQueue.length){commitBuild(evCostAccum,evMonthsAccum);return;}
   const ev=evQueue[evIdx];
-  let ec=0;
-  if(ev.type==='cost')ec=pendingScore.totalInv*ev.pct;
-  else if(ev.type==='flat')ec=ev.flat||0;
-  else if(ev.type==='perUnit')ec=(ev.perUnit||0)*pendingScore.totalUnits;
+  let ec=0,em=0;
+  if(ev.type==='cost'||ev.type==='both')ec=pendingScore.totalInv*(ev.pct||0);
+  if(ev.type==='months'||ev.type==='both')em=ev.extra||0;
+  if(ev.type==='perUnit')ec=(ev.perUnit||0)*pendingScore.totalUnits;
+  if(ev.flat)ec+=ev.flat;
   document.getElementById('ev-em').textContent=ev.emoji;
   document.getElementById('ev-ti').textContent=ev.title;
   document.getElementById('ev-de').textContent=ev.desc;
   document.getElementById('ev-im').textContent=ev.impact.replace('{val}','€'+(ec/1e3).toFixed(0)+'K');
   document.getElementById('ev-ok').dataset.cost=ec;
-  const bar=document.querySelector('.dl-fill');bar.style.animation='none';bar.offsetHeight;bar.style.animation='fillB 1.5s linear forwards';
+  document.getElementById('ev-ok').dataset.months=em;
+  const fill=document.getElementById('dl-fill');fill.style.width='0%';
+  setTimeout(()=>fill.style.cssText='width:100%;transition:width 1.5s linear',50);
   document.getElementById('ev-bg').classList.add('on');document.getElementById('ev-pop').classList.add('on');
   if(ev.emoji==='🪧'||ev.title.includes('님비'))showUncle('nimby');
 }
 
 function resolveEvent(accept){
   document.getElementById('ev-bg').classList.remove('on');document.getElementById('ev-pop').classList.remove('on');
-  if(!accept){showToast('🚫 건설 포기. 땅이 여전히 비어 있습니다.','warn');closePanel();return;}
-  evCostAccum+=parseFloat(document.getElementById('ev-ok').dataset.cost||0);evIdx++;
-  setTimeout(()=>{if(evIdx<evQueue.length)showNextEvent();else finishBuild(evCostAccum);},300);
+  if(!accept){showToast('🚫 건설 포기.','warn');closePanel();return;}
+  evCostAccum+=parseFloat(document.getElementById('ev-ok').dataset.cost||0);
+  evMonthsAccum+=parseInt(document.getElementById('ev-ok').dataset.months||0);
+  evIdx++;
+  setTimeout(()=>{if(evIdx<evQueue.length)showNextEvent();else commitBuild(evCostAccum,evMonthsAccum);},300);
 }
 
-function finishBuild(extra){
-  const s=cur,res=calc(s,method,tenure,floors,difficulty,extra);
-  const{roi,totalInv,profit10,totalUnits}=res;
-  budget-=totalInv;document.getElementById('h-budget').textContent='€'+(budget/1e6).toFixed(1)+'M';
-  developed.add(s.id);totalHomes+=totalUnits;
-  if(roi>bestROI)bestROI=roi;
-  document.getElementById('h-roi').textContent=bestROI.toFixed(0)+'%';
-  document.getElementById('h-homes').textContent=totalHomes.toLocaleString();
-  const ip=ipUnit(tenure),hlR=Math.round(totalUnits*ip.hl),rentR=parseFloat((totalUnits*ip.rent).toFixed(0));
-  totalHLReduced+=hlR;totalRentDrop+=rentR;
-  document.getElementById('h-hl').textContent='-'+totalHLReduced;
-  updateImpactBar();
-  markers[s.id].setIcon(makeIcon(s));markers[s.id].closePopup();markers[s.id].bindPopup(makePopup(s));
-  const pt=theMap.latLngToContainerPoint([s.lat,s.lng]),me=document.getElementById('map').getBoundingClientRect();
-  const fl2=document.createElement('div');fl2.className='bf-ani';fl2.textContent='🏢';fl2.style.left=(me.left+pt.x-16)+'px';fl2.style.top=(me.top+pt.y-20)+'px';
-  document.body.appendChild(fl2);setTimeout(()=>fl2.remove(),1800);
-  pendingScore={roi,units:totalUnits,cost:totalInv,profit:profit10,site:s.name,method,floors,tenure,id:s.id,diff:difficulty,hlReduced:hlR,rentDrop:rentR};
-  closePanel();setTimeout(()=>showUncle('complete',{units:totalUnits}),600);
-  openModal(roi,totalUnits,profit10,s.name,extra,hlR,rentR);
+function commitBuild(extraCost,extraMonths){
+  const s=cur;
+  const r=calcSite(s,method,tenure,floors,difficulty,extraCost,extraMonths);
+  budget-=r.totalInv;
+  document.getElementById('h-budget').textContent='€'+(budget/1e6).toFixed(1)+'M';
+  const ip=ipUnit(tenure);
+  const hlR=Math.round(r.totalUnits*ip.hl);
+  const rentR=parseFloat((r.totalUnits*ip.rent).toFixed(0));
+  const ctMonths=getConstructionMonths(s.area,floors)+extraMonths;
+  const conEntry={siteId:s.id,progress:0,totalMonths:ctMonths,units:r.totalUnits,netMonthly:r.netMonthly,hlR,rentR,roi:r.roi,cost:r.totalInv,floors,tenure,method};
+  underConstruction.push(conEntry);
+  document.getElementById('ib-con').textContent=underConstruction.length+'개소';
+  // Update rect to yellow
+  siteRects[s.id].setStyle({color:'#FB8C00',fillColor:'#FDD835',fillOpacity:.3,dashArray:null,weight:2});
+  siteMarkers[s.id].setIcon(makeSiteIcon(s,'building',0,floors));
+  siteMarkers[s.id].bindPopup(makePopup(s));
+  pendingScore={roi:r.roi,units:r.totalUnits,cost:r.totalInv,site:s.name,method,floors,tenure,id:s.id,diff:difficulty,hlReduced:hlR,rentDrop:rentR};
+  closePanel();
+  if(!gameRunning)resumeGame();
+  openBuildModal(r.roi,r.totalUnits,ctMonths,s.name,extraCost,hlR,rentR);
 }
 
-function updateImpactBar(){
-  document.getElementById('ib-rent').textContent='€'+Math.max(1800,Math.round(BASE_RENT-totalRentDrop)).toLocaleString();
-  document.getElementById('ib-hl').textContent=Math.max(0,BASE_HL-totalHLReduced).toLocaleString()+'명';
-  if(totalHLReduced>0||totalRentDrop>0){
-    document.getElementById('ib-sep2').style.display='';document.getElementById('ib-my').style.display='flex';
-    document.getElementById('ib-rdrop').textContent='-€'+Math.round(totalRentDrop);document.getElementById('ib-hdrop').textContent='-'+totalHLReduced+'명';
-  }
-}
-
-function openModal(roi,units,profit10,site,extra,hlR,rentR){
-  const em=roi>100?'🎯':roi>60?'🔥':roi>30?'🎉':roi>0?'👍':'😅';
-  document.getElementById('mo-em').textContent=em;
-  document.getElementById('mo-roi').textContent=roi.toFixed(0)+'% ROI';
-  let sub=`${units.toLocaleString()}채 완료 · €${(profit10/1e6).toFixed(1)}M 수익 · ${site}`;
-  if(extra>0)sub+=`\n⚠ 장애물 비용 +€${(extra/1e3).toFixed(0)}K`;
-  document.getElementById('mo-sub').textContent=sub;
+function openBuildModal(roi,units,ctMonths,site,extra,hlR,rentR){
+  document.getElementById('mo-em').textContent='🏗';
+  document.getElementById('mo-roi').textContent=ctMonths+'개월 공사 시작!';
+  document.getElementById('mo-sub').textContent=`${units.toLocaleString()}세대 예정 · ${site}
+예상 ROI: ${roi.toFixed(0)}% · 완공 후 수익 시작${extra>0?'
+⚠ 추가 비용 +€'+(extra/1e3).toFixed(0)+'K':''}`;
   document.getElementById('mi-hl').textContent='-'+hlR+'명';
   document.getElementById('mi-rent').textContent='-€'+Math.round(rentR)+'/월';
   document.getElementById('mo-name').value='';
   document.getElementById('mo').classList.add('on');
   setTimeout(()=>document.getElementById('mo-name').focus(),220);
 }
-function closeModal(){document.getElementById('mo').classList.remove('on');showToast('✅ 개발 완료! 다음 땅을 고르세요.');cur=null;}
+function closeModal(){document.getElementById('mo').classList.remove('on');cur=null;showToast('🏗 공사 시작! ▶ PLAY로 시간을 진행하세요.');}
 
+// WIEN PANEL TOGGLE
+function toggleWien(){wienOpen=!wienOpen;document.getElementById('wien-panel').classList.toggle('show',wienOpen);updateWienPanel();}
+
+// SHARE
 function openShare(){
   document.getElementById('sh-homes').textContent=totalHomes.toLocaleString()+'채';
   document.getElementById('sh-roi').textContent=bestROI>0?bestROI.toFixed(0)+'%':'—';
@@ -858,43 +1087,42 @@ function openShare(){
   document.getElementById('sh-ov').classList.add('on');
 }
 function closeShare(){document.getElementById('sh-ov').classList.remove('on');}
-
 function shareLink(){
   const url=location.href;
-  const txt=`🏗 VACANT DUBLIN — 더블린 빈 땅 개발 시뮬레이션!\n더블린의 방치된 빈 땅에 아파트를 지어 주택 위기를 해결하세요.\n👉 ${url}\n#VacantDublin #더블린집값 #아일랜드부동산`;
+  const txt=`🏗 VACANT DUBLIN — 더블린 빈 땅 개발 시뮬레이션!\n빈(Wien)처럼 더블린 주택 위기를 해결하세요.\n👉 ${url}\n#VacantDublin #더블린집값`;
   if(navigator.share)navigator.share({title:'Vacant Dublin',text:txt,url});
-  else{navigator.clipboard?.writeText(txt);showToast('🔗 게임 링크 복사 완료!');}
+  else{navigator.clipboard?.writeText(txt);showToast('🔗 링크 복사!');}
   closeShare();
 }
-
 function shareScore(){
-  const lines=['🏗 VACANT DUBLIN 플레이 결과!','',`🏠 건설한 집: ${totalHomes.toLocaleString()}채`,`💰 최고 ROI: ${bestROI.toFixed(0)}%`,`🏕️ 노숙자 감소: -${totalHLReduced}명`,`📉 월세 인하: -€${Math.round(totalRentDrop)}/월`,'','💡 더블린엔 지금도 13,400명이 거리에 있습니다.',`👉 ${location.href}`,'','#VacantDublin #더블린집값 #아일랜드부동산'];
+  const lines=['🏗 VACANT DUBLIN 플레이 결과!','',`🏠 완공 세대: ${totalHomes.toLocaleString()}채`,`💰 최고 ROI: ${bestROI.toFixed(0)}%`,`🏕️ 노숙자 감소: -${totalHLReduced}명`,`📉 월세 인하: -€${Math.round(totalRentDrop)}/월`,'','🎯 목표: 빈(Wien) 모델 달성',`👉 ${location.href}`,'','#VacantDublin #더블린집값'];
   const txt=lines.join('\n');
-  if(navigator.share)navigator.share({title:'Vacant Dublin 점수',text:txt});
-  else{navigator.clipboard?.writeText(txt);showToast('📊 점수 카드 복사 완료!');}
+  if(navigator.share)navigator.share({title:'Vacant Dublin',text:txt});
+  else{navigator.clipboard?.writeText(txt);showToast('📊 점수 복사!');}
   closeShare();
 }
 
+// LEADERBOARD
 async function saveScore(){
   const name=(document.getElementById('mo-name').value.trim()||'ANON').toUpperCase().slice(0,20);
   const entry={...pendingScore,name,ts:Date.now()};
-  try{await window.storage.set('vd5:'+entry.ts+':'+Math.random().toString(36).slice(2,5),JSON.stringify(entry),true);}catch(e){}
+  try{await window.storage.set('vd6:'+entry.ts+':'+Math.random().toString(36).slice(2,5),JSON.stringify(entry),true);}catch(e){}
   closeModal();loadLB();
 }
 async function loadLB(){
   let entries=[];
-  try{const res=await window.storage.list('vd5:',true);if(res?.keys)for(const k of res.keys){try{const r=await window.storage.get(k,true);if(r)entries.push(JSON.parse(r.value));}catch(e){}}}catch(e){}
+  try{const res=await window.storage.list('vd6:',true);if(res?.keys)for(const k of res.keys){try{const r=await window.storage.get(k,true);if(r)entries.push(JSON.parse(r.value));}catch(e){}}}catch(e){}
   entries.sort((a,b)=>b.roi-a.roi);entries=entries.slice(0,20);
   document.getElementById('lb-tot').textContent=entries.reduce((s,e)=>s+(e.units||0),0).toLocaleString()+'채';
   const md=['🥇','🥈','🥉'],dl={easy:'😊',normal:'😤',hard:'💀'};
-  document.getElementById('lb-list').innerHTML=entries.length?entries.map((e,i)=>`<div class="lb-ent${i===0?' g1':''}"><div class="lb-rk">${md[i]||(i+1)}</div><div class="lb-inf"><div class="lb-nm">${e.name}</div><div class="lb-dt">${e.units||0}채 · ${e.method==='modular'?'📦':'🏛'} ${e.floors||0}F · ${dl[e.diff]||''}</div></div><div><div class="lb-roi">${parseFloat(e.roi||0).toFixed(0)}%</div><div class="lb-u">10yr ROI</div></div></div>`).join(''):'<div class="lb-empty">아직 없음<br><br>🏗<br><br>먼저 건설하세요!</div>';
+  document.getElementById('lb-list').innerHTML=entries.length?entries.map((e,i)=>`<div class="lb-ent${i===0?' g1':''}"><div class="lb-rk">${md[i]||(i+1)}</div><div class="lb-inf"><div class="lb-nm">${e.name}</div><div class="lb-dt">${e.units||0}채 · ${dl[e.diff]||''}</div></div><div><div class="lb-roi">${parseFloat(e.roi||0).toFixed(0)}%</div><div class="lb-u">ROI</div></div></div>`).join(''):'<div class="lb-empty">아직 없음<br><br>🏗<br><br>먼저 건설하세요!</div>';
 }
 
 function closePanel(){document.getElementById('build-panel').classList.remove('open');}
 function toggleLB(){lbOpen=!lbOpen;document.getElementById('lb-panel').classList.toggle('open',lbOpen);if(lbOpen)loadLB();}
 function hideHint(){document.getElementById('hint').style.display='none';}
-function showToast(msg,type=''){const t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(type?' '+type:'');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2900);}
-setInterval(()=>{if(mapInited&&!cur)showUncle('idle');},30000);
+function showToast(msg,type=''){const t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(type?' '+type:'');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3200);}
+setInterval(()=>{if(mapInited&&!gameRunning&&!cur)showUncle('idle');},25000);
 </script>
 </body>
 </html>
