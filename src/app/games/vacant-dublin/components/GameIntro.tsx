@@ -92,7 +92,7 @@ export function GameIntro({ onComplete }: Props) {
             <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.45 }}
               className="text-[0.78rem] text-white/90 leading-loose text-left rounded-2xl rounded-bl-none px-4 py-3 max-w-sm w-full"
               style={{ background: "rgba(21,101,192,0.45)", border: "1px solid rgba(255,255,255,0.1)" }}>
-              "드디어 더블린이다! 🍀<br />꿈에 그리던 아일랜드 유학...<br />일단 집부터 구해야겠어!"
+              &ldquo;드디어 더블린이다! 🍀<br />꿈에 그리던 아일랜드 유학...<br />일단 집부터 구해야겠어!&rdquo;
             </motion.div>
             <SceneButtons onNext={next} onSkip={onComplete} />
           </motion.div>
@@ -126,7 +126,7 @@ export function GameIntro({ onComplete }: Props) {
             </div>
             <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }}
               className="text-[0.82rem] text-white/92 leading-loose max-w-xs">
-              "잠깐... 😱<br />방 하나에 <strong style={{ color: "#FDD835" }}>월 200만원?!</strong><br />이게 무슨 나라야..."
+              &ldquo;잠깐... 😱<br />방 하나에 <strong style={{ color: "#FDD835" }}>월 200만원?!</strong><br />이게 무슨 나라야...&rdquo;
             </motion.p>
             <SceneButtons onNext={next} onSkip={onComplete} />
           </motion.div>
