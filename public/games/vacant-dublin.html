@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VACANT DUBLIN — 빈 땅에 집을 짓자!</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+KR:wght@400;700;900&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+:root{
+  --y:#FDD835;--g:#43A047;--r:#E53935;--b:#1E88E5;
+  --navy:#0d1642;--panel:rgba(13,22,66,0.96);--gold:#FFB300;
+  --kr:'Noto Sans KR','Nunito',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;font-family:var(--kr);}
+body::before{content:'';position:fixed;inset:0;z-index:0;
+  background:linear-gradient(180deg,#1565C0 0%,#42A5F5 38%,#B3E5FC 62%,#E8F5E9 68%,#66BB6A 68%,#4CAF50 100%);}
+.cloud{position:fixed;z-index:1;background:white;border-radius:50px;opacity:.8;animation:drift linear infinite;}
+@keyframes drift{from{transform:translateX(-250px)}to{transform:translateX(110vw)}}
+
+/* ───── INTRO ───── */
+#intro{position:fixed;inset:0;z-index:2000;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:linear-gradient(160deg,#020817 0%,#04091c 50%,#080f28 100%);transition:opacity .5s;}
+#intro.out{opacity:0;pointer-events:none;}
+.scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:2rem;gap:.8rem;opacity:0;transform:translateX(60px);pointer-events:none;
+  transition:opacity .45s ease,transform .45s ease;text-align:center;}
+.scene.active{opacity:1;transform:translateX(0);pointer-events:auto;}
+.s-tag{font-family:'Press Start 2P',monospace;font-size:.38rem;color:rgba(255,255,255,.25);
+  letter-spacing:.14em;text-transform:uppercase;margin-bottom:.2rem;}
+.s-big{font-size:4.5rem;line-height:1;}
+.s-title{font-family:'Press Start 2P',monospace;font-size:clamp(.9rem,2.8vw,1.9rem);
+  color:var(--y);letter-spacing:.06em;line-height:1.4;text-shadow:0 0 40px rgba(253,216,53,.35);}
+.s-sub{font-size:.92rem;color:rgba(255,255,255,.55);line-height:2.2;max-width:500px;}
+.s-dots{display:flex;gap:.45rem;margin-bottom:.5rem;}
+.dot{width:26px;height:3px;background:rgba(255,255,255,.15);border-radius:2px;transition:all .3s;}
+.dot.on{background:var(--y);width:42px;}
+.next-btn{background:var(--y);color:#0d1642;border:none;border-radius:8px;
+  padding:.7rem 2rem;font-family:'Press Start 2P',monospace;font-size:.5rem;
+  cursor:pointer;transition:all .2s;margin-top:.2rem;}
+.next-btn:hover{background:#ffe57f;transform:translateY(-2px);}
+.skip-btn{background:none;border:none;color:rgba(255,255,255,.18);font-size:.46rem;
+  cursor:pointer;font-family:var(--kr);transition:color .2s;}
+.skip-btn:hover{color:rgba(255,255,255,.5);}
+
+/* char card */
+.char-row{display:flex;align-items:center;gap:1rem;background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:.8rem 1.2rem;max-width:380px;}
+.char-em{font-size:2.5rem;}
+.char-nm{font-size:.95rem;font-weight:900;color:#fff;margin-bottom:2px;}
+.char-role{font-size:.5rem;color:rgba(255,255,255,.35);}
+.bubble{background:rgba(21,101,192,.45);border:1px solid rgba(255,255,255,.1);
+  border-radius:14px 14px 14px 0;padding:.75rem 1rem;max-width:380px;
+  font-size:.78rem;color:rgba(255,255,255,.9);line-height:2;text-align:left;}
+.bubble.right{border-radius:14px 14px 0 14px;}
+
+/* phone mockup */
+.phone{background:#0f172a;border:3px solid #1e293b;border-radius:22px;
+  padding:.9rem .75rem;width:240px;box-shadow:0 25px 60px rgba(0,0,0,.65);}
+.ph-bar{background:#1e293b;border-radius:7px;padding:.28rem .6rem;
+  margin-bottom:.55rem;font-size:.46rem;color:#64748b;}
+.ph-item{background:#1e293b;border-radius:8px;padding:.5rem .6rem;margin-bottom:.32rem;text-align:left;}
+.ph-type{font-size:.38rem;color:#64748b;margin-bottom:2px;}
+.ph-price{font-size:.82rem;font-weight:900;color:#fff;}
+.ph-price small{font-size:.38rem;color:#64748b;font-weight:400;}
+.ph-note{font-size:.37rem;color:#94a3b8;margin-top:1px;}
+.ph-item.hot{border-left:3px solid #ef4444;}
+.shock{font-size:.82rem;color:rgba(255,255,255,.92);line-height:2;max-width:310px;margin-top:.3rem;}
+
+/* call UI */
+.call-box{width:100%;max-width:400px;display:flex;flex-direction:column;gap:.55rem;}
+.caller{display:flex;align-items:center;gap:.45rem;font-size:.46rem;color:rgba(255,255,255,.32);}
+.caller.r{flex-direction:row-reverse;}
+.caller em{font-size:1.35rem;font-style:normal;}
+.cbbl{background:#1e3a5f;border-radius:12px 12px 12px 0;padding:.48rem .75rem;
+  font-size:.62rem;color:rgba(255,255,255,.9);line-height:1.8;max-width:280px;text-align:left;}
+.cbbl.r{background:#1a3a1a;border-radius:12px 12px 0 12px;border-left:3px solid #4CAF50;}
+.cbbl.pop{animation:popIn .4s ease .8s both;}
+
+/* mission scene */
+.uncle-av{width:72px;height:72px;border-radius:50%;
+  background:linear-gradient(135deg,#FB8C00,#FFB300);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.9rem;border:4px solid #fff;box-shadow:0 8px 30px rgba(251,140,0,.4);}
+.uncle-nm{font-family:'Press Start 2P',monospace;font-size:.5rem;color:var(--gold);margin-top:.4rem;}
+.mission-grid{display:grid;grid-template-columns:1fr 1fr;gap:.4rem;width:100%;max-width:380px;}
+.mg{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+  border-radius:9px;padding:.5rem .65rem;font-size:.58rem;color:rgba(255,255,255,.82);}
+.crisis{background:rgba(229,57,53,.07);border:1px solid rgba(229,57,53,.2);
+  border-radius:10px;padding:.7rem 1rem;width:100%;max-width:380px;}
+.cl{font-size:.54rem;color:rgba(255,255,255,.58);line-height:2.4;text-align:left;}
+.go-btn{background:linear-gradient(135deg,#FDD835,#FFB300);color:#0d1642;border:none;
+  border-radius:10px;padding:.9rem 2.6rem;font-family:'Press Start 2P',monospace;
+  font-size:.56rem;cursor:pointer;box-shadow:0 6px 28px rgba(253,216,53,.4);
+  transition:all .2s;animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 6px 28px rgba(253,216,53,.4)}50%{box-shadow:0 10px 42px rgba(253,216,53,.75)}}
+.go-btn:hover{transform:translateY(-3px);}
+
+/* ───── HUD ───── */
+.hud{position:fixed;top:0;left:0;right:0;height:56px;z-index:300;
+  background:linear-gradient(135deg,#0d1642,#1a237e);
+  border-bottom:3px solid var(--y);
+  display:flex;align-items:center;padding:0 .85rem;gap:.5rem;
+  box-shadow:0 4px 20px rgba(0,0,0,.5);}
+.hud-logo{font-family:'Press Start 2P',monospace;font-size:.58rem;color:#fff;line-height:1.4;flex-shrink:0;}
+.hud-logo span{color:var(--y);}
+.hv{width:1px;height:34px;background:rgba(255,255,255,.12);flex-shrink:0;}
+.hs{display:flex;flex-direction:column;align-items:center;min-width:58px;}
+.hval{font-family:'Press Start 2P',monospace;font-size:.5rem;color:var(--y);}
+.hlbl{font-size:.35rem;color:rgba(255,255,255,.38);margin-top:2px;text-transform:uppercase;letter-spacing:.04em;}
+.hud-mid{flex:1;display:flex;justify-content:center;align-items:center;gap:.32rem;}
+.db{padding:.24rem .52rem;border:2px solid rgba(255,255,255,.18);background:transparent;
+  color:rgba(255,255,255,.4);font-family:'Press Start 2P',monospace;font-size:.36rem;
+  cursor:pointer;border-radius:4px;transition:all .14s;}
+.db:hover{border-color:var(--y);color:var(--y);}
+.db.on{background:var(--y);border-color:var(--y);color:#0d1642;}
+.db.on.nm{background:#FB8C00;border-color:#FB8C00;color:#fff;}
+.db.on.hd{background:#E53935;border-color:#E53935;color:#fff;}
+.hud-r{display:flex;gap:.38rem;flex-shrink:0;}
+.hbtn{padding:.26rem .58rem;border:2px solid var(--y);background:transparent;
+  color:var(--y);font-family:'Press Start 2P',monospace;font-size:.36rem;
+  cursor:pointer;border-radius:4px;transition:all .14s;}
+.hbtn:hover,.hbtn.pr{background:var(--y);color:#0d1642;}
+
+/* ───── IMPACT BAR ───── */
+.impact-bar{position:fixed;top:56px;left:0;right:0;height:28px;z-index:250;
+  background:rgba(8,14,40,.9);border-bottom:1px solid rgba(255,255,255,.06);
+  display:flex;align-items:center;padding:0 1.1rem;gap:1.2rem;
+  backdrop-filter:blur(10px);font-size:.41rem;color:rgba(255,255,255,.42);}
+.ib{display:flex;align-items:center;gap:.22rem;}
+.ib strong{color:rgba(255,255,255,.82);}
+.ib.good strong{color:#A5D6A7;}
+.ibsep{color:rgba(255,255,255,.1);}
+.ib-live{margin-left:auto;display:flex;align-items:center;gap:.28rem;}
+.ldot{width:5px;height:5px;background:#E53935;border-radius:50%;animation:blink 1.4s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.1}}
+
+/* ───── MAP ───── */
+#map{position:fixed;top:84px;left:0;right:0;bottom:0;z-index:2;}
+.leaflet-container{background:#B3E5FC !important;}
+
+/* ───── BUILD PANEL ───── */
+.build-panel{position:fixed;top:84px;right:0;bottom:0;width:318px;z-index:200;
+  background:var(--panel);border-left:2px solid rgba(255,255,255,.08);
+  display:flex;flex-direction:column;
+  transform:translateX(318px);transition:transform .35s cubic-bezier(.34,1.56,.64,1);
+  backdrop-filter:blur(14px);}
+.build-panel.open{transform:translateX(0);}
+.bp-x{position:absolute;top:.65rem;left:-36px;width:32px;height:32px;
+  background:var(--panel);border:2px solid rgba(255,255,255,.1);border-right:none;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  font-size:.9rem;color:rgba(255,255,255,.6);border-radius:7px 0 0 7px;backdrop-filter:blur(14px);}
+.bp-head{padding:.8rem 1rem;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);}
+.bp-ref{font-size:.38rem;color:rgba(255,255,255,.28);margin-bottom:2px;}
+.bp-name{font-family:'Press Start 2P',monospace;font-size:.47rem;color:#fff;line-height:1.5;margin-bottom:2px;}
+.bp-own{font-size:.41rem;color:rgba(255,255,255,.3);}
+.bp-body{flex:1;overflow-y:auto;padding:.8rem;}
+.bp-body::-webkit-scrollbar{width:3px;}
+.bp-body::-webkit-scrollbar-thumb{background:var(--y);}
+
+.bldg-prev{background:linear-gradient(180deg,#87CEEB 0%,#B3E5FC 55%,#5D8A3C 55%,#4a7a2e 100%);
+  border-radius:8px;margin-bottom:.8rem;padding:.7rem;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  min-height:106px;justify-content:flex-end;position:relative;overflow:hidden;
+  border:2px solid rgba(255,255,255,.12);}
+.bldg-prev::before{content:'☀️';position:absolute;top:6px;right:9px;font-size:.88rem;}
+.bf{display:flex;flex-direction:column;align-items:center;gap:1px;position:relative;z-index:1;}
+.bfr{display:flex;gap:1px;}
+.bu{width:11px;height:8px;border-radius:1px;}
+.bgnd{width:100%;height:3px;background:#4a7a2e;border-radius:1px;position:relative;z-index:1;}
+.brd{width:110%;height:7px;background:#78909C;position:absolute;bottom:0;left:-5%;}
+.brd::after{content:'';position:absolute;top:50%;left:0;right:0;height:2px;
+  background:repeating-linear-gradient(90deg,white 0,white 10px,transparent 10px,transparent 20px);
+  transform:translateY(-50%);}
+
+.clbl{font-family:'Press Start 2P',monospace;font-size:.36rem;color:var(--y);margin-bottom:.4rem;letter-spacing:.04em;}
+.opt-row{display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:.62rem;}
+.chip{padding:.27rem .5rem;border-radius:20px;border:2px solid rgba(255,255,255,.15);
+  background:rgba(255,255,255,.05);color:rgba(255,255,255,.48);
+  font-size:.45rem;font-weight:700;cursor:pointer;transition:all .14s;white-space:nowrap;}
+.chip:hover{border-color:var(--y);color:#fff;}
+.chip.sel{background:var(--y);color:#0d1642;border-color:var(--y);}
+.chip.sel.g{background:var(--g);border-color:var(--g);color:#fff;}
+.chip.sel.b{background:var(--b);border-color:var(--b);color:#fff;}
+
+.sbox{background:rgba(255,255,255,.04);border-radius:8px;padding:.55rem;
+  border:1px solid rgba(255,255,255,.08);margin-bottom:.62rem;}
+.stop{display:flex;justify-content:space-between;margin-bottom:.36rem;}
+.snm{font-size:.45rem;color:rgba(255,255,255,.44);}
+.sval{font-family:'Press Start 2P',monospace;font-size:.58rem;color:var(--y);}
+input[type=range]{width:100%;-webkit-appearance:none;height:5px;background:rgba(255,255,255,.16);border-radius:3px;outline:none;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;
+  background:var(--y);cursor:pointer;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.3);}
+
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:.36rem;margin-bottom:.62rem;}
+.sstat{background:rgba(255,255,255,.04);border-radius:7px;padding:.46rem;border:1px solid rgba(255,255,255,.07);}
+.sv{font-family:'Press Start 2P',monospace;font-size:.56rem;line-height:1.2;}
+.sl{font-size:.37rem;color:rgba(255,255,255,.3);margin-top:2px;text-transform:uppercase;}
+
+.roi-box{background:linear-gradient(135deg,rgba(255,184,0,.1),rgba(229,57,53,.1));
+  border:2px solid rgba(255,184,0,.28);border-radius:10px;padding:.75rem;
+  text-align:center;margin-bottom:.62rem;}
+.roi-n{font-family:'Press Start 2P',monospace;font-size:1.22rem;line-height:1;margin-bottom:.18rem;}
+.roi-s{font-size:.38rem;color:rgba(255,255,255,.36);}
+.roi-t{background:rgba(0,0,0,.3);border-radius:4px;height:6px;margin-top:.42rem;overflow:hidden;}
+.roi-f{height:100%;border-radius:4px;transition:width .5s;background:linear-gradient(90deg,#43A047,#FDD835,#E53935);}
+
+/* social impact preview */
+.impact-prev{background:rgba(67,160,71,.08);border:1px solid rgba(67,160,71,.22);
+  border-radius:9px;padding:.55rem .65rem;margin-bottom:.62rem;}
+.ip-title{font-size:.37rem;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.3rem;}
+.ip-row{display:flex;justify-content:space-between;font-size:.5rem;color:rgba(255,255,255,.7);margin-bottom:.15rem;}
+.ip-row span{color:#A5D6A7;font-weight:700;}
+
+.dn{background:rgba(229,57,53,.09);border:1px solid rgba(229,57,53,.28);
+  border-radius:8px;padding:.5rem;margin-bottom:.62rem;
+  font-size:.41rem;color:rgba(255,255,255,.5);line-height:1.7;display:none;}
+.build-btn{width:100%;padding:.7rem;border:none;border-radius:8px;
+  background:linear-gradient(135deg,#FDD835,#FFB300);
+  color:#0d1642;font-family:'Press Start 2P',monospace;font-size:.47rem;
+  cursor:pointer;letter-spacing:.04em;transition:all .2s;
+  box-shadow:0 4px 15px rgba(253,216,53,.28);}
+.build-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(253,216,53,.48);}
+.build-btn:disabled{background:#444;color:#666;cursor:not-allowed;transform:none;box-shadow:none;}
+
+/* ───── LEADERBOARD ───── */
+.lb-panel{position:fixed;top:84px;right:0;bottom:0;width:298px;z-index:200;
+  background:var(--panel);border-left:2px solid rgba(255,255,255,.08);
+  display:flex;flex-direction:column;backdrop-filter:blur(14px);
+  transform:translateX(298px);transition:transform .3s;}
+.lb-panel.open{transform:translateX(0);}
+.lb-head{padding:.8rem 1rem;border-bottom:1px solid rgba(255,255,255,.08);}
+.lb-title{font-family:'Press Start 2P',monospace;font-size:.52rem;color:var(--y);margin-bottom:.2rem;}
+.lb-sub{font-size:.41rem;color:rgba(255,255,255,.28);}
+.lb-list{flex:1;overflow-y:auto;padding:.3rem 0;}
+.lb-ent{display:flex;align-items:center;gap:.42rem;padding:.46rem .82rem;border-bottom:1px solid rgba(255,255,255,.04);}
+.lb-ent.g1{background:rgba(255,184,0,.07);}
+.lb-rk{font-family:'Press Start 2P',monospace;font-size:.44rem;width:20px;text-align:center;}
+.lb-inf{flex:1;min-width:0;}
+.lb-nm{font-size:.5rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lb-dt{font-size:.37rem;color:rgba(255,255,255,.28);margin-top:1px;}
+.lb-roi{font-family:'Press Start 2P',monospace;font-size:.52rem;color:var(--y);}
+.lb-u{font-size:.36rem;color:rgba(255,255,255,.22);text-align:right;}
+.lb-empty{padding:2rem 1rem;text-align:center;font-family:'Press Start 2P',monospace;
+  font-size:.38rem;color:rgba(255,255,255,.18);line-height:3.2;}
+.lb-foot{padding:.6rem 1rem;border-top:1px solid rgba(255,255,255,.07);
+  display:flex;justify-content:space-between;align-items:center;}
+.lb-tv{font-family:'Press Start 2P',monospace;font-size:.56rem;color:var(--g);}
+.lb-tl{font-size:.38rem;color:rgba(255,255,255,.28);}
+
+/* ───── UNCLE ADVISOR ───── */
+.uncle-wrap{position:fixed;bottom:1.2rem;left:1.2rem;z-index:150;
+  display:none;align-items:flex-end;gap:.45rem;}
+.uncle-wrap.show{display:flex;}
+.uncle-circle{width:48px;height:48px;border-radius:50%;
+  background:linear-gradient(135deg,#FB8C00,#FFB300);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.5rem;border:3px solid #fff;
+  box-shadow:0 4px 18px rgba(0,0,0,.45);cursor:pointer;flex-shrink:0;transition:transform .2s;}
+.uncle-circle:hover{transform:scale(1.1);}
+.uncle-bbl{background:rgba(8,14,40,.97);border:2px solid var(--gold);
+  border-radius:14px 14px 14px 0;padding:.65rem .9rem;max-width:240px;
+  backdrop-filter:blur(12px);
+  opacity:0;transform:scale(0);transform-origin:bottom left;
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .3s;pointer-events:none;}
+.uncle-bbl.show{opacity:1;transform:scale(1);pointer-events:auto;}
+.ub-tag{font-family:'Press Start 2P',monospace;font-size:.32rem;color:var(--gold);margin-bottom:4px;}
+.ub-txt{font-size:.58rem;color:rgba(255,255,255,.88);line-height:1.75;}
+
+/* ───── EVENT POPUP ───── */
+.ev-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:499;display:none;backdrop-filter:blur(4px);}
+.ev-bg.on{display:block;}
+.ev-pop{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.8);
+  z-index:500;background:linear-gradient(135deg,#1a237e,#283593);
+  border-radius:16px;padding:1.8rem;min-width:340px;max-width:90vw;
+  border:3px solid var(--r);box-shadow:0 20px 60px rgba(0,0,0,.7);
+  opacity:0;pointer-events:none;transition:all .3s cubic-bezier(.34,1.56,.64,1);}
+.ev-pop.on{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1);}
+.ev-em{font-size:2.8rem;text-align:center;margin-bottom:.45rem;}
+.ev-ti{font-family:'Press Start 2P',monospace;font-size:.6rem;color:var(--r);text-align:center;margin-bottom:.36rem;}
+.ev-de{font-size:.54rem;color:rgba(255,255,255,.68);text-align:center;line-height:1.85;margin-bottom:.36rem;}
+.ev-im{font-size:.5rem;color:var(--y);text-align:center;margin-bottom:.8rem;font-weight:700;}
+.ev-btns{display:flex;gap:.48rem;}
+.ev-ok{flex:1;padding:.58rem;background:var(--y);color:#0d1642;border:none;border-radius:8px;
+  font-family:'Press Start 2P',monospace;font-size:.44rem;cursor:pointer;}
+.ev-ok:hover{background:#ffe57f;}
+.ev-sk{padding:.58rem .82rem;background:rgba(255,255,255,.07);color:rgba(255,255,255,.38);
+  border:2px solid rgba(255,255,255,.1);border-radius:8px;font-family:'Press Start 2P',monospace;font-size:.44rem;cursor:pointer;}
+.ev-sk:hover{color:#fff;}
+.dl-bar{height:6px;background:rgba(255,255,255,.1);border-radius:3px;margin-top:.5rem;overflow:hidden;}
+.dl-fill{height:100%;background:var(--y);border-radius:3px;animation:fillB 1.5s linear forwards;}
+@keyframes fillB{from{width:0}to{width:100%}}
+
+/* ───── SUCCESS MODAL ───── */
+.mo{position:fixed;inset:0;background:rgba(4,8,25,.88);z-index:600;
+  display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px);}
+.mo.on{display:flex;}
+.mo-box{background:linear-gradient(135deg,#0d1642,#1a237e);border:3px solid var(--y);
+  border-radius:16px;padding:1.8rem;min-width:350px;max-width:92vw;
+  box-shadow:0 20px 60px rgba(0,0,0,.7);animation:popIn .35s cubic-bezier(.34,1.56,.64,1);}
+@keyframes popIn{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+.mo-em{font-size:2.8rem;text-align:center;margin-bottom:.35rem;}
+.mo-ti{font-family:'Press Start 2P',monospace;font-size:.6rem;color:var(--y);text-align:center;margin-bottom:.28rem;}
+.mo-roi{font-family:'Press Start 2P',monospace;font-size:1.85rem;color:#fff;text-align:center;margin-bottom:.28rem;}
+.mo-sub{font-size:.5rem;color:rgba(255,255,255,.46);text-align:center;margin-bottom:.7rem;line-height:1.9;white-space:pre-line;}
+/* impact result */
+.mo-impact{display:grid;grid-template-columns:1fr 1fr;gap:.36rem;
+  background:rgba(67,160,71,.08);border:1px solid rgba(67,160,71,.22);
+  border-radius:9px;padding:.6rem;margin-bottom:.85rem;}
+.mi-v{font-family:'Press Start 2P',monospace;font-size:.58rem;color:#A5D6A7;}
+.mi-l{font-size:.37rem;color:rgba(255,255,255,.32);margin-top:2px;text-transform:uppercase;}
+.mo-lbl{font-size:.41rem;color:rgba(255,255,255,.36);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.27rem;}
+.mo-input{width:100%;background:rgba(0,0,0,.35);border:2px solid rgba(255,255,255,.16);
+  border-radius:8px;color:#fff;font-family:'Nunito',sans-serif;font-size:.82rem;
+  padding:.56rem .82rem;outline:none;margin-bottom:.85rem;font-weight:700;}
+.mo-input:focus{border-color:var(--y);}
+.mo-btns{display:flex;gap:.44rem;}
+.mo-ok{flex:1;padding:.58rem;background:var(--y);color:#0d1642;border:none;border-radius:8px;
+  font-family:'Press Start 2P',monospace;font-size:.44rem;cursor:pointer;}
+.mo-ok:hover{background:#ffe57f;}
+.mo-sk{padding:.58rem .82rem;background:rgba(255,255,255,.06);color:rgba(255,255,255,.3);
+  border:2px solid rgba(255,255,255,.1);border-radius:8px;font-family:'Press Start 2P',monospace;font-size:.44rem;cursor:pointer;}
+.mo-sk:hover{color:#fff;}
+
+/* ───── SHARE OVERLAY ───── */
+.sh-ov{position:fixed;inset:0;background:rgba(4,8,25,.92);z-index:700;
+  display:none;align-items:center;justify-content:center;backdrop-filter:blur(10px);}
+.sh-ov.on{display:flex;}
+.sh-card{background:linear-gradient(135deg,#0d1642,#1a237e,#0a1a50);
+  border:3px solid var(--y);border-radius:20px;padding:2rem;
+  min-width:360px;max-width:92vw;
+  box-shadow:0 20px 60px rgba(0,0,0,.7);animation:popIn .35s cubic-bezier(.34,1.56,.64,1);
+  position:relative;}
+.sh-x{position:absolute;top:.8rem;right:.8rem;background:rgba(255,255,255,.1);
+  border:none;color:rgba(255,255,255,.5);width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:.9rem;}
+.sh-x:hover{color:#fff;}
+.sh-header{text-align:center;margin-bottom:1.2rem;}
+.sh-logo{font-family:'Press Start 2P',monospace;font-size:.65rem;color:var(--y);}
+.sh-tagline{font-size:.5rem;color:rgba(255,255,255,.35);margin-top:.2rem;}
+.sh-stats{display:grid;grid-template-columns:1fr 1fr;gap:.45rem;margin-bottom:1.1rem;}
+.sh-stat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  border-radius:10px;padding:.65rem;text-align:center;}
+.sh-v{font-family:'Press Start 2P',monospace;font-size:.82rem;line-height:1.2;}
+.sh-l{font-size:.4rem;color:rgba(255,255,255,.36);margin-top:3px;}
+.sh-msg{font-size:.56rem;color:rgba(255,255,255,.58);text-align:center;line-height:2;
+  margin-bottom:1.1rem;background:rgba(229,57,53,.07);
+  border:1px solid rgba(229,57,53,.18);border-radius:8px;padding:.65rem;}
+.sh-btns{display:flex;gap:.45rem;}
+.sh-link{flex:1;padding:.62rem;background:rgba(255,255,255,.08);
+  border:2px solid rgba(255,255,255,.2);color:#fff;border-radius:8px;
+  font-family:'Press Start 2P',monospace;font-size:.42rem;cursor:pointer;transition:all .15s;}
+.sh-link:hover{background:rgba(255,255,255,.15);}
+.sh-score{flex:1;padding:.62rem;background:var(--y);color:#0d1642;border:none;
+  border-radius:8px;font-family:'Press Start 2P',monospace;font-size:.42rem;cursor:pointer;}
+.sh-score:hover{background:#ffe57f;}
+
+/* ───── TOAST / MISC ───── */
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(80px);
+  background:linear-gradient(135deg,#1B5E20,#2E7D32);border:2px solid #66BB6A;
+  border-radius:10px;padding:.6rem 1.2rem;z-index:800;
+  font-family:'Press Start 2P',monospace;font-size:.42rem;color:#fff;
+  transition:transform .4s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;
+  box-shadow:0 8px 30px rgba(0,0,0,.4);}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.toast.warn{background:linear-gradient(135deg,#B71C1C,#C62828);border-color:#EF9A9A;}
+.bf-ani{position:fixed;pointer-events:none;font-size:2rem;z-index:350;animation:floatUp 1.6s ease-out forwards;}
+@keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-90px) scale(1.6)}}
+.hint{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);z-index:150;
+  background:rgba(13,22,66,.9);border:2px solid var(--y);border-radius:12px;
+  padding:.6rem 1.3rem;text-align:center;backdrop-filter:blur(10px);
+  animation:hintFloat 3s ease-in-out infinite;display:none;}
+@keyframes hintFloat{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-5px)}}
+.hint p{font-family:'Press Start 2P',monospace;font-size:.44rem;color:#fff;line-height:2.2;}
+.hint span{color:var(--y);}
+.leaflet-popup-content-wrapper{border-radius:12px !important;border:2px solid var(--y) !important;
+  background:rgba(13,22,66,.97) !important;color:#fff !important;
+  font-family:'Nunito',sans-serif !important;font-size:.7rem !important;backdrop-filter:blur(10px) !important;}
+.leaflet-popup-tip{background:rgba(13,22,66,.97) !important;}
+.leaflet-popup-close-button{color:rgba(255,255,255,.4) !important;}
+</style>
+</head>
+<body>
+
+<!-- CLOUDS -->
+<div class="cloud" style="width:130px;height:42px;top:75px;left:-250px;animation-duration:38s"></div>
+<div class="cloud" style="width:85px;height:30px;top:105px;left:-250px;animation-duration:52s;animation-delay:12s"></div>
+<div class="cloud" style="width:170px;height:54px;top:85px;left:-250px;animation-duration:45s;animation-delay:25s"></div>
+<div class="cloud" style="width:105px;height:33px;top:124px;left:-250px;animation-duration:60s;animation-delay:37s"></div>
+
+<!-- ═══ INTRO ═══ -->
+<div id="intro">
+  <div class="s-dots" id="sdots" style="position:absolute;top:1.3rem;left:50%;transform:translateX(-50%);display:flex;gap:.44rem;">
+    <div class="dot on"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+  </div>
+
+  <!-- Scene 0: Title -->
+  <div class="scene active" id="sc0">
+    <div class="s-tag">실화를 바탕으로 한 시뮬레이션</div>
+    <div class="s-big">🏠</div>
+    <div class="s-title">VACANT<br>DUBLIN</div>
+    <div class="s-sub">더블린엔 빈 땅이 있다.<br>그런데 왜 집은 없을까?</div>
+    <button class="next-btn" onclick="nextScene()">이야기 시작 →</button>
+    <button class="skip-btn" onclick="skipIntro()" style="margin-top:.2rem;">건너뛰기</button>
+  </div>
+
+  <!-- Scene 1: 김석준 arrives -->
+  <div class="scene" id="sc1">
+    <div class="s-tag">2025년 9월 · 더블린 국제공항 ✈️</div>
+    <div class="char-row">
+      <div class="char-em">🎓</div>
+      <div>
+        <div class="char-nm">김석준 (25세)</div>
+        <div class="char-role">UCD 경영학 박사과정 · 전북 전주 출신</div>
+      </div>
+    </div>
+    <div class="bubble right">
+      "드디어 더블린이다! 🍀<br>
+      꿈에 그리던 아일랜드 유학...<br>
+      일단 집부터 구해야겠어!"
+    </div>
+    <button class="next-btn" onclick="nextScene()">다음 →</button>
+    <button class="skip-btn" onclick="skipIntro()">건너뛰기</button>
+  </div>
+
+  <!-- Scene 2: 집값 충격 -->
+  <div class="scene" id="sc2">
+    <div class="s-tag">📱 Daft.ie 더블린 매물 검색 중...</div>
+    <div class="phone">
+      <div class="ph-bar">🏠 daft.ie &nbsp;·&nbsp; Dublin</div>
+      <div class="ph-item">
+        <div class="ph-type">Studio · Dublin City Centre</div>
+        <div class="ph-price">€2,100<small>/month</small></div>
+        <div class="ph-note">방 1개, 화장실 공유</div>
+      </div>
+      <div class="ph-item">
+        <div class="ph-type">1-Bed · Dublin 4</div>
+        <div class="ph-price">€2,650<small>/month</small></div>
+        <div class="ph-note">즉시 입주 가능</div>
+      </div>
+      <div class="ph-item hot">
+        <div class="ph-type">⚡ Room Share · Dublin 7</div>
+        <div class="ph-price">€1,400<small>/month</small></div>
+        <div class="ph-note">오늘 마감 · 지금 12명 보는 중</div>
+      </div>
+    </div>
+    <div class="shock">
+      "잠깐... 😱<br>
+      방 하나에 <strong style="color:#FDD835">월 200만원?!</strong><br>
+      이게 무슨 나라야..."
+    </div>
+    <button class="next-btn" onclick="nextScene()">다음 →</button>
+    <button class="skip-btn" onclick="skipIntro()">건너뛰기</button>
+  </div>
+
+  <!-- Scene 3: 삼촌에게 전화 -->
+  <div class="scene" id="sc3">
+    <div class="s-tag">📞 한국으로 국제전화 연결 중...</div>
+    <div class="call-box">
+      <div>
+        <div class="caller"><em>🎓</em><span>김석준 (더블린)</span></div>
+        <div class="cbbl r" style="margin-top:.28rem;margin-left:auto">
+          "삼촌... 여기 방 하나에 월세가 <strong>200만원</strong>이에요.<br>
+          빈 땅은 그렇게 많다는데..."
+        </div>
+      </div>
+      <div>
+        <div class="caller r"><em>👷</em><span>김건설 삼촌 (서울)</span></div>
+        <div class="cbbl" style="margin-top:.28rem">
+          "😤 뭐?! 그 넓은 더블린에<br>
+          빈 땅이 많은데 왜 집을 안 짓는 거야?!"
+        </div>
+        <div class="cbbl pop" style="margin-top:.32rem;background:#1a3a1a;border-left:3px solid #4CAF50">
+          "내가 <strong>직접 지어드리겠다!!!</strong> 🏗<br>
+          조카 걱정은 안 해도 돼!"
+        </div>
+      </div>
+    </div>
+    <button class="next-btn" onclick="nextScene()">다음 →</button>
+    <button class="skip-btn" onclick="skipIntro()">건너뛰기</button>
+  </div>
+
+  <!-- Scene 4: 미션 브리핑 -->
+  <div class="scene" id="sc4">
+    <div class="uncle-av">👷</div>
+    <div class="uncle-nm">김건설 삼촌 — 건설사 대표</div>
+    <div class="mission-grid">
+      <div class="mg">🗺️ 더블린 빈 땅 공략</div>
+      <div class="mg">🏗️ 아파트 설계 & 건설</div>
+      <div class="mg">📉 전체 집값 낮추기</div>
+      <div class="mg">🏕️ 노숙자 줄이기</div>
+    </div>
+    <div class="crisis">
+      <div class="cl">📌 더블린 평균 월세 <strong>€2,300/월</strong> (한화 약 330만원)</div>
+      <div class="cl">📌 긴급 노숙자 <strong>13,400명</strong> (2025년 기준)</div>
+      <div class="cl">📌 수년간 방치된 빈 땅 <strong>19곳</strong></div>
+    </div>
+    <button class="go-btn" onclick="skipIntro()">🏗️ 건설 시작하기!</button>
+  </div>
+</div>
+
+<!-- HUD -->
+<div class="hud">
+  <div class="hud-logo">VACANT<span>.</span><br>DUBLIN</div>
+  <div class="hv"></div>
+  <div class="hs"><div class="hval" id="h-roi">—</div><div class="hlbl">Best ROI</div></div>
+  <div class="hv"></div>
+  <div class="hs"><div class="hval" id="h-homes" style="color:#A5D6A7">0</div><div class="hlbl">주택 수</div></div>
+  <div class="hv"></div>
+  <div class="hs"><div class="hval" id="h-hl" style="color:#81D4FA">+0</div><div class="hlbl">노숙자↓</div></div>
+  <div class="hv"></div>
+  <div class="hs"><div class="hval" id="h-budget" style="color:#90CAF9">€50M</div><div class="hlbl">예산</div></div>
+  <div class="hud-mid">
+    <span style="font-family:'Press Start 2P',monospace;font-size:.33rem;color:rgba(255,255,255,.3)">MODE:</span>
+    <button class="db on" id="db-easy" onclick="setDiff('easy')">😊 EASY</button>
+    <button class="db" id="db-normal" onclick="setDiff('normal')">😤 NORMAL</button>
+    <button class="db" id="db-hard" onclick="setDiff('hard')">💀 HARD</button>
+  </div>
+  <div class="hud-r">
+    <button class="hbtn" onclick="toggleLB()">🏆</button>
+    <button class="hbtn pr" onclick="openShare()">📤 공유</button>
+  </div>
+</div>
+
+<!-- IMPACT BAR -->
+<div class="impact-bar">
+  <div class="ib">🏙️ 더블린 평균 월세: <strong id="ib-rent">€2,300</strong>/월</div>
+  <div class="ibsep">|</div>
+  <div class="ib">🏕️ 긴급 노숙자: <strong id="ib-hl">13,400명</strong></div>
+  <div class="ibsep" id="ib-sep2" style="display:none">|</div>
+  <div class="ib good" id="ib-my" style="display:none">📉 내 기여: 월세 <strong id="ib-rdrop">-€0</strong> · 노숙자 <strong id="ib-hdrop">-0명</strong></div>
+  <div class="ib-live"><div class="ldot"></div><span>실시간 더블린 주택 위기</span></div>
+</div>
+
+<!-- MAP -->
+<div id="map"></div>
+
+<!-- BUILD PANEL -->
+<div class="build-panel" id="build-panel">
+  <div class="bp-x" onclick="closePanel()">✕</div>
+  <div class="bp-head">
+    <div class="bp-ref" id="bp-ref"></div>
+    <div class="bp-name" id="bp-name"></div>
+    <div class="bp-own" id="bp-own"></div>
+  </div>
+  <div class="bp-body">
+    <div class="bldg-prev">
+      <div class="brd"></div>
+      <div class="bf" id="bpf"></div>
+      <div class="bgnd"></div>
+    </div>
+
+    <div class="clbl">🏗 건설 방식</div>
+    <div class="opt-row">
+      <div class="chip sel" onclick="setMethod('standard',this)">🏛 Standard</div>
+      <div class="chip" onclick="setMethod('modular',this)">📦 Modular <span style="font-size:.38rem;color:#A5D6A7">−30%</span></div>
+    </div>
+
+    <div class="clbl">🏘 임대 유형</div>
+    <div class="opt-row">
+      <div class="chip sel" onclick="setTenure('market',this)">💰 시장가</div>
+      <div class="chip" onclick="setTenure('mixed',this)">⚖ 혼합</div>
+      <div class="chip" onclick="setTenure('social',this)">🏘 사회주택</div>
+    </div>
+
+    <div class="sbox">
+      <div class="stop"><span class="snm">층수 (Floors)</span><span class="sval" id="fl-v">6F</span></div>
+      <input type="range" id="fl-s" min="3" max="20" value="6" oninput="updateFloors(this.value)">
+      <div style="display:flex;justify-content:space-between;font-size:.35rem;color:rgba(255,255,255,.2);margin-top:3px"><span>3F</span><span>20F</span></div>
+    </div>
+
+    <div class="sgrid">
+      <div class="sstat"><div class="sv" id="s-u" style="color:#90CAF9">—</div><div class="sl">세대 수</div></div>
+      <div class="sstat"><div class="sv" id="s-c" style="color:#EF9A9A">—</div><div class="sl">총 비용</div></div>
+      <div class="sstat"><div class="sv" id="s-r" style="color:#A5D6A7">—</div><div class="sl">연 순수익</div></div>
+      <div class="sstat"><div class="sv" id="s-p" style="color:#FFE082">—</div><div class="sl">회수 기간</div></div>
+    </div>
+
+    <div class="roi-box">
+      <div class="roi-n" id="roi-n">—</div>
+      <div class="roi-s">10년 ROI (10-Year Return)</div>
+      <div class="roi-t"><div class="roi-f" id="roi-f" style="width:0%"></div></div>
+    </div>
+
+    <!-- social impact preview -->
+    <div class="impact-prev" id="impact-prev">
+      <div class="ip-title">🏕️ 사회적 임팩트 예측</div>
+      <div class="ip-row">노숙자 감소 <span id="ip-hl">0명</span></div>
+      <div class="ip-row">월세 인하 기여 <span id="ip-rent">-€0/월</span></div>
+    </div>
+
+    <div class="dn" id="dn"></div>
+    <button class="build-btn" id="build-btn" onclick="startBuild()">🏗 건설 시작!</button>
+  </div>
+</div>
+
+<!-- LEADERBOARD -->
+<div class="lb-panel" id="lb-panel">
+  <div class="lb-head">
+    <div class="lb-title">🏆 LEADERBOARD</div>
+    <div class="lb-sub">10년 ROI 기준 · 전 세계 김건설</div>
+  </div>
+  <div class="lb-list" id="lb-list"><div class="lb-empty">아직 없음<br><br>🏗<br><br>먼저 건설하세요!</div></div>
+  <div class="lb-foot">
+    <span class="lb-tl">전체 건설 세대</span>
+    <span class="lb-tv" id="lb-tot">0채</span>
+  </div>
+</div>
+
+<!-- UNCLE ADVISOR -->
+<div class="uncle-wrap" id="uncle-wrap">
+  <div class="uncle-bbl" id="uncle-bbl">
+    <div class="ub-tag">👷 김건설 삼촌</div>
+    <div class="ub-txt" id="uncle-txt"></div>
+  </div>
+  <div class="uncle-circle" onclick="cycleUncle()">👷</div>
+</div>
+
+<!-- EVENT POPUP -->
+<div class="ev-bg" id="ev-bg"></div>
+<div class="ev-pop" id="ev-pop">
+  <div class="ev-em" id="ev-em">⚠️</div>
+  <div class="ev-ti" id="ev-ti">OBSTACLE</div>
+  <div class="ev-de" id="ev-de"></div>
+  <div class="ev-im" id="ev-im"></div>
+  <div class="dl-bar"><div class="dl-fill"></div></div>
+  <div class="ev-btns" style="margin-top:.8rem">
+    <button class="ev-ok" id="ev-ok" onclick="resolveEvent(true)">✓ 수락하고 계속</button>
+    <button class="ev-sk" onclick="resolveEvent(false)">✕ 건설 포기</button>
+  </div>
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="mo" id="mo">
+  <div class="mo-box">
+    <div class="mo-em" id="mo-em">🎉</div>
+    <div class="mo-ti">건설 완료!</div>
+    <div class="mo-roi" id="mo-roi"></div>
+    <div class="mo-sub" id="mo-sub"></div>
+    <div class="mo-impact" id="mo-impact">
+      <div><div class="mi-v" id="mi-hl">0명</div><div class="mi-l">노숙자 감소</div></div>
+      <div><div class="mi-v" id="mi-rent">-€0</div><div class="mi-l">월세 인하 기여</div></div>
+    </div>
+    <div class="mo-lbl">리더보드 이름 (닉네임)</div>
+    <input class="mo-input" id="mo-name" type="text" placeholder="DEVELOPER_01" maxlength="20">
+    <div class="mo-btns">
+      <button class="mo-ok" onclick="saveScore()">▶ 등록</button>
+      <button class="mo-sk" onclick="closeModal()">건너뛰기</button>
+    </div>
+  </div>
+</div>
+
+<!-- SHARE OVERLAY -->
+<div class="sh-ov" id="sh-ov">
+  <div class="sh-card">
+    <button class="sh-x" onclick="closeShare()">✕</button>
+    <div class="sh-header">
+      <div class="sh-logo">🏗 VACANT DUBLIN</div>
+      <div class="sh-tagline">더블린 빈 땅 개발 시뮬레이션</div>
+    </div>
+    <div class="sh-stats">
+      <div class="sh-stat">
+        <div class="sh-v" id="sh-homes" style="color:#A5D6A7">0채</div>
+        <div class="sh-l">🏠 건설한 집</div>
+      </div>
+      <div class="sh-stat">
+        <div class="sh-v" id="sh-roi" style="color:#FDD835">—</div>
+        <div class="sh-l">💰 최고 ROI</div>
+      </div>
+      <div class="sh-stat">
+        <div class="sh-v" id="sh-hl" style="color:#81D4FA">0명↓</div>
+        <div class="sh-l">🏕️ 노숙자 감소</div>
+      </div>
+      <div class="sh-stat">
+        <div class="sh-v" id="sh-rent" style="color:#EF9A9A">-€0</div>
+        <div class="sh-l">📉 월세 인하 기여</div>
+      </div>
+    </div>
+    <div class="sh-msg">
+      💡 더블린엔 지금도 <strong style="color:#EF9A9A">13,400명</strong>이 거리에 있어요.<br>
+      수년간 방치된 빈 땅에 아파트를 짓고<br>
+      아일랜드 주택 위기를 직접 느껴보세요!
+    </div>
+    <div class="sh-btns">
+      <button class="sh-link" onclick="shareLink()">🔗 게임 링크 공유</button>
+      <button class="sh-score" onclick="shareScore()">📊 내 점수 공유</button>
+    </div>
+  </div>
+</div>
+
+<!-- HINT -->
+<div class="hint" id="hint">
+  <p>🗺 지도의 <span>📍 빨간 핀</span>을 클릭해서 개발하세요!</p>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════
+// SITES
+// ═══════════════════════════════════════
+const SITES=[
+  {id:"VS-0596",name:"Oscar Traynor Rd",area:4.2,landVal:45e6,type:"Council",owner:"Dublin City Council",years:6,lat:53.3850,lng:-6.2010},
+  {id:"VS-0011",name:"Infirmary Rd",area:2.1,landVal:10.5e6,type:"Council",owner:"Dublin City Council",years:8,lat:53.3520,lng:-6.2852},
+  {id:"VS-0117",name:"East Wall Rd",area:1.8,landVal:10.5e6,type:"Council",owner:"Dublin City Council",years:8,lat:53.3524,lng:-6.2248},
+  {id:"VS-0800",name:"Paper Mills, Clonskeagh",area:1.5,landVal:10e6,type:"Vacant",owner:"Harley Issuer DAC",years:3,lat:53.3140,lng:-6.2430},
+  {id:"VS-0048",name:"Phibsborough Rd",area:0.9,landVal:7.2e6,type:"Vacant",owner:"Bindford Ltd",years:8,lat:53.3674,lng:-6.2706},
+  {id:"VS-0979",name:"East Wall Rd (Port)",area:1.2,landVal:7e6,type:"Vacant",owner:"Dublin Port Co.",years:7,lat:53.3490,lng:-6.2210},
+  {id:"VS-0028",name:"Grand Canal Place",area:0.8,landVal:6e6,type:"Council",owner:"Dublin City Council",years:7,lat:53.3392,lng:-6.2770},
+  {id:"VS-0461",name:"Bannow Rd, Cabra",area:0.9,landVal:6e6,type:"Council",owner:"Dublin City Council",years:7,lat:53.3680,lng:-6.2880},
+  {id:"VS-0453",name:"Faussagh Ave",area:0.7,landVal:5.3e6,type:"Vacant",owner:"R&D Dev. (IoM)",years:6,lat:53.3640,lng:-6.2850},
+  {id:"VS-1077",name:"Back Lane, D8",area:0.6,landVal:4.6e6,type:"Vacant",owner:"Redcaps Dev.",years:7,lat:53.3430,lng:-6.2740},
+  {id:"VS-0693",name:"Davitt Rd",area:0.7,landVal:4e6,type:"Vacant",owner:"Heidelberg Davitt",years:6,lat:53.3210,lng:-6.3050},
+  {id:"VS-0797",name:"Appian Way",area:0.5,landVal:4e6,type:"Vacant",owner:"RGRE Valerys",years:6,lat:53.3270,lng:-6.2500},
+  {id:"VS-0019",name:"Watling St",area:0.7,landVal:4.5e6,type:"Council",owner:"Digital Hub Agency",years:8,lat:53.3462,lng:-6.2773},
+  {id:"VS-0542",name:"Jamestown Rd, Finglas",area:0.6,landVal:3.42e6,type:"Vacant",owner:"Jamestown Village",years:6,lat:53.3890,lng:-6.3010},
+  {id:"VS-0402",name:"Shangan Rd, Ballymun",area:0.6,landVal:3.3e6,type:"Council",owner:"Dublin City Council",years:7,lat:53.4020,lng:-6.2720},
+  {id:"VS-1080",name:"Charles St Great",area:0.4,landVal:3.2e6,type:"Vacant",owner:"Cluid Housing",years:7,lat:53.3508,lng:-6.2580},
+  {id:"VS-0124",name:"Aldborough House",area:0.6,landVal:3.5e6,type:"Vacant",owner:"Reliance (IoM)",years:8,lat:53.3563,lng:-6.2498},
+  {id:"VS-0055",name:"N Circular Rd",area:0.2,landVal:1.4e6,type:"Vacant",owner:"Lilacstone Ltd",years:8,lat:53.3618,lng:-6.2660},
+  {id:"DS-002",name:"Aungier St (Protected)",area:0.1,landVal:2e6,type:"Derelict",owner:"Unknown",years:5,lat:53.3389,lng:-6.2636},
+];
+
+// ═══════════════════════════════════════
+// OBSTACLES
+// ═══════════════════════════════════════
+const OBSTACLES={
+  normal:[
+    {emoji:"💶",title:"LAND PURCHASE TAX",desc:"Stamp duty on commercial land purchase applies. The Revenue Commissioners want their cut.",impact:"+ €{val} added to costs (7.5% stamp duty)",type:"cost",pct:.075},
+    {emoji:"📋",title:"PLANNING PERMISSION",desc:"An Bord Pleanála requires a full planning application. Neighbours have been notified.",impact:"⏳ 6-month delay. Build cost up 8%.",type:"cost",pct:.08},
+    {emoji:"🏗",title:"VAT ON CONSTRUCTION",desc:"Irish VAT at 13.5% applies to all construction work. One of the highest in Europe.",impact:"+ €{val} VAT added to build cost",type:"cost",pct:.135},
+    {emoji:"💰",title:"DEVELOPMENT LEVY",desc:"Dublin City Council charges a development contribution levy for new builds.",impact:"+ €12,000 per unit in levies",type:"perUnit",perUnit:12000},
+    {emoji:"📐",title:"FIRE SAFETY CERT",desc:"A Fire Safety Certificate from the Building Control Authority is required.",impact:"⏳ 2-month delay. €45,000 compliance cost.",type:"flat",flat:45000},
+    {emoji:"🌊",title:"ENVIRONMENTAL SCREENING",desc:"Your site may be near a flood zone. An EIA is required.",impact:"+ €65,000 EIA cost. 3-month delay.",type:"flat",flat:65000},
+  ],
+  hard:[
+    {emoji:"🪧",title:"NIMBY 주민 반대!",desc:"주민 47명이 민원을 제기했습니다. '동네 분위기가 바뀐다'는 이유입니다. 공청회가 열립니다.",impact:"⏳ 계획 지연 12개월. 법률 비용 €120,000.",type:"flat",flat:120000},
+    {emoji:"⚒",title:"UNION ACTION",desc:"The Building Workers' Union has called a work-to-rule after a pay dispute. Progress halved.",impact:"⏳ 4-month delay. Build cost up 15%.",type:"cost",pct:.15},
+    {emoji:"🏛",title:"PROTECTED STRUCTURE",desc:"An architectural historian has flagged a Victorian wall on-site. Conservation order applied.",impact:"⏳ 8-month hold. Redesign costs €200,000.",type:"flat",flat:200000},
+    {emoji:"📁",title:"행정 적체",desc:"An Bord Pleanála가 업무 과부하 상태입니다. 담당자가 병가 중입니다.",impact:"⏳ 18개월 지연. 비용 22% 증가.",type:"cost",pct:.22},
+    {emoji:"💸",title:"INTEREST RATE SPIKE",desc:"ECB가 금리를 또 올렸습니다. 건설 대출 이자가 급증했어요.",impact:"+ 총 금융 비용의 20% 추가.",type:"cost",pct:.20},
+    {emoji:"🏗",title:"시공사 부도",desc:"주요 시공사가 파산했습니다. 재입찰을 진행해야 합니다.",impact:"⏳ 6개월 지연. €180,000 재입찰 비용.",type:"flat",flat:180000},
+    {emoji:"🪨",title:"ARCHAEOLOGICAL FIND",desc:"바이킹 시대 유물이 발견되었습니다. 국립박물관에 신고가 접수되었습니다.",impact:"⏳ 12개월 발굴 중단. €90,000 비용.",type:"flat",flat:90000},
+    {emoji:"🧾",title:"부동산 횡재세",desc:"정부가 새로운 주거용 토지세를 도입했습니다.",impact:"+ €50,000/년 유휴지 세금.",type:"flat",flat:50000},
+  ]
+};
+
+// ═══════════════════════════════════════
+// UNCLE DIALOGUES
+// ═══════════════════════════════════════
+const UNCLE_LINES={
+  idle:[
+    "더블린 집값 왜 이렇게 비싸? 빈 땅은 넘쳐나는데! 빨리 짓자고!",
+    "아일랜드 정부는 뭐 하는 거야... 한국 같았으면 벌써 올라갔어!",
+    "닌비(NIMBY)들 때문에 더블린 집값이 안 내려가는 거야. 무서운 현실이지.",
+    "석준이가 월 200만원 낸다고? 내가 직접 지어줘야겠어!",
+    "핀 클릭해서 빈 땅 골라봐! 아무 데나 짓는 게 방치보다 낫거든!",
+  ],
+  select:{
+    Council:"공공 용지야! 세금으로 사놓고 {years}년 동안 방치?! 말이 돼? 어서 개발하자!",
+    Vacant:"{years}년째 빈 땅... 투기 목적으로 들고 있는 거 아냐. 이런 거 짓는 게 정답이야!",
+    Derelict:"폐건물이네. 철거하고 새로 지으면 딱이야. 이런 게 제일 재미있어!",
+  },
+  highROI:["이야~ ROI {roi}%! 역시 내 조카야! 잘 가르쳤다!","완벽해! {roi}% 수익률이면 석준이 학비도 나오겠는데?"],
+  lowROI:["ROI가 좀 낮네... 층수 더 올리거나 시장가 비율 늘려봐!","이 사이트는 층수를 높여야 수익이 나. 15층 이상 도전해봐!"],
+  nimby:["또 님비야?! '내 집값은 올라야 하는데 새 집은 짓지 마!' 이게 무슨 논리야!","이래서 더블린 집값이 10년째 오르는 거지. 그냥 밀어!"],
+  complete:["완성! {units}채 건설 성공! 석준이 친구들도 이제 살 데 생겼네!","잘했어! 하나하나 지어나가면 더블린 집값 잡을 수 있어!"],
+  budget:"예산이 모자라! 모듈러 공법이나 층수 낮춰서 비용 줄여봐!",
+};
+
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+const BASE_RENT=2300, BASE_HL=13400;
+let totalHLReduced=0, totalRentDrop=0;
+let cur=null,method='standard',tenure='market',floors=6,difficulty='easy';
+let budget=50e6,developed=new Set(),bestROI=0,totalHomes=0;
+let pendingScore=null,lbOpen=false;
+let evQueue=[],evIdx=0,evCostAccum=0;
+let uncleTimer=null,sceneIdx=0;
+const TOTAL_SCENES=5;
+
+const COST={standard:420000,modular:294000};
+const UPF=18; // units per floor per ha
+const MR=2340*12,SR=800*12;
+const VAC=0.05,OPEX=0.25;
+
+// impact per unit by tenure
+function impactPerUnit(t){
+  if(t==='social') return {hl:2.2,rent:0.019};
+  if(t==='mixed')  return {hl:0.9,rent:0.014};
+  return {hl:0.25,rent:0.007};
+}
+
+// ═══════════════════════════════════════
+// INTRO
+// ═══════════════════════════════════════
+function nextScene(){
+  document.getElementById('sc'+sceneIdx).classList.remove('active');
+  sceneIdx=Math.min(sceneIdx+1,TOTAL_SCENES-1);
+  document.getElementById('sc'+sceneIdx).classList.add('active');
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i===sceneIdx));
+}
+function skipIntro(){
+  const el=document.getElementById('intro');
+  el.classList.add('out');
+  setTimeout(()=>el.style.display='none',550);
+  document.getElementById('uncle-wrap').classList.add('show');
+  document.getElementById('hint').style.display='block';
+  setTimeout(()=>showUncle('idle'),1200);
+}
+
+// ═══════════════════════════════════════
+// MAP
+// ═══════════════════════════════════════
+const map=L.map('map',{center:[53.352,-6.268],zoom:13,zoomControl:false});
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap © CARTO',maxZoom:19}).addTo(map);
+L.control.zoom({position:'bottomright'}).addTo(map);
+
+const markers={};
+SITES.forEach(s=>{
+  const m=L.marker([s.lat,s.lng],{icon:makeIcon(s)});
+  m.on('click',()=>{if(!developed.has(s.id)){selectSite(s.id);hideHint();}});
+  m.bindPopup(makePopup(s),{maxWidth:262});
+  m.addTo(map);
+  markers[s.id]=m;
+});
+
+function makeIcon(s){
+  const built=developed.has(s.id);
+  const c=built?'#43A047':{Vacant:'#E53935',Council:'#1E88E5',Derelict:'#FB8C00'}[s.type]||'#E53935';
+  const ico=built?'🏢':'📍';
+  return L.divIcon({className:'',
+    html:`<div style="display:flex;flex-direction:column;align-items:center;cursor:${built?'default':'pointer'}">
+      <div style="font-size:1.6rem;filter:drop-shadow(0 2px 5px rgba(0,0,0,.5))">${ico}</div>
+      <div style="background:${c};color:#fff;font-family:'Press Start 2P',monospace;font-size:.32rem;padding:2px 5px;border-radius:3px;margin-top:-3px;box-shadow:0 2px 6px rgba(0,0,0,.4);max-width:86px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.name}</div>
+    </div>`,iconSize:[90,52],iconAnchor:[45,52],popupAnchor:[0,-52]});
+}
+function makePopup(s){
+  const built=developed.has(s.id);
+  return `<div style="padding:4px">
+    <div style="font-size:.42rem;color:rgba(255,255,255,.3);margin-bottom:2px">${s.id} · ${s.years}년 방치</div>
+    <div style="font-family:'Press Start 2P',monospace;font-size:.5rem;color:#fff;margin-bottom:5px;line-height:1.5">${s.name}</div>
+    <div style="font-size:.56rem;color:#FDD835;margin-bottom:2px">토지: €${(s.landVal/1e6).toFixed(1)}M</div>
+    <div style="font-size:.5rem;color:rgba(255,255,255,.42);margin-bottom:8px">${s.area}ha · ${s.type} · ${s.owner}</div>
+    ${built
+      ?'<div style="color:#A5D6A7;font-size:.52rem">✅ 이미 개발 완료!</div>'
+      :`<button onclick="selectSite('${s.id}');hideHint()" style="background:#FDD835;color:#0d1642;border:none;border-radius:6px;padding:.38rem .75rem;font-family:'Press Start 2P',monospace;font-size:.4rem;cursor:pointer;width:100%">🏗 개발하기</button>`}
+  </div>`;
+}
+
+// ═══════════════════════════════════════
+// UNCLE
+// ═══════════════════════════════════════
+function showUncle(type,vars={}){
+  clearTimeout(uncleTimer);
+  let lines;
+  if(type==='idle') lines=UNCLE_LINES.idle;
+  else if(type==='select'&&cur) lines=[(UNCLE_LINES.select[cur.type]||UNCLE_LINES.select.Vacant)];
+  else if(type==='budget') lines=[UNCLE_LINES.budget];
+  else if(Array.isArray(UNCLE_LINES[type])) lines=UNCLE_LINES[type];
+  else return;
+  let line=lines[Math.floor(Math.random()*lines.length)];
+  if(cur) line=line.replace('{years}',cur.years);
+  line=line.replace('{roi}',vars.roi?vars.roi.toFixed(0):'?').replace('{units}',vars.units||'?');
+  const bbl=document.getElementById('uncle-bbl');
+  document.getElementById('uncle-txt').innerHTML=line;
+  bbl.style.opacity='0';bbl.style.transform='scale(0)';
+  bbl.classList.add('show');
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{bbl.style.opacity='1';bbl.style.transform='scale(1)';}));
+  uncleTimer=setTimeout(()=>{
+    bbl.style.opacity='0';bbl.style.transform='scale(0)';
+    setTimeout(()=>bbl.classList.remove('show'),350);
+  },5500);
+}
+function cycleUncle(){showUncle('idle');}
+
+// ═══════════════════════════════════════
+// DIFFICULTY
+// ═══════════════════════════════════════
+function setDiff(d){
+  difficulty=d;
+  ['easy','normal','hard'].forEach(x=>{
+    const b=document.getElementById('db-'+x);
+    b.classList.remove('on','nm','hd');
+  });
+  const b=document.getElementById('db-'+d);
+  b.classList.add('on');
+  if(d==='normal')b.classList.add('nm');
+  if(d==='hard')b.classList.add('hd');
+  updateDN();if(cur)calcAndRender();
+}
+function updateDN(){
+  const el=document.getElementById('dn');
+  if(difficulty==='easy'){el.style.display='none';return;}
+  el.style.display='block';
+  el.innerHTML=difficulty==='normal'
+    ?'⚠ <b style="color:#FB8C00">NORMAL:</b> 취득세 7.5%, VAT 13.5%, 개발부담금 등 실제 세금 적용.'
+    :'💀 <b style="color:#E53935">HARD:</b> 모든 세금 + 님비·파업·행정지연·고고학 발굴 등 랜덤 이벤트!';
+}
+
+// ═══════════════════════════════════════
+// SELECT SITE
+// ═══════════════════════════════════════
+function selectSite(id){
+  if(developed.has(id))return;
+  cur=SITES.find(s=>s.id===id);if(!cur)return;
+  document.getElementById('bp-ref').textContent=cur.id+' · '+cur.years+'년 방치';
+  document.getElementById('bp-name').textContent=cur.name;
+  document.getElementById('bp-own').textContent=cur.owner+' · '+cur.area+'ha';
+  floors=6;document.getElementById('fl-s').value=6;document.getElementById('fl-v').textContent='6F';
+  map.setView([cur.lat,cur.lng],15,{animate:true});
+  markers[id].openPopup();
+  document.getElementById('build-panel').classList.add('open');
+  if(lbOpen){lbOpen=false;document.getElementById('lb-panel').classList.remove('open');}
+  updateDN();calcAndRender();
+  setTimeout(()=>showUncle('select'),700);
+}
+
+// ═══════════════════════════════════════
+// CONTROLS
+// ═══════════════════════════════════════
+function setMethod(m,btn){method=m;btn.closest('.opt-row').querySelectorAll('.chip').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');calcAndRender();}
+function setTenure(t,btn){tenure=t;btn.closest('.opt-row').querySelectorAll('.chip').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');calcAndRender();}
+function updateFloors(v){floors=parseInt(v);document.getElementById('fl-v').textContent=v+'F';calcAndRender();}
+
+// ═══════════════════════════════════════
+// CALCULATE
+// ═══════════════════════════════════════
+function calcAndRender(){
+  if(!cur)return;
+  const r=calc(cur,method,tenure,floors,difficulty,0);
+  document.getElementById('s-u').textContent=r.totalUnits;
+  document.getElementById('s-c').textContent='€'+(r.totalInv/1e6).toFixed(1)+'M';
+  document.getElementById('s-r').textContent='€'+(r.netRev/1e3).toFixed(0)+'K';
+  document.getElementById('s-p').textContent=r.payback.toFixed(1)+'yr';
+  const rc=r.roi>80?'#A5D6A7':r.roi>30?'#FDD835':r.roi>0?'#fff':'#EF9A9A';
+  document.getElementById('roi-n').textContent=r.roi.toFixed(0)+'%';
+  document.getElementById('roi-n').style.color=rc;
+  document.getElementById('roi-f').style.width=Math.min(100,Math.max(0,r.roi/2))+'%';
+  // impact preview
+  const ip=impactPerUnit(tenure);
+  const hlEst=Math.round(r.totalUnits*ip.hl);
+  const rentEst=(r.totalUnits*ip.rent).toFixed(0);
+  document.getElementById('ip-hl').textContent=hlEst+'명';
+  document.getElementById('ip-rent').textContent='-€'+rentEst+'/월';
+  renderBuilding(Math.max(4,Math.round(cur.area*UPF)),floors);
+  pendingScore={...r,site:cur.name,method,floors,tenure,id:cur.id,diff:difficulty};
+  if(r.roi<20)showUncle('lowROI');
+  else if(r.roi>80)showUncle('highROI',{roi:r.roi});
+}
+
+function calc(site,m,t,fl,diff,extra){
+  const upf=Math.max(4,Math.round(site.area*UPF));
+  const totalUnits=upf*fl;
+  let bc=totalUnits*COST[m],lc=site.landVal;
+  if(diff!=='easy'){lc*=1.075;bc*=1.135;bc+=totalUnits*12000;bc+=45000;}
+  let totalInv=bc+lc+extra;
+  let ar=0;
+  if(t==='market')ar=totalUnits*MR*(1-VAC);
+  else if(t==='mixed'){const mu=Math.round(totalUnits*.7),su=totalUnits-mu;ar=(mu*MR+su*SR)*(1-VAC)+su*75000*.1;}
+  else ar=totalUnits*SR;
+  const netRev=ar*(1-OPEX),payback=totalInv/netRev,p10=netRev*10-totalInv,roi=(p10/totalInv)*100;
+  return{bc,totalInv,netRev,roi,totalUnits,payback,profit10:p10};
+}
+
+// ═══════════════════════════════════════
+// BUILDING PREVIEW
+// ═══════════════════════════════════════
+const UC={standard:'#E53935',modular:'#FDD835',social:'#42A5F5',mixed:'#66BB6A'};
+function renderBuilding(cols,fl){
+  cols=Math.min(cols,9);
+  const c=tenure==='social'?UC.social:tenure==='mixed'?UC.mixed:UC[method];
+  let h='';
+  for(let f=fl-1;f>=0;f--){h+='<div class="bfr">';for(let u=0;u<cols;u++)h+=`<div class="bu" style="background:${c};box-shadow:inset 1px 1px 0 rgba(255,255,255,.25),inset -1px -1px 0 rgba(0,0,0,.2)"></div>`;h+='</div>';}
+  document.getElementById('bpf').innerHTML=h;
+}
+
+// ═══════════════════════════════════════
+// BUILD SYSTEM
+// ═══════════════════════════════════════
+function startBuild(){
+  if(!pendingScore)return;
+  if(pendingScore.totalInv>budget){showToast('❌ 예산 부족! €'+(pendingScore.totalInv/1e6).toFixed(1)+'M 필요','warn');showUncle('budget');return;}
+  if(difficulty==='easy'){finishBuild(0);return;}
+  let pool=[...OBSTACLES.normal];
+  if(difficulty==='hard')pool=[...pool,...OBSTACLES.hard];
+  pool.sort(()=>Math.random()-.5);
+  evQueue=pool.slice(0,difficulty==='normal'?2:4);
+  evIdx=0;evCostAccum=0;showNextEvent();
+}
+
+function showNextEvent(){
+  if(evIdx>=evQueue.length){finishBuild(evCostAccum);return;}
+  const ev=evQueue[evIdx];
+  let ec=0;
+  if(ev.type==='cost')ec=pendingScore.totalInv*ev.pct;
+  else if(ev.type==='flat')ec=ev.flat||0;
+  else if(ev.type==='perUnit')ec=(ev.perUnit||0)*pendingScore.totalUnits;
+  let impTxt=ev.impact.replace('{val}','€'+(ec/1e3).toFixed(0)+'K');
+  document.getElementById('ev-em').textContent=ev.emoji;
+  document.getElementById('ev-ti').textContent=ev.title;
+  document.getElementById('ev-de').textContent=ev.desc;
+  document.getElementById('ev-im').textContent=impTxt;
+  document.getElementById('ev-ok').dataset.cost=ec;
+  const bar=document.querySelector('.dl-fill');
+  bar.style.animation='none';bar.offsetHeight;bar.style.animation='fillB 1.5s linear forwards';
+  document.getElementById('ev-bg').classList.add('on');
+  document.getElementById('ev-pop').classList.add('on');
+  if(ev.emoji==='🪧'||ev.title.includes('님비'))showUncle('nimby');
+}
+
+function resolveEvent(accept){
+  document.getElementById('ev-bg').classList.remove('on');
+  document.getElementById('ev-pop').classList.remove('on');
+  if(!accept){showToast('🚫 건설 포기. 땅이 여전히 비어 있습니다.','warn');closePanel();return;}
+  const cost=parseFloat(document.getElementById('ev-ok').dataset.cost||0);
+  evCostAccum+=cost;evIdx++;
+  setTimeout(()=>{if(evIdx<evQueue.length)showNextEvent();else finishBuild(evCostAccum);},300);
+}
+
+// ═══════════════════════════════════════
+// FINISH BUILD
+// ═══════════════════════════════════════
+function finishBuild(extra){
+  const s=cur;
+  const res=calc(s,method,tenure,floors,difficulty,extra);
+  const{roi,netRev,totalInv,profit10,totalUnits}=res;
+  budget-=totalInv;
+  document.getElementById('h-budget').textContent='€'+(budget/1e6).toFixed(1)+'M';
+  developed.add(s.id);totalHomes+=totalUnits;
+  if(roi>bestROI)bestROI=roi;
+  document.getElementById('h-roi').textContent=bestROI.toFixed(0)+'%';
+  document.getElementById('h-homes').textContent=totalHomes.toLocaleString();
+
+  // social impact
+  const ip=impactPerUnit(tenure);
+  const hlR=Math.round(totalUnits*ip.hl);
+  const rentR=(totalUnits*ip.rent).toFixed(0);
+  totalHLReduced+=hlR;
+  totalRentDrop+=parseFloat(rentR);
+  document.getElementById('h-hl').textContent='-'+totalHLReduced;
+  updateImpactBar();
+
+  markers[s.id].setIcon(makeIcon(s));
+  markers[s.id].closePopup();
+  markers[s.id].bindPopup(makePopup(s));
+
+  const pt=map.latLngToContainerPoint([s.lat,s.lng]);
+  const me=document.getElementById('map').getBoundingClientRect();
+  const fl2=document.createElement('div');fl2.className='bf-ani';fl2.textContent='🏢';
+  fl2.style.left=(me.left+pt.x-16)+'px';fl2.style.top=(me.top+pt.y-20)+'px';
+  document.body.appendChild(fl2);setTimeout(()=>fl2.remove(),1800);
+
+  pendingScore={roi,units:totalUnits,cost:totalInv,profit:profit10,site:s.name,method,floors,tenure,id:s.id,diff:difficulty,hlReduced:hlR,rentDrop:parseFloat(rentR)};
+  closePanel();
+  setTimeout(()=>showUncle('complete',{units:totalUnits}),600);
+  openModal(roi,totalUnits,profit10,s.name,extra,hlR,parseFloat(rentR));
+}
+
+function updateImpactBar(){
+  const rent=Math.max(1800,Math.round(BASE_RENT-totalRentDrop));
+  const hl=Math.max(0,BASE_HL-totalHLReduced);
+  document.getElementById('ib-rent').textContent='€'+rent.toLocaleString();
+  document.getElementById('ib-hl').textContent=hl.toLocaleString()+'명';
+  if(totalHLReduced>0||totalRentDrop>0){
+    document.getElementById('ib-sep2').style.display='';
+    document.getElementById('ib-my').style.display='flex';
+    document.getElementById('ib-rdrop').textContent='-€'+Math.round(totalRentDrop);
+    document.getElementById('ib-hdrop').textContent='-'+totalHLReduced+'명';
+  }
+}
+
+// ═══════════════════════════════════════
+// MODAL
+// ═══════════════════════════════════════
+function openModal(roi,units,profit10,site,extra,hlR,rentR){
+  const em=roi>100?'🎯':roi>60?'🔥':roi>30?'🎉':roi>0?'👍':'😅';
+  document.getElementById('mo-em').textContent=em;
+  document.getElementById('mo-roi').textContent=roi.toFixed(0)+'% ROI';
+  let sub=`${units.toLocaleString()}채 건설 완료 · €${(profit10/1e6).toFixed(1)}M 수익 · ${site}`;
+  if(extra>0) sub+=`\n⚠ 장애물 비용 +€${(extra/1e3).toFixed(0)}K (${difficulty} 모드)`;
+  document.getElementById('mo-sub').textContent=sub;
+  document.getElementById('mi-hl').textContent='-'+hlR+'명';
+  document.getElementById('mi-rent').textContent='-€'+Math.round(rentR)+'/월';
+  document.getElementById('mo-name').value='';
+  document.getElementById('mo').classList.add('on');
+  setTimeout(()=>document.getElementById('mo-name').focus(),220);
+}
+function closeModal(){
+  document.getElementById('mo').classList.remove('on');
+  showToast('✅ 개발 완료! 다음 땅을 고르세요.');
+  cur=null;
+}
+
+// ═══════════════════════════════════════
+// SHARE
+// ═══════════════════════════════════════
+function openShare(){
+  document.getElementById('sh-homes').textContent=totalHomes.toLocaleString()+'채';
+  document.getElementById('sh-roi').textContent=bestROI>0?bestROI.toFixed(0)+'%':'—';
+  document.getElementById('sh-hl').textContent='-'+totalHLReduced+'명';
+  document.getElementById('sh-rent').textContent='-€'+Math.round(totalRentDrop);
+  document.getElementById('sh-ov').classList.add('on');
+}
+function closeShare(){document.getElementById('sh-ov').classList.remove('on');}
+
+function shareLink(){
+  const url=location.href;
+  const txt=`🏗 VACANT DUBLIN — 더블린 빈 땅 개발 시뮬레이션!\n더블린의 방치된 빈 땅에 아파트를 지어 주택 위기를 해결하세요.\n👉 ${url}\n#VacantDublin #더블린집값 #아일랜드부동산`;
+  if(navigator.share){navigator.share({title:'Vacant Dublin',text:txt,url});}
+  else{navigator.clipboard?.writeText(txt);showToast('🔗 게임 링크 복사 완료!');}
+  closeShare();
+}
+
+function shareScore(){
+  const txt=[
+    `🏗 VACANT DUBLIN 플레이 결과!`,``,
+    `📊 내 성과:`,
+    `  🏠 건설한 집: ${totalHomes.toLocaleString()}채`,
+    `  💰 최고 ROI: ${bestROI.toFixed(0)}%`,
+    `  🏕️ 노숙자 감소 기여: -${totalHLReduced}명`,
+    `      `  📉 월세 인하 기여: -€${Math.round(totalRentDrop)}/월`,``,
+    `💡 더블린엔 지금도 13,400명이 거리에 있습니다.`,
+    `   수년간 방치된 빈 땅에 직접 아파트를 지어보세요!`,``,
+    `👉 ${location.href}`,``,
+    `#VacantDublin #더블린집값 #아일랜드부동산`
+  ].join('\n');
+  if(navigator.share){navigator.share({title:'Vacant Dublin 점수 공유',text:txt});}
+  else{navigator.clipboard?.writeText(txt);showToast('📊 점수 카드 복사 완료!');}
+  closeShare();
+}
+
+// ═══════════════════════════════════════
+// LEADERBOARD
+// ═══════════════════════════════════════
+async function saveScore(){
+  const name=(document.getElementById('mo-name').value.trim()||'ANON').toUpperCase().slice(0,20);
+  const entry={...pendingScore,name,ts:Date.now()};
+  try{await window.storage.set('vd4:'+entry.ts+':'+Math.random().toString(36).slice(2,5),JSON.stringify(entry),true);}catch(e){}
+  closeModal();loadLB();
+}
+async function loadLB(){
+  let entries=[];
+  try{
+    const res=await window.storage.list('vd4:',true);
+    if(res?.keys)for(const k of res.keys){try{const r=await window.storage.get(k,true);if(r)entries.push(JSON.parse(r.value));}catch(e){}}
+  }catch(e){}
+  entries.sort((a,b)=>b.roi-a.roi);entries=entries.slice(0,20);
+  const tot=entries.reduce((s,e)=>s+(e.units||0),0);
+  document.getElementById('lb-tot').textContent=tot.toLocaleString()+'채';
+  const md=['🥇','🥈','🥉'];
+  const dl={easy:'😊',normal:'😤',hard:'💀'};
+  const lb=document.getElementById('lb-list');
+  lb.innerHTML=entries.length?entries.map((e,i)=>`
+    <div class="lb-ent${i===0?' g1':''}">
+      <div class="lb-rk">${md[i]||(i+1)}</div>
+      <div class="lb-inf">
+        <div class="lb-nm">${e.name}</div>
+        <div class="lb-dt">${e.units||0}채 · ${e.method==='modular'?'📦':'🏛'} ${e.floors||0}F · ${dl[e.diff]||''}</div>
+      </div>
+      <div><div class="lb-roi">${parseFloat(e.roi||0).toFixed(0)}%</div><div class="lb-u">10yr ROI</div></div>
+    </div>`).join('')
+    :'<div class="lb-empty">아직 없음<br><br>🏗<br><br>먼저 건설하세요!</div>';
+}
+
+// ═══════════════════════════════════════
+// UI HELPERS
+// ═══════════════════════════════════════
+function closePanel(){document.getElementById('build-panel').classList.remove('open');}
+function toggleLB(){lbOpen=!lbOpen;document.getElementById('lb-panel').classList.toggle('open',lbOpen);if(lbOpen)loadLB();}
+function hideHint(){document.getElementById('hint').style.display='none';}
+function showToast(msg,type=''){
+  const t=document.getElementById('toast');t.textContent=msg;
+  t.className='toast'+(type?' '+type:'');t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2900);
+}
+
+loadLB();
+setInterval(loadLB,18000);
+setInterval(()=>{
+  if(document.getElementById('intro').style.display==='none'&&!cur)showUncle('idle');
+},30000);
+</script>
+</body>
+</html>
