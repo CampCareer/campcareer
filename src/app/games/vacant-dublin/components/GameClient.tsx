@@ -42,7 +42,7 @@ const DIFF_ICON: Record<string, string> = { easy: "😊", normal: "😤", hard: 
 
 function Leaderboard({ isOpen, entries, total }: { isOpen: boolean; entries: LeaderboardEntry[]; total: number }) {
   return (
-    <div className="absolute top-[84px] right-0 bottom-0 w-[298px] z-[200] flex flex-col transition-transform duration-300"
+    <div className="absolute top-[88px] right-0 bottom-0 w-[298px] z-[200] flex flex-col transition-transform duration-300"
       style={{
         background: "rgba(13,22,66,0.96)", borderLeft: "2px solid rgba(255,255,255,0.08)",
         backdropFilter: "blur(14px)", transform: isOpen ? "translateX(0)" : "translateX(298px)"
@@ -178,7 +178,6 @@ export function GameClient() {
         totalRentDrop={gs.totalRentDrop}
         budget={gs.budget}
         difficulty={gs.difficulty}
-        onDifficulty={gs.handleDifficultyChange}
         onToggleLB={() => { gs.setShowLB(!gs.showLB); if (!gs.showLB) gs.loadLeaderboard() }}
         onShare={() => gs.setShowShare(true)}
       />
