@@ -13,6 +13,7 @@ const config: Config = {
       fontFamily: {
         sans: ["var(--font-geist-sans)", ...fontFamily.sans],
         mono: ["var(--font-geist-mono)", ...fontFamily.mono],
+        pixel: ["var(--font-press-start)", "'Press Start 2P'", "monospace"],
       },
       colors: {
         background: "hsl(var(--background))",
