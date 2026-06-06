@@ -45,22 +45,6 @@ export interface LeaderboardEntry {
   tenure: string; difficulty: string; created_at?: string
 }
 
-export interface CharacterData {
-  name: string
-  age: number
-  gender: "남성" | "여성" | "기타"
-  skinColor: string
-  hairStyle: string
-}
-
-const DEFAULT_CHARACTER: CharacterData = {
-  name: "김석준",
-  age: 25,
-  gender: "남성",
-  skinColor: "#FDDBB4",
-  hairStyle: "🧑",
-}
-
 // ─── pure helpers ─────────────────────────────────────────────────────────────
 export function impactPerUnit(t: Tenure) {
   if (t === "social") return { hl: 2.2,  rent: 0.019 }
@@ -120,8 +104,6 @@ export function useGameState() {
   const [calcResult,     setCalcResult]     = useState<CalcResult | null>(null)
 
   // mutable ref — always-fresh values for callbacks (avoids stale closures)
-  const [character, setCharacter] = useState<CharacterData>(DEFAULT_CHARACTER)
-
   const g = useRef({
     curSiteId:    null as string | null,
     method:       "standard" as Method,
@@ -135,7 +117,6 @@ export function useGameState() {
     evIdx:        0,
     evCostAccum:  0,
     evCurCost:    0,
-    character:    DEFAULT_CHARACTER as CharacterData,
   })
 
   const uncleTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -165,7 +146,6 @@ export function useGameState() {
     let line = lines[Math.floor(Math.random() * lines.length)]
     if (site) line = line.replace("{years}", String(site.years))
     line = line
-      .replace("{name}",  g.current.character.name || "플레이어")
       .replace("{roi}",   vars.roi   !== undefined ? Number(vars.roi).toFixed(0) : "?")
       .replace("{units}", vars.units !== undefined ? String(vars.units)          : "?")
     setUncleMsg(line)
@@ -366,10 +346,8 @@ export function useGameState() {
     doToast("✅ 개발 완료! 다음 땅을 고르세요.")
   }, [doToast])
 
-  const completeIntro = useCallback((char: CharacterData, diff: Difficulty) => {
-    g.current.character  = char
+  const completeIntro = useCallback((diff: Difficulty) => {
     g.current.difficulty = diff
-    setCharacter(char)
     setDifficulty(diff)
     setIntroComplete(true)
     setShowHint(true)
@@ -391,7 +369,6 @@ export function useGameState() {
 
   return {
     introComplete, showHint, setShowHint,
-    character,
     curSite, method, tenure, floors, difficulty,
     budget, developed, bestROI, totalHomes, totalHLReduced, totalRentDrop,
     pendingScore, showPanel, setShowPanel, showLB, setShowLB,

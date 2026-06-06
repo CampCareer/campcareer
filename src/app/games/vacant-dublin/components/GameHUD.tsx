@@ -1,4 +1,5 @@
 "use client"
+import type { CSSProperties } from "react"
 import type { Difficulty } from "../hooks/useGameState"
 import { BASE_RENT, BASE_HL } from "../hooks/useGameState"
 
@@ -14,10 +15,10 @@ interface Props {
 }
 
 const DIFF_LABELS: Record<Difficulty, string> = { easy: "😊 EASY", normal: "😤 NORMAL", hard: "💀 HARD" }
-const DIFF_BADGE: Record<Difficulty, string> = {
-  easy:   "bg-[#FDD835] border-[#FDD835] text-[#0d1642]",
-  normal: "bg-[#FB8C00] border-[#FB8C00] text-white",
-  hard:   "bg-[#E53935] border-[#E53935] text-white",
+const DIFF_BADGE: Record<Difficulty, CSSProperties> = {
+  easy:   { background: "#FDD835", color: "#0d1642", border: "2px solid #FDD835" },
+  normal: { background: "#FB8C00", color: "#fff",    border: "2px solid #FB8C00" },
+  hard:   { background: "#E53935", color: "#fff",    border: "2px solid #E53935" },
 }
 
 export function GameHUD({
@@ -31,80 +32,103 @@ export function GameHUD({
 
   return (
     <>
-      {/* ── Main HUD ── */}
+      {/* ── Main HUD (72px) ── */}
       <div
-        className="absolute top-0 left-0 right-0 h-14 z-[300] flex items-center px-3 gap-2"
+        className="absolute top-0 left-0 right-0 z-[300] flex items-center px-4 gap-3"
         style={{
+          height:       72,
           background:   "linear-gradient(135deg,#0d1642,#1a237e)",
           borderBottom: "3px solid #FDD835",
           boxShadow:    "0 4px 20px rgba(0,0,0,0.5)",
         }}
       >
-        {/* title */}
-        <div className="font-pixel text-[0.625rem] text-white leading-tight shrink-0">
+        {/* logo */}
+        <div
+          className="font-pixel leading-tight shrink-0 text-white"
+          style={{ fontSize: 16 }}
+        >
           VACANT<span style={{ color: "#FDD835" }}>.</span><br />DUBLIN
         </div>
 
-        <div className="w-px h-8 bg-white/10 shrink-0" />
+        <div className="w-px h-10 bg-white/10 shrink-0" />
 
         {/* stats */}
         <Stat label="Best ROI"  value={bestROI > 0 ? `${bestROI.toFixed(0)}%` : "—"} color="#FDD835" />
-        <div className="w-px h-8 bg-white/10 shrink-0" />
+        <div className="w-px h-10 bg-white/10 shrink-0" />
         <Stat label="주택 수"   value={totalHomes.toLocaleString()}                   color="#A5D6A7" />
-        <div className="w-px h-8 bg-white/10 shrink-0" />
+        <div className="w-px h-10 bg-white/10 shrink-0" />
         <Stat label="노숙자↓"  value={`+${totalHLReduced}`}                          color="#81D4FA" />
-        <div className="w-px h-8 bg-white/10 shrink-0" />
+        <div className="w-px h-10 bg-white/10 shrink-0" />
         <Stat label="예산"      value={`€${budgetM}M`}                               color="#90CAF9" />
 
-        {/* difficulty badge (read-only) */}
+        {/* difficulty badge */}
         <div className="flex-1 flex justify-center items-center">
-          <div className={`font-pixel text-[0.625rem] border-2 rounded px-3 py-1 ${DIFF_BADGE[difficulty]}`}>
+          <div
+            className="font-pixel rounded px-3 py-1.5"
+            style={{ fontSize: 13, ...DIFF_BADGE[difficulty] }}
+          >
             {DIFF_LABELS[difficulty]}
           </div>
         </div>
 
         {/* right buttons */}
-        <div className="flex gap-1.5 shrink-0">
+        <div className="flex gap-2 shrink-0">
           <button
             onClick={onToggleLB}
-            className="font-pixel text-[0.625rem] border-2 border-[#FDD835] text-[#FDD835] bg-transparent rounded px-2.5 py-1 cursor-pointer hover:bg-[#FDD835] hover:text-[#0d1642] transition-all"
+            className="font-pixel rounded px-3 py-1.5 cursor-pointer transition-all"
+            style={{
+              fontSize:    13,
+              border:      "2px solid #FDD835",
+              color:       "#FDD835",
+              background:  "transparent",
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = "#FDD835"; (e.currentTarget as HTMLButtonElement).style.color = "#0d1642" }}
+            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = "transparent"; (e.currentTarget as HTMLButtonElement).style.color = "#FDD835" }}
           >
             🏆
           </button>
           <button
             onClick={onShare}
-            className="font-pixel text-[0.625rem] border-2 border-[#FDD835] bg-[#FDD835] text-[#0d1642] rounded px-2.5 py-1 cursor-pointer hover:bg-[#ffe57f] transition-all"
+            className="font-pixel rounded px-3 py-1.5 cursor-pointer transition-all"
+            style={{
+              fontSize:   13,
+              border:     "2px solid #FDD835",
+              background: "#FDD835",
+              color:      "#0d1642",
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = "#ffe57f" }}
+            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = "#FDD835" }}
           >
             📤 공유
           </button>
         </div>
       </div>
 
-      {/* ── Impact bar ── */}
+      {/* ── Impact bar (36px, top 72) ── */}
       <div
         className="absolute left-0 right-0 z-[250] flex items-center px-4 gap-5 text-white"
         style={{
-          top:             56,
-          height:          32,
-          fontSize:        "0.615rem",
-          background:      "rgba(8,14,40,0.9)",
-          borderBottom:    "1px solid rgba(255,255,255,0.06)",
-          backdropFilter:  "blur(10px)",
+          top:            72,
+          height:         36,
+          fontSize:       13,
+          background:     "rgba(8,14,40,0.92)",
+          borderBottom:   "1px solid rgba(255,255,255,0.07)",
+          backdropFilter: "blur(10px)",
         }}
       >
-        <span>🏙️ 더블린 평균 월세: <strong className="text-white">€{rent.toLocaleString()}</strong>/월</span>
+        <span>🏙️ 더블린 평균 월세: <strong>€{rent.toLocaleString()}</strong>/월</span>
         <span style={{ color: "rgba(255,255,255,0.15)" }}>|</span>
-        <span>🏕️ 긴급 노숙자: <strong className="text-white">{homeless.toLocaleString()}명</strong></span>
+        <span>🏕️ 긴급 노숙자: <strong>{homeless.toLocaleString()}명</strong></span>
         {showMyImpact && (
           <>
             <span style={{ color: "rgba(255,255,255,0.15)" }}>|</span>
-            <span className="text-[#A5D6A7]">
+            <span style={{ color: "#A5D6A7" }}>
               📉 내 기여: 월세 <strong>-€{Math.round(totalRentDrop)}</strong> · 노숙자 <strong>-{totalHLReduced}명</strong>
             </span>
           </>
         )}
         <div className="ml-auto flex items-center gap-1.5">
-          <span className="w-[5px] h-[5px] bg-[#E53935] rounded-full animate-pulse" />
+          <span className="w-[6px] h-[6px] bg-[#E53935] rounded-full animate-pulse" />
           <span>실시간 더블린 주택 위기</span>
         </div>
       </div>
@@ -114,9 +138,9 @@ export function GameHUD({
 
 function Stat({ label, value, color }: { label: string; value: string; color: string }) {
   return (
-    <div className="flex flex-col items-center min-w-[68px]">
-      <div className="font-pixel text-[1rem]" style={{ color }}>{value}</div>
-      <div className="text-[0.525rem] text-white/60 mt-0.5 uppercase tracking-[0.04em]">{label}</div>
+    <div className="flex flex-col items-center" style={{ minWidth: 72 }}>
+      <div className="font-pixel" style={{ fontSize: 16, color }}>{value}</div>
+      <div style={{ fontSize: 11, color: "rgba(255,255,255,0.55)", marginTop: 2, textTransform: "uppercase", letterSpacing: "0.04em" }}>{label}</div>
     </div>
   )
 }
