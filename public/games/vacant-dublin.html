@@ -1064,10 +1064,9 @@ function commitBuild(extraCost,extraMonths){
 function openBuildModal(roi,units,ctMonths,site,extra,hlR,rentR){
   document.getElementById('mo-em').textContent='🏗';
   document.getElementById('mo-roi').textContent=ctMonths+'개월 공사 시작!';
-  document.getElementById('mo-sub').textContent=`${units.toLocaleString()}세대 예정 · ${site}
-예상 ROI: ${roi.toFixed(0)}% · 완공 후 수익 시작${extra>0?'
-⚠ 추가 비용 +€'+(extra/1e3).toFixed(0)+'K':''}`;
-  document.getElementById('mi-hl').textContent='-'+hlR+'명';
+  let moSub=units.toLocaleString()+'세대 예정 · '+site+' | 예상 ROI: '+roi.toFixed(0)+'%';
+  if(extra>0)moSub+=' | 추가비용 +€'+(extra/1e3).toFixed(0)+'K';
+  document.getElementById('mo-sub').textContent=moSub;  document.getElementById('mi-hl').textContent='-'+hlR+'명';
   document.getElementById('mi-rent').textContent='-€'+Math.round(rentR)+'/월';
   document.getElementById('mo-name').value='';
   document.getElementById('mo').classList.add('on');
