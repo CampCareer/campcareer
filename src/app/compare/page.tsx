@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation"
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import { TrendingUp, X, ArrowRight, BarChart2, Search } from "lucide-react"
-import { useTranslations } from "@/lib/i18n/locale-provider"
+import { useTranslations, useLocale } from "@/lib/i18n/locale-provider"
 import { Card, CardContent } from "@/components/ui/card"
 import {
   getExchangeRates,
@@ -37,6 +37,19 @@ const COUNTRIES = ["us", "au", "ca", "uk", "ie"] as const
 type Country = (typeof COUNTRIES)[number]
 
 type CompareData = Record<Country, CountryStats>
+
+// ── Popular fields ────────────────────────────────────────────────────────────
+
+const DEFAULT_FIELD = "Computer Science"
+
+const POPULAR_FIELDS = [
+  { en: "Computer Science", kr: "컴퓨터공학" },
+  { en: "Business",         kr: "경영학" },
+  { en: "Engineering",      kr: "공학" },
+  { en: "Medicine",         kr: "의학" },
+  { en: "Law",              kr: "법학" },
+  { en: "Data Science",     kr: "데이터사이언스" },
+]
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -377,10 +390,11 @@ function CountryCard({
 function CompareContent() {
   const t = useTranslations()
   const tc = t.compare
+  const locale = useLocale()
   const searchParams = useSearchParams()
   const router = useRouter()
 
-  const [field, setField]             = useState(searchParams.get("field") ?? "")
+  const [field, setField]             = useState(searchParams.get("field") ?? DEFAULT_FIELD)
   const [data, setData]               = useState<CompareData | null>(null)
   const [loading, setLoading]         = useState(false)
   const [error, setError]             = useState<string | null>(null)
@@ -468,6 +482,27 @@ function CompareContent() {
           </p>
           <CurrencySelector value={baseCurrency} onChange={setBaseCurrency} />
         </div>
+      </div>
+
+      {/* Popular field tags */}
+      <div className="flex flex-wrap gap-2">
+        {POPULAR_FIELDS.map((f) => {
+          const label = locale === "ko" ? f.kr : f.en
+          const isActive = field.toLowerCase() === f.en.toLowerCase()
+          return (
+            <button
+              key={f.en}
+              onClick={() => handleFieldChange(f.en)}
+              className={`border rounded-full px-3 py-1 text-sm transition-colors ${
+                isActive
+                  ? "bg-indigo-600 text-white border-indigo-600"
+                  : "bg-white text-slate-600 border-slate-200 hover:border-indigo-300"
+              }`}
+            >
+              {label}
+            </button>
+          )
+        })}
       </div>
 
       {/* Search */}
