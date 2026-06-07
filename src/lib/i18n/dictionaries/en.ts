@@ -325,6 +325,11 @@ const en = {
       officialData: 'Official Data Only',
       officialDataSub: 'No agency estimates',
     },
+    heroSearch: {
+      fieldPlaceholder: 'e.g. Computer Science, Business...',
+      countryAll: 'All Countries',
+      button: 'Explore ROI →',
+    },
     howItWorks: {
       sectionTitle: '3 steps to your answer',
       step1Title: 'Enter your field',
