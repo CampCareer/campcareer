@@ -19,27 +19,27 @@ const MOCK_ROWS = [
     flag: "🇺🇸",
     college: "Stanford University",
     field: "Computer Science",
-    roi: 158.9,
-    salary: "$95k",
-    payback: "1.0yr",
+    roi: 38.0,
+    salary: "$89,527",
+    payback: "2.4 yrs",
     roiClass: "text-emerald-700 bg-emerald-50",
   },
   {
     flag: "🇮🇪",
     college: "Trinity College Dublin",
     field: "Computer Science",
-    roi: 68.4,
-    salary: "€25.5k",
-    payback: "2.3yr",
+    roi: 12.3,
+    salary: "€32,450",
+    payback: "4.1 yrs",
     roiClass: "text-amber-700 bg-amber-50",
   },
   {
-    flag: "🇨🇦",
-    college: "University of Toronto",
+    flag: "🇦🇺",
+    college: "Univ. of Melbourne",
     field: "Computer Science",
-    roi: 52.1,
-    salary: "CA$38k",
-    payback: "3.0yr",
+    roi: 9.8,
+    salary: "AU$68,200",
+    payback: "5.2 yrs",
     roiClass: "text-orange-700 bg-orange-50",
   },
 ]
@@ -54,6 +54,7 @@ export default function LandingPage() {
     { value: "5",      label: tl.stats.countries,     sub: "US · AU · CA · UK · IE" },
     { value: "8,500+", label: tl.stats.coursesTracked, sub: "" },
     { value: "Real",   label: tl.stats.salaryData,     sub: "HEA · Scorecard · CRICOS · HESA" },
+    { value: "Gov't",  label: tl.stats.officialData,   sub: tl.stats.officialDataSub },
   ]
 
   const FEATURES = [
@@ -238,7 +239,7 @@ export default function LandingPage() {
       {/* ── Stats ── */}
       <section className="py-20 bg-slate-50 border-y border-slate-200">
         <div className="max-w-5xl mx-auto px-6">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 text-center">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 text-center">
             {STATS.map((s) => (
               <div key={s.label}>
                 <p className="text-5xl font-bold text-slate-900">{s.value}</p>
@@ -246,6 +247,50 @@ export default function LandingPage() {
                 {s.sub && <p className="mt-1 text-sm text-slate-400">{s.sub}</p>}
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── How It Works (3 steps) ── */}
+      <section className="py-20 bg-white">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="text-center mb-14">
+            <h2 className="text-3xl font-bold text-slate-900">
+              {tl.howItWorks.sectionTitle}
+            </h2>
+          </div>
+          <div className="flex flex-col md:flex-row items-center">
+            {/* Step 1 */}
+            <div className="flex-1 flex flex-col items-center text-center px-6 py-4">
+              <div className="relative mb-4">
+                <div className="w-16 h-16 rounded-full bg-indigo-50 flex items-center justify-center text-3xl">🔍</div>
+                <span className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold flex items-center justify-center">1</span>
+              </div>
+              <h3 className="font-semibold text-slate-900 mb-2">{tl.howItWorks.step1Title}</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">{tl.howItWorks.step1Desc}</p>
+            </div>
+            {/* Arrow */}
+            <div className="hidden md:block text-2xl text-slate-300 shrink-0">→</div>
+            {/* Step 2 */}
+            <div className="flex-1 flex flex-col items-center text-center px-6 py-4">
+              <div className="relative mb-4">
+                <div className="w-16 h-16 rounded-full bg-indigo-50 flex items-center justify-center text-3xl">📊</div>
+                <span className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold flex items-center justify-center">2</span>
+              </div>
+              <h3 className="font-semibold text-slate-900 mb-2">{tl.howItWorks.step2Title}</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">{tl.howItWorks.step2Desc}</p>
+            </div>
+            {/* Arrow */}
+            <div className="hidden md:block text-2xl text-slate-300 shrink-0">→</div>
+            {/* Step 3 */}
+            <div className="flex-1 flex flex-col items-center text-center px-6 py-4">
+              <div className="relative mb-4">
+                <div className="w-16 h-16 rounded-full bg-indigo-50 flex items-center justify-center text-3xl">🎯</div>
+                <span className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold flex items-center justify-center">3</span>
+              </div>
+              <h3 className="font-semibold text-slate-900 mb-2">{tl.howItWorks.step3Title}</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">{tl.howItWorks.step3Desc}</p>
+            </div>
           </div>
         </div>
       </section>
