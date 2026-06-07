@@ -366,6 +366,20 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 .ending-btn.share:hover{background:#ffe57f;}
 .ending-btn.retry{background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.25);color:#fff;}
 .ending-btn.retry:hover{background:rgba(255,255,255,.18);}
+/* STRATEGY CARDS */
+.strategy-cards{display:flex;gap:.5rem;margin-bottom:.75rem;}
+.sc-card{flex:1;background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.15);border-radius:12px;padding:.65rem .5rem;cursor:pointer;transition:all .2s;text-align:center;}
+.sc-card:hover{border-color:var(--y);transform:translateY(-2px);}
+.sc-card.sel-profit{border-color:#FDD835;background:rgba(253,216,53,.12);}
+.sc-card.sel-mixed{border-color:#42A5F5;background:rgba(66,165,245,.12);}
+.sc-card.sel-social{border-color:#66BB6A;background:rgba(102,187,106,.12);}
+.sc-em{font-size:1.6rem;margin-bottom:.3rem;}
+.sc-name{font-family:'Press Start 2P',monospace;font-size:9px;color:#fff;margin-bottom:.45rem;}
+.sc-rows{display:flex;flex-direction:column;gap:3px;margin-bottom:.4rem;}
+.sc-row{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.55);}
+.sc-row .hi{color:#A5D6A7;font-weight:700;}
+.sc-row .lo{color:#EF9A9A;font-weight:700;}
+.sc-desc{font-size:10px;color:rgba(255,255,255,.35);line-height:1.5;}
 </style>
 </head>
 <body>
@@ -432,9 +446,9 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
   <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:1.2rem;padding:2rem;max-width:720px;width:100%;">
     <div class="diff-title">난이도를 선택하세요</div>
     <div class="diff-grid">
-      <div class="diff-card" id="dc-easy" onclick="selDiff('easy')"><div class="diff-em">😊</div><div class="diff-nm">EASY</div><div class="diff-desc">세금·장애물 없음<br>건설 전략 집중!<br><br><span style="color:rgba(255,255,255,.28)">처음 플레이하는 분</span></div></div>
-      <div class="diff-card" id="dc-normal" onclick="selDiff('normal')"><div class="diff-em">😤</div><div class="diff-nm">NORMAL</div><div class="diff-desc">취득세 7.5%<br>VAT 13.5%, 개발부담금<br>실제 아이리시 세금<br><br><span style="color:rgba(255,255,255,.28)">부동산 관심자 추천</span></div></div>
-      <div class="diff-card" id="dc-hard" onclick="selDiff('hard')"><div class="diff-em">💀</div><div class="diff-nm">HARD</div><div class="diff-desc">모든 세금 +<br>님비·파업·행정지연<br>랜덤 이벤트<br><br><span style="color:rgba(255,255,255,.28)">도전을 즐기는 분</span></div></div>
+      <div class="diff-card" id="dc-easy" onclick="selDiff('easy')"><div class="diff-em">😊</div><div class="diff-nm">EASY</div><div class="diff-desc">시작 예산 €200M<br>세금·장애물 없음<br>5-7개 부지 개발 가능<br><br><span style="color:rgba(255,255,255,.28)">처음 플레이하는 분</span></div></div>
+      <div class="diff-card" id="dc-normal" onclick="selDiff('normal')"><div class="diff-em">😤</div><div class="diff-nm">NORMAL</div><div class="diff-desc">시작 예산 €120M<br>취득세·VAT 실제 적용<br>3-4개 부지, 선택과 집중<br><br><span style="color:rgba(255,255,255,.28)">부동산 관심자 추천</span></div></div>
+      <div class="diff-card" id="dc-hard" onclick="selDiff('hard')"><div class="diff-em">💀</div><div class="diff-nm">HARD</div><div class="diff-desc">시작 예산 €75M<br>모든 세금 + 랜덤 이벤트<br>실수 한 번이 게임오버<br><br><span style="color:rgba(255,255,255,.28)">도전을 즐기는 분</span></div></div>
     </div>
     <button class="go-btn" id="go-btn" onclick="goStage4()">🏗 건설 시작하기!</button>
   </div>
@@ -505,25 +519,46 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
   <div class="bp-head"><div class="bp-ref" id="bp-ref"></div><div class="bp-name" id="bp-name"></div><div class="bp-own" id="bp-own"></div></div>
   <div class="bp-body">
     <div class="bldg-prev"><div class="brd"></div><div class="bf" id="bpf"></div><div class="bgnd"></div></div>
-    <div class="clbl">🏗 건설 방식</div>
-    <div class="opt-row">
-      <div class="chip sel" onclick="setMethod('standard',this)">🏛 Standard</div>
-      <div class="chip" onclick="setMethod('modular',this)">📦 Modular <span style="font-size:11px;color:#A5D6A7">−30%</span></div>
+    <div class="clbl">🏗 개발 방향을 선택하세요</div>
+    <div class="strategy-cards" id="strategy-cards">
+
+      <div class="sc-card" id="sc-profit" onclick="setStrategy('profit',this)">
+        <div class="sc-em">💰</div>
+        <div class="sc-name">수익형</div>
+        <div class="sc-rows">
+          <div class="sc-row"><span>ROI</span><span class="hi">높음</span></div>
+          <div class="sc-row"><span>월세 인하</span><span class="lo">적음</span></div>
+          <div class="sc-row"><span>노숙자 감소</span><span class="lo">적음</span></div>
+          <div class="sc-row"><span>공사 기간</span><span>보통</span></div>
+        </div>
+        <div class="sc-desc">"수익 극대화에 집중"</div>
+      </div>
+
+      <div class="sc-card" id="sc-mixed" onclick="setStrategy('mixed',this)">
+        <div class="sc-em">⚖️</div>
+        <div class="sc-name">균형형</div>
+        <div class="sc-rows">
+          <div class="sc-row"><span>ROI</span><span>보통</span></div>
+          <div class="sc-row"><span>월세 인하</span><span>보통</span></div>
+          <div class="sc-row"><span>노숙자 감소</span><span>보통</span></div>
+          <div class="sc-row"><span>공사 기간</span><span class="hi">빠름</span></div>
+        </div>
+        <div class="sc-desc">"석준 같은 사람을 위한 집"</div>
+      </div>
+
+      <div class="sc-card" id="sc-social" onclick="setStrategy('social',this)">
+        <div class="sc-em">🏘️</div>
+        <div class="sc-name">사회형</div>
+        <div class="sc-rows">
+          <div class="sc-row"><span>ROI</span><span class="lo">낮음</span></div>
+          <div class="sc-row"><span>월세 인하</span><span class="hi">큼</span></div>
+          <div class="sc-row"><span>노숙자 감소</span><span class="hi">큼</span></div>
+          <div class="sc-row"><span>공사 기간</span><span class="hi">가장 빠름</span></div>
+        </div>
+        <div class="sc-desc">"텐트촌을 줄이는 집"</div>
+      </div>
+
     </div>
-    <div class="clbl">🏘 임대 유형</div>
-    <div class="opt-row">
-      <div class="chip sel" onclick="setTenure('market',this)">💰 시장가</div>
-      <div class="chip" onclick="setTenure('mixed',this)">⚖ 혼합</div>
-      <div class="chip" onclick="setTenure('social',this)">🏘 사회주택</div>
-    </div>
-    <div class="clbl">🤝 파트너십</div>
-    <div class="opt-row" id="partner-row">
-      <div class="chip sel" id="pc-solo" onclick="setPartnership('solo',this)">🏗 단독</div>
-      <div class="chip disabled" id="pc-council" onclick="setPartnership('council',this)">🏛 시의회</div>
-      <div class="chip disabled" id="pc-lda" onclick="setPartnership('lda',this)">🏢 LDA</div>
-      <div class="chip disabled" id="pc-investor" onclick="setPartnership('investor',this)">💼 투자자</div>
-    </div>
-    <div class="partner-info" id="partner-info">🏗 단독개발 — 수익 100% 유지</div>
     <div class="sbox">
       <div class="stop"><span class="snm">층수 (Floors)</span><span class="sval" id="fl-v">6F</span></div>
       <input type="range" id="fl-s" min="3" max="20" value="6" oninput="updateFloors(this.value)">
@@ -585,8 +620,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
     <div class="mo-em" id="mo-em">🎉</div><div class="mo-ti">건설 시작!</div>
     <div class="mo-roi" id="mo-roi"></div><div class="mo-sub" id="mo-sub"></div>
     <div class="mo-impact"><div><div class="mi-v" id="mi-hl">0명</div><div class="mi-l">노숙자 감소 예정</div></div><div><div class="mi-v" id="mi-rent">-€0</div><div class="mi-l">완공 시 월세 인하</div></div></div>
-    <div class="mo-lbl">리더보드 닉네임</div>
-    <input class="mo-input" id="mo-name" type="text" placeholder="DEVELOPER_01" maxlength="20">
+    <div class="mo-lbl">🏢 이 아파트 이름을 지어주세요</div>
+    <input class="mo-input" id="mo-name" type="text" placeholder="예: 석준빌라, 더블린 희망 아파트" maxlength="20">
     <div class="mo-btns"><button class="mo-ok" onclick="saveScore()">▶ 등록</button><button class="mo-sk" onclick="closeModal()">건너뛰기</button></div>
   </div>
 </div>
@@ -639,8 +674,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
     <div class="ending-sub" id="ending-sub">2030년 12월 최종 결산</div>
     <div class="ending-cards" id="ending-cards"></div>
     <div class="ending-story" id="ending-story"></div>
+    <div style="font-size:13px;color:rgba(255,255,255,.45);margin-bottom:.7rem">📸 스크린샷 찍어서 SNS에 공유해보세요!</div>
     <div class="ending-btns">
-      <button class="ending-btn share" onclick="endingShare()">📤 결과 공유</button>
+      <button class="ending-btn share" onclick="shareScore()">📋 결과 텍스트 복사</button>
+      <button class="ending-btn share" onclick="shareLink()">🔗 게임 링크 복사</button>
       <button class="ending-btn retry" onclick="location.reload()">🔄 다시 도전</button>
     </div>
   </div>
@@ -720,10 +757,11 @@ let underConstruction=[];
 let policyEffects={marketMod:1.0,ldaMod:1.0,privateROIMod:1.0,buildCostMod:1.0,socialTimeMod:0};
 let scheduledFired={rpz:false,metrolink:false,ecb:false,election:false};
 let finalGrade='fail'; // {siteId,progress,totalMonths,units,netMonthly,hlR,rentR,socialUnits,roi,cost}
+let strategy='profit';
 const COST={standard:420000,modular:294000};
 const UPF=18,MR=2340*12,SR=800*12,VAC=0.05,OPEX=0.25;
 const MONTHS=['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
-const SPEED_MS={1:2000,2:1000,5:400};
+const SPEED_MS={1:20000,2:10000,5:4000};
 
 function ipUnit(t){if(t==='social')return{hl:2.2,rent:0.019};if(t==='mixed')return{hl:0.9,rent:0.014};return{hl:0.25,rent:0.007};}
 function getConstructionMonths(area,fl){return Math.max(3,Math.min(24,Math.ceil(Math.sqrt(area)*fl*0.7)));}
@@ -775,6 +813,17 @@ function refreshPartnerChips(){
   var pi=document.getElementById('partner-info');if(pi)pi.textContent=info[partnership]||info.solo;
 }
 
+// STRATEGY
+function setStrategy(s,btn){
+  strategy=s;
+  document.querySelectorAll('.sc-card').forEach(function(c){c.className='sc-card';});
+  btn.classList.add('sel-'+s);
+  if(s==='profit'){method='standard';tenure='market';partnership='investor';}
+  else if(s==='mixed'){method='modular';tenure='mixed';partnership='council';}
+  else{method='modular';tenure='social';partnership='lda';}
+  calcAndRender();
+}
+
 // STAGE
 function fadeOut(el,cb){el.classList.add('fading');setTimeout(()=>{el.classList.add('hidden');el.classList.remove('fading');cb();},400);}
 function goStage2(){fadeOut(document.getElementById('st-splash'),()=>document.getElementById('st-story').classList.remove('hidden'));}
@@ -812,6 +861,10 @@ const siteMarkers={};
 const siteRects={};
 
 function startGame(){
+  if(difficulty==='easy')   budget=200e6;
+  if(difficulty==='normal') budget=120e6;
+  if(difficulty==='hard')   budget=75e6;
+  document.getElementById('h-budget').textContent='€'+(budget/1e6).toFixed(0)+'M';
   document.getElementById('hud').style.display='flex';
   document.getElementById('impact-bar').style.display='flex';
   document.getElementById('map').style.display='block';
@@ -824,7 +877,7 @@ function startGame(){
 }
 
 function initMap(){
-  theMap=L.map('map',{center:[53.352,-6.268],zoom:13,zoomControl:false,worldCopyJump:false,maxBounds:[[-85,-180],[85,180]],maxBoundsViscosity:1.0});
+  theMap=L.map('map',{center:[53.345,-6.268],zoom:13,minZoom:11,maxZoom:18,zoomControl:false,worldCopyJump:false,maxBounds:[[53.1,-6.75],[53.65,-5.95]],maxBoundsViscosity:1.0});
   L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap © CARTO',maxZoom:19}).addTo(theMap);
   L.control.zoom({position:'bottomright'}).addTo(theMap);
   SITES.forEach(s=>{
@@ -1200,6 +1253,12 @@ function selectSite(id){
   theMap.setView([cur.lat,cur.lng],15,{animate:true});
   siteMarkers[id].openPopup();
   document.getElementById('build-panel').classList.add('open');
+  // Reflect current strategy on card UI
+  document.querySelectorAll('.sc-card').forEach(function(c){c.className='sc-card';});
+  var scard=document.getElementById('sc-'+strategy);if(scard)scard.classList.add('sel-'+strategy);
+  if(strategy==='profit'){method='standard';tenure='market';partnership='investor';}
+  else if(strategy==='mixed'){method='modular';tenure='mixed';partnership='council';}
+  else{method='modular';tenure='social';partnership='lda';}
   if(lbOpen){lbOpen=false;document.getElementById('lb-panel').classList.remove('open');}
   updateDN();calcAndRender();
   setTimeout(()=>showUncle('select'),700);
@@ -1371,21 +1430,32 @@ function shareLink(){
 function shareScore(){
   var rent=getCurrentRent();
   var g=finalGrade||getGrade();
-  var gradeEmoji={gold:'🥇',silver:'🥈',bronze:'🥉',fail:'💔'};
-  var partnerMap={solo:'단독개발',council:'시의회',lda:'LDA',investor:'민간투자자'};
-  var tenureMap={market:'시장가 위주',mixed:'혼합 임대',social:'사회주택 위주'};
-  var txt='🏗 VACANT DUBLIN 플레이 결과!\n\n'
-    +(gradeEmoji[g]||'🏗')+' 등급: '+g.toUpperCase()+'\n'
-    +'🏠 완공 세대: '+totalHomes.toLocaleString()+'채\n'
+  var gradeLabel={gold:'🥇GOLD',silver:'🥈SILVER',bronze:'🥉BRONZE',fail:'💔FAIL'};
+  var seokLine={
+    gold:'석준: LDA 아파트 입주 성공! 박사논문 제출했어요 🎓',
+    silver:'석준: 친구 2명과 쉐어하우스, 그래도 텐트촌은 면했어요',
+    bronze:'석준: 더블린 외곽 통근 2시간... 그래도 아일랜드 남았어요',
+    fail:'석준: 2028년 한국으로 돌아갔습니다. 더블린의 빈 땅은 오늘도 비어있어요'
+  };
+  var rentDrop=Math.max(0,BASE_RENT-rent);
+  var rentDropPct=Math.round((rentDrop/BASE_RENT)*100);
+  var txt='🏗 VACANT DUBLIN 2030 결산\n'
+    +'📊 나의 더블린 개발 성과:\n'
+    +'🏢 완공 아파트: '+totalHomes.toLocaleString()+'채\n'
     +'💰 최고 ROI: '+bestROI.toFixed(0)+'%\n'
+    +'📉 월세 인하: €'+BASE_RENT+' → €'+rent+' (-'+rentDropPct+'%)\n'
     +'🏕️ 노숙자 감소: -'+totalHLReduced+'명\n'
-    +'📉 달성 월세: €'+rent+'/월\n'
-    +'📊 전략: '+(tenureMap[tenure]||tenure)+' / '+(partnerMap[partnership]||partnership)+'\n\n'
-    +'나는 더블린 집값을 €'+rent+'까지 낮췄다!\n\n'
+    +'🏆 달성 등급: '+(gradeLabel[g]||'💔FAIL')+'\n'
+    +'"'+(seokLine[g]||seokLine.fail)+'"\n\n'
+    +'유럽 도시 비교:\n'
+    +'더블린 2025 시작: €2,540\n'
+    +'내가 만든 더블린: €'+rent+'\n'
+    +'유럽 중앙값: €1,450\n'
+    +'빈(Wien): €900\n\n'
     +'👉 '+location.href+'\n'
-    +'#VacantDublin #더블린집값';
+    +'#VacantDublin #더블린집값 #아일랜드부동산';
   if(navigator.share)navigator.share({title:'Vacant Dublin',text:txt});
-  else{navigator.clipboard&&navigator.clipboard.writeText(txt);showToast('📊 점수 복사!');}
+  else{navigator.clipboard&&navigator.clipboard.writeText(txt);showToast('📊 결과 복사!');}
   closeShare();
 }
 
@@ -1402,7 +1472,7 @@ async function loadLB(){
   entries.sort((a,b)=>b.roi-a.roi);entries=entries.slice(0,20);
   document.getElementById('lb-tot').textContent=entries.reduce((s,e)=>s+(e.units||0),0).toLocaleString()+'채';
   const md=['🥇','🥈','🥉'],dl={easy:'😊',normal:'😤',hard:'💀'};
-  document.getElementById('lb-list').innerHTML=entries.length?entries.map((e,i)=>`<div class="lb-ent${i===0?' g1':''}"><div class="lb-rk">${md[i]||(i+1)}</div><div class="lb-inf"><div class="lb-nm">${e.name}</div><div class="lb-dt">${e.units||0}채 · ${dl[e.diff]||''}</div></div><div><div class="lb-roi">${parseFloat(e.roi||0).toFixed(0)}%</div><div class="lb-u">ROI</div></div></div>`).join(''):'<div class="lb-empty">아직 없음<br><br>🏗<br><br>먼저 건설하세요!</div>';
+  document.getElementById('lb-list').innerHTML=entries.length?entries.map((e,i)=>`<div class="lb-ent${i===0?' g1':''}"><div class="lb-rk">${md[i]||(i+1)}</div><div class="lb-inf"><div class="lb-nm">🏢 ${e.name}</div><div class="lb-dt">${e.units||0}채 · ${dl[e.diff]||''}</div></div><div><div class="lb-roi">${parseFloat(e.roi||0).toFixed(0)}%</div><div class="lb-u">ROI</div></div></div>`).join(''):'<div class="lb-empty">아직 없음<br><br>🏗<br><br>먼저 건설하세요!</div>';
 }
 
 function closePanel(){document.getElementById('build-panel').classList.remove('open');}
