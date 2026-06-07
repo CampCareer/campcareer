@@ -327,6 +327,11 @@ const ko: Dictionary = {
       officialData: '정부 데이터만 사용',
       officialDataSub: '에이전시 추정치 제외',
     },
+    heroSearch: {
+      fieldPlaceholder: '예: 컴퓨터공학, 경영학...',
+      countryAll: '전체 국가',
+      button: 'ROI 확인 →',
+    },
     howItWorks: {
       sectionTitle: '3단계로 답을 찾으세요',
       step1Title: '전공 입력',

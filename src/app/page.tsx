@@ -11,6 +11,7 @@ import {
 import { getTranslations } from "@/lib/i18n/server"
 import { LanguageToggle } from "@/components/language-toggle"
 import { LogoMark } from "@/components/logo-mark"
+import { HeroSearch } from "@/components/hero-search"
 
 // ── 목업 샘플 데이터 (정적, 번역 제외) ────────────────────────────────────────
 
@@ -141,17 +142,19 @@ export default function LandingPage() {
             {tl.hero.description}
           </p>
 
-          {/* CTA 버튼 */}
-          <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
+          {/* 인라인 검색 위젯 */}
+          <HeroSearch />
+          <div className="flex items-center gap-4 mt-4 mb-8">
             <Link
               href="/onboarding"
-              className="inline-flex items-center gap-2 bg-white hover:bg-slate-100 text-slate-900 font-semibold px-5 py-2.5 rounded-xl transition-colors text-sm"
+              className="text-sm text-slate-400 hover:text-white underline underline-offset-2 transition-colors"
             >
-              {tl.hero.ctaExplore} <ArrowRight className="w-4 h-4" />
+              {tl.hero.ctaExplore}
             </Link>
+            <span className="text-slate-700">·</span>
             <Link
               href="/compare"
-              className="inline-flex items-center border border-slate-600 hover:border-slate-500 hover:bg-slate-800/60 text-white font-medium px-5 py-2.5 rounded-xl transition-colors text-sm"
+              className="text-sm text-slate-400 hover:text-white underline underline-offset-2 transition-colors"
             >
               {tl.hero.ctaCompare}
             </Link>
