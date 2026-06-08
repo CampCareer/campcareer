@@ -20,6 +20,10 @@ const en = {
     cta: 'Create free account',
   },
   dashboard: {
+    title: 'Your study-abroad decision dashboard',
+    subtitle: 'Compare countries, schools, ROI, visa steps, timelines, and career routes from one place.',
+    recommendedStartingPoint: 'Recommended starting point',
+    startDecisionQuiz: 'Start with 5 questions to get your recommended country and next steps →',
     whereToStudy: 'Where do you want to study?',
     searchButton: 'Search',
     searchPlaceholder: {
@@ -30,7 +34,7 @@ const en = {
       ie: 'e.g. Computer Science, Pharmacy...',
     },
     nextSteps: {
-      title: 'Your study-abroad decision dashboard',
+      title: 'Your next steps',
       subtitle: 'Pick up where you left off',
       timelineLabel: 'TIMELINE',
       onTrack: 'On track',
@@ -49,6 +53,14 @@ const en = {
       viewAll: 'View all',
       nothingSaved: 'Nothing saved yet',
       browseRoi: 'Browse the ROI Explorer',
+      decideLabel: 'DECIDE',
+      compareLabel: 'COMPARE',
+      planLabel: 'PLAN',
+      trackLabel: 'TRACK',
+      compareCard: 'Compare 5 countries',
+      compareCardSub: 'ROI · salary · tuition side by side',
+      buildTimeline: 'Build your timeline',
+      planCardSub: 'Set key dates, track milestones',
     },
     topPicks: {
       titlePrefix: 'Top picks in',
