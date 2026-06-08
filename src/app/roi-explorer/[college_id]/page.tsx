@@ -13,9 +13,10 @@ type RoiRow = {
   college_name: string
   college_state: string
   school_type?: string
-  city_id: string
-  city_name: string
-  city_state: string
+  city_id?: string | null
+  city_name?: string | null
+  city_state?: string | null
+  college_city?: string | null
   roi_score: number
   net_salary: number
   payback_years: number
@@ -23,6 +24,8 @@ type RoiRow = {
   graduation_rate: number
   median_earnings: number
   field_name?: string | null
+  rent_median?: number | null
+  cost_of_living_index?: number | null
 }
 
 const VALID_COUNTRIES = ['us', 'au', 'ca', 'uk', 'ie'] as const
@@ -47,6 +50,14 @@ const COUNTRY_LABEL: Record<Country, string> = {
 function fmt(value: number, country: Country): string {
   const { symbol } = CURRENCY[country]
   return `${symbol}${Math.round(value).toLocaleString()}`
+}
+
+function fmtMaybe(value: number | null | undefined, country: Country): string {
+  if (typeof value !== 'number' || !Number.isFinite(value) || value <= 0) {
+    return 'Not available'
+  }
+
+  return fmt(value, country)
 }
 
 function calcTax(gross: number, country: Country, state: string): number {
@@ -158,10 +169,37 @@ function CollegeDetailInner() {
 
   const best = rows[0]
   const currCode = CURRENCY[country].code
-  const annualRent = (best.median_earnings - best.net_salary) / 1.4
-  const livingCost = annualRent * 0.4
-  const taxAmount = calcTax(best.median_earnings, country, best.college_state)
-  const netAfterTax = best.median_earnings - taxAmount
+
+  const grossSalary = best.median_earnings ?? best.net_salary ?? 0
+  const displayCity = best.city_name ?? best.college_city ?? best.college_state
+
+  const monthlyRent =
+    typeof best.rent_median === 'number' && Number.isFinite(best.rent_median) && best.rent_median > 0
+      ? best.rent_median
+      : null
+
+  const annualRent = monthlyRent ? Math.round(monthlyRent * 12) : null
+
+  const livingCost =
+    annualRent && annualRent > 0
+      ? Math.round(annualRent * 0.4)
+      : null
+
+  const hasLivingCostData = annualRent !== null && livingCost !== null
+
+  const taxAmount = calcTax(grossSalary, country, best.college_state)
+  const incomeAfterTax = Math.max(0, grossSalary - taxAmount)
+
+  const salaryBase = showAfterTax ? incomeAfterTax : grossSalary
+
+  const estimatedNetSalary = hasLivingCostData
+    ? Math.max(0, salaryBase - annualRent - livingCost)
+    : salaryBase
+
+  const retainedPercent =
+    hasLivingCostData && grossSalary > 0
+      ? Math.max(0, Math.round((estimatedNetSalary / grossSalary) * 1000) / 10)
+      : null
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-10 space-y-8">
@@ -248,10 +286,14 @@ function CollegeDetailInner() {
               <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">{td.netSalary}</span>
             </div>
             <p className="text-2xl font-bold text-emerald-600">
-              {showAfterTax ? fmt(netAfterTax, country) : fmt(best.net_salary, country)}
+              {fmt(estimatedNetSalary, country)}
             </p>
             <p className="text-xs text-slate-400 mt-0.5">
-              {showAfterTax ? td.afterTaxLabel : td.afterLivingCosts} · {currCode}
+              {hasLivingCostData
+                ? showAfterTax
+                  ? `${td.afterTaxLabel} + ${td.afterLivingCosts}`
+                  : td.afterLivingCosts
+                : 'before rent & living costs'} · {currCode}
             </p>
           </CardContent>
         </Card>
@@ -285,7 +327,7 @@ function CollegeDetailInner() {
         <Card>
           <CardContent className="pt-5 pb-6">
             <p className="text-xs text-slate-400 mb-5">
-              {td.netSalaryCalcPrefix} ({best.city_name})
+              {td.netSalaryCalcPrefix} ({displayCity})
             </p>
 
             {/* Tuition & Earnings info row */}
@@ -302,13 +344,17 @@ function CollegeDetailInner() {
               </div>
             </div>
 
+            <p className="mb-4 rounded-xl border border-amber-100 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-700">
+              ROI and net salary are estimates based on available data. If rent or living-cost data is unavailable, those costs are excluded from the estimate.
+            </p>
+            
             {/* Net Salary waterfall */}
             <div className="space-y-3">
               {[
                 {
                   label: td.medianEarnings,
                   sublabel: td.grossIncome,
-                  value: best.median_earnings,
+                  value: grossSalary,
                   pct: 100,
                   barColor: 'bg-slate-300',
                   textColor: 'text-slate-700',
@@ -318,28 +364,28 @@ function CollegeDetailInner() {
                   label: `${td.incomeTax} ${country === 'ie' ? 'USC/PRSI' : country === 'uk' ? 'NI' : country === 'au' ? 'Medicare' : country === 'ca' ? 'CPP/EI' : 'FICA'}`,
                   sublabel: `${country.toUpperCase()} ${td.taxEstimated}`,
                   value: taxAmount,
-                  pct: (taxAmount / best.median_earnings) * 100,
+                  pct: grossSalary > 0 ? (taxAmount / grossSalary) * 100 : 0,
                   barColor: 'bg-purple-300',
                   textColor: 'text-purple-600',
                   sign: '−',
                 }] : []),
                 {
                   label: td.annualRent,
-                  sublabel: td.cityAvgMonths,
+                  sublabel: hasLivingCostData ? td.cityAvgMonths : 'rent data unavailable',
                   value: annualRent,
-                  pct: (annualRent / best.median_earnings) * 100,
+                  pct: annualRent && grossSalary > 0 ? (annualRent / grossSalary) * 100 : 0,
                   barColor: 'bg-rose-300',
                   textColor: 'text-rose-600',
-                  sign: '−',
+                  sign: hasLivingCostData ? '−' : '',
                 },
                 {
                   label: td.livingCost,
-                  sublabel: td.rentMultiplier,
+                  sublabel: hasLivingCostData ? td.rentMultiplier : 'excluded from estimate',
                   value: livingCost,
-                  pct: (livingCost / best.median_earnings) * 100,
+                  pct: livingCost && grossSalary > 0 ? (livingCost / grossSalary) * 100 : 0,
                   barColor: 'bg-orange-300',
                   textColor: 'text-orange-600',
-                  sign: '−',
+                  sign: hasLivingCostData ? '−' : '',
                 },
               ].map(({ label, sublabel, value, pct, barColor, textColor, sign }) => (
                 <div key={label}>
@@ -352,7 +398,7 @@ function CollegeDetailInner() {
                       <span className="text-xs text-slate-400 ml-2">{sublabel}</span>
                     </div>
                     <span className={`text-sm font-semibold ${textColor} whitespace-nowrap`}>
-                      {fmt(value, country)}
+                      {fmtMaybe(value, country)}
                     </span>
                   </div>
                   <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
@@ -368,20 +414,26 @@ function CollegeDetailInner() {
                 <div className="flex items-center justify-between">
                   <div>
                     <span className="text-base font-bold text-slate-900">{td.equalNetSalary}</span>
-                    <span className="text-xs text-slate-400 ml-2">{td.afterRentLiving}</span>
+                    <span className="text-xs text-slate-400 ml-2">
+                      {hasLivingCostData ? td.afterRentLiving : 'before rent & living costs'}
+                    </span>
                   </div>
                   <span className="text-2xl font-bold text-emerald-600">
-                    {fmt(showAfterTax ? netAfterTax : best.net_salary, country)}
+                    {fmt(estimatedNetSalary, country)}
                   </span>
                 </div>
                 <div className="mt-2 h-2 rounded-full bg-slate-100 overflow-hidden">
                   <div
                     className="h-full rounded-full bg-emerald-400"
-                    style={{ width: `${Math.min((best.net_salary / best.median_earnings) * 100, 100).toFixed(1)}%` }}
+                    style={{
+                      width: `${retainedPercent !== null ? Math.min(retainedPercent, 100).toFixed(1) : 0}%`
+                    }}
                   />
                 </div>
                 <p className="text-xs text-slate-400 mt-1.5">
-                  {((best.net_salary / best.median_earnings) * 100).toFixed(1)}{td.earningsRetained}
+                  {retainedPercent !== null
+                    ? `${retainedPercent.toFixed(1)}${td.earningsRetained}`
+                    : 'Living-cost adjustment unavailable'}
                 </p>
               </div>
             </div>

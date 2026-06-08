@@ -169,12 +169,12 @@ export async function GET(req: NextRequest) {
 
   const defaultState = country === 'au' ? 'NSW'
     : country === 'ca' ? 'ON'
-    : country === 'uk' ? 'London'
+    : country === 'uk' ? 'ALL_STATES'
     : country === 'ie' ? 'Leinster'
     : 'CA'
 
   const stateParam = searchParams.get('state') ?? ''
-  const state = (stateParam === 'ALL_STATES' || !stateParam) ? defaultState : stateParam
+  const state = stateParam || defaultState
   const field = searchParams.get('field') ?? ''
   const collegeId = searchParams.get('college_id') ?? ''
   const nfqLevelParam = searchParams.get('nfq_level')
@@ -215,7 +215,10 @@ export async function GET(req: NextRequest) {
     if (collegeId) {
       query = query.eq('college_id', collegeId)
     } else {
-      query = query.eq('college_state', state)
+      if (state !== 'ALL_STATES') {
+        query = query.eq('college_state', state)
+      }
+      
       if (field) query = query.ilike('field_name', `%${field}%`)
       if (country === 'ie' && nfqLevelParam) {
         query = query.eq('nfq_level', parseInt(nfqLevelParam, 10))

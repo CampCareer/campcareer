@@ -141,7 +141,7 @@ const CA_PROVINCES = [
 ] as const
 
 const UK_REGIONS = [
-  { abbr: "London",           name: "London" },
+  { abbr: "ALL_STATES",       name: "ALL UK regions" },
   { abbr: "South East",       name: "South East" },
   { abbr: "Scotland",         name: "Scotland" },
   { abbr: "North West",       name: "North West" },
@@ -315,7 +315,11 @@ const VALID_COUNTRIES = ['us', 'au', 'ca', 'uk', 'ie'] as const
 type Country = typeof VALID_COUNTRIES[number]
 
 const DEFAULT_STATE: Record<Country, string> = {
-  us: 'CA', au: 'NSW', ca: 'ON', uk: 'London', ie: 'Leinster',
+  us: 'CA',
+  au: 'NSW',
+  ca: 'ON',
+  uk: 'ALL_STATES',
+  ie: 'Leinster',
 }
 
 function ROIExplorerContent() {
@@ -360,7 +364,7 @@ function ROIExplorerContent() {
   function handleCountryChange(v: string) {
     const c = v as "us" | "au" | "ca" | "uk" | "ie"
     setCountry(c)
-    setState(c === "au" ? "NSW" : c === "ca" ? "ON" : c === "uk" ? "London" : c === "ie" ? "Leinster" : "CA")
+    setState(c === "au" ? "NSW" : c === "ca" ? "ON" : c === "uk" ? "ALL_STATES" : c === "ie" ? "Leinster" : "CA")
     setField("")
     setCareerStage("early")
   }
