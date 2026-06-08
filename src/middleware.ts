@@ -63,9 +63,16 @@ export async function middleware(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
 
   // 로그인 필요한 페이지 보호
-  const protectedPaths = ['/dashboard', '/saved', '/onboarding']
+  const protectedPaths = ['/dashboard', '/saved']
   if (!user && protectedPaths.some(p => request.nextUrl.pathname.startsWith(p))) {
     const redirect = NextResponse.redirect(new URL('/login', request.url))
+    applyLocaleCookie(redirect, locale)
+    return redirect
+  }
+
+  // 이미 로그인된 유저가 온보딩에 오면 대시보드로
+  if (user && request.nextUrl.pathname.startsWith('/onboarding')) {
+    const redirect = NextResponse.redirect(new URL('/dashboard', request.url))
     applyLocaleCookie(redirect, locale)
     return redirect
   }
