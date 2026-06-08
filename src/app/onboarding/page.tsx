@@ -2,8 +2,10 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase-client'
-import { ArrowRight, Check, Copy, CheckCheck } from 'lucide-react'
+import { useTranslations } from '@/lib/i18n/locale-provider'
+import { ArrowRight, Check, Copy, CheckCheck, BarChart2, Globe2, CalendarDays, Map } from 'lucide-react'
 
 type RoiRow = {
   college_id: string
@@ -43,13 +45,13 @@ function getMatchReasons(
   currency: string
 ): string[] {
   const reasons: string[] = []
-  reasons.push(`Avg. salary ${currency}${Math.round(row.net_salary).toLocaleString()}`)
-  if (row.roi_score >= 10) reasons.push('Top ROI for this field')
-  if (row.payback_years > 0 && row.payback_years <= 3) reasons.push('Pays back in under 3 years')
-  if (goal === 'pr') reasons.push('Strong PR pathway')
-  if (goal === 'visa') reasons.push('Post-study work visa available')
-  if (budget === 'low' && row.tuition > 0 && row.tuition < 15000) reasons.push('Within your budget')
-  if (budget === 'mid' && row.tuition > 0 && row.tuition <= 30000) reasons.push('Within your budget')
+  reasons.push(`Avg. salary ${currency}${Math.round(row.net_salary).toLocaleString()} (estimated)`)
+  if (row.roi_score >= 10) reasons.push('Strong estimated ROI for this field')
+  if (row.payback_years > 0 && row.payback_years <= 3) reasons.push('Estimated payback under 3 years')
+  if (goal === 'pr') reasons.push('Relevant to PR-focused planning')
+  if (goal === 'visa') reasons.push('Post-study work options may be available')
+  if (budget === 'low' && row.tuition > 0 && row.tuition < 15000) reasons.push('Within your selected budget range')
+  if (budget === 'mid' && row.tuition > 0 && row.tuition <= 30000) reasons.push('Within your selected budget range')
   return reasons.slice(0, 3)
 }
 
@@ -81,29 +83,29 @@ function recommend(
 
   const COUNTRY_META: Record<string, { flag: string; reasons: Record<string, string[]> }> = {
     IE: { flag: '🇮🇪', reasons: {
-      visa:  ['EU work permit pathway', 'Critical Skills Employment Permit', 'Low tuition fees'],
-      pr:    ['EU permanent residency route', 'Stamp 4 eligibility', 'Lower cost of living'],
-      study: ['Lowest tuition from €10k/yr', 'HEA graduate salary data', 'English-speaking EU gateway'],
+      visa:  ['Work permit pathways may be available (EU)', 'Critical Skills Employment Permit pathway', 'Relatively low tuition fees'],
+      pr:    ['EU permanent residency pathways available', 'Stamp 4 eligibility after qualifying period', 'Relatively lower cost of living'],
+      study: ['Low tuition from ~€10k/yr (varies)', 'HEA graduate salary data (public)', 'English-speaking EU study option'],
     }},
     AU: { flag: '🇦🇺', reasons: {
-      visa:  ['2–4 year post-study work visa', '8,597 CRICOS-registered courses', 'High graduate salaries'],
-      pr:    ['Points-based PR (subclass 189/190)', 'State-sponsored nomination available', 'High demand for skilled workers'],
-      study: ['QILT-based graduate outcomes', 'Wide range of study fields', 'High quality of life'],
+      visa:  ['Post-study work visa options (2–4 yrs, check requirements)', '8,500+ CRICOS-registered courses', 'Competitive graduate salary ranges'],
+      pr:    ['Points-based PR pathways may be available (subclass 189/190)', 'State nomination may be available', 'Skilled worker demand in some occupations'],
+      study: ['QILT-based graduate outcome data (public)', 'Wide range of study fields available', 'High quality of life index'],
     }},
     CA: { flag: '🇨🇦', reasons: {
-      visa:  ['PGWP up to 3 years', 'Express Entry immigration pathway', 'Strong settlement support'],
-      pr:    ['Fastest PR via Express Entry', 'Provincial Nominee Programs', 'Stable immigration policy'],
-      study: ['Affordable tuition fees', 'French-speaking options available', 'Multicultural environment'],
+      visa:  ['Post-Graduation Work Permit options (check IRCC)', 'Express Entry pathway (points-based)', 'Settlement support programs available'],
+      pr:    ['Express Entry PR pathway (points-based, check IRCC)', 'Provincial Nominee Programs available', 'Generally stable immigration policy'],
+      study: ['Affordable tuition fees (varies by province)', 'French-speaking options available', 'Multicultural environment'],
     }},
     UK: { flag: '🇬🇧', reasons: {
-      visa:  ['Graduate Route: 2-year work visa', 'Access to global companies', 'HESA graduate salary data'],
-      pr:    ['Skilled Worker visa pathway', 'PR eligibility after 5 years', 'London financial hub'],
-      study: ['Russell Group universities', '1-year master\'s programmes', 'HESA graduate outcomes data'],
+      visa:  ['Graduate Route post-study work option (2 yrs)', 'Access to major global companies', 'HESA graduate salary data (public)'],
+      pr:    ['Skilled Worker visa pathway may be available', 'Indefinite Leave to Remain after qualifying period', 'Major financial and tech hub'],
+      study: ['Russell Group and other top universities', '1-year master\'s programmes available', 'HESA graduate outcomes data (public)'],
     }},
     US: { flag: '🇺🇸', reasons: {
-      visa:  ['OPT up to 3 years (STEM)', 'Silicon Valley career opportunities', 'Highest graduate salaries'],
-      pr:    ['EB-2/EB-3 employment-based PR', 'Multiple immigration pathways', 'High demand for tech talent'],
-      study: ['College Scorecard data', 'Wide range of scholarships', 'World-class universities'],
+      visa:  ['OPT post-study work options (STEM up to 3 yrs)', 'Access to major tech and finance hubs', 'High estimated graduate salary ranges'],
+      pr:    ['Employment-based immigration pathways (EB-2/EB-3)', 'Multiple immigration pathway options', 'High demand for tech talent in some sectors'],
+      study: ['College Scorecard data (public)', 'Scholarships may be available (varies)', 'World-class universities and programs'],
     }},
   }
 
@@ -118,6 +120,8 @@ const COUNTRY_NAME: Record<string, string> = {
 export default function OnboardingPage() {
   const router = useRouter()
   const supabase = createClient()
+  const t = useTranslations()
+  const to = t.onboarding
   const [step, setStep] = useState<Step>(1)
   const [field, setField] = useState<string>('')
   const [goal, setGoal] = useState<Goal | null>(null)
@@ -159,6 +163,7 @@ export default function OnboardingPage() {
         environment: env,
         recommended_country: rec.country,
         completed_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       })
     }
     setSaving(false)
@@ -168,8 +173,8 @@ export default function OnboardingPage() {
     if (!result) return
     const top = matchedSchools[0]
     const text = top
-      ? `🎓 My best-fit school for ${field} is ${result.flag} ${top.college_name} (${COUNTRY_NAME[result.country]})!\n\nFind yours → campcareer.com`
-      : `🎓 My best country for studying abroad is ${result.flag} ${COUNTRY_NAME[result.country]}!\n\n✅ ${result.reasons.join('\n✅ ')}\n\nFind yours → campcareer.com`
+      ? `🎓 My suggested starting school for ${field} is ${result.flag} ${top.college_name} (${COUNTRY_NAME[result.country]})!\n\nFind yours → campcareer.com`
+      : `🎓 My suggested study destination is ${result.flag} ${COUNTRY_NAME[result.country]}!\n\n✅ ${result.reasons.join('\n✅ ')}\n\nFind yours → campcareer.com`
     await navigator.clipboard.writeText(text)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
@@ -179,8 +184,8 @@ export default function OnboardingPage() {
     if (!result) return
     const top = matchedSchools[0]
     const text = top
-      ? `My best-fit school for ${field} is ${result.flag} ${top.college_name} (${COUNTRY_NAME[result.country]})!\n\nFind yours → campcareer.com`
-      : `My best country for studying abroad is ${result.flag} ${COUNTRY_NAME[result.country]}!\n\n✅ ${result.reasons[0]}\n✅ ${result.reasons[1]}\n\nFind yours → campcareer.com`
+      ? `My suggested school for ${field} is ${result.flag} ${top.college_name} (${COUNTRY_NAME[result.country]})!\n\nFind yours → campcareer.com`
+      : `My suggested study destination is ${result.flag} ${COUNTRY_NAME[result.country]}!\n\n✅ ${result.reasons[0]}\n✅ ${result.reasons[1]}\n\nFind yours → campcareer.com`
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank')
   }
 
@@ -206,9 +211,12 @@ export default function OnboardingPage() {
       {step === 6 && result && (
         <div className="flex-1 flex flex-col items-center justify-center px-6 py-16 text-center">
 
-          {/* Header */}
-          <p className="text-slate-400 text-sm mb-1">Best-fit schools for</p>
-          <p className="text-2xl font-bold text-slate-900 mb-8">
+          {/* Badge + Header */}
+          <span className="inline-flex items-center text-xs font-semibold text-indigo-500 bg-indigo-50 border border-indigo-100 rounded-full px-3 py-1 mb-4">
+            {to.badge}
+          </span>
+          <p className="text-slate-400 text-sm mb-1">{to.resultHeader}</p>
+          <p className="text-2xl font-bold text-slate-900 mb-6">
             {field} &middot; {result.flag} {COUNTRY_NAME[result.country]}
           </p>
 
@@ -223,7 +231,7 @@ export default function OnboardingPage() {
                 return (
                   <div className="bg-indigo-50 border-2 border-indigo-200 rounded-3xl p-6 mb-4 text-left">
                     <div className="flex items-center gap-2 mb-2">
-                      <span className="text-xs font-bold text-indigo-500 uppercase tracking-wide">#1 Match</span>
+                      <span className="text-xs font-bold text-indigo-500 uppercase tracking-wide">{to.resultBadge}</span>
                       <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full font-semibold">
                         ROI {top.roi_score.toFixed(1)}
                       </span>
@@ -246,7 +254,7 @@ export default function OnboardingPage() {
 
               {/* #2–5 compact list */}
               {matchedSchools.slice(1).length > 0 && (
-                <div className="bg-white border border-slate-200 rounded-2xl divide-y divide-slate-100 mb-6 text-left overflow-hidden">
+                <div className="bg-white border border-slate-200 rounded-2xl divide-y divide-slate-100 mb-3 text-left overflow-hidden">
                   {matchedSchools.slice(1).map((s, i) => (
                     <div key={s.college_id} className="flex items-center justify-between px-4 py-3">
                       <div className="min-w-0">
@@ -267,13 +275,18 @@ export default function OnboardingPage() {
                 </div>
               )}
 
+              {/* Data limitation note */}
+              <p className="text-xs text-slate-400 text-center mb-4 px-1">
+                ⚠️ {to.dataNote}
+              </p>
+
             </div>
           ) : (
             /* Fallback: API returned no schools — show original country card */
-            <div className="w-full max-w-md mb-8">
+            <div className="w-full max-w-md mb-4">
               <div className="text-[72px] leading-none mb-4">{result.flag}</div>
               <h1 className="text-4xl font-bold text-slate-900 mb-6">{COUNTRY_NAME[result.country]}</h1>
-              <div className="bg-slate-50 rounded-3xl p-7 text-left space-y-4">
+              <div className="bg-slate-50 rounded-3xl p-7 text-left space-y-4 mb-4">
                 {result.reasons.map((r, i) => (
                   <div key={i} className="flex items-center gap-3">
                     <div className="w-7 h-7 rounded-full bg-indigo-100 flex items-center justify-center shrink-0">
@@ -283,12 +296,22 @@ export default function OnboardingPage() {
                   </div>
                 ))}
               </div>
+              {/* Data limitation note for fallback */}
+              <p className="text-xs text-slate-400 text-center mb-0 px-1">
+                ⚠️ {to.dataNote}
+              </p>
             </div>
           )}
+
+          {/* Trust disclaimer */}
+          <div className="w-full max-w-md rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 mb-5 text-left">
+            <p className="text-xs text-amber-700 leading-relaxed">⚠️ {to.resultDisclaimer}</p>
+          </div>
 
           {/* Share buttons */}
           <div className="w-full max-w-md flex gap-3 mb-4">
             <button
+              type="button"
               onClick={handleTwitterShare}
               className="flex-1 flex items-center justify-center gap-2 border-2 border-slate-200 hover:border-slate-300 text-slate-700 font-semibold py-3.5 rounded-2xl transition-colors text-sm bg-white"
             >
@@ -296,6 +319,7 @@ export default function OnboardingPage() {
               Share on X
             </button>
             <button
+              type="button"
               onClick={handleCopyToClipboard}
               className="flex-1 flex items-center justify-center gap-2 border-2 border-slate-200 hover:border-slate-300 text-slate-700 font-semibold py-3.5 rounded-2xl transition-colors text-sm bg-white"
             >
@@ -306,15 +330,49 @@ export default function OnboardingPage() {
             </button>
           </div>
 
-          {/* CTA */}
+          {/* Primary CTA */}
           <button
+            type="button"
             onClick={() => { router.push('/dashboard'); router.refresh() }}
             disabled={saving}
-            className="w-full max-w-md bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-5 rounded-2xl transition-colors flex items-center justify-center gap-3 text-lg"
+            className="w-full max-w-md bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-bold py-5 rounded-2xl transition-colors flex items-center justify-center gap-3 text-lg mb-3"
           >
-            Go to my Dashboard
+            {to.ctaDashboard}
             <ArrowRight className="w-5 h-5" />
           </button>
+
+          {/* Secondary CTAs */}
+          <div className="w-full max-w-md grid grid-cols-2 gap-2.5">
+            <Link
+              href="/roi-explorer"
+              className="flex items-center justify-center gap-2 border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 font-medium py-3 rounded-xl transition-colors text-sm bg-white"
+            >
+              <BarChart2 className="w-4 h-4 shrink-0" />
+              {to.ctaRoi}
+            </Link>
+            <Link
+              href="/compare"
+              className="flex items-center justify-center gap-2 border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 font-medium py-3 rounded-xl transition-colors text-sm bg-white"
+            >
+              <Globe2 className="w-4 h-4 shrink-0" />
+              {to.ctaCompare}
+            </Link>
+            <Link
+              href="/timeline"
+              className="flex items-center justify-center gap-2 border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 font-medium py-3 rounded-xl transition-colors text-sm bg-white"
+            >
+              <CalendarDays className="w-4 h-4 shrink-0" />
+              {to.ctaTimeline}
+            </Link>
+            <Link
+              href="/career-path"
+              className="flex items-center justify-center gap-2 border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 font-medium py-3 rounded-xl transition-colors text-sm bg-white"
+            >
+              <Map className="w-4 h-4 shrink-0" />
+              {to.ctaCareerPath}
+            </Link>
+          </div>
+
         </div>
       )}
 
@@ -322,6 +380,11 @@ export default function OnboardingPage() {
       {step < 6 && (
         <div className="flex-1 flex flex-col items-center justify-center px-6 py-16">
           <div className="w-full max-w-lg">
+
+            {/* Wizard branding */}
+            <p className="text-xs font-semibold text-indigo-400 uppercase tracking-widest mb-3 text-center">
+              {to.badge}
+            </p>
 
             {/* Step 번호 */}
             <p className="text-sm font-medium text-slate-400 mb-6 text-center">
@@ -335,7 +398,7 @@ export default function OnboardingPage() {
                   What do you want<br />to study?
                 </h2>
                 <p className="text-slate-400 text-center mb-8">
-                  Enter your field — we&apos;ll find the best schools for you
+                  {to.step1Subtitle}
                 </p>
                 <input
                   type="text"
@@ -350,6 +413,7 @@ export default function OnboardingPage() {
                   {FIELD_SUGGESTIONS.map(s => (
                     <button
                       key={s}
+                      type="button"
                       onClick={() => { setField(s); setStep(2) }}
                       className="text-sm px-4 py-2 rounded-full border border-slate-200 text-slate-600 hover:border-indigo-400 hover:text-indigo-600 transition-colors bg-white"
                     >
@@ -358,6 +422,7 @@ export default function OnboardingPage() {
                   ))}
                 </div>
                 <button
+                  type="button"
                   onClick={() => setStep(2)}
                   disabled={field.trim().length < 2}
                   className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 text-white font-bold py-4 rounded-2xl transition-colors"
@@ -384,6 +449,7 @@ export default function OnboardingPage() {
                   ].map((opt) => (
                     <button
                       key={opt.value}
+                      type="button"
                       onClick={() => { setGoal(opt.value); setStep(3) }}
                       className="w-full flex items-center gap-5 border-2 border-slate-200 hover:border-indigo-400 hover:bg-indigo-50 rounded-2xl p-5 transition-all text-left group"
                     >
@@ -413,6 +479,7 @@ export default function OnboardingPage() {
                   ].map((opt) => (
                     <button
                       key={opt.value}
+                      type="button"
                       onClick={() => { setBudget(opt.value); setStep(4) }}
                       className="w-full flex items-center gap-5 border-2 border-slate-200 hover:border-indigo-400 hover:bg-indigo-50 rounded-2xl p-5 transition-all text-left group"
                     >
@@ -442,6 +509,7 @@ export default function OnboardingPage() {
                   ].map((opt) => (
                     <button
                       key={opt.value}
+                      type="button"
                       onClick={() => { setEnglish(opt.value); setStep(5) }}
                       className="w-full flex items-center gap-5 border-2 border-slate-200 hover:border-indigo-400 hover:bg-indigo-50 rounded-2xl p-5 transition-all text-left group"
                     >
@@ -471,6 +539,7 @@ export default function OnboardingPage() {
                   ].map((opt) => (
                     <button
                       key={opt.value}
+                      type="button"
                       onClick={() => handleFinish(opt.value)}
                       disabled={saving}
                       className="w-full flex items-center gap-5 border-2 border-slate-200 hover:border-indigo-400 hover:bg-indigo-50 rounded-2xl p-5 transition-all text-left group disabled:opacity-50"
