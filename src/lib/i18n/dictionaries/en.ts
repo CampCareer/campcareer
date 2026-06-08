@@ -209,7 +209,7 @@ const en = {
   timeline: {
     setGoalTitle: 'Set your goal',
     updateGoalTitle: 'Update your goal',
-    goalSubtitle: "We'll build your timeline around it.",
+    goalSubtitle: "Choose your destination and target intake. We'll back-calculate key steps for applications, tests, documents, visa, travel, and arrival.",
     destinationLabel: 'Destination',
     targetIntakeLabel: 'Target intake',
     exactDateLabel: 'Know your exact start date?',
@@ -234,6 +234,7 @@ const en = {
     allDeadlinesPassed: 'All deadlines passed — focus on arrival 🎉',
     onTrack: 'On track',
     allStagesPassed: 'All stages passed',
+    officialReminder: 'This timeline is planning guidance only. Always verify deadlines with the university, immigration authority, and official test providers.',
   },
   careerPath: {
     pageTitle: 'Career Route Map',
@@ -248,7 +249,8 @@ const en = {
     experienceLabel: 'Years of Experience',
     goalLabel: 'Specific goal',
     goalOptional: '(optional)',
-    goalPlaceholder: 'e.g. Become a team lead at a tech company, achieve PR within 5 years…',
+    goalPlaceholder: 'e.g. Become a software engineer in Ireland, study nursing in Australia and apply for PR…',
+    goalHelper: 'Be specific: include your target job, country, visa or PR goal, and timeline if you know it.',
     status: {
       student: '🎓 Currently a student',
       freshGrad: '🌱 Recent graduate (0–1 yr)',
@@ -285,6 +287,11 @@ const en = {
     shareModalTitle: 'Share your route map',
     shareDesc: 'Let others see your personalized career roadmap.',
     publicLinkNote: 'Anyone with the link can view this roadmap.',
+    officialReminder: 'This route map is AI-generated planning guidance. Visa rules, salary ranges, and PR pathways can change. Always verify details with official immigration, university, and employer sources.',
+    routeSummaryTitle: 'Route Summary',
+    routeSummaryDuration: 'Total duration',
+    routeSummaryStages: 'Stages',
+    routeSummaryCountry: 'Country',
   },
   documents: {
     pageTitle: 'Documents',

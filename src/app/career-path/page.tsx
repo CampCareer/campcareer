@@ -346,7 +346,9 @@ export default function CareerPathPage() {
                 />
                 {fieldInput && (
                   <button
+                    type="button"
                     onClick={() => { setFieldInput(''); setField(''); setFieldOptions([]); setFieldOpen(false) }}
+                    aria-label="Clear field"
                     className="text-slate-300 hover:text-slate-500 ml-1"
                   >
                     <X className="w-4 h-4" />
@@ -414,6 +416,7 @@ export default function CareerPathPage() {
               placeholder={tc.goalPlaceholder}
               className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-white"
             />
+            <p className="text-xs text-slate-400 leading-relaxed">{tc.goalHelper}</p>
           </div>
 
           {error && (
@@ -432,6 +435,10 @@ export default function CareerPathPage() {
               : <><Map className="w-4 h-4" /> {tc.generateButton}</>
             }
           </button>
+
+          <div className="flex items-start gap-2 rounded-xl border border-slate-100 bg-slate-50 px-3 py-2.5">
+            <p className="text-xs text-slate-400 leading-relaxed">ℹ️ {tc.officialReminder}</p>
+          </div>
 
           {savedPaths.length > 0 && !pathsLoading && (
             <div className="pt-2 border-t border-slate-100">
@@ -608,21 +615,25 @@ export default function CareerPathPage() {
             </div>
 
             <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
-              <p className="text-xs font-semibold text-slate-700 mb-3">Route Summary</p>
+              <p className="text-xs font-semibold text-slate-700 mb-3">{tc.routeSummaryTitle}</p>
               <div className="space-y-2">
                 <div className="flex justify-between text-xs">
-                  <span className="text-slate-400">Total duration</span>
+                  <span className="text-slate-400">{tc.routeSummaryDuration}</span>
                   <span className="font-medium text-slate-700">{roadmap.total_duration}</span>
                 </div>
                 <div className="flex justify-between text-xs">
-                  <span className="text-slate-400">Stages</span>
+                  <span className="text-slate-400">{tc.routeSummaryStages}</span>
                   <span className="font-medium text-slate-700">{roadmap.stages.length}</span>
                 </div>
                 <div className="flex justify-between text-xs">
-                  <span className="text-slate-400">Country</span>
+                  <span className="text-slate-400">{tc.routeSummaryCountry}</span>
                   <span className="font-medium text-slate-700">{COUNTRY_NAME[country]}</span>
                 </div>
               </div>
+            </div>
+
+            <div className="rounded-xl border border-slate-100 bg-slate-50 px-3 py-2.5">
+              <p className="text-xs text-slate-400 leading-relaxed">ℹ️ {tc.officialReminder}</p>
             </div>
 
             {savedPaths.length > 0 && (
@@ -639,8 +650,10 @@ export default function CareerPathPage() {
                         {path.roadmap.title}
                       </button>
                       <button
+                        type="button"
                         onClick={() => deletePath(path.id)}
                         title={tc.deleteButton}
+                        aria-label={tc.deleteButton}
                         className="text-[10px] text-slate-400 hover:text-red-500 transition-colors shrink-0"
                       >
                         ✕
@@ -665,7 +678,9 @@ export default function CareerPathPage() {
           />
           <div className="relative bg-white rounded-2xl shadow-xl p-6 w-full max-w-md space-y-5">
             <button
+              type="button"
               onClick={() => setShowShareModal(false)}
+              aria-label="Close"
               className="absolute top-4 right-4 p-1.5 rounded-lg hover:bg-slate-100 text-slate-400"
             >
               <X className="w-4 h-4" />
@@ -711,7 +726,9 @@ export default function CareerPathPage() {
                       className="flex-1 text-xs border border-slate-200 rounded-lg px-3 py-2 bg-slate-50 text-slate-600 focus:outline-none"
                     />
                     <button
+                      type="button"
                       onClick={handleGetPublicLink}
+                      aria-label={tc.copyLink}
                       className="shrink-0 inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white transition-colors"
                     >
                       {shareCopied === 'link'

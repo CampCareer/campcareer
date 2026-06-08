@@ -211,7 +211,7 @@ const ko: Dictionary = {
   timeline: {
     setGoalTitle: '목표 설정하기',
     updateGoalTitle: '목표 수정하기',
-    goalSubtitle: '목표에 맞춰 타임라인을 만들어드릴게요.',
+    goalSubtitle: '목표 국가와 입학 시기를 선택하면 지원, 시험, 서류, 비자, 출국, 도착 준비 일정을 역산해드려요.',
     destinationLabel: '목적지',
     targetIntakeLabel: '목표 입학 시기',
     exactDateLabel: '정확한 입학일을 알고 계신가요?',
@@ -236,6 +236,7 @@ const ko: Dictionary = {
     allDeadlinesPassed: '모든 마감일이 지났어요 — 출국 준비에 집중하세요 🎉',
     onTrack: '순조롭게 진행 중',
     allStagesPassed: '모든 단계 완료',
+    officialReminder: '이 타임라인은 준비를 돕기 위한 참고용입니다. 실제 마감일은 반드시 대학, 이민청, 시험 기관의 공식 웹사이트에서 확인하세요.',
   },
   careerPath: {
     pageTitle: '커리어 루트맵',
@@ -250,7 +251,8 @@ const ko: Dictionary = {
     experienceLabel: '경력 기간',
     goalLabel: '구체적인 목표',
     goalOptional: '(선택)',
-    goalPlaceholder: '예: 5년 안에 팀 리더가 되고 싶다, 영주권을 취득하고 싶다…',
+    goalPlaceholder: '예: 아일랜드에서 소프트웨어 엔지니어 되기, 호주에서 간호학 공부 후 영주권 준비…',
+    goalHelper: '목표 직무, 국가, 비자/영주권 목표, 희망 기간을 구체적으로 적을수록 더 좋은 로드맵이 나옵니다.',
     status: {
       student: '🎓 현재 학생',
       freshGrad: '🌱 졸업 후 1년 이내',
@@ -287,6 +289,11 @@ const ko: Dictionary = {
     shareModalTitle: '루트맵 공유하기',
     shareDesc: '나만의 커리어 루트맵을 다른 사람과 공유해보세요.',
     publicLinkNote: '링크가 있는 누구나 이 루트맵을 볼 수 있습니다.',
+    officialReminder: '이 로드맵은 AI가 생성한 준비용 참고 자료입니다. 비자 규정, 연봉 범위, 영주권 경로는 변경될 수 있으니 반드시 공식 이민청, 대학, 고용주 자료를 확인하세요.',
+    routeSummaryTitle: '로드맵 요약',
+    routeSummaryDuration: '전체 기간',
+    routeSummaryStages: '단계',
+    routeSummaryCountry: '국가',
   },
   documents: {
     pageTitle: '서류 보관함',
