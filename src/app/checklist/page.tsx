@@ -23,7 +23,7 @@ function getAffiliateLink(item: ChecklistItem, country: string): AffiliateLink |
 
   // IELTS / TOEFL
   if (id.includes('english_proficiency') || task.includes('ielts') || task.includes('toefl')) {
-    return { label: 'Book IELTS', url: 'https://www.ielts.org/book-a-test' } // TODO: verify - ielts.org uses Cloudflare; consider linking to idp.com or britishcouncil.org instead
+    return { label: 'Find IELTS test dates', url: 'https://www.ielts.org/book-a-test' } // TODO: verify - ielts.org uses Cloudflare; consider linking to idp.com or britishcouncil.org instead
   }
 
   // 건강 보험
@@ -374,7 +374,7 @@ export default function ChecklistPage() {
           </div>
 
           {/* 오른쪽 — 선택된 카테고리 아이템 */}
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-0 space-y-4">
             {selectedCategory && grouped[selectedCategory] && (
               <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
 
@@ -473,6 +473,11 @@ export default function ChecklistPage() {
                 </ul>
               </div>
             )}
+
+            {/* Official reminder note */}
+            <p className="text-xs text-slate-400 leading-relaxed px-1">
+              ⚠️ {tc.officialReminder}
+            </p>
           </div>
 
         </div>

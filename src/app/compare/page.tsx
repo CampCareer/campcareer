@@ -163,9 +163,9 @@ function FieldCombobox({
   const canSearch = input.trim().length >= MIN_CHARS
 
   return (
-    <div ref={containerRef} className="relative">
+    <div ref={containerRef} className="relative w-full sm:w-auto">
       <div className="flex items-center gap-2">
-        <div className="relative">
+        <div className="relative w-full sm:w-72">
           <input
             type="text"
             value={input}
@@ -173,7 +173,7 @@ function FieldCombobox({
             onFocus={() => options.length > 0 && setOpen(true)}
             onKeyDown={handleKeyDown}
             placeholder={tc.searchPlaceholder}
-            className="w-72 h-11 rounded-xl border border-slate-200 px-4 pr-9 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 bg-white shadow-sm"
+            className="w-full h-11 rounded-xl border border-slate-200 px-4 pr-9 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 bg-white shadow-sm"
           />
           {input && (
             <button
@@ -197,7 +197,7 @@ function FieldCombobox({
       </div>
 
       {open && options.length > 0 && (
-        <div className="absolute z-50 top-full mt-1 w-72 rounded-xl border border-slate-200 bg-white shadow-lg max-h-60 overflow-y-auto">
+        <div className="absolute z-50 top-full mt-1 w-full sm:w-72 rounded-xl border border-slate-200 bg-white shadow-lg max-h-60 overflow-y-auto">
           {options.map((f) => (
             <button
               key={f}
@@ -224,6 +224,7 @@ function CurrencySelector({
   onChange: (c: SupportedCurrency) => void
 }) {
   return (
+    <div className="max-w-full overflow-x-auto">
     <div className="inline-flex items-center gap-1 bg-slate-100 rounded-xl p-1">
       {BASE_CURRENCIES.map(({ code, symbol, flag }) => (
         <button
@@ -239,6 +240,7 @@ function CurrencySelector({
           {symbol} {code}
         </button>
       ))}
+    </div>
     </div>
   )
 }
@@ -279,9 +281,11 @@ function InfoPopover({ body }: { body: string }) {
   return (
     <span ref={ref} className="relative inline-flex items-center">
       <button
+        type="button"
         onClick={() => setOpen((v) => !v)}
         className="ml-0.5 text-slate-300 hover:text-slate-500 transition-colors"
-        aria-label="More info"
+        aria-label="More information"
+        aria-expanded={open}
       >
         <HelpCircle className="w-3 h-3" />
       </button>
