@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase-client"
 import { useTranslations } from "@/lib/i18n/locale-provider"
 import { parseLocalDate, subMonths, currentPhaseId } from "@/lib/timeline-schedule"
 import type { User } from "@supabase/supabase-js"
+import GuestBanner from "@/components/GuestBanner"
 
 type Task = {
   id: string
@@ -706,6 +707,8 @@ export default function TimelinePage() {
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-10 space-y-8">
+
+      <GuestBanner user={user} />
 
       {/* 목표 카드 (설정됨) 또는 목표 설정 폼 (미설정/편집) */}
       {goalIsSet && !showGoalForm ? (

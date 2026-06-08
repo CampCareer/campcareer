@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase-client'
 import { useTranslations } from '@/lib/i18n/locale-provider'
 import { CheckCircle2, Circle, Loader2, Sparkles, ExternalLink } from 'lucide-react'
 import type { User } from '@supabase/supabase-js'
+import GuestBanner from '@/components/GuestBanner'
 
 type ChecklistItem = {
   id: string
@@ -224,8 +225,10 @@ export default function ChecklistPage() {
   return (
     <div className="max-w-6xl mx-auto px-6 py-8">
 
+      <GuestBanner user={user} />
+
       {/* 헤더 */}
-      <div className="mb-6">
+      <div className="mb-6 mt-4">
         <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
           {tc.pageTitle}
         </h1>
@@ -268,7 +271,7 @@ export default function ChecklistPage() {
 
         {generated && (
           <p className="text-xs text-center text-slate-400 -mb-2">
-            {tc.progressSaved}
+            {user ? tc.progressSavedUser : tc.progressSavedGuest}
           </p>
         )}
         <button

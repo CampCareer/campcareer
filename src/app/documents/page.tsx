@@ -8,6 +8,7 @@ import {
 } from "lucide-react"
 import type { User } from "@supabase/supabase-js"
 import { useTranslations } from "@/lib/i18n/locale-provider"
+import GuestBanner from "@/components/GuestBanner"
 
 type DocCategory = 'passport' | 'transcript' | 'financial' | 'visa' | 'recommendation' | 'other'
 
@@ -160,6 +161,8 @@ export default function DocumentsPage() {
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-8 space-y-6">
+
+      <GuestBanner user={user} />
 
       {/* 헤더 */}
       <div className="flex items-center justify-between gap-4 flex-wrap">
