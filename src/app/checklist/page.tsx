@@ -42,7 +42,7 @@ function getAffiliateLink(item: ChecklistItem, country: string): AffiliateLink |
 
   // 은행 계좌
   if (id.includes('bank_account') || task.includes('bank account') || task.includes('banking')) {
-    return { label: 'Open with Wise', url: 'https://wise.com/open-account' }
+    return { label: 'Open with Wise', url: 'https://wise.prf.hn/click/camref:1100l5La6z' }
   }
 
   // 비자 신청 공식 사이트
