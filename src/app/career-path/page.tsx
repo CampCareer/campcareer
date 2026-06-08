@@ -9,6 +9,7 @@ import {
   Share2, ExternalLink, Check,
 } from "lucide-react"
 import type { User } from "@supabase/supabase-js"
+import GuestBanner from "@/components/GuestBanner"
 
 type CurrentStatus = 'student' | 'fresh_grad' | 'professional' | 'career_changer'
 type StageColor = 'indigo' | 'violet' | 'blue' | 'emerald' | 'amber' | 'rose'
@@ -288,6 +289,7 @@ export default function CareerPathPage() {
   if (view === 'onboarding') {
     return (
       <div className="max-w-2xl mx-auto px-6 py-8 space-y-6">
+        <GuestBanner user={user} />
         <div className="flex items-center gap-3">
           <Map className="w-6 h-6 text-indigo-500" />
           <div>
@@ -458,6 +460,8 @@ export default function CareerPathPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-8 space-y-6">
+
+      <GuestBanner user={user} />
 
       {/* 헤더 바 */}
       <div className="bg-white border border-slate-200 rounded-2xl px-6 py-4 shadow-sm flex items-start justify-between gap-4 flex-wrap">
