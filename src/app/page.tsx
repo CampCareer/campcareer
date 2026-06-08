@@ -132,14 +132,11 @@ export default function LandingPage() {
             {" "}{tl.hero.headlineLine2}
           </h1>
 
-          {/* 서브 헤드라인 */}
-          <p className="text-xl lg:text-2xl font-semibold text-indigo-300 mb-4">
-            {tl.hero.subheadline}
-          </p>
-
-          {/* 설명 텍스트 */}
-          <p className="text-sm text-slate-400 max-w-md leading-relaxed mb-8">
-            {tl.hero.description}
+          {/* 서브 헤드라인 (두 줄) */}
+          <p className="text-xl lg:text-2xl font-semibold text-indigo-300 mb-8 leading-snug">
+            {tl.hero.subheadlineLine1}
+            <br />
+            {tl.hero.subheadlineLine2}
           </p>
 
           {/* 인라인 검색 위젯 */}

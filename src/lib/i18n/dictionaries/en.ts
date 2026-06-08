@@ -354,6 +354,8 @@ const en = {
       headlineLine2: 'salary, tuition & ROI.',
       subtitle: 'Explore study options across the US, UK, Ireland, Canada, and Australia — using public salary, tuition, and career outcome data.',
       subheadline: 'Explore study options across the US, UK, Ireland, Canada, and Australia — using public salary, tuition, and career outcome data.',
+      subheadlineLine1: 'Explore study options across the US, UK, Ireland, Canada, and Australia',
+      subheadlineLine2: '— using public salary, tuition, and career outcome data.',
       description: 'CampCareer helps international students compare courses, estimate payback time, and plan their study-abroad path with ROI tools, country comparisons, checklists, timelines, and career route maps.',
       cta: 'Explore ROI Explorer',
       ctaPrimary: 'Explore ROI Explorer',
@@ -375,7 +377,9 @@ const en = {
     heroSearch: {
       fieldPlaceholder: 'e.g. Computer Science, Business...',
       countryAll: 'All Countries',
-      button: 'Explore ROI →',
+      button: 'Start comparing',
+      fieldHint: 'Enter at least 2 characters to search',
+      noSuggestions: 'No matching fields found',
     },
     howItWorks: {
       sectionTitle: '3 steps to your answer',

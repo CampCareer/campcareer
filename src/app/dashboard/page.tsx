@@ -61,6 +61,10 @@ export default function Dashboard() {
   const [topPicks, setTopPicks] = useState<RoiRow[]>([])
   const [topLoading, setTopLoading] = useState(true)
   const fieldRef = useRef<HTMLDivElement>(null)
+  // Hero-search auto-run: set once on mount when ?source=hero, then cleared
+  const [autoSearchParams, setAutoSearchParams] = useState<{ country: string; field: string } | null>(null)
+  // Prevents auth effect from overriding a country set via URL param
+  const urlCountrySetRef = useRef(false)
 
   // "Your next steps" 카드용 상태
   const [recommendedCountry, setRecommendedCountry] = useState<string | null>(null)
@@ -80,6 +84,50 @@ export default function Dashboard() {
     : null
   const recFlag = recMeta ? recMeta.label.split(" ")[0] : ""
   const recName = recMeta ? recMeta.label.split(" ").slice(1).join(" ") : ""
+
+  // Read URL query params on first mount (hero search handoff)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const srcCountry = params.get('country')?.toLowerCase()
+    const srcField   = params.get('field')?.trim()
+    const src        = params.get('source')
+
+    const validCountries = ['us', 'au', 'ca', 'uk', 'ie']
+    const resolvedCountry = srcCountry && validCountries.includes(srcCountry) ? srcCountry : null
+
+    if (resolvedCountry) {
+      setCountry(resolvedCountry)
+      urlCountrySetRef.current = true
+    }
+    if (srcField) {
+      setField(srcField)
+      setFieldInput(srcField)
+    }
+    // Trigger auto-search when coming from the hero search widget
+    if (src === 'hero' && srcField) {
+      setAutoSearchParams({ country: resolvedCountry ?? 'ie', field: srcField })
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Execute auto-search triggered by URL params (source=hero)
+  useEffect(() => {
+    if (!autoSearchParams) return
+    const { country: c, field: f } = autoSearchParams
+    setAutoSearchParams(null) // clear immediately to prevent re-run
+    setLoading(true)
+    setSearched(true)
+    const params = new URLSearchParams({
+      country: c,
+      state: DEFAULT_STATE[c] ?? 'CA',
+      limit: '10',
+      sort: 'roi_score',
+    })
+    params.set('field', f)
+    fetch(`/api/roi?${params}`)
+      .then(res => res.json())
+      .then(json => { setData(json.data ?? []); setLoading(false) })
+      .catch(() => { setData([]); setLoading(false) })
+  }, [autoSearchParams])
 
   // 유저 로드 + "Your next steps" 데이터
   useEffect(() => {
@@ -116,7 +164,10 @@ export default function Dashboard() {
       const rec = prefsRes.data?.recommended_country ?? null
       if (rec) {
         setRecommendedCountry(rec)
-        setCountry(rec.toLowerCase())
+        // Don't override a country that was explicitly set via URL param (hero search handoff)
+        if (!urlCountrySetRef.current) {
+          setCountry(rec.toLowerCase())
+        }
       }
 
       if (savedRes.data) setSavedIds(new Set(savedRes.data.map((r) => r.course_id)))

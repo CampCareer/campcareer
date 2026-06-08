@@ -356,6 +356,8 @@ const ko: Dictionary = {
       headlineLine2: '대학을 비교하세요.',
       subtitle: '미국, 영국, 아일랜드, 캐나다, 호주의 유학 옵션을 공공 데이터 기반으로 비교하세요.',
       subheadline: '미국, 영국, 아일랜드, 캐나다, 호주의 유학 옵션을 공공 데이터 기반으로 비교하세요.',
+      subheadlineLine1: '미국, 영국, 아일랜드, 캐나다, 호주의 유학 옵션을 비교하세요.',
+      subheadlineLine2: '공공 연봉·학비·커리어 성과 데이터 기반.',
       description: 'CampCareer는 유학을 고려하는 학생들이 학과를 비교하고, 회수 기간을 추정하고, ROI 도구·국가 비교·체크리스트·타임라인·커리어 루트맵으로 유학 계획을 세울 수 있도록 돕습니다.',
       cta: 'ROI 탐색기 보기',
       ctaPrimary: 'ROI 탐색기 보기',
@@ -377,7 +379,9 @@ const ko: Dictionary = {
     heroSearch: {
       fieldPlaceholder: '예: 컴퓨터공학, 경영학...',
       countryAll: '전체 국가',
-      button: 'ROI 확인 →',
+      button: '비교 시작하기',
+      fieldHint: '검색하려면 2자 이상 입력하세요',
+      noSuggestions: '일치하는 전공이 없습니다',
     },
     howItWorks: {
       sectionTitle: '3단계로 답을 찾으세요',
