@@ -847,6 +847,10 @@ export default function TimelinePage() {
               </button>
             )}
           </div>
+
+          <p className="text-xs text-slate-400 leading-relaxed">
+            ⚠️ {tt.officialReminder}
+          </p>
         </div>
       )}
 
@@ -874,6 +878,10 @@ export default function TimelinePage() {
               <p className="text-xs text-slate-400 uppercase tracking-wide mb-1">{tt.nowLabel}</p>
               <p className="text-lg font-bold text-slate-900 truncate">{currentTitle}</p>
             </div>
+          </div>
+
+          <div className="flex items-start rounded-xl border border-slate-100 bg-slate-50 px-3 py-2.5">
+            <p className="text-xs text-slate-400 leading-relaxed">⚠️ {tt.officialReminder}</p>
           </div>
 
           {/* 2단 그리드 */}
