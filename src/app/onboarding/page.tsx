@@ -154,7 +154,7 @@ export default function OnboardingPage() {
     setStep(6)
     const { data: { user } } = await supabase.auth.getUser()
     if (user) {
-      await supabase.from('user_preferences').upsert({
+      const { error: prefError } = await supabase.from('user_preferences').upsert({
         id: user.id,
         field,
         goal,
@@ -165,6 +165,11 @@ export default function OnboardingPage() {
         completed_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       })
+      // Non-fatal: result screen is already visible so the user experience is
+      // unaffected if preference saving fails (e.g. missing column, network error).
+      if (prefError) {
+        console.error('[onboarding] Failed to save preferences:', prefError.message)
+      }
     }
     setSaving(false)
   }

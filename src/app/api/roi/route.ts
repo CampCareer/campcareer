@@ -19,6 +19,16 @@ function getTableName(country: string): string {
   return 'roi_explorer_us'
 }
 
+// Note: roi_explorer_us, roi_explorer_au, etc. are Supabase views (not base
+// tables) built from the underlying datasets.  information_schema.columns may
+// not return rows for them in some Postgres configurations — use pg_views or
+// direct count queries to inspect them.
+//
+// roi_explorer_us   — institution-level US data; field_name is NULL (no field data)
+// roi_explorer_by_field_us — field-level US data (56 k+ rows); has field_name,
+//                            college_state, roi_score, net_salary, payback_years
+// For US field searches we must use roi_explorer_by_field_us.
+
 // ── 세금 계산 함수 ────────────────────────────────────────────────────────────
 
 function calcUSTax(gross: number, state: string): number {
@@ -176,11 +186,18 @@ export async function GET(req: NextRequest) {
     ? (sortParam as SortField)
     : 'roi_score'
 
-  const effectiveSort: string = (country === 'us' && sort === 'roi_score')
+  // When searching US + field: route to roi_explorer_by_field_us (field_name data lives there).
+  // roi_explorer_us has field_name = NULL for all rows; field searches against it return nothing.
+  // collegeId lookups always use the institution-level table (roi_explorer_us) regardless.
+  const useUsFieldTable = country === 'us' && field.trim().length > 0 && !collegeId
+
+  const tableName = useUsFieldTable ? 'roi_explorer_by_field_us' : getTableName(country)
+
+  // roi_explorer_by_field_us likely does not have roi_score_mid / roi_score_senior columns
+  // (those exist only on the institution-level roi_explorer_us view).  Fall back to roi_score.
+  const effectiveSort: string = (country === 'us' && !useUsFieldTable && sort === 'roi_score')
     ? (careerStage === 'mid' ? 'roi_score_mid' : careerStage === 'senior' ? 'roi_score_senior' : 'roi_score')
     : sort
-
-  const tableName = getTableName(country)
 
   try {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -190,7 +207,8 @@ export async function GET(req: NextRequest) {
       .gt('roi_score', 0)
       .gt('payback_years', 0)
 
-    if (country === 'us' && effectiveSort !== 'roi_score') {
+    // Only guard mid/senior sort columns for the institution-level US table
+    if (country === 'us' && !useUsFieldTable && effectiveSort !== 'roi_score') {
       query = query.gt(effectiveSort, 0)
     }
 
