@@ -623,7 +623,7 @@ function ROIExplorerContent() {
             <span>
               Field earnings based on{" "}
               <a
-                href="https://hea.ie/statistics/graduate-outcomes/"
+                href="https://hea.ie/statistics/graduate-outcomes/" // TODO: verify
                 target="_blank"
                 rel="noopener noreferrer"
                 className="underline font-medium hover:text-amber-900"

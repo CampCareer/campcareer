@@ -574,7 +574,7 @@ function CompareContent() {
             <p className="mt-2 text-[11px] text-slate-400 text-right">
               {tc.exchangeRatesAs} {ratesDate} · {tc.exchangeSource}:{" "}
               <a
-                href="https://www.frankfurter.app"
+                href="https://www.frankfurter.app" // TODO: verify
                 target="_blank"
                 rel="noopener noreferrer"
                 className="underline hover:text-slate-600"

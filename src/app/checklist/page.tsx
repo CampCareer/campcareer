@@ -23,47 +23,47 @@ function getAffiliateLink(item: ChecklistItem, country: string): AffiliateLink |
 
   // IELTS / TOEFL
   if (id.includes('english_proficiency') || task.includes('ielts') || task.includes('toefl')) {
-    return { label: 'Book IELTS', url: 'https://www.ielts.org/book-a-test' }
+    return { label: 'Book IELTS', url: 'https://www.ielts.org/book-a-test' } // TODO: verify - ielts.org uses Cloudflare; consider linking to idp.com or britishcouncil.org instead
   }
 
   // 건강 보험
   if (id.includes('health_insurance') || task.includes('health insurance')) {
     const insuranceUrl: Record<string, string> = {
-      IE: 'https://www.endsleigh.co.uk/international-student-insurance',
-      UK: 'https://www.endsleigh.co.uk/international-student-insurance',
-      AU: 'https://www.allianzcare.com.au/en/students.html',
-      CA: 'https://guard.me',
-      US: 'https://www.iso.com/international-student-insurance',
+      IE: 'https://www.endsleigh.co.uk/international-student-insurance', // TODO: verify
+      UK: 'https://www.endsleigh.co.uk/international-student-insurance', // TODO: verify
+      AU: 'https://www.allianzcare.com.au/en/students.html', // TODO: verify
+      CA: 'https://guard.me', // TODO: verify
+      US: 'https://www.iso.com/international-student-insurance', // TODO: verify
     }
     return {
       label: 'Get a quote',
-      url: insuranceUrl[country.toUpperCase()] ?? 'https://www.endsleigh.co.uk/international-student-insurance',
+      url: insuranceUrl[country.toUpperCase()] ?? 'https://www.endsleigh.co.uk/international-student-insurance', // TODO: verify
     }
   }
 
   // 은행 계좌
   if (id.includes('bank_account') || task.includes('bank account') || task.includes('banking')) {
-    return { label: 'Open with Wise', url: 'https://wise.prf.hn/click/camref:1100l5La6z' }
+    return { label: 'Open with Wise', url: 'https://wise.prf.hn/click/camref:1100l5La6z' } // TODO: verify affiliate ref is active
   }
 
   // 비자 신청 공식 사이트
   if (id.includes('visa_application_form') || task.includes('visa application form')) {
     const visaUrl: Record<string, string> = {
-      IE: 'https://www.visas.inis.gov.ie',
-      UK: 'https://www.gov.uk/apply-uk-visa',
-      AU: 'https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/student-500',
-      CA: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/study-permit.html',
-      US: 'https://travel.state.gov/content/travel/en/us-visas/study.html',
+      IE: 'https://www.visas.inis.gov.ie', // TODO: verify
+      UK: 'https://www.gov.uk/apply-uk-visa', // TODO: verify
+      AU: 'https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/student-500', // TODO: verify
+      CA: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/study-permit.html', // TODO: verify
+      US: 'https://travel.state.gov/content/travel/en/us-visas/study.html', // TODO: verify
     }
     return {
       label: 'Official portal',
-      url: visaUrl[country.toUpperCase()] ?? 'https://www.gov.uk/apply-uk-visa',
+      url: visaUrl[country.toUpperCase()] ?? 'https://www.gov.uk/apply-uk-visa', // TODO: verify
     }
   }
 
   // 숙소 검색
   if (id.includes('accommodation') || task.includes('accommodation')) {
-    return { label: 'Find housing', url: 'https://www.uniplaces.com' }
+    return { label: 'Find housing', url: 'https://www.uniplaces.com' } // TODO: verify
   }
 
   return null
