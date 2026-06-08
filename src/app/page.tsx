@@ -52,19 +52,19 @@ export default function LandingPage() {
   const tl = t.landing
 
   const STATS = [
-    { value: "5",      label: tl.stats.countries,     sub: "US · AU · CA · UK · IE" },
-    { value: "8,500+", label: tl.stats.coursesTracked, sub: "" },
-    { value: "Real",   label: tl.stats.salaryData,     sub: "HEA · Scorecard · CRICOS · HESA" },
-    { value: "Gov't",  label: tl.stats.officialData,   sub: tl.stats.officialDataSub },
+    { value: "5",       label: tl.stats.countries,     sub: "US · AU · CA · UK · IE",           desc: tl.stats.countriesDesc },
+    { value: "11,000+", label: tl.stats.coursesTracked, sub: "",                                desc: tl.stats.coursesTrackedDesc },
+    { value: "Real",    label: tl.stats.salaryData,     sub: "HEA · Scorecard · CRICOS · HESA", desc: tl.stats.salaryDataDesc },
+    { value: "Gov't",   label: tl.stats.officialData,   sub: tl.stats.officialDataSub,           desc: tl.stats.officialDataDesc },
   ]
 
   const FEATURES = [
-    { icon: TrendingUp,   title: tl.features.roiTitle,        desc: tl.features.roiDesc,        href: "/roi-explorer" },
-    { icon: Map,          title: tl.features.careerMapTitle,  desc: tl.features.careerMapDesc,  href: "/career-path" },
-    { icon: Globe,        title: tl.features.compareTitle,    desc: tl.features.compareDesc,    href: "/compare" },
-    { icon: CheckSquare,  title: tl.features.checklistTitle,  desc: tl.features.checklistDesc,  href: "/checklist" },
-    { icon: CalendarDays, title: tl.features.timelineTitle,   desc: tl.features.timelineDesc,   href: "/timeline" },
-    { icon: FolderOpen,   title: tl.features.documentsTitle,  desc: tl.features.documentsDesc,  href: "/documents" },
+    { icon: TrendingUp,   title: tl.features.roiTitle,        desc: tl.features.roiDesc,        why: tl.features.roiWhy,        href: "/roi-explorer" },
+    { icon: Map,          title: tl.features.careerMapTitle,  desc: tl.features.careerMapDesc,  why: tl.features.careerMapWhy,  href: "/career-path" },
+    { icon: Globe,        title: tl.features.compareTitle,    desc: tl.features.compareDesc,    why: tl.features.compareWhy,    href: "/compare" },
+    { icon: CheckSquare,  title: tl.features.checklistTitle,  desc: tl.features.checklistDesc,  why: tl.features.checklistWhy,  href: "/checklist" },
+    { icon: CalendarDays, title: tl.features.timelineTitle,   desc: tl.features.timelineDesc,   why: tl.features.timelineWhy,   href: "/timeline" },
+    { icon: FolderOpen,   title: tl.features.documentsTitle,  desc: tl.features.documentsDesc,  why: tl.features.documentsWhy,  href: "/documents" },
   ]
 
   return (
@@ -146,10 +146,10 @@ export default function LandingPage() {
           <HeroSearch />
           <div className="flex items-center gap-4 mt-4 mb-8">
             <Link
-              href="/onboarding"
+              href="/roi-explorer"
               className="text-sm text-slate-400 hover:text-white underline underline-offset-2 transition-colors"
             >
-              {tl.hero.ctaExplore}
+              {tl.hero.ctaPrimary}
             </Link>
             <span className="text-slate-700">·</span>
             <Link
@@ -217,7 +217,7 @@ export default function LandingPage() {
                       </td>
                       <td className="px-4 py-3 text-right">
                         <span className={`inline-block px-2 py-0.5 rounded-md text-xs font-bold ${row.roiClass}`}>
-                          {row.roi}
+                          {row.roi.toFixed(1)}
                         </span>
                       </td>
                       <td className="px-4 py-3 text-right font-medium text-slate-700 whitespace-nowrap">
@@ -248,6 +248,7 @@ export default function LandingPage() {
                 <p className="text-5xl font-bold text-slate-900">{s.value}</p>
                 <p className="mt-2 text-base font-medium text-slate-700">{s.label}</p>
                 {s.sub && <p className="mt-1 text-sm text-slate-400">{s.sub}</p>}
+                {s.desc && <p className="mt-2 text-xs text-slate-500 leading-relaxed">{s.desc}</p>}
               </div>
             ))}
           </div>
@@ -321,6 +322,7 @@ export default function LandingPage() {
                 </div>
                 <h3 className="font-semibold text-slate-900 mb-2">{f.title}</h3>
                 <p className="text-sm text-slate-500 leading-relaxed">{f.desc}</p>
+                {f.why && <p className="mt-3 text-xs text-slate-400 leading-relaxed border-t border-slate-100 pt-3">{f.why}</p>}
               </Link>
             ))}
           </div>
