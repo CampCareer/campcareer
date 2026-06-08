@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, Suspense } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import dynamic from "next/dynamic"
 import Link from "next/link"
-import { TrendingUp, X, ArrowRight, BarChart2, Search } from "lucide-react"
+import { TrendingUp, X, ArrowRight, BarChart2, Search, HelpCircle, ChevronDown } from "lucide-react"
 import { useTranslations, useLocale } from "@/lib/i18n/locale-provider"
 import { Card, CardContent } from "@/components/ui/card"
 import {
@@ -261,6 +261,86 @@ function SkeletonCard() {
   )
 }
 
+// ── InfoPopover ───────────────────────────────────────────────────────────────
+
+function InfoPopover({ body }: { body: string }) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLSpanElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+    function handler(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener("mousedown", handler)
+    return () => document.removeEventListener("mousedown", handler)
+  }, [open])
+
+  return (
+    <span ref={ref} className="relative inline-flex items-center">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="ml-0.5 text-slate-300 hover:text-slate-500 transition-colors"
+        aria-label="More info"
+      >
+        <HelpCircle className="w-3 h-3" />
+      </button>
+      {open && (
+        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-52 bg-slate-800 text-white text-[11px] rounded-lg px-3 py-2.5 shadow-xl z-50 leading-relaxed">
+          {body}
+          <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800" />
+        </div>
+      )}
+    </span>
+  )
+}
+
+// ── DataSourcesAccordion ──────────────────────────────────────────────────────
+
+function DataSourcesAccordion({ ratesDate }: { ratesDate: string | null }) {
+  const [open, setOpen] = useState(false)
+  const t = useTranslations()
+  const tc = t.compare
+
+  return (
+    <div className="border border-slate-200 rounded-xl bg-white overflow-hidden">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors"
+      >
+        <span>{tc.dataSources}</span>
+        <ChevronDown
+          className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+      {open && (
+        <div className="px-4 pb-4 border-t border-slate-100 pt-3 grid sm:grid-cols-2 gap-4 text-xs text-slate-600">
+          <div>
+            <p className="font-semibold text-slate-700 mb-2">{tc.dataSourcesHeader}</p>
+            <ul className="space-y-1 text-slate-500">
+              <li>🇺🇸 {tc.dataSourcesUS}</li>
+              <li>🇦🇺 {tc.dataSourcesAU}</li>
+              <li>🇨🇦 {tc.dataSourcesCA}</li>
+              <li>🇬🇧 {tc.dataSourcesUK}</li>
+              <li>🇮🇪 {tc.dataSourcesIE}</li>
+            </ul>
+          </div>
+          <div>
+            <p className="font-semibold text-slate-700 mb-2">{tc.limitationsTitle}</p>
+            <ul className="space-y-1 text-slate-500 list-disc list-inside">
+              <li>{tc.limitationsAvg}</li>
+              <li>{tc.limitationsLiving}</li>
+              {ratesDate && (
+                <li>{tc.limitationsRates.replace("{date}", ratesDate)}</li>
+              )}
+            </ul>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 // ── Country Card ──────────────────────────────────────────────────────────────
 
 function CountryCard({
@@ -339,7 +419,9 @@ function CountryCard({
             {/* Averages */}
             <div className="grid grid-cols-3 gap-2 text-center">
               <div>
-                <p className="text-[10px] font-medium text-slate-400 uppercase tracking-wide">{tc.avgRoi}</p>
+                <p className="text-[10px] font-medium text-slate-400 uppercase tracking-wide flex items-center justify-center">
+                  {tc.avgRoi}<InfoPopover body={tc.roiScoreTooltipBody} />
+                </p>
                 <p className="text-base font-bold" style={{ color: cfg.color }}>
                   {stats.avg_roi.toFixed(1)}
                 </p>
@@ -353,7 +435,9 @@ function CountryCard({
                 </p>
               </div>
               <div>
-                <p className="text-[10px] font-medium text-slate-400 uppercase tracking-wide">{tc.payback}</p>
+                <p className="text-[10px] font-medium text-slate-400 uppercase tracking-wide flex items-center justify-center">
+                  {tc.payback}<InfoPopover body={tc.paybackTooltipBody} />
+                </p>
                 <p className="text-sm font-semibold text-slate-700">
                   {stats.avg_payback.toFixed(1)} {tc.paybackUnit}
                 </p>
@@ -571,18 +655,26 @@ function CompareContent() {
 
           {/* Exchange rate attribution */}
           {rates && ratesDate && (
-            <p className="mt-2 text-[11px] text-slate-400 text-right">
-              {tc.exchangeRatesAs} {ratesDate} · {tc.exchangeSource}:{" "}
+            <p className="mt-3 flex items-center gap-1.5 text-xs text-slate-500">
+              <span>📅</span>
+              {tc.exchangeRatesAs}{" "}
+              <span className="font-medium text-slate-700">{ratesDate}</span>
+              {" · "}{tc.exchangeSource}:{" "}
               <a
                 href="https://www.frankfurter.app" // TODO: verify
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline hover:text-slate-600"
+                className="text-indigo-500 hover:underline font-medium"
               >
                 frankfurter.app
               </a>
             </p>
           )}
+
+          {/* Data sources accordion */}
+          <div className="mt-3">
+            <DataSourcesAccordion ratesDate={ratesDate} />
+          </div>
         </div>
       )}
 
