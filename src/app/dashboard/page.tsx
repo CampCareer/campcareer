@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Search, Bookmark, ArrowRight, X, CheckSquare, Compass, CalendarClock } from "lucide-react"
+import { Search, Bookmark, ArrowRight, X, CheckSquare, Compass, CalendarClock, Globe } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
 import { useTranslations } from "@/lib/i18n/locale-provider"
 import { calcDdayNumber, currentPhaseTitle } from "@/lib/timeline-schedule"
@@ -74,6 +74,12 @@ export default function Dashboard() {
 
   const currentCountry = COUNTRIES.find(c => c.value === country)!
   const savedCount = savedIds.size
+  // Derived from recommendedCountry state — recalculated on each render, used in header + next-steps cards
+  const recMeta = recommendedCountry
+    ? COUNTRIES.find(c => c.value === recommendedCountry.toLowerCase())
+    : null
+  const recFlag = recMeta ? recMeta.label.split(" ")[0] : ""
+  const recName = recMeta ? recMeta.label.split(" ").slice(1).join(" ") : ""
 
   // 유저 로드 + "Your next steps" 데이터
   useEffect(() => {
@@ -294,12 +300,36 @@ export default function Dashboard() {
       <div className="flex flex-col px-6 sm:px-8 pt-8 pb-8">
         <div className="w-full max-w-5xl mx-auto">
 
+          {/* Decision dashboard compact header */}
+          <div className="mb-7">
+            <h1 className="text-xl font-bold text-slate-900">{td.title}</h1>
+            <p className="text-sm text-slate-500 mt-1">{td.subtitle}</p>
+            <div className="mt-3 h-7 flex items-center">
+              {stepsLoading ? (
+                <div className="h-6 w-64 rounded-full bg-slate-100 animate-pulse" />
+              ) : recMeta ? (
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium text-indigo-600 bg-indigo-50 border border-indigo-100 rounded-full px-3 py-1.5">
+                  <span>{recFlag}</span>
+                  <span>{td.recommendedStartingPoint}: {recName}</span>
+                </span>
+              ) : (
+                <Link
+                  href="/onboarding"
+                  className="inline-flex items-center gap-1 text-xs font-medium text-indigo-600 hover:text-indigo-700 hover:underline"
+                >
+                  {td.startDecisionQuiz}
+                </Link>
+              )}
+            </div>
+          </div>
+
           {/* 국가 선택 칩 */}
           <p className="text-xs font-medium text-slate-400 mb-3">{td.whereToStudy}</p>
           <div className="flex flex-wrap gap-2">
             {COUNTRIES.map(c => (
               <button
                 key={c.value}
+                type="button"
                 onClick={() => { setCountry(c.value); setField(""); setFieldInput(""); setData([]); setSearched(false) }}
                 className={`text-sm font-medium px-4 py-2 rounded-full border transition-colors focus:outline-none ${
                   c.value === country
@@ -338,7 +368,7 @@ export default function Dashboard() {
                   className="flex-1 text-base text-slate-800 placeholder:text-slate-400 focus:outline-none bg-transparent"
                 />
                 {fieldInput && (
-                  <button onClick={handleClear} className="text-slate-300 hover:text-slate-500">
+                  <button type="button" onClick={handleClear} aria-label="Clear search" className="text-slate-300 hover:text-slate-500">
                     <X className="w-5 h-5" />
                   </button>
                 )}
@@ -363,6 +393,7 @@ export default function Dashboard() {
 
             {/* 검색 버튼 */}
             <button
+              type="button"
               onClick={handleSearch}
               className="h-14 px-9 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-base transition-colors shrink-0 rounded-b-xl sm:rounded-b-none sm:rounded-r-xl"
             >
@@ -376,6 +407,7 @@ export default function Dashboard() {
               {["Computer Science", "Nursing", "Business", "Engineering", "Data Science"].map(tag => (
                 <button
                   key={tag}
+                  type="button"
                   onClick={() => { setFieldInput(tag); setField(tag) }}
                   className="text-sm px-4 py-2 rounded-full border border-slate-200 text-slate-500 hover:border-indigo-300 hover:text-indigo-600 transition-colors bg-white"
                 >
@@ -385,15 +417,10 @@ export default function Dashboard() {
             </div>
           )}
 
-          {/* Your next steps (실제 Supabase 데이터) */}
+          {/* Your next steps — 4-card decision flow: Decide · Compare · Plan · Track */}
           {!searched && (() => {
-            const recMeta = recommendedCountry
-              ? COUNTRIES.find(c => c.value === recommendedCountry.toLowerCase())
-              : null
-            const recFlag = recMeta ? recMeta.label.split(" ")[0] : ""
-            const recName = recMeta ? recMeta.label.split(" ").slice(1).join(" ") : ""
-            const cardClass = "group rounded-xl border border-slate-200 bg-slate-50 p-6 min-h-[150px] hover:bg-white hover:shadow-md hover:border-slate-300 transition-all"
-            const focalCardClass = "group rounded-xl border border-indigo-100 bg-indigo-50 p-6 min-h-[150px] hover:shadow-md transition-all"
+            const cardClass = "group rounded-xl border border-slate-200 bg-slate-50 p-5 min-h-[140px] hover:bg-white hover:shadow-md hover:border-slate-300 transition-all"
+            const focalCardClass = "group rounded-xl border border-indigo-100 bg-indigo-50 p-5 min-h-[140px] hover:shadow-md transition-all"
             const ddayLabel = timelineInfo
               ? timelineInfo.dday > 0
                 ? `D-${timelineInfo.dday}`
@@ -410,52 +437,62 @@ export default function Dashboard() {
                 </div>
 
                 {stepsLoading ? (
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {Array.from({ length: 3 }).map((_, i) => (
-                      <div key={i} className="h-[150px] rounded-xl bg-slate-100 animate-pulse" />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                    {Array.from({ length: 4 }).map((_, i) => (
+                      <div key={i} className="h-[140px] rounded-xl bg-slate-100 animate-pulse" />
                     ))}
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
 
-                    {/* 카드1 — 타임라인 D-day → 추천국가 → 온보딩으로 진화 */}
-                    {timelineInfo ? (
-                      <Link href="/timeline" className={focalCardClass}>
-                        <div className="flex items-center gap-2 mb-2">
-                          <CalendarClock className="w-5 h-5 text-indigo-400" />
-                          <span className="text-xs font-medium text-indigo-400 uppercase tracking-wide">{td.nextSteps.timelineLabel}</span>
-                        </div>
-                        <p className="text-3xl font-bold text-indigo-600 mb-0.5 leading-none">{ddayLabel}</p>
-                        <p className="text-sm text-slate-500 truncate mt-2">
-                          {timelineInfo.currentPhaseTitle ?? td.nextSteps.onTrack}
-                        </p>
-                      </Link>
-                    ) : recMeta ? (
-                      <Link href="/timeline" className={cardClass}>
+                    {/* Card 1: DECIDE — recommended country or onboarding */}
+                    {recMeta ? (
+                      <Link href="/onboarding" className={cardClass}>
                         <div className="flex items-center gap-2 mb-2">
                           <span className="text-lg">{recFlag}</span>
-                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">{td.nextSteps.recommendedLabel}</span>
+                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">{td.nextSteps.decideLabel}</span>
                         </div>
                         <p className="text-xl font-bold text-slate-900 mb-0.5">{recName}</p>
-                        <p className="text-sm text-slate-500">{td.nextSteps.setTimeline}</p>
+                        <p className="text-sm text-slate-500">{td.nextSteps.recommendedLabel}</p>
                       </Link>
                     ) : (
                       <Link href="/onboarding" className={cardClass}>
                         <div className="flex items-center gap-2 mb-2">
                           <Compass className="w-5 h-5 text-slate-400" />
-                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">{td.nextSteps.getStartedLabel}</span>
+                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">{td.nextSteps.decideLabel}</span>
                         </div>
                         <p className="text-xl font-bold text-slate-900 mb-0.5">{td.nextSteps.takeQuiz}</p>
                         <p className="text-sm text-slate-500">{td.nextSteps.findCountry}</p>
                       </Link>
                     )}
 
-                    {/* 카드2 — Checklist */}
-                    {checklistProgress && checklistProgress.total > 0 ? (
+                    {/* Card 2: COMPARE — Country Compare */}
+                    <Link href="/compare" className={cardClass}>
+                      <div className="flex items-center gap-2 mb-2">
+                        <Globe className="w-5 h-5 text-slate-400" />
+                        <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">{td.nextSteps.compareLabel}</span>
+                      </div>
+                      <p className="text-xl font-bold text-slate-900 mb-0.5">{td.nextSteps.compareCard}</p>
+                      <p className="text-sm text-slate-500">{td.nextSteps.compareCardSub}</p>
+                    </Link>
+
+                    {/* Card 3: PLAN — Timeline D-day → checklist progress → build timeline */}
+                    {timelineInfo ? (
+                      <Link href="/timeline" className={focalCardClass}>
+                        <div className="flex items-center gap-2 mb-2">
+                          <CalendarClock className="w-5 h-5 text-indigo-400" />
+                          <span className="text-xs font-medium text-indigo-400 uppercase tracking-wide">{td.nextSteps.planLabel}</span>
+                        </div>
+                        <p className="text-3xl font-bold text-indigo-600 mb-0.5 leading-none">{ddayLabel}</p>
+                        <p className="text-sm text-slate-500 truncate mt-2">
+                          {timelineInfo.currentPhaseTitle ?? td.nextSteps.onTrack}
+                        </p>
+                      </Link>
+                    ) : checklistProgress && checklistProgress.total > 0 ? (
                       <Link href="/checklist" className={cardClass}>
                         <div className="flex items-center gap-2 mb-2">
                           <CheckSquare className="w-5 h-5 text-slate-400" />
-                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">{td.nextSteps.checklistLabel}</span>
+                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">{td.nextSteps.planLabel}</span>
                         </div>
                         <p className="text-3xl font-bold text-slate-900 mb-2 leading-none">
                           {checklistProgress.completed}
@@ -469,34 +506,34 @@ export default function Dashboard() {
                         </div>
                       </Link>
                     ) : (
-                      <Link href="/checklist" className={cardClass}>
+                      <Link href="/timeline" className={cardClass}>
                         <div className="flex items-center gap-2 mb-2">
-                          <CheckSquare className="w-5 h-5 text-slate-400" />
-                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">{td.nextSteps.checklistLabel}</span>
+                          <CalendarClock className="w-5 h-5 text-slate-400" />
+                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">{td.nextSteps.planLabel}</span>
                         </div>
-                        <p className="text-xl font-bold text-slate-900 mb-0.5">{td.nextSteps.startChecklist}</p>
-                        <p className="text-sm text-slate-500">{td.nextSteps.trackRequirements}</p>
+                        <p className="text-xl font-bold text-slate-900 mb-0.5">{td.nextSteps.buildTimeline}</p>
+                        <p className="text-sm text-slate-500">{td.nextSteps.planCardSub}</p>
                       </Link>
                     )}
 
-                    {/* 카드3 — Saved */}
+                    {/* Card 4: TRACK — saved courses */}
                     {savedCount > 0 ? (
                       <Link href="/saved" className={cardClass}>
                         <div className="flex items-center gap-2 mb-2">
                           <Bookmark className="w-5 h-5 text-slate-400" />
-                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">{td.nextSteps.savedLabel}</span>
+                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">{td.nextSteps.trackLabel}</span>
                         </div>
                         <p className="text-3xl font-bold text-slate-900 mb-0.5 leading-none">
                           {savedCount}
-                          <span className="text-base font-medium text-slate-400"> {td.nextSteps.savedCourses}</span>
+                          <span className="text-base font-medium text-slate-400"> {savedCount === 1 ? td.nextSteps.savedCourse : td.nextSteps.savedCourses}</span>
                         </p>
                         <p className="text-sm text-slate-500 mt-2">{td.nextSteps.viewAll}</p>
                       </Link>
                     ) : (
-                      <Link href="/roi-explorer" className={cardClass}>
+                      <Link href="/saved" className={cardClass}>
                         <div className="flex items-center gap-2 mb-2">
                           <Bookmark className="w-5 h-5 text-slate-400" />
-                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">{td.nextSteps.savedLabel}</span>
+                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">{td.nextSteps.trackLabel}</span>
                         </div>
                         <p className="text-xl font-bold text-slate-900 mb-0.5">{td.nextSteps.nothingSaved}</p>
                         <p className="text-sm text-slate-500">{td.nextSteps.browseRoi}</p>

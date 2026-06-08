@@ -10,13 +10,17 @@ import { useTranslations } from '@/lib/i18n/locale-provider'
 import type { User } from '@supabase/supabase-js'
 
 const pageTitles: Record<string, string> = {
-  '/dashboard': 'Dashboard',
+  '/dashboard':    'Decision Dashboard',
   '/roi-explorer': 'ROI Explorer',
-  '/compare': 'Country Compare',
-  '/checklist': 'Checklist',
-  '/timeline': 'Timeline',
-  '/career-path': 'Career Map',
-  '/documents': 'Documents',
+  '/compare':      'Country Compare',
+  '/checklist':    'Visa Checklist',
+  '/timeline':     'Timeline Planner',
+  '/career-path':  'Career Route Map',
+  '/documents':    'Document Vault',
+  '/games':        'Career Games',
+  '/saved':        'Saved Courses',
+  '/blog':         'Study Abroad Insights',
+  '/onboarding':   'Decision Engine',
 }
 
 export function Header({ onToggleSidebar, onToggleMobile, collapsed }: { onToggleSidebar?: () => void; onToggleMobile?: () => void; collapsed?: boolean }) {

@@ -22,6 +22,10 @@ const ko: Dictionary = {
     cta: '무료 계정 만들기',
   },
   dashboard: {
+    title: '유학·이민 결정 대시보드',
+    subtitle: '국가, 학교, ROI, 비자 단계, 타임라인, 커리어 경로를 한 곳에서 비교하세요.',
+    recommendedStartingPoint: '추천 시작점',
+    startDecisionQuiz: '5가지 질문으로 나에게 맞는 국가와 다음 단계를 확인하세요 →',
     whereToStudy: '어디서 공부하고 싶으신가요?',
     searchButton: '검색',
     searchPlaceholder: {
@@ -32,7 +36,7 @@ const ko: Dictionary = {
       ie: '예: 컴퓨터공학, 약학...',
     },
     nextSteps: {
-      title: '유학 의사결정 대시보드',
+      title: '다음 할 일',
       subtitle: '이어서 진행하세요',
       timelineLabel: '타임라인',
       onTrack: '순조롭게 진행 중',
@@ -51,6 +55,14 @@ const ko: Dictionary = {
       viewAll: '전체 보기',
       nothingSaved: '저장된 항목 없음',
       browseRoi: 'ROI 탐색기 둘러보기',
+      decideLabel: '결정',
+      compareLabel: '비교',
+      planLabel: '계획',
+      trackLabel: '추적',
+      compareCard: '5개국 비교하기',
+      compareCardSub: 'ROI · 연봉 · 학비 한눈에',
+      buildTimeline: '타임라인 만들기',
+      planCardSub: '주요 일정 설정 및 진행 추적',
     },
     topPicks: {
       titlePrefix: '추천 코스 in',

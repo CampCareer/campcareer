@@ -19,20 +19,44 @@ import { LogoMark } from "@/components/logo-mark"
 import { useTranslations } from "@/lib/i18n/locale-provider"
 import type { Dictionary } from "@/lib/i18n/dictionaries"
 
-const navItems: { key: keyof Dictionary["nav"]; href: string; icon: typeof LayoutDashboard }[] = [
-  { key: "dashboard",   href: "/dashboard",    icon: LayoutDashboard },
-  { key: "saved",       href: "/saved",        icon: Bookmark },
-  { key: "roiExplorer", href: "/roi-explorer", icon: TrendingUp },
-  { key: "compare",     href: "/compare",      icon: Globe },
-  { key: "checklist",   href: "/checklist",    icon: CheckSquare },
-  { key: "timeline",    href: "/timeline",     icon: Calendar },
-  { key: "careerPath",  href: "/career-path",  icon: Map },
-  { key: "documents",   href: "/documents",    icon: FolderOpen },
-  { key: "games",       href: "/games",        icon: Gamepad2 },
+type NavItem = { key: keyof Dictionary["nav"]; href: string; icon: typeof LayoutDashboard }
+type NavGroup = { label: string; items: NavItem[] }
+
+// Navigation ordered by decision flow: Decide → Compare → Plan → Track
+const navGroups: NavGroup[] = [
+  {
+    label: 'Decide',
+    items: [
+      { key: "dashboard",  href: "/dashboard",   icon: LayoutDashboard },
+      { key: "careerPath", href: "/career-path",  icon: Map },
+    ],
+  },
+  {
+    label: 'Compare',
+    items: [
+      { key: "roiExplorer", href: "/roi-explorer", icon: TrendingUp },
+      { key: "compare",     href: "/compare",      icon: Globe },
+    ],
+  },
+  {
+    label: 'Plan',
+    items: [
+      { key: "timeline",  href: "/timeline",  icon: Calendar },
+      { key: "checklist", href: "/checklist", icon: CheckSquare },
+    ],
+  },
+  {
+    label: 'Track',
+    items: [
+      { key: "saved",     href: "/saved",     icon: Bookmark },
+      { key: "documents", href: "/documents", icon: FolderOpen },
+      { key: "games",     href: "/games",     icon: Gamepad2 },
+    ],
+  },
 ]
 
-const secondaryItems: { key: keyof Dictionary["nav"]; href: string; icon: typeof LayoutDashboard }[] = [
-  { key: "blog",        href: "/blog",         icon: BookOpen },
+const secondaryItems: NavItem[] = [
+  { key: "blog", href: "/blog", icon: BookOpen },
 ]
 
 export function Sidebar({ collapsed = false, mobileOpen = false }: { collapsed?: boolean; mobileOpen?: boolean }) {
@@ -73,43 +97,47 @@ export function Sidebar({ collapsed = false, mobileOpen = false }: { collapsed?:
         </Link>
       </div>
 
-      {/* Navigation */}
-      <nav className="flex-1 px-3 py-4">
-        <p
-          className={cn(
-            "px-3 mb-2 text-xs font-medium text-slate-400 uppercase tracking-wider",
-            collapsed && "md:hidden"
-          )}
-        >
-          Menu
-        </p>
-        <ul className="space-y-0.5">
-          {navItems.map((item) => {
-            const Icon = item.icon
-            const isActive = pathname === item.href
-            return (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  title={t.nav[item.key]}
-                  className={cn(
-                    "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
-                    collapsed && "md:justify-center",
-                    isActive
-                      ? "bg-indigo-50 text-indigo-600"
-                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-                  )}
-                >
-                  <Icon className="w-4 h-4 shrink-0" />
-                  <span className={cn(collapsed && "md:hidden")}>{t.nav[item.key]}</span>
-                </Link>
-              </li>
-            )
-          })}
-        </ul>
+      {/* Navigation groups */}
+      <nav className="flex-1 px-3 py-4 overflow-y-auto">
+        {navGroups.map((group, gi) => (
+          <div key={group.label} className={cn(gi > 0 && "mt-4")}>
+            <p
+              className={cn(
+                "px-3 mb-1 text-xs font-medium text-slate-400 uppercase tracking-wider",
+                collapsed && "md:hidden"
+              )}
+            >
+              {group.label}
+            </p>
+            <ul className="space-y-0.5">
+              {group.items.map((item) => {
+                const Icon = item.icon
+                const isActive = pathname === item.href
+                return (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      title={t.nav[item.key]}
+                      className={cn(
+                        "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
+                        collapsed && "md:justify-center",
+                        isActive
+                          ? "bg-indigo-50 text-indigo-600"
+                          : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                      )}
+                    >
+                      <Icon className="w-4 h-4 shrink-0" />
+                      <span className={cn(collapsed && "md:hidden")}>{t.nav[item.key]}</span>
+                    </Link>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        ))}
       </nav>
 
-      {/* Secondary */}
+      {/* Secondary (Blog) */}
       <div className="px-3 py-2 border-t border-slate-200">
         <ul className="space-y-0.5">
           {secondaryItems.map((item) => {
