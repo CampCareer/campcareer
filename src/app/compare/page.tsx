@@ -6,6 +6,7 @@ import dynamic from "next/dynamic"
 import Link from "next/link"
 import { TrendingUp, X, ArrowRight, BarChart2, Search, HelpCircle, ChevronDown } from "lucide-react"
 import { useTranslations, useLocale } from "@/lib/i18n/locale-provider"
+import { isProfessionalField } from "@/lib/field-aliases"
 import { Card, CardContent } from "@/components/ui/card"
 import {
   getExchangeRates,
@@ -537,6 +538,7 @@ function CompareContent() {
       })
     : []
 
+  const professionalField = isProfessionalField(field)
   const hasAnyData = data && COUNTRIES.some((c) => data[c].count > 0)
 
   const chartLabel = rates
@@ -636,6 +638,13 @@ function CompareContent() {
               </button>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* Professional field warning */}
+      {professionalField && (
+        <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+          Professional fields such as Medicine and Law have different licensing, training length, and immigration pathways by country. Salary and ROI comparisons are indicative only. Always verify qualification and licensing requirements with official sources.
         </div>
       )}
 
