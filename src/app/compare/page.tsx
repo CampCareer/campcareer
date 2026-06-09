@@ -489,6 +489,7 @@ function CompareContent() {
   const [baseCurrency, setBaseCurrency] = useState<SupportedCurrency>("USD")
   const [rates, setRates]             = useState<ExchangeRates["rates"] | null>(null)
   const [ratesDate, setRatesDate]     = useState<string | null>(null)
+  const [careerStage, setCareerStage] = useState<1 | 3 | 5 | null>(null)
 
   // Fetch exchange rates once on mount
   useEffect(() => {
@@ -512,7 +513,8 @@ function CompareContent() {
     setLoading(true)
     setError(null)
 
-    fetch(`/api/compare?field=${encodeURIComponent(field)}`, { signal: ctrl.signal })
+    const url = `/api/compare?field=${encodeURIComponent(field)}${careerStage ? `&career_stage=${careerStage}` : ''}`
+    fetch(url, { signal: ctrl.signal })
       .then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json() })
       .then((json) => {
         if (json.error) throw new Error(json.error)
@@ -522,7 +524,7 @@ function CompareContent() {
       .finally(() => setLoading(false))
 
     return () => ctrl.abort()
-  }, [field])
+  }, [field, careerStage])
 
   // Chart: converted avg_salary per country (falls back to avg_roi if rates not ready)
   const chartData: ChartEntry[] = data
@@ -603,6 +605,40 @@ function CompareContent() {
         )}
       </div>
 
+      {/* Career Stage Selector */}
+      {field && data && (
+        <div className="flex items-center gap-3 flex-wrap">
+          <span className="text-xs font-medium text-slate-500 uppercase tracking-wide">
+            {tc.careerStageLabel}
+          </span>
+          <div className="inline-flex items-center gap-1 bg-slate-100 rounded-xl p-1">
+            <button
+              onClick={() => setCareerStage(null)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                careerStage === null
+                  ? "bg-white text-slate-800 shadow-sm"
+                  : "text-slate-500 hover:text-slate-700"
+              }`}
+            >
+              {tc.careerStageDefault}
+            </button>
+            {([1, 3, 5] as const).map((stage) => (
+              <button
+                key={stage}
+                onClick={() => setCareerStage(stage)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                  careerStage === stage
+                    ? "bg-white text-slate-800 shadow-sm"
+                    : "text-slate-500 hover:text-slate-700"
+                }`}
+              >
+                {stage === 1 ? tc.careerStage1yr : stage === 3 ? tc.careerStage3yr : tc.careerStage5yr}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Error */}
       {error && (
         <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
@@ -646,6 +682,11 @@ function CompareContent() {
             {rates
               ? `${tc.avgSalaryByCountry} (${baseCurrency})`
               : tc.avgRoiByCountry}
+            {careerStage && (
+              <span className="ml-2 text-sm font-normal text-slate-400">
+                {tc.careerStageChartTitle.replace('{stage}', careerStage === 1 ? tc.careerStage1yr : careerStage === 3 ? tc.careerStage3yr : tc.careerStage5yr)}
+              </span>
+            )}
           </h2>
           <Card>
             <CardContent className="pt-5 pb-4">

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 import { getFieldSearchTerms } from '@/lib/field-aliases'
 import { MEDICINE_FIRST_YEAR_SALARY, isMedicineField } from '@/lib/medicine-constants'
+import { applyCareerStageEarnings, type CareerStage } from '@/lib/career-stage'
 
 const VALID_SORT_FIELDS = ['roi_score', 'payback_years', 'net_salary', 'avg_cao_points'] as const
 type SortField = typeof VALID_SORT_FIELDS[number]
@@ -360,6 +361,26 @@ export async function GET(req: NextRequest) {
     // Medicine earnings: override with attending/consultant salary for realistic cross-country comparison.
     if (isMedicineField(field)) {
       enriched = enriched.map(row => applyMedicineOverride(row, country))
+    }
+
+    // Career stage: scale earnings proportionally to target career year.
+    // Skipped for medicine because it already uses a fixed attending/consultant salary.
+    const stageNum: CareerStage | null = careerStage === 'early' ? 1 : careerStage === 'mid' ? 3 : careerStage === 'senior' ? 5 : null
+    if (stageNum && !isMedicineField(field)) {
+      enriched = enriched.map(row => {
+        const oldEarnings = row.median_earnings ?? 0
+        if (oldEarnings <= 0) return row
+        const newEarnings = applyCareerStageEarnings(country, oldEarnings, stageNum)
+        const ratio = newEarnings / oldEarnings
+        const updated = {
+          ...row,
+          median_earnings: Math.round(newEarnings),
+          net_salary: Math.round((row.net_salary ?? 0) * ratio),
+          roi_score: Math.round(row.roi_score * ratio * 10) / 10,
+          payback_years: Math.max(1, Math.round(row.payback_years / ratio)),
+        }
+        return enrichRow(updated)
+      })
     }
 
     // Deduplicate list views: one row per college + field + state.
