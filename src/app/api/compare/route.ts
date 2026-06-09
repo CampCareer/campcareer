@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 import { getFieldSearchTerms } from '@/lib/field-aliases'
+import { MEDICINE_FIRST_YEAR_SALARY, isMedicineField } from '@/lib/medicine-constants'
 
 const COUNTRIES = ['us', 'au', 'ca', 'uk', 'ie'] as const
 type Country = typeof COUNTRIES[number]
@@ -10,6 +11,25 @@ const NON_US_TABLE: Record<Exclude<Country, 'us'>, string> = {
   ca: 'roi_explorer_ca',
   uk: 'roi_explorer_uk',
   ie: 'roi_explorer_ie',
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function applyMedicineOverrideCompare(rows: any[], country: string): any[] {
+  const targetEarnings = MEDICINE_FIRST_YEAR_SALARY[country]
+  if (!targetEarnings) return rows
+
+  return rows.map((row) => {
+    const oldEarnings = row.median_earnings ?? 0
+    if (oldEarnings <= 0) return row
+    const ratio = targetEarnings / oldEarnings
+
+    return {
+      ...row,
+      roi_score: Math.round(row.roi_score * ratio * 10) / 10,
+      net_salary: Math.round(row.net_salary * ratio),
+      payback_years: Math.max(1, Math.round(row.payback_years / ratio)),
+    }
+  })
 }
 
 function summarise(data: { college_id: string; college_name: string; roi_score: number; net_salary: number; payback_years: number }[]) {
@@ -54,7 +74,7 @@ export async function GET(req: NextRequest) {
           // Primary: exact ilike match
           const { data } = await supabase
             .from('roi_explorer_by_field_us')
-            .select('college_id, college_name, roi_score, net_salary, payback_years')
+            .select('college_id, college_name, roi_score, net_salary, payback_years, median_earnings')
             .ilike('field_name', `%${field}%`)
             .gt('roi_score', 0)
             .gt('payback_years', 0)
@@ -62,14 +82,15 @@ export async function GET(req: NextRequest) {
             .limit(100)
 
           if (data && data.length > 0) {
-            return [country, { ...summarise(data), field_data_available: true }]
+            const rows = isMedicineField(field) ? applyMedicineOverrideCompare(data, country) : data
+            return [country, { ...summarise(rows), field_data_available: true }]
           }
 
           // Alias fallback for US
           if (aliasTerms.length > 1) {
             const { data: fbData } = await supabase
               .from('roi_explorer_by_field_us')
-              .select('college_id, college_name, roi_score, net_salary, payback_years')
+              .select('college_id, college_name, roi_score, net_salary, payback_years, median_earnings')
               .gt('roi_score', 0)
               .gt('payback_years', 0)
               .or(orFilter)
@@ -77,7 +98,8 @@ export async function GET(req: NextRequest) {
               .limit(100)
 
             if (fbData && fbData.length > 0) {
-              return [country, { ...summarise(fbData), field_data_available: true }]
+              const rows = isMedicineField(field) ? applyMedicineOverrideCompare(fbData, country) : fbData
+              return [country, { ...summarise(rows), field_data_available: true }]
             }
           }
 
@@ -88,7 +110,7 @@ export async function GET(req: NextRequest) {
         const hasField = field.trim().length > 0
         const { data } = await supabase
           .from(NON_US_TABLE[country])
-          .select('college_id, college_name, roi_score, net_salary, payback_years')
+          .select('college_id, college_name, roi_score, net_salary, payback_years, median_earnings')
           .gt('roi_score', 0)
           .gt('payback_years', 0)
           .ilike('field_name', `%${field}%`)
@@ -96,14 +118,15 @@ export async function GET(req: NextRequest) {
           .limit(100)
 
         if (data && data.length > 0) {
-          return [country, { ...summarise(data), field_data_available: hasField }]
+          const rows = isMedicineField(field) ? applyMedicineOverrideCompare(data, country) : data
+          return [country, { ...summarise(rows), field_data_available: hasField }]
         }
 
         // Alias fallback for non-US
         if (hasField && aliasTerms.length > 1) {
           const { data: fallbackData } = await supabase
             .from(NON_US_TABLE[country])
-            .select('college_id, college_name, roi_score, net_salary, payback_years')
+            .select('college_id, college_name, roi_score, net_salary, payback_years, median_earnings')
             .gt('roi_score', 0)
             .gt('payback_years', 0)
             .or(orFilter)
@@ -111,7 +134,8 @@ export async function GET(req: NextRequest) {
             .limit(100)
 
           if (fallbackData && fallbackData.length > 0) {
-            return [country, { ...summarise(fallbackData), field_data_available: true }]
+            const rows = isMedicineField(field) ? applyMedicineOverrideCompare(fallbackData, country) : fallbackData
+            return [country, { ...summarise(rows), field_data_available: true }]
           }
         }
 

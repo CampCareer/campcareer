@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 import { getFieldSearchTerms } from '@/lib/field-aliases'
+import { MEDICINE_FIRST_YEAR_SALARY, isMedicineField } from '@/lib/medicine-constants'
 
 const VALID_SORT_FIELDS = ['roi_score', 'payback_years', 'net_salary', 'avg_cao_points'] as const
 type SortField = typeof VALID_SORT_FIELDS[number]
@@ -182,6 +183,46 @@ function calcTax(gross: number, country: string, stateOrProvince: string): numbe
   }
 }
 
+// ── Medicine earnings override ──────────────────────────────────────────────
+// When searching for medicine, use attending/consultant first-year salary
+// instead of the stored earnings (which use inconsistent career timepoints).
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function applyMedicineOverride(row: any, country: string): any {
+  const targetEarnings = MEDICINE_FIRST_YEAR_SALARY[country]
+  if (!targetEarnings) return row
+
+  const annualRent = (row.rent_median ?? row.city_rent_median ?? 0) * 12
+  const livingCost = annualRent * 0.4
+  const tuition = row.tuition ?? row.avg_net_price ?? 0
+  const gradRate = row.graduation_rate ?? 1
+
+  const netSalary = Math.max(0, targetEarnings - annualRent - livingCost)
+  const totalTuition = tuition * 4
+
+  const roiScore = totalTuition > 0 && netSalary > 0
+    ? Math.round(((netSalary * gradRate) / totalTuition) * 10000) / 100
+    : 0
+
+  const paybackYears = netSalary > 0
+    ? Math.round(totalTuition / netSalary)
+    : 0
+
+  const state = row.college_state ?? ''
+  const taxAmount = calcTax(targetEarnings, country, state)
+
+  return {
+    ...row,
+    median_earnings: Math.round(targetEarnings),
+    net_salary: Math.round(netSalary),
+    roi_score: roiScore,
+    payback_years: paybackYears,
+    gross_salary: Math.round(targetEarnings),
+    tax_amount: taxAmount,
+    net_salary_after_tax: Math.round(targetEarnings - taxAmount),
+  }
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 
 export async function GET(req: NextRequest) {
@@ -314,6 +355,11 @@ export async function GET(req: NextRequest) {
           fallbackApplied = true
         }
       }
+    }
+
+    // Medicine earnings: override with attending/consultant salary for realistic cross-country comparison.
+    if (isMedicineField(field)) {
+      enriched = enriched.map(row => applyMedicineOverride(row, country))
     }
 
     // Deduplicate list views: one row per college + field + state.
