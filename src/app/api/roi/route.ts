@@ -200,7 +200,11 @@ export async function GET(req: NextRequest) {
     : 'CA'
 
   const stateParam = searchParams.get('state') ?? ''
-  const state = stateParam || defaultState
+  const rawState = stateParam || defaultState
+  // 'London' is not a valid college_state in roi_explorer_uk; normalise to ALL_STATES
+  // so legacy bookmarks / old UI code never returns zero rows.
+  const state = (country === 'uk' && rawState === 'London') ? 'ALL_STATES' : rawState
+  const regionNormalised = state !== rawState
   const field = searchParams.get('field') ?? ''
   const collegeId = searchParams.get('college_id') ?? ''
   const nfqLevelParam = searchParams.get('nfq_level')
@@ -344,6 +348,9 @@ export async function GET(req: NextRequest) {
           matchedTerms: getFieldSearchTerms(field),
           fallbackApplied: true,
         },
+      }),
+      ...(regionNormalised && {
+        regionQuery: { requested: stateParam, applied: state },
       }),
     })
   } catch {

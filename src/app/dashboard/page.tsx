@@ -22,7 +22,7 @@ type RoiRow = {
 }
 
 const DEFAULT_STATE: Record<string, string> = {
-  us: "CA", au: "NSW", ca: "ON", uk: "London", ie: "Leinster",
+  us: "CA", au: "NSW", ca: "ON", uk: "ALL_STATES", ie: "Leinster",
 }
 
 function fmt(value: number, currency: string): string {
@@ -56,6 +56,7 @@ export default function Dashboard() {
   const [data, setData] = useState<RoiRow[]>([])
   const [loading, setLoading] = useState(false)
   const [searched, setSearched] = useState(false)
+  const [fieldFallback, setFieldFallback] = useState<{ requested: string } | null>(null)
   const [savedIds, setSavedIds] = useState<Set<string>>(new Set())
   const [userId, setUserId] = useState<string | null>(null)
   const [topPicks, setTopPicks] = useState<RoiRow[]>([])
@@ -125,8 +126,12 @@ export default function Dashboard() {
     params.set('field', f)
     fetch(`/api/roi?${params}`)
       .then(res => res.json())
-      .then(json => { setData(json.data ?? []); setLoading(false) })
-      .catch(() => { setData([]); setLoading(false) })
+      .then(json => {
+        setData(json.data ?? [])
+        setFieldFallback(json.fieldQuery?.fallbackApplied ? { requested: json.fieldQuery.requested } : null)
+        setLoading(false)
+      })
+      .catch(() => { setData([]); setFieldFallback(null); setLoading(false) })
   }, [autoSearchParams])
 
   // 유저 로드 + "Your next steps" 데이터
@@ -268,6 +273,7 @@ export default function Dashboard() {
     const res = await fetch(`/api/roi?${params}`)
     const json = await res.json()
     setData(json.data ?? [])
+    setFieldFallback(json.fieldQuery?.fallbackApplied ? { requested: json.fieldQuery.requested } : null)
     setLoading(false)
   }
 
@@ -665,13 +671,28 @@ export default function Dashboard() {
               </div>
             )}
 
+            {/* 필드 폴백 알림 */}
+            {!loading && fieldFallback && data.length > 0 && (
+              <p className="text-xs text-indigo-500 mb-2 px-1">
+                {td.results.fallbackNote.replace('{field}', fieldFallback.requested)}
+              </p>
+            )}
+
             {/* 결과 리스트 */}
             {!loading && (
               <div className="divide-y divide-slate-100 border border-slate-200 rounded-2xl overflow-hidden bg-white">
                 {data.length === 0 ? (
-                  <div className="py-16 text-center">
+                  <div className="py-16 text-center space-y-2 px-6">
                     <p className="text-sm text-slate-400">{td.results.noResults}</p>
-                    <p className="text-xs text-slate-300 mt-1">{td.results.tryAnother}</p>
+                    <p className="text-xs text-slate-300">{td.results.tryAnother}</p>
+                    {country === 'uk' && (
+                      <a
+                        href="/roi-explorer?country=uk&state=ALL_STATES"
+                        className="inline-block mt-2 text-xs text-indigo-500 hover:text-indigo-700 underline"
+                      >
+                        {td.results.viewAllUk}
+                      </a>
+                    )}
                   </div>
                 ) : data.map((row, i) => renderRoiRow(row, i))}
               </div>
