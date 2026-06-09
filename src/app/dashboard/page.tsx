@@ -239,12 +239,13 @@ export default function Dashboard() {
     fetch(`/api/roi?${params}`)
       .then(res => res.json())
       .then(json => {
-        // college_name 기준 중복 제거 — 같은 학교는 ROI 최고(첫 번째)만 유지
+        // college_id 기준 중복 제거 — 같은 학교는 ROI 최고(첫 번째)만 유지
         const rows: RoiRow[] = json.data ?? []
         const seen = new Set<string>()
         const deduped = rows.filter(r => {
-          if (seen.has(r.college_name)) return false
-          seen.add(r.college_name)
+          const key = r.college_id || r.college_name
+          if (seen.has(key)) return false
+          seen.add(key)
           return true
         })
         setTopPicks(deduped.slice(0, 5))
