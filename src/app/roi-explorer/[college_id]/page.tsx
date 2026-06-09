@@ -47,6 +47,19 @@ const COUNTRY_LABEL: Record<Country, string> = {
   ie: 'Ireland',
 }
 
+// Share of city market rent a student/graduate typically pays in shared accommodation.
+// Market rent data (rent_median) represents a full private-market unit; students typically
+// share, so we apply this factor before annualising.
+const STUDENT_RENT_SHARE: Record<Country, number> = {
+  us: 0.45,
+  au: 0.45,
+  ca: 0.45,
+  uk: 0.45,
+  ie: 0.45,
+}
+
+const LIVING_COST_MULTIPLIER = 0.4
+
 function fmt(value: number, country: Country): string {
   const { symbol } = CURRENCY[country]
   return `${symbol}${Math.round(value).toLocaleString()}`
@@ -173,16 +186,24 @@ function CollegeDetailInner() {
   const grossSalary = best.median_earnings ?? best.net_salary ?? 0
   const displayCity = best.city_name ?? best.college_city ?? best.college_state
 
-  const monthlyRent =
-    typeof best.rent_median === 'number' && Number.isFinite(best.rent_median) && best.rent_median > 0
+  const monthlyMarketRent =
+    typeof best.rent_median === 'number' &&
+    Number.isFinite(best.rent_median) &&
+    best.rent_median > 0
       ? best.rent_median
       : null
 
-  const annualRent = monthlyRent ? Math.round(monthlyRent * 12) : null
+  const monthlyStudentRent = monthlyMarketRent
+    ? Math.round(monthlyMarketRent * STUDENT_RENT_SHARE[country])
+    : null
+
+  const annualRent = monthlyStudentRent
+    ? Math.round(monthlyStudentRent * 12)
+    : null
 
   const livingCost =
     annualRent && annualRent > 0
-      ? Math.round(annualRent * 0.4)
+      ? Math.round(annualRent * LIVING_COST_MULTIPLIER)
       : null
 
   const hasLivingCostData = annualRent !== null && livingCost !== null
@@ -192,6 +213,8 @@ function CollegeDetailInner() {
 
   const salaryBase = showAfterTax ? incomeAfterTax : grossSalary
 
+  // TODO: align ROI score / payback formulas to use the same student-rent share factor
+  // so the summary cards and the financial breakdown always reflect the same assumptions.
   const estimatedNetSalary = hasLivingCostData
     ? Math.max(0, salaryBase - annualRent - livingCost)
     : salaryBase
@@ -345,7 +368,7 @@ function CollegeDetailInner() {
             </div>
 
             <p className="mb-4 rounded-xl border border-amber-100 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-700">
-              ROI and net salary are estimates based on available data. If rent or living-cost data is unavailable, those costs are excluded from the estimate.
+              {td.financialEstimateNote}
             </p>
             
             {/* Net Salary waterfall */}
