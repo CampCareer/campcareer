@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 import { getFieldSearchTerms } from '@/lib/field-aliases'
 import { MEDICINE_FIRST_YEAR_SALARY, isMedicineField } from '@/lib/medicine-constants'
+import { applyCareerStageEarnings, type CareerStage } from '@/lib/career-stage'
 
 const COUNTRIES = ['us', 'au', 'ca', 'uk', 'ie'] as const
 type Country = typeof COUNTRIES[number]
@@ -56,8 +57,34 @@ function summarise(data: { college_id: string; college_name: string; roi_score: 
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function applyCareerStageOverrideCompare(rows: any[], country: string, stage: CareerStage): any[] {
+  return rows.map((row) => {
+    const oldEarnings = row.median_earnings ?? 0
+    if (oldEarnings <= 0) return row
+    const newEarnings = applyCareerStageEarnings(country, oldEarnings, stage)
+    const ratio = newEarnings / oldEarnings
+    return {
+      ...row,
+      roi_score: Math.round(row.roi_score * ratio * 10) / 10,
+      net_salary: Math.round(row.net_salary * ratio),
+      payback_years: Math.max(1, Math.round(row.payback_years / ratio)),
+    }
+  })
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function processRows(rows: any[], country: string, field: string, stage: CareerStage | null): any[] {
+  if (isMedicineField(field)) return applyMedicineOverrideCompare(rows, country)
+  if (stage) return applyCareerStageOverrideCompare(rows, country, stage)
+  return rows
+}
+
 export async function GET(req: NextRequest) {
   const field = req.nextUrl.searchParams.get('field') ?? ''
+  const rawStage = req.nextUrl.searchParams.get('career_stage')
+  const careerStage: CareerStage | null = rawStage === '1' ? 1 : rawStage === '3' ? 3 : rawStage === '5' ? 5 : null
+
   if (!field.trim()) {
     return NextResponse.json({ error: 'field is required' }, { status: 400 })
   }
@@ -82,7 +109,7 @@ export async function GET(req: NextRequest) {
             .limit(100)
 
           if (data && data.length > 0) {
-            const rows = isMedicineField(field) ? applyMedicineOverrideCompare(data, country) : data
+            const rows = processRows(data, country, field, careerStage)
             return [country, { ...summarise(rows), field_data_available: true }]
           }
 
@@ -98,7 +125,7 @@ export async function GET(req: NextRequest) {
               .limit(100)
 
             if (fbData && fbData.length > 0) {
-              const rows = isMedicineField(field) ? applyMedicineOverrideCompare(fbData, country) : fbData
+              const rows = processRows(fbData, country, field, careerStage)
               return [country, { ...summarise(rows), field_data_available: true }]
             }
           }
@@ -118,7 +145,7 @@ export async function GET(req: NextRequest) {
           .limit(100)
 
         if (data && data.length > 0) {
-          const rows = isMedicineField(field) ? applyMedicineOverrideCompare(data, country) : data
+          const rows = processRows(data, country, field, careerStage)
           return [country, { ...summarise(rows), field_data_available: hasField }]
         }
 
@@ -134,7 +161,7 @@ export async function GET(req: NextRequest) {
             .limit(100)
 
           if (fallbackData && fallbackData.length > 0) {
-            const rows = isMedicineField(field) ? applyMedicineOverrideCompare(fallbackData, country) : fallbackData
+            const rows = processRows(fallbackData, country, field, careerStage)
             return [country, { ...summarise(rows), field_data_available: true }]
           }
         }
