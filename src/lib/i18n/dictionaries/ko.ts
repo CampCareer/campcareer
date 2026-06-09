@@ -74,8 +74,8 @@ const ko: Dictionary = {
     results: {
       allFields: '전체 학과',
       viewAll: '전체 보기',
-      noResults: '결과가 없습니다.',
-      tryAnother: '다른 학과나 국가로 검색해보세요.',
+      noResults: '이 전공으로는 결과가 없습니다.',
+      tryAnother: '컴퓨터공학, 데이터분석, 경영학, 공학 등 더 넓은 전공으로 검색해보세요.',
     },
   },
   saved: {

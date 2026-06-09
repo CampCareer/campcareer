@@ -72,8 +72,8 @@ const en = {
     results: {
       allFields: 'All fields',
       viewAll: 'View all',
-      noResults: 'No results found.',
-      tryAnother: 'Try a different field or country.',
+      noResults: 'No results found for this field.',
+      tryAnother: 'Try a broader term like Computer Science, Analytics, Business, or Engineering.',
     },
   },
   saved: {
