@@ -363,7 +363,8 @@ export async function GET(req: NextRequest) {
       enriched = enriched.map(row => applyMedicineOverride(row, country))
     }
 
-    // Career stage: scale earnings proportionally to target career year.
+    // Career stage: adjust earnings to target career year, recalculating net_salary
+    // additively (net_salary = earnings − rent, and rent is fixed across stages).
     // Skipped for medicine because it already uses a fixed attending/consultant salary.
     const stageNum: CareerStage | null = careerStage === 'early' ? 1 : careerStage === 'mid' ? 3 : careerStage === 'senior' ? 5 : null
     if (stageNum && !isMedicineField(field)) {
@@ -371,13 +372,19 @@ export async function GET(req: NextRequest) {
         const oldEarnings = row.median_earnings ?? 0
         if (oldEarnings <= 0) return row
         const newEarnings = applyCareerStageEarnings(country, oldEarnings, stageNum)
-        const ratio = newEarnings / oldEarnings
+        const earningsDelta = newEarnings - oldEarnings
+        const oldNetSalary = row.net_salary ?? 0
+        const newNetSalary = Math.max(0, oldNetSalary + earningsDelta)
         const updated = {
           ...row,
           median_earnings: Math.round(newEarnings),
-          net_salary: Math.round((row.net_salary ?? 0) * ratio),
-          roi_score: Math.round(row.roi_score * ratio * 10) / 10,
-          payback_years: Math.max(1, Math.round(row.payback_years / ratio)),
+          net_salary: Math.round(newNetSalary),
+          roi_score: oldNetSalary > 0
+            ? Math.round(row.roi_score * (newNetSalary / oldNetSalary) * 10) / 10
+            : row.roi_score,
+          payback_years: newNetSalary > 0 && oldNetSalary > 0
+            ? Math.max(1, Math.round(row.payback_years * (oldNetSalary / newNetSalary)))
+            : row.payback_years,
         }
         return enrichRow(updated)
       })
