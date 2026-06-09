@@ -29,6 +29,31 @@ function getTableName(country: string): string {
 //                            college_state, roi_score, net_salary, payback_years
 // For US field searches we must use roi_explorer_by_field_us.
 
+// ── 중복 제거 헬퍼 ───────────────────────────────────────────────────────────
+
+function normalizeKeyPart(value: unknown): string {
+  return String(value ?? '')
+    .toLowerCase()
+    .trim()
+    .replace(/\.$/, '')
+    .replace(/\s+/g, ' ')
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function isBetterRow(candidate: any, current: any): boolean {
+  const cRoi = candidate.roi_score ?? 0
+  const kRoi = current.roi_score ?? 0
+  if (cRoi !== kRoi) return cRoi > kRoi
+
+  const cNet = candidate.net_salary ?? 0
+  const kNet = current.net_salary ?? 0
+  if (cNet !== kNet) return cNet > kNet
+
+  const cTuition = candidate.tuition ?? Number.POSITIVE_INFINITY
+  const kTuition = current.tuition ?? Number.POSITIVE_INFINITY
+  return cTuition < kTuition
+}
+
 // ── 세금 계산 함수 ────────────────────────────────────────────────────────────
 
 function calcUSTax(gross: number, state: string): number {
@@ -245,7 +270,29 @@ export async function GET(req: NextRequest) {
       }
     })
 
-    return NextResponse.json({ data: enriched, count })
+    // Deduplicate list views: one row per college + field + state.
+    // Skipped for college_id requests so the detail page still receives all field rows.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let finalData: any[] = enriched
+    if (!collegeId) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const bestByKey = new Map<string, any>()
+      for (const row of enriched) {
+        const key = [
+          country,
+          row.college_id || normalizeKeyPart(row.college_name),
+          normalizeKeyPart(row.field_name),
+          normalizeKeyPart(row.college_state),
+        ].join('|')
+        const current = bestByKey.get(key)
+        if (!current || isBetterRow(row, current)) {
+          bestByKey.set(key, row)
+        }
+      }
+      finalData = Array.from(bestByKey.values())
+    }
+
+    return NextResponse.json({ data: finalData, count: finalData.length, rawCount: count })
   } catch {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
