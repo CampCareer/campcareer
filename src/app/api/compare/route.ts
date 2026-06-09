@@ -33,9 +33,19 @@ function applyMedicineOverrideCompare(rows: any[], country: string): any[] {
   })
 }
 
-function summarise(data: { college_id: string; college_name: string; roi_score: number; net_salary: number; payback_years: number }[]) {
+function summarise(data: {
+  college_id: string
+  college_name: string
+  roi_score: number
+  median_earnings?: number | null
+  net_salary: number
+  payback_years: number
+}[]) {
   const avg_roi     = data.reduce((s, r) => s + r.roi_score,     0) / data.length
-  const avg_salary  = data.reduce((s, r) => s + r.net_salary,    0) / data.length
+  const avg_salary = data.reduce((s, r) => {
+    const salary = r.median_earnings ?? r.net_salary ?? 0
+    return s + salary
+  }, 0) / data.length
   const avg_payback = data.reduce((s, r) => s + r.payback_years, 0) / data.length
 
   const byCollege = new Map<string, typeof data[0]>()
@@ -107,7 +117,7 @@ export async function GET(req: NextRequest) {
           // Primary: exact ilike match
           const { data } = await supabase
             .from('roi_explorer_by_field_us')
-            .select('college_id, college_name, roi_score, net_salary, payback_years, median_earnings')
+            .select('college_id, college_name, roi_score, median_earnings, payback_years, median_earnings')
             .ilike('field_name', `%${field}%`)
             .gt('roi_score', 0)
             .gt('payback_years', 0)
