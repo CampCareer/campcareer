@@ -10,12 +10,19 @@ export const COUNTRY_BASELINE_YEARS: Record<string, number> = {
   ie: 1,
 }
 
+// Multiplier from stored baseline → target career year.
+// Derived from official sources:
+//   UK: HMRC LEO (5yr computing ~£42k, baseline 1yr ~£30k)
+//   CA: StatCan Job Bank (5yr CS ~C$88k, baseline 2yr ~C$60k)
+//   AU: QILT GOS-L (3yr ~A$83.5k, 5yr ~A$88k)
+//   IE: CSO Revenue data (5yr ICT ~€50k, baseline 1yr ~€38k)
+//   US: College Scorecard (6yr ~$85k)
 const TO_CAREER_STAGE: Record<string, Record<number, number>> = {
-  us: { 1: 0.55, 3: 0.78, 5: 0.95 },
-  uk: { 1: 1.00, 3: 1.30, 5: 1.55 },
-  ca: { 1: 0.88, 3: 1.09, 5: 1.25 },
-  au: { 1: 0.78, 3: 1.00, 5: 1.10 },
-  ie: { 1: 1.00, 3: 1.30, 5: 1.50 },
+  us: { 1: 0.59, 3: 0.76, 5: 0.94 },
+  uk: { 1: 1.00, 3: 1.17, 5: 1.35 },
+  ca: { 1: 0.85, 3: 1.10, 5: 1.35 },
+  au: { 1: 0.85, 3: 1.00, 5: 1.18 },
+  ie: { 1: 1.00, 3: 1.17, 5: 1.32 },
 }
 
 export function applyCareerStageEarnings(

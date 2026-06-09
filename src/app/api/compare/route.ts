@@ -63,12 +63,18 @@ function applyCareerStageOverrideCompare(rows: any[], country: string, stage: Ca
     const oldEarnings = row.median_earnings ?? 0
     if (oldEarnings <= 0) return row
     const newEarnings = applyCareerStageEarnings(country, oldEarnings, stage)
-    const ratio = newEarnings / oldEarnings
+    const earningsDelta = newEarnings - oldEarnings
+    const oldNetSalary = row.net_salary ?? 0
+    const newNetSalary = Math.max(0, oldNetSalary + earningsDelta)
     return {
       ...row,
-      roi_score: Math.round(row.roi_score * ratio * 10) / 10,
-      net_salary: Math.round(row.net_salary * ratio),
-      payback_years: Math.max(1, Math.round(row.payback_years / ratio)),
+      net_salary: Math.round(newNetSalary),
+      roi_score: oldNetSalary > 0
+        ? Math.round(row.roi_score * (newNetSalary / oldNetSalary) * 10) / 10
+        : row.roi_score,
+      payback_years: newNetSalary > 0 && oldNetSalary > 0
+        ? Math.max(1, Math.round(row.payback_years * (oldNetSalary / newNetSalary)))
+        : row.payback_years,
     }
   })
 }
