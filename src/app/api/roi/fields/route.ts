@@ -1,5 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
+import { getFieldSearchTerms } from '@/lib/field-aliases'
+
+function tableForCountry(country: string): string {
+  if (country === 'ie') return 'roi_explorer_ie'
+  if (country === 'au') return 'roi_explorer_au'
+  if (country === 'ca') return 'roi_explorer_ca'
+  if (country === 'uk') return 'roi_explorer_uk'
+  return 'roi_explorer_by_field_us'
+}
 
 export async function GET(req: NextRequest) {
   const q       = req.nextUrl.searchParams.get('q') ?? ''
@@ -9,72 +18,45 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ fields: [] })
   }
 
-  let rawNames: (string | null)[]
+  const tableName = tableForCountry(country)
 
-  if (country === 'ie') {
-    // IE: field_name from the IE ROI view
-    const { data, error } = await supabase
-      .from('roi_explorer_ie')
-      .select('field_name')
-      .ilike('field_name', `%${q}%`)
-      .not('field_name', 'is', null)
-      .limit(500)
+  // Primary: exact ilike match
+  const { data: primary, error } = await supabase
+    .from(tableName)
+    .select('field_name')
+    .ilike('field_name', `%${q}%`)
+    .not('field_name', 'is', null)
+    .limit(500)
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-    rawNames = data.map((r) => r.field_name as string | null)
-  } else if (country === 'au') {
-    // AU: field_name from the AU ROI view
-    const { data, error } = await supabase
-      .from('roi_explorer_au')
-      .select('field_name')
-      .ilike('field_name', `%${q}%`)
-      .not('field_name', 'is', null)
-      .limit(500)
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-    rawNames = data.map((r) => r.field_name as string | null)
-  } else if (country === 'ca') {
-    // CA: field_name from the CA ROI view
-    const { data, error } = await supabase
-      .from('roi_explorer_ca')
-      .select('field_name')
-      .ilike('field_name', `%${q}%`)
-      .not('field_name', 'is', null)
-      .limit(500)
+  let rawNames = (primary ?? []).map(r => r.field_name as string | null)
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-    rawNames = data.map((r) => r.field_name as string | null)
-  } else if (country === 'uk') {
-    // UK: field_name from the UK ROI view
-    const { data, error } = await supabase
-      .from('roi_explorer_uk')
-      .select('field_name')
-      .ilike('field_name', `%${q}%`)
-      .not('field_name', 'is', null)
-      .limit(500)
+  // Alias fallback: if no exact suggestions found, try alias terms
+  if (rawNames.length === 0) {
+    const aliasTerms = getFieldSearchTerms(q)
+    if (aliasTerms.length > 1) {
+      const orFilter = aliasTerms
+        .map(t => `field_name.ilike.%${t}%`)
+        .join(',')
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-    rawNames = data.map((r) => r.field_name as string | null)
-  } else {
-    // US (default): field_name from the field-level ROI view
-    const { data, error } = await supabase
-      .from('roi_explorer_by_field_us')
-      .select('field_name')
-      .ilike('field_name', `%${q}%`)
-      .not('field_name', 'is', null)
-      .limit(500)
+      const { data: aliasData } = await supabase
+        .from(tableName)
+        .select('field_name')
+        .not('field_name', 'is', null)
+        .or(orFilter)
+        .limit(500)
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-    rawNames = data.map((r) => r.field_name as string | null)
+      rawNames = (aliasData ?? []).map(r => r.field_name as string | null)
+    }
   }
 
   const seen = new Set<string>()
   const unique: string[] = []
   for (const name of rawNames) {
-    const clean = name ? (country === 'us' ? name : name) : null
-    if (clean && !seen.has(clean)) {
-      seen.add(clean)
-      unique.push(clean)
+    if (name && !seen.has(name)) {
+      seen.add(name)
+      unique.push(name)
     }
   }
   unique.sort()

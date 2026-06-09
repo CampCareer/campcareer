@@ -1,36 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
-
-const FIELD_ALIASES: Record<string, string> = {
-  'computational': 'computer',
-  'computational science': 'computer science',
-  'information technology': 'computer',
-  'software engineering': 'software',
-  'data science': 'computer and information',
-  'artificial intelligence': 'computer and information',
-  'nursing.': 'registered nursing',
-  'nursing': 'registered nursing',
-  'biochemistry': 'biology',
-  'biophysics': 'biology',
-  'molecular biology': 'biology',
-  'cell biology': 'biology',
-  'microbiology': 'biology',
-  'neuroscience': 'biology',
-  'ecology': 'biology',
-  'genetics': 'biology',
-  'zoology': 'biology',
-  'botany': 'biology',
-  'pharmacy': 'pharmacology',
-  'economics': 'business',
-  'finance': 'business',
-  'accounting': 'business',
-  'marketing': 'business',
-  'management': 'business',
-  'mechanical engineering': 'engineering',
-  'electrical engineering': 'engineering',
-  'civil engineering': 'engineering',
-  'chemical engineering': 'engineering',
-}
+import { getFieldSearchTerms } from '@/lib/field-aliases'
 
 const COUNTRIES = ['us', 'au', 'ca', 'uk', 'ie'] as const
 type Country = typeof COUNTRIES[number]
@@ -77,7 +47,11 @@ export async function GET(req: NextRequest) {
       COUNTRIES.map(async (country) => {
         const EMPTY = { avg_roi: 0, avg_salary: 0, avg_payback: 0, top3: [], count: 0, field_data_available: country === 'us' }
 
+        const aliasTerms = getFieldSearchTerms(field)
+        const orFilter = aliasTerms.map(t => `field_name.ilike.%${t}%`).join(',')
+
         if (country === 'us') {
+          // Primary: exact ilike match
           const { data } = await supabase
             .from('roi_explorer_by_field_us')
             .select('college_id, college_name, roi_score, net_salary, payback_years')
@@ -87,45 +61,52 @@ export async function GET(req: NextRequest) {
             .order('roi_score', { ascending: false })
             .limit(100)
 
-          if (!data || data.length === 0) return [country, EMPTY]
-          return [country, { ...summarise(data), field_data_available: true }]
+          if (data && data.length > 0) {
+            return [country, { ...summarise(data), field_data_available: true }]
+          }
+
+          // Alias fallback for US
+          if (aliasTerms.length > 1) {
+            const { data: fbData } = await supabase
+              .from('roi_explorer_by_field_us')
+              .select('college_id, college_name, roi_score, net_salary, payback_years')
+              .gt('roi_score', 0)
+              .gt('payback_years', 0)
+              .or(orFilter)
+              .order('roi_score', { ascending: false })
+              .limit(100)
+
+            if (fbData && fbData.length > 0) {
+              return [country, { ...summarise(fbData), field_data_available: true }]
+            }
+          }
+
+          return [country, EMPTY]
         }
 
-        // AU / CA / UK / IE — filter by field_name if provided
-        let query = supabase
+        // AU / CA / UK / IE — primary ilike, then alias OR fallback
+        const hasField = field.trim().length > 0
+        const { data } = await supabase
           .from(NON_US_TABLE[country])
           .select('college_id, college_name, roi_score, net_salary, payback_years')
           .gt('roi_score', 0)
           .gt('payback_years', 0)
+          .ilike('field_name', `%${field}%`)
           .order('roi_score', { ascending: false })
           .limit(100)
 
-        const hasField = field.trim().length > 0
-        if (hasField) {
-          query = query.ilike('field_name', `%${field}%`)
+        if (data && data.length > 0) {
+          return [country, { ...summarise(data), field_data_available: hasField }]
         }
 
-        const { data } = await query
-
-        // fallback: 결과 없으면 첫 키워드로 재검색
-        if ((!data || data.length === 0) && hasField) {
-          const lowerField = field.toLowerCase().replace(/\.$/, '')
-          const aliasKeyword = FIELD_ALIASES[lowerField]
-            ?? FIELD_ALIASES[Object.keys(FIELD_ALIASES).find(k => lowerField.includes(k)) ?? '']
-
-          const keyword = aliasKeyword
-            ?? field.split(/[\s,]+/).find(w =>
-                w.length > 3 &&
-                !['and','the','of','for','in','other','general','sciences','studies'].includes(w.toLowerCase())
-              )
-            ?? field
-
+        // Alias fallback for non-US
+        if (hasField && aliasTerms.length > 1) {
           const { data: fallbackData } = await supabase
             .from(NON_US_TABLE[country])
             .select('college_id, college_name, roi_score, net_salary, payback_years')
             .gt('roi_score', 0)
             .gt('payback_years', 0)
-            .ilike('field_name', `%${keyword}%`)
+            .or(orFilter)
             .order('roi_score', { ascending: false })
             .limit(100)
 
@@ -134,8 +115,7 @@ export async function GET(req: NextRequest) {
           }
         }
 
-        if (!data || data.length === 0) return [country, EMPTY]
-        return [country, { ...summarise(data), field_data_available: hasField }]
+        return [country, EMPTY]
       })
     )
 

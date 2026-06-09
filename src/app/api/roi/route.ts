@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
+import { getFieldSearchTerms } from '@/lib/field-aliases'
 
 const VALID_SORT_FIELDS = ['roi_score', 'payback_years', 'net_salary', 'avg_cao_points'] as const
 type SortField = typeof VALID_SORT_FIELDS[number]
@@ -256,19 +257,60 @@ export async function GET(req: NextRequest) {
 
     if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
-    // 세금 계산 추가
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const enriched = (data ?? []).map((row: any) => {
+    const enrichRow = (row: any) => {
       const gross = row.median_earnings ?? row.net_salary ?? 0
       const taxAmount = calcTax(gross, country, state)
-      const netAfterTax = Math.round(gross - taxAmount)
       return {
         ...row,
         gross_salary: Math.round(gross),
         tax_amount: taxAmount,
-        net_salary_after_tax: netAfterTax,
+        net_salary_after_tax: Math.round(gross - taxAmount),
       }
-    })
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let enriched: any[] = (data ?? []).map(enrichRow)
+
+    // Alias fallback: when a field search returns zero rows, retry with broader terms.
+    // Only for list requests (no college_id) to avoid affecting the detail page.
+    let fallbackApplied = false
+    if (field && enriched.length === 0 && !collegeId) {
+      const aliasTerms = getFieldSearchTerms(field)
+      if (aliasTerms.length > 1) {
+        const orFilter = aliasTerms
+          .map(t => `field_name.ilike.%${t}%`)
+          .join(',')
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        let fbQuery: any = supabase
+          .from(tableName)
+          .select('*')
+          .gt('roi_score', 0)
+          .gt('payback_years', 0)
+          .or(orFilter)
+
+        if (country === 'us' && !useUsFieldTable && effectiveSort !== 'roi_score') {
+          fbQuery = fbQuery.gt(effectiveSort, 0)
+        }
+        if (state !== 'ALL_STATES') {
+          fbQuery = fbQuery.eq('college_state', state)
+        }
+        if (country === 'ie' && nfqLevelParam) {
+          fbQuery = fbQuery.eq('nfq_level', parseInt(nfqLevelParam, 10))
+        }
+
+        const { data: fbData } = await fbQuery
+          .order(effectiveSort, { ascending: SORT_ASCENDING[sort], nullsFirst: false })
+          .limit(limit)
+
+        if (fbData && fbData.length > 0) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          enriched = (fbData as any[]).map(enrichRow)
+          fallbackApplied = true
+        }
+      }
+    }
 
     // Deduplicate list views: one row per college + field + state.
     // Skipped for college_id requests so the detail page still receives all field rows.
@@ -292,7 +334,18 @@ export async function GET(req: NextRequest) {
       finalData = Array.from(bestByKey.values())
     }
 
-    return NextResponse.json({ data: finalData, count: finalData.length, rawCount: count })
+    return NextResponse.json({
+      data: finalData,
+      count: finalData.length,
+      rawCount: count,
+      ...(fallbackApplied && {
+        fieldQuery: {
+          requested: field,
+          matchedTerms: getFieldSearchTerms(field),
+          fallbackApplied: true,
+        },
+      }),
+    })
   } catch {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
