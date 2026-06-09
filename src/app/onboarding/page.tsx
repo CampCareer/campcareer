@@ -20,7 +20,7 @@ type RoiRow = {
 }
 
 const DEFAULT_STATE: Record<string, string> = {
-  us: 'CA', au: 'NSW', ca: 'ON', uk: 'London', ie: 'Leinster',
+  us: 'CA', au: 'NSW', ca: 'ON', uk: 'ALL_STATES', ie: 'Leinster',
 }
 
 const CURRENCY: Record<string, string> = {

@@ -76,6 +76,8 @@ const ko: Dictionary = {
       viewAll: '전체 보기',
       noResults: '이 전공으로는 결과가 없습니다.',
       tryAnother: '컴퓨터공학, 데이터분석, 경영학, 공학 등 더 넓은 전공으로 검색해보세요.',
+      fallbackNote: '"{field}"와 관련된 전공 결과를 보여주고 있습니다.',
+      viewAllUk: '영국 ROI 전체 데이터 보기',
     },
   },
   saved: {
