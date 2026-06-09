@@ -91,14 +91,15 @@ const FIELD_ALIASES: Record<string, string[]> = {
   ],
   'medicine': [
     'medicine',
-    'health',
-    'biomedical',
-    'clinical',
     'medical',
+    'clinical',
+    'health professions',
   ],
   'law': [
     'law',
     'legal',
+    'legal studies',
+    'jurisprudence',
   ],
   'psychology': [
     'psychology',
@@ -160,4 +161,20 @@ export function getFieldSearchTerms(input: string): string[] {
 
   // No alias — return the original term as-is
   return [normalized]
+}
+
+const PROFESSIONAL_FIELDS = [
+  'medicine',
+  'medical',
+  'law',
+  'legal',
+  'nursing',
+  'pharmacy',
+  'dentistry',
+  'veterinary',
+]
+
+export function isProfessionalField(field: string): boolean {
+  const f = normalizeInput(field)
+  return PROFESSIONAL_FIELDS.some((term) => f.includes(term))
 }
