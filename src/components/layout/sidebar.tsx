@@ -186,6 +186,7 @@ export function Sidebar({ collapsed = false, mobileOpen = false }: { collapsed?:
       >
         <p className="text-xs text-slate-400">© 2026 CampCareer</p>
         <p className="mt-1 flex items-center gap-3 text-xs text-slate-400">
+          <Link href="/methodology" className="hover:text-slate-600 transition-colors">Methodology</Link>
           <Link href="/privacy" className="hover:text-slate-600 transition-colors">Privacy</Link>
           <Link href="/terms" className="hover:text-slate-600 transition-colors">Terms</Link>
         </p>

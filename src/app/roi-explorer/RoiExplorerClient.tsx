@@ -19,16 +19,17 @@ import { createClient } from "@/lib/supabase-client"
 import { useTranslations } from "@/lib/i18n/locale-provider"
 import { RoiInfo } from "@/components/roi-info"
 import type { User } from "@supabase/supabase-js"
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
-} from "recharts"
+import dynamic from "next/dynamic"
+
+// recharts는 무겁고(First Load JS) 그래프는 필드 선택 시에만 보임 — lazy-load
+const SalaryGrowthChart = dynamic(() => import("./SalaryGrowthChart"), {
+  ssr: false,
+  loading: () => (
+    <div className="h-56 flex items-center justify-center">
+      <div className="w-6 h-6 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin" />
+    </div>
+  ),
+})
 
 export type RoiRow = {
   college_id: string
@@ -778,50 +779,7 @@ export function RoiExplorerClient({
               <div className="w-6 h-6 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin" />
             </div>
           ) : (
-            <ResponsiveContainer width="100%" height={220}>
-              <LineChart data={graphData} margin={{ top: 8, right: 24, left: 0, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                <XAxis
-                  dataKey="year"
-                  tick={{ fontSize: 12, fill: "#94a3b8" }}
-                  axisLine={false}
-                  tickLine={false}
-                />
-                <YAxis
-                  tick={{ fontSize: 11, fill: "#94a3b8" }}
-                  axisLine={false}
-                  tickLine={false}
-                  tickFormatter={(v) => {
-                    const sym = { us: "$", au: "A$", ca: "C$", uk: "£", ie: "€" }[country] ?? "$"
-                    return `${sym}${(v / 1000).toFixed(0)}k`
-                  }}
-                  width={52}
-                />
-                <Tooltip
-                  formatter={(value) => {
-                    const sym = { us: "$", au: "A$", ca: "C$", uk: "£", ie: "€" }[country] ?? "$"
-                    const num = typeof value === "number" ? value : 0
-                    return [`${sym}${Math.round(num).toLocaleString()}`, tr.avgNetSalary]
-                  }}
-                  contentStyle={{
-                    borderRadius: "12px",
-                    border: "1px solid #e2e8f0",
-                    fontSize: "13px",
-                    boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
-                  }}
-                />
-                <Legend wrapperStyle={{ fontSize: "12px", paddingTop: "12px" }} />
-                <Line
-                  type="monotone"
-                  dataKey="salary"
-                  name={tr.avgNetSalary}
-                  stroke="#6366f1"
-                  strokeWidth={2.5}
-                  dot={{ fill: "#6366f1", r: 5, strokeWidth: 0 }}
-                  activeDot={{ r: 7, strokeWidth: 0 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
+            <SalaryGrowthChart data={graphData} country={country} label={tr.avgNetSalary} />
           )}
         </div>
       )}

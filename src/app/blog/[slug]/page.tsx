@@ -8,6 +8,7 @@ import remarkGfm from "remark-gfm"
 import { getAllPosts, getPostBySlug } from "@/lib/blog"
 import { mdxComponents } from "@/components/blog/mdx-components"
 import { getTranslations } from "@/lib/i18n/server"
+import { JsonLd, articleLd, breadcrumbLd } from "@/components/seo/json-ld"
 
 export async function generateStaticParams() {
   const posts = getAllPosts()
@@ -51,9 +52,22 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
   if (!post) notFound()
 
   const { meta, content } = post
+  const path = `/blog/${params.slug}`
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-12">
+      <JsonLd data={articleLd({
+        title: meta.title,
+        description: meta.description,
+        path,
+        datePublished: meta.date,
+        author: meta.author,
+        image: meta.heroImage,
+      })} />
+      <JsonLd data={breadcrumbLd([
+        { name: "Blog", path: "/blog" },
+        { name: meta.title, path },
+      ])} />
       <Link
         href="/blog"
         className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition-colors mb-8"
