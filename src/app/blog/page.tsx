@@ -1,13 +1,13 @@
-import type { Metadata } from "next"
 import { getTranslations } from "@/lib/i18n/server"
 import { getAllPosts } from "@/lib/blog"
 import { BlogGrid } from "./BlogGrid"
+import { pageMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Blog — Study Abroad Insights & Salary Data",
   description: "Data-driven articles on graduate salaries, ROI, and study abroad decisions across USA, Ireland, UK, Canada and Australia.",
-  alternates: { canonical: "/blog" },
-}
+  path: "/blog",
+})
 
 export default function BlogPage() {
   const t = getTranslations()

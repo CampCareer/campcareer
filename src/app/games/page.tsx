@@ -8,6 +8,13 @@ import {
   MapPin,
   CalendarDays,
 } from "lucide-react"
+import { pageMetadata } from "@/lib/seo"
+
+export const metadata = pageMetadata({
+  title: "Games — Learn Study Abroad the Fun Way",
+  description: "Interactive games and quizzes about studying abroad: major match, visa knowledge, and city exploration.",
+  path: "/games",
+})
 
 const previewGames = [
   {

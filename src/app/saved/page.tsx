@@ -242,7 +242,7 @@ export default function SavedPage() {
                     <span />
                   )}
                   <Link
-                    href={`/roi-explorer/${course.course_id}?country=${course.country.toLowerCase()}`}
+                    href={`/roi-explorer/${course.country.toLowerCase()}/${course.course_id}`}
                     onClick={(e) => e.stopPropagation()}
                     className="inline-flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-700 font-medium"
                   >

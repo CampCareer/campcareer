@@ -2,6 +2,8 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useEffect, useState } from "react"
+import { createClient } from "@/lib/supabase-client"
 import {
   LayoutDashboard,
   TrendingUp,
@@ -62,6 +64,16 @@ const secondaryItems: NavItem[] = [
 export function Sidebar({ collapsed = false, mobileOpen = false }: { collapsed?: boolean; mobileOpen?: boolean }) {
   const pathname = usePathname()
   const t = useTranslations()
+  const [loggedIn, setLoggedIn] = useState(false)
+
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.auth.getUser().then(({ data }) => setLoggedIn(!!data.user))
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setLoggedIn(!!session?.user)
+    })
+    return () => subscription.unsubscribe()
+  }, [])
 
   return (
     <aside
@@ -79,7 +91,7 @@ export function Sidebar({ collapsed = false, mobileOpen = false }: { collapsed?:
       {/* Logo */}
       <div className="px-5 py-5 border-b border-slate-200">
         <Link
-          href="/dashboard"
+          href={loggedIn ? "/dashboard" : "/"}
           className={cn(
             "flex items-center gap-2.5",
             collapsed && "md:justify-center"
@@ -173,6 +185,10 @@ export function Sidebar({ collapsed = false, mobileOpen = false }: { collapsed?:
         )}
       >
         <p className="text-xs text-slate-400">© 2026 CampCareer</p>
+        <p className="mt-1 flex items-center gap-3 text-xs text-slate-400">
+          <Link href="/privacy" className="hover:text-slate-600 transition-colors">Privacy</Link>
+          <Link href="/terms" className="hover:text-slate-600 transition-colors">Terms</Link>
+        </p>
       </div>
     </aside>
   )

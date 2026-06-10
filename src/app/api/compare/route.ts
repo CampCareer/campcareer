@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 import { getFieldSearchTerms } from '@/lib/field-aliases'
+import { buildIlikeOrFilter } from '@/lib/postgrest-filter'
 import { MEDICINE_FIRST_YEAR_SALARY, isMedicineField } from '@/lib/medicine-constants'
 import { applyCareerStageEarnings, type CareerStage } from '@/lib/career-stage'
 
@@ -111,18 +112,20 @@ export async function GET(req: NextRequest) {
         const EMPTY = { avg_roi: 0, avg_salary: 0, avg_payback: 0, top3: [], count: 0, field_data_available: country === 'us' }
 
         const aliasTerms = getFieldSearchTerms(field)
-        const orFilter = aliasTerms.map(t => `field_name.ilike.%${t}%`).join(',')
+        const orFilter = buildIlikeOrFilter('field_name', aliasTerms)
 
         if (country === 'us') {
           // Primary: exact ilike match
-          const { data } = await supabase
+          const { data, error } = await supabase
             .from('roi_explorer_by_field_us')
-            .select('college_id, college_name, roi_score, median_earnings, payback_years, median_earnings')
+            .select('college_id, college_name, roi_score, net_salary, payback_years, median_earnings')
             .ilike('field_name', `%${field}%`)
             .gt('roi_score', 0)
             .gt('payback_years', 0)
             .order('roi_score', { ascending: false })
             .limit(100)
+
+          if (error) console.error('[api/compare] us primary query failed:', error)
 
           if (data && data.length > 0) {
             const rows = processRows(data, country, field, careerStage)
@@ -130,8 +133,8 @@ export async function GET(req: NextRequest) {
           }
 
           // Alias fallback for US
-          if (aliasTerms.length > 1) {
-            const { data: fbData } = await supabase
+          if (aliasTerms.length > 1 && orFilter) {
+            const { data: fbData, error: fbError } = await supabase
               .from('roi_explorer_by_field_us')
               .select('college_id, college_name, roi_score, net_salary, payback_years, median_earnings')
               .gt('roi_score', 0)
@@ -139,6 +142,8 @@ export async function GET(req: NextRequest) {
               .or(orFilter)
               .order('roi_score', { ascending: false })
               .limit(100)
+
+            if (fbError) console.error('[api/compare] us fallback query failed:', fbError)
 
             if (fbData && fbData.length > 0) {
               const rows = processRows(fbData, country, field, careerStage)
@@ -151,7 +156,7 @@ export async function GET(req: NextRequest) {
 
         // AU / CA / UK / IE — primary ilike, then alias OR fallback
         const hasField = field.trim().length > 0
-        const { data } = await supabase
+        const { data, error } = await supabase
           .from(NON_US_TABLE[country])
           .select('college_id, college_name, roi_score, net_salary, payback_years, median_earnings')
           .gt('roi_score', 0)
@@ -160,14 +165,16 @@ export async function GET(req: NextRequest) {
           .order('roi_score', { ascending: false })
           .limit(100)
 
+        if (error) console.error(`[api/compare] ${country} primary query failed:`, error)
+
         if (data && data.length > 0) {
           const rows = processRows(data, country, field, careerStage)
           return [country, { ...summarise(rows), field_data_available: hasField }]
         }
 
         // Alias fallback for non-US
-        if (hasField && aliasTerms.length > 1) {
-          const { data: fallbackData } = await supabase
+        if (hasField && aliasTerms.length > 1 && orFilter) {
+          const { data: fallbackData, error: fallbackError } = await supabase
             .from(NON_US_TABLE[country])
             .select('college_id, college_name, roi_score, net_salary, payback_years, median_earnings')
             .gt('roi_score', 0)
@@ -175,6 +182,8 @@ export async function GET(req: NextRequest) {
             .or(orFilter)
             .order('roi_score', { ascending: false })
             .limit(100)
+
+          if (fallbackError) console.error(`[api/compare] ${country} fallback query failed:`, fallbackError)
 
           if (fallbackData && fallbackData.length > 0) {
             const rows = processRows(fallbackData, country, field, careerStage)
@@ -187,7 +196,8 @@ export async function GET(req: NextRequest) {
     )
 
     return NextResponse.json(Object.fromEntries(results))
-  } catch {
+  } catch (err) {
+    console.error('[api/compare] unhandled error:', err)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
