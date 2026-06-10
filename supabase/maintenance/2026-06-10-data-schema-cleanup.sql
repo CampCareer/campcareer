@@ -32,15 +32,27 @@ union all
 select 'colleges_ie', institution_id::text, name
 from colleges_ie where name ~ ' (of|and|the|for|at|in|de)[A-Z]';
 
--- 적발 시 수정 예시 (접속어 뒤에 공백 삽입):
--- update colleges_us
--- set name = regexp_replace(name, ' (of|and|the|for|at|in|de)([A-Z])', ' \1 \2', 'g')
--- where name ~ ' (of|and|the|for|at|in|de)[A-Z]';
+-- 2026-06-10 전수 검토 결과: '[a-z][A-Z]' 매치 95건 중 진짜 공백 누락은 아래 2건뿐.
+-- 나머지 93건(Mc*/Mac*/De*/La*/Inter*/My* 등)과 colleges_ca의 McMaster/McGill/MacEwan은
+-- 학교 고유 표기이므로 수정 금지.
 --
--- colleges_* 를 수정한 경우 관련 matview 갱신 필수:
--- refresh materialized view roi_explorer_us;
--- refresh materialized view roi_explorer_by_field_us;
--- (수정 국가에 따라 roi_explorer_au / _ca / _uk / _ie 도 동일)
+--   17526301: 공식 명칭 "Minnesota State College Southeast" (southeastmn.edu)
+--   389860:   공식 "Mid-East Career and Technology Centers – Adult Education",
+--             IPEDS 축약형 "Mid-East CTC-Adult Education"
+
+update colleges_us
+set name = 'Minnesota State College Southeast-Red Wing Campus'
+where unit_id = '17526301'
+  and name = 'Minnesota State CollegeSoutheast-Red Wing Campus';
+
+update colleges_us
+set name = 'Mid-East CTC-Adult Education'
+where unit_id = '389860'
+  and name = 'Mid-EastCTC-Adult Education';
+
+-- colleges_us 수정 후 matview 갱신 필수:
+refresh materialized view roi_explorer_us;
+refresh materialized view roi_explorer_by_field_us;
 
 -- ────────────────────────────────────────────────────────────────────────────
 -- Task 16. 스키마 정리
