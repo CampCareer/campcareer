@@ -233,6 +233,11 @@ export default function LandingPage() {
                     </tr>
                   ))}
                 </tbody>
+                <caption className="caption-bottom px-4 py-2 text-left text-[11px] text-slate-400">
+                  ROI scores are computed in each country&apos;s local currency and tax system —
+                  compare patterns across countries, not exact numbers.{" "}
+                  <Link href="/methodology" className="underline hover:text-slate-500">Methodology</Link>
+                </caption>
               </table>
             </div>
 
@@ -354,6 +359,8 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-slate-400">
           <span>{tl.footer.copyright}</span>
           <div className="flex items-center gap-4">
+            <Link href="/methodology" className="hover:text-slate-600 transition-colors">Methodology</Link>
+            <Link href="/fields" className="hover:text-slate-600 transition-colors">Fields</Link>
             <Link href="/privacy" className="hover:text-slate-600 transition-colors">Privacy</Link>
             <Link href="/terms" className="hover:text-slate-600 transition-colors">Terms</Link>
             <span>{tl.footer.dataSources}</span>

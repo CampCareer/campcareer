@@ -4,6 +4,7 @@ import { notFound } from "next/navigation"
 import { fetchRoiData, VALID_COUNTRIES, type RoiCountry } from "@/lib/roi-query"
 import { supabase } from "@/lib/supabase"
 import { pageMetadata } from "@/lib/seo"
+import { JsonLd, breadcrumbLd } from "@/components/seo/json-ld"
 import { CollegeDetailClient, type DetailRow } from "./CollegeDetailClient"
 
 export const revalidate = 3600
@@ -90,5 +91,14 @@ export default async function CollegeDetailPage({ params }: { params: Params }) 
 
   if (rows.length === 0) notFound()
 
-  return <CollegeDetailClient country={country} rows={rows} websiteUrl={websiteUrl} />
+  return (
+    <>
+      <JsonLd data={breadcrumbLd([
+        { name: "ROI Explorer", path: "/roi-explorer" },
+        { name: COUNTRY_LABEL[country], path: `/roi-explorer?country=${country}` },
+        { name: rows[0].college_name, path: `/roi-explorer/${country}/${params.college_id}` },
+      ])} />
+      <CollegeDetailClient country={country} rows={rows} websiteUrl={websiteUrl} />
+    </>
+  )
 }

@@ -24,6 +24,7 @@ const FIELDS = [
   'school.name',
   'school.state',
   'school.city',
+  'school.school_url',
   'school.ownership',
   'latest.admissions.admission_rate.overall',
   'latest.student.size',
@@ -45,6 +46,7 @@ interface ScorecardResult {
   'school.name': string
   'school.state': string
   'school.city': string
+  'school.school_url': string | null
   'school.ownership': OwnershipCode
   'latest.admissions.admission_rate.overall': number | null
   'latest.student.size': number | null
@@ -79,6 +81,10 @@ function transform(raw: ScorecardResult) {
     name: raw['school.name'],
     state: raw['school.state'],
     city: raw['school.city'],
+    // Scorecard는 스킴 없는 호스트만 줄 때가 있음 — https로 정규화
+    website_url: raw['school.school_url']
+      ? (raw['school.school_url'].startsWith('http') ? raw['school.school_url'] : `https://${raw['school.school_url']}`)
+      : null,
     school_type: OWNERSHIP_MAP[raw['school.ownership']] ?? null,
     admission_rate: raw['latest.admissions.admission_rate.overall'],
     enrollment: raw['latest.student.size'],

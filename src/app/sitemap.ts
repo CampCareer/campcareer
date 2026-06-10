@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next"
 import { getAllPosts } from "@/lib/blog"
 import { supabase } from "@/lib/supabase"
+import { FIELDS } from "@/lib/fields"
 
 const BASE = "https://www.campcareer.com"
 
@@ -44,9 +45,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/timeline`, priority: 0.6, changeFrequency: "monthly" },
     { url: `${BASE}/career-path`, priority: 0.6, changeFrequency: "monthly" },
     { url: `${BASE}/games`, priority: 0.4, changeFrequency: "monthly" },
+    { url: `${BASE}/methodology`, priority: 0.5, changeFrequency: "monthly" },
+    { url: `${BASE}/fields`, priority: 0.8, changeFrequency: "weekly" },
     { url: `${BASE}/privacy`, priority: 0.2, changeFrequency: "yearly" },
     { url: `${BASE}/terms`, priority: 0.2, changeFrequency: "yearly" },
   ]
+
+  // 프로그래매틱: 전공 허브 + 전공×국가 랭킹
+  const fieldPages: MetadataRoute.Sitemap = FIELDS.flatMap((f) => [
+    { url: `${BASE}/fields/${f.slug}`, priority: 0.7, changeFrequency: "weekly" as const },
+    ...Object.keys(MATVIEW).map((country) => ({
+      url: `${BASE}/rankings/${f.slug}/${country}`,
+      priority: 0.7,
+      changeFrequency: "weekly" as const,
+    })),
+  ])
 
   // 블로그 글 — frontmatter date를 lastModified로
   const blogPages: MetadataRoute.Sitemap = getAllPosts().map((post) => ({
@@ -69,5 +82,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  return [...staticPages, ...blogPages, ...detailPages]
+  return [...staticPages, ...fieldPages, ...blogPages, ...detailPages]
 }
