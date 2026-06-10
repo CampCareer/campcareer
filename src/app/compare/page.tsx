@@ -404,7 +404,7 @@ function CountryCard({
                   </span>
                   <div className="min-w-0 flex-1">
                     <Link
-                      href={`/roi-explorer/${college.college_id}?country=${country}`}
+                      href={`/roi-explorer/${country}/${college.college_id}`}
                       className="text-xs text-slate-700 hover:text-indigo-600 hover:underline leading-snug block truncate"
                       title={college.college_name}
                     >
@@ -715,7 +715,7 @@ function CompareContent() {
               <span className="font-medium text-slate-700">{ratesDate}</span>
               {" · "}{tc.exchangeSource}:{" "}
               <a
-                href="https://www.frankfurter.app" // TODO: verify
+                href="https://www.frankfurter.app"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-indigo-500 hover:underline font-medium"
@@ -736,9 +736,24 @@ function CompareContent() {
   )
 }
 
+function CompareSkeleton() {
+  return (
+    <div className="max-w-7xl mx-auto px-6 py-10 space-y-6">
+      <div className="h-8 w-72 rounded bg-slate-100 animate-pulse" />
+      <div className="h-4 w-96 rounded bg-slate-100 animate-pulse" />
+      <div className="h-40 rounded-2xl bg-slate-100 animate-pulse" />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div key={i} className="h-48 rounded-2xl bg-slate-100 animate-pulse" />
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export default function ComparePage() {
   return (
-    <Suspense>
+    <Suspense fallback={<CompareSkeleton />}>
       <CompareContent />
     </Suspense>
   )

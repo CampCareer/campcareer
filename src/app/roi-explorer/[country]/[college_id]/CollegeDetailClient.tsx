@@ -1,14 +1,15 @@
 'use client'
 
-import { useState, useEffect, Suspense } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, TrendingUp, DollarSign, Clock, GraduationCap, ExternalLink } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { RoiInfo } from '@/components/roi-info'
-import { useParams, useSearchParams } from 'next/navigation'
 import { useTranslations } from '@/lib/i18n/locale-provider'
+import { calcTax } from '@/lib/tax'
+import { degreeYears } from '@/lib/degree-years'
 
-type RoiRow = {
+export type DetailRow = {
   college_id: string
   college_name: string
   college_state: string
@@ -21,15 +22,15 @@ type RoiRow = {
   net_salary: number
   payback_years: number
   tuition: number
-  graduation_rate: number
+  graduation_rate: number | null
   median_earnings: number
   field_name?: string | null
   rent_median?: number | null
   cost_of_living_index?: number | null
+  duration_years?: number | null
 }
 
-const VALID_COUNTRIES = ['us', 'au', 'ca', 'uk', 'ie'] as const
-type Country = typeof VALID_COUNTRIES[number]
+type Country = 'us' | 'au' | 'ca' | 'uk' | 'ie'
 
 const CURRENCY: Record<Country, { symbol: string; code: string }> = {
   us: { symbol: '$',  code: 'USD' },
@@ -73,60 +74,9 @@ function fmtMaybe(value: number | null | undefined, country: Country): string {
   return fmt(value, country)
 }
 
-function calcTax(gross: number, country: Country, state: string): number {
-  if (country === 'ie') {
-    const credits = 3750
-    let tax = gross <= 42000 ? gross * 0.20 : 8400 + (gross - 42000) * 0.40
-    tax = Math.max(0, tax - credits)
-    let usc = 0
-    if (gross <= 12012)      usc = gross * 0.005
-    else if (gross <= 21295) usc = 60 + (gross - 12012) * 0.02
-    else if (gross <= 70044) usc = 246 + (gross - 21295) * 0.04
-    else                      usc = 2196 + (gross - 70044) * 0.08
-    const prsi = gross > 18304 ? gross * 0.04 : 0
-    return Math.round(tax + usc + prsi)
-  }
-  if (country === 'uk') {
-    const taxable = Math.max(0, gross - 12570)
-    let tax = 0
-    if (taxable <= 37700)       tax = taxable * 0.20
-    else if (taxable <= 125140) tax = 7540 + (taxable - 37700) * 0.40
-    else                         tax = 42384 + (taxable - 125140) * 0.45
-    let ni = 0
-    if (gross > 12570 && gross <= 50270) ni = (gross - 12570) * 0.08
-    else if (gross > 50270)               ni = (50270 - 12570) * 0.08 + (gross - 50270) * 0.02
-    return Math.round(tax + ni)
-  }
-  if (country === 'au') {
-    let tax = 0
-    if (gross <= 18200)       tax = 0
-    else if (gross <= 45000)  tax = (gross - 18200) * 0.19
-    else if (gross <= 120000) tax = 5092 + (gross - 45000) * 0.325
-    else if (gross <= 180000) tax = 29467 + (gross - 120000) * 0.37
-    else                       tax = 51667 + (gross - 180000) * 0.45
-    return Math.round(tax + gross * 0.02)
-  }
-  if (country === 'ca') {
-    const fd = Math.max(0, gross - 15705)
-    let federal = 0
-    if (fd <= 55867)       federal = fd * 0.15
-    else if (fd <= 111733) federal = 8380 + (fd - 55867) * 0.205
-    else                    federal = 19832 + (fd - 111733) * 0.26
-    const cpp = Math.min(Math.max(0, gross - 3500), 68500) * 0.0595
-    const ei  = Math.min(gross, 63200) * 0.0166
-    const PROV: Record<string, number> = { ON: 0.0505, BC: 0.0506, QC: 0.14, AB: 0.10, MB: 0.108, NS: 0.0879, NB: 0.094, SK: 0.105, NL: 0.087, PE: 0.0965 }
-    return Math.round(federal + cpp + ei + gross * (PROV[state] ?? 0.08))
-  }
-  // US
-  const taxable = Math.max(0, gross - 14600)
-  let federal = 0
-  if (taxable <= 11600)       federal = taxable * 0.10
-  else if (taxable <= 47150)  federal = 1160 + (taxable - 11600) * 0.12
-  else if (taxable <= 100525) federal = 5426 + (taxable - 47150) * 0.22
-  else                         federal = 17168 + (taxable - 100525) * 0.24
-  const STATE_TAX: Record<string, number> = { AL:0.05,AK:0,AZ:0.025,AR:0.047,CA:0.093,CO:0.044,CT:0.065,DE:0.066,DC:0.085,FL:0,GA:0.055,HI:0.11,ID:0.058,IL:0.0495,IN:0.0305,IA:0.057,KS:0.057,KY:0.045,LA:0.0425,ME:0.075,MD:0.0575,MA:0.05,MI:0.0425,MN:0.0985,MS:0.05,MO:0.054,MT:0.069,NE:0.0664,NV:0,NH:0,NJ:0.0637,NM:0.059,NY:0.0685,NC:0.0499,ND:0.029,OH:0.0399,OK:0.0475,OR:0.099,PA:0.0307,RI:0.0599,SC:0.07,SD:0,TN:0,TX:0,UT:0.0485,VT:0.0875,VA:0.0575,WA:0,WV:0.065,WI:0.0765,WY:0 }
-  const fica = Math.min(gross, 160200) * 0.062 + gross * 0.0145
-  return Math.round(federal + gross * (STATE_TAX[state] ?? 0.05) + fica)
+function fmtPercent(rate: number | null | undefined): string {
+  if (typeof rate !== 'number' || !Number.isFinite(rate)) return '—'
+  return `${(rate * 100).toFixed(1)}%`
 }
 
 function SchoolTypeBadge({ type }: { type?: string }) {
@@ -146,35 +96,18 @@ function SchoolTypeBadge({ type }: { type?: string }) {
   )
 }
 
-function CollegeDetailInner() {
+export function CollegeDetailClient({
+  country,
+  rows,
+  websiteUrl,
+}: {
+  country: Country
+  rows: DetailRow[]
+  websiteUrl: string | null
+}) {
   const t = useTranslations()
   const td = t.roiExplorer.detail
-  const params = useParams()
-  const searchParams = useSearchParams()
-  const collegeId = params.college_id as string
-  const countryParam = searchParams.get('country')
-  const country = (VALID_COUNTRIES.includes(countryParam as Country) ? countryParam : 'us') as Country
-
-  const [rows, setRows] = useState<RoiRow[]>([])
-  const [loading, setLoading] = useState(true)
   const [showAfterTax, setShowAfterTax] = useState(false)
-
-  useEffect(() => {
-    fetch(`/api/roi?college_id=${collegeId}&country=${country}&limit=200&sort=roi_score`)
-      .then((r) => r.json())
-      .then((json) => {
-        setRows(json.data ?? [])
-        setLoading(false)
-      })
-  }, [collegeId, country])
-
-  if (loading) {
-    return (
-      <div className="max-w-5xl mx-auto px-6 py-20 flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin" />
-      </div>
-    )
-  }
 
   if (rows.length === 0) {
     return <div className="max-w-5xl mx-auto px-6 py-20 text-slate-500">{td.noData}</div>
@@ -224,6 +157,8 @@ function CollegeDetailInner() {
       ? Math.max(0, Math.round((estimatedNetSalary / grossSalary) * 1000) / 10)
       : null
 
+  const totalYears = degreeYears(country, best.duration_years)
+
   return (
     <div className="max-w-5xl mx-auto px-6 py-10 space-y-8">
 
@@ -247,10 +182,10 @@ function CollegeDetailInner() {
           {best.college_state}
         </p>
 
-        {/* 공식 사이트 링크 */}
+        {/* 공식 사이트 링크 — 실제 URL이 있으면 사용, 없으면 구글 검색 폴백 */}
         <div className="flex items-center gap-2 flex-wrap mt-2">
           <a
-            href={`https://www.google.com/search?q=${encodeURIComponent(best.college_name)}+official+site`}
+            href={websiteUrl ?? `https://www.google.com/search?q=${encodeURIComponent(best.college_name)}+official+site`}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 text-xs font-medium text-indigo-600 hover:text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-100 px-3 py-1.5 rounded-full transition-colors"
@@ -338,7 +273,7 @@ function CollegeDetailInner() {
               <GraduationCap className="w-4 h-4 text-blue-500" />
               <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">{td.gradRate}</span>
             </div>
-            <p className="text-2xl font-bold text-blue-600">{(best.graduation_rate * 100).toFixed(1)}%</p>
+            <p className="text-2xl font-bold text-blue-600">{fmtPercent(best.graduation_rate)}</p>
             <p className="text-xs text-slate-400 mt-0.5">{td.graduation}</p>
           </CardContent>
         </Card>
@@ -358,7 +293,9 @@ function CollegeDetailInner() {
               <div>
                 <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">{td.annualTuition}</p>
                 <p className="text-xl font-bold text-slate-800">{fmt(best.tuition, country)}</p>
-                <p className="text-xs text-slate-400 mt-0.5">{td.perYear} · {fmt(best.tuition * 4, country)} {td.totalFourYear}</p>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  {td.perYear} · {fmt(best.tuition * totalYears, country)} {td.totalYears.replace('{years}', String(totalYears))}
+                </p>
               </div>
               <div>
                 <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">{td.medianEarnings}</p>
@@ -370,7 +307,7 @@ function CollegeDetailInner() {
             <p className="mb-4 rounded-xl border border-amber-100 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-700">
               {td.financialEstimateNote}
             </p>
-            
+
             {/* Net Salary waterfall */}
             <div className="space-y-3">
               {[
@@ -466,17 +403,5 @@ function CollegeDetailInner() {
       </div>
 
     </div>
-  )
-}
-
-export default function CollegeDetailPage() {
-  return (
-    <Suspense fallback={
-      <div className="max-w-5xl mx-auto px-6 py-20 flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin" />
-      </div>
-    }>
-      <CollegeDetailInner />
-    </Suspense>
   )
 }

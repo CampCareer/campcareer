@@ -9,6 +9,18 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      // 레거시 대학 디테일 URL: /roi-explorer/:id?country=xx → /roi-explorer/:country/:id
+      {
+        source: '/roi-explorer/:college_id((?!us$|au$|ca$|uk$|ie$)[^/]+)',
+        has: [{ type: 'query', key: 'country', value: '(?<country>us|au|ca|uk|ie)' }],
+        destination: '/roi-explorer/:country/:college_id',
+        permanent: true,
+      },
+      {
+        source: '/roi-explorer/:college_id((?!us$|au$|ca$|uk$|ie$)[^/]+)',
+        destination: '/roi-explorer/us/:college_id',
+        permanent: true,
+      },
       {
         source: '/blog/adelaide-university-international-student-guide-2026',
         destination: '/blog/study-in-australia-2026',

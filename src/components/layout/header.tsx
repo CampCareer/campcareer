@@ -63,7 +63,8 @@ export function Header({ onToggleSidebar, onToggleMobile, collapsed }: { onToggl
         >
           {collapsed ? <PanelLeft className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
         </button>
-        <h1 className="font-semibold text-slate-800 text-sm">{title}</h1>
+        {/* 페이지 본문이 h1을 소유 — 헤더 타이틀은 시맨틱상 일반 텍스트로 */}
+        <p className="font-semibold text-slate-800 text-sm">{title}</p>
       </div>
 
       <div className="flex items-center gap-3">

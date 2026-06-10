@@ -154,7 +154,7 @@ const ko: Dictionary = {
       netSalaryCalcPrefix: '실수령액 계산 — 최적 ROI 도시 기준',
       annualTuition: '연간 학비',
       perYear: '/ 년',
-      totalFourYear: '4년 총액',
+      totalYears: '{years}년 총액',
       medianEarnings: '졸업생 중위 연봉',
       grossIncome: '세전 소득',
       annualRent: '예상 연간 임대료',

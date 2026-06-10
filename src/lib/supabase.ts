@@ -1,19 +1,15 @@
 import { createClient } from '@supabase/supabase-js'
 
 // 클라이언트 (읽기 전용 - 브라우저 안전)
+// 쓰기용 service role 클라이언트는 '@/lib/supabase-admin' (server-only) 참조.
 export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 )
 
-// 서버 클라이언트 (쓰기 가능 - 서버 사이드 전용)
-export const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
-
 // 타입 정의
-export type College = {
+// US 스키마(unit_id) 기준 — 타국 colleges_* 테이블은 institution_id를 사용함.
+export type CollegeUS = {
   id: string
   unit_id: string
   name: string

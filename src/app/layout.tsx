@@ -38,7 +38,6 @@ export const metadata: Metadata = {
   authors: [{ name: "CampCareer" }],
   creator: "CampCareer",
   metadataBase: new URL("https://www.campcareer.com"),
-  alternates: { canonical: "/" },
   icons: {
     icon: '/favicon.svg',
     shortcut: '/favicon.svg',
@@ -46,7 +45,6 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://www.campcareer.com",
     siteName: "CampCareer",
     title: "CampCareer | Study Abroad & Immigration Decision Engine",
     description: "Compare study-abroad options by tuition, salary, ROI, payback period, visa pathways, PR potential, and career outcomes across the US, UK, Ireland, Canada, and Australia.",

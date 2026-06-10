@@ -152,7 +152,7 @@ const en = {
       netSalaryCalcPrefix: 'Net Salary calculation — based on best-ROI city',
       annualTuition: 'Annual Tuition',
       perYear: 'per year',
-      totalFourYear: 'total (4yr)',
+      totalYears: 'total ({years}yr)',
       medianEarnings: 'Median Graduate Earnings',
       grossIncome: 'gross income',
       annualRent: 'Estimated Annual Rent',

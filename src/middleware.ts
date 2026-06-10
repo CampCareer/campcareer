@@ -33,10 +33,25 @@ function applyLocaleCookie(response: NextResponse, locale: Locale) {
   })
 }
 
+// 로그인 필요한 페이지 보호 (/timeline, /checklist는 비로그인 체험 허용 정책)
+const PROTECTED_PATHS = ['/dashboard', '/saved', '/documents']
+
 export async function middleware(request: NextRequest) {
   const locale = resolveLocale(request)
   // 현재 렌더가 쿠키를 즉시 읽을 수 있도록 request에도 세팅
   request.cookies.set(LOCALE_COOKIE, locale)
+
+  const pathname = request.nextUrl.pathname
+  const isProtected = PROTECTED_PATHS.some(p => pathname.startsWith(p))
+  const isOnboarding = pathname.startsWith('/onboarding')
+
+  // 인증 판단이 필요 없는 경로(블로그·정적 페이지 등)에서는 Supabase Auth
+  // 네트워크 왕복을 생략 — locale 쿠키만 처리하고 통과.
+  if (!isProtected && !isOnboarding) {
+    const response = NextResponse.next({ request })
+    applyLocaleCookie(response, locale)
+    return response
+  }
 
   let supabaseResponse = NextResponse.next({ request })
   const supabase = createServerClient(
@@ -62,16 +77,14 @@ export async function middleware(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser()
 
-  // 로그인 필요한 페이지 보호
-  const protectedPaths = ['/dashboard', '/saved']
-  if (!user && protectedPaths.some(p => request.nextUrl.pathname.startsWith(p))) {
+  if (!user && isProtected) {
     const redirect = NextResponse.redirect(new URL('/login', request.url))
     applyLocaleCookie(redirect, locale)
     return redirect
   }
 
   // 이미 로그인된 유저가 온보딩에 오면 대시보드로
-  if (user && request.nextUrl.pathname.startsWith('/onboarding')) {
+  if (user && isOnboarding) {
     const redirect = NextResponse.redirect(new URL('/dashboard', request.url))
     applyLocaleCookie(redirect, locale)
     return redirect

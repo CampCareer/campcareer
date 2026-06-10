@@ -315,7 +315,7 @@ export default function Dashboard() {
           <span className="text-xs font-mono text-slate-300 w-4 shrink-0">{i + 1}</span>
           <div className="min-w-0">
             <Link
-              href={`/roi-explorer/${row.college_id}?country=${country}`}
+              href={`/roi-explorer/${country}/${row.college_id}`}
               className="text-sm font-semibold text-slate-800 hover:text-indigo-600 transition-colors truncate block"
             >
               {row.college_name}

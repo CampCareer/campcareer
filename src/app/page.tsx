@@ -12,6 +12,13 @@ import { getTranslations } from "@/lib/i18n/server"
 import { LanguageToggle } from "@/components/language-toggle"
 import { LogoMark } from "@/components/logo-mark"
 import { HeroSearch } from "@/components/hero-search"
+import { pageMetadata } from "@/lib/seo"
+
+export const metadata = pageMetadata({
+  title: "CampCareer | Study Abroad & Immigration Decision Engine",
+  description: "Compare study-abroad options by tuition, salary, ROI, payback period, visa pathways, PR potential, and career outcomes across the US, UK, Ireland, Canada, and Australia.",
+  path: "/",
+})
 
 // ── 목업 샘플 데이터 (정적, 번역 제외) ────────────────────────────────────────
 
@@ -346,7 +353,11 @@ export default function LandingPage() {
       <footer className="py-8 border-t border-slate-200">
         <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-slate-400">
           <span>{tl.footer.copyright}</span>
-          <span>{tl.footer.dataSources}</span>
+          <div className="flex items-center gap-4">
+            <Link href="/privacy" className="hover:text-slate-600 transition-colors">Privacy</Link>
+            <Link href="/terms" className="hover:text-slate-600 transition-colors">Terms</Link>
+            <span>{tl.footer.dataSources}</span>
+          </div>
         </div>
       </footer>
 
