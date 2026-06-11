@@ -386,11 +386,11 @@ const ko: Dictionary = {
       officialDataDesc: '가능한 한 공개된 교육·학비·연봉·졸업생 성과 데이터를 기반으로 합니다. ROI와 회수 기간은 비교를 위한 추정치이며 결과를 보장하지 않습니다.',
     },
     heroSearch: {
-      fieldPlaceholder: '예: 컴퓨터공학, 경영학...',
+      fieldPlaceholder: '예: Computer Science, Business, Nursing...',
       countryAll: '전체 국가',
       button: '비교 시작하기',
-      fieldHint: '검색하려면 2자 이상 입력하세요',
-      noSuggestions: '일치하는 전공이 없습니다',
+      fieldHint: '정확한 결과를 위해 전공명은 영어로 입력해주세요. 예: Computer Science',
+      noSuggestions: '일치하는 전공이 없습니다. 영어 전공명으로 다시 검색해보세요.',
     },
     howItWorks: {
       sectionTitle: '3단계로 답을 찾으세요',

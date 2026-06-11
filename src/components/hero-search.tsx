@@ -19,6 +19,7 @@ export function HeroSearch() {
   const [suggestions, setSuggestions] = useState<string[]>([])
   const [open, setOpen] = useState(false)
   const [activeIdx, setActiveIdx] = useState(-1)
+  const [noResults, setNoResults] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
   const countryOptions = [
@@ -36,8 +37,10 @@ export function HeroSearch() {
     if (trimmed.length < 2) {
       setSuggestions([])
       setOpen(false)
+      setNoResults(false)
       return
     }
+    setNoResults(false)
     const timer = setTimeout(async () => {
       try {
         const countryParam = country || 'us'
@@ -49,9 +52,11 @@ export function HeroSearch() {
         setSuggestions(fields)
         setOpen(fields.length > 0)
         setActiveIdx(-1)
+        setNoResults(fields.length === 0)
       } catch {
         setSuggestions([])
         setOpen(false)
+        setNoResults(false)
       }
     }, 250)
     return () => clearTimeout(timer)
@@ -167,6 +172,10 @@ export function HeroSearch() {
           {/* Hint when input is too short to search */}
           {!canSubmit && field.length > 0 && (
             <p className="text-xs text-white/60 mt-1 pl-1">{hs.fieldHint}</p>
+          )}
+          {/* No suggestions after API returns empty */}
+          {noResults && (
+            <p className="text-xs text-white/60 mt-1 pl-1">{hs.noSuggestions}</p>
           )}
         </div>
 
