@@ -387,8 +387,8 @@ const en = {
       fieldPlaceholder: 'e.g. Computer Science, Business...',
       countryAll: 'All Countries',
       button: 'Start comparing',
-      fieldHint: 'Enter at least 2 characters to search',
-      noSuggestions: 'No matching fields found',
+      fieldHint: 'Enter the field name in English. Minimum 2 characters.',
+      noSuggestions: 'No matching fields found. Try an English field name.',
     },
     howItWorks: {
       sectionTitle: '3 steps to your answer',
