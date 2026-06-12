@@ -1,0 +1,40 @@
+import Link from "next/link"
+import { LogoMark } from "@/components/logo-mark"
+import { pageMetadata } from "@/lib/seo"
+import { DegreeRiskForm } from "./degree-risk-form"
+
+export const metadata = pageMetadata({
+  title: "Degree Risk Checker — Will Your Degree Lead to a Job?",
+  description:
+    "Answer 6 quick questions and see your major's employment potential, visa pathway, market demand, AI exposure, and study ROI — before choosing where to study abroad.",
+  path: "/degree-risk",
+})
+
+export default function DegreeRiskPage() {
+  return (
+    <div className="min-h-screen bg-white">
+      <header className="border-b border-slate-200">
+        <div className="max-w-xl mx-auto px-6 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2">
+            <LogoMark size={28} />
+            <span className="font-semibold text-slate-900 text-sm tracking-tight">CampCareer</span>
+          </Link>
+          <Link href="/methodology" className="text-xs text-slate-400 hover:text-slate-600 transition-colors">
+            Methodology
+          </Link>
+        </div>
+      </header>
+
+      <main className="max-w-xl mx-auto px-6 py-10">
+        <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
+          Check your degree risk
+        </h1>
+        <p className="mt-2 mb-8 text-sm text-slate-500 leading-relaxed">
+          6 questions, under a minute. We score your major on employment,
+          visa pathway, market demand, AI exposure, and ROI.
+        </p>
+        <DegreeRiskForm />
+      </main>
+    </div>
+  )
+}
