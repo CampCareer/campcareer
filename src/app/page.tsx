@@ -146,6 +146,15 @@ export default function LandingPage() {
             {tl.hero.subheadlineLine2}
           </p>
 
+          {/* 메인 CTA — Degree Risk Checker */}
+          <Link
+            href="/degree-risk"
+            className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-lg px-8 py-4 rounded-xl transition-colors mb-8 shadow-lg shadow-indigo-900/40"
+          >
+            {tl.hero.ctaRisk}
+            <ArrowRight className="w-5 h-5" />
+          </Link>
+
           {/* 인라인 검색 위젯 */}
           <HeroSearch />
           <div className="flex items-center gap-4 mt-4 mb-8">
