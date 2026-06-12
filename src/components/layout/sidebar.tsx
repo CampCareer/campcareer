@@ -8,13 +8,8 @@ import {
   LayoutDashboard,
   TrendingUp,
   Globe,
-  CheckSquare,
-  Calendar,
   Map,
-  Bookmark,
   BookOpen,
-  FolderOpen,
-  Gamepad2,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { LogoMark } from "@/components/logo-mark"
@@ -24,12 +19,12 @@ import type { Dictionary } from "@/lib/i18n/dictionaries"
 type NavItem = { key: keyof Dictionary["nav"]; href: string; icon: typeof LayoutDashboard }
 type NavGroup = { label: string; items: NavItem[] }
 
-// Navigation ordered by decision flow: Decide → Compare → Plan → Track
+// Slimmed-down navigation for logged-in users
 const navGroups: NavGroup[] = [
   {
     label: 'Decide',
     items: [
-      { key: "dashboard",  href: "/dashboard",   icon: LayoutDashboard },
+      { key: "degreeRisk", href: "/degree-risk", icon: LayoutDashboard },
       { key: "careerPath", href: "/career-path",  icon: Map },
     ],
   },
@@ -38,21 +33,6 @@ const navGroups: NavGroup[] = [
     items: [
       { key: "roiExplorer", href: "/roi-explorer", icon: TrendingUp },
       { key: "compare",     href: "/compare",      icon: Globe },
-    ],
-  },
-  {
-    label: 'Plan',
-    items: [
-      { key: "timeline",  href: "/timeline",  icon: Calendar },
-      { key: "checklist", href: "/checklist", icon: CheckSquare },
-    ],
-  },
-  {
-    label: 'Track',
-    items: [
-      { key: "saved",     href: "/saved",     icon: Bookmark },
-      { key: "documents", href: "/documents", icon: FolderOpen },
-      { key: "games",     href: "/games",     icon: Gamepad2 },
     ],
   },
 ]
@@ -91,7 +71,7 @@ export function Sidebar({ collapsed = false, mobileOpen = false }: { collapsed?:
       {/* Logo */}
       <div className="px-5 py-5 border-b border-slate-200">
         <Link
-          href={loggedIn ? "/dashboard" : "/"}
+          href={loggedIn ? "/degree-risk" : "/"}
           className={cn(
             "flex items-center gap-2.5",
             collapsed && "md:justify-center"
