@@ -63,7 +63,7 @@ export const MAJOR_OPTIONS = [
   { slug: "software-engineering", label: "Software Engineering" },
   { slug: "nursing", label: "Nursing" },
   { slug: "civil-engineering", label: "Civil Engineering" },
-  { slug: "business", label: "Business" },
+  { slug: "business-management", label: "Business" },
   { slug: "accounting", label: "Accounting" },
   { slug: "ux-design", label: "UX Design" },
   { slug: "psychology", label: "Psychology" },
