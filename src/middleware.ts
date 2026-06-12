@@ -83,9 +83,9 @@ export async function middleware(request: NextRequest) {
     return redirect
   }
 
-  // 이미 로그인된 유저가 온보딩에 오면 대시보드로
+  // 이미 로그인된 유저가 온보딩에 오면 degree-risk로
   if (user && isOnboarding) {
-    const redirect = NextResponse.redirect(new URL('/dashboard', request.url))
+    const redirect = NextResponse.redirect(new URL('/degree-risk', request.url))
     applyLocaleCookie(redirect, locale)
     return redirect
   }
