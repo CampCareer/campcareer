@@ -31,6 +31,8 @@ export default async function DegreeRiskResultPage({
   const view: ResultView = isResultView(searchParams.view) ? searchParams.view : "both"
   const assessmentId = searchParams.aid ?? null
 
+  const lookedUpCountries = viewCountries(view)
+
   let rows: MajorRow[] = []
   if (isMajorSlug(major)) {
     const supabase = createClient()
@@ -38,9 +40,12 @@ export default async function DegreeRiskResultPage({
       .from("majors")
       .select(MAJOR_COLUMNS)
       .eq("slug", major)
-      .in("country", viewCountries(view))
+      .in("country", lookedUpCountries)
       .order("country", { ascending: true }) // AU before IE
     rows = (data ?? []) as unknown as MajorRow[]
+    if (rows.length === 0) {
+      console.warn(`[degree-risk] No majors row found for slug="${major}" countries="${lookedUpCountries.join(",")}"`)
+    }
   }
 
   // Alternatives: union across the shown rows, excluding the current major.
@@ -72,7 +77,11 @@ export default async function DegreeRiskResultPage({
         {rows.length === 0 ? (
           <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center">
             <p className="text-slate-600 text-sm">
-              We could not find a score for this major yet.
+              We could not find a score for{" "}
+              <span className="font-semibold">{major ? majorLabel(major) : "this major"}</span>
+              {view === "both"
+                ? " in Australia or Ireland yet."
+                : ` in ${view === "AU" ? "Australia" : "Ireland"} yet.`}
             </p>
             <Link
               href="/degree-risk"
