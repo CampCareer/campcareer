@@ -10,12 +10,12 @@ const nextConfig = {
   async redirects() {
     return [
       // Soft-hide: redirect hidden routes to landing page
-      { source: '/dashboard', destination: '/', permanent: false },
+      { source: '/dashboard/:path*', destination: '/', permanent: false },
       { source: '/games/:path*', destination: '/', permanent: false },
-      { source: '/timeline', destination: '/', permanent: false },
-      { source: '/checklist', destination: '/', permanent: false },
-      { source: '/documents', destination: '/', permanent: false },
-      { source: '/saved', destination: '/', permanent: false },
+      { source: '/timeline/:path*', destination: '/', permanent: false },
+      { source: '/checklist/:path*', destination: '/', permanent: false },
+      { source: '/documents/:path*', destination: '/', permanent: false },
+      { source: '/saved/:path*', destination: '/', permanent: false },
       { source: '/fields/:path*', destination: '/', permanent: false },
       { source: '/rankings/:path*', destination: '/', permanent: false },
 
