@@ -101,7 +101,7 @@ export default function LandingPage() {
               <span className="truncate">{tl.hero.badge}</span>
             </div>
 
-            <h1 className="text-4xl lg:text-[3.5rem] font-bold text-white leading-[1.08] tracking-tight mb-5">
+            <h1 className="font-display text-4xl lg:text-[3.5rem] font-extrabold text-white leading-[1.08] tracking-tight mb-5">
               {tl.hero.headlineLine1}
               <br />
               {tl.hero.headlineLine2}
@@ -167,7 +167,7 @@ export default function LandingPage() {
       {/* ── Data provenance ── */}
       <section className="py-16 bg-slate-50 border-y border-slate-200">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-2xl font-bold text-slate-900 flex items-center justify-center gap-2">
+          <h2 className="font-display text-2xl font-extrabold text-slate-900 flex items-center justify-center gap-2">
             <ShieldCheck className="w-6 h-6 text-indigo-600" />
             {tl.provenance.title}
           </h2>
@@ -199,7 +199,7 @@ export default function LandingPage() {
       {/* ── How it works ── */}
       <section className="py-20 bg-white">
         <div className="max-w-5xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-slate-900 text-center mb-14">
+          <h2 className="font-display text-3xl font-extrabold text-slate-900 text-center mb-14">
             {tl.howItWorks.sectionTitle}
           </h2>
           <div className="flex flex-col md:flex-row items-stretch gap-4">
@@ -230,7 +230,7 @@ export default function LandingPage() {
       <section className="py-20 bg-slate-50 border-t border-slate-200">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-slate-900">{tl.narrative.sectionTitle}</h2>
+            <h2 className="font-display text-3xl font-extrabold text-slate-900">{tl.narrative.sectionTitle}</h2>
             <p className="mt-3 text-slate-500">{tl.narrative.sectionSubtitle}</p>
           </div>
           <div className="grid md:grid-cols-2 gap-6">
@@ -270,7 +270,7 @@ export default function LandingPage() {
       {/* ── Final CTA ── */}
       <section className="py-24 bg-indigo-600">
         <div className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold text-white mb-8">{tl.cta.title}</h2>
+          <h2 className="font-display text-4xl font-extrabold text-white mb-8">{tl.cta.title}</h2>
           <Link
             href="/degree-risk"
             className="inline-flex items-center gap-2 bg-white hover:bg-indigo-50 text-indigo-600 font-semibold px-8 py-4 rounded-xl transition-colors text-lg"
