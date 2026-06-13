@@ -7,7 +7,6 @@ import {
   type MajorRow,
   type ResultView,
   COUNTRY_META,
-  MAJOR_COLUMNS,
   OTHER_MAJOR,
   goalToLayers,
   isKnownGoal,
@@ -47,9 +46,11 @@ export default async function DegreeRiskResultPage({
   let rows: MajorRow[] = []
   if (isMajorSlug(major)) {
     const supabase = createClient()
+    // select("*") (not MAJOR_COLUMNS) so layer_meta is picked up after its
+    // migration, while staying resilient if the column doesn't exist yet.
     const { data, error } = await supabase
       .from("majors")
-      .select(MAJOR_COLUMNS)
+      .select("*")
       .eq("slug", major)
       .in("country", lookedUpCountries)
     if (error) console.error("[degree-risk] majors query failed:", error.message)

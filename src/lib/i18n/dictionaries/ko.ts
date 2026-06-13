@@ -474,6 +474,13 @@ const ko: Dictionary = {
       'IELTS 6.0–6.5': 'IELTS 6.0–6.5',
       'IELTS 7.0+': 'IELTS 7.0+',
     },
+    resultMeta: {
+      verifiedFmt: '출처: {source} · {date} 기준',
+      sourcePrefix: '출처',
+      estimateBadge: '추정치',
+      policyChip: '정책 변경 예정',
+      methodology: '방법론',
+    },
   },
   onboarding: {
     badge: '유학 결정 도우미',

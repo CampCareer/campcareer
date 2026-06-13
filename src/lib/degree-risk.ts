@@ -13,6 +13,19 @@ export interface MajorSource {
   url: string
 }
 
+// The five scored layers, in display order.
+export const LAYERS = ["employment", "visa", "demand", "ai_exposure", "roi"] as const
+export type LayerKey = (typeof LAYERS)[number]
+
+// Per-layer confidence/source/as-of metadata (majors.layer_meta JSONB).
+export interface LayerMeta {
+  confidence: "estimate" | "verified"
+  last_verified: string | null
+  source_name: string | null
+  source_url: string | null
+  note: string | null
+}
+
 export interface MajorRow {
   slug: string
   country: CountryCode
@@ -29,10 +42,16 @@ export interface MajorRow {
   payback_years: number
   alternatives: string[] | null
   sources: MajorSource[] | null
+  layer_meta: Record<LayerKey, LayerMeta> | null
+  // DEPRECATED: superseded by layer_meta.<layer>.{confidence,last_verified}
   data_confidence?: string | null
   last_verified?: string | null
 }
 
+// NOTE: layer_meta is intentionally NOT listed here. It is read via select("*")
+// on the result page so the query stays resilient before the layer_meta
+// migration is applied (selecting a not-yet-existing column errors the whole
+// query). After migration it is picked up automatically.
 export const MAJOR_COLUMNS =
   "slug, country, overall_risk, risk_summary, employment_rate, occupation_list_match, post_study_work_years, market_demand_score, ai_exposure_band, ai_note, avg_annual_tuition_intl, median_starting_salary, payback_years, alternatives, sources, data_confidence, last_verified"
 
@@ -194,25 +213,18 @@ export function formatMoney(amount: number, country: CountryCode): string {
   return `${COUNTRY_META[country].currency}${Math.round(amount).toLocaleString("en-US")}`
 }
 
-// Best-effort match of a layer to one of the row's sources by keyword;
-// layers without a match simply render no source link.
-export function findSource(sources: MajorSource[] | null, keywords: string[]): MajorSource | null {
-  if (!sources?.length) return null
-  const found = sources.find((s) =>
-    keywords.some((k) => s.name.toLowerCase().includes(k))
+// Read a layer's metadata with a safe fallback (handles rows not yet
+// backfilled with layer_meta).
+export function layerMeta(row: MajorRow, layer: LayerKey): LayerMeta {
+  return (
+    row.layer_meta?.[layer] ?? {
+      confidence: "estimate",
+      last_verified: null,
+      source_name: null,
+      source_url: null,
+      note: null,
+    }
   )
-  return found ?? null
-}
-
-// Keywords are matched as case-insensitive substrings of a source's name, so
-// they must be specific enough to avoid false hits (e.g. bare "ai" matches
-// "home affairs", "cso" matches "CSOL"). Prefer multi-char, distinctive tokens.
-export const LAYER_SOURCE_KEYWORDS: Record<string, string[]> = {
-  employment: ["qilt", "hea ", "hesa", "graduate outcome", "employment", "scorecard"],
-  visa: ["visa", "immigration", "occupation list", "occupations list", "skills list", "stamp", "csol", "critical skills", "home affairs", "stem opt", "h-1b", "pgwp", "graduate route", "uscis", "ircc", "ukvi"],
-  demand: ["demand", "jobs and skills", "vacanc", "labour", "labor", "egfsn", "job bank", "outlook"],
-  ai: ["oecd", "felten", "ai exposure", "ai-exposure", "automation"],
-  roi: ["tuition", "earnings", "fees", "cricos", "scorecard", "discover uni"],
 }
 
 // ── Goal-aware result framing ───────────────────────────────────────────────
