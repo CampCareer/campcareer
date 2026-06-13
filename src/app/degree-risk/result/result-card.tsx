@@ -8,21 +8,24 @@ import {
   RISK_BADGE,
   formatMoney,
   layerMeta,
+  layerNoteText,
   majorLabel,
 } from "@/lib/degree-risk"
-import { getTranslations } from "@/lib/i18n/server"
+import { getTranslations, getLocale } from "@/lib/i18n/server"
 
 type ResultMeta = ReturnType<typeof getTranslations>["degreeRisk"]["resultMeta"]
 
 function LayerRow({
   label,
   meta,
+  note,
   rm,
   highlighted = false,
   children,
 }: {
   label: string
   meta: LayerMeta
+  note: string | null
   rm: ResultMeta
   highlighted?: boolean
   children: React.ReactNode
@@ -52,7 +55,7 @@ function LayerRow({
             {rm.estimateBadge}
           </span>
         )}
-        {meta.note && (
+        {note && (
           <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-semibold text-amber-700 ring-1 ring-amber-200">
             <AlertTriangle className="h-2.5 w-2.5" />
             {rm.policyChip}
@@ -61,6 +64,13 @@ function LayerRow({
       </div>
 
       <div className="mt-1 text-base text-slate-700 leading-relaxed">{children}</div>
+
+      {note && (
+        <p className="mt-2 flex items-start gap-1.5 rounded-lg bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-800 ring-1 ring-amber-100">
+          <AlertTriangle className="mt-0.5 h-3 w-3 shrink-0" />
+          <span>{note}</span>
+        </p>
+      )}
 
       <p className="mt-1.5 text-[11px] text-slate-400">
         {verified && meta.source_name ? (
@@ -122,8 +132,10 @@ export function ResultCard({
   const country = COUNTRY_META[row.country]
   const badge = RISK_BADGE[row.overall_risk]
   const rm = getTranslations().degreeRisk.resultMeta
+  const locale = getLocale()
   const hot = (layer: LayerKey) => priorityLayers.includes(layer)
   const meta = (layer: LayerKey) => layerMeta(row, layer)
+  const note = (layer: LayerKey) => layerNoteText(meta(layer), locale)
 
   return (
     <div className="bg-white border-2 border-slate-200 rounded-2xl p-6 md:p-7">
@@ -156,11 +168,11 @@ export function ResultCard({
 
       {/* Five layers */}
       <div className="mt-5">
-        <LayerRow label="Employment" rm={rm} meta={meta("employment")} highlighted={hot("employment")}>
+        <LayerRow label="Employment" rm={rm} meta={meta("employment")} note={note("employment")} highlighted={hot("employment")}>
           <strong>{row.employment_rate}%</strong> of recent graduates in full-time work
         </LayerRow>
 
-        <LayerRow label="Visa pathway" rm={rm} meta={meta("visa")} highlighted={hot("visa")}>
+        <LayerRow label="Visa pathway" rm={rm} meta={meta("visa")} note={note("visa")} highlighted={hot("visa")}>
           {row.occupation_list_match
             ? "On the skilled occupation list"
             : "Not on the skilled occupation list"}
@@ -169,7 +181,7 @@ export function ResultCard({
           {row.post_study_work_years === 1 ? "year" : "years"} post-study work visa
         </LayerRow>
 
-        <LayerRow label="Market demand" rm={rm} meta={meta("demand")} highlighted={hot("demand")}>
+        <LayerRow label="Market demand" rm={rm} meta={meta("demand")} note={note("demand")} highlighted={hot("demand")}>
           <span className="flex items-center gap-2.5">
             <strong>{row.market_demand_score}</strong>/100
             <span className="flex-1 max-w-[10rem] h-1.5 rounded-full bg-slate-100 overflow-hidden">
@@ -181,12 +193,12 @@ export function ResultCard({
           </span>
         </LayerRow>
 
-        <LayerRow label="AI exposure" rm={rm} meta={meta("ai_exposure")} highlighted={hot("ai_exposure")}>
+        <LayerRow label="AI exposure" rm={rm} meta={meta("ai_exposure")} note={note("ai_exposure")} highlighted={hot("ai_exposure")}>
           <strong className="capitalize">{row.ai_exposure_band}</strong>
           {row.ai_note && <> — {row.ai_note}</>}
         </LayerRow>
 
-        <LayerRow label="ROI" rm={rm} meta={meta("roi")} highlighted={hot("roi")}>
+        <LayerRow label="ROI" rm={rm} meta={meta("roi")} note={note("roi")} highlighted={hot("roi")}>
           {formatMoney(row.avg_annual_tuition_intl, row.country)} tuition ·{" "}
           {formatMoney(row.median_starting_salary, row.country)} median starting salary ·{" "}
           <strong>{row.payback_years}</strong>{" "}
