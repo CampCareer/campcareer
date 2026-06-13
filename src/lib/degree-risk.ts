@@ -1,5 +1,6 @@
 // Degree Risk Checker — shared types, question definitions, and display helpers.
 // Single source of truth for the form (client) and result pages (server).
+import type { Locale } from "@/lib/i18n/config"
 
 export type RiskLevel = "low" | "medium" | "high"
 export type CountryCode = "US" | "CA" | "UK" | "AU" | "IE"
@@ -17,13 +18,24 @@ export interface MajorSource {
 export const LAYERS = ["employment", "visa", "demand", "ai_exposure", "roi"] as const
 export type LayerKey = (typeof LAYERS)[number]
 
+// A layer note may be a plain string (legacy) or a per-locale object.
+export type LayerNote = string | { en: string; ko: string } | null
+
 // Per-layer confidence/source/as-of metadata (majors.layer_meta JSONB).
 export interface LayerMeta {
   confidence: "estimate" | "verified"
   last_verified: string | null
   source_name: string | null
   source_url: string | null
-  note: string | null
+  note: LayerNote
+}
+
+// Resolve a (possibly bilingual) layer note to a string for the active locale.
+export function layerNoteText(meta: LayerMeta, locale: Locale): string | null {
+  const n = meta.note
+  if (!n) return null
+  if (typeof n === "string") return n
+  return n[locale] ?? n.en ?? null
 }
 
 export interface MajorRow {
