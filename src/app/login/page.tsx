@@ -47,17 +47,7 @@ export default function LoginPage() {
         setError(error.message)
         setIsLoading(false)
       } else {
-        // 온보딩 완료 여부 확인
-        const { data: prefs } = await supabase
-          .from('user_preferences')
-          .select('id')
-          .eq('id', data.user!.id)
-          .single()
-        if (!prefs) {
-          router.push('/onboarding')
-        } else {
-          router.push('/dashboard')
-        }
+        router.push('/degree-risk')
         router.refresh()
       }
     } else {

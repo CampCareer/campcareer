@@ -8,7 +8,6 @@ import {
   LayoutDashboard,
   TrendingUp,
   Globe,
-  Map,
   BookOpen,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -19,13 +18,13 @@ import type { Dictionary } from "@/lib/i18n/dictionaries"
 type NavItem = { key: keyof Dictionary["nav"]; href: string; icon: typeof LayoutDashboard }
 type NavGroup = { label: string; items: NavItem[] }
 
-// Slimmed-down navigation for logged-in users
+// Slimmed-down navigation: Degree Risk is the main product,
+// ROI Explorer / Compare are the "where to study" downstream
 const navGroups: NavGroup[] = [
   {
     label: 'Decide',
     items: [
       { key: "degreeRisk", href: "/degree-risk", icon: LayoutDashboard },
-      { key: "careerPath", href: "/career-path",  icon: Map },
     ],
   },
   {

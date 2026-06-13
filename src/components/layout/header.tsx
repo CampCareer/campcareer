@@ -12,9 +12,7 @@ import type { User } from '@supabase/supabase-js'
 const pageTitles: Record<string, string> = {
   '/roi-explorer': 'ROI Explorer',
   '/compare':      'Country Compare',
-  '/career-path':  'Career Route Map',
   '/blog':         'Study Abroad Insights',
-  '/onboarding':   'Decision Engine',
 }
 
 export function Header({ onToggleSidebar, onToggleMobile, collapsed }: { onToggleSidebar?: () => void; onToggleMobile?: () => void; collapsed?: boolean }) {
