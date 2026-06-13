@@ -34,7 +34,7 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
   }
 
   // 랜딩·로그인 페이지는 사이드바·헤더 없이 풀스크린
-  if (pathname === "/" || pathname === "/login" || pathname === "/onboarding" || pathname.startsWith("/career-path/share") || pathname.startsWith("/degree-risk")) {
+  if (pathname === "/" || pathname === "/login" || pathname.startsWith("/degree-risk")) {
     return <>{children}</>
   }
 

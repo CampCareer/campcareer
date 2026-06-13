@@ -11,6 +11,7 @@ const nextConfig = {
     return [
       // Soft-hide: redirect hidden routes to landing page
       { source: '/dashboard/:path*', destination: '/', permanent: false },
+      { source: '/career-path/:path*', destination: '/', permanent: false },
       { source: '/games/:path*', destination: '/', permanent: false },
       { source: '/timeline/:path*', destination: '/', permanent: false },
       { source: '/checklist/:path*', destination: '/', permanent: false },
@@ -18,6 +19,9 @@ const nextConfig = {
       { source: '/saved/:path*', destination: '/', permanent: false },
       { source: '/fields/:path*', destination: '/', permanent: false },
       { source: '/rankings/:path*', destination: '/', permanent: false },
+
+      // 퍼널 단일화: 구 온보딩 → Degree Risk
+      { source: '/onboarding', destination: '/degree-risk', permanent: false },
 
       // 레거시 대학 디테일 URL: /roi-explorer/:id?country=xx → /roi-explorer/:country/:id
       {

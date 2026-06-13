@@ -43,11 +43,10 @@ export async function middleware(request: NextRequest) {
 
   const pathname = request.nextUrl.pathname
   const isProtected = PROTECTED_PATHS.some(p => pathname.startsWith(p))
-  const isOnboarding = pathname.startsWith('/onboarding')
 
   // 인증 판단이 필요 없는 경로(블로그·정적 페이지 등)에서는 Supabase Auth
   // 네트워크 왕복을 생략 — locale 쿠키만 처리하고 통과.
-  if (!isProtected && !isOnboarding) {
+  if (!isProtected) {
     const response = NextResponse.next({ request })
     applyLocaleCookie(response, locale)
     return response
@@ -79,13 +78,6 @@ export async function middleware(request: NextRequest) {
 
   if (!user && isProtected) {
     const redirect = NextResponse.redirect(new URL('/login', request.url))
-    applyLocaleCookie(redirect, locale)
-    return redirect
-  }
-
-  // 이미 로그인된 유저가 온보딩에 오면 degree-risk로
-  if (user && isOnboarding) {
-    const redirect = NextResponse.redirect(new URL('/degree-risk', request.url))
     applyLocaleCookie(redirect, locale)
     return redirect
   }
