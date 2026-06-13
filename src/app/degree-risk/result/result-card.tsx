@@ -12,6 +12,7 @@ import {
   majorLabel,
 } from "@/lib/degree-risk"
 import { getTranslations, getLocale } from "@/lib/i18n/server"
+import { ImmigrationTimeline } from "@/components/immigration-timeline"
 
 type ResultMeta = ReturnType<typeof getTranslations>["degreeRisk"]["resultMeta"]
 
@@ -165,6 +166,15 @@ export function ResultCard({
       <p className={`${row.overall_risk === "high" ? "mt-1" : "mt-4"} text-body-lg text-slate-600`}>
         {row.risk_summary}
       </p>
+
+      {/* Immigration timeline: study → post-study visa → PR */}
+      <div className="mt-5">
+        <ImmigrationTimeline
+          country={row.country}
+          postStudyYears={row.post_study_work_years}
+          visa={meta("visa")}
+        />
+      </div>
 
       {/* Five layers */}
       <div className="mt-5">

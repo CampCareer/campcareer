@@ -81,6 +81,13 @@
   font-size: max(10px, 1em);
 }
 
+/* transform-only so content is ALWAYS visible (opacity stays 1) even if the
+   animation is paused/frozen by a screenshot tool or never runs. */
+@keyframes tl-fade-up {
+  from { transform: translateY(8px); }
+  to   { transform: none; }
+}
+
 @layer components {
   /* ── Tactile "pressable" depth (Duolingo-style) ───────────────────────── */
   /* Pairs with a 2px border. Override --depth for non-brand surfaces. */
@@ -110,6 +117,17 @@
     .btn-3d:active {
       transform: none;
       box-shadow: 0 4px 0 0 hsl(var(--depth));
+    }
+  }
+
+  /* ── Timeline stage entrance (CSS, always resolves to visible) ────────── */
+  .tl-stage {
+    opacity: 1;
+    animation: tl-fade-up 0.3s ease both;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tl-stage {
+      animation: none;
     }
   }
 
