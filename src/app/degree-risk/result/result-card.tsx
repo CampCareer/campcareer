@@ -1,27 +1,33 @@
 import Link from "next/link"
-import { ExternalLink } from "lucide-react"
+import { ExternalLink, AlertTriangle } from "lucide-react"
 import {
   type MajorRow,
-  type MajorSource,
+  type LayerKey,
+  type LayerMeta,
   COUNTRY_META,
-  LAYER_SOURCE_KEYWORDS,
   RISK_BADGE,
-  findSource,
   formatMoney,
+  layerMeta,
   majorLabel,
 } from "@/lib/degree-risk"
+import { getTranslations } from "@/lib/i18n/server"
+
+type ResultMeta = ReturnType<typeof getTranslations>["degreeRisk"]["resultMeta"]
 
 function LayerRow({
   label,
-  source,
+  meta,
+  rm,
   highlighted = false,
   children,
 }: {
   label: string
-  source: MajorSource | null
+  meta: LayerMeta
+  rm: ResultMeta
   highlighted?: boolean
   children: React.ReactNode
 }) {
+  const verified = meta.confidence === "verified"
   return (
     <div
       className={
@@ -30,7 +36,7 @@ function LayerRow({
           : "py-4 border-t border-slate-100 first:border-t-0"
       }
     >
-      <div className="flex items-baseline justify-between gap-3">
+      <div className="flex items-center gap-2">
         <p
           className={
             highlighted
@@ -41,25 +47,65 @@ function LayerRow({
           {label}
           {highlighted && <span className="ml-1.5 normal-case font-medium text-brand/70">· your priority</span>}
         </p>
+        {!verified && (
+          <span className="shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+            {rm.estimateBadge}
+          </span>
+        )}
+        {meta.note && (
+          <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-semibold text-amber-700 ring-1 ring-amber-200">
+            <AlertTriangle className="h-2.5 w-2.5" />
+            {rm.policyChip}
+          </span>
+        )}
       </div>
+
       <div className="mt-1 text-base text-slate-700 leading-relaxed">{children}</div>
+
       <p className="mt-1.5 text-[11px] text-slate-400">
-        {source && (
+        {verified && meta.source_name ? (
           <>
-            <a
-              href={source.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-0.5 hover:text-slate-600 underline underline-offset-2"
-            >
-              {source.name}
-              <ExternalLink className="w-2.5 h-2.5" />
-            </a>
+            {meta.source_url ? (
+              <a
+                href={meta.source_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-0.5 hover:text-slate-600 underline underline-offset-2"
+              >
+                {rm.verifiedFmt
+                  .replace("{source}", meta.source_name)
+                  .replace("{date}", meta.last_verified ?? "")}
+                <ExternalLink className="w-2.5 h-2.5" />
+              </a>
+            ) : (
+              rm.verifiedFmt
+                .replace("{source}", meta.source_name)
+                .replace("{date}", meta.last_verified ?? "")
+            )}
             <span className="mx-1.5">·</span>
           </>
+        ) : (
+          meta.source_name && (
+            <>
+              {meta.source_url ? (
+                <a
+                  href={meta.source_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-0.5 hover:text-slate-600 underline underline-offset-2"
+                >
+                  {rm.sourcePrefix}: {meta.source_name}
+                  <ExternalLink className="w-2.5 h-2.5" />
+                </a>
+              ) : (
+                `${rm.sourcePrefix}: ${meta.source_name}`
+              )}
+              <span className="mx-1.5">·</span>
+            </>
+          )
         )}
         <Link href="/methodology" className="hover:text-slate-600 underline underline-offset-2">
-          Data: estimate — methodology
+          {rm.methodology}
         </Link>
       </p>
     </div>
@@ -75,7 +121,9 @@ export function ResultCard({
 }) {
   const country = COUNTRY_META[row.country]
   const badge = RISK_BADGE[row.overall_risk]
-  const hot = (layer: string) => priorityLayers.includes(layer)
+  const rm = getTranslations().degreeRisk.resultMeta
+  const hot = (layer: LayerKey) => priorityLayers.includes(layer)
+  const meta = (layer: LayerKey) => layerMeta(row, layer)
 
   return (
     <div className="bg-white border-2 border-slate-200 rounded-2xl p-6 md:p-7">
@@ -108,19 +156,11 @@ export function ResultCard({
 
       {/* Five layers */}
       <div className="mt-5">
-        <LayerRow
-          label="Employment"
-          highlighted={hot("employment")}
-          source={findSource(row.sources, LAYER_SOURCE_KEYWORDS.employment)}
-        >
+        <LayerRow label="Employment" rm={rm} meta={meta("employment")} highlighted={hot("employment")}>
           <strong>{row.employment_rate}%</strong> of recent graduates in full-time work
         </LayerRow>
 
-        <LayerRow
-          label="Visa pathway"
-          highlighted={hot("visa")}
-          source={findSource(row.sources, LAYER_SOURCE_KEYWORDS.visa)}
-        >
+        <LayerRow label="Visa pathway" rm={rm} meta={meta("visa")} highlighted={hot("visa")}>
           {row.occupation_list_match
             ? "On the skilled occupation list"
             : "Not on the skilled occupation list"}
@@ -129,11 +169,7 @@ export function ResultCard({
           {row.post_study_work_years === 1 ? "year" : "years"} post-study work visa
         </LayerRow>
 
-        <LayerRow
-          label="Market demand"
-          highlighted={hot("demand")}
-          source={findSource(row.sources, LAYER_SOURCE_KEYWORDS.demand)}
-        >
+        <LayerRow label="Market demand" rm={rm} meta={meta("demand")} highlighted={hot("demand")}>
           <span className="flex items-center gap-2.5">
             <strong>{row.market_demand_score}</strong>/100
             <span className="flex-1 max-w-[10rem] h-1.5 rounded-full bg-slate-100 overflow-hidden">
@@ -145,16 +181,12 @@ export function ResultCard({
           </span>
         </LayerRow>
 
-        <LayerRow
-          label="AI exposure"
-          highlighted={hot("ai")}
-          source={findSource(row.sources, LAYER_SOURCE_KEYWORDS.ai)}
-        >
+        <LayerRow label="AI exposure" rm={rm} meta={meta("ai_exposure")} highlighted={hot("ai_exposure")}>
           <strong className="capitalize">{row.ai_exposure_band}</strong>
           {row.ai_note && <> — {row.ai_note}</>}
         </LayerRow>
 
-        <LayerRow label="ROI" highlighted={hot("roi")} source={findSource(row.sources, LAYER_SOURCE_KEYWORDS.roi)}>
+        <LayerRow label="ROI" rm={rm} meta={meta("roi")} highlighted={hot("roi")}>
           {formatMoney(row.avg_annual_tuition_intl, row.country)} tuition ·{" "}
           {formatMoney(row.median_starting_salary, row.country)} median starting salary ·{" "}
           <strong>{row.payback_years}</strong>{" "}

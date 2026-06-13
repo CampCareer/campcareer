@@ -472,6 +472,13 @@ const en = {
       'IELTS 6.0–6.5': 'IELTS 6.0–6.5',
       'IELTS 7.0+': 'IELTS 7.0+',
     },
+    resultMeta: {
+      verifiedFmt: 'Source: {source} · as of {date}',
+      sourcePrefix: 'Source',
+      estimateBadge: 'Estimate',
+      policyChip: 'Policy change expected',
+      methodology: 'methodology',
+    },
   },
   onboarding: {
     badge: 'Study Abroad Decision Engine',
