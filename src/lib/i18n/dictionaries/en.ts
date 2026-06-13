@@ -1,15 +1,10 @@
 const en = {
   nav: {
-    dashboard: 'Dashboard',
+    degreeRisk: 'Degree Risk',
     roiExplorer: 'ROI Explorer',
     compare: 'Compare',
-    saved: 'Saved',
-    checklist: 'Checklist',
-    timeline: 'Timeline',
     careerPath: 'Career Map',
-    documents: 'Documents',
     blog: 'Blog',
-    games: 'Games',
   },
   common: {
     signIn: 'Sign In',

@@ -43,6 +43,10 @@ export async function submitAssessment(answers: Answers): Promise<SubmitResult> 
     .eq("slug", answers.major_pref)
     .in("country", viewCountries(view))
 
+  if (!majors || majors.length === 0) {
+    console.warn(`[degree-risk] No majors row found for slug="${answers.major_pref}" countries="${viewCountries(view).join(",")}"`)
+  }
+
   const snapshot = ((majors ?? []) as unknown as MajorRow[]).map((m) => ({
     slug: m.slug,
     country: m.country,

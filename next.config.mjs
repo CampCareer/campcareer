@@ -9,6 +9,16 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      // Soft-hide: redirect hidden routes to landing page
+      { source: '/dashboard/:path*', destination: '/', permanent: false },
+      { source: '/games/:path*', destination: '/', permanent: false },
+      { source: '/timeline/:path*', destination: '/', permanent: false },
+      { source: '/checklist/:path*', destination: '/', permanent: false },
+      { source: '/documents/:path*', destination: '/', permanent: false },
+      { source: '/saved/:path*', destination: '/', permanent: false },
+      { source: '/fields/:path*', destination: '/', permanent: false },
+      { source: '/rankings/:path*', destination: '/', permanent: false },
+
       // 레거시 대학 디테일 URL: /roi-explorer/:id?country=xx → /roi-explorer/:country/:id
       {
         source: '/roi-explorer/:college_id((?!us$|au$|ca$|uk$|ie$)[^/]+)',

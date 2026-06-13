@@ -3,10 +3,7 @@ import {
   ArrowRight,
   TrendingUp,
   Globe,
-  CheckSquare,
-  CalendarDays,
   Map,
-  FolderOpen,
 } from "lucide-react"
 import { getTranslations } from "@/lib/i18n/server"
 import { LanguageToggle } from "@/components/language-toggle"
@@ -66,12 +63,9 @@ export default function LandingPage() {
   ]
 
   const FEATURES = [
-    { icon: TrendingUp,   title: tl.features.roiTitle,        desc: tl.features.roiDesc,        why: tl.features.roiWhy,        href: "/roi-explorer" },
-    { icon: Map,          title: tl.features.careerMapTitle,  desc: tl.features.careerMapDesc,  why: tl.features.careerMapWhy,  href: "/career-path" },
-    { icon: Globe,        title: tl.features.compareTitle,    desc: tl.features.compareDesc,    why: tl.features.compareWhy,    href: "/compare" },
-    { icon: CheckSquare,  title: tl.features.checklistTitle,  desc: tl.features.checklistDesc,  why: tl.features.checklistWhy,  href: "/checklist" },
-    { icon: CalendarDays, title: tl.features.timelineTitle,   desc: tl.features.timelineDesc,   why: tl.features.timelineWhy,   href: "/timeline" },
-    { icon: FolderOpen,   title: tl.features.documentsTitle,  desc: tl.features.documentsDesc,  why: tl.features.documentsWhy,  href: "/documents" },
+    { icon: TrendingUp, title: tl.features.roiTitle,       desc: tl.features.roiDesc,       why: tl.features.roiWhy,       href: "/roi-explorer" },
+    { icon: Map,        title: tl.features.careerMapTitle, desc: tl.features.careerMapDesc, why: tl.features.careerMapWhy, href: "/career-path" },
+    { icon: Globe,      title: tl.features.compareTitle,   desc: tl.features.compareDesc,   why: tl.features.compareWhy,   href: "/compare" },
   ]
 
   return (
@@ -369,7 +363,6 @@ export default function LandingPage() {
           <span>{tl.footer.copyright}</span>
           <div className="flex items-center gap-4">
             <Link href="/methodology" className="hover:text-slate-600 transition-colors">Methodology</Link>
-            <Link href="/fields" className="hover:text-slate-600 transition-colors">Fields</Link>
             <Link href="/privacy" className="hover:text-slate-600 transition-colors">Privacy</Link>
             <Link href="/terms" className="hover:text-slate-600 transition-colors">Terms</Link>
             <span>{tl.footer.dataSources}</span>
