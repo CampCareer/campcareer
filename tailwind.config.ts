@@ -12,10 +12,17 @@ const config: Config = {
     extend: {
       fontFamily: {
         sans: ["var(--font-geist-sans)", ...fontFamily.sans],
+        display: ["var(--font-nunito)", "var(--font-geist-sans)", ...fontFamily.sans],
         mono: ["var(--font-geist-mono)", ...fontFamily.mono],
         pixel: ["var(--font-press-start)", "'Press Start 2P'", "monospace"],
       },
       colors: {
+        brand: {
+          DEFAULT: "hsl(var(--brand))",
+          foreground: "hsl(var(--brand-foreground))",
+          press: "hsl(var(--brand-press))",
+          tint: "hsl(var(--brand-tint))",
+        },
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {

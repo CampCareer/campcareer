@@ -2,21 +2,34 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { ArrowLeft, Check, Loader2 } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { ArrowLeft, Loader2 } from "lucide-react"
 import { QUESTIONS, type Answers, type AnswerKey } from "@/lib/degree-risk"
+import { ChoiceCard } from "@/components/ui/choice-card"
+import { Button } from "@/components/ui/button"
 import { submitAssessment } from "./actions"
+
+// Flags for the "where are you studying?" question (icon slot).
+const COUNTRY_FLAGS: Record<string, string> = {
+  "United States": "🇺🇸",
+  "Canada": "🇨🇦",
+  "UK": "🇬🇧",
+  "Australia": "🇦🇺",
+  "Ireland": "🇮🇪",
+  "Not sure": "🌍",
+}
 
 export function DegreeRiskForm() {
   const router = useRouter()
   const [step, setStep] = useState(0)
   const [answers, setAnswers] = useState<Partial<Answers>>({})
   const [submitting, setSubmitting] = useState(false)
+  const [advancing, setAdvancing] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const question = QUESTIONS[step]
   const isLast = step === QUESTIONS.length - 1
   const selected = answers[question.key]
+  const isCountry = question.key === "country_pref"
 
   async function submit(complete: Answers) {
     setSubmitting(true)
@@ -42,59 +55,55 @@ export function DegreeRiskForm() {
   }
 
   function choose(key: AnswerKey, value: string) {
-    if (submitting) return
+    if (submitting || advancing) return
     const next = { ...answers, [key]: value }
     setAnswers(next)
-    if (isLast) {
-      submit(next as Answers)
-    } else {
-      setStep(step + 1)
-    }
+    // Single-select: show the selected state briefly, then advance.
+    setAdvancing(true)
+    setTimeout(() => {
+      if (isLast) {
+        submit(next as Answers)
+      } else {
+        setStep((s) => s + 1)
+      }
+      setAdvancing(false)
+    }, 250)
   }
+
+  const progressPct = Math.round(((step + (selected ? 1 : 0)) / QUESTIONS.length) * 100)
 
   return (
     <div>
       {/* Progress */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-2 text-xs text-slate-400">
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-2 text-sm font-medium text-slate-400">
           <span>
             Question {step + 1} of {QUESTIONS.length}
           </span>
-          <span>{Math.round((step / QUESTIONS.length) * 100)}%</span>
+          <span>{progressPct}%</span>
         </div>
-        <div className="h-1.5 rounded-full bg-slate-100 overflow-hidden">
+        <div className="h-3 rounded-full bg-slate-100 overflow-hidden">
           <div
-            className="h-full rounded-full bg-indigo-600 transition-all duration-300"
-            style={{ width: `${((step + (selected ? 1 : 0)) / QUESTIONS.length) * 100}%` }}
+            className="h-full rounded-full bg-brand transition-all duration-300"
+            style={{ width: `${progressPct}%` }}
           />
         </div>
       </div>
 
-      <h2 className="text-lg font-semibold text-slate-900 mb-4">{question.title}</h2>
+      <h2 className="font-display text-question text-slate-900 mb-6">{question.title}</h2>
 
-      <ul className="space-y-2.5">
-        {question.options.map((option) => {
-          const isSelected = selected === option.value
-          return (
-            <li key={option.value}>
-              <button
-                type="button"
-                onClick={() => choose(question.key, option.value)}
-                disabled={submitting}
-                className={cn(
-                  "w-full flex items-center justify-between text-left px-4 py-3.5 rounded-xl border text-sm font-medium transition-colors",
-                  isSelected
-                    ? "border-indigo-600 bg-indigo-50 text-indigo-700"
-                    : "border-slate-200 text-slate-700 hover:border-indigo-300 hover:bg-slate-50",
-                  submitting && "opacity-60"
-                )}
-              >
-                {option.label}
-                {isSelected && <Check className="w-4 h-4 shrink-0 text-indigo-600" />}
-              </button>
-            </li>
-          )
-        })}
+      <ul className="space-y-3">
+        {question.options.map((option) => (
+          <li key={option.value}>
+            <ChoiceCard
+              label={option.label}
+              icon={isCountry ? COUNTRY_FLAGS[option.value] : undefined}
+              selected={selected === option.value}
+              disabled={submitting || advancing}
+              onSelect={() => choose(question.key, option.value)}
+            />
+          </li>
+        ))}
       </ul>
 
       {error && (
@@ -107,8 +116,8 @@ export function DegreeRiskForm() {
         {step > 0 && !submitting ? (
           <button
             type="button"
-            onClick={() => setStep(step - 1)}
-            className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition-colors"
+            onClick={() => !advancing && setStep((s) => s - 1)}
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Back
@@ -116,13 +125,17 @@ export function DegreeRiskForm() {
         ) : (
           <span />
         )}
-        {submitting && (
-          <span className="inline-flex items-center gap-2 text-sm text-slate-500">
-            <Loader2 className="w-4 h-4 animate-spin" />
-            Scoring your degree…
-          </span>
-        )}
       </div>
+
+      {/* Submit / loading affordance — sticky on mobile, safe-area aware */}
+      {submitting && (
+        <div className="sticky bottom-0 left-0 right-0 mt-2 pb-[env(safe-area-inset-bottom)] bg-gradient-to-t from-white via-white to-transparent pt-4">
+          <Button variant="tactile" size="tactile" disabled className="w-full">
+            <Loader2 className="w-5 h-5 animate-spin mr-2" />
+            Scoring your degree…
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

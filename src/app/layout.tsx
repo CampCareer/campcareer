@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Analytics } from "@vercel/analytics/react"
 import localFont from "next/font/local"
+import { Nunito } from "next/font/google"
 import "./globals.css"
 import { LayoutShell } from "@/components/layout/layout-shell"
 import { getLocale } from "@/lib/i18n/server"
@@ -15,6 +16,13 @@ const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
   weight: "100 900",
+})
+// Rounded display font for headings (body stays Geist for now).
+const nunito = Nunito({
+  subsets: ["latin"],
+  variable: "--font-nunito",
+  weight: ["400", "600", "700", "800", "900"],
+  display: "swap",
 })
 
 // TODO: Future programmatic SEO pages (do not implement now — plan only):
@@ -72,7 +80,7 @@ export default function RootLayout({
   const locale = getLocale()
   return (
     <html lang={locale}>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} ${nunito.variable} antialiased`}>
         <LocaleProvider locale={locale}>
           <LayoutShell>{children}</LayoutShell>
         </LocaleProvider>

@@ -25,11 +25,11 @@ export default function DegreeRiskPage() {
         </div>
       </header>
 
-      <main className="max-w-xl mx-auto px-6 py-10">
-        <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
+      <main className="max-w-2xl mx-auto px-6 min-h-[calc(100vh-3.5rem)] flex flex-col justify-center py-10">
+        <h1 className="font-display text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
           Check your degree risk
         </h1>
-        <p className="mt-2 mb-8 text-sm text-slate-500 leading-relaxed">
+        <p className="mt-2 mb-8 text-body-lg text-slate-500">
           6 questions, under a minute. We score your major on employment,
           visa pathway, market demand, AI exposure, and ROI.
         </p>

@@ -14,12 +14,15 @@ const buttonVariants = cva(
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        tactile:
+          "btn-3d btn-3d-brand border-2 border-brand bg-brand text-brand-foreground font-extrabold uppercase tracking-wide hover:bg-brand",
       },
       size: {
         default: "h-10 px-4 py-2",
         sm: "h-9 rounded-md px-3",
         lg: "h-11 rounded-md px-8",
         icon: "h-10 w-10",
+        tactile: "min-h-[56px] rounded-2xl px-8 text-[17px]",
       },
     },
     defaultVariants: {
