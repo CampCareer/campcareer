@@ -204,12 +204,15 @@ export function findSource(sources: MajorSource[] | null, keywords: string[]): M
   return found ?? null
 }
 
+// Keywords are matched as case-insensitive substrings of a source's name, so
+// they must be specific enough to avoid false hits (e.g. bare "ai" matches
+// "home affairs", "cso" matches "CSOL"). Prefer multi-char, distinctive tokens.
 export const LAYER_SOURCE_KEYWORDS: Record<string, string[]> = {
-  employment: ["qilt", "hea", "hesa", "graduate outcome", "employment", "scorecard"],
-  visa: ["occupation", "visa", "immigration", "skills list", "stamp", "csol", "critical skills", "home affairs", "opt", "h-1b", "pgwp", "graduate route", "uscis", "ircc", "ukvi"],
-  demand: ["demand", "jobs and skills", "vacanc", "labour", "labor", "lmi", "egfsn", "job bank", "outlook"],
-  ai: ["ai", "oecd", "felten", "exposure", "automation"],
-  roi: ["tuition", "salary", "cso", "earnings", "fees", "cricos"],
+  employment: ["qilt", "hea ", "hesa", "graduate outcome", "employment", "scorecard"],
+  visa: ["occupation", "visa", "immigration", "skills list", "stamp", "csol", "critical skills", "home affairs", "stem opt", "h-1b", "pgwp", "graduate route", "uscis", "ircc", "ukvi"],
+  demand: ["demand", "jobs and skills", "vacanc", "labour", "labor", "egfsn", "job bank", "outlook"],
+  ai: ["oecd", "felten", "ai exposure", "ai-exposure", "automation"],
+  roi: ["tuition", "earnings", "fees", "cricos", "scorecard", "discover uni"],
 }
 
 // ── Goal-aware result framing ───────────────────────────────────────────────
