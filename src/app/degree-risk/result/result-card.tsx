@@ -14,17 +14,32 @@ import {
 function LayerRow({
   label,
   source,
+  highlighted = false,
   children,
 }: {
   label: string
   source: MajorSource | null
+  highlighted?: boolean
   children: React.ReactNode
 }) {
   return (
-    <div className="py-3.5 border-t border-slate-100 first:border-t-0">
+    <div
+      className={
+        highlighted
+          ? "py-3.5 border-t border-slate-100 first:border-t-0 -mx-2 px-2 rounded-lg bg-indigo-50/60 ring-1 ring-indigo-100"
+          : "py-3.5 border-t border-slate-100 first:border-t-0"
+      }
+    >
       <div className="flex items-baseline justify-between gap-3">
-        <p className="text-xs font-medium text-slate-400 uppercase tracking-wider shrink-0">
+        <p
+          className={
+            highlighted
+              ? "text-xs font-semibold text-indigo-600 uppercase tracking-wider shrink-0"
+              : "text-xs font-medium text-slate-400 uppercase tracking-wider shrink-0"
+          }
+        >
           {label}
+          {highlighted && <span className="ml-1.5 normal-case font-normal text-indigo-400">· your priority</span>}
         </p>
       </div>
       <div className="mt-1 text-sm text-slate-700 leading-relaxed">{children}</div>
@@ -51,9 +66,16 @@ function LayerRow({
   )
 }
 
-export function ResultCard({ row }: { row: MajorRow }) {
+export function ResultCard({
+  row,
+  priorityLayers = [],
+}: {
+  row: MajorRow
+  priorityLayers?: string[]
+}) {
   const country = COUNTRY_META[row.country]
   const badge = RISK_BADGE[row.overall_risk]
+  const hot = (layer: string) => priorityLayers.includes(layer)
 
   return (
     <div className="bg-white border border-slate-200 rounded-2xl p-6">
@@ -88,12 +110,17 @@ export function ResultCard({ row }: { row: MajorRow }) {
       <div className="mt-5">
         <LayerRow
           label="Employment"
+          highlighted={hot("employment")}
           source={findSource(row.sources, LAYER_SOURCE_KEYWORDS.employment)}
         >
           <strong>{row.employment_rate}%</strong> of recent graduates in full-time work
         </LayerRow>
 
-        <LayerRow label="Visa pathway" source={findSource(row.sources, LAYER_SOURCE_KEYWORDS.visa)}>
+        <LayerRow
+          label="Visa pathway"
+          highlighted={hot("visa")}
+          source={findSource(row.sources, LAYER_SOURCE_KEYWORDS.visa)}
+        >
           {row.occupation_list_match
             ? "On the skilled occupation list"
             : "Not on the skilled occupation list"}
@@ -104,6 +131,7 @@ export function ResultCard({ row }: { row: MajorRow }) {
 
         <LayerRow
           label="Market demand"
+          highlighted={hot("demand")}
           source={findSource(row.sources, LAYER_SOURCE_KEYWORDS.demand)}
         >
           <span className="flex items-center gap-2.5">
@@ -117,13 +145,17 @@ export function ResultCard({ row }: { row: MajorRow }) {
           </span>
         </LayerRow>
 
-        <LayerRow label="AI exposure" source={findSource(row.sources, LAYER_SOURCE_KEYWORDS.ai)}>
+        <LayerRow
+          label="AI exposure"
+          highlighted={hot("ai")}
+          source={findSource(row.sources, LAYER_SOURCE_KEYWORDS.ai)}
+        >
           <strong className="capitalize">{row.ai_exposure_band}</strong>
           {row.ai_note && <> — {row.ai_note}</>}
         </LayerRow>
 
-        <LayerRow label="ROI" source={findSource(row.sources, LAYER_SOURCE_KEYWORDS.roi)}>
-          {formatMoney(row.tuition, row.country)} tuition ·{" "}
+        <LayerRow label="ROI" highlighted={hot("roi")} source={findSource(row.sources, LAYER_SOURCE_KEYWORDS.roi)}>
+          {formatMoney(row.avg_annual_tuition_intl, row.country)} tuition ·{" "}
           {formatMoney(row.median_starting_salary, row.country)} median starting salary ·{" "}
           <strong>{row.payback_years}</strong>{" "}
           {row.payback_years === 1 ? "year" : "years"} payback

@@ -31,6 +31,7 @@ export function DegreeRiskForm() {
       const params = new URLSearchParams({
         major: complete.major_pref,
         view: res.view,
+        goal: complete.primary_goal,
       })
       if (res.assessmentId) params.set("aid", res.assessmentId)
       router.push(`/degree-risk/result?${params.toString()}`)

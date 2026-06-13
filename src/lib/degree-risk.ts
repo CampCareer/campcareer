@@ -2,8 +2,11 @@
 // Single source of truth for the form (client) and result pages (server).
 
 export type RiskLevel = "low" | "medium" | "high"
-export type CountryCode = "AU" | "IE"
-export type ResultView = CountryCode | "both"
+export type CountryCode = "US" | "CA" | "UK" | "AU" | "IE"
+export type ResultView = CountryCode | "all"
+
+// Display order everywhere multiple countries are shown.
+export const ALL_COUNTRIES: CountryCode[] = ["US", "CA", "UK", "AU", "IE"]
 
 export interface MajorSource {
   name: string
@@ -21,7 +24,7 @@ export interface MajorRow {
   market_demand_score: number
   ai_exposure_band: string
   ai_note: string
-  tuition: number
+  avg_annual_tuition_intl: number
   median_starting_salary: number
   payback_years: number
   alternatives: string[] | null
@@ -31,7 +34,7 @@ export interface MajorRow {
 }
 
 export const MAJOR_COLUMNS =
-  "slug, country, overall_risk, risk_summary, employment_rate, occupation_list_match, post_study_work_years, market_demand_score, ai_exposure_band, ai_note, tuition, median_starting_salary, payback_years, alternatives, sources, data_confidence, last_verified"
+  "slug, country, overall_risk, risk_summary, employment_rate, occupation_list_match, post_study_work_years, market_demand_score, ai_exposure_band, ai_note, avg_annual_tuition_intl, median_starting_salary, payback_years, alternatives, sources, data_confidence, last_verified"
 
 // ── Form answers (keys mirror the assessments table columns) ────────────────
 
@@ -70,6 +73,10 @@ export const MAJOR_OPTIONS = [
   { slug: "music", label: "Music" },
 ] as const
 
+// Escape hatch for majors we don't score yet — routed to the ROI Explorer
+// field search instead of a dead-end.
+export const OTHER_MAJOR = "other"
+
 export function majorLabel(slug: string): string {
   return MAJOR_OPTIONS.find((m) => m.slug === slug)?.label ?? slug
 }
@@ -83,17 +90,21 @@ export const QUESTIONS: Question[] = [
     key: "country_pref",
     title: "Where are you thinking of studying?",
     options: [
+      { value: "United States", label: "United States" },
+      { value: "Canada", label: "Canada" },
+      { value: "UK", label: "UK" },
       { value: "Australia", label: "Australia" },
       { value: "Ireland", label: "Ireland" },
-      { value: "UK", label: "UK" },
-      { value: "Canada", label: "Canada" },
       { value: "Not sure", label: "Not sure" },
     ],
   },
   {
     key: "major_pref",
     title: "Which major are you considering?",
-    options: MAJOR_OPTIONS.map((m) => ({ value: m.slug, label: m.label })),
+    options: [
+      ...MAJOR_OPTIONS.map((m) => ({ value: m.slug, label: m.label })),
+      { value: OTHER_MAJOR, label: "Other / Not listed" },
+    ],
   },
   {
     key: "budget",
@@ -138,25 +149,37 @@ export const QUESTIONS: Question[] = [
 ]
 
 // ── Result view resolution ──────────────────────────────────────────────────
-// We only score AU and IE; UK / Canada / Not sure get a side-by-side compare.
+// All five countries are scored; "Not sure" compares them side by side.
+
+const COUNTRY_PREF_TO_CODE: Record<string, CountryCode> = {
+  "United States": "US",
+  "Canada": "CA",
+  "UK": "UK",
+  "Australia": "AU",
+  "Ireland": "IE",
+}
 
 export function resolveView(countryPref: string): ResultView {
-  if (countryPref === "Australia") return "AU"
-  if (countryPref === "Ireland") return "IE"
-  return "both"
+  return COUNTRY_PREF_TO_CODE[countryPref] ?? "all"
 }
 
 export function viewCountries(view: ResultView): CountryCode[] {
-  return view === "both" ? ["AU", "IE"] : [view]
+  return view === "all" ? ALL_COUNTRIES : [view]
 }
 
-export function isResultView(v: string | undefined): v is ResultView {
-  return v === "AU" || v === "IE" || v === "both"
+// Accepts the legacy "both" value from old shared result URLs.
+export function normalizeView(v: string | undefined): ResultView {
+  if (v === "both") return "all"
+  if (v === "all" || (ALL_COUNTRIES as string[]).includes(v ?? "")) return v as ResultView
+  return "all"
 }
 
 // ── Display helpers ─────────────────────────────────────────────────────────
 
 export const COUNTRY_META: Record<CountryCode, { name: string; flag: string; currency: string }> = {
+  US: { name: "United States", flag: "🇺🇸", currency: "$" },
+  CA: { name: "Canada", flag: "🇨🇦", currency: "C$" },
+  UK: { name: "United Kingdom", flag: "🇬🇧", currency: "£" },
   AU: { name: "Australia", flag: "🇦🇺", currency: "A$" },
   IE: { name: "Ireland", flag: "🇮🇪", currency: "€" },
 }
@@ -182,9 +205,49 @@ export function findSource(sources: MajorSource[] | null, keywords: string[]): M
 }
 
 export const LAYER_SOURCE_KEYWORDS: Record<string, string[]> = {
-  employment: ["qilt", "hea", "graduate outcome", "employment"],
-  visa: ["occupation", "visa", "immigration", "skills list", "stamp", "csol", "critical skills", "home affairs"],
-  demand: ["demand", "jobs and skills", "vacanc", "labour", "labor", "lmi", "egfsn"],
+  employment: ["qilt", "hea", "hesa", "graduate outcome", "employment", "scorecard"],
+  visa: ["occupation", "visa", "immigration", "skills list", "stamp", "csol", "critical skills", "home affairs", "opt", "h-1b", "pgwp", "graduate route", "uscis", "ircc", "ukvi"],
+  demand: ["demand", "jobs and skills", "vacanc", "labour", "labor", "lmi", "egfsn", "job bank", "outlook"],
   ai: ["ai", "oecd", "felten", "exposure", "automation"],
   roi: ["tuition", "salary", "cso", "earnings", "fees", "cricos"],
+}
+
+// ── Goal-aware result framing ───────────────────────────────────────────────
+// The "What matters most to you?" answer decides which layers get visually
+// emphasized on the result card.
+
+export const GOAL_PRIORITY_LAYERS: Record<string, string[]> = {
+  "Job": ["employment", "demand"],
+  "PR–Immigration": ["visa"],
+  "Salary": ["roi"],
+}
+
+export function goalToLayers(goal: string | undefined): string[] {
+  return GOAL_PRIORITY_LAYERS[goal ?? ""] ?? []
+}
+
+export function isKnownGoal(goal: string | undefined): boolean {
+  const q = QUESTIONS.find((x) => x.key === "primary_goal")
+  return !!goal && !!q?.options.some((o) => o.value === goal)
+}
+
+// ── Major → ROI Explorer field mapping ──────────────────────────────────────
+// Used by the "Where to study this major" section on the result page to query
+// the roi_explorer views (field terms align with src/lib/field-aliases.ts).
+
+export const MAJOR_ROI_FIELD: Record<string, string> = {
+  "computer-science": "computer science",
+  "data-analytics": "data science",
+  "software-engineering": "software engineering",
+  "nursing": "nursing",
+  "civil-engineering": "civil engineering",
+  "business-management": "business",
+  "accounting": "accounting",
+  "ux-design": "design",
+  "psychology": "psychology",
+  "music": "music",
+}
+
+export function toRoiCountry(country: CountryCode): string {
+  return country.toLowerCase()
 }

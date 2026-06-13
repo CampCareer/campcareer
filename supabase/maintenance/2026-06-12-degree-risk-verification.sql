@@ -83,21 +83,13 @@ BEGIN;
 -- bachelor-level award. If the seeded column means something else
 -- (e.g. masters-level max), do not apply these two statements.
 
-UPDATE public.majors SET
-  post_study_work_years = 2,
-  sources = jsonb_set(COALESCE(sources, '{}'::jsonb), '{visa}', jsonb_build_object(
-    'label', 'Temporary Graduate visa (485), Post-Higher Education Work stream — Dept of Home Affairs',
-    'url', 'https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/temporary-graduate-485/post-higher-education-work',
-    'verified', '2026-06-12'))
-WHERE country = 'AU';
+-- NOTE (2026-06-13): the app reads `sources` as an ARRAY of {name,url}, not a
+-- keyed object. These statements only set post_study_work_years; the canonical
+-- `sources` arrays for AU/IE are rebuilt in 2026-06-13-degree-risk-us-ca-uk-seed.sql.
+-- Run that file after this one so the visa source link renders.
+UPDATE public.majors SET post_study_work_years = 2 WHERE country = 'AU';
 
-UPDATE public.majors SET
-  post_study_work_years = 1,
-  sources = jsonb_set(COALESCE(sources, '{}'::jsonb), '{visa}', jsonb_build_object(
-    'label', 'Stamp 1G, Third Level Graduate Programme — Irish Immigration Service',
-    'url', 'https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/',
-    'verified', '2026-06-12'))
-WHERE country = 'IE';
+UPDATE public.majors SET post_study_work_years = 1 WHERE country = 'IE';
 
 -- Occupation-list membership — only the occupations confirmed this pass.
 UPDATE public.majors SET occupation_list_match = true
