@@ -11,6 +11,7 @@ import {
 import { getTranslations } from "@/lib/i18n/server"
 import { LanguageToggle } from "@/components/language-toggle"
 import { LogoMark } from "@/components/logo-mark"
+import { Button } from "@/components/ui/button"
 import { pageMetadata } from "@/lib/seo"
 
 export const metadata = pageMetadata({
@@ -112,14 +113,13 @@ export default function LandingPage() {
             </p>
 
             <div className="flex flex-col items-center lg:items-start">
-              <Link
-                href="/degree-risk"
-                className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-lg px-8 py-4 rounded-xl transition-colors shadow-lg shadow-indigo-900/40"
-              >
-                {tl.hero.ctaRisk}
-                <ArrowRight className="w-5 h-5" />
-              </Link>
-              <span className="mt-2 text-xs text-slate-500">{tl.hero.ctaRiskSub}</span>
+              <Button asChild variant="tactile" size="tactile">
+                <Link href="/degree-risk">
+                  {tl.hero.ctaRisk}
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Link>
+              </Button>
+              <span className="mt-3 text-xs text-slate-500">{tl.hero.ctaRiskSub}</span>
             </div>
 
             <Link
@@ -273,7 +273,8 @@ export default function LandingPage() {
           <h2 className="font-display text-4xl font-extrabold text-white mb-8">{tl.cta.title}</h2>
           <Link
             href="/degree-risk"
-            className="inline-flex items-center gap-2 bg-white hover:bg-indigo-50 text-indigo-600 font-semibold px-8 py-4 rounded-xl transition-colors text-lg"
+            style={{ ["--depth" as string]: "244 53% 41%" } as React.CSSProperties}
+            className="btn-3d inline-flex items-center gap-2 border-2 border-brand-press bg-white text-brand font-extrabold uppercase tracking-wide px-8 min-h-[56px] rounded-2xl text-[17px]"
           >
             {tl.cta.button}
             <ArrowRight className="w-5 h-5" />

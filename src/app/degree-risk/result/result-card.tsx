@@ -26,23 +26,23 @@ function LayerRow({
     <div
       className={
         highlighted
-          ? "py-3.5 border-t border-slate-100 first:border-t-0 -mx-2 px-2 rounded-lg bg-indigo-50/60 ring-1 ring-indigo-100"
-          : "py-3.5 border-t border-slate-100 first:border-t-0"
+          ? "py-4 border-t border-slate-100 first:border-t-0 -mx-3 px-3 rounded-xl bg-brand-tint ring-2 ring-brand/30"
+          : "py-4 border-t border-slate-100 first:border-t-0"
       }
     >
       <div className="flex items-baseline justify-between gap-3">
         <p
           className={
             highlighted
-              ? "text-xs font-semibold text-indigo-600 uppercase tracking-wider shrink-0"
-              : "text-xs font-medium text-slate-400 uppercase tracking-wider shrink-0"
+              ? "text-sm font-bold text-brand uppercase tracking-wider shrink-0"
+              : "text-sm font-semibold text-slate-400 uppercase tracking-wider shrink-0"
           }
         >
           {label}
-          {highlighted && <span className="ml-1.5 normal-case font-normal text-indigo-400">· your priority</span>}
+          {highlighted && <span className="ml-1.5 normal-case font-medium text-brand/70">· your priority</span>}
         </p>
       </div>
-      <div className="mt-1 text-sm text-slate-700 leading-relaxed">{children}</div>
+      <div className="mt-1 text-base text-slate-700 leading-relaxed">{children}</div>
       <p className="mt-1.5 text-[11px] text-slate-400">
         {source && (
           <>
@@ -78,19 +78,19 @@ export function ResultCard({
   const hot = (layer: string) => priorityLayers.includes(layer)
 
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl p-6">
+    <div className="bg-white border-2 border-slate-200 rounded-2xl p-6 md:p-7">
       {/* Header */}
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-xs text-slate-400">
+          <p className="text-sm text-slate-400">
             {country.flag} {country.name}
           </p>
-          <h2 className="mt-0.5 text-lg font-semibold text-slate-900">
+          <h2 className="mt-0.5 font-display text-2xl font-extrabold text-slate-900 tracking-tight">
             {majorLabel(row.slug)}
           </h2>
         </div>
         <span
-          className={`inline-block shrink-0 px-2.5 py-1 rounded-full border text-xs font-bold ${badge.className}`}
+          className={`inline-block shrink-0 px-3 py-1.5 rounded-full border-2 text-sm font-bold ${badge.className}`}
         >
           {badge.label}
         </span>
@@ -98,11 +98,11 @@ export function ResultCard({
 
       {/* Summary — high-risk majors get cost/conditions framing, never "don't study X" */}
       {row.overall_risk === "high" && (
-        <p className="mt-4 text-xs font-semibold text-slate-500 uppercase tracking-wide">
+        <p className="mt-4 text-xs font-bold text-slate-500 uppercase tracking-wide">
           What this path costs — and when it works
         </p>
       )}
-      <p className={`${row.overall_risk === "high" ? "mt-1" : "mt-4"} text-sm text-slate-600 leading-relaxed`}>
+      <p className={`${row.overall_risk === "high" ? "mt-1" : "mt-4"} text-body-lg text-slate-600`}>
         {row.risk_summary}
       </p>
 
@@ -138,7 +138,7 @@ export function ResultCard({
             <strong>{row.market_demand_score}</strong>/100
             <span className="flex-1 max-w-[10rem] h-1.5 rounded-full bg-slate-100 overflow-hidden">
               <span
-                className="block h-full rounded-full bg-indigo-500"
+                className="block h-full rounded-full bg-brand"
                 style={{ width: `${Math.min(Math.max(row.market_demand_score, 0), 100)}%` }}
               />
             </span>

@@ -129,7 +129,7 @@ export default async function DegreeRiskResultPage({
           </div>
         ) : (
           <>
-            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
+            <h1 className="font-display text-question text-slate-900">
               {majorLabel(major)} — your degree risk
             </h1>
 
