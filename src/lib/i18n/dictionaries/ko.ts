@@ -2,16 +2,11 @@ import type { Dictionary } from './en'
 
 const ko: Dictionary = {
   nav: {
-    dashboard: '대시보드',
+    degreeRisk: 'Degree Risk',
     roiExplorer: 'ROI 탐색기',
     compare: '국가 비교',
-    saved: '즐겨찾기',
-    checklist: '체크리스트',
-    timeline: '타임라인',
     careerPath: '커리어 루트맵',
-    documents: '서류 보관함',
     blog: '블로그',
-    games: '게임',
   },
   common: {
     signIn: '로그인',
