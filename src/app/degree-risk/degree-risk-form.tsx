@@ -6,6 +6,7 @@ import { ArrowLeft, Loader2 } from "lucide-react"
 import { QUESTIONS, type Answers, type AnswerKey } from "@/lib/degree-risk"
 import { ChoiceCard } from "@/components/ui/choice-card"
 import { Button } from "@/components/ui/button"
+import { useTranslations } from "@/lib/i18n/locale-provider"
 import { submitAssessment } from "./actions"
 
 // Flags for the "where are you studying?" question (icon slot).
@@ -20,6 +21,10 @@ const COUNTRY_FLAGS: Record<string, string> = {
 
 export function DegreeRiskForm() {
   const router = useRouter()
+  const t = useTranslations()
+  const dr = t.degreeRisk
+  const optionLabel = (value: string) =>
+    (dr.options as Record<string, string>)[value] ?? value
   const [step, setStep] = useState(0)
   const [answers, setAnswers] = useState<Partial<Answers>>({})
   const [submitting, setSubmitting] = useState(false)
@@ -37,7 +42,7 @@ export function DegreeRiskForm() {
     try {
       const res = await submitAssessment(complete)
       if (!res.ok) {
-        setError(res.error ?? "Something went wrong — please try again.")
+        setError(dr.errorGeneric)
         setSubmitting(false)
         return
       }
@@ -49,7 +54,7 @@ export function DegreeRiskForm() {
       if (res.assessmentId) params.set("aid", res.assessmentId)
       router.push(`/degree-risk/result?${params.toString()}`)
     } catch {
-      setError("Something went wrong — please try again.")
+      setError(dr.errorGeneric)
       setSubmitting(false)
     }
   }
@@ -78,7 +83,9 @@ export function DegreeRiskForm() {
       <div className="mb-8">
         <div className="flex items-center justify-between mb-2 text-sm font-medium text-slate-400">
           <span>
-            Question {step + 1} of {QUESTIONS.length}
+            {dr.progress
+              .replace("{step}", String(step + 1))
+              .replace("{total}", String(QUESTIONS.length))}
           </span>
           <span>{progressPct}%</span>
         </div>
@@ -90,13 +97,15 @@ export function DegreeRiskForm() {
         </div>
       </div>
 
-      <h2 className="font-display text-question text-slate-900 mb-6">{question.title}</h2>
+      <h2 className="font-display text-question text-slate-900 mb-6">
+        {dr.questions[question.key] ?? question.title}
+      </h2>
 
       <ul className="space-y-3">
         {question.options.map((option) => (
           <li key={option.value}>
             <ChoiceCard
-              label={option.label}
+              label={optionLabel(option.value)}
               icon={isCountry ? COUNTRY_FLAGS[option.value] : undefined}
               selected={selected === option.value}
               disabled={submitting || advancing}
@@ -120,7 +129,7 @@ export function DegreeRiskForm() {
             className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back
+            {dr.back}
           </button>
         ) : (
           <span />
@@ -132,7 +141,7 @@ export function DegreeRiskForm() {
         <div className="sticky bottom-0 left-0 right-0 mt-2 pb-[env(safe-area-inset-bottom)] bg-gradient-to-t from-white via-white to-transparent pt-4">
           <Button variant="tactile" size="tactile" disabled className="w-full">
             <Loader2 className="w-5 h-5 animate-spin mr-2" />
-            Scoring your degree…
+            {dr.scoring}
           </Button>
         </div>
       )}

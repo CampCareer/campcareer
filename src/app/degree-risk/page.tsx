@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { LogoMark } from "@/components/logo-mark"
 import { pageMetadata } from "@/lib/seo"
+import { getTranslations } from "@/lib/i18n/server"
 import { DegreeRiskForm } from "./degree-risk-form"
 
 export const metadata = pageMetadata({
@@ -11,6 +12,7 @@ export const metadata = pageMetadata({
 })
 
 export default function DegreeRiskPage() {
+  const t = getTranslations()
   return (
     <div className="min-h-screen bg-white">
       <header className="border-b border-slate-200">
@@ -27,11 +29,10 @@ export default function DegreeRiskPage() {
 
       <main className="max-w-2xl mx-auto px-6 min-h-[calc(100vh-3.5rem)] flex flex-col justify-center py-10">
         <h1 className="font-display text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
-          Check your degree risk
+          {t.degreeRisk.pageTitle}
         </h1>
         <p className="mt-2 mb-8 text-body-lg text-slate-500">
-          6 questions, under a minute. We score your major on employment,
-          visa pathway, market demand, AI exposure, and ROI.
+          {t.degreeRisk.pageSubtitle}
         </p>
         <DegreeRiskForm />
       </main>
