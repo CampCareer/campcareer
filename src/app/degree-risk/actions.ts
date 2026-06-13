@@ -7,6 +7,7 @@ import {
   type MajorRow,
   type ResultView,
   MAJOR_COLUMNS,
+  OTHER_MAJOR,
   QUESTIONS,
   isMajorSlug,
   resolveView,
@@ -25,7 +26,8 @@ export interface SubmitResult {
 export async function submitAssessment(answers: Answers): Promise<SubmitResult> {
   const view = resolveView(answers.country_pref)
 
-  if (!isMajorSlug(answers.major_pref)) {
+  const isOther = answers.major_pref === OTHER_MAJOR
+  if (!isMajorSlug(answers.major_pref) && !isOther) {
     return { ok: false, assessmentId: null, view, error: "Unknown major." }
   }
   for (const q of QUESTIONS) {
@@ -37,14 +39,17 @@ export async function submitAssessment(answers: Answers): Promise<SubmitResult> 
 
   const supabase = createClient()
 
-  const { data: majors } = await supabase
-    .from("majors")
-    .select(MAJOR_COLUMNS)
-    .eq("slug", answers.major_pref)
-    .in("country", viewCountries(view))
-
-  if (!majors || majors.length === 0) {
-    console.warn(`[degree-risk] No majors row found for slug="${answers.major_pref}" countries="${viewCountries(view).join(",")}"`)
+  let majors: unknown[] | null = []
+  if (!isOther) {
+    const { data } = await supabase
+      .from("majors")
+      .select(MAJOR_COLUMNS)
+      .eq("slug", answers.major_pref)
+      .in("country", viewCountries(view))
+    majors = data
+    if (!majors || majors.length === 0) {
+      console.warn(`[degree-risk] No majors row found for slug="${answers.major_pref}" countries="${viewCountries(view).join(",")}"`)
+    }
   }
 
   const snapshot = ((majors ?? []) as unknown as MajorRow[]).map((m) => ({

@@ -1,5 +1,5 @@
 /**
- * Verify all 10 major slugs × AU/IE return a row from the majors table.
+ * Verify all 10 major slugs × US/CA/UK/AU/IE return a row from the majors table.
  * Run: npx tsx scripts/test-degree-risk-majors.ts
  */
 import * as dotenv from "dotenv"
@@ -31,7 +31,7 @@ const SLUGS = [
   "music",
 ] as const
 
-const COUNTRIES = ["AU", "IE"] as const
+const COUNTRIES = ["US", "CA", "UK", "AU", "IE"] as const
 
 async function main() {
   let passed = 0

@@ -1,7 +1,6 @@
 import { MetadataRoute } from "next"
 import { getAllPosts } from "@/lib/blog"
 import { supabase } from "@/lib/supabase"
-import { FIELDS } from "@/lib/fields"
 
 const BASE = "https://www.campcareer.com"
 
@@ -35,31 +34,18 @@ async function fetchCollegeIds(table: string): Promise<string[]> {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // 정적 페이지 — lastModified는 의미 있는 값이 없으면 생략
+  // 정적 페이지 — soft-hidden 라우트(career-path, fields, rankings, checklist,
+  // timeline, games)는 next.config.mjs에서 / 로 302되므로 sitemap에서 제외.
   const staticPages: MetadataRoute.Sitemap = [
     { url: BASE, priority: 1.0, changeFrequency: "weekly" },
+    { url: `${BASE}/degree-risk`, priority: 0.9, changeFrequency: "weekly" },
     { url: `${BASE}/roi-explorer`, priority: 0.9, changeFrequency: "daily" },
     { url: `${BASE}/compare`, priority: 0.9, changeFrequency: "weekly" },
     { url: `${BASE}/blog`, priority: 0.7, changeFrequency: "weekly" },
-    { url: `${BASE}/checklist`, priority: 0.6, changeFrequency: "monthly" },
-    { url: `${BASE}/timeline`, priority: 0.6, changeFrequency: "monthly" },
-    { url: `${BASE}/career-path`, priority: 0.6, changeFrequency: "monthly" },
-    { url: `${BASE}/games`, priority: 0.4, changeFrequency: "monthly" },
     { url: `${BASE}/methodology`, priority: 0.5, changeFrequency: "monthly" },
-    { url: `${BASE}/fields`, priority: 0.8, changeFrequency: "weekly" },
     { url: `${BASE}/privacy`, priority: 0.2, changeFrequency: "yearly" },
     { url: `${BASE}/terms`, priority: 0.2, changeFrequency: "yearly" },
   ]
-
-  // 프로그래매틱: 전공 허브 + 전공×국가 랭킹
-  const fieldPages: MetadataRoute.Sitemap = FIELDS.flatMap((f) => [
-    { url: `${BASE}/fields/${f.slug}`, priority: 0.7, changeFrequency: "weekly" as const },
-    ...Object.keys(MATVIEW).map((country) => ({
-      url: `${BASE}/rankings/${f.slug}/${country}`,
-      priority: 0.7,
-      changeFrequency: "weekly" as const,
-    })),
-  ])
 
   // 블로그 글 — frontmatter date를 lastModified로
   const blogPages: MetadataRoute.Sitemap = getAllPosts().map((post) => ({
@@ -82,5 +68,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  return [...staticPages, ...fieldPages, ...blogPages, ...detailPages]
+  return [...staticPages, ...blogPages, ...detailPages]
 }

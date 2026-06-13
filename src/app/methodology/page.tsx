@@ -10,7 +10,7 @@ export const metadata = pageMetadata({
   path: "/methodology",
 })
 
-const LAST_UPDATED = "12 June 2026"
+const LAST_UPDATED = "13 June 2026"
 
 function Formula({ children }: { children: React.ReactNode }) {
   return (
@@ -46,35 +46,80 @@ export default function MethodologyPage() {
           <h3 className="text-base font-semibold text-slate-700 mt-5 mb-1.5">1 · Employment outcomes</h3>
           <p>
             What share of recent graduates in this field are in full-time work shortly after
-            graduating. For Australia we use the{" "}
-            <a href="https://www.qilt.edu.au/surveys/graduate-outcomes-survey-(gos)" className="text-indigo-600 hover:underline" target="_blank" rel="noopener noreferrer">
-              QILT Graduate Outcomes Survey
-            </a>{" "}
-            (full-time employment rate by study area, ~4–6 months after graduation). For Ireland
-            we use the{" "}
-            <a href="https://hea.ie/statistics/graduate-outcomes-data-and-reports/" className="text-indigo-600 hover:underline" target="_blank" rel="noopener noreferrer">
-              HEA Graduate Outcomes Survey
-            </a>{" "}
-            (share of honours-bachelor graduates in employment nine months after graduation, by
-            field). The two surveys measure slightly different things at slightly different
-            timepoints — compare within a country first, across countries second.
+            graduating, by country:
+          </p>
+          <ul className="list-disc pl-5 space-y-1 mt-2">
+            <li>
+              <strong>United States</strong> —{" "}
+              <a href="https://collegescorecard.ed.gov/" className="text-indigo-600 hover:underline" target="_blank" rel="noopener noreferrer">College Scorecard</a>{" "}
+              earnings/outcomes and the{" "}
+              <a href="https://www.bls.gov/ooh/" className="text-indigo-600 hover:underline" target="_blank" rel="noopener noreferrer">BLS Occupational Outlook Handbook</a>.
+            </li>
+            <li>
+              <strong>Canada</strong> —{" "}
+              <a href="https://www.statcan.gc.ca/" className="text-indigo-600 hover:underline" target="_blank" rel="noopener noreferrer">Statistics Canada</a>{" "}
+              graduate employment and{" "}
+              <a href="https://www.jobbank.gc.ca/trend-analysis" className="text-indigo-600 hover:underline" target="_blank" rel="noopener noreferrer">Job Bank</a> outlooks.
+            </li>
+            <li>
+              <strong>United Kingdom</strong> —{" "}
+              <a href="https://www.hesa.ac.uk/data-and-analysis/graduates" className="text-indigo-600 hover:underline" target="_blank" rel="noopener noreferrer">HESA Graduate Outcomes Survey</a>.
+            </li>
+            <li>
+              <strong>Australia</strong> —{" "}
+              <a href="https://www.qilt.edu.au/surveys/graduate-outcomes-survey-(gos)" className="text-indigo-600 hover:underline" target="_blank" rel="noopener noreferrer">QILT Graduate Outcomes Survey</a>{" "}
+              (~4–6 months after graduation).
+            </li>
+            <li>
+              <strong>Ireland</strong> —{" "}
+              <a href="https://hea.ie/statistics/graduate-outcomes-data-and-reports/" className="text-indigo-600 hover:underline" target="_blank" rel="noopener noreferrer">HEA Graduate Outcomes Survey</a>{" "}
+              (nine months after graduation).
+            </li>
+          </ul>
+          <p className="mt-2">
+            These surveys measure slightly different things at slightly different timepoints —
+            compare within a country first, across countries second.
           </p>
 
           <h3 className="text-base font-semibold text-slate-700 mt-5 mb-1.5">2 · Visa pathway</h3>
           <p>
             A degree only converts into a career abroad if there is a legal route from
-            graduation to skilled work. For Australia we check whether the typical occupations
-            for the major appear on the{" "}
-            <a href="https://immi.homeaffairs.gov.au/visas/working-in-australia/skill-occupation-list" className="text-indigo-600 hover:underline" target="_blank" rel="noopener noreferrer">
-              Core Skills Occupation List
-            </a>{" "}
-            and how many years the Temporary Graduate (subclass 485) visa allows after the
-            degree. For Ireland we check the{" "}
-            <a href="https://enterprise.gov.ie/en/what-we-do/workplace-and-skills/employment-permits/employment-permit-eligibility/highly-skilled-eligible-occupations-list/" className="text-indigo-600 hover:underline" target="_blank" rel="noopener noreferrer">
-              Critical Skills Occupations List
-            </a>{" "}
-            and the Stamp 1G graduate permission. An occupation-list match materially changes
-            how realistic the employer-sponsorship and PR routes are.
+            graduation to skilled work. We check, per country, whether the major&apos;s typical
+            occupations sit on a recognised list and how long the post-study work window runs:
+          </p>
+          <ul className="list-disc pl-5 space-y-1 mt-2">
+            <li>
+              <strong>United States</strong> — STEM-OPT-eligible field (12-month OPT + 24-month
+              STEM extension = 3 years) vs OPT-only (1 year), with{" "}
+              <a href="https://www.uscis.gov/working-in-the-united-states/students-and-exchange-visitors/optional-practical-training-extension-for-stem-students-stem-opt" className="text-indigo-600 hover:underline" target="_blank" rel="noopener noreferrer">USCIS STEM-OPT</a>{" "}
+              and the H-1B as the longer-term (lottery-gated) route.
+            </li>
+            <li>
+              <strong>Canada</strong> — the{" "}
+              <a href="https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/work/after-graduation.html" className="text-indigo-600 hover:underline" target="_blank" rel="noopener noreferrer">Post-Graduation Work Permit</a>{" "}
+              (up to 3 years) plus whether the field is covered by an Express Entry
+              category-based draw (STEM / healthcare).
+            </li>
+            <li>
+              <strong>United Kingdom</strong> — the{" "}
+              <a href="https://www.gov.uk/graduate-visa" className="text-indigo-600 hover:underline" target="_blank" rel="noopener noreferrer">Graduate Route</a>{" "}
+              (2 years; shortening to 18 months from 2027) and Skilled Worker / Immigration
+              Salary List eligibility.
+            </li>
+            <li>
+              <strong>Australia</strong> — the{" "}
+              <a href="https://immi.homeaffairs.gov.au/visas/working-in-australia/skill-occupation-list" className="text-indigo-600 hover:underline" target="_blank" rel="noopener noreferrer">Core Skills Occupation List</a>{" "}
+              and Temporary Graduate (subclass 485) visa.
+            </li>
+            <li>
+              <strong>Ireland</strong> — the{" "}
+              <a href="https://enterprise.gov.ie/en/what-we-do/workplace-and-skills/employment-permits/employment-permit-eligibility/highly-skilled-eligible-occupations-list/" className="text-indigo-600 hover:underline" target="_blank" rel="noopener noreferrer">Critical Skills Occupations List</a>{" "}
+              and the Stamp 1G graduate permission.
+            </li>
+          </ul>
+          <p className="mt-2">
+            An occupation-list match materially changes how realistic the employer-sponsorship
+            and PR routes are.
           </p>
 
           <h3 className="text-base font-semibold text-slate-700 mt-5 mb-1.5">3 · Market demand</h3>
@@ -122,8 +167,9 @@ export default function MethodologyPage() {
               employment rate is a cohort median, not your probability.
             </li>
             <li>
-              We currently score <strong>Australia and Ireland</strong> only; other countries
-              are shown by comparison to these two.
+              We score <strong>the US, Canada, the UK, Australia, and Ireland</strong>. US, CA,
+              and UK rows are currently marked <em>estimate</em> while we verify field-level
+              figures against each country&apos;s primary sources.
             </li>
           </ul>
         </section>
