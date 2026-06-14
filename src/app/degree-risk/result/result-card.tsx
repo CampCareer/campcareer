@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { Fragment } from "react"
 import { ExternalLink, AlertTriangle } from "lucide-react"
 import {
   type MajorRow,
@@ -16,11 +17,20 @@ import { ImmigrationTimeline } from "@/components/immigration-timeline"
 
 type ResultMeta = ReturnType<typeof getTranslations>["degreeRisk"]["resultMeta"]
 
+// Interpolate a "{key}" template with React nodes (keeps emphasized numbers).
+function fill(template: string, values: Record<string, React.ReactNode>): React.ReactNode {
+  return template.split(/(\{[a-z_]+\})/g).map((part, i) => {
+    const m = part.match(/^\{([a-z_]+)\}$/)
+    return <Fragment key={i}>{m ? values[m[1]] ?? part : part}</Fragment>
+  })
+}
+
 function LayerRow({
   label,
   meta,
   note,
   rm,
+  priorityLabel,
   highlighted = false,
   children,
 }: {
@@ -28,6 +38,7 @@ function LayerRow({
   meta: LayerMeta
   note: string | null
   rm: ResultMeta
+  priorityLabel: string
   highlighted?: boolean
   children: React.ReactNode
 }) {
@@ -49,7 +60,7 @@ function LayerRow({
           }
         >
           {label}
-          {highlighted && <span className="ml-1.5 normal-case font-medium text-brand/70">· your priority</span>}
+          {highlighted && <span className="ml-1.5 normal-case font-medium text-brand/70">· {priorityLabel}</span>}
         </p>
         {!verified && (
           <span className="shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-500">
@@ -130,10 +141,15 @@ export function ResultCard({
   row: MajorRow
   priorityLayers?: string[]
 }) {
-  const country = COUNTRY_META[row.country]
-  const badge = RISK_BADGE[row.overall_risk]
-  const rm = getTranslations().degreeRisk.resultMeta
+  const t = getTranslations()
+  const rm = t.degreeRisk.resultMeta
+  const rr = t.degreeRisk.result
+  const opts = t.degreeRisk.options as Record<string, string>
   const locale = getLocale()
+
+  const flag = COUNTRY_META[row.country].flag
+  const countryName = rr.countries[row.country]
+  const majorName = opts[row.slug] ?? majorLabel(row.slug)
   const hot = (layer: LayerKey) => priorityLayers.includes(layer)
   const meta = (layer: LayerKey) => layerMeta(row, layer)
   const note = (layer: LayerKey) => layerNoteText(meta(layer), locale)
@@ -144,23 +160,24 @@ export function ResultCard({
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-sm text-slate-400">
-            {country.flag} {country.name}
+            {flag} {countryName}
           </p>
           <h2 className="mt-0.5 font-display text-2xl font-extrabold text-slate-900 tracking-tight">
-            {majorLabel(row.slug)}
+            {majorName}
           </h2>
         </div>
         <span
-          className={`inline-block shrink-0 px-3 py-1.5 rounded-full border-2 text-sm font-bold ${badge.className}`}
+          className={`inline-block shrink-0 px-3 py-1.5 rounded-full border-2 text-sm font-bold ${RISK_BADGE[row.overall_risk].className}`}
         >
-          {badge.label}
+          {rr.risk[row.overall_risk]}
         </span>
       </div>
 
-      {/* Summary — high-risk majors get cost/conditions framing, never "don't study X" */}
+      {/* Summary — high-risk majors get cost/conditions framing, never "don't study X".
+          risk_summary / ai_note are English DB free-text (localization is a data follow-up). */}
       {row.overall_risk === "high" && (
         <p className="mt-4 text-xs font-bold text-slate-500 uppercase tracking-wide">
-          What this path costs — and when it works
+          {rr.highRiskFraming}
         </p>
       )}
       <p className={`${row.overall_risk === "high" ? "mt-1" : "mt-4"} text-body-lg text-slate-600`}>
@@ -178,20 +195,17 @@ export function ResultCard({
 
       {/* Five layers */}
       <div className="mt-5">
-        <LayerRow label="Employment" rm={rm} meta={meta("employment")} note={note("employment")} highlighted={hot("employment")}>
-          <strong>{row.employment_rate}%</strong> of recent graduates in full-time work
+        <LayerRow label={rr.layerEmployment} rm={rm} priorityLabel={rr.priority} meta={meta("employment")} note={note("employment")} highlighted={hot("employment")}>
+          {fill(rr.employmentValue, { rate: <strong>{row.employment_rate}%</strong> })}
         </LayerRow>
 
-        <LayerRow label="Visa pathway" rm={rm} meta={meta("visa")} note={note("visa")} highlighted={hot("visa")}>
-          {row.occupation_list_match
-            ? "On the skilled occupation list"
-            : "Not on the skilled occupation list"}
+        <LayerRow label={rr.layerVisa} rm={rm} priorityLabel={rr.priority} meta={meta("visa")} note={note("visa")} highlighted={hot("visa")}>
+          {row.occupation_list_match ? rr.visaOnList : rr.visaOffList}
           {" · "}
-          <strong>{row.post_study_work_years}</strong>{" "}
-          {row.post_study_work_years === 1 ? "year" : "years"} post-study work visa
+          {fill(rr.visaYears, { n: <strong>{row.post_study_work_years}</strong> })}
         </LayerRow>
 
-        <LayerRow label="Market demand" rm={rm} meta={meta("demand")} note={note("demand")} highlighted={hot("demand")}>
+        <LayerRow label={rr.layerDemand} rm={rm} priorityLabel={rr.priority} meta={meta("demand")} note={note("demand")} highlighted={hot("demand")}>
           <span className="flex items-center gap-2.5">
             <strong>{row.market_demand_score}</strong>/100
             <span className="flex-1 max-w-[10rem] h-1.5 rounded-full bg-slate-100 overflow-hidden">
@@ -203,16 +217,17 @@ export function ResultCard({
           </span>
         </LayerRow>
 
-        <LayerRow label="AI exposure" rm={rm} meta={meta("ai_exposure")} note={note("ai_exposure")} highlighted={hot("ai_exposure")}>
+        <LayerRow label={rr.layerAi} rm={rm} priorityLabel={rr.priority} meta={meta("ai_exposure")} note={note("ai_exposure")} highlighted={hot("ai_exposure")}>
           <strong className="capitalize">{row.ai_exposure_band}</strong>
           {row.ai_note && <> — {row.ai_note}</>}
         </LayerRow>
 
-        <LayerRow label="ROI" rm={rm} meta={meta("roi")} note={note("roi")} highlighted={hot("roi")}>
-          {formatMoney(row.avg_annual_tuition_intl, row.country)} tuition ·{" "}
-          {formatMoney(row.median_starting_salary, row.country)} median starting salary ·{" "}
-          <strong>{row.payback_years}</strong>{" "}
-          {row.payback_years === 1 ? "year" : "years"} payback
+        <LayerRow label={rr.layerRoi} rm={rm} priorityLabel={rr.priority} meta={meta("roi")} note={note("roi")} highlighted={hot("roi")}>
+          {fill(rr.roiValue, {
+            tuition: formatMoney(row.avg_annual_tuition_intl, row.country),
+            salary: formatMoney(row.median_starting_salary, row.country),
+            payback: <strong>{row.payback_years}</strong>,
+          })}
         </LayerRow>
       </div>
     </div>
