@@ -12,12 +12,12 @@ const LAST_UPDATED = "10 June 2026"
 export default function TermsPage() {
   return (
     <div className="max-w-3xl mx-auto px-6 py-12">
-      <h1 className="text-3xl font-bold text-slate-900 tracking-tight mb-2">Terms of Service</h1>
+      <h1 className="font-display text-3xl font-extrabold text-slate-900 tracking-tight mb-2">Terms of Service</h1>
       <p className="text-sm text-slate-400 mb-10">Last updated: {LAST_UPDATED}</p>
 
       <div className="space-y-8 text-sm leading-relaxed text-slate-600">
         <section>
-          <h2 className="text-lg font-semibold text-slate-800 mb-2">1. Acceptance</h2>
+          <h2 className="font-display text-lg font-extrabold text-slate-800 mb-2">1. Acceptance</h2>
           <p>
             By using campcareer.com (&quot;CampCareer&quot;, the &quot;Service&quot;) you agree to
             these terms. If you do not agree, please do not use the Service.
@@ -25,7 +25,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-slate-800 mb-2">2. Nature of the data — no advice</h2>
+          <h2 className="font-display text-lg font-extrabold text-slate-800 mb-2">2. Nature of the data — no advice</h2>
           <p>
             ROI scores, salary figures, tuition costs, tax estimates, payback periods, and visa or
             immigration information shown on CampCareer are <strong>estimates</strong> derived
@@ -37,7 +37,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-slate-800 mb-2">3. Your account and content</h2>
+          <h2 className="font-display text-lg font-extrabold text-slate-800 mb-2">3. Your account and content</h2>
           <p>
             You are responsible for keeping your account credentials secure and for the content
             you upload (including documents stored in the Document Vault). You retain ownership
@@ -48,7 +48,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-slate-800 mb-2">4. Acceptable use</h2>
+          <h2 className="font-display text-lg font-extrabold text-slate-800 mb-2">4. Acceptable use</h2>
           <p>
             You agree not to abuse the Service — including attempting to access other users&apos;
             data, scraping at volumes that degrade the Service, or interfering with its
@@ -57,7 +57,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-slate-800 mb-2">5. Availability and changes</h2>
+          <h2 className="font-display text-lg font-extrabold text-slate-800 mb-2">5. Availability and changes</h2>
           <p>
             The Service is provided &quot;as is&quot; without warranties of any kind. We may
             modify, suspend, or discontinue features at any time. We may update these terms;
@@ -66,7 +66,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-slate-800 mb-2">6. Limitation of liability</h2>
+          <h2 className="font-display text-lg font-extrabold text-slate-800 mb-2">6. Limitation of liability</h2>
           <p>
             To the maximum extent permitted by law, CampCareer is not liable for decisions made in
             reliance on estimated data, or for indirect or consequential damages arising from use
@@ -75,7 +75,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-slate-800 mb-2">7. Contact</h2>
+          <h2 className="font-display text-lg font-extrabold text-slate-800 mb-2">7. Contact</h2>
           <p>
             Questions about these terms:{" "}
             <a href="mailto:support@campcareer.com" className="text-indigo-600 hover:underline">support@campcareer.com</a>

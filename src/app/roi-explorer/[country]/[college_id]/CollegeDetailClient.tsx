@@ -177,7 +177,7 @@ export function CollegeDetailClient({
           <SchoolTypeBadge type={best.school_type} />
           <span className="text-xs text-slate-400">{COUNTRY_LABEL[country]}</span>
         </div>
-        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">{best.college_name}</h1>
+        <h1 className="font-display text-3xl font-extrabold text-slate-900 tracking-tight">{best.college_name}</h1>
         <p className="text-slate-500 text-sm">
           {best.college_state}
         </p>

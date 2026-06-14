@@ -560,7 +560,7 @@ function CompareContent() {
             <TrendingUp className="w-3 h-3" />
             {tc.badge}
           </div>
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
+          <h1 className="font-display text-3xl font-extrabold text-slate-900 tracking-tight">
             {tc.pageTitle}
           </h1>
           <p className="mt-2 text-slate-500 text-sm">
@@ -691,7 +691,7 @@ function CompareContent() {
       {/* Bar Chart */}
       {!loading && hasAnyData && (
         <div>
-          <h2 className="text-lg font-semibold text-slate-800 mb-3">
+          <h2 className="font-display text-lg font-extrabold text-slate-800 mb-3">
             {rates
               ? `${tc.avgSalaryByCountry} (${baseCurrency})`
               : tc.avgRoiByCountry}
