@@ -18,6 +18,7 @@ import {
 import { ResultCard } from "./result-card"
 import { LeadCapture } from "./lead-capture"
 import { WhereToStudy } from "./where-to-study"
+import { VisaAlertForm } from "@/components/visa-alert-form"
 
 export const metadata = {
   ...pageMetadata({
@@ -92,6 +93,7 @@ export default async function DegreeRiskResultPage({
 
       <main className="max-w-4xl mx-auto px-6 py-10">
         {isOther ? (
+          <>
           <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center">
             <Search className="w-8 h-8 mx-auto text-indigo-500" />
             <p className="mt-4 text-slate-700 text-sm leading-relaxed">
@@ -112,7 +114,12 @@ export default async function DegreeRiskResultPage({
               .
             </p>
           </div>
+          <div className="mt-6">
+            <VisaAlertForm country={view} field={null} />
+          </div>
+          </>
         ) : rows.length === 0 ? (
+          <>
           <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center">
             <p className="text-slate-600 text-sm">
               We could not find a score for{" "}
@@ -128,6 +135,10 @@ export default async function DegreeRiskResultPage({
               Try another major <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
+          <div className="mt-6">
+            <VisaAlertForm country={view} field={major || null} />
+          </div>
+          </>
         ) : (
           <>
             <h1 className="font-display text-question text-slate-900">
@@ -192,6 +203,10 @@ export default async function DegreeRiskResultPage({
             )}
 
             <section className="mt-10">
+              <VisaAlertForm country={view} field={major} />
+            </section>
+
+            <section className="mt-6">
               <LeadCapture assessmentId={assessmentId} />
             </section>
           </>
