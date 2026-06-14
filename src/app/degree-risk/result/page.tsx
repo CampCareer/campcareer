@@ -6,7 +6,6 @@ import { pageMetadata } from "@/lib/seo"
 import {
   type MajorRow,
   type ResultView,
-  COUNTRY_META,
   OTHER_MAJOR,
   goalToLayers,
   isKnownGoal,
@@ -19,6 +18,7 @@ import { ResultCard } from "./result-card"
 import { LeadCapture } from "./lead-capture"
 import { WhereToStudy } from "./where-to-study"
 import { VisaAlertForm } from "@/components/visa-alert-form"
+import { getTranslations } from "@/lib/i18n/server"
 
 export const metadata = {
   ...pageMetadata({
@@ -40,6 +40,12 @@ export default async function DegreeRiskResultPage({
   const assessmentId = searchParams.aid ?? null
   const goal = isKnownGoal(searchParams.goal) ? searchParams.goal! : null
   const priorityLayers = goalToLayers(goal ?? undefined)
+
+  const t = getTranslations()
+  const rr = t.degreeRisk.result
+  const opts = t.degreeRisk.options as Record<string, string>
+  const majorName = (slug: string) => opts[slug] ?? majorLabel(slug)
+  const goalLabel = goal ? opts[goal] ?? goal : null
 
   const lookedUpCountries = viewCountries(view)
   const isOther = major === OTHER_MAJOR
@@ -86,7 +92,7 @@ export default async function DegreeRiskResultPage({
             <span className="font-semibold text-slate-900 text-sm tracking-tight">CampCareer</span>
           </Link>
           <Link href="/degree-risk" className="text-xs text-indigo-600 hover:text-indigo-700 transition-colors">
-            Start over
+            {rr.startOver}
           </Link>
         </div>
       </header>
@@ -97,19 +103,18 @@ export default async function DegreeRiskResultPage({
           <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center">
             <Search className="w-8 h-8 mx-auto text-indigo-500" />
             <p className="mt-4 text-slate-700 text-sm leading-relaxed">
-              We don&apos;t have a risk score for your major yet — but you can still compare
-              real salary, tuition, and payback data for it across 11,000+ courses.
+              {rr.otherText}
             </p>
             <Link
               href="/roi-explorer"
               className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 px-5 py-2.5 rounded-xl transition-colors"
             >
-              Search your field in the ROI Explorer <ArrowRight className="w-4 h-4" />
+              {rr.otherCta} <ArrowRight className="w-4 h-4" />
             </Link>
             <p className="mt-4 text-xs text-slate-400">
-              Or{" "}
+              {rr.otherOr}{" "}
               <Link href="/degree-risk" className="underline underline-offset-2 hover:text-slate-600">
-                pick a nearby major we do score
+                {rr.otherPick}
               </Link>
               .
             </p>
@@ -122,17 +127,17 @@ export default async function DegreeRiskResultPage({
           <>
           <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center">
             <p className="text-slate-600 text-sm">
-              We could not find a score for{" "}
-              <span className="font-semibold">{major ? majorLabel(major) : "this major"}</span>
               {view === "all"
-                ? " in the countries we score yet."
-                : ` in ${COUNTRY_META[view].name} yet.`}
+                ? rr.noScoreAll.replace("{major}", majorName(major))
+                : rr.noScoreCountry
+                    .replace("{major}", majorName(major))
+                    .replace("{country}", rr.countries[view])}
             </p>
             <Link
               href="/degree-risk"
               className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-indigo-600 hover:text-indigo-700"
             >
-              Try another major <ArrowRight className="w-4 h-4" />
+              {rr.tryAnother} <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
           <div className="mt-6">
@@ -142,21 +147,28 @@ export default async function DegreeRiskResultPage({
         ) : (
           <>
             <h1 className="font-display text-question text-slate-900">
-              {majorLabel(major)} — your degree risk
+              {rr.h1.replace("{major}", majorName(major))}
             </h1>
 
             {view === "all" && (
               <p className="mt-3 inline-flex items-start gap-2 text-xs text-slate-600 bg-indigo-50 border border-indigo-100 rounded-lg px-3 py-2">
                 <Info className="w-3.5 h-3.5 mt-px shrink-0 text-indigo-500" />
-                Here is {majorLabel(major)} across all {rows.length} countries we score, side
-                by side.
+                {rr.allBanner.replace("{major}", majorName(major)).replace("{n}", String(rows.length))}
               </p>
             )}
 
-            {goal && priorityLayers.length > 0 && (
+            {goal && priorityLayers.length > 0 && goalLabel && (
               <p className="mt-3 text-xs text-slate-500">
-                Because you chose <span className="font-semibold text-indigo-600">{goal}</span>,
-                the layers that matter most to you are highlighted.
+                {(() => {
+                  const [before, after] = rr.goalNote.split("{goal}")
+                  return (
+                    <>
+                      {before}
+                      <span className="font-semibold text-indigo-600">{goalLabel}</span>
+                      {after}
+                    </>
+                  )
+                })()}
               </p>
             )}
 
@@ -179,11 +191,10 @@ export default async function DegreeRiskResultPage({
             {alternatives.length > 0 && (
               <section className="mt-10">
                 <h2 className="text-base font-semibold text-slate-900 mb-1">
-                  Better-fit alternatives
+                  {rr.alternativesTitle}
                 </h2>
                 <p className="text-xs text-slate-500 mb-4">
-                  Nearby paths that tend to score better on the same five layers — tap one to
-                  swap the result.
+                  {rr.alternativesSubtitle}
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                   {alternatives.map((slug) => (
@@ -193,7 +204,7 @@ export default async function DegreeRiskResultPage({
                       className="group bg-white border border-slate-200 rounded-xl px-4 py-3.5 flex items-center justify-between hover:border-indigo-300 hover:shadow-sm transition-all"
                     >
                       <span className="text-sm font-medium text-slate-800">
-                        {majorLabel(slug)}
+                        {majorName(slug)}
                       </span>
                       <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-indigo-500 transition-colors" />
                     </Link>

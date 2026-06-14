@@ -10,6 +10,9 @@ import {
   toRoiCountry,
   viewCountries,
 } from "@/lib/degree-risk"
+import { getTranslations } from "@/lib/i18n/server"
+
+type ResultStrings = ReturnType<typeof getTranslations>["degreeRisk"]["result"]
 
 type College = {
   college_id: string | null
@@ -55,25 +58,26 @@ function CountryColleges({
   country,
   field,
   colleges,
+  rr,
 }: {
   country: CountryCode
   field: string
   colleges: College[]
+  rr: ResultStrings
 }) {
-  const meta = COUNTRY_META[country]
   if (colleges.length === 0) return null
 
   return (
     <div className="bg-white border border-slate-200 rounded-2xl p-5">
       <div className="flex items-center justify-between gap-3 mb-3">
         <h3 className="text-sm font-semibold text-slate-900">
-          {meta.flag} {meta.name}
+          {COUNTRY_META[country].flag} {rr.countries[country]}
         </h3>
         <Link
           href={explorerHref(country, field)}
           className="text-xs text-indigo-600 hover:text-indigo-700 inline-flex items-center gap-1 shrink-0"
         >
-          See all <ArrowRight className="w-3 h-3" />
+          {rr.seeAll} <ArrowRight className="w-3 h-3" />
         </Link>
       </div>
       <ul className="divide-y divide-slate-100">
@@ -88,7 +92,9 @@ function CountryColleges({
                   </span>
                 )}
                 {c.payback_years != null && (
-                  <span className="text-slate-400 hidden sm:inline">{c.payback_years} yr payback</span>
+                  <span className="text-slate-400 hidden sm:inline">
+                    {rr.paybackYr.replace("{n}", String(c.payback_years))}
+                  </span>
                 )}
               </span>
             </div>
@@ -114,6 +120,11 @@ function CountryColleges({
 }
 
 export async function WhereToStudy({ major, view }: { major: string; view: ResultView }) {
+  const t = getTranslations()
+  const rr = t.degreeRisk.result
+  const opts = t.degreeRisk.options as Record<string, string>
+  const majorName = opts[major] ?? majorLabel(major)
+
   const field = MAJOR_ROI_FIELD[major]
   if (!field) return null
 
@@ -123,11 +134,9 @@ export async function WhereToStudy({ major, view }: { major: string; view: Resul
     return (
       <section className="mt-10">
         <h2 className="text-base font-semibold text-slate-900 mb-1">
-          Where to study {majorLabel(major)}
+          {rr.whereTitle.replace("{major}", majorName)}
         </h2>
-        <p className="text-xs text-slate-500 mb-4">
-          Compare universities by salary, tuition, and ROI in each country.
-        </p>
+        <p className="text-xs text-slate-500 mb-4">{rr.whereAllSubtitle}</p>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
           {viewCountries(view).map((c) => (
             <Link
@@ -136,7 +145,7 @@ export async function WhereToStudy({ major, view }: { major: string; view: Resul
               className="group bg-white border border-slate-200 rounded-xl px-4 py-3.5 flex items-center justify-between hover:border-indigo-300 hover:shadow-sm transition-all"
             >
               <span className="text-sm font-medium text-slate-800">
-                {COUNTRY_META[c].flag} {c}
+                {COUNTRY_META[c].flag} {rr.countries[c]}
               </span>
               <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-indigo-500 transition-colors" />
             </Link>
@@ -158,14 +167,12 @@ export async function WhereToStudy({ major, view }: { major: string; view: Resul
     <section className="mt-10">
       <h2 className="text-base font-semibold text-slate-900 mb-1 flex items-center gap-2">
         <GraduationCap className="w-4 h-4 text-indigo-500" />
-        Where to study {majorLabel(major)}
+        {rr.whereTitle.replace("{major}", majorName)}
       </h2>
-      <p className="text-xs text-slate-500 mb-4">
-        Top universities for this major by ROI — real salary and tuition data.
-      </p>
+      <p className="text-xs text-slate-500 mb-4">{rr.whereSubtitle}</p>
       <div className="grid grid-cols-1 gap-4">
         {blocks.map((b) => (
-          <CountryColleges key={b.country} country={b.country} field={field} colleges={b.colleges} />
+          <CountryColleges key={b.country} country={b.country} field={field} colleges={b.colleges} rr={rr} />
         ))}
       </div>
     </section>
