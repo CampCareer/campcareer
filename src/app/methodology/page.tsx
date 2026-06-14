@@ -25,7 +25,7 @@ export default function MethodologyPage() {
     <div className="max-w-3xl mx-auto px-6 py-12">
       <JsonLd data={breadcrumbLd([{ name: "Methodology", path: "/methodology" }])} />
 
-      <h1 className="text-3xl font-bold text-slate-900 tracking-tight mb-2">Methodology</h1>
+      <h1 className="font-display text-3xl font-extrabold text-slate-900 tracking-tight mb-2">Methodology</h1>
       <p className="text-sm text-slate-400 mb-10">
         Last updated: {LAST_UPDATED} · Tax rules: {TAX_YEAR}
       </p>
@@ -33,7 +33,7 @@ export default function MethodologyPage() {
       <div className="space-y-10 text-sm leading-relaxed text-slate-600">
 
         <section id="degree-risk">
-          <h2 className="text-lg font-semibold text-slate-800 mb-2">Degree Risk score</h2>
+          <h2 className="font-display text-lg font-extrabold text-slate-800 mb-2">Degree Risk score</h2>
           <p>
             The Degree Risk score answers one question in plain terms: <em>if you study this
             major in this country as an international student, how likely is it to lead to a
@@ -43,7 +43,7 @@ export default function MethodologyPage() {
             show exactly where, and under which conditions it still works.
           </p>
 
-          <h3 className="text-base font-semibold text-slate-700 mt-5 mb-1.5">1 · Employment outcomes</h3>
+          <h3 className="font-display text-base font-bold text-slate-700 mt-5 mb-1.5">1 · Employment outcomes</h3>
           <p>
             What share of recent graduates in this field are in full-time work shortly after
             graduating, by country:
@@ -81,7 +81,7 @@ export default function MethodologyPage() {
             compare within a country first, across countries second.
           </p>
 
-          <h3 className="text-base font-semibold text-slate-700 mt-5 mb-1.5">2 · Visa pathway</h3>
+          <h3 className="font-display text-base font-bold text-slate-700 mt-5 mb-1.5">2 · Visa pathway</h3>
           <p>
             A degree only converts into a career abroad if there is a legal route from
             graduation to skilled work. We check, per country, whether the major&apos;s typical
@@ -122,14 +122,14 @@ export default function MethodologyPage() {
             and PR routes are.
           </p>
 
-          <h3 className="text-base font-semibold text-slate-700 mt-5 mb-1.5">3 · Market demand</h3>
+          <h3 className="font-display text-base font-bold text-slate-700 mt-5 mb-1.5">3 · Market demand</h3>
           <p>
             A 0–100 score for how actively the local market is hiring in the field right now:
             vacancy trends, graduate-program intake, and government skills-shortage signals.
             This is the most judgement-heavy layer and the one we update most often.
           </p>
 
-          <h3 className="text-base font-semibold text-slate-700 mt-5 mb-1.5">4 · AI exposure</h3>
+          <h3 className="font-display text-base font-bold text-slate-700 mt-5 mb-1.5">4 · AI exposure</h3>
           <p>
             How much of the entry-level work in this field overlaps with what current AI systems
             already do well. We band each major (lower / moderate / higher exposure) based on
@@ -140,7 +140,7 @@ export default function MethodologyPage() {
             matters most for fresh graduates.
           </p>
 
-          <h3 className="text-base font-semibold text-slate-700 mt-5 mb-1.5">5 · ROI</h3>
+          <h3 className="font-display text-base font-bold text-slate-700 mt-5 mb-1.5">5 · ROI</h3>
           <p>
             What the degree costs an international student (full international tuition for the
             standard course length) against the median starting salary graduates actually earn,
@@ -148,7 +148,7 @@ export default function MethodologyPage() {
             below.
           </p>
 
-          <h3 className="text-base font-semibold text-slate-700 mt-5 mb-1.5">Limitations — read this part</h3>
+          <h3 className="font-display text-base font-bold text-slate-700 mt-5 mb-1.5">Limitations — read this part</h3>
           <ul className="list-disc pl-5 space-y-1.5">
             <li>
               <strong>Official statistics rarely separate international students.</strong> QILT
@@ -175,7 +175,7 @@ export default function MethodologyPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-slate-800 mb-2">ROI score</h2>
+          <h2 className="font-display text-lg font-extrabold text-slate-800 mb-2">ROI score</h2>
           <p>
             The ROI score answers one question: <em>how much of your total tuition do you earn
             back each year, after housing and living costs, weighted by your chance of actually
@@ -210,7 +210,7 @@ export default function MethodologyPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-slate-800 mb-2">After-tax estimates</h2>
+          <h2 className="font-display text-lg font-extrabold text-slate-800 mb-2">After-tax estimates</h2>
           <p>
             The after-tax toggle applies {TAX_YEAR} national tax rules as simplified single-filer
             models: US federal brackets + flat state-rate approximations + FICA; UK income tax +
@@ -222,7 +222,7 @@ export default function MethodologyPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-slate-800 mb-2">Medicine override</h2>
+          <h2 className="font-display text-lg font-extrabold text-slate-800 mb-2">Medicine override</h2>
           <p>
             Stored earnings for medical degrees use inconsistent career timepoints across
             countries (residents vs consultants), which makes raw comparison misleading. When you
@@ -235,7 +235,7 @@ export default function MethodologyPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-slate-800 mb-2">Career stage adjustment</h2>
+          <h2 className="font-display text-lg font-extrabold text-slate-800 mb-2">Career stage adjustment</h2>
           <p>
             Source datasets measure earnings at different points: US College Scorecard ~6 years
             after entry, UK LEO and Irish CSO ~1 year, Canada ~2 years, Australia ~3 years after
@@ -247,7 +247,7 @@ export default function MethodologyPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-slate-800 mb-2">Data sources</h2>
+          <h2 className="font-display text-lg font-extrabold text-slate-800 mb-2">Data sources</h2>
           <ul className="list-disc pl-5 space-y-1.5">
             <li><strong>United States</strong> — College Scorecard (U.S. Dept. of Education): earnings, tuition, graduation rates.</li>
             <li><strong>Ireland</strong> — HEA Graduate Outcomes Survey, Qualifax course data, CSO earnings. Field-level earnings are national averages by field; college-specific earnings are not published in Ireland.</li>
@@ -260,7 +260,7 @@ export default function MethodologyPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-slate-800 mb-2">Known limitations</h2>
+          <h2 className="font-display text-lg font-extrabold text-slate-800 mb-2">Known limitations</h2>
           <ul className="list-disc pl-5 space-y-1.5">
             <li>
               <strong>Cross-country score comparison</strong>: ROI scores are computed in each

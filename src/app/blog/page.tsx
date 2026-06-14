@@ -17,7 +17,7 @@ export default function BlogPage() {
   return (
     <div className="max-w-6xl mx-auto px-6 py-12">
       <div className="mb-10">
-        <h1 className="text-4xl font-bold text-slate-900 tracking-tight mb-3">
+        <h1 className="font-display text-4xl font-extrabold text-slate-900 tracking-tight mb-3">
           {tb.pageTitle}
         </h1>
         <p className="text-lg text-slate-500">

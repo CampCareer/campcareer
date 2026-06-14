@@ -96,7 +96,7 @@ export function BlogGrid({ posts, labels }: BlogGridProps) {
             </div>
             <time className="text-xs text-slate-400">{featured.date}</time>
           </div>
-          <h2 className="text-2xl lg:text-3xl font-bold text-slate-900 mb-3 group-hover:text-indigo-700 transition-colors leading-tight max-w-4xl">
+          <h2 className="font-display text-2xl lg:text-3xl font-extrabold text-slate-900 mb-3 group-hover:text-indigo-700 transition-colors leading-tight max-w-4xl">
             {featured.title}
           </h2>
           <p className="text-slate-500 leading-relaxed mb-6 max-w-3xl">{featured.description}</p>
@@ -128,7 +128,7 @@ export function BlogGrid({ posts, labels }: BlogGridProps) {
               <div className="mb-3">
                 <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${post.tagColor}`}>{post.tag}</span>
               </div>
-              <h2 className="text-base font-bold text-slate-900 mb-2 group-hover:text-indigo-700 transition-colors leading-snug line-clamp-3 flex-1">
+              <h2 className="font-display text-base font-extrabold text-slate-900 mb-2 group-hover:text-indigo-700 transition-colors leading-snug line-clamp-3 flex-1">
                 {post.title}
               </h2>
               <p className="text-slate-400 text-sm leading-relaxed line-clamp-3 mb-4">{post.description}</p>

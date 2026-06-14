@@ -83,7 +83,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
           <span className="text-xs text-slate-400">{meta.date}</span>
           <span className="text-xs text-slate-400">{meta.readTime} read</span>
         </div>
-        <h1 className="text-4xl font-bold text-slate-900 leading-tight tracking-tight mb-4">
+        <h1 className="font-display text-4xl font-extrabold text-slate-900 leading-tight tracking-tight mb-4">
           {meta.title}
         </h1>
         <p className="text-xl text-slate-500 leading-relaxed">{meta.description}</p>

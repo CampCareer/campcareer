@@ -581,7 +581,7 @@ export function RoiExplorerClient({
         </div>
         <div className="flex items-center justify-between mt-1">
           <div className="flex items-center gap-4">
-            <h1 className="text-3xl font-bold text-slate-900 tracking-tight">ROI Explorer</h1>
+            <h1 className="font-display text-3xl font-extrabold text-slate-900 tracking-tight">ROI Explorer</h1>
             {country === "us" && (
               <div className="flex items-center gap-1">
                 {(["early", "mid", "senior"] as const).map((stage) => (

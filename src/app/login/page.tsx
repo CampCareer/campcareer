@@ -79,7 +79,7 @@ export default function LoginPage() {
         </Link>
 
         <div className="flex-1 flex flex-col justify-center">
-          <h2 className="text-4xl font-bold text-white leading-[1.15] tracking-tight mb-4">
+          <h2 className="font-display text-4xl font-extrabold text-white leading-[1.15] tracking-tight mb-4">
             Make smarter<br />study abroad<br />decisions.
           </h2>
           <p className="text-slate-400 text-base leading-relaxed max-w-xs">
@@ -109,7 +109,7 @@ export default function LoginPage() {
           </div>
 
           <div className="mb-8">
-            <h1 className="text-2xl font-bold text-slate-900 mb-1">
+            <h1 className="font-display text-2xl font-extrabold text-slate-900 mb-1">
               {mode === 'signin' ? 'Welcome back' : 'Create account'}
             </h1>
             <p className="text-sm text-slate-500">
@@ -202,7 +202,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl transition-colors text-sm mt-1 flex items-center justify-center gap-2 disabled:opacity-50"
+              className="btn-3d btn-3d-brand w-full border-2 border-brand bg-brand text-brand-foreground font-extrabold uppercase tracking-wide min-h-[48px] rounded-xl text-sm mt-1 flex items-center justify-center gap-2 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/40"
             >
               {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
               {mode === 'signin' ? 'Sign in' : 'Create account'}
