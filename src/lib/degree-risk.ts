@@ -278,3 +278,43 @@ export const MAJOR_ROI_FIELD: Record<string, string> = {
 export function toRoiCountry(country: CountryCode): string {
   return country.toLowerCase()
 }
+
+// Reverse of MAJOR_ROI_FIELD: map a free-text compare field to a scored major
+// slug (for the per-country immigration timeline). Returns null when the field
+// isn't one we score — callers fall back to a country-level timeline.
+// Longest phrases first so "civil engineering" wins over "engineering".
+const FIELD_TO_SLUG: [string, string][] = [
+  ["software engineering", "software-engineering"],
+  ["computer science", "computer-science"],
+  ["data analytics", "data-analytics"],
+  ["data science", "data-analytics"],
+  ["civil engineering", "civil-engineering"],
+  ["business management", "business-management"],
+  ["ux design", "ux-design"],
+  ["accounting", "accounting"],
+  ["psychology", "psychology"],
+  ["nursing", "nursing"],
+  ["engineering", "civil-engineering"], // generic engineering → STEM representative
+  ["business", "business-management"],
+  ["management", "business-management"],
+  ["design", "ux-design"],
+  ["music", "music"],
+]
+
+// Per-country payload for the /compare immigration-timeline grid
+// (returned by /api/degree-risk/timeline).
+export interface TimelineCountry {
+  country: CountryCode
+  postStudyYears: number
+  stemBranch: boolean
+  visa: LayerMeta
+}
+
+export function fieldToMajorSlug(field: string): string | null {
+  const f = field.trim().toLowerCase().replace(/\.$/, "")
+  if (!f) return null
+  for (const [phrase, slug] of FIELD_TO_SLUG) {
+    if (f === phrase || f.includes(phrase)) return slug
+  }
+  return null
+}
