@@ -78,7 +78,7 @@ export default function TermsPage() {
           <h2 className="font-display text-lg font-extrabold text-slate-800 mb-2">7. Contact</h2>
           <p>
             Questions about these terms:{" "}
-            <a href="mailto:support@campcareer.com" className="text-indigo-600 hover:underline">support@campcareer.com</a>
+            <a href="mailto:contact@campcareer.com" className="text-indigo-600 hover:underline">contact@campcareer.com</a>
           </p>
         </section>
       </div>

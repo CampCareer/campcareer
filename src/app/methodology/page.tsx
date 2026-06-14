@@ -274,7 +274,7 @@ export default function MethodologyPage() {
           </ul>
           <p className="mt-2">
             Found an error or have better source data?{" "}
-            <a href="mailto:data@campcareer.com" className="text-indigo-600 hover:underline">data@campcareer.com</a>
+            <a href="mailto:contact@campcareer.com" className="text-indigo-600 hover:underline">contact@campcareer.com</a>
           </p>
         </section>
       </div>

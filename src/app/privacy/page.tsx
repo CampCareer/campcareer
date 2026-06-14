@@ -22,7 +22,7 @@ export default function PrivacyPage() {
             CampCareer (&quot;we&quot;, &quot;us&quot;) operates campcareer.com, a study-abroad and
             immigration decision platform. This policy explains what personal data we collect,
             why we collect it, and the choices you have. For any privacy question or request,
-            contact us at <a href="mailto:privacy@campcareer.com" className="text-indigo-600 hover:underline">privacy@campcareer.com</a>.
+            contact us at <a href="mailto:contact@campcareer.com" className="text-indigo-600 hover:underline">contact@campcareer.com</a>.
           </p>
         </section>
 
@@ -86,7 +86,7 @@ export default function PrivacyPage() {
             to access, correct, export, or delete your personal data. You can delete saved
             courses and uploaded documents at any time from within the product. To delete your
             entire account and all associated data, email{" "}
-            <a href="mailto:privacy@campcareer.com" className="text-indigo-600 hover:underline">privacy@campcareer.com</a>{" "}
+            <a href="mailto:contact@campcareer.com" className="text-indigo-600 hover:underline">contact@campcareer.com</a>{" "}
             from your registered address; we will action verified requests within 30 days.
           </p>
         </section>
