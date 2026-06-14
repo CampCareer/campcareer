@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { GraduationCap, Briefcase, Landmark, ArrowRight, AlertTriangle, ExternalLink } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { type CountryCode, type LayerMeta, layerNoteText } from "@/lib/degree-risk"
+import { type CountryCode, type LayerMeta, type PrPathway, layerNoteText } from "@/lib/degree-risk"
 import { useTranslations, useLocale } from "@/lib/i18n/locale-provider"
 
 type Level = "bachelor" | "master"
@@ -14,6 +14,8 @@ export interface ImmigrationTimelineProps {
   country: CountryCode
   postStudyYears: number
   visa: LayerMeta
+  /** Verified PR pathway (country_pr_pathways). Falls back to i18n config if null. */
+  pr?: PrPathway | null
   level?: Level
   /** Optional caption under the post-study years (e.g. US STEM branch). */
   postStudyCaption?: string
@@ -26,6 +28,7 @@ export function ImmigrationTimeline({
   country,
   postStudyYears,
   visa,
+  pr = null,
   level = "bachelor",
   postStudyCaption,
   heading,
@@ -44,17 +47,40 @@ export function ImmigrationTimeline({
   const yearsLabel = (n: number) =>
     (n === 1 ? tl.yearShort : tl.yearsShort).replace("{n}", String(n))
 
-  // PR route + caveat (literal access keeps types precise; US varies by birth country)
-  const pr = tl.pr
+  // ── PR stage: prefer the verified country_pr_pathways row; fall back to the
+  // i18n config if the table row is missing (resilience).
+  const L: "en" | "ko" = locale === "ko" ? "ko" : "en"
   let prRoute: string
   let prCaveat: string
-  if (country === "US") {
-    prRoute = pr.US.route
-    prCaveat = nat === "india" ? pr.US.caveatIndia : nat === "china" ? pr.US.caveatChina : pr.US.caveatOther
+  let prYears: string | null = null
+  let prVerified = false
+  let prSource: { text: string; url: string | null } | null = null
+
+  if (pr) {
+    prRoute = L === "ko" ? pr.route_ko : pr.route_en
+    prYears = L === "ko" ? pr.years_ko : pr.years_en
+    prVerified = pr.confidence === "verified"
+    prCaveat =
+      country === "US" && pr.nationality_variants
+        ? pr.nationality_variants[nat][L]
+        : L === "ko"
+          ? pr.caveat_ko
+          : pr.caveat_en
+    if (prVerified && pr.source_name) {
+      prSource = {
+        text: tl.sourceFmt.replace("{source}", pr.source_name).replace("{date}", pr.last_verified ?? ""),
+        url: pr.source_url,
+      }
+    }
   } else {
-    const c = pr[country]
-    prRoute = c.route
-    prCaveat = c.caveat
+    const cfg = tl.pr
+    if (country === "US") {
+      prRoute = cfg.US.route
+      prCaveat = nat === "india" ? cfg.US.caveatIndia : nat === "china" ? cfg.US.caveatChina : cfg.US.caveatOther
+    } else {
+      prRoute = cfg[country].route
+      prCaveat = cfg[country].caveat
+    }
   }
 
   // CSS-based entrance (.tl-stage) — always resolves to visible and respects
@@ -118,10 +144,12 @@ export function ImmigrationTimeline({
             icon={<Landmark className="h-4 w-4" />}
             title={tl.prPathway}
             dashed
-            estimateBadge={tl.estimate}
+            estimateBadge={prVerified ? undefined : tl.estimate}
             primary={prRoute}
+            caption={prYears}
             openLabel={tl.prOpen}
             caveat={prCaveat || null}
+            source={prSource}
           >
             {country === "US" && (
               <div className="mt-2">

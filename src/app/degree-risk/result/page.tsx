@@ -19,6 +19,7 @@ import { LeadCapture } from "./lead-capture"
 import { WhereToStudy } from "./where-to-study"
 import { VisaAlertForm } from "@/components/visa-alert-form"
 import { getTranslations } from "@/lib/i18n/server"
+import { fetchPrPathways } from "@/lib/pr-pathways"
 
 export const metadata = {
   ...pageMetadata({
@@ -70,6 +71,9 @@ export default async function DegreeRiskResultPage({
       console.warn(`[degree-risk] No majors row found for slug="${major}" countries="${lookedUpCountries.join(",")}"`)
     }
   }
+
+  // Verified PR pathways (country_pr_pathways) for the timeline PR stage.
+  const prMap = rows.length > 0 ? await fetchPrPathways() : {}
 
   // Alternatives: union across the shown rows, excluding the current major.
   const alternatives = Array.from(
@@ -182,7 +186,7 @@ export default async function DegreeRiskResultPage({
               }
             >
               {rows.map((row) => (
-                <ResultCard key={row.country} row={row} priorityLayers={priorityLayers} />
+                <ResultCard key={row.country} row={row} pr={prMap[row.country] ?? null} priorityLayers={priorityLayers} />
               ))}
             </div>
 

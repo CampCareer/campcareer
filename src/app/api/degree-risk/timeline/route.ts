@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase-server"
+import { fetchPrPathways } from "@/lib/pr-pathways"
 import {
   type CountryCode,
   type LayerMeta,
@@ -51,6 +52,7 @@ export async function GET(request: Request) {
 
   const rows = (data ?? []) as unknown as Row[]
   const byCountry = new Map(rows.map((r) => [r.country, r]))
+  const prByCountry = await fetchPrPathways()
 
   const countries: TimelineCountry[] = ALL_COUNTRIES.flatMap((c) => {
     const row = byCountry.get(c)
@@ -62,6 +64,7 @@ export async function GET(request: Request) {
         postStudyYears: row.post_study_work_years,
         stemBranch: isUsFallback,
         visa: row.layer_meta?.visa ?? ESTIMATE_VISA,
+        pr: prByCountry[c] ?? null,
       },
     ]
   })

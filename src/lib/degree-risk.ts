@@ -301,6 +301,27 @@ const FIELD_TO_SLUG: [string, string][] = [
   ["music", "music"],
 ]
 
+// Verified PR-pathway row (public.country_pr_pathways). route/years/caveat are
+// per-locale; nationality_variants is only set for countries where the wait
+// depends on country of birth (US). years_* are range/condition labels, never a
+// single fixed number.
+export interface PrPathway {
+  country: CountryCode
+  route_en: string
+  route_ko: string
+  years_en: string
+  years_ko: string
+  caveat_en: string
+  caveat_ko: string
+  nationality_variants:
+    | Record<"india" | "china" | "other", { en: string; ko: string }>
+    | null
+  confidence: "estimate" | "verified"
+  last_verified: string | null
+  source_name: string | null
+  source_url: string | null
+}
+
 // Per-country payload for the /compare immigration-timeline grid
 // (returned by /api/degree-risk/timeline).
 export interface TimelineCountry {
@@ -308,6 +329,7 @@ export interface TimelineCountry {
   postStudyYears: number
   stemBranch: boolean
   visa: LayerMeta
+  pr: PrPathway | null
 }
 
 export function fieldToMajorSlug(field: string): string | null {

@@ -5,6 +5,7 @@ import {
   type MajorRow,
   type LayerKey,
   type LayerMeta,
+  type PrPathway,
   COUNTRY_META,
   RISK_BADGE,
   formatMoney,
@@ -136,9 +137,11 @@ function LayerRow({
 
 export function ResultCard({
   row,
+  pr = null,
   priorityLayers = [],
 }: {
   row: MajorRow
+  pr?: PrPathway | null
   priorityLayers?: string[]
 }) {
   const t = getTranslations()
@@ -190,6 +193,7 @@ export function ResultCard({
           country={row.country}
           postStudyYears={row.post_study_work_years}
           visa={meta("visa")}
+          pr={pr}
         />
       </div>
 

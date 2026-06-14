@@ -44,6 +44,7 @@ export function CompareTimelines({ field }: { field: string }) {
             country={r.country}
             postStudyYears={r.postStudyYears}
             visa={r.visa}
+            pr={r.pr}
             postStudyCaption={r.stemBranch ? tl.stemCaption : undefined}
             heading={
               <span className="flex items-center gap-2">
