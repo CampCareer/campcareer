@@ -15,6 +15,10 @@ export interface ImmigrationTimelineProps {
   postStudyYears: number
   visa: LayerMeta
   level?: Level
+  /** Optional caption under the post-study years (e.g. US STEM branch). */
+  postStudyCaption?: string
+  /** Optional country flag/name header (used in the compare grid). */
+  heading?: React.ReactNode
   className?: string
 }
 
@@ -23,6 +27,8 @@ export function ImmigrationTimeline({
   postStudyYears,
   visa,
   level = "bachelor",
+  postStudyCaption,
+  heading,
   className,
 }: ImmigrationTimelineProps) {
   const t = useTranslations()
@@ -57,7 +63,7 @@ export function ImmigrationTimeline({
 
   return (
     <section aria-label={tl.heading} className={cn("rounded-2xl border-2 border-slate-200 bg-white p-5 md:p-6", className)}>
-      <h3 className="font-display text-lg font-extrabold text-slate-900 mb-4">{tl.heading}</h3>
+      <h3 className="font-display text-lg font-extrabold text-slate-900 mb-4">{heading ?? tl.heading}</h3>
 
       {/* Proportional bar — desktop only, decorative */}
       <div aria-hidden className="hidden md:flex items-center gap-1 h-3 mb-4">
@@ -88,6 +94,7 @@ export function ImmigrationTimeline({
             title={tl.postStudy}
             primary={yearsLabel(postStudyYears)}
             primaryStrong={yearsLabel(postStudyYears)}
+            caption={postStudyCaption}
             note={visaNote}
             policyChip={rm.policyChip}
             source={
@@ -173,6 +180,7 @@ function Stage({
   title,
   primary,
   primaryStrong,
+  caption,
   dashed = false,
   estimateBadge,
   source,
@@ -186,6 +194,7 @@ function Stage({
   title: string
   primary: string
   primaryStrong?: string
+  caption?: string | null
   dashed?: boolean
   estimateBadge?: string
   source?: { text: string; url: string | null } | null
@@ -215,6 +224,8 @@ function Stage({
       <p className="mt-2 text-sm leading-relaxed text-slate-700">
         {primaryStrong ? <strong className="text-slate-900">{primaryStrong}</strong> : primary}
       </p>
+
+      {caption && <p className="mt-1 text-xs text-slate-500">{caption}</p>}
 
       {openLabel && <p className="mt-1 text-xs italic text-slate-400">{openLabel}</p>}
 

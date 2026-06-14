@@ -15,6 +15,7 @@ import {
   type ExchangeRates,
 } from "@/app/lib/currency"
 import type { ChartEntry } from "./bar-chart"
+import { CompareTimelines } from "./compare-timelines"
 
 const CompareBarChart = dynamic(() => import("./bar-chart"), {
   ssr: false,
@@ -683,6 +684,9 @@ function CompareContent() {
               ))}
         </div>
       )}
+
+      {/* Immigration path comparison */}
+      {!loading && field && data && <CompareTimelines field={field} />}
 
       {/* Bar Chart */}
       {!loading && hasAnyData && (
