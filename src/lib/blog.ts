@@ -16,8 +16,11 @@ export type PostMeta = {
   heroImage?: string
   heroImageAlt?: string
   author?: string
+  authorTitle?: string
   authorRole?: string
   authorInitials?: string
+  reviewedBy?: string
+  lastReviewed?: string
 }
 
 export function getAllPosts(): PostMeta[] {

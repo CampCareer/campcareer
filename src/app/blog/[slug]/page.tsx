@@ -92,16 +92,33 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
       <hr className="border-slate-200 mb-8" />
 
       {meta.author && (
-        <div className="flex items-center gap-3 mb-6 p-4 bg-slate-50 rounded-xl border border-slate-200">
-          <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
+        <div className="flex items-start gap-3 mb-6 p-4 bg-slate-50 rounded-xl border border-slate-200">
+          <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center shrink-0 mt-0.5">
             <span className="text-sm font-bold text-blue-600">
               {meta.authorInitials ?? meta.author.slice(0, 2).toUpperCase()}
             </span>
           </div>
-          <div>
+          <div className="min-w-0">
             <p className="text-sm font-semibold text-slate-900">{meta.author}</p>
+            {meta.authorTitle && (
+              <p className="text-xs text-slate-500">{meta.authorTitle}</p>
+            )}
             {meta.authorRole && (
-              <p className="text-xs text-slate-500">{meta.authorRole}</p>
+              <p className="text-xs text-slate-500 mt-0.5">{meta.authorRole}</p>
+            )}
+            {(meta.reviewedBy || meta.lastReviewed) && (
+              <div className="mt-1.5 pt-1.5 border-t border-slate-200 space-y-0.5">
+                {meta.reviewedBy && (
+                  <p className="text-[11px] text-slate-400">
+                    Reviewed by {meta.reviewedBy}
+                  </p>
+                )}
+                {meta.lastReviewed && (
+                  <p className="text-[11px] text-slate-400">
+                    Last reviewed {new Date(meta.lastReviewed + "T00:00:00").toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+                  </p>
+                )}
+              </div>
             )}
           </div>
         </div>
