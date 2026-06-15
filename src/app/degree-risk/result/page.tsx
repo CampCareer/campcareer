@@ -15,7 +15,6 @@ import {
   viewCountries,
 } from "@/lib/degree-risk"
 import { ResultCard } from "./result-card"
-import { LeadCapture } from "./lead-capture"
 import { WhereToStudy } from "./where-to-study"
 import { VisaAlertForm } from "@/components/visa-alert-form"
 import { getTranslations } from "@/lib/i18n/server"
@@ -233,7 +232,7 @@ export default async function DegreeRiskResultPage({
                 </div>
 
                 {alternatives.length > 0 ? (
-                  <div className="mt-10 grid lg:grid-cols-2 gap-8 items-start">
+                  <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                     <WhereToStudy major={major} view={view} embedded />
                     <AlternativesPanel
                       alternatives={alternatives}
@@ -274,10 +273,6 @@ export default async function DegreeRiskResultPage({
 
             <section className="mt-10">
               <VisaAlertForm country={view} field={major} />
-            </section>
-
-            <section className="mt-6">
-              <LeadCapture assessmentId={assessmentId} />
             </section>
           </>
         )}
