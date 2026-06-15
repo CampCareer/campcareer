@@ -126,7 +126,9 @@ export default function MethodologyPage() {
           <p>
             A 0–100 score for how actively the local market is hiring in the field right now:
             vacancy trends, graduate-program intake, and government skills-shortage signals.
-            This is the most judgement-heavy layer and the one we update most often.
+            No single official statistic captures this, so we synthesise it from several
+            signals and carry it as an <em>estimate</em> by design — it is the most
+            judgement-heavy layer and the one we update most often.
           </p>
 
           <h3 className="font-display text-base font-semibold text-slate-700 mt-5 mb-1.5">4 · AI exposure</h3>
@@ -137,7 +139,9 @@ export default function MethodologyPage() {
             Felten-style occupational exposure indices — applied to the occupations graduates of
             the major actually enter. Important nuance: high exposure does not mean the job
             disappears; it usually means the junior layer of the job changes first, which
-            matters most for fresh graduates.
+            matters most for fresh graduates. Like market demand, this is an interpretation of
+            published research rather than a single official figure, so it is carried as an{" "}
+            <em>estimate</em> by design.
           </p>
 
           <h3 className="font-display text-base font-semibold text-slate-700 mt-5 mb-1.5">5 · ROI</h3>
@@ -157,19 +161,29 @@ export default function MethodologyPage() {
               our judgement, not an official statistic.
             </li>
             <li>
-              <strong>&quot;Estimate&quot; means estimate.</strong> Scores marked{" "}
-              <em>estimate</em> have not yet been fully verified against the latest QILT / HEA
-              releases and occupation-list updates. Verified rows are marked accordingly, and
-              every major shows a last-verified date.
+              <strong>What &quot;verified&quot; means — and what it doesn&apos;t.</strong>{" "}
+              Employment, visa pathway, and ROI are marked <em>verified</em>: each figure has
+              been cross-checked against the government source named above for that country, and
+              every major carries the date it was last checked. &quot;Verified&quot; means
+              traced to a stated official source as of a stated date — not that the number
+              predicts your individual outcome. Some employment figures map a major onto a
+              broad field band (for example QILT and HEA report by study area), so the match to
+              your specific course is approximate.
+            </li>
+            <li>
+              <strong>Market demand and AI exposure are deliberately left as{" "}
+              <em>estimate</em>.</strong> Neither has a single official statistic behind it, so
+              we build them from several signals and published research and label them honestly.
+              The <em>estimate</em> tag describes how the number was made — it is part of being
+              straight with you, not a gap we simply haven&apos;t filled.
             </li>
             <li>
               <strong>Field-level data hides person-level variance.</strong> A major&apos;s
               employment rate is a cohort median, not your probability.
             </li>
             <li>
-              We score <strong>the US, Canada, the UK, Australia, and Ireland</strong>. US, CA,
-              and UK rows are currently marked <em>estimate</em> while we verify field-level
-              figures against each country&apos;s primary sources.
+              We score <strong>the US, Canada, the UK, Australia, and Ireland</strong> on all
+              five layers, with the same verified-vs-estimate split applied to every country.
             </li>
           </ul>
         </section>
