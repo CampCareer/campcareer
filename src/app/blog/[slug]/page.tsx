@@ -7,8 +7,10 @@ import { MDXRemote } from "next-mdx-remote/rsc"
 import remarkGfm from "remark-gfm"
 import { getAllPosts, getPostBySlug } from "@/lib/blog"
 import { mdxComponents } from "@/components/blog/mdx-components"
-import { getTranslations } from "@/lib/i18n/server"
 import { JsonLd, articleLd, breadcrumbLd } from "@/components/seo/json-ld"
+
+export const revalidate = 86400
+export const dynamic = "force-static"
 
 export async function generateStaticParams() {
   const posts = getAllPosts()
@@ -46,8 +48,6 @@ export async function generateMetadata({
 }
 
 export default function BlogPostPage({ params }: { params: { slug: string } }) {
-  const t = getTranslations()
-  const tb = t.blog
   const post = getPostBySlug(params.slug)
   if (!post) notFound()
 
@@ -72,7 +72,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         href="/blog"
         className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition-colors mb-8"
       >
-        <ArrowLeft className="w-4 h-4" /> {tb.backToBlog}
+        <ArrowLeft className="w-4 h-4" /> Back to blog
       </Link>
 
       <div className="mb-8">
