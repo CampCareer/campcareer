@@ -11,6 +11,8 @@ import {
   formatMoney,
   layerMeta,
   layerNoteText,
+  riskSummaryText,
+  aiNoteText,
   majorLabel,
 } from "@/lib/degree-risk"
 import { getTranslations, getLocale } from "@/lib/i18n/server"
@@ -177,14 +179,15 @@ export function ResultCard({
       </div>
 
       {/* Summary — high-risk majors get cost/conditions framing, never "don't study X".
-          risk_summary / ai_note are English DB free-text (localization is a data follow-up). */}
+          risk_summary / ai_note are English-first DB free-text; ko falls back to the
+          English original until risk_summary_ko / ai_note_ko are seeded. */}
       {row.overall_risk === "high" && (
         <p className="mt-4 text-xs font-bold text-slate-500 uppercase tracking-wide">
           {rr.highRiskFraming}
         </p>
       )}
       <p className={`${row.overall_risk === "high" ? "mt-1" : "mt-4"} text-body-lg text-slate-600`}>
-        {row.risk_summary}
+        {riskSummaryText(row, locale)}
       </p>
 
       {/* Immigration timeline: study → post-study visa → PR */}
@@ -223,7 +226,10 @@ export function ResultCard({
 
         <LayerRow label={rr.layerAi} rm={rm} priorityLabel={rr.priority} meta={meta("ai_exposure")} note={note("ai_exposure")} highlighted={hot("ai_exposure")}>
           <strong className="capitalize">{row.ai_exposure_band}</strong>
-          {row.ai_note && <> — {row.ai_note}</>}
+          {(() => {
+            const aiNote = aiNoteText(row, locale)
+            return aiNote && <> — {aiNote}</>
+          })()}
         </LayerRow>
 
         <LayerRow label={rr.layerRoi} rm={rm} priorityLabel={rr.priority} meta={meta("roi")} note={note("roi")} highlighted={hot("roi")}>
