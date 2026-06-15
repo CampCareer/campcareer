@@ -178,6 +178,7 @@ const ko: Dictionary = {
     notScoredBody: '{country}의 {major}는 아직 검증된 점수가 없어요.',
     timelineHeading: '이민 경로 나란히 보기',
     timelineSubtitle: '학업 → 졸업 후 취업비자 → 영주권, 나라별로.',
+    seeDetail: '전체 상세 보기',
     ogTagline: '취업 · 비자 · 시장수요 · AI 노출 · ROI',
   },
   checklist: {
@@ -537,7 +538,7 @@ const ko: Dictionary = {
     },
   },
   visaAlert: {
-    heading: '비자정책 변경 알림 받기',
+    heading: '비자정책 변경 알림 받기 (+ 전체 리포트)',
     subtitle: '이 경로의 졸업 후 취업비자·영주권 규정이 바뀌면 이메일로 알려드립니다.',
     placeholder: 'you@example.com',
     submit: '알림 받기',

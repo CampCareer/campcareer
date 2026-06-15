@@ -176,6 +176,7 @@ const en = {
     notScoredBody: 'No verified score for {major} in {country} yet.',
     timelineHeading: 'Immigration path, side by side',
     timelineSubtitle: 'Study → post-study work visa → PR for each country.',
+    seeDetail: 'Full detail',
     ogTagline: 'Employment · Visa · Market demand · AI exposure · ROI',
   },
   checklist: {
@@ -535,7 +536,7 @@ const en = {
     },
   },
   visaAlert: {
-    heading: 'Get visa-policy alerts',
+    heading: 'Get visa-policy alerts (+ your full report)',
     subtitle: "We'll email you if the post-study work or PR rules for this path change.",
     placeholder: 'you@example.com',
     submit: 'Notify me',

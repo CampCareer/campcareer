@@ -8,12 +8,11 @@ import {
   type MajorRow,
   type CountryCode,
   ALL_COUNTRIES,
-  COUNTRY_META,
   isMajorSlug,
   majorLabel,
   layerMeta,
 } from "@/lib/degree-risk"
-import { ImmigrationTimeline } from "@/components/immigration-timeline"
+import { ImmigrationCompare, type CompareCol } from "@/components/immigration-compare"
 import { CompareSelectors } from "./compare-selectors"
 import { ComparisonTable } from "./comparison-table"
 
@@ -83,10 +82,19 @@ export default async function ComparePage({ searchParams }: { searchParams: Sear
 
   const prMap = rowA || rowB ? await fetchPrPathways() : {}
 
-  const cols: { country: CountryCode; row: MajorRow | null }[] = [
+  const detailHref = (country: CountryCode) =>
+    `/degree-risk/result?major=${field}&view=${country}`
+
+  const immigrationCols: CompareCol[] = [
     { country: a, row: rowA },
     { country: b, row: rowB },
-  ]
+  ].map(({ country, row }) => ({
+    country,
+    detailHref: detailHref(country),
+    data: row
+      ? { postStudyYears: row.post_study_work_years, visa: layerMeta(row, "visa"), pr: prMap[country] ?? null }
+      : null,
+  }))
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-10 space-y-8">
@@ -120,39 +128,12 @@ export default async function ComparePage({ searchParams }: { searchParams: Sear
         )}
       </section>
 
-      {/* Two immigration timelines, side by side */}
+      {/* Immigration path, stage-aligned across the two countries */}
       {(rowA || rowB) && (
         <section>
           <h2 className="font-display text-lg font-semibold text-slate-800 mb-1">{tc.timelineHeading}</h2>
           <p className="text-sm text-slate-500 mb-4">{tc.timelineSubtitle}</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
-            {cols.map(({ country, row }) =>
-              row ? (
-                <ImmigrationTimeline
-                  key={country}
-                  country={country}
-                  postStudyYears={row.post_study_work_years}
-                  visa={layerMeta(row, "visa")}
-                  pr={prMap[country] ?? null}
-                  heading={
-                    <span className="flex items-center gap-2">
-                      <span>{COUNTRY_META[country].flag}</span>
-                      {t.degreeRisk.result.countries[country]}
-                    </span>
-                  }
-                />
-              ) : (
-                <div
-                  key={country}
-                  className="rounded-2xl border-2 border-dashed border-slate-200 bg-white p-6 text-sm text-slate-400"
-                >
-                  {tc.notScoredBody
-                    .replace("{major}", majorName)
-                    .replace("{country}", t.degreeRisk.result.countries[country])}
-                </div>
-              )
-            )}
-          </div>
+          <ImmigrationCompare cols={immigrationCols} />
         </section>
       )}
     </div>
