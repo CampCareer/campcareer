@@ -19,12 +19,13 @@ export function HomePageClient() {
   const t = useTranslations()
   const tl = t.landing
 
+  // Visa pathway is our wedge — surfaced first and prominently below.
+  // AI exposure stays in the list but is no longer headline-level.
   const SAMPLE_LAYERS = [
     { icon: Briefcase, label: tl.hero.sampleEmployment, value: tl.hero.sampleEmploymentVal },
-    { icon: ShieldCheck, label: tl.hero.sampleVisa, value: tl.hero.sampleVisaVal },
     { icon: TrendingUp, label: tl.hero.sampleDemand, value: tl.hero.sampleDemandVal },
-    { icon: Cpu, label: tl.hero.sampleAi, value: tl.hero.sampleAiVal },
     { icon: LineChart, label: tl.hero.sampleRoi, value: tl.hero.sampleRoiVal },
+    { icon: Cpu, label: tl.hero.sampleAi, value: tl.hero.sampleAiVal },
   ]
 
   const PROVENANCE = [
@@ -95,7 +96,7 @@ export function HomePageClient() {
               <span className="truncate">{tl.hero.badge}</span>
             </div>
 
-            <h1 className="font-display text-4xl lg:text-[3.5rem] font-semibold text-slate-900 leading-[1.08] tracking-tight mb-5">
+            <h1 className="font-display text-4xl lg:text-[3.5rem] font-semibold text-slate-900 leading-[1.08] tracking-tight mb-5 break-keep">
               {tl.hero.headlineLine1}
               <br />
               {tl.hero.headlineLine2}
@@ -137,7 +138,20 @@ export function HomePageClient() {
                 </span>
               </div>
 
-              <div className="mt-4 divide-y divide-slate-100">
+              {/* Visa pathway — the wedge, surfaced first and most prominently */}
+              <div className="mt-4 rounded-xl bg-brand-tint border border-blue-100 px-4 py-3.5">
+                <span className="flex items-center gap-2 text-xs font-semibold text-brand uppercase tracking-wider">
+                  <ShieldCheck className="w-4 h-4 text-brand" />
+                  {tl.hero.sampleVisa}
+                </span>
+                <p className="mt-1.5 text-sm font-semibold text-slate-900">{tl.hero.sampleVisaVal}</p>
+                <p className="mt-1 flex items-center gap-1.5 text-xs font-medium text-brand">
+                  <span className="text-[10px] uppercase tracking-wider text-slate-400">{tl.hero.samplePr}</span>
+                  {tl.hero.samplePrVal}
+                </p>
+              </div>
+
+              <div className="mt-1 divide-y divide-slate-100">
                 {SAMPLE_LAYERS.map((layer) => (
                   <div key={layer.label} className="flex items-center justify-between gap-3 py-3">
                     <span className="flex items-center gap-2 text-xs font-medium text-slate-400 uppercase tracking-wider">
