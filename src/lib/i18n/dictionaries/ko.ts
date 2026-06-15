@@ -474,6 +474,15 @@ const ko: Dictionary = {
       natIndia: '인도',
       natChina: '중국',
       natOther: '그 외',
+      // 비교 뷰 요약용 짧은 영주권 경로 라벨 — 전체 검증 경로는 아래 pr(및
+      // country_pr_pathways)에 있습니다.
+      prShort: {
+        US: '고용주 스폰서 영주권',
+        CA: 'Express Entry',
+        UK: 'Skilled Worker → ILR',
+        AU: '숙련 비자(189/190)',
+        IE: 'Critical Skills → Stamp 4',
+      },
       pr: {
         IE: { route: 'Critical Skills 취업허가 → Stamp 4(2년 후) → 장기거주/시민권', caveat: '' },
         CA: { route: 'PGWP → 1년 숙련 경력 → Express Entry(CEC) → PR', caveat: '' },
@@ -512,10 +521,15 @@ const ko: Dictionary = {
       visaOnList: '숙련 직업 목록에 포함',
       visaOffList: '숙련 직업 목록에 미포함',
       visaYears: '졸업 후 취업비자 {n}년',
+      compactVisaPr: '졸업 후 비자 {n}년 · 영주권: {pr}',
+      seeFullPath: '전체 경로 보기',
       roiValue: '학비 {tuition} · 초임 중위 {salary} · {payback}년 회수',
       whereTitle: '{major} 어디서 공부할까',
       whereAllSubtitle: '국가별로 대학을 연봉·학비·ROI로 비교하세요.',
       whereSubtitle: 'ROI 기준 이 전공 상위 대학 — 실제 연봉·학비 데이터.',
+      whereExploreAllCta: '이 전공 어디서 공부할지 전부 보기',
+      whereEmptyTitle: '학교 데이터 곧 추가',
+      whereEmptyText: '아직 이 조합의 ROI 학교 데이터가 없어요 — 대신 ROI 탐색기에서 살펴보세요.',
       seeAll: '전체 보기',
       paybackYr: '{n}년 회수',
       risk: { low: '낮은 위험', medium: '보통 위험', high: '높은 위험' },

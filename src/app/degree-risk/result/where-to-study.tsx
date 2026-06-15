@@ -54,83 +54,43 @@ function explorerHref(country: CountryCode, field: string): string {
   return `/roi-explorer?${params.toString()}`
 }
 
-function CountryColleges({
-  country,
-  field,
-  colleges,
-  rr,
-}: {
-  country: CountryCode
-  field: string
-  colleges: College[]
-  rr: ResultStrings
-}) {
-  if (colleges.length === 0) return null
-
+// Graceful fallback for combinations with no ROI-ranked schools yet: keep the
+// "what's next" CTA visible instead of rendering nothing.
+function ComingSoon({ rr, href }: { rr: ResultStrings; href: string }) {
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl p-5">
-      <div className="flex items-center justify-between gap-3 mb-3">
-        <h3 className="text-sm font-semibold text-slate-900">
-          {COUNTRY_META[country].flag} {rr.countries[country]}
-        </h3>
-        <Link
-          href={explorerHref(country, field)}
-          className="text-xs text-blue-600 hover:text-blue-700 inline-flex items-center gap-1 shrink-0"
-        >
-          {rr.seeAll} <ArrowRight className="w-3 h-3" />
-        </Link>
-      </div>
-      <ul className="divide-y divide-slate-100">
-        {colleges.map((c, i) => {
-          const inner = (
-            <div className="flex items-center justify-between gap-3 py-2.5">
-              <span className="text-sm text-slate-700 truncate">{c.college_name}</span>
-              <span className="flex items-center gap-3 shrink-0 text-xs">
-                {c.roi_score != null && (
-                  <span className="inline-block px-2 py-0.5 rounded-md font-bold text-emerald-700 bg-emerald-50">
-                    ROI {c.roi_score.toFixed(1)}
-                  </span>
-                )}
-                {c.payback_years != null && (
-                  <span className="text-slate-400 hidden sm:inline">
-                    {rr.paybackYr.replace("{n}", String(c.payback_years))}
-                  </span>
-                )}
-              </span>
-            </div>
-          )
-          return (
-            <li key={c.college_id ?? `${c.college_name}-${i}`}>
-              {c.college_id ? (
-                <Link
-                  href={`/roi-explorer/${toRoiCountry(country)}/${c.college_id}`}
-                  className="block hover:bg-slate-50 -mx-2 px-2 rounded-lg transition-colors"
-                >
-                  {inner}
-                </Link>
-              ) : (
-                inner
-              )}
-            </li>
-          )
-        })}
-      </ul>
+    <div className="flex flex-1 flex-col justify-center rounded-2xl border border-dashed border-slate-300 bg-white p-6 text-center">
+      <p className="text-sm font-semibold text-slate-700">{rr.whereEmptyTitle}</p>
+      <p className="mt-1.5 text-xs leading-relaxed text-slate-500">{rr.whereEmptyText}</p>
+      <Link
+        href={href}
+        className="mt-4 inline-flex items-center justify-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-700"
+      >
+        {rr.whereExploreAllCta} <ArrowRight className="w-4 h-4" />
+      </Link>
     </div>
   )
 }
 
-export async function WhereToStudy({ major, view }: { major: string; view: ResultView }) {
+export async function WhereToStudy({
+  major,
+  view,
+  embedded = false,
+}: {
+  major: string
+  view: ResultView
+  embedded?: boolean
+}) {
   const t = getTranslations()
   const rr = t.degreeRisk.result
   const opts = t.degreeRisk.options as Record<string, string>
   const majorName = opts[major] ?? majorLabel(major)
 
   const field = MAJOR_ROI_FIELD[major]
-  if (!field) return null
 
-  // For a single-country view, show its top universities. For the "all" view,
-  // querying 5 countries × ROI would be heavy and noisy — show a link card.
+  // ── Compare ("all") view: querying 5 countries × ROI would be heavy and
+  // noisy — show a per-country link card. (Never embedded.)
   if (view === "all") {
+    if (!field) return null
     return (
       <section className="mt-10">
         <h2 className="text-base font-semibold text-slate-900 mb-1">
@@ -155,25 +115,88 @@ export async function WhereToStudy({ major, view }: { major: string; view: Resul
     )
   }
 
-  const countries = viewCountries(view)
-  const results = await Promise.all(countries.map((c) => topColleges(c, field)))
-  const blocks = countries
-    .map((c, i) => ({ country: c, colleges: results[i] }))
-    .filter((b) => b.colleges.length > 0)
+  // ── Single-country view: ROI preview that nudges to the ROI Explorer.
+  const country = viewCountries(view)[0]
+  const wrapCls = embedded ? "flex h-full flex-col" : "mt-10"
 
-  if (blocks.length === 0) return null
-
-  return (
-    <section className="mt-10">
+  const heading = (
+    <>
       <h2 className="text-base font-semibold text-slate-900 mb-1 flex items-center gap-2">
         <GraduationCap className="w-4 h-4 text-blue-500" />
         {rr.whereTitle.replace("{major}", majorName)}
       </h2>
       <p className="text-xs text-slate-500 mb-4">{rr.whereSubtitle}</p>
-      <div className="grid grid-cols-1 gap-4">
-        {blocks.map((b) => (
-          <CountryColleges key={b.country} country={b.country} field={field} colleges={b.colleges} rr={rr} />
-        ))}
+    </>
+  )
+
+  if (!field) {
+    if (!embedded) return null
+    return (
+      <section className={wrapCls}>
+        {heading}
+        <ComingSoon rr={rr} href="/roi-explorer" />
+      </section>
+    )
+  }
+
+  const colleges = await topColleges(country, field)
+
+  if (colleges.length === 0) {
+    if (!embedded) return null
+    return (
+      <section className={wrapCls}>
+        {heading}
+        <ComingSoon rr={rr} href={explorerHref(country, field)} />
+      </section>
+    )
+  }
+
+  return (
+    <section className={wrapCls}>
+      {heading}
+      <div className="flex flex-1 flex-col rounded-2xl border border-slate-200 bg-white p-5">
+        <ul className="divide-y divide-slate-100">
+          {colleges.map((c, i) => {
+            const inner = (
+              <div className="flex items-center justify-between gap-3 py-2.5">
+                <span className="text-sm text-slate-700 truncate">{c.college_name}</span>
+                <span className="flex items-center gap-3 shrink-0 text-xs">
+                  {c.roi_score != null && (
+                    <span className="inline-block px-2 py-0.5 rounded-md font-bold text-emerald-700 bg-emerald-50">
+                      ROI {c.roi_score.toFixed(1)}
+                    </span>
+                  )}
+                  {c.payback_years != null && (
+                    <span className="text-slate-400 hidden sm:inline">
+                      {rr.paybackYr.replace("{n}", String(c.payback_years))}
+                    </span>
+                  )}
+                </span>
+              </div>
+            )
+            return (
+              <li key={c.college_id ?? `${c.college_name}-${i}`}>
+                {c.college_id ? (
+                  <Link
+                    href={`/roi-explorer/${toRoiCountry(country)}/${c.college_id}`}
+                    className="block hover:bg-slate-50 -mx-2 px-2 rounded-lg transition-colors"
+                  >
+                    {inner}
+                  </Link>
+                ) : (
+                  inner
+                )}
+              </li>
+            )
+          })}
+        </ul>
+        <Link
+          href={explorerHref(country, field)}
+          className="mt-4 flex items-center justify-center gap-1.5 w-full rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-500"
+        >
+          {rr.whereExploreAllCta}
+          <ArrowRight className="w-4 h-4" />
+        </Link>
       </div>
     </section>
   )

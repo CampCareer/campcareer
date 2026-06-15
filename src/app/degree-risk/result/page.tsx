@@ -31,6 +31,49 @@ export const metadata = {
   robots: { index: false, follow: true },
 }
 
+type ResultStrings = ReturnType<typeof getTranslations>["degreeRisk"]["result"]
+
+// "Better-fit alternatives" chips. `dense` packs them for the half-width bottom
+// column (single view); the default spreads them full-width (compare view).
+function AlternativesPanel({
+  alternatives,
+  hrefFor,
+  nameFor,
+  rr,
+  dense = false,
+}: {
+  alternatives: string[]
+  hrefFor: (slug: string) => string
+  nameFor: (slug: string) => string
+  rr: ResultStrings
+  dense?: boolean
+}) {
+  return (
+    <section className={dense ? "h-full" : "mt-10"}>
+      <h2 className="text-base font-semibold text-slate-900 mb-1">{rr.alternativesTitle}</h2>
+      <p className="text-xs text-slate-500 mb-4">{rr.alternativesSubtitle}</p>
+      <div
+        className={
+          dense
+            ? "grid grid-cols-1 sm:grid-cols-2 gap-3"
+            : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"
+        }
+      >
+        {alternatives.map((slug) => (
+          <Link
+            key={slug}
+            href={hrefFor(slug)}
+            className="group bg-white border border-slate-200 rounded-xl px-4 py-3.5 flex items-center justify-between hover:border-blue-300 hover:shadow-sm transition-all"
+          >
+            <span className="text-sm font-medium text-slate-800">{nameFor(slug)}</span>
+            <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-blue-500 transition-colors" />
+          </Link>
+        ))}
+      </div>
+    </section>
+  )
+}
+
 export default async function DegreeRiskResultPage({
   searchParams,
 }: {
@@ -90,7 +133,7 @@ export default async function DegreeRiskResultPage({
   return (
     <div className="min-h-screen bg-background">
       <header className="bg-white border-b border-slate-200">
-        <div className="max-w-4xl mx-auto px-6 h-14 flex items-center justify-between">
+        <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <LogoMark size={28} />
             <span className="font-semibold text-slate-900 text-sm tracking-tight">CampCareer</span>
@@ -101,9 +144,9 @@ export default async function DegreeRiskResultPage({
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-6 py-10">
+      <main className="max-w-5xl mx-auto px-6 py-10">
         {isOther ? (
-          <>
+          <div className="max-w-2xl mx-auto">
           <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center">
             <Search className="w-8 h-8 mx-auto text-blue-500" />
             <p className="mt-4 text-slate-700 text-sm leading-relaxed">
@@ -126,9 +169,9 @@ export default async function DegreeRiskResultPage({
           <div className="mt-6">
             <VisaAlertForm country={view} field={null} />
           </div>
-          </>
+          </div>
         ) : rows.length === 0 ? (
-          <>
+          <div className="max-w-2xl mx-auto">
           <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center">
             <p className="text-slate-600 text-sm">
               {view === "all"
@@ -147,7 +190,7 @@ export default async function DegreeRiskResultPage({
           <div className="mt-6">
             <VisaAlertForm country={view} field={major || null} />
           </div>
-          </>
+          </div>
         ) : (
           <>
             <h1 className="font-display text-question text-slate-900">
@@ -176,45 +219,57 @@ export default async function DegreeRiskResultPage({
               </p>
             )}
 
-            <div
-              className={
-                rows.length > 2
-                  ? "mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-                  : rows.length > 1
-                    ? "mt-6 grid grid-cols-1 md:grid-cols-2 gap-6"
-                    : "mt-6 max-w-2xl"
-              }
-            >
-              {rows.map((row) => (
-                <ResultCard key={row.country} row={row} pr={prMap[row.country] ?? null} priorityLayers={priorityLayers} />
-              ))}
-            </div>
+            {rows.length === 1 ? (
+              // Single-country: one wide card (2-col layers), then a bottom row
+              // that drives the next step — ROI school preview beside alternatives.
+              <>
+                <div className="mt-6">
+                  <ResultCard
+                    row={rows[0]}
+                    pr={prMap[rows[0].country] ?? null}
+                    priorityLayers={priorityLayers}
+                    layout="grid"
+                  />
+                </div>
 
-            <WhereToStudy major={major} view={view} />
-
-            {alternatives.length > 0 && (
-              <section className="mt-10">
-                <h2 className="text-base font-semibold text-slate-900 mb-1">
-                  {rr.alternativesTitle}
-                </h2>
-                <p className="text-xs text-slate-500 mb-4">
-                  {rr.alternativesSubtitle}
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {alternatives.map((slug) => (
-                    <Link
-                      key={slug}
-                      href={altHref(slug)}
-                      className="group bg-white border border-slate-200 rounded-xl px-4 py-3.5 flex items-center justify-between hover:border-blue-300 hover:shadow-sm transition-all"
-                    >
-                      <span className="text-sm font-medium text-slate-800">
-                        {majorName(slug)}
-                      </span>
-                      <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-blue-500 transition-colors" />
-                    </Link>
+                {alternatives.length > 0 ? (
+                  <div className="mt-10 grid lg:grid-cols-2 gap-8 items-start">
+                    <WhereToStudy major={major} view={view} embedded />
+                    <AlternativesPanel
+                      alternatives={alternatives}
+                      hrefFor={altHref}
+                      nameFor={majorName}
+                      rr={rr}
+                      dense
+                    />
+                  </div>
+                ) : (
+                  <div className="mt-10">
+                    <WhereToStudy major={major} view={view} embedded />
+                  </div>
+                )}
+              </>
+            ) : (
+              // Compare ("all") view: grid of country cards, then full-width
+              // where-to-study links and alternatives.
+              <>
+                <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {rows.map((row) => (
+                    <ResultCard key={row.country} row={row} pr={prMap[row.country] ?? null} priorityLayers={priorityLayers} />
                   ))}
                 </div>
-              </section>
+
+                <WhereToStudy major={major} view={view} />
+
+                {alternatives.length > 0 && (
+                  <AlternativesPanel
+                    alternatives={alternatives}
+                    hrefFor={altHref}
+                    nameFor={majorName}
+                    rr={rr}
+                  />
+                )}
+              </>
             )}
 
             <section className="mt-10">

@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { Fragment } from "react"
-import { ExternalLink, AlertTriangle } from "lucide-react"
+import { ExternalLink, AlertTriangle, ArrowRight } from "lucide-react"
 import {
   type MajorRow,
   type LayerKey,
@@ -35,6 +35,9 @@ function LayerRow({
   rm,
   priorityLabel,
   highlighted = false,
+  cell = false,
+  spanFull = false,
+  compact = false,
   children,
 }: {
   label: string
@@ -43,17 +46,30 @@ function LayerRow({
   rm: ResultMeta
   priorityLabel: string
   highlighted?: boolean
+  // `cell` renders the layer as a self-contained bordered cell (for the 2-col
+  // grid layout); the default keeps the flat top-divider list rows.
+  cell?: boolean
+  spanFull?: boolean
+  // `compact` drops the per-layer note box and source/methodology footer (used
+  // in the multi-country compare grid, where the single-country view holds the
+  // full provenance). The estimate badge and small policy chip are kept.
+  compact?: boolean
   children: React.ReactNode
 }) {
   const verified = meta.confidence === "verified"
+  const containerClass = cell
+    ? [
+        "rounded-xl border p-4",
+        spanFull ? "md:col-span-2" : "",
+        highlighted ? "border-transparent bg-brand-tint ring-2 ring-brand/30" : "border-slate-200",
+      ]
+        .filter(Boolean)
+        .join(" ")
+    : highlighted
+      ? "py-4 border-t border-slate-100 first:border-t-0 -mx-3 px-3 rounded-xl bg-brand-tint ring-2 ring-brand/30"
+      : "py-4 border-t border-slate-100 first:border-t-0"
   return (
-    <div
-      className={
-        highlighted
-          ? "py-4 border-t border-slate-100 first:border-t-0 -mx-3 px-3 rounded-xl bg-brand-tint ring-2 ring-brand/30"
-          : "py-4 border-t border-slate-100 first:border-t-0"
-      }
-    >
+    <div className={containerClass}>
       <div className="flex items-center gap-2">
         <p
           className={
@@ -80,13 +96,14 @@ function LayerRow({
 
       <div className="mt-1 text-base text-slate-700 leading-relaxed">{children}</div>
 
-      {note && (
+      {note && !compact && (
         <p className="mt-2 flex items-start gap-1.5 rounded-lg bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-800 ring-1 ring-amber-100">
           <AlertTriangle className="mt-0.5 h-3 w-3 shrink-0" />
           <span>{note}</span>
         </p>
       )}
 
+      {!compact && (
       <p className="mt-1.5 text-[11px] text-slate-400">
         {verified && meta.source_name ? (
           <>
@@ -133,6 +150,7 @@ function LayerRow({
           {rm.methodology}
         </Link>
       </p>
+      )}
     </div>
   )
 }
@@ -141,14 +159,19 @@ export function ResultCard({
   row,
   pr = null,
   priorityLayers = [],
+  layout = "list",
 }: {
   row: MajorRow
   pr?: PrPathway | null
   priorityLayers?: string[]
+  // "grid" lays the five layers out in a 2-column grid (used for the wide,
+  // single-country result); "list" keeps the stacked rows (compare grid).
+  layout?: "list" | "grid"
 }) {
   const t = getTranslations()
   const rm = t.degreeRisk.resultMeta
   const rr = t.degreeRisk.result
+  const tl = t.degreeRisk.timeline
   const opts = t.degreeRisk.options as Record<string, string>
   const locale = getLocale()
 
@@ -158,6 +181,13 @@ export function ResultCard({
   const hot = (layer: LayerKey) => priorityLayers.includes(layer)
   const meta = (layer: LayerKey) => layerMeta(row, layer)
   const note = (layer: LayerKey) => layerNoteText(meta(layer), locale)
+  const grid = layout === "grid"
+  // Compare ("all") view: each country card is a scannable summary, so the full
+  // timeline (and per-layer source footers) is replaced by a one-line visa→PR
+  // recap that links out to this country's single-country result for the full
+  // path, sources, and nationality toggle.
+  const compact = layout === "list"
+  const detailHref = `/degree-risk/result?major=${row.slug}&view=${row.country}`
 
   return (
     <div className="bg-white border-2 border-slate-200 rounded-2xl p-6 md:p-7">
@@ -190,29 +220,57 @@ export function ResultCard({
         {riskSummaryText(row, locale)}
       </p>
 
-      {/* Immigration timeline: study → post-study visa → PR */}
-      <div className="mt-5">
-        <ImmigrationTimeline
-          country={row.country}
-          postStudyYears={row.post_study_work_years}
-          visa={meta("visa")}
-          pr={pr}
-        />
-      </div>
+      {/* Immigration path: full timeline (single view) or a one-line visa→PR
+          recap (compare view, where the card stays scannable). */}
+      {compact ? (
+        <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5">
+          <div className="flex items-center gap-2">
+            <p className="text-xs font-bold uppercase tracking-wider text-slate-500">{tl.heading}</p>
+            {note("visa") && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-semibold text-amber-700 ring-1 ring-amber-200">
+                <AlertTriangle className="h-2.5 w-2.5" />
+                {rm.policyChip}
+              </span>
+            )}
+          </div>
+          <p className="mt-1.5 text-sm text-slate-700">
+            {fill(rr.compactVisaPr, {
+              n: <strong className="text-slate-900">{row.post_study_work_years}</strong>,
+              pr: <strong className="text-slate-900">{tl.prShort[row.country]}</strong>,
+            })}
+          </p>
+          <Link
+            href={detailHref}
+            className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700"
+          >
+            {rr.seeFullPath}
+            <ArrowRight className="h-3 w-3" />
+          </Link>
+        </div>
+      ) : (
+        <div className="mt-5">
+          <ImmigrationTimeline
+            country={row.country}
+            postStudyYears={row.post_study_work_years}
+            visa={meta("visa")}
+            pr={pr}
+          />
+        </div>
+      )}
 
-      {/* Five layers */}
-      <div className="mt-5">
-        <LayerRow label={rr.layerEmployment} rm={rm} priorityLabel={rr.priority} meta={meta("employment")} note={note("employment")} highlighted={hot("employment")}>
+      {/* Five layers — stacked list (compare grid) or 2-col grid (wide single) */}
+      <div className={grid ? "mt-5 grid grid-cols-1 md:grid-cols-2 gap-4" : "mt-5"}>
+        <LayerRow label={rr.layerEmployment} rm={rm} priorityLabel={rr.priority} meta={meta("employment")} note={note("employment")} highlighted={hot("employment")} cell={grid} compact={compact}>
           {fill(rr.employmentValue, { rate: <strong>{row.employment_rate}%</strong> })}
         </LayerRow>
 
-        <LayerRow label={rr.layerVisa} rm={rm} priorityLabel={rr.priority} meta={meta("visa")} note={note("visa")} highlighted={hot("visa")}>
+        <LayerRow label={rr.layerVisa} rm={rm} priorityLabel={rr.priority} meta={meta("visa")} note={note("visa")} highlighted={hot("visa")} cell={grid} compact={compact}>
           {row.occupation_list_match ? rr.visaOnList : rr.visaOffList}
           {" · "}
           {fill(rr.visaYears, { n: <strong>{row.post_study_work_years}</strong> })}
         </LayerRow>
 
-        <LayerRow label={rr.layerDemand} rm={rm} priorityLabel={rr.priority} meta={meta("demand")} note={note("demand")} highlighted={hot("demand")}>
+        <LayerRow label={rr.layerDemand} rm={rm} priorityLabel={rr.priority} meta={meta("demand")} note={note("demand")} highlighted={hot("demand")} cell={grid} compact={compact}>
           <span className="flex items-center gap-2.5">
             <strong>{row.market_demand_score}</strong>/100
             <span className="flex-1 max-w-[10rem] h-1.5 rounded-full bg-slate-100 overflow-hidden">
@@ -224,7 +282,7 @@ export function ResultCard({
           </span>
         </LayerRow>
 
-        <LayerRow label={rr.layerAi} rm={rm} priorityLabel={rr.priority} meta={meta("ai_exposure")} note={note("ai_exposure")} highlighted={hot("ai_exposure")}>
+        <LayerRow label={rr.layerAi} rm={rm} priorityLabel={rr.priority} meta={meta("ai_exposure")} note={note("ai_exposure")} highlighted={hot("ai_exposure")} cell={grid} compact={compact}>
           <strong className="capitalize">{row.ai_exposure_band}</strong>
           {(() => {
             const aiNote = aiNoteText(row, locale)
@@ -232,7 +290,7 @@ export function ResultCard({
           })()}
         </LayerRow>
 
-        <LayerRow label={rr.layerRoi} rm={rm} priorityLabel={rr.priority} meta={meta("roi")} note={note("roi")} highlighted={hot("roi")}>
+        <LayerRow label={rr.layerRoi} rm={rm} priorityLabel={rr.priority} meta={meta("roi")} note={note("roi")} highlighted={hot("roi")} cell={grid} spanFull={grid} compact={compact}>
           {fill(rr.roiValue, {
             tuition: formatMoney(row.avg_annual_tuition_intl, row.country),
             salary: formatMoney(row.median_starting_salary, row.country),
