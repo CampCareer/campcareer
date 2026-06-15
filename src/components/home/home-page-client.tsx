@@ -1,32 +1,16 @@
 "use client"
 
 import Link from "next/link"
-import {
-  ArrowRight,
-  TrendingUp,
-  GraduationCap,
-  ShieldCheck,
-  Briefcase,
-  Cpu,
-  LineChart,
-} from "lucide-react"
+import { ArrowRight, TrendingUp, GraduationCap, ShieldCheck } from "lucide-react"
 import { LanguageToggle } from "@/components/language-toggle"
 import { LogoMark } from "@/components/logo-mark"
 import { Button } from "@/components/ui/button"
+import { HeroCardRotator } from "@/components/home/hero-card-rotator"
 import { useTranslations } from "@/lib/i18n/locale-provider"
 
 export function HomePageClient() {
   const t = useTranslations()
   const tl = t.landing
-
-  // Visa pathway is our wedge — surfaced first and prominently below.
-  // AI exposure stays in the list but is no longer headline-level.
-  const SAMPLE_LAYERS = [
-    { icon: Briefcase, label: tl.hero.sampleEmployment, value: tl.hero.sampleEmploymentVal },
-    { icon: TrendingUp, label: tl.hero.sampleDemand, value: tl.hero.sampleDemandVal },
-    { icon: LineChart, label: tl.hero.sampleRoi, value: tl.hero.sampleRoiVal },
-    { icon: Cpu, label: tl.hero.sampleAi, value: tl.hero.sampleAiVal },
-  ]
 
   const PROVENANCE = [
     tl.provenance.employment,
@@ -125,49 +109,8 @@ export function HomePageClient() {
             </Link>
           </div>
 
-          {/* Right: sample result card */}
-          <div className="relative">
-            <div className="bg-white rounded-2xl shadow-xl shadow-slate-200/70 border border-slate-200 p-6 max-w-md mx-auto">
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className="text-xs text-slate-400">🇺🇸 {tl.hero.sampleCountry}</p>
-                  <h2 className="mt-0.5 text-lg font-semibold text-slate-900">{tl.hero.sampleField}</h2>
-                </div>
-                <span className="inline-block shrink-0 px-2.5 py-1 rounded-full border text-xs font-bold bg-amber-50 text-amber-700 border-amber-200">
-                  {tl.hero.sampleRisk}
-                </span>
-              </div>
-
-              {/* Visa pathway — the wedge, surfaced first and most prominently */}
-              <div className="mt-4 rounded-xl bg-brand-tint border border-blue-100 px-4 py-3.5">
-                <span className="flex items-center gap-2 text-xs font-semibold text-brand uppercase tracking-wider">
-                  <ShieldCheck className="w-4 h-4 text-brand" />
-                  {tl.hero.sampleVisa}
-                </span>
-                <p className="mt-1.5 text-sm font-semibold text-slate-900">{tl.hero.sampleVisaVal}</p>
-                <p className="mt-1 flex items-center gap-1.5 text-xs font-medium text-brand">
-                  <span className="text-[10px] uppercase tracking-wider text-slate-400">{tl.hero.samplePr}</span>
-                  {tl.hero.samplePrVal}
-                </p>
-              </div>
-
-              <div className="mt-1 divide-y divide-slate-100">
-                {SAMPLE_LAYERS.map((layer) => (
-                  <div key={layer.label} className="flex items-center justify-between gap-3 py-3">
-                    <span className="flex items-center gap-2 text-xs font-medium text-slate-400 uppercase tracking-wider">
-                      <layer.icon className="w-3.5 h-3.5 text-blue-400" />
-                      {layer.label}
-                    </span>
-                    <span className="text-sm font-medium text-slate-700 text-right">{layer.value}</span>
-                  </div>
-                ))}
-              </div>
-
-              <p className="mt-4 text-[11px] text-slate-400 border-t border-slate-100 pt-3">
-                {tl.hero.sampleSource}
-              </p>
-            </div>
-          </div>
+          {/* Right: rotating sample result cards (real verified data) */}
+          <HeroCardRotator />
         </div>
       </section>
 
