@@ -1,7 +1,9 @@
-import { getTranslations } from "@/lib/i18n/server"
 import { getAllPosts } from "@/lib/blog"
 import { BlogGrid } from "./BlogGrid"
 import { pageMetadata } from "@/lib/seo"
+
+export const revalidate = 86400
+export const dynamic = "force-static"
 
 export const metadata = pageMetadata({
   title: "Blog — Study Abroad Insights & Salary Data",
@@ -10,22 +12,20 @@ export const metadata = pageMetadata({
 })
 
 export default function BlogPage() {
-  const t = getTranslations()
-  const tb = t.blog
   const posts = getAllPosts()
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-12">
       <div className="mb-10">
         <h1 className="font-display text-4xl font-semibold text-slate-900 tracking-tight mb-3">
-          {tb.pageTitle}
+          Blog
         </h1>
         <p className="text-lg text-slate-500">
-          {tb.pageSubtitle}
+          Guides and insights for international students
         </p>
       </div>
 
-      <BlogGrid posts={posts} labels={{ readTime: tb.readTime, readMore: tb.readMore }} />
+      <BlogGrid posts={posts} labels={{ readTime: "min read", readMore: "Read more" }} />
     </div>
   )
 }
