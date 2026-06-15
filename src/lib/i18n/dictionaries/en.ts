@@ -472,6 +472,15 @@ const en = {
       natIndia: 'India',
       natChina: 'China',
       natOther: 'Other',
+      // Short PR-route labels for the compact compare-view recap; the full
+      // verified routes live in `pr` (and country_pr_pathways) below.
+      prShort: {
+        US: 'Employer green card',
+        CA: 'Express Entry',
+        UK: 'Skilled Worker → ILR',
+        AU: 'Skilled visa (189/190)',
+        IE: 'Critical Skills → Stamp 4',
+      },
       pr: {
         IE: { route: 'Critical Skills Employment Permit → Stamp 4 (after 2 yrs) → long-term residence / citizenship', caveat: '' },
         CA: { route: 'PGWP → 1 yr skilled experience → Express Entry (CEC) → PR', caveat: '' },
@@ -510,10 +519,15 @@ const en = {
       visaOnList: 'On the skilled occupation list',
       visaOffList: 'Not on the skilled occupation list',
       visaYears: '{n}-year post-study work visa',
+      compactVisaPr: 'Post-study {n} yrs · PR: {pr}',
+      seeFullPath: 'See full path',
       roiValue: '{tuition} tuition · {salary} median starting salary · {payback}-yr payback',
       whereTitle: 'Where to study {major}',
       whereAllSubtitle: 'Compare universities by salary, tuition, and ROI in each country.',
       whereSubtitle: 'Top universities for this major by ROI — real salary and tuition data.',
+      whereExploreAllCta: 'See all schools in the ROI Explorer',
+      whereEmptyTitle: 'School data coming soon',
+      whereEmptyText: "We don't have ROI-ranked schools for this combination yet — explore the full ROI Explorer instead.",
       seeAll: 'See all',
       paybackYr: '{n} yr payback',
       risk: { low: 'Low risk', medium: 'Medium risk', high: 'High risk' },
