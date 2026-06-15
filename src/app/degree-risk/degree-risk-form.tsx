@@ -51,7 +51,14 @@ export function DegreeRiskForm() {
         view: res.view,
         goal: complete.primary_goal,
       })
-      if (res.assessmentId) params.set("aid", res.assessmentId)
+      if (res.assessmentId) {
+        params.set("aid", res.assessmentId)
+        // Remember this anonymous assessment so it can be claimed onto the
+        // account if the visitor signs in after seeing their result.
+        try {
+          localStorage.setItem("cc_last_aid", res.assessmentId)
+        } catch {}
+      }
       router.push(`/degree-risk/result?${params.toString()}`)
     } catch {
       setError(dr.errorGeneric)

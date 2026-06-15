@@ -3,8 +3,9 @@
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Search, Bookmark, ArrowRight, X, CheckSquare, Compass, CalendarClock, Globe } from "lucide-react"
+import { Search, Bookmark, ArrowRight, X, CheckSquare, Compass, CalendarClock, Globe, ShieldCheck, Plus } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
+import { COUNTRY_META, RISK_BADGE, type CountryCode, type RiskLevel } from "@/lib/degree-risk"
 import { useTranslations } from "@/lib/i18n/locale-provider"
 import { calcDdayNumber, currentPhaseTitle } from "@/lib/timeline-schedule"
 import { RoiInfo } from "@/components/roi-info"
@@ -77,6 +78,10 @@ export default function Dashboard() {
   >(null)
   const [stepsLoading, setStepsLoading] = useState(true)
 
+  // Recent degree-risk checks linked to this account (Phase N)
+  type RecentCheck = { id: string; major: string; view: string; risk: RiskLevel | null }
+  const [recentChecks, setRecentChecks] = useState<RecentCheck[]>([])
+
   const currentCountry = COUNTRIES.find(c => c.value === country)!
   const savedCount = savedIds.size
   // Derived from recommendedCountry state — recalculated on each render, used in header + next-steps cards
@@ -141,8 +146,18 @@ export default function Dashboard() {
       const uid = data.user.id
       setUserId(uid)
 
-      // 추천 국가 / 저장 코스 / 최근 체크리스트 진행상황 / 타임라인 목표를 병렬 로드
-      const [prefsRes, savedRes, progressRes, timelineRes] = await Promise.all([
+      // Claim a pre-login anonymous assessment onto this account (best effort),
+      // so the quiz the visitor did before signing in shows up below.
+      try {
+        const lastAid = localStorage.getItem("cc_last_aid")
+        if (lastAid) {
+          await supabase.from("assessments").update({ user_id: uid }).eq("id", lastAid).is("user_id", null)
+          localStorage.removeItem("cc_last_aid")
+        }
+      } catch { /* claim is best-effort; never block the dashboard */ }
+
+      // 추천 국가 / 저장 코스 / 최근 체크리스트 진행상황 / 타임라인 목표 / 최근 전공 체크를 병렬 로드
+      const [prefsRes, savedRes, progressRes, timelineRes, checksRes] = await Promise.all([
         supabase
           .from("user_preferences")
           .select("recommended_country")
@@ -164,7 +179,24 @@ export default function Dashboard() {
           .select("target_date")
           .eq("user_id", uid)
           .maybeSingle(),
+        supabase
+          .from("assessments")
+          .select("id, major_pref, result_snapshot, created_at")
+          .eq("user_id", uid)
+          .order("created_at", { ascending: false })
+          .limit(4),
       ])
+
+      // Recent degree-risk checks (now SELECT-able via the user_id link).
+      type Snapshot = { view?: string; majors?: { country: string; overall_risk: RiskLevel }[] }
+      const checks: RecentCheck[] = (checksRes.data ?? []).map((a) => {
+        const snap = (a.result_snapshot ?? null) as Snapshot | null
+        const view = snap?.view ?? "all"
+        const majors = snap?.majors ?? []
+        const risk = (majors.find((m) => m.country === view) ?? majors[0])?.overall_risk ?? null
+        return { id: a.id as string, major: a.major_pref as string, view, risk }
+      })
+      setRecentChecks(checks)
 
       const rec = prefsRes.data?.recommended_country ?? null
       if (rec) {
@@ -472,6 +504,70 @@ export default function Dashboard() {
                   {tag}
                 </button>
               ))}
+            </div>
+          )}
+
+          {/* Your degree-risk checks — the re-entry hub (no quiz auto-restart) */}
+          {!searched && !stepsLoading && (
+            <div className="mt-8">
+              <div className="mb-4 flex items-center justify-between">
+                <h2 className="text-base font-semibold text-slate-900">{td.recentChecks.title}</h2>
+                {recentChecks.length > 0 && (
+                  <Link
+                    href="/degree-risk"
+                    className="inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-700"
+                  >
+                    <Plus className="h-3.5 w-3.5" /> {td.recentChecks.startNew}
+                  </Link>
+                )}
+              </div>
+
+              {recentChecks.length === 0 ? (
+                <Link
+                  href="/degree-risk"
+                  className="flex items-center justify-center gap-2 rounded-2xl border border-dashed border-slate-200 bg-white py-8 text-sm font-medium text-blue-600 transition-colors hover:border-blue-300"
+                >
+                  <ShieldCheck className="h-4 w-4" />
+                  <span className="text-slate-500">{td.recentChecks.empty}</span>
+                  {td.recentChecks.emptyCta}
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              ) : (
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  {recentChecks.map((c) => {
+                    const opts = t.degreeRisk.options as Record<string, string>
+                    const majorName = opts[c.major] ?? c.major
+                    const isAll = c.view === "all"
+                    const flag = isAll ? "🌐" : COUNTRY_META[c.view as CountryCode].flag
+                    const viewLabel = isAll
+                      ? td.recentChecks.allCountries
+                      : t.degreeRisk.result.countries[c.view as CountryCode]
+                    return (
+                      <Link
+                        key={c.id}
+                        href={`/degree-risk/result?major=${c.major}&view=${c.view}&aid=${c.id}`}
+                        className="group rounded-xl border border-slate-200 bg-white p-4 transition-all hover:border-blue-300 hover:shadow-sm"
+                      >
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="min-w-0">
+                            <p className="text-xs text-slate-400">{flag} {viewLabel}</p>
+                            <p className="truncate text-sm font-semibold text-slate-900">{majorName}</p>
+                          </div>
+                          {c.risk && (
+                            <span className={`shrink-0 rounded-full border px-2 py-0.5 text-[11px] font-bold ${RISK_BADGE[c.risk].className}`}>
+                              {t.degreeRisk.result.risk[c.risk]}
+                            </span>
+                          )}
+                        </div>
+                        <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-blue-600">
+                          {td.recentChecks.viewResult}
+                          <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
+                        </span>
+                      </Link>
+                    )
+                  })}
+                </div>
+              )}
             </div>
           )}
 

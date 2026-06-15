@@ -43,6 +43,11 @@ export async function submitAssessment(answers: Answers): Promise<SubmitResult> 
   }
 
   const supabase = createClient()
+  // Link the assessment to the account when the visitor is already signed in;
+  // anonymous visitors leave user_id null (claimed later on login). RLS allows
+  // both (insert policy: user_id IS NULL OR user_id = auth.uid()).
+  const { data: authData } = await supabase.auth.getUser()
+  const userId = authData.user?.id ?? null
 
   let majors: unknown[] | null = []
   if (!isOther) {
@@ -68,7 +73,7 @@ export async function submitAssessment(answers: Answers): Promise<SubmitResult> 
   }))
 
   const assessmentId = randomUUID()
-  const { error } = await supabase.from("assessments").insert({
+  const baseRow = {
     id: assessmentId,
     country_pref: answers.country_pref,
     major_pref: answers.major_pref,
@@ -77,7 +82,15 @@ export async function submitAssessment(answers: Answers): Promise<SubmitResult> 
     background: answers.background,
     english_level: answers.english_level,
     result_snapshot: { view, majors: snapshot },
-  })
+  }
+
+  // Stamp the account link when signed in. If the user_id column isn't present
+  // yet (migration not applied), retry without it so the public funnel never
+  // breaks — the linkage simply activates once the migration lands.
+  let { error } = await supabase.from("assessments").insert({ ...baseRow, user_id: userId })
+  if (error && (error.code === "42703" || /user_id/i.test(error.message))) {
+    ;({ error } = await supabase.from("assessments").insert(baseRow))
+  }
 
   if (error) {
     // The result is computed from majors, not from the assessment row —

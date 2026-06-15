@@ -1,5 +1,6 @@
 const en = {
   nav: {
+    home: 'Home',
     degreeRisk: 'Degree Risk',
     roiExplorer: 'ROI Explorer',
     compare: 'Compare',
@@ -19,6 +20,14 @@ const en = {
     subtitle: 'Compare countries, schools, ROI, visa steps, timelines, and career routes from one place.',
     recommendedStartingPoint: 'Recommended starting point',
     startDecisionQuiz: 'Start with 5 questions to get your recommended country and next steps →',
+    recentChecks: {
+      title: 'Your degree-risk checks',
+      startNew: 'Start a new check',
+      empty: "You haven't checked a degree yet.",
+      emptyCta: 'Check your degree risk',
+      viewResult: 'View result',
+      allCountries: 'All countries',
+    },
     whereToStudy: 'Where do you want to study?',
     searchButton: 'Search',
     searchPlaceholder: {

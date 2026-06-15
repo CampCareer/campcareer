@@ -2,6 +2,7 @@ import type { Dictionary } from './en'
 
 const ko: Dictionary = {
   nav: {
+    home: '홈',
     degreeRisk: 'Degree Risk',
     roiExplorer: 'ROI 탐색기',
     compare: '국가 비교',
@@ -21,6 +22,14 @@ const ko: Dictionary = {
     subtitle: '국가, 학교, ROI, 비자 단계, 타임라인, 커리어 경로를 한 곳에서 비교하세요.',
     recommendedStartingPoint: '추천 시작점',
     startDecisionQuiz: '5가지 질문으로 나에게 맞는 국가와 다음 단계를 확인하세요 →',
+    recentChecks: {
+      title: '내 전공 위험도 체크',
+      startNew: '새 체크 시작',
+      empty: '아직 체크한 전공이 없어요.',
+      emptyCta: '내 전공 위험도 확인하기',
+      viewResult: '결과 보기',
+      allCountries: '전체 국가',
+    },
     whereToStudy: '어디서 공부하고 싶으신가요?',
     searchButton: '검색',
     searchPlaceholder: {

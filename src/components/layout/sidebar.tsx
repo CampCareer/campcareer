@@ -5,7 +5,8 @@ import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 import { createClient } from "@/lib/supabase-client"
 import {
-  LayoutDashboard,
+  Home,
+  ShieldCheck,
   TrendingUp,
   Globe,
   BookOpen,
@@ -15,16 +16,22 @@ import { LogoMark } from "@/components/logo-mark"
 import { useTranslations } from "@/lib/i18n/locale-provider"
 import type { Dictionary } from "@/lib/i18n/dictionaries"
 
-type NavItem = { key: keyof Dictionary["nav"]; href: string; icon: typeof LayoutDashboard }
+type NavItem = { key: keyof Dictionary["nav"]; href: string; icon: typeof Home }
 type NavGroup = { label: string; items: NavItem[] }
 
-// Slimmed-down navigation: Degree Risk is the main product,
-// ROI Explorer / Compare are the "where to study" downstream
+// Home is the signed-in landing hub (recent checks + next steps). "Degree Risk"
+// stays the explicit entry to start a *new* check, so returning users are never
+// dropped back into the quiz by default.
+const primaryItems: NavItem[] = [
+  { key: "home", href: "/dashboard", icon: Home },
+]
+
+// ROI Explorer / Compare are the "where to study" downstream.
 const navGroups: NavGroup[] = [
   {
     label: 'Decide',
     items: [
-      { key: "degreeRisk", href: "/degree-risk", icon: LayoutDashboard },
+      { key: "degreeRisk", href: "/degree-risk", icon: ShieldCheck },
     ],
   },
   {
@@ -70,7 +77,7 @@ export function Sidebar({ collapsed = false, mobileOpen = false }: { collapsed?:
       {/* Logo */}
       <div className="px-5 py-5 border-b border-slate-200">
         <Link
-          href={loggedIn ? "/degree-risk" : "/"}
+          href={loggedIn ? "/dashboard" : "/"}
           className={cn(
             "flex items-center gap-2.5",
             collapsed && "md:justify-center"
@@ -90,6 +97,33 @@ export function Sidebar({ collapsed = false, mobileOpen = false }: { collapsed?:
 
       {/* Navigation groups */}
       <nav className="flex-1 px-3 py-4 overflow-y-auto">
+        {/* Home hub — signed-in landing */}
+        {loggedIn && (
+          <ul className="space-y-0.5 mb-4">
+            {primaryItems.map((item) => {
+              const Icon = item.icon
+              const isActive = pathname === item.href
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    title={t.nav[item.key]}
+                    className={cn(
+                      "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
+                      collapsed && "md:justify-center",
+                      isActive
+                        ? "bg-blue-50 text-blue-600"
+                        : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                    )}
+                  >
+                    <Icon className="w-4 h-4 shrink-0" />
+                    <span className={cn(collapsed && "md:hidden")}>{t.nav[item.key]}</span>
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
+        )}
         {navGroups.map((group, gi) => (
           <div key={group.label} className={cn(gi > 0 && "mt-4")}>
             <p
