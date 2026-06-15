@@ -46,9 +46,9 @@ type SavedPath = {
 }
 
 const COLOR_MAP: Record<StageColor, { border: string; bg: string; text: string; badge: string }> = {
-  indigo:  { border: 'border-indigo-200',  bg: 'bg-indigo-50',  text: 'text-indigo-700',  badge: 'bg-indigo-100 text-indigo-700' },
-  violet:  { border: 'border-violet-200',  bg: 'bg-violet-50',  text: 'text-violet-700',  badge: 'bg-violet-100 text-violet-700' },
-  blue:    { border: 'border-blue-200',    bg: 'bg-blue-50',    text: 'text-blue-700',    badge: 'bg-blue-100 text-blue-700' },
+  indigo:  { border: 'border-blue-200',  bg: 'bg-blue-50',  text: 'text-blue-700',  badge: 'bg-blue-100 text-blue-700' },
+  violet:  { border: 'border-cyan-200',  bg: 'bg-cyan-50',  text: 'text-cyan-700',  badge: 'bg-cyan-100 text-cyan-700' },
+  blue:    { border: 'border-sky-200',    bg: 'bg-sky-50',    text: 'text-sky-700',    badge: 'bg-sky-100 text-sky-700' },
   emerald: { border: 'border-emerald-200', bg: 'bg-emerald-50', text: 'text-emerald-700', badge: 'bg-emerald-100 text-emerald-700' },
   amber:   { border: 'border-amber-200',   bg: 'bg-amber-50',   text: 'text-amber-700',   badge: 'bg-amber-100 text-amber-700' },
   rose:    { border: 'border-rose-200',    bg: 'bg-rose-50',    text: 'text-rose-700',    badge: 'bg-rose-100 text-rose-700' },
@@ -291,7 +291,7 @@ export default function CareerPathPage() {
       <div className="max-w-2xl mx-auto px-6 py-8 space-y-6">
         <GuestBanner user={user} />
         <div className="flex items-center gap-3">
-          <Map className="w-6 h-6 text-indigo-500" />
+          <Map className="w-6 h-6 text-blue-500" />
           <div>
             <h1 className="text-2xl font-bold text-slate-900">{tc.pageTitle}</h1>
             <p className="text-sm text-slate-400 mt-0.5">
@@ -315,8 +315,8 @@ export default function CareerPathPage() {
                   onClick={() => { setCountry(c.value); setField(''); setFieldInput('') }}
                   className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors focus:outline-none
                     ${country === c.value
-                      ? 'bg-indigo-600 text-white border-indigo-600'
-                      : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-300 hover:text-indigo-600'}`}
+                      ? 'bg-blue-600 text-white border-blue-600'
+                      : 'bg-white text-slate-600 border-slate-200 hover:border-blue-300 hover:text-blue-600'}`}
                 >
                   {c.label}
                 </button>
@@ -328,7 +328,7 @@ export default function CareerPathPage() {
           <div className="space-y-1.5">
             <label className="text-xs font-medium text-slate-600">{tc.fieldLabel}</label>
             <div ref={fieldRef} className="relative">
-              <div className="flex items-center border border-slate-200 rounded-xl bg-white focus-within:ring-2 focus-within:ring-indigo-300 px-3 h-10">
+              <div className="flex items-center border border-slate-200 rounded-xl bg-white focus-within:ring-2 focus-within:ring-blue-300 px-3 h-10">
                 <Search className="w-4 h-4 text-slate-400 shrink-0 mr-2" />
                 <input
                   type="text"
@@ -362,7 +362,7 @@ export default function CareerPathPage() {
                       key={f}
                       onMouseDown={e => e.preventDefault()}
                       onClick={() => { setField(f); setFieldInput(f); setFieldOpen(false) }}
-                      className="w-full px-4 py-2.5 text-left text-sm hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 transition-colors"
+                      className="w-full px-4 py-2.5 text-left text-sm hover:bg-blue-50 hover:text-blue-700 text-slate-700 transition-colors"
                     >
                       {f.endsWith('.') ? f.slice(0, -1) : f}
                     </button>
@@ -379,7 +379,7 @@ export default function CareerPathPage() {
               <select
                 value={currentStatus}
                 onChange={e => setCurrentStatus(e.target.value as CurrentStatus)}
-                className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-white"
+                className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white"
               >
                 <option value="student">{tc.status.student}</option>
                 <option value="fresh_grad">{tc.status.freshGrad}</option>
@@ -393,7 +393,7 @@ export default function CareerPathPage() {
                 <select
                   value={experience}
                   onChange={e => setExperience(e.target.value)}
-                  className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-white"
+                  className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white"
                 >
                   <option value="0-1">{tc.experience.lessThanOne}</option>
                   <option value="1-3">{tc.experience.oneToThree}</option>
@@ -414,7 +414,7 @@ export default function CareerPathPage() {
               value={goalText}
               onChange={e => setGoalText(e.target.value)}
               placeholder={tc.goalPlaceholder}
-              className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-white"
+              className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white"
             />
             <p className="text-xs text-slate-400 leading-relaxed">{tc.goalHelper}</p>
           </div>
@@ -426,7 +426,7 @@ export default function CareerPathPage() {
           <button
             onClick={handleGenerate}
             disabled={loading || !fieldInput.trim()}
-            className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-50 text-sm"
+            className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-50 text-sm"
           >
             {loading
               ? <><Loader2 className="w-4 h-4 animate-spin" /> {tc.generatingButton}</>
@@ -448,7 +448,7 @@ export default function CareerPathPage() {
                   <button
                     key={path.id}
                     onClick={() => { loadSavedPath(path); setView('results') }}
-                    className="w-full text-left px-3 py-2 rounded-lg hover:bg-indigo-50 text-sm text-slate-700 hover:text-indigo-700 transition-colors flex items-center justify-between"
+                    className="w-full text-left px-3 py-2 rounded-lg hover:bg-blue-50 text-sm text-slate-700 hover:text-blue-700 transition-colors flex items-center justify-between"
                   >
                     <span className="truncate">{path.roadmap.title}</span>
                     <ArrowRight className="w-3.5 h-3.5 shrink-0 ml-2 text-slate-400" />
@@ -496,7 +496,7 @@ export default function CareerPathPage() {
           <button
             onClick={handleGenerate}
             disabled={loading}
-            className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white transition-colors disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white transition-colors disabled:opacity-50"
           >
             {loading
               ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -530,7 +530,7 @@ export default function CareerPathPage() {
                     className={`w-full flex items-start gap-3 px-4 py-4 ${c.bg} transition-colors text-left`}
                   >
                     <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0 mt-0.5
-                      ${idx === 0 ? 'bg-indigo-500' : 'bg-slate-300'}`}>
+                      ${idx === 0 ? 'bg-blue-500' : 'bg-slate-300'}`}>
                       {idx + 1}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -593,11 +593,11 @@ export default function CareerPathPage() {
           <div className="lg:sticky lg:top-6 space-y-4">
 
             {roadmap.pr_pathway && (
-              <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-4">
-                <p className="text-xs font-semibold text-indigo-700 mb-1.5 flex items-center gap-1.5">
+              <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4">
+                <p className="text-xs font-semibold text-blue-700 mb-1.5 flex items-center gap-1.5">
                   <Award className="w-3.5 h-3.5" /> {tc.prPathwayTitle}
                 </p>
-                <p className="text-sm text-indigo-600 leading-relaxed">{roadmap.pr_pathway}</p>
+                <p className="text-sm text-blue-600 leading-relaxed">{roadmap.pr_pathway}</p>
               </div>
             )}
 
@@ -645,7 +645,7 @@ export default function CareerPathPage() {
                       <button
                         onClick={() => loadSavedPath(path)}
                         title={tc.loadButton}
-                        className="flex-1 text-left text-xs text-slate-600 hover:text-indigo-600 truncate transition-colors py-1"
+                        className="flex-1 text-left text-xs text-slate-600 hover:text-blue-600 truncate transition-colors py-1"
                       >
                         {path.roadmap.title}
                       </button>
@@ -729,7 +729,7 @@ export default function CareerPathPage() {
                       type="button"
                       onClick={handleGetPublicLink}
                       aria-label={tc.copyLink}
-                      className="shrink-0 inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white transition-colors"
+                      className="shrink-0 inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors"
                     >
                       {shareCopied === 'link'
                         ? <Check className="w-3.5 h-3.5" />
@@ -741,7 +741,7 @@ export default function CareerPathPage() {
                   <button
                     onClick={handleGetPublicLink}
                     disabled={isPublishing || !currentPathId}
-                    className="w-full flex items-center justify-center gap-2 border border-indigo-200 text-indigo-600 hover:bg-indigo-50 font-semibold py-2.5 rounded-xl transition-colors text-sm disabled:opacity-50"
+                    className="w-full flex items-center justify-center gap-2 border border-blue-200 text-blue-600 hover:bg-blue-50 font-semibold py-2.5 rounded-xl transition-colors text-sm disabled:opacity-50"
                   >
                     <ExternalLink className="w-4 h-4" />
                     {isPublishing ? '...' : tc.copyLink}

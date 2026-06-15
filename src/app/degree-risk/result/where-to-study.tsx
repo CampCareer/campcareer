@@ -75,7 +75,7 @@ function CountryColleges({
         </h3>
         <Link
           href={explorerHref(country, field)}
-          className="text-xs text-indigo-600 hover:text-indigo-700 inline-flex items-center gap-1 shrink-0"
+          className="text-xs text-blue-600 hover:text-blue-700 inline-flex items-center gap-1 shrink-0"
         >
           {rr.seeAll} <ArrowRight className="w-3 h-3" />
         </Link>
@@ -142,12 +142,12 @@ export async function WhereToStudy({ major, view }: { major: string; view: Resul
             <Link
               key={c}
               href={explorerHref(c, field)}
-              className="group bg-white border border-slate-200 rounded-xl px-4 py-3.5 flex items-center justify-between hover:border-indigo-300 hover:shadow-sm transition-all"
+              className="group bg-white border border-slate-200 rounded-xl px-4 py-3.5 flex items-center justify-between hover:border-blue-300 hover:shadow-sm transition-all"
             >
               <span className="text-sm font-medium text-slate-800">
                 {COUNTRY_META[c].flag} {rr.countries[c]}
               </span>
-              <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-indigo-500 transition-colors" />
+              <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-blue-500 transition-colors" />
             </Link>
           ))}
         </div>
@@ -166,7 +166,7 @@ export async function WhereToStudy({ major, view }: { major: string; view: Resul
   return (
     <section className="mt-10">
       <h2 className="text-base font-semibold text-slate-900 mb-1 flex items-center gap-2">
-        <GraduationCap className="w-4 h-4 text-indigo-500" />
+        <GraduationCap className="w-4 h-4 text-blue-500" />
         {rr.whereTitle.replace("{major}", majorName)}
       </h2>
       <p className="text-xs text-slate-500 mb-4">{rr.whereSubtitle}</p>

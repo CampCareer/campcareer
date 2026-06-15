@@ -80,7 +80,7 @@ export function Header({ onToggleSidebar, onToggleMobile, collapsed }: { onToggl
             variant="outline"
             size="sm"
             onClick={() => router.push('/login')}
-            className="border-indigo-200 text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700"
+            className="border-blue-200 text-blue-600 hover:bg-blue-50 hover:text-blue-700"
           >
             {t.common.signIn}
           </Button>

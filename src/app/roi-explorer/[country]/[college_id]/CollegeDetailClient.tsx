@@ -85,7 +85,7 @@ function SchoolTypeBadge({ type }: { type?: string }) {
   if (!type) return null
   const map: Record<string, { label: string; cls: string }> = {
     public:            { label: td.schoolPublic,    cls: 'bg-blue-50 text-blue-700 border-blue-200' },
-    private_nonprofit: { label: td.schoolPrivate,   cls: 'bg-violet-50 text-violet-700 border-violet-200' },
+    private_nonprofit: { label: td.schoolPrivate,   cls: 'bg-cyan-50 text-cyan-700 border-cyan-200' },
     private_forprofit: { label: td.schoolForProfit, cls: 'bg-amber-50 text-amber-700 border-amber-200' },
   }
   const { label, cls } = map[type] ?? { label: type, cls: 'bg-slate-50 text-slate-600 border-slate-200' }
@@ -177,7 +177,7 @@ export function CollegeDetailClient({
           <SchoolTypeBadge type={best.school_type} />
           <span className="text-xs text-slate-400">{COUNTRY_LABEL[country]}</span>
         </div>
-        <h1 className="font-display text-3xl font-extrabold text-slate-900 tracking-tight">{best.college_name}</h1>
+        <h1 className="font-display text-3xl font-semibold text-slate-900 tracking-tight">{best.college_name}</h1>
         <p className="text-slate-500 text-sm">
           {best.college_state}
         </p>
@@ -188,7 +188,7 @@ export function CollegeDetailClient({
             href={websiteUrl ?? `https://www.google.com/search?q=${encodeURIComponent(best.college_name)}+official+site`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-xs font-medium text-indigo-600 hover:text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-100 px-3 py-1.5 rounded-full transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-100 px-3 py-1.5 rounded-full transition-colors"
           >
             <ExternalLink className="w-3.5 h-3.5" />
             {td.officialWebsite}
@@ -210,13 +210,13 @@ export function CollegeDetailClient({
           <span className="text-xs text-slate-500">{td.gross}</span>
           <button
             onClick={() => setShowAfterTax((v) => !v)}
-            className={`relative w-10 h-5 rounded-full transition-colors ${showAfterTax ? 'bg-indigo-600' : 'bg-slate-200'}`}
+            className={`relative w-10 h-5 rounded-full transition-colors ${showAfterTax ? 'bg-blue-600' : 'bg-slate-200'}`}
           >
             <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${showAfterTax ? 'translate-x-5' : 'translate-x-0'}`} />
           </button>
           <span className="text-xs text-slate-500">{td.afterTax}</span>
           {showAfterTax && (
-            <span className="text-xs text-indigo-600 font-medium bg-indigo-50 px-2 py-0.5 rounded-full">
+            <span className="text-xs text-blue-600 font-medium bg-blue-50 px-2 py-0.5 rounded-full">
               {td.taxEstimate.replace('{country}', country.toUpperCase())}
             </span>
           )}
@@ -228,11 +228,11 @@ export function CollegeDetailClient({
         <Card className="overflow-visible">
           <CardContent className="pt-5 pb-5">
             <div className="flex items-center gap-1.5 mb-2">
-              <TrendingUp className="w-4 h-4 text-indigo-500" />
+              <TrendingUp className="w-4 h-4 text-blue-500" />
               <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">{td.roiScore}</span>
               <RoiInfo className="ml-auto" />
             </div>
-            <p className="text-2xl font-bold text-indigo-600">{best.roi_score.toFixed(1)}</p>
+            <p className="text-2xl font-bold text-blue-600">{best.roi_score.toFixed(1)}</p>
             <p className="text-xs text-slate-400 mt-0.5">{td.bestCity}</p>
           </CardContent>
         </Card>

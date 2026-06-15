@@ -89,7 +89,7 @@ export function ImmigrationTimeline({
 
   return (
     <section aria-label={tl.heading} className={cn("rounded-2xl border-2 border-slate-200 bg-white p-5 md:p-6", className)}>
-      <h3 className="font-display text-lg font-extrabold text-slate-900 mb-4">{heading ?? tl.heading}</h3>
+      <h3 className="font-display text-lg font-semibold text-slate-900 mb-4">{heading ?? tl.heading}</h3>
 
       {/* Proportional bar — desktop only, decorative */}
       <div aria-hidden className="hidden md:flex items-center gap-1 h-3 mb-4">

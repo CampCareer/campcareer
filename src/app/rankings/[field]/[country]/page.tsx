@@ -91,7 +91,7 @@ export default async function RankingPage({ params }: { params: { field: string;
       {rows.length === 0 ? (
         <div className="rounded-xl border border-slate-200 bg-white px-5 py-10 text-center text-slate-500">
           No {field.label} data for {info.label} yet — coverage is being expanded.{" "}
-          <Link href={`/roi-explorer?country=${country}`} className="text-indigo-600 hover:underline">
+          <Link href={`/roi-explorer?country=${country}`} className="text-blue-600 hover:underline">
             Browse all {info.label} programs
           </Link>
         </div>
@@ -118,7 +118,7 @@ export default async function RankingPage({ params }: { params: { field: string;
                     <td className="px-4 py-3">
                       <Link
                         href={`/roi-explorer/${country}/${row.college_id}`}
-                        className="font-medium text-slate-800 hover:text-indigo-600 hover:underline"
+                        className="font-medium text-slate-800 hover:text-blue-600 hover:underline"
                       >
                         {row.college_name}
                       </Link>
@@ -126,7 +126,7 @@ export default async function RankingPage({ params }: { params: { field: string;
                         <p className="text-xs text-slate-400 mt-0.5 line-clamp-1">{row.field_name}</p>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-right font-semibold text-indigo-600">
+                    <td className="px-4 py-3 text-right font-semibold text-blue-600">
                       {row.roi_score.toFixed(1)}
                     </td>
                     <td className="px-4 py-3 text-right font-medium text-slate-700 whitespace-nowrap">
@@ -147,7 +147,7 @@ export default async function RankingPage({ params }: { params: { field: string;
       )}
 
       <div className="mt-8 flex flex-wrap items-center gap-4 text-sm">
-        <Link href={`/roi-explorer?country=${country}&field=${encodeURIComponent(field.query)}`} className="text-indigo-600 hover:underline">
+        <Link href={`/roi-explorer?country=${country}&field=${encodeURIComponent(field.query)}`} className="text-blue-600 hover:underline">
           Explore with filters →
         </Link>
         <Link href="/methodology" className="text-slate-400 hover:text-slate-600 underline">

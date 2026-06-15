@@ -83,7 +83,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
           <span className="text-xs text-slate-400">{meta.date}</span>
           <span className="text-xs text-slate-400">{meta.readTime} read</span>
         </div>
-        <h1 className="font-display text-4xl font-extrabold text-slate-900 leading-tight tracking-tight mb-4">
+        <h1 className="font-display text-4xl font-semibold text-slate-900 leading-tight tracking-tight mb-4">
           {meta.title}
         </h1>
         <p className="text-xl text-slate-500 leading-relaxed">{meta.description}</p>
@@ -93,8 +93,8 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
 
       {meta.author && (
         <div className="flex items-center gap-3 mb-6 p-4 bg-slate-50 rounded-xl border border-slate-200">
-          <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center shrink-0">
-            <span className="text-sm font-bold text-indigo-600">
+          <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
+            <span className="text-sm font-bold text-blue-600">
               {meta.authorInitials ?? meta.author.slice(0, 2).toUpperCase()}
             </span>
           </div>
@@ -138,7 +138,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         </Link>
         <Link
           href="/roi-explorer"
-          className="inline-flex items-center gap-2 text-sm font-medium text-indigo-600 hover:text-indigo-700 transition-colors"
+          className="inline-flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
         >
           Try ROI Explorer <ExternalLink className="w-3.5 h-3.5" />
         </Link>

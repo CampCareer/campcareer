@@ -59,9 +59,9 @@ export default function SalaryGrowthChart({
           type="monotone"
           dataKey="salary"
           name={label}
-          stroke="#6366f1"
+          stroke="#2563eb"
           strokeWidth={2.5}
-          dot={{ fill: "#6366f1", r: 5, strokeWidth: 0 }}
+          dot={{ fill: "#2563eb", r: 5, strokeWidth: 0 }}
           activeDot={{ r: 7, strokeWidth: 0 }}
         />
       </LineChart>

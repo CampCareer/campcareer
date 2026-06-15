@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 0 0% 100%;        /* pure white (page + cards; hairline borders separate) */
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
@@ -25,11 +25,11 @@
     --ring: 240 5.9% 10%;
     --radius: 0.5rem;
 
-    /* Tactile brand tokens (indigo) */
-    --brand: 243 75% 59%;          /* indigo-600 */
+    /* Brand tokens (single cobalt blue — matches logo) */
+    --brand: 221 83% 53%;          /* blue-600 #2563EB */
     --brand-foreground: 0 0% 100%;
-    --brand-press: 244 53% 41%;    /* indigo-800 — 3D shadow / pressed border */
-    --brand-tint: 226 100% 97%;    /* indigo-50 — selected background */
+    --brand-press: 224 76% 48%;    /* blue-700 #1D4ED8 — hover/press */
+    --brand-tint: 214 100% 97%;    /* blue-50 #EFF6FF — selected/highlight bg */
     --depth: 215 16% 80%;          /* neutral 3D shadow for non-brand cards */
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
@@ -89,35 +89,21 @@
 }
 
 @layer components {
-  /* ── Tactile "pressable" depth (Duolingo-style) ───────────────────────── */
-  /* Pairs with a 2px border. Override --depth for non-brand surfaces. */
+  /* ── Flat pressable surface (restrained / professional) ───────────────── */
+  /* Solid, no 3D ledge. Quick, calm color/shadow feedback — no bounce. */
   .btn-3d {
-    box-shadow: 0 4px 0 0 hsl(var(--depth));
-    transition: transform 100ms ease, box-shadow 100ms ease,
-      background-color 100ms ease, border-color 100ms ease;
+    box-shadow: 0 1px 2px 0 hsl(var(--depth) / 0.18);
+    transition: background-color 130ms ease, border-color 130ms ease,
+      box-shadow 130ms ease;
   }
   .btn-3d:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 0 0 hsl(var(--depth));
+    box-shadow: 0 2px 6px 0 hsl(var(--depth) / 0.22);
   }
-  /* :active is later in source order → wins over :hover while pressing. */
   .btn-3d:active {
-    transform: translateY(4px);
-    box-shadow: 0 0 0 0 hsl(var(--depth));
+    box-shadow: 0 1px 2px 0 hsl(var(--depth) / 0.18);
   }
   .btn-3d-brand {
     --depth: var(--brand-press);
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .btn-3d {
-      transition: background-color 100ms ease, border-color 100ms ease;
-    }
-    /* No translate/shadow change — color feedback only. */
-    .btn-3d:hover,
-    .btn-3d:active {
-      transform: none;
-      box-shadow: 0 4px 0 0 hsl(var(--depth));
-    }
   }
 
   /* ── Timeline stage entrance (CSS, always resolves to visible) ────────── */
@@ -133,10 +119,10 @@
 
   /* ── Typography scale (bigger, tighter) ───────────────────────────────── */
   .text-question {
-    @apply text-[28px] md:text-[38px] font-extrabold leading-tight tracking-[-0.01em];
+    @apply text-[28px] md:text-[38px] font-semibold leading-tight tracking-[-0.01em];
   }
   .text-option {
-    @apply text-[18px] md:text-[20px] font-semibold tracking-[-0.01em] leading-snug;
+    @apply text-[18px] md:text-[20px] font-medium tracking-[-0.01em] leading-snug;
   }
   .text-body-lg {
     @apply text-[17px] leading-relaxed;

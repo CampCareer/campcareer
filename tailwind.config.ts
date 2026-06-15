@@ -12,7 +12,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         sans: ["var(--font-geist-sans)", ...fontFamily.sans],
-        display: ["var(--font-nunito)", "var(--font-geist-sans)", ...fontFamily.sans],
+        display: ["var(--font-fraunces)", "var(--font-geist-sans)", ...fontFamily.serif],
         mono: ["var(--font-geist-mono)", ...fontFamily.mono],
         pixel: ["var(--font-press-start)", "'Press Start 2P'", "monospace"],
       },

@@ -32,9 +32,9 @@ const INITIAL_PHASES: Phase[] = [
     startMonthsBefore: 18,
     endMonthsBefore: 12,
     title: "Research & Decision",
-    color: "text-violet-600",
-    bg: "bg-violet-50",
-    border: "border-violet-200",
+    color: "text-cyan-600",
+    bg: "bg-cyan-50",
+    border: "border-cyan-200",
     tasks: [
       { id: "p1-1", label: "Decide target countries (US / AU / CA / UK / IE)" },
       { id: "p1-2", label: "Research fields of study & career outcomes" },
@@ -66,9 +66,9 @@ const INITIAL_PHASES: Phase[] = [
     startMonthsBefore: 9,
     endMonthsBefore: 6,
     title: "Application Prep",
-    color: "text-indigo-600",
-    bg: "bg-indigo-50",
-    border: "border-indigo-200",
+    color: "text-blue-600",
+    bg: "bg-blue-50",
+    border: "border-blue-200",
     tasks: [
       { id: "p3-1", label: "Write Statement of Purpose (SOP)" },
       { id: "p3-2", label: "Request 2–3 recommendation letters" },
@@ -221,7 +221,7 @@ const NOTE_DOT_BG: Record<NoteColor, string> = {
   default: "bg-slate-400",
   red:     "bg-red-400",
   amber:   "bg-amber-400",
-  indigo:  "bg-indigo-400",
+  indigo:  "bg-blue-400",
 }
 
 function MiniCalendar({
@@ -360,14 +360,14 @@ function MiniCalendar({
               className="relative flex flex-col items-center w-full cursor-pointer"
             >
               <span className={`w-6 h-6 flex items-center justify-center rounded-full text-[11px] ${
-                isToday ? "bg-indigo-600 text-white font-bold" : "text-slate-600"
-              }${isSelected ? " ring-2 ring-indigo-300" : ""}`}>
+                isToday ? "bg-blue-600 text-white font-bold" : "text-slate-600"
+              }${isSelected ? " ring-2 ring-blue-300" : ""}`}>
                 {day}
               </span>
               <div className="flex flex-col items-center gap-0.5">
                 {dotStatus && (
                   <div className={`w-1 h-1 rounded-full ${
-                    dotStatus === "current"  ? "bg-indigo-400" :
+                    dotStatus === "current"  ? "bg-blue-400" :
                     dotStatus === "upcoming" ? "bg-slate-400"  : "bg-slate-300"
                   }`} />
                 )}
@@ -398,7 +398,7 @@ function MiniCalendar({
             onChange={e => setNoteInput(p => ({ ...p, content: e.target.value }))}
             placeholder="Add a note for this day…"
             rows={3}
-            className="w-full text-xs text-slate-700 placeholder:text-slate-300 border border-slate-200 rounded-lg px-2 py-1.5 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-300"
+            className="w-full text-xs text-slate-700 placeholder:text-slate-300 border border-slate-200 rounded-lg px-2 py-1.5 resize-none focus:outline-none focus:ring-2 focus:ring-blue-300"
           />
 
           {/* Color picker */}
@@ -420,7 +420,7 @@ function MiniCalendar({
             <button
               onClick={handleSave}
               disabled={saving}
-              className="flex-1 text-[11px] font-medium bg-indigo-600 hover:bg-indigo-700 text-white py-1.5 rounded-lg transition-colors disabled:opacity-50"
+              className="flex-1 text-[11px] font-medium bg-blue-600 hover:bg-blue-700 text-white py-1.5 rounded-lg transition-colors disabled:opacity-50"
             >
               {saving ? "Saving…" : "Save"}
             </button>
@@ -626,7 +626,7 @@ export default function TimelinePage() {
     const status = sch?.status
     const subtitle = sch ? sch.range : phase.month
 
-    const ringCls = status === "current" ? "ring-2 ring-indigo-400" : ""
+    const ringCls = status === "current" ? "ring-2 ring-blue-400" : ""
     const dimCls = status === "past" ? "opacity-60" : allDone ? "opacity-70" : ""
 
     return (
@@ -641,7 +641,7 @@ export default function TimelinePage() {
         >
           <div className="flex items-center gap-3">
             <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white relative z-10 ${
-              allDone ? "bg-emerald-500" : status === "current" ? "bg-indigo-500" : "bg-slate-300"
+              allDone ? "bg-emerald-500" : status === "current" ? "bg-blue-500" : "bg-slate-300"
             }`}>
               {allDone ? "✓" : idx + 1}
             </div>
@@ -649,7 +649,7 @@ export default function TimelinePage() {
               <div className="flex items-center gap-2">
                 <p className={`text-sm font-semibold ${phase.color}`}>{phase.title}</p>
                 {status === "current" && (
-                  <span className="rounded-full px-2 py-0.5 text-[10px] font-semibold bg-indigo-100 text-indigo-700">
+                  <span className="rounded-full px-2 py-0.5 text-[10px] font-semibold bg-blue-100 text-blue-700">
                     {tt.currentBadge}
                   </span>
                 )}
@@ -733,13 +733,13 @@ export default function TimelinePage() {
               </div>
               <div className="flex flex-col items-end gap-2 shrink-0">
                 {goal!.target_date && (
-                  <span className="text-xl font-bold text-indigo-600 leading-none">
+                  <span className="text-xl font-bold text-blue-600 leading-none">
                     {calcDday(goal!.target_date)}
                   </span>
                 )}
                 <button
                   onClick={openGoalForm}
-                  className="inline-flex items-center gap-1 text-xs font-medium text-slate-500 hover:text-indigo-600 transition-colors"
+                  className="inline-flex items-center gap-1 text-xs font-medium text-slate-500 hover:text-blue-600 transition-colors"
                 >
                   <Pencil className="w-3.5 h-3.5" /> {tt.editButton}
                 </button>
@@ -763,7 +763,7 @@ export default function TimelinePage() {
               <select
                 value={fCountry}
                 onChange={(e) => setFCountry(e.target.value)}
-                className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-white"
+                className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white"
               >
                 {COUNTRIES.map((c) => (
                   <option key={c.value} value={c.value}>{c.label}</option>
@@ -777,7 +777,7 @@ export default function TimelinePage() {
               <select
                 value={fIntake}
                 onChange={(e) => setFIntake(e.target.value)}
-                className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-white"
+                className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white"
               >
                 {INTAKE_OPTIONS.map((o) => (
                   <option key={o.value} value={o.value}>{o.label}</option>
@@ -793,7 +793,7 @@ export default function TimelinePage() {
                 type="checkbox"
                 checked={fUseExact}
                 onChange={(e) => setFUseExact(e.target.checked)}
-                className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-300"
+                className="rounded border-slate-300 text-blue-600 focus:ring-blue-300"
               />
               {tt.exactDateLabel}
             </label>
@@ -802,7 +802,7 @@ export default function TimelinePage() {
                 type="date"
                 value={fExactDate}
                 onChange={(e) => setFExactDate(e.target.value)}
-                className="mt-2 w-full sm:w-56 h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-white"
+                className="mt-2 w-full sm:w-56 h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white"
               />
             )}
           </div>
@@ -816,7 +816,7 @@ export default function TimelinePage() {
                 value={fSchool}
                 onChange={(e) => setFSchool(e.target.value)}
                 placeholder="Trinity College Dublin"
-                className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-white"
+                className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white"
               />
             </div>
             <div className="space-y-1.5">
@@ -826,7 +826,7 @@ export default function TimelinePage() {
                 value={fField}
                 onChange={(e) => setFField(e.target.value)}
                 placeholder="Computer Science"
-                className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-white"
+                className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white"
               />
             </div>
           </div>
@@ -834,7 +834,7 @@ export default function TimelinePage() {
           <div className="flex gap-2">
             <button
               onClick={handleSaveGoal}
-              className="flex-1 sm:flex-none bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2.5 rounded-xl transition-colors text-sm"
+              className="flex-1 sm:flex-none bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2.5 rounded-xl transition-colors text-sm"
             >
               {goalIsSet ? tt.updateGoalButton : tt.setGoalButton}
             </button>
@@ -866,10 +866,10 @@ export default function TimelinePage() {
             </div>
             <div>
               <p className="text-xs text-slate-400 uppercase tracking-wide mb-1">{tt.progressLabel}</p>
-              <p className="text-lg font-bold text-indigo-600">{progress}%</p>
+              <p className="text-lg font-bold text-blue-600">{progress}%</p>
               <div className="mt-1.5 h-1.5 bg-slate-100 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-indigo-600 rounded-full transition-all duration-500"
+                  className="h-full bg-blue-600 rounded-full transition-all duration-500"
                   style={{ width: `${progress}%` }}
                 />
               </div>

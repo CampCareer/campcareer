@@ -355,7 +355,7 @@ const ko: Dictionary = {
       getStarted: '내 전공 위험도 확인하기',
     },
     hero: {
-      badge: '무료 · 1분 · 정부 공식 데이터 기반 — QILT · HEA · HESA · College Scorecard · BLS',
+      badge: '무료 · 1분 · 정부 공식 데이터 기반 — QILT · HEA · HESA · College Scorecard · BLS · StatCan',
       headlineLine1: 'AI 시대에도 살아남을',
       headlineLine2: '전공을 고르세요.',
       subtitle: '취업률·비자 경로·시장 수요·AI 대체 위험·학비 회수 기간, 5가지 기준으로 전공을 진단합니다. 미국·캐나다·영국·호주·아일랜드 5개국 기준으로요. 그리고 어디서 공부할지까지 알려드립니다.',
@@ -380,7 +380,7 @@ const ko: Dictionary = {
     provenance: {
       title: '감이 아니라 정부 데이터로 점수화합니다',
       subtitle: '모든 레이어는 명시된 공개 출처로 거슬러 올라갑니다.',
-      employment: '취업 — QILT · HEA · HESA · College Scorecard · BLS',
+      employment: '취업 — QILT · HEA · HESA · College Scorecard · BLS · StatCan',
       visa: '비자 — 호주 이민성(485) · 아일랜드 이민청(Stamp 1G) · 영국 UKVI Graduate Route · 미국 USCIS OPT · 캐나다 IRCC PGWP',
       demand: '수요 — Jobs and Skills Australia · EGFSN · Job Bank · ONS',
       ai: 'AI 노출 — OECD 고용 전망 & Felten 노출 지수 연구',
@@ -420,7 +420,7 @@ const ko: Dictionary = {
     },
     footer: {
       copyright: '© 2026 CampCareer',
-      dataSources: '데이터: QILT · HEA · HESA · College Scorecard · BLS',
+      dataSources: '데이터: QILT · HEA · HESA · College Scorecard · BLS · StatCan',
     },
   },
   degreeRisk: {

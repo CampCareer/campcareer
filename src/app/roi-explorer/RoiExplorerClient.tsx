@@ -26,7 +26,7 @@ const SalaryGrowthChart = dynamic(() => import("./SalaryGrowthChart"), {
   ssr: false,
   loading: () => (
     <div className="h-56 flex items-center justify-center">
-      <div className="w-6 h-6 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin" />
+      <div className="w-6 h-6 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
     </div>
   ),
 })
@@ -289,7 +289,7 @@ function FieldCombobox({
           onChange={handleChange}
           onFocus={() => options.length > 0 && setOpen(true)}
           placeholder="Search field of study…"
-          className="w-64 h-10 rounded-xl border border-slate-200 px-3 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 bg-white"
+          className="w-64 h-10 rounded-xl border border-slate-200 px-3 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300 bg-white"
         />
         {input && (
           <button
@@ -308,7 +308,7 @@ function FieldCombobox({
               key={f}
               onMouseDown={(e) => e.preventDefault()} // prevent input blur before click
               onClick={() => handleSelect(f)}
-              className="w-full px-3 py-2 text-left text-sm hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 transition-colors"
+              className="w-full px-3 py-2 text-left text-sm hover:bg-blue-50 hover:text-blue-700 text-slate-700 transition-colors"
             >
               {trimDot(f)}
             </button>
@@ -575,13 +575,13 @@ export function RoiExplorerClient({
 
       {/* Header */}
       <div>
-        <div className="inline-flex items-center gap-2 bg-indigo-50 text-indigo-600 text-xs font-medium px-3 py-1.5 rounded-full mb-4 border border-indigo-100">
+        <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-600 text-xs font-medium px-3 py-1.5 rounded-full mb-4 border border-blue-100">
           <TrendingUp className="w-3 h-3" />
           {tr.liveData} · {stateName} {country === "us" ? tr.colleges : tr.universities}
         </div>
         <div className="flex items-center justify-between mt-1">
           <div className="flex items-center gap-4">
-            <h1 className="font-display text-3xl font-extrabold text-slate-900 tracking-tight">ROI Explorer</h1>
+            <h1 className="font-display text-3xl font-semibold text-slate-900 tracking-tight">ROI Explorer</h1>
             {country === "us" && (
               <div className="flex items-center gap-1">
                 {(["early", "mid", "senior"] as const).map((stage) => (
@@ -590,7 +590,7 @@ export function RoiExplorerClient({
                     onClick={() => setCareerStage(stage)}
                     className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors whitespace-nowrap ${
                       careerStage === stage
-                        ? "bg-indigo-600 text-white"
+                        ? "bg-blue-600 text-white"
                         : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50"
                     }`}
                   >
@@ -630,7 +630,7 @@ export function RoiExplorerClient({
           <button
             onClick={() => setShowAfterTax((v) => !v)}
             className={`relative w-10 h-5 rounded-full transition-colors ${
-              showAfterTax ? "bg-indigo-600" : "bg-slate-200"
+              showAfterTax ? "bg-blue-600" : "bg-slate-200"
             }`}
           >
             <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${
@@ -639,7 +639,7 @@ export function RoiExplorerClient({
           </button>
           <span className="text-xs text-slate-500">{tr.afterTax}</span>
           {showAfterTax && (
-            <span className="text-xs text-indigo-600 font-medium bg-indigo-50 px-2 py-0.5 rounded-full">
+            <span className="text-xs text-blue-600 font-medium bg-blue-50 px-2 py-0.5 rounded-full">
               {tr.taxEstimate.replace('{country}', country.toUpperCase())}
             </span>
           )}
@@ -776,7 +776,7 @@ export function RoiExplorerClient({
 
           {graphLoading ? (
             <div className="h-56 flex items-center justify-center">
-              <div className="w-6 h-6 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin" />
+              <div className="w-6 h-6 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
             </div>
           ) : (
             <SalaryGrowthChart data={graphData} country={country} label={tr.avgNetSalary} />
@@ -824,7 +824,7 @@ export function RoiExplorerClient({
                       <td className="px-4 py-3 font-medium text-slate-800 max-w-[200px] truncate">
                         <Link
                           href={`/roi-explorer/${country}/${row.college_id}`}
-                          className="hover:text-indigo-600 hover:underline transition-colors"
+                          className="hover:text-blue-600 hover:underline transition-colors"
                         >
                           {row.college_name}
                         </Link>
@@ -836,7 +836,7 @@ export function RoiExplorerClient({
                         {row.city_name}
                       </td>
                       <td className="px-4 py-3 text-right">
-                        <span className="font-semibold text-indigo-600">
+                        <span className="font-semibold text-blue-600">
                           {country === "us" && careerStage === "mid"
                             ? (row.roi_score_mid ?? row.roi_score).toFixed(1)
                             : country === "us" && careerStage === "senior"
@@ -895,7 +895,7 @@ export function RoiExplorerClient({
                           onClick={() => toggleSave(row)}
                           className={`p-1.5 rounded-lg transition-colors ${
                             savedIds.has(row.college_id)
-                              ? "text-indigo-600 bg-indigo-50 hover:bg-indigo-100"
+                              ? "text-blue-600 bg-blue-50 hover:bg-blue-100"
                               : "text-slate-300 hover:text-slate-500 hover:bg-slate-100"
                           }`}
                           title={savedIds.has(row.college_id) ? "Remove from saved" : "Save"}

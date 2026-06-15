@@ -316,7 +316,7 @@ export default function Dashboard() {
           <div className="min-w-0">
             <Link
               href={`/roi-explorer/${country}/${row.college_id}`}
-              className="text-sm font-semibold text-slate-800 hover:text-indigo-600 transition-colors truncate block"
+              className="text-sm font-semibold text-slate-800 hover:text-blue-600 transition-colors truncate block"
             >
               {row.college_name}
             </Link>
@@ -328,7 +328,7 @@ export default function Dashboard() {
         <div className="flex items-center gap-5 shrink-0 ml-4">
           <div className="text-right">
             <p className="text-[10px] text-slate-400 uppercase tracking-wide">{td.topPicks.roi}</p>
-            <p className="text-sm font-bold text-indigo-600">{row.roi_score.toFixed(1)}</p>
+            <p className="text-sm font-bold text-blue-600">{row.roi_score.toFixed(1)}</p>
           </div>
           <div className="text-right hidden sm:block">
             <p className="text-[10px] text-slate-400 uppercase tracking-wide">{td.topPicks.salary}</p>
@@ -340,7 +340,7 @@ export default function Dashboard() {
             onClick={() => toggleSave(row)}
             className={`p-1.5 rounded-lg transition-colors ${
               savedIds.has(row.college_id)
-                ? "text-indigo-600 bg-indigo-50"
+                ? "text-blue-600 bg-blue-50"
                 : "text-slate-300 hover:text-slate-500 hover:bg-slate-100"
             }`}
           >
@@ -366,14 +366,14 @@ export default function Dashboard() {
               {stepsLoading ? (
                 <div className="h-6 w-64 rounded-full bg-slate-100 animate-pulse" />
               ) : recMeta ? (
-                <span className="inline-flex items-center gap-1.5 text-xs font-medium text-indigo-600 bg-indigo-50 border border-indigo-100 rounded-full px-3 py-1.5">
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium text-blue-600 bg-blue-50 border border-blue-100 rounded-full px-3 py-1.5">
                   <span>{recFlag}</span>
                   <span>{td.recommendedStartingPoint}: {recName}</span>
                 </span>
               ) : (
                 <Link
                   href="/onboarding"
-                  className="inline-flex items-center gap-1 text-xs font-medium text-indigo-600 hover:text-indigo-700 hover:underline"
+                  className="inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700 hover:underline"
                 >
                   {td.startDecisionQuiz}
                 </Link>
@@ -391,8 +391,8 @@ export default function Dashboard() {
                 onClick={() => { setCountry(c.value); setField(""); setFieldInput(""); setData([]); setSearched(false) }}
                 className={`text-sm font-medium px-4 py-2 rounded-full border transition-colors focus:outline-none ${
                   c.value === country
-                    ? "bg-indigo-600 text-white border-indigo-600"
-                    : "bg-white text-slate-600 border-slate-200 hover:border-indigo-300 hover:text-indigo-600"
+                    ? "bg-blue-600 text-white border-blue-600"
+                    : "bg-white text-slate-600 border-slate-200 hover:border-blue-300 hover:text-blue-600"
                 }`}
               >
                 {c.label}
@@ -401,7 +401,7 @@ export default function Dashboard() {
           </div>
 
           {/* 검색 박스 (풀폭) */}
-          <div className="flex flex-col sm:flex-row gap-0 border-2 border-slate-200 rounded-2xl overflow-visible bg-white focus-within:border-indigo-400 transition-colors shadow-sm mt-4">
+          <div className="flex flex-col sm:flex-row gap-0 border-2 border-slate-200 rounded-2xl overflow-visible bg-white focus-within:border-blue-400 transition-colors shadow-sm mt-4">
 
             {/* 전공 검색 */}
             <div ref={fieldRef} className="relative flex-1">
@@ -440,7 +440,7 @@ export default function Dashboard() {
                       key={f}
                       onMouseDown={e => e.preventDefault()}
                       onClick={() => { setField(f); setFieldInput(trimDot(f)); setFieldOpen(false) }}
-                      className="w-full px-4 py-3 text-left text-sm hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 transition-colors"
+                      className="w-full px-4 py-3 text-left text-sm hover:bg-blue-50 hover:text-blue-700 text-slate-700 transition-colors"
                     >
                       {trimDot(f)}
                     </button>
@@ -453,7 +453,7 @@ export default function Dashboard() {
             <button
               type="button"
               onClick={handleSearch}
-              className="h-14 px-9 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-base transition-colors shrink-0 rounded-b-xl sm:rounded-b-none sm:rounded-r-xl"
+              className="h-14 px-9 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-base transition-colors shrink-0 rounded-b-xl sm:rounded-b-none sm:rounded-r-xl"
             >
               {td.searchButton}
             </button>
@@ -467,7 +467,7 @@ export default function Dashboard() {
                   key={tag}
                   type="button"
                   onClick={() => { setFieldInput(tag); setField(tag) }}
-                  className="text-sm px-4 py-2 rounded-full border border-slate-200 text-slate-500 hover:border-indigo-300 hover:text-indigo-600 transition-colors bg-white"
+                  className="text-sm px-4 py-2 rounded-full border border-slate-200 text-slate-500 hover:border-blue-300 hover:text-blue-600 transition-colors bg-white"
                 >
                   {tag}
                 </button>
@@ -478,7 +478,7 @@ export default function Dashboard() {
           {/* Your next steps — 4-card decision flow: Decide · Compare · Plan · Track */}
           {!searched && (() => {
             const cardClass = "group rounded-xl border border-slate-200 bg-slate-50 p-5 min-h-[140px] hover:bg-white hover:shadow-md hover:border-slate-300 transition-all"
-            const focalCardClass = "group rounded-xl border border-indigo-100 bg-indigo-50 p-5 min-h-[140px] hover:shadow-md transition-all"
+            const focalCardClass = "group rounded-xl border border-blue-100 bg-blue-50 p-5 min-h-[140px] hover:shadow-md transition-all"
             const ddayLabel = timelineInfo
               ? timelineInfo.dday > 0
                 ? `D-${timelineInfo.dday}`
@@ -538,10 +538,10 @@ export default function Dashboard() {
                     {timelineInfo ? (
                       <Link href="/timeline" className={focalCardClass}>
                         <div className="flex items-center gap-2 mb-2">
-                          <CalendarClock className="w-5 h-5 text-indigo-400" />
-                          <span className="text-xs font-medium text-indigo-400 uppercase tracking-wide">{td.nextSteps.planLabel}</span>
+                          <CalendarClock className="w-5 h-5 text-blue-400" />
+                          <span className="text-xs font-medium text-blue-400 uppercase tracking-wide">{td.nextSteps.planLabel}</span>
                         </div>
-                        <p className="text-3xl font-bold text-indigo-600 mb-0.5 leading-none">{ddayLabel}</p>
+                        <p className="text-3xl font-bold text-blue-600 mb-0.5 leading-none">{ddayLabel}</p>
                         <p className="text-sm text-slate-500 truncate mt-2">
                           {timelineInfo.currentPhaseTitle ?? td.nextSteps.onTrack}
                         </p>
@@ -558,7 +558,7 @@ export default function Dashboard() {
                         </p>
                         <div className="h-2 rounded-full bg-slate-200 overflow-hidden">
                           <div
-                            className="h-full bg-indigo-500 rounded-full"
+                            className="h-full bg-blue-500 rounded-full"
                             style={{ width: `${(checklistProgress.completed / checklistProgress.total) * 100}%` }}
                           />
                         </div>
@@ -614,7 +614,7 @@ export default function Dashboard() {
                 </h2>
                 <Link
                   href={`/roi-explorer?country=${country}`}
-                  className="text-xs text-indigo-600 hover:text-indigo-700 flex items-center gap-1 font-medium"
+                  className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1 font-medium"
                 >
                   {td.topPicks.viewAll} <ArrowRight className="w-3 h-3" />
                 </Link>
@@ -629,7 +629,7 @@ export default function Dashboard() {
               ) : topPicks.length === 0 ? (
                 <Link
                   href="/roi-explorer"
-                  className="flex items-center justify-center gap-1 py-10 rounded-2xl border border-slate-200 bg-white text-sm font-medium text-indigo-600 hover:text-indigo-700 hover:border-indigo-300 transition-colors"
+                  className="flex items-center justify-center gap-1 py-10 rounded-2xl border border-slate-200 bg-white text-sm font-medium text-blue-600 hover:text-blue-700 hover:border-blue-300 transition-colors"
                 >
                   {td.topPicks.browse} <ArrowRight className="w-3 h-3" />
                 </Link>
@@ -656,7 +656,7 @@ export default function Dashboard() {
               </p>
               <Link
                 href={`/roi-explorer?country=${country}${field ? `&field=${encodeURIComponent(field)}` : ""}`}
-                className="text-xs text-indigo-600 hover:text-indigo-700 flex items-center gap-1 font-medium"
+                className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1 font-medium"
               >
                 {td.results.viewAll} <ArrowRight className="w-3 h-3" />
               </Link>
@@ -673,7 +673,7 @@ export default function Dashboard() {
 
             {/* 필드 폴백 알림 */}
             {!loading && fieldFallback && data.length > 0 && (
-              <p className="text-xs text-indigo-500 mb-2 px-1">
+              <p className="text-xs text-blue-500 mb-2 px-1">
                 {td.results.fallbackNote.replace('{field}', fieldFallback.requested)}
               </p>
             )}
@@ -688,7 +688,7 @@ export default function Dashboard() {
                     {country === 'uk' && (
                       <a
                         href="/roi-explorer?country=uk&state=ALL_STATES"
-                        className="inline-block mt-2 text-xs text-indigo-500 hover:text-indigo-700 underline"
+                        className="inline-block mt-2 text-xs text-blue-500 hover:text-blue-700 underline"
                       >
                         {td.results.viewAllUk}
                       </a>

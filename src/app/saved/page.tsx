@@ -91,7 +91,7 @@ export default function SavedPage() {
         <p className="text-sm text-slate-500 mb-6">{ts.signInDesc}</p>
         <Link
           href="/login"
-          className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-xl transition-colors text-sm"
+          className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-xl transition-colors text-sm"
         >
           {ts.signInButton} <ArrowRight className="w-4 h-4" />
         </Link>
@@ -106,7 +106,7 @@ export default function SavedPage() {
       <div className="flex items-start justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-            <Bookmark className="w-6 h-6 text-indigo-500" />
+            <Bookmark className="w-6 h-6 text-blue-500" />
             {ts.pageTitle}
           </h1>
           <p className="text-slate-500 text-sm mt-1">
@@ -118,7 +118,7 @@ export default function SavedPage() {
         {selected.size >= 2 && (
           <Link
             href={compareHref}
-            className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2.5 rounded-xl transition-colors text-sm shrink-0"
+            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2.5 rounded-xl transition-colors text-sm shrink-0"
           >
             <GitCompare className="w-4 h-4" />
             {ts.compareButton} ({selected.size})
@@ -137,12 +137,12 @@ export default function SavedPage() {
               onClick={() => setFilter(c)}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 filter === c
-                  ? "bg-indigo-600 text-white"
+                  ? "bg-blue-600 text-white"
                   : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50"
               }`}
             >
               {c === "ALL" ? ts.filterAll : `${COUNTRY_FLAG[c]} ${c}`}
-              <span className={`ml-1.5 ${filter === c ? "text-indigo-200" : "text-slate-400"}`}>
+              <span className={`ml-1.5 ${filter === c ? "text-blue-200" : "text-slate-400"}`}>
                 {count}
               </span>
             </button>
@@ -173,7 +173,7 @@ export default function SavedPage() {
           <p className="text-sm text-slate-500 mb-1">{ts.emptyTitle}</p>
           <Link
             href="/roi-explorer"
-            className="inline-flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-700 mt-2"
+            className="inline-flex items-center gap-1 text-xs text-blue-600 hover:text-blue-700 mt-2"
           >
             {ts.emptyLink} <ArrowRight className="w-3 h-3" />
           </Link>
@@ -191,8 +191,8 @@ export default function SavedPage() {
                 onClick={() => toggleSelect(course.id)}
                 className={`bg-white border-2 rounded-2xl p-5 flex flex-col gap-3 shadow-sm cursor-pointer transition-all ${
                   isSelected
-                    ? "border-indigo-500 shadow-indigo-100 shadow-md"
-                    : "border-slate-200 hover:border-indigo-200"
+                    ? "border-blue-500 shadow-blue-100 shadow-md"
+                    : "border-slate-200 hover:border-blue-200"
                 }`}
               >
                 {/* 상단 */}
@@ -200,14 +200,14 @@ export default function SavedPage() {
                   <div className="flex items-center gap-2">
                     <span className="text-lg leading-none">{COUNTRY_FLAG[course.country] ?? "🌍"}</span>
                     <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
-                      isSelected ? "bg-indigo-100 text-indigo-700" : "bg-slate-100 text-slate-500"
+                      isSelected ? "bg-blue-100 text-blue-700" : "bg-slate-100 text-slate-500"
                     }`}>
                       {course.country}
                     </span>
                   </div>
                   <div className="flex items-center gap-1">
                     {isSelected && (
-                      <span className="w-5 h-5 rounded-full bg-indigo-600 flex items-center justify-center">
+                      <span className="w-5 h-5 rounded-full bg-blue-600 flex items-center justify-center">
                         <span className="text-white text-[10px] font-bold">✓</span>
                       </span>
                     )}
@@ -244,7 +244,7 @@ export default function SavedPage() {
                   <Link
                     href={`/roi-explorer/${course.country.toLowerCase()}/${course.course_id}`}
                     onClick={(e) => e.stopPropagation()}
-                    className="inline-flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-700 font-medium"
+                    className="inline-flex items-center gap-1 text-xs text-blue-600 hover:text-blue-700 font-medium"
                   >
                     {ts.viewButton} <ExternalLink className="w-3 h-3" />
                   </Link>

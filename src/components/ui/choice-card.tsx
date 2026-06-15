@@ -39,12 +39,12 @@ export function ChoiceCard({
       disabled={disabled}
       onClick={onSelect}
       className={cn(
-        "btn-3d group flex w-full items-center gap-4 rounded-2xl border-2 px-5 text-left",
+        "btn-3d group flex w-full items-center gap-4 rounded-xl border px-5 text-left",
         "min-h-[72px] md:min-h-[88px]",
-        "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/40",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2",
         "disabled:opacity-60 disabled:pointer-events-none",
         selected
-          ? "btn-3d-brand border-brand bg-brand-tint"
+          ? "border-brand bg-brand-tint"
           : "border-slate-200 bg-white hover:border-slate-300",
         className
       )}
@@ -58,7 +58,7 @@ export function ChoiceCard({
       <span
         className={cn(
           "text-option flex-1 leading-snug",
-          selected ? "text-brand" : "text-slate-700"
+          selected ? "text-brand font-semibold" : "text-slate-700"
         )}
       >
         {label}
@@ -67,9 +67,9 @@ export function ChoiceCard({
       <span className="flex h-7 w-7 shrink-0 items-center justify-center">
         {selected && (
           <motion.span
-            initial={reduce ? false : { scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 500, damping: 22 }}
+            initial={reduce ? false : { scale: 0.6, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={reduce ? { duration: 0 } : { duration: 0.15, ease: "easeOut" }}
             className="flex h-7 w-7 items-center justify-center rounded-full bg-brand text-brand-foreground"
           >
             <Check className="h-4 w-4" strokeWidth={3} />

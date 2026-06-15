@@ -132,7 +132,7 @@ export default async function FieldPage({ params }: { params: { field: string } 
                 <h2 className="font-semibold text-slate-800">{info.label}</h2>
                 <Link
                   href={`/rankings/${field.slug}/${s.country}`}
-                  className="ml-auto text-sm font-medium text-indigo-600 hover:text-indigo-700 hover:underline"
+                  className="ml-auto text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline"
                 >
                   Full {info.label} ranking →
                 </Link>
@@ -142,14 +142,14 @@ export default async function FieldPage({ params }: { params: { field: string } 
                   <p className="text-xs text-slate-400 uppercase tracking-wide">Top program</p>
                   <Link
                     href={`/roi-explorer/${s.country}/${s.top.college_id}`}
-                    className="font-medium text-slate-800 hover:text-indigo-600 hover:underline line-clamp-2"
+                    className="font-medium text-slate-800 hover:text-blue-600 hover:underline line-clamp-2"
                   >
                     {s.top.college_name}
                   </Link>
                 </div>
                 <div>
                   <p className="text-xs text-slate-400 uppercase tracking-wide">Avg ROI (top 10)</p>
-                  <p className="font-semibold text-indigo-600 text-lg">{s.avgRoi}</p>
+                  <p className="font-semibold text-blue-600 text-lg">{s.avgRoi}</p>
                 </div>
                 <div>
                   <p className="text-xs text-slate-400 uppercase tracking-wide">Median salary</p>
@@ -166,7 +166,7 @@ export default async function FieldPage({ params }: { params: { field: string } 
       </div>
 
       <div className="mt-10 flex flex-wrap items-center gap-4 text-sm">
-        <Link href="/compare" className="text-indigo-600 hover:underline">Compare all countries side-by-side</Link>
+        <Link href="/compare" className="text-blue-600 hover:underline">Compare all countries side-by-side</Link>
         <Link href="/methodology" className="text-slate-400 hover:text-slate-600 underline">Methodology</Link>
       </div>
     </div>

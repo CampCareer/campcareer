@@ -32,7 +32,7 @@ function formatBytes(bytes: number | null): string {
 
 function FileIcon({ mime }: { mime: string | null }) {
   if (!mime) return <File className="w-4 h-4 text-slate-400" />
-  if (mime.startsWith('image/')) return <Image className="w-4 h-4 text-indigo-400" />
+  if (mime.startsWith('image/')) return <Image className="w-4 h-4 text-blue-400" />
   if (mime === 'application/pdf') return <FileBadge className="w-4 h-4 text-rose-400" />
   return <FileText className="w-4 h-4 text-slate-400" />
 }
@@ -42,9 +42,9 @@ export default function DocumentsPage() {
   const td = t.documents
   const CATEGORIES: { value: DocCategory; label: string; emoji: string; color: string }[] = [
     { value: 'passport',       label: td.categories.passport,       emoji: '🛂', color: 'bg-blue-50 border-blue-200 text-blue-700' },
-    { value: 'transcript',     label: td.categories.transcript,     emoji: '🎓', color: 'bg-violet-50 border-violet-200 text-violet-700' },
+    { value: 'transcript',     label: td.categories.transcript,     emoji: '🎓', color: 'bg-cyan-50 border-cyan-200 text-cyan-700' },
     { value: 'financial',      label: td.categories.financial,      emoji: '💰', color: 'bg-emerald-50 border-emerald-200 text-emerald-700' },
-    { value: 'visa',           label: td.categories.visa,           emoji: '✈️', color: 'bg-indigo-50 border-indigo-200 text-indigo-700' },
+    { value: 'visa',           label: td.categories.visa,           emoji: '✈️', color: 'bg-blue-50 border-blue-200 text-blue-700' },
     { value: 'recommendation', label: td.categories.recommendation, emoji: '📝', color: 'bg-amber-50 border-amber-200 text-amber-700' },
     { value: 'other',          label: td.categories.other,          emoji: '📁', color: 'bg-slate-50 border-slate-200 text-slate-600' },
   ]
@@ -167,7 +167,7 @@ export default function DocumentsPage() {
       {/* 헤더 */}
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-3">
-          <FolderOpen className="w-6 h-6 text-indigo-500 shrink-0" />
+          <FolderOpen className="w-6 h-6 text-blue-500 shrink-0" />
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">{td.pageTitle}</h1>
             <p className="text-sm text-slate-500 mt-0.5">
@@ -177,7 +177,7 @@ export default function DocumentsPage() {
         </div>
         <button
           onClick={() => setShowUpload(v => !v)}
-          className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2.5 rounded-xl transition-colors text-sm"
+          className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2.5 rounded-xl transition-colors text-sm"
         >
           {td.uploadButton}
         </button>
@@ -197,8 +197,8 @@ export default function DocumentsPage() {
                   onClick={() => setUploadCategory(cat.value)}
                   className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors focus:outline-none
                     ${uploadCategory === cat.value
-                      ? 'bg-indigo-600 text-white border-indigo-600'
-                      : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-300 hover:text-indigo-600'}`}
+                      ? 'bg-blue-600 text-white border-blue-600'
+                      : 'bg-white text-slate-600 border-slate-200 hover:border-blue-300 hover:text-blue-600'}`}
                 >
                   {cat.emoji} {cat.label}
                 </button>
@@ -216,7 +216,7 @@ export default function DocumentsPage() {
               value={uploadNote}
               onChange={e => setUploadNote(e.target.value)}
               placeholder={td.notePlaceholder}
-              className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-white"
+              className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white"
             />
           </div>
 
@@ -227,7 +227,7 @@ export default function DocumentsPage() {
             onDrop={e => { e.preventDefault(); setDragOver(false); handleFiles(e.dataTransfer.files) }}
             onClick={() => fileInputRef.current?.click()}
             className={`border-2 border-dashed rounded-2xl p-10 text-center cursor-pointer transition-colors
-              ${dragOver ? 'border-indigo-400 bg-indigo-50' : 'border-slate-200 hover:border-indigo-300 hover:bg-slate-50'}`}
+              ${dragOver ? 'border-blue-400 bg-blue-50' : 'border-slate-200 hover:border-blue-300 hover:bg-slate-50'}`}
           >
             <input
               ref={fileInputRef}
@@ -238,14 +238,14 @@ export default function DocumentsPage() {
             />
             {uploading ? (
               <div className="flex flex-col items-center gap-2">
-                <Loader2 className="w-8 h-8 text-indigo-400 animate-spin" />
+                <Loader2 className="w-8 h-8 text-blue-400 animate-spin" />
                 <p className="text-sm text-slate-500">{td.uploading}</p>
               </div>
             ) : (
               <div className="flex flex-col items-center gap-2">
                 <Upload className="w-8 h-8 text-slate-300" />
                 <p className="text-sm font-medium text-slate-600">
-                  {td.dragDrop} <span className="text-indigo-600">{td.clickToSelect}</span>
+                  {td.dragDrop} <span className="text-blue-600">{td.clickToSelect}</span>
                 </p>
                 <p className="text-xs text-slate-400">{td.fileTypes}</p>
               </div>
@@ -314,7 +314,7 @@ export default function DocumentsPage() {
                       <div className="flex items-center gap-1 pt-1 border-t border-slate-100">
                         <button
                           onClick={() => handlePreview(doc)}
-                          className="flex-1 inline-flex items-center justify-center gap-1.5 text-xs text-slate-600 hover:text-indigo-600 font-medium py-1.5 rounded-lg hover:bg-indigo-50 transition-colors"
+                          className="flex-1 inline-flex items-center justify-center gap-1.5 text-xs text-slate-600 hover:text-blue-600 font-medium py-1.5 rounded-lg hover:bg-blue-50 transition-colors"
                         >
                           <Eye className="w-3.5 h-3.5" /> {td.previewButton}
                         </button>

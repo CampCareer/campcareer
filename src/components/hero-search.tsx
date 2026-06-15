@@ -121,7 +121,7 @@ export function HeroSearch() {
 
         {/* Field input with autocomplete dropdown */}
         <div className="relative flex-1">
-          <div className="flex items-center bg-white text-slate-900 rounded-xl px-4 py-3 gap-2 focus-within:ring-2 focus-within:ring-indigo-400 transition-shadow">
+          <div className="flex items-center bg-white text-slate-900 rounded-xl px-4 py-3 gap-2 focus-within:ring-2 focus-within:ring-blue-400 transition-shadow">
             <input
               type="text"
               value={field}
@@ -159,8 +159,8 @@ export function HeroSearch() {
                   onClick={() => { setField(s); setOpen(false); setActiveIdx(-1) }}
                   className={`w-full px-4 py-3 text-left text-sm transition-colors ${
                     i === activeIdx
-                      ? 'bg-indigo-50 text-indigo-700'
-                      : 'text-slate-700 hover:bg-indigo-50 hover:text-indigo-700'
+                      ? 'bg-blue-50 text-blue-700'
+                      : 'text-slate-700 hover:bg-blue-50 hover:text-blue-700'
                   }`}
                 >
                   {s}
@@ -183,7 +183,7 @@ export function HeroSearch() {
         <select
           value={country}
           onChange={e => { setCountry(e.target.value); setSuggestions([]); setOpen(false) }}
-          className="bg-white text-slate-900 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-indigo-400 cursor-pointer"
+          className="bg-white text-slate-900 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
         >
           {countryOptions.map(opt => (
             <option key={opt.value} value={opt.value}>
@@ -199,7 +199,7 @@ export function HeroSearch() {
           disabled={!canSubmit}
           className={`font-semibold rounded-xl px-5 py-3 text-sm transition-colors whitespace-nowrap ${
             canSubmit
-              ? 'bg-indigo-500 hover:bg-indigo-400 text-white cursor-pointer'
+              ? 'bg-blue-500 hover:bg-blue-400 text-white cursor-pointer'
               : 'bg-white/20 text-white/50 cursor-not-allowed'
           }`}
         >
