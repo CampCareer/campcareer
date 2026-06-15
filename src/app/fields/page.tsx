@@ -30,12 +30,12 @@ export default function FieldsIndexPage() {
           <Link
             key={field.slug}
             href={`/fields/${field.slug}`}
-            className="group flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-4 shadow-sm hover:border-indigo-300 hover:shadow transition-all"
+            className="group flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-4 shadow-sm hover:border-blue-300 hover:shadow transition-all"
           >
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 group-hover:bg-indigo-100 transition-colors">
+            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-blue-600 group-hover:bg-blue-100 transition-colors">
               <GraduationCap className="w-4.5 h-4.5" />
             </span>
-            <span className="font-medium text-slate-800 group-hover:text-indigo-700 transition-colors">
+            <span className="font-medium text-slate-800 group-hover:text-blue-700 transition-colors">
               {field.label}
             </span>
           </Link>

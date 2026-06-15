@@ -32,9 +32,9 @@ type Roadmap = {
 }
 
 const COLOR_MAP: Record<StageColor, { border: string; bg: string; text: string; badge: string }> = {
-  indigo:  { border: 'border-indigo-200',  bg: 'bg-indigo-50',  text: 'text-indigo-700',  badge: 'bg-indigo-100 text-indigo-700' },
-  violet:  { border: 'border-violet-200',  bg: 'bg-violet-50',  text: 'text-violet-700',  badge: 'bg-violet-100 text-violet-700' },
-  blue:    { border: 'border-blue-200',    bg: 'bg-blue-50',    text: 'text-blue-700',    badge: 'bg-blue-100 text-blue-700' },
+  indigo:  { border: 'border-blue-200',  bg: 'bg-blue-50',  text: 'text-blue-700',  badge: 'bg-blue-100 text-blue-700' },
+  violet:  { border: 'border-cyan-200',  bg: 'bg-cyan-50',  text: 'text-cyan-700',  badge: 'bg-cyan-100 text-cyan-700' },
+  blue:    { border: 'border-sky-200',    bg: 'bg-sky-50',    text: 'text-sky-700',    badge: 'bg-sky-100 text-sky-700' },
   emerald: { border: 'border-emerald-200', bg: 'bg-emerald-50', text: 'text-emerald-700', badge: 'bg-emerald-100 text-emerald-700' },
   amber:   { border: 'border-amber-200',   bg: 'bg-amber-50',   text: 'text-amber-700',   badge: 'bg-amber-100 text-amber-700' },
   rose:    { border: 'border-rose-200',    bg: 'bg-rose-50',    text: 'text-rose-700',    badge: 'bg-rose-100 text-rose-700' },
@@ -75,7 +75,7 @@ export default function ShareCareerPathPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
@@ -86,7 +86,7 @@ export default function ShareCareerPathPage() {
         <p className="text-slate-500 mb-4">This route map is not available.</p>
         <Link
           href="/career-path"
-          className="inline-flex items-center gap-2 bg-indigo-600 text-white font-semibold px-5 py-2.5 rounded-xl text-sm"
+          className="inline-flex items-center gap-2 bg-blue-600 text-white font-semibold px-5 py-2.5 rounded-xl text-sm"
         >
           Create your own <ArrowRight className="w-4 h-4" />
         </Link>
@@ -98,14 +98,14 @@ export default function ShareCareerPathPage() {
     <div className="min-h-screen bg-slate-50">
 
       {/* 상단 배너 — CTA */}
-      <div className="bg-indigo-600 text-white px-6 py-3 flex items-center justify-between">
+      <div className="bg-blue-600 text-white px-6 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Map className="w-4 h-4" />
           <span className="text-sm font-medium">CampCareer — Study Abroad Career Map</span>
         </div>
         <Link
           href="/career-path"
-          className="inline-flex items-center gap-1.5 bg-white text-indigo-600 font-semibold px-4 py-1.5 rounded-lg text-xs hover:bg-indigo-50 transition-colors"
+          className="inline-flex items-center gap-1.5 bg-white text-blue-600 font-semibold px-4 py-1.5 rounded-lg text-xs hover:bg-blue-50 transition-colors"
         >
           Create mine <ArrowRight className="w-3.5 h-3.5" />
         </Link>
@@ -133,7 +133,7 @@ export default function ShareCareerPathPage() {
             </div>
             <Link
               href="/career-path"
-              className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2.5 rounded-xl text-sm transition-colors shrink-0"
+              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2.5 rounded-xl text-sm transition-colors shrink-0"
             >
               Create my own map <ArrowRight className="w-4 h-4" />
             </Link>
@@ -142,9 +142,9 @@ export default function ShareCareerPathPage() {
 
         {/* PR pathway */}
         {roadmap.pr_pathway && (
-          <div className="bg-indigo-50 border border-indigo-100 rounded-2xl px-5 py-4">
-            <p className="text-xs font-semibold text-indigo-700 mb-1">PR / Long-term Pathway</p>
-            <p className="text-sm text-indigo-600">{roadmap.pr_pathway}</p>
+          <div className="bg-blue-50 border border-blue-100 rounded-2xl px-5 py-4">
+            <p className="text-xs font-semibold text-blue-700 mb-1">PR / Long-term Pathway</p>
+            <p className="text-sm text-blue-600">{roadmap.pr_pathway}</p>
           </div>
         )}
 
@@ -155,7 +155,7 @@ export default function ShareCareerPathPage() {
             return (
               <div key={stage.id} className={`border rounded-2xl overflow-hidden shadow-sm ${c.border}`}>
                 <div className={`px-4 py-4 ${c.bg} flex items-start gap-3`}>
-                  <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0 ${idx === 0 ? 'bg-indigo-500' : 'bg-slate-300'}`}>
+                  <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0 ${idx === 0 ? 'bg-blue-500' : 'bg-slate-300'}`}>
                     {idx + 1}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -204,14 +204,14 @@ export default function ShareCareerPathPage() {
         )}
 
         {/* 하단 CTA */}
-        <div className="bg-indigo-600 rounded-2xl px-6 py-8 text-center">
+        <div className="bg-blue-600 rounded-2xl px-6 py-8 text-center">
           <h2 className="text-lg font-bold text-white mb-2">Want your own career route map?</h2>
-          <p className="text-indigo-200 text-sm mb-5">
+          <p className="text-blue-200 text-sm mb-5">
             AI-powered, personalized to your field, country, and current status.
           </p>
           <Link
             href="/career-path"
-            className="inline-flex items-center gap-2 bg-white text-indigo-600 font-bold px-6 py-3 rounded-xl hover:bg-indigo-50 transition-colors"
+            className="inline-flex items-center gap-2 bg-white text-blue-600 font-bold px-6 py-3 rounded-xl hover:bg-blue-50 transition-colors"
           >
             Create my Career Route Map <ArrowRight className="w-4 h-4" />
           </Link>

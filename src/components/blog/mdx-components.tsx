@@ -6,7 +6,7 @@ import type { MDXComponents } from "mdx/types"
 function DataCard({ num, label }: { num: string; label: string }) {
   return (
     <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 text-center">
-      <span className="block text-2xl font-bold text-indigo-600 mb-1">{num}</span>
+      <span className="block text-2xl font-bold text-blue-600 mb-1">{num}</span>
       <span className="block text-xs text-slate-500 leading-snug">{label}</span>
     </div>
   )
@@ -73,22 +73,22 @@ function CTA({
   secondaryLabel?: string
 }) {
   return (
-    <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-6 my-8 not-prose">
-      <p className="text-sm font-semibold text-indigo-700 mb-2">{title}</p>
+    <div className="bg-blue-50 border border-blue-100 rounded-2xl p-6 my-8 not-prose">
+      <p className="text-sm font-semibold text-blue-700 mb-2">{title}</p>
       {description && (
         <p className="text-sm text-slate-600 mb-4">{description}</p>
       )}
       <div className="flex flex-wrap gap-3">
         <Link
           href={href}
-          className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-colors"
+          className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-colors"
         >
           {label} <ArrowRight className="w-4 h-4" />
         </Link>
         {secondaryHref && secondaryLabel && (
           <Link
             href={secondaryHref}
-            className="inline-flex items-center gap-2 bg-white border border-indigo-200 hover:bg-indigo-50 text-indigo-700 text-sm font-semibold px-4 py-2.5 rounded-xl transition-colors"
+            className="inline-flex items-center gap-2 bg-white border border-blue-200 hover:bg-blue-50 text-blue-700 text-sm font-semibold px-4 py-2.5 rounded-xl transition-colors"
           >
             {secondaryLabel}
           </Link>
@@ -109,8 +109,8 @@ function AuthorBox({
 }) {
   return (
     <div className="not-prose flex items-center gap-3 mb-8 p-4 bg-slate-50 rounded-xl border border-slate-200">
-      <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center shrink-0">
-        <span className="text-sm font-bold text-indigo-600">{initials}</span>
+      <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
+        <span className="text-sm font-bold text-blue-600">{initials}</span>
       </div>
       <div>
         <p className="text-sm font-semibold text-slate-900">{name}</p>
@@ -172,7 +172,7 @@ export const mdxComponents: MDXComponents = {
   li: (props) => <li className="leading-relaxed" {...props} />,
   strong: (props) => <strong className="font-semibold text-slate-800" {...props} />,
   blockquote: (props) => (
-    <blockquote className="border-l-4 border-indigo-200 pl-5 my-6 text-slate-500 italic" {...props} />
+    <blockquote className="border-l-4 border-blue-200 pl-5 my-6 text-slate-500 italic" {...props} />
   ),
   hr: () => <hr className="border-slate-200 my-8" />,
   table: (props) => (
@@ -188,7 +188,7 @@ export const mdxComponents: MDXComponents = {
     <td className="px-4 py-3 text-slate-600 border-b border-slate-100" {...props} />
   ),
   a: (props) => (
-    <a className="text-indigo-600 hover:text-indigo-800 underline underline-offset-2" {...props} />
+    <a className="text-blue-600 hover:text-blue-800 underline underline-offset-2" {...props} />
   ),
   code: (props) => (
     <code className="bg-slate-100 text-slate-800 px-1.5 py-0.5 rounded text-sm font-mono" {...props} />

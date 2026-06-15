@@ -83,7 +83,7 @@ export function VisaAlertForm({ country = null, field = null, className }: VisaA
     <div className={cn("rounded-2xl border-2 border-slate-200 bg-white p-5 md:p-6", className)}>
       <div className="mb-1 flex items-center gap-2">
         <Bell className="h-4 w-4 text-brand" />
-        <h3 className="font-display text-base font-extrabold text-slate-900">{va.heading}</h3>
+        <h3 className="font-display text-base font-semibold text-slate-900">{va.heading}</h3>
       </div>
       <p className="mb-4 text-sm text-slate-500">{va.subtitle}</p>
 

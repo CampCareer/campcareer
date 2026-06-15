@@ -70,16 +70,16 @@ export default function LoginPage() {
     <div className="min-h-screen flex">
 
       {/* 좌측 */}
-      <div className="hidden lg:flex flex-col w-1/2 bg-gradient-to-b from-slate-900 to-indigo-950 p-10">
+      <div className="hidden lg:flex flex-col w-1/2 bg-gradient-to-b from-slate-900 to-blue-950 p-10">
         <Link href="/" className="flex items-center gap-2.5 w-fit">
-          <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center shrink-0">
+          <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center shrink-0">
             <span className="text-white text-xs font-bold">CC</span>
           </div>
           <span className="font-semibold text-white text-base tracking-tight">CampCareer</span>
         </Link>
 
         <div className="flex-1 flex flex-col justify-center">
-          <h2 className="font-display text-4xl font-extrabold text-white leading-[1.15] tracking-tight mb-4">
+          <h2 className="font-display text-4xl font-semibold text-white leading-[1.15] tracking-tight mb-4">
             Make smarter<br />study abroad<br />decisions.
           </h2>
           <p className="text-slate-400 text-base leading-relaxed max-w-xs">
@@ -90,7 +90,7 @@ export default function LoginPage() {
         <div className="flex flex-col gap-3">
           {TRUST.map((t) => (
             <div key={t} className="flex items-center gap-2.5 text-sm text-slate-400">
-              <CheckCircle2 className="w-4 h-4 text-indigo-400 shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0" />
               {t}
             </div>
           ))}
@@ -102,14 +102,14 @@ export default function LoginPage() {
         <div className="w-full max-w-sm">
 
           <div className="lg:hidden flex items-center gap-2 mb-10">
-            <div className="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center">
+            <div className="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center">
               <span className="text-white text-[10px] font-bold">CC</span>
             </div>
             <span className="font-semibold text-slate-900 text-sm">CampCareer</span>
           </div>
 
           <div className="mb-8">
-            <h1 className="font-display text-2xl font-extrabold text-slate-900 mb-1">
+            <h1 className="font-display text-2xl font-semibold text-slate-900 mb-1">
               {mode === 'signin' ? 'Welcome back' : 'Create account'}
             </h1>
             <p className="text-sm text-slate-500">
@@ -162,7 +162,7 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="name@example.com"
                 required
-                className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
               />
             </div>
 
@@ -181,7 +181,7 @@ export default function LoginPage() {
                       })
                       setError('Password reset email sent!')
                     }}
-                    className="text-xs text-indigo-600 hover:text-indigo-700 transition-colors"
+                    className="text-xs text-blue-600 hover:text-blue-700 transition-colors"
                   >
                     Forgot password?
                   </button>
@@ -195,14 +195,14 @@ export default function LoginPage() {
                 placeholder="••••••••"
                 required
                 minLength={6}
-                className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
               />
             </div>
 
             <button
               type="submit"
               disabled={isLoading}
-              className="btn-3d btn-3d-brand w-full border-2 border-brand bg-brand text-brand-foreground font-extrabold uppercase tracking-wide min-h-[48px] rounded-xl text-sm mt-1 flex items-center justify-center gap-2 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/40"
+              className="w-full border border-brand bg-brand text-brand-foreground font-semibold tracking-tight shadow-sm transition-colors hover:bg-brand/90 min-h-[48px] rounded-xl text-sm mt-1 flex items-center justify-center gap-2 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2"
             >
               {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
               {mode === 'signin' ? 'Sign in' : 'Create account'}
@@ -214,7 +214,7 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={() => { setMode(mode === 'signin' ? 'signup' : 'signin'); setError(null) }}
-              className="text-indigo-600 hover:text-indigo-700 font-medium transition-colors inline-flex items-center gap-0.5"
+              className="text-blue-600 hover:text-blue-700 font-medium transition-colors inline-flex items-center gap-0.5"
             >
               {mode === 'signin' ? 'Get started' : 'Sign in'}
               <ArrowRight className="w-3.5 h-3.5" />

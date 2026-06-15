@@ -165,7 +165,7 @@ export function ResultCard({
           <p className="text-sm text-slate-400">
             {flag} {countryName}
           </p>
-          <h2 className="mt-0.5 font-display text-2xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="mt-0.5 font-display text-2xl font-semibold text-slate-900 tracking-tight">
             {majorName}
           </h2>
         </div>

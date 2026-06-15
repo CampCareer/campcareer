@@ -59,7 +59,7 @@ const COUNTRY_CONFIG: Record<
   Country,
   { flag: string; name: string; color: string; currency: SupportedCurrency }
 > = {
-  us: { flag: "🇺🇸", name: "United States",  color: "#6366f1", currency: "USD" },
+  us: { flag: "🇺🇸", name: "United States",  color: "#06b6d4", currency: "USD" },
   au: { flag: "🇦🇺", name: "Australia",      color: "#10b981", currency: "AUD" },
   ca: { flag: "🇨🇦", name: "Canada",         color: "#f43f5e", currency: "CAD" },
   uk: { flag: "🇬🇧", name: "United Kingdom", color: "#3b82f6", currency: "GBP" },
@@ -175,7 +175,7 @@ function FieldCombobox({
             onFocus={() => options.length > 0 && setOpen(true)}
             onKeyDown={handleKeyDown}
             placeholder={tc.searchPlaceholder}
-            className="w-full h-11 rounded-xl border border-slate-200 px-4 pr-9 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 bg-white shadow-sm"
+            className="w-full h-11 rounded-xl border border-slate-200 px-4 pr-9 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300 bg-white shadow-sm"
           />
           {input && (
             <button
@@ -190,7 +190,7 @@ function FieldCombobox({
           onClick={() => { if (canSearch) { setOpen(false); commit(input) } }}
           disabled={!canSearch}
           className="inline-flex items-center gap-1.5 h-11 px-4 rounded-xl text-sm font-medium transition-colors
-            bg-indigo-600 text-white hover:bg-indigo-700
+            bg-blue-600 text-white hover:bg-blue-700
             disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed"
         >
           <Search className="w-3.5 h-3.5" />
@@ -205,7 +205,7 @@ function FieldCombobox({
               key={f}
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => handleSelect(f)}
-              className="w-full px-4 py-2 text-left text-sm hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 transition-colors"
+              className="w-full px-4 py-2 text-left text-sm hover:bg-blue-50 hover:text-blue-700 text-slate-700 transition-colors"
             >
               {trimDot(f)}
             </button>
@@ -406,7 +406,7 @@ function CountryCard({
                   <div className="min-w-0 flex-1">
                     <Link
                       href={`/roi-explorer/${country}/${college.college_id}`}
-                      className="text-xs text-slate-700 hover:text-indigo-600 hover:underline leading-snug block truncate"
+                      className="text-xs text-slate-700 hover:text-blue-600 hover:underline leading-snug block truncate"
                       title={college.college_name}
                     >
                       {college.college_name}
@@ -556,11 +556,11 @@ function CompareContent() {
       {/* Header */}
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 bg-indigo-50 text-indigo-600 text-xs font-medium px-3 py-1.5 rounded-full mb-4 border border-indigo-100">
+          <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-600 text-xs font-medium px-3 py-1.5 rounded-full mb-4 border border-blue-100">
             <TrendingUp className="w-3 h-3" />
             {tc.badge}
           </div>
-          <h1 className="font-display text-3xl font-extrabold text-slate-900 tracking-tight">
+          <h1 className="font-display text-3xl font-semibold text-slate-900 tracking-tight">
             {tc.pageTitle}
           </h1>
           <p className="mt-2 text-slate-500 text-sm">
@@ -588,8 +588,8 @@ function CompareContent() {
               onClick={() => handleFieldChange(f.en)}
               className={`border rounded-full px-3 py-1 text-sm transition-colors ${
                 isActive
-                  ? "bg-indigo-600 text-white border-indigo-600"
-                  : "bg-white text-slate-600 border-slate-200 hover:border-indigo-300"
+                  ? "bg-blue-600 text-white border-blue-600"
+                  : "bg-white text-slate-600 border-slate-200 hover:border-blue-300"
               }`}
             >
               {label}
@@ -691,7 +691,7 @@ function CompareContent() {
       {/* Bar Chart */}
       {!loading && hasAnyData && (
         <div>
-          <h2 className="font-display text-lg font-extrabold text-slate-800 mb-3">
+          <h2 className="font-display text-lg font-semibold text-slate-800 mb-3">
             {rates
               ? `${tc.avgSalaryByCountry} (${baseCurrency})`
               : tc.avgRoiByCountry}
@@ -722,7 +722,7 @@ function CompareContent() {
                 href="https://www.frankfurter.app"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-indigo-500 hover:underline font-medium"
+                className="text-blue-500 hover:underline font-medium"
               >
                 frankfurter.app
               </a>

@@ -205,7 +205,7 @@ export default function OnboardingPage() {
         <div className="fixed top-0 inset-x-0 z-50">
           <div className="h-1.5 bg-slate-100">
             <div
-              className="h-full bg-indigo-500 transition-all duration-500"
+              className="h-full bg-blue-500 transition-all duration-500"
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -217,7 +217,7 @@ export default function OnboardingPage() {
         <div className="flex-1 flex flex-col items-center justify-center px-6 py-16 text-center">
 
           {/* Badge + Header */}
-          <span className="inline-flex items-center text-xs font-semibold text-indigo-500 bg-indigo-50 border border-indigo-100 rounded-full px-3 py-1 mb-4">
+          <span className="inline-flex items-center text-xs font-semibold text-blue-500 bg-blue-50 border border-blue-100 rounded-full px-3 py-1 mb-4">
             {to.badge}
           </span>
           <p className="text-slate-400 text-sm mb-1">{to.resultHeader}</p>
@@ -234,10 +234,10 @@ export default function OnboardingPage() {
                 const currency = CURRENCY[result.country] ?? '$'
                 const reasons = getMatchReasons(top, goal!, budget!, currency)
                 return (
-                  <div className="bg-indigo-50 border-2 border-indigo-200 rounded-3xl p-6 mb-4 text-left">
+                  <div className="bg-blue-50 border-2 border-blue-200 rounded-3xl p-6 mb-4 text-left">
                     <div className="flex items-center gap-2 mb-2">
-                      <span className="text-xs font-bold text-indigo-500 uppercase tracking-wide">{to.resultBadge}</span>
-                      <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full font-semibold">
+                      <span className="text-xs font-bold text-blue-500 uppercase tracking-wide">{to.resultBadge}</span>
+                      <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-semibold">
                         ROI {top.roi_score.toFixed(1)}
                       </span>
                     </div>
@@ -248,7 +248,7 @@ export default function OnboardingPage() {
                     <div className="space-y-2">
                       {reasons.map((r, i) => (
                         <div key={i} className="flex items-center gap-2">
-                          <Check className="w-4 h-4 text-indigo-500 shrink-0" />
+                          <Check className="w-4 h-4 text-blue-500 shrink-0" />
                           <span className="text-sm text-slate-700">{r}</span>
                         </div>
                       ))}
@@ -270,7 +270,7 @@ export default function OnboardingPage() {
                         <p className="text-xs text-slate-400">{s.field_name ?? field}</p>
                       </div>
                       <div className="text-right shrink-0 ml-3">
-                        <p className="text-xs font-bold text-indigo-600">ROI {s.roi_score.toFixed(1)}</p>
+                        <p className="text-xs font-bold text-blue-600">ROI {s.roi_score.toFixed(1)}</p>
                         <p className="text-xs text-slate-500">
                           {CURRENCY[result.country]}{Math.round(s.net_salary).toLocaleString()}
                         </p>
@@ -294,8 +294,8 @@ export default function OnboardingPage() {
               <div className="bg-slate-50 rounded-3xl p-7 text-left space-y-4 mb-4">
                 {result.reasons.map((r, i) => (
                   <div key={i} className="flex items-center gap-3">
-                    <div className="w-7 h-7 rounded-full bg-indigo-100 flex items-center justify-center shrink-0">
-                      <Check className="w-3.5 h-3.5 text-indigo-600" />
+                    <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
+                      <Check className="w-3.5 h-3.5 text-blue-600" />
                     </div>
                     <p className="text-sm text-slate-700 font-medium">{r}</p>
                   </div>
@@ -340,7 +340,7 @@ export default function OnboardingPage() {
             type="button"
             onClick={() => { router.push('/dashboard'); router.refresh() }}
             disabled={saving}
-            className="w-full max-w-md bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-bold py-5 rounded-2xl transition-colors flex items-center justify-center gap-3 text-lg mb-3"
+            className="w-full max-w-md bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-bold py-5 rounded-2xl transition-colors flex items-center justify-center gap-3 text-lg mb-3"
           >
             {to.ctaDashboard}
             <ArrowRight className="w-5 h-5" />
@@ -350,28 +350,28 @@ export default function OnboardingPage() {
           <div className="w-full max-w-md grid grid-cols-2 gap-2.5">
             <Link
               href="/roi-explorer"
-              className="flex items-center justify-center gap-2 border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 font-medium py-3 rounded-xl transition-colors text-sm bg-white"
+              className="flex items-center justify-center gap-2 border border-slate-200 hover:border-blue-300 hover:bg-blue-50 text-slate-600 hover:text-blue-600 font-medium py-3 rounded-xl transition-colors text-sm bg-white"
             >
               <BarChart2 className="w-4 h-4 shrink-0" />
               {to.ctaRoi}
             </Link>
             <Link
               href="/compare"
-              className="flex items-center justify-center gap-2 border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 font-medium py-3 rounded-xl transition-colors text-sm bg-white"
+              className="flex items-center justify-center gap-2 border border-slate-200 hover:border-blue-300 hover:bg-blue-50 text-slate-600 hover:text-blue-600 font-medium py-3 rounded-xl transition-colors text-sm bg-white"
             >
               <Globe2 className="w-4 h-4 shrink-0" />
               {to.ctaCompare}
             </Link>
             <Link
               href="/timeline"
-              className="flex items-center justify-center gap-2 border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 font-medium py-3 rounded-xl transition-colors text-sm bg-white"
+              className="flex items-center justify-center gap-2 border border-slate-200 hover:border-blue-300 hover:bg-blue-50 text-slate-600 hover:text-blue-600 font-medium py-3 rounded-xl transition-colors text-sm bg-white"
             >
               <CalendarDays className="w-4 h-4 shrink-0" />
               {to.ctaTimeline}
             </Link>
             <Link
               href="/career-path"
-              className="flex items-center justify-center gap-2 border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 font-medium py-3 rounded-xl transition-colors text-sm bg-white"
+              className="flex items-center justify-center gap-2 border border-slate-200 hover:border-blue-300 hover:bg-blue-50 text-slate-600 hover:text-blue-600 font-medium py-3 rounded-xl transition-colors text-sm bg-white"
             >
               <Map className="w-4 h-4 shrink-0" />
               {to.ctaCareerPath}
@@ -387,7 +387,7 @@ export default function OnboardingPage() {
           <div className="w-full max-w-lg">
 
             {/* Wizard branding */}
-            <p className="text-xs font-semibold text-indigo-400 uppercase tracking-widest mb-3 text-center">
+            <p className="text-xs font-semibold text-blue-400 uppercase tracking-widest mb-3 text-center">
               {to.badge}
             </p>
 
@@ -411,7 +411,7 @@ export default function OnboardingPage() {
                   onChange={e => setField(e.target.value)}
                   onKeyDown={e => { if (e.key === 'Enter' && field.trim().length >= 2) setStep(2) }}
                   placeholder="e.g. Computer Science, Nursing..."
-                  className="w-full border-2 border-slate-200 focus:border-indigo-400 rounded-2xl px-5 py-4 text-base text-slate-800 placeholder:text-slate-400 focus:outline-none transition-colors mb-4"
+                  className="w-full border-2 border-slate-200 focus:border-blue-400 rounded-2xl px-5 py-4 text-base text-slate-800 placeholder:text-slate-400 focus:outline-none transition-colors mb-4"
                   autoFocus
                 />
                 <div className="flex flex-wrap gap-2 mb-6">
@@ -420,7 +420,7 @@ export default function OnboardingPage() {
                       key={s}
                       type="button"
                       onClick={() => { setField(s); setStep(2) }}
-                      className="text-sm px-4 py-2 rounded-full border border-slate-200 text-slate-600 hover:border-indigo-400 hover:text-indigo-600 transition-colors bg-white"
+                      className="text-sm px-4 py-2 rounded-full border border-slate-200 text-slate-600 hover:border-blue-400 hover:text-blue-600 transition-colors bg-white"
                     >
                       {s}
                     </button>
@@ -430,7 +430,7 @@ export default function OnboardingPage() {
                   type="button"
                   onClick={() => setStep(2)}
                   disabled={field.trim().length < 2}
-                  className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 text-white font-bold py-4 rounded-2xl transition-colors"
+                  className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white font-bold py-4 rounded-2xl transition-colors"
                 >
                   Continue →
                 </button>
@@ -456,11 +456,11 @@ export default function OnboardingPage() {
                       key={opt.value}
                       type="button"
                       onClick={() => { setGoal(opt.value); setStep(3) }}
-                      className="w-full flex items-center gap-5 border-2 border-slate-200 hover:border-indigo-400 hover:bg-indigo-50 rounded-2xl p-5 transition-all text-left group"
+                      className="w-full flex items-center gap-5 border-2 border-slate-200 hover:border-blue-400 hover:bg-blue-50 rounded-2xl p-5 transition-all text-left group"
                     >
                       <span className="text-4xl">{opt.emoji}</span>
                       <div>
-                        <p className="text-lg font-semibold text-slate-800 group-hover:text-indigo-700">{opt.title}</p>
+                        <p className="text-lg font-semibold text-slate-800 group-hover:text-blue-700">{opt.title}</p>
                         <p className="text-sm text-slate-400 mt-0.5">{opt.desc}</p>
                       </div>
                     </button>
@@ -486,11 +486,11 @@ export default function OnboardingPage() {
                       key={opt.value}
                       type="button"
                       onClick={() => { setBudget(opt.value); setStep(4) }}
-                      className="w-full flex items-center gap-5 border-2 border-slate-200 hover:border-indigo-400 hover:bg-indigo-50 rounded-2xl p-5 transition-all text-left group"
+                      className="w-full flex items-center gap-5 border-2 border-slate-200 hover:border-blue-400 hover:bg-blue-50 rounded-2xl p-5 transition-all text-left group"
                     >
                       <span className="text-4xl">{opt.emoji}</span>
                       <div>
-                        <p className="text-lg font-semibold text-slate-800 group-hover:text-indigo-700">{opt.title}</p>
+                        <p className="text-lg font-semibold text-slate-800 group-hover:text-blue-700">{opt.title}</p>
                         <p className="text-sm text-slate-400 mt-0.5">{opt.desc}</p>
                       </div>
                     </button>
@@ -516,11 +516,11 @@ export default function OnboardingPage() {
                       key={opt.value}
                       type="button"
                       onClick={() => { setEnglish(opt.value); setStep(5) }}
-                      className="w-full flex items-center gap-5 border-2 border-slate-200 hover:border-indigo-400 hover:bg-indigo-50 rounded-2xl p-5 transition-all text-left group"
+                      className="w-full flex items-center gap-5 border-2 border-slate-200 hover:border-blue-400 hover:bg-blue-50 rounded-2xl p-5 transition-all text-left group"
                     >
                       <span className="text-4xl">{opt.emoji}</span>
                       <div>
-                        <p className="text-lg font-semibold text-slate-800 group-hover:text-indigo-700">{opt.title}</p>
+                        <p className="text-lg font-semibold text-slate-800 group-hover:text-blue-700">{opt.title}</p>
                         <p className="text-sm text-slate-400 mt-0.5">{opt.desc}</p>
                       </div>
                     </button>
@@ -547,11 +547,11 @@ export default function OnboardingPage() {
                       type="button"
                       onClick={() => handleFinish(opt.value)}
                       disabled={saving}
-                      className="w-full flex items-center gap-5 border-2 border-slate-200 hover:border-indigo-400 hover:bg-indigo-50 rounded-2xl p-5 transition-all text-left group disabled:opacity-50"
+                      className="w-full flex items-center gap-5 border-2 border-slate-200 hover:border-blue-400 hover:bg-blue-50 rounded-2xl p-5 transition-all text-left group disabled:opacity-50"
                     >
                       <span className="text-4xl">{opt.emoji}</span>
                       <div>
-                        <p className="text-lg font-semibold text-slate-800 group-hover:text-indigo-700">{opt.title}</p>
+                        <p className="text-lg font-semibold text-slate-800 group-hover:text-blue-700">{opt.title}</p>
                         <p className="text-sm text-slate-400 mt-0.5">{opt.desc}</p>
                       </div>
                     </button>

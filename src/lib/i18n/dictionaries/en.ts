@@ -353,7 +353,7 @@ const en = {
       getStarted: 'Check my degree risk',
     },
     hero: {
-      badge: 'Free · 1 minute · Built on government data — QILT, HEA, HESA, College Scorecard, BLS',
+      badge: 'Free · 1 minute · Built on government data — QILT, HEA, HESA, College Scorecard, BLS, StatCan',
       headlineLine1: 'Pick a degree that survives',
       headlineLine2: 'the AI era.',
       subtitle: 'We score your major on 5 layers — employment outcomes, visa pathway, market demand, AI exposure, and ROI — across the US, Canada, UK, Australia, and Ireland. Then we show you where to study it.',
@@ -378,7 +378,7 @@ const en = {
     provenance: {
       title: 'Scored from government data, not vibes',
       subtitle: 'Every layer traces back to a named public source.',
-      employment: 'Employment — QILT · HEA · HESA · College Scorecard · BLS',
+      employment: 'Employment — QILT · HEA · HESA · College Scorecard · BLS · StatCan',
       visa: 'Visa — Home Affairs (485) · Irish Immigration (Stamp 1G) · UKVI Graduate Route · USCIS OPT · IRCC PGWP',
       demand: 'Demand — Jobs and Skills Australia · EGFSN · Job Bank · ONS',
       ai: 'AI exposure — OECD employment outlook & Felten exposure research',
@@ -418,7 +418,7 @@ const en = {
     },
     footer: {
       copyright: '© 2026 CampCareer',
-      dataSources: 'Data: QILT · HEA · HESA · College Scorecard · BLS',
+      dataSources: 'Data: QILT · HEA · HESA · College Scorecard · BLS · StatCan',
     },
   },
   degreeRisk: {

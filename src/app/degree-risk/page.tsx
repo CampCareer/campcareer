@@ -14,7 +14,7 @@ export const metadata = pageMetadata({
 export default function DegreeRiskPage() {
   const t = getTranslations()
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
       <header className="border-b border-slate-200">
         <div className="max-w-xl mx-auto px-6 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
@@ -28,7 +28,7 @@ export default function DegreeRiskPage() {
       </header>
 
       <main className="max-w-2xl mx-auto px-6 min-h-[calc(100vh-3.5rem)] flex flex-col justify-center py-10">
-        <h1 className="font-display text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
+        <h1 className="font-display text-2xl md:text-3xl font-semibold text-slate-900 tracking-tight">
           {t.degreeRisk.pageTitle}
         </h1>
         <p className="mt-2 mb-8 text-body-lg text-slate-500">

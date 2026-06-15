@@ -88,14 +88,14 @@ export default async function DegreeRiskResultPage({
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-background">
       <header className="bg-white border-b border-slate-200">
         <div className="max-w-4xl mx-auto px-6 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <LogoMark size={28} />
             <span className="font-semibold text-slate-900 text-sm tracking-tight">CampCareer</span>
           </Link>
-          <Link href="/degree-risk" className="text-xs text-indigo-600 hover:text-indigo-700 transition-colors">
+          <Link href="/degree-risk" className="text-xs text-blue-600 hover:text-blue-700 transition-colors">
             {rr.startOver}
           </Link>
         </div>
@@ -105,13 +105,13 @@ export default async function DegreeRiskResultPage({
         {isOther ? (
           <>
           <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center">
-            <Search className="w-8 h-8 mx-auto text-indigo-500" />
+            <Search className="w-8 h-8 mx-auto text-blue-500" />
             <p className="mt-4 text-slate-700 text-sm leading-relaxed">
               {rr.otherText}
             </p>
             <Link
               href="/roi-explorer"
-              className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 px-5 py-2.5 rounded-xl transition-colors"
+              className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-500 px-5 py-2.5 rounded-xl transition-colors"
             >
               {rr.otherCta} <ArrowRight className="w-4 h-4" />
             </Link>
@@ -139,7 +139,7 @@ export default async function DegreeRiskResultPage({
             </p>
             <Link
               href="/degree-risk"
-              className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-indigo-600 hover:text-indigo-700"
+              className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-blue-600 hover:text-blue-700"
             >
               {rr.tryAnother} <ArrowRight className="w-4 h-4" />
             </Link>
@@ -155,8 +155,8 @@ export default async function DegreeRiskResultPage({
             </h1>
 
             {view === "all" && (
-              <p className="mt-3 inline-flex items-start gap-2 text-xs text-slate-600 bg-indigo-50 border border-indigo-100 rounded-lg px-3 py-2">
-                <Info className="w-3.5 h-3.5 mt-px shrink-0 text-indigo-500" />
+              <p className="mt-3 inline-flex items-start gap-2 text-xs text-slate-600 bg-blue-50 border border-blue-100 rounded-lg px-3 py-2">
+                <Info className="w-3.5 h-3.5 mt-px shrink-0 text-blue-500" />
                 {rr.allBanner.replace("{major}", majorName(major)).replace("{n}", String(rows.length))}
               </p>
             )}
@@ -168,7 +168,7 @@ export default async function DegreeRiskResultPage({
                   return (
                     <>
                       {before}
-                      <span className="font-semibold text-indigo-600">{goalLabel}</span>
+                      <span className="font-semibold text-blue-600">{goalLabel}</span>
                       {after}
                     </>
                   )
@@ -205,12 +205,12 @@ export default async function DegreeRiskResultPage({
                     <Link
                       key={slug}
                       href={altHref(slug)}
-                      className="group bg-white border border-slate-200 rounded-xl px-4 py-3.5 flex items-center justify-between hover:border-indigo-300 hover:shadow-sm transition-all"
+                      className="group bg-white border border-slate-200 rounded-xl px-4 py-3.5 flex items-center justify-between hover:border-blue-300 hover:shadow-sm transition-all"
                     >
                       <span className="text-sm font-medium text-slate-800">
                         {majorName(slug)}
                       </span>
-                      <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-indigo-500 transition-colors" />
+                      <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-blue-500 transition-colors" />
                     </Link>
                   ))}
                 </div>

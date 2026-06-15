@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { Analytics } from "@vercel/analytics/react"
 import localFont from "next/font/local"
-import { Nunito } from "next/font/google"
+import { Fraunces } from "next/font/google"
 import "./globals.css"
 import { LayoutShell } from "@/components/layout/layout-shell"
 import { getLocale } from "@/lib/i18n/server"
@@ -17,11 +17,11 @@ const geistMono = localFont({
   variable: "--font-geist-mono",
   weight: "100 900",
 })
-// Rounded display font for headings (body stays Geist for now).
-const nunito = Nunito({
+// Editorial serif display font for headings (body stays Geist).
+const fraunces = Fraunces({
   subsets: ["latin"],
-  variable: "--font-nunito",
-  weight: ["400", "600", "700", "800", "900"],
+  variable: "--font-fraunces",
+  weight: ["400", "500", "600"],
   display: "swap",
 })
 
@@ -80,7 +80,7 @@ export default function RootLayout({
   const locale = getLocale()
   return (
     <html lang={locale}>
-      <body className={`${geistSans.variable} ${geistMono.variable} ${nunito.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} antialiased`}>
         <LocaleProvider locale={locale}>
           <LayoutShell>{children}</LayoutShell>
         </LocaleProvider>

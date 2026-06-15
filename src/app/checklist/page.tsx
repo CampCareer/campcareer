@@ -246,7 +246,7 @@ export default function ChecklistPage() {
             <select
               value={country}
               onChange={e => { setCountry(e.target.value); setGenerated(false); setSelectedCategory(null) }}
-              className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-white"
+              className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white"
             >
               {COUNTRIES.map(c => (
                 <option key={c.value} value={c.value}>{c.label}</option>
@@ -260,7 +260,7 @@ export default function ChecklistPage() {
             <select
               value={visaType}
               onChange={e => { setVisaType(e.target.value); setGenerated(false); setSelectedCategory(null) }}
-              className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-white"
+              className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white"
             >
               {VISA_TYPES.map(v => (
                 <option key={v.value} value={v.value}>{v.label}</option>
@@ -277,7 +277,7 @@ export default function ChecklistPage() {
         <button
           onClick={handleGenerate}
           disabled={loading}
-          className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-50 text-sm"
+          className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-50 text-sm"
         >
           {loading ? (
             <><Loader2 className="w-4 h-4 animate-spin" /> {tc.generatingButton}</>
@@ -313,8 +313,8 @@ export default function ChecklistPage() {
                     onClick={() => setSelectedCategory(category)}
                     className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors whitespace-nowrap
                       ${isSelected
-                        ? 'bg-indigo-600 text-white border-indigo-600'
-                        : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-300'}`}
+                        ? 'bg-blue-600 text-white border-blue-600'
+                        : 'bg-white text-slate-600 border-slate-200 hover:border-blue-300'}`}
                   >
                     {category} {doneCount}/{categoryItems.length}
                   </button>
@@ -330,11 +330,11 @@ export default function ChecklistPage() {
                 <div className="bg-white border border-slate-200 rounded-2xl px-4 py-4 shadow-sm mb-4">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-xs font-semibold text-slate-600">{tc.overallProgress}</span>
-                    <span className="text-xs font-bold text-indigo-600">{checkedCount} / {totalItems}</span>
+                    <span className="text-xs font-bold text-blue-600">{checkedCount} / {totalItems}</span>
                   </div>
                   <div className="w-full bg-slate-100 rounded-full h-1.5">
                     <div
-                      className="bg-indigo-600 h-1.5 rounded-full transition-all duration-500"
+                      className="bg-blue-600 h-1.5 rounded-full transition-all duration-500"
                       style={{ width: `${progress}%` }}
                     />
                   </div>
@@ -353,12 +353,12 @@ export default function ChecklistPage() {
                         onClick={() => setSelectedCategory(category)}
                         className={`w-full flex items-center justify-between px-4 py-3 text-left transition-colors border-b border-slate-100 last:border-b-0
                           ${isSelected
-                            ? 'bg-indigo-50 text-indigo-700'
+                            ? 'bg-blue-50 text-blue-700'
                             : 'hover:bg-slate-50 text-slate-700'}`}
                       >
                         <div className="flex items-center gap-2 min-w-0">
                           <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white shrink-0
-                            ${allDone ? 'bg-emerald-500' : isSelected ? 'bg-indigo-500' : 'bg-slate-300'}`}>
+                            ${allDone ? 'bg-emerald-500' : isSelected ? 'bg-blue-500' : 'bg-slate-300'}`}>
                             {allDone ? '✓' : doneCount > 0 ? doneCount : ''}
                           </div>
                           <span className="text-xs font-medium truncate">{category}</span>
@@ -387,7 +387,7 @@ export default function ChecklistPage() {
                       const allDone = doneCount === catItems.length
                       return (
                         <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white
-                          ${allDone ? 'bg-emerald-500' : 'bg-indigo-500'}`}>
+                          ${allDone ? 'bg-emerald-500' : 'bg-blue-500'}`}>
                           {allDone ? '✓' : doneCount}
                         </div>
                       )
@@ -459,7 +459,7 @@ export default function ChecklistPage() {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 onClick={e => e.stopPropagation()}
-                                className="inline-flex items-center gap-1 mt-1.5 text-[11px] font-medium text-indigo-600 hover:text-indigo-700 hover:underline"
+                                className="inline-flex items-center gap-1 mt-1.5 text-[11px] font-medium text-blue-600 hover:text-blue-700 hover:underline"
                               >
                                 <ExternalLink className="w-3 h-3" />
                                 {affiliate.label}
