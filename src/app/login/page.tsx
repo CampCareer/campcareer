@@ -47,7 +47,7 @@ export default function LoginPage() {
         setError(error.message)
         setIsLoading(false)
       } else {
-        router.push('/degree-risk')
+        router.push('/dashboard')
         router.refresh()
       }
     } else {
