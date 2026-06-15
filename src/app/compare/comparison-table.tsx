@@ -12,6 +12,7 @@ import {
   formatMoney,
   layerMeta,
   layerNoteText,
+  aiNoteText,
 } from "@/lib/degree-risk"
 import { getTranslations, getLocale } from "@/lib/i18n/server"
 
@@ -52,7 +53,8 @@ function layerValue(
   layer: LayerKey,
   row: MajorRow,
   edge: boolean,
-  rr: ResultStrings
+  rr: ResultStrings,
+  locale: ReturnType<typeof getLocale>
 ): React.ReactNode {
   const strong = (node: React.ReactNode) => (
     <strong className={edge ? "text-slate-900 font-bold" : "font-semibold text-slate-800"}>{node}</strong>
@@ -80,13 +82,15 @@ function layerValue(
           </span>
         </span>
       )
-    case "ai_exposure":
+    case "ai_exposure": {
+      const aiNote = aiNoteText(row, locale)
       return (
         <>
           <strong className="font-semibold capitalize text-slate-800">{row.ai_exposure_band}</strong>
-          {row.ai_note && <span className="text-slate-600"> — {row.ai_note}</span>}
+          {aiNote && <span className="text-slate-600"> — {aiNote}</span>}
         </>
       )
+    }
     case "roi":
       return fill(rr.roiValue, {
         tuition: formatMoney(row.avg_annual_tuition_intl, row.country),
@@ -194,7 +198,7 @@ function LayerCell({
   return (
     <div className={`px-4 py-3 ${edge ? "bg-brand-tint/40" : ""}`}>
       <div className="flex items-start gap-1.5">
-        <div className="flex-1 text-sm leading-relaxed text-slate-700">{layerValue(layer, row, edge, rr)}</div>
+        <div className="flex-1 text-sm leading-relaxed text-slate-700">{layerValue(layer, row, edge, rr, locale)}</div>
         {edge && (
           <span
             title={tc.edgeBetter}

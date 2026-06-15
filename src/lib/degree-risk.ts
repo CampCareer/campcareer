@@ -43,12 +43,16 @@ export interface MajorRow {
   country: CountryCode
   overall_risk: RiskLevel
   risk_summary: string
+  // Korean translation of risk_summary; null until the editorial seed lands.
+  risk_summary_ko?: string | null
   employment_rate: number
   occupation_list_match: boolean
   post_study_work_years: number
   market_demand_score: number
   ai_exposure_band: string
   ai_note: string
+  // Korean translation of ai_note; null until the editorial seed lands.
+  ai_note_ko?: string | null
   avg_annual_tuition_intl: number
   median_starting_salary: number
   payback_years: number
@@ -58,6 +62,20 @@ export interface MajorRow {
   // DEPRECATED: superseded by layer_meta.<layer>.{confidence,last_verified}
   data_confidence?: string | null
   last_verified?: string | null
+}
+
+// Editorial free-text (risk_summary, ai_note) is stored English-first with an
+// optional *_ko column. Resolve to the active locale, falling back to the
+// English original whenever the Korean value is absent — so ko renders safely
+// before the translation seed lands. Mirrors layerNoteText for layer notes.
+export function riskSummaryText(row: MajorRow, locale: Locale): string {
+  if (locale === "ko" && row.risk_summary_ko) return row.risk_summary_ko
+  return row.risk_summary
+}
+
+export function aiNoteText(row: MajorRow, locale: Locale): string {
+  if (locale === "ko" && row.ai_note_ko) return row.ai_note_ko
+  return row.ai_note
 }
 
 // NOTE: layer_meta is intentionally NOT listed here. It is read via select("*")
