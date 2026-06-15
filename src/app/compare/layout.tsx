@@ -1,27 +1,29 @@
 import { pageMetadata } from "@/lib/seo"
 import { JsonLd, faqLd } from "@/components/seo/json-ld"
 
+// Fallback metadata — each comparison deep-link overrides title/description/OG
+// via generateMetadata in page.tsx.
 export const metadata = pageMetadata({
-  title: "Country Compare — USA vs Ireland vs UK vs Canada vs Australia",
-  description: "Side-by-side salary and ROI comparison across 5 countries. Find the best country for your career with real graduate earnings data.",
+  title: "Compare a Major Across Two Countries — Degree Risk",
+  description: "Pick a major and two countries to compare employment, post-study visa, market demand, AI exposure, and study ROI side by side, with verified sources.",
   path: "/compare",
 })
 
 const COMPARE_FAQS = [
   {
-    question: "Which country has the best ROI for international students?",
+    question: "How do you compare a major across two countries?",
     answer:
-      "It depends on your field of study. CampCareer compares ROI scores — net salary after rent and living costs relative to total tuition — across the US, UK, Ireland, Canada, and Australia using government salary data, so you can see which country pays back your degree fastest for your specific field.",
+      "CampCareer scores each major on five layers — employment outcomes, post-study work visa, market demand, AI exposure, and study ROI — for the US, UK, Ireland, Canada, and Australia. Pick a major and two countries to see those layers lined up side by side, with the source and as-of date on every verified figure.",
   },
   {
-    question: "How is the ROI score calculated?",
+    question: "Which country is 'better' for my major?",
     answer:
-      "ROI score = (net salary × graduation rate) ÷ total tuition for the degree, where net salary is median graduate earnings minus estimated annual rent and living costs in the college's city. Scores within one country are directly comparable; cross-country comparisons should account for currency and tax differences.",
+      "The comparison only flags a mechanical edge on the quantitative layers — higher graduate employment, higher market demand, or shorter ROI payback. Qualitative layers like visa pathway and AI exposure are shown without a winner, because the right choice depends on your goals, budget, and immigration plans.",
   },
   {
-    question: "Where does the salary data come from?",
+    question: "Where does the data come from?",
     answer:
-      "Official government sources: the U.S. College Scorecard, Ireland's HEA Graduate Outcomes Survey, the UK's HESA/Discover Uni, Australia's CRICOS and graduate outcome data, and Canadian provincial datasets.",
+      "Each layer carries its own source and last-verified date — official government and sector sources such as graduate outcomes surveys and skilled-occupation lists. Immigration timelines use verified post-study work visa lengths and PR pathways; estimates are labelled as estimates.",
   },
 ]
 
