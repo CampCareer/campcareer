@@ -6,8 +6,17 @@ import Image from "next/image"
 import { MDXRemote } from "next-mdx-remote/rsc"
 import remarkGfm from "remark-gfm"
 import { getAllPosts, getPostBySlug } from "@/lib/blog"
-import { mdxComponents } from "@/components/blog/mdx-components"
-import { JsonLd, articleLd, breadcrumbLd } from "@/components/seo/json-ld"
+import { buildMdxComponents } from "@/components/blog/mdx-components"
+import { JsonLd, articleLd, breadcrumbLd, faqLd } from "@/components/seo/json-ld"
+
+// Up to 3 internal links for the post foot — same tag first, topped up with the
+// most recent other posts so the block is never empty (internal-link graph).
+function relatedPosts(slug: string, tag: string) {
+  const others = getAllPosts().filter((p) => p.slug !== slug)
+  const sameTag = others.filter((p) => p.tag === tag)
+  const rest = others.filter((p) => p.tag !== tag)
+  return [...sameTag, ...rest].slice(0, 3)
+}
 
 export const revalidate = 86400
 export const dynamic = "force-static"
@@ -53,6 +62,8 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
 
   const { meta, content } = post
   const path = `/blog/${params.slug}`
+  const components = buildMdxComponents({ country: meta.ctaCountry, major: meta.ctaMajor })
+  const related = relatedPosts(params.slug, meta.tag)
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-12">
@@ -68,6 +79,9 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         { name: "Blog", path: "/blog" },
         { name: meta.title, path },
       ])} />
+      {meta.faqs && meta.faqs.length > 0 && (
+        <JsonLd data={faqLd(meta.faqs.map((f) => ({ question: f.q, answer: f.a })))} />
+      )}
       <Link
         href="/blog"
         className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition-colors mb-8"
@@ -141,8 +155,28 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
       )}
 
       <article>
-        <MDXRemote source={content} components={mdxComponents} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
+        <MDXRemote source={content} components={components} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
       </article>
+
+      {related.length > 0 && (
+        <section className="mt-14">
+          <h2 className="font-display text-lg font-semibold text-slate-900 mb-4">Related guides</h2>
+          <div className="grid gap-3 sm:grid-cols-3">
+            {related.map((p) => (
+              <Link
+                key={p.slug}
+                href={`/blog/${p.slug}`}
+                className="group rounded-xl border border-slate-200 bg-white p-4 transition-all hover:border-blue-300 hover:shadow-sm"
+              >
+                <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${p.tagColor}`}>{p.tag}</span>
+                <p className="mt-2 text-sm font-medium text-slate-800 leading-snug transition-colors group-hover:text-blue-700">
+                  {p.title}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       <hr className="border-slate-200 mt-12 mb-8" />
 
