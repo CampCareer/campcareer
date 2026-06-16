@@ -6,7 +6,8 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/", "/auth/"],
+        // Private/functional routes — keep out of the index.
+        disallow: ["/api/", "/auth/", "/dashboard", "/saved", "/documents"],
       },
     ],
     sitemap: "https://www.campcareer.com/sitemap.xml",

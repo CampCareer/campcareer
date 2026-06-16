@@ -98,6 +98,87 @@ function CTA({
   )
 }
 
+// ── ToolCTA ─────────────────────────────────────────────────────────────────
+// Conversion bridge from a blog post into the product. Always leads with the
+// primary funnel (degree-risk), plus a context-aware secondary deep-link into
+// the /explore surface. Country/major can be set explicitly per-tag or baked in
+// from frontmatter via buildMdxComponents (props always win over the default).
+const TOOLCTA_COUNTRY_LABEL: Record<string, string> = {
+  us: "the USA",
+  au: "Australia",
+  ca: "Canada",
+  uk: "the UK",
+  ie: "Ireland",
+}
+
+type ToolCTAProps = {
+  country?: string
+  major?: string
+  variant?: "block" | "inline"
+  title?: string
+  description?: string
+  label?: string
+}
+
+function ToolCTA({ country, major, variant = "block", title, description, label }: ToolCTAProps) {
+  const cc = country?.toLowerCase()
+  const primaryHref = "/degree-risk"
+  const primaryLabel = label ?? "Check your degree's visa→PR risk"
+
+  // Context-aware secondary: a specific major beats a country beats a generic compare.
+  let secondaryHref = "/compare"
+  let secondaryLabel = "Compare all 5 countries"
+  if (major) {
+    secondaryHref = `/explore/major/${major}`
+    secondaryLabel = "Best countries for this major"
+  } else if (cc && TOOLCTA_COUNTRY_LABEL[cc]) {
+    secondaryHref = `/explore/country/${cc}`
+    secondaryLabel = `Best degrees in ${TOOLCTA_COUNTRY_LABEL[cc]}`
+  }
+
+  if (variant === "inline") {
+    return (
+      <div className="not-prose my-6 flex flex-wrap items-center gap-x-3 gap-y-2 rounded-xl border border-blue-100 bg-blue-50/60 px-4 py-3">
+        <span className="text-sm text-slate-600">
+          {description ?? "Not sure this degree leads to a visa and PR? Run a free 60-second check."}
+        </span>
+        <Link
+          href={primaryHref}
+          className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-700 hover:text-blue-800"
+        >
+          {primaryLabel} <ArrowRight className="h-3.5 w-3.5" />
+        </Link>
+      </div>
+    )
+  }
+
+  return (
+    <div className="not-prose my-8 rounded-2xl border border-blue-100 bg-blue-50 p-6">
+      <p className="mb-2 text-sm font-semibold text-blue-700">
+        {title ?? "Will your degree actually get you a visa — and PR?"}
+      </p>
+      <p className="mb-4 text-sm text-slate-600">
+        {description ??
+          "CampCareer scores any major across employment, visa pathway, market demand, AI exposure, and ROI — using verified government and labour-market data. Get your result in about a minute."}
+      </p>
+      <div className="flex flex-wrap gap-3">
+        <Link
+          href={primaryHref}
+          className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700"
+        >
+          {primaryLabel} <ArrowRight className="h-4 w-4" />
+        </Link>
+        <Link
+          href={secondaryHref}
+          className="inline-flex items-center gap-2 rounded-xl border border-blue-200 bg-white px-4 py-2.5 text-sm font-semibold text-blue-700 transition-colors hover:bg-blue-50"
+        >
+          {secondaryLabel}
+        </Link>
+      </div>
+    </div>
+  )
+}
+
 function AuthorBox({
   name,
   role,
@@ -158,6 +239,7 @@ export const mdxComponents: MDXComponents = {
   CompareTable,
   Callout,
   CTA,
+  ToolCTA,
   AuthorBox,
   BlogImage,
   img: ({ src, alt }: { src?: string; alt?: string }) => (
@@ -193,4 +275,16 @@ export const mdxComponents: MDXComponents = {
   code: (props) => (
     <code className="bg-slate-100 text-slate-800 px-1.5 py-0.5 rounded text-sm font-mono" {...props} />
   ),
+}
+
+// Bakes per-post defaults (from frontmatter) into <ToolCTA> so a bare tag
+// auto-targets the right country/major. Explicit props in the MDX still win.
+export function buildMdxComponents(defaults?: { country?: string; major?: string }): MDXComponents {
+  if (!defaults?.country && !defaults?.major) return mdxComponents
+  return {
+    ...mdxComponents,
+    ToolCTA: ({ country, major, ...rest }: ToolCTAProps) => (
+      <ToolCTA country={country ?? defaults.country} major={major ?? defaults.major} {...rest} />
+    ),
+  }
 }
