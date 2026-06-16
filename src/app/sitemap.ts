@@ -1,6 +1,8 @@
 import { MetadataRoute } from "next"
 import { getAllPosts } from "@/lib/blog"
 import { supabase } from "@/lib/supabase"
+import { ALL_COUNTRIES } from "@/lib/degree-risk"
+import { EXPLORE_MAJORS } from "@/lib/explore"
 
 const BASE = "https://www.campcareer.com"
 
@@ -41,10 +43,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/degree-risk`, priority: 0.9, changeFrequency: "weekly" },
     { url: `${BASE}/roi-explorer`, priority: 0.9, changeFrequency: "daily" },
     { url: `${BASE}/compare`, priority: 0.9, changeFrequency: "weekly" },
+    { url: `${BASE}/explore`, priority: 0.8, changeFrequency: "weekly" },
     { url: `${BASE}/blog`, priority: 0.7, changeFrequency: "weekly" },
     { url: `${BASE}/methodology`, priority: 0.5, changeFrequency: "monthly" },
     { url: `${BASE}/privacy`, priority: 0.2, changeFrequency: "yearly" },
     { url: `${BASE}/terms`, priority: 0.2, changeFrequency: "yearly" },
+  ]
+
+  // 양방향 탐색(Phase O) — 전공×국가 랭킹 페이지
+  const explorePages: MetadataRoute.Sitemap = [
+    ...EXPLORE_MAJORS.map((slug) => ({
+      url: `${BASE}/explore/major/${slug}`,
+      priority: 0.7,
+      changeFrequency: "weekly" as const,
+    })),
+    ...ALL_COUNTRIES.map((c) => ({
+      url: `${BASE}/explore/country/${c.toLowerCase()}`,
+      priority: 0.7,
+      changeFrequency: "weekly" as const,
+    })),
   ]
 
   // 블로그 글 — frontmatter date를 lastModified로
@@ -68,5 +85,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  return [...staticPages, ...blogPages, ...detailPages]
+  return [...staticPages, ...explorePages, ...blogPages, ...detailPages]
 }
