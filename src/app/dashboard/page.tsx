@@ -404,7 +404,7 @@ export default function Dashboard() {
                 </span>
               ) : (
                 <Link
-                  href="/onboarding"
+                  href="/degree-risk"
                   className="inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700 hover:underline"
                 >
                   {td.startDecisionQuiz}
@@ -601,7 +601,7 @@ export default function Dashboard() {
 
                     {/* Card 1: DECIDE — recommended country or onboarding */}
                     {recMeta ? (
-                      <Link href="/onboarding" className={cardClass}>
+                      <Link href="/degree-risk" className={cardClass}>
                         <div className="flex items-center gap-2 mb-2">
                           <span className="text-lg">{recFlag}</span>
                           <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">{td.nextSteps.decideLabel}</span>
@@ -610,7 +610,7 @@ export default function Dashboard() {
                         <p className="text-sm text-slate-500">{td.nextSteps.recommendedLabel}</p>
                       </Link>
                     ) : (
-                      <Link href="/onboarding" className={cardClass}>
+                      <Link href="/degree-risk" className={cardClass}>
                         <div className="flex items-center gap-2 mb-2">
                           <Compass className="w-5 h-5 text-slate-400" />
                           <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">{td.nextSteps.decideLabel}</span>

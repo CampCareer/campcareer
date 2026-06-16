@@ -20,8 +20,8 @@ const nextConfig = {
       { source: '/fields/:path*', destination: '/', permanent: false },
       { source: '/rankings/:path*', destination: '/', permanent: false },
 
-      // 퍼널 단일화: 구 온보딩 → Degree Risk
-      { source: '/onboarding', destination: '/degree-risk', permanent: false },
+      // 퍼널 단일화: 구 온보딩 → Degree Risk (영구 이전)
+      { source: '/onboarding', destination: '/degree-risk', permanent: true },
 
       // 레거시 대학 디테일 URL: /roi-explorer/:id?country=xx → /roi-explorer/:country/:id
       {
