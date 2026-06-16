@@ -236,6 +236,7 @@ export function HomePageClient() {
         <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-slate-400">
           <span>{tl.footer.copyright}</span>
           <div className="flex items-center gap-4">
+            <Link href="/explore" className="hover:text-slate-600 transition-colors">Explore</Link>
             <Link href="/methodology" className="hover:text-slate-600 transition-colors">Methodology</Link>
             <Link href="/privacy" className="hover:text-slate-600 transition-colors">Privacy</Link>
             <Link href="/terms" className="hover:text-slate-600 transition-colors">Terms</Link>
