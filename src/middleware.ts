@@ -36,7 +36,36 @@ function applyLocaleCookie(response: NextResponse, locale: Locale) {
 // 로그인 필요한 페이지 보호 (/timeline, /checklist는 비로그인 체험 허용 정책)
 const PROTECTED_PATHS = ['/dashboard', '/saved', '/documents']
 
+// GSC 정리(月0): 옛 워드프레스 잔재 + 사라진 직업 카드 URL을 명시적 410 Gone으로
+// 응답. 기본 404보다 "영구 삭제됨" 신호가 강해 구글이 색인에서 더 빠르게 제거하고
+// 크롤 예산 낭비를 줄인다. 살아있는 라우트는 어떤 패턴도 매칭하지 않는다.
+const GONE_PATTERNS: RegExp[] = [
+  /^\/\d{4}\/\d{2}(\/|$)/, // WP 날짜 퍼머링크: /2021/05/old-post
+  /^\/category(\/|$)/, // WP 카테고리 아카이브
+  /^\/tag(\/|$)/, // WP 태그 아카이브
+  /^\/author(\/|$)/, // WP author 아카이브
+  /^\/page\/\d+(\/|$)/, // WP 페이지네이션: /page/2
+  /^\/feed(\/|$)/, // WP 피드
+  /^\/comments\/feed(\/|$)/, // WP 댓글 피드
+  /^\/sample-page(\/|$)/, // WP 기본 샘플 페이지
+  /^\/jobs?(\/|$)/, // 사라진 직업 카드: /job, /jobs
+]
+
+const GONE_BODY =
+  '<!doctype html><html lang="en"><head><meta charset="utf-8">' +
+  '<title>410 Gone</title><meta name="robots" content="noindex"></head>' +
+  '<body><h1>410 — Gone</h1><p>This page has been permanently removed.</p>' +
+  '<p><a href="/">Go to CampCareer home</a></p></body></html>'
+
 export async function middleware(request: NextRequest) {
+  // 죽은 옛 URL은 locale/auth 처리 전에 즉시 410으로 끊는다.
+  if (GONE_PATTERNS.some((re) => re.test(request.nextUrl.pathname))) {
+    return new NextResponse(GONE_BODY, {
+      status: 410,
+      headers: { 'content-type': 'text/html; charset=utf-8' },
+    })
+  }
+
   const locale = resolveLocale(request)
   // 현재 렌더가 쿠키를 즉시 읽을 수 있도록 request에도 세팅
   request.cookies.set(LOCALE_COOKIE, locale)
