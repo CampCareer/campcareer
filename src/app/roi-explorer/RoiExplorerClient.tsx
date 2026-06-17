@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useMemo } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import Link from "next/link"
 import {
@@ -14,7 +14,7 @@ import {
   Card,
   CardContent,
 } from "@/components/ui/card"
-import { TrendingUp, X, Bookmark, Copy, CheckCheck } from "lucide-react"
+import { TrendingUp, X, Bookmark, Copy, CheckCheck, Info } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
 import { useTranslations } from "@/lib/i18n/locale-provider"
 import { RoiInfo } from "@/components/roi-info"
@@ -361,7 +361,7 @@ export function RoiExplorerClient({
   const [showAfterTax, setShowAfterTax] = useState(false)
   const [graphField, setGraphField] = useState("")
   const [copied, setCopied] = useState(false)
-  const [graphData, setGraphData] = useState<{ year: string; salary: number }[]>([])
+  const [graphRows, setGraphRows] = useState<RoiRow[]>([])
   const [graphLoading, setGraphLoading] = useState(false)
 
   const stateList = country === "au" ? AU_STATES
@@ -524,49 +524,56 @@ export function RoiExplorerClient({
 
     const params = new URLSearchParams({ country, state, limit: "100", sort: "roi_score" })
     params.set("field", selectedField)
-    if (country === "us") {
-      // US: early/mid/senior 실제 데이터
+    try {
       const res = await fetch(`/api/roi?${params}`)
       const json = await res.json()
-      const rows: RoiRow[] = json.data ?? []
-      if (rows.length === 0) { setGraphData([]); setGraphLoading(false); return }
-      const avg = (arr: number[]) => Math.round(arr.reduce((a, b) => a + b, 0) / arr.length)
-      const early = avg(rows.map((r) => r.net_salary))
-      const mid   = avg(rows.filter((r) => r.roi_score_mid).map((r) => r.net_salary * 1.35))
-      const senior= avg(rows.filter((r) => r.roi_score_senior).map((r) => r.net_salary * 1.75))
-      setGraphData([
-        { year: "Early (1yr)",   salary: early },
-        { year: "Mid (4yr)",     salary: mid },
-        { year: "Senior (10yr)", salary: senior },
-      ])
-    } else {
-      // AU/CA/UK/IE: 단일 연봉 기반 추정 성장
-      const res = await fetch(`/api/roi?${params}`)
-      const json = await res.json()
-      const rows: RoiRow[] = json.data ?? []
-      if (rows.length === 0) { setGraphData([]); setGraphLoading(false); return }
-      const avg = Math.round(rows.reduce((a, r) => a + r.net_salary, 0) / rows.length)
-      setGraphData([
-        { year: "Entry (1yr)",   salary: Math.round(avg * 0.85) },
-        { year: "Mid (4yr)",     salary: avg },
-        { year: "Senior (10yr)", salary: Math.round(avg * 1.55) },
-      ])
+      setGraphRows((json.data ?? []) as RoiRow[])
+    } catch {
+      setGraphRows([])
+    } finally {
+      setGraphLoading(false)
     }
-    setGraphLoading(false)
   }
+
+  // Chart salary basis follows the Gross / After Tax toggle, exactly like the
+  // table — so "Salary Growth" shows the number people expect (gross by default,
+  // after-tax when toggled), never the much lower disposable figure. Growth
+  // multipliers are unchanged; only the base field switches.
+  const graphData = useMemo<{ year: string; salary: number }[]>(() => {
+    if (graphRows.length === 0) return []
+    const pick = (r: RoiRow) =>
+      showAfterTax
+        ? (r.net_salary_after_tax ?? r.net_salary)
+        : (r.gross_salary ?? r.median_earnings ?? r.net_salary)
+    const avg = (arr: number[]) =>
+      arr.length ? Math.round(arr.reduce((a, b) => a + b, 0) / arr.length) : 0
+    if (country === "us") {
+      return [
+        { year: "Early (1yr)",   salary: avg(graphRows.map(pick)) },
+        { year: "Mid (4yr)",     salary: avg(graphRows.filter((r) => r.roi_score_mid).map((r) => pick(r) * 1.35)) },
+        { year: "Senior (10yr)", salary: avg(graphRows.filter((r) => r.roi_score_senior).map((r) => pick(r) * 1.75)) },
+      ]
+    }
+    const base = avg(graphRows.map(pick))
+    return [
+      { year: "Entry (1yr)",   salary: Math.round(base * 0.85) },
+      { year: "Mid (4yr)",     salary: base },
+      { year: "Senior (10yr)", salary: Math.round(base * 1.55) },
+    ]
+  }, [graphRows, showAfterTax, country])
 
   const currencyCode = CURRENCY[country]?.code ?? 'USD'
 
-  const TABLE_COLS = [
+  const TABLE_COLS: Array<[string, string, string?]> = [
     [tr.colCollege,                    "text-left"],
     [tr.colField,                      "text-left"],
     [tr.colCity,                       "text-left"],
-    [country === "us" ? `${tr.colRoiScore} (${careerStage === "early" ? tr.earlyCareer : careerStage === "mid" ? tr.midCareer : tr.seniorCareer})` : tr.colRoiScore, "text-right"],
+    [country === "us" ? `${tr.colRoiScore} (${careerStage === "early" ? tr.earlyCareer : careerStage === "mid" ? tr.midCareer : tr.seniorCareer})` : tr.colRoiScore, "text-right", tr.roiOneLiner],
     [showAfterTax ? `${tr.colAfterTaxSalary} (${currencyCode})` : `${tr.colGrossSalary} (${currencyCode})`, "text-right"],
     [tr.colPayback,                    "text-right"],
     [`${tr.colTuition} (${currencyCode})`, "text-right"],
     [tr.colGradRate,                   "text-right"],
-    ...(country === "ie" ? [[tr.colAdmission, "text-right"] as const] : []),
+    ...(country === "ie" ? [[tr.colAdmission, "text-right"] as [string, string]] : []),
     ["", "text-right"],
   ]
 
@@ -705,7 +712,7 @@ export function RoiExplorerClient({
               {country === "us" || country === "ie" || country === "au" || country === "ca" || country === "uk" ? (
                 <FieldCombobox
                   value={field}
-                  onChange={(v) => { setField(v); if (v) loadGraph(v); else setGraphData([]) }}
+                  onChange={(v) => { setField(v); if (v) loadGraph(v); else { setGraphField(""); setGraphRows([]) } }}
                   country={country}
                 />
               ) : (
@@ -779,7 +786,7 @@ export function RoiExplorerClient({
               <div className="w-6 h-6 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
             </div>
           ) : (
-            <SalaryGrowthChart data={graphData} country={country} label={tr.avgNetSalary} />
+            <SalaryGrowthChart data={graphData} country={country} label={showAfterTax ? tr.avgAfterTaxSalary : tr.avgGrossSalary} />
           )}
         </div>
       )}
@@ -794,8 +801,9 @@ export function RoiExplorerClient({
       {/* Table */}
       {!error && (
         <div>
-          <div className="flex items-center justify-end mb-2">
-            <span className="inline-flex items-center gap-1.5 text-xs text-slate-400">
+          <div className="flex items-center justify-between gap-3 mb-2">
+            <p className="text-xs text-slate-500">{tr.roiOneLiner}</p>
+            <span className="inline-flex items-center gap-1.5 text-xs text-slate-400 shrink-0 whitespace-nowrap">
               {tr.roiExplained}<RoiInfo />
             </span>
           </div>
@@ -804,12 +812,21 @@ export function RoiExplorerClient({
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-200">
-                  {TABLE_COLS.map(([label, align]) => (
+                  {TABLE_COLS.map(([label, align, tip]) => (
                     <th
                       key={label}
                       className={`px-4 py-3 ${align} text-xs font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap`}
                     >
-                      {label}
+                      {tip ? (
+                        <span className="inline-flex items-center gap-1">
+                          {label}
+                          <span title={tip} className="cursor-help text-slate-400">
+                            <Info className="w-3 h-3" />
+                          </span>
+                        </span>
+                      ) : (
+                        label
+                      )}
                     </th>
                   ))}
                 </tr>
