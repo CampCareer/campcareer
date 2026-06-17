@@ -1,11 +1,14 @@
 'use client'
 
 import { useState, useRef, useEffect } from "react"
+import Link from "next/link"
 import { Info } from "lucide-react"
+import { useTranslations } from "@/lib/i18n/locale-provider"
 
 export function RoiInfo({ className }: { className?: string }) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
+  const tr = useTranslations().roiExplorer
 
   useEffect(() => {
     if (!open) return
@@ -53,6 +56,12 @@ export function RoiInfo({ className }: { className?: string }) {
           <p className="text-xs text-slate-600 leading-relaxed mt-2.5">
             So a score of 90 means your adjusted yearly pay ≈ 90% of all four years of tuition — about a year to recover it.
           </p>
+          <Link
+            href="/methodology"
+            className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700"
+          >
+            {tr.seeMethodology} →
+          </Link>
         </div>
       )}
     </div>
