@@ -4,6 +4,7 @@ const en = {
     degreeRisk: 'Degree Risk',
     roiExplorer: 'ROI Explorer',
     compare: 'Compare',
+    explore: 'Explore',
     careerPath: 'Career Map',
     blog: 'Blog',
   },
@@ -334,6 +335,15 @@ const en = {
       blog: 'Blog',
       signIn: 'Sign In',
       getStarted: 'Check my degree risk',
+    },
+    home: {
+      intro: 'Compare degree ROI, visa & PR across 5 countries — built on government data.',
+      majorAll: 'All majors',
+      countryAll: 'All countries',
+      showRoi: 'Show ROI',
+      visaLine: 'Every result includes the post-study work visa & PR pathway — traced to government sources.',
+      orRisk: "Or check a degree's full risk",
+      orCompare: 'Compare two countries',
     },
     hero: {
       badge: 'Free · 1 minute · Built on government data, updated as visa rules change',

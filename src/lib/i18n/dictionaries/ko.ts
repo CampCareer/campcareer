@@ -6,6 +6,7 @@ const ko: Dictionary = {
     degreeRisk: 'Degree Risk',
     roiExplorer: 'ROI 탐색기',
     compare: '국가 비교',
+    explore: '탐색',
     careerPath: '커리어 루트맵',
     blog: '블로그',
   },
@@ -336,6 +337,15 @@ const ko: Dictionary = {
       blog: '블로그',
       signIn: '로그인',
       getStarted: '내 전공 위험도 확인하기',
+    },
+    home: {
+      intro: '5개국 전공 ROI·비자·영주권을 정부 데이터로 한눈에 비교하세요.',
+      majorAll: '전체 전공',
+      countryAll: '전체 국가',
+      showRoi: 'ROI 보기',
+      visaLine: '모든 결과에 졸업 후 취업비자·영주권 경로가 정부 출처와 함께 표시됩니다.',
+      orRisk: '또는 전공 리스크 전체 진단',
+      orCompare: '두 국가 비교하기',
     },
     hero: {
       badge: '무료 · 1분 · 정부 데이터 기반, 비자 규정 변화에 맞춰 갱신',
