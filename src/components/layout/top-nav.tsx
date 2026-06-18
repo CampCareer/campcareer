@@ -64,19 +64,19 @@ export function TopNav() {
     <header className="sticky top-0 z-40 bg-background/90 backdrop-blur-sm border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="h-14 flex items-center gap-4">
-          <Link href="/" className="flex items-center gap-2.5 shrink-0">
+          <Link href="/" className="flex items-center gap-2.5 shrink-0 mr-auto">
             <LogoMark size={30} />
             <span className="font-semibold text-slate-900 text-base tracking-tight">
               CampCareer
             </span>
           </Link>
 
-          {/* Desktop: links inline, push actions right */}
-          <nav className="hidden sm:flex flex-1 items-center gap-1 overflow-x-auto no-scrollbar">
+          {/* Desktop: links centered */}
+          <nav className="hidden sm:flex items-center gap-1 overflow-x-auto no-scrollbar">
             {linkEls}
           </nav>
 
-          <div className="ml-auto sm:ml-0 flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-2 shrink-0 ml-auto">
             <LanguageToggle className="text-slate-500 hover:text-slate-900 hover:bg-slate-100" />
             {user ? (
               <Button
@@ -101,7 +101,7 @@ export function TopNav() {
         </div>
 
         {/* Mobile: links on a full-width second row, scrolls cleanly */}
-        <nav className="sm:hidden flex items-center gap-1 overflow-x-auto no-scrollbar pb-2">
+        <nav className="sm:hidden flex items-center justify-center gap-1 overflow-x-auto no-scrollbar pb-2">
           {linkEls}
         </nav>
       </div>
