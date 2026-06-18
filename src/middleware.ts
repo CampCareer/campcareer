@@ -36,6 +36,12 @@ function applyLocaleCookie(response: NextResponse, locale: Locale) {
 // 로그인 필요한 페이지 보호 (/timeline, /checklist는 비로그인 체험 허용 정책)
 const PROTECTED_PATHS = ['/dashboard', '/saved', '/documents']
 
+// 매출에 기여하지 않는 SEO·백링크 분석 크롤러. 검색엔진(Googlebot/Bingbot/
+// DuckDuckBot 등)과 소셜 미리보기 봇(Twitterbot, facebookexternalhit,
+// LinkedInBot, Slackbot, Discordbot 등)은 의도적으로 제외 — 영향 없음.
+const BLOCKED_BOTS_RE =
+  /AhrefsBot|SemrushBot|MJ12bot|DotBot|BLEXBot|DataForSeoBot|Barkrowler|SeekportBot/i
+
 // GSC 정리(月0): 옛 워드프레스 잔재 + 사라진 직업 카드 URL을 명시적 410 Gone으로
 // 응답. 기본 404보다 "영구 삭제됨" 신호가 강해 구글이 색인에서 더 빠르게 제거하고
 // 크롤 예산 낭비를 줄인다. 살아있는 라우트는 어떤 패턴도 매칭하지 않는다.
@@ -58,6 +64,13 @@ const GONE_BODY =
   '<p><a href="/">Go to CampCareer home</a></p></body></html>'
 
 export async function middleware(request: NextRequest) {
+  // 차단 대상 봇은 어떤 처리(GONE 검사·locale·auth)도 하기 전에 즉시 403으로 끊는다.
+  // 봇 트래픽이 미들웨어 CPU를 증폭시키므로 가장 비용이 큰 경로를 최상단에서 차단.
+  const ua = request.headers.get('user-agent') ?? ''
+  if (BLOCKED_BOTS_RE.test(ua)) {
+    return new NextResponse(null, { status: 403 })
+  }
+
   // 죽은 옛 URL은 locale/auth 처리 전에 즉시 410으로 끊는다.
   if (GONE_PATTERNS.some((re) => re.test(request.nextUrl.pathname))) {
     return new NextResponse(GONE_BODY, {
@@ -67,6 +80,9 @@ export async function middleware(request: NextRequest) {
   }
 
   const locale = resolveLocale(request)
+  // locale 쿠키가 실제로 바뀔 때만 Set-Cookie 한다. 같은 값을 이미 가진 재방문자
+  // 응답에는 Set-Cookie를 붙이지 않아 해당 응답이 CDN/ISR 캐시 대상이 된다.
+  const localeCookieChanged = request.cookies.get(LOCALE_COOKIE)?.value !== locale
   // 현재 렌더가 쿠키를 즉시 읽을 수 있도록 request에도 세팅
   request.cookies.set(LOCALE_COOKIE, locale)
 
@@ -77,7 +93,7 @@ export async function middleware(request: NextRequest) {
   // 네트워크 왕복을 생략 — locale 쿠키만 처리하고 통과.
   if (!isProtected) {
     const response = NextResponse.next({ request })
-    applyLocaleCookie(response, locale)
+    if (localeCookieChanged) applyLocaleCookie(response, locale)
     return response
   }
 
@@ -107,11 +123,11 @@ export async function middleware(request: NextRequest) {
 
   if (!user && isProtected) {
     const redirect = NextResponse.redirect(new URL('/login', request.url))
-    applyLocaleCookie(redirect, locale)
+    if (localeCookieChanged) applyLocaleCookie(redirect, locale)
     return redirect
   }
 
-  applyLocaleCookie(supabaseResponse, locale)
+  if (localeCookieChanged) applyLocaleCookie(supabaseResponse, locale)
   return supabaseResponse
 }
 
