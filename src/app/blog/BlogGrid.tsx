@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo, useCallback } from "react"
+import { useState, useMemo, useCallback, useRef, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight, Clock, ChevronDown } from "lucide-react"
@@ -15,6 +15,16 @@ const CATEGORIES = [
   { label: "USA",        value: "USA",            emoji: "🇺🇸" },
   { label: "Comparison", value: "Comparison",     emoji: "⚖️"  },
 ]
+
+function useClickOutside(ref: React.RefObject<HTMLElement | null>, handler: () => void) {
+  useEffect(() => {
+    const listener = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) handler()
+    }
+    document.addEventListener("mousedown", listener)
+    return () => document.removeEventListener("mousedown", listener)
+  }, [ref, handler])
+}
 
 const SORT_OPTIONS = [
   { label: "Newest First", value: "newest" },
@@ -32,20 +42,34 @@ interface BlogGridProps {
 const PAGE_SIZE = 12
 
 export function BlogGrid({ posts, labels }: BlogGridProps) {
-  const [active, setActive] = useState("all")
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(["all"])
   const [sortOrder, setSortOrder] = useState("newest")
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
+  const [catOpen, setCatOpen] = useState(false)
+  const catRef = useRef<HTMLDivElement>(null)
+  useClickOutside(catRef, () => setCatOpen(false))
 
   const filtered = useMemo(() => {
-    const list = active === "all" ? posts : posts.filter(p => p.tag === active)
+    const showAll = selectedCategories.length === 0 || selectedCategories.includes("all")
+    const list = showAll
+      ? posts
+      : posts.filter(p => selectedCategories.includes(p.tag))
     return [...list].sort((a, b) => {
       const diff = new Date(b.date).getTime() - new Date(a.date).getTime()
       return sortOrder === "newest" ? diff : -diff
     })
-  }, [active, posts, sortOrder])
+  }, [selectedCategories, posts, sortOrder])
 
-  const handleCategoryChange = useCallback((value: string) => {
-    setActive(value)
+  const handleCategoryToggle = useCallback((value: string) => {
+    setSelectedCategories(prev => {
+      if (value === "all") return ["all"]
+      const next = prev.filter(c => c !== "all")
+      if (next.includes(value)) {
+        const filtered = next.filter(c => c !== value)
+        return filtered.length === 0 ? ["all"] : filtered
+      }
+      return [...next, value]
+    })
     setVisibleCount(PAGE_SIZE)
   }, [])
 
@@ -66,6 +90,10 @@ export function BlogGrid({ posts, labels }: BlogGridProps) {
     }, {}),
   [posts])
 
+  const catLabel = selectedCategories.includes("all")
+    ? "All Categories"
+    : `${selectedCategories.length} selected`
+
   return (
     <div className="flex flex-col md:flex-row gap-10">
       <aside className="w-full md:w-64 shrink-0">
@@ -84,31 +112,41 @@ export function BlogGrid({ posts, labels }: BlogGridProps) {
 
         <div className="mb-8">
           <h3 className="text-sm font-semibold text-slate-900 mb-3">Category</h3>
-          <ul className="space-y-1">
-            {CATEGORIES.map(cat => {
-              const count = counts[cat.value] ?? 0
-              if (count === 0 && cat.value !== "all") return null
-              const isActive = active === cat.value
-              return (
-                <li key={cat.value}>
-                  <button
-                    onClick={() => handleCategoryChange(cat.value)}
-                    className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-left transition-colors ${
-                      isActive
-                        ? "bg-slate-900 text-white font-medium"
-                        : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
-                    }`}
-                  >
-                    {cat.emoji && <span aria-hidden="true">{cat.emoji}</span>}
-                    <span className="flex-1">{cat.label}</span>
-                    <span className={`text-xs tabular-nums ${isActive ? "opacity-60" : "text-slate-400"}`}>
-                      {count}
-                    </span>
-                  </button>
-                </li>
-              )
-            })}
-          </ul>
+          <div className="relative" ref={catRef}>
+            <button
+              onClick={() => setCatOpen(o => !o)}
+              className="w-full flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-200 bg-white text-sm text-slate-700 hover:border-slate-400 transition-colors text-left"
+            >
+              <span className="flex-1 truncate">{catLabel}</span>
+              <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${catOpen ? "rotate-180" : ""}`} />
+            </button>
+            {catOpen && (
+              <div className="absolute z-10 mt-1 w-full rounded-lg border border-slate-200 bg-white shadow-lg py-1">
+                {CATEGORIES.map(cat => {
+                  const count = counts[cat.value] ?? 0
+                  if (count === 0 && cat.value !== "all") return null
+                  const checked = selectedCategories.includes(cat.value)
+                  const isAll = cat.value === "all"
+                  return (
+                    <label
+                      key={cat.value}
+                      className="flex items-center gap-2 px-3 py-2 text-sm cursor-pointer hover:bg-slate-50 text-slate-700"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={isAll ? selectedCategories.includes("all") : checked}
+                        onChange={() => handleCategoryToggle(cat.value)}
+                        className="rounded border-slate-300 text-slate-900 focus:ring-blue-300"
+                      />
+                      {cat.emoji && <span aria-hidden="true">{cat.emoji}</span>}
+                      <span className="flex-1">{cat.label}</span>
+                      <span className="text-xs text-slate-400 tabular-nums">{count}</span>
+                    </label>
+                  )
+                })}
+              </div>
+            )}
+          </div>
         </div>
       </aside>
 
@@ -170,7 +208,7 @@ export function BlogGrid({ posts, labels }: BlogGridProps) {
           <div className="text-center py-24">
             <p className="text-slate-400 text-lg font-medium">No articles yet in this category.</p>
             <p className="text-slate-300 text-sm mt-1">Check back soon.</p>
-            <button onClick={() => handleCategoryChange("all")} className="mt-5 text-sm font-medium text-blue-600 hover:underline">
+            <button onClick={() => { setSelectedCategories(["all"]); setVisibleCount(PAGE_SIZE); }} className="mt-5 text-sm font-medium text-blue-600 hover:underline">
               ← View all articles
             </button>
           </div>
