@@ -41,9 +41,6 @@ export function BlogGrid({ posts, labels }: BlogGridProps) {
     }, {}),
   [posts])
 
-  const featured = active === "all" ? filtered.find(p => p.featured) : undefined
-  const grid = active === "all" ? filtered.filter(p => !p.featured) : filtered
-
   return (
     <>
       <div className="flex gap-2 flex-wrap mb-8">
@@ -71,44 +68,9 @@ export function BlogGrid({ posts, labels }: BlogGridProps) {
         })}
       </div>
 
-      {featured && (
-        <Link
-          href={`/blog/${featured.slug}`}
-          className="group block bg-slate-50 border border-slate-200 rounded-2xl p-8 hover:border-blue-300 hover:shadow-lg transition-all mb-8"
-        >
-          {featured.heroImage && (
-            <div className="relative w-full overflow-hidden rounded-xl bg-slate-100 mb-6" style={{ aspectRatio: "16/9" }}>
-              <Image
-                src={featured.heroImage}
-                alt={featured.heroImageAlt ?? featured.title}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 1200px"
-              />
-            </div>
-          )}
-          <div className="flex items-center gap-3 mb-5 flex-wrap">
-            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-100 text-blue-700">Featured</span>
-            <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${featured.tagColor}`}>{featured.tag}</span>
-            <div className="flex items-center gap-1 text-xs text-slate-400">
-              <Clock className="w-3 h-3" />
-              {featured.readTime} {labels.readTime}
-            </div>
-            <time className="text-xs text-slate-400">{featured.date}</time>
-          </div>
-          <h2 className="font-display text-2xl lg:text-3xl font-semibold text-slate-900 mb-3 group-hover:text-blue-700 transition-colors leading-tight max-w-4xl">
-            {featured.title}
-          </h2>
-          <p className="text-slate-500 leading-relaxed mb-6 max-w-3xl">{featured.description}</p>
-          <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 group-hover:gap-3 transition-all">
-            {labels.readMore} <ArrowRight className="w-4 h-4" />
-          </span>
-        </Link>
-      )}
-
-      {grid.length > 0 ? (
+      {filtered.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {grid.map(post => (
+          {filtered.map(post => (
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
