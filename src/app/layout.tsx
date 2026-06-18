@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Script from "next/script"
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import localFont from "next/font/local"
@@ -88,6 +89,19 @@ export default function RootLayout({
         </LocaleProvider>
         <Analytics />
         <SpeedInsights />
+        {/* Google Analytics 4 (gtag.js) — measurement ID G-X2J1LGJL5D */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-X2J1LGJL5D"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-X2J1LGJL5D');
+          `}
+        </Script>
       </body>
     </html>
   )
