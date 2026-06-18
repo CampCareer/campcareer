@@ -51,8 +51,8 @@ export function BlogGrid({ posts, labels }: BlogGridProps) {
   [posts])
 
   return (
-    <div className="flex flex-col md:flex-row gap-8">
-      <aside className="w-full md:w-56 shrink-0">
+    <div className="flex flex-col md:flex-row gap-10">
+      <aside className="w-full md:w-64 shrink-0">
         <div className="mb-8">
           <h3 className="text-sm font-semibold text-slate-900 mb-3">Sort By</h3>
           <select
@@ -98,7 +98,7 @@ export function BlogGrid({ posts, labels }: BlogGridProps) {
 
       <div className="flex-1 min-w-0">
         {filtered.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filtered.map(post => (
               <Link
                 key={post.slug}
