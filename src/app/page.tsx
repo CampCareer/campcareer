@@ -1,4 +1,5 @@
-import { HomePageClient } from "@/components/home/home-page-client"
+import { HomeLanding, type HomeFeaturedPost } from "@/components/home/home-landing"
+import { getAllPosts } from "@/lib/blog"
 import { pageMetadata } from "@/lib/seo"
 
 export const revalidate = 86400
@@ -12,5 +13,19 @@ export const metadata = pageMetadata({
 })
 
 export default function LandingPage() {
-  return <HomePageClient />
+  // Featured guides — only posts with a local hero image (guaranteed to render),
+  // featured-flagged first, newest otherwise. getAllPosts() is a build-time read.
+  const local = getAllPosts().filter((p) => p.heroImage?.startsWith("/blog/images/"))
+  const ordered = [...local.filter((p) => p.featured), ...local.filter((p) => !p.featured)]
+  const posts: HomeFeaturedPost[] = ordered.slice(0, 3).map((p) => ({
+    slug: p.slug,
+    title: p.title,
+    description: p.description,
+    tag: p.tag,
+    tagColor: p.tagColor,
+    readTime: p.readTime,
+    heroImage: p.heroImage as string,
+  }))
+
+  return <HomeLanding posts={posts} />
 }
