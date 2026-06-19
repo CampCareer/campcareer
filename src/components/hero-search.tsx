@@ -82,7 +82,7 @@ export function HeroSearch() {
     params.set('field', field.trim())
     if (country) params.set('country', country)
     params.set('source', 'hero')
-    router.push(`/dashboard?${params.toString()}`)
+    router.push(`/roi-explorer?${params.toString()}`)
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
