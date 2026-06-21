@@ -212,7 +212,7 @@ function Panel({
             부족 직종
           </TabButton>
           <TabButton active={tab === "pay"} onClick={() => onTab("pay")}>
-            고연봉
+            고연봉 부족직종
           </TabButton>
           {selectedSA4 && (
             <TabButton active={tab === "employment"} onClick={() => onTab("employment")}>
@@ -224,7 +224,7 @@ function Panel({
 
       <div className="min-h-0 flex-1 overflow-y-auto px-3 py-3">
         {tab === "shortage" && <ShortageList rows={shortage} />}
-        {tab === "pay" && <HighPayList rows={data.highPay} />}
+        {tab === "pay" && <HighPayList rows={data.highPay} stateRows={shortage} />}
         {tab === "employment" && (
           <EmploymentList
             sa4={selectedSA4}
@@ -294,12 +294,32 @@ function ShortageList({ rows }: { rows: StateOccupation[] }) {
   )
 }
 
-function HighPayList({ rows }: { rows: HighPayOccupation[] }) {
+function HighPayList({
+  rows,
+  stateRows,
+}: {
+  rows: HighPayOccupation[]
+  stateRows: StateOccupation[]
+}) {
+  const useState = stateRows.length > 0
+
+  // state 선택 시: 이 주의 부족직종 중 연봉 상위 12
+  const displayRows: Array<{ anzsco_code: string; occupation_ko: string | null; occupation_en: string; on_csol: boolean; median_salary_aud: number | null; state_count?: number }> = useState
+    ? [...stateRows]
+        .filter((r) => r.median_salary_aud != null)
+        .sort((a, b) => (b.median_salary_aud ?? 0) - (a.median_salary_aud ?? 0))
+        .slice(0, 12)
+    : rows
+
+  const hint = useState
+    ? "이 주의 부족직종 중 연봉 상위 (전국 중위연봉 기준)"
+    : "전국 기준 고연봉 상위 12"
+
   return (
     <div>
-      <p className="mb-1 px-3 text-xs text-slate-400">전국 기준 (주별 연봉 데이터 준비 중)</p>
+      <p className="mb-1 px-3 text-xs text-slate-400">{hint}</p>
       <ol>
-        {rows.map((r, i) => (
+        {displayRows.map((r, i) => (
           <li key={r.anzsco_code}>
             <a
               href={`/roi-explorer/au/occupation/${r.anzsco_code}`}
@@ -310,11 +330,12 @@ function HighPayList({ rows }: { rows: HighPayOccupation[] }) {
                 <span className="block truncate text-sm font-medium text-slate-800">
                   {r.occupation_ko ?? r.occupation_en}
                 </span>
-                {r.on_csol && (
-                  <span className="mt-0.5 flex">
-                    <Badge tone="green">비자 적격(스폰서)</Badge>
-                  </span>
-                )}
+                <span className="mt-0.5 flex flex-wrap items-center gap-1.5">
+                  {r.on_csol && <Badge tone="green">비자 적격(스폰서)</Badge>}
+                  {"state_count" in r && r.state_count === 1 && (
+                    <Badge tone="blue">이 지역 특화</Badge>
+                  )}
+                </span>
               </span>
               <span className="shrink-0 text-sm font-semibold tabular-nums text-slate-700">
                 {r.median_salary_aud != null ? `A$${r.median_salary_aud.toLocaleString()}` : "—"}
