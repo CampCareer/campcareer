@@ -1,21 +1,24 @@
 "use client"
 
 import dynamic from "next/dynamic"
-import { useCallback, useState } from "react"
-import { useRouter } from "next/navigation"
-import { X, ChevronDown, RotateCcw } from "lucide-react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { RotateCcw } from "lucide-react"
+import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { STATE_CODES, STATE_NAMES, type StateCode } from "./states"
+import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
 import type { MapData, StateOccupation, HighPayOccupation } from "@/lib/map-data"
 
-// Leaflet 은 SSR 불가 → 실제 지도는 ssr:false 로 동적 import.
 const LeafletMap = dynamic(() => import("./LeafletMap"), {
   ssr: false,
   loading: () => <div className="h-full w-full bg-slate-100 animate-pulse" />,
 })
 
-type Tab = "shortage" | "pay"
+type Tab = "shortage" | "pay" | "employment"
+
+type NeroOccupation = { a4: string; name: string; emp: number }
+type NeroData = Record<string, NeroOccupation[]>
 
 export default function AustraliaMap({
   data,
@@ -27,19 +30,59 @@ export default function AustraliaMap({
   initialTab?: Tab
 }) {
   const [selected, setSelected] = useState<StateCode | null>(initialState)
+  const [selectedSA4, setSelectedSA4] = useState<SA4Region | null>(null)
   const [tab, setTab] = useState<Tab>(initialTab)
+  const [neroData, setNeroData] = useState<NeroData | null>(null)
+  const neroFetched = useRef(false)
+
+  // Fetch NERO employment data once on first SA4 selection
+  useEffect(() => {
+    if (!selectedSA4 || neroFetched.current) return
+    neroFetched.current = true
+    fetch("/nero-sa4.json")
+      .then((r) => r.json())
+      .then((d: NeroData) => setNeroData(d))
+      .catch(() => {})
+  }, [selectedSA4])
+
+  // Reset SA4 when state changes; auto-switch employment tab when SA4 selected
+  useEffect(() => {
+    setSelectedSA4(null)
+    if (tab === "employment") setTab("shortage")
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected])
+
+  const onSelectSA4 = useCallback((code: string) => {
+    const regions = selected ? SA4_BY_STATE[selected] ?? [] : []
+    const region = regions.find((r) => r.code === code) ?? null
+    setSelectedSA4(region)
+    if (region) setTab("employment")
+  }, [selected])
 
   const onSelectState = useCallback((s: StateCode) => setSelected(s), [])
-  const onReset = useCallback(() => setSelected(null), [])
+  const onReset = useCallback(() => {
+    setSelected(null)
+    setSelectedSA4(null)
+  }, [])
+
+  // Build items maps for base-ui Select trigger label rendering
+  const stateItems = useMemo(() => STATE_NAMES as Record<string, string>, [])
+  const sa4Items = useMemo<Record<string, string>>(() => {
+    if (!selected) return {}
+    return Object.fromEntries((SA4_BY_STATE[selected] ?? []).map((r) => [r.code, r.name]))
+  }, [selected])
+
+  const sa4Regions = selected ? SA4_BY_STATE[selected] ?? [] : []
 
   return (
     <div className="flex h-full w-full flex-col">
-      {/* ── 셀렉터 바 (Jobs & Skills Atlas 스타일) ── */}
+      {/* ── 셀렉터 바 ── */}
       <div className="flex flex-wrap items-end gap-3 border-b border-slate-200 bg-white px-4 py-3">
+        {/* State */}
         <label className="block">
           <span className="mb-1 block text-xs font-medium text-slate-500">주 (State)</span>
           <Select
-            items={STATE_NAMES}
+            items={stateItems}
             value={selected}
             onValueChange={(v) => v && setSelected(v as StateCode)}
           >
@@ -56,19 +99,34 @@ export default function AustraliaMap({
           </Select>
         </label>
 
-        {/* Region(SA4) — 데이터 확보 시 활성화 */}
+        {/* Region (SA4) — enabled when a state is selected */}
         <label className="block">
-          <span className="mb-1 block text-xs font-medium text-slate-500">지역 (Region · SA4)</span>
-          <div
-            className="flex h-10 w-56 cursor-not-allowed items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-400"
-            title="SA4 지역 데이터 준비 중"
-          >
-            준비 중 (SA4 데이터)
-            <ChevronDown className="h-4 w-4" />
-          </div>
+          <span className="mb-1 block text-xs font-medium text-slate-500">지역 (SA4 Region)</span>
+          {selected ? (
+            <Select
+              items={sa4Items}
+              value={selectedSA4?.code ?? null}
+              onValueChange={(v) => v && onSelectSA4(v)}
+            >
+              <SelectTrigger className="h-10 w-64 rounded-lg border-slate-200 text-sm">
+                <SelectValue placeholder="지역을 선택하세요" />
+              </SelectTrigger>
+              <SelectContent className="z-[2000]">
+                {sa4Regions.map((r) => (
+                  <SelectItem key={r.code} value={r.code}>
+                    {r.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          ) : (
+            <div className="flex h-10 w-64 cursor-not-allowed items-center rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-400">
+              주를 먼저 선택하세요
+            </div>
+          )}
         </label>
 
-        {selected && (
+        {(selected || selectedSA4) && (
           <button
             type="button"
             onClick={onReset}
@@ -92,7 +150,15 @@ export default function AustraliaMap({
               "sm:inset-x-auto sm:bottom-auto sm:right-4 sm:top-4 sm:w-[380px] sm:max-h-[calc(100%-2rem)]",
             )}
           >
-            <Panel data={data} selected={selected} tab={tab} onTab={setTab} onClose={onReset} />
+            <Panel
+              data={data}
+              selected={selected}
+              selectedSA4={selectedSA4}
+              tab={tab}
+              onTab={setTab}
+              onClose={onReset}
+              neroData={neroData}
+            />
           </div>
         )}
       </div>
@@ -103,22 +169,33 @@ export default function AustraliaMap({
 function Panel({
   data,
   selected,
+  selectedSA4,
   tab,
   onTab,
   onClose,
+  neroData,
 }: {
   data: MapData
   selected: StateCode
+  selectedSA4: SA4Region | null
   tab: Tab
   onTab: (t: Tab) => void
   onClose: () => void
+  neroData: Record<string, NeroOccupation[]> | null
 }) {
   const shortage = data.shortageByState[selected] ?? []
 
   return (
     <>
       <div className="flex items-start justify-between gap-2 px-5 pt-4">
-        <h2 className="font-display text-lg font-semibold text-slate-900 tracking-tight">{STATE_NAMES[selected]}</h2>
+        <div>
+          <h2 className="font-display text-lg font-semibold text-slate-900 tracking-tight">
+            {selectedSA4 ? selectedSA4.name : STATE_NAMES[selected]}
+          </h2>
+          {selectedSA4 && (
+            <p className="text-xs text-slate-400">{STATE_NAMES[selected]}</p>
+          )}
+        </div>
         <button
           type="button"
           onClick={onClose}
@@ -132,20 +209,32 @@ function Panel({
       <div className="px-5 pt-3">
         <div className="inline-flex rounded-lg bg-slate-100 p-1 text-sm">
           <TabButton active={tab === "shortage"} onClick={() => onTab("shortage")}>
-            가장 부족한 직종
+            부족 직종
           </TabButton>
           <TabButton active={tab === "pay"} onClick={() => onTab("pay")}>
-            연봉 높은 직종
+            고연봉
           </TabButton>
+          {selectedSA4 && (
+            <TabButton active={tab === "employment"} onClick={() => onTab("employment")}>
+              지역 고용
+            </TabButton>
+          )}
         </div>
       </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto px-3 py-3">
-        {tab === "shortage" ? <ShortageList rows={shortage} /> : <HighPayList rows={data.highPay} />}
+        {tab === "shortage" && <ShortageList rows={shortage} />}
+        {tab === "pay" && <HighPayList rows={data.highPay} />}
+        {tab === "employment" && (
+          <EmploymentList
+            sa4={selectedSA4}
+            neroData={neroData}
+          />
+        )}
       </div>
 
       <p className="border-t border-slate-100 px-5 py-3 text-xs text-slate-400">
-        출처: OSCA 2025 부족직종 목록 + ABS 소득 · 호주
+        출처: OSCA 2025 부족직종 · ABS 소득 · JSA NERO 2026-05
       </p>
     </>
   )
@@ -175,7 +264,6 @@ function TabButton({
 }
 
 function ShortageList({ rows }: { rows: StateOccupation[] }) {
-  const router = useRouter()
   if (rows.length === 0) {
     return <p className="py-8 text-center text-sm text-slate-400">이 주의 부족 직종 데이터가 아직 없어요.</p>
   }
@@ -183,9 +271,8 @@ function ShortageList({ rows }: { rows: StateOccupation[] }) {
     <ol>
       {rows.map((r, i) => (
         <li key={r.anzsco_code}>
-          <button
-            type="button"
-            onClick={() => router.push(`/roi-explorer/au/occupation/${r.anzsco_code}`)}
+          <a
+            href={`/roi-explorer/au/occupation/${r.anzsco_code}`}
             className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50"
           >
             <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
@@ -199,7 +286,7 @@ function ShortageList({ rows }: { rows: StateOccupation[] }) {
               </span>
             </span>
             <ShortageDots rating={r.state_shortage_rating} />
-          </button>
+          </a>
         </li>
       ))}
     </ol>
@@ -207,16 +294,14 @@ function ShortageList({ rows }: { rows: StateOccupation[] }) {
 }
 
 function HighPayList({ rows }: { rows: HighPayOccupation[] }) {
-  const router = useRouter()
   return (
     <div>
       <p className="mb-1 px-3 text-xs text-slate-400">전국 기준 (주별 연봉 데이터 준비 중)</p>
       <ol>
         {rows.map((r, i) => (
           <li key={r.anzsco_code}>
-            <button
-              type="button"
-              onClick={() => router.push(`/roi-explorer/au/occupation/${r.anzsco_code}`)}
+            <a
+              href={`/roi-explorer/au/occupation/${r.anzsco_code}`}
               className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50"
             >
               <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
@@ -224,15 +309,71 @@ function HighPayList({ rows }: { rows: HighPayOccupation[] }) {
                 <span className="block truncate text-sm font-medium text-slate-800">
                   {r.occupation_ko ?? r.occupation_en}
                 </span>
-                <span className="mt-0.5 flex flex-wrap items-center gap-1.5">
-                  {r.on_csol && <Badge tone="green">비자 적격(스폰서)</Badge>}
-                  {r.confidence !== "verified" && <Badge tone="gray">추정치</Badge>}
-                </span>
+                {r.on_csol && (
+                  <span className="mt-0.5 flex">
+                    <Badge tone="green">비자 적격(스폰서)</Badge>
+                  </span>
+                )}
               </span>
               <span className="shrink-0 text-sm font-semibold tabular-nums text-slate-700">
                 {r.median_salary_aud != null ? `A$${r.median_salary_aud.toLocaleString()}` : "—"}
               </span>
-            </button>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  )
+}
+
+function EmploymentList({
+  sa4,
+  neroData,
+}: {
+  sa4: SA4Region | null
+  neroData: Record<string, NeroOccupation[]> | null
+}) {
+  if (!sa4) return null
+
+  if (!neroData) {
+    return (
+      <div className="flex flex-col items-center gap-2 py-10">
+        <div className="h-5 w-5 animate-spin rounded-full border-2 border-slate-200 border-t-violet-500" />
+        <p className="text-sm text-slate-400">고용 데이터 불러오는 중...</p>
+      </div>
+    )
+  }
+
+  const occs = neroData[sa4.code] ?? []
+  if (occs.length === 0) {
+    return <p className="py-8 text-center text-sm text-slate-400">해당 지역 데이터가 없어요.</p>
+  }
+
+  const maxEmp = occs[0].emp
+
+  return (
+    <div>
+      <p className="mb-1 px-3 text-xs text-slate-400">
+        JSA NERO 2026-05 · ANZSCO 4자리 단위직군 기준 고용자 수 추정치
+      </p>
+      <ol>
+        {occs.map((r, i) => (
+          <li key={r.a4}>
+            <div className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left">
+              <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-sm font-medium text-slate-800">{r.name}</span>
+                <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+                  <div
+                    className="h-full rounded-full bg-violet-400"
+                    style={{ width: `${Math.round((r.emp / maxEmp) * 100)}%` }}
+                  />
+                </div>
+              </span>
+              <span className="ml-2 shrink-0 text-xs tabular-nums text-slate-500">
+                {r.emp.toLocaleString()}명
+              </span>
+            </div>
           </li>
         ))}
       </ol>
