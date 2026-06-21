@@ -7,10 +7,15 @@ import { SiteFooter } from "./site-footer"
 export function LayoutShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
 
-  // Focused funnels render full-screen with no top nav: the degree-risk quiz
-  // and the login screen. Everything else (home, ROI Explorer, Compare,
-  // Explore, blog, static pages) gets the shared top nav + footer.
-  if (pathname === "/login" || pathname.startsWith("/degree-risk")) {
+  // Focused funnels render full-screen with no shared top nav: the degree-risk
+  // quiz, the login screen, and the AU occupation detail page (which renders its
+  // own TopNav). Everything else (home, ROI Explorer, Compare, Explore, blog,
+  // static pages) gets the shared top nav + footer.
+  if (
+    pathname === "/login" ||
+    pathname.startsWith("/degree-risk") ||
+    pathname.startsWith("/roi-explorer/au/occupation")
+  ) {
     return <>{children}</>
   }
 
