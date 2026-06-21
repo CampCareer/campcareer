@@ -3,9 +3,10 @@
 import dynamic from "next/dynamic"
 import { useCallback, useState } from "react"
 import { useRouter } from "next/navigation"
-import { X } from "lucide-react"
+import { X, ChevronDown, RotateCcw } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { STATE_NAMES, type StateCode } from "./states"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { STATE_CODES, STATE_NAMES, type StateCode } from "./states"
 import type { MapData, StateOccupation, HighPayOccupation } from "@/lib/map-data"
 
 // Leaflet 은 SSR 불가 → 실제 지도는 ssr:false 로 동적 import.
@@ -32,27 +33,69 @@ export default function AustraliaMap({
   const onReset = useCallback(() => setSelected(null), [])
 
   return (
-    <div className="relative h-full w-full">
-      <LeafletMap data={data} selected={selected} onSelectState={onSelectState} onReset={onReset} />
+    <div className="flex h-full w-full flex-col">
+      {/* ── 셀렉터 바 (Jobs & Skills Atlas 스타일) ── */}
+      <div className="flex flex-wrap items-end gap-3 border-b border-slate-200 bg-white px-4 py-3">
+        <label className="block">
+          <span className="mb-1 block text-xs font-medium text-slate-500">주 (State)</span>
+          <Select
+            items={STATE_NAMES}
+            value={selected}
+            onValueChange={(v) => v && setSelected(v as StateCode)}
+          >
+            <SelectTrigger className="h-10 w-56 rounded-lg border-slate-200 text-sm">
+              <SelectValue placeholder="주를 선택하세요" />
+            </SelectTrigger>
+            <SelectContent className="z-[2000]">
+              {STATE_CODES.map((c) => (
+                <SelectItem key={c} value={c}>
+                  {STATE_NAMES[c]}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </label>
 
-      {/* 주 선택 시에만 떠오르는 패널 (구글맵 스타일 오버레이) */}
-      {selected && (
-        <div
-          className={cn(
-            "absolute z-[1000] flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl",
-            "inset-x-3 bottom-3 max-h-[58%]",
-            "sm:inset-x-auto sm:bottom-auto sm:right-4 sm:top-4 sm:w-[380px] sm:max-h-[calc(100%-2rem)]",
-          )}
-        >
-          <Panel
-            data={data}
-            selected={selected}
-            tab={tab}
-            onTab={setTab}
-            onClose={() => setSelected(null)}
-          />
-        </div>
-      )}
+        {/* Region(SA4) — 데이터 확보 시 활성화 */}
+        <label className="block">
+          <span className="mb-1 block text-xs font-medium text-slate-500">지역 (Region · SA4)</span>
+          <div
+            className="flex h-10 w-56 cursor-not-allowed items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-400"
+            title="SA4 지역 데이터 준비 중"
+          >
+            준비 중 (SA4 데이터)
+            <ChevronDown className="h-4 w-4" />
+          </div>
+        </label>
+
+        {selected && (
+          <button
+            type="button"
+            onClick={onReset}
+            className="mb-0.5 inline-flex h-10 items-center gap-1.5 rounded-lg px-3 text-sm font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-700"
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
+            초기화
+          </button>
+        )}
+      </div>
+
+      {/* ── 지도 + 패널 오버레이 ── */}
+      <div className="relative min-h-0 flex-1">
+        <LeafletMap data={data} selected={selected} onSelectState={onSelectState} onReset={onReset} />
+
+        {selected && (
+          <div
+            className={cn(
+              "absolute z-[1000] flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl",
+              "inset-x-3 bottom-3 max-h-[58%]",
+              "sm:inset-x-auto sm:bottom-auto sm:right-4 sm:top-4 sm:w-[380px] sm:max-h-[calc(100%-2rem)]",
+            )}
+          >
+            <Panel data={data} selected={selected} tab={tab} onTab={setTab} onClose={onReset} />
+          </div>
+        )}
+      </div>
     </div>
   )
 }
