@@ -212,7 +212,7 @@ function Panel({
             부족 직종
           </TabButton>
           <TabButton active={tab === "pay"} onClick={() => onTab("pay")}>
-            고연봉 부족직종
+            고소득 직업
           </TabButton>
           {selectedSA4 && (
             <TabButton active={tab === "employment"} onClick={() => onTab("employment")}>
