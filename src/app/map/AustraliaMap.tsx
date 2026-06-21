@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { RotateCcw } from "lucide-react"
 import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useTranslations } from "@/lib/i18n/locale-provider"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { STATE_CODES, STATE_NAMES, type StateCode } from "./states"
 import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
@@ -29,6 +30,7 @@ export default function AustraliaMap({
   initialState?: StateCode | null
   initialTab?: Tab
 }) {
+  const t = useTranslations()
   const [selected, setSelected] = useState<StateCode | null>(initialState)
   const [selectedSA4, setSelectedSA4] = useState<SA4Region | null>(null)
   const [tab, setTab] = useState<Tab>(initialTab)
@@ -80,14 +82,14 @@ export default function AustraliaMap({
       <div className="flex flex-wrap items-end gap-3 border-b border-slate-200 bg-white px-4 py-3">
         {/* State */}
         <label className="block">
-          <span className="mb-1 block text-xs font-medium text-slate-500">주 (State)</span>
+          <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectState}</span>
           <Select
             items={stateItems}
             value={selected}
             onValueChange={(v) => v && setSelected(v as StateCode)}
           >
             <SelectTrigger className="h-10 w-56 rounded-lg border-slate-200 text-sm">
-              <SelectValue placeholder="주를 선택하세요" />
+              <SelectValue placeholder={t.map.selectStatePlaceholder} />
             </SelectTrigger>
             <SelectContent className="z-[2000]">
               {STATE_CODES.map((c) => (
@@ -101,7 +103,7 @@ export default function AustraliaMap({
 
         {/* Region (SA4) — enabled when a state is selected */}
         <label className="block">
-          <span className="mb-1 block text-xs font-medium text-slate-500">지역 (SA4 Region)</span>
+          <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectRegion}</span>
           {selected ? (
             <Select
               items={sa4Items}
@@ -109,7 +111,7 @@ export default function AustraliaMap({
               onValueChange={(v) => v && onSelectSA4(v)}
             >
               <SelectTrigger className="h-10 w-64 rounded-lg border-slate-200 text-sm">
-                <SelectValue placeholder="지역을 선택하세요" />
+                <SelectValue placeholder={t.map.selectRegionPlaceholder} />
               </SelectTrigger>
               <SelectContent className="z-[2000]">
                 {sa4Regions.map((r) => (
@@ -121,7 +123,7 @@ export default function AustraliaMap({
             </Select>
           ) : (
             <div className="flex h-10 w-64 cursor-not-allowed items-center rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-400">
-              주를 먼저 선택하세요
+              {t.map.selectStateFirst}
             </div>
           )}
         </label>
@@ -133,7 +135,7 @@ export default function AustraliaMap({
             className="mb-0.5 inline-flex h-10 items-center gap-1.5 rounded-lg px-3 text-sm font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-700"
           >
             <RotateCcw className="h-3.5 w-3.5" />
-            초기화
+            {t.map.reset}
           </button>
         )}
       </div>
@@ -183,6 +185,7 @@ function Panel({
   onClose: () => void
   neroData: Record<string, NeroOccupation[]> | null
 }) {
+  const t = useTranslations()
   const shortage = data.shortageByState[selected] ?? []
 
   return (
@@ -199,7 +202,7 @@ function Panel({
         <button
           type="button"
           onClick={onClose}
-          aria-label="닫기"
+          aria-label={t.map.close}
           className="-mr-1 rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
         >
           <X className="h-4 w-4" />
@@ -209,14 +212,14 @@ function Panel({
       <div className="px-5 pt-3">
         <div className="inline-flex rounded-lg bg-slate-100 p-1 text-sm">
           <TabButton active={tab === "shortage"} onClick={() => onTab("shortage")}>
-            부족 직종
+            {t.map.tabShortage}
           </TabButton>
           <TabButton active={tab === "pay"} onClick={() => onTab("pay")}>
-            고소득 직업
+            {t.map.tabPay}
           </TabButton>
           {selectedSA4 && (
             <TabButton active={tab === "employment"} onClick={() => onTab("employment")}>
-              지역 고용
+              {t.map.tabEmployment}
             </TabButton>
           )}
         </div>
@@ -234,7 +237,7 @@ function Panel({
       </div>
 
       <p className="border-t border-slate-100 px-5 py-3 text-xs text-slate-400">
-        출처: OSCA 2025 부족직종 · ABS 소득 · JSA NERO 2026-05
+        {t.map.source}
       </p>
     </>
   )
@@ -264,8 +267,9 @@ function TabButton({
 }
 
 function ShortageList({ rows }: { rows: StateOccupation[] }) {
+  const t = useTranslations()
   if (rows.length === 0) {
-    return <p className="py-8 text-center text-sm text-slate-400">이 주의 부족 직종 데이터가 아직 없어요.</p>
+    return <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>
   }
   return (
     <ol>
@@ -281,9 +285,9 @@ function ShortageList({ rows }: { rows: StateOccupation[] }) {
                 {r.occupation_ko ?? r.occupation_en}
               </span>
               <span className="mt-0.5 flex flex-wrap items-center gap-1.5">
-                {r.state_count === 1 && <Badge tone="blue">이 지역 특화</Badge>}
-                {r.state_count >= 7 && <Badge tone="gray">전국 공통</Badge>}
-                {r.on_csol && <Badge tone="green">비자 적격(스폰서)</Badge>}
+                {r.state_count === 1 && <Badge tone="blue">{t.map.regionalSpecific}</Badge>}
+                {r.state_count >= 7 && <Badge tone="gray">{t.map.nationalCommon}</Badge>}
+                {r.on_csol && <Badge tone="green">{t.map.visaEligible}</Badge>}
               </span>
             </span>
             <ShortageDots rating={r.state_shortage_rating} />
@@ -301,6 +305,7 @@ function HighPayList({
   rows: HighPayOccupation[]
   stateRows: StateOccupation[]
 }) {
+  const t = useTranslations()
   const useState = stateRows.length > 0
 
   // state 선택 시: 이 주의 부족직종 중 연봉 상위 12
@@ -311,9 +316,7 @@ function HighPayList({
         .slice(0, 12)
     : rows
 
-  const hint = useState
-    ? "이 주의 부족직종 중 연봉 상위 (전국 중위연봉 기준)"
-    : "전국 기준 고연봉 상위 12"
+  const hint = useState ? t.map.payHintState : t.map.payHintNational
 
   return (
     <div>
@@ -331,9 +334,9 @@ function HighPayList({
                   {r.occupation_ko ?? r.occupation_en}
                 </span>
                 <span className="mt-0.5 flex flex-wrap items-center gap-1.5">
-                  {r.on_csol && <Badge tone="green">비자 적격(스폰서)</Badge>}
+                  {r.on_csol && <Badge tone="green">{t.map.visaEligible}</Badge>}
                   {"state_count" in r && r.state_count === 1 && (
-                    <Badge tone="blue">이 지역 특화</Badge>
+                    <Badge tone="blue">{t.map.regionalSpecific}</Badge>
                   )}
                 </span>
               </span>
@@ -355,20 +358,21 @@ function EmploymentList({
   sa4: SA4Region | null
   neroData: Record<string, NeroOccupation[]> | null
 }) {
+  const t = useTranslations()
   if (!sa4) return null
 
   if (!neroData) {
     return (
       <div className="flex flex-col items-center gap-2 py-10">
         <div className="h-5 w-5 animate-spin rounded-full border-2 border-slate-200 border-t-violet-500" />
-        <p className="text-sm text-slate-400">고용 데이터 불러오는 중...</p>
+        <p className="text-sm text-slate-400">{t.map.loadingEmployment}</p>
       </div>
     )
   }
 
   const occs = neroData[sa4.code] ?? []
   if (occs.length === 0) {
-    return <p className="py-8 text-center text-sm text-slate-400">해당 지역 데이터가 없어요.</p>
+    return <p className="py-8 text-center text-sm text-slate-400">{t.map.noEmploymentData}</p>
   }
 
   const maxEmp = occs[0].emp
@@ -376,7 +380,7 @@ function EmploymentList({
   return (
     <div>
       <p className="mb-1 px-3 text-xs text-slate-400">
-        JSA NERO 2026-05 · ANZSCO 4자리 단위직군 기준 고용자 수 추정치
+        {t.map.employmentSource}
       </p>
       <ol>
         {occs.map((r, i) => (
@@ -393,7 +397,7 @@ function EmploymentList({
                 </div>
               </span>
               <span className="ml-2 shrink-0 text-xs tabular-nums text-slate-500">
-                {r.emp.toLocaleString()}명
+                {t.map.peopleFmt.replace('{n}', r.emp.toLocaleString())}
               </span>
             </div>
           </li>
@@ -404,9 +408,10 @@ function EmploymentList({
 }
 
 function ShortageDots({ rating }: { rating: number }) {
+  const t = useTranslations()
   const n = rating >= 3 ? 3 : rating >= 2 ? 2 : 1
   return (
-    <span className="flex shrink-0 items-center gap-1" aria-label={`부족도 ${rating}`} title={`부족도 ${rating}`}>
+    <span className="flex shrink-0 items-center gap-1" aria-label={t.map.shortageRatingFmt.replace('{rating}', String(rating))} title={t.map.shortageRatingFmt.replace('{rating}', String(rating))}>
       {Array.from({ length: n }).map((_, i) => (
         <span key={i} className="h-2 w-2 rounded-full bg-rose-400" />
       ))}
