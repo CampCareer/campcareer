@@ -15,6 +15,7 @@ export interface StateOccupation {
   on_csol: boolean
   confidence: string | null
   state_shortage_rating: number // 해당 주의 부족도(3=강, 2=중)
+  state_count: number // 이 직종이 shortage로 등재된 주 수 (1=지역 특화, 8=전국 공통)
 }
 
 export interface HighPayOccupation {
@@ -103,6 +104,14 @@ export async function getMapData(): Promise<MapData> {
     if (o.anzsco_code) byCode.set(o.anzsco_code, o)
   }
 
+  // 직종별 등재 주 수 (1=이 지역 특화, 8=전국 공통)
+  const stateCountMap = new Map<string, number>()
+  for (const r of stateRows) {
+    if (r.anzsco_code) {
+      stateCountMap.set(r.anzsco_code, (stateCountMap.get(r.anzsco_code) ?? 0) + 1)
+    }
+  }
+
   // 주별 부족 직종
   const shortageByState: Record<string, StateOccupation[]> = {}
   for (const code of STATE_CODES) shortageByState[code] = []
@@ -120,12 +129,15 @@ export async function getMapData(): Promise<MapData> {
       on_csol: o.on_csol,
       confidence: o.confidence,
       state_shortage_rating: r.shortage_rating,
+      state_count: stateCountMap.get(o.anzsco_code) ?? 8,
     })
   }
 
   for (const code of STATE_CODES) {
+    // 주 특화(등재 주 수 적을수록) → 부족도 → 연봉 순으로 정렬
     shortageByState[code].sort(
       (a, b) =>
+        a.state_count - b.state_count ||
         b.state_shortage_rating - a.state_shortage_rating ||
         (b.median_salary_aud ?? 0) - (a.median_salary_aud ?? 0),
     )

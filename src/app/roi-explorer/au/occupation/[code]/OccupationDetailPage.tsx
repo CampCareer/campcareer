@@ -153,6 +153,33 @@ function EmptyState({ children }: { children: React.ReactNode }) {
   )
 }
 
+const DOTS: Record<ShortageLevel, number> = { Low: 0, Medium: 1, High: 2, Strong: 3 }
+const DOT_LABEL: Record<ShortageLevel, string> = {
+  Low: "부족 없음",
+  Medium: "지역 부족",
+  High: "부족",
+  Strong: "부족",
+}
+
+function ShortageDotsDisplay({ level }: { level: ShortageLevel }) {
+  const filled = DOTS[level]
+  return (
+    <span className="flex items-center gap-1.5" title={DOT_LABEL[level]}>
+      {Array.from({ length: 3 }).map((_, i) => (
+        <span
+          key={i}
+          className={
+            i < filled
+              ? "inline-block h-2.5 w-2.5 rounded-full bg-rose-400"
+              : "inline-block h-2.5 w-2.5 rounded-full border border-slate-300"
+          }
+        />
+      ))}
+      <span className="ml-1 text-xs text-muted-foreground">{DOT_LABEL[level]}</span>
+    </span>
+  )
+}
+
 export default function OccupationDetailPage({
   data,
 }: {
@@ -331,9 +358,7 @@ export default function OccupationDetailPage({
                           className="flex items-center justify-between py-2 text-sm"
                         >
                           <span>{r.region}</span>
-                          <Badge variant={SHORTAGE_VARIANT[r.level]}>
-                            {r.level} · {r.score}/100
-                          </Badge>
+                          <ShortageDotsDisplay level={r.level} />
                         </li>
                       ))}
                     </ul>
