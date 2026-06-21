@@ -281,8 +281,9 @@ function ShortageList({ rows }: { rows: StateOccupation[] }) {
                 {r.occupation_ko ?? r.occupation_en}
               </span>
               <span className="mt-0.5 flex flex-wrap items-center gap-1.5">
+                {r.state_count === 1 && <Badge tone="blue">이 지역 특화</Badge>}
+                {r.state_count >= 7 && <Badge tone="gray">전국 공통</Badge>}
                 {r.on_csol && <Badge tone="green">비자 적격(스폰서)</Badge>}
-                {r.confidence !== "verified" && <Badge tone="gray">추정치</Badge>}
               </span>
             </span>
             <ShortageDots rating={r.state_shortage_rating} />
@@ -392,14 +393,16 @@ function ShortageDots({ rating }: { rating: number }) {
   )
 }
 
-function Badge({ tone, children }: { tone: "green" | "gray"; children: React.ReactNode }) {
+function Badge({ tone, children }: { tone: "green" | "gray" | "blue"; children: React.ReactNode }) {
   return (
     <span
       className={cn(
         "inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium",
         tone === "green"
           ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-          : "bg-slate-100 text-slate-500",
+          : tone === "blue"
+            ? "bg-blue-50 text-blue-700 border border-blue-200"
+            : "bg-slate-100 text-slate-500",
       )}
     >
       {children}

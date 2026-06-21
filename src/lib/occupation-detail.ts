@@ -1,10 +1,35 @@
+import "server-only"
 import { supabase } from "@/lib/supabase"
+import { supabaseAdmin } from "@/lib/supabase-admin"
 import { getCoursesForOccupation, type CourseAU, type OccupationAU } from "@/lib/occupations-au"
-import type { OccupationPageData } from "@/app/roi-explorer/au/occupation/[code]/OccupationDetailPage"
+import type { OccupationPageData, ShortageLevel } from "@/app/roi-explorer/au/occupation/[code]/OccupationDetailPage"
+import { STATE_NAMES, type StateCode } from "@/app/map/states"
 
-const LEVEL = (r: number | null) =>
+const LEVEL = (r: number | null): ShortageLevel =>
   r == null ? "Low" : r >= 5 ? "Strong" : r >= 4 ? "High" : r >= 3 ? "Medium" : "Low"
+
+// occupation_state_au 의 shortage_rating: 3=Shortage, 2=Regional/Metro shortage
+const STATE_LEVEL = (r: number): ShortageLevel => (r >= 3 ? "Strong" : r >= 2 ? "Medium" : "Low")
+
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")
+
+const FULL_NAME_TO_CODE: Record<string, StateCode> = {
+  "new south wales": "NSW",
+  victoria: "VIC",
+  queensland: "QLD",
+  "south australia": "SA",
+  "western australia": "WA",
+  tasmania: "TAS",
+  "northern territory": "NT",
+  "australian capital territory": "ACT",
+}
+
+function normalizeState(raw: string | null): StateCode | null {
+  if (!raw) return null
+  const up = raw.trim().toUpperCase() as StateCode
+  if (STATE_NAMES[up]) return up
+  return FULL_NAME_TO_CODE[raw.trim().toLowerCase()] ?? null
+}
 
 export async function getOccupationPageData(code: string): Promise<OccupationPageData | null> {
   const { data: occ } = await supabase
@@ -12,13 +37,28 @@ export async function getOccupationPageData(code: string): Promise<OccupationPag
   if (!occ) return null
   const o = occ as OccupationAU
 
-  const [courses, prRes] = await Promise.all([
+  const [courses, prRes, stateRes] = await Promise.all([
     o.related_broad_field ? getCoursesForOccupation(o.related_broad_field, 12) : Promise.resolve([] as CourseAU[]),
     supabase.from("country_pr_pathways").select("*").ilike("country", "au").maybeSingle(),
+    supabaseAdmin
+      .from("occupation_state_au")
+      .select("state, shortage_rating")
+      .eq("anzsco_code", code),
   ])
   const pr = prRes.data as { route_ko?: string; route_en?: string; caveat_ko?: string } | null
   const salary = o.median_salary_aud
   const estimate = o.confidence !== "verified"
+
+  const byRegion = (stateRes.data ?? [])
+    .map((r) => {
+      const sc = normalizeState(r.state)
+      return {
+        region: sc ? (STATE_NAMES[sc] ?? r.state) : (r.state ?? ""),
+        level: STATE_LEVEL(r.shortage_rating),
+        score: r.shortage_rating >= 3 ? 90 : 55,
+      }
+    })
+    .filter((r) => r.region)
 
   return {
     countryCode: "AU",
@@ -30,7 +70,7 @@ export async function getOccupationPageData(code: string): Promise<OccupationPag
     shortage: {
       nationalLevel: LEVEL(o.shortage_rating),
       nationalScore: o.shortage_rating ? Math.round((o.shortage_rating / 5) * 100) : 0,
-      byRegion: [], // TODO: 주별 등급은 OSCA 원본에 있음 — 컬럼 추가 시 채움
+      byRegion,
     },
     snapshot: {
       medianSalaryText: salary ? `A$${salary.toLocaleString()}` : "—",
