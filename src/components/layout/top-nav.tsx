@@ -35,10 +35,9 @@ export function TopNav() {
     router.refresh()
   }
 
+  // ROI Explorer / Degree Risk 는 재설계 동안 nav 에서 숨김(라우트는 유지 — /map 의 직종 상세가 사용).
   const navItems: { href: string; label: string }[] = [
     { href: "/map", label: t.nav.map },
-    { href: "/roi-explorer", label: t.nav.roiExplorer },
-    { href: "/degree-risk", label: t.nav.degreeRisk },
   ]
 
   const linkEls = navItems.map((item) => {

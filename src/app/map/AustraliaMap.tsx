@@ -18,16 +18,25 @@ const LeafletMap = dynamic(() => import("./LeafletMap"), {
 
 type Tab = "shortage" | "pay"
 
-export default function AustraliaMap({ data }: { data: MapData }) {
-  const [selected, setSelected] = useState<StateCode | null>(null)
-  const [tab, setTab] = useState<Tab>("shortage")
+export default function AustraliaMap({
+  data,
+  initialState = null,
+  initialTab = "shortage",
+}: {
+  data: MapData
+  initialState?: StateCode | null
+  initialTab?: Tab
+}) {
+  const [selected, setSelected] = useState<StateCode | null>(initialState)
+  const [tab, setTab] = useState<Tab>(initialTab)
 
   const onSelectState = useCallback((s: StateCode) => setSelected(s), [])
+  const onReset = useCallback(() => setSelected(null), [])
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
       {/* 왼쪽: 지도 */}
-      <LeafletMap data={data} selected={selected} onSelectState={onSelectState} />
+      <LeafletMap data={data} selected={selected} onSelectState={onSelectState} onReset={onReset} />
 
       {/* 오른쪽: 패널 */}
       <Panel

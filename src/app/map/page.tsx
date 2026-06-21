@@ -1,8 +1,7 @@
 import { getMapData } from "@/lib/map-data"
 import { pageMetadata } from "@/lib/seo"
+import { STATE_CODES, type StateCode } from "./states"
 import AustraliaMap from "./AustraliaMap"
-
-export const revalidate = 3600
 
 export const metadata = pageMetadata({
   title: "호주 주별 일자리 지도",
@@ -11,8 +10,19 @@ export const metadata = pageMetadata({
   path: "/map",
 })
 
-export default async function MapPage() {
+// 홈 셀렉터에서 ?state=NSW&tab=pay 로 딥링크되어 들어옴 → 초기 선택값으로 사용.
+export default async function MapPage({
+  searchParams,
+}: {
+  searchParams: { state?: string; tab?: string }
+}) {
   const data = await getMapData()
+
+  const rawState = searchParams.state?.toUpperCase()
+  const initialState = (STATE_CODES as string[]).includes(rawState ?? "")
+    ? (rawState as StateCode)
+    : null
+  const initialTab = searchParams.tab === "pay" ? "pay" : "shortage"
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
@@ -26,7 +36,7 @@ export default async function MapPage() {
         </p>
       </header>
 
-      <AustraliaMap data={data} />
+      <AustraliaMap data={data} initialState={initialState} initialTab={initialTab} />
     </div>
   )
 }
