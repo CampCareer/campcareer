@@ -1,19 +1,11 @@
 import { MetadataRoute } from "next"
 import { getAllPosts } from "@/lib/blog"
 import { supabase } from "@/lib/supabase"
-import { ALL_COUNTRIES } from "@/lib/degree-risk"
-import { EXPLORE_MAJORS } from "@/lib/explore"
 
 const BASE = "https://www.campcareer.com"
 
-const MATVIEW: Record<string, string> = {
-  us: "roi_explorer_us",
-  au: "roi_explorer_au",
-  ca: "roi_explorer_ca",
-  uk: "roi_explorer_uk",
-  ie: "roi_explorer_ie",
-}
-
+// 비치헤드 = 호주. 다른 국가 matview는 색인 집중을 위해 sitemap에서 의도적으로 제외.
+const AU_MATVIEW = "roi_explorer_au"
 const PAGE_SIZE = 1000
 
 async function fetchCollegeIds(table: string): Promise<string[]> {
@@ -28,7 +20,7 @@ async function fetchCollegeIds(table: string): Promise<string[]> {
       break
     }
     for (const row of data ?? []) {
-      if (row.college_id) ids.add(row.college_id)
+      if (row.college_id) ids.add(row.college_id as string)
     }
     if (!data || data.length < PAGE_SIZE) break
   }
@@ -36,35 +28,18 @@ async function fetchCollegeIds(table: string): Promise<string[]> {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // 정적 페이지 — soft-hidden 라우트(career-path, fields, rankings, checklist,
-  // timeline, games)는 next.config.mjs에서 / 로 302되므로 sitemap에서 제외.
+  // soft-hidden 라우트(career-path, fields, rankings, checklist, timeline, games,
+  // compare, explore)는 next.config.mjs에서 / 로 리다이렉트되므로 sitemap에서 제외.
   const staticPages: MetadataRoute.Sitemap = [
     { url: BASE, priority: 1.0, changeFrequency: "weekly" },
-    { url: `${BASE}/degree-risk`, priority: 0.9, changeFrequency: "weekly" },
     { url: `${BASE}/roi-explorer`, priority: 0.9, changeFrequency: "daily" },
-    { url: `${BASE}/compare`, priority: 0.9, changeFrequency: "weekly" },
-    { url: `${BASE}/explore`, priority: 0.8, changeFrequency: "weekly" },
+    { url: `${BASE}/degree-risk`, priority: 0.8, changeFrequency: "weekly" },
     { url: `${BASE}/blog`, priority: 0.7, changeFrequency: "weekly" },
     { url: `${BASE}/methodology`, priority: 0.5, changeFrequency: "monthly" },
     { url: `${BASE}/privacy`, priority: 0.2, changeFrequency: "yearly" },
     { url: `${BASE}/terms`, priority: 0.2, changeFrequency: "yearly" },
   ]
 
-  // 양방향 탐색(Phase O) — 전공×국가 랭킹 페이지
-  const explorePages: MetadataRoute.Sitemap = [
-    ...EXPLORE_MAJORS.map((slug) => ({
-      url: `${BASE}/explore/major/${slug}`,
-      priority: 0.7,
-      changeFrequency: "weekly" as const,
-    })),
-    ...ALL_COUNTRIES.map((c) => ({
-      url: `${BASE}/explore/country/${c.toLowerCase()}`,
-      priority: 0.7,
-      changeFrequency: "weekly" as const,
-    })),
-  ]
-
-  // 블로그 글 — frontmatter date를 lastModified로
   const blogPages: MetadataRoute.Sitemap = getAllPosts().map((post) => ({
     url: `${BASE}/blog/${post.slug}`,
     lastModified: new Date(post.date),
@@ -72,18 +47,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "monthly",
   }))
 
-  // 대학 디테일 페이지 — matview에서 country별 college_id 목록
+  // 대학 디테일 — 호주만 색인
   const detailPages: MetadataRoute.Sitemap = []
-  for (const [country, table] of Object.entries(MATVIEW)) {
-    const ids = await fetchCollegeIds(table)
-    for (const id of ids) {
-      detailPages.push({
-        url: `${BASE}/roi-explorer/${country}/${id}`,
-        priority: 0.5,
-        changeFrequency: "monthly",
-      })
-    }
+  const ids = await fetchCollegeIds(AU_MATVIEW)
+  for (const id of ids) {
+    detailPages.push({
+      url: `${BASE}/roi-explorer/au/${id}`,
+      priority: 0.5,
+      changeFrequency: "monthly",
+    })
   }
 
-  return [...staticPages, ...explorePages, ...blogPages, ...detailPages]
+  return [...staticPages, ...blogPages, ...detailPages]
 }

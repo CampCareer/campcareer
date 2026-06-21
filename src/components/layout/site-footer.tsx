@@ -11,7 +11,6 @@ export function SiteFooter() {
 
   const links: { href: string; label: string }[] = [
     { href: "/blog", label: t.nav.blog },
-    { href: "/explore", label: t.nav.explore },
     { href: "/methodology", label: "Methodology" },
     { href: "/privacy", label: "Privacy" },
     { href: "/terms", label: "Terms" },

@@ -37,9 +37,7 @@ export function TopNav() {
 
   const navItems: { href: string; label: string }[] = [
     { href: "/roi-explorer", label: t.nav.roiExplorer },
-    { href: "/compare", label: t.nav.compare },
     { href: "/degree-risk", label: t.nav.degreeRisk },
-    { href: "/explore", label: t.nav.explore },
   ]
 
   const linkEls = navItems.map((item) => {
