@@ -67,21 +67,35 @@ function normalizeStateCode(raw: string | null): StateCode | null {
   return FULL_NAME_TO_CODE[raw.trim().toLowerCase()] ?? null
 }
 
+// Supabase 는 요청당 최대 1,000행을 반환한다. 전 행이 필요하면 range 로 페이지네이션.
+async function fetchAll<T>(table: string, columns: string): Promise<T[]> {
+  const PAGE = 1000
+  const all: T[] = []
+  for (let from = 0; ; from += PAGE) {
+    const { data, error } = await supabaseAdmin
+      .from(table)
+      .select(columns)
+      .range(from, from + PAGE - 1)
+    if (error) {
+      console.error(`[map-data] ${table} fetch failed:`, error)
+      break
+    }
+    const rows = (data ?? []) as T[]
+    all.push(...rows)
+    if (rows.length < PAGE) break
+  }
+  return all
+}
+
 export async function getMapData(): Promise<MapData> {
-  const [occRes, stateRes] = await Promise.all([
-    supabaseAdmin
-      .from("occupations_au")
-      .select(
-        "anzsco_code, occupation_en, occupation_ko, shortage_rating, median_salary_aud, on_csol, confidence, related_broad_field",
-      ),
-    supabaseAdmin.from("occupation_state_au").select("anzsco_code, state, shortage_rating"),
+  const [occupations, stateRows] = await Promise.all([
+    fetchAll<OccRow>(
+      "occupations_au",
+      "anzsco_code, occupation_en, occupation_ko, shortage_rating, median_salary_aud, on_csol, confidence, related_broad_field",
+    ),
+    // occupation_state_au 는 2,400+ 행 — Supabase 는 요청당 1,000행으로 제한하므로 페이지네이션 필수.
+    fetchAll<StateRow>("occupation_state_au", "anzsco_code, state, shortage_rating"),
   ])
-
-  if (occRes.error) console.error("[map-data] occupations_au failed:", occRes.error)
-  if (stateRes.error) console.error("[map-data] occupation_state_au failed:", stateRes.error)
-
-  const occupations = (occRes.data ?? []) as OccRow[]
-  const stateRows = (stateRes.data ?? []) as StateRow[]
 
   // code -> occupation
   const byCode = new Map<string, OccRow>()
