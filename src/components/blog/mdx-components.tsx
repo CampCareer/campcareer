@@ -99,18 +99,9 @@ function CTA({
 }
 
 // ── ToolCTA ─────────────────────────────────────────────────────────────────
-// Conversion bridge from a blog post into the product. Always leads with the
-// primary funnel (degree-risk), plus a context-aware secondary deep-link into
-// the /explore surface. Country/major can be set explicitly per-tag or baked in
+// Conversion bridge from a blog post into the product. Leads with the primary
+// funnel (degree-risk). Country/major can be set explicitly per-tag or baked in
 // from frontmatter via buildMdxComponents (props always win over the default).
-const TOOLCTA_COUNTRY_LABEL: Record<string, string> = {
-  us: "the USA",
-  au: "Australia",
-  ca: "Canada",
-  uk: "the UK",
-  ie: "Ireland",
-}
-
 type ToolCTAProps = {
   country?: string
   major?: string
@@ -120,21 +111,9 @@ type ToolCTAProps = {
   label?: string
 }
 
-function ToolCTA({ country, major, variant = "block", title, description, label }: ToolCTAProps) {
-  const cc = country?.toLowerCase()
+function ToolCTA({ variant = "block", title, description, label }: ToolCTAProps) {
   const primaryHref = "/degree-risk"
   const primaryLabel = label ?? "Check your degree's visa→PR risk"
-
-  // Context-aware secondary: a specific major beats a country beats a generic compare.
-  let secondaryHref = "/compare"
-  let secondaryLabel = "Compare all 5 countries"
-  if (major) {
-    secondaryHref = `/explore/major/${major}`
-    secondaryLabel = "Best countries for this major"
-  } else if (cc && TOOLCTA_COUNTRY_LABEL[cc]) {
-    secondaryHref = `/explore/country/${cc}`
-    secondaryLabel = `Best degrees in ${TOOLCTA_COUNTRY_LABEL[cc]}`
-  }
 
   if (variant === "inline") {
     return (
@@ -167,12 +146,6 @@ function ToolCTA({ country, major, variant = "block", title, description, label 
           className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700"
         >
           {primaryLabel} <ArrowRight className="h-4 w-4" />
-        </Link>
-        <Link
-          href={secondaryHref}
-          className="inline-flex items-center gap-2 rounded-xl border border-blue-200 bg-white px-4 py-2.5 text-sm font-semibold text-blue-700 transition-colors hover:bg-blue-50"
-        >
-          {secondaryLabel}
         </Link>
       </div>
     </div>

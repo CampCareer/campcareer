@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase-client'
 import { useTranslations } from '@/lib/i18n/locale-provider'
-import { ArrowRight, Check, Copy, CheckCheck, BarChart2, Globe2, CalendarDays, Map } from 'lucide-react'
+import { ArrowRight, Check, Copy, CheckCheck, BarChart2 } from 'lucide-react'
 
 type RoiRow = {
   college_id: string
@@ -354,27 +354,6 @@ export default function OnboardingPage() {
             >
               <BarChart2 className="w-4 h-4 shrink-0" />
               {to.ctaRoi}
-            </Link>
-            <Link
-              href="/compare"
-              className="flex items-center justify-center gap-2 border border-slate-200 hover:border-blue-300 hover:bg-blue-50 text-slate-600 hover:text-blue-600 font-medium py-3 rounded-xl transition-colors text-sm bg-white"
-            >
-              <Globe2 className="w-4 h-4 shrink-0" />
-              {to.ctaCompare}
-            </Link>
-            <Link
-              href="/timeline"
-              className="flex items-center justify-center gap-2 border border-slate-200 hover:border-blue-300 hover:bg-blue-50 text-slate-600 hover:text-blue-600 font-medium py-3 rounded-xl transition-colors text-sm bg-white"
-            >
-              <CalendarDays className="w-4 h-4 shrink-0" />
-              {to.ctaTimeline}
-            </Link>
-            <Link
-              href="/career-path"
-              className="flex items-center justify-center gap-2 border border-slate-200 hover:border-blue-300 hover:bg-blue-50 text-slate-600 hover:text-blue-600 font-medium py-3 rounded-xl transition-colors text-sm bg-white"
-            >
-              <Map className="w-4 h-4 shrink-0" />
-              {to.ctaCareerPath}
             </Link>
           </div>
 

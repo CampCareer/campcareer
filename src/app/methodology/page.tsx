@@ -295,7 +295,6 @@ export default function MethodologyPage() {
 
       <div className="mt-12 pt-6 border-t border-slate-200 text-sm flex items-center gap-4">
         <Link href="/roi-explorer" className="text-blue-600 hover:underline">ROI Explorer</Link>
-        <Link href="/compare" className="text-blue-600 hover:underline">Country Compare</Link>
       </div>
     </div>
   )
