@@ -50,6 +50,13 @@ export async function getOccupations(
   return (data ?? []) as OccupationAU[]
 }
 
+// Raw row shape returned by the courses_au select below (course_url is derived
+// from cricos_url/qualifax_url, so those two are present instead).
+type CourseRowAU = Omit<CourseAU, "course_url"> & {
+  cricos_url: string | null
+  qualifax_url: string | null
+}
+
 export async function getCoursesForOccupation(
   broadField: string,
   limit = 20,
@@ -66,7 +73,7 @@ export async function getCoursesForOccupation(
     console.error("[occupations-au] courses failed:", error)
     return []
   }
-  return (data ?? []).map((r: any) => ({
+  return ((data ?? []) as CourseRowAU[]).map((r) => ({
     id: r.id,
     title: r.title,
     course_type: r.course_type,
