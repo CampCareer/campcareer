@@ -1,6 +1,7 @@
 const en = {
   nav: {
     home: 'Home',
+    map: 'Map',
     degreeRisk: 'Degree Risk',
     roiExplorer: 'ROI Explorer',
     compare: 'Compare',

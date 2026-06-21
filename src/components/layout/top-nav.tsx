@@ -36,6 +36,7 @@ export function TopNav() {
   }
 
   const navItems: { href: string; label: string }[] = [
+    { href: "/map", label: t.nav.map },
     { href: "/roi-explorer", label: t.nav.roiExplorer },
     { href: "/degree-risk", label: t.nav.degreeRisk },
   ]

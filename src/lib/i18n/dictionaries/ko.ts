@@ -3,6 +3,7 @@ import type { Dictionary } from './en'
 const ko: Dictionary = {
   nav: {
     home: '홈',
+    map: '지도',
     degreeRisk: 'Degree Risk',
     roiExplorer: 'ROI 탐색기',
     compare: '국가 비교',
