@@ -6,7 +6,7 @@ const ko: Dictionary = {
     map: '지도',
     degreeRisk: 'Degree Risk',
     roiExplorer: 'ROI 탐색기',
-    compare: '국가 비교',
+    compare: '비교',
     explore: '탐색',
     careerPath: '커리어 루트맵',
     blog: '블로그',

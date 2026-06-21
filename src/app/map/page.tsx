@@ -24,18 +24,9 @@ export default async function MapPage({
     : null
   const initialTab = searchParams.tab === "pay" ? "pay" : "shortage"
 
+  // 전체화면 지도(구글맵 스타일): 헤더·여백 없이 nav 아래를 꽉 채운다.
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
-      <header className="mb-6">
-        <h1 className="font-display text-2xl sm:text-3xl font-semibold text-slate-900 tracking-tight">
-          호주 주별 일자리 지도
-        </h1>
-        <p className="mt-1.5 text-sm text-slate-500 max-w-2xl">
-          주를 선택하면 그 지역에서 가장 부족한 직종과 연봉이 높은 직종을 보여줘요. 직종을 누르면 관련
-          정보와 코스로 이어집니다.
-        </p>
-      </header>
-
+    <div className="h-[calc(100vh-3.5rem)] w-full">
       <AustraliaMap data={data} initialState={initialState} initialTab={initialTab} />
     </div>
   )

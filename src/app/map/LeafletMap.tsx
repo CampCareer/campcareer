@@ -181,18 +181,14 @@ export default function LeafletMap({
   }, [selected])
 
   return (
-    <div className="relative">
-      <div
-        ref={containerRef}
-        className="h-[440px] w-full overflow-hidden rounded-xl border border-slate-200 sm:h-[560px]"
-        style={{ background: "#f1f5f9" }}
-      />
+    <div className="relative h-full w-full">
+      <div ref={containerRef} className="h-full w-full" style={{ background: "#f1f5f9" }} />
 
-      {/* 전체 보기(리셋) */}
+      {/* 전체 보기(리셋) — 우하단(우상단 패널과 겹치지 않게) */}
       <button
         type="button"
         onClick={onReset}
-        className="absolute right-3 top-3 z-[1000] inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white/95 px-2.5 py-1.5 text-xs font-medium text-slate-600 shadow-sm backdrop-blur-sm transition-colors hover:bg-white hover:text-slate-900"
+        className="absolute bottom-3 right-3 z-[1000] inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white/95 px-2.5 py-1.5 text-xs font-medium text-slate-600 shadow-sm backdrop-blur-sm transition-colors hover:bg-white hover:text-slate-900"
       >
         <Maximize2 className="h-3.5 w-3.5" />
         전체 보기

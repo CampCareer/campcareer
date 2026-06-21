@@ -1,4 +1,4 @@
-import { JobFinder } from "@/components/home/job-finder"
+import { HomeFinder } from "@/components/home/home-finder"
 import { pageMetadata } from "@/lib/seo"
 
 export const revalidate = 86400
@@ -12,5 +12,5 @@ export const metadata = pageMetadata({
 })
 
 export default function LandingPage() {
-  return <JobFinder />
+  return <HomeFinder />
 }
