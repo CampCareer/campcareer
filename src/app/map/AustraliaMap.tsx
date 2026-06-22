@@ -10,6 +10,7 @@ import { useTranslations, useLocale } from "@/lib/i18n/locale-provider"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { STATE_CODES, STATE_NAMES, type StateCode } from "./states"
 import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
+import { getPathway, TAFE_BY_STATE, VET_PORTALS, cricosSearchUrl } from "@/lib/au-pathway"
 import type { MapData, StateOccupation, HighPayOccupation, USOccupation, StateSalaryMult, OccRow, StateShortageByOcc } from "@/lib/map-data"
 
 const LeafletMap = dynamic(() => import("./LeafletMap"), {
@@ -253,6 +254,7 @@ function Panel({
         onClose={onClose}
         t={t}
         currentState={selected as StateCode}
+        data={data}
       />
     )
   }
@@ -665,6 +667,7 @@ function OccupationDetail({
   onClose,
   t,
   currentState,
+  data,
 }: {
   occ: OccRow
   stateShortages: StateShortageByOcc[]
@@ -672,6 +675,7 @@ function OccupationDetail({
   onClose: () => void
   t: ReturnType<typeof useTranslations>
   currentState: StateCode
+  data: MapData
 }) {
   const locale = useLocale()
   const name = locale === "ko" && occ.occupation_ko ? occ.occupation_ko : occ.occupation_en
@@ -682,47 +686,20 @@ function OccupationDetail({
   const hasNational = occ.shortage_rating != null && occ.shortage_rating > 0
   const nationalWidth = hasNational ? Math.round((occ.shortage_rating! / 5) * 100) : 0
 
-  const [relatedData, setRelatedData] = useState<{
-    pathway: "degree" | "vet"
-    courses: Array<{
-      id: number
-      title: string
-      institution_id: string | null
-      institution_name: string | null
-      state: string | null
-      website_url: string | null
-      cricos_url: string | null
-      aqf_level: number | null
-      duration_years: number | null
-      tuition_fee_aud: number | null
-    }>
-    tafe: { name: string; url: string } | null
-    vetPortals: Array<{ name: string; url: string }>
-    cricosSearch: string | null
-    prPathway: {
-      route_en: string | null
-      route_ko: string | null
-      caveat_en: string | null
-      caveat_ko: string | null
-    } | null
-  }>({ pathway: "degree", courses: [], tafe: null, vetPortals: [], cricosSearch: null, prPathway: null })
-
-  useEffect(() => {
-    if (!occ.anzsco_code) return
-    fetch(`/api/occupations/related?code=${occ.anzsco_code}&state=${currentState}`)
-      .then((r) => r.json())
-      .then((d) =>
-        setRelatedData({
-          pathway: d.pathway ?? "degree",
-          courses: d.courses ?? [],
-          tafe: d.tafe ?? null,
-          vetPortals: d.vetPortals ?? [],
-          cricosSearch: d.cricosSearch ?? null,
-          prPathway: d.prPathway ?? null,
-        }),
-      )
-      .catch(() => {})
-  }, [occ.anzsco_code, currentState])
+  // "공부하는 곳"·"비자"는 모두 맵 초기 데이터(data)에서 동기적으로 계산한다 → 카드 열면 즉시.
+  // (예전엔 /api/occupations/related 를 카드 열 때 fetch 해서 몇 초 지연이 있었다.)
+  const pathway = getPathway(occ.anzsco_code)
+  const relatedData = {
+    pathway,
+    courses:
+      pathway === "degree" && occ.related_broad_field
+        ? data.coursesByFieldState[occ.related_broad_field]?.[currentState] ?? []
+        : [],
+    tafe: pathway === "vet" ? TAFE_BY_STATE[currentState] : null,
+    vetPortals: pathway === "vet" ? VET_PORTALS : [],
+    cricosSearch: cricosSearchUrl(),
+    prPathway: data.prPathway,
+  }
 
   return (
     <>
