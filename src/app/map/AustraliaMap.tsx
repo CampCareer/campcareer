@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import Link from "next/link"
 import { RotateCcw, ChevronLeft } from "lucide-react"
 import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -659,6 +660,7 @@ function OccupationDetail({
     courses: Array<{
       id: number
       title: string
+      institution_id: string | null
       institution_name: string | null
       aqf_level: number | null
       duration_years: number | null
@@ -778,19 +780,35 @@ function OccupationDetail({
                 {t.map.detailRelatedCourses}
               </p>
               <div className="space-y-2">
-                {relatedData.courses.map((c) => (
-                  <div key={c.id} className="rounded-md border border-slate-100 bg-white p-2.5">
-                    <p className="text-sm font-medium text-slate-800 leading-snug">{c.title}</p>
-                    <p className="mt-0.5 text-xs text-slate-500">
-                      {c.institution_name && <>{c.institution_name} · </>}
-                      {c.aqf_level != null && <>{aqfLabel(c.aqf_level)} · </>}
-                      {c.duration_years != null && (
-                        <>{c.duration_years} yr{c.duration_years > 1 ? "s" : ""} · </>
-                      )}
-                      {c.tuition_fee_aud != null && <>A${c.tuition_fee_aud.toLocaleString()}/yr</>}
-                    </p>
-                  </div>
-                ))}
+                {relatedData.courses.map((c) => {
+                  const href = c.institution_id ? `/roi-explorer/au/${c.institution_id}` : null
+                  const content = (
+                    <>
+                      <p className="text-sm font-medium text-slate-800 leading-snug">{c.title}</p>
+                      <p className="mt-0.5 text-xs text-slate-500">
+                        {c.institution_name && <>{c.institution_name} · </>}
+                        {c.aqf_level != null && <>{aqfLabel(c.aqf_level)} · </>}
+                        {c.duration_years != null && (
+                          <>{c.duration_years} yr{c.duration_years > 1 ? "s" : ""} · </>
+                        )}
+                        {c.tuition_fee_aud != null && <>A${c.tuition_fee_aud.toLocaleString()}/yr</>}
+                      </p>
+                    </>
+                  )
+                  return href ? (
+                    <Link
+                      key={c.id}
+                      href={href}
+                      className="block rounded-md border border-slate-100 bg-white p-2.5 transition-colors hover:border-slate-300 hover:bg-slate-50"
+                    >
+                      {content}
+                    </Link>
+                  ) : (
+                    <div key={c.id} className="rounded-md border border-slate-100 bg-white p-2.5">
+                      {content}
+                    </div>
+                  )
+                })}
               </div>
             </div>
           )}
