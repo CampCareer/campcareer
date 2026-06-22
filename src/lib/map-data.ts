@@ -27,6 +27,16 @@ export interface HighPayOccupation {
   confidence: string | null
 }
 
+export interface USOccupation {
+  occ_code: string
+  occ_title: string
+  tot_emp: number
+  median_wage: number
+  pct_change: number
+  annual_openings: number
+  shortage_score: number
+}
+
 export interface USCollege {
   college_id: string
   college_name: string
@@ -49,6 +59,8 @@ export interface MapData {
   highPay: HighPayOccupation[]
   usColleges: USCollege[]
   stateSalaryMult: StateSalaryMult
+  usShortageByState: Record<string, USOccupation[]>
+  usHighPayByState: Record<string, USOccupation[]>
 }
 
 type OccRow = {
@@ -176,6 +188,24 @@ async function getUSColleges(): Promise<USCollege[]> {
   return results
 }
 
+let _usOccData: { shortageByState: Record<string, USOccupation[]>; highPayByState: Record<string, USOccupation[]> } | null = null
+
+function getUSOccupationData() {
+  if (_usOccData) return _usOccData
+  try {
+    const raw = readFileSync(path.join(process.cwd(), "src/data/us-occupation-state.json"), "utf-8")
+    const parsed: {
+      shortageByState: Record<string, USOccupation[]>
+      highPayByState: Record<string, USOccupation[]>
+    } = JSON.parse(raw)
+    _usOccData = parsed
+  } catch (e) {
+    console.error("[map-data] failed to load us-occupation-state.json:", e)
+    _usOccData = { shortageByState: {}, highPayByState: {} }
+  }
+  return _usOccData
+}
+
 export async function getMapData(): Promise<MapData> {
   const [occupations, stateRows, usColleges, multRows] = await Promise.all([
     fetchAll<OccRow>(
@@ -251,5 +281,7 @@ export async function getMapData(): Promise<MapData> {
       confidence: o.confidence,
     }))
 
-  return { shortageByState, highPay, usColleges, stateSalaryMult }
+  const usOccData = getUSOccupationData()
+
+  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState }
 }
