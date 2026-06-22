@@ -626,6 +626,13 @@ const en = {
     detailRelatedCourses: 'Related courses / degrees',
     detailCricosLink: 'CRICOS',
     detailCollegeWebsite: 'College website',
+    detailDegreesInState: 'Where to study in {state}',
+    detailVetInState: 'How to get qualified in {state}',
+    detailCricosMore: 'Search all on CRICOS',
+    detailNoStateDegrees: 'No registered universities in {state} for this field yet — search the official CRICOS register:',
+    detailOfficialTafe: 'Official TAFE / training',
+    detailVetPortals: 'Official course search',
+    detailVetHint: 'Pick your state inside these official portals to find the right certificate or apprenticeship.',
   },
   explore: {
     hubTitle: 'Explore degrees by major & country',

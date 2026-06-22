@@ -32,7 +32,9 @@ export default function AustraliaMap({
   initialTab?: Tab
 }) {
   const t = useTranslations()
-  const [activeCountry, setActiveCountry] = useState<"AU" | "US" | null>(initialState ? "AU" : null)
+  // /map은 호주 비치헤드의 front door다 → 진입 즉시 주/지역 선택(검색) 바가 보이도록
+  // 기본을 "AU"로 둔다. 월드맵(다른 국가)은 "전체 보기"로 빠져나가 볼 수 있다.
+  const [activeCountry, setActiveCountry] = useState<"AU" | "US" | null>("AU")
   const [selected, setSelected] = useState<string | null>(initialState)
   const [selectedSA4, setSelectedSA4] = useState<SA4Region | null>(null)
   const [tab, setTab] = useState<Tab>(initialTab)
@@ -680,34 +682,46 @@ function OccupationDetail({
   const nationalWidth = hasNational ? Math.round((occ.shortage_rating! / 5) * 100) : 0
 
   const [relatedData, setRelatedData] = useState<{
+    pathway: "degree" | "vet"
     courses: Array<{
       id: number
       title: string
       institution_id: string | null
       institution_name: string | null
+      state: string | null
       website_url: string | null
       cricos_url: string | null
       aqf_level: number | null
       duration_years: number | null
       tuition_fee_aud: number | null
     }>
+    tafe: { name: string; url: string } | null
+    vetPortals: Array<{ name: string; url: string }>
+    cricosSearch: string | null
     prPathway: {
       route_en: string | null
       route_ko: string | null
       caveat_en: string | null
       caveat_ko: string | null
     } | null
-  }>({ courses: [], prPathway: null })
+  }>({ pathway: "degree", courses: [], tafe: null, vetPortals: [], cricosSearch: null, prPathway: null })
 
   useEffect(() => {
     if (!occ.anzsco_code) return
-    fetch(`/api/occupations/related?code=${occ.anzsco_code}`)
+    fetch(`/api/occupations/related?code=${occ.anzsco_code}&state=${currentState}`)
       .then((r) => r.json())
       .then((d) =>
-        setRelatedData({ courses: d.courses ?? [], prPathway: d.prPathway ?? null }),
+        setRelatedData({
+          pathway: d.pathway ?? "degree",
+          courses: d.courses ?? [],
+          tafe: d.tafe ?? null,
+          vetPortals: d.vetPortals ?? [],
+          cricosSearch: d.cricosSearch ?? null,
+          prPathway: d.prPathway ?? null,
+        }),
       )
       .catch(() => {})
-  }, [occ.anzsco_code])
+  }, [occ.anzsco_code, currentState])
 
   return (
     <>
@@ -799,15 +813,16 @@ function OccupationDetail({
             </div>
           )}
 
-          {relatedData.courses.length > 0 && (
+          {relatedData.pathway === "degree" ? (
             <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
               <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider mb-2">
-                {t.map.detailRelatedCourses}
+                {t.map.detailDegreesInState.replace("{state}", currentState)}
               </p>
+              {relatedData.courses.length > 0 ? (
               <div className="space-y-2">
                 {relatedData.courses.map((c) => {
                   const href = c.institution_id ? `/roi-explorer/au/${c.institution_id}` : null
-                  const content = (
+                  const info = (
                     <>
                       <p className="text-sm font-medium text-slate-800 leading-snug">{c.title}</p>
                       <p className="mt-0.5 text-xs text-slate-500">
@@ -818,6 +833,22 @@ function OccupationDetail({
                         )}
                         {c.tuition_fee_aud != null && <>A${c.tuition_fee_aud.toLocaleString()}/yr</>}
                       </p>
+                    </>
+                  )
+                  // 코스 카드는 /roi-explorer 링크와 외부(CRICOS/홈페이지) 링크를 형제로 둔다.
+                  // (앵커 중첩 = 잘못된 HTML 이라 hydration 에러가 난다.)
+                  return (
+                    <div
+                      key={c.id}
+                      className="rounded-md border border-slate-100 bg-white p-2.5"
+                    >
+                      {href ? (
+                        <Link href={href} className="block transition-opacity hover:opacity-70">
+                          {info}
+                        </Link>
+                      ) : (
+                        info
+                      )}
                       {(c.cricos_url || c.website_url) && (
                         <div className="mt-1.5 flex flex-wrap gap-2">
                           {c.cricos_url && (
@@ -844,23 +875,77 @@ function OccupationDetail({
                           )}
                         </div>
                       )}
-                    </>
-                  )
-                  return href ? (
-                    <Link
-                      key={c.id}
-                      href={href}
-                      className="block rounded-md border border-slate-100 bg-white p-2.5 transition-colors hover:border-slate-300 hover:bg-slate-50"
-                    >
-                      {content}
-                    </Link>
-                  ) : (
-                    <div key={c.id} className="rounded-md border border-slate-100 bg-white p-2.5">
-                      {content}
                     </div>
                   )
                 })}
               </div>
+              ) : (
+                <div className="text-xs text-slate-500 leading-relaxed">
+                  <p>{t.map.detailNoStateDegrees.replace("{state}", currentState)}</p>
+                  {relatedData.cricosSearch && (
+                    <a
+                      href={relatedData.cricosSearch}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-1.5 inline-flex items-center gap-0.5 text-[11px] text-blue-600 hover:text-blue-800 underline underline-offset-2"
+                    >
+                      <ExternalLink className="h-3 w-3" />
+                      {t.map.detailCricosLink}
+                    </a>
+                  )}
+                </div>
+              )}
+              {relatedData.courses.length > 0 && relatedData.cricosSearch && (
+                <a
+                  href={relatedData.cricosSearch}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 inline-flex items-center gap-0.5 text-[11px] text-blue-600 hover:text-blue-800 underline underline-offset-2"
+                >
+                  <ExternalLink className="h-3 w-3" />
+                  {t.map.detailCricosMore}
+                </a>
+              )}
+            </div>
+          ) : (
+            <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+              <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider mb-2">
+                {t.map.detailVetInState.replace("{state}", currentState)}
+              </p>
+              {relatedData.tafe && (
+                <a
+                  href={relatedData.tafe.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 rounded-md border border-slate-100 bg-white p-2.5 transition-colors hover:border-slate-300 hover:bg-slate-50"
+                >
+                  <ExternalLink className="h-3.5 w-3.5 shrink-0 text-blue-600" />
+                  <span className="text-sm font-medium text-slate-800">{relatedData.tafe.name}</span>
+                  <span className="ml-auto text-[10px] uppercase tracking-wide text-slate-400">
+                    {t.map.detailOfficialTafe}
+                  </span>
+                </a>
+              )}
+              {relatedData.vetPortals.length > 0 && (
+                <div className="mt-2">
+                  <p className="mb-1 text-[11px] text-slate-400">{t.map.detailVetPortals}</p>
+                  <div className="flex flex-wrap gap-x-3 gap-y-1.5">
+                    {relatedData.vetPortals.map((p) => (
+                      <a
+                        key={p.url}
+                        href={p.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-0.5 text-[11px] text-blue-600 hover:text-blue-800 underline underline-offset-2"
+                      >
+                        <ExternalLink className="h-3 w-3" />
+                        {p.name}
+                      </a>
+                    ))}
+                  </div>
+                  <p className="mt-1.5 text-[11px] text-slate-400">{t.map.detailVetHint}</p>
+                </div>
+              )}
             </div>
           )}
 
