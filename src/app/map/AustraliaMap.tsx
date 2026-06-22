@@ -31,14 +31,13 @@ export default function AustraliaMap({
   initialTab?: Tab
 }) {
   const t = useTranslations()
-  const [showAustralia, setShowAustralia] = useState(initialState !== null)
+  const [activeCountry, setActiveCountry] = useState<"AU" | "US" | null>(initialState ? "AU" : null)
   const [selected, setSelected] = useState<StateCode | null>(initialState)
   const [selectedSA4, setSelectedSA4] = useState<SA4Region | null>(null)
   const [tab, setTab] = useState<Tab>(initialTab)
   const [neroData, setNeroData] = useState<NeroData | null>(null)
   const neroFetched = useRef(false)
 
-  // Fetch NERO employment data once on first SA4 selection
   useEffect(() => {
     if (!selectedSA4 || neroFetched.current) return
     neroFetched.current = true
@@ -48,7 +47,6 @@ export default function AustraliaMap({
       .catch(() => {})
   }, [selectedSA4])
 
-  // Reset SA4 when state changes; auto-switch employment tab when SA4 selected
   useEffect(() => {
     setSelectedSA4(null)
     if (tab === "employment") setTab("shortage")
@@ -63,20 +61,25 @@ export default function AustraliaMap({
   }, [selected])
 
   const onSelectState = useCallback((s: StateCode) => {
-    setShowAustralia(true)
+    setActiveCountry("AU")
     setSelected(s)
   }, [])
-  const onSelectAustralia = useCallback(() => setShowAustralia(true), [])
+
+  const onSelectCountry = useCallback((country: "AU" | "US") => {
+    setActiveCountry(country)
+    setSelected(null)
+    setSelectedSA4(null)
+  }, [])
+
   const onReset = useCallback(() => {
     if (selected !== null) {
       setSelected(null)
       setSelectedSA4(null)
-    } else if (showAustralia) {
-      setShowAustralia(false)
+    } else if (activeCountry !== null) {
+      setActiveCountry(null)
     }
-  }, [selected, showAustralia])
+  }, [selected, activeCountry])
 
-  // Build items maps for base-ui Select trigger label rendering
   const stateItems = useMemo(() => STATE_NAMES as Record<string, string>, [])
   const sa4Items = useMemo<Record<string, string>>(() => {
     if (!selected) return {}
@@ -87,10 +90,8 @@ export default function AustraliaMap({
 
   return (
     <div className="flex h-full w-full flex-col">
-      {/* ── 셀렉터 바 (호주 모드에서만) ── */}
-      {showAustralia && (
+      {activeCountry === "AU" && (
       <div className="flex flex-wrap items-end gap-3 border-b border-slate-200 bg-white px-4 py-3">
-        {/* State */}
         <label className="block">
           <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectState}</span>
           <Select
@@ -111,7 +112,6 @@ export default function AustraliaMap({
           </Select>
         </label>
 
-        {/* Region (SA4) — enabled when a state is selected */}
         <label className="block">
           <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectRegion}</span>
           {selected ? (
@@ -151,18 +151,17 @@ export default function AustraliaMap({
       </div>
       )}
 
-      {/* ── 지도 + 패널 오버레이 ── */}
       <div className="relative min-h-0 flex-1">
         <LeafletMap
           data={data}
           selected={selected}
-          showAustralia={showAustralia}
+          activeCountry={activeCountry}
           onSelectState={onSelectState}
-          onSelectAustralia={onSelectAustralia}
+          onSelectCountry={onSelectCountry}
           onReset={onReset}
         />
 
-        {selected && (
+        {activeCountry === "AU" && selected && (
           <div
             className={cn(
               "absolute z-[1000] flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl",
@@ -326,7 +325,6 @@ function HighPayList({
   const t = useTranslations()
   const useState = stateRows.length > 0
 
-  // state 선택 시: 이 주의 부족직종 중 연봉 상위 12
   const displayRows: Array<{ anzsco_code: string; occupation_ko: string | null; occupation_en: string; on_csol: boolean; median_salary_aud: number | null; state_count?: number }> = useState
     ? [...stateRows]
         .filter((r) => r.median_salary_aud != null)
