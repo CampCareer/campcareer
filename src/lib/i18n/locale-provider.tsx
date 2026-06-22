@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useState, useEffect, useCallback } from 'react'
+import { createContext, useContext, useState, useCallback } from 'react'
 import { DEFAULT_LOCALE, LOCALE_COOKIE, type Locale } from './config'
 import { dictionaries, type Dictionary } from './dictionaries'
 
@@ -21,11 +21,12 @@ export function LocaleProvider({
   locale: Locale
   children: React.ReactNode
 }) {
+  // `locale` seeds the initial state only. We intentionally do NOT re-sync it
+  // via an effect: pages are statically rendered in DEFAULT_LOCALE, then
+  // <LocaleInit> reads the NEXT_LOCALE cookie after mount and calls setLocale().
+  // A `useEffect(() => setCurrentLocale(locale), [locale])` here would run after
+  // LocaleInit's child effect and clobber the cookie value back to DEFAULT_LOCALE.
   const [currentLocale, setCurrentLocale] = useState<Locale>(locale)
-
-  useEffect(() => {
-    setCurrentLocale(locale)
-  }, [locale])
 
   const setLocale = useCallback((newLocale: Locale) => {
     document.cookie = `${LOCALE_COOKIE}=${newLocale}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`
