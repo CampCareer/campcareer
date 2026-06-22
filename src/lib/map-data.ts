@@ -41,10 +41,14 @@ export interface USCollege {
   graduation_rate: number | null
 }
 
+// { "WA": { "1": 1.000, "3": 1.222, ... } }
+export type StateSalaryMult = Record<string, Record<string, number>>
+
 export interface MapData {
   shortageByState: Record<string, StateOccupation[]>
   highPay: HighPayOccupation[]
   usColleges: USCollege[]
+  stateSalaryMult: StateSalaryMult
 }
 
 type OccRow = {
@@ -173,14 +177,25 @@ async function getUSColleges(): Promise<USCollege[]> {
 }
 
 export async function getMapData(): Promise<MapData> {
-  const [occupations, stateRows, usColleges] = await Promise.all([
+  const [occupations, stateRows, usColleges, multRows] = await Promise.all([
     fetchAll<OccRow>(
       "occupations_au",
       "anzsco_code, occupation_en, occupation_ko, shortage_rating, median_salary_aud, on_csol, confidence, related_broad_field",
     ),
     fetchAll<StateRow>("occupation_state_au", "anzsco_code, state, shortage_rating"),
     getUSColleges(),
+    supabaseAdmin
+      .from("state_salary_multiplier")
+      .select("state, anzsco_1digit, multiplier")
+      .then((r) => (r.data ?? []) as { state: string; anzsco_1digit: string; multiplier: number }[]),
   ])
+
+  // { "WA": { "3": 1.222, ... } }
+  const stateSalaryMult: StateSalaryMult = {}
+  for (const row of multRows) {
+    if (!stateSalaryMult[row.state]) stateSalaryMult[row.state] = {}
+    stateSalaryMult[row.state][row.anzsco_1digit] = Number(row.multiplier)
+  }
 
   const byCode = new Map<string, OccRow>()
   for (const o of occupations) {
@@ -236,5 +251,5 @@ export async function getMapData(): Promise<MapData> {
       confidence: o.confidence,
     }))
 
-  return { shortageByState, highPay, usColleges }
+  return { shortageByState, highPay, usColleges, stateSalaryMult }
 }
