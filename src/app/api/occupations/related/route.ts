@@ -17,17 +17,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: occErr.message }, { status: 500 })
   }
 
-  if (!occ?.related_broad_field) {
-    return NextResponse.json({ courses: [], prPathway: null })
-  }
-
-  const [coursesRes, prRes] = await Promise.all([
-    supabase
-      .from("courses_au")
-      .select("id, title, institution_id, course_type, aqf_level, duration_years, tuition_fee_aud")
-      .eq("broad_field", occ.related_broad_field)
-      .order("id")
-      .limit(4),
+  const [prRes] = await Promise.all([
     supabase
       .from("country_pr_pathways")
       .select("*")
@@ -35,12 +25,23 @@ export async function GET(req: NextRequest) {
       .maybeSingle(),
   ])
 
-  if (coursesRes.error) {
-    return NextResponse.json({ error: coursesRes.error.message }, { status: 500 })
+  if (!occ?.related_broad_field) {
+    return NextResponse.json({ courses: [], prPathway: prRes.data ?? null })
+  }
+
+  const { data: coursesData, error: coursesErr } = await supabase
+    .from("courses_au")
+    .select("id, title, institution_id, course_type, aqf_level, duration_years, tuition_fee_aud")
+    .eq("broad_field", occ.related_broad_field)
+    .order("id")
+    .limit(4)
+
+  if (coursesErr) {
+    return NextResponse.json({ error: coursesErr.message }, { status: 500 })
   }
 
   const institutionIds = Array.from(
-    new Set((coursesRes.data ?? []).map((c) => c.institution_id).filter(Boolean)),
+    new Set((coursesData ?? []).map((c) => c.institution_id).filter(Boolean)),
   ) as string[]
 
   const collegeMap: Record<string, string> = {}
@@ -52,7 +53,7 @@ export async function GET(req: NextRequest) {
     for (const c of cols ?? []) collegeMap[c.institution_id] = c.name
   }
 
-  const courses = (coursesRes.data ?? []).map((c) => ({
+  const courses = (coursesData ?? []).map((c) => ({
     id: c.id,
     title: c.title,
     institution_id: c.institution_id,
