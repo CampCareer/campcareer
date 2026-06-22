@@ -8,6 +8,7 @@ import { STATE_CODES, STATE_NAMES, type StateCode } from "./states"
 import type { MapData } from "@/lib/map-data"
 
 const AU_BOUNDS = L.latLngBounds([-44, 112], [-10, 154])
+const US_BOUNDS = L.latLngBounds([24, -125], [49, -66])
 const WORLD_BOUNDS = L.latLngBounds([-90, -180], [90, 180])
 
 const RAMP_LIGHT = [237, 233, 254]
@@ -18,37 +19,52 @@ function lerpColor(t: number): string {
   return `rgb(${c[0]}, ${c[1]}, ${c[2]})`
 }
 
+function roiColor(score: number | null): string {
+  if (!score || score <= 0) return "#94a3b8"
+  if (score > 15) return "#16a34a"
+  if (score > 8) return "#22c55e"
+  if (score > 5) return "#65a30d"
+  if (score > 3) return "#eab308"
+  return "#ef4444"
+}
+
 function isAustralia(properties: Record<string, unknown>): boolean {
   return properties?.ISO_A3 === "AUS" || properties?.ADM0_A3 === "AUS"
+}
+
+function isUSA(properties: Record<string, unknown>): boolean {
+  return properties?.ISO_A3 === "USA" || properties?.ADM0_A3 === "USA"
 }
 
 export default function LeafletMap({
   data,
   selected,
-  showAustralia,
+  activeCountry,
   onSelectState,
-  onSelectAustralia,
+  onSelectCountry,
   onReset,
 }: {
   data: MapData
   selected: StateCode | null
-  showAustralia: boolean
+  activeCountry: "AU" | "US" | null
   onSelectState: (s: StateCode) => void
-  onSelectAustralia: () => void
+  onSelectCountry: (c: "AU" | "US") => void
   onReset: () => void
 }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<L.Map | null>(null)
   const auLayerRef = useRef<L.GeoJSON | null>(null)
+  const usLayerRef = useRef<L.GeoJSON | null>(null)
   const worldLayerRef = useRef<L.GeoJSON | null>(null)
+  const markerLayerRef = useRef<L.LayerGroup | null>(null)
   const layersByCode = useRef<Partial<Record<StateCode, L.Polygon>>>({})
   const selectedRef = useRef<StateCode | null>(selected)
-  const showAuRef = useRef(showAustralia)
+  const activeCountryRef = useRef(activeCountry)
   const didFitRef = useRef(false)
   const onSelectStateRef = useRef(onSelectState)
-  const onSelectAustraliaRef = useRef(onSelectAustralia)
+  const onSelectCountryRef = useRef(onSelectCountry)
   onSelectStateRef.current = onSelectState
-  onSelectAustraliaRef.current = onSelectAustralia
+  onSelectCountryRef.current = onSelectCountry
 
   const dataRef = useRef(data)
   dataRef.current = data
@@ -73,24 +89,64 @@ export default function LeafletMap({
     }
   }
 
-  function fitToSelection(animate: boolean) {
-    const map = mapRef.current
-    if (!map) return
-    const code = selectedRef.current
-    const lyr = code ? layersByCode.current[code] : null
-    const target = lyr ? lyr.getBounds() : AU_BOUNDS
-    if (animate) map.flyToBounds(target, { padding: [30, 30], maxZoom: 6, duration: 0.6 })
-    else map.fitBounds(target, { padding: [20, 20], maxZoom: 6 })
+  function buildMarkers(): L.LayerGroup {
+    const group = L.layerGroup()
+    const colleges = dataRef.current.usColleges
+    for (const c of colleges) {
+      const marker = L.circleMarker([c.lat, c.lng], {
+        radius: Math.max(4, Math.min(10, (c.roi_score ?? 0) * 0.5)),
+        fillColor: roiColor(c.roi_score),
+        fillOpacity: 0.8,
+        color: "#ffffff",
+        weight: 1,
+      })
+      const lines = [
+        c.college_name,
+        `${c.city_name}, ${c.college_state}`,
+        c.roi_score != null ? `ROI: ${c.roi_score}` : "",
+        c.tuition != null ? `Tuition: A$${c.tuition.toLocaleString()}` : "",
+        c.median_earnings != null ? `Earnings: $${c.median_earnings.toLocaleString()}` : "",
+        c.graduation_rate != null ? `Grad rate: ${Math.round(c.graduation_rate * 100)}%` : "",
+      ]
+      marker.bindTooltip(c.college_name, {
+        sticky: true,
+        direction: "top",
+        className: "!rounded-md !border-0 !bg-slate-900 !px-2 !py-1 !text-xs !text-white !shadow-md",
+      })
+      marker.bindPopup(
+        `<div class="text-sm leading-relaxed">${lines.filter(Boolean).join("<br>")}</div>`,
+      )
+      marker.on({
+        mouseover: () => marker.setStyle({ radius: Math.max(6, Math.min(14, (c.roi_score ?? 0) * 0.7)), fillOpacity: 1 }),
+        mouseout: () => marker.setStyle({ radius: Math.max(4, Math.min(10, (c.roi_score ?? 0) * 0.5)), fillOpacity: 0.8 }),
+      })
+      group.addLayer(marker)
+    }
+    return group
   }
 
-  function fitToWorld(animate: boolean) {
+  function updateMarkers() {
     const map = mapRef.current
     if (!map) return
-    if (animate) map.flyToBounds(WORLD_BOUNDS, { padding: [10, 10], maxZoom: 2, duration: 0.8 })
-    else map.fitBounds(WORLD_BOUNDS, { padding: [10, 10], maxZoom: 2 })
+    if (markerLayerRef.current) {
+      map.removeLayer(markerLayerRef.current)
+      markerLayerRef.current = null
+    }
+    if (activeCountryRef.current === "US" && map.getZoom() >= 5) {
+      const group = buildMarkers()
+      group.addTo(map)
+      markerLayerRef.current = group
+    }
   }
 
-  // Init map, load GeoJSON layers
+  function fitToBounds(bounds: L.LatLngBoundsExpression, animate: boolean) {
+    const map = mapRef.current
+    if (!map) return
+    if (animate) map.flyToBounds(bounds, { padding: [30, 30], maxZoom: 6, duration: 0.6 })
+    else map.fitBounds(bounds, { padding: [20, 20], maxZoom: 6 })
+  }
+
+  // Init map, load all GeoJSON layers
   useEffect(() => {
     const container = containerRef.current
     if (!container || mapRef.current) return
@@ -100,7 +156,7 @@ export default function LeafletMap({
       scrollWheelZoom: true,
       doubleClickZoom: true,
       minZoom: 2,
-      maxZoom: 8,
+      maxZoom: 10,
       maxBounds: WORLD_BOUNDS.pad(0.3),
       maxBoundsViscosity: 0.8,
     })
@@ -111,12 +167,18 @@ export default function LeafletMap({
       if (mapRef.current !== map) return
       map.invalidateSize()
       if (!didFitRef.current && container.clientWidth > 0) {
-        if (showAuRef.current) fitToSelection(false)
+        if (activeCountryRef.current === "AU") map.fitBounds(AU_BOUNDS)
+        else if (activeCountryRef.current === "US") map.fitBounds(US_BOUNDS)
         else map.fitBounds(WORLD_BOUNDS)
         didFitRef.current = true
       }
     })
     ro.observe(container)
+
+    // Zoom change → update marker visibility
+    map.on("zoomend", () => {
+      if (activeCountryRef.current === "US") updateMarkers()
+    })
 
     // World countries layer
     fetch("/world-countries.geojson")
@@ -128,35 +190,42 @@ export default function LeafletMap({
             if (feature && isAustralia(feature.properties as Record<string, unknown>)) {
               return { fillColor: "#e0e7ff", color: "#6366f1", weight: 2, fillOpacity: 0.5 }
             }
+            if (feature && isUSA(feature.properties as Record<string, unknown>)) {
+              return { fillColor: "#dcfce7", color: "#22c55e", weight: 2, fillOpacity: 0.5 }
+            }
             return { fillColor: "#f8fafc", color: "#cbd5e1", weight: 0.8, fillOpacity: 0.6 }
           },
           onEachFeature: (feature, lyr) => {
-            if (!isAustralia(feature.properties as Record<string, unknown>)) return
-            lyr.bindTooltip("Australia", {
+            const props = feature.properties as Record<string, unknown>
+            const isAU = isAustralia(props)
+            const isUS = isUSA(props)
+            if (!isAU && !isUS) return
+
+            const name = isAU ? "Australia" : "United States"
+            lyr.bindTooltip(name, {
               sticky: true,
               direction: "top",
               className: "!rounded-md !border-0 !bg-slate-900 !px-2 !py-1 !text-xs !text-white !shadow-md",
             })
             lyr.on({
-              click: () => onSelectAustraliaRef.current(),
+              click: () => onSelectCountryRef.current(isAU ? "AU" : "US"),
               mouseover: () => (lyr as L.Path).setStyle({ weight: 3, fillOpacity: 0.7 }),
-              mouseout: () =>
-                (lyr as L.Path).setStyle({
-                  fillColor: "#e0e7ff",
-                  color: "#6366f1",
-                  weight: 2,
-                  fillOpacity: 0.5,
-                }),
+              mouseout: () => {
+                const baseStyle = isAU
+                  ? { fillColor: "#e0e7ff", color: "#6366f1", weight: 2, fillOpacity: 0.5 }
+                  : { fillColor: "#dcfce7", color: "#22c55e", weight: 2, fillOpacity: 0.5 }
+                ;(lyr as L.Path).setStyle(baseStyle)
+              },
             })
             const el = (lyr as L.Path).getElement() as SVGElement | null
             if (el) {
               el.setAttribute("tabindex", "0")
               el.setAttribute("role", "button")
-              el.setAttribute("aria-label", "Australia")
+              el.setAttribute("aria-label", name)
               el.addEventListener("keydown", (e: KeyboardEvent) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault()
-                  onSelectAustraliaRef.current()
+                  onSelectCountryRef.current(isAU ? "AU" : "US")
                 }
               })
             }
@@ -195,13 +264,11 @@ export default function LeafletMap({
         })
         auLayerRef.current = auLayer
 
-        if (showAuRef.current) {
+        if (activeCountryRef.current === "AU") {
           map.addLayer(auLayer)
           if (!didFitRef.current && container.clientWidth > 0) {
-            fitToSelection(false)
+            fitToBounds(AU_BOUNDS, false)
             didFitRef.current = true
-          } else if (selectedRef.current) {
-            fitToSelection(true)
           }
         }
 
@@ -223,41 +290,90 @@ export default function LeafletMap({
       })
       .catch((err) => console.error("[LeafletMap] au geojson load failed:", err))
 
+    // US states layer
+    fetch("/us-states.geojson")
+      .then((r) => r.json())
+      .then((geo: GeoJSON.FeatureCollection) => {
+        if (mapRef.current !== map) return
+        const usLayer = L.geoJSON(geo, {
+          style: () => ({
+            fillColor: "#e0f2fe",
+            fillOpacity: 0.4,
+            color: "#0284c7",
+            weight: 1,
+          }),
+          onEachFeature: (_feature, lyr) => {
+            (lyr as L.Path).on({
+              mouseover: () => (lyr as L.Path).setStyle({ weight: 2, fillOpacity: 0.6 }),
+              mouseout: () => (lyr as L.Path).setStyle({ fillColor: "#e0f2fe", fillOpacity: 0.4, color: "#0284c7", weight: 1 }),
+            })
+          },
+        })
+        usLayerRef.current = usLayer
+
+        if (activeCountryRef.current === "US") {
+          map.addLayer(usLayer)
+          if (!didFitRef.current && container.clientWidth > 0) {
+            fitToBounds(US_BOUNDS, false)
+            didFitRef.current = true
+          }
+        }
+      })
+      .catch((err) => console.error("[LeafletMap] us geojson load failed:", err))
+
     return () => {
       ro.disconnect()
       map.remove()
       mapRef.current = null
       worldLayerRef.current = null
       auLayerRef.current = null
+      usLayerRef.current = null
+      markerLayerRef.current = null
       layersByCode.current = {}
       didFitRef.current = false
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Toggle AU states layer on showAustralia change
+  // Toggle active country
   useEffect(() => {
-    showAuRef.current = showAustralia
+    activeCountryRef.current = activeCountry
     const map = mapRef.current
-    const auLayer = auLayerRef.current
-    if (!map || !auLayer) return
+    if (!map) return
 
-    if (showAustralia) {
-      if (!map.hasLayer(auLayer)) map.addLayer(auLayer)
-      fitToSelection(true)
+    // Hide all country layers
+    if (auLayerRef.current && map.hasLayer(auLayerRef.current)) map.removeLayer(auLayerRef.current)
+    if (usLayerRef.current && map.hasLayer(usLayerRef.current)) map.removeLayer(usLayerRef.current)
+    if (markerLayerRef.current) {
+      map.removeLayer(markerLayerRef.current)
+      markerLayerRef.current = null
+    }
+
+    if (activeCountry === "AU") {
+      if (auLayerRef.current) map.addLayer(auLayerRef.current)
+      fitToBounds(AU_BOUNDS, true)
+    } else if (activeCountry === "US") {
+      if (usLayerRef.current) map.addLayer(usLayerRef.current)
+      fitToBounds(US_BOUNDS, true)
+      updateMarkers()
     } else {
-      if (map.hasLayer(auLayer)) map.removeLayer(auLayer)
-      fitToWorld(true)
+      fitToBounds(WORLD_BOUNDS, true)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showAustralia])
+  }, [activeCountry])
 
   // Selected state changed
   useEffect(() => {
     selectedRef.current = selected
     auLayerRef.current?.setStyle((feature) => styleFor(feature?.properties?.STATE_CODE as StateCode))
-    if (auLayerRef.current && showAustralia) {
-      fitToSelection(true)
+    if (auLayerRef.current && activeCountry === "AU") {
+      if (selected) {
+        const lyr = layersByCode.current[selected]
+        const target = lyr ? lyr.getBounds() : AU_BOUNDS
+        mapRef.current?.flyToBounds(target, { padding: [30, 30], maxZoom: 6, duration: 0.6 })
+      } else {
+        mapRef.current?.flyToBounds(AU_BOUNDS, { padding: [30, 30], maxZoom: 6, duration: 0.6 })
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected])
@@ -276,7 +392,7 @@ export default function LeafletMap({
         전체 보기
       </button>
 
-      {showAustralia && (
+      {activeCountry === "AU" && (
         <div className="pointer-events-none absolute bottom-3 left-3 z-[1000] rounded-lg border border-slate-200 bg-white/95 px-3 py-2 shadow-sm backdrop-blur-sm">
           <p className="mb-1 text-[11px] font-medium text-slate-500">부족 직종 수</p>
           <div

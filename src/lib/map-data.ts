@@ -1,11 +1,11 @@
 import "server-only"
 import { supabaseAdmin } from "@/lib/supabase-admin"
 import { STATE_CODES, type StateCode } from "@/app/map/states"
+import { readFileSync } from "fs"
+import path from "path"
 
 // 지도 페이지용 데이터 계층. occupations_au + occupation_state_au 를 읽어 JS 에서 조인한다.
-// (FK 가 없어 임베디드 조인 불가 — 각 테이블 한 번씩만 select.)
-// occupation_state_au 는 anon RLS 가 막혀 있어(0행 반환) 서버 전용 service-role 클라이언트로 읽는다.
-// 이 모듈은 server-only — page.tsx(서버 컴포넌트)에서만 import 한다.
+// occupation_state_au 는 anon RLS 가 막혀 있어 서버 전용 service-role 클라이언트로 읽는다.
 
 export interface StateOccupation {
   anzsco_code: string
@@ -14,8 +14,8 @@ export interface StateOccupation {
   median_salary_aud: number | null
   on_csol: boolean
   confidence: string | null
-  state_shortage_rating: number // 해당 주의 부족도(3=강, 2=중)
-  state_count: number // 이 직종이 shortage로 등재된 주 수 (1=지역 특화, 8=전국 공통)
+  state_shortage_rating: number
+  state_count: number
 }
 
 export interface HighPayOccupation {
@@ -27,9 +27,24 @@ export interface HighPayOccupation {
   confidence: string | null
 }
 
+export interface USCollege {
+  college_id: string
+  college_name: string
+  city_name: string
+  college_state: string
+  lat: number
+  lng: number
+  roi_score: number | null
+  net_salary: number | null
+  tuition: number | null
+  median_earnings: number | null
+  graduation_rate: number | null
+}
+
 export interface MapData {
-  shortageByState: Record<string, StateOccupation[]> // "NSW" -> [...] 부족도 desc, 연봉 desc
-  highPay: HighPayOccupation[] // 전국 연봉 desc, 상위 12
+  shortageByState: Record<string, StateOccupation[]>
+  highPay: HighPayOccupation[]
+  usColleges: USCollege[]
 }
 
 type OccRow = {
@@ -60,7 +75,6 @@ const FULL_NAME_TO_CODE: Record<string, StateCode> = {
   "australian capital territory": "ACT",
 }
 
-// DB 의 state 값을 표준 약어로 정규화. 약어/풀네임/대소문자 모두 수용, 미상이면 null.
 function normalizeStateCode(raw: string | null): StateCode | null {
   if (!raw) return null
   const upper = raw.trim().toUpperCase()
@@ -68,7 +82,6 @@ function normalizeStateCode(raw: string | null): StateCode | null {
   return FULL_NAME_TO_CODE[raw.trim().toLowerCase()] ?? null
 }
 
-// Supabase 는 요청당 최대 1,000행을 반환한다. 전 행이 필요하면 range 로 페이지네이션.
 async function fetchAll<T>(table: string, columns: string): Promise<T[]> {
   const PAGE = 1000
   const all: T[] = []
@@ -88,23 +101,92 @@ async function fetchAll<T>(table: string, columns: string): Promise<T[]> {
   return all
 }
 
+// 간이 US 도시 → 위경도 매칭 (city_ascii + state_abbr 키)
+let _cityCoords: Map<string, { lat: number; lng: number }> | null = null
+
+function getCityCoords(): Map<string, { lat: number; lng: number }> {
+  if (_cityCoords) return _cityCoords
+  const map = new Map<string, { lat: number; lng: number }>()
+  try {
+    const raw = readFileSync(path.join(process.cwd(), "src/data/us-cities.json"), "utf-8")
+    const cities: Array<{ c: string; s: string; lat: number; lng: number }> = JSON.parse(raw)
+    for (const city of cities) {
+      const key = `${city.c.toLowerCase()}|${city.s}`
+      map.set(key, { lat: city.lat, lng: city.lng })
+    }
+  } catch (e) {
+    console.error("[map-data] failed to load us-cities.json:", e)
+  }
+  _cityCoords = map
+  return map
+}
+
+async function getUSColleges(): Promise<USCollege[]> {
+  const { data, error } = await supabaseAdmin
+    .from("roi_explorer_us")
+    .select("college_id, college_name, city_name, college_state, roi_score, net_salary, tuition, median_earnings, graduation_rate")
+    .gt("roi_score", 0)
+    .limit(500)
+
+  if (error) {
+    console.error("[map-data] roi_explorer_us fetch failed:", error)
+    return []
+  }
+
+  const rows = (data ?? []) as Array<{
+    college_id: string
+    college_name: string
+    city_name: string
+    college_state: string
+    roi_score: number
+    net_salary: number
+    tuition: number
+    median_earnings: number
+    graduation_rate: number
+  }>
+
+  const coords = getCityCoords()
+  const results: USCollege[] = []
+
+  for (const r of rows) {
+    const key = `${r.city_name.toLowerCase()}|${r.college_state}`
+    const coord = coords.get(key)
+    if (!coord) continue
+    results.push({
+      college_id: r.college_id,
+      college_name: r.college_name,
+      city_name: r.city_name,
+      college_state: r.college_state,
+      lat: coord.lat,
+      lng: coord.lng,
+      roi_score: r.roi_score,
+      net_salary: r.net_salary,
+      tuition: r.tuition,
+      median_earnings: r.median_earnings,
+      graduation_rate: r.graduation_rate,
+    })
+  }
+
+  // ROI 높은 순 정렬
+  results.sort((a, b) => (b.roi_score ?? 0) - (a.roi_score ?? 0))
+  return results
+}
+
 export async function getMapData(): Promise<MapData> {
-  const [occupations, stateRows] = await Promise.all([
+  const [occupations, stateRows, usColleges] = await Promise.all([
     fetchAll<OccRow>(
       "occupations_au",
       "anzsco_code, occupation_en, occupation_ko, shortage_rating, median_salary_aud, on_csol, confidence, related_broad_field",
     ),
-    // occupation_state_au 는 2,400+ 행 — Supabase 는 요청당 1,000행으로 제한하므로 페이지네이션 필수.
     fetchAll<StateRow>("occupation_state_au", "anzsco_code, state, shortage_rating"),
+    getUSColleges(),
   ])
 
-  // code -> occupation
   const byCode = new Map<string, OccRow>()
   for (const o of occupations) {
     if (o.anzsco_code) byCode.set(o.anzsco_code, o)
   }
 
-  // 직종별 등재 주 수 (1=이 지역 특화, 8=전국 공통)
   const stateCountMap = new Map<string, number>()
   for (const r of stateRows) {
     if (r.anzsco_code) {
@@ -112,7 +194,6 @@ export async function getMapData(): Promise<MapData> {
     }
   }
 
-  // 주별 부족 직종
   const shortageByState: Record<string, StateOccupation[]> = {}
   for (const code of STATE_CODES) shortageByState[code] = []
 
@@ -120,7 +201,7 @@ export async function getMapData(): Promise<MapData> {
     const code = normalizeStateCode(r.state)
     if (!code) continue
     const o = r.anzsco_code ? byCode.get(r.anzsco_code) : undefined
-    if (!o || !o.anzsco_code) continue // 상세 페이지는 anzsco_code 로 조회 — 없으면 제외
+    if (!o || !o.anzsco_code) continue
     shortageByState[code].push({
       anzsco_code: o.anzsco_code,
       occupation_en: o.occupation_en,
@@ -134,7 +215,6 @@ export async function getMapData(): Promise<MapData> {
   }
 
   for (const code of STATE_CODES) {
-    // 주 특화(등재 주 수 적을수록) → 부족도 → 연봉 순으로 정렬
     shortageByState[code].sort(
       (a, b) =>
         a.state_count - b.state_count ||
@@ -143,7 +223,6 @@ export async function getMapData(): Promise<MapData> {
     )
   }
 
-  // 전국 고연봉 상위 12 (anzsco_code 없는 행 제외)
   const highPay: HighPayOccupation[] = occupations
     .filter((o) => o.anzsco_code != null)
     .sort((a, b) => (b.median_salary_aud ?? 0) - (a.median_salary_aud ?? 0))
@@ -157,5 +236,5 @@ export async function getMapData(): Promise<MapData> {
       confidence: o.confidence,
     }))
 
-  return { shortageByState, highPay }
+  return { shortageByState, highPay, usColleges }
 }
