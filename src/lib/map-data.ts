@@ -54,6 +54,32 @@ export interface USCollege {
 // { "WA": { "1": 1.000, "3": 1.222, ... } }
 export type StateSalaryMult = Record<string, Record<string, number>>
 
+// 직업 상세 카드의 "공부하는 곳"·"비자"는 예전엔 카드를 열 때 클라이언트가 별도
+// API(/api/occupations/related)로 가져와 몇 초 지연이 있었다. 이제 이 두 가지를
+// 맵 초기 데이터에 미리 실어 보내 fetch 없이 즉시 렌더한다.
+//  - prPathway: 호주 공통 1행 (모든 직업 동일)
+//  - coursesByFieldState: 분야(broad_field) × 주(state) 별 학위 코스 (주당 6개 cap)
+
+export interface PrPathway {
+  route_en: string | null
+  route_ko: string | null
+  caveat_en: string | null
+  caveat_ko: string | null
+}
+
+export interface CourseLite {
+  id: number
+  title: string
+  institution_id: string | null
+  institution_name: string | null
+  state: string | null
+  website_url: string | null
+  cricos_url: string | null
+  aqf_level: number | null
+  duration_years: number | null
+  tuition_fee_aud: number | null
+}
+
 export interface MapData {
   shortageByState: Record<string, StateOccupation[]>
   highPay: HighPayOccupation[]
@@ -63,6 +89,8 @@ export interface MapData {
   usHighPayByState: Record<string, USOccupation[]>
   auOccupations: Record<string, OccRow>
   auStateShortages: Record<string, StateShortageByOcc[]>
+  prPathway: PrPathway | null
+  coursesByFieldState: Record<string, Record<string, CourseLite[]>>
 }
 
 export type OccRow = {
@@ -217,8 +245,64 @@ function getUSOccupationData() {
   return _usOccData
 }
 
+// 분야(broad_field) × 주(state) → 학위 코스 6개. 학교 state 는 colleges_au 에서 조인.
+// courses_au 는 거의 안 바뀌므로 서버 인스턴스 메모리에 캐시한다 (us-cities 캐시와 동일 패턴).
+let _coursesByFieldState: Record<string, Record<string, CourseLite[]>> | null = null
+
+async function getCoursesByFieldState(): Promise<Record<string, Record<string, CourseLite[]>>> {
+  if (_coursesByFieldState) return _coursesByFieldState
+
+  const colleges = await fetchAll<{
+    institution_id: string
+    name: string
+    state: string | null
+    website_url: string | null
+  }>("colleges_au", "institution_id, name, state, website_url")
+  const collegeMap = new Map(colleges.map((c) => [c.institution_id, c]))
+
+  const courses = await fetchAll<{
+    id: number
+    title: string
+    institution_id: string | null
+    broad_field: string | null
+    aqf_level: number | null
+    duration_years: number | null
+    tuition_fee_aud: number | null
+    cricos_url: string | null
+  }>(
+    "courses_au",
+    "id, title, institution_id, broad_field, aqf_level, duration_years, tuition_fee_aud, cricos_url",
+  )
+
+  const result: Record<string, Record<string, CourseLite[]>> = {}
+  for (const c of courses) {
+    if (!c.broad_field || !c.institution_id) continue
+    const col = collegeMap.get(c.institution_id)
+    const state = col?.state ?? null
+    if (!state) continue
+    const byState = (result[c.broad_field] ??= {})
+    const arr = (byState[state] ??= [])
+    if (arr.length >= 6) continue // 주당 6개 cap (id 순)
+    arr.push({
+      id: c.id,
+      title: c.title,
+      institution_id: c.institution_id,
+      institution_name: col?.name ?? null,
+      state,
+      website_url: col?.website_url ?? null,
+      cricos_url: c.cricos_url,
+      aqf_level: c.aqf_level,
+      duration_years: c.duration_years,
+      tuition_fee_aud: c.tuition_fee_aud,
+    })
+  }
+
+  _coursesByFieldState = result
+  return result
+}
+
 export async function getMapData(): Promise<MapData> {
-  const [occupations, stateRows, usColleges, multRows] = await Promise.all([
+  const [occupations, stateRows, usColleges, multRows, coursesByFieldState, prRes] = await Promise.all([
     fetchAll<OccRow>(
       "occupations_au",
       "anzsco_code, occupation_en, occupation_ko, shortage_rating, median_salary_aud, on_csol, confidence, related_broad_field, pr_note_ko, source_name, source_url, last_verified",
@@ -229,6 +313,13 @@ export async function getMapData(): Promise<MapData> {
       .from("state_salary_multiplier")
       .select("state, anzsco_1digit, multiplier")
       .then((r) => (r.data ?? []) as { state: string; anzsco_1digit: string; multiplier: number }[]),
+    getCoursesByFieldState(),
+    supabaseAdmin
+      .from("country_pr_pathways")
+      .select("route_en, route_ko, caveat_en, caveat_ko")
+      .ilike("country", "au")
+      .maybeSingle()
+      .then((r) => (r.data ?? null) as PrPathway | null),
   ])
 
   // { "WA": { "3": 1.222, ... } }
@@ -311,5 +402,5 @@ export async function getMapData(): Promise<MapData> {
     auStateShortages[code] = arr
   })
 
-  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages }
+  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages, prPathway: prRes, coursesByFieldState }
 }
