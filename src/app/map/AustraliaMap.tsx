@@ -249,6 +249,7 @@ function Panel({
         onBack={handleBack}
         onClose={onClose}
         t={t}
+        currentState={selected as StateCode}
       />
     )
   }
@@ -366,7 +367,7 @@ function ShortageList({ rows, onSelectOcc }: { rows: StateOccupation[]; onSelect
                 {r.on_csol && <Badge tone="green">{t.map.visaEligible}</Badge>}
               </span>
             </span>
-            <ShortageDots rating={r.state_shortage_rating} />
+            <ShortageLabel rating={r.state_shortage_rating} />
           </button>
         </li>
       ))}
@@ -597,18 +598,23 @@ function OccupationDetail({
   onBack,
   onClose,
   t,
+  currentState,
 }: {
   occ: OccRow
   stateShortages: StateShortageByOcc[]
   onBack: () => void
   onClose: () => void
   t: ReturnType<typeof useTranslations>
+  currentState: StateCode
 }) {
   const locale = useLocale()
   const name = locale === "ko" && occ.occupation_ko ? occ.occupation_ko : occ.occupation_en
 
-  const nationalLabel = shortageLabel(occ.shortage_rating, t)
-  const nationalWidth = occ.shortage_rating ? Math.round((occ.shortage_rating / 5) * 100) : 0
+  const currentStateShortage = stateShortages.find((s) => s.state === currentState)
+  const stateRating = currentStateShortage?.rating ?? 0
+
+  const hasNational = occ.shortage_rating != null && occ.shortage_rating > 0
+  const nationalWidth = hasNational ? Math.round((occ.shortage_rating! / 5) * 100) : 0
 
   return (
     <>
@@ -639,15 +645,6 @@ function OccupationDetail({
         <div className="mt-3 flex flex-wrap items-center gap-1.5">
           <Badge tone="gray">ANZSCO {occ.anzsco_code}</Badge>
           {occ.on_csol && <Badge tone="green">{t.map.visaEligible}</Badge>}
-          <span className={cn(
-            "inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium",
-            "border",
-            shortageColor(occ.shortage_rating).replace("bg-", "border-"),
-            shortageColor(occ.shortage_rating),
-            "text-white",
-          )}>
-            {t.map.detailNationalShortage}: {nationalLabel}
-          </span>
         </div>
 
         <div className="mt-5 space-y-4">
@@ -660,37 +657,52 @@ function OccupationDetail({
             </p>
           </div>
 
-          <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
-            <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
-              {t.map.detailNationalShortage}
-            </p>
-            <div className="mt-2 flex items-center gap-3">
-              <div className="flex-1 h-2 rounded-full bg-slate-200 overflow-hidden">
-                <div
-                  className={cn("h-full rounded-full transition-all", shortageColor(occ.shortage_rating))}
-                  style={{ width: `${nationalWidth}%` }}
-                />
+          {stateRating > 0 && (
+            <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+              <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
+                {currentState} {t.map.detailStateShortages}
+              </p>
+              <div className="mt-2">
+                <ShortageLabel rating={stateRating} />
               </div>
-              <span className="shrink-0 text-sm font-semibold tabular-nums text-slate-700">
-                {occ.shortage_rating ?? "—"}/5
-              </span>
             </div>
-            <p className="mt-1 text-xs text-slate-400">{nationalLabel}</p>
-          </div>
+          )}
 
           {stateShortages.length > 0 && (
             <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
               <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider mb-2">
-                {t.map.detailStateShortages}
+                {t.map.detailStateShortages} ({locale === "ko" ? "전체주" : "all states"})
               </p>
-              <div className="flex flex-wrap gap-x-3 gap-y-1">
+              <div className="flex flex-wrap gap-x-2 gap-y-1.5">
                 {stateShortages.map((s) => (
-                  <span key={s.state} className="inline-flex items-center gap-1.5 text-xs text-slate-700">
-                    <span className="font-medium">{s.state}</span>
-                    <ShortageDotsInline rating={s.rating} />
+                  <span key={s.state} className="inline-flex items-center gap-1 text-xs text-slate-700">
+                    <span className={cn("font-medium", s.state === currentState && "text-slate-900 underline")}>
+                      {s.state}
+                    </span>
+                    <ShortageLabel rating={s.rating} className="!text-[10px]" />
                   </span>
                 ))}
               </div>
+            </div>
+          )}
+
+          {hasNational && (
+            <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+              <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
+                {t.map.detailNationalShortage}
+              </p>
+              <div className="mt-2 flex items-center gap-3">
+                <div className="flex-1 h-2 rounded-full bg-slate-200 overflow-hidden">
+                  <div
+                    className={cn("h-full rounded-full transition-all", shortageColor(occ.shortage_rating))}
+                    style={{ width: `${nationalWidth}%` }}
+                  />
+                </div>
+                <span className="shrink-0 text-sm font-semibold tabular-nums text-slate-700">
+                  {occ.shortage_rating}/5
+                </span>
+              </div>
+              <p className="mt-1 text-xs text-slate-400">{shortageLabel(occ.shortage_rating, t)}</p>
             </div>
           )}
 
@@ -718,31 +730,26 @@ function OccupationDetail({
   )
 }
 
-function ShortageDotsInline({ rating }: { rating: number }) {
-  const n = rating >= 3 ? 3 : rating >= 2 ? 2 : 1
+function ShortageLabel({ rating, className }: { rating: number; className?: string }) {
+  const locale = useLocale()
+  const isKo = locale === "ko"
+  if (rating >= 3) {
+    return (
+      <span className={cn("inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium bg-rose-50 text-rose-700 border border-rose-200", className)}>
+        {isKo ? "상" : "High"}
+      </span>
+    )
+  }
+  if (rating >= 2) {
+    return (
+      <span className={cn("inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium bg-amber-50 text-amber-700 border border-amber-200", className)}>
+        {isKo ? "중" : "Mid"}
+      </span>
+    )
+  }
   return (
-    <span className="inline-flex items-center gap-0.5">
-      {Array.from({ length: 3 }).map((_, i) => (
-        <span
-          key={i}
-          className={cn(
-            "h-1.5 w-1.5 rounded-full",
-            i < n ? "bg-rose-400" : "bg-slate-200",
-          )}
-        />
-      ))}
-    </span>
-  )
-}
-
-function ShortageDots({ rating }: { rating: number }) {
-  const t = useTranslations()
-  const n = rating >= 3 ? 3 : rating >= 2 ? 2 : 1
-  return (
-    <span className="flex shrink-0 items-center gap-1" aria-label={t.map.shortageRatingFmt.replace('{rating}', String(rating))} title={t.map.shortageRatingFmt.replace('{rating}', String(rating))}>
-      {Array.from({ length: n }).map((_, i) => (
-        <span key={i} className="h-2 w-2 rounded-full bg-rose-400" />
-      ))}
+    <span className={cn("inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium bg-slate-100 text-slate-500 border border-slate-200", className)}>
+      {isKo ? "하" : "Low"}
     </span>
   )
 }
