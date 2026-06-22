@@ -352,6 +352,9 @@ const ko: Dictionary = {
       orRisk: '또는 전공 리스크 전체 진단',
       orCompare: '두 국가 비교하기',
       finder: {
+        headline: '지도로 검색하는 유학 로드맵',
+        subhead:
+          '지역을 고르면 사람이 부족한 직업과 고연봉 직업, 관련 코스, 비자·영주권 경로까지 보여드려요. 정부 데이터 기반입니다.',
         country: '국가',
         state: '주·준주',
         category: '직업군',
@@ -362,8 +365,11 @@ const ko: Dictionary = {
         comingSoon: '곧 추가',
         shortage: '부족 직업군',
         pay: '고연봉 직업군',
+        shortageShort: '부족직종',
+        payShort: '고연봉',
+        tryThese: '이렇게 찾아보세요',
         cta: '직업 보기',
-        browseMap: '지도에서 바로 둘러보기',
+        browseMap: '전체 지도 둘러보기',
         dataNote:
           '정부·공공 데이터 기반 — OSCA 2025 부족직종, ABS 소득 데이터. 일부 수치는 추정치이며 공식 출처로 검증 중입니다.',
       },
