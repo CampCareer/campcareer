@@ -620,6 +620,17 @@ function shortageColor(score: number | null): string {
   return "bg-amber-300"
 }
 
+function aqfLabel(level: number | null): string {
+  if (!level) return ""
+  if (level >= 10) return "Doctoral"
+  if (level === 9) return "Master"
+  if (level === 8) return "Grad Cert"
+  if (level === 7) return "Bachelor"
+  if (level === 6) return "Adv Dip"
+  if (level === 5) return "Diploma"
+  return `Cert ${level}`
+}
+
 function OccupationDetail({
   occ,
   stateShortages,
@@ -643,6 +654,33 @@ function OccupationDetail({
 
   const hasNational = occ.shortage_rating != null && occ.shortage_rating > 0
   const nationalWidth = hasNational ? Math.round((occ.shortage_rating! / 5) * 100) : 0
+
+  const [relatedData, setRelatedData] = useState<{
+    courses: Array<{
+      id: number
+      title: string
+      institution_name: string | null
+      aqf_level: number | null
+      duration_years: number | null
+      tuition_fee_aud: number | null
+    }>
+    prPathway: {
+      route_en: string | null
+      route_ko: string | null
+      caveat_en: string | null
+      caveat_ko: string | null
+    } | null
+  }>({ courses: [], prPathway: null })
+
+  useEffect(() => {
+    if (!occ.anzsco_code) return
+    fetch(`/api/occupations/related?code=${occ.anzsco_code}`)
+      .then((r) => r.json())
+      .then((d) =>
+        setRelatedData({ courses: d.courses ?? [], prPathway: d.prPathway ?? null }),
+      )
+      .catch(() => {})
+  }, [occ.anzsco_code])
 
   return (
     <>
@@ -734,12 +772,52 @@ function OccupationDetail({
             </div>
           )}
 
-          {occ.pr_note_ko && locale === "ko" && (
+          {relatedData.courses.length > 0 && (
+            <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+              <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider mb-2">
+                {t.map.detailRelatedCourses}
+              </p>
+              <div className="space-y-2">
+                {relatedData.courses.map((c) => (
+                  <div key={c.id} className="rounded-md border border-slate-100 bg-white p-2.5">
+                    <p className="text-sm font-medium text-slate-800 leading-snug">{c.title}</p>
+                    <p className="mt-0.5 text-xs text-slate-500">
+                      {c.institution_name && <>{c.institution_name} · </>}
+                      {c.aqf_level != null && <>{aqfLabel(c.aqf_level)} · </>}
+                      {c.duration_years != null && (
+                        <>{c.duration_years} yr{c.duration_years > 1 ? "s" : ""} · </>
+                      )}
+                      {c.tuition_fee_aud != null && <>A${c.tuition_fee_aud.toLocaleString()}/yr</>}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {(relatedData.prPathway || (occ.pr_note_ko && locale === "ko")) && (
             <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
               <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider mb-1">
                 {t.map.detailVisaPathway}
               </p>
-              <p className="text-sm text-slate-700 leading-relaxed">{occ.pr_note_ko}</p>
+              {relatedData.prPathway ? (
+                <>
+                  <p className="text-sm text-slate-700 leading-relaxed">
+                    {locale === "ko"
+                      ? (relatedData.prPathway.route_ko ?? relatedData.prPathway.route_en)
+                      : relatedData.prPathway.route_en}
+                  </p>
+                  {(() => {
+                    const caveat =
+                      locale === "ko"
+                        ? relatedData.prPathway.caveat_ko
+                        : relatedData.prPathway.caveat_en
+                    return caveat ? <p className="mt-1.5 text-xs text-slate-400">{caveat}</p> : null
+                  })()}
+                </>
+              ) : (
+                <p className="text-sm text-slate-700 leading-relaxed">{occ.pr_note_ko}</p>
+              )}
             </div>
           )}
 

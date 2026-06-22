@@ -625,6 +625,7 @@ const ko: Dictionary = {
     detailLevelMedium: '보통',
     detailLevelLow: '낮음',
     detailNoData: '직업을 선택하면 상세 정보를 볼 수 있습니다',
+    detailRelatedCourses: '관련 학위·코스',
   },
   explore: {
     hubTitle: '전공·국가로 탐색하기',

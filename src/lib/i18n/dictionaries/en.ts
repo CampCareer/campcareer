@@ -623,6 +623,7 @@ const en = {
     detailLevelMedium: 'Medium',
     detailLevelLow: 'Low',
     detailNoData: 'Select an occupation to see details',
+    detailRelatedCourses: 'Related courses / degrees',
   },
   explore: {
     hubTitle: 'Explore degrees by major & country',
