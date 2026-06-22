@@ -1,23 +1,44 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { ArrowRight, Map as MapIcon, ShieldCheck } from "lucide-react"
-import { OccupationSearch, type OccupationHit } from "@/components/occupation-search"
+import { ArrowRight, MapPin, ShieldCheck } from "lucide-react"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
-const POPULAR = [
-  { code: "265432", label: "Registered Nurse" },
-  { code: "381231", label: "Electrician" },
-  { code: "131131", label: "Construction Project Manager" },
-  { code: "251331", label: "Secondary School Teacher" },
-  { code: "321131", label: "Chef" },
+// 홈 검색 = 딱 두 가지만 고른다: 나라 + 카테고리(부족직종/고연봉).
+// 지역(주)은 /map 에서 고르므로 여기서는 받지 않는다.
+// 호주만 활성, 나머지 국가는 "곧 추가"(disabled).
+const COUNTRIES = [
+  { value: "au", label: "🇦🇺 호주", enabled: true },
+  { value: "ca", label: "🇨🇦 캐나다 (곧 추가)", enabled: false },
+  { value: "uk", label: "🇬🇧 영국 (곧 추가)", enabled: false },
+  { value: "us", label: "🇺🇸 미국 (곧 추가)", enabled: false },
 ]
+
+const CATEGORIES = [
+  { value: "shortage", label: "부족 직업군" },
+  { value: "pay", label: "고연봉 직업군" },
+] as const
+
+// base-ui Select 은 items 맵으로 선택값의 라벨을 트리거에 렌더한다.
+const COUNTRY_ITEMS: Record<string, string> = Object.fromEntries(COUNTRIES.map((c) => [c.value, c.label]))
+const CATEGORY_ITEMS: Record<string, string> = Object.fromEntries(CATEGORIES.map((c) => [c.value, c.label]))
 
 export function HomeFinder() {
   const router = useRouter()
+  const [country, setCountry] = useState("au")
+  const [tab, setTab] = useState<"shortage" | "pay">("shortage")
 
-  function goToOccupation(o: OccupationHit) {
-    router.push(`/roi-explorer/au/occupation/${o.anzsco_code}`)
+  function go() {
+    // 현재는 호주만 활성 → /map 이 AU 로 프레이밍되고, 탭만 미리 선택한다.
+    router.push(`/map?tab=${tab}`)
   }
 
   return (
@@ -26,39 +47,58 @@ export function HomeFinder() {
         <div className="pointer-events-none absolute -top-24 -left-20 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-28 -right-16 h-80 w-80 rounded-full bg-indigo-400/20 blur-3xl" />
 
-        <div className="relative mx-auto max-w-2xl px-6 pt-20 pb-16 text-center sm:pt-28 sm:pb-20">
-          <h1 className="font-display text-3xl font-semibold leading-[1.14] tracking-tight text-white sm:text-[2.6rem] break-keep">
-            호주에서 어떤 직업이 나를 부를까?
-          </h1>
-          <p className="mx-auto mt-4 max-w-xl text-sm text-blue-100 break-keep sm:text-base">
-            직업을 검색하면 호주 주별 인력 부족 정도, 평균 연봉, 비자·코스 정보를 한 번에 볼 수 있어요.
-          </p>
+        <div className="relative mx-auto max-w-xl px-6 pt-16 pb-16 sm:pt-20 sm:pb-20">
+          {/* Selector card */}
+          <div className="rounded-2xl bg-white p-4 text-left shadow-xl sm:p-5">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <Field label="나라">
+                <Select items={COUNTRY_ITEMS} value={country} onValueChange={(v) => v && setCountry(v)}>
+                  <SelectTrigger className="h-11 w-full rounded-xl border-slate-200 text-sm">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {COUNTRIES.map((c) => (
+                      <SelectItem key={c.value} value={c.value} disabled={!c.enabled}>
+                        {c.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </Field>
 
-          <div className="mx-auto mt-8 max-w-xl">
-            <OccupationSearch onSelect={goToOccupation} />
+              <Field label="직업군">
+                <Select items={CATEGORY_ITEMS} value={tab} onValueChange={(v) => v && setTab(v as "shortage" | "pay")}>
+                  <SelectTrigger className="h-11 w-full rounded-xl border-slate-200 text-sm">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {CATEGORIES.map((c) => (
+                      <SelectItem key={c.value} value={c.value}>
+                        {c.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </Field>
+            </div>
+
+            <button
+              type="button"
+              onClick={go}
+              className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 py-3.5 text-sm font-bold text-white transition-colors hover:bg-blue-700"
+            >
+              직업 보기
+              <ArrowRight className="h-4 w-4" />
+            </button>
+
+            <Link
+              href="/map"
+              className="mt-2.5 flex items-center justify-center gap-1.5 text-xs font-medium text-slate-500 hover:text-slate-700"
+            >
+              <MapPin className="h-3.5 w-3.5" />
+              지도에서 바로 둘러보기
+            </Link>
           </div>
-
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
-            <span className="text-xs font-medium uppercase tracking-wide text-blue-200">인기 직업</span>
-            {POPULAR.map((p) => (
-              <Link
-                key={p.code}
-                href={`/roi-explorer/au/occupation/${p.code}`}
-                className="inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/20"
-              >
-                {p.label}
-              </Link>
-            ))}
-          </div>
-
-          <Link
-            href="/map"
-            className="mt-7 inline-flex items-center gap-1.5 text-sm font-medium text-blue-100 hover:text-white"
-          >
-            <MapIcon className="h-4 w-4" />
-            지도에서 주별로 둘러보기
-            <ArrowRight className="h-4 w-4" />
-          </Link>
         </div>
       </section>
 
@@ -74,5 +114,14 @@ export function HomeFinder() {
         </div>
       </section>
     </div>
+  )
+}
+
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <label className="block">
+      <span className="mb-1.5 block text-xs font-medium text-slate-500">{label}</span>
+      {children}
+    </label>
   )
 }
