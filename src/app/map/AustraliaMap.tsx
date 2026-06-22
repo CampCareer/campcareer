@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
-import { RotateCcw, ChevronLeft } from "lucide-react"
+import { RotateCcw, ChevronLeft, ExternalLink } from "lucide-react"
 import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useTranslations, useLocale } from "@/lib/i18n/locale-provider"
@@ -662,6 +662,8 @@ function OccupationDetail({
       title: string
       institution_id: string | null
       institution_name: string | null
+      website_url: string | null
+      cricos_url: string | null
       aqf_level: number | null
       duration_years: number | null
       tuition_fee_aud: number | null
@@ -793,6 +795,32 @@ function OccupationDetail({
                         )}
                         {c.tuition_fee_aud != null && <>A${c.tuition_fee_aud.toLocaleString()}/yr</>}
                       </p>
+                      {(c.cricos_url || c.website_url) && (
+                        <div className="mt-1.5 flex flex-wrap gap-2">
+                          {c.cricos_url && (
+                            <a
+                              href={c.cricos_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-0.5 text-[11px] text-blue-600 hover:text-blue-800 underline underline-offset-2"
+                            >
+                              <ExternalLink className="h-3 w-3" />
+                              {t.map.detailCricosLink}
+                            </a>
+                          )}
+                          {c.website_url && (
+                            <a
+                              href={c.website_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-0.5 text-[11px] text-blue-600 hover:text-blue-800 underline underline-offset-2"
+                            >
+                              <ExternalLink className="h-3 w-3" />
+                              {t.map.detailCollegeWebsite}
+                            </a>
+                          )}
+                        </div>
+                      )}
                     </>
                   )
                   return href ? (
