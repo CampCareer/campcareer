@@ -350,6 +350,9 @@ const en = {
       orRisk: "Or check a degree's full risk",
       orCompare: 'Compare two countries',
       finder: {
+        headline: 'Find the job first, then study',
+        subhead:
+          'Pick a place — see in-demand and high-paying jobs, matching courses, and the visa & PR path. Built on government data.',
         country: 'Country',
         state: 'State / Territory',
         category: 'Job type',
@@ -360,8 +363,11 @@ const en = {
         comingSoon: 'coming soon',
         shortage: 'Shortage occupations',
         pay: 'High-paying jobs',
+        shortageShort: 'Shortage',
+        payShort: 'High-paying',
+        tryThese: 'Try these',
         cta: 'Find jobs',
-        browseMap: 'Browse the map',
+        browseMap: 'Browse the full map',
         dataNote:
           'Built on official government & public data — OSCA 2025 shortage occupations and ABS income. Some figures are estimates under verification.',
       },
