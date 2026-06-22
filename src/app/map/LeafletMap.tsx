@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react"
 import L from "leaflet"
 import { Maximize2 } from "lucide-react"
 import { STATE_CODES, STATE_NAMES, type StateCode } from "./states"
+import { useTranslations } from "@/lib/i18n/locale-provider"
 import type { MapData } from "@/lib/map-data"
 
 const AU_BOUNDS = L.latLngBounds([-44, 112], [-10, 154])
@@ -51,6 +52,7 @@ export default function LeafletMap({
   onSelectCountry: (c: "AU" | "US") => void
   onReset: () => void
 }) {
+  const t = useTranslations()
   const containerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<L.Map | null>(null)
   const auLayerRef = useRef<L.GeoJSON | null>(null)
@@ -424,12 +426,12 @@ export default function LeafletMap({
         className="absolute bottom-3 right-3 z-[1000] inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white/95 px-2.5 py-1.5 text-xs font-medium text-slate-600 shadow-sm backdrop-blur-sm transition-colors hover:bg-white hover:text-slate-900"
       >
         <Maximize2 className="h-3.5 w-3.5" />
-        전체 보기
+        {t.map.seeAll}
       </button>
 
       {activeCountry === "AU" && (
         <div className="pointer-events-none absolute bottom-3 left-3 z-[1000] rounded-lg border border-slate-200 bg-white/95 px-3 py-2 shadow-sm backdrop-blur-sm">
-          <p className="mb-1 text-[11px] font-medium text-slate-500">부족 직종 수</p>
+          <p className="mb-1 text-[11px] font-medium text-slate-500">{t.map.legendShortageCount}</p>
           <div
             className="h-2 w-28 rounded-full"
             style={{ background: `linear-gradient(to right, ${lerpColor(0)}, ${lerpColor(1)})` }}

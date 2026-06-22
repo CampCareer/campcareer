@@ -367,7 +367,7 @@ function ShortageList({ rows, onSelectOcc }: { rows: StateOccupation[]; onSelect
             <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
             <span className="min-w-0 flex-1">
               <span className="block truncate text-sm font-medium text-slate-800">
-                {r.occupation_ko ?? r.occupation_en}
+                {locale === "ko" ? (r.occupation_ko ?? r.occupation_en) : r.occupation_en}
               </span>
               <span className="mt-0.5 flex flex-wrap items-center gap-1.5">
                 {r.state_count === 1 && <Badge tone="blue">{t.map.regionalSpecific}</Badge>}
@@ -421,6 +421,7 @@ function HighPayList({
   onSelectOcc: (code: string) => void
 }) {
   const t = useTranslations()
+  const locale = useLocale()
   const hasStateRows = stateRows.length > 0
 
   // state 선택 시: 이 주의 부족직종 중 보정 연봉 순으로 정렬 후 상위 12
@@ -454,7 +455,7 @@ function HighPayList({
                 <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-sm font-medium text-slate-800">
-                    {r.occupation_ko ?? r.occupation_en}
+                    {locale === "ko" ? (r.occupation_ko ?? r.occupation_en) : r.occupation_en}
                   </span>
                   <span className="mt-0.5 flex flex-wrap items-center gap-1.5">
                     {r.on_csol && <Badge tone="green">{t.map.visaEligible}</Badge>}
@@ -468,7 +469,7 @@ function HighPayList({
                     {adj != null ? `A$${adj.toLocaleString()}` : "—"}
                   </span>
                   {adjusted && (
-                    <span className="block text-[10px] text-slate-400">{selected} 보정 · Census 2021</span>
+                    <span className="block text-[10px] text-slate-400">{selected} {t.map.salaryAdjusted} · Census 2021</span>
                   )}
                 </span>
               </button>
