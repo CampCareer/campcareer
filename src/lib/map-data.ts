@@ -61,9 +61,11 @@ export interface MapData {
   stateSalaryMult: StateSalaryMult
   usShortageByState: Record<string, USOccupation[]>
   usHighPayByState: Record<string, USOccupation[]>
+  auOccupations: Record<string, OccRow>
+  auStateShortages: Record<string, StateShortageByOcc[]>
 }
 
-type OccRow = {
+export type OccRow = {
   anzsco_code: string | null
   occupation_en: string
   occupation_ko: string | null
@@ -72,12 +74,21 @@ type OccRow = {
   on_csol: boolean
   confidence: string | null
   related_broad_field: string | null
+  pr_note_ko: string | null
+  source_name: string | null
+  source_url: string | null
+  last_verified: string | null
 }
 
 type StateRow = {
   anzsco_code: string | null
   state: string | null
   shortage_rating: number
+}
+
+export type StateShortageByOcc = {
+  state: string
+  rating: number
 }
 
 const FULL_NAME_TO_CODE: Record<string, StateCode> = {
@@ -210,7 +221,7 @@ export async function getMapData(): Promise<MapData> {
   const [occupations, stateRows, usColleges, multRows] = await Promise.all([
     fetchAll<OccRow>(
       "occupations_au",
-      "anzsco_code, occupation_en, occupation_ko, shortage_rating, median_salary_aud, on_csol, confidence, related_broad_field",
+      "anzsco_code, occupation_en, occupation_ko, shortage_rating, median_salary_aud, on_csol, confidence, related_broad_field, pr_note_ko, source_name, source_url, last_verified",
     ),
     fetchAll<StateRow>("occupation_state_au", "anzsco_code, state, shortage_rating"),
     getUSColleges(),
@@ -233,9 +244,16 @@ export async function getMapData(): Promise<MapData> {
   }
 
   const stateCountMap = new Map<string, number>()
+  const stateShortagesByOcc = new Map<string, StateShortageByOcc[]>()
   for (const r of stateRows) {
     if (r.anzsco_code) {
       stateCountMap.set(r.anzsco_code, (stateCountMap.get(r.anzsco_code) ?? 0) + 1)
+      const code = normalizeStateCode(r.state)
+      if (code) {
+        const arr = stateShortagesByOcc.get(r.anzsco_code) ?? []
+        arr.push({ state: code, rating: r.shortage_rating })
+        stateShortagesByOcc.set(r.anzsco_code, arr)
+      }
     }
   }
 
@@ -283,5 +301,15 @@ export async function getMapData(): Promise<MapData> {
 
   const usOccData = getUSOccupationData()
 
-  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState }
+  const auOccupations: Record<string, OccRow> = {}
+  byCode.forEach((occ, code) => {
+    auOccupations[code] = occ
+  })
+
+  const auStateShortages: Record<string, StateShortageByOcc[]> = {}
+  stateShortagesByOcc.forEach((arr, code) => {
+    auStateShortages[code] = arr
+  })
+
+  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages }
 }
