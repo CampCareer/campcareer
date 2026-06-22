@@ -9,7 +9,7 @@ import { useTranslations } from "@/lib/i18n/locale-provider"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { STATE_CODES, STATE_NAMES, type StateCode } from "./states"
 import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
-import type { MapData, StateOccupation, HighPayOccupation, StateSalaryMult } from "@/lib/map-data"
+import type { MapData, StateOccupation, HighPayOccupation, USOccupation, StateSalaryMult } from "@/lib/map-data"
 
 const LeafletMap = dynamic(() => import("./LeafletMap"), {
   ssr: false,
@@ -32,7 +32,7 @@ export default function AustraliaMap({
 }) {
   const t = useTranslations()
   const [activeCountry, setActiveCountry] = useState<"AU" | "US" | null>(initialState ? "AU" : null)
-  const [selected, setSelected] = useState<StateCode | null>(initialState)
+  const [selected, setSelected] = useState<string | null>(initialState)
   const [selectedSA4, setSelectedSA4] = useState<SA4Region | null>(null)
   const [tab, setTab] = useState<Tab>(initialTab)
   const [neroData, setNeroData] = useState<NeroData | null>(null)
@@ -54,14 +54,13 @@ export default function AustraliaMap({
   }, [selected])
 
   const onSelectSA4 = useCallback((code: string) => {
-    const regions = selected ? SA4_BY_STATE[selected] ?? [] : []
+    const regions = selected ? SA4_BY_STATE[selected as StateCode] ?? [] : []
     const region = regions.find((r) => r.code === code) ?? null
     setSelectedSA4(region)
     if (region) setTab("employment")
   }, [selected])
 
-  const onSelectState = useCallback((s: StateCode) => {
-    setActiveCountry("AU")
+  const onSelectState = useCallback((s: string) => {
     setSelected(s)
   }, [])
 
@@ -83,10 +82,10 @@ export default function AustraliaMap({
   const stateItems = useMemo(() => STATE_NAMES as Record<string, string>, [])
   const sa4Items = useMemo<Record<string, string>>(() => {
     if (!selected) return {}
-    return Object.fromEntries((SA4_BY_STATE[selected] ?? []).map((r) => [r.code, r.name]))
+    return Object.fromEntries((SA4_BY_STATE[selected as StateCode] ?? []).map((r) => [r.code, r.name]))
   }, [selected])
 
-  const sa4Regions = selected ? SA4_BY_STATE[selected] ?? [] : []
+  const sa4Regions = selected ? SA4_BY_STATE[selected as StateCode] ?? [] : []
 
   return (
     <div className="flex h-full w-full flex-col">
@@ -97,7 +96,7 @@ export default function AustraliaMap({
           <Select
             items={stateItems}
             value={selected}
-            onValueChange={(v) => v && setSelected(v as StateCode)}
+            onValueChange={(v) => v && setSelected(v)}
           >
             <SelectTrigger className="h-10 w-56 rounded-lg border-slate-200 text-sm">
               <SelectValue placeholder={t.map.selectStatePlaceholder} />
@@ -161,7 +160,7 @@ export default function AustraliaMap({
           onReset={onReset}
         />
 
-        {activeCountry === "AU" && selected && (
+        {selected && (
           <div
             className={cn(
               "absolute z-[1000] flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl",
@@ -172,17 +171,32 @@ export default function AustraliaMap({
             <Panel
               data={data}
               selected={selected}
-              selectedSA4={selectedSA4}
+              selectedSA4={activeCountry === "AU" ? selectedSA4 : null}
               tab={tab}
               onTab={setTab}
               onClose={onReset}
-              neroData={neroData}
+              neroData={activeCountry === "AU" ? neroData : null}
+              activeCountry={activeCountry}
             />
           </div>
         )}
       </div>
     </div>
   )
+}
+
+const US_STATE_NAMES: Record<string, string> = {
+  AL: "Alabama", AK: "Alaska", AZ: "Arizona", AR: "Arkansas", CA: "California",
+  CO: "Colorado", CT: "Connecticut", DE: "Delaware", DC: "District of Columbia",
+  FL: "Florida", GA: "Georgia", HI: "Hawaii", ID: "Idaho", IL: "Illinois",
+  IN: "Indiana", IA: "Iowa", KS: "Kansas", KY: "Kentucky", LA: "Louisiana",
+  ME: "Maine", MD: "Maryland", MA: "Massachusetts", MI: "Michigan", MN: "Minnesota",
+  MS: "Mississippi", MO: "Missouri", MT: "Montana", NE: "Nebraska", NV: "Nevada",
+  NH: "New Hampshire", NJ: "New Jersey", NM: "New Mexico", NY: "New York",
+  NC: "North Carolina", ND: "North Dakota", OH: "Ohio", OK: "Oklahoma",
+  OR: "Oregon", PA: "Pennsylvania", RI: "Rhode Island", SC: "South Carolina",
+  SD: "South Dakota", TN: "Tennessee", TX: "Texas", UT: "Utah", VT: "Vermont",
+  VA: "Virginia", WA: "Washington", WV: "West Virginia", WI: "Wisconsin", WY: "Wyoming",
 }
 
 function Panel({
@@ -193,27 +207,36 @@ function Panel({
   onTab,
   onClose,
   neroData,
+  activeCountry,
 }: {
   data: MapData
-  selected: StateCode
+  selected: string
   selectedSA4: SA4Region | null
   tab: Tab
   onTab: (t: Tab) => void
   onClose: () => void
   neroData: Record<string, NeroOccupation[]> | null
+  activeCountry: "AU" | "US" | null
 }) {
   const t = useTranslations()
-  const shortage = data.shortageByState[selected] ?? []
+  const isAU = activeCountry === "AU"
+  const stateName = isAU
+    ? STATE_NAMES[selected as StateCode] ?? selected
+    : US_STATE_NAMES[selected] ?? selected
+
+  const auShortage = isAU ? (data.shortageByState[selected as StateCode] ?? []) : []
+  const usShortage = !isAU ? (data.usShortageByState[selected] ?? []) : []
+  const usHighPay = !isAU ? (data.usHighPayByState[selected] ?? []) : []
 
   return (
     <>
       <div className="flex items-start justify-between gap-2 px-5 pt-4">
         <div>
           <h2 className="font-display text-lg font-semibold text-slate-900 tracking-tight">
-            {selectedSA4 ? selectedSA4.name : STATE_NAMES[selected]}
+            {selectedSA4 ? selectedSA4.name : stateName}
           </h2>
-          {selectedSA4 && (
-            <p className="text-xs text-slate-400">{STATE_NAMES[selected]}</p>
+          {selectedSA4 && isAU && (
+            <p className="text-xs text-slate-400">{STATE_NAMES[selected as StateCode]}</p>
           )}
         </div>
         <button
@@ -234,7 +257,7 @@ function Panel({
           <TabButton active={tab === "pay"} onClick={() => onTab("pay")}>
             {t.map.tabPay}
           </TabButton>
-          {selectedSA4 && (
+          {isAU && selectedSA4 && (
             <TabButton active={tab === "employment"} onClick={() => onTab("employment")}>
               {t.map.tabEmployment}
             </TabButton>
@@ -243,15 +266,17 @@ function Panel({
       </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto px-3 py-3">
-        {tab === "shortage" && <ShortageList rows={shortage} />}
-        {tab === "pay" && (
+        {tab === "shortage" && isAU && <ShortageList rows={auShortage} />}
+        {tab === "shortage" && !isAU && <USShortageList rows={usShortage} />}
+        {tab === "pay" && isAU && (
           <HighPayList
             rows={data.highPay}
-            stateRows={shortage}
-            selected={selected}
+            stateRows={auShortage}
+            selected={selected as StateCode}
             stateSalaryMult={data.stateSalaryMult}
           />
         )}
+        {tab === "pay" && !isAU && <USHighPayList rows={usHighPay} />}
         {tab === "employment" && (
           <EmploymentList
             sa4={selectedSA4}
@@ -458,6 +483,67 @@ function EmploymentList({
         ))}
       </ol>
     </div>
+  )
+}
+
+function USShortageList({ rows }: { rows: USOccupation[] }) {
+  const t = useTranslations()
+  if (rows.length === 0) {
+    return <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>
+  }
+  return (
+    <ol>
+      {rows.map((r, i) => (
+        <li key={r.occ_code}>
+          <div className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50">
+            <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-sm font-medium text-slate-800">
+                {r.occ_title}
+              </span>
+              <span className="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs text-slate-400">
+                {r.pct_change > 0 && <span>Growth: +{r.pct_change}%</span>}
+                {r.annual_openings > 0 && <span>· Openings: {r.annual_openings.toLocaleString()}</span>}
+              </span>
+            </span>
+            <span className="shrink-0 text-right text-sm font-semibold tabular-nums text-slate-700">
+              ${r.median_wage.toLocaleString()}
+            </span>
+          </div>
+        </li>
+      ))}
+    </ol>
+  )
+}
+
+function USHighPayList({ rows }: { rows: USOccupation[] }) {
+  const t = useTranslations()
+  if (rows.length === 0) {
+    return <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>
+  }
+  return (
+    <ol>
+      {rows.map((r, i) => (
+        <li key={r.occ_code}>
+          <div className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50">
+            <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-sm font-medium text-slate-800">
+                {r.occ_title}
+              </span>
+            </span>
+            <span className="shrink-0 text-right">
+              <span className="block text-sm font-semibold tabular-nums text-slate-700">
+                ${r.median_wage.toLocaleString()}
+              </span>
+              {r.pct_change > 0 && (
+                <span className="text-[10px] text-emerald-600">+{r.pct_change}% growth</span>
+              )}
+            </span>
+          </div>
+        </li>
+      ))}
+    </ol>
   )
 }
 

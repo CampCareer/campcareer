@@ -45,9 +45,9 @@ export default function LeafletMap({
   onReset,
 }: {
   data: MapData
-  selected: StateCode | null
+  selected: string | null
   activeCountry: "AU" | "US" | null
-  onSelectState: (s: StateCode) => void
+  onSelectState: (s: string) => void
   onSelectCountry: (c: "AU" | "US") => void
   onReset: () => void
 }) {
@@ -58,7 +58,7 @@ export default function LeafletMap({
   const worldLayerRef = useRef<L.GeoJSON | null>(null)
   const markerLayerRef = useRef<L.LayerGroup | null>(null)
   const layersByCode = useRef<Partial<Record<StateCode, L.Polygon>>>({})
-  const selectedRef = useRef<StateCode | null>(selected)
+  const selectedRef = useRef<string | null>(selected)
   const activeCountryRef = useRef(activeCountry)
   const didFitRef = useRef(false)
   const onSelectStateRef = useRef(onSelectState)
@@ -302,11 +302,34 @@ export default function LeafletMap({
             color: "#0284c7",
             weight: 1,
           }),
-          onEachFeature: (_feature, lyr) => {
-            (lyr as L.Path).on({
+          onEachFeature: (feature, lyr) => {
+            const postal = feature?.properties?.postal as string | undefined
+            ;(lyr as L.Path).on({
+              click: () => {
+                if (postal) onSelectStateRef.current(postal)
+              },
               mouseover: () => (lyr as L.Path).setStyle({ weight: 2, fillOpacity: 0.6 }),
-              mouseout: () => (lyr as L.Path).setStyle({ fillColor: "#e0f2fe", fillOpacity: 0.4, color: "#0284c7", weight: 1 }),
+              mouseout: () => {
+                (lyr as L.Path).setStyle({
+                  fillColor: "#e0f2fe",
+                  fillOpacity: selectedRef.current === postal ? 0.8 : 0.4,
+                  color: selectedRef.current === postal ? "#1e293b" : "#0284c7",
+                  weight: selectedRef.current === postal ? 3 : 1,
+                })
+              },
             })
+            const el = (lyr as L.Path).getElement() as SVGElement | null
+            if (el && postal) {
+              el.setAttribute("tabindex", "0")
+              el.setAttribute("role", "button")
+              el.setAttribute("aria-label", (feature?.properties?.name as string) ?? postal)
+              el.addEventListener("keydown", (e: KeyboardEvent) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault()
+                  onSelectStateRef.current(postal)
+                }
+              })
+            }
           },
         })
         usLayerRef.current = usLayer
@@ -368,12 +391,24 @@ export default function LeafletMap({
     auLayerRef.current?.setStyle((feature) => styleFor(feature?.properties?.STATE_CODE as StateCode))
     if (auLayerRef.current && activeCountry === "AU") {
       if (selected) {
-        const lyr = layersByCode.current[selected]
+        const lyr = layersByCode.current[selected as StateCode]
         const target = lyr ? lyr.getBounds() : AU_BOUNDS
         mapRef.current?.flyToBounds(target, { padding: [30, 30], maxZoom: 6, duration: 0.6 })
       } else {
         mapRef.current?.flyToBounds(AU_BOUNDS, { padding: [30, 30], maxZoom: 6, duration: 0.6 })
       }
+    } else if (usLayerRef.current && activeCountry === "US") {
+      // Update US state styling based on selection
+      usLayerRef.current.setStyle((feature) => {
+        const postal = feature?.properties?.postal as string | undefined
+        const isSel = selected === postal
+        return {
+          fillColor: "#e0f2fe",
+          fillOpacity: isSel ? 0.8 : 0.4,
+          color: isSel ? "#1e293b" : "#0284c7",
+          weight: isSel ? 3 : 1,
+        }
+      })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected])
