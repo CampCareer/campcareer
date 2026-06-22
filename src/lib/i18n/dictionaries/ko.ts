@@ -628,6 +628,13 @@ const ko: Dictionary = {
     detailRelatedCourses: '관련 학위·코스',
     detailCricosLink: 'CRICOS',
     detailCollegeWebsite: '대학 홈페이지',
+    detailDegreesInState: '{state}에서 학위 받기',
+    detailVetInState: '{state}에서 자격증 받기',
+    detailCricosMore: 'CRICOS에서 더 보기',
+    detailNoStateDegrees: '이 주에는 등록된 관련 대학이 아직 없어요 — 공식 CRICOS 등록부에서 검색:',
+    detailOfficialTafe: '공식 TAFE·직업훈련',
+    detailVetPortals: '공식 과정 검색',
+    detailVetHint: '아래 공식 포털에서 주(state)를 선택하면 해당 자격증·도제 과정을 찾을 수 있어요.',
   },
   explore: {
     hubTitle: '전공·국가로 탐색하기',
