@@ -2,14 +2,14 @@
 
 import dynamic from "next/dynamic"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { RotateCcw } from "lucide-react"
+import { RotateCcw, ChevronLeft } from "lucide-react"
 import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { useTranslations } from "@/lib/i18n/locale-provider"
+import { useTranslations, useLocale } from "@/lib/i18n/locale-provider"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { STATE_CODES, STATE_NAMES, type StateCode } from "./states"
 import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
-import type { MapData, StateOccupation, HighPayOccupation, USOccupation, StateSalaryMult } from "@/lib/map-data"
+import type { MapData, StateOccupation, HighPayOccupation, USOccupation, StateSalaryMult, OccRow, StateShortageByOcc } from "@/lib/map-data"
 
 const LeafletMap = dynamic(() => import("./LeafletMap"), {
   ssr: false,
@@ -228,6 +228,31 @@ function Panel({
   const usShortage = !isAU ? (data.usShortageByState[selected] ?? []) : []
   const usHighPay = !isAU ? (data.usHighPayByState[selected] ?? []) : []
 
+  const [selectedOccCode, setSelectedOccCode] = useState<string | null>(null)
+
+  const occ = selectedOccCode ? data.auOccupations[selectedOccCode] : null
+  const stateShortages = selectedOccCode ? data.auStateShortages[selectedOccCode] ?? [] : []
+
+  const handleSelectOcc = useCallback((code: string) => {
+    setSelectedOccCode(code)
+  }, [])
+
+  const handleBack = useCallback(() => {
+    setSelectedOccCode(null)
+  }, [])
+
+  if (selectedOccCode && occ) {
+    return (
+      <OccupationDetail
+        occ={occ}
+        stateShortages={stateShortages}
+        onBack={handleBack}
+        onClose={onClose}
+        t={t}
+      />
+    )
+  }
+
   return (
     <>
       <div className="flex items-start justify-between gap-2 px-5 pt-4">
@@ -266,7 +291,7 @@ function Panel({
       </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto px-3 py-3">
-        {tab === "shortage" && isAU && <ShortageList rows={auShortage} />}
+        {tab === "shortage" && isAU && <ShortageList rows={auShortage} onSelectOcc={handleSelectOcc} />}
         {tab === "shortage" && !isAU && <USShortageList rows={usShortage} />}
         {tab === "pay" && isAU && (
           <HighPayList
@@ -274,6 +299,7 @@ function Panel({
             stateRows={auShortage}
             selected={selected as StateCode}
             stateSalaryMult={data.stateSalaryMult}
+            onSelectOcc={handleSelectOcc}
           />
         )}
         {tab === "pay" && !isAU && <USHighPayList rows={usHighPay} />}
@@ -315,7 +341,7 @@ function TabButton({
   )
 }
 
-function ShortageList({ rows }: { rows: StateOccupation[] }) {
+function ShortageList({ rows, onSelectOcc }: { rows: StateOccupation[]; onSelectOcc: (code: string) => void }) {
   const t = useTranslations()
   if (rows.length === 0) {
     return <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>
@@ -324,8 +350,9 @@ function ShortageList({ rows }: { rows: StateOccupation[] }) {
     <ol>
       {rows.map((r, i) => (
         <li key={r.anzsco_code}>
-          <a
-            href={`/roi-explorer/au/occupation/${r.anzsco_code}`}
+          <button
+            type="button"
+            onClick={() => onSelectOcc(r.anzsco_code)}
             className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50"
           >
             <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
@@ -340,7 +367,7 @@ function ShortageList({ rows }: { rows: StateOccupation[] }) {
               </span>
             </span>
             <ShortageDots rating={r.state_shortage_rating} />
-          </a>
+          </button>
         </li>
       ))}
     </ol>
@@ -365,11 +392,13 @@ function HighPayList({
   stateRows,
   selected,
   stateSalaryMult,
+  onSelectOcc,
 }: {
   rows: HighPayOccupation[]
   stateRows: StateOccupation[]
   selected: StateCode
   stateSalaryMult: StateSalaryMult
+  onSelectOcc: (code: string) => void
 }) {
   const t = useTranslations()
   const hasStateRows = stateRows.length > 0
@@ -397,8 +426,9 @@ function HighPayList({
           const { value: adj, adjusted } = adjustedSalary(r.median_salary_aud, r.anzsco_code, hasStateRows ? selected : null, stateSalaryMult)
           return (
             <li key={r.anzsco_code}>
-              <a
-                href={`/roi-explorer/au/occupation/${r.anzsco_code}`}
+              <button
+                type="button"
+                onClick={() => onSelectOcc(r.anzsco_code)}
                 className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50"
               >
                 <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
@@ -421,7 +451,7 @@ function HighPayList({
                     <span className="block text-[10px] text-slate-400">{selected} 보정 · Census 2021</span>
                   )}
                 </span>
-              </a>
+              </button>
             </li>
           )
         })}
@@ -544,6 +574,164 @@ function USHighPayList({ rows }: { rows: USOccupation[] }) {
         </li>
       ))}
     </ol>
+  )
+}
+
+function shortageLabel(score: number | null, t: ReturnType<typeof useTranslations>): string {
+  if (score == null || score < 3) return t.map.detailLevelLow
+  if (score >= 5) return t.map.detailLevelStrong
+  if (score >= 4) return t.map.detailLevelHigh
+  return t.map.detailLevelMedium
+}
+
+function shortageColor(score: number | null): string {
+  if (score == null || score < 3) return "bg-slate-300"
+  if (score >= 5) return "bg-rose-500"
+  if (score >= 4) return "bg-orange-400"
+  return "bg-amber-300"
+}
+
+function OccupationDetail({
+  occ,
+  stateShortages,
+  onBack,
+  onClose,
+  t,
+}: {
+  occ: OccRow
+  stateShortages: StateShortageByOcc[]
+  onBack: () => void
+  onClose: () => void
+  t: ReturnType<typeof useTranslations>
+}) {
+  const locale = useLocale()
+  const name = locale === "ko" && occ.occupation_ko ? occ.occupation_ko : occ.occupation_en
+
+  const nationalLabel = shortageLabel(occ.shortage_rating, t)
+  const nationalWidth = occ.shortage_rating ? Math.round((occ.shortage_rating / 5) * 100) : 0
+
+  return (
+    <>
+      <div className="flex items-center justify-between px-5 pt-4">
+        <button
+          type="button"
+          onClick={onBack}
+          className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-800 transition-colors"
+        >
+          <ChevronLeft className="h-4 w-4" />
+          {t.map.detailBack}
+        </button>
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label={t.map.close}
+          className="-mr-1 rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+        >
+          <X className="h-4 w-4" />
+        </button>
+      </div>
+
+      <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
+        <h2 className="font-display text-lg font-semibold text-slate-900 tracking-tight">
+          {name}
+        </h2>
+
+        <div className="mt-3 flex flex-wrap items-center gap-1.5">
+          <Badge tone="gray">ANZSCO {occ.anzsco_code}</Badge>
+          {occ.on_csol && <Badge tone="green">{t.map.visaEligible}</Badge>}
+          <span className={cn(
+            "inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium",
+            "border",
+            shortageColor(occ.shortage_rating).replace("bg-", "border-"),
+            shortageColor(occ.shortage_rating),
+            "text-white",
+          )}>
+            {t.map.detailNationalShortage}: {nationalLabel}
+          </span>
+        </div>
+
+        <div className="mt-5 space-y-4">
+          <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+            <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
+              {t.map.detailMedianSalary}
+            </p>
+            <p className="mt-1 text-xl font-bold tabular-nums text-slate-800">
+              {occ.median_salary_aud != null ? `A$${occ.median_salary_aud.toLocaleString()}` : "—"}
+            </p>
+          </div>
+
+          <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+            <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
+              {t.map.detailNationalShortage}
+            </p>
+            <div className="mt-2 flex items-center gap-3">
+              <div className="flex-1 h-2 rounded-full bg-slate-200 overflow-hidden">
+                <div
+                  className={cn("h-full rounded-full transition-all", shortageColor(occ.shortage_rating))}
+                  style={{ width: `${nationalWidth}%` }}
+                />
+              </div>
+              <span className="shrink-0 text-sm font-semibold tabular-nums text-slate-700">
+                {occ.shortage_rating ?? "—"}/5
+              </span>
+            </div>
+            <p className="mt-1 text-xs text-slate-400">{nationalLabel}</p>
+          </div>
+
+          {stateShortages.length > 0 && (
+            <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+              <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider mb-2">
+                {t.map.detailStateShortages}
+              </p>
+              <div className="flex flex-wrap gap-x-3 gap-y-1">
+                {stateShortages.map((s) => (
+                  <span key={s.state} className="inline-flex items-center gap-1.5 text-xs text-slate-700">
+                    <span className="font-medium">{s.state}</span>
+                    <ShortageDotsInline rating={s.rating} />
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {occ.pr_note_ko && locale === "ko" && (
+            <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+              <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider mb-1">
+                {t.map.detailVisaPathway}
+              </p>
+              <p className="text-sm text-slate-700 leading-relaxed">{occ.pr_note_ko}</p>
+            </div>
+          )}
+
+          {occ.last_verified && (
+            <p className="text-xs text-slate-400">
+              {t.map.detailUpdated}: {occ.last_verified}
+            </p>
+          )}
+        </div>
+      </div>
+
+      <p className="border-t border-slate-100 px-5 py-3 text-xs text-slate-400">
+        {t.map.source}
+      </p>
+    </>
+  )
+}
+
+function ShortageDotsInline({ rating }: { rating: number }) {
+  const n = rating >= 3 ? 3 : rating >= 2 ? 2 : 1
+  return (
+    <span className="inline-flex items-center gap-0.5">
+      {Array.from({ length: 3 }).map((_, i) => (
+        <span
+          key={i}
+          className={cn(
+            "h-1.5 w-1.5 rounded-full",
+            i < n ? "bg-rose-400" : "bg-slate-200",
+          )}
+        />
+      ))}
+    </span>
   )
 }
 
