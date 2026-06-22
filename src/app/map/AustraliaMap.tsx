@@ -9,7 +9,7 @@ import { useTranslations } from "@/lib/i18n/locale-provider"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { STATE_CODES, STATE_NAMES, type StateCode } from "./states"
 import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
-import type { MapData, StateOccupation, HighPayOccupation } from "@/lib/map-data"
+import type { MapData, StateOccupation, HighPayOccupation, StateSalaryMult } from "@/lib/map-data"
 
 const LeafletMap = dynamic(() => import("./LeafletMap"), {
   ssr: false,
@@ -244,7 +244,14 @@ function Panel({
 
       <div className="min-h-0 flex-1 overflow-y-auto px-3 py-3">
         {tab === "shortage" && <ShortageList rows={shortage} />}
-        {tab === "pay" && <HighPayList rows={data.highPay} stateRows={shortage} />}
+        {tab === "pay" && (
+          <HighPayList
+            rows={data.highPay}
+            stateRows={shortage}
+            selected={selected}
+            stateSalaryMult={data.stateSalaryMult}
+          />
+        )}
         {tab === "employment" && (
           <EmploymentList
             sa4={selectedSA4}
@@ -315,53 +322,84 @@ function ShortageList({ rows }: { rows: StateOccupation[] }) {
   )
 }
 
+function adjustedSalary(
+  salary: number | null,
+  anzscoCode: string,
+  state: string | null,
+  mult: StateSalaryMult,
+): { value: number | null; adjusted: boolean } {
+  if (salary == null || !state) return { value: salary, adjusted: false }
+  const digit = anzscoCode[0]
+  const factor = mult[state]?.[digit]
+  if (!factor || factor === 1) return { value: salary, adjusted: false }
+  return { value: Math.round(salary * factor), adjusted: true }
+}
+
 function HighPayList({
   rows,
   stateRows,
+  selected,
+  stateSalaryMult,
 }: {
   rows: HighPayOccupation[]
   stateRows: StateOccupation[]
+  selected: StateCode
+  stateSalaryMult: StateSalaryMult
 }) {
   const t = useTranslations()
-  const useState = stateRows.length > 0
+  const hasStateRows = stateRows.length > 0
 
-  const displayRows: Array<{ anzsco_code: string; occupation_ko: string | null; occupation_en: string; on_csol: boolean; median_salary_aud: number | null; state_count?: number }> = useState
+  // state 선택 시: 이 주의 부족직종 중 보정 연봉 순으로 정렬 후 상위 12
+  type DisplayRow = { anzsco_code: string; occupation_ko: string | null; occupation_en: string; on_csol: boolean; median_salary_aud: number | null; state_count?: number }
+  const displayRows: DisplayRow[] = hasStateRows
     ? [...stateRows]
         .filter((r) => r.median_salary_aud != null)
-        .sort((a, b) => (b.median_salary_aud ?? 0) - (a.median_salary_aud ?? 0))
+        .sort((a, b) => {
+          const adjA = adjustedSalary(a.median_salary_aud, a.anzsco_code, selected, stateSalaryMult).value ?? 0
+          const adjB = adjustedSalary(b.median_salary_aud, b.anzsco_code, selected, stateSalaryMult).value ?? 0
+          return adjB - adjA
+        })
         .slice(0, 12)
     : rows
 
-  const hint = useState ? t.map.payHintState : t.map.payHintNational
+  const hint = hasStateRows ? t.map.payHintState : t.map.payHintNational
 
   return (
     <div>
       <p className="mb-1 px-3 text-xs text-slate-400">{hint}</p>
       <ol>
-        {displayRows.map((r, i) => (
-          <li key={r.anzsco_code}>
-            <a
-              href={`/roi-explorer/au/occupation/${r.anzsco_code}`}
-              className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50"
-            >
-              <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
-              <span className="min-w-0 flex-1">
-                <span className="block truncate text-sm font-medium text-slate-800">
-                  {r.occupation_ko ?? r.occupation_en}
+        {displayRows.map((r, i) => {
+          const { value: adj, adjusted } = adjustedSalary(r.median_salary_aud, r.anzsco_code, hasStateRows ? selected : null, stateSalaryMult)
+          return (
+            <li key={r.anzsco_code}>
+              <a
+                href={`/roi-explorer/au/occupation/${r.anzsco_code}`}
+                className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50"
+              >
+                <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-sm font-medium text-slate-800">
+                    {r.occupation_ko ?? r.occupation_en}
+                  </span>
+                  <span className="mt-0.5 flex flex-wrap items-center gap-1.5">
+                    {r.on_csol && <Badge tone="green">{t.map.visaEligible}</Badge>}
+                    {"state_count" in r && r.state_count === 1 && (
+                      <Badge tone="blue">{t.map.regionalSpecific}</Badge>
+                    )}
+                  </span>
                 </span>
-                <span className="mt-0.5 flex flex-wrap items-center gap-1.5">
-                  {r.on_csol && <Badge tone="green">{t.map.visaEligible}</Badge>}
-                  {"state_count" in r && r.state_count === 1 && (
-                    <Badge tone="blue">{t.map.regionalSpecific}</Badge>
+                <span className="shrink-0 text-right">
+                  <span className="block text-sm font-semibold tabular-nums text-slate-700">
+                    {adj != null ? `A$${adj.toLocaleString()}` : "—"}
+                  </span>
+                  {adjusted && (
+                    <span className="block text-[10px] text-slate-400">{selected} 보정 · Census 2021</span>
                   )}
                 </span>
-              </span>
-              <span className="shrink-0 text-sm font-semibold tabular-nums text-slate-700">
-                {r.median_salary_aud != null ? `A$${r.median_salary_aud.toLocaleString()}` : "—"}
-              </span>
-            </a>
-          </li>
-        ))}
+              </a>
+            </li>
+          )
+        })}
       </ol>
     </div>
   )
