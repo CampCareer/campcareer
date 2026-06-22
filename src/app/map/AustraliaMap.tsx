@@ -344,12 +344,15 @@ function TabButton({
 
 function ShortageList({ rows, onSelectOcc }: { rows: StateOccupation[]; onSelectOcc: (code: string) => void }) {
   const t = useTranslations()
+  const locale = useLocale()
+  const [limit, setLimit] = useState(10)
+  const visible = rows.slice(0, limit)
   if (rows.length === 0) {
     return <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>
   }
   return (
     <ol>
-      {rows.map((r, i) => (
+      {visible.map((r, i) => (
         <li key={r.anzsco_code}>
           <button
             type="button"
@@ -371,6 +374,17 @@ function ShortageList({ rows, onSelectOcc }: { rows: StateOccupation[]; onSelect
           </button>
         </li>
       ))}
+      {limit < rows.length && (
+        <li>
+          <button
+            type="button"
+            onClick={() => setLimit((p) => Math.min(p + 10, rows.length))}
+            className="flex w-full items-center justify-center gap-1 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-500 hover:bg-slate-50 hover:text-slate-700 transition-colors"
+          >
+            {locale === "ko" ? "더보기" : "Show more"} ({rows.length - limit})
+          </button>
+        </li>
+      )}
     </ol>
   )
 }
@@ -519,12 +533,15 @@ function EmploymentList({
 
 function USShortageList({ rows }: { rows: USOccupation[] }) {
   const t = useTranslations()
+  const locale = useLocale()
+  const [limit, setLimit] = useState(10)
+  const visible = rows.slice(0, limit)
   if (rows.length === 0) {
     return <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>
   }
   return (
     <ol>
-      {rows.map((r, i) => (
+      {visible.map((r, i) => (
         <li key={r.occ_code}>
           <div className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50">
             <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
@@ -543,6 +560,17 @@ function USShortageList({ rows }: { rows: USOccupation[] }) {
           </div>
         </li>
       ))}
+      {limit < rows.length && (
+        <li>
+          <button
+            type="button"
+            onClick={() => setLimit((p) => Math.min(p + 10, rows.length))}
+            className="flex w-full items-center justify-center gap-1 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-500 hover:bg-slate-50 hover:text-slate-700 transition-colors"
+          >
+            {locale === "ko" ? "더보기" : "Show more"} ({rows.length - limit})
+          </button>
+        </li>
+      )}
     </ol>
   )
 }
