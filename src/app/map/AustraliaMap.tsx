@@ -40,17 +40,16 @@ export default function AustraliaMap({
   const neroFetched = useRef(false)
 
   useEffect(() => {
-    if (!selectedSA4 || neroFetched.current) return
+    if (!selected || neroFetched.current) return
     neroFetched.current = true
     fetch("/nero-sa4.json")
       .then((r) => r.json())
       .then((d: NeroData) => setNeroData(d))
       .catch(() => {})
-  }, [selectedSA4])
+  }, [selected])
 
   useEffect(() => {
     setSelectedSA4(null)
-    if (tab === "employment") setTab("shortage")
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected])
 
@@ -228,6 +227,7 @@ function Panel({
   const auShortage = isAU ? (data.shortageByState[selected as StateCode] ?? []) : []
   const usShortage = !isAU ? (data.usShortageByState[selected] ?? []) : []
   const usHighPay = !isAU ? (data.usHighPayByState[selected] ?? []) : []
+  const panelSa4Regions = isAU ? SA4_BY_STATE[selected as StateCode] ?? [] : []
 
   const [selectedOccCode, setSelectedOccCode] = useState<string | null>(null)
 
@@ -284,7 +284,7 @@ function Panel({
           <TabButton active={tab === "pay"} onClick={() => onTab("pay")}>
             {t.map.tabPay}
           </TabButton>
-          {isAU && selectedSA4 && (
+          {isAU && (
             <TabButton active={tab === "employment"} onClick={() => onTab("employment")}>
               {t.map.tabEmployment}
             </TabButton>
@@ -308,6 +308,8 @@ function Panel({
         {tab === "employment" && (
           <EmploymentList
             sa4={selectedSA4}
+            stateCode={isAU ? (selected as StateCode) : null}
+            sa4Regions={panelSa4Regions}
             neroData={neroData}
           />
         )}
@@ -478,13 +480,16 @@ function HighPayList({
 
 function EmploymentList({
   sa4,
+  stateCode,
+  sa4Regions,
   neroData,
 }: {
   sa4: SA4Region | null
+  stateCode: StateCode | null
+  sa4Regions: SA4Region[]
   neroData: Record<string, NeroOccupation[]> | null
 }) {
   const t = useTranslations()
-  if (!sa4) return null
 
   if (!neroData) {
     return (
@@ -495,7 +500,25 @@ function EmploymentList({
     )
   }
 
-  const occs = neroData[sa4.code] ?? []
+  let occs: NeroOccupation[]
+
+  if (sa4) {
+    occs = neroData[sa4.code] ?? []
+  } else if (stateCode && sa4Regions.length > 0) {
+    const agg = new Map<string, number>()
+    for (const region of sa4Regions) {
+      const rows = neroData[region.code] ?? []
+      for (const r of rows) {
+        agg.set(r.name, (agg.get(r.name) ?? 0) + r.emp)
+      }
+    }
+    occs = Array.from(agg.entries())
+      .map(([name, emp]) => ({ a4: name, name, emp }))
+      .sort((a, b) => b.emp - a.emp)
+  } else {
+    return <p className="py-8 text-center text-sm text-slate-400">{t.map.noEmploymentData}</p>
+  }
+
   if (occs.length === 0) {
     return <p className="py-8 text-center text-sm text-slate-400">{t.map.noEmploymentData}</p>
   }
