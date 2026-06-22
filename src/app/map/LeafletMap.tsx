@@ -264,6 +264,7 @@ export default function LeafletMap({
 
   return (
     <div className="relative h-full w-full">
+      <style>{".leaflet-interactive:focus { outline: none !important; }"}</style>
       <div ref={containerRef} className="h-full w-full" style={{ background: "#f1f5f9" }} />
 
       <button
