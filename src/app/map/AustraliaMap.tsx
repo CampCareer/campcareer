@@ -31,6 +31,7 @@ export default function AustraliaMap({
   initialTab?: Tab
 }) {
   const t = useTranslations()
+  const [showAustralia, setShowAustralia] = useState(initialState !== null)
   const [selected, setSelected] = useState<StateCode | null>(initialState)
   const [selectedSA4, setSelectedSA4] = useState<SA4Region | null>(null)
   const [tab, setTab] = useState<Tab>(initialTab)
@@ -61,11 +62,19 @@ export default function AustraliaMap({
     if (region) setTab("employment")
   }, [selected])
 
-  const onSelectState = useCallback((s: StateCode) => setSelected(s), [])
-  const onReset = useCallback(() => {
-    setSelected(null)
-    setSelectedSA4(null)
+  const onSelectState = useCallback((s: StateCode) => {
+    setShowAustralia(true)
+    setSelected(s)
   }, [])
+  const onSelectAustralia = useCallback(() => setShowAustralia(true), [])
+  const onReset = useCallback(() => {
+    if (selected !== null) {
+      setSelected(null)
+      setSelectedSA4(null)
+    } else if (showAustralia) {
+      setShowAustralia(false)
+    }
+  }, [selected, showAustralia])
 
   // Build items maps for base-ui Select trigger label rendering
   const stateItems = useMemo(() => STATE_NAMES as Record<string, string>, [])
@@ -78,7 +87,8 @@ export default function AustraliaMap({
 
   return (
     <div className="flex h-full w-full flex-col">
-      {/* ── 셀렉터 바 ── */}
+      {/* ── 셀렉터 바 (호주 모드에서만) ── */}
+      {showAustralia && (
       <div className="flex flex-wrap items-end gap-3 border-b border-slate-200 bg-white px-4 py-3">
         {/* State */}
         <label className="block">
@@ -139,10 +149,18 @@ export default function AustraliaMap({
           </button>
         )}
       </div>
+      )}
 
       {/* ── 지도 + 패널 오버레이 ── */}
       <div className="relative min-h-0 flex-1">
-        <LeafletMap data={data} selected={selected} onSelectState={onSelectState} onReset={onReset} />
+        <LeafletMap
+          data={data}
+          selected={selected}
+          showAustralia={showAustralia}
+          onSelectState={onSelectState}
+          onSelectAustralia={onSelectAustralia}
+          onReset={onReset}
+        />
 
         {selected && (
           <div
