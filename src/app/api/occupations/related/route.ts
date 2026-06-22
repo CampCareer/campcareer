@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
 
   const { data: coursesData, error: coursesErr } = await supabase
     .from("courses_au")
-    .select("id, title, institution_id, course_type, aqf_level, duration_years, tuition_fee_aud")
+    .select("id, title, institution_id, course_type, aqf_level, duration_years, tuition_fee_aud, cricos_url")
     .eq("broad_field", occ.related_broad_field)
     .order("id")
     .limit(4)
@@ -44,24 +44,29 @@ export async function GET(req: NextRequest) {
     new Set((coursesData ?? []).map((c) => c.institution_id).filter(Boolean)),
   ) as string[]
 
-  const collegeMap: Record<string, string> = {}
+  interface CollegeRow { institution_id: string; name: string; website_url: string | null }
+  const collegeMap: Record<string, { name: string; website_url: string | null }> = {}
   if (institutionIds.length > 0) {
     const { data: cols } = await supabase
       .from("colleges_au")
-      .select("institution_id, name")
+      .select("institution_id, name, website_url")
       .in("institution_id", institutionIds)
-    for (const c of cols ?? []) collegeMap[c.institution_id] = c.name
+    for (const c of (cols as CollegeRow[] | null) ?? []) {
+      collegeMap[c.institution_id] = { name: c.name, website_url: c.website_url }
+    }
   }
 
   const courses = (coursesData ?? []).map((c) => ({
     id: c.id,
     title: c.title,
     institution_id: c.institution_id,
-    institution_name: collegeMap[c.institution_id] ?? null,
+    institution_name: collegeMap[c.institution_id]?.name ?? null,
+    website_url: collegeMap[c.institution_id]?.website_url ?? null,
     course_type: c.course_type,
     aqf_level: c.aqf_level,
     duration_years: c.duration_years,
     tuition_fee_aud: c.tuition_fee_aud,
+    cricos_url: (c as { cricos_url?: string | null }).cricos_url ?? null,
   }))
 
   return NextResponse.json({ courses, prPathway: prRes.data ?? null })
