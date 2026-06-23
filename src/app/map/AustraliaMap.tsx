@@ -25,6 +25,11 @@ type Tab = "shortage" | "pay" | "employment"
 type NeroOccupation = { a4: string; name: string; emp: number }
 type NeroData = Record<string, NeroOccupation[]>
 
+// 지역(SA4) 단위 직업군 데이터 — public/region-occupations.json (IVI 채용공고 + 인구조사 고소득).
+type RegionGroup = { code?: string; title: string; value: number }
+type RegionEntry = { demand: RegionGroup[]; demandMetro: boolean; pay: RegionGroup[] }
+type RegionOccData = Record<string, RegionEntry>
+
 export default function AustraliaMap({
   data,
 }: {
@@ -39,6 +44,8 @@ export default function AustraliaMap({
   const [tab, setTab] = useState<Tab>("shortage")
   const [neroData, setNeroData] = useState<NeroData | null>(null)
   const neroFetched = useRef(false)
+  const [regionData, setRegionData] = useState<RegionOccData | null>(null)
+  const regionFetched = useRef(false)
   // 직업 카드 열림 상태 — 툴바의 직업 검색에서도 열 수 있도록 최상위로 끌어올림.
   const [selectedOccCode, setSelectedOccCode] = useState<string | null>(null)
   const [selectedUsOcc, setSelectedUsOcc] = useState<USOccupation | null>(null)
@@ -59,6 +66,15 @@ export default function AustraliaMap({
     fetch("/nero-sa4.json")
       .then((r) => r.json())
       .then((d: NeroData) => setNeroData(d))
+      .catch(() => {})
+  }, [selected])
+
+  useEffect(() => {
+    if (!selected || regionFetched.current) return
+    regionFetched.current = true
+    fetch("/region-occupations.json")
+      .then((r) => r.json())
+      .then((d: RegionOccData) => setRegionData(d))
       .catch(() => {})
   }, [selected])
 
@@ -209,6 +225,7 @@ export default function AustraliaMap({
               onTab={setTab}
               onClose={onReset}
               neroData={activeCountry === "AU" ? neroData : null}
+              regionData={activeCountry === "AU" ? regionData : null}
               activeCountry={activeCountry}
               selectedOccCode={selectedOccCode}
               setSelectedOccCode={setSelectedOccCode}
@@ -244,6 +261,7 @@ function Panel({
   onTab,
   onClose,
   neroData,
+  regionData,
   activeCountry,
   selectedOccCode,
   setSelectedOccCode,
@@ -257,6 +275,7 @@ function Panel({
   onTab: (t: Tab) => void
   onClose: () => void
   neroData: Record<string, NeroOccupation[]> | null
+  regionData: RegionOccData | null
   activeCountry: "AU" | "US" | null
   selectedOccCode: string | null
   setSelectedOccCode: (code: string | null) => void
@@ -346,16 +365,26 @@ function Panel({
       </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto px-3 py-3">
-        {tab === "shortage" && isAU && <ShortageList rows={auShortage} onSelectOcc={handleSelectOcc} />}
+        {tab === "shortage" && isAU && (
+          selectedSA4 ? (
+            <RegionGroupList kind="demand" entry={regionData?.[selectedSA4.code]} t={t} />
+          ) : (
+            <ShortageList rows={auShortage} onSelectOcc={handleSelectOcc} />
+          )
+        )}
         {tab === "shortage" && !isAU && <USShortageList rows={usShortage} onSelectOcc={setSelectedUsOcc} />}
         {tab === "pay" && isAU && (
-          <HighPayList
-            rows={data.highPay}
-            stateRows={auShortage}
-            selected={selected as StateCode}
-            stateSalaryMult={data.stateSalaryMult}
-            onSelectOcc={handleSelectOcc}
-          />
+          selectedSA4 ? (
+            <RegionGroupList kind="pay" entry={regionData?.[selectedSA4.code]} t={t} />
+          ) : (
+            <HighPayList
+              rows={data.highPay}
+              stateRows={auShortage}
+              selected={selected as StateCode}
+              stateSalaryMult={data.stateSalaryMult}
+              onSelectOcc={handleSelectOcc}
+            />
+          )
         )}
         {tab === "pay" && !isAU && <USHighPayList rows={usHighPay} onSelectOcc={setSelectedUsOcc} />}
         {tab === "employment" && (
@@ -689,6 +718,54 @@ function USHighPayList({ rows, onSelectOcc }: { rows: USOccupation[]; onSelectOc
         </li>
       ))}
     </ol>
+  )
+}
+
+// 지역(SA4) 선택 시 부족/고소득 탭에 보여줄 직업군(ANZSCO 2자리) 순위.
+// demand = IVI 채용공고 수, pay = 인구조사 고소득자($104k+) 수.
+function RegionGroupList({
+  kind,
+  entry,
+  t,
+}: {
+  kind: "demand" | "pay"
+  entry: RegionEntry | undefined
+  t: ReturnType<typeof useTranslations>
+}) {
+  const rows = kind === "demand" ? entry?.demand ?? [] : entry?.pay ?? []
+  if (rows.length === 0) {
+    return <p className="py-8 text-center text-sm text-slate-400">{t.map.regionNoData}</p>
+  }
+  const max = Math.max(...rows.map((r) => r.value), 1)
+  const metro = kind === "demand" && !!entry?.demandMetro
+  return (
+    <div>
+      <p className="px-3 pb-2 text-xs text-slate-400">
+        {kind === "demand" ? t.map.regionDemandHint : t.map.regionPayHint}
+        {metro ? ` · ${t.map.regionMetroNote}` : ""}
+      </p>
+      <ol>
+        {rows.map((r, i) => (
+          <li key={r.title}>
+            <div className="flex items-center gap-3 rounded-lg px-3 py-2.5">
+              <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-sm font-medium text-slate-800">{r.title}</span>
+                <span className="mt-1.5 block h-1.5 overflow-hidden rounded-full bg-slate-100">
+                  <span
+                    className="block h-full rounded-full bg-violet-500 transition-all"
+                    style={{ width: `${Math.round((r.value / max) * 100)}%` }}
+                  />
+                </span>
+              </span>
+              <span className="shrink-0 text-right text-sm font-semibold tabular-nums text-slate-700">
+                {r.value.toLocaleString()}
+              </span>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
   )
 }
 
