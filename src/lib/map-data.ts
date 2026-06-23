@@ -177,11 +177,13 @@ function getCityCoords(): Map<string, { lat: number; lng: number }> {
 }
 
 async function getUSColleges(): Promise<USCollege[]> {
+  // roi_explorer_us 는 (대학 × 전공) 행이라 college_id 가 중복된다. 도시 컬럼명은 college_city.
   const { data, error } = await supabaseAdmin
     .from("roi_explorer_us")
-    .select("college_id, college_name, city_name, college_state, roi_score, net_salary, tuition, median_earnings, graduation_rate")
+    .select("college_id, college_name, college_city, college_state, roi_score, net_salary, tuition, median_earnings, graduation_rate")
     .gt("roi_score", 0)
-    .limit(500)
+    .order("roi_score", { ascending: false })
+    .limit(3000)
 
   if (error) {
     console.error("[map-data] roi_explorer_us fetch failed:", error)
@@ -191,7 +193,7 @@ async function getUSColleges(): Promise<USCollege[]> {
   const rows = (data ?? []) as Array<{
     college_id: string
     college_name: string
-    city_name: string
+    college_city: string
     college_state: string
     roi_score: number
     net_salary: number
@@ -201,16 +203,18 @@ async function getUSColleges(): Promise<USCollege[]> {
   }>
 
   const coords = getCityCoords()
-  const results: USCollege[] = []
+  // 대학 단위로 접되, ROI 최고값(첫 등장) 행만 남긴다.
+  const byCollege = new Map<string, USCollege>()
 
   for (const r of rows) {
-    const key = `${r.city_name.toLowerCase()}|${r.college_state}`
+    if (!r.college_city || byCollege.has(r.college_id)) continue
+    const key = `${r.college_city.toLowerCase()}|${r.college_state}`
     const coord = coords.get(key)
     if (!coord) continue
-    results.push({
+    byCollege.set(r.college_id, {
       college_id: r.college_id,
       college_name: r.college_name,
-      city_name: r.city_name,
+      city_name: r.college_city,
       college_state: r.college_state,
       lat: coord.lat,
       lng: coord.lng,
@@ -222,9 +226,8 @@ async function getUSColleges(): Promise<USCollege[]> {
     })
   }
 
-  // ROI 높은 순 정렬
-  results.sort((a, b) => (b.roi_score ?? 0) - (a.roi_score ?? 0))
-  return results
+  // ROI 높은 순 정렬 (이미 쿼리에서 정렬됐지만 dedup 후 보장)
+  return Array.from(byCollege.values()).sort((a, b) => (b.roi_score ?? 0) - (a.roi_score ?? 0))
 }
 
 let _usOccData: { shortageByState: Record<string, USOccupation[]>; highPayByState: Record<string, USOccupation[]> } | null = null
