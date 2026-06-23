@@ -165,6 +165,14 @@ export default function LeafletMap({
     mapRef.current = map
     map.fitBounds(WORLD_BOUNDS)
 
+    // 월드(국가) 레이어를 주(state) 레이어보다 항상 아래에 그리도록 전용 pane 을 둔다.
+    // 두 GeoJSON 은 독립 fetch 로 로드되는데, 큰 world-countries.geojson 이 나중에
+    // 끝나면 호주 폴리곤이 주 위에 깔려 첫 클릭이 "국가 선택"으로 새던 버그를 막는다.
+    // (overlayPane 기본 zIndex=400 → basePane 350 으로 낮춘다.)
+    map.createPane("basePane")
+    const basePane = map.getPane("basePane")
+    if (basePane) basePane.style.zIndex = "350"
+
     const ro = new ResizeObserver(() => {
       if (mapRef.current !== map) return
       map.invalidateSize()
@@ -188,6 +196,7 @@ export default function LeafletMap({
       .then((geo: GeoJSON.FeatureCollection) => {
         if (mapRef.current !== map) return
         const worldLayer = L.geoJSON(geo, {
+          pane: "basePane",
           style: (feature) => {
             if (feature && isAustralia(feature.properties as Record<string, unknown>)) {
               return { fillColor: "#e0e7ff", color: "#6366f1", weight: 2, fillOpacity: 0.5 }
