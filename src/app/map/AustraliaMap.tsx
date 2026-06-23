@@ -178,9 +178,11 @@ export default function AustraliaMap({
         <LeafletMap
           data={data}
           selected={selected}
+          selectedSA4={activeCountry === "AU" ? selectedSA4 : null}
           activeCountry={activeCountry}
           onSelectState={onSelectState}
           onSelectCountry={onSelectCountry}
+          onSelectSA4={onSelectSA4}
           onReset={onReset}
         />
 
