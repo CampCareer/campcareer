@@ -1,4 +1,5 @@
 import "server-only"
+import { unstable_cache } from "next/cache"
 import { supabaseAdmin } from "@/lib/supabase-admin"
 import { STATE_CODES, type StateCode } from "@/app/map/states"
 import { readFileSync } from "fs"
@@ -304,7 +305,7 @@ async function getCoursesByFieldState(): Promise<Record<string, Record<string, C
   return result
 }
 
-export async function getMapData(): Promise<MapData> {
+async function getMapDataUncached(): Promise<MapData> {
   const [occupations, stateRows, usColleges, multRows, coursesByFieldState, prRes] = await Promise.all([
     fetchAll<OccRow>(
       "occupations_au",
@@ -406,4 +407,15 @@ export async function getMapData(): Promise<MapData> {
   })
 
   return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages, prPathway: prRes, coursesByFieldState }
+}
+
+// cross-instance 공유 캐시(방어선). 페이지가 force-static이라 보통 빌드/리밸리데이트
+// 때만 돌지만, 콜드 인스턴스·리밸리데이트에서도 Supabase 6쿼리가 중복 실행되지
+// 않도록 24h 캐시한다. 페이지의 revalidate(86400)와 동일하게 맞춘다.
+const getMapDataCached = unstable_cache(getMapDataUncached, ["map-data"], {
+  revalidate: 86400,
+})
+
+export async function getMapData(): Promise<MapData> {
+  return getMapDataCached()
 }

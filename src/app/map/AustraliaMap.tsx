@@ -27,25 +27,31 @@ type NeroData = Record<string, NeroOccupation[]>
 
 export default function AustraliaMap({
   data,
-  initialState = null,
-  initialTab = "shortage",
 }: {
   data: MapData
-  initialState?: StateCode | null
-  initialTab?: Tab
 }) {
   const t = useTranslations()
   // /map은 호주 비치헤드의 front door다 → 진입 즉시 주/지역 선택(검색) 바가 보이도록
   // 기본을 "AU"로 둔다. 월드맵(다른 국가)은 "전체 보기"로 빠져나가 볼 수 있다.
   const [activeCountry, setActiveCountry] = useState<"AU" | "US" | null>("AU")
-  const [selected, setSelected] = useState<string | null>(initialState)
+  const [selected, setSelected] = useState<string | null>(null)
   const [selectedSA4, setSelectedSA4] = useState<SA4Region | null>(null)
-  const [tab, setTab] = useState<Tab>(initialTab)
+  const [tab, setTab] = useState<Tab>("shortage")
   const [neroData, setNeroData] = useState<NeroData | null>(null)
   const neroFetched = useRef(false)
   // 직업 카드 열림 상태 — 툴바의 직업 검색에서도 열 수 있도록 최상위로 끌어올림.
   const [selectedOccCode, setSelectedOccCode] = useState<string | null>(null)
   const [selectedUsOcc, setSelectedUsOcc] = useState<USOccupation | null>(null)
+
+  // 페이지가 정적(force-static)이므로 ?state=NSW&tab=pay 딥링크는 서버가 아니라
+  // 여기서 마운트 후 읽어 반영한다. SSR 시점엔 기본값으로 렌더돼 하이드레이션
+  // 불일치가 없다(홈 셀렉터 → /map 딥링크 동작 보존).
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search)
+    const raw = p.get("state")?.toUpperCase()
+    if (raw && (STATE_CODES as string[]).includes(raw)) setSelected(raw as StateCode)
+    if (p.get("tab") === "pay") setTab("pay")
+  }, [])
 
   useEffect(() => {
     if (!selected || neroFetched.current) return

@@ -161,11 +161,23 @@ export default function LeafletMap({
     }
   }
 
+  // 컨테이너가 아직 0폭(레이아웃 전)이면 leaflet 의 zoom 계산이 NaN LatLng 를 만들어
+  // flyToBounds/fitBounds 가 throw 한다. 그래서 모든 bounds 이동은 이 가드를 통과시킨다.
+  // (딥링크로 selected 가 마운트 직후 null→NSW 로 바뀔 때 특히 중요 — 초기 fit 도 line 376
+  // 에서 같은 clientWidth>0 조건을 본다.)
+  function safeBounds(bounds: L.LatLngBoundsExpression): L.LatLngBounds | null {
+    const container = containerRef.current
+    if (!mapRef.current || !container || container.clientWidth === 0) return null
+    const b = L.latLngBounds(bounds as L.LatLngBoundsLiteral)
+    return b.isValid() ? b : null
+  }
+
   function fitToBounds(bounds: L.LatLngBoundsExpression, animate: boolean) {
     const map = mapRef.current
-    if (!map) return
-    if (animate) map.flyToBounds(bounds, { padding: [30, 30], maxZoom: 6, duration: 0.6 })
-    else map.fitBounds(bounds, { padding: [20, 20], maxZoom: 6 })
+    const b = safeBounds(bounds)
+    if (!map || !b) return
+    if (animate) map.flyToBounds(b, { padding: [30, 30], maxZoom: 6, duration: 0.6 })
+    else map.fitBounds(b, { padding: [20, 20], maxZoom: 6 })
   }
 
   function sa4StyleFor(code: string): L.PathOptions {
@@ -374,7 +386,10 @@ export default function LeafletMap({
         if (activeCountryRef.current === "AU") {
           map.addLayer(auLayer)
           if (!didFitRef.current && container.clientWidth > 0) {
-            fitToBounds(AU_BOUNDS, false)
+            // 딥링크(?state=NSW)로 이미 주가 선택돼 있으면 그 주로, 아니면 호주 전체로 맞춘다.
+            const sel = selectedRef.current
+            const selLyr = sel ? layersByCode.current[sel as StateCode] : undefined
+            fitToBounds(selLyr ? selLyr.getBounds() : AU_BOUNDS, false)
             didFitRef.current = true
           }
         }
@@ -513,10 +528,11 @@ export default function LeafletMap({
     if (auLayerRef.current && activeCountry === "AU") {
       if (selected) {
         const lyr = layersByCode.current[selected as StateCode]
-        const target = lyr ? lyr.getBounds() : AU_BOUNDS
-        mapRef.current?.flyToBounds(target, { padding: [30, 30], maxZoom: 6, duration: 0.6 })
+        const b = safeBounds(lyr ? lyr.getBounds() : AU_BOUNDS)
+        if (b) mapRef.current?.flyToBounds(b, { padding: [30, 30], maxZoom: 6, duration: 0.6 })
       } else {
-        mapRef.current?.flyToBounds(AU_BOUNDS, { padding: [30, 30], maxZoom: 6, duration: 0.6 })
+        const b = safeBounds(AU_BOUNDS)
+        if (b) mapRef.current?.flyToBounds(b, { padding: [30, 30], maxZoom: 6, duration: 0.6 })
       }
     } else if (usLayerRef.current && activeCountry === "US") {
       // Update US state styling based on selection
@@ -544,7 +560,8 @@ export default function LeafletMap({
     layer.setStyle((feature) => sa4StyleFor(feature?.properties?.SA4_CODE as string))
     if (selectedSA4) {
       const lyr = sa4ByCode.current[selectedSA4.code]
-      if (lyr) mapRef.current?.flyToBounds(lyr.getBounds(), { padding: [40, 40], maxZoom: 8, duration: 0.6 })
+      const b = lyr ? safeBounds(lyr.getBounds()) : null
+      if (b) mapRef.current?.flyToBounds(b, { padding: [40, 40], maxZoom: 8, duration: 0.6 })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedSA4])
