@@ -12,6 +12,7 @@ import { STATE_CODES, STATE_NAMES, type StateCode } from "./states"
 import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
 import { getPathway, TAFE_BY_STATE, VET_PORTALS, cricosSearchUrl } from "@/lib/au-pathway"
 import { WiseCta } from "@/components/partners/partner-cta"
+import { OccupationPicker } from "@/components/map/occupation-picker"
 import type { MapData, StateOccupation, HighPayOccupation, USOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc } from "@/lib/map-data"
 
 const LeafletMap = dynamic(() => import("./LeafletMap"), {
@@ -42,6 +43,9 @@ export default function AustraliaMap({
   const [tab, setTab] = useState<Tab>(initialTab)
   const [neroData, setNeroData] = useState<NeroData | null>(null)
   const neroFetched = useRef(false)
+  // 직업 카드 열림 상태 — 툴바의 직업 검색에서도 열 수 있도록 최상위로 끌어올림.
+  const [selectedOccCode, setSelectedOccCode] = useState<string | null>(null)
+  const [selectedUsOcc, setSelectedUsOcc] = useState<USOccupation | null>(null)
 
   useEffect(() => {
     if (!selected || neroFetched.current) return
@@ -56,6 +60,12 @@ export default function AustraliaMap({
     setSelectedSA4(null)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected])
+
+  // 주(state)·국가가 바뀌면 열려 있던 직업 상세를 닫는다 (stale 카드 방지).
+  useEffect(() => {
+    setSelectedOccCode(null)
+    setSelectedUsOcc(null)
+  }, [selected, activeCountry])
 
   const onSelectSA4 = useCallback((code: string) => {
     const regions = selected ? SA4_BY_STATE[selected as StateCode] ?? [] : []
@@ -141,6 +151,16 @@ export default function AustraliaMap({
           )}
         </label>
 
+        <label className="block">
+          <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectOccupation}</span>
+          <OccupationPicker
+            key={selected ?? "none"}
+            disabled={!selected}
+            occupations={selected ? data.shortageByState[selected as StateCode] ?? [] : []}
+            onSelect={(code) => setSelectedOccCode(code)}
+          />
+        </label>
+
         {(selected || selectedSA4) && (
           <button
             type="button"
@@ -181,6 +201,10 @@ export default function AustraliaMap({
               onClose={onReset}
               neroData={activeCountry === "AU" ? neroData : null}
               activeCountry={activeCountry}
+              selectedOccCode={selectedOccCode}
+              setSelectedOccCode={setSelectedOccCode}
+              selectedUsOcc={selectedUsOcc}
+              setSelectedUsOcc={setSelectedUsOcc}
             />
           </div>
         )}
@@ -212,6 +236,10 @@ function Panel({
   onClose,
   neroData,
   activeCountry,
+  selectedOccCode,
+  setSelectedOccCode,
+  selectedUsOcc,
+  setSelectedUsOcc,
 }: {
   data: MapData
   selected: string
@@ -221,6 +249,10 @@ function Panel({
   onClose: () => void
   neroData: Record<string, NeroOccupation[]> | null
   activeCountry: "AU" | "US" | null
+  selectedOccCode: string | null
+  setSelectedOccCode: (code: string | null) => void
+  selectedUsOcc: USOccupation | null
+  setSelectedUsOcc: (occ: USOccupation | null) => void
 }) {
   const t = useTranslations()
   const isAU = activeCountry === "AU"
@@ -233,25 +265,11 @@ function Panel({
   const usHighPay = !isAU ? (data.usHighPayByState[selected] ?? []) : []
   const panelSa4Regions = isAU ? SA4_BY_STATE[selected as StateCode] ?? [] : []
 
-  const [selectedOccCode, setSelectedOccCode] = useState<string | null>(null)
-  const [selectedUsOcc, setSelectedUsOcc] = useState<USOccupation | null>(null)
-
   const occ = selectedOccCode ? data.auOccupations[selectedOccCode] : null
   const stateShortages = selectedOccCode ? data.auStateShortages[selectedOccCode] ?? [] : []
 
-  const handleSelectOcc = useCallback((code: string) => {
-    setSelectedOccCode(code)
-  }, [])
-
-  const handleBack = useCallback(() => {
-    setSelectedOccCode(null)
-  }, [])
-
-  // 주(state)·국가가 바뀌면 열려 있던 직업 상세를 닫는다 (이전 선택이 남아 stale 카드가 뜨는 것 방지).
-  useEffect(() => {
-    setSelectedOccCode(null)
-    setSelectedUsOcc(null)
-  }, [selected, activeCountry])
+  const handleSelectOcc = (code: string) => setSelectedOccCode(code)
+  const handleBack = () => setSelectedOccCode(null)
 
   if (selectedUsOcc) {
     return (
