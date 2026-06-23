@@ -671,6 +671,11 @@ const en = {
     detailBls: 'BLS wage data',
     detailTopSchools: 'Top schools in {state}',
     detailNoSchools: 'No college data for this state yet.',
+    // Partner (affiliate) CTA
+    wiseCtaTitle: 'Moving abroad to study?',
+    wiseCtaDesc: 'Pay tuition and send money home at the real exchange rate with Wise.',
+    wiseCtaButton: 'Open a free Wise account',
+    affiliateNote: 'Affiliate link',
   },
   explore: {
     hubTitle: 'Explore degrees by major & country',

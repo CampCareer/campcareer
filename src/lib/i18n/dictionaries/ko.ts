@@ -673,6 +673,11 @@ const ko: Dictionary = {
     detailBls: 'BLS 임금 데이터',
     detailTopSchools: '{state} 주요 대학',
     detailNoSchools: '이 주의 대학 데이터가 아직 없습니다.',
+    // 제휴(affiliate) CTA
+    wiseCtaTitle: '유학으로 해외 이주하시나요?',
+    wiseCtaDesc: 'Wise로 학비 납부와 본국 송금을 실시간 환율로 처리하세요.',
+    wiseCtaButton: '무료 Wise 계좌 만들기',
+    affiliateNote: '제휴 링크',
   },
   explore: {
     hubTitle: '전공·국가로 탐색하기',
