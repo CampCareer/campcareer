@@ -616,7 +616,7 @@ const ko: Dictionary = {
   map: {
     tabShortage: '부족 직종',
     tabPay: '고소득 직업',
-    tabEmployment: '지역 고용',
+    tabEmployment: '고용률',
     selectState: '주 (State)',
     selectStatePlaceholder: '주를 선택하세요',
     selectRegion: '지역 (SA4 Region)',
@@ -660,6 +660,19 @@ const ko: Dictionary = {
     detailOfficialTafe: '공식 TAFE·직업훈련',
     detailVetPortals: '공식 과정 검색',
     detailVetHint: '아래 공식 포털에서 주(state)를 선택하면 해당 자격증·도제 과정을 찾을 수 있어요.',
+    detailCoursePage: '학과 페이지',
+    // US occupation card
+    detailSoc: 'SOC',
+    detailEmployment: '고용·전망',
+    detailEmployed: '고용 인원',
+    detailGrowth: '성장 전망',
+    detailAnnualOpenings: '연간 채용',
+    detailShortageScore: '부족 점수',
+    detailLearnMore: '더 알아보기',
+    detailOnet: 'O*NET 직업 정보',
+    detailBls: 'BLS 임금 데이터',
+    detailTopSchools: '{state} 주요 대학',
+    detailNoSchools: '이 주의 대학 데이터가 아직 없습니다.',
   },
   explore: {
     hubTitle: '전공·국가로 탐색하기',

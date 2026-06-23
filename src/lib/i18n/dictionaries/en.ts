@@ -614,7 +614,7 @@ const en = {
   map: {
     tabShortage: 'Shortage Occupation',
     tabPay: 'High Salary Job',
-    tabEmployment: 'Regional Employment',
+    tabEmployment: 'Employment rate',
     selectState: 'State',
     selectStatePlaceholder: 'Select a state',
     selectRegion: 'Region (SA4)',
@@ -658,6 +658,19 @@ const en = {
     detailOfficialTafe: 'Official TAFE / training',
     detailVetPortals: 'Official course search',
     detailVetHint: 'Pick your state inside these official portals to find the right certificate or apprenticeship.',
+    detailCoursePage: 'Course page',
+    // US occupation card
+    detailSoc: 'SOC',
+    detailEmployment: 'Employment & outlook',
+    detailEmployed: 'Employed',
+    detailGrowth: 'Projected growth',
+    detailAnnualOpenings: 'Annual openings',
+    detailShortageScore: 'Shortage score',
+    detailLearnMore: 'Learn more',
+    detailOnet: 'O*NET profile',
+    detailBls: 'BLS wage data',
+    detailTopSchools: 'Top schools in {state}',
+    detailNoSchools: 'No college data for this state yet.',
   },
   explore: {
     hubTitle: 'Explore degrees by major & country',

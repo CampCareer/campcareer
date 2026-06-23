@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { STATE_CODES, STATE_NAMES, type StateCode } from "./states"
 import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
 import { getPathway, TAFE_BY_STATE, VET_PORTALS, cricosSearchUrl } from "@/lib/au-pathway"
-import type { MapData, StateOccupation, HighPayOccupation, USOccupation, StateSalaryMult, OccRow, StateShortageByOcc } from "@/lib/map-data"
+import type { MapData, StateOccupation, HighPayOccupation, USOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc } from "@/lib/map-data"
 
 const LeafletMap = dynamic(() => import("./LeafletMap"), {
   ssr: false,
@@ -233,6 +233,7 @@ function Panel({
   const panelSa4Regions = isAU ? SA4_BY_STATE[selected as StateCode] ?? [] : []
 
   const [selectedOccCode, setSelectedOccCode] = useState<string | null>(null)
+  const [selectedUsOcc, setSelectedUsOcc] = useState<USOccupation | null>(null)
 
   const occ = selectedOccCode ? data.auOccupations[selectedOccCode] : null
   const stateShortages = selectedOccCode ? data.auStateShortages[selectedOccCode] ?? [] : []
@@ -244,6 +245,26 @@ function Panel({
   const handleBack = useCallback(() => {
     setSelectedOccCode(null)
   }, [])
+
+  // 주(state)·국가가 바뀌면 열려 있던 직업 상세를 닫는다 (이전 선택이 남아 stale 카드가 뜨는 것 방지).
+  useEffect(() => {
+    setSelectedOccCode(null)
+    setSelectedUsOcc(null)
+  }, [selected, activeCountry])
+
+  if (selectedUsOcc) {
+    return (
+      <USOccupationDetail
+        occ={selectedUsOcc}
+        stateName={stateName}
+        stateCode={selected}
+        colleges={data.usColleges}
+        onBack={() => setSelectedUsOcc(null)}
+        onClose={onClose}
+        t={t}
+      />
+    )
+  }
 
   if (selectedOccCode && occ) {
     return (
@@ -298,7 +319,7 @@ function Panel({
 
       <div className="min-h-0 flex-1 overflow-y-auto px-3 py-3">
         {tab === "shortage" && isAU && <ShortageList rows={auShortage} onSelectOcc={handleSelectOcc} />}
-        {tab === "shortage" && !isAU && <USShortageList rows={usShortage} />}
+        {tab === "shortage" && !isAU && <USShortageList rows={usShortage} onSelectOcc={setSelectedUsOcc} />}
         {tab === "pay" && isAU && (
           <HighPayList
             rows={data.highPay}
@@ -308,7 +329,7 @@ function Panel({
             onSelectOcc={handleSelectOcc}
           />
         )}
-        {tab === "pay" && !isAU && <USHighPayList rows={usHighPay} />}
+        {tab === "pay" && !isAU && <USHighPayList rows={usHighPay} onSelectOcc={setSelectedUsOcc} />}
         {tab === "employment" && (
           <EmploymentList
             sa4={selectedSA4}
@@ -560,7 +581,7 @@ function EmploymentList({
   )
 }
 
-function USShortageList({ rows }: { rows: USOccupation[] }) {
+function USShortageList({ rows, onSelectOcc }: { rows: USOccupation[]; onSelectOcc: (occ: USOccupation) => void }) {
   const t = useTranslations()
   const locale = useLocale()
   const [limit, setLimit] = useState(10)
@@ -572,7 +593,11 @@ function USShortageList({ rows }: { rows: USOccupation[] }) {
     <ol>
       {visible.map((r, i) => (
         <li key={r.occ_code}>
-          <div className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50">
+          <button
+            type="button"
+            onClick={() => onSelectOcc(r)}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50"
+          >
             <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
             <span className="min-w-0 flex-1">
               <span className="block truncate text-sm font-medium text-slate-800">
@@ -586,7 +611,7 @@ function USShortageList({ rows }: { rows: USOccupation[] }) {
             <span className="shrink-0 text-right text-sm font-semibold tabular-nums text-slate-700">
               ${r.median_wage.toLocaleString()}
             </span>
-          </div>
+          </button>
         </li>
       ))}
       {limit < rows.length && (
@@ -604,7 +629,7 @@ function USShortageList({ rows }: { rows: USOccupation[] }) {
   )
 }
 
-function USHighPayList({ rows }: { rows: USOccupation[] }) {
+function USHighPayList({ rows, onSelectOcc }: { rows: USOccupation[]; onSelectOcc: (occ: USOccupation) => void }) {
   const t = useTranslations()
   if (rows.length === 0) {
     return <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>
@@ -613,7 +638,11 @@ function USHighPayList({ rows }: { rows: USOccupation[] }) {
     <ol>
       {rows.map((r, i) => (
         <li key={r.occ_code}>
-          <div className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50">
+          <button
+            type="button"
+            onClick={() => onSelectOcc(r)}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50"
+          >
             <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
             <span className="min-w-0 flex-1">
               <span className="block truncate text-sm font-medium text-slate-800">
@@ -628,7 +657,7 @@ function USHighPayList({ rows }: { rows: USOccupation[] }) {
                 <span className="text-[10px] text-emerald-600">+{r.pct_change}% growth</span>
               )}
             </span>
-          </div>
+          </button>
         </li>
       ))}
     </ol>
@@ -647,6 +676,26 @@ function shortageColor(score: number | null): string {
   if (score >= 5) return "bg-rose-500"
   if (score >= 4) return "bg-orange-400"
   return "bg-amber-300"
+}
+
+// 코스의 "관련 학과" 링크 — 대학 공식 도메인(website_url) 안에서 코스명으로 사이트 검색.
+// 별도 URL 데이터 없이도 학교 홈페이지가 아니라 해당 프로그램 페이지로 바로 안내한다.
+function courseProgramUrl(websiteUrl: string | null, title: string): string | null {
+  if (!websiteUrl) return null
+  let domain: string
+  try {
+    domain = new URL(websiteUrl).hostname.replace(/^www\./, "")
+  } catch {
+    return null
+  }
+  if (!domain) return null
+  return `https://www.google.com/search?q=${encodeURIComponent(`${title} site:${domain}`)}`
+}
+
+// 미국 대학은 데이터에 공식 URL이 없어, 학교명 검색으로 공식 사이트까지 안내한다.
+// (/roi-explorer 는 현재 next.config 에서 soft-hide 되어 내부 링크가 홈으로 리다이렉트됨.)
+function collegeSearchUrl(name: string): string {
+  return `https://www.google.com/search?q=${encodeURIComponent(name)}`
 }
 
 function aqfLabel(level: number | null): string {
@@ -800,6 +849,7 @@ function OccupationDetail({
               <div className="space-y-2">
                 {relatedData.courses.map((c) => {
                   const href = c.institution_id ? `/roi-explorer/au/${c.institution_id}` : null
+                  const programUrl = courseProgramUrl(c.website_url, c.title)
                   const info = (
                     <>
                       <p className="text-sm font-medium text-slate-800 leading-snug">{c.title}</p>
@@ -827,8 +877,19 @@ function OccupationDetail({
                       ) : (
                         info
                       )}
-                      {(c.cricos_url || c.website_url) && (
+                      {(programUrl || c.cricos_url || c.website_url) && (
                         <div className="mt-1.5 flex flex-wrap gap-2">
+                          {programUrl && (
+                            <a
+                              href={programUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-0.5 text-[11px] text-blue-600 hover:text-blue-800 underline underline-offset-2"
+                            >
+                              <ExternalLink className="h-3 w-3" />
+                              {t.map.detailCoursePage}
+                            </a>
+                          )}
                           {c.cricos_url && (
                             <a
                               href={c.cricos_url}
@@ -958,6 +1019,181 @@ function OccupationDetail({
               {t.map.detailUpdated}: {occ.last_verified}
             </p>
           )}
+        </div>
+      </div>
+
+      <p className="border-t border-slate-100 px-5 py-3 text-xs text-slate-400">
+        {t.map.source}
+      </p>
+    </>
+  )
+}
+
+// 미국 직업 상세 카드 — AU OccupationDetail 와 같은 패널 크롬을 쓰되, 우리가 이미 로드한
+// 데이터(임금·고용·부족점수)와 외부 링크(O*NET/BLS), 주별 ROI 상위 대학으로 구성한다.
+function USOccupationDetail({
+  occ,
+  stateName,
+  stateCode,
+  colleges,
+  onBack,
+  onClose,
+  t,
+}: {
+  occ: USOccupation
+  stateName: string
+  stateCode: string
+  colleges: USCollege[]
+  onBack: () => void
+  onClose: () => void
+  t: ReturnType<typeof useTranslations>
+}) {
+  // SOC 코드(예: 15-1252) → O*NET 8자리(.00), BLS OEWS(하이픈 제거) 공식 페이지로 연결.
+  const onetUrl = `https://www.onetonline.org/link/summary/${occ.occ_code}.00`
+  const blsUrl = `https://www.bls.gov/oes/current/oes${occ.occ_code.replace("-", "")}.htm`
+
+  const topSchools = colleges
+    .filter((c) => c.college_state === stateCode && c.roi_score != null)
+    .sort((a, b) => (b.roi_score ?? 0) - (a.roi_score ?? 0))
+    .slice(0, 6)
+
+  const shortageWidth = Math.max(0, Math.min(100, Math.round(occ.shortage_score)))
+
+  return (
+    <>
+      <div className="flex items-center justify-between px-5 pt-4">
+        <button
+          type="button"
+          onClick={onBack}
+          className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-800 transition-colors"
+        >
+          <ChevronLeft className="h-4 w-4" />
+          {t.map.detailBack}
+        </button>
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label={t.map.close}
+          className="-mr-1 rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+        >
+          <X className="h-4 w-4" />
+        </button>
+      </div>
+
+      <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
+        <h2 className="font-display text-lg font-semibold text-slate-900 tracking-tight">
+          {occ.occ_title}
+        </h2>
+
+        <div className="mt-3 flex flex-wrap items-center gap-1.5">
+          <Badge tone="gray">{t.map.detailSoc} {occ.occ_code}</Badge>
+        </div>
+
+        <div className="mt-5 space-y-4">
+          <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+            <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
+              {t.map.detailMedianSalary}
+            </p>
+            <p className="mt-1 text-xl font-bold tabular-nums text-slate-800">
+              ${occ.median_wage.toLocaleString()}
+            </p>
+          </div>
+
+          <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+            <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider mb-2">
+              {t.map.detailEmployment}
+            </p>
+            <dl className="space-y-1.5 text-sm">
+              {occ.tot_emp > 0 && (
+                <div className="flex items-center justify-between">
+                  <dt className="text-slate-500">{t.map.detailEmployed}</dt>
+                  <dd className="font-medium tabular-nums text-slate-700">{occ.tot_emp.toLocaleString()}</dd>
+                </div>
+              )}
+              {occ.pct_change !== 0 && (
+                <div className="flex items-center justify-between">
+                  <dt className="text-slate-500">{t.map.detailGrowth}</dt>
+                  <dd className={cn("font-medium tabular-nums", occ.pct_change > 0 ? "text-emerald-600" : "text-slate-700")}>
+                    {occ.pct_change > 0 ? "+" : ""}{occ.pct_change}%
+                  </dd>
+                </div>
+              )}
+              {occ.annual_openings > 0 && (
+                <div className="flex items-center justify-between">
+                  <dt className="text-slate-500">{t.map.detailAnnualOpenings}</dt>
+                  <dd className="font-medium tabular-nums text-slate-700">{occ.annual_openings.toLocaleString()}</dd>
+                </div>
+              )}
+            </dl>
+            {occ.shortage_score > 0 && (
+              <div className="mt-3">
+                <div className="mb-1 flex items-center justify-between text-[11px] text-slate-500">
+                  <span>{t.map.detailShortageScore}</span>
+                  <span className="tabular-nums">{Math.round(occ.shortage_score)}/100</span>
+                </div>
+                <div className="h-2 overflow-hidden rounded-full bg-slate-200">
+                  <div className="h-full rounded-full bg-rose-500 transition-all" style={{ width: `${shortageWidth}%` }} />
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+            <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider mb-2">
+              {t.map.detailLearnMore}
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <a
+                href={onetUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-0.5 text-[11px] text-blue-600 hover:text-blue-800 underline underline-offset-2"
+              >
+                <ExternalLink className="h-3 w-3" />
+                {t.map.detailOnet}
+              </a>
+              <a
+                href={blsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-0.5 text-[11px] text-blue-600 hover:text-blue-800 underline underline-offset-2"
+              >
+                <ExternalLink className="h-3 w-3" />
+                {t.map.detailBls}
+              </a>
+            </div>
+          </div>
+
+          <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+            <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider mb-2">
+              {t.map.detailTopSchools.replace("{state}", stateName)}
+            </p>
+            {topSchools.length > 0 ? (
+              <div className="space-y-2">
+                {topSchools.map((c) => (
+                  <a
+                    key={c.college_id}
+                    href={collegeSearchUrl(c.college_name)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block rounded-md border border-slate-100 bg-white p-2.5 transition-opacity hover:opacity-70"
+                  >
+                    <p className="flex items-center gap-1 text-sm font-medium text-slate-800 leading-snug">
+                      {c.college_name}
+                      <ExternalLink className="h-3 w-3 shrink-0 text-slate-400" />
+                    </p>
+                    <p className="mt-0.5 text-xs text-slate-500">
+                      {c.city_name && <>{c.city_name} · </>}
+                      {c.roi_score != null && <>ROI {c.roi_score.toFixed(1)}</>}
+                      {c.net_salary != null && <> · ${Math.round(c.net_salary).toLocaleString()}</>}
+                    </p>
+                  </a>
+                ))}
+              </div>
+            ) : (
+              <p className="text-xs text-slate-500">{t.map.detailNoSchools}</p>
+            )}
+          </div>
         </div>
       </div>
 
