@@ -68,10 +68,11 @@ export default function AustraliaMap({
   }, [selected, activeCountry])
 
   const onSelectSA4 = useCallback((code: string) => {
+    // 지역(SA4)을 눌러도 현재 보고 있던 탭(부족/고소득/고용)을 유지한다.
+    // 강제로 "고용률" 탭으로 넘기지 않는다.
     const regions = selected ? SA4_BY_STATE[selected as StateCode] ?? [] : []
     const region = regions.find((r) => r.code === code) ?? null
     setSelectedSA4(region)
-    if (region) setTab("employment")
   }, [selected])
 
   const onSelectState = useCallback((s: string) => {
