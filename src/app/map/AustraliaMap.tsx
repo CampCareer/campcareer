@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { STATE_CODES, STATE_NAMES, type StateCode } from "./states"
 import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
 import { getPathway, TAFE_BY_STATE, VET_PORTALS, cricosSearchUrl } from "@/lib/au-pathway"
+import { WiseCta } from "@/components/partners/partner-cta"
 import type { MapData, StateOccupation, HighPayOccupation, USOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc } from "@/lib/map-data"
 
 const LeafletMap = dynamic(() => import("./LeafletMap"), {
@@ -1019,6 +1020,8 @@ function OccupationDetail({
               {t.map.detailUpdated}: {occ.last_verified}
             </p>
           )}
+
+          <WiseCta />
         </div>
       </div>
 
@@ -1194,6 +1197,8 @@ function USOccupationDetail({
               <p className="text-xs text-slate-500">{t.map.detailNoSchools}</p>
             )}
           </div>
+
+          <WiseCta />
         </div>
       </div>
 
