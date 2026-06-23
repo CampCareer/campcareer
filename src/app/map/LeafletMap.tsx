@@ -5,8 +5,16 @@ import { useEffect, useRef } from "react"
 import L from "leaflet"
 import { Maximize2 } from "lucide-react"
 import { STATE_CODES, STATE_NAMES, type StateCode } from "./states"
+import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
 import { useTranslations } from "@/lib/i18n/locale-provider"
 import type { MapData } from "@/lib/map-data"
+
+// SA4 코드 → 지역명 (툴팁/하이라이트용)
+const SA4_NAME_BY_CODE: Record<string, string> = Object.fromEntries(
+  Object.values(SA4_BY_STATE)
+    .flat()
+    .map((r) => [r.code, r.name]),
+)
 
 const AU_BOUNDS = L.latLngBounds([-44, 112], [-10, 154])
 const US_BOUNDS = L.latLngBounds([24, -125], [49, -66])
@@ -40,16 +48,20 @@ function isUSA(properties: Record<string, unknown>): boolean {
 export default function LeafletMap({
   data,
   selected,
+  selectedSA4,
   activeCountry,
   onSelectState,
   onSelectCountry,
+  onSelectSA4,
   onReset,
 }: {
   data: MapData
   selected: string | null
+  selectedSA4: SA4Region | null
   activeCountry: "AU" | "US" | null
   onSelectState: (s: string) => void
   onSelectCountry: (c: "AU" | "US") => void
+  onSelectSA4: (code: string) => void
   onReset: () => void
 }) {
   const t = useTranslations()
@@ -60,13 +72,21 @@ export default function LeafletMap({
   const worldLayerRef = useRef<L.GeoJSON | null>(null)
   const markerLayerRef = useRef<L.LayerGroup | null>(null)
   const layersByCode = useRef<Partial<Record<StateCode, L.Polygon>>>({})
+  // SA4(지역) 드릴다운: 전체 지오메트리는 한 번만 로드(sa4GeoRef)하고, 선택된 주의 지역만
+  // sa4Layer 로 렌더한다. sa4ByCode 로 선택 지역 bounds 를 찾아 줌인한다.
+  const sa4GeoRef = useRef<GeoJSON.FeatureCollection | null>(null)
+  const sa4LayerRef = useRef<L.GeoJSON | null>(null)
+  const sa4ByCode = useRef<Record<string, L.Polygon>>({})
   const selectedRef = useRef<string | null>(selected)
+  const selectedSA4Ref = useRef<SA4Region | null>(selectedSA4)
   const activeCountryRef = useRef(activeCountry)
   const didFitRef = useRef(false)
   const onSelectStateRef = useRef(onSelectState)
   const onSelectCountryRef = useRef(onSelectCountry)
+  const onSelectSA4Ref = useRef(onSelectSA4)
   onSelectStateRef.current = onSelectState
   onSelectCountryRef.current = onSelectCountry
+  onSelectSA4Ref.current = onSelectSA4
 
   const dataRef = useRef(data)
   dataRef.current = data
@@ -148,6 +168,77 @@ export default function LeafletMap({
     else map.fitBounds(bounds, { padding: [20, 20], maxZoom: 6 })
   }
 
+  function sa4StyleFor(code: string): L.PathOptions {
+    const isSel = selectedSA4Ref.current?.code === code
+    return {
+      fillColor: "#7c3aed",
+      fillOpacity: isSel ? 0.45 : 0.08,
+      color: isSel ? "#4c1d95" : "#ffffff",
+      weight: isSel ? 2.5 : 1,
+    }
+  }
+
+  // 선택된 주의 SA4 지역만 주 폴리곤 위(sa4Pane)에 렌더한다. 주 미선택·비AU면 제거.
+  function renderSA4() {
+    const map = mapRef.current
+    if (!map) return
+    if (sa4LayerRef.current) {
+      map.removeLayer(sa4LayerRef.current)
+      sa4LayerRef.current = null
+    }
+    sa4ByCode.current = {}
+    const stateCode = selectedRef.current
+    if (activeCountryRef.current !== "AU" || !stateCode || !sa4GeoRef.current) return
+
+    const fc: GeoJSON.FeatureCollection = {
+      type: "FeatureCollection",
+      features: sa4GeoRef.current.features.filter(
+        (f) => f.properties?.STATE_CODE === stateCode,
+      ),
+    }
+    const layer = L.geoJSON(fc, {
+      pane: "sa4Pane",
+      style: (feature) => sa4StyleFor(feature?.properties?.SA4_CODE as string),
+      onEachFeature: (feature, lyr) => {
+        const code = feature?.properties?.SA4_CODE as string
+        if (!code) return
+        sa4ByCode.current[code] = lyr as L.Polygon
+        lyr.bindTooltip(SA4_NAME_BY_CODE[code] ?? code, {
+          sticky: true,
+          direction: "top",
+          className: "!rounded-md !border-0 !bg-slate-900 !px-2 !py-1 !text-xs !text-white !shadow-md",
+        })
+        lyr.on({
+          click: () => onSelectSA4Ref.current(code),
+          mouseover: () => {
+            if (selectedSA4Ref.current?.code !== code) (lyr as L.Path).setStyle({ fillOpacity: 0.22 })
+          },
+          mouseout: () => {
+            if (selectedSA4Ref.current?.code !== code) (lyr as L.Path).setStyle(sa4StyleFor(code))
+          },
+        })
+      },
+    })
+    sa4LayerRef.current = layer
+    map.addLayer(layer)
+
+    layer.eachLayer((l) => {
+      const el = (l as L.Path).getElement() as SVGElement | null
+      const code = (l as L.GeoJSON & { feature?: GeoJSON.Feature }).feature?.properties
+        ?.SA4_CODE as string | undefined
+      if (!el || !code) return
+      el.setAttribute("tabindex", "0")
+      el.setAttribute("role", "button")
+      el.setAttribute("aria-label", SA4_NAME_BY_CODE[code] ?? code)
+      el.addEventListener("keydown", (e: KeyboardEvent) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault()
+          onSelectSA4Ref.current(code)
+        }
+      })
+    })
+  }
+
   // Init map, load all GeoJSON layers
   useEffect(() => {
     const container = containerRef.current
@@ -172,6 +263,11 @@ export default function LeafletMap({
     map.createPane("basePane")
     const basePane = map.getPane("basePane")
     if (basePane) basePane.style.zIndex = "350"
+
+    // SA4(지역) 레이어는 주 폴리곤(overlayPane 400) 위에 올린다.
+    map.createPane("sa4Pane")
+    const sa4Pane = map.getPane("sa4Pane")
+    if (sa4Pane) sa4Pane.style.zIndex = "401"
 
     const ro = new ResizeObserver(() => {
       if (mapRef.current !== map) return
@@ -355,6 +451,16 @@ export default function LeafletMap({
       })
       .catch((err) => console.error("[LeafletMap] us geojson load failed:", err))
 
+    // SA4 지역 경계 — 한 번만 로드해 두고, 주 선택 시 해당 주의 지역만 렌더한다.
+    fetch("/au-sa4.geojson")
+      .then((r) => r.json())
+      .then((geo: GeoJSON.FeatureCollection) => {
+        if (mapRef.current !== map) return
+        sa4GeoRef.current = geo
+        renderSA4() // 딥링크(?state=NSW)로 이미 주가 선택돼 있으면 즉시 렌더
+      })
+      .catch((err) => console.error("[LeafletMap] sa4 geojson load failed:", err))
+
     return () => {
       ro.disconnect()
       map.remove()
@@ -363,6 +469,9 @@ export default function LeafletMap({
       auLayerRef.current = null
       usLayerRef.current = null
       markerLayerRef.current = null
+      sa4LayerRef.current = null
+      sa4GeoRef.current = null
+      sa4ByCode.current = {}
       layersByCode.current = {}
       didFitRef.current = false
     }
@@ -393,6 +502,7 @@ export default function LeafletMap({
     } else {
       fitToBounds(WORLD_BOUNDS, true)
     }
+    renderSA4()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeCountry])
 
@@ -421,8 +531,23 @@ export default function LeafletMap({
         }
       })
     }
+    // 주가 바뀌면 그 주의 SA4 지역을 (재)렌더한다.
+    renderSA4()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected])
+
+  // 선택된 지역(SA4) 변경 → 지역 폴리곤 하이라이트 + 해당 지역으로 줌인.
+  useEffect(() => {
+    selectedSA4Ref.current = selectedSA4
+    const layer = sa4LayerRef.current
+    if (!layer) return
+    layer.setStyle((feature) => sa4StyleFor(feature?.properties?.SA4_CODE as string))
+    if (selectedSA4) {
+      const lyr = sa4ByCode.current[selectedSA4.code]
+      if (lyr) mapRef.current?.flyToBounds(lyr.getBounds(), { padding: [40, 40], maxZoom: 8, duration: 0.6 })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedSA4])
 
   return (
     <div className="relative h-full w-full">
