@@ -379,10 +379,14 @@ function Panel({
         {tab === "shortage" && isAU && (
           selectedSA4 ? (
             <RegionGroupList
+              kind="demand"
               key={selectedSA4.code}
               entry={regionData?.[selectedSA4.code]}
               occupations={auShortage}
               onSelectOcc={handleSelectOcc}
+              selected={selected as StateCode}
+              stateSalaryMult={data.stateSalaryMult}
+              highPay={data.highPay}
               t={t}
             />
           ) : (
@@ -391,13 +395,27 @@ function Panel({
         )}
         {tab === "shortage" && !isAU && <USShortageList rows={usShortage} onSelectOcc={setSelectedUsOcc} />}
         {tab === "pay" && isAU && (
-          <HighPayList
-            rows={data.highPay}
-            stateRows={auShortage}
-            selected={selected as StateCode}
-            stateSalaryMult={data.stateSalaryMult}
-            onSelectOcc={handleSelectOcc}
-          />
+          selectedSA4 ? (
+            <RegionGroupList
+              kind="pay"
+              key={selectedSA4.code}
+              entry={regionData?.[selectedSA4.code]}
+              occupations={auShortage}
+              onSelectOcc={handleSelectOcc}
+              selected={selected as StateCode}
+              stateSalaryMult={data.stateSalaryMult}
+              highPay={data.highPay}
+              t={t}
+            />
+          ) : (
+            <HighPayList
+              rows={data.highPay}
+              stateRows={auShortage}
+              selected={selected as StateCode}
+              stateSalaryMult={data.stateSalaryMult}
+              onSelectOcc={handleSelectOcc}
+            />
+          )
         )}
         {tab === "pay" && !isAU && <USHighPayList rows={usHighPay} onSelectOcc={setSelectedUsOcc} />}
         {tab === "employment" && (
@@ -581,27 +599,35 @@ function ShortageList({
   )
 }
 
-// 지역(SA4) 부족 탭 — 보라색 분야(직업군) 막대 차트(채용공고 수 내림차순).
-// 분야를 누르면 그 ANZSCO 2자리에 속한 주(state) 부족 직종으로 펼쳐지고(ShortageList 재사용)
+// 지역(SA4) 부족/고소득 탭 — 보라색 분야(직업군) 막대 차트.
+// 분야를 누르면 그 ANZSCO 2자리에 속한 주(state) 직종으로 펼쳐지고(부족=ShortageList, 고소득=HighPayList)
 // 직업 클릭 시 상세 카드로 연결된다.
 function RegionGroupList({
+  kind,
   entry,
   occupations,
   onSelectOcc,
+  selected,
+  stateSalaryMult,
+  highPay,
   t,
 }: {
+  kind: "demand" | "pay"
   entry: RegionEntry | undefined
   occupations: StateOccupation[]
   onSelectOcc: (code: string) => void
+  selected: StateCode
+  stateSalaryMult: StateSalaryMult
+  highPay: HighPayOccupation[]
   t: ReturnType<typeof useTranslations>
 }) {
   const [openGroup, setOpenGroup] = useState<RegionGroup | null>(null)
-  const rows = entry?.demand ?? []
+  const rows = (kind === "demand" ? entry?.demand : entry?.pay) ?? []
   if (rows.length === 0) {
     return <p className="py-8 text-center text-sm text-slate-400">{t.map.regionNoData}</p>
   }
 
-  // 분야 드릴다운: 해당 ANZSCO 2자리로 시작하는 주(state) 부족 직종 → ShortageList 재사용(클릭 시 상세).
+  // 분야 드릴다운: 해당 ANZSCO 2자리로 시작하는 주(state) 직종 → 부족/고소득 리스트 재사용(클릭 시 상세).
   if (openGroup?.code) {
     const inGroup = occupations.filter((o) => o.anzsco_code.startsWith(openGroup.code!))
     return (
@@ -616,19 +642,27 @@ function RegionGroupList({
         </button>
         {inGroup.length === 0 ? (
           <p className="py-8 text-center text-sm text-slate-400">{t.map.regionGroupNoOcc}</p>
-        ) : (
+        ) : kind === "demand" ? (
           <ShortageList rows={inGroup} onSelectOcc={onSelectOcc} />
+        ) : (
+          <HighPayList
+            rows={highPay}
+            stateRows={inGroup}
+            selected={selected}
+            stateSalaryMult={stateSalaryMult}
+            onSelectOcc={onSelectOcc}
+          />
         )}
       </div>
     )
   }
 
   const max = Math.max(...rows.map((r) => r.value), 1)
-  const metro = !!entry?.demandMetro
+  const metro = kind === "demand" && !!entry?.demandMetro
   return (
     <div>
       <p className="px-3 pb-2 text-xs text-slate-400">
-        {t.map.regionDemandHint}
+        {kind === "demand" ? t.map.regionDemandHint : t.map.regionPayHint}
         {metro ? ` · ${t.map.regionMetroNote}` : ""}
       </p>
       <ol>
@@ -718,12 +752,17 @@ function HighPayList({
 
   const hint = hasStateRows ? t.map.payHintState : t.map.payHintNational
 
+  const computed = displayRows.map((r) => ({
+    r,
+    ...adjustedSalary(r.median_salary_aud, r.anzsco_code, hasStateRows ? selected : null, stateSalaryMult),
+  }))
+  const maxAdj = Math.max(...computed.map((c) => c.value ?? 0), 1)
+
   return (
     <div>
       <p className="mb-1 px-3 text-xs text-slate-400">{hint}</p>
       <ol>
-        {displayRows.map((r, i) => {
-          const { value: adj, adjusted } = adjustedSalary(r.median_salary_aud, r.anzsco_code, hasStateRows ? selected : null, stateSalaryMult)
+        {computed.map(({ r, value: adj, adjusted }, i) => {
           return (
             <li key={r.anzsco_code}>
               <button
@@ -741,6 +780,12 @@ function HighPayList({
                     {"state_count" in r && r.state_count === 1 && (
                       <Badge tone="blue">{t.map.regionalSpecific}</Badge>
                     )}
+                  </span>
+                  <span className="mt-1.5 block h-1.5 overflow-hidden rounded-full bg-slate-100">
+                    <span
+                      className="block h-full rounded-full bg-violet-500 transition-all"
+                      style={{ width: `${adj ? Math.round((adj / maxAdj) * 100) : 0}%` }}
+                    />
                   </span>
                 </span>
                 <span className="shrink-0 text-right">
