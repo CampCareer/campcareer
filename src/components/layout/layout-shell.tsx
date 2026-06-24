@@ -19,11 +19,15 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
     return <>{children}</>
   }
 
+  // /map is a full-screen tool on mobile — hide the footer there (the legal/blog
+  // links stay reachable from every other page, incl. /map on desktop).
+  const isMap = pathname === "/map" || pathname.startsWith("/map/")
+
   return (
     <div className="flex flex-col min-h-screen">
       <TopNav />
       <main className="flex-1 bg-background">{children}</main>
-      <SiteFooter />
+      <SiteFooter className={isMap ? "hidden sm:block" : undefined} />
     </div>
   )
 }

@@ -49,6 +49,16 @@ export default function AustraliaMap({
   // 직업 카드 열림 상태 — 툴바의 직업 검색에서도 열 수 있도록 최상위로 끌어올림.
   const [selectedOccCode, setSelectedOccCode] = useState<string | null>(null)
   const [selectedUsOcc, setSelectedUsOcc] = useState<USOccupation | null>(null)
+  // 모바일에서는 우측 패널 대신 구글맵식 바텀시트(드래그로 확장)를 쓴다.
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)")
+    const update = () => setIsMobile(mq.matches)
+    update()
+    mq.addEventListener("change", update)
+    return () => mq.removeEventListener("change", update)
+  }, [])
 
   // 페이지가 정적(force-static)이므로 ?state=NSW&tab=pay 딥링크는 서버가 아니라
   // 여기서 마운트 후 읽어 반영한다. SSR 시점엔 기본값으로 렌더돼 하이드레이션
@@ -209,14 +219,8 @@ export default function AustraliaMap({
           onReset={onReset}
         />
 
-        {selected && (
-          <div
-            className={cn(
-              "absolute z-[1000] flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl",
-              "inset-x-3 bottom-3 max-h-[58%]",
-              "sm:inset-x-auto sm:bottom-auto sm:right-4 sm:top-4 sm:w-[380px] sm:max-h-[calc(100%-2rem)]",
-            )}
-          >
+        {selected && (() => {
+          const panel = (
             <Panel
               data={data}
               selected={selected}
@@ -232,8 +236,15 @@ export default function AustraliaMap({
               selectedUsOcc={selectedUsOcc}
               setSelectedUsOcc={setSelectedUsOcc}
             />
-          </div>
-        )}
+          )
+          return isMobile ? (
+            <MobileSheet>{panel}</MobileSheet>
+          ) : (
+            <div className="absolute right-4 top-4 z-[1000] flex max-h-[calc(100%-2rem)] w-[380px] flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl">
+              {panel}
+            </div>
+          )
+        })()}
       </div>
     </div>
   )
@@ -442,6 +453,86 @@ function TabButton({
     >
       {children}
     </button>
+  )
+}
+
+// 모바일 바텀시트 — 구글맵 모바일처럼 손잡이를 위/아래로 끌어 높이를 조절한다.
+// 스냅: peek(맵을 넓게) · 기본(절반) · full(화면 거의 전체). 콘텐츠 영역은 따로 스크롤.
+function MobileSheet({ children }: { children: React.ReactNode }) {
+  const sheetRef = useRef<HTMLDivElement>(null)
+  const [height, setHeight] = useState<number | null>(null)
+  const [dragging, setDragging] = useState(false)
+  const liveH = useRef(0)
+  const drag = useRef<{ startY: number; startH: number } | null>(null)
+
+  const snaps = useCallback(() => {
+    const ph = sheetRef.current?.parentElement?.clientHeight ?? 640
+    return {
+      peek: Math.round(ph * 0.3),
+      half: Math.round(ph * 0.62),
+      full: Math.max(0, ph - 10),
+    }
+  }, [])
+
+  useEffect(() => {
+    const { half } = snaps()
+    liveH.current = half
+    setHeight(half)
+    const onResize = () => {
+      const { peek, full } = snaps()
+      setHeight((h) => {
+        const next = h == null ? snaps().half : Math.min(full, Math.max(peek, h))
+        liveH.current = next
+        return next
+      })
+    }
+    window.addEventListener("resize", onResize)
+    return () => window.removeEventListener("resize", onResize)
+  }, [snaps])
+
+  const onPointerDown = (e: React.PointerEvent) => {
+    drag.current = { startY: e.clientY, startH: sheetRef.current?.offsetHeight ?? liveH.current }
+    setDragging(true)
+    ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
+  }
+  const onPointerMove = (e: React.PointerEvent) => {
+    if (!drag.current) return
+    const { peek, full } = snaps()
+    const next = Math.min(full, Math.max(peek, drag.current.startH + (drag.current.startY - e.clientY)))
+    liveH.current = next
+    setHeight(next)
+  }
+  const endDrag = () => {
+    if (!drag.current) return
+    drag.current = null
+    setDragging(false)
+    const { peek, half, full } = snaps()
+    const h = liveH.current
+    const nearest = [peek, half, full].reduce((a, b) => (Math.abs(b - h) < Math.abs(a - h) ? b : a))
+    liveH.current = nearest
+    setHeight(nearest)
+  }
+
+  return (
+    <div
+      ref={sheetRef}
+      className={cn(
+        "absolute inset-x-0 bottom-0 z-[1000] flex flex-col overflow-hidden rounded-t-2xl border-t border-slate-200 bg-white shadow-[0_-6px_24px_rgba(15,23,42,0.14)]",
+        !dragging && "transition-[height] duration-200 ease-out",
+      )}
+      style={{ height: height ?? "55%" }}
+    >
+      <div
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
+        className="flex shrink-0 cursor-grab touch-none justify-center pt-2.5 pb-1 active:cursor-grabbing"
+      >
+        <span className="h-1.5 w-10 rounded-full bg-slate-300" />
+      </div>
+      <div className="flex min-h-0 flex-1 flex-col">{children}</div>
+    </div>
   )
 }
 
