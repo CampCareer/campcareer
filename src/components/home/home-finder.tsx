@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { STATE_CODES, STATE_NAMES, US_STATE_CODES, US_STATE_NAMES } from "@/app/map/states"
+import { STATE_CODES, STATE_NAMES, US_STATE_CODES, US_STATE_NAMES, CA_PROVINCE_CODES, CA_PROVINCE_NAMES } from "@/app/map/states"
 import { useTranslations } from "@/lib/i18n/locale-provider"
 import { track } from "@/lib/analytics"
 
@@ -21,7 +21,7 @@ import { track } from "@/lib/analytics"
 const COUNTRIES = [
   { value: "au", flag: "🇦🇺", nameKey: "australia", enabled: true },
   { value: "us", flag: "🇺🇸", nameKey: "usa", enabled: true },
-  { value: "ca", flag: "🇨🇦", nameKey: "canada", enabled: false },
+  { value: "ca", flag: "🇨🇦", nameKey: "canada", enabled: true },
   { value: "uk", flag: "🇬🇧", nameKey: "uk", enabled: false },
 ] as const
 
@@ -31,6 +31,8 @@ const CHIPS = [
   { country: "au", state: "VIC", tab: "pay" as const },
   { country: "us", state: "CA", tab: "shortage" as const },
   { country: "us", state: "TX", tab: "pay" as const },
+  { country: "ca", state: "ON", tab: "shortage" as const },
+  { country: "ca", state: "BC", tab: "pay" as const },
 ]
 
 // base-ui Select 트리거를 테두리 없는 "검색바 세그먼트"처럼 보이게 하는 클래스.
@@ -64,16 +66,19 @@ export function HomeFinder() {
   )
 
   const isUS = country === "us"
-  const activeStateCodes = isUS ? US_STATE_CODES : STATE_CODES
-  const activeStateNames: Record<string, string> = isUS ? US_STATE_NAMES : STATE_NAMES
+  const isCA = country === "ca"
+  const activeStateCodes = isUS ? US_STATE_CODES : isCA ? CA_PROVINCE_CODES : STATE_CODES
+  const activeStateNames: Record<string, string> = isUS ? US_STATE_NAMES : isCA ? CA_PROVINCE_NAMES : STATE_NAMES
   const stateItems = useMemo<Record<string, string>>(
     () => Object.fromEntries(activeStateCodes.map((c) => [c, `${activeStateNames[c]}`])),
     [activeStateCodes, activeStateNames],
   )
   // reset state when switching country
   useEffect(() => {
-    setState(isUS ? "CA" : "NSW")
-  }, [isUS])
+    if (isUS) setState("CA")
+    else if (isCA) setState("ON")
+    else setState("NSW")
+  }, [isUS, isCA])
 
   const categoryItems = useMemo<Record<string, string>>(
     () => ({ shortage: f.shortageShort, pay: f.payShort }),

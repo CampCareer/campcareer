@@ -26,6 +26,19 @@ export const US_STATE_CODES = [
   "UT","VT","VA","WA","WV","WI","WY",
 ] as const
 
+export type CAProvinceCode = typeof CA_PROVINCE_CODES[number]
+
+export const CA_PROVINCE_CODES = [
+  "AB","BC","MB","NB","NL","NS","NT","NU","ON","PE","QC","SK","YT",
+] as const
+
+export const CA_PROVINCE_NAMES: Record<string, string> = {
+  AB: "Alberta", BC: "British Columbia", MB: "Manitoba",
+  NB: "New Brunswick", NL: "Newfoundland and Labrador", NS: "Nova Scotia",
+  NT: "Northwest Territories", NU: "Nunavut", ON: "Ontario",
+  PE: "Prince Edward Island", QC: "Quebec", SK: "Saskatchewan", YT: "Yukon",
+}
+
 export const US_STATE_NAMES: Record<string, string> = {
   AL: "Alabama", AK: "Alaska", AZ: "Arizona", AR: "Arkansas", CA: "California",
   CO: "Colorado", CT: "Connecticut", DE: "Delaware", DC: "District of Columbia",

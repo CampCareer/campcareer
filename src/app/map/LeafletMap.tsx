@@ -18,6 +18,7 @@ const SA4_NAME_BY_CODE: Record<string, string> = Object.fromEntries(
 
 const AU_BOUNDS = L.latLngBounds([-44, 112], [-10, 154])
 const US_BOUNDS = L.latLngBounds([24, -125], [49, -66])
+const CA_BOUNDS = L.latLngBounds([41, -145], [85, -50])
 const WORLD_BOUNDS = L.latLngBounds([-90, -180], [90, 180])
 
 const RAMP_LIGHT = [237, 233, 254]
@@ -45,6 +46,10 @@ function isUSA(properties: Record<string, unknown>): boolean {
   return properties?.ISO_A3 === "USA" || properties?.ADM0_A3 === "USA"
 }
 
+function isCanada(properties: Record<string, unknown>): boolean {
+  return properties?.ISO_A3 === "CAN" || properties?.ADM0_A3 === "CAN"
+}
+
 export default function LeafletMap({
   data,
   selected,
@@ -58,9 +63,9 @@ export default function LeafletMap({
   data: MapData
   selected: string | null
   selectedSA4: SA4Region | null
-  activeCountry: "AU" | "US" | null
+  activeCountry: "AU" | "US" | "CA" | null
   onSelectState: (s: string) => void
-  onSelectCountry: (c: "AU" | "US") => void
+  onSelectCountry: (c: "AU" | "US" | "CA") => void
   onSelectSA4: (code: string) => void
   onReset: () => void
 }) {
@@ -69,6 +74,7 @@ export default function LeafletMap({
   const mapRef = useRef<L.Map | null>(null)
   const auLayerRef = useRef<L.GeoJSON | null>(null)
   const usLayerRef = useRef<L.GeoJSON | null>(null)
+  const caLayerRef = useRef<L.GeoJSON | null>(null)
   const worldLayerRef = useRef<L.GeoJSON | null>(null)
   const markerLayerRef = useRef<L.LayerGroup | null>(null)
   const layersByCode = useRef<Partial<Record<StateCode, L.Polygon>>>({})
@@ -287,6 +293,7 @@ export default function LeafletMap({
       if (!didFitRef.current && container.clientWidth > 0) {
         if (activeCountryRef.current === "AU") map.fitBounds(AU_BOUNDS)
         else if (activeCountryRef.current === "US") map.fitBounds(US_BOUNDS)
+        else if (activeCountryRef.current === "CA") map.fitBounds(CA_BOUNDS)
         else map.fitBounds(WORLD_BOUNDS)
         didFitRef.current = true
       }
@@ -312,27 +319,33 @@ export default function LeafletMap({
             if (feature && isUSA(feature.properties as Record<string, unknown>)) {
               return { fillColor: "#dcfce7", color: "#22c55e", weight: 2, fillOpacity: 0.5 }
             }
+            if (feature && isCanada(feature.properties as Record<string, unknown>)) {
+              return { fillColor: "#fce7f3", color: "#ec4899", weight: 2, fillOpacity: 0.5 }
+            }
             return { fillColor: "#f8fafc", color: "#cbd5e1", weight: 0.8, fillOpacity: 0.6 }
           },
           onEachFeature: (feature, lyr) => {
             const props = feature.properties as Record<string, unknown>
             const isAU = isAustralia(props)
             const isUS = isUSA(props)
-            if (!isAU && !isUS) return
+            const isCA = isCanada(props)
+            if (!isAU && !isUS && !isCA) return
 
-            const name = isAU ? "Australia" : "United States"
+            const name = isAU ? "Australia" : isUS ? "United States" : "Canada"
             lyr.bindTooltip(name, {
               sticky: true,
               direction: "top",
               className: "!rounded-md !border-0 !bg-slate-900 !px-2 !py-1 !text-xs !text-white !shadow-md",
             })
             lyr.on({
-              click: () => onSelectCountryRef.current(isAU ? "AU" : "US"),
+              click: () => onSelectCountryRef.current(isAU ? "AU" : isUS ? "US" : "CA"),
               mouseover: () => (lyr as L.Path).setStyle({ weight: 3, fillOpacity: 0.7 }),
               mouseout: () => {
                 const baseStyle = isAU
                   ? { fillColor: "#e0e7ff", color: "#6366f1", weight: 2, fillOpacity: 0.5 }
-                  : { fillColor: "#dcfce7", color: "#22c55e", weight: 2, fillOpacity: 0.5 }
+                  : isUS
+                    ? { fillColor: "#dcfce7", color: "#22c55e", weight: 2, fillOpacity: 0.5 }
+                    : { fillColor: "#fce7f3", color: "#ec4899", weight: 2, fillOpacity: 0.5 }
                 ;(lyr as L.Path).setStyle(baseStyle)
               },
             })
@@ -344,7 +357,7 @@ export default function LeafletMap({
               el.addEventListener("keydown", (e: KeyboardEvent) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault()
-                  onSelectCountryRef.current(isAU ? "AU" : "US")
+                  onSelectCountryRef.current(isAU ? "AU" : isUS ? "US" : "CA")
                 }
               })
             }
@@ -473,6 +486,68 @@ export default function LeafletMap({
       })
       .catch((err) => console.error("[LeafletMap] us geojson load failed:", err))
 
+    // Canada provinces layer
+    fetch("/ca-provinces.geojson")
+      .then((r) => r.json())
+      .then((geo: GeoJSON.FeatureCollection) => {
+        if (mapRef.current !== map) return
+        const caLayer = L.geoJSON(geo, {
+          style: (feature) => {
+            const postal = feature?.properties?.postal as string | undefined
+            const isSel = selectedRef.current === postal
+            return {
+              fillColor: "#fce7f3",
+              fillOpacity: isSel ? 0.8 : 0.4,
+              color: isSel ? "#1e293b" : "#ec4899",
+              weight: isSel ? 3 : 1,
+            }
+          },
+          onEachFeature: (feature, lyr) => {
+            const postal = feature?.properties?.postal as string | undefined
+            const name = feature?.properties?.name as string | undefined
+            ;(lyr as L.Path).on({
+              click: () => {
+                if (postal) {
+                  onSelectCountryRef.current("CA")
+                  onSelectStateRef.current(postal)
+                }
+              },
+              mouseover: () => (lyr as L.Path).setStyle({ weight: 2, fillOpacity: 0.6 }),
+              mouseout: () => {
+                (lyr as L.Path).setStyle({
+                  fillColor: "#fce7f3",
+                  fillOpacity: selectedRef.current === postal ? 0.8 : 0.4,
+                  color: selectedRef.current === postal ? "#1e293b" : "#ec4899",
+                  weight: selectedRef.current === postal ? 3 : 1,
+                })
+              },
+            })
+            const el = (lyr as L.Path).getElement() as SVGElement | null
+            if (el && postal) {
+              el.setAttribute("tabindex", "0")
+              el.setAttribute("role", "button")
+              el.setAttribute("aria-label", name ?? postal)
+              el.addEventListener("keydown", (e: KeyboardEvent) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault()
+                  onSelectStateRef.current(postal)
+                }
+              })
+            }
+          },
+        })
+        caLayerRef.current = caLayer
+
+        if (activeCountryRef.current === "CA") {
+          map.addLayer(caLayer)
+          if (!didFitRef.current && container.clientWidth > 0) {
+            fitToBounds(CA_BOUNDS, false)
+            didFitRef.current = true
+          }
+        }
+      })
+      .catch((err) => console.error("[LeafletMap] ca geojson load failed:", err))
+
     // SA4 지역 경계 — 한 번만 로드해 두고, 주 선택 시 해당 주의 지역만 렌더한다.
     fetch("/au-sa4.geojson")
       .then((r) => r.json())
@@ -490,6 +565,7 @@ export default function LeafletMap({
       worldLayerRef.current = null
       auLayerRef.current = null
       usLayerRef.current = null
+      caLayerRef.current = null
       markerLayerRef.current = null
       sa4LayerRef.current = null
       sa4GeoRef.current = null
@@ -509,6 +585,7 @@ export default function LeafletMap({
     // Hide all country layers
     if (auLayerRef.current && map.hasLayer(auLayerRef.current)) map.removeLayer(auLayerRef.current)
     if (usLayerRef.current && map.hasLayer(usLayerRef.current)) map.removeLayer(usLayerRef.current)
+    if (caLayerRef.current && map.hasLayer(caLayerRef.current)) map.removeLayer(caLayerRef.current)
     if (markerLayerRef.current) {
       map.removeLayer(markerLayerRef.current)
       markerLayerRef.current = null
@@ -521,6 +598,9 @@ export default function LeafletMap({
       if (usLayerRef.current) map.addLayer(usLayerRef.current)
       fitToBounds(US_BOUNDS, true)
       updateMarkers()
+    } else if (activeCountry === "CA") {
+      if (caLayerRef.current) map.addLayer(caLayerRef.current)
+      fitToBounds(CA_BOUNDS, true)
     } else {
       fitToBounds(WORLD_BOUNDS, true)
     }
@@ -550,6 +630,17 @@ export default function LeafletMap({
           fillColor: "#e0f2fe",
           fillOpacity: isSel ? 0.8 : 0.4,
           color: isSel ? "#1e293b" : "#0284c7",
+          weight: isSel ? 3 : 1,
+        }
+      })
+    } else if (caLayerRef.current && activeCountry === "CA") {
+      caLayerRef.current.setStyle((feature) => {
+        const postal = feature?.properties?.postal as string | undefined
+        const isSel = selected === postal
+        return {
+          fillColor: "#fce7f3",
+          fillOpacity: isSel ? 0.8 : 0.4,
+          color: isSel ? "#1e293b" : "#ec4899",
           weight: isSel ? 3 : 1,
         }
       })

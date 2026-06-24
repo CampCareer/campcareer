@@ -8,7 +8,7 @@ import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useTranslations, useLocale } from "@/lib/i18n/locale-provider"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { STATE_CODES, STATE_NAMES, US_STATE_CODES, US_STATE_NAMES, type StateCode } from "./states"
+import { STATE_CODES, STATE_NAMES, US_STATE_CODES, US_STATE_NAMES, CA_PROVINCE_CODES, CA_PROVINCE_NAMES, type StateCode } from "./states"
 import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
 import { getPathway, TAFE_BY_STATE, VET_PORTALS, cricosSearchUrl } from "@/lib/au-pathway"
 import { track } from "@/lib/analytics"
@@ -39,7 +39,7 @@ export default function AustraliaMap({
   const t = useTranslations()
   // /map은 호주 비치헤드의 front door다 → 진입 즉시 주/지역 선택(검색) 바가 보이도록
   // 기본을 "AU"로 둔다. 월드맵(다른 국가)은 "전체 보기"로 빠져나가 볼 수 있다.
-  const [activeCountry, setActiveCountry] = useState<"AU" | "US" | null>("AU")
+  const [activeCountry, setActiveCountry] = useState<"AU" | "US" | "CA" | null>("AU")
   const [selected, setSelected] = useState<string | null>(null)
   const [selectedSA4, setSelectedSA4] = useState<SA4Region | null>(null)
   const [tab, setTab] = useState<Tab>("shortage")
@@ -71,6 +71,9 @@ export default function AustraliaMap({
     if (countryRaw === "us") {
       setActiveCountry("US")
       if (raw && (US_STATE_CODES as readonly string[]).includes(raw)) setSelected(raw)
+    } else if (countryRaw === "ca") {
+      setActiveCountry("CA")
+      if (raw && (CA_PROVINCE_CODES as readonly string[]).includes(raw)) setSelected(raw)
     } else if (raw && (STATE_CODES as readonly string[]).includes(raw)) {
       setActiveCountry("AU")
       setSelected(raw as StateCode)
@@ -119,7 +122,7 @@ export default function AustraliaMap({
     track("select_state", { country: activeCountry ?? "AU", state: s })
   }, [activeCountry])
 
-  const onSelectCountry = useCallback((country: "AU" | "US") => {
+  const onSelectCountry = useCallback((country: "AU" | "US" | "CA") => {
     setActiveCountry(country)
     setSelected(null)
     setSelectedSA4(null)
@@ -250,6 +253,41 @@ export default function AustraliaMap({
       </div>
       )}
 
+      {activeCountry === "CA" && (
+      <div className="flex flex-wrap items-end gap-3 border-b border-slate-200 bg-white px-4 py-3">
+        <label className="block">
+          <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectState}</span>
+          <Select
+            items={CA_PROVINCE_NAMES}
+            value={selected}
+            onValueChange={(v) => v && setSelected(v)}
+          >
+            <SelectTrigger className="h-10 w-56 rounded-lg border-slate-200 text-sm">
+              <SelectValue placeholder={t.map.selectStatePlaceholder} />
+            </SelectTrigger>
+            <SelectContent className="z-[2000]">
+              {CA_PROVINCE_CODES.map((c) => (
+                <SelectItem key={c} value={c}>
+                  {CA_PROVINCE_NAMES[c]}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </label>
+
+        {selected && (
+          <button
+            type="button"
+            onClick={onReset}
+            className="mb-0.5 inline-flex h-10 items-center gap-1.5 rounded-lg px-3 text-sm font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-700"
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
+            {t.map.reset}
+          </button>
+        )}
+      </div>
+      )}
+
       <div className="relative min-h-0 flex-1">
         <LeafletMap
           data={data}
@@ -318,7 +356,7 @@ function Panel({
   onClose: () => void
   neroData: Record<string, NeroOccupation[]> | null
   regionData: RegionOccData | null
-  activeCountry: "AU" | "US" | null
+  activeCountry: "AU" | "US" | "CA" | null
   selectedOccCode: string | null
   setSelectedOccCode: (code: string | null) => void
   selectedUsOcc: USOccupation | null
@@ -326,13 +364,16 @@ function Panel({
 }) {
   const t = useTranslations()
   const isAU = activeCountry === "AU"
+  const isUS = activeCountry === "US"
   const stateName = isAU
     ? STATE_NAMES[selected as StateCode] ?? selected
-    : US_STATE_NAMES[selected] ?? selected
+    : isUS
+      ? US_STATE_NAMES[selected] ?? selected
+      : CA_PROVINCE_NAMES[selected] ?? selected
 
   const auShortage = isAU ? (data.shortageByState[selected as StateCode] ?? []) : []
-  const usShortage = !isAU ? (data.usShortageByState[selected] ?? []) : []
-  const usHighPay = !isAU ? (data.usHighPayByState[selected] ?? []) : []
+  const usShortage = isUS ? (data.usShortageByState[selected] ?? []) : []
+  const usHighPay = isUS ? (data.usHighPayByState[selected] ?? []) : []
   const panelSa4Regions = isAU ? SA4_BY_STATE[selected as StateCode] ?? [] : []
 
   const occ = selectedOccCode ? data.auOccupations[selectedOccCode] : null
@@ -432,7 +473,8 @@ function Panel({
             <ShortageList rows={auShortage} onSelectOcc={handleSelectOcc} />
           )
         )}
-        {tab === "shortage" && !isAU && <USShortageList rows={usShortage} onSelectOcc={handleUSSelectOcc} />}
+        {tab === "shortage" && isUS && <USShortageList rows={usShortage} onSelectOcc={handleUSSelectOcc} />}
+        {tab === "shortage" && !isAU && !isUS && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
         {tab === "pay" && isAU && (
           selectedSA4 ? (
             <RegionGroupList
@@ -456,7 +498,8 @@ function Panel({
             />
           )
         )}
-        {tab === "pay" && !isAU && <USHighPayList rows={usHighPay} onSelectOcc={handleUSSelectOcc} />}
+        {tab === "pay" && isUS && <USHighPayList rows={usHighPay} onSelectOcc={handleUSSelectOcc} />}
+        {tab === "pay" && !isAU && !isUS && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
         {tab === "employment" && (
           <EmploymentList
             sa4={selectedSA4}
