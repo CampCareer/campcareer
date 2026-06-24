@@ -614,7 +614,7 @@ const en = {
   map: {
     tabShortage: 'Shortage Occupation',
     tabPay: 'High Salary Job',
-    tabEmployment: 'Employment rate',
+    tabEmployment: 'Employment',
     selectState: 'State',
     selectStatePlaceholder: 'Select a state',
     selectRegion: 'Region (SA4)',
@@ -627,6 +627,7 @@ const en = {
     regionPayHint: 'Most high earners — $104k+/yr, Census 2021',
     regionMetroNote: 'metro-wide',
     regionNoData: 'No region data yet.',
+    regionGroupNoOcc: 'No shortage occupations listed in this group yet.',
     reset: 'Reset',
     close: 'Close',
     source: 'Source: OSCA 2025 Shortage Occupations · ABS Income · JSA NERO 2026-05',

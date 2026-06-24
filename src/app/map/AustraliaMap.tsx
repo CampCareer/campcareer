@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
-import { RotateCcw, ChevronLeft, ExternalLink } from "lucide-react"
+import { RotateCcw, ChevronLeft, ChevronRight, ExternalLink } from "lucide-react"
 import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useTranslations, useLocale } from "@/lib/i18n/locale-provider"
@@ -367,24 +367,26 @@ function Panel({
       <div className="min-h-0 flex-1 overflow-y-auto px-3 py-3">
         {tab === "shortage" && isAU && (
           selectedSA4 ? (
-            <RegionGroupList kind="demand" entry={regionData?.[selectedSA4.code]} t={t} />
+            <RegionGroupList
+              key={selectedSA4.code}
+              entry={regionData?.[selectedSA4.code]}
+              occupations={auShortage}
+              onSelectOcc={handleSelectOcc}
+              t={t}
+            />
           ) : (
             <ShortageList rows={auShortage} onSelectOcc={handleSelectOcc} />
           )
         )}
         {tab === "shortage" && !isAU && <USShortageList rows={usShortage} onSelectOcc={setSelectedUsOcc} />}
         {tab === "pay" && isAU && (
-          selectedSA4 ? (
-            <RegionGroupList kind="pay" entry={regionData?.[selectedSA4.code]} t={t} />
-          ) : (
-            <HighPayList
-              rows={data.highPay}
-              stateRows={auShortage}
-              selected={selected as StateCode}
-              stateSalaryMult={data.stateSalaryMult}
-              onSelectOcc={handleSelectOcc}
-            />
-          )
+          <HighPayList
+            rows={data.highPay}
+            stateRows={auShortage}
+            selected={selected as StateCode}
+            stateSalaryMult={data.stateSalaryMult}
+            onSelectOcc={handleSelectOcc}
+          />
         )}
         {tab === "pay" && !isAU && <USHighPayList rows={usHighPay} onSelectOcc={setSelectedUsOcc} />}
         {tab === "employment" && (
@@ -721,33 +723,85 @@ function USHighPayList({ rows, onSelectOcc }: { rows: USOccupation[]; onSelectOc
   )
 }
 
-// 지역(SA4) 선택 시 부족/고소득 탭에 보여줄 직업군(ANZSCO 2자리) 순위.
-// demand = IVI 채용공고 수, pay = 인구조사 고소득자($104k+) 수.
+// 지역(SA4) 선택 시 부족 탭에 보여줄 직업군(ANZSCO 2자리) 순위.
+// value = IVI 채용공고 수(이 지역의 채용 수요). 직업군을 누르면 그 그룹에 속한
+// 주(state) 부족 직종으로 드릴다운 → 개별 직업 카드로 연결한다.
 function RegionGroupList({
-  kind,
   entry,
+  occupations,
+  onSelectOcc,
   t,
 }: {
-  kind: "demand" | "pay"
   entry: RegionEntry | undefined
+  occupations: StateOccupation[]
+  onSelectOcc: (code: string) => void
   t: ReturnType<typeof useTranslations>
 }) {
-  const rows = kind === "demand" ? entry?.demand ?? [] : entry?.pay ?? []
+  const locale = useLocale()
+  const [openGroup, setOpenGroup] = useState<RegionGroup | null>(null)
+  const rows = entry?.demand ?? []
   if (rows.length === 0) {
     return <p className="py-8 text-center text-sm text-slate-400">{t.map.regionNoData}</p>
   }
+
+  // 직업군 드릴다운: 해당 ANZSCO 2자리로 시작하는 주(state) 부족 직종 — 개별 직업이라 클릭 시 상세 카드로 연결.
+  if (openGroup?.code) {
+    const inGroup = occupations.filter((o) => o.anzsco_code.startsWith(openGroup.code!))
+    return (
+      <div>
+        <button
+          type="button"
+          onClick={() => setOpenGroup(null)}
+          className="mb-1 inline-flex max-w-full items-center gap-1 px-3 text-sm text-slate-500 transition-colors hover:text-slate-800"
+        >
+          <ChevronLeft className="h-4 w-4 shrink-0" />
+          <span className="truncate">{openGroup.title}</span>
+        </button>
+        {inGroup.length === 0 ? (
+          <p className="py-8 text-center text-sm text-slate-400">{t.map.regionGroupNoOcc}</p>
+        ) : (
+          <ol>
+            {inGroup.map((r, i) => (
+              <li key={r.anzsco_code}>
+                <button
+                  type="button"
+                  onClick={() => onSelectOcc(r.anzsco_code)}
+                  className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50"
+                >
+                  <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-sm font-medium text-slate-800">
+                      {locale === "ko" ? (r.occupation_ko ?? r.occupation_en) : r.occupation_en}
+                    </span>
+                    <span className="mt-0.5 flex flex-wrap items-center gap-1.5">
+                      {r.state_count === 1 && <Badge tone="blue">{t.map.regionalSpecific}</Badge>}
+                      {r.state_count >= 7 && <Badge tone="gray">{t.map.nationalCommon}</Badge>}
+                      {r.on_csol && <Badge tone="green">{t.map.visaEligible}</Badge>}
+                    </span>
+                  </span>
+                  <ShortageLabel rating={r.state_shortage_rating} />
+                </button>
+              </li>
+            ))}
+          </ol>
+        )}
+      </div>
+    )
+  }
+
   const max = Math.max(...rows.map((r) => r.value), 1)
-  const metro = kind === "demand" && !!entry?.demandMetro
+  const metro = !!entry?.demandMetro
   return (
     <div>
       <p className="px-3 pb-2 text-xs text-slate-400">
-        {kind === "demand" ? t.map.regionDemandHint : t.map.regionPayHint}
+        {t.map.regionDemandHint}
         {metro ? ` · ${t.map.regionMetroNote}` : ""}
       </p>
       <ol>
-        {rows.map((r, i) => (
-          <li key={r.title}>
-            <div className="flex items-center gap-3 rounded-lg px-3 py-2.5">
+        {rows.map((r, i) => {
+          const matchCount = r.code ? occupations.filter((o) => o.anzsco_code.startsWith(r.code!)).length : 0
+          const inner = (
+            <>
               <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-sm font-medium text-slate-800">{r.title}</span>
@@ -761,9 +815,25 @@ function RegionGroupList({
               <span className="shrink-0 text-right text-sm font-semibold tabular-nums text-slate-700">
                 {r.value.toLocaleString()}
               </span>
-            </div>
-          </li>
-        ))}
+              {matchCount > 0 && <ChevronRight className="ml-1 h-4 w-4 shrink-0 text-slate-300" />}
+            </>
+          )
+          return (
+            <li key={r.title}>
+              {matchCount > 0 ? (
+                <button
+                  type="button"
+                  onClick={() => setOpenGroup(r)}
+                  className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50"
+                >
+                  {inner}
+                </button>
+              ) : (
+                <div className="flex items-center gap-3 rounded-lg px-3 py-2.5">{inner}</div>
+              )}
+            </li>
+          )
+        })}
       </ol>
     </div>
   )
