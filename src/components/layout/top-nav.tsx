@@ -15,6 +15,8 @@ import type { User } from "@supabase/supabase-js"
 // feature is one click from the top bar. Blog lives in the footer.
 export function TopNav() {
   const pathname = usePathname()
+  // /map은 모바일에서 풀스크린(구글맵식)으로 쓰므로 모바일 네비 행을 숨긴다.
+  const isMap = pathname === "/map" || pathname.startsWith("/map/")
   const router = useRouter()
   const t = useTranslations()
   const supabase = createClient()
@@ -101,10 +103,13 @@ export function TopNav() {
           </div>
         </div>
 
-        {/* Mobile: links on a full-width second row, scrolls cleanly */}
-        <nav className="sm:hidden flex items-center justify-center gap-1 overflow-x-auto no-scrollbar pb-2">
-          {linkEls}
-        </nav>
+        {/* Mobile: links on a full-width second row, scrolls cleanly. Hidden on
+            /map so the map can use the full mobile screen (home is one tap on the logo). */}
+        {!isMap && (
+          <nav className="sm:hidden flex items-center justify-center gap-1 overflow-x-auto no-scrollbar pb-2">
+            {linkEls}
+          </nav>
+        )}
       </div>
     </header>
   )
