@@ -17,6 +17,14 @@ export const WISE: Partner = {
   id: "wise",
   name: "Wise",
   href: "https://wise.prf.hn/click/camref:1100l5La6z",
-  accent: "#9FE870", // Wise bright green
-  accentText: "#163300", // Wise forest green
+  accent: "#9FE870",
+  accentText: "#163300",
+}
+
+export const AIRALO: Partner = {
+  id: "airalo",
+  name: "Airalo",
+  href: "https://airalo.pxf.io/c/7430861/1268485/15608",
+  accent: "#00B6BA",
+  accentText: "#FFFFFF",
 }
