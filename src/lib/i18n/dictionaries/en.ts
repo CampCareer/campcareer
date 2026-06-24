@@ -624,6 +624,7 @@ const en = {
     selectOccupationPlaceholder: 'Search a job…',
     occupationNoResults: 'No matches',
     regionDemandHint: 'Most job vacancies — IVI, Apr 2026',
+    regionShortageHint: "Shortage occupations in this region's in-demand fields — tap for details",
     regionPayHint: 'Most high earners — $104k+/yr, Census 2021',
     regionMetroNote: 'metro-wide',
     regionNoData: 'No region data yet.',
