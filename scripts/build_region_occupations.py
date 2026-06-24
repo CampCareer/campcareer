@@ -36,6 +36,55 @@ HIGH_BANDS = {
 }
 SKIP_OCC = re.compile(r"nfd$|^Total$|^Not applicable$|Inadequately|Not stated", re.I)
 
+# ABS Census OCCP names are the 43 standard ANZSCO 2-digit sub-major group names.
+# Mapping to the 2-digit code lets the pay groups expand to their 6-digit occupations
+# (o.anzsco_code.startsWith(code)) in the UI, same as the demand (IVI) groups.
+ANZSCO2_BY_NAME = {
+    "Chief Executives, General Managers and Legislators": "11",
+    "Farmers and Farm Managers": "12",
+    "Specialist Managers": "13",
+    "Hospitality, Retail and Service Managers": "14",
+    "Arts and Media Professionals": "21",
+    "Business, Human Resource and Marketing Professionals": "22",
+    "Design, Engineering, Science and Transport Professionals": "23",
+    "Education Professionals": "24",
+    "Health Professionals": "25",
+    "ICT Professionals": "26",
+    "Legal, Social and Welfare Professionals": "27",
+    "Engineering, ICT and Science Technicians": "31",
+    "Automotive and Engineering Trades Workers": "32",
+    "Construction Trades Workers": "33",
+    "Electrotechnology and Telecommunications Trades Workers": "34",
+    "Food Trades Workers": "35",
+    "Skilled Animal and Horticultural Workers": "36",
+    "Other Technicians and Trades Workers": "39",
+    "Health and Welfare Support Workers": "41",
+    "Carers and Aides": "42",
+    "Hospitality Workers": "43",
+    "Protective Service Workers": "44",
+    "Sports and Personal Service Workers": "45",
+    "Office Managers and Program Administrators": "51",
+    "Personal Assistants and Secretaries": "52",
+    "General Clerical Workers": "53",
+    "Inquiry Clerks and Receptionists": "54",
+    "Numerical Clerks": "55",
+    "Clerical and Office Support Workers": "56",
+    "Other Clerical and Administrative Workers": "59",
+    "Sales Representatives and Agents": "61",
+    "Sales Assistants and Salespersons": "62",
+    "Sales Support Workers": "63",
+    "Machine and Stationary Plant Operators": "71",
+    "Mobile Plant Operators": "72",
+    "Road and Rail Drivers": "73",
+    "Storepersons": "74",
+    "Cleaners and Laundry Workers": "81",
+    "Construction and Mining Labourers": "82",
+    "Factory Process Workers": "83",
+    "Farm, Forestry and Garden Workers": "84",
+    "Food Preparation Assistants": "85",
+    "Other Labourers": "89",
+}
+
 
 def our_sa4():
     """code -> (name, state) from src/data/sa4-regions.ts"""
@@ -115,7 +164,12 @@ def build_pay(name_to_code):
         if not code:
             continue
         items = sorted(occs.items(), key=lambda x: x[1], reverse=True)
-        out[code] = [{"title": t, "value": v} for t, v in items[:TOP_N] if v > 0]
+        out[code] = [
+            {"code": ANZSCO2_BY_NAME[t], "title": t, "value": v} if t in ANZSCO2_BY_NAME
+            else {"title": t, "value": v}
+            for t, v in items[:TOP_N]
+            if v > 0
+        ]
     return out
 
 
