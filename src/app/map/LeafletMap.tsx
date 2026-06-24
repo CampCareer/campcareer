@@ -418,17 +418,24 @@ export default function LeafletMap({
       .then((geo: GeoJSON.FeatureCollection) => {
         if (mapRef.current !== map) return
         const usLayer = L.geoJSON(geo, {
-          style: () => ({
-            fillColor: "#e0f2fe",
-            fillOpacity: 0.4,
-            color: "#0284c7",
-            weight: 1,
-          }),
+          style: (feature) => {
+            const postal = feature?.properties?.postal as string | undefined
+            const isSel = selectedRef.current === postal
+            return {
+              fillColor: "#e0f2fe",
+              fillOpacity: isSel ? 0.8 : 0.4,
+              color: isSel ? "#1e293b" : "#0284c7",
+              weight: isSel ? 3 : 1,
+            }
+          },
           onEachFeature: (feature, lyr) => {
             const postal = feature?.properties?.postal as string | undefined
             ;(lyr as L.Path).on({
               click: () => {
-                if (postal) onSelectStateRef.current(postal)
+                if (postal) {
+                  onSelectCountryRef.current("US")
+                  onSelectStateRef.current(postal)
+                }
               },
               mouseover: () => (lyr as L.Path).setStyle({ weight: 2, fillOpacity: 0.6 }),
               mouseout: () => {

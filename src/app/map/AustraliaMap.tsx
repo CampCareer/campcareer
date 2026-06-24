@@ -8,7 +8,7 @@ import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useTranslations, useLocale } from "@/lib/i18n/locale-provider"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { STATE_CODES, STATE_NAMES, type StateCode } from "./states"
+import { STATE_CODES, STATE_NAMES, US_STATE_CODES, US_STATE_NAMES, type StateCode } from "./states"
 import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
 import { getPathway, TAFE_BY_STATE, VET_PORTALS, cricosSearchUrl } from "@/lib/au-pathway"
 import { WiseCta } from "@/components/partners/partner-cta"
@@ -60,13 +60,20 @@ export default function AustraliaMap({
     return () => mq.removeEventListener("change", update)
   }, [])
 
-  // 페이지가 정적(force-static)이므로 ?state=NSW&tab=pay 딥링크는 서버가 아니라
+  // 페이지가 정적(force-static)이므로 ?country=au&state=NSW&tab=pay 딥링크는 서버가 아니라
   // 여기서 마운트 후 읽어 반영한다. SSR 시점엔 기본값으로 렌더돼 하이드레이션
   // 불일치가 없다(홈 셀렉터 → /map 딥링크 동작 보존).
   useEffect(() => {
     const p = new URLSearchParams(window.location.search)
+    const countryRaw = p.get("country")?.toLowerCase()
     const raw = p.get("state")?.toUpperCase()
-    if (raw && (STATE_CODES as string[]).includes(raw)) setSelected(raw as StateCode)
+    if (countryRaw === "us") {
+      setActiveCountry("US")
+      if (raw && (US_STATE_CODES as readonly string[]).includes(raw)) setSelected(raw)
+    } else if (raw && (STATE_CODES as readonly string[]).includes(raw)) {
+      setActiveCountry("AU")
+      setSelected(raw as StateCode)
+    }
     if (p.get("tab") === "pay") setTab("pay")
   }, [])
 
@@ -207,6 +214,41 @@ export default function AustraliaMap({
       </div>
       )}
 
+      {activeCountry === "US" && (
+      <div className="flex flex-wrap items-end gap-3 border-b border-slate-200 bg-white px-4 py-3">
+        <label className="block">
+          <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectState}</span>
+          <Select
+            items={US_STATE_NAMES}
+            value={selected}
+            onValueChange={(v) => v && setSelected(v)}
+          >
+            <SelectTrigger className="h-10 w-56 rounded-lg border-slate-200 text-sm">
+              <SelectValue placeholder={t.map.selectStatePlaceholder} />
+            </SelectTrigger>
+            <SelectContent className="z-[2000]">
+              {US_STATE_CODES.map((c) => (
+                <SelectItem key={c} value={c}>
+                  {US_STATE_NAMES[c]}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </label>
+
+        {selected && (
+          <button
+            type="button"
+            onClick={onReset}
+            className="mb-0.5 inline-flex h-10 items-center gap-1.5 rounded-lg px-3 text-sm font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-700"
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
+            {t.map.reset}
+          </button>
+        )}
+      </div>
+      )}
+
       <div className="relative min-h-0 flex-1">
         <LeafletMap
           data={data}
@@ -250,19 +292,7 @@ export default function AustraliaMap({
   )
 }
 
-const US_STATE_NAMES: Record<string, string> = {
-  AL: "Alabama", AK: "Alaska", AZ: "Arizona", AR: "Arkansas", CA: "California",
-  CO: "Colorado", CT: "Connecticut", DE: "Delaware", DC: "District of Columbia",
-  FL: "Florida", GA: "Georgia", HI: "Hawaii", ID: "Idaho", IL: "Illinois",
-  IN: "Indiana", IA: "Iowa", KS: "Kansas", KY: "Kentucky", LA: "Louisiana",
-  ME: "Maine", MD: "Maryland", MA: "Massachusetts", MI: "Michigan", MN: "Minnesota",
-  MS: "Mississippi", MO: "Missouri", MT: "Montana", NE: "Nebraska", NV: "Nevada",
-  NH: "New Hampshire", NJ: "New Jersey", NM: "New Mexico", NY: "New York",
-  NC: "North Carolina", ND: "North Dakota", OH: "Ohio", OK: "Oklahoma",
-  OR: "Oregon", PA: "Pennsylvania", RI: "Rhode Island", SC: "South Carolina",
-  SD: "South Dakota", TN: "Tennessee", TX: "Texas", UT: "Utah", VT: "Vermont",
-  VA: "Virginia", WA: "Washington", WV: "West Virginia", WI: "Wisconsin", WY: "Wyoming",
-}
+
 
 function Panel({
   data,
