@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Search, MapPin } from "lucide-react"
@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { STATE_CODES, STATE_NAMES, type StateCode } from "@/app/map/states"
+import { STATE_CODES, STATE_NAMES, US_STATE_CODES, US_STATE_NAMES } from "@/app/map/states"
 import { useTranslations } from "@/lib/i18n/locale-provider"
 
 // 홈 = 검색 우선 랜딩(에어비앤비/스카이스캐너 류). 헤드라인 + 한 줄 검색바 + 예시 칩.
@@ -19,17 +19,17 @@ import { useTranslations } from "@/lib/i18n/locale-provider"
 // 호주만 활성, 나머지 국가는 비활성("곧 추가").
 const COUNTRIES = [
   { value: "au", flag: "🇦🇺", nameKey: "australia", enabled: true },
+  { value: "us", flag: "🇺🇸", nameKey: "usa", enabled: true },
   { value: "ca", flag: "🇨🇦", nameKey: "canada", enabled: false },
   { value: "uk", flag: "🇬🇧", nameKey: "uk", enabled: false },
-  { value: "us", flag: "🇺🇸", nameKey: "usa", enabled: false },
 ] as const
 
 // 첫 방문자가 "뭘 해야 하지?" 막막함을 없애는 예시 검색 칩 — /map 으로 바로 딥링크.
 const CHIPS = [
-  { state: "NSW" as StateCode, tab: "shortage" as const },
-  { state: "VIC" as StateCode, tab: "pay" as const },
-  { state: "QLD" as StateCode, tab: "shortage" as const },
-  { state: "WA" as StateCode, tab: "pay" as const },
+  { country: "au", state: "NSW", tab: "shortage" as const },
+  { country: "au", state: "VIC", tab: "pay" as const },
+  { country: "us", state: "CA", tab: "shortage" as const },
+  { country: "us", state: "TX", tab: "pay" as const },
 ]
 
 // base-ui Select 트리거를 테두리 없는 "검색바 세그먼트"처럼 보이게 하는 클래스.
@@ -41,10 +41,9 @@ export function HomeFinder() {
   const f = t.landing.home.finder
   const router = useRouter()
   const [country, setCountry] = useState("au")
-  const [state, setState] = useState<StateCode>("NSW")
+  const [state, setState] = useState<string>("NSW")
   const [tab, setTab] = useState<"shortage" | "pay">("shortage")
 
-  // base-ui Select 은 items 맵으로 선택값 라벨을 트리거에 렌더한다.
   const countryName: Record<string, string> = {
     au: f.australia,
     ca: f.canada,
@@ -62,18 +61,26 @@ export function HomeFinder() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [f],
   )
-  // 트리거에는 짧은 라벨, 드롭다운 목록에는 풀네임/풀라벨을 보여준다.
+
+  const isUS = country === "us"
+  const activeStateCodes = isUS ? US_STATE_CODES : STATE_CODES
+  const activeStateNames: Record<string, string> = isUS ? US_STATE_NAMES : STATE_NAMES
   const stateItems = useMemo<Record<string, string>>(
-    () => Object.fromEntries(STATE_CODES.map((c) => [c, STATE_NAMES[c]])),
-    [],
+    () => Object.fromEntries(activeStateCodes.map((c) => [c, `${activeStateNames[c]}`])),
+    [activeStateCodes, activeStateNames],
   )
+  // reset state when switching country
+  useEffect(() => {
+    setState(isUS ? "CA" : "NSW")
+  }, [isUS])
+
   const categoryItems = useMemo<Record<string, string>>(
     () => ({ shortage: f.shortageShort, pay: f.payShort }),
     [f],
   )
 
   function go() {
-    router.push(`/map?state=${state}&tab=${tab}`)
+    router.push(`/map?country=${country}&state=${state}&tab=${tab}`)
   }
 
   return (
@@ -120,15 +127,15 @@ export function HomeFinder() {
                   <Select
                     items={stateItems}
                     value={state}
-                    onValueChange={(v) => v && setState(v as StateCode)}
+                    onValueChange={(v) => v && setState(v)}
                   >
                     <SelectTrigger className={segmentTrigger}>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {STATE_CODES.map((c) => (
+                      {activeStateCodes.map((c) => (
                         <SelectItem key={c} value={c}>
-                          {STATE_NAMES[c]} ({c})
+                          {activeStateNames[c]} ({c})
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -169,8 +176,8 @@ export function HomeFinder() {
             <span className="text-xs text-slate-400">{f.tryThese}</span>
             {CHIPS.map((c) => (
               <Link
-                key={`${c.state}-${c.tab}`}
-                href={`/map?state=${c.state}&tab=${c.tab}`}
+                key={`${c.country}-${c.state}-${c.tab}`}
+                href={`/map?country=${c.country}&state=${c.state}&tab=${c.tab}`}
                 className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 transition-colors hover:border-brand/30 hover:bg-brand-tint hover:text-brand-press"
               >
                 {c.tab === "pay" ? f.payShort : f.shortageShort} · {c.state}
