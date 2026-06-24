@@ -626,6 +626,7 @@ const ko: Dictionary = {
     selectOccupationPlaceholder: '직업 검색…',
     occupationNoResults: '검색 결과 없음',
     regionDemandHint: '채용공고가 많은 직업군 — IVI 2026-04',
+    regionShortageHint: '이 지역 채용 수요가 많은 분야의 부족 직종 — 클릭하면 상세',
     regionPayHint: '고소득자($104k+)가 많은 직업군 — 인구조사 2021',
     regionMetroNote: '광역시 단위',
     regionNoData: '지역 데이터가 아직 없습니다.',
