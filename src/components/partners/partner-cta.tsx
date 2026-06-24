@@ -2,7 +2,7 @@
 
 import { ArrowRight } from "lucide-react"
 import { useTranslations } from "@/lib/i18n/locale-provider"
-import { WISE, type Partner } from "@/lib/partners"
+import { WISE, AIRALO, type Partner } from "@/lib/partners"
 
 // 제휴 클릭을 GA4 이벤트로 집계 (gtag 는 layout.tsx 에서 로드됨).
 function trackAffiliateClick(partnerId: string) {
@@ -83,6 +83,36 @@ export function WiseCta() {
       title={t.map.wiseCtaTitle}
       description={t.map.wiseCtaDesc}
       cta={t.map.wiseCtaButton}
+    />
+  )
+}
+
+function AiraloLogo({ size = 28 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 28 28"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      className="shrink-0"
+    >
+      <rect width="28" height="28" rx="8" fill="#00B6BA" />
+      <path d="M8 20V8h2.8l3.2 7.2L17.2 8H20v12h-2.4v-9.2l-3.6 7.6h-2l-3.6-7.6V20H8z" fill="white" />
+    </svg>
+  )
+}
+
+export function AiraloCta() {
+  const t = useTranslations()
+  return (
+    <PartnerCta
+      partner={AIRALO}
+      logo={<AiraloLogo />}
+      title={t.map.airaloCtaTitle}
+      description={t.map.airaloCtaDesc}
+      cta={t.map.airaloCtaButton}
     />
   )
 }

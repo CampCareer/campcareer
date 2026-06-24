@@ -687,6 +687,9 @@ const ko: Dictionary = {
     wiseCtaDesc: 'Wise로 학비 납부와 본국 송금을 실시간 환율로 처리하세요.',
     wiseCtaButton: '무료 Wise 계좌 만들기',
     affiliateNote: '제휴 링크',
+    airaloCtaTitle: '도착하면 현지 eSIM이 필요하신가요?',
+    airaloCtaDesc: 'Airalo eSIM으로 첫날부터 저렴하게 연결하세요 — 200개국 이상 지원.',
+    airaloCtaButton: 'eSIM 받기',
   },
   explore: {
     hubTitle: '전공·국가로 탐색하기',

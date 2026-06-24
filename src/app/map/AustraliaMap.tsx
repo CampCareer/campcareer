@@ -12,7 +12,7 @@ import { STATE_CODES, STATE_NAMES, US_STATE_CODES, US_STATE_NAMES, type StateCod
 import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
 import { getPathway, TAFE_BY_STATE, VET_PORTALS, cricosSearchUrl } from "@/lib/au-pathway"
 import { track } from "@/lib/analytics"
-import { WiseCta } from "@/components/partners/partner-cta"
+import { WiseCta, AiraloCta } from "@/components/partners/partner-cta"
 import { OccupationPicker } from "@/components/map/occupation-picker"
 import type { MapData, StateOccupation, HighPayOccupation, USOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc } from "@/lib/map-data"
 
@@ -1360,7 +1360,10 @@ function OccupationDetail({
             </p>
           )}
 
-          <WiseCta />
+          <div className="space-y-3">
+            <WiseCta />
+            <AiraloCta />
+          </div>
         </div>
       </div>
 
@@ -1537,7 +1540,10 @@ function USOccupationDetail({
             )}
           </div>
 
-          <WiseCta />
+          <div className="space-y-3">
+            <WiseCta />
+            <AiraloCta />
+          </div>
         </div>
       </div>
 
