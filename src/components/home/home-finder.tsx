@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select"
 import { STATE_CODES, STATE_NAMES, US_STATE_CODES, US_STATE_NAMES } from "@/app/map/states"
 import { useTranslations } from "@/lib/i18n/locale-provider"
+import { track } from "@/lib/analytics"
 
 // 홈 = 검색 우선 랜딩(에어비앤비/스카이스캐너 류). 헤드라인 + 한 줄 검색바 + 예시 칩.
 // 검색바: 국가 → 주(state) → 직업군(부족직종/고연봉) 선택 후 /map?state=&tab= 으로 딥링크.
@@ -80,6 +81,7 @@ export function HomeFinder() {
   )
 
   function go() {
+    track("finder_search", { country, state, tab })
     router.push(`/map?country=${country}&state=${state}&tab=${tab}`)
   }
 

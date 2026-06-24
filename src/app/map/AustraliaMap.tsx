@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { STATE_CODES, STATE_NAMES, US_STATE_CODES, US_STATE_NAMES, type StateCode } from "./states"
 import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
 import { getPathway, TAFE_BY_STATE, VET_PORTALS, cricosSearchUrl } from "@/lib/au-pathway"
+import { track } from "@/lib/analytics"
 import { WiseCta } from "@/components/partners/partner-cta"
 import { OccupationPicker } from "@/components/map/occupation-picker"
 import type { MapData, StateOccupation, HighPayOccupation, USOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc } from "@/lib/map-data"
@@ -107,16 +108,16 @@ export default function AustraliaMap({
   }, [selected, activeCountry])
 
   const onSelectSA4 = useCallback((code: string) => {
-    // 지역(SA4)을 눌러도 현재 보고 있던 탭(부족/고소득/고용)을 유지한다.
-    // 강제로 "고용률" 탭으로 넘기지 않는다.
     const regions = selected ? SA4_BY_STATE[selected as StateCode] ?? [] : []
     const region = regions.find((r) => r.code === code) ?? null
     setSelectedSA4(region)
+    if (region) track("select_region", { state: selected ?? "", region: region.name })
   }, [selected])
 
   const onSelectState = useCallback((s: string) => {
     setSelected(s)
-  }, [])
+    track("select_state", { country: activeCountry ?? "AU", state: s })
+  }, [activeCountry])
 
   const onSelectCountry = useCallback((country: "AU" | "US") => {
     setActiveCountry(country)
@@ -337,7 +338,15 @@ function Panel({
   const occ = selectedOccCode ? data.auOccupations[selectedOccCode] : null
   const stateShortages = selectedOccCode ? data.auStateShortages[selectedOccCode] ?? [] : []
 
-  const handleSelectOcc = (code: string) => setSelectedOccCode(code)
+  const handleSelectOcc = (code: string) => {
+    const name = data.auOccupations[code]?.occupation_en ?? code
+    track("click_occupation", { type: "au", code, name, state: selected })
+    setSelectedOccCode(code)
+  }
+  const handleUSSelectOcc = (occ: USOccupation) => {
+    track("click_occupation", { type: "us", code: occ.occ_code, name: occ.occ_title, state: selected })
+    setSelectedUsOcc(occ)
+  }
   const handleBack = () => setSelectedOccCode(null)
 
   if (selectedUsOcc) {
@@ -391,14 +400,14 @@ function Panel({
 
       <div className="px-5 pt-3">
         <div className="inline-flex rounded-lg bg-slate-100 p-1 text-sm">
-          <TabButton active={tab === "shortage"} onClick={() => onTab("shortage")}>
+          <TabButton active={tab === "shortage"} onClick={() => { onTab("shortage"); track("switch_tab", { tab: "shortage", state: selected }) }}>
             {t.map.tabShortage}
           </TabButton>
-          <TabButton active={tab === "pay"} onClick={() => onTab("pay")}>
+          <TabButton active={tab === "pay"} onClick={() => { onTab("pay"); track("switch_tab", { tab: "pay", state: selected }) }}>
             {t.map.tabPay}
           </TabButton>
           {isAU && (
-            <TabButton active={tab === "employment"} onClick={() => onTab("employment")}>
+            <TabButton active={tab === "employment"} onClick={() => { onTab("employment"); track("switch_tab", { tab: "employment", state: selected }) }}>
               {t.map.tabEmployment}
             </TabButton>
           )}
@@ -423,7 +432,7 @@ function Panel({
             <ShortageList rows={auShortage} onSelectOcc={handleSelectOcc} />
           )
         )}
-        {tab === "shortage" && !isAU && <USShortageList rows={usShortage} onSelectOcc={setSelectedUsOcc} />}
+        {tab === "shortage" && !isAU && <USShortageList rows={usShortage} onSelectOcc={handleUSSelectOcc} />}
         {tab === "pay" && isAU && (
           selectedSA4 ? (
             <RegionGroupList
@@ -447,7 +456,7 @@ function Panel({
             />
           )
         )}
-        {tab === "pay" && !isAU && <USHighPayList rows={usHighPay} onSelectOcc={setSelectedUsOcc} />}
+        {tab === "pay" && !isAU && <USHighPayList rows={usHighPay} onSelectOcc={handleUSSelectOcc} />}
         {tab === "employment" && (
           <EmploymentList
             sa4={selectedSA4}
