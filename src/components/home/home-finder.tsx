@@ -100,7 +100,7 @@ export function HomeFinder() {
 
       <div className="flex flex-1 flex-col items-center justify-center px-6 py-12">
         <div className="w-full max-w-xl text-center">
-          <h1 className="font-display text-[2rem] font-semibold leading-[1.1] tracking-tight text-foreground sm:text-5xl">
+          <h1 className="font-sans text-[2rem] font-semibold leading-[1.1] tracking-tight text-foreground sm:text-5xl">
             {f.headline}
           </h1>
           <p className="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-slate-500 sm:text-base">
