@@ -201,6 +201,7 @@ export function HomeFinder() {
       <p className="px-6 pb-6 text-center text-[11px] leading-relaxed text-slate-400">
         {f.dataNote}
       </p>
+      <span className="block text-center text-[0px] leading-none text-transparent select-none">Impact-Site-Verification: 5410aaff-a0e3-4b08-94ef-d3d68407b9f5</span>
     </div>
   )
 }

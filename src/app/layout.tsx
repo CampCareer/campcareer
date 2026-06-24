@@ -102,18 +102,14 @@ export default function RootLayout({
             gtag('config', 'G-X2J1LGJL5D');
           `}
         </Script>
-        {/* Impact affiliate verification — Revolut & Skyscanner */}
+        {/* Impact affiliate verification — Revolut */}
         <Script id="impact-verification" strategy="beforeInteractive">
           {`
             (function(){
-              var m1=document.createElement('meta');
-              m1.name='impact-site-verification';
-              m1.setAttribute('value','4f336c30-8942-4500-9a4f-e33629d44797');
-              document.head.appendChild(m1);
-              var m2=document.createElement('meta');
-              m2.name='impact-site-verification';
-              m2.setAttribute('value','5410aaff-a0e3-4b08-94ef-d3d68407b9f5');
-              document.head.appendChild(m2);
+              var m=document.createElement('meta');
+              m.name='impact-site-verification';
+              m.setAttribute('value','4f336c30-8942-4500-9a4f-e33629d44797');
+              document.head.appendChild(m);
             })();
           `}
         </Script>
