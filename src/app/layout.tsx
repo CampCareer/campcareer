@@ -112,7 +112,7 @@ export default function RootLayout({
               document.head.appendChild(m1);
               var m2=document.createElement('meta');
               m2.name='impact-site-verification';
-              m2.setAttribute('value','60307139-1ad3-4189-ab2e-9b6f26b6b698');
+              m2.setAttribute('value','5410aaff-a0e3-4b08-94ef-d3d68407b9f5');
               document.head.appendChild(m2);
             })();
           `}
