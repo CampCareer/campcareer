@@ -616,7 +616,7 @@ const ko: Dictionary = {
   map: {
     tabShortage: '부족 직종',
     tabPay: '고소득 직업',
-    tabEmployment: '고용률',
+    tabEmployment: '고용 규모',
     selectState: '주 (State)',
     selectStatePlaceholder: '주를 선택하세요',
     selectRegion: '지역 (SA4 Region)',
@@ -629,6 +629,7 @@ const ko: Dictionary = {
     regionPayHint: '고소득자($104k+)가 많은 직업군 — 인구조사 2021',
     regionMetroNote: '광역시 단위',
     regionNoData: '지역 데이터가 아직 없습니다.',
+    regionGroupNoOcc: '이 직업군에 등록된 부족 직종이 아직 없어요.',
     reset: '초기화',
     close: '닫기',
     source: '출처: OSCA 2025 부족직종 · ABS 소득 · JSA NERO 2026-05',
