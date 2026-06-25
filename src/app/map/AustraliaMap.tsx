@@ -509,6 +509,32 @@ function Panel({
   const occ = selectedOccCode ? data.auOccupations[selectedOccCode] : null
   const stateShortages = selectedOccCode ? data.auStateShortages[selectedOccCode] ?? [] : []
 
+  // 일부 ANZSCO 코드가 occupations_au 테이블에 없어 occ가 null인 경우
+  // shortageByState(occupation_state_au 기반)에서 직업 데이터를 찾아 fallback OccRow 생성
+  const resolvedOcc = useMemo<OccRow | null>(() => {
+    if (occ) return occ
+    if (!selectedOccCode || !isAU) return null
+    const fallback = (data.shortageByState[selected as StateCode] ?? []).find(
+      (s) => s.anzsco_code === selectedOccCode,
+    )
+    if (!fallback) return null
+    return {
+      anzsco_code: fallback.anzsco_code,
+      occupation_en: fallback.occupation_en,
+      occupation_ko: fallback.occupation_ko,
+      shortage_rating: null,
+      median_salary_aud: fallback.median_salary_aud,
+      on_csol: fallback.on_csol,
+      confidence: fallback.confidence,
+      related_broad_field: null,
+      pr_note_ko: null,
+      source_name: null,
+      source_url: null,
+      last_verified: null,
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [occ, selectedOccCode, isAU, selected])
+
   const handleSelectOcc = (code: string) => {
     const name = data.auOccupations[code]?.occupation_en ?? code
     track("click_occupation", { type: "au", code, name, state: selected })
@@ -537,10 +563,10 @@ function Panel({
     )
   }
 
-  if (selectedOccCode && occ) {
+  if (selectedOccCode && resolvedOcc) {
     return (
       <OccupationDetail
-        occ={occ}
+        occ={resolvedOcc}
         stateShortages={stateShortages}
         onBack={handleBack}
         onClose={onClose}
