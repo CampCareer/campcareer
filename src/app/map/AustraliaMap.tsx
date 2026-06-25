@@ -437,7 +437,7 @@ function Panel({
     <>
       <div className="flex items-start justify-between gap-2 px-5 pt-4">
         <div>
-          <h2 className="font-display text-lg font-semibold text-slate-900 tracking-tight">
+          <h2 className="font-sans text-lg font-semibold text-slate-900 tracking-tight">
             {selectedSA4 ? selectedSA4.name : stateName}
           </h2>
           {selectedSA4 && isAU && (
@@ -1170,7 +1170,7 @@ function OccupationDetail({
       </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
-        <h2 className="font-display text-lg font-semibold text-slate-900 tracking-tight">
+        <h2 className="font-sans text-lg font-semibold text-slate-900 tracking-tight">
           {name}
         </h2>
 
@@ -1484,7 +1484,7 @@ function USOccupationDetail({
       </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
-        <h2 className="font-display text-lg font-semibold text-slate-900 tracking-tight">
+        <h2 className="font-sans text-lg font-semibold text-slate-900 tracking-tight">
           {occ.occ_title}
         </h2>
 
