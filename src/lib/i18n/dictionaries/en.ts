@@ -350,8 +350,7 @@ const en = {
       orRisk: "Or check a degree's full risk",
       orCompare: 'Compare two countries',
       finder: {
-        headline: 'Find the job',
-        headlineSub: 'then study',
+        headline: 'Find the job first, then study',
         subhead:
           'Pick a place — see in-demand and high-paying jobs, matching courses, and the visa & PR path. Built on government data.',
         country: 'Country',
