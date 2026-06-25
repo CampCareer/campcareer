@@ -103,13 +103,13 @@ export default function AustraliaMap({
     }
   }
 
-  const shareOcc = (occTitle: string) => {
+  const shareOcc = () => {
     const url = new URL(window.location.href)
     url.searchParams.set("country", activeCountry?.toLowerCase() ?? "au")
     if (selected) url.searchParams.set("state", selected)
     const shareUrl = url.toString()
     if (navigator.share) {
-      navigator.share({ title: occTitle, text: `Check ${occTitle} on CampCareer`, url: shareUrl })
+      navigator.share({ url: shareUrl })
     } else {
       navigator.clipboard.writeText(shareUrl)
     }
@@ -491,7 +491,7 @@ function Panel({
   setSelectedUsOcc: (occ: USOccupation | null) => void
   savedOccCodes: Set<string>
   onToggleSave: (occCode: string, occTitle: string) => void
-  onShare: (occTitle: string) => void
+  onShare: () => void
 }) {
   const t = useTranslations()
   const isAU = activeCountry === "AU"
