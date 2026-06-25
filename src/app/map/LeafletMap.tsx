@@ -319,19 +319,15 @@ export default function LeafletMap({
             if (feature && isUSA(feature.properties as Record<string, unknown>)) {
               return { fillColor: "#dcfce7", color: "#22c55e", weight: 2, fillOpacity: 0.5 }
             }
-            if (feature && isCanada(feature.properties as Record<string, unknown>)) {
-              return { fillColor: "#fce7f3", color: "#ec4899", weight: 2, fillOpacity: 0.5 }
-            }
             return { fillColor: "#f8fafc", color: "#cbd5e1", weight: 0.8, fillOpacity: 0.6 }
           },
           onEachFeature: (feature, lyr) => {
             const props = feature.properties as Record<string, unknown>
             const isAU = isAustralia(props)
             const isUS = isUSA(props)
-            const isCA = isCanada(props)
-            if (!isAU && !isUS && !isCA) return
+            if (!isAU && !isUS) return
 
-            const name = isAU ? "Australia" : isUS ? "United States" : "Canada"
+            const name = isAU ? "Australia" : "United States"
             lyr.bindTooltip(name, {
               sticky: true,
               direction: "top",
@@ -343,9 +339,7 @@ export default function LeafletMap({
               mouseout: () => {
                 const baseStyle = isAU
                   ? { fillColor: "#e0e7ff", color: "#6366f1", weight: 2, fillOpacity: 0.5 }
-                  : isUS
-                    ? { fillColor: "#dcfce7", color: "#22c55e", weight: 2, fillOpacity: 0.5 }
-                    : { fillColor: "#fce7f3", color: "#ec4899", weight: 2, fillOpacity: 0.5 }
+                  : { fillColor: "#dcfce7", color: "#22c55e", weight: 2, fillOpacity: 0.5 }
                 ;(lyr as L.Path).setStyle(baseStyle)
               },
             })

@@ -21,8 +21,6 @@ import { track } from "@/lib/analytics"
 const COUNTRIES = [
   { value: "au", flag: "🇦🇺", nameKey: "australia", enabled: true },
   { value: "us", flag: "🇺🇸", nameKey: "usa", enabled: true },
-  { value: "ca", flag: "🇨🇦", nameKey: "canada", enabled: true },
-  { value: "uk", flag: "🇬🇧", nameKey: "uk", enabled: false },
 ] as const
 
 // 각 호주 주의 고용 규모 Top 3 직업 (JSA NERO 2026-05 기반)
@@ -110,9 +108,8 @@ export function HomeFinder() {
   // reset state when switching country
   useEffect(() => {
     if (isUS) setState("CA")
-    else if (isCA) setState("ON")
     else setState("NSW")
-  }, [isUS, isCA])
+  }, [isUS])
 
   const categoryItems = useMemo<Record<string, string>>(
     () => ({ shortage: f.shortageShort, pay: f.payShort }),
