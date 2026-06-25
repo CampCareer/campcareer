@@ -195,15 +195,6 @@ export default function AustraliaMap({
 
         {toolbarExpanded && (
       <div className="flex flex-wrap items-end gap-3 border-b border-slate-200 bg-white px-4 py-3">
-        {isMobile && (
-          <button
-            type="button"
-            onClick={() => setExpanded(false)}
-            className="mb-0.5 flex h-10 w-10 items-center justify-center rounded-lg hover:bg-slate-100"
-          >
-            <ChevronUp className="h-5 w-5 text-slate-400" />
-          </button>
-        )}
         <label className="block">
           <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectCountry}</span>
           <Select
@@ -289,6 +280,16 @@ export default function AustraliaMap({
             </div>
           )}
         </label>
+
+        {isMobile && (
+          <button
+            type="button"
+            onClick={() => setExpanded(false)}
+            className="ml-auto flex h-10 w-10 items-center justify-center rounded-lg hover:bg-slate-100"
+          >
+            <ChevronUp className="h-5 w-5 text-slate-400" />
+          </button>
+        )}
 
         {selected && (
           <button
