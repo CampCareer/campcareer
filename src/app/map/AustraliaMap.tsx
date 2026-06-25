@@ -137,12 +137,6 @@ export default function AustraliaMap({
   }, [selected, activeCountry])
 
   const stateItems = useMemo(() => STATE_NAMES as Record<string, string>, [])
-  const sa4Items = useMemo<Record<string, string>>(() => {
-    if (!selected) return {}
-    return Object.fromEntries((SA4_BY_STATE[selected as StateCode] ?? []).map((r) => [r.code, r.name]))
-  }, [selected])
-
-  const sa4Regions = selected ? SA4_BY_STATE[selected as StateCode] ?? [] : []
 
   const auShortageItems = useMemo<Record<string, string>>(() => {
     if (!selected) return {}
