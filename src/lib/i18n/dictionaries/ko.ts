@@ -352,8 +352,7 @@ const ko: Dictionary = {
       orRisk: '또는 전공 리스크 전체 진단',
       orCompare: '두 국가 비교하기',
       finder: {
-        headline: '지도로 검색하는 유학',
-        headlineSub: '로드맵',
+        headline: '지도로 검색하는 유학 로드맵',
         subhead:
           '지역을 고르면 사람이 부족한 직업과 고연봉 직업, 관련 코스, 비자·영주권 경로까지 보여드려요. 정부 데이터 기반입니다.',
         country: '국가',

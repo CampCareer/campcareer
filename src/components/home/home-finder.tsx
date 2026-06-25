@@ -102,8 +102,6 @@ export function HomeFinder() {
         <div className="w-full max-w-xl text-center">
           <h1 className="font-sans text-[2rem] font-semibold leading-[1.1] tracking-tight text-foreground sm:text-5xl">
             {f.headline}
-            <br />
-            {f.headlineSub}
           </h1>
           <p className="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-slate-500 sm:text-base">
             {f.subhead}
