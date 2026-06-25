@@ -8,13 +8,12 @@ import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useTranslations, useLocale } from "@/lib/i18n/locale-provider"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { STATE_CODES, STATE_NAMES, US_STATE_CODES, US_STATE_NAMES, CA_PROVINCE_CODES, CA_PROVINCE_NAMES, type StateCode } from "./states"
+import { STATE_CODES, STATE_NAMES, US_STATE_CODES, US_STATE_NAMES, type StateCode } from "./states"
 import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
 import { getPathway, TAFE_BY_STATE, VET_PORTALS, cricosSearchUrl } from "@/lib/au-pathway"
 import { track } from "@/lib/analytics"
 import { WiseCta, AiraloCta } from "@/components/partners/partner-cta"
-import { OccupationPicker } from "@/components/map/occupation-picker"
-import type { MapData, StateOccupation, HighPayOccupation, USOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc } from "@/lib/map-data"
+import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc } from "@/lib/map-data"
 
 const LeafletMap = dynamic(() => import("./LeafletMap"), {
   ssr: false,
@@ -71,10 +70,7 @@ export default function AustraliaMap({
     if (countryRaw === "us") {
       setActiveCountry("US")
       if (raw && (US_STATE_CODES as readonly string[]).includes(raw)) setSelected(raw)
-    } else if (countryRaw === "ca") {
-      setActiveCountry("CA")
-      if (raw && (CA_PROVINCE_CODES as readonly string[]).includes(raw)) setSelected(raw)
-    } else if (raw && (STATE_CODES as readonly string[]).includes(raw)) {
+    } else if (countryRaw === "au" && raw && (STATE_CODES as readonly string[]).includes(raw)) {
       setActiveCountry("AU")
       setSelected(raw as StateCode)
     }
@@ -125,6 +121,7 @@ export default function AustraliaMap({
   }, [activeCountry])
 
   const onSelectCountry = useCallback((country: "AU" | "US" | "CA") => {
+    if (country === "CA") return
     setActiveCountry(country)
     setSelected(null)
     setSelectedSA4(null)
@@ -147,14 +144,36 @@ export default function AustraliaMap({
 
   const sa4Regions = selected ? SA4_BY_STATE[selected as StateCode] ?? [] : []
 
+  const auShortageItems = useMemo<Record<string, string>>(() => {
+    if (!selected) return {}
+    const occs = data.shortageByState[selected as StateCode] ?? []
+    return Object.fromEntries(
+      occs.map((o) => [
+        o.anzsco_code,
+        `${o.occupation_en}${o.median_salary_aud != null ? ` · $${o.median_salary_aud.toLocaleString()}` : ""}`,
+      ]),
+    )
+  }, [data.shortageByState, selected])
+
+  const usShortageItems = useMemo<Record<string, string>>(() => {
+    if (!selected) return {}
+    const occs = data.usShortageByState[selected] ?? []
+    return Object.fromEntries(
+      occs.map((o) => [
+        o.occ_code,
+        `${o.occ_title}${o.median_wage != null ? ` · $${o.median_wage.toLocaleString()}` : ""}`,
+      ]),
+    )
+  }, [data.usShortageByState, selected])
+
   return (
     <div className="flex h-full w-full flex-col">
-      {activeCountry === "AU" && (
+      {(activeCountry === "AU" || activeCountry === "US") && (
       <div className="flex flex-wrap items-end gap-3 border-b border-slate-200 bg-white px-4 py-3">
         <label className="block">
           <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectState}</span>
           <Select
-            items={stateItems}
+            items={activeCountry === "AU" ? stateItems : US_STATE_NAMES}
             value={selected}
             onValueChange={(v) => v && setSelected(v)}
           >
@@ -162,119 +181,61 @@ export default function AustraliaMap({
               <SelectValue placeholder={t.map.selectStatePlaceholder} />
             </SelectTrigger>
             <SelectContent className="z-[2000]">
-              {STATE_CODES.map((c) => (
+              {(activeCountry === "AU" ? STATE_CODES : US_STATE_CODES).map((c) => (
                 <SelectItem key={c} value={c}>
-                  {STATE_NAMES[c]}
+                  {activeCountry === "AU" ? STATE_NAMES[c as StateCode] : US_STATE_NAMES[c]}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
-        </label>
-
-        <label className="block">
-          <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectRegion}</span>
-          {selected ? (
-            <Select
-              items={sa4Items}
-              value={selectedSA4?.code ?? null}
-              onValueChange={(v) => v && onSelectSA4(v)}
-            >
-              <SelectTrigger className="h-10 w-64 rounded-lg border-slate-200 text-sm">
-                <SelectValue placeholder={t.map.selectRegionPlaceholder} />
-              </SelectTrigger>
-              <SelectContent className="z-[2000]">
-                {sa4Regions.map((r) => (
-                  <SelectItem key={r.code} value={r.code}>
-                    {r.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          ) : (
-            <div className="flex h-10 w-64 cursor-not-allowed items-center rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-400">
-              {t.map.selectStateFirst}
-            </div>
-          )}
         </label>
 
         <label className="block">
           <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectOccupation}</span>
-          <OccupationPicker
-            key={selected ?? "none"}
-            disabled={!selected}
-            occupations={selected ? data.shortageByState[selected as StateCode] ?? [] : []}
-            onSelect={(code) => setSelectedOccCode(code)}
-          />
-        </label>
-
-        {(selected || selectedSA4) && (
-          <button
-            type="button"
-            onClick={onReset}
-            className="mb-0.5 inline-flex h-10 items-center gap-1.5 rounded-lg px-3 text-sm font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-700"
-          >
-            <RotateCcw className="h-3.5 w-3.5" />
-            {t.map.reset}
-          </button>
-        )}
-      </div>
-      )}
-
-      {activeCountry === "US" && (
-      <div className="flex flex-wrap items-end gap-3 border-b border-slate-200 bg-white px-4 py-3">
-        <label className="block">
-          <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectState}</span>
-          <Select
-            items={US_STATE_NAMES}
-            value={selected}
-            onValueChange={(v) => v && setSelected(v)}
-          >
-            <SelectTrigger className="h-10 w-56 rounded-lg border-slate-200 text-sm">
-              <SelectValue placeholder={t.map.selectStatePlaceholder} />
-            </SelectTrigger>
-            <SelectContent className="z-[2000]">
-              {US_STATE_CODES.map((c) => (
-                <SelectItem key={c} value={c}>
-                  {US_STATE_NAMES[c]}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </label>
-
-        {selected && (
-          <button
-            type="button"
-            onClick={onReset}
-            className="mb-0.5 inline-flex h-10 items-center gap-1.5 rounded-lg px-3 text-sm font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-700"
-          >
-            <RotateCcw className="h-3.5 w-3.5" />
-            {t.map.reset}
-          </button>
-        )}
-      </div>
-      )}
-
-      {activeCountry === "CA" && (
-      <div className="flex flex-wrap items-end gap-3 border-b border-slate-200 bg-white px-4 py-3">
-        <label className="block">
-          <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectState}</span>
-          <Select
-            items={CA_PROVINCE_NAMES}
-            value={selected}
-            onValueChange={(v) => v && setSelected(v)}
-          >
-            <SelectTrigger className="h-10 w-56 rounded-lg border-slate-200 text-sm">
-              <SelectValue placeholder={t.map.selectStatePlaceholder} />
-            </SelectTrigger>
-            <SelectContent className="z-[2000]">
-              {CA_PROVINCE_CODES.map((c) => (
-                <SelectItem key={c} value={c}>
-                  {CA_PROVINCE_NAMES[c]}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          {selected ? (
+            <Select
+              items={activeCountry === "AU" ? auShortageItems : usShortageItems}
+              value={selectedOccCode ?? null}
+              onValueChange={(v) => {
+                if (!v) return
+                if (activeCountry === "AU") setSelectedOccCode(v)
+                else {
+                  const occ = data.usShortageByState[selected]?.find((o) => o.occ_code === v) ?? null
+                  setSelectedUsOcc(occ)
+                }
+              }}
+            >
+              <SelectTrigger className="h-10 w-72 rounded-lg border-slate-200 text-sm">
+                <SelectValue placeholder={t.map.selectStatePlaceholder} />
+              </SelectTrigger>
+              <SelectContent className="z-[2000] max-h-72">
+                {(activeCountry === "AU"
+                  ? data.shortageByState[selected as StateCode] ?? []
+                  : data.usShortageByState[selected] ?? []
+                ).map((occ) => {
+                  const code = activeCountry === "AU" ? (occ as StateOccupation).anzsco_code : (occ as USOccupation).occ_code
+                  const title = activeCountry === "AU" ? (occ as StateOccupation).occupation_en : (occ as USOccupation).occ_title
+                  const salary = activeCountry === "AU" ? (occ as StateOccupation).median_salary_aud : (occ as USOccupation).median_wage
+                  return (
+                    <SelectItem key={code} value={code}>
+                      <span className="flex items-center justify-between gap-3">
+                        <span className="truncate">{title}</span>
+                        {salary != null && (
+                          <span className="shrink-0 text-xs text-slate-400">
+                            ${salary.toLocaleString()}
+                          </span>
+                        )}
+                      </span>
+                    </SelectItem>
+                  )
+                })}
+              </SelectContent>
+            </Select>
+          ) : (
+            <div className="flex h-10 w-72 cursor-not-allowed items-center rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-400">
+              {t.map.selectStateFirst}
+            </div>
+          )}
         </label>
 
         {selected && (
@@ -369,9 +330,7 @@ function Panel({
   const isUS = activeCountry === "US"
   const stateName = isAU
     ? STATE_NAMES[selected as StateCode] ?? selected
-    : isUS
-      ? US_STATE_NAMES[selected] ?? selected
-      : CA_PROVINCE_NAMES[selected] ?? selected
+    : US_STATE_NAMES[selected] ?? selected
 
   const auShortage = isAU ? (data.shortageByState[selected as StateCode] ?? []) : []
   const usShortage = isUS ? (data.usShortageByState[selected] ?? []) : []
