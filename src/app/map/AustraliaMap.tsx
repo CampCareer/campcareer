@@ -520,6 +520,7 @@ function Panel({
     if (!fallback) return null
     return {
       anzsco_code: fallback.anzsco_code,
+      anzsco_v13: fallback.anzsco_v13,
       occupation_en: fallback.occupation_en,
       occupation_ko: fallback.occupation_ko,
       shortage_rating: null,
@@ -873,7 +874,7 @@ function RegionGroupList({
 
   // 분야 드릴다운: 해당 ANZSCO 2자리로 시작하는 주(state) 직종 → 부족/고소득 리스트 재사용(클릭 시 상세).
   if (openGroup?.code) {
-    const inGroup = occupations.filter((o) => o.anzsco_code.startsWith(openGroup.code!))
+    const inGroup = occupations.filter((o) => (o.anzsco_v13 || o.anzsco_code).startsWith(openGroup.code!))
     return (
       <div>
         <button
@@ -911,7 +912,7 @@ function RegionGroupList({
       </p>
       <ol>
         {rows.map((r, i) => {
-          const matchCount = r.code ? occupations.filter((o) => o.anzsco_code.startsWith(r.code!)).length : 0
+          const matchCount = r.code ? occupations.filter((o) => (o.anzsco_v13 || o.anzsco_code).startsWith(r.code!)).length : 0
           const inner = (
             <>
               <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
