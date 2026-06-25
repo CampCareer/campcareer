@@ -48,6 +48,7 @@ export default function AustraliaMap({
   const neroFetched = useRef(false)
   const [regionData, setRegionData] = useState<RegionOccData | null>(null)
   const regionFetched = useRef(false)
+  const initialOccLoaded = useRef(false)
   // 직업 카드 열림 상태 — 툴바의 직업 검색에서도 열 수 있도록 최상위로 끌어올림.
   const [selectedOccCode, setSelectedOccCode] = useState<string | null>(null)
   const [selectedUsOcc, setSelectedUsOcc] = useState<USOccupation | null>(null)
@@ -163,6 +164,42 @@ export default function AustraliaMap({
     setSelectedSA4(null)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected])
+
+  // occ(직업 코드) URL 파라미터 ↔ state 동기화.
+  // 최초 마운트 시 URL의 ?occ=… 를 읽어 자동 선택하고,
+  // 이후 state가 바뀌면 URL을 갱신한다.
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search)
+    const urlOcc = p.get("occ") ?? null
+    const stateOcc = selectedOccCode ?? selectedUsOcc?.occ_code ?? null
+
+    // URL → state (최초 1회)
+    if (!initialOccLoaded.current && urlOcc && !stateOcc && activeCountry && selected) {
+      initialOccLoaded.current = true
+      if (activeCountry === "AU") {
+        if (data.auOccupations[urlOcc]) setSelectedOccCode(urlOcc)
+      } else {
+        const occ = data.usShortageByState[selected]?.find((o) => o.occ_code === urlOcc) ?? null
+        if (occ) setSelectedUsOcc(occ)
+      }
+      return
+    }
+
+    // occ가 없는 URL → 초기 적재 완료로 표시
+    if (!initialOccLoaded.current && !urlOcc) {
+      initialOccLoaded.current = true
+    }
+
+    // state → URL (동기화)
+    if (initialOccLoaded.current && stateOcc !== urlOcc) {
+      if (stateOcc) {
+        p.set("occ", stateOcc)
+      } else {
+        p.delete("occ")
+      }
+      window.history.replaceState(null, "", `?${p.toString()}`)
+    }
+  }, [selectedOccCode, selectedUsOcc, activeCountry, selected, data])
 
   const onSelectSA4 = useCallback((code: string) => {
     const regions = selected ? SA4_BY_STATE[selected as StateCode] ?? [] : []
