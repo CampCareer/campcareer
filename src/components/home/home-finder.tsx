@@ -25,15 +25,49 @@ const COUNTRIES = [
   { value: "uk", flag: "🇬🇧", nameKey: "uk", enabled: false },
 ] as const
 
-// 첫 방문자가 "뭘 해야 하지?" 막막함을 없애는 예시 검색 칩 — /map 으로 바로 딥링크.
-const CHIPS = [
-  { country: "au", state: "NSW", tab: "shortage" as const },
-  { country: "au", state: "VIC", tab: "pay" as const },
-  { country: "us", state: "CA", tab: "shortage" as const },
-  { country: "us", state: "TX", tab: "pay" as const },
-  { country: "ca", state: "ON", tab: "shortage" as const },
-  { country: "ca", state: "BC", tab: "pay" as const },
-]
+// 각 호주 주의 고용 규모 Top 3 직업 (JSA NERO 2026-05 기반)
+const EMPLOYMENT_TOP3: Record<string, { name: string; emp: number }[]> = {
+  "ACT": [
+    { name: "General Clerks", emp: 12721 },
+    { name: "Intelligence and Policy Analysts", emp: 8535 },
+    { name: "Sales Assistants (General)", emp: 8156 },
+  ],
+  "NSW": [
+    { name: "Sales Assistants (General)", emp: 190779 },
+    { name: "Aged and Disabled Carers", emp: 98151 },
+    { name: "Registered Nurses", emp: 96396 },
+  ],
+  "NT": [
+    { name: "Sales Assistants (General)", emp: 4726 },
+    { name: "Registered Nurses", emp: 4687 },
+    { name: "General Clerks", emp: 4166 },
+  ],
+  "QLD": [
+    { name: "Sales Assistants (General)", emp: 123573 },
+    { name: "Registered Nurses", emp: 83470 },
+    { name: "Aged and Disabled Carers", emp: 80748 },
+  ],
+  "SA": [
+    { name: "Aged and Disabled Carers", emp: 39924 },
+    { name: "Sales Assistants (General)", emp: 36360 },
+    { name: "Registered Nurses", emp: 29695 },
+  ],
+  "TAS": [
+    { name: "Aged and Disabled Carers", emp: 11082 },
+    { name: "Sales Assistants (General)", emp: 10984 },
+    { name: "Registered Nurses", emp: 7035 },
+  ],
+  "VIC": [
+    { name: "Sales Assistants (General)", emp: 145060 },
+    { name: "Registered Nurses", emp: 106568 },
+    { name: "Aged and Disabled Carers", emp: 88896 },
+  ],
+  "WA": [
+    { name: "Sales Assistants (General)", emp: 62692 },
+    { name: "Registered Nurses", emp: 41453 },
+    { name: "Aged and Disabled Carers", emp: 32357 },
+  ],
+}
 
 // base-ui Select 트리거를 테두리 없는 "검색바 세그먼트"처럼 보이게 하는 클래스.
 const segmentTrigger =
@@ -91,14 +125,14 @@ export function HomeFinder() {
   }
 
   return (
-    <div className="relative flex min-h-[calc(100vh-3.5rem)] flex-col overflow-hidden bg-background">
+    <div className="relative flex min-h-[calc(100vh-3.5rem)] flex-col overflow-y-auto bg-background">
       {/* 은은한 브랜드 글로우(맵 제품의 정체성을 암시) — CSS만, 이미지/지도 임베드 없음 */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[460px] bg-[radial-gradient(60%_60%_at_50%_-5%,hsl(var(--brand-tint))_0%,transparent_70%)]"
       />
 
-      <div className="flex flex-1 flex-col items-center justify-center px-6 py-12">
+      <div className="flex flex-1 flex-col items-center px-6 pt-8 pb-2 sm:pt-10">
         <div className="w-full max-w-xl text-center">
           <h1 className="font-sans text-[2rem] font-semibold leading-[1.1] tracking-tight text-foreground sm:text-5xl">
             {f.headline}
@@ -177,29 +211,59 @@ export function HomeFinder() {
               </button>
             </div>
           </div>
-
-          {/* 예시 검색 칩 — "이렇게 찾아보세요" */}
-          <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-            <span className="text-xs text-slate-400">{f.tryThese}</span>
-            {CHIPS.map((c) => (
-              <Link
-                key={`${c.country}-${c.state}-${c.tab}`}
-                href={`/map?country=${c.country}&state=${c.state}&tab=${c.tab}`}
-                className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 transition-colors hover:border-brand/30 hover:bg-brand-tint hover:text-brand-press"
-              >
-                {c.tab === "pay" ? f.payShort : f.shortageShort} · {c.state}
-              </Link>
-            ))}
-          </div>
-
-          <Link
-            href="/map"
-            className="mt-6 inline-flex items-center justify-center gap-1.5 text-xs font-medium text-slate-500 hover:text-slate-700"
-          >
-            <MapPin className="h-3.5 w-3.5" />
-            {f.browseMap}
-          </Link>
         </div>
+
+        {/* 주별 고용 Top 3 카드 */}
+        <div className="mt-7 w-full max-w-5xl px-6">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-400">
+            {f.tryThese}
+          </p>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {STATE_CODES.map((code) => {
+              const jobs = EMPLOYMENT_TOP3[code]
+              if (!jobs) return null
+              return (
+                <Link
+                  key={code}
+                  href={`/map?country=au&state=${code}&tab=employment`}
+                  className="group rounded-xl border border-slate-200 bg-white p-3 text-left transition-colors hover:border-brand/30 hover:bg-brand-tint sm:p-4"
+                >
+                  <div className="mb-2 flex items-center justify-between">
+                    <span className="text-sm font-semibold text-slate-800 group-hover:text-brand-press">
+                      {STATE_NAMES[code]}
+                    </span>
+                    <span className="text-[11px] font-medium text-slate-400">{code}</span>
+                  </div>
+                  <ol className="space-y-1">
+                    {jobs.map((job, i) => (
+                      <li key={job.name} className="flex items-center gap-2">
+                        <span className="w-4 shrink-0 text-[11px] font-medium text-slate-400">
+                          {i + 1}
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <span className="block truncate text-xs font-medium text-slate-700">
+                            {job.name}
+                          </span>
+                          <span className="text-[10px] text-slate-400">
+                            {job.emp.toLocaleString()} employed
+                          </span>
+                        </div>
+                      </li>
+                    ))}
+                  </ol>
+                </Link>
+              )
+            })}
+          </div>
+        </div>
+
+        <Link
+          href="/map"
+          className="mt-6 inline-flex items-center justify-center gap-1.5 text-xs font-medium text-slate-500 hover:text-slate-700"
+        >
+          <MapPin className="h-3.5 w-3.5" />
+          {f.browseMap}
+        </Link>
       </div>
 
       {/* 정부·공공 데이터 기반 멘트 — 맨 하단에 작게 */}
