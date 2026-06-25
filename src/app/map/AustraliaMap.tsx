@@ -1565,12 +1565,12 @@ function OccupationDetail({
             </p>
           )}
 
+          <JobListings what={name} where={currentState} country="AU" />
+
           <div className="space-y-3">
             <WiseCta />
             <AiraloCta />
           </div>
-
-          <JobListings what={name} where={currentState} country="AU" />
         </div>
       </div>
 
@@ -1773,12 +1773,12 @@ function USOccupationDetail({
             )}
           </div>
 
+          <JobListings what={occ.occ_title} where={stateCode} country="US" />
+
           <div className="space-y-3">
             <WiseCta />
             <AiraloCta />
           </div>
-
-          <JobListings what={occ.occ_title} where={stateCode} country="US" />
         </div>
       </div>
 
