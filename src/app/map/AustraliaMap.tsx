@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
-import { RotateCcw, ChevronLeft, ChevronRight, ChevronDown, ChevronUp, ExternalLink, Search } from "lucide-react"
+import { RotateCcw, ChevronLeft, ChevronRight, ChevronDown, ChevronUp, ExternalLink, Search, Bookmark, Share2 } from "lucide-react"
 import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useTranslations, useLocale } from "@/lib/i18n/locale-provider"
@@ -14,6 +14,8 @@ import { getPathway, TAFE_BY_STATE, VET_PORTALS, cricosSearchUrl } from "@/lib/a
 import { track } from "@/lib/analytics"
 import { WiseCta, AiraloCta } from "@/components/partners/partner-cta"
 import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc } from "@/lib/map-data"
+import { createClient } from "@/lib/supabase-client"
+import type { User } from "@supabase/supabase-js"
 
 const LeafletMap = dynamic(() => import("./LeafletMap"), {
   ssr: false,
@@ -53,6 +55,64 @@ export default function AustraliaMap({
   const [isMobile, setIsMobile] = useState(false)
   // 모바일 접이식 툴바 상태
   const [expanded, setExpanded] = useState(false)
+
+  const supabase = createClient()
+  const [user, setUser] = useState<User | null>(null)
+  const [savedOccCodes, setSavedOccCodes] = useState<Set<string>>(new Set())
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setUser(data.user ?? null))
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
+      setUser(session?.user ?? null)
+    })
+    return () => subscription.unsubscribe()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    if (!user) { setSavedOccCodes(new Set()); return }
+    supabase
+      .from("saved_occupations")
+      .select("occ_code")
+      .eq("user_id", user.id)
+      .then(({ data }) => {
+        if (data) setSavedOccCodes(new Set(data.map((r) => r.occ_code)))
+      })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user])
+
+  const toggleSaveOcc = async (occCode: string, occTitle: string) => {
+    if (!user) { window.location.href = "/login"; return }
+    const isSaved = savedOccCodes.has(occCode)
+    if (isSaved) {
+      await supabase
+        .from("saved_occupations")
+        .delete()
+        .eq("user_id", user.id)
+        .eq("occ_code", occCode)
+      setSavedOccCodes((prev) => { const next = new Set(prev); next.delete(occCode); return next })
+    } else {
+      await supabase.from("saved_occupations").upsert({
+        user_id: user.id,
+        occ_code: occCode,
+        occ_title: occTitle,
+        country: activeCountry ?? "",
+      })
+      setSavedOccCodes((prev) => new Set(prev).add(occCode))
+    }
+  }
+
+  const shareOcc = (occTitle: string) => {
+    const url = new URL(window.location.href)
+    url.searchParams.set("country", activeCountry?.toLowerCase() ?? "au")
+    if (selected) url.searchParams.set("state", selected)
+    const shareUrl = url.toString()
+    if (navigator.share) {
+      navigator.share({ title: occTitle, text: `Check ${occTitle} on CampCareer`, url: shareUrl })
+    } else {
+      navigator.clipboard.writeText(shareUrl)
+    }
+  }
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 639px)")
@@ -104,12 +164,6 @@ export default function AustraliaMap({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected])
 
-  // 주(state)·국가가 바뀌면 열려 있던 직업 상세를 닫는다 (stale 카드 방지).
-  useEffect(() => {
-    setSelectedOccCode(null)
-    setSelectedUsOcc(null)
-  }, [selected, activeCountry])
-
   const onSelectSA4 = useCallback((code: string) => {
     const regions = selected ? SA4_BY_STATE[selected as StateCode] ?? [] : []
     const region = regions.find((r) => r.code === code) ?? null
@@ -137,6 +191,19 @@ export default function AustraliaMap({
       setActiveCountry(null)
     }
   }, [selected, activeCountry])
+
+  const onClosePanel = useCallback(() => {
+    const hadDetail = selectedOccCode !== null || selectedUsOcc !== null
+    if (hadDetail) {
+      setSelectedOccCode(null)
+      setSelectedUsOcc(null)
+    }
+    if (isMobile) {
+      setExpanded(false)
+    } else if (!hadDetail) {
+      onReset()
+    }
+  }, [selectedOccCode, selectedUsOcc, isMobile, onReset])
 
   const stateItems = useMemo(() => STATE_NAMES as Record<string, string>, [])
 
@@ -326,7 +393,7 @@ export default function AustraliaMap({
               selectedSA4={activeCountry === "AU" ? selectedSA4 : null}
               tab={tab}
               onTab={setTab}
-              onClose={onReset}
+              onClose={onClosePanel}
               neroData={activeCountry === "AU" ? neroData : null}
               regionData={activeCountry === "AU" ? regionData : null}
               activeCountry={activeCountry}
@@ -334,6 +401,9 @@ export default function AustraliaMap({
               setSelectedOccCode={setSelectedOccCode}
               selectedUsOcc={selectedUsOcc}
               setSelectedUsOcc={setSelectedUsOcc}
+              savedOccCodes={savedOccCodes}
+              onToggleSave={toggleSaveOcc}
+              onShare={shareOcc}
             />
           )
           return isMobile ? (
@@ -365,6 +435,9 @@ function Panel({
   setSelectedOccCode,
   selectedUsOcc,
   setSelectedUsOcc,
+  savedOccCodes,
+  onToggleSave,
+  onShare,
 }: {
   data: MapData
   selected: string
@@ -379,6 +452,9 @@ function Panel({
   setSelectedOccCode: (code: string | null) => void
   selectedUsOcc: USOccupation | null
   setSelectedUsOcc: (occ: USOccupation | null) => void
+  savedOccCodes: Set<string>
+  onToggleSave: (occCode: string, occTitle: string) => void
+  onShare: (occTitle: string) => void
 }) {
   const t = useTranslations()
   const isAU = activeCountry === "AU"
@@ -416,6 +492,9 @@ function Panel({
         onBack={() => setSelectedUsOcc(null)}
         onClose={onClose}
         t={t}
+        savedOccCodes={savedOccCodes}
+        onToggleSave={onToggleSave}
+        onShare={onShare}
       />
     )
   }
@@ -430,6 +509,9 @@ function Panel({
         t={t}
         currentState={selected as StateCode}
         data={data}
+        savedOccCodes={savedOccCodes}
+        onToggleSave={onToggleSave}
+        onShare={onShare}
       />
     )
   }
@@ -1116,6 +1198,9 @@ function OccupationDetail({
   t,
   currentState,
   data,
+  savedOccCodes,
+  onToggleSave,
+  onShare,
 }: {
   occ: OccRow
   stateShortages: StateShortageByOcc[]
@@ -1124,6 +1209,9 @@ function OccupationDetail({
   t: ReturnType<typeof useTranslations>
   currentState: StateCode
   data: MapData
+  savedOccCodes: Set<string>
+  onToggleSave: (occCode: string, occTitle: string) => void
+  onShare: (occTitle: string) => void
 }) {
   const locale = useLocale()
   const name = locale === "ko" && occ.occupation_ko ? occ.occupation_ko : occ.occupation_en
@@ -1171,9 +1259,29 @@ function OccupationDetail({
       </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
-        <h2 className="font-sans text-lg font-semibold text-slate-900 tracking-tight">
-          {name}
-        </h2>
+        <div className="flex items-start justify-between gap-2">
+          <h2 className="font-sans text-lg font-semibold text-slate-900 tracking-tight">
+            {name}
+          </h2>
+          <div className="flex items-center gap-1 shrink-0">
+            <button
+              type="button"
+              onClick={() => onToggleSave(occ.anzsco_code ?? "", name)}
+              aria-label="Save occupation"
+              className="rounded-md p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+            >
+              <Bookmark className="h-4 w-4" fill={savedOccCodes.has(occ.anzsco_code ?? "") ? "currentColor" : "none"} />
+            </button>
+            <button
+              type="button"
+              onClick={() => onShare(name)}
+              aria-label="Share occupation"
+              className="rounded-md p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+            >
+              <Share2 className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
 
         <div className="mt-3 flex flex-wrap items-center gap-1.5">
           <Badge tone="gray">ANZSCO {occ.anzsco_code}</Badge>
@@ -1443,6 +1551,9 @@ function USOccupationDetail({
   onBack,
   onClose,
   t,
+  savedOccCodes,
+  onToggleSave,
+  onShare,
 }: {
   occ: USOccupation
   stateName: string
@@ -1451,6 +1562,9 @@ function USOccupationDetail({
   onBack: () => void
   onClose: () => void
   t: ReturnType<typeof useTranslations>
+  savedOccCodes: Set<string>
+  onToggleSave: (occCode: string, occTitle: string) => void
+  onShare: (occTitle: string) => void
 }) {
   // SOC 코드(예: 15-1252) → O*NET 8자리(.00), BLS OEWS(하이픈 제거) 공식 페이지로 연결.
   const onetUrl = `https://www.onetonline.org/link/summary/${occ.occ_code}.00`
@@ -1485,9 +1599,29 @@ function USOccupationDetail({
       </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
-        <h2 className="font-sans text-lg font-semibold text-slate-900 tracking-tight">
-          {occ.occ_title}
-        </h2>
+        <div className="flex items-start justify-between gap-2">
+          <h2 className="font-sans text-lg font-semibold text-slate-900 tracking-tight">
+            {occ.occ_title}
+          </h2>
+          <div className="flex items-center gap-1 shrink-0">
+            <button
+              type="button"
+              onClick={() => onToggleSave(occ.occ_code, occ.occ_title)}
+              aria-label="Save occupation"
+              className="rounded-md p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+            >
+              <Bookmark className="h-4 w-4" fill={savedOccCodes.has(occ.occ_code) ? "currentColor" : "none"} />
+            </button>
+            <button
+              type="button"
+              onClick={() => onShare(occ.occ_title)}
+              aria-label="Share occupation"
+              className="rounded-md p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+            >
+              <Share2 className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
 
         <div className="mt-3 flex flex-wrap items-center gap-1.5">
           <Badge tone="gray">{t.map.detailSoc} {occ.occ_code}</Badge>
