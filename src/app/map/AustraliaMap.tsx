@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
-import { RotateCcw, ChevronLeft, ChevronRight, ChevronDown, ExternalLink, Search } from "lucide-react"
+import { RotateCcw, ChevronLeft, ChevronRight, ChevronDown, ChevronUp, ExternalLink, Search } from "lucide-react"
 import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useTranslations, useLocale } from "@/lib/i18n/locale-provider"
@@ -199,9 +199,9 @@ export default function AustraliaMap({
           <button
             type="button"
             onClick={() => setExpanded(false)}
-            className="mb-1 flex h-6 w-6 items-center justify-center rounded-md hover:bg-slate-100"
+            className="mb-0.5 flex h-10 w-10 items-center justify-center rounded-lg hover:bg-slate-100"
           >
-            <ChevronDown className="h-4 w-4 text-slate-400" />
+            <ChevronUp className="h-5 w-5 text-slate-400" />
           </button>
         )}
         <label className="block">
