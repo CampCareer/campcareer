@@ -165,6 +165,23 @@ export default function AustraliaMap({
       {(activeCountry === "AU" || activeCountry === "US") && (
       <div className="flex flex-wrap items-end gap-3 border-b border-slate-200 bg-white px-4 py-3">
         <label className="block">
+          <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectCountry}</span>
+          <Select
+            items={{ AU: "🇦🇺 Australia", US: "🇺🇸 United States" }}
+            value={activeCountry ?? undefined}
+            onValueChange={(v) => v && onSelectCountry(v as "AU" | "US")}
+          >
+            <SelectTrigger className="h-10 w-44 rounded-lg border-slate-200 text-sm">
+              <SelectValue placeholder={t.map.selectCountryPlaceholder} />
+            </SelectTrigger>
+            <SelectContent className="z-[2000]">
+              <SelectItem value="AU">🇦🇺 Australia</SelectItem>
+              <SelectItem value="US">🇺🇸 United States</SelectItem>
+            </SelectContent>
+          </Select>
+        </label>
+
+        <label className="block">
           <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectState}</span>
           <Select
             items={activeCountry === "AU" ? stateItems : US_STATE_NAMES}

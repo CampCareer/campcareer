@@ -617,6 +617,8 @@ const ko: Dictionary = {
     tabShortage: '부족 직종',
     tabPay: '고소득 직업',
     tabEmployment: '고용 규모',
+    selectCountry: '국가',
+    selectCountryPlaceholder: '국가를 선택하세요',
     selectState: '주 (State)',
     selectStatePlaceholder: '주를 선택하세요',
     selectRegion: '지역 (SA4 Region)',
