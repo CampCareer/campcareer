@@ -10,6 +10,7 @@ import path from "path"
 
 export interface StateOccupation {
   anzsco_code: string
+  anzsco_v13: string | null
   occupation_en: string
   occupation_ko: string | null
   median_salary_aud: number | null
@@ -96,6 +97,7 @@ export interface MapData {
 
 export type OccRow = {
   anzsco_code: string | null
+  anzsco_v13: string | null
   occupation_en: string
   occupation_ko: string | null
   shortage_rating: number | null
@@ -309,7 +311,7 @@ async function getMapDataUncached(): Promise<MapData> {
   const [occupations, stateRows, usColleges, multRows, coursesByFieldState, prRes] = await Promise.all([
     fetchAll<OccRow>(
       "occupations_au",
-      "anzsco_code, occupation_en, occupation_ko, shortage_rating, median_salary_aud, on_csol, confidence, related_broad_field, pr_note_ko, source_name, source_url, last_verified",
+      "anzsco_code, anzsco_v13, occupation_en, occupation_ko, shortage_rating, median_salary_aud, on_csol, confidence, related_broad_field, pr_note_ko, source_name, source_url, last_verified",
     ),
     fetchAll<StateRow>("occupation_state_au", "anzsco_code, state, shortage_rating"),
     getUSColleges(),
@@ -362,6 +364,7 @@ async function getMapDataUncached(): Promise<MapData> {
     if (!o || !o.anzsco_code) continue
     shortageByState[code].push({
       anzsco_code: o.anzsco_code,
+      anzsco_v13: o.anzsco_v13 || null,
       occupation_en: o.occupation_en,
       occupation_ko: o.occupation_ko,
       median_salary_aud: o.median_salary_aud,
