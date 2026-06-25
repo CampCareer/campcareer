@@ -78,7 +78,9 @@ export default function AustraliaMap({
       setActiveCountry("AU")
       setSelected(raw as StateCode)
     }
-    if (p.get("tab") === "pay") setTab("pay")
+    const tabParam = p.get("tab")
+    if (tabParam === "pay") setTab("pay")
+    else if (tabParam === "employment") setTab("employment")
   }, [])
 
   useEffect(() => {
