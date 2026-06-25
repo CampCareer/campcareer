@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
-import { RotateCcw, ChevronLeft, ChevronRight, ExternalLink } from "lucide-react"
+import { RotateCcw, ChevronLeft, ChevronRight, ChevronDown, ExternalLink, Search } from "lucide-react"
 import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useTranslations, useLocale } from "@/lib/i18n/locale-provider"
@@ -51,6 +51,8 @@ export default function AustraliaMap({
   const [selectedUsOcc, setSelectedUsOcc] = useState<USOccupation | null>(null)
   // 모바일에서는 우측 패널 대신 구글맵식 바텀시트(드래그로 확장)를 쓴다.
   const [isMobile, setIsMobile] = useState(false)
+  // 모바일 접이식 툴바 상태
+  const [expanded, setExpanded] = useState(false)
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 639px)")
@@ -160,10 +162,48 @@ export default function AustraliaMap({
     )
   }, [data.usShortageByState, selected])
 
+  const countryLabel = activeCountry === "AU" ? "🇦🇺 Australia" : activeCountry === "US" ? "🇺🇸 United States" : ""
+  const stateLabel = selected
+    ? activeCountry === "AU"
+      ? STATE_NAMES[selected as StateCode]
+      : US_STATE_NAMES[selected]
+    : ""
+  const occLabel = selectedOccCode
+    ? activeCountry === "AU"
+      ? data.shortageByState[selected as StateCode]?.find((o) => o.anzsco_code === selectedOccCode)?.occupation_en
+      : selectedUsOcc?.occ_title
+    : ""
+  const toolbarSummary = [countryLabel, stateLabel, occLabel].filter(Boolean).join(" · ")
+
+  const toolbarExpanded = !isMobile || expanded
+
   return (
     <div className="flex h-full w-full flex-col">
       {(activeCountry === "AU" || activeCountry === "US") && (
+      <>
+        {!toolbarExpanded && (
+          <button
+            type="button"
+            onClick={() => setExpanded(true)}
+            className="flex w-full items-center gap-2 border-b border-slate-200 bg-white px-4 py-3 text-left text-sm font-medium text-slate-700"
+          >
+            <Search className="h-4 w-4 shrink-0 text-slate-400" />
+            <span className="truncate">{toolbarSummary || t.map.selectCountryPlaceholder}</span>
+            <ChevronDown className="ml-auto h-4 w-4 text-slate-400" />
+          </button>
+        )}
+
+        {toolbarExpanded && (
       <div className="flex flex-wrap items-end gap-3 border-b border-slate-200 bg-white px-4 py-3">
+        {isMobile && (
+          <button
+            type="button"
+            onClick={() => setExpanded(false)}
+            className="mb-1 flex h-6 w-6 items-center justify-center rounded-md hover:bg-slate-100"
+          >
+            <ChevronDown className="h-4 w-4 text-slate-400" />
+          </button>
+        )}
         <label className="block">
           <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectCountry}</span>
           <Select
@@ -214,6 +254,7 @@ export default function AustraliaMap({
                   const occ = data.usShortageByState[selected]?.find((o) => o.occ_code === v) ?? null
                   setSelectedUsOcc(occ)
                 }
+                if (isMobile) setExpanded(false)
               }}
             >
               <SelectTrigger className="h-10 w-72 rounded-lg border-slate-200 text-sm">
@@ -261,6 +302,8 @@ export default function AustraliaMap({
         )}
       </div>
       )}
+    </>
+    )}
 
       <div className="relative min-h-0 flex-1">
         <LeafletMap
