@@ -13,6 +13,7 @@ import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
 import { getPathway, TAFE_BY_STATE, VET_PORTALS, cricosSearchUrl } from "@/lib/au-pathway"
 import { track } from "@/lib/analytics"
 import { WiseCta, AiraloCta } from "@/components/partners/partner-cta"
+import JobListings from "./JobListings"
 import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc } from "@/lib/map-data"
 import { createClient } from "@/lib/supabase-client"
 import type { User } from "@supabase/supabase-js"
@@ -1568,6 +1569,8 @@ function OccupationDetail({
             <WiseCta />
             <AiraloCta />
           </div>
+
+          <JobListings what={name} where={currentState} country="AU" />
         </div>
       </div>
 
@@ -1774,6 +1777,8 @@ function USOccupationDetail({
             <WiseCta />
             <AiraloCta />
           </div>
+
+          <JobListings what={occ.occ_title} where={stateCode} country="US" />
         </div>
       </div>
 
