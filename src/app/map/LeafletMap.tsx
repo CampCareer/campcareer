@@ -46,10 +46,6 @@ function isUSA(properties: Record<string, unknown>): boolean {
   return properties?.ISO_A3 === "USA" || properties?.ADM0_A3 === "USA"
 }
 
-function isCanada(properties: Record<string, unknown>): boolean {
-  return properties?.ISO_A3 === "CAN" || properties?.ADM0_A3 === "CAN"
-}
-
 export default function LeafletMap({
   data,
   selected,
