@@ -1837,6 +1837,15 @@ function USOccupationDetail({
                 {t.map.detailBls}
               </a>
             </div>
+            <div className="mt-2 pt-2 border-t border-slate-100">
+              <Link
+                href={`/roi-explorer/us/occupation/${occ.occ_code}`}
+                className="inline-flex items-center gap-1 text-[11px] font-medium text-blue-600 hover:text-blue-700 transition-colors"
+              >
+                자세히 보기
+                <ExternalLink className="h-3 w-3" />
+              </Link>
+            </div>
           </div>
 
           <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
