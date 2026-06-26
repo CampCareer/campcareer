@@ -41,7 +41,7 @@ export default function AustraliaMap({
   const t = useTranslations()
   // /map은 호주 비치헤드의 front door다 → 진입 즉시 주/지역 선택(검색) 바가 보이도록
   // 기본을 "AU"로 둔다. 월드맵(다른 국가)은 "전체 보기"로 빠져나가 볼 수 있다.
-  const [activeCountry, setActiveCountry] = useState<"AU" | "US" | "CA" | null>("AU")
+  const [activeCountry, setActiveCountry] = useState<"AU" | "US" | "CA" | "IE" | null>("AU")
   const [selected, setSelected] = useState<string | null>(null)
   const [selectedSA4, setSelectedSA4] = useState<SA4Region | null>(null)
   const [tab, setTab] = useState<Tab>("shortage")
@@ -137,6 +137,8 @@ export default function AustraliaMap({
     } else if (countryRaw === "au" && raw && (STATE_CODES as readonly string[]).includes(raw)) {
       setActiveCountry("AU")
       setSelected(raw as StateCode)
+    } else if (countryRaw === "ie") {
+      setActiveCountry("IE")
     }
     const tabParam = p.get("tab")
     if (tabParam === "pay") setTab("pay")
@@ -160,6 +162,21 @@ export default function AustraliaMap({
       .then((d: RegionOccData) => setRegionData(d))
       .catch(() => {})
   }, [selected])
+
+  const [ieSchools, setIeSchools] = useState<Array<{
+    id: number; slug: string; name_en: string; name_ko: string | null;
+    city: string; lat: number | null; lng: number | null;
+    price_range_week: string | null; accreditation: string[] | null;
+    description_ko: string | null;
+  }> | null>(null)
+
+  useEffect(() => {
+    if (activeCountry !== "IE") { setIeSchools(null); return }
+    fetch("/api/ie/language-schools")
+      .then((r) => r.json())
+      .then((d) => setIeSchools(d.schools ?? []))
+      .catch(() => setIeSchools([]))
+  }, [activeCountry])
 
   useEffect(() => {
     setSelectedSA4(null)
@@ -214,7 +231,7 @@ export default function AustraliaMap({
     track("select_state", { country: activeCountry ?? "AU", state: s })
   }, [activeCountry])
 
-  const onSelectCountry = useCallback((country: "AU" | "US" | "CA") => {
+  const onSelectCountry = useCallback((country: "AU" | "US" | "CA" | "IE") => {
     if (country === "CA") return
     setActiveCountry(country)
     setSelected(null)
@@ -227,6 +244,7 @@ export default function AustraliaMap({
       setSelectedSA4(null)
     } else if (activeCountry !== null) {
       setActiveCountry(null)
+      setIeSchools(null)
     }
   }, [selected, activeCountry])
 
@@ -284,7 +302,7 @@ export default function AustraliaMap({
 
   return (
     <div className="flex h-full w-full flex-col">
-      {(activeCountry === "AU" || activeCountry === "US") && (
+      {(activeCountry === "AU" || activeCountry === "US" || activeCountry === "IE") && (
       <>
         {!toolbarExpanded && (
           <button
@@ -303,9 +321,9 @@ export default function AustraliaMap({
         <label className="block">
           <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectCountry}</span>
           <Select
-            items={{ AU: "🇦🇺 Australia", US: "🇺🇸 United States" }}
+            items={{ AU: "🇦🇺 Australia", US: "🇺🇸 United States", IE: "🇮🇪 Ireland" }}
             value={activeCountry ?? undefined}
-            onValueChange={(v) => v && onSelectCountry(v as "AU" | "US")}
+            onValueChange={(v) => v && onSelectCountry(v as "AU" | "US" | "IE")}
           >
             <SelectTrigger className="h-10 w-44 rounded-lg border-slate-200 text-sm">
               <SelectValue placeholder={t.map.selectCountryPlaceholder} />
@@ -313,78 +331,83 @@ export default function AustraliaMap({
             <SelectContent className="z-[2000]">
               <SelectItem value="AU">🇦🇺 Australia</SelectItem>
               <SelectItem value="US">🇺🇸 United States</SelectItem>
+              <SelectItem value="IE">🇮🇪 Ireland</SelectItem>
             </SelectContent>
           </Select>
         </label>
 
-        <label className="block">
-          <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectState}</span>
-          <Select
-            items={activeCountry === "AU" ? stateItems : US_STATE_NAMES}
-            value={selected}
-            onValueChange={(v) => v && setSelected(v)}
-          >
-            <SelectTrigger className="h-10 w-56 rounded-lg border-slate-200 text-sm">
-              <SelectValue placeholder={t.map.selectStatePlaceholder} />
-            </SelectTrigger>
-            <SelectContent className="z-[2000]">
-              {(activeCountry === "AU" ? STATE_CODES : US_STATE_CODES).map((c) => (
-                <SelectItem key={c} value={c}>
-                  {activeCountry === "AU" ? STATE_NAMES[c as StateCode] : US_STATE_NAMES[c]}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </label>
-
-        <label className="block">
-          <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectOccupation}</span>
-          {selected ? (
+        {activeCountry !== "IE" && (
+        <>
+          <label className="block">
+            <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectState}</span>
             <Select
-              items={activeCountry === "AU" ? auShortageItems : usShortageItems}
-              value={selectedOccCode ?? null}
-              onValueChange={(v) => {
-                if (!v) return
-                if (activeCountry === "AU") setSelectedOccCode(v)
-                else {
-                  const occ = data.usShortageByState[selected]?.find((o) => o.occ_code === v) ?? null
-                  setSelectedUsOcc(occ)
-                }
-                if (isMobile) setExpanded(false)
-              }}
+              items={activeCountry === "AU" ? stateItems : US_STATE_NAMES}
+              value={selected}
+              onValueChange={(v) => v && setSelected(v)}
             >
-              <SelectTrigger className="h-10 w-72 rounded-lg border-slate-200 text-sm">
+              <SelectTrigger className="h-10 w-56 rounded-lg border-slate-200 text-sm">
                 <SelectValue placeholder={t.map.selectStatePlaceholder} />
               </SelectTrigger>
-              <SelectContent className="z-[2000] max-h-72">
-                {(activeCountry === "AU"
-                  ? data.shortageByState[selected as StateCode] ?? []
-                  : data.usShortageByState[selected] ?? []
-                ).map((occ) => {
-                  const code = activeCountry === "AU" ? (occ as StateOccupation).anzsco_code : (occ as USOccupation).occ_code
-                  const title = activeCountry === "AU" ? (occ as StateOccupation).occupation_en : (occ as USOccupation).occ_title
-                  const salary = activeCountry === "AU" ? (occ as StateOccupation).median_salary_aud : (occ as USOccupation).median_wage
-                  return (
-                    <SelectItem key={code} value={code}>
-                      <span className="flex items-center justify-between gap-3">
-                        <span className="truncate">{title}</span>
-                        {salary != null && (
-                          <span className="shrink-0 text-xs text-slate-400">
-                            ${salary.toLocaleString()}
-                          </span>
-                        )}
-                      </span>
-                    </SelectItem>
-                  )
-                })}
+              <SelectContent className="z-[2000]">
+                {(activeCountry === "AU" ? STATE_CODES : US_STATE_CODES).map((c) => (
+                  <SelectItem key={c} value={c}>
+                    {activeCountry === "AU" ? STATE_NAMES[c as StateCode] : US_STATE_NAMES[c]}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
-          ) : (
-            <div className="flex h-10 w-72 cursor-not-allowed items-center rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-400">
-              {t.map.selectStateFirst}
-            </div>
-          )}
-        </label>
+          </label>
+
+          <label className="block">
+            <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectOccupation}</span>
+            {selected ? (
+              <Select
+                items={activeCountry === "AU" ? auShortageItems : usShortageItems}
+                value={selectedOccCode ?? null}
+                onValueChange={(v) => {
+                  if (!v) return
+                  if (activeCountry === "AU") setSelectedOccCode(v)
+                  else {
+                    const occ = data.usShortageByState[selected]?.find((o) => o.occ_code === v) ?? null
+                    setSelectedUsOcc(occ)
+                  }
+                  if (isMobile) setExpanded(false)
+                }}
+              >
+                <SelectTrigger className="h-10 w-72 rounded-lg border-slate-200 text-sm">
+                  <SelectValue placeholder={t.map.selectStatePlaceholder} />
+                </SelectTrigger>
+                <SelectContent className="z-[2000] max-h-72">
+                  {(activeCountry === "AU"
+                    ? data.shortageByState[selected as StateCode] ?? []
+                    : data.usShortageByState[selected] ?? []
+                  ).map((occ) => {
+                    const code = activeCountry === "AU" ? (occ as StateOccupation).anzsco_code : (occ as USOccupation).occ_code
+                    const title = activeCountry === "AU" ? (occ as StateOccupation).occupation_en : (occ as USOccupation).occ_title
+                    const salary = activeCountry === "AU" ? (occ as StateOccupation).median_salary_aud : (occ as USOccupation).median_wage
+                    return (
+                      <SelectItem key={code} value={code}>
+                        <span className="flex items-center justify-between gap-3">
+                          <span className="truncate">{title}</span>
+                          {salary != null && (
+                            <span className="shrink-0 text-xs text-slate-400">
+                              ${salary.toLocaleString()}
+                            </span>
+                          )}
+                        </span>
+                      </SelectItem>
+                    )
+                  })}
+                </SelectContent>
+              </Select>
+            ) : (
+              <div className="flex h-10 w-72 cursor-not-allowed items-center rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-400">
+                {t.map.selectStateFirst}
+              </div>
+            )}
+          </label>
+        </>
+        )}
 
         {isMobile && (
           <button
@@ -423,11 +446,16 @@ export default function AustraliaMap({
           onReset={onReset}
         />
 
-        {selected && (() => {
-          const panel = (
+        {(selected || activeCountry === "IE") && (() => {
+          const panel = activeCountry === "IE" ? (
+            <IEPanel
+              schools={ieSchools}
+              onClose={onClosePanel}
+            />
+          ) : (
             <Panel
               data={data}
-              selected={selected}
+              selected={selected!}
               selectedSA4={activeCountry === "AU" ? selectedSA4 : null}
               tab={tab}
               onTab={setTab}
@@ -1890,6 +1918,87 @@ function USOccupationDetail({
 
       <p className="border-t border-slate-100 px-5 py-3 text-xs text-slate-400">
         {t.map.source}
+      </p>
+    </>
+  )
+}
+
+function IEPanel({
+  schools,
+  onClose,
+}: {
+  schools: Array<{
+    id: number; slug: string; name_en: string; name_ko: string | null;
+    city: string; lat: number | null; lng: number | null;
+    price_range_week: string | null; accreditation: string[] | null;
+    description_ko: string | null;
+  }> | null
+  onClose: () => void
+}) {
+  return (
+    <>
+      <div className="flex items-start justify-between gap-2 px-5 pt-4">
+        <div>
+          <h2 className="font-sans text-lg font-semibold text-slate-900 tracking-tight">
+            🇮🇪 Ireland
+          </h2>
+          <p className="text-xs text-slate-400 mt-0.5">아일랜드 영어 어학원</p>
+        </div>
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close"
+          className="-mr-1 rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+        >
+          <X className="h-4 w-4" />
+        </button>
+      </div>
+
+      <div className="min-h-0 flex-1 overflow-y-auto px-3 py-3">
+        {schools === null ? (
+          <div className="flex flex-col items-center gap-2 py-10">
+            <div className="h-5 w-5 animate-spin rounded-full border-2 border-slate-200 border-t-violet-500" />
+            <p className="text-sm text-slate-400">로딩 중...</p>
+          </div>
+        ) : schools.length === 0 ? (
+          <p className="py-8 text-center text-sm text-slate-400">등록된 어학원이 없습니다.</p>
+        ) : (
+          <div className="space-y-2">
+            {schools.map((s) => (
+              <Link
+                key={s.id}
+                href={`/roi-explorer/ie/language-schools/${s.slug}`}
+                className="block rounded-lg border border-slate-100 p-3 transition-colors hover:bg-slate-50"
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-slate-800 truncate">{s.name_en}</p>
+                    {s.name_ko && <p className="text-xs text-muted-foreground">{s.name_ko}</p>}
+                    <p className="mt-0.5 text-xs text-slate-400">{s.city}</p>
+                  </div>
+                  <ChevronRight className="h-4 w-4 shrink-0 text-slate-300 mt-1" />
+                </div>
+                {s.price_range_week && (
+                  <p className="mt-1 text-xs font-medium text-slate-600">{s.price_range_week}/주</p>
+                )}
+                <div className="mt-1 flex flex-wrap gap-1">
+                  {s.accreditation?.slice(0, 2).map((a) => (
+                    <span key={a} className="inline-flex items-center rounded-full border border-slate-200 px-1.5 py-0.5 text-[10px] text-slate-500">{a}</span>
+                  ))}
+                </div>
+                {s.description_ko && (
+                  <p className="mt-1 text-xs text-slate-500 line-clamp-2">{s.description_ko}</p>
+                )}
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <p className="border-t border-slate-100 px-5 py-3 text-xs text-slate-400">
+        <Link href="/roi-explorer/ie/language-schools" className="text-blue-600 hover:underline">
+          모든 어학원 보기 →
+        </Link>
       </p>
     </>
   )

@@ -2,6 +2,7 @@ import { MetadataRoute } from "next"
 import { getAllPosts } from "@/lib/blog"
 import { supabase } from "@/lib/supabase"
 import { getUSOccCodes } from "@/lib/us-occupation-detail"
+import { getAllSlugs, getCities } from "@/lib/language-schools-ie"
 
 const BASE = "https://www.campcareer.com"
 
@@ -80,5 +81,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "weekly",
   }))
 
-  return [...staticPages, ...blogPages, ...detailPages, ...occupationPages, ...usOccupationPages]
+  // 아일랜드 어학원
+  const ieSchoolSlugs = await getAllSlugs()
+  const ieCities = await getCities()
+  const ieLangSchoolPages: MetadataRoute.Sitemap = [
+    { url: `${BASE}/roi-explorer/ie/language-schools`, priority: 0.7, changeFrequency: "weekly" },
+    ...ieCities.map((city) => ({
+      url: `${BASE}/roi-explorer/ie/language-schools/city/${city.toLowerCase()}` as const,
+      priority: 0.6,
+      changeFrequency: "weekly" as const,
+    })),
+    ...ieSchoolSlugs.map((slug) => ({
+      url: `${BASE}/roi-explorer/ie/language-schools/${slug}` as const,
+      priority: 0.6,
+      changeFrequency: "weekly" as const,
+    })),
+  ]
+
+  return [...staticPages, ...blogPages, ...detailPages, ...occupationPages, ...usOccupationPages, ...ieLangSchoolPages]
 }
