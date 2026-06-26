@@ -58,5 +58,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })
   }
 
-  return [...staticPages, ...blogPages, ...detailPages]
+  // 직업 디테일 — ANZSCO 395개 전부 색인
+  const occupationPages: MetadataRoute.Sitemap = []
+  const { data: occCodes } = await supabase
+    .from("occupations_au")
+    .select("anzsco_code")
+  for (const row of occCodes ?? []) {
+    if (!row.anzsco_code) continue
+    occupationPages.push({
+      url: `${BASE}/roi-explorer/au/occupation/${row.anzsco_code}`,
+      priority: 0.6,
+      changeFrequency: "weekly",
+    })
+  }
+
+  return [...staticPages, ...blogPages, ...detailPages, ...occupationPages]
 }
