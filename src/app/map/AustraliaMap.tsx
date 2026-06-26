@@ -8,7 +8,7 @@ import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useTranslations, useLocale } from "@/lib/i18n/locale-provider"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { STATE_CODES, STATE_NAMES, US_STATE_CODES, US_STATE_NAMES, type StateCode } from "./states"
+import { STATE_CODES, STATE_NAMES, US_STATE_CODES, US_STATE_NAMES, IE_COUNTY_CODES, IE_COUNTY_NAMES, IE_CITY_TO_COUNTY, type StateCode } from "./states"
 import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
 import { getPathway, TAFE_BY_STATE, VET_PORTALS, cricosSearchUrl } from "@/lib/au-pathway"
 import { track } from "@/lib/analytics"
@@ -285,11 +285,19 @@ export default function AustraliaMap({
     )
   }, [data.usShortageByState, selected])
 
-  const countryLabel = activeCountry === "AU" ? "🇦🇺 Australia" : activeCountry === "US" ? "🇺🇸 United States" : ""
+  const filteredIESchools = useMemo(() => {
+    if (!ieSchools) return null
+    if (!selected || activeCountry !== "IE") return ieSchools
+    return ieSchools.filter((s) => IE_CITY_TO_COUNTY[s.city] === selected)
+  }, [ieSchools, selected, activeCountry])
+
+  const countryLabel = activeCountry === "AU" ? "🇦🇺 Australia" : activeCountry === "US" ? "🇺🇸 United States" : activeCountry === "IE" ? "🇮🇪 Ireland" : ""
   const stateLabel = selected
     ? activeCountry === "AU"
       ? STATE_NAMES[selected as StateCode]
-      : US_STATE_NAMES[selected]
+      : activeCountry === "IE"
+        ? IE_COUNTY_NAMES[selected] ?? selected
+        : US_STATE_NAMES[selected]
     : ""
   const occLabel = selectedOccCode
     ? activeCountry === "AU"
@@ -336,7 +344,27 @@ export default function AustraliaMap({
           </Select>
         </label>
 
-        {activeCountry !== "IE" && (
+        {activeCountry === "IE" ? (
+          <label className="block">
+            <span className="mb-1 block text-xs font-medium text-slate-500">County</span>
+            <Select
+              items={IE_COUNTY_NAMES}
+              value={selected}
+              onValueChange={(v) => v && setSelected(v)}
+            >
+              <SelectTrigger className="h-10 w-56 rounded-lg border-slate-200 text-sm">
+                <SelectValue placeholder="Select a county" />
+              </SelectTrigger>
+              <SelectContent className="z-[2000]">
+                {IE_COUNTY_CODES.map((c) => (
+                  <SelectItem key={c} value={c}>
+                    {IE_COUNTY_NAMES[c]}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </label>
+        ) : (
         <>
           <label className="block">
             <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectState}</span>
@@ -440,6 +468,7 @@ export default function AustraliaMap({
           selected={selected}
           selectedSA4={activeCountry === "AU" ? selectedSA4 : null}
           activeCountry={activeCountry}
+          ieSchools={filteredIESchools ?? undefined}
           onSelectState={onSelectState}
           onSelectCountry={onSelectCountry}
           onSelectSA4={onSelectSA4}
@@ -449,7 +478,8 @@ export default function AustraliaMap({
         {(selected || activeCountry === "IE") && (() => {
           const panel = activeCountry === "IE" ? (
             <IEPanel
-              schools={ieSchools}
+              schools={filteredIESchools}
+              countyName={selected ? stateLabel : undefined}
               onClose={onClosePanel}
             />
           ) : (
@@ -1925,6 +1955,7 @@ function USOccupationDetail({
 
 function IEPanel({
   schools,
+  countyName,
   onClose,
 }: {
   schools: Array<{
@@ -1933,6 +1964,7 @@ function IEPanel({
     price_range_week: string | null; accreditation: string[] | null;
     description_ko: string | null;
   }> | null
+  countyName?: string
   onClose: () => void
 }) {
   return (
@@ -1940,9 +1972,9 @@ function IEPanel({
       <div className="flex items-start justify-between gap-2 px-5 pt-4">
         <div>
           <h2 className="font-sans text-lg font-semibold text-slate-900 tracking-tight">
-            🇮🇪 Ireland
+            🇮🇪 {countyName ? `${countyName}` : "Ireland"}
           </h2>
-          <p className="text-xs text-slate-400 mt-0.5">아일랜드 영어 어학원</p>
+          <p className="text-xs text-slate-400 mt-0.5">{countyName ? `${countyName} · ` : ""}아일랜드 영어 어학원</p>
         </div>
         <button
           type="button"

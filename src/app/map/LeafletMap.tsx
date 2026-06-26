@@ -4,7 +4,7 @@ import "leaflet/dist/leaflet.css"
 import { useEffect, useRef } from "react"
 import L from "leaflet"
 import { Maximize2 } from "lucide-react"
-import { STATE_CODES, STATE_NAMES, type StateCode } from "./states"
+import { STATE_CODES, STATE_NAMES, IE_COUNTY_NAMES, IE_GEOJSON_COUNTY_TO_CODE, IE_CITY_TO_COUNTY, type StateCode, type IECountyCode } from "./states"
 import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
 import { useTranslations } from "@/lib/i18n/locale-provider"
 import type { MapData } from "@/lib/map-data"
@@ -56,6 +56,7 @@ export default function LeafletMap({
   selected,
   selectedSA4,
   activeCountry,
+  ieSchools,
   onSelectState,
   onSelectCountry,
   onSelectSA4,
@@ -65,6 +66,12 @@ export default function LeafletMap({
   selected: string | null
   selectedSA4: SA4Region | null
   activeCountry: "AU" | "US" | "CA" | "IE" | null
+  ieSchools?: Array<{
+    id: number; slug: string; name_en: string; name_ko: string | null;
+    city: string; lat: number | null; lng: number | null;
+    price_range_week: string | null; accreditation: string[] | null;
+    description_ko: string | null;
+  }>
   onSelectState: (s: string) => void
   onSelectCountry: (c: "AU" | "US" | "CA" | "IE") => void
   onSelectSA4: (code: string) => void
@@ -78,7 +85,10 @@ export default function LeafletMap({
   const caLayerRef = useRef<L.GeoJSON | null>(null)
   const worldLayerRef = useRef<L.GeoJSON | null>(null)
   const markerLayerRef = useRef<L.LayerGroup | null>(null)
+  const ieMarkerLayerRef = useRef<L.LayerGroup | null>(null)
   const layersByCode = useRef<Partial<Record<StateCode, L.Polygon>>>({})
+  const ieLayerRef = useRef<L.GeoJSON | null>(null)
+  const ieCountyByCode = useRef<Record<string, L.Polygon>>({})
   // SA4(지역) 드릴다운: 전체 지오메트리는 한 번만 로드(sa4GeoRef)하고, 선택된 주의 지역만
   // sa4Layer 로 렌더한다. sa4ByCode 로 선택 지역 bounds 를 찾아 줌인한다.
   const sa4GeoRef = useRef<GeoJSON.FeatureCollection | null>(null)
@@ -97,6 +107,9 @@ export default function LeafletMap({
 
   const dataRef = useRef(data)
   dataRef.current = data
+
+  const ieSchoolsRef = useRef(ieSchools)
+  ieSchoolsRef.current = ieSchools
 
   const counts = STATE_CODES.map((c) => data.shortageByState[c]?.length ?? 0)
   const minCount = Math.min(...counts)
@@ -165,6 +178,49 @@ export default function LeafletMap({
       const group = buildMarkers()
       group.addTo(map)
       markerLayerRef.current = group
+    }
+  }
+
+  function buildIEMarkers(): L.LayerGroup {
+    const group = L.layerGroup()
+    const schools = ieSchoolsRef.current ?? []
+    const countyCode = selectedRef.current
+    const filtered = countyCode
+      ? schools.filter((s) => s.city && IE_CITY_TO_COUNTY[s.city] === countyCode)
+      : schools
+    for (const s of filtered) {
+      if (s.lat == null || s.lng == null) continue
+      const marker = L.circleMarker([s.lat, s.lng], {
+        radius: 6,
+        fillColor: "#f59e0b",
+        fillOpacity: 0.8,
+        color: "#ffffff",
+        weight: 1.5,
+      })
+      marker.bindTooltip(s.name_en, {
+        sticky: true,
+        direction: "top",
+        className: "!rounded-md !border-0 !bg-slate-900 !px-2 !py-1 !text-xs !text-white !shadow-md",
+      })
+      marker.bindPopup(
+        `<div class="text-sm leading-relaxed">${s.name_en}${s.name_ko ? `<br>${s.name_ko}` : ""}<br>${s.city}${s.price_range_week ? ` · ${s.price_range_week}` : ""}</div>`,
+      )
+      group.addLayer(marker)
+    }
+    return group
+  }
+
+  function updateIEMarkers() {
+    const map = mapRef.current
+    if (!map) return
+    if (ieMarkerLayerRef.current) {
+      map.removeLayer(ieMarkerLayerRef.current)
+      ieMarkerLayerRef.current = null
+    }
+    if (activeCountryRef.current === "IE" && selectedRef.current) {
+      const group = buildIEMarkers()
+      group.addTo(map)
+      ieMarkerLayerRef.current = group
     }
   }
 
@@ -550,6 +606,72 @@ export default function LeafletMap({
       })
       .catch((err) => console.error("[LeafletMap] ca geojson load failed:", err))
 
+    // IE counties layer
+    fetch("/ie-counties.geojson")
+      .then((r) => r.json())
+      .then((geo: GeoJSON.FeatureCollection) => {
+        if (mapRef.current !== map) return
+        const ieLayer = L.geoJSON(geo, {
+          style: (feature) => {
+            const rawName = (feature?.properties?.county as string ?? "").replace(" County", "")
+            const code = IE_GEOJSON_COUNTY_TO_CODE[rawName as IECountyCode] ?? ""
+            const isSel = selectedRef.current === code
+            return {
+              fillColor: "#fef3c7",
+              fillOpacity: isSel ? 0.8 : 0.4,
+              color: isSel ? "#1e293b" : "#f59e0b",
+              weight: isSel ? 3 : 1,
+            }
+          },
+          onEachFeature: (feature, lyr) => {
+            const rawName = (feature?.properties?.county as string ?? "").replace(" County", "")
+            const code = IE_GEOJSON_COUNTY_TO_CODE[rawName as IECountyCode] ?? ""
+            const name = IE_COUNTY_NAMES[code] ?? rawName
+            if (code) ieCountyByCode.current[code] = lyr as L.Polygon
+            ;(lyr as L.Path).on({
+              click: () => {
+                if (code) onSelectStateRef.current(code)
+              },
+              mouseover: () => {
+                if (selectedRef.current !== code) (lyr as L.Path).setStyle({ weight: 2, fillOpacity: 0.6 })
+              },
+              mouseout: () => {
+                if (selectedRef.current !== code) {
+                  ;(lyr as L.Path).setStyle({
+                    fillColor: "#fef3c7",
+                    fillOpacity: selectedRef.current === code ? 0.8 : 0.4,
+                    color: selectedRef.current === code ? "#1e293b" : "#f59e0b",
+                    weight: selectedRef.current === code ? 3 : 1,
+                  })
+                }
+              },
+            })
+            lyr.bindTooltip(name, {
+              sticky: true,
+              direction: "top",
+              className: "!rounded-md !border-0 !bg-slate-900 !px-2 !py-1 !text-xs !text-white !shadow-md",
+            })
+            const el = (lyr as L.Path).getElement() as SVGElement | null
+            if (el && code) {
+              el.setAttribute("tabindex", "0")
+              el.setAttribute("role", "button")
+              el.setAttribute("aria-label", name)
+              el.addEventListener("keydown", (e: KeyboardEvent) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault()
+                  onSelectStateRef.current(code)
+                }
+              })
+            }
+          },
+        })
+        ieLayerRef.current = ieLayer
+        if (activeCountryRef.current === "IE") {
+          map.addLayer(ieLayer)
+        }
+      })
+      .catch((err) => console.error("[LeafletMap] ie geojson load failed:", err))
+
     // SA4 지역 경계 — 한 번만 로드해 두고, 주 선택 시 해당 주의 지역만 렌더한다.
     fetch("/au-sa4.geojson")
       .then((r) => r.json())
@@ -568,11 +690,14 @@ export default function LeafletMap({
       auLayerRef.current = null
       usLayerRef.current = null
       caLayerRef.current = null
+      ieLayerRef.current = null
       markerLayerRef.current = null
+      ieMarkerLayerRef.current = null
       sa4LayerRef.current = null
       sa4GeoRef.current = null
       sa4ByCode.current = {}
       layersByCode.current = {}
+      ieCountyByCode.current = {}
       didFitRef.current = false
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -588,9 +713,14 @@ export default function LeafletMap({
     if (auLayerRef.current && map.hasLayer(auLayerRef.current)) map.removeLayer(auLayerRef.current)
     if (usLayerRef.current && map.hasLayer(usLayerRef.current)) map.removeLayer(usLayerRef.current)
     if (caLayerRef.current && map.hasLayer(caLayerRef.current)) map.removeLayer(caLayerRef.current)
+    if (ieLayerRef.current && map.hasLayer(ieLayerRef.current)) map.removeLayer(ieLayerRef.current)
     if (markerLayerRef.current) {
       map.removeLayer(markerLayerRef.current)
       markerLayerRef.current = null
+    }
+    if (ieMarkerLayerRef.current) {
+      map.removeLayer(ieMarkerLayerRef.current)
+      ieMarkerLayerRef.current = null
     }
 
     if (activeCountry === "AU") {
@@ -604,7 +734,9 @@ export default function LeafletMap({
       if (caLayerRef.current) map.addLayer(caLayerRef.current)
       fitToBounds(CA_BOUNDS, true)
     } else if (activeCountry === "IE") {
+      if (ieLayerRef.current) map.addLayer(ieLayerRef.current)
       fitToBounds(IE_BOUNDS, true)
+      updateIEMarkers()
     } else {
       fitToBounds(WORLD_BOUNDS, true)
     }
@@ -648,6 +780,24 @@ export default function LeafletMap({
           weight: isSel ? 3 : 1,
         }
       })
+    } else if (ieLayerRef.current && activeCountry === "IE") {
+      ieLayerRef.current.setStyle((feature) => {
+        const rawName = (feature?.properties?.county as string ?? "").replace(" County", "")
+        const code = IE_GEOJSON_COUNTY_TO_CODE[rawName as IECountyCode] ?? ""
+        const isSel = selected === code
+        return {
+          fillColor: "#fef3c7",
+          fillOpacity: isSel ? 0.8 : 0.4,
+          color: isSel ? "#1e293b" : "#f59e0b",
+          weight: isSel ? 3 : 1,
+        }
+      })
+      if (selected) {
+        const lyr = ieCountyByCode.current[selected]
+        const b = lyr ? safeBounds(lyr.getBounds()) : null
+        if (b) mapRef.current?.flyToBounds(b, { padding: [30, 30], maxZoom: 8, duration: 0.6 })
+      }
+      updateIEMarkers()
     }
     // 주가 바뀌면 그 주의 SA4 지역을 (재)렌더한다.
     renderSA4()
