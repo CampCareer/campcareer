@@ -511,6 +511,11 @@ function Panel({
 
   // 일부 ANZSCO 코드가 occupations_au 테이블에 없어 occ가 null인 경우
   // shortageByState(occupation_state_au 기반)에서 직업 데이터를 찾아 fallback OccRow 생성
+  const allOccupations = useMemo(
+    () => Object.values(data.auOccupations).filter((o) => o.anzsco_code != null && o.median_salary_aud != null),
+    [data.auOccupations],
+  )
+
   const resolvedOcc = useMemo<OccRow | null>(() => {
     if (occ) return occ
     if (!selectedOccCode || !isAU) return null
@@ -626,6 +631,7 @@ function Panel({
               key={selectedSA4.code}
               entry={regionData?.[selectedSA4.code]}
               occupations={auShortage}
+              allOccupations={allOccupations}
               onSelectOcc={handleSelectOcc}
               selected={selected as StateCode}
               stateSalaryMult={data.stateSalaryMult}
@@ -645,6 +651,7 @@ function Panel({
               key={selectedSA4.code}
               entry={regionData?.[selectedSA4.code]}
               occupations={auShortage}
+              allOccupations={allOccupations}
               onSelectOcc={handleSelectOcc}
               selected={selected as StateCode}
               stateSalaryMult={data.stateSalaryMult}
@@ -844,6 +851,69 @@ function ShortageList({
   )
 }
 
+// fallback용: shortage 데이터 없이 occupations_au (salary 존재)에서 직접 가져온 목록
+function DemandOnlyList({
+  rows,
+  onSelectOcc,
+}: {
+  rows: OccRow[]
+  onSelectOcc: (code: string) => void
+}) {
+  const locale = useLocale()
+  const [limit, setLimit] = useState(10)
+  const visible = rows.slice(0, limit)
+  if (rows.length === 0) {
+    return <p className="py-8 text-center text-sm text-slate-400">이 직업군에 해당하는 데이터가 없습니다.</p>
+  }
+  return (
+    <div>
+      <p className="mb-2 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800 leading-relaxed">
+        이 직군은 기술 이민(189/190/491) 부족직종에 포함되지 않습니다.
+        {' '}고용주 스폰서(482 비자) 또는 워킹홀리데이 비자로 취업이 가능합니다.
+      </p>
+      <ol>
+        {visible.map((r, i) => (
+          <li key={r.anzsco_code}>
+            <button
+              type="button"
+              onClick={() => onSelectOcc(r.anzsco_code!)}
+              className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50"
+            >
+              <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-sm font-medium text-slate-800">
+                  {locale === "ko" ? (r.occupation_ko ?? r.occupation_en) : r.occupation_en}
+                </span>
+                <span className="mt-0.5 flex flex-wrap items-center gap-1.5">
+                  {r.on_csol ? (
+                    <Badge tone="amber">Employer Sponsored (482)</Badge>
+                  ) : (
+                    <Badge tone="blue">High Demand</Badge>
+                  )}
+                </span>
+              </span>
+              <span className="shrink-0 text-right text-sm font-semibold tabular-nums text-slate-700">
+                {r.median_salary_aud != null ? `$${(r.median_salary_aud / 1000).toFixed(0)}k` : ""}
+              </span>
+            </button>
+          </li>
+        ))}
+        {limit < rows.length && (
+          <li>
+            <button
+              type="button"
+              onClick={() => setLimit((p) => Math.min(p + 10, rows.length))}
+              className="flex w-full items-center justify-center gap-1 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-500 hover:bg-slate-50 hover:text-slate-700 transition-colors"
+            >
+              {locale === "ko" ? "더보기" : "Show more"} ({rows.length - limit})
+            </button>
+          </li>
+        )}
+      </ol>
+    </div>
+  )
+}
+
 // 지역(SA4) 부족/고소득 탭 — 보라색 분야(직업군) 막대 차트.
 // 분야를 누르면 그 ANZSCO 2자리에 속한 주(state) 직종으로 펼쳐지고(부족=ShortageList, 고소득=HighPayList)
 // 직업 클릭 시 상세 카드로 연결된다.
@@ -851,6 +921,7 @@ function RegionGroupList({
   kind,
   entry,
   occupations,
+  allOccupations,
   onSelectOcc,
   selected,
   stateSalaryMult,
@@ -860,6 +931,7 @@ function RegionGroupList({
   kind: "demand" | "pay"
   entry: RegionEntry | undefined
   occupations: StateOccupation[]
+  allOccupations: OccRow[]
   onSelectOcc: (code: string) => void
   selected: StateCode
   stateSalaryMult: StateSalaryMult
@@ -872,9 +944,13 @@ function RegionGroupList({
     return <p className="py-8 text-center text-sm text-slate-400">{t.map.regionNoData}</p>
   }
 
-  // 분야 드릴다운: 해당 ANZSCO 2자리로 시작하는 주(state) 직종 → 부족/고소득 리스트 재사용(클릭 시 상세).
+  // 분야 드릴다운
   if (openGroup?.code) {
-    const inGroup = occupations.filter((o) => (o.anzsco_v13 || o.anzsco_code).startsWith(openGroup.code!))
+    const shortageGroup = occupations.filter((o) => (o.anzsco_v13 || o.anzsco_code).startsWith(openGroup.code!))
+    const fallbackGroup = allOccupations.filter(
+      (o) => o.anzsco_code != null && (o.anzsco_v13 || o.anzsco_code).startsWith(openGroup.code!),
+    )
+    const useShortage = shortageGroup.length > 0 && kind === "demand"
     return (
       <div>
         <button
@@ -885,18 +961,22 @@ function RegionGroupList({
           <ChevronLeft className="h-4 w-4 shrink-0" />
           <span className="truncate">{openGroup.title}</span>
         </button>
-        {inGroup.length === 0 ? (
-          <p className="py-8 text-center text-sm text-slate-400">{t.map.regionGroupNoOcc}</p>
-        ) : kind === "demand" ? (
-          <ShortageList rows={inGroup} onSelectOcc={onSelectOcc} />
+        {useShortage ? (
+          <ShortageList rows={shortageGroup} onSelectOcc={onSelectOcc} />
+        ) : kind === "pay" ? (
+          shortageGroup.length > 0 ? (
+            <HighPayList
+              rows={highPay}
+              stateRows={shortageGroup}
+              selected={selected}
+              stateSalaryMult={stateSalaryMult}
+              onSelectOcc={onSelectOcc}
+            />
+          ) : (
+            <p className="py-8 text-center text-sm text-slate-400">{t.map.regionGroupNoOcc}</p>
+          )
         ) : (
-          <HighPayList
-            rows={highPay}
-            stateRows={inGroup}
-            selected={selected}
-            stateSalaryMult={stateSalaryMult}
-            onSelectOcc={onSelectOcc}
-          />
+          <DemandOnlyList rows={fallbackGroup} onSelectOcc={onSelectOcc} />
         )}
       </div>
     )
@@ -912,7 +992,11 @@ function RegionGroupList({
       </p>
       <ol>
         {rows.map((r, i) => {
-          const matchCount = r.code ? occupations.filter((o) => (o.anzsco_v13 || o.anzsco_code).startsWith(r.code!)).length : 0
+          const shortageCount = r.code ? occupations.filter((o) => (o.anzsco_v13 || o.anzsco_code).startsWith(r.code!)).length : 0
+          const fallbackCount = r.code ? allOccupations.filter(
+            (o) => o.anzsco_code != null && (o.anzsco_v13 || o.anzsco_code).startsWith(r.code!),
+          ).length : 0
+          const matchCount = kind === "demand" ? (shortageCount > 0 ? shortageCount : fallbackCount) : shortageCount
           const inner = (
             <>
               <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
@@ -1299,7 +1383,7 @@ function OccupationDetail({
     tafe: pathway === "vet" ? TAFE_BY_STATE[currentState] : null,
     vetPortals: pathway === "vet" ? VET_PORTALS : [],
     cricosSearch: cricosSearchUrl(),
-    prPathway: data.prPathway,
+
   }
 
   return (
@@ -1560,31 +1644,7 @@ function OccupationDetail({
             </div>
           )}
 
-          {(relatedData.prPathway || (occ.pr_note_ko && locale === "ko")) && (
-            <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
-              <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider mb-1">
-                {t.map.detailVisaPathway}
-              </p>
-              {relatedData.prPathway ? (
-                <>
-                  <p className="text-sm text-slate-700 leading-relaxed">
-                    {locale === "ko"
-                      ? (relatedData.prPathway.route_ko ?? relatedData.prPathway.route_en)
-                      : relatedData.prPathway.route_en}
-                  </p>
-                  {(() => {
-                    const caveat =
-                      locale === "ko"
-                        ? relatedData.prPathway.caveat_ko
-                        : relatedData.prPathway.caveat_en
-                    return caveat ? <p className="mt-1.5 text-xs text-slate-400">{caveat}</p> : null
-                  })()}
-                </>
-              ) : (
-                <p className="text-sm text-slate-700 leading-relaxed">{occ.pr_note_ko}</p>
-              )}
-            </div>
-          )}
+
 
           {occ.last_verified && (
             <p className="text-xs text-slate-400">
@@ -1840,7 +1900,7 @@ function ShortageLabel({ rating, className }: { rating: number; className?: stri
   )
 }
 
-function Badge({ tone, children }: { tone: "green" | "gray" | "blue"; children: React.ReactNode }) {
+function Badge({ tone, children }: { tone: "green" | "gray" | "blue" | "amber"; children: React.ReactNode }) {
   return (
     <span
       className={cn(
@@ -1849,7 +1909,9 @@ function Badge({ tone, children }: { tone: "green" | "gray" | "blue"; children: 
           ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
           : tone === "blue"
             ? "bg-blue-50 text-blue-700 border border-blue-200"
-            : "bg-slate-100 text-slate-500",
+            : tone === "amber"
+              ? "bg-amber-50 text-amber-700 border border-amber-200"
+              : "bg-slate-100 text-slate-500",
       )}
     >
       {children}

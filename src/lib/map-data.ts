@@ -59,15 +59,7 @@ export type StateSalaryMult = Record<string, Record<string, number>>
 // 직업 상세 카드의 "공부하는 곳"·"비자"는 예전엔 카드를 열 때 클라이언트가 별도
 // API(/api/occupations/related)로 가져와 몇 초 지연이 있었다. 이제 이 두 가지를
 // 맵 초기 데이터에 미리 실어 보내 fetch 없이 즉시 렌더한다.
-//  - prPathway: 호주 공통 1행 (모든 직업 동일)
 //  - coursesByFieldState: 분야(broad_field) × 주(state) 별 학위 코스 (주당 6개 cap)
-
-export interface PrPathway {
-  route_en: string | null
-  route_ko: string | null
-  caveat_en: string | null
-  caveat_ko: string | null
-}
 
 export interface CourseLite {
   id: number
@@ -91,7 +83,6 @@ export interface MapData {
   usHighPayByState: Record<string, USOccupation[]>
   auOccupations: Record<string, OccRow>
   auStateShortages: Record<string, StateShortageByOcc[]>
-  prPathway: PrPathway | null
   coursesByFieldState: Record<string, Record<string, CourseLite[]>>
 }
 
@@ -308,7 +299,7 @@ async function getCoursesByFieldState(): Promise<Record<string, Record<string, C
 }
 
 async function getMapDataUncached(): Promise<MapData> {
-  const [occupations, stateRows, usColleges, multRows, coursesByFieldState, prRes] = await Promise.all([
+  const [occupations, stateRows, usColleges, multRows, coursesByFieldState] = await Promise.all([
     fetchAll<OccRow>(
       "occupations_au",
       "anzsco_code, anzsco_v13, occupation_en, occupation_ko, shortage_rating, median_salary_aud, on_csol, confidence, related_broad_field, pr_note_ko, source_name, source_url, last_verified",
@@ -320,12 +311,6 @@ async function getMapDataUncached(): Promise<MapData> {
       .select("state, anzsco_1digit, multiplier")
       .then((r) => (r.data ?? []) as { state: string; anzsco_1digit: string; multiplier: number }[]),
     getCoursesByFieldState(),
-    supabaseAdmin
-      .from("country_pr_pathways")
-      .select("route_en, route_ko, caveat_en, caveat_ko")
-      .ilike("country", "au")
-      .maybeSingle()
-      .then((r) => (r.data ?? null) as PrPathway | null),
   ])
 
   // { "WA": { "3": 1.222, ... } }
@@ -409,7 +394,7 @@ async function getMapDataUncached(): Promise<MapData> {
     auStateShortages[code] = arr
   })
 
-  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages, prPathway: prRes, coursesByFieldState }
+  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages, coursesByFieldState }
 }
 
 // cross-instance 공유 캐시(방어선). 페이지가 force-static이라 보통 빌드/리밸리데이트
