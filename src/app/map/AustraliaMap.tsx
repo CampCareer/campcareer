@@ -1437,6 +1437,16 @@ function OccupationDetail({
           {occ.on_csol && <Badge tone="green">{t.map.visaEligible}</Badge>}
         </div>
 
+        {occ.anzsco_code && (
+          <Link
+            href={`/roi-explorer/au/occupation/${occ.anzsco_code}`}
+            className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors"
+          >
+            자세히 보기
+            <ExternalLink className="h-3 w-3" />
+          </Link>
+        )}
+
         <div className="mt-5 space-y-4">
           <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
             <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">

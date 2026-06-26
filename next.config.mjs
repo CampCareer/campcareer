@@ -21,8 +21,6 @@ const nextConfig = {
       { source: '/rankings/:path*', destination: '/', permanent: false },
       { source: '/explore/:path*', destination: '/', permanent: false },
       { source: '/compare/:path*', destination: '/', permanent: false },
-      { source: '/roi-explorer/:path*', destination: '/', permanent: false },
-
       // 퍼널 단일화: 구 온보딩 → Degree Risk (영구 이전)
       { source: '/onboarding', destination: '/degree-risk', permanent: true },
 
