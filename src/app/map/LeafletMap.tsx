@@ -321,6 +321,9 @@ export default function LeafletMap({
             if (feature && isUSA(feature.properties as Record<string, unknown>)) {
               return { fillColor: "#dcfce7", color: "#22c55e", weight: 2, fillOpacity: 0.5 }
             }
+            if (feature && isIreland(feature.properties as Record<string, unknown>)) {
+              return { fillColor: "#fef3c7", color: "#f59e0b", weight: 2, fillOpacity: 0.5 }
+            }
             return { fillColor: "#f8fafc", color: "#cbd5e1", weight: 0.8, fillOpacity: 0.6 }
           },
           onEachFeature: (feature, lyr) => {
