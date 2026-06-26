@@ -740,6 +740,27 @@ export default function LeafletMap({
     } else {
       fitToBounds(WORLD_BOUNDS, true)
     }
+
+    // Hide the world polygon border for the selected country so the detailed
+    // internal boundaries (states/counties) are the only visible outline.
+    if (worldLayerRef.current) {
+      worldLayerRef.current.setStyle((feature) => {
+        const props = feature?.properties as Record<string, unknown> | undefined
+        if (!props) return {}
+        const isAU = isAustralia(props)
+        const isUS = isUSA(props)
+        const isIE = isIreland(props)
+        const hide = (activeCountry === "AU" && isAU)
+          || (activeCountry === "US" && isUS)
+          || (activeCountry === "IE" && isIE)
+        if (hide) return { opacity: 0, fillOpacity: 0, weight: 0 }
+        if (isAU) return { fillColor: "#e0e7ff", color: "#6366f1", weight: 2, fillOpacity: 0.5 }
+        if (isUS) return { fillColor: "#dcfce7", color: "#22c55e", weight: 2, fillOpacity: 0.5 }
+        if (isIE) return { fillColor: "#fef3c7", color: "#f59e0b", weight: 2, fillOpacity: 0.5 }
+        return { fillColor: "#f8fafc", color: "#cbd5e1", weight: 0.8, fillOpacity: 0.6 }
+      })
+    }
+
     renderSA4()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeCountry])
