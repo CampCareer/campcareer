@@ -19,6 +19,7 @@ const SA4_NAME_BY_CODE: Record<string, string> = Object.fromEntries(
 const AU_BOUNDS = L.latLngBounds([-44, 112], [-10, 154])
 const US_BOUNDS = L.latLngBounds([24, -125], [49, -66])
 const CA_BOUNDS = L.latLngBounds([41, -145], [85, -50])
+const IE_BOUNDS = L.latLngBounds([51.3, -10.5], [55.5, -5.8])
 const WORLD_BOUNDS = L.latLngBounds([-90, -180], [90, 180])
 
 const RAMP_LIGHT = [237, 233, 254]
@@ -46,6 +47,10 @@ function isUSA(properties: Record<string, unknown>): boolean {
   return properties?.ISO_A3 === "USA" || properties?.ADM0_A3 === "USA"
 }
 
+function isIreland(properties: Record<string, unknown>): boolean {
+  return properties?.ISO_A3 === "IRL" || properties?.ADM0_A3 === "IRL"
+}
+
 export default function LeafletMap({
   data,
   selected,
@@ -59,9 +64,9 @@ export default function LeafletMap({
   data: MapData
   selected: string | null
   selectedSA4: SA4Region | null
-  activeCountry: "AU" | "US" | "CA" | null
+  activeCountry: "AU" | "US" | "CA" | "IE" | null
   onSelectState: (s: string) => void
-  onSelectCountry: (c: "AU" | "US" | "CA") => void
+  onSelectCountry: (c: "AU" | "US" | "CA" | "IE") => void
   onSelectSA4: (code: string) => void
   onReset: () => void
 }) {
@@ -290,6 +295,7 @@ export default function LeafletMap({
         if (activeCountryRef.current === "AU") map.fitBounds(AU_BOUNDS)
         else if (activeCountryRef.current === "US") map.fitBounds(US_BOUNDS)
         else if (activeCountryRef.current === "CA") map.fitBounds(CA_BOUNDS)
+        else if (activeCountryRef.current === "IE") map.fitBounds(IE_BOUNDS)
         else map.fitBounds(WORLD_BOUNDS)
         didFitRef.current = true
       }
@@ -321,21 +327,24 @@ export default function LeafletMap({
             const props = feature.properties as Record<string, unknown>
             const isAU = isAustralia(props)
             const isUS = isUSA(props)
-            if (!isAU && !isUS) return
+            const isIE = isIreland(props)
+            if (!isAU && !isUS && !isIE) return
 
-            const name = isAU ? "Australia" : "United States"
+            const name = isAU ? "Australia" : isIE ? "Ireland" : "United States"
             lyr.bindTooltip(name, {
               sticky: true,
               direction: "top",
               className: "!rounded-md !border-0 !bg-slate-900 !px-2 !py-1 !text-xs !text-white !shadow-md",
             })
             lyr.on({
-              click: () => onSelectCountryRef.current(isAU ? "AU" : isUS ? "US" : "CA"),
+              click: () => onSelectCountryRef.current(isAU ? "AU" : isIE ? "IE" : "US"),
               mouseover: () => (lyr as L.Path).setStyle({ weight: 3, fillOpacity: 0.7 }),
               mouseout: () => {
                 const baseStyle = isAU
                   ? { fillColor: "#e0e7ff", color: "#6366f1", weight: 2, fillOpacity: 0.5 }
-                  : { fillColor: "#dcfce7", color: "#22c55e", weight: 2, fillOpacity: 0.5 }
+                  : isIE
+                    ? { fillColor: "#fef3c7", color: "#f59e0b", weight: 2, fillOpacity: 0.5 }
+                    : { fillColor: "#dcfce7", color: "#22c55e", weight: 2, fillOpacity: 0.5 }
                 ;(lyr as L.Path).setStyle(baseStyle)
               },
             })
@@ -347,7 +356,7 @@ export default function LeafletMap({
               el.addEventListener("keydown", (e: KeyboardEvent) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault()
-                  onSelectCountryRef.current(isAU ? "AU" : isUS ? "US" : "CA")
+                  onSelectCountryRef.current(isAU ? "AU" : isIE ? "IE" : "US")
                 }
               })
             }
@@ -591,6 +600,8 @@ export default function LeafletMap({
     } else if (activeCountry === "CA") {
       if (caLayerRef.current) map.addLayer(caLayerRef.current)
       fitToBounds(CA_BOUNDS, true)
+    } else if (activeCountry === "IE") {
+      fitToBounds(IE_BOUNDS, true)
     } else {
       fitToBounds(WORLD_BOUNDS, true)
     }
