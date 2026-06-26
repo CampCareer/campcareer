@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next"
 import { getAllPosts } from "@/lib/blog"
 import { supabase } from "@/lib/supabase"
+import { getUSOccCodes } from "@/lib/us-occupation-detail"
 
 const BASE = "https://www.campcareer.com"
 
@@ -72,5 +73,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })
   }
 
-  return [...staticPages, ...blogPages, ...detailPages, ...occupationPages]
+  // US 직업 디테일 — SOC 116개
+  const usOccupationPages: MetadataRoute.Sitemap = getUSOccCodes().map((code) => ({
+    url: `${BASE}/roi-explorer/us/occupation/${code}`,
+    priority: 0.6,
+    changeFrequency: "weekly",
+  }))
+
+  return [...staticPages, ...blogPages, ...detailPages, ...occupationPages, ...usOccupationPages]
 }
