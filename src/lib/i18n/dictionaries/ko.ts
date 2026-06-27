@@ -684,6 +684,18 @@ const ko: Dictionary = {
     detailBls: 'BLS 임금 데이터',
     detailTopSchools: '{state} 주요 대학',
     detailNoSchools: '이 주의 대학 데이터가 아직 없습니다.',
+    // IE panel
+    ieBack: '← 뒤로',
+    ieTabSchools: '어학원',
+    ieTabShortage: '부족 직종',
+    ieLoading: '로딩 중...',
+    ieNoSchools: '등록된 어학원이 없습니다.',
+    iePerWeek: '/주',
+    ieDescription: '설명',
+    ieViewAll: '모든 어학원 보기 →',
+    ieIreland: '아일랜드',
+    ieNoShortageData: '아일랜드 부족 직종 데이터가 아직 없습니다.',
+    ieShowMore: '더보기',
     // 제휴(affiliate) CTA
     wiseCtaTitle: '유학으로 해외 이주하시나요?',
     wiseCtaDesc: 'Wise로 학비 납부와 본국 송금을 실시간 환율로 처리하세요.',

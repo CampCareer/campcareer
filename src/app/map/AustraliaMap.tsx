@@ -1971,6 +1971,7 @@ function IEPanel({
   countyName?: string
   onClose: () => void
 }) {
+  const t = useTranslations()
   const [ietab, setIetab] = useState<"schools" | "shortage">("schools")
   const [selectedSchool, setSelectedSchool] = useState<IESchool | null>(null)
 
@@ -1984,12 +1985,12 @@ function IEPanel({
             className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-800 transition-colors"
           >
             <ChevronLeft className="h-4 w-4" />
-            뒤로
+            {t.map.ieBack}
           </button>
           <button
             type="button"
             onClick={onClose}
-            aria-label="Close"
+            aria-label={t.map.close}
             className="-mr-1 rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
           >
             <X className="h-4 w-4" />
@@ -2008,7 +2009,7 @@ function IEPanel({
           {selectedSchool.price_range_week && (
             <p className="mt-3 text-sm font-medium text-slate-700">
               {selectedSchool.price_range_week}
-              <span className="text-xs text-slate-400 font-normal ml-1">/주</span>
+              <span className="text-xs text-slate-400 font-normal ml-1">{t.map.iePerWeek}</span>
             </p>
           )}
 
@@ -2024,7 +2025,7 @@ function IEPanel({
 
           {selectedSchool.description_ko && (
             <div className="mt-4">
-              <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">설명</p>
+              <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">{t.map.ieDescription}</p>
               <p className="text-sm text-slate-700 leading-relaxed">{selectedSchool.description_ko}</p>
             </div>
           )}
@@ -2038,14 +2039,14 @@ function IEPanel({
       <div className="flex items-start justify-between gap-2 px-5 pt-4">
         <div>
           <h2 className="font-sans text-lg font-semibold text-slate-900 tracking-tight">
-            🇮🇪 {countyName ? `${countyName}` : "Ireland"}
+            🇮🇪 {countyName ? `${countyName}` : t.map.ieIreland}
           </h2>
-          <p className="text-xs text-slate-400 mt-0.5">{countyName ? `${countyName} · ` : ""}아일랜드</p>
+          <p className="text-xs text-slate-400 mt-0.5">{countyName ? `${countyName} · ` : ""}{t.map.ieIreland}</p>
         </div>
         <button
           type="button"
           onClick={onClose}
-          aria-label="Close"
+          aria-label={t.map.close}
           className="-mr-1 rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
         >
           <X className="h-4 w-4" />
@@ -2055,10 +2056,10 @@ function IEPanel({
       <div className="px-5 pt-3">
         <div className="inline-flex rounded-lg bg-slate-100 p-1 text-sm">
           <TabButton active={ietab === "schools"} onClick={() => setIetab("schools")}>
-            어학원
+            {t.map.ieTabSchools}
           </TabButton>
           <TabButton active={ietab === "shortage"} onClick={() => setIetab("shortage")}>
-            부족 직종
+            {t.map.ieTabShortage}
           </TabButton>
         </div>
       </div>
@@ -2068,10 +2069,10 @@ function IEPanel({
           schools === null ? (
             <div className="flex flex-col items-center gap-2 py-10">
               <div className="h-5 w-5 animate-spin rounded-full border-2 border-slate-200 border-t-violet-500" />
-              <p className="text-sm text-slate-400">로딩 중...</p>
+              <p className="text-sm text-slate-400">{t.map.ieLoading}</p>
             </div>
           ) : schools.length === 0 ? (
-            <p className="py-8 text-center text-sm text-slate-400">등록된 어학원이 없습니다.</p>
+            <p className="py-8 text-center text-sm text-slate-400">{t.map.ieNoSchools}</p>
           ) : (
             <div className="space-y-2">
               {schools.map((s) => (
@@ -2090,7 +2091,7 @@ function IEPanel({
                     <ChevronRight className="h-4 w-4 shrink-0 text-slate-300 mt-1" />
                   </div>
                   {s.price_range_week && (
-                    <p className="mt-1 text-xs font-medium text-slate-600">{s.price_range_week}/주</p>
+                    <p className="mt-1 text-xs font-medium text-slate-600">{s.price_range_week}{t.map.iePerWeek}</p>
                   )}
                   <div className="mt-1 flex flex-wrap gap-1">
                     {s.accreditation?.slice(0, 2).map((a) => (
@@ -2111,7 +2112,7 @@ function IEPanel({
       {ietab === "schools" && (
         <p className="border-t border-slate-100 px-5 py-3 text-xs text-slate-400">
           <Link href="/roi-explorer/ie/language-schools" className="text-blue-600 hover:underline">
-            모든 어학원 보기 →
+            {t.map.ieViewAll}
           </Link>
         </p>
       )}
@@ -2120,12 +2121,13 @@ function IEPanel({
 }
 
 function IEShortageList() {
+  const t = useTranslations()
   const locale = useLocale()
   const occupations = useMemo(() => getShortageOccupations(), [])
   const [limit, setLimit] = useState(10)
   const visible = occupations.slice(0, limit)
   if (occupations.length === 0) {
-    return <p className="py-8 text-center text-sm text-slate-400">부족 직종 데이터가 없습니다.</p>
+    return <p className="py-8 text-center text-sm text-slate-400">{t.map.ieNoShortageData || t.map.noShortageData}</p>
   }
   return (
     <ol>
@@ -2159,7 +2161,7 @@ function IEShortageList() {
             onClick={() => setLimit((p) => Math.min(p + 10, occupations.length))}
             className="flex w-full items-center justify-center gap-1 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-500 hover:bg-slate-50 hover:text-slate-700 transition-colors"
           >
-            {locale === "ko" ? "더보기" : "Show more"} ({occupations.length - limit})
+            {t.map.ieShowMore} ({occupations.length - limit})
           </button>
         </li>
       )}

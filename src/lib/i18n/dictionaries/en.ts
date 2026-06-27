@@ -682,6 +682,18 @@ const en = {
     detailBls: 'BLS wage data',
     detailTopSchools: 'Top schools in {state}',
     detailNoSchools: 'No college data for this state yet.',
+    // IE panel
+    ieBack: '← Back',
+    ieTabSchools: 'Language Schools',
+    ieTabShortage: 'Shortage Occupations',
+    ieLoading: 'Loading...',
+    ieNoSchools: 'No language schools found.',
+    iePerWeek: '/week',
+    ieDescription: 'Description',
+    ieViewAll: 'See all language schools →',
+    ieIreland: 'Ireland',
+    ieNoShortageData: 'No shortage occupation data for Ireland yet.',
+    ieShowMore: 'Show more',
     // Partner (affiliate) CTA
     wiseCtaTitle: 'Moving abroad to study?',
     wiseCtaDesc: 'Pay tuition and send money home at the real exchange rate with Wise.',
