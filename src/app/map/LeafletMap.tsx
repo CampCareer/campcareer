@@ -422,6 +422,25 @@ export default function LeafletMap({
           },
         }).addTo(map)
         worldLayerRef.current = worldLayer
+        // If a country is already active when the world layer loads, apply the
+        // hidden style for that country's polygon so it doesn't overlap with
+        // the detail layer (states/counties).
+        if (activeCountryRef.current === "AU" || activeCountryRef.current === "US" || activeCountryRef.current === "IE") {
+          const country = activeCountryRef.current
+          worldLayer.setStyle((feature) => {
+            const props = feature?.properties as Record<string, unknown> | undefined
+            if (!props) return {}
+            const isAU = isAustralia(props)
+            const isUS = isUSA(props)
+            const isIE = isIreland(props)
+            const hide = (country === "AU" && isAU) || (country === "US" && isUS) || (country === "IE" && isIE)
+            if (hide) return { opacity: 0, fillOpacity: 0, weight: 0 }
+            if (isAU) return { fillColor: "#e0e7ff", color: "#6366f1", weight: 2, fillOpacity: 0.5 }
+            if (isUS) return { fillColor: "#dcfce7", color: "#22c55e", weight: 2, fillOpacity: 0.5 }
+            if (isIE) return { fillColor: "#fef3c7", color: "#f59e0b", weight: 2, fillOpacity: 0.5 }
+            return { fillColor: "#f8fafc", color: "#cbd5e1", weight: 0.8, fillOpacity: 0.6 }
+          })
+        }
       })
       .catch((err) => console.error("[LeafletMap] world geojson load failed:", err))
 
