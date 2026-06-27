@@ -420,10 +420,7 @@ export default function LeafletMap({
               })
             }
           },
-        })
-        // When IE is already active, don't add the world layer at all — only
-        // the detailed county boundaries should be visible.
-        if (activeCountryRef.current !== "IE") worldLayer.addTo(map)
+        }).addTo(map)
         worldLayerRef.current = worldLayer
         // If a country is already active when the world layer loads, apply the
         // hidden style for that country's polygon so it doesn't overlap with
@@ -756,31 +753,29 @@ export default function LeafletMap({
       if (caLayerRef.current) map.addLayer(caLayerRef.current)
       fitToBounds(CA_BOUNDS, true)
     } else if (activeCountry === "IE") {
-      // Remove the world layer so the simplified Ireland polygon doesn't overlap with county boundaries
-      if (worldLayerRef.current && map.hasLayer(worldLayerRef.current)) map.removeLayer(worldLayerRef.current)
       if (ieLayerRef.current) map.addLayer(ieLayerRef.current)
       fitToBounds(IE_BOUNDS, true)
       updateIEMarkers()
     } else {
-      // Re-add the world layer when returning to world view
-      if (worldLayerRef.current && !map.hasLayer(worldLayerRef.current)) map.addLayer(worldLayerRef.current)
       fitToBounds(WORLD_BOUNDS, true)
     }
 
-    // Hide the world polygon border for AU/US so the detailed state boundaries
-    // are the only visible outline. (IE uses removeLayer instead, above.)
-    if (worldLayerRef.current && activeCountry !== "IE") {
+    // Hide the world polygon border for the selected country so the detailed
+    // internal boundaries (states/counties) are the only visible outline.
+    if (worldLayerRef.current) {
       worldLayerRef.current.setStyle((feature) => {
         const props = feature?.properties as Record<string, unknown> | undefined
         if (!props) return {}
         const isAU = isAustralia(props)
         const isUS = isUSA(props)
+        const isIE = isIreland(props)
         const hide = (activeCountry === "AU" && isAU)
           || (activeCountry === "US" && isUS)
+          || (activeCountry === "IE" && isIE)
         if (hide) return { opacity: 0, fillOpacity: 0, weight: 0 }
         if (isAU) return { fillColor: "#e0e7ff", color: "#6366f1", weight: 2, fillOpacity: 0.5 }
         if (isUS) return { fillColor: "#dcfce7", color: "#22c55e", weight: 2, fillOpacity: 0.5 }
-        if (isIreland(props)) return { fillColor: "#fef3c7", color: "#f59e0b", weight: 2, fillOpacity: 0.5 }
+        if (isIE) return { fillColor: "#fef3c7", color: "#f59e0b", weight: 2, fillOpacity: 0.5 }
         return { fillColor: "#f8fafc", color: "#cbd5e1", weight: 0.8, fillOpacity: 0.6 }
       })
     }
