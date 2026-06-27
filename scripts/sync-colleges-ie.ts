@@ -37,6 +37,8 @@ interface CollegeRecord {
   name: string
   region: string          // colleges_ie / cities_ie use `region` (stores province name)
   city: string
+  lat: number | null
+  lng: number | null
   median_earnings: number
   graduation_rate: number
   avg_net_price: number
@@ -52,54 +54,63 @@ const HARDCODED_COLLEGES: CollegeRecord[] = [
   {
     name: 'Trinity College Dublin',
     region: 'Leinster', city: 'Dublin',
+    lat: 53.343792, lng: -6.254572,
     median_earnings: 40000, graduation_rate: 0.93, avg_net_price: 26000,
     school_type: 'public',
   },
   {
     name: 'University College Dublin',
     region: 'Leinster', city: 'Dublin',
+    lat: 53.308207, lng: -6.226429,
     median_earnings: 38000, graduation_rate: 0.90, avg_net_price: 24000,
     school_type: 'public',
   },
   {
     name: 'University College Cork',
     region: 'Munster', city: 'Cork',
+    lat: 51.893497, lng: -8.491872,
     median_earnings: 35000, graduation_rate: 0.88, avg_net_price: 20000,
     school_type: 'public',
   },
   {
     name: 'NUI Galway',
     region: 'Connacht', city: 'Galway',
+    lat: 53.277783, lng: -9.061861,
     median_earnings: 34000, graduation_rate: 0.87, avg_net_price: 18000,
     school_type: 'public',
   },
   {
     name: 'University of Limerick',
     region: 'Munster', city: 'Limerick',
+    lat: 52.6717, lng: -8.5703,
     median_earnings: 35000, graduation_rate: 0.86, avg_net_price: 18000,
     school_type: 'public',
   },
   {
     name: 'Dublin City University',
     region: 'Leinster', city: 'Dublin',
+    lat: 53.384953, lng: -6.256542,
     median_earnings: 36000, graduation_rate: 0.85, avg_net_price: 17000,
     school_type: 'public',
   },
   {
     name: 'Maynooth University',
     region: 'Leinster', city: 'Dublin',
+    lat: 53.383500, lng: -6.599600,
     median_earnings: 33000, graduation_rate: 0.84, avg_net_price: 16000,
     school_type: 'public',
   },
   {
     name: 'Technological University Dublin',
     region: 'Leinster', city: 'Dublin',
+    lat: null, lng: null,
     median_earnings: 32000, graduation_rate: 0.80, avg_net_price: 14000,
     school_type: 'public',
   },
   {
     name: 'RCSI University of Medicine and Health Sciences',
     region: 'Leinster', city: 'Dublin',
+    lat: null, lng: null,
     median_earnings: 58000, graduation_rate: 0.95, avg_net_price: 56000,
     school_type: 'private',
   },
@@ -200,6 +211,8 @@ async function main() {
     name: c.name,
     region: c.region,
     city: c.city,
+    lat: c.lat,
+    lng: c.lng,
     median_earnings: c.median_earnings,
     graduation_rate: c.graduation_rate,
     avg_net_price: c.avg_net_price,
