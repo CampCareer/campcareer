@@ -17,6 +17,8 @@ import JobListings from "./JobListings"
 import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc } from "@/lib/map-data"
 import { createClient } from "@/lib/supabase-client"
 import type { User } from "@supabase/supabase-js"
+import { getShortageOccupations } from "@/lib/ie-shortage-occupations"
+import { getIscBroadField } from "@/lib/ie-fields"
 
 const LeafletMap = dynamic(() => import("./LeafletMap"), {
   ssr: false,
@@ -1967,6 +1969,8 @@ function IEPanel({
   countyName?: string
   onClose: () => void
 }) {
+  const [ietab, setIetab] = useState<"schools" | "shortage">("schools")
+
   return (
     <>
       <div className="flex items-start justify-between gap-2 px-5 pt-4">
@@ -1974,7 +1978,7 @@ function IEPanel({
           <h2 className="font-sans text-lg font-semibold text-slate-900 tracking-tight">
             🇮🇪 {countyName ? `${countyName}` : "Ireland"}
           </h2>
-          <p className="text-xs text-slate-400 mt-0.5">{countyName ? `${countyName} · ` : ""}아일랜드 영어 어학원</p>
+          <p className="text-xs text-slate-400 mt-0.5">{countyName ? `${countyName} · ` : ""}아일랜드</p>
         </div>
         <button
           type="button"
@@ -1986,53 +1990,117 @@ function IEPanel({
         </button>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto px-3 py-3">
-        {schools === null ? (
-          <div className="flex flex-col items-center gap-2 py-10">
-            <div className="h-5 w-5 animate-spin rounded-full border-2 border-slate-200 border-t-violet-500" />
-            <p className="text-sm text-slate-400">로딩 중...</p>
-          </div>
-        ) : schools.length === 0 ? (
-          <p className="py-8 text-center text-sm text-slate-400">등록된 어학원이 없습니다.</p>
-        ) : (
-          <div className="space-y-2">
-            {schools.map((s) => (
-              <Link
-                key={s.id}
-                href={`/roi-explorer/ie/language-schools/${s.slug}`}
-                className="block rounded-lg border border-slate-100 p-3 transition-colors hover:bg-slate-50"
-              >
-                <div className="flex items-start justify-between gap-2">
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium text-slate-800 truncate">{s.name_en}</p>
-                    {s.name_ko && <p className="text-xs text-muted-foreground">{s.name_ko}</p>}
-                    <p className="mt-0.5 text-xs text-slate-400">{s.city}</p>
-                  </div>
-                  <ChevronRight className="h-4 w-4 shrink-0 text-slate-300 mt-1" />
-                </div>
-                {s.price_range_week && (
-                  <p className="mt-1 text-xs font-medium text-slate-600">{s.price_range_week}/주</p>
-                )}
-                <div className="mt-1 flex flex-wrap gap-1">
-                  {s.accreditation?.slice(0, 2).map((a) => (
-                    <span key={a} className="inline-flex items-center rounded-full border border-slate-200 px-1.5 py-0.5 text-[10px] text-slate-500">{a}</span>
-                  ))}
-                </div>
-                {s.description_ko && (
-                  <p className="mt-1 text-xs text-slate-500 line-clamp-2">{s.description_ko}</p>
-                )}
-              </Link>
-            ))}
-          </div>
-        )}
+      <div className="px-5 pt-3">
+        <div className="inline-flex rounded-lg bg-slate-100 p-1 text-sm">
+          <TabButton active={ietab === "schools"} onClick={() => setIetab("schools")}>
+            어학원
+          </TabButton>
+          <TabButton active={ietab === "shortage"} onClick={() => setIetab("shortage")}>
+            부족 직종
+          </TabButton>
+        </div>
       </div>
 
-      <p className="border-t border-slate-100 px-5 py-3 text-xs text-slate-400">
-        <Link href="/roi-explorer/ie/language-schools" className="text-blue-600 hover:underline">
-          모든 어학원 보기 →
-        </Link>
-      </p>
+      <div className="min-h-0 flex-1 overflow-y-auto px-3 py-3">
+        {ietab === "schools" && (
+          schools === null ? (
+            <div className="flex flex-col items-center gap-2 py-10">
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-slate-200 border-t-violet-500" />
+              <p className="text-sm text-slate-400">로딩 중...</p>
+            </div>
+          ) : schools.length === 0 ? (
+            <p className="py-8 text-center text-sm text-slate-400">등록된 어학원이 없습니다.</p>
+          ) : (
+            <div className="space-y-2">
+              {schools.map((s) => (
+                <Link
+                  key={s.id}
+                  href={`/roi-explorer/ie/language-schools/${s.slug}`}
+                  className="block rounded-lg border border-slate-100 p-3 transition-colors hover:bg-slate-50"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-slate-800 truncate">{s.name_en}</p>
+                      {s.name_ko && <p className="text-xs text-muted-foreground">{s.name_ko}</p>}
+                      <p className="mt-0.5 text-xs text-slate-400">{s.city}</p>
+                    </div>
+                    <ChevronRight className="h-4 w-4 shrink-0 text-slate-300 mt-1" />
+                  </div>
+                  {s.price_range_week && (
+                    <p className="mt-1 text-xs font-medium text-slate-600">{s.price_range_week}/주</p>
+                  )}
+                  <div className="mt-1 flex flex-wrap gap-1">
+                    {s.accreditation?.slice(0, 2).map((a) => (
+                      <span key={a} className="inline-flex items-center rounded-full border border-slate-200 px-1.5 py-0.5 text-[10px] text-slate-500">{a}</span>
+                    ))}
+                  </div>
+                  {s.description_ko && (
+                    <p className="mt-1 text-xs text-slate-500 line-clamp-2">{s.description_ko}</p>
+                  )}
+                </Link>
+              ))}
+            </div>
+          )
+        )}
+        {ietab === "shortage" && <IEShortageList />}
+      </div>
+
+      {ietab === "schools" && (
+        <p className="border-t border-slate-100 px-5 py-3 text-xs text-slate-400">
+          <Link href="/roi-explorer/ie/language-schools" className="text-blue-600 hover:underline">
+            모든 어학원 보기 →
+          </Link>
+        </p>
+      )}
     </>
+  )
+}
+
+function IEShortageList() {
+  const locale = useLocale()
+  const occupations = useMemo(() => getShortageOccupations(), [])
+  const [limit, setLimit] = useState(10)
+  const visible = occupations.slice(0, limit)
+  if (occupations.length === 0) {
+    return <p className="py-8 text-center text-sm text-slate-400">부족 직종 데이터가 없습니다.</p>
+  }
+  return (
+    <ol>
+      {visible.map((r, i) => {
+        const field = r.relatedBroadField ? getIscBroadField(r.relatedBroadField) : null
+        return (
+          <li key={r.socCode}>
+            <div className="flex items-center gap-3 rounded-lg px-3 py-2.5">
+              <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
+              <span className="min-w-0 flex-1">
+                <span className="block text-sm font-medium text-slate-800">
+                  {r.category}
+                </span>
+                <span className="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs text-slate-400">
+                  <span className="font-mono">SOC {r.socCode}</span>
+                  {field && <span>· {locale === "ko" ? field.nameKo : field.nameEn}</span>}
+                </span>
+                {r.employments.length > 0 && (
+                  <p className="mt-1 text-xs text-slate-500 line-clamp-1">{r.employments.slice(0, 3).join(", ")}</p>
+                )}
+              </span>
+              <Badge tone={r.socLevel === "SOC-4" ? "blue" : "gray"}>{r.socLevel}</Badge>
+            </div>
+          </li>
+        )
+      })}
+      {limit < occupations.length && (
+        <li>
+          <button
+            type="button"
+            onClick={() => setLimit((p) => Math.min(p + 10, occupations.length))}
+            className="flex w-full items-center justify-center gap-1 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-500 hover:bg-slate-50 hover:text-slate-700 transition-colors"
+          >
+            {locale === "ko" ? "더보기" : "Show more"} ({occupations.length - limit})
+          </button>
+        </li>
+      )}
+    </ol>
   )
 }
 
