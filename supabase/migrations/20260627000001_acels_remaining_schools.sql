@@ -1,0 +1,58 @@
+-- ACELS 인증 잉글리시 랭귀지 스쿨 — 미등록 49개교 INSERT
+-- Source: HES.pdf pages 1–33 (ACELS Recognised ELE Providers for 2026)
+-- Created: 2026-06-27
+
+INSERT INTO language_schools_ie (slug, name_en, city, region, website_url, accreditation)
+VALUES
+('carlow-international-english-language-school-ciels-carlow', 'Carlow International English Language School (CIELS)', 'Carlow', 'Leinster', NULL, ARRAY['ACELS']),
+('atlas-language-school-clare-clare', 'Atlas Language School -Clare', 'Clare', 'Munster', NULL, ARRAY['ACELS']),
+('atlantic-school-of-english-active-leisure-cork', 'Atlantic School of English & Active Leisure', 'Cork', 'Munster', NULL, ARRAY['ACELS']),
+('cork-english-world-cork', 'Cork English World', 'Cork', 'Munster', NULL, ARRAY['ACELS']),
+('english-talks-cork', 'English Talks', 'Cork', 'Munster', NULL, ARRAY['ACELS']),
+('griffith-college-cork-cork', 'Griffith College Cork', 'Cork', 'Munster', NULL, ARRAY['ACELS']),
+('ucc-language-centre-university-college-cork-cork', 'UCC Language Centre, University College Cork', 'Cork', 'Munster', NULL, ARRAY['ACELS']),
+('youghal-international-college-cork', 'Youghal International College', 'Cork', 'Munster', NULL, ARRAY['ACELS']),
+('donegal-english-language-school-donegal', 'Donegal English Language School', 'Donegal', 'Ulster', NULL, ARRAY['ACELS']),
+('active-language-learning-dublin', 'Active Language Learning', 'Dublin', 'Leinster', NULL, ARRAY['ACELS']),
+('atc-language-schools-dublin', 'ATC Language Schools', 'Dublin', 'Leinster', NULL, ARRAY['ACELS']),
+('city-language-school-dublin', 'City Language School', 'Dublin', 'Leinster', NULL, ARRAY['ACELS']),
+('dcu-language-services-dublin', 'DCU Language Services', 'Dublin', 'Leinster', NULL, ARRAY['ACELS']),
+('dorset-college-dublin', 'Dorset College', 'Dublin', 'Leinster', NULL, ARRAY['ACELS']),
+('dublin-college-of-advanced-studies-dublin', 'Dublin College of Advanced Studies', 'Dublin', 'Leinster', NULL, ARRAY['ACELS']),
+('dublin-cultural-institute-dublin', 'Dublin Cultural Institute', 'Dublin', 'Leinster', NULL, ARRAY['ACELS']),
+('dublin-international-foundation-college-dublin', 'Dublin International Foundation College', 'Dublin', 'Leinster', NULL, ARRAY['ACELS']),
+('ef-international-language-schools-dublin', 'EF International Language Schools', 'Dublin', 'Leinster', NULL, ARRAY['ACELS']),
+('elta-dublin', 'ELTA', 'Dublin', 'Leinster', NULL, ARRAY['ACELS']),
+('englishour-dublin', 'Englishour', 'Dublin', 'Leinster', NULL, ARRAY['ACELS']),
+('erin-college-dublin', 'Erin College', 'Dublin', 'Leinster', NULL, ARRAY['ACELS']),
+('griffith-college-dublin-dublin', 'Griffith College Dublin', 'Dublin', 'Leinster', NULL, ARRAY['ACELS']),
+('ibat-college-dublin', 'IBAT College', 'Dublin', 'Leinster', NULL, ARRAY['ACELS']),
+('ilsc-dublin-and-berlitz-dublin-dublin', 'ILSC Dublin and Berlitz Dublin', 'Dublin', 'Leinster', NULL, ARRAY['ACELS']),
+('irish-college-of-english-dublin', 'Irish College of English', 'Dublin', 'Leinster', NULL, ARRAY['ACELS']),
+('moyle-park-english-language-college-dublin', 'Moyle Park English Language College', 'Dublin', 'Leinster', NULL, ARRAY['ACELS']),
+('ohc-dublin', 'OHC', 'Dublin', 'Leinster', NULL, ARRAY['ACELS']),
+('seda-college-dublin', 'SEDA College', 'Dublin', 'Leinster', NULL, ARRAY['ACELS']),
+('swan-training-institute-dublin', 'Swan Training Institute', 'Dublin', 'Leinster', NULL, ARRAY['ACELS']),
+('the-linguaviva-centre-dublin', 'The Linguaviva Centre', 'Dublin', 'Leinster', NULL, ARRAY['ACELS']),
+('travelling-languages-dublin', 'Travelling Languages', 'Dublin', 'Leinster', NULL, ARRAY['ACELS']),
+('twin-english-centre-ireland-ltd-dublin', 'Twin English Centre Ireland Ltd.', 'Dublin', 'Leinster', NULL, ARRAY['ACELS']),
+('ulearn-dublin', 'ULearn', 'Dublin', 'Leinster', NULL, ARRAY['ACELS']),
+('atlantic-language-galway-galway', 'Atlantic Language Galway', 'Galway', 'Connacht', NULL, ARRAY['ACELS']),
+('english-language-centre-galway', 'English Language Centre', 'Galway', 'Connacht', NULL, ARRAY['ACELS']),
+('castel-education-kerry', 'Castel Education', 'Kerry', 'Munster', NULL, ARRAY['ACELS']),
+('celtic-school-of-english-kerry', 'Celtic School of English', 'Kerry', 'Munster', NULL, ARRAY['ACELS']),
+('the-asana-school-of-english-kerry', 'The Asana School of English', 'Kerry', 'Munster', NULL, ARRAY['ACELS']),
+('avanti-language-institute-kildare', 'Avanti Language Institute', 'Kildare', 'Leinster', NULL, ARRAY['ACELS']),
+('griffith-college-limerick-limerick', 'Griffith College Limerick', 'Limerick', 'Munster', NULL, ARRAY['ACELS']),
+('university-of-limerick-language-centre-limerick', 'University of Limerick Language Centre', 'Limerick', 'Munster', NULL, ARRAY['ACELS']),
+('native-speaker-sligo', 'Native Speaker', 'Sligo', 'Connacht', NULL, ARRAY['ACELS']),
+('english-language-ireland-wexford', 'English Language Ireland', 'Wexford', 'Leinster', NULL, ARRAY['ACELS']),
+('the-slaney-language-centre-wexford', 'The Slaney Language Centre', 'Wexford', 'Leinster', NULL, ARRAY['ACELS']),
+('atc-language-schools-wicklow', 'ATC Language Schools', 'Wicklow', 'Leinster', NULL, ARRAY['ACELS']),
+('brook-house-school-wicklow', 'Brook House School', 'Wicklow', 'Leinster', NULL, ARRAY['ACELS']),
+('einstein-2-english-language-learning-wicklow', 'Einstein 2-English Language Learning', 'Wicklow', 'Leinster', NULL, ARRAY['ACELS']),
+('pace-language-institute-ltd-wicklow', 'PACE Language Institute Ltd.', 'Wicklow', 'Leinster', NULL, ARRAY['ACELS']),
+('woodlands-academy-summer-camp-wicklow', 'Woodlands Academy Summer Camp', 'Wicklow', 'Leinster', NULL, ARRAY['ACELS']);
+
+-- 참고: 해당 학교들은 ACELS 목록에서 주소/연락처만 확인됨
+-- 상세 정보(코스, 가격, 숙소)는 추후 추가 필요
