@@ -103,14 +103,14 @@ const HARDCODED_COLLEGES: CollegeRecord[] = [
   {
     name: 'Technological University Dublin',
     region: 'Leinster', city: 'Dublin',
-    lat: null, lng: null,
+    lat: 53.35556, lng: -6.28229,
     median_earnings: 32000, graduation_rate: 0.80, avg_net_price: 14000,
     school_type: 'public',
   },
   {
     name: 'RCSI University of Medicine and Health Sciences',
     region: 'Leinster', city: 'Dublin',
-    lat: null, lng: null,
+    lat: 53.33916, lng: -6.26270,
     median_earnings: 58000, graduation_rate: 0.95, avg_net_price: 56000,
     school_type: 'private',
   },
