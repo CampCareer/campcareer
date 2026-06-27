@@ -1955,21 +1955,83 @@ function USOccupationDetail({
   )
 }
 
+type IESchool = {
+  id: number; slug: string; name_en: string; name_ko: string | null;
+  city: string; lat: number | null; lng: number | null;
+  price_range_week: string | null; accreditation: string[] | null;
+  description_ko: string | null;
+}
+
 function IEPanel({
   schools,
   countyName,
   onClose,
 }: {
-  schools: Array<{
-    id: number; slug: string; name_en: string; name_ko: string | null;
-    city: string; lat: number | null; lng: number | null;
-    price_range_week: string | null; accreditation: string[] | null;
-    description_ko: string | null;
-  }> | null
+  schools: IESchool[] | null
   countyName?: string
   onClose: () => void
 }) {
   const [ietab, setIetab] = useState<"schools" | "shortage">("schools")
+  const [selectedSchool, setSelectedSchool] = useState<IESchool | null>(null)
+
+  if (selectedSchool) {
+    return (
+      <>
+        <div className="flex items-center justify-between px-5 pt-4">
+          <button
+            type="button"
+            onClick={() => setSelectedSchool(null)}
+            className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-800 transition-colors"
+          >
+            <ChevronLeft className="h-4 w-4" />
+            뒤로
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close"
+            className="-mr-1 rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+
+        <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
+          <h2 className="font-sans text-lg font-semibold text-slate-900 tracking-tight">
+            {selectedSchool.name_en}
+          </h2>
+          {selectedSchool.name_ko && (
+            <p className="text-sm text-muted-foreground mt-0.5">{selectedSchool.name_ko}</p>
+          )}
+          <p className="text-xs text-slate-400 mt-1">{selectedSchool.city}</p>
+
+          {selectedSchool.price_range_week && (
+            <p className="mt-3 text-sm font-medium text-slate-700">
+              {selectedSchool.price_range_week}
+              <span className="text-xs text-slate-400 font-normal ml-1">/주</span>
+            </p>
+          )}
+
+          {selectedSchool.accreditation && selectedSchool.accreditation.length > 0 && (
+            <div className="mt-3 flex flex-wrap gap-1">
+              {selectedSchool.accreditation.map((a: string) => (
+                <span key={a} className="inline-flex items-center rounded-full border border-slate-200 px-2 py-0.5 text-xs text-slate-500">
+                  {a}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {selectedSchool.description_ko && (
+            <div className="mt-4">
+              <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">설명</p>
+              <p className="text-sm text-slate-700 leading-relaxed">{selectedSchool.description_ko}</p>
+            </div>
+          )}
+        </div>
+      </>
+    )
+  }
 
   return (
     <>
@@ -2013,10 +2075,11 @@ function IEPanel({
           ) : (
             <div className="space-y-2">
               {schools.map((s) => (
-                <Link
+                <button
                   key={s.id}
-                  href={`/roi-explorer/ie/language-schools/${s.slug}`}
-                  className="block rounded-lg border border-slate-100 p-3 transition-colors hover:bg-slate-50"
+                  type="button"
+                  onClick={() => setSelectedSchool(s)}
+                  className="w-full text-left rounded-lg border border-slate-100 p-3 transition-colors hover:bg-slate-50"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
@@ -2037,7 +2100,7 @@ function IEPanel({
                   {s.description_ko && (
                     <p className="mt-1 text-xs text-slate-500 line-clamp-2">{s.description_ko}</p>
                   )}
-                </Link>
+                </button>
               ))}
             </div>
           )
