@@ -222,7 +222,7 @@ export function HomeFinder() {
               return (
                 <Link
                   key={code}
-                  href={`/map?country=au&state=${code}&tab=employment`}
+                  href={`/employment/au/${code.toLowerCase()}`}
                   className="group rounded-xl border border-slate-200 bg-white p-3 text-left transition-colors hover:border-brand/30 hover:bg-brand-tint sm:p-4"
                 >
                   <div className="mb-2 flex items-center justify-between">

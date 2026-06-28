@@ -13,6 +13,7 @@ import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
 import { WHV_REGIONS } from "@/data/whv-regions"
 import { WHV_SPECIFIED_WORK } from "@/data/whv-occupations"
 import { WHV_JOB_LINKS, WHV_GENERAL_JOBS } from "@/data/whv-job-links"
+import { JOB_SEARCH_LINKS } from "@/data/job-search-links"
 import { WHV_POSTCODES } from "@/data/whv-postcodes"
 import POSTCODE_TO_SA4 from "@/data/postcode-to-sa4"
 import { getPathway, TAFE_BY_STATE, VET_PORTALS, cricosSearchUrl } from "@/lib/au-pathway"
@@ -1291,13 +1292,23 @@ function EmploymentList({
 
   const maxEmp = occs[0].emp
 
+  function findSeekUrl(r: NeroOccupation): string | null {
+    const byA4 = JOB_SEARCH_LINKS.find((l) => l.a4 === r.a4)
+    if (byA4) return byA4.seek_url
+    const byName = JOB_SEARCH_LINKS.find((l) => l.name === r.name)
+    if (byName) return byName.seek_url
+    return null
+  }
+
   return (
     <div>
       <p className="mb-1 px-3 text-xs text-slate-400">
         {t.map.employmentSource}
       </p>
       <ol>
-        {occs.map((r, i) => (
+        {occs.map((r, i) => {
+          const seekUrl = findSeekUrl(r)
+          return (
           <li key={r.a4}>
             <div className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left">
               <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
@@ -1313,9 +1324,21 @@ function EmploymentList({
               <span className="ml-2 shrink-0 text-xs tabular-nums text-slate-500">
                 {t.map.peopleFmt.replace('{n}', r.emp.toLocaleString())}
               </span>
+              {seekUrl && (
+                <a
+                  href={seekUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex shrink-0 items-center gap-1 rounded bg-blue-50 px-1.5 py-0.5 text-[11px] font-medium text-blue-700 transition-colors hover:bg-blue-100"
+                >
+                  <ExternalLink className="h-2.5 w-2.5" />
+                  Seek
+                </a>
+              )}
             </div>
           </li>
-        ))}
+          )
+        })}
       </ol>
     </div>
   )
@@ -1493,6 +1516,10 @@ function WHVPanel({
             <p className="mt-2 font-mono text-slate-600 leading-relaxed">{formatSA4Postcodes(sa4Postcodes)}</p>
           </details>
         )}
+        <div className="space-y-2">
+          <WiseCta />
+          <AiraloCta />
+        </div>
       </div>
     )
   }
@@ -1564,6 +1591,10 @@ function WHVPanel({
             </div>
           </details>
         )}
+        <div className="space-y-2">
+          <WiseCta />
+          <AiraloCta />
+        </div>
       </div>
     )
   }
