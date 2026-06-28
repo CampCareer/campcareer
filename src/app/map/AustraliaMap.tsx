@@ -10,6 +10,7 @@ import { useTranslations, useLocale } from "@/lib/i18n/locale-provider"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { STATE_CODES, STATE_NAMES, US_STATE_CODES, US_STATE_NAMES, IE_COUNTY_CODES, IE_COUNTY_NAMES, IE_CITY_TO_COUNTY, type StateCode } from "./states"
 import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
+import { WHV_REGIONS } from "@/data/whv-regions"
 import { getPathway, TAFE_BY_STATE, VET_PORTALS, cricosSearchUrl } from "@/lib/au-pathway"
 import { track } from "@/lib/analytics"
 import { WiseCta, AiraloCta } from "@/components/partners/partner-cta"
@@ -25,7 +26,7 @@ const LeafletMap = dynamic(() => import("./LeafletMap"), {
   loading: () => <div className="h-full w-full bg-slate-100 animate-pulse" />,
 })
 
-type Tab = "shortage" | "pay" | "employment"
+type Tab = "shortage" | "pay" | "employment" | "whv"
 
 type NeroOccupation = { a4: string; name: string; emp: number }
 type NeroData = Record<string, NeroOccupation[]>
@@ -145,6 +146,7 @@ export default function AustraliaMap({
     const tabParam = p.get("tab")
     if (tabParam === "pay") setTab("pay")
     else if (tabParam === "employment") setTab("employment")
+    else if (tabParam === "whv") setTab("whv")
   }, [])
 
   useEffect(() => {
@@ -475,6 +477,7 @@ export default function AustraliaMap({
           onSelectCountry={onSelectCountry}
           onSelectSA4={onSelectSA4}
           onReset={onReset}
+          tab={tab}
         />
 
         {(selected || activeCountry === "IE") && (() => {
@@ -680,6 +683,11 @@ function Panel({
               {t.map.tabEmployment}
             </TabButton>
           )}
+          {isAU && (
+            <TabButton active={tab === "whv"} onClick={() => { onTab("whv"); track("switch_tab", { tab: "whv", state: selected }) }}>
+              {t.map.tabWhv}
+            </TabButton>
+          )}
         </div>
       </div>
 
@@ -736,6 +744,13 @@ function Panel({
             stateCode={isAU ? (selected as StateCode) : null}
             sa4Regions={panelSa4Regions}
             neroData={neroData}
+          />
+        )}
+        {tab === "whv" && isAU && (
+          <WHVPanel
+            selectedSA4={selectedSA4}
+            selected={selected as StateCode}
+            sa4Regions={panelSa4Regions}
           />
         )}
       </div>
@@ -1268,6 +1283,106 @@ function EmploymentList({
         ))}
       </ol>
     </div>
+  )
+}
+
+function WHVPanel({
+  selectedSA4,
+  selected,
+  sa4Regions,
+}: {
+  selectedSA4: SA4Region | null
+  selected: StateCode | null
+  sa4Regions: SA4Region[]
+}) {
+  const locale = useLocale()
+
+  if (selectedSA4) {
+    const whv = WHV_REGIONS[selectedSA4.code]
+    const labels: Record<string, string> = {
+      eligible: locale === "ko" ? "워킹홀리데이 가능" : "WHV Eligible",
+      partial: locale === "ko" ? "일부 가능" : "Partially Eligible",
+      none: locale === "ko" ? "불가능" : "Not Eligible",
+    }
+    const colors: Record<string, string> = { eligible: "text-green-600", partial: "text-amber-600", none: "text-slate-400" }
+    return (
+      <div className="space-y-3 px-3">
+        <p className="text-xs text-slate-400">
+          {locale === "ko"
+            ? "선택한 지역(SA4)의 워킹홀리데이 비자(417/462) 지정 근무 가능 여부입니다."
+            : "Working Holiday Visa (417/462) specified work eligibility for the selected SA4 region."}
+        </p>
+        <div className="rounded-lg border border-slate-200 p-3">
+          <p className="text-sm font-medium text-slate-800">{selectedSA4.name}</p>
+          <p className={`mt-1 text-sm font-semibold ${colors[whv?.category ?? "none"]}`}>
+            {whv ? labels[whv.category] : labels.none}
+          </p>
+          {whv && whv.pct < 100 && (
+            <p className="mt-1 text-xs text-slate-400">
+              {whv.pct}% of postcodes in this region are WHV-eligible
+            </p>
+          )}
+        </div>
+        <details className="text-xs text-slate-500">
+          <summary className="cursor-pointer font-medium">{locale === "ko" ? "자세히" : "Details"}</summary>
+          <p className="mt-1 leading-relaxed">
+            {locale === "ko"
+              ? "워킹홀리데이 비자(417/462)로 지정된 분야(농업, 관광·접객, 건설, 광업 등)에서 근무하면 두 번째/세 번째 비자를 신청할 수 있습니다. 지도에서 녹색(가능), 노랑(일부 가능), 회색(불가능)으로 구분됩니다."
+              : "Working Holiday visa (417/462) holders can apply for a second or third visa after completing specified work (agriculture, tourism/hospitality, construction, mining, etc.) in eligible regions. Map colors: Green = Eligible, Amber = Partially eligible, Grey = Not eligible."}
+          </p>
+        </details>
+      </div>
+    )
+  }
+
+  if (selected && sa4Regions.length > 0) {
+    const eligible = sa4Regions.filter((r) => WHV_REGIONS[r.code]?.category === "eligible").length
+    const partial = sa4Regions.filter((r) => WHV_REGIONS[r.code]?.category === "partial").length
+    const none = sa4Regions.filter((r) => WHV_REGIONS[r.code]?.category === "none").length
+    return (
+      <div className="space-y-3 px-3">
+        <p className="text-xs text-slate-400">
+          {locale === "ko"
+            ? "해당 주(State)의 SA4 지역별 워킹홀리데이 비자 지정 근무 가능 지역입니다. 지역을 클릭하면 자세한 정보를 볼 수 있습니다."
+            : "WHV specified work eligibility by SA4 region. Click a region for details."}
+        </p>
+        <div className="rounded-lg border border-slate-200 p-3 text-sm">
+          {eligible > 0 && (
+            <div className="flex items-center justify-between py-1">
+              <span className="flex items-center gap-2">
+                <span className="inline-block h-2.5 w-2.5 rounded-sm bg-green-600" />
+                {locale === "ko" ? "가능" : "Eligible"}
+              </span>
+              <span className="font-medium text-slate-700">{eligible}</span>
+            </div>
+          )}
+          {partial > 0 && (
+            <div className="flex items-center justify-between py-1">
+              <span className="flex items-center gap-2">
+                <span className="inline-block h-2.5 w-2.5 rounded-sm bg-amber-600" />
+                {locale === "ko" ? "일부 가능" : "Partially eligible"}
+              </span>
+              <span className="font-medium text-slate-700">{partial}</span>
+            </div>
+          )}
+          {none > 0 && (
+            <div className="flex items-center justify-between py-1">
+              <span className="flex items-center gap-2">
+                <span className="inline-block h-2.5 w-2.5 rounded-sm bg-slate-400" />
+                {locale === "ko" ? "불가능" : "Not eligible"}
+              </span>
+              <span className="font-medium text-slate-700">{none}</span>
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <p className="py-8 text-center text-sm text-slate-400">
+      {locale === "ko" ? "주와 지역을 선택해주세요." : "Select a state and region to view WHV eligibility."}
+    </p>
   )
 }
 
