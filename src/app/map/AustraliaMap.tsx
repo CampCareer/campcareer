@@ -383,7 +383,11 @@ export default function AustraliaMap({
             <Select
               items={activeCountry === "AU" ? stateItems : US_STATE_NAMES}
               value={selected}
-              onValueChange={(v) => v && setSelected(v)}
+              onValueChange={(v) => {
+                if (!v) return
+                if (activeCountry === "AU") onSelectState(v)
+                else setSelected(v)
+              }}
             >
               <SelectTrigger className="h-10 w-56 rounded-lg border-slate-200 text-sm">
                 <SelectValue placeholder={t.map.selectStatePlaceholder} />
