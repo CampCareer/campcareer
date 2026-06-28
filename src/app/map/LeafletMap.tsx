@@ -250,20 +250,22 @@ export default function LeafletMap({
     else map.fitBounds(b, { padding: [20, 20], maxZoom: 6 })
   }
 
-  const WHV_COLORS: Record<string, string> = {
-    eligible: "#16a34a",
-    partial: "#d97706",
-    none: "#94a3b8",
-  }
-
   function sa4StyleFor(code: string): L.PathOptions {
     const isSel = selectedSA4Ref.current?.code === code
     if (tabRef.current === "whv") {
       const whv = WHV_REGIONS[code]
-      const fillColor = whv ? WHV_COLORS[whv.category] ?? "#94a3b8" : "#94a3b8"
+      if (!whv || whv.category === "none") {
+        return {
+          fillColor: "#94a3b8",
+          fillOpacity: 0.12,
+          color: "#cbd5e1",
+          weight: 0.5,
+        }
+      }
+      const fillColor = whv.category === "eligible" ? lerpColor(1.0) : lerpColor(0.45)
       return {
         fillColor,
-        fillOpacity: isSel ? 0.55 : 0.25,
+        fillOpacity: isSel ? 0.55 : 0.30,
         color: isSel ? "#1e293b" : "#ffffff",
         weight: isSel ? 2.5 : 1,
       }
@@ -305,17 +307,25 @@ export default function LeafletMap({
         const code = feature?.properties?.SA4_CODE as string
         if (!code) return
         sa4ByCode.current[code] = lyr as L.Polygon
-        lyr.bindTooltip(SA4_NAME_BY_CODE[code] ?? code, {
-          sticky: true,
-          direction: "top",
-          className: "!rounded-md !border-0 !bg-slate-900 !px-2 !py-1 !text-xs !text-white !shadow-md",
-        })
+        const isWhvNone = tabRef.current === "whv" && WHV_REGIONS[code]?.category === "none"
+        if (!isWhvNone) {
+          lyr.bindTooltip(SA4_NAME_BY_CODE[code] ?? code, {
+            sticky: true,
+            direction: "top",
+            className: "!rounded-md !border-0 !bg-slate-900 !px-2 !py-1 !text-xs !text-white !shadow-md",
+          })
+        }
         lyr.on({
-          click: () => onSelectSA4Ref.current(code),
+          click: () => {
+            if (isWhvNone) return
+            onSelectSA4Ref.current(code)
+          },
           mouseover: () => {
+            if (isWhvNone) return
             if (selectedSA4Ref.current?.code !== code) (lyr as L.Path).setStyle(sa4StyleFor(code))
           },
           mouseout: () => {
+            if (isWhvNone) return
             if (selectedSA4Ref.current?.code !== code) (lyr as L.Path).setStyle(sa4StyleFor(code))
           },
         })
@@ -329,6 +339,7 @@ export default function LeafletMap({
       const code = (l as L.GeoJSON & { feature?: GeoJSON.Feature }).feature?.properties
         ?.SA4_CODE as string | undefined
       if (!el || !code) return
+      if (tabRef.current === "whv" && WHV_REGIONS[code]?.category === "none") return
       el.setAttribute("tabindex", "0")
       el.setAttribute("role", "button")
       el.setAttribute("aria-label", SA4_NAME_BY_CODE[code] ?? code)
@@ -909,18 +920,18 @@ export default function LeafletMap({
 
       {activeCountry === "AU" && tab === "whv" && (
         <div className="pointer-events-none absolute bottom-3 left-3 z-[1000] rounded-lg border border-slate-200 bg-white/95 px-3 py-2 shadow-sm backdrop-blur-sm">
-          <p className="mb-1.5 text-[11px] font-medium text-slate-500">WHV Eligibility</p>
+          <p className="mb-1.5 text-[11px] font-medium text-slate-500">Second Visa Eligibility</p>
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="inline-block h-3 w-3 rounded-sm" style={{ backgroundColor: WHV_COLORS.eligible }} />
+              <span className="inline-block h-3 w-3 rounded-sm" style={{ backgroundColor: lerpColor(1.0) }} />
               <span className="text-[11px] text-slate-600">Eligible</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="inline-block h-3 w-3 rounded-sm" style={{ backgroundColor: WHV_COLORS.partial }} />
+              <span className="inline-block h-3 w-3 rounded-sm" style={{ backgroundColor: lerpColor(0.45) }} />
               <span className="text-[11px] text-slate-600">Partially eligible</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="inline-block h-3 w-3 rounded-sm" style={{ backgroundColor: WHV_COLORS.none }} />
+              <span className="inline-block h-3 w-3 rounded-sm" style={{ backgroundColor: "#94a3b8" }} />
               <span className="text-[11px] text-slate-600">Not eligible</span>
             </div>
           </div>

@@ -1331,7 +1331,7 @@ function WHVPanel({
       partial: locale === "ko" ? "일부 가능" : "Partially Eligible",
       none: locale === "ko" ? "불가능" : "Not Eligible",
     }
-    const colors: Record<string, string> = { eligible: "text-green-600", partial: "text-amber-600", none: "text-slate-400" }
+    const colors: Record<string, string> = { eligible: "text-violet-600", partial: "text-violet-400", none: "text-slate-400" }
     return (
       <div className="space-y-3 px-3">
         <p className="text-xs text-slate-400">
@@ -1354,8 +1354,8 @@ function WHVPanel({
           <summary className="cursor-pointer font-medium">{locale === "ko" ? "자세히" : "Details"}</summary>
           <p className="mt-1 leading-relaxed">
             {locale === "ko"
-              ? "워킹홀리데이 비자(417/462)로 지정된 분야(농업, 관광·접객, 건설, 광업 등)에서 근무하면 두 번째/세 번째 비자를 신청할 수 있습니다. 지도에서 녹색(가능), 노랑(일부 가능), 회색(불가능)으로 구분됩니다."
-              : "Working Holiday visa (417/462) holders can apply for a second or third visa after completing specified work (agriculture, tourism/hospitality, construction, mining, etc.) in eligible regions. Map colors: Green = Eligible, Amber = Partially eligible, Grey = Not eligible."}
+              ? "워킹홀리데이 비자(417/462)로 지정된 분야(농업, 관광·접객, 건설, 광업 등)에서 근무하면 두 번째/세 번째 비자를 신청할 수 있습니다. 지도에서 보라색(가능), 연보라(일부 가능), 회색(불가능)으로 구분됩니다."
+              : "Working Holiday visa (417/462) holders can apply for a second or third visa after completing specified work (agriculture, tourism/hospitality, construction, mining, etc.) in eligible regions. Map colors: Purple = Eligible, Light purple = Partially eligible, Grey = Not eligible."}
           </p>
         </details>
       </div>
@@ -1377,7 +1377,7 @@ function WHVPanel({
           {eligible > 0 && (
             <div className="flex items-center justify-between py-1">
               <span className="flex items-center gap-2">
-                <span className="inline-block h-2.5 w-2.5 rounded-sm bg-green-600" />
+                <span className="inline-block h-2.5 w-2.5 rounded-sm bg-violet-600" />
                 {locale === "ko" ? "가능" : "Eligible"}
               </span>
               <span className="font-medium text-slate-700">{eligible}</span>
@@ -1386,7 +1386,7 @@ function WHVPanel({
           {partial > 0 && (
             <div className="flex items-center justify-between py-1">
               <span className="flex items-center gap-2">
-                <span className="inline-block h-2.5 w-2.5 rounded-sm bg-amber-600" />
+                <span className="inline-block h-2.5 w-2.5 rounded-sm bg-violet-400" />
                 {locale === "ko" ? "일부 가능" : "Partially eligible"}
               </span>
               <span className="font-medium text-slate-700">{partial}</span>
