@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { cache } from "react"
-import { getOccupationPageData } from "@/lib/occupation-detail"
+import { getOccupationPageData, getOccupationMeta } from "@/lib/occupation-detail"
 import { supabase } from "@/lib/supabase"
 import { pageMetadata } from "@/lib/seo"
 import { JsonLd, breadcrumbLd } from "@/components/seo/json-ld"
@@ -14,17 +13,8 @@ export async function generateStaticParams() {
   return (data ?? []).map((r) => ({ code: r.anzsco_code })).filter((p) => p.code)
 }
 
-const getMeta = cache(async (code: string) => {
-  const { data } = await supabase
-    .from("occupations_au")
-    .select("occupation_en, median_salary_aud, shortage_rating")
-    .eq("anzsco_code", code)
-    .maybeSingle()
-  return data
-})
-
 export async function generateMetadata({ params }: { params: { code: string } }): Promise<Metadata> {
-  const occ = await getMeta(params.code)
+  const occ = await getOccupationMeta(params.code)
   if (!occ) return { title: "Occupation Not Found" }
 
   const salary = occ.median_salary_aud ? `A$${occ.median_salary_aud.toLocaleString()}` : ""
