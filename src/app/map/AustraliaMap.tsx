@@ -12,6 +12,7 @@ import { STATE_CODES, STATE_NAMES, US_STATE_CODES, US_STATE_NAMES, IE_COUNTY_COD
 import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
 import { WHV_REGIONS } from "@/data/whv-regions"
 import { WHV_SPECIFIED_WORK } from "@/data/whv-occupations"
+import { WHV_JOB_LINKS, WHV_GENERAL_JOBS } from "@/data/whv-job-links"
 import { WHV_POSTCODES } from "@/data/whv-postcodes"
 import POSTCODE_TO_SA4 from "@/data/postcode-to-sa4"
 import { getPathway, TAFE_BY_STATE, VET_PORTALS, cricosSearchUrl } from "@/lib/au-pathway"
@@ -1441,16 +1442,42 @@ function WHVPanel({
             <p className="text-xs font-medium text-slate-500 mb-2">
               {locale === "ko" ? "세컨비자 지정 근무 가능 직종" : "Eligible specified work"}
             </p>
+            <a
+              href={WHV_GENERAL_JOBS.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mb-3 flex items-center gap-1 rounded-md border border-amber-200 bg-amber-50 px-2.5 py-1.5 text-xs font-medium text-amber-800 transition-colors hover:bg-amber-100"
+            >
+              <ExternalLink className="h-3 w-3 shrink-0" />
+              {locale === "ko" ? WHV_GENERAL_JOBS.label_ko : WHV_GENERAL_JOBS.label_en}
+            </a>
             <div className="space-y-2">
               {whv.workCategories.map((key) => {
                 const work = WHV_SPECIFIED_WORK.find((w) => w.key === key)
                 if (!work) return null
                 const examples = locale === "ko" ? work.examples_ko : work.examples_en
                 const label = locale === "ko" ? work.label_ko : work.label_en
+                const links = WHV_JOB_LINKS[key]
                 return (
                   <div key={key}>
                     <p className="text-sm font-medium text-slate-700">{label}</p>
                     <p className="text-xs text-slate-400">{examples.join(" · ")}</p>
+                    {links && links.length > 0 && (
+                      <div className="mt-1 flex flex-wrap gap-1.5">
+                        {links.map((link, i) => (
+                          <a
+                            key={i}
+                            href={link.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-0.5 rounded bg-blue-50 px-1.5 py-0.5 text-[11px] text-blue-700 transition-colors hover:bg-blue-100"
+                          >
+                            <ExternalLink className="h-2.5 w-2.5" />
+                            {locale === "ko" ? link.label_ko : link.label_en}
+                          </a>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 )
               })}
