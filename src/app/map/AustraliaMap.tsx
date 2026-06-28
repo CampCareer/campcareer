@@ -1443,14 +1443,7 @@ function WHVPanel({
           </details>
         )}
 
-        <details className="text-xs text-slate-500">
-          <summary className="cursor-pointer font-medium">{locale === "ko" ? "자세히" : "Details"}</summary>
-          <p className="mt-1 leading-relaxed">
-            {locale === "ko"
-              ? "세컨비자(417/462)로 지정된 분야(농업, 관광·접객, 건설, 광업 등)에서 근무하면 두 번째/세 번째 비자를 신청할 수 있습니다. 지도에서 보라색(가능), 연보라(일부 가능), 회색(불가능)으로 구분됩니다."
-              : "Second Visa (417/462) holders can apply for a further visa after completing specified work (agriculture, tourism/hospitality, construction, mining, etc.) in eligible regions. Map colors: Purple = Eligible, Light purple = Partially eligible, Grey = Not eligible."}
-          </p>
-        </details>
+
       </div>
     )
   }
