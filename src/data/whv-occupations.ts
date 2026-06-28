@@ -53,7 +53,7 @@ export const WHV_SPECIFIED_WORK: WHVSpecifiedWork[] = [
   {
     key: "tourism_hospitality",
     label_en: "Tourism & Hospitality",
-    label_ko: "관광 / 접객",
+    label_ko: "관광 / 호스피탈리티",
     examples_en: ["hotel work", "restaurant / cafe", "tour guiding", "resort operations", "event management"],
     examples_ko: ["호텔 업무", "레스토랑·카페", "투어 가이드", "리조트 운영", "이벤트 관리"],
   },
