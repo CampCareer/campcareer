@@ -499,11 +499,16 @@ export default function LeafletMap({
               className: "!rounded-md !border-0 !bg-slate-900 !px-2 !py-1 !text-xs !text-white !shadow-md",
             })
             lyr.on({
-              click: () => onSelectStateRef.current(code),
+              click: () => {
+                if (selectedRef.current === "WHV") return
+                onSelectStateRef.current(code)
+              },
               mouseover: () => {
+                if (selectedRef.current === "WHV") return
                 if (selectedRef.current !== code) (lyr as L.Path).setStyle({ weight: 2, fillOpacity: 0.95 })
               },
               mouseout: () => {
+                if (selectedRef.current === "WHV") return
                 if (selectedRef.current !== code) (lyr as L.Path).setStyle(styleFor(code))
               },
             })
@@ -527,10 +532,13 @@ export default function LeafletMap({
           const code = (l as L.GeoJSON & { feature?: GeoJSON.Feature }).feature?.properties
             ?.STATE_CODE as StateCode | undefined
           if (!path || !code) return
-          path.setAttribute("tabindex", "0")
-          path.setAttribute("role", "button")
-          path.setAttribute("aria-label", STATE_NAMES[code])
+          if (selectedRef.current !== "WHV") {
+            path.setAttribute("tabindex", "0")
+            path.setAttribute("role", "button")
+            path.setAttribute("aria-label", STATE_NAMES[code])
+          }
           path.addEventListener("keydown", (e: KeyboardEvent) => {
+            if (selectedRef.current === "WHV") return
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault()
               onSelectStateRef.current(code)
