@@ -1331,7 +1331,7 @@ function WHVPanel({
   if (selectedSA4) {
     const whv = WHV_REGIONS[selectedSA4.code]
     const labels: Record<string, string> = {
-      eligible: locale === "ko" ? "워킹홀리데이 가능" : "WHV Eligible",
+      eligible: locale === "ko" ? "세컨비자 가능" : "Second Visa Eligible",
       partial: locale === "ko" ? "일부 가능" : "Partially Eligible",
       none: locale === "ko" ? "불가능" : "Not Eligible",
     }
@@ -1340,8 +1340,8 @@ function WHVPanel({
       <div className="space-y-3 px-3">
         <p className="text-xs text-slate-400">
           {locale === "ko"
-            ? "선택한 지역(SA4)의 워킹홀리데이 비자(417/462) 지정 근무 가능 여부입니다."
-            : "Working Holiday Visa (417/462) specified work eligibility for the selected SA4 region."}
+              ? "선택한 지역(SA4)의 세컨비자(417/462) 지정 근무 가능 여부입니다."
+              : "Second Visa (417/462) specified work eligibility for the selected SA4 region."}
         </p>
         <div className="rounded-lg border border-slate-200 p-3">
           <p className="text-sm font-medium text-slate-800">{selectedSA4.name}</p>
@@ -1358,8 +1358,8 @@ function WHVPanel({
           <summary className="cursor-pointer font-medium">{locale === "ko" ? "자세히" : "Details"}</summary>
           <p className="mt-1 leading-relaxed">
             {locale === "ko"
-              ? "워킹홀리데이 비자(417/462)로 지정된 분야(농업, 관광·접객, 건설, 광업 등)에서 근무하면 두 번째/세 번째 비자를 신청할 수 있습니다. 지도에서 보라색(가능), 연보라(일부 가능), 회색(불가능)으로 구분됩니다."
-              : "Working Holiday visa (417/462) holders can apply for a second or third visa after completing specified work (agriculture, tourism/hospitality, construction, mining, etc.) in eligible regions. Map colors: Purple = Eligible, Light purple = Partially eligible, Grey = Not eligible."}
+              ? "세컨비자(417/462)로 지정된 분야(농업, 관광·접객, 건설, 광업 등)에서 근무하면 두 번째/세 번째 비자를 신청할 수 있습니다. 지도에서 보라색(가능), 연보라(일부 가능), 회색(불가능)으로 구분됩니다."
+              : "Second Visa (417/462) holders can apply for a further visa after completing specified work (agriculture, tourism/hospitality, construction, mining, etc.) in eligible regions. Map colors: Purple = Eligible, Light purple = Partially eligible, Grey = Not eligible."}
           </p>
         </details>
       </div>
@@ -1374,8 +1374,8 @@ function WHVPanel({
       <div className="space-y-3 px-3">
         <p className="text-xs text-slate-400">
           {locale === "ko"
-            ? "해당 주(State)의 SA4 지역별 워킹홀리데이 비자 지정 근무 가능 지역입니다. 지역을 클릭하면 자세한 정보를 볼 수 있습니다."
-            : "WHV specified work eligibility by SA4 region. Click a region for details."}
+            ? "해당 주(State)의 SA4 지역별 세컨비자 지정 근무 가능 지역입니다. 지역을 클릭하면 자세한 정보를 볼 수 있습니다."
+            : "Second Visa specified work eligibility by SA4 region. Click a region for details."}
         </p>
         <div className="rounded-lg border border-slate-200 p-3 text-sm">
           {eligible > 0 && (
