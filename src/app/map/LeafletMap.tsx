@@ -127,12 +127,14 @@ export default function LeafletMap({
   }
 
   function styleFor(code: StateCode): L.PathOptions {
-    const isSel = selectedRef.current === code
+    const sel = selectedRef.current
+    const isSel = sel === code
+    const isWhv = sel === "WHV"
     return {
       fillColor: colorFor(code),
-      fillOpacity: isSel ? 0.95 : 0.8,
-      color: isSel ? "#1e293b" : "#ffffff",
-      weight: isSel ? 3 : 1,
+      fillOpacity: isSel ? 0.95 : isWhv ? 0.5 : 0.8,
+      color: isSel ? "#1e293b" : isWhv ? "#94a3b8" : "#ffffff",
+      weight: isSel ? 3 : isWhv ? 1 : 1,
     }
   }
 
@@ -274,7 +276,8 @@ export default function LeafletMap({
     }
   }
 
-  // 선택된 주의 SA4 지역만 주 폴리곤 위(sa4Pane)에 렌더한다. 주 미선택·비AU면 제거.
+  // 선택된 주의 SA4 지역만 주 폴리곤 위(sa4Pane)에 렌더한다.
+  // "WHV"(Second Visa) 모드면 모든 주의 SA4를 한꺼번에 렌더한다.
   function renderSA4() {
     const map = mapRef.current
     if (!map) return
@@ -286,11 +289,14 @@ export default function LeafletMap({
     const stateCode = selectedRef.current
     if (activeCountryRef.current !== "AU" || !stateCode || !sa4GeoRef.current) return
 
+    const isWHVMode = stateCode === "WHV"
     const fc: GeoJSON.FeatureCollection = {
       type: "FeatureCollection",
-      features: sa4GeoRef.current.features.filter(
-        (f) => f.properties?.STATE_CODE === stateCode,
-      ),
+      features: isWHVMode
+        ? sa4GeoRef.current.features
+        : sa4GeoRef.current.features.filter(
+            (f) => f.properties?.STATE_CODE === stateCode,
+          ),
     }
     const layer = L.geoJSON(fc, {
       pane: "sa4Pane",
@@ -810,7 +816,7 @@ export default function LeafletMap({
     selectedRef.current = selected
     auLayerRef.current?.setStyle((feature) => styleFor(feature?.properties?.STATE_CODE as StateCode))
     if (auLayerRef.current && activeCountry === "AU") {
-      if (selected) {
+      if (selected && selected !== "WHV") {
         const lyr = layersByCode.current[selected as StateCode]
         const b = safeBounds(lyr ? lyr.getBounds() : AU_BOUNDS)
         if (b) mapRef.current?.flyToBounds(b, { padding: [30, 30], maxZoom: 6, duration: 0.6 })

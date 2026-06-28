@@ -137,9 +137,10 @@ export default function AustraliaMap({
     if (countryRaw === "us") {
       setActiveCountry("US")
       if (raw && (US_STATE_CODES as readonly string[]).includes(raw)) setSelected(raw)
-    } else if (countryRaw === "au" && raw && (STATE_CODES as readonly string[]).includes(raw)) {
+    } else if (countryRaw === "au" && raw && ((STATE_CODES as readonly string[]).includes(raw) || raw === "WHV")) {
       setActiveCountry("AU")
-      setSelected(raw as StateCode)
+      setSelected(raw)
+      if (raw === "WHV") setTab("whv")
     } else if (countryRaw === "ie") {
       setActiveCountry("IE")
     }
@@ -224,7 +225,9 @@ export default function AustraliaMap({
   }, [selectedOccCode, selectedUsOcc, activeCountry, selected, data])
 
   const onSelectSA4 = useCallback((code: string) => {
-    const regions = selected ? SA4_BY_STATE[selected as StateCode] ?? [] : []
+    const regions = selected && selected !== "WHV"
+      ? SA4_BY_STATE[selected as StateCode] ?? []
+      : Object.values(SA4_BY_STATE).flat()
     const region = regions.find((r) => r.code === code) ?? null
     setSelectedSA4(region)
     if (region) track("select_region", { state: selected ?? "", region: region.name })
@@ -232,6 +235,7 @@ export default function AustraliaMap({
 
   const onSelectState = useCallback((s: string) => {
     setSelected(s)
+    if (s === "WHV") setTab("whv")
     track("select_state", { country: activeCountry ?? "AU", state: s })
   }, [activeCountry])
 
@@ -246,6 +250,7 @@ export default function AustraliaMap({
     if (selected !== null) {
       setSelected(null)
       setSelectedSA4(null)
+      setTab("shortage")
     } else if (activeCountry !== null) {
       setActiveCountry(null)
       setIeSchools(null)
@@ -265,7 +270,10 @@ export default function AustraliaMap({
     }
   }, [selectedOccCode, selectedUsOcc, isMobile, onReset])
 
-  const stateItems = useMemo(() => STATE_NAMES as Record<string, string>, [])
+  const stateItems = useMemo(() => ({
+    ...STATE_NAMES,
+    WHV: "Second Visa",
+  } as Record<string, string>), [])
 
   const auShortageItems = useMemo<Record<string, string>>(() => {
     if (!selected) return {}
@@ -386,58 +394,63 @@ export default function AustraliaMap({
                     {activeCountry === "AU" ? STATE_NAMES[c as StateCode] : US_STATE_NAMES[c]}
                   </SelectItem>
                 ))}
+                {activeCountry === "AU" && (
+                  <SelectItem value="WHV">Second Visa</SelectItem>
+                )}
               </SelectContent>
             </Select>
           </label>
 
-          <label className="block">
-            <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectOccupation}</span>
-            {selected ? (
-              <Select
-                items={activeCountry === "AU" ? auShortageItems : usShortageItems}
-                value={selectedOccCode ?? null}
-                onValueChange={(v) => {
-                  if (!v) return
-                  if (activeCountry === "AU") setSelectedOccCode(v)
-                  else {
-                    const occ = data.usShortageByState[selected]?.find((o) => o.occ_code === v) ?? null
-                    setSelectedUsOcc(occ)
-                  }
-                  if (isMobile) setExpanded(false)
-                }}
-              >
-                <SelectTrigger className="h-10 w-72 rounded-lg border-slate-200 text-sm">
-                  <SelectValue placeholder={t.map.selectStatePlaceholder} />
-                </SelectTrigger>
-                <SelectContent className="z-[2000] max-h-72">
-                  {(activeCountry === "AU"
-                    ? data.shortageByState[selected as StateCode] ?? []
-                    : data.usShortageByState[selected] ?? []
-                  ).map((occ) => {
-                    const code = activeCountry === "AU" ? (occ as StateOccupation).anzsco_code : (occ as USOccupation).occ_code
-                    const title = activeCountry === "AU" ? (occ as StateOccupation).occupation_en : (occ as USOccupation).occ_title
-                    const salary = activeCountry === "AU" ? (occ as StateOccupation).median_salary_aud : (occ as USOccupation).median_wage
-                    return (
-                      <SelectItem key={code} value={code}>
-                        <span className="flex items-center justify-between gap-3">
-                          <span className="truncate">{title}</span>
-                          {salary != null && (
-                            <span className="shrink-0 text-xs text-slate-400">
-                              ${salary.toLocaleString()}
-                            </span>
-                          )}
-                        </span>
-                      </SelectItem>
-                    )
-                  })}
-                </SelectContent>
-              </Select>
-            ) : (
-              <div className="flex h-10 w-72 cursor-not-allowed items-center rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-400">
-                {t.map.selectStateFirst}
-              </div>
-            )}
-          </label>
+          {selected !== "WHV" && (
+            <label className="block">
+              <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectOccupation}</span>
+              {selected ? (
+                <Select
+                  items={activeCountry === "AU" ? auShortageItems : usShortageItems}
+                  value={selectedOccCode ?? null}
+                  onValueChange={(v) => {
+                    if (!v) return
+                    if (activeCountry === "AU") setSelectedOccCode(v)
+                    else {
+                      const occ = data.usShortageByState[selected]?.find((o) => o.occ_code === v) ?? null
+                      setSelectedUsOcc(occ)
+                    }
+                    if (isMobile) setExpanded(false)
+                  }}
+                >
+                  <SelectTrigger className="h-10 w-72 rounded-lg border-slate-200 text-sm">
+                    <SelectValue placeholder={t.map.selectStatePlaceholder} />
+                  </SelectTrigger>
+                  <SelectContent className="z-[2000] max-h-72">
+                    {(activeCountry === "AU"
+                      ? data.shortageByState[selected as StateCode] ?? []
+                      : data.usShortageByState[selected] ?? []
+                    ).map((occ) => {
+                      const code = activeCountry === "AU" ? (occ as StateOccupation).anzsco_code : (occ as USOccupation).occ_code
+                      const title = activeCountry === "AU" ? (occ as StateOccupation).occupation_en : (occ as USOccupation).occ_title
+                      const salary = activeCountry === "AU" ? (occ as StateOccupation).median_salary_aud : (occ as USOccupation).median_wage
+                      return (
+                        <SelectItem key={code} value={code}>
+                          <span className="flex items-center justify-between gap-3">
+                            <span className="truncate">{title}</span>
+                            {salary != null && (
+                              <span className="shrink-0 text-xs text-slate-400">
+                                ${salary.toLocaleString()}
+                              </span>
+                            )}
+                          </span>
+                        </SelectItem>
+                      )
+                    })}
+                  </SelectContent>
+                </Select>
+              ) : (
+                <div className="flex h-10 w-72 cursor-not-allowed items-center rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-400">
+                  {t.map.selectStateFirst}
+                </div>
+              )}
+            </label>
+          )}
         </>
         )}
 
@@ -558,16 +571,22 @@ function Panel({
   onShare: () => void
 }) {
   const t = useTranslations()
+  const locale = useLocale()
   const isAU = activeCountry === "AU"
   const isUS = activeCountry === "US"
-  const stateName = isAU
-    ? STATE_NAMES[selected as StateCode] ?? selected
+  const isWhv = selected === "WHV"
+  const stateName = isWhv ? "Second Visa"
+    : isAU ? STATE_NAMES[selected as StateCode] ?? selected
     : US_STATE_NAMES[selected] ?? selected
 
   const auShortage = isAU ? (data.shortageByState[selected as StateCode] ?? []) : []
   const usShortage = isUS ? (data.usShortageByState[selected] ?? []) : []
   const usHighPay = isUS ? (data.usHighPayByState[selected] ?? []) : []
-  const panelSa4Regions = isAU ? SA4_BY_STATE[selected as StateCode] ?? [] : []
+  const panelSa4Regions = isAU
+    ? isWhv
+      ? Object.values(SA4_BY_STATE).flat()
+      : SA4_BY_STATE[selected as StateCode] ?? []
+    : []
 
   const occ = selectedOccCode ? data.auOccupations[selectedOccCode] : null
   const stateShortages = selectedOccCode ? data.auStateShortages[selectedOccCode] ?? [] : []
@@ -656,8 +675,14 @@ function Panel({
           <h2 className="font-sans text-lg font-semibold text-slate-900 tracking-tight">
             {selectedSA4 ? selectedSA4.name : stateName}
           </h2>
-          {selectedSA4 && isAU && (
+          {selectedSA4 && isAU && !isWhv && (
             <p className="text-xs text-slate-400">{STATE_NAMES[selected as StateCode]}</p>
+          )}
+          {selectedSA4 && isWhv && (
+            <p className="text-xs text-slate-400">Second Visa · Australia</p>
+          )}
+          {!selectedSA4 && isWhv && (
+            <p className="text-xs text-slate-400">{locale === "ko" ? "전국 지도 — 지역을 클릭하면 상세 정보를 볼 수 있습니다" : "National view — click a region for details"}</p>
           )}
         </div>
         <button
@@ -670,6 +695,7 @@ function Panel({
         </button>
       </div>
 
+      {!isWhv && (
       <div className="px-5 pt-3">
         <div className="inline-flex rounded-lg bg-slate-100 p-1 text-sm">
           <TabButton active={tab === "shortage"} onClick={() => { onTab("shortage"); track("switch_tab", { tab: "shortage", state: selected }) }}>
@@ -690,6 +716,7 @@ function Panel({
           )}
         </div>
       </div>
+      )}
 
       <div className="min-h-0 flex-1 overflow-y-auto px-3 py-3">
         {tab === "shortage" && isAU && (
