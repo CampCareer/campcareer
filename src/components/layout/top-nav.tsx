@@ -79,10 +79,7 @@ export function TopNav() {
           <div className="flex items-center gap-2 shrink-0 ml-auto">
             <LanguageToggle className="text-slate-500 hover:text-slate-900 hover:bg-slate-100" />
             {user ? (
-              <Link
-                href="/profile"
-                className="flex items-center gap-2 rounded-full border border-slate-200 p-0.5 pr-2 hover:bg-slate-50 transition-colors"
-              >
+              <Link href="/profile">
                 {avatarUrl ? (
                   <img
                     src={avatarUrl}
