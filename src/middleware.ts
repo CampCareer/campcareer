@@ -34,7 +34,7 @@ function applyLocaleCookie(response: NextResponse, locale: Locale) {
 }
 
 // 로그인 필요한 페이지 보호 (/timeline, /checklist는 비로그인 체험 허용 정책)
-const PROTECTED_PATHS = ['/dashboard', '/saved', '/documents']
+const PROTECTED_PATHS = ['/dashboard', '/saved', '/documents', '/profile']
 
 // 매출에 기여하지 않는 SEO·백링크 분석 크롤러. 검색엔진(Googlebot/Bingbot/
 // DuckDuckBot 등)과 소셜 미리보기 봇(Twitterbot, facebookexternalhit,
