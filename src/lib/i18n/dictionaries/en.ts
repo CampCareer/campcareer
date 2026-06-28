@@ -627,6 +627,7 @@ const en = {
     tabShortage: 'Shortage Occupation',
     tabPay: 'High Salary Job',
     tabEmployment: 'Employment',
+    tabWhv: 'WHV',
     selectCountry: 'Country',
     selectCountryPlaceholder: 'Select a country',
     selectState: 'State',

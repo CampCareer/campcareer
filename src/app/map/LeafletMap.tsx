@@ -6,6 +6,7 @@ import L from "leaflet"
 import { Maximize2 } from "lucide-react"
 import { STATE_CODES, STATE_NAMES, IE_COUNTY_NAMES, IE_GEOJSON_COUNTY_TO_CODE, IE_CITY_TO_COUNTY, type StateCode, type IECountyCode } from "./states"
 import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
+import { WHV_REGIONS } from "@/data/whv-regions"
 import { useTranslations } from "@/lib/i18n/locale-provider"
 import type { MapData } from "@/lib/map-data"
 
@@ -61,6 +62,7 @@ export default function LeafletMap({
   onSelectCountry,
   onSelectSA4,
   onReset,
+  tab,
 }: {
   data: MapData
   selected: string | null
@@ -76,6 +78,7 @@ export default function LeafletMap({
   onSelectCountry: (c: "AU" | "US" | "CA" | "IE") => void
   onSelectSA4: (code: string) => void
   onReset: () => void
+  tab?: string
 }) {
   const t = useTranslations()
   const containerRef = useRef<HTMLDivElement>(null)
@@ -97,6 +100,7 @@ export default function LeafletMap({
   const selectedRef = useRef<string | null>(selected)
   const selectedSA4Ref = useRef<SA4Region | null>(selectedSA4)
   const activeCountryRef = useRef(activeCountry)
+  const tabRef = useRef(tab)
   const didFitRef = useRef(false)
   const onSelectStateRef = useRef(onSelectState)
   const onSelectCountryRef = useRef(onSelectCountry)
@@ -104,6 +108,7 @@ export default function LeafletMap({
   onSelectStateRef.current = onSelectState
   onSelectCountryRef.current = onSelectCountry
   onSelectSA4Ref.current = onSelectSA4
+  tabRef.current = tab
 
   const dataRef = useRef(data)
   dataRef.current = data
@@ -243,8 +248,24 @@ export default function LeafletMap({
     else map.fitBounds(b, { padding: [20, 20], maxZoom: 6 })
   }
 
+  const WHV_COLORS: Record<string, string> = {
+    eligible: "#16a34a",
+    partial: "#d97706",
+    none: "#94a3b8",
+  }
+
   function sa4StyleFor(code: string): L.PathOptions {
     const isSel = selectedSA4Ref.current?.code === code
+    if (tabRef.current === "whv") {
+      const whv = WHV_REGIONS[code]
+      const fillColor = whv ? WHV_COLORS[whv.category] ?? "#94a3b8" : "#94a3b8"
+      return {
+        fillColor,
+        fillOpacity: isSel ? 0.55 : 0.25,
+        color: isSel ? "#1e293b" : "#ffffff",
+        weight: isSel ? 2.5 : 1,
+      }
+    }
     return {
       fillColor: "#7c3aed",
       fillOpacity: isSel ? 0.45 : 0.08,
@@ -286,7 +307,7 @@ export default function LeafletMap({
         lyr.on({
           click: () => onSelectSA4Ref.current(code),
           mouseover: () => {
-            if (selectedSA4Ref.current?.code !== code) (lyr as L.Path).setStyle({ fillOpacity: 0.22 })
+            if (selectedSA4Ref.current?.code !== code) (lyr as L.Path).setStyle(sa4StyleFor(code))
           },
           mouseout: () => {
             if (selectedSA4Ref.current?.code !== code) (lyr as L.Path).setStyle(sa4StyleFor(code))
@@ -858,6 +879,14 @@ export default function LeafletMap({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedSA4])
 
+  // Tab(shortage/pay/whv) 변경 → SA4 스타일 재적용
+  useEffect(() => {
+    const layer = sa4LayerRef.current
+    if (!layer) return
+    layer.setStyle((feature) => sa4StyleFor(feature?.properties?.SA4_CODE as string))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tab])
+
   return (
     <div className="relative h-full w-full">
       <style>{".leaflet-interactive:focus { outline: none !important; }"}</style>
@@ -872,7 +901,26 @@ export default function LeafletMap({
         {t.map.seeAll}
       </button>
 
-      {activeCountry === "AU" && (
+      {activeCountry === "AU" && tab === "whv" && (
+        <div className="pointer-events-none absolute bottom-3 left-3 z-[1000] rounded-lg border border-slate-200 bg-white/95 px-3 py-2 shadow-sm backdrop-blur-sm">
+          <p className="mb-1.5 text-[11px] font-medium text-slate-500">WHV Eligibility</p>
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="inline-block h-3 w-3 rounded-sm" style={{ backgroundColor: WHV_COLORS.eligible }} />
+              <span className="text-[11px] text-slate-600">Eligible</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="inline-block h-3 w-3 rounded-sm" style={{ backgroundColor: WHV_COLORS.partial }} />
+              <span className="text-[11px] text-slate-600">Partially eligible</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="inline-block h-3 w-3 rounded-sm" style={{ backgroundColor: WHV_COLORS.none }} />
+              <span className="text-[11px] text-slate-600">Not eligible</span>
+            </div>
+          </div>
+        </div>
+      )}
+      {activeCountry === "AU" && tab !== "whv" && (
         <div className="pointer-events-none absolute bottom-3 left-3 z-[1000] rounded-lg border border-slate-200 bg-white/95 px-3 py-2 shadow-sm backdrop-blur-sm">
           <p className="mb-1 text-[11px] font-medium text-slate-500">{t.map.legendShortageCount}</p>
           <div
