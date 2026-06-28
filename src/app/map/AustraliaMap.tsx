@@ -11,6 +11,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { STATE_CODES, STATE_NAMES, US_STATE_CODES, US_STATE_NAMES, IE_COUNTY_CODES, IE_COUNTY_NAMES, IE_CITY_TO_COUNTY, type StateCode } from "./states"
 import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
 import { WHV_REGIONS } from "@/data/whv-regions"
+import { WHV_SPECIFIED_WORK } from "@/data/whv-occupations"
+import { WHV_POSTCODES } from "@/data/whv-postcodes"
 import { getPathway, TAFE_BY_STATE, VET_PORTALS, cricosSearchUrl } from "@/lib/au-pathway"
 import { track } from "@/lib/analytics"
 import { WiseCta, AiraloCta } from "@/components/partners/partner-cta"
@@ -1317,6 +1319,41 @@ function EmploymentList({
   )
 }
 
+function getStateForSA4(code: string): StateCode | null {
+  for (const [state, regions] of Object.entries(SA4_BY_STATE)) {
+    if (regions.some((r) => r.code === code)) return state as StateCode
+  }
+  return null
+}
+
+function padPostcode(n: number): string {
+  return n.toString().padStart(4, "0")
+}
+
+function formatPostcodeList(entries: typeof WHV_POSTCODES[string]): string {
+  const codes: number[] = []
+  for (const e of entries) {
+    codes.push(...e.postcodes)
+    if (e.ranges) {
+      for (const [lo, hi] of e.ranges) {
+        for (let i = lo; i <= hi; i++) codes.push(i)
+      }
+    }
+  }
+  const sorted = Array.from(new Set(codes)).sort((a, b) => a - b)
+  if (sorted.length === 0) return ""
+  const parts: string[] = []
+  let start = sorted[0]
+  let end = sorted[0]
+  for (let i = 1; i < sorted.length; i++) {
+    if (sorted[i] === end + 1) { end = sorted[i]; continue }
+    parts.push(start === end ? padPostcode(start) : `${padPostcode(start)}–${padPostcode(end)}`)
+    start = sorted[i]; end = sorted[i]
+  }
+  parts.push(start === end ? padPostcode(start) : `${padPostcode(start)}–${padPostcode(end)}`)
+  return parts.join(", ")
+}
+
 function WHVPanel({
   selectedSA4,
   selected,
@@ -1336,11 +1373,14 @@ function WHVPanel({
       none: locale === "ko" ? "불가능" : "Not Eligible",
     }
     const colors: Record<string, string> = { eligible: "text-violet-600", partial: "text-violet-400", none: "text-slate-400" }
+    const stateCode = getStateForSA4(selectedSA4.code)
+    const statePostcodes = stateCode ? WHV_POSTCODES[stateCode] : undefined
+
     return (
       <div className="space-y-3 px-3">
         <p className="text-xs text-slate-400">
           {locale === "ko"
-              ? "선택한 지역(SA4)의 세컨비자(417/462) 지정 근무 가능 여부입니다."
+              ? "선택한 지역의 세컨비자(417/462) 지정 근무 가능 여부입니다."
               : "Second Visa (417/462) specified work eligibility for the selected SA4 region."}
         </p>
         <div className="rounded-lg border border-slate-200 p-3">
@@ -1354,6 +1394,55 @@ function WHVPanel({
             </p>
           )}
         </div>
+
+        {whv && whv.workCategories && whv.workCategories.length > 0 && (
+          <div className="rounded-lg border border-slate-200 p-3">
+            <p className="text-xs font-medium text-slate-500 mb-2">
+              {locale === "ko" ? "세컨비자 지정 근무 가능 직종" : "Eligible specified work"}
+            </p>
+            <div className="space-y-2">
+              {whv.workCategories.map((key) => {
+                const work = WHV_SPECIFIED_WORK.find((w) => w.key === key)
+                if (!work) return null
+                const examples = locale === "ko" ? work.examples_ko : work.examples_en
+                const label = locale === "ko" ? work.label_ko : work.label_en
+                return (
+                  <div key={key}>
+                    <p className="text-sm font-medium text-slate-700">{label}</p>
+                    <p className="text-xs text-slate-400">{examples.join(" · ")}</p>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
+        {statePostcodes && whv && whv.category === "partial" && (
+          <details className="rounded-lg border border-slate-200 p-3 text-xs text-slate-500 open:pb-3">
+            <summary className="cursor-pointer font-medium text-slate-700">
+              {locale === "ko" ? `${stateCode} 세컨비자 가능 포스트코드` : `${stateCode} eligible postcodes`}
+            </summary>
+            <div className="mt-2 space-y-2">
+              {statePostcodes.map((entry, i) => {
+                const expanded = formatPostcodeList([entry])
+                if (!expanded) {
+                  return (
+                    <p key={i} className="text-slate-500">
+                      {locale === "ko" ? entry.note_ko : entry.note_en}
+                    </p>
+                  )
+                }
+                return (
+                  <div key={i}>
+                    <p className="text-slate-500">{locale === "ko" ? entry.note_ko : entry.note_en}</p>
+                    <p className="mt-0.5 font-mono text-slate-600 leading-relaxed">{expanded}</p>
+                  </div>
+                )
+              })}
+            </div>
+          </details>
+        )}
+
         <details className="text-xs text-slate-500">
           <summary className="cursor-pointer font-medium">{locale === "ko" ? "자세히" : "Details"}</summary>
           <p className="mt-1 leading-relaxed">
@@ -1370,6 +1459,7 @@ function WHVPanel({
     const eligible = sa4Regions.filter((r) => WHV_REGIONS[r.code]?.category === "eligible").length
     const partial = sa4Regions.filter((r) => WHV_REGIONS[r.code]?.category === "partial").length
     const none = sa4Regions.filter((r) => WHV_REGIONS[r.code]?.category === "none").length
+    const statePostcodes = WHV_POSTCODES[selected]
     return (
       <div className="space-y-3 px-3">
         <p className="text-xs text-slate-400">
@@ -1406,6 +1496,32 @@ function WHVPanel({
             </div>
           )}
         </div>
+
+        {statePostcodes && (
+          <details className="rounded-lg border border-slate-200 p-3 text-xs text-slate-500 open:pb-3">
+            <summary className="cursor-pointer font-medium text-slate-700">
+              {locale === "ko" ? `${selected} 세컨비자 가능 포스트코드` : `${selected} eligible postcodes`}
+            </summary>
+            <div className="mt-2 space-y-2">
+              {statePostcodes.map((entry, i) => {
+                const expanded = formatPostcodeList([entry])
+                if (!expanded) {
+                  return (
+                    <p key={i} className="text-slate-500">
+                      {locale === "ko" ? entry.note_ko : entry.note_en}
+                    </p>
+                  )
+                }
+                return (
+                  <div key={i}>
+                    <p className="text-slate-500">{locale === "ko" ? entry.note_ko : entry.note_en}</p>
+                    <p className="mt-0.5 font-mono text-xs text-slate-600 leading-relaxed">{expanded}</p>
+                  </div>
+                )
+              })}
+            </div>
+          </details>
+        )}
       </div>
     )
   }
