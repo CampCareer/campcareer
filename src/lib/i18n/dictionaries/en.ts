@@ -98,6 +98,18 @@ const en = {
     emptyLink: 'Browse ROI Explorer',
     viewButton: 'View',
   },
+  profile: {
+    pageTitle: 'My Profile',
+    savedOccupations: 'Saved Occupations',
+    savedCourses: 'Saved Courses',
+    noSavedOccupations: 'No saved occupations yet',
+    noSavedCourses: 'No saved courses yet',
+    browseMap: 'Browse the Map',
+    browseRoi: 'Browse ROI Explorer',
+    remove: 'Remove',
+    occupationCount: 'occupations saved',
+    occupationSingle: 'occupation saved',
+  },
   roiExplorer: {
     liveData: 'Live data',
     colleges: 'colleges',

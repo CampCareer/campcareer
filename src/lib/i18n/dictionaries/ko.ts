@@ -100,6 +100,18 @@ const ko: Dictionary = {
     emptyLink: 'ROI 탐색기 둘러보기',
     viewButton: '보기',
   },
+  profile: {
+    pageTitle: '내 프로필',
+    savedOccupations: '저장한 직업',
+    savedCourses: '저장한 코스',
+    noSavedOccupations: '저장한 직업이 없습니다',
+    noSavedCourses: '저장한 코스가 없습니다',
+    browseMap: '지도 둘러보기',
+    browseRoi: 'ROI 탐색기 둘러보기',
+    remove: '삭제',
+    occupationCount: '개 직업 저장됨',
+    occupationSingle: '개 직업 저장됨',
+  },
   roiExplorer: {
     liveData: '실시간 데이터',
     colleges: '대학교',
