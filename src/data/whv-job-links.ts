@@ -44,7 +44,7 @@ export const WHV_JOB_LINKS: Record<WHVWorkCategory, WHVJobLink[]> = {
   tourism_hospitality: [
     {
       label_en: "Seek — Hospitality Jobs",
-      label_ko: "Seek — 접객/관광",
+      label_ko: "Seek — 호스피탈리티/관광",
       url: "https://au.seek.com/hospitality-jobs",
     },
   ],
