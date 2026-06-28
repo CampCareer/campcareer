@@ -13,6 +13,7 @@ import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
 import { WHV_REGIONS } from "@/data/whv-regions"
 import { WHV_SPECIFIED_WORK } from "@/data/whv-occupations"
 import { WHV_POSTCODES } from "@/data/whv-postcodes"
+import POSTCODE_TO_SA4 from "@/data/postcode-to-sa4"
 import { getPathway, TAFE_BY_STATE, VET_PORTALS, cricosSearchUrl } from "@/lib/au-pathway"
 import { track } from "@/lib/analytics"
 import { WiseCta, AiraloCta } from "@/components/partners/partner-cta"
@@ -1354,6 +1355,44 @@ function formatPostcodeList(entries: typeof WHV_POSTCODES[string]): string {
   return parts.join(", ")
 }
 
+// Expand all eligible postcodes for a state into a flat sorted array
+function expandStatePostcodes(stateCode: StateCode): number[] {
+  const entries = WHV_POSTCODES[stateCode]
+  if (!entries) return []
+  const codes: number[] = []
+  for (const e of entries) {
+    codes.push(...e.postcodes)
+    if (e.ranges) {
+      for (const [lo, hi] of e.ranges) {
+        for (let i = lo; i <= hi; i++) codes.push(i)
+      }
+    }
+  }
+  return Array.from(new Set(codes)).sort((a, b) => a - b)
+}
+
+// Get only the eligible postcodes that fall within a specific SA4
+function getPostcodesForSA4(sa4Code: string, stateCode: StateCode): number[] {
+  const allEligible = expandStatePostcodes(stateCode)
+  return allEligible.filter((pc) => POSTCODE_TO_SA4[pc] === sa4Code)
+}
+
+// Format an array of postcodes as compact range string (4-digit padded)
+function formatSA4Postcodes(pcs: number[]): string {
+  if (pcs.length === 0) return ""
+  const sorted = Array.from(new Set(pcs)).sort((a, b) => a - b)
+  const parts: string[] = []
+  let start = sorted[0]
+  let end = sorted[0]
+  for (let i = 1; i < sorted.length; i++) {
+    if (sorted[i] === end + 1) { end = sorted[i]; continue }
+    parts.push(start === end ? padPostcode(start) : `${padPostcode(start)}–${padPostcode(end)}`)
+    start = sorted[i]; end = sorted[i]
+  }
+  parts.push(start === end ? padPostcode(start) : `${padPostcode(start)}–${padPostcode(end)}`)
+  return parts.join(", ")
+}
+
 function WHVPanel({
   selectedSA4,
   selected,
@@ -1374,7 +1413,9 @@ function WHVPanel({
     }
     const colors: Record<string, string> = { eligible: "text-violet-600", partial: "text-violet-400", none: "text-slate-400" }
     const stateCode = getStateForSA4(selectedSA4.code)
-    const statePostcodes = stateCode ? WHV_POSTCODES[stateCode] : undefined
+    const sa4Postcodes = stateCode && whv && whv.category === "partial"
+      ? getPostcodesForSA4(selectedSA4.code, stateCode)
+      : undefined
 
     return (
       <div className="space-y-3 px-3">
@@ -1417,33 +1458,14 @@ function WHVPanel({
           </div>
         )}
 
-        {statePostcodes && whv && whv.category === "partial" && (
+        {sa4Postcodes && sa4Postcodes.length > 0 && (
           <details className="rounded-lg border border-slate-200 p-3 text-xs text-slate-500 open:pb-3">
             <summary className="cursor-pointer font-medium text-slate-700">
-              {locale === "ko" ? `${stateCode} 세컨비자 가능 포스트코드` : `${stateCode} eligible postcodes`}
+              {locale === "ko" ? `${selectedSA4.name} 세컨비자 가능 포스트코드` : `${selectedSA4.name} eligible postcodes`}
             </summary>
-            <div className="mt-2 space-y-2">
-              {statePostcodes.map((entry, i) => {
-                const expanded = formatPostcodeList([entry])
-                if (!expanded) {
-                  return (
-                    <p key={i} className="text-slate-500">
-                      {locale === "ko" ? entry.note_ko : entry.note_en}
-                    </p>
-                  )
-                }
-                return (
-                  <div key={i}>
-                    <p className="text-slate-500">{locale === "ko" ? entry.note_ko : entry.note_en}</p>
-                    <p className="mt-0.5 font-mono text-slate-600 leading-relaxed">{expanded}</p>
-                  </div>
-                )
-              })}
-            </div>
+            <p className="mt-2 font-mono text-slate-600 leading-relaxed">{formatSA4Postcodes(sa4Postcodes)}</p>
           </details>
         )}
-
-
       </div>
     )
   }
