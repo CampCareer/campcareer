@@ -2,13 +2,14 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { createClient } from "@/lib/supabase-client"
 import { LogoMark } from "@/components/logo-mark"
 import { LanguageToggle } from "@/components/language-toggle"
 import { Button } from "@/components/ui/button"
 import { useTranslations } from "@/lib/i18n/locale-provider"
 import { cn } from "@/lib/utils"
+import { UserIcon, BookmarkIcon, LogOutIcon } from "lucide-react"
 import type { User } from "@supabase/supabase-js"
 
 // Numbeo-style horizontal category nav. Replaces the old sidebar — every core
@@ -21,6 +22,8 @@ export function TopNav() {
   const t = useTranslations()
   const supabase = createClient()
   const [user, setUser] = useState<User | null>(null)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setUser(data.user))
@@ -31,11 +34,24 @@ export function TopNav() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
+
   async function handleSignOut() {
+    setMenuOpen(false)
     await supabase.auth.signOut()
     router.push("/login")
     router.refresh()
   }
+
+  const avatarUrl = user?.user_metadata?.avatar_url as string | undefined
 
   const navItems: { href: string; label: string }[] = [
     { href: "/", label: t.nav.home },
@@ -82,14 +98,53 @@ export function TopNav() {
           <div className="flex items-center gap-2 shrink-0 ml-auto">
             <LanguageToggle className="text-slate-500 hover:text-slate-900 hover:bg-slate-100" />
             {user ? (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleSignOut}
-                className="border-slate-200 text-slate-600 hover:bg-slate-50"
-              >
-                {t.common.signOut}
-              </Button>
+              <div className="relative" ref={menuRef}>
+                <button
+                  onClick={() => setMenuOpen(!menuOpen)}
+                  className="flex items-center gap-2 rounded-full border border-slate-200 p-0.5 pr-2 hover:bg-slate-50 transition-colors"
+                >
+                  {avatarUrl ? (
+                    <img
+                      src={avatarUrl}
+                      alt=""
+                      className="w-7 h-7 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center">
+                      <UserIcon className="w-4 h-4 text-blue-600" />
+                    </div>
+                  )}
+                  <svg
+                    className={`w-3.5 h-3.5 text-slate-400 transition-transform ${menuOpen ? "rotate-180" : ""}`}
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {menuOpen && (
+                  <div className="absolute right-0 mt-2 w-44 rounded-lg border border-slate-200 bg-white shadow-lg py-1 z-50">
+                    <Link
+                      href="/profile"
+                      onClick={() => setMenuOpen(false)}
+                      className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
+                    >
+                      <BookmarkIcon className="w-4 h-4 text-slate-400" />
+                      Saved
+                    </Link>
+                    <div className="border-t border-slate-100" />
+                    <button
+                      onClick={handleSignOut}
+                      className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
+                    >
+                      <LogOutIcon className="w-4 h-4 text-slate-400" />
+                      {t.common.signOut}
+                    </button>
+                  </div>
+                )}
+              </div>
             ) : (
               <Button
                 variant="outline"
