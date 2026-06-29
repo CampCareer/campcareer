@@ -6,3 +6,14 @@ export interface WHVRegion {
   name: string
   workCategories?: WHVWorkCategory[]
 }
+
+export interface RegionEmployer {
+  name: string
+  category: "mine" | "hotel" | "farm" | "factory"
+  town: string
+  description: string
+  seekUrl: string
+  mapsQuery: string
+  websiteUrl: string
+  postcode: number | string
+}
