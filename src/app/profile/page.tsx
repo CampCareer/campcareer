@@ -1,13 +1,14 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase-client"
 import { useTranslations } from "@/lib/i18n/locale-provider"
 import { Button } from "@/components/ui/button"
-import { Trash2, MapPin, UserIcon, LogOut } from "lucide-react"
+import { Trash2, MapPin, UserIcon, LogOut, ChevronRight } from "lucide-react"
 import type { User } from "@supabase/supabase-js"
+import { SA4_BY_STATE } from "@/data/sa4-regions"
 
 type SavedOccupation = {
   id: number
@@ -24,6 +25,14 @@ export default function ProfilePage() {
   const [user, setUser] = useState<User | null>(null)
   const [occupations, setOccupations] = useState<SavedOccupation[]>([])
   const [loading, setLoading] = useState(true)
+
+  const sa4ToState = useMemo(() => {
+    const map: Record<string, string> = {}
+    for (const [state, regions] of Object.entries(SA4_BY_STATE)) {
+      for (const r of regions) map[r.code] = state
+    }
+    return map
+  }, [])
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -62,6 +71,14 @@ export default function ProfilePage() {
     await supabase.auth.signOut()
     router.push("/login")
     router.refresh()
+  }
+
+  function navUrl(occ: SavedOccupation): string {
+    if (occ.country === "US") return `/map/us?occ=${occ.occ_code}`
+    const state = sa4ToState[occ.occ_code]
+    if (state) return `/map/au/whv/${state.toLowerCase()}/${occ.occ_code}`
+    if (occ.occ_code.length === 4) return `/map/au?nero=${occ.occ_code}&tab=employment`
+    return `/map/au?occ=${occ.occ_code}`
   }
 
   if (!user) return null
@@ -126,12 +143,13 @@ export default function ProfilePage() {
         ) : (
           <div className="space-y-2">
             {occupations.map((occ) => (
-              <div
+              <Link
                 key={occ.id}
-                className="flex items-center justify-between bg-white border border-slate-200 rounded-lg px-4 py-3"
+                href={navUrl(occ)}
+                className="flex items-center justify-between bg-white border border-slate-200 rounded-lg px-4 py-3 hover:bg-blue-50/40 transition-colors group"
               >
-                <div className="min-w-0">
-                  <p className="font-medium text-slate-900 truncate">
+                <div className="min-w-0 flex-1">
+                  <p className="font-medium text-slate-900 truncate group-hover:text-blue-700">
                     {occ.occ_title || occ.occ_code}
                   </p>
                   <p className="text-sm text-slate-500">
@@ -139,15 +157,18 @@ export default function ProfilePage() {
                     {occ.country ? ` · ${occ.country}` : ""}
                   </p>
                 </div>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => removeOccupation(occ.id)}
-                  className="text-slate-400 hover:text-red-500 shrink-0 ml-2"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
-              </div>
+                <div className="flex items-center gap-1 shrink-0">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={(e) => { e.preventDefault(); removeOccupation(occ.id) }}
+                    className="text-slate-400 hover:text-red-500"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                  <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-blue-500" />
+                </div>
+              </Link>
             ))}
           </div>
         )}
