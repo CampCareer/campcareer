@@ -21,6 +21,7 @@ import { track } from "@/lib/analytics"
 import { WiseCta, AiraloCta } from "@/components/partners/partner-cta"
 import JobListings from "./JobListings"
 import { EMPLOYMENT_OCCUPATIONS } from "@/data/employment-occupations"
+import { EMPLOYMENT_SALARIES } from "@/data/employment-salaries"
 import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc, CourseLite } from "@/lib/map-data"
 import { createClient } from "@/lib/supabase-client"
 import type { User } from "@supabase/supabase-js"
@@ -1333,9 +1334,21 @@ function EmploymentList({
       }
     }
 
-    const medianSalary = occRow?.median_salary_aud ?? null
+    let medianSalary = occRow?.median_salary_aud ?? null
     let estimatedSalary: number | null = null
-    if (medianSalary != null && stateCode && matchedCode) {
+
+    // Third fallback: direct ANZSCO 4-digit salary mapping (JSA / ABS)
+    if (medianSalary == null) {
+      const entry = EMPLOYMENT_SALARIES.find((e) => e.a4 === a4)
+      if (entry?.median_salary_aud) {
+        medianSalary = entry.median_salary_aud
+        if (stateCode) {
+          const d1 = a4.charAt(0)
+          const mult = stateSalaryMult[stateCode]?.[d1] ?? 1
+          estimatedSalary = Math.round(medianSalary * mult)
+        }
+      }
+    } else if (medianSalary != null && stateCode && matchedCode) {
       const d1 = matchedCode.charAt(0)
       const mult = stateSalaryMult[stateCode]?.[d1] ?? 1
       estimatedSalary = Math.round(medianSalary * mult)
