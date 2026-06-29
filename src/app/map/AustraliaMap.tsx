@@ -15,6 +15,7 @@ import { WHV_SPECIFIED_WORK } from "@/data/whv-occupations"
 import { WHV_JOB_LINKS, WHV_GENERAL_JOBS } from "@/data/whv-job-links"
 import { JOB_SEARCH_LINKS } from "@/data/job-search-links"
 import { WHV_POSTCODES } from "@/data/whv-postcodes"
+import { WHV_REGION_EMPLOYERS } from "@/data/whv-region-employers"
 import POSTCODE_TO_SA4 from "@/data/postcode-to-sa4"
 import { getPathway, TAFE_BY_STATE, VET_PORTALS, cricosSearchUrl } from "@/lib/au-pathway"
 import { track } from "@/lib/analytics"
@@ -1632,6 +1633,55 @@ function WHVPanel({
             </div>
           </div>
         )}
+
+        {(() => {
+          const employers = WHV_REGION_EMPLOYERS[selectedSA4.code]
+          if (!employers || employers.length === 0) return null
+          const catLabels: Record<string, { en: string; ko: string }> = {
+            mine: { en: "Mining", ko: "광업" },
+            hotel: { en: "Hospitality", ko: "관광/호스피탈리티" },
+            farm: { en: "Agriculture", ko: "농업" },
+            factory: { en: "Manufacturing", ko: "제조업" },
+          }
+          const catColors: Record<string, string> = {
+            mine: "bg-amber-100 text-amber-700",
+            hotel: "bg-blue-100 text-blue-700",
+            farm: "bg-green-100 text-green-700",
+            factory: "bg-purple-100 text-purple-700",
+          }
+          return (
+            <div className="rounded-lg border border-slate-200 p-3">
+              <p className="mb-2 text-xs font-medium text-slate-500">
+                {locale === "ko" ? "지역 고용주" : "Regional Employers"}
+              </p>
+              <div className="space-y-2">
+                {employers.map((emp, i) => (
+                  <div key={i} className="rounded-md border border-slate-100 bg-slate-50/50 p-2.5 text-xs">
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="font-medium text-slate-800">{emp.name}</p>
+                      <span className={`shrink-0 rounded px-1.5 py-0.5 text-[10px] font-medium ${catColors[emp.category]}`}>
+                        {locale === "ko" ? catLabels[emp.category].ko : catLabels[emp.category].en}
+                      </span>
+                    </div>
+                    <p className="mt-0.5 text-slate-500">{emp.town}</p>
+                    <p className="mt-0.5 text-slate-600">{emp.description}</p>
+                    <div className="mt-1.5 flex flex-wrap gap-1.5">
+                      <a href={emp.seekUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 rounded bg-rose-50 px-1.5 py-0.5 text-[11px] text-rose-700 transition-colors hover:bg-rose-100">
+                        <ExternalLink className="h-2.5 w-2.5" /> Seek
+                      </a>
+                      <a href={`https://www.google.com/maps/search/${encodeURIComponent(emp.mapsQuery)}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 rounded bg-emerald-50 px-1.5 py-0.5 text-[11px] text-emerald-700 transition-colors hover:bg-emerald-100">
+                        <ExternalLink className="h-2.5 w-2.5" /> {locale === "ko" ? "지도" : "Maps"}
+                      </a>
+                      <a href={emp.websiteUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 rounded bg-slate-100 px-1.5 py-0.5 text-[11px] text-slate-700 transition-colors hover:bg-slate-200">
+                        <ExternalLink className="h-2.5 w-2.5" /> {locale === "ko" ? "웹사이트" : "Website"}
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )
+        })()}
 
         {sa4Postcodes && sa4Postcodes.length > 0 && (
           <details className="rounded-lg border border-slate-200 p-3 text-xs text-slate-500 open:pb-3">
