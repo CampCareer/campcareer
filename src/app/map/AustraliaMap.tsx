@@ -1314,11 +1314,29 @@ function EmploymentList({
   function getEnrichment(a4: string) {
     const mapping = EMPLOYMENT_OCCUPATIONS.find((o) => o.a4 === a4)
     if (!mapping) return { broad_field: null, medianSalary: null, estimatedSalary: null }
-    const occRow = mapping.representative_osca_code ? auOccupations[mapping.representative_osca_code] ?? null : null
+
+    let occRow: OccRow | null = null
+    let matchedCode: string | null = null
+
+    if (mapping.representative_osca_code) {
+      occRow = auOccupations[mapping.representative_osca_code] ?? null
+      if (occRow) matchedCode = mapping.representative_osca_code
+    }
+
+    if (!occRow) {
+      const fallback = Object.values(auOccupations).find(
+        (o) => o.anzsco_v13?.startsWith(a4) && o.median_salary_aud != null,
+      )
+      if (fallback?.anzsco_code) {
+        occRow = fallback
+        matchedCode = fallback.anzsco_code
+      }
+    }
+
     const medianSalary = occRow?.median_salary_aud ?? null
     let estimatedSalary: number | null = null
-    if (medianSalary != null && stateCode && mapping.representative_osca_code) {
-      const d1 = mapping.representative_osca_code.charAt(0)
+    if (medianSalary != null && stateCode && matchedCode) {
+      const d1 = matchedCode.charAt(0)
       const mult = stateSalaryMult[stateCode]?.[d1] ?? 1
       estimatedSalary = Math.round(medianSalary * mult)
     }
