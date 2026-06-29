@@ -1284,16 +1284,19 @@ function EmploymentList({
   if (sa4) {
     occs = neroData[sa4.code] ?? []
   } else if (stateCode && sa4Regions.length > 0) {
-    const agg = new Map<string, number>()
+    const agg = new Map<string, { a4: string; name: string; emp: number }>()
     for (const region of sa4Regions) {
       const rows = neroData[region.code] ?? []
       for (const r of rows) {
-        agg.set(r.name, (agg.get(r.name) ?? 0) + r.emp)
+        const existing = agg.get(r.a4)
+        if (existing) {
+          existing.emp += r.emp
+        } else {
+          agg.set(r.a4, { a4: r.a4, name: r.name, emp: r.emp })
+        }
       }
     }
-    occs = Array.from(agg.entries())
-      .map(([name, emp]) => ({ a4: name, name, emp }))
-      .sort((a, b) => b.emp - a.emp)
+    occs = Array.from(agg.values()).sort((a, b) => b.emp - a.emp)
   } else {
     return <p className="py-8 text-center text-sm text-slate-400">{t.map.noEmploymentData}</p>
   }
@@ -1312,7 +1315,7 @@ function EmploymentList({
     return null
   }
 
-  function getEnrichment(a4: string) {
+  function getEnrichment(a4: string, name?: string) {
     const mapping = EMPLOYMENT_OCCUPATIONS.find((o) => o.a4 === a4)
     if (!mapping) return { broad_field: null, medianSalary: null, estimatedSalary: null }
 
@@ -1339,8 +1342,16 @@ function EmploymentList({
 
     // Third fallback: direct ANZSCO 4-digit salary mapping (JSA / ABS)
     if (medianSalary == null) {
-      const entry = EMPLOYMENT_SALARIES.find((e) => e.a4 === a4)
+      let entry = EMPLOYMENT_SALARIES.find((e) => e.a4 === a4)
+      // Also try by name if a4 lookup failed
+      if (!entry && name) {
+        entry = EMPLOYMENT_SALARIES.find((e) => {
+          const m = EMPLOYMENT_OCCUPATIONS.find((o) => o.a4 === e.a4)
+          return m?.name === name
+        })
+      }
       if (entry?.median_salary_aud) {
+        medianSalary = entry.median_salary_aud
         medianSalary = entry.median_salary_aud
         if (stateCode) {
           const d1 = a4.charAt(0)
@@ -1370,7 +1381,7 @@ function EmploymentList({
         {occs.map((r, i) => {
           const isOpen = expandedA4 === r.a4
           const seekUrl = findSeekUrl(r)
-          const enrich = isOpen ? getEnrichment(r.a4) : null
+          const enrich = isOpen ? getEnrichment(r.a4, r.name) : null
           const courses = isOpen && enrich ? getCourses(enrich.broad_field) : []
           return (
           <li key={r.a4}>
