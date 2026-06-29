@@ -712,6 +712,7 @@ const en = {
     wiseCtaDesc: 'Pay tuition and send money home at the real exchange rate with Wise.',
     wiseCtaButton: 'Open a free Wise account',
     affiliateNote: 'Affiliate link',
+    affiliateProgram: 'AFFILIATE PROGRAM',
     airaloCtaTitle: 'Need a local eSIM when you arrive?',
     airaloCtaDesc: 'Stay connected from day one with an affordable Airalo eSIM — 200+ countries covered.',
     airaloCtaButton: 'Get your eSIM',

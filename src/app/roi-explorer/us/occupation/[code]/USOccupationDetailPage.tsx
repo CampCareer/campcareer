@@ -8,7 +8,7 @@ import { SiteFooter } from "@/components/layout/site-footer"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import JobListings from "@/app/map/JobListings"
-import { WiseCta, AiraloCta } from "@/components/partners/partner-cta"
+import { AffiliateCtas } from "@/components/partners/partner-cta"
 
 export default function USOccupationDetailPage({ occ }: { occ: {
   occ_code: string
@@ -195,10 +195,7 @@ export default function USOccupationDetailPage({ occ }: { occ: {
 
             <JobListings what={occ.occ_title} where="" country="US" />
 
-            <div className="space-y-3">
-              <WiseCta />
-              <AiraloCta />
-            </div>
+            <AffiliateCtas />
           </section>
 
           <p className="mt-6 text-xs text-muted-foreground">

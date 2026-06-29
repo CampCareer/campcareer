@@ -18,7 +18,7 @@ import { WHV_POSTCODES } from "@/data/whv-postcodes"
 import POSTCODE_TO_SA4 from "@/data/postcode-to-sa4"
 import { getPathway, TAFE_BY_STATE, VET_PORTALS, cricosSearchUrl } from "@/lib/au-pathway"
 import { track } from "@/lib/analytics"
-import { WiseCta, AiraloCta } from "@/components/partners/partner-cta"
+import { AffiliateCtas } from "@/components/partners/partner-cta"
 import JobListings from "./JobListings"
 import { EMPLOYMENT_OCCUPATIONS } from "@/data/employment-occupations"
 import { EMPLOYMENT_SALARIES } from "@/data/employment-salaries"
@@ -1545,11 +1545,7 @@ function EmploymentList({
                   </div>
                 )}
 
-                {/* Affiliate links */}
-                <div className="space-y-2">
-                  <WiseCta />
-                  <AiraloCta />
-                </div>
+                <AffiliateCtas />
               </div>
             )}
           </li>
@@ -1732,10 +1728,7 @@ function WHVPanel({
             <p className="mt-2 font-mono text-slate-600 leading-relaxed">{formatSA4Postcodes(sa4Postcodes)}</p>
           </details>
         )}
-        <div className="space-y-2">
-          <WiseCta />
-          <AiraloCta />
-        </div>
+        <AffiliateCtas />
       </div>
     )
   }
@@ -1807,10 +1800,7 @@ function WHVPanel({
             </div>
           </details>
         )}
-        <div className="space-y-2">
-          <WiseCta />
-          <AiraloCta />
-        </div>
+        <AffiliateCtas />
       </div>
     )
   }
@@ -2275,10 +2265,7 @@ function OccupationDetail({
 
           <JobListings what={name} where={currentState} country="AU" />
 
-          <div className="space-y-3">
-            <WiseCta />
-            <AiraloCta />
-          </div>
+          <AffiliateCtas />
         </div>
       </div>
 
@@ -2492,10 +2479,7 @@ function USOccupationDetail({
 
           <JobListings what={occ.occ_title} where={stateCode} country="US" />
 
-          <div className="space-y-3">
-            <WiseCta />
-            <AiraloCta />
-          </div>
+          <AffiliateCtas />
         </div>
       </div>
 
