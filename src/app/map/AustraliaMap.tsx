@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
-import { RotateCcw, ChevronLeft, ChevronRight, ChevronDown, ChevronUp, ExternalLink, Search, Bookmark, Share2 } from "lucide-react"
+import { RotateCcw, ChevronLeft, ChevronRight, ChevronDown, ChevronUp, ExternalLink, Search, Bookmark, Share2, DollarSign, GraduationCap } from "lucide-react"
 import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useTranslations, useLocale } from "@/lib/i18n/locale-provider"
@@ -20,7 +20,8 @@ import { getPathway, TAFE_BY_STATE, VET_PORTALS, cricosSearchUrl } from "@/lib/a
 import { track } from "@/lib/analytics"
 import { WiseCta, AiraloCta } from "@/components/partners/partner-cta"
 import JobListings from "./JobListings"
-import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc } from "@/lib/map-data"
+import { EMPLOYMENT_OCCUPATIONS } from "@/data/employment-occupations"
+import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc, CourseLite } from "@/lib/map-data"
 import { createClient } from "@/lib/supabase-client"
 import type { User } from "@supabase/supabase-js"
 import { getShortageOccupations } from "@/lib/ie-shortage-occupations"
@@ -780,6 +781,9 @@ function Panel({
             stateCode={isAU ? (selected as StateCode) : null}
             sa4Regions={panelSa4Regions}
             neroData={neroData}
+            auOccupations={data.auOccupations}
+            stateSalaryMult={data.stateSalaryMult}
+            coursesByFieldState={data.coursesByFieldState}
           />
         )}
         {tab === "whv" && isAU && (
@@ -1250,13 +1254,20 @@ function EmploymentList({
   stateCode,
   sa4Regions,
   neroData,
+  auOccupations,
+  stateSalaryMult,
+  coursesByFieldState,
 }: {
   sa4: SA4Region | null
   stateCode: StateCode | null
   sa4Regions: SA4Region[]
   neroData: Record<string, NeroOccupation[]> | null
+  auOccupations: Record<string, OccRow>
+  stateSalaryMult: StateSalaryMult
+  coursesByFieldState: Record<string, Record<string, CourseLite[]>>
 }) {
   const t = useTranslations()
+  const [expandedA4, setExpandedA4] = useState<string | null>(null)
 
   if (!neroData) {
     return (
@@ -1300,6 +1311,25 @@ function EmploymentList({
     return null
   }
 
+  function getEnrichment(a4: string) {
+    const mapping = EMPLOYMENT_OCCUPATIONS.find((o) => o.a4 === a4)
+    if (!mapping) return { broad_field: null, medianSalary: null, estimatedSalary: null }
+    const occRow = mapping.representative_osca_code ? auOccupations[mapping.representative_osca_code] ?? null : null
+    const medianSalary = occRow?.median_salary_aud ?? null
+    let estimatedSalary: number | null = null
+    if (medianSalary != null && stateCode && mapping.representative_osca_code) {
+      const d1 = mapping.representative_osca_code.charAt(0)
+      const mult = stateSalaryMult[stateCode]?.[d1] ?? 1
+      estimatedSalary = Math.round(medianSalary * mult)
+    }
+    return { broad_field: mapping.broad_field, medianSalary, estimatedSalary }
+  }
+
+  function getCourses(broadField: string | null) {
+    if (!broadField || !stateCode) return []
+    return (coursesByFieldState[broadField]?.[stateCode] ?? []).slice(0, 4)
+  }
+
   return (
     <div>
       <p className="mb-1 px-3 text-xs text-slate-400">
@@ -1307,10 +1337,17 @@ function EmploymentList({
       </p>
       <ol>
         {occs.map((r, i) => {
+          const isOpen = expandedA4 === r.a4
           const seekUrl = findSeekUrl(r)
+          const enrich = isOpen ? getEnrichment(r.a4) : null
+          const courses = isOpen && enrich ? getCourses(enrich.broad_field) : []
           return (
           <li key={r.a4}>
-            <div className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left">
+            <button
+              type="button"
+              onClick={() => setExpandedA4(isOpen ? null : r.a4)}
+              className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left transition-colors hover:bg-slate-50"
+            >
               <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-sm font-medium text-slate-800">{r.name}</span>
@@ -1329,13 +1366,94 @@ function EmploymentList({
                   href={seekUrl}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
                   className="inline-flex shrink-0 items-center gap-1 rounded bg-blue-50 px-1.5 py-0.5 text-[11px] font-medium text-blue-700 transition-colors hover:bg-blue-100"
                 >
                   <ExternalLink className="h-2.5 w-2.5" />
                   Seek
                 </a>
               )}
-            </div>
+              <ChevronDown
+                className={`h-4 w-4 shrink-0 text-slate-400 transition-transform ${isOpen ? "rotate-180" : ""}`}
+              />
+            </button>
+
+            {isOpen && enrich && (
+              <div className="border-t border-slate-100 px-4 pb-3 pt-3">
+                {/* Salary */}
+                <div className="mb-3 rounded-lg bg-slate-50 p-3">
+                  <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">
+                    {t.employment.salary}
+                  </p>
+                  <div className="mt-1.5 space-y-1">
+                    {enrich.medianSalary != null && (
+                      <p className="flex items-center gap-1.5 text-sm text-slate-700">
+                        <DollarSign className="h-3.5 w-3.5 text-green-600" />
+                        {t.employment.nationalMedian.replace('{amount}', enrich.medianSalary.toLocaleString())}
+                      </p>
+                    )}
+                    {enrich.estimatedSalary != null && stateCode && (
+                      <p className="flex items-center gap-1.5 text-sm text-slate-700">
+                        <DollarSign className="h-3.5 w-3.5 text-green-600" />
+                        {t.employment.stateEstimate.replace('{stateName}', STATE_NAMES[stateCode] ?? stateCode).replace('{amount}', enrich.estimatedSalary.toLocaleString())}
+                      </p>
+                    )}
+                    {enrich.medianSalary == null && (
+                      <p className="text-sm text-slate-400">{t.employment.salaryNotAvailable}</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Related study */}
+                {enrich.broad_field && (
+                  <div className="mb-3 rounded-lg bg-slate-50 p-3">
+                    <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">
+                      {t.employment.relatedStudy}
+                    </p>
+                    <p className="mt-1 text-sm text-slate-700">
+                      {enrich.broad_field}
+                    </p>
+                    {courses.length > 0 && (
+                      <div className="mt-2 space-y-1.5">
+                        {courses.map((course) => (
+                          <a
+                            key={course.id}
+                            href={course.cricos_url ?? course.website_url ?? "#"}
+                            target={course.cricos_url || course.website_url ? "_blank" : undefined}
+                            rel="noopener noreferrer"
+                            className="flex items-start gap-2 rounded-md bg-white px-2.5 py-2 text-xs transition-colors hover:bg-blue-50"
+                          >
+                            <GraduationCap className="mt-0.5 h-3.5 w-3.5 shrink-0 text-slate-400" />
+                            <div className="min-w-0 flex-1">
+                              <p className="font-medium text-slate-700 truncate">{course.title}</p>
+                              <p className="text-slate-400">
+                                {course.institution_name}
+                                {course.duration_years != null && ` · ${course.duration_years} yr`}
+                                {course.tuition_fee_aud != null && ` · $${course.tuition_fee_aud.toLocaleString()}`}
+                              </p>
+                            </div>
+                            {(course.cricos_url || course.website_url) && <ExternalLink className="mt-0.5 h-3 w-3 shrink-0 text-slate-400" />}
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Job openings */}
+                {stateCode && (
+                  <div className="mb-3">
+                    <JobListings what={r.name} where={STATE_NAMES[stateCode] ?? stateCode} country="AU" />
+                  </div>
+                )}
+
+                {/* Affiliate links */}
+                <div className="space-y-2">
+                  <WiseCta />
+                  <AiraloCta />
+                </div>
+              </div>
+            )}
           </li>
           )
         })}
