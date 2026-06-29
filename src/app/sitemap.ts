@@ -113,9 +113,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
   ]
 
-  const total = staticPages.length + blogPages.length + detailPages.length +
-    occupationPages.length + usOccupationPages.length + ieLangSchoolPages.length
-  console.log(`[sitemap] counts — static: ${staticPages.length}, blog: ${blogPages.length}, AU colleges: ${detailPages.length}, AU occupations: ${occupationPages.length}, US occupations: ${usOccupationPages.length}, IE schools: ${ieLangSchoolPages.length}, TOTAL: ${total}`)
+  // 전용 페이지: /map/au/employment/:state (8개) + /map/au/whv/:state (8개)
+  const mapPages: MetadataRoute.Sitemap = []
+  const STATE_CODES = ["nsw", "vic", "qld", "sa", "wa", "tas", "nt", "act"]
+  for (const sc of STATE_CODES) {
+    mapPages.push({ url: `${BASE}/map/au/employment/${sc}`, priority: 0.7, changeFrequency: "weekly" })
+    mapPages.push({ url: `${BASE}/map/au/whv/${sc}`, priority: 0.6, changeFrequency: "weekly" })
+  }
 
-  return [...staticPages, ...blogPages, ...detailPages, ...occupationPages, ...usOccupationPages, ...ieLangSchoolPages]
+  const total = staticPages.length + blogPages.length + detailPages.length +
+    occupationPages.length + usOccupationPages.length + ieLangSchoolPages.length + mapPages.length
+  console.log(`[sitemap] counts — static: ${staticPages.length}, blog: ${blogPages.length}, AU colleges: ${detailPages.length}, AU occupations: ${occupationPages.length}, US occupations: ${usOccupationPages.length}, IE schools: ${ieLangSchoolPages.length}, map: ${mapPages.length}, TOTAL: ${total}`)
+
+  return [...staticPages, ...blogPages, ...detailPages, ...occupationPages, ...usOccupationPages, ...ieLangSchoolPages, ...mapPages]
 }
