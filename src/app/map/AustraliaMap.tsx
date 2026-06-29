@@ -373,17 +373,18 @@ export default function AustraliaMap({
   }, [selected, activeCountry])
 
   const onClosePanel = useCallback(() => {
-    const hadDetail = selectedOccCode !== null || selectedUsOcc !== null
+    const hadDetail = selectedOccCode !== null || selectedUsOcc !== null || selectedNeroA4 !== null
     if (hadDetail) {
       setSelectedOccCode(null)
       setSelectedUsOcc(null)
+      setSelectedNeroA4(null)
     }
     if (isMobile) {
       setExpanded(false)
     } else if (!hadDetail) {
       onReset()
     }
-  }, [selectedOccCode, selectedUsOcc, isMobile, onReset])
+  }, [selectedOccCode, selectedUsOcc, selectedNeroA4, isMobile, onReset])
 
   const stateItems = useMemo(() => ({
     ...STATE_NAMES,
@@ -925,6 +926,9 @@ function Panel({
             selectedSA4={selectedSA4}
             selected={selected as StateCode}
             sa4Regions={panelSa4Regions}
+            onToggleSave={onToggleSave}
+            onShare={onShare}
+            savedOccCodes={savedOccCodes}
           />
         )}
       </div>
@@ -1547,10 +1551,16 @@ function WHVPanel({
   selectedSA4,
   selected,
   sa4Regions,
+  onToggleSave,
+  onShare,
+  savedOccCodes,
 }: {
   selectedSA4: SA4Region | null
   selected: StateCode | null
   sa4Regions: SA4Region[]
+  onToggleSave?: (code: string, title: string) => void
+  onShare?: (title: string) => void
+  savedOccCodes?: Set<string>
 }) {
   const locale = useLocale()
 
@@ -1575,15 +1585,39 @@ function WHVPanel({
               : "Second Visa (417/462) specified work eligibility for the selected SA4 region."}
         </p>
         <div className="rounded-lg border border-slate-200 p-3">
-          <p className="text-sm font-medium text-slate-800">{selectedSA4.name}</p>
-          <p className={`mt-1 text-sm font-semibold ${colors[whv?.category ?? "none"]}`}>
-            {whv ? labels[whv.category] : labels.none}
-          </p>
-          {whv && whv.pct < 100 && (
-            <p className="mt-1 text-xs text-slate-400">
-              {whv.pct}% of postcodes in this region are WHV-eligible
-            </p>
-          )}
+          <div className="flex items-start justify-between gap-2">
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-slate-800">{selectedSA4.name}</p>
+              <p className={`mt-1 text-sm font-semibold ${colors[whv?.category ?? "none"]}`}>
+                {whv ? labels[whv.category] : labels.none}
+              </p>
+              {whv && whv.pct < 100 && (
+                <p className="mt-1 text-xs text-slate-400">
+                  {whv.pct}% of postcodes in this region are WHV-eligible
+                </p>
+              )}
+            </div>
+            <div className="flex shrink-0 items-center gap-1">
+              {onToggleSave && (
+                <button type="button"
+                  onClick={() => onToggleSave(selectedSA4.code, selectedSA4.name)}
+                  aria-label={locale === "ko" ? "저장" : "Save"}
+                  className="rounded-md p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+                >
+                  <Bookmark className="h-4 w-4" fill={savedOccCodes?.has(selectedSA4.code) ? "currentColor" : "none"} />
+                </button>
+              )}
+              {onShare && (
+                <button type="button"
+                  onClick={() => onShare(selectedSA4.name)}
+                  aria-label={locale === "ko" ? "공유" : "Share"}
+                  className="rounded-md p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+                >
+                  <Share2 className="h-4 w-4" />
+                </button>
+              )}
+            </div>
+          </div>
         </div>
 
         {whv && whv.workCategories && whv.workCategories.length > 0 && (
