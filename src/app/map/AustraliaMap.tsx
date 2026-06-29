@@ -1700,14 +1700,11 @@ function WHVPanel({
                     <p className="mt-0.5 text-slate-500">{emp.town}</p>
                     <p className="mt-0.5 text-slate-600">{emp.description}</p>
                     <div className="mt-1.5 flex flex-wrap gap-1.5">
-                      <a href={emp.seekUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 rounded bg-rose-50 px-1.5 py-0.5 text-[11px] text-rose-700 transition-colors hover:bg-rose-100">
-                        <ExternalLink className="h-2.5 w-2.5" /> Seek
-                      </a>
-                      <a href={`https://www.google.com/maps/search/${encodeURIComponent(emp.mapsQuery)}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 rounded bg-emerald-50 px-1.5 py-0.5 text-[11px] text-emerald-700 transition-colors hover:bg-emerald-100">
-                        <ExternalLink className="h-2.5 w-2.5" /> {locale === "ko" ? "지도" : "Maps"}
-                      </a>
                       <a href={emp.websiteUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 rounded bg-slate-100 px-1.5 py-0.5 text-[11px] text-slate-700 transition-colors hover:bg-slate-200">
                         <ExternalLink className="h-2.5 w-2.5" /> {locale === "ko" ? "웹사이트" : "Website"}
+                      </a>
+                      <a href={emp.seekUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 rounded bg-rose-50 px-1.5 py-0.5 text-[11px] text-rose-700 transition-colors hover:bg-rose-100">
+                        <ExternalLink className="h-2.5 w-2.5" /> Seek
                       </a>
                     </div>
                   </div>
