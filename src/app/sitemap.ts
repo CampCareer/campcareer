@@ -10,6 +10,7 @@ import { createClient } from "@supabase/supabase-js"
 import { getAllPosts } from "@/lib/blog"
 import { getUSOccCodes } from "@/lib/us-occupation-detail"
 import { getAllSlugs, getCities } from "@/lib/language-schools-ie"
+import { SA4_BY_STATE } from "@/data/sa4-regions"
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -113,12 +114,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
   ]
 
-  // 전용 페이지: /map/au/employment/:state (8개) + /map/au/whv/:state (8개)
+  // 전용 페이지: /map/au/employment/:state (8개) + /map/au/whv/:state (8개) + /map/au/whv/:state/:sa4 (88개)
   const mapPages: MetadataRoute.Sitemap = []
   const STATE_CODES = ["nsw", "vic", "qld", "sa", "wa", "tas", "nt", "act"]
   for (const sc of STATE_CODES) {
     mapPages.push({ url: `${BASE}/map/au/employment/${sc}`, priority: 0.7, changeFrequency: "weekly" })
     mapPages.push({ url: `${BASE}/map/au/whv/${sc}`, priority: 0.6, changeFrequency: "weekly" })
+    const scUpper = sc.toUpperCase() as string
+    const regions = SA4_BY_STATE[scUpper] ?? []
+    for (const r of regions) {
+      mapPages.push({ url: `${BASE}/map/au/whv/${sc}/${r.code}`, priority: 0.5, changeFrequency: "weekly" })
+    }
   }
 
   const total = staticPages.length + blogPages.length + detailPages.length +
