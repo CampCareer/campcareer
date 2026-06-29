@@ -78,6 +78,8 @@ export default function AustraliaMap({
   // 직업 카드 열림 상태 — 툴바의 직업 검색에서도 열 수 있도록 최상위로 끌어올림.
   const [selectedOccCode, setSelectedOccCode] = useState<string | null>(null)
   const [selectedUsOcc, setSelectedUsOcc] = useState<USOccupation | null>(null)
+  const [expandedNeroA4, setExpandedNeroA4] = useState<string | null>(null)
+  const initialNeroLoaded = useRef(false)
   // 모바일에서는 우측 패널 대신 구글맵식 바텀시트(드래그로 확장)를 쓴다.
   const [isMobile, setIsMobile] = useState(false)
   // 모바일 접이식 툴바 상태
@@ -251,6 +253,38 @@ export default function AustraliaMap({
       window.history.replaceState(null, "", `?${p.toString()}`)
     }
   }, [selectedOccCode, selectedUsOcc, activeCountry, selected, data])
+
+  // nero(NERO 고용 코드) URL 파라미터 ↔ state 동기화.
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search)
+    const urlNero = p.get("nero") ?? null
+
+    if (!initialNeroLoaded.current && urlNero && tab === "employment") {
+      initialNeroLoaded.current = true
+      setExpandedNeroA4(urlNero)
+      return
+    }
+
+    if (!initialNeroLoaded.current && !urlNero) {
+      initialNeroLoaded.current = true
+    }
+
+    if (!initialNeroLoaded.current) return
+
+    if (tab === "employment") {
+      if (expandedNeroA4 !== urlNero) {
+        if (expandedNeroA4) {
+          p.set("nero", expandedNeroA4)
+        } else {
+          p.delete("nero")
+        }
+        window.history.replaceState(null, "", `?${p.toString()}`)
+      }
+    } else if (urlNero) {
+      p.delete("nero")
+      window.history.replaceState(null, "", `?${p.toString()}`)
+    }
+  }, [expandedNeroA4, tab])
 
   const onSelectSA4 = useCallback((code: string) => {
     const regions = selected && selected !== "WHV"
@@ -550,6 +584,8 @@ export default function AustraliaMap({
               savedOccCodes={savedOccCodes}
               onToggleSave={toggleSaveOcc}
               onShare={shareOcc}
+              expandedNeroA4={expandedNeroA4}
+              onToggleNeroA4={setExpandedNeroA4}
             />
           )
           return isMobile ? (
@@ -584,6 +620,8 @@ function Panel({
   savedOccCodes,
   onToggleSave,
   onShare,
+  expandedNeroA4,
+  onToggleNeroA4,
 }: {
   data: MapData
   selected: string
@@ -601,6 +639,8 @@ function Panel({
   savedOccCodes: Set<string>
   onToggleSave: (occCode: string, occTitle: string) => void
   onShare: () => void
+  expandedNeroA4: string | null
+  onToggleNeroA4: (a4: string | null) => void
 }) {
   const t = useTranslations()
   const locale = useLocale()
@@ -806,6 +846,8 @@ function Panel({
             auOccupations={data.auOccupations}
             stateSalaryMult={data.stateSalaryMult}
             coursesByFieldState={data.coursesByFieldState}
+            expandedNeroA4={expandedNeroA4}
+            onToggleNeroA4={onToggleNeroA4}
           />
         )}
         {tab === "whv" && isAU && (
@@ -1279,6 +1321,8 @@ function EmploymentList({
   auOccupations,
   stateSalaryMult,
   coursesByFieldState,
+  expandedNeroA4,
+  onToggleNeroA4,
 }: {
   sa4: SA4Region | null
   stateCode: StateCode | null
@@ -1287,9 +1331,10 @@ function EmploymentList({
   auOccupations: Record<string, OccRow>
   stateSalaryMult: StateSalaryMult
   coursesByFieldState: Record<string, Record<string, CourseLite[]>>
+  expandedNeroA4: string | null
+  onToggleNeroA4: (a4: string | null) => void
 }) {
   const t = useTranslations()
-  const [expandedA4, setExpandedA4] = useState<string | null>(null)
 
   if (!neroData) {
     return (
@@ -1416,7 +1461,7 @@ function EmploymentList({
       </p>
       <ol>
         {occs.map((r, i) => {
-          const isOpen = expandedA4 === r.a4
+          const isOpen = expandedNeroA4 === r.a4
           const seekUrl = findSeekUrl(r)
           const enrich = isOpen ? getEnrichment(r.a4, r.name) : null
           const courses = isOpen && enrich ? getCourses(enrich.broad_field) : []
@@ -1424,7 +1469,7 @@ function EmploymentList({
           <li key={r.a4}>
             <button
               type="button"
-              onClick={() => setExpandedA4(isOpen ? null : r.a4)}
+              onClick={() => onToggleNeroA4(isOpen ? null : r.a4)}
               className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left transition-colors hover:bg-slate-50"
             >
               <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
