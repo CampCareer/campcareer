@@ -58,10 +58,12 @@ export default function AustraliaMap({
   data,
   initialState,
   initialTab,
+  initialSA4,
 }: {
   data: MapData
   initialState?: string
   initialTab?: Tab
+  initialSA4?: string
 }) {
   const t = useTranslations()
   // /map은 호주 비치헤드의 front door다 → 진입 즉시 주/지역 선택(검색) 바가 보이도록
@@ -80,6 +82,7 @@ export default function AustraliaMap({
   const [selectedUsOcc, setSelectedUsOcc] = useState<USOccupation | null>(null)
   const [selectedNeroA4, setSelectedNeroA4] = useState<string | null>(null)
   const initialNeroLoaded = useRef(false)
+  const initialSA4Ref = useRef<string | null>(null)
   // 모바일에서는 우측 패널 대신 구글맵식 바텀시트(드래그로 확장)를 쓴다.
   const [isMobile, setIsMobile] = useState(false)
   // 모바일 접이식 툴바 상태
@@ -159,6 +162,7 @@ export default function AustraliaMap({
       setActiveCountry("AU")
       setSelected(initialState)
       if (initialTab) setTab(initialTab)
+      if (initialSA4) initialSA4Ref.current = initialSA4
       return
     }
     const p = new URLSearchParams(window.location.search)
@@ -215,6 +219,18 @@ export default function AustraliaMap({
 
   useEffect(() => {
     setSelectedSA4(null)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected])
+
+  // initialSA4 prop → selectedSA4 (selected-clear effect 이후에 적용)
+  useEffect(() => {
+    if (initialSA4Ref.current && selected) {
+      const code = initialSA4Ref.current
+      initialSA4Ref.current = null
+      const regions = Object.values(SA4_BY_STATE).flat()
+      const region = regions.find((r) => r.code === code) ?? null
+      if (region) setSelectedSA4(region)
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected])
 
@@ -285,6 +301,42 @@ export default function AustraliaMap({
       window.history.replaceState(null, "", `?${p.toString()}`)
     }
   }, [selectedNeroA4, tab])
+
+  // region(WHV 지역 코드) URL 파라미터 ↔ state 동기화.
+  const regionInitialLoaded = useRef(false)
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search)
+    const urlRegion = p.get("region") ?? null
+    const regionCode = selectedSA4?.code ?? null
+
+    if (!regionInitialLoaded.current && urlRegion && tab === "whv") {
+      regionInitialLoaded.current = true
+      const regions = Object.values(SA4_BY_STATE).flat()
+      const region = regions.find((r) => r.code === urlRegion) ?? null
+      if (region) setSelectedSA4(region)
+      return
+    }
+
+    if (!regionInitialLoaded.current && !urlRegion) {
+      regionInitialLoaded.current = true
+    }
+
+    if (!regionInitialLoaded.current) return
+
+    if (tab === "whv") {
+      if (regionCode !== urlRegion) {
+        if (regionCode) {
+          p.set("region", regionCode)
+        } else {
+          p.delete("region")
+        }
+        window.history.replaceState(null, "", `?${p.toString()}`)
+      }
+    } else if (urlRegion) {
+      p.delete("region")
+      window.history.replaceState(null, "", `?${p.toString()}`)
+    }
+  }, [selectedSA4, tab])
 
   const onSelectSA4 = useCallback((code: string) => {
     const regions = selected && selected !== "WHV"
