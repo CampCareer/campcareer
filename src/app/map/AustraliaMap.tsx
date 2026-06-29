@@ -56,8 +56,12 @@ type RegionOccData = Record<string, RegionEntry>
 
 export default function AustraliaMap({
   data,
+  initialState,
+  initialTab,
 }: {
   data: MapData
+  initialState?: string
+  initialTab?: Tab
 }) {
   const t = useTranslations()
   // /map은 호주 비치헤드의 front door다 → 진입 즉시 주/지역 선택(검색) 바가 보이도록
@@ -146,9 +150,15 @@ export default function AustraliaMap({
   }, [])
 
   // 페이지가 정적(force-static)이므로 ?country=au&state=NSW&tab=pay 딥링크는 서버가 아니라
-  // 여기서 마운트 후 읽어 반영한다. SSR 시점엔 기본값으로 렌더돼 하이드레이션
-  // 불일치가 없다(홈 셀렉터 → /map 딥링크 동작 보존).
+  // 여기서 마운트 후 읽어 반영한다. 전용 페이지(/map/au/employment/nsw 등)에서 initialState /
+  // initialTab prop이 넘어오면 URL searchParams보다 우선한다.
   useEffect(() => {
+    if (initialState) {
+      setActiveCountry("AU")
+      setSelected(initialState)
+      if (initialTab) setTab(initialTab)
+      return
+    }
     const p = new URLSearchParams(window.location.search)
     const countryRaw = p.get("country")?.toLowerCase()
     const raw = p.get("state")?.toUpperCase()
@@ -166,7 +176,7 @@ export default function AustraliaMap({
     if (tabParam === "pay") setTab("pay")
     else if (tabParam === "employment") setTab("employment")
     else if (tabParam === "whv") setTab("whv")
-  }, [])
+  }, [initialState, initialTab])
 
   useEffect(() => {
     if (!selected || neroFetched.current) return
