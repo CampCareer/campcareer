@@ -734,7 +734,9 @@ const ko: Dictionary = {
     stateEstimate: '{stateName} 추정: {amount} AUD/년',
     salaryNotAvailable: '이 직업군의 연봉 데이터가 없습니다.',
     relatedStudy: '관련 학과',
-    searchOnSeek: 'Seek 검색',
+    relatedJobs: '관련 채용 사이트',
+    seek: 'Seek',
+    indeed: 'Indeed',
   },
   explore: {
     hubTitle: '전공·국가로 탐색하기',

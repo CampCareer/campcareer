@@ -732,7 +732,9 @@ const en = {
     stateEstimate: '{stateName} estimate: {amount} AUD/year',
     salaryNotAvailable: 'Salary data not available for this occupation group.',
     relatedStudy: 'Related Study',
-    searchOnSeek: 'Search on Seek',
+    relatedJobs: 'Related Job Links',
+    seek: 'Seek',
+    indeed: 'Indeed',
   },
   explore: {
     hubTitle: 'Explore degrees by major & country',

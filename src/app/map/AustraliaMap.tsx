@@ -33,6 +33,17 @@ const LeafletMap = dynamic(() => import("./LeafletMap"), {
   loading: () => <div className="h-full w-full bg-slate-100 animate-pulse" />,
 })
 
+const STATE_SEEK_PATH: Record<string, string> = {
+  NSW: "New-South-Wales",
+  VIC: "Victoria",
+  QLD: "Queensland",
+  SA: "South-Australia",
+  WA: "Western-Australia",
+  TAS: "Tasmania",
+  NT: "Northern-Territory",
+  ACT: "Australian-Capital-Territory",
+}
+
 type Tab = "shortage" | "pay" | "employment" | "whv"
 
 type NeroOccupation = { a4: string; name: string; emp: number }
@@ -1315,6 +1326,22 @@ function EmploymentList({
     return null
   }
 
+  function getStateSeekUrl(baseUrl: string): string {
+    if (!stateCode) return baseUrl
+    const path = STATE_SEEK_PATH[stateCode]
+    if (!path) return baseUrl
+    return `${baseUrl}/in-${path}`
+  }
+
+  function getStateIndeedUrl(name: string): string {
+    const q = name.toLowerCase().replace(/[^a-z0-9]+/g, "+").replace(/(^\+|\+$)/g, "")
+    const base = `https://au.indeed.com/jobs?q=${q}`
+    if (!stateCode) return base
+    const l = STATE_NAMES[stateCode]
+    if (!l) return base
+    return `${base}&l=${encodeURIComponent(l)}`
+  }
+
   function getEnrichment(a4: string, name?: string) {
     const mapping = EMPLOYMENT_OCCUPATIONS.find((o) => o.a4 === a4)
     if (!mapping) return { broad_field: null, medianSalary: null, estimatedSalary: null }
@@ -1479,6 +1506,35 @@ function EmploymentList({
                         ))}
                       </div>
                     )}
+                  </div>
+                )}
+
+                {/* Related job links */}
+                {seekUrl && (
+                  <div className="mb-3 rounded-lg bg-slate-50 p-3">
+                    <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">
+                      {t.employment.relatedJobs}
+                    </p>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      <a
+                        href={getStateSeekUrl(seekUrl)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 rounded-md bg-white px-3 py-2 text-xs font-medium text-slate-700 transition-colors hover:bg-blue-50"
+                      >
+                        <ExternalLink className="h-3.5 w-3.5" />
+                        {t.employment.seek}
+                      </a>
+                      <a
+                        href={getStateIndeedUrl(r.name)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 rounded-md bg-white px-3 py-2 text-xs font-medium text-slate-700 transition-colors hover:bg-blue-50"
+                      >
+                        <ExternalLink className="h-3.5 w-3.5" />
+                        {t.employment.indeed}
+                      </a>
+                    </div>
                   </div>
                 )}
 
