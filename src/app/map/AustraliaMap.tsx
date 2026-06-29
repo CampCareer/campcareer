@@ -1857,7 +1857,7 @@ function OccupationDetail({
           className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-800 transition-colors"
         >
           <ChevronLeft className="h-4 w-4" />
-          {t.map.detailBack}
+          {null}
         </button>
         <button
           type="button"
@@ -2182,7 +2182,7 @@ function USOccupationDetail({
           className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-800 transition-colors"
         >
           <ChevronLeft className="h-4 w-4" />
-          {t.map.detailBack}
+          {null}
         </button>
         <button
           type="button"
@@ -2478,7 +2478,7 @@ function NeroOccupationDetail({
         <button type="button" onClick={onBack}
           className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-800 transition-colors">
           <ChevronLeft className="h-4 w-4" />
-          {t.map.detailBack}
+          {null}
         </button>
         <button type="button" onClick={onClose}
           aria-label={t.map.close}
