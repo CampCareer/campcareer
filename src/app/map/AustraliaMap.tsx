@@ -1430,18 +1430,6 @@ function EmploymentList({
               <span className="ml-2 shrink-0 text-xs tabular-nums text-slate-500">
                 {t.map.peopleFmt.replace('{n}', r.emp.toLocaleString())}
               </span>
-              {seekUrl && (
-                <a
-                  href={seekUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  className="inline-flex shrink-0 items-center gap-1 rounded bg-blue-50 px-1.5 py-0.5 text-[11px] font-medium text-blue-700 transition-colors hover:bg-blue-100"
-                >
-                  <ExternalLink className="h-2.5 w-2.5" />
-                  Seek
-                </a>
-              )}
               <ChevronDown
                 className={`h-4 w-4 shrink-0 text-slate-400 transition-transform ${isOpen ? "rotate-180" : ""}`}
               />
