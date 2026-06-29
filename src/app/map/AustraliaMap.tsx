@@ -78,7 +78,7 @@ export default function AustraliaMap({
   // 직업 카드 열림 상태 — 툴바의 직업 검색에서도 열 수 있도록 최상위로 끌어올림.
   const [selectedOccCode, setSelectedOccCode] = useState<string | null>(null)
   const [selectedUsOcc, setSelectedUsOcc] = useState<USOccupation | null>(null)
-  const [expandedNeroA4, setExpandedNeroA4] = useState<string | null>(null)
+  const [selectedNeroA4, setSelectedNeroA4] = useState<string | null>(null)
   const initialNeroLoaded = useRef(false)
   // 모바일에서는 우측 패널 대신 구글맵식 바텀시트(드래그로 확장)를 쓴다.
   const [isMobile, setIsMobile] = useState(false)
@@ -261,7 +261,7 @@ export default function AustraliaMap({
 
     if (!initialNeroLoaded.current && urlNero && tab === "employment") {
       initialNeroLoaded.current = true
-      setExpandedNeroA4(urlNero)
+      setSelectedNeroA4(urlNero)
       return
     }
 
@@ -272,9 +272,9 @@ export default function AustraliaMap({
     if (!initialNeroLoaded.current) return
 
     if (tab === "employment") {
-      if (expandedNeroA4 !== urlNero) {
-        if (expandedNeroA4) {
-          p.set("nero", expandedNeroA4)
+      if (selectedNeroA4 !== urlNero) {
+        if (selectedNeroA4) {
+          p.set("nero", selectedNeroA4)
         } else {
           p.delete("nero")
         }
@@ -284,7 +284,7 @@ export default function AustraliaMap({
       p.delete("nero")
       window.history.replaceState(null, "", `?${p.toString()}`)
     }
-  }, [expandedNeroA4, tab])
+  }, [selectedNeroA4, tab])
 
   const onSelectSA4 = useCallback((code: string) => {
     const regions = selected && selected !== "WHV"
@@ -584,8 +584,8 @@ export default function AustraliaMap({
               savedOccCodes={savedOccCodes}
               onToggleSave={toggleSaveOcc}
               onShare={shareOcc}
-              expandedNeroA4={expandedNeroA4}
-              onToggleNeroA4={setExpandedNeroA4}
+              selectedNeroA4={selectedNeroA4}
+              setSelectedNeroA4={setSelectedNeroA4}
             />
           )
           return isMobile ? (
@@ -620,8 +620,8 @@ function Panel({
   savedOccCodes,
   onToggleSave,
   onShare,
-  expandedNeroA4,
-  onToggleNeroA4,
+  selectedNeroA4,
+  setSelectedNeroA4,
 }: {
   data: MapData
   selected: string
@@ -639,8 +639,8 @@ function Panel({
   savedOccCodes: Set<string>
   onToggleSave: (occCode: string, occTitle: string) => void
   onShare: () => void
-  expandedNeroA4: string | null
-  onToggleNeroA4: (a4: string | null) => void
+  selectedNeroA4: string | null
+  setSelectedNeroA4: (a4: string | null) => void
 }) {
   const t = useTranslations()
   const locale = useLocale()
@@ -705,6 +705,7 @@ function Panel({
     setSelectedUsOcc(occ)
   }
   const handleBack = () => setSelectedOccCode(null)
+  const handleBackNero = () => setSelectedNeroA4(null)
 
   if (selectedUsOcc) {
     return (
@@ -733,6 +734,26 @@ function Panel({
         t={t}
         currentState={selected as StateCode}
         data={data}
+        savedOccCodes={savedOccCodes}
+        onToggleSave={onToggleSave}
+        onShare={onShare}
+      />
+    )
+  }
+
+  if (selectedNeroA4 && neroData && isAU) {
+    return (
+      <NeroOccupationDetail
+        a4={selectedNeroA4}
+        stateCode={selected as StateCode}
+        neroData={neroData}
+        sa4Regions={panelSa4Regions}
+        auOccupations={data.auOccupations}
+        stateSalaryMult={data.stateSalaryMult}
+        coursesByFieldState={data.coursesByFieldState}
+        onBack={handleBackNero}
+        onClose={onClose}
+        t={t}
         savedOccCodes={savedOccCodes}
         onToggleSave={onToggleSave}
         onShare={onShare}
@@ -843,11 +864,7 @@ function Panel({
             stateCode={isAU ? (selected as StateCode) : null}
             sa4Regions={panelSa4Regions}
             neroData={neroData}
-            auOccupations={data.auOccupations}
-            stateSalaryMult={data.stateSalaryMult}
-            coursesByFieldState={data.coursesByFieldState}
-            expandedNeroA4={expandedNeroA4}
-            onToggleNeroA4={onToggleNeroA4}
+            onSelectNero={(a4) => setSelectedNeroA4(a4)}
           />
         )}
         {tab === "whv" && isAU && (
@@ -1318,21 +1335,13 @@ function EmploymentList({
   stateCode,
   sa4Regions,
   neroData,
-  auOccupations,
-  stateSalaryMult,
-  coursesByFieldState,
-  expandedNeroA4,
-  onToggleNeroA4,
+  onSelectNero,
 }: {
   sa4: SA4Region | null
   stateCode: StateCode | null
   sa4Regions: SA4Region[]
   neroData: Record<string, NeroOccupation[]> | null
-  auOccupations: Record<string, OccRow>
-  stateSalaryMult: StateSalaryMult
-  coursesByFieldState: Record<string, Record<string, CourseLite[]>>
-  expandedNeroA4: string | null
-  onToggleNeroA4: (a4: string | null) => void
+  onSelectNero: (a4: string) => void
 }) {
   const t = useTranslations()
 
@@ -1373,103 +1382,17 @@ function EmploymentList({
 
   const maxEmp = occs[0].emp
 
-  function findSeekUrl(r: NeroOccupation): string | null {
-    const byA4 = JOB_SEARCH_LINKS.find((l) => l.a4 === r.a4)
-    if (byA4) return byA4.seek_url
-    const byName = JOB_SEARCH_LINKS.find((l) => l.name === r.name)
-    if (byName) return byName.seek_url
-    return null
-  }
-
-  function getStateSeekUrl(baseUrl: string): string {
-    if (!stateCode) return baseUrl
-    const path = STATE_SEEK_PATH[stateCode]
-    if (!path) return baseUrl
-    return `${baseUrl}/in-${path}`
-  }
-
-  function getStateIndeedUrl(name: string): string {
-    const q = name.toLowerCase().replace(/[^a-z0-9]+/g, "+").replace(/(^\+|\+$)/g, "")
-    const base = `https://au.indeed.com/jobs?q=${q}`
-    if (!stateCode) return base
-    const l = STATE_NAMES[stateCode]
-    if (!l) return base
-    return `${base}&l=${encodeURIComponent(l)}`
-  }
-
-  function getEnrichment(a4: string, name?: string) {
-    const mapping = EMPLOYMENT_OCCUPATIONS.find((o) => o.a4 === a4)
-    if (!mapping) return { broad_field: null, medianSalary: null, estimatedSalary: null }
-
-    let occRow: OccRow | null = null
-    let matchedCode: string | null = null
-
-    if (mapping.representative_osca_code) {
-      occRow = auOccupations[mapping.representative_osca_code] ?? null
-      if (occRow) matchedCode = mapping.representative_osca_code
-    }
-
-    if (!occRow) {
-      const fallback = Object.values(auOccupations).find(
-        (o) => o.anzsco_v13?.startsWith(a4) && o.median_salary_aud != null,
-      )
-      if (fallback?.anzsco_code) {
-        occRow = fallback
-        matchedCode = fallback.anzsco_code
-      }
-    }
-
-    let medianSalary = occRow?.median_salary_aud ?? null
-    let estimatedSalary: number | null = null
-
-    // Third fallback: direct ANZSCO 4-digit salary mapping (JSA / ABS)
-    if (medianSalary == null) {
-      let entry = EMPLOYMENT_SALARIES.find((e) => e.a4 === a4)
-      // Also try by name if a4 lookup failed
-      if (!entry && name) {
-        entry = EMPLOYMENT_SALARIES.find((e) => {
-          const m = EMPLOYMENT_OCCUPATIONS.find((o) => o.a4 === e.a4)
-          return m?.name === name
-        })
-      }
-      if (entry?.median_salary_aud) {
-        medianSalary = entry.median_salary_aud
-        medianSalary = entry.median_salary_aud
-        if (stateCode) {
-          const d1 = a4.charAt(0)
-          const mult = stateSalaryMult[stateCode]?.[d1] ?? 1
-          estimatedSalary = Math.round(medianSalary * mult)
-        }
-      }
-    } else if (medianSalary != null && stateCode && matchedCode) {
-      const d1 = matchedCode.charAt(0)
-      const mult = stateSalaryMult[stateCode]?.[d1] ?? 1
-      estimatedSalary = Math.round(medianSalary * mult)
-    }
-    return { broad_field: mapping.broad_field, medianSalary, estimatedSalary }
-  }
-
-  function getCourses(broadField: string | null) {
-    if (!broadField || !stateCode) return []
-    return (coursesByFieldState[broadField]?.[stateCode] ?? []).slice(0, 4)
-  }
-
   return (
     <div>
       <p className="mb-1 px-3 text-xs text-slate-400">
         {t.map.employmentSource}
       </p>
       <ol>
-        {occs.map((r, i) => {
-          const isOpen = expandedNeroA4 === r.a4
-          const seekUrl = findSeekUrl(r)
-          const enrich = isOpen ? getEnrichment(r.a4, r.name) : null
-          const courses = isOpen && enrich ? getCourses(enrich.broad_field) : []
-          return (
+        {occs.map((r, i) => (
           <li key={r.a4}>
             <button
               type="button"
-              onClick={() => onToggleNeroA4(isOpen ? null : r.a4)}
+              onClick={() => onSelectNero(r.a4)}
               className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left transition-colors hover:bg-slate-50"
             >
               <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
@@ -1485,115 +1408,10 @@ function EmploymentList({
               <span className="ml-2 shrink-0 text-xs tabular-nums text-slate-500">
                 {t.map.peopleFmt.replace('{n}', r.emp.toLocaleString())}
               </span>
-              <ChevronDown
-                className={`h-4 w-4 shrink-0 text-slate-400 transition-transform ${isOpen ? "rotate-180" : ""}`}
-              />
+              <ChevronRight className="h-4 w-4 shrink-0 text-slate-400" />
             </button>
-
-            {isOpen && enrich && (
-              <div className="border-t border-slate-100 px-4 pb-3 pt-3">
-                {/* Salary */}
-                <div className="mb-3 rounded-lg bg-slate-50 p-3">
-                  <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">
-                    {t.employment.salary}
-                  </p>
-                  <div className="mt-1.5 space-y-1">
-                    {enrich.medianSalary != null && (
-                      <p className="flex items-center gap-1.5 text-sm text-slate-700">
-                        <DollarSign className="h-3.5 w-3.5 text-green-600" />
-                        {t.employment.nationalMedian.replace('{amount}', enrich.medianSalary.toLocaleString())}
-                      </p>
-                    )}
-                    {enrich.estimatedSalary != null && stateCode && (
-                      <p className="flex items-center gap-1.5 text-sm text-slate-700">
-                        <DollarSign className="h-3.5 w-3.5 text-green-600" />
-                        {t.employment.stateEstimate.replace('{stateName}', STATE_NAMES[stateCode] ?? stateCode).replace('{amount}', enrich.estimatedSalary.toLocaleString())}
-                      </p>
-                    )}
-                    {enrich.medianSalary == null && (
-                      <p className="text-sm text-slate-400">{t.employment.salaryNotAvailable}</p>
-                    )}
-                  </div>
-                </div>
-
-                {/* Related study */}
-                {enrich.broad_field && (
-                  <div className="mb-3 rounded-lg bg-slate-50 p-3">
-                    <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">
-                      {t.employment.relatedStudy}
-                    </p>
-                    <p className="mt-1 text-sm text-slate-700">
-                      {enrich.broad_field}
-                    </p>
-                    {courses.length > 0 && (
-                      <div className="mt-2 space-y-1.5">
-                        {courses.map((course) => (
-                          <a
-                            key={course.id}
-                            href={course.cricos_url ?? course.website_url ?? "#"}
-                            target={course.cricos_url || course.website_url ? "_blank" : undefined}
-                            rel="noopener noreferrer"
-                            className="flex items-start gap-2 rounded-md bg-white px-2.5 py-2 text-xs transition-colors hover:bg-blue-50"
-                          >
-                            <GraduationCap className="mt-0.5 h-3.5 w-3.5 shrink-0 text-slate-400" />
-                            <div className="min-w-0 flex-1">
-                              <p className="font-medium text-slate-700 truncate">{course.title}</p>
-                              <p className="text-slate-400">
-                                {course.institution_name}
-                                {course.duration_years != null && ` · ${course.duration_years} yr`}
-                                {course.tuition_fee_aud != null && ` · $${course.tuition_fee_aud.toLocaleString()}`}
-                              </p>
-                            </div>
-                            {(course.cricos_url || course.website_url) && <ExternalLink className="mt-0.5 h-3 w-3 shrink-0 text-slate-400" />}
-                          </a>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Related job links */}
-                {seekUrl && (
-                  <div className="mb-3 rounded-lg bg-slate-50 p-3">
-                    <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">
-                      {t.employment.relatedJobs}
-                    </p>
-                    <div className="mt-2 flex flex-wrap gap-2">
-                      <a
-                        href={getStateSeekUrl(seekUrl)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 rounded-md bg-white px-3 py-2 text-xs font-medium text-slate-700 transition-colors hover:bg-blue-50"
-                      >
-                        <ExternalLink className="h-3.5 w-3.5" />
-                        {t.employment.seek}
-                      </a>
-                      <a
-                        href={getStateIndeedUrl(r.name)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 rounded-md bg-white px-3 py-2 text-xs font-medium text-slate-700 transition-colors hover:bg-blue-50"
-                      >
-                        <ExternalLink className="h-3.5 w-3.5" />
-                        {t.employment.indeed}
-                      </a>
-                    </div>
-                  </div>
-                )}
-
-                {/* Job openings */}
-                {stateCode && (
-                  <div className="mb-3">
-                    <JobListings what={r.name} where={STATE_NAMES[stateCode] ?? stateCode} country="AU" />
-                  </div>
-                )}
-
-                <AffiliateCtas />
-              </div>
-            )}
           </li>
-          )
-        })}
+        ))}
       </ol>
     </div>
   )
@@ -2521,6 +2339,266 @@ function USOccupationDetail({
           </div>
 
           <JobListings what={occ.occ_title} where={stateCode} country="US" />
+
+          <AffiliateCtas />
+        </div>
+      </div>
+
+      <p className="border-t border-slate-100 px-5 py-3 text-xs text-slate-400">
+        {t.map.source}
+      </p>
+    </>
+  )
+}
+
+function NeroOccupationDetail({
+  a4,
+  stateCode,
+  neroData,
+  sa4Regions,
+  auOccupations,
+  stateSalaryMult,
+  coursesByFieldState,
+  onBack,
+  onClose,
+  t,
+  savedOccCodes,
+  onToggleSave,
+  onShare,
+}: {
+  a4: string
+  stateCode: StateCode
+  neroData: Record<string, NeroOccupation[]>
+  sa4Regions: SA4Region[]
+  auOccupations: Record<string, OccRow>
+  stateSalaryMult: StateSalaryMult
+  coursesByFieldState: Record<string, Record<string, CourseLite[]>>
+  onBack: () => void
+  onClose: () => void
+  t: ReturnType<typeof useTranslations>
+  savedOccCodes: Set<string>
+  onToggleSave: (occCode: string, occTitle: string) => void
+  onShare: (occTitle: string) => void
+}) {
+  const occ = useMemo(() => {
+    for (const region of sa4Regions) {
+      const rows = neroData[region.code] ?? []
+      const found = rows.find((r) => r.a4 === a4)
+      if (found) return found
+    }
+    for (const code of Object.keys(neroData)) {
+      const rows = neroData[code] ?? []
+      const found = rows.find((r) => r.a4 === a4)
+      if (found) return found
+    }
+    return null
+  }, [a4, neroData, sa4Regions])
+
+  const name = occ?.name ?? a4
+
+  const enrich = useMemo(() => {
+    const mapping = EMPLOYMENT_OCCUPATIONS.find((o) => o.a4 === a4)
+    if (!mapping) return { broad_field: null, medianSalary: null, estimatedSalary: null }
+
+    let occRow: OccRow | null = null
+    let matchedCode: string | null = null
+
+    if (mapping.representative_osca_code) {
+      occRow = auOccupations[mapping.representative_osca_code] ?? null
+      if (occRow) matchedCode = mapping.representative_osca_code
+    }
+
+    if (!occRow) {
+      const fallback = Object.values(auOccupations).find(
+        (o) => o.anzsco_v13?.startsWith(a4) && o.median_salary_aud != null,
+      )
+      if (fallback?.anzsco_code) {
+        occRow = fallback
+        matchedCode = fallback.anzsco_code
+      }
+    }
+
+    let medianSalary = occRow?.median_salary_aud ?? null
+    let estimatedSalary: number | null = null
+
+    if (medianSalary == null) {
+      let entry = EMPLOYMENT_SALARIES.find((e) => e.a4 === a4)
+      if (!entry && name) {
+        entry = EMPLOYMENT_SALARIES.find((e) => {
+          const m = EMPLOYMENT_OCCUPATIONS.find((o) => o.a4 === e.a4)
+          return m?.name === name
+        })
+      }
+      if (entry?.median_salary_aud) {
+        medianSalary = entry.median_salary_aud
+        if (stateCode) {
+          const d1 = a4.charAt(0)
+          const mult = stateSalaryMult[stateCode]?.[d1] ?? 1
+          estimatedSalary = Math.round(medianSalary * mult)
+        }
+      }
+    } else if (medianSalary != null && stateCode && matchedCode) {
+      const d1 = matchedCode.charAt(0)
+      const mult = stateSalaryMult[stateCode]?.[d1] ?? 1
+      estimatedSalary = Math.round(medianSalary * mult)
+    }
+    return { broad_field: mapping.broad_field, medianSalary, estimatedSalary }
+  }, [a4, name, stateCode, auOccupations, stateSalaryMult])
+
+  const courses = useMemo(() => {
+    if (!enrich.broad_field || !stateCode) return []
+    return (coursesByFieldState[enrich.broad_field]?.[stateCode] ?? []).slice(0, 4)
+  }, [enrich.broad_field, stateCode, coursesByFieldState])
+
+  const seekUrl = useMemo(() => {
+    const byA4 = JOB_SEARCH_LINKS.find((l) => l.a4 === a4)
+    if (byA4) return byA4.seek_url
+    const byName = JOB_SEARCH_LINKS.find((l) => l.name === name)
+    if (byName) return byName.seek_url
+    return null
+  }, [a4, name])
+
+  function getStateSeekUrl(baseUrl: string): string {
+    const path = STATE_SEEK_PATH[stateCode]
+    if (!path) return baseUrl
+    return `${baseUrl}/in-${path}`
+  }
+
+  function getStateIndeedUrl(name: string): string {
+    const q = name.toLowerCase().replace(/[^a-z0-9]+/g, "+").replace(/(^\+|\+$)/g, "")
+    const base = `https://au.indeed.com/jobs?q=${q}`
+    const l = STATE_NAMES[stateCode]
+    if (!l) return base
+    return `${base}&l=${encodeURIComponent(l)}`
+  }
+
+  return (
+    <>
+      <div className="flex items-center justify-between px-5 pt-4">
+        <button type="button" onClick={onBack}
+          className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-800 transition-colors">
+          <ChevronLeft className="h-4 w-4" />
+          {t.map.detailBack}
+        </button>
+        <button type="button" onClick={onClose}
+          aria-label={t.map.close}
+          className="-mr-1 rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700">
+          <X className="h-4 w-4" />
+        </button>
+      </div>
+
+      <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
+        <div className="flex items-start justify-between gap-2">
+          <h2 className="font-sans text-lg font-semibold text-slate-900 tracking-tight">{name}</h2>
+          <div className="flex items-center gap-1 shrink-0">
+            <button type="button"
+              onClick={() => onToggleSave(a4, name)}
+              aria-label="Save occupation"
+              className="rounded-md p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700">
+              <Bookmark className="h-4 w-4"
+                fill={savedOccCodes.has(a4) ? "currentColor" : "none"} />
+            </button>
+            <button type="button"
+              onClick={() => onShare(name)}
+              aria-label="Share occupation"
+              className="rounded-md p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700">
+              <Share2 className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+
+        <div className="mt-5 space-y-4">
+          {/* Salary */}
+          <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+            <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
+              {t.employment.salary}
+            </p>
+            <div className="mt-2 space-y-1">
+              {enrich.medianSalary != null && (
+                <p className="flex items-center gap-1.5 text-sm text-slate-700">
+                  <DollarSign className="h-3.5 w-3.5 text-green-600" />
+                  {t.employment.nationalMedian.replace('{amount}', enrich.medianSalary.toLocaleString())}
+                </p>
+              )}
+              {enrich.estimatedSalary != null && (
+                <p className="flex items-center gap-1.5 text-sm text-slate-700">
+                  <DollarSign className="h-3.5 w-3.5 text-green-600" />
+                  {t.employment.stateEstimate.replace('{stateName}', STATE_NAMES[stateCode] ?? stateCode).replace('{amount}', enrich.estimatedSalary.toLocaleString())}
+                </p>
+              )}
+              {enrich.medianSalary == null && (
+                <p className="text-sm text-slate-400">{t.employment.salaryNotAvailable}</p>
+              )}
+            </div>
+          </div>
+
+          {/* Related study */}
+          {enrich.broad_field && (
+            <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+              <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
+                {t.employment.relatedStudy}
+              </p>
+              <p className="mt-2 text-sm text-slate-700">
+                {enrich.broad_field}
+              </p>
+              {courses.length > 0 && (
+                <div className="mt-3 space-y-2">
+                  {courses.map((course) => (
+                    <a
+                      key={course.id}
+                      href={course.cricos_url ?? course.website_url ?? "#"}
+                      target={course.cricos_url || course.website_url ? "_blank" : undefined}
+                      rel="noopener noreferrer"
+                      className="flex items-start gap-2 rounded-md border border-slate-100 bg-white px-3 py-2.5 text-sm transition-colors hover:bg-blue-50"
+                    >
+                      <GraduationCap className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" />
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium text-slate-700">{course.title}</p>
+                        <p className="text-xs text-slate-400">
+                          {course.institution_name}
+                          {course.duration_years != null && ` · ${course.duration_years} yr`}
+                          {course.tuition_fee_aud != null && ` · A$${course.tuition_fee_aud.toLocaleString()}`}
+                        </p>
+                      </div>
+                      {(course.cricos_url || course.website_url) && <ExternalLink className="mt-0.5 h-3.5 w-3.5 shrink-0 text-slate-400" />}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Related job links */}
+          {seekUrl && (
+            <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+              <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
+                {t.employment.relatedJobs}
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <a
+                  href={getStateSeekUrl(seekUrl)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-md bg-white px-3 py-2 text-xs font-medium text-slate-700 transition-colors hover:bg-blue-50 border border-slate-200"
+                >
+                  <ExternalLink className="h-3.5 w-3.5" />
+                  {t.employment.seek}
+                </a>
+                <a
+                  href={getStateIndeedUrl(name)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-md bg-white px-3 py-2 text-xs font-medium text-slate-700 transition-colors hover:bg-blue-50 border border-slate-200"
+                >
+                  <ExternalLink className="h-3.5 w-3.5" />
+                  {t.employment.indeed}
+                </a>
+              </div>
+            </div>
+          )}
+
+          {/* Job openings */}
+          <JobListings what={name} where={STATE_NAMES[stateCode] ?? stateCode} country="AU" />
 
           <AffiliateCtas />
         </div>
