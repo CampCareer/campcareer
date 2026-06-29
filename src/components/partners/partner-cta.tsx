@@ -10,24 +10,16 @@ function trackAffiliateClick(partnerId: string) {
   w.gtag?.("event", "affiliate_click", { partner: partnerId })
 }
 
-// 작은 Wise 마크 — 인라인 SVG (logo-mark.tsx 컨벤션). 공식 브랜드 SVG 로 교체 가능.
+// Wise 마크 — 공식 브랜드 SVG
 function WiseLogo({ size = 28 }: { size?: number }) {
   return (
-    <svg
+    <img
+      src="/logos/wise-icon.svg"
+      alt="Wise"
       width={size}
       height={size}
-      viewBox="0 0 28 28"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
       className="shrink-0"
-    >
-      <rect width="28" height="28" rx="8" fill="#163300" />
-      <path
-        d="M9 8h4.8l-2 3.2H15l-2 3.2h3.2L13.4 20H8.2l2.4-3.8H7.4l2-3.2H6.2L9 8z"
-        fill="#9FE870"
-      />
-    </svg>
+    />
   )
 }
 
@@ -89,18 +81,13 @@ export function WiseCta() {
 
 function AiraloLogo({ size = 28 }: { size?: number }) {
   return (
-    <svg
+    <img
+      src="/logos/airalo-icon.svg"
+      alt="Airalo"
       width={size}
       height={size}
-      viewBox="0 0 28 28"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
       className="shrink-0"
-    >
-      <rect width="28" height="28" rx="8" fill="#00B6BA" />
-      <path d="M8 20V8h2.8l3.2 7.2L17.2 8H20v12h-2.4v-9.2l-3.6 7.6h-2l-3.6-7.6V20H8z" fill="white" />
-    </svg>
+    />
   )
 }
 
