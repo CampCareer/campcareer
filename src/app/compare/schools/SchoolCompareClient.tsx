@@ -79,15 +79,6 @@ function SchoolTypeBadge({ type }: { type: string }) {
   return <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${color}`}>{labels[type] ?? type}</span>
 }
 
-function MetricLine({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
-  return (
-    <div className="flex items-center justify-between gap-2 rounded-lg bg-slate-50 px-3 py-2">
-      <span className="text-xs text-slate-500">{label}</span>
-      <span className={`text-sm font-semibold ${highlight ? "text-blue-700" : "text-slate-900"}`}>{value}</span>
-    </div>
-  )
-}
-
 function Panel({
   country,
   schoolId,
