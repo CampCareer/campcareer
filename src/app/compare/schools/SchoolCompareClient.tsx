@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import { useTranslations } from "@/lib/i18n/locale-provider"
 
 const HARVARD_ID = "ebef5a65-3759-458c-8086-d4c082a37c1d"
 const UNSW_ID = "50c5abe9-4a93-4410-864d-0d191d0f5d69"
@@ -82,6 +83,10 @@ function SelectorCard({
   loading,
   onCountryChange,
   onSchoolChange,
+  countryLabel,
+  schoolLabel,
+  selectPlaceholder,
+  loadingLabel,
 }: {
   label: string
   country: string
@@ -90,6 +95,10 @@ function SelectorCard({
   loading: boolean
   onCountryChange: (v: string) => void
   onSchoolChange: (v: string) => void
+  countryLabel: string
+  schoolLabel: string
+  selectPlaceholder: string
+  loadingLabel: string
 }) {
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-3 sm:p-5">
@@ -100,7 +109,7 @@ function SelectorCard({
           </span>
         </div>
         <div>
-          <label className="text-xs font-medium text-slate-500 mb-1 block">Country</label>
+          <label className="text-xs font-medium text-slate-500 mb-1 block">{countryLabel}</label>
           <select
             value={country}
             onChange={e => onCountryChange(e.target.value)}
@@ -112,14 +121,14 @@ function SelectorCard({
           </select>
         </div>
         <div>
-          <label className="text-xs font-medium text-slate-500 mb-1 block">School</label>
+          <label className="text-xs font-medium text-slate-500 mb-1 block">{schoolLabel}</label>
           <select
             value={schoolId}
             onChange={e => onSchoolChange(e.target.value)}
             disabled={loading}
             className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
           >
-            <option value="">{loading ? "Loading..." : "Select a school"}</option>
+            <option value="">{loading ? loadingLabel : selectPlaceholder}</option>
             {schools.map(s => (
               <option key={s.college_id} value={s.college_id}>
                 {s.college_name} ({s.college_state})
@@ -140,6 +149,7 @@ type SectionDef = {
 }
 
 export default function SchoolCompareClient() {
+  const t = useTranslations()
   const [currency, setCurrency] = useState<CurrencyCode>("USD")
   const [countryA, setCountryA] = useState("us")
   const [countryB, setCountryB] = useState("au")
@@ -197,23 +207,23 @@ export default function SchoolCompareClient() {
   const ready = detailA && detailB
 
   const sections: SectionDef[] = ready ? [
-    { key: "school_type", label: "School Type",
-      valA: ({ public: "Public", private_nonprofit: "Private Nonprofit", private_forprofit: "For-Profit" })[detailA.school_type] ?? detailA.school_type,
-      valB: ({ public: "Public", private_nonprofit: "Private Nonprofit", private_forprofit: "For-Profit" })[detailB.school_type] ?? detailB.school_type },
-    { key: "location", label: "Location",
+    { key: "school_type", label: t.compare.schools.schoolType,
+      valA: ({ public: t.compare.schools.typePublic, private_nonprofit: t.compare.schools.typePrivateNonprofit, private_forprofit: t.compare.schools.typeForProfit })[detailA.school_type] ?? detailA.school_type,
+      valB: ({ public: t.compare.schools.typePublic, private_nonprofit: t.compare.schools.typePrivateNonprofit, private_forprofit: t.compare.schools.typeForProfit })[detailB.school_type] ?? detailB.school_type },
+    { key: "location", label: t.compare.schools.location,
       valA: `${detailA.city_name}, ${detailA.college_state}`,
       valB: `${detailB.city_name}, ${detailB.college_state}` },
-    { key: "tuition", label: "Tuition / yr",
+    { key: "tuition", label: t.compare.schools.tuition,
       valA: fmtMoney(detailA.tuition, countryA, currency, sym),
       valB: fmtMoney(detailB.tuition, countryB, currency, sym) },
-    { key: "median_earnings", label: "Median Earnings",
+    { key: "median_earnings", label: t.compare.schools.medianEarnings,
       valA: fmtMoney(detailA.median_earnings, countryA, currency, sym),
       valB: fmtMoney(detailB.median_earnings, countryB, currency, sym) },
-    { key: "roi_score", label: "ROI Score",
+    { key: "roi_score", label: t.compare.schools.roiScore,
       valA: detailA.roi_score.toFixed(1), valB: detailB.roi_score.toFixed(1) },
-    { key: "payback_years", label: "Payback",
+    { key: "payback_years", label: t.compare.schools.payback,
       valA: `${detailA.payback_years} yr`, valB: `${detailB.payback_years} yr` },
-    { key: "graduation_rate", label: "Graduation Rate",
+    { key: "graduation_rate", label: t.compare.schools.graduationRate,
       valA: fmtPct(detailA.graduation_rate), valB: fmtPct(detailB.graduation_rate) },
   ] : []
 
@@ -229,7 +239,7 @@ export default function SchoolCompareClient() {
           <span className="flex-1 text-sm font-semibold text-slate-900 truncate text-center">
             {detailA?.college_name ?? ""}
           </span>
-          <span className="text-xs font-medium text-slate-400 shrink-0">vs</span>
+          <span className="text-xs font-medium text-slate-400 shrink-0">{t.compare.schools.vs}</span>
           <span className="flex-1 text-sm font-semibold text-slate-900 truncate text-center">
             {detailB?.college_name ?? ""}
           </span>
@@ -240,14 +250,14 @@ export default function SchoolCompareClient() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
             <h1 className="font-display text-2xl sm:text-3xl font-semibold text-slate-900 tracking-tight">
-              School Comparison
+              {t.compare.schools.pageTitle}
             </h1>
             <p className="mt-1 text-sm text-slate-500">
-              Select a school on each side to compare tuition, earnings, ROI, and more.
+              {t.compare.schools.pageSubtitle}
             </p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
-            <label className="text-xs font-medium text-slate-500">Currency</label>
+            <label className="text-xs font-medium text-slate-500">{t.compare.schools.currency}</label>
             <select
               value={currency}
               onChange={e => setCurrency(e.target.value as CurrencyCode)}
@@ -270,6 +280,10 @@ export default function SchoolCompareClient() {
               loading={loadingA}
               onCountryChange={setCountryA}
               onSchoolChange={setSchoolIdA}
+              countryLabel={t.compare.schools.country}
+              schoolLabel={t.compare.schools.school}
+              selectPlaceholder={t.compare.schools.selectSchool}
+              loadingLabel={t.compare.schools.loading}
             />
           </div>
           <div className="w-1/2 sm:w-[280px] min-w-0">
@@ -281,6 +295,10 @@ export default function SchoolCompareClient() {
               loading={loadingB}
               onCountryChange={setCountryB}
               onSchoolChange={setSchoolIdB}
+              countryLabel={t.compare.schools.country}
+              schoolLabel={t.compare.schools.school}
+              selectPlaceholder={t.compare.schools.selectSchool}
+              loadingLabel={t.compare.schools.loading}
             />
           </div>
         </div>
@@ -313,7 +331,7 @@ export default function SchoolCompareClient() {
           </div>
         ) : (
           <div className="max-w-4xl mx-auto rounded-xl border border-dashed border-slate-300 bg-slate-50/50 p-12 text-center">
-            <p className="text-sm text-slate-500">Select a school on both sides to see the comparison.</p>
+            <p className="text-sm text-slate-500">{t.compare.schools.emptyState}</p>
           </div>
         )}
       </div>
