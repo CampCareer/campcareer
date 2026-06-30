@@ -9,14 +9,6 @@ const ROI_TABLES: Record<string, string> = {
   ie: 'roi_explorer_ie',
 }
 
-const COUNTRY_LABELS: Record<string, string> = {
-  us: 'United States',
-  au: 'Australia',
-  ca: 'Canada',
-  uk: 'United Kingdom',
-  ie: 'Ireland',
-}
-
 export async function GET(request: NextRequest) {
   const country = request.nextUrl.searchParams.get('country') || 'us'
   const collegeId = request.nextUrl.searchParams.get('collegeId')
@@ -63,7 +55,4 @@ export async function GET(request: NextRequest) {
   )
 }
 
-export const countries = Object.entries(COUNTRY_LABELS).map(([value, label]) => ({
-  value,
-  label,
-}))
+
