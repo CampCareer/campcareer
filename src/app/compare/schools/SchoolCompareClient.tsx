@@ -126,10 +126,6 @@ function inferCountry(d: SchoolDetail): string {
   return "us"
 }
 
-function countryFromSchool(schools: SchoolOption[], collegeId: string, currentCountry: string): string {
-  return currentCountry
-}
-
 function SelectorPanel({
   label,
   country,
@@ -247,14 +243,6 @@ export default function SchoolCompareClient() {
   }, [schoolIdB, countryB])
 
   const ccySymbol = CURRENCIES.find(c => c.code === currency)?.symbol ?? "$"
-
-  function getCountryForDetail(d: SchoolDetail | null, fallback: string): string {
-    if (!d) return fallback
-    const mapped: Record<string, string> = {
-      us: "us", au: "au", ca: "ca", uk: "uk", ie: "ie",
-    }
-    return mapped[d.college_id?.slice(0, 2)] ?? fallback
-  }
 
   return (
     <div className="mx-auto max-w-6xl px-4 sm:px-6 py-8 sm:py-10">
