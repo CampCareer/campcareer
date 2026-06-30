@@ -71,10 +71,6 @@ function fmtMoney(value: number, country: string, target: CurrencyCode, symbol: 
   return `${symbol}${convertCurrency(value, country, target).toLocaleString()}`
 }
 
-function fmtPct(value: number): string {
-  return `${(value * 100).toFixed(0)}%`
-}
-
 function SelectorCard({
   label,
   country,
@@ -223,8 +219,8 @@ export default function MajorCompareClient() {
       valA: tc[detailA.overall_risk as keyof typeof tc] as string ?? detailA.overall_risk,
       valB: tc[detailB.overall_risk as keyof typeof tc] as string ?? detailB.overall_risk },
     { key: "employment_rate", label: tc.employmentRate,
-      valA: fmtPct(detailA.employment_rate),
-      valB: fmtPct(detailB.employment_rate) },
+      valA: `${detailA.employment_rate}%`,
+      valB: `${detailB.employment_rate}%` },
     { key: "starting_salary", label: tc.startingSalary,
       valA: fmtMoney(detailA.median_starting_salary, countryA, currency, sym),
       valB: fmtMoney(detailB.median_starting_salary, countryB, currency, sym) },
