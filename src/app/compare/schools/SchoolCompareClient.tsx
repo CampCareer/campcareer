@@ -93,7 +93,7 @@ function SelectorCard({
   onSchoolChange: (v: string) => void
 }) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-5">
+    <div className="rounded-xl border border-slate-200 bg-white p-3 sm:p-5">
       <div className="space-y-3">
         <div className="flex items-center gap-2 mb-1">
           <span className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 text-[10px] font-bold text-white">
@@ -228,8 +228,8 @@ export default function SchoolCompareClient() {
         </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
-        <div className="w-full sm:w-[280px]">
+      <div className="flex flex-row gap-2 sm:gap-4 justify-center mb-6 sm:mb-10">
+        <div className="w-1/2 sm:w-[280px] min-w-0">
           <SelectorCard
             label="A"
             country={countryA}
@@ -240,7 +240,7 @@ export default function SchoolCompareClient() {
             onSchoolChange={setSchoolIdA}
           />
         </div>
-        <div className="w-full sm:w-[280px]">
+        <div className="w-1/2 sm:w-[280px] min-w-0">
           <SelectorCard
             label="B"
             country={countryB}
@@ -254,20 +254,20 @@ export default function SchoolCompareClient() {
       </div>
 
       {ready ? (
-        <div className="overflow-hidden rounded-xl border border-slate-200 bg-white max-w-4xl mx-auto">
+        <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white max-w-4xl mx-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-slate-200 bg-slate-50">
-                <th className="text-left px-5 py-3.5 text-xs font-semibold text-slate-500 uppercase tracking-wider w-[180px]">
+                <th className="text-left px-3 sm:px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap">
                   <div className="flex items-center gap-2">
-                    <Building2 className="h-4 w-4 text-slate-400" />
+                    <Building2 className="h-4 w-4 text-slate-400 shrink-0" />
                     Metric
                   </div>
                 </th>
-                <th className="text-center px-5 py-3.5 text-xs font-semibold text-blue-600 uppercase tracking-wider">
+                <th className="text-center px-3 sm:px-5 py-3 text-xs font-semibold text-blue-600 uppercase tracking-wider whitespace-nowrap">
                   {detailA.college_name}
                 </th>
-                <th className="text-center px-5 py-3.5 text-xs font-semibold text-blue-600 uppercase tracking-wider">
+                <th className="text-center px-3 sm:px-5 py-3 text-xs font-semibold text-blue-600 uppercase tracking-wider whitespace-nowrap">
                   {detailB.college_name}
                 </th>
               </tr>
@@ -275,9 +275,9 @@ export default function SchoolCompareClient() {
             <tbody>
               {rows.map((row, i) => (
                 <tr key={row.key} className={i < rows.length - 1 ? "border-b border-slate-100" : ""}>
-                  <td className="px-5 py-4 text-sm font-medium text-slate-700">{row.label}</td>
-                  <td className={`px-5 py-4 text-center ${row.isMoney ? "font-semibold text-slate-900" : "text-slate-700"}`}>{row.valA}</td>
-                  <td className={`px-5 py-4 text-center ${row.isMoney ? "font-semibold text-slate-900" : "text-slate-700"}`}>{row.valB}</td>
+                  <td className="px-3 sm:px-5 py-3 sm:py-4 text-sm font-medium text-slate-700 whitespace-nowrap">{row.label}</td>
+                  <td className={`px-3 sm:px-5 py-3 sm:py-4 text-center whitespace-nowrap ${row.isMoney ? "font-semibold text-slate-900" : "text-slate-700"}`}>{row.valA}</td>
+                  <td className={`px-3 sm:px-5 py-3 sm:py-4 text-center whitespace-nowrap ${row.isMoney ? "font-semibold text-slate-900" : "text-slate-700"}`}>{row.valB}</td>
                 </tr>
               ))}
             </tbody>
