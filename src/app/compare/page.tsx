@@ -22,7 +22,7 @@ const compareTypes = [
     icon: GraduationCap,
     title: "전공 비교",
     description: "국가별로 같은 전공의 취업·비자·ROI를 나란히 비교해보세요.",
-    status: "준비 중",
+    status: null,
   },
   {
     href: "/compare/careers",
@@ -63,9 +63,11 @@ export default function ComparePage() {
               <p className="mt-1.5 text-sm text-slate-500 leading-relaxed">
                 {item.description}
               </p>
-              <span className="mt-4 inline-block rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-500">
-                {item.status}
-              </span>
+              {item.status && (
+                <span className="mt-4 inline-block rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-500">
+                  {item.status}
+                </span>
+              )}
             </Link>
           )
         })}
