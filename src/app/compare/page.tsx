@@ -29,7 +29,7 @@ const compareTypes = [
     icon: Briefcase,
     title: "직업 비교",
     description: "같은 직업을 국가별·지역별로 비교해보세요.",
-    status: "준비 중",
+    status: null,
   },
 ]
 
