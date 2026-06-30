@@ -45,3 +45,4 @@ cricos_*.json
 cricos_*.xlsx
 hea_*.json
 supabase/.temp/
+temp-ie-geojson/
