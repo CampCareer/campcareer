@@ -81,7 +81,6 @@ function SelectorCard({
   schoolId,
   schools,
   loading,
-  detail,
   onCountryChange,
   onSchoolChange,
 }: {
@@ -90,7 +89,6 @@ function SelectorCard({
   schoolId: string
   schools: SchoolOption[]
   loading: boolean
-  detail: SchoolDetail | null
   onCountryChange: (v: string) => void
   onSchoolChange: (v: string) => void
 }) {
@@ -238,7 +236,6 @@ export default function SchoolCompareClient() {
             schoolId={schoolIdA}
             schools={schoolsA}
             loading={loadingA}
-            detail={detailA}
             onCountryChange={setCountryA}
             onSchoolChange={setSchoolIdA}
           />
@@ -250,7 +247,6 @@ export default function SchoolCompareClient() {
             schoolId={schoolIdB}
             schools={schoolsB}
             loading={loadingB}
-            detail={detailB}
             onCountryChange={setCountryB}
             onSchoolChange={setSchoolIdB}
           />
