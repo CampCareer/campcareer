@@ -207,6 +207,16 @@ const ko: Dictionary = {
     timelineSubtitle: '학업 → 졸업 후 취업비자 → 영주권, 나라별로.',
     seeDetail: '전체 상세 보기',
     ogTagline: '취업 · 비자 · 시장수요 · AI 노출 · ROI',
+    hub: {
+      title: '비교',
+      subtitle: '두 대상을 나란히 놓고 비교해보세요. 학교·전공·직업 각각의 카테고리에서 국가별·지역별 데이터를 한눈에 볼 수 있습니다.',
+      schools: '학교 비교',
+      schoolsDesc: '같은 전공의 학교끼리, 혹은 국가별 학교를 비교해보세요.',
+      majors: '전공 비교',
+      majorsDesc: '국가별로 같은 전공의 취업·비자·ROI를 나란히 비교해보세요.',
+      careers: '직업 비교',
+      careersDesc: '같은 직업을 국가별·지역별로 비교해보세요.',
+    },
     schools: {
       pageTitle: '학교 비교',
       pageSubtitle: '양쪽에서 학교를 선택하면 학비·초봉·ROI를 나란히 비교할 수 있어요.',
