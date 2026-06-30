@@ -28,15 +28,17 @@ const COUNTRY_MAP: Record<string, string> = {
 
 type CareerOption = { code: string; name: string }
 
-function loadUSOccs(): Map<string, { states: RawUSOcc[]; score: number }> {
+type RegionEntry = { state: string; occ: RawUSOcc }
+
+function loadUSOccs(): Map<string, { regions: RegionEntry[]; score: number }> {
   const raw = JSON.parse(readFileSync(join(process.cwd(), 'src/data/us-occupation-state.json'), 'utf-8')) as RawData
-  const byCode = new Map<string, { states: RawUSOcc[]; score: number }>()
-  for (const occs of Object.values(raw.shortageByState)) {
+  const byCode = new Map<string, { regions: RegionEntry[]; score: number }>()
+  for (const [state, occs] of Object.entries(raw.shortageByState)) {
     for (const occ of occs) {
       if (!byCode.has(occ.occ_code)) {
-        byCode.set(occ.occ_code, { states: [], score: occ.shortage_score })
+        byCode.set(occ.occ_code, { regions: [], score: occ.shortage_score })
       }
-      byCode.get(occ.occ_code)!.states.push(occ)
+      byCode.get(occ.occ_code)!.regions.push({ state, occ })
     }
   }
   return byCode
@@ -59,7 +61,7 @@ export async function GET(request: NextRequest) {
       if (!entry) {
         return NextResponse.json({ data: null })
       }
-      const s = entry.states[0]
+      const s = entry.regions[0].occ
       return NextResponse.json({
         data: {
           code: s.occ_code,
@@ -74,7 +76,7 @@ export async function GET(request: NextRequest) {
           on_shortage_list: true,
           confidence: 'verified',
           source_name: 'BLS + Lightcast',
-          regions: entry.states.map(st => ({ name: st.occ_code, score: st.shortage_score })),
+          regions: entry.regions.map(r => ({ name: r.state, score: r.occ.shortage_score })),
         },
       }, { headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400' } })
     }
