@@ -6,9 +6,10 @@ import localFont from "next/font/local"
 import { Fraunces } from "next/font/google"
 import "./globals.css"
 import { LayoutShell } from "@/components/layout/layout-shell"
-import { DEFAULT_LOCALE } from "@/lib/i18n/config"
+import { DEFAULT_LOCALE, isLocale, LOCALE_COOKIE } from "@/lib/i18n/config"
 import { LocaleProvider } from "@/lib/i18n/locale-provider"
 import { LocaleInit } from "@/components/locale-init"
+import { cookies } from "next/headers"
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -80,10 +81,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const cookieLocale = cookies().get(LOCALE_COOKIE)?.value
+  const locale = isLocale(cookieLocale) ? cookieLocale : DEFAULT_LOCALE
+
   return (
-    <html lang={DEFAULT_LOCALE}>
+    <html lang={locale}>
       <body className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} antialiased`}>
-        <LocaleProvider locale={DEFAULT_LOCALE}>
+        <LocaleProvider locale={locale}>
           <LocaleInit />
           <LayoutShell>{children}</LayoutShell>
         </LocaleProvider>
