@@ -30,7 +30,10 @@ type CareerOption = { code: string; name: string }
 
 type RegionEntry = { state: string; occ: RawUSOcc }
 
+const _cache: { data: Map<string, { regions: RegionEntry[]; score: number }> | null } = { data: null }
+
 function loadUSOccs(): Map<string, { regions: RegionEntry[]; score: number }> {
+  if (_cache.data) return _cache.data
   const raw = JSON.parse(readFileSync(join(process.cwd(), 'src/data/us-occupation-state.json'), 'utf-8')) as RawData
   const byCode = new Map<string, { regions: RegionEntry[]; score: number }>()
   for (const [state, occs] of Object.entries(raw.shortageByState)) {
@@ -41,6 +44,7 @@ function loadUSOccs(): Map<string, { regions: RegionEntry[]; score: number }> {
       byCode.get(occ.occ_code)!.regions.push({ state, occ })
     }
   }
+  _cache.data = byCode
   return byCode
 }
 
