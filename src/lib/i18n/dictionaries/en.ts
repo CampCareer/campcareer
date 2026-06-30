@@ -272,6 +272,7 @@ const en = {
       visaEligible: 'Visa Eligible',
       yes: 'Yes',
       no: 'No',
+      dataNotAvailable: 'Data not available for this country.',
     },
   },
   checklist: {

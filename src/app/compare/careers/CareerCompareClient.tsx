@@ -82,6 +82,7 @@ function SelectorCard({
   selectPlaceholder,
   loadingLabel,
   unsupported,
+  unsupportedLabel,
 }: {
   label: string
   country: string
@@ -95,6 +96,7 @@ function SelectorCard({
   selectPlaceholder: string
   loadingLabel: string
   unsupported: boolean
+  unsupportedLabel: string
 }) {
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-3 sm:p-5">
@@ -125,7 +127,7 @@ function SelectorCard({
             className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
           >
             {unsupported ? (
-              <option value="">Data not available</option>
+              <option value="">{unsupportedLabel}</option>
             ) : (
               <>
                 <option value="">{loading ? loadingLabel : selectPlaceholder}</option>
@@ -301,6 +303,7 @@ export default function CareerCompareClient() {
               selectPlaceholder={tc.selectCareer}
               loadingLabel={tc.loading}
               unsupported={unsupportedA}
+              unsupportedLabel={tc.dataNotAvailable}
             />
           </div>
           <div className="w-1/2 sm:w-[280px] min-w-0">
@@ -317,6 +320,7 @@ export default function CareerCompareClient() {
               selectPlaceholder={tc.selectCareer}
               loadingLabel={tc.loading}
               unsupported={unsupportedB}
+              unsupportedLabel={tc.dataNotAvailable}
             />
           </div>
         </div>

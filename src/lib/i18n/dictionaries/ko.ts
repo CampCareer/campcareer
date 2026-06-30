@@ -274,6 +274,7 @@ const ko: Dictionary = {
       visaEligible: '비자 가능',
       yes: '예',
       no: '아니오',
+      dataNotAvailable: '이 국가는 직업 데이터를 제공하지 않습니다.',
     },
   },
   checklist: {
