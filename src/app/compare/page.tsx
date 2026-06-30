@@ -15,7 +15,7 @@ const compareTypes = [
     icon: Building2,
     title: "학교 비교",
     description: "같은 전공의 학교끼리, 혹은 국가별 학교를 비교해보세요.",
-    status: "준비 중",
+    status: null,
   },
   {
     href: "/compare/majors",
