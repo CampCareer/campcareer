@@ -252,6 +252,7 @@ const en = {
       low: 'Low',
       medium: 'Medium',
       high: 'High',
+      year: 'yr',
     },
     careers: {
       pageTitle: 'Career Comparison',

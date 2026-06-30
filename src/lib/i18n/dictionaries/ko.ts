@@ -254,6 +254,7 @@ const ko: Dictionary = {
       low: '낮음',
       medium: '보통',
       high: '높음',
+      year: '년',
     },
     careers: {
       pageTitle: '직업 비교',
