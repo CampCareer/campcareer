@@ -142,14 +142,14 @@ type SectionDef = {
   valB: string
 }
 
-const FIELD_GROUP_LABELS: Record<string, { en: string; ko: string }> = {
-  tech: { en: "Technology", ko: "기술" },
-  health: { en: "Health", ko: "의료" },
-  engineering: { en: "Engineering", ko: "공학" },
-  business: { en: "Business", ko: "경영" },
-  design: { en: "Design", ko: "디자인" },
-  social: { en: "Social Sciences", ko: "사회과학" },
-  creative: { en: "Creative Arts", ko: "예술" },
+const FIELD_GROUP_MAP: Record<string, string> = {
+  tech: 'fieldTech',
+  health: 'fieldHealth',
+  engineering: 'fieldEngineering',
+  business: 'fieldBusiness',
+  design: 'fieldDesign',
+  social: 'fieldSocial',
+  creative: 'fieldCreative',
 }
 
 export default function MajorCompareClient() {
@@ -213,8 +213,8 @@ export default function MajorCompareClient() {
 
   const sections: SectionDef[] = ready ? [
     { key: "field_group", label: tc.fieldGroup,
-      valA: FIELD_GROUP_LABELS[detailA.field_group]?.en ?? detailA.field_group,
-      valB: FIELD_GROUP_LABELS[detailB.field_group]?.en ?? detailB.field_group },
+      valA: tc[FIELD_GROUP_MAP[detailA.field_group] as keyof typeof tc] as string ?? detailA.field_group,
+      valB: tc[FIELD_GROUP_MAP[detailB.field_group] as keyof typeof tc] as string ?? detailB.field_group },
     { key: "overall_risk", label: tc.overallRisk,
       valA: tc[detailA.overall_risk as keyof typeof tc] as string ?? detailA.overall_risk,
       valB: tc[detailB.overall_risk as keyof typeof tc] as string ?? detailB.overall_risk },

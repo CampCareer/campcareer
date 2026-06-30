@@ -255,6 +255,13 @@ const ko: Dictionary = {
       medium: '보통',
       high: '높음',
       year: '년',
+      fieldTech: '기술',
+      fieldHealth: '의료',
+      fieldEngineering: '공학',
+      fieldBusiness: '경영',
+      fieldDesign: '디자인',
+      fieldSocial: '사회과학',
+      fieldCreative: '예술',
     },
     careers: {
       pageTitle: '직업 비교',
