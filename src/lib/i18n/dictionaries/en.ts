@@ -253,6 +253,13 @@ const en = {
       medium: 'Medium',
       high: 'High',
       year: 'yr',
+      fieldTech: 'Technology',
+      fieldHealth: 'Health',
+      fieldEngineering: 'Engineering',
+      fieldBusiness: 'Business',
+      fieldDesign: 'Design',
+      fieldSocial: 'Social Sciences',
+      fieldCreative: 'Creative Arts',
     },
     careers: {
       pageTitle: 'Career Comparison',
