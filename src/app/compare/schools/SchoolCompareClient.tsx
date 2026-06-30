@@ -20,7 +20,6 @@ type SchoolDetail = {
   school_type: string
   tuition: number
   median_earnings: number
-  net_salary: number
   roi_score: number
   payback_years: number
   graduation_rate: number | null

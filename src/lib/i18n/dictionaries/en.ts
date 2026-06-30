@@ -205,6 +205,16 @@ const en = {
     timelineSubtitle: 'Study → post-study work visa → PR for each country.',
     seeDetail: 'Full detail',
     ogTagline: 'Employment · Visa · Market demand · AI exposure · ROI',
+    hub: {
+      title: 'Compare',
+      subtitle: 'Place two items side by side and compare. Schools, majors, and careers — each with country-by-country data at a glance.',
+      schools: 'Schools',
+      schoolsDesc: 'Compare schools offering the same major, or schools across different countries.',
+      majors: 'Majors',
+      majorsDesc: 'Compare the same major across countries — employment, visa, ROI, side by side.',
+      careers: 'Careers',
+      careersDesc: 'Compare the same occupation across countries and regions.',
+    },
     schools: {
       pageTitle: 'School Comparison',
       pageSubtitle: 'Select a school on each side to compare tuition, earnings, ROI, and more.',
