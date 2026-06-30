@@ -291,31 +291,23 @@ export default function SchoolCompareClient() {
         {ready ? (
           <div className="max-w-4xl mx-auto">
             {sections.map((sec, i) => (
-              <div key={sec.key} className="py-5 sm:py-7">
-                <h2 className="text-center text-base sm:text-xl font-semibold text-slate-800 mb-4 sm:mb-5">
+              <div key={sec.key} className={i > 0 ? "pt-8 sm:pt-12" : ""}>
+                <h2 className="text-left text-2xl sm:text-3xl font-bold text-slate-800 tracking-tight">
                   {sec.label}
                 </h2>
+                <hr className="mt-2 sm:mt-3 mb-5 sm:mb-6 border-t-2 border-slate-300" />
                 <div className="flex gap-4 sm:gap-8">
-                  <div className="flex-1 text-center">
-                    <div className="text-[11px] sm:text-xs font-medium text-slate-400 mb-1.5 truncate">
-                      {detailA.college_name}
-                    </div>
-                    <div className="text-base sm:text-xl font-semibold text-slate-900">
+                  <div className="flex-1 text-left">
+                    <div className="text-lg sm:text-2xl font-semibold text-slate-900">
                       {sec.valA}
                     </div>
                   </div>
-                  <div className="flex-1 text-center">
-                    <div className="text-[11px] sm:text-xs font-medium text-slate-400 mb-1.5 truncate">
-                      {detailB.college_name}
-                    </div>
-                    <div className="text-base sm:text-xl font-semibold text-slate-900">
+                  <div className="flex-1 text-left">
+                    <div className="text-lg sm:text-2xl font-semibold text-slate-900">
                       {sec.valB}
                     </div>
                   </div>
                 </div>
-                {i < sections.length - 1 && (
-                  <hr className="mt-5 sm:mt-7 border-t border-slate-200" />
-                )}
               </div>
             ))}
           </div>
