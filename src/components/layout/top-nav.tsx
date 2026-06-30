@@ -37,6 +37,7 @@ export function TopNav() {
   const navItems: { href: string; label: string }[] = [
     { href: "/", label: t.nav.home },
     { href: "/map", label: t.nav.map },
+    { href: "/compare", label: t.nav.compare },
   ]
 
   const linkEls = navItems.map((item) => {
