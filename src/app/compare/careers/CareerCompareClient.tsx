@@ -155,8 +155,8 @@ export default function CareerCompareClient() {
   const [currency, setCurrency] = useState<CurrencyCode>("USD")
   const [countryA, setCountryA] = useState("us")
   const [countryB, setCountryB] = useState("au")
-  const [codeA, setCodeA] = useState("")
-  const [codeB, setCodeB] = useState("")
+  const [codeA, setCodeA] = useState("15-1252")
+  const [codeB, setCodeB] = useState("261313")
 
   const [careersA, setCareersA] = useState<CareerOption[]>([])
   const [careersB, setCareersB] = useState<CareerOption[]>([])
