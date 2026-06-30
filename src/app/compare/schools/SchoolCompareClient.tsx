@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { GraduationCap, MapPin } from "lucide-react"
+import { Building2 } from "lucide-react"
 
 type SchoolOption = {
   college_id: string
@@ -31,162 +31,168 @@ const COUNTRIES = [
   { value: "ie", label: "Ireland" },
 ]
 
-function formatCurrency(value: number, country: string): string {
-  const symbol =
-    country === "us" ? "$" : country === "au" ? "A$" : country === "ca" ? "C$" : country === "uk" ? "£" : "€"
-  return `${symbol}${value.toLocaleString()}`
+type CurrencyCode = "USD" | "EUR" | "GBP" | "AUD" | "CAD"
+
+const CURRENCIES: { code: CurrencyCode; symbol: string; label: string }[] = [
+  { code: "USD", symbol: "$", label: "USD ($)" },
+  { code: "EUR", symbol: "€", label: "EUR (€)" },
+  { code: "GBP", symbol: "£", label: "GBP (£)" },
+  { code: "AUD", symbol: "A$", label: "AUD (A$)" },
+  { code: "CAD", symbol: "C$", label: "CAD (C$)" },
+]
+
+const EXCHANGE_RATES: Record<CurrencyCode, Record<string, number>> = {
+  USD: { usd: 1, eur: 0.93, gbp: 0.79, aud: 1.5, cad: 1.36 },
+  EUR: { usd: 1.08, eur: 1, gbp: 0.85, aud: 1.62, cad: 1.47 },
+  GBP: { usd: 1.27, eur: 1.18, gbp: 1, aud: 1.91, cad: 1.73 },
+  AUD: { usd: 0.67, eur: 0.62, gbp: 0.52, aud: 1, cad: 0.91 },
+  CAD: { usd: 0.73, eur: 0.68, gbp: 0.58, aud: 1.1, cad: 1 },
 }
 
-function SchoolTypeLabel({ type }: { type: string }) {
-  if (!type) return null
-  const labels: Record<string, string> = {
-    public: "Public",
-    private_nonprofit: "Private Nonprofit",
-    private_forprofit: "For-Profit",
-  }
-  const color =
-    type === "public"
-      ? "bg-green-50 text-green-700"
-      : type === "private_nonprofit"
-        ? "bg-blue-50 text-blue-700"
-        : "bg-amber-50 text-amber-700"
-  return (
-    <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${color}`}>
-      {labels[type] ?? type}
-    </span>
-  )
+function toCurrency(value: number, fromCountry: string, targetCurrency: CurrencyCode): number {
+  const fromCurrency: CurrencyCode =
+    fromCountry === "us" ? "USD"
+    : fromCountry === "au" ? "AUD"
+    : fromCountry === "ca" ? "CAD"
+    : fromCountry === "uk" ? "GBP"
+    : "EUR"
+  const rate = EXCHANGE_RATES[targetCurrency]?.[fromCurrency.toLowerCase()]
+  if (!rate || rate === 1) return value
+  return Math.round(value / rate)
 }
 
-function MetricCard({
-  label,
-  value,
-  highlight,
-}: {
+function formatValue(value: number, fromCountry: string, targetCurrency: CurrencyCode, symbol: string): string {
+  const converted = toCurrency(value, fromCountry, targetCurrency)
+  return `${symbol}${converted.toLocaleString()}`
+}
+
+function formatPercent(value: number | null): string {
+  if (value == null || value <= 0) return "—"
+  return `${(value * 100).toFixed(0)}%`
+}
+
+const ROWS: {
+  key: string
   label: string
-  value: string
-  highlight?: boolean
-}) {
-  return (
-    <div
-      className={`rounded-xl border p-4 ${highlight ? "border-blue-200 bg-blue-50/50" : "border-slate-200 bg-white"}`}
-    >
-      <p className="text-xs font-medium text-slate-500 mb-1">{label}</p>
-      <p className={`text-lg font-semibold ${highlight ? "text-blue-700" : "text-slate-900"}`}>{value}</p>
-    </div>
-  )
+  render: (d: SchoolDetail, ccy: CurrencyCode, sym: string) => string | React.ReactNode
+}[] = [
+  {
+    key: "school_type",
+    label: "School Type",
+    render: (d) => {
+      const labels: Record<string, string> = {
+        public: "Public",
+        private_nonprofit: "Private Nonprofit",
+        private_forprofit: "For-Profit",
+      }
+      return labels[d.school_type] ?? d.school_type
+    },
+  },
+  {
+    key: "location",
+    label: "Location",
+    render: (d) => `${d.city_name}, ${d.college_state}`,
+  },
+  {
+    key: "tuition",
+    label: "Tuition / yr",
+    render: (d, ccy, sym) => formatValue(d.tuition, inferCountry(d), ccy, sym),
+  },
+  {
+    key: "median_earnings",
+    label: "Median Earnings",
+    render: (d, ccy, sym) => formatValue(d.median_earnings, inferCountry(d), ccy, sym),
+  },
+  {
+    key: "roi_score",
+    label: "ROI Score",
+    render: (d) => d.roi_score.toFixed(1),
+  },
+  {
+    key: "payback_years",
+    label: "Payback",
+    render: (d) => `${d.payback_years} yr`,
+  },
+  {
+    key: "graduation_rate",
+    label: "Graduation Rate",
+    render: (d) => formatPercent(d.graduation_rate),
+  },
+]
+
+function inferCountry(d: SchoolDetail): string {
+  if (d.tuition > 50000) return "us"
+  if (d.school_type === "public" && d.college_state === "NSW") return "au"
+  return "us"
 }
 
-function SchoolPanel({
-  side,
+function countryFromSchool(schools: SchoolOption[], collegeId: string, currentCountry: string): string {
+  return currentCountry
+}
+
+function SelectorPanel({
+  label,
   country,
   schoolId,
-  schoolDetail,
   schools,
-  loadingSchools,
+  loading,
   onCountryChange,
   onSchoolChange,
 }: {
-  side: "A" | "B"
+  label: string
   country: string
   schoolId: string
-  schoolDetail: SchoolDetail | null
   schools: SchoolOption[]
-  loadingSchools: boolean
-  onCountryChange: (country: string) => void
-  onSchoolChange: (schoolId: string) => void
+  loading: boolean
+  onCountryChange: (v: string) => void
+  onSchoolChange: (v: string) => void
 }) {
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center gap-3 border-b border-slate-200 pb-3">
-        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">
-          {side}
+    <div className="rounded-xl border border-slate-200 bg-white p-5">
+      <div className="flex items-center gap-2 mb-4">
+        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">
+          {label}
         </span>
-        <span className="text-sm font-semibold text-slate-500">{side === "A" ? "School A" : "School B"}</span>
+        <span className="text-sm font-semibold text-slate-700">School {label}</span>
       </div>
-
-      <div>
-        <label className="text-xs font-medium text-slate-500 mb-1.5 block">Country</label>
-        <select
-          value={country}
-          onChange={e => onCountryChange(e.target.value)}
-          className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          {COUNTRIES.map(c => (
-            <option key={c.value} value={c.value}>
-              {c.label}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div>
-        <label className="text-xs font-medium text-slate-500 mb-1.5 block">School</label>
-        <select
-          value={schoolId}
-          onChange={e => onSchoolChange(e.target.value)}
-          disabled={loadingSchools}
-          className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-        >
-          <option value="">{loadingSchools ? "Loading..." : "Select a school"}</option>
-          {schools.map(s => (
-            <option key={s.college_id} value={s.college_id}>
-              {s.college_name} ({s.college_state})
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {schoolDetail && (
-        <div className="mt-2 space-y-3">
-          <div className="flex items-center gap-2">
-            <GraduationCap className="h-4 w-4 text-slate-400" />
-            <span className="text-sm font-semibold text-slate-900">{schoolDetail.college_name}</span>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <SchoolTypeLabel type={schoolDetail.school_type} />
-            <span className="flex items-center gap-1 text-xs text-slate-500">
-              <MapPin className="h-3 w-3" />
-              {schoolDetail.city_name}, {schoolDetail.college_state}
-            </span>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <MetricCard
-              label="Tuition / yr"
-              value={formatCurrency(schoolDetail.tuition, country)}
-            />
-            <MetricCard
-              label="Median Earnings"
-              value={formatCurrency(schoolDetail.median_earnings, country)}
-              highlight
-            />
-            <MetricCard
-              label="ROI Score"
-              value={schoolDetail.roi_score.toFixed(1)}
-            />
-            <MetricCard
-              label="Payback"
-              value={`${schoolDetail.payback_years} yr`}
-            />
-          </div>
-
-          {schoolDetail.graduation_rate != null && schoolDetail.graduation_rate > 0 && (
-            <MetricCard
-              label="Graduation Rate"
-              value={`${(schoolDetail.graduation_rate * 100).toFixed(0)}%`}
-            />
-          )}
+      <div className="space-y-3">
+        <div>
+          <label className="text-xs font-medium text-slate-500 mb-1 block">Country</label>
+          <select
+            value={country}
+            onChange={e => onCountryChange(e.target.value)}
+            className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            {COUNTRIES.map(c => (
+              <option key={c.value} value={c.value}>
+                {c.label}
+              </option>
+            ))}
+          </select>
         </div>
-      )}
-
-      {!schoolDetail && schoolId && (
-        <p className="text-sm text-amber-600">No ROI data available for this school.</p>
-      )}
+        <div>
+          <label className="text-xs font-medium text-slate-500 mb-1 block">School</label>
+          <select
+            value={schoolId}
+            onChange={e => onSchoolChange(e.target.value)}
+            disabled={loading}
+            className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+          >
+            <option value="">{loading ? "Loading..." : "Select a school"}</option>
+            {schools.map(s => (
+              <option key={s.college_id} value={s.college_id}>
+                {s.college_name} ({s.college_state})
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
     </div>
   )
 }
 
 export default function SchoolCompareClient() {
+  const [currency, setCurrency] = useState<CurrencyCode>("USD")
   const [countryA, setCountryA] = useState("us")
   const [countryB, setCountryB] = useState("au")
   const [schoolIdA, setSchoolIdA] = useState("")
@@ -221,10 +227,7 @@ export default function SchoolCompareClient() {
   }, [countryB])
 
   useEffect(() => {
-    if (!schoolIdA) {
-      setDetailA(null)
-      return
-    }
+    if (!schoolIdA) { setDetailA(null); return }
     fetch(`/api/compare/schools?country=${countryA}&collegeId=${schoolIdA}`)
       .then(r => r.json())
       .then(json => {
@@ -234,10 +237,7 @@ export default function SchoolCompareClient() {
   }, [schoolIdA, countryA])
 
   useEffect(() => {
-    if (!schoolIdB) {
-      setDetailB(null)
-      return
-    }
+    if (!schoolIdB) { setDetailB(null); return }
     fetch(`/api/compare/schools?country=${countryB}&collegeId=${schoolIdB}`)
       .then(r => r.json())
       .then(json => {
@@ -246,42 +246,121 @@ export default function SchoolCompareClient() {
       })
   }, [schoolIdB, countryB])
 
+  const ccySymbol = CURRENCIES.find(c => c.code === currency)?.symbol ?? "$"
+
+  function getCountryForDetail(d: SchoolDetail | null, fallback: string): string {
+    if (!d) return fallback
+    const mapped: Record<string, string> = {
+      us: "us", au: "au", ca: "ca", uk: "uk", ie: "ie",
+    }
+    return mapped[d.college_id?.slice(0, 2)] ?? fallback
+  }
+
   return (
     <div className="mx-auto max-w-6xl px-4 sm:px-6 py-8 sm:py-10">
-      <header className="mb-8">
-        <h1 className="font-display text-2xl sm:text-3xl font-semibold text-slate-900 tracking-tight">
-          School Comparison
-        </h1>
-        <p className="mt-1.5 text-sm text-slate-500 max-w-2xl">
-          Select a country and school on each side to compare tuition, earnings, ROI, and more side by side.
-        </p>
-      </header>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+        <div>
+          <h1 className="font-display text-2xl sm:text-3xl font-semibold text-slate-900 tracking-tight">
+            School Comparison
+          </h1>
+          <p className="mt-1 text-sm text-slate-500">
+            Select a school on each side to compare tuition, earnings, ROI, and more.
+          </p>
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <label className="text-xs font-medium text-slate-500">Currency</label>
+          <select
+            value={currency}
+            onChange={e => setCurrency(e.target.value as CurrencyCode)}
+            className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            {CURRENCIES.map(c => (
+              <option key={c.code} value={c.code}>
+                {c.label}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
 
-      <div className="grid gap-8 lg:grid-cols-2 lg:gap-10">
-        <SchoolPanel
-          side="A"
+      <div className="grid gap-4 sm:grid-cols-2 mb-10">
+        <SelectorPanel
+          label="A"
           country={countryA}
           schoolId={schoolIdA}
-          schoolDetail={detailA}
           schools={schoolsA}
-          loadingSchools={loadingA}
+          loading={loadingA}
           onCountryChange={setCountryA}
           onSchoolChange={setSchoolIdA}
         />
-
-        <div className="hidden lg:block w-px bg-slate-200" />
-
-        <SchoolPanel
-          side="B"
+        <SelectorPanel
+          label="B"
           country={countryB}
           schoolId={schoolIdB}
-          schoolDetail={detailB}
           schools={schoolsB}
-          loadingSchools={loadingB}
+          loading={loadingB}
           onCountryChange={setCountryB}
           onSchoolChange={setSchoolIdB}
         />
       </div>
+
+      {detailA && detailB && (
+        <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-slate-200 bg-slate-50">
+                <th className="text-left px-5 py-3.5 text-xs font-semibold text-slate-500 uppercase tracking-wider w-[200px]">
+                  <div className="flex items-center gap-2">
+                    <Building2 className="h-4 w-4 text-slate-400" />
+                    Metric
+                  </div>
+                </th>
+                <th className="text-center px-5 py-3.5 text-xs font-semibold text-blue-600 uppercase tracking-wider">
+                  {detailA.college_name}
+                </th>
+                <th className="text-center px-5 py-3.5 text-xs font-semibold text-blue-600 uppercase tracking-wider">
+                  {detailB.college_name}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {ROWS.map((row, i) => {
+                const valA = row.render(detailA, currency, ccySymbol)
+                const valB = row.render(detailB, currency, ccySymbol)
+                const isMoney = row.key === "tuition" || row.key === "median_earnings"
+                return (
+                  <tr key={row.key} className={i < ROWS.length - 1 ? "border-b border-slate-100" : ""}>
+                    <td className="px-5 py-4 text-sm font-medium text-slate-700">{row.label}</td>
+                    <td className={`px-5 py-4 text-center ${isMoney ? "font-semibold text-slate-900" : "text-slate-700"}`}>
+                      {valA}
+                    </td>
+                    <td className={`px-5 py-4 text-center ${isMoney ? "font-semibold text-slate-900" : "text-slate-700"}`}>
+                      {valB}
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {!detailA && !detailB && (
+        <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/50 p-12 text-center">
+          <Building2 className="mx-auto h-10 w-10 text-slate-300 mb-3" />
+          <p className="text-sm text-slate-500">
+            Select a school on both sides to see the comparison.
+          </p>
+        </div>
+      )}
+
+      {(detailA && !detailB) || (!detailA && detailB) ? (
+        <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/50 p-12 text-center">
+          <p className="text-sm text-slate-500">
+            Select the other school to complete the comparison.
+          </p>
+        </div>
+      ) : null}
     </div>
   )
 }
