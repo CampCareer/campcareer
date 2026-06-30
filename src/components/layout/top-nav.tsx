@@ -18,6 +18,7 @@ export function TopNav() {
   const pathname = usePathname()
   // /map은 모바일에서 풀스크린(구글맵식)으로 쓰므로 모바일 네비 행을 숨긴다.
   const isMap = pathname === "/map" || pathname.startsWith("/map/")
+  const isCompare = pathname === "/compare" || pathname.startsWith("/compare/")
   const router = useRouter()
   const t = useTranslations()
   const supabase = createClient()
@@ -62,7 +63,7 @@ export function TopNav() {
   })
 
   return (
-    <header className="sticky top-0 z-40 bg-background/90 backdrop-blur-sm border-b border-slate-200">
+    <header className={cn(isCompare ? "" : "sticky top-0 z-40", "bg-background/90 backdrop-blur-sm border-b border-slate-200")}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="h-14 flex items-center gap-4">
           <Link href="/" className="flex items-center gap-2.5 shrink-0 mr-auto">

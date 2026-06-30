@@ -1,7 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { Building2 } from "lucide-react"
+import { useEffect, useRef, useState } from "react"
 
 const HARVARD_ID = "ebef5a65-3759-458c-8086-d4c082a37c1d"
 const UNSW_ID = "50c5abe9-4a93-4410-864d-0d191d0f5d69"
@@ -133,6 +132,13 @@ function SelectorCard({
   )
 }
 
+type SectionDef = {
+  key: string
+  label: string
+  valA: string
+  valB: string
+}
+
 export default function SchoolCompareClient() {
   const [currency, setCurrency] = useState<CurrencyCode>("USD")
   const [countryA, setCountryA] = useState("us")
@@ -147,6 +153,9 @@ export default function SchoolCompareClient() {
 
   const [detailA, setDetailA] = useState<SchoolDetail | null>(null)
   const [detailB, setDetailB] = useState<SchoolDetail | null>(null)
+
+  const [sticky, setSticky] = useState(false)
+  const sentinelRef = useRef<HTMLDivElement>(null)
 
   const sym = CURRENCIES.find(c => c.code === currency)?.symbol ?? "$"
 
@@ -174,121 +183,148 @@ export default function SchoolCompareClient() {
       .then(r => r.json()).then(j => { const rows = j.data ?? []; setDetailB(rows[0] ?? null) })
   }, [schoolIdB, countryB])
 
+  useEffect(() => {
+    const el = sentinelRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => setSticky(!entry.isIntersecting),
+      { threshold: 0 },
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   const ready = detailA && detailB
 
-  type RowDef = { key: string; label: string; valA: string; valB: string; isMoney: boolean }
-
-  const rows: RowDef[] = ready ? [
+  const sections: SectionDef[] = ready ? [
     { key: "school_type", label: "School Type",
       valA: ({ public: "Public", private_nonprofit: "Private Nonprofit", private_forprofit: "For-Profit" })[detailA.school_type] ?? detailA.school_type,
-      valB: ({ public: "Public", private_nonprofit: "Private Nonprofit", private_forprofit: "For-Profit" })[detailB.school_type] ?? detailB.school_type,
-      isMoney: false },
+      valB: ({ public: "Public", private_nonprofit: "Private Nonprofit", private_forprofit: "For-Profit" })[detailB.school_type] ?? detailB.school_type },
     { key: "location", label: "Location",
       valA: `${detailA.city_name}, ${detailA.college_state}`,
-      valB: `${detailB.city_name}, ${detailB.college_state}`,
-      isMoney: false },
+      valB: `${detailB.city_name}, ${detailB.college_state}` },
     { key: "tuition", label: "Tuition / yr",
       valA: fmtMoney(detailA.tuition, countryA, currency, sym),
-      valB: fmtMoney(detailB.tuition, countryB, currency, sym),
-      isMoney: true },
+      valB: fmtMoney(detailB.tuition, countryB, currency, sym) },
     { key: "median_earnings", label: "Median Earnings",
       valA: fmtMoney(detailA.median_earnings, countryA, currency, sym),
-      valB: fmtMoney(detailB.median_earnings, countryB, currency, sym),
-      isMoney: true },
+      valB: fmtMoney(detailB.median_earnings, countryB, currency, sym) },
     { key: "roi_score", label: "ROI Score",
-      valA: detailA.roi_score.toFixed(1), valB: detailB.roi_score.toFixed(1), isMoney: false },
+      valA: detailA.roi_score.toFixed(1), valB: detailB.roi_score.toFixed(1) },
     { key: "payback_years", label: "Payback",
-      valA: `${detailA.payback_years} yr`, valB: `${detailB.payback_years} yr`, isMoney: false },
+      valA: `${detailA.payback_years} yr`, valB: `${detailB.payback_years} yr` },
     { key: "graduation_rate", label: "Graduation Rate",
-      valA: fmtPct(detailA.graduation_rate), valB: fmtPct(detailB.graduation_rate), isMoney: false },
+      valA: fmtPct(detailA.graduation_rate), valB: fmtPct(detailB.graduation_rate) },
   ] : []
 
   return (
-    <div className="mx-auto max-w-6xl px-4 sm:px-6 py-8 sm:py-10">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-        <div>
-          <h1 className="font-display text-2xl sm:text-3xl font-semibold text-slate-900 tracking-tight">
-            School Comparison
-          </h1>
-          <p className="mt-1 text-sm text-slate-500">
-            Select a school on each side to compare tuition, earnings, ROI, and more.
-          </p>
-        </div>
-        <div className="flex items-center gap-2 shrink-0">
-          <label className="text-xs font-medium text-slate-500">Currency</label>
-          <select
-            value={currency}
-            onChange={e => setCurrency(e.target.value as CurrencyCode)}
-            className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            {CURRENCIES.map(c => (
-              <option key={c.code} value={c.code}>{c.label}</option>
-            ))}
-          </select>
+    <>
+      {/* Sticky school-name bar */}
+      <div
+        className={`sticky top-0 z-30 bg-white/95 backdrop-blur-sm border-b border-slate-200 transition-opacity duration-200 ${
+          sticky && ready ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+      >
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 flex items-center h-12 gap-4">
+          <span className="flex-1 text-sm font-semibold text-slate-900 truncate text-center">
+            {detailA?.college_name ?? ""}
+          </span>
+          <span className="text-xs font-medium text-slate-400 shrink-0">vs</span>
+          <span className="flex-1 text-sm font-semibold text-slate-900 truncate text-center">
+            {detailB?.college_name ?? ""}
+          </span>
         </div>
       </div>
 
-      <div className="flex flex-row gap-2 sm:gap-4 justify-center mb-6 sm:mb-10">
-        <div className="w-1/2 sm:w-[280px] min-w-0">
-          <SelectorCard
-            label="A"
-            country={countryA}
-            schoolId={schoolIdA}
-            schools={schoolsA}
-            loading={loadingA}
-            onCountryChange={setCountryA}
-            onSchoolChange={setSchoolIdA}
-          />
-        </div>
-        <div className="w-1/2 sm:w-[280px] min-w-0">
-          <SelectorCard
-            label="B"
-            country={countryB}
-            schoolId={schoolIdB}
-            schools={schoolsB}
-            loading={loadingB}
-            onCountryChange={setCountryB}
-            onSchoolChange={setSchoolIdB}
-          />
-        </div>
-      </div>
-
-      {ready ? (
-        <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white max-w-4xl mx-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-slate-200 bg-slate-50">
-                <th className="text-left px-3 sm:px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap">
-                  <div className="flex items-center gap-2">
-                    <Building2 className="h-4 w-4 text-slate-400 shrink-0" />
-                    Metric
-                  </div>
-                </th>
-                <th className="text-center px-3 sm:px-5 py-3 text-xs font-semibold text-blue-600 uppercase tracking-wider whitespace-nowrap">
-                  {detailA.college_name}
-                </th>
-                <th className="text-center px-3 sm:px-5 py-3 text-xs font-semibold text-blue-600 uppercase tracking-wider whitespace-nowrap">
-                  {detailB.college_name}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row, i) => (
-                <tr key={row.key} className={i < rows.length - 1 ? "border-b border-slate-100" : ""}>
-                  <td className="px-3 sm:px-5 py-3 sm:py-4 text-sm font-medium text-slate-700 whitespace-nowrap">{row.label}</td>
-                  <td className={`px-3 sm:px-5 py-3 sm:py-4 text-center whitespace-nowrap ${row.isMoney ? "font-semibold text-slate-900" : "text-slate-700"}`}>{row.valA}</td>
-                  <td className={`px-3 sm:px-5 py-3 sm:py-4 text-center whitespace-nowrap ${row.isMoney ? "font-semibold text-slate-900" : "text-slate-700"}`}>{row.valB}</td>
-                </tr>
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-8 sm:py-10">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+          <div>
+            <h1 className="font-display text-2xl sm:text-3xl font-semibold text-slate-900 tracking-tight">
+              School Comparison
+            </h1>
+            <p className="mt-1 text-sm text-slate-500">
+              Select a school on each side to compare tuition, earnings, ROI, and more.
+            </p>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <label className="text-xs font-medium text-slate-500">Currency</label>
+            <select
+              value={currency}
+              onChange={e => setCurrency(e.target.value as CurrencyCode)}
+              className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              {CURRENCIES.map(c => (
+                <option key={c.code} value={c.code}>{c.label}</option>
               ))}
-            </tbody>
-          </table>
+            </select>
+          </div>
         </div>
-      ) : (
-        <div className="max-w-4xl mx-auto rounded-xl border border-dashed border-slate-300 bg-slate-50/50 p-12 text-center">
-          <Building2 className="mx-auto h-10 w-10 text-slate-300 mb-3" />
-          <p className="text-sm text-slate-500">Select a school on both sides to see the comparison.</p>
+
+        <div className="flex flex-row gap-2 sm:gap-4 justify-center mb-6 sm:mb-10">
+          <div className="w-1/2 sm:w-[280px] min-w-0">
+            <SelectorCard
+              label="A"
+              country={countryA}
+              schoolId={schoolIdA}
+              schools={schoolsA}
+              loading={loadingA}
+              onCountryChange={setCountryA}
+              onSchoolChange={setSchoolIdA}
+            />
+          </div>
+          <div className="w-1/2 sm:w-[280px] min-w-0">
+            <SelectorCard
+              label="B"
+              country={countryB}
+              schoolId={schoolIdB}
+              schools={schoolsB}
+              loading={loadingB}
+              onCountryChange={setCountryB}
+              onSchoolChange={setSchoolIdB}
+            />
+          </div>
         </div>
-      )}
-    </div>
+
+        {/* Sentinel for sticky detection */}
+        <div ref={sentinelRef} className="h-px" />
+
+        {ready ? (
+          <div className="max-w-4xl mx-auto">
+            {sections.map((sec, i) => (
+              <div key={sec.key} className="py-5 sm:py-7">
+                <h2 className="text-center text-base sm:text-xl font-semibold text-slate-800 mb-4 sm:mb-5">
+                  {sec.label}
+                </h2>
+                <div className="flex gap-4 sm:gap-8">
+                  <div className="flex-1 text-center">
+                    <div className="text-[11px] sm:text-xs font-medium text-slate-400 mb-1.5 truncate">
+                      {detailA.college_name}
+                    </div>
+                    <div className="text-base sm:text-xl font-semibold text-slate-900">
+                      {sec.valA}
+                    </div>
+                  </div>
+                  <div className="flex-1 text-center">
+                    <div className="text-[11px] sm:text-xs font-medium text-slate-400 mb-1.5 truncate">
+                      {detailB.college_name}
+                    </div>
+                    <div className="text-base sm:text-xl font-semibold text-slate-900">
+                      {sec.valB}
+                    </div>
+                  </div>
+                </div>
+                {i < sections.length - 1 && (
+                  <hr className="mt-5 sm:mt-7 border-t border-slate-200" />
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="max-w-4xl mx-auto rounded-xl border border-dashed border-slate-300 bg-slate-50/50 p-12 text-center">
+            <p className="text-sm text-slate-500">Select a school on both sides to see the comparison.</p>
+          </div>
+        )}
+      </div>
+    </>
   )
 }
