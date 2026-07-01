@@ -23,7 +23,7 @@ import { AffiliateCtas } from "@/components/partners/partner-cta"
 import JobListings from "./JobListings"
 import { EMPLOYMENT_OCCUPATIONS } from "@/data/employment-occupations"
 import { EMPLOYMENT_SALARIES } from "@/data/employment-salaries"
-import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc, CourseLite, USStateInfo, StateMajorDensity, USRankedCollege } from "@/lib/map-data"
+import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc, CourseLite, USStateInfo, StateMajorDensity, USRankedCollege, AURankedCollege } from "@/lib/map-data"
 import { createClient } from "@/lib/supabase-client"
 import type { User } from "@supabase/supabase-js"
 import { getShortageOccupations } from "@/lib/ie-shortage-occupations"
@@ -83,7 +83,7 @@ export default function AustraliaMap({
   // 직업 카드 열림 상태 — 툴바의 직업 검색에서도 열 수 있도록 최상위로 끌어올림.
   const [selectedOccCode, setSelectedOccCode] = useState<string | null>(null)
   const [selectedUsOcc, setSelectedUsOcc] = useState<USOccupation | null>(null)
-  const [selectedUniv, setSelectedUniv] = useState<USRankedCollege | null>(null)
+  const [selectedUniv, setSelectedUniv] = useState<USRankedCollege | AURankedCollege | null>(null)
   const [selectedNeroA4, setSelectedNeroA4] = useState<string | null>(null)
   const initialNeroLoaded = useRef(false)
   const initialSA4Ref = useRef<string | null>(null)
@@ -410,13 +410,20 @@ export default function AustraliaMap({
   // Handle initialUniversity prop — find the college and show its info
   useEffect(() => {
     if (!initialUniversity) return
-    const univ = data.usRankedColleges.find((c) => c.slug === initialUniversity)
-    if (univ) {
-      setSelectedUniv(univ)
+    const usUniv = data.usRankedColleges.find((c) => c.slug === initialUniversity)
+    if (usUniv) {
+      setSelectedUniv(usUniv)
       setActiveCountry("US")
-      setSelected(univ.college_state)
+      setSelected(usUniv.college_state)
+      return
     }
-  }, [initialUniversity, data.usRankedColleges])
+    const auUniv = data.auRankedColleges.find((c) => c.slug === initialUniversity)
+    if (auUniv) {
+      setSelectedUniv(auUniv)
+      setActiveCountry("AU")
+      setSelected(auUniv.college_state)
+    }
+  }, [initialUniversity, data.usRankedColleges, data.auRankedColleges])
 
   const onReset = useCallback(() => {
     if (selected !== null) {
@@ -671,11 +678,18 @@ export default function AustraliaMap({
           onSelectCountry={onSelectCountry}
           onSelectSA4={onSelectSA4}
           onSelectUniversity={(slug: string) => {
-            const univ = data.usRankedColleges.find((c) => c.slug === slug)
-            if (univ) {
-              setSelectedUniv(univ)
+            const usUniv = data.usRankedColleges.find((c) => c.slug === slug)
+            if (usUniv) {
+              setSelectedUniv(usUniv)
               setActiveCountry("US")
-              setSelected(univ.college_state)
+              setSelected(usUniv.college_state)
+              return
+            }
+            const auUniv = data.auRankedColleges.find((c) => c.slug === slug)
+            if (auUniv) {
+              setSelectedUniv(auUniv)
+              setActiveCountry("AU")
+              setSelected(auUniv.college_state)
             }
           }}
           onReset={onReset}
@@ -1901,12 +1915,13 @@ function UniversityInfoCard({
   onToggleSave,
   onShare,
 }: {
-  college: USRankedCollege
+  college: USRankedCollege | AURankedCollege
   onClose: () => void
   isSaved: boolean
   onToggleSave: (slug: string, name: string) => void
   onShare: (slug: string) => void
 }) {
+  const isAU = "lat" in college && !("college_id" in college)
   return (
     <>
       <div className="flex items-center justify-between border-b border-slate-200 px-5 py-3">
@@ -1948,31 +1963,31 @@ function UniversityInfoCard({
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          {college.tuition != null && (
+          {"tuition" in college && college.tuition != null && (
             <div className="rounded-lg border border-slate-100 bg-slate-50 p-3">
               <p className="text-[10px] font-medium uppercase tracking-wide text-slate-400">Tuition</p>
               <p className="mt-1 text-lg font-bold tabular-nums text-slate-900">
-                A${college.tuition.toLocaleString()}
+                {isAU ? "A$" : "$"}{college.tuition.toLocaleString()}
               </p>
             </div>
           )}
-          {college.median_earnings != null && (
+          {"median_earnings" in college && college.median_earnings != null && (
             <div className="rounded-lg border border-slate-100 bg-slate-50 p-3">
               <p className="text-[10px] font-medium uppercase tracking-wide text-slate-400">Median Earnings</p>
               <p className="mt-1 text-lg font-bold tabular-nums text-slate-900">
-                ${college.median_earnings.toLocaleString()}
+                {isAU ? "A$" : "$"}{college.median_earnings.toLocaleString()}
               </p>
             </div>
           )}
-          {college.net_salary != null && (
+          {"net_salary" in college && college.net_salary != null && (
             <div className="rounded-lg border border-slate-100 bg-slate-50 p-3">
               <p className="text-[10px] font-medium uppercase tracking-wide text-slate-400">Net Salary</p>
               <p className="mt-1 text-lg font-bold tabular-nums text-slate-900">
-                ${college.net_salary.toLocaleString()}
+                {isAU ? "A$" : "$"}{college.net_salary.toLocaleString()}
               </p>
             </div>
           )}
-          {college.graduation_rate != null && (
+          {"graduation_rate" in college && college.graduation_rate != null && (
             <div className="rounded-lg border border-slate-100 bg-slate-50 p-3">
               <p className="text-[10px] font-medium uppercase tracking-wide text-slate-400">Graduation Rate</p>
               <p className="mt-1 text-lg font-bold tabular-nums text-slate-900">
@@ -1980,7 +1995,7 @@ function UniversityInfoCard({
               </p>
             </div>
           )}
-          {college.roi_score != null && (
+          {"roi_score" in college && college.roi_score != null && (
             <div className="rounded-lg border border-slate-100 bg-slate-50 p-3">
               <p className="text-[10px] font-medium uppercase tracking-wide text-slate-400">ROI Score</p>
               <p className="mt-1 text-lg font-bold tabular-nums text-slate-900">

@@ -149,9 +149,11 @@ export default function LeafletMap({
     return () => { style.remove() }
   }, [])
 
-  function buildMarkers(): L.LayerGroup {
+  function buildMarkers(country: "US" | "AU"): L.LayerGroup {
     const group = L.layerGroup()
-    const colleges = dataRef.current.usRankedColleges
+    const colleges = country === "AU"
+      ? dataRef.current.auRankedColleges
+      : dataRef.current.usRankedColleges
     const placed: Array<{ key: string; slug: string }> = []
     for (const c of colleges) {
       if (c.lat === 0 && c.lng === 0) continue
@@ -188,7 +190,12 @@ export default function LeafletMap({
       markerLayerRef.current = null
     }
     if (activeCountryRef.current === "US" && map.getZoom() >= 5) {
-      const group = buildMarkers()
+      const group = buildMarkers("US")
+      group.addTo(map)
+      markerLayerRef.current = group
+    }
+    if (activeCountryRef.current === "AU" && map.getZoom() >= 5) {
+      const group = buildMarkers("AU")
       group.addTo(map)
       markerLayerRef.current = group
     }
