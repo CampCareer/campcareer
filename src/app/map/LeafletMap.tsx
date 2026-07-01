@@ -133,49 +133,46 @@ export default function LeafletMap({
     }
   }
 
-  function qsRankColor(rank: number): string {
-    if (rank <= 10) return "#7c3aed" // purple — top 10
-    if (rank <= 30) return "#2563eb" // blue — top 30
-    if (rank <= 50) return "#0891b2" // teal — top 50
-    if (rank <= 100) return "#059669" // green — top 100
-    if (rank <= 200) return "#65a30d" // lime — top 200
-    return "#94a3b8"                 // slate — 200+
-  }
+  const UNIV_PIN_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 38" width="28" height="38">
+  <defs>
+    <filter id="u" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="1" stdDeviation="1" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  <path d="M14 2C7.4 2 2 7.4 2 14c0 9.5 12 21 12 21s12-11.5 12-21C26 7.4 20.6 2 14 2z" fill="#fff" stroke="#94a3b8" stroke-width="1.5" filter="url(#u)"/>
+  <path d="M7 10.5l7-2.5 7 2.5-7 2.5z" fill="#475569"/>
+  <rect x="10" y="10.5" width="8" height="2" rx="0.7" fill="#475569"/>
+  <path d="M19 10q1 1 1.5 2.5" fill="none" stroke="#475569" stroke-width="0.8" stroke-linecap="round"/>
+  <circle cx="20.5" cy="13" r="0.8" fill="#475569"/>
+</svg>`
 
-  function qsRankRadius(rank: number): number {
-    if (rank <= 10) return 12
-    if (rank <= 30) return 10
-    if (rank <= 50) return 8
-    if (rank <= 100) return 7
-    if (rank <= 200) return 6
-    return 5
-  }
+  // Leaflet divIcon class override — injected once
+  useEffect(() => {
+    const style = document.createElement("style")
+    style.textContent = ".univ-pin-icon { background: transparent !important; border: none !important; }"
+    document.head.appendChild(style)
+    return () => { style.remove() }
+  }, [])
 
   function buildMarkers(): L.LayerGroup {
     const group = L.layerGroup()
     const colleges = dataRef.current.usRankedColleges
     for (const c of colleges) {
       if (c.lat === 0 && c.lng === 0) continue
-      const rank = c.qsRank
-      const color = qsRankColor(rank)
-      const marker = L.circleMarker([c.lat, c.lng], {
-        radius: qsRankRadius(rank),
-        fillColor: color,
-        fillOpacity: 0.85,
-        color: "#ffffff",
-        weight: 2,
+      const icon = L.divIcon({
+        className: "univ-pin-icon",
+        html: UNIV_PIN_SVG,
+        iconSize: [28, 38],
+        iconAnchor: [14, 36],
       })
-      const tooltipText = `#${rank} ${c.college_name}`
+      const marker = L.marker([c.lat, c.lng], { icon })
+      const tooltipText = `${c.college_name}`
       marker.bindTooltip(tooltipText, {
         sticky: true,
         direction: "top",
         className: "!rounded-md !border-0 !bg-slate-900 !px-2 !py-1 !text-xs !text-white !shadow-md",
       })
-      marker.on({
-        click: () => onSelectUniversityRef.current?.(c.slug),
-        mouseover: () => marker.setStyle({ radius: qsRankRadius(rank) + 2, fillOpacity: 1 }),
-        mouseout: () => marker.setStyle({ radius: qsRankRadius(rank), fillOpacity: 0.85 }),
-      })
+      marker.on("click", () => onSelectUniversityRef.current?.(c.slug))
       group.addLayer(marker)
     }
     return group
