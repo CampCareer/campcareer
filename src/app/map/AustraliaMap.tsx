@@ -167,7 +167,9 @@ export default function AustraliaMap({
   }
 
   const shareUniv = (slug: string) => {
-    const shareUrl = `${window.location.origin}/map/us/university/${slug}`
+    if (!selectedUniv) return
+    const country = "college_id" in selectedUniv ? "us" : "au"
+    const shareUrl = `${window.location.origin}/map/${country}/university/${slug}`
     if (navigator.share) {
       navigator.share({ url: shareUrl })
     } else {
