@@ -11,6 +11,7 @@ import { getAllPosts } from "@/lib/blog"
 import { getUSOccCodes } from "@/lib/us-occupation-detail"
 import { getAllSlugs, getCities } from "@/lib/language-schools-ie"
 import { SA4_BY_STATE } from "@/data/sa4-regions"
+import { getMapData } from "@/lib/map-data"
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -114,6 +115,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
   ]
 
+  // US 대학 SEO 페이지 (88개)
+  const mapData = await getMapData()
+  const univPages: MetadataRoute.Sitemap = mapData.usRankedColleges.map((c) => ({
+    url: `${BASE}/map/us/university/${c.slug}`,
+    priority: 0.6,
+    changeFrequency: "weekly",
+  }))
+
   // 전용 페이지: /map/au/employment/:state (8개) + /map/au/whv/:state (8개) + /map/au/whv/:state/:sa4 (88개)
   const mapPages: MetadataRoute.Sitemap = []
   const STATE_CODES = ["nsw", "vic", "qld", "sa", "wa", "tas", "nt", "act"]
@@ -128,8 +137,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   const total = staticPages.length + blogPages.length + detailPages.length +
-    occupationPages.length + usOccupationPages.length + ieLangSchoolPages.length + mapPages.length
-  console.log(`[sitemap] counts — static: ${staticPages.length}, blog: ${blogPages.length}, AU colleges: ${detailPages.length}, AU occupations: ${occupationPages.length}, US occupations: ${usOccupationPages.length}, IE schools: ${ieLangSchoolPages.length}, map: ${mapPages.length}, TOTAL: ${total}`)
+    occupationPages.length + usOccupationPages.length + ieLangSchoolPages.length + mapPages.length + univPages.length
+  console.log(`[sitemap] counts — static: ${staticPages.length}, blog: ${blogPages.length}, AU colleges: ${detailPages.length}, AU occupations: ${occupationPages.length}, US occupations: ${usOccupationPages.length}, IE schools: ${ieLangSchoolPages.length}, map: ${mapPages.length}, US universities: ${univPages.length}, TOTAL: ${total}`)
 
-  return [...staticPages, ...blogPages, ...detailPages, ...occupationPages, ...usOccupationPages, ...ieLangSchoolPages, ...mapPages]
+  return [...staticPages, ...blogPages, ...detailPages, ...occupationPages, ...usOccupationPages, ...ieLangSchoolPages, ...mapPages, ...univPages]
 }

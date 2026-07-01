@@ -79,6 +79,12 @@ export interface USCollege {
   graduation_rate: number | null
 }
 
+export interface USRankedCollege extends USCollege {
+  qsRank: number
+  website: string
+  slug: string
+}
+
 // { "WA": { "1": 1.000, "3": 1.222, ... } }
 export type StateSalaryMult = Record<string, Record<string, number>>
 
@@ -112,6 +118,7 @@ export interface MapData {
   coursesByFieldState: Record<string, Record<string, CourseLite[]>>
   usStateInfo: Record<string, USStateInfo>
   usMajorDensity: Record<string, StateMajorDensity[]>
+  usRankedColleges: USRankedCollege[]
 }
 
 export type OccRow = {
@@ -316,6 +323,81 @@ function computeMajorDensity(): Record<string, StateMajorDensity[]> {
   return result
 }
 
+let _rankedColleges: USRankedCollege[] | null = null
+
+function getUSRankedColleges(colleges: USCollege[]): USRankedCollege[] {
+  if (_rankedColleges) return _rankedColleges
+  try {
+    const raw = readFileSync(path.join(process.cwd(), "src/data/us-university-rankings.json"), "utf-8")
+    const rankings: Array<{ qsRank: number; name: string; alias?: string; city: string; state: string; website: string }> = JSON.parse(raw)
+
+    const ranked: USRankedCollege[] = []
+
+    for (const r of rankings) {
+      // Try to match by name or alias, within the same state
+      const match = colleges.find((c) => {
+        const cn = c.college_name.toLowerCase()
+        const rn = r.name.toLowerCase()
+        const alias = r.alias?.toLowerCase()
+        return (
+          cn.includes(rn) ||
+          rn.includes(cn) ||
+          (alias && (cn.includes(alias) || alias.includes(cn)))
+        ) && c.college_state === r.state
+      })
+
+      if (match) {
+        const slug = match.college_name
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-|-$/g, "")
+
+        ranked.push({
+          ...match,
+          qsRank: r.qsRank,
+          website: r.website,
+          slug,
+        })
+      }
+    }
+
+    // Also add ranked colleges with no matching data (show without financial data)
+    for (const r of rankings) {
+      const exists = ranked.some((c) => c.qsRank === r.qsRank && c.college_state === r.state)
+      if (exists) continue
+      // Use ranking data as fallback
+      const slug = r.name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "")
+      ranked.push({
+        college_id: `qs-${r.qsRank}-${r.state}`,
+        college_name: r.name,
+        city_name: r.city,
+        college_state: r.state,
+        // Estimate lat/lng from state centroid or city lookup? Skip for now.
+        lat: 0,
+        lng: 0,
+        roi_score: null,
+        net_salary: null,
+        tuition: null,
+        median_earnings: null,
+        graduation_rate: null,
+        qsRank: r.qsRank,
+        website: r.website,
+        slug,
+      })
+    }
+
+    ranked.sort((a, b) => a.qsRank - b.qsRank)
+    _rankedColleges = ranked
+  } catch (e) {
+    console.error("[map-data] failed to load us-university-rankings.json:", e)
+    _rankedColleges = []
+  }
+  return _rankedColleges
+}
+
 let _usOccData: { shortageByState: Record<string, USOccupation[]>; highPayByState: Record<string, USOccupation[]> } | null = null
 
 function getUSOccupationData() {
@@ -488,8 +570,9 @@ async function getMapDataUncached(): Promise<MapData> {
 
   const usStateInfo = getUSStateInfo()
   const usMajorDensity = computeMajorDensity()
+  const usRankedColleges = getUSRankedColleges(usColleges)
 
-  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages, coursesByFieldState, usStateInfo, usMajorDensity }
+  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages, coursesByFieldState, usStateInfo, usMajorDensity, usRankedColleges }
 }
 
 // cross-instance 공유 캐시(방어선). 페이지가 force-static이라 보통 빌드/리밸리데이트
