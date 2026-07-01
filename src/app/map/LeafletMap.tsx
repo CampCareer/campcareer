@@ -133,17 +133,13 @@ export default function LeafletMap({
     }
   }
 
-  const UNIV_PIN_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 38" width="28" height="38">
-  <defs>
-    <filter id="u" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="1" stdDeviation="1" flood-opacity="0.15"/>
-    </filter>
-  </defs>
-  <path d="M14 2C7.4 2 2 7.4 2 14c0 9.5 12 21 12 21s12-11.5 12-21C26 7.4 20.6 2 14 2z" fill="#fff" stroke="#94a3b8" stroke-width="1.5" filter="url(#u)"/>
-  <path d="M7 10.5l7-2.5 7 2.5-7 2.5z" fill="#475569"/>
-  <rect x="10" y="10.5" width="8" height="2" rx="0.7" fill="#475569"/>
-  <path d="M19 10q1 1 1.5 2.5" fill="none" stroke="#475569" stroke-width="0.8" stroke-linecap="round"/>
-  <circle cx="20.5" cy="13" r="0.8" fill="#475569"/>
+  const UNIV_PIN_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 30">
+  <ellipse cx="11" cy="29" rx="5" ry="1.5" fill="rgba(0,0,0,0.1)"/>
+  <path d="M11 2C5.5 2 2 5.8 2 11c0 6.5 9 16 9 16s9-9.5 9-16C20 5.8 16.5 2 11 2z" fill="#6b7280" stroke="#fff" stroke-width="1.8"/>
+  <path d="M5.5 8.5l5.5-2 5.5 2-5.5 2.3z" fill="#fff"/>
+  <rect x="8" y="8.5" width="6" height="1.5" rx="0.5" fill="#fff"/>
+  <path d="M15 8.5q0.8 0.5 1.2 1.8" fill="none" stroke="#fff" stroke-width="0.7" stroke-linecap="round"/>
+  <circle cx="16.2" cy="10.8" r="0.5" fill="#fff"/>
 </svg>`
 
   // Leaflet divIcon class override — injected once
@@ -157,15 +153,21 @@ export default function LeafletMap({
   function buildMarkers(): L.LayerGroup {
     const group = L.layerGroup()
     const colleges = dataRef.current.usRankedColleges
+    const placed: Array<{ key: string; slug: string }> = []
     for (const c of colleges) {
       if (c.lat === 0 && c.lng === 0) continue
+      const key = `${c.lat.toFixed(3)},${c.lng.toFixed(3)}`
+      const sameLoc = placed.filter((p) => p.key === key)
+      const offset = sameLoc.length * 0.006
+      const lat = c.lat + offset
+      const lng = c.lng + (sameLoc.length % 2 === 0 ? offset : -offset)
       const icon = L.divIcon({
         className: "univ-pin-icon",
         html: UNIV_PIN_SVG,
-        iconSize: [28, 38],
-        iconAnchor: [14, 36],
+        iconSize: [22, 30],
+        iconAnchor: [11, 28],
       })
-      const marker = L.marker([c.lat, c.lng], { icon })
+      const marker = L.marker([lat, lng], { icon })
       const tooltipText = `${c.college_name}`
       marker.bindTooltip(tooltipText, {
         sticky: true,
@@ -173,6 +175,7 @@ export default function LeafletMap({
         className: "!rounded-md !border-0 !bg-slate-900 !px-2 !py-1 !text-xs !text-white !shadow-md",
       })
       marker.on("click", () => onSelectUniversityRef.current?.(c.slug))
+      placed.push({ key, slug: c.slug })
       group.addLayer(marker)
     }
     return group
