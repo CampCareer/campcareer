@@ -133,15 +133,11 @@ export default function LeafletMap({
     }
   }
 
-  const UNIV_PIN_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 34">
-  <ellipse cx="12" cy="32" rx="5" ry="1.5" fill="rgba(0,0,0,0.12)"/>
-  <path d="M12 3C6.5 3 3 7 3 12.5c0 6.5 9 16.5 9 16.5s9-10 9-16.5C21 7 17.5 3 12 3z" fill="#7c3aed" stroke="#fff" stroke-width="1.5"/>
-  <g transform="translate(12,8)">
-    <ellipse cx="0" cy="3.5" rx="3.5" ry="4.5" fill="#fff" opacity="0.95"/>
-    <rect x="-5.5" y="-2" width="11" height="2.5" rx="1" fill="#fff"/>
-    <polygon points="-7.5,-2 7.5,-2 5.5,-6 -5.5,-6" fill="#fff"/>
-    <line x1="0" y1="-6" x2="-2" y2="-9.5" stroke="#f59e0b" stroke-width="1.2" stroke-linecap="round"/>
-    <circle cx="-2" cy="-9.5" r="1.5" fill="#f59e0b"/>
+  const UNIV_PIN_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 30">
+  <ellipse cx="11" cy="29" rx="5" ry="1.5" fill="rgba(0,0,0,0.1)"/>
+  <path d="M11 2C5.5 2 2 5.8 2 11c0 6.5 9 16 9 16s9-9.5 9-16C20 5.8 16.5 2 11 2z" fill="#7c3aed" stroke="#fff" stroke-width="1.8"/>
+  <g transform="translate(2.5, 2) scale(0.7)">
+    <path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z" fill="#fff" stroke="#475569" stroke-width="1.5" stroke-linejoin="round"/>
   </g>
 </svg>`
 
@@ -169,8 +165,8 @@ export default function LeafletMap({
       const icon = L.divIcon({
         className: "univ-pin-icon",
         html: UNIV_PIN_SVG,
-        iconSize: [24, 34],
-        iconAnchor: [12, 32],
+        iconSize: [22, 30],
+        iconAnchor: [11, 28],
       })
       const marker = L.marker([lat, lng], { icon })
       const tooltipText = `${c.college_name}`

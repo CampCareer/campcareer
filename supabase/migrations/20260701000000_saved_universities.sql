@@ -20,9 +20,18 @@ CREATE TABLE IF NOT EXISTS public.saved_universities (
 );
 
 -- Unique constraint: one save per user + university slug
-ALTER TABLE public.saved_universities
-  ADD CONSTRAINT saved_universities_user_slug_unique
-  UNIQUE (user_id, univ_slug);
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_constraint
+    WHERE conname = 'saved_universities_user_slug_unique'
+      AND connamespace = 'public'::regnamespace
+  ) THEN
+    ALTER TABLE public.saved_universities
+      ADD CONSTRAINT saved_universities_user_slug_unique
+      UNIQUE (user_id, univ_slug);
+  END IF;
+END$$;
 
 DO $$
 DECLARE pol_name text;
