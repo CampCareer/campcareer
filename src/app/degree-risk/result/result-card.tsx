@@ -1,6 +1,9 @@
+"use client"
+
+import React, { useState, useRef, useCallback, useEffect } from "react"
 import Link from "next/link"
-import { Fragment } from "react"
-import { ExternalLink, AlertTriangle, ArrowRight } from "lucide-react"
+import { ExternalLink, AlertTriangle, ArrowRight, ChevronDown } from "lucide-react"
+import { cn } from "@/lib/utils"
 import {
   type MajorRow,
   type LayerKey,
@@ -15,16 +18,15 @@ import {
   aiNoteText,
   majorLabel,
 } from "@/lib/degree-risk"
-import { getTranslations, getLocale } from "@/lib/i18n/server"
+import { useTranslations, useLocale } from "@/lib/i18n/locale-provider"
 import { ImmigrationTimeline } from "@/components/immigration-timeline"
 
-type ResultMeta = ReturnType<typeof getTranslations>["degreeRisk"]["resultMeta"]
+const LAYER_KEYS: LayerKey[] = ["employment", "visa", "demand", "ai_exposure", "roi", "debt"]
 
-// Interpolate a "{key}" template with React nodes (keeps emphasized numbers).
 function fill(template: string, values: Record<string, React.ReactNode>): React.ReactNode {
   return template.split(/(\{[a-z_]+\})/g).map((part, i) => {
     const m = part.match(/^\{([a-z_]+)\}$/)
-    return <Fragment key={i}>{m ? values[m[1]] ?? part : part}</Fragment>
+    return <React.Fragment key={i}>{m ? values[m[1]] ?? part : part}</React.Fragment>
   })
 }
 
@@ -38,39 +40,44 @@ function LayerRow({
   cell = false,
   spanFull = false,
   compact = false,
+  accordionOpen = true,
+  onToggle,
   children,
 }: {
   label: string
   meta: LayerMeta
   note: string | null
-  rm: ResultMeta
+  rm: ReturnType<typeof useTranslations>["degreeRisk"]["resultMeta"]
   priorityLabel: string
   highlighted?: boolean
-  // `cell` renders the layer as a self-contained bordered cell (for the 2-col
-  // grid layout); the default keeps the flat top-divider list rows.
   cell?: boolean
   spanFull?: boolean
-  // `compact` drops the per-layer note box and source/methodology footer (used
-  // in the multi-country compare grid, where the single-country view holds the
-  // full provenance). The estimate badge and small policy chip are kept.
   compact?: boolean
+  accordionOpen?: boolean
+  onToggle?: () => void
   children: React.ReactNode
 }) {
   const verified = meta.confidence === "verified"
   const containerClass = cell
     ? [
-        "rounded-xl border p-4",
+        "rounded-xl border p-3 md:p-4",
         spanFull ? "md:col-span-2" : "",
         highlighted ? "border-transparent bg-brand-tint ring-2 ring-brand/30" : "border-slate-200",
       ]
         .filter(Boolean)
         .join(" ")
     : highlighted
-      ? "py-4 border-t border-slate-100 first:border-t-0 -mx-3 px-3 rounded-xl bg-brand-tint ring-2 ring-brand/30"
-      : "py-4 border-t border-slate-100 first:border-t-0"
+      ? "py-3 md:py-4 border-t border-slate-100 first:border-t-0 -mx-3 px-3 rounded-xl bg-brand-tint ring-2 ring-brand/30"
+      : "py-3 md:py-4 border-t border-slate-100 first:border-t-0"
+
   return (
     <div className={containerClass}>
-      <div className="flex items-center gap-2">
+      <button
+        type="button"
+        onClick={onToggle}
+        className="flex items-center gap-2 w-full text-left md:cursor-default"
+        aria-expanded={accordionOpen}
+      >
         <p
           className={
             highlighted
@@ -92,42 +99,43 @@ function LayerRow({
             {rm.policyChip}
           </span>
         )}
+        <ChevronDown
+          className={cn(
+            "ml-auto h-4 w-4 text-slate-300 transition-transform md:hidden",
+            accordionOpen ? "rotate-180" : ""
+          )}
+        />
+      </button>
+
+      <div
+        className={cn(
+          "mt-1 text-base text-slate-700 leading-relaxed",
+          accordionOpen ? "" : "hidden md:block"
+        )}
+      >
+        {children}
       </div>
 
-      <div className="mt-1 text-base text-slate-700 leading-relaxed">{children}</div>
-
       {note && !compact && (
-        <p className="mt-2 flex items-start gap-1.5 rounded-lg bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-800 ring-1 ring-amber-100">
+        <p
+          className={cn(
+            "mt-2 flex items-start gap-1.5 rounded-lg bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-800 ring-1 ring-amber-100",
+            accordionOpen ? "" : "hidden md:flex"
+          )}
+        >
           <AlertTriangle className="mt-0.5 h-3 w-3 shrink-0" />
           <span>{note}</span>
         </p>
       )}
 
       {!compact && (
-      <p className="mt-1.5 text-[11px] text-slate-400">
-        {verified && meta.source_name ? (
-          <>
-            {meta.source_url ? (
-              <a
-                href={meta.source_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-0.5 hover:text-slate-600 underline underline-offset-2"
-              >
-                {rm.verifiedFmt
-                  .replace("{source}", meta.source_name)
-                  .replace("{date}", meta.last_verified ?? "")}
-                <ExternalLink className="w-2.5 h-2.5" />
-              </a>
-            ) : (
-              rm.verifiedFmt
-                .replace("{source}", meta.source_name)
-                .replace("{date}", meta.last_verified ?? "")
-            )}
-            <span className="mx-1.5">·</span>
-          </>
-        ) : (
-          meta.source_name && (
+        <p
+          className={cn(
+            "mt-1.5 text-[11px] text-slate-400",
+            accordionOpen ? "" : "hidden md:block"
+          )}
+        >
+          {verified && meta.source_name ? (
             <>
               {meta.source_url ? (
                 <a
@@ -136,21 +144,77 @@ function LayerRow({
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-0.5 hover:text-slate-600 underline underline-offset-2"
                 >
-                  {rm.sourcePrefix}: {meta.source_name}
+                  {rm.verifiedFmt
+                    .replace("{source}", meta.source_name)
+                    .replace("{date}", meta.last_verified ?? "")}
                   <ExternalLink className="w-2.5 h-2.5" />
                 </a>
               ) : (
-                `${rm.sourcePrefix}: ${meta.source_name}`
+                rm.verifiedFmt
+                  .replace("{source}", meta.source_name)
+                  .replace("{date}", meta.last_verified ?? "")
               )}
               <span className="mx-1.5">·</span>
             </>
-          )
-        )}
-        <Link href="/methodology" className="hover:text-slate-600 underline underline-offset-2">
-          {rm.methodology}
-        </Link>
-      </p>
+          ) : (
+            meta.source_name && (
+              <>
+                {meta.source_url ? (
+                  <a
+                    href={meta.source_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-0.5 hover:text-slate-600 underline underline-offset-2"
+                  >
+                    {rm.sourcePrefix}: {meta.source_name}
+                    <ExternalLink className="w-2.5 h-2.5" />
+                  </a>
+                ) : (
+                  `${rm.sourcePrefix}: ${meta.source_name}`
+                )}
+                <span className="mx-1.5">·</span>
+              </>
+            )
+          )}
+          <Link href="/methodology" className="hover:text-slate-600 underline underline-offset-2">
+            {rm.methodology}
+          </Link>
+        </p>
       )}
+    </div>
+  )
+}
+
+function LayerTabs({
+  activeLayer,
+  layerLabels,
+  onSelect,
+  className,
+}: {
+  activeLayer: LayerKey | null
+  layerLabels: Record<LayerKey, string>
+  onSelect: (key: LayerKey) => void
+  className?: string
+}) {
+  return (
+    <div className={cn("sticky top-10 md:top-14 z-40 bg-white border-b border-slate-200 overflow-x-auto no-scrollbar", className)}>
+      <div className="flex gap-1 px-4">
+        {LAYER_KEYS.map((key) => (
+          <button
+            key={key}
+            type="button"
+            onClick={() => onSelect(key)}
+            className={cn(
+              "shrink-0 px-3 py-2.5 text-xs font-semibold uppercase tracking-wider border-b-2 transition-colors",
+              activeLayer === key
+                ? "border-brand text-brand"
+                : "border-transparent text-slate-400 hover:text-slate-600"
+            )}
+          >
+            {layerLabels[key]}
+          </button>
+        ))}
+      </div>
     </div>
   )
 }
@@ -164,16 +228,19 @@ export function ResultCard({
   row: MajorRow
   pr?: PrPathway | null
   priorityLayers?: string[]
-  // "grid" lays the five layers out in a 2-column grid (used for the wide,
-  // single-country result); "list" keeps the stacked rows (compare grid).
   layout?: "list" | "grid"
 }) {
-  const t = getTranslations()
+  const t = useTranslations()
   const rm = t.degreeRisk.resultMeta
   const rr = t.degreeRisk.result
   const tl = t.degreeRisk.timeline
   const opts = t.degreeRisk.options as Record<string, string>
-  const locale = getLocale()
+  const locale = useLocale()
+
+  const [summaryExpanded, setSummaryExpanded] = useState(false)
+  const [expandedLayers, setExpandedLayers] = useState<Set<LayerKey>>(new Set())
+  const [activeTab, setActiveTab] = useState<LayerKey | null>(null)
+  const layerRefs = useRef<Record<LayerKey, HTMLDivElement | null>>({} as Record<LayerKey, HTMLDivElement | null>)
 
   const flag = COUNTRY_META[row.country].flag
   const countryName = rr.countries[row.country]
@@ -182,46 +249,114 @@ export function ResultCard({
   const meta = (layer: LayerKey) => layerMeta(row, layer)
   const note = (layer: LayerKey) => layerNoteText(meta(layer), locale)
   const grid = layout === "grid"
-  // Compare ("all") view: each country card is a scannable summary, so the full
-  // timeline (and per-layer source footers) is replaced by a one-line visa→PR
-  // recap that links out to this country's single-country result for the full
-  // path, sources, and nationality toggle.
   const compact = layout === "list"
   const detailHref = `/degree-risk/result?major=${row.slug}&view=${row.country}`
 
+  const toggleLayer = useCallback((key: LayerKey) => {
+    setExpandedLayers((prev) => {
+      const next = new Set(prev)
+      if (next.has(key)) {
+        next.delete(key)
+      } else {
+        next.add(key)
+      }
+      return next
+    })
+  }, [])
+
+  const scrollToLayer = useCallback((key: LayerKey) => {
+    const el = layerRefs.current[key]
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" })
+    }
+    setExpandedLayers((prev) => {
+      if (prev.has(key)) return prev
+      const next = new Set(prev)
+      next.add(key)
+      return next
+    })
+  }, [])
+
+  useEffect(() => {
+    if (!grid) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const key = entry.target.getAttribute("data-layer-key") as LayerKey | null
+            if (key) setActiveTab(key)
+          }
+        }
+      },
+      { rootMargin: "-80px 0px -60% 0px", threshold: 0 }
+    )
+    for (const key of LAYER_KEYS) {
+      const el = layerRefs.current[key]
+      if (el) observer.observe(el)
+    }
+    return () => observer.disconnect()
+  }, [grid])
+
+  const layerLabels: Record<LayerKey, string> = {
+    employment: rr.layerEmployment,
+    visa: rr.layerVisa,
+    demand: rr.layerDemand,
+    ai_exposure: rr.layerAi,
+    roi: rr.layerRoi,
+    debt: rr.layerDebt,
+  }
+
   return (
-    <div className="bg-white border-2 border-slate-200 rounded-2xl p-6 md:p-7">
+    <div className="bg-white border-2 border-slate-200 rounded-2xl p-4 md:p-7">
+      {/* Tab bar — mobile only */}
+      {grid && (
+        <div className="-mx-4 md:-mx-7 mb-4 md:hidden">
+          <LayerTabs activeLayer={activeTab} layerLabels={layerLabels} onSelect={scrollToLayer} />
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-start justify-between gap-3">
-        <div>
+        <div className="min-w-0">
           <p className="text-sm text-slate-400">
             {flag} {countryName}
           </p>
-          <h2 className="mt-0.5 font-display text-2xl font-semibold text-slate-900 tracking-tight">
+          <h2 className="mt-0.5 font-display text-xl md:text-2xl font-semibold text-slate-900 tracking-tight truncate">
             {majorName}
           </h2>
         </div>
         <span
-          className={`inline-block shrink-0 px-3 py-1.5 rounded-full border-2 text-sm font-bold ${RISK_BADGE[row.overall_risk].className}`}
+          className={`shrink-0 inline-flex items-center px-2.5 md:px-3 py-1 md:py-1.5 rounded-full border-2 text-xs md:text-sm font-bold ${RISK_BADGE[row.overall_risk].className}`}
         >
           {rr.risk[row.overall_risk]}
         </span>
       </div>
 
-      {/* Summary — high-risk majors get cost/conditions framing, never "don't study X".
-          risk_summary / ai_note are English-first DB free-text; ko falls back to the
-          English original until risk_summary_ko / ai_note_ko are seeded. */}
+      {/* Summary */}
       {row.overall_risk === "high" && (
-        <p className="mt-4 text-xs font-bold text-slate-500 uppercase tracking-wide">
+        <p className="mt-3 md:mt-4 text-xs font-bold text-slate-500 uppercase tracking-wide">
           {rr.highRiskFraming}
         </p>
       )}
-      <p className={`${row.overall_risk === "high" ? "mt-1" : "mt-4"} text-body-lg text-slate-600`}>
-        {riskSummaryText(row, locale)}
-      </p>
+      <div className={`${row.overall_risk === "high" ? "mt-1" : "mt-3 md:mt-4"}`}>
+        <p
+          className={cn(
+            "text-body-lg text-slate-600",
+            summaryExpanded ? "" : "line-clamp-2 md:line-clamp-none"
+          )}
+        >
+          {riskSummaryText(row, locale)}
+        </p>
+        <button
+          type="button"
+          onClick={() => setSummaryExpanded((v) => !v)}
+          className="mt-1 text-xs font-medium text-blue-600 hover:text-blue-700 md:hidden"
+        >
+          {summaryExpanded ? "Show less" : "Read more"}
+        </button>
+      </div>
 
-      {/* Immigration path: full timeline (single view) or a one-line visa→PR
-          recap (compare view, where the card stays scannable). */}
+      {/* Immigration path */}
       {compact ? (
         <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5">
           <div className="flex items-center gap-2">
@@ -248,7 +383,7 @@ export function ResultCard({
           </Link>
         </div>
       ) : (
-        <div className="mt-5">
+        <div className="mt-4 md:mt-5">
           <ImmigrationTimeline
             country={row.country}
             postStudyYears={row.post_study_work_years}
@@ -258,63 +393,83 @@ export function ResultCard({
         </div>
       )}
 
-      {/* Six layers — stacked list (compare grid) or 2-col grid (wide single) */}
-      <div className={grid ? "mt-5 grid grid-cols-1 md:grid-cols-2 gap-4" : "mt-5"}>
-        <LayerRow label={rr.layerEmployment} rm={rm} priorityLabel={rr.priority} meta={meta("employment")} note={note("employment")} highlighted={hot("employment")} cell={grid} compact={compact}>
-          {fill(rr.employmentValue, { rate: <strong>{row.employment_rate}%</strong> })}
-        </LayerRow>
-
-        <LayerRow label={rr.layerVisa} rm={rm} priorityLabel={rr.priority} meta={meta("visa")} note={note("visa")} highlighted={hot("visa")} cell={grid} compact={compact}>
-          {row.occupation_list_match ? rr.visaOnList : rr.visaOffList}
-          {" · "}
-          {fill(rr.visaYears, { n: <strong>{row.post_study_work_years}</strong> })}
-        </LayerRow>
-
-        <LayerRow label={rr.layerDemand} rm={rm} priorityLabel={rr.priority} meta={meta("demand")} note={note("demand")} highlighted={hot("demand")} cell={grid} compact={compact}>
-          <span className="flex items-center gap-2.5">
-            <strong>{row.market_demand_score}</strong>/100
-            <span className="flex-1 max-w-[10rem] h-1.5 rounded-full bg-slate-100 overflow-hidden">
-              <span
-                className="block h-full rounded-full bg-brand"
-                style={{ width: `${Math.min(Math.max(row.market_demand_score, 0), 100)}%` }}
-              />
-            </span>
-          </span>
-        </LayerRow>
-
-        <LayerRow label={rr.layerAi} rm={rm} priorityLabel={rr.priority} meta={meta("ai_exposure")} note={note("ai_exposure")} highlighted={hot("ai_exposure")} cell={grid} compact={compact}>
-          <strong className="capitalize">{row.ai_exposure_band}</strong>
-          {(() => {
-            const aiNote = aiNoteText(row, locale)
-            return aiNote && <> — {aiNote}</>
-          })()}
-        </LayerRow>
-
-        <LayerRow label={rr.layerRoi} rm={rm} priorityLabel={rr.priority} meta={meta("roi")} note={note("roi")} highlighted={hot("roi")} cell={grid} spanFull={grid} compact={compact}>
-          {fill(rr.roiValue, {
-            tuition: formatMoney(row.avg_annual_tuition_intl, row.country),
-            salary: formatMoney(row.median_starting_salary, row.country),
-            payback: <strong>{row.payback_years}</strong>,
-          })}
-          {row.earnings_p25 && row.earnings_p75 && (
-            <p className="mt-1 text-sm text-slate-500">
-              {fill(rr.roiIncomeRange, {
-                range: <strong>{formatMoney(row.earnings_p25, row.country)} – {formatMoney(row.earnings_p75, row.country)}</strong>,
-              })}
-            </p>
-          )}
-        </LayerRow>
-
-        <LayerRow label={rr.layerDebt} rm={rm} priorityLabel={rr.priority} meta={meta("debt")} note={note("debt")} highlighted={hot("debt")} cell={grid} compact={compact}>
-          {row.median_debt ? (
-            fill(rr.debtValue, {
-              debt: <strong>{formatMoney(row.median_debt, row.country)}</strong>,
-              note: row.median_debt < 25000 ? "Below national average" : row.median_debt > 40000 ? "Above national average" : "Near national average",
-            })
-          ) : (
-            "Data not available"
-          )}
-        </LayerRow>
+      {/* Six layers */}
+      <div className={grid ? "mt-4 md:mt-5 grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4" : "mt-4 md:mt-5"}>
+        {LAYER_KEYS.map((key) => (
+          <div key={key} ref={(el) => { layerRefs.current[key] = el }} data-layer-key={key}>
+            <LayerRow
+              label={layerLabels[key]}
+              rm={rm}
+              priorityLabel={rr.priority}
+              meta={meta(key)}
+              note={note(key)}
+              highlighted={hot(key)}
+              cell={grid}
+              compact={compact}
+              accordionOpen={grid ? expandedLayers.has(key) : true}
+              onToggle={grid ? () => toggleLayer(key) : undefined}
+            >
+              {key === "employment" && (
+                <>{fill(rr.employmentValue, { rate: <strong>{row.employment_rate}%</strong> })}</>
+              )}
+              {key === "visa" && (
+                <>
+                  {row.occupation_list_match ? rr.visaOnList : rr.visaOffList}
+                  {" · "}
+                  {fill(rr.visaYears, { n: <strong>{row.post_study_work_years}</strong> })}
+                </>
+              )}
+              {key === "demand" && (
+                <span className="flex items-center gap-2.5">
+                  <strong>{row.market_demand_score}</strong>/100
+                  <span className="flex-1 max-w-[10rem] h-1.5 rounded-full bg-slate-100 overflow-hidden">
+                    <span
+                      className="block h-full rounded-full bg-brand"
+                      style={{ width: `${Math.min(Math.max(row.market_demand_score, 0), 100)}%` }}
+                    />
+                  </span>
+                </span>
+              )}
+              {key === "ai_exposure" && (
+                <>
+                  <strong className="capitalize">{row.ai_exposure_band}</strong>
+                  {(() => {
+                    const aiNote = aiNoteText(row, locale)
+                    return aiNote && <> — {aiNote}</>
+                  })()}
+                </>
+              )}
+              {key === "roi" && (
+                <>
+                  {fill(rr.roiValue, {
+                    tuition: formatMoney(row.avg_annual_tuition_intl, row.country),
+                    salary: formatMoney(row.median_starting_salary, row.country),
+                    payback: <strong>{row.payback_years}</strong>,
+                  })}
+                  {row.earnings_p25 && row.earnings_p75 && (
+                    <p className="mt-1 text-sm text-slate-500">
+                      {fill(rr.roiIncomeRange, {
+                        range: <strong>{formatMoney(row.earnings_p25, row.country)} – {formatMoney(row.earnings_p75, row.country)}</strong>,
+                      })}
+                    </p>
+                  )}
+                </>
+              )}
+              {key === "debt" && (
+                <>
+                  {row.median_debt ? (
+                    fill(rr.debtValue, {
+                      debt: <strong>{formatMoney(row.median_debt, row.country)}</strong>,
+                      note: row.median_debt < 25000 ? "Below national average" : row.median_debt > 40000 ? "Above national average" : "Near national average",
+                    })
+                  ) : (
+                    "Data not available"
+                  )}
+                </>
+              )}
+            </LayerRow>
+          </div>
+        ))}
       </div>
     </div>
   )

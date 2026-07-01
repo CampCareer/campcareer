@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { GraduationCap, Briefcase, Landmark, ArrowRight, AlertTriangle, ExternalLink } from "lucide-react"
+import { GraduationCap, Briefcase, Landmark, ArrowRight, AlertTriangle, ExternalLink, ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { type CountryCode, type LayerMeta, type PrPathway, layerNoteText } from "@/lib/degree-risk"
 import { useTranslations, useLocale } from "@/lib/i18n/locale-provider"
@@ -39,6 +39,7 @@ export function ImmigrationTimeline({
   const tl = t.degreeRisk.timeline
   const rm = t.degreeRisk.resultMeta
   const [nat, setNat] = useState<Nationality>("india")
+  const [expanded, setExpanded] = useState(false)
 
   const studyYears = STUDY_YEARS[level]
   const visaNote = layerNoteText(visa, locale)
@@ -87,96 +88,115 @@ export function ImmigrationTimeline({
   // prefers-reduced-motion; staggered via animation-delay.
   const stageStyle = (i: number) => ({ animationDelay: `${i * 0.08}s` })
 
+  const psYears = yearsLabel(postStudyYears)
+
   return (
-    <section aria-label={tl.heading} className={cn("rounded-2xl border-2 border-slate-200 bg-white p-5 md:p-6", className)}>
-      <h3 className="font-display text-lg font-semibold text-slate-900 mb-4">{heading ?? tl.heading}</h3>
-
-      {/* Proportional bar — desktop only, decorative */}
-      <div aria-hidden className="hidden md:flex items-center gap-1 h-3 mb-4">
-        <div style={{ flexGrow: studyYears }} className="h-full rounded-l-full bg-slate-300" />
-        <div style={{ flexGrow: Math.max(postStudyYears, 0.5) }} className="h-full bg-brand" />
-        <div style={{ flexGrow: 2 }} className="relative h-full rounded-r-full border-2 border-dashed border-brand/50">
-          <ArrowRight className="absolute -right-1 top-1/2 h-3 w-3 -translate-y-1/2 text-brand/60" />
+    <section aria-label={tl.heading} className={cn("rounded-2xl border-2 border-slate-200 bg-white p-4 md:p-6", className)}>
+      {/* Mobile compact toggle */}
+      <button
+        type="button"
+        onClick={() => setExpanded((v) => !v)}
+        className="flex md:hidden items-center justify-between w-full text-left"
+        aria-expanded={expanded}
+      >
+        <h3 className="font-display text-base font-semibold text-slate-900">{heading ?? tl.heading}</h3>
+        <div className="flex items-center gap-2">
+          {!expanded && (
+            <span className="text-sm text-slate-500">{studyYears} yr → {psYears} → PR</span>
+          )}
+          <ChevronDown className={cn("h-4 w-4 text-slate-300 transition-transform", expanded && "rotate-180")} />
         </div>
-      </div>
+      </button>
+      <h3 className="hidden md:block font-display text-lg font-semibold text-slate-900 mb-4">{heading ?? tl.heading}</h3>
 
-      {/* Stages: vertical on mobile, horizontal on desktop */}
-      <div className="flex flex-col md:flex-row md:items-stretch gap-3 md:gap-0">
-        {/* STUDY */}
-        <div style={stageStyle(0)} className="tl-stage flex-1 md:px-3 md:first:pl-0">
-          <Stage
-            icon={<GraduationCap className="h-4 w-4" />}
-            title={tl.study}
-            primary={tl.studyDuration.replace("{years}", String(studyYears))}
-          />
-        </div>
-
-        <Connector />
-
-        {/* POST-STUDY VISA (verified) */}
-        <div style={stageStyle(1)} className="tl-stage flex-1 md:px-3">
-          <Stage
-            icon={<Briefcase className="h-4 w-4" />}
-            title={tl.postStudy}
-            primary={yearsLabel(postStudyYears)}
-            primaryStrong={yearsLabel(postStudyYears)}
-            caption={postStudyCaption}
-            note={visaNote}
-            policyChip={rm.policyChip}
-            source={
-              verified && visa.source_name
-                ? {
-                    text: tl.sourceFmt
-                      .replace("{source}", visa.source_name)
-                      .replace("{date}", visa.last_verified ?? ""),
-                    url: visa.source_url,
-                  }
-                : null
-            }
-          />
+      <div className={cn(expanded ? "block" : "hidden", "md:block")}>
+        {/* Proportional bar — desktop only, decorative */}
+        <div aria-hidden className="hidden md:flex items-center gap-1 h-3 mb-4">
+          <div style={{ flexGrow: studyYears }} className="h-full rounded-l-full bg-slate-300" />
+          <div style={{ flexGrow: Math.max(postStudyYears, 0.5) }} className="h-full bg-brand" />
+          <div style={{ flexGrow: 2 }} className="relative h-full rounded-r-full border-2 border-dashed border-brand/50">
+            <ArrowRight className="absolute -right-1 top-1/2 h-3 w-3 -translate-y-1/2 text-brand/60" />
+          </div>
         </div>
 
-        <Connector dashed />
+        {/* Stages: vertical on mobile, horizontal on desktop */}
+        <div className="flex flex-col md:flex-row md:items-stretch gap-3 md:gap-0">
+          {/* STUDY */}
+          <div style={stageStyle(0)} className="tl-stage flex-1 md:px-3 md:first:pl-0">
+            <Stage
+              icon={<GraduationCap className="h-4 w-4" />}
+              title={tl.study}
+              primary={tl.studyDuration.replace("{years}", String(studyYears))}
+            />
+          </div>
 
-        {/* PR PATHWAY (estimate, open-ended) */}
-        <div style={stageStyle(2)} className="tl-stage flex-1 md:px-3 md:last:pr-0">
-          <Stage
-            icon={<Landmark className="h-4 w-4" />}
-            title={tl.prPathway}
-            dashed
-            estimateBadge={prVerified ? undefined : tl.estimate}
-            primary={prRoute}
-            caption={prYears}
-            openLabel={tl.prOpen}
-            caveat={prCaveat || null}
-            source={prSource}
-          >
-            {country === "US" && (
-              <div className="mt-2">
-                <p className="text-[11px] font-medium text-slate-400 mb-1">{tl.nationalityLabel}</p>
-                <div role="group" aria-label={tl.nationalityLabel} className="inline-flex rounded-lg border border-slate-200 p-0.5">
-                  {([
-                    ["india", tl.natIndia],
-                    ["china", tl.natChina],
-                    ["other", tl.natOther],
-                  ] as const).map(([val, label]) => (
-                    <button
-                      key={val}
-                      type="button"
-                      aria-pressed={nat === val}
-                      onClick={() => setNat(val)}
-                      className={cn(
-                        "min-h-[44px] rounded-md px-3 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40",
-                        nat === val ? "bg-brand text-brand-foreground" : "text-slate-600 hover:bg-slate-100"
-                      )}
-                    >
-                      {label}
-                    </button>
-                  ))}
+          <Connector />
+
+          {/* POST-STUDY VISA (verified) */}
+          <div style={stageStyle(1)} className="tl-stage flex-1 md:px-3">
+            <Stage
+              icon={<Briefcase className="h-4 w-4" />}
+              title={tl.postStudy}
+              primary={yearsLabel(postStudyYears)}
+              primaryStrong={yearsLabel(postStudyYears)}
+              caption={postStudyCaption}
+              note={visaNote}
+              policyChip={rm.policyChip}
+              source={
+                verified && visa.source_name
+                  ? {
+                      text: tl.sourceFmt
+                        .replace("{source}", visa.source_name)
+                        .replace("{date}", visa.last_verified ?? ""),
+                      url: visa.source_url,
+                    }
+                  : null
+              }
+            />
+          </div>
+
+          <Connector dashed />
+
+          {/* PR PATHWAY (estimate, open-ended) */}
+          <div style={stageStyle(2)} className="tl-stage flex-1 md:px-3 md:last:pr-0">
+            <Stage
+              icon={<Landmark className="h-4 w-4" />}
+              title={tl.prPathway}
+              dashed
+              estimateBadge={prVerified ? undefined : tl.estimate}
+              primary={prRoute}
+              caption={prYears}
+              openLabel={tl.prOpen}
+              caveat={prCaveat || null}
+              source={prSource}
+            >
+              {country === "US" && (
+                <div className="mt-2">
+                  <p className="text-[11px] font-medium text-slate-400 mb-1">{tl.nationalityLabel}</p>
+                  <div role="group" aria-label={tl.nationalityLabel} className="inline-flex rounded-lg border border-slate-200 p-0.5">
+                    {([
+                      ["india", tl.natIndia],
+                      ["china", tl.natChina],
+                      ["other", tl.natOther],
+                    ] as const).map(([val, label]) => (
+                      <button
+                        key={val}
+                        type="button"
+                        aria-pressed={nat === val}
+                        onClick={() => setNat(val)}
+                        className={cn(
+                          "min-h-[44px] rounded-md px-3 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40",
+                          nat === val ? "bg-brand text-brand-foreground" : "text-slate-600 hover:bg-slate-100"
+                        )}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
-          </Stage>
+              )}
+            </Stage>
+          </div>
         </div>
       </div>
     </section>
