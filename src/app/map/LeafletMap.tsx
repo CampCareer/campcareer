@@ -31,15 +31,6 @@ function lerpColor(t: number): string {
   return `rgb(${c[0]}, ${c[1]}, ${c[2]})`
 }
 
-function roiColor(score: number | null): string {
-  if (!score || score <= 0) return "#94a3b8"
-  if (score > 15) return "#16a34a"
-  if (score > 8) return "#22c55e"
-  if (score > 5) return "#65a30d"
-  if (score > 3) return "#eab308"
-  return "#ef4444"
-}
-
 function isAustralia(properties: Record<string, unknown>): boolean {
   return properties?.ISO_A3 === "AUS" || properties?.ADM0_A3 === "AUS"
 }
@@ -138,36 +129,61 @@ export default function LeafletMap({
     }
   }
 
+  function qsRankColor(rank: number): string {
+    if (rank <= 10) return "#7c3aed" // purple — top 10
+    if (rank <= 30) return "#2563eb" // blue — top 30
+    if (rank <= 50) return "#0891b2" // teal — top 50
+    if (rank <= 100) return "#059669" // green — top 100
+    if (rank <= 200) return "#65a30d" // lime — top 200
+    return "#94a3b8"                 // slate — 200+
+  }
+
+  function qsRankRadius(rank: number): number {
+    if (rank <= 10) return 12
+    if (rank <= 30) return 10
+    if (rank <= 50) return 8
+    if (rank <= 100) return 7
+    if (rank <= 200) return 6
+    return 5
+  }
+
   function buildMarkers(): L.LayerGroup {
     const group = L.layerGroup()
-    const colleges = dataRef.current.usColleges
+    const colleges = dataRef.current.usRankedColleges
     for (const c of colleges) {
+      if (c.lat === 0 && c.lng === 0) continue
+      const rank = c.qsRank
+      const color = qsRankColor(rank)
       const marker = L.circleMarker([c.lat, c.lng], {
-        radius: Math.max(4, Math.min(10, (c.roi_score ?? 0) * 0.5)),
-        fillColor: roiColor(c.roi_score),
-        fillOpacity: 0.8,
+        radius: qsRankRadius(rank),
+        fillColor: color,
+        fillOpacity: 0.85,
         color: "#ffffff",
-        weight: 1,
+        weight: 2,
       })
-      const lines = [
-        c.college_name,
-        `${c.city_name}, ${c.college_state}`,
-        c.roi_score != null ? `ROI: ${c.roi_score}` : "",
-        c.tuition != null ? `Tuition: A$${c.tuition.toLocaleString()}` : "",
-        c.median_earnings != null ? `Earnings: $${c.median_earnings.toLocaleString()}` : "",
-        c.graduation_rate != null ? `Grad rate: ${Math.round(c.graduation_rate * 100)}%` : "",
-      ]
-      marker.bindTooltip(c.college_name, {
+      const tooltipText = `#${rank} ${c.college_name}`
+      marker.bindTooltip(tooltipText, {
         sticky: true,
         direction: "top",
         className: "!rounded-md !border-0 !bg-slate-900 !px-2 !py-1 !text-xs !text-white !shadow-md",
       })
+      const lines = [
+        `<strong>#${rank} ${c.college_name}</strong>`,
+        `${c.city_name}, ${c.college_state}`,
+        "",
+        c.tuition != null ? `Tuition: A$${c.tuition.toLocaleString()}` : "",
+        c.median_earnings != null ? `Median earnings: $${c.median_earnings.toLocaleString()}` : "",
+        c.graduation_rate != null ? `Graduation rate: ${Math.round(c.graduation_rate * 100)}%` : "",
+        c.roi_score != null ? `ROI score: ${c.roi_score}` : "",
+        "",
+        `<a href="/map/us/university/${c.slug}" class="text-blue-600 underline text-xs">View details →</a>`,
+      ]
       marker.bindPopup(
         `<div class="text-sm leading-relaxed">${lines.filter(Boolean).join("<br>")}</div>`,
       )
       marker.on({
-        mouseover: () => marker.setStyle({ radius: Math.max(6, Math.min(14, (c.roi_score ?? 0) * 0.7)), fillOpacity: 1 }),
-        mouseout: () => marker.setStyle({ radius: Math.max(4, Math.min(10, (c.roi_score ?? 0) * 0.5)), fillOpacity: 0.8 }),
+        mouseover: () => marker.setStyle({ radius: qsRankRadius(rank) + 2, fillOpacity: 1 }),
+        mouseout: () => marker.setStyle({ radius: qsRankRadius(rank), fillOpacity: 0.85 }),
       })
       group.addLayer(marker)
     }

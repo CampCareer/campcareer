@@ -23,7 +23,7 @@ import { AffiliateCtas } from "@/components/partners/partner-cta"
 import JobListings from "./JobListings"
 import { EMPLOYMENT_OCCUPATIONS } from "@/data/employment-occupations"
 import { EMPLOYMENT_SALARIES } from "@/data/employment-salaries"
-import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc, CourseLite, USStateInfo, StateMajorDensity } from "@/lib/map-data"
+import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc, CourseLite, USStateInfo, StateMajorDensity, USRankedCollege } from "@/lib/map-data"
 import { createClient } from "@/lib/supabase-client"
 import type { User } from "@supabase/supabase-js"
 import { getShortageOccupations } from "@/lib/ie-shortage-occupations"
@@ -60,11 +60,13 @@ export default function AustraliaMap({
   initialState,
   initialTab,
   initialSA4,
+  initialUniversity,
 }: {
   data: MapData
   initialState?: string
   initialTab?: Tab
   initialSA4?: string
+  initialUniversity?: string
 }) {
   const t = useTranslations()
   // /map은 호주 비치헤드의 front door다 → 진입 즉시 주/지역 선택(검색) 바가 보이도록
@@ -81,6 +83,7 @@ export default function AustraliaMap({
   // 직업 카드 열림 상태 — 툴바의 직업 검색에서도 열 수 있도록 최상위로 끌어올림.
   const [selectedOccCode, setSelectedOccCode] = useState<string | null>(null)
   const [selectedUsOcc, setSelectedUsOcc] = useState<USOccupation | null>(null)
+  const [selectedUniv, setSelectedUniv] = useState<USRankedCollege | null>(null)
   const [selectedNeroA4, setSelectedNeroA4] = useState<string | null>(null)
   const initialNeroLoaded = useRef(false)
   const initialSA4Ref = useRef<string | null>(null)
@@ -367,6 +370,17 @@ export default function AustraliaMap({
     if (activeCountry === "US" && selected) setTab("stateInfo")
   }, [activeCountry, selected])
 
+  // Handle initialUniversity prop — find the college and show its info
+  useEffect(() => {
+    if (!initialUniversity) return
+    const univ = data.usRankedColleges.find((c) => c.slug === initialUniversity)
+    if (univ) {
+      setSelectedUniv(univ)
+      setActiveCountry("US")
+      setSelected(univ.college_state)
+    }
+  }, [initialUniversity, data.usRankedColleges])
+
   const onReset = useCallback(() => {
     if (selected !== null) {
       setSelected(null)
@@ -379,6 +393,10 @@ export default function AustraliaMap({
   }, [selected, activeCountry])
 
   const onClosePanel = useCallback(() => {
+    if (selectedUniv) {
+      setSelectedUniv(null)
+      return
+    }
     const hadDetail = selectedOccCode !== null || selectedUsOcc !== null || selectedNeroA4 !== null
     if (hadDetail) {
       setSelectedOccCode(null)
@@ -390,7 +408,7 @@ export default function AustraliaMap({
     } else if (!hadDetail) {
       onReset()
     }
-  }, [selectedOccCode, selectedUsOcc, selectedNeroA4, isMobile, onReset])
+  }, [selectedUniv, selectedOccCode, selectedUsOcc, selectedNeroA4, isMobile, onReset])
 
   const stateItems = useMemo(() => ({
     ...STATE_NAMES,
@@ -619,8 +637,13 @@ export default function AustraliaMap({
           tab={tab}
         />
 
-        {(selected || activeCountry === "IE") && (() => {
-          const panel = activeCountry === "IE" ? (
+        {(selected || activeCountry === "IE" || selectedUniv) && (() => {
+          const panel = selectedUniv ? (
+            <UniversityInfoCard
+              college={selectedUniv}
+              onClose={() => setSelectedUniv(null)}
+            />
+          ) : activeCountry === "IE" ? (
             <IEPanel
               schools={filteredIESchools}
               countyName={selected ? stateLabel : undefined}
@@ -1820,6 +1843,84 @@ function WHVPanel({
     <p className="py-8 text-center text-sm text-slate-400">
       {locale === "ko" ? "주와 지역을 선택해주세요." : "Select a state and region to view WHV eligibility."}
     </p>
+  )
+}
+
+function UniversityInfoCard({
+  college,
+  onClose,
+}: {
+  college: USRankedCollege
+  onClose: () => void
+}) {
+  return (
+    <>
+      <div className="flex items-center justify-between border-b border-slate-200 px-5 py-3">
+        <div className="min-w-0 flex-1">
+          <h2 className="truncate text-sm font-semibold text-slate-900">{college.college_name}</h2>
+          <p className="text-xs text-slate-500">{college.city_name}, {college.college_state}</p>
+        </div>
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close"
+          className="-mr-1 rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+        >
+          <X className="h-4 w-4" />
+        </button>
+      </div>
+
+      <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
+        <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-violet-50 px-3 py-1 text-sm font-semibold text-violet-700">
+          QS #{college.qsRank}
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          {college.tuition != null && (
+            <div className="rounded-lg border border-slate-100 bg-slate-50 p-3">
+              <p className="text-[10px] font-medium uppercase tracking-wide text-slate-400">Tuition</p>
+              <p className="mt-1 text-lg font-bold tabular-nums text-slate-900">
+                A${college.tuition.toLocaleString()}
+              </p>
+            </div>
+          )}
+          {college.median_earnings != null && (
+            <div className="rounded-lg border border-slate-100 bg-slate-50 p-3">
+              <p className="text-[10px] font-medium uppercase tracking-wide text-slate-400">Median Earnings</p>
+              <p className="mt-1 text-lg font-bold tabular-nums text-slate-900">
+                ${college.median_earnings.toLocaleString()}
+              </p>
+            </div>
+          )}
+          {college.graduation_rate != null && (
+            <div className="rounded-lg border border-slate-100 bg-slate-50 p-3">
+              <p className="text-[10px] font-medium uppercase tracking-wide text-slate-400">Graduation Rate</p>
+              <p className="mt-1 text-lg font-bold tabular-nums text-slate-900">
+                {Math.round(college.graduation_rate * 100)}%
+              </p>
+            </div>
+          )}
+          {college.roi_score != null && (
+            <div className="rounded-lg border border-slate-100 bg-slate-50 p-3">
+              <p className="text-[10px] font-medium uppercase tracking-wide text-slate-400">ROI Score</p>
+              <p className="mt-1 text-lg font-bold tabular-nums text-slate-900">
+                {college.roi_score}
+              </p>
+            </div>
+          )}
+        </div>
+
+        <a
+          href={college.website}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-slate-700"
+        >
+          <ExternalLink className="h-4 w-4" />
+          Visit official website
+        </a>
+      </div>
+    </>
   )
 }
 
