@@ -117,8 +117,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // US 대학 SEO 페이지 (88개)
   const mapData = await getMapData()
-  const univPages: MetadataRoute.Sitemap = mapData.usRankedColleges.map((c) => ({
+  const usUnivPages: MetadataRoute.Sitemap = mapData.usRankedColleges.map((c) => ({
     url: `${BASE}/map/us/university/${c.slug}`,
+    priority: 0.6,
+    changeFrequency: "weekly",
+  }))
+
+  // AU 대학 SEO 페이지 (28개)
+  const auUnivPages: MetadataRoute.Sitemap = mapData.auRankedColleges.map((c) => ({
+    url: `${BASE}/map/au/university/${c.slug}`,
     priority: 0.6,
     changeFrequency: "weekly",
   }))
@@ -137,8 +144,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   const total = staticPages.length + blogPages.length + detailPages.length +
-    occupationPages.length + usOccupationPages.length + ieLangSchoolPages.length + mapPages.length + univPages.length
-  console.log(`[sitemap] counts — static: ${staticPages.length}, blog: ${blogPages.length}, AU colleges: ${detailPages.length}, AU occupations: ${occupationPages.length}, US occupations: ${usOccupationPages.length}, IE schools: ${ieLangSchoolPages.length}, map: ${mapPages.length}, US universities: ${univPages.length}, TOTAL: ${total}`)
+    occupationPages.length + usOccupationPages.length + ieLangSchoolPages.length + mapPages.length + usUnivPages.length + auUnivPages.length
+  console.log(`[sitemap] counts — static: ${staticPages.length}, blog: ${blogPages.length}, AU colleges: ${detailPages.length}, AU occupations: ${occupationPages.length}, US occupations: ${usOccupationPages.length}, IE schools: ${ieLangSchoolPages.length}, map: ${mapPages.length}, US universities: ${usUnivPages.length}, AU universities: ${auUnivPages.length}, TOTAL: ${total}`)
 
-  return [...staticPages, ...blogPages, ...detailPages, ...occupationPages, ...usOccupationPages, ...ieLangSchoolPages, ...mapPages, ...univPages]
+  return [...staticPages, ...blogPages, ...detailPages, ...occupationPages, ...usOccupationPages, ...ieLangSchoolPages, ...mapPages, ...usUnivPages, ...auUnivPages]
 }

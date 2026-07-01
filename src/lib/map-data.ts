@@ -85,6 +85,17 @@ export interface USRankedCollege extends USCollege {
   slug: string
 }
 
+export interface AURankedCollege {
+  college_name: string
+  city_name: string
+  college_state: string
+  lat: number
+  lng: number
+  qsRank: number
+  website: string
+  slug: string
+}
+
 // { "WA": { "1": 1.000, "3": 1.222, ... } }
 export type StateSalaryMult = Record<string, Record<string, number>>
 
@@ -119,6 +130,7 @@ export interface MapData {
   usStateInfo: Record<string, USStateInfo>
   usMajorDensity: Record<string, StateMajorDensity[]>
   usRankedColleges: USRankedCollege[]
+  auRankedColleges: AURankedCollege[]
 }
 
 export type OccRow = {
@@ -398,6 +410,37 @@ function getUSRankedColleges(colleges: USCollege[]): USRankedCollege[] {
   return _rankedColleges
 }
 
+let _auRankedColleges: AURankedCollege[] | null = null
+
+function getAURankedColleges(): AURankedCollege[] {
+  if (_auRankedColleges) return _auRankedColleges
+  try {
+    const raw = readFileSync(path.join(process.cwd(), "src/data/au-university-rankings.json"), "utf-8")
+    const rankings: Array<{ qsRank: number; name: string; alias?: string; city: string; state: string; lat: number; lng: number; website: string }> = JSON.parse(raw)
+
+    _auRankedColleges = rankings.map((r) => {
+      const slug = r.name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "")
+      return {
+        college_name: r.name,
+        city_name: r.city,
+        college_state: r.state,
+        lat: r.lat,
+        lng: r.lng,
+        qsRank: r.qsRank,
+        website: r.website,
+        slug,
+      }
+    })
+  } catch (e) {
+    console.error("[map-data] failed to load au-university-rankings.json:", e)
+    _auRankedColleges = []
+  }
+  return _auRankedColleges
+}
+
 let _usOccData: { shortageByState: Record<string, USOccupation[]>; highPayByState: Record<string, USOccupation[]> } | null = null
 
 function getUSOccupationData() {
@@ -571,8 +614,9 @@ async function getMapDataUncached(): Promise<MapData> {
   const usStateInfo = getUSStateInfo()
   const usMajorDensity = computeMajorDensity()
   const usRankedColleges = getUSRankedColleges(usColleges)
+  const auRankedColleges = getAURankedColleges()
 
-  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages, coursesByFieldState, usStateInfo, usMajorDensity, usRankedColleges }
+  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages, coursesByFieldState, usStateInfo, usMajorDensity, usRankedColleges, auRankedColleges }
 }
 
 // cross-instance 공유 캐시(방어선). 페이지가 force-static이라 보통 빌드/리밸리데이트
