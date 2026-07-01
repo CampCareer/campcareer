@@ -52,6 +52,7 @@ export default function LeafletMap({
   onSelectState,
   onSelectCountry,
   onSelectSA4,
+  onSelectUniversity,
   onReset,
   tab,
 }: {
@@ -68,6 +69,7 @@ export default function LeafletMap({
   onSelectState: (s: string) => void
   onSelectCountry: (c: "AU" | "US" | "CA" | "IE") => void
   onSelectSA4: (code: string) => void
+  onSelectUniversity?: (slug: string) => void
   onReset: () => void
   tab?: string
 }) {
@@ -96,9 +98,11 @@ export default function LeafletMap({
   const onSelectStateRef = useRef(onSelectState)
   const onSelectCountryRef = useRef(onSelectCountry)
   const onSelectSA4Ref = useRef(onSelectSA4)
+  const onSelectUniversityRef = useRef(onSelectUniversity)
   onSelectStateRef.current = onSelectState
   onSelectCountryRef.current = onSelectCountry
   onSelectSA4Ref.current = onSelectSA4
+  onSelectUniversityRef.current = onSelectUniversity
   tabRef.current = tab
 
   const dataRef = useRef(data)
@@ -167,21 +171,8 @@ export default function LeafletMap({
         direction: "top",
         className: "!rounded-md !border-0 !bg-slate-900 !px-2 !py-1 !text-xs !text-white !shadow-md",
       })
-      const lines = [
-        `<strong>#${rank} ${c.college_name}</strong>`,
-        `${c.city_name}, ${c.college_state}`,
-        "",
-        c.tuition != null ? `Tuition: A$${c.tuition.toLocaleString()}` : "",
-        c.median_earnings != null ? `Median earnings: $${c.median_earnings.toLocaleString()}` : "",
-        c.graduation_rate != null ? `Graduation rate: ${Math.round(c.graduation_rate * 100)}%` : "",
-        c.roi_score != null ? `ROI score: ${c.roi_score}` : "",
-        "",
-        `<a href="/map/us/university/${c.slug}" class="text-blue-600 underline text-xs">View details →</a>`,
-      ]
-      marker.bindPopup(
-        `<div class="text-sm leading-relaxed">${lines.filter(Boolean).join("<br>")}</div>`,
-      )
       marker.on({
+        click: () => onSelectUniversityRef.current?.(c.slug),
         mouseover: () => marker.setStyle({ radius: qsRankRadius(rank) + 2, fillOpacity: 1 }),
         mouseout: () => marker.setStyle({ radius: qsRankRadius(rank), fillOpacity: 0.85 }),
       })
