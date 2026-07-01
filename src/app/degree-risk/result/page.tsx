@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { ArrowRight, Info, Search } from "lucide-react"
-import { LogoMark } from "@/components/logo-mark"
+import { ResultHeader } from "@/components/degree-risk/result-header"
 import { createClient } from "@/lib/supabase-server"
 import { pageMetadata } from "@/lib/seo"
 import {
@@ -130,20 +130,10 @@ export default async function DegreeRiskResultPage({
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="bg-white border-b border-slate-200">
-        <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <LogoMark size={28} />
-            <span className="font-semibold text-slate-900 text-sm tracking-tight">CampCareer</span>
-          </Link>
-          <Link href="/degree-risk" className="text-xs text-blue-600 hover:text-blue-700 transition-colors">
-            {rr.startOver}
-          </Link>
-        </div>
-      </header>
+    <div className="min-h-dvh bg-background">
+      <ResultHeader startOverLabel={rr.startOver} />
 
-      <main className="max-w-5xl mx-auto px-6 py-10">
+      <main className="max-w-5xl mx-auto px-6 py-3 md:py-10">
         {isOther ? (
           <div className="max-w-2xl mx-auto">
           <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center">
