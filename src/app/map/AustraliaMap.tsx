@@ -1991,12 +1991,6 @@ function UniversityInfoCard({
         </div>
 
         <a
-          href={`/map/us/university/${college.slug}`}
-          className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition-colors hover:bg-slate-50"
-        >
-          View full details
-        </a>
-        <a
           href={college.website}
           target="_blank"
           rel="noopener noreferrer"
