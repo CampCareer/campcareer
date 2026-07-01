@@ -95,6 +95,7 @@ export default function AustraliaMap({
   const supabase = createClient()
   const [user, setUser] = useState<User | null>(null)
   const [savedOccCodes, setSavedOccCodes] = useState<Set<string>>(new Set())
+  const [savedUnivSlugs, setSavedUnivSlugs] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setUser(data.user ?? null))
@@ -106,13 +107,20 @@ export default function AustraliaMap({
   }, [])
 
   useEffect(() => {
-    if (!user) { setSavedOccCodes(new Set()); return }
+    if (!user) { setSavedOccCodes(new Set()); setSavedUnivSlugs(new Set()); return }
     supabase
       .from("saved_occupations")
       .select("occ_code")
       .eq("user_id", user.id)
       .then(({ data }) => {
         if (data) setSavedOccCodes(new Set(data.map((r) => r.occ_code)))
+      })
+    supabase
+      .from("saved_universities")
+      .select("univ_slug")
+      .eq("user_id", user.id)
+      .then(({ data }) => {
+        if (data) setSavedUnivSlugs(new Set(data.map((r) => r.univ_slug)))
       })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
@@ -135,6 +143,35 @@ export default function AustraliaMap({
         country: activeCountry ?? "",
       })
       setSavedOccCodes((prev) => new Set(prev).add(occCode))
+    }
+  }
+
+  const toggleSaveUniv = async (slug: string, name: string) => {
+    if (!user) { window.location.href = "/login"; return }
+    const isSaved = savedUnivSlugs.has(slug)
+    if (isSaved) {
+      await supabase
+        .from("saved_universities")
+        .delete()
+        .eq("user_id", user.id)
+        .eq("univ_slug", slug)
+      setSavedUnivSlugs((prev) => { const next = new Set(prev); next.delete(slug); return next })
+    } else {
+      await supabase.from("saved_universities").upsert({
+        user_id: user.id,
+        univ_slug: slug,
+        univ_name: name,
+      })
+      setSavedUnivSlugs((prev) => new Set(prev).add(slug))
+    }
+  }
+
+  const shareUniv = (slug: string) => {
+    const shareUrl = `${window.location.origin}/map/us/university/${slug}`
+    if (navigator.share) {
+      navigator.share({ url: shareUrl })
+    } else {
+      navigator.clipboard.writeText(shareUrl)
     }
   }
 
@@ -650,6 +687,9 @@ export default function AustraliaMap({
             <UniversityInfoCard
               college={selectedUniv}
               onClose={() => setSelectedUniv(null)}
+              isSaved={savedUnivSlugs.has(selectedUniv.slug)}
+              onToggleSave={toggleSaveUniv}
+              onShare={shareUniv}
             />
           ) : activeCountry === "IE" ? (
             <IEPanel
@@ -1857,9 +1897,15 @@ function WHVPanel({
 function UniversityInfoCard({
   college,
   onClose,
+  isSaved,
+  onToggleSave,
+  onShare,
 }: {
   college: USRankedCollege
   onClose: () => void
+  isSaved: boolean
+  onToggleSave: (slug: string, name: string) => void
+  onShare: (slug: string) => void
 }) {
   return (
     <>
@@ -1868,14 +1914,32 @@ function UniversityInfoCard({
           <h2 className="truncate text-sm font-semibold text-slate-900">{college.college_name}</h2>
           <p className="text-xs text-slate-500">{college.city_name}, {college.college_state}</p>
         </div>
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="Close"
-          className="-mr-1 rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
-        >
-          <X className="h-4 w-4" />
-        </button>
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={() => onToggleSave(college.slug, college.college_name)}
+            aria-label="Save university"
+            className="rounded-md p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+          >
+            <Bookmark className="h-4 w-4" fill={isSaved ? "currentColor" : "none"} />
+          </button>
+          <button
+            type="button"
+            onClick={() => onShare(college.slug)}
+            aria-label="Share university"
+            className="rounded-md p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+          >
+            <Share2 className="h-4 w-4" />
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close"
+            className="-mr-1 rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
       </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
@@ -1900,6 +1964,14 @@ function UniversityInfoCard({
               </p>
             </div>
           )}
+          {college.net_salary != null && (
+            <div className="rounded-lg border border-slate-100 bg-slate-50 p-3">
+              <p className="text-[10px] font-medium uppercase tracking-wide text-slate-400">Net Salary</p>
+              <p className="mt-1 text-lg font-bold tabular-nums text-slate-900">
+                ${college.net_salary.toLocaleString()}
+              </p>
+            </div>
+          )}
           {college.graduation_rate != null && (
             <div className="rounded-lg border border-slate-100 bg-slate-50 p-3">
               <p className="text-[10px] font-medium uppercase tracking-wide text-slate-400">Graduation Rate</p>
@@ -1919,10 +1991,16 @@ function UniversityInfoCard({
         </div>
 
         <a
+          href={`/map/us/university/${college.slug}`}
+          className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition-colors hover:bg-slate-50"
+        >
+          View full details
+        </a>
+        <a
           href={college.website}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-slate-700"
+          className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-slate-700"
         >
           <ExternalLink className="h-4 w-4" />
           Visit official website
