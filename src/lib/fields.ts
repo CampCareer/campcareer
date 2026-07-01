@@ -25,6 +25,12 @@ export const FIELDS: FieldDef[] = [
   { slug: "law",                     label: "Law",                     query: "law" },
   { slug: "psychology",              label: "Psychology",              query: "psychology" },
   { slug: "biology",                 label: "Biology",                 query: "biology" },
+  { slug: "mechanical-engineering",  label: "Mechanical Engineering",  query: "mechanical engineering" },
+  { slug: "electrical-engineering",  label: "Electrical Engineering",  query: "electrical engineering" },
+  { slug: "chemical-engineering",    label: "Chemical Engineering",    query: "chemical engineering" },
+  { slug: "mathematics",             label: "Mathematics",             query: "mathematics" },
+  { slug: "communications",          label: "Communications",          query: "communications" },
+  { slug: "political-science",       label: "Political Science",       query: "political science" },
   { slug: "education",               label: "Education",               query: "education" },
   { slug: "architecture",            label: "Architecture",            query: "architecture" },
 ]

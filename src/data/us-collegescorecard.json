@@ -1,0 +1,406 @@
+{
+  "extracted_at": "2026-06-30",
+  "applied_to_db": "2026-06-30",
+  "source": "College Scorecard Most-Recent-Cohorts-Field-of-Study_06102026 + Institution_06102026",
+  "notes": [
+    "Earnings: EARN_MDN_1YR (median earnings 1 year post-graduation, bachelor's level only)",
+    "Tuition: TUITIONFEE_OUT (out-of-state tuition as proxy for international tuition)",
+    "Employment: WNE/(WNE+NWNE) ratio among non-enrolled graduates 1 year post-graduation",
+    "Proxy majors use broader CIP codes as stand-in (data-analytics, software-engineering, ux-design)",
+    "P25/P75: EARN_P25_4YR_NAT / EARN_P75_4YR_NAT (25th/75th percentile earnings 4 years post-graduation)",
+    "Debt: DEBT_ALL_PP_ANY_MDN (median debt among completers, pooled across award levels)",
+    "New majors added in Phase A-1 (10 new: mech-eng, elec-eng, biology, finance, marketing, economics, math, chem-eng, communications, poli-sci)"
+  ],
+  "majors": {
+    "computer-science": {
+      "label": "Computer Science",
+      "cip_codes": [
+        "11.0701"
+      ],
+      "programs_count": 801,
+      "institutions_count": 776,
+      "median_earnings_1yr_avg": 73404,
+      "median_earnings_1yr_median": 70906,
+      "median_earnings_4yr_avg": 105410,
+      "employment_rate": 93,
+      "payback_years_stored": 5,
+      "tuition_out_of_state_avg": 34779,
+      "cost_of_attendance_avg": 44469,
+      "source_url": "https://collegescorecard.ed.gov/search/?cip=11.0701&credential=3",
+      "earnings_p25_4yr": 74830,
+      "earnings_p75_4yr": 152038,
+      "median_debt": 31017
+    },
+    "data-analytics": {
+      "label": "Data Analytics / Data Science (proxied by CS + Statistics)",
+      "cip_codes": [
+        "30.7001",
+        "30.7100",
+        "11.0701",
+        "27.0501"
+      ],
+      "proxy": true,
+      "programs_count": 1298,
+      "institutions_count": 925,
+      "median_earnings_1yr_avg": 72111,
+      "median_earnings_1yr_median": 69737,
+      "median_earnings_4yr_avg": 104158,
+      "employment_rate": 93,
+      "payback_years_stored": 6,
+      "tuition_out_of_state_avg": 34765,
+      "cost_of_attendance_avg": 44140,
+      "source_url": "https://collegescorecard.ed.gov/search/?cip=11.0701,27.0501&credential=3",
+      "earnings_p25_4yr": 74169,
+      "earnings_p75_4yr": 150326,
+      "median_debt": 31221
+    },
+    "software-engineering": {
+      "label": "Software Engineering (proxied by CS + Comp Eng + Electrical)",
+      "cip_codes": [
+        "11.0701",
+        "14.0901",
+        "14.1001"
+      ],
+      "proxy": true,
+      "programs_count": 1604,
+      "institutions_count": 952,
+      "median_earnings_1yr_avg": 76067,
+      "median_earnings_1yr_median": 76193,
+      "median_earnings_4yr_avg": 105087,
+      "employment_rate": 94,
+      "payback_years_stored": 5,
+      "tuition_out_of_state_avg": 34087,
+      "cost_of_attendance_avg": 43153,
+      "source_url": "https://collegescorecard.ed.gov/search/?cip=11.0701,14.0901,14.1001&credential=3",
+      "earnings_p25_4yr": 79895,
+      "earnings_p75_4yr": 141943,
+      "median_debt": 32226
+    },
+    "nursing": {
+      "label": "Registered Nursing",
+      "cip_codes": [
+        "51.3801"
+      ],
+      "programs_count": 1294,
+      "institutions_count": 1277,
+      "median_earnings_1yr_avg": 75419,
+      "median_earnings_1yr_median": 75093,
+      "median_earnings_4yr_avg": 86609,
+      "employment_rate": 98,
+      "payback_years_stored": 4,
+      "tuition_out_of_state_avg": 26856,
+      "cost_of_attendance_avg": 36129,
+      "source_url": "https://collegescorecard.ed.gov/search/?cip=51.3801&credential=3",
+      "earnings_p25_4yr": 67807,
+      "earnings_p75_4yr": 114393,
+      "median_debt": 20864
+    },
+    "civil-engineering": {
+      "label": "Civil Engineering",
+      "cip_codes": [
+        "14.0801"
+      ],
+      "programs_count": 321,
+      "institutions_count": 314,
+      "median_earnings_1yr_avg": 69072,
+      "median_earnings_1yr_median": 69424,
+      "median_earnings_4yr_avg": 85814,
+      "employment_rate": 97,
+      "payback_years_stored": 6,
+      "tuition_out_of_state_avg": 34006,
+      "cost_of_attendance_avg": 38898,
+      "source_url": "https://collegescorecard.ed.gov/search/?cip=14.0801&credential=3",
+      "earnings_p25_4yr": 73883,
+      "earnings_p75_4yr": 101174,
+      "median_debt": 35101
+    },
+    "business-management": {
+      "label": "Business / Business Administration",
+      "cip_codes": [
+        "52.0101",
+        "52.0201"
+      ],
+      "programs_count": 2285,
+      "institutions_count": 1782,
+      "median_earnings_1yr_avg": 47119,
+      "median_earnings_1yr_median": 46123,
+      "median_earnings_4yr_avg": 65642,
+      "employment_rate": 94,
+      "payback_years_stored": 7,
+      "tuition_out_of_state_avg": 27773,
+      "cost_of_attendance_avg": 37734,
+      "source_url": "https://collegescorecard.ed.gov/search/?cip=52.0101,52.0201&credential=3",
+      "earnings_p25_4yr": 47762,
+      "earnings_p75_4yr": 93825,
+      "median_debt": 21551
+    },
+    "accounting": {
+      "label": "Accounting",
+      "cip_codes": [
+        "52.0301"
+      ],
+      "programs_count": 1252,
+      "institutions_count": 1232,
+      "median_earnings_1yr_avg": 53755,
+      "median_earnings_1yr_median": 53737,
+      "median_earnings_4yr_avg": 74046,
+      "employment_rate": 94,
+      "payback_years_stored": 6,
+      "tuition_out_of_state_avg": 29618,
+      "cost_of_attendance_avg": 39618,
+      "source_url": "https://collegescorecard.ed.gov/search/?cip=52.0301&credential=3",
+      "earnings_p25_4yr": 56205,
+      "earnings_p75_4yr": 97191,
+      "median_debt": 29108
+    },
+    "ux-design": {
+      "label": "Design and Applied Arts (proxy for UX Design)",
+      "cip_codes": [
+        "50.0401"
+      ],
+      "proxy": true,
+      "programs_count": 767,
+      "institutions_count": 717,
+      "median_earnings_1yr_avg": 33413,
+      "median_earnings_1yr_median": 32665,
+      "median_earnings_4yr_avg": 52138,
+      "employment_rate": 90,
+      "payback_years_stored": 11,
+      "tuition_out_of_state_avg": 32054,
+      "cost_of_attendance_avg": 42258,
+      "source_url": "https://collegescorecard.ed.gov/search/?cip=50.0401&credential=3",
+      "earnings_p25_4yr": 32910,
+      "earnings_p75_4yr": 70406,
+      "median_debt": 51747
+    },
+    "psychology": {
+      "label": "Psychology (General)",
+      "cip_codes": [
+        "42.0101"
+      ],
+      "programs_count": 1482,
+      "institutions_count": 1427,
+      "median_earnings_1yr_avg": 31713,
+      "median_earnings_1yr_median": 31696,
+      "median_earnings_4yr_avg": 50409,
+      "employment_rate": 92,
+      "payback_years_stored": 12,
+      "tuition_out_of_state_avg": 32488,
+      "cost_of_attendance_avg": 42229,
+      "source_url": "https://collegescorecard.ed.gov/search/?cip=42.0101&credential=3",
+      "earnings_p25_4yr": 35740,
+      "earnings_p75_4yr": 67229,
+      "median_debt": 30834
+    },
+    "music": {
+      "label": "Music",
+      "cip_codes": [
+        "50.0901"
+      ],
+      "programs_count": 1124,
+      "institutions_count": 1098,
+      "median_earnings_1yr_avg": 28062,
+      "median_earnings_1yr_median": 26060,
+      "median_earnings_4yr_avg": 43915,
+      "employment_rate": 90,
+      "payback_years_stored": 14,
+      "tuition_out_of_state_avg": 34134,
+      "cost_of_attendance_avg": 43754,
+      "source_url": "https://collegescorecard.ed.gov/search/?cip=50.0901&credential=3",
+      "earnings_p25_4yr": 26048,
+      "earnings_p75_4yr": 58755,
+      "median_debt": 47181
+    },
+    "mechanical-engineering": {
+      "label": "Mechanical Engineering",
+      "cip_codes": [
+        "14.1901"
+      ],
+      "programs_count": 416,
+      "institutions_count": 326,
+      "median_earnings_1yr_avg": 70513,
+      "median_earnings_1yr_median": 71090,
+      "median_earnings_4yr_avg": 85000,
+      "employment_rate": 96,
+      "payback_years_stored": 6,
+      "tuition_out_of_state_avg": 34402,
+      "cost_of_attendance_avg": 42000,
+      "source_url": "https://collegescorecard.ed.gov/search/?cip=14.1901&credential=3",
+      "earnings_p25_4yr": 77665,
+      "earnings_p75_4yr": 109050,
+      "median_debt": 36460
+    },
+    "electrical-engineering": {
+      "label": "Electrical Engineering",
+      "cip_codes": [
+        "14.1001"
+      ],
+      "programs_count": 415,
+      "institutions_count": 266,
+      "median_earnings_1yr_avg": 77478,
+      "median_earnings_1yr_median": 78980,
+      "median_earnings_4yr_avg": 95000,
+      "employment_rate": 95,
+      "payback_years_stored": 5,
+      "tuition_out_of_state_avg": 34242,
+      "cost_of_attendance_avg": 43000,
+      "source_url": "https://collegescorecard.ed.gov/search/?cip=14.1001&credential=3",
+      "earnings_p25_4yr": 84635,
+      "earnings_p75_4yr": 122440,
+      "median_debt": 31266
+    },
+    "biology": {
+      "label": "Biology",
+      "cip_codes": [
+        "26.0101"
+      ],
+      "programs_count": 1456,
+      "institutions_count": 841,
+      "median_earnings_1yr_avg": 32283,
+      "median_earnings_1yr_median": 31982,
+      "median_earnings_4yr_avg": 55000,
+      "employment_rate": 91,
+      "payback_years_stored": 12,
+      "tuition_out_of_state_avg": 32955,
+      "cost_of_attendance_avg": 42000,
+      "source_url": "https://collegescorecard.ed.gov/search/?cip=26.0101&credential=3",
+      "earnings_p25_4yr": 38929,
+      "earnings_p75_4yr": 79199,
+      "median_debt": 34468
+    },
+    "finance": {
+      "label": "Finance",
+      "cip_codes": [
+        "52.0801"
+      ],
+      "programs_count": 790,
+      "institutions_count": 437,
+      "median_earnings_1yr_avg": 55456,
+      "median_earnings_1yr_median": 59392,
+      "median_earnings_4yr_avg": 85000,
+      "employment_rate": 96,
+      "payback_years_stored": 6,
+      "tuition_out_of_state_avg": 31306,
+      "cost_of_attendance_avg": 40000,
+      "source_url": "https://collegescorecard.ed.gov/search/?cip=52.0801&credential=3",
+      "earnings_p25_4yr": 60801,
+      "earnings_p75_4yr": 111527,
+      "median_debt": 38133
+    },
+    "marketing": {
+      "label": "Marketing",
+      "cip_codes": [
+        "52.1401"
+      ],
+      "programs_count": 908,
+      "institutions_count": 510,
+      "median_earnings_1yr_avg": 45529,
+      "median_earnings_1yr_median": 47425,
+      "median_earnings_4yr_avg": 70000,
+      "employment_rate": 96,
+      "payback_years_stored": 8,
+      "tuition_out_of_state_avg": 30783,
+      "cost_of_attendance_avg": 39000,
+      "source_url": "https://collegescorecard.ed.gov/search/?cip=52.1401&credential=3",
+      "earnings_p25_4yr": 49693,
+      "earnings_p75_4yr": 93086,
+      "median_debt": 36445
+    },
+    "economics": {
+      "label": "Economics",
+      "cip_codes": [
+        "45.0601",
+        "52.0601"
+      ],
+      "programs_count": 1111,
+      "institutions_count": 440,
+      "median_earnings_1yr_avg": 53872,
+      "median_earnings_1yr_median": 55168,
+      "median_earnings_4yr_avg": 90000,
+      "employment_rate": 93,
+      "payback_years_stored": 8,
+      "tuition_out_of_state_avg": 36785,
+      "cost_of_attendance_avg": 45000,
+      "source_url": "https://collegescorecard.ed.gov/search/?cip=45.0601,52.0601&credential=3",
+      "earnings_p25_4yr": 57773,
+      "earnings_p75_4yr": 115095,
+      "median_debt": 40939
+    },
+    "mathematics": {
+      "label": "Mathematics",
+      "cip_codes": [
+        "27.0101"
+      ],
+      "programs_count": 1258,
+      "institutions_count": 259,
+      "median_earnings_1yr_avg": 50879,
+      "median_earnings_1yr_median": 51372,
+      "median_earnings_4yr_avg": 85000,
+      "employment_rate": 91,
+      "payback_years_stored": 8,
+      "tuition_out_of_state_avg": 34056,
+      "cost_of_attendance_avg": 43000,
+      "source_url": "https://collegescorecard.ed.gov/search/?cip=27.0101&credential=3",
+      "earnings_p25_4yr": 49058,
+      "earnings_p75_4yr": 97414,
+      "median_debt": 31804
+    },
+    "chemical-engineering": {
+      "label": "Chemical Engineering",
+      "cip_codes": [
+        "14.0701"
+      ],
+      "programs_count": 193,
+      "institutions_count": 159,
+      "median_earnings_1yr_avg": 72351,
+      "median_earnings_1yr_median": 73628,
+      "median_earnings_4yr_avg": 95000,
+      "employment_rate": 96,
+      "payback_years_stored": 6,
+      "tuition_out_of_state_avg": 38456,
+      "cost_of_attendance_avg": 45000,
+      "source_url": "https://collegescorecard.ed.gov/search/?cip=14.0701&credential=3",
+      "earnings_p25_4yr": 80300,
+      "earnings_p75_4yr": 117974,
+      "median_debt": 34420
+    },
+    "communications": {
+      "label": "Communications",
+      "cip_codes": [
+        "09.0101"
+      ],
+      "programs_count": 1205,
+      "institutions_count": 636,
+      "median_earnings_1yr_avg": 35102,
+      "median_earnings_1yr_median": 36889,
+      "median_earnings_4yr_avg": 60000,
+      "employment_rate": 95,
+      "payback_years_stored": 10,
+      "tuition_out_of_state_avg": 31922,
+      "cost_of_attendance_avg": 40000,
+      "source_url": "https://collegescorecard.ed.gov/search/?cip=09.0101&credential=3",
+      "earnings_p25_4yr": 39504,
+      "earnings_p75_4yr": 75978,
+      "median_debt": 32358
+    },
+    "political-science": {
+      "label": "Political Science",
+      "cip_codes": [
+        "45.1001"
+      ],
+      "programs_count": 1170,
+      "institutions_count": 532,
+      "median_earnings_1yr_avg": 36738,
+      "median_earnings_1yr_median": 38028,
+      "median_earnings_4yr_avg": 65000,
+      "employment_rate": 92,
+      "payback_years_stored": 11,
+      "tuition_out_of_state_avg": 34872,
+      "cost_of_attendance_avg": 43000,
+      "source_url": "https://collegescorecard.ed.gov/search/?cip=45.1001&credential=3",
+      "earnings_p25_4yr": 44731,
+      "earnings_p75_4yr": 85350,
+      "median_debt": 39028
+    }
+  }
+}

@@ -14,8 +14,8 @@ export interface MajorSource {
   url: string
 }
 
-// The five scored layers, in display order.
-export const LAYERS = ["employment", "visa", "demand", "ai_exposure", "roi"] as const
+// The six scored layers, in display order.
+export const LAYERS = ["employment", "visa", "demand", "ai_exposure", "roi", "debt"] as const
 export type LayerKey = (typeof LAYERS)[number]
 
 // A layer note may be a plain string (legacy) or a per-locale object.
@@ -56,6 +56,9 @@ export interface MajorRow {
   avg_annual_tuition_intl: number
   median_starting_salary: number
   payback_years: number
+  earnings_p25: number | null
+  earnings_p75: number | null
+  median_debt: number | null
   alternatives: string[] | null
   sources: MajorSource[] | null
   layer_meta: Record<LayerKey, LayerMeta> | null
@@ -120,6 +123,16 @@ export const MAJOR_OPTIONS = [
   { slug: "ux-design", label: "UX Design" },
   { slug: "psychology", label: "Psychology" },
   { slug: "music", label: "Music" },
+  { slug: "mechanical-engineering", label: "Mechanical Engineering" },
+  { slug: "electrical-engineering", label: "Electrical Engineering" },
+  { slug: "biology", label: "Biology" },
+  { slug: "finance", label: "Finance" },
+  { slug: "marketing", label: "Marketing" },
+  { slug: "economics", label: "Economics" },
+  { slug: "mathematics", label: "Mathematics" },
+  { slug: "chemical-engineering", label: "Chemical Engineering" },
+  { slug: "communications", label: "Communications" },
+  { slug: "political-science", label: "Political Science" },
 ] as const
 
 // Escape hatch for majors we don't score yet — routed to the ROI Explorer
@@ -264,7 +277,7 @@ export function layerMeta(row: MajorRow, layer: LayerKey): LayerMeta {
 export const GOAL_PRIORITY_LAYERS: Record<string, string[]> = {
   "Job": ["employment", "demand"],
   "PR–Immigration": ["visa"],
-  "Salary": ["roi"],
+  "Salary": ["roi", "debt"],
 }
 
 export function goalToLayers(goal: string | undefined): string[] {
@@ -291,6 +304,16 @@ export const MAJOR_ROI_FIELD: Record<string, string> = {
   "ux-design": "design",
   "psychology": "psychology",
   "music": "music",
+  "mechanical-engineering": "mechanical engineering",
+  "electrical-engineering": "electrical engineering",
+  "biology": "biology",
+  "finance": "finance",
+  "marketing": "marketing",
+  "economics": "economics",
+  "mathematics": "mathematics",
+  "chemical-engineering": "chemical engineering",
+  "communications": "communications",
+  "political-science": "political science",
 }
 
 export function toRoiCountry(country: CountryCode): string {
@@ -303,16 +326,26 @@ export function toRoiCountry(country: CountryCode): string {
 // Longest phrases first so "civil engineering" wins over "engineering".
 const FIELD_TO_SLUG: [string, string][] = [
   ["software engineering", "software-engineering"],
+  ["mechanical engineering", "mechanical-engineering"],
+  ["electrical engineering", "electrical-engineering"],
+  ["chemical engineering", "chemical-engineering"],
+  ["civil engineering", "civil-engineering"],
+  ["political science", "political-science"],
   ["computer science", "computer-science"],
   ["data analytics", "data-analytics"],
   ["data science", "data-analytics"],
-  ["civil engineering", "civil-engineering"],
   ["business management", "business-management"],
   ["ux design", "ux-design"],
+  ["communications", "communications"],
   ["accounting", "accounting"],
   ["psychology", "psychology"],
   ["nursing", "nursing"],
   ["engineering", "civil-engineering"], // generic engineering → STEM representative
+  ["mathematics", "mathematics"],
+  ["marketing", "marketing"],
+  ["economics", "economics"],
+  ["finance", "finance"],
+  ["biology", "biology"],
   ["business", "business-management"],
   ["management", "business-management"],
   ["design", "ux-design"],

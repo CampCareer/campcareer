@@ -258,7 +258,7 @@ export function ResultCard({
         </div>
       )}
 
-      {/* Five layers — stacked list (compare grid) or 2-col grid (wide single) */}
+      {/* Six layers — stacked list (compare grid) or 2-col grid (wide single) */}
       <div className={grid ? "mt-5 grid grid-cols-1 md:grid-cols-2 gap-4" : "mt-5"}>
         <LayerRow label={rr.layerEmployment} rm={rm} priorityLabel={rr.priority} meta={meta("employment")} note={note("employment")} highlighted={hot("employment")} cell={grid} compact={compact}>
           {fill(rr.employmentValue, { rate: <strong>{row.employment_rate}%</strong> })}
@@ -296,6 +296,24 @@ export function ResultCard({
             salary: formatMoney(row.median_starting_salary, row.country),
             payback: <strong>{row.payback_years}</strong>,
           })}
+          {row.earnings_p25 && row.earnings_p75 && (
+            <p className="mt-1 text-sm text-slate-500">
+              {fill(rr.roiIncomeRange, {
+                range: <strong>{formatMoney(row.earnings_p25, row.country)} – {formatMoney(row.earnings_p75, row.country)}</strong>,
+              })}
+            </p>
+          )}
+        </LayerRow>
+
+        <LayerRow label={rr.layerDebt} rm={rm} priorityLabel={rr.priority} meta={meta("debt")} note={note("debt")} highlighted={hot("debt")} cell={grid} compact={compact}>
+          {row.median_debt ? (
+            fill(rr.debtValue, {
+              debt: <strong>{formatMoney(row.median_debt, row.country)}</strong>,
+              note: row.median_debt < 25000 ? "Below national average" : row.median_debt > 40000 ? "Above national average" : "Near national average",
+            })
+          ) : (
+            "Data not available"
+          )}
         </LayerRow>
       </div>
     </div>
