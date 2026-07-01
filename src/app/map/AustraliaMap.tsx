@@ -23,7 +23,7 @@ import { AffiliateCtas } from "@/components/partners/partner-cta"
 import JobListings from "./JobListings"
 import { EMPLOYMENT_OCCUPATIONS } from "@/data/employment-occupations"
 import { EMPLOYMENT_SALARIES } from "@/data/employment-salaries"
-import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc, CourseLite } from "@/lib/map-data"
+import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc, CourseLite, USStateInfo, StateMajorDensity } from "@/lib/map-data"
 import { createClient } from "@/lib/supabase-client"
 import type { User } from "@supabase/supabase-js"
 import { getShortageOccupations } from "@/lib/ie-shortage-occupations"
@@ -45,7 +45,7 @@ const STATE_SEEK_PATH: Record<string, string> = {
   ACT: "Australian-Capital-Territory",
 }
 
-type Tab = "shortage" | "pay" | "employment" | "whv"
+type Tab = "stateInfo" | "shortage" | "pay" | "employment" | "whv"
 
 type NeroOccupation = { a4: string; name: string; emp: number }
 type NeroData = Record<string, NeroOccupation[]>
@@ -351,6 +351,7 @@ export default function AustraliaMap({
   const onSelectState = useCallback((s: string) => {
     setSelected(s)
     if (s === "WHV") setTab("whv")
+    else if (activeCountry === "US") setTab("stateInfo")
     track("select_state", { country: activeCountry ?? "AU", state: s })
   }, [activeCountry])
 
@@ -360,6 +361,11 @@ export default function AustraliaMap({
     setSelected(null)
     setSelectedSA4(null)
   }, [])
+
+  // When a US state is already selected and country changes to US, switch to stateInfo
+  useEffect(() => {
+    if (activeCountry === "US" && selected) setTab("stateInfo")
+  }, [activeCountry, selected])
 
   const onReset = useCallback(() => {
     if (selected !== null) {
@@ -845,6 +851,11 @@ function Panel({
       {!isWhv && (
       <div className="px-5 pt-3">
         <div className="inline-flex rounded-lg bg-slate-100 p-1 text-sm">
+          {isUS && (
+            <TabButton active={tab === "stateInfo"} onClick={() => { onTab("stateInfo"); track("switch_tab", { tab: "stateInfo", state: selected }) }}>
+              {t.map.tabStateInfo}
+            </TabButton>
+          )}
           <TabButton active={tab === "shortage"} onClick={() => { onTab("shortage"); track("switch_tab", { tab: "shortage", state: selected }) }}>
             {t.map.tabShortage}
           </TabButton>
@@ -866,6 +877,12 @@ function Panel({
       )}
 
       <div className="min-h-0 flex-1 overflow-y-auto px-3 py-3">
+        {tab === "stateInfo" && isUS && (
+          <StateInfoPanel
+            stateInfo={data.usStateInfo[selected] ?? null}
+            majors={data.usMajorDensity[selected] ?? []}
+          />
+        )}
         {tab === "shortage" && isAU && (
           selectedSA4 ? (
             <RegionGroupList
@@ -1803,6 +1820,104 @@ function WHVPanel({
     <p className="py-8 text-center text-sm text-slate-400">
       {locale === "ko" ? "주와 지역을 선택해주세요." : "Select a state and region to view WHV eligibility."}
     </p>
+  )
+}
+
+function StateInfoPanel({
+  stateInfo,
+  majors,
+}: {
+  stateInfo: USStateInfo | null
+  majors: StateMajorDensity[]
+}) {
+  return (
+    <div className="space-y-5">
+      {stateInfo && (
+        <section>
+          <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
+            Affordability
+          </h3>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="rounded-lg border border-slate-100 bg-slate-50 p-3">
+              <p className="text-[10px] font-medium uppercase tracking-wide text-slate-400">Median Rent</p>
+              <p className="mt-1 text-lg font-bold tabular-nums text-slate-900">
+                {stateInfo.medianRent != null ? `$${stateInfo.medianRent.toLocaleString()}/mo` : "—"}
+              </p>
+            </div>
+            <div className="rounded-lg border border-slate-100 bg-slate-50 p-3">
+              <p className="text-[10px] font-medium uppercase tracking-wide text-slate-400">Median Income</p>
+              <p className="mt-1 text-lg font-bold tabular-nums text-slate-900">
+                {stateInfo.medianIncome != null ? `$${stateInfo.medianIncome.toLocaleString()}/yr` : "—"}
+              </p>
+            </div>
+          </div>
+          {stateInfo.rentIncomeRatio != null && (
+            <div className="mt-3 rounded-lg border p-3" style={{
+              borderColor: stateInfo.rentIncomeRatio > 0.3 ? "#fecaca" : stateInfo.rentIncomeRatio > 0.22 ? "#fed7aa" : "#bbf7d0",
+              backgroundColor: stateInfo.rentIncomeRatio > 0.3 ? "#fef2f2" : stateInfo.rentIncomeRatio > 0.22 ? "#fff7ed" : "#f0fdf4",
+            }}>
+              <p className="text-[10px] font-medium uppercase tracking-wide text-slate-400">Rent-to-Income Ratio</p>
+              <p className="mt-1 text-lg font-bold tabular-nums text-slate-900">
+                {Math.round(stateInfo.rentIncomeRatio * 100)}%
+              </p>
+              <p className="mt-0.5 text-xs text-slate-500">
+                {stateInfo.rentIncomeRatio > 0.3
+                  ? "High cost — rent takes over 30% of income"
+                  : stateInfo.rentIncomeRatio > 0.22
+                    ? "Moderate cost — rent takes 22–30% of income"
+                    : "Affordable — rent under 22% of income"}
+              </p>
+            </div>
+          )}
+          {stateInfo.rentByBedrooms && (
+            <div className="mt-3">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Median Rent by Bedrooms</p>
+              <div className="grid grid-cols-5 gap-1.5">
+                {(["studio", "1br", "2br", "3br", "4br"] as const).map((b) => (
+                  <div key={b} className="rounded border border-slate-100 bg-white p-2 text-center">
+                    <p className="text-[10px] text-slate-400">{b === "studio" ? "Studio" : b.toUpperCase()}</p>
+                    <p className="mt-0.5 text-xs font-semibold tabular-nums text-slate-800">
+                      {stateInfo.rentByBedrooms?.[b] != null ? `$${stateInfo.rentByBedrooms[b].toLocaleString()}` : "—"}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </section>
+      )}
+      {!stateInfo && (
+        <p className="py-4 text-center text-sm text-slate-400">No affordability data for this state yet.</p>
+      )}
+
+      <section>
+        <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
+          Top Majors in This State
+        </h3>
+        {majors.length === 0 ? (
+          <p className="py-4 text-center text-sm text-slate-400">No major data for this state yet.</p>
+        ) : (
+          <ol>
+            {majors.slice(0, 10).map((m, i) => (
+              <li key={m.slug}>
+                <div className="flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-slate-50">
+                  <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-sm font-medium text-slate-800">{m.label}</span>
+                    <span className="mt-0.5 text-xs text-slate-400">
+                      {m.occupationCount} occupation{m.occupationCount > 1 ? "s" : ""} · {m.totalEmp.toLocaleString()} employed
+                    </span>
+                  </span>
+                  <span className="shrink-0 text-right text-sm font-semibold tabular-nums text-slate-700">
+                    ${m.avgWage.toLocaleString()}
+                  </span>
+                </div>
+              </li>
+            ))}
+          </ol>
+        )}
+      </section>
+    </div>
   )
 }
 

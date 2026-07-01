@@ -714,6 +714,7 @@ const en = {
     ctaCareerPath: 'Career route map',
   },
   map: {
+    tabStateInfo: 'State Info',
     tabShortage: 'Shortage Occupation',
     tabPay: 'High Salary Job',
     tabEmployment: 'Employment',

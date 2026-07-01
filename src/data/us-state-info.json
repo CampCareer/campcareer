@@ -1,0 +1,614 @@
+{
+  "AL": {
+    "medianRent": 963,
+    "medianIncome": 62027,
+    "rentIncomeRatio": 0.19,
+    "rentByBedrooms": {
+      "studio": 738,
+      "1br": 807,
+      "2br": 913,
+      "3br": 1090,
+      "4br": 1259
+    }
+  },
+  "AK": {
+    "medianRent": 1388,
+    "medianIncome": 89336,
+    "rentIncomeRatio": 0.19,
+    "rentByBedrooms": {
+      "studio": 933,
+      "1br": 1059,
+      "2br": 1399,
+      "3br": 1842,
+      "4br": 2183
+    }
+  },
+  "AZ": {
+    "medianRent": 1431,
+    "medianIncome": 76872,
+    "rentIncomeRatio": 0.22,
+    "rentByBedrooms": {
+      "studio": 1078,
+      "1br": 1202,
+      "2br": 1420,
+      "3br": 1693,
+      "4br": 1925
+    }
+  },
+  "AR": {
+    "medianRent": 914,
+    "medianIncome": 58773,
+    "rentIncomeRatio": 0.19,
+    "rentByBedrooms": {
+      "studio": 689,
+      "1br": 722,
+      "2br": 873,
+      "3br": 1096,
+      "4br": 1277
+    }
+  },
+  "CA": {
+    "medianRent": 1956,
+    "medianIncome": 96334,
+    "rentIncomeRatio": 0.24,
+    "rentByBedrooms": {
+      "studio": 1531,
+      "1br": 1709,
+      "2br": 2014,
+      "3br": 2262,
+      "4br": 2699
+    }
+  },
+  "CO": {
+    "medianRent": 1693,
+    "medianIncome": 92470,
+    "rentIncomeRatio": 0.22,
+    "rentByBedrooms": {
+      "studio": 1395,
+      "1br": 1478,
+      "2br": 1713,
+      "3br": 1969,
+      "4br": 2292
+    }
+  },
+  "CT": {
+    "medianRent": 1431,
+    "medianIncome": 93760,
+    "rentIncomeRatio": 0.18,
+    "rentByBedrooms": {
+      "studio": 997,
+      "1br": 1190,
+      "2br": 1500,
+      "3br": 1702,
+      "4br": 1978
+    }
+  },
+  "DE": {
+    "medianRent": 1341,
+    "medianIncome": 82855,
+    "rentIncomeRatio": 0.19,
+    "rentByBedrooms": {
+      "studio": 1143,
+      "1br": 1152,
+      "2br": 1329,
+      "3br": 1550,
+      "4br": 1779
+    }
+  },
+  "DC": {
+    "medianRent": 1900,
+    "medianIncome": 106287,
+    "rentIncomeRatio": 0.21,
+    "rentByBedrooms": {
+      "studio": 1763,
+      "1br": 1885,
+      "2br": 1949,
+      "3br": 2249,
+      "4br": 2961
+    }
+  },
+  "FL": {
+    "medianRent": 1564,
+    "medianIncome": 71711,
+    "rentIncomeRatio": 0.26,
+    "rentByBedrooms": {
+      "studio": 1283,
+      "1br": 1332,
+      "2br": 1560,
+      "3br": 1773,
+      "4br": 2081
+    }
+  },
+  "GA": {
+    "medianRent": 1306,
+    "medianIncome": 74664,
+    "rentIncomeRatio": 0.21,
+    "rentByBedrooms": {
+      "studio": 1265,
+      "1br": 1237,
+      "2br": 1230,
+      "3br": 1338,
+      "4br": 1719
+    }
+  },
+  "HI": {
+    "medianRent": 1938,
+    "medianIncome": 98317,
+    "rentIncomeRatio": 0.24,
+    "rentByBedrooms": {
+      "studio": 1370,
+      "1br": 1477,
+      "2br": 1977,
+      "3br": 2585,
+      "4br": 3285
+    }
+  },
+  "ID": {
+    "medianRent": 1150,
+    "medianIncome": 74636,
+    "rentIncomeRatio": 0.18,
+    "rentByBedrooms": {
+      "studio": 880,
+      "1br": 875,
+      "2br": 1081,
+      "3br": 1405,
+      "4br": 1618
+    }
+  },
+  "IL": {
+    "medianRent": 1227,
+    "medianIncome": 81702,
+    "rentIncomeRatio": 0.18,
+    "rentByBedrooms": {
+      "studio": 1079,
+      "1br": 1083,
+      "2br": 1231,
+      "3br": 1443,
+      "4br": 1624
+    }
+  },
+  "IN": {
+    "medianRent": 1020,
+    "medianIncome": 70051,
+    "rentIncomeRatio": 0.17,
+    "rentByBedrooms": {
+      "studio": 838,
+      "1br": 845,
+      "2br": 1030,
+      "3br": 1181,
+      "4br": 1362
+    }
+  },
+  "IA": {
+    "medianRent": 949,
+    "medianIncome": 73147,
+    "rentIncomeRatio": 0.16,
+    "rentByBedrooms": {
+      "studio": 771,
+      "1br": 750,
+      "2br": 968,
+      "3br": 1151,
+      "4br": 1224
+    }
+  },
+  "KS": {
+    "medianRent": 1029,
+    "medianIncome": 72639,
+    "rentIncomeRatio": 0.17,
+    "rentByBedrooms": {
+      "studio": 785,
+      "1br": 848,
+      "2br": 1001,
+      "3br": 1212,
+      "4br": 1470
+    }
+  },
+  "KY": {
+    "medianRent": 933,
+    "medianIncome": 62417,
+    "rentIncomeRatio": 0.18,
+    "rentByBedrooms": {
+      "studio": 706,
+      "1br": 773,
+      "2br": 931,
+      "3br": 1076,
+      "4br": 1290
+    }
+  },
+  "LA": {
+    "medianRent": 1038,
+    "medianIncome": 60023,
+    "rentIncomeRatio": 0.21,
+    "rentByBedrooms": {
+      "studio": 848,
+      "1br": 874,
+      "2br": 1037,
+      "3br": 1174,
+      "4br": 1343
+    }
+  },
+  "ME": {
+    "medianRent": 1084,
+    "medianIncome": 71773,
+    "rentIncomeRatio": 0.18,
+    "rentByBedrooms": {
+      "studio": 874,
+      "1br": 854,
+      "2br": 1154,
+      "3br": 1347,
+      "4br": 1348
+    }
+  },
+  "MD": {
+    "medianRent": 1662,
+    "medianIncome": 101652,
+    "rentIncomeRatio": 0.2,
+    "rentByBedrooms": {
+      "studio": 1388,
+      "1br": 1393,
+      "2br": 1695,
+      "3br": 1904,
+      "4br": 2255
+    }
+  },
+  "MA": {
+    "medianRent": 1687,
+    "medianIncome": 101341,
+    "rentIncomeRatio": 0.2,
+    "rentByBedrooms": {
+      "studio": 1420,
+      "1br": 1350,
+      "2br": 1803,
+      "3br": 1859,
+      "4br": 2188
+    }
+  },
+  "MI": {
+    "medianRent": 1084,
+    "medianIncome": 71149,
+    "rentIncomeRatio": 0.18,
+    "rentByBedrooms": {
+      "studio": 842,
+      "1br": 879,
+      "2br": 1119,
+      "3br": 1264,
+      "4br": 1365
+    }
+  },
+  "MN": {
+    "medianRent": 1235,
+    "medianIncome": 87556,
+    "rentIncomeRatio": 0.17,
+    "rentByBedrooms": {
+      "studio": 992,
+      "1br": 1095,
+      "2br": 1309,
+      "3br": 1537,
+      "4br": 1746
+    }
+  },
+  "MS": {
+    "medianRent": 923,
+    "medianIncome": 54915,
+    "rentIncomeRatio": 0.2,
+    "rentByBedrooms": {
+      "studio": 741,
+      "1br": 759,
+      "2br": 881,
+      "3br": 1024,
+      "4br": 1182
+    }
+  },
+  "MO": {
+    "medianRent": 996,
+    "medianIncome": 68920,
+    "rentIncomeRatio": 0.17,
+    "rentByBedrooms": {
+      "studio": 812,
+      "1br": 835,
+      "2br": 988,
+      "3br": 1174,
+      "4br": 1359
+    }
+  },
+  "MT": {
+    "medianRent": 1031,
+    "medianIncome": 69922,
+    "rentIncomeRatio": 0.18,
+    "rentByBedrooms": {
+      "studio": 720,
+      "1br": 804,
+      "2br": 1039,
+      "3br": 1306,
+      "4br": 1491
+    }
+  },
+  "NE": {
+    "medianRent": 1035,
+    "medianIncome": 74985,
+    "rentIncomeRatio": 0.17,
+    "rentByBedrooms": {
+      "studio": 849,
+      "1br": 880,
+      "2br": 1048,
+      "3br": 1255,
+      "4br": 1418
+    }
+  },
+  "NV": {
+    "medianRent": 1489,
+    "medianIncome": 75561,
+    "rentIncomeRatio": 0.24,
+    "rentByBedrooms": {
+      "studio": 1072,
+      "1br": 1211,
+      "2br": 1423,
+      "3br": 1769,
+      "4br": 2082
+    }
+  },
+  "NH": {
+    "medianRent": 1423,
+    "medianIncome": 95628,
+    "rentIncomeRatio": 0.18,
+    "rentByBedrooms": {
+      "studio": 1049,
+      "1br": 1115,
+      "2br": 1554,
+      "3br": 1731,
+      "4br": 1851
+    }
+  },
+  "NJ": {
+    "medianRent": 1653,
+    "medianIncome": 101050,
+    "rentIncomeRatio": 0.2,
+    "rentByBedrooms": {
+      "studio": 1268,
+      "1br": 1410,
+      "2br": 1741,
+      "3br": 1949,
+      "4br": 2271
+    }
+  },
+  "NM": {
+    "medianRent": 1021,
+    "medianIncome": 62125,
+    "rentIncomeRatio": 0.2,
+    "rentByBedrooms": {
+      "studio": 766,
+      "1br": 844,
+      "2br": 998,
+      "3br": 1254,
+      "4br": 1409
+    }
+  },
+  "NY": {
+    "medianRent": 1576,
+    "medianIncome": 84578,
+    "rentIncomeRatio": 0.22,
+    "rentByBedrooms": {
+      "studio": 1467,
+      "1br": 1497,
+      "2br": 1574,
+      "3br": 1767,
+      "4br": 1882
+    }
+  },
+  "NC": {
+    "medianRent": 1162,
+    "medianIncome": 69904,
+    "rentIncomeRatio": 0.2,
+    "rentByBedrooms": {
+      "studio": 1018,
+      "1br": 1088,
+      "2br": 1099,
+      "3br": 1247,
+      "4br": 1677
+    }
+  },
+  "ND": {
+    "medianRent": 934,
+    "medianIncome": 75949,
+    "rentIncomeRatio": 0.15,
+    "rentByBedrooms": {
+      "studio": 752,
+      "1br": 768,
+      "2br": 934,
+      "3br": 1248,
+      "4br": 1470
+    }
+  },
+  "OH": {
+    "medianRent": 988,
+    "medianIncome": 69680,
+    "rentIncomeRatio": 0.17,
+    "rentByBedrooms": {
+      "studio": 751,
+      "1br": 791,
+      "2br": 1009,
+      "3br": 1139,
+      "4br": 1245
+    }
+  },
+  "OK": {
+    "medianRent": 980,
+    "medianIncome": 63603,
+    "rentIncomeRatio": 0.18,
+    "rentByBedrooms": {
+      "studio": 741,
+      "1br": 801,
+      "2br": 959,
+      "3br": 1171,
+      "4br": 1380
+    }
+  },
+  "OR": {
+    "medianRent": 1450,
+    "medianIncome": 80426,
+    "rentIncomeRatio": 0.22,
+    "rentByBedrooms": {
+      "studio": 1222,
+      "1br": 1242,
+      "2br": 1440,
+      "3br": 1755,
+      "4br": 1988
+    }
+  },
+  "PA": {
+    "medianRent": 1162,
+    "medianIncome": 76081,
+    "rentIncomeRatio": 0.18,
+    "rentByBedrooms": {
+      "studio": 973,
+      "1br": 982,
+      "2br": 1192,
+      "3br": 1320,
+      "4br": 1413
+    }
+  },
+  "RI": {
+    "medianRent": 1273,
+    "medianIncome": 86372,
+    "rentIncomeRatio": 0.18,
+    "rentByBedrooms": {
+      "studio": 963,
+      "1br": 958,
+      "2br": 1354,
+      "3br": 1544,
+      "4br": 1755
+    }
+  },
+  "SC": {
+    "medianRent": 1126,
+    "medianIncome": 66818,
+    "rentIncomeRatio": 0.2,
+    "rentByBedrooms": {
+      "studio": 972,
+      "1br": 1047,
+      "2br": 1088,
+      "3br": 1204,
+      "4br": 1416
+    }
+  },
+  "SD": {
+    "medianRent": 912,
+    "medianIncome": 72421,
+    "rentIncomeRatio": 0.15,
+    "rentByBedrooms": {
+      "studio": 638,
+      "1br": 735,
+      "2br": 950,
+      "3br": 1106,
+      "4br": 1338
+    }
+  },
+  "TN": {
+    "medianRent": 1122,
+    "medianIncome": 67097,
+    "rentIncomeRatio": 0.2,
+    "rentByBedrooms": {
+      "studio": 966,
+      "1br": 997,
+      "2br": 1076,
+      "3br": 1241,
+      "4br": 1490
+    }
+  },
+  "TX": {
+    "medianRent": 1339,
+    "medianIncome": 76292,
+    "rentIncomeRatio": 0.21,
+    "rentByBedrooms": {
+      "studio": 1149,
+      "1br": 1180,
+      "2br": 1327,
+      "3br": 1573,
+      "4br": 2022
+    }
+  },
+  "UT": {
+    "medianRent": 1405,
+    "medianIncome": 91750,
+    "rentIncomeRatio": 0.18,
+    "rentByBedrooms": {
+      "studio": 1088,
+      "1br": 1145,
+      "2br": 1338,
+      "3br": 1610,
+      "4br": 1907
+    }
+  },
+  "VT": {
+    "medianRent": 1193,
+    "medianIncome": 78024,
+    "rentIncomeRatio": 0.18,
+    "rentByBedrooms": {
+      "studio": 969,
+      "1br": 977,
+      "2br": 1327,
+      "3br": 1458,
+      "4br": 1644
+    }
+  },
+  "VA": {
+    "medianRent": 1514,
+    "medianIncome": 90974,
+    "rentIncomeRatio": 0.2,
+    "rentByBedrooms": {
+      "studio": 1488,
+      "1br": 1421,
+      "2br": 1419,
+      "3br": 1612,
+      "4br": 2086
+    }
+  },
+  "WA": {
+    "medianRent": 1682,
+    "medianIncome": 94952,
+    "rentIncomeRatio": 0.21,
+    "rentByBedrooms": {
+      "studio": 1448,
+      "1br": 1485,
+      "2br": 1671,
+      "3br": 1948,
+      "4br": 2398
+    }
+  },
+  "WV": {
+    "medianRent": 850,
+    "medianIncome": 57917,
+    "rentIncomeRatio": 0.18,
+    "rentByBedrooms": {
+      "studio": 651,
+      "1br": 647,
+      "2br": 869,
+      "3br": 1019,
+      "4br": 1053
+    }
+  },
+  "WI": {
+    "medianRent": 1045,
+    "medianIncome": 75670,
+    "rentIncomeRatio": 0.17,
+    "rentByBedrooms": {
+      "studio": 878,
+      "1br": 863,
+      "2br": 1067,
+      "3br": 1237,
+      "4br": 1319
+    }
+  },
+  "WY": {
+    "medianRent": 968,
+    "medianIncome": 74815,
+    "rentIncomeRatio": 0.16,
+    "rentByBedrooms": {
+      "studio": 694,
+      "1br": 738,
+      "2br": 932,
+      "3br": 1232,
+      "4br": 1397
+    }
+  }
+}
