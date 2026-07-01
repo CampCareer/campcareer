@@ -557,15 +557,33 @@ export default function LeafletMap({
           style: (feature) => {
             const postal = feature?.properties?.postal as string | undefined
             const isSel = selectedRef.current === postal
+            const ratio = postal ? dataRef.current.usStateInfo?.[postal]?.rentIncomeRatio ?? null : null
+            const fillColor = ratio != null
+              ? ratio > 0.30 ? "#fecaca"
+                : ratio > 0.22 ? "#fed7aa"
+                : "#bbf7d0"
+              : "#e0f2fe"
             return {
-              fillColor: "#e0f2fe",
-              fillOpacity: isSel ? 0.8 : 0.4,
-              color: isSel ? "#1e293b" : "#0284c7",
+              fillColor,
+              fillOpacity: isSel ? 0.8 : 0.5,
+              color: isSel ? "#1e293b" : "#475569",
               weight: isSel ? 3 : 1,
             }
           },
           onEachFeature: (feature, lyr) => {
             const postal = feature?.properties?.postal as string | undefined
+            const name = feature?.properties?.name as string | undefined
+            if (postal) {
+              const ratio = dataRef.current.usStateInfo?.[postal]?.rentIncomeRatio ?? null
+              const tooltip = ratio != null
+                ? `${name} · ${Math.round(ratio * 100)}% rent/income`
+                : name ?? postal
+              lyr.bindTooltip(tooltip, {
+                sticky: true,
+                direction: "top",
+                className: "!rounded-md !border-0 !bg-slate-900 !px-2 !py-1 !text-xs !text-white !shadow-md",
+              })
+            }
             ;(lyr as L.Path).on({
               click: () => {
                 if (postal) {
@@ -575,10 +593,16 @@ export default function LeafletMap({
               },
               mouseover: () => (lyr as L.Path).setStyle({ weight: 2, fillOpacity: 0.6 }),
               mouseout: () => {
-                (lyr as L.Path).setStyle({
-                  fillColor: "#e0f2fe",
-                  fillOpacity: selectedRef.current === postal ? 0.8 : 0.4,
-                  color: selectedRef.current === postal ? "#1e293b" : "#0284c7",
+                const ratio = postal ? dataRef.current.usStateInfo?.[postal]?.rentIncomeRatio ?? null : null
+                const fillColor = ratio != null
+                  ? ratio > 0.30 ? "#fecaca"
+                    : ratio > 0.22 ? "#fed7aa"
+                    : "#bbf7d0"
+                  : "#e0f2fe"
+                ;(lyr as L.Path).setStyle({
+                  fillColor,
+                  fillOpacity: selectedRef.current === postal ? 0.8 : 0.5,
+                  color: selectedRef.current === postal ? "#1e293b" : "#475569",
                   weight: selectedRef.current === postal ? 3 : 1,
                 })
               },

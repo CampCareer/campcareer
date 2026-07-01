@@ -716,6 +716,7 @@ const ko: Dictionary = {
     ctaCareerPath: '커리어 루트맵',
   },
   map: {
+    tabStateInfo: '주 정보',
     tabShortage: '부족 직종',
     tabPay: '고소득 직업',
     tabEmployment: '고용 규모',

@@ -4,6 +4,7 @@ import { supabaseAdmin } from "@/lib/supabase-admin"
 import { STATE_CODES, type StateCode } from "@/app/map/states"
 import { readFileSync } from "fs"
 import path from "path"
+import { MAJOR_OCCUPATIONS } from "@/lib/major-occupation-map"
 
 // 지도 페이지용 데이터 계층. occupations_au + occupation_state_au 를 읽어 JS 에서 조인한다.
 // occupation_state_au 는 anon RLS 가 막혀 있어 서버 전용 service-role 클라이언트로 읽는다.
@@ -37,6 +38,31 @@ export interface USOccupation {
   pct_change: number
   annual_openings: number
   shortage_score: number
+}
+
+export interface USStateInfo {
+  medianRent: number | null
+  medianIncome: number | null
+  rentIncomeRatio: number | null
+  rentByBedrooms: {
+    studio: number | null
+    "1br": number | null
+    "2br": number | null
+    "3br": number | null
+    "4br": number | null
+  } | null
+}
+
+// Per-state computed major density data
+export interface StateMajorDensity {
+  slug: string
+  label: string
+  // Number of mapped occupations that have data in this state
+  occupationCount: number
+  // Total employment across matched occupations
+  totalEmp: number
+  // Average wage across matched occupations
+  avgWage: number
 }
 
 export interface USCollege {
@@ -84,6 +110,8 @@ export interface MapData {
   auOccupations: Record<string, OccRow>
   auStateShortages: Record<string, StateShortageByOcc[]>
   coursesByFieldState: Record<string, Record<string, CourseLite[]>>
+  usStateInfo: Record<string, USStateInfo>
+  usMajorDensity: Record<string, StateMajorDensity[]>
 }
 
 export type OccRow = {
@@ -222,6 +250,70 @@ async function getUSColleges(): Promise<USCollege[]> {
 
   // ROI 높은 순 정렬 (이미 쿼리에서 정렬됐지만 dedup 후 보장)
   return Array.from(byCollege.values()).sort((a, b) => (b.roi_score ?? 0) - (a.roi_score ?? 0))
+}
+
+let _usStateInfo: Record<string, USStateInfo> | null = null
+
+function getUSStateInfo(): Record<string, USStateInfo> {
+  if (_usStateInfo) return _usStateInfo
+  try {
+    const raw = readFileSync(path.join(process.cwd(), "src/data/us-state-info.json"), "utf-8")
+    _usStateInfo = JSON.parse(raw) as Record<string, USStateInfo>
+  } catch (e) {
+    console.error("[map-data] failed to load us-state-info.json:", e)
+    _usStateInfo = {}
+  }
+  return _usStateInfo
+}
+
+function computeMajorDensity(): Record<string, StateMajorDensity[]> {
+  const occData = getUSOccupationData()
+  const result: Record<string, StateMajorDensity[]> = {}
+
+  // Collect all unique state codes from us-occupation-state.json
+  const states = new Set<string>()
+  for (const state of Object.keys(occData.shortageByState)) states.add(state)
+  for (const state of Object.keys(occData.highPayByState)) states.add(state)
+
+  for (const state of Array.from(states)) {
+    const shortageOccs = occData.shortageByState[state] ?? []
+    const highPayOccs = occData.highPayByState[state] ?? []
+    const allOccs = [...shortageOccs, ...highPayOccs]
+    const byCode = new Map<string, USOccupation>()
+    for (const occ of allOccs) byCode.set(occ.occ_code, occ)
+
+    const densities: StateMajorDensity[] = []
+
+    for (const major of MAJOR_OCCUPATIONS) {
+      let totalEmp = 0
+      let totalWage = 0
+      let matchCount = 0
+
+      for (const socCode of major.socCodes) {
+        const match = byCode.get(socCode)
+        if (match) {
+          totalEmp += match.tot_emp
+          totalWage += match.median_wage * match.tot_emp
+          matchCount++
+        }
+      }
+
+      if (matchCount > 0) {
+        densities.push({
+          slug: major.slug,
+          label: major.label,
+          occupationCount: matchCount,
+          totalEmp,
+          avgWage: totalEmp > 0 ? Math.round(totalWage / totalEmp) : 0,
+        })
+      }
+    }
+
+    densities.sort((a, b) => b.totalEmp - a.totalEmp)
+    result[state] = densities
+  }
+
+  return result
 }
 
 let _usOccData: { shortageByState: Record<string, USOccupation[]>; highPayByState: Record<string, USOccupation[]> } | null = null
@@ -394,7 +486,10 @@ async function getMapDataUncached(): Promise<MapData> {
     auStateShortages[code] = arr
   })
 
-  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages, coursesByFieldState }
+  const usStateInfo = getUSStateInfo()
+  const usMajorDensity = computeMajorDensity()
+
+  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages, coursesByFieldState, usStateInfo, usMajorDensity }
 }
 
 // cross-instance 공유 캐시(방어선). 페이지가 force-static이라 보통 빌드/리밸리데이트
