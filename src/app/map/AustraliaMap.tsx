@@ -633,6 +633,14 @@ export default function AustraliaMap({
           onSelectState={onSelectState}
           onSelectCountry={onSelectCountry}
           onSelectSA4={onSelectSA4}
+          onSelectUniversity={(slug: string) => {
+            const univ = data.usRankedColleges.find((c) => c.slug === slug)
+            if (univ) {
+              setSelectedUniv(univ)
+              setActiveCountry("US")
+              setSelected(univ.college_state)
+            }
+          }}
           onReset={onReset}
           tab={tab}
         />
