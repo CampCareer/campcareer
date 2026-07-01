@@ -136,8 +136,8 @@ export default function LeafletMap({
   const UNIV_PIN_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 30">
   <ellipse cx="11" cy="29" rx="5" ry="1.5" fill="rgba(0,0,0,0.1)"/>
   <path d="M11 2C5.5 2 2 5.8 2 11c0 6.5 9 16 9 16s9-9.5 9-16C20 5.8 16.5 2 11 2z" fill="#6b7280" stroke="#fff" stroke-width="1.8"/>
-  <g transform="translate(2.5, 2) scale(0.7)" fill="#fff">
-    <path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/>
+  <g transform="translate(2.5, 2) scale(0.7)">
+    <path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z" fill="#fff" stroke="#475569" stroke-width="1.5" stroke-linejoin="round"/>
   </g>
 </svg>`
 
