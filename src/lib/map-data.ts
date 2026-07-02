@@ -2,9 +2,12 @@ import "server-only"
 import { unstable_cache } from "next/cache"
 import { supabaseAdmin } from "@/lib/supabase-admin"
 import { STATE_CODES, type StateCode } from "@/app/map/states"
-import { readFileSync } from "fs"
-import path from "path"
 import { MAJOR_OCCUPATIONS } from "@/lib/major-occupation-map"
+import usCitiesRaw from "@/data/us-cities.json"
+import usStateInfoRaw from "@/data/us-state-info.json"
+import usUniversityRankingsRaw from "@/data/us-university-rankings.json"
+import auUniversityRankingsRaw from "@/data/au-university-rankings.json"
+import usOccupationStateRaw from "@/data/us-occupation-state.json"
 
 // 지도 페이지용 데이터 계층. occupations_au + occupation_state_au 를 읽어 JS 에서 조인한다.
 // occupation_state_au 는 anon RLS 가 막혀 있어 서버 전용 service-role 클라이언트로 읽는다.
@@ -203,15 +206,10 @@ let _cityCoords: Map<string, { lat: number; lng: number }> | null = null
 function getCityCoords(): Map<string, { lat: number; lng: number }> {
   if (_cityCoords) return _cityCoords
   const map = new Map<string, { lat: number; lng: number }>()
-  try {
-    const raw = readFileSync(path.join(process.cwd(), "src/data/us-cities.json"), "utf-8")
-    const cities: Array<{ c: string; s: string; lat: number; lng: number }> = JSON.parse(raw)
-    for (const city of cities) {
-      const key = `${city.c.toLowerCase()}|${city.s}`
-      map.set(key, { lat: city.lat, lng: city.lng })
-    }
-  } catch (e) {
-    console.error("[map-data] failed to load us-cities.json:", e)
+  const cities = usCitiesRaw as unknown as Array<{ c: string; s: string; lat: number; lng: number }>
+  for (const city of cities) {
+    const key = `${city.c.toLowerCase()}|${city.s}`
+    map.set(key, { lat: city.lat, lng: city.lng })
   }
   _cityCoords = map
   return map
@@ -275,13 +273,7 @@ let _usStateInfo: Record<string, USStateInfo> | null = null
 
 function getUSStateInfo(): Record<string, USStateInfo> {
   if (_usStateInfo) return _usStateInfo
-  try {
-    const raw = readFileSync(path.join(process.cwd(), "src/data/us-state-info.json"), "utf-8")
-    _usStateInfo = JSON.parse(raw) as Record<string, USStateInfo>
-  } catch (e) {
-    console.error("[map-data] failed to load us-state-info.json:", e)
-    _usStateInfo = {}
-  }
+  _usStateInfo = usStateInfoRaw as unknown as Record<string, USStateInfo>
   return _usStateInfo
 }
 
@@ -339,74 +331,68 @@ let _rankedColleges: USRankedCollege[] | null = null
 
 function getUSRankedColleges(colleges: USCollege[]): USRankedCollege[] {
   if (_rankedColleges) return _rankedColleges
-  try {
-    const raw = readFileSync(path.join(process.cwd(), "src/data/us-university-rankings.json"), "utf-8")
-    const rankings: Array<{ qsRank: number; name: string; alias?: string; city: string; state: string; website: string }> = JSON.parse(raw)
+  const rankings = usUniversityRankingsRaw as unknown as Array<{ qsRank: number; name: string; alias?: string; city: string; state: string; website: string }>
 
-    const ranked: USRankedCollege[] = []
+  const ranked: USRankedCollege[] = []
 
-    for (const r of rankings) {
-      // Try to match by name or alias, within the same state
-      const match = colleges.find((c) => {
-        const cn = c.college_name.toLowerCase()
-        const rn = r.name.toLowerCase()
-        const alias = r.alias?.toLowerCase()
-        return (
-          cn.includes(rn) ||
-          rn.includes(cn) ||
-          (alias && (cn.includes(alias) || alias.includes(cn)))
-        ) && c.college_state === r.state
-      })
+  for (const r of rankings) {
+    // Try to match by name or alias, within the same state
+    const match = colleges.find((c) => {
+      const cn = c.college_name.toLowerCase()
+      const rn = r.name.toLowerCase()
+      const alias = r.alias?.toLowerCase()
+      return (
+        cn.includes(rn) ||
+        rn.includes(cn) ||
+        (alias && (cn.includes(alias) || alias.includes(cn)))
+      ) && c.college_state === r.state
+    })
 
-      if (match) {
-        const slug = match.college_name
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, "-")
-          .replace(/^-|-$/g, "")
-
-        ranked.push({
-          ...match,
-          qsRank: r.qsRank,
-          website: r.website,
-          slug,
-        })
-      }
-    }
-
-    // Also add ranked colleges with no matching data (show without financial data)
-    for (const r of rankings) {
-      const exists = ranked.some((c) => c.qsRank === r.qsRank && c.college_state === r.state)
-      if (exists) continue
-      // Use ranking data as fallback
-      const slug = r.name
+    if (match) {
+      const slug = match.college_name
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/^-|-$/g, "")
+
       ranked.push({
-        college_id: `qs-${r.qsRank}-${r.state}`,
-        college_name: r.name,
-        city_name: r.city,
-        college_state: r.state,
-        // Estimate lat/lng from state centroid or city lookup? Skip for now.
-        lat: 0,
-        lng: 0,
-        roi_score: null,
-        net_salary: null,
-        tuition: null,
-        median_earnings: null,
-        graduation_rate: null,
+        ...match,
         qsRank: r.qsRank,
         website: r.website,
         slug,
       })
     }
-
-    ranked.sort((a, b) => a.qsRank - b.qsRank)
-    _rankedColleges = ranked
-  } catch (e) {
-    console.error("[map-data] failed to load us-university-rankings.json:", e)
-    _rankedColleges = []
   }
+
+  // Also add ranked colleges with no matching data (show without financial data)
+  for (const r of rankings) {
+    const exists = ranked.some((c) => c.qsRank === r.qsRank && c.college_state === r.state)
+    if (exists) continue
+    // Use ranking data as fallback
+    const slug = r.name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "")
+    ranked.push({
+      college_id: `qs-${r.qsRank}-${r.state}`,
+      college_name: r.name,
+      city_name: r.city,
+      college_state: r.state,
+      // Estimate lat/lng from state centroid or city lookup? Skip for now.
+      lat: 0,
+      lng: 0,
+      roi_score: null,
+      net_salary: null,
+      tuition: null,
+      median_earnings: null,
+      graduation_rate: null,
+      qsRank: r.qsRank,
+      website: r.website,
+      slug,
+    })
+  }
+
+  ranked.sort((a, b) => a.qsRank - b.qsRank)
+  _rankedColleges = ranked
   return _rankedColleges
 }
 
@@ -414,30 +400,24 @@ let _auRankedColleges: AURankedCollege[] | null = null
 
 function getAURankedColleges(): AURankedCollege[] {
   if (_auRankedColleges) return _auRankedColleges
-  try {
-    const raw = readFileSync(path.join(process.cwd(), "src/data/au-university-rankings.json"), "utf-8")
-    const rankings: Array<{ qsRank: number; name: string; alias?: string; city: string; state: string; lat: number; lng: number; website: string }> = JSON.parse(raw)
+  const rankings = auUniversityRankingsRaw as unknown as Array<{ qsRank: number; name: string; alias?: string; city: string; state: string; lat: number; lng: number; website: string }>
 
-    _auRankedColleges = rankings.map((r) => {
-      const slug = r.name
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-|-$/g, "")
-      return {
-        college_name: r.name,
-        city_name: r.city,
-        college_state: r.state,
-        lat: r.lat,
-        lng: r.lng,
-        qsRank: r.qsRank,
-        website: r.website,
-        slug,
-      }
-    })
-  } catch (e) {
-    console.error("[map-data] failed to load au-university-rankings.json:", e)
-    _auRankedColleges = []
-  }
+  _auRankedColleges = rankings.map((r) => {
+    const slug = r.name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "")
+    return {
+      college_name: r.name,
+      city_name: r.city,
+      college_state: r.state,
+      lat: r.lat,
+      lng: r.lng,
+      qsRank: r.qsRank,
+      website: r.website,
+      slug,
+    }
+  })
   return _auRankedColleges
 }
 
@@ -445,17 +425,7 @@ let _usOccData: { shortageByState: Record<string, USOccupation[]>; highPayByStat
 
 function getUSOccupationData() {
   if (_usOccData) return _usOccData
-  try {
-    const raw = readFileSync(path.join(process.cwd(), "src/data/us-occupation-state.json"), "utf-8")
-    const parsed: {
-      shortageByState: Record<string, USOccupation[]>
-      highPayByState: Record<string, USOccupation[]>
-    } = JSON.parse(raw)
-    _usOccData = parsed
-  } catch (e) {
-    console.error("[map-data] failed to load us-occupation-state.json:", e)
-    _usOccData = { shortageByState: {}, highPayByState: {} }
-  }
+  _usOccData = usOccupationStateRaw as unknown as { shortageByState: Record<string, USOccupation[]>; highPayByState: Record<string, USOccupation[]> }
   return _usOccData
 }
 
