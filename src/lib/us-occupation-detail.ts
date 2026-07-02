@@ -1,10 +1,6 @@
 import "server-only"
 import { readFileSync } from "fs"
-import { join, dirname } from "path"
-import { fileURLToPath } from "url"
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+import { join } from "path"
 
 interface RawUSOcc {
   occ_code: string
@@ -26,7 +22,14 @@ const _cache: { data: { byCode: Map<string, USOccDetail>; codes: string[] } | nu
 function load(): { byCode: Map<string, USOccDetail>; codes: string[] } {
   if (_cache.data) return _cache.data
 
-  const raw = readFileSync(join(__dirname, "../data/us-occupation-state.json"), "utf-8")
+  const filePath = join(process.cwd(), "src/data/us-occupation-state.json")
+  let raw: string
+  try {
+    raw = readFileSync(filePath, "utf-8")
+  } catch (e) {
+    console.error(`[us-occupation-detail] failed to read ${filePath}:`, e)
+    return { byCode: new Map(), codes: [] }
+  }
   const parsed: RawData = JSON.parse(raw)
 
   const stateEntries: { state: string; occ: RawUSOcc; list: "shortage" | "highPay" }[] = []
