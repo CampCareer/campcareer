@@ -1,6 +1,7 @@
 import fs from "fs"
 import path from "path"
 import matter from "gray-matter"
+import blogManifest from "@/data/blog-manifest.json"
 
 const BLOG_DIR = path.join(process.cwd(), "content/blog")
 
@@ -29,18 +30,7 @@ export type PostMeta = {
 }
 
 export function getAllPosts(): PostMeta[] {
-  if (!fs.existsSync(BLOG_DIR)) return []
-
-  const files = fs.readdirSync(BLOG_DIR).filter(f => f.endsWith(".mdx"))
-
-  return files
-    .map(filename => {
-      const slug = filename.replace(/\.mdx$/, "")
-      const raw = fs.readFileSync(path.join(BLOG_DIR, filename), "utf-8")
-      const { data } = matter(raw)
-      return { slug, ...data } as PostMeta
-    })
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  return blogManifest as PostMeta[]
 }
 
 // Strip markdown emphasis/links so FAQ answers are clean plain text for schema.
