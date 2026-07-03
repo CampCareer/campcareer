@@ -810,6 +810,7 @@ function Panel({
   const isWhv = selected === "WHV"
   const stateName = isWhv ? "Second Visa"
     : isAU ? STATE_NAMES[selected as StateCode] ?? selected
+    : activeCountry === "CA" ? CA_PROVINCE_NAMES[selected] ?? selected
     : US_STATE_NAMES[selected] ?? selected
 
   const auShortage = isAU ? (data.shortageByState[selected as StateCode] ?? []) : []
