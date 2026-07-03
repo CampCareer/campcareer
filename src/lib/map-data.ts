@@ -110,6 +110,32 @@ export interface CACollege {
   slug: string
 }
 
+export interface CAOccRow {
+  noc_code: string
+  occupation_en: string
+  occupation_ko: string | null
+  median_salary_cad: number | null
+  low_wage_cad: number | null
+  high_wage_cad: number | null
+  average_wage_cad: number | null
+  q1_wage_cad: number | null
+  q3_wage_cad: number | null
+  shortage_rating: number | null
+  on_teer_eligible: boolean | null
+  related_broad_field: string | null
+  confidence: string | null
+  data_source: string | null
+  last_verified: string | null
+}
+
+export interface CAHighPayOccupation {
+  noc_code: string
+  occupation_en: string
+  occupation_ko: string | null
+  median_salary_cad: number | null
+  shortage_rating: number | null
+}
+
 // { "WA": { "1": 1.000, "3": 1.222, ... } }
 export type StateSalaryMult = Record<string, Record<string, number>>
 
@@ -146,6 +172,8 @@ export interface MapData {
   usRankedColleges: USRankedCollege[]
   auRankedColleges: AURankedCollege[]
   caColleges: CACollege[]
+  caOccupations: Record<string, CAOccRow>
+  caHighPay: CAHighPayOccupation[]
 }
 
 export type OccRow = {
@@ -533,7 +561,7 @@ async function getCAColleges(): Promise<CACollege[]> {
 }
 
 async function getMapDataUncached(): Promise<MapData> {
-  const [occupations, stateRows, usColleges, multRows, coursesByFieldState, caColleges] = await Promise.all([
+  const [occupations, stateRows, usColleges, multRows, coursesByFieldState, caColleges, caOccupationsList] = await Promise.all([
     fetchAll<OccRow>(
       "occupations_au",
       "anzsco_code, anzsco_v13, occupation_en, occupation_ko, shortage_rating, median_salary_aud, on_csol, confidence, related_broad_field, pr_note_ko, source_name, source_url, last_verified",
@@ -546,6 +574,10 @@ async function getMapDataUncached(): Promise<MapData> {
       .then((r) => (r.data ?? []) as { state: string; anzsco_1digit: string; multiplier: number }[]),
     getCoursesByFieldState(),
     getCAColleges(),
+    fetchAll<CAOccRow>(
+      "occupations_ca",
+      "noc_code, occupation_en, occupation_ko, median_salary_cad, low_wage_cad, high_wage_cad, average_wage_cad, q1_wage_cad, q3_wage_cad, shortage_rating, on_teer_eligible, related_broad_field, confidence, data_source, last_verified",
+    ),
   ])
 
   // { "WA": { "3": 1.222, ... } }
@@ -629,12 +661,29 @@ async function getMapDataUncached(): Promise<MapData> {
     auStateShortages[code] = arr
   })
 
+  const caOccupations: Record<string, CAOccRow> = {}
+  for (const o of caOccupationsList) {
+    caOccupations[o.noc_code] = o
+  }
+
+  const caHighPay: CAHighPayOccupation[] = caOccupationsList
+    .filter((o) => o.noc_code != null)
+    .sort((a, b) => (b.median_salary_cad ?? 0) - (a.median_salary_cad ?? 0))
+    .slice(0, 12)
+    .map((o) => ({
+      noc_code: o.noc_code,
+      occupation_en: o.occupation_en,
+      occupation_ko: o.occupation_ko,
+      median_salary_cad: o.median_salary_cad,
+      shortage_rating: o.shortage_rating,
+    }))
+
   const usStateInfo = getUSStateInfo()
   const usMajorDensity = computeMajorDensity()
   const usRankedColleges = getUSRankedColleges(usColleges)
   const auRankedColleges = getAURankedColleges()
 
-  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages, coursesByFieldState, usStateInfo, usMajorDensity, usRankedColleges, auRankedColleges, caColleges }
+  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages, coursesByFieldState, usStateInfo, usMajorDensity, usRankedColleges, auRankedColleges, caColleges, caOccupations, caHighPay }
 }
 
 // cross-instance 공유 캐시(방어선). 페이지가 force-static이라 보통 빌드/리밸리데이트
