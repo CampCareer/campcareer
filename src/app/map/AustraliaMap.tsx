@@ -23,7 +23,7 @@ import { AffiliateCtas } from "@/components/partners/partner-cta"
 import JobListings from "./JobListings"
 import { EMPLOYMENT_OCCUPATIONS } from "@/data/employment-occupations"
 import { EMPLOYMENT_SALARIES } from "@/data/employment-salaries"
-import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc, CourseLite, USStateInfo, StateMajorDensity, USRankedCollege, AURankedCollege, CACollege } from "@/lib/map-data"
+import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc, CourseLite, USStateInfo, StateMajorDensity, USRankedCollege, AURankedCollege, CACollege, CAOccRow, CAHighPayOccupation } from "@/lib/map-data"
 import { createClient } from "@/lib/supabase-client"
 import type { User } from "@supabase/supabase-js"
 import { getShortageOccupations } from "@/lib/ie-shortage-occupations"
@@ -488,6 +488,16 @@ export default function AustraliaMap({
     )
   }, [data.usShortageByState, selected])
 
+  const caShortageItems = useMemo<Record<string, string>>(() => {
+    const occs = selected ? Object.values(data.caOccupations).filter((o) => o.occupation_en) : []
+    return Object.fromEntries(
+      occs.map((o) => [
+        o.noc_code,
+        `${o.occupation_en}${o.median_salary_cad != null ? ` · C$${o.median_salary_cad.toLocaleString()}` : ""}`,
+      ]),
+    )
+  }, [data.caOccupations, selected])
+
   const filteredIESchools = useMemo(() => {
     if (!ieSchools) return null
     if (!selected || activeCountry !== "IE") return ieSchools
@@ -507,7 +517,9 @@ export default function AustraliaMap({
   const occLabel = selectedOccCode
     ? activeCountry === "AU"
       ? data.shortageByState[selected as StateCode]?.find((o) => o.anzsco_code === selectedOccCode)?.occupation_en
-      : selectedUsOcc?.occ_title
+      : activeCountry === "CA"
+        ? data.caOccupations[selectedOccCode]?.occupation_en
+        : selectedUsOcc?.occ_title
     : ""
   const toolbarSummary = [countryLabel, stateLabel, occLabel].filter(Boolean).join(" · ")
 
@@ -604,11 +616,12 @@ export default function AustraliaMap({
               <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectOccupation}</span>
               {selected ? (
                 <Select
-                  items={activeCountry === "AU" ? auShortageItems : usShortageItems}
+                  items={activeCountry === "AU" ? auShortageItems : activeCountry === "CA" ? caShortageItems : usShortageItems}
                   value={selectedOccCode ?? null}
                   onValueChange={(v) => {
                     if (!v) return
                     if (activeCountry === "AU") setSelectedOccCode(v)
+                    else if (activeCountry === "CA") setSelectedOccCode(v)
                     else {
                       const occ = data.usShortageByState[selected]?.find((o) => o.occ_code === v) ?? null
                       setSelectedUsOcc(occ)
@@ -622,18 +635,20 @@ export default function AustraliaMap({
                   <SelectContent className="z-[2000] max-h-72">
                     {(activeCountry === "AU"
                       ? data.shortageByState[selected as StateCode] ?? []
-                      : data.usShortageByState[selected] ?? []
+                      : activeCountry === "CA"
+                        ? Object.values(data.caOccupations)
+                        : data.usShortageByState[selected] ?? []
                     ).map((occ) => {
-                      const code = activeCountry === "AU" ? (occ as StateOccupation).anzsco_code : (occ as USOccupation).occ_code
-                      const title = activeCountry === "AU" ? (occ as StateOccupation).occupation_en : (occ as USOccupation).occ_title
-                      const salary = activeCountry === "AU" ? (occ as StateOccupation).median_salary_aud : (occ as USOccupation).median_wage
+                      const code = activeCountry === "AU" ? (occ as StateOccupation).anzsco_code : activeCountry === "CA" ? (occ as CAOccRow).noc_code : (occ as USOccupation).occ_code
+                      const title = activeCountry === "AU" ? (occ as StateOccupation).occupation_en : activeCountry === "CA" ? (occ as CAOccRow).occupation_en : (occ as USOccupation).occ_title
+                      const salary = activeCountry === "AU" ? (occ as StateOccupation).median_salary_aud : activeCountry === "CA" ? (occ as CAOccRow).median_salary_cad : (occ as USOccupation).median_wage
                       return (
                         <SelectItem key={code} value={code}>
                           <span className="flex items-center justify-between gap-3">
                             <span className="truncate">{title}</span>
                             {salary != null && (
                               <span className="shrink-0 text-xs text-slate-400">
-                                ${salary.toLocaleString()}
+                                {activeCountry === "CA" ? "C$" : "$"}{salary.toLocaleString()}
                               </span>
                             )}
                           </span>
@@ -1011,7 +1026,7 @@ function Panel({
         )}
         {tab === "shortage" && isUS && <USShortageList rows={usShortage} onSelectOcc={handleUSSelectOcc} />}
         {tab === "shortage" && !isAU && !isUS && activeCountry !== "CA" && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
-        {tab === "shortage" && activeCountry === "CA" && <p className="py-8 text-center text-sm text-slate-400">Occupational shortage data coming soon.</p>}
+        {tab === "shortage" && activeCountry === "CA" && <CAShortageList rows={Object.values(data.caOccupations)} />}
         {tab === "pay" && isAU && (
           selectedSA4 ? (
             <RegionGroupList
@@ -1038,7 +1053,7 @@ function Panel({
         )}
         {tab === "pay" && isUS && <USHighPayList rows={usHighPay} onSelectOcc={handleUSSelectOcc} />}
         {tab === "pay" && !isAU && !isUS && activeCountry !== "CA" && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
-        {tab === "pay" && activeCountry === "CA" && <p className="py-8 text-center text-sm text-slate-400">Salary data coming soon.</p>}
+        {tab === "pay" && activeCountry === "CA" && <CAHighPayList rows={data.caHighPay} />}
         {tab === "employment" && (
           <EmploymentList
             sa4={selectedSA4}
@@ -2176,6 +2191,90 @@ function CACollegesPanel({
         ))}
       </ol>
     </div>
+  )
+}
+
+function CAShortageList({ rows }: { rows: CAOccRow[] }) {
+  const t = useTranslations()
+  const locale = useLocale()
+  const [limit, setLimit] = useState(10)
+  const sorted = [...rows]
+    .filter((r) => r.shortage_rating != null)
+    .sort((a, b) => (b.shortage_rating ?? 0) - (a.shortage_rating ?? 0))
+  const visible = sorted.slice(0, limit)
+  if (visible.length === 0) {
+    return <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>
+  }
+  return (
+    <ol>
+      {visible.map((r, i) => (
+        <li key={r.noc_code}>
+          <button
+            type="button"
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50"
+          >
+            <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-sm font-medium text-slate-800">
+                {locale === "ko" ? (r.occupation_ko ?? r.occupation_en) : r.occupation_en}
+              </span>
+            </span>
+            <span className="shrink-0 text-right">
+              <span className="block text-sm font-semibold tabular-nums text-slate-700">
+                {r.median_salary_cad != null ? `C$${r.median_salary_cad.toLocaleString()}` : "—"}
+              </span>
+              <span className="text-[10px] text-slate-400">Shortage: {r.shortage_rating}/5</span>
+            </span>
+          </button>
+        </li>
+      ))}
+      {limit < sorted.length && (
+        <li>
+          <button
+            type="button"
+            onClick={() => setLimit((p) => Math.min(p + 10, sorted.length))}
+            className="flex w-full items-center justify-center gap-1 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-500 hover:bg-slate-50 hover:text-slate-700 transition-colors"
+          >
+            {locale === "ko" ? "더보기" : "Show more"} ({sorted.length - limit})
+          </button>
+        </li>
+      )}
+    </ol>
+  )
+}
+
+function CAHighPayList({ rows }: { rows: CAHighPayOccupation[] }) {
+  const t = useTranslations()
+  const locale = useLocale()
+  if (rows.length === 0) {
+    return <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>
+  }
+  return (
+    <ol>
+      {rows.map((r, i) => (
+        <li key={r.noc_code}>
+          <button
+            type="button"
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50"
+          >
+            <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-sm font-medium text-slate-800">
+                {locale === "ko" ? (r.occupation_ko ?? r.occupation_en) : r.occupation_en}
+              </span>
+            </span>
+            <span className="shrink-0 text-right">
+              <span className="block text-sm font-semibold tabular-nums text-slate-700">
+                {r.median_salary_cad != null ? `C$${r.median_salary_cad.toLocaleString()}` : "—"}
+              </span>
+              {r.shortage_rating != null && (
+                <span className="text-[10px] text-slate-400">Shortage: {r.shortage_rating}/5</span>
+              )}
+            </span>
+          </button>
+        </li>
+      ))}
+    </ol>
   )
 }
 
