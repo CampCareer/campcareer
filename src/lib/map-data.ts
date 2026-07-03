@@ -1,13 +1,14 @@
 import "server-only"
 import { unstable_cache } from "next/cache"
 import { supabaseAdmin } from "@/lib/supabase-admin"
-import { STATE_CODES, type StateCode } from "@/app/map/states"
+import { STATE_CODES, CA_PROVINCE_CODES, type StateCode } from "@/app/map/states"
 import { MAJOR_OCCUPATIONS } from "@/lib/major-occupation-map"
 import usCitiesRaw from "@/data/us-cities.json"
 import usStateInfoRaw from "@/data/us-state-info.json"
 import usUniversityRankingsRaw from "@/data/us-university-rankings.json"
 import auUniversityRankingsRaw from "@/data/au-university-rankings.json"
 import usOccupationStateRaw from "@/data/us-occupation-state.json"
+import caProvinceSampleRaw from "@/data/ca-occupation-province-sample.json"
 
 // 지도 페이지용 데이터 계층. occupations_au + occupation_state_au 를 읽어 JS 에서 조인한다.
 // occupation_state_au 는 anon RLS 가 막혀 있어 서버 전용 service-role 클라이언트로 읽는다.
@@ -174,6 +175,7 @@ export interface MapData {
   caColleges: CACollege[]
   caOccupations: Record<string, CAOccRow>
   caHighPay: CAHighPayOccupation[]
+  caHighPayByProvince: Record<string, CAHighPayOccupation[]>
 }
 
 export type OccRow = {
@@ -678,12 +680,33 @@ async function getMapDataUncached(): Promise<MapData> {
       shortage_rating: o.shortage_rating,
     }))
 
+  const caProvinceCodeFix: Record<string, string> = { PEI: "PE", YK: "YT", NWT: "NT" }
+  const caHighPayByProvince: Record<string, CAHighPayOccupation[]> = {}
+  for (const province of CA_PROVINCE_CODES) {
+    caHighPayByProvince[province] = []
+  }
+  const caProvinceSample = caProvinceSampleRaw as unknown as Record<string, Array<{ noc_code: string; title: string; median_wage_cad: number }>>
+  for (const [sampleCode, occs] of Object.entries(caProvinceSample)) {
+    const appCode = caProvinceCodeFix[sampleCode] ?? sampleCode
+    if (!caHighPayByProvince[appCode]) continue
+    caHighPayByProvince[appCode] = occs
+      .sort((a, b) => b.median_wage_cad - a.median_wage_cad)
+      .slice(0, 12)
+      .map((o) => ({
+        noc_code: o.noc_code,
+        occupation_en: o.title,
+        occupation_ko: caOccupations[o.noc_code]?.occupation_ko ?? null,
+        median_salary_cad: o.median_wage_cad,
+        shortage_rating: caOccupations[o.noc_code]?.shortage_rating ?? null,
+      }))
+  }
+
   const usStateInfo = getUSStateInfo()
   const usMajorDensity = computeMajorDensity()
   const usRankedColleges = getUSRankedColleges(usColleges)
   const auRankedColleges = getAURankedColleges()
 
-  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages, coursesByFieldState, usStateInfo, usMajorDensity, usRankedColleges, auRankedColleges, caColleges, caOccupations, caHighPay }
+  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages, coursesByFieldState, usStateInfo, usMajorDensity, usRankedColleges, auRankedColleges, caColleges, caOccupations, caHighPay, caHighPayByProvince }
 }
 
 // cross-instance 공유 캐시(방어선). 페이지가 force-static이라 보통 빌드/리밸리데이트
