@@ -1,0 +1,3086 @@
+[
+  {
+    "noc_code": "31101",
+    "shortage_rating": 5,
+    "confidence": "medium",
+    "rationale": "Known high-shortage occupation (NOC 31101); wage 5.4x category median"
+  },
+  {
+    "noc_code": "41100",
+    "shortage_rating": 4,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2; wage 4.2x category median"
+  },
+  {
+    "noc_code": "31100",
+    "shortage_rating": 5,
+    "confidence": "medium",
+    "rationale": "Known high-shortage occupation (NOC 31100); wage 3.8x category median"
+  },
+  {
+    "noc_code": "31102",
+    "shortage_rating": 5,
+    "confidence": "medium",
+    "rationale": "Known high-shortage occupation (NOC 31102); wage 2.9x category median"
+  },
+  {
+    "noc_code": "00012",
+    "shortage_rating": 4,
+    "confidence": "medium",
+    "rationale": "Management category, base rating 3; wage 2.0x category median"
+  },
+  {
+    "noc_code": "80010",
+    "shortage_rating": 4,
+    "confidence": "medium",
+    "rationale": "Natural resources and agriculture category, base rating 2; wage 2.6x category median"
+  },
+  {
+    "noc_code": "40040",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "20010",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "40011",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "20012",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "21332",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "40012",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "40041",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "00011",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Management category, base rating 3"
+  },
+  {
+    "noc_code": "40010",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "40019",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "90011",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2; wage 2.4x category median"
+  },
+  {
+    "noc_code": "41101",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "10010",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2; wage 1.9x category median"
+  },
+  {
+    "noc_code": "41200",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "10021",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2; wage 1.9x category median"
+  },
+  {
+    "noc_code": "20011",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "31103",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 31103)"
+  },
+  {
+    "noc_code": "10011",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2; wage 1.9x category median"
+  },
+  {
+    "noc_code": "10020",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2; wage 1.9x category median"
+  },
+  {
+    "noc_code": "10012",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2; wage 1.9x category median"
+  },
+  {
+    "noc_code": "40020",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "31302",
+    "shortage_rating": 5,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 31302)"
+  },
+  {
+    "noc_code": "60010",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1; wage 2.6x category median"
+  },
+  {
+    "noc_code": "21231",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 21231)"
+  },
+  {
+    "noc_code": "31120",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Health category, base rating 4; health sector shortage"
+  },
+  {
+    "noc_code": "72600",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 72600)"
+  },
+  {
+    "noc_code": "10022",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "40021",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "21330",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "31110",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Health category, base rating 4; health sector shortage"
+  },
+  {
+    "noc_code": "30010",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Health category, base rating 4; health sector shortage"
+  },
+  {
+    "noc_code": "41310",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "10029",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "70020",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "21100",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "21311",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "21320",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "21390",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "42100",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "82020",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural resources and agriculture category, base rating 2; wage 1.9x category median"
+  },
+  {
+    "noc_code": "90010",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2; wage 2.0x category median"
+  },
+  {
+    "noc_code": "93101",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2; wage 2.0x category median"
+  },
+  {
+    "noc_code": "10030",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "31200",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 31200)"
+  },
+  {
+    "noc_code": "10019",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "21310",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "21102",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "21322",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "21399",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "21331",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "21210",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 21210)"
+  },
+  {
+    "noc_code": "21300",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "72406",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 72406)"
+  },
+  {
+    "noc_code": "21220",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 21220)"
+  },
+  {
+    "noc_code": "70010",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "72103",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "82021",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Natural resources and agriculture category, base rating 2"
+  },
+  {
+    "noc_code": "21301",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "00015",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Management category, base rating 3"
+  },
+  {
+    "noc_code": "21232",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 21232)"
+  },
+  {
+    "noc_code": "72601",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "72012",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "22312",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "42101",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "21222",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 21222)"
+  },
+  {
+    "noc_code": "21109",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "21202",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "41220",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "11103",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "41401",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "72202",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 72202)"
+  },
+  {
+    "noc_code": "72203",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 72203)"
+  },
+  {
+    "noc_code": "92100",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2; wage 1.8x category median"
+  },
+  {
+    "noc_code": "31300",
+    "shortage_rating": 5,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 31300)"
+  },
+  {
+    "noc_code": "21211",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 21211)"
+  },
+  {
+    "noc_code": "21103",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "31112",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Health category, base rating 4; health sector shortage"
+  },
+  {
+    "noc_code": "31202",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 31202)"
+  },
+  {
+    "noc_code": "31203",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 31203)"
+  },
+  {
+    "noc_code": "21230",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 21230)"
+  },
+  {
+    "noc_code": "92011",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "21221",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 21221)"
+  },
+  {
+    "noc_code": "41407",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "70012",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "00014",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Management category, base rating 3"
+  },
+  {
+    "noc_code": "21321",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "32111",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Health category, base rating 4; health sector shortage"
+  },
+  {
+    "noc_code": "72301",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 72301)"
+  },
+  {
+    "noc_code": "73310",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "41402",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "41221",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "21223",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 21223)"
+  },
+  {
+    "noc_code": "72011",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "41210",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "31301",
+    "shortage_rating": 5,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 31301)"
+  },
+  {
+    "noc_code": "31303",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 31303)"
+  },
+  {
+    "noc_code": "41404",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "22231",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "40042",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "51102",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "31121",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Health category, base rating 4; health sector shortage"
+  },
+  {
+    "noc_code": "40030",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "72105",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "11201",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "21120",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "11101",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "41311",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "83101",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Natural resources and agriculture category, base rating 2"
+  },
+  {
+    "noc_code": "72500",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 72500)"
+  },
+  {
+    "noc_code": "72023",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "41400",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "72201",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 72201)"
+  },
+  {
+    "noc_code": "72604",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "22232",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "41405",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "73311",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "41403",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "00010",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Management category, base rating 3"
+  },
+  {
+    "noc_code": "21110",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "21111",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "21200",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "21203",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "32122",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Health category, base rating 4; health sector shortage"
+  },
+  {
+    "noc_code": "60020",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1; wage 1.9x category median"
+  },
+  {
+    "noc_code": "72403",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 72403)"
+  },
+  {
+    "noc_code": "83100",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Natural resources and agriculture category, base rating 2"
+  },
+  {
+    "noc_code": "72602",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "93100",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "11100",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "41320",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "22313",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "32121",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Health category, base rating 4; health sector shortage"
+  },
+  {
+    "noc_code": "72010",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "31111",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Health category, base rating 4; health sector shortage"
+  },
+  {
+    "noc_code": "51120",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "32103",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 32103)"
+  },
+  {
+    "noc_code": "11200",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "21234",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 21234)"
+  },
+  {
+    "noc_code": "50010",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "52112",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "72020",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "21101",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "51100",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "72021",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "72320",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "72404",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 72404)"
+  },
+  {
+    "noc_code": "84101",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Natural resources and agriculture category, base rating 2"
+  },
+  {
+    "noc_code": "32120",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Health category, base rating 4; health sector shortage"
+  },
+  {
+    "noc_code": "60031",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1; wage 1.8x category median"
+  },
+  {
+    "noc_code": "72603",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "22214",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "41300",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "72014",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "50011",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "72321",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "50012",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "93102",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "43203",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "21201",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "21112",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "72402",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 72402)"
+  },
+  {
+    "noc_code": "22303",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "51111",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "51112",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "22233",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "41409",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "43201",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "92010",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "11109",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "12012",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "51101",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "11102",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "32102",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 32102)"
+  },
+  {
+    "noc_code": "60040",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "70021",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "73402",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 73402)"
+  },
+  {
+    "noc_code": "12102",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "22113",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "22230",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "52110",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "62100",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "72200",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 72200)"
+  },
+  {
+    "noc_code": "72302",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 72302)"
+  },
+  {
+    "noc_code": "72400",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 72400)"
+  },
+  {
+    "noc_code": "72401",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 72401)"
+  },
+  {
+    "noc_code": "74200",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "83120",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Natural resources and agriculture category, base rating 2"
+  },
+  {
+    "noc_code": "84100",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Natural resources and agriculture category, base rating 2"
+  },
+  {
+    "noc_code": "22310",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "72013",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "92014",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "12201",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "51110",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "72405",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 72405)"
+  },
+  {
+    "noc_code": "72300",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 72300)"
+  },
+  {
+    "noc_code": "44200",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "43202",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "72102",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "72101",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "22111",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "22220",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "52111",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "72204",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 72204)"
+  },
+  {
+    "noc_code": "82010",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Natural resources and agriculture category, base rating 2"
+  },
+  {
+    "noc_code": "12202",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "12100",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "43200",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "92101",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "11202",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "92023",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "12104",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "12011",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "12203",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "22301",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "72024",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "72205",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 72205)"
+  },
+  {
+    "noc_code": "73101",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 73101)"
+  },
+  {
+    "noc_code": "73100",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 73100)"
+  },
+  {
+    "noc_code": "42200",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "41301",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "92020",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "22211",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "92013",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "32123",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Health category, base rating 4; health sector shortage"
+  },
+  {
+    "noc_code": "52113",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "74204",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "83110",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Natural resources and agriculture category, base rating 2"
+  },
+  {
+    "noc_code": "94100",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "42102",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "21233",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 21233)"
+  },
+  {
+    "noc_code": "43204",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "53120",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "22300",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "75100",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "22302",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "51114",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "12101",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "31204",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 31204)"
+  },
+  {
+    "noc_code": "51113",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "92021",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "22101",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "72025",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "73102",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 73102)"
+  },
+  {
+    "noc_code": "73400",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 73400)"
+  },
+  {
+    "noc_code": "94121",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "72422",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 72422)"
+  },
+  {
+    "noc_code": "72310",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 72310)"
+  },
+  {
+    "noc_code": "80022",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Natural resources and agriculture category, base rating 2"
+  },
+  {
+    "noc_code": "12010",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "22212",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "53123",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "64101",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "22221",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "32101",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 32101)"
+  },
+  {
+    "noc_code": "14103",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "22110",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "22112",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "22210",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "22222",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "52119",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "52120",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "53122",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "64311",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "73110",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 73110)"
+  },
+  {
+    "noc_code": "85111",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Natural resources and agriculture category, base rating 2"
+  },
+  {
+    "noc_code": "62201",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "31201",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 31201)"
+  },
+  {
+    "noc_code": "63100",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "12111",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "13102",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "14402",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "73111",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 73111)"
+  },
+  {
+    "noc_code": "75210",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "55109",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "63102",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "74201",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "72106",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "72100",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "72423",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 72423)"
+  },
+  {
+    "noc_code": "84110",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Natural resources and agriculture category, base rating 2"
+  },
+  {
+    "noc_code": "92024",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "13101",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "41406",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "52114",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "52121",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "62023",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "72410",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 72410)"
+  },
+  {
+    "noc_code": "92012",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "93200",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "72501",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 72501)"
+  },
+  {
+    "noc_code": "42203",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "12112",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "94200",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "13201",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "22100",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "63101",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "13100",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "12013",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "22213",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "41321",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "62101",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "72022",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "72104",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "72999",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "74101",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "85110",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Natural resources and agriculture category, base rating 2"
+  },
+  {
+    "noc_code": "12103",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "14301",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "52100",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "31209",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Health category, base rating 4; health sector shortage"
+  },
+  {
+    "noc_code": "74205",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "14404",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "22114",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "32100",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 32100)"
+  },
+  {
+    "noc_code": "75212",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "82031",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Natural resources and agriculture category, base rating 2"
+  },
+  {
+    "noc_code": "85120",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Natural resources and agriculture category, base rating 2"
+  },
+  {
+    "noc_code": "12200",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "64201",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "73113",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 73113)"
+  },
+  {
+    "noc_code": "14405",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "92015",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "22311",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Natural and applied sciences category, base rating 3"
+  },
+  {
+    "noc_code": "33100",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 33100)"
+  },
+  {
+    "noc_code": "74100",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "14102",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "14202",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "94151",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "33101",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 33101)"
+  },
+  {
+    "noc_code": "41302",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "83121",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Natural resources and agriculture category, base rating 2"
+  },
+  {
+    "noc_code": "73112",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 73112)"
+  },
+  {
+    "noc_code": "94120",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "32110",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Health category, base rating 4; health sector shortage"
+  },
+  {
+    "noc_code": "41201",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "53111",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "94123",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "32109",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 32109)"
+  },
+  {
+    "noc_code": "12113",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "13111",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "13200",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "94112",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "72411",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 72411)"
+  },
+  {
+    "noc_code": "53125",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "94106",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "12110",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "13110",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "32112",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Health category, base rating 4; health sector shortage"
+  },
+  {
+    "noc_code": "42201",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "53200",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "53201",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "60030",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "72420",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 72420)"
+  },
+  {
+    "noc_code": "73200",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 73200)"
+  },
+  {
+    "noc_code": "73300",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 73300)"
+  },
+  {
+    "noc_code": "75110",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "92022",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "94103",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "94104",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "94110",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "94122",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "95100",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "72421",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 72421)"
+  },
+  {
+    "noc_code": "14401",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "95102",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "14200",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "14201",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "80020",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Natural resources and agriculture category, base rating 2"
+  },
+  {
+    "noc_code": "94213",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "43100",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "62024",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "13112",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "14300",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "84111",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Natural resources and agriculture category, base rating 2"
+  },
+  {
+    "noc_code": "94101",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "94129",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "94204",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "84121",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Natural resources and agriculture category, base rating 2"
+  },
+  {
+    "noc_code": "72429",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "32129",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Health category, base rating 4; health sector shortage"
+  },
+  {
+    "noc_code": "73202",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 73202)"
+  },
+  {
+    "noc_code": "73401",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 73401)"
+  },
+  {
+    "noc_code": "82030",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Natural resources and agriculture category, base rating 2"
+  },
+  {
+    "noc_code": "14100",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "14403",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "33102",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 33102)"
+  },
+  {
+    "noc_code": "53110",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "53121",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "62022",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "62029",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "64401",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "72311",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 72311)"
+  },
+  {
+    "noc_code": "73201",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 73201)"
+  },
+  {
+    "noc_code": "73209",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "73301",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 73301)"
+  },
+  {
+    "noc_code": "75119",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "94105",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "94111",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "95101",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "95103",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "70011",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "32124",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Health category, base rating 4; health sector shortage"
+  },
+  {
+    "noc_code": "14111",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "14112",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "32104",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 32104)"
+  },
+  {
+    "noc_code": "33109",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Health category, base rating 4; health sector shortage"
+  },
+  {
+    "noc_code": "64321",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "74202",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "85102",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Natural resources and agriculture category, base rating 2"
+  },
+  {
+    "noc_code": "94102",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "94141",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "94143",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "94202",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "94203",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "94150",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "94107",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "63221",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "64310",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "64400",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "64409",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "62200",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "74102",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "94124",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "94205",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "42202",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "14400",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "45100",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "62010",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "64313",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "65312",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "75101",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "75211",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "84120",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Natural resources and agriculture category, base rating 2"
+  },
+  {
+    "noc_code": "94140",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "94210",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "94211",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "94219",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "62202",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "94201",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "94212",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "64312",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "80021",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Natural resources and agriculture category, base rating 2"
+  },
+  {
+    "noc_code": "14110",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "65210",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "14101",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Business, finance and administration category, base rating 2"
+  },
+  {
+    "noc_code": "33103",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Health category, base rating 4; health sector shortage"
+  },
+  {
+    "noc_code": "42204",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "44101",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "53100",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "62021",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "64322",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "64410",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "74203",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "85121",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Natural resources and agriculture category, base rating 2"
+  },
+  {
+    "noc_code": "94130",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "94152",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "95104",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "85104",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Natural resources and agriculture category, base rating 2"
+  },
+  {
+    "noc_code": "63201",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "65311",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "95106",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "64301",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "64320",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "94153",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "43109",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "53124",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "75201",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "85100",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Natural resources and agriculture category, base rating 2"
+  },
+  {
+    "noc_code": "85103",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Natural resources and agriculture category, base rating 2"
+  },
+  {
+    "noc_code": "95109",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "65310",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "94131",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "54100",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "63210",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "44100",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Education, law and social services category, base rating 2"
+  },
+  {
+    "noc_code": "53202",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "62020",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "63211",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "64200",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "64314",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "65200",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "65202",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "65320",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "75200",
+    "shortage_rating": 3,
+    "confidence": "medium",
+    "rationale": "Trades, transport and equipment operators category, base rating 3"
+  },
+  {
+    "noc_code": "95105",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "65220",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "85101",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Natural resources and agriculture category, base rating 2"
+  },
+  {
+    "noc_code": "51121",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "95107",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "63200",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "63202",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "64300",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "65211",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "94132",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "94142",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "94133",
+    "shortage_rating": 2,
+    "confidence": "medium",
+    "rationale": "Manufacturing and utilities category, base rating 2"
+  },
+  {
+    "noc_code": "64100",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "65109",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "65329",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "65201",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "65102",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "32200",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 32200)"
+  },
+  {
+    "noc_code": "32201",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Known high-shortage occupation (NOC 32201)"
+  },
+  {
+    "noc_code": "32209",
+    "shortage_rating": 4,
+    "confidence": "high",
+    "rationale": "Health category, base rating 4; health sector shortage"
+  },
+  {
+    "noc_code": "51122",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Art, culture and recreation category, base rating 1"
+  },
+  {
+    "noc_code": "65229",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "65100",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  },
+  {
+    "noc_code": "65101",
+    "shortage_rating": 1,
+    "confidence": "medium",
+    "rationale": "Sales and service category, base rating 1"
+  }
+]
