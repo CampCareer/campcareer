@@ -872,6 +872,11 @@ function Panel({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [occ, selectedOccCode, isAU, selected])
 
+  const resolvedCAOcc = useMemo<CAOccRow | null>(() => {
+    if (!selectedOccCode || activeCountry !== "CA") return null
+    return data.caOccupations[selectedOccCode] ?? null
+  }, [selectedOccCode, activeCountry, data.caOccupations])
+
   const handleSelectOcc = (code: string) => {
     const name = data.auOccupations[code]?.occupation_en ?? code
     track("click_occupation", { type: "au", code, name, state: selected })
@@ -880,6 +885,11 @@ function Panel({
   const handleUSSelectOcc = (occ: USOccupation) => {
     track("click_occupation", { type: "us", code: occ.occ_code, name: occ.occ_title, state: selected })
     setSelectedUsOcc(occ)
+  }
+  const handleSelectCAOcc = (code: string) => {
+    const name = data.caOccupations[code]?.occupation_en ?? code
+    track("click_occupation", { type: "ca", code, name, province: selected })
+    setSelectedOccCode(code)
   }
   const handleBack = () => setSelectedOccCode(null)
   const handleBackNero = () => setSelectedNeroA4(null)
@@ -892,6 +902,20 @@ function Panel({
         stateCode={selected}
         colleges={data.usColleges}
         onBack={() => setSelectedUsOcc(null)}
+        onClose={onClose}
+        t={t}
+        savedOccCodes={savedOccCodes}
+        onToggleSave={onToggleSave}
+        onShare={onShare}
+      />
+    )
+  }
+
+  if (selectedOccCode && resolvedCAOcc) {
+    return (
+      <CAOccupationDetail
+        occ={resolvedCAOcc}
+        onBack={handleBack}
         onClose={onClose}
         t={t}
         savedOccCodes={savedOccCodes}
@@ -1026,7 +1050,7 @@ function Panel({
         )}
         {tab === "shortage" && isUS && <USShortageList rows={usShortage} onSelectOcc={handleUSSelectOcc} />}
         {tab === "shortage" && !isAU && !isUS && activeCountry !== "CA" && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
-        {tab === "shortage" && activeCountry === "CA" && <CAShortageList rows={Object.values(data.caOccupations)} />}
+        {tab === "shortage" && activeCountry === "CA" && <CAShortageList rows={Object.values(data.caOccupations)} onSelectOcc={handleSelectCAOcc} />}
         {tab === "pay" && isAU && (
           selectedSA4 ? (
             <RegionGroupList
@@ -1053,7 +1077,7 @@ function Panel({
         )}
         {tab === "pay" && isUS && <USHighPayList rows={usHighPay} onSelectOcc={handleUSSelectOcc} />}
         {tab === "pay" && !isAU && !isUS && activeCountry !== "CA" && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
-        {tab === "pay" && activeCountry === "CA" && <CAHighPayList rows={data.caHighPay} />}
+        {tab === "pay" && activeCountry === "CA" && <CAHighPayList rows={data.caHighPay} provinceRows={selected ? data.caHighPayByProvince[selected] ?? [] : []} onSelectOcc={handleSelectCAOcc} />}
         {tab === "employment" && (
           <EmploymentList
             sa4={selectedSA4}
@@ -2194,7 +2218,139 @@ function CACollegesPanel({
   )
 }
 
-function CAShortageList({ rows }: { rows: CAOccRow[] }) {
+function CAOccupationDetail({
+  occ,
+  onBack,
+  onClose,
+  t,
+  savedOccCodes,
+  onToggleSave,
+  onShare,
+}: {
+  occ: CAOccRow
+  onBack: () => void
+  onClose: () => void
+  t: ReturnType<typeof useTranslations>
+  savedOccCodes: Set<string>
+  onToggleSave: (occCode: string, occTitle: string) => void
+  onShare: (occTitle: string) => void
+}) {
+  const locale = useLocale()
+  const name = locale === "ko" && occ.occupation_ko ? occ.occupation_ko : occ.occupation_en
+
+  return (
+    <>
+      <div className="flex items-center justify-between px-5 pt-4">
+        <button
+          type="button"
+          onClick={onBack}
+          className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-800 transition-colors"
+        >
+          <ChevronLeft className="h-4 w-4" />
+          {null}
+        </button>
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label={t.map.close}
+          className="-mr-1 rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+        >
+          <X className="h-4 w-4" />
+        </button>
+      </div>
+
+      <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
+        <div className="flex items-start justify-between gap-2">
+          <h2 className="font-sans text-lg font-semibold text-slate-900 tracking-tight">
+            {name}
+          </h2>
+          <div className="flex items-center gap-1 shrink-0">
+            <button
+              type="button"
+              onClick={() => onToggleSave(occ.noc_code, name)}
+              aria-label="Save occupation"
+              className="rounded-md p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+            >
+              <Bookmark className="h-4 w-4" fill={savedOccCodes.has(occ.noc_code) ? "currentColor" : "none"} />
+            </button>
+            <button
+              type="button"
+              onClick={() => onShare(name)}
+              aria-label="Share occupation"
+              className="rounded-md p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+            >
+              <Share2 className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+
+        <div className="mt-3 flex flex-wrap items-center gap-1.5">
+          <Badge tone="gray">NOC {occ.noc_code}</Badge>
+          {occ.confidence && <Badge tone="blue">{occ.confidence}</Badge>}
+        </div>
+
+        {occ.noc_code && (
+          <Link
+            href={`/roi-explorer/ca/occupation/${occ.noc_code}`}
+            className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors"
+          >
+            자세히 보기
+            <ExternalLink className="h-3 w-3" />
+          </Link>
+        )}
+
+        <div className="mt-5 space-y-4">
+          <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+            <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
+              {t.map.detailMedianSalary}
+            </p>
+            <p className="mt-1 text-xl font-bold tabular-nums text-slate-800">
+              {occ.median_salary_cad != null ? `C$${occ.median_salary_cad.toLocaleString()}` : "—"}
+            </p>
+            {(occ.low_wage_cad != null || occ.high_wage_cad != null) && (
+              <div className="mt-2 flex items-center gap-3 text-xs text-slate-500">
+                {occ.low_wage_cad != null && <span>Low: C${occ.low_wage_cad.toLocaleString()}</span>}
+                {occ.high_wage_cad != null && <span>High: C${occ.high_wage_cad.toLocaleString()}</span>}
+              </div>
+            )}
+          </div>
+
+          {occ.shortage_rating != null && (
+            <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+              <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
+                Shortage Rating
+              </p>
+              <div className="mt-2 flex items-center gap-3">
+                <div className="flex-1 h-2 rounded-full bg-slate-200 overflow-hidden">
+                  <div
+                    className={cn("h-full rounded-full transition-all", shortageColor(occ.shortage_rating))}
+                    style={{ width: `${Math.round((occ.shortage_rating / 5) * 100)}%` }}
+                  />
+                </div>
+                <span className="shrink-0 text-sm font-semibold tabular-nums text-slate-700">
+                  {occ.shortage_rating}/5
+                </span>
+              </div>
+              <p className="mt-1 text-xs text-slate-400">{shortageLabel(occ.shortage_rating, t)}</p>
+            </div>
+          )}
+
+          {occ.data_source && (
+            <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+              <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Source</p>
+              <p className="mt-1 text-xs text-slate-600">{occ.data_source}</p>
+              {occ.last_verified && (
+                <p className="mt-0.5 text-[10px] text-slate-400">Verified: {occ.last_verified}</p>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </>
+  )
+}
+
+function CAShortageList({ rows, onSelectOcc }: { rows: CAOccRow[]; onSelectOcc?: (code: string) => void }) {
   const t = useTranslations()
   const locale = useLocale()
   const [limit, setLimit] = useState(10)
@@ -2211,6 +2367,7 @@ function CAShortageList({ rows }: { rows: CAOccRow[] }) {
         <li key={r.noc_code}>
           <button
             type="button"
+            onClick={() => onSelectOcc?.(r.noc_code)}
             className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50"
           >
             <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
@@ -2243,18 +2400,20 @@ function CAShortageList({ rows }: { rows: CAOccRow[] }) {
   )
 }
 
-function CAHighPayList({ rows }: { rows: CAHighPayOccupation[] }) {
+function CAHighPayList({ rows, provinceRows, onSelectOcc }: { rows: CAHighPayOccupation[]; provinceRows?: CAHighPayOccupation[]; onSelectOcc?: (code: string) => void }) {
   const t = useTranslations()
   const locale = useLocale()
-  if (rows.length === 0) {
+  const display = provinceRows && provinceRows.length > 0 ? provinceRows : rows
+  if (display.length === 0) {
     return <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>
   }
   return (
     <ol>
-      {rows.map((r, i) => (
+      {display.map((r, i) => (
         <li key={r.noc_code}>
           <button
             type="button"
+            onClick={() => onSelectOcc?.(r.noc_code)}
             className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50"
           >
             <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
