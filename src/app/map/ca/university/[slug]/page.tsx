@@ -1,5 +1,6 @@
 import { getMapData } from "@/lib/map-data"
 import { pageMetadata } from "@/lib/seo"
+import { CA_PROVINCE_NAMES } from "../../../states"
 import AustraliaMap from "../../../AustraliaMap"
 
 export const revalidate = 86400
@@ -15,10 +16,11 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const college = data.caColleges.find((c) => c.slug === params.slug)
   if (!college) return pageMetadata({ title: "University Details", description: "", path: "/map" })
 
-  const title = `${college.college_name} — ${college.province}`
+  const provinceName = CA_PROVINCE_NAMES[college.province] ?? college.province
+  const title = `${college.college_name} — ${provinceName}`
   const description = college.median_earnings != null
-    ? `${college.college_name} in ${college.city_name}, ${college.province}. Median earnings $${college.median_earnings.toLocaleString()} · Graduation rate ${Math.round(college.graduation_rate! * 100)}%`
-    : `${college.college_name} in ${college.city_name}, ${college.province}. Learn about tuition, earnings, and more.`
+    ? `${college.college_name} in ${college.city_name}, ${provinceName}. Median earnings $${college.median_earnings.toLocaleString()} · Graduation rate ${Math.round(college.graduation_rate! * 100)}%`
+    : `${college.college_name} in ${college.city_name}, ${provinceName}. Learn about tuition, earnings, and more.`
 
   return pageMetadata({
     title,
