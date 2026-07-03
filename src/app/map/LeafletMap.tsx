@@ -830,10 +830,12 @@ export default function LeafletMap({
       fitToBounds(AU_BOUNDS, true)
     } else if (activeCountry === "US") {
       if (usLayerRef.current) map.addLayer(usLayerRef.current)
+      if (caLayerRef.current) map.addLayer(caLayerRef.current)
       fitToBounds(US_BOUNDS, true)
       updateMarkers()
     } else if (activeCountry === "CA") {
       if (caLayerRef.current) map.addLayer(caLayerRef.current)
+      if (usLayerRef.current) map.addLayer(usLayerRef.current)
       fitToBounds(CA_BOUNDS, true)
     } else if (activeCountry === "IE") {
       if (ieLayerRef.current) map.addLayer(ieLayerRef.current)
