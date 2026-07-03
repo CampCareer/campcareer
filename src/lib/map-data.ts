@@ -99,6 +99,17 @@ export interface AURankedCollege {
   slug: string
 }
 
+export interface CACollege {
+  institution_id: string
+  college_name: string
+  city_name: string
+  province: string
+  median_earnings: number | null
+  graduation_rate: number | null
+  avg_net_price: number | null
+  slug: string
+}
+
 // { "WA": { "1": 1.000, "3": 1.222, ... } }
 export type StateSalaryMult = Record<string, Record<string, number>>
 
@@ -134,6 +145,7 @@ export interface MapData {
   usMajorDensity: Record<string, StateMajorDensity[]>
   usRankedColleges: USRankedCollege[]
   auRankedColleges: AURankedCollege[]
+  caColleges: CACollege[]
 }
 
 export type OccRow = {
@@ -485,8 +497,43 @@ async function getCoursesByFieldState(): Promise<Record<string, Record<string, C
   return result
 }
 
+async function getCAColleges(): Promise<CACollege[]> {
+  const { data, error } = await supabaseAdmin
+    .from("colleges_ca")
+    .select("institution_id, name, city, province, median_earnings, graduation_rate, avg_net_price")
+    .order("median_earnings", { ascending: false })
+    .limit(100)
+
+  if (error) {
+    console.error("[map-data] colleges_ca fetch failed:", error)
+    return []
+  }
+
+  return (data ?? []).map((r: {
+    institution_id: string
+    name: string
+    city: string
+    province: string
+    median_earnings: number | null
+    graduation_rate: number | null
+    avg_net_price: number | null
+  }) => ({
+    institution_id: r.institution_id,
+    college_name: r.name,
+    city_name: r.city,
+    province: r.province,
+    median_earnings: r.median_earnings,
+    graduation_rate: r.graduation_rate,
+    avg_net_price: r.avg_net_price,
+    slug: r.name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, ""),
+  }))
+}
+
 async function getMapDataUncached(): Promise<MapData> {
-  const [occupations, stateRows, usColleges, multRows, coursesByFieldState] = await Promise.all([
+  const [occupations, stateRows, usColleges, multRows, coursesByFieldState, caColleges] = await Promise.all([
     fetchAll<OccRow>(
       "occupations_au",
       "anzsco_code, anzsco_v13, occupation_en, occupation_ko, shortage_rating, median_salary_aud, on_csol, confidence, related_broad_field, pr_note_ko, source_name, source_url, last_verified",
@@ -498,6 +545,7 @@ async function getMapDataUncached(): Promise<MapData> {
       .select("state, anzsco_1digit, multiplier")
       .then((r) => (r.data ?? []) as { state: string; anzsco_1digit: string; multiplier: number }[]),
     getCoursesByFieldState(),
+    getCAColleges(),
   ])
 
   // { "WA": { "3": 1.222, ... } }
@@ -586,7 +634,7 @@ async function getMapDataUncached(): Promise<MapData> {
   const usRankedColleges = getUSRankedColleges(usColleges)
   const auRankedColleges = getAURankedColleges()
 
-  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages, coursesByFieldState, usStateInfo, usMajorDensity, usRankedColleges, auRankedColleges }
+  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages, coursesByFieldState, usStateInfo, usMajorDensity, usRankedColleges, auRankedColleges, caColleges }
 }
 
 // cross-instance 공유 캐시(방어선). 페이지가 force-static이라 보통 빌드/리밸리데이트

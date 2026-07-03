@@ -8,7 +8,7 @@ import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useTranslations, useLocale } from "@/lib/i18n/locale-provider"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { STATE_CODES, STATE_NAMES, US_STATE_CODES, US_STATE_NAMES, IE_COUNTY_CODES, IE_COUNTY_NAMES, IE_CITY_TO_COUNTY, type StateCode } from "./states"
+import { STATE_CODES, STATE_NAMES, US_STATE_CODES, US_STATE_NAMES, IE_COUNTY_CODES, IE_COUNTY_NAMES, IE_CITY_TO_COUNTY, CA_PROVINCE_CODES, CA_PROVINCE_NAMES, type StateCode } from "./states"
 import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
 import { WHV_REGIONS } from "@/data/whv-regions"
 import { WHV_SPECIFIED_WORK } from "@/data/whv-occupations"
@@ -23,7 +23,7 @@ import { AffiliateCtas } from "@/components/partners/partner-cta"
 import JobListings from "./JobListings"
 import { EMPLOYMENT_OCCUPATIONS } from "@/data/employment-occupations"
 import { EMPLOYMENT_SALARIES } from "@/data/employment-salaries"
-import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc, CourseLite, USStateInfo, StateMajorDensity, USRankedCollege, AURankedCollege } from "@/lib/map-data"
+import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc, CourseLite, USStateInfo, StateMajorDensity, USRankedCollege, AURankedCollege, CACollege } from "@/lib/map-data"
 import { createClient } from "@/lib/supabase-client"
 import type { User } from "@supabase/supabase-js"
 import { getShortageOccupations } from "@/lib/ie-shortage-occupations"
@@ -398,7 +398,6 @@ export default function AustraliaMap({
   }, [activeCountry])
 
   const onSelectCountry = useCallback((country: "AU" | "US" | "CA" | "IE") => {
-    if (country === "CA") return
     setActiveCountry(country)
     setSelected(null)
     setSelectedSA4(null)
@@ -424,8 +423,14 @@ export default function AustraliaMap({
       setSelectedUniv(auUniv)
       setActiveCountry("AU")
       setSelected(auUniv.college_state)
+      return
     }
-  }, [initialUniversity, data.usRankedColleges, data.auRankedColleges])
+    const caUniv = data.caColleges.find((c) => c.slug === initialUniversity)
+    if (caUniv) {
+      setActiveCountry("CA")
+      setSelected(caUniv.province)
+    }
+  }, [initialUniversity, data.usRankedColleges, data.auRankedColleges, data.caColleges])
 
   const onReset = useCallback(() => {
     if (selected !== null) {
@@ -489,13 +494,15 @@ export default function AustraliaMap({
     return ieSchools.filter((s) => IE_CITY_TO_COUNTY[s.city] === selected)
   }, [ieSchools, selected, activeCountry])
 
-  const countryLabel = activeCountry === "AU" ? "🇦🇺 Australia" : activeCountry === "US" ? "🇺🇸 United States" : activeCountry === "IE" ? "🇮🇪 Ireland" : ""
+  const countryLabel = activeCountry === "AU" ? "🇦🇺 Australia" : activeCountry === "US" ? "🇺🇸 United States" : activeCountry === "CA" ? "🇨🇦 Canada" : activeCountry === "IE" ? "🇮🇪 Ireland" : ""
   const stateLabel = selected
     ? activeCountry === "AU"
       ? STATE_NAMES[selected as StateCode]
-      : activeCountry === "IE"
-        ? IE_COUNTY_NAMES[selected] ?? selected
-        : US_STATE_NAMES[selected]
+      : activeCountry === "CA"
+        ? CA_PROVINCE_NAMES[selected] ?? selected
+        : activeCountry === "IE"
+          ? IE_COUNTY_NAMES[selected] ?? selected
+          : US_STATE_NAMES[selected]
     : ""
   const occLabel = selectedOccCode
     ? activeCountry === "AU"
@@ -508,7 +515,7 @@ export default function AustraliaMap({
 
   return (
     <div className="flex h-full w-full flex-col">
-      {(activeCountry === "AU" || activeCountry === "US" || activeCountry === "IE") && (
+      {(activeCountry === "AU" || activeCountry === "US" || activeCountry === "CA" || activeCountry === "IE") && (
       <>
         {!toolbarExpanded && (
           <button
@@ -527,9 +534,9 @@ export default function AustraliaMap({
         <label className="block">
           <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectCountry}</span>
           <Select
-            items={{ AU: "🇦🇺 Australia", US: "🇺🇸 United States", IE: "🇮🇪 Ireland" }}
+            items={{ AU: "🇦🇺 Australia", US: "🇺🇸 United States", CA: "🇨🇦 Canada", IE: "🇮🇪 Ireland" }}
             value={activeCountry ?? undefined}
-            onValueChange={(v) => v && onSelectCountry(v as "AU" | "US" | "IE")}
+            onValueChange={(v) => v && onSelectCountry(v as "AU" | "US" | "CA" | "IE")}
           >
             <SelectTrigger className="h-10 w-44 rounded-lg border-slate-200 text-sm">
               <SelectValue placeholder={t.map.selectCountryPlaceholder} />
@@ -537,6 +544,7 @@ export default function AustraliaMap({
             <SelectContent className="z-[2000]">
               <SelectItem value="AU">🇦🇺 Australia</SelectItem>
               <SelectItem value="US">🇺🇸 United States</SelectItem>
+              <SelectItem value="CA">🇨🇦 Canada</SelectItem>
               <SelectItem value="IE">🇮🇪 Ireland</SelectItem>
             </SelectContent>
           </Select>
@@ -567,7 +575,7 @@ export default function AustraliaMap({
           <label className="block">
             <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectState}</span>
             <Select
-              items={activeCountry === "AU" ? stateItems : US_STATE_NAMES}
+              items={activeCountry === "AU" ? stateItems : activeCountry === "CA" ? CA_PROVINCE_NAMES : US_STATE_NAMES}
               value={selected}
               onValueChange={(v) => {
                 if (!v) return
@@ -579,9 +587,9 @@ export default function AustraliaMap({
                 <SelectValue placeholder={t.map.selectStatePlaceholder} />
               </SelectTrigger>
               <SelectContent className="z-[2000]">
-                {(activeCountry === "AU" ? STATE_CODES : US_STATE_CODES).map((c) => (
+                {(activeCountry === "AU" ? STATE_CODES : activeCountry === "CA" ? CA_PROVINCE_CODES : US_STATE_CODES).map((c) => (
                   <SelectItem key={c} value={c}>
-                    {activeCountry === "AU" ? STATE_NAMES[c as StateCode] : US_STATE_NAMES[c]}
+                    {activeCountry === "AU" ? STATE_NAMES[c as StateCode] : activeCountry === "CA" ? CA_PROVINCE_NAMES[c] : US_STATE_NAMES[c]}
                   </SelectItem>
                 ))}
                 {activeCountry === "AU" && (
@@ -692,6 +700,12 @@ export default function AustraliaMap({
               setSelectedUniv(auUniv)
               setActiveCountry("AU")
               setSelected(auUniv.college_state)
+              return
+            }
+            const caUniv = data.caColleges.find((c) => c.slug === slug)
+            if (caUniv) {
+              setActiveCountry("CA")
+              setSelected(caUniv.province)
             }
           }}
           onReset={onReset}
@@ -938,9 +952,9 @@ function Panel({
       {!isWhv && (
       <div className="px-5 pt-3">
         <div className="inline-flex rounded-lg bg-slate-100 p-1 text-sm">
-          {isUS && (
+          {(isUS || activeCountry === "CA") && (
             <TabButton active={tab === "stateInfo"} onClick={() => { onTab("stateInfo"); track("switch_tab", { tab: "stateInfo", state: selected }) }}>
-              {t.map.tabStateInfo}
+              {activeCountry === "CA" ? "Universities" : t.map.tabStateInfo}
             </TabButton>
           )}
           <TabButton active={tab === "shortage"} onClick={() => { onTab("shortage"); track("switch_tab", { tab: "shortage", state: selected }) }}>
@@ -970,6 +984,12 @@ function Panel({
             majors={data.usMajorDensity[selected] ?? []}
           />
         )}
+        {tab === "stateInfo" && activeCountry === "CA" && (
+          <CACollegesPanel
+            colleges={data.caColleges}
+            province={selected}
+          />
+        )}
         {tab === "shortage" && isAU && (
           selectedSA4 ? (
             <RegionGroupList
@@ -989,7 +1009,8 @@ function Panel({
           )
         )}
         {tab === "shortage" && isUS && <USShortageList rows={usShortage} onSelectOcc={handleUSSelectOcc} />}
-        {tab === "shortage" && !isAU && !isUS && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
+        {tab === "shortage" && !isAU && !isUS && activeCountry !== "CA" && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
+        {tab === "shortage" && activeCountry === "CA" && <p className="py-8 text-center text-sm text-slate-400">Occupational shortage data coming soon.</p>}
         {tab === "pay" && isAU && (
           selectedSA4 ? (
             <RegionGroupList
@@ -1015,7 +1036,8 @@ function Panel({
           )
         )}
         {tab === "pay" && isUS && <USHighPayList rows={usHighPay} onSelectOcc={handleUSSelectOcc} />}
-        {tab === "pay" && !isAU && !isUS && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
+        {tab === "pay" && !isAU && !isUS && activeCountry !== "CA" && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
+        {tab === "pay" && activeCountry === "CA" && <p className="py-8 text-center text-sm text-slate-400">Salary data coming soon.</p>}
         {tab === "employment" && (
           <EmploymentList
             sa4={selectedSA4}
@@ -2115,6 +2137,43 @@ function StateInfoPanel({
           </ol>
         )}
       </section>
+    </div>
+  )
+}
+
+function CACollegesPanel({
+  colleges,
+  province,
+}: {
+  colleges: CACollege[]
+  province: string | null
+}) {
+  const filtered = province ? colleges.filter((c) => c.province === province) : colleges
+  if (filtered.length === 0) {
+    return <p className="py-8 text-center text-sm text-slate-400">No university data for this province yet.</p>
+  }
+  return (
+    <div className="space-y-3">
+      <p className="text-xs text-slate-500">{filtered.length} universities{province ? ` in ${CA_PROVINCE_NAMES[province] ?? province}` : ""}</p>
+      <ol>
+        {filtered.map((c, i) => (
+          <li key={c.institution_id}>
+            <Link
+              href={`/map/ca/university/${c.slug}`}
+              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50"
+            >
+              <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-sm font-medium text-slate-800">{c.college_name}</span>
+                <span className="mt-0.5 text-xs text-slate-400">{c.city_name}</span>
+              </span>
+              <span className="shrink-0 text-right text-sm font-semibold tabular-nums text-slate-700">
+                {c.median_earnings != null ? `$${c.median_earnings.toLocaleString()}` : "—"}
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ol>
     </div>
   )
 }
