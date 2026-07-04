@@ -11,7 +11,7 @@
     "author": "CampCareer Research Team",
     "authorRole": "2026년 6월 업데이트 · 출처: 각 어학원 공시 학비, ACELS(Accreditation and Co-ordination of English Language Services), MEI(Marketing English in Ireland)",
     "authorInitials": "CC",
-    "heroImage": "/blog/images/TCU.jpg",
+    "heroImage": "/blog/images/TCU.webp",
     "heroImageAlt": "아일랜드 더블린 트리니티 칼리지 더블린 (TCU)"
   },
   {
@@ -326,7 +326,7 @@
     "author": "CampCareer Research Team",
     "authorRole": "Updated June 2026 · Sources: MOE Graduate Employment Survey, NUS, NTU, Glassdoor, ZipRecruiter, mid-market FX rates June 2026",
     "authorInitials": "CC",
-    "heroImage": "/blog/images/Singapore.jpg",
+    "heroImage": "/blog/images/Singapore.webp",
     "heroImageAlt": "Marina Bay Sands and the Singapore skyline, representing the financial decision behind studying abroad versus staying home"
   },
   {
@@ -371,7 +371,7 @@
     "author": "Yaehun Lee",
     "authorRole": "March 2026 · Sources: KEDI 2023, IIE Open Doors 2024, Military Manpower Administration, QS Rankings 2026, IRCC, DESE",
     "authorInitials": "YL",
-    "heroImage": "/blog/images/Korean.jpg",
+    "heroImage": "/blog/images/Korean.webp",
     "heroImageAlt": "University students in graduation gowns throwing caps in the air, celebrating academic achievement"
   },
   {
@@ -416,7 +416,7 @@
     "author": "Yaehun Lee",
     "authorRole": "March 2026 · Sources: IRCC, USCIS, QS Rankings 2026, Statistics Canada, U.S. Bureau of Labor Statistics",
     "authorInitials": "YL",
-    "heroImage": "/blog/images/Canada.jpg",
+    "heroImage": "/blog/images/Canada.webp",
     "heroImageAlt": "International students studying together at a university library, laptops and notebooks open"
   },
   {
@@ -467,7 +467,7 @@
     "authorInitials": "CC",
     "reviewedBy": "CampCareer Editorial Team",
     "lastReviewed": "2026-06-14",
-    "heroImage": "/blog/images/China.jpg",
+    "heroImage": "/blog/images/China.webp",
     "heroImageAlt": "International university graduation ceremony with students in academic gowns"
   },
   {
@@ -485,7 +485,7 @@
     "authorInitials": "CC",
     "reviewedBy": "CampCareer Editorial Team",
     "lastReviewed": "2026-06-14",
-    "heroImage": "/blog/images/UoT.jpg",
+    "heroImage": "/blog/images/UoT.webp",
     "heroImageAlt": "University of Toronto historic campus buildings surrounded by autumn foliage in downtown Toronto"
   },
   {
@@ -612,7 +612,7 @@
     "authorInitials": "CC",
     "reviewedBy": "CampCareer Editorial Team",
     "lastReviewed": "2026-06-14",
-    "heroImage": "/blog/images/Sydney_Opera_House.JPG",
+    "heroImage": "/blog/images/Sydney_Opera_House.webp",
     "heroImageAlt": "Sydney Opera House and harbour skyline, Australia"
   },
   {
@@ -666,7 +666,7 @@
     "authorInitials": "CC",
     "reviewedBy": "CampCareer Editorial Team",
     "lastReviewed": "2026-06-14",
-    "heroImage": "/blog/images/UNSW.jpg",
+    "heroImage": "/blog/images/UNSW.webp",
     "heroImageAlt": "Sydney skyline at sunset with Harbour Bridge and Opera House reflected in the water"
   },
   {
@@ -684,7 +684,7 @@
     "authorInitials": "CC",
     "reviewedBy": "CampCareer Editorial Team",
     "lastReviewed": "2026-06-14",
-    "heroImage": "/blog/images/Melbourne_University.jpg",
+    "heroImage": "/blog/images/Melbourne_University.webp",
     "heroImageAlt": "University of Melbourne main quadrangle building with Gothic architecture"
   },
   {
@@ -720,7 +720,7 @@
     "authorInitials": "CC",
     "reviewedBy": "CampCareer Editorial Team",
     "lastReviewed": "2026-06-14",
-    "heroImage": "/blog/images/AUS_PR.jpg",
+    "heroImage": "/blog/images/AUS_PR.webp",
     "heroImageAlt": "Australian permanent residency documents and passport on a wooden desk"
   },
   {
@@ -750,7 +750,7 @@
     "tag": "Australia",
     "tagColor": "bg-amber-100 text-amber-700",
     "featured": true,
-    "heroImage": "/blog/images/sydney-harbour.jpg",
+    "heroImage": "/blog/images/sydney-harbour.webp",
     "heroImageAlt": "View of Sydney Harbour Bridge and CBD skyline from Observatory Hill, Sydney",
     "author": "Yaehun Lee",
     "authorTitle": "Study Abroad Analyst, CampCareer",

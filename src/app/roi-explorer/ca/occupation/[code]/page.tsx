@@ -6,11 +6,7 @@ import { JsonLd, breadcrumbLd } from "@/components/seo/json-ld"
 import CAOccupationDetailPage from "./CAOccupationDetailPage"
 
 export const revalidate = 3600
-
-export async function generateStaticParams() {
-  const { data } = await supabase.from("occupations_ca").select("noc_code")
-  return (data ?? []).map((r) => ({ code: r.noc_code })).filter((p) => p.code)
-}
+export const dynamicParams = true
 
 export async function generateMetadata({ params }: { params: { code: string } }): Promise<Metadata> {
   const { data } = await supabase

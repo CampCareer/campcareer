@@ -1,6 +1,6 @@
 // POST-DEPLOY ACTIONS:
-// 1. Check build log for "[sitemap] counts" line — AU occupations must show 395, US must show 116
-// 2. Open https://www.campcareer.com/sitemap.xml in browser and verify 560+ URLs are present
+// 1. Check build log for "[sitemap] counts" line — AU occupations: 395, US: 116, CA occupations: 514, CA colleges: ~30
+// 2. Open https://www.campcareer.com/sitemap.xml in browser and verify 1,100+ URLs are present
 // 3. Go to Google Search Console → Sitemaps → delete old sitemap.xml entry → resubmit
 // 4. Go to Search Console → URL Inspection → manually request indexing for 10 high-priority occupation pages per day
 // 5. Monitor Search Console → Pages tab over the next 2–4 weeks for indexed page count increase
@@ -63,12 +63,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "monthly",
   }))
 
-  // 대학 디테일 — 호주만 색인
+  // 대학 디테일 — 호주 + 캐나다
   const detailPages: MetadataRoute.Sitemap = []
-  const ids = await fetchCollegeIds(AU_MATVIEW)
-  for (const id of ids) {
+  const auIds = await fetchCollegeIds(AU_MATVIEW)
+  for (const id of auIds) {
     detailPages.push({
       url: `${BASE}/roi-explorer/au/${id}`,
+      priority: 0.5,
+      changeFrequency: "monthly",
+    })
+  }
+  const { data: caColleges } = await supabase
+    .from("colleges_ca")
+    .select("institution_id")
+  for (const row of caColleges ?? []) {
+    if (!row.institution_id) continue
+    detailPages.push({
+      url: `${BASE}/roi-explorer/ca/${row.institution_id}`,
       priority: 0.5,
       changeFrequency: "monthly",
     })
@@ -97,6 +108,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
     changeFrequency: "weekly",
   }))
+
+  // CA 직업 디테일 — NOC 514개
+  const caOccupationPages: MetadataRoute.Sitemap = []
+  const { data: caOccCodes, error: caOccError } = await supabase
+    .from("occupations_ca")
+    .select("noc_code")
+  if (caOccError) console.error("[sitemap] occupations_ca failed:", caOccError.message)
+  for (const row of caOccCodes ?? []) {
+    if (!row.noc_code) continue
+    caOccupationPages.push({
+      url: `${BASE}/roi-explorer/ca/occupation/${row.noc_code}`,
+      priority: 0.6,
+      changeFrequency: "weekly",
+    })
+  }
 
   // 아일랜드 어학원
   const ieSchoolSlugs = await getAllSlugs()
@@ -151,8 +177,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   const total = staticPages.length + blogPages.length + detailPages.length +
-    occupationPages.length + usOccupationPages.length + ieLangSchoolPages.length + mapPages.length + usUnivPages.length + auUnivPages.length + caUnivPages.length
-  console.log(`[sitemap] counts — static: ${staticPages.length}, blog: ${blogPages.length}, AU colleges: ${detailPages.length}, AU occupations: ${occupationPages.length}, US occupations: ${usOccupationPages.length}, IE schools: ${ieLangSchoolPages.length}, map: ${mapPages.length}, US universities: ${usUnivPages.length}, AU universities: ${auUnivPages.length}, CA universities: ${caUnivPages.length}, TOTAL: ${total}`)
+    occupationPages.length + usOccupationPages.length + caOccupationPages.length + ieLangSchoolPages.length + mapPages.length + usUnivPages.length + auUnivPages.length + caUnivPages.length
+  console.log(`[sitemap] counts — static: ${staticPages.length}, blog: ${blogPages.length}, AU colleges: ${detailPages.length}, AU occupations: ${occupationPages.length}, US occupations: ${usOccupationPages.length}, CA occupations: ${caOccupationPages.length}, IE schools: ${ieLangSchoolPages.length}, map: ${mapPages.length}, US universities: ${usUnivPages.length}, AU universities: ${auUnivPages.length}, CA universities: ${caUnivPages.length}, TOTAL: ${total}`)
 
-  return [...staticPages, ...blogPages, ...detailPages, ...occupationPages, ...usOccupationPages, ...ieLangSchoolPages, ...mapPages, ...usUnivPages, ...auUnivPages, ...caUnivPages]
+  return [...staticPages, ...blogPages, ...detailPages, ...occupationPages, ...usOccupationPages, ...caOccupationPages, ...ieLangSchoolPages, ...mapPages, ...usUnivPages, ...auUnivPages, ...caUnivPages]
 }
