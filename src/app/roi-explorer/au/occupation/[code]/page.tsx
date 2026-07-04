@@ -1,17 +1,12 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { getOccupationPageData, getOccupationMeta } from "@/lib/occupation-detail"
-import { supabase } from "@/lib/supabase"
 import { pageMetadata } from "@/lib/seo"
 import { JsonLd, breadcrumbLd } from "@/components/seo/json-ld"
 import OccupationDetailPage from "./OccupationDetailPage"
 
 export const revalidate = 3600
-
-export async function generateStaticParams() {
-  const { data } = await supabase.from("occupations_au").select("anzsco_code")
-  return (data ?? []).map((r) => ({ code: r.anzsco_code })).filter((p) => p.code)
-}
+export const dynamicParams = true
 
 export async function generateMetadata({ params }: { params: { code: string } }): Promise<Metadata> {
   const occ = await getOccupationMeta(params.code)
