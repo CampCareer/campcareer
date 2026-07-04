@@ -111,6 +111,8 @@ export interface CACollege {
   median_earnings: number | null
   graduation_rate: number | null
   avg_net_price: number | null
+  qs_rank: number | null
+  website: string | null
   slug: string
 }
 
@@ -603,7 +605,7 @@ async function getCACities(): Promise<CACity[]> {
 async function getCAColleges(): Promise<CACollege[]> {
   const { data, error } = await supabaseAdmin
     .from("colleges_ca")
-    .select("institution_id, name, city, province, median_earnings, graduation_rate, avg_net_price")
+    .select("institution_id, name, city, province, median_earnings, graduation_rate, avg_net_price, qs_rank, website")
     .order("median_earnings", { ascending: false })
     .limit(100)
 
@@ -623,6 +625,8 @@ async function getCAColleges(): Promise<CACollege[]> {
     median_earnings: number | null
     graduation_rate: number | null
     avg_net_price: number | null
+    qs_rank: number | null
+    website: string | null
   }) => {
     const key = `${r.city.toLowerCase()}|${r.province}`
     const coord = coords.get(key) ?? defaultCoord
@@ -636,6 +640,8 @@ async function getCAColleges(): Promise<CACollege[]> {
       median_earnings: r.median_earnings,
       graduation_rate: r.graduation_rate,
       avg_net_price: r.avg_net_price,
+      qs_rank: r.qs_rank,
+      website: r.website,
       slug: r.name
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, "-")
