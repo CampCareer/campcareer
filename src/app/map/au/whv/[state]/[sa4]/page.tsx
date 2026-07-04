@@ -1,7 +1,7 @@
 import { getMapData } from "@/lib/map-data"
 import { pageMetadata } from "@/lib/seo"
 import AustraliaMap from "../../../../AustraliaMap"
-import { type StateCode } from "../../../../states"
+import { STATE_CODES, type StateCode } from "../../../../states"
 import { WHV_REGIONS } from "@/data/whv-regions"
 
 const STATE_NAMES_KO: Record<StateCode, string> = {
