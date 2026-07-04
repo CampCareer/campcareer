@@ -46,3 +46,14 @@ cricos_*.xlsx
 hea_*.json
 supabase/.temp/
 temp-ie-geojson/
+
+# seed-only reference data (not used at runtime)
+src/data/ca-province-outlook.json
+src/data/ca-employment-income.json
+src/data/ca-shortage-ratings.json
+src/data/ca-occupation-province-sample.json
+src/data/us-collegescorecard.json
+src/data/ie-graduate-outcomes.json
+
+# raw source data
+souces/
