@@ -1,8 +1,7 @@
 import { getMapData } from "@/lib/map-data"
 import { pageMetadata } from "@/lib/seo"
 import AustraliaMap from "../../../../AustraliaMap"
-import { STATE_CODES, type StateCode } from "../../../../states"
-import { SA4_BY_STATE } from "@/data/sa4-regions"
+import { type StateCode } from "../../../../states"
 import { WHV_REGIONS } from "@/data/whv-regions"
 
 const STATE_NAMES_KO: Record<StateCode, string> = {
@@ -23,18 +22,6 @@ const CATEGORY_LABEL: Record<string, string> = {
 }
 
 export const revalidate = 86400
-export const dynamic = "force-static"
-
-export function generateStaticParams() {
-  const params: { state: string; sa4: string }[] = []
-  for (const sc of STATE_CODES) {
-    const regions = SA4_BY_STATE[sc] ?? []
-    for (const r of regions) {
-      params.push({ state: sc.toLowerCase(), sa4: r.code })
-    }
-  }
-  return params
-}
 
 function toStateCode(param: string): StateCode | null {
   const upper = param.toUpperCase() as StateCode

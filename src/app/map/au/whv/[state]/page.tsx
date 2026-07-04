@@ -15,11 +15,6 @@ const STATE_NAMES_KO: Record<StateCode, string> = {
 }
 
 export const revalidate = 86400
-export const dynamic = "force-static"
-
-export function generateStaticParams() {
-  return STATE_CODES.map((code) => ({ state: code.toLowerCase() }))
-}
 
 function toStateCode(param: string): StateCode | null {
   const upper = param.toUpperCase() as StateCode

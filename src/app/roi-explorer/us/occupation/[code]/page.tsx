@@ -1,16 +1,12 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { cache } from "react"
-import { getUSOccDetail, getUSOccCodes } from "@/lib/us-occupation-detail"
+import { getUSOccDetail } from "@/lib/us-occupation-detail"
 import { pageMetadata } from "@/lib/seo"
 import { JsonLd, breadcrumbLd } from "@/components/seo/json-ld"
 import USOccupationDetailPage from "./USOccupationDetailPage"
 
 export const revalidate = 86400
-
-export async function generateStaticParams() {
-  return getUSOccCodes().map((code) => ({ code }))
-}
 
 const getDetail = cache(getUSOccDetail)
 

@@ -7,16 +7,11 @@ import { TopNav } from "@/components/layout/top-nav"
 import { SiteFooter } from "@/components/layout/site-footer"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
-import { getSchoolsByCity, getCities, type LanguageSchool } from "@/lib/language-schools-ie"
+import { getSchoolsByCity, type LanguageSchool } from "@/lib/language-schools-ie"
 import { pageMetadata } from "@/lib/seo"
 import { JsonLd, breadcrumbLd } from "@/components/seo/json-ld"
 
 export const revalidate = 86400
-
-export async function generateStaticParams() {
-  const cities = await getCities()
-  return cities.map((city) => ({ city: city.toLowerCase() }))
-}
 
 function capitalize(s: string) {
   return s.charAt(0).toUpperCase() + s.slice(1)

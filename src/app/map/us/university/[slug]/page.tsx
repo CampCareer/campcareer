@@ -3,12 +3,6 @@ import { pageMetadata } from "@/lib/seo"
 import AustraliaMap from "../../../AustraliaMap"
 
 export const revalidate = 86400
-export const dynamic = "force-static"
-
-export async function generateStaticParams() {
-  const data = await getMapData()
-  return data.usRankedColleges.map((c) => ({ slug: c.slug }))
-}
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const data = await getMapData()
