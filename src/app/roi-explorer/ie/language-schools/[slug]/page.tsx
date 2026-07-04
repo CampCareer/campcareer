@@ -1,16 +1,11 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { getSchoolBySlug, getAllSlugs } from "@/lib/language-schools-ie"
+import { getSchoolBySlug } from "@/lib/language-schools-ie"
 import { pageMetadata } from "@/lib/seo"
 import { JsonLd, breadcrumbLd } from "@/components/seo/json-ld"
 import SchoolDetailPage from "./SchoolDetailPage"
 
 export const revalidate = 86400
-
-export async function generateStaticParams() {
-  const slugs = await getAllSlugs()
-  return slugs.map((slug) => ({ slug }))
-}
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const school = await getSchoolBySlug(params.slug)
