@@ -8,7 +8,8 @@ import usStateInfoRaw from "@/data/us-state-info.json"
 import usUniversityRankingsRaw from "@/data/us-university-rankings.json"
 import auUniversityRankingsRaw from "@/data/au-university-rankings.json"
 import usOccupationStateRaw from "@/data/us-occupation-state.json"
-import caProvinceSampleRaw from "@/data/ca-occupation-province-sample.json"
+import caOccupationStateRaw from "@/data/ca-occupation-state.json"
+import caCitiesRaw from "@/data/ca-cities.json"
 
 // 지도 페이지용 데이터 계층. occupations_au + occupation_state_au 를 읽어 JS 에서 조인한다.
 // occupation_state_au 는 anon RLS 가 막혀 있어 서버 전용 service-role 클라이언트로 읽는다.
@@ -105,6 +106,8 @@ export interface CACollege {
   college_name: string
   city_name: string
   province: string
+  lat: number
+  lng: number
   median_earnings: number | null
   graduation_rate: number | null
   avg_net_price: number | null
@@ -135,6 +138,27 @@ export interface CAHighPayOccupation {
   occupation_ko: string | null
   median_salary_cad: number | null
   shortage_rating: number | null
+}
+
+export interface CAProvinceOccupation {
+  noc_code: string
+  occupation_en: string
+  occupation_ko: string | null
+  median_salary_cad: number | null
+  low_wage_cad: number | null
+  high_wage_cad: number | null
+  shortage_rating: number | null
+  province_shortage_rating: number | null
+}
+
+export interface CAStateRow {
+  noc_code: string
+  province: string
+  median_wage_cad: number | null
+  low_wage_cad: number | null
+  high_wage_cad: number | null
+  shortage_rating: number | null
+  data_source: string | null
 }
 
 // { "WA": { "1": 1.000, "3": 1.222, ... } }
@@ -176,6 +200,16 @@ export interface MapData {
   caOccupations: Record<string, CAOccRow>
   caHighPay: CAHighPayOccupation[]
   caHighPayByProvince: Record<string, CAHighPayOccupation[]>
+  caProvinceOccupations: Record<string, CAProvinceOccupation[]>
+  caProvinceShortages: Record<string, StateShortageByOcc[]>
+  caCities: CACity[]
+}
+
+export interface CACity {
+  name: string
+  province: string
+  rent_median: number | null
+  cost_of_living_index: number | null
 }
 
 export type OccRow = {
@@ -254,6 +288,21 @@ function getCityCoords(): Map<string, { lat: number; lng: number }> {
     map.set(key, { lat: city.lat, lng: city.lng })
   }
   _cityCoords = map
+  return map
+}
+
+// Canadian city → coordinate lookup
+let _caCityCoords: Map<string, { lat: number; lng: number }> | null = null
+
+function getCACityCoords(): Map<string, { lat: number; lng: number }> {
+  if (_caCityCoords) return _caCityCoords
+  const map = new Map<string, { lat: number; lng: number }>()
+  const cities = caCitiesRaw as unknown as Array<{ c: string; s: string; lat: number; lng: number }>
+  for (const city of cities) {
+    const key = `${city.c.toLowerCase()}|${city.s}`
+    map.set(key, { lat: city.lat, lng: city.lng })
+  }
+  _caCityCoords = map
   return map
 }
 
@@ -527,6 +576,30 @@ async function getCoursesByFieldState(): Promise<Record<string, Record<string, C
   return result
 }
 
+async function getCACities(): Promise<CACity[]> {
+  const { data, error } = await supabaseAdmin
+    .from("cities_ca")
+    .select("name, province, rent_median, cost_of_living_index")
+    .order("rent_median", { ascending: false })
+
+  if (error) {
+    console.error("[map-data] cities_ca fetch failed:", error)
+    return []
+  }
+
+  return (data ?? []).map((r: {
+    name: string
+    province: string
+    rent_median: number | null
+    cost_of_living_index: number | null
+  }) => ({
+    name: r.name,
+    province: r.province,
+    rent_median: r.rent_median,
+    cost_of_living_index: r.cost_of_living_index,
+  }))
+}
+
 async function getCAColleges(): Promise<CACollege[]> {
   const { data, error } = await supabaseAdmin
     .from("colleges_ca")
@@ -539,6 +612,9 @@ async function getCAColleges(): Promise<CACollege[]> {
     return []
   }
 
+  const coords = getCACityCoords()
+  const defaultCoord = { lat: 56, lng: -106 }  // Canada centroid fallback
+
   return (data ?? []).map((r: {
     institution_id: string
     name: string
@@ -547,23 +623,29 @@ async function getCAColleges(): Promise<CACollege[]> {
     median_earnings: number | null
     graduation_rate: number | null
     avg_net_price: number | null
-  }) => ({
-    institution_id: r.institution_id,
-    college_name: r.name,
-    city_name: r.city,
-    province: r.province,
-    median_earnings: r.median_earnings,
-    graduation_rate: r.graduation_rate,
-    avg_net_price: r.avg_net_price,
-    slug: r.name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-|-$/g, ""),
-  }))
+  }) => {
+    const key = `${r.city.toLowerCase()}|${r.province}`
+    const coord = coords.get(key) ?? defaultCoord
+    return {
+      institution_id: r.institution_id,
+      college_name: r.name,
+      city_name: r.city,
+      province: r.province,
+      lat: coord.lat,
+      lng: coord.lng,
+      median_earnings: r.median_earnings,
+      graduation_rate: r.graduation_rate,
+      avg_net_price: r.avg_net_price,
+      slug: r.name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, ""),
+    }
+  })
 }
 
 async function getMapDataUncached(): Promise<MapData> {
-  const [occupations, stateRows, usColleges, multRows, coursesByFieldState, caColleges, caOccupationsList] = await Promise.all([
+  const [occupations, stateRows, usColleges, multRows, coursesByFieldState, caColleges, caOccupationsList, caStateRows, caCities] = await Promise.all([
     fetchAll<OccRow>(
       "occupations_au",
       "anzsco_code, anzsco_v13, occupation_en, occupation_ko, shortage_rating, median_salary_aud, on_csol, confidence, related_broad_field, pr_note_ko, source_name, source_url, last_verified",
@@ -580,6 +662,11 @@ async function getMapDataUncached(): Promise<MapData> {
       "occupations_ca",
       "noc_code, occupation_en, occupation_ko, median_salary_cad, low_wage_cad, high_wage_cad, average_wage_cad, q1_wage_cad, q3_wage_cad, shortage_rating, on_teer_eligible, related_broad_field, confidence, data_source, last_verified",
     ),
+    fetchAll<CAStateRow>(
+      "occupation_state_ca",
+      "noc_code, province, median_wage_cad, low_wage_cad, high_wage_cad, shortage_rating, data_source",
+    ),
+    getCACities(),
   ])
 
   // { "WA": { "3": 1.222, ... } }
@@ -680,33 +767,72 @@ async function getMapDataUncached(): Promise<MapData> {
       shortage_rating: o.shortage_rating,
     }))
 
-  const caProvinceCodeFix: Record<string, string> = { PEI: "PE", YK: "YT", NWT: "NT" }
+  // CA province-level data from occupation_state_ca (or JSON fallback)
+  const caStateRowsRaw: CAStateRow[] = caStateRows.length > 0
+    ? caStateRows
+    : Object.entries(caOccupationStateRaw as Record<string, Array<Omit<CAStateRow, "province">>>)
+        .flatMap(([province, rows]) =>
+          rows.map((r) => ({ ...r, province }))
+        )
+
+  const caOccByProvince = new Map<string, CAStateRow[]>()
+  const caShortagesByOcc = new Map<string, StateShortageByOcc[]>()
+  for (const r of caStateRowsRaw) {
+    const arr = caOccByProvince.get(r.province) ?? []
+    arr.push(r)
+    caOccByProvince.set(r.province, arr)
+
+    if (r.shortage_rating != null) {
+      const sArr = caShortagesByOcc.get(r.noc_code) ?? []
+      sArr.push({ state: r.province, rating: r.shortage_rating })
+      caShortagesByOcc.set(r.noc_code, sArr)
+    }
+  }
+
+  const caProvinceOccupations: Record<string, CAProvinceOccupation[]> = {}
   const caHighPayByProvince: Record<string, CAHighPayOccupation[]> = {}
   for (const province of CA_PROVINCE_CODES) {
-    caHighPayByProvince[province] = []
-  }
-  const caProvinceSample = caProvinceSampleRaw as unknown as Record<string, Array<{ noc_code: string; title: string; median_wage_cad: number }>>
-  for (const [sampleCode, occs] of Object.entries(caProvinceSample)) {
-    const appCode = caProvinceCodeFix[sampleCode] ?? sampleCode
-    if (!caHighPayByProvince[appCode]) continue
-    caHighPayByProvince[appCode] = occs
-      .sort((a, b) => b.median_wage_cad - a.median_wage_cad)
+    const rows = caOccByProvince.get(province) ?? []
+    caProvinceOccupations[province] = rows
+      .filter((r) => caOccupations[r.noc_code])
+      .map((r) => {
+        const occ = caOccupations[r.noc_code]
+        return {
+          noc_code: r.noc_code,
+          occupation_en: occ.occupation_en,
+          occupation_ko: occ.occupation_ko,
+          median_salary_cad: r.median_wage_cad ?? occ.median_salary_cad,
+          low_wage_cad: r.low_wage_cad ?? occ.low_wage_cad,
+          high_wage_cad: r.high_wage_cad ?? occ.high_wage_cad,
+          shortage_rating: occ.shortage_rating,
+          province_shortage_rating: r.shortage_rating,
+        }
+      })
+
+    caHighPayByProvince[province] = caProvinceOccupations[province]
+      .filter((o) => o.median_salary_cad != null)
+      .sort((a, b) => (b.median_salary_cad ?? 0) - (a.median_salary_cad ?? 0))
       .slice(0, 12)
       .map((o) => ({
         noc_code: o.noc_code,
-        occupation_en: o.title,
-        occupation_ko: caOccupations[o.noc_code]?.occupation_ko ?? null,
-        median_salary_cad: o.median_wage_cad,
-        shortage_rating: caOccupations[o.noc_code]?.shortage_rating ?? null,
+        occupation_en: o.occupation_en,
+        occupation_ko: o.occupation_ko,
+        median_salary_cad: o.median_salary_cad,
+        shortage_rating: o.province_shortage_rating ?? o.shortage_rating,
       }))
   }
+
+  const caProvinceShortages: Record<string, StateShortageByOcc[]> = {}
+  caShortagesByOcc.forEach((arr, code) => {
+    caProvinceShortages[code] = arr
+  })
 
   const usStateInfo = getUSStateInfo()
   const usMajorDensity = computeMajorDensity()
   const usRankedColleges = getUSRankedColleges(usColleges)
   const auRankedColleges = getAURankedColleges()
 
-  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages, coursesByFieldState, usStateInfo, usMajorDensity, usRankedColleges, auRankedColleges, caColleges, caOccupations, caHighPay, caHighPayByProvince }
+  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages, coursesByFieldState, usStateInfo, usMajorDensity, usRankedColleges, auRankedColleges, caColleges, caOccupations, caHighPay, caHighPayByProvince, caProvinceOccupations, caProvinceShortages, caCities }
 }
 
 // cross-instance 공유 캐시(방어선). 페이지가 force-static이라 보통 빌드/리밸리데이트

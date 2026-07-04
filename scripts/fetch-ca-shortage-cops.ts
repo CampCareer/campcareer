@@ -1,9 +1,9 @@
 /**
- * ESDC Canadian Occupational Projection System (COPS) 데이터 다운로드
+ * ESDC COPS (Canadian Occupational Projection System) 데이터 다운로드
  *
- * COPS는 open.canada.ca 에서 CSV로 제공:
- *   - "Projections of employment in Canada by occupation"
- *   - NOC 2021 4-digit unit group 단위 outlook (Shortage/Balanced/Surplus)
+ * COPS 는 open.canada.ca 에서 CSV로 제공:
+ *   - Assessment of Projected Labour Market Conditions (shortage, surplus or balance), 2024-2033
+ *   - Summary of the Components (Job Openings and Job Seekers), 2024-2033
  *
  * 사용법: npx tsx scripts/fetch-ca-shortage-cops.ts
  *
@@ -17,188 +17,285 @@ import path from "path"
 const OUTPUT_PATH = path.resolve("src/data/ca-shortage-ratings.json")
 const WAGES_PATH = path.resolve("src/data/ca-occupation-wages.json")
 
-// COPS Dataset ID on open.canada.ca
-// Latest: "Canadian Occupational Projection System (COPS)
-//          - Projections of employment in Canada by occupation"
-const COPS_CKAN_ID = "auto-generated-or-manual-entries"
-const COPS_DATASET_URL =
-  "https://open.canada.ca/data/en/dataset/auto-generated-or-manual-entries"
+// COPS dataset — 2024–2033 projections (NOC 2021)
+const DATASET_ID = "e80851b8-de68-43bd-a85c-c72e1b3a3890"
 
-// Try multiple known dataset IDs
-const COPS_IDS = [
-  "006a4e29-8d5f-4cfa-82ed-9ebdae126ba6", // ESDC COPS projections dataset
-  "ece3ab1b-80c0-4e0b-8543-ae7a0e30efad", // Alternative ID
-]
-
-interface COPSRow {
-  noc: string
-  outlook: "Shortage" | "Balanced" | "Surplus" | "Moderate Shortage" | "Moderate Surplus"
-  region: string
-  year: string
+// Known direct-download URLs for the CSVs we need
+const CSVS = {
+  // "Assessment of Projected Labour Market Conditions (shortage, surplus or balance), 2024-2033"
+  flmc: "https://open.canada.ca/data/dataset/e80851b8-de68-43bd-a85c-c72e1b3a3890/resource/446fe474-96e7-47cd-a3f9-3bb391b2df60/download/flmc_cfmt_2024_2033_noc2021.csv",
+  // "Summary of the Components (Job Openings and Job Seekers), 2024-2033"
+  summary: "https://open.canada.ca/data/dataset/e80851b8-de68-43bd-a85c-c72e1b3a3890/resource/7c4767a5-f807-441d-9776-a0074b5870a0/download/summary_sommaire_2024_2033_noc2021.csv",
 }
 
-function outlookToRating(outlook: string): number {
-  switch (outlook.toLowerCase()) {
-    case "shortage":
-    case "severe shortage":
-      return 5
-    case "moderate shortage":
-    case "moderate shortage expected":
-      return 4
-    case "balanced":
-    case "expected balance":
-      return 3
-    case "moderate surplus":
-    case "moderate surplus expected":
-      return 2
-    case "surplus":
-    case "significant surplus":
-      return 1
-    default:
-      return 3
-  }
+interface FLMCRow {
+  code: string
+  futureCondition: string | null
 }
 
-async function tryFetchCKAN(datasetId: string): Promise<COPSRow[] | null> {
-  try {
-    // CKAN API: search the dataset
-    const res = await fetch(
-      `https://open.canada.ca/data/api/3/action/package_show?id=${datasetId}`,
-      { signal: AbortSignal.timeout(10000) },
-    )
-    if (!res.ok) return null
-    const body = await res.json()
-    if (!body?.result?.resources) return null
+interface SummaryRow {
+  code: string
+  employment2023: number | null
+  employmentGrowth: number | null
+  retirements: number | null
+  totalJobOpenings: number | null
+  jobSeekers: number | null
+  recentCondition: string | null
+  futureCondition: string | null
+}
 
-    // Find the CSV resource with national-level outlook data
-    const resources = body.result.resources as Array<{
-      url: string
-      format: string
-      name: string
-    }>
-
-    const csvResource = resources.find(
-      (r) =>
-        r.format === "CSV" &&
-        (r.name.toLowerCase().includes("outlook") ||
-          r.name.toLowerCase().includes("projection")),
-    )
-
-    if (!csvResource) return null
-
-    // Download and parse the CSV
-    const csvRes = await fetch(csvResource.url, {
-      signal: AbortSignal.timeout(30000),
-    })
-    const csvText = await csvRes.text()
-
-    // Parse CSV - COPS format varies by year
-    const lines = csvText.split("\n").filter(Boolean)
-    if (lines.length < 2) return null
-
-    const header = lines[0].toLowerCase()
-    const nocIdx = header.includes("noc") ? lines[0].split(",").findIndex((c) => c.toLowerCase().includes("noc")) : -1
-    const outlookIdx = header.includes("outlook")
-      ? lines[0].split(",").findIndex((c) => c.toLowerCase().includes("outlook"))
-      : -1
-
-    if (nocIdx < 0 || outlookIdx < 0) return null
-
-    const rows: COPSRow[] = []
-    for (let i = 1; i < lines.length; i++) {
-      const cols = lines[i].split(",")
-      const noc = cols[nocIdx]?.trim().replace(/"/g, "")
-      const outlook = cols[outlookIdx]?.trim().replace(/"/g, "")
-      if (noc && noc.length >= 4 && outlook) {
-        rows.push({
-          noc: noc.padEnd(5, "0"),
-          outlook: outlook as COPSRow["outlook"],
-          region: "CA",
-          year: "2024",
-        })
+function parseCSV(text: string): string[][] {
+  const lines = text.split("\n").filter(Boolean)
+  return lines.map((l) => {
+    const cols: string[] = []
+    let current = ""
+    let inQuotes = false
+    for (const ch of l) {
+      if (ch === '"') {
+        inQuotes = !inQuotes
+      } else if (ch === "," && !inQuotes) {
+        cols.push(current.trim())
+        current = ""
+      } else {
+        current += ch
       }
     }
-    return rows
-  } catch {
-    return null
+    cols.push(current.trim())
+    return cols
+  })
+}
+
+async function downloadCSV(url: string): Promise<string> {
+  const res = await fetch(url, { signal: AbortSignal.timeout(30000) })
+  if (!res.ok) throw new Error(`HTTP ${res.status} fetching ${url}`)
+  return res.text()
+}
+
+function mapOutlookToRating(outlook: string | null): number | null {
+  if (!outlook) return null
+  const o = outlook.toLowerCase().trim()
+  // Shortage
+  if (o.includes("shortage") || o.includes("pénurie") || o.includes("pénurie")) {
+    if (o.includes("strong") || o.includes("important")) return 5
+    if (o.includes("moderate") || o.includes("modéré")) return 4
+    return 4
   }
+  // Surplus
+  if (o.includes("surplus")) {
+    if (o.includes("strong") || o.includes("important")) return 1
+    if (o.includes("moderate") || o.includes("modéré")) return 2
+    return 2
+  }
+  // Balance
+  if (o.includes("balance") || o.includes("équilibre")) return 3
+  return null
+}
+
+function parseNumeric(val: string | null): number | null {
+  if (!val) return null
+  const cleaned = val.replace(/[",\s]/g, "")
+  const n = Number(cleaned)
+  return isNaN(n) ? null : n
 }
 
 async function main() {
-  console.log("Attempting to fetch COPS data from open.canada.ca...")
-  let copsRows: COPSRow[] | null = null
+  console.log("Downloading COPS data from open.canada.ca...")
 
-  for (const id of COPS_IDS) {
-    console.log(`  trying dataset ${id}...`)
-    copsRows = await tryFetchCKAN(id)
-    if (copsRows && copsRows.length > 0) {
-      console.log(`  found ${copsRows.length} rows from dataset ${id}`)
-      break
+  let flmcRows: FLMCRow[] = []
+  let summaryRows: SummaryRow[] = []
+
+  // ── 1. Future Labour Market Conditions CSV ──────────────────────────────
+  try {
+    console.log(`  fetching FLMC...`)
+    const flmcText = await downloadCSV(CSVS.flmc)
+    const flmcParsed = parseCSV(flmcText)
+    const flmcHeader = flmcParsed[0]
+    const codeIdx = flmcHeader.findIndex((c) => c.toLowerCase().includes("code"))
+    const conditionIdx = flmcHeader.findIndex((c) =>
+      c.toLowerCase().includes("future") && c.toLowerCase().includes("condition")
+    )
+    if (codeIdx >= 0 && conditionIdx >= 0) {
+      for (let i = 1; i < flmcParsed.length; i++) {
+        const code = flmcParsed[i][codeIdx]?.trim()
+        if (!code || code.length < 4) continue
+        flmcRows.push({
+          code: code.padEnd(5, "0"),
+          futureCondition: mapOutlookToRating(flmcParsed[i][conditionIdx]) != null
+            ? flmcParsed[i][conditionIdx]
+            : null,
+        })
+      }
+      console.log(`    → ${flmcRows.length} rows (code only)`)
     }
+  } catch (err) {
+    console.error(`  FLMC download failed:`, (err as Error).message)
   }
 
-  if (!copsRows || copsRows.length === 0) {
+  // ── 2. Summary CSV (has job openings, job seekers, and both recent/future conditions) ─
+  try {
+    console.log(`  fetching Summary...`)
+    const summaryText = await downloadCSV(CSVS.summary)
+    const summaryParsed = parseCSV(summaryText)
+    const summaryHeader = summaryParsed[0]
+
+    const sCodeIdx = summaryHeader.findIndex((c) => c.toLowerCase().includes("code"))
+    const sEmpIdx = summaryHeader.findIndex((c) =>
+      c.toLowerCase().includes("employment") && c.toLowerCase().includes("2023")
+    )
+    const sGrowthIdx = summaryHeader.findIndex((c) =>
+      c.toLowerCase().includes("growth")
+    )
+    const sRetireIdx = summaryHeader.findIndex((c) => c.toLowerCase().includes("retire"))
+    const sOpeningsIdx = summaryHeader.findIndex((c) =>
+      c.toLowerCase().includes("total") && c.toLowerCase().includes("openings")
+    )
+    const sSeekersIdx = summaryHeader.findIndex((c) =>
+      c.toLowerCase().includes("seekers")
+    )
+    const sRecentIdx = summaryHeader.findIndex((c) =>
+      c.toLowerCase().includes("recent") && c.toLowerCase().includes("condition")
+    )
+    const sFutureIdx = summaryHeader.findIndex((c) =>
+      c.toLowerCase().includes("future") && c.toLowerCase().includes("condition")
+    )
+
+    if (sCodeIdx >= 0) {
+      for (let i = 1; i < summaryParsed.length; i++) {
+        const code = summaryParsed[i][sCodeIdx]?.trim()
+        if (!code || code.length < 4) continue
+        summaryRows.push({
+          code: code.padEnd(5, "0"),
+          employment2023: parseNumeric(summaryParsed[i][sEmpIdx]),
+          employmentGrowth: parseNumeric(summaryParsed[i][sGrowthIdx]),
+          retirements: parseNumeric(summaryParsed[i][sRetireIdx]),
+          totalJobOpenings: parseNumeric(summaryParsed[i][sOpeningsIdx]),
+          jobSeekers: parseNumeric(summaryParsed[i][sSeekersIdx]),
+          recentCondition: sRecentIdx >= 0 ? summaryParsed[i][sRecentIdx] : null,
+          futureCondition: sFutureIdx >= 0 ? summaryParsed[i][sFutureIdx] : null,
+        })
+      }
+      console.log(`    → ${summaryRows.length} rows (full data)`)
+    }
+  } catch (err) {
+    console.error(`  Summary download failed:`, (err as Error).message)
+  }
+
+  if (summaryRows.length === 0 && flmcRows.length === 0) {
     console.log(`
 Failed to fetch COPS data. This could be because:
 1. Network access to open.canada.ca is unavailable
-2. The dataset ID has changed
+2. The dataset ID or resource URLs have changed
+3. open.canada.ca is temporarily down
 
-To find the correct dataset:
-1. Go to https://open.canada.ca/data/en/dataset
-2. Search for "Canadian Occupational Projection System"
-3. Look for the dataset with occupation-level outlook data
-4. Update the COPS_IDS array in this script with the correct CKAN ID
-
-Falling back to existing heuristic data in src/data/ca-shortage-ratings.json
+Falling back to existing heuristic data.
     `)
     return
   }
 
-  // Map COPS outlook back to our 514 NOC codes
+  // Build a lookup from summary (preferred) + FLMC fallback
+  const futureByCode = new Map<string, { futureCondition: string | null; recentCondition: string | null; jobOpenings: number | null; jobSeekers: number | null; employmentGrowth: number | null }>()
+  for (const r of summaryRows) {
+    futureByCode.set(r.code, {
+      futureCondition: r.futureCondition || null,
+      recentCondition: r.recentCondition || null,
+      jobOpenings: r.totalJobOpenings,
+      jobSeekers: r.jobSeekers,
+      employmentGrowth: r.employmentGrowth,
+    })
+  }
+
+  // Read wages to get the full list of 514 NOC codes
   const wages: Array<{ noc_code: string }> = JSON.parse(
     fs.readFileSync(WAGES_PATH, "utf-8"),
   )
-  const copsMap = new Map<string, number>()
-  for (const row of copsRows) {
-    copsMap.set(row.noc, outlookToRating(row.outlook))
-  }
 
-  const results: Array<{
+  interface ShortageEntry {
     noc_code: string
     shortage_rating: number
-    confidence: string
+    confidence: "high" | "medium" | "low"
     rationale: string
-  }> = []
+    cops_future_outlook: string | null
+    cops_recent_outlook: string | null
+    projected_job_openings: number | null
+    projected_job_seekers: number | null
+    employment_growth: number | null
+  }
 
-  let matched = 0
+  const results: ShortageEntry[] = []
+
+  let matchedFuture = 0
+  let matchedRecent = 0
+
   for (const w of wages) {
-    let rating = copsMap.get(w.noc_code)
+    const cops = futureByCode.get(w.noc_code)
+    const futureOutlook = cops?.futureCondition ?? null
+    const recentOutlook = cops?.recentCondition ?? null
+
+    if (futureOutlook) matchedFuture++
+    if (recentOutlook) matchedRecent++
+
+    // Derive rating from COPS future outlook
+    let rating = mapOutlookToRating(futureOutlook)
+    let rationale = ""
+    let confidence: "high" | "medium" | "low" = "low"
+
     if (rating != null) {
-      matched++
-    } else {
-      rating = 3 // default if not in COPS data
+      rationale = `COPS 2024-2033: ${futureOutlook}`
+      confidence = "high"
+    } else if (recentOutlook) {
+      rating = mapOutlookToRating(recentOutlook)
+      if (rating != null) {
+        rationale = `COPS 2021-2023 (recent): ${recentOutlook}`
+        confidence = "medium"
+      }
     }
+
+    // Fallback to heuristic if no COPS data
+    if (rating == null) {
+      const cat = w.noc_code[0]
+      const baseRatings: Record<string, number> = {
+        "0": 3, "1": 2, "2": 3, "3": 4, "4": 2,
+        "5": 1, "6": 1, "7": 3, "8": 2, "9": 2,
+      }
+      rating = baseRatings[cat] ?? 2
+      rationale = `No COPS data, category ${cat} base`
+      confidence = "low"
+    }
+
     results.push({
       noc_code: w.noc_code,
-      shortage_rating: rating,
-      confidence: rating != null ? "high" : "low",
-      rationale:
-        rating != null
-          ? "Canadian Occupational Projection System (COPS)"
-          : "No COPS data, defaulted to balanced",
+      shortage_rating: Math.max(1, Math.min(5, Math.round(rating))),
+      confidence,
+      rationale,
+      cops_future_outlook: futureOutlook,
+      cops_recent_outlook: recentOutlook,
+      projected_job_openings: cops?.jobOpenings ?? null,
+      projected_job_seekers: cops?.jobSeekers ?? null,
+      employment_growth: cops?.employmentGrowth ?? null,
     })
   }
 
   fs.writeFileSync(OUTPUT_PATH, JSON.stringify(results, null, 2))
-  console.log(`Wrote ${results.length} shortage ratings (${matched} from COPS data)`)
+  console.log(`\nWrote ${results.length} shortage ratings to ${OUTPUT_PATH}`)
+  console.log(`  COPS future outlook matched: ${matchedFuture} / ${wages.length}`)
+  console.log(`  COPS recent outlook matched: ${matchedRecent} / ${wages.length}`)
+  console.log(`  COPS job openings data: ${results.filter((r) => r.projected_job_openings != null).length} / ${wages.length}`)
 
   const byRating: Record<number, number> = {}
   for (const r of results) {
     byRating[r.shortage_rating] = (byRating[r.shortage_rating] ?? 0) + 1
   }
+  console.log(`\nUpdated shortage rating distribution:`)
   for (let i = 1; i <= 5; i++) {
-    console.log(`  rating ${i}: ${byRating[i] ?? 0} occupations`)
+    console.log(`  rating ${i}: ${byRating[i] ?? 0} occupations (${confidenceBreakdown(results, i)})`)
   }
+}
+
+function confidenceBreakdown(results: Array<{ shortage_rating: number; confidence: string }>, rating: number): string {
+  const filtered = results.filter((r) => r.shortage_rating === rating)
+  const high = filtered.filter((r) => r.confidence === "high").length
+  const med = filtered.filter((r) => r.confidence === "medium").length
+  return `high=${high}, med=${med}, low=${filtered.length - high - med}`
 }
 
 main().catch(console.error)

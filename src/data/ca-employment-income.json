@@ -1,0 +1,6344 @@
+{
+  "bachelor": {
+    "13.01": {
+      "name": "13.01 Education, general",
+      "n": 241465,
+      "median": 59600,
+      "average": 56600
+    },
+    "13.02": {
+      "name": "13.02 Bilingual, multilingual and multicultural education",
+      "n": 335,
+      "median": 56800,
+      "average": 59400
+    },
+    "13.03": {
+      "name": "13.03 Curriculum and instruction",
+      "n": 35,
+      "median": 29000,
+      "average": 28000
+    },
+    "13.04": {
+      "name": "13.04 Educational administration and supervision",
+      "n": 560,
+      "median": 42400,
+      "average": 52400
+    },
+    "13.05": {
+      "name": "13.05 Educational/instructional media design",
+      "n": 105,
+      "median": 51200,
+      "average": 68000
+    },
+    "13.06": {
+      "name": "13.06 Educational assessment, evaluation and research",
+      "n": 50,
+      "median": 12300,
+      "average": 18000
+    },
+    "13.07": {
+      "name": "13.07 International and comparative education",
+      "n": 40,
+      "median": 71500,
+      "average": 64000
+    },
+    "13.10": {
+      "name": "13.10 Special education and teaching",
+      "n": 9030,
+      "median": 60000,
+      "average": 54500
+    },
+    "13.11": {
+      "name": "13.11 Student counselling and personnel services",
+      "n": 2550,
+      "median": 46800,
+      "average": 49840
+    },
+    "13.12": {
+      "name": "13.12 Teacher education and professional development, specific levels and methods",
+      "n": 49355,
+      "median": 50000,
+      "average": 50240
+    },
+    "13.13": {
+      "name": "13.13 Teacher education and professional development, specific subject areas",
+      "n": 89255,
+      "median": 63200,
+      "average": 59950
+    },
+    "13.14": {
+      "name": "13.14 Teaching English or French as a second or foreign language",
+      "n": 3255,
+      "median": 54000,
+      "average": 50640
+    },
+    "13.15": {
+      "name": "13.15 Teaching assistants/aides",
+      "n": 145,
+      "median": 30600,
+      "average": 28400
+    },
+    "10.02": {
+      "name": "10.02 Audiovisual communications technologies/technicians",
+      "n": 425,
+      "median": 24600,
+      "average": 39400
+    },
+    "10.03": {
+      "name": "10.03 Graphic communications",
+      "n": 7260,
+      "median": 48000,
+      "average": 53350
+    },
+    "50.01": {
+      "name": "50.01 Visual, digital and performing arts, general",
+      "n": 7035,
+      "median": 27800,
+      "average": 36840
+    },
+    "50.02": {
+      "name": "50.02 Crafts/craft design, folk art and artisanry",
+      "n": 120,
+      "median": 19000,
+      "average": 26000
+    },
+    "50.03": {
+      "name": "50.03 Dance",
+      "n": 2045,
+      "median": 18600,
+      "average": 37120
+    },
+    "50.04": {
+      "name": "50.04 Design and applied arts",
+      "n": 38830,
+      "median": 38400,
+      "average": 46200
+    },
+    "50.05": {
+      "name": "50.05 Drama/theatre arts and stagecraft",
+      "n": 14995,
+      "median": 25200,
+      "average": 36440
+    },
+    "50.06": {
+      "name": "50.06 Film/video and photographic arts",
+      "n": 16870,
+      "median": 32000,
+      "average": 43920
+    },
+    "50.07": {
+      "name": "50.07 Fine arts and art studies",
+      "n": 49945,
+      "median": 30800,
+      "average": 41840
+    },
+    "50.09": {
+      "name": "50.09 Music",
+      "n": 24750,
+      "median": 22000,
+      "average": 36720
+    },
+    "50.10": {
+      "name": "50.10 Arts, entertainment, and media management",
+      "n": 500,
+      "median": 44800,
+      "average": 75600
+    },
+    "16.01": {
+      "name": "16.01 Linguistic, comparative and related language studies and services",
+      "n": 29540,
+      "median": 40400,
+      "average": 47520
+    },
+    "16.03": {
+      "name": "16.03 East Asian languages, literatures and linguistics",
+      "n": 2690,
+      "median": 22200,
+      "average": 33000
+    },
+    "16.04": {
+      "name": "16.04 Slavic, Baltic and Albanian languages, literatures and linguistics",
+      "n": 650,
+      "median": 29000,
+      "average": 36000
+    },
+    "16.05": {
+      "name": "16.05 Germanic languages, literatures and linguistics",
+      "n": 1275,
+      "median": 36400,
+      "average": 45200
+    },
+    "16.06": {
+      "name": "16.06 Modern Greek language and literature",
+      "n": 45,
+      "median": 40400,
+      "average": 42000
+    },
+    "16.07": {
+      "name": "16.07 South Asian languages, literatures and linguistics",
+      "n": 705,
+      "median": 20000,
+      "average": 24200
+    },
+    "16.08": {
+      "name": "16.08 Iranian languages, literatures and linguistics",
+      "n": 170,
+      "median": 6800,
+      "average": 15300
+    },
+    "16.09": {
+      "name": "16.09 Romance languages, literatures and linguistics",
+      "n": 2345,
+      "median": 41600,
+      "average": 48200
+    },
+    "16.10": {
+      "name": "16.10 Indigenous languages, literatures, and linguistics of the Americas",
+      "n": 60,
+      "median": 48400,
+      "average": 50000
+    },
+    "16.11": {
+      "name": "16.11 Middle/Near Eastern and Semitic languages, literatures and linguistics",
+      "n": 455,
+      "median": 13400,
+      "average": 23200
+    },
+    "16.12": {
+      "name": "16.12 Classics and classical languages, literatures and linguistics",
+      "n": 145,
+      "median": 9800,
+      "average": 28400
+    },
+    "16.14": {
+      "name": "16.14 Southeast Asian and Australasian/Pacific languages, literatures and linguistics",
+      "n": 120,
+      "median": 33600,
+      "average": 38500
+    },
+    "16.15": {
+      "name": "16.15 Turkic, Uralic-Altaic, Caucasian and Central Asian languages, literatures and linguistics",
+      "n": 55,
+      "median": 18800,
+      "average": 24000
+    },
+    "16.16": {
+      "name": "16.16 Sign language",
+      "n": 60,
+      "median": 27800,
+      "average": 31000
+    },
+    "16.17": {
+      "name": "16.17 Second language learning",
+      "n": 405,
+      "median": 45200,
+      "average": 47600
+    },
+    "16.99": {
+      "name": "16.99 Indigenous and foreign languages, literatures and linguistics, other",
+      "n": 115,
+      "median": 45600,
+      "average": 51000
+    },
+    "23.01": {
+      "name": "23.01 English language and literature, general",
+      "n": 63025,
+      "median": 42800,
+      "average": 53200
+    },
+    "23.13": {
+      "name": "23.13 English rhetoric and composition/writing studies",
+      "n": 3130,
+      "median": 34800,
+      "average": 42440
+    },
+    "23.14": {
+      "name": "23.14 English literature",
+      "n": 25325,
+      "median": 39200,
+      "average": 49920
+    },
+    "24.01": {
+      "name": "24.01 Liberal arts and sciences, general studies and humanities",
+      "n": 112590,
+      "median": 37600,
+      "average": 50920
+    },
+    "30.13": {
+      "name": "30.13 Medieval and renaissance studies",
+      "n": 155,
+      "median": 50800,
+      "average": 45000
+    },
+    "30.22": {
+      "name": "30.22 Classical and ancient studies",
+      "n": 3010,
+      "median": 40000,
+      "average": 51900
+    },
+    "30.29": {
+      "name": "30.29 Maritime studies",
+      "n": 125,
+      "median": 107000,
+      "average": 92000
+    },
+    "30.45": {
+      "name": "30.45 History and language/literature",
+      "n": 6430,
+      "median": 46000,
+      "average": 56200
+    },
+    "30.47": {
+      "name": "30.47 Linguistics and anthropology",
+      "n": 130,
+      "median": 27200,
+      "average": 33000
+    },
+    "30.51": {
+      "name": "30.51 Integrated philosophy, politics, and economics",
+      "n": 70,
+      "median": 54800,
+      "average": 74000
+    },
+    "30.52": {
+      "name": "30.52 Digital humanities and textual studies",
+      "n": 75,
+      "median": 22600,
+      "average": 29000
+    },
+    "30.53": {
+      "name": "30.53 Thanatology",
+      "n": 105,
+      "median": 38400,
+      "average": 37500
+    },
+    "38.00": {
+      "name": "38.00 Philosophy and religious studies, general",
+      "n": 425,
+      "median": 43600,
+      "average": 53200
+    },
+    "38.01": {
+      "name": "38.01 Philosophy, logic and ethics",
+      "n": 15235,
+      "median": 42000,
+      "average": 58450
+    },
+    "38.02": {
+      "name": "38.02 Religion/religious studies",
+      "n": 6730,
+      "median": 40000,
+      "average": 48200
+    },
+    "39.02": {
+      "name": "39.02 Bible/Biblical studies",
+      "n": 1430,
+      "median": 38800,
+      "average": 43480
+    },
+    "39.03": {
+      "name": "39.03 Missions/missionary studies and missiology",
+      "n": 85,
+      "median": 60400,
+      "average": 68000
+    },
+    "39.04": {
+      "name": "39.04 Religious education",
+      "n": 2665,
+      "median": 35200,
+      "average": 43920
+    },
+    "39.05": {
+      "name": "39.05 Religious music and worship",
+      "n": 270,
+      "median": 38800,
+      "average": 38000
+    },
+    "39.06": {
+      "name": "39.06 Theological and ministerial studies",
+      "n": 9215,
+      "median": 40400,
+      "average": 45120
+    },
+    "39.07": {
+      "name": "39.07 Pastoral counselling and specialized ministries",
+      "n": 910,
+      "median": 40800,
+      "average": 46000
+    },
+    "54.01": {
+      "name": "54.01 History",
+      "n": 57650,
+      "median": 50400,
+      "average": 63900
+    },
+    "55.01": {
+      "name": "55.01 French language and literature, generalCAN",
+      "n": 13750,
+      "median": 47200,
+      "average": 53050
+    },
+    "55.13": {
+      "name": "55.13 French rhetoric and composition/writing studiesCAN",
+      "n": 600,
+      "median": 43600,
+      "average": 47600
+    },
+    "55.14": {
+      "name": "55.14 French literatureCAN",
+      "n": 6100,
+      "median": 35600,
+      "average": 42040
+    },
+    "05.01": {
+      "name": "05.01 Area studies",
+      "n": 7195,
+      "median": 44000,
+      "average": 51900
+    },
+    "05.02": {
+      "name": "05.02 Ethnic, cultural minority, gender, and group studies",
+      "n": 5875,
+      "median": 40000,
+      "average": 45280
+    },
+    "09.01": {
+      "name": "09.01 Communication and media studies",
+      "n": 63895,
+      "median": 48800,
+      "average": 56850
+    },
+    "09.04": {
+      "name": "09.04 Journalism",
+      "n": 14655,
+      "median": 49200,
+      "average": 56350
+    },
+    "09.07": {
+      "name": "09.07 Radio, television and digital communication",
+      "n": 4475,
+      "median": 47600,
+      "average": 57600
+    },
+    "09.09": {
+      "name": "09.09 Public relations, advertising and applied communication",
+      "n": 11820,
+      "median": 45200,
+      "average": 52750
+    },
+    "09.10": {
+      "name": "09.10 Publishing",
+      "n": 110,
+      "median": 21800,
+      "average": 30800
+    },
+    "09.99": {
+      "name": "09.99 Communication, journalism and related programs, other",
+      "n": 1525,
+      "median": 44400,
+      "average": 52400
+    },
+    "19.01": {
+      "name": "19.01 Family and consumer sciences/human sciences, general",
+      "n": 5610,
+      "median": 34400,
+      "average": 41240
+    },
+    "19.02": {
+      "name": "19.02 Family and consumer sciences/human sciences business services",
+      "n": 1740,
+      "median": 47200,
+      "average": 55000
+    },
+    "19.05": {
+      "name": "19.05 Foods, nutrition and related services",
+      "n": 11920,
+      "median": 44400,
+      "average": 48960
+    },
+    "19.06": {
+      "name": "19.06 Housing and human environments",
+      "n": 205,
+      "median": 46000,
+      "average": 57600
+    },
+    "19.07": {
+      "name": "19.07 Human development, family studies and related services",
+      "n": 13890,
+      "median": 39200,
+      "average": 42200
+    },
+    "19.09": {
+      "name": "19.09 Apparel and textiles",
+      "n": 1765,
+      "median": 30200,
+      "average": 39680
+    },
+    "19.10": {
+      "name": "19.10 Work and family studies",
+      "n": 820,
+      "median": 42000,
+      "average": 53300
+    },
+    "19.99": {
+      "name": "19.99 Family and consumer sciences/human sciences, other",
+      "n": 1985,
+      "median": 42000,
+      "average": 46160
+    },
+    "22.00": {
+      "name": "22.00 Non-professional legal studies",
+      "n": 2850,
+      "median": 39600,
+      "average": 46360
+    },
+    "22.01": {
+      "name": "22.01 Law (LLB, JD, BCL)",
+      "n": 86665,
+      "median": 66000,
+      "average": 109600
+    },
+    "22.03": {
+      "name": "22.03 Legal support services",
+      "n": 1165,
+      "median": 39200,
+      "average": 44600
+    },
+    "22.99": {
+      "name": "22.99 Legal professions and studies, other",
+      "n": 55,
+      "median": 59200,
+      "average": 62000
+    },
+    "30.05": {
+      "name": "30.05 Peace studies and conflict resolution",
+      "n": 1155,
+      "median": 40400,
+      "average": 44200
+    },
+    "30.11": {
+      "name": "30.11 Gerontology",
+      "n": 1455,
+      "median": 47600,
+      "average": 53800
+    },
+    "30.14": {
+      "name": "30.14 Museology/museum studies",
+      "n": 125,
+      "median": 35600,
+      "average": 40000
+    },
+    "30.15": {
+      "name": "30.15 Science, technology and society",
+      "n": 65,
+      "median": 56000,
+      "average": 50000
+    },
+    "30.17": {
+      "name": "30.17 Behavioural sciences",
+      "n": 1140,
+      "median": 37600,
+      "average": 40500
+    },
+    "30.20": {
+      "name": "30.20 International/globalization studies",
+      "n": 3575,
+      "median": 39200,
+      "average": 45240
+    },
+    "30.23": {
+      "name": "30.23 Intercultural/multicultural and diversity studies",
+      "n": 390,
+      "median": 28600,
+      "average": 34200
+    },
+    "30.25": {
+      "name": "30.25 Cognitive science",
+      "n": 1395,
+      "median": 28400,
+      "average": 43280
+    },
+    "30.26": {
+      "name": "30.26 Cultural studies/critical theory and analysis",
+      "n": 1195,
+      "median": 37200,
+      "average": 44500
+    },
+    "30.33": {
+      "name": "30.33 Sustainability studies",
+      "n": 575,
+      "median": 18200,
+      "average": 29800
+    },
+    "30.40": {
+      "name": "30.40 Economics and foreign language/literature",
+      "n": 440,
+      "median": 44000,
+      "average": 81600
+    },
+    "30.44": {
+      "name": "30.44 Geography and environmental studies",
+      "n": 2470,
+      "median": 50400,
+      "average": 57500
+    },
+    "30.46": {
+      "name": "30.46 History and political science",
+      "n": 5370,
+      "median": 58000,
+      "average": 73000
+    },
+    "42.01": {
+      "name": "42.01 Psychology, general",
+      "n": 150745,
+      "median": 43200,
+      "average": 52150
+    },
+    "42.27": {
+      "name": "42.27 Research and experimental psychology",
+      "n": 9105,
+      "median": 44000,
+      "average": 50640
+    },
+    "42.28": {
+      "name": "42.28 Clinical, counselling and applied psychology",
+      "n": 12415,
+      "median": 48000,
+      "average": 51800
+    },
+    "42.99": {
+      "name": "42.99 Psychology, other",
+      "n": 310,
+      "median": 23800,
+      "average": 64000
+    },
+    "45.01": {
+      "name": "45.01 General social sciences",
+      "n": 18260,
+      "median": 47600,
+      "average": 56100
+    },
+    "45.02": {
+      "name": "45.02 Anthropology",
+      "n": 16515,
+      "median": 42800,
+      "average": 49440
+    },
+    "45.03": {
+      "name": "45.03 Archaeology",
+      "n": 3020,
+      "median": 38000,
+      "average": 45280
+    },
+    "45.04": {
+      "name": "45.04 Criminology",
+      "n": 39585,
+      "median": 54800,
+      "average": 59850
+    },
+    "45.05": {
+      "name": "45.05 Demography",
+      "n": 125,
+      "median": 54000,
+      "average": 56000
+    },
+    "45.06": {
+      "name": "45.06 Economics",
+      "n": 105120,
+      "median": 53600,
+      "average": 80800
+    },
+    "45.07": {
+      "name": "45.07 Geography and cartography",
+      "n": 39765,
+      "median": 60400,
+      "average": 68900
+    },
+    "45.09": {
+      "name": "45.09 International relations and national security studies",
+      "n": 6625,
+      "median": 41600,
+      "average": 52900
+    },
+    "45.10": {
+      "name": "45.10 Political science and government",
+      "n": 76215,
+      "median": 54800,
+      "average": 73500
+    },
+    "45.11": {
+      "name": "45.11 Sociology",
+      "n": 70920,
+      "median": 50000,
+      "average": 58650
+    },
+    "45.12": {
+      "name": "45.12 Urban studies/affairs",
+      "n": 1530,
+      "median": 50800,
+      "average": 59650
+    },
+    "45.13": {
+      "name": "45.13 Sociology and anthropology",
+      "n": 2060,
+      "median": 49600,
+      "average": 55950
+    },
+    "45.15": {
+      "name": "45.15 Geography and anthropology",
+      "n": 170,
+      "median": 48400,
+      "average": 59600
+    },
+    "45.99": {
+      "name": "45.99 Social sciences, other",
+      "n": 1975,
+      "median": 34400,
+      "average": 40800
+    },
+    "30.16": {
+      "name": "30.16 Accounting and computer science",
+      "n": 620,
+      "median": 71000,
+      "average": 76000
+    },
+    "44.00": {
+      "name": "44.00 Human services, general",
+      "n": 5900,
+      "median": 58000,
+      "average": 56200
+    },
+    "44.02": {
+      "name": "44.02 Community organization and advocacy",
+      "n": 40,
+      "median": 58000,
+      "average": 44000
+    },
+    "44.04": {
+      "name": "44.04 Public administration",
+      "n": 4475,
+      "median": 50000,
+      "average": 60250
+    },
+    "44.05": {
+      "name": "44.05 Public policy analysis",
+      "n": 1030,
+      "median": 49200,
+      "average": 54600
+    },
+    "44.07": {
+      "name": "44.07 Social work",
+      "n": 52540,
+      "median": 54800,
+      "average": 53400
+    },
+    "52.01": {
+      "name": "52.01 Business/commerce, general",
+      "n": 267335,
+      "median": 61600,
+      "average": 91500
+    },
+    "52.02": {
+      "name": "52.02 Business administration, management and operations",
+      "n": 205105,
+      "median": 54000,
+      "average": 67600
+    },
+    "52.03": {
+      "name": "52.03 Accounting and related services",
+      "n": 165970,
+      "median": 56800,
+      "average": 75100
+    },
+    "52.04": {
+      "name": "52.04 Business operations support and assistant services",
+      "n": 3330,
+      "median": 37200,
+      "average": 46280
+    },
+    "52.05": {
+      "name": "52.05 Business/corporate communications",
+      "n": 1465,
+      "median": 53200,
+      "average": 62250
+    },
+    "52.06": {
+      "name": "52.06 Business/managerial economics",
+      "n": 12575,
+      "median": 59200,
+      "average": 86800
+    },
+    "52.07": {
+      "name": "52.07 Entrepreneurial and small business operations",
+      "n": 1825,
+      "median": 49600,
+      "average": 59350
+    },
+    "52.08": {
+      "name": "52.08 Finance and financial management services",
+      "n": 66780,
+      "median": 59600,
+      "average": 90100
+    },
+    "52.09": {
+      "name": "52.09 Hospitality administration/management",
+      "n": 22955,
+      "median": 33200,
+      "average": 41600
+    },
+    "52.10": {
+      "name": "52.10 Human resources management and services",
+      "n": 39190,
+      "median": 57600,
+      "average": 64200
+    },
+    "52.11": {
+      "name": "52.11 International business/trade/commerce",
+      "n": 9560,
+      "median": 42400,
+      "average": 53650
+    },
+    "52.12": {
+      "name": "52.12 Management information systems and services",
+      "n": 6860,
+      "median": 78000,
+      "average": 82800
+    },
+    "52.13": {
+      "name": "52.13 Management sciences and quantitative methods",
+      "n": 10010,
+      "median": 87000,
+      "average": 117000
+    },
+    "52.14": {
+      "name": "52.14 Marketing",
+      "n": 44970,
+      "median": 50800,
+      "average": 64300
+    },
+    "52.15": {
+      "name": "52.15 Real estate",
+      "n": 1540,
+      "median": 57600,
+      "average": 83900
+    },
+    "52.16": {
+      "name": "52.16 Taxation",
+      "n": 170,
+      "median": 37200,
+      "average": 52800
+    },
+    "52.17": {
+      "name": "52.17 Insurance",
+      "n": 525,
+      "median": 31800,
+      "average": 50200
+    },
+    "52.18": {
+      "name": "52.18 General sales, merchandising and related marketing operations",
+      "n": 675,
+      "median": 42000,
+      "average": 61200
+    },
+    "52.19": {
+      "name": "52.19 Specialized sales, merchandising and marketing operations",
+      "n": 6350,
+      "median": 34400,
+      "average": 42840
+    },
+    "52.20": {
+      "name": "52.20 Construction management",
+      "n": 2115,
+      "median": 75500,
+      "average": 87700
+    },
+    "52.21": {
+      "name": "52.21 Telecommunications management",
+      "n": 30,
+      "median": 51200,
+      "average": 60000
+    },
+    "26.01": {
+      "name": "26.01 Biology, general",
+      "n": 71955,
+      "median": 42400,
+      "average": 52750
+    },
+    "26.02": {
+      "name": "26.02 Biochemistry/biophysics and molecular biology",
+      "n": 19935,
+      "median": 47600,
+      "average": 57450
+    },
+    "26.03": {
+      "name": "26.03 Botany/plant biology",
+      "n": 2730,
+      "median": 32000,
+      "average": 42760
+    },
+    "26.04": {
+      "name": "26.04 Cell/cellular biology and anatomical sciences",
+      "n": 2065,
+      "median": 45600,
+      "average": 59000
+    },
+    "26.05": {
+      "name": "26.05 Microbiological sciences and immunology",
+      "n": 9915,
+      "median": 44000,
+      "average": 53950
+    },
+    "26.07": {
+      "name": "26.07 Zoology/animal biology",
+      "n": 5735,
+      "median": 38400,
+      "average": 50160
+    },
+    "26.08": {
+      "name": "26.08 Genetics",
+      "n": 1510,
+      "median": 46400,
+      "average": 58950
+    },
+    "26.09": {
+      "name": "26.09 Physiology, pathology and related sciences",
+      "n": 2800,
+      "median": 29000,
+      "average": 45600
+    },
+    "26.10": {
+      "name": "26.10 Pharmacology and toxicology",
+      "n": 2380,
+      "median": 41600,
+      "average": 59100
+    },
+    "26.11": {
+      "name": "26.11 Biomathematics, bioinformatics, and computational biology",
+      "n": 715,
+      "median": 45600,
+      "average": 58700
+    },
+    "26.12": {
+      "name": "26.12 Biotechnology",
+      "n": 2860,
+      "median": 37600,
+      "average": 45120
+    },
+    "26.13": {
+      "name": "26.13 Ecology, evolution, systematics and population biology",
+      "n": 5790,
+      "median": 44000,
+      "average": 54300
+    },
+    "26.14": {
+      "name": "26.14 Molecular medicine",
+      "n": 40,
+      "median": 12000,
+      "average": 22000
+    },
+    "26.15": {
+      "name": "26.15 Neurobiology and neurosciences",
+      "n": 4020,
+      "median": 18000,
+      "average": 34040
+    },
+    "30.01": {
+      "name": "30.01 Biological and physical sciences",
+      "n": 83650,
+      "median": 46800,
+      "average": 59450
+    },
+    "30.10": {
+      "name": "30.10 Biopsychology",
+      "n": 2905,
+      "median": 40800,
+      "average": 48720
+    },
+    "30.18": {
+      "name": "30.18 Natural sciences",
+      "n": 690,
+      "median": 39600,
+      "average": 51500
+    },
+    "30.19": {
+      "name": "30.19 Nutrition sciences",
+      "n": 2085,
+      "median": 50400,
+      "average": 51350
+    },
+    "30.27": {
+      "name": "30.27 Human biology",
+      "n": 1425,
+      "median": 52000,
+      "average": 67300
+    },
+    "30.32": {
+      "name": "30.32 Marine sciences",
+      "n": 110,
+      "median": 65000,
+      "average": 60000
+    },
+    "30.35": {
+      "name": "30.35 Climate science",
+      "n": 55,
+      "median": 39600,
+      "average": 56000
+    },
+    "30.41": {
+      "name": "30.41 Environmental geosciences",
+      "n": 310,
+      "median": 38000,
+      "average": 56800
+    },
+    "30.43": {
+      "name": "30.43 Geobiology",
+      "n": 145,
+      "median": 43200,
+      "average": 58000
+    },
+    "40.01": {
+      "name": "40.01 Physical sciences, general",
+      "n": 5560,
+      "median": 70000,
+      "average": 79600
+    },
+    "40.02": {
+      "name": "40.02 Astronomy and astrophysics",
+      "n": 685,
+      "median": 60800,
+      "average": 66600
+    },
+    "40.04": {
+      "name": "40.04 Atmospheric sciences and meteorology",
+      "n": 595,
+      "median": 70000,
+      "average": 68000
+    },
+    "40.05": {
+      "name": "40.05 Chemistry",
+      "n": 29090,
+      "median": 46400,
+      "average": 57300
+    },
+    "40.06": {
+      "name": "40.06 Geological and Earth sciences/geosciences",
+      "n": 17245,
+      "median": 54800,
+      "average": 80500
+    },
+    "40.08": {
+      "name": "40.08 Physics",
+      "n": 14045,
+      "median": 49200,
+      "average": 63100
+    },
+    "40.10": {
+      "name": "40.10 Materials sciences",
+      "n": 1110,
+      "median": 47600,
+      "average": 68000
+    },
+    "40.11": {
+      "name": "40.11 Physics and astronomy",
+      "n": 280,
+      "median": 27200,
+      "average": 38800
+    },
+    "41.00": {
+      "name": "41.00 Science technologies/technicians, general",
+      "n": 990,
+      "median": 47600,
+      "average": 55900
+    },
+    "41.01": {
+      "name": "41.01 Biology and biotechnology technologies/technicians",
+      "n": 75,
+      "median": 44000,
+      "average": 42000
+    },
+    "41.02": {
+      "name": "41.02 Nuclear and industrial radiologic technologies/technicians",
+      "n": 35,
+      "median": 31000,
+      "average": 52000
+    },
+    "11.01": {
+      "name": "11.01 Computer and information sciences and support services, general",
+      "n": 35565,
+      "median": 57600,
+      "average": 65400
+    },
+    "11.02": {
+      "name": "11.02 Computer programming",
+      "n": 2390,
+      "median": 55600,
+      "average": 62550
+    },
+    "11.04": {
+      "name": "11.04 Information science/studies",
+      "n": 620,
+      "median": 60800,
+      "average": 97200
+    },
+    "11.05": {
+      "name": "11.05 Computer systems analysis/analyst",
+      "n": 570,
+      "median": 65000,
+      "average": 62000
+    },
+    "11.07": {
+      "name": "11.07 Computer science",
+      "n": 125305,
+      "median": 75000,
+      "average": 85100
+    },
+    "11.08": {
+      "name": "11.08 Computer software and media applications",
+      "n": 2220,
+      "median": 46000,
+      "average": 62550
+    },
+    "11.09": {
+      "name": "11.09 Computer systems networking and telecommunications",
+      "n": 215,
+      "median": 47200,
+      "average": 50800
+    },
+    "11.10": {
+      "name": "11.10 Computer/information technology administration and management",
+      "n": 3770,
+      "median": 61200,
+      "average": 67000
+    },
+    "11.99": {
+      "name": "11.99 Computer and information sciences and support services, other",
+      "n": 3935,
+      "median": 34400,
+      "average": 45240
+    },
+    "25.01": {
+      "name": "25.01 Library science and administration",
+      "n": 1585,
+      "median": 31400,
+      "average": 37000
+    },
+    "27.01": {
+      "name": "27.01 Mathematics",
+      "n": 34430,
+      "median": 60400,
+      "average": 81600
+    },
+    "27.03": {
+      "name": "27.03 Applied mathematics",
+      "n": 3145,
+      "median": 56800,
+      "average": 67900
+    },
+    "27.05": {
+      "name": "27.05 Statistics",
+      "n": 7590,
+      "median": 47600,
+      "average": 60400
+    },
+    "27.06": {
+      "name": "27.06 Applied statistics",
+      "n": 60,
+      "median": 41600,
+      "average": 46000
+    },
+    "27.99": {
+      "name": "27.99 Mathematics and statistics, other",
+      "n": 115,
+      "median": 54800,
+      "average": 64000
+    },
+    "30.08": {
+      "name": "30.08 Mathematics and computer science",
+      "n": 6225,
+      "median": 80000,
+      "average": 89600
+    },
+    "30.30": {
+      "name": "30.30 Computational science",
+      "n": 150,
+      "median": 86000,
+      "average": 80000
+    },
+    "30.39": {
+      "name": "30.39 Economics and computer science",
+      "n": 570,
+      "median": 89000,
+      "average": 100800
+    },
+    "30.48": {
+      "name": "30.48 Linguistics and computer science",
+      "n": 70,
+      "median": 70000,
+      "average": 76000
+    },
+    "30.49": {
+      "name": "30.49 Mathematical economics",
+      "n": 1645,
+      "median": 55600,
+      "average": 69900
+    },
+    "30.70": {
+      "name": "30.70 Data science",
+      "n": 95,
+      "median": 28600,
+      "average": 46000
+    },
+    "30.71": {
+      "name": "30.71 Data analytics",
+      "n": 95,
+      "median": 16000,
+      "average": 23600
+    },
+    "04.02": {
+      "name": "04.02 Architecture",
+      "n": 21660,
+      "median": 47200,
+      "average": 60400
+    },
+    "04.03": {
+      "name": "04.03 City/urban, community and regional planning",
+      "n": 9145,
+      "median": 60800,
+      "average": 73500
+    },
+    "04.04": {
+      "name": "04.04 Environmental design/architecture",
+      "n": 2520,
+      "median": 33600,
+      "average": 45240
+    },
+    "04.05": {
+      "name": "04.05 Interior architecture",
+      "n": 395,
+      "median": 34400,
+      "average": 41800
+    },
+    "04.06": {
+      "name": "04.06 Landscape architecture (BS, BSc, BSLA, BLA, MSLA, MLA, PhD)",
+      "n": 2645,
+      "median": 56000,
+      "average": 64900
+    },
+    "04.08": {
+      "name": "04.08 Architectural history, criticism, and conservation",
+      "n": 330,
+      "median": 34400,
+      "average": 46800
+    },
+    "04.09": {
+      "name": "04.09 Architectural sciences and technology",
+      "n": 235,
+      "median": 55600,
+      "average": 70000
+    },
+    "14.01": {
+      "name": "14.01 General engineering",
+      "n": 112925,
+      "median": 81000,
+      "average": 98700
+    },
+    "14.02": {
+      "name": "14.02 Aerospace, aeronautical and astronautical/space engineering",
+      "n": 5095,
+      "median": 64500,
+      "average": 74900
+    },
+    "14.03": {
+      "name": "14.03 Agricultural engineering",
+      "n": 3270,
+      "median": 40800,
+      "average": 49800
+    },
+    "14.04": {
+      "name": "14.04 Architectural engineering",
+      "n": 950,
+      "median": 32000,
+      "average": 44400
+    },
+    "14.05": {
+      "name": "14.05 Biomedical/medical engineering",
+      "n": 2400,
+      "median": 40800,
+      "average": 49840
+    },
+    "14.06": {
+      "name": "14.06 Ceramic sciences and engineering",
+      "n": 60,
+      "median": 46000,
+      "average": 68000
+    },
+    "14.07": {
+      "name": "14.07 Chemical engineering",
+      "n": 24100,
+      "median": 67500,
+      "average": 87400
+    },
+    "14.08": {
+      "name": "14.08 Civil engineering",
+      "n": 56470,
+      "median": 61600,
+      "average": 72600
+    },
+    "14.09": {
+      "name": "14.09 Computer engineering",
+      "n": 42915,
+      "median": 77000,
+      "average": 88300
+    },
+    "14.10": {
+      "name": "14.10 Electrical, electronics and communications engineering",
+      "n": 83115,
+      "median": 70000,
+      "average": 79600
+    },
+    "14.11": {
+      "name": "14.11 Engineering mechanics",
+      "n": 155,
+      "median": 43200,
+      "average": 63000
+    },
+    "14.12": {
+      "name": "14.12 Engineering physics/applied physics",
+      "n": 2895,
+      "median": 71500,
+      "average": 77800
+    },
+    "14.13": {
+      "name": "14.13 Engineering science",
+      "n": 1130,
+      "median": 86000,
+      "average": 113200
+    },
+    "14.14": {
+      "name": "14.14 Environmental/environmental health engineering",
+      "n": 2945,
+      "median": 59600,
+      "average": 64100
+    },
+    "14.18": {
+      "name": "14.18 Materials engineering",
+      "n": 2165,
+      "median": 57600,
+      "average": 69600
+    },
+    "14.19": {
+      "name": "14.19 Mechanical engineering",
+      "n": 78085,
+      "median": 65000,
+      "average": 76700
+    },
+    "14.20": {
+      "name": "14.20 Metallurgical engineering",
+      "n": 1210,
+      "median": 59200,
+      "average": 93200
+    },
+    "14.21": {
+      "name": "14.21 Mining and mineral engineering",
+      "n": 3300,
+      "median": 85000,
+      "average": 133400
+    },
+    "14.22": {
+      "name": "14.22 Naval architecture and marine engineering",
+      "n": 1720,
+      "median": 50800,
+      "average": 67600
+    },
+    "14.23": {
+      "name": "14.23 Nuclear engineering",
+      "n": 590,
+      "median": 79000,
+      "average": 84800
+    },
+    "14.25": {
+      "name": "14.25 Petroleum engineering",
+      "n": 2320,
+      "median": 50000,
+      "average": 86600
+    },
+    "14.27": {
+      "name": "14.27 Systems engineering",
+      "n": 1670,
+      "median": 80000,
+      "average": 94500
+    },
+    "14.28": {
+      "name": "14.28 Textile sciences and engineering",
+      "n": 655,
+      "median": 26400,
+      "average": 34800
+    },
+    "14.32": {
+      "name": "14.32 Polymer/plastics engineering",
+      "n": 130,
+      "median": 46400,
+      "average": 46000
+    },
+    "14.33": {
+      "name": "14.33 Construction engineering",
+      "n": 3965,
+      "median": 60400,
+      "average": 66300
+    },
+    "14.34": {
+      "name": "14.34 Forest engineering",
+      "n": 1595,
+      "median": 61600,
+      "average": 68500
+    },
+    "14.35": {
+      "name": "14.35 Industrial engineering",
+      "n": 11585,
+      "median": 56400,
+      "average": 69900
+    },
+    "14.36": {
+      "name": "14.36 Manufacturing engineering",
+      "n": 2305,
+      "median": 69500,
+      "average": 71700
+    },
+    "14.37": {
+      "name": "14.37 Operations research",
+      "n": 290,
+      "median": 52800,
+      "average": 61200
+    },
+    "14.38": {
+      "name": "14.38 Surveying engineering",
+      "n": 2400,
+      "median": 72000,
+      "average": 75100
+    },
+    "14.39": {
+      "name": "14.39 Geological/geophysical engineering",
+      "n": 2320,
+      "median": 71500,
+      "average": 89000
+    },
+    "14.41": {
+      "name": "14.41 Electromechanical engineering",
+      "n": 930,
+      "median": 54800,
+      "average": 66800
+    },
+    "14.42": {
+      "name": "14.42 Mechatronics, robotics, and automation engineering",
+      "n": 3340,
+      "median": 61200,
+      "average": 68300
+    },
+    "14.43": {
+      "name": "14.43 Biochemical engineering",
+      "n": 355,
+      "median": 72000,
+      "average": 80800
+    },
+    "14.44": {
+      "name": "14.44 Engineering chemistry",
+      "n": 680,
+      "median": 49200,
+      "average": 62000
+    },
+    "14.45": {
+      "name": "14.45 Biological/biosystems engineering",
+      "n": 455,
+      "median": 60800,
+      "average": 76800
+    },
+    "14.47": {
+      "name": "14.47 Electrical and computer engineering",
+      "n": 1510,
+      "median": 85000,
+      "average": 91300
+    },
+    "14.48": {
+      "name": "14.48 Energy systems engineering",
+      "n": 1235,
+      "median": 53200,
+      "average": 66600
+    },
+    "14.99": {
+      "name": "14.99 Engineering, other",
+      "n": 5450,
+      "median": 47600,
+      "average": 59900
+    },
+    "15.00": {
+      "name": "15.00 General engineering technologies/technicians",
+      "n": 1390,
+      "median": 57600,
+      "average": 63750
+    },
+    "15.02": {
+      "name": "15.02 Civil engineering technology/technician",
+      "n": 255,
+      "median": 31600,
+      "average": 44800
+    },
+    "15.03": {
+      "name": "15.03 Electrical/electronic engineering technologies/technicians",
+      "n": 7130,
+      "median": 59200,
+      "average": 62150
+    },
+    "15.04": {
+      "name": "15.04 Electromechanical technologies/technicians",
+      "n": 1300,
+      "median": 50400,
+      "average": 58200
+    },
+    "15.05": {
+      "name": "15.05 Environmental control technologies/technicians",
+      "n": 290,
+      "median": 42400,
+      "average": 46800
+    },
+    "15.06": {
+      "name": "15.06 Industrial production technologies/technicians",
+      "n": 465,
+      "median": 62400,
+      "average": 60200
+    },
+    "15.07": {
+      "name": "15.07 Quality control and safety technologies/technicians",
+      "n": 1020,
+      "median": 60800,
+      "average": 64200
+    },
+    "15.08": {
+      "name": "15.08 Mechanical engineering related technologies/technicians",
+      "n": 825,
+      "median": 39600,
+      "average": 44800
+    },
+    "15.09": {
+      "name": "15.09 Mining and petroleum technologies/technicians",
+      "n": 1035,
+      "median": 50800,
+      "average": 78200
+    },
+    "15.12": {
+      "name": "15.12 Computer engineering technologies/technicians",
+      "n": 1725,
+      "median": 56800,
+      "average": 72000
+    },
+    "15.15": {
+      "name": "15.15 Engineering-related fields",
+      "n": 1095,
+      "median": 58400,
+      "average": 66600
+    },
+    "15.16": {
+      "name": "15.16 Nanotechnology",
+      "n": 430,
+      "median": 52000,
+      "average": 61400
+    },
+    "15.99": {
+      "name": "15.99 Engineering/engineering-related technologies/technicians, other",
+      "n": 55,
+      "median": 51600,
+      "average": 52000
+    },
+    "30.12": {
+      "name": "30.12 Historic preservation and conservation",
+      "n": 70,
+      "median": 24600,
+      "average": 32000
+    },
+    "48.99": {
+      "name": "48.99 Precision production, other",
+      "n": 915,
+      "median": 36800,
+      "average": 44500
+    },
+    "01.00": {
+      "name": "01.00 Agriculture, general",
+      "n": 14785,
+      "median": 42400,
+      "average": 55850
+    },
+    "01.01": {
+      "name": "01.01 Agricultural business and management",
+      "n": 4260,
+      "median": 54000,
+      "average": 65500
+    },
+    "01.02": {
+      "name": "01.02 Agricultural mechanization",
+      "n": 125,
+      "median": 42800,
+      "average": 44000
+    },
+    "01.03": {
+      "name": "01.03 Agricultural production operations",
+      "n": 1215,
+      "median": 40400,
+      "average": 43600
+    },
+    "01.04": {
+      "name": "01.04 Agricultural and food products processing",
+      "n": 145,
+      "median": 27400,
+      "average": 31600
+    },
+    "01.06": {
+      "name": "01.06 Applied horticulture/horticultural business services",
+      "n": 1405,
+      "median": 38400,
+      "average": 48040
+    },
+    "01.07": {
+      "name": "01.07 International agriculture",
+      "n": 40,
+      "median": 26000,
+      "average": 38000
+    },
+    "01.08": {
+      "name": "01.08 Agricultural public services",
+      "n": 45,
+      "median": 41200,
+      "average": 42000
+    },
+    "01.09": {
+      "name": "01.09 Animal sciences",
+      "n": 3670,
+      "median": 39200,
+      "average": 47880
+    },
+    "01.10": {
+      "name": "01.10 Food science and technology",
+      "n": 5615,
+      "median": 46800,
+      "average": 55250
+    },
+    "01.11": {
+      "name": "01.11 Plant sciences",
+      "n": 5445,
+      "median": 48400,
+      "average": 54400
+    },
+    "01.12": {
+      "name": "01.12 Soil sciences",
+      "n": 360,
+      "median": 52400,
+      "average": 68400
+    },
+    "01.13": {
+      "name": "01.13 Agriculture/veterinary preparatory programs",
+      "n": 35,
+      "median": 37600,
+      "average": 32000
+    },
+    "01.83": {
+      "name": "01.83 Veterinary/animal health technologies/technicians",
+      "n": 140,
+      "median": 30000,
+      "average": 33500
+    },
+    "01.99": {
+      "name": "01.99 Agricultural and veterinary sciences/services/operations and related fields, other",
+      "n": 190,
+      "median": 49600,
+      "average": 51200
+    },
+    "03.01": {
+      "name": "03.01 Natural resources conservation and research",
+      "n": 24865,
+      "median": 52400,
+      "average": 59300
+    },
+    "03.02": {
+      "name": "03.02 Environmental/natural resources management and policy",
+      "n": 3705,
+      "median": 49200,
+      "average": 60050
+    },
+    "03.03": {
+      "name": "03.03 Fishing and fisheries sciences and management",
+      "n": 325,
+      "median": 52000,
+      "average": 53600
+    },
+    "03.05": {
+      "name": "03.05 Forestry",
+      "n": 8490,
+      "median": 62800,
+      "average": 70500
+    },
+    "03.06": {
+      "name": "03.06 Wildlife and wildlands science and management",
+      "n": 355,
+      "median": 29400,
+      "average": 40200
+    },
+    "03.99": {
+      "name": "03.99 Natural resources and conservation, other",
+      "n": 55,
+      "median": 34000,
+      "average": 48000
+    },
+    "31.01": {
+      "name": "31.01 Parks, recreation, and leisure studies",
+      "n": 8345,
+      "median": 49600,
+      "average": 55150
+    },
+    "31.03": {
+      "name": "31.03 Parks, recreation, and leisure facilities management",
+      "n": 230,
+      "median": 46800,
+      "average": 56400
+    },
+    "31.05": {
+      "name": "31.05 Sports, kinesiology, and physical education/physical fitness",
+      "n": 77580,
+      "median": 42400,
+      "average": 52550
+    },
+    "31.06": {
+      "name": "31.06 Outdoor education",
+      "n": 940,
+      "median": 50000,
+      "average": 59600
+    },
+    "51.00": {
+      "name": "51.00 General health services/allied health/health sciences",
+      "n": 23010,
+      "median": 38000,
+      "average": 47040
+    },
+    "51.01": {
+      "name": "51.01 Chiropractic (DC)",
+      "n": 350,
+      "median": 30000,
+      "average": 53000
+    },
+    "51.02": {
+      "name": "51.02 Communication disorders sciences and services",
+      "n": 1510,
+      "median": 35600,
+      "average": 40680
+    },
+    "51.06": {
+      "name": "51.06 Dental support services and allied professions",
+      "n": 3640,
+      "median": 33200,
+      "average": 41240
+    },
+    "51.07": {
+      "name": "51.07 Health and medical administrative services",
+      "n": 2050,
+      "median": 49600,
+      "average": 55550
+    },
+    "51.09": {
+      "name": "51.09 Allied health diagnostic, intervention and treatment professions",
+      "n": 6965,
+      "median": 62400,
+      "average": 61500
+    },
+    "51.10": {
+      "name": "51.10 Clinical/medical laboratory science/research and allied professions",
+      "n": 7225,
+      "median": 52800,
+      "average": 53400
+    },
+    "51.11": {
+      "name": "51.11 Health/medical preparatory programs",
+      "n": 5360,
+      "median": 22800,
+      "average": 36800
+    },
+    "51.15": {
+      "name": "51.15 Mental and social health services and allied professions",
+      "n": 3210,
+      "median": 39600,
+      "average": 41400
+    },
+    "51.18": {
+      "name": "51.18 Ophthalmic and optometric support services and allied professions",
+      "n": 415,
+      "median": 37600,
+      "average": 38200
+    },
+    "51.20": {
+      "name": "51.20 Pharmacy, pharmaceutical sciences and administration",
+      "n": 36590,
+      "median": 77000,
+      "average": 77200
+    },
+    "51.22": {
+      "name": "51.22 Public health",
+      "n": 5160,
+      "median": 43200,
+      "average": 50040
+    },
+    "51.23": {
+      "name": "51.23 Rehabilitation and therapeutic professions",
+      "n": 29245,
+      "median": 55600,
+      "average": 56550
+    },
+    "51.27": {
+      "name": "51.27 Medical illustration and informatics",
+      "n": 240,
+      "median": 40000,
+      "average": 47200
+    },
+    "51.31": {
+      "name": "51.31 Dietetics and clinical nutrition services",
+      "n": 4215,
+      "median": 46800,
+      "average": 50240
+    },
+    "51.32": {
+      "name": "51.32 Health professions education, ethics, and humanities",
+      "n": 660,
+      "median": 65500,
+      "average": 78400
+    },
+    "51.33": {
+      "name": "51.33 Alternative and complementary medicine and medical systems",
+      "n": 1105,
+      "median": 22400,
+      "average": 31050
+    },
+    "51.34": {
+      "name": "51.34 Alternative and complementary medical support services",
+      "n": 1895,
+      "median": 40800,
+      "average": 57950
+    },
+    "51.35": {
+      "name": "51.35 Somatic bodywork and related therapeutic services",
+      "n": 265,
+      "median": 22400,
+      "average": 24000
+    },
+    "51.36": {
+      "name": "51.36 Movement and mind-body therapies",
+      "n": 35,
+      "median": 7050,
+      "average": 11000
+    },
+    "51.38": {
+      "name": "51.38 Registered nursing, nursing administration, nursing research and clinical nursing",
+      "n": 236240,
+      "median": 71000,
+      "average": 66600
+    },
+    "60.07": {
+      "name": "60.07 Nurse practitioner residency/fellowship programs",
+      "n": 120,
+      "median": 108000,
+      "average": 94000
+    },
+    "12.05": {
+      "name": "12.05 Culinary arts and related services",
+      "n": 1020,
+      "median": 29600,
+      "average": 33900
+    },
+    "28.08": {
+      "name": "28.08 Military science, leadership and operational artCAN",
+      "n": 775,
+      "median": 91000,
+      "average": 85400
+    },
+    "29.05": {
+      "name": "29.05 Military technologies and applied sciencesCAN",
+      "n": 250,
+      "median": 58400,
+      "average": 65500
+    },
+    "43.01": {
+      "name": "43.01 Criminal justice and corrections",
+      "n": 12490,
+      "median": 53200,
+      "average": 59100
+    },
+    "43.02": {
+      "name": "43.02 Fire protection",
+      "n": 200,
+      "median": 67500,
+      "average": 77500
+    },
+    "43.03": {
+      "name": "43.03 Security and protective services, specialized programs",
+      "n": 785,
+      "median": 62400,
+      "average": 66600
+    },
+    "43.04": {
+      "name": "43.04 Security science and technology",
+      "n": 1630,
+      "median": 39200,
+      "average": 50400
+    },
+    "43.99": {
+      "name": "43.99 Security and protective services, other",
+      "n": 50,
+      "median": 81000,
+      "average": 76000
+    },
+    "49.01": {
+      "name": "49.01 Air transportation",
+      "n": 2295,
+      "median": 51600,
+      "average": 66100
+    },
+    "49.03": {
+      "name": "49.03 Marine transportation",
+      "n": 3000,
+      "median": 47600,
+      "average": 55850
+    },
+    "49.99": {
+      "name": "49.99 Transportation and materials moving, other",
+      "n": 245,
+      "median": 30200,
+      "average": 50800
+    },
+    "30.99": {
+      "name": "30.99 Multidisciplinary/interdisciplinary studies, other",
+      "n": 2350,
+      "median": 44000,
+      "average": 49160
+    }
+  },
+  "overall": {
+    "13.01": {
+      "name": "13.01 Education, general",
+      "n": 438290,
+      "median": 59600,
+      "average": 58200
+    },
+    "13.02": {
+      "name": "13.02 Bilingual, multilingual and multicultural education",
+      "n": 760,
+      "median": 57600,
+      "average": 61500
+    },
+    "13.03": {
+      "name": "13.03 Curriculum and instruction",
+      "n": 2300,
+      "median": 85000,
+      "average": 72600
+    },
+    "13.04": {
+      "name": "13.04 Educational administration and supervision",
+      "n": 15845,
+      "median": 91000,
+      "average": 79500
+    },
+    "13.05": {
+      "name": "13.05 Educational/instructional media design",
+      "n": 2615,
+      "median": 76500,
+      "average": 72100
+    },
+    "13.06": {
+      "name": "13.06 Educational assessment, evaluation and research",
+      "n": 600,
+      "median": 77500,
+      "average": 75200
+    },
+    "13.07": {
+      "name": "13.07 International and comparative education",
+      "n": 230,
+      "median": 62000,
+      "average": 60800
+    },
+    "13.09": {
+      "name": "13.09 Social and philosophical foundations of education",
+      "n": 480,
+      "median": 74000,
+      "average": 70400
+    },
+    "13.10": {
+      "name": "13.10 Special education and teaching",
+      "n": 48820,
+      "median": 44400,
+      "average": 45560
+    },
+    "13.11": {
+      "name": "13.11 Student counselling and personnel services",
+      "n": 9705,
+      "median": 58400,
+      "average": 57650
+    },
+    "13.12": {
+      "name": "13.12 Teacher education and professional development, specific levels and methods",
+      "n": 81985,
+      "median": 44000,
+      "average": 48160
+    },
+    "13.13": {
+      "name": "13.13 Teacher education and professional development, specific subject areas",
+      "n": 124940,
+      "median": 60000,
+      "average": 58150
+    },
+    "13.14": {
+      "name": "13.14 Teaching English or French as a second or foreign language",
+      "n": 7055,
+      "median": 43200,
+      "average": 45880
+    },
+    "13.15": {
+      "name": "13.15 Teaching assistants/aides",
+      "n": 27870,
+      "median": 30400,
+      "average": 31480
+    },
+    "13.99": {
+      "name": "13.99 Education, other",
+      "n": 3320,
+      "median": 24000,
+      "average": 28040
+    },
+    "10.01": {
+      "name": "10.01 Communications technology/technician",
+      "n": 1355,
+      "median": 49600,
+      "average": 52900
+    },
+    "10.02": {
+      "name": "10.02 Audiovisual communications technologies/technicians",
+      "n": 16460,
+      "median": 40800,
+      "average": 46520
+    },
+    "10.03": {
+      "name": "10.03 Graphic communications",
+      "n": 38175,
+      "median": 42000,
+      "average": 48800
+    },
+    "10.99": {
+      "name": "10.99 Communications technologies/technicians and support services, other",
+      "n": 1490,
+      "median": 27800,
+      "average": 35400
+    },
+    "50.01": {
+      "name": "50.01 Visual, digital and performing arts, general",
+      "n": 19585,
+      "median": 24600,
+      "average": 35400
+    },
+    "50.02": {
+      "name": "50.02 Crafts/craft design, folk art and artisanry",
+      "n": 870,
+      "median": 24600,
+      "average": 31200
+    },
+    "50.03": {
+      "name": "50.03 Dance",
+      "n": 5370,
+      "median": 15600,
+      "average": 29520
+    },
+    "50.04": {
+      "name": "50.04 Design and applied arts",
+      "n": 164395,
+      "median": 34800,
+      "average": 42080
+    },
+    "50.05": {
+      "name": "50.05 Drama/theatre arts and stagecraft",
+      "n": 36725,
+      "median": 22400,
+      "average": 34360
+    },
+    "50.06": {
+      "name": "50.06 Film/video and photographic arts",
+      "n": 55785,
+      "median": 29400,
+      "average": 38960
+    },
+    "50.07": {
+      "name": "50.07 Fine arts and art studies",
+      "n": 95935,
+      "median": 29600,
+      "average": 40920
+    },
+    "50.09": {
+      "name": "50.09 Music",
+      "n": 59620,
+      "median": 22200,
+      "average": 35920
+    },
+    "50.10": {
+      "name": "50.10 Arts, entertainment, and media management",
+      "n": 2745,
+      "median": 36800,
+      "average": 49920
+    },
+    "50.11": {
+      "name": "50.11 Community/environmental/socially-engaged art",
+      "n": 50,
+      "median": 17400,
+      "average": 28000
+    },
+    "50.99": {
+      "name": "50.99 Visual and performing arts, other",
+      "n": 360,
+      "median": 20600,
+      "average": 27300
+    },
+    "16.01": {
+      "name": "16.01 Linguistic, comparative and related language studies and services",
+      "n": 53805,
+      "median": 39200,
+      "average": 47360
+    },
+    "16.02": {
+      "name": "16.02 African languages, literatures and linguistics",
+      "n": 50,
+      "median": 10600,
+      "average": 17500
+    },
+    "16.03": {
+      "name": "16.03 East Asian languages, literatures and linguistics",
+      "n": 4490,
+      "median": 20800,
+      "average": 32040
+    },
+    "16.04": {
+      "name": "16.04 Slavic, Baltic and Albanian languages, literatures and linguistics",
+      "n": 1425,
+      "median": 29600,
+      "average": 38680
+    },
+    "16.05": {
+      "name": "16.05 Germanic languages, literatures and linguistics",
+      "n": 2215,
+      "median": 34400,
+      "average": 47080
+    },
+    "16.06": {
+      "name": "16.06 Modern Greek language and literature",
+      "n": 50,
+      "median": 40400,
+      "average": 39000
+    },
+    "16.07": {
+      "name": "16.07 South Asian languages, literatures and linguistics",
+      "n": 3270,
+      "median": 21600,
+      "average": 27680
+    },
+    "16.08": {
+      "name": "16.08 Iranian languages, literatures and linguistics",
+      "n": 265,
+      "median": 7500,
+      "average": 19200
+    },
+    "16.09": {
+      "name": "16.09 Romance languages, literatures and linguistics",
+      "n": 3620,
+      "median": 40400,
+      "average": 51850
+    },
+    "16.10": {
+      "name": "16.10 Indigenous languages, literatures, and linguistics of the Americas",
+      "n": 375,
+      "median": 43600,
+      "average": 48800
+    },
+    "16.11": {
+      "name": "16.11 Middle/Near Eastern and Semitic languages, literatures and linguistics",
+      "n": 830,
+      "median": 14500,
+      "average": 26300
+    },
+    "16.12": {
+      "name": "16.12 Classics and classical languages, literatures and linguistics",
+      "n": 305,
+      "median": 23400,
+      "average": 40800
+    },
+    "16.14": {
+      "name": "16.14 Southeast Asian and Australasian/Pacific languages, literatures and linguistics",
+      "n": 185,
+      "median": 32400,
+      "average": 38800
+    },
+    "16.15": {
+      "name": "16.15 Turkic, Uralic-Altaic, Caucasian and Central Asian languages, literatures and linguistics",
+      "n": 90,
+      "median": 14700,
+      "average": 20400
+    },
+    "16.16": {
+      "name": "16.16 Sign language",
+      "n": 1875,
+      "median": 36000,
+      "average": 38080
+    },
+    "16.17": {
+      "name": "16.17 Second language learning",
+      "n": 1855,
+      "median": 31400,
+      "average": 37880
+    },
+    "16.99": {
+      "name": "16.99 Indigenous and foreign languages, literatures and linguistics, other",
+      "n": 580,
+      "median": 20800,
+      "average": 33600
+    },
+    "23.01": {
+      "name": "23.01 English language and literature, general",
+      "n": 85115,
+      "median": 41200,
+      "average": 51850
+    },
+    "23.13": {
+      "name": "23.13 English rhetoric and composition/writing studies",
+      "n": 7040,
+      "median": 35200,
+      "average": 42680
+    },
+    "23.14": {
+      "name": "23.14 English literature",
+      "n": 39515,
+      "median": 40000,
+      "average": 52050
+    },
+    "23.99": {
+      "name": "23.99 English language and literature/letters, other",
+      "n": 305,
+      "median": 17600,
+      "average": 29000
+    },
+    "24.01": {
+      "name": "24.01 Liberal arts and sciences, general studies and humanities",
+      "n": 240980,
+      "median": 30000,
+      "average": 43040
+    },
+    "30.13": {
+      "name": "30.13 Medieval and renaissance studies",
+      "n": 580,
+      "median": 49200,
+      "average": 58800
+    },
+    "30.22": {
+      "name": "30.22 Classical and ancient studies",
+      "n": 4330,
+      "median": 41200,
+      "average": 53350
+    },
+    "30.29": {
+      "name": "30.29 Maritime studies",
+      "n": 320,
+      "median": 90000,
+      "average": 86000
+    },
+    "30.45": {
+      "name": "30.45 History and language/literature",
+      "n": 7370,
+      "median": 45200,
+      "average": 55100
+    },
+    "30.47": {
+      "name": "30.47 Linguistics and anthropology",
+      "n": 140,
+      "median": 27400,
+      "average": 34500
+    },
+    "30.51": {
+      "name": "30.51 Integrated philosophy, politics, and economics",
+      "n": 105,
+      "median": 27800,
+      "average": 57000
+    },
+    "30.52": {
+      "name": "30.52 Digital humanities and textual studies",
+      "n": 115,
+      "median": 23400,
+      "average": 31200
+    },
+    "30.53": {
+      "name": "30.53 Thanatology",
+      "n": 805,
+      "median": 46400,
+      "average": 51100
+    },
+    "38.00": {
+      "name": "38.00 Philosophy and religious studies, general",
+      "n": 790,
+      "median": 42400,
+      "average": 49800
+    },
+    "38.01": {
+      "name": "38.01 Philosophy, logic and ethics",
+      "n": 26110,
+      "median": 44800,
+      "average": 62150
+    },
+    "38.02": {
+      "name": "38.02 Religion/religious studies",
+      "n": 15185,
+      "median": 37600,
+      "average": 46760
+    },
+    "38.99": {
+      "name": "38.99 Philosophy and religious studies, other",
+      "n": 115,
+      "median": 33600,
+      "average": 39000
+    },
+    "39.02": {
+      "name": "39.02 Bible/Biblical studies",
+      "n": 7765,
+      "median": 30800,
+      "average": 38760
+    },
+    "39.03": {
+      "name": "39.03 Missions/missionary studies and missiology",
+      "n": 460,
+      "median": 35600,
+      "average": 46000
+    },
+    "39.04": {
+      "name": "39.04 Religious education",
+      "n": 4910,
+      "median": 36400,
+      "average": 44960
+    },
+    "39.05": {
+      "name": "39.05 Religious music and worship",
+      "n": 560,
+      "median": 29800,
+      "average": 36200
+    },
+    "39.06": {
+      "name": "39.06 Theological and ministerial studies",
+      "n": 37770,
+      "median": 42400,
+      "average": 46240
+    },
+    "39.07": {
+      "name": "39.07 Pastoral counselling and specialized ministries",
+      "n": 3910,
+      "median": 38800,
+      "average": 43240
+    },
+    "39.08": {
+      "name": "39.08 Religious institution administration and law",
+      "n": 175,
+      "median": 24800,
+      "average": 29800
+    },
+    "39.99": {
+      "name": "39.99 Theology and religious vocations, other",
+      "n": 485,
+      "median": 41600,
+      "average": 42000
+    },
+    "54.01": {
+      "name": "54.01 History",
+      "n": 82300,
+      "median": 50000,
+      "average": 63200
+    },
+    "55.01": {
+      "name": "55.01 French language and literature, generalCAN",
+      "n": 23905,
+      "median": 40400,
+      "average": 47880
+    },
+    "55.13": {
+      "name": "55.13 French rhetoric and composition/writing studiesCAN",
+      "n": 1650,
+      "median": 35200,
+      "average": 41120
+    },
+    "55.14": {
+      "name": "55.14 French literatureCAN",
+      "n": 13885,
+      "median": 36800,
+      "average": 45000
+    },
+    "55.99": {
+      "name": "55.99 French language and literature/letters, otherCAN",
+      "n": 235,
+      "median": 21600,
+      "average": 29600
+    },
+    "05.01": {
+      "name": "05.01 Area studies",
+      "n": 11800,
+      "median": 46000,
+      "average": 54400
+    },
+    "05.02": {
+      "name": "05.02 Ethnic, cultural minority, gender, and group studies",
+      "n": 11710,
+      "median": 40400,
+      "average": 46520
+    },
+    "09.01": {
+      "name": "09.01 Communication and media studies",
+      "n": 99905,
+      "median": 46800,
+      "average": 54900
+    },
+    "09.04": {
+      "name": "09.04 Journalism",
+      "n": 39465,
+      "median": 45600,
+      "average": 54000
+    },
+    "09.07": {
+      "name": "09.07 Radio, television and digital communication",
+      "n": 14120,
+      "median": 43200,
+      "average": 52600
+    },
+    "09.09": {
+      "name": "09.09 Public relations, advertising and applied communication",
+      "n": 42180,
+      "median": 46800,
+      "average": 53950
+    },
+    "09.10": {
+      "name": "09.10 Publishing",
+      "n": 1400,
+      "median": 41600,
+      "average": 45240
+    },
+    "09.99": {
+      "name": "09.99 Communication, journalism and related programs, other",
+      "n": 2650,
+      "median": 41200,
+      "average": 47600
+    },
+    "19.01": {
+      "name": "19.01 Family and consumer sciences/human sciences, general",
+      "n": 8910,
+      "median": 30200,
+      "average": 39400
+    },
+    "19.02": {
+      "name": "19.02 Family and consumer sciences/human sciences business services",
+      "n": 2120,
+      "median": 47200,
+      "average": 54700
+    },
+    "19.04": {
+      "name": "19.04 Family and consumer economics and related services",
+      "n": 50,
+      "median": 26200,
+      "average": 34000
+    },
+    "19.05": {
+      "name": "19.05 Foods, nutrition and related services",
+      "n": 27180,
+      "median": 39200,
+      "average": 46360
+    },
+    "19.06": {
+      "name": "19.06 Housing and human environments",
+      "n": 8705,
+      "median": 27600,
+      "average": 34600
+    },
+    "19.07": {
+      "name": "19.07 Human development, family studies and related services",
+      "n": 201420,
+      "median": 31600,
+      "average": 33520
+    },
+    "19.09": {
+      "name": "19.09 Apparel and textiles",
+      "n": 13785,
+      "median": 23400,
+      "average": 29920
+    },
+    "19.10": {
+      "name": "19.10 Work and family studies",
+      "n": 1235,
+      "median": 41600,
+      "average": 54300
+    },
+    "19.99": {
+      "name": "19.99 Family and consumer sciences/human sciences, other",
+      "n": 3250,
+      "median": 40000,
+      "average": 44600
+    },
+    "22.00": {
+      "name": "22.00 Non-professional legal studies",
+      "n": 5250,
+      "median": 41600,
+      "average": 49720
+    },
+    "22.01": {
+      "name": "22.01 Law (LLB, JD, BCL)",
+      "n": 128890,
+      "median": 67500,
+      "average": 108700
+    },
+    "22.02": {
+      "name": "22.02 Legal research and advanced professional studies (post-LLB/JD)",
+      "n": 35615,
+      "median": 69000,
+      "average": 109800
+    },
+    "22.03": {
+      "name": "22.03 Legal support services",
+      "n": 92250,
+      "median": 44800,
+      "average": 47240
+    },
+    "22.99": {
+      "name": "22.99 Legal professions and studies, other",
+      "n": 280,
+      "median": 66000,
+      "average": 81000
+    },
+    "30.05": {
+      "name": "30.05 Peace studies and conflict resolution",
+      "n": 3155,
+      "median": 53600,
+      "average": 59550
+    },
+    "30.11": {
+      "name": "30.11 Gerontology",
+      "n": 6190,
+      "median": 42800,
+      "average": 46240
+    },
+    "30.14": {
+      "name": "30.14 Museology/museum studies",
+      "n": 2740,
+      "median": 42800,
+      "average": 45360
+    },
+    "30.15": {
+      "name": "30.15 Science, technology and society",
+      "n": 160,
+      "median": 42000,
+      "average": 47000
+    },
+    "30.17": {
+      "name": "30.17 Behavioural sciences",
+      "n": 2935,
+      "median": 36000,
+      "average": 42280
+    },
+    "30.20": {
+      "name": "30.20 International/globalization studies",
+      "n": 6150,
+      "median": 37200,
+      "average": 44520
+    },
+    "30.23": {
+      "name": "30.23 Intercultural/multicultural and diversity studies",
+      "n": 855,
+      "median": 32400,
+      "average": 41600
+    },
+    "30.25": {
+      "name": "30.25 Cognitive science",
+      "n": 1765,
+      "median": 31000,
+      "average": 46320
+    },
+    "30.26": {
+      "name": "30.26 Cultural studies/critical theory and analysis",
+      "n": 2525,
+      "median": 36400,
+      "average": 44200
+    },
+    "30.28": {
+      "name": "30.28 Dispute resolution",
+      "n": 1010,
+      "median": 44000,
+      "average": 50100
+    },
+    "30.31": {
+      "name": "30.31 Human computer interaction",
+      "n": 200,
+      "median": 66000,
+      "average": 74000
+    },
+    "30.33": {
+      "name": "30.33 Sustainability studies",
+      "n": 2755,
+      "median": 42800,
+      "average": 52450
+    },
+    "30.36": {
+      "name": "30.36 Cultural studies and comparative literature",
+      "n": 50,
+      "median": 49600,
+      "average": 50000
+    },
+    "30.40": {
+      "name": "30.40 Economics and foreign language/literature",
+      "n": 580,
+      "median": 44400,
+      "average": 75600
+    },
+    "30.44": {
+      "name": "30.44 Geography and environmental studies",
+      "n": 3005,
+      "median": 51200,
+      "average": 60800
+    },
+    "30.46": {
+      "name": "30.46 History and political science",
+      "n": 6165,
+      "median": 57200,
+      "average": 71300
+    },
+    "42.01": {
+      "name": "42.01 Psychology, general",
+      "n": 205125,
+      "median": 44000,
+      "average": 53750
+    },
+    "42.27": {
+      "name": "42.27 Research and experimental psychology",
+      "n": 12740,
+      "median": 44000,
+      "average": 52050
+    },
+    "42.28": {
+      "name": "42.28 Clinical, counselling and applied psychology",
+      "n": 41485,
+      "median": 54400,
+      "average": 58300
+    },
+    "42.99": {
+      "name": "42.99 Psychology, other",
+      "n": 1130,
+      "median": 54400,
+      "average": 70200
+    },
+    "45.01": {
+      "name": "45.01 General social sciences",
+      "n": 46605,
+      "median": 36800,
+      "average": 47720
+    },
+    "45.02": {
+      "name": "45.02 Anthropology",
+      "n": 23920,
+      "median": 44000,
+      "average": 52750
+    },
+    "45.03": {
+      "name": "45.03 Archaeology",
+      "n": 5195,
+      "median": 42000,
+      "average": 49240
+    },
+    "45.04": {
+      "name": "45.04 Criminology",
+      "n": 58780,
+      "median": 53600,
+      "average": 59550
+    },
+    "45.05": {
+      "name": "45.05 Demography",
+      "n": 675,
+      "median": 61600,
+      "average": 60300
+    },
+    "45.06": {
+      "name": "45.06 Economics",
+      "n": 156895,
+      "median": 53200,
+      "average": 79300
+    },
+    "45.07": {
+      "name": "45.07 Geography and cartography",
+      "n": 58725,
+      "median": 60000,
+      "average": 68000
+    },
+    "45.09": {
+      "name": "45.09 International relations and national security studies",
+      "n": 15440,
+      "median": 51600,
+      "average": 66800
+    },
+    "45.10": {
+      "name": "45.10 Political science and government",
+      "n": 103900,
+      "median": 55200,
+      "average": 72700
+    },
+    "45.11": {
+      "name": "45.11 Sociology",
+      "n": 88320,
+      "median": 49600,
+      "average": 58500
+    },
+    "45.12": {
+      "name": "45.12 Urban studies/affairs",
+      "n": 2340,
+      "median": 56000,
+      "average": 62250
+    },
+    "45.13": {
+      "name": "45.13 Sociology and anthropology",
+      "n": 2275,
+      "median": 50000,
+      "average": 55750
+    },
+    "45.15": {
+      "name": "45.15 Geography and anthropology",
+      "n": 200,
+      "median": 44800,
+      "average": 57600
+    },
+    "45.99": {
+      "name": "45.99 Social sciences, other",
+      "n": 4125,
+      "median": 35600,
+      "average": 44560
+    },
+    "30.16": {
+      "name": "30.16 Accounting and computer science",
+      "n": 3775,
+      "median": 43600,
+      "average": 52150
+    },
+    "44.00": {
+      "name": "44.00 Human services, general",
+      "n": 40165,
+      "median": 38800,
+      "average": 41040
+    },
+    "44.02": {
+      "name": "44.02 Community organization and advocacy",
+      "n": 250,
+      "median": 33200,
+      "average": 40000
+    },
+    "44.04": {
+      "name": "44.04 Public administration",
+      "n": 29785,
+      "median": 68000,
+      "average": 73500
+    },
+    "44.05": {
+      "name": "44.05 Public policy analysis",
+      "n": 6375,
+      "median": 70000,
+      "average": 76100
+    },
+    "44.07": {
+      "name": "44.07 Social work",
+      "n": 141755,
+      "median": 49200,
+      "average": 52300
+    },
+    "44.99": {
+      "name": "44.99 Public administration and social service professions, other",
+      "n": 280,
+      "median": 40800,
+      "average": 50800
+    },
+    "52.01": {
+      "name": "52.01 Business/commerce, general",
+      "n": 501500,
+      "median": 56000,
+      "average": 86700
+    },
+    "52.02": {
+      "name": "52.02 Business administration, management and operations",
+      "n": 691790,
+      "median": 53200,
+      "average": 70800
+    },
+    "52.03": {
+      "name": "52.03 Accounting and related services",
+      "n": 498315,
+      "median": 48000,
+      "average": 63250
+    },
+    "52.04": {
+      "name": "52.04 Business operations support and assistant services",
+      "n": 236740,
+      "median": 35600,
+      "average": 36600
+    },
+    "52.05": {
+      "name": "52.05 Business/corporate communications",
+      "n": 2520,
+      "median": 50800,
+      "average": 59950
+    },
+    "52.06": {
+      "name": "52.06 Business/managerial economics",
+      "n": 18150,
+      "median": 57200,
+      "average": 92500
+    },
+    "52.07": {
+      "name": "52.07 Entrepreneurial and small business operations",
+      "n": 10655,
+      "median": 34000,
+      "average": 44880
+    },
+    "52.08": {
+      "name": "52.08 Finance and financial management services",
+      "n": 182580,
+      "median": 55200,
+      "average": 89600
+    },
+    "52.09": {
+      "name": "52.09 Hospitality administration/management",
+      "n": 109095,
+      "median": 32000,
+      "average": 39600
+    },
+    "52.10": {
+      "name": "52.10 Human resources management and services",
+      "n": 117895,
+      "median": 54400,
+      "average": 61650
+    },
+    "52.11": {
+      "name": "52.11 International business/trade/commerce",
+      "n": 26655,
+      "median": 42800,
+      "average": 55950
+    },
+    "52.12": {
+      "name": "52.12 Management information systems and services",
+      "n": 16230,
+      "median": 69000,
+      "average": 75700
+    },
+    "52.13": {
+      "name": "52.13 Management sciences and quantitative methods",
+      "n": 14095,
+      "median": 84000,
+      "average": 109700
+    },
+    "52.14": {
+      "name": "52.14 Marketing",
+      "n": 134750,
+      "median": 48400,
+      "average": 61400
+    },
+    "52.15": {
+      "name": "52.15 Real estate",
+      "n": 45740,
+      "median": 38400,
+      "average": 55500
+    },
+    "52.16": {
+      "name": "52.16 Taxation",
+      "n": 4160,
+      "median": 80000,
+      "average": 107400
+    },
+    "52.17": {
+      "name": "52.17 Insurance",
+      "n": 28775,
+      "median": 54000,
+      "average": 61250
+    },
+    "52.18": {
+      "name": "52.18 General sales, merchandising and related marketing operations",
+      "n": 24200,
+      "median": 38800,
+      "average": 50080
+    },
+    "52.19": {
+      "name": "52.19 Specialized sales, merchandising and marketing operations",
+      "n": 75845,
+      "median": 35200,
+      "average": 41160
+    },
+    "52.20": {
+      "name": "52.20 Construction management",
+      "n": 8300,
+      "median": 66000,
+      "average": 76300
+    },
+    "52.21": {
+      "name": "52.21 Telecommunications management",
+      "n": 170,
+      "median": 55200,
+      "average": 63200
+    },
+    "52.99": {
+      "name": "52.99 Business, management, marketing and related support services, other",
+      "n": 1415,
+      "median": 48800,
+      "average": 79600
+    },
+    "26.01": {
+      "name": "26.01 Biology, general",
+      "n": 98645,
+      "median": 45200,
+      "average": 55450
+    },
+    "26.02": {
+      "name": "26.02 Biochemistry/biophysics and molecular biology",
+      "n": 36030,
+      "median": 54400,
+      "average": 67100
+    },
+    "26.03": {
+      "name": "26.03 Botany/plant biology",
+      "n": 6350,
+      "median": 37600,
+      "average": 49960
+    },
+    "26.04": {
+      "name": "26.04 Cell/cellular biology and anatomical sciences",
+      "n": 5360,
+      "median": 58000,
+      "average": 68900
+    },
+    "26.05": {
+      "name": "26.05 Microbiological sciences and immunology",
+      "n": 21075,
+      "median": 53600,
+      "average": 66400
+    },
+    "26.07": {
+      "name": "26.07 Zoology/animal biology",
+      "n": 9475,
+      "median": 41200,
+      "average": 53600
+    },
+    "26.08": {
+      "name": "26.08 Genetics",
+      "n": 4945,
+      "median": 68000,
+      "average": 82100
+    },
+    "26.09": {
+      "name": "26.09 Physiology, pathology and related sciences",
+      "n": 9655,
+      "median": 58400,
+      "average": 78100
+    },
+    "26.10": {
+      "name": "26.10 Pharmacology and toxicology",
+      "n": 6910,
+      "median": 60400,
+      "average": 79000
+    },
+    "26.11": {
+      "name": "26.11 Biomathematics, bioinformatics, and computational biology",
+      "n": 2350,
+      "median": 60000,
+      "average": 69400
+    },
+    "26.12": {
+      "name": "26.12 Biotechnology",
+      "n": 10620,
+      "median": 39600,
+      "average": 47760
+    },
+    "26.13": {
+      "name": "26.13 Ecology, evolution, systematics and population biology",
+      "n": 17000,
+      "median": 58000,
+      "average": 73600
+    },
+    "26.14": {
+      "name": "26.14 Molecular medicine",
+      "n": 415,
+      "median": 69000,
+      "average": 72400
+    },
+    "26.15": {
+      "name": "26.15 Neurobiology and neurosciences",
+      "n": 10110,
+      "median": 42400,
+      "average": 62400
+    },
+    "30.01": {
+      "name": "30.01 Biological and physical sciences",
+      "n": 122235,
+      "median": 42400,
+      "average": 57450
+    },
+    "30.10": {
+      "name": "30.10 Biopsychology",
+      "n": 3115,
+      "median": 41600,
+      "average": 49280
+    },
+    "30.18": {
+      "name": "30.18 Natural sciences",
+      "n": 21310,
+      "median": 11500,
+      "average": 19200
+    },
+    "30.19": {
+      "name": "30.19 Nutrition sciences",
+      "n": 3080,
+      "median": 51200,
+      "average": 55400
+    },
+    "30.27": {
+      "name": "30.27 Human biology",
+      "n": 1595,
+      "median": 52400,
+      "average": 69900
+    },
+    "30.32": {
+      "name": "30.32 Marine sciences",
+      "n": 300,
+      "median": 54000,
+      "average": 55200
+    },
+    "30.35": {
+      "name": "30.35 Climate science",
+      "n": 420,
+      "median": 57200,
+      "average": 61200
+    },
+    "30.41": {
+      "name": "30.41 Environmental geosciences",
+      "n": 505,
+      "median": 45600,
+      "average": 56800
+    },
+    "30.43": {
+      "name": "30.43 Geobiology",
+      "n": 205,
+      "median": 44800,
+      "average": 54000
+    },
+    "40.01": {
+      "name": "40.01 Physical sciences, general",
+      "n": 11710,
+      "median": 52400,
+      "average": 65900
+    },
+    "40.02": {
+      "name": "40.02 Astronomy and astrophysics",
+      "n": 2080,
+      "median": 66000,
+      "average": 77200
+    },
+    "40.04": {
+      "name": "40.04 Atmospheric sciences and meteorology",
+      "n": 2035,
+      "median": 73500,
+      "average": 70300
+    },
+    "40.05": {
+      "name": "40.05 Chemistry",
+      "n": 60130,
+      "median": 50800,
+      "average": 63400
+    },
+    "40.06": {
+      "name": "40.06 Geological and Earth sciences/geosciences",
+      "n": 34435,
+      "median": 58800,
+      "average": 82600
+    },
+    "40.08": {
+      "name": "40.08 Physics",
+      "n": 31885,
+      "median": 60000,
+      "average": 72500
+    },
+    "40.10": {
+      "name": "40.10 Materials sciences",
+      "n": 3240,
+      "median": 47600,
+      "average": 69900
+    },
+    "40.11": {
+      "name": "40.11 Physics and astronomy",
+      "n": 535,
+      "median": 28200,
+      "average": 44400
+    },
+    "40.99": {
+      "name": "40.99 Physical sciences, other",
+      "n": 1555,
+      "median": 57600,
+      "average": 65000
+    },
+    "41.00": {
+      "name": "41.00 Science technologies/technicians, general",
+      "n": 11625,
+      "median": 39200,
+      "average": 44720
+    },
+    "41.01": {
+      "name": "41.01 Biology and biotechnology technologies/technicians",
+      "n": 2165,
+      "median": 38000,
+      "average": 41160
+    },
+    "41.02": {
+      "name": "41.02 Nuclear and industrial radiologic technologies/technicians",
+      "n": 510,
+      "median": 65000,
+      "average": 62800
+    },
+    "41.03": {
+      "name": "41.03 Physical science technologies/technicians",
+      "n": 9485,
+      "median": 52000,
+      "average": 59450
+    },
+    "41.99": {
+      "name": "41.99 Science technologies/technicians, other",
+      "n": 500,
+      "median": 51600,
+      "average": 56400
+    },
+    "11.01": {
+      "name": "11.01 Computer and information sciences and support services, general",
+      "n": 138185,
+      "median": 57600,
+      "average": 65600
+    },
+    "11.02": {
+      "name": "11.02 Computer programming",
+      "n": 49680,
+      "median": 50800,
+      "average": 59350
+    },
+    "11.03": {
+      "name": "11.03 Data processing and data processing technology/technician",
+      "n": 2690,
+      "median": 45200,
+      "average": 54050
+    },
+    "11.04": {
+      "name": "11.04 Information science/studies",
+      "n": 4000,
+      "median": 67500,
+      "average": 75600
+    },
+    "11.05": {
+      "name": "11.05 Computer systems analysis/analyst",
+      "n": 12475,
+      "median": 61200,
+      "average": 64900
+    },
+    "11.06": {
+      "name": "11.06 Data entry/microcomputer applications",
+      "n": 7155,
+      "median": 35200,
+      "average": 40120
+    },
+    "11.07": {
+      "name": "11.07 Computer science",
+      "n": 245220,
+      "median": 71500,
+      "average": 81300
+    },
+    "11.08": {
+      "name": "11.08 Computer software and media applications",
+      "n": 21000,
+      "median": 38800,
+      "average": 47600
+    },
+    "11.09": {
+      "name": "11.09 Computer systems networking and telecommunications",
+      "n": 975,
+      "median": 63200,
+      "average": 69200
+    },
+    "11.10": {
+      "name": "11.10 Computer/information technology administration and management",
+      "n": 46150,
+      "median": 48800,
+      "average": 55100
+    },
+    "11.99": {
+      "name": "11.99 Computer and information sciences and support services, other",
+      "n": 12500,
+      "median": 51200,
+      "average": 59850
+    },
+    "25.01": {
+      "name": "25.01 Library science and administration",
+      "n": 17755,
+      "median": 56400,
+      "average": 58950
+    },
+    "25.03": {
+      "name": "25.03 Library and archives assisting",
+      "n": 10430,
+      "median": 38800,
+      "average": 38560
+    },
+    "27.01": {
+      "name": "27.01 Mathematics",
+      "n": 51525,
+      "median": 58400,
+      "average": 79300
+    },
+    "27.03": {
+      "name": "27.03 Applied mathematics",
+      "n": 6660,
+      "median": 65500,
+      "average": 80900
+    },
+    "27.05": {
+      "name": "27.05 Statistics",
+      "n": 14375,
+      "median": 54000,
+      "average": 68100
+    },
+    "27.06": {
+      "name": "27.06 Applied statistics",
+      "n": 205,
+      "median": 60400,
+      "average": 72000
+    },
+    "27.99": {
+      "name": "27.99 Mathematics and statistics, other",
+      "n": 200,
+      "median": 39200,
+      "average": 50800
+    },
+    "30.06": {
+      "name": "30.06 Systems science and theory",
+      "n": 195,
+      "median": 80000,
+      "average": 96000
+    },
+    "30.08": {
+      "name": "30.08 Mathematics and computer science",
+      "n": 8255,
+      "median": 76000,
+      "average": 86800
+    },
+    "30.30": {
+      "name": "30.30 Computational science",
+      "n": 325,
+      "median": 70000,
+      "average": 76000
+    },
+    "30.39": {
+      "name": "30.39 Economics and computer science",
+      "n": 700,
+      "median": 81000,
+      "average": 94800
+    },
+    "30.48": {
+      "name": "30.48 Linguistics and computer science",
+      "n": 135,
+      "median": 83000,
+      "average": 82000
+    },
+    "30.49": {
+      "name": "30.49 Mathematical economics",
+      "n": 1945,
+      "median": 54000,
+      "average": 70800
+    },
+    "30.70": {
+      "name": "30.70 Data science",
+      "n": 1305,
+      "median": 60400,
+      "average": 61850
+    },
+    "30.71": {
+      "name": "30.71 Data analytics",
+      "n": 2405,
+      "median": 72000,
+      "average": 76500
+    },
+    "04.02": {
+      "name": "04.02 Architecture",
+      "n": 43525,
+      "median": 50400,
+      "average": 62750
+    },
+    "04.03": {
+      "name": "04.03 City/urban, community and regional planning",
+      "n": 22505,
+      "median": 64500,
+      "average": 73600
+    },
+    "04.04": {
+      "name": "04.04 Environmental design/architecture",
+      "n": 3385,
+      "median": 36000,
+      "average": 49200
+    },
+    "04.05": {
+      "name": "04.05 Interior architecture",
+      "n": 865,
+      "median": 30000,
+      "average": 40300
+    },
+    "04.06": {
+      "name": "04.06 Landscape architecture (BS, BSc, BSLA, BLA, MSLA, MLA, PhD)",
+      "n": 4775,
+      "median": 55200,
+      "average": 62350
+    },
+    "04.08": {
+      "name": "04.08 Architectural history, criticism, and conservation",
+      "n": 520,
+      "median": 35600,
+      "average": 53400
+    },
+    "04.09": {
+      "name": "04.09 Architectural sciences and technology",
+      "n": 32015,
+      "median": 52800,
+      "average": 58950
+    },
+    "04.10": {
+      "name": "04.10 Real estate development",
+      "n": 150,
+      "median": 65000,
+      "average": 128000
+    },
+    "04.99": {
+      "name": "04.99 Architecture and related services, other",
+      "n": 1885,
+      "median": 44000,
+      "average": 52750
+    },
+    "14.01": {
+      "name": "14.01 General engineering",
+      "n": 161820,
+      "median": 80000,
+      "average": 99200
+    },
+    "14.02": {
+      "name": "14.02 Aerospace, aeronautical and astronautical/space engineering",
+      "n": 10835,
+      "median": 66500,
+      "average": 76700
+    },
+    "14.03": {
+      "name": "14.03 Agricultural engineering",
+      "n": 5155,
+      "median": 40800,
+      "average": 49560
+    },
+    "14.04": {
+      "name": "14.04 Architectural engineering",
+      "n": 1820,
+      "median": 36400,
+      "average": 45760
+    },
+    "14.05": {
+      "name": "14.05 Biomedical/medical engineering",
+      "n": 6335,
+      "median": 55600,
+      "average": 63900
+    },
+    "14.06": {
+      "name": "14.06 Ceramic sciences and engineering",
+      "n": 70,
+      "median": 47200,
+      "average": 70000
+    },
+    "14.07": {
+      "name": "14.07 Chemical engineering",
+      "n": 36510,
+      "median": 67000,
+      "average": 86400
+    },
+    "14.08": {
+      "name": "14.08 Civil engineering",
+      "n": 88635,
+      "median": 61600,
+      "average": 73200
+    },
+    "14.09": {
+      "name": "14.09 Computer engineering",
+      "n": 61835,
+      "median": 77000,
+      "average": 87900
+    },
+    "14.10": {
+      "name": "14.10 Electrical, electronics and communications engineering",
+      "n": 126430,
+      "median": 69500,
+      "average": 80600
+    },
+    "14.11": {
+      "name": "14.11 Engineering mechanics",
+      "n": 345,
+      "median": 54800,
+      "average": 70800
+    },
+    "14.12": {
+      "name": "14.12 Engineering physics/applied physics",
+      "n": 4435,
+      "median": 76000,
+      "average": 85400
+    },
+    "14.13": {
+      "name": "14.13 Engineering science",
+      "n": 1490,
+      "median": 89000,
+      "average": 111400
+    },
+    "14.14": {
+      "name": "14.14 Environmental/environmental health engineering",
+      "n": 6860,
+      "median": 61600,
+      "average": 69900
+    },
+    "14.18": {
+      "name": "14.18 Materials engineering",
+      "n": 4635,
+      "median": 63600,
+      "average": 75200
+    },
+    "14.19": {
+      "name": "14.19 Mechanical engineering",
+      "n": 116710,
+      "median": 62800,
+      "average": 74700
+    },
+    "14.20": {
+      "name": "14.20 Metallurgical engineering",
+      "n": 2085,
+      "median": 58400,
+      "average": 87800
+    },
+    "14.21": {
+      "name": "14.21 Mining and mineral engineering",
+      "n": 4985,
+      "median": 84000,
+      "average": 130800
+    },
+    "14.22": {
+      "name": "14.22 Naval architecture and marine engineering",
+      "n": 3855,
+      "median": 56000,
+      "average": 72200
+    },
+    "14.23": {
+      "name": "14.23 Nuclear engineering",
+      "n": 1270,
+      "median": 90000,
+      "average": 91200
+    },
+    "14.24": {
+      "name": "14.24 Ocean engineering",
+      "n": 70,
+      "median": 80000,
+      "average": 74000
+    },
+    "14.25": {
+      "name": "14.25 Petroleum engineering",
+      "n": 4770,
+      "median": 50800,
+      "average": 84000
+    },
+    "14.27": {
+      "name": "14.27 Systems engineering",
+      "n": 2995,
+      "median": 78000,
+      "average": 87900
+    },
+    "14.28": {
+      "name": "14.28 Textile sciences and engineering",
+      "n": 940,
+      "median": 33600,
+      "average": 40500
+    },
+    "14.32": {
+      "name": "14.32 Polymer/plastics engineering",
+      "n": 380,
+      "median": 46000,
+      "average": 48000
+    },
+    "14.33": {
+      "name": "14.33 Construction engineering",
+      "n": 9980,
+      "median": 53200,
+      "average": 61150
+    },
+    "14.34": {
+      "name": "14.34 Forest engineering",
+      "n": 1955,
+      "median": 60800,
+      "average": 67300
+    },
+    "14.35": {
+      "name": "14.35 Industrial engineering",
+      "n": 19490,
+      "median": 58000,
+      "average": 71500
+    },
+    "14.36": {
+      "name": "14.36 Manufacturing engineering",
+      "n": 3390,
+      "median": 68000,
+      "average": 71300
+    },
+    "14.37": {
+      "name": "14.37 Operations research",
+      "n": 1020,
+      "median": 72000,
+      "average": 81400
+    },
+    "14.38": {
+      "name": "14.38 Surveying engineering",
+      "n": 3560,
+      "median": 66500,
+      "average": 72500
+    },
+    "14.39": {
+      "name": "14.39 Geological/geophysical engineering",
+      "n": 2970,
+      "median": 72000,
+      "average": 87900
+    },
+    "14.40": {
+      "name": "14.40 Paper science and engineering",
+      "n": 110,
+      "median": 105000,
+      "average": 110000
+    },
+    "14.41": {
+      "name": "14.41 Electromechanical engineering",
+      "n": 1955,
+      "median": 54400,
+      "average": 62750
+    },
+    "14.42": {
+      "name": "14.42 Mechatronics, robotics, and automation engineering",
+      "n": 5835,
+      "median": 65000,
+      "average": 70400
+    },
+    "14.43": {
+      "name": "14.43 Biochemical engineering",
+      "n": 695,
+      "median": 70000,
+      "average": 81600
+    },
+    "14.44": {
+      "name": "14.44 Engineering chemistry",
+      "n": 1100,
+      "median": 47600,
+      "average": 59400
+    },
+    "14.45": {
+      "name": "14.45 Biological/biosystems engineering",
+      "n": 1090,
+      "median": 54000,
+      "average": 84000
+    },
+    "14.47": {
+      "name": "14.47 Electrical and computer engineering",
+      "n": 7340,
+      "median": 78500,
+      "average": 99200
+    },
+    "14.48": {
+      "name": "14.48 Energy systems engineering",
+      "n": 4895,
+      "median": 59600,
+      "average": 71100
+    },
+    "14.99": {
+      "name": "14.99 Engineering, other",
+      "n": 16650,
+      "median": 47600,
+      "average": 58700
+    },
+    "15.00": {
+      "name": "15.00 General engineering technologies/technicians",
+      "n": 31655,
+      "median": 55600,
+      "average": 68400
+    },
+    "15.01": {
+      "name": "15.01 Architectural engineering technology/technician",
+      "n": 1535,
+      "median": 62400,
+      "average": 70700
+    },
+    "15.02": {
+      "name": "15.02 Civil engineering technology/technician",
+      "n": 42585,
+      "median": 61200,
+      "average": 68100
+    },
+    "15.03": {
+      "name": "15.03 Electrical/electronic engineering technologies/technicians",
+      "n": 145910,
+      "median": 57200,
+      "average": 62700
+    },
+    "15.04": {
+      "name": "15.04 Electromechanical technologies/technicians",
+      "n": 44545,
+      "median": 64000,
+      "average": 72100
+    },
+    "15.05": {
+      "name": "15.05 Environmental control technologies/technicians",
+      "n": 19090,
+      "median": 56000,
+      "average": 58500
+    },
+    "15.06": {
+      "name": "15.06 Industrial production technologies/technicians",
+      "n": 22705,
+      "median": 58800,
+      "average": 68200
+    },
+    "15.07": {
+      "name": "15.07 Quality control and safety technologies/technicians",
+      "n": 23980,
+      "median": 60800,
+      "average": 66800
+    },
+    "15.08": {
+      "name": "15.08 Mechanical engineering related technologies/technicians",
+      "n": 57535,
+      "median": 59600,
+      "average": 65000
+    },
+    "15.09": {
+      "name": "15.09 Mining and petroleum technologies/technicians",
+      "n": 28300,
+      "median": 59200,
+      "average": 71500
+    },
+    "15.10": {
+      "name": "15.10 Construction engineering technology/technician",
+      "n": 6570,
+      "median": 62000,
+      "average": 71100
+    },
+    "15.11": {
+      "name": "15.11 Engineering-related technologies/technicians",
+      "n": 9105,
+      "median": 52000,
+      "average": 58600
+    },
+    "15.12": {
+      "name": "15.12 Computer engineering technologies/technicians",
+      "n": 49535,
+      "median": 54800,
+      "average": 61650
+    },
+    "15.13": {
+      "name": "15.13 Drafting/design engineering technologies/technicians",
+      "n": 32175,
+      "median": 44400,
+      "average": 50440
+    },
+    "15.15": {
+      "name": "15.15 Engineering-related fields",
+      "n": 4590,
+      "median": 73500,
+      "average": 83400
+    },
+    "15.16": {
+      "name": "15.16 Nanotechnology",
+      "n": 810,
+      "median": 50400,
+      "average": 59200
+    },
+    "15.17": {
+      "name": "15.17 Energy systems technologies/technicians",
+      "n": 43525,
+      "median": 75000,
+      "average": 88200
+    },
+    "15.99": {
+      "name": "15.99 Engineering/engineering-related technologies/technicians, other",
+      "n": 8855,
+      "median": 60400,
+      "average": 66900
+    },
+    "30.12": {
+      "name": "30.12 Historic preservation and conservation",
+      "n": 485,
+      "median": 40000,
+      "average": 44200
+    },
+    "46.00": {
+      "name": "46.00 Construction trades, general",
+      "n": 36660,
+      "median": 44400,
+      "average": 50400
+    },
+    "46.01": {
+      "name": "46.01 Masonry/mason",
+      "n": 16285,
+      "median": 42400,
+      "average": 46120
+    },
+    "46.02": {
+      "name": "46.02 Carpentry/carpenter",
+      "n": 127505,
+      "median": 46000,
+      "average": 50520
+    },
+    "46.03": {
+      "name": "46.03 Electrical and power transmission installers",
+      "n": 185665,
+      "median": 58000,
+      "average": 63050
+    },
+    "46.04": {
+      "name": "46.04 Building/construction finishing, management and inspection",
+      "n": 75915,
+      "median": 45600,
+      "average": 49480
+    },
+    "46.05": {
+      "name": "46.05 Plumbing and related water supply services",
+      "n": 105435,
+      "median": 55600,
+      "average": 59300
+    },
+    "46.99": {
+      "name": "46.99 Construction trades, other",
+      "n": 5120,
+      "median": 94000,
+      "average": 90400
+    },
+    "47.00": {
+      "name": "47.00 Mechanics and repairers, general",
+      "n": 74740,
+      "median": 48400,
+      "average": 52950
+    },
+    "47.01": {
+      "name": "47.01 Electrical/electronics maintenance and repair technologies/technicians",
+      "n": 34025,
+      "median": 49200,
+      "average": 52250
+    },
+    "47.02": {
+      "name": "47.02 Heating, air conditioning, ventilation and refrigeration maintenance technology/technician",
+      "n": 41165,
+      "median": 55200,
+      "average": 59750
+    },
+    "47.03": {
+      "name": "47.03 Heavy/industrial equipment maintenance technologies/technicians",
+      "n": 110290,
+      "median": 71000,
+      "average": 74400
+    },
+    "47.04": {
+      "name": "47.04 Precision systems maintenance and repair technologies/technicians",
+      "n": 13705,
+      "median": 52400,
+      "average": 57700
+    },
+    "47.06": {
+      "name": "47.06 Vehicle maintenance and repair technologies/technicians",
+      "n": 237155,
+      "median": 50400,
+      "average": 53950
+    },
+    "47.07": {
+      "name": "47.07 Energy systems maintenance and repair technologies/technicians",
+      "n": 1105,
+      "median": 38800,
+      "average": 52400
+    },
+    "47.99": {
+      "name": "47.99 Mechanic and repair technologies/technicians, other",
+      "n": 510,
+      "median": 27800,
+      "average": 38200
+    },
+    "48.00": {
+      "name": "48.00 Precision production trades, general",
+      "n": 500,
+      "median": 44800,
+      "average": 46200
+    },
+    "48.03": {
+      "name": "48.03 Leatherworking and upholstery",
+      "n": 1860,
+      "median": 25000,
+      "average": 30880
+    },
+    "48.05": {
+      "name": "48.05 Precision metal working",
+      "n": 237475,
+      "median": 50400,
+      "average": 54550
+    },
+    "48.07": {
+      "name": "48.07 Woodworking",
+      "n": 34910,
+      "median": 39600,
+      "average": 43240
+    },
+    "48.08": {
+      "name": "48.08 Boilermaking/boilermaker",
+      "n": 5845,
+      "median": 54000,
+      "average": 62450
+    },
+    "48.99": {
+      "name": "48.99 Precision production, other",
+      "n": 4090,
+      "median": 42800,
+      "average": 48600
+    },
+    "01.00": {
+      "name": "01.00 Agriculture, general",
+      "n": 51105,
+      "median": 36000,
+      "average": 46480
+    },
+    "01.01": {
+      "name": "01.01 Agricultural business and management",
+      "n": 11680,
+      "median": 42800,
+      "average": 55000
+    },
+    "01.02": {
+      "name": "01.02 Agricultural mechanization",
+      "n": 5770,
+      "median": 51200,
+      "average": 55600
+    },
+    "01.03": {
+      "name": "01.03 Agricultural production operations",
+      "n": 14100,
+      "median": 33600,
+      "average": 39600
+    },
+    "01.04": {
+      "name": "01.04 Agricultural and food products processing",
+      "n": 2070,
+      "median": 33200,
+      "average": 35680
+    },
+    "01.05": {
+      "name": "01.05 Agricultural and domestic animal services",
+      "n": 9175,
+      "median": 19800,
+      "average": 26520
+    },
+    "01.06": {
+      "name": "01.06 Applied horticulture/horticultural business services",
+      "n": 37690,
+      "median": 36800,
+      "average": 43880
+    },
+    "01.07": {
+      "name": "01.07 International agriculture",
+      "n": 50,
+      "median": 37600,
+      "average": 44000
+    },
+    "01.08": {
+      "name": "01.08 Agricultural public services",
+      "n": 190,
+      "median": 52000,
+      "average": 53600
+    },
+    "01.09": {
+      "name": "01.09 Animal sciences",
+      "n": 10155,
+      "median": 39200,
+      "average": 46600
+    },
+    "01.10": {
+      "name": "01.10 Food science and technology",
+      "n": 15835,
+      "median": 46400,
+      "average": 53200
+    },
+    "01.11": {
+      "name": "01.11 Plant sciences",
+      "n": 10770,
+      "median": 49200,
+      "average": 55350
+    },
+    "01.12": {
+      "name": "01.12 Soil sciences",
+      "n": 1890,
+      "median": 54800,
+      "average": 65000
+    },
+    "01.13": {
+      "name": "01.13 Agriculture/veterinary preparatory programs",
+      "n": 85,
+      "median": 10500,
+      "average": 22400
+    },
+    "01.80": {
+      "name": "01.80 Veterinary medicine (DVM)",
+      "n": 13340,
+      "median": 68000,
+      "average": 73500
+    },
+    "01.81": {
+      "name": "01.81 Veterinary biomedical and clinical sciences (Cert., MS, MSc, PhD)",
+      "n": 2255,
+      "median": 69500,
+      "average": 84900
+    },
+    "01.82": {
+      "name": "01.82 Veterinary administrative services",
+      "n": 1255,
+      "median": 28600,
+      "average": 29900
+    },
+    "01.83": {
+      "name": "01.83 Veterinary/animal health technologies/technicians",
+      "n": 23105,
+      "median": 33200,
+      "average": 35520
+    },
+    "01.99": {
+      "name": "01.99 Agricultural and veterinary sciences/services/operations and related fields, other",
+      "n": 460,
+      "median": 44800,
+      "average": 48600
+    },
+    "03.01": {
+      "name": "03.01 Natural resources conservation and research",
+      "n": 50980,
+      "median": 53600,
+      "average": 61200
+    },
+    "03.02": {
+      "name": "03.02 Environmental/natural resources management and policy",
+      "n": 19885,
+      "median": 51200,
+      "average": 58800
+    },
+    "03.03": {
+      "name": "03.03 Fishing and fisheries sciences and management",
+      "n": 1430,
+      "median": 45200,
+      "average": 53350
+    },
+    "03.05": {
+      "name": "03.05 Forestry",
+      "n": 44320,
+      "median": 52000,
+      "average": 58200
+    },
+    "03.06": {
+      "name": "03.06 Wildlife and wildlands science and management",
+      "n": 5280,
+      "median": 41600,
+      "average": 47520
+    },
+    "03.99": {
+      "name": "03.99 Natural resources and conservation, other",
+      "n": 470,
+      "median": 51600,
+      "average": 55400
+    },
+    "31.01": {
+      "name": "31.01 Parks, recreation, and leisure studies",
+      "n": 24915,
+      "median": 42800,
+      "average": 48320
+    },
+    "31.03": {
+      "name": "31.03 Parks, recreation, and leisure facilities management",
+      "n": 3525,
+      "median": 55200,
+      "average": 59150
+    },
+    "31.05": {
+      "name": "31.05 Sports, kinesiology, and physical education/physical fitness",
+      "n": 119110,
+      "median": 38400,
+      "average": 49880
+    },
+    "31.06": {
+      "name": "31.06 Outdoor education",
+      "n": 3200,
+      "median": 38400,
+      "average": 49160
+    },
+    "31.99": {
+      "name": "31.99 Parks, recreation, leisure, fitness, and kinesiology, other",
+      "n": 305,
+      "median": 14700,
+      "average": 24000
+    },
+    "51.00": {
+      "name": "51.00 General health services/allied health/health sciences",
+      "n": 73230,
+      "median": 36000,
+      "average": 44360
+    },
+    "51.01": {
+      "name": "51.01 Chiropractic (DC)",
+      "n": 7965,
+      "median": 45600,
+      "average": 57100
+    },
+    "51.02": {
+      "name": "51.02 Communication disorders sciences and services",
+      "n": 15760,
+      "median": 64500,
+      "average": 61200
+    },
+    "51.04": {
+      "name": "51.04 Dentistry (DDS, DMD)",
+      "n": 27015,
+      "median": 51600,
+      "average": 71600
+    },
+    "51.05": {
+      "name": "51.05 Advanced/graduate dentistry and oral sciences (Cert., MS, MSc, PhD)",
+      "n": 4040,
+      "median": 54000,
+      "average": 87000
+    },
+    "51.06": {
+      "name": "51.06 Dental support services and allied professions",
+      "n": 93590,
+      "median": 35200,
+      "average": 38200
+    },
+    "51.07": {
+      "name": "51.07 Health and medical administrative services",
+      "n": 101880,
+      "median": 37200,
+      "average": 40440
+    },
+    "51.08": {
+      "name": "51.08 Allied health and medical assisting services",
+      "n": 53705,
+      "median": 38000,
+      "average": 39640
+    },
+    "51.09": {
+      "name": "51.09 Allied health diagnostic, intervention and treatment professions",
+      "n": 79410,
+      "median": 65500,
+      "average": 64700
+    },
+    "51.10": {
+      "name": "51.10 Clinical/medical laboratory science/research and allied professions",
+      "n": 40495,
+      "median": 49200,
+      "average": 50360
+    },
+    "51.11": {
+      "name": "51.11 Health/medical preparatory programs",
+      "n": 12855,
+      "median": 18400,
+      "average": 31240
+    },
+    "51.12": {
+      "name": "51.12 Medicine",
+      "n": 63195,
+      "median": 72000,
+      "average": 105200
+    },
+    "51.14": {
+      "name": "51.14 Medical clinical sciences/graduate medical studies",
+      "n": 20665,
+      "median": 73000,
+      "average": 110800
+    },
+    "51.15": {
+      "name": "51.15 Mental and social health services and allied professions",
+      "n": 26945,
+      "median": 38400,
+      "average": 41520
+    },
+    "51.17": {
+      "name": "51.17 Optometry (OD)",
+      "n": 6515,
+      "median": 71500,
+      "average": 79400
+    },
+    "51.18": {
+      "name": "51.18 Ophthalmic and optometric support services and allied professions",
+      "n": 11015,
+      "median": 41600,
+      "average": 44800
+    },
+    "51.20": {
+      "name": "51.20 Pharmacy, pharmaceutical sciences and administration",
+      "n": 58060,
+      "median": 74000,
+      "average": 77300
+    },
+    "51.22": {
+      "name": "51.22 Public health",
+      "n": 25480,
+      "median": 61600,
+      "average": 71700
+    },
+    "51.23": {
+      "name": "51.23 Rehabilitation and therapeutic professions",
+      "n": 76710,
+      "median": 52000,
+      "average": 53200
+    },
+    "51.26": {
+      "name": "51.26 Health aides/attendants/orderlies",
+      "n": 208160,
+      "median": 34800,
+      "average": 35000
+    },
+    "51.27": {
+      "name": "51.27 Medical illustration and informatics",
+      "n": 1505,
+      "median": 70500,
+      "average": 77200
+    },
+    "51.31": {
+      "name": "51.31 Dietetics and clinical nutrition services",
+      "n": 14445,
+      "median": 38800,
+      "average": 42400
+    },
+    "51.32": {
+      "name": "51.32 Health professions education, ethics, and humanities",
+      "n": 2570,
+      "median": 78000,
+      "average": 91900
+    },
+    "51.33": {
+      "name": "51.33 Alternative and complementary medicine and medical systems",
+      "n": 8600,
+      "median": 19800,
+      "average": 30000
+    },
+    "51.34": {
+      "name": "51.34 Alternative and complementary medical support services",
+      "n": 8135,
+      "median": 36000,
+      "average": 42600
+    },
+    "51.35": {
+      "name": "51.35 Somatic bodywork and related therapeutic services",
+      "n": 39790,
+      "median": 21600,
+      "average": 27720
+    },
+    "51.36": {
+      "name": "51.36 Movement and mind-body therapies",
+      "n": 1795,
+      "median": 12500,
+      "average": 24300
+    },
+    "51.37": {
+      "name": "51.37 Energy-based and biologically-based therapies",
+      "n": 975,
+      "median": 15900,
+      "average": 24920
+    },
+    "51.38": {
+      "name": "51.38 Registered nursing, nursing administration, nursing research and clinical nursing",
+      "n": 465995,
+      "median": 62800,
+      "average": 62300
+    },
+    "51.39": {
+      "name": "51.39 Practical nursing, vocational nursing and nursing assistants",
+      "n": 98930,
+      "median": 43200,
+      "average": 42640
+    },
+    "51.99": {
+      "name": "51.99 Health professions and related programs, other",
+      "n": 805,
+      "median": 39600,
+      "average": 44000
+    },
+    "60.01": {
+      "name": "60.01 Dental residency/fellowship programs",
+      "n": 860,
+      "median": 62400,
+      "average": 106000
+    },
+    "60.03": {
+      "name": "60.03 Veterinary residency/fellowship programs",
+      "n": 575,
+      "median": 86000,
+      "average": 87200
+    },
+    "60.07": {
+      "name": "60.07 Nurse practitioner residency/fellowship programs",
+      "n": 2985,
+      "median": 103000,
+      "average": 93400
+    },
+    "60.08": {
+      "name": "60.08 Pharmacy residency/fellowship programs",
+      "n": 50,
+      "median": 111000,
+      "average": 96000
+    },
+    "61.01": {
+      "name": "61.01 Combined medical residency/fellowship programs",
+      "n": 770,
+      "median": 126000,
+      "average": 147600
+    },
+    "61.02": {
+      "name": "61.02 Multiple-pathway medical fellowship programs",
+      "n": 560,
+      "median": 115000,
+      "average": 147000
+    },
+    "61.03": {
+      "name": "61.03 Allergy and immunology residency/fellowship programs",
+      "n": 145,
+      "median": 90000,
+      "average": 132000
+    },
+    "61.04": {
+      "name": "61.04 Anesthesiology residency/fellowship programs",
+      "n": 2470,
+      "median": 125000,
+      "average": 155800
+    },
+    "61.05": {
+      "name": "61.05 Dermatology residency/fellowship programs",
+      "n": 565,
+      "median": 90000,
+      "average": 144500
+    },
+    "61.06": {
+      "name": "61.06 Emergency medicine residency/fellowship programs",
+      "n": 1665,
+      "median": 148000,
+      "average": 160800
+    },
+    "61.07": {
+      "name": "61.07 Family medicine residency/fellowship programs",
+      "n": 15100,
+      "median": 115000,
+      "average": 127000
+    },
+    "61.08": {
+      "name": "61.08 Internal medicine residency/fellowship programs",
+      "n": 6060,
+      "median": 112000,
+      "average": 150000
+    },
+    "61.09": {
+      "name": "61.09 Medical genetics and genomics residency/fellowship programs",
+      "n": 40,
+      "median": 123000,
+      "average": 140000
+    },
+    "61.10": {
+      "name": "61.10 Neurological surgery residency/fellowship programs",
+      "n": 205,
+      "median": 88000,
+      "average": 156000
+    },
+    "61.11": {
+      "name": "61.11 Neurology residency/fellowship programs",
+      "n": 890,
+      "median": 88000,
+      "average": 130400
+    },
+    "61.12": {
+      "name": "61.12 Nuclear medicine residency/fellowship programs",
+      "n": 90,
+      "median": 89000,
+      "average": 154000
+    },
+    "61.13": {
+      "name": "61.13 Obstetrics and gynecology residency/fellowship programs",
+      "n": 2060,
+      "median": 90000,
+      "average": 132800
+    },
+    "61.14": {
+      "name": "61.14 Ophthalmology residency/fellowship programs",
+      "n": 1160,
+      "median": 96000,
+      "average": 162000
+    },
+    "61.15": {
+      "name": "61.15 Orthopedic surgery residency/fellowship programs",
+      "n": 1080,
+      "median": 120000,
+      "average": 148400
+    },
+    "61.17": {
+      "name": "61.17 Otolaryngology residency/fellowship programs",
+      "n": 480,
+      "median": 79500,
+      "average": 113600
+    },
+    "61.18": {
+      "name": "61.18 Pathology residency/fellowship programs",
+      "n": 1250,
+      "median": 89000,
+      "average": 158400
+    },
+    "61.19": {
+      "name": "61.19 Pediatrics residency/fellowship programs",
+      "n": 2935,
+      "median": 81000,
+      "average": 113000
+    },
+    "61.20": {
+      "name": "61.20 Physical medicine and rehabilitation residency/fellowship programs",
+      "n": 655,
+      "median": 70000,
+      "average": 104400
+    },
+    "61.21": {
+      "name": "61.21 Plastic surgery residency/fellowship programs",
+      "n": 320,
+      "median": 133000,
+      "average": 191000
+    },
+    "61.23": {
+      "name": "61.23 Preventive medicine residency/fellowship programs",
+      "n": 345,
+      "median": 32000,
+      "average": 68800
+    },
+    "61.24": {
+      "name": "61.24 Psychiatry residency/fellowship programs",
+      "n": 3515,
+      "median": 121000,
+      "average": 151200
+    },
+    "61.25": {
+      "name": "61.25 Radiation oncology residency/fellowship programs",
+      "n": 245,
+      "median": 156000,
+      "average": 198000
+    },
+    "61.26": {
+      "name": "61.26 Radiology residency/fellowship programs",
+      "n": 1910,
+      "median": 154000,
+      "average": 202400
+    },
+    "61.27": {
+      "name": "61.27 Surgery residency/fellowship programs",
+      "n": 2935,
+      "median": 81000,
+      "average": 132600
+    },
+    "61.28": {
+      "name": "61.28 Urology residency/fellowship programs",
+      "n": 460,
+      "median": 108000,
+      "average": 133000
+    },
+    "61.99": {
+      "name": "61.99 Medical residency/fellowship programs, other",
+      "n": 310,
+      "median": 148000,
+      "average": 152000
+    },
+    "12.03": {
+      "name": "12.03 Funeral service and mortuary science",
+      "n": 4880,
+      "median": 55600,
+      "average": 57350
+    },
+    "12.04": {
+      "name": "12.04 Cosmetology and related personal grooming services",
+      "n": 231235,
+      "median": 17400,
+      "average": 24000
+    },
+    "12.05": {
+      "name": "12.05 Culinary arts and related services",
+      "n": 164250,
+      "median": 30400,
+      "average": 35400
+    },
+    "12.06": {
+      "name": "12.06 Casino operations and services",
+      "n": 280,
+      "median": 16000,
+      "average": 27000
+    },
+    "28.08": {
+      "name": "28.08 Military science, leadership and operational artCAN",
+      "n": 3105,
+      "median": 96000,
+      "average": 92000
+    },
+    "29.05": {
+      "name": "29.05 Military technologies and applied sciencesCAN",
+      "n": 4185,
+      "median": 51200,
+      "average": 54350
+    },
+    "43.01": {
+      "name": "43.01 Criminal justice and corrections",
+      "n": 155665,
+      "median": 54000,
+      "average": 60450
+    },
+    "43.02": {
+      "name": "43.02 Fire protection",
+      "n": 32990,
+      "median": 69500,
+      "average": 71800
+    },
+    "43.03": {
+      "name": "43.03 Security and protective services, specialized programs",
+      "n": 6065,
+      "median": 58800,
+      "average": 63850
+    },
+    "43.04": {
+      "name": "43.04 Security science and technology",
+      "n": 3525,
+      "median": 46800,
+      "average": 57350
+    },
+    "43.99": {
+      "name": "43.99 Security and protective services, other",
+      "n": 1485,
+      "median": 42000,
+      "average": 48160
+    },
+    "49.01": {
+      "name": "49.01 Air transportation",
+      "n": 35705,
+      "median": 54400,
+      "average": 67600
+    },
+    "49.02": {
+      "name": "49.02 Ground transportation",
+      "n": 120665,
+      "median": 49200,
+      "average": 53050
+    },
+    "49.03": {
+      "name": "49.03 Marine transportation",
+      "n": 20260,
+      "median": 51200,
+      "average": 66800
+    },
+    "49.99": {
+      "name": "49.99 Transportation and materials moving, other",
+      "n": 1980,
+      "median": 43600,
+      "average": 51700
+    },
+    "30.00": {
+      "name": "30.00 Inclusive postsecondary education",
+      "n": 435,
+      "median": 4880,
+      "average": 9720
+    },
+    "30.99": {
+      "name": "30.99 Multidisciplinary/interdisciplinary studies, other",
+      "n": 3695,
+      "median": 47200,
+      "average": 54800
+    }
+  },
+  "master": {
+    "13.01": {
+      "name": "13.01 Education, general",
+      "n": 91070,
+      "median": 78500,
+      "average": 70500
+    },
+    "13.02": {
+      "name": "13.02 Bilingual, multilingual and multicultural education",
+      "n": 180,
+      "median": 92000,
+      "average": 81000
+    },
+    "13.03": {
+      "name": "13.03 Curriculum and instruction",
+      "n": 1990,
+      "median": 85000,
+      "average": 73100
+    },
+    "13.04": {
+      "name": "13.04 Educational administration and supervision",
+      "n": 11720,
+      "median": 92000,
+      "average": 81000
+    },
+    "13.05": {
+      "name": "13.05 Educational/instructional media design",
+      "n": 1895,
+      "median": 83000,
+      "average": 77600
+    },
+    "13.06": {
+      "name": "13.06 Educational assessment, evaluation and research",
+      "n": 290,
+      "median": 81000,
+      "average": 72000
+    },
+    "13.07": {
+      "name": "13.07 International and comparative education",
+      "n": 160,
+      "median": 65000,
+      "average": 67000
+    },
+    "13.09": {
+      "name": "13.09 Social and philosophical foundations of education",
+      "n": 285,
+      "median": 65000,
+      "average": 61200
+    },
+    "13.10": {
+      "name": "13.10 Special education and teaching",
+      "n": 3685,
+      "median": 69000,
+      "average": 61500
+    },
+    "13.11": {
+      "name": "13.11 Student counselling and personnel services",
+      "n": 6230,
+      "median": 65000,
+      "average": 61750
+    },
+    "13.12": {
+      "name": "13.12 Teacher education and professional development, specific levels and methods",
+      "n": 6600,
+      "median": 57200,
+      "average": 66600
+    },
+    "13.13": {
+      "name": "13.13 Teacher education and professional development, specific subject areas",
+      "n": 11955,
+      "median": 57200,
+      "average": 59100
+    },
+    "13.14": {
+      "name": "13.14 Teaching English or French as a second or foreign language",
+      "n": 1630,
+      "median": 43600,
+      "average": 47920
+    },
+    "13.15": {
+      "name": "13.15 Teaching assistants/aides",
+      "n": 1160,
+      "median": 86000,
+      "average": 71000
+    },
+    "13.99": {
+      "name": "13.99 Education, other",
+      "n": 40,
+      "median": 29400,
+      "average": 38000
+    },
+    "10.02": {
+      "name": "10.02 Audiovisual communications technologies/technicians",
+      "n": 180,
+      "median": 52000,
+      "average": 59600
+    },
+    "10.03": {
+      "name": "10.03 Graphic communications",
+      "n": 670,
+      "median": 68000,
+      "average": 70400
+    },
+    "50.01": {
+      "name": "50.01 Visual, digital and performing arts, general",
+      "n": 1955,
+      "median": 31800,
+      "average": 43400
+    },
+    "50.03": {
+      "name": "50.03 Dance",
+      "n": 450,
+      "median": 12600,
+      "average": 29900
+    },
+    "50.04": {
+      "name": "50.04 Design and applied arts",
+      "n": 3285,
+      "median": 35600,
+      "average": 47240
+    },
+    "50.05": {
+      "name": "50.05 Drama/theatre arts and stagecraft",
+      "n": 2310,
+      "median": 28200,
+      "average": 41680
+    },
+    "50.06": {
+      "name": "50.06 Film/video and photographic arts",
+      "n": 2460,
+      "median": 32000,
+      "average": 43400
+    },
+    "50.07": {
+      "name": "50.07 Fine arts and art studies",
+      "n": 9530,
+      "median": 30600,
+      "average": 47240
+    },
+    "50.09": {
+      "name": "50.09 Music",
+      "n": 10965,
+      "median": 24200,
+      "average": 38000
+    },
+    "50.10": {
+      "name": "50.10 Arts, entertainment, and media management",
+      "n": 290,
+      "median": 40400,
+      "average": 69500
+    },
+    "16.01": {
+      "name": "16.01 Linguistic, comparative and related language studies and services",
+      "n": 10510,
+      "median": 44000,
+      "average": 51550
+    },
+    "16.03": {
+      "name": "16.03 East Asian languages, literatures and linguistics",
+      "n": 235,
+      "median": 23400,
+      "average": 38800
+    },
+    "16.04": {
+      "name": "16.04 Slavic, Baltic and Albanian languages, literatures and linguistics",
+      "n": 490,
+      "median": 30000,
+      "average": 40400
+    },
+    "16.05": {
+      "name": "16.05 Germanic languages, literatures and linguistics",
+      "n": 465,
+      "median": 34000,
+      "average": 54800
+    },
+    "16.07": {
+      "name": "16.07 South Asian languages, literatures and linguistics",
+      "n": 2225,
+      "median": 23200,
+      "average": 28760
+    },
+    "16.08": {
+      "name": "16.08 Iranian languages, literatures and linguistics",
+      "n": 55,
+      "median": 18800,
+      "average": 33000
+    },
+    "16.09": {
+      "name": "16.09 Romance languages, literatures and linguistics",
+      "n": 570,
+      "median": 45200,
+      "average": 73200
+    },
+    "16.10": {
+      "name": "16.10 Indigenous languages, literatures, and linguistics of the Americas",
+      "n": 50,
+      "median": 62000,
+      "average": 58000
+    },
+    "16.11": {
+      "name": "16.11 Middle/Near Eastern and Semitic languages, literatures and linguistics",
+      "n": 150,
+      "median": 16600,
+      "average": 26000
+    },
+    "16.12": {
+      "name": "16.12 Classics and classical languages, literatures and linguistics",
+      "n": 95,
+      "median": 70500,
+      "average": 67000
+    },
+    "16.17": {
+      "name": "16.17 Second language learning",
+      "n": 205,
+      "median": 46000,
+      "average": 47600
+    },
+    "16.99": {
+      "name": "16.99 Indigenous and foreign languages, literatures and linguistics, other",
+      "n": 30,
+      "median": 59200,
+      "average": 60000
+    },
+    "23.01": {
+      "name": "23.01 English language and literature, general",
+      "n": 10355,
+      "median": 39200,
+      "average": 51750
+    },
+    "23.13": {
+      "name": "23.13 English rhetoric and composition/writing studies",
+      "n": 1795,
+      "median": 39600,
+      "average": 46680
+    },
+    "23.14": {
+      "name": "23.14 English literature",
+      "n": 8365,
+      "median": 43600,
+      "average": 54600
+    },
+    "24.01": {
+      "name": "24.01 Liberal arts and sciences, general studies and humanities",
+      "n": 8550,
+      "median": 36400,
+      "average": 53750
+    },
+    "30.13": {
+      "name": "30.13 Medieval and renaissance studies",
+      "n": 245,
+      "median": 31800,
+      "average": 52400
+    },
+    "30.22": {
+      "name": "30.22 Classical and ancient studies",
+      "n": 780,
+      "median": 40400,
+      "average": 49100
+    },
+    "30.29": {
+      "name": "30.29 Maritime studies",
+      "n": 80,
+      "median": 109000,
+      "average": 92000
+    },
+    "30.45": {
+      "name": "30.45 History and language/literature",
+      "n": 360,
+      "median": 28200,
+      "average": 37000
+    },
+    "30.52": {
+      "name": "30.52 Digital humanities and textual studies",
+      "n": 30,
+      "median": 25000,
+      "average": 36000
+    },
+    "38.00": {
+      "name": "38.00 Philosophy and religious studies, general",
+      "n": 170,
+      "median": 42800,
+      "average": 52000
+    },
+    "38.01": {
+      "name": "38.01 Philosophy, logic and ethics",
+      "n": 5840,
+      "median": 44800,
+      "average": 61050
+    },
+    "38.02": {
+      "name": "38.02 Religion/religious studies",
+      "n": 3340,
+      "median": 38800,
+      "average": 46680
+    },
+    "38.99": {
+      "name": "38.99 Philosophy and religious studies, other",
+      "n": 50,
+      "median": 52000,
+      "average": 54000
+    },
+    "39.02": {
+      "name": "39.02 Bible/Biblical studies",
+      "n": 425,
+      "median": 49600,
+      "average": 51000
+    },
+    "39.03": {
+      "name": "39.03 Missions/missionary studies and missiology",
+      "n": 85,
+      "median": 38800,
+      "average": 42000
+    },
+    "39.04": {
+      "name": "39.04 Religious education",
+      "n": 995,
+      "median": 56000,
+      "average": 58400
+    },
+    "39.05": {
+      "name": "39.05 Religious music and worship",
+      "n": 95,
+      "median": 23200,
+      "average": 32000
+    },
+    "39.06": {
+      "name": "39.06 Theological and ministerial studies",
+      "n": 17265,
+      "median": 47600,
+      "average": 49080
+    },
+    "39.07": {
+      "name": "39.07 Pastoral counselling and specialized ministries",
+      "n": 1050,
+      "median": 49200,
+      "average": 48900
+    },
+    "39.08": {
+      "name": "39.08 Religious institution administration and law",
+      "n": 75,
+      "median": 19400,
+      "average": 20000
+    },
+    "39.99": {
+      "name": "39.99 Theology and religious vocations, other",
+      "n": 275,
+      "median": 47600,
+      "average": 47200
+    },
+    "54.01": {
+      "name": "54.01 History",
+      "n": 13890,
+      "median": 51600,
+      "average": 61900
+    },
+    "55.01": {
+      "name": "55.01 French language and literature, generalCAN",
+      "n": 2105,
+      "median": 53600,
+      "average": 55350
+    },
+    "55.13": {
+      "name": "55.13 French rhetoric and composition/writing studiesCAN",
+      "n": 100,
+      "median": 56000,
+      "average": 54000
+    },
+    "55.14": {
+      "name": "55.14 French literatureCAN",
+      "n": 3740,
+      "median": 52000,
+      "average": 53100
+    },
+    "05.01": {
+      "name": "05.01 Area studies",
+      "n": 2820,
+      "median": 52000,
+      "average": 59850
+    },
+    "05.02": {
+      "name": "05.02 Ethnic, cultural minority, gender, and group studies",
+      "n": 2430,
+      "median": 54400,
+      "average": 53600
+    },
+    "09.01": {
+      "name": "09.01 Communication and media studies",
+      "n": 9175,
+      "median": 54000,
+      "average": 63800
+    },
+    "09.04": {
+      "name": "09.04 Journalism",
+      "n": 4090,
+      "median": 56800,
+      "average": 65300
+    },
+    "09.07": {
+      "name": "09.07 Radio, television and digital communication",
+      "n": 950,
+      "median": 55600,
+      "average": 66200
+    },
+    "09.09": {
+      "name": "09.09 Public relations, advertising and applied communication",
+      "n": 2885,
+      "median": 54800,
+      "average": 59200
+    },
+    "09.10": {
+      "name": "09.10 Publishing",
+      "n": 410,
+      "median": 53200,
+      "average": 61600
+    },
+    "09.99": {
+      "name": "09.99 Communication, journalism and related programs, other",
+      "n": 390,
+      "median": 34000,
+      "average": 39000
+    },
+    "19.01": {
+      "name": "19.01 Family and consumer sciences/human sciences, general",
+      "n": 510,
+      "median": 40400,
+      "average": 44200
+    },
+    "19.02": {
+      "name": "19.02 Family and consumer sciences/human sciences business services",
+      "n": 90,
+      "median": 66500,
+      "average": 70000
+    },
+    "19.05": {
+      "name": "19.05 Foods, nutrition and related services",
+      "n": 2880,
+      "median": 53200,
+      "average": 59350
+    },
+    "19.06": {
+      "name": "19.06 Housing and human environments",
+      "n": 45,
+      "median": 81000,
+      "average": 68000
+    },
+    "19.07": {
+      "name": "19.07 Human development, family studies and related services",
+      "n": 2275,
+      "median": 52800,
+      "average": 56500
+    },
+    "19.09": {
+      "name": "19.09 Apparel and textiles",
+      "n": 405,
+      "median": 30600,
+      "average": 45400
+    },
+    "19.10": {
+      "name": "19.10 Work and family studies",
+      "n": 145,
+      "median": 52400,
+      "average": 62000
+    },
+    "19.99": {
+      "name": "19.99 Family and consumer sciences/human sciences, other",
+      "n": 85,
+      "median": 55200,
+      "average": 61000
+    },
+    "22.00": {
+      "name": "22.00 Non-professional legal studies",
+      "n": 500,
+      "median": 72000,
+      "average": 77200
+    },
+    "22.02": {
+      "name": "22.02 Legal research and advanced professional studies (post-LLB/JD)",
+      "n": 29195,
+      "median": 66500,
+      "average": 107700
+    },
+    "22.03": {
+      "name": "22.03 Legal support services",
+      "n": 155,
+      "median": 52400,
+      "average": 68000
+    },
+    "30.05": {
+      "name": "30.05 Peace studies and conflict resolution",
+      "n": 1505,
+      "median": 64000,
+      "average": 71200
+    },
+    "30.11": {
+      "name": "30.11 Gerontology",
+      "n": 440,
+      "median": 45600,
+      "average": 54400
+    },
+    "30.14": {
+      "name": "30.14 Museology/museum studies",
+      "n": 1725,
+      "median": 44800,
+      "average": 48080
+    },
+    "30.15": {
+      "name": "30.15 Science, technology and society",
+      "n": 50,
+      "median": 42000,
+      "average": 50000
+    },
+    "30.17": {
+      "name": "30.17 Behavioural sciences",
+      "n": 185,
+      "median": 43200,
+      "average": 52400
+    },
+    "30.20": {
+      "name": "30.20 International/globalization studies",
+      "n": 1425,
+      "median": 51600,
+      "average": 56350
+    },
+    "30.23": {
+      "name": "30.23 Intercultural/multicultural and diversity studies",
+      "n": 195,
+      "median": 57200,
+      "average": 52400
+    },
+    "30.25": {
+      "name": "30.25 Cognitive science",
+      "n": 160,
+      "median": 40000,
+      "average": 54000
+    },
+    "30.26": {
+      "name": "30.26 Cultural studies/critical theory and analysis",
+      "n": 795,
+      "median": 36800,
+      "average": 44300
+    },
+    "30.28": {
+      "name": "30.28 Dispute resolution",
+      "n": 355,
+      "median": 60800,
+      "average": 62200
+    },
+    "30.31": {
+      "name": "30.31 Human computer interaction",
+      "n": 155,
+      "median": 64000,
+      "average": 67000
+    },
+    "30.33": {
+      "name": "30.33 Sustainability studies",
+      "n": 1695,
+      "median": 56800,
+      "average": 62350
+    },
+    "30.40": {
+      "name": "30.40 Economics and foreign language/literature",
+      "n": 50,
+      "median": 44000,
+      "average": 46000
+    },
+    "30.44": {
+      "name": "30.44 Geography and environmental studies",
+      "n": 320,
+      "median": 54800,
+      "average": 69200
+    },
+    "30.46": {
+      "name": "30.46 History and political science",
+      "n": 325,
+      "median": 36400,
+      "average": 55800
+    },
+    "42.01": {
+      "name": "42.01 Psychology, general",
+      "n": 21215,
+      "median": 52400,
+      "average": 58700
+    },
+    "42.27": {
+      "name": "42.27 Research and experimental psychology",
+      "n": 1220,
+      "median": 47200,
+      "average": 57600
+    },
+    "42.28": {
+      "name": "42.28 Clinical, counselling and applied psychology",
+      "n": 20435,
+      "median": 58000,
+      "average": 58300
+    },
+    "42.99": {
+      "name": "42.99 Psychology, other",
+      "n": 285,
+      "median": 68500,
+      "average": 68500
+    },
+    "45.01": {
+      "name": "45.01 General social sciences",
+      "n": 2100,
+      "median": 46800,
+      "average": 56900
+    },
+    "45.02": {
+      "name": "45.02 Anthropology",
+      "n": 4085,
+      "median": 48800,
+      "average": 55000
+    },
+    "45.03": {
+      "name": "45.03 Archaeology",
+      "n": 1430,
+      "median": 46400,
+      "average": 53000
+    },
+    "45.04": {
+      "name": "45.04 Criminology",
+      "n": 3585,
+      "median": 68000,
+      "average": 70200
+    },
+    "45.05": {
+      "name": "45.05 Demography",
+      "n": 375,
+      "median": 61600,
+      "average": 56000
+    },
+    "45.06": {
+      "name": "45.06 Economics",
+      "n": 29190,
+      "median": 60000,
+      "average": 82000
+    },
+    "45.07": {
+      "name": "45.07 Geography and cartography",
+      "n": 7645,
+      "median": 63200,
+      "average": 69800
+    },
+    "45.09": {
+      "name": "45.09 International relations and national security studies",
+      "n": 7270,
+      "median": 70000,
+      "average": 81100
+    },
+    "45.10": {
+      "name": "45.10 Political science and government",
+      "n": 16975,
+      "median": 59600,
+      "average": 71500
+    },
+    "45.11": {
+      "name": "45.11 Sociology",
+      "n": 8295,
+      "median": 47200,
+      "average": 55250
+    },
+    "45.12": {
+      "name": "45.12 Urban studies/affairs",
+      "n": 390,
+      "median": 70000,
+      "average": 78400
+    },
+    "45.13": {
+      "name": "45.13 Sociology and anthropology",
+      "n": 90,
+      "median": 64000,
+      "average": 63000
+    },
+    "45.99": {
+      "name": "45.99 Social sciences, other",
+      "n": 825,
+      "median": 45200,
+      "average": 51000
+    },
+    "30.16": {
+      "name": "30.16 Accounting and computer science",
+      "n": 100,
+      "median": 44400,
+      "average": 67000
+    },
+    "44.00": {
+      "name": "44.00 Human services, general",
+      "n": 1250,
+      "median": 71500,
+      "average": 67800
+    },
+    "44.02": {
+      "name": "44.02 Community organization and advocacy",
+      "n": 50,
+      "median": 55200,
+      "average": 64000
+    },
+    "44.04": {
+      "name": "44.04 Public administration",
+      "n": 17345,
+      "median": 78500,
+      "average": 83200
+    },
+    "44.05": {
+      "name": "44.05 Public policy analysis",
+      "n": 4610,
+      "median": 73500,
+      "average": 79700
+    },
+    "44.07": {
+      "name": "44.07 Social work",
+      "n": 32185,
+      "median": 70000,
+      "average": 69900
+    },
+    "44.99": {
+      "name": "44.99 Public administration and social service professions, other",
+      "n": 50,
+      "median": 46000,
+      "average": 62000
+    },
+    "52.01": {
+      "name": "52.01 Business/commerce, general",
+      "n": 57605,
+      "median": 91000,
+      "average": 148000
+    },
+    "52.02": {
+      "name": "52.02 Business administration, management and operations",
+      "n": 160535,
+      "median": 77500,
+      "average": 107800
+    },
+    "52.03": {
+      "name": "52.03 Accounting and related services",
+      "n": 29545,
+      "median": 66500,
+      "average": 91700
+    },
+    "52.04": {
+      "name": "52.04 Business operations support and assistant services",
+      "n": 380,
+      "median": 60000,
+      "average": 67200
+    },
+    "52.05": {
+      "name": "52.05 Business/corporate communications",
+      "n": 135,
+      "median": 52000,
+      "average": 62000
+    },
+    "52.06": {
+      "name": "52.06 Business/managerial economics",
+      "n": 2965,
+      "median": 71000,
+      "average": 124400
+    },
+    "52.07": {
+      "name": "52.07 Entrepreneurial and small business operations",
+      "n": 1150,
+      "median": 56000,
+      "average": 69000
+    },
+    "52.08": {
+      "name": "52.08 Finance and financial management services",
+      "n": 36640,
+      "median": 69000,
+      "average": 143600
+    },
+    "52.09": {
+      "name": "52.09 Hospitality administration/management",
+      "n": 2185,
+      "median": 36400,
+      "average": 48840
+    },
+    "52.10": {
+      "name": "52.10 Human resources management and services",
+      "n": 15530,
+      "median": 59600,
+      "average": 72700
+    },
+    "52.11": {
+      "name": "52.11 International business/trade/commerce",
+      "n": 6660,
+      "median": 55200,
+      "average": 75300
+    },
+    "52.12": {
+      "name": "52.12 Management information systems and services",
+      "n": 2595,
+      "median": 77500,
+      "average": 93500
+    },
+    "52.13": {
+      "name": "52.13 Management sciences and quantitative methods",
+      "n": 2740,
+      "median": 76500,
+      "average": 90900
+    },
+    "52.14": {
+      "name": "52.14 Marketing",
+      "n": 17595,
+      "median": 50000,
+      "average": 66700
+    },
+    "52.15": {
+      "name": "52.15 Real estate",
+      "n": 665,
+      "median": 75000,
+      "average": 113400
+    },
+    "52.16": {
+      "name": "52.16 Taxation",
+      "n": 2895,
+      "median": 98000,
+      "average": 127200
+    },
+    "52.17": {
+      "name": "52.17 Insurance",
+      "n": 220,
+      "median": 47600,
+      "average": 58000
+    },
+    "52.18": {
+      "name": "52.18 General sales, merchandising and related marketing operations",
+      "n": 655,
+      "median": 50400,
+      "average": 77800
+    },
+    "52.19": {
+      "name": "52.19 Specialized sales, merchandising and marketing operations",
+      "n": 845,
+      "median": 34800,
+      "average": 42700
+    },
+    "52.20": {
+      "name": "52.20 Construction management",
+      "n": 870,
+      "median": 68000,
+      "average": 78400
+    },
+    "52.21": {
+      "name": "52.21 Telecommunications management",
+      "n": 40,
+      "median": 58800,
+      "average": 72000
+    },
+    "52.99": {
+      "name": "52.99 Business, management, marketing and related support services, other",
+      "n": 300,
+      "median": 62800,
+      "average": 162000
+    },
+    "26.01": {
+      "name": "26.01 Biology, general",
+      "n": 11785,
+      "median": 56800,
+      "average": 64600
+    },
+    "26.02": {
+      "name": "26.02 Biochemistry/biophysics and molecular biology",
+      "n": 6850,
+      "median": 59600,
+      "average": 72100
+    },
+    "26.03": {
+      "name": "26.03 Botany/plant biology",
+      "n": 1970,
+      "median": 40000,
+      "average": 48080
+    },
+    "26.04": {
+      "name": "26.04 Cell/cellular biology and anatomical sciences",
+      "n": 1475,
+      "median": 61200,
+      "average": 68800
+    },
+    "26.05": {
+      "name": "26.05 Microbiological sciences and immunology",
+      "n": 5745,
+      "median": 56400,
+      "average": 70500
+    },
+    "26.07": {
+      "name": "26.07 Zoology/animal biology",
+      "n": 2185,
+      "median": 46800,
+      "average": 57600
+    },
+    "26.08": {
+      "name": "26.08 Genetics",
+      "n": 1565,
+      "median": 63600,
+      "average": 78700
+    },
+    "26.09": {
+      "name": "26.09 Physiology, pathology and related sciences",
+      "n": 3675,
+      "median": 66500,
+      "average": 84600
+    },
+    "26.10": {
+      "name": "26.10 Pharmacology and toxicology",
+      "n": 2385,
+      "median": 68000,
+      "average": 81300
+    },
+    "26.11": {
+      "name": "26.11 Biomathematics, bioinformatics, and computational biology",
+      "n": 1085,
+      "median": 59200,
+      "average": 64000
+    },
+    "26.12": {
+      "name": "26.12 Biotechnology",
+      "n": 3150,
+      "median": 44800,
+      "average": 59600
+    },
+    "26.13": {
+      "name": "26.13 Ecology, evolution, systematics and population biology",
+      "n": 6260,
+      "median": 72500,
+      "average": 89800
+    },
+    "26.14": {
+      "name": "26.14 Molecular medicine",
+      "n": 190,
+      "median": 58000,
+      "average": 64000
+    },
+    "26.15": {
+      "name": "26.15 Neurobiology and neurosciences",
+      "n": 2630,
+      "median": 49600,
+      "average": 64800
+    },
+    "30.01": {
+      "name": "30.01 Biological and physical sciences",
+      "n": 11420,
+      "median": 63600,
+      "average": 78000
+    },
+    "30.10": {
+      "name": "30.10 Biopsychology",
+      "n": 50,
+      "median": 75500,
+      "average": 76000
+    },
+    "30.18": {
+      "name": "30.18 Natural sciences",
+      "n": 60,
+      "median": 52400,
+      "average": 60000
+    },
+    "30.19": {
+      "name": "30.19 Nutrition sciences",
+      "n": 600,
+      "median": 58800,
+      "average": 62000
+    },
+    "30.27": {
+      "name": "30.27 Human biology",
+      "n": 55,
+      "median": 94000,
+      "average": 100000
+    },
+    "30.32": {
+      "name": "30.32 Marine sciences",
+      "n": 95,
+      "median": 48800,
+      "average": 46000
+    },
+    "30.35": {
+      "name": "30.35 Climate science",
+      "n": 245,
+      "median": 59600,
+      "average": 61600
+    },
+    "30.41": {
+      "name": "30.41 Environmental geosciences",
+      "n": 120,
+      "median": 72500,
+      "average": 67000
+    },
+    "40.01": {
+      "name": "40.01 Physical sciences, general",
+      "n": 1250,
+      "median": 83000,
+      "average": 91400
+    },
+    "40.02": {
+      "name": "40.02 Astronomy and astrophysics",
+      "n": 585,
+      "median": 64000,
+      "average": 63600
+    },
+    "40.04": {
+      "name": "40.04 Atmospheric sciences and meteorology",
+      "n": 540,
+      "median": 81000,
+      "average": 71200
+    },
+    "40.05": {
+      "name": "40.05 Chemistry",
+      "n": 11935,
+      "median": 53200,
+      "average": 65500
+    },
+    "40.06": {
+      "name": "40.06 Geological and Earth sciences/geosciences",
+      "n": 9055,
+      "median": 66000,
+      "average": 87400
+    },
+    "40.08": {
+      "name": "40.08 Physics",
+      "n": 7390,
+      "median": 58400,
+      "average": 72000
+    },
+    "40.10": {
+      "name": "40.10 Materials sciences",
+      "n": 855,
+      "median": 44000,
+      "average": 70400
+    },
+    "40.11": {
+      "name": "40.11 Physics and astronomy",
+      "n": 85,
+      "median": 46800,
+      "average": 57000
+    },
+    "41.00": {
+      "name": "41.00 Science technologies/technicians, general",
+      "n": 185,
+      "median": 35200,
+      "average": 57200
+    },
+    "11.01": {
+      "name": "11.01 Computer and information sciences and support services, general",
+      "n": 17155,
+      "median": 69000,
+      "average": 74900
+    },
+    "11.02": {
+      "name": "11.02 Computer programming",
+      "n": 465,
+      "median": 68500,
+      "average": 78400
+    },
+    "11.04": {
+      "name": "11.04 Information science/studies",
+      "n": 3020,
+      "median": 70000,
+      "average": 71300
+    },
+    "11.05": {
+      "name": "11.05 Computer systems analysis/analyst",
+      "n": 285,
+      "median": 60800,
+      "average": 66000
+    },
+    "11.07": {
+      "name": "11.07 Computer science",
+      "n": 39120,
+      "median": 84000,
+      "average": 93200
+    },
+    "11.08": {
+      "name": "11.08 Computer software and media applications",
+      "n": 705,
+      "median": 64500,
+      "average": 86800
+    },
+    "11.09": {
+      "name": "11.09 Computer systems networking and telecommunications",
+      "n": 505,
+      "median": 89000,
+      "average": 84000
+    },
+    "11.10": {
+      "name": "11.10 Computer/information technology administration and management",
+      "n": 3930,
+      "median": 72500,
+      "average": 76500
+    },
+    "11.99": {
+      "name": "11.99 Computer and information sciences and support services, other",
+      "n": 6270,
+      "median": 73000,
+      "average": 72600
+    },
+    "25.01": {
+      "name": "25.01 Library science and administration",
+      "n": 13465,
+      "median": 65000,
+      "average": 64700
+    },
+    "27.01": {
+      "name": "27.01 Mathematics",
+      "n": 8840,
+      "median": 52400,
+      "average": 74700
+    },
+    "27.03": {
+      "name": "27.03 Applied mathematics",
+      "n": 2045,
+      "median": 88000,
+      "average": 109000
+    },
+    "27.05": {
+      "name": "27.05 Statistics",
+      "n": 4550,
+      "median": 67000,
+      "average": 75500
+    },
+    "27.06": {
+      "name": "27.06 Applied statistics",
+      "n": 105,
+      "median": 47600,
+      "average": 64000
+    },
+    "30.06": {
+      "name": "30.06 Systems science and theory",
+      "n": 175,
+      "median": 82000,
+      "average": 101000
+    },
+    "30.08": {
+      "name": "30.08 Mathematics and computer science",
+      "n": 895,
+      "median": 90000,
+      "average": 102000
+    },
+    "30.30": {
+      "name": "30.30 Computational science",
+      "n": 140,
+      "median": 65000,
+      "average": 69000
+    },
+    "30.39": {
+      "name": "30.39 Economics and computer science",
+      "n": 70,
+      "median": 54400,
+      "average": 68000
+    },
+    "30.48": {
+      "name": "30.48 Linguistics and computer science",
+      "n": 45,
+      "median": 86000,
+      "average": 88000
+    },
+    "30.49": {
+      "name": "30.49 Mathematical economics",
+      "n": 135,
+      "median": 54800,
+      "average": 86000
+    },
+    "30.70": {
+      "name": "30.70 Data science",
+      "n": 915,
+      "median": 66000,
+      "average": 67200
+    },
+    "30.71": {
+      "name": "30.71 Data analytics",
+      "n": 1875,
+      "median": 76500,
+      "average": 83300
+    },
+    "04.02": {
+      "name": "04.02 Architecture",
+      "n": 15475,
+      "median": 58400,
+      "average": 67900
+    },
+    "04.03": {
+      "name": "04.03 City/urban, community and regional planning",
+      "n": 9890,
+      "median": 71000,
+      "average": 77300
+    },
+    "04.04": {
+      "name": "04.04 Environmental design/architecture",
+      "n": 515,
+      "median": 54800,
+      "average": 72000
+    },
+    "04.05": {
+      "name": "04.05 Interior architecture",
+      "n": 85,
+      "median": 17200,
+      "average": 25600
+    },
+    "04.06": {
+      "name": "04.06 Landscape architecture (BS, BSc, BSLA, BLA, MSLA, MLA, PhD)",
+      "n": 1650,
+      "median": 57200,
+      "average": 62200
+    },
+    "04.08": {
+      "name": "04.08 Architectural history, criticism, and conservation",
+      "n": 85,
+      "median": 64500,
+      "average": 56000
+    },
+    "04.09": {
+      "name": "04.09 Architectural sciences and technology",
+      "n": 245,
+      "median": 69000,
+      "average": 71000
+    },
+    "04.10": {
+      "name": "04.10 Real estate development",
+      "n": 110,
+      "median": 75000,
+      "average": 154000
+    },
+    "14.01": {
+      "name": "14.01 General engineering",
+      "n": 28390,
+      "median": 88000,
+      "average": 108600
+    },
+    "14.02": {
+      "name": "14.02 Aerospace, aeronautical and astronautical/space engineering",
+      "n": 3065,
+      "median": 79500,
+      "average": 87700
+    },
+    "14.03": {
+      "name": "14.03 Agricultural engineering",
+      "n": 910,
+      "median": 43200,
+      "average": 49100
+    },
+    "14.04": {
+      "name": "14.04 Architectural engineering",
+      "n": 280,
+      "median": 37200,
+      "average": 52400
+    },
+    "14.05": {
+      "name": "14.05 Biomedical/medical engineering",
+      "n": 2445,
+      "median": 60400,
+      "average": 68200
+    },
+    "14.07": {
+      "name": "14.07 Chemical engineering",
+      "n": 7100,
+      "median": 65000,
+      "average": 86200
+    },
+    "14.08": {
+      "name": "14.08 Civil engineering",
+      "n": 18580,
+      "median": 68000,
+      "average": 77900
+    },
+    "14.09": {
+      "name": "14.09 Computer engineering",
+      "n": 12095,
+      "median": 83000,
+      "average": 92000
+    },
+    "14.10": {
+      "name": "14.10 Electrical, electronics and communications engineering",
+      "n": 22060,
+      "median": 78500,
+      "average": 89000
+    },
+    "14.11": {
+      "name": "14.11 Engineering mechanics",
+      "n": 85,
+      "median": 104000,
+      "average": 104000
+    },
+    "14.12": {
+      "name": "14.12 Engineering physics/applied physics",
+      "n": 970,
+      "median": 83000,
+      "average": 93400
+    },
+    "14.13": {
+      "name": "14.13 Engineering science",
+      "n": 240,
+      "median": 113000,
+      "average": 111000
+    },
+    "14.14": {
+      "name": "14.14 Environmental/environmental health engineering",
+      "n": 2900,
+      "median": 67000,
+      "average": 75700
+    },
+    "14.18": {
+      "name": "14.18 Materials engineering",
+      "n": 1350,
+      "median": 60800,
+      "average": 70100
+    },
+    "14.19": {
+      "name": "14.19 Mechanical engineering",
+      "n": 19790,
+      "median": 63200,
+      "average": 73600
+    },
+    "14.20": {
+      "name": "14.20 Metallurgical engineering",
+      "n": 425,
+      "median": 68500,
+      "average": 93600
+    },
+    "14.21": {
+      "name": "14.21 Mining and mineral engineering",
+      "n": 945,
+      "median": 83000,
+      "average": 136400
+    },
+    "14.22": {
+      "name": "14.22 Naval architecture and marine engineering",
+      "n": 525,
+      "median": 97000,
+      "average": 91600
+    },
+    "14.23": {
+      "name": "14.23 Nuclear engineering",
+      "n": 455,
+      "median": 103000,
+      "average": 104400
+    },
+    "14.25": {
+      "name": "14.25 Petroleum engineering",
+      "n": 1630,
+      "median": 48800,
+      "average": 79400
+    },
+    "14.27": {
+      "name": "14.27 Systems engineering",
+      "n": 885,
+      "median": 71000,
+      "average": 78800
+    },
+    "14.28": {
+      "name": "14.28 Textile sciences and engineering",
+      "n": 115,
+      "median": 56000,
+      "average": 51000
+    },
+    "14.32": {
+      "name": "14.32 Polymer/plastics engineering",
+      "n": 75,
+      "median": 43200,
+      "average": 50000
+    },
+    "14.33": {
+      "name": "14.33 Construction engineering",
+      "n": 1485,
+      "median": 49600,
+      "average": 63300
+    },
+    "14.34": {
+      "name": "14.34 Forest engineering",
+      "n": 170,
+      "median": 66500,
+      "average": 81000
+    },
+    "14.35": {
+      "name": "14.35 Industrial engineering",
+      "n": 4550,
+      "median": 65000,
+      "average": 74800
+    },
+    "14.36": {
+      "name": "14.36 Manufacturing engineering",
+      "n": 660,
+      "median": 68500,
+      "average": 78000
+    },
+    "14.37": {
+      "name": "14.37 Operations research",
+      "n": 510,
+      "median": 85000,
+      "average": 88800
+    },
+    "14.38": {
+      "name": "14.38 Surveying engineering",
+      "n": 385,
+      "median": 75000,
+      "average": 77600
+    },
+    "14.39": {
+      "name": "14.39 Geological/geophysical engineering",
+      "n": 400,
+      "median": 88000,
+      "average": 94400
+    },
+    "14.40": {
+      "name": "14.40 Paper science and engineering",
+      "n": 50,
+      "median": 118000,
+      "average": 116000
+    },
+    "14.41": {
+      "name": "14.41 Electromechanical engineering",
+      "n": 240,
+      "median": 65000,
+      "average": 69000
+    },
+    "14.42": {
+      "name": "14.42 Mechatronics, robotics, and automation engineering",
+      "n": 1260,
+      "median": 76500,
+      "average": 78200
+    },
+    "14.43": {
+      "name": "14.43 Biochemical engineering",
+      "n": 185,
+      "median": 65500,
+      "average": 76500
+    },
+    "14.44": {
+      "name": "14.44 Engineering chemistry",
+      "n": 250,
+      "median": 42800,
+      "average": 50400
+    },
+    "14.45": {
+      "name": "14.45 Biological/biosystems engineering",
+      "n": 305,
+      "median": 44400,
+      "average": 99000
+    },
+    "14.47": {
+      "name": "14.47 Electrical and computer engineering",
+      "n": 4365,
+      "median": 69500,
+      "average": 74800
+    },
+    "14.48": {
+      "name": "14.48 Energy systems engineering",
+      "n": 1715,
+      "median": 59600,
+      "average": 68400
+    },
+    "14.99": {
+      "name": "14.99 Engineering, other",
+      "n": 2935,
+      "median": 58800,
+      "average": 70500
+    },
+    "15.00": {
+      "name": "15.00 General engineering technologies/technicians",
+      "n": 435,
+      "median": 64000,
+      "average": 81200
+    },
+    "15.02": {
+      "name": "15.02 Civil engineering technology/technician",
+      "n": 35,
+      "median": 73500,
+      "average": 85000
+    },
+    "15.03": {
+      "name": "15.03 Electrical/electronic engineering technologies/technicians",
+      "n": 2335,
+      "median": 73000,
+      "average": 79500
+    },
+    "15.04": {
+      "name": "15.04 Electromechanical technologies/technicians",
+      "n": 735,
+      "median": 69000,
+      "average": 80400
+    },
+    "15.05": {
+      "name": "15.05 Environmental control technologies/technicians",
+      "n": 130,
+      "median": 50800,
+      "average": 61000
+    },
+    "15.06": {
+      "name": "15.06 Industrial production technologies/technicians",
+      "n": 245,
+      "median": 68500,
+      "average": 95000
+    },
+    "15.07": {
+      "name": "15.07 Quality control and safety technologies/technicians",
+      "n": 945,
+      "median": 72000,
+      "average": 82400
+    },
+    "15.08": {
+      "name": "15.08 Mechanical engineering related technologies/technicians",
+      "n": 155,
+      "median": 73000,
+      "average": 68000
+    },
+    "15.09": {
+      "name": "15.09 Mining and petroleum technologies/technicians",
+      "n": 615,
+      "median": 49600,
+      "average": 78000
+    },
+    "15.12": {
+      "name": "15.12 Computer engineering technologies/technicians",
+      "n": 635,
+      "median": 54800,
+      "average": 66000
+    },
+    "15.15": {
+      "name": "15.15 Engineering-related fields",
+      "n": 2315,
+      "median": 85000,
+      "average": 93200
+    },
+    "15.16": {
+      "name": "15.16 Nanotechnology",
+      "n": 155,
+      "median": 46800,
+      "average": 56000
+    },
+    "30.12": {
+      "name": "30.12 Historic preservation and conservation",
+      "n": 255,
+      "median": 54800,
+      "average": 55200
+    },
+    "48.99": {
+      "name": "48.99 Precision production, other",
+      "n": 280,
+      "median": 41600,
+      "average": 50000
+    },
+    "01.00": {
+      "name": "01.00 Agriculture, general",
+      "n": 1940,
+      "median": 49600,
+      "average": 60850
+    },
+    "01.01": {
+      "name": "01.01 Agricultural business and management",
+      "n": 1425,
+      "median": 55600,
+      "average": 64500
+    },
+    "01.02": {
+      "name": "01.02 Agricultural mechanization",
+      "n": 40,
+      "median": 42400,
+      "average": 56000
+    },
+    "01.03": {
+      "name": "01.03 Agricultural production operations",
+      "n": 465,
+      "median": 58000,
+      "average": 60800
+    },
+    "01.04": {
+      "name": "01.04 Agricultural and food products processing",
+      "n": 85,
+      "median": 51600,
+      "average": 48000
+    },
+    "01.06": {
+      "name": "01.06 Applied horticulture/horticultural business services",
+      "n": 400,
+      "median": 37200,
+      "average": 46200
+    },
+    "01.08": {
+      "name": "01.08 Agricultural public services",
+      "n": 95,
+      "median": 54000,
+      "average": 55000
+    },
+    "01.09": {
+      "name": "01.09 Animal sciences",
+      "n": 1140,
+      "median": 56000,
+      "average": 61400
+    },
+    "01.10": {
+      "name": "01.10 Food science and technology",
+      "n": 2965,
+      "median": 56000,
+      "average": 60700
+    },
+    "01.11": {
+      "name": "01.11 Plant sciences",
+      "n": 1690,
+      "median": 52800,
+      "average": 59100
+    },
+    "01.12": {
+      "name": "01.12 Soil sciences",
+      "n": 785,
+      "median": 61600,
+      "average": 67600
+    },
+    "01.81": {
+      "name": "01.81 Veterinary biomedical and clinical sciences (Cert., MS, MSc, PhD)",
+      "n": 1220,
+      "median": 68000,
+      "average": 81600
+    },
+    "01.99": {
+      "name": "01.99 Agricultural and veterinary sciences/services/operations and related fields, other",
+      "n": 65,
+      "median": 37600,
+      "average": 48000
+    },
+    "03.01": {
+      "name": "03.01 Natural resources conservation and research",
+      "n": 11740,
+      "median": 61600,
+      "average": 68600
+    },
+    "03.02": {
+      "name": "03.02 Environmental/natural resources management and policy",
+      "n": 5010,
+      "median": 67500,
+      "average": 72400
+    },
+    "03.03": {
+      "name": "03.03 Fishing and fisheries sciences and management",
+      "n": 245,
+      "median": 48800,
+      "average": 73000
+    },
+    "03.05": {
+      "name": "03.05 Forestry",
+      "n": 2550,
+      "median": 62000,
+      "average": 64500
+    },
+    "03.06": {
+      "name": "03.06 Wildlife and wildlands science and management",
+      "n": 160,
+      "median": 59600,
+      "average": 56000
+    },
+    "03.99": {
+      "name": "03.99 Natural resources and conservation, other",
+      "n": 115,
+      "median": 60400,
+      "average": 63000
+    },
+    "31.01": {
+      "name": "31.01 Parks, recreation, and leisure studies",
+      "n": 405,
+      "median": 56000,
+      "average": 61600
+    },
+    "31.03": {
+      "name": "31.03 Parks, recreation, and leisure facilities management",
+      "n": 35,
+      "median": 45200,
+      "average": 44000
+    },
+    "31.05": {
+      "name": "31.05 Sports, kinesiology, and physical education/physical fitness",
+      "n": 8555,
+      "median": 52000,
+      "average": 58050
+    },
+    "31.06": {
+      "name": "31.06 Outdoor education",
+      "n": 35,
+      "median": 47200,
+      "average": 60000
+    },
+    "51.00": {
+      "name": "51.00 General health services/allied health/health sciences",
+      "n": 5660,
+      "median": 65000,
+      "average": 73700
+    },
+    "51.01": {
+      "name": "51.01 Chiropractic (DC)",
+      "n": 135,
+      "median": 35600,
+      "average": 45000
+    },
+    "51.02": {
+      "name": "51.02 Communication disorders sciences and services",
+      "n": 12370,
+      "median": 69500,
+      "average": 64200
+    },
+    "51.05": {
+      "name": "51.05 Advanced/graduate dentistry and oral sciences (Cert., MS, MSc, PhD)",
+      "n": 2405,
+      "median": 63600,
+      "average": 97300
+    },
+    "51.06": {
+      "name": "51.06 Dental support services and allied professions",
+      "n": 55,
+      "median": 62400,
+      "average": 70000
+    },
+    "51.07": {
+      "name": "51.07 Health and medical administrative services",
+      "n": 5710,
+      "median": 92000,
+      "average": 95400
+    },
+    "51.09": {
+      "name": "51.09 Allied health diagnostic, intervention and treatment professions",
+      "n": 895,
+      "median": 76000,
+      "average": 83000
+    },
+    "51.10": {
+      "name": "51.10 Clinical/medical laboratory science/research and allied professions",
+      "n": 790,
+      "median": 52000,
+      "average": 66200
+    },
+    "51.14": {
+      "name": "51.14 Medical clinical sciences/graduate medical studies",
+      "n": 9525,
+      "median": 69500,
+      "average": 102500
+    },
+    "51.15": {
+      "name": "51.15 Mental and social health services and allied professions",
+      "n": 5495,
+      "median": 51200,
+      "average": 53350
+    },
+    "51.18": {
+      "name": "51.18 Ophthalmic and optometric support services and allied professions",
+      "n": 275,
+      "median": 51600,
+      "average": 62000
+    },
+    "51.20": {
+      "name": "51.20 Pharmacy, pharmaceutical sciences and administration",
+      "n": 7510,
+      "median": 63600,
+      "average": 76500
+    },
+    "51.22": {
+      "name": "51.22 Public health",
+      "n": 15285,
+      "median": 68500,
+      "average": 77300
+    },
+    "51.23": {
+      "name": "51.23 Rehabilitation and therapeutic professions",
+      "n": 27285,
+      "median": 60800,
+      "average": 57350
+    },
+    "51.27": {
+      "name": "51.27 Medical illustration and informatics",
+      "n": 985,
+      "median": 78000,
+      "average": 86800
+    },
+    "51.31": {
+      "name": "51.31 Dietetics and clinical nutrition services",
+      "n": 685,
+      "median": 60000,
+      "average": 57700
+    },
+    "51.32": {
+      "name": "51.32 Health professions education, ethics, and humanities",
+      "n": 1415,
+      "median": 94000,
+      "average": 106400
+    },
+    "51.33": {
+      "name": "51.33 Alternative and complementary medicine and medical systems",
+      "n": 835,
+      "median": 20400,
+      "average": 34800
+    },
+    "51.34": {
+      "name": "51.34 Alternative and complementary medical support services",
+      "n": 155,
+      "median": 48000,
+      "average": 60000
+    },
+    "51.35": {
+      "name": "51.35 Somatic bodywork and related therapeutic services",
+      "n": 35,
+      "median": 11100,
+      "average": 13000
+    },
+    "51.36": {
+      "name": "51.36 Movement and mind-body therapies",
+      "n": 55,
+      "median": 42400,
+      "average": 44000
+    },
+    "51.38": {
+      "name": "51.38 Registered nursing, nursing administration, nursing research and clinical nursing",
+      "n": 20695,
+      "median": 93000,
+      "average": 85600
+    },
+    "60.07": {
+      "name": "60.07 Nurse practitioner residency/fellowship programs",
+      "n": 2410,
+      "median": 102000,
+      "average": 92900
+    },
+    "12.05": {
+      "name": "12.05 Culinary arts and related services",
+      "n": 60,
+      "median": 44400,
+      "average": 50000
+    },
+    "28.08": {
+      "name": "28.08 Military science, leadership and operational artCAN",
+      "n": 1640,
+      "median": 124000,
+      "average": 108400
+    },
+    "29.05": {
+      "name": "29.05 Military technologies and applied sciencesCAN",
+      "n": 175,
+      "median": 110000,
+      "average": 101000
+    },
+    "43.01": {
+      "name": "43.01 Criminal justice and corrections",
+      "n": 770,
+      "median": 78000,
+      "average": 79400
+    },
+    "43.02": {
+      "name": "43.02 Fire protection",
+      "n": 35,
+      "median": 73000,
+      "average": 60000
+    },
+    "43.03": {
+      "name": "43.03 Security and protective services, specialized programs",
+      "n": 1095,
+      "median": 92000,
+      "average": 93000
+    },
+    "43.04": {
+      "name": "43.04 Security science and technology",
+      "n": 640,
+      "median": 69000,
+      "average": 73400
+    },
+    "49.01": {
+      "name": "49.01 Air transportation",
+      "n": 950,
+      "median": 82000,
+      "average": 89800
+    },
+    "49.03": {
+      "name": "49.03 Marine transportation",
+      "n": 330,
+      "median": 67000,
+      "average": 74800
+    },
+    "49.99": {
+      "name": "49.99 Transportation and materials moving, other",
+      "n": 95,
+      "median": 65500,
+      "average": 73000
+    },
+    "30.99": {
+      "name": "30.99 Multidisciplinary/interdisciplinary studies, other",
+      "n": 495,
+      "median": 72500,
+      "average": 70000
+    }
+  }
+}
