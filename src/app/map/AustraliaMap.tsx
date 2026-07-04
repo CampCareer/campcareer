@@ -23,7 +23,7 @@ import { AffiliateCtas } from "@/components/partners/partner-cta"
 import JobListings from "./JobListings"
 import { EMPLOYMENT_OCCUPATIONS } from "@/data/employment-occupations"
 import { EMPLOYMENT_SALARIES } from "@/data/employment-salaries"
-import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc, CourseLite, USStateInfo, StateMajorDensity, USRankedCollege, AURankedCollege, CACollege, CAOccRow, CAHighPayOccupation } from "@/lib/map-data"
+import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc, CourseLite, USStateInfo, StateMajorDensity, USRankedCollege, AURankedCollege, CACollege, CACity, CAOccRow, CAHighPayOccupation } from "@/lib/map-data"
 import { createClient } from "@/lib/supabase-client"
 import type { User } from "@supabase/supabase-js"
 import { getShortageOccupations } from "@/lib/ie-shortage-occupations"
@@ -839,6 +839,7 @@ function Panel({
 
   const occ = selectedOccCode ? data.auOccupations[selectedOccCode] : null
   const stateShortages = selectedOccCode ? data.auStateShortages[selectedOccCode] ?? [] : []
+  const caProvinceShortages = selectedOccCode ? data.caProvinceShortages[selectedOccCode] ?? [] : []
 
   // 일부 ANZSCO 코드가 occupations_au 테이블에 없어 occ가 null인 경우
   // shortageByState(occupation_state_au 기반)에서 직업 데이터를 찾아 fallback OccRow 생성
@@ -915,6 +916,8 @@ function Panel({
     return (
       <CAOccupationDetail
         occ={resolvedCAOcc}
+        provinceShortages={caProvinceShortages}
+        currentProvince={selected}
         onBack={handleBack}
         onClose={onClose}
         t={t}
@@ -1025,10 +1028,16 @@ function Panel({
           />
         )}
         {tab === "stateInfo" && activeCountry === "CA" && (
-          <CACollegesPanel
-            colleges={data.caColleges}
-            province={selected}
-          />
+          <div className="space-y-5">
+            <CACitiesPanel
+              cities={data.caCities}
+              province={selected}
+            />
+            <CACollegesPanel
+              colleges={data.caColleges}
+              province={selected}
+            />
+          </div>
         )}
         {tab === "shortage" && isAU && (
           selectedSA4 ? (
@@ -2181,6 +2190,64 @@ function StateInfoPanel({
   )
 }
 
+function CACitiesPanel({
+  cities,
+  province,
+}: {
+  cities: CACity[]
+  province: string | null
+}) {
+  const filtered = province ? cities.filter((c) => c.province === province) : cities
+  if (filtered.length === 0) return null
+
+  const maxRent = Math.max(...filtered.map((c) => c.rent_median ?? 0), 1)
+  return (
+    <section>
+      <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-400">Cost of Living</h3>
+      <div className="space-y-1">
+        {filtered.map((c) => {
+          const barPct = c.rent_median != null ? (c.rent_median / maxRent) * 100 : 0
+          const affordability =
+            c.cost_of_living_index != null
+              ? c.cost_of_living_index > 90 ? "High" : c.cost_of_living_index > 75 ? "Moderate" : "Low"
+              : null
+          return (
+            <div key={c.name} className="flex items-center gap-3 rounded-lg px-3 py-2 transition-colors hover:bg-slate-50">
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-sm font-medium text-slate-800">{c.name}</span>
+                <div className="mt-1 flex items-center gap-2">
+                  <div className="h-1.5 flex-1 rounded-full bg-slate-100">
+                    <div
+                      className="h-1.5 rounded-full transition-all"
+                      style={{
+                        width: `${barPct}%`,
+                        backgroundColor: barPct > 80 ? "#ef4444" : barPct > 50 ? "#f59e0b" : "#22c55e",
+                      }}
+                    />
+                  </div>
+                  {affordability && (
+                    <span className="shrink-0 text-[10px] font-medium" style={{
+                      color: affordability === "High" ? "#ef4444" : affordability === "Moderate" ? "#f59e0b" : "#22c55e",
+                    }}>
+                      {affordability}
+                    </span>
+                  )}
+                </div>
+              </span>
+              <span className="shrink-0 text-right">
+                <span className="block text-sm font-semibold tabular-nums text-slate-700">
+                  {c.rent_median != null ? `$${c.rent_median.toLocaleString()}` : "—"}
+                </span>
+                <span className="block text-[10px] text-slate-400">/mo</span>
+              </span>
+            </div>
+          )
+        })}
+      </div>
+    </section>
+  )
+}
+
 function CACollegesPanel({
   colleges,
   province,
@@ -2220,6 +2287,8 @@ function CACollegesPanel({
 
 function CAOccupationDetail({
   occ,
+  provinceShortages,
+  currentProvince,
   onBack,
   onClose,
   t,
@@ -2228,6 +2297,8 @@ function CAOccupationDetail({
   onShare,
 }: {
   occ: CAOccRow
+  provinceShortages: StateShortageByOcc[]
+  currentProvince: string | null
   onBack: () => void
   onClose: () => void
   t: ReturnType<typeof useTranslations>
@@ -2332,6 +2403,31 @@ function CAOccupationDetail({
                 </span>
               </div>
               <p className="mt-1 text-xs text-slate-400">{shortageLabel(occ.shortage_rating, t)}</p>
+            </div>
+          )}
+
+          {provinceShortages.length > 0 && (
+            <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+              <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
+                Shortage by Province
+              </p>
+              <div className="mt-2 space-y-1">
+                {provinceShortages.map((ps) => (
+                  <div
+                    key={ps.state}
+                    className={cn(
+                      "flex items-center justify-between rounded px-2 py-1",
+                      ps.state === currentProvince && "bg-blue-100"
+                    )}
+                  >
+                    <span className="text-xs font-medium text-slate-600">{ps.state}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs tabular-nums text-slate-500">{ps.rating}/5</span>
+                      <span className={cn("h-2 w-8 rounded-full", shortageBar(ps.rating))} />
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 
@@ -2532,6 +2628,10 @@ function shortageColor(score: number | null): string {
   if (score >= 5) return "bg-rose-500"
   if (score >= 4) return "bg-orange-400"
   return "bg-amber-300"
+}
+
+function shortageBar(score: number | null): string {
+  return shortageColor(score)
 }
 
 // 코스의 "관련 학과" 링크 — 대학 공식 도메인(website_url) 안에서 코스명으로 사이트 검색.

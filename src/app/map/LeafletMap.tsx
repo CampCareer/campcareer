@@ -149,10 +149,12 @@ export default function LeafletMap({
     return () => { style.remove() }
   }, [])
 
-  function buildMarkers(country: "US" | "AU"): L.LayerGroup {
+  function buildMarkers(country: "US" | "AU" | "CA"): L.LayerGroup {
     const group = L.layerGroup()
     const colleges = country === "AU"
       ? dataRef.current.auRankedColleges
+      : country === "CA"
+      ? dataRef.current.caColleges
       : dataRef.current.usRankedColleges
     const placed: Array<{ key: string; slug: string }> = []
     for (const c of colleges) {
@@ -196,6 +198,11 @@ export default function LeafletMap({
     }
     if (activeCountryRef.current === "AU" && map.getZoom() >= 5) {
       const group = buildMarkers("AU")
+      group.addTo(map)
+      markerLayerRef.current = group
+    }
+    if (activeCountryRef.current === "CA" && map.getZoom() >= 5) {
+      const group = buildMarkers("CA")
       group.addTo(map)
       markerLayerRef.current = group
     }
@@ -411,7 +418,8 @@ export default function LeafletMap({
 
     // Zoom change → update marker visibility
     map.on("zoomend", () => {
-      if (activeCountryRef.current === "US") updateMarkers()
+      const c = activeCountryRef.current
+      if (c === "US" || c === "AU" || c === "CA") updateMarkers()
     })
 
     // World countries layer
