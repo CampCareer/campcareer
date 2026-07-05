@@ -13,6 +13,7 @@ import caCitiesRaw from "@/data/ca-cities.json"
 import ukCitiesRaw from "@/data/uk-cities.json"
 import ukOccupationsRaw from "@/data/uk-occupations.json"
 import ukRegionOccupationsRaw from "@/data/uk-region-occupations.json"
+import ukCollegesRaw from "@/data/uk-colleges.json"
 
 // 지도 페이지용 데이터 계층. occupations_au + occupation_state_au 를 읽어 JS 에서 조인한다.
 // occupation_state_au 는 anon RLS 가 막혀 있어 서버 전용 service-role 클라이언트로 읽는다.
@@ -671,30 +672,57 @@ function getUKCityCoords(): Map<string, { lat: number; lng: number }> {
 }
 
 async function getUKColleges(): Promise<UKCollege[]> {
+  const coords = getUKCityCoords()
+  const defaultCoord = { lat: 54, lng: -2 }  // UK centroid fallback
+
   const { data, error } = await supabaseAdmin
     .from("colleges_uk")
     .select("institution_id, name, city, region, median_earnings, tuition, qs_rank, website")
     .order("median_earnings", { ascending: false })
     .limit(100)
 
-  if (error) {
-    console.error("[map-data] colleges_uk fetch failed:", error)
-    return []
+  if (!error && data && data.length > 0) {
+    return (data ?? []).map((r: {
+      institution_id: string
+      name: string
+      city: string
+      region: string
+      median_earnings: number | null
+      tuition: number | null
+      qs_rank: number | null
+      website: string | null
+    }) => {
+      const key = `${r.city.toLowerCase()}|${r.region}`
+      const coord = coords.get(key) ?? defaultCoord
+      return {
+        institution_id: r.institution_id,
+        college_name: r.name,
+        city_name: r.city,
+        region: r.region,
+        lat: coord.lat,
+        lng: coord.lng,
+        median_earnings: r.median_earnings,
+        tuition: r.tuition,
+        qs_rank: r.qs_rank,
+        website: r.website,
+        slug: r.name
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-|-$/g, ""),
+      }
+    })
   }
 
-  const coords = getUKCityCoords()
-  const defaultCoord = { lat: 54, lng: -2 }  // UK centroid fallback
-
-  return (data ?? []).map((r: {
+  // JSON fallback
+  const raw = ukCollegesRaw as unknown as Array<{
     institution_id: string
     name: string
     city: string
     region: string
-    median_earnings: number | null
-    tuition: number | null
     qs_rank: number | null
     website: string | null
-  }) => {
+  }>
+  return raw.map((r) => {
     const key = `${r.city.toLowerCase()}|${r.region}`
     const coord = coords.get(key) ?? defaultCoord
     return {
@@ -704,8 +732,8 @@ async function getUKColleges(): Promise<UKCollege[]> {
       region: r.region,
       lat: coord.lat,
       lng: coord.lng,
-      median_earnings: r.median_earnings,
-      tuition: r.tuition,
+      median_earnings: null,
+      tuition: null,
       qs_rank: r.qs_rank,
       website: r.website,
       slug: r.name
