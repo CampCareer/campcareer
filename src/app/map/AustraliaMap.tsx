@@ -2414,12 +2414,13 @@ function UKCitiesPanel({
   const filtered = region ? cities.filter((c) => c.region === region) : cities
   if (filtered.length === 0) return null
 
+  const sorted = [...filtered].sort((a, b) => (a.rent_median ?? 0) - (b.rent_median ?? 0))
   const maxRent = Math.max(...filtered.map((c) => c.rent_median ?? 0), 1)
   return (
     <section>
       <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-400">Cost of Living</h3>
       <div className="space-y-1">
-        {filtered.map((c) => {
+        {sorted.map((c) => {
           const barPct = c.rent_median != null ? (c.rent_median / maxRent) * 100 : 0
           const affordability =
             c.cost_of_living_index != null
