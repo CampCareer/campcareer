@@ -156,12 +156,14 @@ export default function LeafletMap({
     return () => { style.remove() }
   }, [])
 
-  function buildMarkers(country: "US" | "AU" | "CA"): L.LayerGroup {
+  function buildMarkers(country: "US" | "AU" | "CA" | "UK"): L.LayerGroup {
     const group = L.layerGroup()
     const colleges = country === "AU"
       ? dataRef.current.auRankedColleges
       : country === "CA"
       ? dataRef.current.caColleges
+      : country === "UK"
+      ? dataRef.current.ukColleges
       : dataRef.current.usRankedColleges
     const placed: Array<{ key: string; slug: string }> = []
     for (const c of colleges) {
@@ -210,6 +212,11 @@ export default function LeafletMap({
     }
     if (activeCountryRef.current === "CA" && map.getZoom() >= 5) {
       const group = buildMarkers("CA")
+      group.addTo(map)
+      markerLayerRef.current = group
+    }
+    if (activeCountryRef.current === "UK" && map.getZoom() >= 6) {
+      const group = buildMarkers("UK")
       group.addTo(map)
       markerLayerRef.current = group
     }
@@ -427,7 +434,7 @@ export default function LeafletMap({
     // Zoom change → update marker visibility
     map.on("zoomend", () => {
       const c = activeCountryRef.current
-      if (c === "US" || c === "AU" || c === "CA") updateMarkers()
+      if (c === "US" || c === "AU" || c === "CA" || c === "UK") updateMarkers()
     })
 
     // World countries layer
@@ -941,6 +948,7 @@ export default function LeafletMap({
     } else if (activeCountry === "UK") {
       if (ukLayerRef.current) map.addLayer(ukLayerRef.current)
       fitToBounds(UK_BOUNDS, true)
+      updateMarkers()
     } else {
       fitToBounds(WORLD_BOUNDS, true)
     }

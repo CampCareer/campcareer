@@ -3877,8 +3877,8 @@ function UKShortageList({ rows, onSelectOcc }: { rows: UKRegionOccupation[]; onS
   const locale = useLocale()
   const [limit, setLimit] = useState(10)
   const sorted = [...rows]
-    .filter((r) => r.shortage_rating != null)
-    .sort((a, b) => (b.shortage_rating ?? 0) - (a.shortage_rating ?? 0))
+    .filter((r) => r.median_salary_gbp != null)
+    .sort((a, b) => (b.median_salary_gbp ?? 0) - (a.median_salary_gbp ?? 0))
   const visible = sorted.slice(0, limit)
   if (visible.length === 0) {
     return <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>
@@ -3902,7 +3902,9 @@ function UKShortageList({ rows, onSelectOcc }: { rows: UKRegionOccupation[]; onS
               <span className="block text-sm font-semibold tabular-nums text-slate-700">
                 {r.median_salary_gbp != null ? `£${r.median_salary_gbp.toLocaleString()}` : "—"}
               </span>
-              <span className="text-[10px] text-slate-400">Shortage: {r.shortage_rating}/5</span>
+              {r.shortage_rating != null && (
+                <span className="text-[10px] text-slate-400">Shortage: {r.shortage_rating}/5</span>
+              )}
             </span>
           </button>
         </li>
