@@ -729,6 +729,7 @@ async function getUKColleges(): Promise<UKCollege[]> {
     region: string
     qs_rank: number | null
     t?: number
+    m?: number
     website: string | null
   }>
   return raw.map((r) => {
@@ -741,7 +742,7 @@ async function getUKColleges(): Promise<UKCollege[]> {
       region: r.region,
       lat: coord.lat,
       lng: coord.lng,
-      median_earnings: null,
+      median_earnings: r.m ?? null,
       tuition: r.t ?? null,
       qs_rank: r.qs_rank,
       website: r.website,
