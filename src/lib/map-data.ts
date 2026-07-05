@@ -174,6 +174,10 @@ export interface UKOccRow {
   occupation_en: string
   occupation_ko: string | null
   median_salary_gbp: number | null
+  mean_salary_gbp: number | null
+  q1_salary_gbp: number | null
+  q3_salary_gbp: number | null
+  employment_thousands: number | null
   on_sol: boolean
   on_isl: boolean
   confidence: string | null
@@ -188,6 +192,10 @@ export interface UKRegionOccupation {
   occupation_en: string
   occupation_ko: string | null
   median_salary_gbp: number | null
+  mean_salary_gbp: number | null
+  q1_salary_gbp: number | null
+  q3_salary_gbp: number | null
+  employment_thousands: number | null
   shortage_rating: number | null
 }
 
@@ -195,6 +203,10 @@ export interface UKStateRow {
   soc_code: string
   region: string
   median_salary_gbp: number | null
+  mean_salary_gbp: number | null
+  q1_salary_gbp: number | null
+  q3_salary_gbp: number | null
+  employment_thousands: number | null
   shortage_rating: number | null
   data_source: string | null
 }
@@ -1036,22 +1048,41 @@ async function getMapDataUncached(): Promise<MapData> {
       soc_code: string
       occupation_en: string
       median_salary_gbp: number | null
+      mean_salary_gbp?: number | null
+      q1_salary_gbp?: number | null
+      q3_salary_gbp?: number | null
+      employment_thousands?: number | null
       on_sol: boolean
       on_isl: boolean
       source_name: string
     }>
     for (const occ of Object.values(raw)) {
-      ukOccupations[occ.soc_code] = { ...occ, occupation_ko: null, confidence: null, related_broad_field: null, source_url: null, last_verified: null }
+      ukOccupations[occ.soc_code] = {
+        ...occ,
+        mean_salary_gbp: occ.mean_salary_gbp ?? null,
+        q1_salary_gbp: occ.q1_salary_gbp ?? null,
+        q3_salary_gbp: occ.q3_salary_gbp ?? null,
+        employment_thousands: occ.employment_thousands ?? null,
+        occupation_ko: null, confidence: null, related_broad_field: null, source_url: null, last_verified: null,
+      }
     }
     const regRaw = ukRegionOccupationsRaw as unknown as Record<string, Array<{
       soc_code: string
       median_salary_gbp: number | null
+      mean_salary_gbp?: number | null
+      q1_salary_gbp?: number | null
+      q3_salary_gbp?: number | null
+      employment_thousands?: number | null
     }>>
     for (const [region, occs] of Object.entries(regRaw)) {
       ukOccByRegion.set(region, occs.map((r) => ({
         soc_code: r.soc_code,
         region,
         median_salary_gbp: r.median_salary_gbp,
+        mean_salary_gbp: r.mean_salary_gbp ?? null,
+        q1_salary_gbp: r.q1_salary_gbp ?? null,
+        q3_salary_gbp: r.q3_salary_gbp ?? null,
+        employment_thousands: r.employment_thousands ?? null,
         shortage_rating: null,
         data_source: "ONS ASHE 2025 provisional (JSON fallback)",
       })))
@@ -1071,6 +1102,10 @@ async function getMapDataUncached(): Promise<MapData> {
           occupation_en: occ.occupation_en,
           occupation_ko: occ.occupation_ko,
           median_salary_gbp: r.median_salary_gbp ?? occ.median_salary_gbp,
+          mean_salary_gbp: r.mean_salary_gbp ?? occ.mean_salary_gbp,
+          q1_salary_gbp: r.q1_salary_gbp ?? occ.q1_salary_gbp,
+          q3_salary_gbp: r.q3_salary_gbp ?? occ.q3_salary_gbp,
+          employment_thousands: r.employment_thousands ?? occ.employment_thousands,
           shortage_rating: r.shortage_rating,
         }
       })
