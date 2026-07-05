@@ -925,7 +925,6 @@ function Panel({
   const auShortage = isAU ? (data.shortageByState[selected as StateCode] ?? []) : []
   const usShortage = isUS ? (data.usShortageByState[selected] ?? []) : []
   const usHighPay = isUS ? (data.usHighPayByState[selected] ?? []) : []
-  const ukShortage = isUK ? (data.ukShortageByRegion[selected] ?? []) : []
   const ukHighPay = isUK ? (data.ukHighPayByRegion[selected] ?? []) : []
   const panelSa4Regions = isAU
     ? isWhv
@@ -3985,58 +3984,6 @@ function Badge({ tone, children }: { tone: "green" | "gray" | "blue" | "amber"; 
 }
 
 // ── UK components ──────────────────────────────────────────────────────────────
-
-function UKShortageList({ rows, onSelectOcc }: { rows: UKRegionOccupation[]; onSelectOcc?: (code: string) => void }) {
-  const t = useTranslations()
-  const locale = useLocale()
-  const [limit, setLimit] = useState(10)
-  const sorted = [...rows]
-    .filter((r) => r.median_salary_gbp != null)
-    .sort((a, b) => (b.median_salary_gbp ?? 0) - (a.median_salary_gbp ?? 0))
-  const visible = sorted.slice(0, limit)
-  if (visible.length === 0) {
-    return <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>
-  }
-  return (
-    <ol>
-      {visible.map((r, i) => (
-        <li key={r.soc_code}>
-          <button
-            type="button"
-            onClick={() => onSelectOcc?.(r.soc_code)}
-            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50"
-          >
-            <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
-            <span className="min-w-0 flex-1">
-              <span className="block truncate text-sm font-medium text-slate-800">
-                {locale === "ko" ? (r.occupation_ko ?? r.occupation_en) : r.occupation_en}
-              </span>
-            </span>
-            <span className="shrink-0 text-right">
-              <span className="block text-sm font-semibold tabular-nums text-slate-700">
-                {r.median_salary_gbp != null ? `£${r.median_salary_gbp.toLocaleString()}` : "—"}
-              </span>
-              {r.shortage_rating != null && (
-                <span className="text-[10px] text-slate-400">Shortage: {r.shortage_rating}/5</span>
-              )}
-            </span>
-          </button>
-        </li>
-      ))}
-      {limit < sorted.length && (
-        <li>
-          <button
-            type="button"
-            onClick={() => setLimit((p) => Math.min(p + 10, sorted.length))}
-            className="flex w-full items-center justify-center gap-1 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-500 hover:bg-slate-50 hover:text-slate-700 transition-colors"
-          >
-            {locale === "ko" ? "더보기" : "Show more"} ({sorted.length - limit})
-          </button>
-        </li>
-      )}
-    </ol>
-  )
-}
 
 function UKHighPayList({ rows, onSelectOcc }: { rows: UKRegionOccupation[]; onSelectOcc?: (code: string) => void }) {
   const t = useTranslations()
