@@ -210,6 +210,38 @@ export function HomeFinder() {
           </div>
         </div>
 
+        {/* 서비스 소개 — 3줄 요약 + 실제 데이터 예시 + 신뢰 지표 */}
+        <div className="mt-8 w-full max-w-xl px-6">
+          <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
+            <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-3">
+              What is CampCareer?
+            </p>
+            <ul className="space-y-2 text-sm text-slate-600">
+              <li className="flex gap-2">
+                <span>💼</span>
+                <span>Pick any country &amp; state — see which jobs are in shortage and highest-paying</span>
+              </li>
+              <li className="flex gap-2">
+                <span>📊</span>
+                <span>Each job shows median salary, skills shortage rating, and the exact PR pathway</span>
+              </li>
+              <li className="flex gap-2">
+                <span>🎓</span>
+                <span>Get matched to university courses that lead to that job, with tuition &amp; ROI</span>
+              </li>
+            </ul>
+            {/* 실제 데이터 예시 */}
+            <div className="mt-3 rounded-lg bg-white border border-slate-100 px-3 py-2 text-xs text-slate-500">
+              <span className="font-semibold text-slate-700">Example:</span>{" "}
+              Registered Nurse in NSW → A$95,000/yr · Shortage ★★★★ · PR via Subclass 189
+            </div>
+            {/* 신뢰 지표 */}
+            <p className="mt-3 text-[11px] text-slate-400">
+              🔒 Based on official government data — ANZSCO, ABS, OSCA, BLS, Statistics Canada
+            </p>
+          </div>
+        </div>
+
         {/* 주별 고용 Top 3 카드 */}
         <div className="mt-7 w-full max-w-5xl px-6">
           <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-400">

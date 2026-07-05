@@ -54,6 +54,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/methodology`, priority: 0.5, changeFrequency: "monthly" },
     { url: `${BASE}/privacy`, priority: 0.2, changeFrequency: "yearly" },
     { url: `${BASE}/terms`, priority: 0.2, changeFrequency: "yearly" },
+    // 국가별 허브 페이지 — 크롤러 진입점. orphan 페이지 문제 해결.
+    { url: `${BASE}/au`, priority: 0.9, changeFrequency: "weekly" },
+    { url: `${BASE}/au/jobs`, priority: 0.9, changeFrequency: "weekly" },
+    { url: `${BASE}/ca`, priority: 0.8, changeFrequency: "weekly" },
+    { url: `${BASE}/ca/jobs`, priority: 0.8, changeFrequency: "weekly" },
+    { url: `${BASE}/us`, priority: 0.8, changeFrequency: "weekly" },
+    { url: `${BASE}/us/jobs`, priority: 0.8, changeFrequency: "weekly" },
   ]
 
   const blogPages: MetadataRoute.Sitemap = getAllPosts().map((post) => ({

@@ -209,11 +209,11 @@ export default function OccupationDetailPage({
         <div className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6">
           {/* Breadcrumb / back */}
           <Link
-            href="/roi-explorer"
+            href="/au/jobs"
             className="inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
           >
             <ArrowRight className="size-3.5 rotate-180" />
-            ROI 탐색으로 돌아가기
+            All Australian Jobs
           </Link>
 
           {/* Header */}
@@ -497,6 +497,24 @@ export default function OccupationDetailPage({
           ) : null}
         </div>
       </main>
+
+      {/* 모바일 전용 sticky CTA — 하단 고정. 데스크탑에서는 숨김. */}
+      <div className="fixed bottom-0 inset-x-0 z-30 sm:hidden">
+        <div className="flex items-center gap-2 border-t border-slate-200 bg-white px-4 py-3 shadow-lg">
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-xs font-semibold text-slate-700">{occupationName}</p>
+            <p className="text-[11px] text-slate-400">{snapshot.medianSalaryText} · {shortage.nationalLevel} shortage</p>
+          </div>
+          <Button asChild variant="tactile" size="sm" className="shrink-0">
+            <Link href="/roi-explorer">
+              Check Visa Path
+              <ArrowRight className="ml-1 size-3.5" />
+            </Link>
+          </Button>
+        </div>
+      </div>
+      {/* sticky CTA 높이 보정 (모바일에서 콘텐츠가 bar에 가려지지 않도록) */}
+      <div className="h-16 sm:hidden" aria-hidden />
 
       <SiteFooter />
     </div>
