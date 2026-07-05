@@ -2414,7 +2414,7 @@ function UKCitiesPanel({
   const filtered = region ? cities.filter((c) => c.region === region) : cities
   if (filtered.length === 0) return null
 
-  const sorted = [...filtered].sort((a, b) => (a.rent_median ?? 0) - (b.rent_median ?? 0))
+  const sorted = [...filtered].sort((a, b) => (b.rent_median ?? 0) - (a.rent_median ?? 0))
   const maxRent = Math.max(...filtered.map((c) => c.rent_median ?? 0), 1)
   return (
     <section>
