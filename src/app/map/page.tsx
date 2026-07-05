@@ -11,9 +11,9 @@ export const revalidate = 86400
 export const dynamic = "force-static"
 
 export const metadata = pageMetadata({
-  title: "세계 취업 지도 — 호주 주별 부족 직종",
+  title: "세계 취업 지도 — 호주·영국·미국 주별 부족 직종",
   description:
-    "세계 지도에서 호주를 클릭하면 주별 부족 직종과 고소득 직업을 볼 수 있어요. 직종을 누르면 관련 코스·비자 정보로 이어집니다.",
+    "세계 지도에서 호주·영국·미국·캐나다·아일랜드를 클릭하면 주별 부족 직종과 고소득 직업을 볼 수 있어요. 직종을 누르면 관련 코스·비자 정보로 이어집니다.",
   path: "/map",
 })
 

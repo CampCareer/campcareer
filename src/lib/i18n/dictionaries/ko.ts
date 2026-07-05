@@ -739,7 +739,7 @@ const ko: Dictionary = {
     regionGroupNoOcc: '이 직업군에 등록된 부족 직종이 아직 없어요.',
     reset: '초기화',
     close: '닫기',
-    source: '출처: OSCA 2025 부족직종 · ABS 소득 · JSA NERO 2026-05',
+    source: '출처: OSCA 2025 · ABS 소득 · JSA NERO 2026-05 · ONS ASHE 2025 · Home Office SOL',
     noShortageData: '이 주의 부족 직종 데이터가 아직 없어요.',
     regionalSpecific: '이 지역 특화',
     nationalCommon: '전국 공통',

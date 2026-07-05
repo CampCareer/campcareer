@@ -737,7 +737,7 @@ const en = {
     regionGroupNoOcc: 'No shortage occupations listed in this group yet.',
     reset: 'Reset',
     close: 'Close',
-    source: 'Source: OSCA 2025 Shortage Occupations · ABS Income · JSA NERO 2026-05',
+    source: 'Source: OSCA 2025 · ABS Income · JSA NERO 2026-05 · ONS ASHE 2025 · Home Office SOL',
     noShortageData: 'No shortage occupation data for this state yet.',
     regionalSpecific: 'Specific to this region',
     nationalCommon: 'Common nationwide',
