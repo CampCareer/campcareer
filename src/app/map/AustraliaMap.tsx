@@ -23,7 +23,7 @@ import { AffiliateCtas } from "@/components/partners/partner-cta"
 import JobListings from "./JobListings"
 import { EMPLOYMENT_OCCUPATIONS } from "@/data/employment-occupations"
 import { EMPLOYMENT_SALARIES } from "@/data/employment-salaries"
-import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc, CourseLite, USStateInfo, StateMajorDensity, USRankedCollege, AURankedCollege, CACollege, CACity, CAOccRow, CAHighPayOccupation, UKOccRow, UKRegionOccupation, UKCollege } from "@/lib/map-data"
+import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc, CourseLite, USStateInfo, StateMajorDensity, USRankedCollege, AURankedCollege, CACollege, CACity, CAOccRow, CAHighPayOccupation, UKOccRow, UKRegionOccupation, UKCollege, UKCity } from "@/lib/map-data"
 import { createClient } from "@/lib/supabase-client"
 import type { User } from "@supabase/supabase-js"
 import { getShortageOccupations } from "@/lib/ie-shortage-occupations"
@@ -397,6 +397,7 @@ export default function AustraliaMap({
     setSelected(s)
     if (s === "WHV") setTab("whv")
     else if (activeCountry === "US") setTab("stateInfo")
+    else if (activeCountry === "UK") setTab("stateInfo")
     track("select_state", { country: activeCountry ?? "AU", state: s })
   }, [activeCountry])
 
@@ -410,6 +411,11 @@ export default function AustraliaMap({
   useEffect(() => {
     if (activeCountry === "US" && selected) setTab("stateInfo")
   }, [activeCountry, selected])
+
+  // UK has no shortage tab — reset to pay if needed
+  useEffect(() => {
+    if (activeCountry === "UK" && tab === "shortage") setTab("pay")
+  }, [activeCountry, tab])
 
   // Handle initialUniversity prop — find the college and show its info
   useEffect(() => {
@@ -1109,14 +1115,16 @@ function Panel({
       {!isWhv && (
       <div className="px-5 pt-3">
         <div className="inline-flex rounded-lg bg-slate-100 p-1 text-sm">
-          {(isUS || activeCountry === "CA") && (
+          {(isUS || activeCountry === "CA" || isUK) && (
             <TabButton active={tab === "stateInfo"} onClick={() => { onTab("stateInfo"); track("switch_tab", { tab: "stateInfo", state: selected }) }}>
               {activeCountry === "CA" ? "State Info" : t.map.tabStateInfo}
             </TabButton>
           )}
-          <TabButton active={tab === "shortage"} onClick={() => { onTab("shortage"); track("switch_tab", { tab: "shortage", state: selected }) }}>
-            {t.map.tabShortage}
-          </TabButton>
+          {!isUK && (
+            <TabButton active={tab === "shortage"} onClick={() => { onTab("shortage"); track("switch_tab", { tab: "shortage", state: selected }) }}>
+              {t.map.tabShortage}
+            </TabButton>
+          )}
           <TabButton active={tab === "pay"} onClick={() => { onTab("pay"); track("switch_tab", { tab: "pay", state: selected }) }}>
             {t.map.tabPay}
           </TabButton>
@@ -1153,6 +1161,18 @@ function Panel({
             />
           </div>
         )}
+        {tab === "stateInfo" && isUK && (
+          <div className="space-y-5">
+            <UKCitiesPanel
+              cities={data.ukCities}
+              region={selected}
+            />
+            <UKCollegesPanel
+              colleges={data.ukColleges}
+              region={selected}
+            />
+          </div>
+        )}
         {tab === "shortage" && isAU && (
           selectedSA4 ? (
             <RegionGroupList
@@ -1174,7 +1194,6 @@ function Panel({
         {tab === "shortage" && isUS && <USShortageList rows={usShortage} onSelectOcc={handleUSSelectOcc} />}
         {tab === "shortage" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
         {tab === "shortage" && activeCountry === "CA" && <CAShortageList rows={Object.values(data.caOccupations)} onSelectOcc={handleSelectCAOcc} />}
-        {tab === "shortage" && isUK && <UKShortageList rows={ukShortage} onSelectOcc={handleSelectUKOcc} />}
         {tab === "pay" && isAU && (
           selectedSA4 ? (
             <RegionGroupList
@@ -2386,6 +2405,64 @@ function CACitiesPanel({
   )
 }
 
+function UKCitiesPanel({
+  cities,
+  region,
+}: {
+  cities: UKCity[]
+  region: string | null
+}) {
+  const filtered = region ? cities.filter((c) => c.region === region) : cities
+  if (filtered.length === 0) return null
+
+  const maxRent = Math.max(...filtered.map((c) => c.rent_median ?? 0), 1)
+  return (
+    <section>
+      <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-400">Cost of Living</h3>
+      <div className="space-y-1">
+        {filtered.map((c) => {
+          const barPct = c.rent_median != null ? (c.rent_median / maxRent) * 100 : 0
+          const affordability =
+            c.cost_of_living_index != null
+              ? c.cost_of_living_index > 90 ? "High" : c.cost_of_living_index > 75 ? "Moderate" : "Low"
+              : null
+          return (
+            <div key={c.name} className="flex items-center gap-3 rounded-lg px-3 py-2 transition-colors hover:bg-slate-50">
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-sm font-medium text-slate-800">{c.name}</span>
+                <div className="mt-1 flex items-center gap-2">
+                  <div className="h-1.5 flex-1 rounded-full bg-slate-100">
+                    <div
+                      className="h-1.5 rounded-full transition-all"
+                      style={{
+                        width: `${barPct}%`,
+                        backgroundColor: barPct > 80 ? "#ef4444" : barPct > 50 ? "#f59e0b" : "#22c55e",
+                      }}
+                    />
+                  </div>
+                  {affordability && (
+                    <span className="shrink-0 text-[10px] font-medium" style={{
+                      color: affordability === "High" ? "#ef4444" : affordability === "Moderate" ? "#f59e0b" : "#22c55e",
+                    }}>
+                      {affordability}
+                    </span>
+                  )}
+                </div>
+              </span>
+              <span className="shrink-0 text-right">
+                <span className="block text-sm font-semibold tabular-nums text-slate-700">
+                  {c.rent_median != null ? `£${c.rent_median.toLocaleString()}` : "—"}
+                </span>
+                <span className="block text-[10px] text-slate-400">/mo</span>
+              </span>
+            </div>
+          )
+        })}
+      </div>
+    </section>
+  )
+}
+
 function CACollegesPanel({
   colleges,
   province,
@@ -2414,6 +2491,43 @@ function CACollegesPanel({
               </span>
               <span className="shrink-0 text-right text-sm font-semibold tabular-nums text-slate-700">
                 {c.median_earnings != null ? `$${c.median_earnings.toLocaleString()}` : "—"}
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ol>
+    </div>
+  )
+}
+
+function UKCollegesPanel({
+  colleges,
+  region,
+}: {
+  colleges: UKCollege[]
+  region: string | null
+}) {
+  const filtered = region ? colleges.filter((c) => c.region === region) : colleges
+  if (filtered.length === 0) {
+    return <p className="py-8 text-center text-sm text-slate-400">No university data for this region yet.</p>
+  }
+  return (
+    <div className="space-y-3">
+      <p className="text-xs text-slate-500">{filtered.length} universities{region ? ` in ${UK_REGION_NAMES[region] ?? region}` : ""}</p>
+      <ol>
+        {filtered.map((c, i) => (
+          <li key={c.institution_id}>
+            <Link
+              href={`/map/uk/university/${c.slug}`}
+              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50"
+            >
+              <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-sm font-medium text-slate-800">{c.college_name}</span>
+                <span className="mt-0.5 text-xs text-slate-400">{c.city_name}</span>
+              </span>
+              <span className="shrink-0 text-right text-sm font-semibold tabular-nums text-slate-700">
+                {c.median_earnings != null ? `£${c.median_earnings.toLocaleString()}` : "—"}
               </span>
             </Link>
           </li>
