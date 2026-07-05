@@ -106,6 +106,60 @@ export const IE_CITY_TO_COUNTY: Record<string, string> = {
   "Carrick-on-Shannon": "LM",
 }
 
+// ── UK (ITL1) regions ─────────────────────────────────────────────────────────
+
+export const UK_REGION_CODES = [
+  "TLC","TLD","TLE","TLF","TLG","TLH","TLI","TLJ","TLK","TLL","TLM","TLN",
+] as const
+
+export type UKRegionCode = typeof UK_REGION_CODES[number]
+
+export const UK_REGION_NAMES: Record<string, string> = {
+  TLC: "North East",
+  TLD: "North West",
+  TLE: "Yorkshire and The Humber",
+  TLF: "East Midlands",
+  TLG: "West Midlands",
+  TLH: "East of England",
+  TLI: "London",
+  TLJ: "South East",
+  TLK: "South West",
+  TLL: "Wales",
+  TLM: "Scotland",
+  TLN: "Northern Ireland",
+}
+
+// GeoJSON ITL121CD → clean display name
+export const UK_GEOJSON_ITL1_TO_NAME: Record<string, string> = {
+  TLC: "North East",
+  TLD: "North West",
+  TLE: "Yorkshire and The Humber",
+  TLF: "East Midlands",
+  TLG: "West Midlands",
+  TLH: "East of England",
+  TLI: "London",
+  TLJ: "South East",
+  TLK: "South West",
+  TLL: "Wales",
+  TLM: "Scotland",
+  TLN: "Northern Ireland",
+}
+
+export const UK_GEOJSON_ITL1_TO_CODE: Record<string, UKRegionCode> = {
+  "North East (England)": "TLC",
+  "North West (England)": "TLD",
+  "Yorkshire and The Humber": "TLE",
+  "East Midlands (England)": "TLF",
+  "West Midlands (England)": "TLG",
+  East: "TLH",
+  London: "TLI",
+  "South East (England)": "TLJ",
+  "South West (England)": "TLK",
+  Wales: "TLL",
+  Scotland: "TLM",
+  "Northern Ireland": "TLN",
+}
+
 export const US_STATE_NAMES: Record<string, string> = {
   AL: "Alabama", AK: "Alaska", AZ: "Arizona", AR: "Arkansas", CA: "California",
   CO: "Colorado", CT: "Connecticut", DE: "Delaware", DC: "District of Columbia",

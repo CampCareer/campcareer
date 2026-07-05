@@ -1,7 +1,7 @@
 import "server-only"
 import { unstable_cache } from "next/cache"
 import { supabaseAdmin } from "@/lib/supabase-admin"
-import { STATE_CODES, CA_PROVINCE_CODES, type StateCode } from "@/app/map/states"
+import { STATE_CODES, CA_PROVINCE_CODES, UK_REGION_CODES, type StateCode } from "@/app/map/states"
 import { MAJOR_OCCUPATIONS } from "@/lib/major-occupation-map"
 import usCitiesRaw from "@/data/us-cities.json"
 import usStateInfoRaw from "@/data/us-state-info.json"
@@ -10,6 +10,7 @@ import auUniversityRankingsRaw from "@/data/au-university-rankings.json"
 import usOccupationStateRaw from "@/data/us-occupation-state.json"
 import caOccupationStateRaw from "@/data/ca-occupation-state.json"
 import caCitiesRaw from "@/data/ca-cities.json"
+import ukCitiesRaw from "@/data/uk-cities.json"
 
 // 지도 페이지용 데이터 계층. occupations_au + occupation_state_au 를 읽어 JS 에서 조인한다.
 // occupation_state_au 는 anon RLS 가 막혀 있어 서버 전용 service-role 클라이언트로 읽는다.
@@ -163,6 +164,52 @@ export interface CAStateRow {
   data_source: string | null
 }
 
+// ── UK occupation interfaces ───────────────────────────────────────────────────
+
+export interface UKOccRow {
+  soc_code: string
+  occupation_en: string
+  occupation_ko: string | null
+  median_salary_gbp: number | null
+  on_sol: boolean
+  on_isl: boolean
+  confidence: string | null
+  related_broad_field: string | null
+  source_name: string | null
+  source_url: string | null
+  last_verified: string | null
+}
+
+export interface UKRegionOccupation {
+  soc_code: string
+  occupation_en: string
+  occupation_ko: string | null
+  median_salary_gbp: number | null
+  shortage_rating: number | null
+}
+
+export interface UKStateRow {
+  soc_code: string
+  region: string
+  median_salary_gbp: number | null
+  shortage_rating: number | null
+  data_source: string | null
+}
+
+export interface UKCollege {
+  institution_id: string
+  college_name: string
+  city_name: string
+  region: string
+  lat: number
+  lng: number
+  median_earnings: number | null
+  tuition: number | null
+  qs_rank: number | null
+  website: string | null
+  slug: string
+}
+
 // { "WA": { "1": 1.000, "3": 1.222, ... } }
 export type StateSalaryMult = Record<string, Record<string, number>>
 
@@ -205,6 +252,10 @@ export interface MapData {
   caProvinceOccupations: Record<string, CAProvinceOccupation[]>
   caProvinceShortages: Record<string, StateShortageByOcc[]>
   caCities: CACity[]
+  ukOccupations: Record<string, UKOccRow>
+  ukShortageByRegion: Record<string, UKRegionOccupation[]>
+  ukHighPayByRegion: Record<string, UKRegionOccupation[]>
+  ukColleges: UKCollege[]
 }
 
 export interface CACity {
@@ -602,6 +653,67 @@ async function getCACities(): Promise<CACity[]> {
   }))
 }
 
+// UK city → coordinate lookup
+let _ukCityCoords: Map<string, { lat: number; lng: number }> | null = null
+
+function getUKCityCoords(): Map<string, { lat: number; lng: number }> {
+  if (_ukCityCoords) return _ukCityCoords
+  const map = new Map<string, { lat: number; lng: number }>()
+  const cities = ukCitiesRaw as unknown as Array<{ c: string; s: string; lat: number; lng: number }>
+  for (const city of cities) {
+    const key = `${city.c.toLowerCase()}|${city.s}`
+    map.set(key, { lat: city.lat, lng: city.lng })
+  }
+  _ukCityCoords = map
+  return map
+}
+
+async function getUKColleges(): Promise<UKCollege[]> {
+  const { data, error } = await supabaseAdmin
+    .from("colleges_uk")
+    .select("institution_id, name, city, region, median_earnings, tuition, qs_rank, website")
+    .order("median_earnings", { ascending: false })
+    .limit(100)
+
+  if (error) {
+    console.error("[map-data] colleges_uk fetch failed:", error)
+    return []
+  }
+
+  const coords = getUKCityCoords()
+  const defaultCoord = { lat: 54, lng: -2 }  // UK centroid fallback
+
+  return (data ?? []).map((r: {
+    institution_id: string
+    name: string
+    city: string
+    region: string
+    median_earnings: number | null
+    tuition: number | null
+    qs_rank: number | null
+    website: string | null
+  }) => {
+    const key = `${r.city.toLowerCase()}|${r.region}`
+    const coord = coords.get(key) ?? defaultCoord
+    return {
+      institution_id: r.institution_id,
+      college_name: r.name,
+      city_name: r.city,
+      region: r.region,
+      lat: coord.lat,
+      lng: coord.lng,
+      median_earnings: r.median_earnings,
+      tuition: r.tuition,
+      qs_rank: r.qs_rank,
+      website: r.website,
+      slug: r.name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, ""),
+    }
+  })
+}
+
 async function getCAColleges(): Promise<CACollege[]> {
   const { data, error } = await supabaseAdmin
     .from("colleges_ca")
@@ -651,7 +763,7 @@ async function getCAColleges(): Promise<CACollege[]> {
 }
 
 async function getMapDataUncached(): Promise<MapData> {
-  const [occupations, stateRows, usColleges, multRows, coursesByFieldState, caColleges, caOccupationsList, caStateRows, caCities] = await Promise.all([
+  const [occupations, stateRows, usColleges, multRows, coursesByFieldState, caColleges, caOccupationsList, caStateRows, caCities, ukOccupationsList, ukStateRows, ukColleges] = await Promise.all([
     fetchAll<OccRow>(
       "occupations_au",
       "anzsco_code, anzsco_v13, occupation_en, occupation_ko, shortage_rating, median_salary_aud, on_csol, confidence, related_broad_field, pr_note_ko, source_name, source_url, last_verified",
@@ -673,6 +785,15 @@ async function getMapDataUncached(): Promise<MapData> {
       "noc_code, province, median_wage_cad, low_wage_cad, high_wage_cad, shortage_rating, data_source",
     ),
     getCACities(),
+    fetchAll<UKOccRow>(
+      "occupations_uk",
+      "soc_code, occupation_en, occupation_ko, median_salary_gbp, on_sol, on_isl, confidence, related_broad_field, source_name, source_url, last_verified",
+    ),
+    fetchAll<UKStateRow>(
+      "occupation_state_uk",
+      "soc_code, region, median_salary_gbp, shortage_rating, data_source",
+    ),
+    getUKColleges(),
   ])
 
   // { "WA": { "3": 1.222, ... } }
@@ -838,7 +959,50 @@ async function getMapDataUncached(): Promise<MapData> {
   const usRankedColleges = getUSRankedColleges(usColleges)
   const auRankedColleges = getAURankedColleges()
 
-  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages, coursesByFieldState, usStateInfo, usMajorDensity, usRankedColleges, auRankedColleges, caColleges, caOccupations, caHighPay, caHighPayByProvince, caProvinceOccupations, caProvinceShortages, caCities }
+  // ── UK data aggregation ────────────────────────────────────────────────────────
+
+  const ukOccupations: Record<string, UKOccRow> = {}
+  for (const o of ukOccupationsList) {
+    ukOccupations[o.soc_code] = o
+  }
+
+  // Region-level shortage/high-pay data
+  const ukOccByRegion = new Map<string, UKStateRow[]>()
+  for (const r of ukStateRows) {
+    const arr = ukOccByRegion.get(r.region) ?? []
+    arr.push(r)
+    ukOccByRegion.set(r.region, arr)
+  }
+
+  const ukShortageByRegion: Record<string, UKRegionOccupation[]> = {}
+  const ukHighPayByRegion: Record<string, UKRegionOccupation[]> = {}
+  for (const code of UK_REGION_CODES) {
+    const rows = ukOccByRegion.get(code) ?? []
+    const occs: UKRegionOccupation[] = rows
+      .filter((r) => ukOccupations[r.soc_code])
+      .map((r) => {
+        const occ = ukOccupations[r.soc_code]
+        return {
+          soc_code: r.soc_code,
+          occupation_en: occ.occupation_en,
+          occupation_ko: occ.occupation_ko,
+          median_salary_gbp: r.median_salary_gbp ?? occ.median_salary_gbp,
+          shortage_rating: r.shortage_rating,
+        }
+      })
+
+    ukShortageByRegion[code] = occs.sort(
+      (a, b) => (b.shortage_rating ?? 0) - (a.shortage_rating ?? 0) ||
+                ((b.median_salary_gbp ?? 0) - (a.median_salary_gbp ?? 0)),
+    )
+
+    ukHighPayByRegion[code] = occs
+      .filter((o) => o.median_salary_gbp != null)
+      .sort((a, b) => (b.median_salary_gbp ?? 0) - (a.median_salary_gbp ?? 0))
+      .slice(0, 12)
+  }
+
+  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages, coursesByFieldState, usStateInfo, usMajorDensity, usRankedColleges, auRankedColleges, caColleges, caOccupations, caHighPay, caHighPayByProvince, caProvinceOccupations, caProvinceShortages, caCities, ukOccupations, ukShortageByRegion, ukHighPayByRegion, ukColleges }
 }
 
 // cross-instance 공유 캐시(방어선). 페이지가 force-static이라 보통 빌드/리밸리데이트
