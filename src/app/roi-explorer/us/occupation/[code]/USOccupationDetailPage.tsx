@@ -32,11 +32,11 @@ export default function USOccupationDetailPage({ occ }: { occ: {
       <main className="flex-1 bg-background">
         <div className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6">
           <Link
-            href="/roi-explorer"
+            href="/us/jobs"
             className="inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
           >
             <ArrowRight className="size-3.5 rotate-180" />
-            ROI 탐색으로 돌아가기
+            All US Jobs
           </Link>
 
           <header className="mt-4 flex flex-col gap-3">
@@ -61,12 +61,12 @@ export default function USOccupationDetailPage({ occ }: { occ: {
               <CardContent className="flex flex-col gap-1">
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <DollarSign className="size-3.5" />
-                  <span className="text-xs font-medium">평균 연봉</span>
+                  <span className="text-xs font-medium">Median Salary</span>
                 </div>
                 <div className="text-lg font-semibold tracking-tight">
                   ${occ.median_wage.toLocaleString()}
                 </div>
-                <div className="text-xs text-muted-foreground">전 경력 기준 연봉</div>
+                <div className="text-xs text-muted-foreground">All experience levels</div>
               </CardContent>
             </Card>
 
@@ -74,12 +74,12 @@ export default function USOccupationDetailPage({ occ }: { occ: {
               <CardContent className="flex flex-col gap-1">
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Users className="size-3.5" />
-                  <span className="text-xs font-medium">고용 규모</span>
+                  <span className="text-xs font-medium">Total Employment</span>
                 </div>
                 <div className="text-lg font-semibold tracking-tight">
                   {occ.tot_emp.toLocaleString()}
                 </div>
-                <div className="text-xs text-muted-foreground">전국 고용 인원</div>
+                <div className="text-xs text-muted-foreground">National employment</div>
               </CardContent>
             </Card>
 
@@ -87,12 +87,12 @@ export default function USOccupationDetailPage({ occ }: { occ: {
               <CardContent className="flex flex-col gap-1">
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <TrendingUp className="size-3.5" />
-                  <span className="text-xs font-medium">성장률</span>
+                  <span className="text-xs font-medium">Growth Rate</span>
                 </div>
                 <div className="text-lg font-semibold tracking-tight">
                   {occ.pct_change > 0 ? "+" : ""}{occ.pct_change}%
                 </div>
-                <div className="text-xs text-muted-foreground">고용 증가율 (전망)</div>
+                <div className="text-xs text-muted-foreground">Projected job growth</div>
               </CardContent>
             </Card>
 
@@ -100,12 +100,12 @@ export default function USOccupationDetailPage({ occ }: { occ: {
               <CardContent className="flex flex-col gap-1">
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <GraduationCap className="size-3.5" />
-                  <span className="text-xs font-medium">연간 채용</span>
+                  <span className="text-xs font-medium">Annual Openings</span>
                 </div>
                 <div className="text-lg font-semibold tracking-tight">
                   {occ.annual_openings.toLocaleString()}
                 </div>
-                <div className="text-xs text-muted-foreground">연간 신규 일자리</div>
+                <div className="text-xs text-muted-foreground">New openings per year</div>
               </CardContent>
             </Card>
           </section>
@@ -114,7 +114,7 @@ export default function USOccupationDetailPage({ occ }: { occ: {
             <Card>
               <CardContent className="pt-5">
                 <div className="mb-1 flex items-center justify-between text-sm">
-                  <span className="font-medium text-slate-700">부족도 지수</span>
+                  <span className="font-medium text-slate-700">Shortage Index</span>
                   <span className="font-semibold tabular-nums text-slate-800">
                     {Math.round(occ.shortage_score)}/100
                   </span>
@@ -127,10 +127,10 @@ export default function USOccupationDetailPage({ occ }: { occ: {
                 </div>
                 <p className="mt-2 text-xs text-muted-foreground">
                   {occ.shortage_score >= 75
-                    ? "높은 부족도 — 해당 직종의 인력 수요가 공급을 크게 초과합니다."
+                    ? "High shortage — demand significantly exceeds supply in this occupation."
                     : occ.shortage_score >= 50
-                    ? "중간 부족도 — 일부 지역에서 인력 부족이 보고되고 있습니다."
-                    : "낮은 부족도 — 인력 수급이 비교적 안정적입니다."}
+                    ? "Moderate shortage — shortages reported in some regions."
+                    : "Low shortage — supply and demand relatively balanced."}
                 </p>
               </CardContent>
             </Card>
@@ -140,7 +140,7 @@ export default function USOccupationDetailPage({ occ }: { occ: {
                 <CardContent className="pt-5">
                   <div className="flex items-center gap-2 text-sm font-medium text-slate-700">
                     <ShieldCheck className="size-4" />
-                    부족 직종으로 보고된 주
+                    States Reporting Shortage
                   </div>
                   <div className="mt-2 flex flex-wrap gap-1.5">
                     {occ.shortageStates.map((s) => (
@@ -156,7 +156,7 @@ export default function USOccupationDetailPage({ occ }: { occ: {
                 <CardContent className="pt-5">
                   <div className="flex items-center gap-2 text-sm font-medium text-slate-700">
                     <DollarSign className="size-4" />
-                    고소득 직종으로 보고된 주
+                    States Reporting High Pay
                   </div>
                   <div className="mt-2 flex flex-wrap gap-1.5">
                     {occ.highPayStates.map((s) => (
@@ -169,7 +169,7 @@ export default function USOccupationDetailPage({ occ }: { occ: {
 
             <Card>
               <CardContent className="pt-5">
-                <p className="text-sm font-medium text-slate-700 mb-2">공식 출처</p>
+                <p className="text-sm font-medium text-slate-700 mb-2">Official Sources</p>
                 <div className="flex flex-wrap gap-3">
                   <a
                     href={occ.onetUrl}
@@ -199,8 +199,8 @@ export default function USOccupationDetailPage({ occ }: { occ: {
           </section>
 
           <p className="mt-6 text-xs text-muted-foreground">
-            출처: U.S. Bureau of Labor Statistics (BLS) Occupational Employment and Wage Statistics (OEWS).
-            부족도 지수는 CampCareer가 BLS 데이터를 기반으로 산출한 추정치입니다.
+            Source: U.S. Bureau of Labor Statistics (BLS) Occupational Employment and Wage Statistics (OEWS).
+            Shortage score is an estimate calculated by CampCareer based on BLS data.
           </p>
         </div>
       </main>

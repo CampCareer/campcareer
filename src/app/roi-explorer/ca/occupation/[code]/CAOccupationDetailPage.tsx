@@ -65,11 +65,11 @@ export default function CAOccupationDetailPage({
       <main className="flex-1 bg-background">
         <div className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6">
           <Link
-            href="/roi-explorer"
+            href="/ca/jobs"
             className="inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
           >
             <ArrowRight className="size-3.5 rotate-180" />
-            ROI 탐색으로 돌아가기
+            All Canadian Jobs
           </Link>
 
           <header className="mt-4 flex flex-col gap-3">
@@ -93,8 +93,8 @@ export default function CAOccupationDetailPage({
             </div>
             <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{occ.occupation_en}</h1>
             <p className="text-sm text-muted-foreground">
-              {occ.last_verified ? `최종 업데이트 ${occ.last_verified}` : ""}
-              {occ.data_source ? ` · 출처 ${occ.data_source}` : ""}
+              {occ.last_verified ? `Updated ${occ.last_verified}` : ""}
+              {occ.data_source ? ` · Source: ${occ.data_source}` : ""}
             </p>
           </header>
 
@@ -103,10 +103,10 @@ export default function CAOccupationDetailPage({
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <TrendingUp className="size-4 text-primary" />
-                  전국 인력 부족도
+                  National Skills Shortage
                 </CardTitle>
                 <CardDescription>
-                  COPS (Canadian Occupational Projection System) 2024-2033 기준
+                  Based on COPS (Canadian Occupational Projection System) 2024–2033
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex flex-col gap-2">
@@ -116,7 +116,7 @@ export default function CAOccupationDetailPage({
                 </div>
                 <Progress value={(occ.shortage_rating / 5) * 100} />
                 {occ.cops_future_outlook && (
-                  <p className="text-xs text-muted-foreground">COPS 전망: {occ.cops_future_outlook}</p>
+                  <p className="text-xs text-muted-foreground">COPS Outlook: {occ.cops_future_outlook}</p>
                 )}
               </CardContent>
             </Card>
@@ -125,7 +125,7 @@ export default function CAOccupationDetailPage({
           <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <SnapshotCard
               icon={<Landmark className="size-4" />}
-              label="평균 연봉"
+              label="Median Salary"
               value={occ.median_salary_cad != null ? `C$${occ.median_salary_cad.toLocaleString()}` : "—"}
               hint={occ.low_wage_cad != null || occ.high_wage_cad != null
                 ? `Low C$${occ.low_wage_cad?.toLocaleString() ?? "—"} · High C$${occ.high_wage_cad?.toLocaleString() ?? "—"}`
@@ -133,20 +133,20 @@ export default function CAOccupationDetailPage({
             />
             <SnapshotCard
               icon={<ShieldCheck className="size-4" />}
-              label="취업 비자"
+              label="Work Visa"
               value="PGWP / Express Entry"
               hint={occ.on_teer_eligible ? "TEER eligible occupation" : undefined}
             />
             <SnapshotCard
               icon={<TrendingUp className="size-4" />}
-              label="일자리 전망"
-              value={occ.projected_job_openings != null ? `${occ.projected_job_openings.toLocaleString()}개` : "—"}
-              hint={occ.employment_growth != null ? `고용 증가 ${occ.employment_growth.toLocaleString()}` : undefined}
+              label="Job Openings (Projected)"
+              value={occ.projected_job_openings != null ? occ.projected_job_openings.toLocaleString() : "—"}
+              hint={occ.employment_growth != null ? `Employment growth: ${occ.employment_growth.toLocaleString()}` : undefined}
             />
             <SnapshotCard
               icon={<TrendingUp className="size-4" />}
-              label="구직자 수"
-              value={occ.projected_job_seekers != null ? `${occ.projected_job_seekers.toLocaleString()}명` : "—"}
+              label="Job Seekers (Projected)"
+              value={occ.projected_job_seekers != null ? occ.projected_job_seekers.toLocaleString() : "—"}
             />
           </div>
 
@@ -156,7 +156,7 @@ export default function CAOccupationDetailPage({
             <section className="flex flex-col gap-3">
               <h2 className="flex items-center gap-2 text-sm font-semibold text-muted-foreground">
                 <Globe className="size-4" />
-                주(Province)별 임금 및 부족도
+                Salary &amp; Shortage by Province
               </h2>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
@@ -199,7 +199,7 @@ export default function CAOccupationDetailPage({
             <>
               <Separator className="my-8" />
               <section className="flex flex-col gap-3">
-                <h2 className="text-sm font-semibold text-muted-foreground">관련 분야</h2>
+                <h2 className="text-sm font-semibold text-muted-foreground">Related Field</h2>
                 <Badge variant="secondary" className="w-fit">{occ.related_broad_field}</Badge>
               </section>
             </>
@@ -211,14 +211,14 @@ export default function CAOccupationDetailPage({
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Landmark className="size-4 text-primary" />
-                캐나다 취업 및 이민 전략 알아보기
+                Canada Work &amp; Immigration Pathways
               </CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
               <ul className="flex flex-col gap-2">
                 <li className="flex items-start gap-2 text-sm">
                   <BadgeCheck className="mt-0.5 size-4 shrink-0 text-primary" />
-                  PGWP (Post-Graduation Work Permit) 최대 3년
+                  PGWP (Post-Graduation Work Permit) — up to 3 years
                 </li>
                 <li className="flex items-start gap-2 text-sm">
                   <BadgeCheck className="mt-0.5 size-4 shrink-0 text-primary" />
@@ -226,25 +226,25 @@ export default function CAOccupationDetailPage({
                 </li>
                 <li className="flex items-start gap-2 text-sm">
                   <BadgeCheck className="mt-0.5 size-4 shrink-0 text-primary" />
-                  각 주(Province)별 PNP (Provincial Nominee Program)
+                  Provincial Nominee Program (PNP) — varies by province
                 </li>
               </ul>
               <div className="flex flex-wrap gap-3">
                 <Button asChild variant="tactile">
                   <Link href="/roi-explorer">
-                    ROI 탐색하기
+                    Explore ROI
                     <ArrowRight className="ml-1 size-4" />
                   </Link>
                 </Button>
                 <Button asChild variant="outline">
-                  <Link href="/roi-explorer">전공별 ROI 비교</Link>
+                  <Link href="/roi-explorer">Compare by Major</Link>
                 </Button>
               </div>
             </CardContent>
           </Card>
 
           <p className="mt-6 text-xs text-muted-foreground">
-            출처: Statistics Canada · ESDC Job Bank · COPS 2024-2033 · IRCC
+            Source: Statistics Canada · ESDC Job Bank · COPS 2024–2033 · IRCC
           </p>
         </div>
       </main>

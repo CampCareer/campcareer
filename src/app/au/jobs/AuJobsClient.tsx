@@ -19,19 +19,16 @@ export function AuJobsClient({ occupations }: { occupations: OccRow[] }) {
 
   const filtered = useMemo(() => {
     const q = query.toLowerCase().trim()
-    let list = q
+    const base = q
       ? occupations.filter((o) => o.occupation_en.toLowerCase().includes(q))
       : [...occupations]
 
     if (sort === "salary") {
-      list.sort((a, b) => (b.median_salary_aud ?? 0) - (a.median_salary_aud ?? 0))
+      return [...base].sort((a, b) => (b.median_salary_aud ?? 0) - (a.median_salary_aud ?? 0))
     } else if (sort === "shortage") {
-      list.sort((a, b) => (b.shortage_rating ?? 0) - (a.shortage_rating ?? 0))
-    } else {
-      list.sort((a, b) => a.occupation_en.localeCompare(b.occupation_en))
+      return [...base].sort((a, b) => (b.shortage_rating ?? 0) - (a.shortage_rating ?? 0))
     }
-
-    return list
+    return [...base].sort((a, b) => a.occupation_en.localeCompare(b.occupation_en))
   }, [occupations, query, sort])
 
   return (
