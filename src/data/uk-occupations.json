@@ -1,0 +1,3266 @@
+{
+  "1111": {
+    "soc_code": "1111",
+    "occupation_en": "Chief executives and senior officials",
+    "median_salary_gbp": 89835,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1112": {
+    "soc_code": "1112",
+    "occupation_en": "Elected officers and representatives",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1121": {
+    "soc_code": "1121",
+    "occupation_en": "Production managers and directors in manufacturing",
+    "median_salary_gbp": 52885,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1122": {
+    "soc_code": "1122",
+    "occupation_en": "Production managers and directors in construction",
+    "median_salary_gbp": 54947,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1123": {
+    "soc_code": "1123",
+    "occupation_en": "Production managers and directors in mining and energy",
+    "median_salary_gbp": 63241,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1131": {
+    "soc_code": "1131",
+    "occupation_en": "Financial managers and directors",
+    "median_salary_gbp": 65336,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1132": {
+    "soc_code": "1132",
+    "occupation_en": "Marketing, sales and advertising directors",
+    "median_salary_gbp": 90000,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1133": {
+    "soc_code": "1133",
+    "occupation_en": "Public relations and communications directors",
+    "median_salary_gbp": 72020,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1134": {
+    "soc_code": "1134",
+    "occupation_en": "Purchasing managers and directors",
+    "median_salary_gbp": 56779,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1135": {
+    "soc_code": "1135",
+    "occupation_en": "Charitable organisation managers and directors",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1136": {
+    "soc_code": "1136",
+    "occupation_en": "Human resource managers and directors",
+    "median_salary_gbp": 54474,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1137": {
+    "soc_code": "1137",
+    "occupation_en": "Information technology directors",
+    "median_salary_gbp": 90081,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1139": {
+    "soc_code": "1139",
+    "occupation_en": "Functional managers and directors n.e.c.",
+    "median_salary_gbp": 69996,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1140": {
+    "soc_code": "1140",
+    "occupation_en": "Directors in logistics, warehousing and transport",
+    "median_salary_gbp": 80518,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1150": {
+    "soc_code": "1150",
+    "occupation_en": "Managers and directors in retail and wholesale",
+    "median_salary_gbp": 36006,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1162": {
+    "soc_code": "1162",
+    "occupation_en": "Senior police officers",
+    "median_salary_gbp": 66514,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1163": {
+    "soc_code": "1163",
+    "occupation_en": "Senior officers in fire, ambulance, prison and related services",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1171": {
+    "soc_code": "1171",
+    "occupation_en": "Health services and public health managers and directors",
+    "median_salary_gbp": 55879,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1172": {
+    "soc_code": "1172",
+    "occupation_en": "Social services managers and directors",
+    "median_salary_gbp": 45155,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1211": {
+    "soc_code": "1211",
+    "occupation_en": "Managers and proprietors in agriculture and horticulture",
+    "median_salary_gbp": 34976,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1212": {
+    "soc_code": "1212",
+    "occupation_en": "Managers and proprietors in forestry, fishing and related services",
+    "median_salary_gbp": 31126,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1221": {
+    "soc_code": "1221",
+    "occupation_en": "Hotel and accommodation managers and proprietors",
+    "median_salary_gbp": 33008,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1222": {
+    "soc_code": "1222",
+    "occupation_en": "Restaurant and catering establishment managers and proprietors",
+    "median_salary_gbp": 30513,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1223": {
+    "soc_code": "1223",
+    "occupation_en": "Publicans and managers of licensed premises",
+    "median_salary_gbp": 37427,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1224": {
+    "soc_code": "1224",
+    "occupation_en": "Leisure and sports managers",
+    "median_salary_gbp": 33342,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1225": {
+    "soc_code": "1225",
+    "occupation_en": "Travel agency managers and proprietors",
+    "median_salary_gbp": 34505,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1231": {
+    "soc_code": "1231",
+    "occupation_en": "Health care practice managers",
+    "median_salary_gbp": 38941,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1232": {
+    "soc_code": "1232",
+    "occupation_en": "Residential, day and domiciliary care managers and proprietors",
+    "median_salary_gbp": 40661,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1241": {
+    "soc_code": "1241",
+    "occupation_en": "Managers in transport and distribution",
+    "median_salary_gbp": 46734,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1242": {
+    "soc_code": "1242",
+    "occupation_en": "Managers in storage and warehousing",
+    "median_salary_gbp": 36620,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1243": {
+    "soc_code": "1243",
+    "occupation_en": "Managers in logistics",
+    "median_salary_gbp": 45104,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1251": {
+    "soc_code": "1251",
+    "occupation_en": "Property, housing and estate managers",
+    "median_salary_gbp": 41115,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1252": {
+    "soc_code": "1252",
+    "occupation_en": "Garage managers and proprietors",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1253": {
+    "soc_code": "1253",
+    "occupation_en": "Hairdressing and beauty salon managers and proprietors",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1254": {
+    "soc_code": "1254",
+    "occupation_en": "Waste disposal and environmental services managers",
+    "median_salary_gbp": 48927,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1255": {
+    "soc_code": "1255",
+    "occupation_en": "Managers and directors in the creative industries",
+    "median_salary_gbp": 50868,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1256": {
+    "soc_code": "1256",
+    "occupation_en": "Betting shop and gambling establishment managers",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1257": {
+    "soc_code": "1257",
+    "occupation_en": "Hire services managers and proprietors",
+    "median_salary_gbp": 31763,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1258": {
+    "soc_code": "1258",
+    "occupation_en": "Directors in consultancy services",
+    "median_salary_gbp": 73453,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "1259": {
+    "soc_code": "1259",
+    "occupation_en": "Managers and proprietors in other services n.e.c.",
+    "median_salary_gbp": 43382,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2111": {
+    "soc_code": "2111",
+    "occupation_en": "Chemical scientists",
+    "median_salary_gbp": 39668,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2112": {
+    "soc_code": "2112",
+    "occupation_en": "Biological scientists",
+    "median_salary_gbp": 43781,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2113": {
+    "soc_code": "2113",
+    "occupation_en": "Biochemists and biomedical scientists",
+    "median_salary_gbp": 45269,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2114": {
+    "soc_code": "2114",
+    "occupation_en": "Physical scientists",
+    "median_salary_gbp": 53142,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2115": {
+    "soc_code": "2115",
+    "occupation_en": "Social and humanities scientists",
+    "median_salary_gbp": 38591,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2119": {
+    "soc_code": "2119",
+    "occupation_en": "Natural and social science professionals n.e.c.",
+    "median_salary_gbp": 41706,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2121": {
+    "soc_code": "2121",
+    "occupation_en": "Civil engineers",
+    "median_salary_gbp": 50602,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2122": {
+    "soc_code": "2122",
+    "occupation_en": "Mechanical engineers",
+    "median_salary_gbp": 50594,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2123": {
+    "soc_code": "2123",
+    "occupation_en": "Electrical engineers",
+    "median_salary_gbp": 59930,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2124": {
+    "soc_code": "2124",
+    "occupation_en": "Electronics engineers",
+    "median_salary_gbp": 51973,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2125": {
+    "soc_code": "2125",
+    "occupation_en": "Production and process engineers",
+    "median_salary_gbp": 47711,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2126": {
+    "soc_code": "2126",
+    "occupation_en": "Aerospace engineers",
+    "median_salary_gbp": 55817,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2127": {
+    "soc_code": "2127",
+    "occupation_en": "Engineering project managers and project engineers",
+    "median_salary_gbp": 52451,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2129": {
+    "soc_code": "2129",
+    "occupation_en": "Engineering professionals n.e.c.",
+    "median_salary_gbp": 47985,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2131": {
+    "soc_code": "2131",
+    "occupation_en": "IT project managers",
+    "median_salary_gbp": 58016,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2132": {
+    "soc_code": "2132",
+    "occupation_en": "IT managers",
+    "median_salary_gbp": 55502,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2133": {
+    "soc_code": "2133",
+    "occupation_en": "IT business analysts, architects and systems designers",
+    "median_salary_gbp": 59593,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2134": {
+    "soc_code": "2134",
+    "occupation_en": "Programmers and software development professionals",
+    "median_salary_gbp": 55587,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2135": {
+    "soc_code": "2135",
+    "occupation_en": "Cyber security professionals",
+    "median_salary_gbp": 54816,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2136": {
+    "soc_code": "2136",
+    "occupation_en": "IT quality and testing professionals",
+    "median_salary_gbp": 44973,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2137": {
+    "soc_code": "2137",
+    "occupation_en": "IT network professionals",
+    "median_salary_gbp": 48294,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2139": {
+    "soc_code": "2139",
+    "occupation_en": "Information technology professionals n.e.c.",
+    "median_salary_gbp": 50459,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2141": {
+    "soc_code": "2141",
+    "occupation_en": "Web design professionals",
+    "median_salary_gbp": 46639,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2142": {
+    "soc_code": "2142",
+    "occupation_en": "Graphic and multimedia designers",
+    "median_salary_gbp": 31236,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2151": {
+    "soc_code": "2151",
+    "occupation_en": "Conservation professionals",
+    "median_salary_gbp": 37949,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2152": {
+    "soc_code": "2152",
+    "occupation_en": "Environment professionals",
+    "median_salary_gbp": 41555,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2161": {
+    "soc_code": "2161",
+    "occupation_en": "Research and development (R&D) managers",
+    "median_salary_gbp": 54857,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2162": {
+    "soc_code": "2162",
+    "occupation_en": "Other researchers, unspecified discipline",
+    "median_salary_gbp": 42463,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2211": {
+    "soc_code": "2211",
+    "occupation_en": "Generalist medical practitioners",
+    "median_salary_gbp": 51756,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2212": {
+    "soc_code": "2212",
+    "occupation_en": "Specialist medical practitioners",
+    "median_salary_gbp": 88997,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2221": {
+    "soc_code": "2221",
+    "occupation_en": "Physiotherapists",
+    "median_salary_gbp": 37917,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2222": {
+    "soc_code": "2222",
+    "occupation_en": "Occupational therapists",
+    "median_salary_gbp": 37201,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2223": {
+    "soc_code": "2223",
+    "occupation_en": "Speech and language therapists",
+    "median_salary_gbp": 35002,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2224": {
+    "soc_code": "2224",
+    "occupation_en": "Psychotherapists and cognitive behaviour therapists",
+    "median_salary_gbp": 38230,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2225": {
+    "soc_code": "2225",
+    "occupation_en": "Clinical psychologists",
+    "median_salary_gbp": 45954,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2226": {
+    "soc_code": "2226",
+    "occupation_en": "Other psychologists",
+    "median_salary_gbp": 34250,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2229": {
+    "soc_code": "2229",
+    "occupation_en": "Therapy professionals n.e.c.",
+    "median_salary_gbp": 32287,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2231": {
+    "soc_code": "2231",
+    "occupation_en": "Midwifery nurses",
+    "median_salary_gbp": 39327,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2232": {
+    "soc_code": "2232",
+    "occupation_en": "Community nurses",
+    "median_salary_gbp": 33764,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2233": {
+    "soc_code": "2233",
+    "occupation_en": "Specialist nurses",
+    "median_salary_gbp": 41095,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2234": {
+    "soc_code": "2234",
+    "occupation_en": "Nurse practitioners",
+    "median_salary_gbp": 41392,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2235": {
+    "soc_code": "2235",
+    "occupation_en": "Mental health nurses",
+    "median_salary_gbp": 40028,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2236": {
+    "soc_code": "2236",
+    "occupation_en": "Children's nurses",
+    "median_salary_gbp": 34173,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2237": {
+    "soc_code": "2237",
+    "occupation_en": "Other nursing professionals",
+    "median_salary_gbp": 36775,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2240": {
+    "soc_code": "2240",
+    "occupation_en": "Veterinarians",
+    "median_salary_gbp": 45362,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2251": {
+    "soc_code": "2251",
+    "occupation_en": "Pharmacists",
+    "median_salary_gbp": 47508,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2252": {
+    "soc_code": "2252",
+    "occupation_en": "Optometrists",
+    "median_salary_gbp": 38743,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2253": {
+    "soc_code": "2253",
+    "occupation_en": "Dental practitioners",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2254": {
+    "soc_code": "2254",
+    "occupation_en": "Medical radiographers",
+    "median_salary_gbp": 44324,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2255": {
+    "soc_code": "2255",
+    "occupation_en": "Paramedics",
+    "median_salary_gbp": 50294,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2256": {
+    "soc_code": "2256",
+    "occupation_en": "Podiatrists",
+    "median_salary_gbp": 35920,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2259": {
+    "soc_code": "2259",
+    "occupation_en": "Other health professionals n.e.c.",
+    "median_salary_gbp": 38033,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2311": {
+    "soc_code": "2311",
+    "occupation_en": "Higher education teaching professionals",
+    "median_salary_gbp": 46494,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2312": {
+    "soc_code": "2312",
+    "occupation_en": "Further education teaching professionals",
+    "median_salary_gbp": 38642,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2313": {
+    "soc_code": "2313",
+    "occupation_en": "Secondary education teaching professionals",
+    "median_salary_gbp": 44246,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2314": {
+    "soc_code": "2314",
+    "occupation_en": "Primary education teaching professionals",
+    "median_salary_gbp": 42031,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2315": {
+    "soc_code": "2315",
+    "occupation_en": "Nursery education teaching professionals",
+    "median_salary_gbp": 31425,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2316": {
+    "soc_code": "2316",
+    "occupation_en": "Special needs education teaching professionals",
+    "median_salary_gbp": 40363,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2317": {
+    "soc_code": "2317",
+    "occupation_en": "Teachers of English as a foreign language",
+    "median_salary_gbp": null,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2319": {
+    "soc_code": "2319",
+    "occupation_en": "Teaching professionals n.e.c.",
+    "median_salary_gbp": null,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2321": {
+    "soc_code": "2321",
+    "occupation_en": "Head teachers and principals",
+    "median_salary_gbp": 70977,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2322": {
+    "soc_code": "2322",
+    "occupation_en": "Education managers",
+    "median_salary_gbp": 45043,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2323": {
+    "soc_code": "2323",
+    "occupation_en": "Education advisers and school inspectors",
+    "median_salary_gbp": 41535,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2324": {
+    "soc_code": "2324",
+    "occupation_en": "Early education and childcare services managers",
+    "median_salary_gbp": 28511,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2329": {
+    "soc_code": "2329",
+    "occupation_en": "Other educational professionals n.e.c",
+    "median_salary_gbp": 35079,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2411": {
+    "soc_code": "2411",
+    "occupation_en": "Barristers and judges",
+    "median_salary_gbp": 34253,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2412": {
+    "soc_code": "2412",
+    "occupation_en": "Solicitors and lawyers",
+    "median_salary_gbp": 53314,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2419": {
+    "soc_code": "2419",
+    "occupation_en": "Legal professionals n.e.c.",
+    "median_salary_gbp": 33822,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2421": {
+    "soc_code": "2421",
+    "occupation_en": "Chartered and certified accountants",
+    "median_salary_gbp": 45538,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2422": {
+    "soc_code": "2422",
+    "occupation_en": "Finance and investment analysts and advisers",
+    "median_salary_gbp": 47776,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2423": {
+    "soc_code": "2423",
+    "occupation_en": "Taxation experts",
+    "median_salary_gbp": 46280,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2431": {
+    "soc_code": "2431",
+    "occupation_en": "Management consultants and business analysts",
+    "median_salary_gbp": 51729,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2432": {
+    "soc_code": "2432",
+    "occupation_en": "Marketing and commercial managers",
+    "median_salary_gbp": 50589,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2433": {
+    "soc_code": "2433",
+    "occupation_en": "Actuaries, economists and statisticians",
+    "median_salary_gbp": 51520,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2434": {
+    "soc_code": "2434",
+    "occupation_en": "Business and related research professionals",
+    "median_salary_gbp": 39941,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2435": {
+    "soc_code": "2435",
+    "occupation_en": "Professional/Chartered company secretaries",
+    "median_salary_gbp": null,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2439": {
+    "soc_code": "2439",
+    "occupation_en": "Business, research and administrative professionals n.e.c.",
+    "median_salary_gbp": 55106,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2440": {
+    "soc_code": "2440",
+    "occupation_en": "Business and financial project management professionals",
+    "median_salary_gbp": 57874,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2451": {
+    "soc_code": "2451",
+    "occupation_en": "Architects",
+    "median_salary_gbp": 45625,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2452": {
+    "soc_code": "2452",
+    "occupation_en": "Chartered architectural technologists, planning officers and consultants",
+    "median_salary_gbp": 34951,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2453": {
+    "soc_code": "2453",
+    "occupation_en": "Quantity surveyors",
+    "median_salary_gbp": 51950,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2454": {
+    "soc_code": "2454",
+    "occupation_en": "Chartered surveyors",
+    "median_salary_gbp": 45673,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2455": {
+    "soc_code": "2455",
+    "occupation_en": "Construction project managers and related professionals",
+    "median_salary_gbp": 45613,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2461": {
+    "soc_code": "2461",
+    "occupation_en": "Social workers",
+    "median_salary_gbp": 42708,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2462": {
+    "soc_code": "2462",
+    "occupation_en": "Probation officers",
+    "median_salary_gbp": null,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2463": {
+    "soc_code": "2463",
+    "occupation_en": "Clergy",
+    "median_salary_gbp": 30655,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2464": {
+    "soc_code": "2464",
+    "occupation_en": "Youth work professionals",
+    "median_salary_gbp": 34630,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2469": {
+    "soc_code": "2469",
+    "occupation_en": "Welfare professionals n.e.c.",
+    "median_salary_gbp": 33269,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2471": {
+    "soc_code": "2471",
+    "occupation_en": "Librarians",
+    "median_salary_gbp": null,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2472": {
+    "soc_code": "2472",
+    "occupation_en": "Archivists and curators",
+    "median_salary_gbp": 33096,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2481": {
+    "soc_code": "2481",
+    "occupation_en": "Quality control and planning engineers",
+    "median_salary_gbp": 42511,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2482": {
+    "soc_code": "2482",
+    "occupation_en": "Quality assurance and regulatory professionals",
+    "median_salary_gbp": 47969,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2483": {
+    "soc_code": "2483",
+    "occupation_en": "Environmental health professionals",
+    "median_salary_gbp": 40044,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2491": {
+    "soc_code": "2491",
+    "occupation_en": "Newspaper and periodical editors",
+    "median_salary_gbp": 41583,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2492": {
+    "soc_code": "2492",
+    "occupation_en": "Newspaper and periodical journalists and reporters",
+    "median_salary_gbp": 42169,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2493": {
+    "soc_code": "2493",
+    "occupation_en": "Public relations professionals",
+    "median_salary_gbp": 36336,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "2494": {
+    "soc_code": "2494",
+    "occupation_en": "Advertising accounts managers and creative directors",
+    "median_salary_gbp": 46356,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3111": {
+    "soc_code": "3111",
+    "occupation_en": "Laboratory technicians",
+    "median_salary_gbp": 26861,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3112": {
+    "soc_code": "3112",
+    "occupation_en": "Electrical and electronics technicians",
+    "median_salary_gbp": 35018,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3113": {
+    "soc_code": "3113",
+    "occupation_en": "Engineering technicians",
+    "median_salary_gbp": 44330,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3114": {
+    "soc_code": "3114",
+    "occupation_en": "Building and civil engineering technicians",
+    "median_salary_gbp": 36912,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3115": {
+    "soc_code": "3115",
+    "occupation_en": "Quality assurance technicians",
+    "median_salary_gbp": 33242,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3116": {
+    "soc_code": "3116",
+    "occupation_en": "Planning, process and production technicians",
+    "median_salary_gbp": 36062,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3119": {
+    "soc_code": "3119",
+    "occupation_en": "Science, engineering and production technicians n.e.c.",
+    "median_salary_gbp": 34475,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3120": {
+    "soc_code": "3120",
+    "occupation_en": "CAD, drawing and architectural technicians",
+    "median_salary_gbp": 34465,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3131": {
+    "soc_code": "3131",
+    "occupation_en": "IT operations technicians",
+    "median_salary_gbp": 34656,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3132": {
+    "soc_code": "3132",
+    "occupation_en": "IT user support technicians",
+    "median_salary_gbp": 34314,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3133": {
+    "soc_code": "3133",
+    "occupation_en": "Database administrators and web content technicians",
+    "median_salary_gbp": 36015,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3211": {
+    "soc_code": "3211",
+    "occupation_en": "Dispensing opticians",
+    "median_salary_gbp": 27645,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3212": {
+    "soc_code": "3212",
+    "occupation_en": "Pharmaceutical technicians",
+    "median_salary_gbp": 28381,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3213": {
+    "soc_code": "3213",
+    "occupation_en": "Medical and dental technicians",
+    "median_salary_gbp": 29119,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3214": {
+    "soc_code": "3214",
+    "occupation_en": "Complementary health associate professionals",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3219": {
+    "soc_code": "3219",
+    "occupation_en": "Health associate professionals n.e.c.",
+    "median_salary_gbp": 25017,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3221": {
+    "soc_code": "3221",
+    "occupation_en": "Youth and community workers",
+    "median_salary_gbp": 27711,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3222": {
+    "soc_code": "3222",
+    "occupation_en": "Child and early years officers",
+    "median_salary_gbp": 29347,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3223": {
+    "soc_code": "3223",
+    "occupation_en": "Housing officers",
+    "median_salary_gbp": 32542,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3224": {
+    "soc_code": "3224",
+    "occupation_en": "Counsellors",
+    "median_salary_gbp": 27082,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3229": {
+    "soc_code": "3229",
+    "occupation_en": "Welfare and housing associate professionals n.e.c.",
+    "median_salary_gbp": 26640,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3231": {
+    "soc_code": "3231",
+    "occupation_en": "Higher level teaching assistants",
+    "median_salary_gbp": 22050,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3232": {
+    "soc_code": "3232",
+    "occupation_en": "Early education and childcare practitioners",
+    "median_salary_gbp": 19516,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3240": {
+    "soc_code": "3240",
+    "occupation_en": "Veterinary nurses",
+    "median_salary_gbp": 26666,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3312": {
+    "soc_code": "3312",
+    "occupation_en": "Police officers (sergeant and below)",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3313": {
+    "soc_code": "3313",
+    "occupation_en": "Fire service officers (watch manager and below)",
+    "median_salary_gbp": 40775,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3314": {
+    "soc_code": "3314",
+    "occupation_en": "Prison service officers (below principal officer)",
+    "median_salary_gbp": 31603,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3319": {
+    "soc_code": "3319",
+    "occupation_en": "Protective service associate professionals n.e.c.",
+    "median_salary_gbp": 41592,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3411": {
+    "soc_code": "3411",
+    "occupation_en": "Artists",
+    "median_salary_gbp": null,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3412": {
+    "soc_code": "3412",
+    "occupation_en": "Authors, writers and translators",
+    "median_salary_gbp": 36865,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3413": {
+    "soc_code": "3413",
+    "occupation_en": "Actors, entertainers and presenters",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3414": {
+    "soc_code": "3414",
+    "occupation_en": "Dancers and choreographers",
+    "median_salary_gbp": null,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3415": {
+    "soc_code": "3415",
+    "occupation_en": "Musicians",
+    "median_salary_gbp": null,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3416": {
+    "soc_code": "3416",
+    "occupation_en": "Arts officers, producers and directors",
+    "median_salary_gbp": 39643,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3417": {
+    "soc_code": "3417",
+    "occupation_en": "Photographers, audio-visual and broadcasting equipment operators",
+    "median_salary_gbp": 30396,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3421": {
+    "soc_code": "3421",
+    "occupation_en": "Interior designers",
+    "median_salary_gbp": 34962,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3422": {
+    "soc_code": "3422",
+    "occupation_en": "Clothing, fashion and accessories designers",
+    "median_salary_gbp": 36731,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3429": {
+    "soc_code": "3429",
+    "occupation_en": "Design occupations n.e.c.",
+    "median_salary_gbp": 37017,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3431": {
+    "soc_code": "3431",
+    "occupation_en": "Sports players",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3432": {
+    "soc_code": "3432",
+    "occupation_en": "Sports coaches, instructors and officials",
+    "median_salary_gbp": 12570,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3433": {
+    "soc_code": "3433",
+    "occupation_en": "Fitness and wellbeing instructors",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3511": {
+    "soc_code": "3511",
+    "occupation_en": "Aircraft pilots and air traffic controllers",
+    "median_salary_gbp": 107712,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3512": {
+    "soc_code": "3512",
+    "occupation_en": "Ship and hovercraft officers",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3520": {
+    "soc_code": "3520",
+    "occupation_en": "Legal associate professionals",
+    "median_salary_gbp": 32438,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3531": {
+    "soc_code": "3531",
+    "occupation_en": "Brokers",
+    "median_salary_gbp": 51026,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3532": {
+    "soc_code": "3532",
+    "occupation_en": "Insurance underwriters",
+    "median_salary_gbp": 38666,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3533": {
+    "soc_code": "3533",
+    "occupation_en": "Financial and accounting technicians",
+    "median_salary_gbp": 53265,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3534": {
+    "soc_code": "3534",
+    "occupation_en": "Financial accounts managers",
+    "median_salary_gbp": 45162,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3541": {
+    "soc_code": "3541",
+    "occupation_en": "Estimators, valuers and assessors",
+    "median_salary_gbp": 37809,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3542": {
+    "soc_code": "3542",
+    "occupation_en": "Importers and exporters",
+    "median_salary_gbp": 34757,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3543": {
+    "soc_code": "3543",
+    "occupation_en": "Project support officers",
+    "median_salary_gbp": 34207,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3544": {
+    "soc_code": "3544",
+    "occupation_en": "Data analysts",
+    "median_salary_gbp": 38107,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3549": {
+    "soc_code": "3549",
+    "occupation_en": "Business associate professionals n.e.c.",
+    "median_salary_gbp": 33035,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3551": {
+    "soc_code": "3551",
+    "occupation_en": "Buyers and procurement officers",
+    "median_salary_gbp": 36230,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3552": {
+    "soc_code": "3552",
+    "occupation_en": "Business sales executives",
+    "median_salary_gbp": 36498,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3553": {
+    "soc_code": "3553",
+    "occupation_en": "Merchandisers",
+    "median_salary_gbp": 26554,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3554": {
+    "soc_code": "3554",
+    "occupation_en": "Marketing associate professionals",
+    "median_salary_gbp": 30479,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3555": {
+    "soc_code": "3555",
+    "occupation_en": "Estate agents and auctioneers",
+    "median_salary_gbp": 26988,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3556": {
+    "soc_code": "3556",
+    "occupation_en": "Sales accounts and business development managers",
+    "median_salary_gbp": 56021,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3557": {
+    "soc_code": "3557",
+    "occupation_en": "Events managers and organisers",
+    "median_salary_gbp": 29101,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3560": {
+    "soc_code": "3560",
+    "occupation_en": "Public services associate professionals",
+    "median_salary_gbp": 38454,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3571": {
+    "soc_code": "3571",
+    "occupation_en": "Human resources and industrial relations officers",
+    "median_salary_gbp": 33012,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3572": {
+    "soc_code": "3572",
+    "occupation_en": "Careers advisers and vocational guidance specialists",
+    "median_salary_gbp": 30045,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3573": {
+    "soc_code": "3573",
+    "occupation_en": "Information technology trainers",
+    "median_salary_gbp": 36621,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3574": {
+    "soc_code": "3574",
+    "occupation_en": "Other vocational and industrial trainers",
+    "median_salary_gbp": 33236,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3581": {
+    "soc_code": "3581",
+    "occupation_en": "Inspectors of standards and regulations",
+    "median_salary_gbp": 37236,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "3582": {
+    "soc_code": "3582",
+    "occupation_en": "Health and safety managers and officers",
+    "median_salary_gbp": 44551,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "4111": {
+    "soc_code": "4111",
+    "occupation_en": "National government administrative occupations",
+    "median_salary_gbp": 31363,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "4112": {
+    "soc_code": "4112",
+    "occupation_en": "Local government administrative occupations",
+    "median_salary_gbp": 27642,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "4113": {
+    "soc_code": "4113",
+    "occupation_en": "Officers of non-governmental organisations",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "4121": {
+    "soc_code": "4121",
+    "occupation_en": "Credit controllers",
+    "median_salary_gbp": 26981,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "4122": {
+    "soc_code": "4122",
+    "occupation_en": "Book-keepers, payroll managers and wages clerks",
+    "median_salary_gbp": 27743,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "4123": {
+    "soc_code": "4123",
+    "occupation_en": "Bank and post office clerks",
+    "median_salary_gbp": 27671,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "4124": {
+    "soc_code": "4124",
+    "occupation_en": "Finance officers",
+    "median_salary_gbp": 28610,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "4129": {
+    "soc_code": "4129",
+    "occupation_en": "Financial administrative occupations n.e.c.",
+    "median_salary_gbp": 25936,
+    "on_sol": true,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "4131": {
+    "soc_code": "4131",
+    "occupation_en": "Records clerks and assistants",
+    "median_salary_gbp": 26312,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "4132": {
+    "soc_code": "4132",
+    "occupation_en": "Pensions and insurance clerks and assistants",
+    "median_salary_gbp": 29329,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "4133": {
+    "soc_code": "4133",
+    "occupation_en": "Stock control clerks and assistants",
+    "median_salary_gbp": 28851,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "4134": {
+    "soc_code": "4134",
+    "occupation_en": "Transport and distribution clerks and assistants",
+    "median_salary_gbp": 32060,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "4135": {
+    "soc_code": "4135",
+    "occupation_en": "Library clerks and assistants",
+    "median_salary_gbp": 18659,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "4136": {
+    "soc_code": "4136",
+    "occupation_en": "Human resources administrative occupations",
+    "median_salary_gbp": 25531,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "4141": {
+    "soc_code": "4141",
+    "occupation_en": "Office managers",
+    "median_salary_gbp": 35000,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "4142": {
+    "soc_code": "4142",
+    "occupation_en": "Office supervisors",
+    "median_salary_gbp": 32265,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "4143": {
+    "soc_code": "4143",
+    "occupation_en": "Customer service managers",
+    "median_salary_gbp": 32983,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "4151": {
+    "soc_code": "4151",
+    "occupation_en": "Sales administrators",
+    "median_salary_gbp": 27132,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "4152": {
+    "soc_code": "4152",
+    "occupation_en": "Data entry administrators",
+    "median_salary_gbp": 26534,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "4159": {
+    "soc_code": "4159",
+    "occupation_en": "Other administrative occupations n.e.c.",
+    "median_salary_gbp": 23385,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "4211": {
+    "soc_code": "4211",
+    "occupation_en": "Medical secretaries",
+    "median_salary_gbp": 24071,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "4212": {
+    "soc_code": "4212",
+    "occupation_en": "Legal secretaries",
+    "median_salary_gbp": 24263,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "4213": {
+    "soc_code": "4213",
+    "occupation_en": "School secretaries",
+    "median_salary_gbp": 22155,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "4214": {
+    "soc_code": "4214",
+    "occupation_en": "Company secretaries and administrators",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "4215": {
+    "soc_code": "4215",
+    "occupation_en": "Personal assistants and other secretaries",
+    "median_salary_gbp": 25233,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "4216": {
+    "soc_code": "4216",
+    "occupation_en": "Receptionists",
+    "median_salary_gbp": 18152,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "4217": {
+    "soc_code": "4217",
+    "occupation_en": "Typists and related keyboard occupations",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5111": {
+    "soc_code": "5111",
+    "occupation_en": "Farmers",
+    "median_salary_gbp": 32728,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5112": {
+    "soc_code": "5112",
+    "occupation_en": "Horticultural trades",
+    "median_salary_gbp": 24613,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5113": {
+    "soc_code": "5113",
+    "occupation_en": "Gardeners and landscape gardeners",
+    "median_salary_gbp": 27057,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5114": {
+    "soc_code": "5114",
+    "occupation_en": "Groundsmen and greenkeepers",
+    "median_salary_gbp": 27519,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5119": {
+    "soc_code": "5119",
+    "occupation_en": "Agricultural and fishing trades n.e.c.",
+    "median_salary_gbp": 27676,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5211": {
+    "soc_code": "5211",
+    "occupation_en": "Sheet metal workers",
+    "median_salary_gbp": 31920,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5212": {
+    "soc_code": "5212",
+    "occupation_en": "Metal plate workers, smiths, moulders and related occupations",
+    "median_salary_gbp": 37035,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5213": {
+    "soc_code": "5213",
+    "occupation_en": "Welding trades",
+    "median_salary_gbp": 34742,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5214": {
+    "soc_code": "5214",
+    "occupation_en": "Pipe fitters",
+    "median_salary_gbp": 42580,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5221": {
+    "soc_code": "5221",
+    "occupation_en": "Metal machining setters and setter-operators",
+    "median_salary_gbp": 35394,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5222": {
+    "soc_code": "5222",
+    "occupation_en": "Tool makers, tool fitters and markers-out",
+    "median_salary_gbp": 38584,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5223": {
+    "soc_code": "5223",
+    "occupation_en": "Metal working production and maintenance fitters",
+    "median_salary_gbp": 40002,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5224": {
+    "soc_code": "5224",
+    "occupation_en": "Precision instrument makers and repairers",
+    "median_salary_gbp": 37031,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5225": {
+    "soc_code": "5225",
+    "occupation_en": "Air-conditioning and refrigeration installers and repairers",
+    "median_salary_gbp": 41166,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5231": {
+    "soc_code": "5231",
+    "occupation_en": "Vehicle technicians, mechanics and electricians",
+    "median_salary_gbp": 36560,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5232": {
+    "soc_code": "5232",
+    "occupation_en": "Vehicle body builders and repairers",
+    "median_salary_gbp": 34848,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5233": {
+    "soc_code": "5233",
+    "occupation_en": "Vehicle paint technicians",
+    "median_salary_gbp": 34531,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5234": {
+    "soc_code": "5234",
+    "occupation_en": "Aircraft maintenance and related trades",
+    "median_salary_gbp": 44704,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5235": {
+    "soc_code": "5235",
+    "occupation_en": "Boat and ship builders and repairers",
+    "median_salary_gbp": 32600,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5236": {
+    "soc_code": "5236",
+    "occupation_en": "Rail and rolling stock builders and repairers",
+    "median_salary_gbp": 64322,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5241": {
+    "soc_code": "5241",
+    "occupation_en": "Electricians and electrical fitters",
+    "median_salary_gbp": 39187,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5242": {
+    "soc_code": "5242",
+    "occupation_en": "Telecoms and related network installers and repairers",
+    "median_salary_gbp": 39652,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5243": {
+    "soc_code": "5243",
+    "occupation_en": "TV, video and audio servicers and repairers",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5244": {
+    "soc_code": "5244",
+    "occupation_en": "Computer system and equipment installers and servicers",
+    "median_salary_gbp": 34073,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5245": {
+    "soc_code": "5245",
+    "occupation_en": "Security system installers and repairers",
+    "median_salary_gbp": 37991,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5246": {
+    "soc_code": "5246",
+    "occupation_en": "Electrical service and maintenance mechanics and repairers",
+    "median_salary_gbp": 41111,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5249": {
+    "soc_code": "5249",
+    "occupation_en": "Electrical and electronic trades n.e.c.",
+    "median_salary_gbp": 48171,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5250": {
+    "soc_code": "5250",
+    "occupation_en": "Skilled metal, electrical and electronic trades supervisors",
+    "median_salary_gbp": 44793,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5311": {
+    "soc_code": "5311",
+    "occupation_en": "Steel erectors",
+    "median_salary_gbp": 34782,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5312": {
+    "soc_code": "5312",
+    "occupation_en": "Stonemasons and related trades",
+    "median_salary_gbp": 33938,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5313": {
+    "soc_code": "5313",
+    "occupation_en": "Bricklayers",
+    "median_salary_gbp": 32480,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5314": {
+    "soc_code": "5314",
+    "occupation_en": "Roofers, roof tilers and slaters",
+    "median_salary_gbp": 30961,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5315": {
+    "soc_code": "5315",
+    "occupation_en": "Plumbers & heating and ventilating installers and repairers",
+    "median_salary_gbp": 36563,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5316": {
+    "soc_code": "5316",
+    "occupation_en": "Carpenters and joiners",
+    "median_salary_gbp": 33797,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5317": {
+    "soc_code": "5317",
+    "occupation_en": "Glaziers, window fabricators and fitters",
+    "median_salary_gbp": 28623,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5319": {
+    "soc_code": "5319",
+    "occupation_en": "Construction and building trades n.e.c.",
+    "median_salary_gbp": 34378,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5321": {
+    "soc_code": "5321",
+    "occupation_en": "Plasterers",
+    "median_salary_gbp": 33789,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5322": {
+    "soc_code": "5322",
+    "occupation_en": "Floorers and wall tilers",
+    "median_salary_gbp": 32663,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5323": {
+    "soc_code": "5323",
+    "occupation_en": "Painters and decorators",
+    "median_salary_gbp": 30889,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5330": {
+    "soc_code": "5330",
+    "occupation_en": "Construction and building trades supervisors",
+    "median_salary_gbp": 45000,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5411": {
+    "soc_code": "5411",
+    "occupation_en": "Upholsterers",
+    "median_salary_gbp": 26966,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5412": {
+    "soc_code": "5412",
+    "occupation_en": "Footwear and leather working trades",
+    "median_salary_gbp": 25116,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5413": {
+    "soc_code": "5413",
+    "occupation_en": "Tailors and dressmakers",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5419": {
+    "soc_code": "5419",
+    "occupation_en": "Textiles, garments and related trades n.e.c.",
+    "median_salary_gbp": 26173,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5421": {
+    "soc_code": "5421",
+    "occupation_en": "Pre-press technicians",
+    "median_salary_gbp": 27496,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5422": {
+    "soc_code": "5422",
+    "occupation_en": "Printers",
+    "median_salary_gbp": 31367,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5423": {
+    "soc_code": "5423",
+    "occupation_en": "Print finishing and binding workers",
+    "median_salary_gbp": 25296,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5431": {
+    "soc_code": "5431",
+    "occupation_en": "Butchers",
+    "median_salary_gbp": 27929,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5432": {
+    "soc_code": "5432",
+    "occupation_en": "Bakers and flour confectioners",
+    "median_salary_gbp": 26983,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5433": {
+    "soc_code": "5433",
+    "occupation_en": "Fishmongers and poultry dressers",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5434": {
+    "soc_code": "5434",
+    "occupation_en": "Chefs",
+    "median_salary_gbp": 26531,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5435": {
+    "soc_code": "5435",
+    "occupation_en": "Cooks",
+    "median_salary_gbp": 17885,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5436": {
+    "soc_code": "5436",
+    "occupation_en": "Catering and bar managers",
+    "median_salary_gbp": 27888,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5441": {
+    "soc_code": "5441",
+    "occupation_en": "Glass and ceramics makers, decorators and finishers",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5442": {
+    "soc_code": "5442",
+    "occupation_en": "Furniture makers and other craft woodworkers",
+    "median_salary_gbp": 30328,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5443": {
+    "soc_code": "5443",
+    "occupation_en": "Florists",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "5449": {
+    "soc_code": "5449",
+    "occupation_en": "Other skilled trades n.e.c.",
+    "median_salary_gbp": 26800,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "6111": {
+    "soc_code": "6111",
+    "occupation_en": "Early education and childcare assistants",
+    "median_salary_gbp": 19165,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "6112": {
+    "soc_code": "6112",
+    "occupation_en": "Teaching assistants",
+    "median_salary_gbp": 18024,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "6113": {
+    "soc_code": "6113",
+    "occupation_en": "Educational support assistants",
+    "median_salary_gbp": 17086,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "6114": {
+    "soc_code": "6114",
+    "occupation_en": "Childminders",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "6116": {
+    "soc_code": "6116",
+    "occupation_en": "Nannies and au pairs",
+    "median_salary_gbp": 22955,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "6117": {
+    "soc_code": "6117",
+    "occupation_en": "Playworkers",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "6121": {
+    "soc_code": "6121",
+    "occupation_en": "Pest control officers",
+    "median_salary_gbp": 27487,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "6129": {
+    "soc_code": "6129",
+    "occupation_en": "Animal care services occupations n.e.c.",
+    "median_salary_gbp": 23345,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "6131": {
+    "soc_code": "6131",
+    "occupation_en": "Nursing auxiliaries and assistants",
+    "median_salary_gbp": 24761,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "6132": {
+    "soc_code": "6132",
+    "occupation_en": "Ambulance staff (excluding paramedics)",
+    "median_salary_gbp": 31516,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "6133": {
+    "soc_code": "6133",
+    "occupation_en": "Dental nurses",
+    "median_salary_gbp": 22615,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "6134": {
+    "soc_code": "6134",
+    "occupation_en": "Houseparents and residential wardens",
+    "median_salary_gbp": 26499,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "6135": {
+    "soc_code": "6135",
+    "occupation_en": "Care workers and home carers",
+    "median_salary_gbp": 21487,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "6136": {
+    "soc_code": "6136",
+    "occupation_en": "Senior care workers",
+    "median_salary_gbp": 27417,
+    "on_sol": true,
+    "on_isl": true,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "6137": {
+    "soc_code": "6137",
+    "occupation_en": "Care escorts",
+    "median_salary_gbp": 12175,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "6138": {
+    "soc_code": "6138",
+    "occupation_en": "Undertakers, mortuary and crematorium assistants",
+    "median_salary_gbp": 27020,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "6211": {
+    "soc_code": "6211",
+    "occupation_en": "Sports and leisure assistants",
+    "median_salary_gbp": 14366,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "6212": {
+    "soc_code": "6212",
+    "occupation_en": "Travel agents",
+    "median_salary_gbp": 26426,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "6213": {
+    "soc_code": "6213",
+    "occupation_en": "Air travel assistants",
+    "median_salary_gbp": 28808,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "6214": {
+    "soc_code": "6214",
+    "occupation_en": "Rail travel assistants",
+    "median_salary_gbp": 45240,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "6219": {
+    "soc_code": "6219",
+    "occupation_en": "Leisure and travel service occupations n.e.c.",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "6221": {
+    "soc_code": "6221",
+    "occupation_en": "Hairdressers and barbers",
+    "median_salary_gbp": 15064,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "6222": {
+    "soc_code": "6222",
+    "occupation_en": "Beauticians and related occupations",
+    "median_salary_gbp": 15009,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "6231": {
+    "soc_code": "6231",
+    "occupation_en": "Housekeepers and related occupations",
+    "median_salary_gbp": 16618,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "6232": {
+    "soc_code": "6232",
+    "occupation_en": "Caretakers",
+    "median_salary_gbp": 25147,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "6240": {
+    "soc_code": "6240",
+    "occupation_en": "Cleaning and housekeeping managers and supervisors",
+    "median_salary_gbp": 24931,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "6311": {
+    "soc_code": "6311",
+    "occupation_en": "Police community support officers",
+    "median_salary_gbp": 35189,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "6312": {
+    "soc_code": "6312",
+    "occupation_en": "Parking and civil enforcement occupations",
+    "median_salary_gbp": 27766,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "7111": {
+    "soc_code": "7111",
+    "occupation_en": "Sales and retail assistants",
+    "median_salary_gbp": 14491,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "7112": {
+    "soc_code": "7112",
+    "occupation_en": "Retail cashiers and check-out operators",
+    "median_salary_gbp": 14018,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "7113": {
+    "soc_code": "7113",
+    "occupation_en": "Telephone salespersons",
+    "median_salary_gbp": 26944,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "7114": {
+    "soc_code": "7114",
+    "occupation_en": "Pharmacy and optical dispensing assistants",
+    "median_salary_gbp": 17993,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "7115": {
+    "soc_code": "7115",
+    "occupation_en": "Vehicle and parts salespersons and advisers",
+    "median_salary_gbp": 31750,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "7121": {
+    "soc_code": "7121",
+    "occupation_en": "Collector salespersons and credit agents",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "7122": {
+    "soc_code": "7122",
+    "occupation_en": "Debt, rent and other cash collectors",
+    "median_salary_gbp": 27454,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "7123": {
+    "soc_code": "7123",
+    "occupation_en": "Roundspersons and van salespersons",
+    "median_salary_gbp": 26984,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "7124": {
+    "soc_code": "7124",
+    "occupation_en": "Market and street traders and assistants",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "7125": {
+    "soc_code": "7125",
+    "occupation_en": "Visual merchandisers and related occupations",
+    "median_salary_gbp": 25488,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "7129": {
+    "soc_code": "7129",
+    "occupation_en": "Sales related occupations n.e.c.",
+    "median_salary_gbp": 28870,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "7131": {
+    "soc_code": "7131",
+    "occupation_en": "Shopkeepers and owners - retail and wholesale",
+    "median_salary_gbp": 35083,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "7132": {
+    "soc_code": "7132",
+    "occupation_en": "Sales supervisors - retail and wholesale",
+    "median_salary_gbp": 26112,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "7211": {
+    "soc_code": "7211",
+    "occupation_en": "Call and contact centre occupations",
+    "median_salary_gbp": 25440,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "7212": {
+    "soc_code": "7212",
+    "occupation_en": "Telephonists",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "7213": {
+    "soc_code": "7213",
+    "occupation_en": "Communication operators",
+    "median_salary_gbp": 34934,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "7214": {
+    "soc_code": "7214",
+    "occupation_en": "Market research interviewers",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "7219": {
+    "soc_code": "7219",
+    "occupation_en": "Customer service occupations n.e.c.",
+    "median_salary_gbp": 24438,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "7220": {
+    "soc_code": "7220",
+    "occupation_en": "Customer service supervisors",
+    "median_salary_gbp": 34033,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8111": {
+    "soc_code": "8111",
+    "occupation_en": "Food, drink and tobacco process operatives",
+    "median_salary_gbp": 27267,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8112": {
+    "soc_code": "8112",
+    "occupation_en": "Textile process operatives",
+    "median_salary_gbp": 25572,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8113": {
+    "soc_code": "8113",
+    "occupation_en": "Chemical and related process operatives",
+    "median_salary_gbp": 33531,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8114": {
+    "soc_code": "8114",
+    "occupation_en": "Plastics process operatives",
+    "median_salary_gbp": 29644,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8115": {
+    "soc_code": "8115",
+    "occupation_en": "Metal making and treating process operatives",
+    "median_salary_gbp": 31893,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8119": {
+    "soc_code": "8119",
+    "occupation_en": "Process operatives n.e.c.",
+    "median_salary_gbp": 30843,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8120": {
+    "soc_code": "8120",
+    "occupation_en": "Metal working machine operatives",
+    "median_salary_gbp": 31344,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8131": {
+    "soc_code": "8131",
+    "occupation_en": "Paper and wood machine operatives",
+    "median_salary_gbp": 29640,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8132": {
+    "soc_code": "8132",
+    "occupation_en": "Mining and quarry workers and related operatives",
+    "median_salary_gbp": 38301,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8133": {
+    "soc_code": "8133",
+    "occupation_en": "Energy plant operatives",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8134": {
+    "soc_code": "8134",
+    "occupation_en": "Water and sewerage plant operatives",
+    "median_salary_gbp": 39057,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8135": {
+    "soc_code": "8135",
+    "occupation_en": "Printing machine assistants",
+    "median_salary_gbp": 29657,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8139": {
+    "soc_code": "8139",
+    "occupation_en": "Plant and machine operatives n.e.c.",
+    "median_salary_gbp": 29142,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8141": {
+    "soc_code": "8141",
+    "occupation_en": "Assemblers (electrical and electronic products)",
+    "median_salary_gbp": 28241,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8142": {
+    "soc_code": "8142",
+    "occupation_en": "Assemblers (vehicles and metal goods)",
+    "median_salary_gbp": 31041,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8143": {
+    "soc_code": "8143",
+    "occupation_en": "Routine inspectors and testers",
+    "median_salary_gbp": 33982,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8144": {
+    "soc_code": "8144",
+    "occupation_en": "Weighers, graders and sorters",
+    "median_salary_gbp": 29141,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8145": {
+    "soc_code": "8145",
+    "occupation_en": "Tyre, exhaust and windscreen fitters",
+    "median_salary_gbp": 30429,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8146": {
+    "soc_code": "8146",
+    "occupation_en": "Sewing machinists",
+    "median_salary_gbp": 22767,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8149": {
+    "soc_code": "8149",
+    "occupation_en": "Assemblers and routine operatives n.e.c.",
+    "median_salary_gbp": 26975,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8151": {
+    "soc_code": "8151",
+    "occupation_en": "Scaffolders, stagers and riggers",
+    "median_salary_gbp": 40797,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8152": {
+    "soc_code": "8152",
+    "occupation_en": "Road construction operatives",
+    "median_salary_gbp": 38315,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8153": {
+    "soc_code": "8153",
+    "occupation_en": "Rail construction and maintenance operatives",
+    "median_salary_gbp": 44445,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8159": {
+    "soc_code": "8159",
+    "occupation_en": "Construction operatives n.e.c.",
+    "median_salary_gbp": 30237,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8160": {
+    "soc_code": "8160",
+    "occupation_en": "Production, factory and assembly supervisors",
+    "median_salary_gbp": 35092,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8211": {
+    "soc_code": "8211",
+    "occupation_en": "Large goods vehicle drivers",
+    "median_salary_gbp": 39141,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8212": {
+    "soc_code": "8212",
+    "occupation_en": "Bus and coach drivers",
+    "median_salary_gbp": 33947,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8213": {
+    "soc_code": "8213",
+    "occupation_en": "Taxi and cab drivers and chauffeurs",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8214": {
+    "soc_code": "8214",
+    "occupation_en": "Delivery drivers and couriers",
+    "median_salary_gbp": 24627,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8215": {
+    "soc_code": "8215",
+    "occupation_en": "Driving instructors",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8219": {
+    "soc_code": "8219",
+    "occupation_en": "Road transport drivers n.e.c.",
+    "median_salary_gbp": 28725,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8221": {
+    "soc_code": "8221",
+    "occupation_en": "Crane drivers",
+    "median_salary_gbp": 46392,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8222": {
+    "soc_code": "8222",
+    "occupation_en": "Fork-lift truck drivers",
+    "median_salary_gbp": 31016,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8229": {
+    "soc_code": "8229",
+    "occupation_en": "Mobile machine drivers and operatives n.e.c.",
+    "median_salary_gbp": 36408,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8231": {
+    "soc_code": "8231",
+    "occupation_en": "Train and tram drivers",
+    "median_salary_gbp": 76176,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8232": {
+    "soc_code": "8232",
+    "occupation_en": "Marine and waterways transport operatives",
+    "median_salary_gbp": 39405,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8233": {
+    "soc_code": "8233",
+    "occupation_en": "Air transport operatives",
+    "median_salary_gbp": 32376,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8234": {
+    "soc_code": "8234",
+    "occupation_en": "Rail transport operatives",
+    "median_salary_gbp": 56925,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "8239": {
+    "soc_code": "8239",
+    "occupation_en": "Other drivers and transport operatives n.e.c.",
+    "median_salary_gbp": 32066,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9111": {
+    "soc_code": "9111",
+    "occupation_en": "Farm workers",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9112": {
+    "soc_code": "9112",
+    "occupation_en": "Forestry and related workers",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9119": {
+    "soc_code": "9119",
+    "occupation_en": "Fishing and other elementary agriculture occupations n.e.c.",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9121": {
+    "soc_code": "9121",
+    "occupation_en": "Groundworkers",
+    "median_salary_gbp": 37849,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9129": {
+    "soc_code": "9129",
+    "occupation_en": "Elementary construction occupations n.e.c.",
+    "median_salary_gbp": 26723,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9131": {
+    "soc_code": "9131",
+    "occupation_en": "Industrial cleaning process occupations",
+    "median_salary_gbp": 26236,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9132": {
+    "soc_code": "9132",
+    "occupation_en": "Packers, bottlers, canners and fillers",
+    "median_salary_gbp": 25087,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9139": {
+    "soc_code": "9139",
+    "occupation_en": "Elementary process plant occupations n.e.c.",
+    "median_salary_gbp": 28600,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9211": {
+    "soc_code": "9211",
+    "occupation_en": "Postal workers, mail sorters and messengers",
+    "median_salary_gbp": 29761,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9219": {
+    "soc_code": "9219",
+    "occupation_en": "Elementary administration occupations n.e.c.",
+    "median_salary_gbp": 23005,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9221": {
+    "soc_code": "9221",
+    "occupation_en": "Window cleaners",
+    "median_salary_gbp": 25002,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9222": {
+    "soc_code": "9222",
+    "occupation_en": "Street cleaners",
+    "median_salary_gbp": 26330,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9223": {
+    "soc_code": "9223",
+    "occupation_en": "Cleaners and domestics",
+    "median_salary_gbp": 11852,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9224": {
+    "soc_code": "9224",
+    "occupation_en": "Launderers, dry cleaners and pressers",
+    "median_salary_gbp": 20464,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9225": {
+    "soc_code": "9225",
+    "occupation_en": "Refuse and salvage occupations",
+    "median_salary_gbp": 27576,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9226": {
+    "soc_code": "9226",
+    "occupation_en": "Vehicle valeters and cleaners",
+    "median_salary_gbp": 24875,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9229": {
+    "soc_code": "9229",
+    "occupation_en": "Elementary cleaning occupations n.e.c.",
+    "median_salary_gbp": 25688,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9231": {
+    "soc_code": "9231",
+    "occupation_en": "Security guards and related occupations",
+    "median_salary_gbp": 30819,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9232": {
+    "soc_code": "9232",
+    "occupation_en": "School midday and crossing patrol occupations",
+    "median_salary_gbp": 4263,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9233": {
+    "soc_code": "9233",
+    "occupation_en": "Exam invigilators",
+    "median_salary_gbp": 1902,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9241": {
+    "soc_code": "9241",
+    "occupation_en": "Shelf fillers",
+    "median_salary_gbp": 15809,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9249": {
+    "soc_code": "9249",
+    "occupation_en": "Elementary sales occupations n.e.c.",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9251": {
+    "soc_code": "9251",
+    "occupation_en": "Elementary storage supervisors",
+    "median_salary_gbp": 30480,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9252": {
+    "soc_code": "9252",
+    "occupation_en": "Warehouse operatives",
+    "median_salary_gbp": 26574,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9253": {
+    "soc_code": "9253",
+    "occupation_en": "Delivery operatives",
+    "median_salary_gbp": 25541,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9259": {
+    "soc_code": "9259",
+    "occupation_en": "Elementary storage occupations n.e.c.",
+    "median_salary_gbp": 31589,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9261": {
+    "soc_code": "9261",
+    "occupation_en": "Bar and catering supervisors",
+    "median_salary_gbp": 22552,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9262": {
+    "soc_code": "9262",
+    "occupation_en": "Hospital porters",
+    "median_salary_gbp": 27988,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9263": {
+    "soc_code": "9263",
+    "occupation_en": "Kitchen and catering assistants",
+    "median_salary_gbp": 11840,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9264": {
+    "soc_code": "9264",
+    "occupation_en": "Waiters and waitresses",
+    "median_salary_gbp": 10000,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9265": {
+    "soc_code": "9265",
+    "occupation_en": "Bar staff",
+    "median_salary_gbp": 9166,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9266": {
+    "soc_code": "9266",
+    "occupation_en": "Coffee shop workers",
+    "median_salary_gbp": 12170,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9267": {
+    "soc_code": "9267",
+    "occupation_en": "Leisure and theme park attendants",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  },
+  "9269": {
+    "soc_code": "9269",
+    "occupation_en": "Other elementary services occupations n.e.c.",
+    "median_salary_gbp": null,
+    "on_sol": false,
+    "on_isl": false,
+    "source_name": "ONS ASHE 2025 provisional"
+  }
+}

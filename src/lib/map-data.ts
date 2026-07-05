@@ -11,6 +11,8 @@ import usOccupationStateRaw from "@/data/us-occupation-state.json"
 import caOccupationStateRaw from "@/data/ca-occupation-state.json"
 import caCitiesRaw from "@/data/ca-cities.json"
 import ukCitiesRaw from "@/data/uk-cities.json"
+import ukOccupationsRaw from "@/data/uk-occupations.json"
+import ukRegionOccupationsRaw from "@/data/uk-region-occupations.json"
 
 // 지도 페이지용 데이터 계층. occupations_au + occupation_state_au 를 읽어 JS 에서 조인한다.
 // occupation_state_au 는 anon RLS 가 막혀 있어 서버 전용 service-role 클라이언트로 읽는다.
@@ -959,19 +961,47 @@ async function getMapDataUncached(): Promise<MapData> {
   const usRankedColleges = getUSRankedColleges(usColleges)
   const auRankedColleges = getAURankedColleges()
 
-  // ── UK data aggregation ────────────────────────────────────────────────────────
+  // ── UK data aggregation (fall back to JSON if Supabase empty) ─────────────────
 
   const ukOccupations: Record<string, UKOccRow> = {}
-  for (const o of ukOccupationsList) {
-    ukOccupations[o.soc_code] = o
-  }
-
-  // Region-level shortage/high-pay data
   const ukOccByRegion = new Map<string, UKStateRow[]>()
-  for (const r of ukStateRows) {
-    const arr = ukOccByRegion.get(r.region) ?? []
-    arr.push(r)
-    ukOccByRegion.set(r.region, arr)
+
+  if (ukOccupationsList.length > 0) {
+    // Supabase data — prefer this
+    for (const o of ukOccupationsList) {
+      ukOccupations[o.soc_code] = o
+    }
+    for (const r of ukStateRows) {
+      const arr = ukOccByRegion.get(r.region) ?? []
+      arr.push(r)
+      ukOccByRegion.set(r.region, arr)
+    }
+  } else {
+    // JSON fallback
+    const raw = ukOccupationsRaw as unknown as Record<string, {
+      soc_code: string
+      occupation_en: string
+      median_salary_gbp: number | null
+      on_sol: boolean
+      on_isl: boolean
+      source_name: string
+    }>
+    for (const occ of Object.values(raw)) {
+      ukOccupations[occ.soc_code] = { ...occ, occupation_ko: null, confidence: null, related_broad_field: null, source_url: null, last_verified: null }
+    }
+    const regRaw = ukRegionOccupationsRaw as unknown as Record<string, Array<{
+      soc_code: string
+      median_salary_gbp: number | null
+    }>>
+    for (const [region, occs] of Object.entries(regRaw)) {
+      ukOccByRegion.set(region, occs.map((r) => ({
+        soc_code: r.soc_code,
+        region,
+        median_salary_gbp: r.median_salary_gbp,
+        shortage_rating: null,
+        data_source: "ONS ASHE 2025 provisional (JSON fallback)",
+      })))
+    }
   }
 
   const ukShortageByRegion: Record<string, UKRegionOccupation[]> = {}
