@@ -1045,6 +1045,8 @@ function Panel({
       <UKOccupationDetail
         occ={resolvedUKOcc}
         regionName={stateName}
+        regionCode={selected}
+        data={data}
         onBack={handleBack}
         onClose={onClose}
         savedOccCodes={savedOccCodes}
@@ -4035,6 +4037,8 @@ function UKHighPayList({ rows, onSelectOcc }: { rows: UKRegionOccupation[]; onSe
 function UKOccupationDetail({
   occ,
   regionName,
+  regionCode,
+  data,
   onBack,
   onClose,
   savedOccCodes,
@@ -4043,6 +4047,8 @@ function UKOccupationDetail({
 }: {
   occ: UKOccRow
   regionName: string
+  regionCode: string
+  data: MapData
   onBack: () => void
   onClose: () => void
   savedOccCodes: Set<string>
@@ -4050,6 +4056,22 @@ function UKOccupationDetail({
   onShare: () => void
 }) {
   const isSaved = savedOccCodes.has(occ.soc_code)
+  const hasRange = occ.q1_salary_gbp != null && occ.q3_salary_gbp != null
+  const midSalary = occ.median_salary_gbp ?? occ.mean_salary_gbp
+  const maxRange = occ.q3_salary_gbp ?? occ.mean_salary_gbp ?? occ.median_salary_gbp ?? 1
+  const barMax = Math.max(maxRange, occ.mean_salary_gbp ?? 0)
+
+  // Related universities in the same region
+  const regionColleges = data.ukColleges
+    .filter((c) => c.region === regionCode && c.median_earnings != null)
+    .sort((a, b) => (b.median_earnings ?? 0) - (a.median_earnings ?? 0))
+    .slice(0, 5)
+
+  // Cities in the region with rent data
+  const regionCities = data.ukCities
+    .filter((c) => c.region === regionCode && c.rent_median != null)
+    .sort((a, b) => (b.rent_median ?? 0) - (a.rent_median ?? 0))
+
   return (
     <>
       <div className="flex items-center gap-2 px-5 pt-4">
@@ -4067,26 +4089,124 @@ function UKOccupationDetail({
           <p className="text-xs text-slate-400 mt-1">{regionName} · SOC {occ.soc_code}</p>
         </div>
 
-        <div className="flex gap-3">
-          <div className="flex-1 rounded-lg bg-slate-50 px-3 py-2.5">
+        {/* Salary cards */}
+        <div className="grid grid-cols-2 gap-3">
+          <div className="rounded-lg bg-slate-50 px-3 py-2.5">
             <p className="text-[11px] text-slate-500">Median Salary</p>
             <p className="text-lg font-bold text-slate-900">
               {occ.median_salary_gbp != null ? `£${occ.median_salary_gbp.toLocaleString()}` : "—"}
             </p>
           </div>
+          <div className="rounded-lg bg-slate-50 px-3 py-2.5">
+            <p className="text-[11px] text-slate-500">Mean Salary</p>
+            <p className="text-lg font-bold text-slate-900">
+              {occ.mean_salary_gbp != null ? `£${occ.mean_salary_gbp.toLocaleString()}` : "—"}
+            </p>
+          </div>
+          {occ.employment_thousands != null && (
+            <div className="rounded-lg bg-slate-50 px-3 py-2.5">
+              <p className="text-[11px] text-slate-500">Employed (UK)</p>
+              <p className="text-lg font-bold text-slate-900">
+                {(occ.employment_thousands * 1000).toLocaleString()}
+              </p>
+            </div>
+          )}
           {occ.on_sol && (
-            <div className="flex-1 rounded-lg bg-emerald-50 px-3 py-2.5">
+            <div className="rounded-lg bg-emerald-50 px-3 py-2.5">
               <p className="text-[11px] text-emerald-600">Shortage Occupation</p>
               <p className="text-lg font-bold text-emerald-700">SOL</p>
             </div>
           )}
           {occ.on_isl && (
-            <div className="flex-1 rounded-lg bg-blue-50 px-3 py-2.5">
+            <div className="rounded-lg bg-blue-50 px-3 py-2.5">
               <p className="text-[11px] text-blue-600">Immigration Salary List</p>
               <p className="text-lg font-bold text-blue-700">ISL</p>
             </div>
           )}
         </div>
+
+        {/* Salary range bar */}
+        {hasRange && (
+          <div className="rounded-lg border border-slate-200 px-4 py-3">
+            <p className="text-[11px] text-slate-500 mb-2">Salary Range (Q1 → Q3)</p>
+            <div className="relative h-2 rounded-full bg-slate-100">
+              <div
+                className="absolute h-2 rounded-full bg-violet-200"
+                style={{
+                  left: `${(occ.q1_salary_gbp! / barMax) * 100}%`,
+                  right: `${100 - (occ.q3_salary_gbp! / barMax) * 100}%`,
+                }}
+              />
+              {midSalary != null && (
+                <div
+                  className="absolute top-1/2 -mt-1.5 h-3 w-0.5 rounded bg-violet-600"
+                  style={{ left: `${(midSalary / barMax) * 100}%` }}
+                />
+              )}
+            </div>
+            <div className="flex justify-between text-xs text-slate-500 mt-1">
+              <span>£{occ.q1_salary_gbp!.toLocaleString()}</span>
+              <span className="font-semibold text-violet-700">
+                {occ.median_salary_gbp != null ? `£${occ.median_salary_gbp.toLocaleString()}` : ""}
+              </span>
+              <span>£{occ.q3_salary_gbp!.toLocaleString()}</span>
+            </div>
+          </div>
+        )}
+
+        {/* Salary vs Cost of Living */}
+        {regionCities.length > 0 && occ.median_salary_gbp != null && (
+          <div className="rounded-lg border border-slate-200 px-4 py-3">
+            <p className="text-[11px] text-slate-500 mb-2">Salary vs Cost of Living in {regionName}</p>
+            <div className="space-y-2">
+              {regionCities.slice(0, 3).map((city) => {
+                const rentRatio = city.rent_median != null
+                  ? Math.round(occ.median_salary_gbp! / 12 / city.rent_median)
+                  : null
+                return (
+                  <div key={city.name} className="flex items-center justify-between text-xs">
+                    <span className="text-slate-600">{city.name}</span>
+                    <div className="text-right">
+                      {city.rent_median != null && (
+                        <span className="text-slate-500">Rent £{city.rent_median}/mo</span>
+                      )}
+                      {rentRatio != null && (
+                        <span className="ml-2 font-medium text-emerald-600">
+                          {rentRatio}x
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+            <p className="text-[10px] text-slate-400 mt-1.5">
+              Rent multiple = monthly median salary ÷ median rent
+            </p>
+          </div>
+        )}
+
+        {/* Related Universities */}
+        {regionColleges.length > 0 && (
+          <div className="rounded-lg border border-slate-200 px-4 py-3">
+            <p className="text-[11px] text-slate-500 mb-2">Top Universities in {regionName}</p>
+            <div className="space-y-2">
+              {regionColleges.map((c) => (
+                <div key={c.institution_id} className="flex items-center justify-between text-xs">
+                  <div>
+                    <span className="font-medium text-slate-700">{c.college_name}</span>
+                    {c.qs_rank != null && (
+                      <span className="ml-1.5 text-slate-400">#{c.qs_rank}</span>
+                    )}
+                  </div>
+                  <span className="font-semibold text-slate-600">
+                    {c.median_earnings != null ? `£${c.median_earnings.toLocaleString()}` : ""}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="flex gap-2">
           <button

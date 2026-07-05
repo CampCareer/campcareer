@@ -34,6 +34,20 @@ const ASHE14_URL =
 const ASHE15_URL =
   "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/regionbyoccupation4digitsoc2010ashetable15/2025provisional/ashetable152025provisional.zip"
 
+// ── Column indices in ASHE Table 14 / 15 ──────────────────────────────────────
+//
+// Row 4 is header: Description, Code, (thousand), Median, %change, Mean, %change,
+//                   10, 20, 25, 30, 40, 60, 70, 75, 80, 90
+//
+// [0] Description   [1] Code   [2] jobs (1k)   [3] Median   [5] Mean
+// [9] 25th pctile   [14] 75th pctile
+
+const COL_JOBS = 2
+const COL_MEDIAN = 3
+const COL_MEAN = 5
+const COL_25PC = 9
+const COL_75PC = 14
+
 // ── ITL1 region mapping (ONS name → ITL1 code) ────────────────────────────────
 
 const REGION_MAP: Record<string, string> = {
@@ -103,7 +117,8 @@ function is4Digit(code: unknown): code is string {
   return typeof code === "string" && /^\d{4}$/.test(code.trim())
 }
 
-function cleanMedian(val: unknown): number | null {
+/** Table 14 uses "c" for confidential, Table 15 uses "x" for suppressed. */
+function cleanSalary(val: unknown): number | null {
   if (val == null) return null
   if (typeof val === "number") return Math.round(val)
   const s = String(val).replace(/[£,\s]/g, "")
@@ -118,6 +133,10 @@ interface NatOcc {
   soc_code: string
   occupation_en: string
   median_salary_gbp: number | null
+  mean_salary_gbp: number | null
+  q1_salary_gbp: number | null
+  q3_salary_gbp: number | null
+  employment_thousands: number | null
 }
 
 function parseTable14(wb: XLSX.WorkBook): NatOcc[] {
@@ -131,10 +150,17 @@ function parseTable14(wb: XLSX.WorkBook): NatOcc[] {
     if (!row || row.length < 4) continue
     const code = String(row[1] ?? "").trim()
     const desc = String(row[0] ?? "").trim()
-    const median = cleanMedian(row[3])
 
     if (is4Digit(code) && desc) {
-      results.push({ soc_code: code, occupation_en: desc, median_salary_gbp: median })
+      results.push({
+        soc_code: code,
+        occupation_en: desc,
+        median_salary_gbp: cleanSalary(row[COL_MEDIAN]),
+        mean_salary_gbp: cleanSalary(row[COL_MEAN]),
+        q1_salary_gbp: cleanSalary(row[COL_25PC]),
+        q3_salary_gbp: cleanSalary(row[COL_75PC]),
+        employment_thousands: cleanSalary(row[COL_JOBS]),
+      })
     }
   }
   return results
@@ -146,6 +172,10 @@ interface RegOcc {
   soc_code: string
   region: string
   median_salary_gbp: number | null
+  mean_salary_gbp: number | null
+  q1_salary_gbp: number | null
+  q3_salary_gbp: number | null
+  employment_thousands: number | null
 }
 
 function parseTable15(wb: XLSX.WorkBook): RegOcc[] {
@@ -160,7 +190,6 @@ function parseTable15(wb: XLSX.WorkBook): RegOcc[] {
 
     const desc = String(row[0] ?? "").trim()
     const code = String(row[1] ?? "").trim()
-    const median = cleanMedian(row[3])
 
     if (!is4Digit(code)) continue
 
@@ -170,7 +199,15 @@ function parseTable15(wb: XLSX.WorkBook): RegOcc[] {
     const itl1Code = REGION_MAP[regionName]
     if (!itl1Code) continue
 
-    results.push({ soc_code: code, region: itl1Code, median_salary_gbp: median })
+    results.push({
+      soc_code: code,
+      region: itl1Code,
+      median_salary_gbp: cleanSalary(row[COL_MEDIAN]),
+      mean_salary_gbp: cleanSalary(row[COL_MEAN]),
+      q1_salary_gbp: cleanSalary(row[COL_25PC]),
+      q3_salary_gbp: cleanSalary(row[COL_75PC]),
+      employment_thousands: cleanSalary(row[COL_JOBS]),
+    })
   }
   return results
 }
@@ -230,6 +267,10 @@ async function main() {
     soc_code: string
     occupation_en: string
     median_salary_gbp: number | null
+    mean_salary_gbp: number | null
+    q1_salary_gbp: number | null
+    q3_salary_gbp: number | null
+    employment_thousands: number | null
     on_sol: boolean
     on_isl: boolean
     source_name: string
@@ -239,6 +280,10 @@ async function main() {
       soc_code: o.soc_code,
       occupation_en: o.occupation_en,
       median_salary_gbp: o.median_salary_gbp,
+      mean_salary_gbp: o.mean_salary_gbp,
+      q1_salary_gbp: o.q1_salary_gbp,
+      q3_salary_gbp: o.q3_salary_gbp,
+      employment_thousands: o.employment_thousands,
       on_sol: TSL_SOC_CODES.has(o.soc_code) || ISL_SOC_CODES.has(o.soc_code),
       on_isl: ISL_SOC_CODES.has(o.soc_code),
       source_name: "ONS ASHE 2025 provisional",
@@ -248,10 +293,21 @@ async function main() {
   const regionOccJson: Record<string, Array<{
     soc_code: string
     median_salary_gbp: number | null
+    mean_salary_gbp: number | null
+    q1_salary_gbp: number | null
+    q3_salary_gbp: number | null
+    employment_thousands: number | null
   }>> = {}
   for (const r of regOccs) {
     const arr = regionOccJson[r.region] ?? []
-    arr.push({ soc_code: r.soc_code, median_salary_gbp: r.median_salary_gbp })
+    arr.push({
+      soc_code: r.soc_code,
+      median_salary_gbp: r.median_salary_gbp,
+      mean_salary_gbp: r.mean_salary_gbp,
+      q1_salary_gbp: r.q1_salary_gbp,
+      q3_salary_gbp: r.q3_salary_gbp,
+      employment_thousands: r.employment_thousands,
+    })
     regionOccJson[r.region] = arr
   }
 
@@ -288,6 +344,10 @@ async function main() {
     soc_code: r.soc_code,
     occupation_en: r.occupation_en,
     median_salary_gbp: r.median_salary_gbp,
+    mean_salary_gbp: r.mean_salary_gbp,
+    q1_salary_gbp: r.q1_salary_gbp,
+    q3_salary_gbp: r.q3_salary_gbp,
+    employment_thousands: r.employment_thousands,
     on_sol: TSL_SOC_CODES.has(r.soc_code) || ISL_SOC_CODES.has(r.soc_code),
     on_isl: ISL_SOC_CODES.has(r.soc_code),
     source_name: "ONS ASHE 2025 provisional · Home Office ISL/TSL 2025",
@@ -309,6 +369,10 @@ async function main() {
     soc_code: r.soc_code,
     region: r.region,
     median_salary_gbp: r.median_salary_gbp,
+    mean_salary_gbp: r.mean_salary_gbp,
+    q1_salary_gbp: r.q1_salary_gbp,
+    q3_salary_gbp: r.q3_salary_gbp,
+    employment_thousands: r.employment_thousands,
     data_source: "ONS ASHE 2025 provisional (Table 15)",
   }))
 
