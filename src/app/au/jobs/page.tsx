@@ -4,6 +4,7 @@ import Link from "next/link"
 import { supabaseAdmin } from "@/lib/supabase-admin"
 import { pageMetadata } from "@/lib/seo"
 import { JsonLd } from "@/components/seo/json-ld"
+import { AuJobsClient } from "./AuJobsClient"
 
 export const revalidate = 86400
 
@@ -75,33 +76,8 @@ export default async function AuJobsPage() {
           </p>
         </div>
 
-        {/* Occupation grid — all links visible to crawlers */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {occupations.map((occ) => (
-            <Link
-              key={occ.anzsco_code}
-              href={`/roi-explorer/au/occupation/${occ.anzsco_code}`}
-              className="group p-4 rounded-xl border border-slate-200 hover:border-brand/40 hover:bg-brand-tint transition-colors"
-            >
-              <div className="font-medium text-sm text-foreground group-hover:text-brand-press leading-snug mb-2">
-                {occ.occupation_en}
-              </div>
-              <div className="flex items-center gap-3 text-xs text-slate-400">
-                {occ.median_salary_aud && (
-                  <span className="font-semibold text-slate-600">
-                    A${occ.median_salary_aud.toLocaleString()}
-                  </span>
-                )}
-                {occ.shortage_rating != null && occ.shortage_rating >= 3 && (
-                  <span className="bg-orange-50 text-orange-600 px-1.5 py-0.5 rounded text-[10px] font-semibold">
-                    Shortage
-                  </span>
-                )}
-                <span className="ml-auto">{occ.anzsco_code}</span>
-              </div>
-            </Link>
-          ))}
-        </div>
+        {/* Client-side search + filter, with all occupation data pre-fetched server-side */}
+        <AuJobsClient occupations={occupations} />
       </div>
     </main>
   )

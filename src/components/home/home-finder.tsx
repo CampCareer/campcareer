@@ -242,6 +242,46 @@ export function HomeFinder() {
           </div>
         </div>
 
+        {/* 국가 허브 카드 — /au /us /ca /uk 빠른 진입 */}
+        <div className="mt-7 w-full max-w-xl px-6">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-400">
+            Explore by Country
+          </p>
+          <div className="grid grid-cols-2 gap-3">
+            {[
+              { href: "/au", flag: "🇦🇺", name: "Australia", sub: "395+ occupations", enabled: true },
+              { href: "/us", flag: "🇺🇸", name: "United States", sub: "116+ occupations", enabled: true },
+              { href: "/ca", flag: "🇨🇦", name: "Canada", sub: "514+ occupations", enabled: true },
+              { href: "/roi-explorer/ie/language-schools", flag: "🇮🇪", name: "Ireland", sub: "Language schools", enabled: true },
+            ].map(({ href, flag, name, sub, enabled }) =>
+              enabled ? (
+                <Link
+                  key={name}
+                  href={href}
+                  className="group flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-3 hover:border-brand/30 hover:bg-brand-tint transition-colors"
+                >
+                  <span className="text-2xl leading-none">{flag}</span>
+                  <div className="min-w-0">
+                    <div className="text-sm font-semibold text-slate-800 group-hover:text-brand-press">{name}</div>
+                    <div className="text-[11px] text-slate-400">{sub}</div>
+                  </div>
+                </Link>
+              ) : (
+                <div
+                  key={name}
+                  className="flex items-center gap-3 rounded-xl border border-slate-100 bg-slate-50 p-3 opacity-60 cursor-not-allowed"
+                >
+                  <span className="text-2xl leading-none">{flag}</span>
+                  <div className="min-w-0">
+                    <div className="text-sm font-semibold text-slate-500">{name}</div>
+                    <div className="text-[11px] text-slate-400">Coming soon</div>
+                  </div>
+                </div>
+              )
+            )}
+          </div>
+        </div>
+
         {/* 주별 고용 Top 3 카드 */}
         <div className="mt-7 w-full max-w-5xl px-6">
           <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-400">

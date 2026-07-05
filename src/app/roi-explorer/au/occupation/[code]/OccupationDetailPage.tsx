@@ -155,10 +155,10 @@ function EmptyState({ children }: { children: React.ReactNode }) {
 
 const DOTS: Record<ShortageLevel, number> = { Low: 0, Medium: 1, High: 2, Strong: 3 }
 const DOT_LABEL: Record<ShortageLevel, string> = {
-  Low: "부족 없음",
-  Medium: "지역 부족",
-  High: "부족",
-  Strong: "부족",
+  Low: "No shortage",
+  Medium: "Regional shortage",
+  High: "Shortage",
+  Strong: "Strong shortage",
 }
 
 function ShortageDotsDisplay({ level }: { level: ShortageLevel }) {
@@ -225,15 +225,15 @@ export default function OccupationDetailPage({
               </Badge>
               <Badge variant="secondary">ANZSCO {anzscoCode}</Badge>
               <Badge variant={SHORTAGE_VARIANT[shortage.nationalLevel]}>
-                인력 부족: {shortage.nationalLevel}
+                Shortage: {shortage.nationalLevel}
               </Badge>
             </div>
             <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
               {occupationName}
             </h1>
             <p className="text-sm text-muted-foreground">
-              최종 업데이트 {updatedAtISO}
-              {sources.length > 0 ? ` · 출처 ${sources.length}건` : ""}
+              Updated {updatedAtISO}
+              {sources.length > 0 ? ` · ${sources.length} source${sources.length > 1 ? "s" : ""}` : ""}
             </p>
           </header>
 
@@ -242,10 +242,10 @@ export default function OccupationDetailPage({
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <TrendingUp className="size-4 text-primary" />
-                전국 인력 부족도
+                National Skills Shortage
               </CardTitle>
               <CardDescription>
-                OSCA 부족도 평가 기준 (높을수록 인력 수요가 큼)
+                OSCA shortage rating (higher = greater demand)
               </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col gap-2">
@@ -263,24 +263,24 @@ export default function OccupationDetailPage({
           <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <SnapshotCard
               icon={<Landmark className="size-4" />}
-              label="평균 연봉"
+              label="Median Salary"
               value={snapshot.medianSalaryText}
               hint={snapshot.salaryRangeText}
             />
             <SnapshotCard
               icon={<Briefcase className="size-4" />}
-              label="채용 추이 (90일)"
+              label="Hiring Trend (90d)"
               value={snapshot.jobAdsTrend90dText}
             />
             <SnapshotCard
               icon={<Clock className="size-4" />}
-              label="평균 채용 소요"
+              label="Avg. Time to Hire"
               value={snapshot.timeToHireText}
             />
             <SnapshotCard
               icon={<ShieldCheck className="size-4" />}
-              label="비자 경로"
-              value="스폰서/영주권"
+              label="Visa Pathway"
+              value="Sponsor / PR"
               hint={snapshot.visaPathwaysText}
             />
           </div>
@@ -288,17 +288,17 @@ export default function OccupationDetailPage({
           {/* Tabs */}
           <Tabs defaultValue="overview" className="mt-8">
             <TabsList>
-              <TabsTrigger value="overview">개요</TabsTrigger>
-              <TabsTrigger value="skills">역량</TabsTrigger>
-              <TabsTrigger value="credentials">자격·코스</TabsTrigger>
-              <TabsTrigger value="jobs">채용</TabsTrigger>
+              <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="skills">Skills</TabsTrigger>
+              <TabsTrigger value="credentials">Courses</TabsTrigger>
+              <TabsTrigger value="jobs">Jobs</TabsTrigger>
             </TabsList>
 
             {/* Overview */}
             <TabsContent value="overview" className="mt-4 flex flex-col gap-6">
               <section className="flex flex-col gap-3">
                 <h2 className="text-sm font-semibold text-muted-foreground">
-                  쉽게 풀어보면
+                  What this means
                 </h2>
                 {plainEnglish.bullets.length > 0 ? (
                   <ul className="flex flex-col gap-2">
@@ -310,7 +310,7 @@ export default function OccupationDetailPage({
                     ))}
                   </ul>
                 ) : (
-                  <EmptyState>요약 정보가 곧 추가됩니다.</EmptyState>
+                  <EmptyState>Summary coming soon.</EmptyState>
                 )}
                 {plainEnglish.officialUrl ? (
                   <a
@@ -319,7 +319,7 @@ export default function OccupationDetailPage({
                     rel="noopener noreferrer"
                     className="inline-flex w-fit items-center gap-1 text-sm text-primary hover:underline"
                   >
-                    공식 출처 보기
+                    Official source
                     <ExternalLink className="size-3.5" />
                   </a>
                 ) : null}
@@ -329,7 +329,7 @@ export default function OccupationDetailPage({
 
               <section className="flex flex-col gap-3">
                 <h2 className="text-sm font-semibold text-muted-foreground">
-                  전망
+                  Outlook
                 </h2>
                 <p className="text-sm">{outlook.why}</p>
                 {outlook.index.length > 0 ? (
@@ -349,7 +349,7 @@ export default function OccupationDetailPage({
                   <section className="flex flex-col gap-3">
                     <h2 className="flex items-center gap-2 text-sm font-semibold text-muted-foreground">
                       <MapIcon className="size-4" />
-                      주(State)별 인력 부족
+                      Shortage by State
                     </h2>
                     <ul className="flex flex-col divide-y divide-border">
                       {shortage.byRegion.map((r) => (
@@ -381,7 +381,7 @@ export default function OccupationDetailPage({
                   ))}
                 </div>
               ) : (
-                <EmptyState>핵심 역량 데이터가 곧 추가됩니다.</EmptyState>
+                <EmptyState>Skills data coming soon.</EmptyState>
               )}
             </TabsContent>
 
@@ -411,8 +411,18 @@ export default function OccupationDetailPage({
                   ))}
                 </div>
               ) : (
-                <EmptyState>연결된 자격·코스 정보가 곧 추가됩니다.</EmptyState>
+                <EmptyState>Courses &amp; credentials coming soon.</EmptyState>
               )}
+              {/* Compare courses CTA */}
+              <div className="mt-4 flex items-center justify-between rounded-lg border border-dashed border-slate-200 px-4 py-3">
+                <span className="text-sm text-slate-600">Looking for the best course for this occupation?</span>
+                <Button asChild variant="outline" size="sm">
+                  <Link href="/compare">
+                    Compare Courses
+                    <ArrowRight className="ml-1 size-3.5" />
+                  </Link>
+                </Button>
+              </div>
             </TabsContent>
 
             {/* Jobs */}
@@ -443,7 +453,7 @@ export default function OccupationDetailPage({
                               rel="noopener noreferrer"
                               className="mt-1 inline-flex w-fit items-center gap-1 text-xs text-primary hover:underline"
                             >
-                              공고 보기
+                              View listing
                               <ExternalLink className="size-3" />
                             </a>
                           ) : null}
@@ -453,7 +463,7 @@ export default function OccupationDetailPage({
                   ))}
                 </ul>
               ) : (
-                <EmptyState>실시간 채용 공고가 곧 연결됩니다.</EmptyState>
+                <EmptyState>Live job listings coming soon.</EmptyState>
               )}
             </TabsContent>
           </Tabs>
