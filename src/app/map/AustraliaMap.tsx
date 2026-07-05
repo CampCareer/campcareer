@@ -854,6 +854,11 @@ export default function AustraliaMap({
               onShare={shareOcc}
               selectedNeroA4={selectedNeroA4}
               setSelectedNeroA4={setSelectedNeroA4}
+              onSelectCollege={(c) => {
+                setSelectedUniv(c)
+                setActiveCountry("UK")
+                setSelected(c.region)
+              }}
             />
           )
           return isMobile ? (
@@ -890,6 +895,7 @@ function Panel({
   onShare,
   selectedNeroA4,
   setSelectedNeroA4,
+  onSelectCollege,
 }: {
   data: MapData
   selected: string
@@ -909,6 +915,7 @@ function Panel({
   onShare: () => void
   selectedNeroA4: string | null
   setSelectedNeroA4: (a4: string | null) => void
+  onSelectCollege?: (college: UKCollege) => void
 }) {
   const t = useTranslations()
   const locale = useLocale()
@@ -1169,6 +1176,7 @@ function Panel({
             <UKCollegesPanel
               colleges={data.ukColleges}
               region={selected}
+              onSelect={(c) => onSelectCollege?.(c)}
             />
           </div>
         )}
@@ -2503,9 +2511,11 @@ function CACollegesPanel({
 function UKCollegesPanel({
   colleges,
   region,
+  onSelect,
 }: {
   colleges: UKCollege[]
   region: string | null
+  onSelect: (college: UKCollege) => void
 }) {
   const filtered = region ? colleges.filter((c) => c.region === region) : colleges
   if (filtered.length === 0) {
@@ -2517,9 +2527,9 @@ function UKCollegesPanel({
       <ol>
         {filtered.map((c, i) => (
           <li key={c.institution_id}>
-            <Link
-              href={`/map/uk/university/${c.slug}`}
-              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50"
+            <button
+              onClick={() => onSelect(c)}
+              className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50"
             >
               <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
               <span className="min-w-0 flex-1">
@@ -2529,7 +2539,7 @@ function UKCollegesPanel({
               <span className="shrink-0 text-right text-sm font-semibold tabular-nums text-slate-700">
                 {c.median_earnings != null ? `£${c.median_earnings.toLocaleString()}` : "—"}
               </span>
-            </Link>
+            </button>
           </li>
         ))}
       </ol>
