@@ -223,6 +223,12 @@ export default function AustraliaMap({
     } else if (countryRaw === "uk" && raw && (UK_REGION_CODES as readonly string[]).includes(raw)) {
       setActiveCountry("UK")
       setSelected(raw)
+    } else if (countryRaw === "ca" && raw && (CA_PROVINCE_CODES as readonly string[]).includes(raw)) {
+      setActiveCountry("CA")
+      setSelected(raw)
+    } else if (countryRaw === "de" && raw && (DE_BUNDESLAND_CODES as readonly string[]).includes(raw)) {
+      setActiveCountry("DE")
+      setSelected(raw)
     }
     const tabParam = p.get("tab")
     if (tabParam === "pay") setTab("pay")
