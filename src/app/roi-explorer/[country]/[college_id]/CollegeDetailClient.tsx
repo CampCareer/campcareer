@@ -30,7 +30,7 @@ export type DetailRow = {
   duration_years?: number | null
 }
 
-type Country = 'us' | 'au' | 'ca' | 'uk' | 'ie'
+type Country = 'us' | 'au' | 'ca' | 'uk' | 'ie' | 'de'
 
 const CURRENCY: Record<Country, { symbol: string; code: string }> = {
   us: { symbol: '$',  code: 'USD' },
@@ -38,6 +38,7 @@ const CURRENCY: Record<Country, { symbol: string; code: string }> = {
   ca: { symbol: 'C$', code: 'CAD' },
   uk: { symbol: '£',  code: 'GBP' },
   ie: { symbol: '€',  code: 'EUR' },
+  de: { symbol: '€',  code: 'EUR' },
 }
 
 const COUNTRY_LABEL: Record<Country, string> = {
@@ -46,6 +47,7 @@ const COUNTRY_LABEL: Record<Country, string> = {
   ca: 'Canada',
   uk: 'United Kingdom',
   ie: 'Ireland',
+  de: 'Germany',
 }
 
 // Share of city market rent a student/graduate typically pays in shared accommodation.
@@ -57,6 +59,7 @@ const STUDENT_RENT_SHARE: Record<Country, number> = {
   ca: 0.45,
   uk: 0.45,
   ie: 0.45,
+  de: 0.45,
 }
 
 const LIVING_COST_MULTIPLIER = 0.4

@@ -319,7 +319,7 @@ function FieldCombobox({
   )
 }
 
-type Country = 'us' | 'au' | 'ca' | 'uk' | 'ie'
+type Country = 'us' | 'au' | 'ca' | 'uk' | 'ie' | 'de'
 
 export type RoiFilters = {
   country: Country

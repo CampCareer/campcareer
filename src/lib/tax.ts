@@ -115,6 +115,31 @@ function calcIETax(gross: number): number {
   return Math.round(tax + usc + prsi)
 }
 
+function calcDETax(gross: number): number {
+  // Simplified German income tax + social security estimation (2025)
+  // Income tax (Einkommensteuer) brackets for single filers:
+  // €0-12,096: 0%, €12,097-17,443: 14-24%, €17,444-68,430: 24-42%,
+  // €68,431-277,825: 42%, >€277,825: 45%
+  // + Solidaritätszuschlag (5.5% of tax) for most
+  // + Social security ~20% (pension 9.3% + health ~7.3% + unemployment 1.3% + care 1.8%)
+  const socSec = Math.min(gross * 0.20, 18000)
+
+  const taxable = gross - socSec
+  if (taxable <= 12096) return Math.round(socSec)
+  if (taxable <= 17443) {
+    const rate = 0.14 + (taxable - 12096) / (17443 - 12096) * (0.24 - 0.14)
+    return Math.round(socSec + taxable * rate * 1.055)
+  }
+  if (taxable <= 68430) {
+    const rate = 0.24 + (taxable - 17443) / (68430 - 17443) * (0.42 - 0.24)
+    return Math.round(socSec + taxable * rate * 1.055)
+  }
+  if (taxable <= 277825) {
+    return Math.round(socSec + taxable * 0.42 * 1.055)
+  }
+  return Math.round(socSec + taxable * 0.45 * 1.055)
+}
+
 export function calcTax(gross: number, country: string, stateOrProvince: string): number {
   switch (country) {
     case 'us': return calcUSTax(gross, stateOrProvince)
@@ -122,6 +147,7 @@ export function calcTax(gross: number, country: string, stateOrProvince: string)
     case 'ca': return calcCATax(gross, stateOrProvince)
     case 'uk': return calcUKTax(gross)
     case 'ie': return calcIETax(gross)
+    case 'de': return calcDETax(gross)
     default:   return 0
   }
 }

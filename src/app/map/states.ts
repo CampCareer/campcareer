@@ -173,3 +173,30 @@ export const US_STATE_NAMES: Record<string, string> = {
   SD: "South Dakota", TN: "Tennessee", TX: "Texas", UT: "Utah", VT: "Vermont",
   VA: "Virginia", WA: "Washington", WV: "West Virginia", WI: "Wisconsin", WY: "Wyoming",
 }
+
+// ── Germany (DE) Bundesländer ─────────────────────────────────────────────────
+
+export const DE_BUNDESLAND_CODES = [
+  "BW","BY","BE","BB","HB","HH","HE","MV","NI","NW","RP","SL","SN","ST","SH","TH",
+] as const
+
+export type DEBundeslandCode = typeof DE_BUNDESLAND_CODES[number]
+
+export const DE_BUNDESLAND_NAMES: Record<string, string> = {
+  BW: "Baden-Württemberg",
+  BY: "Bayern",
+  BE: "Berlin",
+  BB: "Brandenburg",
+  HB: "Bremen",
+  HH: "Hamburg",
+  HE: "Hessen",
+  MV: "Mecklenburg-Vorpommern",
+  NI: "Niedersachsen",
+  NW: "Nordrhein-Westfalen",
+  RP: "Rheinland-Pfalz",
+  SL: "Saarland",
+  SN: "Sachsen",
+  ST: "Sachsen-Anhalt",
+  SH: "Schleswig-Holstein",
+  TH: "Thüringen",
+}

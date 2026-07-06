@@ -14,6 +14,10 @@ import ukCitiesRaw from "@/data/uk-cities.json"
 import ukOccupationsRaw from "@/data/uk-occupations.json"
 import ukRegionOccupationsRaw from "@/data/uk-region-occupations.json"
 import ukCollegesRaw from "@/data/uk-colleges.json"
+import deOccupationsRaw from "@/data/de-occupations.json"
+import deCollegesRaw from "@/data/de-colleges.json"
+import deCitiesRaw from "@/data/de-cities.json"
+import deRegionOccupationsRaw from "@/data/de-region-occupations.json"
 
 // 지도 페이지용 데이터 계층. occupations_au + occupation_state_au 를 읽어 JS 에서 조인한다.
 // occupation_state_au 는 anon RLS 가 막혀 있어 서버 전용 service-role 클라이언트로 읽는다.
@@ -232,6 +236,49 @@ export interface UKCity {
   cost_of_living_index: number | null
 }
 
+export interface DEOccRow {
+  kldb_code: string
+  occupation_de: string
+  occupation_en: string
+  median_salary_eur: number | null
+  mean_salary_eur: number | null
+  q1_salary_eur: number | null
+  q3_salary_eur: number | null
+  employment_thousands: number | null
+  shortage_rating: number | null
+  on_blue_card_list: boolean
+  related_broad_field: string | null
+}
+
+export interface DERegionOccupation {
+  kldb_code: string
+  occupation_en: string
+  median_salary_eur: number | null
+  shortage_rating: number | null
+  employment_thousands: number | null
+}
+
+export interface DECollege {
+  institution_id: string
+  college_name: string
+  city_name: string
+  region: string
+  lat: number
+  lng: number
+  median_earnings: number | null
+  tuition: number | null
+  qs_rank: number | null
+  website: string | null
+  slug: string
+}
+
+export interface DECity {
+  name: string
+  region: string
+  rent_median: number | null
+  cost_of_living_index: number | null
+}
+
 // { "WA": { "1": 1.000, "3": 1.222, ... } }
 export type StateSalaryMult = Record<string, Record<string, number>>
 
@@ -279,6 +326,11 @@ export interface MapData {
   ukHighPayByRegion: Record<string, UKRegionOccupation[]>
   ukColleges: UKCollege[]
   ukCities: UKCity[]
+  deOccupations: Record<string, DEOccRow>
+  deHighPayByRegion: Record<string, DERegionOccupation[]>
+  deShortageByRegion: Record<string, DERegionOccupation[]>
+  deColleges: DECollege[]
+  deCities: DECity[]
 }
 
 export interface CACity {
@@ -781,6 +833,67 @@ async function getUKCities(): Promise<UKCity[]> {
   }))
 }
 
+// ── DE (Germany) data ───────────────────────────────────────────────────────────
+
+async function getDEColleges(): Promise<DECollege[]> {
+  const raw = deCollegesRaw as unknown as Array<{
+    institution_id: string
+    name: string
+    city: string
+    region: string
+    qs_rank: number | null
+    m?: number | null
+    t?: number | null
+    website: string | null
+  }>
+  const cityCoords = getDECityCoords()
+  const defaultCoord = { lat: 51.165, lng: 10.451 }  // Germany centroid
+  return raw.map((r) => {
+    const slug = r.name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "")
+    const coord = cityCoords.get(r.city.toLowerCase()) ?? defaultCoord
+    return {
+      institution_id: r.institution_id,
+      college_name: r.name,
+      city_name: r.city,
+      region: r.region,
+      lat: coord.lat,
+      lng: coord.lng,
+      median_earnings: r.m ?? null,
+      tuition: r.t ?? null,
+      qs_rank: r.qs_rank,
+      website: r.website,
+      slug,
+    }
+  })
+}
+
+function getDECityCoords(): Map<string, { lat: number; lng: number }> {
+  const map = new Map<string, { lat: number; lng: number }>()
+  const cities = deCitiesRaw as unknown as Array<{ name: string; lat: number; lng: number }>
+  for (const city of cities) {
+    map.set(city.name.toLowerCase(), { lat: city.lat, lng: city.lng })
+  }
+  return map
+}
+
+async function getDECities(): Promise<DECity[]> {
+  const raw = deCitiesRaw as unknown as Array<{
+    name: string
+    region: string
+    rent_median: number | null
+    cost_of_living_index: number | null
+  }>
+  return raw.map((city) => ({
+    name: city.name,
+    region: city.region,
+    rent_median: city.rent_median ?? null,
+    cost_of_living_index: city.cost_of_living_index ?? null,
+  }))
+}
+
 async function getCAColleges(): Promise<CACollege[]> {
   const { data, error } = await supabaseAdmin
     .from("colleges_ca")
@@ -830,7 +943,7 @@ async function getCAColleges(): Promise<CACollege[]> {
 }
 
 async function getMapDataUncached(): Promise<MapData> {
-  const [occupations, stateRows, usColleges, multRows, coursesByFieldState, caColleges, caOccupationsList, caStateRows, caCities, ukOccupationsList, ukStateRows, ukColleges, ukCities] = await Promise.all([
+  const [occupations, stateRows, usColleges, multRows, coursesByFieldState, caColleges, caOccupationsList, caStateRows, caCities, ukOccupationsList, ukStateRows, ukColleges, ukCities, deColleges, deCities] = await Promise.all([
     fetchAll<OccRow>(
       "occupations_au",
       "anzsco_code, anzsco_v13, occupation_en, occupation_ko, shortage_rating, median_salary_aud, on_csol, confidence, related_broad_field, pr_note_ko, source_name, source_url, last_verified",
@@ -862,6 +975,8 @@ async function getMapDataUncached(): Promise<MapData> {
     ),
     getUKColleges(),
     getUKCities(),
+    getDEColleges(),
+    getDECities(),
   ])
 
   // { "WA": { "3": 1.222, ... } }
@@ -1121,7 +1236,50 @@ async function getMapDataUncached(): Promise<MapData> {
       .slice(0, 12)
   }
 
-  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages, coursesByFieldState, usStateInfo, usMajorDensity, usRankedColleges, auRankedColleges, caColleges, caOccupations, caHighPay, caHighPayByProvince, caProvinceOccupations, caProvinceShortages, caCities, ukOccupations, ukShortageByRegion, ukHighPayByRegion, ukColleges, ukCities }
+  // ── DE (Germany) data from JSON ────────────────────────────────────────────────
+
+  const deRaw = deOccupationsRaw as unknown as Record<string, {
+    kldb_code: string
+    occupation_de: string
+    occupation_en: string
+    median_salary_eur: number | null
+    mean_salary_eur: number | null
+    q1_salary_eur: number | null
+    q3_salary_eur: number | null
+    employment_thousands: number | null
+    shortage_rating: number | null
+    on_blue_card_list: boolean
+    related_broad_field: string | null
+  }>
+  const deOccupations: Record<string, DEOccRow> = {}
+  for (const occ of Object.values(deRaw)) {
+    deOccupations[occ.kldb_code] = occ
+  }
+
+  const deRegRaw = deRegionOccupationsRaw as unknown as Record<string, { shortage_codes: string[] }>
+  const deShortageByRegion: Record<string, DERegionOccupation[]> = {}
+  const deHighPayByRegion: Record<string, DERegionOccupation[]> = {}
+  for (const [code, d] of Object.entries(deRegRaw)) {
+    const occs: DERegionOccupation[] = d.shortage_codes
+      .map((kid) => deOccupations[kid])
+      .filter(Boolean)
+      .map((o) => ({
+        kldb_code: o.kldb_code,
+        occupation_en: o.occupation_en,
+        median_salary_eur: o.median_salary_eur,
+        shortage_rating: o.shortage_rating,
+        employment_thousands: o.employment_thousands,
+      }))
+    deShortageByRegion[code] = occs.sort(
+      (a, b) => (b.shortage_rating ?? 0) - (a.shortage_rating ?? 0),
+    )
+    deHighPayByRegion[code] = occs
+      .filter((o) => o.median_salary_eur != null)
+      .sort((a, b) => (b.median_salary_eur ?? 0) - (a.median_salary_eur ?? 0))
+      .slice(0, 12)
+  }
+
+  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages, coursesByFieldState, usStateInfo, usMajorDensity, usRankedColleges, auRankedColleges, caColleges, caOccupations, caHighPay, caHighPayByProvince, caProvinceOccupations, caProvinceShortages, caCities, ukOccupations, ukShortageByRegion, ukHighPayByRegion, ukColleges, ukCities, deOccupations, deHighPayByRegion, deShortageByRegion, deColleges, deCities }
 }
 
 // cross-instance 공유 캐시(방어선). 페이지가 force-static이라 보통 빌드/리밸리데이트

@@ -15,10 +15,11 @@ const COLLEGES_TABLE: Record<RoiCountry, string> = {
   ca: "colleges_ca",
   uk: "colleges_uk",
   ie: "colleges_ie",
+  de: "colleges_de",
 }
 
 const CURRENCY_SYMBOL: Record<RoiCountry, string> = {
-  us: "$", au: "A$", ca: "C$", uk: "£", ie: "€",
+  us: "$", au: "A$", ca: "C$", uk: "£", ie: "€", de: "€",
 }
 
 const COUNTRY_LABEL: Record<RoiCountry, string> = {
@@ -27,6 +28,7 @@ const COUNTRY_LABEL: Record<RoiCountry, string> = {
   ca: "Canada",
   uk: "United Kingdom",
   ie: "Ireland",
+  de: "Germany",
 }
 
 type Params = { country: string; college_id: string }

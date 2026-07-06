@@ -22,6 +22,7 @@ const US_BOUNDS = L.latLngBounds([24, -125], [49, -66])
 const CA_BOUNDS = L.latLngBounds([41, -145], [85, -50])
 const IE_BOUNDS = L.latLngBounds([51.3, -10.5], [55.5, -5.8])
 const UK_BOUNDS = L.latLngBounds([49.9, -8.2], [60.9, 1.8])
+const DE_BOUNDS = L.latLngBounds([47.3, 5.9], [55.1, 15.0])
 const WORLD_BOUNDS = L.latLngBounds([-90, -180], [90, 180])
 
 const RAMP_LIGHT = [237, 233, 254]
@@ -64,7 +65,7 @@ export default function LeafletMap({
   data: MapData
   selected: string | null
   selectedSA4: SA4Region | null
-  activeCountry: "AU" | "US" | "CA" | "IE" | "UK" | null
+  activeCountry: "AU" | "US" | "CA" | "IE" | "UK" | "DE" | null
   ieSchools?: Array<{
     id: number; slug: string; name_en: string; name_ko: string | null;
     city: string; lat: number | null; lng: number | null;
@@ -156,7 +157,7 @@ export default function LeafletMap({
     return () => { style.remove() }
   }, [])
 
-  function buildMarkers(country: "US" | "AU" | "CA" | "UK"): L.LayerGroup {
+  function buildMarkers(country: "US" | "AU" | "CA" | "UK" | "DE"): L.LayerGroup {
     const group = L.layerGroup()
     const colleges = country === "AU"
       ? dataRef.current.auRankedColleges
@@ -164,6 +165,8 @@ export default function LeafletMap({
       ? dataRef.current.caColleges
       : country === "UK"
       ? dataRef.current.ukColleges
+      : country === "DE"
+      ? dataRef.current.deColleges
       : dataRef.current.usRankedColleges
     const placed: Array<{ key: string; slug: string }> = []
     for (const c of colleges) {
@@ -217,6 +220,11 @@ export default function LeafletMap({
     }
     if (activeCountryRef.current === "UK" && map.getZoom() >= 6) {
       const group = buildMarkers("UK")
+      group.addTo(map)
+      markerLayerRef.current = group
+    }
+    if (activeCountryRef.current === "DE" && map.getZoom() >= 6) {
+      const group = buildMarkers("DE")
       group.addTo(map)
       markerLayerRef.current = group
     }
@@ -425,6 +433,7 @@ export default function LeafletMap({
         else if (activeCountryRef.current === "CA") map.fitBounds(CA_BOUNDS)
         else if (activeCountryRef.current === "IE") map.fitBounds(IE_BOUNDS)
         else if (activeCountryRef.current === "UK") map.fitBounds(UK_BOUNDS)
+        else if (activeCountryRef.current === "DE") map.fitBounds(DE_BOUNDS)
         else map.fitBounds(WORLD_BOUNDS)
         didFitRef.current = true
       }
@@ -434,7 +443,7 @@ export default function LeafletMap({
     // Zoom change → update marker visibility
     map.on("zoomend", () => {
       const c = activeCountryRef.current
-      if (c === "US" || c === "AU" || c === "CA" || c === "UK") updateMarkers()
+      if (c === "US" || c === "AU" || c === "CA" || c === "UK" || c === "DE") updateMarkers()
     })
 
     // World countries layer
@@ -949,6 +958,8 @@ export default function LeafletMap({
       if (ukLayerRef.current) map.addLayer(ukLayerRef.current)
       fitToBounds(UK_BOUNDS, true)
       updateMarkers()
+    } else if (activeCountry === "DE") {
+      fitToBounds(DE_BOUNDS, true)
     } else {
       fitToBounds(WORLD_BOUNDS, true)
     }

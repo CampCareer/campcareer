@@ -23,7 +23,7 @@ import { AffiliateCtas } from "@/components/partners/partner-cta"
 import JobListings from "./JobListings"
 import { EMPLOYMENT_OCCUPATIONS } from "@/data/employment-occupations"
 import { EMPLOYMENT_SALARIES } from "@/data/employment-salaries"
-import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc, CourseLite, USStateInfo, StateMajorDensity, USRankedCollege, AURankedCollege, CACollege, CACity, CAOccRow, CAHighPayOccupation, UKOccRow, UKRegionOccupation, UKCollege, UKCity } from "@/lib/map-data"
+import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc, CourseLite, USStateInfo, StateMajorDensity, USRankedCollege, AURankedCollege, CACollege, CACity, CAOccRow, CAHighPayOccupation, UKOccRow, UKRegionOccupation, UKCollege, UKCity, DECollege } from "@/lib/map-data"
 import { createClient } from "@/lib/supabase-client"
 import type { User } from "@supabase/supabase-js"
 import { getShortageOccupations } from "@/lib/ie-shortage-occupations"
@@ -71,7 +71,7 @@ export default function AustraliaMap({
   const t = useTranslations()
   // /map은 호주 비치헤드의 front door다 → 진입 즉시 주/지역 선택(검색) 바가 보이도록
   // 기본을 "AU"로 둔다. 월드맵(다른 국가)은 "전체 보기"로 빠져나가 볼 수 있다.
-  const [activeCountry, setActiveCountry] = useState<"AU" | "US" | "CA" | "IE" | "UK" | null>("AU")
+  const [activeCountry, setActiveCountry] = useState<"AU" | "US" | "CA" | "IE" | "UK" | "DE" | null>("AU")
   const [selected, setSelected] = useState<string | null>(null)
   const [selectedSA4, setSelectedSA4] = useState<SA4Region | null>(null)
   const [tab, setTab] = useState<Tab>("shortage")
@@ -83,7 +83,7 @@ export default function AustraliaMap({
   // 직업 카드 열림 상태 — 툴바의 직업 검색에서도 열 수 있도록 최상위로 끌어올림.
   const [selectedOccCode, setSelectedOccCode] = useState<string | null>(null)
   const [selectedUsOcc, setSelectedUsOcc] = useState<USOccupation | null>(null)
-  const [selectedUniv, setSelectedUniv] = useState<USRankedCollege | AURankedCollege | CACollege | UKCollege | null>(null)
+  const [selectedUniv, setSelectedUniv] = useState<USRankedCollege | AURankedCollege | CACollege | UKCollege | DECollege | null>(null)
   const [selectedNeroA4, setSelectedNeroA4] = useState<string | null>(null)
   const initialNeroLoaded = useRef(false)
   const initialSA4Ref = useRef<string | null>(null)
@@ -446,8 +446,15 @@ export default function AustraliaMap({
       setSelectedUniv(ukUniv)
       setActiveCountry("UK")
       setSelected(ukUniv.region)
+      return
     }
-  }, [initialUniversity, data.usRankedColleges, data.auRankedColleges, data.caColleges, data.ukColleges])
+    const deUniv = data.deColleges?.find((c) => c.slug === initialUniversity)
+    if (deUniv) {
+      setSelectedUniv(deUniv)
+      setActiveCountry("DE")
+      setSelected(deUniv.region)
+    }
+  }, [initialUniversity, data.usRankedColleges, data.auRankedColleges, data.caColleges, data.ukColleges, data.deColleges])
 
   const onReset = useCallback(() => {
     if (selected !== null) {
@@ -820,6 +827,13 @@ export default function AustraliaMap({
               setSelectedUniv(ukUniv)
               setActiveCountry("UK")
               setSelected(ukUniv.region)
+              return
+            }
+            const deUniv = data.deColleges.find((c) => c.slug === slug)
+            if (deUniv) {
+              setSelectedUniv(deUniv)
+              setActiveCountry("DE")
+              setSelected(deUniv.region)
             }
           }}
           onReset={onReset}
@@ -912,7 +926,7 @@ function Panel({
   onClose: () => void
   neroData: Record<string, NeroOccupation[]> | null
   regionData: RegionOccData | null
-  activeCountry: "AU" | "US" | "CA" | "UK" | null
+  activeCountry: "AU" | "US" | "CA" | "UK" | "DE" | null
   selectedOccCode: string | null
   setSelectedOccCode: (code: string | null) => void
   selectedUsOcc: USOccupation | null
