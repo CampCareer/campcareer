@@ -170,12 +170,33 @@ const IE_PROVINCES = [
   { abbr: "Ulster",   name: "Ulster" },
 ] as const
 
+const DE_BUNDESLANDER = [
+  { abbr: "ALL_STATES", name: "ALL Germany" },
+  { abbr: "BW", name: "Baden-Württemberg" },
+  { abbr: "BY", name: "Bayern" },
+  { abbr: "BE", name: "Berlin" },
+  { abbr: "BB", name: "Brandenburg" },
+  { abbr: "HB", name: "Bremen" },
+  { abbr: "HH", name: "Hamburg" },
+  { abbr: "HE", name: "Hessen" },
+  { abbr: "MV", name: "Mecklenburg-Vorpommern" },
+  { abbr: "NI", name: "Niedersachsen" },
+  { abbr: "NW", name: "Nordrhein-Westfalen" },
+  { abbr: "RP", name: "Rheinland-Pfalz" },
+  { abbr: "SL", name: "Saarland" },
+  { abbr: "SN", name: "Sachsen" },
+  { abbr: "ST", name: "Sachsen-Anhalt" },
+  { abbr: "SH", name: "Schleswig-Holstein" },
+  { abbr: "TH", name: "Thüringen" },
+] as const
+
 const COUNTRY_OPTIONS = [
   { value: "us", label: "🇺🇸 United States" },
   { value: "au", label: "🇦🇺 Australia" },
   { value: "ca", label: "🇨🇦 Canada" },
   { value: "uk", label: "🇬🇧 United Kingdom" },
   { value: "ie", label: "🇮🇪 Ireland" },
+  { value: "de", label: "🇩🇪 Germany" },
 ] as const
 
 // ── Currency helpers ─────────────────────────────────────────────────────────
@@ -186,6 +207,7 @@ const CURRENCY: Record<string, { symbol: string; code: string }> = {
   ca: { symbol: 'C$', code: 'CAD' },
   uk: { symbol: '£',  code: 'GBP' },
   ie: { symbol: '€',  code: 'EUR' },
+  de: { symbol: '€',  code: 'EUR' },
 }
 
 function formatCurrency(value: number, country: string): string {
@@ -368,17 +390,19 @@ export function RoiExplorerClient({
     : country === "ca" ? CA_PROVINCES
     : country === "uk" ? UK_REGIONS
     : country === "ie" ? IE_PROVINCES
+    : country === "de" ? DE_BUNDESLANDER
     : US_STATES
   const stateName = stateList.find((s) => s.abbr === state)?.name ?? state
   const stateLabel = country === "ca" ? "Province"
     : country === "uk" ? "Region"
     : country === "ie" ? "Province"
+    : country === "de" ? "Bundesland"
     : "State"
 
   function handleCountryChange(v: string) {
-    const c = v as "us" | "au" | "ca" | "uk" | "ie"
+    const c = v as "us" | "au" | "ca" | "uk" | "ie" | "de"
     setCountry(c)
-    setState(c === "au" ? "NSW" : c === "ca" ? "ON" : c === "uk" ? "ALL_STATES" : c === "ie" ? "Leinster" : "CA")
+    setState(c === "au" ? "NSW" : c === "ca" ? "ON" : c === "uk" ? "ALL_STATES" : c === "ie" ? "Leinster" : c === "de" ? "ALL_STATES" : "CA")
     setField("")
     setCareerStage("early")
   }

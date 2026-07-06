@@ -8,7 +8,7 @@ import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useTranslations, useLocale } from "@/lib/i18n/locale-provider"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { STATE_CODES, STATE_NAMES, US_STATE_CODES, US_STATE_NAMES, IE_COUNTY_CODES, IE_COUNTY_NAMES, IE_CITY_TO_COUNTY, CA_PROVINCE_CODES, CA_PROVINCE_NAMES, UK_REGION_CODES, UK_REGION_NAMES, type StateCode } from "./states"
+import { STATE_CODES, STATE_NAMES, US_STATE_CODES, US_STATE_NAMES, IE_COUNTY_CODES, IE_COUNTY_NAMES, IE_CITY_TO_COUNTY, CA_PROVINCE_CODES, CA_PROVINCE_NAMES, UK_REGION_CODES, UK_REGION_NAMES, DE_BUNDESLAND_CODES, DE_BUNDESLAND_NAMES, type StateCode } from "./states"
 import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
 import { WHV_REGIONS } from "@/data/whv-regions"
 import { WHV_SPECIFIED_WORK } from "@/data/whv-occupations"
@@ -401,7 +401,7 @@ export default function AustraliaMap({
     track("select_state", { country: activeCountry ?? "AU", state: s })
   }, [activeCountry])
 
-  const onSelectCountry = useCallback((country: "AU" | "US" | "CA" | "IE" | "UK") => {
+  const onSelectCountry = useCallback((country: "AU" | "US" | "CA" | "IE" | "UK" | "DE") => {
     setActiveCountry(country)
     setSelected(null)
     setSelectedSA4(null)
@@ -533,13 +533,24 @@ export default function AustraliaMap({
     )
   }, [data.ukShortageByRegion, selected])
 
+  const deShortageItems = useMemo<Record<string, string>>(() => {
+    if (!selected) return {}
+    const occs = data.deShortageByRegion?.[selected] ?? []
+    return Object.fromEntries(
+      occs.map((o) => [
+        o.kldb_code,
+        `${o.occupation_en}${o.median_salary_eur != null ? ` · €${o.median_salary_eur.toLocaleString()}` : ""}`,
+      ]),
+    )
+  }, [data.deShortageByRegion, selected])
+
   const filteredIESchools = useMemo(() => {
     if (!ieSchools) return null
     if (!selected || activeCountry !== "IE") return ieSchools
     return ieSchools.filter((s) => IE_CITY_TO_COUNTY[s.city] === selected)
   }, [ieSchools, selected, activeCountry])
 
-  const countryLabel = activeCountry === "AU" ? "🇦🇺 Australia" : activeCountry === "US" ? "🇺🇸 United States" : activeCountry === "CA" ? "🇨🇦 Canada" : activeCountry === "IE" ? "🇮🇪 Ireland" : activeCountry === "UK" ? "🇬🇧 United Kingdom" : ""
+  const countryLabel = activeCountry === "AU" ? "🇦🇺 Australia" : activeCountry === "US" ? "🇺🇸 United States" : activeCountry === "CA" ? "🇨🇦 Canada" : activeCountry === "IE" ? "🇮🇪 Ireland" : activeCountry === "UK" ? "🇬🇧 United Kingdom" : activeCountry === "DE" ? "🇩🇪 Germany" : ""
   const stateLabel = selected
     ? activeCountry === "AU"
       ? STATE_NAMES[selected as StateCode]
@@ -549,14 +560,18 @@ export default function AustraliaMap({
           ? IE_COUNTY_NAMES[selected] ?? selected
           : activeCountry === "UK"
             ? UK_REGION_NAMES[selected] ?? selected
-            : US_STATE_NAMES[selected]
+            : activeCountry === "DE"
+              ? DE_BUNDESLAND_NAMES[selected] ?? selected
+              : US_STATE_NAMES[selected]
     : ""
   const occLabel = selectedOccCode
     ? activeCountry === "AU"
       ? data.shortageByState[selected as StateCode]?.find((o) => o.anzsco_code === selectedOccCode)?.occupation_en
       : activeCountry === "CA"
         ? data.caOccupations[selectedOccCode]?.occupation_en
-        : selectedUsOcc?.occ_title
+      : activeCountry === "DE"
+        ? data.deShortageByRegion?.[selected!]?.find((o) => o.kldb_code === selectedOccCode)?.occupation_en
+          : selectedUsOcc?.occ_title
     : ""
   const toolbarSummary = [countryLabel, stateLabel, occLabel].filter(Boolean).join(" · ")
 
@@ -564,7 +579,7 @@ export default function AustraliaMap({
 
   return (
     <div className="flex h-full w-full flex-col">
-      {(activeCountry === "AU" || activeCountry === "US" || activeCountry === "CA" || activeCountry === "IE" || activeCountry === "UK") && (
+      {(activeCountry === "AU" || activeCountry === "US" || activeCountry === "CA" || activeCountry === "IE" || activeCountry === "UK" || activeCountry === "DE") && (
       <>
         {!toolbarExpanded && (
           <button
@@ -583,9 +598,9 @@ export default function AustraliaMap({
         <label className="block">
           <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectCountry}</span>
           <Select
-            items={{ AU: "🇦🇺 Australia", US: "🇺🇸 United States", CA: "🇨🇦 Canada", IE: "🇮🇪 Ireland", UK: "🇬🇧 United Kingdom" }}
+            items={{ AU: "🇦🇺 Australia", US: "🇺🇸 United States", CA: "🇨🇦 Canada", IE: "🇮🇪 Ireland", UK: "🇬🇧 United Kingdom", DE: "🇩🇪 Germany" }}
             value={activeCountry ?? undefined}
-            onValueChange={(v) => v && onSelectCountry(v as "AU" | "US" | "CA" | "IE" | "UK")}
+            onValueChange={(v) => v && onSelectCountry(v as "AU" | "US" | "CA" | "IE" | "UK" | "DE")}
           >
             <SelectTrigger className="h-10 w-44 rounded-lg border-slate-200 text-sm">
               <SelectValue placeholder={t.map.selectCountryPlaceholder} />
@@ -596,6 +611,7 @@ export default function AustraliaMap({
               <SelectItem value="CA">🇨🇦 Canada</SelectItem>
               <SelectItem value="IE">🇮🇪 Ireland</SelectItem>
               <SelectItem value="UK">🇬🇧 United Kingdom</SelectItem>
+              <SelectItem value="DE">🇩🇪 Germany</SelectItem>
             </SelectContent>
           </Select>
         </label>
@@ -655,6 +671,61 @@ export default function AustraliaMap({
                       </SelectItem>
                     )
                   })}
+                </SelectContent>
+              </Select>
+            </label>
+          )}
+          </>
+        ) : activeCountry === "DE" ? (
+          <>
+          <label className="block">
+            <span className="mb-1 block text-xs font-medium text-slate-500">Bundesland</span>
+            <Select
+              items={DE_BUNDESLAND_NAMES}
+              value={selected}
+              onValueChange={(v) => v && setSelected(v)}
+            >
+              <SelectTrigger className="h-10 w-56 rounded-lg border-slate-200 text-sm">
+                <SelectValue placeholder="Select a Bundesland" />
+              </SelectTrigger>
+              <SelectContent className="z-[2000]">
+                {DE_BUNDESLAND_CODES.map((c) => (
+                  <SelectItem key={c} value={c}>
+                    {DE_BUNDESLAND_NAMES[c]}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </label>
+
+          {selected && (
+            <label className="block">
+              <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectOccupation}</span>
+              <Select
+                items={deShortageItems}
+                value={selectedOccCode ?? null}
+                onValueChange={(v) => {
+                  if (!v) return
+                  setSelectedOccCode(v)
+                  if (isMobile) setExpanded(false)
+                }}
+              >
+                <SelectTrigger className="h-10 w-72 rounded-lg border-slate-200 text-sm">
+                  <SelectValue placeholder={t.map.selectStatePlaceholder} />
+                </SelectTrigger>
+                <SelectContent className="z-[2000] max-h-72">
+                  {(data.deShortageByRegion?.[selected] ?? []).map((occ) => (
+                    <SelectItem key={occ.kldb_code} value={occ.kldb_code}>
+                      <span className="flex items-center justify-between gap-3">
+                        <span className="truncate">{occ.occupation_en}</span>
+                        {occ.median_salary_eur != null && (
+                          <span className="shrink-0 text-xs text-slate-400">
+                            €{occ.median_salary_eur.toLocaleString()}
+                          </span>
+                        )}
+                      </span>
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </label>
