@@ -439,8 +439,15 @@ export default function AustraliaMap({
       setSelectedUniv(caUniv)
       setActiveCountry("CA")
       setSelected(caUniv.province)
+      return
     }
-  }, [initialUniversity, data.usRankedColleges, data.auRankedColleges, data.caColleges])
+    const ukUniv = data.ukColleges?.find((c) => c.slug === initialUniversity)
+    if (ukUniv) {
+      setSelectedUniv(ukUniv)
+      setActiveCountry("UK")
+      setSelected(ukUniv.region)
+    }
+  }, [initialUniversity, data.usRankedColleges, data.auRankedColleges, data.caColleges, data.ukColleges])
 
   const onReset = useCallback(() => {
     if (selected !== null) {

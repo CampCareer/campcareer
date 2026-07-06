@@ -1,6 +1,6 @@
 // POST-DEPLOY ACTIONS:
 // 1. Check build log for "[sitemap] counts" line — AU occupations: 395, US: 116, CA occupations: 514, CA colleges: ~30
-// 2. Open https://www.campcareer.com/sitemap.xml in browser and verify 1,100+ URLs are present
+// 2. Open https://www.campcareer.com/sitemap.xml in browser and verify 1,900+ URLs are present
 // 3. Go to Google Search Console → Sitemaps → delete old sitemap.xml entry → resubmit
 // 4. Go to Search Console → URL Inspection → manually request indexing for 10 high-priority occupation pages per day
 // 5. Monitor Search Console → Pages tab over the next 2–4 weeks for indexed page count increase
@@ -61,6 +61,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/ca/jobs`, priority: 0.8, changeFrequency: "weekly" },
     { url: `${BASE}/us`, priority: 0.8, changeFrequency: "weekly" },
     { url: `${BASE}/us/jobs`, priority: 0.8, changeFrequency: "weekly" },
+    { url: `${BASE}/uk`, priority: 0.8, changeFrequency: "weekly" },
+    { url: `${BASE}/uk/jobs`, priority: 0.8, changeFrequency: "weekly" },
   ]
 
   const blogPages: MetadataRoute.Sitemap = getAllPosts().map((post) => ({
@@ -87,6 +89,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (!row.institution_id) continue
     detailPages.push({
       url: `${BASE}/roi-explorer/ca/${row.institution_id}`,
+      priority: 0.5,
+      changeFrequency: "monthly",
+    })
+  }
+
+  // 대학 디테일 — 영국
+  const ukIds = await fetchCollegeIds("roi_explorer_uk")
+  for (const id of ukIds) {
+    detailPages.push({
+      url: `${BASE}/roi-explorer/uk/${id}`,
       priority: 0.5,
       changeFrequency: "monthly",
     })
@@ -131,6 +143,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })
   }
 
+  // UK 직업 디테일 — SOC 코드
+  const ukOccupationPages: MetadataRoute.Sitemap = []
+  const { data: ukOccCodes, error: ukOccError } = await supabase
+    .from("occupations_uk")
+    .select("soc_code")
+  if (ukOccError) console.error("[sitemap] occupations_uk failed:", ukOccError.message)
+  for (const row of ukOccCodes ?? []) {
+    if (!row.soc_code) continue
+    ukOccupationPages.push({
+      url: `${BASE}/roi-explorer/uk/occupation/${row.soc_code}`,
+      priority: 0.6,
+      changeFrequency: "weekly",
+    })
+  }
+
   // 아일랜드 어학원
   const ieSchoolSlugs = await getAllSlugs()
   const ieCities = await getCities()
@@ -170,6 +197,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "weekly",
   }))
 
+  // UK 대학 SEO 페이지 (~80개)
+  const ukUnivPages: MetadataRoute.Sitemap = mapData.ukColleges.map((c) => ({
+    url: `${BASE}/map/uk/university/${c.slug}`,
+    priority: 0.6,
+    changeFrequency: "weekly",
+  }))
+
   // 전용 페이지: /map/au/employment/:state (8개) + /map/au/whv/:state (8개) + /map/au/whv/:state/:sa4 (88개)
   const mapPages: MetadataRoute.Sitemap = []
   const STATE_CODES = ["nsw", "vic", "qld", "sa", "wa", "tas", "nt", "act"]
@@ -184,8 +218,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   const total = staticPages.length + blogPages.length + detailPages.length +
-    occupationPages.length + usOccupationPages.length + caOccupationPages.length + ieLangSchoolPages.length + mapPages.length + usUnivPages.length + auUnivPages.length + caUnivPages.length
-  console.log(`[sitemap] counts — static: ${staticPages.length}, blog: ${blogPages.length}, AU colleges: ${detailPages.length}, AU occupations: ${occupationPages.length}, US occupations: ${usOccupationPages.length}, CA occupations: ${caOccupationPages.length}, IE schools: ${ieLangSchoolPages.length}, map: ${mapPages.length}, US universities: ${usUnivPages.length}, AU universities: ${auUnivPages.length}, CA universities: ${caUnivPages.length}, TOTAL: ${total}`)
+    occupationPages.length + usOccupationPages.length + caOccupationPages.length + ukOccupationPages.length + ieLangSchoolPages.length + mapPages.length + usUnivPages.length + auUnivPages.length + caUnivPages.length + ukUnivPages.length
+  console.log(`[sitemap] counts — static: ${staticPages.length}, blog: ${blogPages.length}, AU colleges: ${detailPages.length}, AU occupations: ${occupationPages.length}, US occupations: ${usOccupationPages.length}, CA occupations: ${caOccupationPages.length}, UK occupations: ${ukOccupationPages.length}, IE schools: ${ieLangSchoolPages.length}, map: ${mapPages.length}, US universities: ${usUnivPages.length}, AU universities: ${auUnivPages.length}, CA universities: ${caUnivPages.length}, UK universities: ${ukUnivPages.length}, TOTAL: ${total}`)
 
-  return [...staticPages, ...blogPages, ...detailPages, ...occupationPages, ...usOccupationPages, ...caOccupationPages, ...ieLangSchoolPages, ...mapPages, ...usUnivPages, ...auUnivPages, ...caUnivPages]
+  return [...staticPages, ...blogPages, ...detailPages, ...occupationPages, ...usOccupationPages, ...caOccupationPages, ...ukOccupationPages, ...ieLangSchoolPages, ...mapPages, ...usUnivPages, ...auUnivPages, ...caUnivPages, ...ukUnivPages]
 }
