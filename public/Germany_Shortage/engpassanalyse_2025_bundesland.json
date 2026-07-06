@@ -1,0 +1,86 @@
+[
+  {
+    "bundesland": "Mecklenburg-Vorpommern",
+    "mean_gesamtwertung": 1.848,
+    "n_berufsgruppen": 48,
+    "n_engpassberufe": 22,
+    "engpass_anteil": 0.458
+  },
+  {
+    "bundesland": "Rheinland-Pfalz / Saarland",
+    "mean_gesamtwertung": 1.831,
+    "n_berufsgruppen": 91,
+    "n_engpassberufe": 37,
+    "engpass_anteil": 0.407
+  },
+  {
+    "bundesland": "Thüringen",
+    "mean_gesamtwertung": 1.829,
+    "n_berufsgruppen": 49,
+    "n_engpassberufe": 21,
+    "engpass_anteil": 0.429
+  },
+  {
+    "bundesland": "Sachsen-Anhalt",
+    "mean_gesamtwertung": 1.764,
+    "n_berufsgruppen": 53,
+    "n_engpassberufe": 22,
+    "engpass_anteil": 0.415
+  },
+  {
+    "bundesland": "Bayern",
+    "mean_gesamtwertung": 1.721,
+    "n_berufsgruppen": 155,
+    "n_engpassberufe": 55,
+    "engpass_anteil": 0.355
+  },
+  {
+    "bundesland": "Sachsen",
+    "mean_gesamtwertung": 1.719,
+    "n_berufsgruppen": 91,
+    "n_engpassberufe": 31,
+    "engpass_anteil": 0.341
+  },
+  {
+    "bundesland": "Niedersachsen / Bremen",
+    "mean_gesamtwertung": 1.687,
+    "n_berufsgruppen": 132,
+    "n_engpassberufe": 45,
+    "engpass_anteil": 0.341
+  },
+  {
+    "bundesland": "Hessen",
+    "mean_gesamtwertung": 1.68,
+    "n_berufsgruppen": 104,
+    "n_engpassberufe": 27,
+    "engpass_anteil": 0.26
+  },
+  {
+    "bundesland": "Baden-Württemberg",
+    "mean_gesamtwertung": 1.653,
+    "n_berufsgruppen": 150,
+    "n_engpassberufe": 47,
+    "engpass_anteil": 0.313
+  },
+  {
+    "bundesland": "Nordrhein-Westfalen",
+    "mean_gesamtwertung": 1.55,
+    "n_berufsgruppen": 175,
+    "n_engpassberufe": 40,
+    "engpass_anteil": 0.229
+  },
+  {
+    "bundesland": "Schleswig-Holstein / Hamburg",
+    "mean_gesamtwertung": 1.55,
+    "n_berufsgruppen": 104,
+    "n_engpassberufe": 27,
+    "engpass_anteil": 0.26
+  },
+  {
+    "bundesland": "Brandenburg / Berlin",
+    "mean_gesamtwertung": 1.455,
+    "n_berufsgruppen": 118,
+    "n_engpassberufe": 19,
+    "engpass_anteil": 0.161
+  }
+]

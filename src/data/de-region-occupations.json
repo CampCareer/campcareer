@@ -1,18 +1,3562 @@
 {
-  "BW": { "shortage_codes": ["812","817","818","341","321","431","432","433","434","831","832","833","516","516","262","245","252","341","341","322","331","332","817","818","817","812","831","832"] },
-  "BY": { "shortage_codes": ["812","817","818","341","321","431","432","433","434","831","832","833","516","262","245","252","341","322","331","332","817","818","817","812","831","832","292"] },
-  "BE": { "shortage_codes": ["812","817","818","341","431","432","433","434","831","832","833","516","531","817","818","812","831","832","262","245"] },
-  "BB": { "shortage_codes": ["812","817","818","341","321","322","516","831","832","833","817","818","812"] },
-  "HB": { "shortage_codes": ["812","817","818","341","516","512","533","831","832","817","818","812"] },
-  "HH": { "shortage_codes": ["812","817","818","341","431","432","433","434","516","831","832","833","817","818","812","262","245"] },
-  "HE": { "shortage_codes": ["812","817","818","341","321","431","432","433","434","516","262","245","252","831","832","833","817","818","812","291"] },
-  "MV": { "shortage_codes": ["812","817","818","341","321","322","516","831","832","833","817","818","812","533","331"] },
-  "NI": { "shortage_codes": ["812","817","818","341","321","516","262","245","252","242","831","832","833","817","818","812","291"] },
-  "NW": { "shortage_codes": ["812","817","818","341","321","322","431","432","433","434","516","262","245","252","242","243","831","832","833","817","818","812","515","533","291"] },
-  "RP": { "shortage_codes": ["812","817","818","341","321","322","516","831","832","833","817","818","812"] },
-  "SL": { "shortage_codes": ["812","817","818","341","321","322","516","831","832","833","817","818","812","242"] },
-  "SN": { "shortage_codes": ["812","817","818","341","321","322","516","262","245","831","832","833","817","818","812","291"] },
-  "ST": { "shortage_codes": ["812","817","818","341","321","322","516","831","832","833","817","818","812","242"] },
-  "SH": { "shortage_codes": ["812","817","818","341","321","516","831","832","833","817","818","812"] },
-  "TH": { "shortage_codes": ["812","817","818","341","321","322","516","831","832","833","817","818","812","242"] }
+  "BW": [
+    {
+      "kldb_code": "121",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "221",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "222",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "223",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "232",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "242",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "244",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "245",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "251",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "252",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "261",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "262",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "263",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "272",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "273",
+      "shortage_rating": 0.8
+    },
+    {
+      "kldb_code": "282",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "292",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "293",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "321",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "322",
+      "shortage_rating": 2.4
+    },
+    {
+      "kldb_code": "331",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "332",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "333",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "341",
+      "shortage_rating": 0.7
+    },
+    {
+      "kldb_code": "342",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "343",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "412",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "413",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "431",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "434",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "513",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "514",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "516",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "521",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "522",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "525",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "531",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "541",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "611",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "612",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "613",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "621",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "622",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "623",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "631",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "632",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "633",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "713",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "714",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "721",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "723",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "731",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "732",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "733",
+      "shortage_rating": 0.5
+    },
+    {
+      "kldb_code": "811",
+      "shortage_rating": 2.7
+    },
+    {
+      "kldb_code": "812",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "813",
+      "shortage_rating": 2.8
+    },
+    {
+      "kldb_code": "817",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "818",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "821",
+      "shortage_rating": 2.8
+    },
+    {
+      "kldb_code": "823",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "832",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "921",
+      "shortage_rating": 0.8
+    },
+    {
+      "kldb_code": "932",
+      "shortage_rating": 1.8
+    }
+  ],
+  "BY": [
+    {
+      "kldb_code": "121",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "212",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "221",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "222",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "223",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "231",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "232",
+      "shortage_rating": 0.8
+    },
+    {
+      "kldb_code": "242",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "244",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "245",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "251",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "252",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "261",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "262",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "263",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "272",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "273",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "282",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "292",
+      "shortage_rating": 2.7
+    },
+    {
+      "kldb_code": "293",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "321",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "322",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "331",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "332",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "333",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "341",
+      "shortage_rating": 0.7
+    },
+    {
+      "kldb_code": "342",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "343",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "412",
+      "shortage_rating": 0.8
+    },
+    {
+      "kldb_code": "413",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "431",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "434",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "512",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "513",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "514",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "516",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "521",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "522",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "525",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "531",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "541",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "611",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "612",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "613",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "621",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "622",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "623",
+      "shortage_rating": 2.7
+    },
+    {
+      "kldb_code": "631",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "632",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "633",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "713",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "714",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "721",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "723",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "731",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "732",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "733",
+      "shortage_rating": 0.5
+    },
+    {
+      "kldb_code": "811",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "812",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "813",
+      "shortage_rating": 2.7
+    },
+    {
+      "kldb_code": "817",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "818",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "821",
+      "shortage_rating": 2.7
+    },
+    {
+      "kldb_code": "823",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "832",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "921",
+      "shortage_rating": 0.7
+    },
+    {
+      "kldb_code": "945",
+      "shortage_rating": 2
+    }
+  ],
+  "BE": [
+    {
+      "kldb_code": "111",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "121",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "222",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "223",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "242",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "244",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "251",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "252",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "261",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "262",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "263",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "272",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "292",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "293",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "321",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "322",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "331",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "332",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "333",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "341",
+      "shortage_rating": 0.5
+    },
+    {
+      "kldb_code": "342",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "343",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "413",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "431",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "512",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "513",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "514",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "516",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "521",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "522",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "525",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "531",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "541",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "611",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "612",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "613",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "621",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "622",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "623",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "631",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "632",
+      "shortage_rating": 2.8
+    },
+    {
+      "kldb_code": "633",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "713",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "714",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "721",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "723",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "731",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "732",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "733",
+      "shortage_rating": 0.5
+    },
+    {
+      "kldb_code": "811",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "812",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "813",
+      "shortage_rating": 2.7
+    },
+    {
+      "kldb_code": "818",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "821",
+      "shortage_rating": 2.7
+    },
+    {
+      "kldb_code": "823",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "832",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "921",
+      "shortage_rating": 1
+    }
+  ],
+  "BB": [
+    {
+      "kldb_code": "111",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "121",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "222",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "223",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "242",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "244",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "251",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "252",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "261",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "262",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "263",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "272",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "292",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "293",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "321",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "322",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "331",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "332",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "333",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "341",
+      "shortage_rating": 0.5
+    },
+    {
+      "kldb_code": "342",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "343",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "413",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "431",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "512",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "513",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "514",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "516",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "521",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "522",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "525",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "531",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "541",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "611",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "612",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "613",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "621",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "622",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "623",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "631",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "632",
+      "shortage_rating": 2.8
+    },
+    {
+      "kldb_code": "633",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "713",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "714",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "721",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "723",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "731",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "732",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "733",
+      "shortage_rating": 0.5
+    },
+    {
+      "kldb_code": "811",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "812",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "813",
+      "shortage_rating": 2.7
+    },
+    {
+      "kldb_code": "818",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "821",
+      "shortage_rating": 2.7
+    },
+    {
+      "kldb_code": "823",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "832",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "921",
+      "shortage_rating": 1
+    }
+  ],
+  "HB": [
+    {
+      "kldb_code": "111",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "121",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "221",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "222",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "223",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "232",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "242",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "244",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "245",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "251",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "252",
+      "shortage_rating": 2.7
+    },
+    {
+      "kldb_code": "261",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "262",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "263",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "272",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "273",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "282",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "292",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "293",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "321",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "322",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "331",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "332",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "333",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "341",
+      "shortage_rating": 0.5
+    },
+    {
+      "kldb_code": "342",
+      "shortage_rating": 2.7
+    },
+    {
+      "kldb_code": "343",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "412",
+      "shortage_rating": 0.8
+    },
+    {
+      "kldb_code": "413",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "431",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "434",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "513",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "514",
+      "shortage_rating": 0.8
+    },
+    {
+      "kldb_code": "516",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "521",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "522",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "525",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "531",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "541",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "611",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "612",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "613",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "621",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "622",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "623",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "631",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "632",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "633",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "713",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "714",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "721",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "723",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "731",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "732",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "733",
+      "shortage_rating": 0.5
+    },
+    {
+      "kldb_code": "811",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "812",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "813",
+      "shortage_rating": 2.8
+    },
+    {
+      "kldb_code": "817",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "818",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "821",
+      "shortage_rating": 2.8
+    },
+    {
+      "kldb_code": "823",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "832",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "921",
+      "shortage_rating": 0.5
+    },
+    {
+      "kldb_code": "932",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "945",
+      "shortage_rating": 1.5
+    }
+  ],
+  "HH": [
+    {
+      "kldb_code": "121",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "222",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "223",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "242",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "244",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "245",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "251",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "252",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "261",
+      "shortage_rating": 2.4
+    },
+    {
+      "kldb_code": "262",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "263",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "272",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "282",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "292",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "293",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "321",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "322",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "331",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "332",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "333",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "341",
+      "shortage_rating": 0.5
+    },
+    {
+      "kldb_code": "342",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "343",
+      "shortage_rating": 2.4
+    },
+    {
+      "kldb_code": "413",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "431",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "513",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "516",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "521",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "522",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "525",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "531",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "541",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "611",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "612",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "613",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "621",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "622",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "623",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "631",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "632",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "633",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "713",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "714",
+      "shortage_rating": 0.8
+    },
+    {
+      "kldb_code": "721",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "723",
+      "shortage_rating": 2.4
+    },
+    {
+      "kldb_code": "731",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "732",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "811",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "812",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "813",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "817",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "821",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "823",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "832",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "921",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "945",
+      "shortage_rating": 1.5
+    }
+  ],
+  "HE": [
+    {
+      "kldb_code": "121",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "221",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "222",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "223",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "232",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "242",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "244",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "251",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "252",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "261",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "262",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "263",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "272",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "292",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "293",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "321",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "322",
+      "shortage_rating": 2.6
+    },
+    {
+      "kldb_code": "331",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "332",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "333",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "341",
+      "shortage_rating": 0.7
+    },
+    {
+      "kldb_code": "342",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "343",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "413",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "431",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "513",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "514",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "516",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "521",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "522",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "525",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "531",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "541",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "611",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "612",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "613",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "621",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "622",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "623",
+      "shortage_rating": 2.7
+    },
+    {
+      "kldb_code": "631",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "632",
+      "shortage_rating": 2.4
+    },
+    {
+      "kldb_code": "633",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "713",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "714",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "721",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "723",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "731",
+      "shortage_rating": 2.4
+    },
+    {
+      "kldb_code": "732",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "733",
+      "shortage_rating": 0.8
+    },
+    {
+      "kldb_code": "811",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "812",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "813",
+      "shortage_rating": 2.7
+    },
+    {
+      "kldb_code": "821",
+      "shortage_rating": 2.7
+    },
+    {
+      "kldb_code": "823",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "832",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "921",
+      "shortage_rating": 0.8
+    }
+  ],
+  "MV": [
+    {
+      "kldb_code": "111",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "121",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "223",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "244",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "251",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "252",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "262",
+      "shortage_rating": 2.4
+    },
+    {
+      "kldb_code": "263",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "292",
+      "shortage_rating": 2.4
+    },
+    {
+      "kldb_code": "293",
+      "shortage_rating": 2.8
+    },
+    {
+      "kldb_code": "321",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "322",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "332",
+      "shortage_rating": 0.8
+    },
+    {
+      "kldb_code": "333",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "341",
+      "shortage_rating": 0.5
+    },
+    {
+      "kldb_code": "342",
+      "shortage_rating": 2.4
+    },
+    {
+      "kldb_code": "343",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "513",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "521",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "525",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "531",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "541",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "621",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "622",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "623",
+      "shortage_rating": 2.4
+    },
+    {
+      "kldb_code": "631",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "632",
+      "shortage_rating": 2.8
+    },
+    {
+      "kldb_code": "633",
+      "shortage_rating": 2.8
+    },
+    {
+      "kldb_code": "714",
+      "shortage_rating": 0.8
+    },
+    {
+      "kldb_code": "732",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "811",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "813",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "821",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "823",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "832",
+      "shortage_rating": 0.5
+    },
+    {
+      "kldb_code": "921",
+      "shortage_rating": 1.6
+    }
+  ],
+  "NI": [
+    {
+      "kldb_code": "111",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "121",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "221",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "222",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "223",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "232",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "242",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "244",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "245",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "251",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "252",
+      "shortage_rating": 2.7
+    },
+    {
+      "kldb_code": "261",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "262",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "263",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "272",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "273",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "282",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "292",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "293",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "321",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "322",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "331",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "332",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "333",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "341",
+      "shortage_rating": 0.5
+    },
+    {
+      "kldb_code": "342",
+      "shortage_rating": 2.7
+    },
+    {
+      "kldb_code": "343",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "412",
+      "shortage_rating": 0.8
+    },
+    {
+      "kldb_code": "413",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "431",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "434",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "513",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "514",
+      "shortage_rating": 0.8
+    },
+    {
+      "kldb_code": "516",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "521",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "522",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "525",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "531",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "541",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "611",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "612",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "613",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "621",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "622",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "623",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "631",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "632",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "633",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "713",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "714",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "721",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "723",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "731",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "732",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "733",
+      "shortage_rating": 0.5
+    },
+    {
+      "kldb_code": "811",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "812",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "813",
+      "shortage_rating": 2.8
+    },
+    {
+      "kldb_code": "817",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "818",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "821",
+      "shortage_rating": 2.8
+    },
+    {
+      "kldb_code": "823",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "832",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "921",
+      "shortage_rating": 0.5
+    },
+    {
+      "kldb_code": "932",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "945",
+      "shortage_rating": 1.5
+    }
+  ],
+  "NW": [
+    {
+      "kldb_code": "111",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "121",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "212",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "221",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "222",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "223",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "231",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "232",
+      "shortage_rating": 0.8
+    },
+    {
+      "kldb_code": "242",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "243",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "244",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "245",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "251",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "252",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "261",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "262",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "263",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "272",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "273",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "281",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "282",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "292",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "293",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "312",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "321",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "322",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "331",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "332",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "333",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "341",
+      "shortage_rating": 0.5
+    },
+    {
+      "kldb_code": "342",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "343",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "412",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "413",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "414",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "431",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "432",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "434",
+      "shortage_rating": 0.8
+    },
+    {
+      "kldb_code": "512",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "513",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "514",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "515",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "516",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "521",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "522",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "525",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "531",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "541",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "611",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "612",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "613",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "621",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "622",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "623",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "631",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "632",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "633",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "713",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "714",
+      "shortage_rating": 0.8
+    },
+    {
+      "kldb_code": "721",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "723",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "731",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "732",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "733",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "811",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "812",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "813",
+      "shortage_rating": 2.7
+    },
+    {
+      "kldb_code": "817",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "818",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "821",
+      "shortage_rating": 2.7
+    },
+    {
+      "kldb_code": "823",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "832",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "921",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "932",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "945",
+      "shortage_rating": 1.4
+    }
+  ],
+  "RP": [
+    {
+      "kldb_code": "121",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "221",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "222",
+      "shortage_rating": 2.4
+    },
+    {
+      "kldb_code": "223",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "232",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "242",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "244",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "251",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "252",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "261",
+      "shortage_rating": 2.6
+    },
+    {
+      "kldb_code": "262",
+      "shortage_rating": 2.7
+    },
+    {
+      "kldb_code": "263",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "272",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "292",
+      "shortage_rating": 2.7
+    },
+    {
+      "kldb_code": "293",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "321",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "322",
+      "shortage_rating": 2.6
+    },
+    {
+      "kldb_code": "331",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "332",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "333",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "341",
+      "shortage_rating": 0.7
+    },
+    {
+      "kldb_code": "342",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "343",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "413",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "431",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "513",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "516",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "521",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "525",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "531",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "541",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "611",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "612",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "621",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "622",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "623",
+      "shortage_rating": 2.7
+    },
+    {
+      "kldb_code": "631",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "632",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "633",
+      "shortage_rating": 2.8
+    },
+    {
+      "kldb_code": "713",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "714",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "721",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "723",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "731",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "732",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "811",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "813",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "821",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "823",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "832",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "921",
+      "shortage_rating": 0.8
+    }
+  ],
+  "SL": [
+    {
+      "kldb_code": "121",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "221",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "222",
+      "shortage_rating": 2.4
+    },
+    {
+      "kldb_code": "223",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "232",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "242",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "244",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "251",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "252",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "261",
+      "shortage_rating": 2.6
+    },
+    {
+      "kldb_code": "262",
+      "shortage_rating": 2.7
+    },
+    {
+      "kldb_code": "263",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "272",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "292",
+      "shortage_rating": 2.7
+    },
+    {
+      "kldb_code": "293",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "321",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "322",
+      "shortage_rating": 2.6
+    },
+    {
+      "kldb_code": "331",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "332",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "333",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "341",
+      "shortage_rating": 0.7
+    },
+    {
+      "kldb_code": "342",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "343",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "413",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "431",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "513",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "516",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "521",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "525",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "531",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "541",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "611",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "612",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "621",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "622",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "623",
+      "shortage_rating": 2.7
+    },
+    {
+      "kldb_code": "631",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "632",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "633",
+      "shortage_rating": 2.8
+    },
+    {
+      "kldb_code": "713",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "714",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "721",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "723",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "731",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "732",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "811",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "813",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "821",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "823",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "832",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "921",
+      "shortage_rating": 0.8
+    }
+  ],
+  "SN": [
+    {
+      "kldb_code": "112",
+      "shortage_rating": 3
+    },
+    {
+      "kldb_code": "121",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "221",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "222",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "223",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "242",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "244",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "251",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "252",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "261",
+      "shortage_rating": 2.4
+    },
+    {
+      "kldb_code": "262",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "263",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "272",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "273",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "282",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "292",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "293",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "321",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "322",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "332",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "333",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "341",
+      "shortage_rating": 0.7
+    },
+    {
+      "kldb_code": "342",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "343",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "413",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "431",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "513",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "516",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "521",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "525",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "531",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "541",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "611",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "612",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "613",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "621",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "622",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "623",
+      "shortage_rating": 2.7
+    },
+    {
+      "kldb_code": "631",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "632",
+      "shortage_rating": 3
+    },
+    {
+      "kldb_code": "633",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "713",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "714",
+      "shortage_rating": 0.5
+    },
+    {
+      "kldb_code": "721",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "723",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "731",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "732",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "811",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "813",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "821",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "823",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "832",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "921",
+      "shortage_rating": 1.2
+    }
+  ],
+  "ST": [
+    {
+      "kldb_code": "121",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "223",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "242",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "244",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "251",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "252",
+      "shortage_rating": 2.7
+    },
+    {
+      "kldb_code": "261",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "262",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "263",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "292",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "293",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "321",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "322",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "332",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "341",
+      "shortage_rating": 0.7
+    },
+    {
+      "kldb_code": "342",
+      "shortage_rating": 2.6
+    },
+    {
+      "kldb_code": "343",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "413",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "431",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "513",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "516",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "521",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "525",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "531",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "541",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "621",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "622",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "623",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "633",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "713",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "714",
+      "shortage_rating": 0.7
+    },
+    {
+      "kldb_code": "721",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "732",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "811",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "813",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "821",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "823",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "921",
+      "shortage_rating": 1.6
+    }
+  ],
+  "SH": [
+    {
+      "kldb_code": "121",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "222",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "223",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "242",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "244",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "245",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "251",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "252",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "261",
+      "shortage_rating": 2.4
+    },
+    {
+      "kldb_code": "262",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "263",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "272",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "282",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "292",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "293",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "321",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "322",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "331",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "332",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "333",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "341",
+      "shortage_rating": 0.5
+    },
+    {
+      "kldb_code": "342",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "343",
+      "shortage_rating": 2.4
+    },
+    {
+      "kldb_code": "413",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "431",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "513",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "516",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "521",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "522",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "525",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "531",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "541",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "611",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "612",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "613",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "621",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "622",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "623",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "631",
+      "shortage_rating": 2.3
+    },
+    {
+      "kldb_code": "632",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "633",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "713",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "714",
+      "shortage_rating": 0.8
+    },
+    {
+      "kldb_code": "721",
+      "shortage_rating": 1
+    },
+    {
+      "kldb_code": "723",
+      "shortage_rating": 2.4
+    },
+    {
+      "kldb_code": "731",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "732",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "811",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "812",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "813",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "817",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "821",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "823",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "832",
+      "shortage_rating": 1.4
+    },
+    {
+      "kldb_code": "921",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "945",
+      "shortage_rating": 1.5
+    }
+  ],
+  "TH": [
+    {
+      "kldb_code": "121",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "223",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "242",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "244",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "251",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "252",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "261",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "262",
+      "shortage_rating": 2.8
+    },
+    {
+      "kldb_code": "263",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "292",
+      "shortage_rating": 2.8
+    },
+    {
+      "kldb_code": "293",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "321",
+      "shortage_rating": 2
+    },
+    {
+      "kldb_code": "322",
+      "shortage_rating": 2.4
+    },
+    {
+      "kldb_code": "341",
+      "shortage_rating": 0.3
+    },
+    {
+      "kldb_code": "342",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "431",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "513",
+      "shortage_rating": 1.3
+    },
+    {
+      "kldb_code": "521",
+      "shortage_rating": 1.2
+    },
+    {
+      "kldb_code": "525",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "531",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "541",
+      "shortage_rating": 1.6
+    },
+    {
+      "kldb_code": "611",
+      "shortage_rating": 1.5
+    },
+    {
+      "kldb_code": "621",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "622",
+      "shortage_rating": 1.8
+    },
+    {
+      "kldb_code": "623",
+      "shortage_rating": 2.6
+    },
+    {
+      "kldb_code": "633",
+      "shortage_rating": 2.6
+    },
+    {
+      "kldb_code": "713",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "714",
+      "shortage_rating": 0.7
+    },
+    {
+      "kldb_code": "732",
+      "shortage_rating": 1.7
+    },
+    {
+      "kldb_code": "811",
+      "shortage_rating": 2.2
+    },
+    {
+      "kldb_code": "813",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "821",
+      "shortage_rating": 2.5
+    },
+    {
+      "kldb_code": "832",
+      "shortage_rating": 0.5
+    }
+  ]
 }

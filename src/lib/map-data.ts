@@ -1256,20 +1256,23 @@ async function getMapDataUncached(): Promise<MapData> {
     deOccupations[occ.kldb_code] = occ
   }
 
-  const deRegRaw = deRegionOccupationsRaw as unknown as Record<string, { shortage_codes: string[] }>
+  const deRegRaw = deRegionOccupationsRaw as unknown as Record<string, { kldb_code: string; shortage_rating: number }[]>
   const deShortageByRegion: Record<string, DERegionOccupation[]> = {}
   const deHighPayByRegion: Record<string, DERegionOccupation[]> = {}
-  for (const [code, d] of Object.entries(deRegRaw)) {
-    const occs: DERegionOccupation[] = d.shortage_codes
-      .map((kid) => deOccupations[kid])
-      .filter(Boolean)
-      .map((o) => ({
-        kldb_code: o.kldb_code,
-        occupation_en: o.occupation_en,
-        median_salary_eur: o.median_salary_eur,
-        shortage_rating: o.shortage_rating,
-        employment_thousands: o.employment_thousands,
-      }))
+  for (const [code, entries] of Object.entries(deRegRaw)) {
+    const occs = entries
+      .map((e): DERegionOccupation | null => {
+        const o = deOccupations[e.kldb_code]
+        if (!o) return null
+        return {
+          kldb_code: o.kldb_code,
+          occupation_en: o.occupation_en,
+          median_salary_eur: o.median_salary_eur,
+          shortage_rating: e.shortage_rating ?? o.shortage_rating,
+          employment_thousands: o.employment_thousands,
+        }
+      })
+      .filter((x): x is DERegionOccupation => x != null)
     deShortageByRegion[code] = occs.sort(
       (a, b) => (b.shortage_rating ?? 0) - (a.shortage_rating ?? 0),
     )
