@@ -2,11 +2,17 @@ import "server-only"
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import Link from "next/link"
+import { pageMetadata } from "@/lib/seo"
 import { JsonLd, breadcrumbLd } from "@/components/seo/json-ld"
 import deOccupationsRaw from "@/data/de-occupations.json"
 
 export const revalidate = 3600
 export const dynamicParams = true
+
+export function generateStaticParams() {
+  const raw = deOccupationsRaw as unknown as Record<string, DeOccRow>
+  return Object.keys(raw).map((code) => ({ code }))
+}
 
 type DeOccRow = {
   kldb_code: string
@@ -38,10 +44,11 @@ export async function generateMetadata({ params }: { params: { code: string } })
   const salary = occ.median_salary_eur ? `€${occ.median_salary_eur.toLocaleString()}` : ""
   const shortage = occ.shortage_rating != null ? `${"★".repeat(Math.round(occ.shortage_rating))} shortage` : ""
 
-  return {
+  return pageMetadata({
     title: `${occ.occupation_en} — KldB ${params.code} Salary & Career in Germany 2026`,
     description: `${occ.occupation_en} (KldB ${params.code}) salary data, skills shortage rating ${shortage}, and career pathways in Germany.${occ.median_salary_eur ? ` Median salary ${salary}/yr.` : ""} Data from Bundesagentur für Arbeit.`,
-  }
+    path: `/roi-explorer/de/occupation/${params.code}`,
+  })
 }
 
 export default async function Page({ params }: { params: { code: string } }) {
