@@ -23,7 +23,7 @@ import { AffiliateCtas } from "@/components/partners/partner-cta"
 import JobListings from "./JobListings"
 import { EMPLOYMENT_OCCUPATIONS } from "@/data/employment-occupations"
 import { EMPLOYMENT_SALARIES } from "@/data/employment-salaries"
-import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc, CourseLite, USStateInfo, StateMajorDensity, USRankedCollege, AURankedCollege, CACollege, CACity, CAOccRow, CAHighPayOccupation, UKOccRow, UKRegionOccupation, UKCollege, UKCity, DECollege } from "@/lib/map-data"
+import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc, CourseLite, USStateInfo, StateMajorDensity, USRankedCollege, AURankedCollege, CACollege, CACity, CAOccRow, CAHighPayOccupation, UKOccRow, UKRegionOccupation, UKCollege, UKCity, DECollege, DERegionOccupation } from "@/lib/map-data"
 import { createClient } from "@/lib/supabase-client"
 import type { User } from "@supabase/supabase-js"
 import { getShortageOccupations } from "@/lib/ie-shortage-occupations"
@@ -1299,7 +1299,14 @@ function Panel({
           )
         )}
         {tab === "shortage" && isUS && <USShortageList rows={usShortage} onSelectOcc={handleUSSelectOcc} />}
-        {tab === "shortage" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
+        {tab === "shortage" && activeCountry === "DE" && (
+          selected ? (
+            <DEShortageList rows={data.deShortageByRegion?.[selected] ?? []} onSelectOcc={setSelectedOccCode} />
+          ) : (
+            <p className="py-8 text-center text-sm text-slate-400">{t.map.selectStateFirst}</p>
+          )
+        )}
+        {tab === "shortage" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
         {tab === "shortage" && activeCountry === "CA" && <CAShortageList rows={Object.values(data.caOccupations)} onSelectOcc={handleSelectCAOcc} />}
         {tab === "pay" && isAU && (
           selectedSA4 ? (
@@ -1326,7 +1333,14 @@ function Panel({
           )
         )}
         {tab === "pay" && isUS && <USHighPayList rows={usHighPay} onSelectOcc={handleUSSelectOcc} />}
-        {tab === "pay" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
+        {tab === "pay" && activeCountry === "DE" && (
+          selected ? (
+            <DEHighPayList rows={data.deHighPayByRegion?.[selected] ?? []} onSelectOcc={setSelectedOccCode} />
+          ) : (
+            <p className="py-8 text-center text-sm text-slate-400">{t.map.selectStateFirst}</p>
+          )
+        )}
+        {tab === "pay" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
         {tab === "pay" && activeCountry === "CA" && <CAHighPayList rows={data.caHighPay} provinceRows={selected ? data.caHighPayByProvince[selected] ?? [] : []} onSelectOcc={handleSelectCAOcc} />}
         {tab === "pay" && isUK && <UKHighPayList rows={ukHighPay} onSelectOcc={handleSelectUKOcc} />}
         {tab === "employment" && (
@@ -4123,6 +4137,74 @@ function UKHighPayList({ rows, onSelectOcc }: { rows: UKRegionOccupation[]; onSe
               </span>
               {r.shortage_rating != null && (
                 <span className="text-[10px] text-slate-400">Shortage: {r.shortage_rating}/5</span>
+              )}
+            </span>
+          </button>
+        </li>
+      ))}
+    </ol>
+  )
+}
+
+function DEShortageList({ rows, onSelectOcc }: { rows: DERegionOccupation[]; onSelectOcc?: (code: string) => void }) {
+  if (rows.length === 0) {
+    return <p className="py-8 text-center text-sm text-slate-400">...</p>
+  }
+  return (
+    <ol>
+      {rows.map((r, i) => (
+        <li key={r.kldb_code}>
+          <button
+            type="button"
+            onClick={() => onSelectOcc?.(r.kldb_code)}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50"
+          >
+            <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-sm font-medium text-slate-800">
+                {r.occupation_en}
+              </span>
+            </span>
+            <span className="shrink-0 text-right">
+              <span className="block text-sm font-semibold tabular-nums text-slate-700">
+                {r.shortage_rating != null ? `${r.shortage_rating.toFixed(1)}/4` : "—"}
+              </span>
+              {r.median_salary_eur != null && (
+                <span className="text-[10px] text-slate-400">€{r.median_salary_eur.toLocaleString()}</span>
+              )}
+            </span>
+          </button>
+        </li>
+      ))}
+    </ol>
+  )
+}
+
+function DEHighPayList({ rows, onSelectOcc }: { rows: DERegionOccupation[]; onSelectOcc?: (code: string) => void }) {
+  if (rows.length === 0) {
+    return <p className="py-8 text-center text-sm text-slate-400">...</p>
+  }
+  return (
+    <ol>
+      {rows.map((r, i) => (
+        <li key={r.kldb_code}>
+          <button
+            type="button"
+            onClick={() => onSelectOcc?.(r.kldb_code)}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50"
+          >
+            <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-sm font-medium text-slate-800">
+                {r.occupation_en}
+              </span>
+            </span>
+            <span className="shrink-0 text-right">
+              <span className="block text-sm font-semibold tabular-nums text-slate-700">
+                {r.median_salary_eur != null ? `€${r.median_salary_eur.toLocaleString()}` : "—"}
+              </span>
+              {r.shortage_rating != null && (
+                <span className="text-[10px] text-slate-400">Shortage: {r.shortage_rating.toFixed(1)}/4</span>
               )}
             </span>
           </button>

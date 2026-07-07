@@ -1256,7 +1256,7 @@ async function getMapDataUncached(): Promise<MapData> {
     deOccupations[occ.kldb_code] = occ
   }
 
-  const deRegRaw = deRegionOccupationsRaw as unknown as Record<string, { kldb_code: string; shortage_rating: number }[]>
+  const deRegRaw = deRegionOccupationsRaw as unknown as Record<string, { kldb_code: string; shortage_rating: number; median_salary_eur: number | null }[]>
   const deShortageByRegion: Record<string, DERegionOccupation[]> = {}
   const deHighPayByRegion: Record<string, DERegionOccupation[]> = {}
   for (const [code, entries] of Object.entries(deRegRaw)) {
@@ -1267,7 +1267,7 @@ async function getMapDataUncached(): Promise<MapData> {
         return {
           kldb_code: o.kldb_code,
           occupation_en: o.occupation_en,
-          median_salary_eur: o.median_salary_eur,
+          median_salary_eur: e.median_salary_eur ?? o.median_salary_eur,
           shortage_rating: e.shortage_rating ?? o.shortage_rating,
           employment_thousands: o.employment_thousands,
         }

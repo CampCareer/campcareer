@@ -2,3561 +2,4443 @@
   "BW": [
     {
       "kldb_code": "121",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 42492
     },
     {
       "kldb_code": "221",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 46032
     },
     {
       "kldb_code": "222",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 47808
     },
     {
       "kldb_code": "223",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 41532
     },
     {
       "kldb_code": "232",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 41016
     },
     {
       "kldb_code": "242",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 53856
     },
     {
       "kldb_code": "244",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 48876
     },
     {
       "kldb_code": "245",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 55740
     },
     {
       "kldb_code": "251",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 56196
     },
     {
       "kldb_code": "252",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 49836
     },
     {
       "kldb_code": "261",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 53628
     },
     {
       "kldb_code": "262",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 53208
     },
     {
       "kldb_code": "263",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 56220
     },
     {
       "kldb_code": "272",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 46308
     },
     {
       "kldb_code": "273",
-      "shortage_rating": 0.8
+      "shortage_rating": 0.8,
+      "median_salary_eur": 60408
     },
     {
       "kldb_code": "282",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 36120
     },
     {
       "kldb_code": "292",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 37524
     },
     {
       "kldb_code": "293",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 35556
     },
     {
       "kldb_code": "321",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 45984
     },
     {
       "kldb_code": "322",
-      "shortage_rating": 2.4
+      "shortage_rating": 2.4,
+      "median_salary_eur": 51768
     },
     {
       "kldb_code": "331",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 42840
     },
     {
       "kldb_code": "332",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 40692
     },
     {
       "kldb_code": "333",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 43356
     },
     {
       "kldb_code": "341",
-      "shortage_rating": 0.7
+      "shortage_rating": 0.7,
+      "median_salary_eur": 46920
     },
     {
       "kldb_code": "342",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 49548
     },
     {
       "kldb_code": "343",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 52944
     },
     {
       "kldb_code": "412",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 50148
     },
     {
       "kldb_code": "413",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 54144
     },
     {
       "kldb_code": "431",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 61488
     },
     {
       "kldb_code": "434",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 56292
     },
     {
       "kldb_code": "513",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 41088
     },
     {
       "kldb_code": "514",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 40020
     },
     {
       "kldb_code": "516",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 49032
     },
     {
       "kldb_code": "521",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 39096
     },
     {
       "kldb_code": "522",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 46608
     },
     {
       "kldb_code": "525",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 49944
     },
     {
       "kldb_code": "531",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 46788
     },
     {
       "kldb_code": "541",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 33144
     },
     {
       "kldb_code": "611",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 54900
     },
     {
       "kldb_code": "612",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 47556
     },
     {
       "kldb_code": "613",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 51036
     },
     {
       "kldb_code": "621",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 36648
     },
     {
       "kldb_code": "622",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 41316
     },
     {
       "kldb_code": "623",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 29940
     },
     {
       "kldb_code": "631",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 38232
     },
     {
       "kldb_code": "632",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 34272
     },
     {
       "kldb_code": "633",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 31056
     },
     {
       "kldb_code": "713",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 57000
     },
     {
       "kldb_code": "714",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 48108
     },
     {
       "kldb_code": "721",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 64572
     },
     {
       "kldb_code": "723",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 43836
     },
     {
       "kldb_code": "731",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 41556
     },
     {
       "kldb_code": "732",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 51252
     },
     {
       "kldb_code": "733",
-      "shortage_rating": 0.5
+      "shortage_rating": 0.5,
+      "median_salary_eur": 52320
     },
     {
       "kldb_code": "811",
-      "shortage_rating": 2.7
+      "shortage_rating": 2.7,
+      "median_salary_eur": 36432
     },
     {
       "kldb_code": "812",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 51600
     },
     {
       "kldb_code": "813",
-      "shortage_rating": 2.8
+      "shortage_rating": 2.8,
+      "median_salary_eur": 54300
     },
     {
       "kldb_code": "817",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 39468
     },
     {
       "kldb_code": "818",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 39336
     },
     {
       "kldb_code": "821",
-      "shortage_rating": 2.8
+      "shortage_rating": 2.8,
+      "median_salary_eur": 51888
     },
     {
       "kldb_code": "823",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 26664
     },
     {
       "kldb_code": "832",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 34416
     },
     {
       "kldb_code": "921",
-      "shortage_rating": 0.8
+      "shortage_rating": 0.8,
+      "median_salary_eur": 47652
     },
     {
       "kldb_code": "932",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 37812
     }
   ],
   "BY": [
     {
       "kldb_code": "121",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 41172
     },
     {
       "kldb_code": "212",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 45972
     },
     {
       "kldb_code": "221",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 42396
     },
     {
       "kldb_code": "222",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 46848
     },
     {
       "kldb_code": "223",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 39552
     },
     {
       "kldb_code": "231",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 46020
     },
     {
       "kldb_code": "232",
-      "shortage_rating": 0.8
+      "shortage_rating": 0.8,
+      "median_salary_eur": 41352
     },
     {
       "kldb_code": "242",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 50856
     },
     {
       "kldb_code": "244",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 45264
     },
     {
       "kldb_code": "245",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 60012
     },
     {
       "kldb_code": "251",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 50580
     },
     {
       "kldb_code": "252",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 46848
     },
     {
       "kldb_code": "261",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 49284
     },
     {
       "kldb_code": "262",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 49032
     },
     {
       "kldb_code": "263",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 52644
     },
     {
       "kldb_code": "272",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 47160
     },
     {
       "kldb_code": "273",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 57408
     },
     {
       "kldb_code": "282",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 34476
     },
     {
       "kldb_code": "292",
-      "shortage_rating": 2.7
+      "shortage_rating": 2.7,
+      "median_salary_eur": 37992
     },
     {
       "kldb_code": "293",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 35988
     },
     {
       "kldb_code": "321",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 46176
     },
     {
       "kldb_code": "322",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 49884
     },
     {
       "kldb_code": "331",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 41928
     },
     {
       "kldb_code": "332",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 40344
     },
     {
       "kldb_code": "333",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 42720
     },
     {
       "kldb_code": "341",
-      "shortage_rating": 0.7
+      "shortage_rating": 0.7,
+      "median_salary_eur": 45072
     },
     {
       "kldb_code": "342",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 45252
     },
     {
       "kldb_code": "343",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 49848
     },
     {
       "kldb_code": "412",
-      "shortage_rating": 0.8
+      "shortage_rating": 0.8,
+      "median_salary_eur": 51864
     },
     {
       "kldb_code": "413",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 54168
     },
     {
       "kldb_code": "431",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 60192
     },
     {
       "kldb_code": "434",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 53736
     },
     {
       "kldb_code": "512",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 48828
     },
     {
       "kldb_code": "513",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 39096
     },
     {
       "kldb_code": "514",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 40416
     },
     {
       "kldb_code": "516",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 47676
     },
     {
       "kldb_code": "521",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 37044
     },
     {
       "kldb_code": "522",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 48156
     },
     {
       "kldb_code": "525",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 47424
     },
     {
       "kldb_code": "531",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 46152
     },
     {
       "kldb_code": "541",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 32604
     },
     {
       "kldb_code": "611",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 53040
     },
     {
       "kldb_code": "612",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 45072
     },
     {
       "kldb_code": "613",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 52764
     },
     {
       "kldb_code": "621",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 35772
     },
     {
       "kldb_code": "622",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 40632
     },
     {
       "kldb_code": "623",
-      "shortage_rating": 2.7
+      "shortage_rating": 2.7,
+      "median_salary_eur": 30972
     },
     {
       "kldb_code": "631",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 39972
     },
     {
       "kldb_code": "632",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 34932
     },
     {
       "kldb_code": "633",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 31464
     },
     {
       "kldb_code": "713",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 55836
     },
     {
       "kldb_code": "714",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 46248
     },
     {
       "kldb_code": "721",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 65028
     },
     {
       "kldb_code": "723",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 43128
     },
     {
       "kldb_code": "731",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 45492
     },
     {
       "kldb_code": "732",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 49932
     },
     {
       "kldb_code": "733",
-      "shortage_rating": 0.5
+      "shortage_rating": 0.5,
+      "median_salary_eur": 52044
     },
     {
       "kldb_code": "811",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 36504
     },
     {
       "kldb_code": "812",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 50724
     },
     {
       "kldb_code": "813",
-      "shortage_rating": 2.7
+      "shortage_rating": 2.7,
+      "median_salary_eur": 52200
     },
     {
       "kldb_code": "817",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 38760
     },
     {
       "kldb_code": "818",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 38544
     },
     {
       "kldb_code": "821",
-      "shortage_rating": 2.7
+      "shortage_rating": 2.7,
+      "median_salary_eur": 50616
     },
     {
       "kldb_code": "823",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 26280
     },
     {
       "kldb_code": "832",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 33324
     },
     {
       "kldb_code": "921",
-      "shortage_rating": 0.7
+      "shortage_rating": 0.7,
+      "median_salary_eur": 46140
     },
     {
       "kldb_code": "945",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 43608
     }
   ],
   "BE": [
     {
       "kldb_code": "111",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 33780
     },
     {
       "kldb_code": "121",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 39480
     },
     {
       "kldb_code": "222",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 43008
     },
     {
       "kldb_code": "223",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 34980
     },
     {
       "kldb_code": "242",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 46920
     },
     {
       "kldb_code": "244",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 40872
     },
     {
       "kldb_code": "251",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 49260
     },
     {
       "kldb_code": "252",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 44628
     },
     {
       "kldb_code": "261",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 48036
     },
     {
       "kldb_code": "262",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 46968
     },
     {
       "kldb_code": "263",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 52116
     },
     {
       "kldb_code": "272",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 43488
     },
     {
       "kldb_code": "292",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 35796
     },
     {
       "kldb_code": "293",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 33804
     },
     {
       "kldb_code": "321",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 38784
     },
     {
       "kldb_code": "322",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 45876
     },
     {
       "kldb_code": "331",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 33228
     },
     {
       "kldb_code": "332",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 35172
     },
     {
       "kldb_code": "333",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 35088
     },
     {
       "kldb_code": "341",
-      "shortage_rating": 0.5
+      "shortage_rating": 0.5,
+      "median_salary_eur": 36096
     },
     {
       "kldb_code": "342",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 41580
     },
     {
       "kldb_code": "343",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 45852
     },
     {
       "kldb_code": "413",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 47352
     },
     {
       "kldb_code": "431",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 66372
     },
     {
       "kldb_code": "512",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 43272
     },
     {
       "kldb_code": "513",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 36072
     },
     {
       "kldb_code": "514",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 39312
     },
     {
       "kldb_code": "516",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 44136
     },
     {
       "kldb_code": "521",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 34668
     },
     {
       "kldb_code": "522",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 46872
     },
     {
       "kldb_code": "525",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 43560
     },
     {
       "kldb_code": "531",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 39576
     },
     {
       "kldb_code": "541",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 30180
     },
     {
       "kldb_code": "611",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 50160
     },
     {
       "kldb_code": "612",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 43572
     },
     {
       "kldb_code": "613",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 51948
     },
     {
       "kldb_code": "621",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 34620
     },
     {
       "kldb_code": "622",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 39840
     },
     {
       "kldb_code": "623",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 31704
     },
     {
       "kldb_code": "631",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 38832
     },
     {
       "kldb_code": "632",
-      "shortage_rating": 2.8
+      "shortage_rating": 2.8,
+      "median_salary_eur": 35484
     },
     {
       "kldb_code": "633",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 29640
     },
     {
       "kldb_code": "713",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 56028
     },
     {
       "kldb_code": "714",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 50052
     },
     {
       "kldb_code": "721",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 69720
     },
     {
       "kldb_code": "723",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 44616
     },
     {
       "kldb_code": "731",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 42456
     },
     {
       "kldb_code": "732",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 49608
     },
     {
       "kldb_code": "733",
-      "shortage_rating": 0.5
+      "shortage_rating": 0.5,
+      "median_salary_eur": 48540
     },
     {
       "kldb_code": "811",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 35904
     },
     {
       "kldb_code": "812",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 49356
     },
     {
       "kldb_code": "813",
-      "shortage_rating": 2.7
+      "shortage_rating": 2.7,
+      "median_salary_eur": 51360
     },
     {
       "kldb_code": "818",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 42312
     },
     {
       "kldb_code": "821",
-      "shortage_rating": 2.7
+      "shortage_rating": 2.7,
+      "median_salary_eur": 50832
     },
     {
       "kldb_code": "823",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 26004
     },
     {
       "kldb_code": "832",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 31896
     },
     {
       "kldb_code": "921",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 35916
     }
   ],
   "BB": [
     {
       "kldb_code": "111",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 31728
     },
     {
       "kldb_code": "121",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 34092
     },
     {
       "kldb_code": "222",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 36912
     },
     {
       "kldb_code": "223",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 33012
     },
     {
       "kldb_code": "242",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 38472
     },
     {
       "kldb_code": "244",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 36444
     },
     {
       "kldb_code": "251",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 40308
     },
     {
       "kldb_code": "252",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 41556
     },
     {
       "kldb_code": "261",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 41760
     },
     {
       "kldb_code": "262",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 43308
     },
     {
       "kldb_code": "263",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 44520
     },
     {
       "kldb_code": "272",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 36912
     },
     {
       "kldb_code": "292",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 31836
     },
     {
       "kldb_code": "293",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 31476
     },
     {
       "kldb_code": "321",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 36000
     },
     {
       "kldb_code": "322",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 41112
     },
     {
       "kldb_code": "331",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 34260
     },
     {
       "kldb_code": "332",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 33648
     },
     {
       "kldb_code": "333",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 34116
     },
     {
       "kldb_code": "341",
-      "shortage_rating": 0.5
+      "shortage_rating": 0.5,
+      "median_salary_eur": 37932
     },
     {
       "kldb_code": "342",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 37668
     },
     {
       "kldb_code": "343",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 43764
     },
     {
       "kldb_code": "413",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 45792
     },
     {
       "kldb_code": "431",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 54192
     },
     {
       "kldb_code": "512",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 43260
     },
     {
       "kldb_code": "513",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 35124
     },
     {
       "kldb_code": "514",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 40536
     },
     {
       "kldb_code": "516",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 41988
     },
     {
       "kldb_code": "521",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 33276
     },
     {
       "kldb_code": "522",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 48972
     },
     {
       "kldb_code": "525",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 38064
     },
     {
       "kldb_code": "531",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 37032
     },
     {
       "kldb_code": "541",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 30120
     },
     {
       "kldb_code": "611",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 43164
     },
     {
       "kldb_code": "612",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 39456
     },
     {
       "kldb_code": "613",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 45516
     },
     {
       "kldb_code": "621",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 31788
     },
     {
       "kldb_code": "622",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 35820
     },
     {
       "kldb_code": "623",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 29196
     },
     {
       "kldb_code": "631",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 31944
     },
     {
       "kldb_code": "632",
-      "shortage_rating": 2.8
+      "shortage_rating": 2.8,
+      "median_salary_eur": 31416
     },
     {
       "kldb_code": "633",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 28956
     },
     {
       "kldb_code": "713",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 47544
     },
     {
       "kldb_code": "714",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 40212
     },
     {
       "kldb_code": "721",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 56424
     },
     {
       "kldb_code": "723",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 38016
     },
     {
       "kldb_code": "731",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 35316
     },
     {
       "kldb_code": "732",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 48996
     },
     {
       "kldb_code": "733",
-      "shortage_rating": 0.5
+      "shortage_rating": 0.5,
+      "median_salary_eur": 49236
     },
     {
       "kldb_code": "811",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 32580
     },
     {
       "kldb_code": "812",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 44532
     },
     {
       "kldb_code": "813",
-      "shortage_rating": 2.7
+      "shortage_rating": 2.7,
+      "median_salary_eur": 49380
     },
     {
       "kldb_code": "818",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 38388
     },
     {
       "kldb_code": "821",
-      "shortage_rating": 2.7
+      "shortage_rating": 2.7,
+      "median_salary_eur": 48900
     },
     {
       "kldb_code": "823",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 23988
     },
     {
       "kldb_code": "832",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 28992
     },
     {
       "kldb_code": "921",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 31656
     }
   ],
   "HB": [
     {
       "kldb_code": "111",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 33780
     },
     {
       "kldb_code": "121",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 40536
     },
     {
       "kldb_code": "221",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 42672
     },
     {
       "kldb_code": "222",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 43284
     },
     {
       "kldb_code": "223",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 37776
     },
     {
       "kldb_code": "232",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 39912
     },
     {
       "kldb_code": "242",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 48372
     },
     {
       "kldb_code": "244",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 45300
     },
     {
       "kldb_code": "245",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 50700
     },
     {
       "kldb_code": "251",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 61368
     },
     {
       "kldb_code": "252",
-      "shortage_rating": 2.7
+      "shortage_rating": 2.7,
+      "median_salary_eur": 50664
     },
     {
       "kldb_code": "261",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 53640
     },
     {
       "kldb_code": "262",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 52296
     },
     {
       "kldb_code": "263",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 54420
     },
     {
       "kldb_code": "272",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 45396
     },
     {
       "kldb_code": "273",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 64404
     },
     {
       "kldb_code": "282",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 55572
     },
     {
       "kldb_code": "292",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 42432
     },
     {
       "kldb_code": "293",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 34572
     },
     {
       "kldb_code": "321",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 46812
     },
     {
       "kldb_code": "322",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 49788
     },
     {
       "kldb_code": "331",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 39756
     },
     {
       "kldb_code": "332",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 39828
     },
     {
       "kldb_code": "333",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 43224
     },
     {
       "kldb_code": "341",
-      "shortage_rating": 0.5
+      "shortage_rating": 0.5,
+      "median_salary_eur": 41124
     },
     {
       "kldb_code": "342",
-      "shortage_rating": 2.7
+      "shortage_rating": 2.7,
+      "median_salary_eur": 47556
     },
     {
       "kldb_code": "343",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 47592
     },
     {
       "kldb_code": "412",
-      "shortage_rating": 0.8
+      "shortage_rating": 0.8,
+      "median_salary_eur": 48348
     },
     {
       "kldb_code": "413",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 43752
     },
     {
       "kldb_code": "431",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 54540
     },
     {
       "kldb_code": "434",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 53388
     },
     {
       "kldb_code": "513",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 38916
     },
     {
       "kldb_code": "514",
-      "shortage_rating": 0.8
+      "shortage_rating": 0.8,
+      "median_salary_eur": 39792
     },
     {
       "kldb_code": "516",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 48252
     },
     {
       "kldb_code": "521",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 35280
     },
     {
       "kldb_code": "522",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 47940
     },
     {
       "kldb_code": "525",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 79284
     },
     {
       "kldb_code": "531",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 36648
     },
     {
       "kldb_code": "541",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 34812
     },
     {
       "kldb_code": "611",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 50844
     },
     {
       "kldb_code": "612",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 47376
     },
     {
       "kldb_code": "613",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 49212
     },
     {
       "kldb_code": "621",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 33492
     },
     {
       "kldb_code": "622",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 40236
     },
     {
       "kldb_code": "623",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 32904
     },
     {
       "kldb_code": "631",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 44448
     },
     {
       "kldb_code": "632",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 34020
     },
     {
       "kldb_code": "633",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 31932
     },
     {
       "kldb_code": "713",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 51156
     },
     {
       "kldb_code": "714",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 45048
     },
     {
       "kldb_code": "721",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 61992
     },
     {
       "kldb_code": "723",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 42420
     },
     {
       "kldb_code": "731",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 37764
     },
     {
       "kldb_code": "732",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 48360
     },
     {
       "kldb_code": "733",
-      "shortage_rating": 0.5
+      "shortage_rating": 0.5,
+      "median_salary_eur": 49236
     },
     {
       "kldb_code": "811",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 36864
     },
     {
       "kldb_code": "812",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 49500
     },
     {
       "kldb_code": "813",
-      "shortage_rating": 2.8
+      "shortage_rating": 2.8,
+      "median_salary_eur": 53184
     },
     {
       "kldb_code": "817",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 37596
     },
     {
       "kldb_code": "818",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 38280
     },
     {
       "kldb_code": "821",
-      "shortage_rating": 2.8
+      "shortage_rating": 2.8,
+      "median_salary_eur": 50172
     },
     {
       "kldb_code": "823",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 26004
     },
     {
       "kldb_code": "832",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 32472
     },
     {
       "kldb_code": "921",
-      "shortage_rating": 0.5
+      "shortage_rating": 0.5,
+      "median_salary_eur": 34464
     },
     {
       "kldb_code": "932",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 35940
     },
     {
       "kldb_code": "945",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 43488
     }
   ],
   "HH": [
     {
       "kldb_code": "121",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 38724
     },
     {
       "kldb_code": "222",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 60168
     },
     {
       "kldb_code": "223",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 40368
     },
     {
       "kldb_code": "242",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 52044
     },
     {
       "kldb_code": "244",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 52128
     },
     {
       "kldb_code": "245",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 53412
     },
     {
       "kldb_code": "251",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 56436
     },
     {
       "kldb_code": "252",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 67824
     },
     {
       "kldb_code": "261",
-      "shortage_rating": 2.4
+      "shortage_rating": 2.4,
+      "median_salary_eur": 56352
     },
     {
       "kldb_code": "262",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 52992
     },
     {
       "kldb_code": "263",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 54492
     },
     {
       "kldb_code": "272",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 48036
     },
     {
       "kldb_code": "282",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 34164
     },
     {
       "kldb_code": "292",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 40740
     },
     {
       "kldb_code": "293",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 34980
     },
     {
       "kldb_code": "321",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 48360
     },
     {
       "kldb_code": "322",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 51624
     },
     {
       "kldb_code": "331",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 41352
     },
     {
       "kldb_code": "332",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 39444
     },
     {
       "kldb_code": "333",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 40896
     },
     {
       "kldb_code": "341",
-      "shortage_rating": 0.5
+      "shortage_rating": 0.5,
+      "median_salary_eur": 41952
     },
     {
       "kldb_code": "342",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 49140
     },
     {
       "kldb_code": "343",
-      "shortage_rating": 2.4
+      "shortage_rating": 2.4,
+      "median_salary_eur": 51828
     },
     {
       "kldb_code": "413",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 58116
     },
     {
       "kldb_code": "431",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 66912
     },
     {
       "kldb_code": "513",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 38916
     },
     {
       "kldb_code": "516",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 53448
     },
     {
       "kldb_code": "521",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 36744
     },
     {
       "kldb_code": "522",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 49236
     },
     {
       "kldb_code": "525",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 65232
     },
     {
       "kldb_code": "531",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 40092
     },
     {
       "kldb_code": "541",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 33636
     },
     {
       "kldb_code": "611",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 54180
     },
     {
       "kldb_code": "612",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 54312
     },
     {
       "kldb_code": "613",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 53100
     },
     {
       "kldb_code": "621",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 36432
     },
     {
       "kldb_code": "622",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 41952
     },
     {
       "kldb_code": "623",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 31920
     },
     {
       "kldb_code": "631",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 41988
     },
     {
       "kldb_code": "632",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 34560
     },
     {
       "kldb_code": "633",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 31548
     },
     {
       "kldb_code": "713",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 58560
     },
     {
       "kldb_code": "714",
-      "shortage_rating": 0.8
+      "shortage_rating": 0.8,
+      "median_salary_eur": 52500
     },
     {
       "kldb_code": "721",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 67908
     },
     {
       "kldb_code": "723",
-      "shortage_rating": 2.4
+      "shortage_rating": 2.4,
+      "median_salary_eur": 47916
     },
     {
       "kldb_code": "731",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 44664
     },
     {
       "kldb_code": "732",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 48876
     },
     {
       "kldb_code": "811",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 37164
     },
     {
       "kldb_code": "812",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 50856
     },
     {
       "kldb_code": "813",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 51636
     },
     {
       "kldb_code": "817",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 37596
     },
     {
       "kldb_code": "821",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 51156
     },
     {
       "kldb_code": "823",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 27552
     },
     {
       "kldb_code": "832",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 35604
     },
     {
       "kldb_code": "921",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 45456
     },
     {
       "kldb_code": "945",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 46404
     }
   ],
   "HE": [
     {
       "kldb_code": "121",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 41568
     },
     {
       "kldb_code": "221",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 46608
     },
     {
       "kldb_code": "222",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 42900
     },
     {
       "kldb_code": "223",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 38676
     },
     {
       "kldb_code": "232",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 41040
     },
     {
       "kldb_code": "242",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 48540
     },
     {
       "kldb_code": "244",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 44184
     },
     {
       "kldb_code": "251",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 51768
     },
     {
       "kldb_code": "252",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 44976
     },
     {
       "kldb_code": "261",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 49176
     },
     {
       "kldb_code": "262",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 49932
     },
     {
       "kldb_code": "263",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 54072
     },
     {
       "kldb_code": "272",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 47976
     },
     {
       "kldb_code": "292",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 39816
     },
     {
       "kldb_code": "293",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 35916
     },
     {
       "kldb_code": "321",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 42708
     },
     {
       "kldb_code": "322",
-      "shortage_rating": 2.6
+      "shortage_rating": 2.6,
+      "median_salary_eur": 49440
     },
     {
       "kldb_code": "331",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 39444
     },
     {
       "kldb_code": "332",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 38580
     },
     {
       "kldb_code": "333",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 40668
     },
     {
       "kldb_code": "341",
-      "shortage_rating": 0.7
+      "shortage_rating": 0.7,
+      "median_salary_eur": 44724
     },
     {
       "kldb_code": "342",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 46368
     },
     {
       "kldb_code": "343",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 51624
     },
     {
       "kldb_code": "413",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 63312
     },
     {
       "kldb_code": "431",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 64320
     },
     {
       "kldb_code": "513",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 38496
     },
     {
       "kldb_code": "514",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 40116
     },
     {
       "kldb_code": "516",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 43704
     },
     {
       "kldb_code": "521",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 36708
     },
     {
       "kldb_code": "522",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 47232
     },
     {
       "kldb_code": "525",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 47520
     },
     {
       "kldb_code": "531",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 45432
     },
     {
       "kldb_code": "541",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 31728
     },
     {
       "kldb_code": "611",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 53940
     },
     {
       "kldb_code": "612",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 46116
     },
     {
       "kldb_code": "613",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 52980
     },
     {
       "kldb_code": "621",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 36696
     },
     {
       "kldb_code": "622",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 41496
     },
     {
       "kldb_code": "623",
-      "shortage_rating": 2.7
+      "shortage_rating": 2.7,
+      "median_salary_eur": 29208
     },
     {
       "kldb_code": "631",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 42516
     },
     {
       "kldb_code": "632",
-      "shortage_rating": 2.4
+      "shortage_rating": 2.4,
+      "median_salary_eur": 35832
     },
     {
       "kldb_code": "633",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 31740
     },
     {
       "kldb_code": "713",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 57300
     },
     {
       "kldb_code": "714",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 49764
     },
     {
       "kldb_code": "721",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 77880
     },
     {
       "kldb_code": "723",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 44172
     },
     {
       "kldb_code": "731",
-      "shortage_rating": 2.4
+      "shortage_rating": 2.4,
+      "median_salary_eur": 42720
     },
     {
       "kldb_code": "732",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 52416
     },
     {
       "kldb_code": "733",
-      "shortage_rating": 0.8
+      "shortage_rating": 0.8,
+      "median_salary_eur": 54624
     },
     {
       "kldb_code": "811",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 35796
     },
     {
       "kldb_code": "812",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 51312
     },
     {
       "kldb_code": "813",
-      "shortage_rating": 2.7
+      "shortage_rating": 2.7,
+      "median_salary_eur": 52968
     },
     {
       "kldb_code": "821",
-      "shortage_rating": 2.7
+      "shortage_rating": 2.7,
+      "median_salary_eur": 50304
     },
     {
       "kldb_code": "823",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 26436
     },
     {
       "kldb_code": "832",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 33720
     },
     {
       "kldb_code": "921",
-      "shortage_rating": 0.8
+      "shortage_rating": 0.8,
+      "median_salary_eur": 48636
     }
   ],
   "MV": [
     {
       "kldb_code": "111",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 33912
     },
     {
       "kldb_code": "121",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 34056
     },
     {
       "kldb_code": "223",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 33084
     },
     {
       "kldb_code": "244",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 37776
     },
     {
       "kldb_code": "251",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 40584
     },
     {
       "kldb_code": "252",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 35412
     },
     {
       "kldb_code": "262",
-      "shortage_rating": 2.4
+      "shortage_rating": 2.4,
+      "median_salary_eur": 42240
     },
     {
       "kldb_code": "263",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 43572
     },
     {
       "kldb_code": "292",
-      "shortage_rating": 2.4
+      "shortage_rating": 2.4,
+      "median_salary_eur": 35844
     },
     {
       "kldb_code": "293",
-      "shortage_rating": 2.8
+      "shortage_rating": 2.8,
+      "median_salary_eur": 31284
     },
     {
       "kldb_code": "321",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 36324
     },
     {
       "kldb_code": "322",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 39300
     },
     {
       "kldb_code": "332",
-      "shortage_rating": 0.8
+      "shortage_rating": 0.8,
+      "median_salary_eur": 33336
     },
     {
       "kldb_code": "333",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 34956
     },
     {
       "kldb_code": "341",
-      "shortage_rating": 0.5
+      "shortage_rating": 0.5,
+      "median_salary_eur": 34824
     },
     {
       "kldb_code": "342",
-      "shortage_rating": 2.4
+      "shortage_rating": 2.4,
+      "median_salary_eur": 38112
     },
     {
       "kldb_code": "343",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 44064
     },
     {
       "kldb_code": "513",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 35400
     },
     {
       "kldb_code": "521",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 33804
     },
     {
       "kldb_code": "525",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 37668
     },
     {
       "kldb_code": "531",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 36552
     },
     {
       "kldb_code": "541",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 29928
     },
     {
       "kldb_code": "621",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 29352
     },
     {
       "kldb_code": "622",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 34356
     },
     {
       "kldb_code": "623",
-      "shortage_rating": 2.4
+      "shortage_rating": 2.4,
+      "median_salary_eur": 27600
     },
     {
       "kldb_code": "631",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 33492
     },
     {
       "kldb_code": "632",
-      "shortage_rating": 2.8
+      "shortage_rating": 2.8,
+      "median_salary_eur": 29988
     },
     {
       "kldb_code": "633",
-      "shortage_rating": 2.8
+      "shortage_rating": 2.8,
+      "median_salary_eur": 28560
     },
     {
       "kldb_code": "714",
-      "shortage_rating": 0.8
+      "shortage_rating": 0.8,
+      "median_salary_eur": 38700
     },
     {
       "kldb_code": "732",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 48600
     },
     {
       "kldb_code": "811",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 32148
     },
     {
       "kldb_code": "813",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 48984
     },
     {
       "kldb_code": "821",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 47532
     },
     {
       "kldb_code": "823",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 25176
     },
     {
       "kldb_code": "832",
-      "shortage_rating": 0.5
+      "shortage_rating": 0.5,
+      "median_salary_eur": 32472
     },
     {
       "kldb_code": "921",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 30948
     }
   ],
   "NI": [
     {
       "kldb_code": "111",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 35604
     },
     {
       "kldb_code": "121",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 39300
     },
     {
       "kldb_code": "221",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 43056
     },
     {
       "kldb_code": "222",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 45912
     },
     {
       "kldb_code": "223",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 39276
     },
     {
       "kldb_code": "232",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 38028
     },
     {
       "kldb_code": "242",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 48252
     },
     {
       "kldb_code": "244",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 43620
     },
     {
       "kldb_code": "245",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 49812
     },
     {
       "kldb_code": "251",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 50076
     },
     {
       "kldb_code": "252",
-      "shortage_rating": 2.7
+      "shortage_rating": 2.7,
+      "median_salary_eur": 43464
     },
     {
       "kldb_code": "261",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 47448
     },
     {
       "kldb_code": "262",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 53232
     },
     {
       "kldb_code": "263",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 49584
     },
     {
       "kldb_code": "272",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 45252
     },
     {
       "kldb_code": "273",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 56784
     },
     {
       "kldb_code": "282",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 40632
     },
     {
       "kldb_code": "292",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 35388
     },
     {
       "kldb_code": "293",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 34572
     },
     {
       "kldb_code": "321",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 45696
     },
     {
       "kldb_code": "322",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 47952
     },
     {
       "kldb_code": "331",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 41520
     },
     {
       "kldb_code": "332",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 39384
     },
     {
       "kldb_code": "333",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 42348
     },
     {
       "kldb_code": "341",
-      "shortage_rating": 0.5
+      "shortage_rating": 0.5,
+      "median_salary_eur": 42384
     },
     {
       "kldb_code": "342",
-      "shortage_rating": 2.7
+      "shortage_rating": 2.7,
+      "median_salary_eur": 44868
     },
     {
       "kldb_code": "343",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 52644
     },
     {
       "kldb_code": "412",
-      "shortage_rating": 0.8
+      "shortage_rating": 0.8,
+      "median_salary_eur": 45492
     },
     {
       "kldb_code": "413",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 53568
     },
     {
       "kldb_code": "431",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 56424
     },
     {
       "kldb_code": "434",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 47448
     },
     {
       "kldb_code": "513",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 37404
     },
     {
       "kldb_code": "514",
-      "shortage_rating": 0.8
+      "shortage_rating": 0.8,
+      "median_salary_eur": 38040
     },
     {
       "kldb_code": "516",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 46140
     },
     {
       "kldb_code": "521",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 36252
     },
     {
       "kldb_code": "522",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 47652
     },
     {
       "kldb_code": "525",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 46788
     },
     {
       "kldb_code": "531",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 44112
     },
     {
       "kldb_code": "541",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 32712
     },
     {
       "kldb_code": "611",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 51420
     },
     {
       "kldb_code": "612",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 42300
     },
     {
       "kldb_code": "613",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 47724
     },
     {
       "kldb_code": "621",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 34188
     },
     {
       "kldb_code": "622",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 38916
     },
     {
       "kldb_code": "623",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 29856
     },
     {
       "kldb_code": "631",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 39780
     },
     {
       "kldb_code": "632",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 33432
     },
     {
       "kldb_code": "633",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 30636
     },
     {
       "kldb_code": "713",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 52404
     },
     {
       "kldb_code": "714",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 43452
     },
     {
       "kldb_code": "721",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 64848
     },
     {
       "kldb_code": "723",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 39540
     },
     {
       "kldb_code": "731",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 34500
     },
     {
       "kldb_code": "732",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 50340
     },
     {
       "kldb_code": "733",
-      "shortage_rating": 0.5
+      "shortage_rating": 0.5,
+      "median_salary_eur": 47328
     },
     {
       "kldb_code": "811",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 34944
     },
     {
       "kldb_code": "812",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 49416
     },
     {
       "kldb_code": "813",
-      "shortage_rating": 2.8
+      "shortage_rating": 2.8,
+      "median_salary_eur": 51168
     },
     {
       "kldb_code": "817",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 39276
     },
     {
       "kldb_code": "818",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 37008
     },
     {
       "kldb_code": "821",
-      "shortage_rating": 2.8
+      "shortage_rating": 2.8,
+      "median_salary_eur": 48900
     },
     {
       "kldb_code": "823",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 25284
     },
     {
       "kldb_code": "832",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 31932
     },
     {
       "kldb_code": "921",
-      "shortage_rating": 0.5
+      "shortage_rating": 0.5,
+      "median_salary_eur": 38040
     },
     {
       "kldb_code": "932",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 34752
     },
     {
       "kldb_code": "945",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 41088
     }
   ],
   "NW": [
     {
       "kldb_code": "111",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 35700
     },
     {
       "kldb_code": "121",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 41688
     },
     {
       "kldb_code": "212",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 45612
     },
     {
       "kldb_code": "221",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 43476
     },
     {
       "kldb_code": "222",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 42708
     },
     {
       "kldb_code": "223",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 40176
     },
     {
       "kldb_code": "231",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 47388
     },
     {
       "kldb_code": "232",
-      "shortage_rating": 0.8
+      "shortage_rating": 0.8,
+      "median_salary_eur": 40680
     },
     {
       "kldb_code": "242",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 48864
     },
     {
       "kldb_code": "243",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 46620
     },
     {
       "kldb_code": "244",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 45444
     },
     {
       "kldb_code": "245",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 50244
     },
     {
       "kldb_code": "251",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 50448
     },
     {
       "kldb_code": "252",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 41700
     },
     {
       "kldb_code": "261",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 49596
     },
     {
       "kldb_code": "262",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 50148
     },
     {
       "kldb_code": "263",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 51204
     },
     {
       "kldb_code": "272",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 48048
     },
     {
       "kldb_code": "273",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 52416
     },
     {
       "kldb_code": "281",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 39312
     },
     {
       "kldb_code": "282",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 33396
     },
     {
       "kldb_code": "292",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 37008
     },
     {
       "kldb_code": "293",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 35016
     },
     {
       "kldb_code": "312",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 53004
     },
     {
       "kldb_code": "321",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 46404
     },
     {
       "kldb_code": "322",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 50160
     },
     {
       "kldb_code": "331",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 41760
     },
     {
       "kldb_code": "332",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 39996
     },
     {
       "kldb_code": "333",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 41208
     },
     {
       "kldb_code": "341",
-      "shortage_rating": 0.5
+      "shortage_rating": 0.5,
+      "median_salary_eur": 43416
     },
     {
       "kldb_code": "342",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 46944
     },
     {
       "kldb_code": "343",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 51000
     },
     {
       "kldb_code": "412",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 47868
     },
     {
       "kldb_code": "413",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 60192
     },
     {
       "kldb_code": "414",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 52728
     },
     {
       "kldb_code": "431",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 60384
     },
     {
       "kldb_code": "432",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 48672
     },
     {
       "kldb_code": "434",
-      "shortage_rating": 0.8
+      "shortage_rating": 0.8,
+      "median_salary_eur": 52368
     },
     {
       "kldb_code": "512",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 50220
     },
     {
       "kldb_code": "513",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 37824
     },
     {
       "kldb_code": "514",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 40080
     },
     {
       "kldb_code": "515",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 45600
     },
     {
       "kldb_code": "516",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 48108
     },
     {
       "kldb_code": "521",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 37332
     },
     {
       "kldb_code": "522",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 49824
     },
     {
       "kldb_code": "525",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 48396
     },
     {
       "kldb_code": "531",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 43608
     },
     {
       "kldb_code": "541",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 33876
     },
     {
       "kldb_code": "611",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 51876
     },
     {
       "kldb_code": "612",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 45108
     },
     {
       "kldb_code": "613",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 50196
     },
     {
       "kldb_code": "621",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 35004
     },
     {
       "kldb_code": "622",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 40968
     },
     {
       "kldb_code": "623",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 30696
     },
     {
       "kldb_code": "631",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 38316
     },
     {
       "kldb_code": "632",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 34308
     },
     {
       "kldb_code": "633",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 30948
     },
     {
       "kldb_code": "713",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 53748
     },
     {
       "kldb_code": "714",
-      "shortage_rating": 0.8
+      "shortage_rating": 0.8,
+      "median_salary_eur": 47268
     },
     {
       "kldb_code": "721",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 65772
     },
     {
       "kldb_code": "723",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 41724
     },
     {
       "kldb_code": "731",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 37608
     },
     {
       "kldb_code": "732",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 52056
     },
     {
       "kldb_code": "733",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 49452
     },
     {
       "kldb_code": "811",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 35604
     },
     {
       "kldb_code": "812",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 50820
     },
     {
       "kldb_code": "813",
-      "shortage_rating": 2.7
+      "shortage_rating": 2.7,
+      "median_salary_eur": 52404
     },
     {
       "kldb_code": "817",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 39288
     },
     {
       "kldb_code": "818",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 37812
     },
     {
       "kldb_code": "821",
-      "shortage_rating": 2.7
+      "shortage_rating": 2.7,
+      "median_salary_eur": 50124
     },
     {
       "kldb_code": "823",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 26448
     },
     {
       "kldb_code": "832",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 33396
     },
     {
       "kldb_code": "921",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 36816
     },
     {
       "kldb_code": "932",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 36192
     },
     {
       "kldb_code": "945",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 42732
     }
   ],
   "RP": [
     {
       "kldb_code": "121",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 41568
     },
     {
       "kldb_code": "221",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 45852
     },
     {
       "kldb_code": "222",
-      "shortage_rating": 2.4
+      "shortage_rating": 2.4,
+      "median_salary_eur": 42600
     },
     {
       "kldb_code": "223",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 39600
     },
     {
       "kldb_code": "232",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 39972
     },
     {
       "kldb_code": "242",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 48276
     },
     {
       "kldb_code": "244",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 44052
     },
     {
       "kldb_code": "251",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 51144
     },
     {
       "kldb_code": "252",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 42492
     },
     {
       "kldb_code": "261",
-      "shortage_rating": 2.6
+      "shortage_rating": 2.6,
+      "median_salary_eur": 47640
     },
     {
       "kldb_code": "262",
-      "shortage_rating": 2.7
+      "shortage_rating": 2.7,
+      "median_salary_eur": 48648
     },
     {
       "kldb_code": "263",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 51552
     },
     {
       "kldb_code": "272",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 45156
     },
     {
       "kldb_code": "292",
-      "shortage_rating": 2.7
+      "shortage_rating": 2.7,
+      "median_salary_eur": 38904
     },
     {
       "kldb_code": "293",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 35016
     },
     {
       "kldb_code": "321",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 45204
     },
     {
       "kldb_code": "322",
-      "shortage_rating": 2.6
+      "shortage_rating": 2.6,
+      "median_salary_eur": 49212
     },
     {
       "kldb_code": "331",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 41868
     },
     {
       "kldb_code": "332",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 39588
     },
     {
       "kldb_code": "333",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 40956
     },
     {
       "kldb_code": "341",
-      "shortage_rating": 0.7
+      "shortage_rating": 0.7,
+      "median_salary_eur": 42864
     },
     {
       "kldb_code": "342",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 43848
     },
     {
       "kldb_code": "343",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 49248
     },
     {
       "kldb_code": "413",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 62520
     },
     {
       "kldb_code": "431",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 56652
     },
     {
       "kldb_code": "513",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 37980
     },
     {
       "kldb_code": "516",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 48144
     },
     {
       "kldb_code": "521",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 38100
     },
     {
       "kldb_code": "525",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 48972
     },
     {
       "kldb_code": "531",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 46200
     },
     {
       "kldb_code": "541",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 32064
     },
     {
       "kldb_code": "611",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 50904
     },
     {
       "kldb_code": "612",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 42780
     },
     {
       "kldb_code": "621",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 34812
     },
     {
       "kldb_code": "622",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 40296
     },
     {
       "kldb_code": "623",
-      "shortage_rating": 2.7
+      "shortage_rating": 2.7,
+      "median_salary_eur": 29736
     },
     {
       "kldb_code": "631",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 37416
     },
     {
       "kldb_code": "632",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 34224
     },
     {
       "kldb_code": "633",
-      "shortage_rating": 2.8
+      "shortage_rating": 2.8,
+      "median_salary_eur": 30516
     },
     {
       "kldb_code": "713",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 50544
     },
     {
       "kldb_code": "714",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 43596
     },
     {
       "kldb_code": "721",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 61968
     },
     {
       "kldb_code": "723",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 39252
     },
     {
       "kldb_code": "731",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 35580
     },
     {
       "kldb_code": "732",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 51384
     },
     {
       "kldb_code": "811",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 35268
     },
     {
       "kldb_code": "813",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 52416
     },
     {
       "kldb_code": "821",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 49920
     },
     {
       "kldb_code": "823",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 26508
     },
     {
       "kldb_code": "832",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 32988
     },
     {
       "kldb_code": "921",
-      "shortage_rating": 0.8
+      "shortage_rating": 0.8,
+      "median_salary_eur": 42792
     }
   ],
   "SL": [
     {
       "kldb_code": "121",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 43740
     },
     {
       "kldb_code": "221",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 49368
     },
     {
       "kldb_code": "222",
-      "shortage_rating": 2.4
+      "shortage_rating": 2.4,
+      "median_salary_eur": 43284
     },
     {
       "kldb_code": "223",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 39444
     },
     {
       "kldb_code": "232",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 39912
     },
     {
       "kldb_code": "242",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 52596
     },
     {
       "kldb_code": "244",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 46044
     },
     {
       "kldb_code": "251",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 53748
     },
     {
       "kldb_code": "252",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 42552
     },
     {
       "kldb_code": "261",
-      "shortage_rating": 2.6
+      "shortage_rating": 2.6,
+      "median_salary_eur": 48432
     },
     {
       "kldb_code": "262",
-      "shortage_rating": 2.7
+      "shortage_rating": 2.7,
+      "median_salary_eur": 50748
     },
     {
       "kldb_code": "263",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 50232
     },
     {
       "kldb_code": "272",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 44964
     },
     {
       "kldb_code": "292",
-      "shortage_rating": 2.7
+      "shortage_rating": 2.7,
+      "median_salary_eur": 35988
     },
     {
       "kldb_code": "293",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 34224
     },
     {
       "kldb_code": "321",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 44532
     },
     {
       "kldb_code": "322",
-      "shortage_rating": 2.6
+      "shortage_rating": 2.6,
+      "median_salary_eur": 49344
     },
     {
       "kldb_code": "331",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 39756
     },
     {
       "kldb_code": "332",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 37656
     },
     {
       "kldb_code": "333",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 38592
     },
     {
       "kldb_code": "341",
-      "shortage_rating": 0.7
+      "shortage_rating": 0.7,
+      "median_salary_eur": 44844
     },
     {
       "kldb_code": "342",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 43860
     },
     {
       "kldb_code": "343",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 50736
     },
     {
       "kldb_code": "413",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 49512
     },
     {
       "kldb_code": "431",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 52992
     },
     {
       "kldb_code": "513",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 39156
     },
     {
       "kldb_code": "516",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 44016
     },
     {
       "kldb_code": "521",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 36900
     },
     {
       "kldb_code": "525",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 51240
     },
     {
       "kldb_code": "531",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 45552
     },
     {
       "kldb_code": "541",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 32268
     },
     {
       "kldb_code": "611",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 51084
     },
     {
       "kldb_code": "612",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 40176
     },
     {
       "kldb_code": "621",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 34692
     },
     {
       "kldb_code": "622",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 39588
     },
     {
       "kldb_code": "623",
-      "shortage_rating": 2.7
+      "shortage_rating": 2.7,
+      "median_salary_eur": 29532
     },
     {
       "kldb_code": "631",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 38364
     },
     {
       "kldb_code": "632",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 34020
     },
     {
       "kldb_code": "633",
-      "shortage_rating": 2.8
+      "shortage_rating": 2.8,
+      "median_salary_eur": 31344
     },
     {
       "kldb_code": "713",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 50832
     },
     {
       "kldb_code": "714",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 43464
     },
     {
       "kldb_code": "721",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 60264
     },
     {
       "kldb_code": "723",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 37032
     },
     {
       "kldb_code": "731",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 33756
     },
     {
       "kldb_code": "732",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 52404
     },
     {
       "kldb_code": "811",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 35832
     },
     {
       "kldb_code": "813",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 54180
     },
     {
       "kldb_code": "821",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 49032
     },
     {
       "kldb_code": "823",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 25224
     },
     {
       "kldb_code": "832",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 32472
     },
     {
       "kldb_code": "921",
-      "shortage_rating": 0.8
+      "shortage_rating": 0.8,
+      "median_salary_eur": 35652
     }
   ],
   "SN": [
     {
       "kldb_code": "112",
-      "shortage_rating": 3
+      "shortage_rating": 3,
+      "median_salary_eur": 30036
     },
     {
       "kldb_code": "121",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 31728
     },
     {
       "kldb_code": "221",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 33948
     },
     {
       "kldb_code": "222",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 35808
     },
     {
       "kldb_code": "223",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 31608
     },
     {
       "kldb_code": "242",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 35952
     },
     {
       "kldb_code": "244",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 35448
     },
     {
       "kldb_code": "251",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 40752
     },
     {
       "kldb_code": "252",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 39072
     },
     {
       "kldb_code": "261",
-      "shortage_rating": 2.4
+      "shortage_rating": 2.4,
+      "median_salary_eur": 40932
     },
     {
       "kldb_code": "262",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 40404
     },
     {
       "kldb_code": "263",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 42744
     },
     {
       "kldb_code": "272",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 36276
     },
     {
       "kldb_code": "273",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 40380
     },
     {
       "kldb_code": "282",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 28884
     },
     {
       "kldb_code": "292",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 31116
     },
     {
       "kldb_code": "293",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 30708
     },
     {
       "kldb_code": "321",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 35064
     },
     {
       "kldb_code": "322",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 39048
     },
     {
       "kldb_code": "332",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 33432
     },
     {
       "kldb_code": "333",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 33852
     },
     {
       "kldb_code": "341",
-      "shortage_rating": 0.7
+      "shortage_rating": 0.7,
+      "median_salary_eur": 33312
     },
     {
       "kldb_code": "342",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 36888
     },
     {
       "kldb_code": "343",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 42924
     },
     {
       "kldb_code": "413",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 43248
     },
     {
       "kldb_code": "431",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 50136
     },
     {
       "kldb_code": "513",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 35016
     },
     {
       "kldb_code": "516",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 40332
     },
     {
       "kldb_code": "521",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 33084
     },
     {
       "kldb_code": "525",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 38460
     },
     {
       "kldb_code": "531",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 36588
     },
     {
       "kldb_code": "541",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 29844
     },
     {
       "kldb_code": "611",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 43500
     },
     {
       "kldb_code": "612",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 37200
     },
     {
       "kldb_code": "613",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 42144
     },
     {
       "kldb_code": "621",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 31128
     },
     {
       "kldb_code": "622",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 35568
     },
     {
       "kldb_code": "623",
-      "shortage_rating": 2.7
+      "shortage_rating": 2.7,
+      "median_salary_eur": 27816
     },
     {
       "kldb_code": "631",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 33036
     },
     {
       "kldb_code": "632",
-      "shortage_rating": 3
+      "shortage_rating": 3,
+      "median_salary_eur": 31344
     },
     {
       "kldb_code": "633",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 28572
     },
     {
       "kldb_code": "713",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 45888
     },
     {
       "kldb_code": "714",
-      "shortage_rating": 0.5
+      "shortage_rating": 0.5,
+      "median_salary_eur": 40872
     },
     {
       "kldb_code": "721",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 60504
     },
     {
       "kldb_code": "723",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 35880
     },
     {
       "kldb_code": "731",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 33612
     },
     {
       "kldb_code": "732",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 50676
     },
     {
       "kldb_code": "811",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 31416
     },
     {
       "kldb_code": "813",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 48024
     },
     {
       "kldb_code": "821",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 46680
     },
     {
       "kldb_code": "823",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 24612
     },
     {
       "kldb_code": "832",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 28416
     },
     {
       "kldb_code": "921",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 32448
     }
   ],
   "ST": [
     {
       "kldb_code": "121",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 34260
     },
     {
       "kldb_code": "223",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 33396
     },
     {
       "kldb_code": "242",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 38196
     },
     {
       "kldb_code": "244",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 36000
     },
     {
       "kldb_code": "251",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 42180
     },
     {
       "kldb_code": "252",
-      "shortage_rating": 2.7
+      "shortage_rating": 2.7,
+      "median_salary_eur": 35616
     },
     {
       "kldb_code": "261",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 42948
     },
     {
       "kldb_code": "262",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 41784
     },
     {
       "kldb_code": "263",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 42768
     },
     {
       "kldb_code": "292",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 32916
     },
     {
       "kldb_code": "293",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 30912
     },
     {
       "kldb_code": "321",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 36336
     },
     {
       "kldb_code": "322",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 41172
     },
     {
       "kldb_code": "332",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 33828
     },
     {
       "kldb_code": "341",
-      "shortage_rating": 0.7
+      "shortage_rating": 0.7,
+      "median_salary_eur": 35940
     },
     {
       "kldb_code": "342",
-      "shortage_rating": 2.6
+      "shortage_rating": 2.6,
+      "median_salary_eur": 37272
     },
     {
       "kldb_code": "343",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 43788
     },
     {
       "kldb_code": "413",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 49704
     },
     {
       "kldb_code": "431",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 47232
     },
     {
       "kldb_code": "513",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 35364
     },
     {
       "kldb_code": "516",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 37488
     },
     {
       "kldb_code": "521",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 34608
     },
     {
       "kldb_code": "525",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 39612
     },
     {
       "kldb_code": "531",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 37608
     },
     {
       "kldb_code": "541",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 29736
     },
     {
       "kldb_code": "621",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 46560
     },
     {
       "kldb_code": "622",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 40176
     },
     {
       "kldb_code": "623",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 28680
     },
     {
       "kldb_code": "633",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 28140
     },
     {
       "kldb_code": "713",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 44472
     },
     {
       "kldb_code": "714",
-      "shortage_rating": 0.7
+      "shortage_rating": 0.7,
+      "median_salary_eur": 38460
     },
     {
       "kldb_code": "721",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 59064
     },
     {
       "kldb_code": "732",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 49308
     },
     {
       "kldb_code": "811",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 31488
     },
     {
       "kldb_code": "813",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 49296
     },
     {
       "kldb_code": "821",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 47568
     },
     {
       "kldb_code": "823",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 23268
     },
     {
       "kldb_code": "921",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 30420
     }
   ],
   "SH": [
     {
       "kldb_code": "121",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 38928
     },
     {
       "kldb_code": "222",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 39972
     },
     {
       "kldb_code": "223",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 38652
     },
     {
       "kldb_code": "242",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 48456
     },
     {
       "kldb_code": "244",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 45564
     },
     {
       "kldb_code": "245",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 47700
     },
     {
       "kldb_code": "251",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 48252
     },
     {
       "kldb_code": "252",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 41112
     },
     {
       "kldb_code": "261",
-      "shortage_rating": 2.4
+      "shortage_rating": 2.4,
+      "median_salary_eur": 47952
     },
     {
       "kldb_code": "262",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 46896
     },
     {
       "kldb_code": "263",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 49116
     },
     {
       "kldb_code": "272",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 45336
     },
     {
       "kldb_code": "282",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 33120
     },
     {
       "kldb_code": "292",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 39636
     },
     {
       "kldb_code": "293",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 34440
     },
     {
       "kldb_code": "321",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 45612
     },
     {
       "kldb_code": "322",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 47496
     },
     {
       "kldb_code": "331",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 41604
     },
     {
       "kldb_code": "332",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 39204
     },
     {
       "kldb_code": "333",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 43476
     },
     {
       "kldb_code": "341",
-      "shortage_rating": 0.5
+      "shortage_rating": 0.5,
+      "median_salary_eur": 41160
     },
     {
       "kldb_code": "342",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 44316
     },
     {
       "kldb_code": "343",
-      "shortage_rating": 2.4
+      "shortage_rating": 2.4,
+      "median_salary_eur": 49176
     },
     {
       "kldb_code": "413",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 53520
     },
     {
       "kldb_code": "431",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 51948
     },
     {
       "kldb_code": "513",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 37236
     },
     {
       "kldb_code": "516",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 46860
     },
     {
       "kldb_code": "521",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 36684
     },
     {
       "kldb_code": "522",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 46932
     },
     {
       "kldb_code": "525",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 46224
     },
     {
       "kldb_code": "531",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 41700
     },
     {
       "kldb_code": "541",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 31524
     },
     {
       "kldb_code": "611",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 48756
     },
     {
       "kldb_code": "612",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 43968
     },
     {
       "kldb_code": "613",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 46188
     },
     {
       "kldb_code": "621",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 33360
     },
     {
       "kldb_code": "622",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 39300
     },
     {
       "kldb_code": "623",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 30072
     },
     {
       "kldb_code": "631",
-      "shortage_rating": 2.3
+      "shortage_rating": 2.3,
+      "median_salary_eur": 36828
     },
     {
       "kldb_code": "632",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 33816
     },
     {
       "kldb_code": "633",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 31368
     },
     {
       "kldb_code": "713",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 50004
     },
     {
       "kldb_code": "714",
-      "shortage_rating": 0.8
+      "shortage_rating": 0.8,
+      "median_salary_eur": 42192
     },
     {
       "kldb_code": "721",
-      "shortage_rating": 1
+      "shortage_rating": 1,
+      "median_salary_eur": 63108
     },
     {
       "kldb_code": "723",
-      "shortage_rating": 2.4
+      "shortage_rating": 2.4,
+      "median_salary_eur": 41520
     },
     {
       "kldb_code": "731",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 36240
     },
     {
       "kldb_code": "732",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 52296
     },
     {
       "kldb_code": "811",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 35616
     },
     {
       "kldb_code": "812",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 50028
     },
     {
       "kldb_code": "813",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 51984
     },
     {
       "kldb_code": "817",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 38148
     },
     {
       "kldb_code": "821",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 49692
     },
     {
       "kldb_code": "823",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 25656
     },
     {
       "kldb_code": "832",
-      "shortage_rating": 1.4
+      "shortage_rating": 1.4,
+      "median_salary_eur": 31836
     },
     {
       "kldb_code": "921",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 38580
     },
     {
       "kldb_code": "945",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 43488
     }
   ],
   "TH": [
     {
       "kldb_code": "121",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 34860
     },
     {
       "kldb_code": "223",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 34164
     },
     {
       "kldb_code": "242",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 37356
     },
     {
       "kldb_code": "244",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 37116
     },
     {
       "kldb_code": "251",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 40296
     },
     {
       "kldb_code": "252",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 36156
     },
     {
       "kldb_code": "261",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 42288
     },
     {
       "kldb_code": "262",
-      "shortage_rating": 2.8
+      "shortage_rating": 2.8,
+      "median_salary_eur": 41040
     },
     {
       "kldb_code": "263",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 41364
     },
     {
       "kldb_code": "292",
-      "shortage_rating": 2.8
+      "shortage_rating": 2.8,
+      "median_salary_eur": 34044
     },
     {
       "kldb_code": "293",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 31008
     },
     {
       "kldb_code": "321",
-      "shortage_rating": 2
+      "shortage_rating": 2,
+      "median_salary_eur": 37068
     },
     {
       "kldb_code": "322",
-      "shortage_rating": 2.4
+      "shortage_rating": 2.4,
+      "median_salary_eur": 40932
     },
     {
       "kldb_code": "341",
-      "shortage_rating": 0.3
+      "shortage_rating": 0.3,
+      "median_salary_eur": 37860
     },
     {
       "kldb_code": "342",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 37044
     },
     {
       "kldb_code": "431",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 47976
     },
     {
       "kldb_code": "513",
-      "shortage_rating": 1.3
+      "shortage_rating": 1.3,
+      "median_salary_eur": 35064
     },
     {
       "kldb_code": "521",
-      "shortage_rating": 1.2
+      "shortage_rating": 1.2,
+      "median_salary_eur": 34392
     },
     {
       "kldb_code": "525",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 40596
     },
     {
       "kldb_code": "531",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 34944
     },
     {
       "kldb_code": "541",
-      "shortage_rating": 1.6
+      "shortage_rating": 1.6,
+      "median_salary_eur": 29556
     },
     {
       "kldb_code": "611",
-      "shortage_rating": 1.5
+      "shortage_rating": 1.5,
+      "median_salary_eur": 42300
     },
     {
       "kldb_code": "621",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 30180
     },
     {
       "kldb_code": "622",
-      "shortage_rating": 1.8
+      "shortage_rating": 1.8,
+      "median_salary_eur": 35952
     },
     {
       "kldb_code": "623",
-      "shortage_rating": 2.6
+      "shortage_rating": 2.6,
+      "median_salary_eur": 27552
     },
     {
       "kldb_code": "633",
-      "shortage_rating": 2.6
+      "shortage_rating": 2.6,
+      "median_salary_eur": 28956
     },
     {
       "kldb_code": "713",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 44304
     },
     {
       "kldb_code": "714",
-      "shortage_rating": 0.7
+      "shortage_rating": 0.7,
+      "median_salary_eur": 38364
     },
     {
       "kldb_code": "732",
-      "shortage_rating": 1.7
+      "shortage_rating": 1.7,
+      "median_salary_eur": 47568
     },
     {
       "kldb_code": "811",
-      "shortage_rating": 2.2
+      "shortage_rating": 2.2,
+      "median_salary_eur": 31428
     },
     {
       "kldb_code": "813",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 48900
     },
     {
       "kldb_code": "821",
-      "shortage_rating": 2.5
+      "shortage_rating": 2.5,
+      "median_salary_eur": 48312
     },
     {
       "kldb_code": "832",
-      "shortage_rating": 0.5
+      "shortage_rating": 0.5,
+      "median_salary_eur": 32472
     }
   ]
 }
