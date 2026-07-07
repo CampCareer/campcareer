@@ -93,6 +93,12 @@ export async function middleware(request: NextRequest) {
   // 네트워크 왕복을 생략 — locale 쿠키만 처리하고 통과.
   if (!isProtected) {
     const response = NextResponse.next({ request })
+    // 검색/필터 쿼리 파라미터(q=, salary=, category=, page=)가 붙은 URL은 noindex 처리.
+    // Googlebot이 무한한 쿼리 조합을 크롤링하는 것을 막고 크롤 예산을 실제 페이지에 집중.
+    // 추적 파라미터(utm_*, ref= 등)는 noindex 대상 아님.
+    if (["q", "salary", "category", "page"].some((p) => request.nextUrl.searchParams.has(p))) {
+      response.headers.set("X-Robots-Tag", "noindex, follow")
+    }
     if (localeCookieChanged) applyLocaleCookie(response, locale)
     return response
   }

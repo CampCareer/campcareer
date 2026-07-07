@@ -46,23 +46,24 @@ async function fetchCollegeIds(table: string): Promise<string[]> {
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // soft-hidden 라우트(career-path, fields, rankings, checklist, timeline, games,
   // compare, explore)는 next.config.mjs에서 / 로 리다이렉트되므로 sitemap에서 제외.
+  const lastModStatic = new Date()
   const staticPages: MetadataRoute.Sitemap = [
-    { url: BASE, priority: 1.0, changeFrequency: "weekly" },
-    { url: `${BASE}/roi-explorer`, priority: 0.9, changeFrequency: "daily" },
-    { url: `${BASE}/degree-risk`, priority: 0.8, changeFrequency: "weekly" },
-    { url: `${BASE}/blog`, priority: 0.7, changeFrequency: "weekly" },
-    { url: `${BASE}/methodology`, priority: 0.5, changeFrequency: "monthly" },
-    { url: `${BASE}/privacy`, priority: 0.2, changeFrequency: "yearly" },
-    { url: `${BASE}/terms`, priority: 0.2, changeFrequency: "yearly" },
+    { url: BASE, lastModified: lastModStatic, priority: 1.0, changeFrequency: "weekly" },
+    { url: `${BASE}/roi-explorer`, lastModified: lastModStatic, priority: 0.9, changeFrequency: "daily" },
+    { url: `${BASE}/degree-risk`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
+    { url: `${BASE}/blog`, lastModified: lastModStatic, priority: 0.7, changeFrequency: "weekly" },
+    { url: `${BASE}/methodology`, lastModified: lastModStatic, priority: 0.5, changeFrequency: "monthly" },
+    { url: `${BASE}/privacy`, lastModified: lastModStatic, priority: 0.2, changeFrequency: "yearly" },
+    { url: `${BASE}/terms`, lastModified: lastModStatic, priority: 0.2, changeFrequency: "yearly" },
     // 국가별 허브 페이지 — 크롤러 진입점. orphan 페이지 문제 해결.
-    { url: `${BASE}/au`, priority: 0.9, changeFrequency: "weekly" },
-    { url: `${BASE}/au/jobs`, priority: 0.9, changeFrequency: "weekly" },
-    { url: `${BASE}/ca`, priority: 0.8, changeFrequency: "weekly" },
-    { url: `${BASE}/ca/jobs`, priority: 0.8, changeFrequency: "weekly" },
-    { url: `${BASE}/us`, priority: 0.8, changeFrequency: "weekly" },
-    { url: `${BASE}/us/jobs`, priority: 0.8, changeFrequency: "weekly" },
-    { url: `${BASE}/uk`, priority: 0.8, changeFrequency: "weekly" },
-    { url: `${BASE}/uk/jobs`, priority: 0.8, changeFrequency: "weekly" },
+    { url: `${BASE}/au`, lastModified: lastModStatic, priority: 0.9, changeFrequency: "weekly" },
+    { url: `${BASE}/au/jobs`, lastModified: lastModStatic, priority: 0.9, changeFrequency: "weekly" },
+    { url: `${BASE}/ca`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
+    { url: `${BASE}/ca/jobs`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
+    { url: `${BASE}/us`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
+    { url: `${BASE}/us/jobs`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
+    { url: `${BASE}/uk`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
+    { url: `${BASE}/uk/jobs`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
   ]
 
   const blogPages: MetadataRoute.Sitemap = getAllPosts().map((post) => ({
@@ -73,11 +74,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }))
 
   // 대학 디테일 — 호주 + 캐나다
+  const lastMod = new Date()
   const detailPages: MetadataRoute.Sitemap = []
   const auIds = await fetchCollegeIds(AU_MATVIEW)
   for (const id of auIds) {
     detailPages.push({
       url: `${BASE}/roi-explorer/au/${id}`,
+      lastModified: lastMod,
       priority: 0.5,
       changeFrequency: "monthly",
     })
@@ -89,6 +92,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (!row.institution_id) continue
     detailPages.push({
       url: `${BASE}/roi-explorer/ca/${row.institution_id}`,
+      lastModified: lastMod,
       priority: 0.5,
       changeFrequency: "monthly",
     })
@@ -99,6 +103,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   for (const id of ukIds) {
     detailPages.push({
       url: `${BASE}/roi-explorer/uk/${id}`,
+      lastModified: lastMod,
       priority: 0.5,
       changeFrequency: "monthly",
     })
@@ -114,6 +119,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (!row.anzsco_code) continue
     occupationPages.push({
       url: `${BASE}/roi-explorer/au/occupation/${row.anzsco_code}`,
+      lastModified: lastMod,
       priority: 0.6,
       changeFrequency: "weekly",
     })
@@ -124,6 +130,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   console.log("[sitemap] US occ codes count:", usCodes.length)
   const usOccupationPages: MetadataRoute.Sitemap = usCodes.map((code) => ({
     url: `${BASE}/roi-explorer/us/occupation/${code}`,
+    lastModified: lastMod,
     priority: 0.6,
     changeFrequency: "weekly",
   }))
@@ -138,6 +145,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (!row.noc_code) continue
     caOccupationPages.push({
       url: `${BASE}/roi-explorer/ca/occupation/${row.noc_code}`,
+      lastModified: lastMod,
       priority: 0.6,
       changeFrequency: "weekly",
     })
@@ -153,6 +161,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (!row.soc_code) continue
     ukOccupationPages.push({
       url: `${BASE}/roi-explorer/uk/occupation/${row.soc_code}`,
+      lastModified: lastMod,
       priority: 0.6,
       changeFrequency: "weekly",
     })
@@ -162,14 +171,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const ieSchoolSlugs = await getAllSlugs()
   const ieCities = await getCities()
   const ieLangSchoolPages: MetadataRoute.Sitemap = [
-    { url: `${BASE}/roi-explorer/ie/language-schools`, priority: 0.7, changeFrequency: "weekly" },
+    { url: `${BASE}/roi-explorer/ie/language-schools`, lastModified: lastMod, priority: 0.7, changeFrequency: "weekly" },
     ...ieCities.map((city) => ({
       url: `${BASE}/roi-explorer/ie/language-schools/city/${city.toLowerCase()}` as const,
+      lastModified: lastMod,
       priority: 0.6,
       changeFrequency: "weekly" as const,
     })),
     ...ieSchoolSlugs.map((slug) => ({
       url: `${BASE}/roi-explorer/ie/language-schools/${slug}` as const,
+      lastModified: lastMod,
       priority: 0.6,
       changeFrequency: "weekly" as const,
     })),
@@ -179,6 +190,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const mapData = await getMapData()
   const usUnivPages: MetadataRoute.Sitemap = mapData.usRankedColleges.map((c) => ({
     url: `${BASE}/map/us/university/${c.slug}`,
+    lastModified: lastMod,
     priority: 0.6,
     changeFrequency: "weekly",
   }))
@@ -186,6 +198,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // AU 대학 SEO 페이지 (28개)
   const auUnivPages: MetadataRoute.Sitemap = mapData.auRankedColleges.map((c) => ({
     url: `${BASE}/map/au/university/${c.slug}`,
+    lastModified: lastMod,
     priority: 0.6,
     changeFrequency: "weekly",
   }))
@@ -193,6 +206,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // CA 대학 SEO 페이지 (~30개)
   const caUnivPages: MetadataRoute.Sitemap = mapData.caColleges.map((c) => ({
     url: `${BASE}/map/ca/university/${c.slug}`,
+    lastModified: lastMod,
     priority: 0.6,
     changeFrequency: "weekly",
   }))
@@ -200,20 +214,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // UK 대학 SEO 페이지 (~80개)
   const ukUnivPages: MetadataRoute.Sitemap = mapData.ukColleges.map((c) => ({
     url: `${BASE}/map/uk/university/${c.slug}`,
+    lastModified: lastMod,
     priority: 0.6,
     changeFrequency: "weekly",
   }))
 
   // DE 정적 페이지
   const deStaticPages: MetadataRoute.Sitemap = [
-    { url: `${BASE}/de`, priority: 0.8, changeFrequency: "weekly" },
-    { url: `${BASE}/de/jobs`, priority: 0.8, changeFrequency: "weekly" },
+    { url: `${BASE}/de`, lastModified: lastMod, priority: 0.8, changeFrequency: "weekly" },
+    { url: `${BASE}/de/jobs`, lastModified: lastMod, priority: 0.8, changeFrequency: "weekly" },
   ]
 
   // DE 직업 디테일 — KldB 124개
   const deOccData = (await import("@/data/de-occupations.json")).default as Record<string, { kldb_code: string }>
   const deOccupationPages: MetadataRoute.Sitemap = Object.values(deOccData).map((occ) => ({
     url: `${BASE}/roi-explorer/de/occupation/${occ.kldb_code}`,
+    lastModified: lastMod,
     priority: 0.6,
     changeFrequency: "weekly",
   }))
@@ -221,6 +237,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // DE 대학 SEO 페이지 (55개)
   const deUnivPages: MetadataRoute.Sitemap = mapData.deColleges.map((c: { slug: string }) => ({
     url: `${BASE}/map/de/university/${c.slug}`,
+    lastModified: lastMod,
     priority: 0.6,
     changeFrequency: "weekly",
   }))
@@ -229,12 +246,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const mapPages: MetadataRoute.Sitemap = []
   const STATE_CODES = ["nsw", "vic", "qld", "sa", "wa", "tas", "nt", "act"]
   for (const sc of STATE_CODES) {
-    mapPages.push({ url: `${BASE}/map/au/employment/${sc}`, priority: 0.7, changeFrequency: "weekly" })
-    mapPages.push({ url: `${BASE}/map/au/whv/${sc}`, priority: 0.6, changeFrequency: "weekly" })
+    mapPages.push({ url: `${BASE}/map/au/employment/${sc}`, lastModified: lastMod, priority: 0.7, changeFrequency: "weekly" })
+    mapPages.push({ url: `${BASE}/map/au/whv/${sc}`, lastModified: lastMod, priority: 0.6, changeFrequency: "weekly" })
     const scUpper = sc.toUpperCase() as string
     const regions = SA4_BY_STATE[scUpper] ?? []
     for (const r of regions) {
-      mapPages.push({ url: `${BASE}/map/au/whv/${sc}/${r.code}`, priority: 0.5, changeFrequency: "weekly" })
+      mapPages.push({ url: `${BASE}/map/au/whv/${sc}/${r.code}`, lastModified: lastMod, priority: 0.5, changeFrequency: "weekly" })
     }
   }
 

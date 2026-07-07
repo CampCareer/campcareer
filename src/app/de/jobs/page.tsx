@@ -1,17 +1,19 @@
 import "server-only"
 import type { Metadata } from "next"
 import Link from "next/link"
+import { pageMetadata } from "@/lib/seo"
 import { JsonLd, breadcrumbLd } from "@/components/seo/json-ld"
 import deOccupationsRaw from "@/data/de-occupations.json"
 import { DeJobsClient } from "./DeJobsClient"
 
 export const revalidate = 86400
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Germany Jobs & Occupations — Salary & Skills Shortage Guide | CampCareer",
   description:
     "Browse all KldB-classified occupations in Germany. Compare median salaries, skills shortage ratings, and career pathways for each role. Data from Bundesagentur für Arbeit.",
-}
+  path: "/de/jobs",
+})
 
 type DeOccRow = {
   kldb_code: string
