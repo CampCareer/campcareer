@@ -23,7 +23,7 @@ import { AffiliateCtas } from "@/components/partners/partner-cta"
 import JobListings from "./JobListings"
 import { EMPLOYMENT_OCCUPATIONS } from "@/data/employment-occupations"
 import { EMPLOYMENT_SALARIES } from "@/data/employment-salaries"
-import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc, CourseLite, USStateInfo, StateMajorDensity, USRankedCollege, AURankedCollege, CACollege, CACity, CAOccRow, CAHighPayOccupation, UKOccRow, UKRegionOccupation, UKCollege, UKCity, DECollege, DERegionOccupation } from "@/lib/map-data"
+import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc, CourseLite, USStateInfo, StateMajorDensity, USRankedCollege, AURankedCollege, CACollege, CACity, CAOccRow, CAHighPayOccupation, UKOccRow, UKRegionOccupation, UKCollege, UKCity, DECollege, DERegionOccupation, DEOccRow } from "@/lib/map-data"
 import { createClient } from "@/lib/supabase-client"
 import type { User } from "@supabase/supabase-js"
 import { getShortageOccupations } from "@/lib/ie-shortage-occupations"
@@ -692,7 +692,9 @@ export default function AustraliaMap({
               onValueChange={(v) => v && setSelected(v)}
             >
               <SelectTrigger className="h-10 w-56 rounded-lg border-slate-200 text-sm">
-                <SelectValue placeholder="Select a Bundesland" />
+                <SelectValue placeholder="Select a Bundesland">
+                  {selected ? DE_BUNDESLAND_NAMES[selected] : null}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent className="z-[2000]">
                 {DE_BUNDESLAND_CODES.map((c) => (
@@ -712,6 +714,8 @@ export default function AustraliaMap({
                 value={selectedOccCode ?? null}
                 onValueChange={(v) => {
                   if (!v) return
+                  const name = data.deOccupations[v]?.occupation_en ?? v
+                  track("click_occupation", { type: "de", code: v, name, state: selected ?? undefined })
                   setSelectedOccCode(v)
                   if (isMobile) setExpanded(false)
                 }}
@@ -1025,7 +1029,10 @@ function Panel({
     : isAU ? STATE_NAMES[selected as StateCode] ?? selected
     : activeCountry === "CA" ? CA_PROVINCE_NAMES[selected] ?? selected
     : isUK ? UK_REGION_NAMES[selected] ?? selected
+    : activeCountry === "DE" ? DE_BUNDESLAND_NAMES[selected] ?? selected
     : US_STATE_NAMES[selected] ?? selected
+
+  const [deExpLevel, setDeExpLevel] = useState<"fachkräfte" | "spezialisten" | "experten">("fachkräfte")
 
   const auShortage = isAU ? (data.shortageByState[selected as StateCode] ?? []) : []
   const usShortage = isUS ? (data.usShortageByState[selected] ?? []) : []
@@ -1083,6 +1090,11 @@ function Panel({
     return data.ukOccupations[selectedOccCode] ?? null
   }, [selectedOccCode, activeCountry, data.ukOccupations])
 
+  const resolvedDEOcc = useMemo<DEOccRow | null>(() => {
+    if (!selectedOccCode || activeCountry !== "DE") return null
+    return data.deOccupations[selectedOccCode] ?? null
+  }, [selectedOccCode, activeCountry, data.deOccupations])
+
   const handleSelectOcc = (code: string) => {
     const name = data.auOccupations[code]?.occupation_en ?? code
     track("click_occupation", { type: "au", code, name, state: selected })
@@ -1100,6 +1112,11 @@ function Panel({
   const handleSelectUKOcc = (code: string) => {
     const name = data.ukOccupations[code]?.occupation_en ?? code
     track("click_occupation", { type: "uk", code, name, region: selected })
+    setSelectedOccCode(code)
+  }
+  const handleSelectDEOcc = (code: string) => {
+    const name = data.deOccupations[code]?.occupation_en ?? code
+    track("click_occupation", { type: "de", code, name, state: selected })
     setSelectedOccCode(code)
   }
   const handleBack = () => setSelectedOccCode(null)
@@ -1142,6 +1159,22 @@ function Panel({
     return (
       <UKOccupationDetail
         occ={resolvedUKOcc}
+        regionName={stateName}
+        regionCode={selected}
+        data={data}
+        onBack={handleBack}
+        onClose={onClose}
+        savedOccCodes={savedOccCodes}
+        onToggleSave={onToggleSave}
+        onShare={onShare}
+      />
+    )
+  }
+
+  if (selectedOccCode && resolvedDEOcc) {
+    return (
+      <DEOccupationDetail
+        occ={resolvedDEOcc}
         regionName={stateName}
         regionCode={selected}
         data={data}
@@ -1301,7 +1334,7 @@ function Panel({
         {tab === "shortage" && isUS && <USShortageList rows={usShortage} onSelectOcc={handleUSSelectOcc} />}
         {tab === "shortage" && activeCountry === "DE" && (
           selected ? (
-            <DEShortageList rows={data.deShortageByRegion?.[selected] ?? []} onSelectOcc={setSelectedOccCode} />
+            <DEShortageList rows={data.deShortageByRegion?.[selected] ?? []} onSelectOcc={handleSelectDEOcc} />
           ) : (
             <p className="py-8 text-center text-sm text-slate-400">{t.map.selectStateFirst}</p>
           )
@@ -1335,7 +1368,33 @@ function Panel({
         {tab === "pay" && isUS && <USHighPayList rows={usHighPay} onSelectOcc={handleUSSelectOcc} />}
         {tab === "pay" && activeCountry === "DE" && (
           selected ? (
-            <DEHighPayList rows={data.deHighPayByRegion?.[selected] ?? []} onSelectOcc={setSelectedOccCode} />
+            <div className="space-y-3">
+              <div className="flex items-center gap-1 rounded-lg bg-slate-100 p-0.5 text-xs font-medium">
+                {(["fachkräfte", "spezialisten", "experten"] as const).map((level) => (
+                  <button
+                    key={level}
+                    type="button"
+                    onClick={() => setDeExpLevel(level)}
+                    className={`flex-1 rounded-md px-3 py-1.5 capitalize transition-colors ${
+                      deExpLevel === level
+                        ? "bg-white text-slate-900 shadow-sm"
+                        : "text-slate-500 hover:text-slate-700"
+                    }`}
+                  >
+                    {level}
+                  </button>
+                ))}
+              </div>
+              {deExpLevel === "fachkräfte" ? (
+                <DEHighPayList rows={data.deHighPayByRegion?.[selected] ?? []} onSelectOcc={handleSelectDEOcc} />
+              ) : (
+                <p className="py-8 text-center text-sm text-slate-400">
+                  {deExpLevel === "spezialisten"
+                    ? "Spezialisten salary data coming soon (BA Entgeltatlas 2024)"
+                    : "Experten salary data coming soon (BA Entgeltatlas 2024)"}
+                </p>
+              )}
+            </div>
           ) : (
             <p className="py-8 text-center text-sm text-slate-400">{t.map.selectStateFirst}</p>
           )
@@ -4409,6 +4468,160 @@ function UKOccupationDetail({
             <p className="text-xs text-slate-700">{occ.source_name}</p>
           </div>
         )}
+      </div>
+    </>
+  )
+}
+
+function DEOccupationDetail({
+  occ,
+  regionName,
+  regionCode,
+  data,
+  onBack,
+  onClose,
+  savedOccCodes,
+  onToggleSave,
+  onShare,
+}: {
+  occ: DEOccRow
+  regionName: string
+  regionCode: string
+  data: MapData
+  onBack: () => void
+  onClose: () => void
+  savedOccCodes: Set<string>
+  onToggleSave: (occCode: string, occTitle: string) => void
+  onShare: () => void
+}) {
+  const isSaved = savedOccCodes.has(occ.kldb_code)
+  const hasRange = occ.q1_salary_eur != null && occ.q3_salary_eur != null
+  const midSalary = occ.median_salary_eur ?? occ.mean_salary_eur
+  const maxRange = occ.q3_salary_eur ?? occ.mean_salary_eur ?? occ.median_salary_eur ?? 1
+  const barMax = Math.max(maxRange, occ.mean_salary_eur ?? 0)
+
+  const regionColleges = data.deColleges
+    .filter((c) => c.region === regionCode && c.median_earnings != null)
+    .sort((a, b) => (b.median_earnings ?? 0) - (a.median_earnings ?? 0))
+    .slice(0, 5)
+
+  return (
+    <>
+      <div className="flex items-center gap-2 px-5 pt-4">
+        <button type="button" onClick={onBack} className="rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700">
+          <ChevronLeft className="h-4 w-4" />
+        </button>
+        <button type="button" onClick={onClose} className="ml-auto rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700">
+          <X className="h-4 w-4" />
+        </button>
+      </div>
+      <div className="min-h-0 flex-1 overflow-y-auto px-5 py-3 space-y-4">
+        <div>
+          <h3 className="text-lg font-semibold text-slate-900">{occ.occupation_en}</h3>
+          {occ.occupation_de && <p className="text-sm text-slate-500">{occ.occupation_de}</p>}
+          <p className="text-xs text-slate-400 mt-1">{regionName} · KLdB {occ.kldb_code}</p>
+        </div>
+
+        {/* Salary cards */}
+        <div className="grid grid-cols-2 gap-3">
+          <div className="rounded-lg bg-slate-50 px-3 py-2.5">
+            <p className="text-[11px] text-slate-500">Median Salary</p>
+            <p className="text-lg font-bold text-slate-900">
+              {occ.median_salary_eur != null ? `€${occ.median_salary_eur.toLocaleString()}` : "—"}
+            </p>
+          </div>
+          <div className="rounded-lg bg-slate-50 px-3 py-2.5">
+            <p className="text-[11px] text-slate-500">Shortage Rating</p>
+            <p className="text-lg font-bold text-slate-900">
+              {occ.shortage_rating != null ? `${occ.shortage_rating.toFixed(1)}/4` : "—"}
+            </p>
+          </div>
+          {occ.on_blue_card_list && (
+            <div className="rounded-lg bg-blue-50 px-3 py-2.5">
+              <p className="text-[11px] text-blue-600">Blue Card</p>
+              <p className="text-lg font-bold text-blue-700">Eligible</p>
+            </div>
+          )}
+          {occ.employment_thousands != null && (
+            <div className="rounded-lg bg-slate-50 px-3 py-2.5">
+              <p className="text-[11px] text-slate-500">Employed (DE)</p>
+              <p className="text-lg font-bold text-slate-900">
+                {(occ.employment_thousands * 1000).toLocaleString()}
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* Salary range bar */}
+        {hasRange && (
+          <div className="rounded-lg border border-slate-200 px-4 py-3">
+            <p className="text-[11px] text-slate-500 mb-2">Salary Range (Q1 → Q3)</p>
+            <div className="relative h-2 rounded-full bg-slate-100">
+              <div
+                className="absolute h-2 rounded-full bg-violet-200"
+                style={{
+                  left: `${(occ.q1_salary_eur! / barMax) * 100}%`,
+                  right: `${100 - (occ.q3_salary_eur! / barMax) * 100}%`,
+                }}
+              />
+              {midSalary != null && (
+                <div
+                  className="absolute top-1/2 -mt-1.5 h-3 w-0.5 rounded bg-violet-600"
+                  style={{ left: `${(midSalary / barMax) * 100}%` }}
+                />
+              )}
+            </div>
+            <div className="flex justify-between text-xs text-slate-500 mt-1">
+              <span>€{occ.q1_salary_eur!.toLocaleString()}</span>
+              <span className="font-semibold text-violet-700">
+                {occ.median_salary_eur != null ? `€${occ.median_salary_eur.toLocaleString()}` : ""}
+              </span>
+              <span>€{occ.q3_salary_eur!.toLocaleString()}</span>
+            </div>
+          </div>
+        )}
+
+        {/* Related Universities */}
+        {regionColleges.length > 0 && (
+          <div className="rounded-lg border border-slate-200 px-4 py-3">
+            <p className="text-[11px] text-slate-500 mb-2">Top Universities in {regionName}</p>
+            <div className="space-y-2">
+              {regionColleges.map((c) => (
+                <div key={c.institution_id} className="flex items-center justify-between text-xs">
+                  <div>
+                    <span className="font-medium text-slate-700">{c.college_name}</span>
+                    {c.qs_rank != null && (
+                      <span className="ml-1.5 text-slate-400">#{c.qs_rank}</span>
+                    )}
+                  </div>
+                  <span className="font-semibold text-slate-600">
+                    {c.median_earnings != null ? `€${c.median_earnings.toLocaleString()}` : ""}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={() => onToggleSave(occ.kldb_code, occ.occupation_en)}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors"
+          >
+            <Bookmark className={`h-3.5 w-3.5 ${isSaved ? "fill-violet-500 text-violet-500" : ""}`} />
+            {isSaved ? "Saved" : "Save"}
+          </button>
+          <button type="button" onClick={onShare} className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors">
+            <Share2 className="h-3.5 w-3.5" />
+            Share
+          </button>
+        </div>
+
+        <div className="rounded-lg border border-slate-200 px-3 py-2">
+          <p className="text-[11px] text-slate-500">Source</p>
+          <p className="text-xs text-slate-700">BA Entgeltatlas 2024 / BA Engpassanalyse 2025</p>
+        </div>
       </div>
     </>
   )
