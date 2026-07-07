@@ -3,12 +3,16 @@
     {
       "kldb_code": "121",
       "shortage_rating": 2.2,
-      "median_salary_eur": 42492
+      "median_salary_eur": 42492,
+      "median_salary_spezialist_eur": 47796,
+      "median_salary_experte_eur": 55104,
+      "shortage_rating_spezialist": 1.8
     },
     {
       "kldb_code": "221",
       "shortage_rating": 1.8,
-      "median_salary_eur": 46032
+      "median_salary_eur": 46032,
+      "median_salary_spezialist_eur": 64284
     },
     {
       "kldb_code": "222",
@@ -18,87 +22,132 @@
     {
       "kldb_code": "223",
       "shortage_rating": 2,
-      "median_salary_eur": 41532
+      "median_salary_eur": 41532,
+      "median_salary_spezialist_eur": 51744,
+      "shortage_rating_spezialist": 2.3
     },
     {
       "kldb_code": "232",
       "shortage_rating": 1,
-      "median_salary_eur": 41016
+      "median_salary_eur": 41016,
+      "median_salary_spezialist_eur": 47508,
+      "median_salary_experte_eur": 45432,
+      "shortage_rating_spezialist": 1.3,
+      "shortage_rating_experte": 0.8
     },
     {
       "kldb_code": "242",
       "shortage_rating": 1.2,
-      "median_salary_eur": 53856
+      "median_salary_eur": 53856,
+      "median_salary_spezialist_eur": 63480,
+      "shortage_rating_spezialist": 1.5
     },
     {
       "kldb_code": "244",
       "shortage_rating": 1.7,
-      "median_salary_eur": 48876
+      "median_salary_eur": 48876,
+      "median_salary_spezialist_eur": 64908
     },
     {
       "kldb_code": "245",
       "shortage_rating": 1.3,
-      "median_salary_eur": 55740
+      "median_salary_eur": 55740,
+      "median_salary_spezialist_eur": 65760
     },
     {
       "kldb_code": "251",
       "shortage_rating": 1.2,
-      "median_salary_eur": 56196
+      "median_salary_eur": 56196,
+      "median_salary_spezialist_eur": 72816,
+      "median_salary_experte_eur": 84708,
+      "shortage_rating_spezialist": 1.8,
+      "shortage_rating_experte": 1.2
     },
     {
       "kldb_code": "252",
       "shortage_rating": 2.2,
-      "median_salary_eur": 49836
+      "median_salary_eur": 49836,
+      "median_salary_spezialist_eur": 60168,
+      "median_salary_experte_eur": 85920,
+      "shortage_rating_spezialist": 1.8,
+      "shortage_rating_experte": 1.4
     },
     {
       "kldb_code": "261",
       "shortage_rating": 2.3,
-      "median_salary_eur": 53628
+      "median_salary_eur": 53628,
+      "median_salary_spezialist_eur": 67380,
+      "median_salary_experte_eur": 79728,
+      "shortage_rating_experte": 1.0
     },
     {
       "kldb_code": "262",
       "shortage_rating": 2.5,
-      "median_salary_eur": 53208
+      "median_salary_eur": 53208,
+      "median_salary_spezialist_eur": 67800,
+      "median_salary_experte_eur": 83784,
+      "shortage_rating_experte": 2.0
     },
     {
       "kldb_code": "263",
       "shortage_rating": 1.7,
-      "median_salary_eur": 56220
+      "median_salary_eur": 56220,
+      "median_salary_spezialist_eur": 71184,
+      "median_salary_experte_eur": 85464,
+      "shortage_rating_spezialist": 2.3,
+      "shortage_rating_experte": 1.5
     },
     {
       "kldb_code": "272",
       "shortage_rating": 1.3,
-      "median_salary_eur": 46308
+      "median_salary_eur": 46308,
+      "median_salary_spezialist_eur": 69804,
+      "median_salary_experte_eur": 87792,
+      "shortage_rating_spezialist": 1.5
     },
     {
       "kldb_code": "273",
       "shortage_rating": 0.8,
-      "median_salary_eur": 60408
+      "median_salary_eur": 60408,
+      "median_salary_spezialist_eur": 74196,
+      "median_salary_experte_eur": 87336,
+      "shortage_rating_spezialist": 1.8,
+      "shortage_rating_experte": 0.8
     },
     {
       "kldb_code": "282",
       "shortage_rating": 1.6,
-      "median_salary_eur": 36120
+      "median_salary_eur": 36120,
+      "median_salary_spezialist_eur": 55416
     },
     {
       "kldb_code": "292",
       "shortage_rating": 2.3,
-      "median_salary_eur": 37524
+      "median_salary_eur": 37524,
+      "median_salary_spezialist_eur": 45960
     },
     {
       "kldb_code": "293",
       "shortage_rating": 2,
-      "median_salary_eur": 35556
+      "median_salary_eur": 35556,
+      "median_salary_spezialist_eur": 45888,
+      "median_salary_experte_eur": 51348,
+      "shortage_rating_spezialist": 2.8
     },
     {
       "kldb_code": "321",
       "shortage_rating": 2,
-      "median_salary_eur": 45984
+      "median_salary_eur": 45984,
+      "median_salary_spezialist_eur": 66384,
+      "median_salary_experte_eur": 65052,
+      "shortage_rating_spezialist": 1.8
     },
     {
       "kldb_code": "322",
       "shortage_rating": 2.4,
-      "median_salary_eur": 51768
+      "median_salary_eur": 51768,
+      "median_salary_spezialist_eur": 72072,
+      "median_salary_experte_eur": 74268
     },
     {
       "kldb_code": "331",
@@ -108,52 +157,76 @@
     {
       "kldb_code": "332",
       "shortage_rating": 2,
-      "median_salary_eur": 40692
+      "median_salary_eur": 40692,
+      "median_salary_spezialist_eur": 47028,
+      "shortage_rating_spezialist": 2.3
     },
     {
       "kldb_code": "333",
       "shortage_rating": 2.3,
-      "median_salary_eur": 43356
+      "median_salary_eur": 43356,
+      "median_salary_spezialist_eur": 55332
     },
     {
       "kldb_code": "341",
       "shortage_rating": 0.7,
-      "median_salary_eur": 46920
+      "median_salary_eur": 46920,
+      "median_salary_spezialist_eur": 55068
     },
     {
       "kldb_code": "342",
       "shortage_rating": 2.5,
-      "median_salary_eur": 49548
+      "median_salary_eur": 49548,
+      "median_salary_spezialist_eur": 61428,
+      "shortage_rating_spezialist": 2.8
     },
     {
       "kldb_code": "343",
       "shortage_rating": 1.8,
-      "median_salary_eur": 52944
+      "median_salary_eur": 52944,
+      "median_salary_spezialist_eur": 65388,
+      "median_salary_experte_eur": 82452
     },
     {
       "kldb_code": "412",
       "shortage_rating": 1.3,
-      "median_salary_eur": 50148
+      "median_salary_eur": 50148,
+      "median_salary_spezialist_eur": 64128,
+      "median_salary_experte_eur": 68220,
+      "shortage_rating_experte": 1.0
     },
     {
       "kldb_code": "413",
       "shortage_rating": 1.3,
-      "median_salary_eur": 54144
+      "median_salary_eur": 54144,
+      "median_salary_spezialist_eur": 72372,
+      "median_salary_experte_eur": 78636,
+      "shortage_rating_experte": 1.3
     },
     {
       "kldb_code": "431",
       "shortage_rating": 1.3,
-      "median_salary_eur": 61488
+      "median_salary_eur": 61488,
+      "median_salary_spezialist_eur": 85476,
+      "median_salary_experte_eur": 72120,
+      "shortage_rating_spezialist": 1.6,
+      "shortage_rating_experte": 1.4
     },
     {
       "kldb_code": "434",
       "shortage_rating": 1.3,
-      "median_salary_eur": 56292
+      "median_salary_eur": 56292,
+      "median_salary_spezialist_eur": 83928,
+      "median_salary_experte_eur": 78024,
+      "shortage_rating_spezialist": 1.8,
+      "shortage_rating_experte": 1.2
     },
     {
       "kldb_code": "513",
       "shortage_rating": 1.5,
-      "median_salary_eur": 41088
+      "median_salary_eur": 41088,
+      "median_salary_spezialist_eur": 53556,
+      "median_salary_experte_eur": 62412
     },
     {
       "kldb_code": "514",
@@ -163,7 +236,11 @@
     {
       "kldb_code": "516",
       "shortage_rating": 1.7,
-      "median_salary_eur": 49032
+      "median_salary_eur": 49032,
+      "median_salary_spezialist_eur": 55812,
+      "median_salary_experte_eur": 54792,
+      "shortage_rating_spezialist": 1.0,
+      "shortage_rating_experte": 1.0
     },
     {
       "kldb_code": "521",
@@ -183,32 +260,49 @@
     {
       "kldb_code": "531",
       "shortage_rating": 1.3,
-      "median_salary_eur": 46788
+      "median_salary_eur": 46788,
+      "median_salary_spezialist_eur": 62184,
+      "median_salary_experte_eur": 73968,
+      "shortage_rating_spezialist": 1.6
     },
     {
       "kldb_code": "541",
       "shortage_rating": 1.3,
-      "median_salary_eur": 33144
+      "median_salary_eur": 33144,
+      "median_salary_spezialist_eur": 47376,
+      "shortage_rating_spezialist": 2.0
     },
     {
       "kldb_code": "611",
       "shortage_rating": 1.5,
-      "median_salary_eur": 54900
+      "median_salary_eur": 54900,
+      "median_salary_spezialist_eur": 70284,
+      "median_salary_experte_eur": 89004,
+      "shortage_rating_spezialist": 1.3,
+      "shortage_rating_experte": 0.8
     },
     {
       "kldb_code": "612",
       "shortage_rating": 1.5,
-      "median_salary_eur": 47556
+      "median_salary_eur": 47556,
+      "median_salary_spezialist_eur": 75324,
+      "shortage_rating_spezialist": 2.0
     },
     {
       "kldb_code": "613",
       "shortage_rating": 1.4,
-      "median_salary_eur": 51036
+      "median_salary_eur": 51036,
+      "median_salary_spezialist_eur": 56832,
+      "shortage_rating_spezialist": 1.5
     },
     {
       "kldb_code": "621",
       "shortage_rating": 1.7,
-      "median_salary_eur": 36648
+      "median_salary_eur": 36648,
+      "median_salary_spezialist_eur": 52068,
+      "median_salary_experte_eur": 60204,
+      "shortage_rating_spezialist": 1.6,
+      "shortage_rating_experte": 2.3
     },
     {
       "kldb_code": "622",
@@ -223,109 +317,159 @@
     {
       "kldb_code": "631",
       "shortage_rating": 2,
-      "median_salary_eur": 38232
+      "median_salary_eur": 38232,
+      "median_salary_experte_eur": 45828
     },
     {
       "kldb_code": "632",
       "shortage_rating": 2.3,
-      "median_salary_eur": 34272
+      "median_salary_eur": 34272,
+      "median_salary_spezialist_eur": 33444,
+      "median_salary_experte_eur": 53088,
+      "shortage_rating_spezialist": 2.0
     },
     {
       "kldb_code": "633",
       "shortage_rating": 2.5,
-      "median_salary_eur": 31056
+      "median_salary_eur": 31056,
+      "median_salary_spezialist_eur": 37824,
+      "median_salary_experte_eur": 44376,
+      "shortage_rating_experte": 2.2
     },
     {
       "kldb_code": "713",
       "shortage_rating": 1.8,
-      "median_salary_eur": 57000
+      "median_salary_eur": 57000,
+      "median_salary_spezialist_eur": 82464,
+      "median_salary_experte_eur": 90600,
+      "shortage_rating_spezialist": 1.2,
+      "shortage_rating_experte": 1.4
     },
     {
       "kldb_code": "714",
       "shortage_rating": 1,
-      "median_salary_eur": 48108
+      "median_salary_eur": 48108,
+      "median_salary_spezialist_eur": 57768,
+      "median_salary_experte_eur": 45540,
+      "shortage_rating_spezialist": 1.8
     },
     {
       "kldb_code": "721",
       "shortage_rating": 1.8,
-      "median_salary_eur": 64572
+      "median_salary_eur": 64572,
+      "median_salary_spezialist_eur": 70596,
+      "median_salary_experte_eur": 84852,
+      "shortage_rating_spezialist": 1.4,
+      "shortage_rating_experte": 1.3
     },
     {
       "kldb_code": "723",
       "shortage_rating": 2.5,
-      "median_salary_eur": 43836
+      "median_salary_eur": 43836,
+      "median_salary_spezialist_eur": 53616,
+      "median_salary_experte_eur": 87744
     },
     {
       "kldb_code": "731",
       "shortage_rating": 2.3,
-      "median_salary_eur": 41556
+      "median_salary_eur": 41556,
+      "median_salary_spezialist_eur": 67428,
+      "median_salary_experte_eur": 84564,
+      "shortage_rating_experte": 2.2
     },
     {
       "kldb_code": "732",
       "shortage_rating": 1.3,
-      "median_salary_eur": 51252
+      "median_salary_eur": 51252,
+      "median_salary_spezialist_eur": 60276,
+      "median_salary_experte_eur": 72180,
+      "shortage_rating_spezialist": 2.0
     },
     {
       "kldb_code": "733",
       "shortage_rating": 0.5,
-      "median_salary_eur": 52320
+      "median_salary_eur": 52320,
+      "median_salary_experte_eur": 60024
     },
     {
       "kldb_code": "811",
       "shortage_rating": 2.7,
-      "median_salary_eur": 36432
+      "median_salary_eur": 36432,
+      "median_salary_spezialist_eur": 38592,
+      "shortage_rating_spezialist": 3.0
     },
     {
       "kldb_code": "812",
       "shortage_rating": 1.7,
-      "median_salary_eur": 51600
+      "median_salary_eur": 51600,
+      "median_salary_experte_eur": 90600
     },
     {
       "kldb_code": "813",
       "shortage_rating": 2.8,
-      "median_salary_eur": 54300
+      "median_salary_eur": 54300,
+      "median_salary_spezialist_eur": 62760,
+      "median_salary_experte_eur": 67608,
+      "shortage_rating_spezialist": 2.3,
+      "shortage_rating_experte": 2.5
     },
     {
       "kldb_code": "817",
       "shortage_rating": 1.8,
-      "median_salary_eur": 39468
+      "median_salary_eur": 39468,
+      "median_salary_spezialist_eur": 40308,
+      "shortage_rating_spezialist": 2.8
     },
     {
       "kldb_code": "818",
       "shortage_rating": 1.8,
-      "median_salary_eur": 39336
+      "median_salary_eur": 39336,
+      "median_salary_spezialist_eur": 79740,
+      "median_salary_experte_eur": 69792,
+      "shortage_rating_experte": 1.4
     },
     {
       "kldb_code": "821",
       "shortage_rating": 2.8,
-      "median_salary_eur": 51888
+      "median_salary_eur": 51888,
+      "median_salary_experte_eur": 79428
     },
     {
       "kldb_code": "823",
       "shortage_rating": 1.5,
-      "median_salary_eur": 26664
+      "median_salary_eur": 26664,
+      "median_salary_spezialist_eur": 29892
     },
     {
       "kldb_code": "832",
       "shortage_rating": 1.3,
-      "median_salary_eur": 34416
+      "median_salary_eur": 34416,
+      "median_salary_spezialist_eur": 50304
     },
     {
       "kldb_code": "921",
       "shortage_rating": 0.8,
-      "median_salary_eur": 47652
+      "median_salary_eur": 47652,
+      "median_salary_spezialist_eur": 71904,
+      "median_salary_experte_eur": 86208,
+      "shortage_rating_spezialist": 1.0,
+      "shortage_rating_experte": 1.0
     },
     {
       "kldb_code": "932",
       "shortage_rating": 1.8,
-      "median_salary_eur": 37812
+      "median_salary_eur": 37812,
+      "median_salary_experte_eur": 47508
     }
   ],
   "BY": [
     {
       "kldb_code": "121",
       "shortage_rating": 2.2,
-      "median_salary_eur": 41172
+      "median_salary_eur": 41172,
+      "median_salary_spezialist_eur": 45828,
+      "median_salary_experte_eur": 52596,
+      "shortage_rating_spezialist": 2.2
     },
     {
       "kldb_code": "212",
@@ -335,7 +479,8 @@
     {
       "kldb_code": "221",
       "shortage_rating": 2.2,
-      "median_salary_eur": 42396
+      "median_salary_eur": 42396,
+      "median_salary_spezialist_eur": 59472
     },
     {
       "kldb_code": "222",
@@ -345,7 +490,8 @@
     {
       "kldb_code": "223",
       "shortage_rating": 1.8,
-      "median_salary_eur": 39552
+      "median_salary_eur": 39552,
+      "median_salary_spezialist_eur": 50472
     },
     {
       "kldb_code": "231",
@@ -355,17 +501,24 @@
     {
       "kldb_code": "232",
       "shortage_rating": 0.8,
-      "median_salary_eur": 41352
+      "median_salary_eur": 41352,
+      "median_salary_spezialist_eur": 48636,
+      "median_salary_experte_eur": 49812,
+      "shortage_rating_spezialist": 1.6,
+      "shortage_rating_experte": 1.3
     },
     {
       "kldb_code": "242",
       "shortage_rating": 2,
-      "median_salary_eur": 50856
+      "median_salary_eur": 50856,
+      "median_salary_spezialist_eur": 59916,
+      "shortage_rating_spezialist": 1.2
     },
     {
       "kldb_code": "244",
       "shortage_rating": 2.2,
-      "median_salary_eur": 45264
+      "median_salary_eur": 45264,
+      "median_salary_spezialist_eur": 57264
     },
     {
       "kldb_code": "245",
@@ -375,62 +528,99 @@
     {
       "kldb_code": "251",
       "shortage_rating": 1.3,
-      "median_salary_eur": 50580
+      "median_salary_eur": 50580,
+      "median_salary_spezialist_eur": 65292,
+      "median_salary_experte_eur": 84684,
+      "shortage_rating_spezialist": 1.3,
+      "shortage_rating_experte": 1.7
     },
     {
       "kldb_code": "252",
       "shortage_rating": 2.3,
-      "median_salary_eur": 46848
+      "median_salary_eur": 46848,
+      "median_salary_spezialist_eur": 54480,
+      "median_salary_experte_eur": 89484,
+      "shortage_rating_spezialist": 2.4,
+      "shortage_rating_experte": 2.0
     },
     {
       "kldb_code": "261",
       "shortage_rating": 2.3,
-      "median_salary_eur": 49284
+      "median_salary_eur": 49284,
+      "median_salary_spezialist_eur": 61896,
+      "median_salary_experte_eur": 74364,
+      "shortage_rating_spezialist": 2.0,
+      "shortage_rating_experte": 1.8
     },
     {
       "kldb_code": "262",
       "shortage_rating": 2.5,
-      "median_salary_eur": 49032
+      "median_salary_eur": 49032,
+      "median_salary_spezialist_eur": 62136,
+      "median_salary_experte_eur": 80904,
+      "shortage_rating_experte": 1.5
     },
     {
       "kldb_code": "263",
       "shortage_rating": 1.8,
-      "median_salary_eur": 52644
+      "median_salary_eur": 52644,
+      "median_salary_spezialist_eur": 67128,
+      "median_salary_experte_eur": 86904,
+      "shortage_rating_spezialist": 2.3,
+      "shortage_rating_experte": 1.8
     },
     {
       "kldb_code": "272",
       "shortage_rating": 1.7,
-      "median_salary_eur": 47160
+      "median_salary_eur": 47160,
+      "median_salary_spezialist_eur": 65928,
+      "median_salary_experte_eur": 82728,
+      "shortage_rating_spezialist": 1.5
     },
     {
       "kldb_code": "273",
       "shortage_rating": 1,
-      "median_salary_eur": 57408
+      "median_salary_eur": 57408,
+      "median_salary_spezialist_eur": 65388,
+      "median_salary_experte_eur": 88944,
+      "shortage_rating_spezialist": 1.5,
+      "shortage_rating_experte": 1.3
     },
     {
       "kldb_code": "282",
       "shortage_rating": 1.3,
-      "median_salary_eur": 34476
+      "median_salary_eur": 34476,
+      "median_salary_spezialist_eur": 51876
     },
     {
       "kldb_code": "292",
       "shortage_rating": 2.7,
-      "median_salary_eur": 37992
+      "median_salary_eur": 37992,
+      "median_salary_spezialist_eur": 45720
     },
     {
       "kldb_code": "293",
       "shortage_rating": 2.5,
-      "median_salary_eur": 35988
+      "median_salary_eur": 35988,
+      "median_salary_spezialist_eur": 47556,
+      "median_salary_experte_eur": 52680,
+      "shortage_rating_spezialist": 2.8
     },
     {
       "kldb_code": "321",
       "shortage_rating": 2.2,
-      "median_salary_eur": 46176
+      "median_salary_eur": 46176,
+      "median_salary_spezialist_eur": 64644,
+      "median_salary_experte_eur": 69132,
+      "shortage_rating_spezialist": 2.0,
+      "shortage_rating_experte": 1.3
     },
     {
       "kldb_code": "322",
       "shortage_rating": 2.5,
-      "median_salary_eur": 49884
+      "median_salary_eur": 49884,
+      "median_salary_spezialist_eur": 67596,
+      "median_salary_experte_eur": 78144
     },
     {
       "kldb_code": "331",
@@ -440,47 +630,68 @@
     {
       "kldb_code": "332",
       "shortage_rating": 1.8,
-      "median_salary_eur": 40344
+      "median_salary_eur": 40344,
+      "median_salary_spezialist_eur": 43812
     },
     {
       "kldb_code": "333",
       "shortage_rating": 2.5,
-      "median_salary_eur": 42720
+      "median_salary_eur": 42720,
+      "median_salary_spezialist_eur": 53964
     },
     {
       "kldb_code": "341",
       "shortage_rating": 0.7,
-      "median_salary_eur": 45072
+      "median_salary_eur": 45072,
+      "median_salary_spezialist_eur": 52056
     },
     {
       "kldb_code": "342",
       "shortage_rating": 2.5,
-      "median_salary_eur": 45252
+      "median_salary_eur": 45252,
+      "median_salary_spezialist_eur": 56724,
+      "shortage_rating_spezialist": 2.5
     },
     {
       "kldb_code": "343",
       "shortage_rating": 2.2,
-      "median_salary_eur": 49848
+      "median_salary_eur": 49848,
+      "median_salary_spezialist_eur": 62532,
+      "median_salary_experte_eur": 78924
     },
     {
       "kldb_code": "412",
       "shortage_rating": 0.8,
-      "median_salary_eur": 51864
+      "median_salary_eur": 51864,
+      "median_salary_spezialist_eur": 54948,
+      "median_salary_experte_eur": 69312,
+      "shortage_rating_experte": 1.8
     },
     {
       "kldb_code": "413",
       "shortage_rating": 1.2,
-      "median_salary_eur": 54168
+      "median_salary_eur": 54168,
+      "median_salary_spezialist_eur": 68880,
+      "median_salary_experte_eur": 76356,
+      "shortage_rating_experte": 1.0
     },
     {
       "kldb_code": "431",
       "shortage_rating": 1.3,
-      "median_salary_eur": 60192
+      "median_salary_eur": 60192,
+      "median_salary_spezialist_eur": 70488,
+      "median_salary_experte_eur": 88860,
+      "shortage_rating_spezialist": 1.8,
+      "shortage_rating_experte": 1.5
     },
     {
       "kldb_code": "434",
       "shortage_rating": 1.2,
-      "median_salary_eur": 53736
+      "median_salary_eur": 53736,
+      "median_salary_spezialist_eur": 74460,
+      "median_salary_experte_eur": 79464,
+      "shortage_rating_spezialist": 2.0,
+      "shortage_rating_experte": 1.8
     },
     {
       "kldb_code": "512",
@@ -490,7 +701,9 @@
     {
       "kldb_code": "513",
       "shortage_rating": 1.5,
-      "median_salary_eur": 39096
+      "median_salary_eur": 39096,
+      "median_salary_spezialist_eur": 50748,
+      "median_salary_experte_eur": 62592
     },
     {
       "kldb_code": "514",
@@ -500,7 +713,11 @@
     {
       "kldb_code": "516",
       "shortage_rating": 2,
-      "median_salary_eur": 47676
+      "median_salary_eur": 47676,
+      "median_salary_spezialist_eur": 56952,
+      "median_salary_experte_eur": 56928,
+      "shortage_rating_spezialist": 1.2,
+      "shortage_rating_experte": 1.0
     },
     {
       "kldb_code": "521",
@@ -515,37 +732,56 @@
     {
       "kldb_code": "525",
       "shortage_rating": 2.3,
-      "median_salary_eur": 47424
+      "median_salary_eur": 47424,
+      "median_salary_spezialist_eur": 60780
     },
     {
       "kldb_code": "531",
       "shortage_rating": 2,
-      "median_salary_eur": 46152
+      "median_salary_eur": 46152,
+      "median_salary_spezialist_eur": 59916,
+      "median_salary_experte_eur": 79812,
+      "shortage_rating_spezialist": 2.0
     },
     {
       "kldb_code": "541",
       "shortage_rating": 1.7,
-      "median_salary_eur": 32604
+      "median_salary_eur": 32604,
+      "median_salary_spezialist_eur": 46308,
+      "shortage_rating_spezialist": 1.8
     },
     {
       "kldb_code": "611",
       "shortage_rating": 1.3,
-      "median_salary_eur": 53040
+      "median_salary_eur": 53040,
+      "median_salary_spezialist_eur": 68148,
+      "median_salary_experte_eur": 89100,
+      "shortage_rating_spezialist": 1.5,
+      "shortage_rating_experte": 0.7
     },
     {
       "kldb_code": "612",
       "shortage_rating": 1.3,
-      "median_salary_eur": 45072
+      "median_salary_eur": 45072,
+      "median_salary_spezialist_eur": 60948,
+      "median_salary_experte_eur": 78012
     },
     {
       "kldb_code": "613",
       "shortage_rating": 1.2,
-      "median_salary_eur": 52764
+      "median_salary_eur": 52764,
+      "median_salary_spezialist_eur": 58476,
+      "median_salary_experte_eur": 89916,
+      "shortage_rating_spezialist": 1.3
     },
     {
       "kldb_code": "621",
       "shortage_rating": 1.8,
-      "median_salary_eur": 35772
+      "median_salary_eur": 35772,
+      "median_salary_spezialist_eur": 49932,
+      "median_salary_experte_eur": 59172,
+      "shortage_rating_spezialist": 1.6,
+      "shortage_rating_experte": 2.3
     },
     {
       "kldb_code": "622",
@@ -560,102 +796,150 @@
     {
       "kldb_code": "631",
       "shortage_rating": 1.5,
-      "median_salary_eur": 39972
+      "median_salary_eur": 39972,
+      "median_salary_experte_eur": 50508
     },
     {
       "kldb_code": "632",
       "shortage_rating": 2.5,
-      "median_salary_eur": 34932
+      "median_salary_eur": 34932,
+      "median_salary_spezialist_eur": 29208,
+      "median_salary_experte_eur": 56532,
+      "shortage_rating_spezialist": 1.8
     },
     {
       "kldb_code": "633",
       "shortage_rating": 2.5,
-      "median_salary_eur": 31464
+      "median_salary_eur": 31464,
+      "median_salary_spezialist_eur": 38136,
+      "median_salary_experte_eur": 46140,
+      "shortage_rating_experte": 2.6
     },
     {
       "kldb_code": "713",
       "shortage_rating": 1.7,
-      "median_salary_eur": 55836
+      "median_salary_eur": 55836,
+      "median_salary_spezialist_eur": 80028,
+      "median_salary_experte_eur": 89952,
+      "shortage_rating_spezialist": 1.3,
+      "shortage_rating_experte": 0.8
     },
     {
       "kldb_code": "714",
       "shortage_rating": 1,
-      "median_salary_eur": 46248
+      "median_salary_eur": 46248,
+      "median_salary_spezialist_eur": 58248,
+      "median_salary_experte_eur": 48132,
+      "shortage_rating_spezialist": 1.3
     },
     {
       "kldb_code": "721",
       "shortage_rating": 1.8,
-      "median_salary_eur": 65028
+      "median_salary_eur": 65028,
+      "median_salary_spezialist_eur": 77472,
+      "median_salary_experte_eur": 87540,
+      "shortage_rating_spezialist": 1.5,
+      "shortage_rating_experte": 1.8
     },
     {
       "kldb_code": "723",
       "shortage_rating": 2.3,
-      "median_salary_eur": 43128
+      "median_salary_eur": 43128,
+      "median_salary_spezialist_eur": 54024,
+      "median_salary_experte_eur": 89844
     },
     {
       "kldb_code": "731",
       "shortage_rating": 2.2,
-      "median_salary_eur": 45492
+      "median_salary_eur": 45492,
+      "median_salary_spezialist_eur": 64152,
+      "median_salary_experte_eur": 89832,
+      "shortage_rating_experte": 1.7
     },
     {
       "kldb_code": "732",
       "shortage_rating": 1.5,
-      "median_salary_eur": 49932
+      "median_salary_eur": 49932,
+      "median_salary_spezialist_eur": 61956,
+      "median_salary_experte_eur": 73248,
+      "shortage_rating_spezialist": 1.7
     },
     {
       "kldb_code": "733",
       "shortage_rating": 0.5,
-      "median_salary_eur": 52044
+      "median_salary_eur": 52044,
+      "median_salary_experte_eur": 60744
     },
     {
       "kldb_code": "811",
       "shortage_rating": 2.5,
-      "median_salary_eur": 36504
+      "median_salary_eur": 36504,
+      "median_salary_spezialist_eur": 40152,
+      "shortage_rating_spezialist": 2.8
     },
     {
       "kldb_code": "812",
       "shortage_rating": 1.5,
-      "median_salary_eur": 50724
+      "median_salary_eur": 50724,
+      "median_salary_experte_eur": 90600
     },
     {
       "kldb_code": "813",
       "shortage_rating": 2.7,
-      "median_salary_eur": 52200
+      "median_salary_eur": 52200,
+      "median_salary_spezialist_eur": 58476,
+      "median_salary_experte_eur": 64428,
+      "shortage_rating_spezialist": 2.5,
+      "shortage_rating_experte": 2.0
     },
     {
       "kldb_code": "817",
       "shortage_rating": 2.3,
-      "median_salary_eur": 38760
+      "median_salary_eur": 38760,
+      "median_salary_spezialist_eur": 40440,
+      "shortage_rating_spezialist": 2.7
     },
     {
       "kldb_code": "818",
       "shortage_rating": 2,
-      "median_salary_eur": 38544
+      "median_salary_eur": 38544,
+      "median_salary_spezialist_eur": 90600,
+      "median_salary_experte_eur": 69984,
+      "shortage_rating_experte": 1.8
     },
     {
       "kldb_code": "821",
       "shortage_rating": 2.7,
-      "median_salary_eur": 50616
+      "median_salary_eur": 50616,
+      "median_salary_experte_eur": 77340
     },
     {
       "kldb_code": "823",
       "shortage_rating": 1.8,
-      "median_salary_eur": 26280
+      "median_salary_eur": 26280,
+      "median_salary_spezialist_eur": 29532,
+      "shortage_rating_spezialist": 2.2
     },
     {
       "kldb_code": "832",
       "shortage_rating": 1.2,
-      "median_salary_eur": 33324
+      "median_salary_eur": 33324,
+      "median_salary_spezialist_eur": 48264
     },
     {
       "kldb_code": "921",
       "shortage_rating": 0.7,
-      "median_salary_eur": 46140
+      "median_salary_eur": 46140,
+      "median_salary_spezialist_eur": 70404,
+      "median_salary_experte_eur": 89496,
+      "shortage_rating_spezialist": 0.8,
+      "shortage_rating_experte": 0.8
     },
     {
       "kldb_code": "945",
       "shortage_rating": 2,
-      "median_salary_eur": 43608
+      "median_salary_eur": 43608,
+      "median_salary_spezialist_eur": 55596
     }
   ],
   "BE": [
@@ -667,7 +951,9 @@
     {
       "kldb_code": "121",
       "shortage_rating": 1.6,
-      "median_salary_eur": 39480
+      "median_salary_eur": 39480,
+      "median_salary_experte_eur": 48480,
+      "shortage_rating_experte": 0.5
     },
     {
       "kldb_code": "222",
@@ -692,12 +978,18 @@
     {
       "kldb_code": "251",
       "shortage_rating": 1.5,
-      "median_salary_eur": 49260
+      "median_salary_eur": 49260,
+      "median_salary_spezialist_eur": 60204,
+      "median_salary_experte_eur": 74700,
+      "shortage_rating_spezialist": 1.8,
+      "shortage_rating_experte": 0.8
     },
     {
       "kldb_code": "252",
       "shortage_rating": 2.5,
-      "median_salary_eur": 44628
+      "median_salary_eur": 44628,
+      "median_salary_spezialist_eur": 51132,
+      "median_salary_experte_eur": 89400
     },
     {
       "kldb_code": "261",
@@ -707,17 +999,24 @@
     {
       "kldb_code": "262",
       "shortage_rating": 2.5,
-      "median_salary_eur": 46968
+      "median_salary_eur": 46968,
+      "median_salary_spezialist_eur": 66636,
+      "median_salary_experte_eur": 72144
     },
     {
       "kldb_code": "263",
       "shortage_rating": 1.5,
-      "median_salary_eur": 52116
+      "median_salary_eur": 52116,
+      "median_salary_spezialist_eur": 64716,
+      "median_salary_experte_eur": 78432,
+      "shortage_rating_spezialist": 1.6,
+      "shortage_rating_experte": 2.0
     },
     {
       "kldb_code": "272",
       "shortage_rating": 1.2,
-      "median_salary_eur": 43488
+      "median_salary_eur": 43488,
+      "median_salary_spezialist_eur": 55284
     },
     {
       "kldb_code": "292",
@@ -727,12 +1026,16 @@
     {
       "kldb_code": "293",
       "shortage_rating": 1.8,
-      "median_salary_eur": 33804
+      "median_salary_eur": 33804,
+      "median_salary_spezialist_eur": 42672,
+      "shortage_rating_spezialist": 2.5
     },
     {
       "kldb_code": "321",
       "shortage_rating": 1.3,
-      "median_salary_eur": 38784
+      "median_salary_eur": 38784,
+      "median_salary_spezialist_eur": 59460,
+      "shortage_rating_experte": 2.0
     },
     {
       "kldb_code": "322",
@@ -757,27 +1060,36 @@
     {
       "kldb_code": "341",
       "shortage_rating": 0.5,
-      "median_salary_eur": 36096
+      "median_salary_eur": 36096,
+      "median_salary_spezialist_eur": 45912
     },
     {
       "kldb_code": "342",
       "shortage_rating": 2.2,
-      "median_salary_eur": 41580
+      "median_salary_eur": 41580,
+      "median_salary_spezialist_eur": 51048
     },
     {
       "kldb_code": "343",
       "shortage_rating": 2.2,
-      "median_salary_eur": 45852
+      "median_salary_eur": 45852,
+      "median_salary_spezialist_eur": 60312
     },
     {
       "kldb_code": "413",
       "shortage_rating": 1.3,
-      "median_salary_eur": 47352
+      "median_salary_eur": 47352,
+      "median_salary_experte_eur": 70452,
+      "shortage_rating_experte": 1.5
     },
     {
       "kldb_code": "431",
       "shortage_rating": 1,
-      "median_salary_eur": 66372
+      "median_salary_eur": 66372,
+      "median_salary_spezialist_eur": 72636,
+      "median_salary_experte_eur": 76392,
+      "shortage_rating_spezialist": 1.3,
+      "shortage_rating_experte": 1.6
     },
     {
       "kldb_code": "512",
@@ -797,7 +1109,9 @@
     {
       "kldb_code": "516",
       "shortage_rating": 1.8,
-      "median_salary_eur": 44136
+      "median_salary_eur": 44136,
+      "median_salary_experte_eur": 42732,
+      "shortage_rating_experte": 1.8
     },
     {
       "kldb_code": "521",
@@ -817,32 +1131,47 @@
     {
       "kldb_code": "531",
       "shortage_rating": 1.2,
-      "median_salary_eur": 39576
+      "median_salary_eur": 39576,
+      "median_salary_spezialist_eur": 51936,
+      "median_salary_experte_eur": 67932,
+      "shortage_rating_spezialist": 2.2
     },
     {
       "kldb_code": "541",
       "shortage_rating": 1.5,
-      "median_salary_eur": 30180
+      "median_salary_eur": 30180,
+      "median_salary_spezialist_eur": 45156
     },
     {
       "kldb_code": "611",
       "shortage_rating": 1.3,
-      "median_salary_eur": 50160
+      "median_salary_eur": 50160,
+      "median_salary_spezialist_eur": 60684,
+      "median_salary_experte_eur": 74736,
+      "shortage_rating_spezialist": 1.5,
+      "shortage_rating_experte": 0.8
     },
     {
       "kldb_code": "612",
       "shortage_rating": 1.8,
-      "median_salary_eur": 43572
+      "median_salary_eur": 43572,
+      "median_salary_spezialist_eur": 62868
     },
     {
       "kldb_code": "613",
       "shortage_rating": 1.2,
-      "median_salary_eur": 51948
+      "median_salary_eur": 51948,
+      "median_salary_spezialist_eur": 54876,
+      "shortage_rating_spezialist": 1.3
     },
     {
       "kldb_code": "621",
       "shortage_rating": 1.2,
-      "median_salary_eur": 34620
+      "median_salary_eur": 34620,
+      "median_salary_spezialist_eur": 42492,
+      "median_salary_experte_eur": 55608,
+      "shortage_rating_spezialist": 1.3,
+      "shortage_rating_experte": 1.8
     },
     {
       "kldb_code": "622",
@@ -862,52 +1191,78 @@
     {
       "kldb_code": "632",
       "shortage_rating": 2.8,
-      "median_salary_eur": 35484
+      "median_salary_eur": 35484,
+      "median_salary_spezialist_eur": 9468,
+      "median_salary_experte_eur": 61452,
+      "shortage_rating_spezialist": 1.5
     },
     {
       "kldb_code": "633",
       "shortage_rating": 1.8,
-      "median_salary_eur": 29640
+      "median_salary_eur": 29640,
+      "median_salary_spezialist_eur": 38628,
+      "median_salary_experte_eur": 42864
     },
     {
       "kldb_code": "713",
       "shortage_rating": 1.8,
-      "median_salary_eur": 56028
+      "median_salary_eur": 56028,
+      "median_salary_spezialist_eur": 70536,
+      "median_salary_experte_eur": 79572,
+      "shortage_rating_spezialist": 0.8,
+      "shortage_rating_experte": 0.8
     },
     {
       "kldb_code": "714",
       "shortage_rating": 1,
-      "median_salary_eur": 50052
+      "median_salary_eur": 50052,
+      "median_salary_spezialist_eur": 54252,
+      "shortage_rating_spezialist": 1.6
     },
     {
       "kldb_code": "721",
       "shortage_rating": 1.3,
-      "median_salary_eur": 69720
+      "median_salary_eur": 69720,
+      "median_salary_spezialist_eur": 70056,
+      "median_salary_experte_eur": 74544,
+      "shortage_rating_spezialist": 0.8
     },
     {
       "kldb_code": "723",
       "shortage_rating": 2.2,
-      "median_salary_eur": 44616
+      "median_salary_eur": 44616,
+      "median_salary_spezialist_eur": 57108,
+      "median_salary_experte_eur": 89400
     },
     {
       "kldb_code": "731",
       "shortage_rating": 1.6,
-      "median_salary_eur": 42456
+      "median_salary_eur": 42456,
+      "median_salary_spezialist_eur": 71844,
+      "median_salary_experte_eur": 87732,
+      "shortage_rating_experte": 1.0
     },
     {
       "kldb_code": "732",
       "shortage_rating": 1.3,
-      "median_salary_eur": 49608
+      "median_salary_eur": 49608,
+      "median_salary_spezialist_eur": 64464,
+      "median_salary_experte_eur": 75720,
+      "shortage_rating_spezialist": 1.5,
+      "shortage_rating_experte": 1.5
     },
     {
       "kldb_code": "733",
       "shortage_rating": 0.5,
-      "median_salary_eur": 48540
+      "median_salary_eur": 48540,
+      "median_salary_experte_eur": 54864,
+      "shortage_rating_experte": 1.0
     },
     {
       "kldb_code": "811",
       "shortage_rating": 1.7,
-      "median_salary_eur": 35904
+      "median_salary_eur": 35904,
+      "median_salary_spezialist_eur": 37932
     },
     {
       "kldb_code": "812",
@@ -917,12 +1272,18 @@
     {
       "kldb_code": "813",
       "shortage_rating": 2.7,
-      "median_salary_eur": 51360
+      "median_salary_eur": 51360,
+      "median_salary_spezialist_eur": 57732,
+      "median_salary_experte_eur": 60816,
+      "shortage_rating_experte": 2.3
     },
     {
       "kldb_code": "818",
       "shortage_rating": 1.8,
-      "median_salary_eur": 42312
+      "median_salary_eur": 42312,
+      "median_salary_spezialist_eur": 89400,
+      "median_salary_experte_eur": 68880,
+      "shortage_rating_experte": 1.4
     },
     {
       "kldb_code": "821",
@@ -942,7 +1303,11 @@
     {
       "kldb_code": "921",
       "shortage_rating": 1,
-      "median_salary_eur": 35916
+      "median_salary_eur": 35916,
+      "median_salary_spezialist_eur": 61932,
+      "median_salary_experte_eur": 78504,
+      "shortage_rating_spezialist": 0.8,
+      "shortage_rating_experte": 0.5
     }
   ],
   "BB": [
@@ -954,7 +1319,8 @@
     {
       "kldb_code": "121",
       "shortage_rating": 1.6,
-      "median_salary_eur": 34092
+      "median_salary_eur": 34092,
+      "shortage_rating_experte": 0.5
     },
     {
       "kldb_code": "222",
@@ -979,12 +1345,18 @@
     {
       "kldb_code": "251",
       "shortage_rating": 1.5,
-      "median_salary_eur": 40308
+      "median_salary_eur": 40308,
+      "median_salary_spezialist_eur": 57024,
+      "median_salary_experte_eur": 74340,
+      "shortage_rating_spezialist": 1.8,
+      "shortage_rating_experte": 0.8
     },
     {
       "kldb_code": "252",
       "shortage_rating": 2.5,
-      "median_salary_eur": 41556
+      "median_salary_eur": 41556,
+      "median_salary_spezialist_eur": 47904,
+      "median_salary_experte_eur": 88464
     },
     {
       "kldb_code": "261",
@@ -994,17 +1366,23 @@
     {
       "kldb_code": "262",
       "shortage_rating": 2.5,
-      "median_salary_eur": 43308
+      "median_salary_eur": 43308,
+      "median_salary_spezialist_eur": 57012
     },
     {
       "kldb_code": "263",
       "shortage_rating": 1.5,
-      "median_salary_eur": 44520
+      "median_salary_eur": 44520,
+      "median_salary_spezialist_eur": 54012,
+      "median_salary_experte_eur": 68172,
+      "shortage_rating_spezialist": 1.6,
+      "shortage_rating_experte": 2.0
     },
     {
       "kldb_code": "272",
       "shortage_rating": 1.2,
-      "median_salary_eur": 36912
+      "median_salary_eur": 36912,
+      "median_salary_spezialist_eur": 55032
     },
     {
       "kldb_code": "292",
@@ -1014,17 +1392,21 @@
     {
       "kldb_code": "293",
       "shortage_rating": 1.8,
-      "median_salary_eur": 31476
+      "median_salary_eur": 31476,
+      "shortage_rating_spezialist": 2.5
     },
     {
       "kldb_code": "321",
       "shortage_rating": 1.3,
-      "median_salary_eur": 36000
+      "median_salary_eur": 36000,
+      "median_salary_spezialist_eur": 55608,
+      "shortage_rating_experte": 2.0
     },
     {
       "kldb_code": "322",
       "shortage_rating": 2.2,
-      "median_salary_eur": 41112
+      "median_salary_eur": 41112,
+      "median_salary_spezialist_eur": 61956
     },
     {
       "kldb_code": "331",
@@ -1044,7 +1426,8 @@
     {
       "kldb_code": "341",
       "shortage_rating": 0.5,
-      "median_salary_eur": 37932
+      "median_salary_eur": 37932,
+      "median_salary_spezialist_eur": 43020
     },
     {
       "kldb_code": "342",
@@ -1054,17 +1437,23 @@
     {
       "kldb_code": "343",
       "shortage_rating": 2.2,
-      "median_salary_eur": 43764
+      "median_salary_eur": 43764,
+      "median_salary_spezialist_eur": 58008
     },
     {
       "kldb_code": "413",
       "shortage_rating": 1.3,
-      "median_salary_eur": 45792
+      "median_salary_eur": 45792,
+      "median_salary_experte_eur": 58032,
+      "shortage_rating_experte": 1.5
     },
     {
       "kldb_code": "431",
       "shortage_rating": 1,
-      "median_salary_eur": 54192
+      "median_salary_eur": 54192,
+      "median_salary_spezialist_eur": 65304,
+      "shortage_rating_spezialist": 1.3,
+      "shortage_rating_experte": 1.6
     },
     {
       "kldb_code": "512",
@@ -1084,7 +1473,10 @@
     {
       "kldb_code": "516",
       "shortage_rating": 1.8,
-      "median_salary_eur": 41988
+      "median_salary_eur": 41988,
+      "median_salary_spezialist_eur": 41508,
+      "median_salary_experte_eur": 42816,
+      "shortage_rating_experte": 1.8
     },
     {
       "kldb_code": "521",
@@ -1104,7 +1496,10 @@
     {
       "kldb_code": "531",
       "shortage_rating": 1.2,
-      "median_salary_eur": 37032
+      "median_salary_eur": 37032,
+      "median_salary_spezialist_eur": 51264,
+      "median_salary_experte_eur": 66396,
+      "shortage_rating_spezialist": 2.2
     },
     {
       "kldb_code": "541",
@@ -1114,7 +1509,11 @@
     {
       "kldb_code": "611",
       "shortage_rating": 1.3,
-      "median_salary_eur": 43164
+      "median_salary_eur": 43164,
+      "median_salary_spezialist_eur": 52212,
+      "median_salary_experte_eur": 71904,
+      "shortage_rating_spezialist": 1.5,
+      "shortage_rating_experte": 0.8
     },
     {
       "kldb_code": "612",
@@ -1124,12 +1523,18 @@
     {
       "kldb_code": "613",
       "shortage_rating": 1.2,
-      "median_salary_eur": 45516
+      "median_salary_eur": 45516,
+      "median_salary_spezialist_eur": 50676,
+      "shortage_rating_spezialist": 1.3
     },
     {
       "kldb_code": "621",
       "shortage_rating": 1.2,
-      "median_salary_eur": 31788
+      "median_salary_eur": 31788,
+      "median_salary_spezialist_eur": 45348,
+      "median_salary_experte_eur": 53040,
+      "shortage_rating_spezialist": 1.3,
+      "shortage_rating_experte": 1.8
     },
     {
       "kldb_code": "622",
@@ -1149,7 +1554,8 @@
     {
       "kldb_code": "632",
       "shortage_rating": 2.8,
-      "median_salary_eur": 31416
+      "median_salary_eur": 31416,
+      "shortage_rating_spezialist": 1.5
     },
     {
       "kldb_code": "633",
@@ -1159,17 +1565,26 @@
     {
       "kldb_code": "713",
       "shortage_rating": 1.8,
-      "median_salary_eur": 47544
+      "median_salary_eur": 47544,
+      "median_salary_spezialist_eur": 62088,
+      "median_salary_experte_eur": 71616,
+      "shortage_rating_spezialist": 0.8,
+      "shortage_rating_experte": 0.8
     },
     {
       "kldb_code": "714",
       "shortage_rating": 1,
-      "median_salary_eur": 40212
+      "median_salary_eur": 40212,
+      "median_salary_spezialist_eur": 45816,
+      "shortage_rating_spezialist": 1.6
     },
     {
       "kldb_code": "721",
       "shortage_rating": 1.3,
-      "median_salary_eur": 56424
+      "median_salary_eur": 56424,
+      "median_salary_spezialist_eur": 58680,
+      "median_salary_experte_eur": 59580,
+      "shortage_rating_spezialist": 0.8
     },
     {
       "kldb_code": "723",
@@ -1179,17 +1594,24 @@
     {
       "kldb_code": "731",
       "shortage_rating": 1.6,
-      "median_salary_eur": 35316
+      "median_salary_eur": 35316,
+      "median_salary_experte_eur": 75264,
+      "shortage_rating_experte": 1.0
     },
     {
       "kldb_code": "732",
       "shortage_rating": 1.3,
-      "median_salary_eur": 48996
+      "median_salary_eur": 48996,
+      "median_salary_spezialist_eur": 58320,
+      "median_salary_experte_eur": 72972,
+      "shortage_rating_spezialist": 1.5,
+      "shortage_rating_experte": 1.5
     },
     {
       "kldb_code": "733",
       "shortage_rating": 0.5,
-      "median_salary_eur": 49236
+      "median_salary_eur": 49236,
+      "shortage_rating_experte": 1.0
     },
     {
       "kldb_code": "811",
@@ -1204,12 +1626,16 @@
     {
       "kldb_code": "813",
       "shortage_rating": 2.7,
-      "median_salary_eur": 49380
+      "median_salary_eur": 49380,
+      "median_salary_spezialist_eur": 52908,
+      "median_salary_experte_eur": 60336,
+      "shortage_rating_experte": 2.3
     },
     {
       "kldb_code": "818",
       "shortage_rating": 1.8,
-      "median_salary_eur": 38388
+      "median_salary_eur": 38388,
+      "shortage_rating_experte": 1.4
     },
     {
       "kldb_code": "821",
@@ -1229,14 +1655,18 @@
     {
       "kldb_code": "921",
       "shortage_rating": 1,
-      "median_salary_eur": 31656
+      "median_salary_eur": 31656,
+      "median_salary_spezialist_eur": 49800,
+      "shortage_rating_spezialist": 0.8,
+      "shortage_rating_experte": 0.5
     }
   ],
   "HB": [
     {
       "kldb_code": "111",
       "shortage_rating": 2,
-      "median_salary_eur": 33780
+      "median_salary_eur": 33780,
+      "shortage_rating_experte": 1.3
     },
     {
       "kldb_code": "121",
@@ -1281,12 +1711,19 @@
     {
       "kldb_code": "251",
       "shortage_rating": 1.5,
-      "median_salary_eur": 61368
+      "median_salary_eur": 61368,
+      "median_salary_spezialist_eur": 72096,
+      "median_salary_experte_eur": 81864,
+      "shortage_rating_spezialist": 2.0,
+      "shortage_rating_experte": 0.8
     },
     {
       "kldb_code": "252",
       "shortage_rating": 2.7,
-      "median_salary_eur": 50664
+      "median_salary_eur": 50664,
+      "median_salary_experte_eur": 78108,
+      "shortage_rating_spezialist": 2.0,
+      "shortage_rating_experte": 1.8
     },
     {
       "kldb_code": "261",
@@ -1296,22 +1733,33 @@
     {
       "kldb_code": "262",
       "shortage_rating": 2.3,
-      "median_salary_eur": 52296
+      "median_salary_eur": 52296,
+      "median_salary_spezialist_eur": 51444
     },
     {
       "kldb_code": "263",
       "shortage_rating": 1.7,
-      "median_salary_eur": 54420
+      "median_salary_eur": 54420,
+      "median_salary_spezialist_eur": 68688,
+      "median_salary_experte_eur": 87084,
+      "shortage_rating_spezialist": 2.5,
+      "shortage_rating_experte": 1.8
     },
     {
       "kldb_code": "272",
       "shortage_rating": 1.7,
-      "median_salary_eur": 45396
+      "median_salary_eur": 45396,
+      "median_salary_spezialist_eur": 66012,
+      "shortage_rating_spezialist": 1.5
     },
     {
       "kldb_code": "273",
       "shortage_rating": 1.8,
-      "median_salary_eur": 64404
+      "median_salary_eur": 64404,
+      "median_salary_spezialist_eur": 79812,
+      "median_salary_experte_eur": 82356,
+      "shortage_rating_spezialist": 1.7,
+      "shortage_rating_experte": 1.2
     },
     {
       "kldb_code": "282",
@@ -1331,7 +1779,8 @@
     {
       "kldb_code": "321",
       "shortage_rating": 1.8,
-      "median_salary_eur": 46812
+      "median_salary_eur": 46812,
+      "shortage_rating_spezialist": 2.0
     },
     {
       "kldb_code": "322",
@@ -1361,7 +1810,8 @@
     {
       "kldb_code": "342",
       "shortage_rating": 2.7,
-      "median_salary_eur": 47556
+      "median_salary_eur": 47556,
+      "shortage_rating_spezialist": 2.5
     },
     {
       "kldb_code": "343",
@@ -1371,22 +1821,31 @@
     {
       "kldb_code": "412",
       "shortage_rating": 0.8,
-      "median_salary_eur": 48348
+      "median_salary_eur": 48348,
+      "shortage_rating_experte": 1.3
     },
     {
       "kldb_code": "413",
       "shortage_rating": 1.2,
-      "median_salary_eur": 43752
+      "median_salary_eur": 43752,
+      "shortage_rating_experte": 1.8
     },
     {
       "kldb_code": "431",
       "shortage_rating": 1,
-      "median_salary_eur": 54540
+      "median_salary_eur": 54540,
+      "median_salary_spezialist_eur": 62856,
+      "shortage_rating_spezialist": 0.8,
+      "shortage_rating_experte": 2.2
     },
     {
       "kldb_code": "434",
       "shortage_rating": 1.8,
-      "median_salary_eur": 53388
+      "median_salary_eur": 53388,
+      "median_salary_spezialist_eur": 65808,
+      "median_salary_experte_eur": 67980,
+      "shortage_rating_spezialist": 2.3,
+      "shortage_rating_experte": 1.5
     },
     {
       "kldb_code": "513",
@@ -1401,7 +1860,11 @@
     {
       "kldb_code": "516",
       "shortage_rating": 2.3,
-      "median_salary_eur": 48252
+      "median_salary_eur": 48252,
+      "median_salary_spezialist_eur": 50760,
+      "median_salary_experte_eur": 61812,
+      "shortage_rating_spezialist": 1.0,
+      "shortage_rating_experte": 1.2
     },
     {
       "kldb_code": "521",
@@ -1421,7 +1884,8 @@
     {
       "kldb_code": "531",
       "shortage_rating": 1,
-      "median_salary_eur": 36648
+      "median_salary_eur": 36648,
+      "shortage_rating_spezialist": 2.0
     },
     {
       "kldb_code": "541",
@@ -1431,7 +1895,11 @@
     {
       "kldb_code": "611",
       "shortage_rating": 1.5,
-      "median_salary_eur": 50844
+      "median_salary_eur": 50844,
+      "median_salary_spezialist_eur": 62112,
+      "median_salary_experte_eur": 83556,
+      "shortage_rating_spezialist": 1.3,
+      "shortage_rating_experte": 1.0
     },
     {
       "kldb_code": "612",
@@ -1441,12 +1909,16 @@
     {
       "kldb_code": "613",
       "shortage_rating": 1.4,
-      "median_salary_eur": 49212
+      "median_salary_eur": 49212,
+      "shortage_rating_spezialist": 1.5
     },
     {
       "kldb_code": "621",
       "shortage_rating": 1,
-      "median_salary_eur": 33492
+      "median_salary_eur": 33492,
+      "median_salary_experte_eur": 55992,
+      "shortage_rating_spezialist": 2.0,
+      "shortage_rating_experte": 2.0
     },
     {
       "kldb_code": "622",
@@ -1466,7 +1938,8 @@
     {
       "kldb_code": "632",
       "shortage_rating": 2.2,
-      "median_salary_eur": 34020
+      "median_salary_eur": 34020,
+      "shortage_rating_spezialist": 2.5
     },
     {
       "kldb_code": "633",
@@ -1476,17 +1949,24 @@
     {
       "kldb_code": "713",
       "shortage_rating": 2,
-      "median_salary_eur": 51156
+      "median_salary_eur": 51156,
+      "median_salary_spezialist_eur": 73764,
+      "median_salary_experte_eur": 81324,
+      "shortage_rating_spezialist": 1.5,
+      "shortage_rating_experte": 1.2
     },
     {
       "kldb_code": "714",
       "shortage_rating": 1,
-      "median_salary_eur": 45048
+      "median_salary_eur": 45048,
+      "median_salary_spezialist_eur": 53028,
+      "shortage_rating_spezialist": 1.8
     },
     {
       "kldb_code": "721",
       "shortage_rating": 1.8,
-      "median_salary_eur": 61992
+      "median_salary_eur": 61992,
+      "shortage_rating_spezialist": 1.0
     },
     {
       "kldb_code": "723",
@@ -1496,12 +1976,17 @@
     {
       "kldb_code": "731",
       "shortage_rating": 2.3,
-      "median_salary_eur": 37764
+      "median_salary_eur": 37764,
+      "median_salary_experte_eur": 76404,
+      "shortage_rating_experte": 2.0
     },
     {
       "kldb_code": "732",
       "shortage_rating": 1.7,
-      "median_salary_eur": 48360
+      "median_salary_eur": 48360,
+      "median_salary_spezialist_eur": 54108,
+      "median_salary_experte_eur": 72360,
+      "shortage_rating_spezialist": 1.8
     },
     {
       "kldb_code": "733",
@@ -1511,7 +1996,8 @@
     {
       "kldb_code": "811",
       "shortage_rating": 2.3,
-      "median_salary_eur": 36864
+      "median_salary_eur": 36864,
+      "shortage_rating_spezialist": 2.8
     },
     {
       "kldb_code": "812",
@@ -1521,12 +2007,16 @@
     {
       "kldb_code": "813",
       "shortage_rating": 2.8,
-      "median_salary_eur": 53184
+      "median_salary_eur": 53184,
+      "shortage_rating_spezialist": 2.3,
+      "shortage_rating_experte": 2.3
     },
     {
       "kldb_code": "817",
       "shortage_rating": 1.4,
-      "median_salary_eur": 37596
+      "median_salary_eur": 37596,
+      "median_salary_spezialist_eur": 42948,
+      "shortage_rating_spezialist": 2.7
     },
     {
       "kldb_code": "818",
@@ -1551,7 +2041,10 @@
     {
       "kldb_code": "921",
       "shortage_rating": 0.5,
-      "median_salary_eur": 34464
+      "median_salary_eur": 34464,
+      "median_salary_spezialist_eur": 63216,
+      "shortage_rating_spezialist": 1.0,
+      "shortage_rating_experte": 0.8
     },
     {
       "kldb_code": "932",
@@ -1598,12 +2091,19 @@
     {
       "kldb_code": "251",
       "shortage_rating": 1.3,
-      "median_salary_eur": 56436
+      "median_salary_eur": 56436,
+      "median_salary_spezialist_eur": 64008,
+      "median_salary_experte_eur": 75912,
+      "shortage_rating_experte": 1.0
     },
     {
       "kldb_code": "252",
       "shortage_rating": 2.5,
-      "median_salary_eur": 67824
+      "median_salary_eur": 67824,
+      "median_salary_spezialist_eur": 76776,
+      "median_salary_experte_eur": 89820,
+      "shortage_rating_spezialist": 2.3,
+      "shortage_rating_experte": 1.0
     },
     {
       "kldb_code": "261",
@@ -1613,17 +2113,24 @@
     {
       "kldb_code": "262",
       "shortage_rating": 2.5,
-      "median_salary_eur": 52992
+      "median_salary_eur": 52992,
+      "median_salary_spezialist_eur": 68604,
+      "median_salary_experte_eur": 82956
     },
     {
       "kldb_code": "263",
       "shortage_rating": 1.5,
-      "median_salary_eur": 54492
+      "median_salary_eur": 54492,
+      "median_salary_spezialist_eur": 67596,
+      "median_salary_experte_eur": 88224,
+      "shortage_rating_spezialist": 2.0,
+      "shortage_rating_experte": 1.8
     },
     {
       "kldb_code": "272",
       "shortage_rating": 1.2,
-      "median_salary_eur": 48036
+      "median_salary_eur": 48036,
+      "median_salary_spezialist_eur": 69564
     },
     {
       "kldb_code": "282",
@@ -1638,12 +2145,14 @@
     {
       "kldb_code": "293",
       "shortage_rating": 2,
-      "median_salary_eur": 34980
+      "median_salary_eur": 34980,
+      "median_salary_spezialist_eur": 43320
     },
     {
       "kldb_code": "321",
       "shortage_rating": 1.3,
-      "median_salary_eur": 48360
+      "median_salary_eur": 48360,
+      "median_salary_spezialist_eur": 73788
     },
     {
       "kldb_code": "322",
@@ -1668,37 +2177,50 @@
     {
       "kldb_code": "341",
       "shortage_rating": 0.5,
-      "median_salary_eur": 41952
+      "median_salary_eur": 41952,
+      "median_salary_spezialist_eur": 51372
     },
     {
       "kldb_code": "342",
       "shortage_rating": 2.3,
-      "median_salary_eur": 49140
+      "median_salary_eur": 49140,
+      "median_salary_spezialist_eur": 60912
     },
     {
       "kldb_code": "343",
       "shortage_rating": 2.4,
-      "median_salary_eur": 51828
+      "median_salary_eur": 51828,
+      "median_salary_spezialist_eur": 69540
     },
     {
       "kldb_code": "413",
       "shortage_rating": 1.4,
-      "median_salary_eur": 58116
+      "median_salary_eur": 58116,
+      "median_salary_experte_eur": 76656
     },
     {
       "kldb_code": "431",
       "shortage_rating": 1,
-      "median_salary_eur": 66912
+      "median_salary_eur": 66912,
+      "median_salary_spezialist_eur": 73488,
+      "median_salary_experte_eur": 75360,
+      "shortage_rating_spezialist": 1.8,
+      "shortage_rating_experte": 1.6
     },
     {
       "kldb_code": "513",
       "shortage_rating": 1.2,
-      "median_salary_eur": 38916
+      "median_salary_eur": 38916,
+      "median_salary_spezialist_eur": 52356
     },
     {
       "kldb_code": "516",
       "shortage_rating": 1.5,
-      "median_salary_eur": 53448
+      "median_salary_eur": 53448,
+      "median_salary_spezialist_eur": 62244,
+      "median_salary_experte_eur": 60540,
+      "shortage_rating_spezialist": 1.5,
+      "shortage_rating_experte": 1.5
     },
     {
       "kldb_code": "521",
@@ -1718,32 +2240,47 @@
     {
       "kldb_code": "531",
       "shortage_rating": 1.7,
-      "median_salary_eur": 40092
+      "median_salary_eur": 40092,
+      "median_salary_spezialist_eur": 58068,
+      "median_salary_experte_eur": 76068,
+      "shortage_rating_spezialist": 2.0
     },
     {
       "kldb_code": "541",
       "shortage_rating": 1.3,
-      "median_salary_eur": 33636
+      "median_salary_eur": 33636,
+      "median_salary_spezialist_eur": 45132
     },
     {
       "kldb_code": "611",
       "shortage_rating": 1.3,
-      "median_salary_eur": 54180
+      "median_salary_eur": 54180,
+      "median_salary_spezialist_eur": 68136,
+      "median_salary_experte_eur": 82632,
+      "shortage_rating_spezialist": 1.2,
+      "shortage_rating_experte": 0.5
     },
     {
       "kldb_code": "612",
       "shortage_rating": 1.2,
-      "median_salary_eur": 54312
+      "median_salary_eur": 54312,
+      "median_salary_spezialist_eur": 79416
     },
     {
       "kldb_code": "613",
       "shortage_rating": 1,
-      "median_salary_eur": 53100
+      "median_salary_eur": 53100,
+      "median_salary_spezialist_eur": 58668,
+      "shortage_rating_spezialist": 1.5
     },
     {
       "kldb_code": "621",
       "shortage_rating": 1.7,
-      "median_salary_eur": 36432
+      "median_salary_eur": 36432,
+      "median_salary_spezialist_eur": 49308,
+      "median_salary_experte_eur": 58632,
+      "shortage_rating_spezialist": 1.8,
+      "shortage_rating_experte": 2.4
     },
     {
       "kldb_code": "622",
@@ -1763,42 +2300,61 @@
     {
       "kldb_code": "632",
       "shortage_rating": 2,
-      "median_salary_eur": 34560
+      "median_salary_eur": 34560,
+      "median_salary_spezialist_eur": 4656
     },
     {
       "kldb_code": "633",
       "shortage_rating": 2,
-      "median_salary_eur": 31548
+      "median_salary_eur": 31548,
+      "median_salary_spezialist_eur": 36336,
+      "median_salary_experte_eur": 44880
     },
     {
       "kldb_code": "713",
       "shortage_rating": 1.8,
-      "median_salary_eur": 58560
+      "median_salary_eur": 58560,
+      "median_salary_spezialist_eur": 76464,
+      "median_salary_experte_eur": 84504,
+      "shortage_rating_spezialist": 1.0,
+      "shortage_rating_experte": 0.7
     },
     {
       "kldb_code": "714",
       "shortage_rating": 0.8,
-      "median_salary_eur": 52500
+      "median_salary_eur": 52500,
+      "median_salary_spezialist_eur": 57204,
+      "shortage_rating_spezialist": 1.3
     },
     {
       "kldb_code": "721",
       "shortage_rating": 1,
-      "median_salary_eur": 67908
+      "median_salary_eur": 67908,
+      "median_salary_spezialist_eur": 75984,
+      "median_salary_experte_eur": 83148
     },
     {
       "kldb_code": "723",
       "shortage_rating": 2.4,
-      "median_salary_eur": 47916
+      "median_salary_eur": 47916,
+      "median_salary_spezialist_eur": 58884,
+      "median_salary_experte_eur": 89868
     },
     {
       "kldb_code": "731",
       "shortage_rating": 2,
-      "median_salary_eur": 44664
+      "median_salary_eur": 44664,
+      "median_salary_spezialist_eur": 69624,
+      "median_salary_experte_eur": 89016,
+      "shortage_rating_experte": 1.0
     },
     {
       "kldb_code": "732",
       "shortage_rating": 1.5,
-      "median_salary_eur": 48876
+      "median_salary_eur": 48876,
+      "median_salary_spezialist_eur": 59832,
+      "median_salary_experte_eur": 75108,
+      "shortage_rating_spezialist": 1.7
     },
     {
       "kldb_code": "811",
@@ -1813,12 +2369,16 @@
     {
       "kldb_code": "813",
       "shortage_rating": 2.2,
-      "median_salary_eur": 51636
+      "median_salary_eur": 51636,
+      "median_salary_spezialist_eur": 60948,
+      "median_salary_experte_eur": 64560
     },
     {
       "kldb_code": "817",
       "shortage_rating": 1.6,
-      "median_salary_eur": 37596
+      "median_salary_eur": 37596,
+      "median_salary_spezialist_eur": 42456,
+      "shortage_rating_spezialist": 2.5
     },
     {
       "kldb_code": "821",
@@ -1838,19 +2398,26 @@
     {
       "kldb_code": "921",
       "shortage_rating": 1.2,
-      "median_salary_eur": 45456
+      "median_salary_eur": 45456,
+      "median_salary_spezialist_eur": 63984,
+      "median_salary_experte_eur": 80388,
+      "shortage_rating_spezialist": 1.0,
+      "shortage_rating_experte": 0.5
     },
     {
       "kldb_code": "945",
       "shortage_rating": 1.5,
-      "median_salary_eur": 46404
+      "median_salary_eur": 46404,
+      "median_salary_spezialist_eur": 51516
     }
   ],
   "HE": [
     {
       "kldb_code": "121",
       "shortage_rating": 1.8,
-      "median_salary_eur": 41568
+      "median_salary_eur": 41568,
+      "median_salary_spezialist_eur": 47772,
+      "median_salary_experte_eur": 58668
     },
     {
       "kldb_code": "221",
@@ -1865,72 +2432,100 @@
     {
       "kldb_code": "223",
       "shortage_rating": 1.5,
-      "median_salary_eur": 38676
+      "median_salary_eur": 38676,
+      "median_salary_spezialist_eur": 48540
     },
     {
       "kldb_code": "232",
       "shortage_rating": 1.3,
-      "median_salary_eur": 41040
+      "median_salary_eur": 41040,
+      "median_salary_spezialist_eur": 46452,
+      "median_salary_experte_eur": 47940
     },
     {
       "kldb_code": "242",
       "shortage_rating": 1.3,
-      "median_salary_eur": 48540
+      "median_salary_eur": 48540,
+      "median_salary_spezialist_eur": 54276
     },
     {
       "kldb_code": "244",
       "shortage_rating": 1.3,
-      "median_salary_eur": 44184
+      "median_salary_eur": 44184,
+      "median_salary_spezialist_eur": 56064
     },
     {
       "kldb_code": "251",
       "shortage_rating": 1.5,
-      "median_salary_eur": 51768
+      "median_salary_eur": 51768,
+      "median_salary_spezialist_eur": 64416,
+      "median_salary_experte_eur": 79452,
+      "shortage_rating_spezialist": 1.5,
+      "shortage_rating_experte": 1.3
     },
     {
       "kldb_code": "252",
       "shortage_rating": 2.2,
-      "median_salary_eur": 44976
+      "median_salary_eur": 44976,
+      "median_salary_spezialist_eur": 56892,
+      "median_salary_experte_eur": 87252,
+      "shortage_rating_spezialist": 2.2
     },
     {
       "kldb_code": "261",
       "shortage_rating": 2.2,
-      "median_salary_eur": 49176
+      "median_salary_eur": 49176,
+      "median_salary_spezialist_eur": 62568,
+      "median_salary_experte_eur": 79176
     },
     {
       "kldb_code": "262",
       "shortage_rating": 2.3,
-      "median_salary_eur": 49932
+      "median_salary_eur": 49932,
+      "median_salary_spezialist_eur": 65832,
+      "median_salary_experte_eur": 87168
     },
     {
       "kldb_code": "263",
       "shortage_rating": 1.5,
-      "median_salary_eur": 54072
+      "median_salary_eur": 54072,
+      "median_salary_spezialist_eur": 71916,
+      "median_salary_experte_eur": 81948,
+      "shortage_rating_spezialist": 2.0,
+      "shortage_rating_experte": 2.2
     },
     {
       "kldb_code": "272",
       "shortage_rating": 1.4,
-      "median_salary_eur": 47976
+      "median_salary_eur": 47976,
+      "median_salary_spezialist_eur": 62076,
+      "median_salary_experte_eur": 79584
     },
     {
       "kldb_code": "292",
       "shortage_rating": 1.8,
-      "median_salary_eur": 39816
+      "median_salary_eur": 39816,
+      "median_salary_spezialist_eur": 50928
     },
     {
       "kldb_code": "293",
       "shortage_rating": 1.8,
-      "median_salary_eur": 35916
+      "median_salary_eur": 35916,
+      "median_salary_spezialist_eur": 46164
     },
     {
       "kldb_code": "321",
       "shortage_rating": 1.5,
-      "median_salary_eur": 42708
+      "median_salary_eur": 42708,
+      "median_salary_spezialist_eur": 62640,
+      "median_salary_experte_eur": 70752
     },
     {
       "kldb_code": "322",
       "shortage_rating": 2.6,
-      "median_salary_eur": 49440
+      "median_salary_eur": 49440,
+      "median_salary_spezialist_eur": 68172,
+      "median_salary_experte_eur": 77904
     },
     {
       "kldb_code": "331",
@@ -1945,37 +2540,49 @@
     {
       "kldb_code": "333",
       "shortage_rating": 1.2,
-      "median_salary_eur": 40668
+      "median_salary_eur": 40668,
+      "median_salary_spezialist_eur": 50784
     },
     {
       "kldb_code": "341",
       "shortage_rating": 0.7,
-      "median_salary_eur": 44724
+      "median_salary_eur": 44724,
+      "median_salary_spezialist_eur": 54060
     },
     {
       "kldb_code": "342",
       "shortage_rating": 2.3,
-      "median_salary_eur": 46368
+      "median_salary_eur": 46368,
+      "median_salary_spezialist_eur": 55716
     },
     {
       "kldb_code": "343",
       "shortage_rating": 1.8,
-      "median_salary_eur": 51624
+      "median_salary_eur": 51624,
+      "median_salary_spezialist_eur": 67356
     },
     {
       "kldb_code": "413",
       "shortage_rating": 1,
-      "median_salary_eur": 63312
+      "median_salary_eur": 63312,
+      "median_salary_spezialist_eur": 82296,
+      "median_salary_experte_eur": 90600
     },
     {
       "kldb_code": "431",
       "shortage_rating": 1.3,
-      "median_salary_eur": 64320
+      "median_salary_eur": 64320,
+      "median_salary_spezialist_eur": 80340,
+      "median_salary_experte_eur": 81096,
+      "shortage_rating_spezialist": 2.3,
+      "shortage_rating_experte": 2.0
     },
     {
       "kldb_code": "513",
       "shortage_rating": 1.2,
-      "median_salary_eur": 38496
+      "median_salary_eur": 38496,
+      "median_salary_spezialist_eur": 53052,
+      "median_salary_experte_eur": 59772
     },
     {
       "kldb_code": "514",
@@ -1985,7 +2592,11 @@
     {
       "kldb_code": "516",
       "shortage_rating": 2.3,
-      "median_salary_eur": 43704
+      "median_salary_eur": 43704,
+      "median_salary_spezialist_eur": 53724,
+      "median_salary_experte_eur": 55728,
+      "shortage_rating_spezialist": 1.8,
+      "shortage_rating_experte": 1.6
     },
     {
       "kldb_code": "521",
@@ -2005,32 +2616,48 @@
     {
       "kldb_code": "531",
       "shortage_rating": 1.3,
-      "median_salary_eur": 45432
+      "median_salary_eur": 45432,
+      "median_salary_spezialist_eur": 57384,
+      "median_salary_experte_eur": 75396,
+      "shortage_rating_spezialist": 2.0
     },
     {
       "kldb_code": "541",
       "shortage_rating": 1.5,
-      "median_salary_eur": 31728
+      "median_salary_eur": 31728,
+      "median_salary_spezialist_eur": 48180
     },
     {
       "kldb_code": "611",
       "shortage_rating": 1.5,
-      "median_salary_eur": 53940
+      "median_salary_eur": 53940,
+      "median_salary_spezialist_eur": 70056,
+      "median_salary_experte_eur": 89136,
+      "shortage_rating_spezialist": 1.5,
+      "shortage_rating_experte": 1.2
     },
     {
       "kldb_code": "612",
       "shortage_rating": 1.8,
-      "median_salary_eur": 46116
+      "median_salary_eur": 46116,
+      "median_salary_spezialist_eur": 71592
     },
     {
       "kldb_code": "613",
       "shortage_rating": 1.2,
-      "median_salary_eur": 52980
+      "median_salary_eur": 52980,
+      "median_salary_spezialist_eur": 58944,
+      "median_salary_experte_eur": 78984,
+      "shortage_rating_spezialist": 1.5
     },
     {
       "kldb_code": "621",
       "shortage_rating": 1.3,
-      "median_salary_eur": 36696
+      "median_salary_eur": 36696,
+      "median_salary_spezialist_eur": 50124,
+      "median_salary_experte_eur": 62676,
+      "shortage_rating_spezialist": 1.8,
+      "shortage_rating_experte": 2.6
     },
     {
       "kldb_code": "622",
@@ -2050,62 +2677,89 @@
     {
       "kldb_code": "632",
       "shortage_rating": 2.4,
-      "median_salary_eur": 35832
+      "median_salary_eur": 35832,
+      "median_salary_spezialist_eur": 40308,
+      "median_salary_experte_eur": 60408
     },
     {
       "kldb_code": "633",
       "shortage_rating": 1.8,
-      "median_salary_eur": 31740
+      "median_salary_eur": 31740,
+      "median_salary_spezialist_eur": 39900,
+      "median_salary_experte_eur": 47820
     },
     {
       "kldb_code": "713",
       "shortage_rating": 1.7,
-      "median_salary_eur": 57300
+      "median_salary_eur": 57300,
+      "median_salary_spezialist_eur": 78672,
+      "median_salary_experte_eur": 86376,
+      "shortage_rating_spezialist": 1.5,
+      "shortage_rating_experte": 1.5
     },
     {
       "kldb_code": "714",
       "shortage_rating": 1.2,
-      "median_salary_eur": 49764
+      "median_salary_eur": 49764,
+      "median_salary_spezialist_eur": 60492,
+      "shortage_rating_spezialist": 1.6
     },
     {
       "kldb_code": "721",
       "shortage_rating": 1.8,
-      "median_salary_eur": 77880
+      "median_salary_eur": 77880,
+      "median_salary_spezialist_eur": 82164,
+      "median_salary_experte_eur": 88512,
+      "shortage_rating_spezialist": 1.6,
+      "shortage_rating_experte": 1.8
     },
     {
       "kldb_code": "723",
       "shortage_rating": 2.5,
-      "median_salary_eur": 44172
+      "median_salary_eur": 44172,
+      "median_salary_spezialist_eur": 56256,
+      "median_salary_experte_eur": 90600
     },
     {
       "kldb_code": "731",
       "shortage_rating": 2.4,
-      "median_salary_eur": 42720
+      "median_salary_eur": 42720,
+      "median_salary_spezialist_eur": 74292,
+      "median_salary_experte_eur": 90600,
+      "shortage_rating_experte": 1.6
     },
     {
       "kldb_code": "732",
       "shortage_rating": 1.7,
-      "median_salary_eur": 52416
+      "median_salary_eur": 52416,
+      "median_salary_spezialist_eur": 63240,
+      "median_salary_experte_eur": 73260,
+      "shortage_rating_spezialist": 1.8
     },
     {
       "kldb_code": "733",
       "shortage_rating": 0.8,
-      "median_salary_eur": 54624
+      "median_salary_eur": 54624,
+      "median_salary_experte_eur": 58368
     },
     {
       "kldb_code": "811",
       "shortage_rating": 2.3,
-      "median_salary_eur": 35796
+      "median_salary_eur": 35796,
+      "median_salary_spezialist_eur": 37128
     },
     {
       "kldb_code": "812",
       "shortage_rating": 1.8,
-      "median_salary_eur": 51312
+      "median_salary_eur": 51312,
+      "median_salary_experte_eur": 90600
     },
     {
       "kldb_code": "813",
       "shortage_rating": 2.7,
-      "median_salary_eur": 52968
+      "median_salary_eur": 52968,
+      "median_salary_spezialist_eur": 58500,
+      "median_salary_experte_eur": 62016
     },
     {
       "kldb_code": "821",
@@ -2125,7 +2779,11 @@
     {
       "kldb_code": "921",
       "shortage_rating": 0.8,
-      "median_salary_eur": 48636
+      "median_salary_eur": 48636,
+      "median_salary_spezialist_eur": 72984,
+      "median_salary_experte_eur": 85776,
+      "shortage_rating_spezialist": 1.2,
+      "shortage_rating_experte": 1.3
     }
   ],
   "MV": [
@@ -2152,22 +2810,27 @@
     {
       "kldb_code": "251",
       "shortage_rating": 1.7,
-      "median_salary_eur": 40584
+      "median_salary_eur": 40584,
+      "median_salary_spezialist_eur": 49440,
+      "median_salary_experte_eur": 67956
     },
     {
       "kldb_code": "252",
       "shortage_rating": 2.2,
-      "median_salary_eur": 35412
+      "median_salary_eur": 35412,
+      "median_salary_spezialist_eur": 45168
     },
     {
       "kldb_code": "262",
       "shortage_rating": 2.4,
-      "median_salary_eur": 42240
+      "median_salary_eur": 42240,
+      "median_salary_spezialist_eur": 57396
     },
     {
       "kldb_code": "263",
       "shortage_rating": 1.4,
-      "median_salary_eur": 43572
+      "median_salary_eur": 43572,
+      "median_salary_spezialist_eur": 51660
     },
     {
       "kldb_code": "292",
@@ -2177,7 +2840,8 @@
     {
       "kldb_code": "293",
       "shortage_rating": 2.8,
-      "median_salary_eur": 31284
+      "median_salary_eur": 31284,
+      "median_salary_spezialist_eur": 40716
     },
     {
       "kldb_code": "321",
@@ -2232,7 +2896,8 @@
     {
       "kldb_code": "531",
       "shortage_rating": 2.5,
-      "median_salary_eur": 36552
+      "median_salary_eur": 36552,
+      "median_salary_spezialist_eur": 40188
     },
     {
       "kldb_code": "541",
@@ -2242,7 +2907,8 @@
     {
       "kldb_code": "621",
       "shortage_rating": 1.3,
-      "median_salary_eur": 29352
+      "median_salary_eur": 29352,
+      "median_salary_experte_eur": 49380
     },
     {
       "kldb_code": "622",
@@ -2262,7 +2928,9 @@
     {
       "kldb_code": "632",
       "shortage_rating": 2.8,
-      "median_salary_eur": 29988
+      "median_salary_eur": 29988,
+      "median_salary_spezialist_eur": 31848,
+      "shortage_rating_spezialist": 3.0
     },
     {
       "kldb_code": "633",
@@ -2272,12 +2940,15 @@
     {
       "kldb_code": "714",
       "shortage_rating": 0.8,
-      "median_salary_eur": 38700
+      "median_salary_eur": 38700,
+      "median_salary_spezialist_eur": 44688
     },
     {
       "kldb_code": "732",
       "shortage_rating": 1.5,
-      "median_salary_eur": 48600
+      "median_salary_eur": 48600,
+      "median_salary_spezialist_eur": 58692,
+      "median_salary_experte_eur": 71304
     },
     {
       "kldb_code": "811",
@@ -2287,7 +2958,9 @@
     {
       "kldb_code": "813",
       "shortage_rating": 2.5,
-      "median_salary_eur": 48984
+      "median_salary_eur": 48984,
+      "median_salary_spezialist_eur": 54312,
+      "median_salary_experte_eur": 59244
     },
     {
       "kldb_code": "821",
@@ -2307,19 +2980,25 @@
     {
       "kldb_code": "921",
       "shortage_rating": 1.6,
-      "median_salary_eur": 30948
+      "median_salary_eur": 30948,
+      "median_salary_spezialist_eur": 40284
     }
   ],
   "NI": [
     {
       "kldb_code": "111",
       "shortage_rating": 2,
-      "median_salary_eur": 35604
+      "median_salary_eur": 35604,
+      "median_salary_spezialist_eur": 53676,
+      "median_salary_experte_eur": 64560,
+      "shortage_rating_experte": 1.3
     },
     {
       "kldb_code": "121",
       "shortage_rating": 2,
-      "median_salary_eur": 39300
+      "median_salary_eur": 39300,
+      "median_salary_spezialist_eur": 44244,
+      "median_salary_experte_eur": 56376
     },
     {
       "kldb_code": "221",
@@ -2334,62 +3013,91 @@
     {
       "kldb_code": "223",
       "shortage_rating": 1.7,
-      "median_salary_eur": 39276
+      "median_salary_eur": 39276,
+      "median_salary_spezialist_eur": 48144
     },
     {
       "kldb_code": "232",
       "shortage_rating": 1,
-      "median_salary_eur": 38028
+      "median_salary_eur": 38028,
+      "median_salary_spezialist_eur": 38808,
+      "median_salary_experte_eur": 41508
     },
     {
       "kldb_code": "242",
       "shortage_rating": 1.7,
-      "median_salary_eur": 48252
+      "median_salary_eur": 48252,
+      "median_salary_spezialist_eur": 59964
     },
     {
       "kldb_code": "244",
       "shortage_rating": 2.2,
-      "median_salary_eur": 43620
+      "median_salary_eur": 43620,
+      "median_salary_spezialist_eur": 56424
     },
     {
       "kldb_code": "245",
       "shortage_rating": 1.4,
-      "median_salary_eur": 49812
+      "median_salary_eur": 49812,
+      "median_salary_spezialist_eur": 52824
     },
     {
       "kldb_code": "251",
       "shortage_rating": 1.5,
-      "median_salary_eur": 50076
+      "median_salary_eur": 50076,
+      "median_salary_spezialist_eur": 59340,
+      "median_salary_experte_eur": 75192,
+      "shortage_rating_spezialist": 2.0,
+      "shortage_rating_experte": 0.8
     },
     {
       "kldb_code": "252",
       "shortage_rating": 2.7,
-      "median_salary_eur": 43464
+      "median_salary_eur": 43464,
+      "median_salary_spezialist_eur": 59268,
+      "median_salary_experte_eur": 90600,
+      "shortage_rating_spezialist": 2.0,
+      "shortage_rating_experte": 1.8
     },
     {
       "kldb_code": "261",
       "shortage_rating": 2.2,
-      "median_salary_eur": 47448
+      "median_salary_eur": 47448,
+      "median_salary_spezialist_eur": 57876,
+      "median_salary_experte_eur": 75960
     },
     {
       "kldb_code": "262",
       "shortage_rating": 2.3,
-      "median_salary_eur": 53232
+      "median_salary_eur": 53232,
+      "median_salary_spezialist_eur": 58188,
+      "median_salary_experte_eur": 80940
     },
     {
       "kldb_code": "263",
       "shortage_rating": 1.7,
-      "median_salary_eur": 49584
+      "median_salary_eur": 49584,
+      "median_salary_spezialist_eur": 61728,
+      "median_salary_experte_eur": 81036,
+      "shortage_rating_spezialist": 2.5,
+      "shortage_rating_experte": 1.8
     },
     {
       "kldb_code": "272",
       "shortage_rating": 1.7,
-      "median_salary_eur": 45252
+      "median_salary_eur": 45252,
+      "median_salary_spezialist_eur": 64824,
+      "median_salary_experte_eur": 76152,
+      "shortage_rating_spezialist": 1.5
     },
     {
       "kldb_code": "273",
       "shortage_rating": 1.8,
-      "median_salary_eur": 56784
+      "median_salary_eur": 56784,
+      "median_salary_spezialist_eur": 60276,
+      "median_salary_experte_eur": 77472,
+      "shortage_rating_spezialist": 1.7,
+      "shortage_rating_experte": 1.2
     },
     {
       "kldb_code": "282",
@@ -2399,22 +3107,29 @@
     {
       "kldb_code": "292",
       "shortage_rating": 2.5,
-      "median_salary_eur": 35388
+      "median_salary_eur": 35388,
+      "median_salary_spezialist_eur": 47172
     },
     {
       "kldb_code": "293",
       "shortage_rating": 1.8,
-      "median_salary_eur": 34572
+      "median_salary_eur": 34572,
+      "median_salary_spezialist_eur": 42864
     },
     {
       "kldb_code": "321",
       "shortage_rating": 1.8,
-      "median_salary_eur": 45696
+      "median_salary_eur": 45696,
+      "median_salary_spezialist_eur": 59844,
+      "median_salary_experte_eur": 68172,
+      "shortage_rating_spezialist": 2.0
     },
     {
       "kldb_code": "322",
       "shortage_rating": 2.3,
-      "median_salary_eur": 47952
+      "median_salary_eur": 47952,
+      "median_salary_spezialist_eur": 69288,
+      "median_salary_experte_eur": 72048
     },
     {
       "kldb_code": "331",
@@ -2424,52 +3139,74 @@
     {
       "kldb_code": "332",
       "shortage_rating": 1.3,
-      "median_salary_eur": 39384
+      "median_salary_eur": 39384,
+      "median_salary_spezialist_eur": 43512
     },
     {
       "kldb_code": "333",
       "shortage_rating": 1.8,
-      "median_salary_eur": 42348
+      "median_salary_eur": 42348,
+      "median_salary_spezialist_eur": 52848
     },
     {
       "kldb_code": "341",
       "shortage_rating": 0.5,
-      "median_salary_eur": 42384
+      "median_salary_eur": 42384,
+      "median_salary_spezialist_eur": 48084
     },
     {
       "kldb_code": "342",
       "shortage_rating": 2.7,
-      "median_salary_eur": 44868
+      "median_salary_eur": 44868,
+      "median_salary_spezialist_eur": 51636,
+      "shortage_rating_spezialist": 2.5
     },
     {
       "kldb_code": "343",
       "shortage_rating": 2,
-      "median_salary_eur": 52644
+      "median_salary_eur": 52644,
+      "median_salary_spezialist_eur": 61728,
+      "median_salary_experte_eur": 75192
     },
     {
       "kldb_code": "412",
       "shortage_rating": 0.8,
-      "median_salary_eur": 45492
+      "median_salary_eur": 45492,
+      "median_salary_experte_eur": 65292,
+      "shortage_rating_experte": 1.3
     },
     {
       "kldb_code": "413",
       "shortage_rating": 1.2,
-      "median_salary_eur": 53568
+      "median_salary_eur": 53568,
+      "median_salary_spezialist_eur": 72816,
+      "median_salary_experte_eur": 83580,
+      "shortage_rating_experte": 1.8
     },
     {
       "kldb_code": "431",
       "shortage_rating": 1,
-      "median_salary_eur": 56424
+      "median_salary_eur": 56424,
+      "median_salary_spezialist_eur": 69720,
+      "median_salary_experte_eur": 68064,
+      "shortage_rating_spezialist": 0.8,
+      "shortage_rating_experte": 2.2
     },
     {
       "kldb_code": "434",
       "shortage_rating": 1.8,
-      "median_salary_eur": 47448
+      "median_salary_eur": 47448,
+      "median_salary_spezialist_eur": 62676,
+      "median_salary_experte_eur": 65712,
+      "shortage_rating_spezialist": 2.3,
+      "shortage_rating_experte": 1.5
     },
     {
       "kldb_code": "513",
       "shortage_rating": 1.5,
-      "median_salary_eur": 37404
+      "median_salary_eur": 37404,
+      "median_salary_spezialist_eur": 47844,
+      "median_salary_experte_eur": 57120
     },
     {
       "kldb_code": "514",
@@ -2479,7 +3216,11 @@
     {
       "kldb_code": "516",
       "shortage_rating": 2.3,
-      "median_salary_eur": 46140
+      "median_salary_eur": 46140,
+      "median_salary_spezialist_eur": 49668,
+      "median_salary_experte_eur": 47652,
+      "shortage_rating_spezialist": 1.0,
+      "shortage_rating_experte": 1.2
     },
     {
       "kldb_code": "521",
@@ -2499,32 +3240,47 @@
     {
       "kldb_code": "531",
       "shortage_rating": 1,
-      "median_salary_eur": 44112
+      "median_salary_eur": 44112,
+      "median_salary_spezialist_eur": 59076,
+      "median_salary_experte_eur": 69912,
+      "shortage_rating_spezialist": 2.0
     },
     {
       "kldb_code": "541",
       "shortage_rating": 1.3,
-      "median_salary_eur": 32712
+      "median_salary_eur": 32712,
+      "median_salary_spezialist_eur": 42420
     },
     {
       "kldb_code": "611",
       "shortage_rating": 1.5,
-      "median_salary_eur": 51420
+      "median_salary_eur": 51420,
+      "median_salary_spezialist_eur": 61872,
+      "median_salary_experte_eur": 82500,
+      "shortage_rating_spezialist": 1.3,
+      "shortage_rating_experte": 1.0
     },
     {
       "kldb_code": "612",
       "shortage_rating": 1.5,
-      "median_salary_eur": 42300
+      "median_salary_eur": 42300,
+      "median_salary_spezialist_eur": 67044
     },
     {
       "kldb_code": "613",
       "shortage_rating": 1.4,
-      "median_salary_eur": 47724
+      "median_salary_eur": 47724,
+      "median_salary_spezialist_eur": 49092,
+      "shortage_rating_spezialist": 1.5
     },
     {
       "kldb_code": "621",
       "shortage_rating": 1,
-      "median_salary_eur": 34188
+      "median_salary_eur": 34188,
+      "median_salary_spezialist_eur": 45864,
+      "median_salary_experte_eur": 54060,
+      "shortage_rating_spezialist": 2.0,
+      "shortage_rating_experte": 2.0
     },
     {
       "kldb_code": "622",
@@ -2544,52 +3300,76 @@
     {
       "kldb_code": "632",
       "shortage_rating": 2.2,
-      "median_salary_eur": 33432
+      "median_salary_eur": 33432,
+      "median_salary_spezialist_eur": 36552,
+      "median_salary_experte_eur": 49440,
+      "shortage_rating_spezialist": 2.5
     },
     {
       "kldb_code": "633",
       "shortage_rating": 2.3,
-      "median_salary_eur": 30636
+      "median_salary_eur": 30636,
+      "median_salary_experte_eur": 42336
     },
     {
       "kldb_code": "713",
       "shortage_rating": 2,
-      "median_salary_eur": 52404
+      "median_salary_eur": 52404,
+      "median_salary_spezialist_eur": 71904,
+      "median_salary_experte_eur": 83664,
+      "shortage_rating_spezialist": 1.5,
+      "shortage_rating_experte": 1.2
     },
     {
       "kldb_code": "714",
       "shortage_rating": 1,
-      "median_salary_eur": 43452
+      "median_salary_eur": 43452,
+      "median_salary_spezialist_eur": 52824,
+      "shortage_rating_spezialist": 1.8
     },
     {
       "kldb_code": "721",
       "shortage_rating": 1.8,
-      "median_salary_eur": 64848
+      "median_salary_eur": 64848,
+      "median_salary_spezialist_eur": 67740,
+      "median_salary_experte_eur": 76812,
+      "shortage_rating_spezialist": 1.0
     },
     {
       "kldb_code": "723",
       "shortage_rating": 2.5,
-      "median_salary_eur": 39540
+      "median_salary_eur": 39540,
+      "median_salary_spezialist_eur": 49884,
+      "median_salary_experte_eur": 81036
     },
     {
       "kldb_code": "731",
       "shortage_rating": 2.3,
-      "median_salary_eur": 34500
+      "median_salary_eur": 34500,
+      "median_salary_spezialist_eur": 68892,
+      "median_salary_experte_eur": 73752,
+      "shortage_rating_experte": 2.0
     },
     {
       "kldb_code": "732",
       "shortage_rating": 1.7,
-      "median_salary_eur": 50340
+      "median_salary_eur": 50340,
+      "median_salary_spezialist_eur": 58044,
+      "median_salary_experte_eur": 82812,
+      "shortage_rating_spezialist": 1.8
     },
     {
       "kldb_code": "733",
       "shortage_rating": 0.5,
-      "median_salary_eur": 47328
+      "median_salary_eur": 47328,
+      "median_salary_experte_eur": 57324
     },
     {
       "kldb_code": "811",
       "shortage_rating": 2.3,
-      "median_salary_eur": 34944
+      "median_salary_eur": 34944,
+      "median_salary_spezialist_eur": 37584,
+      "shortage_rating_spezialist": 2.8
     },
     {
       "kldb_code": "812",
@@ -2599,22 +3379,30 @@
     {
       "kldb_code": "813",
       "shortage_rating": 2.8,
-      "median_salary_eur": 51168
+      "median_salary_eur": 51168,
+      "median_salary_spezialist_eur": 60564,
+      "median_salary_experte_eur": 60996,
+      "shortage_rating_spezialist": 2.3,
+      "shortage_rating_experte": 2.3
     },
     {
       "kldb_code": "817",
       "shortage_rating": 1.4,
-      "median_salary_eur": 39276
+      "median_salary_eur": 39276,
+      "median_salary_spezialist_eur": 38964,
+      "shortage_rating_spezialist": 2.7
     },
     {
       "kldb_code": "818",
       "shortage_rating": 2.2,
-      "median_salary_eur": 37008
+      "median_salary_eur": 37008,
+      "median_salary_experte_eur": 62832
     },
     {
       "kldb_code": "821",
       "shortage_rating": 2.8,
-      "median_salary_eur": 48900
+      "median_salary_eur": 48900,
+      "median_salary_experte_eur": 74136
     },
     {
       "kldb_code": "823",
@@ -2624,12 +3412,17 @@
     {
       "kldb_code": "832",
       "shortage_rating": 1.3,
-      "median_salary_eur": 31932
+      "median_salary_eur": 31932,
+      "median_salary_spezialist_eur": 44280
     },
     {
       "kldb_code": "921",
       "shortage_rating": 0.5,
-      "median_salary_eur": 38040
+      "median_salary_eur": 38040,
+      "median_salary_spezialist_eur": 59688,
+      "median_salary_experte_eur": 75276,
+      "shortage_rating_spezialist": 1.0,
+      "shortage_rating_experte": 0.8
     },
     {
       "kldb_code": "932",
@@ -2639,19 +3432,26 @@
     {
       "kldb_code": "945",
       "shortage_rating": 1.5,
-      "median_salary_eur": 41088
+      "median_salary_eur": 41088,
+      "median_salary_spezialist_eur": 50076
     }
   ],
   "NW": [
     {
       "kldb_code": "111",
       "shortage_rating": 2.2,
-      "median_salary_eur": 35700
+      "median_salary_eur": 35700,
+      "median_salary_spezialist_eur": 50568,
+      "median_salary_experte_eur": 60444,
+      "shortage_rating_experte": 0.5
     },
     {
       "kldb_code": "121",
       "shortage_rating": 2,
-      "median_salary_eur": 41688
+      "median_salary_eur": 41688,
+      "median_salary_spezialist_eur": 46668,
+      "median_salary_experte_eur": 60288,
+      "shortage_rating_spezialist": 1.8
     },
     {
       "kldb_code": "212",
@@ -2661,7 +3461,8 @@
     {
       "kldb_code": "221",
       "shortage_rating": 1.8,
-      "median_salary_eur": 43476
+      "median_salary_eur": 43476,
+      "median_salary_spezialist_eur": 61812
     },
     {
       "kldb_code": "222",
@@ -2671,22 +3472,30 @@
     {
       "kldb_code": "223",
       "shortage_rating": 1.3,
-      "median_salary_eur": 40176
+      "median_salary_eur": 40176,
+      "median_salary_spezialist_eur": 50688,
+      "shortage_rating_spezialist": 1.8
     },
     {
       "kldb_code": "231",
       "shortage_rating": 1.3,
-      "median_salary_eur": 47388
+      "median_salary_eur": 47388,
+      "median_salary_spezialist_eur": 58608
     },
     {
       "kldb_code": "232",
       "shortage_rating": 0.8,
-      "median_salary_eur": 40680
+      "median_salary_eur": 40680,
+      "median_salary_spezialist_eur": 44052,
+      "median_salary_experte_eur": 45828,
+      "shortage_rating_spezialist": 1.4
     },
     {
       "kldb_code": "242",
       "shortage_rating": 1.3,
-      "median_salary_eur": 48864
+      "median_salary_eur": 48864,
+      "median_salary_spezialist_eur": 58620,
+      "shortage_rating_spezialist": 1.8
     },
     {
       "kldb_code": "243",
@@ -2696,47 +3505,77 @@
     {
       "kldb_code": "244",
       "shortage_rating": 1.2,
-      "median_salary_eur": 45444
+      "median_salary_eur": 45444,
+      "median_salary_spezialist_eur": 58812,
+      "shortage_rating_spezialist": 2.3
     },
     {
       "kldb_code": "245",
       "shortage_rating": 1.3,
-      "median_salary_eur": 50244
+      "median_salary_eur": 50244,
+      "median_salary_spezialist_eur": 61896
     },
     {
       "kldb_code": "251",
       "shortage_rating": 1.2,
-      "median_salary_eur": 50448
+      "median_salary_eur": 50448,
+      "median_salary_spezialist_eur": 65880,
+      "median_salary_experte_eur": 82248,
+      "shortage_rating_spezialist": 1.7,
+      "shortage_rating_experte": 0.8
     },
     {
       "kldb_code": "252",
       "shortage_rating": 2,
-      "median_salary_eur": 41700
+      "median_salary_eur": 41700,
+      "median_salary_spezialist_eur": 52116,
+      "median_salary_experte_eur": 71760,
+      "shortage_rating_spezialist": 2.2,
+      "shortage_rating_experte": 1.2
     },
     {
       "kldb_code": "261",
       "shortage_rating": 2.2,
-      "median_salary_eur": 49596
+      "median_salary_eur": 49596,
+      "median_salary_spezialist_eur": 62904,
+      "median_salary_experte_eur": 78048,
+      "shortage_rating_spezialist": 1.8,
+      "shortage_rating_experte": 1.8
     },
     {
       "kldb_code": "262",
       "shortage_rating": 2.2,
-      "median_salary_eur": 50148
+      "median_salary_eur": 50148,
+      "median_salary_spezialist_eur": 64704,
+      "median_salary_experte_eur": 86052,
+      "shortage_rating_spezialist": 1.2,
+      "shortage_rating_experte": 1.5
     },
     {
       "kldb_code": "263",
       "shortage_rating": 1.3,
-      "median_salary_eur": 51204
+      "median_salary_eur": 51204,
+      "median_salary_spezialist_eur": 67224,
+      "median_salary_experte_eur": 83952,
+      "shortage_rating_spezialist": 2.3,
+      "shortage_rating_experte": 1.7
     },
     {
       "kldb_code": "272",
       "shortage_rating": 1.3,
-      "median_salary_eur": 48048
+      "median_salary_eur": 48048,
+      "median_salary_spezialist_eur": 64848,
+      "median_salary_experte_eur": 86580,
+      "shortage_rating_spezialist": 1.5
     },
     {
       "kldb_code": "273",
       "shortage_rating": 1.4,
-      "median_salary_eur": 52416
+      "median_salary_eur": 52416,
+      "median_salary_spezialist_eur": 64068,
+      "median_salary_experte_eur": 82464,
+      "shortage_rating_spezialist": 1.7,
+      "shortage_rating_experte": 0.8
     },
     {
       "kldb_code": "281",
@@ -2746,32 +3585,46 @@
     {
       "kldb_code": "282",
       "shortage_rating": 1.2,
-      "median_salary_eur": 33396
+      "median_salary_eur": 33396,
+      "median_salary_spezialist_eur": 50196
     },
     {
       "kldb_code": "292",
       "shortage_rating": 2.2,
-      "median_salary_eur": 37008
+      "median_salary_eur": 37008,
+      "median_salary_spezialist_eur": 49344
     },
     {
       "kldb_code": "293",
       "shortage_rating": 1.8,
-      "median_salary_eur": 35016
+      "median_salary_eur": 35016,
+      "median_salary_spezialist_eur": 45000,
+      "median_salary_experte_eur": 50520,
+      "shortage_rating_spezialist": 2.8
     },
     {
       "kldb_code": "312",
       "shortage_rating": 1.5,
-      "median_salary_eur": 53004
+      "median_salary_eur": 53004,
+      "median_salary_spezialist_eur": 57960,
+      "median_salary_experte_eur": 75036
     },
     {
       "kldb_code": "321",
       "shortage_rating": 1.3,
-      "median_salary_eur": 46404
+      "median_salary_eur": 46404,
+      "median_salary_spezialist_eur": 62808,
+      "median_salary_experte_eur": 72432,
+      "shortage_rating_spezialist": 2.2,
+      "shortage_rating_experte": 1.8
     },
     {
       "kldb_code": "322",
       "shortage_rating": 2.3,
-      "median_salary_eur": 50160
+      "median_salary_eur": 50160,
+      "median_salary_spezialist_eur": 69972,
+      "median_salary_experte_eur": 76116,
+      "shortage_rating_experte": 2.0
     },
     {
       "kldb_code": "331",
@@ -2781,57 +3634,84 @@
     {
       "kldb_code": "332",
       "shortage_rating": 1.2,
-      "median_salary_eur": 39996
+      "median_salary_eur": 39996,
+      "median_salary_spezialist_eur": 44616
     },
     {
       "kldb_code": "333",
       "shortage_rating": 1.3,
-      "median_salary_eur": 41208
+      "median_salary_eur": 41208,
+      "median_salary_spezialist_eur": 52212
     },
     {
       "kldb_code": "341",
       "shortage_rating": 0.5,
-      "median_salary_eur": 43416
+      "median_salary_eur": 43416,
+      "median_salary_spezialist_eur": 52560,
+      "median_salary_experte_eur": 77532
     },
     {
       "kldb_code": "342",
       "shortage_rating": 2.3,
-      "median_salary_eur": 46944
+      "median_salary_eur": 46944,
+      "median_salary_spezialist_eur": 55164,
+      "shortage_rating_spezialist": 2.6
     },
     {
       "kldb_code": "343",
       "shortage_rating": 1.7,
-      "median_salary_eur": 51000
+      "median_salary_eur": 51000,
+      "median_salary_spezialist_eur": 66264,
+      "median_salary_experte_eur": 82608
     },
     {
       "kldb_code": "412",
       "shortage_rating": 1,
-      "median_salary_eur": 47868
+      "median_salary_eur": 47868,
+      "median_salary_experte_eur": 68280,
+      "shortage_rating_experte": 1.3
     },
     {
       "kldb_code": "413",
       "shortage_rating": 1.2,
-      "median_salary_eur": 60192
+      "median_salary_eur": 60192,
+      "median_salary_spezialist_eur": 82848,
+      "median_salary_experte_eur": 89760,
+      "shortage_rating_experte": 1.0
     },
     {
       "kldb_code": "414",
       "shortage_rating": 1.2,
-      "median_salary_eur": 52728
+      "median_salary_eur": 52728,
+      "median_salary_spezialist_eur": 57936,
+      "median_salary_experte_eur": 81204,
+      "shortage_rating_experte": 1.0
     },
     {
       "kldb_code": "431",
       "shortage_rating": 1.2,
-      "median_salary_eur": 60384
+      "median_salary_eur": 60384,
+      "median_salary_spezialist_eur": 70896,
+      "median_salary_experte_eur": 74220,
+      "shortage_rating_spezialist": 1.2,
+      "shortage_rating_experte": 2.0
     },
     {
       "kldb_code": "432",
       "shortage_rating": 1.8,
-      "median_salary_eur": 48672
+      "median_salary_eur": 48672,
+      "median_salary_spezialist_eur": 66768,
+      "median_salary_experte_eur": 72444,
+      "shortage_rating_spezialist": 1.0
     },
     {
       "kldb_code": "434",
       "shortage_rating": 0.8,
-      "median_salary_eur": 52368
+      "median_salary_eur": 52368,
+      "median_salary_spezialist_eur": 69660,
+      "median_salary_experte_eur": 68376,
+      "shortage_rating_spezialist": 1.2,
+      "shortage_rating_experte": 1.2
     },
     {
       "kldb_code": "512",
@@ -2841,7 +3721,9 @@
     {
       "kldb_code": "513",
       "shortage_rating": 1.2,
-      "median_salary_eur": 37824
+      "median_salary_eur": 37824,
+      "median_salary_spezialist_eur": 50904,
+      "median_salary_experte_eur": 60804
     },
     {
       "kldb_code": "514",
@@ -2851,12 +3733,18 @@
     {
       "kldb_code": "515",
       "shortage_rating": 1.4,
-      "median_salary_eur": 45600
+      "median_salary_eur": 45600,
+      "median_salary_spezialist_eur": 51804,
+      "median_salary_experte_eur": 66564
     },
     {
       "kldb_code": "516",
       "shortage_rating": 1.3,
-      "median_salary_eur": 48108
+      "median_salary_eur": 48108,
+      "median_salary_spezialist_eur": 62160,
+      "median_salary_experte_eur": 53040,
+      "shortage_rating_spezialist": 1.0,
+      "shortage_rating_experte": 1.3
     },
     {
       "kldb_code": "521",
@@ -2876,32 +3764,51 @@
     {
       "kldb_code": "531",
       "shortage_rating": 1.3,
-      "median_salary_eur": 43608
+      "median_salary_eur": 43608,
+      "median_salary_spezialist_eur": 54456,
+      "median_salary_experte_eur": 71340,
+      "shortage_rating_spezialist": 1.6
     },
     {
       "kldb_code": "541",
       "shortage_rating": 1.3,
-      "median_salary_eur": 33876
+      "median_salary_eur": 33876,
+      "median_salary_spezialist_eur": 44592,
+      "shortage_rating_spezialist": 1.8
     },
     {
       "kldb_code": "611",
       "shortage_rating": 1.5,
-      "median_salary_eur": 51876
+      "median_salary_eur": 51876,
+      "median_salary_spezialist_eur": 65904,
+      "median_salary_experte_eur": 86688,
+      "shortage_rating_spezialist": 1.7,
+      "shortage_rating_experte": 0.8
     },
     {
       "kldb_code": "612",
       "shortage_rating": 1,
-      "median_salary_eur": 45108
+      "median_salary_eur": 45108,
+      "median_salary_spezialist_eur": 69516,
+      "median_salary_experte_eur": 86256,
+      "shortage_rating_spezialist": 2.0
     },
     {
       "kldb_code": "613",
       "shortage_rating": 1,
-      "median_salary_eur": 50196
+      "median_salary_eur": 50196,
+      "median_salary_spezialist_eur": 55620,
+      "median_salary_experte_eur": 79692,
+      "shortage_rating_spezialist": 1.7
     },
     {
       "kldb_code": "621",
       "shortage_rating": 1.2,
-      "median_salary_eur": 35004
+      "median_salary_eur": 35004,
+      "median_salary_spezialist_eur": 47880,
+      "median_salary_experte_eur": 58944,
+      "shortage_rating_spezialist": 1.8,
+      "shortage_rating_experte": 2.3
     },
     {
       "kldb_code": "622",
@@ -2916,107 +3823,161 @@
     {
       "kldb_code": "631",
       "shortage_rating": 1.5,
-      "median_salary_eur": 38316
+      "median_salary_eur": 38316,
+      "median_salary_experte_eur": 46116
     },
     {
       "kldb_code": "632",
       "shortage_rating": 2.3,
-      "median_salary_eur": 34308
+      "median_salary_eur": 34308,
+      "median_salary_spezialist_eur": 37092,
+      "median_salary_experte_eur": 54348,
+      "shortage_rating_spezialist": 2.3
     },
     {
       "kldb_code": "633",
       "shortage_rating": 2.2,
-      "median_salary_eur": 30948
+      "median_salary_eur": 30948,
+      "median_salary_spezialist_eur": 38700,
+      "median_salary_experte_eur": 44388
     },
     {
       "kldb_code": "713",
       "shortage_rating": 2,
-      "median_salary_eur": 53748
+      "median_salary_eur": 53748,
+      "median_salary_spezialist_eur": 73332,
+      "median_salary_experte_eur": 86028,
+      "shortage_rating_spezialist": 1.2,
+      "shortage_rating_experte": 1.3
     },
     {
       "kldb_code": "714",
       "shortage_rating": 0.8,
-      "median_salary_eur": 47268
+      "median_salary_eur": 47268,
+      "median_salary_spezialist_eur": 57792,
+      "median_salary_experte_eur": 45216,
+      "shortage_rating_spezialist": 1.7
     },
     {
       "kldb_code": "721",
       "shortage_rating": 1.8,
-      "median_salary_eur": 65772
+      "median_salary_eur": 65772,
+      "median_salary_spezialist_eur": 72720,
+      "median_salary_experte_eur": 84516,
+      "shortage_rating_spezialist": 1.2,
+      "shortage_rating_experte": 1.3
     },
     {
       "kldb_code": "723",
       "shortage_rating": 2.5,
-      "median_salary_eur": 41724
+      "median_salary_eur": 41724,
+      "median_salary_spezialist_eur": 53844,
+      "median_salary_experte_eur": 86892,
+      "shortage_rating_experte": 2.5
     },
     {
       "kldb_code": "731",
       "shortage_rating": 2.2,
-      "median_salary_eur": 37608
+      "median_salary_eur": 37608,
+      "median_salary_spezialist_eur": 67920,
+      "median_salary_experte_eur": 87900,
+      "shortage_rating_experte": 1.5
     },
     {
       "kldb_code": "732",
       "shortage_rating": 1.3,
-      "median_salary_eur": 52056
+      "median_salary_eur": 52056,
+      "median_salary_spezialist_eur": 61920,
+      "median_salary_experte_eur": 78576,
+      "shortage_rating_spezialist": 1.8,
+      "shortage_rating_experte": 1.0
     },
     {
       "kldb_code": "733",
       "shortage_rating": 1,
-      "median_salary_eur": 49452
+      "median_salary_eur": 49452,
+      "median_salary_experte_eur": 58740,
+      "shortage_rating_experte": 0.8
     },
     {
       "kldb_code": "811",
       "shortage_rating": 2.5,
-      "median_salary_eur": 35604
+      "median_salary_eur": 35604,
+      "median_salary_spezialist_eur": 37920,
+      "shortage_rating_spezialist": 2.4
     },
     {
       "kldb_code": "812",
       "shortage_rating": 1.8,
-      "median_salary_eur": 50820
+      "median_salary_eur": 50820,
+      "median_salary_spezialist_eur": 53112,
+      "median_salary_experte_eur": 90600
     },
     {
       "kldb_code": "813",
       "shortage_rating": 2.7,
-      "median_salary_eur": 52404
+      "median_salary_eur": 52404,
+      "median_salary_spezialist_eur": 60384,
+      "median_salary_experte_eur": 64572,
+      "shortage_rating_spezialist": 2.0,
+      "shortage_rating_experte": 2.4
     },
     {
       "kldb_code": "817",
       "shortage_rating": 1.5,
-      "median_salary_eur": 39288
+      "median_salary_eur": 39288,
+      "median_salary_spezialist_eur": 40236,
+      "median_salary_experte_eur": 41640,
+      "shortage_rating_spezialist": 2.8
     },
     {
       "kldb_code": "818",
       "shortage_rating": 1.7,
-      "median_salary_eur": 37812
+      "median_salary_eur": 37812,
+      "median_salary_spezialist_eur": 84276,
+      "median_salary_experte_eur": 63576,
+      "shortage_rating_experte": 1.6
     },
     {
       "kldb_code": "821",
       "shortage_rating": 2.7,
-      "median_salary_eur": 50124
+      "median_salary_eur": 50124,
+      "median_salary_experte_eur": 79284
     },
     {
       "kldb_code": "823",
       "shortage_rating": 1.7,
-      "median_salary_eur": 26448
+      "median_salary_eur": 26448,
+      "median_salary_spezialist_eur": 28788,
+      "shortage_rating_spezialist": 2.0
     },
     {
       "kldb_code": "832",
       "shortage_rating": 1.2,
-      "median_salary_eur": 33396
+      "median_salary_eur": 33396,
+      "median_salary_spezialist_eur": 49884
     },
     {
       "kldb_code": "921",
       "shortage_rating": 1.2,
-      "median_salary_eur": 36816
+      "median_salary_eur": 36816,
+      "median_salary_spezialist_eur": 64092,
+      "median_salary_experte_eur": 81648,
+      "shortage_rating_spezialist": 1.0,
+      "shortage_rating_experte": 0.8
     },
     {
       "kldb_code": "932",
       "shortage_rating": 1.8,
-      "median_salary_eur": 36192
+      "median_salary_eur": 36192,
+      "median_salary_spezialist_eur": 44880,
+      "median_salary_experte_eur": 48420
     },
     {
       "kldb_code": "945",
       "shortage_rating": 1.4,
-      "median_salary_eur": 42732
+      "median_salary_eur": 42732,
+      "median_salary_spezialist_eur": 53472
     }
   ],
   "RP": [
@@ -3038,52 +3999,71 @@
     {
       "kldb_code": "223",
       "shortage_rating": 1.7,
-      "median_salary_eur": 39600
+      "median_salary_eur": 39600,
+      "median_salary_spezialist_eur": 43968
     },
     {
       "kldb_code": "232",
       "shortage_rating": 1.3,
-      "median_salary_eur": 39972
+      "median_salary_eur": 39972,
+      "median_salary_spezialist_eur": 43188,
+      "median_salary_experte_eur": 43272
     },
     {
       "kldb_code": "242",
       "shortage_rating": 1.7,
-      "median_salary_eur": 48276
+      "median_salary_eur": 48276,
+      "median_salary_spezialist_eur": 56592
     },
     {
       "kldb_code": "244",
       "shortage_rating": 2.2,
-      "median_salary_eur": 44052
+      "median_salary_eur": 44052,
+      "median_salary_spezialist_eur": 57492
     },
     {
       "kldb_code": "251",
       "shortage_rating": 1.7,
-      "median_salary_eur": 51144
+      "median_salary_eur": 51144,
+      "median_salary_spezialist_eur": 69744,
+      "median_salary_experte_eur": 82212,
+      "shortage_rating_spezialist": 1.8,
+      "shortage_rating_experte": 1.3
     },
     {
       "kldb_code": "252",
       "shortage_rating": 2.5,
-      "median_salary_eur": 42492
+      "median_salary_eur": 42492,
+      "median_salary_spezialist_eur": 51792,
+      "median_salary_experte_eur": 67908,
+      "shortage_rating_spezialist": 2.4
     },
     {
       "kldb_code": "261",
       "shortage_rating": 2.6,
-      "median_salary_eur": 47640
+      "median_salary_eur": 47640,
+      "median_salary_spezialist_eur": 61308
     },
     {
       "kldb_code": "262",
       "shortage_rating": 2.7,
-      "median_salary_eur": 48648
+      "median_salary_eur": 48648,
+      "median_salary_spezialist_eur": 54168
     },
     {
       "kldb_code": "263",
       "shortage_rating": 1.8,
-      "median_salary_eur": 51552
+      "median_salary_eur": 51552,
+      "median_salary_spezialist_eur": 63156,
+      "median_salary_experte_eur": 77436,
+      "shortage_rating_spezialist": 2.4,
+      "shortage_rating_experte": 2.0
     },
     {
       "kldb_code": "272",
       "shortage_rating": 1.6,
-      "median_salary_eur": 45156
+      "median_salary_eur": 45156,
+      "median_salary_spezialist_eur": 62484
     },
     {
       "kldb_code": "292",
@@ -3093,17 +4073,20 @@
     {
       "kldb_code": "293",
       "shortage_rating": 2.2,
-      "median_salary_eur": 35016
+      "median_salary_eur": 35016,
+      "median_salary_spezialist_eur": 45144
     },
     {
       "kldb_code": "321",
       "shortage_rating": 1.7,
-      "median_salary_eur": 45204
+      "median_salary_eur": 45204,
+      "median_salary_spezialist_eur": 62472
     },
     {
       "kldb_code": "322",
       "shortage_rating": 2.6,
-      "median_salary_eur": 49212
+      "median_salary_eur": 49212,
+      "median_salary_spezialist_eur": 55884
     },
     {
       "kldb_code": "331",
@@ -3123,37 +4106,51 @@
     {
       "kldb_code": "341",
       "shortage_rating": 0.7,
-      "median_salary_eur": 42864
+      "median_salary_eur": 42864,
+      "median_salary_spezialist_eur": 54612
     },
     {
       "kldb_code": "342",
       "shortage_rating": 2.5,
-      "median_salary_eur": 43848
+      "median_salary_eur": 43848,
+      "median_salary_spezialist_eur": 54024
     },
     {
       "kldb_code": "343",
       "shortage_rating": 1.8,
-      "median_salary_eur": 49248
+      "median_salary_eur": 49248,
+      "median_salary_spezialist_eur": 81372
     },
     {
       "kldb_code": "413",
       "shortage_rating": 1,
-      "median_salary_eur": 62520
+      "median_salary_eur": 62520,
+      "median_salary_spezialist_eur": 82452,
+      "median_salary_experte_eur": 89688,
+      "shortage_rating_experte": 1.0
     },
     {
       "kldb_code": "431",
       "shortage_rating": 1.4,
-      "median_salary_eur": 56652
+      "median_salary_eur": 56652,
+      "median_salary_spezialist_eur": 73488,
+      "median_salary_experte_eur": 74892,
+      "shortage_rating_experte": 1.8
     },
     {
       "kldb_code": "513",
       "shortage_rating": 1.3,
-      "median_salary_eur": 37980
+      "median_salary_eur": 37980,
+      "median_salary_spezialist_eur": 53964,
+      "median_salary_experte_eur": 62448
     },
     {
       "kldb_code": "516",
       "shortage_rating": 1.8,
-      "median_salary_eur": 48144
+      "median_salary_eur": 48144,
+      "median_salary_spezialist_eur": 67236,
+      "median_salary_experte_eur": 53196,
+      "shortage_rating_experte": 2.3
     },
     {
       "kldb_code": "521",
@@ -3168,7 +4165,9 @@
     {
       "kldb_code": "531",
       "shortage_rating": 1.3,
-      "median_salary_eur": 46200
+      "median_salary_eur": 46200,
+      "median_salary_spezialist_eur": 68604,
+      "median_salary_experte_eur": 69780
     },
     {
       "kldb_code": "541",
@@ -3178,7 +4177,11 @@
     {
       "kldb_code": "611",
       "shortage_rating": 1.3,
-      "median_salary_eur": 50904
+      "median_salary_eur": 50904,
+      "median_salary_spezialist_eur": 63948,
+      "median_salary_experte_eur": 86856,
+      "shortage_rating_spezialist": 1.7,
+      "shortage_rating_experte": 1.2
     },
     {
       "kldb_code": "612",
@@ -3188,7 +4191,10 @@
     {
       "kldb_code": "621",
       "shortage_rating": 1.5,
-      "median_salary_eur": 34812
+      "median_salary_eur": 34812,
+      "median_salary_spezialist_eur": 49152,
+      "median_salary_experte_eur": 57240,
+      "shortage_rating_experte": 2.4
     },
     {
       "kldb_code": "622",
@@ -3213,47 +4219,67 @@
     {
       "kldb_code": "633",
       "shortage_rating": 2.8,
-      "median_salary_eur": 30516
+      "median_salary_eur": 30516,
+      "median_salary_experte_eur": 42396
     },
     {
       "kldb_code": "713",
       "shortage_rating": 1.5,
-      "median_salary_eur": 50544
+      "median_salary_eur": 50544,
+      "median_salary_spezialist_eur": 71448,
+      "median_salary_experte_eur": 86532,
+      "shortage_rating_spezialist": 1.3,
+      "shortage_rating_experte": 1.2
     },
     {
       "kldb_code": "714",
       "shortage_rating": 1,
-      "median_salary_eur": 43596
+      "median_salary_eur": 43596,
+      "median_salary_spezialist_eur": 55212,
+      "shortage_rating_spezialist": 1.8
     },
     {
       "kldb_code": "721",
       "shortage_rating": 1.8,
-      "median_salary_eur": 61968
+      "median_salary_eur": 61968,
+      "median_salary_spezialist_eur": 63360,
+      "median_salary_experte_eur": 75276
     },
     {
       "kldb_code": "723",
       "shortage_rating": 2.3,
-      "median_salary_eur": 39252
+      "median_salary_eur": 39252,
+      "median_salary_spezialist_eur": 49128,
+      "median_salary_experte_eur": 81456
     },
     {
       "kldb_code": "731",
       "shortage_rating": 2.2,
-      "median_salary_eur": 35580
+      "median_salary_eur": 35580,
+      "median_salary_spezialist_eur": 73812,
+      "median_salary_experte_eur": 59880,
+      "shortage_rating_experte": 2.4
     },
     {
       "kldb_code": "732",
       "shortage_rating": 1.8,
-      "median_salary_eur": 51384
+      "median_salary_eur": 51384,
+      "median_salary_spezialist_eur": 58968,
+      "median_salary_experte_eur": 76224,
+      "shortage_rating_spezialist": 2.0
     },
     {
       "kldb_code": "811",
       "shortage_rating": 2.5,
-      "median_salary_eur": 35268
+      "median_salary_eur": 35268,
+      "median_salary_spezialist_eur": 37308
     },
     {
       "kldb_code": "813",
       "shortage_rating": 2.5,
-      "median_salary_eur": 52416
+      "median_salary_eur": 52416,
+      "median_salary_spezialist_eur": 60432,
+      "median_salary_experte_eur": 65184
     },
     {
       "kldb_code": "821",
@@ -3273,7 +4299,10 @@
     {
       "kldb_code": "921",
       "shortage_rating": 0.8,
-      "median_salary_eur": 42792
+      "median_salary_eur": 42792,
+      "median_salary_spezialist_eur": 64716,
+      "median_salary_experte_eur": 89664,
+      "shortage_rating_spezialist": 1.3
     }
   ],
   "SL": [
@@ -3315,12 +4344,17 @@
     {
       "kldb_code": "251",
       "shortage_rating": 1.7,
-      "median_salary_eur": 53748
+      "median_salary_eur": 53748,
+      "median_salary_spezialist_eur": 69372,
+      "median_salary_experte_eur": 82920,
+      "shortage_rating_spezialist": 1.8,
+      "shortage_rating_experte": 1.3
     },
     {
       "kldb_code": "252",
       "shortage_rating": 2.5,
-      "median_salary_eur": 42552
+      "median_salary_eur": 42552,
+      "shortage_rating_spezialist": 2.4
     },
     {
       "kldb_code": "261",
@@ -3335,7 +4369,10 @@
     {
       "kldb_code": "263",
       "shortage_rating": 1.8,
-      "median_salary_eur": 50232
+      "median_salary_eur": 50232,
+      "median_salary_spezialist_eur": 64116,
+      "shortage_rating_spezialist": 2.4,
+      "shortage_rating_experte": 2.0
     },
     {
       "kldb_code": "272",
@@ -3395,12 +4432,15 @@
     {
       "kldb_code": "413",
       "shortage_rating": 1,
-      "median_salary_eur": 49512
+      "median_salary_eur": 49512,
+      "shortage_rating_experte": 1.0
     },
     {
       "kldb_code": "431",
       "shortage_rating": 1.4,
-      "median_salary_eur": 52992
+      "median_salary_eur": 52992,
+      "median_salary_spezialist_eur": 82728,
+      "shortage_rating_experte": 1.8
     },
     {
       "kldb_code": "513",
@@ -3410,7 +4450,9 @@
     {
       "kldb_code": "516",
       "shortage_rating": 1.8,
-      "median_salary_eur": 44016
+      "median_salary_eur": 44016,
+      "median_salary_experte_eur": 43692,
+      "shortage_rating_experte": 2.3
     },
     {
       "kldb_code": "521",
@@ -3435,7 +4477,11 @@
     {
       "kldb_code": "611",
       "shortage_rating": 1.3,
-      "median_salary_eur": 51084
+      "median_salary_eur": 51084,
+      "median_salary_spezialist_eur": 62316,
+      "median_salary_experte_eur": 86520,
+      "shortage_rating_spezialist": 1.7,
+      "shortage_rating_experte": 1.2
     },
     {
       "kldb_code": "612",
@@ -3445,7 +4491,9 @@
     {
       "kldb_code": "621",
       "shortage_rating": 1.5,
-      "median_salary_eur": 34692
+      "median_salary_eur": 34692,
+      "median_salary_experte_eur": 58572,
+      "shortage_rating_experte": 2.4
     },
     {
       "kldb_code": "622",
@@ -3475,17 +4523,24 @@
     {
       "kldb_code": "713",
       "shortage_rating": 1.5,
-      "median_salary_eur": 50832
+      "median_salary_eur": 50832,
+      "median_salary_spezialist_eur": 69432,
+      "median_salary_experte_eur": 83400,
+      "shortage_rating_spezialist": 1.3,
+      "shortage_rating_experte": 1.2
     },
     {
       "kldb_code": "714",
       "shortage_rating": 1,
-      "median_salary_eur": 43464
+      "median_salary_eur": 43464,
+      "median_salary_spezialist_eur": 53484,
+      "shortage_rating_spezialist": 1.8
     },
     {
       "kldb_code": "721",
       "shortage_rating": 1.8,
-      "median_salary_eur": 60264
+      "median_salary_eur": 60264,
+      "median_salary_spezialist_eur": 65712
     },
     {
       "kldb_code": "723",
@@ -3495,12 +4550,15 @@
     {
       "kldb_code": "731",
       "shortage_rating": 2.2,
-      "median_salary_eur": 33756
+      "median_salary_eur": 33756,
+      "shortage_rating_experte": 2.4
     },
     {
       "kldb_code": "732",
       "shortage_rating": 1.8,
-      "median_salary_eur": 52404
+      "median_salary_eur": 52404,
+      "median_salary_spezialist_eur": 60684,
+      "shortage_rating_spezialist": 2.0
     },
     {
       "kldb_code": "811",
@@ -3510,7 +4568,8 @@
     {
       "kldb_code": "813",
       "shortage_rating": 2.5,
-      "median_salary_eur": 54180
+      "median_salary_eur": 54180,
+      "median_salary_spezialist_eur": 61068
     },
     {
       "kldb_code": "821",
@@ -3530,7 +4589,9 @@
     {
       "kldb_code": "921",
       "shortage_rating": 0.8,
-      "median_salary_eur": 35652
+      "median_salary_eur": 35652,
+      "median_salary_spezialist_eur": 59268,
+      "shortage_rating_spezialist": 1.3
     }
   ],
   "SN": [
@@ -3557,52 +4618,75 @@
     {
       "kldb_code": "223",
       "shortage_rating": 1.6,
-      "median_salary_eur": 31608
+      "median_salary_eur": 31608,
+      "median_salary_spezialist_eur": 35748
     },
     {
       "kldb_code": "242",
       "shortage_rating": 1.8,
-      "median_salary_eur": 35952
+      "median_salary_eur": 35952,
+      "median_salary_spezialist_eur": 40416
     },
     {
       "kldb_code": "244",
       "shortage_rating": 2,
-      "median_salary_eur": 35448
+      "median_salary_eur": 35448,
+      "median_salary_spezialist_eur": 44772
     },
     {
       "kldb_code": "251",
       "shortage_rating": 1.2,
-      "median_salary_eur": 40752
+      "median_salary_eur": 40752,
+      "median_salary_spezialist_eur": 49500,
+      "median_salary_experte_eur": 69156,
+      "shortage_rating_spezialist": 1.6,
+      "shortage_rating_experte": 1.6
     },
     {
       "kldb_code": "252",
       "shortage_rating": 2.5,
-      "median_salary_eur": 39072
+      "median_salary_eur": 39072,
+      "median_salary_spezialist_eur": 42972,
+      "median_salary_experte_eur": 75096
     },
     {
       "kldb_code": "261",
       "shortage_rating": 2.4,
-      "median_salary_eur": 40932
+      "median_salary_eur": 40932,
+      "median_salary_spezialist_eur": 50724,
+      "median_salary_experte_eur": 64260
     },
     {
       "kldb_code": "262",
       "shortage_rating": 2.5,
-      "median_salary_eur": 40404
+      "median_salary_eur": 40404,
+      "median_salary_spezialist_eur": 52752,
+      "median_salary_experte_eur": 67296
     },
     {
       "kldb_code": "263",
       "shortage_rating": 2,
-      "median_salary_eur": 42744
+      "median_salary_eur": 42744,
+      "median_salary_spezialist_eur": 55440,
+      "median_salary_experte_eur": 69036,
+      "shortage_rating_spezialist": 2.3,
+      "shortage_rating_experte": 2.2
     },
     {
       "kldb_code": "272",
       "shortage_rating": 1.8,
-      "median_salary_eur": 36276
+      "median_salary_eur": 36276,
+      "median_salary_spezialist_eur": 50568,
+      "shortage_rating_spezialist": 1.8
     },
     {
       "kldb_code": "273",
       "shortage_rating": 1.5,
-      "median_salary_eur": 40380
+      "median_salary_eur": 40380,
+      "median_salary_spezialist_eur": 49572,
+      "median_salary_experte_eur": 69552,
+      "shortage_rating_spezialist": 1.8,
+      "shortage_rating_experte": 1.2
     },
     {
       "kldb_code": "282",
@@ -3617,17 +4701,20 @@
     {
       "kldb_code": "293",
       "shortage_rating": 1.8,
-      "median_salary_eur": 30708
+      "median_salary_eur": 30708,
+      "median_salary_spezialist_eur": 38592
     },
     {
       "kldb_code": "321",
       "shortage_rating": 1.5,
-      "median_salary_eur": 35064
+      "median_salary_eur": 35064,
+      "median_salary_spezialist_eur": 50232
     },
     {
       "kldb_code": "322",
       "shortage_rating": 2.2,
-      "median_salary_eur": 39048
+      "median_salary_eur": 39048,
+      "median_salary_spezialist_eur": 56352
     },
     {
       "kldb_code": "332",
@@ -3642,37 +4729,51 @@
     {
       "kldb_code": "341",
       "shortage_rating": 0.7,
-      "median_salary_eur": 33312
+      "median_salary_eur": 33312,
+      "median_salary_spezialist_eur": 44832
     },
     {
       "kldb_code": "342",
       "shortage_rating": 2.3,
-      "median_salary_eur": 36888
+      "median_salary_eur": 36888,
+      "median_salary_spezialist_eur": 43944
     },
     {
       "kldb_code": "343",
       "shortage_rating": 1.4,
-      "median_salary_eur": 42924
+      "median_salary_eur": 42924,
+      "median_salary_spezialist_eur": 56388,
+      "median_salary_experte_eur": 63648
     },
     {
       "kldb_code": "413",
       "shortage_rating": 1.5,
-      "median_salary_eur": 43248
+      "median_salary_eur": 43248,
+      "median_salary_spezialist_eur": 60120,
+      "median_salary_experte_eur": 59112
     },
     {
       "kldb_code": "431",
       "shortage_rating": 1,
-      "median_salary_eur": 50136
+      "median_salary_eur": 50136,
+      "median_salary_spezialist_eur": 60444,
+      "median_salary_experte_eur": 65400,
+      "shortage_rating_spezialist": 2.0,
+      "shortage_rating_experte": 2.2
     },
     {
       "kldb_code": "513",
       "shortage_rating": 1.5,
-      "median_salary_eur": 35016
+      "median_salary_eur": 35016,
+      "median_salary_spezialist_eur": 43416,
+      "median_salary_experte_eur": 45672
     },
     {
       "kldb_code": "516",
       "shortage_rating": 1.6,
-      "median_salary_eur": 40332
+      "median_salary_eur": 40332,
+      "median_salary_spezialist_eur": 41856,
+      "median_salary_experte_eur": 35760
     },
     {
       "kldb_code": "521",
@@ -3687,7 +4788,9 @@
     {
       "kldb_code": "531",
       "shortage_rating": 1.5,
-      "median_salary_eur": 36588
+      "median_salary_eur": 36588,
+      "median_salary_spezialist_eur": 47196,
+      "median_salary_experte_eur": 65772
     },
     {
       "kldb_code": "541",
@@ -3697,22 +4800,32 @@
     {
       "kldb_code": "611",
       "shortage_rating": 1.5,
-      "median_salary_eur": 43500
+      "median_salary_eur": 43500,
+      "median_salary_spezialist_eur": 52032,
+      "median_salary_experte_eur": 72852,
+      "shortage_rating_spezialist": 1.3,
+      "shortage_rating_experte": 1.4
     },
     {
       "kldb_code": "612",
       "shortage_rating": 1.5,
-      "median_salary_eur": 37200
+      "median_salary_eur": 37200,
+      "median_salary_spezialist_eur": 53412
     },
     {
       "kldb_code": "613",
       "shortage_rating": 1.2,
-      "median_salary_eur": 42144
+      "median_salary_eur": 42144,
+      "median_salary_spezialist_eur": 43824,
+      "shortage_rating_spezialist": 1.3
     },
     {
       "kldb_code": "621",
       "shortage_rating": 1,
-      "median_salary_eur": 31128
+      "median_salary_eur": 31128,
+      "median_salary_spezialist_eur": 42288,
+      "median_salary_experte_eur": 48912,
+      "shortage_rating_experte": 2.2
     },
     {
       "kldb_code": "622",
@@ -3737,47 +4850,66 @@
     {
       "kldb_code": "633",
       "shortage_rating": 2.3,
-      "median_salary_eur": 28572
+      "median_salary_eur": 28572,
+      "median_salary_experte_eur": 38388
     },
     {
       "kldb_code": "713",
       "shortage_rating": 1.8,
-      "median_salary_eur": 45888
+      "median_salary_eur": 45888,
+      "median_salary_spezialist_eur": 62724,
+      "median_salary_experte_eur": 72396,
+      "shortage_rating_spezialist": 1.2,
+      "shortage_rating_experte": 1.5
     },
     {
       "kldb_code": "714",
       "shortage_rating": 0.5,
-      "median_salary_eur": 40872
+      "median_salary_eur": 40872,
+      "median_salary_spezialist_eur": 44028,
+      "shortage_rating_spezialist": 1.8
     },
     {
       "kldb_code": "721",
       "shortage_rating": 1.5,
-      "median_salary_eur": 60504
+      "median_salary_eur": 60504,
+      "median_salary_spezialist_eur": 61560,
+      "median_salary_experte_eur": 68976
     },
     {
       "kldb_code": "723",
       "shortage_rating": 2,
-      "median_salary_eur": 35880
+      "median_salary_eur": 35880,
+      "median_salary_spezialist_eur": 45936,
+      "median_salary_experte_eur": 80016
     },
     {
       "kldb_code": "731",
       "shortage_rating": 2,
-      "median_salary_eur": 33612
+      "median_salary_eur": 33612,
+      "median_salary_spezialist_eur": 68640,
+      "shortage_rating_experte": 1.8
     },
     {
       "kldb_code": "732",
       "shortage_rating": 1.5,
-      "median_salary_eur": 50676
+      "median_salary_eur": 50676,
+      "median_salary_spezialist_eur": 57576,
+      "median_salary_experte_eur": 68868,
+      "shortage_rating_spezialist": 1.3
     },
     {
       "kldb_code": "811",
       "shortage_rating": 2,
-      "median_salary_eur": 31416
+      "median_salary_eur": 31416,
+      "median_salary_spezialist_eur": 34740
     },
     {
       "kldb_code": "813",
       "shortage_rating": 2.2,
-      "median_salary_eur": 48024
+      "median_salary_eur": 48024,
+      "median_salary_spezialist_eur": 54324,
+      "median_salary_experte_eur": 58128
     },
     {
       "kldb_code": "821",
@@ -3797,7 +4929,10 @@
     {
       "kldb_code": "921",
       "shortage_rating": 1.2,
-      "median_salary_eur": 32448
+      "median_salary_eur": 32448,
+      "median_salary_spezialist_eur": 50712,
+      "median_salary_experte_eur": 61296,
+      "shortage_rating_spezialist": 1.4
     }
   ],
   "ST": [
@@ -3824,12 +4959,15 @@
     {
       "kldb_code": "251",
       "shortage_rating": 1.8,
-      "median_salary_eur": 42180
+      "median_salary_eur": 42180,
+      "median_salary_spezialist_eur": 49368,
+      "median_salary_experte_eur": 68772
     },
     {
       "kldb_code": "252",
       "shortage_rating": 2.7,
-      "median_salary_eur": 35616
+      "median_salary_eur": 35616,
+      "median_salary_spezialist_eur": 42576
     },
     {
       "kldb_code": "261",
@@ -3839,12 +4977,14 @@
     {
       "kldb_code": "262",
       "shortage_rating": 2.3,
-      "median_salary_eur": 41784
+      "median_salary_eur": 41784,
+      "median_salary_spezialist_eur": 51336
     },
     {
       "kldb_code": "263",
       "shortage_rating": 1.6,
-      "median_salary_eur": 42768
+      "median_salary_eur": 42768,
+      "median_salary_spezialist_eur": 54888
     },
     {
       "kldb_code": "292",
@@ -3859,7 +4999,8 @@
     {
       "kldb_code": "321",
       "shortage_rating": 1.6,
-      "median_salary_eur": 36336
+      "median_salary_eur": 36336,
+      "median_salary_spezialist_eur": 54672
     },
     {
       "kldb_code": "322",
@@ -3884,17 +5025,21 @@
     {
       "kldb_code": "343",
       "shortage_rating": 1.8,
-      "median_salary_eur": 43788
+      "median_salary_eur": 43788,
+      "median_salary_spezialist_eur": 51744
     },
     {
       "kldb_code": "413",
       "shortage_rating": 1.6,
-      "median_salary_eur": 49704
+      "median_salary_eur": 49704,
+      "median_salary_spezialist_eur": 62772,
+      "median_salary_experte_eur": 68604
     },
     {
       "kldb_code": "431",
       "shortage_rating": 1.3,
-      "median_salary_eur": 47232
+      "median_salary_eur": 47232,
+      "median_salary_spezialist_eur": 52752
     },
     {
       "kldb_code": "513",
@@ -3904,7 +5049,8 @@
     {
       "kldb_code": "516",
       "shortage_rating": 2,
-      "median_salary_eur": 37488
+      "median_salary_eur": 37488,
+      "median_salary_experte_eur": 41556
     },
     {
       "kldb_code": "521",
@@ -3919,7 +5065,9 @@
     {
       "kldb_code": "531",
       "shortage_rating": 1.5,
-      "median_salary_eur": 37608
+      "median_salary_eur": 37608,
+      "median_salary_spezialist_eur": 50172,
+      "median_salary_experte_eur": 66972
     },
     {
       "kldb_code": "541",
@@ -3929,7 +5077,8 @@
     {
       "kldb_code": "621",
       "shortage_rating": 1,
-      "median_salary_eur": 46560
+      "median_salary_eur": 46560,
+      "median_salary_spezialist_eur": 50892
     },
     {
       "kldb_code": "622",
@@ -3949,22 +5098,30 @@
     {
       "kldb_code": "713",
       "shortage_rating": 2,
-      "median_salary_eur": 44472
+      "median_salary_eur": 44472,
+      "median_salary_spezialist_eur": 59988,
+      "median_salary_experte_eur": 70752,
+      "shortage_rating_spezialist": 1.6,
+      "shortage_rating_experte": 1.8
     },
     {
       "kldb_code": "714",
       "shortage_rating": 0.7,
-      "median_salary_eur": 38460
+      "median_salary_eur": 38460,
+      "median_salary_spezialist_eur": 45180
     },
     {
       "kldb_code": "721",
       "shortage_rating": 1.8,
-      "median_salary_eur": 59064
+      "median_salary_eur": 59064,
+      "median_salary_spezialist_eur": 51504
     },
     {
       "kldb_code": "732",
       "shortage_rating": 1.7,
-      "median_salary_eur": 49308
+      "median_salary_eur": 49308,
+      "median_salary_spezialist_eur": 58500,
+      "median_salary_experte_eur": 67476
     },
     {
       "kldb_code": "811",
@@ -3974,7 +5131,9 @@
     {
       "kldb_code": "813",
       "shortage_rating": 2.5,
-      "median_salary_eur": 49296
+      "median_salary_eur": 49296,
+      "median_salary_spezialist_eur": 54024,
+      "median_salary_experte_eur": 59820
     },
     {
       "kldb_code": "821",
@@ -3989,14 +5148,17 @@
     {
       "kldb_code": "921",
       "shortage_rating": 1.6,
-      "median_salary_eur": 30420
+      "median_salary_eur": 30420,
+      "median_salary_spezialist_eur": 45732,
+      "shortage_rating_spezialist": 1.8
     }
   ],
   "SH": [
     {
       "kldb_code": "121",
       "shortage_rating": 2.2,
-      "median_salary_eur": 38928
+      "median_salary_eur": 38928,
+      "median_salary_spezialist_eur": 42036
     },
     {
       "kldb_code": "222",
@@ -4026,12 +5188,19 @@
     {
       "kldb_code": "251",
       "shortage_rating": 1.3,
-      "median_salary_eur": 48252
+      "median_salary_eur": 48252,
+      "median_salary_spezialist_eur": 62436,
+      "median_salary_experte_eur": 80652,
+      "shortage_rating_experte": 1.0
     },
     {
       "kldb_code": "252",
       "shortage_rating": 2.5,
-      "median_salary_eur": 41112
+      "median_salary_eur": 41112,
+      "median_salary_spezialist_eur": 49752,
+      "median_salary_experte_eur": 74880,
+      "shortage_rating_spezialist": 2.3,
+      "shortage_rating_experte": 1.0
     },
     {
       "kldb_code": "261",
@@ -4041,17 +5210,23 @@
     {
       "kldb_code": "262",
       "shortage_rating": 2.5,
-      "median_salary_eur": 46896
+      "median_salary_eur": 46896,
+      "median_salary_spezialist_eur": 56100
     },
     {
       "kldb_code": "263",
       "shortage_rating": 1.5,
-      "median_salary_eur": 49116
+      "median_salary_eur": 49116,
+      "median_salary_spezialist_eur": 60072,
+      "median_salary_experte_eur": 77580,
+      "shortage_rating_spezialist": 2.0,
+      "shortage_rating_experte": 1.8
     },
     {
       "kldb_code": "272",
       "shortage_rating": 1.2,
-      "median_salary_eur": 45336
+      "median_salary_eur": 45336,
+      "median_salary_spezialist_eur": 66996
     },
     {
       "kldb_code": "282",
@@ -4066,17 +5241,20 @@
     {
       "kldb_code": "293",
       "shortage_rating": 2,
-      "median_salary_eur": 34440
+      "median_salary_eur": 34440,
+      "median_salary_spezialist_eur": 44652
     },
     {
       "kldb_code": "321",
       "shortage_rating": 1.3,
-      "median_salary_eur": 45612
+      "median_salary_eur": 45612,
+      "median_salary_spezialist_eur": 59592
     },
     {
       "kldb_code": "322",
       "shortage_rating": 2,
-      "median_salary_eur": 47496
+      "median_salary_eur": 47496,
+      "median_salary_spezialist_eur": 66792
     },
     {
       "kldb_code": "331",
@@ -4096,27 +5274,35 @@
     {
       "kldb_code": "341",
       "shortage_rating": 0.5,
-      "median_salary_eur": 41160
+      "median_salary_eur": 41160,
+      "median_salary_spezialist_eur": 50076
     },
     {
       "kldb_code": "342",
       "shortage_rating": 2.3,
-      "median_salary_eur": 44316
+      "median_salary_eur": 44316,
+      "median_salary_spezialist_eur": 53160
     },
     {
       "kldb_code": "343",
       "shortage_rating": 2.4,
-      "median_salary_eur": 49176
+      "median_salary_eur": 49176,
+      "median_salary_spezialist_eur": 60684
     },
     {
       "kldb_code": "413",
       "shortage_rating": 1.4,
-      "median_salary_eur": 53520
+      "median_salary_eur": 53520,
+      "median_salary_experte_eur": 84120
     },
     {
       "kldb_code": "431",
       "shortage_rating": 1,
-      "median_salary_eur": 51948
+      "median_salary_eur": 51948,
+      "median_salary_spezialist_eur": 60288,
+      "median_salary_experte_eur": 72696,
+      "shortage_rating_spezialist": 1.8,
+      "shortage_rating_experte": 1.6
     },
     {
       "kldb_code": "513",
@@ -4126,7 +5312,11 @@
     {
       "kldb_code": "516",
       "shortage_rating": 1.5,
-      "median_salary_eur": 46860
+      "median_salary_eur": 46860,
+      "median_salary_spezialist_eur": 50064,
+      "median_salary_experte_eur": 54060,
+      "shortage_rating_spezialist": 1.5,
+      "shortage_rating_experte": 1.5
     },
     {
       "kldb_code": "521",
@@ -4146,7 +5336,10 @@
     {
       "kldb_code": "531",
       "shortage_rating": 1.7,
-      "median_salary_eur": 41700
+      "median_salary_eur": 41700,
+      "median_salary_spezialist_eur": 57036,
+      "median_salary_experte_eur": 72192,
+      "shortage_rating_spezialist": 2.0
     },
     {
       "kldb_code": "541",
@@ -4156,7 +5349,11 @@
     {
       "kldb_code": "611",
       "shortage_rating": 1.3,
-      "median_salary_eur": 48756
+      "median_salary_eur": 48756,
+      "median_salary_spezialist_eur": 61608,
+      "median_salary_experte_eur": 82860,
+      "shortage_rating_spezialist": 1.2,
+      "shortage_rating_experte": 0.5
     },
     {
       "kldb_code": "612",
@@ -4166,12 +5363,18 @@
     {
       "kldb_code": "613",
       "shortage_rating": 1,
-      "median_salary_eur": 46188
+      "median_salary_eur": 46188,
+      "median_salary_spezialist_eur": 50904,
+      "shortage_rating_spezialist": 1.5
     },
     {
       "kldb_code": "621",
       "shortage_rating": 1.7,
-      "median_salary_eur": 33360
+      "median_salary_eur": 33360,
+      "median_salary_spezialist_eur": 44964,
+      "median_salary_experte_eur": 56724,
+      "shortage_rating_spezialist": 1.8,
+      "shortage_rating_experte": 2.4
     },
     {
       "kldb_code": "622",
@@ -4196,22 +5399,31 @@
     {
       "kldb_code": "633",
       "shortage_rating": 2,
-      "median_salary_eur": 31368
+      "median_salary_eur": 31368,
+      "median_salary_experte_eur": 43272
     },
     {
       "kldb_code": "713",
       "shortage_rating": 1.8,
-      "median_salary_eur": 50004
+      "median_salary_eur": 50004,
+      "median_salary_spezialist_eur": 69336,
+      "median_salary_experte_eur": 77904,
+      "shortage_rating_spezialist": 1.0,
+      "shortage_rating_experte": 0.7
     },
     {
       "kldb_code": "714",
       "shortage_rating": 0.8,
-      "median_salary_eur": 42192
+      "median_salary_eur": 42192,
+      "median_salary_spezialist_eur": 51408,
+      "shortage_rating_spezialist": 1.3
     },
     {
       "kldb_code": "721",
       "shortage_rating": 1,
-      "median_salary_eur": 63108
+      "median_salary_eur": 63108,
+      "median_salary_spezialist_eur": 64788,
+      "median_salary_experte_eur": 77892
     },
     {
       "kldb_code": "723",
@@ -4221,17 +5433,23 @@
     {
       "kldb_code": "731",
       "shortage_rating": 2,
-      "median_salary_eur": 36240
+      "median_salary_eur": 36240,
+      "median_salary_experte_eur": 71004,
+      "shortage_rating_experte": 1.0
     },
     {
       "kldb_code": "732",
       "shortage_rating": 1.5,
-      "median_salary_eur": 52296
+      "median_salary_eur": 52296,
+      "median_salary_spezialist_eur": 60588,
+      "median_salary_experte_eur": 70332,
+      "shortage_rating_spezialist": 1.7
     },
     {
       "kldb_code": "811",
       "shortage_rating": 2.2,
-      "median_salary_eur": 35616
+      "median_salary_eur": 35616,
+      "median_salary_spezialist_eur": 39192
     },
     {
       "kldb_code": "812",
@@ -4241,12 +5459,16 @@
     {
       "kldb_code": "813",
       "shortage_rating": 2.2,
-      "median_salary_eur": 51984
+      "median_salary_eur": 51984,
+      "median_salary_spezialist_eur": 56892,
+      "median_salary_experte_eur": 62412
     },
     {
       "kldb_code": "817",
       "shortage_rating": 1.6,
-      "median_salary_eur": 38148
+      "median_salary_eur": 38148,
+      "median_salary_spezialist_eur": 40776,
+      "shortage_rating_spezialist": 2.5
     },
     {
       "kldb_code": "821",
@@ -4266,7 +5488,10 @@
     {
       "kldb_code": "921",
       "shortage_rating": 1.2,
-      "median_salary_eur": 38580
+      "median_salary_eur": 38580,
+      "median_salary_spezialist_eur": 62508,
+      "shortage_rating_spezialist": 1.0,
+      "shortage_rating_experte": 0.5
     },
     {
       "kldb_code": "945",
@@ -4288,7 +5513,8 @@
     {
       "kldb_code": "242",
       "shortage_rating": 2.2,
-      "median_salary_eur": 37356
+      "median_salary_eur": 37356,
+      "median_salary_spezialist_eur": 42096
     },
     {
       "kldb_code": "244",
@@ -4298,12 +5524,15 @@
     {
       "kldb_code": "251",
       "shortage_rating": 1.2,
-      "median_salary_eur": 40296
+      "median_salary_eur": 40296,
+      "median_salary_spezialist_eur": 50460,
+      "median_salary_experte_eur": 65532
     },
     {
       "kldb_code": "252",
       "shortage_rating": 2.5,
-      "median_salary_eur": 36156
+      "median_salary_eur": 36156,
+      "median_salary_spezialist_eur": 42360
     },
     {
       "kldb_code": "261",
@@ -4313,12 +5542,16 @@
     {
       "kldb_code": "262",
       "shortage_rating": 2.8,
-      "median_salary_eur": 41040
+      "median_salary_eur": 41040,
+      "median_salary_spezialist_eur": 51216
     },
     {
       "kldb_code": "263",
       "shortage_rating": 2,
-      "median_salary_eur": 41364
+      "median_salary_eur": 41364,
+      "median_salary_spezialist_eur": 50784,
+      "median_salary_experte_eur": 63204,
+      "shortage_rating_experte": 2.5
     },
     {
       "kldb_code": "292",
@@ -4333,7 +5566,8 @@
     {
       "kldb_code": "321",
       "shortage_rating": 2,
-      "median_salary_eur": 37068
+      "median_salary_eur": 37068,
+      "median_salary_spezialist_eur": 56856
     },
     {
       "kldb_code": "322",
@@ -4353,7 +5587,8 @@
     {
       "kldb_code": "431",
       "shortage_rating": 1.3,
-      "median_salary_eur": 47976
+      "median_salary_eur": 47976,
+      "median_salary_spezialist_eur": 51312
     },
     {
       "kldb_code": "513",
@@ -4373,7 +5608,9 @@
     {
       "kldb_code": "531",
       "shortage_rating": 1.8,
-      "median_salary_eur": 34944
+      "median_salary_eur": 34944,
+      "median_salary_spezialist_eur": 49152,
+      "median_salary_experte_eur": 63156
     },
     {
       "kldb_code": "541",
@@ -4383,12 +5620,18 @@
     {
       "kldb_code": "611",
       "shortage_rating": 1.5,
-      "median_salary_eur": 42300
+      "median_salary_eur": 42300,
+      "median_salary_spezialist_eur": 51972,
+      "median_salary_experte_eur": 72768,
+      "shortage_rating_spezialist": 1.6,
+      "shortage_rating_experte": 1.5
     },
     {
       "kldb_code": "621",
       "shortage_rating": 1.7,
-      "median_salary_eur": 30180
+      "median_salary_eur": 30180,
+      "median_salary_spezialist_eur": 42684,
+      "median_salary_experte_eur": 48588
     },
     {
       "kldb_code": "622",
@@ -4408,17 +5651,24 @@
     {
       "kldb_code": "713",
       "shortage_rating": 2.2,
-      "median_salary_eur": 44304
+      "median_salary_eur": 44304,
+      "median_salary_spezialist_eur": 62112,
+      "median_salary_experte_eur": 71508,
+      "shortage_rating_spezialist": 1.5,
+      "shortage_rating_experte": 1.8
     },
     {
       "kldb_code": "714",
       "shortage_rating": 0.7,
-      "median_salary_eur": 38364
+      "median_salary_eur": 38364,
+      "median_salary_spezialist_eur": 45216
     },
     {
       "kldb_code": "732",
       "shortage_rating": 1.7,
-      "median_salary_eur": 47568
+      "median_salary_eur": 47568,
+      "median_salary_spezialist_eur": 58524,
+      "median_salary_experte_eur": 66468
     },
     {
       "kldb_code": "811",
@@ -4428,7 +5678,9 @@
     {
       "kldb_code": "813",
       "shortage_rating": 2.5,
-      "median_salary_eur": 48900
+      "median_salary_eur": 48900,
+      "median_salary_spezialist_eur": 54036,
+      "median_salary_experte_eur": 61152
     },
     {
       "kldb_code": "821",

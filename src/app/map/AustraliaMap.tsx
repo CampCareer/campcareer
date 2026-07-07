@@ -1038,6 +1038,16 @@ function Panel({
   const usShortage = isUS ? (data.usShortageByState[selected] ?? []) : []
   const usHighPay = isUS ? (data.usHighPayByState[selected] ?? []) : []
   const ukHighPay = isUK ? (data.ukHighPayByRegion[selected] ?? []) : []
+  const deSalaryField = deExpLevel === "fachkräfte" ? "median_salary_eur" : deExpLevel === "spezialisten" ? "median_salary_spezialist_eur" : "median_salary_experte_eur"
+  const deShortageField = deExpLevel === "fachkräfte" ? "shortage_rating" : deExpLevel === "spezialisten" ? "shortage_rating_spezialist" : "shortage_rating_experte"
+  const deHighPayForLevel = useMemo(() => {
+    if (activeCountry !== "DE" || !selected) return []
+    const all = data.deShortageByRegion?.[selected] ?? []
+    return all
+      .filter((o) => o[deSalaryField as keyof DERegionOccupation] != null)
+      .sort((a, b) => ((b[deSalaryField as keyof DERegionOccupation] ?? 0) as number) - ((a[deSalaryField as keyof DERegionOccupation] ?? 0) as number))
+      .slice(0, 12)
+  }, [data.deShortageByRegion, selected, deSalaryField, activeCountry])
   const panelSa4Regions = isAU
     ? isWhv
       ? Object.values(SA4_BY_STATE).flat()
@@ -1183,6 +1193,7 @@ function Panel({
         savedOccCodes={savedOccCodes}
         onToggleSave={onToggleSave}
         onShare={onShare}
+        deExpLevel={deExpLevel}
       />
     )
   }
@@ -1385,15 +1396,7 @@ function Panel({
                   </button>
                 ))}
               </div>
-              {deExpLevel === "fachkräfte" ? (
-                <DEHighPayList rows={data.deHighPayByRegion?.[selected] ?? []} onSelectOcc={handleSelectDEOcc} />
-              ) : (
-                <p className="py-8 text-center text-sm text-slate-400">
-                  {deExpLevel === "spezialisten"
-                    ? "Spezialisten salary data coming soon (BA Entgeltatlas 2024)"
-                    : "Experten salary data coming soon (BA Entgeltatlas 2024)"}
-                </p>
-              )}
+              <DEHighPayList rows={deHighPayForLevel} salaryField={deSalaryField} ratingField={deShortageField} onSelectOcc={handleSelectDEOcc} />
             </div>
           ) : (
             <p className="py-8 text-center text-sm text-slate-400">{t.map.selectStateFirst}</p>
@@ -4239,13 +4242,18 @@ function DEShortageList({ rows, onSelectOcc }: { rows: DERegionOccupation[]; onS
   )
 }
 
-function DEHighPayList({ rows, onSelectOcc }: { rows: DERegionOccupation[]; onSelectOcc?: (code: string) => void }) {
+function DEHighPayList({ rows, salaryField, ratingField, onSelectOcc }: {
+  rows: DERegionOccupation[]; salaryField: string; ratingField: string; onSelectOcc?: (code: string) => void
+}) {
   if (rows.length === 0) {
     return <p className="py-8 text-center text-sm text-slate-400">...</p>
   }
   return (
     <ol>
-      {rows.map((r, i) => (
+      {rows.map((r, i) => {
+        const salary = (r as any)[salaryField] as number | null
+        const rating = (r as any)[ratingField] as number | null
+        return (
         <li key={r.kldb_code}>
           <button
             type="button"
@@ -4260,15 +4268,16 @@ function DEHighPayList({ rows, onSelectOcc }: { rows: DERegionOccupation[]; onSe
             </span>
             <span className="shrink-0 text-right">
               <span className="block text-sm font-semibold tabular-nums text-slate-700">
-                {r.median_salary_eur != null ? `€${r.median_salary_eur.toLocaleString()}` : "—"}
+                {salary != null ? `€${salary.toLocaleString()}` : "—"}
               </span>
-              {r.shortage_rating != null && (
-                <span className="text-[10px] text-slate-400">Shortage: {r.shortage_rating.toFixed(1)}/4</span>
+              {rating != null && (
+                <span className="text-[10px] text-slate-400">Shortage: {rating.toFixed(1)}/4</span>
               )}
             </span>
           </button>
         </li>
-      ))}
+        )
+      })}
     </ol>
   )
 }
@@ -4483,6 +4492,7 @@ function DEOccupationDetail({
   savedOccCodes,
   onToggleSave,
   onShare,
+  deExpLevel,
 }: {
   occ: DEOccRow
   regionName: string
@@ -4493,12 +4503,19 @@ function DEOccupationDetail({
   savedOccCodes: Set<string>
   onToggleSave: (occCode: string, occTitle: string) => void
   onShare: () => void
+  deExpLevel: "fachkräfte" | "spezialisten" | "experten"
 }) {
   const isSaved = savedOccCodes.has(occ.kldb_code)
   const hasRange = occ.q1_salary_eur != null && occ.q3_salary_eur != null
   const midSalary = occ.median_salary_eur ?? occ.mean_salary_eur
   const maxRange = occ.q3_salary_eur ?? occ.mean_salary_eur ?? occ.median_salary_eur ?? 1
   const barMax = Math.max(maxRange, occ.mean_salary_eur ?? 0)
+
+  const salaryField = deExpLevel === "fachkräfte" ? "median_salary_eur" : deExpLevel === "spezialisten" ? "median_salary_spezialist_eur" : "median_salary_experte_eur"
+  const ratingField = deExpLevel === "fachkräfte" ? "shortage_rating" : deExpLevel === "spezialisten" ? "shortage_rating_spezialist" : "shortage_rating_experte"
+  const displaySalary = (occ as any)[salaryField] as number | null
+  const displayRating = (occ as any)[ratingField] as number | null
+  const levelLabel = deExpLevel === "fachkräfte" ? "Fachkräfte" : deExpLevel === "spezialisten" ? "Spezialisten" : "Experten"
 
   const regionColleges = data.deColleges
     .filter((c) => c.region === regionCode && c.median_earnings != null)
@@ -4525,15 +4542,15 @@ function DEOccupationDetail({
         {/* Salary cards */}
         <div className="grid grid-cols-2 gap-3">
           <div className="rounded-lg bg-slate-50 px-3 py-2.5">
-            <p className="text-[11px] text-slate-500">Median Salary</p>
+            <p className="text-[11px] text-slate-500">{levelLabel} Salary</p>
             <p className="text-lg font-bold text-slate-900">
-              {occ.median_salary_eur != null ? `€${occ.median_salary_eur.toLocaleString()}` : "—"}
+              {displaySalary != null ? `€${displaySalary.toLocaleString()}` : "—"}
             </p>
           </div>
           <div className="rounded-lg bg-slate-50 px-3 py-2.5">
             <p className="text-[11px] text-slate-500">Shortage Rating</p>
             <p className="text-lg font-bold text-slate-900">
-              {occ.shortage_rating != null ? `${occ.shortage_rating.toFixed(1)}/4` : "—"}
+              {displayRating != null ? `${displayRating.toFixed(1)}/4` : "—"}
             </p>
           </div>
           {occ.on_blue_card_list && (
@@ -4555,7 +4572,7 @@ function DEOccupationDetail({
         {/* Salary range bar */}
         {hasRange && (
           <div className="rounded-lg border border-slate-200 px-4 py-3">
-            <p className="text-[11px] text-slate-500 mb-2">Salary Range (Q1 → Q3)</p>
+            <p className="text-[11px] text-slate-500 mb-2">Salary Range (Q1 → Q3, all levels)</p>
             <div className="relative h-2 rounded-full bg-slate-100">
               <div
                 className="absolute h-2 rounded-full bg-violet-200"

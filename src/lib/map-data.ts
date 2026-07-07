@@ -248,6 +248,10 @@ export interface DEOccRow {
   shortage_rating: number | null
   on_blue_card_list: boolean
   related_broad_field: string | null
+  median_salary_spezialist_eur?: number | null
+  median_salary_experte_eur?: number | null
+  shortage_rating_spezialist?: number | null
+  shortage_rating_experte?: number | null
 }
 
 export interface DERegionOccupation {
@@ -256,6 +260,10 @@ export interface DERegionOccupation {
   median_salary_eur: number | null
   shortage_rating: number | null
   employment_thousands: number | null
+  median_salary_spezialist_eur?: number | null
+  median_salary_experte_eur?: number | null
+  shortage_rating_spezialist?: number | null
+  shortage_rating_experte?: number | null
 }
 
 export interface DECollege {
@@ -1256,7 +1264,11 @@ async function getMapDataUncached(): Promise<MapData> {
     deOccupations[occ.kldb_code] = occ
   }
 
-  const deRegRaw = deRegionOccupationsRaw as unknown as Record<string, { kldb_code: string; shortage_rating: number; median_salary_eur: number | null }[]>
+  const deRegRaw = deRegionOccupationsRaw as unknown as Record<string, {
+    kldb_code: string; shortage_rating: number | null; median_salary_eur: number | null;
+    median_salary_spezialist_eur?: number | null; median_salary_experte_eur?: number | null;
+    shortage_rating_spezialist?: number | null; shortage_rating_experte?: number | null
+  }[]>
   const deShortageByRegion: Record<string, DERegionOccupation[]> = {}
   const deHighPayByRegion: Record<string, DERegionOccupation[]> = {}
   for (const [code, entries] of Object.entries(deRegRaw)) {
@@ -1270,6 +1282,10 @@ async function getMapDataUncached(): Promise<MapData> {
           median_salary_eur: e.median_salary_eur ?? o.median_salary_eur,
           shortage_rating: e.shortage_rating ?? o.shortage_rating,
           employment_thousands: o.employment_thousands,
+          median_salary_spezialist_eur: e.median_salary_spezialist_eur ?? o.median_salary_spezialist_eur ?? null,
+          median_salary_experte_eur: e.median_salary_experte_eur ?? o.median_salary_experte_eur ?? null,
+          shortage_rating_spezialist: e.shortage_rating_spezialist ?? o.shortage_rating_spezialist ?? null,
+          shortage_rating_experte: e.shortage_rating_experte ?? o.shortage_rating_experte ?? null,
         }
       })
       .filter((x): x is DERegionOccupation => x != null)
