@@ -4251,8 +4251,8 @@ function DEHighPayList({ rows, salaryField, ratingField, onSelectOcc }: {
   return (
     <ol>
       {rows.map((r, i) => {
-        const salary = (r as any)[salaryField] as number | null
-        const rating = (r as any)[ratingField] as number | null
+        const salary = (r as Record<string, unknown>)[salaryField] as number | null
+        const rating = (r as Record<string, unknown>)[ratingField] as number | null
         return (
         <li key={r.kldb_code}>
           <button
@@ -4513,8 +4513,8 @@ function DEOccupationDetail({
 
   const salaryField = deExpLevel === "fachkräfte" ? "median_salary_eur" : deExpLevel === "spezialisten" ? "median_salary_spezialist_eur" : "median_salary_experte_eur"
   const ratingField = deExpLevel === "fachkräfte" ? "shortage_rating" : deExpLevel === "spezialisten" ? "shortage_rating_spezialist" : "shortage_rating_experte"
-  const displaySalary = (occ as any)[salaryField] as number | null
-  const displayRating = (occ as any)[ratingField] as number | null
+  const displaySalary = (occ as Record<string, unknown>)[salaryField] as number | null
+  const displayRating = (occ as Record<string, unknown>)[ratingField] as number | null
   const levelLabel = deExpLevel === "fachkräfte" ? "Fachkräfte" : deExpLevel === "spezialisten" ? "Spezialisten" : "Experten"
 
   const regionColleges = data.deColleges
