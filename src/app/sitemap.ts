@@ -210,7 +210,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/de/jobs`, priority: 0.8, changeFrequency: "weekly" },
   ]
 
-  // DE 직업 디테일 — KldB 130개
+  // DE 직업 디테일 — KldB 124개
   const deOccData = (await import("@/data/de-occupations.json")).default as Record<string, { kldb_code: string }>
   const deOccupationPages: MetadataRoute.Sitemap = Object.values(deOccData).map((occ) => ({
     url: `${BASE}/roi-explorer/de/occupation/${occ.kldb_code}`,
