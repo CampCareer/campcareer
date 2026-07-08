@@ -64,10 +64,6 @@ export default function UniversityStaticCard({ d }: { d: UniversityCardData }) {
       ? `${tc}${d.tuition.toLocaleString()}/yr`
       : null
 
-  const tuitionColor = d.tuitionFree
-    ? "text-emerald-700"
-    : "text-slate-900"
-
   return (
     <div className="border-b border-slate-200 bg-white px-4 py-4 sm:px-6">
       {/* Header */}
