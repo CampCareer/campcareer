@@ -64,6 +64,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/us/jobs`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
     { url: `${BASE}/uk`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
     { url: `${BASE}/uk/jobs`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
+    { url: `${BASE}/de`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
+    { url: `${BASE}/de/jobs`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
+    { url: `${BASE}/nl`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
+    { url: `${BASE}/nl/jobs`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
   ]
 
   const blogPages: MetadataRoute.Sitemap = getAllPosts().map((post) => ({
@@ -250,6 +254,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "weekly",
   }))
 
+  // NL 직업 디테일 — SBC 72개
+  const nlOccData = (await import("@/data/nl-occupations.json")).default as Record<string, { sbc_code: string }>
+  const nlOccupationPages: MetadataRoute.Sitemap = Object.values(nlOccData).map((occ) => ({
+    url: `${BASE}/roi-explorer/nl/occupation/${occ.sbc_code}`,
+    lastModified: lastMod,
+    priority: 0.6,
+    changeFrequency: "weekly",
+  }))
+
   // 전용 페이지: /map/au/employment/:state (8개) + /map/au/whv/:state (8개) + /map/au/whv/:state/:sa4 (88개)
   const mapPages: MetadataRoute.Sitemap = []
   const STATE_CODES = ["nsw", "vic", "qld", "sa", "wa", "tas", "nt", "act"]
@@ -264,8 +277,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   const total = staticPages.length + blogPages.length + detailPages.length +
-    occupationPages.length + usOccupationPages.length + caOccupationPages.length + ukOccupationPages.length + ieLangSchoolPages.length + mapPages.length + usUnivPages.length + auUnivPages.length + caUnivPages.length + ukUnivPages.length + deStaticPages.length + deOccupationPages.length + deUnivPages.length + nlUnivPages.length
-  console.log(`[sitemap] counts — static: ${staticPages.length}, blog: ${blogPages.length}, AU colleges: ${detailPages.length}, AU occupations: ${occupationPages.length}, US occupations: ${usOccupationPages.length}, CA occupations: ${caOccupationPages.length}, UK occupations: ${ukOccupationPages.length}, IE schools: ${ieLangSchoolPages.length}, map: ${mapPages.length}, US universities: ${usUnivPages.length}, AU universities: ${auUnivPages.length}, CA universities: ${caUnivPages.length}, UK universities: ${ukUnivPages.length}, DE static: ${deStaticPages.length}, DE occupations: ${deOccupationPages.length}, DE universities: ${deUnivPages.length}, NL universities: ${nlUnivPages.length}, TOTAL: ${total}`)
+    occupationPages.length + usOccupationPages.length + caOccupationPages.length + ukOccupationPages.length + ieLangSchoolPages.length + mapPages.length + usUnivPages.length + auUnivPages.length + caUnivPages.length + ukUnivPages.length + deStaticPages.length + deOccupationPages.length + deUnivPages.length + nlUnivPages.length + nlOccupationPages.length
+  console.log(`[sitemap] counts — static: ${staticPages.length}, blog: ${blogPages.length}, AU colleges: ${detailPages.length}, AU occupations: ${occupationPages.length}, US occupations: ${usOccupationPages.length}, CA occupations: ${caOccupationPages.length}, UK occupations: ${ukOccupationPages.length}, IE schools: ${ieLangSchoolPages.length}, map: ${mapPages.length}, US universities: ${usUnivPages.length}, AU universities: ${auUnivPages.length}, CA universities: ${caUnivPages.length}, UK universities: ${ukUnivPages.length}, DE static: ${deStaticPages.length}, DE occupations: ${deOccupationPages.length}, DE universities: ${deUnivPages.length}, NL universities: ${nlUnivPages.length}, NL occupations: ${nlOccupationPages.length}, TOTAL: ${total}`)
 
-  return [...staticPages, ...blogPages, ...detailPages, ...occupationPages, ...usOccupationPages, ...caOccupationPages, ...ukOccupationPages, ...ieLangSchoolPages, ...mapPages, ...usUnivPages, ...auUnivPages, ...caUnivPages, ...ukUnivPages, ...deStaticPages, ...deOccupationPages, ...deUnivPages, ...nlUnivPages]
+  return [...staticPages, ...blogPages, ...detailPages, ...occupationPages, ...usOccupationPages, ...caOccupationPages, ...ukOccupationPages, ...ieLangSchoolPages, ...mapPages, ...usUnivPages, ...auUnivPages, ...caUnivPages, ...ukUnivPages, ...deStaticPages, ...deOccupationPages, ...deUnivPages, ...nlUnivPages, ...nlOccupationPages]
 }
