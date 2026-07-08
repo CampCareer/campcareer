@@ -8,7 +8,7 @@
     "lng": 4.3627245,
     "qs_rank": 47,
     "m": null,
-    "t": null,
+    "t": 19500,
     "website": "https://www.tudelft.nl/"
   },
   {
@@ -20,7 +20,7 @@
     "lng": 4.8924534,
     "qs_rank": 53,
     "m": null,
-    "t": null,
+    "t": 18000,
     "website": "https://www.uva.nl/"
   },
   {
@@ -32,7 +32,7 @@
     "lng": 5.1215634,
     "qs_rank": 103,
     "m": null,
-    "t": null,
+    "t": 17500,
     "website": "https://www.uu.nl/"
   },
   {
@@ -44,7 +44,7 @@
     "lng": 4.4908843,
     "qs_rank": 119,
     "m": null,
-    "t": null,
+    "t": 17000,
     "website": "https://www.universiteitleiden.nl/"
   },
   {
@@ -56,7 +56,7 @@
     "lng": 5.478633,
     "qs_rank": 140,
     "m": null,
-    "t": null,
+    "t": 16500,
     "website": "https://www.tue.nl/"
   },
   {
@@ -68,7 +68,7 @@
     "lng": 4.47775,
     "qs_rank": 140,
     "m": null,
-    "t": null,
+    "t": 16000,
     "website": "https://www.eur.nl/"
   },
   {
@@ -80,7 +80,7 @@
     "lng": 6.5680077,
     "qs_rank": 147,
     "m": null,
-    "t": null,
+    "t": 15000,
     "website": "https://www.rug.nl/"
   },
   {
@@ -92,7 +92,7 @@
     "lng": 5.6662814,
     "qs_rank": 153,
     "m": null,
-    "t": null,
+    "t": 18300,
     "website": "https://www.wur.nl/"
   },
   {
@@ -104,7 +104,7 @@
     "lng": 4.8924534,
     "qs_rank": 194,
     "m": null,
-    "t": null,
+    "t": 15500,
     "website": "https://www.vu.nl/"
   },
   {
@@ -116,7 +116,7 @@
     "lng": 6.8940537,
     "qs_rank": 203,
     "m": null,
-    "t": null,
+    "t": 16000,
     "website": "https://www.utwente.nl/"
   },
   {
@@ -128,7 +128,7 @@
     "lng": 5.6969882,
     "qs_rank": 239,
     "m": null,
-    "t": null,
+    "t": 14500,
     "website": "https://www.maastrichtuniversity.nl/"
   },
   {
@@ -140,7 +140,7 @@
     "lng": 5.8389606,
     "qs_rank": 279,
     "m": null,
-    "t": null,
+    "t": 14000,
     "website": "https://www.ru.nl/"
   },
   {
@@ -152,7 +152,7 @@
     "lng": 5.0660616,
     "qs_rank": 347,
     "m": null,
-    "t": null,
+    "t": 13000,
     "website": "https://www.tilburguniversity.edu/"
   }
 ]
