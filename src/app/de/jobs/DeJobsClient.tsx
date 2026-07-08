@@ -9,6 +9,7 @@ type DeOccRow = {
   occupation_en: string
   median_salary_eur: number | null
   shortage_rating: number | null
+  on_blue_card_list: boolean
 }
 
 type SortKey = "alpha" | "salary" | "shortage"
@@ -68,6 +69,7 @@ export function DeJobsClient({ occupations }: { occupations: DeOccRow[] }) {
           <thead className="bg-slate-50">
             <tr>
               <th className="text-left px-4 py-3 font-semibold text-slate-500">Occupation</th>
+              <th className="text-center px-4 py-3 font-semibold text-slate-500">Blue Card</th>
               <th className="text-right px-4 py-3 font-semibold text-slate-500">Median Salary</th>
               <th className="text-right px-4 py-3 font-semibold text-slate-500">Shortage</th>
             </tr>
@@ -83,6 +85,15 @@ export function DeJobsClient({ occupations }: { occupations: DeOccRow[] }) {
                     {occ.occupation_en}
                   </Link>
                   <span className="ml-2 text-xs text-slate-400">KldB {occ.kldb_code}</span>
+                </td>
+                <td className="px-4 py-3 text-center">
+                  {occ.on_blue_card_list ? (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold bg-blue-100 text-blue-700">
+                      ✓ EU
+                    </span>
+                  ) : (
+                    <span className="text-slate-300">—</span>
+                  )}
                 </td>
                 <td className="px-4 py-3 text-right font-mono text-slate-700">
                   {occ.median_salary_eur != null ? `€${occ.median_salary_eur.toLocaleString()}` : "—"}

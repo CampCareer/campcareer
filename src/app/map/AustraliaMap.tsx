@@ -23,7 +23,7 @@ import { AffiliateCtas } from "@/components/partners/partner-cta"
 import JobListings from "./JobListings"
 import { EMPLOYMENT_OCCUPATIONS } from "@/data/employment-occupations"
 import { EMPLOYMENT_SALARIES } from "@/data/employment-salaries"
-import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc, CourseLite, USStateInfo, StateMajorDensity, USRankedCollege, AURankedCollege, CACollege, CACity, CAOccRow, CAHighPayOccupation, UKOccRow, UKRegionOccupation, UKCollege, UKCity, DECollege, DERegionOccupation, DEOccRow } from "@/lib/map-data"
+import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc, CourseLite, USStateInfo, StateMajorDensity, USRankedCollege, AURankedCollege, CACollege, CACity, CAOccRow, CAHighPayOccupation, UKOccRow, UKRegionOccupation, UKCollege, UKCity, DECollege, DECity, DERegionOccupation, DEOccRow } from "@/lib/map-data"
 import { createClient } from "@/lib/supabase-client"
 import type { User } from "@supabase/supabase-js"
 import { getShortageOccupations } from "@/lib/ie-shortage-occupations"
@@ -922,6 +922,12 @@ export default function AustraliaMap({
         />
 
         {(selected || activeCountry === "IE" || activeCountry === "UK" || selectedUniv) && (() => {
+          const deCity = activeCountry === "DE" && selectedUniv
+            ? data.deCities.find((c) => c.name.toLowerCase() === (selectedUniv as DECollege).city_name.toLowerCase())
+            : undefined
+          const deRegionOccs = activeCountry === "DE" && selectedUniv
+            ? (data.deHighPayByRegion[(selectedUniv as DECollege).region] ?? [])
+            : undefined
           const panel = selectedUniv ? (
             <UniversityInfoCard
               college={selectedUniv}
@@ -929,6 +935,9 @@ export default function AustraliaMap({
               isSaved={savedUnivSlugs.has(selectedUniv.slug)}
               onToggleSave={toggleSaveUniv}
               onShare={shareUniv}
+              country={activeCountry}
+              deCity={deCity}
+              deRegionOccs={deRegionOccs}
             />
           ) : activeCountry === "IE" ? (
             <IEPanel
@@ -2305,20 +2314,27 @@ function UniversityInfoCard({
   isSaved,
   onToggleSave,
   onShare,
+  country,
+  deCity,
+  deRegionOccs,
 }: {
-  college: USRankedCollege | AURankedCollege | CACollege | UKCollege
+  college: USRankedCollege | AURankedCollege | CACollege | UKCollege | DECollege
   onClose: () => void
   isSaved: boolean
   onToggleSave: (slug: string, name: string) => void
   onShare: (slug: string) => void
+  country?: string | null
+  deCity?: DECity | null
+  deRegionOccs?: DERegionOccupation[]
 }) {
-  const isUK = "region" in college
+  const isUK = "province" in college ? false : "college_id" in college ? false : "cricos_id" in college ? false : country === "UK"
   const isCA = "province" in college
   const isUS = "college_id" in college
-  const stateOrProv = "region" in college ? (college as UKCollege).region : "province" in college ? (college as CACollege).province : (college as USRankedCollege | AURankedCollege).college_state
-  const qsRank = "qsRank" in college ? (college as USRankedCollege | AURankedCollege).qsRank : (college as CACollege | UKCollege).qs_rank
-  const tuition = "avg_net_price" in college ? (college as CACollege).avg_net_price : "tuition" in college ? (college as USRankedCollege | UKCollege).tuition : null
-  const hasEarningsAndCost = "median_earnings" in college && college.median_earnings != null && ("tuition" in college ? college.tuition != null : "avg_net_price" in college ? college.avg_net_price != null : false)
+  const isDE = country === "DE"
+  const stateOrProv = "college_id" in college ? (college as USRankedCollege | AURankedCollege).college_state : "province" in college ? (college as CACollege).province : "region" in college ? (college as UKCollege | DECollege).region : ""
+  const qsRank = "qsRank" in college ? (college as USRankedCollege | AURankedCollege).qsRank : (college as CACollege | UKCollege | DECollege).qs_rank
+  const tuition = isDE ? null : "avg_net_price" in college ? (college as CACollege).avg_net_price : "tuition" in college ? (college as USRankedCollege | UKCollege).tuition : null
+  const hasEarningsAndCost = !isDE && "median_earnings" in college && college.median_earnings != null && ("tuition" in college ? college.tuition != null : "avg_net_price" in college ? college.avg_net_price != null : false)
   const netSalary = hasEarningsAndCost
     ? "tuition" in college
       ? college.median_earnings! - college.tuition!
@@ -2329,7 +2345,7 @@ function UniversityInfoCard({
       ? Math.round((college.median_earnings! / college.tuition!) * 10) / 10
       : Math.round((college.median_earnings! / (college as CACollege).avg_net_price!) * 10) / 10
     : "roi_score" in college ? (college as USRankedCollege).roi_score : null
-  const currency = isUK ? "£" : isCA ? "C$" : isUS ? "$" : "A$"
+  const currency = isDE ? "€" : isUK ? "£" : isCA ? "C$" : isUS ? "$" : "A$"
 
   return (
     <>
@@ -2374,14 +2390,19 @@ function UniversityInfoCard({
         )}
 
         <div className="grid grid-cols-2 gap-3">
-          {tuition != null && (
+          {isDE ? (
+            <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-3">
+              <p className="text-[10px] font-medium uppercase tracking-wide text-emerald-600">Tuition</p>
+              <p className="mt-1 text-lg font-bold text-emerald-700">Tuition-Free</p>
+            </div>
+          ) : tuition != null ? (
             <div className="rounded-lg border border-slate-100 bg-slate-50 p-3">
               <p className="text-[10px] font-medium uppercase tracking-wide text-slate-400">Tuition</p>
               <p className="mt-1 text-lg font-bold tabular-nums text-slate-900">
                 {currency}{tuition.toLocaleString()}
               </p>
             </div>
-          )}
+          ) : null}
           {"median_earnings" in college && college.median_earnings != null && (
             <div className="rounded-lg border border-slate-100 bg-slate-50 p-3">
               <p className="text-[10px] font-medium uppercase tracking-wide text-slate-400">Median Earnings</p>
@@ -2415,6 +2436,48 @@ function UniversityInfoCard({
             </div>
           )}
         </div>
+
+        {isDE && deCity && (
+          <div className="mt-3">
+            <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">City Living Cost</p>
+            <div className="grid grid-cols-2 gap-2">
+              {deCity.rent_median != null && (
+                <div className="rounded-lg border border-slate-100 bg-slate-50 p-2.5">
+                  <p className="text-[10px] font-medium uppercase tracking-wide text-slate-400">Median Rent</p>
+                  <p className="mt-0.5 text-base font-bold tabular-nums text-slate-900">
+                    €{deCity.rent_median.toLocaleString()}/mo
+                  </p>
+                </div>
+              )}
+              {deCity.cost_of_living_index != null && (
+                <div className="rounded-lg border border-slate-100 bg-slate-50 p-2.5">
+                  <p className="text-[10px] font-medium uppercase tracking-wide text-slate-400">Cost of Living</p>
+                  <p className="mt-0.5 text-base font-bold tabular-nums text-slate-900">
+                    {deCity.cost_of_living_index.toFixed(1)}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {isDE && deRegionOccs && deRegionOccs.length > 0 && (
+          <div className="mt-3">
+            <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+              Top-paying jobs in {stateOrProv}
+            </p>
+            <div className="space-y-1.5">
+              {deRegionOccs.slice(0, 4).map((occ) => (
+                <div key={occ.kldb_code} className="flex items-center justify-between rounded-lg border border-slate-100 bg-white px-3 py-2">
+                  <span className="text-xs text-slate-700 truncate mr-2">{occ.occupation_en}</span>
+                  <span className="text-xs font-semibold tabular-nums text-slate-900 shrink-0">
+                    {occ.median_salary_eur != null ? `€${occ.median_salary_eur.toLocaleString()}` : "—"}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {college.website && (
           <a
@@ -4536,7 +4599,13 @@ function DEOccupationDetail({
         <div>
           <h3 className="text-lg font-semibold text-slate-900">{occ.occupation_en}</h3>
           {occ.occupation_de && <p className="text-sm text-slate-500">{occ.occupation_de}</p>}
-          <p className="text-xs text-slate-400 mt-1">{regionName} · KLdB {occ.kldb_code}</p>
+          <p className="text-xs text-slate-400 mt-1">{regionName} · KldB {occ.kldb_code}</p>
+          {occ.on_blue_card_list && (
+            <div className="mt-2 flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2">
+              <span className="text-sm font-bold text-blue-700">EU Blue Card</span>
+              <span className="text-xs text-blue-600">✓ Eligible occupation</span>
+            </div>
+          )}
         </div>
 
         {/* Salary cards */}

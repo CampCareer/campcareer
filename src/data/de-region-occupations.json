@@ -460,6 +460,87 @@
       "shortage_rating": 1.8,
       "median_salary_eur": 37812,
       "median_salary_experte_eur": 47508
+    },
+    {
+      "kldb_code": "271",
+      "occupation_en": "Technical Research and Development",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 89544,
+      "shortage_rating_experte": 1.0
+    },
+    {
+      "kldb_code": "523",
+      "occupation_en": "Aircraft Pilot and Flight Operations",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "532",
+      "occupation_en": "Police, Criminal Investigation, Courts, Corrections",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "634",
+      "occupation_en": "Event Service and Management",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 53748,
+      "shortage_rating_spezialist": 0.8
+    },
+    {
+      "kldb_code": "715",
+      "occupation_en": "Human Resources and Personnel Services",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 58176,
+      "median_salary_experte_eur": 72468,
+      "shortage_rating_spezialist": 1.0,
+      "shortage_rating_experte": 1.6
+    },
+    {
+      "kldb_code": "825",
+      "occupation_en": "Medical, Orthopedic and Rehabilitation Technology",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 54588,
+      "median_salary_experte_eur": 71964,
+      "shortage_rating_spezialist": 2.3
+    },
+    {
+      "kldb_code": "842",
+      "occupation_en": "Vocational Education and Corporate Training",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 65748,
+      "median_salary_experte_eur": 65088,
+      "shortage_rating_spezialist": 2.0,
+      "shortage_rating_experte": 1.4
+    },
+    {
+      "kldb_code": "843",
+      "occupation_en": "University Teaching and Research",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_experte_eur": 62676,
+      "shortage_rating_experte": 1.3
+    },
+    {
+      "kldb_code": "914",
+      "occupation_en": "Economics",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_experte_eur": 76236
     }
   ],
   "BY": [
@@ -940,6 +1021,89 @@
       "shortage_rating": 2,
       "median_salary_eur": 43608,
       "median_salary_spezialist_eur": 55596
+    },
+    {
+      "kldb_code": "271",
+      "occupation_en": "Technical Research and Development",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 75480,
+      "median_salary_experte_eur": 89004,
+      "shortage_rating_experte": 1.2
+    },
+    {
+      "kldb_code": "523",
+      "occupation_en": "Aircraft Pilot and Flight Operations",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 90600,
+      "median_salary_experte_eur": 90600
+    },
+    {
+      "kldb_code": "532",
+      "occupation_en": "Police, Criminal Investigation, Courts, Corrections",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "634",
+      "occupation_en": "Event Service and Management",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 49944
+    },
+    {
+      "kldb_code": "715",
+      "occupation_en": "Human Resources and Personnel Services",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 60912,
+      "median_salary_experte_eur": 73824,
+      "shortage_rating_spezialist": 0.7,
+      "shortage_rating_experte": 1.6
+    },
+    {
+      "kldb_code": "825",
+      "occupation_en": "Medical, Orthopedic and Rehabilitation Technology",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 52728,
+      "median_salary_experte_eur": 70092,
+      "shortage_rating_spezialist": 2.3
+    },
+    {
+      "kldb_code": "842",
+      "occupation_en": "Vocational Education and Corporate Training",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 60180,
+      "median_salary_experte_eur": 65268,
+      "shortage_rating_spezialist": 1.8,
+      "shortage_rating_experte": 1.7
+    },
+    {
+      "kldb_code": "843",
+      "occupation_en": "University Teaching and Research",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_experte_eur": 62292,
+      "shortage_rating_experte": 1.3
+    },
+    {
+      "kldb_code": "914",
+      "occupation_en": "Economics",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_experte_eur": 77868
     }
   ],
   "BE": [
@@ -1308,6 +1472,82 @@
       "median_salary_experte_eur": 78504,
       "shortage_rating_spezialist": 0.8,
       "shortage_rating_experte": 0.5
+    },
+    {
+      "kldb_code": "271",
+      "occupation_en": "Technical Research and Development",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 72084,
+      "median_salary_experte_eur": 75324,
+      "shortage_rating_experte": 1.6
+    },
+    {
+      "kldb_code": "523",
+      "occupation_en": "Aircraft Pilot and Flight Operations",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "532",
+      "occupation_en": "Police, Criminal Investigation, Courts, Corrections",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "634",
+      "occupation_en": "Event Service and Management",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "715",
+      "occupation_en": "Human Resources and Personnel Services",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 54756,
+      "median_salary_experte_eur": 68124,
+      "shortage_rating_spezialist": 0.8,
+      "shortage_rating_experte": 1.4
+    },
+    {
+      "kldb_code": "825",
+      "occupation_en": "Medical, Orthopedic and Rehabilitation Technology",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 50460
+    },
+    {
+      "kldb_code": "842",
+      "occupation_en": "Vocational Education and Corporate Training",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 53124,
+      "median_salary_experte_eur": 76584,
+      "shortage_rating_spezialist": 1.2
+    },
+    {
+      "kldb_code": "843",
+      "occupation_en": "University Teaching and Research",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_experte_eur": 68580,
+      "shortage_rating_experte": 1.0
+    },
+    {
+      "kldb_code": "914",
+      "occupation_en": "Economics",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
     }
   ],
   "BB": [
@@ -1659,6 +1899,80 @@
       "median_salary_spezialist_eur": 49800,
       "shortage_rating_spezialist": 0.8,
       "shortage_rating_experte": 0.5
+    },
+    {
+      "kldb_code": "271",
+      "occupation_en": "Technical Research and Development",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_experte_eur": 67392,
+      "shortage_rating_experte": 1.6
+    },
+    {
+      "kldb_code": "523",
+      "occupation_en": "Aircraft Pilot and Flight Operations",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "532",
+      "occupation_en": "Police, Criminal Investigation, Courts, Corrections",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "634",
+      "occupation_en": "Event Service and Management",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "715",
+      "occupation_en": "Human Resources and Personnel Services",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 51264,
+      "median_salary_experte_eur": 66624,
+      "shortage_rating_spezialist": 0.8,
+      "shortage_rating_experte": 1.4
+    },
+    {
+      "kldb_code": "825",
+      "occupation_en": "Medical, Orthopedic and Rehabilitation Technology",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "842",
+      "occupation_en": "Vocational Education and Corporate Training",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 48840,
+      "median_salary_experte_eur": 57048,
+      "shortage_rating_spezialist": 1.2
+    },
+    {
+      "kldb_code": "843",
+      "occupation_en": "University Teaching and Research",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_experte_eur": 62256,
+      "shortage_rating_experte": 1.0
+    },
+    {
+      "kldb_code": "914",
+      "occupation_en": "Economics",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
     }
   ],
   "HB": [
@@ -2055,6 +2369,80 @@
       "kldb_code": "945",
       "shortage_rating": 1.5,
       "median_salary_eur": 43488
+    },
+    {
+      "kldb_code": "271",
+      "occupation_en": "Technical Research and Development",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_experte_eur": 79596,
+      "shortage_rating_experte": 1.7
+    },
+    {
+      "kldb_code": "523",
+      "occupation_en": "Aircraft Pilot and Flight Operations",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "532",
+      "occupation_en": "Police, Criminal Investigation, Courts, Corrections",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "634",
+      "occupation_en": "Event Service and Management",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "715",
+      "occupation_en": "Human Resources and Personnel Services",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 55632,
+      "median_salary_experte_eur": 67224,
+      "shortage_rating_spezialist": 1.2,
+      "shortage_rating_experte": 2.0
+    },
+    {
+      "kldb_code": "825",
+      "occupation_en": "Medical, Orthopedic and Rehabilitation Technology",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "842",
+      "occupation_en": "Vocational Education and Corporate Training",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 54096,
+      "shortage_rating_spezialist": 1.4,
+      "shortage_rating_experte": 1.5
+    },
+    {
+      "kldb_code": "843",
+      "occupation_en": "University Teaching and Research",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_experte_eur": 66588,
+      "shortage_rating_experte": 1.5
+    },
+    {
+      "kldb_code": "914",
+      "occupation_en": "Economics",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
     }
   ],
   "HH": [
@@ -2409,6 +2797,81 @@
       "shortage_rating": 1.5,
       "median_salary_eur": 46404,
       "median_salary_spezialist_eur": 51516
+    },
+    {
+      "kldb_code": "271",
+      "occupation_en": "Technical Research and Development",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 69468,
+      "median_salary_experte_eur": 77628,
+      "shortage_rating_experte": 1.5
+    },
+    {
+      "kldb_code": "523",
+      "occupation_en": "Aircraft Pilot and Flight Operations",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "532",
+      "occupation_en": "Police, Criminal Investigation, Courts, Corrections",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "634",
+      "occupation_en": "Event Service and Management",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 46464
+    },
+    {
+      "kldb_code": "715",
+      "occupation_en": "Human Resources and Personnel Services",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 56172,
+      "median_salary_experte_eur": 71580,
+      "shortage_rating_spezialist": 1.0,
+      "shortage_rating_experte": 1.3
+    },
+    {
+      "kldb_code": "825",
+      "occupation_en": "Medical, Orthopedic and Rehabilitation Technology",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 53868
+    },
+    {
+      "kldb_code": "842",
+      "occupation_en": "Vocational Education and Corporate Training",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 59736
+    },
+    {
+      "kldb_code": "843",
+      "occupation_en": "University Teaching and Research",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_experte_eur": 65220,
+      "shortage_rating_experte": 1.2
+    },
+    {
+      "kldb_code": "914",
+      "occupation_en": "Economics",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
     }
   ],
   "HE": [
@@ -2784,6 +3247,84 @@
       "median_salary_experte_eur": 85776,
       "shortage_rating_spezialist": 1.2,
       "shortage_rating_experte": 1.3
+    },
+    {
+      "kldb_code": "271",
+      "occupation_en": "Technical Research and Development",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 72972,
+      "median_salary_experte_eur": 86580,
+      "shortage_rating_experte": 2.0
+    },
+    {
+      "kldb_code": "523",
+      "occupation_en": "Aircraft Pilot and Flight Operations",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 90600,
+      "median_salary_experte_eur": 90600
+    },
+    {
+      "kldb_code": "532",
+      "occupation_en": "Police, Criminal Investigation, Courts, Corrections",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "634",
+      "occupation_en": "Event Service and Management",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 48012
+    },
+    {
+      "kldb_code": "715",
+      "occupation_en": "Human Resources and Personnel Services",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 61032,
+      "median_salary_experte_eur": 73944,
+      "shortage_rating_spezialist": 1.0,
+      "shortage_rating_experte": 1.8
+    },
+    {
+      "kldb_code": "825",
+      "occupation_en": "Medical, Orthopedic and Rehabilitation Technology",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 50388
+    },
+    {
+      "kldb_code": "842",
+      "occupation_en": "Vocational Education and Corporate Training",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 59184,
+      "median_salary_experte_eur": 68364
+    },
+    {
+      "kldb_code": "843",
+      "occupation_en": "University Teaching and Research",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_experte_eur": 66036,
+      "shortage_rating_experte": 1.6
+    },
+    {
+      "kldb_code": "914",
+      "occupation_en": "Economics",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
     }
   ],
   "MV": [
@@ -2982,6 +3523,74 @@
       "shortage_rating": 1.6,
       "median_salary_eur": 30948,
       "median_salary_spezialist_eur": 40284
+    },
+    {
+      "kldb_code": "271",
+      "occupation_en": "Technical Research and Development",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_experte_eur": 63504
+    },
+    {
+      "kldb_code": "523",
+      "occupation_en": "Aircraft Pilot and Flight Operations",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "532",
+      "occupation_en": "Police, Criminal Investigation, Courts, Corrections",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "634",
+      "occupation_en": "Event Service and Management",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "715",
+      "occupation_en": "Human Resources and Personnel Services",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_experte_eur": 65976
+    },
+    {
+      "kldb_code": "825",
+      "occupation_en": "Medical, Orthopedic and Rehabilitation Technology",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "842",
+      "occupation_en": "Vocational Education and Corporate Training",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 46932,
+      "median_salary_experte_eur": 64584
+    },
+    {
+      "kldb_code": "843",
+      "occupation_en": "University Teaching and Research",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_experte_eur": 63564
+    },
+    {
+      "kldb_code": "914",
+      "occupation_en": "Economics",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
     }
   ],
   "NI": [
@@ -3434,6 +4043,83 @@
       "shortage_rating": 1.5,
       "median_salary_eur": 41088,
       "median_salary_spezialist_eur": 50076
+    },
+    {
+      "kldb_code": "271",
+      "occupation_en": "Technical Research and Development",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 80136,
+      "median_salary_experte_eur": 75984,
+      "shortage_rating_experte": 1.7
+    },
+    {
+      "kldb_code": "523",
+      "occupation_en": "Aircraft Pilot and Flight Operations",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "532",
+      "occupation_en": "Police, Criminal Investigation, Courts, Corrections",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "634",
+      "occupation_en": "Event Service and Management",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "715",
+      "occupation_en": "Human Resources and Personnel Services",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 52584,
+      "median_salary_experte_eur": 68592,
+      "shortage_rating_spezialist": 1.2,
+      "shortage_rating_experte": 2.0
+    },
+    {
+      "kldb_code": "825",
+      "occupation_en": "Medical, Orthopedic and Rehabilitation Technology",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 47916
+    },
+    {
+      "kldb_code": "842",
+      "occupation_en": "Vocational Education and Corporate Training",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 55788,
+      "median_salary_experte_eur": 60876,
+      "shortage_rating_spezialist": 1.4,
+      "shortage_rating_experte": 1.5
+    },
+    {
+      "kldb_code": "843",
+      "occupation_en": "University Teaching and Research",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_experte_eur": 63684,
+      "shortage_rating_experte": 1.5
+    },
+    {
+      "kldb_code": "914",
+      "occupation_en": "Economics",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
     }
   ],
   "NW": [
@@ -3978,6 +4664,90 @@
       "shortage_rating": 1.4,
       "median_salary_eur": 42732,
       "median_salary_spezialist_eur": 53472
+    },
+    {
+      "kldb_code": "271",
+      "occupation_en": "Technical Research and Development",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 69924,
+      "median_salary_experte_eur": 82248,
+      "shortage_rating_experte": 1.2
+    },
+    {
+      "kldb_code": "523",
+      "occupation_en": "Aircraft Pilot and Flight Operations",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 89088,
+      "median_salary_experte_eur": 89340
+    },
+    {
+      "kldb_code": "532",
+      "occupation_en": "Police, Criminal Investigation, Courts, Corrections",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "634",
+      "occupation_en": "Event Service and Management",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 46848,
+      "shortage_rating_spezialist": 2.5
+    },
+    {
+      "kldb_code": "715",
+      "occupation_en": "Human Resources and Personnel Services",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 56064,
+      "median_salary_experte_eur": 70056,
+      "shortage_rating_spezialist": 0.7,
+      "shortage_rating_experte": 1.5
+    },
+    {
+      "kldb_code": "825",
+      "occupation_en": "Medical, Orthopedic and Rehabilitation Technology",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 50160,
+      "median_salary_experte_eur": 69012,
+      "shortage_rating_spezialist": 2.0
+    },
+    {
+      "kldb_code": "842",
+      "occupation_en": "Vocational Education and Corporate Training",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 56352,
+      "median_salary_experte_eur": 67812,
+      "shortage_rating_spezialist": 1.3,
+      "shortage_rating_experte": 1.0
+    },
+    {
+      "kldb_code": "843",
+      "occupation_en": "University Teaching and Research",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_experte_eur": 63012,
+      "shortage_rating_experte": 1.3
+    },
+    {
+      "kldb_code": "914",
+      "occupation_en": "Economics",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_experte_eur": 82776
     }
   ],
   "RP": [
@@ -4303,6 +5073,79 @@
       "median_salary_spezialist_eur": 64716,
       "median_salary_experte_eur": 89664,
       "shortage_rating_spezialist": 1.3
+    },
+    {
+      "kldb_code": "271",
+      "occupation_en": "Technical Research and Development",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 69336,
+      "median_salary_experte_eur": 80400
+    },
+    {
+      "kldb_code": "523",
+      "occupation_en": "Aircraft Pilot and Flight Operations",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "532",
+      "occupation_en": "Police, Criminal Investigation, Courts, Corrections",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "634",
+      "occupation_en": "Event Service and Management",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "715",
+      "occupation_en": "Human Resources and Personnel Services",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 59748,
+      "median_salary_experte_eur": 71712,
+      "shortage_rating_spezialist": 1.0
+    },
+    {
+      "kldb_code": "825",
+      "occupation_en": "Medical, Orthopedic and Rehabilitation Technology",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 52344
+    },
+    {
+      "kldb_code": "842",
+      "occupation_en": "Vocational Education and Corporate Training",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 58224,
+      "shortage_rating_spezialist": 2.0
+    },
+    {
+      "kldb_code": "843",
+      "occupation_en": "University Teaching and Research",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_experte_eur": 66204,
+      "shortage_rating_experte": 1.8
+    },
+    {
+      "kldb_code": "914",
+      "occupation_en": "Economics",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
     }
   ],
   "SL": [
@@ -4592,6 +5435,76 @@
       "median_salary_eur": 35652,
       "median_salary_spezialist_eur": 59268,
       "shortage_rating_spezialist": 1.3
+    },
+    {
+      "kldb_code": "271",
+      "occupation_en": "Technical Research and Development",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_experte_eur": 79932
+    },
+    {
+      "kldb_code": "523",
+      "occupation_en": "Aircraft Pilot and Flight Operations",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "532",
+      "occupation_en": "Police, Criminal Investigation, Courts, Corrections",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "634",
+      "occupation_en": "Event Service and Management",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "715",
+      "occupation_en": "Human Resources and Personnel Services",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_experte_eur": 71412,
+      "shortage_rating_spezialist": 1.0
+    },
+    {
+      "kldb_code": "825",
+      "occupation_en": "Medical, Orthopedic and Rehabilitation Technology",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "842",
+      "occupation_en": "Vocational Education and Corporate Training",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 56676,
+      "shortage_rating_spezialist": 2.0
+    },
+    {
+      "kldb_code": "843",
+      "occupation_en": "University Teaching and Research",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_experte_eur": 62148,
+      "shortage_rating_experte": 1.8
+    },
+    {
+      "kldb_code": "914",
+      "occupation_en": "Economics",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
     }
   ],
   "SN": [
@@ -4933,6 +5846,80 @@
       "median_salary_spezialist_eur": 50712,
       "median_salary_experte_eur": 61296,
       "shortage_rating_spezialist": 1.4
+    },
+    {
+      "kldb_code": "271",
+      "occupation_en": "Technical Research and Development",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 58572,
+      "median_salary_experte_eur": 63828
+    },
+    {
+      "kldb_code": "523",
+      "occupation_en": "Aircraft Pilot and Flight Operations",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "532",
+      "occupation_en": "Police, Criminal Investigation, Courts, Corrections",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "634",
+      "occupation_en": "Event Service and Management",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "715",
+      "occupation_en": "Human Resources and Personnel Services",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 47220,
+      "median_salary_experte_eur": 64596,
+      "shortage_rating_spezialist": 0.8
+    },
+    {
+      "kldb_code": "825",
+      "occupation_en": "Medical, Orthopedic and Rehabilitation Technology",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 41220
+    },
+    {
+      "kldb_code": "842",
+      "occupation_en": "Vocational Education and Corporate Training",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 46776,
+      "median_salary_experte_eur": 65016,
+      "shortage_rating_spezialist": 1.4
+    },
+    {
+      "kldb_code": "843",
+      "occupation_en": "University Teaching and Research",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_experte_eur": 60576,
+      "shortage_rating_experte": 1.8
+    },
+    {
+      "kldb_code": "914",
+      "occupation_en": "Economics",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
     }
   ],
   "ST": [
@@ -5151,6 +6138,75 @@
       "median_salary_eur": 30420,
       "median_salary_spezialist_eur": 45732,
       "shortage_rating_spezialist": 1.8
+    },
+    {
+      "kldb_code": "271",
+      "occupation_en": "Technical Research and Development",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_experte_eur": 60888
+    },
+    {
+      "kldb_code": "523",
+      "occupation_en": "Aircraft Pilot and Flight Operations",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "532",
+      "occupation_en": "Police, Criminal Investigation, Courts, Corrections",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "634",
+      "occupation_en": "Event Service and Management",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "715",
+      "occupation_en": "Human Resources and Personnel Services",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 47904,
+      "median_salary_experte_eur": 65940
+    },
+    {
+      "kldb_code": "825",
+      "occupation_en": "Medical, Orthopedic and Rehabilitation Technology",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "842",
+      "occupation_en": "Vocational Education and Corporate Training",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 45492,
+      "median_salary_experte_eur": 58248
+    },
+    {
+      "kldb_code": "843",
+      "occupation_en": "University Teaching and Research",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_experte_eur": 63204
+    },
+    {
+      "kldb_code": "914",
+      "occupation_en": "Economics",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
     }
   ],
   "SH": [
@@ -5497,6 +6553,80 @@
       "kldb_code": "945",
       "shortage_rating": 1.5,
       "median_salary_eur": 43488
+    },
+    {
+      "kldb_code": "271",
+      "occupation_en": "Technical Research and Development",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 78552,
+      "median_salary_experte_eur": 78852,
+      "shortage_rating_experte": 1.5
+    },
+    {
+      "kldb_code": "523",
+      "occupation_en": "Aircraft Pilot and Flight Operations",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "532",
+      "occupation_en": "Police, Criminal Investigation, Courts, Corrections",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "634",
+      "occupation_en": "Event Service and Management",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "715",
+      "occupation_en": "Human Resources and Personnel Services",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 52116,
+      "median_salary_experte_eur": 69204,
+      "shortage_rating_spezialist": 1.0,
+      "shortage_rating_experte": 1.3
+    },
+    {
+      "kldb_code": "825",
+      "occupation_en": "Medical, Orthopedic and Rehabilitation Technology",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 51612
+    },
+    {
+      "kldb_code": "842",
+      "occupation_en": "Vocational Education and Corporate Training",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 56940
+    },
+    {
+      "kldb_code": "843",
+      "occupation_en": "University Teaching and Research",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_experte_eur": 66180,
+      "shortage_rating_experte": 1.2
+    },
+    {
+      "kldb_code": "914",
+      "occupation_en": "Economics",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
     }
   ],
   "TH": [
@@ -5691,6 +6821,78 @@
       "kldb_code": "832",
       "shortage_rating": 0.5,
       "median_salary_eur": 32472
+    },
+    {
+      "kldb_code": "271",
+      "occupation_en": "Technical Research and Development",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 58272,
+      "median_salary_experte_eur": 65616
+    },
+    {
+      "kldb_code": "523",
+      "occupation_en": "Aircraft Pilot and Flight Operations",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "532",
+      "occupation_en": "Police, Criminal Investigation, Courts, Corrections",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "634",
+      "occupation_en": "Event Service and Management",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
+    },
+    {
+      "kldb_code": "715",
+      "occupation_en": "Human Resources and Personnel Services",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 45780,
+      "median_salary_experte_eur": 64488
+    },
+    {
+      "kldb_code": "825",
+      "occupation_en": "Medical, Orthopedic and Rehabilitation Technology",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 40956
+    },
+    {
+      "kldb_code": "842",
+      "occupation_en": "Vocational Education and Corporate Training",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_spezialist_eur": 44412,
+      "median_salary_experte_eur": 57864
+    },
+    {
+      "kldb_code": "843",
+      "occupation_en": "University Teaching and Research",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null,
+      "median_salary_experte_eur": 62532,
+      "shortage_rating_experte": 1.0
+    },
+    {
+      "kldb_code": "914",
+      "occupation_en": "Economics",
+      "median_salary_eur": null,
+      "shortage_rating": null,
+      "employment_thousands": null
     }
   ]
 }

@@ -95,6 +95,12 @@ export default async function Page({ params }: { params: { code: string } }) {
             {occ.occupation_de && (
               <p className="text-lg text-slate-500">{occ.occupation_de}</p>
             )}
+            {occ.on_blue_card_list && (
+              <div className="mt-3 flex items-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3">
+                <span className="text-sm font-bold text-blue-700">EU Blue Card</span>
+                <span className="text-xs text-blue-600">✓ This occupation is eligible — a fast-track visa to work in Germany</span>
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">

@@ -20,6 +20,7 @@ type DeOccRow = {
   occupation_en: string
   median_salary_eur: number | null
   shortage_rating: number | null
+  on_blue_card_list: boolean
 }
 
 function getOccupations(): DeOccRow[] {

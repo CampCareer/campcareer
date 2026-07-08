@@ -8,7 +8,7 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: "Work & Study in Germany — Salary, Visa & Career Guide | CampCareer",
   description:
-    "Browse 140+ KldB-classified occupations in Germany with real salary data, skills shortage ratings, and career pathways. Data from Bundesagentur für Arbeit (BA).",
+    "Browse 124 KldB-classified occupations in Germany with real salary data, skills shortage ratings, and career pathways. Data from Bundesagentur für Arbeit (BA).",
 }
 
 export default async function DeHubPage() {
@@ -32,7 +32,7 @@ export default async function DeHubPage() {
             Work & Live in Germany
           </h1>
           <p className="text-lg text-slate-600 max-w-2xl mb-8">
-            Real salary data, skills shortage ratings, and career pathways for 140+ KldB-classified occupations —
+            Real salary data, skills shortage ratings, and career pathways for 124 KldB-classified occupations —
             all sourced from Bundesagentur für Arbeit (BA) statistics.
           </p>
           <div className="flex flex-wrap gap-3">
@@ -40,7 +40,7 @@ export default async function DeHubPage() {
               href="/de/jobs"
               className="px-5 py-2.5 bg-brand text-white rounded-full text-sm font-semibold hover:bg-brand-press transition-colors"
             >
-              Browse 140+ Occupations
+              Browse 124 Occupations
             </Link>
             <Link
               href="/roi-explorer?country=de"
@@ -53,7 +53,7 @@ export default async function DeHubPage() {
 
         <section className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-12">
           {[
-            { value: "140+", label: "Occupations" },
+            { value: "124", label: "Occupations" },
             { value: "16", label: "Bundesländer" },
             { value: "55+", label: "Universities" },
             { value: "EU Blue Card", label: "Visa Pathway" },
@@ -74,7 +74,7 @@ export default async function DeHubPage() {
             >
               <div className="font-semibold mb-1">💼 Jobs & Occupations</div>
               <div className="text-sm text-slate-500">
-                140+ occupations with salary, shortage & career pathways
+                124 occupations with salary, shortage & career pathways
               </div>
             </Link>
             <Link
