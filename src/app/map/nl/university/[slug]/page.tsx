@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation"
 import { getMapData } from "@/lib/map-data"
 import { pageMetadata } from "@/lib/seo"
-import { UK_REGION_NAMES } from "../../../states"
+import { NL_PROVINCE_NAMES } from "../../../states"
 import CampCareerMaps from "../../../CampCareerMaps"
 import UniversityStaticCard from "../../../UniversityStaticCard"
 
@@ -9,46 +9,44 @@ export const revalidate = 86400
 
 export async function generateStaticParams() {
   const data = await getMapData()
-  return data.ukColleges.map((c) => ({ slug: c.slug }))
+  return data.nlColleges.map((c) => ({ slug: c.slug }))
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const data = await getMapData()
-  const college = data.ukColleges.find((c) => c.slug === params.slug)
+  const college = data.nlColleges.find((c) => c.slug === params.slug)
   if (!college) return pageMetadata({ title: "University Details", description: "", path: "/map" })
 
-  const regionName = UK_REGION_NAMES[college.region] ?? college.region
+  const provinceName = NL_PROVINCE_NAMES[college.province] ?? college.province
   const rankStr = college.qs_rank ? `QS #${college.qs_rank} · ` : ""
-  const earningsStr = college.median_earnings != null
-    ? `Median earnings £${college.median_earnings.toLocaleString()} · `
+  const tuitionStr = college.tuition != null
+    ? `Tuition €${college.tuition.toLocaleString()}/yr (non-EU). `
     : ""
-  const title = `${college.college_name} — ${rankStr}${regionName}, UK`
-  const description = college.median_earnings != null
-    ? `${college.college_name} in ${college.city_name}, ${regionName}. ${rankStr}${earningsStr}Tuition £${college.tuition?.toLocaleString() ?? "—"}/yr for international students.`
-    : `${college.college_name} in ${college.city_name}, ${regionName}. ${rankStr}Tuition, earnings, and in-demand occupations for international students in the UK.`
+  const title = `${college.college_name} — ${rankStr}${provinceName}, Netherlands`
+  const description = `${college.college_name} in ${college.city_name}, ${provinceName}. ${rankStr}${tuitionStr}Top Dutch research university — study in the Netherlands as an international student.`
 
   return pageMetadata({
     title,
     description,
-    path: `/map/uk/university/${params.slug}`,
+    path: `/map/nl/university/${params.slug}`,
   })
 }
 
 export default async function UniversityPage({ params }: { params: { slug: string } }) {
   const data = await getMapData()
-  const college = data.ukColleges.find((c) => c.slug === params.slug)
+  const college = data.nlColleges.find((c) => c.slug === params.slug)
   if (!college) notFound()
 
-  const regionName = UK_REGION_NAMES[college.region] ?? college.region
+  const provinceName = NL_PROVINCE_NAMES[college.province] ?? college.province
 
-  const cityData = data.ukCities.find(
+  const cityData = data.nlCities.find(
     (c) => c.name.toLowerCase() === college.city_name.toLowerCase(),
   )
 
-  const regionHighPay = data.ukHighPayByRegion[college.region] ?? []
-  const topOccs = regionHighPay
+  const provinceHighPay = data.nlHighPayByRegion[college.province] ?? []
+  const topOccs = provinceHighPay
     .slice(0, 5)
-    .map((o) => ({ name: o.occupation_en, salary: o.median_salary_gbp, currency: "£" }))
+    .map((o) => ({ name: o.occupation_en, salary: o.median_salary_eur, currency: "€" }))
 
   return (
     <div className="flex h-[calc(100vh-3.5rem)] flex-col">
@@ -56,17 +54,17 @@ export default async function UniversityPage({ params }: { params: { slug: strin
         d={{
           name: college.college_name,
           cityName: college.city_name,
-          locationLabel: regionName,
-          countryCode: "UK",
-          countryLabel: "United Kingdom",
+          locationLabel: provinceName,
+          countryCode: "NL",
+          countryLabel: "Netherlands",
           qsRank: college.qs_rank,
           website: college.website,
           tuition: college.tuition,
-          tuitionCurrency: "£",
+          tuitionCurrency: "€",
           medianEarnings: college.median_earnings,
-          earningsCurrency: "£",
+          earningsCurrency: "€",
           rentMedian: cityData?.rent_median ?? undefined,
-          rentCurrency: "£",
+          rentCurrency: "€",
           topOccupations: topOccs,
         }}
       />
