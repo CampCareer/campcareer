@@ -1,6 +1,6 @@
 import { getMapData } from "@/lib/map-data"
 import { pageMetadata } from "@/lib/seo"
-import AustraliaMap from "../../../../AustraliaMap"
+import CampCareerMaps from "../../../../CampCareerMaps"
 import { STATE_CODES, type StateCode } from "../../../../states"
 import { WHV_REGIONS } from "@/data/whv-regions"
 
@@ -49,13 +49,13 @@ export default async function WhvSA4Page({ params }: { params: { state: string; 
   if (!sc || !WHV_REGIONS[params.sa4]) {
     return (
       <div className="h-[calc(100vh-3.5rem)] w-full">
-        <AustraliaMap data={data} />
+        <CampCareerMaps data={data} />
       </div>
     )
   }
   return (
     <div className="h-[calc(100vh-3.5rem)] w-full">
-      <AustraliaMap data={data} initialState={sc} initialTab="whv" initialSA4={params.sa4} />
+      <CampCareerMaps data={data} initialState={sc} initialTab="whv" initialSA4={params.sa4} />
     </div>
   )
 }

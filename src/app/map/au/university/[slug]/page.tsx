@@ -1,6 +1,6 @@
 import { getMapData } from "@/lib/map-data"
 import { pageMetadata } from "@/lib/seo"
-import AustraliaMap from "../../../AustraliaMap"
+import CampCareerMaps from "../../../CampCareerMaps"
 
 export const revalidate = 86400
 
@@ -23,7 +23,7 @@ export default async function UniversityPage({ params }: { params: { slug: strin
   const data = await getMapData()
   return (
     <div className="h-[calc(100vh-3.5rem)] w-full">
-      <AustraliaMap data={data} initialUniversity={params.slug} />
+      <CampCareerMaps data={data} initialUniversity={params.slug} />
     </div>
   )
 }

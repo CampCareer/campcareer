@@ -1,6 +1,6 @@
 import { getMapData } from "@/lib/map-data"
 import { pageMetadata } from "@/lib/seo"
-import AustraliaMap from "../../../AustraliaMap"
+import CampCareerMaps from "../../../CampCareerMaps"
 import { STATE_CODES, type StateCode } from "../../../states"
 
 const STATE_NAMES_KO: Record<StateCode, string> = {
@@ -37,7 +37,7 @@ export default async function WhvStatePage({ params }: { params: { state: string
   const sc = toStateCode(params.state)
   return (
     <div className="h-[calc(100vh-3.5rem)] w-full">
-      <AustraliaMap data={data} initialState={sc ?? undefined} initialTab="whv" />
+      <CampCareerMaps data={data} initialState={sc ?? undefined} initialTab="whv" />
     </div>
   )
 }
