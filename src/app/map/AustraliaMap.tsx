@@ -23,7 +23,7 @@ import { AffiliateCtas } from "@/components/partners/partner-cta"
 import JobListings from "./JobListings"
 import { EMPLOYMENT_OCCUPATIONS } from "@/data/employment-occupations"
 import { EMPLOYMENT_SALARIES } from "@/data/employment-salaries"
-import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc, CourseLite, USStateInfo, StateMajorDensity, USRankedCollege, AURankedCollege, CACollege, CACity, CAOccRow, CAHighPayOccupation, UKOccRow, UKRegionOccupation, UKCollege, UKCity, DECollege, DECity, DERegionOccupation, DEOccRow, NLCollege } from "@/lib/map-data"
+import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc, CourseLite, USStateInfo, StateMajorDensity, USRankedCollege, AURankedCollege, CACollege, CACity, CAOccRow, CAHighPayOccupation, UKOccRow, UKRegionOccupation, UKCollege, UKCity, DECollege, DECity, DERegionOccupation, DEOccRow, NLCollege, NLCity, NLRegionOccupation, NLOccRow } from "@/lib/map-data"
 import { createClient } from "@/lib/supabase-client"
 import type { User } from "@supabase/supabase-js"
 import { getShortageOccupations } from "@/lib/ie-shortage-occupations"
@@ -168,8 +168,8 @@ export default function AustraliaMap({
 
   const shareUniv = (slug: string) => {
     if (!selectedUniv) return
-    const country = "college_id" in selectedUniv ? "us" : "qs_rank" in selectedUniv ? "ca" : "au"
-    const shareUrl = `${window.location.origin}/map/${country}/university/${slug}`
+    const cc = activeCountry?.toLowerCase() ?? "au"
+    const shareUrl = `${window.location.origin}/map/${cc}/university/${slug}`
     if (navigator.share) {
       navigator.share({ url: shareUrl })
     } else {
@@ -459,12 +459,14 @@ export default function AustraliaMap({
       setSelectedUniv(deUniv)
       setActiveCountry("DE")
       setSelected(deUniv.region)
+      return
     }
     const nlUniv = data.nlColleges?.find((c) => c.slug === initialUniversity)
     if (nlUniv) {
       setSelectedUniv(nlUniv)
       setActiveCountry("NL")
       setSelected(nlUniv.province)
+      return
     }
   }, [initialUniversity, data.usRankedColleges, data.auRankedColleges, data.caColleges, data.ukColleges, data.deColleges, data.nlColleges])
 
@@ -583,11 +585,11 @@ export default function AustraliaMap({
           ? IE_COUNTY_NAMES[selected] ?? selected
           : activeCountry === "UK"
             ? UK_REGION_NAMES[selected] ?? selected
-    : activeCountry === "DE"
-      ? DE_BUNDESLAND_NAMES[selected] ?? selected
-      : activeCountry === "NL"
-        ? NL_PROVINCE_NAMES[selected] ?? selected
-        : US_STATE_NAMES[selected]
+            : activeCountry === "DE"
+              ? DE_BUNDESLAND_NAMES[selected] ?? selected
+              : activeCountry === "NL"
+                ? NL_PROVINCE_NAMES[selected] ?? selected
+                : US_STATE_NAMES[selected]
     : ""
   const occLabel = selectedOccCode
     ? activeCountry === "AU"
@@ -996,6 +998,14 @@ export default function AustraliaMap({
               setSelectedUniv(deUniv)
               setActiveCountry("DE")
               setSelected(deUniv.region)
+              return
+            }
+            const nlUniv = data.nlColleges.find((c) => c.slug === slug)
+            if (nlUniv) {
+              setSelectedUniv(nlUniv)
+              setActiveCountry("NL")
+              setSelected(nlUniv.province)
+              return
             }
           }}
           onReset={onReset}
@@ -1009,6 +1019,12 @@ export default function AustraliaMap({
           const deRegionOccs = activeCountry === "DE" && selectedUniv
             ? (data.deHighPayByRegion[(selectedUniv as DECollege).region] ?? [])
             : undefined
+          const nlCity = activeCountry === "NL" && selectedUniv
+            ? data.nlCities.find((c) => c.name.toLowerCase() === (selectedUniv as NLCollege).city_name.toLowerCase())
+            : undefined
+          const nlRegionOccs = activeCountry === "NL" && selectedUniv
+            ? (data.nlHighPayByRegion[(selectedUniv as NLCollege).province] ?? [])
+            : undefined
           const panel = selectedUniv ? (
             <UniversityInfoCard
               college={selectedUniv}
@@ -1019,6 +1035,8 @@ export default function AustraliaMap({
               country={activeCountry}
               deCity={deCity}
               deRegionOccs={deRegionOccs}
+              nlCity={nlCity}
+              nlRegionOccs={nlRegionOccs}
             />
           ) : activeCountry === "IE" ? (
             <IEPanel
@@ -1120,6 +1138,7 @@ function Panel({
     : activeCountry === "CA" ? CA_PROVINCE_NAMES[selected] ?? selected
     : isUK ? UK_REGION_NAMES[selected] ?? selected
     : activeCountry === "DE" ? DE_BUNDESLAND_NAMES[selected] ?? selected
+    : activeCountry === "NL" ? NL_PROVINCE_NAMES[selected] ?? selected
     : US_STATE_NAMES[selected] ?? selected
 
   const [deExpLevel, setDeExpLevel] = useState<"fachkräfte" | "spezialisten" | "experten">("fachkräfte")
@@ -1195,6 +1214,11 @@ function Panel({
     return data.deOccupations[selectedOccCode] ?? null
   }, [selectedOccCode, activeCountry, data.deOccupations])
 
+  const resolvedNLOcc = useMemo<NLOccRow | null>(() => {
+    if (!selectedOccCode || activeCountry !== "NL") return null
+    return data.nlOccupations[selectedOccCode] ?? null
+  }, [selectedOccCode, activeCountry, data.nlOccupations])
+
   const handleSelectOcc = (code: string) => {
     const name = data.auOccupations[code]?.occupation_en ?? code
     track("click_occupation", { type: "au", code, name, state: selected })
@@ -1217,6 +1241,11 @@ function Panel({
   const handleSelectDEOcc = (code: string) => {
     const name = data.deOccupations[code]?.occupation_en ?? code
     track("click_occupation", { type: "de", code, name, state: selected })
+    setSelectedOccCode(code)
+  }
+  const handleSelectNLOcc = (code: string) => {
+    const name = data.nlOccupations[code]?.occupation_en ?? code
+    track("click_occupation", { type: "nl", code, name, state: selected })
     setSelectedOccCode(code)
   }
   const handleBack = () => setSelectedOccCode(null)
@@ -1284,6 +1313,22 @@ function Panel({
         onToggleSave={onToggleSave}
         onShare={onShare}
         deExpLevel={deExpLevel}
+      />
+    )
+  }
+
+  if (selectedOccCode && resolvedNLOcc) {
+    return (
+      <NLOccupationDetail
+        occ={resolvedNLOcc}
+        regionName={stateName}
+        regionCode={selected}
+        data={data}
+        onBack={handleBack}
+        onClose={onClose}
+        savedOccCodes={savedOccCodes}
+        onToggleSave={onToggleSave}
+        onShare={onShare}
       />
     )
   }
@@ -1440,7 +1485,14 @@ function Panel({
             <p className="py-8 text-center text-sm text-slate-400">{t.map.selectStateFirst}</p>
           )
         )}
-        {tab === "shortage" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
+        {tab === "shortage" && activeCountry === "NL" && (
+          selected ? (
+            <NLShortageList rows={data.nlShortageByRegion?.[selected] ?? []} onSelectOcc={handleSelectNLOcc} />
+          ) : (
+            <p className="py-8 text-center text-sm text-slate-400">{t.map.selectStateFirst}</p>
+          )
+        )}
+        {tab === "shortage" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && activeCountry !== "NL" && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
         {tab === "shortage" && activeCountry === "CA" && <CAShortageList rows={Object.values(data.caOccupations)} onSelectOcc={handleSelectCAOcc} />}
         {tab === "pay" && isAU && (
           selectedSA4 ? (
@@ -1492,7 +1544,14 @@ function Panel({
             <p className="py-8 text-center text-sm text-slate-400">{t.map.selectStateFirst}</p>
           )
         )}
-        {tab === "pay" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
+        {tab === "pay" && activeCountry === "NL" && (
+          selected ? (
+            <NLHighPayList rows={data.nlHighPayByRegion?.[selected] ?? []} onSelectOcc={handleSelectNLOcc} />
+          ) : (
+            <p className="py-8 text-center text-sm text-slate-400">{t.map.selectStateFirst}</p>
+          )
+        )}
+        {tab === "pay" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && activeCountry !== "NL" && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
         {tab === "pay" && activeCountry === "CA" && <CAHighPayList rows={data.caHighPay} provinceRows={selected ? data.caHighPayByProvince[selected] ?? [] : []} onSelectOcc={handleSelectCAOcc} />}
         {tab === "pay" && isUK && <UKHighPayList rows={ukHighPay} onSelectOcc={handleSelectUKOcc} />}
         {tab === "employment" && (
@@ -2398,6 +2457,8 @@ function UniversityInfoCard({
   country,
   deCity,
   deRegionOccs,
+  nlCity,
+  nlRegionOccs,
 }: {
   college: USRankedCollege | AURankedCollege | CACollege | UKCollege | DECollege | NLCollege
   onClose: () => void
@@ -2407,13 +2468,15 @@ function UniversityInfoCard({
   country?: string | null
   deCity?: DECity | null
   deRegionOccs?: DERegionOccupation[]
+  nlCity?: NLCity | null
+  nlRegionOccs?: NLRegionOccupation[]
 }) {
   const isUK = "region" in college && country === "UK"
   const isDE = "region" in college && country === "DE"
   const isNL = "province" in college && country === "NL"
   const isCA = "province" in college && country === "CA"
   const isUS = "college_id" in college
-  const stateOrProv = "college_id" in college ? (college as USRankedCollege | AURankedCollege).college_state : "province" in college ? (isCA ? (college as CACollege).province : (college as NLCollege).province) : "region" in college ? (college as UKCollege | DECollege).region : ""
+  const stateOrProv = "college_id" in college ? (college as USRankedCollege | AURankedCollege).college_state : "province" in college ? (isCA ? (college as CACollege).province : NL_PROVINCE_NAMES[(college as NLCollege).province] ?? (college as NLCollege).province) : "region" in college ? (college as UKCollege | DECollege).region : ""
   const qsRank = "qsRank" in college ? (college as USRankedCollege | AURankedCollege).qsRank : (college as CACollege | UKCollege | DECollege | NLCollege).qs_rank
   const tuition = isDE || isNL ? null : "avg_net_price" in college ? (college as CACollege).avg_net_price : "tuition" in college ? (college as USRankedCollege | UKCollege).tuition : null
   const hasEarningsAndCost = !isDE && !isNL && "median_earnings" in college && college.median_earnings != null && ("tuition" in college ? college.tuition != null : "avg_net_price" in college ? college.avg_net_price != null : false)
@@ -2551,6 +2614,48 @@ function UniversityInfoCard({
             <div className="space-y-1.5">
               {deRegionOccs.slice(0, 4).map((occ) => (
                 <div key={occ.kldb_code} className="flex items-center justify-between rounded-lg border border-slate-100 bg-white px-3 py-2">
+                  <span className="text-xs text-slate-700 truncate mr-2">{occ.occupation_en}</span>
+                  <span className="text-xs font-semibold tabular-nums text-slate-900 shrink-0">
+                    {occ.median_salary_eur != null ? `€${occ.median_salary_eur.toLocaleString()}` : "—"}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {isNL && nlCity && (
+          <div className="mt-3">
+            <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">City Living Cost</p>
+            <div className="grid grid-cols-2 gap-2">
+              {nlCity.rent_median != null && (
+                <div className="rounded-lg border border-slate-100 bg-slate-50 p-2.5">
+                  <p className="text-[10px] font-medium uppercase tracking-wide text-slate-400">Median Rent</p>
+                  <p className="mt-0.5 text-base font-bold tabular-nums text-slate-900">
+                    €{nlCity.rent_median.toLocaleString()}/mo
+                  </p>
+                </div>
+              )}
+              {nlCity.cost_of_living_index != null && (
+                <div className="rounded-lg border border-slate-100 bg-slate-50 p-2.5">
+                  <p className="text-[10px] font-medium uppercase tracking-wide text-slate-400">Cost of Living</p>
+                  <p className="mt-0.5 text-base font-bold tabular-nums text-slate-900">
+                    {nlCity.cost_of_living_index.toFixed(1)}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {isNL && nlRegionOccs && nlRegionOccs.length > 0 && (
+          <div className="mt-3">
+            <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+              Top-paying jobs in {stateOrProv}
+            </p>
+            <div className="space-y-1.5">
+              {nlRegionOccs.slice(0, 4).map((occ) => (
+                <div key={occ.sbc_code} className="flex items-center justify-between rounded-lg border border-slate-100 bg-white px-3 py-2">
                   <span className="text-xs text-slate-700 truncate mr-2">{occ.occupation_en}</span>
                   <span className="text-xs font-semibold tabular-nums text-slate-900 shrink-0">
                     {occ.median_salary_eur != null ? `€${occ.median_salary_eur.toLocaleString()}` : "—"}
@@ -4132,10 +4237,10 @@ function IEPanel({
               <p className="text-sm text-slate-700 leading-relaxed">{selectedSchool.description_ko}</p>
             </div>
           )}
-        </div>
-      </>
-    )
-  }
+      </div>
+    </>
+  )
+}
 
   return (
     <>
@@ -4423,6 +4528,77 @@ function DEHighPayList({ rows, salaryField, ratingField, onSelectOcc }: {
         </li>
         )
       })}
+    </ol>
+  )
+}
+
+function NLShortageList({ rows, onSelectOcc }: { rows: NLRegionOccupation[]; onSelectOcc?: (code: string) => void }) {
+  if (rows.length === 0) {
+    return <p className="py-8 text-center text-sm text-slate-400">...</p>
+  }
+  return (
+    <ol>
+      {rows.map((r, i) => (
+        <li key={r.sbc_code}>
+          <button
+            type="button"
+            onClick={() => onSelectOcc?.(r.sbc_code)}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50"
+          >
+            <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-sm font-medium text-slate-800">
+                {r.occupation_en}
+              </span>
+            </span>
+            <span className="shrink-0 text-right">
+              <span className="block text-sm font-semibold tabular-nums text-slate-700">
+                {r.shortage_rating != null ? `${r.shortage_rating.toFixed(1)}/5` : "—"}
+              </span>
+              {r.median_salary_eur != null && (
+                <span className="text-[10px] text-slate-400">€{r.median_salary_eur.toLocaleString()}</span>
+              )}
+            </span>
+          </button>
+        </li>
+      ))}
+    </ol>
+  )
+}
+
+function NLHighPayList({ rows, onSelectOcc }: { rows: NLRegionOccupation[]; onSelectOcc?: (code: string) => void }) {
+  const sorted = [...rows]
+    .filter((r) => r.median_salary_eur != null)
+    .sort((a, b) => (b.median_salary_eur ?? 0) - (a.median_salary_eur ?? 0))
+  if (sorted.length === 0) {
+    return <p className="py-8 text-center text-sm text-slate-400">...</p>
+  }
+  return (
+    <ol>
+      {sorted.map((r, i) => (
+        <li key={r.sbc_code}>
+          <button
+            type="button"
+            onClick={() => onSelectOcc?.(r.sbc_code)}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50"
+          >
+            <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-sm font-medium text-slate-800">
+                {r.occupation_en}
+              </span>
+            </span>
+            <span className="shrink-0 text-right">
+              <span className="block text-sm font-semibold tabular-nums text-slate-700">
+                {r.median_salary_eur != null ? `€${r.median_salary_eur.toLocaleString()}` : "—"}
+              </span>
+              {r.shortage_rating != null && (
+                <span className="text-[10px] text-slate-400">Shortage: {r.shortage_rating.toFixed(1)}/5</span>
+              )}
+            </span>
+          </button>
+        </li>
+      ))}
     </ol>
   )
 }
@@ -4789,6 +4965,151 @@ function DEOccupationDetail({
         <div className="rounded-lg border border-slate-200 px-3 py-2">
           <p className="text-[11px] text-slate-500">Source</p>
           <p className="text-xs text-slate-700">BA Entgeltatlas 2024 / BA Engpassanalyse 2025</p>
+        </div>
+      </div>
+    </>
+  )
+}
+
+function NLOccupationDetail({
+  occ,
+  regionName,
+  regionCode,
+  data,
+  onBack,
+  onClose,
+  savedOccCodes,
+  onToggleSave,
+  onShare,
+}: {
+  occ: NLOccRow
+  regionName: string
+  regionCode: string
+  data: MapData
+  onBack: () => void
+  onClose: () => void
+  savedOccCodes: Set<string>
+  onToggleSave: (occCode: string, occTitle: string) => void
+  onShare: () => void
+}) {
+  const isSaved = savedOccCodes.has(occ.sbc_code)
+  const hasRange = occ.q1_salary_eur != null && occ.q3_salary_eur != null
+  const midSalary = occ.median_salary_eur ?? occ.mean_salary_eur
+  const maxRange = occ.q3_salary_eur ?? occ.mean_salary_eur ?? occ.median_salary_eur ?? 1
+  const barMax = Math.max(maxRange, occ.mean_salary_eur ?? 0)
+
+  const regionColleges = data.nlColleges
+    .filter((c) => c.province === regionCode && c.median_earnings != null)
+    .sort((a, b) => (b.median_earnings ?? 0) - (a.median_earnings ?? 0))
+    .slice(0, 5)
+
+  return (
+    <>
+      <div className="flex items-center gap-2 px-5 pt-4">
+        <button type="button" onClick={onBack} className="rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700">
+          <ChevronLeft className="h-4 w-4" />
+        </button>
+        <button type="button" onClick={onClose} className="ml-auto rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700">
+          <X className="h-4 w-4" />
+        </button>
+      </div>
+      <div className="min-h-0 flex-1 overflow-y-auto px-5 py-3 space-y-4">
+        <div>
+          <h3 className="text-lg font-semibold text-slate-900">{occ.occupation_en}</h3>
+          {occ.occupation_nl && <p className="text-sm text-slate-500">{occ.occupation_nl}</p>}
+          <p className="text-xs text-slate-400 mt-1">{regionName} · SBC {occ.sbc_code}</p>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <div className="rounded-lg bg-slate-50 px-3 py-2.5">
+            <p className="text-[11px] text-slate-500">Median Salary</p>
+            <p className="text-lg font-bold text-slate-900">
+              {occ.median_salary_eur != null ? `€${occ.median_salary_eur.toLocaleString()}` : "—"}
+            </p>
+          </div>
+          <div className="rounded-lg bg-slate-50 px-3 py-2.5">
+            <p className="text-[11px] text-slate-500">Shortage Rating</p>
+            <p className="text-lg font-bold text-slate-900">
+              {occ.shortage_rating != null ? `${occ.shortage_rating.toFixed(1)}/5` : "—"}
+            </p>
+          </div>
+          {occ.employment_thousands != null && (
+            <div className="rounded-lg bg-slate-50 px-3 py-2.5">
+              <p className="text-[11px] text-slate-500">Employed (NL)</p>
+              <p className="text-lg font-bold text-slate-900">
+                {(occ.employment_thousands * 1000).toLocaleString()}
+              </p>
+            </div>
+          )}
+        </div>
+
+        {hasRange && (
+          <div className="rounded-lg border border-slate-200 px-4 py-3">
+            <p className="text-[11px] text-slate-500 mb-2">Salary Range (Q1 → Q3)</p>
+            <div className="relative h-2 rounded-full bg-slate-100">
+              <div
+                className="absolute h-2 rounded-full bg-violet-200"
+                style={{
+                  left: `${(occ.q1_salary_eur! / barMax) * 100}%`,
+                  right: `${100 - (occ.q3_salary_eur! / barMax) * 100}%`,
+                }}
+              />
+              {midSalary != null && (
+                <div
+                  className="absolute top-1/2 -mt-1.5 h-3 w-0.5 rounded bg-violet-600"
+                  style={{ left: `${(midSalary / barMax) * 100}%` }}
+                />
+              )}
+            </div>
+            <div className="flex justify-between text-xs text-slate-500 mt-1">
+              <span>€{occ.q1_salary_eur!.toLocaleString()}</span>
+              <span className="font-semibold text-violet-700">
+                {occ.median_salary_eur != null ? `€${occ.median_salary_eur.toLocaleString()}` : ""}
+              </span>
+              <span>€{occ.q3_salary_eur!.toLocaleString()}</span>
+            </div>
+          </div>
+        )}
+
+        {regionColleges.length > 0 && (
+          <div className="rounded-lg border border-slate-200 px-4 py-3">
+            <p className="text-[11px] text-slate-500 mb-2">Top Universities in {regionName}</p>
+            <div className="space-y-2">
+              {regionColleges.map((c) => (
+                <div key={c.institution_id} className="flex items-center justify-between text-xs">
+                  <div>
+                    <span className="font-medium text-slate-700">{c.college_name}</span>
+                    {c.qs_rank != null && (
+                      <span className="ml-1.5 text-slate-400">#{c.qs_rank}</span>
+                    )}
+                  </div>
+                  <span className="font-semibold text-slate-600">
+                    {c.median_earnings != null ? `€${c.median_earnings.toLocaleString()}` : ""}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={() => onToggleSave(occ.sbc_code, occ.occupation_en)}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors"
+          >
+            <Bookmark className={`h-3.5 w-3.5 ${isSaved ? "fill-violet-500 text-violet-500" : ""}`} />
+            {isSaved ? "Saved" : "Save"}
+          </button>
+          <button type="button" onClick={onShare} className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors">
+            <Share2 className="h-3.5 w-3.5" />
+            Share
+          </button>
+        </div>
+
+        <div className="rounded-lg border border-slate-200 px-3 py-2">
+          <p className="text-[11px] text-slate-500">Source</p>
+          <p className="text-xs text-slate-700">CBS 2024 / UWV Spanningsindicator 2025</p>
         </div>
       </div>
     </>
