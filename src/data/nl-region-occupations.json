@@ -1,0 +1,1041 @@
+{
+  "DR": [
+    {
+      "sbc_code": "2221",
+      "shortage_rating": 5,
+      "median_salary_eur": 45000
+    },
+    {
+      "sbc_code": "2222",
+      "shortage_rating": 5,
+      "median_salary_eur": 55000
+    },
+    {
+      "sbc_code": "2330",
+      "shortage_rating": 5,
+      "median_salary_eur": 42000
+    },
+    {
+      "sbc_code": "2320",
+      "shortage_rating": 5,
+      "median_salary_eur": 48000
+    },
+    {
+      "sbc_code": "2341",
+      "shortage_rating": 5,
+      "median_salary_eur": 50000
+    },
+    {
+      "sbc_code": "8331",
+      "shortage_rating": 5,
+      "median_salary_eur": 38000
+    },
+    {
+      "sbc_code": "2223",
+      "shortage_rating": 5,
+      "median_salary_eur": 32000
+    },
+    {
+      "sbc_code": "7111",
+      "shortage_rating": 4,
+      "median_salary_eur": 37000
+    },
+    {
+      "sbc_code": "7112",
+      "shortage_rating": 4,
+      "median_salary_eur": 37000
+    },
+    {
+      "sbc_code": "7114",
+      "shortage_rating": 4,
+      "median_salary_eur": 40000
+    },
+    {
+      "sbc_code": "2512",
+      "shortage_rating": 4,
+      "median_salary_eur": 62000
+    },
+    {
+      "sbc_code": "2142",
+      "shortage_rating": 4,
+      "median_salary_eur": 52000
+    },
+    {
+      "sbc_code": "2144",
+      "shortage_rating": 4,
+      "median_salary_eur": 57000
+    },
+    {
+      "sbc_code": "2411",
+      "shortage_rating": 4,
+      "median_salary_eur": 55000
+    },
+    {
+      "sbc_code": "9111",
+      "shortage_rating": 4,
+      "median_salary_eur": 28000
+    }
+  ],
+  "FL": [
+    {
+      "sbc_code": "2221",
+      "shortage_rating": 5,
+      "median_salary_eur": 47000
+    },
+    {
+      "sbc_code": "2330",
+      "shortage_rating": 5,
+      "median_salary_eur": 43000
+    },
+    {
+      "sbc_code": "2320",
+      "shortage_rating": 5,
+      "median_salary_eur": 49000
+    },
+    {
+      "sbc_code": "2512",
+      "shortage_rating": 5,
+      "median_salary_eur": 65000
+    },
+    {
+      "sbc_code": "8331",
+      "shortage_rating": 5,
+      "median_salary_eur": 39000
+    },
+    {
+      "sbc_code": "2222",
+      "shortage_rating": 4,
+      "median_salary_eur": 57000
+    },
+    {
+      "sbc_code": "7111",
+      "shortage_rating": 4,
+      "median_salary_eur": 38000
+    },
+    {
+      "sbc_code": "7114",
+      "shortage_rating": 4,
+      "median_salary_eur": 42000
+    },
+    {
+      "sbc_code": "2142",
+      "shortage_rating": 4,
+      "median_salary_eur": 54000
+    },
+    {
+      "sbc_code": "2144",
+      "shortage_rating": 3,
+      "median_salary_eur": 58000
+    },
+    {
+      "sbc_code": "2411",
+      "shortage_rating": 3,
+      "median_salary_eur": 57000
+    },
+    {
+      "sbc_code": "9111",
+      "shortage_rating": 4,
+      "median_salary_eur": 28000
+    }
+  ],
+  "FR": [
+    {
+      "sbc_code": "2221",
+      "shortage_rating": 5,
+      "median_salary_eur": 44000
+    },
+    {
+      "sbc_code": "2222",
+      "shortage_rating": 5,
+      "median_salary_eur": 54000
+    },
+    {
+      "sbc_code": "2330",
+      "shortage_rating": 5,
+      "median_salary_eur": 41000
+    },
+    {
+      "sbc_code": "2320",
+      "shortage_rating": 5,
+      "median_salary_eur": 47000
+    },
+    {
+      "sbc_code": "2341",
+      "shortage_rating": 5,
+      "median_salary_eur": 49000
+    },
+    {
+      "sbc_code": "8331",
+      "shortage_rating": 5,
+      "median_salary_eur": 37000
+    },
+    {
+      "sbc_code": "2223",
+      "shortage_rating": 5,
+      "median_salary_eur": 31000
+    },
+    {
+      "sbc_code": "2512",
+      "shortage_rating": 4,
+      "median_salary_eur": 60000
+    },
+    {
+      "sbc_code": "7111",
+      "shortage_rating": 4,
+      "median_salary_eur": 36000
+    },
+    {
+      "sbc_code": "7112",
+      "shortage_rating": 4,
+      "median_salary_eur": 36000
+    },
+    {
+      "sbc_code": "7114",
+      "shortage_rating": 4,
+      "median_salary_eur": 40000
+    },
+    {
+      "sbc_code": "2142",
+      "shortage_rating": 4,
+      "median_salary_eur": 51000
+    },
+    {
+      "sbc_code": "9111",
+      "shortage_rating": 4,
+      "median_salary_eur": 27000
+    }
+  ],
+  "GE": [
+    {
+      "sbc_code": "2512",
+      "shortage_rating": 5,
+      "median_salary_eur": 68000
+    },
+    {
+      "sbc_code": "2516",
+      "shortage_rating": 5,
+      "median_salary_eur": 75000
+    },
+    {
+      "sbc_code": "2529",
+      "shortage_rating": 5,
+      "median_salary_eur": 78000
+    },
+    {
+      "sbc_code": "2221",
+      "shortage_rating": 5,
+      "median_salary_eur": 46000
+    },
+    {
+      "sbc_code": "2222",
+      "shortage_rating": 5,
+      "median_salary_eur": 56000
+    },
+    {
+      "sbc_code": "2330",
+      "shortage_rating": 5,
+      "median_salary_eur": 42000
+    },
+    {
+      "sbc_code": "2320",
+      "shortage_rating": 5,
+      "median_salary_eur": 48000
+    },
+    {
+      "sbc_code": "2341",
+      "shortage_rating": 5,
+      "median_salary_eur": 50000
+    },
+    {
+      "sbc_code": "2142",
+      "shortage_rating": 4,
+      "median_salary_eur": 55000
+    },
+    {
+      "sbc_code": "2144",
+      "shortage_rating": 4,
+      "median_salary_eur": 60000
+    },
+    {
+      "sbc_code": "2143",
+      "shortage_rating": 4,
+      "median_salary_eur": 62000
+    },
+    {
+      "sbc_code": "2411",
+      "shortage_rating": 4,
+      "median_salary_eur": 58000
+    },
+    {
+      "sbc_code": "2412",
+      "shortage_rating": 3,
+      "median_salary_eur": 65000
+    },
+    {
+      "sbc_code": "2424",
+      "shortage_rating": 3,
+      "median_salary_eur": 60000
+    },
+    {
+      "sbc_code": "2611",
+      "shortage_rating": 3,
+      "median_salary_eur": 80000
+    },
+    {
+      "sbc_code": "8331",
+      "shortage_rating": 4,
+      "median_salary_eur": 38000
+    },
+    {
+      "sbc_code": "7114",
+      "shortage_rating": 4,
+      "median_salary_eur": 42000
+    },
+    {
+      "sbc_code": "7111",
+      "shortage_rating": 4,
+      "median_salary_eur": 38000
+    },
+    {
+      "sbc_code": "9111",
+      "shortage_rating": 4,
+      "median_salary_eur": 28000
+    }
+  ],
+  "GR": [
+    {
+      "sbc_code": "2221",
+      "shortage_rating": 5,
+      "median_salary_eur": 44000
+    },
+    {
+      "sbc_code": "2222",
+      "shortage_rating": 5,
+      "median_salary_eur": 54000
+    },
+    {
+      "sbc_code": "2330",
+      "shortage_rating": 5,
+      "median_salary_eur": 41000
+    },
+    {
+      "sbc_code": "2320",
+      "shortage_rating": 5,
+      "median_salary_eur": 47000
+    },
+    {
+      "sbc_code": "2341",
+      "shortage_rating": 5,
+      "median_salary_eur": 49000
+    },
+    {
+      "sbc_code": "8331",
+      "shortage_rating": 5,
+      "median_salary_eur": 37000
+    },
+    {
+      "sbc_code": "2223",
+      "shortage_rating": 5,
+      "median_salary_eur": 31000
+    },
+    {
+      "sbc_code": "2512",
+      "shortage_rating": 4,
+      "median_salary_eur": 61000
+    },
+    {
+      "sbc_code": "2516",
+      "shortage_rating": 4,
+      "median_salary_eur": 70000
+    },
+    {
+      "sbc_code": "2529",
+      "shortage_rating": 4,
+      "median_salary_eur": 72000
+    },
+    {
+      "sbc_code": "2144",
+      "shortage_rating": 4,
+      "median_salary_eur": 58000
+    },
+    {
+      "sbc_code": "2143",
+      "shortage_rating": 4,
+      "median_salary_eur": 60000
+    },
+    {
+      "sbc_code": "2411",
+      "shortage_rating": 4,
+      "median_salary_eur": 55000
+    },
+    {
+      "sbc_code": "7111",
+      "shortage_rating": 4,
+      "median_salary_eur": 36000
+    },
+    {
+      "sbc_code": "7114",
+      "shortage_rating": 4,
+      "median_salary_eur": 40000
+    },
+    {
+      "sbc_code": "9111",
+      "shortage_rating": 4,
+      "median_salary_eur": 27000
+    }
+  ],
+  "LI": [
+    {
+      "sbc_code": "2221",
+      "shortage_rating": 5,
+      "median_salary_eur": 45000
+    },
+    {
+      "sbc_code": "2222",
+      "shortage_rating": 5,
+      "median_salary_eur": 55000
+    },
+    {
+      "sbc_code": "2330",
+      "shortage_rating": 5,
+      "median_salary_eur": 42000
+    },
+    {
+      "sbc_code": "2320",
+      "shortage_rating": 5,
+      "median_salary_eur": 48000
+    },
+    {
+      "sbc_code": "2512",
+      "shortage_rating": 4,
+      "median_salary_eur": 63000
+    },
+    {
+      "sbc_code": "2515",
+      "shortage_rating": 4,
+      "median_salary_eur": 62000
+    },
+    {
+      "sbc_code": "2144",
+      "shortage_rating": 4,
+      "median_salary_eur": 58000
+    },
+    {
+      "sbc_code": "2142",
+      "shortage_rating": 4,
+      "median_salary_eur": 52000
+    },
+    {
+      "sbc_code": "2411",
+      "shortage_rating": 4,
+      "median_salary_eur": 56000
+    },
+    {
+      "sbc_code": "8331",
+      "shortage_rating": 4,
+      "median_salary_eur": 38000
+    },
+    {
+      "sbc_code": "7111",
+      "shortage_rating": 4,
+      "median_salary_eur": 37000
+    },
+    {
+      "sbc_code": "7114",
+      "shortage_rating": 4,
+      "median_salary_eur": 41000
+    },
+    {
+      "sbc_code": "9111",
+      "shortage_rating": 4,
+      "median_salary_eur": 27000
+    },
+    {
+      "sbc_code": "2223",
+      "shortage_rating": 4,
+      "median_salary_eur": 32000
+    }
+  ],
+  "NB": [
+    {
+      "sbc_code": "2512",
+      "shortage_rating": 5,
+      "median_salary_eur": 70000
+    },
+    {
+      "sbc_code": "2516",
+      "shortage_rating": 5,
+      "median_salary_eur": 78000
+    },
+    {
+      "sbc_code": "2529",
+      "shortage_rating": 5,
+      "median_salary_eur": 80000
+    },
+    {
+      "sbc_code": "2143",
+      "shortage_rating": 5,
+      "median_salary_eur": 65000
+    },
+    {
+      "sbc_code": "2144",
+      "shortage_rating": 5,
+      "median_salary_eur": 63000
+    },
+    {
+      "sbc_code": "2221",
+      "shortage_rating": 5,
+      "median_salary_eur": 46000
+    },
+    {
+      "sbc_code": "2222",
+      "shortage_rating": 5,
+      "median_salary_eur": 56000
+    },
+    {
+      "sbc_code": "2330",
+      "shortage_rating": 5,
+      "median_salary_eur": 43000
+    },
+    {
+      "sbc_code": "2320",
+      "shortage_rating": 5,
+      "median_salary_eur": 49000
+    },
+    {
+      "sbc_code": "2341",
+      "shortage_rating": 5,
+      "median_salary_eur": 51000
+    },
+    {
+      "sbc_code": "2142",
+      "shortage_rating": 4,
+      "median_salary_eur": 56000
+    },
+    {
+      "sbc_code": "2411",
+      "shortage_rating": 4,
+      "median_salary_eur": 59000
+    },
+    {
+      "sbc_code": "2412",
+      "shortage_rating": 3,
+      "median_salary_eur": 66000
+    },
+    {
+      "sbc_code": "2424",
+      "shortage_rating": 3,
+      "median_salary_eur": 61000
+    },
+    {
+      "sbc_code": "2611",
+      "shortage_rating": 3,
+      "median_salary_eur": 82000
+    },
+    {
+      "sbc_code": "7114",
+      "shortage_rating": 4,
+      "median_salary_eur": 43000
+    },
+    {
+      "sbc_code": "7111",
+      "shortage_rating": 4,
+      "median_salary_eur": 39000
+    },
+    {
+      "sbc_code": "8331",
+      "shortage_rating": 4,
+      "median_salary_eur": 39000
+    },
+    {
+      "sbc_code": "9111",
+      "shortage_rating": 4,
+      "median_salary_eur": 28000
+    }
+  ],
+  "NH": [
+    {
+      "sbc_code": "2512",
+      "shortage_rating": 5,
+      "median_salary_eur": 75000
+    },
+    {
+      "sbc_code": "2516",
+      "shortage_rating": 5,
+      "median_salary_eur": 85000
+    },
+    {
+      "sbc_code": "2517",
+      "shortage_rating": 5,
+      "median_salary_eur": 100000
+    },
+    {
+      "sbc_code": "2529",
+      "shortage_rating": 5,
+      "median_salary_eur": 85000
+    },
+    {
+      "sbc_code": "2515",
+      "shortage_rating": 5,
+      "median_salary_eur": 68000
+    },
+    {
+      "sbc_code": "2221",
+      "shortage_rating": 5,
+      "median_salary_eur": 48000
+    },
+    {
+      "sbc_code": "2222",
+      "shortage_rating": 5,
+      "median_salary_eur": 58000
+    },
+    {
+      "sbc_code": "2330",
+      "shortage_rating": 5,
+      "median_salary_eur": 44000
+    },
+    {
+      "sbc_code": "2320",
+      "shortage_rating": 5,
+      "median_salary_eur": 50000
+    },
+    {
+      "sbc_code": "2341",
+      "shortage_rating": 5,
+      "median_salary_eur": 52000
+    },
+    {
+      "sbc_code": "2211",
+      "shortage_rating": 5,
+      "median_salary_eur": 100000
+    },
+    {
+      "sbc_code": "2143",
+      "shortage_rating": 4,
+      "median_salary_eur": 64000
+    },
+    {
+      "sbc_code": "2144",
+      "shortage_rating": 4,
+      "median_salary_eur": 62000
+    },
+    {
+      "sbc_code": "2411",
+      "shortage_rating": 4,
+      "median_salary_eur": 60000
+    },
+    {
+      "sbc_code": "2412",
+      "shortage_rating": 4,
+      "median_salary_eur": 68000
+    },
+    {
+      "sbc_code": "2421",
+      "shortage_rating": 4,
+      "median_salary_eur": 75000
+    },
+    {
+      "sbc_code": "2422",
+      "shortage_rating": 3,
+      "median_salary_eur": 70000
+    },
+    {
+      "sbc_code": "2611",
+      "shortage_rating": 4,
+      "median_salary_eur": 88000
+    },
+    {
+      "sbc_code": "1211",
+      "shortage_rating": 3,
+      "median_salary_eur": 67000
+    },
+    {
+      "sbc_code": "7114",
+      "shortage_rating": 4,
+      "median_salary_eur": 44000
+    },
+    {
+      "sbc_code": "7115",
+      "shortage_rating": 4,
+      "median_salary_eur": 42000
+    },
+    {
+      "sbc_code": "8331",
+      "shortage_rating": 4,
+      "median_salary_eur": 40000
+    },
+    {
+      "sbc_code": "9111",
+      "shortage_rating": 4,
+      "median_salary_eur": 29000
+    },
+    {
+      "sbc_code": "9112",
+      "shortage_rating": 4,
+      "median_salary_eur": 27000
+    }
+  ],
+  "OV": [
+    {
+      "sbc_code": "2512",
+      "shortage_rating": 5,
+      "median_salary_eur": 64000
+    },
+    {
+      "sbc_code": "2529",
+      "shortage_rating": 5,
+      "median_salary_eur": 74000
+    },
+    {
+      "sbc_code": "2221",
+      "shortage_rating": 5,
+      "median_salary_eur": 44000
+    },
+    {
+      "sbc_code": "2222",
+      "shortage_rating": 5,
+      "median_salary_eur": 54000
+    },
+    {
+      "sbc_code": "2330",
+      "shortage_rating": 5,
+      "median_salary_eur": 41000
+    },
+    {
+      "sbc_code": "2320",
+      "shortage_rating": 5,
+      "median_salary_eur": 47000
+    },
+    {
+      "sbc_code": "2341",
+      "shortage_rating": 5,
+      "median_salary_eur": 49000
+    },
+    {
+      "sbc_code": "2144",
+      "shortage_rating": 4,
+      "median_salary_eur": 58000
+    },
+    {
+      "sbc_code": "2143",
+      "shortage_rating": 4,
+      "median_salary_eur": 60000
+    },
+    {
+      "sbc_code": "8331",
+      "shortage_rating": 5,
+      "median_salary_eur": 37000
+    },
+    {
+      "sbc_code": "2411",
+      "shortage_rating": 4,
+      "median_salary_eur": 55000
+    },
+    {
+      "sbc_code": "7111",
+      "shortage_rating": 4,
+      "median_salary_eur": 36000
+    },
+    {
+      "sbc_code": "7112",
+      "shortage_rating": 4,
+      "median_salary_eur": 36000
+    },
+    {
+      "sbc_code": "7114",
+      "shortage_rating": 4,
+      "median_salary_eur": 40000
+    },
+    {
+      "sbc_code": "9111",
+      "shortage_rating": 4,
+      "median_salary_eur": 27000
+    }
+  ],
+  "UT": [
+    {
+      "sbc_code": "2512",
+      "shortage_rating": 5,
+      "median_salary_eur": 72000
+    },
+    {
+      "sbc_code": "2516",
+      "shortage_rating": 5,
+      "median_salary_eur": 80000
+    },
+    {
+      "sbc_code": "2529",
+      "shortage_rating": 5,
+      "median_salary_eur": 82000
+    },
+    {
+      "sbc_code": "2515",
+      "shortage_rating": 5,
+      "median_salary_eur": 66000
+    },
+    {
+      "sbc_code": "2221",
+      "shortage_rating": 5,
+      "median_salary_eur": 47000
+    },
+    {
+      "sbc_code": "2222",
+      "shortage_rating": 5,
+      "median_salary_eur": 57000
+    },
+    {
+      "sbc_code": "2330",
+      "shortage_rating": 5,
+      "median_salary_eur": 43000
+    },
+    {
+      "sbc_code": "2320",
+      "shortage_rating": 5,
+      "median_salary_eur": 49000
+    },
+    {
+      "sbc_code": "2341",
+      "shortage_rating": 5,
+      "median_salary_eur": 51000
+    },
+    {
+      "sbc_code": "2211",
+      "shortage_rating": 5,
+      "median_salary_eur": 98000
+    },
+    {
+      "sbc_code": "2143",
+      "shortage_rating": 4,
+      "median_salary_eur": 63000
+    },
+    {
+      "sbc_code": "2144",
+      "shortage_rating": 4,
+      "median_salary_eur": 61000
+    },
+    {
+      "sbc_code": "2411",
+      "shortage_rating": 4,
+      "median_salary_eur": 59000
+    },
+    {
+      "sbc_code": "2421",
+      "shortage_rating": 4,
+      "median_salary_eur": 74000
+    },
+    {
+      "sbc_code": "2611",
+      "shortage_rating": 3,
+      "median_salary_eur": 85000
+    },
+    {
+      "sbc_code": "1211",
+      "shortage_rating": 3,
+      "median_salary_eur": 66000
+    },
+    {
+      "sbc_code": "7114",
+      "shortage_rating": 4,
+      "median_salary_eur": 43000
+    },
+    {
+      "sbc_code": "7115",
+      "shortage_rating": 4,
+      "median_salary_eur": 41000
+    },
+    {
+      "sbc_code": "8331",
+      "shortage_rating": 4,
+      "median_salary_eur": 39000
+    },
+    {
+      "sbc_code": "9111",
+      "shortage_rating": 4,
+      "median_salary_eur": 28000
+    }
+  ],
+  "ZE": [
+    {
+      "sbc_code": "2221",
+      "shortage_rating": 5,
+      "median_salary_eur": 44000
+    },
+    {
+      "sbc_code": "2330",
+      "shortage_rating": 5,
+      "median_salary_eur": 41000
+    },
+    {
+      "sbc_code": "2320",
+      "shortage_rating": 5,
+      "median_salary_eur": 47000
+    },
+    {
+      "sbc_code": "2142",
+      "shortage_rating": 4,
+      "median_salary_eur": 52000
+    },
+    {
+      "sbc_code": "2512",
+      "shortage_rating": 4,
+      "median_salary_eur": 60000
+    },
+    {
+      "sbc_code": "8331",
+      "shortage_rating": 5,
+      "median_salary_eur": 37000
+    },
+    {
+      "sbc_code": "7111",
+      "shortage_rating": 4,
+      "median_salary_eur": 36000
+    },
+    {
+      "sbc_code": "7112",
+      "shortage_rating": 4,
+      "median_salary_eur": 36000
+    },
+    {
+      "sbc_code": "7114",
+      "shortage_rating": 4,
+      "median_salary_eur": 40000
+    },
+    {
+      "sbc_code": "2223",
+      "shortage_rating": 5,
+      "median_salary_eur": 31000
+    },
+    {
+      "sbc_code": "9111",
+      "shortage_rating": 4,
+      "median_salary_eur": 27000
+    },
+    {
+      "sbc_code": "2411",
+      "shortage_rating": 3,
+      "median_salary_eur": 54000
+    }
+  ],
+  "ZH": [
+    {
+      "sbc_code": "2512",
+      "shortage_rating": 5,
+      "median_salary_eur": 73000
+    },
+    {
+      "sbc_code": "2516",
+      "shortage_rating": 5,
+      "median_salary_eur": 82000
+    },
+    {
+      "sbc_code": "2529",
+      "shortage_rating": 5,
+      "median_salary_eur": 83000
+    },
+    {
+      "sbc_code": "2515",
+      "shortage_rating": 5,
+      "median_salary_eur": 67000
+    },
+    {
+      "sbc_code": "2221",
+      "shortage_rating": 5,
+      "median_salary_eur": 47000
+    },
+    {
+      "sbc_code": "2222",
+      "shortage_rating": 5,
+      "median_salary_eur": 57000
+    },
+    {
+      "sbc_code": "2330",
+      "shortage_rating": 5,
+      "median_salary_eur": 43000
+    },
+    {
+      "sbc_code": "2320",
+      "shortage_rating": 5,
+      "median_salary_eur": 49000
+    },
+    {
+      "sbc_code": "2341",
+      "shortage_rating": 5,
+      "median_salary_eur": 51000
+    },
+    {
+      "sbc_code": "2211",
+      "shortage_rating": 5,
+      "median_salary_eur": 99000
+    },
+    {
+      "sbc_code": "2143",
+      "shortage_rating": 4,
+      "median_salary_eur": 63000
+    },
+    {
+      "sbc_code": "2144",
+      "shortage_rating": 4,
+      "median_salary_eur": 61000
+    },
+    {
+      "sbc_code": "2142",
+      "shortage_rating": 4,
+      "median_salary_eur": 55000
+    },
+    {
+      "sbc_code": "2411",
+      "shortage_rating": 4,
+      "median_salary_eur": 59000
+    },
+    {
+      "sbc_code": "2412",
+      "shortage_rating": 4,
+      "median_salary_eur": 67000
+    },
+    {
+      "sbc_code": "2421",
+      "shortage_rating": 4,
+      "median_salary_eur": 74000
+    },
+    {
+      "sbc_code": "2611",
+      "shortage_rating": 4,
+      "median_salary_eur": 86000
+    },
+    {
+      "sbc_code": "1211",
+      "shortage_rating": 3,
+      "median_salary_eur": 66000
+    },
+    {
+      "sbc_code": "1212",
+      "shortage_rating": 3,
+      "median_salary_eur": 68000
+    },
+    {
+      "sbc_code": "7114",
+      "shortage_rating": 4,
+      "median_salary_eur": 43000
+    },
+    {
+      "sbc_code": "7115",
+      "shortage_rating": 4,
+      "median_salary_eur": 41000
+    },
+    {
+      "sbc_code": "8331",
+      "shortage_rating": 4,
+      "median_salary_eur": 39000
+    },
+    {
+      "sbc_code": "9111",
+      "shortage_rating": 4,
+      "median_salary_eur": 28000
+    },
+    {
+      "sbc_code": "9112",
+      "shortage_rating": 4,
+      "median_salary_eur": 27000
+    }
+  ]
+}

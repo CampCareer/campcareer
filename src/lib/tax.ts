@@ -115,6 +115,17 @@ function calcIETax(gross: number): number {
   return Math.round(tax + usc + prsi)
 }
 
+function calcNLTax(gross: number): number {
+  // Simplified Dutch income tax + social security estimation (2025)
+  // Box 1 brackets (single filer):
+  // €0-38,441: 35.82% (includes social security contributions)
+  // €38,441-76,817: 37.48%
+  // €76,817+: 49.50%
+  if (gross <= 38441) return Math.round(gross * 0.3582)
+  if (gross <= 76817) return Math.round(38441 * 0.3582 + (gross - 38441) * 0.3748)
+  return Math.round(38441 * 0.3582 + (76817 - 38441) * 0.3748 + (gross - 76817) * 0.4950)
+}
+
 function calcDETax(gross: number): number {
   // Simplified German income tax + social security estimation (2025)
   // Income tax (Einkommensteuer) brackets for single filers:
@@ -148,6 +159,7 @@ export function calcTax(gross: number, country: string, stateOrProvince: string)
     case 'uk': return calcUKTax(gross)
     case 'ie': return calcIETax(gross)
     case 'de': return calcDETax(gross)
+    case 'nl': return calcNLTax(gross)
     default:   return 0
   }
 }

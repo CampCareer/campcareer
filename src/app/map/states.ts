@@ -200,3 +200,26 @@ export const DE_BUNDESLAND_NAMES: Record<string, string> = {
   SH: "Schleswig-Holstein",
   TH: "Thüringen",
 }
+
+// ── Netherlands (NL) Provinces ───────────────────────────────────────────────
+
+export const NL_PROVINCE_CODES = [
+  "DR","FL","FR","GE","GR","LI","NB","NH","OV","UT","ZE","ZH",
+] as const
+
+export type NLProvinceCode = typeof NL_PROVINCE_CODES[number]
+
+export const NL_PROVINCE_NAMES: Record<string, string> = {
+  DR: "Drenthe",
+  FL: "Flevoland",
+  FR: "Fryslân",
+  GE: "Gelderland",
+  GR: "Groningen",
+  LI: "Limburg",
+  NB: "Noord-Brabant",
+  NH: "Noord-Holland",
+  OV: "Overijssel",
+  UT: "Utrecht",
+  ZE: "Zeeland",
+  ZH: "Zuid-Holland",
+}

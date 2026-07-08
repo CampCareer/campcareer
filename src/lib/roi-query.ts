@@ -20,7 +20,7 @@ const SORT_ASCENDING: Record<SortField, boolean> = {
   avg_cao_points: false,
 }
 
-export const VALID_COUNTRIES = ['us', 'au', 'ca', 'uk', 'ie', 'de'] as const
+export const VALID_COUNTRIES = ['us', 'au', 'ca', 'uk', 'ie', 'de', 'nl'] as const
 export type RoiCountry = typeof VALID_COUNTRIES[number]
 
 export const DEFAULT_STATE: Record<RoiCountry, string> = {
@@ -30,6 +30,7 @@ export const DEFAULT_STATE: Record<RoiCountry, string> = {
   uk: 'ALL_STATES',
   ie: 'Leinster',
   de: 'ALL_STATES',
+  nl: 'ALL_STATES',
 }
 
 function getTableName(country: string): string {
@@ -38,6 +39,7 @@ function getTableName(country: string): string {
   if (country === 'uk') return 'roi_explorer_uk'
   if (country === 'ie') return 'roi_explorer_ie'
   if (country === 'de') return 'roi_explorer_de'
+  if (country === 'nl') return 'roi_explorer_nl'
   return 'roi_explorer_us'
 }
 

@@ -6,6 +6,7 @@ export const DEGREE_YEARS: Record<string, number> = {
   au: 3,
   uk: 3,
   ie: 4,
+  nl: 3,
 }
 
 export function degreeYears(country: string, courseDurationYears?: number | null): number {

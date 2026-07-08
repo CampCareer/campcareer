@@ -459,6 +459,7 @@ const en = {
         canada: 'Canada',
         uk: 'United Kingdom',
         usa: 'United States',
+        netherlands: 'Netherlands',
         comingSoon: 'coming soon',
         shortage: 'Shortage occupations',
         pay: 'High-paying jobs',

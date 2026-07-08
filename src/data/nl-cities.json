@@ -1,0 +1,186 @@
+[
+  {
+    "name": "Amsterdam",
+    "province": "NH",
+    "lat": 52.3731,
+    "lng": 4.8925,
+    "rent_median": 2000,
+    "cost_of_living_index": 82
+  },
+  {
+    "name": "Rotterdam",
+    "province": "ZH",
+    "lat": 51.9244,
+    "lng": 4.4778,
+    "rent_median": 1400,
+    "cost_of_living_index": 70
+  },
+  {
+    "name": "Den Haag",
+    "province": "ZH",
+    "lat": 52.079,
+    "lng": 4.3058,
+    "rent_median": 1500,
+    "cost_of_living_index": 71
+  },
+  {
+    "name": "Utrecht",
+    "province": "UT",
+    "lat": 52.0907,
+    "lng": 5.1216,
+    "rent_median": 1700,
+    "cost_of_living_index": 74
+  },
+  {
+    "name": "Leiden",
+    "province": "ZH",
+    "lat": 52.1595,
+    "lng": 4.4909,
+    "rent_median": 1200,
+    "cost_of_living_index": 66
+  },
+  {
+    "name": "Delft",
+    "province": "ZH",
+    "lat": 51.9995,
+    "lng": 4.3627,
+    "rent_median": 1300,
+    "cost_of_living_index": 67
+  },
+  {
+    "name": "Groningen",
+    "province": "GR",
+    "lat": 53.2191,
+    "lng": 6.568,
+    "rent_median": 1100,
+    "cost_of_living_index": 62
+  },
+  {
+    "name": "Eindhoven",
+    "province": "NB",
+    "lat": 51.4393,
+    "lng": 5.4786,
+    "rent_median": 1200,
+    "cost_of_living_index": 65
+  },
+  {
+    "name": "Maastricht",
+    "province": "LI",
+    "lat": 50.858,
+    "lng": 5.697,
+    "rent_median": 1100,
+    "cost_of_living_index": 63
+  },
+  {
+    "name": "Nijmegen",
+    "province": "GE",
+    "lat": 51.8426,
+    "lng": 5.839,
+    "rent_median": 1050,
+    "cost_of_living_index": 61
+  },
+  {
+    "name": "Tilburg",
+    "province": "NB",
+    "lat": 51.5856,
+    "lng": 5.0661,
+    "rent_median": 1000,
+    "cost_of_living_index": 60
+  },
+  {
+    "name": "Enschede",
+    "province": "OV",
+    "lat": 52.221,
+    "lng": 6.8941,
+    "rent_median": 850,
+    "cost_of_living_index": 56
+  },
+  {
+    "name": "Wageningen",
+    "province": "GE",
+    "lat": 51.9663,
+    "lng": 5.6663,
+    "rent_median": 750,
+    "cost_of_living_index": 54
+  },
+  {
+    "name": "Haarlem",
+    "province": "NH",
+    "lat": 52.3814,
+    "lng": 4.6329,
+    "rent_median": 1500,
+    "cost_of_living_index": 73
+  },
+  {
+    "name": "Arnhem",
+    "province": "GE",
+    "lat": 51.9851,
+    "lng": 5.8987,
+    "rent_median": 1050,
+    "cost_of_living_index": 62
+  },
+  {
+    "name": "Almere",
+    "province": "FL",
+    "lat": 52.3694,
+    "lng": 5.2187,
+    "rent_median": 1300,
+    "cost_of_living_index": 67
+  },
+  {
+    "name": "Leeuwarden",
+    "province": "FR",
+    "lat": 53.2012,
+    "lng": 5.7999,
+    "rent_median": 900,
+    "cost_of_living_index": 57
+  },
+  {
+    "name": "Assen",
+    "province": "DR",
+    "lat": 52.9937,
+    "lng": 6.5627,
+    "rent_median": 850,
+    "cost_of_living_index": 55
+  },
+  {
+    "name": "Zwolle",
+    "province": "OV",
+    "lat": 52.5169,
+    "lng": 6.083,
+    "rent_median": 950,
+    "cost_of_living_index": 59
+  },
+  {
+    "name": "Amersfoort",
+    "province": "UT",
+    "lat": 52.1533,
+    "lng": 5.3818,
+    "rent_median": 1300,
+    "cost_of_living_index": 67
+  },
+  {
+    "name": "'s-Hertogenbosch",
+    "province": "NB",
+    "lat": 51.6961,
+    "lng": 5.3087,
+    "rent_median": 1100,
+    "cost_of_living_index": 63
+  },
+  {
+    "name": "Middelburg",
+    "province": "ZE",
+    "lat": 51.4998,
+    "lng": 3.6139,
+    "rent_median": 800,
+    "cost_of_living_index": 54
+  },
+  {
+    "name": "Lelystad",
+    "province": "FL",
+    "lat": 52.5187,
+    "lng": 5.4716,
+    "rent_median": 1000,
+    "cost_of_living_index": 59
+  }
+]

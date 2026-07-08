@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { STATE_CODES, STATE_NAMES, US_STATE_CODES, US_STATE_NAMES, CA_PROVINCE_CODES, CA_PROVINCE_NAMES, UK_REGION_CODES, UK_REGION_NAMES, IE_COUNTY_CODES, IE_COUNTY_NAMES, DE_BUNDESLAND_CODES, DE_BUNDESLAND_NAMES } from "@/app/map/states"
+import { STATE_CODES, STATE_NAMES, US_STATE_CODES, US_STATE_NAMES, CA_PROVINCE_CODES, CA_PROVINCE_NAMES, UK_REGION_CODES, UK_REGION_NAMES, IE_COUNTY_CODES, IE_COUNTY_NAMES, DE_BUNDESLAND_CODES, DE_BUNDESLAND_NAMES, NL_PROVINCE_CODES, NL_PROVINCE_NAMES } from "@/app/map/states"
 import { useTranslations } from "@/lib/i18n/locale-provider"
 import { track } from "@/lib/analytics"
 
@@ -25,6 +25,7 @@ const COUNTRIES = [
   { value: "uk", flag: "🇬🇧", nameKey: "uk", enabled: true },
   { value: "ie", flag: "🇮🇪", nameKey: "ireland", enabled: true },
   { value: "de", flag: "🇩🇪", nameKey: "germany", enabled: true },
+  { value: "nl", flag: "🇳🇱", nameKey: "netherlands", enabled: true },
 ] as const
 
 // 각 호주 주의 고용 규모 Top 3 직업 (JSA NERO 2026-05 기반)
@@ -90,6 +91,7 @@ export function HomeFinder() {
     ie: "Ireland",
     us: f.usa,
     de: "Germany",
+    nl: "Netherlands",
   }
   const countryItems = useMemo<Record<string, string>>(
     () =>
@@ -108,8 +110,9 @@ export function HomeFinder() {
   const isUK = country === "uk"
   const isIE = country === "ie"
   const isDE = country === "de"
-  const activeStateCodes = isUS ? US_STATE_CODES : isCA ? CA_PROVINCE_CODES : isUK ? UK_REGION_CODES : isIE ? IE_COUNTY_CODES : isDE ? DE_BUNDESLAND_CODES : STATE_CODES
-  const activeStateNames: Record<string, string> = isUS ? US_STATE_NAMES : isCA ? CA_PROVINCE_NAMES : isUK ? UK_REGION_NAMES : isIE ? IE_COUNTY_NAMES : isDE ? DE_BUNDESLAND_NAMES : STATE_NAMES
+  const isNL = country === "nl"
+  const activeStateCodes = isUS ? US_STATE_CODES : isCA ? CA_PROVINCE_CODES : isUK ? UK_REGION_CODES : isIE ? IE_COUNTY_CODES : isDE ? DE_BUNDESLAND_CODES : isNL ? NL_PROVINCE_CODES : STATE_CODES
+  const activeStateNames: Record<string, string> = isUS ? US_STATE_NAMES : isCA ? CA_PROVINCE_NAMES : isUK ? UK_REGION_NAMES : isIE ? IE_COUNTY_NAMES : isDE ? DE_BUNDESLAND_NAMES : isNL ? NL_PROVINCE_NAMES : STATE_NAMES
   const stateItems = useMemo<Record<string, string>>(
     () => Object.fromEntries(activeStateCodes.map((c) => [c, `${activeStateNames[c]}`])),
     [activeStateCodes, activeStateNames],
@@ -121,6 +124,7 @@ export function HomeFinder() {
     else if (isUK) setState("TLI")
     else if (isIE) setState("D")
     else if (isDE) setState("BY")
+    else if (isNL) setState("NH")
     else setState("NSW")
   }, [country])
 
@@ -268,6 +272,7 @@ export function HomeFinder() {
               { href: "/uk", flag: "🇬🇧", name: "United Kingdom", sub: "408+ occupations", enabled: true },
               { href: "/roi-explorer/ie/language-schools", flag: "🇮🇪", name: "Ireland", sub: "Language schools", enabled: true },
               { href: "/de", flag: "🇩🇪", name: "Germany", sub: "124+ occupations", enabled: true },
+              { href: "/nl", flag: "🇳🇱", name: "Netherlands", sub: "Coming soon", enabled: false },
             ].map(({ href, flag, name, sub, enabled }) =>
               enabled ? (
                 <Link

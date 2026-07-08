@@ -461,6 +461,7 @@ const ko: Dictionary = {
         canada: '캐나다',
         uk: '영국',
         usa: '미국',
+        netherlands: '네덜란드',
         comingSoon: '곧 추가',
         shortage: '부족 직업군',
         pay: '고연봉 직업군',

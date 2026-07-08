@@ -190,6 +190,22 @@ const DE_BUNDESLANDER = [
   { abbr: "TH", name: "Thüringen" },
 ] as const
 
+const NL_PROVINCES = [
+  { abbr: "ALL_STATES", name: "ALL Netherlands" },
+  { abbr: "DR", name: "Drenthe" },
+  { abbr: "FL", name: "Flevoland" },
+  { abbr: "FR", name: "Fryslân" },
+  { abbr: "GE", name: "Gelderland" },
+  { abbr: "GR", name: "Groningen" },
+  { abbr: "LI", name: "Limburg" },
+  { abbr: "NB", name: "Noord-Brabant" },
+  { abbr: "NH", name: "Noord-Holland" },
+  { abbr: "OV", name: "Overijssel" },
+  { abbr: "UT", name: "Utrecht" },
+  { abbr: "ZE", name: "Zeeland" },
+  { abbr: "ZH", name: "Zuid-Holland" },
+] as const
+
 const COUNTRY_OPTIONS = [
   { value: "us", label: "🇺🇸 United States" },
   { value: "au", label: "🇦🇺 Australia" },
@@ -197,6 +213,7 @@ const COUNTRY_OPTIONS = [
   { value: "uk", label: "🇬🇧 United Kingdom" },
   { value: "ie", label: "🇮🇪 Ireland" },
   { value: "de", label: "🇩🇪 Germany" },
+  { value: "nl", label: "🇳🇱 Netherlands" },
 ] as const
 
 // ── Currency helpers ─────────────────────────────────────────────────────────
@@ -208,6 +225,7 @@ const CURRENCY: Record<string, { symbol: string; code: string }> = {
   uk: { symbol: '£',  code: 'GBP' },
   ie: { symbol: '€',  code: 'EUR' },
   de: { symbol: '€',  code: 'EUR' },
+  nl: { symbol: '€',  code: 'EUR' },
 }
 
 function formatCurrency(value: number, country: string): string {
@@ -341,7 +359,7 @@ function FieldCombobox({
   )
 }
 
-type Country = 'us' | 'au' | 'ca' | 'uk' | 'ie' | 'de'
+type Country = 'us' | 'au' | 'ca' | 'uk' | 'ie' | 'de' | 'nl'
 
 export type RoiFilters = {
   country: Country
@@ -391,18 +409,20 @@ export function RoiExplorerClient({
     : country === "uk" ? UK_REGIONS
     : country === "ie" ? IE_PROVINCES
     : country === "de" ? DE_BUNDESLANDER
+    : country === "nl" ? NL_PROVINCES
     : US_STATES
   const stateName = stateList.find((s) => s.abbr === state)?.name ?? state
   const stateLabel = country === "ca" ? "Province"
     : country === "uk" ? "Region"
     : country === "ie" ? "Province"
     : country === "de" ? "Bundesland"
+    : country === "nl" ? "Province"
     : "State"
 
   function handleCountryChange(v: string) {
-    const c = v as "us" | "au" | "ca" | "uk" | "ie" | "de"
+    const c = v as "us" | "au" | "ca" | "uk" | "ie" | "de" | "nl"
     setCountry(c)
-    setState(c === "au" ? "NSW" : c === "ca" ? "ON" : c === "uk" ? "ALL_STATES" : c === "ie" ? "Leinster" : c === "de" ? "ALL_STATES" : "CA")
+    setState(c === "au" ? "NSW" : c === "ca" ? "ON" : c === "uk" ? "ALL_STATES" : c === "ie" ? "Leinster" : c === "de" ? "ALL_STATES" : c === "nl" ? "ALL_STATES" : "CA")
     setField("")
     setCareerStage("early")
   }
