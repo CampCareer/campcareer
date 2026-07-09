@@ -9,7 +9,6 @@ scripts/
 scripts/__pycache__/
 
 # Ignore crawler output not imported by app
-src/data/be-tax-rates.json
 src/data/be-immigration.json
 src/data/be-cost-of-living.json
 src/data/be-states.json
