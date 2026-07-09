@@ -6,8 +6,9 @@ import { getUSOccCodes, getUSOccDetail } from "@/lib/us-occupation-detail"
 import ukOccupationsRaw from "@/data/uk-occupations.json"
 import deOccupationsRaw from "@/data/de-occupations.json"
 import nlOccupationsRaw from "@/data/nl-occupations.json"
+import { getBelgiumOccupations, getIrelandOccupations } from "@/lib/country-occupation-data"
 
-export const MAP_COUNTRIES = ["au", "ca", "us", "uk", "de", "nl"] as const
+export const MAP_COUNTRIES = ["au", "ca", "us", "ie", "uk", "de", "nl", "be"] as const
 
 export type MapCountry = (typeof MAP_COUNTRIES)[number]
 
@@ -35,9 +36,11 @@ const COUNTRY_NAME: Record<MapCountry, string> = {
   au: "Australia",
   ca: "Canada",
   us: "United States",
+  ie: "Ireland",
   uk: "United Kingdom",
   de: "Germany",
   nl: "Netherlands",
+  be: "Belgium",
 }
 
 const CURRENCY_SYMBOL: Record<MapOccupation["currency"], string> = {
@@ -166,6 +169,20 @@ function loadUnitedKingdom(): RawMapOccupation[] {
   }))
 }
 
+function loadIreland(): RawMapOccupation[] {
+  return getIrelandOccupations().map((row) => ({
+    code: row.code,
+    name: row.name,
+    localName: row.localName,
+    medianSalary: row.medianSalary,
+    currency: row.currency,
+    shortageRating: row.shortageRating,
+    employment: row.employment,
+    field: row.field,
+    codeLabel: row.codeLabel,
+  }))
+}
+
 function loadGermany(): RawMapOccupation[] {
   type Row = {
     kldb_code: string
@@ -214,14 +231,30 @@ function loadNetherlands(): RawMapOccupation[] {
   }))
 }
 
+function loadBelgium(): RawMapOccupation[] {
+  return getBelgiumOccupations().map((row) => ({
+    code: row.code,
+    name: row.name,
+    localName: row.localName,
+    medianSalary: row.medianSalary,
+    currency: row.currency,
+    shortageRating: row.shortageRating,
+    employment: row.employment,
+    field: row.field,
+    codeLabel: row.codeLabel,
+  }))
+}
+
 export const getMapOccupations = cache(async (country: MapCountry): Promise<MapOccupation[]> => {
   const raw =
     country === "au" ? await loadAustralia() :
     country === "ca" ? await loadCanada() :
     country === "us" ? loadUnitedStates() :
+    country === "ie" ? loadIreland() :
     country === "uk" ? loadUnitedKingdom() :
     country === "de" ? loadGermany() :
-    loadNetherlands()
+    country === "nl" ? loadNetherlands() :
+    loadBelgium()
 
   return withCanonicalSlugs(country, raw)
 })
@@ -233,7 +266,7 @@ export async function resolveMapOccupation(country: MapCountry, slugOrCode: stri
 }
 
 export async function getMapOccupationStaticParams() {
-  const countries: MapCountry[] = ["us", "uk", "de", "nl"]
+  const countries: MapCountry[] = ["us", "ie", "uk", "de", "nl", "be"]
   const params: Array<{ country: MapCountry; slug: string }> = []
 
   for (const country of countries) {

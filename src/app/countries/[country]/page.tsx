@@ -122,6 +122,9 @@ export default async function CountryDetailPage({ params, searchParams }: PagePr
     { label: "Tax preview", value: country.tax, note: "Simplified effective rate" },
     { label: "Policy route", value: country.policy, note: "Verify before applying" },
   ]
+  const primaryCta = country.code === "BE"
+    ? { href: "/map?country=be", label: "Compare regions and schools" }
+    : { href: `/roi-explorer?country=${country.code.toLowerCase()}`, label: "Compare schools and ROI" }
 
   return (
     <main className="min-h-screen bg-white text-slate-950">
@@ -171,10 +174,10 @@ export default async function CountryDetailPage({ params, searchParams }: PagePr
 
             <div className="mt-7 flex flex-wrap gap-3">
               <Link
-                href={`/roi-explorer?country=${country.code.toLowerCase()}`}
+                href={primaryCta.href}
                 className="inline-flex h-11 items-center justify-center rounded-lg bg-slate-950 px-5 text-sm font-bold text-white transition-colors hover:bg-slate-800"
               >
-                Compare schools and ROI
+                {primaryCta.label}
               </Link>
               <Link
                 href={country.detail.nextSteps[0]?.href ?? country.hubHref}

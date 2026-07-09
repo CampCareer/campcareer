@@ -11,7 +11,7 @@ import { getAllSlugs, getCities } from "@/lib/language-schools-ie"
 import { SA4_BY_STATE } from "@/data/sa4-regions"
 import { COUNTRY_ROI_DATA_META, COUNTRY_ROI_INSIGHTS } from "@/data/country-roi-mvp"
 import { getMapData } from "@/lib/map-data"
-import { getMapOccupations, type MapCountry } from "@/lib/map-slugs"
+import { getMapOccupations, MAP_COUNTRIES } from "@/lib/map-slugs"
 
 const BASE = "https://www.campcareer.com"
 
@@ -41,6 +41,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/de/jobs`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
     { url: `${BASE}/nl`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
     { url: `${BASE}/nl/jobs`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
+    { url: `${BASE}/ie`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
+    { url: `${BASE}/ie/jobs`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
+    { url: `${BASE}/be`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
+    { url: `${BASE}/be/jobs`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
   ]
 
   const blogPages: MetadataRoute.Sitemap = getAllPosts().map((post) => ({
@@ -61,7 +65,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Search indexing is concentrated on readable Maps URLs instead.
   const lastMod = new Date()
   const mapOccupationPages: MetadataRoute.Sitemap = []
-  for (const country of ["au", "ca", "us", "uk", "de", "nl"] satisfies MapCountry[]) {
+  for (const country of MAP_COUNTRIES) {
     const occupations = await getMapOccupations(country)
     mapOccupationPages.push(...occupations.map((occupation) => ({
       url: `${BASE}${occupation.path}`,
@@ -123,12 +127,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "weekly",
   }))
 
-  // DE 정적 페이지
-  const deStaticPages: MetadataRoute.Sitemap = [
-    { url: `${BASE}/de`, lastModified: lastMod, priority: 0.8, changeFrequency: "weekly" },
-    { url: `${BASE}/de/jobs`, lastModified: lastMod, priority: 0.8, changeFrequency: "weekly" },
-  ]
-
   // DE 대학 SEO 페이지 (55개)
   const deUnivPages: MetadataRoute.Sitemap = mapData.deColleges.map((c: { slug: string }) => ({
     url: `${BASE}/map/de/university/${c.slug}`,
@@ -159,8 +157,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   const total = staticPages.length + blogPages.length + countryDetailPages.length + mapOccupationPages.length +
-    ieLangSchoolPages.length + mapPages.length + usUnivPages.length + auUnivPages.length + caUnivPages.length + ukUnivPages.length + deStaticPages.length + deUnivPages.length + nlUnivPages.length
-  console.log(`[sitemap] counts — static: ${staticPages.length}, blog: ${blogPages.length}, country details: ${countryDetailPages.length}, map occupations: ${mapOccupationPages.length}, IE schools: ${ieLangSchoolPages.length}, map: ${mapPages.length}, US universities: ${usUnivPages.length}, AU universities: ${auUnivPages.length}, CA universities: ${caUnivPages.length}, UK universities: ${ukUnivPages.length}, DE static: ${deStaticPages.length}, DE universities: ${deUnivPages.length}, NL universities: ${nlUnivPages.length}, TOTAL: ${total}`)
+    ieLangSchoolPages.length + mapPages.length + usUnivPages.length + auUnivPages.length + caUnivPages.length + ukUnivPages.length + deUnivPages.length + nlUnivPages.length
+  console.log(`[sitemap] counts — static: ${staticPages.length}, blog: ${blogPages.length}, country details: ${countryDetailPages.length}, map occupations: ${mapOccupationPages.length}, IE schools: ${ieLangSchoolPages.length}, map: ${mapPages.length}, US universities: ${usUnivPages.length}, AU universities: ${auUnivPages.length}, CA universities: ${caUnivPages.length}, UK universities: ${ukUnivPages.length}, DE universities: ${deUnivPages.length}, NL universities: ${nlUnivPages.length}, TOTAL: ${total}`)
 
-  return [...staticPages, ...blogPages, ...countryDetailPages, ...mapOccupationPages, ...ieLangSchoolPages, ...mapPages, ...usUnivPages, ...auUnivPages, ...caUnivPages, ...ukUnivPages, ...deStaticPages, ...deUnivPages, ...nlUnivPages]
+  return [...staticPages, ...blogPages, ...countryDetailPages, ...mapOccupationPages, ...ieLangSchoolPages, ...mapPages, ...usUnivPages, ...auUnivPages, ...caUnivPages, ...ukUnivPages, ...deUnivPages, ...nlUnivPages]
 }

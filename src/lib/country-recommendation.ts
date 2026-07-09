@@ -51,18 +51,24 @@ export const LANGUAGE_READINESS_OPTIONS: Record<LanguageReadinessKey, string> = 
 
 const COUNTRY_RISK_LEVEL: Record<string, number> = {
   AU: 2,
+  US: 3,
   CA: 2,
+  IE: 2,
   DE: 3,
   UK: 3,
   NL: 2,
+  BE: 2,
 }
 
 const COUNTRY_LANGUAGE_FIT: Record<string, Record<LanguageReadinessKey, number>> = {
   AU: { "english-only": 96, "can-learn-local": 94, multilingual: 94 },
+  US: { "english-only": 98, "can-learn-local": 96, multilingual: 96 },
   CA: { "english-only": 90, "can-learn-local": 94, multilingual: 97 },
+  IE: { "english-only": 96, "can-learn-local": 94, multilingual: 94 },
   DE: { "english-only": 58, "can-learn-local": 82, multilingual: 90 },
   UK: { "english-only": 96, "can-learn-local": 94, multilingual: 94 },
   NL: { "english-only": 78, "can-learn-local": 88, multilingual: 92 },
+  BE: { "english-only": 62, "can-learn-local": 82, multilingual: 94 },
 }
 
 const WEIGHTS: ScoreBreakdown = {
