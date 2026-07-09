@@ -1,209 +1,209 @@
 {
   "source": "Jobat.be",
   "last_updated": "2025",
-  "note": "Jobat.be occupation and course URLs constructed from known URL patterns",
+  "note": "Career guide pages use Dutch beroepengids pattern: /nl/art/beroepengids/{slug}. Salary calculator: /en/salary-calculator. Courses: /en/courses",
   "occupations": {
     "nurse": {
       "occupation_en": "Nurse",
-      "jobat_url": "https://www.jobat.be/en/career/verpleegkundige",
-      "salary_url": "https://www.jobat.be/en/art/loon/het-loon-van-verpleegkundige",
-      "course_url": "https://www.jobat.be/en/courses?query=nursing",
+      "jobat_url": "https://www.jobat.be/nl/art/beroepengids/verpleegkundige",
+      "salary_url": "https://www.jobat.be/en/salary-calculator",
+      "course_url": "https://www.jobat.be/en/courses",
       "course_keywords": ["nursing", "verpleegkunde", "healthcare"]
     },
     "accountant": {
       "occupation_en": "Accountant",
-      "jobat_url": "https://www.jobat.be/en/career/boekhouder",
-      "salary_url": "https://www.jobat.be/en/art/loon/het-loon-van-boekhouder",
-      "course_url": "https://www.jobat.be/en/courses?query=accounting",
+      "jobat_url": "https://www.jobat.be/nl/art/beroepengids/boekhouder",
+      "salary_url": "https://www.jobat.be/en/salary-calculator",
+      "course_url": "https://www.jobat.be/en/courses",
       "course_keywords": ["accounting", "boekhouden", "finance"]
     },
     "industrial-technician": {
       "occupation_en": "Industrial Technician",
-      "jobat_url": "https://www.jobat.be/en/career/industrieel-technicus",
-      "salary_url": "https://www.jobat.be/en/art/loon/het-loon-van-industrieel-technicus",
-      "course_url": "https://www.jobat.be/en/courses?query=technician",
+      "jobat_url": "https://www.jobat.be/nl/art/beroepengids/onderhoudstechnieker",
+      "salary_url": "https://www.jobat.be/en/salary-calculator",
+      "course_url": "https://www.jobat.be/en/courses",
       "course_keywords": ["technician", "technicus", "industrial"]
     },
     "maintenance-mechanic": {
       "occupation_en": "Maintenance Mechanic",
-      "jobat_url": "https://www.jobat.be/en/career/mechanieker",
-      "salary_url": "https://www.jobat.be/en/art/loon/het-loon-van-mechanieker",
-      "course_url": "https://www.jobat.be/en/courses?query=mechanical",
+      "jobat_url": "https://www.jobat.be/nl/art/beroepengids/onderhoudstechnieker",
+      "salary_url": "https://www.jobat.be/en/salary-calculator",
+      "course_url": "https://www.jobat.be/en/courses",
       "course_keywords": ["mechanical", "onderhoud", "maintenance"]
     },
     "machine-builder": {
       "occupation_en": "Machine Builder",
-      "jobat_url": "https://www.jobat.be/en/career/machinebouwer",
-      "salary_url": "https://www.jobat.be/en/art/loon/het-loon-van-machinebouwer",
-      "course_url": "https://www.jobat.be/en/courses?query=engineering",
+      "jobat_url": "https://www.jobat.be/nl/art/beroepengids/monteur",
+      "salary_url": "https://www.jobat.be/en/salary-calculator",
+      "course_url": "https://www.jobat.be/en/courses",
       "course_keywords": ["engineering", "machinebouw", "manufacturing"]
     },
     "construction-foreman": {
       "occupation_en": "Construction Foreman",
-      "jobat_url": "https://www.jobat.be/en/career/werfleider",
-      "salary_url": "https://www.jobat.be/en/art/loon/het-loon-van-werfleider",
-      "course_url": "https://www.jobat.be/en/courses?query=construction",
+      "jobat_url": "https://www.jobat.be/nl/art/beroepengids/werfleider",
+      "salary_url": "https://www.jobat.be/en/salary-calculator",
+      "course_url": "https://www.jobat.be/en/courses",
       "course_keywords": ["construction", "bouw", "project-management"]
     },
     "home-cleaner": {
       "occupation_en": "Home Cleaner",
-      "jobat_url": "https://www.jobat.be/en/career/schoonmaker",
-      "salary_url": "https://www.jobat.be/en/art/loon/het-loon-van-schoonmaker",
-      "course_url": "https://www.jobat.be/en/courses?query=cleaning",
+      "jobat_url": "https://www.jobat.be/nl/art/beroepengids/schoonmaker",
+      "salary_url": "https://www.jobat.be/en/salary-calculator",
+      "course_url": null,
       "course_keywords": ["cleaning", "schoonmaak"]
     },
     "fruit-harvest-worker": {
       "occupation_en": "Fruit Harvest Worker",
-      "jobat_url": "https://www.jobat.be/en/career/landarbeider",
-      "salary_url": "https://www.jobat.be/en/art/loon/het-loon-van-landarbeider",
+      "jobat_url": "https://www.jobat.be/nl/art/beroepengids/landarbeider",
+      "salary_url": "https://www.jobat.be/en/salary-calculator",
       "course_url": null,
       "course_keywords": ["agriculture", "landbouw"]
     },
     "hospitality-staff": {
       "occupation_en": "Hospitality Staff",
-      "jobat_url": "https://www.jobat.be/en/career/horecamedewerker",
-      "salary_url": "https://www.jobat.be/en/art/loon/het-loon-van-horecamedewerker",
-      "course_url": "https://www.jobat.be/en/courses?query=horeca",
+      "jobat_url": "https://www.jobat.be/nl/art/beroepengids/horecamedewerker",
+      "salary_url": "https://www.jobat.be/en/salary-calculator",
+      "course_url": "https://www.jobat.be/en/courses",
       "course_keywords": ["hospitality", "horeca", "tourism"]
     },
     "childcare-worker": {
       "occupation_en": "Childcare Worker",
-      "jobat_url": "https://www.jobat.be/en/career/medewerker-kinderopvang",
-      "salary_url": "https://www.jobat.be/en/art/loon/het-loon-van-medewerker-kinderopvang",
-      "course_url": "https://www.jobat.be/en/courses?query=childcare",
+      "jobat_url": "https://www.jobat.be/nl/art/beroepengids/medewerker-kinderopvang",
+      "salary_url": "https://www.jobat.be/en/salary-calculator",
+      "course_url": "https://www.jobat.be/en/courses",
       "course_keywords": ["childcare", "kinderopvang", "education"]
     },
     "ergotherapist": {
       "occupation_en": "Ergotherapist",
-      "jobat_url": "https://www.jobat.be/en/career/ergotherapeut",
-      "salary_url": "https://www.jobat.be/en/art/loon/het-loon-van-ergotherapeut",
-      "course_url": "https://www.jobat.be/en/courses?query=therapy",
+      "jobat_url": "https://www.jobat.be/nl/art/beroepengids/ergotherapeut",
+      "salary_url": "https://www.jobat.be/en/salary-calculator",
+      "course_url": "https://www.jobat.be/en/courses",
       "course_keywords": ["therapy", "ergotherapie", "healthcare"]
     },
     "teacher": {
       "occupation_en": "Teacher",
-      "jobat_url": "https://www.jobat.be/en/career/leerkracht",
-      "salary_url": "https://www.jobat.be/en/art/loon/het-loon-van-leerkracht",
-      "course_url": "https://www.jobat.be/en/courses?query=education",
+      "jobat_url": "https://www.jobat.be/nl/art/beroepengids/leraar",
+      "salary_url": "https://www.jobat.be/en/salary-calculator",
+      "course_url": "https://www.jobat.be/en/courses",
       "course_keywords": ["education", "onderwijs", "teaching"]
     },
     "it-specialist": {
       "occupation_en": "IT Specialist",
-      "jobat_url": "https://www.jobat.be/en/career/ict-specialist",
-      "salary_url": "https://www.jobat.be/en/art/loon/het-loon-van-ict-specialist",
-      "course_url": "https://www.jobat.be/en/courses?query=ict",
+      "jobat_url": "https://www.jobat.be/nl/art/beroepengids/software-ontwikkelaar",
+      "salary_url": "https://www.jobat.be/en/salary-calculator",
+      "course_url": "https://www.jobat.be/en/courses",
       "course_keywords": ["ict", "programming", "software"]
     },
     "it-specialists": {
       "occupation_en": "IT Specialists",
-      "jobat_url": "https://www.jobat.be/en/career/ict-specialist",
-      "salary_url": "https://www.jobat.be/en/art/loon/het-loon-van-ict-specialist",
-      "course_url": "https://www.jobat.be/en/courses?query=ict",
+      "jobat_url": "https://www.jobat.be/nl/art/beroepengids/software-ontwikkelaar",
+      "salary_url": "https://www.jobat.be/en/salary-calculator",
+      "course_url": "https://www.jobat.be/en/courses",
       "course_keywords": ["ict", "programming", "software"]
     },
     "baker": {
       "occupation_en": "Baker",
-      "jobat_url": "https://www.jobat.be/en/career/bakker",
-      "salary_url": "https://www.jobat.be/en/art/loon/het-loon-van-bakker",
-      "course_url": "https://www.jobat.be/en/courses?query=baking",
+      "jobat_url": "https://www.jobat.be/nl/art/beroepengids/bakker",
+      "salary_url": "https://www.jobat.be/en/salary-calculator",
+      "course_url": "https://www.jobat.be/en/courses",
       "course_keywords": ["baking", "bakkerij", "food"]
     },
     "butcher": {
       "occupation_en": "Butcher",
-      "jobat_url": "https://www.jobat.be/en/career/slager",
-      "salary_url": "https://www.jobat.be/en/art/loon/het-loon-van-slager",
-      "course_url": "https://www.jobat.be/en/courses?query=butchery",
+      "jobat_url": "https://www.jobat.be/nl/art/beroepengids/slager",
+      "salary_url": "https://www.jobat.be/en/salary-calculator",
+      "course_url": "https://www.jobat.be/en/courses",
       "course_keywords": ["butchery", "slagerij", "food"]
     },
     "healthcare-workers": {
       "occupation_en": "Healthcare Workers",
-      "jobat_url": "https://www.jobat.be/en/career/zorgverlener",
-      "salary_url": "https://www.jobat.be/en/art/loon/het-loon-van-zorgverlener",
-      "course_url": "https://www.jobat.be/en/courses?query=healthcare",
+      "jobat_url": "https://www.jobat.be/nl/art/beroepengids/zorgverlener",
+      "salary_url": "https://www.jobat.be/en/salary-calculator",
+      "course_url": "https://www.jobat.be/en/courses",
       "course_keywords": ["healthcare", "zorg", "nursing"]
     },
     "construction-workers": {
       "occupation_en": "Construction Workers",
-      "jobat_url": "https://www.jobat.be/en/career/bouwvakker",
-      "salary_url": "https://www.jobat.be/en/art/loon/het-loon-van-bouwvakker",
-      "course_url": "https://www.jobat.be/en/courses?query=construction",
+      "jobat_url": "https://www.jobat.be/nl/art/beroepengids/bouwvakker",
+      "salary_url": "https://www.jobat.be/en/salary-calculator",
+      "course_url": "https://www.jobat.be/en/courses",
       "course_keywords": ["construction", "bouw", "crafts"]
     },
     "engineers": {
       "occupation_en": "Engineers",
-      "jobat_url": "https://www.jobat.be/en/career/ingenieur",
-      "salary_url": "https://www.jobat.be/en/art/loon/het-loon-van-ingenieur",
-      "course_url": "https://www.jobat.be/en/courses?query=engineering",
+      "jobat_url": "https://www.jobat.be/nl/art/beroepengids/ingenieur",
+      "salary_url": "https://www.jobat.be/en/salary-calculator",
+      "course_url": "https://www.jobat.be/en/courses",
       "course_keywords": ["engineering", "ingenieur", "STEM"]
     },
     "logistics-workers": {
       "occupation_en": "Logistics Workers",
-      "jobat_url": "https://www.jobat.be/en/career/magazijnier",
-      "salary_url": "https://www.jobat.be/en/art/loon/het-loon-van-magazijnier",
-      "course_url": "https://www.jobat.be/en/courses?query=logistics",
+      "jobat_url": "https://www.jobat.be/nl/art/beroepengids/magazijnier",
+      "salary_url": "https://www.jobat.be/en/salary-calculator",
+      "course_url": "https://www.jobat.be/en/courses",
       "course_keywords": ["logistics", "logistiek", "warehouse"]
     },
     "management-and-directors": {
       "occupation_en": "Management & Directors",
-      "jobat_url": "https://www.jobat.be/en/career/manager",
-      "salary_url": "https://www.jobat.be/en/art/loon/het-loon-van-manager",
-      "course_url": "https://www.jobat.be/en/courses?query=management",
+      "jobat_url": "https://www.jobat.be/nl/art/beroepengids/manager",
+      "salary_url": "https://www.jobat.be/en/salary-calculator",
+      "course_url": "https://www.jobat.be/en/courses",
       "course_keywords": ["management", "leadership", "business"]
     },
     "lawyers": {
       "occupation_en": "Lawyers",
-      "jobat_url": "https://www.jobat.be/en/career/jurist",
-      "salary_url": "https://www.jobat.be/en/art/loon/het-loon-van-jurist",
-      "course_url": "https://www.jobat.be/en/courses?query=law",
+      "jobat_url": "https://www.jobat.be/nl/art/beroepengids/jurist",
+      "salary_url": "https://www.jobat.be/en/salary-calculator",
+      "course_url": "https://www.jobat.be/en/courses",
       "course_keywords": ["law", "recht", "legal"]
     },
     "education-and-training": {
       "occupation_en": "Education & Training",
-      "jobat_url": "https://www.jobat.be/en/career/leraar",
-      "salary_url": "https://www.jobat.be/en/art/loon/het-loon-van-leraar",
-      "course_url": "https://www.jobat.be/en/courses?query=education",
+      "jobat_url": "https://www.jobat.be/nl/art/beroepengids/leraar",
+      "salary_url": "https://www.jobat.be/en/salary-calculator",
+      "course_url": "https://www.jobat.be/en/courses",
       "course_keywords": ["education", "onderwijs", "training"]
     },
     "r-d-and-quality": {
       "occupation_en": "R&D and Quality",
-      "jobat_url": "https://www.jobat.be/en/career/onderzoeker",
-      "salary_url": "https://www.jobat.be/en/art/loon/het-loon-van-onderzoeker",
-      "course_url": "https://www.jobat.be/en/courses?query=research",
+      "jobat_url": "https://www.jobat.be/nl/art/beroepengids/rd-medewerker",
+      "salary_url": "https://www.jobat.be/en/salary-calculator",
+      "course_url": "https://www.jobat.be/en/courses",
       "course_keywords": ["research", "R&D", "quality"]
     },
     "security-staff": {
       "occupation_en": "Security Staff",
-      "jobat_url": "https://www.jobat.be/en/career/bewakingsagent",
-      "salary_url": "https://www.jobat.be/en/art/loon/het-loon-van-bewakingsagent",
-      "course_url": "https://www.jobat.be/en/courses?query=security",
+      "jobat_url": "https://www.jobat.be/nl/art/beroepengids/bewakingsagent",
+      "salary_url": "https://www.jobat.be/en/salary-calculator",
+      "course_url": "https://www.jobat.be/en/courses",
       "course_keywords": ["security", "veiligheid", "bewaking"]
     },
     "it-professionals": {
       "occupation_en": "IT Professionals",
-      "jobat_url": "https://www.jobat.be/en/career/ict-professional",
-      "salary_url": "https://www.jobat.be/en/art/loon/het-loon-van-ict-professional",
-      "course_url": "https://www.jobat.be/en/courses?query=ict",
+      "jobat_url": "https://www.jobat.be/nl/art/beroepengids/software-ontwikkelaar",
+      "salary_url": "https://www.jobat.be/en/salary-calculator",
+      "course_url": "https://www.jobat.be/en/courses",
       "course_keywords": ["ict", "programming", "software"]
     },
     "financial-functions": {
       "occupation_en": "Financial Functions",
-      "jobat_url": "https://www.jobat.be/en/career/financieel-medewerker",
-      "salary_url": "https://www.jobat.be/en/art/loon/het-loon-van-financieel-medewerker",
-      "course_url": "https://www.jobat.be/en/courses?query=finance",
+      "jobat_url": "https://www.jobat.be/nl/art/beroepengids/boekhouder",
+      "salary_url": "https://www.jobat.be/en/salary-calculator",
+      "course_url": "https://www.jobat.be/en/courses",
       "course_keywords": ["finance", "financieel", "accounting"]
     },
     "medical-and-paramedical": {
       "occupation_en": "Medical & Paramedical",
-      "jobat_url": "https://www.jobat.be/en/career/arts",
-      "salary_url": "https://www.jobat.be/en/art/loon/het-loon-van-arts",
-      "course_url": "https://www.jobat.be/en/courses?query=medicine",
+      "jobat_url": "https://www.jobat.be/nl/art/beroepengids/arts",
+      "salary_url": "https://www.jobat.be/en/salary-calculator",
+      "course_url": "https://www.jobat.be/en/courses",
       "course_keywords": ["medicine", "geneeskunde", "healthcare"]
     },
     "sales": {
       "occupation_en": "Sales",
-      "jobat_url": "https://www.jobat.be/en/career/verkoper",
-      "salary_url": "https://www.jobat.be/en/art/loon/het-loon-van-verkoper",
-      "course_url": "https://www.jobat.be/en/courses?query=sales",
+      "jobat_url": "https://www.jobat.be/nl/art/beroepengids/verkoper",
+      "salary_url": "https://www.jobat.be/en/salary-calculator",
+      "course_url": "https://www.jobat.be/en/courses",
       "course_keywords": ["sales", "verkoop", "marketing"]
     }
   }
