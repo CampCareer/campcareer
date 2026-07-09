@@ -12,6 +12,9 @@ import { SA4_BY_STATE } from "@/data/sa4-regions"
 import { COUNTRY_ROI_DATA_META, COUNTRY_ROI_INSIGHTS } from "@/data/country-roi-mvp"
 import { getMapData } from "@/lib/map-data"
 import { getIndexableMapOccupations, MAP_COUNTRIES } from "@/lib/map-slugs"
+import { PILOT_OCCUPATIONS } from "@/data/pilot-occupations"
+import { isPilotOccupationIndexable } from "@/lib/pilot-launch-gate"
+import { pilotOccupationSlug } from "@/components/expansion/pilot-occupation-page"
 
 const BASE = "https://www.campcareer.com"
 
@@ -28,6 +31,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/methodology`, lastModified: lastModStatic, priority: 0.5, changeFrequency: "monthly" },
     { url: `${BASE}/privacy`, lastModified: lastModStatic, priority: 0.2, changeFrequency: "yearly" },
     { url: `${BASE}/terms`, lastModified: lastModStatic, priority: 0.2, changeFrequency: "yearly" },
+    { url: `${BASE}/ko`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
     // 국가별 허브 페이지 — 크롤러 진입점. orphan 페이지 문제 해결.
     { url: `${BASE}/au`, lastModified: lastModStatic, priority: 0.9, changeFrequency: "weekly" },
     { url: `${BASE}/au/jobs`, lastModified: lastModStatic, priority: 0.9, changeFrequency: "weekly" },
@@ -74,6 +78,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly" as const,
     })))
   }
+
+  const pilotOccupationPages: MetadataRoute.Sitemap = PILOT_OCCUPATIONS
+    .filter(isPilotOccupationIndexable)
+    .flatMap((occupation) => {
+      const country = occupation.country.toLowerCase()
+      const slug = pilotOccupationSlug(occupation)
+      return [
+        { url: `${BASE}/ko/maps/${country}/${slug}`, lastModified: lastMod, priority: 0.7, changeFrequency: "weekly" as const },
+        { url: `${BASE}/expansion/maps/${country}/${slug}`, lastModified: lastMod, priority: 0.5, changeFrequency: "weekly" as const },
+      ]
+    })
 
   // 아일랜드 어학원
   const ieSchoolSlugs = await getAllSlugs()
@@ -156,9 +171,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  const total = staticPages.length + blogPages.length + countryDetailPages.length + mapOccupationPages.length +
+  const total = staticPages.length + blogPages.length + countryDetailPages.length + mapOccupationPages.length + pilotOccupationPages.length +
     ieLangSchoolPages.length + mapPages.length + usUnivPages.length + auUnivPages.length + caUnivPages.length + ukUnivPages.length + deUnivPages.length + nlUnivPages.length
-  console.log(`[sitemap] counts — static: ${staticPages.length}, blog: ${blogPages.length}, country details: ${countryDetailPages.length}, map occupations: ${mapOccupationPages.length}, IE schools: ${ieLangSchoolPages.length}, map: ${mapPages.length}, US universities: ${usUnivPages.length}, AU universities: ${auUnivPages.length}, CA universities: ${caUnivPages.length}, UK universities: ${ukUnivPages.length}, DE universities: ${deUnivPages.length}, NL universities: ${nlUnivPages.length}, TOTAL: ${total}`)
+  console.log(`[sitemap] counts — static: ${staticPages.length}, blog: ${blogPages.length}, country details: ${countryDetailPages.length}, map occupations: ${mapOccupationPages.length}, pilot occupations: ${pilotOccupationPages.length}, IE schools: ${ieLangSchoolPages.length}, map: ${mapPages.length}, US universities: ${usUnivPages.length}, AU universities: ${auUnivPages.length}, CA universities: ${caUnivPages.length}, UK universities: ${ukUnivPages.length}, DE universities: ${deUnivPages.length}, NL universities: ${nlUnivPages.length}, TOTAL: ${total}`)
 
-  return [...staticPages, ...blogPages, ...countryDetailPages, ...mapOccupationPages, ...ieLangSchoolPages, ...mapPages, ...usUnivPages, ...auUnivPages, ...caUnivPages, ...ukUnivPages, ...deUnivPages, ...nlUnivPages]
+  return [...staticPages, ...blogPages, ...countryDetailPages, ...mapOccupationPages, ...pilotOccupationPages, ...ieLangSchoolPages, ...mapPages, ...usUnivPages, ...auUnivPages, ...caUnivPages, ...ukUnivPages, ...deUnivPages, ...nlUnivPages]
 }

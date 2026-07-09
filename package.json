@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "check:data": "npx tsx scripts/check-data-quality.ts"
+    "check:data": "npx tsx scripts/check-data-quality.ts",
+    "check:pilot": "npx tsx scripts/check-pilot-readiness.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
