@@ -1725,6 +1725,256 @@ async function getMapDataUncached(): Promise<MapData> {
   return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages, coursesByFieldState, usStateInfo, usMajorDensity, usRankedColleges, auRankedColleges, caColleges, caOccupations, caHighPay, caHighPayByProvince, caProvinceOccupations, caProvinceShortages, caCities, ukOccupations, ukShortageByRegion, ukHighPayByRegion, ukColleges, ukCities, deOccupations, deHighPayByRegion, deShortageByRegion, deColleges, deCities, nlOccupations, nlShortageByRegion, nlHighPayByRegion, nlColleges, nlCities, beOccupations, beHighPayByRegion, beShortageByRegion, beColleges, beCities, beStateInfo }
 }
 
+// ── Per-country lightweight data (avoids 2 MB unstable_cache limit) ──────────
+
+export interface AUMapData {
+  shortageByState: Record<string, StateOccupation[]>
+  stateSalaryMult: StateSalaryMult
+  auRankedColleges: AURankedCollege[]
+}
+
+export interface USMapData {
+  usRankedColleges: USRankedCollege[]
+  usShortageByState: Record<string, USOccupation[]>
+  usStateInfo: Record<string, USStateInfo>
+}
+
+export interface UKMapData {
+  ukColleges: UKCollege[]
+  ukHighPayByRegion: Record<string, UKRegionOccupation[]>
+  ukCities: UKCity[]
+}
+
+export interface DEMapData {
+  deColleges: DECollege[]
+  deHighPayByRegion: Record<string, DERegionOccupation[]>
+  deCities: DECity[]
+}
+
+export interface NLMapData {
+  nlColleges: NLCollege[]
+  nlHighPayByRegion: Record<string, NLRegionOccupation[]>
+  nlCities: NLCity[]
+}
+
+export interface CAMapData {
+  caColleges: CACollege[]
+  caHighPayByProvince: Record<string, CAHighPayOccupation[]>
+  caCities: CACity[]
+}
+
+async function getAUMapDataUncached(): Promise<AUMapData> {
+  const [occupations, stateRows, multRows] = await Promise.all([
+    fetchAll<OccRow>(
+      "occupations_au",
+      "anzsco_code, anzsco_v13, occupation_en, occupation_ko, shortage_rating, median_salary_aud, on_csol, confidence, related_broad_field, pr_note_ko, source_name, source_url, last_verified",
+    ),
+    fetchAll<StateRow>("occupation_state_au", "anzsco_code, state, shortage_rating"),
+    supabaseAdmin
+      .from("state_salary_multiplier")
+      .select("state, anzsco_1digit, multiplier")
+      .then((r) => (r.data ?? []) as { state: string; anzsco_1digit: string; multiplier: number }[]),
+  ])
+
+  const stateSalaryMult: StateSalaryMult = {}
+  for (const row of multRows) {
+    if (!stateSalaryMult[row.state]) stateSalaryMult[row.state] = {}
+    stateSalaryMult[row.state][row.anzsco_1digit] = Number(row.multiplier)
+  }
+
+  const byCode = new Map<string, OccRow>()
+  for (const o of occupations) {
+    if (o.anzsco_code) byCode.set(o.anzsco_code, o)
+  }
+
+  const stateCountMap = new Map<string, number>()
+  for (const r of stateRows) {
+    if (r.anzsco_code) stateCountMap.set(r.anzsco_code, (stateCountMap.get(r.anzsco_code) ?? 0) + 1)
+  }
+
+  const shortageByState: Record<string, StateOccupation[]> = {}
+  for (const code of STATE_CODES) shortageByState[code] = []
+  for (const r of stateRows) {
+    const code = normalizeStateCode(r.state)
+    if (!code) continue
+    const o = r.anzsco_code ? byCode.get(r.anzsco_code) : undefined
+    if (!o || !o.anzsco_code) continue
+    shortageByState[code].push({
+      anzsco_code: o.anzsco_code,
+      anzsco_v13: o.anzsco_v13 || null,
+      occupation_en: o.occupation_en,
+      occupation_ko: o.occupation_ko,
+      median_salary_aud: o.median_salary_aud,
+      on_csol: o.on_csol,
+      confidence: o.confidence,
+      state_shortage_rating: r.shortage_rating,
+      state_count: stateCountMap.get(o.anzsco_code) ?? 8,
+    })
+  }
+  for (const code of STATE_CODES) {
+    shortageByState[code].sort(
+      (a, b) => a.state_count - b.state_count || b.state_shortage_rating - a.state_shortage_rating || (b.median_salary_aud ?? 0) - (a.median_salary_aud ?? 0),
+    )
+  }
+
+  const auRankedColleges = getAURankedColleges()
+  return { shortageByState, stateSalaryMult, auRankedColleges }
+}
+
+async function getUSMapDataUncached(): Promise<USMapData> {
+  const usColleges = await getUSColleges()
+  const usRankedColleges = getUSRankedColleges(usColleges)
+  const usOccData = getUSOccupationData()
+  const usStateInfo = getUSStateInfo()
+  return { usRankedColleges, usShortageByState: usOccData.shortageByState, usStateInfo }
+}
+
+async function getUKMapDataUncached(): Promise<UKMapData> {
+  const [ukOccupationsList, ukStateRows, ukColleges, ukCities] = await Promise.all([
+    fetchAll<UKOccRow>(
+      "occupations_uk",
+      "soc_code, occupation_en, occupation_ko, median_salary_gbp, on_sol, on_isl, confidence, related_broad_field, source_name, source_url, last_verified",
+    ),
+    fetchAll<UKStateRow>(
+      "occupation_state_uk",
+      "soc_code, region, median_salary_gbp, shortage_rating, data_source",
+    ),
+    getUKColleges(),
+    getUKCities(),
+  ])
+
+  const ukOccupations: Record<string, UKOccRow> = {}
+  const ukOccByRegion = new Map<string, UKStateRow[]>()
+
+  if (ukOccupationsList.length > 0) {
+    for (const o of ukOccupationsList) ukOccupations[o.soc_code] = o
+    for (const r of ukStateRows) {
+      const arr = ukOccByRegion.get(r.region) ?? []
+      arr.push(r)
+      ukOccByRegion.set(r.region, arr)
+    }
+  } else {
+    const raw = ukOccupationsRaw as unknown as Record<string, { soc_code: string; occupation_en: string; median_salary_gbp: number | null; mean_salary_gbp?: number | null; q1_salary_gbp?: number | null; q3_salary_gbp?: number | null; employment_thousands?: number | null; on_sol: boolean; on_isl: boolean; source_name: string }>
+    for (const occ of Object.values(raw)) {
+      ukOccupations[occ.soc_code] = { ...occ, mean_salary_gbp: occ.mean_salary_gbp ?? null, q1_salary_gbp: occ.q1_salary_gbp ?? null, q3_salary_gbp: occ.q3_salary_gbp ?? null, employment_thousands: occ.employment_thousands ?? null, occupation_ko: null, confidence: null, related_broad_field: null, source_url: null, last_verified: null }
+    }
+    const regRaw = ukRegionOccupationsRaw as unknown as Record<string, Array<{ soc_code: string; median_salary_gbp: number | null; mean_salary_gbp?: number | null; q1_salary_gbp?: number | null; q3_salary_gbp?: number | null; employment_thousands?: number | null }>>
+    for (const [region, occs] of Object.entries(regRaw)) {
+      ukOccByRegion.set(region, occs.map((r) => ({ soc_code: r.soc_code, region, median_salary_gbp: r.median_salary_gbp, mean_salary_gbp: r.mean_salary_gbp ?? null, q1_salary_gbp: r.q1_salary_gbp ?? null, q3_salary_gbp: r.q3_salary_gbp ?? null, employment_thousands: r.employment_thousands ?? null, shortage_rating: null, data_source: "ONS ASHE 2025 provisional (JSON fallback)" })))
+    }
+  }
+
+  const ukHighPayByRegion: Record<string, UKRegionOccupation[]> = {}
+  for (const code of UK_REGION_CODES) {
+    const rows = ukOccByRegion.get(code) ?? []
+    const occs: UKRegionOccupation[] = rows.filter((r) => ukOccupations[r.soc_code]).map((r) => {
+      const occ = ukOccupations[r.soc_code]
+      return { soc_code: r.soc_code, occupation_en: occ.occupation_en, occupation_ko: occ.occupation_ko, median_salary_gbp: r.median_salary_gbp ?? occ.median_salary_gbp, mean_salary_gbp: r.mean_salary_gbp ?? occ.mean_salary_gbp, q1_salary_gbp: r.q1_salary_gbp ?? occ.q1_salary_gbp, q3_salary_gbp: r.q3_salary_gbp ?? occ.q3_salary_gbp, employment_thousands: r.employment_thousands ?? occ.employment_thousands, shortage_rating: r.shortage_rating }
+    })
+    ukHighPayByRegion[code] = occs.filter((o) => o.median_salary_gbp != null).sort((a, b) => (b.median_salary_gbp ?? 0) - (a.median_salary_gbp ?? 0)).slice(0, 12)
+  }
+
+  return { ukColleges, ukHighPayByRegion, ukCities }
+}
+
+async function getDEMapDataUncached(): Promise<DEMapData> {
+  const [deColleges, deCities] = await Promise.all([getDEColleges(), getDECities()])
+
+  const deRaw = deOccupationsRaw as unknown as Record<string, { kldb_code: string; occupation_de: string; occupation_en: string; median_salary_eur: number | null; mean_salary_eur: number | null; q1_salary_eur: number | null; q3_salary_eur: number | null; employment_thousands: number | null; shortage_rating: number | null; on_blue_card_list: boolean; related_broad_field: string | null }>
+  const deOccupations: Record<string, DEOccRow> = {}
+  for (const occ of Object.values(deRaw)) deOccupations[occ.kldb_code] = occ
+
+  const deRegRaw = deRegionOccupationsRaw as unknown as Record<string, { kldb_code: string; shortage_rating: number | null; median_salary_eur: number | null; median_salary_spezialist_eur?: number | null; median_salary_experte_eur?: number | null; shortage_rating_spezialist?: number | null; shortage_rating_experte?: number | null }[]>
+  const deHighPayByRegion: Record<string, DERegionOccupation[]> = {}
+  for (const [code, entries] of Object.entries(deRegRaw)) {
+    const occs = entries.map((e): DERegionOccupation | null => {
+      const o = deOccupations[e.kldb_code]
+      if (!o) return null
+      return { kldb_code: o.kldb_code, occupation_en: o.occupation_en, median_salary_eur: e.median_salary_eur ?? o.median_salary_eur, shortage_rating: e.shortage_rating ?? o.shortage_rating, employment_thousands: o.employment_thousands, median_salary_spezialist_eur: e.median_salary_spezialist_eur ?? o.median_salary_spezialist_eur ?? null, median_salary_experte_eur: e.median_salary_experte_eur ?? o.median_salary_experte_eur ?? null, shortage_rating_spezialist: e.shortage_rating_spezialist ?? o.shortage_rating_spezialist ?? null, shortage_rating_experte: e.shortage_rating_experte ?? o.shortage_rating_experte ?? null }
+    }).filter((x): x is DERegionOccupation => x != null)
+    deHighPayByRegion[code] = occs.filter((o) => o.median_salary_eur != null).sort((a, b) => (b.median_salary_eur ?? 0) - (a.median_salary_eur ?? 0)).slice(0, 12)
+  }
+
+  return { deColleges, deHighPayByRegion, deCities }
+}
+
+async function getNLMapDataUncached(): Promise<NLMapData> {
+  const [nlColleges, nlCities] = await Promise.all([getNLColleges(), getNLCities()])
+
+  const nlRaw = nlOccupationsRaw as unknown as Record<string, { sbc_code: string; occupation_nl: string; occupation_en: string; median_salary_eur: number | null; mean_salary_eur: number | null; q1_salary_eur: number | null; q3_salary_eur: number | null; employment_thousands: number | null; shortage_rating: number | null; related_broad_field: string | null }>
+  const nlOccupations: Record<string, NLOccRow> = {}
+  for (const occ of Object.values(nlRaw)) nlOccupations[occ.sbc_code] = occ
+
+  const nlRegRaw = nlRegionOccupationsRaw as unknown as Record<string, { sbc_code: string; shortage_rating: number | null; median_salary_eur: number | null }[]>
+  const nlHighPayByRegion: Record<string, NLRegionOccupation[]> = {}
+  for (const [code, entries] of Object.entries(nlRegRaw)) {
+    const occs = entries.map((e): NLRegionOccupation | null => {
+      const o = nlOccupations[e.sbc_code]
+      if (!o) return null
+      return { sbc_code: o.sbc_code, occupation_en: o.occupation_en, median_salary_eur: e.median_salary_eur ?? o.median_salary_eur, shortage_rating: e.shortage_rating ?? o.shortage_rating, employment_thousands: o.employment_thousands }
+    }).filter((x): x is NLRegionOccupation => x != null)
+    nlHighPayByRegion[code] = occs.filter((o) => o.median_salary_eur != null).sort((a, b) => (b.median_salary_eur ?? 0) - (a.median_salary_eur ?? 0)).slice(0, 12)
+  }
+
+  return { nlColleges, nlHighPayByRegion, nlCities }
+}
+
+async function getCAMapDataUncached(): Promise<CAMapData> {
+  const [caColleges, caOccupationsList, caStateRows, caCities] = await Promise.all([
+    getCAColleges(),
+    fetchAll<CAOccRow>(
+      "occupations_ca",
+      "noc_code, occupation_en, occupation_ko, median_salary_cad, low_wage_cad, high_wage_cad, average_wage_cad, q1_wage_cad, q3_wage_cad, shortage_rating, on_teer_eligible, related_broad_field, confidence, data_source, last_verified",
+    ),
+    fetchAll<CAStateRow>(
+      "occupation_state_ca",
+      "noc_code, province, median_wage_cad, low_wage_cad, high_wage_cad, shortage_rating, data_source",
+    ),
+    getCACities(),
+  ])
+
+  const caOccupations: Record<string, CAOccRow> = {}
+  for (const o of caOccupationsList) caOccupations[o.noc_code] = o
+
+  const caStateRowsRaw: CAStateRow[] = caStateRows.length > 0
+    ? caStateRows
+    : Object.entries(caOccupationStateRaw as Record<string, Array<Omit<CAStateRow, "province">>>).flatMap(([province, rows]) => rows.map((r) => ({ ...r, province })))
+
+  const caOccByProvince = new Map<string, CAStateRow[]>()
+  for (const r of caStateRowsRaw) {
+    const arr = caOccByProvince.get(r.province) ?? []
+    arr.push(r)
+    caOccByProvince.set(r.province, arr)
+  }
+
+  const caHighPayByProvince: Record<string, CAHighPayOccupation[]> = {}
+  for (const province of CA_PROVINCE_CODES) {
+    const rows = caOccByProvince.get(province) ?? []
+    const provinceOccs = rows.filter((r) => caOccupations[r.noc_code]).map((r) => {
+      const occ = caOccupations[r.noc_code]
+      return { noc_code: r.noc_code, occupation_en: occ.occupation_en, occupation_ko: occ.occupation_ko, median_salary_cad: r.median_wage_cad ?? occ.median_salary_cad, low_wage_cad: r.low_wage_cad ?? occ.low_wage_cad, high_wage_cad: r.high_wage_cad ?? occ.high_wage_cad, shortage_rating: occ.shortage_rating, province_shortage_rating: r.shortage_rating }
+    })
+    caHighPayByProvince[province] = provinceOccs.filter((o) => o.median_salary_cad != null).sort((a, b) => (b.median_salary_cad ?? 0) - (a.median_salary_cad ?? 0)).slice(0, 12).map((o) => ({ noc_code: o.noc_code, occupation_en: o.occupation_en, occupation_ko: o.occupation_ko, median_salary_cad: o.median_salary_cad, shortage_rating: o.province_shortage_rating ?? o.shortage_rating }))
+  }
+
+  return { caColleges, caHighPayByProvince, caCities }
+}
+
+// Cached wrappers — each well under the 2 MB limit
+const getAUCached = unstable_cache(getAUMapDataUncached, ["map-data-au"], { revalidate: 86400 })
+const getUSCached = unstable_cache(getUSMapDataUncached, ["map-data-us"], { revalidate: 86400 })
+const getUKCached = unstable_cache(getUKMapDataUncached, ["map-data-uk"], { revalidate: 86400 })
+const getDECached = unstable_cache(getDEMapDataUncached, ["map-data-de"], { revalidate: 86400 })
+const getNLCached = unstable_cache(getNLMapDataUncached, ["map-data-nl"], { revalidate: 86400 })
+const getCACached = unstable_cache(getCAMapDataUncached, ["map-data-ca"], { revalidate: 86400 })
+
+export async function getAUMapData(): Promise<AUMapData> { return getAUCached() }
+export async function getUSMapData(): Promise<USMapData> { return getUSCached() }
+export async function getUKMapData(): Promise<UKMapData> { return getUKCached() }
+export async function getDEMapData(): Promise<DEMapData> { return getDECached() }
+export async function getNLMapData(): Promise<NLMapData> { return getNLCached() }
+export async function getCAMapData(): Promise<CAMapData> { return getCACached() }
+
 // cross-instance 공유 캐시(방어선). 페이지가 force-static이라 보통 빌드/리밸리데이트
 // 때만 돌지만, 콜드 인스턴스·리밸리데이트에서도 Supabase 6쿼리가 중복 실행되지
 // 않도록 24h 캐시한다. 페이지의 revalidate(86400)와 동일하게 맞춘다.

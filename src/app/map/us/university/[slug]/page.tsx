@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { getMapData } from "@/lib/map-data"
+import { getUSMapData } from "@/lib/map-data"
 import { pageMetadata } from "@/lib/seo"
 import { US_STATE_NAMES } from "../../../states"
 import UniversityStaticCard from "../../../UniversityStaticCard"
@@ -8,12 +8,12 @@ import UniversityStaticCard from "../../../UniversityStaticCard"
 export const revalidate = 86400
 
 export async function generateStaticParams() {
-  const data = await getMapData()
+  const data = await getUSMapData()
   return data.usRankedColleges.map((c) => ({ slug: c.slug }))
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const data = await getMapData()
+  const data = await getUSMapData()
   const college = data.usRankedColleges.find((c) => c.slug === params.slug)
   if (!college) return pageMetadata({ title: "University Details", description: "", path: "/map" })
 
@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export default async function UniversityPage({ params }: { params: { slug: string } }) {
-  const data = await getMapData()
+  const data = await getUSMapData()
   const college = data.usRankedColleges.find((c) => c.slug === params.slug)
   if (!college) notFound()
 
