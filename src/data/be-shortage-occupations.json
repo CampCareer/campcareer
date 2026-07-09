@@ -1,0 +1,144 @@
+{
+  "source": "VDAB, Actiris, Forem",
+  "last_updated": "2025",
+  "flanders": {
+    "total_shortage_occupations": 251,
+    "top_10_shortage": [
+      {
+        "rank": 1,
+        "occupation": "Nurse",
+        "occupation_nl": "Verpleegkundige",
+        "reason": "Aging population, high demand"
+      },
+      {
+        "rank": 2,
+        "occupation": "Accountant",
+        "occupation_nl": "Boekhouder",
+        "reason": "High demand across all sectors"
+      },
+      {
+        "rank": 3,
+        "occupation": "Industrial Technician",
+        "occupation_nl": "Technicus industriële installaties",
+        "reason": "Technical skills shortage"
+      },
+      {
+        "rank": 4,
+        "occupation": "Maintenance Mechanic",
+        "occupation_nl": "Onderhoudsmecanicien",
+        "reason": "Industrial demand"
+      },
+      {
+        "rank": 5,
+        "occupation": "Machine Builder",
+        "occupation_nl": "Machinebouwer",
+        "reason": "Manufacturing sector"
+      },
+      {
+        "rank": 6,
+        "occupation": "Construction Foreman",
+        "occupation_nl": "Werfleider",
+        "reason": "Construction boom"
+      },
+      {
+        "rank": 7,
+        "occupation": "Home Cleaner",
+        "occupation_nl": "Schoonmaker bij mensen thuis",
+        "reason": "Service sector demand"
+      },
+      {
+        "rank": 8,
+        "occupation": "Fruit Harvest Worker",
+        "occupation_nl": "Medewerker in de fruitteelt",
+        "reason": "Agricultural sector"
+      },
+      {
+        "rank": 9,
+        "occupation": "Hospitality Staff",
+        "occupation_nl": "Horecapersoneel",
+        "reason": "Tourism recovery"
+      },
+      {
+        "rank": 10,
+        "occupation": "Childcare Worker",
+        "occupation_nl": "Begeleider kinderopvang",
+        "reason": "Social sector demand"
+      }
+    ],
+    "categories": [
+      "Administrative professions",
+      "Construction professions",
+      "Communication and knowledge professions",
+      "Service professions",
+      "Hospitality, trade and sales",
+      "Industrial professions and crafts",
+      "Agriculture and forestry",
+      "Medical and paramedical professions",
+      "Educational professions",
+      "Transport and logistics",
+      "Leisure and artistic professions"
+    ]
+  },
+  "brussels": {
+    "total_shortage_occupations": 106,
+    "top_shortage": [
+      {
+        "occupation": "Accountant",
+        "occupation_fr": "Comptable"
+      },
+      {
+        "occupation": "Ergotherapist",
+        "occupation_fr": "Ergothérapeute"
+      },
+      {
+        "occupation": "Construction Foreman",
+        "occupation_fr": "Chef de chantier"
+      },
+      {
+        "occupation": "Nurse",
+        "occupation_fr": "Infirmier"
+      },
+      {
+        "occupation": "Teacher",
+        "occupation_fr": "Enseignant"
+      },
+      {
+        "occupation": "IT Specialist",
+        "occupation_fr": "Spécialiste IT"
+      },
+      {
+        "occupation": "Baker",
+        "occupation_fr": "Boulanger"
+      },
+      {
+        "occupation": "Butcher",
+        "occupation_fr": "Boucher"
+      }
+    ]
+  },
+  "wallonia": {
+    "total_shortage_occupations": 85,
+    "top_shortage": [
+      {
+        "occupation": "Healthcare Workers",
+        "occupation_fr": "Travailleurs de la santé"
+      },
+      {
+        "occupation": "Construction Workers",
+        "occupation_fr": "Travailleurs de la construction"
+      },
+      {
+        "occupation": "IT Specialists",
+        "occupation_fr": "Spécialistes IT"
+      },
+      {
+        "occupation": "Engineers",
+        "occupation_fr": "Ingénieurs"
+      },
+      {
+        "occupation": "Logistics Workers",
+        "occupation_fr": "Travailleurs logistiques"
+      }
+    ]
+  }
+}

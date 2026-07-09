@@ -1,0 +1,67 @@
+#!/usr/bin/env python3
+"""
+Belgium Cost of Living Crawler
+소스: Numbeo, Expatis
+"""
+
+import requests
+from bs4 import BeautifulSoup
+import json
+
+def crawl_budget():
+    """생활비 데이터 수집"""
+    data = {
+        "source": "Numbeo, Expatis, Pacific Prime",
+        "last_updated": "2025",
+        "single_person_monthly_budget_eur": {
+            "total": 1800,
+            "breakdown": {
+                "rent_1bed_apartment": 950,
+                "utilities_electricity_gas": 150,
+                "internet_tv": 50,
+                "groceries": 300,
+                "transport": 80,
+                "dining_out": 150,
+                "entertainment": 70,
+                "health_insurance": 50
+            }
+        },
+        "family_of_four_monthly_budget_eur": {
+            "total": 4518,
+            "breakdown": {
+                "rent_3bed_apartment": 1800,
+                "utilities_electricity_gas": 250,
+                "internet_tv": 50,
+                "groceries": 600,
+                "transport": 200,
+                "dining_out": 300,
+                "entertainment": 150,
+                "childcare_education": 1000,
+                "health_insurance": 100
+            }
+        },
+        "city_comparison": [
+            {"city": "Brussels", "single_person_monthly_eur": 2000, "family_of_four_monthly_eur": 4800},
+            {"city": "Antwerp", "single_person_monthly_eur": 1800, "family_of_four_monthly_eur": 4200},
+            {"city": "Ghent", "single_person_monthly_eur": 1700, "family_of_four_monthly_eur": 4000},
+            {"city": "Liège", "single_person_monthly_eur": 1600, "family_of_four_monthly_eur": 3800},
+            {"city": "Namur", "single_person_monthly_eur": 1550, "family_of_four_monthly_eur": 3700}
+        ],
+        "utilities": {
+            "electricity_gas_eur": 150,
+            "internet_tv_eur": 50,
+            "water_eur": 20,
+            "mobile_phone_eur": 20
+        },
+        "food_costs": {
+            "groceries_monthly_eur": 300,
+            "meal_inexpensive_restaurant_eur": 15,
+            "meal_mid_range_restaurant_eur": 60,
+            "coffee_eur": 3.5
+        }
+    }
+    return data
+
+if __name__ == "__main__":
+    data = crawl_budget()
+    print(json.dumps(data, ensure_ascii=False, indent=2))

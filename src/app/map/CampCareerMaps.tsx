@@ -8,7 +8,7 @@ import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useTranslations, useLocale } from "@/lib/i18n/locale-provider"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { STATE_CODES, STATE_NAMES, US_STATE_CODES, US_STATE_NAMES, IE_COUNTY_CODES, IE_COUNTY_NAMES, IE_CITY_TO_COUNTY, CA_PROVINCE_CODES, CA_PROVINCE_NAMES, UK_REGION_CODES, UK_REGION_NAMES, DE_BUNDESLAND_CODES, DE_BUNDESLAND_NAMES, NL_PROVINCE_CODES, NL_PROVINCE_NAMES, type StateCode } from "./states"
+import { STATE_CODES, STATE_NAMES, US_STATE_CODES, US_STATE_NAMES, IE_COUNTY_CODES, IE_COUNTY_NAMES, IE_CITY_TO_COUNTY, CA_PROVINCE_CODES, CA_PROVINCE_NAMES, UK_REGION_CODES, UK_REGION_NAMES, DE_BUNDESLAND_CODES, DE_BUNDESLAND_NAMES, NL_PROVINCE_CODES, NL_PROVINCE_NAMES, BE_REGION_CODES, BE_REGION_NAMES, type StateCode } from "./states"
 import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
 import { WHV_REGIONS } from "@/data/whv-regions"
 import { WHV_SPECIFIED_WORK } from "@/data/whv-occupations"
@@ -23,7 +23,7 @@ import { AffiliateCtas } from "@/components/partners/partner-cta"
 import JobListings from "./JobListings"
 import { EMPLOYMENT_OCCUPATIONS } from "@/data/employment-occupations"
 import { EMPLOYMENT_SALARIES } from "@/data/employment-salaries"
-import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc, CourseLite, USStateInfo, StateMajorDensity, USRankedCollege, AURankedCollege, CACollege, CACity, CAOccRow, CAHighPayOccupation, UKOccRow, UKRegionOccupation, UKCollege, UKCity, DECollege, DECity, DERegionOccupation, DEOccRow, NLCollege, NLCity, NLRegionOccupation, NLOccRow } from "@/lib/map-data"
+import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc, CourseLite, USStateInfo, StateMajorDensity, USRankedCollege, AURankedCollege, CACollege, CACity, CAOccRow, CAHighPayOccupation, UKOccRow, UKRegionOccupation, UKCollege, UKCity, DECollege, DECity, DERegionOccupation, DEOccRow, NLCollege, NLCity, NLRegionOccupation, NLOccRow, BERegionOccupation, BEOccRow } from "@/lib/map-data"
 import { createClient } from "@/lib/supabase-client"
 import type { User } from "@supabase/supabase-js"
 import { getShortageOccupations } from "@/lib/ie-shortage-occupations"
@@ -71,7 +71,7 @@ export default function CampCareerMaps({
   const t = useTranslations()
   // /map은 호주 비치헤드의 front door다 → 진입 즉시 주/지역 선택(검색) 바가 보이도록
   // 기본을 "AU"로 둔다. 월드맵(다른 국가)은 "전체 보기"로 빠져나가 볼 수 있다.
-  const [activeCountry, setActiveCountry] = useState<"AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL" | null>("AU")
+  const [activeCountry, setActiveCountry] = useState<"AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL" | "BE" | null>("AU")
   const [selected, setSelected] = useState<string | null>(null)
   const [selectedSA4, setSelectedSA4] = useState<SA4Region | null>(null)
   const [tab, setTab] = useState<Tab>("shortage")
@@ -407,7 +407,7 @@ export default function CampCareerMaps({
     track("select_state", { country: activeCountry ?? "AU", state: s })
   }, [activeCountry])
 
-  const onSelectCountry = useCallback((country: "AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL") => {
+  const onSelectCountry = useCallback((country: "AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL" | "BE") => {
     setActiveCountry(country)
     setSelected(null)
     setSelectedSA4(null)
@@ -569,13 +569,24 @@ export default function CampCareerMaps({
     )
   }, [data.nlShortageByRegion, selected])
 
+  const beShortageItems = useMemo<Record<string, string>>(() => {
+    if (!selected) return {}
+    const occs = data.beShortageByRegion?.[selected] ?? []
+    return Object.fromEntries(
+      occs.map((o) => [
+        o.occupation_code,
+        `${o.occupation_en}${o.median_salary_eur != null ? ` · €${o.median_salary_eur.toLocaleString()}` : ""}`,
+      ]),
+    )
+  }, [data.beShortageByRegion, selected])
+
   const filteredIESchools = useMemo(() => {
     if (!ieSchools) return null
     if (!selected || activeCountry !== "IE") return ieSchools
     return ieSchools.filter((s) => IE_CITY_TO_COUNTY[s.city] === selected)
   }, [ieSchools, selected, activeCountry])
 
-  const countryLabel = activeCountry === "AU" ? "🇦🇺 Australia" : activeCountry === "US" ? "🇺🇸 United States" : activeCountry === "CA" ? "🇨🇦 Canada" : activeCountry === "IE" ? "🇮🇪 Ireland" : activeCountry === "UK" ? "🇬🇧 United Kingdom" : activeCountry === "DE" ? "🇩🇪 Germany" : activeCountry === "NL" ? "🇳🇱 Netherlands" : ""
+  const countryLabel = activeCountry === "AU" ? "🇦🇺 Australia" : activeCountry === "US" ? "🇺🇸 United States" : activeCountry === "CA" ? "🇨🇦 Canada" : activeCountry === "IE" ? "🇮🇪 Ireland" : activeCountry === "UK" ? "🇬🇧 United Kingdom" : activeCountry === "DE" ? "🇩🇪 Germany" : activeCountry === "NL" ? "🇳🇱 Netherlands" : activeCountry === "BE" ? "🇧🇪 Belgium" : ""
   const stateLabel = selected
     ? activeCountry === "AU"
       ? STATE_NAMES[selected as StateCode]
@@ -608,7 +619,7 @@ export default function CampCareerMaps({
 
   return (
     <div className="flex h-full w-full flex-col">
-      {(activeCountry === "AU" || activeCountry === "US" || activeCountry === "CA" || activeCountry === "IE" || activeCountry === "UK" || activeCountry === "DE" || activeCountry === "NL") && (
+        {(activeCountry === "AU" || activeCountry === "US" || activeCountry === "CA" || activeCountry === "IE" || activeCountry === "UK" || activeCountry === "DE" || activeCountry === "NL" || activeCountry === "BE") && (
       <>
         {!toolbarExpanded && (
           <button
@@ -627,9 +638,9 @@ export default function CampCareerMaps({
         <label className="block">
           <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectCountry}</span>
           <Select
-            items={{ AU: "🇦🇺 Australia", US: "🇺🇸 United States", CA: "🇨🇦 Canada", IE: "🇮🇪 Ireland", UK: "🇬🇧 United Kingdom", DE: "🇩🇪 Germany", NL: "🇳🇱 Netherlands" }}
+            items={{ AU: "🇦🇺 Australia", US: "🇺🇸 United States", CA: "🇨🇦 Canada", IE: "🇮🇪 Ireland", UK: "🇬🇧 United Kingdom", DE: "🇩🇪 Germany", NL: "🇳🇱 Netherlands", BE: "🇧🇪 Belgium" }}
             value={activeCountry ?? undefined}
-            onValueChange={(v) => v && onSelectCountry(v as "AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL")}
+            onValueChange={(v) => v && onSelectCountry(v as "AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL" | "BE")}
           >
             <SelectTrigger className="h-10 w-44 rounded-lg border-slate-200 text-sm">
               <SelectValue placeholder={t.map.selectCountryPlaceholder} />
@@ -642,6 +653,7 @@ export default function CampCareerMaps({
               <SelectItem value="UK">🇬🇧 United Kingdom</SelectItem>
               <SelectItem value="DE">🇩🇪 Germany</SelectItem>
               <SelectItem value="NL">🇳🇱 Netherlands</SelectItem>
+              <SelectItem value="BE">🇧🇪 Belgium</SelectItem>
             </SelectContent>
           </Select>
         </label>
@@ -750,6 +762,65 @@ export default function CampCareerMaps({
                 <SelectContent className="z-[2000] max-h-72">
                   {(data.deShortageByRegion?.[selected] ?? []).map((occ) => (
                     <SelectItem key={occ.kldb_code} value={occ.kldb_code}>
+                      <span className="flex items-center justify-between gap-3">
+                        <span className="truncate">{occ.occupation_en}</span>
+                        {occ.median_salary_eur != null && (
+                          <span className="shrink-0 text-xs text-slate-400">
+                            €{occ.median_salary_eur.toLocaleString()}
+                          </span>
+                        )}
+                      </span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </label>
+          )}
+          </>
+        ) : activeCountry === "BE" ? (
+          <>
+          <label className="block">
+            <span className="mb-1 block text-xs font-medium text-slate-500">Region</span>
+            <Select
+              items={BE_REGION_NAMES}
+              value={selected}
+              onValueChange={(v) => v && setSelected(v)}
+            >
+              <SelectTrigger className="h-10 w-56 rounded-lg border-slate-200 text-sm">
+                <SelectValue placeholder="Select a region">
+                  {selected ? BE_REGION_NAMES[selected] : null}
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent className="z-[2000]">
+                {BE_REGION_CODES.map((c) => (
+                  <SelectItem key={c} value={c}>
+                    {BE_REGION_NAMES[c]}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </label>
+
+          {selected && (
+            <label className="block">
+              <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectOccupation}</span>
+              <Select
+                items={beShortageItems}
+                value={selectedOccCode ?? null}
+                onValueChange={(v) => {
+                  if (!v) return
+                  const name = data.beOccupations[v]?.occupation_en ?? v
+                  track("click_occupation", { type: "be", code: v, name, state: selected ?? undefined })
+                  setSelectedOccCode(v)
+                  if (isMobile) setExpanded(false)
+                }}
+              >
+                <SelectTrigger className="h-10 w-72 rounded-lg border-slate-200 text-sm">
+                  <SelectValue placeholder={t.map.selectStatePlaceholder} />
+                </SelectTrigger>
+                <SelectContent className="z-[2000] max-h-72">
+                  {(data.beShortageByRegion?.[selected] ?? []).map((occ) => (
+                    <SelectItem key={occ.occupation_code} value={occ.occupation_code}>
                       <span className="flex items-center justify-between gap-3">
                         <span className="truncate">{occ.occupation_en}</span>
                         {occ.median_salary_eur != null && (
@@ -1115,7 +1186,7 @@ function Panel({
   onClose: () => void
   neroData: Record<string, NeroOccupation[]> | null
   regionData: RegionOccData | null
-  activeCountry: "AU" | "US" | "CA" | "UK" | "DE" | "NL" | null
+  activeCountry: "AU" | "US" | "CA" | "UK" | "DE" | "NL" | "BE" | null
   selectedOccCode: string | null
   setSelectedOccCode: (code: string | null) => void
   selectedUsOcc: USOccupation | null
@@ -1139,6 +1210,7 @@ function Panel({
     : isUK ? UK_REGION_NAMES[selected] ?? selected
     : activeCountry === "DE" ? DE_BUNDESLAND_NAMES[selected] ?? selected
     : activeCountry === "NL" ? NL_PROVINCE_NAMES[selected] ?? selected
+    : activeCountry === "BE" ? BE_REGION_NAMES[selected] ?? selected
     : US_STATE_NAMES[selected] ?? selected
 
   const [deExpLevel, setDeExpLevel] = useState<"fachkräfte" | "spezialisten" | "experten">("fachkräfte")
@@ -1219,6 +1291,11 @@ function Panel({
     return data.nlOccupations[selectedOccCode] ?? null
   }, [selectedOccCode, activeCountry, data.nlOccupations])
 
+  const resolvedBEOcc = useMemo<BEOccRow | null>(() => {
+    if (!selectedOccCode || activeCountry !== "BE") return null
+    return data.beOccupations[selectedOccCode] ?? null
+  }, [selectedOccCode, activeCountry, data.beOccupations])
+
   const handleSelectOcc = (code: string) => {
     const name = data.auOccupations[code]?.occupation_en ?? code
     track("click_occupation", { type: "au", code, name, state: selected })
@@ -1246,6 +1323,11 @@ function Panel({
   const handleSelectNLOcc = (code: string) => {
     const name = data.nlOccupations[code]?.occupation_en ?? code
     track("click_occupation", { type: "nl", code, name, state: selected })
+    setSelectedOccCode(code)
+  }
+  const handleSelectBEOcc = (code: string) => {
+    const name = data.beOccupations[code]?.occupation_en ?? code
+    track("click_occupation", { type: "be", code, name, state: selected })
     setSelectedOccCode(code)
   }
   const handleBack = () => setSelectedOccCode(null)
@@ -1321,6 +1403,22 @@ function Panel({
     return (
       <NLOccupationDetail
         occ={resolvedNLOcc}
+        regionName={stateName}
+        regionCode={selected}
+        data={data}
+        onBack={handleBack}
+        onClose={onClose}
+        savedOccCodes={savedOccCodes}
+        onToggleSave={onToggleSave}
+        onShare={onShare}
+      />
+    )
+  }
+
+  if (selectedOccCode && resolvedBEOcc) {
+    return (
+      <BEOccupationDetail
+        occ={resolvedBEOcc}
         regionName={stateName}
         regionCode={selected}
         data={data}
@@ -1492,7 +1590,14 @@ function Panel({
             <p className="py-8 text-center text-sm text-slate-400">{t.map.selectStateFirst}</p>
           )
         )}
-        {tab === "shortage" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && activeCountry !== "NL" && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
+        {tab === "shortage" && activeCountry === "BE" && (
+          selected ? (
+            <BEShortageList rows={data.beShortageByRegion?.[selected] ?? []} onSelectOcc={handleSelectBEOcc} />
+          ) : (
+            <p className="py-8 text-center text-sm text-slate-400">{t.map.selectStateFirst}</p>
+          )
+        )}
+        {tab === "shortage" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && activeCountry !== "NL" && activeCountry !== "BE" && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
         {tab === "shortage" && activeCountry === "CA" && <CAShortageList rows={Object.values(data.caOccupations)} onSelectOcc={handleSelectCAOcc} />}
         {tab === "pay" && isAU && (
           selectedSA4 ? (
@@ -1551,7 +1656,14 @@ function Panel({
             <p className="py-8 text-center text-sm text-slate-400">{t.map.selectStateFirst}</p>
           )
         )}
-        {tab === "pay" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && activeCountry !== "NL" && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
+        {tab === "pay" && activeCountry === "BE" && (
+          selected ? (
+            <BEHighPayList rows={data.beHighPayByRegion?.[selected] ?? []} onSelectOcc={handleSelectBEOcc} />
+          ) : (
+            <p className="py-8 text-center text-sm text-slate-400">{t.map.selectStateFirst}</p>
+          )
+        )}
+        {tab === "pay" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && activeCountry !== "NL" && activeCountry !== "BE" && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
         {tab === "pay" && activeCountry === "CA" && <CAHighPayList rows={data.caHighPay} provinceRows={selected ? data.caHighPayByProvince[selected] ?? [] : []} onSelectOcc={handleSelectCAOcc} />}
         {tab === "pay" && isUK && <UKHighPayList rows={ukHighPay} onSelectOcc={handleSelectUKOcc} />}
         {tab === "employment" && (
@@ -4600,6 +4712,199 @@ function NLHighPayList({ rows, onSelectOcc }: { rows: NLRegionOccupation[]; onSe
         </li>
       ))}
     </ol>
+  )
+}
+
+function BEShortageList({ rows, onSelectOcc }: { rows: BERegionOccupation[]; onSelectOcc?: (code: string) => void }) {
+  if (rows.length === 0) {
+    return <p className="py-8 text-center text-sm text-slate-400">No shortage data available for this region.</p>
+  }
+  return (
+    <ol>
+      {rows.map((r, i) => (
+        <li key={r.occupation_code}>
+          <button
+            type="button"
+            onClick={() => onSelectOcc?.(r.occupation_code)}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50"
+          >
+            <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-sm font-medium text-slate-800">
+                {r.occupation_en}
+              </span>
+            </span>
+            <span className="shrink-0 text-right">
+              <span className="block text-sm font-semibold tabular-nums text-slate-700">
+                {r.shortage_rating != null ? `${r.shortage_rating.toFixed(1)}/5` : "—"}
+              </span>
+              {r.median_salary_eur != null && (
+                <span className="text-[10px] text-slate-400">€{r.median_salary_eur.toLocaleString()}</span>
+              )}
+            </span>
+          </button>
+        </li>
+      ))}
+    </ol>
+  )
+}
+
+function BEHighPayList({ rows, onSelectOcc }: { rows: BERegionOccupation[]; onSelectOcc?: (code: string) => void }) {
+  const sorted = [...rows]
+    .filter((r) => r.median_salary_eur != null)
+    .sort((a, b) => (b.median_salary_eur ?? 0) - (a.median_salary_eur ?? 0))
+  if (sorted.length === 0) {
+    return <p className="py-8 text-center text-sm text-slate-400">No salary data available for this region.</p>
+  }
+  return (
+    <ol>
+      {sorted.map((r, i) => (
+        <li key={r.occupation_code}>
+          <button
+            type="button"
+            onClick={() => onSelectOcc?.(r.occupation_code)}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50"
+          >
+            <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-sm font-medium text-slate-800">
+                {r.occupation_en}
+              </span>
+            </span>
+            <span className="shrink-0 text-right">
+              <span className="block text-sm font-semibold tabular-nums text-slate-700">
+                {r.median_salary_eur != null ? `€${r.median_salary_eur.toLocaleString()}` : "—"}
+              </span>
+              {r.shortage_rating != null && (
+                <span className="text-[10px] text-slate-400">Shortage: {r.shortage_rating.toFixed(1)}/5</span>
+              )}
+            </span>
+          </button>
+        </li>
+      ))}
+    </ol>
+  )
+}
+
+function BEOccupationDetail({
+  occ,
+  regionName,
+  regionCode,
+  data,
+  onBack,
+  onClose,
+  savedOccCodes,
+  onToggleSave,
+  onShare,
+}: {
+  occ: BEOccRow
+  regionName: string
+  regionCode: string | null
+  data: MapData
+  onBack: () => void
+  onClose: () => void
+  savedOccCodes: Set<string>
+  onToggleSave: (occCode: string, occTitle: string) => void
+  onShare: () => void
+}) {
+  const regionColleges = useMemo(() => {
+    return (data.beColleges ?? [])
+      .filter((c) => c.region === regionCode)
+      .sort((a, b) => (b.median_earnings ?? 0) - (a.median_earnings ?? 0))
+      .slice(0, 5)
+  }, [data.beColleges, regionCode])
+
+  const regionCities = useMemo(() => {
+    return (data.beCities ?? []).filter((c) => c.region === regionCode)
+  }, [data.beCities, regionCode])
+
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex items-center gap-2">
+        <button onClick={onBack} className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600" type="button">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="h-5 w-5"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" /></svg>
+        </button>
+        <h3 className="truncate text-lg font-semibold text-slate-900">{occ.occupation_en}</h3>
+        <button type="button" onClick={onClose} className="ml-auto rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="h-4 w-4"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
+        </button>
+      </div>
+
+      <div className="text-sm text-slate-500">{regionName}</div>
+
+      {occ.occupation_nl && (
+        <div className="text-xs text-slate-400">Dutch: {occ.occupation_nl}</div>
+      )}
+
+      <div className="grid grid-cols-2 gap-3">
+        <div className="rounded-lg bg-slate-50 p-3">
+          <div className="text-xs text-slate-400">Median Salary</div>
+          <div className="text-lg font-semibold text-slate-800">
+            {occ.median_salary_eur != null ? `€${occ.median_salary_eur.toLocaleString()}` : "—"}
+          </div>
+        </div>
+        <div className="rounded-lg bg-slate-50 p-3">
+          <div className="text-xs text-slate-400">Shortage Rating</div>
+          <div className="text-lg font-semibold text-slate-800">
+            {occ.shortage_rating != null ? `${occ.shortage_rating.toFixed(1)}/5` : "—"}
+          </div>
+        </div>
+      </div>
+
+      {occ.related_broad_field && (
+        <div className="text-xs text-slate-400">Field: {occ.related_broad_field}</div>
+      )}
+
+      {regionCities.length > 0 && (
+        <div>
+          <h4 className="mb-2 text-sm font-medium text-slate-700">Cities in {regionName}</h4>
+          <div className="flex flex-wrap gap-2">
+            {regionCities.map((city) => (
+              <span key={city.name} className="rounded-full bg-slate-100 px-2.5 py-1 text-xs text-slate-600">
+                {city.name}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {regionColleges.length > 0 && (
+        <div>
+          <h4 className="mb-2 text-sm font-medium text-slate-700">Related Universities</h4>
+          <ul className="space-y-1">
+            {regionColleges.map((c) => (
+              <li key={c.institution_id} className="text-xs text-slate-600">
+                {c.college_name}
+                {c.median_earnings != null && <span className="ml-1 text-slate-400">· €{c.median_earnings.toLocaleString()}</span>}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <div className="flex items-center gap-2 pt-2">
+        <button
+          type="button"
+          onClick={() => onToggleSave(occ.occupation_code, occ.occupation_en)}
+          className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
+            savedOccCodes.has(occ.occupation_code) ? "bg-indigo-100 text-indigo-700" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+          }`}
+        >
+          {savedOccCodes.has(occ.occupation_code) ? "Saved" : "Save"}
+        </button>
+        <button
+          type="button"
+          onClick={onShare}
+          className="rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-medium text-slate-600 transition-colors hover:bg-slate-200"
+        >
+          Share
+        </button>
+      </div>
+
+      <div className="pt-2 text-[10px] text-slate-300">
+        Source: Statbel / VDAB / Actiris / Jobat.be
+      </div>
+    </div>
   )
 }
 

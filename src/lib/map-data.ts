@@ -22,6 +22,10 @@ import nlOccupationsRaw from "@/data/nl-occupations.json"
 import nlCollegesRaw from "@/data/nl-colleges.json"
 import nlCitiesRaw from "@/data/nl-cities.json"
 import nlRegionOccupationsRaw from "@/data/nl-region-occupations.json"
+import beGraduateSalaryRaw from "@/data/be-graduate-salary.json"
+import beRentByCityRaw from "@/data/be-rent-by-city.json"
+import beShortageOccupationsRaw from "@/data/be-shortage-occupations.json"
+import beHighIncomeOccupationsRaw from "@/data/be-high-income-occupations.json"
 
 // 지도 페이지용 데이터 계층. occupations_au + occupation_state_au 를 읽어 JS 에서 조인한다.
 // occupation_state_au 는 anon RLS 가 막혀 있어 서버 전용 service-role 클라이언트로 읽는다.
@@ -335,6 +339,55 @@ export interface NLCity {
   cost_of_living_index: number | null
 }
 
+// ── BE (Belgium) interfaces ──────────────────────────────────────────────────
+
+export interface BEOccRow {
+  occupation_code: string
+  occupation_en: string
+  occupation_nl: string | null
+  occupation_fr: string | null
+  median_salary_eur: number | null
+  mean_salary_eur: number | null
+  shortage_rating: number | null
+  related_broad_field: string | null
+}
+
+export interface BERegionOccupation {
+  occupation_code: string
+  occupation_en: string
+  median_salary_eur: number | null
+  shortage_rating: number | null
+}
+
+export interface BECollege {
+  institution_id: string
+  college_name: string
+  city_name: string
+  region: string
+  lat: number
+  lng: number
+  median_earnings: number | null
+  tuition: number | null
+  qs_rank: number | null
+  website: string | null
+  slug: string
+}
+
+export interface BECity {
+  name: string
+  region: string
+  rent_median: number | null
+  cost_of_living_index: number | null
+}
+
+export interface BEStateInfo {
+  average_rent_eur: number | null
+  average_salary_eur: number | null
+  cost_of_living_index: number | null
+  shortage_occupations: string[] | null
+  high_income_occupations: string[] | null
+}
+
 // { "WA": { "1": 1.000, "3": 1.222, ... } }
 export type StateSalaryMult = Record<string, Record<string, number>>
 
@@ -392,6 +445,12 @@ export interface MapData {
   nlHighPayByRegion: Record<string, NLRegionOccupation[]>
   nlColleges: NLCollege[]
   nlCities: NLCity[]
+  beOccupations: Record<string, BEOccRow>
+  beHighPayByRegion: Record<string, BERegionOccupation[]>
+  beShortageByRegion: Record<string, BERegionOccupation[]>
+  beColleges: BECollege[]
+  beCities: BECity[]
+  beStateInfo: Record<string, BEStateInfo>
 }
 
 export interface CACity {
@@ -1016,6 +1075,199 @@ async function getNLCities(): Promise<NLCity[]> {
   }))
 }
 
+// ── BE (Belgium) data ─────────────────────────────────────────────────────────
+
+function getBEOccupations(): Record<string, BEOccRow> {
+  const graduateSalary = beGraduateSalaryRaw as unknown as {
+    graduate_salary_by_field: Array<{
+      field: string
+      field_nl: string
+      field_fr: string
+      starting_salary_eur: number
+      experience_5yr_eur: number
+    }>
+  }
+
+  const highIncomeData = beHighIncomeOccupationsRaw as unknown as {
+    top_10_high_income_occupations: Array<{
+      rank: number
+      occupation: string
+      occupation_nl: string
+      occupation_fr: string
+      average_gross_monthly_eur: number
+    }>
+  }
+
+  const occupations: Record<string, BEOccRow> = {}
+
+  // Graduate salary data
+  for (const field of graduateSalary.graduate_salary_by_field) {
+    const code = field.field.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+    occupations[code] = {
+      occupation_code: code,
+      occupation_en: field.field,
+      occupation_nl: field.field_nl,
+      occupation_fr: field.field_fr,
+      median_salary_eur: field.starting_salary_eur,
+      mean_salary_eur: (field.starting_salary_eur + field.experience_5yr_eur) / 2,
+      shortage_rating: null,
+      related_broad_field: field.field,
+    }
+  }
+
+  // High income occupations
+  for (const occ of highIncomeData.top_10_high_income_occupations) {
+    const code = occ.occupation.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+    if (!occupations[code]) {
+      occupations[code] = {
+        occupation_code: code,
+        occupation_en: occ.occupation,
+        occupation_nl: occ.occupation_nl,
+        occupation_fr: occ.occupation_fr,
+        median_salary_eur: occ.average_gross_monthly_eur,
+        mean_salary_eur: occ.average_gross_monthly_eur,
+        shortage_rating: null,
+        related_broad_field: null,
+      }
+    }
+  }
+
+  return occupations
+}
+
+function getBEHighPayByRegion(): Record<string, BERegionOccupation[]> {
+  const highIncomeData = beHighIncomeOccupationsRaw as unknown as {
+    top_10_high_income_occupations: Array<{
+      rank: number
+      occupation: string
+      occupation_nl: string
+      occupation_fr: string
+      average_gross_monthly_eur: number
+    }>
+  }
+
+  const regions = ["FL", "WA", "BR"]
+  const result: Record<string, BERegionOccupation[]> = {}
+
+  for (const region of regions) {
+    result[region] = highIncomeData.top_10_high_income_occupations.map((occ) => ({
+      occupation_code: occ.occupation.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+      occupation_en: occ.occupation,
+      median_salary_eur: occ.average_gross_monthly_eur,
+      shortage_rating: null,
+    }))
+  }
+
+  return result
+}
+
+function getBEShortageByRegion(): Record<string, BERegionOccupation[]> {
+  const shortageData = beShortageOccupationsRaw as unknown as {
+    flanders: { top_10_shortage: Array<{ rank: number; occupation: string; occupation_nl: string }> }
+    brussels: { top_shortage: Array<{ occupation: string; occupation_fr: string }> }
+    wallonia: { top_shortage: Array<{ occupation: string; occupation_fr: string }> }
+  }
+
+  const result: Record<string, BERegionOccupation[]> = {}
+
+  // Flanders
+  result["FL"] = shortageData.flanders.top_10_shortage.map((occ) => ({
+    occupation_code: occ.occupation.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+    occupation_en: occ.occupation,
+    median_salary_eur: null,
+    shortage_rating: 6 - Math.min(occ.rank, 5),
+  }))
+
+  // Brussels
+  result["BR"] = shortageData.brussels.top_shortage.map((occ) => ({
+    occupation_code: occ.occupation.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+    occupation_en: occ.occupation,
+    median_salary_eur: null,
+    shortage_rating: 5,
+  }))
+
+  // Wallonia
+  result["WA"] = shortageData.wallonia.top_shortage.map((occ) => ({
+    occupation_code: occ.occupation.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+    occupation_en: occ.occupation,
+    median_salary_eur: null,
+    shortage_rating: 5,
+  }))
+
+  return result
+}
+
+async function getBEColleges(): Promise<BECollege[]> {
+  // For now, return empty array - can be populated later with university data
+  return []
+}
+
+async function getBECities(): Promise<BECity[]> {
+  const rentData = beRentByCityRaw as unknown as {
+    cities: Array<{
+      city: string
+      region: string
+      median_rent_2025: number
+      total_cost_2025: number
+    }>
+  }
+
+  return rentData.cities.map((city) => ({
+    name: city.city,
+    region: city.region === "Flanders" ? "FL" : city.region === "Wallonia" ? "WA" : "BR",
+    rent_median: city.median_rent_2025,
+    cost_of_living_index: null,
+  }))
+}
+
+function getBEStateInfo(): Record<string, BEStateInfo> {
+  const rentData = beRentByCityRaw as unknown as {
+    regions: {
+      Flanders: { average_rent_eur: number }
+      Wallonia: { average_rent_eur: number }
+      "Brussels-Capital": { average_rent_eur: number }
+    }
+  }
+
+  const salaryData = beGraduateSalaryRaw as unknown as {
+    national_average: { gross_monthly_eur: number }
+  }
+
+  const shortageData = beShortageOccupationsRaw as unknown as {
+    flanders: { top_10_shortage: Array<{ occupation: string }> }
+    brussels: { top_shortage: Array<{ occupation: string }> }
+    wallonia: { top_shortage: Array<{ occupation: string }> }
+  }
+
+  const highIncomeData = beHighIncomeOccupationsRaw as unknown as {
+    top_10_high_income_occupations: Array<{ occupation: string }>
+  }
+
+  return {
+    FL: {
+      average_rent_eur: rentData.regions.Flanders.average_rent_eur,
+      average_salary_eur: salaryData.national_average.gross_monthly_eur,
+      cost_of_living_index: null,
+      shortage_occupations: shortageData.flanders.top_10_shortage.map((o) => o.occupation),
+      high_income_occupations: highIncomeData.top_10_high_income_occupations.map((o) => o.occupation),
+    },
+    WA: {
+      average_rent_eur: rentData.regions.Wallonia.average_rent_eur,
+      average_salary_eur: salaryData.national_average.gross_monthly_eur,
+      cost_of_living_index: null,
+      shortage_occupations: shortageData.wallonia.top_shortage.map((o) => o.occupation),
+      high_income_occupations: highIncomeData.top_10_high_income_occupations.map((o) => o.occupation),
+    },
+    BR: {
+      average_rent_eur: rentData.regions["Brussels-Capital"].average_rent_eur,
+      average_salary_eur: salaryData.national_average.gross_monthly_eur,
+      cost_of_living_index: null,
+      shortage_occupations: shortageData.brussels.top_shortage.map((o) => o.occupation),
+      high_income_occupations: highIncomeData.top_10_high_income_occupations.map((o) => o.occupation),
+    },
+  }
+}
+
 async function getCAColleges(): Promise<CACollege[]> {
   const { data, error } = await supabaseAdmin
     .from("colleges_ca")
@@ -1461,7 +1713,16 @@ async function getMapDataUncached(): Promise<MapData> {
       .slice(0, 12)
   }
 
-  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages, coursesByFieldState, usStateInfo, usMajorDensity, usRankedColleges, auRankedColleges, caColleges, caOccupations, caHighPay, caHighPayByProvince, caProvinceOccupations, caProvinceShortages, caCities, ukOccupations, ukShortageByRegion, ukHighPayByRegion, ukColleges, ukCities, deOccupations, deHighPayByRegion, deShortageByRegion, deColleges, deCities, nlOccupations, nlShortageByRegion, nlHighPayByRegion, nlColleges, nlCities }
+  // ── BE (Belgium) data ────────────────────────────────────────────────────────
+
+  const beOccupations = getBEOccupations()
+  const beHighPayByRegion = getBEHighPayByRegion()
+  const beShortageByRegion = getBEShortageByRegion()
+  const beColleges = await getBEColleges()
+  const beCities = await getBECities()
+  const beStateInfo = getBEStateInfo()
+
+  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages, coursesByFieldState, usStateInfo, usMajorDensity, usRankedColleges, auRankedColleges, caColleges, caOccupations, caHighPay, caHighPayByProvince, caProvinceOccupations, caProvinceShortages, caCities, ukOccupations, ukShortageByRegion, ukHighPayByRegion, ukColleges, ukCities, deOccupations, deHighPayByRegion, deShortageByRegion, deColleges, deCities, nlOccupations, nlShortageByRegion, nlHighPayByRegion, nlColleges, nlCities, beOccupations, beHighPayByRegion, beShortageByRegion, beColleges, beCities, beStateInfo }
 }
 
 // cross-instance 공유 캐시(방어선). 페이지가 force-static이라 보통 빌드/리밸리데이트

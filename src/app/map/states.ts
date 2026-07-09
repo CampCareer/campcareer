@@ -223,3 +223,35 @@ export const NL_PROVINCE_NAMES: Record<string, string> = {
   ZE: "Zeeland",
   ZH: "Zuid-Holland",
 }
+
+// ── Belgium (BE) Regions ──────────────────────────────────────────────────────
+
+export const BE_REGION_CODES = ["FL", "WA", "BR"] as const
+
+export type BERegionCode = typeof BE_REGION_CODES[number]
+
+export const BE_REGION_NAMES: Record<string, string> = {
+  FL: "Flanders",
+  WA: "Wallonia",
+  BR: "Brussels-Capital",
+}
+
+export const BE_PROVINCE_CODES = [
+  "VAN", "VBR", "VGB", "VWV", "VLI",  // Flanders
+  "WBR", "WHT", "WLG", "WLB", "WNA",  // Wallonia
+] as const
+
+export type BEProvinceCode = typeof BE_PROVINCE_CODES[number]
+
+export const BE_PROVINCE_NAMES: Record<string, string> = {
+  VAN: "Antwerp",
+  VBR: "Flemish Brabant",
+  VGB: "East Flanders",
+  VWV: "West Flanders",
+  VLI: "Limburg",
+  WBR: "Walloon Brabant",
+  WHT: "Hainaut",
+  WLG: "Liège",
+  WLB: "Luxembourg",
+  WNA: "Namur",
+}
