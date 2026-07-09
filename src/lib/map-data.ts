@@ -1132,6 +1132,41 @@ function getBEOccupations(): Record<string, BEOccRow> {
     }
   }
 
+  // Shortage occupations (so clicking them in the shortage tab resolves the detail card)
+  const shortageData = beShortageOccupationsRaw as unknown as {
+    flanders: { top_10_shortage: Array<{ rank: number; occupation: string; occupation_nl: string }> }
+    brussels: { top_shortage: Array<{ occupation: string; occupation_fr: string }> }
+    wallonia: { top_shortage: Array<{ occupation: string; occupation_fr: string }> }
+  }
+
+  const addShortage = (occ: { occupation: string; occupation_nl?: string; occupation_fr?: string }, rating: number | null) => {
+    const code = occ.occupation.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+    if (!occupations[code]) {
+      occupations[code] = {
+        occupation_code: code,
+        occupation_en: occ.occupation,
+        occupation_nl: occ.occupation_nl ?? null,
+        occupation_fr: occ.occupation_fr ?? null,
+        median_salary_eur: null,
+        mean_salary_eur: null,
+        shortage_rating: rating,
+        related_broad_field: null,
+      }
+    } else if (occupations[code].shortage_rating == null && rating != null) {
+      occupations[code].shortage_rating = rating
+    }
+  }
+
+  for (const occ of shortageData.flanders.top_10_shortage) {
+    addShortage(occ, 6 - Math.min(occ.rank, 5))
+  }
+  for (const occ of shortageData.brussels.top_shortage) {
+    addShortage(occ, 5)
+  }
+  for (const occ of shortageData.wallonia.top_shortage) {
+    addShortage(occ, 5)
+  }
+
   return occupations
 }
 
