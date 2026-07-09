@@ -1498,9 +1498,9 @@ function Panel({
       {!isWhv && (
       <div className="px-5 pt-3">
         <div className="inline-flex rounded-lg bg-slate-100 p-1 text-sm">
-          {(isUS || activeCountry === "CA" || isUK) && (
+          {(isUS || activeCountry === "CA" || isUK || activeCountry === "BE") && (
             <TabButton active={tab === "stateInfo"} onClick={() => { onTab("stateInfo"); track("switch_tab", { tab: "stateInfo", state: selected }) }}>
-              {activeCountry === "CA" ? "State Info" : t.map.tabStateInfo}
+              {(activeCountry === "CA" || activeCountry === "BE") ? "Info" : t.map.tabStateInfo}
             </TabButton>
           )}
           {!isUK && (
@@ -1556,6 +1556,9 @@ function Panel({
               onSelect={(c) => onSelectCollege?.(c)}
             />
           </div>
+        )}
+        {tab === "stateInfo" && activeCountry === "BE" && (
+          <BEInfoPanel stateInfo={data.beStateInfo[selected] ?? null} cities={data.beCities} regionCode={selected} />
         )}
         {tab === "shortage" && isAU && (
           selectedSA4 ? (
@@ -4715,6 +4718,104 @@ function NLHighPayList({ rows, onSelectOcc }: { rows: NLRegionOccupation[]; onSe
   )
 }
 
+function BEInfoPanel({
+  stateInfo,
+  cities,
+  regionCode,
+}: {
+  stateInfo: import("@/lib/map-data").BEStateInfo | null
+  cities: import("@/lib/map-data").BECity[]
+  regionCode: string | null
+}) {
+  const regionCities = useMemo(() => {
+    return cities.filter((c) => c.region === regionCode && c.rent_median != null)
+      .sort((a, b) => (b.rent_median ?? 0) - (a.rent_median ?? 0))
+  }, [cities, regionCode])
+
+  if (!stateInfo) {
+    return <p className="py-8 text-center text-sm text-slate-400">No info available for this region.</p>
+  }
+
+  return (
+    <div className="space-y-4">
+      {/* Region Summary */}
+      <div className="grid grid-cols-2 gap-3">
+        <div className="rounded-lg bg-slate-50 px-3 py-2.5">
+          <p className="text-[11px] text-slate-500">Avg Monthly Rent</p>
+          <p className="text-lg font-bold text-slate-900">
+            {stateInfo.average_rent_eur != null ? `€${stateInfo.average_rent_eur.toLocaleString()}` : "—"}
+          </p>
+        </div>
+        <div className="rounded-lg bg-slate-50 px-3 py-2.5">
+          <p className="text-[11px] text-slate-500">Avg Gross Salary</p>
+          <p className="text-lg font-bold text-slate-900">
+            {stateInfo.average_salary_eur != null ? `€${stateInfo.average_salary_eur.toLocaleString()}` : "—"}
+          </p>
+          <p className="text-[10px] text-slate-400">per month</p>
+        </div>
+      </div>
+
+      {/* Rent by City */}
+      {regionCities.length > 0 && (
+        <div className="rounded-lg border border-slate-200 px-4 py-3">
+          <p className="text-[11px] text-slate-500 mb-2">Median Rent by City</p>
+          <div className="space-y-2">
+            {regionCities.map((city) => (
+              <div key={city.name} className="flex items-center justify-between text-xs">
+                <span className="text-slate-600">{city.name}</span>
+                <span className="font-semibold text-slate-700">€{city.rent_median?.toLocaleString()}/mo</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Salary vs Rent Overview */}
+      {stateInfo.average_salary_eur != null && stateInfo.average_rent_eur != null && (
+        <div className="rounded-lg border border-slate-200 px-4 py-3">
+          <p className="text-[11px] text-slate-500 mb-2">Salary vs Rent</p>
+          <div className="space-y-1.5 text-xs">
+            <div className="flex justify-between">
+              <span className="text-slate-600">Monthly Gross</span>
+              <span className="font-medium text-slate-700">€{stateInfo.average_salary_eur.toLocaleString()}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-slate-600">Avg Rent</span>
+              <span className="font-medium text-slate-700">€{stateInfo.average_rent_eur.toLocaleString()}/mo</span>
+            </div>
+            <div className="flex justify-between border-t border-slate-100 pt-1.5">
+              <span className="text-slate-600">Rent Multiple</span>
+              <span className="font-bold text-emerald-600">
+                {(stateInfo.average_salary_eur / 12 / stateInfo.average_rent_eur).toFixed(1)}x
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Top Shortage Occupations */}
+      {stateInfo.shortage_occupations && stateInfo.shortage_occupations.length > 0 && (
+        <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3">
+          <p className="text-[11px] text-amber-600 font-medium mb-2">Top Shortage Occupations</p>
+          <ul className="space-y-1">
+            {stateInfo.shortage_occupations.slice(0, 5).map((occ, i) => (
+              <li key={i} className="text-xs text-slate-700 flex items-start gap-1.5">
+                <span className="text-amber-500 mt-0.5">•</span>
+                {occ}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <div className="rounded-lg border border-slate-200 px-3 py-2">
+        <p className="text-[11px] text-slate-500">Source</p>
+        <p className="text-xs text-slate-700">Numbeo, Statbel, VDAB / CIB 2025</p>
+      </div>
+    </div>
+  )
+}
+
 function BEShortageList({ rows, onSelectOcc }: { rows: BERegionOccupation[]; onSelectOcc?: (code: string) => void }) {
   if (rows.length === 0) {
     return <p className="py-8 text-center text-sm text-slate-400">No shortage data available for this region.</p>
@@ -4807,6 +4908,8 @@ function BEOccupationDetail({
   onToggleSave: (occCode: string, occTitle: string) => void
   onShare: () => void
 }) {
+  const isSaved = savedOccCodes.has(occ.occupation_code)
+
   const regionColleges = useMemo(() => {
     return (data.beColleges ?? [])
       .filter((c) => c.region === regionCode)
@@ -4819,92 +4922,128 @@ function BEOccupationDetail({
   }, [data.beCities, regionCode])
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center gap-2">
-        <button onClick={onBack} className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600" type="button">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="h-5 w-5"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" /></svg>
+    <>
+      <div className="flex items-center gap-2 px-5 pt-4">
+        <button type="button" onClick={onBack} className="rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700">
+          <ChevronLeft className="h-4 w-4" />
         </button>
-        <h3 className="truncate text-lg font-semibold text-slate-900">{occ.occupation_en}</h3>
         <button type="button" onClick={onClose} className="ml-auto rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="h-4 w-4"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
+          <X className="h-4 w-4" />
         </button>
       </div>
-
-      <div className="text-sm text-slate-500">{regionName}</div>
-
-      {occ.occupation_nl && (
-        <div className="text-xs text-slate-400">Dutch: {occ.occupation_nl}</div>
-      )}
-
-      <div className="grid grid-cols-2 gap-3">
-        <div className="rounded-lg bg-slate-50 p-3">
-          <div className="text-xs text-slate-400">Median Salary</div>
-          <div className="text-lg font-semibold text-slate-800">
-            {occ.median_salary_eur != null ? `€${occ.median_salary_eur.toLocaleString()}` : "—"}
-          </div>
-        </div>
-        <div className="rounded-lg bg-slate-50 p-3">
-          <div className="text-xs text-slate-400">Shortage Rating</div>
-          <div className="text-lg font-semibold text-slate-800">
-            {occ.shortage_rating != null ? `${occ.shortage_rating.toFixed(1)}/5` : "—"}
-          </div>
-        </div>
-      </div>
-
-      {occ.related_broad_field && (
-        <div className="text-xs text-slate-400">Field: {occ.related_broad_field}</div>
-      )}
-
-      {regionCities.length > 0 && (
+      <div className="min-h-0 flex-1 overflow-y-auto px-5 py-3 space-y-4">
         <div>
-          <h4 className="mb-2 text-sm font-medium text-slate-700">Cities in {regionName}</h4>
-          <div className="flex flex-wrap gap-2">
-            {regionCities.map((city) => (
-              <span key={city.name} className="rounded-full bg-slate-100 px-2.5 py-1 text-xs text-slate-600">
-                {city.name}
-              </span>
-            ))}
+          <h3 className="text-lg font-semibold text-slate-900">{occ.occupation_en}</h3>
+          {occ.occupation_nl && <p className="text-sm text-slate-500">{occ.occupation_nl}</p>}
+          {occ.occupation_fr && <p className="text-xs text-slate-400">{occ.occupation_fr}</p>}
+          <p className="text-xs text-slate-400 mt-1">{regionName}</p>
+        </div>
+
+        {/* Salary cards */}
+        <div className="grid grid-cols-2 gap-3">
+          <div className="rounded-lg bg-slate-50 px-3 py-2.5">
+            <p className="text-[11px] text-slate-500">Median Salary</p>
+            <p className="text-lg font-bold text-slate-900">
+              {occ.median_salary_eur != null ? `€${occ.median_salary_eur.toLocaleString()}` : "—"}
+            </p>
           </div>
+          <div className="rounded-lg bg-slate-50 px-3 py-2.5">
+            <p className="text-[11px] text-slate-500">Mean Salary</p>
+            <p className="text-lg font-bold text-slate-900">
+              {occ.mean_salary_eur != null ? `€${occ.mean_salary_eur.toLocaleString()}` : "—"}
+            </p>
+          </div>
+          {occ.shortage_rating != null && (
+            <div className="rounded-lg bg-amber-50 px-3 py-2.5">
+              <p className="text-[11px] text-amber-600">Shortage Rating</p>
+              <p className="text-lg font-bold text-amber-700">
+                {occ.shortage_rating.toFixed(1)}/5
+              </p>
+            </div>
+          )}
+          {occ.related_broad_field && (
+            <div className="rounded-lg bg-slate-50 px-3 py-2.5">
+              <p className="text-[11px] text-slate-500">Field</p>
+              <p className="text-sm font-semibold text-slate-900">{occ.related_broad_field}</p>
+            </div>
+          )}
         </div>
-      )}
 
-      {regionColleges.length > 0 && (
-        <div>
-          <h4 className="mb-2 text-sm font-medium text-slate-700">Related Universities</h4>
-          <ul className="space-y-1">
-            {regionColleges.map((c) => (
-              <li key={c.institution_id} className="text-xs text-slate-600">
-                {c.college_name}
-                {c.median_earnings != null && <span className="ml-1 text-slate-400">· €{c.median_earnings.toLocaleString()}</span>}
-              </li>
-            ))}
-          </ul>
+        {/* Salary vs Cost of Living */}
+        {regionCities.length > 0 && occ.median_salary_eur != null && (
+          <div className="rounded-lg border border-slate-200 px-4 py-3">
+            <p className="text-[11px] text-slate-500 mb-2">Salary vs Cost of Living in {regionName}</p>
+            <div className="space-y-2">
+              {regionCities.slice(0, 4).map((city) => {
+                const rentRatio = city.rent_median != null
+                  ? Math.round(occ.median_salary_eur! / 12 / city.rent_median)
+                  : null
+                return (
+                  <div key={city.name} className="flex items-center justify-between text-xs">
+                    <span className="text-slate-600">{city.name}</span>
+                    <div className="text-right">
+                      {city.rent_median != null && (
+                        <span className="text-slate-500">Rent €{city.rent_median}/mo</span>
+                      )}
+                      {rentRatio != null && (
+                        <span className="ml-2 font-medium text-emerald-600">
+                          {rentRatio}x
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+            <p className="text-[10px] text-slate-400 mt-1.5">
+              Rent multiple = monthly median salary ÷ median rent
+            </p>
+          </div>
+        )}
+
+        {/* Related Universities */}
+        {regionColleges.length > 0 && (
+          <div className="rounded-lg border border-slate-200 px-4 py-3">
+            <p className="text-[11px] text-slate-500 mb-2">Top Universities in {regionName}</p>
+            <div className="space-y-2">
+              {regionColleges.map((c) => (
+                <div key={c.institution_id} className="flex items-center justify-between text-xs">
+                  <div>
+                    <span className="font-medium text-slate-700">{c.college_name}</span>
+                    {c.qs_rank != null && (
+                      <span className="ml-1.5 text-slate-400">#{c.qs_rank}</span>
+                    )}
+                  </div>
+                  <span className="font-semibold text-slate-600">
+                    {c.median_earnings != null ? `€${c.median_earnings.toLocaleString()}` : ""}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={() => onToggleSave(occ.occupation_code, occ.occupation_en)}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors"
+          >
+            <Bookmark className={`h-3.5 w-3.5 ${isSaved ? "fill-violet-500 text-violet-500" : ""}`} />
+            {isSaved ? "Saved" : "Save"}
+          </button>
+          <button type="button" onClick={onShare} className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors">
+            <Share2 className="h-3.5 w-3.5" />
+            Share
+          </button>
         </div>
-      )}
 
-      <div className="flex items-center gap-2 pt-2">
-        <button
-          type="button"
-          onClick={() => onToggleSave(occ.occupation_code, occ.occupation_en)}
-          className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
-            savedOccCodes.has(occ.occupation_code) ? "bg-indigo-100 text-indigo-700" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-          }`}
-        >
-          {savedOccCodes.has(occ.occupation_code) ? "Saved" : "Save"}
-        </button>
-        <button
-          type="button"
-          onClick={onShare}
-          className="rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-medium text-slate-600 transition-colors hover:bg-slate-200"
-        >
-          Share
-        </button>
+        <div className="rounded-lg border border-slate-200 px-3 py-2">
+          <p className="text-[11px] text-slate-500">Source</p>
+          <p className="text-xs text-slate-700">Statbel / VDAB / Actiris / Jobat.be</p>
+        </div>
       </div>
-
-      <div className="pt-2 text-[10px] text-slate-300">
-        Source: Statbel / VDAB / Actiris / Jobat.be
-      </div>
-    </div>
+    </>
   )
 }
 
