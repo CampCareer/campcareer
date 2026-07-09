@@ -23,6 +23,14 @@ const nextConfig = {
       // 퍼널 단일화: 구 온보딩 → Degree Risk (영구 이전)
       { source: '/onboarding', destination: '/degree-risk', permanent: true },
 
+      // SEO migration: code-based occupation URLs now resolve through
+      // search-term based CampCareer Maps URLs, then canonicalize to slug.
+      {
+        source: '/roi-explorer/:country(au|ca|us|uk|de|nl)/occupation/:code',
+        destination: '/maps/:country/:code',
+        permanent: true,
+      },
+
       // 레거시 대학 디테일 URL: /roi-explorer/:id?country=xx → /roi-explorer/:country/:id
       {
         source: '/roi-explorer/:college_id((?!us$|au$|ca$|uk$|ie$)[^/]+)',

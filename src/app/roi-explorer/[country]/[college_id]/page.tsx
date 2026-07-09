@@ -1,5 +1,5 @@
-import { cache } from "react"
 import type { Metadata } from "next"
+import { unstable_cache } from "next/cache"
 import { notFound } from "next/navigation"
 import { fetchRoiData, VALID_COUNTRIES, type RoiCountry } from "@/lib/roi-query"
 import { supabase } from "@/lib/supabase"
@@ -11,7 +11,7 @@ import nlCitiesRaw from "@/data/nl-cities.json"
 import deCollegesRaw from "@/data/de-colleges.json"
 import deCitiesRaw from "@/data/de-cities.json"
 
-export const revalidate = 3600
+export const revalidate = 86400
 
 const COLLEGES_TABLE: Record<RoiCountry, string> = {
   us: "colleges_us",
@@ -129,8 +129,7 @@ function getJSONFallbackCountry(country: RoiCountry): 'nl' | 'de' | null {
   return country === 'nl' ? 'nl' : country === 'de' ? 'de' : null
 }
 
-// generateMetadata와 페이지 본문이 같은 요청 안에서 데이터를 공유하도록 cache로 감쌈
-const getDetailRows = cache(async (country: RoiCountry, collegeId: string): Promise<DetailRow[]> => {
+const getDetailRows = unstable_cache(async (country: RoiCountry, collegeId: string): Promise<DetailRow[]> => {
   const jsonCountry = getJSONFallbackCountry(country)
   try {
     const result = await fetchRoiData({
@@ -148,9 +147,9 @@ const getDetailRows = cache(async (country: RoiCountry, collegeId: string): Prom
     if (jsonCountry) return makeDetailRowsFromJSON(collegeId, jsonCountry)
     return []
   }
-})
+}, ["college-detail-rows"], { revalidate: 86400 })
 
-async function getWebsiteUrl(country: RoiCountry, collegeId: string): Promise<string | null> {
+const getWebsiteUrl = unstable_cache(async (country: RoiCountry, collegeId: string): Promise<string | null> => {
   const jsonCountry = getJSONFallbackCountry(country)
   try {
     const { data, error } = await supabase
@@ -170,7 +169,7 @@ async function getWebsiteUrl(country: RoiCountry, collegeId: string): Promise<st
     }
     return null
   }
-}
+}, ["college-detail-website"], { revalidate: 86400 })
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const country = parseCountry(params.country)

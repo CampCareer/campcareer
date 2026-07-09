@@ -1,8 +1,8 @@
+import Link from "next/link"
 import { notFound } from "next/navigation"
 import { getMapData } from "@/lib/map-data"
 import { pageMetadata } from "@/lib/seo"
 import { DE_BUNDESLAND_NAMES } from "../../../states"
-import CampCareerMaps from "../../../CampCareerMaps"
 import UniversityStaticCard from "../../../UniversityStaticCard"
 
 export const revalidate = 86400
@@ -52,7 +52,7 @@ export default async function UniversityPage({ params }: { params: { slug: strin
     .map((o) => ({ name: o.occupation_en, salary: o.median_salary_eur, currency: "€" }))
 
   return (
-    <div className="flex h-[calc(100vh-3.5rem)] flex-col">
+    <main className="min-h-screen bg-slate-50">
       <UniversityStaticCard
         d={{
           name: college.college_name,
@@ -72,9 +72,14 @@ export default async function UniversityPage({ params }: { params: { slug: strin
           topOccupations: topOccs,
         }}
       />
-      <div className="min-h-0 flex-1">
-        <CampCareerMaps data={data} initialUniversity={params.slug} />
-      </div>
-    </div>
+      <section className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
+        <Link
+          href={`/maps?country=de&university=${params.slug}`}
+          className="inline-flex rounded-lg bg-slate-950 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
+        >
+          Open interactive map
+        </Link>
+      </section>
+    </main>
   )
 }

@@ -19,6 +19,11 @@ function relatedPosts(slug: string, tag: string) {
 }
 
 export const revalidate = 86400
+export const dynamicParams = false
+
+export function generateStaticParams() {
+  return getAllPosts().map((post) => ({ slug: post.slug }))
+}
 
 export async function generateMetadata({
   params,

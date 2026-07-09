@@ -16,8 +16,8 @@ import type { User } from "@supabase/supabase-js"
 // feature is one click from the top bar. Blog lives in the footer.
 export function TopNav() {
   const pathname = usePathname()
-  // /map은 모바일에서 풀스크린(구글맵식)으로 쓰므로 모바일 네비 행을 숨긴다.
-  const isMap = pathname === "/map" || pathname.startsWith("/map/")
+  // /map and /maps are full-screen map surfaces on mobile.
+  const isMap = pathname === "/map" || pathname.startsWith("/map/") || pathname === "/maps" || pathname.startsWith("/maps/")
   const isCompare = pathname === "/compare" || pathname.startsWith("/compare/")
   const router = useRouter()
   const t = useTranslations()
@@ -37,7 +37,7 @@ export function TopNav() {
 
   const navItems: { href: string; label: string }[] = [
     { href: "/", label: t.nav.home },
-    { href: "/map", label: t.nav.map },
+    { href: "/maps", label: t.nav.map },
     { href: "/compare", label: t.nav.compare },
   ]
 
