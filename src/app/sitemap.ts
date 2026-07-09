@@ -6,42 +6,14 @@
 // 5. Monitor Search Console → Pages tab over the next 2–4 weeks for indexed page count increase
 
 import { MetadataRoute } from "next"
-import { createClient } from "@supabase/supabase-js"
 import { getAllPosts } from "@/lib/blog"
-import { getUSOccCodes } from "@/lib/us-occupation-detail"
 import { getAllSlugs, getCities } from "@/lib/language-schools-ie"
 import { SA4_BY_STATE } from "@/data/sa4-regions"
+import { COUNTRY_ROI_DATA_META, COUNTRY_ROI_INSIGHTS } from "@/data/country-roi-mvp"
 import { getMapData } from "@/lib/map-data"
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+import { getMapOccupations, type MapCountry } from "@/lib/map-slugs"
 
 const BASE = "https://www.campcareer.com"
-
-// 비치헤드 = 호주. 다른 국가 matview는 색인 집중을 위해 sitemap에서 의도적으로 제외.
-const AU_MATVIEW = "roi_explorer_au"
-const PAGE_SIZE = 1000
-
-async function fetchCollegeIds(table: string): Promise<string[]> {
-  const ids = new Set<string>()
-  for (let from = 0; ; from += PAGE_SIZE) {
-    const { data, error } = await supabase
-      .from(table)
-      .select("college_id")
-      .range(from, from + PAGE_SIZE - 1)
-    if (error) {
-      console.error(`[sitemap] ${table} query failed:`, error)
-      break
-    }
-    for (const row of data ?? []) {
-      if (row.college_id) ids.add(row.college_id as string)
-    }
-    if (!data || data.length < PAGE_SIZE) break
-  }
-  return Array.from(ids)
-}
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // soft-hidden 라우트(career-path, fields, rankings, checklist, timeline, games,
@@ -49,6 +21,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const lastModStatic = new Date()
   const staticPages: MetadataRoute.Sitemap = [
     { url: BASE, lastModified: lastModStatic, priority: 1.0, changeFrequency: "weekly" },
+    { url: `${BASE}/maps`, lastModified: lastModStatic, priority: 0.9, changeFrequency: "daily" },
     { url: `${BASE}/roi-explorer`, lastModified: lastModStatic, priority: 0.9, changeFrequency: "daily" },
     { url: `${BASE}/degree-risk`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
     { url: `${BASE}/blog`, lastModified: lastModStatic, priority: 0.7, changeFrequency: "weekly" },
@@ -77,98 +50,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "monthly",
   }))
 
-  // 대학 디테일 — 호주 + 캐나다
-  const lastMod = new Date()
-  const detailPages: MetadataRoute.Sitemap = []
-  const auIds = await fetchCollegeIds(AU_MATVIEW)
-  for (const id of auIds) {
-    detailPages.push({
-      url: `${BASE}/roi-explorer/au/${id}`,
-      lastModified: lastMod,
-      priority: 0.5,
-      changeFrequency: "monthly",
-    })
-  }
-  const { data: caColleges } = await supabase
-    .from("colleges_ca")
-    .select("institution_id")
-  for (const row of caColleges ?? []) {
-    if (!row.institution_id) continue
-    detailPages.push({
-      url: `${BASE}/roi-explorer/ca/${row.institution_id}`,
-      lastModified: lastMod,
-      priority: 0.5,
-      changeFrequency: "monthly",
-    })
-  }
-
-  // 대학 디테일 — 영국
-  const ukIds = await fetchCollegeIds("roi_explorer_uk")
-  for (const id of ukIds) {
-    detailPages.push({
-      url: `${BASE}/roi-explorer/uk/${id}`,
-      lastModified: lastMod,
-      priority: 0.5,
-      changeFrequency: "monthly",
-    })
-  }
-
-  // 직업 디테일 — ANZSCO 395개 전부 색인
-  const occupationPages: MetadataRoute.Sitemap = []
-  const { data: occCodes, error: occError } = await supabase
-    .from("occupations_au")
-    .select("anzsco_code")
-  if (occError) console.error("[sitemap] occupations_au failed:", occError.message)
-  for (const row of occCodes ?? []) {
-    if (!row.anzsco_code) continue
-    occupationPages.push({
-      url: `${BASE}/roi-explorer/au/occupation/${row.anzsco_code}`,
-      lastModified: lastMod,
-      priority: 0.6,
-      changeFrequency: "weekly",
-    })
-  }
-
-  // US 직업 디테일 — SOC 116개
-  const usCodes = getUSOccCodes()
-  console.log("[sitemap] US occ codes count:", usCodes.length)
-  const usOccupationPages: MetadataRoute.Sitemap = usCodes.map((code) => ({
-    url: `${BASE}/roi-explorer/us/occupation/${code}`,
-    lastModified: lastMod,
-    priority: 0.6,
+  const countryDetailPages: MetadataRoute.Sitemap = COUNTRY_ROI_INSIGHTS.map((country) => ({
+    url: `${BASE}${country.href}`,
+    lastModified: new Date(COUNTRY_ROI_DATA_META.lastUpdated),
+    priority: 0.85,
     changeFrequency: "weekly",
   }))
 
-  // CA 직업 디테일 — NOC 514개
-  const caOccupationPages: MetadataRoute.Sitemap = []
-  const { data: caOccCodes, error: caOccError } = await supabase
-    .from("occupations_ca")
-    .select("noc_code")
-  if (caOccError) console.error("[sitemap] occupations_ca failed:", caOccError.message)
-  for (const row of caOccCodes ?? []) {
-    if (!row.noc_code) continue
-    caOccupationPages.push({
-      url: `${BASE}/roi-explorer/ca/occupation/${row.noc_code}`,
+  // Raw college IDs/UUIDs are intentionally excluded from the sitemap.
+  // Search indexing is concentrated on readable Maps URLs instead.
+  const lastMod = new Date()
+  const mapOccupationPages: MetadataRoute.Sitemap = []
+  for (const country of ["au", "ca", "us", "uk", "de", "nl"] satisfies MapCountry[]) {
+    const occupations = await getMapOccupations(country)
+    mapOccupationPages.push(...occupations.map((occupation) => ({
+      url: `${BASE}${occupation.path}`,
       lastModified: lastMod,
       priority: 0.6,
-      changeFrequency: "weekly",
-    })
-  }
-
-  // UK 직업 디테일 — SOC 코드
-  const ukOccupationPages: MetadataRoute.Sitemap = []
-  const { data: ukOccCodes, error: ukOccError } = await supabase
-    .from("occupations_uk")
-    .select("soc_code")
-  if (ukOccError) console.error("[sitemap] occupations_uk failed:", ukOccError.message)
-  for (const row of ukOccCodes ?? []) {
-    if (!row.soc_code) continue
-    ukOccupationPages.push({
-      url: `${BASE}/roi-explorer/uk/occupation/${row.soc_code}`,
-      lastModified: lastMod,
-      priority: 0.6,
-      changeFrequency: "weekly",
-    })
+      changeFrequency: "weekly" as const,
+    })))
   }
 
   // 아일랜드 어학원
@@ -229,15 +129,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/de/jobs`, lastModified: lastMod, priority: 0.8, changeFrequency: "weekly" },
   ]
 
-  // DE 직업 디테일 — KldB 124개
-  const deOccData = (await import("@/data/de-occupations.json")).default as Record<string, { kldb_code: string }>
-  const deOccupationPages: MetadataRoute.Sitemap = Object.values(deOccData).map((occ) => ({
-    url: `${BASE}/roi-explorer/de/occupation/${occ.kldb_code}`,
-    lastModified: lastMod,
-    priority: 0.6,
-    changeFrequency: "weekly",
-  }))
-
   // DE 대학 SEO 페이지 (55개)
   const deUnivPages: MetadataRoute.Sitemap = mapData.deColleges.map((c: { slug: string }) => ({
     url: `${BASE}/map/de/university/${c.slug}`,
@@ -249,15 +140,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // NL 대학 SEO 페이지 (13개)
   const nlUnivPages: MetadataRoute.Sitemap = mapData.nlColleges.map((c: { slug: string }) => ({
     url: `${BASE}/map/nl/university/${c.slug}`,
-    lastModified: lastMod,
-    priority: 0.6,
-    changeFrequency: "weekly",
-  }))
-
-  // NL 직업 디테일 — SBC 72개
-  const nlOccData = (await import("@/data/nl-occupations.json")).default as Record<string, { sbc_code: string }>
-  const nlOccupationPages: MetadataRoute.Sitemap = Object.values(nlOccData).map((occ) => ({
-    url: `${BASE}/roi-explorer/nl/occupation/${occ.sbc_code}`,
     lastModified: lastMod,
     priority: 0.6,
     changeFrequency: "weekly",
@@ -276,9 +158,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  const total = staticPages.length + blogPages.length + detailPages.length +
-    occupationPages.length + usOccupationPages.length + caOccupationPages.length + ukOccupationPages.length + ieLangSchoolPages.length + mapPages.length + usUnivPages.length + auUnivPages.length + caUnivPages.length + ukUnivPages.length + deStaticPages.length + deOccupationPages.length + deUnivPages.length + nlUnivPages.length + nlOccupationPages.length
-  console.log(`[sitemap] counts — static: ${staticPages.length}, blog: ${blogPages.length}, AU colleges: ${detailPages.length}, AU occupations: ${occupationPages.length}, US occupations: ${usOccupationPages.length}, CA occupations: ${caOccupationPages.length}, UK occupations: ${ukOccupationPages.length}, IE schools: ${ieLangSchoolPages.length}, map: ${mapPages.length}, US universities: ${usUnivPages.length}, AU universities: ${auUnivPages.length}, CA universities: ${caUnivPages.length}, UK universities: ${ukUnivPages.length}, DE static: ${deStaticPages.length}, DE occupations: ${deOccupationPages.length}, DE universities: ${deUnivPages.length}, NL universities: ${nlUnivPages.length}, NL occupations: ${nlOccupationPages.length}, TOTAL: ${total}`)
+  const total = staticPages.length + blogPages.length + countryDetailPages.length + mapOccupationPages.length +
+    ieLangSchoolPages.length + mapPages.length + usUnivPages.length + auUnivPages.length + caUnivPages.length + ukUnivPages.length + deStaticPages.length + deUnivPages.length + nlUnivPages.length
+  console.log(`[sitemap] counts — static: ${staticPages.length}, blog: ${blogPages.length}, country details: ${countryDetailPages.length}, map occupations: ${mapOccupationPages.length}, IE schools: ${ieLangSchoolPages.length}, map: ${mapPages.length}, US universities: ${usUnivPages.length}, AU universities: ${auUnivPages.length}, CA universities: ${caUnivPages.length}, UK universities: ${ukUnivPages.length}, DE static: ${deStaticPages.length}, DE universities: ${deUnivPages.length}, NL universities: ${nlUnivPages.length}, TOTAL: ${total}`)
 
-  return [...staticPages, ...blogPages, ...detailPages, ...occupationPages, ...usOccupationPages, ...caOccupationPages, ...ukOccupationPages, ...ieLangSchoolPages, ...mapPages, ...usUnivPages, ...auUnivPages, ...caUnivPages, ...ukUnivPages, ...deStaticPages, ...deOccupationPages, ...deUnivPages, ...nlUnivPages, ...nlOccupationPages]
+  return [...staticPages, ...blogPages, ...countryDetailPages, ...mapOccupationPages, ...ieLangSchoolPages, ...mapPages, ...usUnivPages, ...auUnivPages, ...caUnivPages, ...ukUnivPages, ...deStaticPages, ...deUnivPages, ...nlUnivPages]
 }

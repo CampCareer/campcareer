@@ -43,16 +43,22 @@ import {
 import {
   BUDGET_OPTIONS,
   COUNTRY_ROI_DATA_META,
-  COUNTRY_ROI_INSIGHTS,
   FIELD_OPTIONS,
   GOAL_OPTIONS,
   type BudgetKey,
-  type CountryRoiInsight,
   type DataConfidence,
   type FieldKey,
   type GoalKey,
 } from "@/data/country-roi-mvp"
 import { track } from "@/lib/analytics"
+import {
+  LANGUAGE_READINESS_OPTIONS,
+  RISK_TOLERANCE_OPTIONS,
+  recommendCountries,
+  type CountryRecommendation,
+  type LanguageReadinessKey,
+  type RiskToleranceKey,
+} from "@/lib/country-recommendation"
 
 const COUNTRIES = [
   { value: "au", name: "Australia", enabled: true },
@@ -72,20 +78,15 @@ export function HomeFinder() {
   const [field, setField] = useState<FieldKey>("software")
   const [budget, setBudget] = useState<BudgetKey>("balanced")
   const [goal, setGoal] = useState<GoalKey>("immigration")
+  const [riskTolerance, setRiskTolerance] = useState<RiskToleranceKey>("medium")
+  const [languageReadiness, setLanguageReadiness] = useState<LanguageReadinessKey>("english-only")
   const [mapCountry, setMapCountry] = useState("au")
   const [state, setState] = useState("NSW")
   const [tab, setTab] = useState<"shortage" | "pay">("shortage")
 
   const rankedCountries = useMemo(() => {
-    return COUNTRY_ROI_INSIGHTS.map((country) => ({
-      ...country,
-      matchScore: Math.round(
-        country.score[field] * 0.45 +
-          country.goalFit[goal] * 0.35 +
-          country.budgetFit[budget] * 0.2,
-      ),
-    })).sort((a, b) => b.matchScore - a.matchScore)
-  }, [budget, field, goal])
+    return recommendCountries({ field, budget, goal, riskTolerance, languageReadiness })
+  }, [budget, field, goal, languageReadiness, riskTolerance])
 
   const activeCountry = rankedCountries[0]
   const mapConfig = getMapConfig(mapCountry)
@@ -103,9 +104,11 @@ export function HomeFinder() {
       field,
       budget,
       goal,
+      risk: riskTolerance,
+      language: languageReadiness,
       top_country: activeCountry.code,
     })
-    router.push(`${activeCountry.href}?field=${field}&budget=${budget}&goal=${goal}`)
+    router.push(activeCountry.detailHref)
   }
 
   function goToMapSearch() {
@@ -140,7 +143,7 @@ export function HomeFinder() {
               rent, visa policy, and the budget you actually need before you move.
             </p>
 
-            <div className="mt-7 grid max-w-3xl grid-cols-2 gap-2 rounded-lg border border-slate-200 bg-white/95 p-3 shadow-xl shadow-slate-900/10 backdrop-blur sm:grid-cols-[1fr_1fr_1fr_auto]">
+            <div className="mt-7 grid max-w-3xl grid-cols-2 gap-2 rounded-lg border border-slate-200 bg-white/95 p-3 shadow-xl shadow-slate-900/10 backdrop-blur sm:grid-cols-3">
               <FilterSegment label="Major">
                 <Select
                   items={FIELD_OPTIONS}
@@ -198,10 +201,48 @@ export function HomeFinder() {
                 </Select>
               </FilterSegment>
 
+              <FilterSegment label="Risk">
+                <Select
+                  items={RISK_TOLERANCE_OPTIONS}
+                  value={riskTolerance}
+                  onValueChange={(value) => value && setRiskTolerance(value as RiskToleranceKey)}
+                >
+                  <SelectTrigger className={segmentTrigger}>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.entries(RISK_TOLERANCE_OPTIONS).map(([value, label]) => (
+                      <SelectItem key={value} value={value}>
+                        {label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FilterSegment>
+
+              <FilterSegment label="Language">
+                <Select
+                  items={LANGUAGE_READINESS_OPTIONS}
+                  value={languageReadiness}
+                  onValueChange={(value) => value && setLanguageReadiness(value as LanguageReadinessKey)}
+                >
+                  <SelectTrigger className={segmentTrigger}>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.entries(LANGUAGE_READINESS_OPTIONS).map(([value, label]) => (
+                      <SelectItem key={value} value={value}>
+                        {label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FilterSegment>
+
               <button
                 type="button"
                 onClick={goToPersonalizedResult}
-                className="col-span-2 inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-slate-950 px-5 text-sm font-bold text-white transition-colors hover:bg-slate-800 sm:col-span-1 sm:h-[58px] sm:self-end"
+                className="col-span-2 inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-slate-950 px-5 text-sm font-bold text-white transition-colors hover:bg-slate-800 sm:col-span-3"
               >
                 <Search className="h-4 w-4" />
                 Match
@@ -225,6 +266,9 @@ export function HomeFinder() {
                   <h2 className="mt-1 text-2xl font-semibold text-slate-950">
                     {activeCountry.name}
                   </h2>
+                  <p className="mt-1 text-sm font-semibold text-emerald-700">
+                    {activeCountry.fitLabel}
+                  </p>
                 </div>
                 <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-xl font-bold text-emerald-700">
                   {activeCountry.matchScore}
@@ -240,18 +284,15 @@ export function HomeFinder() {
 
               <div className="mt-4 rounded-lg bg-slate-50 p-3">
                 <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                  Strong majors
+                  Why this matches
                 </p>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {activeCountry.bestMajors.map((major) => (
-                    <span
-                      key={major}
-                      className="rounded-md border border-slate-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-700"
-                    >
-                      {major}
-                    </span>
+                <ul className="mt-2 space-y-2">
+                  {activeCountry.reasons.slice(0, 2).map((reason) => (
+                    <li key={reason} className="text-xs leading-5 text-slate-600">
+                      {reason}
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
 
               <DataQualityLine
@@ -262,7 +303,7 @@ export function HomeFinder() {
               />
 
               <Link
-                href={activeCountry.href}
+                href={activeCountry.detailHref}
                 className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-brand px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-brand-press"
               >
                 Open country page
@@ -429,12 +470,12 @@ function CountryCard({
   country,
   rank,
 }: {
-  country: CountryRoiInsight & { matchScore: number }
+  country: CountryRecommendation
   rank: number
 }) {
   return (
     <Link
-      href={country.href}
+      href={country.detailHref}
       className="group flex min-h-[420px] flex-col rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition-colors hover:border-brand/40 hover:bg-brand-tint/50"
     >
       <div className="flex items-start justify-between gap-3">
@@ -445,7 +486,7 @@ function CountryCard({
           <h3 className="mt-1 text-xl font-semibold text-slate-950 group-hover:text-brand-press">
             {country.name}
           </h3>
-          <p className="mt-1 text-xs text-slate-500">{country.cities}</p>
+          <p className="mt-1 text-xs text-slate-500">{country.fitLabel}</p>
         </div>
         <span className="rounded-md bg-slate-950 px-2.5 py-1 text-xs font-bold text-white">
           {country.code}
@@ -457,6 +498,12 @@ function CountryCard({
         <Metric label="Tax" value={country.tax} />
       </div>
 
+      <div className="mt-3 grid grid-cols-3 gap-2">
+        <ScorePill label="Major" value={country.breakdown.field} />
+        <ScorePill label="Goal" value={country.breakdown.goal} />
+        <ScorePill label="Budget" value={country.breakdown.budget} />
+      </div>
+
       <div className="mt-4 space-y-2">
         <SalaryRow label="After grad" value={country.salaries.first} />
         <SalaryRow label="Year 3" value={country.salaries.year3} />
@@ -466,22 +513,13 @@ function CountryCard({
 
       <div className="mt-4 border-t border-slate-200 pt-4">
         <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
-          Best majors
+          Recommendation reason
         </p>
-        <div className="mt-2 flex flex-wrap gap-1.5">
-          {country.bestMajors.map((major) => (
-            <span
-              key={major}
-              className="rounded-md border border-slate-200 bg-white px-2 py-1 text-[11px] font-semibold text-slate-600"
-            >
-              {major}
-            </span>
-          ))}
-        </div>
+        <p className="mt-2 text-xs leading-5 text-slate-600">{country.reasons[0]}</p>
       </div>
 
       <div className="mt-auto pt-4">
-        <p className="text-xs leading-5 text-slate-500">{country.policy}</p>
+        <p className="text-xs leading-5 text-slate-500">{country.cautions[0] ?? country.policy}</p>
         <DataQualityLine
           className="mt-3"
           confidence={country.sources.policy.confidence}
@@ -580,6 +618,15 @@ function Metric({ label, value }: { label: string; value: string }) {
         {label}
       </p>
       <p className="mt-1 text-sm font-bold text-slate-950">{value}</p>
+    </div>
+  )
+}
+
+function ScorePill({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="rounded-md bg-slate-50 px-2 py-1.5 text-center">
+      <p className="text-[10px] font-bold uppercase tracking-wide text-slate-400">{label}</p>
+      <p className="mt-0.5 text-xs font-bold text-slate-900">{value}</p>
     </div>
   )
 }
