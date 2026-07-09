@@ -53,7 +53,6 @@ src/data/ca-employment-income.json
 src/data/ca-shortage-ratings.json
 src/data/ca-occupation-province-sample.json
 src/data/us-collegescorecard.json
-src/data/ie-graduate-outcomes.json
 
 # raw source data
 souces/
