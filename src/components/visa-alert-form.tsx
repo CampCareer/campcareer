@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { useTranslations, useLocale } from "@/lib/i18n/locale-provider"
 import { subscribeVisaAlerts } from "@/app/degree-risk/actions"
+import { track } from "@/lib/analytics"
 
 type Status = "idle" | "submitting" | "done" | "duplicate"
 
@@ -17,9 +18,21 @@ export interface VisaAlertFormProps {
   /** Major slug or field name | null. */
   field?: string | null
   className?: string
+  decisionContext?: Record<string, string>
+  heading?: string
+  subtitle?: string
+  submitLabel?: string
 }
 
-export function VisaAlertForm({ country = null, field = null, className }: VisaAlertFormProps) {
+export function VisaAlertForm({
+  country = null,
+  field = null,
+  className,
+  decisionContext,
+  heading,
+  subtitle,
+  submitLabel,
+}: VisaAlertFormProps) {
   const t = useTranslations()
   const va = t.visaAlert
   const locale = useLocale()
@@ -38,6 +51,7 @@ export function VisaAlertForm({ country = null, field = null, className }: VisaA
       setError(va.errorConsent)
       return
     }
+    if (decisionContext) track("decision_save_click", { country: country ?? "all", field: field ?? "unknown" })
     setStatus("submitting")
     try {
       const res = await subscribeVisaAlerts({
@@ -47,8 +61,10 @@ export function VisaAlertForm({ country = null, field = null, className }: VisaA
         locale,
         sourcePath: pathname,
         consent,
+        decisionContext,
       })
       if (res.ok) {
+        track("lead_submitted", { country: country ?? "all", field: field ?? "unknown", lead_type: decisionContext ? "decision_brief" : "visa_alert" })
         setStatus("done")
       } else if (res.duplicate) {
         setStatus("duplicate")
@@ -83,9 +99,9 @@ export function VisaAlertForm({ country = null, field = null, className }: VisaA
     <div className={cn("rounded-2xl border-2 border-slate-200 bg-white p-5 md:p-6", className)}>
       <div className="mb-1 flex items-center gap-2">
         <Bell className="h-4 w-4 text-brand" />
-        <h3 className="font-display text-base font-semibold text-slate-900">{va.heading}</h3>
+        <h3 className="font-display text-base font-semibold text-slate-900">{heading ?? va.heading}</h3>
       </div>
-      <p className="mb-4 text-sm text-slate-500">{va.subtitle}</p>
+      <p className="mb-4 text-sm text-slate-500">{subtitle ?? va.subtitle}</p>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:flex-row">
         <input
@@ -99,7 +115,7 @@ export function VisaAlertForm({ country = null, field = null, className }: VisaA
         />
         <Button type="submit" variant="tactile" size="tactile" disabled={status === "submitting"}>
           {status === "submitting" && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          {status === "submitting" ? va.submitting : va.submit}
+          {status === "submitting" ? va.submitting : submitLabel ?? va.submit}
         </Button>
       </form>
 

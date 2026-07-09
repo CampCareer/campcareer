@@ -70,6 +70,20 @@ const COUNTRIES = [
   { value: "nl", name: "Netherlands", enabled: true },
 ] as const
 
+const DEGREE_OPTIONS = {
+  bachelor: "Bachelor's degree",
+  master: "Master's degree",
+  diploma: "Diploma / pathway",
+  phd: "PhD",
+} as const
+
+const TIMELINE_OPTIONS = {
+  six: "Within 6 months",
+  twelve: "Within 12 months",
+  eighteen: "12-18 months",
+  later: "More than 18 months",
+} as const
+
 const segmentTrigger =
   "h-9 w-full justify-between border-slate-200 bg-white px-3 text-sm font-semibold text-slate-900 shadow-sm data-[size=default]:h-9"
 
@@ -80,6 +94,11 @@ export function HomeFinder() {
   const [goal, setGoal] = useState<GoalKey>("immigration")
   const [riskTolerance, setRiskTolerance] = useState<RiskToleranceKey>("medium")
   const [languageReadiness, setLanguageReadiness] = useState<LanguageReadinessKey>("english-only")
+  const [citizenship, setCitizenship] = useState("South Korea")
+  const [residence, setResidence] = useState("South Korea")
+  const [degree, setDegree] = useState<keyof typeof DEGREE_OPTIONS>("bachelor")
+  const [timeline, setTimeline] = useState<keyof typeof TIMELINE_OPTIONS>("twelve")
+  const [occupation, setOccupation] = useState("")
   const [mapCountry, setMapCountry] = useState("au")
   const [state, setState] = useState("NSW")
   const [tab, setTab] = useState<"shortage" | "pay">("shortage")
@@ -100,6 +119,13 @@ export function HomeFinder() {
   }, [mapCountry])
 
   function goToPersonalizedResult() {
+    track("decision_start", {
+      field,
+      budget,
+      goal,
+      risk: riskTolerance,
+      language: languageReadiness,
+    })
     track("landing_personalized_country_click", {
       field,
       budget,
@@ -108,7 +134,19 @@ export function HomeFinder() {
       language: languageReadiness,
       top_country: activeCountry.code,
     })
-    router.push(activeCountry.detailHref)
+    const params = new URLSearchParams({
+      field,
+      budget,
+      goal,
+      risk: riskTolerance,
+      language: languageReadiness,
+      citizenship,
+      residence,
+      degree: DEGREE_OPTIONS[degree],
+      timeline: TIMELINE_OPTIONS[timeline],
+      occupation,
+    })
+    router.push(`/decision-brief?${params.toString()}`)
   }
 
   function goToMapSearch() {
@@ -237,6 +275,69 @@ export function HomeFinder() {
                     ))}
                   </SelectContent>
                 </Select>
+              </FilterSegment>
+
+              <FilterSegment label="Citizenship">
+                <input
+                  value={citizenship}
+                  onChange={(event) => setCitizenship(event.target.value)}
+                  maxLength={60}
+                  className={segmentTrigger}
+                  aria-label="Citizenship"
+                />
+              </FilterSegment>
+
+              <FilterSegment label="Residence">
+                <input
+                  value={residence}
+                  onChange={(event) => setResidence(event.target.value)}
+                  maxLength={60}
+                  className={segmentTrigger}
+                  aria-label="Current residence"
+                />
+              </FilterSegment>
+
+              <FilterSegment label="Degree level">
+                <Select
+                  items={DEGREE_OPTIONS}
+                  value={degree}
+                  onValueChange={(value) => value && setDegree(value as keyof typeof DEGREE_OPTIONS)}
+                >
+                  <SelectTrigger className={segmentTrigger}><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="bachelor">Bachelor&apos;s degree</SelectItem>
+                    <SelectItem value="master">Master&apos;s degree</SelectItem>
+                    <SelectItem value="diploma">Diploma / pathway</SelectItem>
+                    <SelectItem value="phd">PhD</SelectItem>
+                  </SelectContent>
+                </Select>
+              </FilterSegment>
+
+              <FilterSegment label="Target intake">
+                <Select
+                  items={TIMELINE_OPTIONS}
+                  value={timeline}
+                  onValueChange={(value) => value && setTimeline(value as keyof typeof TIMELINE_OPTIONS)}
+                >
+                  <SelectTrigger className={segmentTrigger}><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="six">Within 6 months</SelectItem>
+                    <SelectItem value="twelve">Within 12 months</SelectItem>
+                    <SelectItem value="eighteen">12-18 months</SelectItem>
+                    <SelectItem value="later">More than 18 months</SelectItem>
+                  </SelectContent>
+                </Select>
+              </FilterSegment>
+
+              <FilterSegment label="Target occupation">
+                <input
+                  value={occupation}
+                  onChange={(event) => setOccupation(event.target.value)}
+                  placeholder="Optional"
+                  maxLength={80}
+                  className={segmentTrigger}
+                  aria-label="Target occupation"
+                />
               </FilterSegment>
 
               <button

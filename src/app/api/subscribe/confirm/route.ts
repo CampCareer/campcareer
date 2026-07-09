@@ -56,11 +56,33 @@ export async function GET(req: Request): Promise<Response> {
 
   if (!UUID_RE.test(token)) return invalid(cookieLocale())
 
-  const { data, error } = await supabaseAdmin
+  const initialLookup = await supabaseAdmin
     .from("subscriptions")
-    .select("id, confirmed, locale")
+    .select("id, confirmed, locale, acquisition_session_id, first_path, utm, decision_context")
     .eq("unsubscribe_token", token)
     .limit(1)
+  let data: Array<{
+    id: string
+    confirmed: boolean
+    locale: string | null
+    acquisition_session_id?: string | null
+    first_path?: string | null
+    utm?: Record<string, string> | null
+    decision_context?: Record<string, string> | null
+  }> | null = initialLookup.data
+  let error = initialLookup.error
+
+  // Allow confirmation links to keep working if application code reaches a
+  // deployment before the attribution migration is applied.
+  if (error && (error.code === "42703" || /acquisition_session_id|first_path|decision_context|utm/i.test(error.message))) {
+    const fallbackLookup = await supabaseAdmin
+      .from("subscriptions")
+      .select("id, confirmed, locale")
+      .eq("unsubscribe_token", token)
+      .limit(1)
+    data = fallbackLookup.data
+    error = fallbackLookup.error
+  }
 
   if (error) {
     console.error("[visa-alert] confirm lookup failed:", error.message)
@@ -86,6 +108,20 @@ export async function GET(req: Request): Promise<Response> {
   if (updateError) {
     console.error("[visa-alert] confirm update failed:", updateError.message)
     return invalid(locale)
+  }
+
+  if (row.acquisition_session_id || row.first_path || row.decision_context) {
+    const { error: eventError } = await supabaseAdmin.from("analytics_events").insert({
+      event_name: "lead_confirmed",
+      session_id: row.acquisition_session_id ?? null,
+      path: "/api/subscribe/confirm",
+      first_path: row.first_path ?? null,
+      utm: row.utm ?? {},
+      context: { lead_type: row.decision_context && Object.keys(row.decision_context).length > 0 ? "decision_brief" : "visa_alert" },
+    })
+    if (eventError && eventError.code !== "42P01") {
+      console.error("[analytics] confirmation event write failed:", eventError.message)
+    }
   }
 
   return htmlResponse(

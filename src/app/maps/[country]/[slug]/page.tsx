@@ -4,7 +4,8 @@ import { notFound, redirect } from "next/navigation"
 import { JsonLd, breadcrumbLd } from "@/components/seo/json-ld"
 import {
   formatMapSalary,
-  getMapOccupationStaticParams,
+  getIndexableMapOccupations,
+  isMapOccupationIndexable,
   isMapCountry,
   resolveMapOccupation,
 } from "@/lib/map-slugs"
@@ -19,7 +20,13 @@ type Params = {
 }
 
 export async function generateStaticParams() {
-  return getMapOccupationStaticParams()
+  const countries = ["us", "ie", "uk", "de", "nl", "be"] as const
+  const params: Array<{ country: string; slug: string }> = []
+  for (const country of countries) {
+    const occupations = await getIndexableMapOccupations(country)
+    params.push(...occupations.map((occupation) => ({ country, slug: occupation.slug })))
+  }
+  return params
 }
 
 async function getOccupationFromParams(params: Params) {
@@ -31,11 +38,14 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   const occupation = await getOccupationFromParams(params)
   if (!occupation) return { title: "Map page not found" }
 
-  return pageMetadata({
+  return {
+    ...pageMetadata({
     title: `${occupation.name} Map in ${occupation.countryName} — Salary, Demand & Study Pathways`,
     description: `Explore ${occupation.name} pathways in ${occupation.countryName}: salary, labour demand, shortage signals, study direction, and related CampCareer planning tools.`,
     path: occupation.path,
-  })
+    }),
+    robots: { index: isMapOccupationIndexable(occupation), follow: true },
+  }
 }
 
 export default async function MapsOccupationPage({ params }: { params: Params }) {
@@ -51,6 +61,7 @@ export default async function MapsOccupationPage({ params }: { params: Params })
     occupation.shortageRating != null ? `${occupation.shortageRating}/5 shortage rating` :
     occupation.shortageScore != null ? `${occupation.shortageScore}/100 shortage score` :
     "Demand varies by region"
+  const decisionBriefHref = `/decision-brief?occupation=${encodeURIComponent(occupation.name)}`
 
   return (
     <>
@@ -123,6 +134,19 @@ export default async function MapsOccupationPage({ params }: { params: Params })
                       <div className="mt-1 text-lg font-semibold text-slate-950">{occupation.field}</div>
                     </div>
                   )}
+                  <div>
+                    <div className="text-xs uppercase tracking-wide text-slate-400">Data source</div>
+                    <a
+                      href={occupation.dataSource.sourceUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-1 inline-flex items-center gap-1 text-sm font-semibold text-slate-700 hover:text-slate-950 hover:underline"
+                    >
+                      {occupation.dataSource.sourceName}
+                      <span aria-hidden="true">-&gt;</span>
+                    </a>
+                    <div className="mt-1 text-xs text-slate-400">Checked {occupation.dataSource.lastChecked}</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -157,6 +181,16 @@ export default async function MapsOccupationPage({ params }: { params: Params })
             </p>
             <Link href={`/maps?country=${occupation.country}`} className="mt-5 inline-flex text-sm font-semibold text-slate-950 hover:underline">
               Open map
+            </Link>
+          </div>
+
+          <div className="rounded-2xl border border-slate-200 bg-white p-5">
+            <h2 className="text-lg font-semibold text-slate-950">Decision brief</h2>
+            <p className="mt-3 text-sm leading-6 text-slate-600">
+              Compare this career direction against your budget, study level, migration goal, and country options.
+            </p>
+            <Link href={decisionBriefHref} className="mt-5 inline-flex text-sm font-semibold text-slate-950 hover:underline">
+              Build decision brief
             </Link>
           </div>
         </section>

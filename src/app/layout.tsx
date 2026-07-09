@@ -9,6 +9,7 @@ import { LayoutShell } from "@/components/layout/layout-shell"
 import { DEFAULT_LOCALE } from "@/lib/i18n/config"
 import { LocaleProvider } from "@/lib/i18n/locale-provider"
 import { LocaleInit } from "@/components/locale-init"
+import { PageViewTracker } from "@/components/analytics/page-view-tracker"
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -85,6 +86,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} antialiased`}>
         <LocaleProvider locale={DEFAULT_LOCALE}>
           <LocaleInit />
+          <PageViewTracker />
           <LayoutShell>{children}</LayoutShell>
         </LocaleProvider>
         <Analytics />

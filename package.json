@@ -7,7 +7,8 @@
     "prebuild": "npx tsx generate-blog-manifest.ts",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "check:data": "npx tsx scripts/check-data-quality.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",

@@ -286,6 +286,7 @@ export default async function CountryDetailPage({ params, searchParams }: PagePr
                     <th className="px-4 py-3 font-semibold">Confidence</th>
                     <th className="px-4 py-3 font-semibold">Source</th>
                     <th className="px-4 py-3 font-semibold">Checked</th>
+                    <th className="px-4 py-3 font-semibold">Review</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
@@ -314,6 +315,11 @@ export default async function CountryDetailPage({ params, searchParams }: PagePr
                           <p className="mt-1 text-xs leading-5 text-slate-500">{source.note}</p>
                         </td>
                         <td className="px-4 py-3 text-slate-600">{formatDate(source.lastChecked)}</td>
+                        <td className="px-4 py-3">
+                          <span className={source.reviewStatus === "approved" ? "text-xs font-semibold text-emerald-700" : "text-xs font-semibold text-amber-700"}>
+                            {source.reviewStatus === "approved" ? "Approved" : "Review before applying"}
+                          </span>
+                        </td>
                       </tr>
                     )
                   })}

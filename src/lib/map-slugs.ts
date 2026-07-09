@@ -7,6 +7,7 @@ import ukOccupationsRaw from "@/data/uk-occupations.json"
 import deOccupationsRaw from "@/data/de-occupations.json"
 import nlOccupationsRaw from "@/data/nl-occupations.json"
 import { getBelgiumOccupations, getIrelandOccupations } from "@/lib/country-occupation-data"
+import { getCountrySource, type SourceRecord } from "@/data/source-registry"
 
 export const MAP_COUNTRIES = ["au", "ca", "us", "ie", "uk", "de", "nl", "be"] as const
 
@@ -30,6 +31,7 @@ export type MapOccupation = RawMapOccupation & {
   countryName: string
   slug: string
   path: string
+  dataSource: SourceRecord
 }
 
 const COUNTRY_NAME: Record<MapCountry, string> = {
@@ -41,6 +43,17 @@ const COUNTRY_NAME: Record<MapCountry, string> = {
   de: "Germany",
   nl: "Netherlands",
   be: "Belgium",
+}
+
+const SOURCE_COUNTRY: Record<MapCountry, SourceRecord["country"]> = {
+  au: "AU",
+  ca: "CA",
+  us: "US",
+  ie: "IE",
+  uk: "UK",
+  de: "DE",
+  nl: "NL",
+  be: "BE",
 }
 
 const CURRENCY_SYMBOL: Record<MapOccupation["currency"], string> = {
@@ -86,6 +99,7 @@ function withCanonicalSlugs(country: MapCountry, rows: RawMapOccupation[]): MapO
         countryName: COUNTRY_NAME[country],
         slug,
         path: `/maps/${country}/${slug}`,
+        dataSource: getCountrySource(SOURCE_COUNTRY[country], "occupation"),
       }
     })
 }
@@ -275,4 +289,23 @@ export async function getMapOccupationStaticParams() {
   }
 
   return params
+}
+
+// Sitemap only includes pages with enough distinct facts to answer a specific
+// career query. The route stays available for exploration when a thin row is
+// intentionally excluded from indexing.
+export function isMapOccupationIndexable(occupation: MapOccupation): boolean {
+  const facts = [
+    occupation.code,
+    occupation.medianSalary,
+    occupation.shortageRating ?? occupation.shortageScore,
+    occupation.employment,
+    occupation.field,
+  ].filter((value) => value !== null && value !== undefined && value !== "")
+
+  return occupation.dataSource.reviewStatus === "approved" && facts.length >= 3
+}
+
+export async function getIndexableMapOccupations(country: MapCountry): Promise<MapOccupation[]> {
+  return (await getMapOccupations(country)).filter(isMapOccupationIndexable)
 }

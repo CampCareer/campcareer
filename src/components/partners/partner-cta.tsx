@@ -1,13 +1,14 @@
 "use client"
 
+import { useEffect } from "react"
 import { ArrowRight } from "lucide-react"
 import { useTranslations } from "@/lib/i18n/locale-provider"
-import { WISE, AIRALO, type Partner } from "@/lib/partners"
+import { WISE, AIRALO, partnerExitPath, type Partner } from "@/lib/partners"
+import { track } from "@/lib/analytics"
 
 // 제휴 클릭을 GA4 이벤트로 집계 (gtag 는 layout.tsx 에서 로드됨).
 function trackAffiliateClick(partnerId: string) {
-  const w = window as unknown as { gtag?: (...args: unknown[]) => void }
-  w.gtag?.("event", "affiliate_click", { partner: partnerId })
+  track("affiliate_click", { partner: partnerId })
 }
 
 // Wise 마크 — 공식 브랜드 SVG
@@ -39,6 +40,10 @@ export function PartnerCta({
   cta: string
 }) {
   const t = useTranslations()
+  useEffect(() => {
+    track("affiliate_offer_view", { partner: partner.id })
+  }, [partner.id])
+
   return (
     <div className="rounded-lg border border-slate-200 bg-white p-3">
       <div className="flex items-center gap-2">
@@ -51,7 +56,7 @@ export function PartnerCta({
       <p className="mt-2.5 text-sm font-semibold text-slate-800 leading-snug">{title}</p>
       <p className="mt-0.5 text-xs leading-relaxed text-slate-500">{description}</p>
       <a
-        href={partner.href}
+        href={partnerExitPath(partner)}
         target="_blank"
         rel="sponsored noopener noreferrer"
         onClick={() => trackAffiliateClick(partner.id)}

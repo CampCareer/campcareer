@@ -3,12 +3,17 @@ export type BudgetKey = "lean" | "balanced" | "premium"
 export type GoalKey = "salary" | "immigration" | "low-cost"
 
 export type DataConfidence = "official" | "market-estimate" | "internal-estimate"
+export type DataMethod = "official-api" | "official-download" | "official-web" | "market-estimate" | "internal-methodology"
+export type ReviewStatus = "approved" | "review-required"
 
 export type DataSource = {
   confidence: DataConfidence
   sourceName: string
   sourceUrl?: string
+  retrievedAt: string
   lastChecked: string
+  method: DataMethod
+  reviewStatus: ReviewStatus
   note: string
 }
 
@@ -85,7 +90,10 @@ const methodologySource: DataSource = {
   confidence: "internal-estimate",
   sourceName: "CampCareer methodology",
   sourceUrl: "/methodology",
+  retrievedAt: COUNTRY_ROI_DATA_META.lastUpdated,
   lastChecked: COUNTRY_ROI_DATA_META.lastUpdated,
+  method: "internal-methodology",
+  reviewStatus: "approved",
   note: SHARED_ESTIMATE_NOTE,
 }
 
@@ -93,7 +101,10 @@ const taxEstimateSource: DataSource = {
   confidence: "internal-estimate",
   sourceName: "CampCareer simplified tax model",
   sourceUrl: "/methodology",
+  retrievedAt: COUNTRY_ROI_DATA_META.lastUpdated,
   lastChecked: COUNTRY_ROI_DATA_META.lastUpdated,
+  method: "internal-methodology",
+  reviewStatus: "approved",
   note: "Simplified single-filer estimate; credits, deductions, and local rules are not fully modelled.",
 }
 
@@ -101,7 +112,10 @@ const rentEstimateSource: DataSource = {
   confidence: "market-estimate",
   sourceName: "City rent estimate",
   sourceUrl: "/methodology",
+  retrievedAt: COUNTRY_ROI_DATA_META.lastUpdated,
   lastChecked: COUNTRY_ROI_DATA_META.lastUpdated,
+  method: "market-estimate",
+  reviewStatus: "approved",
   note: "Monthly shared/student housing proxy derived from city-level rent assumptions.",
 }
 
@@ -165,7 +179,10 @@ export const COUNTRY_ROI_INSIGHTS: CountryRoiInsight[] = [
         confidence: "official",
         sourceName: "Australian Department of Home Affairs",
         sourceUrl: "https://immi.homeaffairs.gov.au/visas/working-in-australia/skill-occupation-list",
+        retrievedAt: COUNTRY_ROI_DATA_META.lastUpdated,
         lastChecked: COUNTRY_ROI_DATA_META.lastUpdated,
+        method: "official-web",
+        reviewStatus: "review-required",
         note: "Skilled occupation list and skilled migration pathway reference.",
       },
     },
@@ -225,7 +242,10 @@ export const COUNTRY_ROI_INSIGHTS: CountryRoiInsight[] = [
         confidence: "official",
         sourceName: "Bureau of Labor Statistics occupational wage data",
         sourceUrl: "https://www.bls.gov/oes/",
+        retrievedAt: COUNTRY_ROI_DATA_META.lastUpdated,
         lastChecked: COUNTRY_ROI_DATA_META.lastUpdated,
+        method: "official-download",
+        reviewStatus: "approved",
         note: "Occupation-level salary signals are based on BLS/OES-derived CampCareer datasets.",
       },
       tax: taxEstimateSource,
@@ -235,7 +255,10 @@ export const COUNTRY_ROI_INSIGHTS: CountryRoiInsight[] = [
         confidence: "official",
         sourceName: "USCIS Optional Practical Training",
         sourceUrl: "https://www.uscis.gov/working-in-the-united-states/students-and-exchange-visitors/optional-practical-training-opt-for-f-1-students",
+        retrievedAt: COUNTRY_ROI_DATA_META.lastUpdated,
         lastChecked: COUNTRY_ROI_DATA_META.lastUpdated,
+        method: "official-web",
+        reviewStatus: "review-required",
         note: "F-1 OPT and post-study work authorization reference.",
       },
     },
@@ -299,7 +322,10 @@ export const COUNTRY_ROI_INSIGHTS: CountryRoiInsight[] = [
         confidence: "official",
         sourceName: "IRCC post-graduation work permit",
         sourceUrl: "https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/work/after-graduation/about.html",
+        retrievedAt: COUNTRY_ROI_DATA_META.lastUpdated,
         lastChecked: COUNTRY_ROI_DATA_META.lastUpdated,
+        method: "official-web",
+        reviewStatus: "review-required",
         note: "PGWP eligibility and post-study work reference.",
       },
     },
@@ -359,7 +385,10 @@ export const COUNTRY_ROI_INSIGHTS: CountryRoiInsight[] = [
         confidence: "official",
         sourceName: "CSO Higher Education Outcomes",
         sourceUrl: "https://www.cso.ie/en/releasesandpublications/ep/p-heo/highereducationoutcomes-graduationyears2013-2022/whatgraduatesearn/",
+        retrievedAt: COUNTRY_ROI_DATA_META.lastUpdated,
         lastChecked: COUNTRY_ROI_DATA_META.lastUpdated,
+        method: "official-download",
+        reviewStatus: "approved",
         note: "Graduate earnings and employment outcomes by field; occupation salary figures remain directional.",
       },
       tax: taxEstimateSource,
@@ -369,7 +398,10 @@ export const COUNTRY_ROI_INSIGHTS: CountryRoiInsight[] = [
         confidence: "official",
         sourceName: "Irish Immigration Service Third Level Graduate Programme",
         sourceUrl: "https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/",
+        retrievedAt: COUNTRY_ROI_DATA_META.lastUpdated,
         lastChecked: COUNTRY_ROI_DATA_META.lastUpdated,
+        method: "official-web",
+        reviewStatus: "review-required",
         note: "Post-study permission reference for eligible Irish-educated non-EEA graduates.",
       },
     },
@@ -433,7 +465,10 @@ export const COUNTRY_ROI_INSIGHTS: CountryRoiInsight[] = [
         confidence: "official",
         sourceName: "Make it in Germany EU Blue Card",
         sourceUrl: "https://www.make-it-in-germany.com/en/visa-residence/types/eu-blue-card",
+        retrievedAt: COUNTRY_ROI_DATA_META.lastUpdated,
         lastChecked: COUNTRY_ROI_DATA_META.lastUpdated,
+        method: "official-web",
+        reviewStatus: "review-required",
         note: "EU Blue Card work-residence pathway reference.",
       },
     },
@@ -497,7 +532,10 @@ export const COUNTRY_ROI_INSIGHTS: CountryRoiInsight[] = [
         confidence: "official",
         sourceName: "GOV.UK Graduate visa",
         sourceUrl: "https://www.gov.uk/graduate-visa",
+        retrievedAt: COUNTRY_ROI_DATA_META.lastUpdated,
         lastChecked: COUNTRY_ROI_DATA_META.lastUpdated,
+        method: "official-web",
+        reviewStatus: "review-required",
         note: "Graduate route and post-study stay reference.",
       },
     },
@@ -561,7 +599,10 @@ export const COUNTRY_ROI_INSIGHTS: CountryRoiInsight[] = [
         confidence: "official",
         sourceName: "IND orientation year",
         sourceUrl: "https://ind.nl/en/residence-permits/work/residence-permit-for-orientation-year",
+        retrievedAt: COUNTRY_ROI_DATA_META.lastUpdated,
         lastChecked: COUNTRY_ROI_DATA_META.lastUpdated,
+        method: "official-web",
+        reviewStatus: "review-required",
         note: "Orientation year after graduation, doctorate, or research reference.",
       },
     },
@@ -621,14 +662,20 @@ export const COUNTRY_ROI_INSIGHTS: CountryRoiInsight[] = [
         confidence: "official",
         sourceName: "Statbel Belgian wages and salaries",
         sourceUrl: "https://statbel.fgov.be/en/themes/work-training/wages-and-labourcost/overview-belgian-wages-and-salaries",
+        retrievedAt: COUNTRY_ROI_DATA_META.lastUpdated,
         lastChecked: COUNTRY_ROI_DATA_META.lastUpdated,
+        method: "official-download",
+        reviewStatus: "approved",
         note: "Belgian gross salary reference; occupation-level figures are merged with Jobat and market datasets where needed.",
       },
       tax: {
         confidence: "official",
         sourceName: "FPS Finance Belgium tax rates",
         sourceUrl: "https://fin.belgium.be/en/individuals/taxation/tax-rates/income-tax-rates",
+        retrievedAt: COUNTRY_ROI_DATA_META.lastUpdated,
         lastChecked: COUNTRY_ROI_DATA_META.lastUpdated,
+        method: "official-web",
+        reviewStatus: "review-required",
         note: "Simplified tax preview derived from official Belgian tax-rate structure.",
       },
       rent: rentEstimateSource,
@@ -637,7 +684,10 @@ export const COUNTRY_ROI_INSIGHTS: CountryRoiInsight[] = [
         confidence: "official",
         sourceName: "IBZ Search year after higher studies",
         sourceUrl: "https://dofi.ibz.be/en/themes/third-country-nationals/study/search-year-after-higher-studies",
+        retrievedAt: COUNTRY_ROI_DATA_META.lastUpdated,
         lastChecked: COUNTRY_ROI_DATA_META.lastUpdated,
+        method: "official-web",
+        reviewStatus: "review-required",
         note: "Post-study search year reference for eligible third-country graduates.",
       },
     },

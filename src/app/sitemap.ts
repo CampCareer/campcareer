@@ -11,7 +11,7 @@ import { getAllSlugs, getCities } from "@/lib/language-schools-ie"
 import { SA4_BY_STATE } from "@/data/sa4-regions"
 import { COUNTRY_ROI_DATA_META, COUNTRY_ROI_INSIGHTS } from "@/data/country-roi-mvp"
 import { getMapData } from "@/lib/map-data"
-import { getMapOccupations, MAP_COUNTRIES } from "@/lib/map-slugs"
+import { getIndexableMapOccupations, MAP_COUNTRIES } from "@/lib/map-slugs"
 
 const BASE = "https://www.campcareer.com"
 
@@ -66,7 +66,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const lastMod = new Date()
   const mapOccupationPages: MetadataRoute.Sitemap = []
   for (const country of MAP_COUNTRIES) {
-    const occupations = await getMapOccupations(country)
+    const occupations = await getIndexableMapOccupations(country)
     mapOccupationPages.push(...occupations.map((occupation) => ({
       url: `${BASE}${occupation.path}`,
       lastModified: lastMod,

@@ -28,3 +28,13 @@ export const AIRALO: Partner = {
   accent: "#00B6BA",
   accentText: "#FFFFFF",
 }
+
+export const PARTNERS = [WISE, AIRALO] as const
+
+export function getPartner(id: string): Partner | null {
+  return PARTNERS.find((partner) => partner.id === id) ?? null
+}
+
+export function partnerExitPath(partner: Partner): string {
+  return `/out/${partner.id}`
+}
