@@ -1557,9 +1557,9 @@ function Panel({
             />
           </div>
         )}
-        {tab === "stateInfo" && activeCountry === "BE" && (
-          <BEInfoPanel stateInfo={data.beStateInfo[selected] ?? null} cities={data.beCities} regionCode={selected} />
-        )}
+{tab === "stateInfo" && activeCountry === "BE" && (
+  <BEInfoPanel stateInfo={data.beStateInfo[selected] ?? null} cities={data.beCities} regionCode={selected} taxRates={data.beTaxRates as Record<string, unknown>} />
+)}
         {tab === "shortage" && isAU && (
           selectedSA4 ? (
             <RegionGroupList
@@ -4722,10 +4722,12 @@ function BEInfoPanel({
   stateInfo,
   cities,
   regionCode,
+  taxRates,
 }: {
   stateInfo: import("@/lib/map-data").BEStateInfo | null
   cities: import("@/lib/map-data").BECity[]
   regionCode: string | null
+  taxRates: Record<string, unknown>
 }) {
   const regionCities = useMemo(() => {
     return cities.filter((c) => c.region === regionCode && c.rent_median != null)
@@ -4807,6 +4809,46 @@ function BEInfoPanel({
           </ul>
         </div>
       )}
+
+      {/* Tax Brackets */}
+      {(() => {
+        const brackets = taxRates?.brackets as Array<{ rate: number; from: number; to: number | null }> | undefined
+        if (!brackets || brackets.length === 0) return null
+        return (
+          <div className="rounded-lg border border-slate-200 px-4 py-3">
+            <p className="text-[11px] text-slate-500 mb-2">Income Tax Brackets (2025)</p>
+            <div className="space-y-1.5">
+              {brackets.map((b, i) => (
+                <div key={i} className="flex items-center justify-between text-xs">
+                  <span className="text-slate-600">
+                    €{b.from.toLocaleString()} {b.to != null ? `– €${b.to.toLocaleString()}` : "+"}
+                  </span>
+                  <span className="font-medium text-slate-700">{b.rate}%</span>
+                </div>
+              ))}
+            </div>
+            {taxRates?.personal_tax_allowance != null && (
+              <p className="text-[10px] text-slate-400 mt-2">
+                Personal allowance: €{(taxRates.personal_tax_allowance as number).toLocaleString()}
+              </p>
+            )}
+            {taxRates?.social_security_rate != null && (
+              <p className="text-[10px] text-slate-400">
+                Social security: {taxRates.social_security_rate as number}% of gross
+              </p>
+            )}
+            <a
+              href="https://fin.belgium.be/en/individuals/taxation/tax-rates/income-tax-rates"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-[10px] text-violet-500 hover:text-violet-700 hover:underline mt-1.5"
+            >
+              <ExternalLink className="h-2.5 w-2.5" />
+              fin.belgium.be
+            </a>
+          </div>
+        )
+      })()}
 
       <div className="rounded-lg border border-slate-200 px-3 py-2">
         <p className="text-[11px] text-slate-500">Source</p>
@@ -5022,6 +5064,48 @@ function BEOccupationDetail({
             </div>
           </div>
         )}
+
+        {/* Jobat Career & Course Links */}
+        {(() => {
+          const jobatLink = data.beJobatLinks?.[occ.occupation_code]
+          if (!jobatLink) return null
+          return (
+            <div className="rounded-lg border border-slate-200 px-4 py-3">
+              <p className="text-[11px] text-slate-500 mb-2">Career & Courses on Jobat.be</p>
+              <div className="space-y-2">
+                <a
+                  href={jobatLink.jobat_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 text-xs font-medium text-violet-600 hover:text-violet-800 hover:underline"
+                >
+                  <ExternalLink className="h-3 w-3" />
+                  Career Info: {jobatLink.occupation_en}
+                </a>
+                <a
+                  href={jobatLink.salary_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 text-xs font-medium text-violet-600 hover:text-violet-800 hover:underline"
+                >
+                  <ExternalLink className="h-3 w-3" />
+                  Salary Details
+                </a>
+                {jobatLink.course_url && (
+                  <a
+                    href={jobatLink.course_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 text-xs font-medium text-violet-600 hover:text-violet-800 hover:underline"
+                  >
+                    <GraduationCap className="h-3 w-3" />
+                    Related Courses
+                  </a>
+                )}
+              </div>
+            </div>
+          )
+        })()}
 
         <div className="flex gap-2">
           <button

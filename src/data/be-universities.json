@@ -1,0 +1,104 @@
+{
+  "source": "QS World University Rankings 2027, THE World University Rankings 2026",
+  "last_updated": "2025",
+  "universities": [
+    {
+      "name": "KU Leuven",
+      "name_nl": "Katholieke Universiteit Leuven",
+      "city": "Leuven",
+      "region": "FL",
+      "qs_rank": 59,
+      "the_rank": 46,
+      "website": "https://www.kuleuven.be",
+      "slug": "ku-leuven"
+    },
+    {
+      "name": "Ghent University",
+      "name_nl": "Universiteit Gent",
+      "city": "Ghent",
+      "region": "FL",
+      "qs_rank": 150,
+      "the_rank": 115,
+      "website": "https://www.ugent.be",
+      "slug": "ghent-university"
+    },
+    {
+      "name": "University of Antwerp",
+      "name_nl": "Universiteit Antwerpen",
+      "city": "Antwerp",
+      "region": "FL",
+      "qs_rank": 277,
+      "the_rank": 170,
+      "website": "https://www.uantwerpen.be",
+      "slug": "university-of-antwerp"
+    },
+    {
+      "name": "Vrije Universiteit Brussel",
+      "city": "Brussels",
+      "region": "BR",
+      "qs_rank": 295,
+      "the_rank": 225,
+      "website": "https://www.vub.be",
+      "slug": "vrije-universiteit-brussel"
+    },
+    {
+      "name": "Université catholique de Louvain",
+      "name_fr": "Université catholique de Louvain",
+      "city": "Louvain-la-Neuve",
+      "region": "WA",
+      "qs_rank": 196,
+      "the_rank": 184,
+      "website": "https://uclouvain.be",
+      "slug": "uclouvain"
+    },
+    {
+      "name": "Université libre de Bruxelles",
+      "city": "Brussels",
+      "region": "BR",
+      "qs_rank": 248,
+      "the_rank": 225,
+      "website": "https://www.ulb.be",
+      "slug": "ulb"
+    },
+    {
+      "name": "University of Liège",
+      "name_fr": "Université de Liège",
+      "city": "Liège",
+      "region": "WA",
+      "qs_rank": 364,
+      "the_rank": 325,
+      "website": "https://www.uliege.be",
+      "slug": "university-of-liege"
+    },
+    {
+      "name": "Hasselt University",
+      "name_nl": "Universiteit Hasselt",
+      "city": "Hasselt",
+      "region": "FL",
+      "qs_rank": 639,
+      "the_rank": 325,
+      "website": "https://www.uhasselt.be",
+      "slug": "hasselt-university"
+    },
+    {
+      "name": "University of Mons",
+      "name_fr": "Université de Mons",
+      "city": "Mons",
+      "region": "WA",
+      "qs_rank": 825,
+      "the_rank": 700,
+      "website": "https://www.umons.ac.be",
+      "slug": "university-of-mons"
+    },
+    {
+      "name": "University of Namur",
+      "name_fr": "Université de Namur",
+      "city": "Namur",
+      "region": "WA",
+      "qs_rank": 825,
+      "the_rank": 900,
+      "website": "https://www.unamur.be",
+      "slug": "university-of-namur"
+    }
+  ]
+}

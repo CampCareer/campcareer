@@ -27,6 +27,9 @@ import beRentByCityRaw from "@/data/be-rent-by-city.json"
 import beShortageOccupationsRaw from "@/data/be-shortage-occupations.json"
 import beHighIncomeOccupationsRaw from "@/data/be-high-income-occupations.json"
 import beOccupationsSalaryRaw from "@/data/be-occupations-salary.json"
+import beUniversitiesRaw from "@/data/be-universities.json"
+import beTaxRatesRaw from "@/data/be-tax-rates.json"
+import beJobatLinksRaw from "@/data/be-jobat-links.json"
 
 // 지도 페이지용 데이터 계층. occupations_au + occupation_state_au 를 읽어 JS 에서 조인한다.
 // occupation_state_au 는 anon RLS 가 막혀 있어 서버 전용 service-role 클라이언트로 읽는다.
@@ -370,6 +373,7 @@ export interface BECollege {
   median_earnings: number | null
   tuition: number | null
   qs_rank: number | null
+  the_rank: number | null
   website: string | null
   slug: string
 }
@@ -452,6 +456,8 @@ export interface MapData {
   beColleges: BECollege[]
   beCities: BECity[]
   beStateInfo: Record<string, BEStateInfo>
+  beTaxRates: Record<string, unknown>
+  beJobatLinks: Record<string, { occupation_en: string; jobat_url: string; salary_url: string; course_url: string | null; course_keywords: string[] }>
 }
 
 export interface CACity {
@@ -1256,8 +1262,49 @@ function getBEShortageByRegion(): Record<string, BERegionOccupation[]> {
 }
 
 async function getBEColleges(): Promise<BECollege[]> {
-  // For now, return empty array - can be populated later with university data
-  return []
+  const uniData = beUniversitiesRaw as unknown as {
+    universities: Array<{
+      name: string
+      name_nl?: string
+      city: string
+      region: string
+      qs_rank: number
+      the_rank: number
+      website: string
+      slug: string
+    }>
+  }
+
+  // Approximate coordinates for Belgian university cities
+  const cityCoords: Record<string, { lat: number; lng: number }> = {
+    "Leuven": { lat: 50.8798, lng: 4.7005 },
+    "Ghent": { lat: 51.0543, lng: 3.7174 },
+    "Antwerp": { lat: 51.2194, lng: 4.4025 },
+    "Brussels": { lat: 50.8503, lng: 4.3517 },
+    "Louvain-la-Neuve": { lat: 50.6699, lng: 4.6119 },
+    "Liège": { lat: 50.6326, lng: 5.5797 },
+    "Hasselt": { lat: 50.9307, lng: 5.3321 },
+    "Mons": { lat: 50.4542, lng: 3.9520 },
+    "Namur": { lat: 50.4669, lng: 4.8675 },
+  }
+
+  return uniData.universities.map((u, i) => {
+    const coords = cityCoords[u.city] ?? { lat: 50.85, lng: 4.35 }
+    return {
+      institution_id: `be-uni-${i}`,
+      college_name: u.name,
+      city_name: u.city,
+      region: u.region,
+      lat: coords.lat,
+      lng: coords.lng,
+      median_earnings: null,
+      tuition: null,
+      qs_rank: u.qs_rank,
+      the_rank: u.the_rank,
+      website: u.website,
+      slug: u.slug,
+    }
+  })
 }
 
 async function getBECities(): Promise<BECity[]> {
@@ -1780,7 +1827,11 @@ async function getMapDataUncached(): Promise<MapData> {
   const beCities = await getBECities()
   const beStateInfo = getBEStateInfo()
 
-  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages, coursesByFieldState, usStateInfo, usMajorDensity, usRankedColleges, auRankedColleges, caColleges, caOccupations, caHighPay, caHighPayByProvince, caProvinceOccupations, caProvinceShortages, caCities, ukOccupations, ukShortageByRegion, ukHighPayByRegion, ukColleges, ukCities, deOccupations, deHighPayByRegion, deShortageByRegion, deColleges, deCities, nlOccupations, nlShortageByRegion, nlHighPayByRegion, nlColleges, nlCities, beOccupations, beHighPayByRegion, beShortageByRegion, beColleges, beCities, beStateInfo }
+  const beTaxRates = beTaxRatesRaw as unknown as Record<string, unknown>
+  const beJobatLinksData = beJobatLinksRaw as unknown as { occupations: Record<string, { occupation_en: string; jobat_url: string; salary_url: string; course_url: string | null; course_keywords: string[] }> }
+  const beJobatLinks = beJobatLinksData.occupations
+
+  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages, coursesByFieldState, usStateInfo, usMajorDensity, usRankedColleges, auRankedColleges, caColleges, caOccupations, caHighPay, caHighPayByProvince, caProvinceOccupations, caProvinceShortages, caCities, ukOccupations, ukShortageByRegion, ukHighPayByRegion, ukColleges, ukCities, deOccupations, deHighPayByRegion, deShortageByRegion, deColleges, deCities, nlOccupations, nlShortageByRegion, nlHighPayByRegion, nlColleges, nlCities, beOccupations, beHighPayByRegion, beShortageByRegion, beColleges, beCities, beStateInfo, beTaxRates, beJobatLinks }
 }
 
 // ── Per-country lightweight data (avoids 2 MB unstable_cache limit) ──────────
