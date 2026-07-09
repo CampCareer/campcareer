@@ -5,9 +5,9 @@ export const revalidate = 86400
 export const dynamic = "force-static"
 
 export const metadata = pageMetadata({
-  title: "CampCareer — Jobs, Salary & PR Pathways for Australia, Canada & USA",
+  title: "CampCareer — Compare Countries by Degree, Salary, Cost & Immigration ROI",
   description:
-    "Pick a country and state — see in-demand jobs, median salaries, and permanent residency pathways. Built on government data: ANZSCO, ABS, BLS, Statistics Canada.",
+    "Find the best country for your degree and career goals. Compare majors, graduate salaries, tax, rent, immigration policy, and the budget needed to study abroad.",
   path: "/",
 })
 
