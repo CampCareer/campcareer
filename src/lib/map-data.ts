@@ -26,6 +26,7 @@ import beGraduateSalaryRaw from "@/data/be-graduate-salary.json"
 import beRentByCityRaw from "@/data/be-rent-by-city.json"
 import beShortageOccupationsRaw from "@/data/be-shortage-occupations.json"
 import beHighIncomeOccupationsRaw from "@/data/be-high-income-occupations.json"
+import beOccupationsSalaryRaw from "@/data/be-occupations-salary.json"
 
 // 지도 페이지용 데이터 계층. occupations_au + occupation_state_au 를 읽어 JS 에서 조인한다.
 // occupation_state_au 는 anon RLS 가 막혀 있어 서버 전용 service-role 클라이언트로 읽는다.
@@ -1167,6 +1168,17 @@ function getBEOccupations(): Record<string, BEOccRow> {
     addShortage(occ, 5)
   }
 
+  // Enrich with Indeed/Jobat salary data (fill in missing salaries)
+  const salaryData = beOccupationsSalaryRaw as unknown as {
+    occupations: Record<string, { salary_eur_monthly: number | null; occupation_en: string }>
+  }
+  for (const [code, entry] of Object.entries(salaryData.occupations)) {
+    if (entry.salary_eur_monthly != null && occupations[code] && occupations[code].median_salary_eur == null) {
+      occupations[code].median_salary_eur = entry.salary_eur_monthly
+      occupations[code].mean_salary_eur = entry.salary_eur_monthly
+    }
+  }
+
   return occupations
 }
 
@@ -1228,6 +1240,17 @@ function getBEShortageByRegion(): Record<string, BERegionOccupation[]> {
     median_salary_eur: null,
     shortage_rating: 5,
   }))
+
+  // Enrich with Indeed/Jobat salary data
+  const salaryLookup = beOccupationsSalaryRaw as unknown as {
+    occupations: Record<string, { salary_eur_monthly: number | null }>
+  }
+  for (const region of Object.keys(result)) {
+    for (const occ of result[region]) {
+      const salary = salaryLookup.occupations[occ.occupation_code]?.salary_eur_monthly
+      if (salary != null) occ.median_salary_eur = salary
+    }
+  }
 
   return result
 }

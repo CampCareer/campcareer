@@ -1,0 +1,241 @@
+{
+  "source": "Indeed Belgium, Jobat.be",
+  "last_updated": "2025",
+  "occupations": {
+    "nurse": {
+      "occupation_en": "Nurse",
+      "occupation_code": "nurse",
+      "salary_eur_monthly": 3863.0,
+      "source": "Indeed Belgium",
+      "url": "https://be.indeed.com/career/verpleegkundige/salaries",
+      "sample_size": 116
+    },
+    "accountant": {
+      "occupation_en": "Accountant",
+      "occupation_code": "accountant",
+      "salary_eur_monthly": 3698.0,
+      "source": "Indeed Belgium",
+      "url": "https://be.indeed.com/career/boekhouder/salaries",
+      "sample_size": 81
+    },
+    "industrial-technician": {
+      "occupation_en": "Industrial Technician",
+      "occupation_code": "industrial-technician",
+      "salary_eur_monthly": 3129,
+      "source": "Indeed Belgium",
+      "url": "https://be.indeed.com/career/industrieel-technicus/salaries",
+      "sample_size": 6
+    },
+    "maintenance-mechanic": {
+      "occupation_en": "Maintenance Mechanic",
+      "occupation_code": "maintenance-mechanic",
+      "salary_eur_monthly": 2997,
+      "source": "Indeed Belgium",
+      "url": "https://be.indeed.com/career/mechanieker/salaries",
+      "sample_size": 273
+    },
+    "machine-builder": {
+      "occupation_en": "Machine Builder",
+      "occupation_code": "machine-builder",
+      "salary_eur_monthly": 2907,
+      "source": "Indeed Belgium",
+      "url": "https://be.indeed.com/career/machinebouwer/salaries",
+      "sample_size": 3,
+      "note": "converted from annual €34888"
+    },
+    "construction-foreman": {
+      "occupation_en": "Construction Foreman",
+      "occupation_code": "construction-foreman",
+      "salary_eur_monthly": 3666.0,
+      "source": "Indeed Belgium",
+      "url": "https://be.indeed.com/career/werfleider/salaries",
+      "sample_size": 39
+    },
+    "home-cleaner": {
+      "occupation_en": "Home Cleaner",
+      "occupation_code": "home-cleaner",
+      "salary_eur_monthly": 2625,
+      "source": "Indeed Belgium",
+      "url": "https://be.indeed.com/career/schoonmaker/salaries",
+      "sample_size": 26
+    },
+    "fruit-harvest-worker": {
+      "occupation_en": "Fruit Harvest Worker",
+      "occupation_code": "fruit-harvest-worker",
+      "salary_eur_monthly": 3033,
+      "source": "Indeed Belgium",
+      "url": "https://be.indeed.com/career/landarbeider/salaries",
+      "sample_size": 15
+    },
+    "hospitality-staff": {
+      "occupation_en": "Hospitality Staff",
+      "occupation_code": "hospitality-staff",
+      "salary_eur_monthly": 2625,
+      "source": "Indeed Belgium",
+      "url": "https://be.indeed.com/career/horecamedewerker/salaries",
+      "sample_size": 98
+    },
+    "childcare-worker": {
+      "occupation_en": "Childcare Worker",
+      "occupation_code": "childcare-worker",
+      "salary_eur_monthly": 3357.0,
+      "source": "Indeed Belgium",
+      "url": "https://be.indeed.com/career/medewerker-kinderopvang/salaries",
+      "sample_size": 2
+    },
+    "ergotherapist": {
+      "occupation_en": "Ergotherapist",
+      "occupation_code": "ergotherapist",
+      "salary_eur_monthly": 4011.0,
+      "source": "Indeed Belgium",
+      "url": "https://be.indeed.com/career/ergotherapeut/salaries",
+      "sample_size": 9
+    },
+    "teacher": {
+      "occupation_en": "Teacher",
+      "occupation_code": "teacher",
+      "salary_eur_monthly": 3832.0,
+      "source": "Indeed Belgium",
+      "url": "https://be.indeed.com/career/leerkracht/salaries",
+      "sample_size": 5
+    },
+    "it-specialist": {
+      "occupation_en": "IT Specialist",
+      "occupation_code": "it-specialist",
+      "salary_eur_monthly": 3866,
+      "source": "Indeed Belgium",
+      "url": "https://be.indeed.com/career/ict-specialist/salaries",
+      "sample_size": 5,
+      "note": "converted from annual €46389"
+    },
+    "baker": {
+      "occupation_en": "Baker",
+      "occupation_code": "baker",
+      "salary_eur_monthly": 2770,
+      "source": "Indeed Belgium",
+      "url": "https://be.indeed.com/career/bakker/salaries",
+      "sample_size": 8
+    },
+    "butcher": {
+      "occupation_en": "Butcher",
+      "occupation_code": "butcher",
+      "salary_eur_monthly": 2826,
+      "source": "Indeed Belgium",
+      "url": "https://be.indeed.com/career/slager/salaries",
+      "sample_size": 30
+    },
+    "healthcare-workers": {
+      "occupation_en": "Healthcare Workers",
+      "occupation_code": "healthcare-workers",
+      "salary_eur_monthly": 3100.0,
+      "source": "Indeed Belgium",
+      "url": "https://be.indeed.com/career/zorgverlener/salaries",
+      "sample_size": 14
+    },
+    "construction-workers": {
+      "occupation_en": "Construction Workers",
+      "occupation_code": "construction-workers",
+      "salary_eur_monthly": 3033,
+      "source": "Indeed Belgium",
+      "url": "https://be.indeed.com/career/bouwvakker/salaries",
+      "sample_size": 15
+    },
+    "it-specialists": {
+      "occupation_en": "IT Specialists",
+      "occupation_code": "it-specialists",
+      "salary_eur_monthly": 3866,
+      "source": "Indeed Belgium",
+      "url": "https://be.indeed.com/career/ict-specialist/salaries",
+      "sample_size": 5,
+      "note": "converted from annual €46389"
+    },
+    "engineers": {
+      "occupation_en": "Engineers",
+      "occupation_code": "engineers",
+      "salary_eur_monthly": 3514.0,
+      "source": "Indeed Belgium",
+      "url": "https://be.indeed.com/career/ingenieur/salaries",
+      "sample_size": 3
+    },
+    "logistics-workers": {
+      "occupation_en": "Logistics Workers",
+      "occupation_code": "logistics-workers",
+      "salary_eur_monthly": 2780,
+      "source": "Indeed Belgium",
+      "url": "https://be.indeed.com/career/magazijnier/salaries",
+      "sample_size": 154
+    },
+    "management-and-directors": {
+      "occupation_en": "Management & Directors",
+      "occupation_code": "management-and-directors",
+      "salary_eur_monthly": 4306.0,
+      "source": "Indeed Belgium",
+      "url": "https://be.indeed.com/career/manager/salaries",
+      "sample_size": 3
+    },
+    "lawyers": {
+      "occupation_en": "Lawyers",
+      "occupation_code": "lawyers",
+      "salary_eur_monthly": 3767.0,
+      "source": "Indeed Belgium",
+      "url": "https://be.indeed.com/career/jurist/salaries",
+      "sample_size": 6
+    },
+    "education-and-training": {
+      "occupation_en": "Education & Training",
+      "occupation_code": "education-and-training",
+      "salary_eur_monthly": 3832.0,
+      "source": "Indeed Belgium",
+      "url": "https://be.indeed.com/career/leraar/salaries",
+      "sample_size": 5
+    },
+    "randd-and-quality": {
+      "occupation_en": "R&D and Quality",
+      "occupation_code": "randd-and-quality",
+      "salary_eur_monthly": 3237.0,
+      "source": "Indeed Belgium",
+      "url": "https://be.indeed.com/career/onderzoeker/salaries",
+      "sample_size": 3
+    },
+    "security-staff": {
+      "occupation_en": "Security Staff",
+      "occupation_code": "security-staff",
+      "salary_eur_monthly": 2920,
+      "source": "Indeed Belgium",
+      "url": "https://be.indeed.com/career/bewakingsagent/salaries",
+      "sample_size": 13
+    },
+    "it-professionals": {
+      "occupation_en": "IT Professionals",
+      "occupation_code": "it-professionals",
+      "salary_eur_monthly": 3565.0,
+      "source": "Indeed Belgium",
+      "url": "https://be.indeed.com/career/ict-professional/salaries",
+      "sample_size": 11
+    },
+    "financial-functions": {
+      "occupation_en": "Financial Functions",
+      "occupation_code": "financial-functions",
+      "salary_eur_monthly": 3457.0,
+      "source": "Indeed Belgium",
+      "url": "https://be.indeed.com/career/financieel-medewerker/salaries",
+      "sample_size": 5
+    },
+    "medical-and-paramedical": {
+      "occupation_en": "Medical & Paramedical",
+      "occupation_code": "medical-and-paramedical",
+      "salary_eur_monthly": 6425.0,
+      "source": "Indeed Belgium",
+      "url": "https://be.indeed.com/career/arts/salaries",
+      "sample_size": 8
+    },
+    "sales": {
+      "occupation_en": "Sales",
+      "occupation_code": "sales",
+      "salary_eur_monthly": 2864.0,
+      "source": "Indeed Belgium",
+      "url": "https://be.indeed.com/career/verkoper/salaries",
+      "sample_size": 53
+    }
+  }
+}
