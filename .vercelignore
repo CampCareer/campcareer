@@ -1,0 +1,15 @@
+# Ignore reference data not needed for deployment
+public/ne_10m_admin_1_states_provinces/
+public/ne_10m_admin_0_countries_deu/
+public/germany_median_salary/
+public/Germany_Shortage/
+
+# Ignore Python scripts and cache (not needed for Next.js build)
+scripts/
+scripts/__pycache__/
+
+# Ignore crawler output not imported by app
+src/data/be-tax-rates.json
+src/data/be-immigration.json
+src/data/be-cost-of-living.json
+src/data/be-states.json

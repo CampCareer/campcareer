@@ -57,3 +57,14 @@ src/data/ie-graduate-outcomes.json
 
 # raw source data
 souces/
+
+# Natural Earth shapefiles (reference data, not used at runtime)
+public/ne_10m_admin_1_states_provinces/
+public/ne_10m_admin_0_countries_deu/
+
+# German salary/shortage reference PDFs and raw data
+public/germany_median_salary/
+public/Germany_Shortage/
+
+# Python cache
+scripts/__pycache__/
