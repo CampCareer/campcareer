@@ -1,6 +1,8 @@
 import occupationsRaw from "@/data/jp-official-occupations.json"
 import prefectureShortageRaw from "@/data/jp-prefecture-shortage-groups.json"
 import rentRaw from "@/data/jp-rent-by-area.json"
+import jobTagProfilesRaw from "@/data/jp-jobtag-occupation-profiles.json"
+import jobTagWageLinksRaw from "@/data/jp-jobtag-wage-links.json"
 import { JP_CITY_AREAS, JP_PREFECTURE_CODES, JP_PREFECTURE_NAMES, type JPPrefectureCode } from "@/app/map/states"
 
 export type JPShortageGroup = {
@@ -41,12 +43,33 @@ export type JPRentArea = {
   lastChecked: string
 }
 
+export type JPJobTagProfile = {
+  recordNumber: number
+  sourceCode: string
+  localName: string
+  nameEn: string | null
+  nameKo: string | null
+  translationStatus: "pending" | "machine-draft" | "human-reviewed"
+  mhlwClassification: string | null
+  wageOccupationCode: string | null
+  entryPathJa: string | null
+  qualificationsJa: string[]
+  skills: Array<{ nameJa: string; score: number }>
+  knowledge: Array<{ nameJa: string; score: number }>
+  sourceUrl: string
+  sourceVersion: string
+  lastChecked: string
+  reviewStatus: "review-required"
+}
+
 const allWages = (occupationsRaw as unknown as Array<JPHighPayOccupation & { salarySourceUrl?: string }>).map((row) => ({
   ...row,
   sourceUrl: row.sourceUrl ?? row.salarySourceUrl ?? "https://www.mhlw.go.jp/content/001692996.xlsx",
 }))
 const allShortage = prefectureShortageRaw as JPShortageGroup[]
 const allRents = rentRaw as JPRentArea[]
+const allJobTagProfiles = jobTagProfilesRaw as JPJobTagProfile[]
+const jobTagWageLinks = jobTagWageLinksRaw as Record<string, number[]>
 
 export const JP_HIGH_PAY_OCCUPATIONS = [...allWages]
   .sort((a, b) => b.hourlyBaseWageYen - a.hourlyBaseWageYen)
@@ -69,6 +92,19 @@ export const JP_RENT_BY_PREFECTURE: Record<string, JPRentArea> = Object.fromEntr
 export const JP_CITIES: JPRentArea[] = allRents
   .filter((row) => row.kind === "city")
   .sort((a, b) => a.prefectureCode.localeCompare(b.prefectureCode) || a.nameEn.localeCompare(b.nameEn))
+
+export const JP_JOBTAG_PROFILES_BY_RECORD: Record<number, JPJobTagProfile> = Object.fromEntries(
+  allJobTagProfiles.map((profile) => [profile.recordNumber, profile]),
+)
+
+export const JP_JOBTAG_PROFILES_BY_WAGE_CODE: Record<string, JPJobTagProfile[]> = Object.fromEntries(
+  Object.entries(jobTagWageLinks).map(([wageCode, recordNumbers]) => [
+    wageCode,
+    recordNumbers
+      .map((recordNumber) => JP_JOBTAG_PROFILES_BY_RECORD[recordNumber])
+      .filter((profile): profile is JPJobTagProfile => profile != null),
+  ]),
+)
 
 export const JP_PREFECTURE_SEO_DATA = JP_PREFECTURE_CODES.map((code) => ({
   code,

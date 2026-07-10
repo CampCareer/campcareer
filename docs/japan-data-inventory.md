@@ -23,3 +23,18 @@ Korean title, an official demand crosswalk, reviewed foreign-worker pathway and
 language evidence, and passes the hidden high-ROI gate. Maps therefore shows
 high-pay occupations nationally and shortage groups by prefecture without
 claiming that these two classifications are a verified occupation-level match.
+
+## Occupation cards
+
+The card contract stores the Japanese source name separately from English and
+Korean translations. A browser locale can choose which reviewed name to show,
+but it never substitutes for stored SEO data. Skills, qualifications, and
+course recommendations remain empty until the Job Tag explanatory dataset has
+been imported with its required attribution and human review.
+
+The first Job Tag import includes 556 official profiles, skills, knowledge
+areas, qualifications, and 135 wage-classification mappings. Each public card
+must credit the JILPT Occupational Information Database, identify the
+description/numeric dataset versions, and link to the Job Tag download page.
+The import does not publish a machine-translated occupation name or make a
+school-specific course recommendation.

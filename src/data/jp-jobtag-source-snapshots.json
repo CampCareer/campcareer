@@ -1,0 +1,41 @@
+[
+  {
+    "countryCode": "JP",
+    "sourceName": "JILPT Occupational Information Database via job tag",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download",
+    "retrievedAt": "2026-07-10T09:16:40.640Z",
+    "lastChecked": "2026-07-10",
+    "method": "official-download",
+    "reviewStatus": "approved",
+    "attribution": "Source: JILPT Occupational Information Database, IPD_DL_description_7_01.xlsx ver. 7.01, downloaded from job tag (https://shigoto.mhlw.go.jp/User/download) and processed by CampCareer.",
+    "fileName": "IPD_DL_description_7_01.xlsx",
+    "version": "7.01",
+    "hash": "6b549f294ddce170b4d0ce7164cacc6d2d03d0faab5c6e6c8deb885035377b01"
+  },
+  {
+    "countryCode": "JP",
+    "sourceName": "JILPT Occupational Information Database via job tag",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download",
+    "retrievedAt": "2026-07-10T09:16:40.640Z",
+    "lastChecked": "2026-07-10",
+    "method": "official-download",
+    "reviewStatus": "approved",
+    "attribution": "Source: JILPT Occupational Information Database, IPD_DL_numeric_7_00.xlsx ver. 7.00, downloaded from job tag (https://shigoto.mhlw.go.jp/User/download) and processed by CampCareer.",
+    "fileName": "IPD_DL_numeric_7_00.xlsx",
+    "version": "7.00",
+    "hash": "a09aef2c1874200da1cda8910d5a6eebc484f183c29ed1d7458f8531575b2ffd"
+  },
+  {
+    "countryCode": "JP",
+    "sourceName": "JILPT Occupational Information Database via job tag",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download",
+    "retrievedAt": "2026-07-10T09:16:40.640Z",
+    "lastChecked": "2026-07-10",
+    "method": "official-download",
+    "reviewStatus": "approved",
+    "attribution": "Source: JILPT Occupational Information Database, jobtag-classification-crosswalk.xlsx ver. R8.3, downloaded from job tag (https://shigoto.mhlw.go.jp/User/download) and processed by CampCareer.",
+    "fileName": "jobtag-classification-crosswalk.xlsx",
+    "version": "R8.3",
+    "hash": "49f548ac63b4c7ff7ddc4e870ea2ca885700851666d92b863f1021a8e30a393e"
+  }
+]

@@ -1,0 +1,4450 @@
+[
+  {
+    "sourceCode": "jobtag-1",
+    "localName": "豆腐製造、豆腐職人",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-2",
+    "localName": "パン製造、パン職人",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-3",
+    "localName": "洋菓子製造、パティシエ",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-4",
+    "localName": "和菓子製造、和菓子職人",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-5",
+    "localName": "乳製品製造",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-6",
+    "localName": "水産ねり製品製造",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-7",
+    "localName": "冷凍加工食品製造",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-8",
+    "localName": "惣菜製造",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-9",
+    "localName": "清酒製造",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-10",
+    "localName": "みそ製造",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-11",
+    "localName": "しょうゆ製造",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-12",
+    "localName": "ハム・ソーセージ・ベーコン製造",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-13",
+    "localName": "ワイン製造",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-14",
+    "localName": "ビール製造",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-15",
+    "localName": "かん詰・びん詰・レトルト食品製造",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-16",
+    "localName": "野菜つけ物製造",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-17",
+    "localName": "陶磁器製造",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-18",
+    "localName": "ガラス食器製造",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-19",
+    "localName": "プラスチック成形",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-20",
+    "localName": "建築設計技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-21",
+    "localName": "建築施工管理技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-22",
+    "localName": "土木設計技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-23",
+    "localName": "土木施工管理技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-24",
+    "localName": "測量士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-25",
+    "localName": "CADオペレーター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-26",
+    "localName": "大工",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-27",
+    "localName": "型枠大工",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-28",
+    "localName": "鉄筋工",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-29",
+    "localName": "鉄骨工",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-30",
+    "localName": "とび",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-31",
+    "localName": "建設機械オペレーター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-32",
+    "localName": "建設・土木作業員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-33",
+    "localName": "潜水士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-35",
+    "localName": "さく井工/ボーリング工",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-36",
+    "localName": "舗装工",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-37",
+    "localName": "ブロック積み",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-38",
+    "localName": "タイル工",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-39",
+    "localName": "左官",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-40",
+    "localName": "建築板金",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-41",
+    "localName": "サッシ取付",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-42",
+    "localName": "内装工",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-43",
+    "localName": "建築塗装工",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-44",
+    "localName": "防水工",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-45",
+    "localName": "保温工事",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-46",
+    "localName": "電気工事士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-47",
+    "localName": "配管工",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-48",
+    "localName": "エレベーター据付",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-49",
+    "localName": "鉄道線路管理",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-50",
+    "localName": "送電線工事",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-51",
+    "localName": "解体工",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-52",
+    "localName": "ホテル・旅館支配人",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-53",
+    "localName": "銀行支店長",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-54",
+    "localName": "デパート店員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-55",
+    "localName": "スーパー店長",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-56",
+    "localName": "スーパーレジ係",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-57",
+    "localName": "スーパー店員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-58",
+    "localName": "商社営業",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-59",
+    "localName": "住宅・不動産営業",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-60",
+    "localName": "自動車営業",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-61",
+    "localName": "広告営業",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-62",
+    "localName": "印刷営業",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-63",
+    "localName": "医薬情報担当者（MR）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-64",
+    "localName": "コールセンターオペレーター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-65",
+    "localName": "せり人",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-66",
+    "localName": "フラワーショップ店員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-67",
+    "localName": "電器店店員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-68",
+    "localName": "書店員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-69",
+    "localName": "メガネ販売",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-70",
+    "localName": "スポーツ用品販売",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-71",
+    "localName": "ホームセンター店員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-72",
+    "localName": "ペットショップ店員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-73",
+    "localName": "衣料品販売",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-74",
+    "localName": "検針員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-75",
+    "localName": "フランチャイズチェーン・スーパーバイザー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-76",
+    "localName": "シューフィッター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-77",
+    "localName": "駅構内売店店員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-78",
+    "localName": "コンビニエンスストア店員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-79",
+    "localName": "ベーカリーショップ店員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-80",
+    "localName": "中小企業診断士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-81",
+    "localName": "経営コンサルタント",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-82",
+    "localName": "ファイナンシャル・プランナー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-83",
+    "localName": "社会保険労務士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-84",
+    "localName": "司法書士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-85",
+    "localName": "行政書士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-86",
+    "localName": "土地家屋調査士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-87",
+    "localName": "翻訳者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-88",
+    "localName": "通訳者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-89",
+    "localName": "弁護士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-90",
+    "localName": "公認会計士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-91",
+    "localName": "弁理士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-92",
+    "localName": "税理士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-93",
+    "localName": "不動産鑑定士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-94",
+    "localName": "気象予報士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-95",
+    "localName": "ビル施設管理",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-96",
+    "localName": "駐車場管理",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-97",
+    "localName": "ビル清掃",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-98",
+    "localName": "鉄道車両清掃",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-99",
+    "localName": "西洋料理調理人（コック）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-100",
+    "localName": "日本料理調理人（板前）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-101",
+    "localName": "すし職人",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-102",
+    "localName": "そば・うどん調理人",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-103",
+    "localName": "中華料理調理人",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-104",
+    "localName": "ハンバーガーショップ店長",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-105",
+    "localName": "カフェ店員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-106",
+    "localName": "ソムリエ",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-107",
+    "localName": "バーテンダー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-108",
+    "localName": "ラーメン調理人",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-109",
+    "localName": "旅行会社カウンター係",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-110",
+    "localName": "ツアーコンダクター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-111",
+    "localName": "観光バスガイド",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-112",
+    "localName": "遊園地スタッフ",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-113",
+    "localName": "キャディ",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-114",
+    "localName": "通訳ガイド",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-115",
+    "localName": "理容師",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-116",
+    "localName": "美容師",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-117",
+    "localName": "エステティシャン",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-118",
+    "localName": "メイクアップアーティスト",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-119",
+    "localName": "クリーニング師",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-120",
+    "localName": "スポーツインストラクター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-121",
+    "localName": "自動車教習指導員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-122",
+    "localName": "音楽教室講師",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-123",
+    "localName": "ビデオレンタル店店員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-124",
+    "localName": "レンタカー店舗スタッフ",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-125",
+    "localName": "ブライダルコーディネーター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-126",
+    "localName": "家政婦（夫）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-127",
+    "localName": "ピアノ調律師",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-128",
+    "localName": "ネイリスト",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-129",
+    "localName": "児童相談所相談員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-130",
+    "localName": "福祉事務所ケースワーカー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-131",
+    "localName": "保育士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-132",
+    "localName": "介護支援専門員/ケアマネジャー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-133",
+    "localName": "訪問介護員/ホームヘルパー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-134",
+    "localName": "施設介護員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-135",
+    "localName": "手話通訳者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-136",
+    "localName": "キャリアカウンセラー/キャリアコンサルタント",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-137",
+    "localName": "福祉用具専門相談員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-138",
+    "localName": "国家公務員（行政事務）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-139",
+    "localName": "地方公務員（行政事務）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-140",
+    "localName": "警察官（都道府県警察）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-141",
+    "localName": "海上保安官",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-142",
+    "localName": "麻薬取締官",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-143",
+    "localName": "入国警備官",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-144",
+    "localName": "裁判官",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-145",
+    "localName": "検察官",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-146",
+    "localName": "家庭裁判所調査官",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-147",
+    "localName": "法務教官",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-148",
+    "localName": "刑務官",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-149",
+    "localName": "税務事務官",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-150",
+    "localName": "外務公務員（外交官）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-151",
+    "localName": "国際公務員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-152",
+    "localName": "陸上自衛官",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-153",
+    "localName": "海上自衛官",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-154",
+    "localName": "航空自衛官",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-155",
+    "localName": "消防官",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-156",
+    "localName": "看護師",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-157",
+    "localName": "助産師",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-158",
+    "localName": "薬剤師",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-159",
+    "localName": "歯科医師",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-160",
+    "localName": "保健師",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-161",
+    "localName": "臨床検査技師",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-162",
+    "localName": "細胞検査士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-163",
+    "localName": "診療放射線技師",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-164",
+    "localName": "臨床工学技士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-165",
+    "localName": "歯科技工士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-166",
+    "localName": "歯科衛生士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-167",
+    "localName": "理学療法士（PT）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-168",
+    "localName": "作業療法士（OT）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-169",
+    "localName": "言語聴覚士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-170",
+    "localName": "視能訓練士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-171",
+    "localName": "栄養士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-172",
+    "localName": "あんまマッサージ指圧師",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-173",
+    "localName": "柔道整復師",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-174",
+    "localName": "診療情報管理士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-175",
+    "localName": "はり師・きゅう師",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-176",
+    "localName": "義肢装具士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-178",
+    "localName": "幼稚園教員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-179",
+    "localName": "小学校教員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-180",
+    "localName": "中学校教員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-181",
+    "localName": "専門学校教員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-182",
+    "localName": "図書館司書",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-183",
+    "localName": "高等学校教員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-184",
+    "localName": "大学・短期大学教員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-185",
+    "localName": "学芸員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-186",
+    "localName": "路線バス運転士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-187",
+    "localName": "観光バス運転士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-188",
+    "localName": "タクシー運転手",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-189",
+    "localName": "パイロット",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-190",
+    "localName": "航海士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-191",
+    "localName": "船舶機関士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-192",
+    "localName": "電車運転士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-193",
+    "localName": "鉄道車掌",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-194",
+    "localName": "空港グランドスタッフ",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-195",
+    "localName": "駅務員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-196",
+    "localName": "鉄道運転計画・運行管理",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-197",
+    "localName": "自動車整備士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-198",
+    "localName": "ガソリンスタンド・スタッフ",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-199",
+    "localName": "道路パトロール隊員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-200",
+    "localName": "タクシー配車オペレーター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-201",
+    "localName": "引越作業員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-202",
+    "localName": "通関士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-203",
+    "localName": "航空管制官",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-204",
+    "localName": "ディスパッチャー（航空機運航管理者）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-205",
+    "localName": "客室乗務員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-206",
+    "localName": "航空整備士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-207",
+    "localName": "船員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-208",
+    "localName": "新聞記者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-209",
+    "localName": "雑誌記者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-210",
+    "localName": "図書編集者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-211",
+    "localName": "雑誌編集者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-212",
+    "localName": "テレビ・ラジオ放送技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-213",
+    "localName": "録音エンジニア",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-214",
+    "localName": "映像編集者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-215",
+    "localName": "放送記者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-216",
+    "localName": "アナウンサー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-217",
+    "localName": "放送ディレクター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-218",
+    "localName": "厩舎スタッフ",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-219",
+    "localName": "アウトドアインストラクター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-220",
+    "localName": "動物園飼育員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-221",
+    "localName": "農業技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-222",
+    "localName": "造園工",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-223",
+    "localName": "獣医師",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-224",
+    "localName": "水族館飼育員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-225",
+    "localName": "調教師",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-226",
+    "localName": "犬訓練士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-227",
+    "localName": "トリマー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-228",
+    "localName": "水産技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-229",
+    "localName": "林業技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-230",
+    "localName": "林業作業",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-231",
+    "localName": "産業用ロボット開発技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-232",
+    "localName": "産業用ロボットの設置・設定",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-233",
+    "localName": "産業用ロボットの保守・メンテナンス",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-234",
+    "localName": "太陽光発電の企画・調査",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-235",
+    "localName": "太陽光発電の設計・施工",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-236",
+    "localName": "太陽光発電のメンテナンス",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-237",
+    "localName": "フォークリフト運転作業員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-238",
+    "localName": "ネット通販の企画開発",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-239",
+    "localName": "ネット通販の運営",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-240",
+    "localName": "Webマーケティング（ネット広告・販売促進）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-241",
+    "localName": "施設警備員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-242",
+    "localName": "学童保育指導員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-243",
+    "localName": "児童指導員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-244",
+    "localName": "障害者福祉施設指導専門員（生活支援員、就労支援員等）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-245",
+    "localName": "老人福祉施設生活相談員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-246",
+    "localName": "看護助手",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-247",
+    "localName": "植物工場の研究開発",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-248",
+    "localName": "植物工場の設計、施工",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-249",
+    "localName": "植物工場の栽培管理",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-250",
+    "localName": "起業、創業",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-251",
+    "localName": "鋳造工/鋳造設備オペレーター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-252",
+    "localName": "鍛造工/鍛造設備オペレーター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-253",
+    "localName": "金型工",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-254",
+    "localName": "金属プレス工",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-255",
+    "localName": "溶接工",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-256",
+    "localName": "NC工作機械オペレーター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-257",
+    "localName": "めっき工",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-258",
+    "localName": "非鉄金属製錬技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-259",
+    "localName": "鉄鋼製造オペレーター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-260",
+    "localName": "非破壊検査技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-261",
+    "localName": "電子機器組立",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-262",
+    "localName": "機械設計技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-263",
+    "localName": "光学機器組立",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-264",
+    "localName": "自動車組立",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-265",
+    "localName": "生産用機械組立",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-266",
+    "localName": "計器組立",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-267",
+    "localName": "半導体技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-268",
+    "localName": "半導体製造",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-269",
+    "localName": "物流設備管理・保全",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-270",
+    "localName": "自動車技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-271",
+    "localName": "精密機器技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-272",
+    "localName": "電気技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-273",
+    "localName": "電子機器技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-274",
+    "localName": "電気通信技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-275",
+    "localName": "家電修理",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-276",
+    "localName": "プラント設計技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-277",
+    "localName": "医療用画像機器組立",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-278",
+    "localName": "織布工/織機オペレーター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-279",
+    "localName": "染色工/染色設備オペレーター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-280",
+    "localName": "ミシン縫製",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-281",
+    "localName": "木材製造",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-282",
+    "localName": "合板製造",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-283",
+    "localName": "家具製造",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-284",
+    "localName": "紡織設備管理・保全",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-285",
+    "localName": "紙器製造",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-286",
+    "localName": "紡績機械オペレーター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-287",
+    "localName": "建具製造",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-288",
+    "localName": "食品技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-289",
+    "localName": "靴製造",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-290",
+    "localName": "かばん・袋物製造",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-291",
+    "localName": "漆器製造",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-292",
+    "localName": "貴金属装身具製作",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-295",
+    "localName": "医薬品製造",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-296",
+    "localName": "生産・品質管理技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-297",
+    "localName": "タイヤ製造",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-298",
+    "localName": "化粧品製造",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-299",
+    "localName": "石油精製オペレーター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-300",
+    "localName": "化学製品製造オペレーター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-301",
+    "localName": "原子力技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-302",
+    "localName": "発電所運転管理",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-303",
+    "localName": "分析化学技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-304",
+    "localName": "陶磁器技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-305",
+    "localName": "ファインセラミックス製造技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-306",
+    "localName": "石工",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-307",
+    "localName": "花火師",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-308",
+    "localName": "高分子化学技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-309",
+    "localName": "バイオテクノロジー技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-310",
+    "localName": "宇宙開発技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-311",
+    "localName": "航空機開発エンジニア（ジェットエンジン）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-312",
+    "localName": "システムエンジニア（受託開発）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-313",
+    "localName": "プログラマー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-314",
+    "localName": "システムエンジニア（Webサービス開発）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-315",
+    "localName": "システムエンジニア（組込み、IoT）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-316",
+    "localName": "ソフトウェア開発（パッケージソフト）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-317",
+    "localName": "ソフトウェア開発（スマホアプリ）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-318",
+    "localName": "システムエンジニア（基盤システム）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-319",
+    "localName": "運用・管理（IT）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-320",
+    "localName": "ヘルプデスク（IT）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-321",
+    "localName": "セキュリティエキスパート（オペレーション）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-322",
+    "localName": "プロジェクトマネージャ（IT）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-323",
+    "localName": "データサイエンティスト",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-324",
+    "localName": "DXプロデューサー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-325",
+    "localName": "AIエンジニア",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-326",
+    "localName": "Webデザイナー（Web制作会社）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-327",
+    "localName": "Webディレクター（Web制作会社）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-328",
+    "localName": "動画制作",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-329",
+    "localName": "CG制作",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-330",
+    "localName": "ゲームクリエーター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-331",
+    "localName": "アートディレクター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-332",
+    "localName": "広告デザイナー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-333",
+    "localName": "広告ディレクター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-334",
+    "localName": "グラフィックデザイナー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-335",
+    "localName": "コピーライター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-336",
+    "localName": "ディスプレイデザイナー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-337",
+    "localName": "インテリアデザイナー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-338",
+    "localName": "インテリアコーディネーター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-339",
+    "localName": "カラーコーディネーター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-340",
+    "localName": "ファッションデザイナー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-341",
+    "localName": "パタンナー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-342",
+    "localName": "イラストレーター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-343",
+    "localName": "アニメーター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-344",
+    "localName": "看板制作",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-345",
+    "localName": "テクニカルイラストレーター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-346",
+    "localName": "スタイリスト",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-347",
+    "localName": "ブックデザイナー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-348",
+    "localName": "テキスタイルデザイナー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-349",
+    "localName": "フラワーデザイナー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-350",
+    "localName": "ジュエリーデザイナー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-351",
+    "localName": "フードコーディネーター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-352",
+    "localName": "舞台美術スタッフ",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-353",
+    "localName": "舞台照明スタッフ",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-354",
+    "localName": "インダストリアルデザイナー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-355",
+    "localName": "商業カメラマン",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-356",
+    "localName": "テレビカメラマン",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-357",
+    "localName": "報道カメラマン",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-358",
+    "localName": "テクニカルライター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-359",
+    "localName": "製版オペレーター、DTPオペレーター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-360",
+    "localName": "印刷オペレーター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-361",
+    "localName": "製本オペレーター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-362",
+    "localName": "ITコンサルタント",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-363",
+    "localName": "広報コンサルタント",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-364",
+    "localName": "人事コンサルタント",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-365",
+    "localName": "知的財産コーディネーター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-366",
+    "localName": "知的財産サーチャー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-388",
+    "localName": "土木・建築工学研究者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-389",
+    "localName": "情報工学研究者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-390",
+    "localName": "医学研究者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-391",
+    "localName": "科学捜査研究所鑑定技術職員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-392",
+    "localName": "薬学研究者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-393",
+    "localName": "バイオテクノロジー研究者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-394",
+    "localName": "エコノミスト",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-395",
+    "localName": "特別支援学校教員、特別支援学級教員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-396",
+    "localName": "学習塾教師",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-397",
+    "localName": "日本語教師",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-398",
+    "localName": "英会話教師",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-399",
+    "localName": "職業訓練指導員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-400",
+    "localName": "社会教育主事",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-401",
+    "localName": "救急救命士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-402",
+    "localName": "外科医",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-403",
+    "localName": "小児科医",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-404",
+    "localName": "内科医",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-405",
+    "localName": "精神科医",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-406",
+    "localName": "産婦人科医",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-407",
+    "localName": "治験コーディネーター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-408",
+    "localName": "医療ソーシャルワーカー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-409",
+    "localName": "福祉ソーシャルワーカー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-410",
+    "localName": "施設管理者（介護施設）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-411",
+    "localName": "カウンセラー（医療福祉分野）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-412",
+    "localName": "スクールカウンセラー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-413",
+    "localName": "ベビーシッター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-414",
+    "localName": "フロント（ホテル・旅館）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-415",
+    "localName": "客室清掃・整備担当（ホテル・旅館）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-416",
+    "localName": "接客担当（ホテル・旅館）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-417",
+    "localName": "ホールスタッフ（レストラン）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-418",
+    "localName": "飲食チェーン店店員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-419",
+    "localName": "調香師",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-420",
+    "localName": "アロマセラピスト",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-421",
+    "localName": "リフレクソロジスト",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-422",
+    "localName": "葬祭ディレクター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-423",
+    "localName": "きもの着付指導員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-424",
+    "localName": "速記者、音声反訳者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-425",
+    "localName": "パラリーガル（弁護士補助職）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-426",
+    "localName": "秘書",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-427",
+    "localName": "受付事務",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-428",
+    "localName": "一般事務",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-429",
+    "localName": "データ入力",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-430",
+    "localName": "経理事務",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-431",
+    "localName": "営業事務",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-432",
+    "localName": "人事事務",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-433",
+    "localName": "総務事務",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-434",
+    "localName": "企画・調査担当",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-435",
+    "localName": "調剤薬局事務",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-436",
+    "localName": "介護事務",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-437",
+    "localName": "生産・工程管理事務",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-438",
+    "localName": "銀行等窓口事務",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-439",
+    "localName": "貿易事務",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-440",
+    "localName": "損害保険事務",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-441",
+    "localName": "通信販売受付事務",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-442",
+    "localName": "学校事務",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-443",
+    "localName": "医療事務",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-444",
+    "localName": "広報・PR担当",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-445",
+    "localName": "IR広報担当",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-446",
+    "localName": "企業法務担当",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-447",
+    "localName": "コンプライアンス推進担当",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-448",
+    "localName": "医薬品販売/登録販売者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-449",
+    "localName": "リサイクルショップ店員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-450",
+    "localName": "携帯電話販売",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-451",
+    "localName": "CDショップ店員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-452",
+    "localName": "コンサルティング営業（IT）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-453",
+    "localName": "保険営業（生命保険、損害保険）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-454",
+    "localName": "銀行・信用金庫渉外担当",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-455",
+    "localName": "ディーラー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-456",
+    "localName": "マーケティング・リサーチャー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-457",
+    "localName": "証券アナリスト",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-461",
+    "localName": "商品企画開発（チェーンストア）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-462",
+    "localName": "OA機器営業",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-463",
+    "localName": "証券外務員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-464",
+    "localName": "化粧品販売/美容部員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-465",
+    "localName": "化粧品訪問販売",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-466",
+    "localName": "清涼飲料ルートセールス",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-467",
+    "localName": "自転車販売",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-468",
+    "localName": "アクチュアリー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-469",
+    "localName": "内部監査人",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-470",
+    "localName": "ファンドマネージャー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-471",
+    "localName": "M&Aマネージャー、M&Aコンサルタント/M&Aアドバイザー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-472",
+    "localName": "代理店営業（保険会社）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-473",
+    "localName": "マンション管理員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-474",
+    "localName": "マンション管理フロント",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-475",
+    "localName": "雑踏・交通誘導警備員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-476",
+    "localName": "ボイラーオペレーター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-477",
+    "localName": "トラックドライバー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-478",
+    "localName": "トレーラートラックドライバー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-479",
+    "localName": "ダンプカー運転手",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-480",
+    "localName": "送迎バス等運転手",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-481",
+    "localName": "介護タクシー運転手",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-482",
+    "localName": "ルート配送ドライバー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-483",
+    "localName": "宅配便配達員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-484",
+    "localName": "新聞配達員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-485",
+    "localName": "倉庫作業員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-486",
+    "localName": "ピッキング作業員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-487",
+    "localName": "ハウスクリーニング",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-488",
+    "localName": "ペストコントロール従事者（害虫等防除・駆除従事者）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-489",
+    "localName": "製品包装作業員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-490",
+    "localName": "工場労務作業員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-491",
+    "localName": "バックヤード作業員（スーパー食品部門）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-492",
+    "localName": "調理補助",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-493",
+    "localName": "給食調理員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-494",
+    "localName": "ごみ収集作業員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-495",
+    "localName": "産業廃棄物処理技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-496",
+    "localName": "産業廃棄物収集運搬作業員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-497",
+    "localName": "積卸作業員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-498",
+    "localName": "こん包作業員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-499",
+    "localName": "港湾荷役作業員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-500",
+    "localName": "ブリーダー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-501",
+    "localName": "自然保護官（レンジャー）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-502",
+    "localName": "酪農従事者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-503",
+    "localName": "水産養殖従事者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-504",
+    "localName": "稲作農業者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-505",
+    "localName": "ハウス野菜栽培者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-506",
+    "localName": "果樹栽培者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-507",
+    "localName": "花き栽培者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-508",
+    "localName": "畜産技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-509",
+    "localName": "沿岸漁業従事者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-510",
+    "localName": "動物看護",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-511",
+    "localName": "ドローンパイロット",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-512",
+    "localName": "国会議員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-513",
+    "localName": "国際協力専門家",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-514",
+    "localName": "会社経営者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-515",
+    "localName": "玩具（おもちゃ）製作",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-516",
+    "localName": "法務技官（心理）（矯正心理専門職）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-517",
+    "localName": "入国審査官",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-518",
+    "localName": "検察事務官",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-519",
+    "localName": "労働基準監督官",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-520",
+    "localName": "セキュリティエキスパート（脆弱性診断）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-521",
+    "localName": "特許審査官",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-522",
+    "localName": "NPO法人職員（企画・運営）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-523",
+    "localName": "データエンジニア",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-524",
+    "localName": "独立系ファイナンシャル・アドバイザー（IFA）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-525",
+    "localName": "タンクローリー乗務員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-526",
+    "localName": "検査工（工業製品）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-527",
+    "localName": "食品営業（食品メーカー）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-528",
+    "localName": "自動運転開発エンジニア（自動車）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-529",
+    "localName": "医療機器開発技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-530",
+    "localName": "臨床開発モニター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-531",
+    "localName": "キッティング作業員（PCセットアップ作業員）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-532",
+    "localName": "フードデリバリー（料理配達員）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-533",
+    "localName": "セキュリティエキスパート（デジタルフォレンジック）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-534",
+    "localName": "セキュリティエキスパート（情報セキュリティ監査）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-535",
+    "localName": "風力発電のメンテナンス",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-536",
+    "localName": "総務課長",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-537",
+    "localName": "人事課長",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-538",
+    "localName": "経理課長",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-539",
+    "localName": "営業課長",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-540",
+    "localName": "デバッグ作業",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-541",
+    "localName": "ナレーター",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-542",
+    "localName": "出荷・受荷事務",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-543",
+    "localName": "郵便局郵便窓口業務",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-544",
+    "localName": "マーチャンダイザー、バイヤー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-545",
+    "localName": "歯科助手",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-546",
+    "localName": "保育補助者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-547",
+    "localName": "造船技能者（造船工、船舶艤装工等）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-548",
+    "localName": "検査工（食料品等）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-549",
+    "localName": "クレーン運転士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-550",
+    "localName": "造船技術者（船舶の開発・設計）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-551",
+    "localName": "バイオマス発電プラントの設計",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-552",
+    "localName": "UX/UIデザイナー",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-553",
+    "localName": "アニメ制作進行管理",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-554",
+    "localName": "プロスポーツ運営団体職員（企画・運営）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-555",
+    "localName": "訪問介護のサービス提供責任者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-556",
+    "localName": "障害者グループホーム世話人",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-557",
+    "localName": "汎用金属工作機械工（旋盤工、ボール盤工等）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-558",
+    "localName": "自動車板金塗装",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-559",
+    "localName": "配電盤・制御盤等組立",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-560",
+    "localName": "社会学研究者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-561",
+    "localName": "鉄道車両の設計・開発",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-562",
+    "localName": "探偵",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-563",
+    "localName": "麻酔科医",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-564",
+    "localName": "検疫官（看護師）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-565",
+    "localName": "養護教諭",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-566",
+    "localName": "イベントの企画・運営",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-567",
+    "localName": "学校事務（私立大学）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-568",
+    "localName": "児童発達支援管理責任者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-569",
+    "localName": "納棺師",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-570",
+    "localName": "耐震診断",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-571",
+    "localName": "作業環境測定士",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-572",
+    "localName": "下水道管路施設の点検・調査",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-573",
+    "localName": "オーケストラ奏者（団員）",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-574",
+    "localName": "ハローワーク職員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-575",
+    "localName": "整形外科医",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-576",
+    "localName": "衛生管理者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-577",
+    "localName": "風力発電の企画・調査",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-578",
+    "localName": "税関職員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-579",
+    "localName": "自動車検査員",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-580",
+    "localName": "障害福祉サービス管理責任者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-581",
+    "localName": "ブロックチェーン・エンジニア",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-582",
+    "localName": "声優",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-583",
+    "localName": "産業医",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  },
+  {
+    "sourceCode": "jobtag-584",
+    "localName": "3Dプリンター技術者",
+    "nameEn": null,
+    "nameKo": null,
+    "translationStatus": "pending",
+    "sourceUrl": "https://shigoto.mhlw.go.jp/User/download"
+  }
+]

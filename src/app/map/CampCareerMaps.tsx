@@ -28,6 +28,7 @@ import { createClient } from "@/lib/supabase-client"
 import type { User } from "@supabase/supabase-js"
 import { getShortageOccupations } from "@/lib/ie-shortage-occupations"
 import { getIscBroadField } from "@/lib/ie-fields"
+import { getJapanCareerLinks } from "@/lib/jp-occupation-card-contract"
 
 const LeafletMap = dynamic(() => import("./LeafletMap"), {
   ssr: false,
@@ -1339,6 +1340,13 @@ function Panel({
     return data.beOccupations[selectedOccCode] ?? null
   }, [selectedOccCode, activeCountry, data.beOccupations])
 
+  const selectedJPWage = useMemo(() => {
+    if (activeCountry !== "JP" || !selectedOccCode?.startsWith("jp-wage-")) return null
+    const occupationCode = selectedOccCode.slice("jp-wage-".length)
+    const wage = data.jpHighPayOccupations.find((row) => row.occupationCode === occupationCode) ?? null
+    return wage ? { wage, profiles: data.jpJobTagProfilesByWageCode[occupationCode] ?? [] } : null
+  }, [activeCountry, selectedOccCode, data.jpHighPayOccupations, data.jpJobTagProfilesByWageCode])
+
   const handleSelectOcc = (code: string) => {
     const name = data.auOccupations[code]?.occupation_en ?? code
     track("click_occupation", { type: "au", code, name, state: selected })
@@ -1373,6 +1381,11 @@ function Panel({
     track("click_occupation", { type: "be", code, name, state: selected })
     setSelectedOccCode(code)
   }
+  const handleSelectJPWage = (code: string) => {
+    const wage = data.jpHighPayOccupations.find((row) => row.occupationCode === code)
+    track("click_occupation", { type: "jp", code, name: wage?.localName ?? code, prefecture: selected })
+    setSelectedOccCode(`jp-wage-${code}`)
+  }
   const handleBack = () => setSelectedOccCode(null)
   const handleBackNero = () => setSelectedNeroA4(null)
 
@@ -1389,6 +1402,18 @@ function Panel({
         savedOccCodes={savedOccCodes}
         onToggleSave={onToggleSave}
         onShare={onShare}
+      />
+    )
+  }
+
+  if (selectedJPWage) {
+    return (
+      <JPWageOccupationDetail
+        wage={selectedJPWage.wage}
+        profiles={selectedJPWage.profiles}
+        prefectureName={stateName}
+        onBack={handleBack}
+        onClose={onClose}
       />
     )
   }
@@ -1713,7 +1738,7 @@ function Panel({
             <p className="py-8 text-center text-sm text-slate-400">{t.map.selectStateFirst}</p>
           )
         )}
-        {tab === "pay" && isJP && <JPHighPayList rows={data.jpHighPayOccupations} />}
+        {tab === "pay" && isJP && <JPHighPayList rows={data.jpHighPayOccupations} onSelectWage={handleSelectJPWage} />}
         {tab === "pay" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && activeCountry !== "NL" && activeCountry !== "BE" && activeCountry !== "JP" && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
         {tab === "pay" && activeCountry === "CA" && <CAHighPayList rows={data.caHighPay} provinceRows={selected ? data.caHighPayByProvince[selected] ?? [] : []} onSelectOcc={handleSelectCAOcc} />}
         {tab === "pay" && isUK && <UKHighPayList rows={ukHighPay} onSelectOcc={handleSelectUKOcc} />}
@@ -1739,7 +1764,7 @@ function Panel({
       </div>
 
       <p className="border-t border-slate-100 px-5 py-3 text-xs text-slate-400">
-        {t.map.source}
+        {isJP ? "Sources: MHLW · Statistics Bureau of Japan · JILPT Job Tag" : t.map.source}
       </p>
     </>
   )
@@ -4835,7 +4860,13 @@ function JPShortageList({ rows }: { rows: import("@/data/jp-map-data").JPShortag
   )
 }
 
-function JPHighPayList({ rows }: { rows: import("@/data/jp-map-data").JPHighPayOccupation[] }) {
+function JPHighPayList({
+  rows,
+  onSelectWage,
+}: {
+  rows: import("@/data/jp-map-data").JPHighPayOccupation[]
+  onSelectWage: (occupationCode: string) => void
+}) {
   return (
     <div className="space-y-3">
       <p className="px-3 text-[11px] leading-relaxed text-slate-500">National MHLW hourly baseline. Annual figure is a transparent estimate using hourly baseline × 160 hours/month × 12 months; it is not a reported annual salary.</p>
@@ -4844,11 +4875,74 @@ function JPHighPayList({ rows }: { rows: import("@/data/jp-map-data").JPHighPayO
           <li key={row.occupationCode} className="flex items-center gap-3 rounded-lg px-3 py-2.5">
             <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{index + 1}</span>
             <span className="min-w-0 flex-1"><span className="block truncate text-sm font-medium text-slate-800">{row.localName}</span><span className="block text-[10px] text-slate-400">MHLW occupation code {row.occupationCode}</span></span>
-            <span className="shrink-0 text-right"><span className="block text-sm font-semibold tabular-nums text-slate-700">JPY {row.hourlyBaseWageYen.toLocaleString()}/hr</span><span className="text-[10px] text-slate-400">est. JPY {row.annualizedBaseSalaryYen.toLocaleString()}/yr</span></span>
+            <button type="button" onClick={() => onSelectWage(row.occupationCode)} className="shrink-0 text-right transition-opacity hover:opacity-70"><span className="block text-sm font-semibold tabular-nums text-slate-700">JPY {row.hourlyBaseWageYen.toLocaleString()}/hr</span><span className="text-[10px] text-slate-400">est. JPY {row.annualizedBaseSalaryYen.toLocaleString()}/yr</span></button>
           </li>
         ))}
       </ol>
     </div>
+  )
+}
+
+function JPWageOccupationDetail({
+  wage,
+  profiles,
+  prefectureName,
+  onBack,
+  onClose,
+}: {
+  wage: import("@/data/jp-map-data").JPHighPayOccupation
+  profiles: import("@/data/jp-map-data").JPJobTagProfile[]
+  prefectureName: string
+  onBack: () => void
+  onClose: () => void
+}) {
+  const locale = useLocale()
+  const title = locale === "ko" ? "고소득 직업 카드" : "High-pay occupation card"
+  return (
+    <>
+      <div className="flex items-center gap-2 px-5 pt-4">
+        <button type="button" onClick={onBack} className="rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700" aria-label="Back"><ChevronLeft className="h-4 w-4" /></button>
+        <button type="button" onClick={onClose} className="ml-auto rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700" aria-label="Close"><X className="h-4 w-4" /></button>
+      </div>
+      <div className="min-h-0 flex-1 overflow-y-auto px-5 py-3">
+        <p className="text-[11px] font-medium text-rose-700">{title}</p>
+        <h3 className="mt-1 text-lg font-semibold text-slate-900">{wage.localName}</h3>
+        <p className="mt-1 text-xs text-slate-500">{prefectureName} · national MHLW wage baseline</p>
+        <div className="mt-4 grid grid-cols-2 gap-3">
+          <div className="rounded-lg bg-slate-50 px-3 py-2.5"><p className="text-[11px] text-slate-500">Hourly baseline</p><p className="text-lg font-bold text-slate-900">JPY {wage.hourlyBaseWageYen.toLocaleString()}</p></div>
+          <div className="rounded-lg bg-slate-50 px-3 py-2.5"><p className="text-[11px] text-slate-500">Annual estimate</p><p className="text-lg font-bold text-slate-900">JPY {wage.annualizedBaseSalaryYen.toLocaleString()}</p><p className="text-[10px] text-slate-400">160 hr × 12</p></div>
+        </div>
+        {profiles.length === 0 ? (
+          <p className="mt-5 rounded-lg border border-slate-200 px-3 py-3 text-sm text-slate-500">No Job Tag profile is mapped to this wage classification yet.</p>
+        ) : (
+          <div className="mt-5 space-y-4">
+            {profiles.slice(0, 6).map((profile) => {
+              const links = getJapanCareerLinks(profile.localName)
+              return (
+                <section key={profile.recordNumber} className="rounded-lg border border-slate-200 p-3">
+                  <h4 className="font-medium text-slate-900">{profile.localName}</h4>
+                  {profile.skills.length > 0 && <div className="mt-3">
+                    <p className="text-[11px] font-medium text-slate-500">Top skills</p>
+                    <div className="mt-1.5 flex flex-wrap gap-1.5">{profile.skills.slice(0, 4).map((skill) => <span key={skill.nameJa} className="rounded-md bg-slate-100 px-2 py-1 text-xs text-slate-700">{skill.nameJa}</span>)}</div>
+                  </div>}
+                  {profile.knowledge.length > 0 && <div className="mt-3">
+                    <p className="text-[11px] font-medium text-slate-500">Recommended study focus</p>
+                    <div className="mt-1.5 flex flex-wrap gap-1.5">{profile.knowledge.slice(0, 3).map((knowledge) => <span key={knowledge.nameJa} className="rounded-md bg-blue-50 px-2 py-1 text-xs text-blue-800">{knowledge.nameJa}</span>)}</div>
+                  </div>}
+                  {profile.qualificationsJa.length > 0 && <div className="mt-3"><p className="text-[11px] font-medium text-slate-500">Related qualifications</p><p className="mt-1 text-xs leading-relaxed text-slate-700">{profile.qualificationsJa.slice(0, 4).join(" · ")}</p></div>}
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <a href={links.jobTagSearch} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-medium text-rose-700 hover:underline"><ExternalLink className="h-3 w-3" />Job Tag</a>
+                    <a href={links.indeedJapan} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-medium text-rose-700 hover:underline"><ExternalLink className="h-3 w-3" />Current jobs</a>
+                    <a href={links.jassoStudySearch} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-medium text-rose-700 hover:underline"><ExternalLink className="h-3 w-3" />Study options</a>
+                  </div>
+                </section>
+              )
+            })}
+          </div>
+        )}
+      </div>
+      <p className="border-t border-slate-100 px-5 py-3 text-[10px] leading-relaxed text-slate-400">Source: JILPT Occupational Information Database, Job Tag description v7.01 and numeric v7.00. Skills and study focus are official Job Tag measures; study focus is not a school-specific recommendation.</p>
+    </>
   )
 }
 
