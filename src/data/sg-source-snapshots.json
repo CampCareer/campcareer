@@ -1,0 +1,73 @@
+[
+  {
+    "category": "occupation",
+    "sourceName": "MOM Occupational Wages 2025",
+    "sourceUrl": "https://stats.mom.gov.sg/iMAS_Tables1/Wages/Wages_2025/mrsd_2025Wages_table1.xlsx",
+    "datasetUrls": [
+      "https://stats.mom.gov.sg/iMAS_Tables1/Wages/Wages_2025/mrsd_2025Wages_table1.xlsx"
+    ],
+    "contentHash": "72e77c967290b237e0ca4cd23e90c9ebd5e3b9d7645f0353891a278796cd6f79",
+    "retrievedAt": "2026-07-10T13:22:43.284Z",
+    "method": "official-download",
+    "reviewStatus": "approved",
+    "status": "ingested",
+    "summary": "SSOC 2024 occupation-level median monthly basic and gross wages."
+  },
+  {
+    "category": "shortage",
+    "sourceName": "MOM Job Vacancies 2025",
+    "sourceUrl": "https://stats.mom.gov.sg/Pages/Job-Vacancies-2025.aspx",
+    "datasetUrls": [
+      "https://stats.mom.gov.sg/iMAS_PdfLibrary/mrsd_JV2025.pdf"
+    ],
+    "contentHash": "6f8daf18a7d388d957d3d8547e7b2f83f689564e0b9544aea431643b754d50dc",
+    "retrievedAt": "2026-07-10T13:22:43.284Z",
+    "method": "official-download",
+    "reviewStatus": "approved",
+    "status": "ingested",
+    "summary": "Published top job-vacancy lists with offer ranges, skills, qualifications and experience context."
+  },
+  {
+    "category": "rent",
+    "sourceName": "URA 1Q 2026 rental index",
+    "sourceUrl": "https://www.ura.gov.sg/news/media/pr26-31/",
+    "datasetUrls": [
+      "https://www.ura.gov.sg/-/media/Corporate/Media-Room/2026/Apr/pr26-31a-2.pdf"
+    ],
+    "contentHash": null,
+    "retrievedAt": "2026-07-10T13:22:43.284Z",
+    "method": "official-download",
+    "reviewStatus": "approved",
+    "status": "cataloged",
+    "summary": "CCR, RCR and OCR rental-index market segments; no room-rent average is inferred."
+  },
+  {
+    "category": "foreign-worker-pathway",
+    "sourceName": "MOM work pass requirements",
+    "sourceUrl": "https://www.mom.gov.sg/passes-and-permits/employment-pass/eligibility",
+    "datasetUrls": [
+      "https://www.mom.gov.sg/passes-and-permits/s-pass/eligibility",
+      "https://www.mom.gov.sg/passes-and-permits/employment-pass/eligibility/compass-c5-skills-bonus-shortage-occupation-list-sol"
+    ],
+    "contentHash": null,
+    "retrievedAt": "2026-07-10T13:22:43.284Z",
+    "method": "official-web",
+    "reviewStatus": "review-required",
+    "status": "cataloged",
+    "summary": "Work-pass policy is linked for human review and never treated as approval evidence."
+  },
+  {
+    "category": "skills",
+    "sourceName": "SkillsFuture Skills Framework",
+    "sourceUrl": "https://www.skillsfuture.gov.sg/skills-framework/skills-frameworks-faq",
+    "datasetUrls": [
+      "https://www.myskillsfuture.gov.sg/content/portal/en/portal-search/portal-search.html"
+    ],
+    "contentHash": null,
+    "retrievedAt": "2026-07-10T13:22:43.284Z",
+    "method": "official-web",
+    "reviewStatus": "approved",
+    "status": "cataloged",
+    "summary": "Official career-framework and training-directory source for occupation-card next actions."
+  }
+]

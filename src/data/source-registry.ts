@@ -8,7 +8,7 @@ export const CORE_DATA_CATEGORIES = [
 ] as const
 
 export type CoreDataCategory = (typeof CORE_DATA_CATEGORIES)[number]
-export type RegistryCountryCode = "AU" | "US" | "CA" | "UK" | "IE" | "DE" | "NL" | "BE"
+export type RegistryCountryCode = "AU" | "US" | "CA" | "UK" | "IE" | "DE" | "NL" | "BE" | "SG"
 export type SourceConfidence = "official" | "market-estimate" | "internal-estimate"
 export type SourceMethod = "official-api" | "official-download" | "official-web" | "market-estimate"
 export type ReviewStatus = "approved" | "review-required"
@@ -26,7 +26,7 @@ export type SourceRecord = {
   refreshCadence: "monthly" | "quarterly" | "annual"
 }
 
-const CHECKED_AT = "2026-07-09"
+const CHECKED_AT = "2026-07-10"
 
 type SourceSeed = Omit<SourceRecord, "country" | "category" | "retrievedAt" | "lastChecked" | "confidence" | "reviewStatus">
 type CountrySourceSeed = Record<CoreDataCategory, SourceSeed>
@@ -95,6 +95,14 @@ const COUNTRY_SOURCES: Record<RegistryCountryCode, CountrySourceSeed> = {
     rent: { sourceName: "Statbel housing statistics", sourceUrl: "https://statbel.fgov.be/en/themes/housing", method: "official-download", refreshCadence: "annual" },
     "visa-pathway": { sourceName: "IBZ search year after higher studies", sourceUrl: "https://dofi.ibz.be/en/themes/third-country-nationals/study/search-year-after-higher-studies", method: "official-web", refreshCadence: "monthly" },
     shortage: { sourceName: "VDAB shortage occupations", sourceUrl: "https://www.vdab.be/trends-en-cijfers/knelpuntberoepenlijst", method: "official-web", refreshCadence: "quarterly" },
+  },
+  SG: {
+    tuition: { sourceName: "Ministry of Education Singapore", sourceUrl: "https://www.moe.gov.sg/", method: "official-web", refreshCadence: "annual" },
+    "graduate-outcomes": { sourceName: "MOE Graduate Employment Survey", sourceUrl: "https://www.moe.gov.sg/news/press-releases", method: "official-web", refreshCadence: "annual" },
+    occupation: { sourceName: "MOM Occupational Wages 2025", sourceUrl: "https://stats.mom.gov.sg/Pages/Occupational-Wages-Tables2025.aspx", method: "official-download", refreshCadence: "annual" },
+    rent: { sourceName: "Urban Redevelopment Authority rental statistics", sourceUrl: "https://www.ura.gov.sg/news/media/pr26-31/", method: "official-download", refreshCadence: "quarterly" },
+    "visa-pathway": { sourceName: "Immigration and Checkpoints Authority Student's Pass", sourceUrl: "https://www.ica.gov.sg/reside/STP/apply?pageid=325&secid=182", method: "official-web", refreshCadence: "monthly" },
+    shortage: { sourceName: "MOM Job Vacancies 2025", sourceUrl: "https://stats.mom.gov.sg/Pages/Job-Vacancies-2025.aspx", method: "official-download", refreshCadence: "annual" },
   },
 }
 

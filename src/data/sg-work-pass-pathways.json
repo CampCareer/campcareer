@@ -1,0 +1,31 @@
+{
+  "country": "SG",
+  "reviewStatus": "review-required",
+  "lastChecked": "2026-07-10",
+  "pathways": [
+    {
+      "code": "ep",
+      "name": "Employment Pass",
+      "sourceUrl": "https://www.mom.gov.sg/passes-and-permits/employment-pass/eligibility",
+      "note": "Employer must apply. Qualifying salary and COMPASS requirements are assessed for the individual application."
+    },
+    {
+      "code": "spass",
+      "name": "S Pass",
+      "sourceUrl": "https://www.mom.gov.sg/passes-and-permits/s-pass/eligibility",
+      "note": "Employer must apply. Eligibility, quota and levy context are employer-dependent."
+    },
+    {
+      "code": "student-pass",
+      "name": "Student's Pass",
+      "sourceUrl": "https://www.ica.gov.sg/reside/STP/apply?pageid=325&secid=182",
+      "note": "Full-time study pass. Work rights and post-study status require official review."
+    },
+    {
+      "code": "compass-sol",
+      "name": "COMPASS C5 Shortage Occupation List",
+      "sourceUrl": "https://www.mom.gov.sg/passes-and-permits/employment-pass/eligibility/compass-c5-skills-bonus-shortage-occupation-list-sol",
+      "note": "SOL status can provide COMPASS C5 points when all job-duty and additional requirements are met; it is not a visa approval guarantee."
+    }
+  ]
+}

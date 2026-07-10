@@ -29,6 +29,7 @@ import type { User } from "@supabase/supabase-js"
 import { getShortageOccupations } from "@/lib/ie-shortage-occupations"
 import { getIscBroadField } from "@/lib/ie-fields"
 import { getJapanCareerLinks } from "@/lib/jp-occupation-card-contract"
+import { getSingaporeCareerLinks, type SingaporeDemandOccupation, type SingaporeWageOccupation } from "@/data/sg-map-data"
 
 const LeafletMap = dynamic(() => import("./LeafletMap"), {
   ssr: false,
@@ -72,7 +73,7 @@ export default function CampCareerMaps({
   const t = useTranslations()
   // /map은 호주 비치헤드의 front door다 → 진입 즉시 주/지역 선택(검색) 바가 보이도록
   // 기본을 "AU"로 둔다. 월드맵(다른 국가)은 "전체 보기"로 빠져나가 볼 수 있다.
-  const [activeCountry, setActiveCountry] = useState<"AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL" | "BE" | "JP" | null>("AU")
+  const [activeCountry, setActiveCountry] = useState<"AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL" | "BE" | "JP" | "SG" | null>("AU")
   const [selected, setSelected] = useState<string | null>(null)
   const [selectedSA4, setSelectedSA4] = useState<SA4Region | null>(null)
   const [tab, setTab] = useState<Tab>("shortage")
@@ -235,12 +236,17 @@ export default function CampCareerMaps({
       setActiveCountry("JP")
       setSelected(raw)
       setTab("stateInfo")
+    } else if (countryRaw === "sg") {
+      setActiveCountry("SG")
+      const area = data.sgAreas.find((item) => item.code === p.get("area"))?.code ?? "central"
+      setSelected(area)
+      setTab("stateInfo")
     }
     const tabParam = p.get("tab")
     if (tabParam === "pay") setTab("pay")
     else if (tabParam === "employment") setTab("employment")
     else if (tabParam === "whv") setTab("whv")
-  }, [initialState, initialTab])
+  }, [initialState, initialTab, initialSA4, data.sgAreas])
 
   useEffect(() => {
     if (!selected || neroFetched.current) return
@@ -412,20 +418,23 @@ export default function CampCareerMaps({
     else if (activeCountry === "US") setTab("stateInfo")
     else if (activeCountry === "UK") setTab("stateInfo")
     else if (activeCountry === "JP") setTab("stateInfo")
+    else if (activeCountry === "SG") setTab("stateInfo")
     track("select_state", { country: activeCountry ?? "AU", state: s })
   }, [activeCountry])
 
-  const onSelectCountry = useCallback((country: "AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL" | "BE" | "JP") => {
+  const onSelectCountry = useCallback((country: "AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL" | "BE" | "JP" | "SG") => {
     setActiveCountry(country)
-    setSelected(null)
+    setSelected(country === "SG" ? "central" : null)
     setSelectedJPCityArea(null)
     setSelectedSA4(null)
+    if (country === "SG") setTab("stateInfo")
   }, [])
 
   // When a US state is already selected and country changes to US, switch to stateInfo
   useEffect(() => {
     if (activeCountry === "US" && selected) setTab("stateInfo")
     if (activeCountry === "JP" && selected) setTab("stateInfo")
+    if (activeCountry === "SG" && selected) setTab("stateInfo")
   }, [activeCountry, selected])
 
   // UK has no shortage tab — reset to pay if needed
@@ -596,7 +605,7 @@ export default function CampCareerMaps({
     return ieSchools.filter((s) => IE_CITY_TO_COUNTY[s.city] === selected)
   }, [ieSchools, selected, activeCountry])
 
-  const countryLabel = activeCountry === "AU" ? "🇦🇺 Australia" : activeCountry === "US" ? "🇺🇸 United States" : activeCountry === "CA" ? "🇨🇦 Canada" : activeCountry === "IE" ? "🇮🇪 Ireland" : activeCountry === "UK" ? "🇬🇧 United Kingdom" : activeCountry === "DE" ? "🇩🇪 Germany" : activeCountry === "NL" ? "🇳🇱 Netherlands" : activeCountry === "BE" ? "🇧🇪 Belgium" : activeCountry === "JP" ? "🇯🇵 Japan" : ""
+  const countryLabel = activeCountry === "AU" ? "🇦🇺 Australia" : activeCountry === "US" ? "🇺🇸 United States" : activeCountry === "CA" ? "🇨🇦 Canada" : activeCountry === "IE" ? "🇮🇪 Ireland" : activeCountry === "UK" ? "🇬🇧 United Kingdom" : activeCountry === "DE" ? "🇩🇪 Germany" : activeCountry === "NL" ? "🇳🇱 Netherlands" : activeCountry === "BE" ? "🇧🇪 Belgium" : activeCountry === "JP" ? "🇯🇵 Japan" : activeCountry === "SG" ? "🇸🇬 Singapore" : ""
   const stateLabel = selected
     ? activeCountry === "AU"
       ? STATE_NAMES[selected as StateCode]
@@ -614,6 +623,8 @@ export default function CampCareerMaps({
                   ? BE_REGION_NAMES[selected] ?? selected
                   : activeCountry === "JP"
                     ? JP_PREFECTURE_NAMES[selected as keyof typeof JP_PREFECTURE_NAMES]?.en ?? selected
+                    : activeCountry === "SG"
+                      ? data.sgAreas.find((area) => area.code === selected)?.nameEn ?? selected
                     : US_STATE_NAMES[selected]
     : ""
   const occLabel = selectedOccCode
@@ -633,7 +644,7 @@ export default function CampCareerMaps({
 
   return (
     <div className="flex h-full w-full flex-col">
-        {(activeCountry === "AU" || activeCountry === "US" || activeCountry === "CA" || activeCountry === "IE" || activeCountry === "UK" || activeCountry === "DE" || activeCountry === "NL" || activeCountry === "BE" || activeCountry === "JP") && (
+        {(activeCountry === "AU" || activeCountry === "US" || activeCountry === "CA" || activeCountry === "IE" || activeCountry === "UK" || activeCountry === "DE" || activeCountry === "NL" || activeCountry === "BE" || activeCountry === "JP" || activeCountry === "SG") && (
       <>
         {!toolbarExpanded && (
           <button
@@ -652,9 +663,9 @@ export default function CampCareerMaps({
         <label className="block">
           <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectCountry}</span>
           <Select
-            items={{ AU: "🇦🇺 Australia", US: "🇺🇸 United States", CA: "🇨🇦 Canada", IE: "🇮🇪 Ireland", UK: "🇬🇧 United Kingdom", DE: "🇩🇪 Germany", NL: "🇳🇱 Netherlands", BE: "🇧🇪 Belgium", JP: "🇯🇵 Japan" }}
+            items={{ AU: "🇦🇺 Australia", US: "🇺🇸 United States", CA: "🇨🇦 Canada", IE: "🇮🇪 Ireland", UK: "🇬🇧 United Kingdom", DE: "🇩🇪 Germany", NL: "🇳🇱 Netherlands", BE: "🇧🇪 Belgium", JP: "🇯🇵 Japan", SG: "🇸🇬 Singapore" }}
             value={activeCountry ?? undefined}
-            onValueChange={(v) => v && onSelectCountry(v as "AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL" | "BE" | "JP")}
+            onValueChange={(v) => v && onSelectCountry(v as "AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL" | "BE" | "JP" | "SG")}
           >
             <SelectTrigger className="h-10 w-44 rounded-lg border-slate-200 text-sm">
               <SelectValue placeholder={t.map.selectCountryPlaceholder} />
@@ -669,11 +680,20 @@ export default function CampCareerMaps({
               <SelectItem value="NL">🇳🇱 Netherlands</SelectItem>
               <SelectItem value="BE">🇧🇪 Belgium</SelectItem>
               <SelectItem value="JP">🇯🇵 Japan</SelectItem>
+              <SelectItem value="SG">🇸🇬 Singapore</SelectItem>
             </SelectContent>
           </Select>
         </label>
 
-        {activeCountry === "JP" ? (
+        {activeCountry === "SG" ? (
+          <label className="block">
+            <span className="mb-1 block text-xs font-medium text-slate-500">Area</span>
+            <Select items={Object.fromEntries(data.sgAreas.map((area) => [area.code, `${area.nameEn} · ${area.nameKo}`]))} value={selected} onValueChange={(value) => { if (value) { setSelected(value); setTab("stateInfo") } }}>
+              <SelectTrigger className="h-10 w-64 rounded-lg border-slate-200 text-sm"><SelectValue placeholder="Select an area" /></SelectTrigger>
+              <SelectContent className="z-[2000]">{data.sgAreas.map((area) => <SelectItem key={area.code} value={area.code}>{area.nameEn} · {area.nameKo}</SelectItem>)}</SelectContent>
+            </Select>
+          </label>
+        ) : activeCountry === "JP" ? (
           <>
           <label className="block">
             <span className="mb-1 block text-xs font-medium text-slate-500">Prefecture</span>
@@ -1224,7 +1244,7 @@ function Panel({
   onClose: () => void
   neroData: Record<string, NeroOccupation[]> | null
   regionData: RegionOccData | null
-  activeCountry: "AU" | "US" | "CA" | "UK" | "DE" | "NL" | "BE" | "JP" | null
+  activeCountry: "AU" | "US" | "CA" | "UK" | "DE" | "NL" | "BE" | "JP" | "SG" | null
   selectedJPCity: import("@/data/jp-map-data").JPRentArea | null
   selectedOccCode: string | null
   setSelectedOccCode: (code: string | null) => void
@@ -1243,6 +1263,7 @@ function Panel({
   const isUS = activeCountry === "US"
   const isUK = activeCountry === "UK"
   const isJP = activeCountry === "JP"
+  const isSG = activeCountry === "SG"
   const isWhv = selected === "WHV"
   const stateName = isWhv ? "Second Visa"
     : isAU ? STATE_NAMES[selected as StateCode] ?? selected
@@ -1252,6 +1273,7 @@ function Panel({
     : activeCountry === "NL" ? NL_PROVINCE_NAMES[selected] ?? selected
     : activeCountry === "BE" ? BE_REGION_NAMES[selected] ?? selected
     : activeCountry === "JP" ? JP_PREFECTURE_NAMES[selected as keyof typeof JP_PREFECTURE_NAMES]?.en ?? selected
+    : activeCountry === "SG" ? data.sgAreas.find((area) => area.code === selected)?.nameEn ?? selected
     : US_STATE_NAMES[selected] ?? selected
 
   const [deExpLevel, setDeExpLevel] = useState<"fachkräfte" | "spezialisten" | "experten">("fachkräfte")
@@ -1263,6 +1285,7 @@ function Panel({
   const jpShortage = isJP ? (data.jpShortageByPrefecture[selected] ?? []) : []
   const jpRent = isJP ? data.jpRentByPrefecture[selected] ?? null : null
   const jpCities = isJP ? data.jpCities.filter((city) => city.prefectureCode === selected) : []
+  const sgArea = isSG ? data.sgAreas.find((area) => area.code === selected) ?? null : null
   const deSalaryField = deExpLevel === "fachkräfte" ? "median_salary_eur" : deExpLevel === "spezialisten" ? "median_salary_spezialist_eur" : "median_salary_experte_eur"
   const deShortageField = deExpLevel === "fachkräfte" ? "shortage_rating" : deExpLevel === "spezialisten" ? "shortage_rating_spezialist" : "shortage_rating_experte"
   const deHighPayForLevel = useMemo(() => {
@@ -1350,6 +1373,14 @@ function Panel({
     if (activeCountry !== "JP" || !selectedOccCode?.startsWith("jp-shortage-")) return null
     return (data.jpShortageByPrefecture[selected] ?? []).find((row) => row.shortageGroupCode === selectedOccCode.slice("jp-shortage-".length)) ?? null
   }, [activeCountry, selectedOccCode, selected, data.jpShortageByPrefecture])
+  const selectedSGDemand = useMemo(() => {
+    if (!isSG || !selectedOccCode?.startsWith("sg-demand-")) return null
+    return data.sgDemandOccupations.find((row) => row.sourceCode === selectedOccCode.slice("sg-demand-".length)) ?? null
+  }, [isSG, selectedOccCode, data.sgDemandOccupations])
+  const selectedSGHighPay = useMemo(() => {
+    if (!isSG || !selectedOccCode?.startsWith("sg-wage-")) return null
+    return data.sgHighPayOccupations.find((row) => row.ssocCode === selectedOccCode.slice("sg-wage-".length)) ?? null
+  }, [isSG, selectedOccCode, data.sgHighPayOccupations])
 
   const handleSelectOcc = (code: string) => {
     const name = data.auOccupations[code]?.occupation_en ?? code
@@ -1395,6 +1426,16 @@ function Panel({
     track("click_occupation", { type: "jp-shortage", code, name: group?.localName ?? code, prefecture: selected })
     setSelectedOccCode(`jp-shortage-${code}`)
   }
+  const handleSelectSGDemand = (sourceCode: string) => {
+    const occupation = data.sgDemandOccupations.find((row) => row.sourceCode === sourceCode)
+    track("click_occupation", { type: "sg-demand", code: sourceCode, name: occupation?.nameEn ?? sourceCode, area: selected })
+    setSelectedOccCode(`sg-demand-${sourceCode}`)
+  }
+  const handleSelectSGHighPay = (ssocCode: string) => {
+    const occupation = data.sgHighPayOccupations.find((row) => row.ssocCode === ssocCode)
+    track("click_occupation", { type: "sg-wage", code: ssocCode, name: occupation?.nameEn ?? ssocCode, area: selected })
+    setSelectedOccCode(`sg-wage-${ssocCode}`)
+  }
   const handleBack = () => setSelectedOccCode(null)
   const handleBackNero = () => setSelectedNeroA4(null)
 
@@ -1437,6 +1478,14 @@ function Panel({
         onClose={onClose}
       />
     )
+  }
+
+  if (selectedSGDemand) {
+    return <SGDemandOccupationDetail occupation={selectedSGDemand} areaName={stateName} pathways={data.sgWorkPassPathways.pathways} onBack={handleBack} onClose={onClose} />
+  }
+
+  if (selectedSGHighPay) {
+    return <SGHighPayOccupationDetail occupation={selectedSGHighPay} onBack={handleBack} onClose={onClose} />
   }
 
   if (selectedOccCode && resolvedCAOcc) {
@@ -1587,9 +1636,9 @@ function Panel({
       {!isWhv && (
       <div className="px-5 pt-3">
         <div className="inline-flex rounded-lg bg-slate-100 p-1 text-sm">
-          {(isUS || activeCountry === "CA" || isUK || activeCountry === "BE" || isJP) && (
+          {(isUS || activeCountry === "CA" || isUK || activeCountry === "BE" || isJP || isSG) && (
             <TabButton active={tab === "stateInfo"} onClick={() => { onTab("stateInfo"); track("switch_tab", { tab: "stateInfo", state: selected }) }}>
-              {(activeCountry === "CA" || activeCountry === "BE" || isJP) ? "Info" : t.map.tabStateInfo}
+              {(activeCountry === "CA" || activeCountry === "BE" || isJP || isSG) ? "Info" : t.map.tabStateInfo}
             </TabButton>
           )}
           {!isUK && (
@@ -1652,6 +1701,7 @@ function Panel({
         {tab === "stateInfo" && isJP && (
           <JPInfoPanel rent={jpRent} cities={jpCities} selectedCity={selectedJPCity} shortageCount={jpShortage.length} />
         )}
+        {tab === "stateInfo" && isSG && <SGInfoPanel area={sgArea} demandCount={data.sgDemandOccupations.length} pathways={data.sgWorkPassPathways.pathways} />}
         {tab === "shortage" && isAU && (
           selectedSA4 ? (
             <RegionGroupList
@@ -1693,7 +1743,8 @@ function Panel({
           )
         )}
         {tab === "shortage" && isJP && <JPShortageList rows={jpShortage} onSelectGroup={handleSelectJPShortageGroup} />}
-        {tab === "shortage" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && activeCountry !== "NL" && activeCountry !== "BE" && activeCountry !== "JP" && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
+        {tab === "shortage" && isSG && <SGShortageList rows={data.sgDemandOccupations} onSelect={handleSelectSGDemand} />}
+        {tab === "shortage" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && activeCountry !== "NL" && activeCountry !== "BE" && activeCountry !== "JP" && activeCountry !== "SG" && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
         {tab === "shortage" && activeCountry === "CA" && <CAShortageList rows={Object.values(data.caOccupations)} onSelectOcc={handleSelectCAOcc} />}
         {tab === "pay" && isAU && (
           selectedSA4 ? (
@@ -1760,7 +1811,8 @@ function Panel({
           )
         )}
         {tab === "pay" && isJP && <JPHighPayList rows={data.jpHighPayOccupations} onSelectWage={handleSelectJPWage} />}
-        {tab === "pay" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && activeCountry !== "NL" && activeCountry !== "BE" && activeCountry !== "JP" && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
+        {tab === "pay" && isSG && <SGHighPayList rows={data.sgHighPayOccupations} onSelect={handleSelectSGHighPay} />}
+        {tab === "pay" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && activeCountry !== "NL" && activeCountry !== "BE" && activeCountry !== "JP" && activeCountry !== "SG" && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
         {tab === "pay" && activeCountry === "CA" && <CAHighPayList rows={data.caHighPay} provinceRows={selected ? data.caHighPayByProvince[selected] ?? [] : []} onSelectOcc={handleSelectCAOcc} />}
         {tab === "pay" && isUK && <UKHighPayList rows={ukHighPay} onSelectOcc={handleSelectUKOcc} />}
         {tab === "employment" && (
@@ -1785,7 +1837,7 @@ function Panel({
       </div>
 
       <p className="border-t border-slate-100 px-5 py-3 text-xs text-slate-400">
-        {isJP ? "Sources: MHLW · Statistics Bureau of Japan · JILPT Job Tag" : t.map.source}
+        {isJP ? "Sources: MHLW · Statistics Bureau of Japan · JILPT Job Tag" : isSG ? "Sources: MOM · URA · SkillsFuture Singapore" : t.map.source}
       </p>
     </>
   )
@@ -4809,6 +4861,102 @@ function NLHighPayList({ rows, onSelectOcc }: { rows: NLRegionOccupation[]; onSe
         </li>
       ))}
     </ol>
+  )
+}
+
+function SGInfoPanel({
+  area,
+  demandCount,
+  pathways,
+}: {
+  area: import("@/data/sg-map-data").SingaporeMapArea | null
+  demandCount: number
+  pathways: import("@/data/sg-map-data").SingaporeWorkPassPathway[]
+}) {
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 gap-3">
+        <div className="rounded-lg bg-slate-50 px-3 py-2.5">
+          <p className="text-[11px] text-slate-500">URA rental market proxy</p>
+          <p className="text-lg font-bold text-slate-900">{area ? `${area.uraSegment} ${area.rentalIndex.toFixed(1)}` : "-"}</p>
+          <p className="mt-1 text-[10px] text-slate-400">1Q 2026 rental index, not monthly rent</p>
+        </div>
+        <div className="rounded-lg bg-amber-50 px-3 py-2.5">
+          <p className="text-[11px] text-amber-700">Official demand cards</p>
+          <p className="text-lg font-bold text-amber-900">{demandCount}</p>
+          <p className="mt-1 text-[10px] text-amber-700">MOM Job Vacancies 2025</p>
+        </div>
+      </div>
+      {area && <div className="rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-700"><p className="font-medium">{area.nameEn} · {area.nameKo}</p><p className="mt-1 text-xs leading-relaxed text-slate-500">{area.focus}. This uses the URA {area.uraSegment} market segment as a transparent location proxy. Singapore does not publish occupation shortages by these areas, so job-demand cards remain national.</p></div>}
+      <section className="rounded-lg border border-slate-200 p-3">
+        <p className="text-sm font-medium text-slate-800">Foreign work-pass context</p>
+        <div className="mt-2 space-y-2">
+          {pathways.map((pathway) => <a key={pathway.code} href={pathway.sourceUrl} target="_blank" rel="noopener noreferrer" className="block rounded-md bg-slate-50 px-3 py-2 text-xs text-slate-600 hover:bg-slate-100"><span className="font-medium text-slate-800">{pathway.name}</span> · {pathway.note}</a>)}
+        </div>
+      </section>
+    </div>
+  )
+}
+
+function SGShortageList({ rows, onSelect }: { rows: SingaporeDemandOccupation[]; onSelect: (sourceCode: string) => void }) {
+  return (
+    <div className="space-y-3">
+      <p className="px-3 text-[11px] leading-relaxed text-slate-500">National MOM 2025 top-vacancy occupations. The score is each occupation&apos;s normalized rank within the published PMET or non-PMET top-10 list, not a local-area vacancy rate.</p>
+      <ol>
+        {rows.map((row) => <li key={row.sourceCode}><button type="button" onClick={() => onSelect(row.sourceCode)} className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-amber-50"><span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{row.rank}</span><span className="min-w-0 flex-1"><span className="block truncate text-sm font-medium text-slate-800">{row.nameKo}</span><span className="block truncate text-[10px] text-slate-400">{row.nameEn} · {row.category}</span></span><span className="shrink-0 text-right"><span className="block text-sm font-semibold tabular-nums text-amber-700">S${row.offeredWageLowSgd.toLocaleString()}-{row.offeredWageHighSgd.toLocaleString()}</span><span className="text-[10px] text-slate-400">MOM offer range/mo</span></span></button></li>)}
+      </ol>
+    </div>
+  )
+}
+
+function SGHighPayList({ rows, onSelect }: { rows: SingaporeWageOccupation[]; onSelect: (ssocCode: string) => void }) {
+  return (
+    <div className="space-y-3">
+      <p className="px-3 text-[11px] leading-relaxed text-slate-500">MOM median monthly gross wages for full-time resident employees, June 2025. This is not an expatriate salary offer or a work-pass approval threshold.</p>
+      <ol>
+        {rows.slice(0, 20).map((row, index) => <li key={row.ssocCode}><button type="button" onClick={() => onSelect(row.ssocCode)} className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50"><span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{index + 1}</span><span className="min-w-0 flex-1"><span className="block truncate text-sm font-medium text-slate-800">{row.nameEn}</span><span className="block text-[10px] text-slate-400">SSOC 2024 {row.ssocCode}</span></span><span className="shrink-0 text-right"><span className="block text-sm font-semibold tabular-nums text-slate-700">S${row.medianGrossWageSgd.toLocaleString()}/mo</span><span className="text-[10px] text-slate-400">median gross wage</span></span></button></li>)}
+      </ol>
+    </div>
+  )
+}
+
+function SGDemandOccupationDetail({
+  occupation,
+  areaName,
+  pathways,
+  onBack,
+  onClose,
+}: {
+  occupation: SingaporeDemandOccupation
+  areaName: string
+  pathways: import("@/data/sg-map-data").SingaporeWorkPassPathway[]
+  onBack: () => void
+  onClose: () => void
+}) {
+  const links = getSingaporeCareerLinks(occupation)
+  return (
+    <>
+      <div className="flex items-center gap-2 px-5 pt-4"><button type="button" onClick={onBack} className="rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700" aria-label="Back"><ChevronLeft className="h-4 w-4" /></button><button type="button" onClick={onClose} className="ml-auto rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700" aria-label="Close"><X className="h-4 w-4" /></button></div>
+      <div className="min-h-0 flex-1 overflow-y-auto px-5 py-3">
+        <p className="text-[11px] font-medium text-amber-700">MOM national demand card · {occupation.category} rank #{occupation.rank}</p>
+        <h3 className="mt-1 text-lg font-semibold text-slate-900">{occupation.nameKo}</h3>
+        <p className="mt-1 text-xs text-slate-500">{occupation.nameEn} · {areaName} living comparison</p>
+        <div className="mt-4 grid grid-cols-2 gap-3"><div className="rounded-lg bg-amber-50 px-3 py-2.5"><p className="text-[11px] text-amber-700">Employer offer range</p><p className="text-base font-bold text-amber-900">S${occupation.offeredWageLowSgd.toLocaleString()}-{occupation.offeredWageHighSgd.toLocaleString()}</p><p className="text-[10px] text-amber-700">monthly, MOM report</p></div><div className="rounded-lg bg-slate-50 px-3 py-2.5"><p className="text-[11px] text-slate-500">Typical experience</p><p className="mt-1 text-sm font-bold text-slate-900">{occupation.commonExperience}</p><p className="text-[10px] text-slate-400">{occupation.commonQualification}</p></div></div>
+        <section className="mt-5 rounded-lg border border-slate-200 p-3"><p className="text-sm font-medium text-slate-800">Skills identified by MOM</p><div className="mt-2 flex flex-wrap gap-1.5">{occupation.skills.map((skill) => <span key={skill} className="rounded-md bg-blue-50 px-2 py-1 text-xs text-blue-800">{skill}</span>)}</div><div className="mt-3 flex flex-wrap gap-3"><a href={links.skillsFramework} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-medium text-blue-700 hover:underline"><ExternalLink className="h-3 w-3" />Skills framework</a><a href={links.courseDirectory} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-medium text-blue-700 hover:underline"><ExternalLink className="h-3 w-3" />Official course directory</a><a href={links.jobSearch} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-medium text-blue-700 hover:underline"><ExternalLink className="h-3 w-3" />MyCareersFuture search</a></div></section>
+        <section className="mt-4 rounded-lg border border-rose-200 bg-rose-50 p-3"><p className="text-sm font-medium text-rose-900">Work-pass caution</p><p className="mt-1 text-xs leading-relaxed text-rose-800">A national demand signal does not mean a foreign applicant can obtain a pass. An employer must apply, and EP/S Pass criteria and COMPASS are assessed for the actual role and applicant.</p><div className="mt-2 flex flex-wrap gap-2">{pathways.filter((pathway) => pathway.code === "ep" || pathway.code === "spass" || pathway.code === "compass-sol").map((pathway) => <a key={pathway.code} href={pathway.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-xs font-medium text-rose-800 hover:underline">{pathway.name}</a>)}</div></section>
+      </div>
+      <p className="border-t border-slate-100 px-5 py-3 text-[10px] leading-relaxed text-slate-400">Source: MOM Job Vacancies 2025. Salary is the published employer offer range for vacancies in this occupation, not an individual offer or guaranteed work-pass outcome.</p>
+    </>
+  )
+}
+
+function SGHighPayOccupationDetail({ occupation, onBack, onClose }: { occupation: SingaporeWageOccupation; onBack: () => void; onClose: () => void }) {
+  return (
+    <>
+      <div className="flex items-center gap-2 px-5 pt-4"><button type="button" onClick={onBack} className="rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700" aria-label="Back"><ChevronLeft className="h-4 w-4" /></button><button type="button" onClick={onClose} className="ml-auto rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700" aria-label="Close"><X className="h-4 w-4" /></button></div>
+      <div className="min-h-0 flex-1 overflow-y-auto px-5 py-3"><p className="text-[11px] font-medium text-rose-700">MOM high-pay occupation card</p><h3 className="mt-1 text-lg font-semibold text-slate-900">{occupation.nameEn}</h3><p className="mt-1 text-xs text-slate-500">SSOC 2024 {occupation.ssocCode} · full-time resident employees</p><div className="mt-4 grid grid-cols-2 gap-3"><div className="rounded-lg bg-slate-50 px-3 py-2.5"><p className="text-[11px] text-slate-500">Median gross wage</p><p className="text-lg font-bold text-slate-900">S${occupation.medianGrossWageSgd.toLocaleString()}/mo</p></div><div className="rounded-lg bg-slate-50 px-3 py-2.5"><p className="text-[11px] text-slate-500">Median basic wage</p><p className="text-lg font-bold text-slate-900">S${occupation.medianBasicWageSgd.toLocaleString()}/mo</p></div></div><section className="mt-5 rounded-lg border border-slate-200 p-3"><p className="text-sm font-medium text-slate-800">Skills and course research</p><p className="mt-1 text-xs leading-relaxed text-slate-500">MOM&apos;s wage table does not establish occupation-specific skills or foreign-worker eligibility. Use the official SkillsFuture sources before treating this as a study recommendation.</p><div className="mt-3 flex flex-wrap gap-3"><a href="https://www.skillsfuture.gov.sg/skills-framework/skills-frameworks-faq" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-medium text-rose-700 hover:underline"><ExternalLink className="h-3 w-3" />Skills framework</a><a href="https://www.myskillsfuture.gov.sg/content/portal/en/portal-search/portal-search.html" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-medium text-rose-700 hover:underline"><ExternalLink className="h-3 w-3" />Official course directory</a></div></section></div>
+      <p className="border-t border-slate-100 px-5 py-3 text-[10px] leading-relaxed text-slate-400">Source: MOM Occupational Wages 2025, June 2025. This resident wage benchmark is not an employer offer, a foreign-worker salary, or a work-pass threshold.</p>
+    </>
   )
 }
 

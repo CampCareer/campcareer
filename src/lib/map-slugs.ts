@@ -8,8 +8,9 @@ import deOccupationsRaw from "@/data/de-occupations.json"
 import nlOccupationsRaw from "@/data/nl-occupations.json"
 import { getBelgiumOccupations, getIrelandOccupations } from "@/lib/country-occupation-data"
 import { getCountrySource, type SourceRecord } from "@/data/source-registry"
+import { SG_DEMAND_OCCUPATIONS } from "@/data/sg-map-data"
 
-export const MAP_COUNTRIES = ["au", "ca", "us", "ie", "uk", "de", "nl", "be"] as const
+export const MAP_COUNTRIES = ["au", "ca", "us", "ie", "uk", "de", "nl", "be", "sg"] as const
 
 export type MapCountry = (typeof MAP_COUNTRIES)[number]
 
@@ -18,12 +19,14 @@ type RawMapOccupation = {
   name: string
   localName?: string | null
   medianSalary?: number | null
-  currency: "AUD" | "CAD" | "USD" | "GBP" | "EUR"
+  currency: "AUD" | "CAD" | "USD" | "GBP" | "EUR" | "SGD"
   shortageRating?: number | null
   shortageScore?: number | null
   employment?: number | null
   field?: string | null
   codeLabel: string
+  salaryLabel?: string
+  dataSource?: SourceRecord
 }
 
 export type MapOccupation = RawMapOccupation & {
@@ -43,6 +46,7 @@ const COUNTRY_NAME: Record<MapCountry, string> = {
   de: "Germany",
   nl: "Netherlands",
   be: "Belgium",
+  sg: "Singapore",
 }
 
 const SOURCE_COUNTRY: Record<MapCountry, SourceRecord["country"]> = {
@@ -54,6 +58,7 @@ const SOURCE_COUNTRY: Record<MapCountry, SourceRecord["country"]> = {
   de: "DE",
   nl: "NL",
   be: "BE",
+  sg: "SG",
 }
 
 const CURRENCY_SYMBOL: Record<MapOccupation["currency"], string> = {
@@ -62,6 +67,7 @@ const CURRENCY_SYMBOL: Record<MapOccupation["currency"], string> = {
   USD: "$",
   GBP: "£",
   EUR: "€",
+  SGD: "S$",
 }
 
 export function isMapCountry(value: string): value is MapCountry {
@@ -99,7 +105,7 @@ function withCanonicalSlugs(country: MapCountry, rows: RawMapOccupation[]): MapO
         countryName: COUNTRY_NAME[country],
         slug,
         path: `/maps/${country}/${slug}`,
-        dataSource: getCountrySource(SOURCE_COUNTRY[country], "occupation"),
+        dataSource: row.dataSource ?? getCountrySource(SOURCE_COUNTRY[country], "occupation"),
       }
     })
 }
@@ -259,6 +265,21 @@ function loadBelgium(): RawMapOccupation[] {
   }))
 }
 
+function loadSingapore(): RawMapOccupation[] {
+  return SG_DEMAND_OCCUPATIONS.map((row) => ({
+    code: row.sourceCode,
+    name: row.nameEn,
+    localName: row.nameKo,
+    medianSalary: Math.round((row.offeredWageLowSgd + row.offeredWageHighSgd) / 2),
+    currency: "SGD" as const,
+    shortageScore: row.shortageScore,
+    field: `${row.category} · MOM vacancy rank #${row.rank}`,
+    codeLabel: "MOM Job Vacancies 2025",
+    salaryLabel: "Employer offer midpoint",
+    dataSource: getCountrySource("SG", "shortage"),
+  }))
+}
+
 export const getMapOccupations = cache(async (country: MapCountry): Promise<MapOccupation[]> => {
   const raw =
     country === "au" ? await loadAustralia() :
@@ -268,7 +289,8 @@ export const getMapOccupations = cache(async (country: MapCountry): Promise<MapO
     country === "uk" ? loadUnitedKingdom() :
     country === "de" ? loadGermany() :
     country === "nl" ? loadNetherlands() :
-    loadBelgium()
+    country === "be" ? loadBelgium() :
+    loadSingapore()
 
   return withCanonicalSlugs(country, raw)
 })
@@ -280,7 +302,7 @@ export async function resolveMapOccupation(country: MapCountry, slugOrCode: stri
 }
 
 export async function getMapOccupationStaticParams() {
-  const countries: MapCountry[] = ["us", "ie", "uk", "de", "nl", "be"]
+  const countries: MapCountry[] = ["us", "ie", "uk", "de", "nl", "be", "sg"]
   const params: Array<{ country: MapCountry; slug: string }> = []
 
   for (const country of countries) {

@@ -20,7 +20,7 @@ type Params = {
 }
 
 export async function generateStaticParams() {
-  const countries = ["us", "ie", "uk", "de", "nl", "be"] as const
+  const countries = ["us", "ie", "uk", "de", "nl", "be", "sg"] as const
   const params: Array<{ country: string; slug: string }> = []
   for (const country of countries) {
     const occupations = await getIndexableMapOccupations(country)
@@ -57,6 +57,7 @@ export default async function MapsOccupationPage({ params }: { params: Params })
   }
 
   const salary = formatMapSalary(occupation.medianSalary, occupation.currency)
+  const salaryLabel = occupation.salaryLabel ?? "Median salary"
   const demandLabel =
     occupation.shortageRating != null ? `${occupation.shortageRating}/5 shortage rating` :
     occupation.shortageScore != null ? `${occupation.shortageScore}/100 shortage score` :
@@ -77,7 +78,7 @@ export default async function MapsOccupationPage({ params }: { params: Params })
         name: occupation.name,
         occupationCategory: `${occupation.codeLabel} ${occupation.code}`,
         description: `${occupation.name} pathways in ${occupation.countryName}. ${demandLabel}.`,
-        ...(occupation.medianSalary && {
+        ...(occupation.medianSalary && occupation.salaryLabel == null && {
           estimatedSalary: {
             "@type": "MonetaryAmount",
             currency: occupation.currency,
@@ -121,8 +122,9 @@ export default async function MapsOccupationPage({ params }: { params: Params })
                 <div className="text-sm font-medium text-slate-500">Quick snapshot</div>
                 <div className="mt-4 space-y-4">
                   <div>
-                    <div className="text-xs uppercase tracking-wide text-slate-400">Median salary</div>
+                    <div className="text-xs uppercase tracking-wide text-slate-400">{salaryLabel}</div>
                     <div className="mt-1 text-2xl font-semibold text-slate-950">{salary}</div>
+                    {occupation.salaryLabel && <div className="mt-1 text-xs text-slate-400">Published MOM offer-range midpoint, not a resident wage median.</div>}
                   </div>
                   <div>
                     <div className="text-xs uppercase tracking-wide text-slate-400">Demand signal</div>

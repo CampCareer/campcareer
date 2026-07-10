@@ -31,6 +31,7 @@ import beUniversitiesRaw from "@/data/be-universities.json"
 import beTaxRatesRaw from "@/data/be-tax-rates.json"
 import beJobatLinksRaw from "@/data/be-jobat-links.json"
 import { JP_CITIES, JP_HIGH_PAY_OCCUPATIONS, JP_JOBTAG_PROFILES_BY_WAGE_CODE, JP_RENT_BY_PREFECTURE, JP_SHORTAGE_BY_PREFECTURE, type JPHighPayOccupation, type JPJobTagProfile, type JPRentArea, type JPShortageGroup } from "@/data/jp-map-data"
+import { SG_DEMAND_OCCUPATIONS, SG_HIGH_PAY_OCCUPATIONS, SG_MAP_AREAS, SG_WORK_PASS_PATHWAYS, type SingaporeDemandOccupation, type SingaporeMapArea, type SingaporeWageOccupation, type SingaporeWorkPassPathway } from "@/data/sg-map-data"
 
 // 지도 페이지용 데이터 계층. occupations_au + occupation_state_au 를 읽어 JS 에서 조인한다.
 // occupation_state_au 는 anon RLS 가 막혀 있어 서버 전용 service-role 클라이언트로 읽는다.
@@ -464,6 +465,10 @@ export interface MapData {
   jpRentByPrefecture: Record<string, JPRentArea>
   jpCities: JPRentArea[]
   jpJobTagProfilesByWageCode: Record<string, JPJobTagProfile[]>
+  sgDemandOccupations: SingaporeDemandOccupation[]
+  sgHighPayOccupations: SingaporeWageOccupation[]
+  sgAreas: SingaporeMapArea[]
+  sgWorkPassPathways: { country: "SG"; reviewStatus: "review-required"; lastChecked: string; pathways: SingaporeWorkPassPathway[] }
 }
 
 export interface CACity {
@@ -1837,7 +1842,7 @@ async function getMapDataUncached(): Promise<MapData> {
   const beJobatLinksData = beJobatLinksRaw as unknown as { occupations: Record<string, { occupation_en: string; jobat_url: string; salary_url: string; course_url: string | null; course_keywords: string[] }> }
   const beJobatLinks = beJobatLinksData.occupations
 
-  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages, coursesByFieldState, usStateInfo, usMajorDensity, usRankedColleges, auRankedColleges, caColleges, caOccupations, caHighPay, caHighPayByProvince, caProvinceOccupations, caProvinceShortages, caCities, ukOccupations, ukShortageByRegion, ukHighPayByRegion, ukColleges, ukCities, deOccupations, deHighPayByRegion, deShortageByRegion, deColleges, deCities, nlOccupations, nlShortageByRegion, nlHighPayByRegion, nlColleges, nlCities, beOccupations, beHighPayByRegion, beShortageByRegion, beColleges, beCities, beStateInfo, beTaxRates, beJobatLinks, jpShortageByPrefecture: JP_SHORTAGE_BY_PREFECTURE, jpHighPayOccupations: JP_HIGH_PAY_OCCUPATIONS, jpRentByPrefecture: JP_RENT_BY_PREFECTURE, jpCities: JP_CITIES, jpJobTagProfilesByWageCode: JP_JOBTAG_PROFILES_BY_WAGE_CODE }
+  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages, coursesByFieldState, usStateInfo, usMajorDensity, usRankedColleges, auRankedColleges, caColleges, caOccupations, caHighPay, caHighPayByProvince, caProvinceOccupations, caProvinceShortages, caCities, ukOccupations, ukShortageByRegion, ukHighPayByRegion, ukColleges, ukCities, deOccupations, deHighPayByRegion, deShortageByRegion, deColleges, deCities, nlOccupations, nlShortageByRegion, nlHighPayByRegion, nlColleges, nlCities, beOccupations, beHighPayByRegion, beShortageByRegion, beColleges, beCities, beStateInfo, beTaxRates, beJobatLinks, jpShortageByPrefecture: JP_SHORTAGE_BY_PREFECTURE, jpHighPayOccupations: JP_HIGH_PAY_OCCUPATIONS, jpRentByPrefecture: JP_RENT_BY_PREFECTURE, jpCities: JP_CITIES, jpJobTagProfilesByWageCode: JP_JOBTAG_PROFILES_BY_WAGE_CODE, sgDemandOccupations: SG_DEMAND_OCCUPATIONS, sgHighPayOccupations: SG_HIGH_PAY_OCCUPATIONS, sgAreas: SG_MAP_AREAS, sgWorkPassPathways: SG_WORK_PASS_PATHWAYS }
 }
 
 // ── Per-country lightweight data (avoids 2 MB unstable_cache limit) ──────────
