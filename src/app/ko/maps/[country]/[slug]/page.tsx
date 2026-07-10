@@ -24,8 +24,8 @@ export function generateMetadata({ params }: Props): Metadata {
   if (!occupation) return { title: "직업 페이지를 찾을 수 없습니다" }
   const path = `/ko/maps/${params.country}/${params.slug}`
   return {
-    title: `${occupation.nameKo} 연봉·수요·취업 경로 | CampCareer`,
-    description: `${occupation.nameKo}의 연봉, 인력 부족, 외국인 취업 경로, 언어 장벽을 확인하세요.`,
+    title: `${occupation.nameKo ?? occupation.localName ?? occupation.sourceCode} 연봉·수요·취업 경로 | CampCareer`,
+    description: `${occupation.nameKo ?? occupation.localName ?? occupation.sourceCode}의 연봉, 인력 부족, 외국인 취업 경로, 언어 장벽을 확인하세요.`,
     alternates: { canonical: path, languages: { "ko-KR": path, en: `/expansion/maps/${params.country}/${params.slug}` } },
   }
 }

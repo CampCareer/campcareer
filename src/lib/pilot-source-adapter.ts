@@ -39,7 +39,7 @@ export function createPilotSourceSnapshot(payload: OfficialSourcePayload): Pilot
 // Imports never self-publish: raw values remain review-required until a human
 // validates the source mapping, Korean title, and foreign-worker pathway.
 export function preparePilotOccupationImport(input: PilotOccupationImport): PilotOccupation {
-  if (!input.sourceCode.trim() || !input.nameEn.trim()) throw new Error("Occupation source code and English name are required.")
+  if (!input.sourceCode.trim()) throw new Error("Occupation source code is required.")
   if (input.medianSalary !== null && input.medianSalary < 0) throw new Error("Median salary cannot be negative.")
   if (input.shortageScore !== null && (input.shortageScore < 0 || input.shortageScore > 100)) {
     throw new Error("Shortage score must be between 0 and 100.")
@@ -48,7 +48,7 @@ export function preparePilotOccupationImport(input: PilotOccupationImport): Pilo
   return {
     ...input,
     sourceCode: input.sourceCode.trim(),
-    nameEn: input.nameEn.trim(),
+    nameEn: input.nameEn?.trim() || null,
     nameKo: input.nameKo?.trim() || null,
     localName: input.localName?.trim() || null,
     reviewStatus: "review-required",

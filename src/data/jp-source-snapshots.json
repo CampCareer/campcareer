@@ -1,0 +1,126 @@
+[
+  {
+    "countryCode": "JP",
+    "category": "tuition",
+    "sourceName": "Japan Student Services Organization",
+    "sourceUrl": "https://www.jasso.go.jp/en/study_j/sgtj/guide/",
+    "datasetUrls": [],
+    "contentHash": null,
+    "retrievedAt": null,
+    "method": "official-web",
+    "reviewStatus": "approved",
+    "status": "cataloged",
+    "summary": "Official study-in-Japan guidance; school-level tuition imports require a separate reviewed adapter."
+  },
+  {
+    "countryCode": "JP",
+    "category": "graduate-outcomes",
+    "sourceName": "Ministry of Education, Culture, Sports, Science and Technology",
+    "sourceUrl": "https://www.mext.go.jp/en/",
+    "datasetUrls": [],
+    "contentHash": null,
+    "retrievedAt": null,
+    "method": "official-web",
+    "reviewStatus": "approved",
+    "status": "cataloged",
+    "summary": "Official higher-education source catalogued; outcome extraction remains a separate review task."
+  },
+  {
+    "countryCode": "JP",
+    "category": "occupation",
+    "sourceName": "MHLW Wage Structure Basic Statistical Survey",
+    "sourceUrl": "https://www.mhlw.go.jp/content/001692996.xlsx",
+    "datasetUrls": [
+      "https://www.mhlw.go.jp/content/001692996.xlsx"
+    ],
+    "contentHash": "3bb602f2b4d412b1c0b176a4e9fa8838a08caa2d7a0f1d859ac106366bb43879",
+    "retrievedAt": "2026-07-10T08:24:13.211Z",
+    "method": "official-download",
+    "reviewStatus": "approved",
+    "status": "ingested",
+    "summary": "Occupation-specific hourly baseline wages from the published MHLW workbook."
+  },
+  {
+    "countryCode": "JP",
+    "category": "rent",
+    "sourceName": "Statistics Bureau of Japan Housing and Land Survey",
+    "sourceUrl": "https://www.e-stat.go.jp/stat-search/database?layout=datalist&stat_infid=000040210070&statdisp_id=0004021497",
+    "datasetUrls": [
+      "https://www.e-stat.go.jp/stat-search/database?layout=datalist&stat_infid=000040210070&statdisp_id=0004021497"
+    ],
+    "contentHash": "e4d74baadf2755eaea54cd2f84d2454a04dfca5fc3f538f7411f6fafcfbb006d",
+    "retrievedAt": "2026-07-10T08:24:13.211Z",
+    "method": "official-api",
+    "reviewStatus": "approved",
+    "status": "ingested",
+    "summary": "2023 official private-rental monthly-rent distribution by prefecture and 21 major cities. CampCareer displays the lower edge of the median rent band, not an inferred mean."
+  },
+  {
+    "countryCode": "JP",
+    "category": "visa-pathway",
+    "sourceName": "Immigration Services Agency of Japan",
+    "sourceUrl": "https://www.isa.go.jp/en/",
+    "datasetUrls": [],
+    "contentHash": null,
+    "retrievedAt": null,
+    "method": "official-web",
+    "reviewStatus": "review-required",
+    "status": "cataloged",
+    "summary": "Official immigration policy source; never auto-publish pathway claims."
+  },
+  {
+    "countryCode": "JP",
+    "category": "shortage",
+    "sourceName": "MHLW Employment-related indicators by occupation",
+    "sourceUrl": "https://www.mhlw.go.jp/toukei/list/114-1d.html",
+    "datasetUrls": [
+      "https://www.mhlw.go.jp/toukei/list/xls/114-1d-04.xlsx",
+      "https://www.mhlw.go.jp/toukei/list/xls/114-1d-05.xlsx"
+    ],
+    "contentHash": "6c905f1628cf4497adbd3bf9f9f0dfb51b6c92649877fc8c0dd85c492075e4f0",
+    "retrievedAt": "2026-07-10T08:24:13.211Z",
+    "method": "official-download",
+    "reviewStatus": "approved",
+    "status": "ingested",
+    "summary": "Annual occupation-group job openings and job seekers from MHLW employment-service statistics."
+  },
+  {
+    "countryCode": "JP",
+    "category": "foreign-worker-pathway",
+    "sourceName": "Immigration Services Agency of Japan work status",
+    "sourceUrl": "https://www.isa.go.jp/en/applications/procedures/nyuukokukanri07_00059.html",
+    "datasetUrls": [],
+    "contentHash": null,
+    "retrievedAt": null,
+    "method": "official-web",
+    "reviewStatus": "review-required",
+    "status": "cataloged",
+    "summary": "Official work-status policy source; occupation mappings require human review."
+  },
+  {
+    "countryCode": "JP",
+    "category": "language-requirement",
+    "sourceName": "Japanese-Language Proficiency Test",
+    "sourceUrl": "https://www.jlpt.jp/e/",
+    "datasetUrls": [],
+    "contentHash": null,
+    "retrievedAt": null,
+    "method": "official-web",
+    "reviewStatus": "approved",
+    "status": "cataloged",
+    "summary": "Official JLPT framework source; it does not prove occupation-specific language requirements."
+  },
+  {
+    "countryCode": "JP",
+    "category": "job-quality",
+    "sourceName": "MHLW Labour Statistics Yearbook",
+    "sourceUrl": "https://www.mhlw.go.jp/stf/roudouyoran.html",
+    "datasetUrls": [],
+    "contentHash": null,
+    "retrievedAt": null,
+    "method": "official-download",
+    "reviewStatus": "approved",
+    "status": "cataloged",
+    "summary": "Official job-quality source catalogued; occupation-level working-condition extraction remains a separate adapter."
+  }
+]

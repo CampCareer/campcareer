@@ -46,6 +46,11 @@ const importRow = preparePilotOccupationImport({
 })
 if (importRow.reviewStatus !== "review-required") issues.push("Occupation imports must require human review")
 
+const rawJapanGate = evaluatePilotLaunch("JP", PILOT_SOURCE_REGISTRY, [importRow])
+if (rawJapanGate.rawOccupationCount !== 1 || rawJapanGate.occupationCount !== 0 || rawJapanGate.ready) {
+  issues.push("Review-required imports must count as collected work but never as launch-ready occupations")
+}
+
 if (issues.length > 0) {
   console.error("[pilot-readiness] failed")
   for (const issue of issues) console.error(`- ${issue}`)

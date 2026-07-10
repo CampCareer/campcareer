@@ -26,7 +26,7 @@ export type PilotSourceRecord = {
   reviewStatus: ReviewStatus
 }
 
-const CHECKED_AT = "2026-07-09"
+const CHECKED_AT = "2026-07-10"
 
 type SourceSeed = Omit<PilotSourceRecord, "country" | "category" | "lastChecked" | "reviewStatus">
 type CountrySeeds = Record<PilotDataCategory, SourceSeed>
@@ -44,12 +44,12 @@ const PILOT_SOURCES: Record<PilotCountryCode, CountrySeeds> = {
     "job-quality": { sourceName: "Ministry of Employment and Labor", sourceUrl: "https://www.moel.go.kr/english/", method: "official-web", refreshCadence: "annual" },
   },
   JP: {
-    tuition: { sourceName: "Japan Student Services Organization", sourceUrl: "https://www.jasso.go.jp/en/", method: "official-web", refreshCadence: "annual" },
+    tuition: { sourceName: "Japan Student Services Organization", sourceUrl: "https://www.jasso.go.jp/en/study_j/sgtj/guide/", method: "official-web", refreshCadence: "annual" },
     "graduate-outcomes": { sourceName: "Ministry of Education, Culture, Sports, Science and Technology", sourceUrl: "https://www.mext.go.jp/en/", method: "official-web", refreshCadence: "annual" },
-    occupation: { sourceName: "Hello Work Internet Service", sourceUrl: "https://www.hellowork.mhlw.go.jp/", method: "official-web", refreshCadence: "monthly" },
+    occupation: { sourceName: "MHLW Wage Structure Basic Statistical Survey", sourceUrl: "https://www.mhlw.go.jp/content/001692996.xlsx", method: "official-download", refreshCadence: "annual" },
     rent: { sourceName: "Statistics Bureau of Japan housing statistics", sourceUrl: "https://www.stat.go.jp/english/data/jyutaku/index.html", method: "official-download", refreshCadence: "annual" },
     "visa-pathway": { sourceName: "Immigration Services Agency of Japan", sourceUrl: "https://www.isa.go.jp/en/", method: "official-web", refreshCadence: "monthly" },
-    shortage: { sourceName: "Ministry of Health, Labour and Welfare labour shortage statistics", sourceUrl: "https://www.mhlw.go.jp/english/", method: "official-download", refreshCadence: "quarterly" },
+    shortage: { sourceName: "MHLW Employment-related indicators by occupation", sourceUrl: "https://www.mhlw.go.jp/toukei/list/114-1d.html", method: "official-download", refreshCadence: "annual" },
     "foreign-worker-pathway": { sourceName: "Immigration Services Agency of Japan work status", sourceUrl: "https://www.isa.go.jp/en/applications/procedures/nyuukokukanri07_00059.html", method: "official-web", refreshCadence: "monthly" },
     "language-requirement": { sourceName: "Japanese-Language Proficiency Test", sourceUrl: "https://www.jlpt.jp/e/", method: "official-web", refreshCadence: "annual" },
     "job-quality": { sourceName: "Ministry of Health, Labour and Welfare", sourceUrl: "https://www.mhlw.go.jp/english/", method: "official-download", refreshCadence: "annual" },

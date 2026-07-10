@@ -24,8 +24,8 @@ export function generateMetadata({ params }: Props): Metadata {
   if (!occupation) return { title: "Occupation pilot not found" }
   const path = `/expansion/maps/${params.country}/${params.slug}`
   return {
-    title: `${occupation.nameEn} salary, demand, and work pathway | CampCareer`,
-    description: `Validate salary, labour demand, foreign-worker access, and language barriers for ${occupation.nameEn}.`,
+    title: `${occupation.nameEn ?? occupation.localName ?? occupation.sourceCode} salary, demand, and work pathway | CampCareer`,
+    description: `Validate salary, labour demand, foreign-worker access, and language barriers for ${occupation.nameEn ?? occupation.localName ?? occupation.sourceCode}.`,
     alternates: { canonical: path, languages: { en: path, "ko-KR": `/ko/maps/${params.country}/${params.slug}` } },
   }
 }

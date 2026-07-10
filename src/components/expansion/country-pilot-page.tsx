@@ -65,9 +65,10 @@ export function PilotCountryPage({ country, locale }: { country: ExpansionCountr
           )}
         </div>
 
-        <div className="mt-6 grid gap-4 sm:grid-cols-3">
-          <Metric label={korean ? "필수 소스" : "Required sources"} value={`${Math.round(gate.sourceCoverage * 100)}%`} />
-          <Metric label={korean ? "검토 직업" : "Reviewed occupations"} value={`${gate.occupationCount}/50`} />
+        <div className="mt-6 grid gap-4 sm:grid-cols-4">
+          <Metric label={korean ? "등록 공식 출처" : "Registered official sources"} value={`${Math.round(gate.sourceCoverage * 100)}%`} />
+          <Metric label={korean ? "수집 직업" : "Collected occupations"} value={`${gate.rawOccupationCount}`} />
+          <Metric label={korean ? "승인 직업" : "Approved occupations"} value={`${gate.occupationCount}/50`} />
           <Metric label={korean ? "임금·수요 근거" : "Salary and demand evidence"} value={`${Math.round(gate.salaryAndDemandCoverage * 100)}%`} />
         </div>
 

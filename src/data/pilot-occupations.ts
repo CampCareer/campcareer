@@ -1,6 +1,6 @@
 import type { PilotOccupation } from "@/lib/pilot-launch-gate"
+import { JAPAN_OCCUPATION_REVIEW_QUEUE } from "@/data/jp-official-data"
 
-// Public indexing starts only after a reviewed import supplies all required
-// fields for at least 50 occupations per country. Keeping this empty prevents
-// source-only placeholders from becoming thin SEO pages.
-export const PILOT_OCCUPATIONS: PilotOccupation[] = []
+// Review-required imports are included for collection reporting, but every
+// route and sitemap entry still requires isPilotOccupationIndexable().
+export const PILOT_OCCUPATIONS: PilotOccupation[] = [...JAPAN_OCCUPATION_REVIEW_QUEUE]

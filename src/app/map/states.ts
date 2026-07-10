@@ -236,6 +236,70 @@ export const BE_REGION_NAMES: Record<string, string> = {
   BR: "Brussels-Capital",
 }
 
+// ── Japan (JP) prefectures ──────────────────────────────────────────────────
+
+export const JP_PREFECTURE_CODES = [
+  "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12",
+  "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24",
+  "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36",
+  "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47",
+] as const
+
+export type JPPrefectureCode = typeof JP_PREFECTURE_CODES[number]
+
+type JPPrefectureName = { en: string; ja: string; ko: string }
+
+export const JP_PREFECTURE_NAMES: Record<JPPrefectureCode, JPPrefectureName> = {
+  "01": { en: "Hokkaido", ja: "北海道", ko: "홋카이도" }, "02": { en: "Aomori", ja: "青森県", ko: "아오모리" },
+  "03": { en: "Iwate", ja: "岩手県", ko: "이와테" }, "04": { en: "Miyagi", ja: "宮城県", ko: "미야기" },
+  "05": { en: "Akita", ja: "秋田県", ko: "아키타" }, "06": { en: "Yamagata", ja: "山形県", ko: "야마가타" },
+  "07": { en: "Fukushima", ja: "福島県", ko: "후쿠시마" }, "08": { en: "Ibaraki", ja: "茨城県", ko: "이바라키" },
+  "09": { en: "Tochigi", ja: "栃木県", ko: "도치기" }, "10": { en: "Gunma", ja: "群馬県", ko: "군마" },
+  "11": { en: "Saitama", ja: "埼玉県", ko: "사이타마" }, "12": { en: "Chiba", ja: "千葉県", ko: "지바" },
+  "13": { en: "Tokyo", ja: "東京都", ko: "도쿄" }, "14": { en: "Kanagawa", ja: "神奈川県", ko: "가나가와" },
+  "15": { en: "Niigata", ja: "新潟県", ko: "니가타" }, "16": { en: "Toyama", ja: "富山県", ko: "도야마" },
+  "17": { en: "Ishikawa", ja: "石川県", ko: "이시카와" }, "18": { en: "Fukui", ja: "福井県", ko: "후쿠이" },
+  "19": { en: "Yamanashi", ja: "山梨県", ko: "야마나시" }, "20": { en: "Nagano", ja: "長野県", ko: "나가노" },
+  "21": { en: "Gifu", ja: "岐阜県", ko: "기후" }, "22": { en: "Shizuoka", ja: "静岡県", ko: "시즈오카" },
+  "23": { en: "Aichi", ja: "愛知県", ko: "아이치" }, "24": { en: "Mie", ja: "三重県", ko: "미에" },
+  "25": { en: "Shiga", ja: "滋賀県", ko: "시가" }, "26": { en: "Kyoto", ja: "京都府", ko: "교토" },
+  "27": { en: "Osaka", ja: "大阪府", ko: "오사카" }, "28": { en: "Hyogo", ja: "兵庫県", ko: "효고" },
+  "29": { en: "Nara", ja: "奈良県", ko: "나라" }, "30": { en: "Wakayama", ja: "和歌山県", ko: "와카야마" },
+  "31": { en: "Tottori", ja: "鳥取県", ko: "돗토리" }, "32": { en: "Shimane", ja: "島根県", ko: "시마네" },
+  "33": { en: "Okayama", ja: "岡山県", ko: "오카야마" }, "34": { en: "Hiroshima", ja: "広島県", ko: "히로시마" },
+  "35": { en: "Yamaguchi", ja: "山口県", ko: "야마구치" }, "36": { en: "Tokushima", ja: "徳島県", ko: "도쿠시마" },
+  "37": { en: "Kagawa", ja: "香川県", ko: "가가와" }, "38": { en: "Ehime", ja: "愛媛県", ko: "에히메" },
+  "39": { en: "Kochi", ja: "高知県", ko: "고치" }, "40": { en: "Fukuoka", ja: "福岡県", ko: "후쿠오카" },
+  "41": { en: "Saga", ja: "佐賀県", ko: "사가" }, "42": { en: "Nagasaki", ja: "長崎県", ko: "나가사키" },
+  "43": { en: "Kumamoto", ja: "熊本県", ko: "구마모토" }, "44": { en: "Oita", ja: "大分県", ko: "오이타" },
+  "45": { en: "Miyazaki", ja: "宮崎県", ko: "미야자키" }, "46": { en: "Kagoshima", ja: "鹿児島県", ko: "가고시마" },
+  "47": { en: "Okinawa", ja: "沖縄県", ko: "오키나와" },
+}
+
+export const JP_CITY_AREAS: Record<string, { prefectureCode: JPPrefectureCode; en: string; ja: string; ko: string }> = {
+  "01100": { prefectureCode: "01", en: "Sapporo", ja: "札幌市", ko: "삿포로" },
+  "04100": { prefectureCode: "04", en: "Sendai", ja: "仙台市", ko: "센다이" },
+  "11100": { prefectureCode: "11", en: "Saitama", ja: "さいたま市", ko: "사이타마시" },
+  "12100": { prefectureCode: "12", en: "Chiba", ja: "千葉市", ko: "지바시" },
+  "13100": { prefectureCode: "13", en: "Tokyo wards", ja: "東京都区部", ko: "도쿄 특별구" },
+  "14100": { prefectureCode: "14", en: "Yokohama", ja: "横浜市", ko: "요코하마" },
+  "14130": { prefectureCode: "14", en: "Kawasaki", ja: "川崎市", ko: "가와사키" },
+  "14150": { prefectureCode: "14", en: "Sagamihara", ja: "相模原市", ko: "사가미하라" },
+  "15100": { prefectureCode: "15", en: "Niigata City", ja: "新潟市", ko: "니가타시" },
+  "22100": { prefectureCode: "22", en: "Shizuoka City", ja: "静岡市", ko: "시즈오카시" },
+  "22130": { prefectureCode: "22", en: "Hamamatsu", ja: "浜松市", ko: "하마마쓰" },
+  "23100": { prefectureCode: "23", en: "Nagoya", ja: "名古屋市", ko: "나고야" },
+  "26100": { prefectureCode: "26", en: "Kyoto City", ja: "京都市", ko: "교토시" },
+  "27100": { prefectureCode: "27", en: "Osaka City", ja: "大阪市", ko: "오사카시" },
+  "27140": { prefectureCode: "27", en: "Sakai", ja: "堺市", ko: "사카이" },
+  "28100": { prefectureCode: "28", en: "Kobe", ja: "神戸市", ko: "고베" },
+  "33100": { prefectureCode: "33", en: "Okayama City", ja: "岡山市", ko: "오카야마시" },
+  "34100": { prefectureCode: "34", en: "Hiroshima City", ja: "広島市", ko: "히로시마시" },
+  "40100": { prefectureCode: "40", en: "Kitakyushu", ja: "北九州市", ko: "기타큐슈" },
+  "40130": { prefectureCode: "40", en: "Fukuoka City", ja: "福岡市", ko: "후쿠오카시" },
+  "43100": { prefectureCode: "43", en: "Kumamoto City", ja: "熊本市", ko: "구마모토시" },
+}
+
 export const BE_PROVINCE_CODES = [
   "VAN", "VBR", "VGB", "VWV", "VLI",  // Flanders
   "WBR", "WHT", "WLG", "WLB", "WNA",  // Wallonia

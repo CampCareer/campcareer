@@ -8,7 +8,7 @@ import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useTranslations, useLocale } from "@/lib/i18n/locale-provider"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { STATE_CODES, STATE_NAMES, US_STATE_CODES, US_STATE_NAMES, IE_COUNTY_CODES, IE_COUNTY_NAMES, IE_CITY_TO_COUNTY, CA_PROVINCE_CODES, CA_PROVINCE_NAMES, UK_REGION_CODES, UK_REGION_NAMES, DE_BUNDESLAND_CODES, DE_BUNDESLAND_NAMES, NL_PROVINCE_CODES, NL_PROVINCE_NAMES, BE_REGION_CODES, BE_REGION_NAMES, type StateCode } from "./states"
+import { STATE_CODES, STATE_NAMES, US_STATE_CODES, US_STATE_NAMES, IE_COUNTY_CODES, IE_COUNTY_NAMES, IE_CITY_TO_COUNTY, CA_PROVINCE_CODES, CA_PROVINCE_NAMES, UK_REGION_CODES, UK_REGION_NAMES, DE_BUNDESLAND_CODES, DE_BUNDESLAND_NAMES, NL_PROVINCE_CODES, NL_PROVINCE_NAMES, BE_REGION_CODES, BE_REGION_NAMES, JP_PREFECTURE_CODES, JP_PREFECTURE_NAMES, type StateCode } from "./states"
 import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
 import { WHV_REGIONS } from "@/data/whv-regions"
 import { WHV_SPECIFIED_WORK } from "@/data/whv-occupations"
@@ -71,7 +71,7 @@ export default function CampCareerMaps({
   const t = useTranslations()
   // /map은 호주 비치헤드의 front door다 → 진입 즉시 주/지역 선택(검색) 바가 보이도록
   // 기본을 "AU"로 둔다. 월드맵(다른 국가)은 "전체 보기"로 빠져나가 볼 수 있다.
-  const [activeCountry, setActiveCountry] = useState<"AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL" | "BE" | null>("AU")
+  const [activeCountry, setActiveCountry] = useState<"AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL" | "BE" | "JP" | null>("AU")
   const [selected, setSelected] = useState<string | null>(null)
   const [selectedSA4, setSelectedSA4] = useState<SA4Region | null>(null)
   const [tab, setTab] = useState<Tab>("shortage")
@@ -82,6 +82,7 @@ export default function CampCareerMaps({
   const initialOccLoaded = useRef(false)
   // 직업 카드 열림 상태 — 툴바의 직업 검색에서도 열 수 있도록 최상위로 끌어올림.
   const [selectedOccCode, setSelectedOccCode] = useState<string | null>(null)
+  const [selectedJPCityArea, setSelectedJPCityArea] = useState<string | null>(null)
   const [selectedUsOcc, setSelectedUsOcc] = useState<USOccupation | null>(null)
   const [selectedUniv, setSelectedUniv] = useState<USRankedCollege | AURankedCollege | CACollege | UKCollege | DECollege | NLCollege | null>(null)
   const [selectedNeroA4, setSelectedNeroA4] = useState<string | null>(null)
@@ -229,6 +230,10 @@ export default function CampCareerMaps({
     } else if (countryRaw === "de" && raw && (DE_BUNDESLAND_CODES as readonly string[]).includes(raw)) {
       setActiveCountry("DE")
       setSelected(raw)
+    } else if (countryRaw === "jp" && raw && (JP_PREFECTURE_CODES as readonly string[]).includes(raw)) {
+      setActiveCountry("JP")
+      setSelected(raw)
+      setTab("stateInfo")
     }
     const tabParam = p.get("tab")
     if (tabParam === "pay") setTab("pay")
@@ -401,21 +406,25 @@ export default function CampCareerMaps({
 
   const onSelectState = useCallback((s: string) => {
     setSelected(s)
+    if (activeCountry === "JP") setSelectedJPCityArea(null)
     if (s === "WHV") setTab("whv")
     else if (activeCountry === "US") setTab("stateInfo")
     else if (activeCountry === "UK") setTab("stateInfo")
+    else if (activeCountry === "JP") setTab("stateInfo")
     track("select_state", { country: activeCountry ?? "AU", state: s })
   }, [activeCountry])
 
-  const onSelectCountry = useCallback((country: "AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL" | "BE") => {
+  const onSelectCountry = useCallback((country: "AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL" | "BE" | "JP") => {
     setActiveCountry(country)
     setSelected(null)
+    setSelectedJPCityArea(null)
     setSelectedSA4(null)
   }, [])
 
   // When a US state is already selected and country changes to US, switch to stateInfo
   useEffect(() => {
     if (activeCountry === "US" && selected) setTab("stateInfo")
+    if (activeCountry === "JP" && selected) setTab("stateInfo")
   }, [activeCountry, selected])
 
   // UK has no shortage tab — reset to pay if needed
@@ -586,7 +595,7 @@ export default function CampCareerMaps({
     return ieSchools.filter((s) => IE_CITY_TO_COUNTY[s.city] === selected)
   }, [ieSchools, selected, activeCountry])
 
-  const countryLabel = activeCountry === "AU" ? "🇦🇺 Australia" : activeCountry === "US" ? "🇺🇸 United States" : activeCountry === "CA" ? "🇨🇦 Canada" : activeCountry === "IE" ? "🇮🇪 Ireland" : activeCountry === "UK" ? "🇬🇧 United Kingdom" : activeCountry === "DE" ? "🇩🇪 Germany" : activeCountry === "NL" ? "🇳🇱 Netherlands" : activeCountry === "BE" ? "🇧🇪 Belgium" : ""
+  const countryLabel = activeCountry === "AU" ? "🇦🇺 Australia" : activeCountry === "US" ? "🇺🇸 United States" : activeCountry === "CA" ? "🇨🇦 Canada" : activeCountry === "IE" ? "🇮🇪 Ireland" : activeCountry === "UK" ? "🇬🇧 United Kingdom" : activeCountry === "DE" ? "🇩🇪 Germany" : activeCountry === "NL" ? "🇳🇱 Netherlands" : activeCountry === "BE" ? "🇧🇪 Belgium" : activeCountry === "JP" ? "🇯🇵 Japan" : ""
   const stateLabel = selected
     ? activeCountry === "AU"
       ? STATE_NAMES[selected as StateCode]
@@ -600,7 +609,11 @@ export default function CampCareerMaps({
               ? DE_BUNDESLAND_NAMES[selected] ?? selected
               : activeCountry === "NL"
                 ? NL_PROVINCE_NAMES[selected] ?? selected
-                : US_STATE_NAMES[selected]
+                : activeCountry === "BE"
+                  ? BE_REGION_NAMES[selected] ?? selected
+                  : activeCountry === "JP"
+                    ? JP_PREFECTURE_NAMES[selected as keyof typeof JP_PREFECTURE_NAMES]?.en ?? selected
+                    : US_STATE_NAMES[selected]
     : ""
   const occLabel = selectedOccCode
     ? activeCountry === "AU"
@@ -619,7 +632,7 @@ export default function CampCareerMaps({
 
   return (
     <div className="flex h-full w-full flex-col">
-        {(activeCountry === "AU" || activeCountry === "US" || activeCountry === "CA" || activeCountry === "IE" || activeCountry === "UK" || activeCountry === "DE" || activeCountry === "NL" || activeCountry === "BE") && (
+        {(activeCountry === "AU" || activeCountry === "US" || activeCountry === "CA" || activeCountry === "IE" || activeCountry === "UK" || activeCountry === "DE" || activeCountry === "NL" || activeCountry === "BE" || activeCountry === "JP") && (
       <>
         {!toolbarExpanded && (
           <button
@@ -638,9 +651,9 @@ export default function CampCareerMaps({
         <label className="block">
           <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectCountry}</span>
           <Select
-            items={{ AU: "🇦🇺 Australia", US: "🇺🇸 United States", CA: "🇨🇦 Canada", IE: "🇮🇪 Ireland", UK: "🇬🇧 United Kingdom", DE: "🇩🇪 Germany", NL: "🇳🇱 Netherlands", BE: "🇧🇪 Belgium" }}
+            items={{ AU: "🇦🇺 Australia", US: "🇺🇸 United States", CA: "🇨🇦 Canada", IE: "🇮🇪 Ireland", UK: "🇬🇧 United Kingdom", DE: "🇩🇪 Germany", NL: "🇳🇱 Netherlands", BE: "🇧🇪 Belgium", JP: "🇯🇵 Japan" }}
             value={activeCountry ?? undefined}
-            onValueChange={(v) => v && onSelectCountry(v as "AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL" | "BE")}
+            onValueChange={(v) => v && onSelectCountry(v as "AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL" | "BE" | "JP")}
           >
             <SelectTrigger className="h-10 w-44 rounded-lg border-slate-200 text-sm">
               <SelectValue placeholder={t.map.selectCountryPlaceholder} />
@@ -654,11 +667,33 @@ export default function CampCareerMaps({
               <SelectItem value="DE">🇩🇪 Germany</SelectItem>
               <SelectItem value="NL">🇳🇱 Netherlands</SelectItem>
               <SelectItem value="BE">🇧🇪 Belgium</SelectItem>
+              <SelectItem value="JP">🇯🇵 Japan</SelectItem>
             </SelectContent>
           </Select>
         </label>
 
-        {activeCountry === "UK" ? (
+        {activeCountry === "JP" ? (
+          <>
+          <label className="block">
+            <span className="mb-1 block text-xs font-medium text-slate-500">Prefecture</span>
+            <Select items={Object.fromEntries(JP_PREFECTURE_CODES.map((code) => [code, `${JP_PREFECTURE_NAMES[code].en} · ${JP_PREFECTURE_NAMES[code].ja}`]))} value={selected} onValueChange={(v) => { if (v) { setSelected(v); setSelectedJPCityArea(null); setTab("stateInfo") } }}>
+              <SelectTrigger className="h-10 w-64 rounded-lg border-slate-200 text-sm"><SelectValue placeholder="Select a prefecture" /></SelectTrigger>
+              <SelectContent className="z-[2000] max-h-72">
+                {JP_PREFECTURE_CODES.map((code) => <SelectItem key={code} value={code}>{JP_PREFECTURE_NAMES[code].en} · {JP_PREFECTURE_NAMES[code].ja}</SelectItem>)}
+              </SelectContent>
+            </Select>
+          </label>
+          {selected && (
+            <label className="block">
+              <span className="mb-1 block text-xs font-medium text-slate-500">Major city</span>
+              <Select items={Object.fromEntries(data.jpCities.filter((city) => city.prefectureCode === selected).map((city) => [city.areaCode, `${city.nameEn} · ${city.nameJa}`]))} value={selectedJPCityArea} onValueChange={setSelectedJPCityArea}>
+                <SelectTrigger className="h-10 w-64 rounded-lg border-slate-200 text-sm"><SelectValue placeholder="Select a major city" /></SelectTrigger>
+                <SelectContent className="z-[2000]">{data.jpCities.filter((city) => city.prefectureCode === selected).map((city) => <SelectItem key={city.areaCode} value={city.areaCode}>{city.nameEn} · {city.nameJa}</SelectItem>)}</SelectContent>
+              </Select>
+            </label>
+          )}
+          </>
+        ) : activeCountry === "UK" ? (
           <>
           <label className="block">
             <span className="mb-1 block text-xs font-medium text-slate-500">Region</span>
@@ -1126,6 +1161,7 @@ export default function CampCareerMaps({
               neroData={activeCountry === "AU" ? neroData : null}
               regionData={activeCountry === "AU" ? regionData : null}
               activeCountry={activeCountry}
+              selectedJPCity={activeCountry === "JP" ? data.jpCities.find((city) => city.areaCode === selectedJPCityArea) ?? null : null}
               selectedOccCode={selectedOccCode}
               setSelectedOccCode={setSelectedOccCode}
               selectedUsOcc={selectedUsOcc}
@@ -1167,6 +1203,7 @@ function Panel({
   neroData,
   regionData,
   activeCountry,
+  selectedJPCity,
   selectedOccCode,
   setSelectedOccCode,
   selectedUsOcc,
@@ -1186,7 +1223,8 @@ function Panel({
   onClose: () => void
   neroData: Record<string, NeroOccupation[]> | null
   regionData: RegionOccData | null
-  activeCountry: "AU" | "US" | "CA" | "UK" | "DE" | "NL" | "BE" | null
+  activeCountry: "AU" | "US" | "CA" | "UK" | "DE" | "NL" | "BE" | "JP" | null
+  selectedJPCity: import("@/data/jp-map-data").JPRentArea | null
   selectedOccCode: string | null
   setSelectedOccCode: (code: string | null) => void
   selectedUsOcc: USOccupation | null
@@ -1203,6 +1241,7 @@ function Panel({
   const isAU = activeCountry === "AU"
   const isUS = activeCountry === "US"
   const isUK = activeCountry === "UK"
+  const isJP = activeCountry === "JP"
   const isWhv = selected === "WHV"
   const stateName = isWhv ? "Second Visa"
     : isAU ? STATE_NAMES[selected as StateCode] ?? selected
@@ -1211,6 +1250,7 @@ function Panel({
     : activeCountry === "DE" ? DE_BUNDESLAND_NAMES[selected] ?? selected
     : activeCountry === "NL" ? NL_PROVINCE_NAMES[selected] ?? selected
     : activeCountry === "BE" ? BE_REGION_NAMES[selected] ?? selected
+    : activeCountry === "JP" ? JP_PREFECTURE_NAMES[selected as keyof typeof JP_PREFECTURE_NAMES]?.en ?? selected
     : US_STATE_NAMES[selected] ?? selected
 
   const [deExpLevel, setDeExpLevel] = useState<"fachkräfte" | "spezialisten" | "experten">("fachkräfte")
@@ -1219,6 +1259,9 @@ function Panel({
   const usShortage = isUS ? (data.usShortageByState[selected] ?? []) : []
   const usHighPay = isUS ? (data.usHighPayByState[selected] ?? []) : []
   const ukHighPay = isUK ? (data.ukHighPayByRegion[selected] ?? []) : []
+  const jpShortage = isJP ? (data.jpShortageByPrefecture[selected] ?? []) : []
+  const jpRent = isJP ? data.jpRentByPrefecture[selected] ?? null : null
+  const jpCities = isJP ? data.jpCities.filter((city) => city.prefectureCode === selected) : []
   const deSalaryField = deExpLevel === "fachkräfte" ? "median_salary_eur" : deExpLevel === "spezialisten" ? "median_salary_spezialist_eur" : "median_salary_experte_eur"
   const deShortageField = deExpLevel === "fachkräfte" ? "shortage_rating" : deExpLevel === "spezialisten" ? "shortage_rating_spezialist" : "shortage_rating_experte"
   const deHighPayForLevel = useMemo(() => {
@@ -1498,9 +1541,9 @@ function Panel({
       {!isWhv && (
       <div className="px-5 pt-3">
         <div className="inline-flex rounded-lg bg-slate-100 p-1 text-sm">
-          {(isUS || activeCountry === "CA" || isUK || activeCountry === "BE") && (
+          {(isUS || activeCountry === "CA" || isUK || activeCountry === "BE" || isJP) && (
             <TabButton active={tab === "stateInfo"} onClick={() => { onTab("stateInfo"); track("switch_tab", { tab: "stateInfo", state: selected }) }}>
-              {(activeCountry === "CA" || activeCountry === "BE") ? "Info" : t.map.tabStateInfo}
+              {(activeCountry === "CA" || activeCountry === "BE" || isJP) ? "Info" : t.map.tabStateInfo}
             </TabButton>
           )}
           {!isUK && (
@@ -1560,6 +1603,9 @@ function Panel({
 {tab === "stateInfo" && activeCountry === "BE" && (
   <BEInfoPanel stateInfo={data.beStateInfo[selected] ?? null} cities={data.beCities} regionCode={selected} taxRates={data.beTaxRates as Record<string, unknown>} />
 )}
+        {tab === "stateInfo" && isJP && (
+          <JPInfoPanel rent={jpRent} cities={jpCities} selectedCity={selectedJPCity} shortageCount={jpShortage.length} />
+        )}
         {tab === "shortage" && isAU && (
           selectedSA4 ? (
             <RegionGroupList
@@ -1600,7 +1646,8 @@ function Panel({
             <p className="py-8 text-center text-sm text-slate-400">{t.map.selectStateFirst}</p>
           )
         )}
-        {tab === "shortage" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && activeCountry !== "NL" && activeCountry !== "BE" && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
+        {tab === "shortage" && isJP && <JPShortageList rows={jpShortage} />}
+        {tab === "shortage" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && activeCountry !== "NL" && activeCountry !== "BE" && activeCountry !== "JP" && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
         {tab === "shortage" && activeCountry === "CA" && <CAShortageList rows={Object.values(data.caOccupations)} onSelectOcc={handleSelectCAOcc} />}
         {tab === "pay" && isAU && (
           selectedSA4 ? (
@@ -1666,7 +1713,8 @@ function Panel({
             <p className="py-8 text-center text-sm text-slate-400">{t.map.selectStateFirst}</p>
           )
         )}
-        {tab === "pay" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && activeCountry !== "NL" && activeCountry !== "BE" && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
+        {tab === "pay" && isJP && <JPHighPayList rows={data.jpHighPayOccupations} />}
+        {tab === "pay" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && activeCountry !== "NL" && activeCountry !== "BE" && activeCountry !== "JP" && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
         {tab === "pay" && activeCountry === "CA" && <CAHighPayList rows={data.caHighPay} provinceRows={selected ? data.caHighPayByProvince[selected] ?? [] : []} onSelectOcc={handleSelectCAOcc} />}
         {tab === "pay" && isUK && <UKHighPayList rows={ukHighPay} onSelectOcc={handleSelectUKOcc} />}
         {tab === "employment" && (
@@ -4715,6 +4763,92 @@ function NLHighPayList({ rows, onSelectOcc }: { rows: NLRegionOccupation[]; onSe
         </li>
       ))}
     </ol>
+  )
+}
+
+function JPInfoPanel({
+  rent,
+  cities,
+  selectedCity,
+  shortageCount,
+}: {
+  rent: import("@/data/jp-map-data").JPRentArea | null
+  cities: import("@/data/jp-map-data").JPRentArea[]
+  selectedCity: import("@/data/jp-map-data").JPRentArea | null
+  shortageCount: number
+}) {
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 gap-3">
+        <div className="rounded-lg bg-slate-50 px-3 py-2.5">
+          <p className="text-[11px] text-slate-500">Median rent band</p>
+          <p className="text-base font-bold text-slate-900">{rent?.medianRentBandLabel ?? "—"}</p>
+          <p className="mt-1 text-[10px] text-slate-400">2023 private rentals</p>
+        </div>
+        <div className="rounded-lg bg-amber-50 px-3 py-2.5">
+          <p className="text-[11px] text-amber-700">Occupation groups</p>
+          <p className="text-lg font-bold text-amber-800">{shortageCount || "—"}</p>
+          <p className="mt-1 text-[10px] text-amber-700">with FY2025 demand data</p>
+        </div>
+      </div>
+      {cities.length > 0 && (
+        <div className="rounded-lg border border-slate-200 px-4 py-3">
+          <p className="mb-2 text-[11px] text-slate-500">Major city rent bands</p>
+          <div className="space-y-2">
+            {cities.map((city) => (
+              <div key={city.areaCode} className="flex items-center justify-between gap-3 text-xs">
+                <span className="text-slate-600">{city.nameEn} <span className="text-slate-400">{city.nameJa}</span></span>
+                <span className="shrink-0 font-semibold text-slate-700">{city.medianRentBandLabel}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+      {selectedCity && (
+        <div className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-slate-700">
+          <p className="font-semibold">{selectedCity.nameEn} · {selectedCity.nameJa}</p>
+          <p className="mt-1">Official median rent band: <b>{selectedCity.medianRentBandLabel}</b></p>
+        </div>
+      )}
+      <p className="rounded-lg border border-slate-200 px-3 py-2 text-[11px] leading-relaxed text-slate-500">
+        Rent is the lower edge of the official median monthly private-rental band, not an average. Source: Statistics Bureau of Japan, 2023 Housing and Land Survey.
+      </p>
+    </div>
+  )
+}
+
+function JPShortageList({ rows }: { rows: import("@/data/jp-map-data").JPShortageGroup[] }) {
+  if (rows.length === 0) return <p className="py-8 text-center text-sm text-slate-400">No verified MHLW occupation-group data is available for this prefecture.</p>
+  return (
+    <ol>
+      {rows.slice(0, 15).map((row, index) => (
+        <li key={row.shortageGroupCode} className="flex items-center gap-3 rounded-lg px-3 py-2.5">
+          <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{index + 1}</span>
+          <span className="min-w-0 flex-1">
+            <span className="block truncate text-sm font-medium text-slate-800">{row.localName}</span>
+            <span className="block text-[10px] text-slate-400">Openings {row.jobOpenings.toLocaleString()} · seekers {row.applicants.toLocaleString()}</span>
+          </span>
+          <span className="shrink-0 text-right"><span className="block text-sm font-semibold tabular-nums text-amber-700">{row.openingsToApplicantsRatio.toFixed(2)}x</span><span className="text-[10px] text-slate-400">openings / seekers</span></span>
+        </li>
+      ))}
+    </ol>
+  )
+}
+
+function JPHighPayList({ rows }: { rows: import("@/data/jp-map-data").JPHighPayOccupation[] }) {
+  return (
+    <div className="space-y-3">
+      <p className="px-3 text-[11px] leading-relaxed text-slate-500">National MHLW hourly baseline. Annual figure is a transparent estimate using hourly baseline × 160 hours/month × 12 months; it is not a reported annual salary.</p>
+      <ol>
+        {rows.slice(0, 15).map((row, index) => (
+          <li key={row.occupationCode} className="flex items-center gap-3 rounded-lg px-3 py-2.5">
+            <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{index + 1}</span>
+            <span className="min-w-0 flex-1"><span className="block truncate text-sm font-medium text-slate-800">{row.localName}</span><span className="block text-[10px] text-slate-400">MHLW occupation code {row.occupationCode}</span></span>
+            <span className="shrink-0 text-right"><span className="block text-sm font-semibold tabular-nums text-slate-700">JPY {row.hourlyBaseWageYen.toLocaleString()}/hr</span><span className="text-[10px] text-slate-400">est. JPY {row.annualizedBaseSalaryYen.toLocaleString()}/yr</span></span>
+          </li>
+        ))}
+      </ol>
+    </div>
   )
 }
 
