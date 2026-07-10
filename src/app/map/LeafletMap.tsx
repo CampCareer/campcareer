@@ -26,7 +26,7 @@ const DE_BOUNDS = L.latLngBounds([47.3, 5.9], [55.1, 15.0])
 const NL_BOUNDS = L.latLngBounds([50.7, 3.3], [53.6, 7.2])
 const BE_BOUNDS = L.latLngBounds([49.5, 2.5], [51.5, 6.4])
 const JP_BOUNDS = L.latLngBounds([24.0, 122.0], [46.5, 146.5])
-const SG_BOUNDS = L.latLngBounds([1.15, 103.58], [1.48, 104.08])
+const SG_BOUNDS = L.latLngBounds([1.16, 103.55], [1.48, 104.06])
 const WORLD_BOUNDS = L.latLngBounds([-90, -180], [90, 180])
 
 const RAMP_LIGHT = [237, 233, 254]
@@ -112,7 +112,7 @@ export default function LeafletMap({
   const worldLayerRef = useRef<L.GeoJSON | null>(null)
   const markerLayerRef = useRef<L.LayerGroup | null>(null)
   const ieMarkerLayerRef = useRef<L.LayerGroup | null>(null)
-  const sgMarkerLayerRef = useRef<L.LayerGroup | null>(null)
+  const sgLayerRef = useRef<L.GeoJSON | null>(null)
   const layersByCode = useRef<Partial<Record<StateCode, L.Polygon>>>({})
   const ieLayerRef = useRef<L.GeoJSON | null>(null)
   const ieCountyByCode = useRef<Record<string, L.Polygon>>({})
@@ -296,26 +296,6 @@ export default function LeafletMap({
       )
       group.addLayer(marker)
     }
-    return group
-  }
-
-  function buildSingaporeMarker(): L.LayerGroup {
-    const group = L.layerGroup()
-    const marker = L.circleMarker([1.3521, 103.8198], {
-      radius: 14,
-      fillColor: "#0f766e",
-      fillOpacity: 0.9,
-      color: "#ffffff",
-      weight: 3,
-    })
-    marker.bindTooltip("Singapore national job data", {
-      permanent: true,
-      direction: "top",
-      offset: [0, -10],
-      className: "!rounded-md !border-0 !bg-slate-900 !px-2 !py-1 !text-xs !text-white !shadow-md",
-    })
-    marker.on("click", () => onSelectStateRef.current("central"))
-    group.addLayer(marker)
     return group
   }
 
@@ -1213,6 +1193,37 @@ export default function LeafletMap({
       })
       .catch((err) => console.error("[LeafletMap] jp geojson load failed:", err))
 
+    // Singapore is too small for the world-country geometry used elsewhere.
+    // This is the SLA National Map Polygon coastal outline, trimmed to the
+    // Singapore features so the map remains responsive and visibly clickable.
+    fetch("/sg-boundary.geojson")
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`)
+        return r.json()
+      })
+      .then((geo: GeoJSON.FeatureCollection) => {
+        if (mapRef.current !== map) return
+        const singaporeLayer = L.geoJSON(geo, {
+          style: () => ({ fillColor: "#0f766e", fillOpacity: 0.62, color: "#0f172a", weight: 1.8 }),
+          onEachFeature: (_feature, layer) => {
+            const path = layer as L.Path
+            path.on({
+              click: () => onSelectStateRef.current("central"),
+              mouseover: () => path.setStyle({ fillOpacity: 0.82, weight: 2.5 }),
+              mouseout: () => path.setStyle({ fillOpacity: 0.62, weight: 1.8 }),
+            })
+          },
+        })
+        singaporeLayer.bindTooltip("Singapore", {
+          permanent: true,
+          direction: "top",
+          className: "!rounded-md !border-0 !bg-slate-900 !px-2 !py-1 !text-xs !text-white !shadow-md",
+        })
+        sgLayerRef.current = singaporeLayer
+        if (activeCountryRef.current === "SG") singaporeLayer.addTo(map)
+      })
+      .catch((err) => console.error("[LeafletMap] Singapore boundary load failed:", err))
+
     // SA4 지역 경계 — 한 번만 로드해 두고, 주 선택 시 해당 주의 지역만 렌더한다.
     fetch("/au-sa4.geojson")
       .then((r) => r.json())
@@ -1239,7 +1250,7 @@ export default function LeafletMap({
       jpLayerRef.current = null
       markerLayerRef.current = null
       ieMarkerLayerRef.current = null
-      sgMarkerLayerRef.current = null
+      sgLayerRef.current = null
       sa4LayerRef.current = null
       sa4GeoRef.current = null
       sa4ByCode.current = {}
@@ -1279,10 +1290,7 @@ export default function LeafletMap({
       map.removeLayer(ieMarkerLayerRef.current)
       ieMarkerLayerRef.current = null
     }
-    if (sgMarkerLayerRef.current) {
-      map.removeLayer(sgMarkerLayerRef.current)
-      sgMarkerLayerRef.current = null
-    }
+    if (sgLayerRef.current && map.hasLayer(sgLayerRef.current)) map.removeLayer(sgLayerRef.current)
 
     if (activeCountry === "AU") {
       if (auLayerRef.current) map.addLayer(auLayerRef.current)
@@ -1320,10 +1328,8 @@ export default function LeafletMap({
       if (jpLayerRef.current) map.addLayer(jpLayerRef.current)
       fitToBounds(JP_BOUNDS, true)
     } else if (activeCountry === "SG") {
+      if (sgLayerRef.current) map.addLayer(sgLayerRef.current)
       fitToBounds(SG_BOUNDS, true)
-      const markerLayer = buildSingaporeMarker()
-      markerLayer.addTo(map)
-      sgMarkerLayerRef.current = markerLayer
     } else {
       fitToBounds(WORLD_BOUNDS, true)
     }
@@ -1351,6 +1357,7 @@ export default function LeafletMap({
           || (activeCountry === "NL" && isNL)
           || (activeCountry === "BE" && isBE)
           || (activeCountry === "JP" && isJP)
+          || (activeCountry === "SG" && isSG)
         if (hide) return { opacity: 0, fillOpacity: 0, weight: 0 }
         if (isAU) return { fillColor: "#e0e7ff", color: "#6366f1", weight: 2, fillOpacity: 0.5 }
         if (isUS) return { fillColor: "#dcfce7", color: "#22c55e", weight: 2, fillOpacity: 0.5 }

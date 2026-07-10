@@ -97,7 +97,9 @@ export function getSingaporeCareerLinks(occupation: Pick<SingaporeDemandOccupati
   const query = encodeURIComponent(occupation.nameEn)
   return {
     jobSearch: `https://www.mycareersfuture.gov.sg/search?search=${query}`,
-    skillsFramework: "https://www.skillsfuture.gov.sg/skills-framework/skills-frameworks-faq",
-    courseDirectory: "https://www.myskillsfuture.gov.sg/content/portal/en/portal-search/portal-search.html",
+    skillsFramework: "https://www.skillsfuture.gov.sg/skills-framework",
+    learningPathways: "https://www.skillsfuture.gov.sg/initiatives/individuals",
+    careersFinder: "https://careersfinder.mycareersfuture.gov.sg/",
+    wageSource: "https://stats.mom.gov.sg/Pages/Occupational-Wages-Data-and-Other-Resources.aspx",
   }
 }

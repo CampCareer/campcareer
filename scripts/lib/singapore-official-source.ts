@@ -11,8 +11,8 @@ export const SINGAPORE_SOURCE_URLS = {
   employmentPass: "https://www.mom.gov.sg/passes-and-permits/employment-pass/eligibility",
   sPass: "https://www.mom.gov.sg/passes-and-permits/s-pass/eligibility",
   studentsPass: "https://www.ica.gov.sg/reside/STP/apply?pageid=325&secid=182",
-  skillsFramework: "https://www.skillsfuture.gov.sg/skills-framework/skills-frameworks-faq",
-  skillsDirectory: "https://www.myskillsfuture.gov.sg/content/portal/en/portal-search/portal-search.html",
+  skillsFramework: "https://www.skillsfuture.gov.sg/skills-framework",
+  skillsDirectory: "https://www.skillsfuture.gov.sg/initiatives/individuals",
   graduateOutcomes: "https://www.moe.gov.sg/news/press-releases",
 } as const
 

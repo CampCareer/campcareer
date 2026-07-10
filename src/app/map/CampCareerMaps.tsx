@@ -29,7 +29,7 @@ import type { User } from "@supabase/supabase-js"
 import { getShortageOccupations } from "@/lib/ie-shortage-occupations"
 import { getIscBroadField } from "@/lib/ie-fields"
 import { getJapanCareerLinks } from "@/lib/jp-occupation-card-contract"
-import { getSingaporeCareerLinks, type SingaporeDemandOccupation, type SingaporeWageOccupation } from "@/data/sg-map-data"
+import { getSingaporeCareerLinks, SG_DEMAND_OCCUPATIONS, type SingaporeDemandOccupation, type SingaporeWageOccupation } from "@/data/sg-map-data"
 
 const LeafletMap = dynamic(() => import("./LeafletMap"), {
   ssr: false,
@@ -1485,7 +1485,7 @@ function Panel({
   }
 
   if (selectedSGHighPay) {
-    return <SGHighPayOccupationDetail occupation={selectedSGHighPay} onBack={handleBack} onClose={onClose} />
+    return <SGHighPayOccupationDetail occupation={selectedSGHighPay} pathways={data.sgWorkPassPathways.pathways} onBack={handleBack} onClose={onClose} />
   }
 
   if (selectedOccCode && resolvedCAOcc) {
@@ -4899,11 +4899,13 @@ function SGInfoPanel({
 }
 
 function SGShortageList({ rows, onSelect }: { rows: SingaporeDemandOccupation[]; onSelect: (sourceCode: string) => void }) {
+  const locale = useLocale()
+  const isKo = locale === "ko"
   return (
     <div className="space-y-3">
-      <p className="px-3 text-[11px] leading-relaxed text-slate-500">National MOM 2025 top-vacancy occupations. The score is each occupation&apos;s normalized rank within the published PMET or non-PMET top-10 list, not a local-area vacancy rate.</p>
+      <p className="px-3 text-[11px] leading-relaxed text-slate-500">{isKo ? "MOM 2025 전국 상위 공석 직업입니다. 점수는 PMET 또는 Non-PMET 상위 10개 목록 안에서의 정규화된 순위이며, 지역별 공석률이 아닙니다." : "National MOM 2025 top-vacancy occupations. The score is each occupation's normalized rank within the published PMET or non-PMET top-10 list, not a local-area vacancy rate."}</p>
       <ol>
-        {rows.map((row) => <li key={row.sourceCode}><button type="button" onClick={() => onSelect(row.sourceCode)} className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-amber-50"><span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{row.rank}</span><span className="min-w-0 flex-1"><span className="block truncate text-sm font-medium text-slate-800">{row.nameKo}</span><span className="block truncate text-[10px] text-slate-400">{row.nameEn} · {row.category}</span></span><span className="shrink-0 text-right"><span className="block text-sm font-semibold tabular-nums text-amber-700">S${row.offeredWageLowSgd.toLocaleString()}-{row.offeredWageHighSgd.toLocaleString()}</span><span className="text-[10px] text-slate-400">MOM offer range/mo</span></span></button></li>)}
+        {rows.map((row) => <li key={row.sourceCode}><button type="button" onClick={() => onSelect(row.sourceCode)} className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-amber-50"><span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{row.rank}</span><span className="min-w-0 flex-1"><span className="block truncate text-sm font-medium text-slate-800">{isKo ? row.nameKo : row.nameEn}</span><span className="block truncate text-[10px] text-slate-400">{isKo ? row.nameEn : row.nameKo} · {row.category}</span></span><span className="shrink-0 text-right"><span className="block text-sm font-semibold tabular-nums text-amber-700">S${row.offeredWageLowSgd.toLocaleString()}-{row.offeredWageHighSgd.toLocaleString()}</span><span className="text-[10px] text-slate-400">MOM offer range/mo</span></span></button></li>)}
       </ol>
     </div>
   )
@@ -4933,16 +4935,19 @@ function SGDemandOccupationDetail({
   onBack: () => void
   onClose: () => void
 }) {
+  const locale = useLocale()
+  const isKo = locale === "ko"
   const links = getSingaporeCareerLinks(occupation)
   return (
     <>
       <div className="flex items-center gap-2 px-5 pt-4"><button type="button" onClick={onBack} className="rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700" aria-label="Back"><ChevronLeft className="h-4 w-4" /></button><button type="button" onClick={onClose} className="ml-auto rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700" aria-label="Close"><X className="h-4 w-4" /></button></div>
       <div className="min-h-0 flex-1 overflow-y-auto px-5 py-3">
-        <p className="text-[11px] font-medium text-amber-700">MOM national demand card · {occupation.category} rank #{occupation.rank}</p>
-        <h3 className="mt-1 text-lg font-semibold text-slate-900">{occupation.nameKo}</h3>
-        <p className="mt-1 text-xs text-slate-500">{occupation.nameEn} · {areaName} living comparison</p>
+        <p className="text-[11px] font-medium text-amber-700">{isKo ? "MOM 전국 수요 카드" : "MOM national demand card"} · {occupation.category} rank #{occupation.rank}</p>
+        <h3 className="mt-1 text-lg font-semibold text-slate-900">{isKo ? occupation.nameKo : occupation.nameEn}</h3>
+        <p className="mt-1 text-xs text-slate-500">{isKo ? occupation.nameEn : occupation.nameKo} · {areaName} {isKo ? "생활비 비교" : "living comparison"}</p>
         <div className="mt-4 grid grid-cols-2 gap-3"><div className="rounded-lg bg-amber-50 px-3 py-2.5"><p className="text-[11px] text-amber-700">Employer offer range</p><p className="text-base font-bold text-amber-900">S${occupation.offeredWageLowSgd.toLocaleString()}-{occupation.offeredWageHighSgd.toLocaleString()}</p><p className="text-[10px] text-amber-700">monthly, MOM report</p></div><div className="rounded-lg bg-slate-50 px-3 py-2.5"><p className="text-[11px] text-slate-500">Typical experience</p><p className="mt-1 text-sm font-bold text-slate-900">{occupation.commonExperience}</p><p className="text-[10px] text-slate-400">{occupation.commonQualification}</p></div></div>
-        <section className="mt-5 rounded-lg border border-slate-200 p-3"><p className="text-sm font-medium text-slate-800">Skills identified by MOM</p><div className="mt-2 flex flex-wrap gap-1.5">{occupation.skills.map((skill) => <span key={skill} className="rounded-md bg-blue-50 px-2 py-1 text-xs text-blue-800">{skill}</span>)}</div><div className="mt-3 flex flex-wrap gap-3"><a href={links.skillsFramework} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-medium text-blue-700 hover:underline"><ExternalLink className="h-3 w-3" />Skills framework</a><a href={links.courseDirectory} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-medium text-blue-700 hover:underline"><ExternalLink className="h-3 w-3" />Official course directory</a><a href={links.jobSearch} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-medium text-blue-700 hover:underline"><ExternalLink className="h-3 w-3" />MyCareersFuture search</a></div></section>
+        <section className="mt-5 rounded-lg border border-slate-200 p-3"><p className="text-sm font-medium text-slate-800">{isKo ? "MOM이 제시한 핵심 스킬" : "MOM-identified core skills"}</p><div className="mt-2 flex flex-wrap gap-1.5">{occupation.skills.map((skill) => <span key={skill} className="rounded-md bg-blue-50 px-2 py-1 text-xs text-blue-800">{skill}</span>)}</div><a href={links.skillsFramework} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-blue-700 hover:underline"><ExternalLink className="h-3 w-3" />{isKo ? "공식 Skills Framework 열기" : "Open official Skills Framework"}</a></section>
+        <SGCareerActions links={links} locale={locale} />
         <section className="mt-4 rounded-lg border border-rose-200 bg-rose-50 p-3"><p className="text-sm font-medium text-rose-900">Work-pass caution</p><p className="mt-1 text-xs leading-relaxed text-rose-800">A national demand signal does not mean a foreign applicant can obtain a pass. An employer must apply, and EP/S Pass criteria and COMPASS are assessed for the actual role and applicant.</p><div className="mt-2 flex flex-wrap gap-2">{pathways.filter((pathway) => pathway.code === "ep" || pathway.code === "spass" || pathway.code === "compass-sol").map((pathway) => <a key={pathway.code} href={pathway.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-xs font-medium text-rose-800 hover:underline">{pathway.name}</a>)}</div></section>
       </div>
       <p className="border-t border-slate-100 px-5 py-3 text-[10px] leading-relaxed text-slate-400">Source: MOM Job Vacancies 2025. Salary is the published employer offer range for vacancies in this occupation, not an individual offer or guaranteed work-pass outcome.</p>
@@ -4950,11 +4955,26 @@ function SGDemandOccupationDetail({
   )
 }
 
-function SGHighPayOccupationDetail({ occupation, onBack, onClose }: { occupation: SingaporeWageOccupation; onBack: () => void; onClose: () => void }) {
+function SGCareerActions({ links, locale }: { links: ReturnType<typeof getSingaporeCareerLinks>; locale: string }) {
+  const isKo = locale === "ko"
+  return (
+    <section className="mt-4 grid gap-3 sm:grid-cols-2">
+      <a href={links.learningPathways} target="_blank" rel="noopener noreferrer" className="rounded-lg border border-blue-200 bg-blue-50 p-3 transition-colors hover:bg-blue-100"><p className="text-sm font-medium text-blue-950">{isKo ? "관련 코스·학위 탐색" : "Courses and study pathways"}</p><p className="mt-1 text-xs leading-relaxed text-blue-800">{isKo ? "SkillsFuture의 공식 학습·훈련 경로를 확인합니다." : "Browse SkillsFuture's official learning and training pathways."}</p><span className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-blue-800"><GraduationCap className="h-3 w-3" />{isKo ? "코스 탐색" : "Explore courses"}</span></a>
+      <a href={links.jobSearch} target="_blank" rel="noopener noreferrer" className="rounded-lg border border-emerald-200 bg-emerald-50 p-3 transition-colors hover:bg-emerald-100"><p className="text-sm font-medium text-emerald-950">{isKo ? "관련 채용 공고" : "Related job listings"}</p><p className="mt-1 text-xs leading-relaxed text-emerald-800">{isKo ? "MyCareersFuture에서 현재 관련 공고를 검색합니다." : "Search current matching listings on MyCareersFuture."}</p><span className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-emerald-800"><ExternalLink className="h-3 w-3" />{isKo ? "채용 공고 보기" : "View job listings"}</span></a>
+    </section>
+  )
+}
+
+function SGHighPayOccupationDetail({ occupation, pathways, onBack, onClose }: { occupation: SingaporeWageOccupation; pathways: import("@/data/sg-map-data").SingaporeWorkPassPathway[]; onBack: () => void; onClose: () => void }) {
+  const locale = useLocale()
+  const isKo = locale === "ko"
+  const links = getSingaporeCareerLinks(occupation)
+  const demandProfile = SG_DEMAND_OCCUPATIONS.find((row) => row.ssocCode === occupation.ssocCode) ?? null
+  const annualGrossWage = occupation.medianGrossWageSgd * 12
   return (
     <>
       <div className="flex items-center gap-2 px-5 pt-4"><button type="button" onClick={onBack} className="rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700" aria-label="Back"><ChevronLeft className="h-4 w-4" /></button><button type="button" onClick={onClose} className="ml-auto rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700" aria-label="Close"><X className="h-4 w-4" /></button></div>
-      <div className="min-h-0 flex-1 overflow-y-auto px-5 py-3"><p className="text-[11px] font-medium text-rose-700">MOM high-pay occupation card</p><h3 className="mt-1 text-lg font-semibold text-slate-900">{occupation.nameEn}</h3><p className="mt-1 text-xs text-slate-500">SSOC 2024 {occupation.ssocCode} · full-time resident employees</p><div className="mt-4 grid grid-cols-2 gap-3"><div className="rounded-lg bg-slate-50 px-3 py-2.5"><p className="text-[11px] text-slate-500">Median gross wage</p><p className="text-lg font-bold text-slate-900">S${occupation.medianGrossWageSgd.toLocaleString()}/mo</p></div><div className="rounded-lg bg-slate-50 px-3 py-2.5"><p className="text-[11px] text-slate-500">Median basic wage</p><p className="text-lg font-bold text-slate-900">S${occupation.medianBasicWageSgd.toLocaleString()}/mo</p></div></div><section className="mt-5 rounded-lg border border-slate-200 p-3"><p className="text-sm font-medium text-slate-800">Skills and course research</p><p className="mt-1 text-xs leading-relaxed text-slate-500">MOM&apos;s wage table does not establish occupation-specific skills or foreign-worker eligibility. Use the official SkillsFuture sources before treating this as a study recommendation.</p><div className="mt-3 flex flex-wrap gap-3"><a href="https://www.skillsfuture.gov.sg/skills-framework/skills-frameworks-faq" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-medium text-rose-700 hover:underline"><ExternalLink className="h-3 w-3" />Skills framework</a><a href="https://www.myskillsfuture.gov.sg/content/portal/en/portal-search/portal-search.html" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-medium text-rose-700 hover:underline"><ExternalLink className="h-3 w-3" />Official course directory</a></div></section></div>
+      <div className="min-h-0 flex-1 overflow-y-auto px-5 py-3"><p className="text-[11px] font-medium text-rose-700">{isKo ? "MOM 고소득 직업 카드" : "MOM high-pay occupation card"}</p><h3 className="mt-1 text-lg font-semibold text-slate-900">{occupation.nameEn}</h3><p className="mt-1 text-xs text-slate-500">SSOC 2024 {occupation.ssocCode} · {isKo ? "정규직 현지 거주자" : "full-time resident employees"}</p><div className="mt-4 grid grid-cols-2 gap-3"><div className="rounded-lg bg-slate-50 px-3 py-2.5"><p className="text-[11px] text-slate-500">Median gross wage</p><p className="text-lg font-bold text-slate-900">S${occupation.medianGrossWageSgd.toLocaleString()}/mo</p><p className="text-[10px] text-slate-400">S${annualGrossWage.toLocaleString()}/yr · 12 months</p></div><div className="rounded-lg bg-slate-50 px-3 py-2.5"><p className="text-[11px] text-slate-500">Median basic wage</p><p className="text-lg font-bold text-slate-900">S${occupation.medianBasicWageSgd.toLocaleString()}/mo</p><p className="text-[10px] text-slate-400">{isKo ? "공개 직업군 내 임금 백분위" : "wage percentile in published occupations"}: {occupation.salaryScore}/100</p></div></div>{demandProfile ? <section className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-3"><p className="text-sm font-medium text-amber-950">{isKo ? "MOM 수요 데이터도 확인됨" : "Also present in MOM demand data"}</p><p className="mt-1 text-xs text-amber-800">{isKo ? "공고 임금 범위" : "Published offer range"}: S${demandProfile.offeredWageLowSgd.toLocaleString()}-{demandProfile.offeredWageHighSgd.toLocaleString()}/mo · {demandProfile.commonQualification} · {demandProfile.commonExperience}</p><div className="mt-2 flex flex-wrap gap-1.5">{demandProfile.skills.map((skill) => <span key={skill} className="rounded-md bg-white px-2 py-1 text-xs text-amber-900">{skill}</span>)}</div></section> : <section className="mt-4 rounded-lg border border-slate-200 p-3"><p className="text-sm font-medium text-slate-800">{isKo ? "직무 스킬 데이터 상태" : "Occupation-skill data status"}</p><p className="mt-1 text-xs leading-relaxed text-slate-500">{isKo ? "이 직업은 MOM 임금 표에는 있지만, 이번 MOM 상위 공석 표에는 직접 매핑되지 않았습니다. 임금 수치만으로 요구 스킬, 학위, 외국인 채용 가능성을 추정하지 않습니다." : "This occupation appears in MOM's wage table but is not directly mapped to the published top-vacancy list. CampCareer does not infer required skills, degrees, or foreign-worker access from wage data alone."}</p><a href={links.skillsFramework} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-rose-700 hover:underline"><ExternalLink className="h-3 w-3" />{isKo ? "공식 Skills Framework 확인" : "Check official Skills Framework"}</a></section>}<SGCareerActions links={links} locale={locale} /><section className="mt-4 rounded-lg border border-rose-200 bg-rose-50 p-3"><p className="text-sm font-medium text-rose-900">{isKo ? "외국인 취업 경로 주의" : "Foreign work-pass caution"}</p><p className="mt-1 text-xs leading-relaxed text-rose-800">{isKo ? "이 임금 기준은 취업비자 승인 기준이나 외국인 제안 연봉이 아닙니다. 고용주 신청과 실제 직무·지원자 기준의 EP/S Pass·COMPASS 심사가 별도로 필요합니다." : "This wage benchmark is not a work-pass threshold or a foreign-worker offer. An employer application and role- and applicant-specific EP/S Pass and COMPASS assessment remain necessary."}</p><div className="mt-2 flex flex-wrap gap-2">{pathways.filter((pathway) => pathway.code === "ep" || pathway.code === "spass" || pathway.code === "compass-sol").map((pathway) => <a key={pathway.code} href={pathway.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-xs font-medium text-rose-800 hover:underline">{pathway.name}</a>)}</div></section><a href={links.wageSource} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-slate-500 hover:text-slate-700 hover:underline"><ExternalLink className="h-3 w-3" />{isKo ? "MOM 임금 원본 데이터" : "MOM wage source"}</a></div>
       <p className="border-t border-slate-100 px-5 py-3 text-[10px] leading-relaxed text-slate-400">Source: MOM Occupational Wages 2025, June 2025. This resident wage benchmark is not an employer offer, a foreign-worker salary, or a work-pass threshold.</p>
     </>
   )
@@ -5121,7 +5141,9 @@ function JPWageOccupationDetail({
   onClose: () => void
 }) {
   const locale = useLocale()
-  const title = locale === "ko" ? "고소득 직업 카드" : "High-pay occupation card"
+  const isKo = locale === "ko"
+  const title = isKo ? "고소득 직업 카드" : "High-pay occupation card"
+  const fallbackLinks = getJapanCareerLinks(wage.localName)
   return (
     <>
       <div className="flex items-center gap-2 px-5 pt-4">
@@ -5137,7 +5159,10 @@ function JPWageOccupationDetail({
           <div className="rounded-lg bg-slate-50 px-3 py-2.5"><p className="text-[11px] text-slate-500">Annual estimate</p><p className="text-lg font-bold text-slate-900">JPY {wage.annualizedBaseSalaryYen.toLocaleString()}</p><p className="text-[10px] text-slate-400">160 hr × 12</p></div>
         </div>
         {profiles.length === 0 ? (
-          <p className="mt-5 rounded-lg border border-slate-200 px-3 py-3 text-sm text-slate-500">No Job Tag profile is mapped to this wage classification yet.</p>
+          <div className="mt-5 space-y-4">
+            <section className="rounded-lg border border-slate-200 p-3"><p className="text-sm font-medium text-slate-800">{isKo ? "직무 정보 상태" : "Occupation information status"}</p><p className="mt-1 text-xs leading-relaxed text-slate-500">{isKo ? "이 임금 분류에는 아직 Job Tag 세부 직업 프로필이 연결되지 않았습니다. 연봉만으로 필요한 스킬, 학위 또는 비자 가능성을 추정하지 않습니다." : "No Job Tag role profile is mapped to this wage classification yet. CampCareer does not infer required skills, degree paths, or visa access from the wage figure alone."}</p></section>
+            <JPCareerActions links={fallbackLinks} locale={locale} />
+          </div>
         ) : (
           <div className="mt-5 space-y-4">
             {profiles.slice(0, 6).map((profile) => {
@@ -5145,6 +5170,7 @@ function JPWageOccupationDetail({
               return (
                 <section key={profile.recordNumber} className="rounded-lg border border-slate-200 p-3">
                   <h4 className="font-medium text-slate-900">{profile.localName}</h4>
+                  {profile.entryPathJa && <p className="mt-1 text-xs leading-relaxed text-slate-500">{isKo ? "일본 직업 진입 경로" : "Japanese entry path"}: {profile.entryPathJa}</p>}
                   {profile.skills.length > 0 && <div className="mt-3">
                     <p className="text-[11px] font-medium text-slate-500">Top skills</p>
                     <div className="mt-1.5 flex flex-wrap gap-1.5">{profile.skills.slice(0, 4).map((skill) => <span key={skill.nameJa} className="rounded-md bg-slate-100 px-2 py-1 text-xs text-slate-700">{skill.nameJa}</span>)}</div>
@@ -5154,19 +5180,27 @@ function JPWageOccupationDetail({
                     <div className="mt-1.5 flex flex-wrap gap-1.5">{profile.knowledge.slice(0, 3).map((knowledge) => <span key={knowledge.nameJa} className="rounded-md bg-blue-50 px-2 py-1 text-xs text-blue-800">{knowledge.nameJa}</span>)}</div>
                   </div>}
                   {profile.qualificationsJa.length > 0 && <div className="mt-3"><p className="text-[11px] font-medium text-slate-500">Related qualifications</p><p className="mt-1 text-xs leading-relaxed text-slate-700">{profile.qualificationsJa.slice(0, 4).join(" · ")}</p></div>}
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    <a href={links.jobTagSearch} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-medium text-rose-700 hover:underline"><ExternalLink className="h-3 w-3" />Job Tag</a>
-                    <a href={links.indeedJapan} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-medium text-rose-700 hover:underline"><ExternalLink className="h-3 w-3" />Current jobs</a>
-                    <a href={links.jassoStudySearch} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-medium text-rose-700 hover:underline"><ExternalLink className="h-3 w-3" />Study options</a>
-                  </div>
+                  <JPCareerActions links={links} locale={locale} />
                 </section>
               )
             })}
           </div>
         )}
+        <a href={wage.sourceUrl} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-slate-500 hover:text-slate-700 hover:underline"><ExternalLink className="h-3 w-3" />{isKo ? "MHLW 임금 원본 데이터" : "MHLW wage source"}</a>
       </div>
-      <p className="border-t border-slate-100 px-5 py-3 text-[10px] leading-relaxed text-slate-400">Source: JILPT Occupational Information Database, Job Tag description v7.01 and numeric v7.00. Skills and study focus are official Job Tag measures; study focus is not a school-specific recommendation.</p>
+      <p className="border-t border-slate-100 px-5 py-3 text-[10px] leading-relaxed text-slate-400">Source: MHLW Wage Structure Basic Statistical Survey for the wage baseline; Job Tag v7.01/v7.00 for linked role skills and qualifications. The annual figure is a transparent calculation, not a reported annual salary.</p>
     </>
+  )
+}
+
+function JPCareerActions({ links, locale }: { links: ReturnType<typeof getJapanCareerLinks>; locale: string }) {
+  const isKo = locale === "ko"
+  return (
+    <div className="mt-4 grid gap-2 sm:grid-cols-3">
+      <a href={links.jobTagSearch} target="_blank" rel="noopener noreferrer" className="rounded-md border border-slate-200 bg-slate-50 p-2.5 hover:bg-slate-100"><p className="text-xs font-medium text-slate-800">{isKo ? "직무·스킬 정보" : "Role and skills"}</p><span className="mt-1 inline-flex items-center gap-1 text-[11px] text-slate-600"><ExternalLink className="h-3 w-3" />Job Tag</span></a>
+      <a href={links.jassoStudySearch} target="_blank" rel="noopener noreferrer" className="rounded-md border border-blue-200 bg-blue-50 p-2.5 hover:bg-blue-100"><p className="text-xs font-medium text-blue-950">{isKo ? "관련 코스·학위" : "Courses and degrees"}</p><span className="mt-1 inline-flex items-center gap-1 text-[11px] text-blue-700"><GraduationCap className="h-3 w-3" />JASSO</span></a>
+      <a href={links.indeedJapan} target="_blank" rel="noopener noreferrer" className="rounded-md border border-emerald-200 bg-emerald-50 p-2.5 hover:bg-emerald-100"><p className="text-xs font-medium text-emerald-950">{isKo ? "관련 채용 공고" : "Current job listings"}</p><span className="mt-1 inline-flex items-center gap-1 text-[11px] text-emerald-700"><ExternalLink className="h-3 w-3" />{isKo ? "공고 검색" : "Search jobs"}</span></a>
+    </div>
   )
 }
 

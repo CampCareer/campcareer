@@ -59,9 +59,9 @@
   {
     "category": "skills",
     "sourceName": "SkillsFuture Skills Framework",
-    "sourceUrl": "https://www.skillsfuture.gov.sg/skills-framework/skills-frameworks-faq",
+    "sourceUrl": "https://www.skillsfuture.gov.sg/skills-framework",
     "datasetUrls": [
-      "https://www.myskillsfuture.gov.sg/content/portal/en/portal-search/portal-search.html"
+      "https://www.skillsfuture.gov.sg/initiatives/individuals"
     ],
     "contentHash": null,
     "retrievedAt": "2026-07-10T13:22:43.284Z",
