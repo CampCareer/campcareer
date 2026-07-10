@@ -9,8 +9,9 @@ import nlOccupationsRaw from "@/data/nl-occupations.json"
 import { getBelgiumOccupations, getIrelandOccupations } from "@/lib/country-occupation-data"
 import { getCountrySource, type SourceRecord } from "@/data/source-registry"
 import { SG_DEMAND_OCCUPATIONS } from "@/data/sg-map-data"
+import { KR_OCCUPATIONS, isKoreaOccupationIndexable } from "@/data/kr-map-data"
 
-export const MAP_COUNTRIES = ["au", "ca", "us", "ie", "uk", "de", "nl", "be", "sg"] as const
+export const MAP_COUNTRIES = ["au", "ca", "us", "ie", "uk", "de", "nl", "be", "sg", "kr"] as const
 
 export type MapCountry = (typeof MAP_COUNTRIES)[number]
 
@@ -19,7 +20,7 @@ type RawMapOccupation = {
   name: string
   localName?: string | null
   medianSalary?: number | null
-  currency: "AUD" | "CAD" | "USD" | "GBP" | "EUR" | "SGD"
+  currency: "AUD" | "CAD" | "USD" | "GBP" | "EUR" | "SGD" | "KRW"
   shortageRating?: number | null
   shortageScore?: number | null
   employment?: number | null
@@ -47,6 +48,7 @@ const COUNTRY_NAME: Record<MapCountry, string> = {
   nl: "Netherlands",
   be: "Belgium",
   sg: "Singapore",
+  kr: "South Korea",
 }
 
 const SOURCE_COUNTRY: Record<MapCountry, SourceRecord["country"]> = {
@@ -59,6 +61,7 @@ const SOURCE_COUNTRY: Record<MapCountry, SourceRecord["country"]> = {
   nl: "NL",
   be: "BE",
   sg: "SG",
+  kr: "KR",
 }
 
 const CURRENCY_SYMBOL: Record<MapOccupation["currency"], string> = {
@@ -68,6 +71,7 @@ const CURRENCY_SYMBOL: Record<MapOccupation["currency"], string> = {
   GBP: "£",
   EUR: "€",
   SGD: "S$",
+  KRW: "KRW ",
 }
 
 export function isMapCountry(value: string): value is MapCountry {
@@ -265,6 +269,22 @@ function loadBelgium(): RawMapOccupation[] {
   }))
 }
 
+function loadKorea(): RawMapOccupation[] {
+  return KR_OCCUPATIONS
+    .filter(isKoreaOccupationIndexable)
+    .map((row) => ({
+      code: row.kscoCode,
+      name: row.nameEn ?? row.nameKo,
+      localName: row.nameKo,
+      medianSalary: row.annualWageKrw,
+      currency: "KRW" as const,
+      shortageScore: row.demandScore,
+      field: row.relatedMajors.length > 0 ? row.relatedMajors.join(", ") : "Official connection unavailable",
+      codeLabel: "KSCO",
+      salaryLabel: row.wageKind === "official-regional-wage" ? "Official regional annual wage" : "Estimated annual wage",
+    }))
+}
+
 function loadSingapore(): RawMapOccupation[] {
   return SG_DEMAND_OCCUPATIONS.map((row) => ({
     code: row.sourceCode,
@@ -290,7 +310,8 @@ export const getMapOccupations = cache(async (country: MapCountry): Promise<MapO
     country === "de" ? loadGermany() :
     country === "nl" ? loadNetherlands() :
     country === "be" ? loadBelgium() :
-    loadSingapore()
+    country === "sg" ? loadSingapore() :
+    loadKorea()
 
   return withCanonicalSlugs(country, raw)
 })
@@ -302,7 +323,7 @@ export async function resolveMapOccupation(country: MapCountry, slugOrCode: stri
 }
 
 export async function getMapOccupationStaticParams() {
-  const countries: MapCountry[] = ["us", "ie", "uk", "de", "nl", "be", "sg"]
+  const countries: MapCountry[] = ["us", "ie", "uk", "de", "nl", "be", "sg", "kr"]
   const params: Array<{ country: MapCountry; slug: string }> = []
 
   for (const country of countries) {

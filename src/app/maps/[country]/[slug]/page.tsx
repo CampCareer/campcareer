@@ -20,7 +20,7 @@ type Params = {
 }
 
 export async function generateStaticParams() {
-  const countries = ["us", "ie", "uk", "de", "nl", "be", "sg"] as const
+  const countries = ["us", "ie", "uk", "de", "nl", "be", "sg", "kr"] as const
   const params: Array<{ country: string; slug: string }> = []
   for (const country of countries) {
     const occupations = await getIndexableMapOccupations(country)

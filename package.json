@@ -16,7 +16,9 @@
     "check:jp-jobtag": "npx tsx scripts/check-japan-jobtag.ts",
     "check:jp-cards": "npx tsx scripts/check-japan-occupation-cards.ts",
     "import:sg": "npx tsx scripts/import-singapore-official-data.ts",
-    "check:sg": "npx tsx scripts/check-singapore-data.ts"
+    "check:sg": "npx tsx scripts/check-singapore-data.ts",
+    "import:kr": "npx tsx scripts/import-korea-official-data.ts",
+    "check:kr": "npx tsx scripts/check-korea-data.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",

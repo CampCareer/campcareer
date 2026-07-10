@@ -8,7 +8,7 @@ export const CORE_DATA_CATEGORIES = [
 ] as const
 
 export type CoreDataCategory = (typeof CORE_DATA_CATEGORIES)[number]
-export type RegistryCountryCode = "AU" | "US" | "CA" | "UK" | "IE" | "DE" | "NL" | "BE" | "SG"
+export type RegistryCountryCode = "AU" | "US" | "CA" | "UK" | "IE" | "DE" | "NL" | "BE" | "SG" | "KR"
 export type SourceConfidence = "official" | "market-estimate" | "internal-estimate"
 export type SourceMethod = "official-api" | "official-download" | "official-web" | "market-estimate"
 export type ReviewStatus = "approved" | "review-required"
@@ -103,6 +103,14 @@ const COUNTRY_SOURCES: Record<RegistryCountryCode, CountrySourceSeed> = {
     rent: { sourceName: "Urban Redevelopment Authority rental statistics", sourceUrl: "https://www.ura.gov.sg/news/media/pr26-31/", method: "official-download", refreshCadence: "quarterly" },
     "visa-pathway": { sourceName: "Immigration and Checkpoints Authority Student's Pass", sourceUrl: "https://www.ica.gov.sg/reside/STP/apply?pageid=325&secid=182", method: "official-web", refreshCadence: "monthly" },
     shortage: { sourceName: "MOM Job Vacancies 2025", sourceUrl: "https://stats.mom.gov.sg/Pages/Job-Vacancies-2025.aspx", method: "official-download", refreshCadence: "annual" },
+  },
+  KR: {
+    tuition: { sourceName: "대학알리미", sourceUrl: "https://m.academyinfo.go.kr/intro/intro0300/intro.do", method: "official-download", refreshCadence: "annual" },
+    "graduate-outcomes": { sourceName: "대학알리미 졸업 후 상황 공시", sourceUrl: "https://www.academyinfo.go.kr/", method: "official-download", refreshCadence: "annual" },
+    occupation: { sourceName: "고용노동부 사업체노동력조사", sourceUrl: "https://laborstat.moel.go.kr/", method: "official-download", refreshCadence: "quarterly" },
+    rent: { sourceName: "국토교통부 전월세 실거래가", sourceUrl: "https://rt.molit.go.kr/", method: "official-api", refreshCadence: "monthly" },
+    "visa-pathway": { sourceName: "Korea Visa Portal", sourceUrl: "https://www.visa.go.kr/", method: "official-web", refreshCadence: "monthly" },
+    shortage: { sourceName: "고용노동부 사업체노동력조사", sourceUrl: "https://laborstat.moel.go.kr/", method: "official-download", refreshCadence: "quarterly" },
   },
 }
 

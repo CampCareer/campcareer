@@ -17,6 +17,7 @@ import { isPilotOccupationIndexable } from "@/lib/pilot-launch-gate"
 import { pilotOccupationSlug } from "@/components/expansion/pilot-occupation-page"
 import { JP_CITY_MAP_PAGES, JP_PREFECTURE_MAP_PAGES } from "@/lib/jp-map-seo"
 import { SG_AREA_MAP_PAGES } from "@/lib/sg-map-seo"
+import { KR_REGIONS, KR_UNIVERSITIES, isKoreaRegionIndexable } from "@/data/kr-map-data"
 
 const BASE = "https://www.campcareer.com"
 
@@ -54,6 +55,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/sg`, lastModified: lastModStatic, priority: 0.85, changeFrequency: "weekly" },
     { url: `${BASE}/sg/jobs`, lastModified: lastModStatic, priority: 0.85, changeFrequency: "weekly" },
     { url: `${BASE}/countries/singapore`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
+    { url: `${BASE}/kr`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
+    { url: `${BASE}/kr/jobs`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
   ]
 
   const blogPages: MetadataRoute.Sitemap = getAllPosts().map((post) => ({
@@ -186,10 +189,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.65,
     changeFrequency: "monthly" as const,
   }))
+  const krRegionPages: MetadataRoute.Sitemap = KR_REGIONS.filter(isKoreaRegionIndexable).map((region) => ({
+    url: `${BASE}/maps/kr/regions/${region.nameEn.toLowerCase()}`,
+    lastModified: new Date(region.lastChecked),
+    priority: 0.65,
+    changeFrequency: "monthly" as const,
+  }))
+  const krUniversityPages: MetadataRoute.Sitemap = KR_UNIVERSITIES
+    .filter((university) => university.reviewStatus === "approved" && university.coordinateStatus === "approved" && university.averageTuitionKrw != null)
+    .map((university) => ({
+      url: `${BASE}/map/kr/university/${university.slug}`,
+      lastModified: lastMod,
+      priority: 0.6,
+      changeFrequency: "weekly" as const,
+    }))
 
   const total = staticPages.length + blogPages.length + countryDetailPages.length + mapOccupationPages.length + pilotOccupationPages.length +
-    ieLangSchoolPages.length + mapPages.length + jpMapPages.length + sgMapPages.length + usUnivPages.length + auUnivPages.length + caUnivPages.length + ukUnivPages.length + deUnivPages.length + nlUnivPages.length
-  console.log(`[sitemap] counts — static: ${staticPages.length}, blog: ${blogPages.length}, country details: ${countryDetailPages.length}, map occupations: ${mapOccupationPages.length}, pilot occupations: ${pilotOccupationPages.length}, IE schools: ${ieLangSchoolPages.length}, map: ${mapPages.length}, JP regional maps: ${jpMapPages.length}, SG regional maps: ${sgMapPages.length}, US universities: ${usUnivPages.length}, AU universities: ${auUnivPages.length}, CA universities: ${caUnivPages.length}, UK universities: ${ukUnivPages.length}, DE universities: ${deUnivPages.length}, NL universities: ${nlUnivPages.length}, TOTAL: ${total}`)
+    ieLangSchoolPages.length + mapPages.length + jpMapPages.length + sgMapPages.length + krRegionPages.length + krUniversityPages.length + usUnivPages.length + auUnivPages.length + caUnivPages.length + ukUnivPages.length + deUnivPages.length + nlUnivPages.length
+  console.log(`[sitemap] counts — static: ${staticPages.length}, blog: ${blogPages.length}, country details: ${countryDetailPages.length}, map occupations: ${mapOccupationPages.length}, pilot occupations: ${pilotOccupationPages.length}, IE schools: ${ieLangSchoolPages.length}, map: ${mapPages.length}, JP regional maps: ${jpMapPages.length}, SG regional maps: ${sgMapPages.length}, KR regional maps: ${krRegionPages.length}, KR universities: ${krUniversityPages.length}, US universities: ${usUnivPages.length}, AU universities: ${auUnivPages.length}, CA universities: ${caUnivPages.length}, UK universities: ${ukUnivPages.length}, DE universities: ${deUnivPages.length}, NL universities: ${nlUnivPages.length}, TOTAL: ${total}`)
 
-  return [...staticPages, ...blogPages, ...countryDetailPages, ...mapOccupationPages, ...pilotOccupationPages, ...ieLangSchoolPages, ...mapPages, ...jpMapPages, ...sgMapPages, ...usUnivPages, ...auUnivPages, ...caUnivPages, ...ukUnivPages, ...deUnivPages, ...nlUnivPages]
+  return [...staticPages, ...blogPages, ...countryDetailPages, ...mapOccupationPages, ...pilotOccupationPages, ...ieLangSchoolPages, ...mapPages, ...jpMapPages, ...sgMapPages, ...krRegionPages, ...krUniversityPages, ...usUnivPages, ...auUnivPages, ...caUnivPages, ...ukUnivPages, ...deUnivPages, ...nlUnivPages]
 }

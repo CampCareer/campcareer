@@ -43,4 +43,5 @@ if (issues.length > 0) {
   process.exit(1)
 }
 
-console.log(`[data-quality] ${SOURCE_REGISTRY.length} source records cover ${CORE_DATA_CATEGORIES.length} required categories across 8 countries.`)
+const countryCount = new Set(SOURCE_REGISTRY.map((source) => source.country)).size
+console.log(`[data-quality] ${SOURCE_REGISTRY.length} source records cover ${CORE_DATA_CATEGORIES.length} required categories across ${countryCount} countries.`)

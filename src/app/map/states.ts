@@ -319,3 +319,31 @@ export const BE_PROVINCE_NAMES: Record<string, string> = {
   WLB: "Luxembourg",
   WNA: "Namur",
 }
+
+// ── South Korea (KR) si/do ──────────────────────────────────────────────────
+
+export const KR_SIDO_CODES = [
+  "11", "26", "27", "28", "29", "30", "31", "36", "41", "42", "43", "44", "45", "46", "47", "48", "50",
+] as const
+
+export type KRSidoCode = typeof KR_SIDO_CODES[number]
+
+export const KR_SIDO_NAMES: Record<KRSidoCode, { ko: string; en: string }> = {
+  "11": { ko: "서울특별시", en: "Seoul" },
+  "26": { ko: "부산광역시", en: "Busan" },
+  "27": { ko: "대구광역시", en: "Daegu" },
+  "28": { ko: "인천광역시", en: "Incheon" },
+  "29": { ko: "광주광역시", en: "Gwangju" },
+  "30": { ko: "대전광역시", en: "Daejeon" },
+  "31": { ko: "울산광역시", en: "Ulsan" },
+  "36": { ko: "세종특별자치시", en: "Sejong" },
+  "41": { ko: "경기도", en: "Gyeonggi" },
+  "42": { ko: "강원특별자치도", en: "Gangwon" },
+  "43": { ko: "충청북도", en: "Chungbuk" },
+  "44": { ko: "충청남도", en: "Chungnam" },
+  "45": { ko: "전북특별자치도", en: "Jeonbuk" },
+  "46": { ko: "전라남도", en: "Jeonnam" },
+  "47": { ko: "경상북도", en: "Gyeongbuk" },
+  "48": { ko: "경상남도", en: "Gyeongnam" },
+  "50": { ko: "제주특별자치도", en: "Jeju" },
+}
