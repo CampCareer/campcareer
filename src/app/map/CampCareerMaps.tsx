@@ -1346,6 +1346,10 @@ function Panel({
     const wage = data.jpHighPayOccupations.find((row) => row.occupationCode === occupationCode) ?? null
     return wage ? { wage, profiles: data.jpJobTagProfilesByWageCode[occupationCode] ?? [] } : null
   }, [activeCountry, selectedOccCode, data.jpHighPayOccupations, data.jpJobTagProfilesByWageCode])
+  const selectedJPShortageGroup = useMemo(() => {
+    if (activeCountry !== "JP" || !selectedOccCode?.startsWith("jp-shortage-")) return null
+    return (data.jpShortageByPrefecture[selected] ?? []).find((row) => row.shortageGroupCode === selectedOccCode.slice("jp-shortage-".length)) ?? null
+  }, [activeCountry, selectedOccCode, selected, data.jpShortageByPrefecture])
 
   const handleSelectOcc = (code: string) => {
     const name = data.auOccupations[code]?.occupation_en ?? code
@@ -1386,6 +1390,11 @@ function Panel({
     track("click_occupation", { type: "jp", code, name: wage?.localName ?? code, prefecture: selected })
     setSelectedOccCode(`jp-wage-${code}`)
   }
+  const handleSelectJPShortageGroup = (code: string) => {
+    const group = data.jpShortageByPrefecture[selected]?.find((row) => row.shortageGroupCode === code)
+    track("click_occupation", { type: "jp-shortage", code, name: group?.localName ?? code, prefecture: selected })
+    setSelectedOccCode(`jp-shortage-${code}`)
+  }
   const handleBack = () => setSelectedOccCode(null)
   const handleBackNero = () => setSelectedNeroA4(null)
 
@@ -1412,6 +1421,18 @@ function Panel({
         wage={selectedJPWage.wage}
         profiles={selectedJPWage.profiles}
         prefectureName={stateName}
+        onBack={handleBack}
+        onClose={onClose}
+      />
+    )
+  }
+
+  if (selectedJPShortageGroup) {
+    return (
+      <JPShortageOccupationDetail
+        group={selectedJPShortageGroup}
+        prefectureName={stateName}
+        prefectureJa={JP_PREFECTURE_NAMES[selected as keyof typeof JP_PREFECTURE_NAMES]?.ja ?? null}
         onBack={handleBack}
         onClose={onClose}
       />
@@ -1671,7 +1692,7 @@ function Panel({
             <p className="py-8 text-center text-sm text-slate-400">{t.map.selectStateFirst}</p>
           )
         )}
-        {tab === "shortage" && isJP && <JPShortageList rows={jpShortage} />}
+        {tab === "shortage" && isJP && <JPShortageList rows={jpShortage} onSelectGroup={handleSelectJPShortageGroup} />}
         {tab === "shortage" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && activeCountry !== "NL" && activeCountry !== "BE" && activeCountry !== "JP" && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
         {tab === "shortage" && activeCountry === "CA" && <CAShortageList rows={Object.values(data.caOccupations)} onSelectOcc={handleSelectCAOcc} />}
         {tab === "pay" && isAU && (
@@ -4842,21 +4863,74 @@ function JPInfoPanel({
   )
 }
 
-function JPShortageList({ rows }: { rows: import("@/data/jp-map-data").JPShortageGroup[] }) {
+function JPShortageList({
+  rows,
+  onSelectGroup,
+}: {
+  rows: import("@/data/jp-map-data").JPShortageGroup[]
+  onSelectGroup: (shortageGroupCode: string) => void
+}) {
   if (rows.length === 0) return <p className="py-8 text-center text-sm text-slate-400">No verified MHLW occupation-group data is available for this prefecture.</p>
   return (
     <ol>
       {rows.slice(0, 15).map((row, index) => (
-        <li key={row.shortageGroupCode} className="flex items-center gap-3 rounded-lg px-3 py-2.5">
-          <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{index + 1}</span>
-          <span className="min-w-0 flex-1">
-            <span className="block truncate text-sm font-medium text-slate-800">{row.localName}</span>
-            <span className="block text-[10px] text-slate-400">Openings {row.jobOpenings.toLocaleString()} · seekers {row.applicants.toLocaleString()}</span>
-          </span>
-          <span className="shrink-0 text-right"><span className="block text-sm font-semibold tabular-nums text-amber-700">{row.openingsToApplicantsRatio.toFixed(2)}x</span><span className="text-[10px] text-slate-400">openings / seekers</span></span>
+        <li key={row.shortageGroupCode}>
+          <button type="button" onClick={() => onSelectGroup(row.shortageGroupCode)} className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-amber-50">
+            <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{index + 1}</span>
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-sm font-medium text-slate-800">{row.localName}</span>
+              <span className="block text-[10px] text-slate-400">Openings {row.jobOpenings.toLocaleString()} · seekers {row.applicants.toLocaleString()}</span>
+            </span>
+            <span className="shrink-0 text-right"><span className="block text-sm font-semibold tabular-nums text-amber-700">{row.openingsToApplicantsRatio.toFixed(2)}x</span><span className="text-[10px] text-slate-400">openings / seekers</span></span>
+          </button>
         </li>
       ))}
     </ol>
+  )
+}
+
+function JPShortageOccupationDetail({
+  group,
+  prefectureName,
+  prefectureJa,
+  onBack,
+  onClose,
+}: {
+  group: import("@/data/jp-map-data").JPShortageGroup
+  prefectureName: string
+  prefectureJa: string | null
+  onBack: () => void
+  onClose: () => void
+}) {
+  const locale = useLocale()
+  const links = getJapanCareerLinks(group.localName, prefectureJa)
+  return (
+    <>
+      <div className="flex items-center gap-2 px-5 pt-4">
+        <button type="button" onClick={onBack} className="rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700" aria-label="Back"><ChevronLeft className="h-4 w-4" /></button>
+        <button type="button" onClick={onClose} className="ml-auto rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700" aria-label="Close"><X className="h-4 w-4" /></button>
+      </div>
+      <div className="min-h-0 flex-1 overflow-y-auto px-5 py-3">
+        <p className="text-[11px] font-medium text-amber-700">{locale === "ko" ? "부족직군 카드" : "Shortage occupation-group card"}</p>
+        <h3 className="mt-1 text-lg font-semibold text-slate-900">{group.localName}</h3>
+        <p className="mt-1 text-xs text-slate-500">{prefectureName} · FY2025 MHLW annual average</p>
+        <div className="mt-4 grid grid-cols-2 gap-3">
+          <div className="rounded-lg bg-amber-50 px-3 py-2.5"><p className="text-[11px] text-amber-700">Effective openings</p><p className="text-lg font-bold text-amber-900">{group.jobOpenings.toLocaleString()}</p></div>
+          <div className="rounded-lg bg-amber-50 px-3 py-2.5"><p className="text-[11px] text-amber-700">Job seekers</p><p className="text-lg font-bold text-amber-900">{group.applicants.toLocaleString()}</p></div>
+          <div className="col-span-2 rounded-lg bg-slate-50 px-3 py-2.5"><p className="text-[11px] text-slate-500">Openings-to-seekers ratio</p><p className="text-xl font-bold text-slate-900">{group.openingsToApplicantsRatio.toFixed(2)}x</p><p className="text-[10px] text-slate-400">Effective openings ÷ effective job seekers</p></div>
+        </div>
+        <section className="mt-5 rounded-lg border border-slate-200 p-3">
+          <p className="text-sm font-medium text-slate-800">Explore roles, skills and study paths</p>
+          <p className="mt-1 text-xs leading-relaxed text-slate-500">This MHLW statistic is an occupation group, not one specific Job Tag role. Skills and qualifications must be checked for the individual role before making a study decision.</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <a href={links.jobTagSearch} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-medium text-amber-700 hover:underline"><ExternalLink className="h-3 w-3" />Job Tag roles</a>
+            <a href={links.indeedJapan} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-medium text-amber-700 hover:underline"><ExternalLink className="h-3 w-3" />Current jobs</a>
+            <a href={links.jassoStudySearch} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-medium text-amber-700 hover:underline"><ExternalLink className="h-3 w-3" />Study options</a>
+          </div>
+        </section>
+      </div>
+      <p className="border-t border-slate-100 px-5 py-3 text-[10px] leading-relaxed text-slate-400">Source: MHLW Employment-related indicators by occupation, FY2025. The group-to-specific-role selection is intentionally left to Job Tag instead of inferred by CampCareer.</p>
+    </>
   )
 }
 
@@ -4872,10 +4946,12 @@ function JPHighPayList({
       <p className="px-3 text-[11px] leading-relaxed text-slate-500">National MHLW hourly baseline. Annual figure is a transparent estimate using hourly baseline × 160 hours/month × 12 months; it is not a reported annual salary.</p>
       <ol>
         {rows.slice(0, 15).map((row, index) => (
-          <li key={row.occupationCode} className="flex items-center gap-3 rounded-lg px-3 py-2.5">
-            <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{index + 1}</span>
-            <span className="min-w-0 flex-1"><span className="block truncate text-sm font-medium text-slate-800">{row.localName}</span><span className="block text-[10px] text-slate-400">MHLW occupation code {row.occupationCode}</span></span>
-            <button type="button" onClick={() => onSelectWage(row.occupationCode)} className="shrink-0 text-right transition-opacity hover:opacity-70"><span className="block text-sm font-semibold tabular-nums text-slate-700">JPY {row.hourlyBaseWageYen.toLocaleString()}/hr</span><span className="text-[10px] text-slate-400">est. JPY {row.annualizedBaseSalaryYen.toLocaleString()}/yr</span></button>
+          <li key={row.occupationCode}>
+            <button type="button" onClick={() => onSelectWage(row.occupationCode)} className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50">
+              <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{index + 1}</span>
+              <span className="min-w-0 flex-1"><span className="block truncate text-sm font-medium text-slate-800">{row.localName}</span><span className="block text-[10px] text-slate-400">MHLW occupation code {row.occupationCode}</span></span>
+              <span className="shrink-0 text-right"><span className="block text-sm font-semibold tabular-nums text-slate-700">JPY {row.hourlyBaseWageYen.toLocaleString()}/hr</span><span className="text-[10px] text-slate-400">est. JPY {row.annualizedBaseSalaryYen.toLocaleString()}/yr</span></span>
+            </button>
           </li>
         ))}
       </ol>
