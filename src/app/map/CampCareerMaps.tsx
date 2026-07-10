@@ -3389,6 +3389,8 @@ function CAOccupationDetail({
               )}
             </div>
           )}
+
+          <AffiliateCtas />
         </div>
       </div>
     </>
@@ -4949,6 +4951,7 @@ function SGDemandOccupationDetail({
         <section className="mt-5 rounded-lg border border-slate-200 p-3"><p className="text-sm font-medium text-slate-800">{isKo ? "MOM이 제시한 핵심 스킬" : "MOM-identified core skills"}</p><div className="mt-2 flex flex-wrap gap-1.5">{occupation.skills.map((skill) => <span key={skill} className="rounded-md bg-blue-50 px-2 py-1 text-xs text-blue-800">{skill}</span>)}</div><a href={links.skillsFramework} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-blue-700 hover:underline"><ExternalLink className="h-3 w-3" />{isKo ? "공식 Skills Framework 열기" : "Open official Skills Framework"}</a></section>
         <SGCareerActions links={links} locale={locale} />
         <section className="mt-4 rounded-lg border border-rose-200 bg-rose-50 p-3"><p className="text-sm font-medium text-rose-900">Work-pass caution</p><p className="mt-1 text-xs leading-relaxed text-rose-800">A national demand signal does not mean a foreign applicant can obtain a pass. An employer must apply, and EP/S Pass criteria and COMPASS are assessed for the actual role and applicant.</p><div className="mt-2 flex flex-wrap gap-2">{pathways.filter((pathway) => pathway.code === "ep" || pathway.code === "spass" || pathway.code === "compass-sol").map((pathway) => <a key={pathway.code} href={pathway.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-xs font-medium text-rose-800 hover:underline">{pathway.name}</a>)}</div></section>
+        <AffiliateCtas />
       </div>
       <p className="border-t border-slate-100 px-5 py-3 text-[10px] leading-relaxed text-slate-400">Source: MOM Job Vacancies 2025. Salary is the published employer offer range for vacancies in this occupation, not an individual offer or guaranteed work-pass outcome.</p>
     </>
@@ -4974,7 +4977,7 @@ function SGHighPayOccupationDetail({ occupation, pathways, onBack, onClose }: { 
   return (
     <>
       <div className="flex items-center gap-2 px-5 pt-4"><button type="button" onClick={onBack} className="rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700" aria-label="Back"><ChevronLeft className="h-4 w-4" /></button><button type="button" onClick={onClose} className="ml-auto rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700" aria-label="Close"><X className="h-4 w-4" /></button></div>
-      <div className="min-h-0 flex-1 overflow-y-auto px-5 py-3"><p className="text-[11px] font-medium text-rose-700">{isKo ? "MOM 고소득 직업 카드" : "MOM high-pay occupation card"}</p><h3 className="mt-1 text-lg font-semibold text-slate-900">{occupation.nameEn}</h3><p className="mt-1 text-xs text-slate-500">SSOC 2024 {occupation.ssocCode} · {isKo ? "정규직 현지 거주자" : "full-time resident employees"}</p><div className="mt-4 grid grid-cols-2 gap-3"><div className="rounded-lg bg-slate-50 px-3 py-2.5"><p className="text-[11px] text-slate-500">Median gross wage</p><p className="text-lg font-bold text-slate-900">S${occupation.medianGrossWageSgd.toLocaleString()}/mo</p><p className="text-[10px] text-slate-400">S${annualGrossWage.toLocaleString()}/yr · 12 months</p></div><div className="rounded-lg bg-slate-50 px-3 py-2.5"><p className="text-[11px] text-slate-500">Median basic wage</p><p className="text-lg font-bold text-slate-900">S${occupation.medianBasicWageSgd.toLocaleString()}/mo</p><p className="text-[10px] text-slate-400">{isKo ? "공개 직업군 내 임금 백분위" : "wage percentile in published occupations"}: {occupation.salaryScore}/100</p></div></div>{demandProfile ? <section className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-3"><p className="text-sm font-medium text-amber-950">{isKo ? "MOM 수요 데이터도 확인됨" : "Also present in MOM demand data"}</p><p className="mt-1 text-xs text-amber-800">{isKo ? "공고 임금 범위" : "Published offer range"}: S${demandProfile.offeredWageLowSgd.toLocaleString()}-{demandProfile.offeredWageHighSgd.toLocaleString()}/mo · {demandProfile.commonQualification} · {demandProfile.commonExperience}</p><div className="mt-2 flex flex-wrap gap-1.5">{demandProfile.skills.map((skill) => <span key={skill} className="rounded-md bg-white px-2 py-1 text-xs text-amber-900">{skill}</span>)}</div></section> : <section className="mt-4 rounded-lg border border-slate-200 p-3"><p className="text-sm font-medium text-slate-800">{isKo ? "직무 스킬 데이터 상태" : "Occupation-skill data status"}</p><p className="mt-1 text-xs leading-relaxed text-slate-500">{isKo ? "이 직업은 MOM 임금 표에는 있지만, 이번 MOM 상위 공석 표에는 직접 매핑되지 않았습니다. 임금 수치만으로 요구 스킬, 학위, 외국인 채용 가능성을 추정하지 않습니다." : "This occupation appears in MOM's wage table but is not directly mapped to the published top-vacancy list. CampCareer does not infer required skills, degrees, or foreign-worker access from wage data alone."}</p><a href={links.skillsFramework} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-rose-700 hover:underline"><ExternalLink className="h-3 w-3" />{isKo ? "공식 Skills Framework 확인" : "Check official Skills Framework"}</a></section>}<SGCareerActions links={links} locale={locale} /><section className="mt-4 rounded-lg border border-rose-200 bg-rose-50 p-3"><p className="text-sm font-medium text-rose-900">{isKo ? "외국인 취업 경로 주의" : "Foreign work-pass caution"}</p><p className="mt-1 text-xs leading-relaxed text-rose-800">{isKo ? "이 임금 기준은 취업비자 승인 기준이나 외국인 제안 연봉이 아닙니다. 고용주 신청과 실제 직무·지원자 기준의 EP/S Pass·COMPASS 심사가 별도로 필요합니다." : "This wage benchmark is not a work-pass threshold or a foreign-worker offer. An employer application and role- and applicant-specific EP/S Pass and COMPASS assessment remain necessary."}</p><div className="mt-2 flex flex-wrap gap-2">{pathways.filter((pathway) => pathway.code === "ep" || pathway.code === "spass" || pathway.code === "compass-sol").map((pathway) => <a key={pathway.code} href={pathway.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-xs font-medium text-rose-800 hover:underline">{pathway.name}</a>)}</div></section><a href={links.wageSource} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-slate-500 hover:text-slate-700 hover:underline"><ExternalLink className="h-3 w-3" />{isKo ? "MOM 임금 원본 데이터" : "MOM wage source"}</a></div>
+      <div className="min-h-0 flex-1 overflow-y-auto px-5 py-3"><p className="text-[11px] font-medium text-rose-700">{isKo ? "MOM 고소득 직업 카드" : "MOM high-pay occupation card"}</p><h3 className="mt-1 text-lg font-semibold text-slate-900">{occupation.nameEn}</h3><p className="mt-1 text-xs text-slate-500">SSOC 2024 {occupation.ssocCode} · {isKo ? "정규직 현지 거주자" : "full-time resident employees"}</p><div className="mt-4 grid grid-cols-2 gap-3"><div className="rounded-lg bg-slate-50 px-3 py-2.5"><p className="text-[11px] text-slate-500">Median gross wage</p><p className="text-lg font-bold text-slate-900">S${occupation.medianGrossWageSgd.toLocaleString()}/mo</p><p className="text-[10px] text-slate-400">S${annualGrossWage.toLocaleString()}/yr · 12 months</p></div><div className="rounded-lg bg-slate-50 px-3 py-2.5"><p className="text-[11px] text-slate-500">Median basic wage</p><p className="text-lg font-bold text-slate-900">S${occupation.medianBasicWageSgd.toLocaleString()}/mo</p><p className="text-[10px] text-slate-400">{isKo ? "공개 직업군 내 임금 백분위" : "wage percentile in published occupations"}: {occupation.salaryScore}/100</p></div></div>{demandProfile ? <section className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-3"><p className="text-sm font-medium text-amber-950">{isKo ? "MOM 수요 데이터도 확인됨" : "Also present in MOM demand data"}</p><p className="mt-1 text-xs text-amber-800">{isKo ? "공고 임금 범위" : "Published offer range"}: S${demandProfile.offeredWageLowSgd.toLocaleString()}-{demandProfile.offeredWageHighSgd.toLocaleString()}/mo · {demandProfile.commonQualification} · {demandProfile.commonExperience}</p><div className="mt-2 flex flex-wrap gap-1.5">{demandProfile.skills.map((skill) => <span key={skill} className="rounded-md bg-white px-2 py-1 text-xs text-amber-900">{skill}</span>)}</div></section> : <section className="mt-4 rounded-lg border border-slate-200 p-3"><p className="text-sm font-medium text-slate-800">{isKo ? "직무 스킬 데이터 상태" : "Occupation-skill data status"}</p><p className="mt-1 text-xs leading-relaxed text-slate-500">{isKo ? "이 직업은 MOM 임금 표에는 있지만, 이번 MOM 상위 공석 표에는 직접 매핑되지 않았습니다. 임금 수치만으로 요구 스킬, 학위, 외국인 채용 가능성을 추정하지 않습니다." : "This occupation appears in MOM's wage table but is not directly mapped to the published top-vacancy list. CampCareer does not infer required skills, degrees, or foreign-worker access from wage data alone."}</p><a href={links.skillsFramework} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-rose-700 hover:underline"><ExternalLink className="h-3 w-3" />{isKo ? "공식 Skills Framework 확인" : "Check official Skills Framework"}</a></section>}<SGCareerActions links={links} locale={locale} /><section className="mt-4 rounded-lg border border-rose-200 bg-rose-50 p-3"><p className="text-sm font-medium text-rose-900">{isKo ? "외국인 취업 경로 주의" : "Foreign work-pass caution"}</p><p className="mt-1 text-xs leading-relaxed text-rose-800">{isKo ? "이 임금 기준은 취업비자 승인 기준이나 외국인 제안 연봉이 아닙니다. 고용주 신청과 실제 직무·지원자 기준의 EP/S Pass·COMPASS 심사가 별도로 필요합니다." : "This wage benchmark is not a work-pass threshold or a foreign-worker offer. An employer application and role- and applicant-specific EP/S Pass and COMPASS assessment remain necessary."}</p><div className="mt-2 flex flex-wrap gap-2">{pathways.filter((pathway) => pathway.code === "ep" || pathway.code === "spass" || pathway.code === "compass-sol").map((pathway) => <a key={pathway.code} href={pathway.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-xs font-medium text-rose-800 hover:underline">{pathway.name}</a>)}</div></section><a href={links.wageSource} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-slate-500 hover:text-slate-700 hover:underline"><ExternalLink className="h-3 w-3" />{isKo ? "MOM 임금 원본 데이터" : "MOM wage source"}</a><AffiliateCtas /></div>
       <p className="border-t border-slate-100 px-5 py-3 text-[10px] leading-relaxed text-slate-400">Source: MOM Occupational Wages 2025, June 2025. This resident wage benchmark is not an employer offer, a foreign-worker salary, or a work-pass threshold.</p>
     </>
   )
@@ -5096,6 +5099,7 @@ function JPShortageOccupationDetail({
             <a href={links.jassoStudySearch} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-medium text-amber-700 hover:underline"><ExternalLink className="h-3 w-3" />Study options</a>
           </div>
         </section>
+        <AffiliateCtas />
       </div>
       <p className="border-t border-slate-100 px-5 py-3 text-[10px] leading-relaxed text-slate-400">Source: MHLW Employment-related indicators by occupation, FY2025. The group-to-specific-role selection is intentionally left to Job Tag instead of inferred by CampCareer.</p>
     </>
@@ -5187,6 +5191,7 @@ function JPWageOccupationDetail({
           </div>
         )}
         <a href={wage.sourceUrl} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-slate-500 hover:text-slate-700 hover:underline"><ExternalLink className="h-3 w-3" />{isKo ? "MHLW 임금 원본 데이터" : "MHLW wage source"}</a>
+        <AffiliateCtas />
       </div>
       <p className="border-t border-slate-100 px-5 py-3 text-[10px] leading-relaxed text-slate-400">Source: MHLW Wage Structure Basic Statistical Survey for the wage baseline; Job Tag v7.01/v7.00 for linked role skills and qualifications. The annual figure is a transparent calculation, not a reported annual salary.</p>
     </>
@@ -5612,6 +5617,7 @@ function BEOccupationDetail({
           <p className="text-[11px] text-slate-500">Source</p>
           <p className="text-xs text-slate-700">Statbel / VDAB / Actiris / Jobat.be</p>
         </div>
+        <AffiliateCtas />
       </div>
     </>
   )
@@ -5812,6 +5818,7 @@ function UKOccupationDetail({
             <p className="text-xs text-slate-700">{occ.source_name}</p>
           </div>
         )}
+        <AffiliateCtas />
       </div>
     </>
   )
@@ -5980,6 +5987,7 @@ function DEOccupationDetail({
           <p className="text-[11px] text-slate-500">Source</p>
           <p className="text-xs text-slate-700">BA Entgeltatlas 2024 / BA Engpassanalyse 2025</p>
         </div>
+        <AffiliateCtas />
       </div>
     </>
   )
@@ -6125,6 +6133,7 @@ function NLOccupationDetail({
           <p className="text-[11px] text-slate-500">Source</p>
           <p className="text-xs text-slate-700">CBS 2024 / UWV Spanningsindicator 2025</p>
         </div>
+        <AffiliateCtas />
       </div>
     </>
   )
