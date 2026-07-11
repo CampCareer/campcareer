@@ -1,0 +1,1276 @@
+[
+  {
+    "code": "93",
+    "nameFr": "Provence-Alpes-Côte d'Azur",
+    "nameEn": "Provence-Alpes-Côte d'Azur",
+    "nameKo": null,
+    "slug": "provence-alpes-cote-d-azur",
+    "geometrySource": "IGN ADMIN EXPRESS COG",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved",
+    "topDemand": [
+      {
+        "code": "FAP2021-serveurs-de-cafes-restaurants",
+        "recruitmentProjects": 14920
+      },
+      {
+        "code": "FAP2021-aides-de-cuisine-et-employes-polyvalents-de-la-restauration",
+        "recruitmentProjects": 12730
+      },
+      {
+        "code": "FAP2021-agriculteurs",
+        "recruitmentProjects": 10990
+      },
+      {
+        "code": "FAP2021-employes-de-l-hotellerie",
+        "recruitmentProjects": 8460
+      },
+      {
+        "code": "FAP2021-viticulteurs-arboriculteurs",
+        "recruitmentProjects": 7560
+      },
+      {
+        "code": "FAP2021-cuisiniers",
+        "recruitmentProjects": 7280
+      },
+      {
+        "code": "FAP2021-agents-d-entretien-de-locaux",
+        "recruitmentProjects": 6260
+      },
+      {
+        "code": "FAP2021-aides-a-domicile-et-auxiliaires-de-vie",
+        "recruitmentProjects": 5750
+      },
+      {
+        "code": "FAP2021-aides-soignants",
+        "recruitmentProjects": 5720
+      },
+      {
+        "code": "FAP2021-professionnels-de-l-animation-socioculturelle",
+        "recruitmentProjects": 5460
+      },
+      {
+        "code": "FAP2021-artistes-musique-danse-spectacles",
+        "recruitmentProjects": 5450
+      },
+      {
+        "code": "FAP2021-employes-de-libre-service",
+        "recruitmentProjects": 5090
+      },
+      {
+        "code": "FAP2021-vendeurs-en-habillement-et-accessoires-articles-de-luxe-de-sport-de-loisirs-et-culturels",
+        "recruitmentProjects": 3780
+      },
+      {
+        "code": "FAP2021-personnels-de-menage-chez-des-particuliers",
+        "recruitmentProjects": 3630
+      },
+      {
+        "code": "FAP2021-vendeurs-en-produits-alimentaires",
+        "recruitmentProjects": 3400
+      },
+      {
+        "code": "FAP2021-infirmiers-et-sages-femmes",
+        "recruitmentProjects": 2920
+      },
+      {
+        "code": "FAP2021-magasiniers-et-preparateurs-de-commandes-peu-qualifies",
+        "recruitmentProjects": 2890
+      },
+      {
+        "code": "FAP2021-maraichers-et-horticulteurs",
+        "recruitmentProjects": 2870
+      },
+      {
+        "code": "FAP2021-professionnels-des-spectacles",
+        "recruitmentProjects": 2840
+      },
+      {
+        "code": "FAP2021-assistants-maternels-auxiliaires-de-puericulture-assistants-familiaux-et-gardes-a-domicile",
+        "recruitmentProjects": 2690
+      }
+    ],
+    "rent": {
+      "advertisedRentEurM2": 17.81778307639801,
+      "cityCoverage": 4,
+      "sourceCityCount": 5,
+      "status": "internal-estimate"
+    }
+  },
+  {
+    "code": "84",
+    "nameFr": "Auvergne-Rhône-Alpes",
+    "nameEn": "Auvergne-Rhône-Alpes",
+    "nameKo": null,
+    "slug": "auvergne-rhone-alpes",
+    "geometrySource": "IGN ADMIN EXPRESS COG",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved",
+    "topDemand": [
+      {
+        "code": "FAP2021-serveurs-de-cafes-restaurants",
+        "recruitmentProjects": 11490
+      },
+      {
+        "code": "FAP2021-aides-de-cuisine-et-employes-polyvalents-de-la-restauration",
+        "recruitmentProjects": 10070
+      },
+      {
+        "code": "FAP2021-professionnels-de-l-animation-socioculturelle",
+        "recruitmentProjects": 7770
+      },
+      {
+        "code": "FAP2021-agriculteurs",
+        "recruitmentProjects": 7530
+      },
+      {
+        "code": "FAP2021-employes-de-l-hotellerie",
+        "recruitmentProjects": 7380
+      },
+      {
+        "code": "FAP2021-viticulteurs-arboriculteurs",
+        "recruitmentProjects": 7310
+      },
+      {
+        "code": "FAP2021-agents-d-entretien-de-locaux",
+        "recruitmentProjects": 7040
+      },
+      {
+        "code": "FAP2021-employes-de-libre-service",
+        "recruitmentProjects": 6690
+      },
+      {
+        "code": "FAP2021-aides-soignants",
+        "recruitmentProjects": 6600
+      },
+      {
+        "code": "FAP2021-aides-a-domicile-et-auxiliaires-de-vie",
+        "recruitmentProjects": 6510
+      },
+      {
+        "code": "FAP2021-cuisiniers",
+        "recruitmentProjects": 5940
+      },
+      {
+        "code": "FAP2021-vendeurs-en-habillement-et-accessoires-articles-de-luxe-de-sport-de-loisirs-et-culturels",
+        "recruitmentProjects": 4040
+      },
+      {
+        "code": "FAP2021-vendeurs-en-produits-alimentaires",
+        "recruitmentProjects": 3890
+      },
+      {
+        "code": "FAP2021-artistes-musique-danse-spectacles",
+        "recruitmentProjects": 3810
+      },
+      {
+        "code": "FAP2021-caissiers",
+        "recruitmentProjects": 3740
+      },
+      {
+        "code": "FAP2021-infirmiers-et-sages-femmes",
+        "recruitmentProjects": 3450
+      },
+      {
+        "code": "FAP2021-conducteurs-routiers",
+        "recruitmentProjects": 3420
+      },
+      {
+        "code": "FAP2021-personnels-de-menage-chez-des-particuliers",
+        "recruitmentProjects": 3400
+      },
+      {
+        "code": "FAP2021-educateurs-specialises-et-autres-intervenants-socio-educatifs",
+        "recruitmentProjects": 3230
+      },
+      {
+        "code": "FAP2021-assistants-maternels-auxiliaires-de-puericulture-assistants-familiaux-et-gardes-a-domicile",
+        "recruitmentProjects": 3070
+      }
+    ],
+    "rent": {
+      "advertisedRentEurM2": 14.263830134034915,
+      "cityCoverage": 6,
+      "sourceCityCount": 6,
+      "status": "internal-estimate"
+    }
+  },
+  {
+    "code": "76",
+    "nameFr": "Occitanie",
+    "nameEn": "Occitanie",
+    "nameKo": null,
+    "slug": "occitanie",
+    "geometrySource": "IGN ADMIN EXPRESS COG",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved",
+    "topDemand": [
+      {
+        "code": "FAP2021-agriculteurs",
+        "recruitmentProjects": 11960
+      },
+      {
+        "code": "FAP2021-serveurs-de-cafes-restaurants",
+        "recruitmentProjects": 10200
+      },
+      {
+        "code": "FAP2021-aides-de-cuisine-et-employes-polyvalents-de-la-restauration",
+        "recruitmentProjects": 9540
+      },
+      {
+        "code": "FAP2021-viticulteurs-arboriculteurs",
+        "recruitmentProjects": 9220
+      },
+      {
+        "code": "FAP2021-agents-d-entretien-de-locaux",
+        "recruitmentProjects": 7400
+      },
+      {
+        "code": "FAP2021-aides-a-domicile-et-auxiliaires-de-vie",
+        "recruitmentProjects": 6600
+      },
+      {
+        "code": "FAP2021-professionnels-de-l-animation-socioculturelle",
+        "recruitmentProjects": 6410
+      },
+      {
+        "code": "FAP2021-aides-soignants",
+        "recruitmentProjects": 5710
+      },
+      {
+        "code": "FAP2021-employes-de-l-hotellerie",
+        "recruitmentProjects": 5360
+      },
+      {
+        "code": "FAP2021-cuisiniers",
+        "recruitmentProjects": 5280
+      },
+      {
+        "code": "FAP2021-employes-de-libre-service",
+        "recruitmentProjects": 5130
+      },
+      {
+        "code": "FAP2021-artistes-musique-danse-spectacles",
+        "recruitmentProjects": 4900
+      },
+      {
+        "code": "FAP2021-personnels-de-menage-chez-des-particuliers",
+        "recruitmentProjects": 3400
+      },
+      {
+        "code": "FAP2021-infirmiers-et-sages-femmes",
+        "recruitmentProjects": 3300
+      },
+      {
+        "code": "FAP2021-vendeurs-en-habillement-et-accessoires-articles-de-luxe-de-sport-de-loisirs-et-culturels",
+        "recruitmentProjects": 2890
+      },
+      {
+        "code": "FAP2021-vendeurs-en-produits-alimentaires",
+        "recruitmentProjects": 2770
+      },
+      {
+        "code": "FAP2021-educateurs-specialises-et-autres-intervenants-socio-educatifs",
+        "recruitmentProjects": 2700
+      },
+      {
+        "code": "FAP2021-caissiers",
+        "recruitmentProjects": 2530
+      },
+      {
+        "code": "FAP2021-sportifs-et-animateurs-sportifs",
+        "recruitmentProjects": 2240
+      },
+      {
+        "code": "FAP2021-conducteurs-routiers",
+        "recruitmentProjects": 2180
+      }
+    ],
+    "rent": {
+      "advertisedRentEurM2": 13.946895369703853,
+      "cityCoverage": 6,
+      "sourceCityCount": 6,
+      "status": "internal-estimate"
+    }
+  },
+  {
+    "code": "28",
+    "nameFr": "Normandie",
+    "nameEn": "Normandie",
+    "nameKo": null,
+    "slug": "normandie",
+    "geometrySource": "IGN ADMIN EXPRESS COG",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved",
+    "topDemand": [
+      {
+        "code": "FAP2021-aides-a-domicile-et-auxiliaires-de-vie",
+        "recruitmentProjects": 4720
+      },
+      {
+        "code": "FAP2021-aides-soignants",
+        "recruitmentProjects": 4230
+      },
+      {
+        "code": "FAP2021-serveurs-de-cafes-restaurants",
+        "recruitmentProjects": 3900
+      },
+      {
+        "code": "FAP2021-agents-d-entretien-de-locaux",
+        "recruitmentProjects": 3800
+      },
+      {
+        "code": "FAP2021-aides-de-cuisine-et-employes-polyvalents-de-la-restauration",
+        "recruitmentProjects": 3780
+      },
+      {
+        "code": "FAP2021-agriculteurs",
+        "recruitmentProjects": 2760
+      },
+      {
+        "code": "FAP2021-infirmiers-et-sages-femmes",
+        "recruitmentProjects": 2700
+      },
+      {
+        "code": "FAP2021-professionnels-de-l-animation-socioculturelle",
+        "recruitmentProjects": 2670
+      },
+      {
+        "code": "FAP2021-employes-de-libre-service",
+        "recruitmentProjects": 2660
+      },
+      {
+        "code": "FAP2021-cuisiniers",
+        "recruitmentProjects": 2520
+      },
+      {
+        "code": "FAP2021-jardiniers-des-espaces-verts-et-naturels",
+        "recruitmentProjects": 1960
+      },
+      {
+        "code": "FAP2021-ouvriers-peu-qualifies-des-industries-agro-alimentaires",
+        "recruitmentProjects": 1690
+      },
+      {
+        "code": "FAP2021-agents-de-service-hospitaliers",
+        "recruitmentProjects": 1680
+      },
+      {
+        "code": "FAP2021-sportifs-et-animateurs-sportifs",
+        "recruitmentProjects": 1660
+      },
+      {
+        "code": "FAP2021-personnels-de-menage-chez-des-particuliers",
+        "recruitmentProjects": 1600
+      },
+      {
+        "code": "FAP2021-caissiers",
+        "recruitmentProjects": 1600
+      },
+      {
+        "code": "FAP2021-employes-de-l-hotellerie",
+        "recruitmentProjects": 1520
+      },
+      {
+        "code": "FAP2021-conducteurs-routiers",
+        "recruitmentProjects": 1330
+      },
+      {
+        "code": "FAP2021-ouvriers-de-l-assainissement-et-du-traitement-des-dechets",
+        "recruitmentProjects": 1320
+      },
+      {
+        "code": "FAP2021-vendeurs-en-produits-alimentaires",
+        "recruitmentProjects": 1270
+      }
+    ],
+    "rent": {
+      "advertisedRentEurM2": 13.044111376253484,
+      "cityCoverage": 3,
+      "sourceCityCount": 3,
+      "status": "internal-estimate"
+    }
+  },
+  {
+    "code": "32",
+    "nameFr": "Hauts-de-France",
+    "nameEn": "Hauts-de-France",
+    "nameKo": null,
+    "slug": "hauts-de-france",
+    "geometrySource": "IGN ADMIN EXPRESS COG",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved",
+    "topDemand": [
+      {
+        "code": "FAP2021-professionnels-de-l-animation-socioculturelle",
+        "recruitmentProjects": 6480
+      },
+      {
+        "code": "FAP2021-aides-a-domicile-et-auxiliaires-de-vie",
+        "recruitmentProjects": 6360
+      },
+      {
+        "code": "FAP2021-aides-de-cuisine-et-employes-polyvalents-de-la-restauration",
+        "recruitmentProjects": 6120
+      },
+      {
+        "code": "FAP2021-agents-d-entretien-de-locaux",
+        "recruitmentProjects": 5600
+      },
+      {
+        "code": "FAP2021-employes-de-libre-service",
+        "recruitmentProjects": 4970
+      },
+      {
+        "code": "FAP2021-agriculteurs",
+        "recruitmentProjects": 4520
+      },
+      {
+        "code": "FAP2021-serveurs-de-cafes-restaurants",
+        "recruitmentProjects": 3650
+      },
+      {
+        "code": "FAP2021-magasiniers-et-preparateurs-de-commandes-peu-qualifies",
+        "recruitmentProjects": 3540
+      },
+      {
+        "code": "FAP2021-personnels-de-menage-chez-des-particuliers",
+        "recruitmentProjects": 3510
+      },
+      {
+        "code": "FAP2021-aides-soignants",
+        "recruitmentProjects": 3490
+      },
+      {
+        "code": "FAP2021-artistes-musique-danse-spectacles",
+        "recruitmentProjects": 3200
+      },
+      {
+        "code": "FAP2021-jardiniers-des-espaces-verts-et-naturels",
+        "recruitmentProjects": 3130
+      },
+      {
+        "code": "FAP2021-viticulteurs-arboriculteurs",
+        "recruitmentProjects": 3060
+      },
+      {
+        "code": "FAP2021-agents-de-securite-et-de-surveillance",
+        "recruitmentProjects": 2580
+      },
+      {
+        "code": "FAP2021-educateurs-specialises-et-autres-intervenants-socio-educatifs",
+        "recruitmentProjects": 2570
+      },
+      {
+        "code": "FAP2021-infirmiers-et-sages-femmes",
+        "recruitmentProjects": 2510
+      },
+      {
+        "code": "FAP2021-conducteurs-routiers",
+        "recruitmentProjects": 2320
+      },
+      {
+        "code": "FAP2021-vendeurs-en-habillement-et-accessoires-articles-de-luxe-de-sport-de-loisirs-et-culturels",
+        "recruitmentProjects": 2170
+      },
+      {
+        "code": "FAP2021-cuisiniers",
+        "recruitmentProjects": 2080
+      },
+      {
+        "code": "FAP2021-ouvriers-peu-qualifies-des-industries-agro-alimentaires",
+        "recruitmentProjects": 1880
+      }
+    ],
+    "rent": {
+      "advertisedRentEurM2": 14.280316398379641,
+      "cityCoverage": 5,
+      "sourceCityCount": 5,
+      "status": "internal-estimate"
+    }
+  },
+  {
+    "code": "24",
+    "nameFr": "Centre-Val de Loire",
+    "nameEn": "Centre-Val de Loire",
+    "nameKo": null,
+    "slug": "centre-val-de-loire",
+    "geometrySource": "IGN ADMIN EXPRESS COG",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved",
+    "topDemand": [
+      {
+        "code": "FAP2021-viticulteurs-arboriculteurs",
+        "recruitmentProjects": 4840
+      },
+      {
+        "code": "FAP2021-agriculteurs",
+        "recruitmentProjects": 3830
+      },
+      {
+        "code": "FAP2021-agents-d-entretien-de-locaux",
+        "recruitmentProjects": 3130
+      },
+      {
+        "code": "FAP2021-aides-de-cuisine-et-employes-polyvalents-de-la-restauration",
+        "recruitmentProjects": 3000
+      },
+      {
+        "code": "FAP2021-aides-soignants",
+        "recruitmentProjects": 2570
+      },
+      {
+        "code": "FAP2021-professionnels-de-l-animation-socioculturelle",
+        "recruitmentProjects": 2530
+      },
+      {
+        "code": "FAP2021-aides-a-domicile-et-auxiliaires-de-vie",
+        "recruitmentProjects": 2210
+      },
+      {
+        "code": "FAP2021-serveurs-de-cafes-restaurants",
+        "recruitmentProjects": 2140
+      },
+      {
+        "code": "FAP2021-artistes-musique-danse-spectacles",
+        "recruitmentProjects": 2050
+      },
+      {
+        "code": "FAP2021-employes-de-libre-service",
+        "recruitmentProjects": 1940
+      },
+      {
+        "code": "FAP2021-infirmiers-et-sages-femmes",
+        "recruitmentProjects": 1690
+      },
+      {
+        "code": "FAP2021-maraichers-et-horticulteurs",
+        "recruitmentProjects": 1600
+      },
+      {
+        "code": "FAP2021-jardiniers-des-espaces-verts-et-naturels",
+        "recruitmentProjects": 1490
+      },
+      {
+        "code": "FAP2021-employes-de-l-hotellerie",
+        "recruitmentProjects": 1410
+      },
+      {
+        "code": "FAP2021-personnels-de-menage-chez-des-particuliers",
+        "recruitmentProjects": 1220
+      },
+      {
+        "code": "FAP2021-cuisiniers",
+        "recruitmentProjects": 1160
+      },
+      {
+        "code": "FAP2021-conducteurs-routiers",
+        "recruitmentProjects": 1140
+      },
+      {
+        "code": "FAP2021-secretaires-bureautiques-et-assimiles",
+        "recruitmentProjects": 1010
+      },
+      {
+        "code": "FAP2021-caissiers",
+        "recruitmentProjects": 1000
+      },
+      {
+        "code": "FAP2021-ouvriers-mecaniciens-de-vehicules",
+        "recruitmentProjects": 900
+      }
+    ],
+    "rent": {
+      "advertisedRentEurM2": 13.35535792050563,
+      "cityCoverage": 3,
+      "sourceCityCount": 3,
+      "status": "internal-estimate"
+    }
+  },
+  {
+    "code": "44",
+    "nameFr": "Grand Est",
+    "nameEn": "Grand Est",
+    "nameKo": null,
+    "slug": "grand-est",
+    "geometrySource": "IGN ADMIN EXPRESS COG",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved",
+    "topDemand": [
+      {
+        "code": "FAP2021-viticulteurs-arboriculteurs",
+        "recruitmentProjects": 20650
+      },
+      {
+        "code": "FAP2021-employes-de-libre-service",
+        "recruitmentProjects": 5810
+      },
+      {
+        "code": "FAP2021-aides-de-cuisine-et-employes-polyvalents-de-la-restauration",
+        "recruitmentProjects": 5760
+      },
+      {
+        "code": "FAP2021-aides-a-domicile-et-auxiliaires-de-vie",
+        "recruitmentProjects": 5720
+      },
+      {
+        "code": "FAP2021-professionnels-de-l-animation-socioculturelle",
+        "recruitmentProjects": 5540
+      },
+      {
+        "code": "FAP2021-agents-d-entretien-de-locaux",
+        "recruitmentProjects": 5410
+      },
+      {
+        "code": "FAP2021-agriculteurs",
+        "recruitmentProjects": 4640
+      },
+      {
+        "code": "FAP2021-serveurs-de-cafes-restaurants",
+        "recruitmentProjects": 4430
+      },
+      {
+        "code": "FAP2021-aides-soignants",
+        "recruitmentProjects": 4340
+      },
+      {
+        "code": "FAP2021-personnels-de-menage-chez-des-particuliers",
+        "recruitmentProjects": 3270
+      },
+      {
+        "code": "FAP2021-cuisiniers",
+        "recruitmentProjects": 3210
+      },
+      {
+        "code": "FAP2021-infirmiers-et-sages-femmes",
+        "recruitmentProjects": 2540
+      },
+      {
+        "code": "FAP2021-caissiers",
+        "recruitmentProjects": 2540
+      },
+      {
+        "code": "FAP2021-jardiniers-des-espaces-verts-et-naturels",
+        "recruitmentProjects": 2540
+      },
+      {
+        "code": "FAP2021-employes-de-l-hotellerie",
+        "recruitmentProjects": 1980
+      },
+      {
+        "code": "FAP2021-conducteurs-routiers",
+        "recruitmentProjects": 1890
+      },
+      {
+        "code": "FAP2021-magasiniers-et-preparateurs-de-commandes-peu-qualifies",
+        "recruitmentProjects": 1840
+      },
+      {
+        "code": "FAP2021-agents-de-securite-et-de-surveillance",
+        "recruitmentProjects": 1790
+      },
+      {
+        "code": "FAP2021-secretaires-bureautiques-et-assimiles",
+        "recruitmentProjects": 1770
+      },
+      {
+        "code": "FAP2021-educateurs-specialises-et-autres-intervenants-socio-educatifs",
+        "recruitmentProjects": 1760
+      }
+    ],
+    "rent": {
+      "advertisedRentEurM2": 13.55992159949385,
+      "cityCoverage": 6,
+      "sourceCityCount": 6,
+      "status": "internal-estimate"
+    }
+  },
+  {
+    "code": "11",
+    "nameFr": "Île-de-France",
+    "nameEn": "Île-de-France",
+    "nameKo": null,
+    "slug": "ile-de-france",
+    "geometrySource": "IGN ADMIN EXPRESS COG",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved",
+    "topDemand": [
+      {
+        "code": "FAP2021-artistes-musique-danse-spectacles",
+        "recruitmentProjects": 19260
+      },
+      {
+        "code": "FAP2021-aides-de-cuisine-et-employes-polyvalents-de-la-restauration",
+        "recruitmentProjects": 17700
+      },
+      {
+        "code": "FAP2021-agents-d-entretien-de-locaux",
+        "recruitmentProjects": 12830
+      },
+      {
+        "code": "FAP2021-serveurs-de-cafes-restaurants",
+        "recruitmentProjects": 12700
+      },
+      {
+        "code": "FAP2021-agents-d-accueil-et-d-information",
+        "recruitmentProjects": 11810
+      },
+      {
+        "code": "FAP2021-professionnels-des-spectacles",
+        "recruitmentProjects": 11730
+      },
+      {
+        "code": "FAP2021-aides-a-domicile-et-auxiliaires-de-vie",
+        "recruitmentProjects": 10040
+      },
+      {
+        "code": "FAP2021-ingenieurs-et-cadres-d-etude-recherche-et-developpement-en-informatique-et-telecom",
+        "recruitmentProjects": 8910
+      },
+      {
+        "code": "FAP2021-personnels-de-menage-chez-des-particuliers",
+        "recruitmentProjects": 8320
+      },
+      {
+        "code": "FAP2021-professionnels-de-l-animation-socioculturelle",
+        "recruitmentProjects": 8230
+      },
+      {
+        "code": "FAP2021-employes-de-libre-service",
+        "recruitmentProjects": 7540
+      },
+      {
+        "code": "FAP2021-aides-soignants",
+        "recruitmentProjects": 7140
+      },
+      {
+        "code": "FAP2021-cuisiniers",
+        "recruitmentProjects": 7080
+      },
+      {
+        "code": "FAP2021-agents-de-securite-et-de-surveillance",
+        "recruitmentProjects": 6510
+      },
+      {
+        "code": "FAP2021-infirmiers-et-sages-femmes",
+        "recruitmentProjects": 6500
+      },
+      {
+        "code": "FAP2021-attaches-commerciaux",
+        "recruitmentProjects": 6200
+      },
+      {
+        "code": "FAP2021-agents-administratifs",
+        "recruitmentProjects": 6100
+      },
+      {
+        "code": "FAP2021-assistants-maternels-auxiliaires-de-puericulture-assistants-familiaux-et-gardes-a-domicile",
+        "recruitmentProjects": 5900
+      },
+      {
+        "code": "FAP2021-secretaires-bureautiques-et-assimiles",
+        "recruitmentProjects": 5570
+      },
+      {
+        "code": "FAP2021-vendeurs-en-habillement-et-accessoires-articles-de-luxe-de-sport-de-loisirs-et-culturels",
+        "recruitmentProjects": 5330
+      }
+    ],
+    "rent": {
+      "advertisedRentEurM2": 22.8590189106697,
+      "cityCoverage": 1,
+      "sourceCityCount": 1,
+      "status": "internal-estimate"
+    }
+  },
+  {
+    "code": "27",
+    "nameFr": "Bourgogne-Franche-Comté",
+    "nameEn": "Bourgogne-Franche-Comté",
+    "nameKo": null,
+    "slug": "bourgogne-franche-comte",
+    "geometrySource": "IGN ADMIN EXPRESS COG",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved",
+    "topDemand": [
+      {
+        "code": "FAP2021-viticulteurs-arboriculteurs",
+        "recruitmentProjects": 7670
+      },
+      {
+        "code": "FAP2021-agents-d-entretien-de-locaux",
+        "recruitmentProjects": 4110
+      },
+      {
+        "code": "FAP2021-aides-a-domicile-et-auxiliaires-de-vie",
+        "recruitmentProjects": 3560
+      },
+      {
+        "code": "FAP2021-aides-de-cuisine-et-employes-polyvalents-de-la-restauration",
+        "recruitmentProjects": 3300
+      },
+      {
+        "code": "FAP2021-aides-soignants",
+        "recruitmentProjects": 3050
+      },
+      {
+        "code": "FAP2021-employes-de-libre-service",
+        "recruitmentProjects": 2840
+      },
+      {
+        "code": "FAP2021-serveurs-de-cafes-restaurants",
+        "recruitmentProjects": 2670
+      },
+      {
+        "code": "FAP2021-professionnels-de-l-animation-socioculturelle",
+        "recruitmentProjects": 1960
+      },
+      {
+        "code": "FAP2021-agriculteurs",
+        "recruitmentProjects": 1730
+      },
+      {
+        "code": "FAP2021-personnels-de-menage-chez-des-particuliers",
+        "recruitmentProjects": 1680
+      },
+      {
+        "code": "FAP2021-cuisiniers",
+        "recruitmentProjects": 1580
+      },
+      {
+        "code": "FAP2021-infirmiers-et-sages-femmes",
+        "recruitmentProjects": 1550
+      },
+      {
+        "code": "FAP2021-employes-de-l-hotellerie",
+        "recruitmentProjects": 1450
+      },
+      {
+        "code": "FAP2021-artistes-musique-danse-spectacles",
+        "recruitmentProjects": 1390
+      },
+      {
+        "code": "FAP2021-jardiniers-des-espaces-verts-et-naturels",
+        "recruitmentProjects": 1310
+      },
+      {
+        "code": "FAP2021-conducteurs-routiers",
+        "recruitmentProjects": 1180
+      },
+      {
+        "code": "FAP2021-caissiers",
+        "recruitmentProjects": 1080
+      },
+      {
+        "code": "FAP2021-secretaires-bureautiques-et-assimiles",
+        "recruitmentProjects": 1080
+      },
+      {
+        "code": "FAP2021-educateurs-specialises-et-autres-intervenants-socio-educatifs",
+        "recruitmentProjects": 980
+      },
+      {
+        "code": "FAP2021-attaches-commerciaux",
+        "recruitmentProjects": 970
+      }
+    ],
+    "rent": {
+      "advertisedRentEurM2": 13.146989167975823,
+      "cityCoverage": 2,
+      "sourceCityCount": 2,
+      "status": "internal-estimate"
+    }
+  },
+  {
+    "code": "52",
+    "nameFr": "Pays de la Loire",
+    "nameEn": "Pays de la Loire",
+    "nameKo": null,
+    "slug": "pays-de-la-loire",
+    "geometrySource": "IGN ADMIN EXPRESS COG",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved",
+    "topDemand": [
+      {
+        "code": "FAP2021-agriculteurs",
+        "recruitmentProjects": 7710
+      },
+      {
+        "code": "FAP2021-agents-d-entretien-de-locaux",
+        "recruitmentProjects": 5680
+      },
+      {
+        "code": "FAP2021-viticulteurs-arboriculteurs",
+        "recruitmentProjects": 5540
+      },
+      {
+        "code": "FAP2021-aides-soignants",
+        "recruitmentProjects": 5130
+      },
+      {
+        "code": "FAP2021-aides-de-cuisine-et-employes-polyvalents-de-la-restauration",
+        "recruitmentProjects": 5050
+      },
+      {
+        "code": "FAP2021-serveurs-de-cafes-restaurants",
+        "recruitmentProjects": 4620
+      },
+      {
+        "code": "FAP2021-employes-de-libre-service",
+        "recruitmentProjects": 4470
+      },
+      {
+        "code": "FAP2021-professionnels-de-l-animation-socioculturelle",
+        "recruitmentProjects": 4390
+      },
+      {
+        "code": "FAP2021-maraichers-et-horticulteurs",
+        "recruitmentProjects": 3940
+      },
+      {
+        "code": "FAP2021-aides-a-domicile-et-auxiliaires-de-vie",
+        "recruitmentProjects": 3930
+      },
+      {
+        "code": "FAP2021-ouvriers-peu-qualifies-des-industries-agro-alimentaires",
+        "recruitmentProjects": 3160
+      },
+      {
+        "code": "FAP2021-cuisiniers",
+        "recruitmentProjects": 2980
+      },
+      {
+        "code": "FAP2021-employes-de-l-hotellerie",
+        "recruitmentProjects": 2830
+      },
+      {
+        "code": "FAP2021-infirmiers-et-sages-femmes",
+        "recruitmentProjects": 2520
+      },
+      {
+        "code": "FAP2021-magasiniers-et-preparateurs-de-commandes-peu-qualifies",
+        "recruitmentProjects": 2460
+      },
+      {
+        "code": "FAP2021-agents-de-service-hospitaliers",
+        "recruitmentProjects": 2280
+      },
+      {
+        "code": "FAP2021-vendeurs-en-produits-alimentaires",
+        "recruitmentProjects": 2260
+      },
+      {
+        "code": "FAP2021-caissiers",
+        "recruitmentProjects": 2250
+      },
+      {
+        "code": "FAP2021-jardiniers-des-espaces-verts-et-naturels",
+        "recruitmentProjects": 2150
+      },
+      {
+        "code": "FAP2021-artistes-musique-danse-spectacles",
+        "recruitmentProjects": 2120
+      }
+    ],
+    "rent": {
+      "advertisedRentEurM2": 13.767537290565837,
+      "cityCoverage": 4,
+      "sourceCityCount": 4,
+      "status": "internal-estimate"
+    }
+  },
+  {
+    "code": "75",
+    "nameFr": "Nouvelle-Aquitaine",
+    "nameEn": "Nouvelle-Aquitaine",
+    "nameKo": null,
+    "slug": "nouvelle-aquitaine",
+    "geometrySource": "IGN ADMIN EXPRESS COG",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved",
+    "topDemand": [
+      {
+        "code": "FAP2021-agriculteurs",
+        "recruitmentProjects": 17460
+      },
+      {
+        "code": "FAP2021-viticulteurs-arboriculteurs",
+        "recruitmentProjects": 15670
+      },
+      {
+        "code": "FAP2021-serveurs-de-cafes-restaurants",
+        "recruitmentProjects": 11730
+      },
+      {
+        "code": "FAP2021-aides-de-cuisine-et-employes-polyvalents-de-la-restauration",
+        "recruitmentProjects": 11140
+      },
+      {
+        "code": "FAP2021-agents-d-entretien-de-locaux",
+        "recruitmentProjects": 8340
+      },
+      {
+        "code": "FAP2021-aides-soignants",
+        "recruitmentProjects": 7980
+      },
+      {
+        "code": "FAP2021-aides-a-domicile-et-auxiliaires-de-vie",
+        "recruitmentProjects": 6890
+      },
+      {
+        "code": "FAP2021-employes-de-libre-service",
+        "recruitmentProjects": 6690
+      },
+      {
+        "code": "FAP2021-employes-de-l-hotellerie",
+        "recruitmentProjects": 6400
+      },
+      {
+        "code": "FAP2021-professionnels-de-l-animation-socioculturelle",
+        "recruitmentProjects": 6300
+      },
+      {
+        "code": "FAP2021-cuisiniers",
+        "recruitmentProjects": 6190
+      },
+      {
+        "code": "FAP2021-personnels-de-menage-chez-des-particuliers",
+        "recruitmentProjects": 3760
+      },
+      {
+        "code": "FAP2021-ouvriers-peu-qualifies-des-industries-agro-alimentaires",
+        "recruitmentProjects": 3640
+      },
+      {
+        "code": "FAP2021-maraichers-et-horticulteurs",
+        "recruitmentProjects": 3590
+      },
+      {
+        "code": "FAP2021-infirmiers-et-sages-femmes",
+        "recruitmentProjects": 3510
+      },
+      {
+        "code": "FAP2021-vendeurs-en-produits-alimentaires",
+        "recruitmentProjects": 3500
+      },
+      {
+        "code": "FAP2021-caissiers",
+        "recruitmentProjects": 3470
+      },
+      {
+        "code": "FAP2021-manutentionnaires-et-demenageurs-peu-qualifies",
+        "recruitmentProjects": 3250
+      },
+      {
+        "code": "FAP2021-magasiniers-et-preparateurs-de-commandes-peu-qualifies",
+        "recruitmentProjects": 3120
+      },
+      {
+        "code": "FAP2021-artistes-musique-danse-spectacles",
+        "recruitmentProjects": 3060
+      }
+    ],
+    "rent": {
+      "advertisedRentEurM2": 13.92371656913634,
+      "cityCoverage": 4,
+      "sourceCityCount": 4,
+      "status": "internal-estimate"
+    }
+  },
+  {
+    "code": "53",
+    "nameFr": "Bretagne",
+    "nameEn": "Bretagne",
+    "nameKo": null,
+    "slug": "bretagne",
+    "geometrySource": "IGN ADMIN EXPRESS COG",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved",
+    "topDemand": [
+      {
+        "code": "FAP2021-serveurs-de-cafes-restaurants",
+        "recruitmentProjects": 6460
+      },
+      {
+        "code": "FAP2021-agents-d-entretien-de-locaux",
+        "recruitmentProjects": 6070
+      },
+      {
+        "code": "FAP2021-aides-soignants",
+        "recruitmentProjects": 4980
+      },
+      {
+        "code": "FAP2021-agriculteurs",
+        "recruitmentProjects": 4670
+      },
+      {
+        "code": "FAP2021-aides-de-cuisine-et-employes-polyvalents-de-la-restauration",
+        "recruitmentProjects": 4290
+      },
+      {
+        "code": "FAP2021-aides-a-domicile-et-auxiliaires-de-vie",
+        "recruitmentProjects": 4060
+      },
+      {
+        "code": "FAP2021-professionnels-de-l-animation-socioculturelle",
+        "recruitmentProjects": 3940
+      },
+      {
+        "code": "FAP2021-ouvriers-peu-qualifies-des-industries-agro-alimentaires",
+        "recruitmentProjects": 3940
+      },
+      {
+        "code": "FAP2021-employes-de-libre-service",
+        "recruitmentProjects": 3650
+      },
+      {
+        "code": "FAP2021-cuisiniers",
+        "recruitmentProjects": 3250
+      },
+      {
+        "code": "FAP2021-employes-de-l-hotellerie",
+        "recruitmentProjects": 2960
+      },
+      {
+        "code": "FAP2021-maraichers-et-horticulteurs",
+        "recruitmentProjects": 2900
+      },
+      {
+        "code": "FAP2021-ouvriers-qualifies-des-industries-agro-alimentaires",
+        "recruitmentProjects": 2570
+      },
+      {
+        "code": "FAP2021-artistes-musique-danse-spectacles",
+        "recruitmentProjects": 2380
+      },
+      {
+        "code": "FAP2021-agents-de-service-hospitaliers",
+        "recruitmentProjects": 2200
+      },
+      {
+        "code": "FAP2021-infirmiers-et-sages-femmes",
+        "recruitmentProjects": 2080
+      },
+      {
+        "code": "FAP2021-vendeurs-en-produits-alimentaires",
+        "recruitmentProjects": 2030
+      },
+      {
+        "code": "FAP2021-conducteurs-routiers",
+        "recruitmentProjects": 1980
+      },
+      {
+        "code": "FAP2021-caissiers",
+        "recruitmentProjects": 1940
+      },
+      {
+        "code": "FAP2021-personnels-de-menage-chez-des-particuliers",
+        "recruitmentProjects": 1890
+      }
+    ],
+    "rent": {
+      "advertisedRentEurM2": 13.547187211814705,
+      "cityCoverage": 4,
+      "sourceCityCount": 4,
+      "status": "internal-estimate"
+    }
+  },
+  {
+    "code": "94",
+    "nameFr": "Corse",
+    "nameEn": "Corse",
+    "nameKo": null,
+    "slug": "corse",
+    "geometrySource": "IGN ADMIN EXPRESS COG",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved",
+    "topDemand": [
+      {
+        "code": "FAP2021-serveurs-de-cafes-restaurants",
+        "recruitmentProjects": 2860
+      },
+      {
+        "code": "FAP2021-employes-de-l-hotellerie",
+        "recruitmentProjects": 2260
+      },
+      {
+        "code": "FAP2021-cuisiniers",
+        "recruitmentProjects": 1460
+      },
+      {
+        "code": "FAP2021-aides-de-cuisine-et-employes-polyvalents-de-la-restauration",
+        "recruitmentProjects": 1400
+      },
+      {
+        "code": "FAP2021-agriculteurs",
+        "recruitmentProjects": 1130
+      },
+      {
+        "code": "FAP2021-viticulteurs-arboriculteurs",
+        "recruitmentProjects": 820
+      },
+      {
+        "code": "FAP2021-employes-de-libre-service",
+        "recruitmentProjects": 760
+      },
+      {
+        "code": "FAP2021-vendeurs-en-habillement-et-accessoires-articles-de-luxe-de-sport-de-loisirs-et-culturels",
+        "recruitmentProjects": 550
+      },
+      {
+        "code": "FAP2021-macons-qualifies",
+        "recruitmentProjects": 550
+      },
+      {
+        "code": "FAP2021-caissiers",
+        "recruitmentProjects": 510
+      },
+      {
+        "code": "FAP2021-vendeurs-en-produits-alimentaires",
+        "recruitmentProjects": 490
+      },
+      {
+        "code": "FAP2021-jardiniers-des-espaces-verts-et-naturels",
+        "recruitmentProjects": 410
+      },
+      {
+        "code": "FAP2021-agents-d-entretien-de-locaux",
+        "recruitmentProjects": 400
+      },
+      {
+        "code": "FAP2021-conducteurs-et-livreurs-sur-courte-distance-hors-distribution-de-documents",
+        "recruitmentProjects": 340
+      },
+      {
+        "code": "FAP2021-aides-a-domicile-et-auxiliaires-de-vie",
+        "recruitmentProjects": 300
+      },
+      {
+        "code": "FAP2021-sportifs-et-animateurs-sportifs",
+        "recruitmentProjects": 290
+      },
+      {
+        "code": "FAP2021-agents-de-maitrise-de-l-hotellerie-et-de-la-gestion-des-structures-de-loisirs",
+        "recruitmentProjects": 260
+      },
+      {
+        "code": "FAP2021-professionnels-de-l-animation-socioculturelle",
+        "recruitmentProjects": 250
+      },
+      {
+        "code": "FAP2021-personnels-de-menage-chez-des-particuliers",
+        "recruitmentProjects": 240
+      },
+      {
+        "code": "FAP2021-manutentionnaires-et-demenageurs-peu-qualifies",
+        "recruitmentProjects": 240
+      }
+    ],
+    "rent": {
+      "advertisedRentEurM2": 15.215186350503899,
+      "cityCoverage": 1,
+      "sourceCityCount": 1,
+      "status": "internal-estimate"
+    }
+  }
+]

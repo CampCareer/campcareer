@@ -18,6 +18,7 @@ import { pilotOccupationSlug } from "@/components/expansion/pilot-occupation-pag
 import { JP_CITY_MAP_PAGES, JP_PREFECTURE_MAP_PAGES } from "@/lib/jp-map-seo"
 import { SG_AREA_MAP_PAGES } from "@/lib/sg-map-seo"
 import { KR_REGIONS, KR_UNIVERSITIES, isKoreaRegionIndexable } from "@/data/kr-map-data"
+import { FR_CITIES, FR_REGIONS, FR_UNIVERSITIES, isFranceCityIndexable, isFranceRegionIndexable } from "@/data/fr-map-data"
 
 const BASE = "https://www.campcareer.com"
 
@@ -57,6 +58,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/countries/singapore`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
     { url: `${BASE}/kr`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
     { url: `${BASE}/kr/jobs`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
+    { url: `${BASE}/fr`, lastModified: lastModStatic, priority: 0.85, changeFrequency: "weekly" },
+    { url: `${BASE}/fr/jobs`, lastModified: lastModStatic, priority: 0.85, changeFrequency: "weekly" },
+    { url: `${BASE}/ko/fr`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
+    { url: `${BASE}/ko/fr/jobs`, lastModified: lastModStatic, priority: 0.75, changeFrequency: "weekly" },
+    { url: `${BASE}/countries/france`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
   ]
 
   const blogPages: MetadataRoute.Sitemap = getAllPosts().map((post) => ({
@@ -203,10 +209,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.6,
       changeFrequency: "weekly" as const,
     }))
+  const frRegionPages: MetadataRoute.Sitemap = FR_REGIONS.filter(isFranceRegionIndexable).map((region) => ({
+    url: `${BASE}/maps/fr/regions/${region.slug}`,
+    lastModified: new Date(region.lastChecked),
+    priority: 0.65,
+    changeFrequency: "monthly" as const,
+  }))
+  const frCityPages: MetadataRoute.Sitemap = FR_CITIES.filter(isFranceCityIndexable).map((city) => ({
+    url: `${BASE}/maps/fr/cities/${city.slug}`,
+    lastModified: new Date(city.lastChecked),
+    priority: 0.6,
+    changeFrequency: "monthly" as const,
+  }))
+  const frUniversityPages: MetadataRoute.Sitemap = FR_UNIVERSITIES
+    .filter((university) => university.reviewStatus === "approved" && university.officialUrl && Number.isFinite(university.lat) && Number.isFinite(university.lng))
+    .map((university) => ({
+      url: `${BASE}/map/fr/university/${university.slug}`,
+      lastModified: new Date(university.lastChecked),
+      priority: 0.55,
+      changeFrequency: "monthly" as const,
+    }))
 
   const total = staticPages.length + blogPages.length + countryDetailPages.length + mapOccupationPages.length + pilotOccupationPages.length +
-    ieLangSchoolPages.length + mapPages.length + jpMapPages.length + sgMapPages.length + krRegionPages.length + krUniversityPages.length + usUnivPages.length + auUnivPages.length + caUnivPages.length + ukUnivPages.length + deUnivPages.length + nlUnivPages.length
-  console.log(`[sitemap] counts — static: ${staticPages.length}, blog: ${blogPages.length}, country details: ${countryDetailPages.length}, map occupations: ${mapOccupationPages.length}, pilot occupations: ${pilotOccupationPages.length}, IE schools: ${ieLangSchoolPages.length}, map: ${mapPages.length}, JP regional maps: ${jpMapPages.length}, SG regional maps: ${sgMapPages.length}, KR regional maps: ${krRegionPages.length}, KR universities: ${krUniversityPages.length}, US universities: ${usUnivPages.length}, AU universities: ${auUnivPages.length}, CA universities: ${caUnivPages.length}, UK universities: ${ukUnivPages.length}, DE universities: ${deUnivPages.length}, NL universities: ${nlUnivPages.length}, TOTAL: ${total}`)
+    ieLangSchoolPages.length + mapPages.length + jpMapPages.length + sgMapPages.length + krRegionPages.length + krUniversityPages.length + frRegionPages.length + frCityPages.length + frUniversityPages.length + usUnivPages.length + auUnivPages.length + caUnivPages.length + ukUnivPages.length + deUnivPages.length + nlUnivPages.length
+  console.log(`[sitemap] counts — static: ${staticPages.length}, blog: ${blogPages.length}, country details: ${countryDetailPages.length}, map occupations: ${mapOccupationPages.length}, pilot occupations: ${pilotOccupationPages.length}, IE schools: ${ieLangSchoolPages.length}, map: ${mapPages.length}, JP regional maps: ${jpMapPages.length}, SG regional maps: ${sgMapPages.length}, KR regional maps: ${krRegionPages.length}, KR universities: ${krUniversityPages.length}, FR regions: ${frRegionPages.length}, FR cities: ${frCityPages.length}, FR universities: ${frUniversityPages.length}, US universities: ${usUnivPages.length}, AU universities: ${auUnivPages.length}, CA universities: ${caUnivPages.length}, UK universities: ${ukUnivPages.length}, DE universities: ${deUnivPages.length}, NL universities: ${nlUnivPages.length}, TOTAL: ${total}`)
 
-  return [...staticPages, ...blogPages, ...countryDetailPages, ...mapOccupationPages, ...pilotOccupationPages, ...ieLangSchoolPages, ...mapPages, ...jpMapPages, ...sgMapPages, ...krRegionPages, ...krUniversityPages, ...usUnivPages, ...auUnivPages, ...caUnivPages, ...ukUnivPages, ...deUnivPages, ...nlUnivPages]
+  return [...staticPages, ...blogPages, ...countryDetailPages, ...mapOccupationPages, ...pilotOccupationPages, ...ieLangSchoolPages, ...mapPages, ...jpMapPages, ...sgMapPages, ...krRegionPages, ...krUniversityPages, ...frRegionPages, ...frCityPages, ...frUniversityPages, ...usUnivPages, ...auUnivPages, ...caUnivPages, ...ukUnivPages, ...deUnivPages, ...nlUnivPages]
 }

@@ -18,7 +18,9 @@
     "import:sg": "npx tsx scripts/import-singapore-official-data.ts",
     "check:sg": "npx tsx scripts/check-singapore-data.ts",
     "import:kr": "npx tsx scripts/import-korea-official-data.ts",
-    "check:kr": "npx tsx scripts/check-korea-data.ts"
+    "check:kr": "npx tsx scripts/check-korea-data.ts",
+    "import:fr": "npx tsx scripts/import-france-official-data.ts",
+    "check:fr": "npx tsx scripts/check-france-data.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",

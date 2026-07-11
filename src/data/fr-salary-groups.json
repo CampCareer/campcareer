@@ -1,0 +1,470 @@
+[
+  {
+    "regionCode": "84",
+    "pcsCode": "5",
+    "monthlyNetEur": 1966.047384,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "75",
+    "pcsCode": "1T3",
+    "monthlyNetEur": 3914.152918,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "24",
+    "pcsCode": "5",
+    "monthlyNetEur": 1904.359376,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "52",
+    "pcsCode": "1T3",
+    "monthlyNetEur": 3911.393822,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "11",
+    "pcsCode": "1T3",
+    "monthlyNetEur": 5287.196839,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "27",
+    "pcsCode": "1T3",
+    "monthlyNetEur": 3955.982293,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "52",
+    "pcsCode": "4",
+    "monthlyNetEur": 2524.059769,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "32",
+    "pcsCode": "4",
+    "monthlyNetEur": 2575.571064,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "24",
+    "pcsCode": "1T3",
+    "monthlyNetEur": 3983.169811,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "84",
+    "pcsCode": "6",
+    "monthlyNetEur": 2077.362531,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "44",
+    "pcsCode": "4",
+    "monthlyNetEur": 2633.208856,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "76",
+    "pcsCode": "5",
+    "monthlyNetEur": 1883.971126,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "75",
+    "pcsCode": "5",
+    "monthlyNetEur": 1916.138272,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "28",
+    "pcsCode": "4",
+    "monthlyNetEur": 2631.647282,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "75",
+    "pcsCode": "4",
+    "monthlyNetEur": 2524.57562,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "84",
+    "pcsCode": "4",
+    "monthlyNetEur": 2652.477597,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "76",
+    "pcsCode": "1T3",
+    "monthlyNetEur": 3886.513862,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "94",
+    "pcsCode": "1T3",
+    "monthlyNetEur": 3583.671586,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "93",
+    "pcsCode": "1T3",
+    "monthlyNetEur": 4125.125217,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "84",
+    "pcsCode": "1T3",
+    "monthlyNetEur": 4175.195517,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "28",
+    "pcsCode": "1T3",
+    "monthlyNetEur": 4055.587643,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "44",
+    "pcsCode": "6",
+    "monthlyNetEur": 2087.813747,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "28",
+    "pcsCode": "6",
+    "monthlyNetEur": 2087.381041,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "76",
+    "pcsCode": "4",
+    "monthlyNetEur": 2528.19914,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "27",
+    "pcsCode": "5",
+    "monthlyNetEur": 1904.279981,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "53",
+    "pcsCode": "6",
+    "monthlyNetEur": 1981.647209,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "24",
+    "pcsCode": "6",
+    "monthlyNetEur": 2020.614835,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "11",
+    "pcsCode": "4",
+    "monthlyNetEur": 2895.448779,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "44",
+    "pcsCode": "5",
+    "monthlyNetEur": 1908.172948,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "93",
+    "pcsCode": "5",
+    "monthlyNetEur": 1953.491254,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "28",
+    "pcsCode": "5",
+    "monthlyNetEur": 1907.376839,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "94",
+    "pcsCode": "5",
+    "monthlyNetEur": 1946.011797,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "11",
+    "pcsCode": "5",
+    "monthlyNetEur": 2092.607491,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "44",
+    "pcsCode": "1T3",
+    "monthlyNetEur": 4042.466616,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "32",
+    "pcsCode": "5",
+    "monthlyNetEur": 1883.865,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "76",
+    "pcsCode": "6",
+    "monthlyNetEur": 1966.75092,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "24",
+    "pcsCode": "4",
+    "monthlyNetEur": 2588.221413,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "93",
+    "pcsCode": "6",
+    "monthlyNetEur": 2031.059293,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "93",
+    "pcsCode": "4",
+    "monthlyNetEur": 2663.883425,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "52",
+    "pcsCode": "6",
+    "monthlyNetEur": 2013.99796,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "94",
+    "pcsCode": "4",
+    "monthlyNetEur": 2623.803237,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "94",
+    "pcsCode": "6",
+    "monthlyNetEur": 2010.023947,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "53",
+    "pcsCode": "5",
+    "monthlyNetEur": 1898.233553,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "32",
+    "pcsCode": "6",
+    "monthlyNetEur": 2027.187597,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "53",
+    "pcsCode": "4",
+    "monthlyNetEur": 2534.460435,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "11",
+    "pcsCode": "6",
+    "monthlyNetEur": 2036.496492,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "52",
+    "pcsCode": "5",
+    "monthlyNetEur": 1924.58172,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "75",
+    "pcsCode": "6",
+    "monthlyNetEur": 1987.569129,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "53",
+    "pcsCode": "1T3",
+    "monthlyNetEur": 3893.226982,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "27",
+    "pcsCode": "6",
+    "monthlyNetEur": 2049.636328,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "27",
+    "pcsCode": "4",
+    "monthlyNetEur": 2567.236386,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  },
+  {
+    "regionCode": "32",
+    "pcsCode": "1T3",
+    "monthlyNetEur": 4040.941434,
+    "definition": "Average monthly net salary in full-time equivalent, private sector, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "lastChecked": "2026-07-10",
+    "reviewStatus": "approved"
+  }
+]

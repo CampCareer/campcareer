@@ -10,8 +10,9 @@ import { getBelgiumOccupations, getIrelandOccupations } from "@/lib/country-occu
 import { getCountrySource, type SourceRecord } from "@/data/source-registry"
 import { SG_DEMAND_OCCUPATIONS } from "@/data/sg-map-data"
 import { KR_OCCUPATIONS, isKoreaOccupationIndexable } from "@/data/kr-map-data"
+import { FR_DEMAND_OCCUPATIONS, isFranceDemandOccupationIndexable } from "@/data/fr-map-data"
 
-export const MAP_COUNTRIES = ["au", "ca", "us", "ie", "uk", "de", "nl", "be", "sg", "kr"] as const
+export const MAP_COUNTRIES = ["au", "ca", "us", "ie", "uk", "de", "nl", "be", "sg", "kr", "fr"] as const
 
 export type MapCountry = (typeof MAP_COUNTRIES)[number]
 
@@ -49,6 +50,7 @@ const COUNTRY_NAME: Record<MapCountry, string> = {
   be: "Belgium",
   sg: "Singapore",
   kr: "South Korea",
+  fr: "France",
 }
 
 const SOURCE_COUNTRY: Record<MapCountry, SourceRecord["country"]> = {
@@ -62,6 +64,7 @@ const SOURCE_COUNTRY: Record<MapCountry, SourceRecord["country"]> = {
   be: "BE",
   sg: "SG",
   kr: "KR",
+  fr: "FR",
 }
 
 const CURRENCY_SYMBOL: Record<MapOccupation["currency"], string> = {
@@ -300,6 +303,24 @@ function loadSingapore(): RawMapOccupation[] {
   }))
 }
 
+function loadFrance(): RawMapOccupation[] {
+  return FR_DEMAND_OCCUPATIONS
+    .filter(isFranceDemandOccupationIndexable)
+    .map((row) => ({
+      code: row.bmoCode,
+      name: row.nameEn!,
+      localName: row.localName,
+      medianSalary: null,
+      currency: "EUR" as const,
+      shortageScore: row.demandScore,
+      employment: row.recruitmentProjects,
+      field: `France Travail BMO 2026 · ${row.recruitmentDifficultyPct ?? "n/a"}% recruitment difficulty`,
+      codeLabel: "FAP2021",
+      salaryLabel: "Salary is shown separately by INSEE PCS group",
+      dataSource: getCountrySource("FR", "shortage"),
+    }))
+}
+
 export const getMapOccupations = cache(async (country: MapCountry): Promise<MapOccupation[]> => {
   const raw =
     country === "au" ? await loadAustralia() :
@@ -311,6 +332,7 @@ export const getMapOccupations = cache(async (country: MapCountry): Promise<MapO
     country === "nl" ? loadNetherlands() :
     country === "be" ? loadBelgium() :
     country === "sg" ? loadSingapore() :
+    country === "fr" ? loadFrance() :
     loadKorea()
 
   return withCanonicalSlugs(country, raw)
@@ -323,7 +345,7 @@ export async function resolveMapOccupation(country: MapCountry, slugOrCode: stri
 }
 
 export async function getMapOccupationStaticParams() {
-  const countries: MapCountry[] = ["us", "ie", "uk", "de", "nl", "be", "sg", "kr"]
+  const countries: MapCountry[] = ["us", "ie", "uk", "de", "nl", "be", "sg", "kr", "fr"]
   const params: Array<{ country: MapCountry; slug: string }> = []
 
   for (const country of countries) {

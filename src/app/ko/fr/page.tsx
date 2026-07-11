@@ -1,0 +1,7 @@
+import Link from "next/link"
+import { FR_CITIES, FR_DEMAND_OCCUPATIONS, FR_REGIONS, isFranceDemandOccupationIndexable } from "@/data/fr-map-data"
+import { pageMetadata } from "@/lib/seo"
+
+export const revalidate = 86400
+export const metadata = { ...pageMetadata({ title: "프랑스 지역별 직업·주거·대학 지도 | CampCareer", description: "프랑스 레지옹과 도시별 채용 수요, INSEE 임금 직업군, 임대광고 지표와 공공 대학을 비교합니다.", path: "/ko/fr" }), alternates: { canonical: "/ko/fr", languages: { "ko-KR": "/ko/fr", en: "/fr" } } }
+export default function KoreanFranceHubPage() { const occupations = FR_DEMAND_OCCUPATIONS.filter(isFranceDemandOccupationIndexable); return <main className="mx-auto max-w-5xl px-4 py-12 sm:px-6"><p className="text-sm font-semibold text-blue-700">France</p><h1 className="mt-4 text-4xl font-semibold">프랑스 유학·취업 지도</h1><p className="mt-4 max-w-3xl leading-7 text-slate-600">France Travail BMO, INSEE, MESR의 공식 지표를 직업 수요·임금·주거·대학으로 분리해 확인합니다.</p><div className="mt-8 grid gap-3 sm:grid-cols-3"><div className="rounded-lg border border-slate-200 p-4"><b>{FR_REGIONS.length}개</b><p className="mt-1 text-sm text-slate-500">본토 레지옹</p></div><div className="rounded-lg border border-slate-200 p-4"><b>{FR_CITIES.length}개</b><p className="mt-1 text-sm text-slate-500">고용권역 연결 도시</p></div><div className="rounded-lg border border-slate-200 p-4"><b>{occupations.length}개</b><p className="mt-1 text-sm text-slate-500">품질 통과 직업군</p></div></div><Link href="/map?country=fr" className="mt-8 inline-flex text-sm font-semibold text-blue-700 hover:underline">프랑스 지도 열기</Link></main> }

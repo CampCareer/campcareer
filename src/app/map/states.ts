@@ -347,3 +347,25 @@ export const KR_SIDO_NAMES: Record<KRSidoCode, { ko: string; en: string }> = {
   "48": { ko: "경상남도", en: "Gyeongnam" },
   "50": { ko: "제주특별자치도", en: "Jeju" },
 }
+
+// ── France (FR) metropolitan regions ────────────────────────────────────────
+
+export const FR_REGION_CODES = ["11", "24", "27", "28", "32", "44", "52", "53", "75", "76", "84", "93", "94"] as const
+
+export type FRRegionCode = typeof FR_REGION_CODES[number]
+
+export const FR_REGION_NAMES: Record<FRRegionCode, string> = {
+  "11": "Île-de-France",
+  "24": "Centre-Val de Loire",
+  "27": "Bourgogne-Franche-Comté",
+  "28": "Normandie",
+  "32": "Hauts-de-France",
+  "44": "Grand Est",
+  "52": "Pays de la Loire",
+  "53": "Bretagne",
+  "75": "Nouvelle-Aquitaine",
+  "76": "Occitanie",
+  "84": "Auvergne-Rhône-Alpes",
+  "93": "Provence-Alpes-Côte d'Azur",
+  "94": "Corse",
+}

@@ -1,0 +1,78 @@
+[
+  {
+    "category": "shortage",
+    "sourceName": "France Travail BMO 2026",
+    "sourceUrl": "https://statistiques.francetravail.org/bmo/bmoexp?le=0&pp=2026",
+    "datasetUrls": [
+      "https://statistiques.francetravail.org/bmo/bmoexp?le=0&na=0&pp=2026",
+      "https://statistiques.francetravail.org/bmo/bmoexp?le=0&nc=0&pp=2026"
+    ],
+    "contentHash": "6a9b2d1bd8fecd437ca3a8dfed5039a988ae199429d7acfddbf48b94e3c15525",
+    "retrievedAt": "2026-07-10T20:50:07.882Z",
+    "lastChecked": "2026-07-10",
+    "method": "official-download",
+    "licenseStatus": "pending-verification",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "rent",
+    "sourceName": "Carte des loyers 2025",
+    "sourceUrl": "https://www.data.gouv.fr/datasets/carte-des-loyers-indicateurs-de-loyers-dannonce-par-commune-en-2025",
+    "datasetUrls": [
+      "https://static.data.gouv.fr/resources/carte-des-loyers-indicateurs-de-loyers-dannonce-par-commune-en-2025/20251211-145010/pred-app-mef-dhup.csv"
+    ],
+    "contentHash": "eda84e03a269faff3335f7ab6061d1f1e9f45adc89c0a4c32632df20a5de4010",
+    "retrievedAt": "2026-07-10T20:50:07.882Z",
+    "lastChecked": "2026-07-10",
+    "method": "official-download",
+    "licenseStatus": "pending-verification",
+    "reviewStatus": "review-required",
+    "status": "ingested"
+  },
+  {
+    "category": "occupation",
+    "sourceName": "INSEE private-sector salaries by PCS, 2023",
+    "sourceUrl": "https://www.insee.fr/fr/statistiques/2021266",
+    "datasetUrls": [
+      "https://www.insee.fr/fr/statistiques/fichier/2021266/DS_BTS_SAL_EQTP_SEX_PCS_2023_CSV_FR.zip"
+    ],
+    "contentHash": "1cc99f41d8b943a0449c55ff25b243c041af0f3b1816afb7b9d10c1d5124a7c3",
+    "retrievedAt": "2026-07-10T20:50:07.882Z",
+    "lastChecked": "2026-07-10",
+    "method": "official-download",
+    "licenseStatus": "public-statistics",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "university",
+    "sourceName": "MESR public higher-education institutions",
+    "sourceUrl": "https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-principaux-etablissements-enseignement-superieur/",
+    "datasetUrls": [
+      "https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-principaux-etablissements-enseignement-superieur/exports/csv?limit=-1"
+    ],
+    "contentHash": "200bea407ef542e1f569f34b33dcd1a195ca311c076176f715893cf5ebb55e55",
+    "retrievedAt": "2026-07-10T20:50:07.882Z",
+    "lastChecked": "2026-07-10",
+    "method": "official-api",
+    "licenseStatus": "Licence Ouverte 2.0",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "boundary",
+    "sourceName": "IGN ADMIN EXPRESS COG",
+    "sourceUrl": "https://data.geopf.fr/wfs/ows?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature&TYPENAMES=ADMINEXPRESS-COG.LATEST:region&OUTPUTFORMAT=application%2Fjson",
+    "datasetUrls": [
+      "https://geo.api.gouv.fr/communes"
+    ],
+    "contentHash": "8ae01e49ddebdb7d1836fce0727d47e3401d6824a599f0ff8bcdf5ee03252715",
+    "retrievedAt": "2026-07-10T20:50:07.882Z",
+    "lastChecked": "2026-07-10",
+    "method": "official-api",
+    "licenseStatus": "official-source",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  }
+]

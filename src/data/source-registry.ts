@@ -8,7 +8,7 @@ export const CORE_DATA_CATEGORIES = [
 ] as const
 
 export type CoreDataCategory = (typeof CORE_DATA_CATEGORIES)[number]
-export type RegistryCountryCode = "AU" | "US" | "CA" | "UK" | "IE" | "DE" | "NL" | "BE" | "SG" | "KR"
+export type RegistryCountryCode = "AU" | "US" | "CA" | "UK" | "IE" | "DE" | "NL" | "BE" | "SG" | "KR" | "FR"
 export type SourceConfidence = "official" | "market-estimate" | "internal-estimate"
 export type SourceMethod = "official-api" | "official-download" | "official-web" | "market-estimate"
 export type ReviewStatus = "approved" | "review-required"
@@ -111,6 +111,14 @@ const COUNTRY_SOURCES: Record<RegistryCountryCode, CountrySourceSeed> = {
     rent: { sourceName: "국토교통부 전월세 실거래가", sourceUrl: "https://rt.molit.go.kr/", method: "official-api", refreshCadence: "monthly" },
     "visa-pathway": { sourceName: "Korea Visa Portal", sourceUrl: "https://www.visa.go.kr/", method: "official-web", refreshCadence: "monthly" },
     shortage: { sourceName: "고용노동부 사업체노동력조사", sourceUrl: "https://laborstat.moel.go.kr/", method: "official-download", refreshCadence: "quarterly" },
+  },
+  FR: {
+    tuition: { sourceName: "Campus France", sourceUrl: "https://www.campusfrance.org/en", method: "official-web", refreshCadence: "annual" },
+    "graduate-outcomes": { sourceName: "French Ministry of Higher Education", sourceUrl: "https://www.enseignementsup-recherche.gouv.fr/en", method: "official-download", refreshCadence: "annual" },
+    occupation: { sourceName: "INSEE private-sector salaries by PCS", sourceUrl: "https://www.insee.fr/fr/statistiques/2021266", method: "official-download", refreshCadence: "annual" },
+    rent: { sourceName: "Carte des loyers", sourceUrl: "https://www.data.gouv.fr/datasets/carte-des-loyers-indicateurs-de-loyers-dannonce-par-commune-en-2025", method: "official-download", refreshCadence: "annual" },
+    "visa-pathway": { sourceName: "France-Visas", sourceUrl: "https://france-visas.gouv.fr/en", method: "official-web", refreshCadence: "monthly" },
+    shortage: { sourceName: "France Travail BMO 2026", sourceUrl: "https://statistiques.francetravail.org/bmo/", method: "official-download", refreshCadence: "annual" },
   },
 }
 

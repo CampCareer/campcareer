@@ -20,7 +20,7 @@ type Params = {
 }
 
 export async function generateStaticParams() {
-  const countries = ["us", "ie", "uk", "de", "nl", "be", "sg", "kr"] as const
+  const countries = ["us", "ie", "uk", "de", "nl", "be", "sg", "kr", "fr"] as const
   const params: Array<{ country: string; slug: string }> = []
   for (const country of countries) {
     const occupations = await getIndexableMapOccupations(country)
@@ -45,6 +45,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
     path: occupation.path,
     }),
     robots: { index: isMapOccupationIndexable(occupation), follow: true },
+    ...(occupation.country === "fr" && { alternates: { canonical: occupation.path, languages: { en: occupation.path, "ko-KR": `/ko${occupation.path}` } } }),
   }
 }
 
