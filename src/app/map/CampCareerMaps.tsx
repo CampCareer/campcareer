@@ -32,7 +32,7 @@ import { getJapanCareerLinks } from "@/lib/jp-occupation-card-contract"
 import { getSingaporeCareerLinks, SG_DEMAND_OCCUPATIONS, type SingaporeDemandOccupation, type SingaporeWageOccupation } from "@/data/sg-map-data"
 import { koreaJobSearchLinks, type KoreaOccupation, type KoreaUniversity } from "@/data/kr-map-data"
 import { FR_DEMAND_BY_CODE, FR_PCS_LABELS, franceJobSearchUrl, type FranceCity, type FranceDemandOccupation, type FranceSalaryGroup, type FranceUniversity } from "@/data/fr-map-data"
-import { type SpainCity, type SpainOccupation, type SpainSalaryGroup, type SpainUniversity } from "@/data/es-map-data"
+import { spainJobSearchUrl, type SpainCity, type SpainOccupation, type SpainSalaryGroup, type SpainUniversity } from "@/data/es-map-data"
 
 const LeafletMap = dynamic(() => import("./LeafletMap"), {
   ssr: false,
@@ -1413,12 +1413,21 @@ function ESInfoPanel({ community, city, universities, shortageCount }: { communi
   </div>
 }
 
-function ESShortageList({ rows }: { rows: SpainOccupation[] }) {
-  return <div className="space-y-2">{rows.slice(0, 20).map((occupation, index) => <Link key={occupation.code} href={`/maps/es/${occupation.code.replace(/\./g, "-")}`} className="flex items-center gap-3 rounded-lg border border-slate-200 p-3 text-left hover:border-slate-400 hover:bg-slate-50"><span className="w-5 shrink-0 text-xs font-semibold text-slate-400">{index + 1}</span><span className="min-w-0 flex-1"><span className="block text-sm font-semibold text-slate-900">{occupation.nameEn ?? occupation.localName}</span><span className="mt-0.5 block text-xs text-slate-500">{occupation.nameKo ?? occupation.localName} · {occupation.localName}</span></span><span className="shrink-0 text-right text-xs font-semibold text-rose-800">SEPE<span className="block text-[10px] font-normal text-slate-500">hard to fill</span></span></Link>)}</div>
+function ESShortageList({ rows, onSelect }: { rows: SpainOccupation[]; onSelect: (code: string) => void }) {
+  return <div className="space-y-2">{rows.slice(0, 20).map((occupation, index) => <button type="button" key={occupation.code} onClick={() => onSelect(occupation.code)} className="flex w-full items-center gap-3 rounded-lg border border-slate-200 p-3 text-left hover:border-slate-400 hover:bg-slate-50"><span className="w-5 shrink-0 text-xs font-semibold text-slate-400">{index + 1}</span><span className="min-w-0 flex-1"><span className="block text-sm font-semibold text-slate-900">{occupation.nameEn ?? occupation.localName}</span><span className="mt-0.5 block text-xs text-slate-500">{occupation.nameKo ?? occupation.localName} · {occupation.localName}</span></span><span className="shrink-0 text-right text-xs font-semibold text-rose-800">SEPE<span className="block text-[10px] font-normal text-slate-500">hard to fill</span></span></button>)}</div>
 }
 
-function ESHighPayList({ rows }: { rows: SpainSalaryGroup[] }) {
-  return <div className="space-y-2">{rows.slice(0, 20).map((salary) => <div key={salary.cnoCode} className="flex items-center gap-3 rounded-lg border border-slate-200 p-3"><span className="min-w-0 flex-1"><span className="block text-sm font-semibold text-slate-900">CNO {salary.cnoCode}</span><span className="mt-0.5 block text-xs text-slate-500">Official INE occupation group</span></span><span className="shrink-0 text-right text-xs font-semibold text-emerald-800">€{Math.round(salary.regionalAnnualGrossEur ?? salary.annualGrossEur ?? 0).toLocaleString()}<span className="block text-[10px] font-normal text-slate-500">gross / year</span></span></div>)}</div>
+function ESHighPayList({ rows, onSelect }: { rows: SpainSalaryGroup[]; onSelect: (salary: SpainSalaryGroup) => void }) {
+  return <div className="space-y-2">{rows.slice(0, 20).map((salary) => <button type="button" key={salary.cnoCode} onClick={() => onSelect(salary)} className="flex w-full items-center gap-3 rounded-lg border border-slate-200 p-3 text-left hover:border-slate-400 hover:bg-slate-50"><span className="min-w-0 flex-1"><span className="block text-sm font-semibold text-slate-900">{salary.nameEn}</span><span className="mt-0.5 block text-xs text-slate-500">{salary.nameKo} · {salary.nameEs} · CNO {salary.cnoCode}</span></span><span className="shrink-0 text-right text-xs font-semibold text-emerald-800">€{Math.round(salary.regionalAnnualGrossEur ?? salary.annualGrossEur ?? 0).toLocaleString()}<span className="block text-[10px] font-normal text-slate-500">gross / year</span></span></button>)}</div>
+}
+
+function ESShortageOccupationDetail({ occupation, communityName, province, onBack, onClose }: { occupation: SpainOccupation; communityName: string; province: MapData["esProvinces"][number] | null; onBack: () => void; onClose: () => void }) {
+  const jobUrl = spainJobSearchUrl(occupation, province)
+  return <><div className="flex items-center justify-between border-b border-slate-200 px-5 py-3"><button type="button" onClick={onBack} className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-900"><ChevronLeft className="h-4 w-4" />목록</button><button type="button" onClick={onClose} aria-label="Close" className="rounded-md p-1 text-slate-400 hover:bg-slate-100"><X className="h-4 w-4" /></button></div><div className="min-h-0 flex-1 space-y-4 overflow-y-auto px-5 py-4"><div><p className="text-xs text-slate-500">{communityName} · {occupation.sourceQuarter} · SEPE</p><h2 className="mt-1 text-xl font-semibold text-slate-950">{occupation.nameEn ?? occupation.localName}</h2><p className="mt-1 text-sm text-slate-500">{occupation.nameKo ?? "한국어 번역 검토 대기"} · {occupation.localName}</p></div><div className="grid grid-cols-2 gap-3"><div className="rounded-lg border border-slate-200 bg-slate-50 p-3"><p className="text-[11px] text-slate-500">Foreign-hiring signal</p><p className="mt-1 text-base font-semibold">SEPE listed</p><p className="mt-1 text-[11px] text-slate-500">{occupation.provinceCodes.length} provinces</p></div><div className="rounded-lg border border-slate-200 bg-slate-50 p-3"><p className="text-[11px] text-slate-500">Study fields</p><p className="mt-1 text-base font-semibold">{occupation.studyFields.length > 0 ? occupation.studyFields.join(", ") : "Review pending"}</p></div></div><div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs leading-5 text-amber-900">SEPE listing is an employment-access signal that may support an employer work-permit application. It does not guarantee a visa, sponsorship, or a job offer. Regulated professions may require degree recognition.</div><a href={jobUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between rounded-lg border border-emerald-200 bg-emerald-50 p-3 hover:bg-emerald-100"><span><span className="block text-sm font-semibold text-emerald-950">Spain official job search</span><span className="mt-1 block text-xs text-emerald-700">Search {occupation.localName}{province ? ` in ${province.nameEs}` : ""}</span></span><ExternalLink className="h-4 w-4 text-emerald-700" /></a><a href="https://www.sepe.es/HomeSepe/empresas/informacion-para-empresas/profesiones-de-dificil-cobertura/profesiones-mas-demandadas" target="_blank" rel="noopener noreferrer" className="block text-xs text-slate-500 hover:underline">SEPE source · checked {occupation.sourceQuarter}</a><AffiliateCtas /></div></>
+}
+
+function ESSalaryOccupationDetail({ salary, communityName, onBack, onClose }: { salary: SpainSalaryGroup; communityName: string; onBack: () => void; onClose: () => void }) {
+  return <><div className="flex items-center justify-between border-b border-slate-200 px-5 py-3"><button type="button" onClick={onBack} className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-900"><ChevronLeft className="h-4 w-4" />목록</button><button type="button" onClick={onClose} aria-label="Close" className="rounded-md p-1 text-slate-400 hover:bg-slate-100"><X className="h-4 w-4" /></button></div><div className="min-h-0 flex-1 space-y-4 overflow-y-auto px-5 py-4"><div><p className="text-xs text-slate-500">{communityName} · INE EAES {salary.period}</p><h2 className="mt-1 text-xl font-semibold text-slate-950">{salary.nameEn}</h2><p className="mt-1 text-sm text-slate-500">{salary.nameKo} · {salary.nameEs} · CNO {salary.cnoCode}</p></div><div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4"><p className="text-xs text-emerald-700">Regional annual gross wage reference</p><p className="mt-1 text-2xl font-semibold text-emerald-950">€{Math.round(salary.regionalAnnualGrossEur ?? salary.annualGrossEur ?? 0).toLocaleString()}</p><p className="mt-2 text-xs leading-5 text-emerald-800">CNO major-group wage, adjusted using the official regional all-worker wage factor. This is not an individual job offer or a guaranteed foreign-worker salary.</p></div><div className="rounded-lg border border-slate-200 p-4 text-sm text-slate-600">{salary.definition}</div><a href={salary.sourceUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-sm font-semibold text-slate-700 hover:underline">INE source <ExternalLink className="h-3.5 w-3.5" /></a><AffiliateCtas /></div></>
 }
 
 function FRDemandOccupationDetail({ occupation, city, regionName, onBack, onClose }: { occupation: FranceDemandOccupation; city: FranceCity | null; regionName: string; onBack: () => void; onClose: () => void }) {
@@ -1643,6 +1652,15 @@ function Panel({
     const [, , pcsCode] = selectedOccCode.split("-")
     return data.frSalaryByRegion[selected].find((salary) => salary.pcsCode === pcsCode) ?? null
   }, [isFR, selectedOccCode, selected, data.frSalaryByRegion])
+  const selectedESOccupation = useMemo(() => {
+    if (!isES || !selectedOccCode?.startsWith("es-shortage-")) return null
+    return data.esOccupations.find((occupation) => occupation.code === selectedOccCode.slice("es-shortage-".length)) ?? null
+  }, [isES, selectedOccCode, data.esOccupations])
+  const selectedESSalary = useMemo(() => {
+    if (!isES || !selectedOccCode?.startsWith("es-pay-")) return null
+    const [, , regionCode, cnoCode] = selectedOccCode.split("-")
+    return data.esHighPayByCommunity[regionCode]?.find((salary) => salary.cnoCode === cnoCode) ?? null
+  }, [isES, selectedOccCode, data.esHighPayByCommunity])
 
   const handleSelectOcc = (code: string) => {
     const name = data.auOccupations[code]?.occupation_en ?? code
@@ -1712,6 +1730,15 @@ function Panel({
     track("click_occupation", { type: "fr-salary-group", code: pcsCode, name: FR_PCS_LABELS[pcsCode as keyof typeof FR_PCS_LABELS]?.nameEn ?? pcsCode, region: selected })
     setSelectedOccCode(`fr-pay-${pcsCode}`)
   }
+  const handleSelectESShortage = (code: string) => {
+    const occupation = data.esOccupations.find((row) => row.code === code)
+    track("click_occupation", { type: "es-shortage", code, name: occupation?.nameEn ?? code, region: selected })
+    setSelectedOccCode(`es-shortage-${code}`)
+  }
+  const handleSelectESSalary = (salary: SpainSalaryGroup) => {
+    track("click_occupation", { type: "es-high-pay", code: salary.cnoCode, name: salary.nameEn, region: selected })
+    setSelectedOccCode(`es-pay-${selected}-${salary.cnoCode}`)
+  }
   const handleBack = () => setSelectedOccCode(null)
   const handleBackNero = () => setSelectedNeroA4(null)
 
@@ -1772,6 +1799,12 @@ function Panel({
   }
   if (selectedFRSalary) {
     return <FRSalaryGroupDetail salary={selectedFRSalary} regionName={stateName} onBack={handleBack} onClose={onClose} />
+  }
+  if (selectedESOccupation) {
+    return <ESShortageOccupationDetail occupation={selectedESOccupation} communityName={stateName} province={data.esProvinces.find((province) => province.code === selectedESOccupation.provinceCodes[0]) ?? null} onBack={handleBack} onClose={onClose} />
+  }
+  if (selectedESSalary) {
+    return <ESSalaryOccupationDetail salary={selectedESSalary} communityName={stateName} onBack={handleBack} onClose={onClose} />
   }
 
   if (selectedOccCode && resolvedCAOcc) {
@@ -2035,7 +2068,7 @@ function Panel({
         {tab === "shortage" && isSG && <SGShortageList rows={data.sgDemandOccupations} onSelect={handleSelectSGDemand} />}
         {tab === "shortage" && isKR && <KROccupationList rows={krDemand} kind="demand" onSelect={handleSelectKROccupation} />}
         {tab === "shortage" && isFR && <FRDemandList rows={selectedFRCity ? selectedFRCity.topDemand.map((row) => ({ ...FR_DEMAND_BY_CODE.get(row.code)!, regionalProjects: row.recruitmentProjects })).filter(Boolean) : frDemand} onSelect={handleSelectFRDemand} locale={locale} />}
-        {tab === "shortage" && isES && <ESShortageList rows={esShortage} />}
+        {tab === "shortage" && isES && <ESShortageList rows={esShortage} onSelect={handleSelectESShortage} />}
         {tab === "shortage" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && activeCountry !== "NL" && activeCountry !== "BE" && activeCountry !== "JP" && activeCountry !== "SG" && activeCountry !== "KR" && activeCountry !== "FR" && activeCountry !== "ES" && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
         {tab === "shortage" && activeCountry === "CA" && <CAShortageList rows={Object.values(data.caOccupations)} onSelectOcc={handleSelectCAOcc} />}
         {tab === "pay" && isAU && (
@@ -2106,7 +2139,7 @@ function Panel({
         {tab === "pay" && isSG && <SGHighPayList rows={data.sgHighPayOccupations} onSelect={handleSelectSGHighPay} />}
         {tab === "pay" && isKR && <KROccupationList rows={krHighPay} kind="pay" onSelect={handleSelectKROccupation} />}
         {tab === "pay" && isFR && <FRSalaryList rows={frSalary} onSelect={handleSelectFRSalary} locale={locale} />}
-        {tab === "pay" && isES && <ESHighPayList rows={esHighPay} />}
+        {tab === "pay" && isES && <ESHighPayList rows={esHighPay} onSelect={handleSelectESSalary} />}
         {tab === "pay" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && activeCountry !== "NL" && activeCountry !== "BE" && activeCountry !== "JP" && activeCountry !== "SG" && activeCountry !== "KR" && activeCountry !== "FR" && activeCountry !== "ES" && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
         {tab === "pay" && activeCountry === "CA" && <CAHighPayList rows={data.caHighPay} provinceRows={selected ? data.caHighPayByProvince[selected] ?? [] : []} onSelectOcc={handleSelectCAOcc} />}
         {tab === "pay" && isUK && <UKHighPayList rows={ukHighPay} onSelectOcc={handleSelectUKOcc} />}

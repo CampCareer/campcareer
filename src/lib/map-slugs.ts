@@ -352,7 +352,7 @@ export const getMapOccupations = cache(async (country: MapCountry): Promise<MapO
 export async function resolveMapOccupation(country: MapCountry, slugOrCode: string): Promise<MapOccupation | null> {
   const occupations = await getMapOccupations(country)
   const normalized = slugifyMapTerm(slugOrCode)
-  return occupations.find((occ) => occ.slug === normalized || occ.code.toLowerCase() === slugOrCode.toLowerCase()) ?? null
+  return occupations.find((occ) => occ.slug === normalized || occ.code.toLowerCase() === slugOrCode.toLowerCase() || slugifyMapTerm(occ.code) === normalized) ?? null
 }
 
 export async function getMapOccupationStaticParams() {
