@@ -34,6 +34,7 @@ import { JP_CITIES, JP_HIGH_PAY_OCCUPATIONS, JP_JOBTAG_PROFILES_BY_WAGE_CODE, JP
 import { SG_DEMAND_OCCUPATIONS, SG_HIGH_PAY_OCCUPATIONS, SG_MAP_AREAS, SG_WORK_PASS_PATHWAYS, type SingaporeDemandOccupation, type SingaporeMapArea, type SingaporeWageOccupation, type SingaporeWorkPassPathway } from "@/data/sg-map-data"
 import { KR_HIGH_PAY_BY_REGION, KR_OCCUPATIONS, KR_OCCUPATIONS_BY_REGION, KR_REGIONS, KR_UNIVERSITIES, type KoreaOccupation, type KoreaRegion, type KoreaUniversity } from "@/data/kr-map-data"
 import { FR_CITIES, FR_DEMAND_BY_REGION, FR_DEMAND_OCCUPATIONS, FR_REGIONS, FR_SALARY_BY_REGION, FR_UNIVERSITIES, type FranceCity, type FranceDemandOccupation, type FranceRegion, type FranceSalaryGroup, type FranceUniversity } from "@/data/fr-map-data"
+import { ES_CITIES, ES_COMMUNITIES, ES_HIGH_PAY_BY_COMMUNITY, ES_OCCUPATIONS, ES_PROVINCES, ES_SHORTAGE_BY_COMMUNITY, ES_SHORTAGE_BY_PROVINCE, ES_UNIVERSITIES, type SpainCity, type SpainCommunity, type SpainOccupation, type SpainProvince, type SpainSalaryGroup, type SpainUniversity } from "@/data/es-map-data"
 
 // 지도 페이지용 데이터 계층. occupations_au + occupation_state_au 를 읽어 JS 에서 조인한다.
 // occupation_state_au 는 anon RLS 가 막혀 있어 서버 전용 service-role 클라이언트로 읽는다.
@@ -482,6 +483,14 @@ export interface MapData {
   frDemandByRegion: Record<string, Array<FranceDemandOccupation & { regionalProjects: number }>>
   frSalaryByRegion: Record<string, FranceSalaryGroup[]>
   frUniversities: FranceUniversity[]
+  esCommunities: SpainCommunity[]
+  esProvinces: SpainProvince[]
+  esCities: SpainCity[]
+  esOccupations: SpainOccupation[]
+  esShortageByCommunity: Record<string, SpainOccupation[]>
+  esShortageByProvince: Record<string, SpainOccupation[]>
+  esHighPayByCommunity: Record<string, SpainSalaryGroup[]>
+  esUniversities: SpainUniversity[]
 }
 
 export interface CACity {
@@ -1855,7 +1864,7 @@ async function getMapDataUncached(): Promise<MapData> {
   const beJobatLinksData = beJobatLinksRaw as unknown as { occupations: Record<string, { occupation_en: string; jobat_url: string; salary_url: string; course_url: string | null; course_keywords: string[] }> }
   const beJobatLinks = beJobatLinksData.occupations
 
-  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages, coursesByFieldState, usStateInfo, usMajorDensity, usRankedColleges, auRankedColleges, caColleges, caOccupations, caHighPay, caHighPayByProvince, caProvinceOccupations, caProvinceShortages, caCities, ukOccupations, ukShortageByRegion, ukHighPayByRegion, ukColleges, ukCities, deOccupations, deHighPayByRegion, deShortageByRegion, deColleges, deCities, nlOccupations, nlShortageByRegion, nlHighPayByRegion, nlColleges, nlCities, beOccupations, beHighPayByRegion, beShortageByRegion, beColleges, beCities, beStateInfo, beTaxRates, beJobatLinks, jpShortageByPrefecture: JP_SHORTAGE_BY_PREFECTURE, jpHighPayOccupations: JP_HIGH_PAY_OCCUPATIONS, jpRentByPrefecture: JP_RENT_BY_PREFECTURE, jpCities: JP_CITIES, jpJobTagProfilesByWageCode: JP_JOBTAG_PROFILES_BY_WAGE_CODE, sgDemandOccupations: SG_DEMAND_OCCUPATIONS, sgHighPayOccupations: SG_HIGH_PAY_OCCUPATIONS, sgAreas: SG_MAP_AREAS, sgWorkPassPathways: SG_WORK_PASS_PATHWAYS, krRegions: KR_REGIONS, krOccupations: KR_OCCUPATIONS, krOccupationsByRegion: KR_OCCUPATIONS_BY_REGION, krHighPayByRegion: KR_HIGH_PAY_BY_REGION, krUniversities: KR_UNIVERSITIES, frRegions: FR_REGIONS, frCities: FR_CITIES, frDemandOccupations: FR_DEMAND_OCCUPATIONS, frDemandByRegion: FR_DEMAND_BY_REGION, frSalaryByRegion: FR_SALARY_BY_REGION, frUniversities: FR_UNIVERSITIES }
+  return { shortageByState, highPay, usColleges, stateSalaryMult, usShortageByState: usOccData.shortageByState, usHighPayByState: usOccData.highPayByState, auOccupations, auStateShortages, coursesByFieldState, usStateInfo, usMajorDensity, usRankedColleges, auRankedColleges, caColleges, caOccupations, caHighPay, caHighPayByProvince, caProvinceOccupations, caProvinceShortages, caCities, ukOccupations, ukShortageByRegion, ukHighPayByRegion, ukColleges, ukCities, deOccupations, deHighPayByRegion, deShortageByRegion, deColleges, deCities, nlOccupations, nlShortageByRegion, nlHighPayByRegion, nlColleges, nlCities, beOccupations, beHighPayByRegion, beShortageByRegion, beColleges, beCities, beStateInfo, beTaxRates, beJobatLinks, jpShortageByPrefecture: JP_SHORTAGE_BY_PREFECTURE, jpHighPayOccupations: JP_HIGH_PAY_OCCUPATIONS, jpRentByPrefecture: JP_RENT_BY_PREFECTURE, jpCities: JP_CITIES, jpJobTagProfilesByWageCode: JP_JOBTAG_PROFILES_BY_WAGE_CODE, sgDemandOccupations: SG_DEMAND_OCCUPATIONS, sgHighPayOccupations: SG_HIGH_PAY_OCCUPATIONS, sgAreas: SG_MAP_AREAS, sgWorkPassPathways: SG_WORK_PASS_PATHWAYS, krRegions: KR_REGIONS, krOccupations: KR_OCCUPATIONS, krOccupationsByRegion: KR_OCCUPATIONS_BY_REGION, krHighPayByRegion: KR_HIGH_PAY_BY_REGION, krUniversities: KR_UNIVERSITIES, frRegions: FR_REGIONS, frCities: FR_CITIES, frDemandOccupations: FR_DEMAND_OCCUPATIONS, frDemandByRegion: FR_DEMAND_BY_REGION, frSalaryByRegion: FR_SALARY_BY_REGION, frUniversities: FR_UNIVERSITIES, esCommunities: ES_COMMUNITIES, esProvinces: ES_PROVINCES, esCities: ES_CITIES, esOccupations: ES_OCCUPATIONS, esShortageByCommunity: ES_SHORTAGE_BY_COMMUNITY, esShortageByProvince: ES_SHORTAGE_BY_PROVINCE, esHighPayByCommunity: ES_HIGH_PAY_BY_COMMUNITY, esUniversities: ES_UNIVERSITIES }
 }
 
 // ── Per-country lightweight data (avoids 2 MB unstable_cache limit) ──────────

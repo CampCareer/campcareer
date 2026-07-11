@@ -91,6 +91,8 @@ export type FranceUniversity = {
   sourceUrl: string
   lastChecked: string
   reviewStatus: FranceReviewStatus
+  qsRank2027?: number
+  qsRankSourceUrl?: string
 }
 
 export type FranceSourceSnapshot = {
@@ -118,7 +120,19 @@ export const FR_DEMAND_OCCUPATIONS = demandRaw as FranceDemandOccupation[]
 export const FR_REGIONS = regionsRaw as FranceRegion[]
 export const FR_CITIES = citiesRaw as FranceCity[]
 export const FR_SALARY_GROUPS = salaryRaw as FranceSalaryGroup[]
-export const FR_UNIVERSITIES = universitiesRaw as FranceUniversity[]
+// QS is kept as a small, cited overlay rather than copied from the full ranking
+// dataset. Only institutions that can be matched unambiguously to the public
+// MESR institution record are annotated.
+const FR_QS_RANK_2027: Record<string, { rank: number; sourceUrl: string }> = {
+  "universite-paris-cite-5czyu": { rank: 303, sourceUrl: "https://www.topuniversities.com/universities/universite-paris-cite" },
+  "universite-paris-saclay-g2qa7": { rank: 76, sourceUrl: "https://www.topuniversities.com/universities/universite-paris-saclay" },
+  "institut-polytechnique-de-paris-kyr50": { rank: 43, sourceUrl: "https://www.topuniversities.com/universities/institut-polytechnique-de-paris" },
+}
+
+export const FR_UNIVERSITIES = (universitiesRaw as FranceUniversity[]).map((university) => {
+  const ranking = FR_QS_RANK_2027[university.slug]
+  return ranking ? { ...university, qsRank2027: ranking.rank, qsRankSourceUrl: ranking.sourceUrl } : university
+})
 export const FR_SOURCE_SNAPSHOTS = snapshotsRaw as FranceSourceSnapshot[]
 
 export const FR_DEMAND_BY_CODE = new Map(FR_DEMAND_OCCUPATIONS.map((occupation) => [occupation.bmoCode, occupation]))
