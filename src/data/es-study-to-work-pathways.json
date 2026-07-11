@@ -1,0 +1,26 @@
+[
+  {
+    "code": "student-work",
+    "titleEn": "Work while studying",
+    "titleKo": "유학 중 취업",
+    "summary": "Higher-education study authorisation can allow compatible employed or self-employed work without a separate work procedure.",
+    "sourceUrl": "https://www.inclusion.gob.es/web/migraciones/w/hoja-4-bis-acceso-al-empleo-de-las-personas-titulares-de-una-autorizacion-de-estancia-de-larga-duracion-por-estudios-movilidad-de-alumnos-servicios-de-voluntariado-o-actividades-formativas",
+    "reviewStatus": "review-required"
+  },
+  {
+    "code": "post-study-search",
+    "titleEn": "Post-study job-search residence",
+    "titleKo": "졸업 후 구직 체류",
+    "summary": "Eligible graduates of authorised higher education can seek a 24-month job-search residence. It does not itself authorise work.",
+    "sourceUrl": "https://inclusion.gob.es/web/migraciones/w/20.-autorizacion-de-residencia-para-busqueda-de-empleo-o-inicio-de-proyecto-empresarial",
+    "reviewStatus": "review-required"
+  },
+  {
+    "code": "degree-recognition",
+    "titleEn": "Regulated-profession recognition",
+    "titleKo": "규제직 학위 인정",
+    "summary": "A foreign degree may require homologation before practising a regulated profession in Spain.",
+    "sourceUrl": "https://www.ciencia.gob.es/Universidades/validate/como_reconocer.html",
+    "reviewStatus": "review-required"
+  }
+]

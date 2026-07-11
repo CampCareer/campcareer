@@ -60,6 +60,7 @@ data/raw/jp/
 data/raw/sg/
 data/raw/kr/
 data/raw/fr/
+data/raw/es/
 
 # Natural Earth shapefiles (reference data, not used at runtime)
 public/ne_10m_admin_1_states_provinces/

@@ -8,7 +8,7 @@ export const CORE_DATA_CATEGORIES = [
 ] as const
 
 export type CoreDataCategory = (typeof CORE_DATA_CATEGORIES)[number]
-export type RegistryCountryCode = "AU" | "US" | "CA" | "UK" | "IE" | "DE" | "NL" | "BE" | "SG" | "KR" | "FR"
+export type RegistryCountryCode = "AU" | "US" | "CA" | "UK" | "IE" | "DE" | "NL" | "BE" | "SG" | "KR" | "FR" | "ES"
 export type SourceConfidence = "official" | "market-estimate" | "internal-estimate"
 export type SourceMethod = "official-api" | "official-download" | "official-web" | "market-estimate"
 export type ReviewStatus = "approved" | "review-required"
@@ -119,6 +119,14 @@ const COUNTRY_SOURCES: Record<RegistryCountryCode, CountrySourceSeed> = {
     rent: { sourceName: "Carte des loyers", sourceUrl: "https://www.data.gouv.fr/datasets/carte-des-loyers-indicateurs-de-loyers-dannonce-par-commune-en-2025", method: "official-download", refreshCadence: "annual" },
     "visa-pathway": { sourceName: "France-Visas", sourceUrl: "https://france-visas.gouv.fr/en", method: "official-web", refreshCadence: "monthly" },
     shortage: { sourceName: "France Travail BMO 2026", sourceUrl: "https://statistiques.francetravail.org/bmo/", method: "official-download", refreshCadence: "annual" },
+  },
+  ES: {
+    tuition: { sourceName: "RUCT", sourceUrl: "https://www.educacion.gob.es/ruct/home", method: "official-web", refreshCadence: "annual" },
+    "graduate-outcomes": { sourceName: "Spanish university statistics", sourceUrl: "https://estadisticas.universidades.gob.es/", method: "official-download", refreshCadence: "annual" },
+    occupation: { sourceName: "INE Annual Wage Structure Survey 2024", sourceUrl: "https://ine.es/dyngs/Prensa/EAES2024.htm", method: "official-download", refreshCadence: "annual" },
+    rent: { sourceName: "SERPAVI 2026", sourceUrl: "https://serpavi.mivau.gob.es/", method: "official-download", refreshCadence: "annual" },
+    "visa-pathway": { sourceName: "Spain Migration information sheets", sourceUrl: "https://www.inclusion.gob.es/web/migraciones/estudiar", method: "official-web", refreshCadence: "monthly" },
+    shortage: { sourceName: "SEPE Catálogo de Ocupaciones de Difícil Cobertura", sourceUrl: "https://www.sepe.es/HomeSepe/empresas/informacion-para-empresas/profesiones-de-dificil-cobertura/profesiones-mas-demandadas", method: "official-download", refreshCadence: "quarterly" },
   },
 }
 

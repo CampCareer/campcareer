@@ -1,0 +1,902 @@
+[
+  {
+    "code": "01",
+    "provinceCode": "01",
+    "regionCode": "16",
+    "nameEs": "Vitoria-Gasteiz",
+    "nameEn": "Vitoria-Gasteiz",
+    "nameKo": null,
+    "slug": "vitoria-gasteiz",
+    "lat": 42.850537,
+    "lng": -2.6990534999999998,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "02",
+    "provinceCode": "02",
+    "regionCode": "08",
+    "nameEs": "Albacete",
+    "nameEn": "Albacete",
+    "nameKo": null,
+    "slug": "albacete",
+    "lat": 38.9294045,
+    "lng": -1.9015875000000002,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "03",
+    "provinceCode": "03",
+    "regionCode": "10",
+    "nameEs": "Alacant/Alicante",
+    "nameEn": "Alacant/Alicante",
+    "nameKo": null,
+    "slug": "alacant-alicante",
+    "lat": 38.3489815,
+    "lng": -0.5140025,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "04",
+    "provinceCode": "04",
+    "regionCode": "01",
+    "nameEs": "Almería",
+    "nameEn": "Almería",
+    "nameKo": null,
+    "slug": "almeria",
+    "lat": 36.468361,
+    "lng": -2.621874,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "05",
+    "provinceCode": "05",
+    "regionCode": "07",
+    "nameEs": "Ávila",
+    "nameEn": "Ávila",
+    "nameKo": null,
+    "slug": "avila",
+    "lat": 40.657182500000005,
+    "lng": -4.635033,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "06",
+    "provinceCode": "06",
+    "regionCode": "11",
+    "nameEs": "Badajoz",
+    "nameEn": "Badajoz",
+    "nameKo": null,
+    "slug": "badajoz",
+    "lat": 38.874106,
+    "lng": -6.8591705,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "07",
+    "provinceCode": "07",
+    "regionCode": "04",
+    "nameEs": "Palma",
+    "nameEn": "Palma",
+    "nameKo": null,
+    "slug": "palma",
+    "lat": 39.389006499999994,
+    "lng": 2.7721605,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "08",
+    "provinceCode": "08",
+    "regionCode": "09",
+    "nameEs": "Barcelona",
+    "nameEn": "Barcelona",
+    "nameKo": null,
+    "slug": "barcelona",
+    "lat": 41.392708,
+    "lng": 2.1409485,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "09",
+    "provinceCode": "09",
+    "regionCode": "07",
+    "nameEs": "Burgos",
+    "nameEn": "Burgos",
+    "nameKo": null,
+    "slug": "burgos",
+    "lat": 42.3447795,
+    "lng": -3.689855,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "10",
+    "provinceCode": "10",
+    "regionCode": "11",
+    "nameEs": "Cáceres",
+    "nameEn": "Cáceres",
+    "nameKo": null,
+    "slug": "caceres",
+    "lat": 39.40193,
+    "lng": -6.440405,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "11",
+    "provinceCode": "11",
+    "regionCode": "01",
+    "nameEs": "Cádiz",
+    "nameEn": "Cádiz",
+    "nameKo": null,
+    "slug": "cadiz",
+    "lat": 36.4923725,
+    "lng": -6.2731085,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "12",
+    "provinceCode": "12",
+    "regionCode": "10",
+    "nameEs": "Castelló de la Plana/Castellón de la Plana",
+    "nameEn": "Castelló de la Plana/Castellón de la Plana",
+    "nameKo": null,
+    "slug": "castello-de-la-plana-castellon-de-la-plana",
+    "lat": 39.9573975,
+    "lng": 0.26313699999999995,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "13",
+    "provinceCode": "13",
+    "regionCode": "08",
+    "nameEs": "Ciudad Real",
+    "nameEn": "Ciudad Real",
+    "nameKo": null,
+    "slug": "ciudad-real",
+    "lat": 38.959761,
+    "lng": -3.9771215,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "14",
+    "provinceCode": "14",
+    "regionCode": "01",
+    "nameEs": "Córdoba",
+    "nameEn": "Córdoba",
+    "nameKo": null,
+    "slug": "cordoba",
+    "lat": 37.8490015,
+    "lng": -4.675546,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "15",
+    "provinceCode": "15",
+    "regionCode": "12",
+    "nameEs": "A Coruña",
+    "nameEn": "A Coruña",
+    "nameKo": null,
+    "slug": "a-coruna",
+    "lat": 43.345493000000005,
+    "lng": -8.421587500000001,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "16",
+    "provinceCode": "16",
+    "regionCode": "08",
+    "nameEs": "Cuenca",
+    "nameEn": "Cuenca",
+    "nameKo": null,
+    "slug": "cuenca",
+    "lat": 40.1872245,
+    "lng": -2.0335685,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "17",
+    "provinceCode": "17",
+    "regionCode": "09",
+    "nameEs": "Girona",
+    "nameEn": "Girona",
+    "nameKo": null,
+    "slug": "girona",
+    "lat": 41.983987,
+    "lng": 2.840275,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "18",
+    "provinceCode": "18",
+    "regionCode": "01",
+    "nameEs": "Granada",
+    "nameEn": "Granada",
+    "nameKo": null,
+    "slug": "granada",
+    "lat": 37.180849,
+    "lng": -3.5982975,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "19",
+    "provinceCode": "19",
+    "regionCode": "08",
+    "nameEs": "Guadalajara",
+    "nameEn": "Guadalajara",
+    "nameKo": null,
+    "slug": "guadalajara",
+    "lat": 40.6154195,
+    "lng": -3.1474585,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "20",
+    "provinceCode": "20",
+    "regionCode": "16",
+    "nameEs": "Donostia/San Sebastián",
+    "nameEn": "Donostia/San Sebastián",
+    "nameKo": null,
+    "slug": "donostia-san-sebastian",
+    "lat": 43.2779785,
+    "lng": -1.987225,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "21",
+    "provinceCode": "21",
+    "regionCode": "01",
+    "nameEs": "Huelva",
+    "nameEn": "Huelva",
+    "nameKo": null,
+    "slug": "huelva",
+    "lat": 37.237562,
+    "lng": -6.9189705,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "22",
+    "provinceCode": "22",
+    "regionCode": "02",
+    "nameEs": "Huesca",
+    "nameEn": "Huesca",
+    "nameKo": null,
+    "slug": "huesca",
+    "lat": 42.1363695,
+    "lng": -0.42721549999999997,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "23",
+    "provinceCode": "23",
+    "regionCode": "01",
+    "nameEs": "Jaén",
+    "nameEn": "Jaén",
+    "nameKo": null,
+    "slug": "jaen",
+    "lat": 37.791235,
+    "lng": -3.7423075,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "24",
+    "provinceCode": "24",
+    "regionCode": "07",
+    "nameEs": "León",
+    "nameEn": "León",
+    "nameKo": null,
+    "slug": "leon",
+    "lat": 42.593635500000005,
+    "lng": -5.582447,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "25",
+    "provinceCode": "25",
+    "regionCode": "09",
+    "nameEs": "Lleida",
+    "nameEn": "Lleida",
+    "nameKo": null,
+    "slug": "lleida",
+    "lat": 41.623412,
+    "lng": 0.553013,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "26",
+    "provinceCode": "26",
+    "regionCode": "17",
+    "nameEs": "Logroño",
+    "nameEn": "Logroño",
+    "nameKo": null,
+    "slug": "logrono",
+    "lat": 42.474447,
+    "lng": -2.442046,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "27",
+    "provinceCode": "27",
+    "regionCode": "12",
+    "nameEs": "Lugo",
+    "nameEn": "Lugo",
+    "nameKo": null,
+    "slug": "lugo",
+    "lat": 42.991009,
+    "lng": -7.5706264999999995,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "28",
+    "provinceCode": "28",
+    "regionCode": "13",
+    "nameEs": "Madrid",
+    "nameEn": "Madrid",
+    "nameKo": null,
+    "slug": "madrid",
+    "lat": 40.477645499999994,
+    "lng": -3.703389,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "29",
+    "provinceCode": "29",
+    "regionCode": "01",
+    "nameEs": "Málaga",
+    "nameEn": "Málaga",
+    "nameKo": null,
+    "slug": "malaga",
+    "lat": 36.764735,
+    "lng": -4.423609,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "30",
+    "provinceCode": "30",
+    "regionCode": "14",
+    "nameEs": "Murcia",
+    "nameEn": "Murcia",
+    "nameKo": null,
+    "slug": "murcia",
+    "lat": 37.9163635,
+    "lng": -1.1184859999999999,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "31",
+    "provinceCode": "31",
+    "regionCode": "15",
+    "nameEs": "Pamplona/Iruña",
+    "nameEn": "Pamplona/Iruña",
+    "nameKo": null,
+    "slug": "pamplona-iruna",
+    "lat": 42.8157745,
+    "lng": -1.649774,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "32",
+    "provinceCode": "32",
+    "regionCode": "12",
+    "nameEs": "Ourense",
+    "nameEn": "Ourense",
+    "nameKo": null,
+    "slug": "ourense",
+    "lat": 42.3439065,
+    "lng": -7.904721500000001,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "33",
+    "provinceCode": "33",
+    "regionCode": "03",
+    "nameEs": "Oviedo",
+    "nameEn": "Oviedo",
+    "nameKo": null,
+    "slug": "oviedo",
+    "lat": 43.35325,
+    "lng": -5.880008500000001,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "34",
+    "provinceCode": "34",
+    "regionCode": "07",
+    "nameEs": "Palencia",
+    "nameEn": "Palencia",
+    "nameKo": null,
+    "slug": "palencia",
+    "lat": 41.995320500000005,
+    "lng": -4.568054999999999,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "35",
+    "provinceCode": "35",
+    "regionCode": "05",
+    "nameEs": "Las Palmas de Gran Canaria",
+    "nameEn": "Las Palmas de Gran Canaria",
+    "nameKo": null,
+    "slug": "las-palmas-de-gran-canaria",
+    "lat": 28.102978,
+    "lng": -15.4610855,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "36",
+    "provinceCode": "36",
+    "regionCode": "12",
+    "nameEs": "Pontevedra",
+    "nameEn": "Pontevedra",
+    "nameKo": null,
+    "slug": "pontevedra",
+    "lat": 42.4281445,
+    "lng": -8.6272135,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "37",
+    "provinceCode": "37",
+    "regionCode": "07",
+    "nameEs": "Salamanca",
+    "nameEn": "Salamanca",
+    "nameKo": null,
+    "slug": "salamanca",
+    "lat": 40.954319,
+    "lng": -5.679277,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "38",
+    "provinceCode": "38",
+    "regionCode": "05",
+    "nameEs": "Santa Cruz de Tenerife",
+    "nameEn": "Santa Cruz de Tenerife",
+    "nameKo": null,
+    "slug": "santa-cruz-de-tenerife",
+    "lat": 28.5075675,
+    "lng": -16.230496000000002,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "39",
+    "provinceCode": "39",
+    "regionCode": "06",
+    "nameEs": "Santander",
+    "nameEn": "Santander",
+    "nameKo": null,
+    "slug": "santander",
+    "lat": 43.464718000000005,
+    "lng": -3.8212260000000002,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "40",
+    "provinceCode": "40",
+    "regionCode": "07",
+    "nameEs": "Segovia",
+    "nameEn": "Segovia",
+    "nameKo": null,
+    "slug": "segovia",
+    "lat": 40.9115805,
+    "lng": -4.1942675000000005,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "41",
+    "provinceCode": "41",
+    "regionCode": "01",
+    "nameEs": "Sevilla",
+    "nameEn": "Sevilla",
+    "nameKo": null,
+    "slug": "sevilla",
+    "lat": 37.376697,
+    "lng": -5.9259125,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "42",
+    "provinceCode": "42",
+    "regionCode": "07",
+    "nameEs": "Soria",
+    "nameEn": "Soria",
+    "nameKo": null,
+    "slug": "soria",
+    "lat": 41.811339,
+    "lng": -2.7075195,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "43",
+    "provinceCode": "43",
+    "regionCode": "09",
+    "nameEs": "Tarragona",
+    "nameEn": "Tarragona",
+    "nameKo": null,
+    "slug": "tarragona",
+    "lat": 41.122905,
+    "lng": 1.280056,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "44",
+    "provinceCode": "44",
+    "regionCode": "02",
+    "nameEs": "Teruel",
+    "nameEn": "Teruel",
+    "nameKo": null,
+    "slug": "teruel",
+    "lat": 40.369181499999996,
+    "lng": -1.1161765,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "45",
+    "provinceCode": "45",
+    "regionCode": "08",
+    "nameEs": "Toledo",
+    "nameEn": "Toledo",
+    "nameKo": null,
+    "slug": "toledo",
+    "lat": 39.868301,
+    "lng": -3.9974135,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "46",
+    "provinceCode": "46",
+    "regionCode": "10",
+    "nameEs": "València",
+    "nameEn": "València",
+    "nameKo": null,
+    "slug": "valencia",
+    "lat": 39.422537000000005,
+    "lng": -0.3525465,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "47",
+    "provinceCode": "47",
+    "regionCode": "07",
+    "nameEs": "Valladolid",
+    "nameEn": "Valladolid",
+    "nameKo": null,
+    "slug": "valladolid",
+    "lat": 41.6696065,
+    "lng": -4.7797445,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "48",
+    "provinceCode": "48",
+    "regionCode": "16",
+    "nameEs": "Bilbao",
+    "nameEn": "Bilbao",
+    "nameKo": null,
+    "slug": "bilbao",
+    "lat": 43.254318,
+    "lng": -2.9331195,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "49",
+    "provinceCode": "49",
+    "regionCode": "07",
+    "nameEs": "Zamora",
+    "nameEn": "Zamora",
+    "nameKo": null,
+    "slug": "zamora",
+    "lat": 41.515997999999996,
+    "lng": -5.8065204999999995,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "50",
+    "provinceCode": "50",
+    "regionCode": "02",
+    "nameEs": "Zaragoza",
+    "nameEn": "Zaragoza",
+    "nameKo": null,
+    "slug": "zaragoza",
+    "lat": 41.691678499999995,
+    "lng": -0.92704,
+    "rent": {
+      "eurM2": null,
+      "status": "unavailable",
+      "note": "No reusable city-level SERPAVI aggregate was ingested."
+    },
+    "lastChecked": "2026-07-11",
+    "reviewStatus": "approved"
+  }
+]

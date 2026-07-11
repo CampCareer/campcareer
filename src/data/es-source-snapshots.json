@@ -1,0 +1,102 @@
+[
+  {
+    "category": "shortage",
+    "sourceName": "SEPE Catálogo de Ocupaciones de Difícil Cobertura 2026 Q1",
+    "sourceUrl": "https://www.sepe.es/HomeSepe/empresas/informacion-para-empresas/profesiones-de-dificil-cobertura/profesiones-mas-demandadas",
+    "datasetUrls": [
+      "https://www.sepe.es/dam/jcr%3A3dc1fa69-05a5-41a4-9398-f9442c9cd3db/catalogo-ocupaciones-dificil-cobertura-1T-2026.pdf"
+    ],
+    "contentHash": "a7b9098463085068ff3cad82e673c380fa5b3ee201624a3549290f4c99884e16",
+    "retrievedAt": "2026-07-11T09:46:43.400Z",
+    "lastChecked": "2026-07-11",
+    "method": "official-pdf",
+    "licenseStatus": "public-administrative-source",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "contracts",
+    "sourceName": "SEPE employment contract statistics",
+    "sourceUrl": "https://www.sepe.es/HomeSepe/que-es-el-sepe/estadisticas/contratos/estadisticas-nuevas/2026/enero.html",
+    "datasetUrls": [],
+    "contentHash": "bfa868ef3724e257431a0bbebf1b4c996829d947555babaf2f710f39aa3dda65",
+    "retrievedAt": "2026-07-11T09:46:43.400Z",
+    "lastChecked": "2026-07-11",
+    "method": "official-reference",
+    "licenseStatus": "public-statistics",
+    "reviewStatus": "review-required",
+    "status": "reference-only"
+  },
+  {
+    "category": "occupation",
+    "sourceName": "INE Annual Wage Structure Survey 2024",
+    "sourceUrl": "https://ine.es/dyngs/Prensa/EAES2024.htm",
+    "datasetUrls": [],
+    "contentHash": "58b555dc5caa3516b4d8f57611e00fa8d1044dc213db1dcced8eea36570e354e",
+    "retrievedAt": "2026-07-11T09:46:43.400Z",
+    "lastChecked": "2026-07-11",
+    "method": "official-html-table",
+    "licenseStatus": "public-statistics",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "rent",
+    "sourceName": "SERPAVI 2026",
+    "sourceUrl": "https://serpavi.mivau.gob.es/",
+    "datasetUrls": [
+      "https://publicaciones.transportes.gob.es/downloadcustom/sample/4078"
+    ],
+    "contentHash": "0741daa1a699ee6952ed170da1b04880f72e582afbf84158b0965a25f79d0c2e",
+    "retrievedAt": "2026-07-11T09:46:43.400Z",
+    "lastChecked": "2026-07-11",
+    "method": "official-pdf",
+    "licenseStatus": "public-statistics",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "university",
+    "sourceName": "RUCT and CartoCiudad",
+    "sourceUrl": "https://www.educacion.gob.es/ruct/home",
+    "datasetUrls": [
+      "https://www.cartociudad.es/geocoder/api/geocoder/candidates"
+    ],
+    "contentHash": "541f52fc662c44e0154542dd264de47eba3ff3874bfd671dd6b533c1f96c182f",
+    "retrievedAt": "2026-07-11T09:46:43.400Z",
+    "lastChecked": "2026-07-11",
+    "method": "official-registry-and-geocoder",
+    "licenseStatus": "public-administrative-source",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "boundary",
+    "sourceName": "IGN INSPIRE Administrative Units",
+    "sourceUrl": "https://contenido.ign.es/wfs-inspire/unidades-administrativas",
+    "datasetUrls": [],
+    "contentHash": "abe6e9db447e676be5f5f4896b5c71208b07dd5006e1d5917695bb14b4781f99",
+    "retrievedAt": "2026-07-11T09:46:43.400Z",
+    "lastChecked": "2026-07-11",
+    "method": "official-wfs",
+    "licenseStatus": "official-source",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "study-to-work",
+    "sourceName": "Spain Migration information sheets",
+    "sourceUrl": "https://www.inclusion.gob.es/web/migraciones/w/hoja-4-bis-acceso-al-empleo-de-las-personas-titulares-de-una-autorizacion-de-estancia-de-larga-duracion-por-estudios-movilidad-de-alumnos-servicios-de-voluntariado-o-actividades-formativas",
+    "datasetUrls": [
+      "https://inclusion.gob.es/web/migraciones/w/20.-autorizacion-de-residencia-para-busqueda-de-empleo-o-inicio-de-proyecto-empresarial",
+      "https://www.ciencia.gob.es/Universidades/validate/como_reconocer.html"
+    ],
+    "contentHash": "97b98c14ed8f52b116b0bb252cd60c7998116bb71803c3b0f12ea1364f4b7e73",
+    "retrievedAt": "2026-07-11T09:46:43.400Z",
+    "lastChecked": "2026-07-11",
+    "method": "official-policy-reference",
+    "licenseStatus": "public-administrative-source",
+    "reviewStatus": "review-required",
+    "status": "review-required"
+  }
+]

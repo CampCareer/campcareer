@@ -19,6 +19,7 @@ import { JP_CITY_MAP_PAGES, JP_PREFECTURE_MAP_PAGES } from "@/lib/jp-map-seo"
 import { SG_AREA_MAP_PAGES } from "@/lib/sg-map-seo"
 import { KR_REGIONS, KR_UNIVERSITIES, isKoreaRegionIndexable } from "@/data/kr-map-data"
 import { FR_CITIES, FR_REGIONS, FR_UNIVERSITIES, isFranceCityIndexable, isFranceRegionIndexable } from "@/data/fr-map-data"
+import { ES_CITIES, ES_COMMUNITIES, ES_PROVINCES, ES_UNIVERSITIES, isSpainCityIndexable, isSpainCommunityIndexable, isSpainProvinceIndexable } from "@/data/es-map-data"
 
 const BASE = "https://www.campcareer.com"
 
@@ -63,6 +64,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/ko/fr`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
     { url: `${BASE}/ko/fr/jobs`, lastModified: lastModStatic, priority: 0.75, changeFrequency: "weekly" },
     { url: `${BASE}/countries/france`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
+    { url: `${BASE}/es`, lastModified: lastModStatic, priority: 0.85, changeFrequency: "weekly" },
+    { url: `${BASE}/es/jobs`, lastModified: lastModStatic, priority: 0.85, changeFrequency: "weekly" },
+    { url: `${BASE}/countries/spain`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
   ]
 
   const blogPages: MetadataRoute.Sitemap = getAllPosts().map((post) => ({
@@ -229,10 +233,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.55,
       changeFrequency: "monthly" as const,
     }))
+  const esCommunityPages: MetadataRoute.Sitemap = ES_COMMUNITIES.filter(isSpainCommunityIndexable).map((item) => ({ url: `${BASE}/maps/es/regions/${item.slug}`, lastModified: new Date(item.lastChecked), priority: 0.65, changeFrequency: "monthly" as const }))
+  const esProvincePages: MetadataRoute.Sitemap = ES_PROVINCES.filter(isSpainProvinceIndexable).map((item) => ({ url: `${BASE}/maps/es/provinces/${item.slug}`, lastModified: new Date(item.lastChecked), priority: 0.6, changeFrequency: "monthly" as const }))
+  const esCityPages: MetadataRoute.Sitemap = ES_CITIES.filter(isSpainCityIndexable).map((item) => ({ url: `${BASE}/maps/es/cities/${item.slug}`, lastModified: new Date(item.lastChecked), priority: 0.55, changeFrequency: "monthly" as const }))
+  const esUniversityPages: MetadataRoute.Sitemap = ES_UNIVERSITIES.filter((item) => item.reviewStatus === "approved").map((item) => ({ url: `${BASE}/map/es/university/${item.slug}`, lastModified: new Date(item.lastChecked), priority: 0.55, changeFrequency: "monthly" as const }))
 
   const total = staticPages.length + blogPages.length + countryDetailPages.length + mapOccupationPages.length + pilotOccupationPages.length +
-    ieLangSchoolPages.length + mapPages.length + jpMapPages.length + sgMapPages.length + krRegionPages.length + krUniversityPages.length + frRegionPages.length + frCityPages.length + frUniversityPages.length + usUnivPages.length + auUnivPages.length + caUnivPages.length + ukUnivPages.length + deUnivPages.length + nlUnivPages.length
+    ieLangSchoolPages.length + mapPages.length + jpMapPages.length + sgMapPages.length + krRegionPages.length + krUniversityPages.length + frRegionPages.length + frCityPages.length + frUniversityPages.length + esCommunityPages.length + esProvincePages.length + esCityPages.length + esUniversityPages.length + usUnivPages.length + auUnivPages.length + caUnivPages.length + ukUnivPages.length + deUnivPages.length + nlUnivPages.length
   console.log(`[sitemap] counts — static: ${staticPages.length}, blog: ${blogPages.length}, country details: ${countryDetailPages.length}, map occupations: ${mapOccupationPages.length}, pilot occupations: ${pilotOccupationPages.length}, IE schools: ${ieLangSchoolPages.length}, map: ${mapPages.length}, JP regional maps: ${jpMapPages.length}, SG regional maps: ${sgMapPages.length}, KR regional maps: ${krRegionPages.length}, KR universities: ${krUniversityPages.length}, FR regions: ${frRegionPages.length}, FR cities: ${frCityPages.length}, FR universities: ${frUniversityPages.length}, US universities: ${usUnivPages.length}, AU universities: ${auUnivPages.length}, CA universities: ${caUnivPages.length}, UK universities: ${ukUnivPages.length}, DE universities: ${deUnivPages.length}, NL universities: ${nlUnivPages.length}, TOTAL: ${total}`)
 
-  return [...staticPages, ...blogPages, ...countryDetailPages, ...mapOccupationPages, ...pilotOccupationPages, ...ieLangSchoolPages, ...mapPages, ...jpMapPages, ...sgMapPages, ...krRegionPages, ...krUniversityPages, ...frRegionPages, ...frCityPages, ...frUniversityPages, ...usUnivPages, ...auUnivPages, ...caUnivPages, ...ukUnivPages, ...deUnivPages, ...nlUnivPages]
+  return [...staticPages, ...blogPages, ...countryDetailPages, ...mapOccupationPages, ...pilotOccupationPages, ...ieLangSchoolPages, ...mapPages, ...jpMapPages, ...sgMapPages, ...krRegionPages, ...krUniversityPages, ...frRegionPages, ...frCityPages, ...frUniversityPages, ...esCommunityPages, ...esProvincePages, ...esCityPages, ...esUniversityPages, ...usUnivPages, ...auUnivPages, ...caUnivPages, ...ukUnivPages, ...deUnivPages, ...nlUnivPages]
 }

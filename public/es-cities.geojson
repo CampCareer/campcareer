@@ -1,0 +1,805 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "01",
+        "provinceCode": "01",
+        "regionCode": "16",
+        "nameEs": "Vitoria-Gasteiz"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.6990534999999998,
+          42.850537
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "02",
+        "provinceCode": "02",
+        "regionCode": "08",
+        "nameEs": "Albacete"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.9015875000000002,
+          38.9294045
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "03",
+        "provinceCode": "03",
+        "regionCode": "10",
+        "nameEs": "Alacant/Alicante"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.5140025,
+          38.3489815
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "04",
+        "provinceCode": "04",
+        "regionCode": "01",
+        "nameEs": "Almería"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.621874,
+          36.468361
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "05",
+        "provinceCode": "05",
+        "regionCode": "07",
+        "nameEs": "Ávila"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.635033,
+          40.657182500000005
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "06",
+        "provinceCode": "06",
+        "regionCode": "11",
+        "nameEs": "Badajoz"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.8591705,
+          38.874106
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "07",
+        "provinceCode": "07",
+        "regionCode": "04",
+        "nameEs": "Palma"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.7721605,
+          39.389006499999994
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "08",
+        "provinceCode": "08",
+        "regionCode": "09",
+        "nameEs": "Barcelona"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.1409485,
+          41.392708
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "09",
+        "provinceCode": "09",
+        "regionCode": "07",
+        "nameEs": "Burgos"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.689855,
+          42.3447795
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "10",
+        "provinceCode": "10",
+        "regionCode": "11",
+        "nameEs": "Cáceres"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.440405,
+          39.40193
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "11",
+        "provinceCode": "11",
+        "regionCode": "01",
+        "nameEs": "Cádiz"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.2731085,
+          36.4923725
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "12",
+        "provinceCode": "12",
+        "regionCode": "10",
+        "nameEs": "Castelló de la Plana/Castellón de la Plana"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.26313699999999995,
+          39.9573975
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "13",
+        "provinceCode": "13",
+        "regionCode": "08",
+        "nameEs": "Ciudad Real"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.9771215,
+          38.959761
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "14",
+        "provinceCode": "14",
+        "regionCode": "01",
+        "nameEs": "Córdoba"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.675546,
+          37.8490015
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "15",
+        "provinceCode": "15",
+        "regionCode": "12",
+        "nameEs": "A Coruña"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.421587500000001,
+          43.345493000000005
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "16",
+        "provinceCode": "16",
+        "regionCode": "08",
+        "nameEs": "Cuenca"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.0335685,
+          40.1872245
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "17",
+        "provinceCode": "17",
+        "regionCode": "09",
+        "nameEs": "Girona"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.840275,
+          41.983987
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "18",
+        "provinceCode": "18",
+        "regionCode": "01",
+        "nameEs": "Granada"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.5982975,
+          37.180849
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "19",
+        "provinceCode": "19",
+        "regionCode": "08",
+        "nameEs": "Guadalajara"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.1474585,
+          40.6154195
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "20",
+        "provinceCode": "20",
+        "regionCode": "16",
+        "nameEs": "Donostia/San Sebastián"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.987225,
+          43.2779785
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "21",
+        "provinceCode": "21",
+        "regionCode": "01",
+        "nameEs": "Huelva"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.9189705,
+          37.237562
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "22",
+        "provinceCode": "22",
+        "regionCode": "02",
+        "nameEs": "Huesca"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.42721549999999997,
+          42.1363695
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "23",
+        "provinceCode": "23",
+        "regionCode": "01",
+        "nameEs": "Jaén"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.7423075,
+          37.791235
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "24",
+        "provinceCode": "24",
+        "regionCode": "07",
+        "nameEs": "León"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -5.582447,
+          42.593635500000005
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "25",
+        "provinceCode": "25",
+        "regionCode": "09",
+        "nameEs": "Lleida"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.553013,
+          41.623412
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "26",
+        "provinceCode": "26",
+        "regionCode": "17",
+        "nameEs": "Logroño"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.442046,
+          42.474447
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "27",
+        "provinceCode": "27",
+        "regionCode": "12",
+        "nameEs": "Lugo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.5706264999999995,
+          42.991009
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "28",
+        "provinceCode": "28",
+        "regionCode": "13",
+        "nameEs": "Madrid"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.703389,
+          40.477645499999994
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "29",
+        "provinceCode": "29",
+        "regionCode": "01",
+        "nameEs": "Málaga"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.423609,
+          36.764735
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "30",
+        "provinceCode": "30",
+        "regionCode": "14",
+        "nameEs": "Murcia"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.1184859999999999,
+          37.9163635
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "31",
+        "provinceCode": "31",
+        "regionCode": "15",
+        "nameEs": "Pamplona/Iruña"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.649774,
+          42.8157745
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "32",
+        "provinceCode": "32",
+        "regionCode": "12",
+        "nameEs": "Ourense"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.904721500000001,
+          42.3439065
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "33",
+        "provinceCode": "33",
+        "regionCode": "03",
+        "nameEs": "Oviedo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -5.880008500000001,
+          43.35325
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "34",
+        "provinceCode": "34",
+        "regionCode": "07",
+        "nameEs": "Palencia"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.568054999999999,
+          41.995320500000005
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "35",
+        "provinceCode": "35",
+        "regionCode": "05",
+        "nameEs": "Las Palmas de Gran Canaria"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -15.4610855,
+          28.102978
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "36",
+        "provinceCode": "36",
+        "regionCode": "12",
+        "nameEs": "Pontevedra"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.6272135,
+          42.4281445
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "37",
+        "provinceCode": "37",
+        "regionCode": "07",
+        "nameEs": "Salamanca"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -5.679277,
+          40.954319
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "38",
+        "provinceCode": "38",
+        "regionCode": "05",
+        "nameEs": "Santa Cruz de Tenerife"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.230496000000002,
+          28.5075675
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "39",
+        "provinceCode": "39",
+        "regionCode": "06",
+        "nameEs": "Santander"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.8212260000000002,
+          43.464718000000005
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "40",
+        "provinceCode": "40",
+        "regionCode": "07",
+        "nameEs": "Segovia"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.1942675000000005,
+          40.9115805
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "41",
+        "provinceCode": "41",
+        "regionCode": "01",
+        "nameEs": "Sevilla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -5.9259125,
+          37.376697
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "42",
+        "provinceCode": "42",
+        "regionCode": "07",
+        "nameEs": "Soria"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.7075195,
+          41.811339
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "43",
+        "provinceCode": "43",
+        "regionCode": "09",
+        "nameEs": "Tarragona"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.280056,
+          41.122905
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "44",
+        "provinceCode": "44",
+        "regionCode": "02",
+        "nameEs": "Teruel"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.1161765,
+          40.369181499999996
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "45",
+        "provinceCode": "45",
+        "regionCode": "08",
+        "nameEs": "Toledo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.9974135,
+          39.868301
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "46",
+        "provinceCode": "46",
+        "regionCode": "10",
+        "nameEs": "València"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.3525465,
+          39.422537000000005
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "47",
+        "provinceCode": "47",
+        "regionCode": "07",
+        "nameEs": "Valladolid"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.7797445,
+          41.6696065
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "48",
+        "provinceCode": "48",
+        "regionCode": "16",
+        "nameEs": "Bilbao"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.9331195,
+          43.254318
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "49",
+        "provinceCode": "49",
+        "regionCode": "07",
+        "nameEs": "Zamora"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -5.8065204999999995,
+          41.515997999999996
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "code": "50",
+        "provinceCode": "50",
+        "regionCode": "02",
+        "nameEs": "Zaragoza"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.92704,
+          41.691678499999995
+        ]
+      }
+    }
+  ]
+}
