@@ -19,7 +19,8 @@ export async function generateStaticParams() {
 export const revalidate = 3600
 export const dynamicParams = true
 
-export async function generateMetadata({ params }: { params: { code: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ code: string }> }): Promise<Metadata> {
+  const params = await props.params;
   const occ = await getOccupationMeta(params.code)
   if (!occ) return { title: "Occupation Not Found" }
 
@@ -33,7 +34,8 @@ export async function generateMetadata({ params }: { params: { code: string } })
   })
 }
 
-export default async function Page({ params }: { params: { code: string } }) {
+export default async function Page(props: { params: Promise<{ code: string }> }) {
+  const params = await props.params;
   const data = await getOccupationPageData(params.code)
   if (!data) notFound()
   return (
@@ -90,5 +92,5 @@ export default async function Page({ params }: { params: { code: string } }) {
       }} />
       <OccupationDetailPage data={data} />
     </>
-  )
+  );
 }

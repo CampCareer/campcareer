@@ -30,7 +30,7 @@ export const metadata = {
   robots: { index: false, follow: true },
 }
 
-type ResultStrings = ReturnType<typeof getTranslations>["degreeRisk"]["result"]
+type ResultStrings = Awaited<ReturnType<typeof getTranslations>>["degreeRisk"]["result"]
 
 // "Better-fit alternatives" chips. `dense` packs them for the half-width bottom
 // column (single view); the default spreads them full-width (compare view).
@@ -73,18 +73,19 @@ function AlternativesPanel({
   )
 }
 
-export default async function DegreeRiskResultPage({
-  searchParams,
-}: {
-  searchParams: { major?: string; view?: string; aid?: string; goal?: string }
-}) {
+export default async function DegreeRiskResultPage(
+  props: {
+    searchParams: Promise<{ major?: string; view?: string; aid?: string; goal?: string }>
+  }
+) {
+  const searchParams = await props.searchParams;
   const major = searchParams.major ?? ""
   const view: ResultView = normalizeView(searchParams.view)
   const assessmentId = searchParams.aid ?? null
   const goal = isKnownGoal(searchParams.goal) ? searchParams.goal! : null
   const priorityLayers = goalToLayers(goal ?? undefined)
 
-  const t = getTranslations()
+  const t = await getTranslations()
   const rr = t.degreeRisk.result
   const opts = t.degreeRisk.options as Record<string, string>
   const majorName = (slug: string) => opts[slug] ?? majorLabel(slug)
@@ -95,7 +96,7 @@ export default async function DegreeRiskResultPage({
 
   let rows: MajorRow[] = []
   if (isMajorSlug(major)) {
-    const supabase = createClient()
+    const supabase = await createClient()
     // select("*") (not MAJOR_COLUMNS) so layer_meta is picked up after its
     // migration, while staying resilient if the column doesn't exist yet.
     const { data, error } = await supabase
@@ -132,7 +133,6 @@ export default async function DegreeRiskResultPage({
   return (
     <div className="min-h-dvh bg-background">
       <ResultHeader startOverLabel={rr.startOver} />
-
       <main className="max-w-5xl mx-auto px-6 py-3 md:py-10">
         {isOther ? (
           <div className="max-w-2xl mx-auto">
@@ -211,7 +211,7 @@ export default async function DegreeRiskResultPage({
             {rows.length === 1 ? (
               // Single-country: one wide card (2-col layers), then a bottom row
               // that drives the next step — ROI school preview beside alternatives.
-              <>
+              (<>
                 <div className="mt-6">
                   <ResultCard
                     row={rows[0]}
@@ -220,7 +220,6 @@ export default async function DegreeRiskResultPage({
                     layout="grid"
                   />
                 </div>
-
                 {alternatives.length > 0 ? (
                   <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                     <WhereToStudy major={major} view={view} embedded />
@@ -237,19 +236,17 @@ export default async function DegreeRiskResultPage({
                     <WhereToStudy major={major} view={view} embedded />
                   </div>
                 )}
-              </>
+              </>)
             ) : (
               // Compare ("all") view: grid of country cards, then full-width
               // where-to-study links and alternatives.
-              <>
+              (<>
                 <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {rows.map((row) => (
                     <ResultCard key={row.country} row={row} pr={prMap[row.country] ?? null} priorityLayers={priorityLayers} />
                   ))}
                 </div>
-
                 <WhereToStudy major={major} view={view} />
-
                 {alternatives.length > 0 && (
                   <AlternativesPanel
                     alternatives={alternatives}
@@ -258,7 +255,7 @@ export default async function DegreeRiskResultPage({
                     rr={rr}
                   />
                 )}
-              </>
+              </>)
             )}
 
             <section className="mt-10">
@@ -268,5 +265,5 @@ export default async function DegreeRiskResultPage({
         )}
       </main>
     </div>
-  )
+  );
 }

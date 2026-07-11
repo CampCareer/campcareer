@@ -50,6 +50,7 @@ export function TopNav() {
       <Link
         key={item.href}
         href={item.href}
+        prefetch={item.href === "/maps" ? false : undefined}
         className={cn(
           "whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors",
           active

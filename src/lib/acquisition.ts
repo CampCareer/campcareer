@@ -16,9 +16,9 @@ function clean(value: string | undefined, maxLength = 500): string | null {
   return normalized ? normalized.slice(0, maxLength) : null
 }
 
-export function getServerAcquisitionContext(): AcquisitionContext {
-  const cookieStore = cookies()
-  const requestHeaders = headers()
+export async function getServerAcquisitionContext(): Promise<AcquisitionContext> {
+  const cookieStore = await cookies()
+  const requestHeaders = await headers()
   const utm: Record<string, string> = {}
 
   for (const key of UTM_KEYS) {

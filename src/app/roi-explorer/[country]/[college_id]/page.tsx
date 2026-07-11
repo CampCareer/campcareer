@@ -171,7 +171,8 @@ const getWebsiteUrl = unstable_cache(async (country: RoiCountry, collegeId: stri
   }
 }, ["college-detail-website"], { revalidate: 86400 })
 
-export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<Params> }): Promise<Metadata> {
+  const params = await props.params;
   const country = parseCountry(params.country)
   if (!country) return { title: "Not Found" }
 
@@ -187,7 +188,8 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   })
 }
 
-export default async function CollegeDetailPage({ params }: { params: Params }) {
+export default async function CollegeDetailPage(props: { params: Promise<Params> }) {
+  const params = await props.params;
   const country = parseCountry(params.country)
   if (!country) notFound()
 

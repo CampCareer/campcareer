@@ -10,7 +10,8 @@ export const revalidate = 86400
 
 const getDetail = cache(getUSOccDetail)
 
-export async function generateMetadata({ params }: { params: { code: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ code: string }> }): Promise<Metadata> {
+  const params = await props.params;
   const occ = getDetail(params.code)
   if (!occ) return { title: "Occupation Not Found" }
 
@@ -21,7 +22,8 @@ export async function generateMetadata({ params }: { params: { code: string } })
   })
 }
 
-export default async function Page({ params }: { params: { code: string } }) {
+export default async function Page(props: { params: Promise<{ code: string }> }) {
+  const params = await props.params;
   const occ = getDetail(params.code)
   if (!occ) notFound()
   return (

@@ -1,5 +1,11 @@
 import Link from "next/link"
 import { ES_UNIVERSITIES } from "@/data/es-map-data"
 import { pageMetadata } from "@/lib/seo"
-export function generateMetadata({ params }: { params: { slug: string } }) { const item = ES_UNIVERSITIES.find((row) => row.slug === params.slug); return pageMetadata({ title: item ? `${item.nameEs} | Spain university map | CampCareer` : "Spain university", description: "RUCT-recognised Spanish university map entry.", path: `/map/es/university/${params.slug}` }) }
-export default function SpainUniversity({ params }: { params: { slug: string } }) { const item = ES_UNIVERSITIES.find((row) => row.slug === params.slug); if (!item) return null; return <main className="mx-auto max-w-3xl px-4 py-12"><Link href={`/map?country=es&state=${item.regionCode}`} className="text-sm font-semibold text-blue-700">Spain Maps</Link><h1 className="mt-5 text-4xl font-semibold">{item.nameEs}</h1><p className="mt-3 text-slate-600">{item.cityName} · {item.institutionType}</p><a href={item.officialUrl} target="_blank" rel="noopener noreferrer" className="mt-8 inline-flex text-sm font-semibold text-blue-700">Official university website</a><p className="mt-6 text-sm text-slate-500">RUCT 등록 정보와 공식 CartoCiudad 행정 위치를 기반으로 한 지도 핀입니다.</p></main> }
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
+  const item = ES_UNIVERSITIES.find((row) => row.slug === params.slug);return pageMetadata({ title: item ? `${item.nameEs} | Spain university map | CampCareer` : "Spain university", description: "RUCT-recognised Spanish university map entry.", path: `/map/es/university/${params.slug}` })
+}
+export default async function SpainUniversity(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
+  const item = ES_UNIVERSITIES.find((row) => row.slug === params.slug);if (!item) return null;return <main className="mx-auto max-w-3xl px-4 py-12"><Link href={`/map?country=es&state=${item.regionCode}`} className="text-sm font-semibold text-blue-700">Spain Maps</Link><h1 className="mt-5 text-4xl font-semibold">{item.nameEs}</h1><p className="mt-3 text-slate-600">{item.cityName} · {item.institutionType}</p><a href={item.officialUrl} target="_blank" rel="noopener noreferrer" className="mt-8 inline-flex text-sm font-semibold text-blue-700">Official university website</a><p className="mt-6 text-sm text-slate-500">RUCT 등록 정보와 공식 CartoCiudad 행정 위치를 기반으로 한 지도 핀입니다.</p></main>
+}

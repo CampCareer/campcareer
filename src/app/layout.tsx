@@ -60,13 +60,13 @@ export const metadata: Metadata = {
     siteName: "CampCareer",
     title: "CampCareer | Study Abroad & Immigration Decision Engine",
     description: "Compare study-abroad options by tuition, salary, ROI, payback period, visa pathways, PR potential, and career outcomes across the US, UK, Ireland, Canada, and Australia.",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "CampCareer — Study Abroad Decision Engine" }],
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "CampCareer — Study Abroad Decision Engine" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "CampCareer | Study Abroad & Immigration Decision Engine",
     description: "Compare study-abroad options by tuition, salary, ROI, payback period, visa pathways, PR potential, and career outcomes across 5 countries.",
-    images: ["/og-image.png"],
+    images: ["/opengraph-image"],
     creator: "@campcareer",
   },
   robots: {
@@ -91,19 +91,6 @@ export default function RootLayout({
         </LocaleProvider>
         <Analytics />
         <SpeedInsights />
-        {/* Google Analytics 4 (gtag.js) — measurement ID G-X2J1LGJL5D */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-X2J1LGJL5D"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-X2J1LGJL5D');
-          `}
-        </Script>
         {/* Impact affiliate verification — Revolut */}
         <Script id="impact-verification" strategy="beforeInteractive">
           {`

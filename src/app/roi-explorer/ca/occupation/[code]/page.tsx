@@ -8,7 +8,8 @@ import CAOccupationDetailPage from "./CAOccupationDetailPage"
 export const revalidate = 3600
 export const dynamicParams = true
 
-export async function generateMetadata({ params }: { params: { code: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ code: string }> }): Promise<Metadata> {
+  const params = await props.params;
   const { data } = await supabase
     .from("occupations_ca")
     .select("occupation_en, median_salary_cad, shortage_rating")
@@ -27,7 +28,8 @@ export async function generateMetadata({ params }: { params: { code: string } })
   })
 }
 
-export default async function Page({ params }: { params: { code: string } }) {
+export default async function Page(props: { params: Promise<{ code: string }> }) {
+  const params = await props.params;
   const { data: occ } = await supabase
     .from("occupations_ca")
     .select("occupation_en, noc_code, median_salary_cad, low_wage_cad, high_wage_cad, shortage_rating, on_teer_eligible, related_broad_field, confidence, data_source, last_verified, cops_future_outlook, cops_recent_outlook, projected_job_openings, projected_job_seekers, employment_growth")

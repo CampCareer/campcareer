@@ -4,17 +4,19 @@ import { notFound } from "next/navigation"
 import { JP_SHORTAGE_BY_PREFECTURE } from "@/data/jp-map-data"
 import { JP_CITY_MAP_PAGES } from "@/lib/jp-map-seo"
 
-type Props = { params: { slug: string } }
+type Props = { params: Promise<{ slug: string }> }
 const findPage = (slug: string) => JP_CITY_MAP_PAGES.find((page) => page.slug === slug) ?? null
 
 export function generateStaticParams() { return JP_CITY_MAP_PAGES.map((page) => ({ slug: page.slug })) }
-export function generateMetadata({ params }: Props): Metadata {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const page = findPage(params.slug)
   if (!page) return {}
   return { title: `${page.nameEn} Japan rent and job data | CampCareer`, description: `Official 2023 private-rental distribution and prefecture labour-demand data for ${page.nameEn}, Japan.`, alternates: { canonical: `https://www.campcareer.com${page.path}` } }
 }
 
-export default function JapanCityMapPage({ params }: Props) {
+export default async function JapanCityMapPage(props: Props) {
+  const params = await props.params;
   const page = findPage(params.slug)
   if (!page) notFound()
   const shortage = JP_SHORTAGE_BY_PREFECTURE[page.prefectureCode] ?? []

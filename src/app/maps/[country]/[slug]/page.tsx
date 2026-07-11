@@ -34,7 +34,8 @@ async function getOccupationFromParams(params: Params) {
   return resolveMapOccupation(params.country, params.slug)
 }
 
-export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<Params> }): Promise<Metadata> {
+  const params = await props.params;
   const occupation = await getOccupationFromParams(params)
   if (!occupation) return { title: "Map page not found" }
 
@@ -49,7 +50,8 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   }
 }
 
-export default async function MapsOccupationPage({ params }: { params: Params }) {
+export default async function MapsOccupationPage(props: { params: Promise<Params> }) {
+  const params = await props.params;
   const occupation = await getOccupationFromParams(params)
   if (!occupation) notFound()
 

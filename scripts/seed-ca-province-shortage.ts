@@ -58,7 +58,7 @@ async function main() {
     existingMap.set(`${row.noc_code}-${row.province}`, row.shortage_rating)
   }
 
-  let updated = 0
+  const updated = 0
   let unchanged = 0
   let undetermined = 0
   const batchSize = 200

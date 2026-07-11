@@ -4,9 +4,10 @@ import { PILOT_OCCUPATIONS } from "@/data/pilot-occupations"
 import { isPilotOccupationIndexable } from "@/lib/pilot-launch-gate"
 import { PilotOccupationPage, pilotOccupationSlug } from "@/components/expansion/pilot-occupation-page"
 
-type Props = { params: { country: string; slug: string } }
+type Props = { params: Promise<{ country: string; slug: string }> }
+type RouteParams = Awaited<Props["params"]>
 
-function findOccupation(params: Props["params"]) {
+function findOccupation(params: RouteParams) {
   return PILOT_OCCUPATIONS.find((occupation) =>
     occupation.country.toLowerCase() === params.country && pilotOccupationSlug(occupation) === params.slug && isPilotOccupationIndexable(occupation),
   ) ?? null
@@ -19,7 +20,8 @@ export function generateStaticParams() {
   }))
 }
 
-export function generateMetadata({ params }: Props): Metadata {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const occupation = findOccupation(params)
   if (!occupation) return { title: "Occupation pilot not found" }
   const path = `/expansion/maps/${params.country}/${params.slug}`
@@ -30,7 +32,8 @@ export function generateMetadata({ params }: Props): Metadata {
   }
 }
 
-export default function EnglishPilotOccupationPage({ params }: Props) {
+export default async function EnglishPilotOccupationPage(props: Props) {
+  const params = await props.params;
   const occupation = findOccupation(params)
   if (!occupation) notFound()
   return <PilotOccupationPage occupation={occupation} locale="en" />

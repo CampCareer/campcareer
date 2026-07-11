@@ -11,8 +11,8 @@ export const metadata = pageMetadata({
   path: "/degree-risk",
 })
 
-export default function DegreeRiskPage() {
-  const t = getTranslations()
+export default async function DegreeRiskPage() {
+  const t = await getTranslations()
   return (
     <div className="min-h-dvh bg-background">
       <header className="border-b border-slate-200">

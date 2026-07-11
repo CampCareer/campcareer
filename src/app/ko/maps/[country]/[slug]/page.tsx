@@ -7,22 +7,23 @@ import { getKoreaOccupation, isKoreaOccupationIndexable } from "@/data/kr-map-da
 import { getMapOccupations } from "@/lib/map-slugs"
 import { getFranceDemandOccupation, isFranceDemandOccupationIndexable } from "@/data/fr-map-data"
 
-type Props = { params: { country: string; slug: string } }
+type Props = { params: Promise<{ country: string; slug: string }> }
+type RouteParams = Awaited<Props["params"]>
 
-function findOccupation(params: Props["params"]) {
+function findOccupation(params: RouteParams) {
   return PILOT_OCCUPATIONS.find((occupation) =>
     occupation.country.toLowerCase() === params.country && pilotOccupationSlug(occupation) === params.slug && isPilotOccupationIndexable(occupation),
   ) ?? null
 }
 
-async function findKoreaOccupation(params: Props["params"]) {
+async function findKoreaOccupation(params: RouteParams) {
   if (params.country !== "kr") return null
   const occupations = await getMapOccupations("kr")
   const mapOccupation = occupations.find((occupation) => occupation.slug === params.slug || occupation.code === params.slug)
   return mapOccupation ? getKoreaOccupation(mapOccupation.code) : null
 }
 
-async function findFranceOccupation(params: Props["params"]) {
+async function findFranceOccupation(params: RouteParams) {
   if (params.country !== "fr") return null
   const occupations = await getMapOccupations("fr")
   const mapOccupation = occupations.find((occupation) => occupation.slug === params.slug || occupation.code === params.slug)
@@ -39,7 +40,8 @@ export async function generateStaticParams() {
   return [...pilot, ...korea, ...france]
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const korea = await findKoreaOccupation(params)
   if (korea) {
     const path = `/ko/maps/kr/${params.slug}`
@@ -64,7 +66,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default async function KoreanPilotOccupationPage({ params }: Props) {
+export default async function KoreanPilotOccupationPage(props: Props) {
+  const params = await props.params;
   const korea = await findKoreaOccupation(params)
   if (korea) {
     if (!isKoreaOccupationIndexable(korea)) notFound()

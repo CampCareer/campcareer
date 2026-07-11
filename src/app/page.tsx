@@ -5,12 +5,12 @@ export const revalidate = 86400
 export const dynamic = "force-static"
 
 export const metadata = pageMetadata({
-  title: "CampCareer — Compare Countries by Degree, Salary, Cost & Immigration ROI",
+  title: "Compare Study Paths by Cost, Career Outcomes & Post-Study Options",
   description:
-    "Find the best country for your degree and career goals. Compare majors, graduate salaries, tax, rent, immigration policy, and the budget needed to study abroad.",
+    "Search degrees, diplomas and trade qualifications, then compare total cost, career outcomes and post-study options across countries using verified sources.",
   path: "/",
 })
 
 export default function LandingPage() {
-  return <HomeFinder />
+  return <HomeFinder locale="en" />
 }

@@ -7,7 +7,8 @@ import SchoolDetailPage from "./SchoolDetailPage"
 
 export const revalidate = 86400
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const params = await props.params;
   const school = await getSchoolBySlug(params.slug)
   if (!school) return { title: "School Not Found" }
 
@@ -21,7 +22,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   })
 }
 
-export default async function Page({ params }: { params: { slug: string } }) {
+export default async function Page(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const school = await getSchoolBySlug(params.slug)
   if (!school) notFound()
   return (

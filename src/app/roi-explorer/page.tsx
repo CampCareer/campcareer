@@ -9,11 +9,12 @@ const VALID_SORTS = ["roi_score", "net_salary", "payback_years", "avg_cao_points
 const VALID_STAGES = ["early", "mid", "senior"] as const
 const VALID_LIMITS = [20, 50, 100]
 
-export default async function ROIExplorerPage({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined }
-}) {
+export default async function ROIExplorerPage(
+  props: {
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+  }
+) {
+  const searchParams = await props.searchParams;
   const param = (key: string): string => {
     const v = searchParams[key]
     return typeof v === "string" ? v : ""

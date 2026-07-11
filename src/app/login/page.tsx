@@ -2,7 +2,8 @@
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { Suspense, useState } from 'react'
 import { CheckCircle2, ArrowRight, Loader2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase-client'
 
@@ -12,8 +13,11 @@ const TRUST = [
   'Free to explore',
 ]
 
-export default function LoginPage() {
+function LoginPageContent() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const requestedNext = searchParams.get('next') ?? '/profile'
+  const next = requestedNext.startsWith('/') && !requestedNext.startsWith('//') ? requestedNext : '/profile'
   const supabase = createClient()
 
   const [email, setEmail] = useState('')
@@ -27,7 +31,7 @@ export default function LoginPage() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${location.origin}/auth/callback`,
+        redirectTo: `${location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
       },
     })
     if (error) {
@@ -47,14 +51,14 @@ export default function LoginPage() {
         setError(error.message)
         setIsLoading(false)
       } else {
-        router.push('/dashboard')
+        router.push(next)
         router.refresh()
       }
     } else {
       const { error } = await supabase.auth.signUp({
         email,
         password,
-        options: { emailRedirectTo: `${location.origin}/auth/callback` },
+        options: { emailRedirectTo: `${location.origin}/auth/callback?next=${encodeURIComponent(next)}` },
       })
       if (error) {
         setError(error.message)
@@ -230,5 +234,13 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white" aria-busy="true" />}>
+      <LoginPageContent />
+    </Suspense>
   )
 }

@@ -4,7 +4,7 @@ import { notFound } from "next/navigation"
 import { JP_HIGH_PAY_OCCUPATIONS, JP_SHORTAGE_BY_PREFECTURE } from "@/data/jp-map-data"
 import { JP_PREFECTURE_MAP_PAGES } from "@/lib/jp-map-seo"
 
-type Props = { params: { slug: string } }
+type Props = { params: Promise<{ slug: string }> }
 
 function findPage(slug: string) {
   return JP_PREFECTURE_MAP_PAGES.find((page) => page.slug === slug) ?? null
@@ -14,7 +14,8 @@ export function generateStaticParams() {
   return JP_PREFECTURE_MAP_PAGES.map((page) => ({ slug: page.slug }))
 }
 
-export function generateMetadata({ params }: Props): Metadata {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const page = findPage(params.slug)
   if (!page) return {}
   const title = `${page.en} Japan jobs, rent and salary data | CampCareer`
@@ -22,7 +23,8 @@ export function generateMetadata({ params }: Props): Metadata {
   return { title, description, alternates: { canonical: `https://www.campcareer.com${page.path}` } }
 }
 
-export default function JapanPrefectureMapPage({ params }: Props) {
+export default async function JapanPrefectureMapPage(props: Props) {
+  const params = await props.params;
   const page = findPage(params.slug)
   if (!page) notFound()
   const shortage = JP_SHORTAGE_BY_PREFECTURE[page.code] ?? []

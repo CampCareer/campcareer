@@ -17,7 +17,8 @@ function capitalize(s: string) {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
-export async function generateMetadata({ params }: { params: { city: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ city: string }> }): Promise<Metadata> {
+  const params = await props.params;
   const cityName = capitalize(params.city)
   return pageMetadata({
     title: `${cityName} 아일랜드 어학원 추천 2026 — 학비 및 과정 정보`,
@@ -63,7 +64,8 @@ function SchoolCard({ school }: { school: LanguageSchool }) {
   )
 }
 
-export default async function CityPage({ params }: { params: { city: string } }) {
+export default async function CityPage(props: { params: Promise<{ city: string }> }) {
+  const params = await props.params;
   const cityName = capitalize(params.city)
   const schools = await getSchoolsByCity(cityName)
 

@@ -28,7 +28,8 @@ function toStateCode(param: string): StateCode | null {
   return (STATE_CODES as readonly string[]).includes(upper) ? upper : null
 }
 
-export function generateMetadata({ params }: { params: { state: string; sa4: string } }) {
+export async function generateMetadata(props: { params: Promise<{ state: string; sa4: string }> }) {
+  const params = await props.params;
   const sc = toStateCode(params.state)
   if (!sc || !WHV_REGIONS[params.sa4]) {
     return pageMetadata({ title: "Australia WHV", description: "", path: "/map" })
@@ -43,7 +44,8 @@ export function generateMetadata({ params }: { params: { state: string; sa4: str
   })
 }
 
-export default async function WhvSA4Page({ params }: { params: { state: string; sa4: string } }) {
+export default async function WhvSA4Page(props: { params: Promise<{ state: string; sa4: string }> }) {
+  const params = await props.params;
   const data = await getMapData()
   const sc = toStateCode(params.state)
   if (!sc || !WHV_REGIONS[params.sa4]) {

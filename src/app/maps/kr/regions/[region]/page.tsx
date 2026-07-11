@@ -12,7 +12,8 @@ export function generateStaticParams() {
   return KR_REGIONS.map((region) => ({ region: region.nameEn.toLowerCase() }))
 }
 
-export function generateMetadata({ params }: { params: { region: string } }): Metadata {
+export async function generateMetadata(props: { params: Promise<{ region: string }> }): Promise<Metadata> {
+  const params = await props.params;
   const region = regionForSlug(params.region)
   if (!region) return { title: "지역 페이지를 찾을 수 없습니다" }
   return {
@@ -21,7 +22,8 @@ export function generateMetadata({ params }: { params: { region: string } }): Me
   }
 }
 
-export default function KoreaRegionPage({ params }: { params: { region: string } }) {
+export default async function KoreaRegionPage(props: { params: Promise<{ region: string }> }) {
+  const params = await props.params;
   const region = regionForSlug(params.region)
   if (!region) notFound()
   const current = getKoreaRegion(region.code)!

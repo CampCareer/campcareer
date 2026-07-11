@@ -43,7 +43,7 @@ export async function submitAssessment(answers: Answers): Promise<SubmitResult> 
     }
   }
 
-  const supabase = createClient()
+  const supabase = await createClient()
   // Link the assessment to the account when the visitor is already signed in;
   // anonymous visitors leave user_id null (claimed later on login). RLS allows
   // both (insert policy: user_id IS NULL OR user_id = auth.uid()).
@@ -118,7 +118,7 @@ export async function saveLead(input: {
     return { ok: false, error: "Please enter a valid email address." }
   }
 
-  const supabase = createClient()
+  const supabase = await createClient()
   const { error } = await supabase.from("leads").insert({
     email,
     consent_marketing: input.consentMarketing,
@@ -160,8 +160,8 @@ export async function subscribeVisaAlerts(input: SubscribeInput): Promise<Subscr
     return { ok: false, error: "consent_required" }
   }
 
-  const supabase = createClient()
-  const acquisition = getServerAcquisitionContext()
+  const supabase = await createClient()
+  const acquisition = await getServerAcquisitionContext()
   const baseRow = {
     email,
     country: input.country,

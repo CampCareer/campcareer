@@ -3,7 +3,7 @@ import { getTranslations } from "@/lib/i18n/server"
 import CompareHubClient from "./CompareHubClient"
 
 export async function generateMetadata() {
-  const t = getTranslations()
+  const t = await getTranslations()
   return pageMetadata({
     title: t.compare.hub.title,
     description: t.compare.hub.subtitle,

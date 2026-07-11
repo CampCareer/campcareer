@@ -6,9 +6,13 @@ import { pageMetadata } from "@/lib/seo"
 export const revalidate = 86400
 function getCity(slug: string) { return FR_CITIES.find((city) => city.slug === slug) ?? null }
 export function generateStaticParams() { return FR_CITIES.map((city) => ({ city: city.slug })) }
-export function generateMetadata({ params }: { params: { city: string } }): Metadata { const city = getCity(params.city); if (!city) return { title: "France city not found" }; return { ...pageMetadata({ title: `${city.nameFr} jobs, rent and universities | CampCareer`, description: `${city.nameFr} employment-basin hiring demand, advertised rent indicator and nearby public institutions in France.`, path: `/maps/fr/cities/${city.slug}` }), robots: { index: isFranceCityIndexable(city), follow: true } } }
+export async function generateMetadata(props: { params: Promise<{ city: string }> }): Promise<Metadata> {
+  const params = await props.params;
+  const city = getCity(params.city);if (!city) return { title: "France city not found" };return { ...pageMetadata({ title: `${city.nameFr} jobs, rent and universities | CampCareer`, description: `${city.nameFr} employment-basin hiring demand, advertised rent indicator and nearby public institutions in France.`, path: `/maps/fr/cities/${city.slug}` }), robots: { index: isFranceCityIndexable(city), follow: true } }
+}
 
-export default function FranceCityPage({ params }: { params: { city: string } }) {
+export default async function FranceCityPage(props: { params: Promise<{ city: string }> }) {
+  const params = await props.params;
   const city = getCity(params.city)
   if (!city) return null
   const region = FR_REGIONS.find((item) => item.code === city.regionCode)

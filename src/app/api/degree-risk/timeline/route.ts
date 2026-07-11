@@ -39,7 +39,7 @@ export async function GET(request: Request) {
   const slug = fieldToMajorSlug(field)
   const lookupSlug = slug ?? FALLBACK_SLUG
 
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data, error } = await supabase
     .from("majors")
     .select("country, post_study_work_years, layer_meta")

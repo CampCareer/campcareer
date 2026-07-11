@@ -3,13 +3,14 @@ import type { Metadata } from "next"
 import { EXPANSION_COUNTRIES, getExpansionCountry, PILOT_COUNTRY_SLUGS } from "@/data/expansion-countries"
 import { PilotCountryPage, isPilotCountry } from "@/components/expansion/country-pilot-page"
 
-type Props = { params: { country: string } }
+type Props = { params: Promise<{ country: string }> }
 
 export function generateStaticParams() {
   return EXPANSION_COUNTRIES.filter((country) => country.wave === "baseline" || PILOT_COUNTRY_SLUGS.includes(country.slug as typeof PILOT_COUNTRY_SLUGS[number])).map((country) => ({ country: country.slug }))
 }
 
-export function generateMetadata({ params }: Props): Metadata {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const country = getExpansionCountry(params.country)
   if (!country || !isPilotCountry(country)) return { title: "페이지를 찾을 수 없습니다" }
   const path = `/ko/${country.slug}`
@@ -21,7 +22,8 @@ export function generateMetadata({ params }: Props): Metadata {
   }
 }
 
-export default function KoreanPilotCountryPage({ params }: Props) {
+export default async function KoreanPilotCountryPage(props: Props) {
+  const params = await props.params;
   const country = getExpansionCountry(params.country)
   if (!country || !isPilotCountry(country)) notFound()
   return <PilotCountryPage country={country} locale="ko" />

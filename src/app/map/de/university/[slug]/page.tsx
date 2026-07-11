@@ -12,7 +12,8 @@ export async function generateStaticParams() {
   return data.deColleges.map((c) => ({ slug: c.slug }))
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const data = await getDEMapData()
   const college = data.deColleges.find((c) => c.slug === params.slug)
   if (!college) return pageMetadata({ title: "University Details", description: "", path: "/map" })
@@ -35,7 +36,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   })
 }
 
-export default async function UniversityPage({ params }: { params: { slug: string } }) {
+export default async function UniversityPage(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const data = await getDEMapData()
   const college = data.deColleges.find((c) => c.slug === params.slug)
   if (!college) notFound()

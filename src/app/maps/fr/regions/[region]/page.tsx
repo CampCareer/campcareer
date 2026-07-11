@@ -7,9 +7,13 @@ export const revalidate = 86400
 
 function getRegion(slug: string) { return FR_REGIONS.find((region) => region.slug === slug) ?? null }
 export function generateStaticParams() { return FR_REGIONS.map((region) => ({ region: region.slug })) }
-export function generateMetadata({ params }: { params: { region: string } }): Metadata { const region = getRegion(params.region); if (!region) return { title: "France region not found" }; return { ...pageMetadata({ title: `${region.nameFr} jobs, rent and universities | CampCareer`, description: `Compare ${region.nameFr} France Travail hiring demand, INSEE salary groups, city rent indicators and public universities.`, path: `/maps/fr/regions/${region.slug}` }), robots: { index: isFranceRegionIndexable(region), follow: true } } }
+export async function generateMetadata(props: { params: Promise<{ region: string }> }): Promise<Metadata> {
+  const params = await props.params;
+  const region = getRegion(params.region);if (!region) return { title: "France region not found" };return { ...pageMetadata({ title: `${region.nameFr} jobs, rent and universities | CampCareer`, description: `Compare ${region.nameFr} France Travail hiring demand, INSEE salary groups, city rent indicators and public universities.`, path: `/maps/fr/regions/${region.slug}` }), robots: { index: isFranceRegionIndexable(region), follow: true } }
+}
 
-export default function FranceRegionPage({ params }: { params: { region: string } }) {
+export default async function FranceRegionPage(props: { params: Promise<{ region: string }> }) {
+  const params = await props.params;
   const region = getRegion(params.region)
   if (!region) return null
   const demand = region.topDemand.map((row) => ({ ...FR_DEMAND_BY_CODE.get(row.code)!, projects: row.recruitmentProjects })).filter(Boolean)

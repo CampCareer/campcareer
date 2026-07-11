@@ -27,6 +27,8 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.claude/settings.local.json
+.codex/config.local.toml
 
 # vercel
 .vercel
@@ -72,3 +74,7 @@ public/Germany_Shortage/
 
 # Python cache
 scripts/__pycache__/
+
+# Browser test artifacts
+test-results/
+playwright-report/

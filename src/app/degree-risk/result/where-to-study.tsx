@@ -12,7 +12,7 @@ import {
 } from "@/lib/degree-risk"
 import { getTranslations } from "@/lib/i18n/server"
 
-type ResultStrings = ReturnType<typeof getTranslations>["degreeRisk"]["result"]
+type ResultStrings = Awaited<ReturnType<typeof getTranslations>>["degreeRisk"]["result"]
 
 type College = {
   college_id: string | null
@@ -80,7 +80,7 @@ export async function WhereToStudy({
   view: ResultView
   embedded?: boolean
 }) {
-  const t = getTranslations()
+  const t = await getTranslations()
   const rr = t.degreeRisk.result
   const opts = t.degreeRisk.options as Record<string, string>
   const majorName = opts[major] ?? majorLabel(major)

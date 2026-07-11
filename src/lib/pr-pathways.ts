@@ -9,7 +9,7 @@ import { type CountryCode, type PrPathway } from "@/lib/degree-risk"
  */
 export async function fetchPrPathways(): Promise<Partial<Record<CountryCode, PrPathway>>> {
   try {
-    const supabase = createClient()
+    const supabase = await createClient()
     const { data, error } = await supabase.from("country_pr_pathways").select("*")
     if (error) {
       console.error("[pr-pathways] query failed:", error.message)

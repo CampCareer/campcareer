@@ -1845,7 +1845,7 @@ export default function LeafletMap({
       const b = lyr ? safeBounds(lyr.getBounds()) : null
       if (b) mapRef.current?.flyToBounds(b, { padding: [40, 40], maxZoom: 8, duration: 0.6 })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [selectedSA4])
 
   // Tab(shortage/pay/whv) 변경 → SA4 스타일 재적용
@@ -1853,7 +1853,7 @@ export default function LeafletMap({
     const layer = sa4LayerRef.current
     if (!layer) return
     layer.setStyle((feature) => sa4StyleFor(feature?.properties?.SA4_CODE as string))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [tab])
 
   return (

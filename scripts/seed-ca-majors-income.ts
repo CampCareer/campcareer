@@ -97,7 +97,7 @@ function parseCsvFile(filepath: string): Record<string, { name: string; n: numbe
   let cur: string[] = []
   let inQ = false
   for (let li = 0; li < lines.length; li++) {
-    let line = lines[li]
+    const line = lines[li]
     // Handle possible multi-line fields
     if (inQ) {
       cur[cur.length - 1] += '\n' + line

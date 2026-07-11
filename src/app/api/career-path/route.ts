@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { FEATURE_FLAGS } from '@/lib/feature-flags'
 
 export async function POST(req: NextRequest) {
+  if (!FEATURE_FLAGS.aiGeneration) {
+    return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  }
+  if (Number(req.headers.get('content-length') ?? 0) > 16_384) {
+    return NextResponse.json({ error: 'Request is too large' }, { status: 413 })
+  }
   const { country, field, currentStatus, experience, goalText, goal, english } = await req.json()
   if (!country || !field || !currentStatus) {
     return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })

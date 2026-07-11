@@ -20,8 +20,8 @@ function aiBand(band: string): "low" | "medium" | "high" {
 // Build serializable display rows for the client ranking table. `nameMode`
 // decides what the first column shows: countries (one major across countries)
 // or majors (one country's majors).
-export function toExploreRows(rows: MajorRow[], nameMode: "country" | "major"): ExploreRow[] {
-  const t = getTranslations()
+export async function toExploreRows(rows: MajorRow[], nameMode: "country" | "major"): Promise<ExploreRow[]> {
+  const t = await getTranslations()
   const rr = t.degreeRisk.result
   const ex = t.explore
   const opts = t.degreeRisk.options as Record<string, string>

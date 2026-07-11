@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  allowedDevOrigins: ['127.0.0.1', 'localhost'],
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
@@ -17,7 +18,6 @@ const nextConfig = {
       { source: '/checklist/:path*', destination: '/', permanent: false },
       { source: '/documents/:path*', destination: '/', permanent: false },
       { source: '/saved/:path*', destination: '/', permanent: false },
-      { source: '/fields/:path*', destination: '/', permanent: false },
       { source: '/rankings/:path*', destination: '/', permanent: false },
       { source: '/explore/:path*', destination: '/', permanent: false },
       // 퍼널 단일화: 구 온보딩 → Degree Risk (영구 이전)

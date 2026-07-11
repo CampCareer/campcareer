@@ -3,7 +3,7 @@ import { getTranslations } from "@/lib/i18n/server"
 import MajorCompareClient from "./MajorCompareClient"
 
 export async function generateMetadata() {
-  const t = getTranslations()
+  const t = await getTranslations()
   return pageMetadata({
     title: t.compare.majors.pageTitle,
     description: t.compare.majors.pageSubtitle,

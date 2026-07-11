@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase-admin'
 import { withStableIds } from '@/lib/checklist-id'
+import { FEATURE_FLAGS } from '@/lib/feature-flags'
 
 const VISA_PROMPTS: Record<string, string> = {
   'student':        'student visa / study permit',
@@ -9,6 +10,12 @@ const VISA_PROMPTS: Record<string, string> = {
 }
 
 export async function POST(req: NextRequest) {
+  if (!FEATURE_FLAGS.aiGeneration) {
+    return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  }
+  if (Number(req.headers.get('content-length') ?? 0) > 8_192) {
+    return NextResponse.json({ error: 'Request is too large' }, { status: 413 })
+  }
   const { country, visa_type } = await req.json()
 
   if (!country || !visa_type) {

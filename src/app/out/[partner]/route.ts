@@ -5,11 +5,12 @@ import { supabaseAdmin } from "@/lib/supabase-admin"
 
 export const dynamic = "force-dynamic"
 
-export async function GET(request: Request, { params }: { params: { partner: string } }) {
+export async function GET(request: Request, props: { params: Promise<{ partner: string }> }) {
+  const params = await props.params;
   const partner = getPartner(params.partner)
   if (!partner) return new NextResponse("Not found", { status: 404 })
 
-  const acquisition = getServerAcquisitionContext()
+  const acquisition = await getServerAcquisitionContext()
   const { error } = await supabaseAdmin.from("analytics_events").insert({
     event_name: "affiliate_click",
     session_id: acquisition.sessionId,

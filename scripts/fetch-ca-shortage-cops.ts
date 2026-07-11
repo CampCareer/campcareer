@@ -101,8 +101,8 @@ function parseNumeric(val: string | null): number | null {
 async function main() {
   console.log("Downloading COPS data from open.canada.ca...")
 
-  let flmcRows: FLMCRow[] = []
-  let summaryRows: SummaryRow[] = []
+  const flmcRows: FLMCRow[] = []
+  const summaryRows: SummaryRow[] = []
 
   // ── 1. Future Labour Market Conditions CSV ──────────────────────────────
   try {

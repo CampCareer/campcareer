@@ -3,11 +3,11 @@ import { pageMetadata } from "@/lib/seo"
 
 export const metadata = pageMetadata({
   title: "Privacy Policy",
-  description: "How CampCareer collects, stores, and protects your personal data, including account information and uploaded documents.",
+  description: "How CampCareer collects, stores, and protects account, saved-plan, consent, and product analytics data.",
   path: "/privacy",
 })
 
-const LAST_UPDATED = "10 June 2026"
+const LAST_UPDATED = "11 July 2026"
 
 export default function PrivacyPage() {
   return (
@@ -34,23 +34,22 @@ export default function PrivacyPage() {
               you create an account or sign in.
             </li>
             <li>
-              <strong>Profile and preference data</strong> — target country, field of study, and
-              other answers you provide during onboarding to personalise the product.
+              <strong>Decision inputs</strong> — origin country, study concept, budget, currency,
+              and product priority used to calculate or save a decision plan.
             </li>
             <li>
-              <strong>Saved content</strong> — courses, checklists, timelines, and career paths
-              you save while using the product.
+              <strong>Saved plans</strong> — the recommendation snapshot, source and engine
+              versions, and recalculation history you explicitly save.
             </li>
             <li>
-              <strong>Uploaded documents</strong> — files you choose to store in the Document
-              Vault (for example passports, visas, or transcripts), together with metadata such
-              as document type and expiry date. We never access the contents of your documents
-              except to provide the storage and reminder features you request.
+              <strong>Consent records</strong> — separate records for saving a plan and for any
+              optional policy or marketing alerts. Saving a plan does not subscribe you to marketing.
             </li>
             <li>
-              <strong>Usage analytics</strong> — aggregated page-view and interaction data
-              collected via Vercel Analytics to understand how the product is used. This data is
-              not used to identify individual users.
+              <strong>Usage analytics</strong> — page views, performance measurements, and
+              allow-listed product events collected with Vercel Analytics and Speed Insights.
+              Product events may include origin country, concept ID, destination, and engine/data
+              versions, but never email addresses or free-text responses.
             </li>
           </ul>
         </section>
@@ -58,11 +57,11 @@ export default function PrivacyPage() {
         <section>
           <h2 className="font-display text-lg font-semibold text-slate-800 mb-2">3. How we store and protect data</h2>
           <p>
-            Your data is stored with our infrastructure providers (see section 4). Documents and
-            personal records are stored in access-controlled storage protected by row-level
-            security, so they are only readable by your authenticated account. Data is encrypted
-            in transit (TLS) and at rest by our storage providers. We retain your data for as
-            long as your account exists, or as required to provide the service.
+            Personal records are stored with our infrastructure providers (see section 4).
+            Saved decision plans are protected by owner-only row-level security and are only
+            readable by the authenticated account that owns them. Data is encrypted in transit
+            and at rest by our providers. Save-intent tokens expire after 24 hours. Saved plans
+            are retained while your account remains active or until you request deletion.
           </p>
         </section>
 
@@ -70,8 +69,9 @@ export default function PrivacyPage() {
           <h2 className="font-display text-lg font-semibold text-slate-800 mb-2">4. Processors and sub-processors</h2>
           <p>We use the following service providers to operate CampCareer:</p>
           <ul className="list-disc pl-5 space-y-1.5 mt-2">
-            <li><strong>Supabase</strong> — database, authentication, and file storage.</li>
+            <li><strong>Supabase</strong> — database and authentication.</li>
             <li><strong>Vercel</strong> — application hosting and privacy-friendly analytics.</li>
+            <li><strong>Resend</strong> — transactional messages and separately consented alerts.</li>
           </ul>
           <p className="mt-2">
             These providers process data on our behalf under their own data-processing agreements
@@ -84,8 +84,8 @@ export default function PrivacyPage() {
           <p>
             Depending on where you live (including under the EU/UK GDPR), you may have the right
             to access, correct, export, or delete your personal data. You can delete saved
-            courses and uploaded documents at any time from within the product. To delete your
-            entire account and all associated data, email{" "}
+            saved content where the product provides a delete control. To delete your entire
+            account and all associated data, email{" "}
             <a href="mailto:contact@campcareer.com" className="text-blue-600 hover:underline">contact@campcareer.com</a>{" "}
             from your registered address; we will action verified requests within 30 days.
           </p>
@@ -94,9 +94,9 @@ export default function PrivacyPage() {
         <section>
           <h2 className="font-display text-lg font-semibold text-slate-800 mb-2">6. Cookies</h2>
           <p>
-            We use strictly necessary cookies for authentication sessions, language preference,
-            and interface state (such as sidebar collapse). We do not use third-party advertising
-            cookies.
+            We use strictly necessary cookies for authentication sessions and interface state.
+            Vercel&apos;s current analytics configuration is used without advertising or cross-site
+            tracking cookies. We do not use Google Analytics or third-party advertising cookies.
           </p>
         </section>
 

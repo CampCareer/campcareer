@@ -6,8 +6,8 @@ import { siteUrl } from "@/lib/email/links"
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
-function cookieLocale(): Locale {
-  const v = cookies().get(LOCALE_COOKIE)?.value
+async function cookieLocale(): Promise<Locale> {
+  const v = (await cookies()).get(LOCALE_COOKIE)?.value
   return isLocale(v) ? v : "en"
 }
 
@@ -54,7 +54,7 @@ export async function GET(req: Request): Promise<Response> {
       400
     )
 
-  if (!UUID_RE.test(token)) return invalid(cookieLocale())
+  if (!UUID_RE.test(token)) return invalid(await cookieLocale())
 
   const { data, error } = await supabaseAdmin
     .from("subscriptions")
@@ -64,12 +64,12 @@ export async function GET(req: Request): Promise<Response> {
 
   if (error) {
     console.error("[visa-alert] unsubscribe lookup failed:", error.message)
-    return invalid(cookieLocale())
+    return invalid(await cookieLocale())
   }
   const row = data?.[0]
-  if (!row) return invalid(cookieLocale())
+  if (!row) return invalid(await cookieLocale())
 
-  const locale: Locale = isLocale(row.locale) ? row.locale : cookieLocale()
+  const locale: Locale = isLocale(row.locale) ? row.locale : await cookieLocale()
   const c = COPY[locale]
 
   if (row.unsubscribed_at) {

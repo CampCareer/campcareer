@@ -310,7 +310,7 @@ export default function CampCareerMaps({
 
   useEffect(() => {
     setSelectedSA4(null)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [selected])
 
   // initialSA4 prop → selectedSA4 (selected-clear effect 이후에 적용)
@@ -322,7 +322,7 @@ export default function CampCareerMaps({
       const region = regions.find((r) => r.code === code) ?? null
       if (region) setSelectedSA4(region)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [selected])
 
   // occ(직업 코드) URL 파라미터 ↔ state 동기화.

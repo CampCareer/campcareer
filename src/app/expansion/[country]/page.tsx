@@ -3,13 +3,14 @@ import type { Metadata } from "next"
 import { EXPANSION_COUNTRIES, getExpansionCountry, PILOT_COUNTRY_SLUGS } from "@/data/expansion-countries"
 import { PilotCountryPage, isPilotCountry } from "@/components/expansion/country-pilot-page"
 
-type Props = { params: { country: string } }
+type Props = { params: Promise<{ country: string }> }
 
 export function generateStaticParams() {
   return EXPANSION_COUNTRIES.filter((country) => country.wave === "baseline" || PILOT_COUNTRY_SLUGS.includes(country.slug as typeof PILOT_COUNTRY_SLUGS[number])).map((country) => ({ country: country.slug }))
 }
 
-export function generateMetadata({ params }: Props): Metadata {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const country = getExpansionCountry(params.country)
   if (!country || !isPilotCountry(country)) return { title: "Country pilot not found" }
   const path = `/expansion/${country.slug}`
@@ -21,7 +22,8 @@ export function generateMetadata({ params }: Props): Metadata {
   }
 }
 
-export default function EnglishPilotCountryPage({ params }: Props) {
+export default async function EnglishPilotCountryPage(props: Props) {
+  const params = await props.params;
   const country = getExpansionCountry(params.country)
   if (!country || !isPilotCountry(country)) notFound()
   return <PilotCountryPage country={country} locale="en" />
