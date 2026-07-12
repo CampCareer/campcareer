@@ -22,7 +22,6 @@ import {
 import type { LucideIcon } from "lucide-react"
 import { STUDY_CATEGORIES, STUDY_CONCEPTS } from "@/data/study-concepts"
 import type {
-  ConceptCountryCoverage,
   CountryRecommendation,
   FitBand,
   RecommendationPriority,
@@ -119,76 +118,21 @@ export function HomeFinder({ locale = "en" }: { locale?: StudyLocale }) {
   const [origin, setOrigin] = useState<string | undefined>()
   const [query, setQuery] = useState("")
   const [selected, setSelected] = useState<TaxonomySearchResult | null>(null)
-  const [results, setResults] = useState<TaxonomySearchResult[]>(() => conceptSearchResults(isKo))
   const [searchOpen, setSearchOpen] = useState(false)
-  const [searching, setSearching] = useState(false)
+  const [focusCategoryId, setFocusCategoryId] = useState<string | undefined>()
   const [budget, setBudget] = useState<number | undefined>()
   const [priority, setPriority] = useState<RecommendationPriority>("CAREER_OUTCOME")
   const [recommendation, setRecommendation] = useState<RecommendationResultV2 | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showAll, setShowAll] = useState(false)
-  const searchSequence = useRef(0)
-  const browsingCategory = useRef(false)
-
-  useEffect(() => {
-    if (selected && query === selected.label) return
-    if (!query.trim()) {
-      setSearching(false)
-      return
-    }
-    if (browsingCategory.current) {
-      browsingCategory.current = false
-      return
-    }
-    const timeout = window.setTimeout(async () => {
-      const sequence = ++searchSequence.current
-      setSearching(true)
-      try {
-        const response = await fetch(`/api/v1/taxonomy/search?q=${encodeURIComponent(query)}&locale=${locale}`)
-        const payload = await response.json() as { results?: TaxonomySearchResult[] }
-        if (sequence === searchSequence.current) setResults(payload.results ?? [])
-      } catch {
-        if (sequence === searchSequence.current) setResults([])
-      } finally {
-        if (sequence === searchSequence.current) setSearching(false)
-      }
-    }, query ? 180 : 0)
-    return () => window.clearTimeout(timeout)
-  }, [locale, query, selected])
 
   function chooseConcept(item: TaxonomySearchResult) {
-    if (item.conceptId.startsWith(CATEGORY_PREFIX)) {
-      const categoryId = item.conceptId.slice(CATEGORY_PREFIX.length)
-      browseCategory(categoryId)
-      return
-    }
     setSelected(item)
     setQuery(item.label)
     setSearchOpen(false)
     setRecommendation(null)
     setError(null)
-  }
-
-  function browseCategory(categoryId: string) {
-    const category = STUDY_CATEGORIES.find((c) => c.id === categoryId)
-    const categoryConcepts = STUDY_CONCEPTS
-      .filter((concept) => concept.category === categoryId)
-      .map<TaxonomySearchResult>((concept) => ({
-        conceptId: concept.id,
-        slug: concept.slug,
-        kind: concept.kind,
-        label: isKo ? concept.labelKo : concept.label,
-        secondaryLabel: concept.description,
-        officialCodes: concept.officialCodes ?? [],
-        coverageByCountry: concept.coverageByCountry,
-        recommendable: Boolean(concept.legacyField),
-      }))
-    browsingCategory.current = true
-    setResults(categoryConcepts)
-    setQuery(category ? (isKo ? category.labelKo : category.label) : "")
-    setSelected(null)
-    setSearchOpen(true)
   }
 
   async function requestRecommendation(personalization?: { originCountry?: string; budget?: number }) {
@@ -308,16 +252,17 @@ export function HomeFinder({ locale = "en" }: { locale?: StudyLocale }) {
                         aria-autocomplete="list"
                         className={`${controlClass} pl-11 pr-10`}
                       />
-                      {searching ? <Loader2 className="absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-blue-600" /> : <ChevronDown className="absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />}
+                      <ChevronDown className="absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                     </div>
                   </Field>
                   {searchOpen && (
                     <SearchMenu
                       id="study-search-results"
-                      items={results}
+                      locale={locale}
                       isKo={isKo}
+                      initialCategoryId={focusCategoryId}
                       onChoose={chooseConcept}
-                      onClose={() => setSearchOpen(false)}
+                      onClose={() => { setSearchOpen(false); setFocusCategoryId(undefined) }}
                     />
                   )}
               </div>
@@ -363,7 +308,7 @@ export function HomeFinder({ locale = "en" }: { locale?: StudyLocale }) {
               <button
                 key={category.id}
                 type="button"
-                onClick={() => browseCategory(category.id)}
+                onClick={() => { setFocusCategoryId(category.id); setSearchOpen(true) }}
                 className="min-h-11 rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 transition hover:border-blue-300 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
               >
                 {isKo ? category.labelKo : category.label}
@@ -456,21 +401,6 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   return <label className="block"><span className="mb-2 block text-xs font-bold text-slate-700">{label}</span>{children}</label>
 }
 
-const CATEGORY_PREFIX = "__category__"
-
-function conceptSearchResults(isKo: boolean): TaxonomySearchResult[] {
-  return STUDY_CATEGORIES.map((category) => ({
-    conceptId: `${CATEGORY_PREFIX}${category.id}`,
-    slug: category.id,
-    kind: "STUDY_FIELD" as const,
-    label: isKo ? category.labelKo : category.label,
-    secondaryLabel: "",
-    officialCodes: [],
-    coverageByCountry: {} as Record<string, ConceptCountryCoverage>,
-    recommendable: false,
-  }))
-}
-
 function PriorityButton({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
   return (
     <button type="button" aria-pressed={active} onClick={onClick} className={`min-h-12 rounded-xl border px-2 text-xs font-bold leading-4 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${active ? "border-blue-600 bg-blue-50 text-blue-700" : "border-slate-200 bg-white text-slate-600 hover:border-slate-300"}`}>
@@ -479,23 +409,110 @@ function PriorityButton({ active, onClick, children }: { active: boolean; onClic
   )
 }
 
-function SearchMenu({ id, items, isKo, onChoose, onClose }: { id: string; items: TaxonomySearchResult[]; isKo: boolean; onChoose: (item: TaxonomySearchResult) => void; onClose: () => void }) {
+function SearchMenu({ id, locale, isKo, initialCategoryId, onChoose, onClose }: { id: string; locale: StudyLocale; isKo: boolean; initialCategoryId?: string; onChoose: (item: TaxonomySearchResult) => void; onClose: () => void }) {
+  const [activeCategoryId, setActiveCategoryId] = useState<string | null>(initialCategoryId ?? null)
+  const [query, setQuery] = useState("")
+  const [searchResults, setSearchResults] = useState<TaxonomySearchResult[]>([])
+  const [searching, setSearching] = useState(false)
+  const searchSequence = useRef(0)
+
+  const categoryItemClass = "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-semibold transition hover:bg-slate-50"
+
+  const conceptItems = activeCategoryId
+    ? STUDY_CONCEPTS
+        .filter((c) => c.category === activeCategoryId)
+        .map<TaxonomySearchResult>((concept) => ({
+          conceptId: concept.id,
+          slug: concept.slug,
+          kind: concept.kind,
+          label: isKo ? concept.labelKo : concept.label,
+          secondaryLabel: concept.description,
+          officialCodes: concept.officialCodes ?? [],
+          coverageByCountry: concept.coverageByCountry,
+          recommendable: Boolean(concept.legacyField),
+        }))
+    : []
+
+  const activeCategory = STUDY_CATEGORIES.find((c) => c.id === activeCategoryId)
+
+  const displayItems = query.trim() ? searchResults : conceptItems
+
+  useEffect(() => {
+    if (!query.trim()) {
+      setSearchResults([])
+      setSearching(false)
+      return
+    }
+    const timeout = window.setTimeout(async () => {
+      const sequence = ++searchSequence.current
+      setSearching(true)
+      try {
+        const response = await fetch(`/api/v1/taxonomy/search?q=${encodeURIComponent(query)}&locale=${locale}`)
+        const payload = await response.json() as { results?: TaxonomySearchResult[] }
+        if (sequence === searchSequence.current) setSearchResults(payload.results ?? [])
+      } catch {
+        if (sequence === searchSequence.current) setSearchResults([])
+      } finally {
+        if (sequence === searchSequence.current) setSearching(false)
+      }
+    }, 180)
+    return () => window.clearTimeout(timeout)
+  }, [locale, query])
+
   return (
-    <div id={id} role="listbox" className="absolute left-0 right-0 top-[calc(100%+8px)] z-50 max-h-96 overflow-y-auto rounded-xl border border-slate-200 bg-white p-2 shadow-2xl shadow-slate-900/15">
-      {items.length === 0 ? (
-        <div className="px-3 py-8 text-center text-sm text-slate-500">{isKo ? "검색 결과가 없습니다. 다른 과정이나 기술명을 입력해보세요." : "No matching option yet. Try another course or skill name."}</div>
-      ) : items.map((item) => (
-        <button key={item.conceptId} type="button" role="option" aria-selected="false" onClick={() => onChoose(item)} className="flex w-full items-start justify-between gap-3 rounded-lg px-3 py-3 text-left hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
-          <span>
-            <span className="block text-sm font-bold text-slate-900">{item.label}</span>
-            <span className="mt-1 block text-xs leading-5 text-slate-500">{item.secondaryLabel}</span>
-            {item.matchedAlias && <span className="mt-1 block text-[11px] text-blue-600">{isKo ? "일치" : "Matched"}: {item.matchedAlias}</span>}
-          </span>
-          <span className={`mt-0.5 shrink-0 rounded-full px-2 py-1 text-[10px] font-bold ${item.recommendable ? "bg-emerald-50 text-emerald-700" : "bg-slate-100 text-slate-500"}`}>
-            {item.recommendable ? (isKo ? "비교 가능" : "Comparable") : (isKo ? "자료 보기" : "Explore")}
-          </span>
-        </button>
-      ))}
+    <div id={id} role="listbox" className="absolute left-0 right-0 top-[calc(100%+8px)] z-50 flex overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl shadow-slate-900/15">
+      <div className="w-56 shrink-0 border-r border-slate-100 bg-slate-50/50 py-2">
+        {STUDY_CATEGORIES.map((category) => (
+          <button
+            key={category.id}
+            type="button"
+            onClick={() => { setActiveCategoryId(category.id); setQuery(""); setSearchResults([]) }}
+            className={`${categoryItemClass} ${activeCategoryId === category.id ? "bg-blue-50 text-blue-700" : "text-slate-700"}`}
+          >
+            <span className="truncate">{isKo ? category.labelKo : category.label}</span>
+          </button>
+        ))}
+      </div>
+      <div className="min-h-[384px] max-h-[384px] min-w-[340px] flex-1 overflow-y-auto py-2">
+        {!activeCategoryId && !query.trim() ? (
+          <div className="flex h-full items-center justify-center px-6 text-center text-sm text-slate-400">
+            {isKo ? "왼쪽에서 직종을 선택하세요" : "Choose a field on the left"}
+          </div>
+        ) : searching ? (
+          <div className="flex h-full items-center justify-center px-6 text-center text-sm text-slate-400">
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            {isKo ? "검색 중…" : "Searching…"}
+          </div>
+        ) : displayItems.length === 0 ? (
+          <div className="flex h-full items-center justify-center px-6 text-center text-sm text-slate-400">
+            {isKo ? "해당하는 과정이 없습니다" : "No matching option yet"}
+          </div>
+        ) : (
+          <>
+            {activeCategory && !query.trim() && (
+              <p className="px-4 pb-2 pt-1 text-[11px] font-bold uppercase tracking-wider text-slate-400">{isKo ? activeCategory.labelKo : activeCategory.label}</p>
+            )}
+            {displayItems.map((item) => (
+              <button
+                key={item.conceptId}
+                type="button"
+                role="option"
+                aria-selected="false"
+                onClick={() => onChoose(item)}
+                className="flex w-full items-start justify-between gap-3 rounded-lg px-4 py-3 text-left transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+              >
+                <span>
+                  <span className="block text-sm font-bold text-slate-900">{item.label}</span>
+                  <span className="mt-1 block text-xs leading-5 text-slate-500">{item.secondaryLabel}</span>
+                </span>
+                <span className={`mt-0.5 shrink-0 rounded-full px-2 py-1 text-[10px] font-bold ${item.recommendable ? "bg-emerald-50 text-emerald-700" : "bg-slate-100 text-slate-500"}`}>
+                  {item.recommendable ? (isKo ? "비교 가능" : "Comparable") : (isKo ? "자료 보기" : "Explore")}
+                </span>
+              </button>
+            ))}
+          </>
+        )}
+      </div>
       <button type="button" onClick={onClose} className="sr-only">Close results</button>
     </div>
   )
