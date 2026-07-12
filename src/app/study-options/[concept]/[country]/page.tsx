@@ -119,6 +119,13 @@ export default async function StudyOptionsPage(
           </div>
         )}
 
+        <section className="mt-8 rounded-2xl border border-blue-200 bg-blue-50 p-6">
+          <p className="text-sm font-bold text-blue-700">{isKo ? "다음 단계" : "Next step"}</p>
+          <h2 className="mt-2 text-2xl font-semibold text-slate-950">{isKo ? "지원 준비가 되셨나요?" : "Ready to prepare an application?"}</h2>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-700">{isKo ? "희망 과정과 예산을 확인한 뒤에만 검증된 학교 또는 에이전트 연결을 요청하세요. 파트너 비용은 과정·국가 순위에 반영되지 않습니다." : "Request help from a verified school or agent only after you have reviewed your shortlist and budget. Partner fees never affect course or country ranking."}</p>
+          <Link href={`/support/request?concept=${encodeURIComponent(concept.id)}&country=${countryCode}&locale=${isKo ? "ko-KR" : "en"}`} className="mt-5 inline-flex min-h-11 items-center rounded-xl bg-blue-600 px-5 text-sm font-bold text-white hover:bg-blue-700">{isKo ? "지원 준비 도움 요청" : "Request application support"}</Link>
+        </section>
+
         <div className="mt-8 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs leading-5 text-amber-900">
           {isKo ? "CampCareer는 정보·계획 도구이며 입학, 비자 또는 자격 적격성을 보장하지 않습니다. 지원 전에 교육기관과 정부 공식 페이지를 확인하세요." : "CampCareer is an information and planning tool and does not guarantee admission, visa or qualification eligibility. Verify requirements with the provider and official authority before applying."}
         </div>

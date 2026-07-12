@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { FormEvent, useEffect, useMemo, useRef, useState } from "react"
+import { FormEvent, useEffect, useRef, useState } from "react"
 import {
   ArrowRight,
   BadgeCheck,
@@ -21,7 +21,6 @@ import {
 } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 import { STUDY_CATEGORIES, STUDY_CONCEPTS } from "@/data/study-concepts"
-import { ORIGIN_PROFILES, type OriginProfileCode } from "@/lib/study-product/recommendation"
 import type {
   CountryRecommendation,
   FitBand,
@@ -30,6 +29,7 @@ import type {
   StudyLocale,
   TaxonomySearchResult,
 } from "@/lib/study-product/types"
+import type { CountryOption } from "@/lib/study-product/countries"
 import { track } from "@/lib/analytics"
 import { createClient } from "@/lib/supabase-client"
 import { subscribeVisaAlerts } from "@/app/degree-risk/actions"
@@ -38,10 +38,8 @@ const EN_COPY = {
   eyebrow: "Study decisions backed by evidence",
   title: "Compare study paths—from qualification to career.",
   subtitle: "Search degrees, diplomas and trade qualifications, then compare total cost, career outcomes and post-study options across countries.",
-  origin: "Where are you applying from?",
   study: "What do you want to study?",
   studyPlaceholder: "Nursing, Data Analytics, Carpentry…",
-  budget: "Maximum first-year budget",
   priority: "What matters most?",
   compare: "Compare my study options",
   career: "Career outcome",
@@ -60,6 +58,13 @@ const EN_COPY = {
   shortlist: "View verified courses",
   evidence: "Open evidence",
   save: "Save this plan",
+  personalize: "Personalize this comparison",
+  personalizeBody: "Add your home country or a first-year budget. This changes only your private view, never the public ranking page.",
+  homeCountry: "Your current country",
+  homeCountryPlaceholder: "Search all countries",
+  optionalBudget: "Optional first-year budget (USD)",
+  applyPersonalization: "Update my comparison",
+  comparisonUnavailable: "A same-occupation salary and housing comparison is not verified for your country pair yet.",
   methodology: "How recommendations work",
   disclaimer: "Information and planning only—not legal, immigration, admissions or eligibility advice.",
   noRanked: "This option is searchable, but it does not yet have two fully reviewed destination pathways. Explore the official occupation and course data below instead.",
@@ -73,10 +78,8 @@ const KO_COPY: Copy = {
   eyebrow: "검증된 근거로 비교하는 유학 선택",
   title: "과정부터 취업까지, 유학의 결과를 비교하세요.",
   subtitle: "대학 전공부터 기술 자격까지 검색하고, 국가별 총비용·취업 전망·졸업 후 경로를 검증된 자료로 비교해보세요.",
-  origin: "어디에서 출발하나요?",
   study: "무엇을 배우고 싶나요?",
   studyPlaceholder: "간호, 데이터 분석, 목공…",
-  budget: "첫해 최대 예산",
   priority: "가장 중요한 기준",
   compare: "내 유학 선택지 비교하기",
   career: "취업 결과",
@@ -95,6 +98,13 @@ const KO_COPY: Copy = {
   shortlist: "검증된 과정 보기",
   evidence: "근거 확인",
   save: "이 플랜 저장하기",
+  personalize: "이 비교 개인화하기",
+  personalizeBody: "현재 국가와 첫해 예산을 선택할 수 있습니다. 공개 순위는 바뀌지 않고 내 비교 화면에만 적용됩니다.",
+  homeCountry: "현재 거주 국가",
+  homeCountryPlaceholder: "모든 국가 검색",
+  optionalBudget: "선택: 첫해 예산 (USD)",
+  applyPersonalization: "내 비교 업데이트",
+  comparisonUnavailable: "선택한 국가와 목적국의 동일 직종 연봉·주거비 비교는 아직 검증되지 않았습니다.",
   methodology: "추천 방식 보기",
   disclaimer: "정보 제공 및 계획 도구이며 법률·이민·입학 또는 적격성 자문이 아닙니다.",
   noRanked: "검색 가능한 과정이지만 아직 두 개 이상의 목적국이 전체 검수 기준을 통과하지 않았습니다. 아래 공식 직업·과정 자료를 먼저 확인해보세요.",
@@ -102,52 +112,22 @@ const KO_COPY: Copy = {
   searchHint: "대학 전공뿐 아니라 과정·자격·기술 이름으로 검색할 수 있습니다.",
 }
 
-const ORIGIN_OPTIONS: Array<{ code: OriginProfileCode; label: string; labelKo: string }> = [
-  { code: "GLOBAL", label: "Global / Other", labelKo: "글로벌 / 기타" },
-  { code: "IN", label: "India", labelKo: "인도" },
-  { code: "PH", label: "Philippines", labelKo: "필리핀" },
-  { code: "KR", label: "South Korea", labelKo: "대한민국" },
-]
-
-const DEFAULT_BUDGET: Record<OriginProfileCode, number> = {
-  GLOBAL: 60_000,
-  IN: 5_000_000,
-  PH: 3_000_000,
-  KR: 80_000_000,
-  NG: 60_000,
-  NP: 60_000,
-  PK: 60_000,
-  BD: 60_000,
-  LK: 60_000,
-}
-
 export function HomeFinder({ locale = "en" }: { locale?: StudyLocale }) {
   const isKo = locale === "ko-KR"
   const copy = isKo ? KO_COPY : EN_COPY
-  const [origin, setOrigin] = useState<OriginProfileCode>(isKo ? "KR" : "GLOBAL")
+  const [origin, setOrigin] = useState<string | undefined>()
   const [query, setQuery] = useState("")
   const [selected, setSelected] = useState<TaxonomySearchResult | null>(null)
   const [results, setResults] = useState<TaxonomySearchResult[]>(() => conceptSearchResults(isKo))
   const [searchOpen, setSearchOpen] = useState(false)
   const [searching, setSearching] = useState(false)
-  const [budget, setBudget] = useState(DEFAULT_BUDGET[isKo ? "KR" : "GLOBAL"])
+  const [budget, setBudget] = useState<number | undefined>()
   const [priority, setPriority] = useState<RecommendationPriority>("CAREER_OUTCOME")
   const [recommendation, setRecommendation] = useState<RecommendationResultV2 | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showAll, setShowAll] = useState(false)
   const searchSequence = useRef(0)
-
-  const currency = ORIGIN_PROFILES[origin].currency
-  const budgetStep = currency === "KRW" ? 1_000_000 : currency === "INR" || currency === "PHP" ? 50_000 : 1_000
-  const budgetFormatter = useMemo(
-    () => new Intl.NumberFormat(isKo ? "ko-KR" : "en", { style: "currency", currency, maximumFractionDigits: 0 }),
-    [currency, isKo],
-  )
-
-  useEffect(() => {
-    setBudget(DEFAULT_BUDGET[origin])
-  }, [origin])
 
   useEffect(() => {
     if (selected && query === selected.label) return
@@ -198,6 +178,29 @@ export function HomeFinder({ locale = "en" }: { locale?: StudyLocale }) {
     setSearchOpen(true)
   }
 
+  async function requestRecommendation(personalization?: { originCountry?: string; budget?: number }) {
+    if (!selected) return
+    const selectedOrigin = personalization?.originCountry ?? origin
+    const selectedBudget = personalization?.budget ?? budget
+    const response = await fetch("/api/v3/recommendations/countries", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        locale,
+        targetConceptId: selected.conceptId,
+        priority,
+        ...(selectedOrigin ? { originCountry: selectedOrigin } : {}),
+        ...(selectedBudget ? { firstYearBudget: { amount: selectedBudget, currency: "USD" } } : {}),
+      }),
+    })
+    const payload = await response.json()
+    if (!response.ok) throw new Error(payload.error ?? "Recommendation failed")
+    setOrigin(selectedOrigin)
+    setBudget(selectedBudget)
+    setRecommendation(payload as RecommendationResultV2)
+    return payload as RecommendationResultV2
+  }
+
   async function submit(event: FormEvent) {
     event.preventDefault()
     setError(null)
@@ -214,33 +217,36 @@ export function HomeFinder({ locale = "en" }: { locale?: StudyLocale }) {
     setSubmitting(true)
     setShowAll(false)
     track("recommendation_start", {
-      origin,
       concept_id: selected.conceptId,
       priority,
     })
     try {
-      const response = await fetch("/api/v2/recommendations/countries", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          locale,
-          originCountry: origin,
-          targetConceptId: selected.conceptId,
-          firstYearBudget: { amount: budget, currency },
-          priority,
-        }),
-      })
-      const payload = await response.json()
-      if (!response.ok) throw new Error(payload.error ?? "Recommendation failed")
-      setRecommendation(payload as RecommendationResultV2)
+      const payload = await requestRecommendation()
       track("recommendation_result_view", {
-        origin,
         concept_id: selected.conceptId,
-        ranked_count: (payload as RecommendationResultV2).rankedCountries.length,
+        ranked_count: payload?.rankedCountries.length ?? 0,
       })
       window.setTimeout(() => document.getElementById("recommendation-results")?.scrollIntoView({ behavior: "smooth", block: "start" }), 50)
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : "Unable to compare options")
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  async function personalizeComparison(personalization: { originCountry?: string; budget?: number }) {
+    setSubmitting(true)
+    setError(null)
+    try {
+      const payload = await requestRecommendation(personalization)
+      track("recommendation_result_view", {
+        concept_id: selected?.conceptId ?? "unknown",
+        ranked_count: payload?.rankedCountries.length ?? 0,
+        personalized: true,
+      })
+      track("comparison_personalized", { concept_id: selected?.conceptId ?? "unknown", origin: personalization.originCountry ?? "none" })
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : "Unable to update comparison")
     } finally {
       setSubmitting(false)
     }
@@ -267,20 +273,7 @@ export function HomeFinder({ locale = "en" }: { locale?: StudyLocale }) {
             </p>
 
             <form onSubmit={submit} className="mt-8 max-w-4xl rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl shadow-slate-900/10 sm:p-5">
-              <div className="grid gap-4 md:grid-cols-[.72fr_1.28fr]">
-                <Field label={copy.origin}>
-                  <select
-                    value={origin}
-                    onChange={(event) => setOrigin(event.target.value as OriginProfileCode)}
-                    className={controlClass}
-                  >
-                    {ORIGIN_OPTIONS.map((option) => (
-                      <option key={option.code} value={option.code}>{isKo ? option.labelKo : option.label}</option>
-                    ))}
-                  </select>
-                </Field>
-
-                <div className="relative">
+              <div className="relative">
                   <Field label={copy.study}>
                     <div className="relative">
                       <Search className="pointer-events-none absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" aria-hidden="true" />
@@ -314,25 +307,9 @@ export function HomeFinder({ locale = "en" }: { locale?: StudyLocale }) {
                       onClose={() => setSearchOpen(false)}
                     />
                   )}
-                </div>
               </div>
 
-              <div className="mt-4 grid gap-4 md:grid-cols-[.72fr_1.28fr]">
-                <Field label={copy.budget}>
-                  <div className="relative">
-                    <input
-                      type="number"
-                      min={budgetStep}
-                      step={budgetStep}
-                      value={budget}
-                      onChange={(event) => setBudget(Math.max(1, Number(event.target.value)))}
-                      className={`${controlClass} pr-16`}
-                    />
-                    <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">{currency}</span>
-                  </div>
-                  <span className="mt-1.5 block text-xs text-slate-500">{budgetFormatter.format(budget)}</span>
-                </Field>
-
+              <div className="mt-4">
                 <Field label={copy.priority}>
                   <div className="grid grid-cols-3 gap-2">
                     <PriorityButton active={priority === "CAREER_OUTCOME"} onClick={() => setPriority("CAREER_OUTCOME")}>{copy.career}</PriorityButton>
@@ -393,6 +370,14 @@ export function HomeFinder({ locale = "en" }: { locale?: StudyLocale }) {
                 <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">{copy.rankedBody}</p>
               </div>
               <div className="flex flex-wrap items-center gap-3">
+                <PersonalizeComparisonButton
+                  copy={copy}
+                  locale={locale}
+                  currentOrigin={origin}
+                  currentBudget={budget}
+                  disabled={submitting}
+                  onApply={personalizeComparison}
+                />
                 <SavePlanButton result={recommendation} copy={copy} locale={locale} />
                 <Link href="/methodology" className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-slate-600 hover:text-blue-700">
                   <BookOpen className="h-4 w-4" />{copy.methodology}
@@ -513,7 +498,7 @@ function ResultPreview({ copy, isKo, recommendation }: { copy: Copy; isKo: boole
         <div className="rounded-2xl bg-blue-50 p-3 text-blue-700"><BriefcaseBusiness className="h-6 w-6" /></div>
       </div>
       <div className="mt-6 grid grid-cols-2 gap-3">
-        <PreviewMetric icon={CircleDollarSign} label={isKo ? "첫해 예산" : "First-year budget"} value={country?.metrics.find((metric) => metric.key === "FIRST_YEAR_COST")?.value.split(" · ")[0] ?? "US$43k–68k"} />
+        <PreviewMetric icon={CircleDollarSign} label={isKo ? "첫해 필요비용" : "First-year runway"} value={country?.metrics.find((metric) => metric.key === "FIRST_YEAR_COST")?.value.split(" · ")[0] ?? "US$43k–68k"} />
         <PreviewMetric icon={BriefcaseBusiness} label={isKo ? "경력 3년 연봉" : "Year-three salary"} value={country?.metrics.find((metric) => metric.key === "SALARY")?.value ?? "US$68k"} />
       </div>
       <div className="mt-4 rounded-2xl border border-slate-200 p-4">
@@ -567,6 +552,22 @@ function CountryResultCard({ country, rank, copy, locale }: { country: CountryRe
           </div>
         ))}
       </div>
+      {country.originComparison.status === "READY" && (
+        <div className="mt-4 rounded-xl border border-blue-200 bg-blue-50 px-3 py-3 text-xs leading-5 text-blue-950">
+          <p className="font-bold">{isKo ? "현재 국가 대비 동일 직종 차이" : "Same-occupation difference from your current country"}</p>
+          <div className="mt-2 grid grid-cols-3 gap-2">
+            <ComparisonDelta label={isKo ? "연간 급여" : "Annual pay"} value={country.originComparison.salaryDifferenceUsd ?? 0} />
+            <ComparisonDelta label={isKo ? "월 주거비" : "Monthly housing"} value={country.originComparison.monthlyHousingDifferenceUsd ?? 0} inverse />
+            <ComparisonDelta label={isKo ? "주거비 차감 여력" : "After-housing"} value={country.originComparison.housingAdjustedDifferenceUsd ?? 0} />
+          </div>
+          <p className="mt-2 text-[10px] text-blue-700">{isKo ? "세전 기준 · exact 직종 mapping · 환율" : "Before tax · exact career mapping · FX"} {country.originComparison.currencyAsOf}</p>
+        </div>
+      )}
+      {country.originComparison.status === "UNAVAILABLE" && (
+        <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-xs leading-5 text-slate-600">
+          {copy.comparisonUnavailable}
+        </div>
+      )}
       <div className="mt-5 rounded-xl bg-amber-50 px-3 py-2.5 text-xs leading-5 text-amber-900"><strong>{isKo ? "주의:" : "Watch:"}</strong> {country.caution}</div>
       <div className="mt-auto grid grid-cols-2 gap-2 pt-5">
         <Link href={`${country.shortlistHref}?locale=${locale}`} className="inline-flex min-h-11 items-center justify-center gap-1 rounded-xl bg-blue-600 px-3 text-xs font-bold text-white hover:bg-blue-700">{copy.shortlist}<ArrowRight className="h-3.5 w-3.5" /></Link>
@@ -574,6 +575,12 @@ function CountryResultCard({ country, rank, copy, locale }: { country: CountryRe
       </div>
     </article>
   )
+}
+
+function ComparisonDelta({ label, value, inverse = false }: { label: string; value: number; inverse?: boolean }) {
+  const positive = inverse ? value <= 0 : value >= 0
+  const sign = value > 0 ? "+" : value < 0 ? "−" : "±"
+  return <div className="rounded-lg bg-white/70 p-2"><p className="text-[10px] font-bold text-blue-700">{label}</p><p className={`mt-1 text-xs font-bold ${positive ? "text-emerald-700" : "text-amber-700"}`}>{sign}US${Math.abs(value).toLocaleString()}</p></div>
 }
 
 function TrustBlock({ icon: Icon, title, body }: { icon: LucideIcon; title: string; body: string }) {
@@ -599,6 +606,89 @@ function factorLabel(key: string, isKo: boolean) {
 
 function coverageLabel(value: string) {
   return value === "PATHWAY_READY" ? "Pathway" : value === "PROFILE_READY" ? "Profile" : "Catalog"
+}
+
+function PersonalizeComparisonButton({
+  copy,
+  locale,
+  currentOrigin,
+  currentBudget,
+  disabled,
+  onApply,
+}: {
+  copy: Copy
+  locale: StudyLocale
+  currentOrigin?: string
+  currentBudget?: number
+  disabled: boolean
+  onApply: (value: { originCountry?: string; budget?: number }) => Promise<void>
+}) {
+  const [nudgeOpen, setNudgeOpen] = useState(false)
+  const [open, setOpen] = useState(false)
+  const [countries, setCountries] = useState<CountryOption[]>([])
+  const [countryQuery, setCountryQuery] = useState("")
+  const [originCountry, setOriginCountry] = useState(currentOrigin ?? "")
+  const [budget, setBudget] = useState(currentBudget?.toString() ?? "")
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (!open || countries.length > 0) return
+    fetch(`/api/v1/countries?locale=${locale}`)
+      .then((response) => response.json())
+      .then((payload: { countries?: CountryOption[] }) => setCountries(payload.countries ?? []))
+      .catch(() => setCountries([]))
+  }, [countries.length, locale, open])
+
+  const matchingCountries = countries
+    .filter((country) => `${country.label} ${country.code}`.toLowerCase().includes(countryQuery.toLowerCase()))
+    .slice(0, 8)
+
+  async function apply() {
+    setLoading(true)
+    try {
+      await onApply({
+        ...(originCountry ? { originCountry } : {}),
+        ...(budget.trim() ? { budget: Math.max(1, Number(budget)) } : {}),
+      })
+      setOpen(false)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <>
+      <button type="button" onClick={() => setNudgeOpen(true)} disabled={disabled} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-slate-200 px-4 text-sm font-bold text-slate-700 hover:bg-slate-50 disabled:opacity-60">
+        <CircleDollarSign className="h-4 w-4" />{copy.personalize}
+      </button>
+      {nudgeOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/55 p-4" role="presentation">
+          <div role="dialog" aria-modal="true" className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
+            <h3 className="text-2xl font-semibold text-slate-950">{copy.personalize}</h3>
+            <p className="mt-3 text-sm leading-6 text-slate-600">{locale === "ko-KR" ? "무료 계정으로 비교를 저장하고 정책 변화도 추적할 수 있습니다." : "Create a free account to save this comparison and track policy changes."}</p>
+            <button type="button" onClick={() => { window.location.assign(`/login?next=${encodeURIComponent(location.pathname)}`) }} className="mt-6 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-blue-600 px-4 text-sm font-bold text-white hover:bg-blue-700">{locale === "ko-KR" ? "무료 계정 만들기" : "Create free account"}</button>
+            <button type="button" onClick={() => { setNudgeOpen(false); setOpen(true) }} className="mt-3 inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-slate-200 px-4 text-sm font-bold text-slate-700 hover:bg-slate-50">{locale === "ko-KR" ? "계정 없이 계속하기" : "Continue without an account"}</button>
+          </div>
+        </div>
+      )}
+      {open && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/55 p-4" role="presentation" onMouseDown={(event) => { if (event.currentTarget === event.target) setOpen(false) }}>
+          <div role="dialog" aria-modal="true" className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
+            <div className="flex items-start justify-between gap-4"><div><h3 className="text-2xl font-semibold text-slate-950">{copy.personalize}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{copy.personalizeBody}</p></div><button type="button" onClick={() => setOpen(false)} aria-label="Close" className="rounded-lg p-2 text-slate-400 hover:bg-slate-100"><X className="h-5 w-5" /></button></div>
+            <label className="mt-6 block text-xs font-bold text-slate-700">{copy.homeCountry}</label>
+            <input value={countryQuery} onChange={(event) => setCountryQuery(event.target.value)} placeholder={copy.homeCountryPlaceholder} className={`${controlClass} mt-2`} />
+            <div className="mt-2 max-h-44 overflow-y-auto rounded-xl border border-slate-200 p-1">
+              {matchingCountries.map((country) => <button key={country.code} type="button" onClick={() => { setOriginCountry(country.code); setCountryQuery(country.label) }} className={`flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm hover:bg-slate-50 ${originCountry === country.code ? "bg-blue-50 text-blue-800" : "text-slate-700"}`}><span>{country.label}</span><span className="text-xs font-bold text-slate-400">{country.code}</span></button>)}
+              {!countries.length && <p className="px-3 py-3 text-sm text-slate-500">{locale === "ko-KR" ? "국가 목록을 불러오는 중입니다…" : "Loading countries…"}</p>}
+            </div>
+            <label className="mt-5 block text-xs font-bold text-slate-700">{copy.optionalBudget}</label>
+            <input type="number" min="1" step="1000" value={budget} onChange={(event) => setBudget(event.target.value)} placeholder="60000" className={`${controlClass} mt-2`} />
+            <button type="button" disabled={loading} onClick={apply} className="mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-bold text-white hover:bg-blue-700 disabled:opacity-60">{loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}{copy.applyPersonalization}</button>
+          </div>
+        </div>
+      )}
+    </>
+  )
 }
 
 function SavePlanButton({ result, copy, locale }: { result: RecommendationResultV2; copy: Copy; locale: StudyLocale }) {
@@ -707,6 +797,7 @@ function SavePlanButton({ result, copy, locale }: { result: RecommendationResult
                   <span>{isKo ? "선택: 이 과정과 관련된 정책 변경 알림도 신청합니다. 별도 확인 이메일이 발송됩니다." : "Optional: also subscribe to policy updates for this study option. A separate confirmation email will be sent."}</span>
                 </label>
                 <button type="submit" disabled={loading} className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-bold text-white hover:bg-blue-700 disabled:opacity-60">{loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Mail className="h-4 w-4" />}{isKo ? "로그인 링크 보내기" : "Email me a sign-in link"}</button>
+                <button type="button" onClick={() => setOpen(false)} className="mt-3 inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-slate-200 px-4 text-sm font-bold text-slate-700 hover:bg-slate-50">{isKo ? "계정 없이 계속하기" : "Continue without an account"}</button>
                 {error && <p className="mt-3 text-xs text-red-600" role="alert">{error}</p>}
                 <p className="mt-4 text-[11px] leading-5 text-slate-400">{isKo ? "플랜 저장은 필수 서비스 처리이며, 정책 알림 동의와 분리됩니다." : "Plan saving is a required service action and is separate from optional policy-alert consent."} <Link href="/privacy" className="underline">{isKo ? "개인정보 처리방침" : "Privacy policy"}</Link></p>
               </form>

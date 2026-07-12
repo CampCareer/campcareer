@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase-server"
 import { supabaseAdmin } from "@/lib/supabase-admin"
 import { recommendStudyCountries } from "@/lib/study-product/recommendation"
-import type { RecommendationInputV2 } from "@/lib/study-product/types"
+import type { RecommendationInputV3 } from "@/lib/study-product/types"
 
 export const dynamic = "force-dynamic"
 
@@ -28,7 +28,7 @@ export async function POST(_request: NextRequest, props: { params: Promise<{ id:
   if (!current) return NextResponse.json({ error: "Plan version not found" }, { status: 404 })
 
   try {
-    const result = recommendStudyCountries(current.input_json as unknown as RecommendationInputV2)
+    const result = recommendStudyCountries(current.input_json as unknown as RecommendationInputV3)
     const nextVersion = Number(plan.current_version) + 1
     const { error: versionError } = await supabaseAdmin.from("decision_plan_versions").insert({
       plan_id: params.id,

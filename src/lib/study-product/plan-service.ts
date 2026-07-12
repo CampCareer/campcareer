@@ -3,7 +3,7 @@ import "server-only"
 import { createHash, randomBytes, timingSafeEqual } from "node:crypto"
 import { supabaseAdmin } from "@/lib/supabase-admin"
 import { recommendStudyCountries } from "@/lib/study-product/recommendation"
-import type { RecommendationInputV2 } from "@/lib/study-product/types"
+import type { RecommendationInputV3 } from "@/lib/study-product/types"
 
 export function createClaimToken() {
   const token = randomBytes(32).toString("base64url")
@@ -20,7 +20,7 @@ export function claimTokenMatches(token: string, expectedHash: string) {
   return actual.length === expected.length && timingSafeEqual(actual, expected)
 }
 
-export async function createPlanSaveIntent(input: RecommendationInputV2) {
+export async function createPlanSaveIntent(input: RecommendationInputV3) {
   const result = recommendStudyCountries(input)
   const { token, hash } = createClaimToken()
   const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()

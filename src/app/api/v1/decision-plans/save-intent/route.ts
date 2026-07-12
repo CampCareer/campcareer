@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getStudyConcept } from "@/data/study-concepts"
-import { ORIGIN_PROFILES } from "@/lib/study-product/recommendation"
+import { isIsoCountryCode } from "@/lib/study-product/countries"
 import { createPlanSaveIntent } from "@/lib/study-product/plan-service"
-import type { RecommendationInputV2, RecommendationPriority, StudyLocale } from "@/lib/study-product/types"
+import type { RecommendationInputV3, RecommendationPriority, StudyLocale } from "@/lib/study-product/types"
 
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
@@ -33,17 +33,22 @@ export async function POST(request: NextRequest) {
   }
 }
 
-function parseInput(value: unknown): RecommendationInputV2 | null {
+function parseInput(value: unknown): RecommendationInputV3 | null {
   if (!value || typeof value !== "object") return null
   const body = value as Record<string, unknown>
-  const origin = typeof body.originCountry === "string" ? body.originCountry.toUpperCase() : ""
+  const origin = typeof body.originCountry === "string" ? body.originCountry.toUpperCase() : undefined
   const conceptId = typeof body.targetConceptId === "string" ? body.targetConceptId : ""
   const budget = body.firstYearBudget as Record<string, unknown> | undefined
   const priority = body.priority as RecommendationPriority
   const locale: StudyLocale = body.locale === "ko-KR" ? "ko-KR" : "en"
-  if (!(origin in ORIGIN_PROFILES) || !getStudyConcept(conceptId) || !PRIORITIES.has(priority)) return null
-  if (!budget || typeof budget.amount !== "number" || !Number.isFinite(budget.amount) || budget.amount <= 0) return null
-  const currency = ORIGIN_PROFILES[origin as keyof typeof ORIGIN_PROFILES].currency
-  if (budget.currency !== currency) return null
-  return { locale, originCountry: origin, targetConceptId: conceptId, firstYearBudget: { amount: Math.round(budget.amount), currency }, priority }
+  if (!getStudyConcept(conceptId) || !PRIORITIES.has(priority)) return null
+  if (origin && !isIsoCountryCode(origin)) return null
+  if (budget && (typeof budget.amount !== "number" || !Number.isFinite(budget.amount) || budget.amount <= 0 || typeof budget.currency !== "string" || !/^[A-Za-z]{3}$/.test(budget.currency))) return null
+  return {
+    locale,
+    targetConceptId: conceptId,
+    priority,
+    ...(origin ? { originCountry: origin } : {}),
+    ...(budget ? { firstYearBudget: { amount: Math.round(budget.amount as number), currency: String(budget.currency).toUpperCase() } } : {}),
+  }
 }

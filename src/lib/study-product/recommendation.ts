@@ -6,7 +6,7 @@ import type {
   CountryRecommendation,
   FactorBreakdown,
   FitBand,
-  RecommendationInputV2,
+  RecommendationInputV3,
   RecommendationPriority,
   RecommendationResultV2,
   StudyConcept,
@@ -59,19 +59,16 @@ export function normalizeOriginCountry(value: string): OriginProfileCode {
   return normalized in ORIGIN_PROFILES ? normalized as OriginProfileCode : "GLOBAL"
 }
 
-export function recommendStudyCountries(input: RecommendationInputV2): RecommendationResultV2 {
+export function recommendStudyCountries(input: RecommendationInputV3): RecommendationResultV2 {
   const concept = getStudyConcept(input.targetConceptId)
   if (!concept) throw new Error("Unknown study concept")
 
-  const origin = normalizeOriginCountry(input.originCountry)
-  const currency = ORIGIN_PROFILES[origin].currency
-  const normalizedInput: RecommendationInputV2 = {
+  const normalizedInput: RecommendationInputV3 = {
     ...input,
-    originCountry: origin,
-    firstYearBudget: {
-      amount: input.firstYearBudget.amount,
-      currency,
-    },
+    originCountry: input.originCountry?.toUpperCase(),
+    firstYearBudget: input.firstYearBudget
+      ? { amount: input.firstYearBudget.amount, currency: input.firstYearBudget.currency.toUpperCase() }
+      : undefined,
   }
 
   const rankedCountries: Array<CountryRecommendation & { _score: number }> = []
@@ -129,14 +126,15 @@ export function recommendStudyCountries(input: RecommendationInputV2): Recommend
 function buildFactors(
   concept: StudyConcept,
   country: (typeof COUNTRY_ROI_INSIGHTS)[number],
-  input: RecommendationInputV2,
+  input: RecommendationInputV3,
 ) {
-  const budgetUsd = convertCurrency(input.firstYearBudget.amount, input.firstYearBudget.currency, "USD")
   const range = parseUsdRange(country.initialBudget)
 
   return {
     career: country.score[concept.legacyField!],
-    cost: budgetFitScore(budgetUsd, range),
+    cost: input.firstYearBudget
+      ? budgetFitScore(convertCurrency(input.firstYearBudget.amount, input.firstYearBudget.currency, "USD"), range)
+      : relativeCostScore(range),
     postStudy: country.goalFit.immigration,
     pathway: 88,
   }
@@ -145,7 +143,7 @@ function buildFactors(
 function buildCountryRecommendation(
   concept: StudyConcept,
   country: (typeof COUNTRY_ROI_INSIGHTS)[number],
-  input: RecommendationInputV2,
+  input: RecommendationInputV3,
   factors: ReturnType<typeof buildFactors>,
   score: number,
 ): CountryRecommendation {
@@ -156,15 +154,13 @@ function buildCountryRecommendation(
     postStudyOptions: factorBand(factors.postStudy),
     pathwayFeasibility: factorBand(factors.pathway),
   }
-  const sourceCurrency = input.firstYearBudget.currency
-
   return {
     countryCode: country.code,
     countryName: country.name,
     slug: country.slug,
     fitBand,
     factorBreakdown,
-    why: buildWhy(country.name, input.priority, factorBreakdown),
+    why: buildWhy(country.name, input.priority, factorBreakdown, Boolean(input.firstYearBudget)),
     caution: country.detail.watchouts[0],
     qualification: qualificationLabel(concept),
     duration: "Varies by verified course and qualification level",
@@ -174,7 +170,9 @@ function buildCountryRecommendation(
       {
         key: "FIRST_YEAR_COST",
         label: "Estimated first-year runway",
-        value: `${country.initialBudget} · ${formatRangeInCurrency(country.initialBudget, sourceCurrency)}`,
+        value: input.firstYearBudget
+          ? `${country.initialBudget} · ${formatRangeInCurrency(country.initialBudget, input.firstYearBudget.currency)}`
+          : country.initialBudget,
         sourceId: `${country.code.toLowerCase()}-budget-${COUNTRY_ROI_DATA_META.version}`,
         sourceName: country.sources.budget.sourceName,
         sourceUrl: country.sources.budget.sourceUrl,
@@ -196,6 +194,29 @@ function buildCountryRecommendation(
         reviewStatus: reviewStatus(country.sources.salary.reviewStatus),
       },
       {
+        key: "MONTHLY_HOUSING",
+        label: "Representative monthly housing proxy",
+        value: country.rent,
+        sourceId: `${country.code.toLowerCase()}-housing-${COUNTRY_ROI_DATA_META.version}`,
+        sourceName: country.sources.rent.sourceName,
+        sourceUrl: country.sources.rent.sourceUrl,
+        sourceType: sourceType(country.sources.rent.confidence),
+        asOf: country.sources.rent.retrievedAt,
+        lastVerifiedAt: country.sources.rent.lastChecked,
+        reviewStatus: reviewStatus(country.sources.rent.reviewStatus),
+      },
+      {
+        key: "HOUSING_ADJUSTED",
+        label: "Salary after housing proxy (before tax)",
+        value: housingAdjustedSalary(country.salaries.year3, country.rent),
+        sourceId: `${country.code.toLowerCase()}-housing-adjusted-${COUNTRY_ROI_DATA_META.version}`,
+        sourceName: "CampCareer calculation from salary and housing sources",
+        sourceType: "INTERNAL",
+        asOf: COUNTRY_ROI_DATA_META.lastUpdated,
+        lastVerifiedAt: COUNTRY_ROI_DATA_META.lastUpdated,
+        reviewStatus: "APPROVED",
+      },
+      {
         key: "PATHWAY",
         label: "Post-study option",
         value: country.policy,
@@ -210,6 +231,7 @@ function buildCountryRecommendation(
     ],
     detailHref: country.href,
     shortlistHref: `/study-options/${concept.slug}/${country.code.toLowerCase()}`,
+    originComparison: buildOriginComparison(input.originCountry, country.code),
   }
 }
 
@@ -238,9 +260,12 @@ function buildWhy(
   countryName: string,
   priority: RecommendationPriority,
   factors: FactorBreakdown,
+  hasBudget: boolean,
 ) {
   if (priority === "LOWER_COST" && factors.affordability === "STRONG") {
-    return `${countryName} fits your first-year budget comparatively well while preserving a verified study-to-career route.`
+    return hasBudget
+      ? `${countryName} fits your first-year budget comparatively well while preserving a verified study-to-career route.`
+      : `${countryName} has a comparatively lower reviewed first-year runway while preserving a verified study-to-career route.`
   }
   if (priority === "POST_STUDY_OPTIONS" && factors.postStudyOptions === "STRONG") {
     return `${countryName} has a comparatively strong official post-study option for this reviewed pathway.`
@@ -279,6 +304,44 @@ function budgetFitScore(budgetUsd: number, range: { low: number; high: number })
   if (budgetUsd >= range.low) return 64
   if (budgetUsd >= range.low * 0.85) return 45
   return 20
+}
+
+function relativeCostScore(range: { low: number; high: number }) {
+  // A visitor who has not supplied a budget still deserves a cost-aware ranking.
+  // This ranks the reviewed first-year runway relative to other destinations,
+  // without pretending it is personally affordable.
+  const midpoint = (range.low + range.high) / 2
+  return Math.max(20, Math.min(95, 110 - midpoint / 1_000))
+}
+
+function housingAdjustedSalary(salary: string, rent: string) {
+  const annualSalary = parseUsdAmount(salary)
+  const monthlyRent = parseUsdAmount(rent)
+  if (annualSalary === null || monthlyRent === null) return "Unavailable"
+  return `US$${Math.round((annualSalary - monthlyRent * 12) / 1_000)}k/year`
+}
+
+function parseUsdAmount(value: string) {
+  const match = value.match(/US\$([\d,.]+)(k)?/i)
+  if (!match) return null
+  const amount = Number(match[1].replaceAll(",", ""))
+  return match[2] ? amount * 1_000 : amount
+}
+
+function buildOriginComparison(originCountry: string | undefined, destinationCountry: string) {
+  if (!originCountry) {
+    return { status: "NOT_SELECTED" as const, destinationCountry }
+  }
+
+  // No exact canonical career compensation pairs have been editorially
+  // approved yet. Keeping this explicit prevents broad field scores from being
+  // misrepresented as same-occupation salary differences.
+  return {
+    status: "UNAVAILABLE" as const,
+    originCountry,
+    destinationCountry,
+    reason: "An exact occupation, wage and housing comparison has not passed verification for this country pair yet.",
+  }
 }
 
 function convertCurrency(amount: number, from: string, to: string) {

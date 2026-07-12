@@ -66,8 +66,34 @@ export type RecommendationInputV2 = {
   priority: RecommendationPriority
 }
 
+export type RecommendationInputV3 = {
+  locale: StudyLocale
+  targetConceptId: string
+  priority: RecommendationPriority
+  originCountry?: string
+  firstYearBudget?: {
+    amount: number
+    currency: string
+  }
+}
+
+export type OriginComparisonStatus = "READY" | "UNAVAILABLE" | "NOT_SELECTED"
+
+export type OriginComparison = {
+  status: OriginComparisonStatus
+  originCountry?: string
+  destinationCountry: string
+  reason?: string
+  careerMappingRelation?: "exact"
+  salaryDifferenceUsd?: number
+  monthlyHousingDifferenceUsd?: number
+  housingAdjustedDifferenceUsd?: number
+  currencyAsOf?: string
+  lastVerifiedAt?: string
+}
+
 export type MetricEvidence = {
-  key: "FIRST_YEAR_COST" | "TOTAL_COST" | "SALARY" | "PATHWAY" | "QUALIFICATION"
+  key: "FIRST_YEAR_COST" | "TOTAL_COST" | "SALARY" | "MONTHLY_HOUSING" | "HOUSING_ADJUSTED" | "PATHWAY" | "QUALIFICATION"
   label: string
   value: string
   sourceId: string
@@ -101,6 +127,7 @@ export type CountryRecommendation = {
   metrics: MetricEvidence[]
   detailHref: string
   shortlistHref: string
+  originComparison: OriginComparison
 }
 
 export type CountryEvidenceSummary = {
@@ -116,7 +143,7 @@ export type RecommendationResultV2 = {
   engineVersion: string
   dataVersion: string
   generatedAt: string
-  input: RecommendationInputV2
+  input: RecommendationInputV3
   concept: {
     id: string
     slug: string
@@ -127,6 +154,8 @@ export type RecommendationResultV2 = {
   unrankedCountries: CountryEvidenceSummary[]
   disclaimer: string
 }
+
+export type RecommendationResultV3 = RecommendationResultV2
 
 export type CourseOffering = {
   id: string

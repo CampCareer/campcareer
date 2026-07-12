@@ -7,7 +7,7 @@ export const metadata = pageMetadata({
   path: "/privacy",
 })
 
-const LAST_UPDATED = "11 July 2026"
+const LAST_UPDATED = "12 July 2026"
 
 export default function PrivacyPage() {
   return (
@@ -46,6 +46,13 @@ export default function PrivacyPage() {
               optional policy or marketing alerts. Saving a plan does not subscribe you to marketing.
             </li>
             <li>
+              <strong>Application-support requests</strong> — your name, account email, selected
+              study option, destination, optional intake and budget, requested help, consent time,
+              and request status when you ask to be connected with a verified school or agency.
+              We do not share this request with a partner until you give the specific consent shown
+              in that request form.
+            </li>
+            <li>
               <strong>Usage analytics</strong> — page views, performance measurements, and
               allow-listed product events collected with Vercel Analytics and Speed Insights.
               Product events may include origin country, concept ID, destination, and engine/data
@@ -76,6 +83,11 @@ export default function PrivacyPage() {
           <p className="mt-2">
             These providers process data on our behalf under their own data-processing agreements
             and security certifications.
+          </p>
+          <p className="mt-2">
+            If you submit an application-support request, the verified school or agency assigned to
+            that request becomes an independent recipient of the information you explicitly agreed
+            to share. Sponsored placement never changes comparison or course ranking.
           </p>
         </section>
 

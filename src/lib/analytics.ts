@@ -13,6 +13,8 @@ const ALLOWED_EVENTS = new Set([
   "plan_save_confirmed",
   "plan_returned",
   "partner_exit",
+  "comparison_personalized",
+  "lead_request_submitted",
   // Existing low-cardinality product events retained during the migration.
   "finder_search",
   "decision_start",

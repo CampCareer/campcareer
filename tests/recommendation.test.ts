@@ -1,6 +1,7 @@
 import assert from "node:assert/strict"
 import test from "node:test"
 import { recommendStudyCountries } from "../src/lib/study-product/recommendation"
+import { getCountryOptions, isIsoCountryCode } from "../src/lib/study-product/countries"
 
 const BASE_INPUT = {
   locale: "en" as const,
@@ -42,4 +43,35 @@ test("the selected priority can change country order", () => {
     career.rankedCountries.map((country) => country.countryCode),
     cost.rankedCountries.map((country) => country.countryCode),
   )
+})
+
+test("V3 recommendations work without an origin country or personal budget", () => {
+  const result = recommendStudyCountries({
+    locale: "en",
+    targetConceptId: "nursing",
+    priority: "LOWER_COST",
+  })
+
+  assert.ok(result.rankedCountries.length >= 2)
+  assert.ok(result.rankedCountries.every((country) => country.originComparison.status === "NOT_SELECTED"))
+})
+
+test("origin comparisons never invent a same-occupation salary delta", () => {
+  const result = recommendStudyCountries({
+    locale: "en",
+    targetConceptId: "nursing",
+    priority: "CAREER_OUTCOME",
+    originCountry: "SG",
+  })
+
+  assert.ok(result.rankedCountries.every((country) => country.originComparison.status === "UNAVAILABLE"))
+  assert.ok(result.rankedCountries.every((country) => country.originComparison.salaryDifferenceUsd === undefined))
+})
+
+test("global country selector contains the 249 official ISO alpha-2 entries", () => {
+  const countries = getCountryOptions("en")
+  assert.equal(countries.length, 249)
+  assert.ok(isIsoCountryCode("US"))
+  assert.ok(isIsoCountryCode("CN"))
+  assert.equal(isIsoCountryCode("XK"), false)
 })
