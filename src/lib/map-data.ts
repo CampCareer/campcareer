@@ -2117,6 +2117,44 @@ export async function getDEMapData(): Promise<DEMapData> { return getDECached() 
 export async function getNLMapData(): Promise<NLMapData> { return getNLCached() }
 export async function getCAMapData(): Promise<CAMapData> { return getCACached() }
 
+const MAP_DATA_COUNTRY_PREFIXES: Record<string, readonly string[]> = {
+  AU: ["au", "shortageByState", "highPay", "stateSalaryMult", "coursesByFieldState"],
+  US: ["us"],
+  CA: ["ca"],
+  UK: ["uk"],
+  DE: ["de"],
+  NL: ["nl"],
+  BE: ["be"],
+  JP: ["jp"],
+  SG: ["sg"],
+  KR: ["kr"],
+  FR: ["fr"],
+  ES: ["es"],
+  IE: [],
+}
+
+export type MapDataCountry = keyof typeof MAP_DATA_COUNTRY_PREFIXES
+
+export function selectMapCountryBundle(data: MapData, country: MapDataCountry): Partial<MapData> {
+  const prefixes = MAP_DATA_COUNTRY_PREFIXES[country]
+  const deferredKeys = new Set<keyof MapData>(["caProvinceOccupations", "jpJobTagProfilesByWageCode"])
+  return Object.fromEntries(
+    Object.entries(data).filter(([key]) => !deferredKeys.has(key as keyof MapData) && prefixes.some((prefix) => key === prefix || key.startsWith(prefix))),
+  ) as Partial<MapData>
+}
+
+function emptyMapValue(value: unknown) {
+  return Array.isArray(value) ? [] : value && typeof value === "object" ? {} : null
+}
+
+export async function getInitialMapShellData(): Promise<MapData> {
+  const full = await getMapData()
+  const australia = selectMapCountryBundle(full, "AU")
+  return Object.fromEntries(
+    Object.entries(full).map(([key, value]) => [key, key in australia ? australia[key as keyof MapData] : emptyMapValue(value)]),
+  ) as unknown as MapData
+}
+
 export async function getMapData(): Promise<MapData> {
   // /map is already force-static with a 24h ISR window. The complete map
   // payload is larger than Next's 2 MB data-cache item limit, so wrapping it

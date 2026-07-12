@@ -26,6 +26,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: "/",
       },
     ],
-    sitemap: "https://www.campcareer.com/sitemap.xml",
+    sitemap: "https://www.campcareer.com/sitemap-index.xml",
   }
 }

@@ -1,4 +1,4 @@
-import { getMapData } from "@/lib/map-data"
+import { getInitialMapShellData } from "@/lib/map-data"
 import { pageMetadata } from "@/lib/seo"
 import CampCareerMaps from "./CampCareerMaps"
 
@@ -18,7 +18,7 @@ export const metadata = pageMetadata({
 })
 
 export default async function MapPage() {
-  const data = await getMapData()
+  const data = await getInitialMapShellData()
 
   // 전체화면 지도(구글맵 스타일): 헤더·여백 없이 nav 아래를 꽉 채운다.
   return (

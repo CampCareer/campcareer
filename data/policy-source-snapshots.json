@@ -1,0 +1,90 @@
+[
+  {
+    "countryCode": "AU",
+    "sourceName": "Australian Department of Home Affairs",
+    "requestedUrl": "https://immi.homeaffairs.gov.au/visas/working-in-australia/skill-occupation-list",
+    "finalUrl": "https://immi.homeaffairs.gov.au/visas/working-in-australia/skill-occupation-list",
+    "contentHash": "e409e66b90188dfbcf53718052a81014b0c2ddee8850ae19aa58cd7956fec8ca",
+    "etag": null,
+    "lastModified": null,
+    "checkedAt": "2026-07-12T06:23:42.584Z",
+    "monitorMode": "content"
+  },
+  {
+    "countryCode": "US",
+    "sourceName": "USCIS Policy Manual — Practical Training",
+    "requestedUrl": "https://www.uscis.gov/node/92821",
+    "finalUrl": "https://www.uscis.gov/policy-manual/volume-2-part-f-chapter-5",
+    "contentHash": "47e117a27cbe61515e5bfdb27b509c0b471a20ad876dda8c70d6e67381a1fd9a",
+    "etag": "\"1783837364\"",
+    "lastModified": "Sun, 12 Jul 2026 06:22:44 GMT",
+    "checkedAt": "2026-07-12T06:23:42.684Z",
+    "monitorMode": "content"
+  },
+  {
+    "countryCode": "CA",
+    "sourceName": "IRCC post-graduation work permit",
+    "requestedUrl": "https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/work/after-graduation/about.html",
+    "finalUrl": "https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/work/after-graduation/about.html",
+    "contentHash": "60f807bd2952988302f38763e5f06ad0fcef1ddde90e6c060b57ee0150b600ee",
+    "etag": null,
+    "lastModified": "Sun, 12 Jul 2026 00:24:53 GMT",
+    "checkedAt": "2026-07-12T06:23:43.797Z",
+    "monitorMode": "content"
+  },
+  {
+    "countryCode": "IE",
+    "sourceName": "Irish Immigration Service Third Level Graduate Programme",
+    "requestedUrl": "https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/",
+    "finalUrl": "https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/",
+    "contentHash": "568db588ac0705b54b2d6bcb20bd4aaa5b234a7b6e18dbf0c3c061cdcb6994b4",
+    "etag": null,
+    "lastModified": null,
+    "checkedAt": "2026-07-12T06:23:44.014Z",
+    "monitorMode": "content"
+  },
+  {
+    "countryCode": "DE",
+    "sourceName": "Make it in Germany EU Blue Card",
+    "requestedUrl": "https://www.make-it-in-germany.com/en/visa-residence/types/eu-blue-card",
+    "finalUrl": "https://www.make-it-in-germany.com/en/visa-residence/types/eu-blue-card",
+    "contentHash": "6412eb8ae6e8361b2c80f3abede98fbc899cb447116c52be82a324f22aafb13f",
+    "etag": null,
+    "lastModified": null,
+    "checkedAt": "2026-07-12T06:23:44.291Z",
+    "monitorMode": "headers_or_availability"
+  },
+  {
+    "countryCode": "UK",
+    "sourceName": "GOV.UK Graduate visa",
+    "requestedUrl": "https://www.gov.uk/graduate-visa",
+    "finalUrl": "https://www.gov.uk/graduate-visa",
+    "contentHash": "d134b5cb7e440af44406ad65b9226832522b4ae5dd49cd960c197b4415d32ef8",
+    "etag": "W/\"6cc1521397bb9d0623bebea146d54c1b\"",
+    "lastModified": null,
+    "checkedAt": "2026-07-12T06:23:44.378Z",
+    "monitorMode": "content"
+  },
+  {
+    "countryCode": "NL",
+    "sourceName": "IND orientation year",
+    "requestedUrl": "https://ind.nl/en/residence-permits/work/residence-permit-for-orientation-year",
+    "finalUrl": "https://ind.nl/en/residence-permits/work/residence-permit-for-orientation-year",
+    "contentHash": "61ee3ae1f61df19b31112354cf10c96608dc84055d021c4bdeeeefd5d01ce8c4",
+    "etag": null,
+    "lastModified": null,
+    "checkedAt": "2026-07-12T06:23:44.665Z",
+    "monitorMode": "content"
+  },
+  {
+    "countryCode": "BE",
+    "sourceName": "IBZ Search year after higher studies",
+    "requestedUrl": "https://dofi.ibz.be/en/themes/third-country-nationals/study/search-year-after-higher-studies",
+    "finalUrl": "https://dofi.ibz.be/en/themes/third-country-nationals/study/search-year-after-higher-studies",
+    "contentHash": "c710b450a9be10d2b9a99d84736453cee395cb8a50eb16e895996cec8dd6e6f4",
+    "etag": "W/\"1783811635\"",
+    "lastModified": "Sat, 11 Jul 2026 23:13:55 GMT",
+    "checkedAt": "2026-07-12T06:23:45.074Z",
+    "monitorMode": "content"
+  }
+]

@@ -1,0 +1,37 @@
+name: Load smoke test
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: "Approved deployment URL without a trailing slash"
+        required: true
+        type: string
+      requests:
+        description: "Total requests"
+        required: false
+        default: "1000"
+        type: string
+      concurrency:
+        description: "Concurrent workers"
+        required: false
+        default: "50"
+        type: string
+
+jobs:
+  load-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - name: Run bounded load smoke test
+        env:
+          LOAD_BASE_URL: ${{ inputs.base_url }}
+          LOAD_REQUESTS: ${{ inputs.requests }}
+          LOAD_CONCURRENCY: ${{ inputs.concurrency }}
+          LOAD_MAX_ERROR_RATE: "0.005"
+          LOAD_MAX_P95_MS: "500"
+        run: npm run load:smoke

@@ -62,7 +62,7 @@ type RegionEntry = { demand: RegionGroup[]; demandMetro: boolean; pay: RegionGro
 type RegionOccData = Record<string, RegionEntry>
 
 export default function CampCareerMaps({
-  data,
+  data: initialData,
   initialState,
   initialTab,
   initialSA4,
@@ -79,6 +79,11 @@ export default function CampCareerMaps({
   // /map은 호주 비치헤드의 front door다 → 진입 즉시 주/지역 선택(검색) 바가 보이도록
   // 기본을 "AU"로 둔다. 월드맵(다른 국가)은 "전체 보기"로 빠져나가 볼 수 있다.
   const [activeCountry, setActiveCountry] = useState<ActiveCountry>("AU")
+  const [data, setData] = useState<MapData>(initialData)
+  const loadedCountries = useRef(new Set<Exclude<ActiveCountry, null>>(["AU"]))
+  const [countryDataLoading, setCountryDataLoading] = useState(false)
+  const [countryDataError, setCountryDataError] = useState<string | null>(null)
+  const [jpProfilesByCode, setJpProfilesByCode] = useState<MapData["jpJobTagProfilesByWageCode"]>({})
   const [selected, setSelected] = useState<string | null>(null)
   const [selectedSA4, setSelectedSA4] = useState<SA4Region | null>(null)
   const [tab, setTab] = useState<Tab>("shortage")
@@ -101,6 +106,44 @@ export default function CampCareerMaps({
   const [isMobile, setIsMobile] = useState(false)
   // 모바일 접이식 툴바 상태
   const [expanded, setExpanded] = useState(false)
+
+  useEffect(() => {
+    if (!activeCountry || loadedCountries.current.has(activeCountry)) return
+    const controller = new AbortController()
+    setCountryDataLoading(true)
+    setCountryDataError(null)
+    fetch(`/api/maps/data/${activeCountry.toLowerCase()}`, { signal: controller.signal })
+      .then(async (response) => {
+        if (!response.ok) throw new Error(`Map data request failed (${response.status})`)
+        return response.json() as Promise<{ data: Partial<MapData> }>
+      })
+      .then((payload) => {
+        setData((current) => ({ ...current, ...payload.data }))
+        loadedCountries.current.add(activeCountry)
+      })
+      .catch((error: unknown) => {
+        if (error instanceof DOMException && error.name === "AbortError") return
+        setCountryDataError(locale === "ko" ? "국가 데이터를 불러오지 못했습니다." : "Unable to load this country dataset.")
+      })
+      .finally(() => setCountryDataLoading(false))
+    return () => controller.abort()
+  }, [activeCountry, locale])
+
+  useEffect(() => {
+    if (activeCountry !== "JP" || !selectedOccCode?.startsWith("jp-wage-")) return
+    const code = selectedOccCode.slice("jp-wage-".length)
+    if (jpProfilesByCode[code]) return
+    const controller = new AbortController()
+    fetch(`/api/maps/data/jp/jobtag/${encodeURIComponent(code)}`, { signal: controller.signal })
+      .then((response) => response.ok ? response.json() : Promise.reject(new Error("Job profile request failed")))
+      .then((payload: { profiles: MapData["jpJobTagProfilesByWageCode"][string] }) => {
+        setJpProfilesByCode((current) => ({ ...current, [code]: payload.profiles }))
+      })
+      .catch((error: unknown) => {
+        if (!(error instanceof DOMException && error.name === "AbortError")) setCountryDataError(locale === "ko" ? "직업 상세 자료를 불러오지 못했습니다." : "Unable to load occupation details.")
+      })
+    return () => controller.abort()
+  }, [activeCountry, jpProfilesByCode, locale, selectedOccCode])
 
   const supabase = createClient()
   const [user, setUser] = useState<User | null>(null)
@@ -1180,6 +1223,16 @@ export default function CampCareerMaps({
     )}
 
       <div className="relative min-h-0 flex-1">
+        {countryDataLoading && (
+          <div className="absolute inset-x-4 top-4 z-[1600] mx-auto max-w-sm rounded-xl border border-blue-200 bg-white/95 px-4 py-3 text-center text-sm font-semibold text-blue-800 shadow-lg backdrop-blur" role="status">
+            {locale === "ko" ? "국가 데이터를 불러오는 중입니다…" : "Loading country dataset…"}
+          </div>
+        )}
+        {countryDataError && !countryDataLoading && (
+          <div className="absolute inset-x-4 top-4 z-[1600] mx-auto max-w-sm rounded-xl border border-red-200 bg-white/95 px-4 py-3 text-center text-sm font-semibold text-red-700 shadow-lg backdrop-blur" role="alert">
+            {countryDataError}
+          </div>
+        )}
         <LeafletMap
           data={data}
           selected={selected}
@@ -1313,6 +1366,7 @@ export default function CampCareerMaps({
               selectedJPCity={activeCountry === "JP" ? data.jpCities.find((city) => city.areaCode === selectedJPCityArea) ?? null : null}
               selectedFRCity={activeCountry === "FR" ? data.frCities.find((city) => city.code === selectedFRCityCode) ?? null : null}
               selectedESCity={activeCountry === "ES" ? data.esCities.find((city) => city.code === selectedESCityCode) ?? null : null}
+              jpProfilesByCode={jpProfilesByCode}
               selectedOccCode={selectedOccCode}
               setSelectedOccCode={setSelectedOccCode}
               selectedUsOcc={selectedUsOcc}
@@ -1466,6 +1520,7 @@ function Panel({
   selectedJPCity,
   selectedFRCity,
   selectedESCity,
+  jpProfilesByCode,
   selectedOccCode,
   setSelectedOccCode,
   selectedUsOcc,
@@ -1489,6 +1544,7 @@ function Panel({
   selectedJPCity: import("@/data/jp-map-data").JPRentArea | null
   selectedFRCity: FranceCity | null
   selectedESCity: SpainCity | null
+  jpProfilesByCode: MapData["jpJobTagProfilesByWageCode"]
   selectedOccCode: string | null
   setSelectedOccCode: (code: string | null) => void
   selectedUsOcc: USOccupation | null
@@ -1625,8 +1681,8 @@ function Panel({
     if (activeCountry !== "JP" || !selectedOccCode?.startsWith("jp-wage-")) return null
     const occupationCode = selectedOccCode.slice("jp-wage-".length)
     const wage = data.jpHighPayOccupations.find((row) => row.occupationCode === occupationCode) ?? null
-    return wage ? { wage, profiles: data.jpJobTagProfilesByWageCode[occupationCode] ?? [] } : null
-  }, [activeCountry, selectedOccCode, data.jpHighPayOccupations, data.jpJobTagProfilesByWageCode])
+    return wage ? { wage, profiles: jpProfilesByCode[occupationCode] ?? [] } : null
+  }, [activeCountry, selectedOccCode, data.jpHighPayOccupations, jpProfilesByCode])
   const selectedJPShortageGroup = useMemo(() => {
     if (activeCountry !== "JP" || !selectedOccCode?.startsWith("jp-shortage-")) return null
     return (data.jpShortageByPrefecture[selected] ?? []).find((row) => row.shortageGroupCode === selectedOccCode.slice("jp-shortage-".length)) ?? null
