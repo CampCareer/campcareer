@@ -22,6 +22,7 @@ import {
 import type { LucideIcon } from "lucide-react"
 import { STUDY_CATEGORIES, STUDY_CONCEPTS } from "@/data/study-concepts"
 import type {
+  ConceptCountryCoverage,
   CountryRecommendation,
   FitBand,
   RecommendationPriority,
@@ -128,11 +129,16 @@ export function HomeFinder({ locale = "en" }: { locale?: StudyLocale }) {
   const [error, setError] = useState<string | null>(null)
   const [showAll, setShowAll] = useState(false)
   const searchSequence = useRef(0)
+  const browsingCategory = useRef(false)
 
   useEffect(() => {
     if (selected && query === selected.label) return
     if (!query.trim()) {
       setSearching(false)
+      return
+    }
+    if (browsingCategory.current) {
+      browsingCategory.current = false
       return
     }
     const timeout = window.setTimeout(async () => {
@@ -152,6 +158,11 @@ export function HomeFinder({ locale = "en" }: { locale?: StudyLocale }) {
   }, [locale, query, selected])
 
   function chooseConcept(item: TaxonomySearchResult) {
+    if (item.conceptId.startsWith(CATEGORY_PREFIX)) {
+      const categoryId = item.conceptId.slice(CATEGORY_PREFIX.length)
+      browseCategory(categoryId)
+      return
+    }
     setSelected(item)
     setQuery(item.label)
     setSearchOpen(false)
@@ -160,6 +171,7 @@ export function HomeFinder({ locale = "en" }: { locale?: StudyLocale }) {
   }
 
   function browseCategory(categoryId: string) {
+    const category = STUDY_CATEGORIES.find((c) => c.id === categoryId)
     const categoryConcepts = STUDY_CONCEPTS
       .filter((concept) => concept.category === categoryId)
       .map<TaxonomySearchResult>((concept) => ({
@@ -172,8 +184,9 @@ export function HomeFinder({ locale = "en" }: { locale?: StudyLocale }) {
         coverageByCountry: concept.coverageByCountry,
         recommendable: Boolean(concept.legacyField),
       }))
+    browsingCategory.current = true
     setResults(categoryConcepts)
-    setQuery("")
+    setQuery(category ? (isKo ? category.labelKo : category.label) : "")
     setSelected(null)
     setSearchOpen(true)
   }
@@ -443,16 +456,18 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   return <label className="block"><span className="mb-2 block text-xs font-bold text-slate-700">{label}</span>{children}</label>
 }
 
+const CATEGORY_PREFIX = "__category__"
+
 function conceptSearchResults(isKo: boolean): TaxonomySearchResult[] {
-  return STUDY_CONCEPTS.map((concept) => ({
-    conceptId: concept.id,
-    slug: concept.slug,
-    kind: concept.kind,
-    label: isKo ? concept.labelKo : concept.label,
-    secondaryLabel: concept.description,
-    officialCodes: concept.officialCodes ?? [],
-    coverageByCountry: concept.coverageByCountry,
-    recommendable: Boolean(concept.legacyField),
+  return STUDY_CATEGORIES.map((category) => ({
+    conceptId: `${CATEGORY_PREFIX}${category.id}`,
+    slug: category.id,
+    kind: "STUDY_FIELD" as const,
+    label: isKo ? category.labelKo : category.label,
+    secondaryLabel: "",
+    officialCodes: [],
+    coverageByCountry: {} as Record<string, ConceptCountryCoverage>,
+    recommendable: false,
   }))
 }
 
