@@ -738,7 +738,7 @@ export const COUNTRY_ROI_INSIGHTS: CountryRoiInsight[] = [
       ],
       nextSteps: [
         { label: "Browse New Zealand occupations", href: "/nz/jobs", note: "Check salary, shortage, and Green List fit." },
-        { label: "Open New Zealand map", href: "/map?country=nz", note: "Compare regions and schools." },
+        { label: "Open New Zealand map", href: "/map/nz", note: "Explore regions and institution references." },
         { label: "Compare country ROI", href: "/countries/new-zealand", note: "Review NZ budget, tax, rent, and policy assumptions." },
       ],
     },

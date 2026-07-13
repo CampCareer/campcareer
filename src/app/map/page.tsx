@@ -1,5 +1,6 @@
 import { getInitialMapShellData } from "@/lib/map-data"
 import { pageMetadata } from "@/lib/seo"
+import Link from "next/link"
 import CampCareerMaps from "./CampCareerMaps"
 
 // 다른 모든 페이지(/, /blog, /roi-explorer)와 동일하게 정적(ISR)으로 렌더한다.
@@ -22,8 +23,14 @@ export default async function MapPage() {
 
   // 전체화면 지도(구글맵 스타일): 헤더·여백 없이 nav 아래를 꽉 채운다.
   return (
-    <div className="h-[calc(100vh-3.5rem)] w-full">
+    <div className="relative h-[calc(100vh-3.5rem)] w-full">
       <CampCareerMaps data={data} />
+      <Link
+        href="/map/nz"
+        className="absolute right-4 top-4 z-[500] rounded-lg border border-indigo-200 bg-white px-4 py-2 text-sm font-semibold text-indigo-700 shadow-sm hover:bg-indigo-50"
+      >
+        New Zealand map
+      </Link>
     </div>
   )
 }

@@ -50,7 +50,9 @@ export const LAUNCH_COUNTRIES: readonly LaunchCountry[] = [
   profile("SG", "singapore", "Singapore", "SGD"),
   profile("KR", "south-korea", "South Korea", "KRW"),
   profile("JP", "japan", "Japan", "JPY"),
-  reviewRequired("NZ", "new-zealand", "New Zealand", "NZD"),
+  // Map discovery is safe before career comparison: this bundle deliberately
+  // contains no unverified wage or shortage numbers.
+  { ...reviewRequired("NZ", "new-zealand", "New Zealand", "NZD"), mapReady: true },
   reviewRequired("NO", "norway", "Norway", "NOK"),
   reviewRequired("SE", "sweden", "Sweden", "SEK"),
   reviewRequired("DK", "denmark", "Denmark", "DKK"),
