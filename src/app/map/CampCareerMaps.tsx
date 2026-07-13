@@ -97,6 +97,10 @@ export default function CampCareerMaps({
   const [regionData, setRegionData] = useState<RegionOccData | null>(null)
   const regionFetched = useRef(false)
   const initialOccLoaded = useRef(false)
+  // The static Maps page reads its initial deep-link on the client. It must be
+  // applied once only: country bundles arrive asynchronously, and re-reading
+  // an old `?country=us` after every bundle response would undo a map click.
+  const initialUrlApplied = useRef(false)
   // 직업 카드 열림 상태 — 툴바의 직업 검색에서도 열 수 있도록 최상위로 끌어올림.
   const [selectedOccCode, setSelectedOccCode] = useState<string | null>(null)
   const [selectedJPCityArea, setSelectedJPCityArea] = useState<string | null>(null)
@@ -259,6 +263,8 @@ export default function CampCareerMaps({
   // 여기서 마운트 후 읽어 반영한다. 전용 페이지(/map/au/employment/nsw 등)에서 initialState /
   // initialTab prop이 넘어오면 URL searchParams보다 우선한다.
   useEffect(() => {
+    if (initialUrlApplied.current) return
+    initialUrlApplied.current = true
     if (initialState) {
       setActiveCountry("AU")
       setSelected(initialState)

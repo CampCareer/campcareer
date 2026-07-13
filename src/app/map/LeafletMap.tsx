@@ -53,6 +53,10 @@ function isUSA(properties: Record<string, unknown>): boolean {
   return properties?.ISO_A3 === "USA" || properties?.ADM0_A3 === "USA"
 }
 
+function isCanada(properties: Record<string, unknown>): boolean {
+  return properties?.ISO_A3 === "CAN" || properties?.ADM0_A3 === "CAN"
+}
+
 function isIreland(properties: Record<string, unknown>): boolean {
   return properties?.ISO_A3 === "IRL" || properties?.ADM0_A3 === "IRL"
 }
@@ -634,6 +638,9 @@ export default function LeafletMap({
             if (feature && isUSA(feature.properties as Record<string, unknown>)) {
               return { fillColor: "#dcfce7", color: "#22c55e", weight: 2, fillOpacity: 0.5 }
             }
+            if (feature && isCanada(feature.properties as Record<string, unknown>)) {
+              return { fillColor: "#fce7f3", color: "#ec4899", weight: 2, fillOpacity: 0.5 }
+            }
             if (feature && isIreland(feature.properties as Record<string, unknown>)) {
               return { fillColor: "#fef3c7", color: "#f59e0b", weight: 2, fillOpacity: 0.5 }
             }
@@ -658,12 +665,22 @@ export default function LeafletMap({
             if (feature && isNorway(feature.properties as Record<string, unknown>)) {
               return { fillColor: "#ede9fe", color: "#6d28d9", weight: 2, fillOpacity: 0.55 }
             }
+            if (feature && isSweden(feature.properties as Record<string, unknown>)) {
+              return { fillColor: "#ccfbf1", color: "#0f766e", weight: 2, fillOpacity: 0.55 }
+            }
+            if (feature && isDenmark(feature.properties as Record<string, unknown>)) {
+              return { fillColor: "#fef3c7", color: "#b45309", weight: 2, fillOpacity: 0.55 }
+            }
+            if (feature && isFinland(feature.properties as Record<string, unknown>)) {
+              return { fillColor: "#e0f2fe", color: "#0369a1", weight: 2, fillOpacity: 0.55 }
+            }
             return { fillColor: "#f8fafc", color: "#cbd5e1", weight: 0.8, fillOpacity: 0.6 }
           },
           onEachFeature: (feature, lyr) => {
             const props = feature.properties as Record<string, unknown>
             const isAU = isAustralia(props)
             const isUS = isUSA(props)
+            const isCA = isCanada(props)
             const isIE = isIreland(props)
             const isGB = isUK(props)
             const isDE = isGermany(props)
@@ -676,16 +693,20 @@ export default function LeafletMap({
             const isES = isSpain(props)
             const isNZ = isNewZealand(props)
             const isNO = isNorway(props)
-            if (!isAU && !isUS && !isIE && !isGB && !isDE && !isNL && !isBE && !isJP && !isSG && !isKR && !isFR && !isES && !isNZ && !isNO) return
+            const isSE = isSweden(props)
+            const isDK = isDenmark(props)
+            const isFI = isFinland(props)
+            if (!isAU && !isUS && !isCA && !isIE && !isGB && !isDE && !isNL && !isBE && !isJP && !isSG && !isKR && !isFR && !isES && !isNZ && !isNO && !isSE && !isDK && !isFI) return
 
-            const name = isAU ? "Australia" : isIE ? "Ireland" : isGB ? "United Kingdom" : isDE ? "Germany" : isNL ? "Netherlands" : isBE ? "Belgium" : isJP ? "Japan" : isSG ? "Singapore" : isKR ? "South Korea" : isFR ? "France" : isES ? "Spain" : isNZ ? "New Zealand" : isNO ? "Norway" : "United States"
+            const country = isAU ? "AU" : isUS ? "US" : isCA ? "CA" : isIE ? "IE" : isGB ? "UK" : isDE ? "DE" : isNL ? "NL" : isBE ? "BE" : isJP ? "JP" : isSG ? "SG" : isKR ? "KR" : isFR ? "FR" : isES ? "ES" : isNZ ? "NZ" : isNO ? "NO" : isSE ? "SE" : isDK ? "DK" : "FI"
+            const name = isAU ? "Australia" : isUS ? "United States" : isCA ? "Canada" : isIE ? "Ireland" : isGB ? "United Kingdom" : isDE ? "Germany" : isNL ? "Netherlands" : isBE ? "Belgium" : isJP ? "Japan" : isSG ? "Singapore" : isKR ? "South Korea" : isFR ? "France" : isES ? "Spain" : isNZ ? "New Zealand" : isNO ? "Norway" : isSE ? "Sweden" : isDK ? "Denmark" : "Finland"
             lyr.bindTooltip(name, {
               sticky: true,
               direction: "top",
               className: "!rounded-md !border-0 !bg-slate-900 !px-2 !py-1 !text-xs !text-white !shadow-md",
             })
             lyr.on({
-              click: () => onSelectCountryRef.current(isAU ? "AU" : isIE ? "IE" : isGB ? "UK" : isDE ? "DE" : isNL ? "NL" : isBE ? "BE" : isJP ? "JP" : isSG ? "SG" : isKR ? "KR" : isFR ? "FR" : isES ? "ES" : isNZ ? "NZ" : isNO ? "NO" : "US"),
+              click: () => onSelectCountryRef.current(country),
               mouseover: () => (lyr as L.Path).setStyle({ weight: 3, fillOpacity: 0.7 }),
               mouseout: () => {
                 const baseStyle = isAU
@@ -710,8 +731,16 @@ export default function LeafletMap({
                                     ? { fillColor: "#ffedd5", color: "#ea580c", weight: 2, fillOpacity: 0.55 }
                                     : isNZ
                                       ? { fillColor: "#dbeafe", color: "#1d4ed8", weight: 2, fillOpacity: 0.55 }
-                                      : isNO
-                                        ? { fillColor: "#ede9fe", color: "#6d28d9", weight: 2, fillOpacity: 0.55 }
+                                    : isNO
+                                      ? { fillColor: "#ede9fe", color: "#6d28d9", weight: 2, fillOpacity: 0.55 }
+                                      : isSE
+                                        ? { fillColor: "#ccfbf1", color: "#0f766e", weight: 2, fillOpacity: 0.55 }
+                                        : isDK
+                                          ? { fillColor: "#fef3c7", color: "#b45309", weight: 2, fillOpacity: 0.55 }
+                                          : isFI
+                                            ? { fillColor: "#e0f2fe", color: "#0369a1", weight: 2, fillOpacity: 0.55 }
+                                            : isCA
+                                              ? { fillColor: "#fce7f3", color: "#ec4899", weight: 2, fillOpacity: 0.5 }
                                 : { fillColor: "#dcfce7", color: "#22c55e", weight: 2, fillOpacity: 0.5 }
                 ;(lyr as L.Path).setStyle(baseStyle)
               },
@@ -724,7 +753,7 @@ export default function LeafletMap({
               el.addEventListener("keydown", (e: KeyboardEvent) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault()
-                  onSelectCountryRef.current(isAU ? "AU" : isIE ? "IE" : isGB ? "UK" : isDE ? "DE" : isNL ? "NL" : isBE ? "BE" : isJP ? "JP" : isSG ? "SG" : isKR ? "KR" : isFR ? "FR" : isES ? "ES" : isNZ ? "NZ" : isNO ? "NO" : "US")
+                  onSelectCountryRef.current(country)
                 }
               })
             }
