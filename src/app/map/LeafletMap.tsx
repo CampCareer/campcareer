@@ -252,7 +252,7 @@ export default function LeafletMap({
     return () => { style.remove() }
   }, [])
 
-  function buildMarkers(country: "US" | "AU" | "CA" | "UK" | "DE" | "NL" | "KR" | "FR"): L.LayerGroup {
+  function buildMarkers(country: "US" | "AU" | "CA" | "UK" | "DE" | "NL" | "KR" | "FR" | "NZ"): L.LayerGroup {
     const group = L.layerGroup()
     const colleges = country === "AU"
       ? dataRef.current.auRankedColleges
@@ -268,6 +268,8 @@ export default function LeafletMap({
       ? dataRef.current.krUniversities.map((university) => ({ college_name: university.nameEn, lat: university.lat, lng: university.lng, slug: university.slug }))
       : country === "FR"
       ? dataRef.current.frUniversities.map((university) => ({ college_name: university.nameFr, lat: university.lat, lng: university.lng, slug: university.slug }))
+      : country === "NZ"
+      ? dataRef.current.nzUniversities.map((u) => ({ college_name: u.nameEn, lat: u.lat, lng: u.lng, slug: u.slug }))
       : dataRef.current.usRankedColleges
     const placed: Array<{ key: string; slug: string }> = []
     for (const c of colleges) {
@@ -341,6 +343,11 @@ export default function LeafletMap({
     }
     if (activeCountryRef.current === "FR" && map.getZoom() >= 6) {
       const group = buildMarkers("FR")
+      group.addTo(map)
+      markerLayerRef.current = group
+    }
+    if (activeCountryRef.current === "NZ" && map.getZoom() >= 5) {
+      const group = buildMarkers("NZ")
       group.addTo(map)
       markerLayerRef.current = group
     }
