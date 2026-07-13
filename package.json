@@ -19,6 +19,7 @@
     "policy:snapshot": "tsx scripts/check-policy-sources.ts --update",
     "load:smoke": "node scripts/load-smoke.mjs",
     "check:map-payload": "node scripts/check-map-payloads.mjs",
+    "refresh:no-regions": "node scripts/refresh-no-regions.mjs",
     "check:data": "npx tsx scripts/check-data-quality.ts",
     "check:new-countries": "npx tsx scripts/check-new-country-readiness.ts",
     "check:pilot": "npx tsx scripts/check-pilot-readiness.ts",
