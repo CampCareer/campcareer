@@ -25,12 +25,10 @@ export default async function MapPage() {
   return (
     <div className="relative h-[calc(100vh-3.5rem)] w-full">
       <CampCareerMaps data={data} />
-      <Link
-        href="/map/nz"
-        className="absolute right-4 top-4 z-[500] rounded-lg border border-indigo-200 bg-white px-4 py-2 text-sm font-semibold text-indigo-700 shadow-sm hover:bg-indigo-50"
-      >
-        New Zealand map
-      </Link>
+      <div className="absolute right-4 top-4 z-[500] flex gap-2">
+        <Link href="/map/nz" className="rounded-lg border border-indigo-200 bg-white px-4 py-2 text-sm font-semibold text-indigo-700 shadow-sm hover:bg-indigo-50">New Zealand map</Link>
+        <Link href="/map/no" className="rounded-lg border border-indigo-200 bg-white px-4 py-2 text-sm font-semibold text-indigo-700 shadow-sm hover:bg-indigo-50">Norway map</Link>
+      </div>
     </div>
   )
 }

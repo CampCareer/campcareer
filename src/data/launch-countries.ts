@@ -53,7 +53,7 @@ export const LAUNCH_COUNTRIES: readonly LaunchCountry[] = [
   // Map discovery is safe before career comparison: this bundle deliberately
   // contains no unverified wage or shortage numbers.
   { ...reviewRequired("NZ", "new-zealand", "New Zealand", "NZD"), mapReady: true },
-  reviewRequired("NO", "norway", "Norway", "NOK"),
+  { ...reviewRequired("NO", "norway", "Norway", "NOK"), mapReady: true },
   reviewRequired("SE", "sweden", "Sweden", "SEK"),
   reviewRequired("DK", "denmark", "Denmark", "DKK"),
   reviewRequired("FI", "finland", "Finland", "EUR"),

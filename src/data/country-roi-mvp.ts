@@ -805,7 +805,7 @@ export const COUNTRY_ROI_INSIGHTS: CountryRoiInsight[] = [
       ],
       nextSteps: [
         { label: "Browse Norway occupations", href: "/no/jobs", note: "Check STYRK salary and shortage data." },
-        { label: "Open Norway map", href: "/map?country=no", note: "Compare regions and universities." },
+        { label: "Open Norway map", href: "/map/no", note: "Explore counties and university references." },
         { label: "Compare country ROI", href: "/countries/norway", note: "Review NO budget, tax, rent, and policy assumptions." },
       ],
     },

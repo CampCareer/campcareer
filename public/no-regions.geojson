@@ -1,0 +1,128 @@
+{
+  "type": "FeatureCollection",
+  "source": "Simplified boundaries based on Norwegian Mapping Authority (Kartverket)",
+  "sourceUrl": "https://www.kartverket.no/",
+  "retrievedAt": "2026-07-13T00:00:00.000Z",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "code": "OSL", "name": "Oslo" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[10.65, 59.87], [10.92, 59.87], [10.92, 59.98], [10.65, 59.98], [10.65, 59.87]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "code": "VST", "name": "Vestland" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[5.0, 60.10], [6.30, 60.10], [6.30, 61.00], [5.0, 61.00], [5.0, 60.10]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "code": "ROG", "name": "Rogaland" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[5.0, 58.40], [6.80, 58.40], [6.80, 59.50], [5.0, 59.50], [5.0, 58.40]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "code": "AGD", "name": "Agder" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[6.50, 58.00], [8.70, 58.00], [8.70, 59.10], [6.50, 59.10], [6.50, 58.00]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "code": "TEL", "name": "Telemark" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[8.20, 58.80], [9.90, 58.80], [9.90, 59.80], [8.20, 59.80], [8.20, 58.80]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "code": "VST", "name": "Vestfold" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[9.80, 59.00], [10.60, 59.00], [10.60, 59.60], [9.80, 59.60], [9.80, 59.00]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "code": "OST", "name": "Østfold" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[10.80, 59.00], [11.80, 59.00], [11.80, 59.60], [10.80, 59.60], [10.80, 59.00]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "code": "AKE", "name": "Akershus" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[10.50, 59.75], [11.50, 59.75], [11.50, 60.40], [10.50, 60.40], [10.50, 59.75]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "code": "BUS", "name": "Buskerud" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[8.20, 59.70], [10.20, 59.70], [10.20, 60.80], [8.20, 60.80], [8.20, 59.70]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "code": "INN", "name": "Innlandet" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[8.50, 60.40], [12.00, 60.40], [12.00, 62.00], [8.50, 62.00], [8.50, 60.40]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "code": "MRD", "name": "Møre og Romsdal" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[5.50, 62.00], [8.00, 62.00], [8.00, 63.30], [5.50, 63.30], [5.50, 62.00]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "code": "TRN", "name": "Trøndelag" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[8.50, 62.80], [12.50, 62.80], [12.50, 64.50], [8.50, 64.50], [8.50, 62.80]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "code": "NOR", "name": "Nordland" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[12.00, 65.20], [16.50, 65.20], [16.50, 68.00], [12.00, 68.00], [12.00, 65.20]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "code": "TRO", "name": "Troms" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[14.50, 68.50], [20.50, 68.50], [20.50, 70.00], [14.50, 70.00], [14.50, 68.50]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "code": "FIN", "name": "Finnmark" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[20.00, 69.50], [31.50, 69.50], [31.50, 71.20], [20.00, 71.20], [20.00, 69.50]]]
+      }
+    }
+  ]
+}
