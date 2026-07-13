@@ -369,3 +369,102 @@ export const FR_REGION_NAMES: Record<FRRegionCode, string> = {
   "93": "Provence-Alpes-Côte d'Azur",
   "94": "Corse",
 }
+
+// ── New Zealand (NZ) regions ───────────────────────────────────────────────
+
+export const NZ_REGION_CODES = [
+  "NTL","AUK","WKO","BOP","GIS","HAW","TAR","MWT","WGN","TAS","NSN","MBH","WTC","CAN","OTG","STL",
+] as const
+
+export type NZRegionCode = typeof NZ_REGION_CODES[number]
+
+export const NZ_REGION_NAMES: Record<NZRegionCode, string> = {
+  NTL: "Northland",
+  AUK: "Auckland",
+  WKO: "Waikato",
+  BOP: "Bay of Plenty",
+  GIS: "Gisborne",
+  HAW: "Hawke's Bay",
+  TAR: "Taranaki",
+  MWT: "Manawatū-Whanganui",
+  WGN: "Wellington",
+  TAS: "Tasman",
+  NSN: "Nelson",
+  MBH: "Marlborough",
+  WTC: "West Coast",
+  CAN: "Canterbury",
+  OTG: "Otago",
+  STL: "Southland",
+}
+
+// ── Norway (NO) fylker ──────────────────────────────────────────────────
+
+export const NO_REGION_CODES = [
+  "OSL","ROG","MRD","NOR","OST","AKE","BUS","INN","VST","TEL","AGD","VEL","TRN","TRO","FIN",
+] as const
+
+export type NORegionCode = typeof NO_REGION_CODES[number]
+
+export const NO_REGION_NAMES: Record<NORegionCode, string> = {
+  OSL: "Oslo",
+  ROG: "Rogaland",
+  MRD: "Møre og Romsdal",
+  NOR: "Nordland",
+  OST: "Østfold",
+  AKE: "Akershus",
+  BUS: "Buskerud",
+  INN: "Innlandet",
+  VST: "Vestfold",
+  TEL: "Telemark",
+  AGD: "Agder",
+  VEL: "Vestland",
+  TRN: "Trøndelag",
+  TRO: "Troms",
+  FIN: "Finnmark",
+}
+
+// ── Sweden (SE) regions (län) ──────────────────────────────────────────────
+
+export const SE_REGION_CODES = [
+  "AB","AC","BD","C","D","E","F","G","H","I","K","M","N","O","S","T","U","W","X","Y","Z",
+] as const
+
+export type SERegionCode = typeof SE_REGION_CODES[number]
+
+export const SE_REGION_NAMES: Record<SERegionCode, string> = {
+  AB: "Stockholm",
+  AC: "Västerbotten",
+  BD: "Norrbotten",
+  C: "Uppsala",
+  D: "Södermanland",
+  E: "Östergötland",
+  F: "Jönköping",
+  G: "Kronoberg",
+  H: "Kalmar",
+  I: "Gotland",
+  K: "Blekinge",
+  M: "Skåne",
+  N: "Halland",
+  O: "Västra Götaland",
+  S: "Värmland",
+  T: "Örebro",
+  U: "Västmanland",
+  W: "Dalarna",
+  X: "Gävleborg",
+  Y: "Jämtland",
+  Z: "Västernorrland",
+}
+
+// ── Denmark (DK) regions ──────────────────────────────────────────────
+
+export const DK_REGION_CODES = ["HST", "MID", "SDJ", "SJA", "NOR"] as const
+
+export type DKRegionCode = typeof DK_REGION_CODES[number]
+
+export const DK_REGION_NAMES: Record<DKRegionCode, string> = {
+  HST: "Hovedstaden",
+  MID: "Midtjylland",
+  SDJ: "Syddanmark",
+  SJA: "Sjælland",
+  NOR: "Nordjylland",
+}

@@ -7,7 +7,7 @@ import { track } from "@/lib/analytics"
 function seoPageType(pathname: string): string | null {
   if (pathname.startsWith("/maps/")) return "occupation_map"
   if (pathname.startsWith("/countries/")) return "country_roi"
-  if (/^\/(au|us|ca|uk|ie|de|nl|be)(\/jobs)?$/.test(pathname)) return "country_hub"
+  if (/^\/(au|us|ca|uk|ie|de|nl|be|sg|kr|fr|es|nz|no|se|dk|fi)(\/jobs)?$/.test(pathname)) return "country_hub"
   if (pathname.startsWith("/blog/")) return "editorial"
   return null
 }

@@ -1,0 +1,290 @@
+[
+  {
+    "code": "NTL",
+    "nameEn": "Northland",
+    "nameKo": "노스랜드",
+    "slug": "northland",
+    "lat": -35.55,
+    "lng": 174.3,
+    "rent": {
+      "monthlyNzd": 1600,
+      "weeklyNzd": 370,
+      "period": "2025 Q1",
+      "definition": "Median weekly rent for 2-3 bedroom property",
+      "status": "available"
+    },
+    "topShortage": ["253111","341111","334111"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "AUK",
+    "nameEn": "Auckland",
+    "nameKo": "오클랜드",
+    "slug": "auckland",
+    "lat": -36.8485,
+    "lng": 174.7633,
+    "rent": {
+      "monthlyNzd": 2400,
+      "weeklyNzd": 550,
+      "period": "2025 Q1",
+      "definition": "Median weekly rent for 2-3 bedroom property",
+      "status": "available"
+    },
+    "topShortage": ["253111","261312","261313","332111","334111","341111","233211","133111"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "WKO",
+    "nameEn": "Waikato",
+    "nameKo": "와이카토",
+    "slug": "waikato",
+    "lat": -37.7870,
+    "lng": 175.2793,
+    "rent": {
+      "monthlyNzd": 1850,
+      "weeklyNzd": 425,
+      "period": "2025 Q1",
+      "definition": "Median weekly rent for 2-3 bedroom property",
+      "status": "available"
+    },
+    "topShortage": ["253111","332111","334111","341111","234112","234111","133111","261312"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "BOP",
+    "nameEn": "Bay of Plenty",
+    "nameKo": "베이오브플렌티",
+    "slug": "bay-of-plenty",
+    "lat": -37.6878,
+    "lng": 176.1657,
+    "rent": {
+      "monthlyNzd": 1900,
+      "weeklyNzd": 435,
+      "period": "2025 Q1",
+      "definition": "Median weekly rent for 2-3 bedroom property",
+      "status": "available"
+    },
+    "topShortage": ["253111","332111","341111","334111","261313","133111","233211","411711"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "GIS",
+    "nameEn": "Gisborne",
+    "nameKo": "기스번",
+    "slug": "gisborne",
+    "lat": -38.6623,
+    "lng": 178.0176,
+    "rent": {
+      "monthlyNzd": 1400,
+      "weeklyNzd": 325,
+      "period": "2025 Q1",
+      "definition": "Median weekly rent for 2-3 bedroom property",
+      "status": "available"
+    },
+    "topShortage": ["253111","411711","241411"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "HAW",
+    "nameEn": "Hawke's Bay",
+    "nameKo": "호크스베이",
+    "slug": "hawks-bay",
+    "lat": -39.4928,
+    "lng": 176.8123,
+    "rent": {
+      "monthlyNzd": 1650,
+      "weeklyNzd": 380,
+      "period": "2025 Q1",
+      "definition": "Median weekly rent for 2-3 bedroom property",
+      "status": "available"
+    },
+    "topShortage": ["253111","253312","411711","332111","341111"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "TAR",
+    "nameEn": "Taranaki",
+    "nameKo": "타라나키",
+    "slug": "taranaki",
+    "lat": -39.2318,
+    "lng": 174.0904,
+    "rent": {
+      "monthlyNzd": 1550,
+      "weeklyNzd": 355,
+      "period": "2025 Q1",
+      "definition": "Median weekly rent for 2-3 bedroom property",
+      "status": "available"
+    },
+    "topShortage": ["253111","233512","341111","323111","411711"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "MWT",
+    "nameEn": "Manawatū-Whanganui",
+    "nameKo": "마나와투-왕가누이",
+    "slug": "manawatu-whanganui",
+    "lat": -40.3523,
+    "lng": 175.6084,
+    "rent": {
+      "monthlyNzd": 1500,
+      "weeklyNzd": 345,
+      "period": "2025 Q1",
+      "definition": "Median weekly rent for 2-3 bedroom property",
+      "status": "available"
+    },
+    "topShortage": ["253111","241411","452499","234112","411711","332111"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "WGN",
+    "nameEn": "Wellington",
+    "nameKo": "웰링턴",
+    "slug": "wellington",
+    "lat": -41.2924,
+    "lng": 174.7787,
+    "rent": {
+      "monthlyNzd": 2200,
+      "weeklyNzd": 510,
+      "period": "2025 Q1",
+      "definition": "Median weekly rent for 2-3 bedroom property",
+      "status": "available"
+    },
+    "topShortage": ["253111","261312","261313","261111","341111","334111","233211","241411"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "TAS",
+    "nameEn": "Tasman",
+    "nameKo": "태즈먼",
+    "slug": "tasman",
+    "lat": -41.2985,
+    "lng": 172.5130,
+    "rent": {
+      "monthlyNzd": 1650,
+      "weeklyNzd": 380,
+      "period": "2025 Q1",
+      "definition": "Median weekly rent for 2-3 bedroom property",
+      "status": "available"
+    },
+    "topShortage": ["253111","341111","332111","351411"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "NSN",
+    "nameEn": "Nelson",
+    "nameKo": "넬슨",
+    "slug": "nelson",
+    "lat": -41.2706,
+    "lng": 173.2819,
+    "rent": {
+      "monthlyNzd": 1700,
+      "weeklyNzd": 390,
+      "period": "2025 Q1",
+      "definition": "Median weekly rent for 2-3 bedroom property",
+      "status": "available"
+    },
+    "topShortage": ["253111","332111","341111","351311","351411"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "MBH",
+    "nameEn": "Marlborough",
+    "nameKo": "마루버러",
+    "slug": "marlborough",
+    "lat": -41.5160,
+    "lng": 173.9528,
+    "rent": {
+      "monthlyNzd": 1600,
+      "weeklyNzd": 370,
+      "period": "2025 Q1",
+      "definition": "Median weekly rent for 2-3 bedroom property",
+      "status": "available"
+    },
+    "topShortage": ["253111","351311","351411"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "WTC",
+    "nameEn": "West Coast",
+    "nameKo": "웨스트코스트",
+    "slug": "west-coast",
+    "lat": -42.4502,
+    "lng": 171.2108,
+    "rent": {
+      "monthlyNzd": 1200,
+      "weeklyNzd": 275,
+      "period": "2025 Q1",
+      "definition": "Median weekly rent for 2-3 bedroom property",
+      "status": "available"
+    },
+    "topShortage": ["253111","341111","332111"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "CAN",
+    "nameEn": "Canterbury",
+    "nameKo": "캔터베리",
+    "slug": "canterbury",
+    "lat": -43.5321,
+    "lng": 172.6362,
+    "rent": {
+      "monthlyNzd": 1800,
+      "weeklyNzd": 415,
+      "period": "2025 Q1",
+      "definition": "Median weekly rent for 2-3 bedroom property",
+      "status": "available"
+    },
+    "topShortage": ["253111","261312","261313","332111","334111","341111","233211","133111"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "OTG",
+    "nameEn": "Otago",
+    "nameKo": "오타고",
+    "slug": "otago",
+    "lat": -45.8788,
+    "lng": 170.5028,
+    "rent": {
+      "monthlyNzd": 1950,
+      "weeklyNzd": 450,
+      "period": "2025 Q1",
+      "definition": "Median weekly rent for 2-3 bedroom property",
+      "status": "available"
+    },
+    "topShortage": ["253111","332111","334111","341111","351411","411711","241411"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "STL",
+    "nameEn": "Southland",
+    "nameKo": "사우스랜드",
+    "slug": "southland",
+    "lat": -46.4132,
+    "lng": 168.3538,
+    "rent": {
+      "monthlyNzd": 1400,
+      "weeklyNzd": 320,
+      "period": "2025 Q1",
+      "definition": "Median weekly rent for 2-3 bedroom property",
+      "status": "available"
+    },
+    "topShortage": ["253111","341111","233211","411711"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  }
+]

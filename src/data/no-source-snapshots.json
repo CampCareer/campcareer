@@ -1,0 +1,80 @@
+[
+  {
+    "category": "shortage",
+    "sourceName": "NAV Labour Market Shortage Statistics",
+    "sourceUrl": "https://www.nav.no/en/home/work-and-attendance/work-in-norway/shortage-occupations",
+    "datasetUrls": [],
+    "contentHash": "placeholder-no-shortage-2025",
+    "retrievedAt": "2025-07-01T00:00:00.000Z",
+    "lastChecked": "2025-07-01",
+    "method": "official-download",
+    "licenseStatus": "public-statistics",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "salary",
+    "sourceName": "Statistics Norway (SSB) Earnings Statistics",
+    "sourceUrl": "https://www.ssb.no/en/arbeid-og-lonn/lonn-og-arbeidskraftskostnader",
+    "datasetUrls": [],
+    "contentHash": "placeholder-no-salary-2025",
+    "retrievedAt": "2025-07-01T00:00:00.000Z",
+    "lastChecked": "2025-07-01",
+    "method": "official-download",
+    "licenseStatus": "public-statistics",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "rent",
+    "sourceName": "Statistics Norway (SSB) Housing Statistics",
+    "sourceUrl": "https://www.ssb.no/en/boliger-og-eiendommer/utleie-og-bosituasjoner",
+    "datasetUrls": [],
+    "contentHash": "placeholder-no-rent-2025",
+    "retrievedAt": "2025-07-01T00:00:00.000Z",
+    "lastChecked": "2025-07-01",
+    "method": "official-download",
+    "licenseStatus": "public-statistics",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "occupation",
+    "sourceName": "NAV Occupation Information",
+    "sourceUrl": "https://www.nav.no/en/home/work-and-attendance/work-in-norway",
+    "datasetUrls": [],
+    "contentHash": "placeholder-no-occupation-2025",
+    "retrievedAt": "2025-07-01T00:00:00.000Z",
+    "lastChecked": "2025-07-01",
+    "method": "official-web",
+    "licenseStatus": "public-administrative-source",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "visa-pathway",
+    "sourceName": "Norwegian Directorate of Immigration (UDI)",
+    "sourceUrl": "https://www.udi.no/en/want-to-apply/work-immigration/",
+    "datasetUrls": [],
+    "contentHash": "placeholder-no-visa-2025",
+    "retrievedAt": "2025-07-01T00:00:00.000Z",
+    "lastChecked": "2025-07-01",
+    "method": "official-web",
+    "licenseStatus": "public-administrative-source",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "tuition",
+    "sourceName": "Study in Norway",
+    "sourceUrl": "https://www.studyinnorway.no/",
+    "datasetUrls": [],
+    "contentHash": "placeholder-no-tuition-2025",
+    "retrievedAt": "2025-07-01T00:00:00.000Z",
+    "lastChecked": "2025-07-01",
+    "method": "official-web",
+    "licenseStatus": "public-administrative-source",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  }
+]

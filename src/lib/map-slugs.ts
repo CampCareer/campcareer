@@ -12,7 +12,15 @@ import { SG_DEMAND_OCCUPATIONS } from "@/data/sg-map-data"
 import { KR_OCCUPATIONS, isKoreaOccupationIndexable } from "@/data/kr-map-data"
 import { FR_DEMAND_OCCUPATIONS, isFranceDemandOccupationIndexable } from "@/data/fr-map-data"
 import { ES_OCCUPATIONS, isSpainOccupationIndexable } from "@/data/es-map-data"
+import { NZ_OCCUPATIONS, isNZOccupationIndexable } from "@/data/nz-map-data"
+import { NO_OCCUPATIONS, isNOOccupationIndexable } from "@/data/no-map-data"
+import { SE_OCCUPATIONS, isSEOccupationIndexable } from "@/data/se-map-data"
+import { DK_OCCUPATIONS, isDKOccupationIndexable } from "@/data/dk-map-data"
+import { FI_OCCUPATIONS, isFIOccupationIndexable } from "@/data/fi-map-data"
 
+// The five rebuilt country packs remain unavailable to Maps until their
+// country-level Map v2 gate passes. Keeping them out of the route whitelist
+// prevents direct URLs from exposing quarantined occupation numbers.
 export const MAP_COUNTRIES = ["au", "ca", "us", "ie", "uk", "de", "nl", "be", "sg", "kr", "fr", "es"] as const
 
 export type MapCountry = (typeof MAP_COUNTRIES)[number]
@@ -22,7 +30,7 @@ type RawMapOccupation = {
   name: string
   localName?: string | null
   medianSalary?: number | null
-  currency: "AUD" | "CAD" | "USD" | "GBP" | "EUR" | "SGD" | "KRW"
+  currency: "AUD" | "CAD" | "USD" | "GBP" | "EUR" | "SGD" | "KRW" | "NZD" | "NOK" | "SEK" | "DKK"
   shortageRating?: number | null
   shortageScore?: number | null
   employment?: number | null
@@ -78,6 +86,10 @@ const CURRENCY_SYMBOL: Record<MapOccupation["currency"], string> = {
   EUR: "€",
   SGD: "S$",
   KRW: "KRW ",
+  NZD: "NZ$",
+  NOK: "kr",
+  SEK: "kr",
+  DKK: "kr",
 }
 
 export function isMapCountry(value: string): value is MapCountry {
@@ -328,6 +340,81 @@ function loadSpain(): RawMapOccupation[] {
   return ES_OCCUPATIONS.filter(isSpainOccupationIndexable).map((row) => ({
     code: row.code, name: row.nameEn!, localName: row.localName, medianSalary: null, currency: "EUR" as const,
     shortageRating: row.provinceCodes.length, field: `SEPE 2026 Q1 · ${row.provinceCodes.length} provinces listed`, codeLabel: "CNO / SEPE", salaryLabel: "Salary is shown separately by INE CNO group", dataSource: getCountrySource("ES", "shortage"),
+  }))
+}
+
+export function loadNorway(): RawMapOccupation[] {
+  return NO_OCCUPATIONS.filter(isNOOccupationIndexable).map((row) => ({
+    code: row.stykrCode,
+    name: row.nameEn,
+    localName: row.nameKo,
+    medianSalary: row.medianSalaryNok,
+    currency: "NOK" as const,
+    shortageRating: row.shortageRating,
+    employment: row.employmentThousands,
+    field: row.relatedField,
+    codeLabel: "STYRK-08",
+    dataSource: getCountrySource("NO", "occupation"),
+  }))
+}
+
+export function loadSweden(): RawMapOccupation[] {
+  return SE_OCCUPATIONS.filter(isSEOccupationIndexable).map((row) => ({
+    code: row.ssykCode,
+    name: row.nameEn,
+    localName: row.nameKo,
+    medianSalary: row.medianSalarySek,
+    currency: "SEK" as const,
+    shortageRating: row.shortageRating,
+    employment: row.employmentThousands,
+    field: row.relatedField,
+    codeLabel: "SSYK 2012",
+    dataSource: getCountrySource("SE", "occupation"),
+  }))
+}
+
+export function loadDenmark(): RawMapOccupation[] {
+  return DK_OCCUPATIONS.filter(isDKOccupationIndexable).map((row) => ({
+    code: row.dosCode,
+    name: row.nameEn,
+    localName: row.nameKo,
+    medianSalary: row.medianSalaryDkk,
+    currency: "DKK" as const,
+    shortageRating: row.shortageRating,
+    employment: row.employmentThousands,
+    field: row.relatedField,
+    codeLabel: "DISCO-08",
+    dataSource: getCountrySource("DK", "occupation"),
+  }))
+}
+
+export function loadFinland(): RawMapOccupation[] {
+  return FI_OCCUPATIONS.filter(isFIOccupationIndexable).map((row) => ({
+    code: row.iscoCode,
+    name: row.nameEn,
+    localName: row.nameKo,
+    medianSalary: row.medianSalaryEur,
+    currency: "EUR" as const,
+    shortageRating: row.shortageRating,
+    employment: row.employmentThousands,
+    field: row.relatedField,
+    codeLabel: "ISCO-08",
+    dataSource: getCountrySource("FI", "occupation"),
+  }))
+}
+
+export function loadNewZealand(): RawMapOccupation[] {
+  return NZ_OCCUPATIONS.filter(isNZOccupationIndexable).map((row) => ({
+    code: row.anzscoCode,
+    name: row.nameEn,
+    localName: row.nameKo,
+    medianSalary: row.medianSalaryNzd,
+    currency: "NZD" as const,
+    shortageRating: row.shortageRating,
+    employment: row.employmentThousands,
+    field: row.relatedField,
+    codeLabel: "ANZSCO",
+    dataSource: getCountrySource("NZ", "occupation"),
   }))
 }
 

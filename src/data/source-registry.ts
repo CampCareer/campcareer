@@ -1,3 +1,5 @@
+import { isCountrySearchIndexable } from "@/lib/new-country-release-gate"
+
 export const CORE_DATA_CATEGORIES = [
   "tuition",
   "graduate-outcomes",
@@ -8,7 +10,7 @@ export const CORE_DATA_CATEGORIES = [
 ] as const
 
 export type CoreDataCategory = (typeof CORE_DATA_CATEGORIES)[number]
-export type RegistryCountryCode = "AU" | "US" | "CA" | "UK" | "IE" | "DE" | "NL" | "BE" | "SG" | "KR" | "FR" | "ES"
+export type RegistryCountryCode = "AU" | "US" | "CA" | "UK" | "IE" | "DE" | "NL" | "BE" | "SG" | "KR" | "FR" | "ES" | "NZ" | "NO" | "SE" | "DK" | "FI"
 export type SourceConfidence = "official" | "market-estimate" | "internal-estimate"
 export type SourceMethod = "official-api" | "official-download" | "official-web" | "market-estimate"
 export type ReviewStatus = "approved" | "review-required"
@@ -128,6 +130,46 @@ const COUNTRY_SOURCES: Record<RegistryCountryCode, CountrySourceSeed> = {
     "visa-pathway": { sourceName: "Spain Migration information sheets", sourceUrl: "https://www.inclusion.gob.es/web/migraciones/estudiar", method: "official-web", refreshCadence: "monthly" },
     shortage: { sourceName: "SEPE Catálogo de Ocupaciones de Difícil Cobertura", sourceUrl: "https://www.sepe.es/HomeSepe/empresas/informacion-para-empresas/profesiones-de-dificil-cobertura/profesiones-mas-demandadas", method: "official-download", refreshCadence: "quarterly" },
   },
+  NZ: {
+    tuition: { sourceName: "Education New Zealand — Study with New Zealand", sourceUrl: "https://www.studywithnz.govt.nz/", method: "official-web", refreshCadence: "annual" },
+    "graduate-outcomes": { sourceName: "Stats NZ Income Survey", sourceUrl: "https://www.stats.govt.nz/information-releases/income-statistics-year-ended-june-2025/", method: "official-download", refreshCadence: "annual" },
+    occupation: { sourceName: "Hīkina te Mahi — Skill Shortage Lists", sourceUrl: "https://www.immigration.govt.nz/new-zealand-visas/preparing-a-visa-application/working-nz/skill-shortage-lists", method: "official-web", refreshCadence: "quarterly" },
+    rent: { sourceName: "Tenancy Services NZ Bond Data", sourceUrl: "https://www.tenancy.govt.nz/rent-bond/rent-bond-statistics/", method: "official-download", refreshCadence: "quarterly" },
+    "visa-pathway": { sourceName: "Immigration New Zealand — Study to Work pathway", sourceUrl: "https://www.immigration.govt.nz/new-zealand-visas/applying-for-a-visa/visa-factsheet/going-from-study-to-work", method: "official-web", refreshCadence: "monthly" },
+    shortage: { sourceName: "Immigration New Zealand Green List", sourceUrl: "https://www.immigration.govt.nz/new-zealand-visas/preparing-a-visa-application/working-in-nz/green-list", method: "official-web", refreshCadence: "monthly" },
+  },
+  NO: {
+    tuition: { sourceName: "Study in Norway", sourceUrl: "https://www.studyinnorway.no/", method: "official-web", refreshCadence: "annual" },
+    "graduate-outcomes": { sourceName: "Statistics Norway (SSB) Earnings Statistics", sourceUrl: "https://www.ssb.no/en/arbeid-og-lonn/lonn-og-arbeidskraftskostnader", method: "official-download", refreshCadence: "annual" },
+    occupation: { sourceName: "NAV Occupation Information", sourceUrl: "https://www.nav.no/en/home/work-and-attendance/work-in-norway", method: "official-web", refreshCadence: "quarterly" },
+    rent: { sourceName: "Statistics Norway (SSB) Housing Statistics", sourceUrl: "https://www.ssb.no/en/boliger-og-eiendommer/utleie-og-bosituasjoner", method: "official-download", refreshCadence: "quarterly" },
+    "visa-pathway": { sourceName: "Norwegian Directorate of Immigration (UDI)", sourceUrl: "https://www.udi.no/en/want-to-apply/work-immigration/", method: "official-web", refreshCadence: "monthly" },
+    shortage: { sourceName: "NAV Labour Market Shortage Statistics", sourceUrl: "https://www.nav.no/en/home/work-and-attendance/work-in-norway/shortage-occupations", method: "official-download", refreshCadence: "quarterly" },
+  },
+  SE: {
+    tuition: { sourceName: "Universityadmissions.se", sourceUrl: "https://www.universityadmissions.se/", method: "official-web", refreshCadence: "annual" },
+    "graduate-outcomes": { sourceName: "Statistics Sweden (SCB) Education Outcomes", sourceUrl: "https://www.scb.se/en/statistics/education/", method: "official-download", refreshCadence: "annual" },
+    occupation: { sourceName: "Swedish Public Employment Service (Arbetsförmedlingen)", sourceUrl: "https://arbetsformedlingen.se/for-arbetssokande/yrken-och-framtid/yrkesprognoser", method: "official-download", refreshCadence: "quarterly" },
+    rent: { sourceName: "Statistics Sweden (SCB) Housing Statistics", sourceUrl: "https://www.scb.se/en/statistics/housing-and-construction/", method: "official-download", refreshCadence: "quarterly" },
+    "visa-pathway": { sourceName: "Swedish Migration Agency (Migrationsverket)", sourceUrl: "https://www.migrationsverket.se/English/Private-individuals/Working-in-Sweden/", method: "official-web", refreshCadence: "monthly" },
+    shortage: { sourceName: "Swedish Public Employment Service Shortage Analysis", sourceUrl: "https://arbetsformedlingen.se/for-arbetssokande/yrken-och-framtid/yrkesprognoser", method: "official-download", refreshCadence: "quarterly" },
+  },
+  DK: {
+    tuition: { sourceName: "Study in Denmark", sourceUrl: "https://studyindenmark.dk/", method: "official-web", refreshCadence: "annual" },
+    "graduate-outcomes": { sourceName: "Statistics Denmark (DST) Education Outcomes", sourceUrl: "https://www.dst.dk/en/statistik/emner/uddannelse-og-viden", method: "official-download", refreshCadence: "annual" },
+    occupation: { sourceName: "Danish Agency for Labour Market and Recruitment (STAR)", sourceUrl: "https://starservice.mim.dk/starservice/occupations/list", method: "official-download", refreshCadence: "quarterly" },
+    rent: { sourceName: "Statistics Denmark (DST) Housing Statistics", sourceUrl: "https://www.dst.dk/en/statistik/emner/boliger-og-ejendomme", method: "official-download", refreshCadence: "quarterly" },
+    "visa-pathway": { sourceName: "Danish Agency for International Recruitment (SIRI)", sourceUrl: "https://www.nyidanmark.dk/en-GB/Words-and-concepts/US/Establishment-Card/", method: "official-web", refreshCadence: "monthly" },
+    shortage: { sourceName: "STAR Shortage Occupation List", sourceUrl: "https://starservice.mim.dk/starservice/occupations/list", method: "official-download", refreshCadence: "quarterly" },
+  },
+  FI: {
+    tuition: { sourceName: "Study in Finland", sourceUrl: "https://www.studyinfinland.fi/", method: "official-web", refreshCadence: "annual" },
+    "graduate-outcomes": { sourceName: "Statistics Finland Education Outcomes", sourceUrl: "https://stat.fi/en/statistics/education", method: "official-download", refreshCadence: "annual" },
+    occupation: { sourceName: "Finnish Ministry of Economic Affairs and Employment", sourceUrl: "https://tyo-ja-elinkeinoministeri.fi/en/employment-and-enterprises/employers/recruiting-foreign-workers/shortage-occupations", method: "official-download", refreshCadence: "quarterly" },
+    rent: { sourceName: "Statistics Finland Housing Statistics", sourceUrl: "https://stat.fi/en/statistics/housing", method: "official-download", refreshCadence: "quarterly" },
+    "visa-pathway": { sourceName: "Finnish Immigration Service (Migri)", sourceUrl: "https://migri.fi/en/work-in-finland", method: "official-web", refreshCadence: "monthly" },
+    shortage: { sourceName: "Finnish Ministry of Economic Affairs and Employment Shortage Occupation List", sourceUrl: "https://tyo-ja-elinkeinoministeri.fi/en/employment-and-enterprises/employers/recruiting-foreign-workers/shortage-occupations", method: "official-download", refreshCadence: "quarterly" },
+  },
 }
 
 export const SOURCE_REGISTRY: SourceRecord[] = (Object.entries(COUNTRY_SOURCES) as Array<[RegistryCountryCode, CountrySourceSeed]>).flatMap(
@@ -138,7 +180,10 @@ export const SOURCE_REGISTRY: SourceRecord[] = (Object.entries(COUNTRY_SOURCES) 
     retrievedAt: CHECKED_AT,
     lastChecked: CHECKED_AT,
     confidence: "official" as const,
-    reviewStatus: category === "visa-pathway" ? "review-required" as const : "approved" as const,
+    reviewStatus:
+      category === "visa-pathway" || !isCountrySearchIndexable(country)
+        ? "review-required" as const
+        : "approved" as const,
   })),
 )
 

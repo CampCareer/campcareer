@@ -1,0 +1,80 @@
+[
+  {
+    "category": "shortage",
+    "sourceName": "Finnish Ministry of Economic Affairs and Employment Shortage Occupation List",
+    "sourceUrl": "https://tyo-ja-elinkeinoministeri.fi/en/employment-and-enterprises/employers/recruiting-foreign-workers/shortage-occupations",
+    "datasetUrls": [],
+    "contentHash": "placeholder-fi-shortage-2025",
+    "retrievedAt": "2025-07-01T00:00:00.000Z",
+    "lastChecked": "2025-07-01",
+    "method": "official-download",
+    "licenseStatus": "public-statistics",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "salary",
+    "sourceName": "Statistics Finland (Tilastokeskus) Earnings Statistics",
+    "sourceUrl": "https://stat.fi/en/statistics/labour-costs-and-earnings",
+    "datasetUrls": [],
+    "contentHash": "placeholder-fi-salary-2025",
+    "retrievedAt": "2025-07-01T00:00:00.000Z",
+    "lastChecked": "2025-07-01",
+    "method": "official-download",
+    "licenseStatus": "public-statistics",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "rent",
+    "sourceName": "Statistics Finland Housing Statistics",
+    "sourceUrl": "https://stat.fi/en/statistics/housing",
+    "datasetUrls": [],
+    "contentHash": "placeholder-fi-rent-2025",
+    "retrievedAt": "2025-07-01T00:00:00.000Z",
+    "lastChecked": "2025-07-01",
+    "method": "official-download",
+    "licenseStatus": "public-statistics",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "tuition",
+    "sourceName": "Study in Finland",
+    "sourceUrl": "https://www.studyinfinland.fi/",
+    "datasetUrls": [],
+    "contentHash": "placeholder-fi-tuition-2025",
+    "retrievedAt": "2025-07-01T00:00:00.000Z",
+    "lastChecked": "2025-07-01",
+    "method": "official-web",
+    "licenseStatus": "public-information",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "visa-pathway",
+    "sourceName": "Finnish Immigration Service (Migri)",
+    "sourceUrl": "https://migri.fi/en/work-in-finland",
+    "datasetUrls": [],
+    "contentHash": "placeholder-fi-visa-2025",
+    "retrievedAt": "2025-07-01T00:00:00.000Z",
+    "lastChecked": "2025-07-01",
+    "method": "official-web",
+    "licenseStatus": "public-information",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "graduate-outcomes",
+    "sourceName": "Statistics Finland Education Outcomes",
+    "sourceUrl": "https://stat.fi/en/statistics/education",
+    "datasetUrls": [],
+    "contentHash": "placeholder-fi-outcomes-2025",
+    "retrievedAt": "2025-07-01T00:00:00.000Z",
+    "lastChecked": "2025-07-01",
+    "method": "official-download",
+    "licenseStatus": "public-statistics",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  }
+]

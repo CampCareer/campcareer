@@ -1,0 +1,362 @@
+[
+  {
+    "code": "AB",
+    "nameEn": "Stockholm",
+    "nameKo": "스톡홀름",
+    "slug": "stockholm",
+    "lat": 59.33,
+    "lng": 18.07,
+    "rent": {
+      "monthlySek": 12500,
+      "weeklySek": 2900,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "2512", "7411", "2142", "3113"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "O",
+    "nameEn": "Västra Götaland",
+    "nameKo": "베스테라 예탈란드",
+    "slug": "vastra-gotaland",
+    "lat": 57.71,
+    "lng": 11.97,
+    "rent": {
+      "monthlySek": 9500,
+      "weeklySek": 2200,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "7411", "2141", "2512", "3113"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "M",
+    "nameEn": "Skåne",
+    "nameKo": "스코네",
+    "slug": "skane",
+    "lat": 55.60,
+    "lng": 13.00,
+    "rent": {
+      "monthlySek": 8500,
+      "weeklySek": 1960,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "2512", "7411", "2142", "3113"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "E",
+    "nameEn": "Östergötland",
+    "nameKo": "외스테르예otland",
+    "slug": "ostergotland",
+    "lat": 58.41,
+    "lng": 15.63,
+    "rent": {
+      "monthlySek": 7500,
+      "weeklySek": 1730,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "2141", "7411", "3113", "2512"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "C",
+    "nameEn": "Uppsala",
+    "nameKo": "우ppsala",
+    "slug": "uppsala",
+    "lat": 59.86,
+    "lng": 17.64,
+    "rent": {
+      "monthlySek": 8000,
+      "weeklySek": 1850,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "7411", "6111", "2512", "2142"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "AC",
+    "nameEn": "Västerbotten",
+    "nameKo": "베스테르보텐",
+    "slug": "vasterbotten",
+    "lat": 64.34,
+    "lng": 18.82,
+    "rent": {
+      "monthlySek": 6500,
+      "weeklySek": 1500,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "2211", "3222", "7411", "2212"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "BD",
+    "nameEn": "Norrbotten",
+    "nameKo": "노르보텐",
+    "slug": "norrbotten",
+    "lat": 66.83,
+    "lng": 20.40,
+    "rent": {
+      "monthlySek": 5500,
+      "weeklySek": 1270,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "2211", "3222", "7411", "2212"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "X",
+    "nameEn": "Gävleborg",
+    "nameKo": "예블레보리",
+    "slug": "gavleborg",
+    "lat": 60.67,
+    "lng": 17.16,
+    "rent": {
+      "monthlySek": 6000,
+      "weeklySek": 1380,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2141", "7411", "3113", "2221", "3112"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "W",
+    "nameEn": "Dalarna",
+    "nameKo": "달라르나",
+    "slug": "dalarna",
+    "lat": 60.83,
+    "lng": 14.53,
+    "rent": {
+      "monthlySek": 5500,
+      "weeklySek": 1270,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["7411", "6210", "2141", "2221", "3112"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "H",
+    "nameEn": "Kalmar",
+    "nameKo": "칼마르",
+    "slug": "kalmar",
+    "lat": 56.66,
+    "lng": 16.36,
+    "rent": {
+      "monthlySek": 6000,
+      "weeklySek": 1380,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["7411", "6111", "2221", "6210", "5121"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "G",
+    "nameEn": "Kronoberg",
+    "nameKo": "크로노베리",
+    "slug": "kronoberg",
+    "lat": 56.87,
+    "lng": 14.81,
+    "rent": {
+      "monthlySek": 6000,
+      "weeklySek": 1380,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["7411", "2221", "3222", "6210", "5121"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "F",
+    "nameEn": "Jönköping",
+    "nameKo": "욘코핑",
+    "slug": "jonkoping",
+    "lat": 57.78,
+    "lng": 14.16,
+    "rent": {
+      "monthlySek": 6500,
+      "weeklySek": 1500,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["7411", "2221", "3222", "7126", "2512"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "N",
+    "nameEn": "Halland",
+    "nameKo": "할란드",
+    "slug": "halland",
+    "lat": 56.68,
+    "lng": 12.86,
+    "rent": {
+      "monthlySek": 7500,
+      "weeklySek": 1730,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "7411", "5121", "2212", "7126"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "U",
+    "nameEn": "Västmanland",
+    "nameKo": "베스틀란드",
+    "slug": "vastmanland",
+    "lat": 59.60,
+    "lng": 16.54,
+    "rent": {
+      "monthlySek": 6500,
+      "weeklySek": 1500,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["7411", "2141", "6111", "2221", "3113"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "S",
+    "nameEn": "Värmland",
+    "nameKo": "베름란드",
+    "slug": "varmland",
+    "lat": 59.28,
+    "lng": 12.11,
+    "rent": {
+      "monthlySek": 5500,
+      "weeklySek": 1270,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2141", "3113", "6210", "2131", "1221"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "T",
+    "nameEn": "Örebro",
+    "nameKo": "외레브로",
+    "slug": "orebro",
+    "lat": 59.27,
+    "lng": 15.21,
+    "rent": {
+      "monthlySek": 6000,
+      "weeklySek": 1380,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "7411", "3222", "6210", "2512"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "Y",
+    "nameEn": "Jämtland",
+    "nameKo": "얀틀란드",
+    "slug": "jamtland",
+    "lat": 63.18,
+    "lng": 14.65,
+    "rent": {
+      "monthlySek": 5500,
+      "weeklySek": 1270,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "7411", "6210", "3222", "8222"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "I",
+    "nameEn": "Gotland",
+    "nameKo": "고틀란드",
+    "slug": "gotland",
+    "lat": 57.63,
+    "lng": 18.30,
+    "rent": {
+      "monthlySek": 7000,
+      "weeklySek": 1610,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["7411", "5121", "6111", "7126", "2221"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "Z",
+    "nameEn": "Västernorrland",
+    "nameKo": "베스테르노를란드",
+    "slug": "vasternorrland",
+    "lat": 63.43,
+    "lng": 17.32,
+    "rent": {
+      "monthlySek": 5500,
+      "weeklySek": 1270,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "7411", "6210", "3222", "2141"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "K",
+    "nameEn": "Blekinge",
+    "nameKo": "블레킹에",
+    "slug": "blekinge",
+    "lat": 56.22,
+    "lng": 15.05,
+    "rent": {
+      "monthlySek": 6000,
+      "weeklySek": 1380,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["7411", "2221", "3222", "6111", "5121"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  }
+]

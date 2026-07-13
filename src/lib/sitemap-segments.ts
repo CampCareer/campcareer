@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next"
+import { LAUNCH_COUNTRIES, getLaunchCountry } from "@/data/launch-countries"
 
 const BASE = "https://www.campcareer.com"
 
@@ -26,15 +27,37 @@ export async function getSitemapSegment(segment: SitemapSegment): Promise<Metada
   return entries.filter((entry) => belongsToSegment(new URL(entry.url).pathname, segment))
 }
 
+/** Country files are intentionally independent from broad legacy segments. */
+export async function getCountrySitemap(countryCode: string): Promise<MetadataRoute.Sitemap | null> {
+  const country = getLaunchCountry(countryCode)
+  if (!country || country.publicationStage === "REVIEW_REQUIRED") return null
+
+  const { default: buildLegacySitemap } = await import("@/app/sitemap")
+  const entries = await buildLegacySitemap()
+  const shortCode = country.code.toLowerCase()
+  return entries.filter((entry) => belongsToCountrySitemap(new URL(entry.url).pathname, shortCode))
+}
+
 export function sitemapIndexXml(lastModified = "2026-07-12") {
-  const rows = SITEMAP_SEGMENTS.map((segment) => [
+  const segments = [
+    ...SITEMAP_SEGMENTS.map((segment) => ({ loc: `${BASE}/sitemaps/${segment}.xml` })),
+    ...LAUNCH_COUNTRIES
+      .filter((country) => country.publicationStage !== "REVIEW_REQUIRED")
+      .map((country) => ({ loc: `${BASE}/sitemaps/country-${country.code.toLowerCase()}.xml` })),
+  ]
+  const rows = segments.map(({ loc }) => [
     "  <sitemap>",
-    `    <loc>${BASE}/sitemaps/${segment}.xml</loc>`,
+    `    <loc>${loc}</loc>`,
     `    <lastmod>${lastModified}</lastmod>`,
     "  </sitemap>",
   ].join("\n")).join("\n")
 
   return `<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${rows}\n</sitemapindex>\n`
+}
+
+function belongsToCountrySitemap(pathname: string, code: string) {
+  return pathname === `/${code}` || pathname === `/${code}/jobs` ||
+    pathname.startsWith(`/maps/${code}/`) || pathname.startsWith(`/map/${code}/`)
 }
 
 export function urlSetXml(entries: MetadataRoute.Sitemap) {
@@ -61,7 +84,7 @@ export function belongsToSegment(pathname: string, segment: SitemapSegment) {
     case "fields-en":
       return pathname.startsWith("/fields/") || /^\/countries\/[^/]+\/fields\//.test(pathname)
     case "countries-en":
-      return /^\/countries\/[^/]+$/.test(pathname) || /^\/(au|be|ca|de|es|fr|ie|kr|nl|sg|uk|us)(\/jobs)?$/.test(pathname)
+      return /^\/countries\/[^/]+$/.test(pathname) || /^\/(au|be|ca|de|dk|es|fi|fr|ie|kr|nl|no|nz|se|sg|uk|us)(\/jobs)?$/.test(pathname)
     case "careers":
       return pathname.startsWith("/maps/") && !pathname.includes("/regions/") && !pathname.includes("/cities/") && !pathname.includes("/areas/") && !pathname.includes("/prefectures/")
     case "schools":

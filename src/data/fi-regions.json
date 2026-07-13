@@ -1,0 +1,290 @@
+[
+  {
+    "code": "UUS",
+    "nameEn": "Uusimaa",
+    "nameKo": "우우시마",
+    "slug": "uusimaa",
+    "lat": 60.17,
+    "lng": 24.94,
+    "rent": {
+      "monthlyEur": 950,
+      "weeklyEur": 220,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "2512", "7411", "2142", "3113"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "PIR",
+    "nameEn": "Pirkanmaa",
+    "nameKo": "피르칸마",
+    "slug": "pirkanmaa",
+    "lat": 61.50,
+    "lng": 23.79,
+    "rent": {
+      "monthlyEur": 700,
+      "weeklyEur": 161,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "7411", "2141", "2512", "3113"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "VRS",
+    "nameEn": "Varsinais-Suomi",
+    "nameKo": "바르시나이스수오미",
+    "slug": "varsinais-suomi",
+    "lat": 60.45,
+    "lng": 22.27,
+    "rent": {
+      "monthlyEur": 650,
+      "weeklyEur": 150,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "7411", "2141", "3113", "2512"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "NSV",
+    "nameEn": "Pohjois-Savo",
+    "nameKo": "포이오이스사보",
+    "slug": "pohjois-savo",
+    "lat": 62.89,
+    "lng": 27.68,
+    "rent": {
+      "monthlyEur": 550,
+      "weeklyEur": 127,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "3222", "2351", "3411", "7411"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "NPO",
+    "nameEn": "Pohjois-Pohjanmaa",
+    "nameKo": "포이오이스포흐얀마",
+    "slug": "pohjois-pohjanmaa",
+    "lat": 65.01,
+    "lng": 25.47,
+    "rent": {
+      "monthlyEur": 500,
+      "weeklyEur": 115,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "7411", "3222", "2351", "3411"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "PKY",
+    "nameEn": "Päijät-Häme",
+    "nameKo": "파이야트하메",
+    "slug": "paijat-hame",
+    "lat": 61.00,
+    "lng": 25.75,
+    "rent": {
+      "monthlyEur": 550,
+      "weeklyEur": 127,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "7411", "2351", "6111", "3222"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "KSR",
+    "nameEn": "Keski-Suomi",
+    "nameKo": "케스키수오미",
+    "slug": "keski-suomi",
+    "lat": 62.24,
+    "lng": 25.75,
+    "rent": {
+      "monthlyEur": 550,
+      "weeklyEur": 127,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "7411", "2351", "6111", "3222"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "KAI",
+    "nameEn": "Kainuu",
+    "nameKo": "카이누",
+    "slug": "kainuu",
+    "lat": 64.22,
+    "lng": 28.41,
+    "rent": {
+      "monthlyEur": 450,
+      "weeklyEur": 104,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "2351", "3411", "3222", "6210"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "NKR",
+    "nameEn": "Pohjois-Karjala",
+    "nameKo": "포이오이스카르야라",
+    "slug": "pohjois-karjala",
+    "lat": 62.60,
+    "lng": 29.76,
+    "rent": {
+      "monthlyEur": 480,
+      "weeklyEur": 110,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "2351", "3411", "3222", "7411"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "SAT",
+    "nameEn": "Satakunta",
+    "nameKo": "사타쿤타",
+    "slug": "satakunta",
+    "lat": 61.49,
+    "lng": 21.79,
+    "rent": {
+      "monthlyEur": 550,
+      "weeklyEur": 127,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "7411", "1221", "3112", "3222"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "SKR",
+    "nameEn": "Etelä-Karjala",
+    "nameKo": "에텔라카르야라",
+    "slug": "etela-karjala",
+    "lat": 61.06,
+    "lng": 28.19,
+    "rent": {
+      "monthlyEur": 500,
+      "weeklyEur": 115,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "7411", "2351", "3222", "1221"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "KYS",
+    "nameEn": "Etelä-Savo",
+    "nameKo": "에텔라사보",
+    "slug": "etela-savo",
+    "lat": 61.69,
+    "lng": 27.80,
+    "rent": {
+      "monthlyEur": 480,
+      "weeklyEur": 110,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "2351", "3411", "3222", "6210"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "KHM",
+    "nameEn": "Kanta-Häme",
+    "nameKo": "칸타하메",
+    "slug": "kanta-hame",
+    "lat": 60.81,
+    "lng": 24.30,
+    "rent": {
+      "monthlyEur": 600,
+      "weeklyEur": 138,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "7411", "2351", "3222", "6111"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "PHM",
+    "nameEn": "Pohjanmaa",
+    "nameKo": "포흐얀마",
+    "slug": "pohjanmaa",
+    "lat": 63.10,
+    "lng": 21.60,
+    "rent": {
+      "monthlyEur": 550,
+      "weeklyEur": 127,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "7411", "1221", "2351", "3222"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "KPK",
+    "nameEn": "Keski-Pohjanmaa",
+    "nameKo": "케스키포흐얀마",
+    "slug": "keski-pohjanmaa",
+    "lat": 63.54,
+    "lng": 24.00,
+    "rent": {
+      "monthlyEur": 480,
+      "weeklyEur": 110,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "7411", "1221", "2351", "3222"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "KYR",
+    "nameEn": "Kymenlaakso",
+    "nameKo": "퀴멘라크소",
+    "slug": "kymenlaakso",
+    "lat": 60.57,
+    "lng": 26.94,
+    "rent": {
+      "monthlyEur": 550,
+      "weeklyEur": 127,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "7411", "1221", "3222", "2351"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  }
+]

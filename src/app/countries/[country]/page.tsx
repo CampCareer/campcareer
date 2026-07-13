@@ -4,6 +4,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import type { ReactNode } from "react"
 import { JsonLd, breadcrumbLd } from "@/components/seo/json-ld"
+import { CountryDataNotice } from "@/components/country-profiles/country-data-notice"
 import {
   COUNTRY_ROI_DATA_META,
   COUNTRY_ROI_INSIGHTS,
@@ -17,6 +18,7 @@ import {
   recommendCountries,
 } from "@/lib/country-recommendation"
 import { pageMetadata } from "@/lib/seo"
+import { isCountrySearchIndexable } from "@/lib/new-country-release-gate"
 
 export const revalidate = 86400
 
@@ -78,11 +80,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     })
   }
 
-  return pageMetadata({
-    title: `Study & Work in ${country.name} — Salary, Budget & Visa ROI | CampCareer`,
-    description: `Compare ${country.name} by graduate salary, 3/5/10-year pay, rent, tax, visa policy, best majors, and initial budget.`,
-    path: country.href,
-  })
+  return {
+    ...pageMetadata({
+      title: `Study & Work in ${country.name} — Salary, Budget & Visa ROI | CampCareer`,
+      description: `Compare ${country.name} by graduate salary, 3/5/10-year pay, rent, tax, visa policy, best majors, and initial budget.`,
+      path: country.href,
+    }),
+    robots: {
+      index: isCountrySearchIndexable(country.code),
+      follow: true,
+    },
+  }
 }
 
 export default async function CountryDetailPage({ params, searchParams }: PageProps) {
@@ -91,6 +99,22 @@ export default async function CountryDetailPage({ params, searchParams }: PagePr
   const country = getCountry(slug)
 
   if (!country) notFound()
+
+  if (!isCountrySearchIndexable(country.code)) {
+    return (
+      <main className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
+        <Link href={country.hubHref} className="text-sm font-semibold text-blue-700 hover:underline">
+          {country.name} profile
+        </Link>
+        <h1 className="mt-5 text-4xl font-semibold tracking-normal text-slate-950">
+          Study and career profile: {country.name}
+        </h1>
+        <div className="mt-8">
+          <CountryDataNotice countryName={country.name} />
+        </div>
+      </main>
+    )
+  }
 
   const hasPersonalQuery = Boolean(
     query?.field ?? query?.budget ?? query?.goal ?? query?.risk ?? query?.language,

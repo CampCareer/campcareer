@@ -77,6 +77,59 @@ export type RecommendationInputV3 = {
   }
 }
 
+/**
+ * V4 is deliberately career-first. Unlike V2/V3 it cannot inherit a ranking
+ * from a broad study-field score: a career × country release record is needed.
+ */
+export type RecommendationInputV4 = {
+  locale: StudyLocale
+  targetCareerId: string
+  priority: RecommendationPriority
+  originCountry?: string
+  firstYearBudget?: {
+    amount: number
+    currency: string
+  }
+}
+
+export type CareerCountryReleaseStatus =
+  | "DECISION_READY"
+  | "RELATED_DATA_ONLY"
+  | "REVIEW_REQUIRED"
+  | "UNAVAILABLE"
+
+export type CareerCountryRecommendation = {
+  countryCode: string
+  countryName: string
+  slug: string
+  fitBand: FitBand
+  status: CareerCountryReleaseStatus
+  why: string
+  caution: string
+  metrics: MetricEvidence[]
+}
+
+export type CareerRecommendationResultV4 = {
+  engineVersion: string
+  dataVersion: string
+  generatedAt: string
+  input: RecommendationInputV4
+  career: {
+    id: string
+    categoryId: string
+    label: string
+  }
+  rankedCountries: CareerCountryRecommendation[]
+  unrankedCountries: Array<{
+    countryCode: string
+    countryName: string
+    slug: string
+    status: Exclude<CareerCountryReleaseStatus, "DECISION_READY">
+    reason: string
+  }>
+  disclaimer: string
+}
+
 export type OriginComparisonStatus = "READY" | "UNAVAILABLE" | "NOT_SELECTED"
 
 export type OriginComparison = {

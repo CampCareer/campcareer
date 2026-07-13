@@ -26,9 +26,14 @@ export const EXPANSION_COUNTRIES: ExpansionCountry[] = [
   { code: "PL", slug: "pl", nameEn: "Poland", nameKo: "폴란드", wave: "wave-3", role: "destination" },
   { code: "HU", slug: "hu", nameEn: "Hungary", nameKo: "헝가리", wave: "wave-3", role: "destination" },
   { code: "LV", slug: "lv", nameEn: "Latvia", nameKo: "라트비아", wave: "wave-3", role: "destination" },
+  { code: "CH", slug: "ch", nameEn: "Switzerland", nameKo: "스위스", wave: "wave-3", role: "destination" },
+  { code: "AE", slug: "ae", nameEn: "United Arab Emirates", nameKo: "아랍에미리트", wave: "wave-3", role: "destination" },
   { code: "BR", slug: "br", nameEn: "Brazil", nameKo: "브라질", wave: "wave-4", role: "destination" },
   { code: "AR", slug: "ar", nameEn: "Argentina", nameKo: "아르헨티나", wave: "wave-4", role: "destination" },
   { code: "CL", slug: "cl", nameEn: "Chile", nameKo: "칠레", wave: "wave-4", role: "destination" },
+  { code: "NZ", slug: "nz", nameEn: "New Zealand", nameKo: "뉴질랜드", wave: "pilot", role: "destination" },
+  { code: "NO", slug: "no", nameEn: "Norway", nameKo: "노르웨이", wave: "wave-2", role: "destination" },
+  { code: "FI", slug: "fi", nameEn: "Finland", nameKo: "핀란드", wave: "wave-2", role: "destination" },
 ]
 
 export const PILOT_COUNTRY_SLUGS = ["jp", "sg", "fr"] as const

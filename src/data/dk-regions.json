@@ -1,0 +1,92 @@
+[
+  {
+    "code": "HST",
+    "nameEn": "Hovedstaden",
+    "nameKo": "호베스탄",
+    "slug": "hovedstaden",
+    "lat": 55.88,
+    "lng": 12.57,
+    "rent": {
+      "monthlyDkk": 10500,
+      "weeklyDkk": 2420,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "2512", "7411", "2142", "3113"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "MID",
+    "nameEn": "Midtjylland",
+    "nameKo": "미드jylland",
+    "slug": "midtjylland",
+    "lat": 56.16,
+    "lng": 10.21,
+    "rent": {
+      "monthlyDkk": 7500,
+      "weeklyDkk": 1730,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "7411", "2141", "2512", "3113"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "SDJ",
+    "nameEn": "Syddanmark",
+    "nameKo": "시대너마크",
+    "slug": "syddanmark",
+    "lat": 55.23,
+    "lng": 9.98,
+    "rent": {
+      "monthlyDkk": 6500,
+      "weeklyDkk": 1500,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "7411", "2141", "3113", "2512"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "SJA",
+    "nameEn": "Sjælland",
+    "nameKo": "쉐란",
+    "slug": "sjaelland",
+    "lat": 55.40,
+    "lng": 11.79,
+    "rent": {
+      "monthlyDkk": 7000,
+      "weeklyDkk": 1610,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "7411", "6111", "6210", "5121"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "NOR",
+    "nameEn": "Nordjylland",
+    "nameKo": "노르jylland",
+    "slug": "nordjylland",
+    "lat": 57.10,
+    "lng": 9.56,
+    "rent": {
+      "monthlyDkk": 5500,
+      "weeklyDkk": 1270,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221", "7411", "3222", "2351", "3411"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  }
+]

@@ -20,7 +20,13 @@ import { SG_AREA_MAP_PAGES } from "@/lib/sg-map-seo"
 import { KR_REGIONS, KR_UNIVERSITIES, isKoreaRegionIndexable } from "@/data/kr-map-data"
 import { FR_CITIES, FR_REGIONS, FR_UNIVERSITIES, isFranceCityIndexable, isFranceRegionIndexable } from "@/data/fr-map-data"
 import { ES_CITIES, ES_COMMUNITIES, ES_PROVINCES, ES_UNIVERSITIES, isSpainCityIndexable, isSpainCommunityIndexable, isSpainProvinceIndexable } from "@/data/es-map-data"
+import { NZ_UNIVERSITIES } from "@/data/nz-map-data"
+import { NO_UNIVERSITIES } from "@/data/no-map-data"
+import { SE_UNIVERSITIES } from "@/data/se-map-data"
+import { DK_UNIVERSITIES } from "@/data/dk-map-data"
+import { FI_UNIVERSITIES } from "@/data/fi-map-data"
 import { STUDY_CONCEPTS } from "@/data/study-concepts"
+import { isCountrySearchIndexable } from "@/lib/new-country-release-gate"
 
 const BASE = "https://www.campcareer.com"
 
@@ -70,6 +76,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/countries/spain`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
   ]
 
+  const countryProfileStaticPages: MetadataRoute.Sitemap = [
+    { code: "NZ", paths: ["/nz", "/nz/jobs"] },
+    { code: "NO", paths: ["/no", "/no/jobs"] },
+    { code: "SE", paths: ["/se", "/se/jobs"] },
+    { code: "DK", paths: ["/dk", "/dk/jobs"] },
+    { code: "FI", paths: ["/fi", "/fi/jobs"] },
+  ].flatMap(({ code, paths }) =>
+    isCountrySearchIndexable(code)
+      ? paths.map((path) => ({
+          url: BASE + path,
+          lastModified: lastModStatic,
+          priority: 0.85,
+          changeFrequency: "weekly" as const,
+        }))
+      : [],
+  )
+
   const blogPages: MetadataRoute.Sitemap = getAllPosts().map((post) => ({
     url: `${BASE}/blog/${post.slug}`,
     lastModified: new Date(post.date),
@@ -77,12 +100,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "monthly",
   }))
 
-  const countryDetailPages: MetadataRoute.Sitemap = COUNTRY_ROI_INSIGHTS.map((country) => ({
-    url: `${BASE}${country.href}`,
-    lastModified: new Date(COUNTRY_ROI_DATA_META.lastUpdated),
-    priority: 0.85,
-    changeFrequency: "weekly",
-  }))
+  const countryDetailPages: MetadataRoute.Sitemap = COUNTRY_ROI_INSIGHTS
+    .filter((country) => isCountrySearchIndexable(country.code))
+    .map((country) => ({
+      url: `${BASE}${country.href}`,
+      lastModified: new Date(COUNTRY_ROI_DATA_META.lastUpdated),
+      priority: 0.85,
+      changeFrequency: "weekly",
+    }))
 
   // Raw college IDs/UUIDs are intentionally excluded from the sitemap.
   // Search indexing is concentrated on readable Maps URLs instead.
@@ -238,6 +263,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const esProvincePages: MetadataRoute.Sitemap = ES_PROVINCES.filter(isSpainProvinceIndexable).map((item) => ({ url: `${BASE}/maps/es/provinces/${item.slug}`, lastModified: new Date(item.lastChecked), priority: 0.6, changeFrequency: "monthly" as const }))
   const esCityPages: MetadataRoute.Sitemap = ES_CITIES.filter(isSpainCityIndexable).map((item) => ({ url: `${BASE}/maps/es/cities/${item.slug}`, lastModified: new Date(item.lastChecked), priority: 0.55, changeFrequency: "monthly" as const }))
   const esUniversityPages: MetadataRoute.Sitemap = ES_UNIVERSITIES.filter((item) => item.reviewStatus === "approved").map((item) => ({ url: `${BASE}/map/es/university/${item.slug}`, lastModified: new Date(item.lastChecked), priority: 0.55, changeFrequency: "monthly" as const }))
+  const nzUniversityPages: MetadataRoute.Sitemap = isCountrySearchIndexable("NZ") ? NZ_UNIVERSITIES.filter((item) => item.reviewStatus === "approved").map((item) => ({ url: `${BASE}/map/nz/university/${item.slug}`, lastModified: new Date(item.lastChecked), priority: 0.55, changeFrequency: "monthly" as const })) : []
+  const noUniversityPages: MetadataRoute.Sitemap = isCountrySearchIndexable("NO") ? NO_UNIVERSITIES.filter((item) => item.reviewStatus === "approved").map((item) => ({ url: `${BASE}/map/no/university/${item.slug}`, lastModified: new Date(item.lastChecked), priority: 0.55, changeFrequency: "monthly" as const })) : []
+  const seUniversityPages: MetadataRoute.Sitemap = isCountrySearchIndexable("SE") ? SE_UNIVERSITIES.filter((item) => item.reviewStatus === "approved").map((item) => ({ url: `${BASE}/map/se/university/${item.slug}`, lastModified: new Date(item.lastChecked), priority: 0.55, changeFrequency: "monthly" as const })) : []
+  const dkUniversityPages: MetadataRoute.Sitemap = isCountrySearchIndexable("DK") ? DK_UNIVERSITIES.filter((item) => item.reviewStatus === "approved").map((item) => ({ url: `${BASE}/map/dk/university/${item.slug}`, lastModified: new Date(item.lastChecked), priority: 0.55, changeFrequency: "monthly" as const })) : []
+  const fiUniversityPages: MetadataRoute.Sitemap = isCountrySearchIndexable("FI") ? FI_UNIVERSITIES.filter((item) => item.reviewStatus === "approved").map((item) => ({ url: `${BASE}/map/fi/university/${item.slug}`, lastModified: new Date(item.lastChecked), priority: 0.55, changeFrequency: "monthly" as const })) : []
 
   const fieldPages: MetadataRoute.Sitemap = STUDY_CONCEPTS.flatMap((concept) => [
     { url: `${BASE}/fields/${concept.slug}`, lastModified: lastModStatic, priority: 0.75, changeFrequency: "monthly" as const },
@@ -255,9 +285,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }))
   })
 
-  const total = staticPages.length + blogPages.length + countryDetailPages.length + mapOccupationPages.length + pilotOccupationPages.length +
-    ieLangSchoolPages.length + mapPages.length + jpMapPages.length + sgMapPages.length + krRegionPages.length + krUniversityPages.length + frRegionPages.length + frCityPages.length + frUniversityPages.length + esCommunityPages.length + esProvincePages.length + esCityPages.length + esUniversityPages.length + usUnivPages.length + auUnivPages.length + caUnivPages.length + ukUnivPages.length + deUnivPages.length + nlUnivPages.length + fieldPages.length + countryFieldPages.length
-  console.log(`[sitemap] counts — static: ${staticPages.length}, blog: ${blogPages.length}, country details: ${countryDetailPages.length}, map occupations: ${mapOccupationPages.length}, pilot occupations: ${pilotOccupationPages.length}, IE schools: ${ieLangSchoolPages.length}, map: ${mapPages.length}, JP regional maps: ${jpMapPages.length}, SG regional maps: ${sgMapPages.length}, KR regional maps: ${krRegionPages.length}, KR universities: ${krUniversityPages.length}, FR regions: ${frRegionPages.length}, FR cities: ${frCityPages.length}, FR universities: ${frUniversityPages.length}, US universities: ${usUnivPages.length}, AU universities: ${auUnivPages.length}, CA universities: ${caUnivPages.length}, UK universities: ${ukUnivPages.length}, DE universities: ${deUnivPages.length}, NL universities: ${nlUnivPages.length}, TOTAL: ${total}`)
+  const total = staticPages.length + countryProfileStaticPages.length + blogPages.length + countryDetailPages.length + mapOccupationPages.length + pilotOccupationPages.length +
+    ieLangSchoolPages.length + mapPages.length + jpMapPages.length + sgMapPages.length + krRegionPages.length + krUniversityPages.length + frRegionPages.length + frCityPages.length + frUniversityPages.length + esCommunityPages.length + esProvincePages.length + esCityPages.length + esUniversityPages.length + nzUniversityPages.length + noUniversityPages.length + seUniversityPages.length + dkUniversityPages.length + fiUniversityPages.length + usUnivPages.length + auUnivPages.length + caUnivPages.length + ukUnivPages.length + deUnivPages.length + nlUnivPages.length + fieldPages.length + countryFieldPages.length
+  console.log(`[sitemap] counts — static: ${staticPages.length}, blog: ${blogPages.length}, country details: ${countryDetailPages.length}, map occupations: ${mapOccupationPages.length}, pilot occupations: ${pilotOccupationPages.length}, IE schools: ${ieLangSchoolPages.length}, map: ${mapPages.length}, JP regional maps: ${jpMapPages.length}, SG regional maps: ${sgMapPages.length}, KR regional maps: ${krRegionPages.length}, KR universities: ${krUniversityPages.length}, FR regions: ${frRegionPages.length}, FR cities: ${frCityPages.length}, FR universities: ${frUniversityPages.length}, NZ universities: ${nzUniversityPages.length}, NO universities: ${noUniversityPages.length}, SE universities: ${seUniversityPages.length}, DK universities: ${dkUniversityPages.length}, FI universities: ${fiUniversityPages.length}, US universities: ${usUnivPages.length}, AU universities: ${auUnivPages.length}, CA universities: ${caUnivPages.length}, UK universities: ${ukUnivPages.length}, DE universities: ${deUnivPages.length}, NL universities: ${nlUnivPages.length}, TOTAL: ${total}`)
 
-  return [...staticPages, ...blogPages, ...countryDetailPages, ...fieldPages, ...countryFieldPages, ...mapOccupationPages, ...pilotOccupationPages, ...ieLangSchoolPages, ...mapPages, ...jpMapPages, ...sgMapPages, ...krRegionPages, ...krUniversityPages, ...frRegionPages, ...frCityPages, ...frUniversityPages, ...esCommunityPages, ...esProvincePages, ...esCityPages, ...esUniversityPages, ...usUnivPages, ...auUnivPages, ...caUnivPages, ...ukUnivPages, ...deUnivPages, ...nlUnivPages]
+  return [...staticPages, ...countryProfileStaticPages, ...blogPages, ...countryDetailPages, ...fieldPages, ...countryFieldPages, ...mapOccupationPages, ...pilotOccupationPages, ...ieLangSchoolPages, ...mapPages, ...jpMapPages, ...sgMapPages, ...krRegionPages, ...krUniversityPages, ...frRegionPages, ...frCityPages, ...frUniversityPages, ...esCommunityPages, ...esProvincePages, ...esCityPages, ...esUniversityPages, ...nzUniversityPages, ...noUniversityPages, ...seUniversityPages, ...dkUniversityPages, ...fiUniversityPages, ...usUnivPages, ...auUnivPages, ...caUnivPages, ...ukUnivPages, ...deUnivPages, ...nlUnivPages]
 }

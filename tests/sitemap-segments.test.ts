@@ -26,3 +26,11 @@ test("URL-set XML escapes query parameters", () => {
   const xml = urlSetXml([{ url: "https://www.campcareer.com/map?country=au&tab=pay" }])
   assert.match(xml, /country=au&amp;tab=pay/)
 })
+
+test("country sitemap index publishes profile-ready countries but not quarantined packs", () => {
+  const xml = sitemapIndexXml()
+  assert.ok(xml.includes("/sitemaps/country-au.xml"))
+  assert.ok(xml.includes("/sitemaps/country-fr.xml"))
+  assert.equal(xml.includes("/sitemaps/country-nz.xml"), false)
+  assert.equal(xml.includes("/sitemaps/country-fi.xml"), false)
+})

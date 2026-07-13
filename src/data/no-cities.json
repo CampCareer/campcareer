@@ -1,0 +1,12 @@
+[
+  { "code": "OSL", "regionCode": "OSL", "nameEn": "Oslo", "nameKo": "오슬로", "slug": "oslo", "lat": 59.9139, "lng": 10.7522, "rent": { "monthlyNok": 15000, "status": "available" }, "lastChecked": "2025-07-01", "reviewStatus": "approved" },
+  { "code": "BGO", "regionCode": "VEL", "nameEn": "Bergen", "nameKo": "베르겐", "slug": "bergen", "lat": 60.3913, "lng": 5.3221, "rent": { "monthlyNok": 11500, "status": "available" }, "lastChecked": "2025-07-01", "reviewStatus": "approved" },
+  { "code": "TRD", "regionCode": "TRN", "nameEn": "Trondheim", "nameKo": "트론트하임", "slug": "trondheim", "lat": 63.4305, "lng": 10.3951, "rent": { "monthlyNok": 10500, "status": "available" }, "lastChecked": "2025-07-01", "reviewStatus": "approved" },
+  { "code": "SVG", "regionCode": "ROG", "nameEn": "Stavanger", "nameKo": "스타방에르", "slug": "stavanger", "lat": 58.9700, "lng": 5.7331, "rent": { "monthlyNok": 11000, "status": "available" }, "lastChecked": "2025-07-01", "reviewStatus": "approved" },
+  { "code": "KRS", "regionCode": "AGD", "nameEn": "Kristiansand", "nameKo": "크리스티안산", "slug": "kristiansand", "lat": 58.1467, "lng": 8.0019, "rent": { "monthlyNok": 9500, "status": "available" }, "lastChecked": "2025-07-01", "reviewStatus": "approved" },
+  { "code": "TOS", "regionCode": "TRO", "nameEn": "Tromsø", "nameKo": "트롬쇠", "slug": "tromso", "lat": 69.6492, "lng": 18.9553, "rent": { "monthlyNok": 10500, "status": "available" }, "lastChecked": "2025-07-01", "reviewStatus": "approved" },
+  { "code": "DRN", "regionCode": "BUS", "nameEn": "Drammen", "nameKo": "드라멘", "slug": "drammen", "lat": 59.7439, "lng": 10.2044, "rent": { "monthlyNok": 10000, "status": "available" }, "lastChecked": "2025-07-01", "reviewStatus": "approved" },
+  { "code": "FRO", "regionCode": "OST", "nameEn": "Fredrikstad", "nameKo": "프레데릭스ตา", "slug": "fredrikstad", "lat": 59.2181, "lng": 11.0414, "rent": { "monthlyNok": 9500, "status": "available" }, "lastChecked": "2025-07-01", "reviewStatus": "approved" },
+  { "code": "BOO", "regionCode": "NOR", "nameEn": "Bodø", "nameKo": "뢰데", "slug": "bodo", "lat": 67.2800, "lng": 14.4049, "rent": { "monthlyNok": 9000, "status": "available" }, "lastChecked": "2025-07-01", "reviewStatus": "approved" },
+  { "code": "AES", "regionCode": "MRD", "nameEn": "Ålesund", "nameKo": "올레순", "slug": "alesund", "lat": 62.4734, "lng": 6.1521, "rent": { "monthlyNok": 9000, "status": "available" }, "lastChecked": "2025-07-01", "reviewStatus": "approved" }
+]

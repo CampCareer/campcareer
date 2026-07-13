@@ -1,0 +1,80 @@
+[
+  {
+    "category": "shortage",
+    "sourceName": "Immigration New Zealand Green List",
+    "sourceUrl": "https://www.immigration.govt.nz/new-zealand-visas/preparing-a-visa-application/working-in-nz/green-list",
+    "datasetUrls": [],
+    "contentHash": "placeholder-nz-green-list-2025",
+    "retrievedAt": "2025-07-01T00:00:00.000Z",
+    "lastChecked": "2025-07-01",
+    "method": "official-web",
+    "licenseStatus": "public-administrative-source",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "salary",
+    "sourceName": "Stats NZ Income Survey 2025",
+    "sourceUrl": "https://www.stats.govt.nz/information-releases/ income-statistics-year-ended-june-2025/",
+    "datasetUrls": [],
+    "contentHash": "placeholder-nz-income-2025",
+    "retrievedAt": "2025-07-01T00:00:00.000Z",
+    "lastChecked": "2025-07-01",
+    "method": "official-download",
+    "licenseStatus": "public-statistics",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "rent",
+    "sourceName": "Tenancy Services NZ Bond Data",
+    "sourceUrl": "https://www.tenancy.govt.nz/rent-bond/rent-bond-statistics/",
+    "datasetUrls": [],
+    "contentHash": "placeholder-nz-rent-2025",
+    "retrievedAt": "2025-07-01T00:00:00.000Z",
+    "lastChecked": "2025-07-01",
+    "method": "official-download",
+    "licenseStatus": "public-statistics",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "occupation",
+    "sourceName": "Hīkina te Mahi — Skill Shortage Lists",
+    "sourceUrl": "https://www.immigration.govt.nz/new-zealand-visas/preparing-a-visa-application/working-nz/skill-shortage-lists",
+    "datasetUrls": [],
+    "contentHash": "placeholder-nz-skill-shortage-2025",
+    "retrievedAt": "2025-07-01T00:00:00.000Z",
+    "lastChecked": "2025-07-01",
+    "method": "official-web",
+    "licenseStatus": "public-administrative-source",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "visa-pathway",
+    "sourceName": "Immigration New Zealand — Study to Work pathway",
+    "sourceUrl": "https://www.immigration.govt.nz/new-zealand-visas/applying-for-a-visa/visa-factsheet/going-from-study-to-work",
+    "datasetUrls": [],
+    "contentHash": "placeholder-nz-study-to-work-2025",
+    "retrievedAt": "2025-07-01T00:00:00.000Z",
+    "lastChecked": "2025-07-01",
+    "method": "official-web",
+    "licenseStatus": "public-administrative-source",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "tuition",
+    "sourceName": "Education New Zealand — Study with New Zealand",
+    "sourceUrl": "https://www.studywithnz.govt.nz/",
+    "datasetUrls": [],
+    "contentHash": "placeholder-nz-tuition-2025",
+    "retrievedAt": "2025-07-01T00:00:00.000Z",
+    "lastChecked": "2025-07-01",
+    "method": "official-web",
+    "licenseStatus": "public-administrative-source",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  }
+]

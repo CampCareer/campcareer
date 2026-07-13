@@ -1,0 +1,80 @@
+[
+  {
+    "category": "shortage",
+    "sourceName": "Swedish Public Employment Service (Arbetsförmedlingen) Occupation Shortage Statistics",
+    "sourceUrl": "https://arbetsformedlingen.se/for-arbetssokande/yrken-och-framtid/yrkesprognoser",
+    "datasetUrls": [],
+    "contentHash": "placeholder-se-shortage-2025",
+    "retrievedAt": "2025-07-01T00:00:00.000Z",
+    "lastChecked": "2025-07-01",
+    "method": "official-download",
+    "licenseStatus": "public-statistics",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "salary",
+    "sourceName": "Statistics Sweden (SCB) Earnings Statistics",
+    "sourceUrl": "https://www.scb.se/en/statistics/labour-and-earnings/",
+    "datasetUrls": [],
+    "contentHash": "placeholder-se-salary-2025",
+    "retrievedAt": "2025-07-01T00:00:00.000Z",
+    "lastChecked": "2025-07-01",
+    "method": "official-download",
+    "licenseStatus": "public-statistics",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "rent",
+    "sourceName": "Statistics Sweden (SCB) Housing Statistics",
+    "sourceUrl": "https://www.scb.se/en/statistics/housing-and-construction/",
+    "datasetUrls": [],
+    "contentHash": "placeholder-se-rent-2025",
+    "retrievedAt": "2025-07-01T00:00:00.000Z",
+    "lastChecked": "2025-07-01",
+    "method": "official-download",
+    "licenseStatus": "public-statistics",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "tuition",
+    "sourceName": "Universityadmission.se",
+    "sourceUrl": "https://www.universityadmissions.se/",
+    "datasetUrls": [],
+    "contentHash": "placeholder-se-tuition-2025",
+    "retrievedAt": "2025-07-01T00:00:00.000Z",
+    "lastChecked": "2025-07-01",
+    "method": "official-web",
+    "licenseStatus": "public-information",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "visa-pathway",
+    "sourceName": "Swedish Migration Agency (Migrationsverket)",
+    "sourceUrl": "https://www.migrationsverket.se/English/Private-individuals/Working-in-Sweden/",
+    "datasetUrls": [],
+    "contentHash": "placeholder-se-visa-2025",
+    "retrievedAt": "2025-07-01T00:00:00.000Z",
+    "lastChecked": "2025-07-01",
+    "method": "official-web",
+    "licenseStatus": "public-information",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "graduate-outcomes",
+    "sourceName": "Statistics Sweden (SCB) Education Outcomes",
+    "sourceUrl": "https://www.scb.se/en/statistics/education/",
+    "datasetUrls": [],
+    "contentHash": "placeholder-se-outcomes-2025",
+    "retrievedAt": "2025-07-01T00:00:00.000Z",
+    "lastChecked": "2025-07-01",
+    "method": "official-download",
+    "licenseStatus": "public-statistics",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  }
+]

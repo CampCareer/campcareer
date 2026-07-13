@@ -76,10 +76,10 @@ export function recommendStudyCountries(input: RecommendationInputV3): Recommend
 
   for (const country of COUNTRY_ROI_INSIGHTS) {
     const coverage = concept.coverageByCountry[country.code] ?? "CATALOG"
-    const sourceIsReady = Object.values(country.sources).every(
-      (source) => source.reviewStatus === "approved",
-    )
-    const canRank = coverage === "DECISION_READY" && sourceIsReady && concept.legacyField
+    // V2/V3 used broad five-field scores. They are retained only for existing
+    // saved-plan readability and must never rank a live country comparison.
+    // V4 requires an exact canonical-career crosswalk plus current source rows.
+    const canRank = false
 
     if (!canRank) {
       unrankedCountries.push(buildEvidenceSummary(concept, country, coverage))

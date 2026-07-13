@@ -1,4 +1,5 @@
 import type { ConceptCountryCoverage, StudyConcept } from "@/lib/study-product/types"
+import { LAUNCH_COUNTRY_CODES } from "@/data/launch-countries"
 
 export const STUDY_CATEGORIES = [
   { id: "trades", label: "Construction & Skilled Trades", labelKo: "건설·기술직" },
@@ -13,7 +14,7 @@ export const STUDY_CATEGORIES = [
   { id: "transport", label: "Transport, Aviation & Maritime", labelKo: "운송·항공·해양" },
 ] as const
 
-const DESTINATIONS = ["AU", "US", "CA", "UK", "IE", "DE", "NL", "BE"] as const
+const DESTINATIONS = LAUNCH_COUNTRY_CODES
 
 function coverage(
   decisionReady: readonly string[],

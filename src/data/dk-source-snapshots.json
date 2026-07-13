@@ -1,0 +1,80 @@
+[
+  {
+    "category": "shortage",
+    "sourceName": "Danish Agency for Labour Market and Recruitment (STAR) Shortage Occupations",
+    "sourceUrl": "https://starservice.mim.dk/starservice/occupations/list",
+    "datasetUrls": [],
+    "contentHash": "placeholder-dk-shortage-2025",
+    "retrievedAt": "2025-07-01T00:00:00.000Z",
+    "lastChecked": "2025-07-01",
+    "method": "official-download",
+    "licenseStatus": "public-statistics",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "salary",
+    "sourceName": "Statistics Denmark (DST) Earnings Statistics",
+    "sourceUrl": "https://www.dst.dk/en/statistik/emner/arbejde-og-indkomst/loen-og-ansaettelse",
+    "datasetUrls": [],
+    "contentHash": "placeholder-dk-salary-2025",
+    "retrievedAt": "2025-07-01T00:00:00.000Z",
+    "lastChecked": "2025-07-01",
+    "method": "official-download",
+    "licenseStatus": "public-statistics",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "rent",
+    "sourceName": "Statistics Denmark (DST) Housing Statistics",
+    "sourceUrl": "https://www.dst.dk/en/statistik/emner/boliger-og-ejendomme",
+    "datasetUrls": [],
+    "contentHash": "placeholder-dk-rent-2025",
+    "retrievedAt": "2025-07-01T00:00:00.000Z",
+    "lastChecked": "2025-07-01",
+    "method": "official-download",
+    "licenseStatus": "public-statistics",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "tuition",
+    "sourceName": "Study in Denmark",
+    "sourceUrl": "https://studyindenmark.dk/",
+    "datasetUrls": [],
+    "contentHash": "placeholder-dk-tuition-2025",
+    "retrievedAt": "2025-07-01T00:00:00.000Z",
+    "lastChecked": "2025-07-01",
+    "method": "official-web",
+    "licenseStatus": "public-information",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "visa-pathway",
+    "sourceName": "Danish Agency for International Recruitment and Integration (SIRI)",
+    "sourceUrl": "https://www.nyidanmark.dk/en-GB/Words-and-concepts/US/Establishment-Card/",
+    "datasetUrls": [],
+    "contentHash": "placeholder-dk-visa-2025",
+    "retrievedAt": "2025-07-01T00:00:00.000Z",
+    "lastChecked": "2025-07-01",
+    "method": "official-web",
+    "licenseStatus": "public-information",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "graduate-outcomes",
+    "sourceName": "Statistics Denmark (DST) Education Outcomes",
+    "sourceUrl": "https://www.dst.dk/en/statistik/emner/uddannelse-og-viden",
+    "datasetUrls": [],
+    "contentHash": "placeholder-dk-outcomes-2025",
+    "retrievedAt": "2025-07-01T00:00:00.000Z",
+    "lastChecked": "2025-07-01",
+    "method": "official-download",
+    "licenseStatus": "public-statistics",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  }
+]

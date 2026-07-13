@@ -8,6 +8,7 @@ import {
   type FieldKey,
   type GoalKey,
 } from "@/data/country-roi-mvp"
+import { isCountryDecisionReady } from "@/lib/new-country-release-gate"
 
 export type RiskToleranceKey = "low" | "medium" | "high"
 export type LanguageReadinessKey = "english-only" | "can-learn-local" | "multilingual"
@@ -58,6 +59,10 @@ const COUNTRY_RISK_LEVEL: Record<string, number> = {
   UK: 3,
   NL: 2,
   BE: 2,
+  NZ: 2,
+  NO: 2,
+  SE: 2,
+  DK: 2,
 }
 
 const COUNTRY_LANGUAGE_FIT: Record<string, Record<LanguageReadinessKey, number>> = {
@@ -69,6 +74,10 @@ const COUNTRY_LANGUAGE_FIT: Record<string, Record<LanguageReadinessKey, number>>
   UK: { "english-only": 96, "can-learn-local": 94, multilingual: 94 },
   NL: { "english-only": 78, "can-learn-local": 88, multilingual: 92 },
   BE: { "english-only": 62, "can-learn-local": 82, multilingual: 94 },
+  NZ: { "english-only": 96, "can-learn-local": 92, multilingual: 92 },
+  NO: { "english-only": 82, "can-learn-local": 86, multilingual: 92 },
+  SE: { "english-only": 85, "can-learn-local": 88, multilingual: 92 },
+  DK: { "english-only": 86, "can-learn-local": 87, multilingual: 92 },
 }
 
 const WEIGHTS: ScoreBreakdown = {
@@ -110,6 +119,7 @@ export function recommendCountries(
   countries: CountryRoiInsight[] = COUNTRY_ROI_INSIGHTS,
 ): CountryRecommendation[] {
   return countries
+    .filter((country) => isCountryDecisionReady(country.code))
     .map((country) => {
       const breakdown = buildBreakdown(country, input)
       const matchScore = Math.round(

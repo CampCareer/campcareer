@@ -1,0 +1,12 @@
+[
+  { "code": "STO", "regionCode": "AB", "nameEn": "Stockholm", "nameKo": "스톡홀름", "slug": "stockholm", "lat": 59.3293, "lng": 18.0686, "rent": { "monthlySek": 13000, "status": "available" }, "lastChecked": "2025-07-01", "reviewStatus": "approved" },
+  { "code": "GOT", "regionCode": "O", "nameEn": "Gothenburg", "nameKo": "예테보리", "slug": "gothenburg", "lat": 57.7089, "lng": 11.9746, "rent": { "monthlySek": 10000, "status": "available" }, "lastChecked": "2025-07-01", "reviewStatus": "approved" },
+  { "code": "MAL", "regionCode": "M", "nameEn": "Malmö", "nameKo": "말뫼", "slug": "malmo", "lat": 55.6050, "lng": 13.0038, "rent": { "monthlySek": 9000, "status": "available" }, "lastChecked": "2025-07-01", "reviewStatus": "approved" },
+  { "code": "UPP", "regionCode": "C", "nameEn": "Uppsala", "nameKo": "우ppsala", "slug": "uppsala", "lat": 59.8586, "lng": 17.6389, "rent": { "monthlySek": 8500, "status": "available" }, "lastChecked": "2025-07-01", "reviewStatus": "approved" },
+  { "code": "LNK", "regionCode": "E", "nameEn": "Linköping", "nameKo": "린코핑", "slug": "linkoping", "lat": 58.4108, "lng": 15.6214, "rent": { "monthlySek": 7800, "status": "available" }, "lastChecked": "2025-07-01", "reviewStatus": "approved" },
+  { "code": "OBT", "regionCode": "AC", "nameEn": "Umeå", "nameKo": "우메오", "slug": "umea", "lat": 63.8258, "lng": 20.2630, "rent": { "monthlySek": 7000, "status": "available" }, "lastChecked": "2025-07-01", "reviewStatus": "approved" },
+  { "code": "NVK", "regionCode": "BD", "nameEn": "Luleå", "nameKo": "룰레오", "slug": "lulea", "lat": 65.5848, "lng": 22.1547, "rent": { "monthlySek": 6000, "status": "available" }, "lastChecked": "2025-07-01", "reviewStatus": "approved" },
+  { "code": "OBR", "regionCode": "T", "nameEn": "Örebro", "nameKo": "외레브로", "slug": "orebro", "lat": 59.2753, "lng": 15.2134, "rent": { "monthlySek": 6500, "status": "available" }, "lastChecked": "2025-07-01", "reviewStatus": "approved" },
+  { "code": "VST", "regionCode": "U", "nameEn": "Västerås", "nameKo": "베스테로스", "slug": "vasteras", "lat": 59.6099, "lng": 16.5448, "rent": { "monthlySek": 7000, "status": "available" }, "lastChecked": "2025-07-01", "reviewStatus": "approved" },
+  { "code": "NRK", "regionCode": "F", "nameEn": "Jönköping", "nameKo": "욘코핑", "slug": "jonkoping", "lat": 57.7826, "lng": 14.1618, "rent": { "monthlySek": 7000, "status": "available" }, "lastChecked": "2025-07-01", "reviewStatus": "approved" }
+]

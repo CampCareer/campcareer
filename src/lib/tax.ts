@@ -126,6 +126,58 @@ function calcNLTax(gross: number): number {
   return Math.round(38441 * 0.3582 + (76817 - 38441) * 0.3748 + (gross - 76817) * 0.4950)
 }
 
+function calcNZTax(gross: number): number {
+  // New Zealand income tax 2024-25 (NZD, single earner)
+  // NZD 0-15,600: 10.5%
+  // NZD 15,601-53,500: 17.5%
+  // NZD 53,501-78,100: 30%
+  // NZD 78,101-180,000: 33%
+  // NZD 180,001+: 39%
+  // ACC levy ~1.46% (simplified)
+  let tax = 0
+  if (gross <= 15600)       tax = gross * 0.105
+  else if (gross <= 53500)  tax = 15600 * 0.105 + (gross - 15600) * 0.175
+  else if (gross <= 78100)  tax = 15600 * 0.105 + (53500 - 15600) * 0.175 + (gross - 53500) * 0.30
+  else if (gross <= 180000) tax = 15600 * 0.105 + (53500 - 15600) * 0.175 + (78100 - 53500) * 0.30 + (gross - 78100) * 0.33
+  else                       tax = 15600 * 0.105 + (53500 - 15600) * 0.175 + (78100 - 53500) * 0.30 + (180000 - 78100) * 0.33 + (gross - 180000) * 0.39
+
+  const acc = gross * 0.0146
+  return Math.round(tax + acc)
+}
+
+function calcNOTax(gross: number): number {
+  // Norwegian income tax 2025 (NOK, single filer)
+  // NOK 0-208,050: 0%
+  // NOK 208,050-292,850: 1.7% (trinnskatt step 2)
+  // NOK 292,850-670,000: 4.0% (trinnskatt step 3)
+  // NOK 670,000-937,900: 13.2% (trinnskatt step 4)
+  // NOK 937,900+: 16.2% (trinnskatt step 5)
+  // Base income tax: 22% flat
+  // National insurance (folketrygden): 7.8% on wage income
+  const baseIncomeTax = gross * 0.22
+
+  let trinnskatt = 0
+  if (gross > 208050 && gross <= 292850) trinnskatt = (gross - 208050) * 0.017
+  else if (gross > 292850 && gross <= 670000) trinnskatt = (292850 - 208050) * 0.017 + (gross - 292850) * 0.04
+  else if (gross > 670000 && gross <= 937900) trinnskatt = (292850 - 208050) * 0.017 + (670000 - 292850) * 0.04 + (gross - 670000) * 0.132
+  else if (gross > 937900) trinnskatt = (292850 - 208050) * 0.017 + (670000 - 292850) * 0.04 + (937900 - 670000) * 0.132 + (gross - 937900) * 0.162
+
+  const folketrygd = gross > 58150 ? gross * 0.078 : 0
+
+  return Math.round(baseIncomeTax + trinnskatt + folketrygd)
+}
+
+function calcSETax(gross: number): number {
+  // Swedish income tax 2025 (SEK, single filer)
+  // Municipal tax: ~32% (varies by municipality, average ~32%)
+  // State income tax: 20% on income above SEK 598,500
+  // Funeral fee: 0.35%
+  const municipalTax = Math.min(gross, 598500) * 0.32
+  const stateTax = gross > 598500 ? (gross - 598500) * 0.20 : 0
+  const funeralFee = gross * 0.0035
+  return Math.round(municipalTax + stateTax + funeralFee)
+}
+
 function calcDETax(gross: number): number {
   // Simplified German income tax + social security estimation (2025)
   // Income tax (Einkommensteuer) brackets for single filers:
@@ -151,6 +203,21 @@ function calcDETax(gross: number): number {
   return Math.round(socSec + taxable * 0.45 * 1.055)
 }
 
+function calcDKTax(gross: number): number {
+  // Danish income tax 2025 (DKK, single filer)
+  // Labour market contribution (AM-bidrag): 8%
+  // Municipal tax: ~25% (average)
+  // Church tax: ~0.77%
+  // State tax: 12.11% above DKK 58,894, 15.14% above DKK 560,400
+  const amBidrag = gross * 0.08
+  const municipalTax = gross * 0.25
+  const churchTax = gross * 0.0077
+  let stateTax = 0
+  if (gross > 560400) stateTax = (560400 - 58894) * 0.1211 + (gross - 560400) * 0.1514
+  else if (gross > 58894) stateTax = (gross - 58894) * 0.1211
+  return Math.round(amBidrag + municipalTax + churchTax + stateTax)
+}
+
 export function calcTax(gross: number, country: string, stateOrProvince: string): number {
   switch (country) {
     case 'us': return calcUSTax(gross, stateOrProvince)
@@ -160,6 +227,10 @@ export function calcTax(gross: number, country: string, stateOrProvince: string)
     case 'ie': return calcIETax(gross)
     case 'de': return calcDETax(gross)
     case 'nl': return calcNLTax(gross)
+    case 'nz': return calcNZTax(gross)
+    case 'no': return calcNOTax(gross)
+    case 'se': return calcSETax(gross)
+    case 'dk': return calcDKTax(gross)
     default:   return 0
   }
 }

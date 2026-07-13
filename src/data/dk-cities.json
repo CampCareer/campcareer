@@ -1,0 +1,12 @@
+[
+  { "code": "CPH", "regionCode": "HST", "nameEn": "Copenhagen", "nameKo": "코펜하겐", "slug": "copenhagen", "lat": 55.6761, "lng": 12.5683, "rent": { "monthlyDkk": 11000, "status": "available" }, "lastChecked": "2025-07-01", "reviewStatus": "approved" },
+  { "code": "AAR", "regionCode": "MID", "nameEn": "Aarhus", "nameKo": "오르후스", "slug": "aarhus", "lat": 56.1629, "lng": 10.2039, "rent": { "monthlyDkk": 8000, "status": "available" }, "lastChecked": "2025-07-01", "reviewStatus": "approved" },
+  { "code": "ODE", "regionCode": "SDJ", "nameEn": "Odense", "nameKo": "오덴세", "slug": "odense", "lat": 55.3960, "lng": 10.4083, "rent": { "monthlyDkk": 7000, "status": "available" }, "lastChecked": "2025-07-01", "reviewStatus": "approved" },
+  { "code": "AAL", "regionCode": "NOR", "nameEn": "Aalborg", "nameKo": "올보리", "slug": "aalborg", "lat": 57.0488, "lng": 9.9217, "rent": { "monthlyDkk": 6000, "status": "available" }, "lastChecked": "2025-07-01", "reviewStatus": "approved" },
+  { "code": "ESB", "regionCode": "SDJ", "nameEn": "Esbjerg", "nameKo": "에스비에르", "slug": "esbjerg", "lat": 55.4670, "lng": 8.4518, "rent": { "monthlyDkk": 5500, "status": "available" }, "lastChecked": "2025-07-01", "reviewStatus": "approved" },
+  { "code": "RAN", "regionCode": "MID", "nameEn": "Randers", "nameKo": "란데르스", "slug": "randers", "lat": 56.4607, "lng": 10.0364, "rent": { "monthlyDkk": 5500, "status": "available" }, "lastChecked": "2025-07-01", "reviewStatus": "approved" },
+  { "code": "KOL", "regionCode": "SDJ", "nameEn": "Kolding", "nameKo": "콜딩", "slug": "kolding", "lat": 55.4904, "lng": 9.4722, "rent": { "monthlyDkk": 5500, "status": "available" }, "lastChecked": "2025-07-01", "reviewStatus": "approved" },
+  { "code": "VEJ", "regionCode": "SDJ", "nameEn": "Vejle", "nameKo": "베일레", "slug": "vejle", "lat": 55.7110, "lng": 9.5369, "rent": { "monthlyDkk": 5500, "status": "available" }, "lastChecked": "2025-07-01", "reviewStatus": "approved" },
+  { "code": "ROS", "regionCode": "SJA", "nameEn": "Roskilde", "nameKo": "로스킬레", "slug": "roskilde", "lat": 55.6419, "lng": 12.0878, "rent": { "monthlyDkk": 7000, "status": "available" }, "lastChecked": "2025-07-01", "reviewStatus": "approved" },
+  { "code": "HEL", "regionCode": "HST", "nameEn": "Helsingør", "nameKo": "헬싱르", "slug": "helsingor", "lat": 56.0361, "lng": 12.6136, "rent": { "monthlyDkk": 7500, "status": "available" }, "lastChecked": "2025-07-01", "reviewStatus": "approved" }
+]

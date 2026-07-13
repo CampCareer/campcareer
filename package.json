@@ -20,6 +20,7 @@
     "load:smoke": "node scripts/load-smoke.mjs",
     "check:map-payload": "node scripts/check-map-payloads.mjs",
     "check:data": "npx tsx scripts/check-data-quality.ts",
+    "check:new-countries": "npx tsx scripts/check-new-country-readiness.ts",
     "check:pilot": "npx tsx scripts/check-pilot-readiness.ts",
     "import:jp": "npx tsx scripts/import-japan-official-data.ts",
     "import:jp-jobtag": "npx tsx scripts/import-japan-jobtag.ts",

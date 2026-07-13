@@ -1,0 +1,272 @@
+[
+  {
+    "code": "OSL",
+    "nameEn": "Oslo",
+    "nameKo": "오슬로",
+    "slug": "oslo",
+    "lat": 59.91,
+    "lng": 10.75,
+    "rent": {
+      "monthlyNok": 14500,
+      "weeklyNok": 3350,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221","2142","2141","7411","3113"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "ROG",
+    "nameEn": "Rogaland",
+    "nameKo": "로갈란",
+    "slug": "rogaland",
+    "lat": 58.97,
+    "lng": 5.73,
+    "rent": {
+      "monthlyNok": 11500,
+      "weeklyNok": 2650,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["7411","7233","2144","2143"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "MRD",
+    "nameEn": "Møre og Romsdal",
+    "nameKo": "뢰레스달",
+    "slug": "more-og-romsdal",
+    "lat": 62.47,
+    "lng": 6.15,
+    "rent": {
+      "monthlyNok": 9500,
+      "weeklyNok": 2200,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["7233","2144","8121"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "NOR",
+    "nameEn": "Nordland",
+    "nameKo": "노를란",
+    "slug": "nordland",
+    "lat": 66.95,
+    "lng": 14.31,
+    "rent": {
+      "monthlyNok": 8500,
+      "weeklyNok": 1960,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221","2351","8121"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "OST",
+    "nameEn": "Østfold",
+    "nameKo": "쇠르폴",
+    "slug": "ostfold",
+    "lat": 59.18,
+    "lng": 11.03,
+    "rent": {
+      "monthlyNok": 10500,
+      "weeklyNok": 2420,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221","3113","3411"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "AKE",
+    "nameEn": "Akershus",
+    "nameKo": "아케르스후스",
+    "slug": "akershus",
+    "lat": 59.95,
+    "lng": 10.90,
+    "rent": {
+      "monthlyNok": 12500,
+      "weeklyNok": 2880,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2142","2141","2221"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "BUS",
+    "nameEn": "Buskerud",
+    "nameKo": "부스케루",
+    "slug": "buskerud",
+    "lat": 60.17,
+    "lng": 9.05,
+    "rent": {
+      "monthlyNok": 10000,
+      "weeklyNok": 2300,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221","7411","3411"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "INN",
+    "nameEn": "Innlandet",
+    "nameKo": "인란",
+    "slug": "innlandet",
+    "lat": 61.15,
+    "lng": 10.47,
+    "rent": {
+      "monthlyNok": 8000,
+      "weeklyNok": 1840,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221","2351","2211"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "VST",
+    "nameEn": "Vestfold",
+    "nameKo": "베스트폴",
+    "slug": "vestfold",
+    "lat": 59.29,
+    "lng": 10.42,
+    "rent": {
+      "monthlyNok": 10500,
+      "weeklyNok": 2420,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221","7411","2222"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "TEL",
+    "nameEn": "Telemark",
+    "nameKo": "텔레마르크",
+    "slug": "telemark",
+    "lat": 59.21,
+    "lng": 9.58,
+    "rent": {
+      "monthlyNok": 8500,
+      "weeklyNok": 1960,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221","7311","2145"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "AGD",
+    "nameEn": "Agder",
+    "nameKo": "아그데르",
+    "slug": "agder",
+    "lat": 58.47,
+    "lng": 7.91,
+    "rent": {
+      "monthlyNok": 9500,
+      "weeklyNok": 2190,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221","3113","7411"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "VEL",
+    "nameEn": "Vestland",
+    "nameKo": "베스틀란",
+    "slug": "vestland",
+    "lat": 60.39,
+    "lng": 5.32,
+    "rent": {
+      "monthlyNok": 11000,
+      "weeklyNok": 2530,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221","7411","7233","2144"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "TRN",
+    "nameEn": "Trøndelag",
+    "nameKo": "뢰렌달라그",
+    "slug": "trondelag",
+    "lat": 63.43,
+    "lng": 10.39,
+    "rent": {
+      "monthlyNok": 10000,
+      "weeklyNok": 2300,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221","2142","7411"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "TRO",
+    "nameEn": "Troms",
+    "nameKo": "트롬스",
+    "slug": "troms",
+    "lat": 69.65,
+    "lng": 18.96,
+    "rent": {
+      "monthlyNok": 10000,
+      "weeklyNok": 2300,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221","2351","2211"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  },
+  {
+    "code": "FIN",
+    "nameEn": "Finnmark",
+    "nameKo": "핀마르크",
+    "slug": "finnmark",
+    "lat": 70.20,
+    "lng": 26.02,
+    "rent": {
+      "monthlyNok": 8000,
+      "weeklyNok": 1840,
+      "period": "2025 Q1",
+      "definition": "Median monthly rent for 1-2 bedroom apartment",
+      "status": "available"
+    },
+    "topShortage": ["2221","2351","8121"],
+    "lastChecked": "2025-07-01",
+    "reviewStatus": "approved"
+  }
+]
