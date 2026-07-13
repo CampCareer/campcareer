@@ -33,7 +33,7 @@ import { getSingaporeCareerLinks, SG_DEMAND_OCCUPATIONS, type SingaporeDemandOcc
 import { koreaJobSearchLinks, type KoreaOccupation, type KoreaUniversity } from "@/data/kr-map-data"
 import { FR_DEMAND_BY_CODE, FR_PCS_LABELS, franceJobSearchUrl, type FranceCity, type FranceDemandOccupation, type FranceSalaryGroup, type FranceUniversity } from "@/data/fr-map-data"
 import { spainJobSearchUrl, type SpainCity, type SpainOccupation, type SpainSalaryGroup, type SpainUniversity } from "@/data/es-map-data"
-import { type NZRegion, type NZOccupation, type NZUniversity } from "@/data/nz-map-data"
+import { type NZRegion, type NZOccupation, type NZUniversity, NZ_OCCUPATION_BY_CODE, NZ_REGIONS } from "@/data/nz-map-data"
 
 const LeafletMap = dynamic(() => import("./LeafletMap"), {
   ssr: false,
@@ -1496,7 +1496,7 @@ function NZInfoPanel({ region, universities, shortageCount, locale }: { region: 
   )
 }
 
-function NZShortageList({ rows, locale }: { rows: NZOccupation[]; locale: string }) {
+function NZShortageList({ rows, locale, onSelectOcc }: { rows: NZOccupation[]; locale: string; onSelectOcc?: (code: string) => void }) {
   const [limit, setLimit] = useState(10)
   const visible = rows.slice(0, limit)
   if (rows.length === 0) {
@@ -1506,7 +1506,11 @@ function NZShortageList({ rows, locale }: { rows: NZOccupation[]; locale: string
     <ol>
       {visible.map((occ, i) => (
         <li key={occ.anzscoCode}>
-          <div className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5">
+          <button
+            type="button"
+            onClick={() => onSelectOcc?.(occ.anzscoCode)}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50"
+          >
             <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
             <span className="min-w-0 flex-1">
               <span className="block truncate text-sm font-medium text-slate-800">
@@ -1524,7 +1528,7 @@ function NZShortageList({ rows, locale }: { rows: NZOccupation[]; locale: string
             <span className="shrink-0 text-right text-sm font-semibold tabular-nums text-slate-700">
               ${(occ.medianSalaryNzd / 1000).toFixed(0)}k
             </span>
-          </div>
+          </button>
         </li>
       ))}
       {limit < rows.length && (
@@ -1542,7 +1546,7 @@ function NZShortageList({ rows, locale }: { rows: NZOccupation[]; locale: string
   )
 }
 
-function NZHighPayList({ rows, locale }: { rows: NZOccupation[]; locale: string }) {
+function NZHighPayList({ rows, locale, onSelectOcc }: { rows: NZOccupation[]; locale: string; onSelectOcc?: (code: string) => void }) {
   const [limit, setLimit] = useState(10)
   const visible = rows.slice(0, limit)
   if (rows.length === 0) {
@@ -1552,7 +1556,11 @@ function NZHighPayList({ rows, locale }: { rows: NZOccupation[]; locale: string 
     <ol>
       {visible.map((occ, i) => (
         <li key={occ.anzscoCode}>
-          <div className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5">
+          <button
+            type="button"
+            onClick={() => onSelectOcc?.(occ.anzscoCode)}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-50"
+          >
             <span className="w-5 shrink-0 text-sm tabular-nums text-slate-400">{i + 1}</span>
             <span className="min-w-0 flex-1">
               <span className="block truncate text-sm font-medium text-slate-800">
@@ -1563,7 +1571,7 @@ function NZHighPayList({ rows, locale }: { rows: NZOccupation[]; locale: string 
             <span className="shrink-0 text-right text-sm font-semibold tabular-nums text-slate-700">
               ${(occ.medianSalaryNzd / 1000).toFixed(0)}k
             </span>
-          </div>
+          </button>
         </li>
       ))}
       {limit < rows.length && (
@@ -1610,6 +1618,133 @@ function NZUniversityInfoCard({ university, onClose, locale }: { university: NZU
           {locale === "ko" ? "공식 사이트" : "Official site"} <ExternalLink className="h-3.5 w-3.5" />
         </a>
       </div>
+    </>
+  )
+}
+
+function nzJobSearchUrls(occ: NZOccupation, regionName?: string): Array<{ label: string; url: string }> {
+  const q = encodeURIComponent([occ.nameEn, regionName].filter(Boolean).join(" "))
+  return [
+    { label: "Seek", url: `https://www.seek.co.nz/${occ.nameEn.toLowerCase().replace(/\s+/g, "-")}-jobs?search=${q}` },
+    { label: "Indeed", url: `https://nz.indeed.com/jobs?q=${q}` },
+    { label: "Immigration NZ", url: "https://www.immigration.govt.nz/new-zealand-visas/preparing-a-visa-application/working-in-nz/green-list" },
+    { label: "Careers NZ", url: `https://www.careers.govt.nz/jobs-search?search=${q}` },
+  ]
+}
+
+function NZOccupationDetail({
+  occ,
+  regionName,
+  regionCode,
+  universities,
+  locale,
+  onBack,
+  onClose,
+}: {
+  occ: NZOccupation | null
+  regionName: string
+  regionCode: string
+  universities: NZUniversity[]
+  locale: string
+  onBack: () => void
+  onClose: () => void
+}) {
+  const name = occ ? (locale === "ko" ? occ.nameKo : occ.nameEn) : regionName
+  const shortageWidth = occ ? Math.round((occ.shortageRating / 5) * 100) : 0
+  const nzUnivsByField = occ
+    ? universities.filter((u) => u.relatedFields.includes(occ.relatedField))
+    : universities
+  const jobLinks = occ ? nzJobSearchUrls(occ, regionName) : []
+
+  return (
+    <>
+      <div className="flex items-center justify-between px-5 pt-4">
+        <button type="button" onClick={onBack} className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-800 transition-colors">
+          <ChevronLeft className="h-4 w-4" />
+          {null}
+        </button>
+        <button type="button" onClick={onClose} aria-label="Close" className="-mr-1 rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700">
+          <X className="h-4 w-4" />
+        </button>
+      </div>
+
+      <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
+        {occ ? (
+          <>
+            <h2 className="font-sans text-lg font-semibold text-slate-900 tracking-tight">{name}</h2>
+
+            <div className="mt-3 flex flex-wrap items-center gap-1.5">
+              <Badge tone="gray">ANZSCO {occ.anzscoCode}</Badge>
+              {occ.shortageRating >= 4 && <Badge tone="gray">{locale === "ko" ? "높은 부족" : "High Shortage"}</Badge>}
+              {occ.shortageRating >= 3 && occ.shortageRating < 4 && <Badge tone="amber">{locale === "ko" ? "부족" : "Shortage"}</Badge>}
+            </div>
+
+            <div className="mt-5 space-y-4">
+              <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">{locale === "ko" ? "중위 급여 (NZD)" : "Median Salary (NZD)"}</p>
+                <p className="mt-1 text-xl font-bold tabular-nums text-slate-800">NZ${occ.medianSalaryNzd.toLocaleString()}</p>
+                <p className="mt-0.5 text-[10px] text-slate-400">{occ.employmentThousands.toLocaleString()}k {locale === "ko" ? "고용" : "employed"}</p>
+              </div>
+
+              <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">{locale === "ko" ? "국가 부족도" : "National Shortage"}</p>
+                <div className="mt-2 flex items-center gap-3">
+                  <div className="flex-1 h-2 rounded-full bg-slate-200 overflow-hidden">
+                    <div className={cn("h-full rounded-full transition-all", occ.shortageRating >= 4 ? "bg-red-500" : occ.shortageRating >= 3 ? "bg-amber-500" : "bg-blue-500")} style={{ width: `${shortageWidth}%` }} />
+                  </div>
+                  <span className="shrink-0 text-sm font-semibold tabular-nums text-slate-700">{occ.shortageRating}/5</span>
+                </div>
+              </div>
+
+              <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">{locale === "ko" ? "관련 분야" : "Related Field"}</p>
+                <p className="mt-1 text-sm font-medium text-slate-800">{occ.relatedField}</p>
+                {regionName && (
+                  <p className="mt-0.5 text-[10px] text-slate-400">{locale === "ko" ? `${regionName} 지역` : `${regionName} region`}</p>
+                )}
+              </div>
+
+              {nzUnivsByField.length > 0 && (
+                <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                  <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider mb-2">{locale === "ko" ? "관련 대학" : "Related Universities"}</p>
+                  <div className="space-y-2">
+                    {nzUnivsByField.map((u) => (
+                      <a key={u.slug} href={u.officialUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between rounded-md border border-slate-100 bg-white p-2.5 transition-colors hover:border-slate-300 hover:bg-slate-50">
+                        <div>
+                          <p className="text-sm font-medium text-slate-800">{u.nameEn}</p>
+                          <p className="text-[10px] text-slate-400">{u.cityName}{u.worldRanking ? ` · QS #${u.worldRanking}` : ""}</p>
+                        </div>
+                        <ExternalLink className="h-3.5 w-3.5 shrink-0 text-blue-600" />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {jobLinks.length > 0 && (
+                <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                  <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider mb-2">{locale === "ko" ? "구인 사이트" : "Job Search"}</p>
+                  <div className="flex flex-wrap gap-x-3 gap-y-1.5">
+                    {jobLinks.map((link) => (
+                      <a key={link.url} href={link.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 text-[11px] text-blue-600 hover:text-blue-800 underline underline-offset-2">
+                        <ExternalLink className="h-3 w-3" />
+                        {link.label}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+            </div>
+          </>
+        ) : (
+          <p className="py-8 text-center text-sm text-slate-400">{locale === "ko" ? "직업을 선택하세요" : "Select an occupation"}</p>
+        )}
+      </div>
+
+      <p className="border-t border-slate-100 px-5 py-3 text-xs text-slate-400">
+        Sources: Immigration NZ · Seek · Stats NZ · QS World University Rankings
+      </p>
     </>
   )
 }
@@ -2005,6 +2140,11 @@ function Panel({
     track("click_occupation", { type: "es-high-pay", code: salary.cnoCode, name: salary.nameEn, region: selected })
     setSelectedOccCode(`es-pay-${selected}-${salary.cnoCode}`)
   }
+  const handleSelectNZOcc = (code: string) => {
+    const occ = NZ_OCCUPATION_BY_CODE.get(code)
+    track("click_occupation", { type: "nz", code, name: occ?.nameEn ?? code, region: selected })
+    setSelectedOccCode(`nz-${code}`)
+  }
   const handleBack = () => setSelectedOccCode(null)
   const handleBackNero = () => setSelectedNeroA4(null)
 
@@ -2071,6 +2211,22 @@ function Panel({
   }
   if (selectedESSalary) {
     return <ESSalaryOccupationDetail salary={selectedESSalary} communityName={stateName} onBack={handleBack} onClose={onClose} />
+  }
+
+  const isNzOccSelected = selectedOccCode?.startsWith("nz-") ?? false
+  const nzSelectedOcc = isNzOccSelected ? NZ_OCCUPATION_BY_CODE.get(selectedOccCode!.slice(3)) ?? null : null
+  if (isNzOccSelected) {
+    return (
+      <NZOccupationDetail
+        occ={nzSelectedOcc}
+        regionName={stateName}
+        regionCode={selected}
+        universities={nzUnivs}
+        locale={locale}
+        onBack={handleBack}
+        onClose={onClose}
+      />
+    )
   }
 
   if (selectedOccCode && resolvedCAOcc) {
@@ -2341,7 +2497,7 @@ function Panel({
         {tab === "shortage" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && activeCountry !== "NL" && activeCountry !== "BE" && activeCountry !== "JP" && activeCountry !== "SG" && activeCountry !== "KR" && activeCountry !== "FR" && activeCountry !== "ES" && !isNZ && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
         {tab === "shortage" && isNZ && (
           selected ? (
-            <NZShortageList rows={nzShortage} locale={locale} />
+            <NZShortageList rows={nzShortage} locale={locale} onSelectOcc={handleSelectNZOcc} />
           ) : (
             <p className="py-8 text-center text-sm text-slate-400">{t.map.selectStateFirst}</p>
           )
@@ -2418,7 +2574,7 @@ function Panel({
         {tab === "pay" && isES && <ESHighPayList rows={esHighPay} onSelect={handleSelectESSalary} />}
         {tab === "pay" && isNZ && (
           selected ? (
-            <NZHighPayList rows={nzHighPay} locale={locale} />
+            <NZHighPayList rows={nzHighPay} locale={locale} onSelectOcc={handleSelectNZOcc} />
           ) : (
             <p className="py-8 text-center text-sm text-slate-400">{t.map.selectStateFirst}</p>
           )
