@@ -219,6 +219,10 @@ export default function LeafletMap({
   const onSelectFranceCityRef = useRef(onSelectFranceCity)
   const onSelectSpainCityRef = useRef(onSelectSpainCity)
   const onSelectUniversityRef = useRef(onSelectUniversity)
+  // Keep async GeoJSON loaders aligned with the latest render. Updating this
+  // during render prevents an initial AU effect from repainting over a deep
+  // link such as /map?country=fi.
+  activeCountryRef.current = activeCountry
   onSelectStateRef.current = onSelectState
   onSelectCountryRef.current = onSelectCountry
   onSelectSA4Ref.current = onSelectSA4
@@ -599,6 +603,11 @@ export default function LeafletMap({
         else if (activeCountryRef.current === "KR") map.fitBounds(KR_BOUNDS)
         else if (activeCountryRef.current === "FR") map.fitBounds(FR_BOUNDS)
         else if (activeCountryRef.current === "ES") map.fitBounds(ES_BOUNDS)
+        else if (activeCountryRef.current === "NZ") map.fitBounds(NZ_BOUNDS)
+        else if (activeCountryRef.current === "NO") map.fitBounds(NO_BOUNDS)
+        else if (activeCountryRef.current === "SE") map.fitBounds(SE_BOUNDS)
+        else if (activeCountryRef.current === "DK") map.fitBounds(DK_BOUNDS)
+        else if (activeCountryRef.current === "FI") map.fitBounds(FI_BOUNDS)
         else map.fitBounds(WORLD_BOUNDS)
         didFitRef.current = true
       }
@@ -608,7 +617,7 @@ export default function LeafletMap({
     // Zoom change → update marker visibility
     map.on("zoomend", () => {
       const c = activeCountryRef.current
-      if (c === "US" || c === "AU" || c === "CA" || c === "UK" || c === "DE" || c === "NL" || c === "KR" || c === "FR" || c === "ES") updateMarkers()
+      if (c === "US" || c === "AU" || c === "CA" || c === "UK" || c === "DE" || c === "NL" || c === "KR" || c === "FR" || c === "ES" || c === "NZ" || c === "NO" || c === "SE" || c === "DK" || c === "FI") updateMarkers()
     })
 
     // World countries layer
@@ -1565,9 +1574,20 @@ export default function LeafletMap({
           },
         })
         noLayerRef.current = noLayer
-        if (activeCountryRef.current === "NO") noLayer.addTo(map)
+        showOnlyNordicLayer("NO", noLayer)
       })
       .catch((error) => console.error("[LeafletMap] NO region GeoJSON load failed:", error))
+
+    // Boundary requests finish independently. When a user changes country while
+    // one is still downloading, never leave the previously loaded country on
+    // the map: the last resolved layer must honour the currently selected one.
+    const showOnlyNordicLayer = (country: "NO" | "SE" | "DK" | "FI", layer: L.GeoJSON) => {
+      if (activeCountryRef.current !== country) return
+      for (const detailLayer of [noLayerRef.current, seLayerRef.current, dkLayerRef.current, fiLayerRef.current]) {
+        if (detailLayer && detailLayer !== layer && map.hasLayer(detailLayer)) map.removeLayer(detailLayer)
+      }
+      if (!map.hasLayer(layer)) layer.addTo(map)
+    }
 
     const loadNordicRegions = (country: "SE" | "DK" | "FI", file: string, color: string, layerRef: MutableRefObject<L.GeoJSON | null>, byCode: MutableRefObject<Record<string, L.Polygon>>) => {
       fetch(file).then((response) => {
@@ -1591,7 +1611,7 @@ export default function LeafletMap({
           },
         })
         layerRef.current = countryLayer
-        if (activeCountryRef.current === country) countryLayer.addTo(map)
+        showOnlyNordicLayer(country, countryLayer)
       }).catch((error) => console.error(`[LeafletMap] ${country} region GeoJSON load failed:`, error))
     }
     loadNordicRegions("SE", "/se-regions.geojson", "#0f766e", seLayerRef, seRegionByCode)
@@ -1699,12 +1719,10 @@ export default function LeafletMap({
       fitToBounds(AU_BOUNDS, true)
     } else if (activeCountry === "US") {
       if (usLayerRef.current) map.addLayer(usLayerRef.current)
-      if (caLayerRef.current) map.addLayer(caLayerRef.current)
       fitToBounds(US_BOUNDS, true)
       updateMarkers()
     } else if (activeCountry === "CA") {
       if (caLayerRef.current) map.addLayer(caLayerRef.current)
-      if (usLayerRef.current) map.addLayer(usLayerRef.current)
       fitToBounds(CA_BOUNDS, true)
     } else if (activeCountry === "IE") {
       if (ieLayerRef.current) map.addLayer(ieLayerRef.current)
@@ -1790,6 +1808,9 @@ export default function LeafletMap({
         const isES = isSpain(props)
         const isNZ = isNewZealand(props)
         const isNO = isNorway(props)
+        const isSE = isSweden(props)
+        const isDK = isDenmark(props)
+        const isFI = isFinland(props)
         const hide = (activeCountry === "AU" && isAU)
           || (activeCountry === "US" && isUS)
           || (activeCountry === "IE" && isIE)
@@ -1804,6 +1825,9 @@ export default function LeafletMap({
           || (activeCountry === "ES" && isES && esLayerRef.current != null)
           || (activeCountry === "NZ" && isNZ && nzLayerRef.current != null)
           || (activeCountry === "NO" && isNO && noLayerRef.current != null)
+          || (activeCountry === "SE" && isSE && seLayerRef.current != null)
+          || (activeCountry === "DK" && isDK && dkLayerRef.current != null)
+          || (activeCountry === "FI" && isFI && fiLayerRef.current != null)
         if (hide) return { opacity: 0, fillOpacity: 0, weight: 0 }
         if (isAU) return { fillColor: "#e0e7ff", color: "#6366f1", weight: 2, fillOpacity: 0.5 }
         if (isUS) return { fillColor: "#dcfce7", color: "#22c55e", weight: 2, fillOpacity: 0.5 }
@@ -1819,6 +1843,9 @@ export default function LeafletMap({
         if (isES) return { fillColor: "#ffedd5", color: "#ea580c", weight: 2, fillOpacity: 0.55 }
         if (isNZ) return { fillColor: "#dbeafe", color: "#1d4ed8", weight: 2, fillOpacity: 0.55 }
         if (isNO) return { fillColor: "#ede9fe", color: "#6d28d9", weight: 2, fillOpacity: 0.55 }
+        if (isSE) return { fillColor: "#ccfbf1", color: "#0f766e", weight: 2, fillOpacity: 0.55 }
+        if (isDK) return { fillColor: "#fef3c7", color: "#b45309", weight: 2, fillOpacity: 0.55 }
+        if (isFI) return { fillColor: "#e0f2fe", color: "#0369a1", weight: 2, fillOpacity: 0.55 }
         return { fillColor: "#f8fafc", color: "#cbd5e1", weight: 0.8, fillOpacity: 0.6 }
       })
     }

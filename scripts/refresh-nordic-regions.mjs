@@ -87,7 +87,9 @@ await writeCollection(OUTPUTS.dk, dkSource.features.map((feature) => {
   return { type: "Feature", properties: { code, name: feature.properties.navn.replace(/^Region /, ""), sourceCode: feature.properties.kode }, geometry: simplifyGeometry(feature.geometry) }
 }))
 
-const fiSource = await getJson("https://geo.stat.fi/geoserver/tilastointialueet/wfs?service=WFS&version=2.0.0&request=GetFeature&typeNames=tilastointialueet:maakunta1000k_2025&outputFormat=application/json")
+// Statistics Finland serves this WFS layer in EPSG:3067 by default. Leaflet
+// expects GeoJSON coordinates in WGS84, so force EPSG:4326 at the source.
+const fiSource = await getJson("https://geo.stat.fi/geoserver/tilastointialueet/wfs?service=WFS&version=2.0.0&request=GetFeature&typeNames=tilastointialueet:maakunta1000k_2025&outputFormat=application/json&srsName=EPSG:4326")
 await writeCollection(OUTPUTS.fi, fiSource.features.map((feature) => ({
   type: "Feature",
   properties: { code: finlandCodeByMaakunta[feature.properties.maakunta] ?? null, name: feature.properties.name, sourceCode: feature.properties.maakunta },
