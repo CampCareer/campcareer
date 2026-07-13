@@ -54,9 +54,9 @@ export const LAUNCH_COUNTRIES: readonly LaunchCountry[] = [
   // contains no unverified wage or shortage numbers.
   { ...reviewRequired("NZ", "new-zealand", "New Zealand", "NZD"), mapReady: true },
   { ...reviewRequired("NO", "norway", "Norway", "NOK"), mapReady: true },
-  reviewRequired("SE", "sweden", "Sweden", "SEK"),
-  reviewRequired("DK", "denmark", "Denmark", "DKK"),
-  reviewRequired("FI", "finland", "Finland", "EUR"),
+  { ...reviewRequired("SE", "sweden", "Sweden", "SEK"), mapReady: true },
+  { ...reviewRequired("DK", "denmark", "Denmark", "DKK"), mapReady: true },
+  { ...reviewRequired("FI", "finland", "Finland", "EUR"), mapReady: true },
   reviewRequired("CH", "switzerland", "Switzerland", "CHF"),
   reviewRequired("AE", "united-arab-emirates", "United Arab Emirates", "AED"),
 ] as const

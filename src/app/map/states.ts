@@ -468,3 +468,18 @@ export const DK_REGION_NAMES: Record<DKRegionCode, string> = {
   SJA: "Sjælland",
   NOR: "Nordjylland",
 }
+
+// ── Finland (FI) regions (maakunnat) ───────────────────────────────────────
+
+export const FI_REGION_CODES = [
+  "UUS", "PIR", "VRS", "NSV", "NPO", "PKY", "KSR", "KAI", "NKR", "SAT", "SKR", "KYS", "KHM", "PHM", "KPK", "KYR",
+] as const
+
+export type FIRegionCode = typeof FI_REGION_CODES[number]
+
+export const FI_REGION_NAMES: Record<FIRegionCode, string> = {
+  UUS: "Uusimaa", PIR: "Pirkanmaa", VRS: "Varsinais-Suomi", NSV: "Pohjois-Savo",
+  NPO: "Pohjois-Pohjanmaa", PKY: "Päijät-Häme", KSR: "Keski-Suomi", KAI: "Kainuu",
+  NKR: "Pohjois-Karjala", SAT: "Satakunta", SKR: "Etelä-Karjala", KYS: "Etelä-Savo",
+  KHM: "Kanta-Häme", PHM: "Pohjanmaa", KPK: "Keski-Pohjanmaa", KYR: "Kymenlaakso",
+}

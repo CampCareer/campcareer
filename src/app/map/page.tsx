@@ -28,6 +28,9 @@ export default async function MapPage() {
       <div className="absolute right-4 top-4 z-[500] flex gap-2">
         <Link href="/map/nz" className="rounded-lg border border-indigo-200 bg-white px-4 py-2 text-sm font-semibold text-indigo-700 shadow-sm hover:bg-indigo-50">New Zealand map</Link>
         <Link href="/map/no" className="rounded-lg border border-indigo-200 bg-white px-4 py-2 text-sm font-semibold text-indigo-700 shadow-sm hover:bg-indigo-50">Norway map</Link>
+        <Link href="/map/se" className="rounded-lg border border-indigo-200 bg-white px-4 py-2 text-sm font-semibold text-indigo-700 shadow-sm hover:bg-indigo-50">Sweden map</Link>
+        <Link href="/map/dk" className="rounded-lg border border-indigo-200 bg-white px-4 py-2 text-sm font-semibold text-indigo-700 shadow-sm hover:bg-indigo-50">Denmark map</Link>
+        <Link href="/map/fi" className="rounded-lg border border-indigo-200 bg-white px-4 py-2 text-sm font-semibold text-indigo-700 shadow-sm hover:bg-indigo-50">Finland map</Link>
       </div>
     </div>
   )
