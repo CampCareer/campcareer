@@ -31,6 +31,7 @@ const KR_BOUNDS = L.latLngBounds([33.0, 124.5], [39.3, 132.2])
 const FR_BOUNDS = L.latLngBounds([41.0, -5.6], [51.3, 9.8])
 const ES_BOUNDS = L.latLngBounds([35.5, -10.5], [44.5, 4.5])
 const NZ_BOUNDS = L.latLngBounds([-47.5, 166.0], [-34.0, 179.0])
+const NO_BOUNDS = L.latLngBounds([57.7, 4.0], [71.5, 32.0])
 const WORLD_BOUNDS = L.latLngBounds([-90, -180], [90, 180])
 
 const RAMP_LIGHT = [237, 233, 254]
@@ -93,6 +94,10 @@ function isNewZealand(properties: Record<string, unknown>): boolean {
   return properties?.ISO_A3 === "NZL" || properties?.ADM0_A3 === "NZL"
 }
 
+function isNorway(properties: Record<string, unknown>): boolean {
+  return properties?.ISO_A3 === "NOR" || properties?.ADM0_A3 === "NOR"
+}
+
 // Natural Earth stores metropolitan France and overseas territories in one
 // country feature. CampCareer currently supports metropolitan France only, so
 // retain the European polygons and avoid a non-interactive French Guiana shape.
@@ -132,7 +137,7 @@ export default function LeafletMap({
   data: MapData
   selected: string | null
   selectedSA4: SA4Region | null
-  activeCountry: "AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL" | "BE" | "JP" | "SG" | "KR" | "FR" | "ES" | "NZ" | null
+  activeCountry: "AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL" | "BE" | "JP" | "SG" | "KR" | "FR" | "ES" | "NZ" | "NO" | null
   selectedFranceCity?: string | null
   selectedSpainCity?: string | null
   ieSchools?: Array<{
@@ -142,7 +147,7 @@ export default function LeafletMap({
     description_ko: string | null;
   }>
   onSelectState: (s: string) => void
-  onSelectCountry: (c: "AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL" | "BE" | "JP" | "SG" | "KR" | "FR" | "ES" | "NZ") => void
+  onSelectCountry: (c: "AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL" | "BE" | "JP" | "SG" | "KR" | "FR" | "ES" | "NZ" | "NO") => void
   onSelectSA4: (code: string) => void
   onSelectFranceCity?: (code: string) => void
   onSelectSpainCity?: (code: string) => void
@@ -167,7 +172,9 @@ export default function LeafletMap({
   const esLayerRef = useRef<L.GeoJSON | null>(null)
   const esCityLayerRef = useRef<L.GeoJSON | null>(null)
   const nzLayerRef = useRef<L.GeoJSON | null>(null)
+  const noLayerRef = useRef<L.GeoJSON | null>(null)
   const nzRegionByCode = useRef<Record<string, L.Polygon>>({})
+  const noRegionByCode = useRef<Record<string, L.Polygon>>({})
   const layersByCode = useRef<Partial<Record<StateCode, L.Polygon>>>({})
   const ieLayerRef = useRef<L.GeoJSON | null>(null)
   const ieCountyByCode = useRef<Record<string, L.Polygon>>({})
@@ -252,7 +259,7 @@ export default function LeafletMap({
     return () => { style.remove() }
   }, [])
 
-  function buildMarkers(country: "US" | "AU" | "CA" | "UK" | "DE" | "NL" | "KR" | "FR" | "NZ"): L.LayerGroup {
+  function buildMarkers(country: "US" | "AU" | "CA" | "UK" | "DE" | "NL" | "KR" | "FR" | "NZ" | "NO"): L.LayerGroup {
     const group = L.layerGroup()
     const colleges = country === "AU"
       ? dataRef.current.auRankedColleges
@@ -270,6 +277,8 @@ export default function LeafletMap({
       ? dataRef.current.frUniversities.map((university) => ({ college_name: university.nameFr, lat: university.lat, lng: university.lng, slug: university.slug }))
       : country === "NZ"
       ? dataRef.current.nzUniversities.map((u) => ({ college_name: u.nameEn, lat: u.lat, lng: u.lng, slug: u.slug }))
+      : country === "NO"
+      ? dataRef.current.noUniversities.map((u) => ({ college_name: u.nameEn, lat: u.lat, lng: u.lng, slug: u.slug }))
       : dataRef.current.usRankedColleges
     const placed: Array<{ key: string; slug: string }> = []
     for (const c of colleges) {
@@ -348,6 +357,11 @@ export default function LeafletMap({
     }
     if (activeCountryRef.current === "NZ" && map.getZoom() >= 5) {
       const group = buildMarkers("NZ")
+      group.addTo(map)
+      markerLayerRef.current = group
+    }
+    if (activeCountryRef.current === "NO" && map.getZoom() >= 5) {
+      const group = buildMarkers("NO")
       group.addTo(map)
       markerLayerRef.current = group
     }
@@ -611,6 +625,9 @@ export default function LeafletMap({
             if (feature && isSpain(feature.properties as Record<string, unknown>)) {
               return { fillColor: "#ffedd5", color: "#ea580c", weight: 2, fillOpacity: 0.55 }
             }
+            if (feature && isNorway(feature.properties as Record<string, unknown>)) {
+              return { fillColor: "#ede9fe", color: "#6d28d9", weight: 2, fillOpacity: 0.55 }
+            }
             return { fillColor: "#f8fafc", color: "#cbd5e1", weight: 0.8, fillOpacity: 0.6 }
           },
           onEachFeature: (feature, lyr) => {
@@ -628,16 +645,17 @@ export default function LeafletMap({
             const isFR = isFrance(props)
             const isES = isSpain(props)
             const isNZ = isNewZealand(props)
-            if (!isAU && !isUS && !isIE && !isGB && !isDE && !isNL && !isBE && !isJP && !isSG && !isKR && !isFR && !isES && !isNZ) return
+            const isNO = isNorway(props)
+            if (!isAU && !isUS && !isIE && !isGB && !isDE && !isNL && !isBE && !isJP && !isSG && !isKR && !isFR && !isES && !isNZ && !isNO) return
 
-            const name = isAU ? "Australia" : isIE ? "Ireland" : isGB ? "United Kingdom" : isDE ? "Germany" : isNL ? "Netherlands" : isBE ? "Belgium" : isJP ? "Japan" : isSG ? "Singapore" : isKR ? "South Korea" : isFR ? "France" : isES ? "Spain" : isNZ ? "New Zealand" : "United States"
+            const name = isAU ? "Australia" : isIE ? "Ireland" : isGB ? "United Kingdom" : isDE ? "Germany" : isNL ? "Netherlands" : isBE ? "Belgium" : isJP ? "Japan" : isSG ? "Singapore" : isKR ? "South Korea" : isFR ? "France" : isES ? "Spain" : isNZ ? "New Zealand" : isNO ? "Norway" : "United States"
             lyr.bindTooltip(name, {
               sticky: true,
               direction: "top",
               className: "!rounded-md !border-0 !bg-slate-900 !px-2 !py-1 !text-xs !text-white !shadow-md",
             })
             lyr.on({
-              click: () => onSelectCountryRef.current(isAU ? "AU" : isIE ? "IE" : isGB ? "UK" : isDE ? "DE" : isNL ? "NL" : isBE ? "BE" : isJP ? "JP" : isSG ? "SG" : isKR ? "KR" : isFR ? "FR" : isES ? "ES" : isNZ ? "NZ" : "US"),
+              click: () => onSelectCountryRef.current(isAU ? "AU" : isIE ? "IE" : isGB ? "UK" : isDE ? "DE" : isNL ? "NL" : isBE ? "BE" : isJP ? "JP" : isSG ? "SG" : isKR ? "KR" : isFR ? "FR" : isES ? "ES" : isNZ ? "NZ" : isNO ? "NO" : "US"),
               mouseover: () => (lyr as L.Path).setStyle({ weight: 3, fillOpacity: 0.7 }),
               mouseout: () => {
                 const baseStyle = isAU
@@ -662,6 +680,8 @@ export default function LeafletMap({
                                     ? { fillColor: "#ffedd5", color: "#ea580c", weight: 2, fillOpacity: 0.55 }
                                     : isNZ
                                       ? { fillColor: "#dbeafe", color: "#1d4ed8", weight: 2, fillOpacity: 0.55 }
+                                      : isNO
+                                        ? { fillColor: "#ede9fe", color: "#6d28d9", weight: 2, fillOpacity: 0.55 }
                                 : { fillColor: "#dcfce7", color: "#22c55e", weight: 2, fillOpacity: 0.5 }
                 ;(lyr as L.Path).setStyle(baseStyle)
               },
@@ -674,7 +694,7 @@ export default function LeafletMap({
               el.addEventListener("keydown", (e: KeyboardEvent) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault()
-                  onSelectCountryRef.current(isAU ? "AU" : isIE ? "IE" : isGB ? "UK" : isDE ? "DE" : isNL ? "NL" : isBE ? "BE" : isJP ? "JP" : isSG ? "SG" : isKR ? "KR" : isFR ? "FR" : isES ? "ES" : isNZ ? "NZ" : "US")
+                  onSelectCountryRef.current(isAU ? "AU" : isIE ? "IE" : isGB ? "UK" : isDE ? "DE" : isNL ? "NL" : isBE ? "BE" : isJP ? "JP" : isSG ? "SG" : isKR ? "KR" : isFR ? "FR" : isES ? "ES" : isNZ ? "NZ" : isNO ? "NO" : "US")
                 }
               })
             }
@@ -684,7 +704,7 @@ export default function LeafletMap({
         // If a country is already active when the world layer loads, apply the
         // hidden style for that country's polygon so it doesn't overlap with
         // the detail layer (states/counties).
-        if (activeCountryRef.current === "AU" || activeCountryRef.current === "US" || activeCountryRef.current === "IE" || activeCountryRef.current === "UK" || activeCountryRef.current === "DE" || activeCountryRef.current === "NL" || activeCountryRef.current === "BE" || activeCountryRef.current === "JP" || activeCountryRef.current === "SG" || activeCountryRef.current === "KR" || activeCountryRef.current === "FR" || activeCountryRef.current === "ES" || activeCountryRef.current === "NZ") {
+        if (activeCountryRef.current === "AU" || activeCountryRef.current === "US" || activeCountryRef.current === "IE" || activeCountryRef.current === "UK" || activeCountryRef.current === "DE" || activeCountryRef.current === "NL" || activeCountryRef.current === "BE" || activeCountryRef.current === "JP" || activeCountryRef.current === "SG" || activeCountryRef.current === "KR" || activeCountryRef.current === "FR" || activeCountryRef.current === "ES" || activeCountryRef.current === "NZ" || activeCountryRef.current === "NO") {
           const country = activeCountryRef.current
           worldLayer.setStyle((feature) => {
             const props = feature?.properties as Record<string, unknown> | undefined
@@ -702,7 +722,8 @@ export default function LeafletMap({
             const isFR = isFrance(props)
             const isES = isSpain(props)
             const isNZ = isNewZealand(props)
-            const hide = (country === "AU" && isAU) || (country === "US" && isUS) || (country === "IE" && isIE) || (country === "UK" && isGB) || (country === "DE" && isDE) || (country === "NL" && isNL) || (country === "BE" && isBE) || (country === "JP" && isJP) || (country === "KR" && isKR && krLayerRef.current != null) || (country === "FR" && isFR && frLayerRef.current != null) || (country === "ES" && isES && esLayerRef.current != null) || (country === "NZ" && isNZ && nzLayerRef.current != null)
+            const isNO = isNorway(props)
+            const hide = (country === "AU" && isAU) || (country === "US" && isUS) || (country === "IE" && isIE) || (country === "UK" && isGB) || (country === "DE" && isDE) || (country === "NL" && isNL) || (country === "BE" && isBE) || (country === "JP" && isJP) || (country === "KR" && isKR && krLayerRef.current != null) || (country === "FR" && isFR && frLayerRef.current != null) || (country === "ES" && isES && esLayerRef.current != null) || (country === "NZ" && isNZ && nzLayerRef.current != null) || (country === "NO" && isNO && noLayerRef.current != null)
             if (hide) return { opacity: 0, fillOpacity: 0, weight: 0 }
             if (isAU) return { fillColor: "#e0e7ff", color: "#6366f1", weight: 2, fillOpacity: 0.5 }
             if (isUS) return { fillColor: "#dcfce7", color: "#22c55e", weight: 2, fillOpacity: 0.5 }
@@ -716,6 +737,7 @@ export default function LeafletMap({
             if (isKR) return { fillColor: "#ffe4e6", color: "#e11d48", weight: 2, fillOpacity: 0.55 }
             if (isFR) return { fillColor: "#dbeafe", color: "#2563eb", weight: 2, fillOpacity: 0.55 }
             if (isNZ) return { fillColor: "#dbeafe", color: "#1d4ed8", weight: 2, fillOpacity: 0.55 }
+            if (isNO) return { fillColor: "#ede9fe", color: "#6d28d9", weight: 2, fillOpacity: 0.55 }
             return { fillColor: "#f8fafc", color: "#cbd5e1", weight: 0.8, fillOpacity: 0.6 }
           })
         }
@@ -1499,6 +1521,33 @@ export default function LeafletMap({
       })
       .catch((error) => console.error("[LeafletMap] NZ region GeoJSON load failed:", error))
 
+    fetch("/no-regions.geojson")
+      .then((response) => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`)
+        return response.json()
+      })
+      .then((geo: GeoJSON.FeatureCollection) => {
+        if (mapRef.current !== map) return
+        const noLayer = L.geoJSON(geo, {
+          style: () => ({ fillColor: "#ede9fe", fillOpacity: 0.58, color: "#6d28d9", weight: 1.2 }),
+          onEachFeature: (feature, layer) => {
+            const props = feature?.properties as { code?: string; name?: string } | undefined
+            const code = String(props?.code ?? "")
+            if (code) noRegionByCode.current[code] = layer as L.Polygon
+            const path = layer as L.Path
+            path.on({
+              click: () => { if (code) { onSelectCountryRef.current("NO"); onSelectStateRef.current(code) } },
+              mouseover: () => { if (selectedRef.current !== code) path.setStyle({ weight: 2.5, fillOpacity: 0.75 }) },
+              mouseout: () => { if (selectedRef.current !== code) path.setStyle({ fillColor: "#ede9fe", fillOpacity: 0.58, color: "#6d28d9", weight: 1.2 }) },
+            })
+            layer.bindTooltip(props?.name ?? code, { sticky: true, direction: "top", className: "!rounded-md !border-0 !bg-slate-900 !px-2 !py-1 !text-xs !text-white !shadow-md" })
+          },
+        })
+        noLayerRef.current = noLayer
+        if (activeCountryRef.current === "NO") noLayer.addTo(map)
+      })
+      .catch((error) => console.error("[LeafletMap] NO region GeoJSON load failed:", error))
+
     // SA4 지역 경계 — 한 번만 로드해 두고, 주 선택 시 해당 주의 지역만 렌더한다.
     fetch("/au-sa4.geojson")
       .then((r) => r.json())
@@ -1545,6 +1594,9 @@ export default function LeafletMap({
       frRegionByCode.current = {}
       esRegionByCode.current = {}
       nzRegionByCode.current = {}
+      noRegionByCode.current = {}
+      nzLayerRef.current = null
+      noLayerRef.current = null
       didFitRef.current = false
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -1572,6 +1624,7 @@ export default function LeafletMap({
     if (esLayerRef.current && map.hasLayer(esLayerRef.current)) map.removeLayer(esLayerRef.current)
     if (esCityLayerRef.current && map.hasLayer(esCityLayerRef.current)) map.removeLayer(esCityLayerRef.current)
     if (nzLayerRef.current && map.hasLayer(nzLayerRef.current)) map.removeLayer(nzLayerRef.current)
+    if (noLayerRef.current && map.hasLayer(noLayerRef.current)) map.removeLayer(noLayerRef.current)
     if (markerLayerRef.current) {
       map.removeLayer(markerLayerRef.current)
       markerLayerRef.current = null
@@ -1637,6 +1690,11 @@ export default function LeafletMap({
     } else if (activeCountry === "NZ") {
       if (nzLayerRef.current) map.addLayer(nzLayerRef.current)
       fitToBounds(NZ_BOUNDS, true)
+      updateMarkers()
+    } else if (activeCountry === "NO") {
+      if (noLayerRef.current) map.addLayer(noLayerRef.current)
+      fitToBounds(NO_BOUNDS, true)
+      updateMarkers()
     } else {
       fitToBounds(WORLD_BOUNDS, true)
     }
@@ -1660,6 +1718,7 @@ export default function LeafletMap({
         const isFR = isFrance(props)
         const isES = isSpain(props)
         const isNZ = isNewZealand(props)
+        const isNO = isNorway(props)
         const hide = (activeCountry === "AU" && isAU)
           || (activeCountry === "US" && isUS)
           || (activeCountry === "IE" && isIE)
@@ -1673,6 +1732,7 @@ export default function LeafletMap({
           || (activeCountry === "FR" && isFR && frLayerRef.current != null)
           || (activeCountry === "ES" && isES && esLayerRef.current != null)
           || (activeCountry === "NZ" && isNZ && nzLayerRef.current != null)
+          || (activeCountry === "NO" && isNO && noLayerRef.current != null)
         if (hide) return { opacity: 0, fillOpacity: 0, weight: 0 }
         if (isAU) return { fillColor: "#e0e7ff", color: "#6366f1", weight: 2, fillOpacity: 0.5 }
         if (isUS) return { fillColor: "#dcfce7", color: "#22c55e", weight: 2, fillOpacity: 0.5 }
@@ -1687,6 +1747,7 @@ export default function LeafletMap({
         if (isFR) return { fillColor: "#dbeafe", color: "#2563eb", weight: 2, fillOpacity: 0.55 }
         if (isES) return { fillColor: "#ffedd5", color: "#ea580c", weight: 2, fillOpacity: 0.55 }
         if (isNZ) return { fillColor: "#dbeafe", color: "#1d4ed8", weight: 2, fillOpacity: 0.55 }
+        if (isNO) return { fillColor: "#ede9fe", color: "#6d28d9", weight: 2, fillOpacity: 0.55 }
         return { fillColor: "#f8fafc", color: "#cbd5e1", weight: 0.8, fillOpacity: 0.6 }
       })
     }
@@ -1863,6 +1924,18 @@ export default function LeafletMap({
         const layer = esRegionByCode.current[selected]
         const bounds = layer ? safeBounds(layer.getBounds()) : null
         if (bounds) mapRef.current?.flyToBounds(bounds, { padding: [30, 30], maxZoom: 8, duration: 0.6 })
+      }
+      updateMarkers()
+    } else if (noLayerRef.current && activeCountry === "NO") {
+      noLayerRef.current.setStyle((feature) => {
+        const code = String((feature?.properties as { code?: string } | undefined)?.code ?? "")
+        const isSelected = selected === code
+        return { fillColor: "#ede9fe", fillOpacity: isSelected ? 0.85 : 0.58, color: isSelected ? "#4c1d95" : "#6d28d9", weight: isSelected ? 3 : 1.2 }
+      })
+      if (selected) {
+        const layer = noRegionByCode.current[selected]
+        const bounds = layer ? safeBounds(layer.getBounds()) : null
+        if (bounds) mapRef.current?.flyToBounds(bounds, { padding: [30, 30], maxZoom: 7, duration: 0.6 })
       }
       updateMarkers()
     }

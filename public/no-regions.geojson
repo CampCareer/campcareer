@@ -14,7 +14,7 @@
     },
     {
       "type": "Feature",
-      "properties": { "code": "VST", "name": "Vestland" },
+      "properties": { "code": "VEL", "name": "Vestland" },
       "geometry": {
         "type": "Polygon",
         "coordinates": [[[5.0, 60.10], [6.30, 60.10], [6.30, 61.00], [5.0, 61.00], [5.0, 60.10]]]
