@@ -5,7 +5,7 @@ import {
   type MapDataCountry,
 } from "@/lib/map-data"
 
-const COUNTRIES = new Set<MapDataCountry>(["AU", "US", "CA", "IE", "UK", "DE", "NL", "BE", "JP", "SG", "KR", "FR", "ES"])
+const COUNTRIES = new Set<MapDataCountry>(["AU", "US", "CA", "IE", "UK", "DE", "NL", "BE", "JP", "SG", "KR", "FR", "ES", "NZ"])
 
 export const revalidate = 86400
 

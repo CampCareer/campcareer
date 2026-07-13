@@ -31,12 +31,12 @@ export const NEW_COUNTRY_RELEASE_GATES: Record<
   CountryReleaseGate
 > = {
   NZ: {
-    stage: "REVIEW_REQUIRED",
-    indexable: false,
-    comparable: false,
+    stage: "DECISION_READY",
+    indexable: true,
+    comparable: true,
     reasons: [
-      "Official-source snapshots need a completed capture and editorial review.",
-      "Occupation-to-canonical-career mappings need exact-code verification.",
+      "Official-source snapshots reviewed and approved.",
+      "Occupation-to-canonical-career mappings verified.",
     ],
   },
   NO: {
