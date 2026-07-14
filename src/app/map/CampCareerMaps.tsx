@@ -1984,6 +1984,112 @@ function CHShortageNotice({ locale }: { locale: string }) {
   return <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-5 text-sm text-slate-600"><p className="font-medium text-slate-800">{locale === "ko" ? "공식 칸톤별 부족직군 수치가 없습니다" : "No official canton-by-occupation shortage dataset is available"}</p><p className="mt-2 text-xs leading-5">{locale === "ko" ? "SECO의 직업 신고 의무 목록은 실업률 기준 자료이므로 부족직군 순위로 사용하지 않습니다." : "SECO job-registration data is unemployment-based and is not shown as a shortage ranking."} <a className="underline hover:text-slate-800" href="https://www.arbeit.swiss/en/employers/job-registration-requirement-and-check-up-for-2026" target="_blank" rel="noopener noreferrer">SECO</a></p></div>
 }
 
+function AEInfoPanel({ emirate, locale }: { emirate: import("@/data/ae-map-data").UAEEmirate | null; locale: string }) {
+  if (!emirate) return <p className="py-8 text-center text-sm text-slate-400">{locale === "ko" ? "에미리트를 선택하세요" : "Select an emirate"}</p>
+  return (
+    <div className="space-y-4 px-4 py-3">
+      <section className="rounded-lg border border-slate-200 p-4">
+        <p className="text-xs font-medium text-slate-500">{locale === "ko" ? "에미리트 정보" : "Emirate information"}</p>
+        <h3 className="mt-1 text-lg font-semibold text-slate-950">{locale === "ko" ? emirate.nameKo : emirate.nameEn} <span className="font-normal text-slate-500">· {emirate.nameEn}</span></h3>
+        <div className="mt-3 grid grid-cols-2 gap-3">
+          <div className="rounded-lg bg-slate-50 p-3"><p className="text-xs text-slate-500">{locale === "ko" ? "면적" : "Area"}</p><p className="mt-1 text-sm font-semibold text-slate-800">{emirate.areaSqkm.toLocaleString()} km²</p></div>
+          <div className="rounded-lg bg-amber-50 p-3"><p className="text-xs text-amber-700">{locale === "ko" ? "부족 직군 수" : "Shortage occupations"}</p><p className="mt-1 text-lg font-semibold text-amber-950">39</p><p className="mt-1 text-[10px] text-amber-700">{locale === "ko" ? "전국 통계 (에미리트별 미분리)" : "National total (not split by emirate)"}</p></div>
+        </div>
+        <div className="mt-3 rounded-lg bg-slate-50 p-3">
+          <p className="text-xs text-slate-500">{locale === "ko" ? "공식 언어" : "Official language"}</p>
+          <p className="mt-1 text-sm font-medium text-slate-800">{locale === "ko" ? "아랍어 (공식), 영어 (비즈니스)" : "Arabic (official), English (business)"}</p>
+        </div>
+        <div className="mt-3 rounded-lg bg-slate-50 p-3">
+          <p className="text-xs text-slate-500">{locale === "ko" ? "통화" : "Currency"}</p>
+          <p className="mt-1 text-sm font-medium text-slate-800">AED (Dirham) — {locale === "ko" ? "소득세 없음" : "No income tax"}</p>
+        </div>
+      </section>
+      <section className="rounded-lg border border-slate-200 p-4">
+        <p className="text-xs font-medium text-slate-500">{locale === "ko" ? "골든비자 요건" : "Golden Visa eligibility"}</p>
+        <p className="mt-1 text-sm text-slate-700">{locale === "ko" ? "특정 전문직 종사자, 투자자, 우수 인재에게 5~10년 장기 거주 비자를 발급합니다." : "5-10 year long-term residence visa for eligible professionals, investors, and outstanding talents."}</p>
+        <p className="mt-2 text-[10px] text-slate-400">{locale === "ko" ? "MOHRE Level 1-2 직종, 월 AED 30,000 이상 조건" : "MOHRE Level 1-2 occupations, monthly salary ≥ AED 30,000"}</p>
+      </section>
+      <p className="px-1 text-[11px] leading-5 text-slate-500">{locale === "ko" ? "경계: " : "Boundaries: "}<a className="underline hover:text-slate-800" href="https://data.humdata.org/dataset/cod-ab-are" target="_blank" rel="noopener noreferrer">HDX COD-AB ARE</a> · {locale === "ko" ? "직업: " : "Occupations: "}<a className="underline hover:text-slate-800" href="https://www.mohre.gov.ae/en/services.aspx" target="_blank" rel="noopener noreferrer">MOHRE</a> · {locale === "ko" ? "급여: " : "Salary: "}<a className="underline hover:text-slate-800" href="https://www.cooperfitch.com/salary-guide" target="_blank" rel="noopener noreferrer">Cooper Fitch</a></p>
+    </div>
+  )
+}
+
+function AEShortageList({ data: aeShortage, locale }: { data: typeof import("@/data/ae-map-data").AE_SHORTAGE_OCCUPATIONS; locale: string }) {
+  const [expandedCategory, setExpandedCategory] = useState<string | null>(null)
+  const categories = Object.entries(aeShortage.categories) as Array<[string, { total_demand_occupations: number; top_demand: Array<{ rank: number; occupation: string; occupation_ko: string; mohre_level: number; min_salary_aed: number; demand_reason: string; golden_visa_eligible: boolean }> }]>
+  const categoryLabels: Record<string, { en: string; ko: string }> = {
+    healthcare: { en: "Healthcare", ko: "의료" },
+    engineering_technology: { en: "Engineering & Technology", ko: "공학·기술" },
+    finance_banking: { en: "Finance & Banking", ko: "금융·은행" },
+    education: { en: "Education", ko: "교육" },
+    legal: { en: "Legal", ko: "법률" },
+    science_research: { en: "Science & Research", ko: "과학·연구" },
+    creative_design: { en: "Creative & Design", ko: "크리에이티브·디자인" },
+    telecommunications: { en: "Telecommunications", ko: "통신" },
+  }
+  return (
+    <div className="space-y-2 px-4 py-3">
+      <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">
+        {locale === "ko" ? `전체 ${aeShortage.summary.total_demand_occupations}개 부족 직종 · 골든비자 대상 ${aeShortage.summary.golden_visa_eligible_count}개` : `${aeShortage.summary.total_demand_occupations} demand occupations · ${aeShortage.summary.golden_visa_eligible_count} Golden Visa eligible`}
+      </div>
+      {categories.map(([key, cat]) => {
+        const label = categoryLabels[key] ?? { en: key, ko: key }
+        const isExpanded = expandedCategory === key
+        return (
+          <div key={key} className="rounded-lg border border-slate-200">
+            <button type="button" onClick={() => setExpandedCategory(isExpanded ? null : key)} className="flex w-full items-center justify-between px-3 py-2.5 text-left hover:bg-slate-50">
+              <span className="text-sm font-medium text-slate-800">{locale === "ko" ? label.ko : label.en}</span>
+              <span className="flex items-center gap-2"><span className="text-xs text-slate-400">{cat.top_demand.length}</span>{isExpanded ? <ChevronUp className="h-4 w-4 text-slate-400" /> : <ChevronDown className="h-4 w-4 text-slate-400" />}</span>
+            </button>
+            {isExpanded && (
+              <div className="border-t border-slate-100 px-3 py-2">
+                {cat.top_demand.map((occ) => (
+                  <div key={occ.rank} className="flex items-start gap-2 py-1.5">
+                    <span className="w-5 shrink-0 text-xs tabular-nums text-slate-400">{occ.rank}</span>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-slate-800">{occ.occupation}</p>
+                      <p className="text-[10px] text-slate-400">{occ.occupation_ko}</p>
+                    </div>
+                    <div className="flex shrink-0 items-center gap-1.5">
+                      {occ.golden_visa_eligible && <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-800">GV</span>}
+                      <span className="text-[10px] text-slate-400">MOHRE L{occ.mohre_level}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+function AEHighPayList({ data: aeHighPay, locale }: { data: typeof import("@/data/ae-map-data").AE_HIGH_INCOME_OCCUPATIONS; locale: string }) {
+  return (
+    <div className="space-y-3 px-4 py-3">
+      <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">
+        {locale === "ko" ? "UAE 연봉 상위 10개 직종 (Cooper Fitch 2024). UAE는 소득세가 없습니다." : "Top 10 highest-paying occupations in UAE (Cooper Fitch 2024). UAE has no personal income tax."}
+      </div>
+      <ol>
+        {aeHighPay.top_10_high_income_occupations.map((occ) => (
+          <li key={occ.rank} className="flex items-center gap-3 rounded-lg px-3 py-2.5 hover:bg-slate-50">
+            <span className="w-5 text-sm tabular-nums text-slate-400">{occ.rank}</span>
+            <span className="min-w-0 flex-1">
+              <span className="block text-sm font-medium text-slate-800">{occ.occupation}</span>
+              <span className="block text-[10px] text-slate-400">{occ.sector}</span>
+            </span>
+            <span className="shrink-0 text-right">
+              <span className="block text-sm font-semibold tabular-nums text-slate-700">AED {(occ.monthly_min_aed / 1000).toFixed(0)}K–{(occ.monthly_max_aed / 1000).toFixed(0)}K</span>
+              <span className="block text-[10px] text-slate-400">{locale === "ko" ? "/월" : "/mo"}</span>
+            </span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  )
+}
+
 function CHUniversityInfoCard({ university, onClose, locale }: { university: CHUniversity; onClose: () => void; locale: string }) {
   return <div className="px-5 py-5"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-medium text-violet-700">{university.institutionType}</p><h2 className="mt-1 text-xl font-semibold text-slate-950">{university.nameEn}</h2><p className="mt-1 text-sm text-slate-500">{university.nameKo} · {university.cityName}</p></div><button type="button" onClick={onClose} aria-label="Close" className="rounded-md p-1 text-slate-400 hover:bg-slate-100"><X className="h-4 w-4" /></button></div><div className="mt-5 rounded-lg border border-slate-200 p-4"><p className="text-xs text-slate-500">{locale === "ko" ? "국제학생 이용 가능 여부" : "International-student availability"}</p><p className="mt-1 text-sm font-medium">{university.internationalStudentAvailability}</p><p className="mt-3 text-xs text-slate-500">{locale === "ko" ? "과정별 자격은 학교 공식 페이지에서 확인하세요." : "Confirm programme-specific eligibility on the institution’s official site."}</p></div><a href={university.officialUrl} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-violet-700 hover:underline">{locale === "ko" ? "공식 웹사이트" : "Official website"}<ExternalLink className="h-3.5 w-3.5" /></a></div>
 }
@@ -2220,6 +2326,7 @@ function Panel({
   const chCities = isCH ? (data.chCities ?? []).filter((city) => city.cantonCode === selected) : []
   const chUnivs = isCH ? (data.chUniversities ?? []).filter((university) => university.cantonCode === selected) : []
   const chShortage = isCH ? data.chShortageByCanton?.[selected] ?? [] : []
+  const aeEmirate = isAE ? data.aeEmirates.find((e) => e.code === selected) ?? null : null
   const deSalaryField = deExpLevel === "fachkräfte" ? "median_salary_eur" : deExpLevel === "spezialisten" ? "median_salary_spezialist_eur" : "median_salary_experte_eur"
   const deShortageField = deExpLevel === "fachkräfte" ? "shortage_rating" : deExpLevel === "spezialisten" ? "shortage_rating_spezialist" : "shortage_rating_experte"
   const deHighPayForLevel = useMemo(() => {
@@ -2752,6 +2859,7 @@ function Panel({
         {tab === "stateInfo" && isDK && <NordicInfoPanel region={dkRegion ? { nameEn: dkRegion.nameEn, monthlyRent: dkRegion.rent.monthlyDkk, weeklyRent: dkRegion.rent.weeklyDkk, period: dkRegion.rent.period, definition: dkRegion.rent.definition } : null} cities={dkCities.map((city) => ({ code: city.code, nameEn: city.nameEn, nameKo: city.nameKo, monthlyRent: city.rent.monthlyDkk }))} universities={dkUnivs} shortageCount={dkShortage.length} currency="DKK" locale={locale} />}
         {tab === "stateInfo" && isFI && <NordicInfoPanel region={fiRegion ? { nameEn: fiRegion.nameEn, monthlyRent: fiRegion.rent.monthlyEur, weeklyRent: fiRegion.rent.weeklyEur, period: fiRegion.rent.period, definition: fiRegion.rent.definition } : null} cities={fiCities.map((city) => ({ code: city.code, nameEn: city.nameEn, nameKo: city.nameKo, monthlyRent: city.rent.monthlyEur }))} universities={fiUnivs} shortageCount={fiShortage.length} currency="EUR" locale={locale} />}
         {tab === "stateInfo" && isCH && <CHInfoPanel region={chRegion} cities={chCities} universities={chUnivs} shortageCount={chShortage.length} locale={locale} />}
+        {tab === "stateInfo" && isAE && <AEInfoPanel emirate={aeEmirate} locale={locale} />}
         {tab === "shortage" && isAU && (
           selectedSA4 ? (
             <RegionGroupList
@@ -2812,6 +2920,7 @@ function Panel({
         {tab === "shortage" && isDK && (selected ? <NordicOccupationList rows={dkShortage.map((occ) => ({ code: occ.dosCode, classification: "DISCO-08", nameEn: occ.nameEn, nameKo: occ.nameKo, medianSalary: occ.medianSalaryDkk, employmentThousands: occ.employmentThousands, shortageRating: occ.shortageRating, relatedField: occ.relatedField, sourceYear: occ.sourceYear }))} kind="shortage" currency="DKK" locale={locale} onSelect={handleSelectDKOcc} /> : <p className="py-8 text-center text-sm text-slate-400">{t.map.selectStateFirst}</p>)}
         {tab === "shortage" && isFI && (selected ? <NordicOccupationList rows={fiShortage.map((occ) => ({ code: occ.iscoCode, classification: "ISCO-08", nameEn: occ.nameEn, nameKo: occ.nameKo, medianSalary: occ.medianSalaryEur, employmentThousands: occ.employmentThousands, shortageRating: occ.shortageRating, relatedField: occ.relatedField, sourceYear: occ.sourceYear }))} kind="shortage" currency="EUR" locale={locale} onSelect={handleSelectFIOcc} /> : <p className="py-8 text-center text-sm text-slate-400">{t.map.selectStateFirst}</p>)}
         {tab === "shortage" && isCH && <CHShortageNotice locale={locale} />}
+        {tab === "shortage" && isAE && <AEShortageList data={data.aeShortageOccupations} locale={locale} />}
         {tab === "shortage" && activeCountry === "CA" && <CAShortageList rows={Object.values(data.caOccupations)} onSelectOcc={handleSelectCAOcc} />}
         {tab === "pay" && isAU && (
           selectedSA4 ? (
@@ -2896,6 +3005,7 @@ function Panel({
         {tab === "pay" && isDK && (selected ? <NordicOccupationList rows={dkHighPay.map((occ) => ({ code: occ.dosCode, classification: "DISCO-08", nameEn: occ.nameEn, nameKo: occ.nameKo, medianSalary: occ.medianSalaryDkk, employmentThousands: occ.employmentThousands, shortageRating: occ.shortageRating, relatedField: occ.relatedField, sourceYear: occ.sourceYear }))} kind="pay" currency="DKK" locale={locale} onSelect={handleSelectDKOcc} /> : <p className="py-8 text-center text-sm text-slate-400">{t.map.selectStateFirst}</p>)}
         {tab === "pay" && isFI && (selected ? <NordicOccupationList rows={fiHighPay.map((occ) => ({ code: occ.iscoCode, classification: "ISCO-08", nameEn: occ.nameEn, nameKo: occ.nameKo, medianSalary: occ.medianSalaryEur, employmentThousands: occ.employmentThousands, shortageRating: occ.shortageRating, relatedField: occ.relatedField, sourceYear: occ.sourceYear }))} kind="pay" currency="EUR" locale={locale} onSelect={handleSelectFIOcc} /> : <p className="py-8 text-center text-sm text-slate-400">{t.map.selectStateFirst}</p>)}
         {tab === "pay" && isCH && <CHHighPayList rows={data.chHighPayNational ?? []} locale={locale} />}
+        {tab === "pay" && isAE && <AEHighPayList data={data.aeHighIncomeOccupations} locale={locale} />}
         {tab === "pay" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && activeCountry !== "NL" && activeCountry !== "BE" && activeCountry !== "JP" && activeCountry !== "SG" && activeCountry !== "KR" && activeCountry !== "FR" && activeCountry !== "ES" && !isNZ && !isNO && !isCH && !isAE && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
         {tab === "pay" && activeCountry === "CA" && <CAHighPayList rows={data.caHighPay} provinceRows={selected ? data.caHighPayByProvince[selected] ?? [] : []} onSelectOcc={handleSelectCAOcc} />}
         {tab === "pay" && isUK && <UKHighPayList rows={ukHighPay} onSelectOcc={handleSelectUKOcc} />}
