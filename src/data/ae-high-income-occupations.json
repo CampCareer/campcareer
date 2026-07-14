@@ -1,0 +1,126 @@
+{
+  "source": "Cooper Fitch UAE Salary Guide 2024, salary.ae",
+  "last_updated": "2026-07-14",
+  "currency": "AED",
+  "salary_period": "monthly_gross",
+  "note": "UAE has no personal income tax. All figures are total monthly gross in AED.",
+  "top_10_high_income_occupations": [
+    {
+      "rank": 1,
+      "occupation": "Law Firm Partner (5+ years)",
+      "sector": "Legal",
+      "monthly_min_aed": 132000,
+      "monthly_max_aed": 275000,
+      "annual_min_aed": 1584000,
+      "annual_max_aed": 3300000
+    },
+    {
+      "rank": 2,
+      "occupation": "Chief Investment Officer",
+      "sector": "Banking",
+      "monthly_min_aed": 137000,
+      "monthly_max_aed": 208000,
+      "annual_min_aed": 1644000,
+      "annual_max_aed": 2496000
+    },
+    {
+      "rank": 3,
+      "occupation": "Undersecretary",
+      "sector": "Public Sector",
+      "monthly_min_aed": 137100,
+      "monthly_max_aed": 191000,
+      "annual_min_aed": 1645200,
+      "annual_max_aed": 2292000
+    },
+    {
+      "rank": 4,
+      "occupation": "Head of Private Banking / Wealth Management (16+ years)",
+      "sector": "Banking",
+      "monthly_min_aed": 149000,
+      "monthly_max_aed": 186000,
+      "annual_min_aed": 1788000,
+      "annual_max_aed": 2232000
+    },
+    {
+      "rank": 5,
+      "occupation": "Group CFO (Large Local Groups & MNCs)",
+      "sector": "Senior Finance",
+      "monthly_min_aed": 107000,
+      "monthly_max_aed": 160000,
+      "annual_min_aed": 1284000,
+      "annual_max_aed": 1920000
+    },
+    {
+      "rank": 6,
+      "occupation": "Managing Director",
+      "sector": "Banking",
+      "monthly_min_aed": 99000,
+      "monthly_max_aed": 157000,
+      "annual_min_aed": 1188000,
+      "annual_max_aed": 1884000
+    },
+    {
+      "rank": 7,
+      "occupation": "Head of Investments / Investment Director",
+      "sector": "Banking",
+      "monthly_min_aed": 88000,
+      "monthly_max_aed": 155000,
+      "annual_min_aed": 1056000,
+      "annual_max_aed": 1860000
+    },
+    {
+      "rank": 8,
+      "occupation": "Market Head / Managing Director (15 years)",
+      "sector": "Banking",
+      "monthly_min_aed": 132000,
+      "monthly_max_aed": 154000,
+      "annual_min_aed": 1584000,
+      "annual_max_aed": 1848000
+    },
+    {
+      "rank": 9,
+      "occupation": "Chief Shared Services Officer (CSSO)",
+      "sector": "Human Resources",
+      "monthly_min_aed": 109600,
+      "monthly_max_aed": 154000,
+      "annual_min_aed": 1315200,
+      "annual_max_aed": 1848000
+    },
+    {
+      "rank": 10,
+      "occupation": "Executive Director",
+      "sector": "Public Sector",
+      "monthly_min_aed": 98600,
+      "monthly_max_aed": 154000,
+      "annual_min_aed": 1183200,
+      "annual_max_aed": 1848000
+    }
+  ],
+  "top_5_high_income_sectors": [
+    {
+      "sector": "Public Sector",
+      "avg_annual_max_aed": 1084695,
+      "role_count": 23
+    },
+    {
+      "sector": "Healthcare",
+      "avg_annual_max_aed": 1080000,
+      "role_count": 1
+    },
+    {
+      "sector": "Legal",
+      "avg_annual_max_aed": 1074000,
+      "role_count": 14
+    },
+    {
+      "sector": "Banking",
+      "avg_annual_max_aed": 909600,
+      "role_count": 65
+    },
+    {
+      "sector": "Strategy & Consulting",
+      "avg_annual_max_aed": 853090,
+      "role_count": 11
+    }
+  ]
+}

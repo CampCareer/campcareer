@@ -1,0 +1,412 @@
+{
+  "source": "MOHRE (u.ae), Golden Visa Skilled Occupations List 2025, uaexpatriates.com",
+  "last_updated": "2026-07-14",
+  "note": "UAE does not publish a formal 'shortage occupations' list. This dataset combines Golden Visa eligible occupations (MOHRE Level 1-2, salary >= AED 30,000) with Emiratisation priority sectors to indicate high-demand roles.",
+  "methodology": "Golden Visa eligible occupations indicate government-recognized high-skill demand. MOHRE Level 1-2 classification requires bachelor's degree or higher. Emiratisation targets apply to private-sector companies with 50+ employees.",
+  "categories": {
+    "healthcare": {
+      "total_demand_occupations": 7,
+      "top_demand": [
+        {
+          "rank": 1,
+          "occupation": "General Physician",
+          "occupation_ko": "일반의",
+          "mohre_level": 1,
+          "min_salary_aed": 25000,
+          "demand_reason": "Golden Visa eligible, healthcare expansion",
+          "golden_visa_eligible": true
+        },
+        {
+          "rank": 2,
+          "occupation": "Medical Specialist (Cardiology, Neurology, Oncology)",
+          "occupation_ko": "의료 전문의 (심장신경종양)",
+          "mohre_level": 1,
+          "min_salary_aed": 35000,
+          "demand_reason": "Golden Visa eligible, specialty shortage",
+          "golden_visa_eligible": true
+        },
+        {
+          "rank": 3,
+          "occupation": "Dentist / Orthodontist",
+          "occupation_ko": "치과의사",
+          "mohre_level": 1,
+          "min_salary_aed": 20000,
+          "demand_reason": "Golden Visa eligible, healthcare demand",
+          "golden_visa_eligible": true
+        },
+        {
+          "rank": 4,
+          "occupation": "Pharmacist",
+          "occupation_ko": "약사",
+          "mohre_level": 1,
+          "min_salary_aed": 15000,
+          "demand_reason": "Golden Visa eligible, healthcare sector",
+          "golden_visa_eligible": true
+        },
+        {
+          "rank": 5,
+          "occupation": "Registered Nurse / Midwife",
+          "occupation_ko": "간호사/조산사",
+          "mohre_level": 1,
+          "min_salary_aed": 12000,
+          "demand_reason": "Golden Visa eligible, persistent nursing shortage",
+          "golden_visa_eligible": true
+        },
+        {
+          "rank": 6,
+          "occupation": "Medical Laboratory Technician",
+          "occupation_ko": "의료기사",
+          "mohre_level": 2,
+          "min_salary_aed": 8000,
+          "demand_reason": "Healthcare infrastructure expansion",
+          "golden_visa_eligible": false
+        },
+        {
+          "rank": 7,
+          "occupation": "Physiotherapist",
+          "occupation_ko": "물리치료사",
+          "mohre_level": 1,
+          "min_salary_aed": 10000,
+          "demand_reason": "Healthcare and sports sector demand",
+          "golden_visa_eligible": false
+        }
+      ]
+    },
+    "engineering_technology": {
+      "total_demand_occupations": 9,
+      "top_demand": [
+        {
+          "rank": 1,
+          "occupation": "Software Engineer",
+          "occupation_ko": "소프트웨어 엔지니어",
+          "mohre_level": 1,
+          "min_salary_aed": 20000,
+          "demand_reason": "Golden Visa eligible, digital transformation",
+          "golden_visa_eligible": true
+        },
+        {
+          "rank": 2,
+          "occupation": "AI / Machine Learning Engineer",
+          "occupation_ko": "AI/머신러닝 엔지니어",
+          "mohre_level": 1,
+          "min_salary_aed": 35000,
+          "demand_reason": "Golden Visa eligible, UAE AI strategy",
+          "golden_visa_eligible": true
+        },
+        {
+          "rank": 3,
+          "occupation": "Cybersecurity Specialist",
+          "occupation_ko": "사이버보안 전문가",
+          "mohre_level": 1,
+          "min_salary_aed": 25000,
+          "demand_reason": "Golden Visa eligible, critical infrastructure protection",
+          "golden_visa_eligible": true
+        },
+        {
+          "rank": 4,
+          "occupation": "Data Scientist",
+          "occupation_ko": "데이터 과학자",
+          "mohre_level": 1,
+          "min_salary_aed": 30000,
+          "demand_reason": "Golden Visa eligible, data-driven economy",
+          "golden_visa_eligible": true
+        },
+        {
+          "rank": 5,
+          "occupation": "Cloud Computing Expert",
+          "occupation_ko": "클라우드 컴퓨팅 전문가",
+          "mohre_level": 1,
+          "min_salary_aed": 25000,
+          "demand_reason": "Golden Visa eligible, cloud migration",
+          "golden_visa_eligible": true
+        },
+        {
+          "rank": 6,
+          "occupation": "Civil Engineer",
+          "occupation_ko": "토목 엔지니어",
+          "mohre_level": 1,
+          "min_salary_aed": 18000,
+          "demand_reason": "Golden Visa eligible, infrastructure projects",
+          "golden_visa_eligible": true
+        },
+        {
+          "rank": 7,
+          "occupation": "Mechanical Engineer",
+          "occupation_ko": "기계 엔지니어",
+          "mohre_level": 1,
+          "min_salary_aed": 15000,
+          "demand_reason": "Golden Visa eligible, industrial sector",
+          "golden_visa_eligible": true
+        },
+        {
+          "rank": 8,
+          "occupation": "Electrical Engineer",
+          "occupation_ko": "전기 엔지니어",
+          "mohre_level": 1,
+          "min_salary_aed": 15000,
+          "demand_reason": "Golden Visa eligible, energy sector",
+          "golden_visa_eligible": true
+        },
+        {
+          "rank": 9,
+          "occupation": "Blockchain Developer",
+          "occupation_ko": "블록체인 개발자",
+          "mohre_level": 1,
+          "min_salary_aed": 30000,
+          "demand_reason": "Golden Visa eligible, fintech growth",
+          "golden_visa_eligible": true
+        }
+      ]
+    },
+    "finance_banking": {
+      "total_demand_occupations": 5,
+      "top_demand": [
+        {
+          "rank": 1,
+          "occupation": "Investment Manager",
+          "occupation_ko": "투자 매니저",
+          "mohre_level": 1,
+          "min_salary_aed": 30000,
+          "demand_reason": "Golden Visa eligible, financial hub status",
+          "golden_visa_eligible": true
+        },
+        {
+          "rank": 2,
+          "occupation": "Financial Analyst",
+          "occupation_ko": "재무 분석가",
+          "mohre_level": 1,
+          "min_salary_aed": 25000,
+          "demand_reason": "Golden Visa eligible, DIFC/ADGM growth",
+          "golden_visa_eligible": true
+        },
+        {
+          "rank": 3,
+          "occupation": "Risk and Compliance Officer",
+          "occupation_ko": "리스크/컴플라이언스 매니저",
+          "mohre_level": 1,
+          "min_salary_aed": 25000,
+          "demand_reason": "Golden Visa eligible, regulatory requirements",
+          "golden_visa_eligible": true
+        },
+        {
+          "rank": 4,
+          "occupation": "Chartered Accountant / Auditor",
+          "occupation_ko": "공인회계사/감사원",
+          "mohre_level": 1,
+          "min_salary_aed": 20000,
+          "demand_reason": "Golden Visa eligible, financial sector",
+          "golden_visa_eligible": true
+        },
+        {
+          "rank": 5,
+          "occupation": "Fintech Specialist",
+          "occupation_ko": "핀테크 전문가",
+          "mohre_level": 1,
+          "min_salary_aed": 25000,
+          "demand_reason": "Digital finance transformation",
+          "golden_visa_eligible": false
+        }
+      ]
+    },
+    "education": {
+      "total_demand_occupations": 4,
+      "top_demand": [
+        {
+          "rank": 1,
+          "occupation": "University Professor (STEM)",
+          "occupation_ko": "대학교수 (STEM)",
+          "mohre_level": 1,
+          "min_salary_aed": 25000,
+          "demand_reason": "Golden Visa eligible, higher education expansion",
+          "golden_visa_eligible": true
+        },
+        {
+          "rank": 2,
+          "occupation": "STEM Teacher (K-12)",
+          "occupation_ko": "STEM 교사 (K-12)",
+          "mohre_level": 1,
+          "min_salary_aed": 15000,
+          "demand_reason": "Golden Visa eligible, Emiratisation in education",
+          "golden_visa_eligible": true
+        },
+        {
+          "rank": 3,
+          "occupation": "Curriculum Designer",
+          "occupation_ko": "교과과정 설계자",
+          "mohre_level": 1,
+          "min_salary_aed": 15000,
+          "demand_reason": "Education sector modernization",
+          "golden_visa_eligible": false
+        },
+        {
+          "rank": 4,
+          "occupation": "Special Education Expert",
+          "occupation_ko": "특수교육 전문가",
+          "mohre_level": 1,
+          "min_salary_aed": 12000,
+          "demand_reason": "Inclusive education initiative",
+          "golden_visa_eligible": false
+        }
+      ]
+    },
+    "legal": {
+      "total_demand_occupations": 3,
+      "top_demand": [
+        {
+          "rank": 1,
+          "occupation": "Lawyer / Legal Advisor",
+          "occupation_ko": "변호사/법률고문",
+          "mohre_level": 1,
+          "min_salary_aed": 25000,
+          "demand_reason": "Golden Visa eligible, DIFC/ADGM legal hub",
+          "golden_visa_eligible": true
+        },
+        {
+          "rank": 2,
+          "occupation": "Intellectual Property Specialist",
+          "occupation_ko": "지식재산 전문가",
+          "mohre_level": 1,
+          "min_salary_aed": 20000,
+          "demand_reason": "Innovation economy growth",
+          "golden_visa_eligible": false
+        },
+        {
+          "rank": 3,
+          "occupation": "International Arbitration Specialist",
+          "occupation_ko": "국제중재 전문가",
+          "mohre_level": 1,
+          "min_salary_aed": 30000,
+          "demand_reason": "DIAC and DIFC-LCIA growth",
+          "golden_visa_eligible": false
+        }
+      ]
+    },
+    "science_research": {
+      "total_demand_occupations": 4,
+      "top_demand": [
+        {
+          "rank": 1,
+          "occupation": "Biotechnology Researcher",
+          "occupation_ko": "생물공학 연구원",
+          "mohre_level": 1,
+          "min_salary_aed": 20000,
+          "demand_reason": "Golden Visa eligible, research investment",
+          "golden_visa_eligible": true
+        },
+        {
+          "rank": 2,
+          "occupation": "Environmental Scientist",
+          "occupation_ko": "환경과학자",
+          "mohre_level": 1,
+          "min_salary_aed": 18000,
+          "demand_reason": "Golden Visa eligible, sustainability goals",
+          "golden_visa_eligible": true
+        },
+        {
+          "rank": 3,
+          "occupation": "Space Scientist / Engineer",
+          "occupation_ko": "우주과학자/엔지니어",
+          "mohre_level": 1,
+          "min_salary_aed": 25000,
+          "demand_reason": "Golden Visa eligible, UAE Space Agency",
+          "golden_visa_eligible": true
+        },
+        {
+          "rank": 4,
+          "occupation": "Energy / Renewable Energy Engineer",
+          "occupation_ko": "에너지/신재생에너지 엔지니어",
+          "mohre_level": 1,
+          "min_salary_aed": 20000,
+          "demand_reason": "Net Zero 2050 initiative",
+          "golden_visa_eligible": false
+        }
+      ]
+    },
+    "creative_design": {
+      "total_demand_occupations": 4,
+      "top_demand": [
+        {
+          "rank": 1,
+          "occupation": "Architect",
+          "occupation_ko": "건축가",
+          "mohre_level": 1,
+          "min_salary_aed": 15000,
+          "demand_reason": "Golden Visa eligible, mega-project pipeline",
+          "golden_visa_eligible": true
+        },
+        {
+          "rank": 2,
+          "occupation": "Interior Designer",
+          "occupation_ko": "인테리어 디자이너",
+          "mohre_level": 1,
+          "min_salary_aed": 12000,
+          "demand_reason": "Golden Visa eligible, hospitality growth",
+          "golden_visa_eligible": true
+        },
+        {
+          "rank": 3,
+          "occupation": "UX/UI Designer",
+          "occupation_ko": "UX/UI 디자이너",
+          "mohre_level": 1,
+          "min_salary_aed": 15000,
+          "demand_reason": "Digital product growth",
+          "golden_visa_eligible": false
+        },
+        {
+          "rank": 4,
+          "occupation": "Film Director / Content Creator",
+          "occupation_ko": "영상감독/콘텐츠크리에이터",
+          "mohre_level": 1,
+          "min_salary_aed": 15000,
+          "demand_reason": "Golden Visa eligible, media sector",
+          "golden_visa_eligible": true
+        }
+      ]
+    },
+    "telecommunications": {
+      "total_demand_occupations": 3,
+      "top_demand": [
+        {
+          "rank": 1,
+          "occupation": "Network Engineer",
+          "occupation_ko": "네트워크 엔지니어",
+          "mohre_level": 2,
+          "min_salary_aed": 15000,
+          "demand_reason": "Golden Visa eligible, 5G rollout",
+          "golden_visa_eligible": true
+        },
+        {
+          "rank": 2,
+          "occupation": "IT Project Manager",
+          "occupation_ko": "IT 프로젝트매니저",
+          "mohre_level": 1,
+          "min_salary_aed": 25000,
+          "demand_reason": "Golden Visa eligible, digital infrastructure",
+          "golden_visa_eligible": true
+        },
+        {
+          "rank": 3,
+          "occupation": "DevOps / Site Reliability Engineer",
+          "occupation_ko": "DevOps/SRE 엔지니어",
+          "mohre_level": 1,
+          "min_salary_aed": 25000,
+          "demand_reason": "Cloud-native transformation",
+          "golden_visa_eligible": false
+        }
+      ]
+    }
+  },
+  "summary": {
+    "total_demand_occupations": 39,
+    "golden_visa_eligible_count": 27,
+    "mohre_level_1_count": 35,
+    "mohre_level_2_count": 4,
+    "top_5_in_demand": [
+      "AI / Machine Learning Engineer",
+      "Software Engineer",
+      "Cybersecurity Specialist",
+      "Data Scientist",
+      "Medical Specialist"
+    ]
+  }
+}

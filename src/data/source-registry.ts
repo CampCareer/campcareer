@@ -10,7 +10,7 @@ export const CORE_DATA_CATEGORIES = [
 ] as const
 
 export type CoreDataCategory = (typeof CORE_DATA_CATEGORIES)[number]
-export type RegistryCountryCode = "AU" | "US" | "CA" | "UK" | "IE" | "DE" | "NL" | "BE" | "SG" | "KR" | "FR" | "ES" | "NZ" | "NO" | "SE" | "DK" | "FI" | "CH"
+export type RegistryCountryCode = "AU" | "US" | "CA" | "UK" | "IE" | "DE" | "NL" | "BE" | "SG" | "KR" | "FR" | "ES" | "NZ" | "NO" | "SE" | "DK" | "FI" | "CH" | "AE"
 export type SourceConfidence = "official" | "market-estimate" | "internal-estimate"
 export type SourceMethod = "official-api" | "official-download" | "official-web" | "market-estimate"
 export type ReviewStatus = "approved" | "review-required"
@@ -177,6 +177,14 @@ const COUNTRY_SOURCES: Record<RegistryCountryCode, CountrySourceSeed> = {
     rent: { sourceName: "Statistics Finland Housing Statistics", sourceUrl: "https://stat.fi/en/statistics/housing", method: "official-download", refreshCadence: "quarterly" },
     "visa-pathway": { sourceName: "Finnish Immigration Service (Migri)", sourceUrl: "https://migri.fi/en/work-in-finland", method: "official-web", refreshCadence: "monthly" },
     shortage: { sourceName: "Finnish Ministry of Economic Affairs and Employment Shortage Occupation List", sourceUrl: "https://tyo-ja-elinkeinoministeri.fi/en/employment-and-enterprises/employers/recruiting-foreign-workers/shortage-occupations", method: "official-download", refreshCadence: "quarterly" },
+  },
+  AE: {
+    tuition: { sourceName: "UAE Ministry of Education", sourceUrl: "https://www.moe.gov.ae/", method: "official-web", refreshCadence: "annual" },
+    "graduate-outcomes": { sourceName: "UAE.STAT Labour Force Survey", sourceUrl: "https://uaestat.fcsc.gov.ae/", method: "official-api", refreshCadence: "annual" },
+    occupation: { sourceName: "MOHRE Labour Market Observatory", sourceUrl: "https://observatory.mohre.gov.ae/en/home", method: "official-web", refreshCadence: "quarterly" },
+    rent: { sourceName: "Dubai Land Department / Bayut rental data", sourceUrl: "https://www.bayut.com/", method: "market-estimate", refreshCadence: "quarterly" },
+    "visa-pathway": { sourceName: "UAE Government Golden Visa", sourceUrl: "https://u.ae/en/information-and-services/visa-and-emirates-id/residence-visas/golden-visa", method: "official-web", refreshCadence: "monthly" },
+    shortage: { sourceName: "MOHRE Golden Visa Skilled Occupations + ISCO Classification", sourceUrl: "https://u.ae/en/information-and-services/jobs/employment-in-the-private-sector/skill-levels-of-jobs-in-the-uae", method: "official-web", refreshCadence: "annual" },
   },
 }
 

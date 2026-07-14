@@ -1,0 +1,3058 @@
+[
+  {
+    "sector": "Banking",
+    "role": "PRIVATE Head of Private Banking / Wealth Management (16+ years)",
+    "monthly_min_aed": 149000,
+    "monthly_max_aed": 186000,
+    "annual_min_aed": 1788000,
+    "annual_max_aed": 2232000
+  },
+  {
+    "sector": "Banking",
+    "role": "BANKING AND Market Head / Managing Director (15 years)",
+    "monthly_min_aed": 132000,
+    "monthly_max_aed": 154000,
+    "annual_min_aed": 1584000,
+    "annual_max_aed": 1848000
+  },
+  {
+    "sector": "Banking",
+    "role": "WEALTH Executive Director / Unit Head (10 - 12 years)",
+    "monthly_min_aed": 85000,
+    "monthly_max_aed": 110000,
+    "annual_min_aed": 1020000,
+    "annual_max_aed": 1320000
+  },
+  {
+    "sector": "Banking",
+    "role": "MANAGEMENT Associate Director (5 - 8 years)",
+    "monthly_min_aed": 71000,
+    "monthly_max_aed": 88000,
+    "annual_min_aed": 852000,
+    "annual_max_aed": 1056000
+  },
+  {
+    "sector": "Banking",
+    "role": "Senior Wealth Manager",
+    "monthly_min_aed": 71000,
+    "monthly_max_aed": 88000,
+    "annual_min_aed": 852000,
+    "annual_max_aed": 1056000
+  },
+  {
+    "sector": "Banking",
+    "role": "Wealth Manager",
+    "monthly_min_aed": 51000,
+    "monthly_max_aed": 69000,
+    "annual_min_aed": 612000,
+    "annual_max_aed": 828000
+  },
+  {
+    "sector": "Banking",
+    "role": "Relationship Manager - Key Clients (5 - 7 years)",
+    "monthly_min_aed": 49000,
+    "monthly_max_aed": 66000,
+    "annual_min_aed": 588000,
+    "annual_max_aed": 792000
+  },
+  {
+    "sector": "Banking",
+    "role": "Wealth Management Specialist",
+    "monthly_min_aed": 38000,
+    "monthly_max_aed": 50000,
+    "annual_min_aed": 456000,
+    "annual_max_aed": 600000
+  },
+  {
+    "sector": "Banking",
+    "role": "Assistant Relationship Manager - Support (5 - 7 years)",
+    "monthly_min_aed": 27000,
+    "monthly_max_aed": 44000,
+    "annual_min_aed": 324000,
+    "annual_max_aed": 528000
+  },
+  {
+    "sector": "Banking",
+    "role": "CORPORATE Head of Corporate Banking",
+    "monthly_min_aed": 96000,
+    "monthly_max_aed": 146000,
+    "annual_min_aed": 1152000,
+    "annual_max_aed": 1752000
+  },
+  {
+    "sector": "Banking",
+    "role": "BANKING Head of SME Banking",
+    "monthly_min_aed": 74000,
+    "monthly_max_aed": 112000,
+    "annual_min_aed": 888000,
+    "annual_max_aed": 1344000
+  },
+  {
+    "sector": "Banking",
+    "role": "Team Leader - Corporate Banking",
+    "monthly_min_aed": 88000,
+    "monthly_max_aed": 99000,
+    "annual_min_aed": 1056000,
+    "annual_max_aed": 1188000
+  },
+  {
+    "sector": "Banking",
+    "role": "Senior Director – Relationship Management",
+    "monthly_min_aed": 71000,
+    "monthly_max_aed": 82000,
+    "annual_min_aed": 852000,
+    "annual_max_aed": 984000
+  },
+  {
+    "sector": "Banking",
+    "role": "Director - Relationship Management",
+    "monthly_min_aed": 53000,
+    "monthly_max_aed": 69000,
+    "annual_min_aed": 636000,
+    "annual_max_aed": 828000
+  },
+  {
+    "sector": "Banking",
+    "role": "Relationship Manager",
+    "monthly_min_aed": 38000,
+    "monthly_max_aed": 49000,
+    "annual_min_aed": 456000,
+    "annual_max_aed": 588000
+  },
+  {
+    "sector": "Banking",
+    "role": "COMPLIANCE & Chief Compliance Officer (CCO)",
+    "monthly_min_aed": 102000,
+    "monthly_max_aed": 125000,
+    "annual_min_aed": 1224000,
+    "annual_max_aed": 1500000
+  },
+  {
+    "sector": "Banking",
+    "role": "REGULATION Head of Enforcement",
+    "monthly_min_aed": 78000,
+    "monthly_max_aed": 97000,
+    "annual_min_aed": 936000,
+    "annual_max_aed": 1164000
+  },
+  {
+    "sector": "Banking",
+    "role": "Head of Compliance",
+    "monthly_min_aed": 70000,
+    "monthly_max_aed": 88000,
+    "annual_min_aed": 840000,
+    "annual_max_aed": 1056000
+  },
+  {
+    "sector": "Banking",
+    "role": "Head of Financial Crime",
+    "monthly_min_aed": 61000,
+    "monthly_max_aed": 73000,
+    "annual_min_aed": 732000,
+    "annual_max_aed": 876000
+  },
+  {
+    "sector": "Banking",
+    "role": "Head of Fraud",
+    "monthly_min_aed": 56000,
+    "monthly_max_aed": 69000,
+    "annual_min_aed": 672000,
+    "annual_max_aed": 828000
+  },
+  {
+    "sector": "Banking",
+    "role": "Compliance Licensed MLRO (DIFC)",
+    "monthly_min_aed": 45000,
+    "monthly_max_aed": 59000,
+    "annual_min_aed": 540000,
+    "annual_max_aed": 708000
+  },
+  {
+    "sector": "Banking",
+    "role": "Senior Manager, Banking Supervisor",
+    "monthly_min_aed": 50000,
+    "monthly_max_aed": 57000,
+    "annual_min_aed": 600000,
+    "annual_max_aed": 684000
+  },
+  {
+    "sector": "Banking",
+    "role": "Manager, Banking Supervision",
+    "monthly_min_aed": 45000,
+    "monthly_max_aed": 49000,
+    "annual_min_aed": 540000,
+    "annual_max_aed": 588000
+  },
+  {
+    "sector": "Banking",
+    "role": "Financial Crime Manager",
+    "monthly_min_aed": 42000,
+    "monthly_max_aed": 48000,
+    "annual_min_aed": 504000,
+    "annual_max_aed": 576000
+  },
+  {
+    "sector": "Banking",
+    "role": "Fraud Manager",
+    "monthly_min_aed": 39000,
+    "monthly_max_aed": 45000,
+    "annual_min_aed": 468000,
+    "annual_max_aed": 540000
+  },
+  {
+    "sector": "Banking",
+    "role": "Compliance (FATCA specialists)",
+    "monthly_min_aed": 32000,
+    "monthly_max_aed": 40000,
+    "annual_min_aed": 384000,
+    "annual_max_aed": 480000
+  },
+  {
+    "sector": "Banking",
+    "role": "Compliance Manager",
+    "monthly_min_aed": 33000,
+    "monthly_max_aed": 40000,
+    "annual_min_aed": 396000,
+    "annual_max_aed": 480000
+  },
+  {
+    "sector": "Banking",
+    "role": "Sanctions and AML Manager",
+    "monthly_min_aed": 33000,
+    "monthly_max_aed": 39000,
+    "annual_min_aed": 396000,
+    "annual_max_aed": 468000
+  },
+  {
+    "sector": "Banking",
+    "role": "Compliance Consultant",
+    "monthly_min_aed": 28000,
+    "monthly_max_aed": 39000,
+    "annual_min_aed": 336000,
+    "annual_max_aed": 468000
+  },
+  {
+    "sector": "Banking",
+    "role": "Compliance Officer-Private Banking, Wealth, Invest. products",
+    "monthly_min_aed": 23000,
+    "monthly_max_aed": 29000,
+    "annual_min_aed": 276000,
+    "annual_max_aed": 348000
+  },
+  {
+    "sector": "Banking",
+    "role": "Compliance Officer (KYC, On boarding, CDD)",
+    "monthly_min_aed": 16000,
+    "monthly_max_aed": 23000,
+    "annual_min_aed": 192000,
+    "annual_max_aed": 276000
+  },
+  {
+    "sector": "Banking",
+    "role": "RISK Chief Risk Officer",
+    "monthly_min_aed": 82000,
+    "monthly_max_aed": 105000,
+    "annual_min_aed": 984000,
+    "annual_max_aed": 1260000
+  },
+  {
+    "sector": "Banking",
+    "role": "Head of Credit Risk",
+    "monthly_min_aed": 60000,
+    "monthly_max_aed": 75000,
+    "annual_min_aed": 720000,
+    "annual_max_aed": 900000
+  },
+  {
+    "sector": "Banking",
+    "role": "Head of Collections and Recovery",
+    "monthly_min_aed": 60000,
+    "monthly_max_aed": 70000,
+    "annual_min_aed": 720000,
+    "annual_max_aed": 840000
+  },
+  {
+    "sector": "Banking",
+    "role": "Market Risk Head",
+    "monthly_min_aed": 59000,
+    "monthly_max_aed": 65000,
+    "annual_min_aed": 708000,
+    "annual_max_aed": 780000
+  },
+  {
+    "sector": "Banking",
+    "role": "Head of Risk Analytics",
+    "monthly_min_aed": 56000,
+    "monthly_max_aed": 65000,
+    "annual_min_aed": 672000,
+    "annual_max_aed": 780000
+  },
+  {
+    "sector": "Banking",
+    "role": "Credit Risk Policies Head",
+    "monthly_min_aed": 57000,
+    "monthly_max_aed": 64000,
+    "annual_min_aed": 684000,
+    "annual_max_aed": 768000
+  },
+  {
+    "sector": "Banking",
+    "role": "Operational Risk Head",
+    "monthly_min_aed": 59000,
+    "monthly_max_aed": 64000,
+    "annual_min_aed": 708000,
+    "annual_max_aed": 768000
+  },
+  {
+    "sector": "Banking",
+    "role": "Credit Risk Policies VP",
+    "monthly_min_aed": 53000,
+    "monthly_max_aed": 58000,
+    "annual_min_aed": 636000,
+    "annual_max_aed": 696000
+  },
+  {
+    "sector": "Banking",
+    "role": "Credit Risk Manager",
+    "monthly_min_aed": 34000,
+    "monthly_max_aed": 53000,
+    "annual_min_aed": 408000,
+    "annual_max_aed": 636000
+  },
+  {
+    "sector": "Banking",
+    "role": "Operational Risk Manager",
+    "monthly_min_aed": 38000,
+    "monthly_max_aed": 46000,
+    "annual_min_aed": 456000,
+    "annual_max_aed": 552000
+  },
+  {
+    "sector": "Banking",
+    "role": "Market Risk Manager",
+    "monthly_min_aed": 34000,
+    "monthly_max_aed": 45000,
+    "annual_min_aed": 408000,
+    "annual_max_aed": 540000
+  },
+  {
+    "sector": "Banking",
+    "role": "Risk Analytics Manager",
+    "monthly_min_aed": 28000,
+    "monthly_max_aed": 41000,
+    "annual_min_aed": 336000,
+    "annual_max_aed": 492000
+  },
+  {
+    "sector": "Banking",
+    "role": "Enterprise Risk Manager",
+    "monthly_min_aed": 30000,
+    "monthly_max_aed": 38000,
+    "annual_min_aed": 360000,
+    "annual_max_aed": 456000
+  },
+  {
+    "sector": "Banking",
+    "role": "Credit Risk Analyst",
+    "monthly_min_aed": 19000,
+    "monthly_max_aed": 25000,
+    "annual_min_aed": 228000,
+    "annual_max_aed": 300000
+  },
+  {
+    "sector": "Banking",
+    "role": "Risk Analytics Officer",
+    "monthly_min_aed": 17000,
+    "monthly_max_aed": 25000,
+    "annual_min_aed": 204000,
+    "annual_max_aed": 300000
+  },
+  {
+    "sector": "Banking",
+    "role": "Market Risk Analyst",
+    "monthly_min_aed": 20000,
+    "monthly_max_aed": 24000,
+    "annual_min_aed": 240000,
+    "annual_max_aed": 288000
+  },
+  {
+    "sector": "Banking",
+    "role": "Credit Risk Portfolio Analyst",
+    "monthly_min_aed": 17000,
+    "monthly_max_aed": 23000,
+    "annual_min_aed": 204000,
+    "annual_max_aed": 276000
+  },
+  {
+    "sector": "Banking",
+    "role": "Operational Risk Analyst",
+    "monthly_min_aed": 17000,
+    "monthly_max_aed": 21000,
+    "annual_min_aed": 204000,
+    "annual_max_aed": 252000
+  },
+  {
+    "sector": "Human Resources",
+    "role": "Chief Shared Services Officer (CSSO)",
+    "monthly_min_aed": 109600,
+    "monthly_max_aed": 154000,
+    "annual_min_aed": 1315200,
+    "annual_max_aed": 1848000
+  },
+  {
+    "sector": "Human Resources",
+    "role": "Chief Human Resources Officer (CHRO)",
+    "monthly_min_aed": 95000,
+    "monthly_max_aed": 142000,
+    "annual_min_aed": 1140000,
+    "annual_max_aed": 1704000
+  },
+  {
+    "sector": "Human Resources",
+    "role": "Vice President Human Resources",
+    "monthly_min_aed": 87300,
+    "monthly_max_aed": 120000,
+    "annual_min_aed": 1047600,
+    "annual_max_aed": 1440000
+  },
+  {
+    "sector": "Human Resources",
+    "role": "Executive Director Support Services",
+    "monthly_min_aed": 81900,
+    "monthly_max_aed": 105000,
+    "annual_min_aed": 982800,
+    "annual_max_aed": 1260000
+  },
+  {
+    "sector": "Human Resources",
+    "role": "Executive Director Human Resources",
+    "monthly_min_aed": 78400,
+    "monthly_max_aed": 102000,
+    "annual_min_aed": 940800,
+    "annual_max_aed": 1224000
+  },
+  {
+    "sector": "Human Resources",
+    "role": "Director Support Services",
+    "monthly_min_aed": 65900,
+    "monthly_max_aed": 94000,
+    "annual_min_aed": 790800,
+    "annual_max_aed": 1128000
+  },
+  {
+    "sector": "Human Resources",
+    "role": "HR Director",
+    "monthly_min_aed": 58000,
+    "monthly_max_aed": 88000,
+    "annual_min_aed": 696000,
+    "annual_max_aed": 1056000
+  },
+  {
+    "sector": "Human Resources",
+    "role": "Director / Head of Talent Mgt",
+    "monthly_min_aed": 43700,
+    "monthly_max_aed": 61000,
+    "annual_min_aed": 524400,
+    "annual_max_aed": 732000
+  },
+  {
+    "sector": "Human Resources",
+    "role": "Head of / Director Organisational Development",
+    "monthly_min_aed": 43700,
+    "monthly_max_aed": 59000,
+    "annual_min_aed": 524400,
+    "annual_max_aed": 708000
+  },
+  {
+    "sector": "Human Resources",
+    "role": "Director / Head of Talent Acquisition",
+    "monthly_min_aed": 43700,
+    "monthly_max_aed": 55000,
+    "annual_min_aed": 524400,
+    "annual_max_aed": 660000
+  },
+  {
+    "sector": "Human Resources",
+    "role": "Director / Head of Learning & Development",
+    "monthly_min_aed": 43700,
+    "monthly_max_aed": 55000,
+    "annual_min_aed": 524400,
+    "annual_max_aed": 660000
+  },
+  {
+    "sector": "Human Resources",
+    "role": "Human Resources Business Partner",
+    "monthly_min_aed": 33000,
+    "monthly_max_aed": 54000,
+    "annual_min_aed": 396000,
+    "annual_max_aed": 648000
+  },
+  {
+    "sector": "Human Resources",
+    "role": "Organisational Development Manager",
+    "monthly_min_aed": 32000,
+    "monthly_max_aed": 48000,
+    "annual_min_aed": 384000,
+    "annual_max_aed": 576000
+  },
+  {
+    "sector": "Human Resources",
+    "role": "HR Manager",
+    "monthly_min_aed": 33000,
+    "monthly_max_aed": 44000,
+    "annual_min_aed": 396000,
+    "annual_max_aed": 528000
+  },
+  {
+    "sector": "Human Resources",
+    "role": "Compensation and Benefits / Total Rewards Manager",
+    "monthly_min_aed": 27700,
+    "monthly_max_aed": 39000,
+    "annual_min_aed": 332400,
+    "annual_max_aed": 468000
+  },
+  {
+    "sector": "Human Resources",
+    "role": "Learning & Development Manager",
+    "monthly_min_aed": 27700,
+    "monthly_max_aed": 39000,
+    "annual_min_aed": 332400,
+    "annual_max_aed": 468000
+  },
+  {
+    "sector": "Human Resources",
+    "role": "Talent Acquisition Manager",
+    "monthly_min_aed": 22400,
+    "monthly_max_aed": 37000,
+    "annual_min_aed": 268800,
+    "annual_max_aed": 444000
+  },
+  {
+    "sector": "Human Resources",
+    "role": "Training Manager",
+    "monthly_min_aed": 22400,
+    "monthly_max_aed": 36000,
+    "annual_min_aed": 268800,
+    "annual_max_aed": 432000
+  },
+  {
+    "sector": "Human Resources",
+    "role": "Recruitment Manager",
+    "monthly_min_aed": 20300,
+    "monthly_max_aed": 29000,
+    "annual_min_aed": 243600,
+    "annual_max_aed": 348000
+  },
+  {
+    "sector": "Human Resources",
+    "role": "Employee Relations Manager",
+    "monthly_min_aed": 20300,
+    "monthly_max_aed": 29000,
+    "annual_min_aed": 243600,
+    "annual_max_aed": 348000
+  },
+  {
+    "sector": "Human Resources",
+    "role": "Organisational Development Specialist",
+    "monthly_min_aed": 19100,
+    "monthly_max_aed": 26000,
+    "annual_min_aed": 229200,
+    "annual_max_aed": 312000
+  },
+  {
+    "sector": "Human Resources",
+    "role": "Learning & Development Specialist",
+    "monthly_min_aed": 16000,
+    "monthly_max_aed": 23000,
+    "annual_min_aed": 192000,
+    "annual_max_aed": 276000
+  },
+  {
+    "sector": "Human Resources",
+    "role": "Talent Acquisition Specialist",
+    "monthly_min_aed": 16000,
+    "monthly_max_aed": 21000,
+    "annual_min_aed": 192000,
+    "annual_max_aed": 252000
+  },
+  {
+    "sector": "Human Resources",
+    "role": "HR Generalist",
+    "monthly_min_aed": 16000,
+    "monthly_max_aed": 20000,
+    "annual_min_aed": 192000,
+    "annual_max_aed": 240000
+  },
+  {
+    "sector": "Banking",
+    "role": "PRIVATE Chief Investment Officer",
+    "monthly_min_aed": 88000,
+    "monthly_max_aed": 165000,
+    "annual_min_aed": 1056000,
+    "annual_max_aed": 1980000
+  },
+  {
+    "sector": "Banking",
+    "role": "SECTOR Head of Investments / Investment Director",
+    "monthly_min_aed": 82000,
+    "monthly_max_aed": 120000,
+    "annual_min_aed": 984000,
+    "annual_max_aed": 1440000
+  },
+  {
+    "sector": "Banking",
+    "role": "Vice President",
+    "monthly_min_aed": 66000,
+    "monthly_max_aed": 88000,
+    "annual_min_aed": 792000,
+    "annual_max_aed": 1056000
+  },
+  {
+    "sector": "Banking",
+    "role": "Investment Manager",
+    "monthly_min_aed": 47000,
+    "monthly_max_aed": 71000,
+    "annual_min_aed": 564000,
+    "annual_max_aed": 852000
+  },
+  {
+    "sector": "Banking",
+    "role": "Investment Senior Associate",
+    "monthly_min_aed": 42000,
+    "monthly_max_aed": 59000,
+    "annual_min_aed": 504000,
+    "annual_max_aed": 708000
+  },
+  {
+    "sector": "Banking",
+    "role": "Investment Associate",
+    "monthly_min_aed": 25000,
+    "monthly_max_aed": 39000,
+    "annual_min_aed": 300000,
+    "annual_max_aed": 468000
+  },
+  {
+    "sector": "Banking",
+    "role": "Investment Analyst",
+    "monthly_min_aed": 13000,
+    "monthly_max_aed": 25000,
+    "annual_min_aed": 156000,
+    "annual_max_aed": 300000
+  },
+  {
+    "sector": "Banking",
+    "role": "PUBLIC Chief Investment Officer",
+    "monthly_min_aed": 137000,
+    "monthly_max_aed": 208000,
+    "annual_min_aed": 1644000,
+    "annual_max_aed": 2496000
+  },
+  {
+    "sector": "Banking",
+    "role": "SECTOR Head of Investments / Investment Director",
+    "monthly_min_aed": 88000,
+    "monthly_max_aed": 155000,
+    "annual_min_aed": 1056000,
+    "annual_max_aed": 1860000
+  },
+  {
+    "sector": "Banking",
+    "role": "Vice President",
+    "monthly_min_aed": 82000,
+    "monthly_max_aed": 115000,
+    "annual_min_aed": 984000,
+    "annual_max_aed": 1380000
+  },
+  {
+    "sector": "Banking",
+    "role": "Investment Manager",
+    "monthly_min_aed": 66000,
+    "monthly_max_aed": 94000,
+    "annual_min_aed": 792000,
+    "annual_max_aed": 1128000
+  },
+  {
+    "sector": "Banking",
+    "role": "Investment Senior Associate",
+    "monthly_min_aed": 55000,
+    "monthly_max_aed": 76000,
+    "annual_min_aed": 660000,
+    "annual_max_aed": 912000
+  },
+  {
+    "sector": "Banking",
+    "role": "Investment Associate",
+    "monthly_min_aed": 44000,
+    "monthly_max_aed": 61000,
+    "annual_min_aed": 528000,
+    "annual_max_aed": 732000
+  },
+  {
+    "sector": "Banking",
+    "role": "Investment Analyst",
+    "monthly_min_aed": 33000,
+    "monthly_max_aed": 44000,
+    "annual_min_aed": 396000,
+    "annual_max_aed": 528000
+  },
+  {
+    "sector": "Banking",
+    "role": "ASSET Head of Equities",
+    "monthly_min_aed": 82000,
+    "monthly_max_aed": 120000,
+    "annual_min_aed": 984000,
+    "annual_max_aed": 1440000
+  },
+  {
+    "sector": "Banking",
+    "role": "MANAGEMENT Head of Fixed Income",
+    "monthly_min_aed": 73000,
+    "monthly_max_aed": 120000,
+    "annual_min_aed": 876000,
+    "annual_max_aed": 1440000
+  },
+  {
+    "sector": "Banking",
+    "role": "Head of Business Development",
+    "monthly_min_aed": 76000,
+    "monthly_max_aed": 105000,
+    "annual_min_aed": 912000,
+    "annual_max_aed": 1260000
+  },
+  {
+    "sector": "Banking",
+    "role": "Head of Real Estate",
+    "monthly_min_aed": 66000,
+    "monthly_max_aed": 99000,
+    "annual_min_aed": 792000,
+    "annual_max_aed": 1188000
+  },
+  {
+    "sector": "Banking",
+    "role": "Senior Fund/Portfolio Manager",
+    "monthly_min_aed": 53000,
+    "monthly_max_aed": 74000,
+    "annual_min_aed": 636000,
+    "annual_max_aed": 888000
+  },
+  {
+    "sector": "Banking",
+    "role": "Business Development Senior Manager",
+    "monthly_min_aed": 49000,
+    "monthly_max_aed": 71000,
+    "annual_min_aed": 588000,
+    "annual_max_aed": 852000
+  },
+  {
+    "sector": "Banking",
+    "role": "Business Development Manager",
+    "monthly_min_aed": 37000,
+    "monthly_max_aed": 51000,
+    "annual_min_aed": 444000,
+    "annual_max_aed": 612000
+  },
+  {
+    "sector": "Banking",
+    "role": "Fund/Portfolio Manager",
+    "monthly_min_aed": 36000,
+    "monthly_max_aed": 55000,
+    "annual_min_aed": 432000,
+    "annual_max_aed": 660000
+  },
+  {
+    "sector": "Banking",
+    "role": "Investment Associate",
+    "monthly_min_aed": 27000,
+    "monthly_max_aed": 37000,
+    "annual_min_aed": 324000,
+    "annual_max_aed": 444000
+  },
+  {
+    "sector": "Banking",
+    "role": "Investment Analyst",
+    "monthly_min_aed": 13000,
+    "monthly_max_aed": 22000,
+    "annual_min_aed": 156000,
+    "annual_max_aed": 264000
+  },
+  {
+    "sector": "Banking",
+    "role": "INVESTMENT Managing Director",
+    "monthly_min_aed": 99000,
+    "monthly_max_aed": 157000,
+    "annual_min_aed": 1188000,
+    "annual_max_aed": 1884000
+  },
+  {
+    "sector": "Banking",
+    "role": "BANKING Senior Director",
+    "monthly_min_aed": 82000,
+    "monthly_max_aed": 131000,
+    "annual_min_aed": 984000,
+    "annual_max_aed": 1572000
+  },
+  {
+    "sector": "Banking",
+    "role": "Director",
+    "monthly_min_aed": 68000,
+    "monthly_max_aed": 89000,
+    "annual_min_aed": 816000,
+    "annual_max_aed": 1068000
+  },
+  {
+    "sector": "Banking",
+    "role": "Vice President",
+    "monthly_min_aed": 44000,
+    "monthly_max_aed": 73000,
+    "annual_min_aed": 528000,
+    "annual_max_aed": 876000
+  },
+  {
+    "sector": "Banking",
+    "role": "Associate",
+    "monthly_min_aed": 25000,
+    "monthly_max_aed": 43000,
+    "annual_min_aed": 300000,
+    "annual_max_aed": 516000
+  },
+  {
+    "sector": "Banking",
+    "role": "Analyst",
+    "monthly_min_aed": 16000,
+    "monthly_max_aed": 27000,
+    "annual_min_aed": 192000,
+    "annual_max_aed": 324000
+  },
+  {
+    "sector": "Legal",
+    "role": "PRIVATE PRACTICE Partner 5+",
+    "monthly_min_aed": 110000,
+    "monthly_max_aed": 241000,
+    "annual_min_aed": 1320000,
+    "annual_max_aed": 2892000
+  },
+  {
+    "sector": "Legal",
+    "role": "REGIONAL FIRMS Partner 1-4",
+    "monthly_min_aed": 82000,
+    "monthly_max_aed": 110000,
+    "annual_min_aed": 984000,
+    "annual_max_aed": 1320000
+  },
+  {
+    "sector": "Legal",
+    "role": "Counsel",
+    "monthly_min_aed": 66000,
+    "monthly_max_aed": 94000,
+    "annual_min_aed": 792000,
+    "annual_max_aed": 1128000
+  },
+  {
+    "sector": "Legal",
+    "role": "Senior Associate",
+    "monthly_min_aed": 49000,
+    "monthly_max_aed": 76000,
+    "annual_min_aed": 588000,
+    "annual_max_aed": 912000
+  },
+  {
+    "sector": "Legal",
+    "role": "Associate",
+    "monthly_min_aed": 33000,
+    "monthly_max_aed": 55000,
+    "annual_min_aed": 396000,
+    "annual_max_aed": 660000
+  },
+  {
+    "sector": "Legal",
+    "role": "Newly Qualified",
+    "monthly_min_aed": 22000,
+    "monthly_max_aed": 39000,
+    "annual_min_aed": 264000,
+    "annual_max_aed": 468000
+  },
+  {
+    "sector": "Legal",
+    "role": "Paralegal",
+    "monthly_min_aed": 16000,
+    "monthly_max_aed": 27000,
+    "annual_min_aed": 192000,
+    "annual_max_aed": 324000
+  },
+  {
+    "sector": "Legal",
+    "role": "Legal Secretary",
+    "monthly_min_aed": 14000,
+    "monthly_max_aed": 22000,
+    "annual_min_aed": 168000,
+    "annual_max_aed": 264000
+  },
+  {
+    "sector": "Legal",
+    "role": "PRIVATE PRACTICE Partner 5+",
+    "monthly_min_aed": 132000,
+    "monthly_max_aed": 275000,
+    "annual_min_aed": 1584000,
+    "annual_max_aed": 3300000
+  },
+  {
+    "sector": "Legal",
+    "role": "US & UK FIRMS Partner 1-4",
+    "monthly_min_aed": 88000,
+    "monthly_max_aed": 132000,
+    "annual_min_aed": 1056000,
+    "annual_max_aed": 1584000
+  },
+  {
+    "sector": "Legal",
+    "role": "Counsel",
+    "monthly_min_aed": 82000,
+    "monthly_max_aed": 110000,
+    "annual_min_aed": 984000,
+    "annual_max_aed": 1320000
+  },
+  {
+    "sector": "Legal",
+    "role": "Senior Associate",
+    "monthly_min_aed": 55000,
+    "monthly_max_aed": 82000,
+    "annual_min_aed": 660000,
+    "annual_max_aed": 984000
+  },
+  {
+    "sector": "Legal",
+    "role": "Associate",
+    "monthly_min_aed": 44000,
+    "monthly_max_aed": 66000,
+    "annual_min_aed": 528000,
+    "annual_max_aed": 792000
+  },
+  {
+    "sector": "Legal",
+    "role": "Newly Qualified",
+    "monthly_min_aed": 27000,
+    "monthly_max_aed": 44000,
+    "annual_min_aed": 324000,
+    "annual_max_aed": 528000
+  },
+  {
+    "sector": "Legal",
+    "role": "Paralegal",
+    "monthly_min_aed": 19000,
+    "monthly_max_aed": 33000,
+    "annual_min_aed": 228000,
+    "annual_max_aed": 396000
+  },
+  {
+    "sector": "Legal",
+    "role": "Legal Secretary",
+    "monthly_min_aed": 16000,
+    "monthly_max_aed": 27000,
+    "annual_min_aed": 192000,
+    "annual_max_aed": 324000
+  },
+  {
+    "sector": "Legal",
+    "role": "IN HOUSE Chief Legal Officer",
+    "monthly_min_aed": 88000,
+    "monthly_max_aed": 132000,
+    "annual_min_aed": 1056000,
+    "annual_max_aed": 1584000
+  },
+  {
+    "sector": "Legal",
+    "role": "Director/Head",
+    "monthly_min_aed": 66000,
+    "monthly_max_aed": 99000,
+    "annual_min_aed": 792000,
+    "annual_max_aed": 1188000
+  },
+  {
+    "sector": "Legal",
+    "role": "General Counsel",
+    "monthly_min_aed": 66000,
+    "monthly_max_aed": 99000,
+    "annual_min_aed": 792000,
+    "annual_max_aed": 1188000
+  },
+  {
+    "sector": "Legal",
+    "role": "Senior Legal Counsel",
+    "monthly_min_aed": 44000,
+    "monthly_max_aed": 66000,
+    "annual_min_aed": 528000,
+    "annual_max_aed": 792000
+  },
+  {
+    "sector": "Legal",
+    "role": "Legal Counsel",
+    "monthly_min_aed": 39000,
+    "monthly_max_aed": 49000,
+    "annual_min_aed": 468000,
+    "annual_max_aed": 588000
+  },
+  {
+    "sector": "Legal",
+    "role": "Junior Legal Counsel",
+    "monthly_min_aed": 27000,
+    "monthly_max_aed": 39000,
+    "annual_min_aed": 324000,
+    "annual_max_aed": 468000
+  },
+  {
+    "sector": "Manufacturing",
+    "role": "Managing Director",
+    "monthly_min_aed": 103000,
+    "monthly_max_aed": 142000,
+    "annual_min_aed": 1236000,
+    "annual_max_aed": 1704000
+  },
+  {
+    "sector": "Manufacturing",
+    "role": "Operations Director",
+    "monthly_min_aed": 84000,
+    "monthly_max_aed": 120000,
+    "annual_min_aed": 1008000,
+    "annual_max_aed": 1440000
+  },
+  {
+    "sector": "Manufacturing",
+    "role": "Chief Production Officer",
+    "monthly_min_aed": 71000,
+    "monthly_max_aed": 88000,
+    "annual_min_aed": 852000,
+    "annual_max_aed": 1056000
+  },
+  {
+    "sector": "Manufacturing",
+    "role": "General Manager",
+    "monthly_min_aed": 59000,
+    "monthly_max_aed": 82000,
+    "annual_min_aed": 708000,
+    "annual_max_aed": 984000
+  },
+  {
+    "sector": "Manufacturing",
+    "role": "Head of R&D",
+    "monthly_min_aed": 37000,
+    "monthly_max_aed": 49000,
+    "annual_min_aed": 444000,
+    "annual_max_aed": 588000
+  },
+  {
+    "sector": "Manufacturing",
+    "role": "Operations Manager",
+    "monthly_min_aed": 30000,
+    "monthly_max_aed": 46000,
+    "annual_min_aed": 360000,
+    "annual_max_aed": 552000
+  },
+  {
+    "sector": "Manufacturing",
+    "role": "Plant / Factory / Manufacturing Manager",
+    "monthly_min_aed": 30000,
+    "monthly_max_aed": 44000,
+    "annual_min_aed": 360000,
+    "annual_max_aed": 528000
+  },
+  {
+    "sector": "Manufacturing",
+    "role": "Production Manager",
+    "monthly_min_aed": 30000,
+    "monthly_max_aed": 39000,
+    "annual_min_aed": 360000,
+    "annual_max_aed": 468000
+  },
+  {
+    "sector": "Manufacturing",
+    "role": "Process Development Manager",
+    "monthly_min_aed": 25000,
+    "monthly_max_aed": 38000,
+    "annual_min_aed": 300000,
+    "annual_max_aed": 456000
+  },
+  {
+    "sector": "Manufacturing",
+    "role": "HSE Manager",
+    "monthly_min_aed": 24000,
+    "monthly_max_aed": 36000,
+    "annual_min_aed": 288000,
+    "annual_max_aed": 432000
+  },
+  {
+    "sector": "Manufacturing",
+    "role": "Quality Manager Assurance and Control",
+    "monthly_min_aed": 26000,
+    "monthly_max_aed": 33000,
+    "annual_min_aed": 312000,
+    "annual_max_aed": 396000
+  },
+  {
+    "sector": "Manufacturing",
+    "role": "Maintenance Manager",
+    "monthly_min_aed": 22000,
+    "monthly_max_aed": 33000,
+    "annual_min_aed": 264000,
+    "annual_max_aed": 396000
+  },
+  {
+    "sector": "Manufacturing",
+    "role": "Process Innovation Manager",
+    "monthly_min_aed": 21000,
+    "monthly_max_aed": 32000,
+    "annual_min_aed": 252000,
+    "annual_max_aed": 384000
+  },
+  {
+    "sector": "Manufacturing",
+    "role": "Master Black Belt",
+    "monthly_min_aed": 19000,
+    "monthly_max_aed": 31000,
+    "annual_min_aed": 228000,
+    "annual_max_aed": 372000
+  },
+  {
+    "sector": "Manufacturing",
+    "role": "Continuous Improvement Manager",
+    "monthly_min_aed": 20000,
+    "monthly_max_aed": 31000,
+    "annual_min_aed": 240000,
+    "annual_max_aed": 372000
+  },
+  {
+    "sector": "Manufacturing",
+    "role": "Lean Six Sigma Black Belt",
+    "monthly_min_aed": 16000,
+    "monthly_max_aed": 23000,
+    "annual_min_aed": 192000,
+    "annual_max_aed": 276000
+  },
+  {
+    "sector": "Manufacturing",
+    "role": "HSE Engineer",
+    "monthly_min_aed": 14000,
+    "monthly_max_aed": 20000,
+    "annual_min_aed": 168000,
+    "annual_max_aed": 240000
+  },
+  {
+    "sector": "Manufacturing",
+    "role": "Production Supervisor",
+    "monthly_min_aed": 10000,
+    "monthly_max_aed": 19000,
+    "annual_min_aed": 120000,
+    "annual_max_aed": 228000
+  },
+  {
+    "sector": "Manufacturing",
+    "role": "Quality Engineer Assurance and Control",
+    "monthly_min_aed": 13000,
+    "monthly_max_aed": 16000,
+    "annual_min_aed": 156000,
+    "annual_max_aed": 192000
+  },
+  {
+    "sector": "Manufacturing",
+    "role": "Civil Engineer",
+    "monthly_min_aed": 8000,
+    "monthly_max_aed": 16000,
+    "annual_min_aed": 96000,
+    "annual_max_aed": 192000
+  },
+  {
+    "sector": "Manufacturing",
+    "role": "Design Engineer",
+    "monthly_min_aed": 8000,
+    "monthly_max_aed": 16000,
+    "annual_min_aed": 96000,
+    "annual_max_aed": 192000
+  },
+  {
+    "sector": "Manufacturing",
+    "role": "Process Engineer",
+    "monthly_min_aed": 11000,
+    "monthly_max_aed": 15000,
+    "annual_min_aed": 132000,
+    "annual_max_aed": 180000
+  },
+  {
+    "sector": "Manufacturing",
+    "role": "Manufacturing Engineer",
+    "monthly_min_aed": 11000,
+    "monthly_max_aed": 15000,
+    "annual_min_aed": 132000,
+    "annual_max_aed": 180000
+  },
+  {
+    "sector": "Manufacturing",
+    "role": "Maintenance Engineer",
+    "monthly_min_aed": 9000,
+    "monthly_max_aed": 14000,
+    "annual_min_aed": 108000,
+    "annual_max_aed": 168000
+  },
+  {
+    "sector": "Manufacturing",
+    "role": "Electrical Engineer",
+    "monthly_min_aed": 9000,
+    "monthly_max_aed": 14000,
+    "annual_min_aed": 108000,
+    "annual_max_aed": 168000
+  },
+  {
+    "sector": "Manufacturing",
+    "role": "Mechanical Engineer",
+    "monthly_min_aed": 9000,
+    "monthly_max_aed": 13000,
+    "annual_min_aed": 108000,
+    "annual_max_aed": 156000
+  },
+  {
+    "sector": "Public Sector",
+    "role": "Undersecretary",
+    "monthly_min_aed": 137100,
+    "monthly_max_aed": 191000,
+    "annual_min_aed": 1645200,
+    "annual_max_aed": 2292000
+  },
+  {
+    "sector": "Public Sector",
+    "role": "Executive Director",
+    "monthly_min_aed": 98600,
+    "monthly_max_aed": 154000,
+    "annual_min_aed": 1183200,
+    "annual_max_aed": 1848000
+  },
+  {
+    "sector": "Public Sector",
+    "role": "Chief Economist",
+    "monthly_min_aed": 98600,
+    "monthly_max_aed": 142000,
+    "annual_min_aed": 1183200,
+    "annual_max_aed": 1704000
+  },
+  {
+    "sector": "Public Sector",
+    "role": "Assistant Undersecretary",
+    "monthly_min_aed": 109600,
+    "monthly_max_aed": 137000,
+    "annual_min_aed": 1315200,
+    "annual_max_aed": 1644000
+  },
+  {
+    "sector": "Public Sector",
+    "role": "Chief Human Resources Officer",
+    "monthly_min_aed": 87700,
+    "monthly_max_aed": 132000,
+    "annual_min_aed": 1052400,
+    "annual_max_aed": 1584000
+  },
+  {
+    "sector": "Public Sector",
+    "role": "Chief Shared Services Officer",
+    "monthly_min_aed": 87700,
+    "monthly_max_aed": 132000,
+    "annual_min_aed": 1052400,
+    "annual_max_aed": 1584000
+  },
+  {
+    "sector": "Public Sector",
+    "role": "International Subject Matter Expert/Advisor",
+    "monthly_min_aed": 87700,
+    "monthly_max_aed": 132000,
+    "annual_min_aed": 1052400,
+    "annual_max_aed": 1584000
+  },
+  {
+    "sector": "Public Sector",
+    "role": "Chief Communications Officer",
+    "monthly_min_aed": 71300,
+    "monthly_max_aed": 105000,
+    "annual_min_aed": 855600,
+    "annual_max_aed": 1260000
+  },
+  {
+    "sector": "Public Sector",
+    "role": "Public Policy Director",
+    "monthly_min_aed": 65700,
+    "monthly_max_aed": 88000,
+    "annual_min_aed": 788400,
+    "annual_max_aed": 1056000
+  },
+  {
+    "sector": "Public Sector",
+    "role": "Director of Shared Services",
+    "monthly_min_aed": 65700,
+    "monthly_max_aed": 88000,
+    "annual_min_aed": 788400,
+    "annual_max_aed": 1056000
+  },
+  {
+    "sector": "Public Sector",
+    "role": "Director of Human Resources",
+    "monthly_min_aed": 65700,
+    "monthly_max_aed": 88000,
+    "annual_min_aed": 788400,
+    "annual_max_aed": 1056000
+  },
+  {
+    "sector": "Public Sector",
+    "role": "Senior Economist",
+    "monthly_min_aed": 54900,
+    "monthly_max_aed": 76000,
+    "annual_min_aed": 658800,
+    "annual_max_aed": 912000
+  },
+  {
+    "sector": "Public Sector",
+    "role": "Policy Specialist",
+    "monthly_min_aed": 43900,
+    "monthly_max_aed": 66000,
+    "annual_min_aed": 526800,
+    "annual_max_aed": 792000
+  },
+  {
+    "sector": "Public Sector",
+    "role": "Economist",
+    "monthly_min_aed": 27500,
+    "monthly_max_aed": 44000,
+    "annual_min_aed": 330000,
+    "annual_max_aed": 528000
+  },
+  {
+    "sector": "Public Sector",
+    "role": "Policy Analyst",
+    "monthly_min_aed": 21900,
+    "monthly_max_aed": 33000,
+    "annual_min_aed": 262800,
+    "annual_max_aed": 396000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "CONSUMER (B2C) Chief Sales Officer / Chief Revenue Officer",
+    "monthly_min_aed": 78000,
+    "monthly_max_aed": 99000,
+    "annual_min_aed": 936000,
+    "annual_max_aed": 1188000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "SALES General Manager",
+    "monthly_min_aed": 62000,
+    "monthly_max_aed": 79000,
+    "annual_min_aed": 744000,
+    "annual_max_aed": 948000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "Commercial Director",
+    "monthly_min_aed": 59000,
+    "monthly_max_aed": 72000,
+    "annual_min_aed": 708000,
+    "annual_max_aed": 864000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "VP of Sales",
+    "monthly_min_aed": 55000,
+    "monthly_max_aed": 69000,
+    "annual_min_aed": 660000,
+    "annual_max_aed": 828000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "Sales Director",
+    "monthly_min_aed": 47000,
+    "monthly_max_aed": 62000,
+    "annual_min_aed": 564000,
+    "annual_max_aed": 744000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "Country Sales Manager",
+    "monthly_min_aed": 41000,
+    "monthly_max_aed": 51000,
+    "annual_min_aed": 492000,
+    "annual_max_aed": 612000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "E-commerce Manager",
+    "monthly_min_aed": 26000,
+    "monthly_max_aed": 38000,
+    "annual_min_aed": 312000,
+    "annual_max_aed": 456000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "Sales Manager",
+    "monthly_min_aed": 23000,
+    "monthly_max_aed": 34000,
+    "annual_min_aed": 276000,
+    "annual_max_aed": 408000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "BD Manager",
+    "monthly_min_aed": 26000,
+    "monthly_max_aed": 34000,
+    "annual_min_aed": 312000,
+    "annual_max_aed": 408000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "Key Account Manager",
+    "monthly_min_aed": 17000,
+    "monthly_max_aed": 25000,
+    "annual_min_aed": 204000,
+    "annual_max_aed": 300000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "Key Account Executive",
+    "monthly_min_aed": 8000,
+    "monthly_max_aed": 16000,
+    "annual_min_aed": 96000,
+    "annual_max_aed": 192000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "CONSUMER (B2C) Chief Marketing Officer",
+    "monthly_min_aed": 69000,
+    "monthly_max_aed": 98000,
+    "annual_min_aed": 828000,
+    "annual_max_aed": 1176000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "MARKETING Marketing Director",
+    "monthly_min_aed": 59000,
+    "monthly_max_aed": 72000,
+    "annual_min_aed": 708000,
+    "annual_max_aed": 864000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "Marketing Manager",
+    "monthly_min_aed": 38000,
+    "monthly_max_aed": 48000,
+    "annual_min_aed": 456000,
+    "annual_max_aed": 576000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "Digital Marketing Manager",
+    "monthly_min_aed": 30000,
+    "monthly_max_aed": 43000,
+    "annual_min_aed": 360000,
+    "annual_max_aed": 516000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "Communications Manager",
+    "monthly_min_aed": 30000,
+    "monthly_max_aed": 41000,
+    "annual_min_aed": 360000,
+    "annual_max_aed": 492000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "Consumer Insight Manager",
+    "monthly_min_aed": 23000,
+    "monthly_max_aed": 34000,
+    "annual_min_aed": 276000,
+    "annual_max_aed": 408000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "CRM / Marketing Automation Manager",
+    "monthly_min_aed": 28000,
+    "monthly_max_aed": 32000,
+    "annual_min_aed": 336000,
+    "annual_max_aed": 384000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "Trade Marketing Manager",
+    "monthly_min_aed": 21000,
+    "monthly_max_aed": 30000,
+    "annual_min_aed": 252000,
+    "annual_max_aed": 360000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "PR Manager",
+    "monthly_min_aed": 19000,
+    "monthly_max_aed": 27000,
+    "annual_min_aed": 228000,
+    "annual_max_aed": 324000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "Brand Manager / Regional",
+    "monthly_min_aed": 19000,
+    "monthly_max_aed": 26000,
+    "annual_min_aed": 228000,
+    "annual_max_aed": 312000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "INDUSTRIAL (B2B) Chief Sales Officer",
+    "monthly_min_aed": 78000,
+    "monthly_max_aed": 99000,
+    "annual_min_aed": 936000,
+    "annual_max_aed": 1188000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "SALES General Manager",
+    "monthly_min_aed": 53000,
+    "monthly_max_aed": 76000,
+    "annual_min_aed": 636000,
+    "annual_max_aed": 912000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "Regional Sales Director",
+    "monthly_min_aed": 51000,
+    "monthly_max_aed": 66000,
+    "annual_min_aed": 612000,
+    "annual_max_aed": 792000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "Chief Sales Officer",
+    "monthly_min_aed": 39000,
+    "monthly_max_aed": 49000,
+    "annual_min_aed": 468000,
+    "annual_max_aed": 588000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "Country Sales Manager",
+    "monthly_min_aed": 38000,
+    "monthly_max_aed": 48000,
+    "annual_min_aed": 456000,
+    "annual_max_aed": 576000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "Project Sales Manager",
+    "monthly_min_aed": 26000,
+    "monthly_max_aed": 38000,
+    "annual_min_aed": 312000,
+    "annual_max_aed": 456000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "Business Development Manager",
+    "monthly_min_aed": 26000,
+    "monthly_max_aed": 34000,
+    "annual_min_aed": 312000,
+    "annual_max_aed": 408000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "Key Account Manager / Area Sales Manager",
+    "monthly_min_aed": 19000,
+    "monthly_max_aed": 26000,
+    "annual_min_aed": 228000,
+    "annual_max_aed": 312000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "Pre Sales Manager",
+    "monthly_min_aed": 17000,
+    "monthly_max_aed": 24000,
+    "annual_min_aed": 204000,
+    "annual_max_aed": 288000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "Sales Engineer / Specification Specialist",
+    "monthly_min_aed": 13000,
+    "monthly_max_aed": 23000,
+    "annual_min_aed": 156000,
+    "annual_max_aed": 276000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "Account Manager",
+    "monthly_min_aed": 16000,
+    "monthly_max_aed": 22000,
+    "annual_min_aed": 192000,
+    "annual_max_aed": 264000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "Business Development Executive",
+    "monthly_min_aed": 10000,
+    "monthly_max_aed": 16000,
+    "annual_min_aed": 120000,
+    "annual_max_aed": 192000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "INDUSTRIAL (B2B) Chief Marketing Officer",
+    "monthly_min_aed": 69000,
+    "monthly_max_aed": 98000,
+    "annual_min_aed": 828000,
+    "annual_max_aed": 1176000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "MARKETING Regional Head of Product",
+    "monthly_min_aed": 43000,
+    "monthly_max_aed": 53000,
+    "annual_min_aed": 516000,
+    "annual_max_aed": 636000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "Marketing Manager / Group Product Manager",
+    "monthly_min_aed": 38000,
+    "monthly_max_aed": 47000,
+    "annual_min_aed": 456000,
+    "annual_max_aed": 564000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "Regional Communications Manager",
+    "monthly_min_aed": 30000,
+    "monthly_max_aed": 41000,
+    "annual_min_aed": 360000,
+    "annual_max_aed": 492000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "CRM/ Marketing Automation Manager",
+    "monthly_min_aed": 29000,
+    "monthly_max_aed": 37000,
+    "annual_min_aed": 348000,
+    "annual_max_aed": 444000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "Marketing Research Manager",
+    "monthly_min_aed": 26000,
+    "monthly_max_aed": 33000,
+    "annual_min_aed": 312000,
+    "annual_max_aed": 396000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "Manager - Sales Analytics",
+    "monthly_min_aed": 26000,
+    "monthly_max_aed": 32000,
+    "annual_min_aed": 312000,
+    "annual_max_aed": 384000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "Category Manager",
+    "monthly_min_aed": 23000,
+    "monthly_max_aed": 31000,
+    "annual_min_aed": 276000,
+    "annual_max_aed": 372000
+  },
+  {
+    "sector": "Sales & Marketing",
+    "role": "Regional PR",
+    "monthly_min_aed": 19000,
+    "monthly_max_aed": 27000,
+    "annual_min_aed": 228000,
+    "annual_max_aed": 324000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Group Chief Financial Officer Large Local groups & MNCs",
+    "monthly_min_aed": 107000,
+    "monthly_max_aed": 160000,
+    "annual_min_aed": 1284000,
+    "annual_max_aed": 1920000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Chief Financial Officer Large Local groups & MNCs",
+    "monthly_min_aed": 85000,
+    "monthly_max_aed": 127000,
+    "annual_min_aed": 1020000,
+    "annual_max_aed": 1524000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Chief Financial Officer Small to Medium Enterprises SMEs",
+    "monthly_min_aed": 64000,
+    "monthly_max_aed": 96000,
+    "annual_min_aed": 768000,
+    "annual_max_aed": 1152000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Financial Director Large Local groups & MNCs",
+    "monthly_min_aed": 66000,
+    "monthly_max_aed": 85000,
+    "annual_min_aed": 792000,
+    "annual_max_aed": 1020000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Financial Director Small to Medium Enterprises SMEs",
+    "monthly_min_aed": 55000,
+    "monthly_max_aed": 72000,
+    "annual_min_aed": 660000,
+    "annual_max_aed": 864000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Treasury Director Large Local groups & MNCs",
+    "monthly_min_aed": 69000,
+    "monthly_max_aed": 85000,
+    "annual_min_aed": 828000,
+    "annual_max_aed": 1020000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Treasury Director Small to Medium Enterprises SMEs",
+    "monthly_min_aed": 59000,
+    "monthly_max_aed": 74000,
+    "annual_min_aed": 708000,
+    "annual_max_aed": 888000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Financial Controller Large Local groups & MNCs",
+    "monthly_min_aed": 45000,
+    "monthly_max_aed": 59000,
+    "annual_min_aed": 540000,
+    "annual_max_aed": 708000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Financial Controller Small to Medium Enterprises SMEs",
+    "monthly_min_aed": 38000,
+    "monthly_max_aed": 53000,
+    "annual_min_aed": 456000,
+    "annual_max_aed": 636000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Financial Planning Analysis Director Large Local groups & MNCs",
+    "monthly_min_aed": 59000,
+    "monthly_max_aed": 76000,
+    "annual_min_aed": 708000,
+    "annual_max_aed": 912000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Financial Planning Analysis Director Small to Medium Enterprises SMEs",
+    "monthly_min_aed": 48000,
+    "monthly_max_aed": 66000,
+    "annual_min_aed": 576000,
+    "annual_max_aed": 792000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Financial Planning Analysis Manager Large Local groups & MNCs",
+    "monthly_min_aed": 34000,
+    "monthly_max_aed": 48000,
+    "annual_min_aed": 408000,
+    "annual_max_aed": 576000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Financial Planning Analysis Manager Small to Medium Enterprises SMEs",
+    "monthly_min_aed": 26000,
+    "monthly_max_aed": 38000,
+    "annual_min_aed": 312000,
+    "annual_max_aed": 456000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Treasury Manager Large Local groups & MNCs",
+    "monthly_min_aed": 33000,
+    "monthly_max_aed": 48000,
+    "annual_min_aed": 396000,
+    "annual_max_aed": 576000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Treasury Manager Small to Medium Enterprises SMEs",
+    "monthly_min_aed": 26000,
+    "monthly_max_aed": 39000,
+    "annual_min_aed": 312000,
+    "annual_max_aed": 468000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Finance Manager Large Local groups & MNCs",
+    "monthly_min_aed": 38000,
+    "monthly_max_aed": 48000,
+    "annual_min_aed": 456000,
+    "annual_max_aed": 576000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Finance Manager Small to Medium Enterprises SMEs",
+    "monthly_min_aed": 30000,
+    "monthly_max_aed": 39000,
+    "annual_min_aed": 360000,
+    "annual_max_aed": 468000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Chief Internal Auditor Large Local groups & MNCs",
+    "monthly_min_aed": 91000,
+    "monthly_max_aed": 138000,
+    "annual_min_aed": 1092000,
+    "annual_max_aed": 1656000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Director - Internal Audit Large Local groups & MNCs",
+    "monthly_min_aed": 64000,
+    "monthly_max_aed": 85000,
+    "annual_min_aed": 768000,
+    "annual_max_aed": 1020000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Director - Internal Audit Small to Medium Enterprises SMEs",
+    "monthly_min_aed": 53000,
+    "monthly_max_aed": 69000,
+    "annual_min_aed": 636000,
+    "annual_max_aed": 828000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Manager - Internal Audit Large Local groups & MNCs",
+    "monthly_min_aed": 32000,
+    "monthly_max_aed": 43000,
+    "annual_min_aed": 384000,
+    "annual_max_aed": 516000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Manager - Internal Audit Small to Medium Enterprises SMEs",
+    "monthly_min_aed": 26000,
+    "monthly_max_aed": 38000,
+    "annual_min_aed": 312000,
+    "annual_max_aed": 456000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Reporting Manager Large Local groups & MNCs",
+    "monthly_min_aed": 32000,
+    "monthly_max_aed": 43000,
+    "annual_min_aed": 384000,
+    "annual_max_aed": 516000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Reporting Manager Small to Medium Enterprises SMEs",
+    "monthly_min_aed": 21000,
+    "monthly_max_aed": 32000,
+    "annual_min_aed": 252000,
+    "annual_max_aed": 384000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Budgeting Manager Large Local groups & MNCs",
+    "monthly_min_aed": 25000,
+    "monthly_max_aed": 38000,
+    "annual_min_aed": 300000,
+    "annual_max_aed": 456000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Budgeting Manager Small to Medium Enterprises SMEs",
+    "monthly_min_aed": 19000,
+    "monthly_max_aed": 28000,
+    "annual_min_aed": 228000,
+    "annual_max_aed": 336000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Chief Accountant Large Local groups & MNCs",
+    "monthly_min_aed": 16000,
+    "monthly_max_aed": 24000,
+    "annual_min_aed": 192000,
+    "annual_max_aed": 288000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Chief Accountant Small to Medium Enterprises SMEs",
+    "monthly_min_aed": 11000,
+    "monthly_max_aed": 17000,
+    "annual_min_aed": 132000,
+    "annual_max_aed": 204000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Finance / Business Analyst Large Local groups & MNCs",
+    "monthly_min_aed": 10000,
+    "monthly_max_aed": 19000,
+    "annual_min_aed": 120000,
+    "annual_max_aed": 228000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Finance / Business Analyst Small to Medium Enterprises SMEs",
+    "monthly_min_aed": 9000,
+    "monthly_max_aed": 16000,
+    "annual_min_aed": 108000,
+    "annual_max_aed": 192000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Credit Manager Large Local groups & MNCs",
+    "monthly_min_aed": 16000,
+    "monthly_max_aed": 24000,
+    "annual_min_aed": 192000,
+    "annual_max_aed": 288000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Credit Manager Small to Medium Enterprises SMEs",
+    "monthly_min_aed": 13000,
+    "monthly_max_aed": 19000,
+    "annual_min_aed": 156000,
+    "annual_max_aed": 228000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Financial Accountant Large Local groups & MNCs",
+    "monthly_min_aed": 11000,
+    "monthly_max_aed": 17000,
+    "annual_min_aed": 132000,
+    "annual_max_aed": 204000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Financial Accountant Small to Medium Enterprises SMEs",
+    "monthly_min_aed": 8000,
+    "monthly_max_aed": 14000,
+    "annual_min_aed": 96000,
+    "annual_max_aed": 168000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Management Accountant Large Local groups & MNCs",
+    "monthly_min_aed": 10000,
+    "monthly_max_aed": 19000,
+    "annual_min_aed": 120000,
+    "annual_max_aed": 228000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Management Accountant Small to Medium Enterprises SMEs",
+    "monthly_min_aed": 6000,
+    "monthly_max_aed": 13000,
+    "annual_min_aed": 72000,
+    "annual_max_aed": 156000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "AP/AR Accountant Large Local groups & MNCs",
+    "monthly_min_aed": 4000,
+    "monthly_max_aed": 10000,
+    "annual_min_aed": 48000,
+    "annual_max_aed": 120000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "AP/AR Accountant Small to Medium Enterprises SMEs",
+    "monthly_min_aed": 4000,
+    "monthly_max_aed": 10000,
+    "annual_min_aed": 48000,
+    "annual_max_aed": 120000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Internal Auditor Large Local groups & MNCs",
+    "monthly_min_aed": 13000,
+    "monthly_max_aed": 19000,
+    "annual_min_aed": 156000,
+    "annual_max_aed": 228000
+  },
+  {
+    "sector": "Senior Finance",
+    "role": "Internal Auditor Small to Medium Enterprises SMEs",
+    "monthly_min_aed": 8000,
+    "monthly_max_aed": 14000,
+    "annual_min_aed": 96000,
+    "annual_max_aed": 168000
+  },
+  {
+    "sector": "Strategy & Consulting",
+    "role": "INDUSTRY Chief Strategy Officer",
+    "monthly_min_aed": 96000,
+    "monthly_max_aed": 137000,
+    "annual_min_aed": 1152000,
+    "annual_max_aed": 1644000
+  },
+  {
+    "sector": "Strategy & Consulting",
+    "role": "Strategy Director",
+    "monthly_min_aed": 66000,
+    "monthly_max_aed": 91000,
+    "annual_min_aed": 792000,
+    "annual_max_aed": 1092000
+  },
+  {
+    "sector": "Strategy & Consulting",
+    "role": "Senior Strategy Manager",
+    "monthly_min_aed": 51000,
+    "monthly_max_aed": 64000,
+    "annual_min_aed": 612000,
+    "annual_max_aed": 768000
+  },
+  {
+    "sector": "Strategy & Consulting",
+    "role": "Strategy Manager",
+    "monthly_min_aed": 33000,
+    "monthly_max_aed": 48000,
+    "annual_min_aed": 396000,
+    "annual_max_aed": 576000
+  },
+  {
+    "sector": "Strategy & Consulting",
+    "role": "Strategy Analyst",
+    "monthly_min_aed": 19000,
+    "monthly_max_aed": 24000,
+    "annual_min_aed": 228000,
+    "annual_max_aed": 288000
+  },
+  {
+    "sector": "Strategy & Consulting",
+    "role": "FIRMS Principal",
+    "monthly_min_aed": 84000,
+    "monthly_max_aed": 103000,
+    "annual_min_aed": 1008000,
+    "annual_max_aed": 1236000
+  },
+  {
+    "sector": "Strategy & Consulting",
+    "role": "Engagement Manager",
+    "monthly_min_aed": 56000,
+    "monthly_max_aed": 75000,
+    "annual_min_aed": 672000,
+    "annual_max_aed": 900000
+  },
+  {
+    "sector": "Strategy & Consulting",
+    "role": "Associate",
+    "monthly_min_aed": 38000,
+    "monthly_max_aed": 55000,
+    "annual_min_aed": 456000,
+    "annual_max_aed": 660000
+  },
+  {
+    "sector": "Strategy & Consulting",
+    "role": "Senior Analyst",
+    "monthly_min_aed": 30000,
+    "monthly_max_aed": 38000,
+    "annual_min_aed": 360000,
+    "annual_max_aed": 456000
+  },
+  {
+    "sector": "Strategy & Consulting",
+    "role": "Business Analyst",
+    "monthly_min_aed": 23000,
+    "monthly_max_aed": 29000,
+    "annual_min_aed": 276000,
+    "annual_max_aed": 348000
+  },
+  {
+    "sector": "Strategy & Consulting",
+    "role": "CONSULTING Partner (1-5 years)",
+    "monthly_min_aed": 90000,
+    "monthly_max_aed": 120000,
+    "annual_min_aed": 1080000,
+    "annual_max_aed": 1440000
+  },
+  {
+    "sector": "Strategy & Consulting",
+    "role": "Director",
+    "monthly_min_aed": 59000,
+    "monthly_max_aed": 75000,
+    "annual_min_aed": 708000,
+    "annual_max_aed": 900000
+  },
+  {
+    "sector": "Strategy & Consulting",
+    "role": "Senior Manager",
+    "monthly_min_aed": 42000,
+    "monthly_max_aed": 53000,
+    "annual_min_aed": 504000,
+    "annual_max_aed": 636000
+  },
+  {
+    "sector": "Strategy & Consulting",
+    "role": "Manager",
+    "monthly_min_aed": 29000,
+    "monthly_max_aed": 40000,
+    "annual_min_aed": 348000,
+    "annual_max_aed": 480000
+  },
+  {
+    "sector": "Strategy & Consulting",
+    "role": "Senior Consultant",
+    "monthly_min_aed": 22000,
+    "monthly_max_aed": 26000,
+    "annual_min_aed": 264000,
+    "annual_max_aed": 312000
+  },
+  {
+    "sector": "Strategy & Consulting",
+    "role": "Consultant",
+    "monthly_min_aed": 14000,
+    "monthly_max_aed": 20000,
+    "annual_min_aed": 168000,
+    "annual_max_aed": 240000
+  },
+  {
+    "sector": "Supply Chain & Logistics",
+    "role": "General Manager",
+    "monthly_min_aed": 64000,
+    "monthly_max_aed": 99000,
+    "annual_min_aed": 768000,
+    "annual_max_aed": 1188000
+  },
+  {
+    "sector": "Supply Chain & Logistics",
+    "role": "Procurement Director",
+    "monthly_min_aed": 51000,
+    "monthly_max_aed": 74000,
+    "annual_min_aed": 612000,
+    "annual_max_aed": 888000
+  },
+  {
+    "sector": "Supply Chain & Logistics",
+    "role": "Supply Chain Director",
+    "monthly_min_aed": 49000,
+    "monthly_max_aed": 71000,
+    "annual_min_aed": 588000,
+    "annual_max_aed": 852000
+  },
+  {
+    "sector": "Supply Chain & Logistics",
+    "role": "Project Procurement Manager",
+    "monthly_min_aed": 32000,
+    "monthly_max_aed": 43000,
+    "annual_min_aed": 384000,
+    "annual_max_aed": 516000
+  },
+  {
+    "sector": "Supply Chain & Logistics",
+    "role": "Corporate Procurement Manager",
+    "monthly_min_aed": 32000,
+    "monthly_max_aed": 43000,
+    "annual_min_aed": 384000,
+    "annual_max_aed": 516000
+  },
+  {
+    "sector": "Supply Chain & Logistics",
+    "role": "Supply Chain Manager",
+    "monthly_min_aed": 25000,
+    "monthly_max_aed": 41000,
+    "annual_min_aed": 300000,
+    "annual_max_aed": 492000
+  },
+  {
+    "sector": "Supply Chain & Logistics",
+    "role": "Trade Compliance Manager",
+    "monthly_min_aed": 20000,
+    "monthly_max_aed": 40000,
+    "annual_min_aed": 240000,
+    "annual_max_aed": 480000
+  },
+  {
+    "sector": "Supply Chain & Logistics",
+    "role": "Operations Manager",
+    "monthly_min_aed": 21000,
+    "monthly_max_aed": 39000,
+    "annual_min_aed": 252000,
+    "annual_max_aed": 468000
+  },
+  {
+    "sector": "Supply Chain & Logistics",
+    "role": "Contracts Manager",
+    "monthly_min_aed": 26000,
+    "monthly_max_aed": 32000,
+    "annual_min_aed": 312000,
+    "annual_max_aed": 384000
+  },
+  {
+    "sector": "Supply Chain & Logistics",
+    "role": "Category Manager",
+    "monthly_min_aed": 24000,
+    "monthly_max_aed": 28000,
+    "annual_min_aed": 288000,
+    "annual_max_aed": 336000
+  },
+  {
+    "sector": "Supply Chain & Logistics",
+    "role": "Demand/Supply Planning Manager",
+    "monthly_min_aed": 22000,
+    "monthly_max_aed": 27000,
+    "annual_min_aed": 264000,
+    "annual_max_aed": 324000
+  },
+  {
+    "sector": "Supply Chain & Logistics",
+    "role": "Logistics Manager",
+    "monthly_min_aed": 16000,
+    "monthly_max_aed": 27000,
+    "annual_min_aed": 192000,
+    "annual_max_aed": 324000
+  },
+  {
+    "sector": "Supply Chain & Logistics",
+    "role": "Bid Manager",
+    "monthly_min_aed": 19000,
+    "monthly_max_aed": 27000,
+    "annual_min_aed": 228000,
+    "annual_max_aed": 324000
+  },
+  {
+    "sector": "Supply Chain & Logistics",
+    "role": "Materials Manager",
+    "monthly_min_aed": 16000,
+    "monthly_max_aed": 26000,
+    "annual_min_aed": 192000,
+    "annual_max_aed": 312000
+  },
+  {
+    "sector": "Supply Chain & Logistics",
+    "role": "Senior Contracts Engineer",
+    "monthly_min_aed": 15000,
+    "monthly_max_aed": 24000,
+    "annual_min_aed": 180000,
+    "annual_max_aed": 288000
+  },
+  {
+    "sector": "Supply Chain & Logistics",
+    "role": "Warehouse Manager",
+    "monthly_min_aed": 15000,
+    "monthly_max_aed": 21000,
+    "annual_min_aed": 180000,
+    "annual_max_aed": 252000
+  },
+  {
+    "sector": "Supply Chain & Logistics",
+    "role": "Demand/Supply Planner",
+    "monthly_min_aed": 10000,
+    "monthly_max_aed": 16000,
+    "annual_min_aed": 120000,
+    "annual_max_aed": 192000
+  },
+  {
+    "sector": "Supply Chain & Logistics",
+    "role": "Materials Engineer",
+    "monthly_min_aed": 9000,
+    "monthly_max_aed": 14000,
+    "annual_min_aed": 108000,
+    "annual_max_aed": 168000
+  },
+  {
+    "sector": "Supply Chain & Logistics",
+    "role": "Buyer",
+    "monthly_min_aed": 10000,
+    "monthly_max_aed": 14000,
+    "annual_min_aed": 120000,
+    "annual_max_aed": 168000
+  },
+  {
+    "sector": "Supply Chain & Logistics",
+    "role": "Warehouse Supervisor",
+    "monthly_min_aed": 8000,
+    "monthly_max_aed": 13000,
+    "annual_min_aed": 96000,
+    "annual_max_aed": 156000
+  },
+  {
+    "sector": "Public Sector",
+    "role": "BIG4 Partner (5+ years)",
+    "monthly_min_aed": 85000,
+    "monthly_max_aed": 122000,
+    "annual_min_aed": 1020000,
+    "annual_max_aed": 1464000
+  },
+  {
+    "sector": "Public Sector",
+    "role": "Partner (1-4 years)",
+    "monthly_min_aed": 57000,
+    "monthly_max_aed": 79000,
+    "annual_min_aed": 684000,
+    "annual_max_aed": 948000
+  },
+  {
+    "sector": "Public Sector",
+    "role": "Director",
+    "monthly_min_aed": 48000,
+    "monthly_max_aed": 61000,
+    "annual_min_aed": 576000,
+    "annual_max_aed": 732000
+  },
+  {
+    "sector": "Public Sector",
+    "role": "Senior Manager",
+    "monthly_min_aed": 31000,
+    "monthly_max_aed": 47000,
+    "annual_min_aed": 372000,
+    "annual_max_aed": 564000
+  },
+  {
+    "sector": "Public Sector",
+    "role": "Manager",
+    "monthly_min_aed": 25000,
+    "monthly_max_aed": 40000,
+    "annual_min_aed": 300000,
+    "annual_max_aed": 480000
+  },
+  {
+    "sector": "Public Sector",
+    "role": "Assistant Manager",
+    "monthly_min_aed": 16000,
+    "monthly_max_aed": 23000,
+    "annual_min_aed": 192000,
+    "annual_max_aed": 276000
+  },
+  {
+    "sector": "Public Sector",
+    "role": "Associate / Senior Associate",
+    "monthly_min_aed": 15000,
+    "monthly_max_aed": 20000,
+    "annual_min_aed": 180000,
+    "annual_max_aed": 240000
+  },
+  {
+    "sector": "Public Sector",
+    "role": "INDUSTRY & Head of Tax (5+ years)",
+    "monthly_min_aed": 71000,
+    "monthly_max_aed": 105000,
+    "annual_min_aed": 852000,
+    "annual_max_aed": 1260000
+  },
+  {
+    "sector": "Public Sector",
+    "role": "PUBLIC SECTOR Director (1-4 years)",
+    "monthly_min_aed": 49000,
+    "monthly_max_aed": 73000,
+    "annual_min_aed": 588000,
+    "annual_max_aed": 876000
+  },
+  {
+    "sector": "Public Sector",
+    "role": "Senior Manager",
+    "monthly_min_aed": 38000,
+    "monthly_max_aed": 49000,
+    "annual_min_aed": 456000,
+    "annual_max_aed": 588000
+  },
+  {
+    "sector": "Public Sector",
+    "role": "Manager",
+    "monthly_min_aed": 25000,
+    "monthly_max_aed": 39000,
+    "annual_min_aed": 300000,
+    "annual_max_aed": 468000
+  },
+  {
+    "sector": "Public Sector",
+    "role": "Supervisor",
+    "monthly_min_aed": 20000,
+    "monthly_max_aed": 27000,
+    "annual_min_aed": 240000,
+    "annual_max_aed": 324000
+  },
+  {
+    "sector": "Public Sector",
+    "role": "Analyst/Senior Analyst",
+    "monthly_min_aed": 16000,
+    "monthly_max_aed": 22000,
+    "annual_min_aed": 192000,
+    "annual_max_aed": 264000
+  },
+  {
+    "sector": "Technology",
+    "role": "CONSULTING Partner",
+    "monthly_min_aed": 91000,
+    "monthly_max_aed": 117000,
+    "annual_min_aed": 1092000,
+    "annual_max_aed": 1404000
+  },
+  {
+    "sector": "Technology",
+    "role": "CLOUD Director",
+    "monthly_min_aed": 46000,
+    "monthly_max_aed": 61000,
+    "annual_min_aed": 552000,
+    "annual_max_aed": 732000
+  },
+  {
+    "sector": "Technology",
+    "role": "ENGINEERING & Senior Manager",
+    "monthly_min_aed": 34000,
+    "monthly_max_aed": 44000,
+    "annual_min_aed": 408000,
+    "annual_max_aed": 528000
+  },
+  {
+    "sector": "Technology",
+    "role": "ADVISORY Manager",
+    "monthly_min_aed": 28000,
+    "monthly_max_aed": 33000,
+    "annual_min_aed": 336000,
+    "annual_max_aed": 396000
+  },
+  {
+    "sector": "Technology",
+    "role": "Senior Consultant",
+    "monthly_min_aed": 22000,
+    "monthly_max_aed": 27000,
+    "annual_min_aed": 264000,
+    "annual_max_aed": 324000
+  },
+  {
+    "sector": "Technology",
+    "role": "Consultant",
+    "monthly_min_aed": 17000,
+    "monthly_max_aed": 21000,
+    "annual_min_aed": 204000,
+    "annual_max_aed": 252000
+  },
+  {
+    "sector": "Technology",
+    "role": "Business Analyst",
+    "monthly_min_aed": 11000,
+    "monthly_max_aed": 16000,
+    "annual_min_aed": 132000,
+    "annual_max_aed": 192000
+  },
+  {
+    "sector": "Technology",
+    "role": "DIGITAL Partner",
+    "monthly_min_aed": 91000,
+    "monthly_max_aed": 117000,
+    "annual_min_aed": 1092000,
+    "annual_max_aed": 1404000
+  },
+  {
+    "sector": "Technology",
+    "role": "DATA ANALYTICS Director",
+    "monthly_min_aed": 61000,
+    "monthly_max_aed": 71000,
+    "annual_min_aed": 732000,
+    "annual_max_aed": 852000
+  },
+  {
+    "sector": "Technology",
+    "role": "Senior Manager",
+    "monthly_min_aed": 40000,
+    "monthly_max_aed": 49000,
+    "annual_min_aed": 480000,
+    "annual_max_aed": 588000
+  },
+  {
+    "sector": "Technology",
+    "role": "Manager",
+    "monthly_min_aed": 31000,
+    "monthly_max_aed": 37000,
+    "annual_min_aed": 372000,
+    "annual_max_aed": 444000
+  },
+  {
+    "sector": "Technology",
+    "role": "Senior Consultant",
+    "monthly_min_aed": 21000,
+    "monthly_max_aed": 26000,
+    "annual_min_aed": 252000,
+    "annual_max_aed": 312000
+  },
+  {
+    "sector": "Technology",
+    "role": "Consultant",
+    "monthly_min_aed": 16000,
+    "monthly_max_aed": 20000,
+    "annual_min_aed": 192000,
+    "annual_max_aed": 240000
+  },
+  {
+    "sector": "Technology",
+    "role": "Business Analyst",
+    "monthly_min_aed": 11000,
+    "monthly_max_aed": 15000,
+    "annual_min_aed": 132000,
+    "annual_max_aed": 180000
+  },
+  {
+    "sector": "Technology",
+    "role": "CYBER SECURITY Partner",
+    "monthly_min_aed": 91000,
+    "monthly_max_aed": 117000,
+    "annual_min_aed": 1092000,
+    "annual_max_aed": 1404000
+  },
+  {
+    "sector": "Technology",
+    "role": "IT AUDIT & Director",
+    "monthly_min_aed": 57000,
+    "monthly_max_aed": 64000,
+    "annual_min_aed": 684000,
+    "annual_max_aed": 768000
+  },
+  {
+    "sector": "Technology",
+    "role": "RISK ADVISORY Senior Manager",
+    "monthly_min_aed": 44000,
+    "monthly_max_aed": 51000,
+    "annual_min_aed": 528000,
+    "annual_max_aed": 612000
+  },
+  {
+    "sector": "Technology",
+    "role": "Manager",
+    "monthly_min_aed": 33000,
+    "monthly_max_aed": 39000,
+    "annual_min_aed": 396000,
+    "annual_max_aed": 468000
+  },
+  {
+    "sector": "Technology",
+    "role": "Senior Consultant",
+    "monthly_min_aed": 19000,
+    "monthly_max_aed": 26000,
+    "annual_min_aed": 228000,
+    "annual_max_aed": 312000
+  },
+  {
+    "sector": "Technology",
+    "role": "Consultant",
+    "monthly_min_aed": 15000,
+    "monthly_max_aed": 19000,
+    "annual_min_aed": 180000,
+    "annual_max_aed": 228000
+  },
+  {
+    "sector": "Technology",
+    "role": "Business Analyst",
+    "monthly_min_aed": 11000,
+    "monthly_max_aed": 15000,
+    "annual_min_aed": 132000,
+    "annual_max_aed": 180000
+  },
+  {
+    "sector": "Technology",
+    "role": "INDUSTRY UX / UI Designer",
+    "monthly_min_aed": 22000,
+    "monthly_max_aed": 34000,
+    "annual_min_aed": 264000,
+    "annual_max_aed": 408000
+  },
+  {
+    "sector": "Technology",
+    "role": "DevOps Engineer",
+    "monthly_min_aed": 23000,
+    "monthly_max_aed": 30000,
+    "annual_min_aed": 276000,
+    "annual_max_aed": 360000
+  },
+  {
+    "sector": "Technology",
+    "role": "Cloud Engineer",
+    "monthly_min_aed": 24000,
+    "monthly_max_aed": 30000,
+    "annual_min_aed": 288000,
+    "annual_max_aed": 360000
+  },
+  {
+    "sector": "Technology",
+    "role": "Business Continuity & DR Engineer",
+    "monthly_min_aed": 20000,
+    "monthly_max_aed": 24000,
+    "annual_min_aed": 240000,
+    "annual_max_aed": 288000
+  },
+  {
+    "sector": "Technology",
+    "role": "Network Manager",
+    "monthly_min_aed": 20000,
+    "monthly_max_aed": 24000,
+    "annual_min_aed": 240000,
+    "annual_max_aed": 288000
+  },
+  {
+    "sector": "Technology",
+    "role": "Network Engineer",
+    "monthly_min_aed": 14000,
+    "monthly_max_aed": 20000,
+    "annual_min_aed": 168000,
+    "annual_max_aed": 240000
+  },
+  {
+    "sector": "Technology",
+    "role": "VENDORS VP of Sales",
+    "monthly_min_aed": 82000,
+    "monthly_max_aed": 110000,
+    "annual_min_aed": 984000,
+    "annual_max_aed": 1320000
+  },
+  {
+    "sector": "Technology",
+    "role": "Country Manager / Regional Sales Director",
+    "monthly_min_aed": 66000,
+    "monthly_max_aed": 76000,
+    "annual_min_aed": 792000,
+    "annual_max_aed": 912000
+  },
+  {
+    "sector": "Technology",
+    "role": "Pre-Sales Director",
+    "monthly_min_aed": 48000,
+    "monthly_max_aed": 55000,
+    "annual_min_aed": 576000,
+    "annual_max_aed": 660000
+  },
+  {
+    "sector": "Technology",
+    "role": "Professional Services Director",
+    "monthly_min_aed": 46000,
+    "monthly_max_aed": 52000,
+    "annual_min_aed": 552000,
+    "annual_max_aed": 624000
+  },
+  {
+    "sector": "Technology",
+    "role": "Sales Manager / RSM",
+    "monthly_min_aed": 39000,
+    "monthly_max_aed": 52000,
+    "annual_min_aed": 468000,
+    "annual_max_aed": 624000
+  },
+  {
+    "sector": "Technology",
+    "role": "Pre-Sales Manager",
+    "monthly_min_aed": 33000,
+    "monthly_max_aed": 42000,
+    "annual_min_aed": 396000,
+    "annual_max_aed": 504000
+  },
+  {
+    "sector": "Technology",
+    "role": "Territory / Regional Sales Manager (Individual Contributor)",
+    "monthly_min_aed": 31000,
+    "monthly_max_aed": 42000,
+    "annual_min_aed": 372000,
+    "annual_max_aed": 504000
+  },
+  {
+    "sector": "Technology",
+    "role": "Customer Success Manager / TAM",
+    "monthly_min_aed": 27000,
+    "monthly_max_aed": 39000,
+    "annual_min_aed": 324000,
+    "annual_max_aed": 468000
+  },
+  {
+    "sector": "Technology",
+    "role": "Pre-Sales Engineer",
+    "monthly_min_aed": 26000,
+    "monthly_max_aed": 31000,
+    "annual_min_aed": 312000,
+    "annual_max_aed": 372000
+  },
+  {
+    "sector": "Technology",
+    "role": "Inside Sales Manager",
+    "monthly_min_aed": 25000,
+    "monthly_max_aed": 30000,
+    "annual_min_aed": 300000,
+    "annual_max_aed": 360000
+  },
+  {
+    "sector": "Technology",
+    "role": "Inside Sales Representative",
+    "monthly_min_aed": 16000,
+    "monthly_max_aed": 23000,
+    "annual_min_aed": 192000,
+    "annual_max_aed": 276000
+  },
+  {
+    "sector": "Technology",
+    "role": "INDUSTRY Chief Digital Officer",
+    "monthly_min_aed": 99000,
+    "monthly_max_aed": 132000,
+    "annual_min_aed": 1188000,
+    "annual_max_aed": 1584000
+  },
+  {
+    "sector": "Technology",
+    "role": "Chief Information & Technology Officer",
+    "monthly_min_aed": 99000,
+    "monthly_max_aed": 120000,
+    "annual_min_aed": 1188000,
+    "annual_max_aed": 1440000
+  },
+  {
+    "sector": "Technology",
+    "role": "Chief Information Security Officer (CISO)",
+    "monthly_min_aed": 88000,
+    "monthly_max_aed": 99000,
+    "annual_min_aed": 1056000,
+    "annual_max_aed": 1188000
+  },
+  {
+    "sector": "Technology",
+    "role": "Chief Product Officer",
+    "monthly_min_aed": 76000,
+    "monthly_max_aed": 99000,
+    "annual_min_aed": 912000,
+    "annual_max_aed": 1188000
+  },
+  {
+    "sector": "Technology",
+    "role": "VP of Digital Transformation",
+    "monthly_min_aed": 79000,
+    "monthly_max_aed": 91000,
+    "annual_min_aed": 948000,
+    "annual_max_aed": 1092000
+  },
+  {
+    "sector": "Technology",
+    "role": "Head of Digital Factory",
+    "monthly_min_aed": 79000,
+    "monthly_max_aed": 91000,
+    "annual_min_aed": 948000,
+    "annual_max_aed": 1092000
+  },
+  {
+    "sector": "Technology",
+    "role": "Product Director",
+    "monthly_min_aed": 79000,
+    "monthly_max_aed": 91000,
+    "annual_min_aed": 948000,
+    "annual_max_aed": 1092000
+  },
+  {
+    "sector": "Technology",
+    "role": "Data Governance Director",
+    "monthly_min_aed": 74000,
+    "monthly_max_aed": 85000,
+    "annual_min_aed": 888000,
+    "annual_max_aed": 1020000
+  },
+  {
+    "sector": "Technology",
+    "role": "Head of Data Science",
+    "monthly_min_aed": 66000,
+    "monthly_max_aed": 82000,
+    "annual_min_aed": 792000,
+    "annual_max_aed": 984000
+  },
+  {
+    "sector": "Technology",
+    "role": "IT Director",
+    "monthly_min_aed": 66000,
+    "monthly_max_aed": 76000,
+    "annual_min_aed": 792000,
+    "annual_max_aed": 912000
+  },
+  {
+    "sector": "Technology",
+    "role": "Director of Analytics",
+    "monthly_min_aed": 61000,
+    "monthly_max_aed": 76000,
+    "annual_min_aed": 732000,
+    "annual_max_aed": 912000
+  },
+  {
+    "sector": "Technology",
+    "role": "Lead Enterprise Architect",
+    "monthly_min_aed": 59000,
+    "monthly_max_aed": 76000,
+    "annual_min_aed": 708000,
+    "annual_max_aed": 912000
+  },
+  {
+    "sector": "Technology",
+    "role": "Program Director",
+    "monthly_min_aed": 64000,
+    "monthly_max_aed": 74000,
+    "annual_min_aed": 768000,
+    "annual_max_aed": 888000
+  },
+  {
+    "sector": "Technology",
+    "role": "Head of Digital",
+    "monthly_min_aed": 56000,
+    "monthly_max_aed": 72000,
+    "annual_min_aed": 672000,
+    "annual_max_aed": 864000
+  },
+  {
+    "sector": "Technology",
+    "role": "Head of Cloud Business Unit",
+    "monthly_min_aed": 55000,
+    "monthly_max_aed": 71000,
+    "annual_min_aed": 660000,
+    "annual_max_aed": 852000
+  },
+  {
+    "sector": "Technology",
+    "role": "Digital Transformation Manager",
+    "monthly_min_aed": 59000,
+    "monthly_max_aed": 69000,
+    "annual_min_aed": 708000,
+    "annual_max_aed": 828000
+  },
+  {
+    "sector": "Technology",
+    "role": "Cyber Security Manager",
+    "monthly_min_aed": 53000,
+    "monthly_max_aed": 64000,
+    "annual_min_aed": 636000,
+    "annual_max_aed": 768000
+  },
+  {
+    "sector": "Technology",
+    "role": "Enterprise Architect",
+    "monthly_min_aed": 38000,
+    "monthly_max_aed": 59000,
+    "annual_min_aed": 456000,
+    "annual_max_aed": 708000
+  },
+  {
+    "sector": "Technology",
+    "role": "Data Architect",
+    "monthly_min_aed": 48000,
+    "monthly_max_aed": 59000,
+    "annual_min_aed": 576000,
+    "annual_max_aed": 708000
+  },
+  {
+    "sector": "Technology",
+    "role": "Data Scientist",
+    "monthly_min_aed": 44000,
+    "monthly_max_aed": 55000,
+    "annual_min_aed": 528000,
+    "annual_max_aed": 660000
+  },
+  {
+    "sector": "Technology",
+    "role": "Cloud Security Architect",
+    "monthly_min_aed": 42000,
+    "monthly_max_aed": 55000,
+    "annual_min_aed": 504000,
+    "annual_max_aed": 660000
+  },
+  {
+    "sector": "Technology",
+    "role": "Cyber Security Architect",
+    "monthly_min_aed": 44000,
+    "monthly_max_aed": 55000,
+    "annual_min_aed": 528000,
+    "annual_max_aed": 660000
+  },
+  {
+    "sector": "Technology",
+    "role": "IT Project Manager",
+    "monthly_min_aed": 39000,
+    "monthly_max_aed": 55000,
+    "annual_min_aed": 468000,
+    "annual_max_aed": 660000
+  },
+  {
+    "sector": "Technology",
+    "role": "Program Manager",
+    "monthly_min_aed": 43000,
+    "monthly_max_aed": 53000,
+    "annual_min_aed": 516000,
+    "annual_max_aed": 636000
+  },
+  {
+    "sector": "Technology",
+    "role": "SOC Manager",
+    "monthly_min_aed": 39000,
+    "monthly_max_aed": 50000,
+    "annual_min_aed": 468000,
+    "annual_max_aed": 600000
+  },
+  {
+    "sector": "Technology",
+    "role": "Head of IT / IT Manager",
+    "monthly_min_aed": 39000,
+    "monthly_max_aed": 49000,
+    "annual_min_aed": 468000,
+    "annual_max_aed": 588000
+  },
+  {
+    "sector": "Technology",
+    "role": "AI/ ML Engineer",
+    "monthly_min_aed": 33000,
+    "monthly_max_aed": 49000,
+    "annual_min_aed": 396000,
+    "annual_max_aed": 588000
+  },
+  {
+    "sector": "Technology",
+    "role": "IT Infrastructure Manager",
+    "monthly_min_aed": 39000,
+    "monthly_max_aed": 49000,
+    "annual_min_aed": 468000,
+    "annual_max_aed": 588000
+  },
+  {
+    "sector": "Technology",
+    "role": "DevOps Manager",
+    "monthly_min_aed": 39000,
+    "monthly_max_aed": 48000,
+    "annual_min_aed": 468000,
+    "annual_max_aed": 576000
+  },
+  {
+    "sector": "Technology",
+    "role": "Product Manager",
+    "monthly_min_aed": 36000,
+    "monthly_max_aed": 45000,
+    "annual_min_aed": 432000,
+    "annual_max_aed": 540000
+  },
+  {
+    "sector": "Technology",
+    "role": "Data Engineer",
+    "monthly_min_aed": 27000,
+    "monthly_max_aed": 44000,
+    "annual_min_aed": 324000,
+    "annual_max_aed": 528000
+  },
+  {
+    "sector": "Technology",
+    "role": "Data Analyst",
+    "monthly_min_aed": 27000,
+    "monthly_max_aed": 44000,
+    "annual_min_aed": 324000,
+    "annual_max_aed": 528000
+  },
+  {
+    "sector": "Technology",
+    "role": "Cloud Product Manager",
+    "monthly_min_aed": 34000,
+    "monthly_max_aed": 44000,
+    "annual_min_aed": 408000,
+    "annual_max_aed": 528000
+  },
+  {
+    "sector": "Technology",
+    "role": "Service Delivery Manager",
+    "monthly_min_aed": 32000,
+    "monthly_max_aed": 43000,
+    "annual_min_aed": 384000,
+    "annual_max_aed": 516000
+  },
+  {
+    "sector": "Technology",
+    "role": "Cloud Architect",
+    "monthly_min_aed": 31000,
+    "monthly_max_aed": 39000,
+    "annual_min_aed": 372000,
+    "annual_max_aed": 468000
+  },
+  {
+    "sector": "Telecommunications",
+    "role": "Chief Commercial Officer / VP of Sales",
+    "monthly_min_aed": 99000,
+    "monthly_max_aed": 120000,
+    "annual_min_aed": 1188000,
+    "annual_max_aed": 1440000
+  },
+  {
+    "sector": "Telecommunications",
+    "role": "CTO / CIO",
+    "monthly_min_aed": 76000,
+    "monthly_max_aed": 99000,
+    "annual_min_aed": 912000,
+    "annual_max_aed": 1188000
+  },
+  {
+    "sector": "Telecommunications",
+    "role": "Country Head / General Manager / Sales Director",
+    "monthly_min_aed": 66000,
+    "monthly_max_aed": 88000,
+    "annual_min_aed": 792000,
+    "annual_max_aed": 1056000
+  },
+  {
+    "sector": "Telecommunications",
+    "role": "VP of Customer Experience",
+    "monthly_min_aed": 66000,
+    "monthly_max_aed": 76000,
+    "annual_min_aed": 792000,
+    "annual_max_aed": 912000
+  },
+  {
+    "sector": "Telecommunications",
+    "role": "Head of Digital Development",
+    "monthly_min_aed": 44000,
+    "monthly_max_aed": 66000,
+    "annual_min_aed": 528000,
+    "annual_max_aed": 792000
+  },
+  {
+    "sector": "Telecommunications",
+    "role": "Regional Sales Manager / Account Director",
+    "monthly_min_aed": 42000,
+    "monthly_max_aed": 55000,
+    "annual_min_aed": 504000,
+    "annual_max_aed": 660000
+  },
+  {
+    "sector": "Telecommunications",
+    "role": "Solutions Architect",
+    "monthly_min_aed": 36000,
+    "monthly_max_aed": 49000,
+    "annual_min_aed": 432000,
+    "annual_max_aed": 588000
+  },
+  {
+    "sector": "Telecommunications",
+    "role": "Enterprise Sales / Territory Sales Manager / Account Manager",
+    "monthly_min_aed": 31000,
+    "monthly_max_aed": 42000,
+    "annual_min_aed": 372000,
+    "annual_max_aed": 504000
+  },
+  {
+    "sector": "Telecommunications",
+    "role": "Pre-Sales Manager",
+    "monthly_min_aed": 28000,
+    "monthly_max_aed": 39000,
+    "annual_min_aed": 336000,
+    "annual_max_aed": 468000
+  },
+  {
+    "sector": "Telecommunications",
+    "role": "Customer Project Manager",
+    "monthly_min_aed": 31000,
+    "monthly_max_aed": 38000,
+    "annual_min_aed": 372000,
+    "annual_max_aed": 456000
+  },
+  {
+    "sector": "Telecommunications",
+    "role": "Pre-Sales Engineer",
+    "monthly_min_aed": 28000,
+    "monthly_max_aed": 36000,
+    "annual_min_aed": 336000,
+    "annual_max_aed": 432000
+  },
+  {
+    "sector": "Telecommunications",
+    "role": "RF/IBS Engineer",
+    "monthly_min_aed": 21000,
+    "monthly_max_aed": 30000,
+    "annual_min_aed": 252000,
+    "annual_max_aed": 360000
+  }
+]

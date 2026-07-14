@@ -1,0 +1,46 @@
+[
+  {
+    "category": "map",
+    "sourceName": "HDX COD-AB UAE Admin Boundaries",
+    "sourceUrl": "https://data.humdata.org/dataset/cod-ab-are",
+    "datasetUrls": [
+      "https://data.humdata.org/dataset/23d41c1f-41ef-4957-a47e-b8c08c984d83/resource/29e34577-9c64-4792-bcd0-1dbe1121e7f5/download/are_admin_boundaries.geojson.zip"
+    ],
+    "contentHash": "hdx-cod-ab-are-admin1-2026-07-14",
+    "retrievedAt": "2026-07-14T04:06:00.000Z",
+    "lastChecked": "2026-07-14",
+    "method": "official-download",
+    "licenseStatus": "cc-by-igo",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "salary",
+    "sourceName": "Cooper Fitch UAE Salary Guide 2024",
+    "sourceUrl": "https://cooperfitch.ae/wp-content/uploads/2023/12/2024-UAE-Salary-Guide.pdf",
+    "datasetUrls": [],
+    "contentHash": "cooper-fitch-uae-2024-parsed-382-roles",
+    "retrievedAt": "2026-07-14T04:10:00.000Z",
+    "lastChecked": "2026-07-14",
+    "method": "official-download",
+    "licenseStatus": "commercial-report",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  },
+  {
+    "category": "shortage",
+    "sourceName": "MOHRE Professional Levels (u.ae), Golden Visa Skilled Occupations List 2025",
+    "sourceUrl": "https://u.ae/en/information-and-services/jobs/employment-in-the-private-sector/skill-levels-of-jobs-in-the-uae",
+    "datasetUrls": [
+      "https://amercenter.ae/en/blogs/golden-visa-for-skilled-workers-in-uae-latest-occupation-list-2025",
+      "https://uaexpatriates.com/uae-labour-category-list/"
+    ],
+    "contentHash": "mohre-golden-visa-combined-2026-07-14",
+    "retrievedAt": "2026-07-14T04:15:00.000Z",
+    "lastChecked": "2026-07-14",
+    "method": "official-web",
+    "licenseStatus": "public-administrative-source",
+    "reviewStatus": "approved",
+    "status": "ingested"
+  }
+]
