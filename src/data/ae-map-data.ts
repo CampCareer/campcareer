@@ -1,4 +1,6 @@
 import sourceSnapshotsRaw from "@/data/ae-source-snapshots.json"
+import shortageOccupationsRaw from "@/data/ae-shortage-occupations.json"
+import highIncomeOccupationsRaw from "@/data/ae-high-income-occupations.json"
 import { isCountrySearchIndexable } from "@/lib/new-country-release-gate"
 
 export type UAEReviewStatus = "approved" | "review-required"
@@ -44,6 +46,9 @@ const sourceSnapshots = sourceSnapshotsRaw as UAESourceSnapshot[]
 
 export const AE_EMIRATES = EMIRATES_DATA
 export const AE_SOURCE_SNAPSHOTS = sourceSnapshots
+
+export const AE_SHORTAGE_OCCUPATIONS = shortageOccupationsRaw
+export const AE_HIGH_INCOME_OCCUPATIONS = highIncomeOccupationsRaw
 
 export const AE_EMIRATE_BY_CODE = new Map(AE_EMIRATES.map((e) => [e.code, e]))
 

@@ -12,3 +12,6 @@ scripts/__pycache__/
 src/data/be-immigration.json
 src/data/be-cost-of-living.json
 src/data/be-states.json
+
+# Ignore raw source data (PDFs, zips, original GeoJSON) not needed at runtime
+data/raw/

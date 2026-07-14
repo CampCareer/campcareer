@@ -370,6 +370,22 @@ export const FR_REGION_NAMES: Record<FRRegionCode, string> = {
   "94": "Corse",
 }
 
+// ── UAE (AE) emirates ────────────────────────────────────────────────────
+
+export const AE_EMIRATE_CODES = ["AUH", "DXB", "SHJ", "AJM", "UAQ", "RAK", "FUJ"] as const
+
+export type AEEmirateCode = typeof AE_EMIRATE_CODES[number]
+
+export const AE_EMIRATE_NAMES: Record<AEEmirateCode, { en: string; ko: string }> = {
+  AUH: { en: "Abu Dhabi", ko: "아부다비" },
+  DXB: { en: "Dubai", ko: "두바이" },
+  SHJ: { en: "Sharjah", ko: "샤르자" },
+  AJM: { en: "Ajman", ko: "아즈만" },
+  UAQ: { en: "Umm Al Quwain", ko: "움알콰인" },
+  RAK: { en: "Ras Al Khaimah", ko: "라스알카이마" },
+  FUJ: { en: "Fujairah", ko: "푸자이라" },
+}
+
 // ── New Zealand (NZ) regions ───────────────────────────────────────────────
 
 export const NZ_REGION_CODES = [

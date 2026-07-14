@@ -8,7 +8,7 @@ import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useTranslations, useLocale } from "@/lib/i18n/locale-provider"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { STATE_CODES, STATE_NAMES, US_STATE_CODES, US_STATE_NAMES, IE_COUNTY_CODES, IE_COUNTY_NAMES, IE_CITY_TO_COUNTY, CA_PROVINCE_CODES, CA_PROVINCE_NAMES, UK_REGION_CODES, UK_REGION_NAMES, DE_BUNDESLAND_CODES, DE_BUNDESLAND_NAMES, NL_PROVINCE_CODES, NL_PROVINCE_NAMES, BE_REGION_CODES, BE_REGION_NAMES, JP_PREFECTURE_CODES, JP_PREFECTURE_NAMES, KR_SIDO_CODES, KR_SIDO_NAMES, FR_REGION_CODES, FR_REGION_NAMES, NZ_REGION_NAMES, NO_REGION_NAMES, SE_REGION_NAMES, DK_REGION_NAMES, FI_REGION_NAMES, CH_CANTON_NAMES, type StateCode, type NZRegionCode, type NORegionCode, type SERegionCode, type DKRegionCode, type FIRegionCode, type CHCantonCode } from "./states"
+import { STATE_CODES, STATE_NAMES, US_STATE_CODES, US_STATE_NAMES, IE_COUNTY_CODES, IE_COUNTY_NAMES, IE_CITY_TO_COUNTY, CA_PROVINCE_CODES, CA_PROVINCE_NAMES, UK_REGION_CODES, UK_REGION_NAMES, DE_BUNDESLAND_CODES, DE_BUNDESLAND_NAMES, NL_PROVINCE_CODES, NL_PROVINCE_NAMES, BE_REGION_CODES, BE_REGION_NAMES, JP_PREFECTURE_CODES, JP_PREFECTURE_NAMES, KR_SIDO_CODES, KR_SIDO_NAMES, FR_REGION_CODES, FR_REGION_NAMES, NZ_REGION_NAMES, NO_REGION_NAMES, SE_REGION_NAMES, DK_REGION_NAMES, FI_REGION_NAMES, CH_CANTON_NAMES, AE_EMIRATE_CODES, AE_EMIRATE_NAMES, type StateCode, type NZRegionCode, type NORegionCode, type SERegionCode, type DKRegionCode, type FIRegionCode, type CHCantonCode, type AEEmirateCode } from "./states"
 import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
 import { WHV_REGIONS } from "@/data/whv-regions"
 import { WHV_SPECIFIED_WORK } from "@/data/whv-occupations"
@@ -57,7 +57,7 @@ const STATE_SEEK_PATH: Record<string, string> = {
 }
 
 type Tab = "stateInfo" | "shortage" | "pay" | "employment" | "whv"
-type ActiveCountry = "AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL" | "BE" | "JP" | "SG" | "KR" | "FR" | "ES" | "NZ" | "NO" | "SE" | "DK" | "FI" | "CH" | null
+type ActiveCountry = "AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL" | "BE" | "JP" | "SG" | "KR" | "FR" | "ES" | "NZ" | "NO" | "SE" | "DK" | "FI" | "CH" | "AE" | null
 
 type NeroOccupation = { a4: string; name: string; emp: number }
 type NeroData = Record<string, NeroOccupation[]>
@@ -350,6 +350,10 @@ export default function CampCareerMaps({
       setActiveCountry("CH")
       const canton = data.chRegions.find((item) => item.code === raw || item.slug === p.get("state"))
       setSelected(canton?.code ?? null)
+      setTab("stateInfo")
+    } else if (countryRaw === "ae") {
+      setActiveCountry("AE")
+      if (raw && (AE_EMIRATE_CODES as readonly string[]).includes(raw)) setSelected(raw)
       setTab("stateInfo")
     }
     const tabParam = p.get("tab")
@@ -751,7 +755,7 @@ export default function CampCareerMaps({
     return ieSchools.filter((s) => IE_CITY_TO_COUNTY[s.city] === selected)
   }, [ieSchools, selected, activeCountry])
 
-  const countryLabel = activeCountry === "AU" ? "🇦🇺 Australia" : activeCountry === "US" ? "🇺🇸 United States" : activeCountry === "CA" ? "🇨🇦 Canada" : activeCountry === "IE" ? "🇮🇪 Ireland" : activeCountry === "UK" ? "🇬🇧 United Kingdom" : activeCountry === "DE" ? "🇩🇪 Germany" : activeCountry === "NL" ? "🇳🇱 Netherlands" : activeCountry === "BE" ? "🇧🇪 Belgium" : activeCountry === "JP" ? "🇯🇵 Japan" : activeCountry === "SG" ? "🇸🇬 Singapore" : activeCountry === "KR" ? "🇰🇷 South Korea" : activeCountry === "FR" ? "🇫🇷 France" : activeCountry === "NZ" ? "🇳🇿 New Zealand" : activeCountry === "NO" ? "🇳🇴 Norway" : activeCountry === "SE" ? "🇸🇪 Sweden" : activeCountry === "DK" ? "🇩🇰 Denmark" : activeCountry === "FI" ? "🇫🇮 Finland" : activeCountry === "CH" ? "🇨🇭 Switzerland" : ""
+  const countryLabel = activeCountry === "AU" ? "🇦🇺 Australia" : activeCountry === "US" ? "🇺🇸 United States" : activeCountry === "CA" ? "🇨🇦 Canada" : activeCountry === "IE" ? "🇮🇪 Ireland" : activeCountry === "UK" ? "🇬🇧 United Kingdom" : activeCountry === "DE" ? "🇩🇪 Germany" : activeCountry === "NL" ? "🇳🇱 Netherlands" : activeCountry === "BE" ? "🇧🇪 Belgium" : activeCountry === "JP" ? "🇯🇵 Japan" : activeCountry === "SG" ? "🇸🇬 Singapore" : activeCountry === "KR" ? "🇰🇷 South Korea" : activeCountry === "FR" ? "🇫🇷 France" : activeCountry === "NZ" ? "🇳🇿 New Zealand" : activeCountry === "NO" ? "🇳🇴 Norway" : activeCountry === "SE" ? "🇸🇪 Sweden" : activeCountry === "DK" ? "🇩🇰 Denmark" : activeCountry === "FI" ? "🇫🇮 Finland" : activeCountry === "CH" ? "🇨🇭 Switzerland" : activeCountry === "AE" ? "🇦🇪 UAE" : ""
   const stateLabel = selected
     ? activeCountry === "AU"
       ? STATE_NAMES[selected as StateCode]
@@ -808,7 +812,7 @@ export default function CampCareerMaps({
 
   return (
     <div className="flex h-full w-full flex-col">
-        {(activeCountry === "AU" || activeCountry === "US" || activeCountry === "CA" || activeCountry === "IE" || activeCountry === "UK" || activeCountry === "DE" || activeCountry === "NL" || activeCountry === "BE" || activeCountry === "JP" || activeCountry === "SG" || activeCountry === "KR" || activeCountry === "FR" || activeCountry === "ES" || activeCountry === "NZ" || activeCountry === "NO" || activeCountry === "SE" || activeCountry === "DK" || activeCountry === "FI" || activeCountry === "CH") && (
+        {(activeCountry === "AU" || activeCountry === "US" || activeCountry === "CA" || activeCountry === "IE" || activeCountry === "UK" || activeCountry === "DE" || activeCountry === "NL" || activeCountry === "BE" || activeCountry === "JP" || activeCountry === "SG" || activeCountry === "KR" || activeCountry === "FR" || activeCountry === "ES" || activeCountry === "NZ" || activeCountry === "NO" || activeCountry === "SE" || activeCountry === "DK" || activeCountry === "FI" || activeCountry === "CH" || activeCountry === "AE") && (
       <>
         {!toolbarExpanded && (
           <button
@@ -854,6 +858,7 @@ export default function CampCareerMaps({
               <SelectItem value="DK">🇩🇰 Denmark</SelectItem>
               <SelectItem value="FI">🇫🇮 Finland</SelectItem>
               <SelectItem value="CH">🇨🇭 Switzerland</SelectItem>
+              <SelectItem value="AE">🇦🇪 UAE</SelectItem>
             </SelectContent>
           </Select>
         </label>
@@ -1238,6 +1243,8 @@ export default function CampCareerMaps({
           <label className="block"><span className="mb-1 block text-xs font-medium text-slate-500">Region</span><Select items={Object.fromEntries((data.fiRegions ?? []).map((r) => [r.code, r.nameEn]))} value={selected} onValueChange={(v) => v && onSelectState(v)}><SelectTrigger className="h-10 w-56 rounded-lg border-slate-200 text-sm"><SelectValue placeholder="Select a region" /></SelectTrigger><SelectContent className="z-[2000] max-h-72">{(data.fiRegions ?? []).map((r) => <SelectItem key={r.code} value={r.code}>{r.nameEn}</SelectItem>)}</SelectContent></Select></label>
         ) : activeCountry === "CH" ? (
           <label className="block"><span className="mb-1 block text-xs font-medium text-slate-500">{locale === "ko" ? "칸톤" : "Canton"}</span><Select items={Object.fromEntries((data.chRegions ?? []).map((r) => [r.code, `${r.nameEn} · ${r.nameLocal}`]))} value={selected} onValueChange={(v) => v && onSelectState(v)}><SelectTrigger className="h-10 w-64 rounded-lg border-slate-200 text-sm"><SelectValue placeholder={locale === "ko" ? "칸톤 선택" : "Select a canton"} /></SelectTrigger><SelectContent className="z-[2000] max-h-72">{(data.chRegions ?? []).map((r) => <SelectItem key={r.code} value={r.code}>{r.nameEn} · {r.nameLocal}</SelectItem>)}</SelectContent></Select></label>
+        ) : activeCountry === "AE" ? (
+          <label className="block"><span className="mb-1 block text-xs font-medium text-slate-500">{locale === "ko" ? "에미리트" : "Emirate"}</span><Select value={selected} onValueChange={(v) => v && onSelectState(v)}><SelectTrigger className="h-10 w-56 rounded-lg border-slate-200 text-sm"><SelectValue placeholder={locale === "ko" ? "에미리트 선택" : "Select an emirate"} /></SelectTrigger><SelectContent className="z-[2000] max-h-72">{AE_EMIRATE_CODES.map((code) => <SelectItem key={code} value={code}>{AE_EMIRATE_NAMES[code].ko} · {AE_EMIRATE_NAMES[code].en}</SelectItem>)}</SelectContent></Select></label>
         ) : (
         <>
           <label className="block">
@@ -2143,6 +2150,7 @@ function Panel({
   const isDK = activeCountry === "DK"
   const isFI = activeCountry === "FI"
   const isCH = activeCountry === "CH"
+  const isAE = activeCountry === "AE"
   const isWhv = selected === "WHV"
   const stateName = isWhv ? "Second Visa"
     : isAU ? STATE_NAMES[selected as StateCode] ?? selected
@@ -2162,6 +2170,7 @@ function Panel({
     : isDK ? DK_REGION_NAMES[selected as DKRegionCode] ?? selected
     : isFI ? FI_REGION_NAMES[selected as FIRegionCode] ?? selected
     : isCH ? CH_CANTON_NAMES[selected as CHCantonCode] ?? selected
+    : isAE ? AE_EMIRATE_NAMES[selected as AEEmirateCode]?.ko ?? selected
     : US_STATE_NAMES[selected] ?? selected
 
   const [deExpLevel, setDeExpLevel] = useState<"fachkräfte" | "spezialisten" | "experten">("fachkräfte")
@@ -2664,9 +2673,9 @@ function Panel({
       {!isWhv && (
       <div className="px-5 pt-3">
         <div className="inline-flex rounded-lg bg-slate-100 p-1 text-sm">
-          {(isUS || activeCountry === "CA" || isUK || activeCountry === "BE" || isJP || isSG || isKR || isFR || isES || isNZ || isNO || isSE || isDK || isFI || isCH) && (
+          {(isUS || activeCountry === "CA" || isUK || activeCountry === "BE" || isJP || isSG || isKR || isFR || isES || isNZ || isNO || isSE || isDK || isFI || isCH || isAE) && (
             <TabButton active={tab === "stateInfo"} onClick={() => { onTab("stateInfo"); track("switch_tab", { tab: "stateInfo", state: selected }) }}>
-              {(activeCountry === "CA" || activeCountry === "BE" || isJP || isSG || isKR || isFR || isES || isNZ || isNO || isSE || isDK || isFI || isCH) ? (locale === "ko" ? "정보" : "Info") : t.map.tabStateInfo}
+              {(activeCountry === "CA" || activeCountry === "BE" || isJP || isSG || isKR || isFR || isES || isNZ || isNO || isSE || isDK || isFI || isCH || isAE) ? (locale === "ko" ? "정보" : "Info") : t.map.tabStateInfo}
             </TabButton>
           )}
           {!isUK && (
@@ -2788,7 +2797,7 @@ function Panel({
         {tab === "shortage" && isKR && <KROccupationList rows={krDemand} kind="demand" onSelect={handleSelectKROccupation} />}
         {tab === "shortage" && isFR && <FRDemandList rows={selectedFRCity ? selectedFRCity.topDemand.map((row) => ({ ...FR_DEMAND_BY_CODE.get(row.code)!, regionalProjects: row.recruitmentProjects })).filter(Boolean) : frDemand} onSelect={handleSelectFRDemand} locale={locale} />}
         {tab === "shortage" && isES && <ESShortageList rows={esShortage} onSelect={handleSelectESShortage} />}
-        {tab === "shortage" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && activeCountry !== "NL" && activeCountry !== "BE" && activeCountry !== "JP" && activeCountry !== "SG" && activeCountry !== "KR" && activeCountry !== "FR" && activeCountry !== "ES" && !isNZ && !isNO && !isCH && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
+        {tab === "shortage" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && activeCountry !== "NL" && activeCountry !== "BE" && activeCountry !== "JP" && activeCountry !== "SG" && activeCountry !== "KR" && activeCountry !== "FR" && activeCountry !== "ES" && !isNZ && !isNO && !isCH && !isAE && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
         {tab === "shortage" && isNZ && (
           selected ? (
             <NZShortageList rows={nzShortage} locale={locale} onSelectOcc={handleSelectNZOcc} />
@@ -2887,7 +2896,7 @@ function Panel({
         {tab === "pay" && isDK && (selected ? <NordicOccupationList rows={dkHighPay.map((occ) => ({ code: occ.dosCode, classification: "DISCO-08", nameEn: occ.nameEn, nameKo: occ.nameKo, medianSalary: occ.medianSalaryDkk, employmentThousands: occ.employmentThousands, shortageRating: occ.shortageRating, relatedField: occ.relatedField, sourceYear: occ.sourceYear }))} kind="pay" currency="DKK" locale={locale} onSelect={handleSelectDKOcc} /> : <p className="py-8 text-center text-sm text-slate-400">{t.map.selectStateFirst}</p>)}
         {tab === "pay" && isFI && (selected ? <NordicOccupationList rows={fiHighPay.map((occ) => ({ code: occ.iscoCode, classification: "ISCO-08", nameEn: occ.nameEn, nameKo: occ.nameKo, medianSalary: occ.medianSalaryEur, employmentThousands: occ.employmentThousands, shortageRating: occ.shortageRating, relatedField: occ.relatedField, sourceYear: occ.sourceYear }))} kind="pay" currency="EUR" locale={locale} onSelect={handleSelectFIOcc} /> : <p className="py-8 text-center text-sm text-slate-400">{t.map.selectStateFirst}</p>)}
         {tab === "pay" && isCH && <CHHighPayList rows={data.chHighPayNational ?? []} locale={locale} />}
-        {tab === "pay" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && activeCountry !== "NL" && activeCountry !== "BE" && activeCountry !== "JP" && activeCountry !== "SG" && activeCountry !== "KR" && activeCountry !== "FR" && activeCountry !== "ES" && !isNZ && !isNO && !isCH && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
+        {tab === "pay" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && activeCountry !== "NL" && activeCountry !== "BE" && activeCountry !== "JP" && activeCountry !== "SG" && activeCountry !== "KR" && activeCountry !== "FR" && activeCountry !== "ES" && !isNZ && !isNO && !isCH && !isAE && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
         {tab === "pay" && activeCountry === "CA" && <CAHighPayList rows={data.caHighPay} provinceRows={selected ? data.caHighPayByProvince[selected] ?? [] : []} onSelectOcc={handleSelectCAOcc} />}
         {tab === "pay" && isUK && <UKHighPayList rows={ukHighPay} onSelectOcc={handleSelectUKOcc} />}
         {tab === "employment" && (
@@ -2912,7 +2921,7 @@ function Panel({
       </div>
 
       <p className="border-t border-slate-100 px-5 py-3 text-xs text-slate-400">
-        {isCH ? "Sources: swisstopo swissBOUNDARIES3D · swissuniversities · FSO · SECO" : isJP ? "Sources: MHLW · Statistics Bureau of Japan · JILPT Job Tag" : isSG ? "Sources: MOM · URA · SkillsFuture Singapore" : isKR ? "Sources: MOEL · KOSIS · MOLIT · CareerNet · QS" : isFR ? "Sources: France Travail BMO · INSEE · MESR · API Geo" : t.map.source}
+        {isCH ? "Sources: swisstopo swissBOUNDARIES3D · swissuniversities · FSO · SECO" : isJP ? "Sources: MHLW · Statistics Bureau of Japan · JILPT Job Tag" : isSG ? "Sources: MOM · URA · SkillsFuture Singapore" : isKR ? "Sources: MOEL · KOSIS · MOLIT · CareerNet · QS" : isFR ? "Sources: France Travail BMO · INSEE · MESR · API Geo" : isAE ? "Sources: MOHRE · Cooper Fitch · HDX COD-AB · Golden Visa List" : t.map.source}
       </p>
     </>
   )
