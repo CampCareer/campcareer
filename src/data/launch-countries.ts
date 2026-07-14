@@ -19,6 +19,8 @@ export type LaunchCountry = {
   publicationStage: CountryPublicationStage
   /** A Map v2 bundle is available and has passed country-level validation. */
   mapReady: boolean
+  /** Thumbnail image URL (Unsplash, free to use). */
+  image: string
 }
 
 const profile = (
@@ -26,39 +28,41 @@ const profile = (
   slug: string,
   name: string,
   currency: string,
-): LaunchCountry => ({ code, slug, name, currency, publicationStage: "PROFILE_READY", mapReady: true })
+  image: string,
+): LaunchCountry => ({ code, slug, name, currency, publicationStage: "PROFILE_READY", mapReady: true, image })
 
 const reviewRequired = (
   code: LaunchCountryCode,
   slug: string,
   name: string,
   currency: string,
-): LaunchCountry => ({ code, slug, name, currency, publicationStage: "REVIEW_REQUIRED", mapReady: false })
+  image: string,
+): LaunchCountry => ({ code, slug, name, currency, publicationStage: "REVIEW_REQUIRED", mapReady: false, image })
 
 /** Fixed 20-country launch perimeter, in the agreed release order. */
 export const LAUNCH_COUNTRIES: readonly LaunchCountry[] = [
-  profile("AU", "australia", "Australia", "AUD"),
-  profile("CA", "canada", "Canada", "CAD"),
-  profile("US", "united-states", "United States", "USD"),
-  profile("UK", "united-kingdom", "United Kingdom", "GBP"),
-  profile("IE", "ireland", "Ireland", "EUR"),
-  profile("DE", "germany", "Germany", "EUR"),
-  profile("NL", "netherlands", "Netherlands", "EUR"),
-  profile("BE", "belgium", "Belgium", "EUR"),
-  profile("FR", "france", "France", "EUR"),
-  profile("ES", "spain", "Spain", "EUR"),
-  profile("SG", "singapore", "Singapore", "SGD"),
-  profile("KR", "south-korea", "South Korea", "KRW"),
-  profile("JP", "japan", "Japan", "JPY"),
+  profile("AU", "australia", "Australia", "AUD", "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=400&h=250&fit=crop&auto=format"),
+  profile("CA", "canada", "Canada", "CAD", "https://images.unsplash.com/photo-1503614472-8c93d56e92ce?w=400&h=250&fit=crop&auto=format"),
+  profile("US", "united-states", "United States", "USD", "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=400&h=250&fit=crop&auto=format"),
+  profile("UK", "united-kingdom", "United Kingdom", "GBP", "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=400&h=250&fit=crop&auto=format"),
+  profile("IE", "ireland", "Ireland", "EUR", "https://images.unsplash.com/photo-1590089415225-401b63c4e743?w=400&h=250&fit=crop&auto=format"),
+  profile("DE", "germany", "Germany", "EUR", "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=400&h=250&fit=crop&auto=format"),
+  profile("NL", "netherlands", "Netherlands", "EUR", "https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=400&h=250&fit=crop&auto=format"),
+  profile("BE", "belgium", "Belgium", "EUR", "https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=400&h=250&fit=crop&auto=format"),
+  profile("FR", "france", "France", "EUR", "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=400&h=250&fit=crop&auto=format"),
+  profile("ES", "spain", "Spain", "EUR", "https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=400&h=250&fit=crop&auto=format"),
+  profile("SG", "singapore", "Singapore", "SGD", "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=400&h=250&fit=crop&auto=format"),
+  profile("KR", "south-korea", "South Korea", "KRW", "https://images.unsplash.com/photo-1534274988757-a28bf1a57c17?w=400&h=250&fit=crop&auto=format"),
+  profile("JP", "japan", "Japan", "JPY", "https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?w=400&h=250&fit=crop&auto=format"),
   // Map discovery is safe before career comparison: this bundle deliberately
   // contains no unverified wage or shortage numbers.
-  { ...reviewRequired("NZ", "new-zealand", "New Zealand", "NZD"), mapReady: true },
-  { ...reviewRequired("NO", "norway", "Norway", "NOK"), mapReady: true },
-  { ...reviewRequired("SE", "sweden", "Sweden", "SEK"), mapReady: true },
-  { ...reviewRequired("DK", "denmark", "Denmark", "DKK"), mapReady: true },
-  { ...reviewRequired("FI", "finland", "Finland", "EUR"), mapReady: true },
-  profile("CH", "switzerland", "Switzerland", "CHF"),
-  profile("AE", "united-arab-emirates", "United Arab Emirates", "AED"),
+  { ...reviewRequired("NZ", "new-zealand", "New Zealand", "NZD", "https://images.unsplash.com/photo-1507699622108-4be3abd695ad?w=400&h=250&fit=crop&auto=format"), mapReady: true },
+  { ...reviewRequired("NO", "norway", "Norway", "NOK", "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=400&h=250&fit=crop&auto=format"), mapReady: true },
+  { ...reviewRequired("SE", "sweden", "Sweden", "SEK", "https://images.unsplash.com/photo-1509356843151-3e7d96241e11?w=400&h=250&fit=crop&auto=format"), mapReady: true },
+  { ...reviewRequired("DK", "denmark", "Denmark", "DKK", "https://images.unsplash.com/photo-1513622470522-26c3c8a854bc?w=400&h=250&fit=crop&auto=format"), mapReady: true },
+  { ...reviewRequired("FI", "finland", "Finland", "EUR", "https://images.unsplash.com/photo-1483347756197-71ef80e95f73?w=400&h=250&fit=crop&auto=format"), mapReady: true },
+  profile("CH", "switzerland", "Switzerland", "CHF", "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=400&h=250&fit=crop&auto=format"),
+  profile("AE", "united-arab-emirates", "United Arab Emirates", "AED", "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=400&h=250&fit=crop&auto=format"),
 ] as const
 
 export const LAUNCH_COUNTRY_CODES = LAUNCH_COUNTRIES.map((country) => country.code) as readonly LaunchCountryCode[]
