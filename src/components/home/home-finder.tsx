@@ -15,7 +15,7 @@ type Locale = "en" | "ko-KR"
 const COPY = {
   en: {
     eyebrow: "Study decisions, made practical",
-    title: "Choose what to study, where to go, and what you’ll have left after graduation.",
+    title: "Compare study paths - from campus to career.",
     subtitle: "Start with your career and budget. We’ll show the destinations that have enough evidence to earn a place on your shortlist.",
     category: "Career category",
     career: "Career",

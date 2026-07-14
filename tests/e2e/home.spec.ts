@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test"
 
 test("landing sends a career, budget, and goal to country rankings", async ({ page }) => {
   await page.goto("/")
-  await expect(page.getByRole("heading", { name: "Choose what to study, where to go, and what you’ll have left after graduation." })).toBeVisible()
+  await expect(page.getByRole("heading", { name: "Compare study paths - from campus to career." })).toBeVisible()
 
   await page.getByLabel("Career category", { exact: true }).selectOption("health")
   await page.getByLabel("Career", { exact: true }).selectOption("registered-nurse")
