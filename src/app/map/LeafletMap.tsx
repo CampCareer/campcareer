@@ -245,6 +245,80 @@ export default function LeafletMap({
   const ieSchoolsRef = useRef(ieSchools)
   ieSchoolsRef.current = ieSchools
 
+  // Keep the world overview visible until the selected country's detailed
+  // boundary has finished loading. Country GeoJSON files resolve independently
+  // of React's country switch, so hiding the overview unconditionally creates
+  // a blank country (most noticeable for the larger CA and FR bundles).
+  const refreshWorldCountryStyle = () => {
+    const worldLayer = worldLayerRef.current
+    if (!worldLayer) return
+
+    const country = activeCountryRef.current
+    worldLayer.setStyle((feature) => {
+      const props = feature?.properties as Record<string, unknown> | undefined
+      if (!props) return {}
+      const isAU = isAustralia(props)
+      const isUS = isUSA(props)
+      const isCA = isCanada(props)
+      const isIE = isIreland(props)
+      const isGB = isUK(props)
+      const isDE = isGermany(props)
+      const isNL = isNetherlands(props)
+      const isBE = isBelgium(props)
+      const isJP = isJapan(props)
+      const isSG = isSingapore(props)
+      const isKR = isKorea(props)
+      const isFR = isFrance(props)
+      const isES = isSpain(props)
+      const isNZ = isNewZealand(props)
+      const isNO = isNorway(props)
+      const isSE = isSweden(props)
+      const isDK = isDenmark(props)
+      const isFI = isFinland(props)
+      const isCH = isSwitzerland(props)
+      const hide = (country === "AU" && isAU && auLayerRef.current != null)
+        || (country === "US" && isUS && usLayerRef.current != null)
+        || (country === "CA" && isCA && caLayerRef.current != null)
+        || (country === "IE" && isIE && ieLayerRef.current != null)
+        || (country === "UK" && isGB && ukLayerRef.current != null)
+        || (country === "DE" && isDE && deLayerRef.current != null)
+        || (country === "NL" && isNL && nlLayerRef.current != null)
+        || (country === "BE" && isBE && beLayerRef.current != null)
+        || (country === "JP" && isJP && jpLayerRef.current != null)
+        || (country === "SG" && isSG && sgLayerRef.current != null)
+        || (country === "KR" && isKR && krLayerRef.current != null)
+        || (country === "FR" && isFR && frLayerRef.current != null)
+        || (country === "ES" && isES && esLayerRef.current != null)
+        || (country === "NZ" && isNZ && nzLayerRef.current != null)
+        || (country === "NO" && isNO && noLayerRef.current != null)
+        || (country === "SE" && isSE && seLayerRef.current != null)
+        || (country === "DK" && isDK && dkLayerRef.current != null)
+        || (country === "FI" && isFI && fiLayerRef.current != null)
+        || (country === "CH" && isCH && chLayerRef.current != null)
+      if (hide) return { opacity: 0, fillOpacity: 0, weight: 0 }
+      if (isAU) return { fillColor: "#e0e7ff", color: "#6366f1", weight: 2, fillOpacity: 0.5 }
+      if (isUS) return { fillColor: "#dcfce7", color: "#22c55e", weight: 2, fillOpacity: 0.5 }
+      if (isCA) return { fillColor: "#fce7f3", color: "#ec4899", weight: 2, fillOpacity: 0.5 }
+      if (isIE) return { fillColor: "#fef3c7", color: "#f59e0b", weight: 2, fillOpacity: 0.5 }
+      if (isGB) return { fillColor: "#dbeafe", color: "#3b82f6", weight: 2, fillOpacity: 0.5 }
+      if (isDE) return { fillColor: "#bbf7d0", color: "#22c55e", weight: 2, fillOpacity: 0.4 }
+      if (isNL) return { fillColor: "#fce7f3", color: "#d946ef", weight: 2, fillOpacity: 0.4 }
+      if (isBE) return { fillColor: "#fef9c3", color: "#eab308", weight: 2, fillOpacity: 0.5 }
+      if (isJP) return { fillColor: "#fee2e2", color: "#ef4444", weight: 2, fillOpacity: 0.5 }
+      if (isSG) return { fillColor: "#ccfbf1", color: "#0f766e", weight: 2, fillOpacity: 0.7 }
+      if (isKR) return { fillColor: "#ffe4e6", color: "#e11d48", weight: 2, fillOpacity: 0.55 }
+      if (isFR) return { fillColor: "#dbeafe", color: "#2563eb", weight: 2, fillOpacity: 0.55 }
+      if (isES) return { fillColor: "#ffedd5", color: "#ea580c", weight: 2, fillOpacity: 0.55 }
+      if (isNZ) return { fillColor: "#dbeafe", color: "#1d4ed8", weight: 2, fillOpacity: 0.55 }
+      if (isNO) return { fillColor: "#ede9fe", color: "#6d28d9", weight: 2, fillOpacity: 0.55 }
+      if (isSE) return { fillColor: "#ccfbf1", color: "#0f766e", weight: 2, fillOpacity: 0.55 }
+      if (isDK) return { fillColor: "#fef3c7", color: "#b45309", weight: 2, fillOpacity: 0.55 }
+      if (isFI) return { fillColor: "#e0f2fe", color: "#0369a1", weight: 2, fillOpacity: 0.55 }
+      if (isCH) return { fillColor: "#fce7f3", color: "#be185d", weight: 2, fillOpacity: 0.55 }
+      return { fillColor: "#f8fafc", color: "#cbd5e1", weight: 0.8, fillOpacity: 0.6 }
+    })
+  }
+
   const counts = STATE_CODES.map((c) => data.shortageByState[c]?.length ?? 0)
   const minCount = Math.min(...counts)
   const maxCount = Math.max(...counts)
@@ -777,46 +851,7 @@ export default function LeafletMap({
           },
         }).addTo(map)
         worldLayerRef.current = worldLayer
-        // If a country is already active when the world layer loads, apply the
-        // hidden style for that country's polygon so it doesn't overlap with
-        // the detail layer (states/counties).
-        if (activeCountryRef.current === "AU" || activeCountryRef.current === "US" || activeCountryRef.current === "IE" || activeCountryRef.current === "UK" || activeCountryRef.current === "DE" || activeCountryRef.current === "NL" || activeCountryRef.current === "BE" || activeCountryRef.current === "JP" || activeCountryRef.current === "SG" || activeCountryRef.current === "KR" || activeCountryRef.current === "FR" || activeCountryRef.current === "ES" || activeCountryRef.current === "NZ" || activeCountryRef.current === "NO") {
-          const country = activeCountryRef.current
-          worldLayer.setStyle((feature) => {
-            const props = feature?.properties as Record<string, unknown> | undefined
-            if (!props) return {}
-            const isAU = isAustralia(props)
-            const isUS = isUSA(props)
-            const isIE = isIreland(props)
-            const isGB = isUK(props)
-            const isDE = isGermany(props)
-            const isNL = isNetherlands(props)
-            const isBE = isBelgium(props)
-            const isJP = isJapan(props)
-            const isSG = isSingapore(props)
-            const isKR = isKorea(props)
-            const isFR = isFrance(props)
-            const isES = isSpain(props)
-            const isNZ = isNewZealand(props)
-            const isNO = isNorway(props)
-            const hide = (country === "AU" && isAU) || (country === "US" && isUS) || (country === "IE" && isIE) || (country === "UK" && isGB) || (country === "DE" && isDE) || (country === "NL" && isNL) || (country === "BE" && isBE) || (country === "JP" && isJP) || (country === "KR" && isKR && krLayerRef.current != null) || (country === "FR" && isFR && frLayerRef.current != null) || (country === "ES" && isES && esLayerRef.current != null) || (country === "NZ" && isNZ && nzLayerRef.current != null) || (country === "NO" && isNO && noLayerRef.current != null)
-            if (hide) return { opacity: 0, fillOpacity: 0, weight: 0 }
-            if (isAU) return { fillColor: "#e0e7ff", color: "#6366f1", weight: 2, fillOpacity: 0.5 }
-            if (isUS) return { fillColor: "#dcfce7", color: "#22c55e", weight: 2, fillOpacity: 0.5 }
-            if (isIE) return { fillColor: "#fef3c7", color: "#f59e0b", weight: 2, fillOpacity: 0.5 }
-            if (isGB) return { fillColor: "#dbeafe", color: "#3b82f6", weight: 2, fillOpacity: 0.5 }
-            if (isDE) return { fillColor: "#bbf7d0", color: "#22c55e", weight: 2, fillOpacity: 0.4 }
-            if (isNL) return { fillColor: "#fce7f3", color: "#d946ef", weight: 2, fillOpacity: 0.4 }
-            if (isBE) return { fillColor: "#fef9c3", color: "#eab308", weight: 2, fillOpacity: 0.5 }
-            if (isJP) return { fillColor: "#fee2e2", color: "#ef4444", weight: 2, fillOpacity: 0.5 }
-            if (isSG) return { fillColor: "#ccfbf1", color: "#0f766e", weight: 2, fillOpacity: 0.7 }
-            if (isKR) return { fillColor: "#ffe4e6", color: "#e11d48", weight: 2, fillOpacity: 0.55 }
-            if (isFR) return { fillColor: "#dbeafe", color: "#2563eb", weight: 2, fillOpacity: 0.55 }
-            if (isNZ) return { fillColor: "#dbeafe", color: "#1d4ed8", weight: 2, fillOpacity: 0.55 }
-            if (isNO) return { fillColor: "#ede9fe", color: "#6d28d9", weight: 2, fillOpacity: 0.55 }
-            return { fillColor: "#f8fafc", color: "#cbd5e1", weight: 0.8, fillOpacity: 0.6 }
-          })
-        }
+        refreshWorldCountryStyle()
       })
       .catch((err) => console.error("[LeafletMap] world geojson load failed:", err))
 
@@ -1030,6 +1065,7 @@ export default function LeafletMap({
             didFitRef.current = true
           }
         }
+        refreshWorldCountryStyle()
       })
       .catch((err) => console.error("[LeafletMap] ca geojson load failed:", err))
 
@@ -1457,6 +1493,7 @@ export default function LeafletMap({
         })
         frLayerRef.current = frLayer
         if (activeCountryRef.current === "FR") map.addLayer(frLayer)
+        refreshWorldCountryStyle()
       })
       .catch((error) => console.error("[LeafletMap] France region GeoJSON load failed:", error))
 
@@ -1483,6 +1520,7 @@ export default function LeafletMap({
         })
         frCityLayerRef.current = cityLayer
         if (activeCountryRef.current === "FR") map.addLayer(cityLayer)
+        refreshWorldCountryStyle()
       })
       .catch((error) => console.error("[LeafletMap] France city GeoJSON load failed:", error))
 
@@ -1848,70 +1886,7 @@ export default function LeafletMap({
       fitToBounds(WORLD_BOUNDS, true)
     }
 
-    // Hide the world polygon border for the selected country so the detailed
-    // internal boundaries (states/counties) are the only visible outline.
-    if (worldLayerRef.current) {
-      worldLayerRef.current.setStyle((feature) => {
-        const props = feature?.properties as Record<string, unknown> | undefined
-        if (!props) return {}
-        const isAU = isAustralia(props)
-        const isUS = isUSA(props)
-        const isIE = isIreland(props)
-        const isGB = isUK(props)
-        const isDE = isGermany(props)
-        const isNL = isNetherlands(props)
-        const isBE = isBelgium(props)
-        const isJP = isJapan(props)
-        const isSG = isSingapore(props)
-        const isKR = isKorea(props)
-        const isFR = isFrance(props)
-        const isES = isSpain(props)
-        const isNZ = isNewZealand(props)
-        const isNO = isNorway(props)
-        const isSE = isSweden(props)
-        const isDK = isDenmark(props)
-        const isFI = isFinland(props)
-        const isCH = isSwitzerland(props)
-        const hide = (activeCountry === "AU" && isAU)
-          || (activeCountry === "US" && isUS)
-          || (activeCountry === "IE" && isIE)
-          || (activeCountry === "UK" && isGB)
-          || (activeCountry === "DE" && isDE)
-          || (activeCountry === "NL" && isNL)
-          || (activeCountry === "BE" && isBE)
-          || (activeCountry === "JP" && isJP)
-          || (activeCountry === "SG" && isSG)
-          || (activeCountry === "KR" && isKR && krLayerRef.current != null)
-          || (activeCountry === "FR" && isFR && frLayerRef.current != null)
-          || (activeCountry === "ES" && isES && esLayerRef.current != null)
-          || (activeCountry === "NZ" && isNZ && nzLayerRef.current != null)
-          || (activeCountry === "NO" && isNO && noLayerRef.current != null)
-          || (activeCountry === "SE" && isSE && seLayerRef.current != null)
-          || (activeCountry === "DK" && isDK && dkLayerRef.current != null)
-          || (activeCountry === "FI" && isFI && fiLayerRef.current != null)
-          || (activeCountry === "CH" && isCH && chLayerRef.current != null)
-        if (hide) return { opacity: 0, fillOpacity: 0, weight: 0 }
-        if (isAU) return { fillColor: "#e0e7ff", color: "#6366f1", weight: 2, fillOpacity: 0.5 }
-        if (isUS) return { fillColor: "#dcfce7", color: "#22c55e", weight: 2, fillOpacity: 0.5 }
-        if (isIE) return { fillColor: "#fef3c7", color: "#f59e0b", weight: 2, fillOpacity: 0.5 }
-        if (isGB) return { fillColor: "#dbeafe", color: "#3b82f6", weight: 2, fillOpacity: 0.5 }
-        if (isDE) return { fillColor: "#bbf7d0", color: "#22c55e", weight: 2, fillOpacity: 0.4 }
-        if (isNL) return { fillColor: "#fce7f3", color: "#d946ef", weight: 2, fillOpacity: 0.4 }
-        if (isBE) return { fillColor: "#fef9c3", color: "#eab308", weight: 2, fillOpacity: 0.5 }
-        if (isJP) return { fillColor: "#fee2e2", color: "#ef4444", weight: 2, fillOpacity: 0.5 }
-        if (isSG) return { fillColor: "#ccfbf1", color: "#0f766e", weight: 2, fillOpacity: 0.7 }
-        if (isKR) return { fillColor: "#ffe4e6", color: "#e11d48", weight: 2, fillOpacity: 0.55 }
-        if (isFR) return { fillColor: "#dbeafe", color: "#2563eb", weight: 2, fillOpacity: 0.55 }
-        if (isES) return { fillColor: "#ffedd5", color: "#ea580c", weight: 2, fillOpacity: 0.55 }
-        if (isNZ) return { fillColor: "#dbeafe", color: "#1d4ed8", weight: 2, fillOpacity: 0.55 }
-        if (isNO) return { fillColor: "#ede9fe", color: "#6d28d9", weight: 2, fillOpacity: 0.55 }
-        if (isSE) return { fillColor: "#ccfbf1", color: "#0f766e", weight: 2, fillOpacity: 0.55 }
-        if (isDK) return { fillColor: "#fef3c7", color: "#b45309", weight: 2, fillOpacity: 0.55 }
-        if (isFI) return { fillColor: "#e0f2fe", color: "#0369a1", weight: 2, fillOpacity: 0.55 }
-        if (isCH) return { fillColor: "#fce7f3", color: "#be185d", weight: 2, fillOpacity: 0.55 }
-        return { fillColor: "#f8fafc", color: "#cbd5e1", weight: 0.8, fillOpacity: 0.6 }
-      })
-    }
+    refreshWorldCountryStyle()
 
     renderSA4()
     // eslint-disable-next-line react-hooks/exhaustive-deps
