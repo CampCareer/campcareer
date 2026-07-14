@@ -11,7 +11,7 @@ import { useTranslations } from "@/lib/i18n/locale-provider"
 import { useLocale } from "@/lib/i18n/locale-provider"
 import { localeFromPathname, localizePath, withoutLocalePrefix } from "@/lib/i18n/config"
 import { cn } from "@/lib/utils"
-import { UserIcon } from "lucide-react"
+import { UserIcon, Globe, Building2, Briefcase } from "lucide-react"
 import type { User } from "@supabase/supabase-js"
 
 // Numbeo-style horizontal category nav. Replaces the old sidebar — every core
@@ -40,11 +40,10 @@ export function TopNav() {
 
   const avatarUrl = user?.user_metadata?.avatar_url as string | undefined
 
-  const navItems: { href: string; label: string; accent?: "blue" | "rose" | "amber" }[] = [
-    { href: "/", label: t.nav.home },
-    { href: "/countries", label: locale === "ko" ? "국가" : "Countries", accent: "blue" },
-    { href: "/universities", label: locale === "ko" ? "대학" : "Universities", accent: "rose" },
-    { href: "/majors", label: locale === "ko" ? "전공·직업" : "Majors", accent: "amber" },
+  const navItems: { href: string; label: string; icon?: typeof Globe; accent?: "blue" | "rose" | "amber" }[] = [
+    { href: "/countries", label: locale === "ko" ? "국가" : "Countries", icon: Globe, accent: "blue" },
+    { href: "/universities", label: locale === "ko" ? "대학" : "Universities", icon: Building2, accent: "rose" },
+    { href: "/majors", label: locale === "ko" ? "전공·직업" : "Majors", icon: Briefcase, accent: "amber" },
     { href: "/maps", label: t.nav.map },
     { href: "/compare", label: t.nav.compare },
   ]
@@ -54,18 +53,20 @@ export function TopNav() {
       item.href === "/"
         ? barePathname === "/"
         : barePathname === item.href || barePathname.startsWith(`${item.href}/`)
+    const Icon = item.icon
     return (
       <Link
         key={item.href}
         href={localizePath(item.href, pathLocale)}
         prefetch={item.href === "/maps" ? false : undefined}
         className={cn(
-          "whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors",
+          "whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors flex items-center gap-1.5",
           active
             ? item.accent === "rose" ? "bg-rose-50 text-rose-700" : item.accent === "amber" ? "bg-amber-100 text-amber-900" : "bg-blue-50 text-blue-700"
             : "text-slate-500 hover:text-slate-900 hover:bg-slate-100"
         )}
       >
+        {Icon && <Icon className="w-4 h-4 shrink-0" />}
         {item.label}
       </Link>
     )
@@ -74,10 +75,10 @@ export function TopNav() {
   return (
     <header className={cn(isCompare ? "" : "sticky top-0 z-40", "bg-background/90 backdrop-blur-sm border-b border-slate-200")}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="h-14 flex items-center gap-4">
+        <div className="h-20 flex items-center gap-4">
           <Link href={localizePath("/", pathLocale)} className="flex items-center gap-2.5 shrink-0 mr-auto">
-            <LogoMark size={30} />
-            <span className="font-semibold text-slate-900 text-base tracking-tight">
+            <LogoMark size={36} />
+            <span className="font-semibold text-slate-900 text-lg tracking-tight">
               CampCareer
             </span>
           </Link>
