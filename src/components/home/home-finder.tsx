@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { FormEvent, useEffect, useRef, useState } from "react"
+import { FormEvent, useCallback, useEffect, useRef, useState } from "react"
 import {
   ArrowRight,
   BadgeCheck,
@@ -16,7 +16,6 @@ import {
   Map,
   Search,
   ShieldCheck,
-  Sparkles,
   X,
 } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
@@ -33,15 +32,16 @@ import type { CountryOption } from "@/lib/study-product/countries"
 import { track } from "@/lib/analytics"
 import { createClient } from "@/lib/supabase-client"
 import { subscribeVisaAlerts } from "@/app/degree-risk/actions"
+import { getTaxonomyJourneyHref, localizeStudyJourneyHref } from "@/lib/study-product/journey-hrefs"
 
 const EN_COPY = {
   eyebrow: "Study decisions backed by evidence",
-  title: "Compare study paths—from qualification to career.",
-  subtitle: "Search degrees, diplomas and trade qualifications, then compare total cost, career outcomes and post-study options across countries.",
-  study: "What do you want to study?",
+  title: "Choose what to study, where to go, and what you’ll have left after graduation.",
+  subtitle: "Compare tuition, take-home pay, living costs, and work and visa pathways across 20 countries.",
+  study: "What do you want to study or do?",
   studyPlaceholder: "Nursing, Data Analytics, Carpentry…",
   priority: "What matters most?",
-  compare: "Compare my study options",
+  compare: "Compare my options",
   career: "Career outcome",
   cost: "Lower total cost",
   postStudy: "Post-study options",
@@ -70,15 +70,18 @@ const EN_COPY = {
   noRanked: "This option is searchable, but it does not yet have two fully reviewed destination pathways. Explore the official occupation and course data below instead.",
   officialProfile: "Open official profile",
   searchHint: "Search by a course, qualification or skill—not only a university major.",
+  closeSearch: "Close study options",
+  searchResults: "Study option results",
+  detailedComparison: "Open detailed comparison",
 }
 
 type Copy = { [K in keyof typeof EN_COPY]: string }
 
 const KO_COPY: Copy = {
   eyebrow: "검증된 근거로 비교하는 유학 선택",
-  title: "과정부터 취업까지, 유학의 결과를 비교하세요.",
-  subtitle: "대학 전공부터 기술 자격까지 검색하고, 국가별 총비용·취업 전망·졸업 후 경로를 검증된 자료로 비교해보세요.",
-  study: "무엇을 배우고 싶나요?",
+  title: "무엇을 공부할지, 어느 나라로 갈지, 졸업 후 얼마가 남는지 비교하세요.",
+  subtitle: "20개국의 학비, 세후 소득, 생활비, 취업·비자 경로를 한곳에서 비교하세요.",
+  study: "무엇을 공부하거나 어떤 일을 하고 싶나요?",
   studyPlaceholder: "간호, 데이터 분석, 목공…",
   priority: "가장 중요한 기준",
   compare: "내 유학 선택지 비교하기",
@@ -110,6 +113,9 @@ const KO_COPY: Copy = {
   noRanked: "검색 가능한 과정이지만 아직 두 개 이상의 목적국이 전체 검수 기준을 통과하지 않았습니다. 아래 공식 직업·과정 자료를 먼저 확인해보세요.",
   officialProfile: "공식 직업 자료 열기",
   searchHint: "대학 전공뿐 아니라 과정·자격·기술 이름으로 검색할 수 있습니다.",
+  closeSearch: "검색 결과 닫기",
+  searchResults: "과정 검색 결과",
+  detailedComparison: "상세 비교 열기",
 }
 
 export function HomeFinder({ locale = "en" }: { locale?: StudyLocale }) {
@@ -120,19 +126,65 @@ export function HomeFinder({ locale = "en" }: { locale?: StudyLocale }) {
   const [selected, setSelected] = useState<TaxonomySearchResult | null>(null)
   const [searchOpen, setSearchOpen] = useState(false)
   const [focusCategoryId, setFocusCategoryId] = useState<string | undefined>()
+  const [focusMenuInput, setFocusMenuInput] = useState(false)
   const [budget, setBudget] = useState<number | undefined>()
   const [priority, setPriority] = useState<RecommendationPriority>("CAREER_OUTCOME")
   const [recommendation, setRecommendation] = useState<RecommendationResultV2 | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showAll, setShowAll] = useState(false)
+  const searchRootRef = useRef<HTMLDivElement>(null)
+  const searchInputRef = useRef<HTMLInputElement>(null)
+  const searchTriggerRef = useRef<HTMLElement | null>(null)
+  const suppressSearchOpenRef = useRef(false)
+  const restoreSearchFocusRef = useRef(false)
+
+  const closeSearch = useCallback((restoreFocus = false) => {
+    restoreSearchFocusRef.current = restoreFocus
+    setSearchOpen(false)
+    setFocusCategoryId(undefined)
+    setFocusMenuInput(false)
+  }, [])
+
+  useEffect(() => {
+    if (searchOpen || !restoreSearchFocusRef.current) return
+    restoreSearchFocusRef.current = false
+    window.requestAnimationFrame(() => {
+      const trigger = searchTriggerRef.current
+      if (!trigger || document.activeElement === trigger) return
+      suppressSearchOpenRef.current = trigger === searchInputRef.current
+      trigger.focus({ preventScroll: true })
+    })
+  }, [searchOpen])
+
+  useEffect(() => {
+    if (!searchOpen) return
+
+    function handlePointerDown(event: PointerEvent) {
+      if (!searchRootRef.current?.contains(event.target as Node)) closeSearch(false)
+    }
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key !== "Escape") return
+      event.preventDefault()
+      closeSearch(true)
+    }
+
+    document.addEventListener("pointerdown", handlePointerDown)
+    document.addEventListener("keydown", handleKeyDown)
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown)
+      document.removeEventListener("keydown", handleKeyDown)
+    }
+  }, [closeSearch, searchOpen])
 
   function chooseConcept(item: TaxonomySearchResult) {
     setSelected(item)
     setQuery(item.label)
-    setSearchOpen(false)
     setRecommendation(null)
     setError(null)
+    searchTriggerRef.current = searchInputRef.current
+    closeSearch(true)
   }
 
   async function requestRecommendation(personalization?: { originCountry?: string; budget?: number }) {
@@ -167,7 +219,7 @@ export function HomeFinder({ locale = "en" }: { locale?: StudyLocale }) {
       return
     }
     if (!selected.recommendable) {
-      if (selected.exploreHref) window.location.assign(selected.exploreHref)
+      window.location.assign(getTaxonomyJourneyHref(selected, locale))
       return
     }
 
@@ -215,7 +267,7 @@ export function HomeFinder({ locale = "en" }: { locale?: StudyLocale }) {
 
   return (
     <div className="bg-white text-slate-950">
-      <section className="relative overflow-hidden border-b border-slate-200 bg-[radial-gradient(circle_at_80%_10%,rgba(37,99,235,0.12),transparent_32%),linear-gradient(180deg,#f8fbff_0%,#ffffff_78%)]">
+      <section className="relative border-b border-slate-200 bg-[radial-gradient(circle_at_80%_10%,rgba(37,99,235,0.12),transparent_32%),linear-gradient(180deg,#f8fbff_0%,#ffffff_78%)]">
         <div className="mx-auto grid min-h-[620px] max-w-7xl items-center gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[minmax(0,1.12fr)_minmax(360px,.88fr)] lg:py-16">
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-bold text-blue-700">
@@ -230,20 +282,35 @@ export function HomeFinder({ locale = "en" }: { locale?: StudyLocale }) {
             </p>
 
             <form onSubmit={submit} className="mt-8 max-w-4xl rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl shadow-slate-900/10 sm:p-5">
-              <div className="relative">
+              <div ref={searchRootRef} className="relative">
                   <Field label={copy.study}>
                     <div className="relative">
                       <Search className="pointer-events-none absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" aria-hidden="true" />
                       <input
+                        ref={searchInputRef}
                         value={query}
-                        onFocus={() => setSearchOpen(true)}
-                        onChange={(event) => {
-                          setQuery(event.target.value)
-                          setSelected(null)
+                        onFocus={(event) => {
+                          if (suppressSearchOpenRef.current) {
+                            suppressSearchOpenRef.current = false
+                            return
+                          }
+                          searchTriggerRef.current = event.currentTarget
+                          setFocusMenuInput(true)
                           setSearchOpen(true)
                         }}
-                        onKeyDown={(event) => {
-                          if (event.key === "Escape") setSearchOpen(false)
+                        onClick={(event) => {
+                          searchTriggerRef.current = event.currentTarget
+                          setFocusMenuInput(true)
+                          setSearchOpen(true)
+                        }}
+                        onChange={(event) => {
+                          searchTriggerRef.current = event.currentTarget
+                          setQuery(event.target.value)
+                          setSelected(null)
+                          setRecommendation(null)
+                          setFocusCategoryId(undefined)
+                          setFocusMenuInput(true)
+                          setSearchOpen(true)
                         }}
                         placeholder={copy.studyPlaceholder}
                         role="combobox"
@@ -252,7 +319,26 @@ export function HomeFinder({ locale = "en" }: { locale?: StudyLocale }) {
                         aria-autocomplete="list"
                         className={`${controlClass} pl-11 pr-10`}
                       />
-                      <ChevronDown className="absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                      <button
+                        type="button"
+                        aria-label={searchOpen ? (isKo ? "검색 메뉴 접기" : "Collapse study options") : copy.searchResults}
+                        aria-expanded={searchOpen}
+                        aria-controls="study-search-results"
+                        onMouseDown={(event) => event.preventDefault()}
+                        onClick={() => {
+                          if (searchOpen) {
+                            closeSearch(true)
+                            return
+                          }
+                          searchTriggerRef.current = searchInputRef.current
+                          setFocusMenuInput(true)
+                          setSearchOpen(true)
+                          searchInputRef.current?.focus({ preventScroll: true })
+                        }}
+                        className="absolute right-1.5 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                      >
+                        <ChevronDown className={`h-4 w-4 transition-transform ${searchOpen ? "rotate-180" : ""}`} aria-hidden="true" />
+                      </button>
                     </div>
                   </Field>
                   {searchOpen && (
@@ -260,9 +346,31 @@ export function HomeFinder({ locale = "en" }: { locale?: StudyLocale }) {
                       id="study-search-results"
                       locale={locale}
                       isKo={isKo}
-                      initialCategoryId={focusCategoryId}
+                      query={query}
+                      activeCategoryId={focusCategoryId}
+                      closeLabel={copy.closeSearch}
+                      resultsLabel={copy.searchResults}
+                      searchLabel={copy.study}
+                      searchPlaceholder={copy.studyPlaceholder}
+                      autoFocusSearch={focusMenuInput}
+                      onQueryChange={(value) => {
+                        setQuery(value)
+                        setSelected(null)
+                        setRecommendation(null)
+                        setFocusCategoryId(undefined)
+                        setFocusMenuInput(true)
+                        setError(null)
+                      }}
+                      onCategoryChange={(categoryId) => {
+                        setFocusCategoryId(categoryId)
+                        setQuery("")
+                        setSelected(null)
+                        setRecommendation(null)
+                        setFocusMenuInput(false)
+                        setError(null)
+                      }}
                       onChoose={chooseConcept}
-                      onClose={() => { setSearchOpen(false); setFocusCategoryId(undefined) }}
+                      onClose={() => closeSearch(true)}
                     />
                   )}
               </div>
@@ -283,10 +391,10 @@ export function HomeFinder({ locale = "en" }: { locale?: StudyLocale }) {
                   disabled={submitting}
                   className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-bold text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:opacity-60"
                 >
-                  {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+                  {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
                   {copy.compare}
                 </button>
-                <Link href="/maps" prefetch={false} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50">
+                <Link href={localizeStudyJourneyHref("/maps", locale)} prefetch={false} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50">
                   <Map className="h-4 w-4" />
                   {isKo ? "직업·연봉 지도" : "Career & salary map"}
                 </Link>
@@ -296,7 +404,7 @@ export function HomeFinder({ locale = "en" }: { locale?: StudyLocale }) {
             </form>
           </div>
 
-          <ResultPreview copy={copy} isKo={isKo} recommendation={recommendation} />
+          <ResultPreview copy={copy} isKo={isKo} selected={selected} recommendation={recommendation} />
         </div>
       </section>
 
@@ -308,7 +416,20 @@ export function HomeFinder({ locale = "en" }: { locale?: StudyLocale }) {
               <button
                 key={category.id}
                 type="button"
-                onClick={() => { setFocusCategoryId(category.id); setSearchOpen(true) }}
+                aria-controls="study-search-results"
+                onClick={(event) => {
+                  searchTriggerRef.current = event.currentTarget
+                  setFocusCategoryId(category.id)
+                  setQuery("")
+                  setSelected(null)
+                  setRecommendation(null)
+                  setFocusMenuInput(false)
+                  setError(null)
+                  setSearchOpen(true)
+                  if (window.matchMedia("(min-width: 640px)").matches) {
+                    searchInputRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
+                  }
+                }}
                 className="min-h-11 rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 transition hover:border-blue-300 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
               >
                 {isKo ? category.labelKo : category.label}
@@ -328,6 +449,11 @@ export function HomeFinder({ locale = "en" }: { locale?: StudyLocale }) {
                 <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">{copy.rankedBody}</p>
               </div>
               <div className="flex flex-wrap items-center gap-3">
+                {selected && (
+                  <Link href={getTaxonomyJourneyHref(selected, locale)} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-slate-950 px-4 text-sm font-bold text-white transition hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-2">
+                    {copy.detailedComparison}<ArrowRight className="h-4 w-4" aria-hidden="true" />
+                  </Link>
+                )}
                 <PersonalizeComparisonButton
                   copy={copy}
                   locale={locale}
@@ -337,7 +463,7 @@ export function HomeFinder({ locale = "en" }: { locale?: StudyLocale }) {
                   onApply={personalizeComparison}
                 />
                 <SavePlanButton result={recommendation} copy={copy} locale={locale} />
-                <Link href="/methodology" className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-slate-600 hover:text-blue-700">
+                <Link href={localizeStudyJourneyHref("/methodology", locale)} className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-slate-600 hover:text-blue-700">
                   <BookOpen className="h-4 w-4" />{copy.methodology}
                 </Link>
               </div>
@@ -366,7 +492,7 @@ export function HomeFinder({ locale = "en" }: { locale?: StudyLocale }) {
                 <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">{copy.exploreBody}</p>
                 <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                   {recommendation.unrankedCountries.map((country) => (
-                    <Link key={country.countryCode} href={country.exploreHref} prefetch={false} className="rounded-xl border border-slate-200 p-4 transition hover:border-blue-300 hover:bg-blue-50/40">
+                    <Link key={country.countryCode} href={localizeStudyJourneyHref(country.exploreHref, locale)} prefetch={false} className="rounded-xl border border-slate-200 p-4 transition hover:border-blue-300 hover:bg-blue-50/40">
                       <div className="flex items-center justify-between gap-3">
                         <p className="font-bold text-slate-900">{country.countryName}</p>
                         <span className="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500">{coverageLabel(country.coverage)}</span>
@@ -409,14 +535,40 @@ function PriorityButton({ active, onClick, children }: { active: boolean; onClic
   )
 }
 
-function SearchMenu({ id, locale, isKo, initialCategoryId, onChoose, onClose }: { id: string; locale: StudyLocale; isKo: boolean; initialCategoryId?: string; onChoose: (item: TaxonomySearchResult) => void; onClose: () => void }) {
-  const [activeCategoryId, setActiveCategoryId] = useState<string | null>(initialCategoryId ?? null)
-  const [query, setQuery] = useState("")
+function SearchMenu({
+  id,
+  locale,
+  isKo,
+  query,
+  activeCategoryId,
+  closeLabel,
+  resultsLabel,
+  searchLabel,
+  searchPlaceholder,
+  autoFocusSearch,
+  onQueryChange,
+  onCategoryChange,
+  onChoose,
+  onClose,
+}: {
+  id: string
+  locale: StudyLocale
+  isKo: boolean
+  query: string
+  activeCategoryId?: string
+  closeLabel: string
+  resultsLabel: string
+  searchLabel: string
+  searchPlaceholder: string
+  autoFocusSearch: boolean
+  onQueryChange: (value: string) => void
+  onCategoryChange: (categoryId: string) => void
+  onChoose: (item: TaxonomySearchResult) => void
+  onClose: () => void
+}) {
   const [searchResults, setSearchResults] = useState<TaxonomySearchResult[]>([])
   const [searching, setSearching] = useState(false)
-  const searchSequence = useRef(0)
-
-  const categoryItemClass = "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-semibold transition hover:bg-slate-50"
+  const mobileInputRef = useRef<HTMLInputElement>(null)
 
   const conceptItems = activeCategoryId
     ? STUDY_CONCEPTS
@@ -438,109 +590,218 @@ function SearchMenu({ id, locale, isKo, initialCategoryId, onChoose, onClose }: 
   const displayItems = query.trim() ? searchResults : conceptItems
 
   useEffect(() => {
-    if (!query.trim()) {
+    const normalizedQuery = query.trim()
+    if (!normalizedQuery) {
       setSearchResults([])
       setSearching(false)
       return
     }
+
+    const controller = new AbortController()
+    setSearching(true)
     const timeout = window.setTimeout(async () => {
-      const sequence = ++searchSequence.current
-      setSearching(true)
       try {
-        const response = await fetch(`/api/v1/taxonomy/search?q=${encodeURIComponent(query)}&locale=${locale}`)
+        const response = await fetch(`/api/v1/taxonomy/search?q=${encodeURIComponent(normalizedQuery)}&locale=${locale}`, {
+          signal: controller.signal,
+        })
+        if (!response.ok) throw new Error("Search failed")
         const payload = await response.json() as { results?: TaxonomySearchResult[] }
-        if (sequence === searchSequence.current) setSearchResults(payload.results ?? [])
-      } catch {
-        if (sequence === searchSequence.current) setSearchResults([])
+        setSearchResults(payload.results ?? [])
+      } catch (reason) {
+        if (!(reason instanceof DOMException && reason.name === "AbortError")) setSearchResults([])
       } finally {
-        if (sequence === searchSequence.current) setSearching(false)
+        if (!controller.signal.aborted) setSearching(false)
       }
     }, 180)
-    return () => window.clearTimeout(timeout)
+    return () => {
+      window.clearTimeout(timeout)
+      controller.abort()
+    }
   }, [locale, query])
 
+  useEffect(() => {
+    const mobile = window.matchMedia("(max-width: 639px)")
+    if (!mobile.matches) return
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+    if (autoFocusSearch) {
+      window.requestAnimationFrame(() => mobileInputRef.current?.focus({ preventScroll: true }))
+    }
+    return () => {
+      document.body.style.overflow = previousOverflow
+    }
+  }, [autoFocusSearch])
+
   return (
-    <div id={id} role="listbox" className="absolute left-0 right-0 top-[calc(100%+8px)] z-50 flex overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl shadow-slate-900/15">
-      <div className="w-56 shrink-0 border-r border-slate-100 bg-slate-50/50 py-2">
-        {STUDY_CATEGORIES.map((category) => (
-          <button
-            key={category.id}
-            type="button"
-            onClick={() => { setActiveCategoryId(category.id); setQuery(""); setSearchResults([]) }}
-            className={`${categoryItemClass} ${activeCategoryId === category.id ? "bg-blue-50 text-blue-700" : "text-slate-700"}`}
-          >
-            <span className="truncate">{isKo ? category.labelKo : category.label}</span>
+    <>
+      <div data-testid="study-search-backdrop" aria-hidden="true" onPointerDown={onClose} className="fixed inset-0 z-40 bg-slate-950/40 backdrop-blur-[1px] sm:hidden" />
+      <div role="dialog" aria-label={resultsLabel} className="fixed inset-x-0 bottom-0 z-50 flex h-[min(82dvh,38rem)] flex-col overflow-hidden rounded-t-2xl border border-slate-200 bg-white shadow-2xl shadow-slate-900/20 sm:absolute sm:bottom-auto sm:left-0 sm:right-0 sm:top-[calc(100%+8px)] sm:h-[min(70vh,32rem)] sm:min-h-72 sm:rounded-xl sm:shadow-slate-900/15">
+        <div className="flex shrink-0 items-center justify-between gap-4 border-b border-slate-100 px-4 py-3">
+          <div>
+            <div className="mx-auto mb-2 h-1 w-10 rounded-full bg-slate-200 sm:hidden" aria-hidden="true" />
+            <p className="text-xs font-bold uppercase tracking-[0.12em] text-blue-600">{isKo ? "과정·직업 찾기" : "Find a study or career path"}</p>
+            <p className="mt-0.5 text-xs text-slate-500">{query.trim() ? (isKo ? `“${query.trim()}” 검색 결과` : `Results for “${query.trim()}”`) : (isKo ? "분야를 선택해 전체 과정을 확인하세요" : "Choose a field to see every option")}</p>
+          </div>
+          <button type="button" onClick={onClose} aria-label={closeLabel} className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
+            <X className="h-5 w-5" aria-hidden="true" />
           </button>
-        ))}
+        </div>
+
+        <div className="relative mx-4 my-3 sm:hidden">
+          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" aria-hidden="true" />
+          <input
+            ref={mobileInputRef}
+            type="search"
+            value={query}
+            onChange={(event) => onQueryChange(event.target.value)}
+            aria-label={searchLabel}
+            aria-controls={id}
+            placeholder={searchPlaceholder}
+            className={`${controlClass} pl-10`}
+          />
+        </div>
+
+        <div className="flex shrink-0 gap-2 overflow-x-auto border-y border-slate-100 bg-slate-50/60 px-3 py-3 [scrollbar-width:thin] sm:border-t-0">
+          {STUDY_CATEGORIES.map((category) => (
+            <button
+              key={category.id}
+              type="button"
+              onClick={() => {
+                mobileInputRef.current?.blur()
+                onCategoryChange(category.id)
+              }}
+              aria-pressed={activeCategoryId === category.id}
+              className={`min-h-10 shrink-0 rounded-full border px-3 text-xs font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${activeCategoryId === category.id ? "border-blue-600 bg-blue-600 text-white" : "border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:text-blue-700"}`}
+            >
+              {isKo ? category.labelKo : category.label}
+            </button>
+          ))}
+        </div>
+
+        <div id={id} role="listbox" aria-label={resultsLabel} className="min-h-0 flex-1 overflow-y-auto overscroll-contain py-2 [scrollbar-width:thin]">
+          {!activeCategoryId && !query.trim() ? (
+            <div className="flex h-full items-center justify-center px-6 text-center text-sm text-slate-400">
+              {isKo ? "위에서 관심 분야를 선택하세요" : "Choose a field above"}
+            </div>
+          ) : searching ? (
+            <div className="flex h-full items-center justify-center px-6 text-center text-sm text-slate-400">
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              {isKo ? "검색 중…" : "Searching…"}
+            </div>
+          ) : displayItems.length === 0 ? (
+            <div className="flex h-full items-center justify-center px-6 text-center text-sm text-slate-400">
+              {isKo ? "해당하는 과정이 없습니다" : "No matching option yet"}
+            </div>
+          ) : (
+            <>
+              {activeCategory && !query.trim() && (
+                <p className="px-4 pb-2 pt-1 text-[11px] font-bold uppercase tracking-wider text-slate-400">{isKo ? activeCategory.labelKo : activeCategory.label}</p>
+              )}
+              {displayItems.map((item) => (
+                <button
+                  key={item.conceptId}
+                  type="button"
+                  role="option"
+                  aria-selected="false"
+                  onClick={() => onChoose(item)}
+                  className="flex w-full items-start justify-between gap-3 rounded-lg px-4 py-3 text-left transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                >
+                  <span>
+                    <span className="block text-sm font-bold text-slate-900">{item.label}</span>
+                    <span className="mt-1 block text-xs leading-5 text-slate-500">{item.secondaryLabel}</span>
+                  </span>
+                  <span className={`mt-0.5 shrink-0 rounded-full px-2 py-1 text-[10px] font-bold ${item.recommendable ? "bg-emerald-50 text-emerald-700" : "bg-slate-100 text-slate-500"}`}>
+                    {item.recommendable ? (isKo ? "비교 가능" : "Comparable") : (isKo ? "자료 보기" : "Explore")}
+                  </span>
+                </button>
+              ))}
+            </>
+          )}
+        </div>
       </div>
-      <div className="min-h-[384px] max-h-[384px] min-w-[340px] flex-1 overflow-y-auto py-2">
-        {!activeCategoryId && !query.trim() ? (
-          <div className="flex h-full items-center justify-center px-6 text-center text-sm text-slate-400">
-            {isKo ? "왼쪽에서 직종을 선택하세요" : "Choose a field on the left"}
-          </div>
-        ) : searching ? (
-          <div className="flex h-full items-center justify-center px-6 text-center text-sm text-slate-400">
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            {isKo ? "검색 중…" : "Searching…"}
-          </div>
-        ) : displayItems.length === 0 ? (
-          <div className="flex h-full items-center justify-center px-6 text-center text-sm text-slate-400">
-            {isKo ? "해당하는 과정이 없습니다" : "No matching option yet"}
-          </div>
-        ) : (
-          <>
-            {activeCategory && !query.trim() && (
-              <p className="px-4 pb-2 pt-1 text-[11px] font-bold uppercase tracking-wider text-slate-400">{isKo ? activeCategory.labelKo : activeCategory.label}</p>
-            )}
-            {displayItems.map((item) => (
-              <button
-                key={item.conceptId}
-                type="button"
-                role="option"
-                aria-selected="false"
-                onClick={() => onChoose(item)}
-                className="flex w-full items-start justify-between gap-3 rounded-lg px-4 py-3 text-left transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-              >
-                <span>
-                  <span className="block text-sm font-bold text-slate-900">{item.label}</span>
-                  <span className="mt-1 block text-xs leading-5 text-slate-500">{item.secondaryLabel}</span>
-                </span>
-                <span className={`mt-0.5 shrink-0 rounded-full px-2 py-1 text-[10px] font-bold ${item.recommendable ? "bg-emerald-50 text-emerald-700" : "bg-slate-100 text-slate-500"}`}>
-                  {item.recommendable ? (isKo ? "비교 가능" : "Comparable") : (isKo ? "자료 보기" : "Explore")}
-                </span>
-              </button>
-            ))}
-          </>
-        )}
-      </div>
-      <button type="button" onClick={onClose} className="sr-only">Close results</button>
-    </div>
+    </>
   )
 }
 
-function ResultPreview({ copy, isKo, recommendation }: { copy: Copy; isKo: boolean; recommendation: RecommendationResultV2 | null }) {
+function ResultPreview({
+  copy,
+  isKo,
+  selected,
+  recommendation,
+}: {
+  copy: Copy
+  isKo: boolean
+  selected: TaxonomySearchResult | null
+  recommendation: RecommendationResultV2 | null
+}) {
   const country = recommendation?.rankedCountries[0]
+  const kindLabel = selected?.kind === "TRADE_PATHWAY"
+    ? (isKo ? "기술·직업 경로" : "Trade or career pathway")
+    : selected?.kind === "QUALIFICATION"
+      ? (isKo ? "자격·과정" : "Qualification")
+      : (isKo ? "전공·학업 분야" : "Study field")
+
   return (
     <aside className="relative rounded-3xl border border-slate-200 bg-white p-5 shadow-2xl shadow-slate-900/10 sm:p-7" aria-live="polite">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-600">{country ? (isKo ? "현재 최상위 결과" : "Current leading result") : (isKo ? "결과 미리보기" : "Result preview")}</p>
-          <h2 className="mt-2 text-2xl font-semibold text-slate-950">{country?.countryName ?? "Australia"}</h2>
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-600">
+            {country ? (isKo ? "현재 최상위 결과" : "Current leading result") : selected ? (isKo ? "선택한 경로" : "Your selected path") : (isKo ? "비교 시작하기" : "Build your comparison")}
+          </p>
+          <h2 className="mt-2 text-2xl font-semibold text-slate-950">
+            {country?.countryName ?? selected?.label ?? (isKo ? "목표를 먼저 선택하세요" : "Start with what you want to do")}
+          </h2>
         </div>
         <div className="rounded-2xl bg-blue-50 p-3 text-blue-700"><BriefcaseBusiness className="h-6 w-6" /></div>
       </div>
-      <div className="mt-6 grid grid-cols-2 gap-3">
-        <PreviewMetric icon={CircleDollarSign} label={isKo ? "첫해 필요비용" : "First-year runway"} value={country?.metrics.find((metric) => metric.key === "FIRST_YEAR_COST")?.value.split(" · ")[0] ?? "US$43k–68k"} />
-        <PreviewMetric icon={BriefcaseBusiness} label={isKo ? "경력 3년 연봉" : "Year-three salary"} value={country?.metrics.find((metric) => metric.key === "SALARY")?.value ?? "US$68k"} />
-      </div>
-      <div className="mt-4 rounded-2xl border border-slate-200 p-4">
-        <p className="text-xs font-bold text-slate-500">{isKo ? "졸업 후 선택지" : "Post-study option"}</p>
-        <p className="mt-2 text-sm font-semibold leading-6 text-slate-900">{country?.policy ?? "Post-study work route + occupation-specific pathways"}</p>
-      </div>
-      <div className="mt-4 space-y-2 text-xs text-slate-600">
-        <div className="flex items-center gap-2"><BadgeCheck className="h-4 w-4 text-emerald-600" />{copy.verified}</div>
-        <div className="flex items-center gap-2"><BookOpen className="h-4 w-4 text-blue-600" />{country ? country.qualification : (isKo ? "학위·디플로마·기술자격" : "Degrees, diplomas and trade qualifications")}</div>
-      </div>
+
+      {country ? (
+        <>
+          <div className="mt-6 grid grid-cols-2 gap-3">
+            <PreviewMetric icon={CircleDollarSign} label={isKo ? "첫해 필요비용" : "First-year runway"} value={country.metrics.find((metric) => metric.key === "FIRST_YEAR_COST")?.value.split(" · ")[0] ?? (isKo ? "미공개" : "Not published")} />
+            <PreviewMetric icon={BriefcaseBusiness} label={isKo ? "연봉" : "Salary"} value={country.metrics.find((metric) => metric.key === "SALARY")?.value ?? (isKo ? "미공개" : "Not published")} />
+          </div>
+          <div className="mt-4 rounded-2xl border border-slate-200 p-4">
+            <p className="text-xs font-bold text-slate-500">{isKo ? "졸업 후 선택지" : "Post-study option"}</p>
+            <p className="mt-2 text-sm font-semibold leading-6 text-slate-900">{country.policy}</p>
+          </div>
+          <div className="mt-4 space-y-2 text-xs text-slate-600">
+            <div className="flex items-center gap-2"><BadgeCheck className="h-4 w-4 text-emerald-600" />{copy.verified}</div>
+            <div className="flex items-center gap-2"><BookOpen className="h-4 w-4 text-blue-600" />{country.qualification}</div>
+          </div>
+        </>
+      ) : selected ? (
+        <div className="mt-6">
+          <div className="rounded-2xl border border-blue-100 bg-blue-50/60 p-4">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="rounded-full bg-white px-2.5 py-1 text-[11px] font-bold text-blue-700">{kindLabel}</span>
+              <span className="rounded-full bg-white px-2.5 py-1 text-[11px] font-bold text-slate-600">
+                {selected.recommendable ? (isKo ? "비교 모델 확인 가능" : "Comparison model available") : (isKo ? "탐색 자료 확인 가능" : "Discovery evidence available")}
+              </span>
+            </div>
+            <p className="mt-3 text-sm leading-6 text-slate-700">
+              {isKo ? "다음 단계에서 공개 기준을 통과한 학비·세후소득·생활비·취업 및 비자 근거를 확인합니다." : "Next, we’ll check which tuition, take-home pay, living-cost, work, and visa evidence is ready to publish."}
+            </p>
+          </div>
+          <p className="mt-4 text-xs leading-5 text-slate-500">
+            {isKo ? "검수가 끝나지 않은 국가에는 금액이나 순위를 표시하지 않습니다." : "Countries without complete review stay unranked and show no estimated amount."}
+          </p>
+        </div>
+      ) : (
+        <ol className="mt-6 space-y-3">
+          {[
+            isKo ? "전공·과정·직업을 검색하세요" : "Search a study field, qualification, or career",
+            isKo ? "취업·비용·졸업 후 경로 중 우선순위를 고르세요" : "Choose whether career, cost, or post-study options matter most",
+            isKo ? "공개 기준을 통과한 국가 근거만 비교하세요" : "Compare only destination evidence that passes review",
+          ].map((step, index) => (
+            <li key={step} className="flex items-center gap-3 rounded-xl bg-slate-50 px-4 py-3 text-sm font-semibold leading-5 text-slate-700">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-600 text-[11px] font-bold text-white">{index + 1}</span>
+              {step}
+            </li>
+          ))}
+        </ol>
+      )}
       <p className="mt-6 border-t border-slate-200 pt-4 text-[11px] leading-5 text-slate-400">{copy.disclaimer}</p>
     </aside>
   )
@@ -715,7 +976,7 @@ function PersonalizeComparisonButton({
             </div>
             <label className="mt-5 block text-xs font-bold text-slate-700">{copy.optionalBudget}</label>
             <input type="number" min="1" step="1000" value={budget} onChange={(event) => setBudget(event.target.value)} placeholder="60000" className={`${controlClass} mt-2`} />
-            <button type="button" disabled={loading} onClick={apply} className="mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-bold text-white hover:bg-blue-700 disabled:opacity-60">{loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}{copy.applyPersonalization}</button>
+            <button type="button" disabled={loading} onClick={apply} className="mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-bold text-white hover:bg-blue-700 disabled:opacity-60">{loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}{copy.applyPersonalization}</button>
           </div>
         </div>
       )}

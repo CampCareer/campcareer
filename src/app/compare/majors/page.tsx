@@ -1,16 +1,11 @@
-import { pageMetadata } from "@/lib/seo"
-import { getTranslations } from "@/lib/i18n/server"
-import MajorCompareClient from "./MajorCompareClient"
+import { permanentRedirect } from "next/navigation"
+import { getDocumentLocale } from "@/lib/i18n/server"
+import { buildLegacyCompareRedirect } from "@/lib/comparison/legacy-redirect"
 
-export async function generateMetadata() {
-  const t = await getTranslations()
-  return pageMetadata({
-    title: t.compare.majors.pageTitle,
-    description: t.compare.majors.pageSubtitle,
-    path: "/compare/majors",
-  })
-}
-
-export default function MajorComparePage() {
-  return <MajorCompareClient />
+export default async function MajorComparePage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>
+}) {
+  permanentRedirect(buildLegacyCompareRedirect(await searchParams, await getDocumentLocale()))
 }

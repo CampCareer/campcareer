@@ -57,6 +57,7 @@ export function articleLd({
   description,
   path,
   datePublished,
+  dateModified,
   author,
   image,
 }: {
@@ -64,6 +65,7 @@ export function articleLd({
   description: string
   path: string
   datePublished: string
+  dateModified?: string
   author?: string
   image?: string
 }) {
@@ -73,6 +75,7 @@ export function articleLd({
     headline: title,
     description,
     datePublished,
+    ...(dateModified && { dateModified }),
     mainEntityOfPage: `${BASE}${path}`,
     author: { "@type": "Organization", name: author ?? "CampCareer" },
     publisher: { "@type": "Organization", name: "CampCareer", url: BASE },

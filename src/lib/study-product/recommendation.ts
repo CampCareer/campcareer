@@ -252,7 +252,7 @@ function buildEvidenceSummary(
     slug: country.slug,
     coverage,
     availableEvidence,
-    exploreHref: `/maps/${country.code.toLowerCase()}?q=${encodeURIComponent(concept.label)}`,
+    exploreHref: `/maps?country=${country.code.toLowerCase()}&q=${encodeURIComponent(concept.label)}`,
   }
 }
 

@@ -9,6 +9,7 @@ import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
 import { WHV_REGIONS } from "@/data/whv-regions"
 import { useTranslations } from "@/lib/i18n/locale-provider"
 import type { MapData } from "@/lib/map-data"
+import { metropolitanFranceOnly } from "./france-geometry"
 
 // SA4 코드 → 지역명 (툴팁/하이라이트용)
 const SA4_NAME_BY_CODE: Record<string, string> = Object.fromEntries(
@@ -111,25 +112,6 @@ function isDenmark(properties: Record<string, unknown>): boolean { return proper
 function isFinland(properties: Record<string, unknown>): boolean { return properties?.ISO_A3 === "FIN" || properties?.ADM0_A3 === "FIN" }
 function isSwitzerland(properties: Record<string, unknown>): boolean { return properties?.ISO_A3 === "CHE" || properties?.ADM0_A3 === "CHE" }
 function isUAE(properties: Record<string, unknown>): boolean { return properties?.ISO_A3 === "ARE" || properties?.ADM0_A3 === "ARE" }
-
-// Natural Earth stores metropolitan France and overseas territories in one
-// country feature. CampCareer currently supports metropolitan France only, so
-// retain the European polygons and avoid a non-interactive French Guiana shape.
-function metropolitanFranceOnly(geo: GeoJSON.FeatureCollection): GeoJSON.FeatureCollection {
-  return {
-    ...geo,
-    features: geo.features.map((feature) => {
-      if (!isFrance((feature.properties ?? {}) as Record<string, unknown>) || feature.geometry?.type !== "MultiPolygon") return feature
-      const coordinates = feature.geometry.coordinates.filter((polygon) => {
-        const points = polygon.flat(2) as unknown as Array<[number, number]>
-        const latitude = points.reduce((sum, point) => sum + point[1], 0) / Math.max(points.length, 1)
-        const longitude = points.reduce((sum, point) => sum + point[0], 0) / Math.max(points.length, 1)
-        return latitude >= 40 && latitude <= 52 && longitude >= -6 && longitude <= 10
-      })
-      return { ...feature, geometry: { ...feature.geometry, coordinates } } as GeoJSON.Feature
-    }),
-  }
-}
 
 export default function LeafletMap({
   data,
@@ -2203,7 +2185,7 @@ export default function LeafletMap({
   return (
     <div className="relative h-full w-full">
       <style>{".leaflet-interactive:focus { outline: none !important; }"}</style>
-      <div ref={containerRef} className="h-full w-full" style={{ background: "#f1f5f9" }} />
+      <div ref={containerRef} className="h-full w-full bg-slate-100 dark:bg-slate-950" />
 
       <button
         type="button"

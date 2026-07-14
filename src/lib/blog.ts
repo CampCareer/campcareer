@@ -22,10 +22,12 @@ export type PostMeta = {
   authorInitials?: string
   reviewedBy?: string
   lastReviewed?: string
-  // Conversion + GEO (optional). ctaCountry/ctaMajor bake a default deep-link
-  // into bare <ToolCTA/> tags; faqs emit FAQPage structured data.
+  // Conversion + GEO (optional). CTA defaults bake a supported Compare deep
+  // link into bare <ToolCTA/> and legacy <CTA/> tags; faqs emit FAQPage data.
   ctaCountry?: string
   ctaMajor?: string
+  ctaCareer?: string
+  ctaOrigin?: string
   faqs?: { q: string; a: string }[]
 }
 

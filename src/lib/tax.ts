@@ -218,7 +218,11 @@ function calcDKTax(gross: number): number {
   return Math.round(amBidrag + municipalTax + churchTax + stateTax)
 }
 
-export function calcTax(gross: number, country: string, stateOrProvince: string): number {
+/**
+ * Returns null when CampCareer does not have a maintained country model.
+ * A missing rule must never be rendered as a zero-tax estimate.
+ */
+export function calcTax(gross: number, country: string, stateOrProvince: string): number | null {
   switch (country) {
     case 'us': return calcUSTax(gross, stateOrProvince)
     case 'au': return calcAUTax(gross)
@@ -231,6 +235,6 @@ export function calcTax(gross: number, country: string, stateOrProvince: string)
     case 'no': return calcNOTax(gross)
     case 'se': return calcSETax(gross)
     case 'dk': return calcDKTax(gross)
-    default:   return 0
+    default:   return null
   }
 }

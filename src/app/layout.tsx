@@ -1,15 +1,18 @@
 import type { Metadata } from "next"
 import Script from "next/script"
-import { Analytics } from "@vercel/analytics/react"
-import { SpeedInsights } from "@vercel/speed-insights/next"
 import localFont from "next/font/local"
 import { Fraunces } from "next/font/google"
 import "./globals.css"
 import { LayoutShell } from "@/components/layout/layout-shell"
-import { DEFAULT_LOCALE } from "@/lib/i18n/config"
+import { DEFAULT_LOCALE, PUBLISHED_LOCALE_OPTIONS, isLocaleOption, isPublishedLocaleOption, localizePath, withoutLocalePrefix } from "@/lib/i18n/config"
+import { getDocumentLocale, getLocale } from "@/lib/i18n/server"
+import { headers } from "next/headers"
 import { LocaleProvider } from "@/lib/i18n/locale-provider"
 import { LocaleInit } from "@/components/locale-init"
 import { PageViewTracker } from "@/components/analytics/page-view-tracker"
+import { ThemeProvider } from "@/components/theme-provider"
+import { AnalyticsConsent } from "@/components/analytics-consent"
+import { ConsentGatedInsights } from "@/components/consent-gated-insights"
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -36,12 +39,12 @@ const fraunces = Fraunces({
 // - /compare/[field]/[country-a]-vs-[country-b]  — Side-by-side field + country comparison
 // - /visa-pathways/[country]/[field]             — Visa and immigration pathway by country + field
 
-export const metadata: Metadata = {
+const baseMetadata: Metadata = {
   title: {
     default: "CampCareer | Study Abroad & Immigration Decision Engine",
     template: "%s | CampCareer",
   },
-  description: "Compare study-abroad options by tuition, salary, ROI, payback period, visa pathways, PR potential, and career outcomes across the US, UK, Ireland, Canada, and Australia. Estimated figures based on available public data — verify with official sources.",
+  description: "Search study and career paths across 20 destinations. Compare tuition, take-home pay, living costs, and work pathways only where current evidence supports the result.",
   keywords: [
     "study abroad", "immigration decision", "ROI", "graduate salary",
     "Ireland tuition", "Australia student visa", "Canada PR", "UK graduate route",
@@ -59,13 +62,13 @@ export const metadata: Metadata = {
     locale: "en_US",
     siteName: "CampCareer",
     title: "CampCareer | Study Abroad & Immigration Decision Engine",
-    description: "Compare study-abroad options by tuition, salary, ROI, payback period, visa pathways, PR potential, and career outcomes across the US, UK, Ireland, Canada, and Australia.",
+    description: "Search study and career paths across 20 destinations with source-backed cost, income, and work-pathway evidence.",
     images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "CampCareer — Study Abroad Decision Engine" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "CampCareer | Study Abroad & Immigration Decision Engine",
-    description: "Compare study-abroad options by tuition, salary, ROI, payback period, visa pathways, PR potential, and career outcomes across 5 countries.",
+    description: "Search study and career paths across 20 destinations with source-backed comparison evidence.",
     images: ["/opengraph-image"],
     creator: "@campcareer",
   },
@@ -76,21 +79,64 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export async function generateMetadata(): Promise<Metadata> {
+  const requestHeaders = await headers()
+  const requestedPath = requestHeaders.get("x-campcareer-pathname") ?? "/"
+  const requestedLocale = requestHeaders.get("x-campcareer-route-locale")
+  const routeLocale = isLocaleOption(requestedLocale) ? requestedLocale : DEFAULT_LOCALE
+  const published = isPublishedLocaleOption(routeLocale)
+  const barePath = withoutLocalePrefix(requestedPath)
+  const canonicalPath = localizePath(barePath, published ? routeLocale : DEFAULT_LOCALE)
+  const languages = Object.fromEntries(
+    PUBLISHED_LOCALE_OPTIONS.map((locale) => [locale === "ko" ? "ko" : "en", localizePath(barePath, locale)]),
+  )
+
+  return {
+    ...baseMetadata,
+    alternates: {
+      canonical: canonicalPath,
+      languages: {
+        ...languages,
+        "x-default": barePath,
+      },
+    },
+    robots: published
+      ? baseMetadata.robots
+      : {
+          index: false,
+          follow: false,
+          googleBot: { index: false, follow: false },
+        },
+    openGraph: {
+      ...baseMetadata.openGraph,
+      url: canonicalPath,
+      locale: routeLocale === "ko" ? "ko_KR" : "en_US",
+    },
+  }
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const locale = await getLocale()
+  const documentLocale = await getDocumentLocale()
   return (
-    <html lang={DEFAULT_LOCALE}>
+    <html lang={documentLocale || DEFAULT_LOCALE} suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} antialiased`}>
-        <LocaleProvider locale={DEFAULT_LOCALE}>
-          <LocaleInit />
-          <PageViewTracker />
-          <LayoutShell>{children}</LayoutShell>
-        </LocaleProvider>
-        <Analytics />
-        <SpeedInsights />
+        <Script id="theme-preference" strategy="beforeInteractive">
+          {`(function(){try{var p=localStorage.getItem('campcareer-theme')||'system';var d=p==='dark'||(p==='system'&&matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.classList.toggle('dark',d);document.documentElement.style.colorScheme=d?'dark':'light'}catch(e){}})()`}
+        </Script>
+        <ThemeProvider>
+          <LocaleProvider locale={locale}>
+            <LocaleInit />
+            <PageViewTracker />
+            <LayoutShell>{children}</LayoutShell>
+            <AnalyticsConsent />
+          </LocaleProvider>
+        </ThemeProvider>
+        <ConsentGatedInsights />
         {/* Impact affiliate verification — Revolut */}
         <Script id="impact-verification" strategy="beforeInteractive">
           {`

@@ -114,7 +114,7 @@ function applyMedicineOverride(row: any, country: string): any {
     payback_years: paybackYears,
     gross_salary: Math.round(targetEarnings),
     tax_amount: taxAmount,
-    net_salary_after_tax: Math.round(targetEarnings - taxAmount),
+    net_salary_after_tax: taxAmount == null ? null : Math.round(targetEarnings - taxAmount),
   }
 }
 
@@ -230,7 +230,7 @@ export async function fetchRoiData(params: RoiQueryParams): Promise<RoiQueryResu
       ...row,
       gross_salary: Math.round(gross),
       tax_amount: taxAmount,
-      net_salary_after_tax: Math.round(gross - taxAmount),
+      net_salary_after_tax: taxAmount == null ? null : Math.round(gross - taxAmount),
     }
   }
 

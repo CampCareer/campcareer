@@ -14,8 +14,10 @@ const nextConfig = {
       { source: '/dashboard/:path*', destination: '/', permanent: false },
       { source: '/career-path/:path*', destination: '/', permanent: false },
       { source: '/games/:path*', destination: '/', permanent: false },
-      { source: '/timeline/:path*', destination: '/', permanent: false },
-      { source: '/checklist/:path*', destination: '/', permanent: false },
+      // Retired planning tools now enter the public Compare journey instead of
+      // silently dropping visitors on the landing page.
+      { source: '/timeline/:path*', destination: '/compare', permanent: false },
+      { source: '/checklist/:path*', destination: '/compare', permanent: false },
       { source: '/documents/:path*', destination: '/', permanent: false },
       { source: '/saved/:path*', destination: '/', permanent: false },
       { source: '/rankings/:path*', destination: '/', permanent: false },

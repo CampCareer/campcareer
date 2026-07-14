@@ -7,7 +7,7 @@
     "contentHash": "e409e66b90188dfbcf53718052a81014b0c2ddee8850ae19aa58cd7956fec8ca",
     "etag": null,
     "lastModified": null,
-    "checkedAt": "2026-07-12T06:23:42.584Z",
+    "checkedAt": "2026-07-14T06:39:38.761Z",
     "monitorMode": "content"
   },
   {
@@ -15,10 +15,10 @@
     "sourceName": "USCIS Policy Manual — Practical Training",
     "requestedUrl": "https://www.uscis.gov/node/92821",
     "finalUrl": "https://www.uscis.gov/policy-manual/volume-2-part-f-chapter-5",
-    "contentHash": "47e117a27cbe61515e5bfdb27b509c0b471a20ad876dda8c70d6e67381a1fd9a",
-    "etag": "\"1783837364\"",
-    "lastModified": "Sun, 12 Jul 2026 06:22:44 GMT",
-    "checkedAt": "2026-07-12T06:23:42.684Z",
+    "contentHash": "f5d8643798f20d9c35d7375a694fe29093e14cdca0000a225e4b7529f3c2a2ed",
+    "etag": "\"1784010933\"",
+    "lastModified": "Tue, 14 Jul 2026 06:35:33 GMT",
+    "checkedAt": "2026-07-14T06:39:39.032Z",
     "monitorMode": "content"
   },
   {
@@ -28,8 +28,8 @@
     "finalUrl": "https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/work/after-graduation/about.html",
     "contentHash": "60f807bd2952988302f38763e5f06ad0fcef1ddde90e6c060b57ee0150b600ee",
     "etag": null,
-    "lastModified": "Sun, 12 Jul 2026 00:24:53 GMT",
-    "checkedAt": "2026-07-12T06:23:43.797Z",
+    "lastModified": "Tue, 14 Jul 2026 00:06:46 GMT",
+    "checkedAt": "2026-07-14T06:39:42.301Z",
     "monitorMode": "content"
   },
   {
@@ -40,7 +40,7 @@
     "contentHash": "568db588ac0705b54b2d6bcb20bd4aaa5b234a7b6e18dbf0c3c061cdcb6994b4",
     "etag": null,
     "lastModified": null,
-    "checkedAt": "2026-07-12T06:23:44.014Z",
+    "checkedAt": "2026-07-14T06:39:42.533Z",
     "monitorMode": "content"
   },
   {
@@ -51,7 +51,7 @@
     "contentHash": "6412eb8ae6e8361b2c80f3abede98fbc899cb447116c52be82a324f22aafb13f",
     "etag": null,
     "lastModified": null,
-    "checkedAt": "2026-07-12T06:23:44.291Z",
+    "checkedAt": "2026-07-14T06:39:42.810Z",
     "monitorMode": "headers_or_availability"
   },
   {
@@ -60,9 +60,9 @@
     "requestedUrl": "https://www.gov.uk/graduate-visa",
     "finalUrl": "https://www.gov.uk/graduate-visa",
     "contentHash": "d134b5cb7e440af44406ad65b9226832522b4ae5dd49cd960c197b4415d32ef8",
-    "etag": "W/\"6cc1521397bb9d0623bebea146d54c1b\"",
+    "etag": "W/\"fe6e29cb783fa3a331d53363ec2cd3ce\"",
     "lastModified": null,
-    "checkedAt": "2026-07-12T06:23:44.378Z",
+    "checkedAt": "2026-07-14T06:39:42.935Z",
     "monitorMode": "content"
   },
   {
@@ -73,7 +73,7 @@
     "contentHash": "61ee3ae1f61df19b31112354cf10c96608dc84055d021c4bdeeeefd5d01ce8c4",
     "etag": null,
     "lastModified": null,
-    "checkedAt": "2026-07-12T06:23:44.665Z",
+    "checkedAt": "2026-07-14T06:39:43.219Z",
     "monitorMode": "content"
   },
   {
@@ -82,9 +82,64 @@
     "requestedUrl": "https://dofi.ibz.be/en/themes/third-country-nationals/study/search-year-after-higher-studies",
     "finalUrl": "https://dofi.ibz.be/en/themes/third-country-nationals/study/search-year-after-higher-studies",
     "contentHash": "c710b450a9be10d2b9a99d84736453cee395cb8a50eb16e895996cec8dd6e6f4",
-    "etag": "W/\"1783811635\"",
-    "lastModified": "Sat, 11 Jul 2026 23:13:55 GMT",
-    "checkedAt": "2026-07-12T06:23:45.074Z",
+    "etag": "W/\"1783984138\"",
+    "lastModified": "Mon, 13 Jul 2026 23:08:58 GMT",
+    "checkedAt": "2026-07-14T06:39:43.562Z",
+    "monitorMode": "content"
+  },
+  {
+    "countryCode": "NZ",
+    "sourceName": "Immigration New Zealand Green List",
+    "requestedUrl": "https://www.immigration.govt.nz/work/requirements-for-work-visas/green-list-occupations-qualifications-and-skills/green-list-roles-jobs-we-need-people-for-in-new-zealand/",
+    "finalUrl": "https://www.immigration.govt.nz/work/requirements-for-work-visas/green-list-occupations-qualifications-and-skills/green-list-roles-jobs-we-need-people-for-in-new-zealand/",
+    "contentHash": "c26c9bff6dda1c8f8282389d6c622172611021f19be0ce7fa706f483271672eb",
+    "etag": "\"3c0461a3cb24a4d3ca6ff6f971fc134b-gzip\"",
+    "lastModified": null,
+    "checkedAt": "2026-07-14T06:39:45.141Z",
+    "monitorMode": "content"
+  },
+  {
+    "countryCode": "NO",
+    "sourceName": "Norwegian Directorate of Immigration (UDI)",
+    "requestedUrl": "https://www.udi.no/en/want-to-apply/work-immigration/",
+    "finalUrl": "https://www.udi.no/en/want-to-apply/work-immigration/",
+    "contentHash": "1200593b036466bc6372f880a0145490cef987c9029c1ebbe821d176d3ffa403",
+    "etag": null,
+    "lastModified": null,
+    "checkedAt": "2026-07-14T06:39:45.430Z",
+    "monitorMode": "content"
+  },
+  {
+    "countryCode": "SE",
+    "sourceName": "Swedish Migration Agency (Migrationsverket)",
+    "requestedUrl": "https://www.migrationsverket.se/en/you-want-to-apply/work/employee-or-self-employed/employees.html",
+    "finalUrl": "https://www.migrationsverket.se/en/you-want-to-apply/work/employee-or-self-employed/employees.html",
+    "contentHash": "7c0e0638ee765b369676cca43a562ed63e2a675f718b91ececcadbcc23b3a5fb",
+    "etag": null,
+    "lastModified": null,
+    "checkedAt": "2026-07-14T06:39:46.293Z",
+    "monitorMode": "content"
+  },
+  {
+    "countryCode": "DK",
+    "sourceName": "Danish Agency for International Recruitment (SIRI)",
+    "requestedUrl": "https://www.nyidanmark.dk/en-GB/You-want-to-extend/Work---extension/Establishment-card",
+    "finalUrl": "https://www.nyidanmark.dk/en-GB/You-want-to-extend/Work---extension/Establishment-card",
+    "contentHash": "45d9a5edb8feaaa5acf642d94d85cbb8be44ab5e8e2892e9c0d0e1b8c366b3f7",
+    "etag": null,
+    "lastModified": null,
+    "checkedAt": "2026-07-14T06:39:46.969Z",
+    "monitorMode": "content"
+  },
+  {
+    "countryCode": "FI",
+    "sourceName": "Finnish Immigration Service (Migri)",
+    "requestedUrl": "https://migri.fi/en/work-in-finland",
+    "finalUrl": "https://migri.fi/en/work-in-finland",
+    "contentHash": "8bae2efa9983564d8bd0dd69d03b281ee2bc4e52aafdcda702dac6d29237dad2",
+    "etag": "\"410be3e5-gzip\"",
+    "lastModified": null,
+    "checkedAt": "2026-07-14T06:39:47.541Z",
     "monitorMode": "content"
   }
 ]

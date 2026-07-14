@@ -3,9 +3,10 @@
 import { usePathname } from "next/navigation"
 import { TopNav } from "./top-nav"
 import { SiteFooter } from "./site-footer"
+import { withoutLocalePrefix } from "@/lib/i18n/config"
 
 export function LayoutShell({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname()
+  const pathname = withoutLocalePrefix(usePathname())
 
   // Focused funnels render full-screen with no shared top nav: the degree-risk
   // quiz, the login screen, and the AU occupation detail page (which renders its

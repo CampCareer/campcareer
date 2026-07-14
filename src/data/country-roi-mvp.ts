@@ -750,7 +750,7 @@ export const COUNTRY_ROI_INSIGHTS: CountryRoiInsight[] = [
       policy: {
         confidence: "official",
         sourceName: "Immigration New Zealand Green List",
-        sourceUrl: "https://www.immigration.govt.nz/new-zealand-visas/preparing-a-visa-application/working-in-nz/green-list",
+        sourceUrl: "https://www.immigration.govt.nz/work/requirements-for-work-visas/green-list-occupations-qualifications-and-skills/green-list-roles-jobs-we-need-people-for-in-new-zealand/",
         retrievedAt: COUNTRY_ROI_DATA_META.lastUpdated,
         lastChecked: COUNTRY_ROI_DATA_META.lastUpdated,
         method: "official-web",
@@ -884,7 +884,7 @@ export const COUNTRY_ROI_INSIGHTS: CountryRoiInsight[] = [
       policy: {
         confidence: "official",
         sourceName: "Swedish Migration Agency (Migrationsverket)",
-        sourceUrl: "https://www.migrationsverket.se/English/Private-individuals/Working-in-Sweden/",
+        sourceUrl: "https://www.migrationsverket.se/en/you-want-to-apply/work/employee-or-self-employed/employees.html",
         retrievedAt: COUNTRY_ROI_DATA_META.lastUpdated,
         lastChecked: COUNTRY_ROI_DATA_META.lastUpdated,
         method: "official-web",
@@ -951,7 +951,7 @@ export const COUNTRY_ROI_INSIGHTS: CountryRoiInsight[] = [
       policy: {
         confidence: "official",
         sourceName: "Danish Agency for International Recruitment (SIRI)",
-        sourceUrl: "https://www.nyidanmark.dk/en-GB/Words-and-concepts/US/Establishment-Card/",
+        sourceUrl: "https://www.nyidanmark.dk/en-GB/You-want-to-extend/Work---extension/Establishment-card",
         retrievedAt: COUNTRY_ROI_DATA_META.lastUpdated,
         lastChecked: COUNTRY_ROI_DATA_META.lastUpdated,
         method: "official-web",

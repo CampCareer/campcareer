@@ -1,16 +1,11 @@
-import { pageMetadata } from "@/lib/seo"
-import { getTranslations } from "@/lib/i18n/server"
-import CareerCompareClient from "./CareerCompareClient"
+import { permanentRedirect } from "next/navigation"
+import { getDocumentLocale } from "@/lib/i18n/server"
+import { buildLegacyCompareRedirect } from "@/lib/comparison/legacy-redirect"
 
-export async function generateMetadata() {
-  const t = await getTranslations()
-  return pageMetadata({
-    title: t.compare.careers.pageTitle,
-    description: t.compare.careers.pageSubtitle,
-    path: "/compare/careers",
-  })
-}
-
-export default function CareerComparePage() {
-  return <CareerCompareClient />
+export default async function CareerComparePage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>
+}) {
+  permanentRedirect(buildLegacyCompareRedirect(await searchParams, await getDocumentLocale()))
 }

@@ -1,7 +1,9 @@
 "use client"
 
 import Link from "next/link"
-import { useTranslations } from "@/lib/i18n/locale-provider"
+import { usePathname } from "next/navigation"
+import { useLocale, useTranslations } from "@/lib/i18n/locale-provider"
+import { localeFromPathname, localizePath } from "@/lib/i18n/config"
 import { cn } from "@/lib/utils"
 import { FeedbackWidget } from "@/components/feedback/FeedbackWidget"
 
@@ -9,6 +11,8 @@ import { FeedbackWidget } from "@/components/feedback/FeedbackWidget"
 // core tool), alongside the legal/methodology links.
 export function SiteFooter({ className }: { className?: string }) {
   const t = useTranslations()
+  const locale = useLocale()
+  const pathLocale = localeFromPathname(usePathname()) ?? locale
   const tf = t.landing.footer
 
   return (
@@ -16,16 +20,16 @@ export function SiteFooter({ className }: { className?: string }) {
       <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-slate-400">
         <span>{tf.copyright}</span>
         <nav className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
-          <Link href="/blog" className="hover:text-slate-600 transition-colors">
+          <Link href={localizePath("/blog", pathLocale)} className="hover:text-slate-600 transition-colors">
             {t.nav.blog}
           </Link>
-          <Link href="/methodology" className="hover:text-slate-600 transition-colors">
+          <Link href={localizePath("/methodology", pathLocale)} className="hover:text-slate-600 transition-colors">
             Methodology
           </Link>
-          <Link href="/privacy" className="hover:text-slate-600 transition-colors">
+          <Link href={localizePath("/privacy", pathLocale)} className="hover:text-slate-600 transition-colors">
             Privacy
           </Link>
-          <Link href="/terms" className="hover:text-slate-600 transition-colors">
+          <Link href={localizePath("/terms", pathLocale)} className="hover:text-slate-600 transition-colors">
             Terms
           </Link>
           <FeedbackWidget />

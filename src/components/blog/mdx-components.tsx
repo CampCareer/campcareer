@@ -2,6 +2,11 @@ import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import type { MDXComponents } from "mdx/types"
+import {
+  buildCompareHref,
+  resolveBlogCtaHref,
+  type CompareLinkInput,
+} from "@/lib/blog/compare-link"
 
 function DataCard({ num, label }: { num: string; label: string }) {
   return (
@@ -64,6 +69,12 @@ function CTA({
   label,
   secondaryHref,
   secondaryLabel,
+  country,
+  countries,
+  major,
+  career,
+  origin,
+  currency,
 }: {
   title: string
   description?: string
@@ -71,7 +82,13 @@ function CTA({
   label: string
   secondaryHref?: string
   secondaryLabel?: string
-}) {
+} & CompareLinkInput) {
+  const comparisonInput = { country, countries, major, career, origin, currency }
+  const primaryHref = resolveBlogCtaHref(href, comparisonInput)
+  const resolvedSecondaryHref = secondaryHref
+    ? resolveBlogCtaHref(secondaryHref, comparisonInput)
+    : undefined
+
   return (
     <div className="bg-blue-50 border border-blue-100 rounded-2xl p-6 my-8 not-prose">
       <p className="text-sm font-semibold text-blue-700 mb-2">{title}</p>
@@ -80,14 +97,14 @@ function CTA({
       )}
       <div className="flex flex-wrap gap-3">
         <Link
-          href={href}
+          href={primaryHref}
           className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-colors"
         >
           {label} <ArrowRight className="w-4 h-4" />
         </Link>
-        {secondaryHref && secondaryLabel && (
+        {resolvedSecondaryHref && secondaryLabel && (
           <Link
-            href={secondaryHref}
+            href={resolvedSecondaryHref}
             className="inline-flex items-center gap-2 bg-white border border-blue-200 hover:bg-blue-50 text-blue-700 text-sm font-semibold px-4 py-2.5 rounded-xl transition-colors"
           >
             {secondaryLabel}
@@ -99,27 +116,36 @@ function CTA({
 }
 
 // ── ToolCTA ─────────────────────────────────────────────────────────────────
-// Conversion bridge from a blog post into the product. Leads with the primary
-// funnel (degree-risk). Country/major can be set explicitly per-tag or baked in
-// from frontmatter via buildMdxComponents (props always win over the default).
-type ToolCTAProps = {
-  country?: string
-  major?: string
+// Conversion bridge from a blog post into the public Compare journey. Country,
+// major, and career can be set explicitly per tag or baked in from frontmatter
+// via buildMdxComponents (explicit props always win over defaults).
+type ToolCTAProps = CompareLinkInput & {
   variant?: "block" | "inline"
   title?: string
   description?: string
   label?: string
 }
 
-function ToolCTA({ variant = "block", title, description, label }: ToolCTAProps) {
-  const primaryHref = "/degree-risk"
-  const primaryLabel = label ?? "Check your degree's visa→PR risk"
+function ToolCTA({
+  variant = "block",
+  title,
+  description,
+  label,
+  country,
+  countries,
+  major,
+  career,
+  origin,
+  currency,
+}: ToolCTAProps) {
+  const primaryHref = buildCompareHref({ country, countries, major, career, origin, currency })
+  const primaryLabel = label ?? "Compare my study options"
 
   if (variant === "inline") {
     return (
       <div className="not-prose my-6 flex flex-wrap items-center gap-x-3 gap-y-2 rounded-xl border border-blue-100 bg-blue-50/60 px-4 py-3">
         <span className="text-sm text-slate-600">
-          {description ?? "Not sure this degree leads to a visa and PR? Run a free 60-second check."}
+          {description ?? "Compare career evidence, take-home pay, living costs, and post-study pathways before you choose."}
         </span>
         <Link
           href={primaryHref}
@@ -134,11 +160,11 @@ function ToolCTA({ variant = "block", title, description, label }: ToolCTAProps)
   return (
     <div className="not-prose my-8 rounded-2xl border border-blue-100 bg-blue-50 p-6">
       <p className="mb-2 text-sm font-semibold text-blue-700">
-        {title ?? "Will your degree actually get you a visa — and PR?"}
+        {title ?? "See your study options side by side"}
       </p>
       <p className="mb-4 text-sm text-slate-600">
         {description ??
-          "CampCareer scores any major across employment, visa pathway, market demand, AI exposure, and ROI — using verified government and labour-market data. Get your result in about a minute."}
+          "Compare the current evidence for your career: salary after tax, living costs, first-year budget, and work or immigration pathways. CampCareer leaves incomplete results clearly marked as unavailable."}
       </p>
       <div className="flex flex-wrap gap-3">
         <Link
@@ -252,12 +278,27 @@ export const mdxComponents: MDXComponents = {
 
 // Bakes per-post defaults (from frontmatter) into <ToolCTA> so a bare tag
 // auto-targets the right country/major. Explicit props in the MDX still win.
-export function buildMdxComponents(defaults?: { country?: string; major?: string }): MDXComponents {
-  if (!defaults?.country && !defaults?.major) return mdxComponents
+export function buildMdxComponents(defaults?: Pick<CompareLinkInput, "country" | "major" | "career" | "origin">): MDXComponents {
+  if (!defaults?.country && !defaults?.major && !defaults?.career && !defaults?.origin) return mdxComponents
   return {
     ...mdxComponents,
-    ToolCTA: ({ country, major, ...rest }: ToolCTAProps) => (
-      <ToolCTA country={country ?? defaults.country} major={major ?? defaults.major} {...rest} />
+    CTA: ({ country, major, career, origin, ...rest }: Parameters<typeof CTA>[0]) => (
+      <CTA
+        country={country ?? defaults.country}
+        major={major ?? defaults.major}
+        career={career ?? defaults.career}
+        origin={origin ?? defaults.origin}
+        {...rest}
+      />
+    ),
+    ToolCTA: ({ country, major, career, origin, ...rest }: ToolCTAProps) => (
+      <ToolCTA
+        country={country ?? defaults.country}
+        major={major ?? defaults.major}
+        career={career ?? defaults.career}
+        origin={origin ?? defaults.origin}
+        {...rest}
+      />
     ),
   }
 }

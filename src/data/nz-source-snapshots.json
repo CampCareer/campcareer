@@ -2,7 +2,7 @@
   {
     "category": "shortage",
     "sourceName": "Immigration New Zealand Green List",
-    "sourceUrl": "https://www.immigration.govt.nz/new-zealand-visas/preparing-a-visa-application/working-in-nz/green-list",
+    "sourceUrl": "https://www.immigration.govt.nz/work/requirements-for-work-visas/green-list-occupations-qualifications-and-skills/green-list-roles-jobs-we-need-people-for-in-new-zealand/",
     "datasetUrls": [],
     "contentHash": "placeholder-nz-green-list-2025",
     "retrievedAt": "2025-07-01T00:00:00.000Z",
@@ -41,7 +41,7 @@
   {
     "category": "occupation",
     "sourceName": "Hīkina te Mahi — Skill Shortage Lists",
-    "sourceUrl": "https://www.immigration.govt.nz/new-zealand-visas/preparing-a-visa-application/working-nz/skill-shortage-lists",
+    "sourceUrl": "https://www.immigration.govt.nz/work/requirements-for-work-visas/green-list-occupations-qualifications-and-skills/",
     "datasetUrls": [],
     "contentHash": "placeholder-nz-skill-shortage-2025",
     "retrievedAt": "2025-07-01T00:00:00.000Z",
@@ -54,7 +54,7 @@
   {
     "category": "visa-pathway",
     "sourceName": "Immigration New Zealand — Study to Work pathway",
-    "sourceUrl": "https://www.immigration.govt.nz/new-zealand-visas/applying-for-a-visa/visa-factsheet/going-from-study-to-work",
+    "sourceUrl": "https://www.immigration.govt.nz/study/after-you-finish-your-study/staying-to-work-after-finishing-your-study/",
     "datasetUrls": [],
     "contentHash": "placeholder-nz-study-to-work-2025",
     "retrievedAt": "2025-07-01T00:00:00.000Z",

@@ -1,13 +1,14 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { ArrowLeft, ExternalLink } from "lucide-react"
+import { ArrowLeft, ArrowRight } from "lucide-react"
 import Image from "next/image"
 import { MDXRemote } from "next-mdx-remote/rsc"
 import remarkGfm from "remark-gfm"
 import { getAllPosts, getPostBySlug } from "@/lib/blog"
 import { buildMdxComponents } from "@/components/blog/mdx-components"
 import { JsonLd, articleLd, breadcrumbLd, faqLd } from "@/components/seo/json-ld"
+import { buildCompareHref } from "@/lib/blog/compare-link"
 
 // Up to 3 internal links for the post foot — same tag first, topped up with the
 // most recent other posts so the block is never empty (internal-link graph).
@@ -45,6 +46,7 @@ export async function generateMetadata(
       siteName: "CampCareer",
       type: "article",
       publishedTime: post.meta.date,
+      modifiedTime: post.meta.lastReviewed ?? post.meta.date,
       ...(post.meta.heroImage && { images: [{ url: post.meta.heroImage }] }),
     },
     twitter: {
@@ -63,7 +65,18 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
 
   const { meta, content } = post
   const path = `/blog/${params.slug}`
-  const components = buildMdxComponents({ country: meta.ctaCountry, major: meta.ctaMajor })
+  const components = buildMdxComponents({
+    country: meta.ctaCountry,
+    major: meta.ctaMajor,
+    career: meta.ctaCareer,
+    origin: meta.ctaOrigin,
+  })
+  const compareHref = buildCompareHref({
+    country: meta.ctaCountry,
+    major: meta.ctaMajor,
+    career: meta.ctaCareer,
+    origin: meta.ctaOrigin,
+  })
   const related = relatedPosts(params.slug, meta.tag)
 
   return (
@@ -73,6 +86,7 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
         description: meta.description,
         path,
         datePublished: meta.date,
+        dateModified: meta.lastReviewed ?? meta.date,
         author: meta.author,
         image: meta.heroImage,
       })} />
@@ -189,10 +203,10 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
           <ArrowLeft className="w-4 h-4" /> All articles
         </Link>
         <Link
-          href="/roi-explorer"
+          href={compareHref}
           className="inline-flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
         >
-          Try ROI Explorer <ExternalLink className="w-3.5 h-3.5" />
+          Compare your options <ArrowRight className="w-3.5 h-3.5" />
         </Link>
       </div>
     </div>

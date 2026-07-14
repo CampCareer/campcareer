@@ -1,4 +1,5 @@
 import { NZ_CITIES, NZ_REGIONS, NZ_UNIVERSITIES } from "@/data/nz-map-data"
+import type { MapData } from "@/lib/map-data"
 
 export const NZ_MAP_V2_VERSION = "nz-map-v2-2026-07-13"
 
@@ -7,7 +8,7 @@ const SOURCE = {
   providers: "https://www.educationcounts.govt.nz/directories/list-of-tertiary-providers",
   rent: "https://www.tenancy.govt.nz/about-tenancy-services/data-and-statistics/",
   occupations: "https://datainfoplus.stats.govt.nz/item/nz.govt.stats/8996cd76-1d52-4fb8-8bb4-5ad2d9c76f10",
-  pathways: "https://www.immigration.govt.nz/new-zealand-visas/preparing-a-visa-application/working-in-nz/green-list",
+  pathways: "https://www.immigration.govt.nz/work/requirements-for-work-visas/green-list-occupations-qualifications-and-skills/green-list-roles-jobs-we-need-people-for-in-new-zealand/",
 } as const
 
 /** A public, safe-to-render bundle. Numeric seed data is intentionally absent. */
@@ -43,5 +44,47 @@ export function getNZMapV2Bundle() {
       rent: "Official Tenancy Services bond data is being normalized by region and dwelling type. No rent figure is shown until its source row is verified.",
       occupations: "Official ANZSCO, Green List and wage source rows are being matched. No shortage or high-income claim is shown until an exact mapping is approved.",
     },
+  }
+}
+
+/**
+ * The Maps UI accepts the shared MapData shape, but the only reviewed NZ v2
+ * material so far is geography and provider references. Keep the legacy and
+ * v1 endpoints on exactly the same safe projection: no seeded wage, rent, or
+ * shortage values can cross either API boundary before their source rows pass
+ * review.
+ */
+export function getSafeNZMapData(): Partial<MapData> {
+  const nzRegions: MapData["nzRegions"] = NZ_REGIONS.map((region) => ({
+    ...region,
+    rent: {
+      ...region.rent,
+      monthlyNzd: 0,
+      weeklyNzd: 0,
+      status: "unavailable",
+    },
+    topShortage: [],
+    reviewStatus: "review-required",
+  }))
+  const nzCities: MapData["nzCities"] = NZ_CITIES.map((city) => ({
+    ...city,
+    rent: { monthlyNzd: null, status: "unavailable" },
+    reviewStatus: "review-required",
+  }))
+  const nzUniversities: MapData["nzUniversities"] = NZ_UNIVERSITIES.map((university) => ({
+    ...university,
+    worldRanking: null,
+    relatedFields: [],
+    reviewStatus: "review-required",
+  }))
+  const emptyByRegion = Object.fromEntries(nzRegions.map((region) => [region.code, []]))
+
+  return {
+    nzRegions,
+    nzOccupations: [],
+    nzHighPayByRegion: emptyByRegion,
+    nzShortageByRegion: emptyByRegion,
+    nzUniversities,
+    nzCities,
   }
 }

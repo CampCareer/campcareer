@@ -2200,13 +2200,22 @@ function emptyMapValue(value: unknown) {
   return Array.isArray(value) ? [] : value && typeof value === "object" ? {} : null
 }
 
-export async function getInitialMapShellData(): Promise<MapData> {
+async function getInitialMapShellDataUncached(): Promise<MapData> {
   const full = await getMapData()
   const australia = selectMapCountryBundle(full, "AU")
   return Object.fromEntries(
     Object.entries(full).map(([key, value]) => [key, key in australia ? australia[key as keyof MapData] : emptyMapValue(value)]),
   ) as unknown as MapData
 }
+
+// Locale-aware Maps pages need a request-time root layout for the correct
+// document language. Cache only the small Australia shell instead of forcing
+// the whole route static; the full country corpus remains lazy-loaded.
+export const getInitialMapShellData = unstable_cache(
+  getInitialMapShellDataUncached,
+  ["map-initial-shell-v2"],
+  { revalidate: 86400 },
+)
 
 export async function getMapData(): Promise<MapData> {
   // /map is already force-static with a 24h ISR window. The complete map

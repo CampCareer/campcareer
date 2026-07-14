@@ -5,12 +5,12 @@ import { DEGREE_YEARS } from "@/lib/degree-years"
 import { JsonLd, breadcrumbLd } from "@/components/seo/json-ld"
 
 export const metadata = pageMetadata({
-  title: "Methodology — Degree Risk Score & ROI Calculations",
-  description: "Full methodology behind CampCareer's Degree Risk score and ROI scores: the five risk layers, formulas, data sources (QILT, HEA, College Scorecard, HESA, CRICOS), and known limitations.",
+  title: "Methodology — Comparison Evidence, Costs & Pathways",
+  description: "How CampCareer publishes career-country comparisons, handles missing evidence, calculates after-tax disposable income, and distinguishes exploration from decision-ready results.",
   path: "/methodology",
 })
 
-const LAST_UPDATED = "13 June 2026"
+const LAST_UPDATED = "14 July 2026"
 
 function Formula({ children }: { children: React.ReactNode }) {
   return (
@@ -27,10 +27,56 @@ export default function MethodologyPage() {
 
       <h1 className="font-display text-3xl font-semibold text-slate-900 tracking-tight mb-2">Methodology</h1>
       <p className="text-sm text-slate-400 mb-10">
-        Last updated: {LAST_UPDATED} · Tax rules: {TAX_YEAR}
+        Last updated: {LAST_UPDATED} · Legacy ROI tax-model reference: {TAX_YEAR}
       </p>
 
       <div className="space-y-10 text-sm leading-relaxed text-slate-600">
+
+        <section id="career-comparison">
+          <h2 className="font-display text-lg font-semibold text-slate-800 mb-2">Career-country comparison release policy</h2>
+          <p>
+            CampCareer separates <strong>exploration</strong> from a publishable decision comparison.
+            All 20 launch destinations may appear in Maps when a geography or institution dataset is
+            available. A destination is not ranked, and no financial result is shown, until the exact
+            career-to-official-occupation mapping and all required source rows have passed review.
+          </p>
+          <ul className="list-disc pl-5 space-y-1.5 mt-2">
+            <li><strong>Decision ready</strong> requires an exact occupation crosswalk plus current compensation, tax, housing, tuition, and work-pathway evidence.</li>
+            <li><strong>Discovery</strong> means useful map or profile data exists, but at least one decision input has not passed review.</li>
+            <li><strong>Review required</strong> means CampCareer has not published enough current evidence for the comparison.</li>
+          </ul>
+          <p className="mt-2">
+            We never fill a missing country with another country&apos;s average, treat a broad major score as an exact occupation result, or show an unsupported tax model as zero.
+          </p>
+
+          <h3 className="font-display text-base font-semibold text-slate-700 mt-5 mb-1.5">Financial definitions</h3>
+          <Formula>Take-home pay = annual gross pay − income tax − mandatory employee contributions</Formula>
+          <Formula>Annual disposable income = take-home pay − 12 × (monthly rent + essential non-housing costs)</Formula>
+          <Formula>First-year cash need = tuition deposit + visa/health costs + 12 months of living costs + travel/setup + contingency</Formula>
+          <p>
+            Every money field retains its original currency and source date. Conversion, where shown,
+            is a display convenience rather than a replacement for the local-currency source. The default
+            tax scenario is a single filer with no dependants and full-year tax residency. Student housing
+            defaults to shared housing; graduate housing defaults to a one-bedroom outside the city centre.
+          </p>
+
+          <h3 className="font-display text-base font-semibold text-slate-700 mt-5 mb-1.5">Work and immigration status</h3>
+          <p>
+            CampCareer does not publish an immigration success percentage. We use <strong>eligible</strong>,
+            <strong> conditionally eligible</strong>, <strong>not currently eligible</strong>, or <strong>unknown</strong>
+            only when the relevant occupation list, post-study work period, salary threshold, licensing or
+            language requirement, and policy date can be shown beside the result. This is planning information,
+            not legal or immigration advice.
+          </p>
+
+          <h3 className="font-display text-base font-semibold text-slate-700 mt-5 mb-1.5">Evidence record and freshness</h3>
+          <p>
+            Published cells carry the publisher, original URL, applicable date, retrieval date, review status,
+            and methodology/data version. Policy and visa sources are reviewed on change alerts; salary, tuition,
+            and housing sources are rechecked on their stated source cadence. A stale or incomplete field removes
+            the financial result until it is reviewed again.
+          </p>
+        </section>
 
         <section id="degree-risk">
           <h2 className="font-display text-lg font-semibold text-slate-800 mb-2">Degree Risk score</h2>
@@ -182,8 +228,9 @@ export default function MethodologyPage() {
               employment rate is a cohort median, not your probability.
             </li>
             <li>
-              We score <strong>the US, Canada, the UK, Australia, and Ireland</strong> on all
-              five layers, with the same verified-vs-estimate split applied to every country.
+              The legacy Degree Risk model currently covers <strong>the US, Canada, the UK,
+              Australia, and Ireland</strong>. It is an editorial study-field tool and is not used
+              as an exact career-country ranking in the newer comparison release gate.
             </li>
           </ul>
         </section>
@@ -226,12 +273,12 @@ export default function MethodologyPage() {
         <section>
           <h2 className="font-display text-lg font-semibold text-slate-800 mb-2">After-tax estimates</h2>
           <p>
-            The after-tax toggle applies {TAX_YEAR} national tax rules as simplified single-filer
-            models: US federal brackets + flat state-rate approximations + FICA; UK income tax +
-            National Insurance; Irish income tax + USC + PRSI; Australian brackets + Medicare
-            levy; Canadian federal brackets + flat provincial approximations + CPP/EI. These are
-            estimates — marginal relief, credits beyond the basics, and local taxes are not
-            modelled.
+            The legacy ROI Explorer uses simplified {TAX_YEAR} single-filer models only in countries
+            where a country rule exists. It is not a current decision-ready tax comparison. It can
+            include national income tax, selected regional approximations, and mandatory employee
+            contributions. Credits, deductions, household circumstances, local taxes, and professional
+            advice are not modelled. Where there is no maintained model, the product labels the tax
+            and take-home result unavailable instead of showing a zero-tax estimate.
           </p>
         </section>
 

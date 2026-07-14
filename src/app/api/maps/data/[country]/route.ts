@@ -4,6 +4,7 @@ import {
   selectMapCountryBundle,
   type MapDataCountry,
 } from "@/lib/map-data"
+import { buildMapDataEnvelope } from "../contract"
 
 const COUNTRIES = new Set<MapDataCountry>(["AU", "US", "CA", "IE", "UK", "DE", "NL", "BE", "JP", "SG", "KR", "FR", "ES", "NZ", "NO", "SE", "DK", "FI", "CH", "AE"])
 
@@ -16,7 +17,11 @@ export async function GET(_request: Request, { params }: { params: Promise<{ cou
   }
 
   const bundle = selectMapCountryBundle(await getMapData(), country)
-  const body = JSON.stringify({ country, data: bundle, dataVersion: "map-country-bundle-2026-07-12" })
+  const body = JSON.stringify(buildMapDataEnvelope(
+    country,
+    bundle,
+    "map-country-bundle-2026-07-14",
+  ))
 
   return new Response(body, {
     headers: {

@@ -63,6 +63,8 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --brand-tint: 217 44% 16%;
+    --depth: 215 20% 10%;
   }
 }
 
@@ -73,7 +75,33 @@
   body {
     @apply bg-background text-foreground font-sans;
   }
+
+  .dark body {
+    color-scheme: dark;
+  }
 }
+
+/* Most existing product surfaces predate semantic Tailwind tokens.  These
+   compatibility rules keep the shared shell legible while those components are
+   migrated one by one, without applying a visual filter to map tiles. */
+.dark .bg-white { background-color: hsl(var(--card)); }
+.dark .bg-slate-50, .dark .bg-slate-50\/50 { background-color: hsl(var(--secondary)); }
+.dark .bg-slate-100 { background-color: hsl(var(--muted)); }
+.dark .border-slate-100, .dark .border-slate-200, .dark .border-slate-300 { border-color: hsl(var(--border)); }
+.dark .text-slate-950, .dark .text-slate-900, .dark .text-slate-800, .dark .text-slate-700 { color: hsl(var(--foreground)); }
+.dark .text-slate-600, .dark .text-slate-500, .dark .text-slate-400 { color: hsl(var(--muted-foreground)); }
+.dark .hover\:bg-slate-50:hover, .dark .hover\:bg-slate-100:hover { background-color: hsl(var(--accent)); }
+
+/* The interactive Maps surface uses its own vector basemap, so theme changes
+   switch the map canvas and controls directly instead of applying a filter to
+   rendered geography. This preserves labels, contrast and country colours. */
+.dark .leaflet-container { background: #020617; }
+.dark .leaflet-control-zoom a {
+  background: #0f172a;
+  border-color: #334155;
+  color: #e2e8f0;
+}
+.dark .leaflet-control-zoom a:hover { background: #1e293b; }
 
 /* Vacant Dublin — Press Start 2P minimum 10 px */
 .font-pixel {
@@ -86,6 +114,19 @@
 @keyframes tl-fade-up {
   from { transform: translateY(8px); }
   to   { transform: none; }
+}
+
+/* Product motion is intentionally limited to focus, selection and short
+   feedback transitions. Respect an OS-level reduced-motion preference across
+   the Landing, Compare and Maps surfaces instead of relying on individual
+   components to remember every animation utility. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 @layer components {

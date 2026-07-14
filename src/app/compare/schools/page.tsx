@@ -1,16 +1,11 @@
-import { pageMetadata } from "@/lib/seo"
-import { getTranslations } from "@/lib/i18n/server"
-import SchoolCompareClient from "./SchoolCompareClient"
+import { permanentRedirect } from "next/navigation"
+import { getDocumentLocale } from "@/lib/i18n/server"
+import { buildLegacyCompareRedirect } from "@/lib/comparison/legacy-redirect"
 
-export async function generateMetadata() {
-  const t = await getTranslations()
-  return pageMetadata({
-    title: t.compare.schools.pageTitle,
-    description: t.compare.schools.pageSubtitle,
-    path: "/compare/schools",
-  })
-}
-
-export default function SchoolComparePage() {
-  return <SchoolCompareClient />
+export default async function SchoolComparePage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>
+}) {
+  permanentRedirect(buildLegacyCompareRedirect(await searchParams, await getDocumentLocale()))
 }

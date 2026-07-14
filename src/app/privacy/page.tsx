@@ -7,7 +7,7 @@ export const metadata = pageMetadata({
   path: "/privacy",
 })
 
-const LAST_UPDATED = "12 July 2026"
+const LAST_UPDATED = "14 July 2026"
 
 export default function PrivacyPage() {
   return (
@@ -23,6 +23,9 @@ export default function PrivacyPage() {
             immigration decision platform. This policy explains what personal data we collect,
             why we collect it, and the choices you have. For any privacy question or request,
             contact us at <a href="mailto:contact@campcareer.com" className="text-blue-600 hover:underline">contact@campcareer.com</a>.
+            CampCareer is the controller for the data described in this policy. Before we launch a
+            paid partner programme in a new jurisdiction, we will publish the applicable legal
+            entity and registered-address contact details here.
           </p>
         </section>
 
@@ -58,6 +61,19 @@ export default function PrivacyPage() {
               Product events may include origin country, concept ID, destination, and engine/data
               versions, but never email addresses or free-text responses.
             </li>
+            <li>
+              <strong>Feedback reports</strong> — the category and text you submit, plus an email
+              address only if you opt in to follow-up. If you separately opt in, we may attach the
+              page path, locale, time zone, browser user-agent, and viewport size to help reproduce
+              a fault. Uploaded screenshots are stored privately and are not made public or shared
+              with partners.
+            </li>
+            <li>
+              <strong>Optional measurement and attribution</strong> — after you choose “Allow
+              measurement”, we store a short-lived session identifier, first page path, and UTM
+              campaign fields to measure product and partner-link performance. We do not create
+              these attribution cookies when you choose “Essential only”.
+            </li>
           </ul>
         </section>
 
@@ -68,7 +84,10 @@ export default function PrivacyPage() {
             Saved decision plans are protected by owner-only row-level security and are only
             readable by the authenticated account that owns them. Data is encrypted in transit
             and at rest by our providers. Save-intent tokens expire after 24 hours. Saved plans
-            are retained while your account remains active or until you request deletion.
+            are retained while your account remains active or until you request deletion. Feedback
+            reports and private screenshots are retained for up to 180 days, unless a longer period
+            is necessary to investigate abuse, security, or a legal claim. Optional attribution
+            cookies expire after 30 days; measurement-consent choices expire after 180 days.
           </p>
         </section>
 
@@ -77,6 +96,7 @@ export default function PrivacyPage() {
           <p>We use the following service providers to operate CampCareer:</p>
           <ul className="list-disc pl-5 space-y-1.5 mt-2">
             <li><strong>Supabase</strong> — database and authentication.</li>
+            <li><strong>Supabase Storage</strong> — private feedback screenshots when you choose to upload one.</li>
             <li><strong>Vercel</strong> — application hosting and privacy-friendly analytics.</li>
             <li><strong>Resend</strong> — transactional messages and separately consented alerts.</li>
           </ul>
@@ -92,7 +112,20 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="font-display text-lg font-semibold text-slate-800 mb-2">5. Your rights and deletion requests</h2>
+          <h2 className="font-display text-lg font-semibold text-slate-800 mb-2">5. Legal bases and international transfers</h2>
+          <p>
+            We process account and saved-plan data to provide the service you request; security,
+            reliability, and limited product measurement under our legitimate interests where
+            permitted; and optional feedback follow-up, partner sharing, alerts, and measurement
+            where you give consent. Our providers may process data outside your country. Where
+            required, we rely on the provider&apos;s applicable transfer safeguards and data-processing
+            terms. Do not submit special-category personal data, passport numbers, passwords, or
+            payment-card data in feedback.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="font-display text-lg font-semibold text-slate-800 mb-2">6. Your rights and deletion requests</h2>
           <p>
             Depending on where you live (including under the EU/UK GDPR), you may have the right
             to access, correct, export, or delete your personal data. You can delete saved
@@ -100,23 +133,29 @@ export default function PrivacyPage() {
             account and all associated data, email{" "}
             <a href="mailto:contact@campcareer.com" className="text-blue-600 hover:underline">contact@campcareer.com</a>{" "}
             from your registered address; we will action verified requests within 30 days.
+            Depending on your location, you may also have the right to complain to your local data
+            protection authority.
           </p>
         </section>
 
         <section>
-          <h2 className="font-display text-lg font-semibold text-slate-800 mb-2">6. Cookies</h2>
+          <h2 className="font-display text-lg font-semibold text-slate-800 mb-2">7. Cookies and measurement choices</h2>
           <p>
             We use strictly necessary cookies for authentication sessions and interface state.
-            Vercel&apos;s current analytics configuration is used without advertising or cross-site
-            tracking cookies. We do not use Google Analytics or third-party advertising cookies.
+            Optional product measurement and attribution begin only after you choose “Allow
+            measurement” in the privacy control. Vercel&apos;s current analytics configuration is used
+            without Google Analytics or third-party advertising cookies. Partner links may carry an
+            affiliate identifier after you choose to open that partner&apos;s site; the partner&apos;s own
+            privacy policy then applies.
           </p>
         </section>
 
         <section>
-          <h2 className="font-display text-lg font-semibold text-slate-800 mb-2">7. Changes to this policy</h2>
+          <h2 className="font-display text-lg font-semibold text-slate-800 mb-2">8. Children and changes to this policy</h2>
           <p>
-            We may update this policy as the product evolves. Material changes will be announced
-            on this page with an updated &quot;last updated&quot; date.
+            CampCareer is not designed for children under 16. We may update this policy as the
+            product evolves. Material changes will be announced on this page with an updated
+            &quot;last updated&quot; date.
           </p>
         </section>
       </div>

@@ -1,17 +1,26 @@
-import { NextResponse } from "next/server"
-import { getNZMapV2Bundle } from "@/lib/nz-map-v2"
+import { getNZMapV2Bundle, getSafeNZMapData, NZ_MAP_V2_VERSION } from "@/lib/nz-map-v2"
+import { buildMapDataEnvelope } from "../contract"
 
 export const revalidate = 86400
 
 export function GET() {
-  const body = JSON.stringify(getNZMapV2Bundle())
+  const v2 = getNZMapV2Bundle()
+  const envelope = buildMapDataEnvelope(
+    "NZ",
+    getSafeNZMapData(),
+    NZ_MAP_V2_VERSION,
+    Object.values(v2.notices),
+  )
+  const body = JSON.stringify(envelope)
+
   return new Response(body, {
     headers: {
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "public, s-maxage=86400, stale-while-revalidate=604800",
       "CDN-Cache-Control": "public, s-maxage=86400, stale-while-revalidate=604800",
-      "X-Map-Country": "NZ",
-      "X-Map-Data-Version": "nz-map-v2-2026-07-13",
+      "X-Map-Country": envelope.country,
+      "X-Map-Data-Version": envelope.dataVersion,
+      "X-Uncompressed-Bytes": String(Buffer.byteLength(body)),
       "X-Content-Type-Options": "nosniff",
     },
   })

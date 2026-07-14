@@ -20,7 +20,7 @@ import {
 } from "../src/lib/country-recommendation"
 
 test("new country packs cannot enter search or ranked comparison before release", () => {
-  const unreleasedCountries = NEW_COUNTRY_CODES.filter((countryCode) => countryCode !== "NZ")
+  const unreleasedCountries = NEW_COUNTRY_CODES
   for (const countryCode of unreleasedCountries) {
     const gate = getNewCountryReleaseGate(countryCode)
     assert.equal(gate?.stage, "REVIEW_REQUIRED")
@@ -30,7 +30,7 @@ test("new country packs cannot enter search or ranked comparison before release"
 })
 
 test("the legacy country scorecard also excludes gated countries", () => {
-  const unreleasedCountries = NEW_COUNTRY_CODES.filter((countryCode) => countryCode !== "NZ")
+  const unreleasedCountries = NEW_COUNTRY_CODES
   const result = recommendCountries(DEFAULT_RECOMMENDATION_INPUT)
   assert.ok(
     result.every((country) => !unreleasedCountries.includes(country.code as typeof unreleasedCountries[number])),

@@ -10,7 +10,7 @@ export const CORE_DATA_CATEGORIES = [
 ] as const
 
 export type CoreDataCategory = (typeof CORE_DATA_CATEGORIES)[number]
-export type RegistryCountryCode = "AU" | "US" | "CA" | "UK" | "IE" | "DE" | "NL" | "BE" | "SG" | "KR" | "FR" | "ES" | "NZ" | "NO" | "SE" | "DK" | "FI" | "CH" | "AE"
+export type RegistryCountryCode = "AU" | "US" | "CA" | "UK" | "IE" | "DE" | "NL" | "BE" | "SG" | "KR" | "JP" | "FR" | "ES" | "NZ" | "NO" | "SE" | "DK" | "FI" | "CH" | "AE"
 export type SourceConfidence = "official" | "market-estimate" | "internal-estimate"
 export type SourceMethod = "official-api" | "official-download" | "official-web" | "market-estimate"
 export type ReviewStatus = "approved" | "review-required"
@@ -29,6 +29,12 @@ export type SourceRecord = {
 }
 
 const CHECKED_AT = "2026-07-10"
+const JAPAN_CHECKED_AT = "2026-07-14"
+
+// Japan remains discoverable on Maps, but its source rows cannot support a
+// ranked study or migration decision until exact career crosswalks and
+// editorial evidence review are complete.
+const REVIEW_REQUIRED_SOURCE_COUNTRIES = new Set<RegistryCountryCode>(["JP"])
 
 type SourceSeed = Omit<SourceRecord, "country" | "category" | "retrievedAt" | "lastChecked" | "confidence" | "reviewStatus">
 type CountrySourceSeed = Record<CoreDataCategory, SourceSeed>
@@ -114,6 +120,14 @@ const COUNTRY_SOURCES: Record<RegistryCountryCode, CountrySourceSeed> = {
     "visa-pathway": { sourceName: "Korea Visa Portal", sourceUrl: "https://www.visa.go.kr/", method: "official-web", refreshCadence: "monthly" },
     shortage: { sourceName: "고용노동부 사업체노동력조사", sourceUrl: "https://laborstat.moel.go.kr/", method: "official-download", refreshCadence: "quarterly" },
   },
+  JP: {
+    tuition: { sourceName: "Study in Japan Official Website — Academic Fees", sourceUrl: "https://www.studyinjapan.go.jp/en/planning/academic-fees/", method: "official-web", refreshCadence: "annual" },
+    "graduate-outcomes": { sourceName: "MEXT School Basic Survey — graduate employment overview", sourceUrl: "https://www.mext.go.jp/en/publication/statistics/title01/detail01/1373636.htm", method: "official-download", refreshCadence: "annual" },
+    occupation: { sourceName: "MHLW Basic Survey on Wage Structure — results", sourceUrl: "https://www.mhlw.go.jp/toukei/list/chinginkouzou_a.html", method: "official-download", refreshCadence: "annual" },
+    rent: { sourceName: "Statistics Bureau of Japan Housing and Land Survey (e-Stat)", sourceUrl: "https://www.e-stat.go.jp/stat-search/database?layout=datalist&stat_infid=000040210070&statdisp_id=0004021497", method: "official-api", refreshCadence: "annual" },
+    "visa-pathway": { sourceName: "Study in Japan Official Website — Changing Status of Residence", sourceUrl: "https://www.studyinjapan.go.jp/en/work-in-japan/immigration-procedures/", method: "official-web", refreshCadence: "monthly" },
+    shortage: { sourceName: "MHLW Employment-related indicators by occupation", sourceUrl: "https://www.mhlw.go.jp/toukei/list/114-1d.html", method: "official-download", refreshCadence: "annual" },
+  },
   FR: {
     tuition: { sourceName: "Campus France", sourceUrl: "https://www.campusfrance.org/en", method: "official-web", refreshCadence: "annual" },
     "graduate-outcomes": { sourceName: "French Ministry of Higher Education", sourceUrl: "https://www.enseignementsup-recherche.gouv.fr/en", method: "official-download", refreshCadence: "annual" },
@@ -141,10 +155,10 @@ const COUNTRY_SOURCES: Record<RegistryCountryCode, CountrySourceSeed> = {
   NZ: {
     tuition: { sourceName: "Education New Zealand — Study with New Zealand", sourceUrl: "https://www.studywithnz.govt.nz/", method: "official-web", refreshCadence: "annual" },
     "graduate-outcomes": { sourceName: "Stats NZ Income Survey", sourceUrl: "https://www.stats.govt.nz/information-releases/income-statistics-year-ended-june-2025/", method: "official-download", refreshCadence: "annual" },
-    occupation: { sourceName: "Hīkina te Mahi — Skill Shortage Lists", sourceUrl: "https://www.immigration.govt.nz/new-zealand-visas/preparing-a-visa-application/working-nz/skill-shortage-lists", method: "official-web", refreshCadence: "quarterly" },
+    occupation: { sourceName: "Hīkina te Mahi — Skill Shortage Lists", sourceUrl: "https://www.immigration.govt.nz/work/requirements-for-work-visas/green-list-occupations-qualifications-and-skills/", method: "official-web", refreshCadence: "quarterly" },
     rent: { sourceName: "Tenancy Services NZ Bond Data", sourceUrl: "https://www.tenancy.govt.nz/rent-bond/rent-bond-statistics/", method: "official-download", refreshCadence: "quarterly" },
-    "visa-pathway": { sourceName: "Immigration New Zealand — Study to Work pathway", sourceUrl: "https://www.immigration.govt.nz/new-zealand-visas/applying-for-a-visa/visa-factsheet/going-from-study-to-work", method: "official-web", refreshCadence: "monthly" },
-    shortage: { sourceName: "Immigration New Zealand Green List", sourceUrl: "https://www.immigration.govt.nz/new-zealand-visas/preparing-a-visa-application/working-in-nz/green-list", method: "official-web", refreshCadence: "monthly" },
+    "visa-pathway": { sourceName: "Immigration New Zealand — Study to Work pathway", sourceUrl: "https://www.immigration.govt.nz/study/after-you-finish-your-study/staying-to-work-after-finishing-your-study/", method: "official-web", refreshCadence: "monthly" },
+    shortage: { sourceName: "Immigration New Zealand Green List", sourceUrl: "https://www.immigration.govt.nz/work/requirements-for-work-visas/green-list-occupations-qualifications-and-skills/green-list-roles-jobs-we-need-people-for-in-new-zealand/", method: "official-web", refreshCadence: "monthly" },
   },
   NO: {
     tuition: { sourceName: "Study in Norway", sourceUrl: "https://www.studyinnorway.no/", method: "official-web", refreshCadence: "annual" },
@@ -159,7 +173,7 @@ const COUNTRY_SOURCES: Record<RegistryCountryCode, CountrySourceSeed> = {
     "graduate-outcomes": { sourceName: "Statistics Sweden (SCB) Education Outcomes", sourceUrl: "https://www.scb.se/en/statistics/education/", method: "official-download", refreshCadence: "annual" },
     occupation: { sourceName: "Swedish Public Employment Service (Arbetsförmedlingen)", sourceUrl: "https://arbetsformedlingen.se/for-arbetssokande/yrken-och-framtid/yrkesprognoser", method: "official-download", refreshCadence: "quarterly" },
     rent: { sourceName: "Statistics Sweden (SCB) Housing Statistics", sourceUrl: "https://www.scb.se/en/statistics/housing-and-construction/", method: "official-download", refreshCadence: "quarterly" },
-    "visa-pathway": { sourceName: "Swedish Migration Agency (Migrationsverket)", sourceUrl: "https://www.migrationsverket.se/English/Private-individuals/Working-in-Sweden/", method: "official-web", refreshCadence: "monthly" },
+    "visa-pathway": { sourceName: "Swedish Migration Agency (Migrationsverket)", sourceUrl: "https://www.migrationsverket.se/en/you-want-to-apply/work/employee-or-self-employed/employees.html", method: "official-web", refreshCadence: "monthly" },
     shortage: { sourceName: "Swedish Public Employment Service Shortage Analysis", sourceUrl: "https://arbetsformedlingen.se/for-arbetssokande/yrken-och-framtid/yrkesprognoser", method: "official-download", refreshCadence: "quarterly" },
   },
   DK: {
@@ -167,7 +181,7 @@ const COUNTRY_SOURCES: Record<RegistryCountryCode, CountrySourceSeed> = {
     "graduate-outcomes": { sourceName: "Statistics Denmark (DST) Education Outcomes", sourceUrl: "https://www.dst.dk/en/statistik/emner/uddannelse-og-viden", method: "official-download", refreshCadence: "annual" },
     occupation: { sourceName: "Danish Agency for Labour Market and Recruitment (STAR)", sourceUrl: "https://starservice.mim.dk/starservice/occupations/list", method: "official-download", refreshCadence: "quarterly" },
     rent: { sourceName: "Statistics Denmark (DST) Housing Statistics", sourceUrl: "https://www.dst.dk/en/statistik/emner/boliger-og-ejendomme", method: "official-download", refreshCadence: "quarterly" },
-    "visa-pathway": { sourceName: "Danish Agency for International Recruitment (SIRI)", sourceUrl: "https://www.nyidanmark.dk/en-GB/Words-and-concepts/US/Establishment-Card/", method: "official-web", refreshCadence: "monthly" },
+    "visa-pathway": { sourceName: "Danish Agency for International Recruitment (SIRI)", sourceUrl: "https://www.nyidanmark.dk/en-GB/You-want-to-extend/Work---extension/Establishment-card", method: "official-web", refreshCadence: "monthly" },
     shortage: { sourceName: "STAR Shortage Occupation List", sourceUrl: "https://starservice.mim.dk/starservice/occupations/list", method: "official-download", refreshCadence: "quarterly" },
   },
   FI: {
@@ -193,11 +207,11 @@ export const SOURCE_REGISTRY: SourceRecord[] = (Object.entries(COUNTRY_SOURCES) 
     country,
     category,
     ...sources[category],
-    retrievedAt: CHECKED_AT,
-    lastChecked: CHECKED_AT,
+    retrievedAt: country === "JP" ? JAPAN_CHECKED_AT : CHECKED_AT,
+    lastChecked: country === "JP" ? JAPAN_CHECKED_AT : CHECKED_AT,
     confidence: "official" as const,
     reviewStatus:
-      category === "visa-pathway" || !isCountrySearchIndexable(country)
+      category === "visa-pathway" || REVIEW_REQUIRED_SOURCE_COUNTRIES.has(country) || !isCountrySearchIndexable(country)
         ? "review-required" as const
         : "approved" as const,
   })),

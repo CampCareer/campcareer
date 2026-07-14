@@ -3,6 +3,7 @@
 import { useEffect } from "react"
 import { usePathname } from "next/navigation"
 import { track } from "@/lib/analytics"
+import { withoutLocalePrefix } from "@/lib/i18n/config"
 
 function seoPageType(pathname: string): string | null {
   if (pathname.startsWith("/maps/")) return "occupation_map"
@@ -16,7 +17,7 @@ export function PageViewTracker() {
   const pathname = usePathname()
 
   useEffect(() => {
-    const pageType = seoPageType(pathname)
+    const pageType = seoPageType(withoutLocalePrefix(pathname))
     if (pageType) track("seo_landing_view", { page_type: pageType })
   }, [pathname])
 

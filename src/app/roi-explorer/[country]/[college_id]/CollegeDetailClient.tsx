@@ -148,9 +148,21 @@ export function CollegeDetailClient({
   const hasLivingCostData = annualRent !== null && livingCost !== null
 
   const taxAmount = calcTax(grossSalary, country, best.college_state)
-  const incomeAfterTax = Math.max(0, grossSalary - taxAmount)
+  const incomeAfterTax = taxAmount == null ? null : Math.max(0, grossSalary - taxAmount)
+  const afterTaxAvailable = incomeAfterTax !== null
+  const taxBreakdown = showAfterTax && taxAmount !== null
+    ? [{
+        label: `${td.incomeTax} ${country === 'ie' ? 'USC/PRSI' : country === 'uk' ? 'NI' : country === 'au' ? 'Medicare' : country === 'ca' ? 'CPP/EI' : 'FICA'}`,
+        sublabel: `${country.toUpperCase()} ${td.taxEstimated}`,
+        value: taxAmount,
+        pct: grossSalary > 0 ? (taxAmount / grossSalary) * 100 : 0,
+        barColor: 'bg-purple-300',
+        textColor: 'text-purple-600',
+        sign: '−',
+      }]
+    : []
 
-  const salaryBase = showAfterTax ? incomeAfterTax : grossSalary
+  const salaryBase = showAfterTax && afterTaxAvailable ? incomeAfterTax : grossSalary
 
   // TODO: align ROI score / payback formulas to use the same student-rent share factor
   // so the summary cards and the financial breakdown always reflect the same assumptions.
@@ -215,17 +227,20 @@ export function CollegeDetailClient({
         <div className="flex items-center gap-2 mt-2">
           <span className="text-xs text-slate-500">{td.gross}</span>
           <button
-            onClick={() => setShowAfterTax((v) => !v)}
-            className={`relative w-10 h-5 rounded-full transition-colors ${showAfterTax ? 'bg-blue-600' : 'bg-slate-200'}`}
+            onClick={() => afterTaxAvailable && setShowAfterTax((v) => !v)}
+            disabled={!afterTaxAvailable}
+            aria-disabled={!afterTaxAvailable}
+            className={`relative w-10 h-5 rounded-full transition-colors ${showAfterTax && afterTaxAvailable ? 'bg-blue-600' : 'bg-slate-200'} disabled:cursor-not-allowed disabled:opacity-50`}
           >
             <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${showAfterTax ? 'translate-x-5' : 'translate-x-0'}`} />
           </button>
           <span className="text-xs text-slate-500">{td.afterTax}</span>
-          {showAfterTax && (
+          {showAfterTax && afterTaxAvailable && (
             <span className="text-xs text-blue-600 font-medium bg-blue-50 px-2 py-0.5 rounded-full">
               {td.taxEstimate.replace('{country}', country.toUpperCase())}
             </span>
           )}
+          {!afterTaxAvailable && <span className="text-xs text-slate-400">Tax estimate unavailable for this country</span>}
         </div>
       </div>
 
@@ -326,15 +341,7 @@ export function CollegeDetailClient({
                   textColor: 'text-slate-700',
                   sign: '',
                 },
-                ...(showAfterTax ? [{
-                  label: `${td.incomeTax} ${country === 'ie' ? 'USC/PRSI' : country === 'uk' ? 'NI' : country === 'au' ? 'Medicare' : country === 'ca' ? 'CPP/EI' : 'FICA'}`,
-                  sublabel: `${country.toUpperCase()} ${td.taxEstimated}`,
-                  value: taxAmount,
-                  pct: grossSalary > 0 ? (taxAmount / grossSalary) * 100 : 0,
-                  barColor: 'bg-purple-300',
-                  textColor: 'text-purple-600',
-                  sign: '−',
-                }] : []),
+                ...taxBreakdown,
                 {
                   label: td.annualRent,
                   sublabel: hasLivingCostData ? td.cityAvgMonths : 'rent data unavailable',

@@ -2,7 +2,6 @@ import { HomeFinder } from "@/components/home/home-finder"
 import { pageMetadata } from "@/lib/seo"
 
 export const revalidate = 86400
-export const dynamic = "force-static"
 
 export const metadata = {
   ...pageMetadata({

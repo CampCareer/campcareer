@@ -24,6 +24,7 @@ import JobListings from "./JobListings"
 import { EMPLOYMENT_OCCUPATIONS } from "@/data/employment-occupations"
 import { EMPLOYMENT_SALARIES } from "@/data/employment-salaries"
 import type { MapData, StateOccupation, USOccupation, HighPayOccupation, USCollege, StateSalaryMult, OccRow, StateShortageByOcc, CourseLite, USStateInfo, StateMajorDensity, USRankedCollege, AURankedCollege, CACollege, CACity, CAOccRow, CAHighPayOccupation, UKOccRow, UKRegionOccupation, UKCollege, UKCity, DECollege, DECity, DERegionOccupation, DEOccRow, NLCollege, NLCity, NLRegionOccupation, NLOccRow, BERegionOccupation, BEOccRow } from "@/lib/map-data"
+import type { MapsV1Envelope } from "@/lib/maps-v1-contract"
 import { createClient } from "@/lib/supabase-client"
 import type { User } from "@supabase/supabase-js"
 import { getShortageOccupations } from "@/lib/ie-shortage-occupations"
@@ -66,7 +67,6 @@ type NeroData = Record<string, NeroOccupation[]>
 type RegionGroup = { code?: string; title: string; value: number }
 type RegionEntry = { demand: RegionGroup[]; demandMetro: boolean; pay: RegionGroup[] }
 type RegionOccData = Record<string, RegionEntry>
-
 export default function CampCareerMaps({
   data: initialData,
   initialState,
@@ -82,7 +82,7 @@ export default function CampCareerMaps({
 }) {
   const t = useTranslations()
   const locale = useLocale()
-  // /map은 호주 비치헤드의 front door다 → 진입 즉시 주/지역 선택(검색) 바가 보이도록
+  // /maps는 호주 비치헤드의 front door다 → 진입 즉시 주/지역 선택(검색) 바가 보이도록
   // 기본을 "AU"로 둔다. 월드맵(다른 국가)은 "전체 보기"로 빠져나가 볼 수 있다.
   const [activeCountry, setActiveCountry] = useState<ActiveCountry>("AU")
   const [data, setData] = useState<MapData>(initialData)
@@ -122,12 +122,24 @@ export default function CampCareerMaps({
     const controller = new AbortController()
     setCountryDataLoading(true)
     setCountryDataError(null)
-    fetch(`/api/maps/data/${activeCountry.toLowerCase()}`, { signal: controller.signal })
+    fetch(`/api/v1/maps/${activeCountry.toLowerCase()}`, { signal: controller.signal })
       .then(async (response) => {
         if (!response.ok) throw new Error(`Map data request failed (${response.status})`)
-        return response.json() as Promise<{ data: Partial<MapData> }>
+        return response.json() as Promise<MapsV1Envelope<Partial<MapData>>>
       })
       .then((payload) => {
+        if (
+          payload.country !== activeCountry ||
+          !payload.data ||
+          typeof payload.data !== "object" ||
+          !payload.dataVersion ||
+          !payload.methodologyVersion ||
+          !payload.generatedAt ||
+          !Array.isArray(payload.evidence) ||
+          !["decision_ready", "discovery", "review_required"].includes(payload.readiness)
+        ) {
+          throw new Error("Map data response did not match the v1 country bundle contract")
+        }
         setData((current) => ({ ...current, ...payload.data }))
         loadedCountries.current.add(activeCountry)
       })
@@ -1765,7 +1777,7 @@ function nzJobSearchUrls(occ: NZOccupation, regionName?: string): Array<{ label:
   return [
     { label: "Seek", url: `https://www.seek.co.nz/${occ.nameEn.toLowerCase().replace(/\s+/g, "-")}-jobs?search=${q}` },
     { label: "Indeed", url: `https://nz.indeed.com/jobs?q=${q}` },
-    { label: "Immigration NZ", url: "https://www.immigration.govt.nz/new-zealand-visas/preparing-a-visa-application/working-in-nz/green-list" },
+    { label: "Immigration NZ", url: "https://www.immigration.govt.nz/work/requirements-for-work-visas/green-list-occupations-qualifications-and-skills/green-list-roles-jobs-we-need-people-for-in-new-zealand/" },
     { label: "Careers NZ", url: `https://www.careers.govt.nz/jobs-search?search=${q}` },
   ]
 }

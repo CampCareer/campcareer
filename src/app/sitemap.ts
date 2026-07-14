@@ -31,14 +31,14 @@ import { isCountrySearchIndexable } from "@/lib/new-country-release-gate"
 const BASE = "https://www.campcareer.com"
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // soft-hidden 라우트(career-path, rankings, checklist, timeline, games,
-  // compare, explore)는 next.config.mjs에서 / 로 리다이렉트되므로 sitemap에서 제외.
-  const lastModStatic = new Date("2026-07-11")
+  // Hidden legacy routes (career-path, rankings, checklist, timeline, games,
+  // explore) are excluded. Compare is the public decision-product canonical.
+  const lastModStatic = new Date("2026-07-14")
   const staticPages: MetadataRoute.Sitemap = [
     { url: BASE, lastModified: lastModStatic, priority: 1.0, changeFrequency: "weekly" },
+    { url: `${BASE}/compare`, lastModified: lastModStatic, priority: 0.95, changeFrequency: "daily" },
     { url: `${BASE}/maps`, lastModified: lastModStatic, priority: 0.9, changeFrequency: "daily" },
     { url: `${BASE}/roi-explorer`, lastModified: lastModStatic, priority: 0.9, changeFrequency: "daily" },
-    { url: `${BASE}/degree-risk`, lastModified: lastModStatic, priority: 0.8, changeFrequency: "weekly" },
     { url: `${BASE}/blog`, lastModified: lastModStatic, priority: 0.7, changeFrequency: "weekly" },
     { url: `${BASE}/methodology`, lastModified: lastModStatic, priority: 0.5, changeFrequency: "monthly" },
     { url: `${BASE}/privacy`, lastModified: lastModStatic, priority: 0.2, changeFrequency: "yearly" },
@@ -95,7 +95,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const blogPages: MetadataRoute.Sitemap = getAllPosts().map((post) => ({
     url: `${BASE}/blog/${post.slug}`,
-    lastModified: new Date(post.date),
+    lastModified: new Date(post.lastReviewed ?? post.date),
     priority: 0.6,
     changeFrequency: "monthly",
   }))

@@ -6,8 +6,8 @@ export const revalidate = 86400
 export const dynamic = "force-static"
 
 export const metadata = pageMetadata({
-  title: "Blog — Study Abroad Insights & Salary Data",
-  description: "Data-driven articles on graduate salaries, ROI, and study abroad decisions across USA, Ireland, UK, Canada and Australia.",
+  title: "Blog — Study Abroad, Career & Cost Guides",
+  description: "Data-backed guides for choosing a study destination, comparing career paths, costs, and post-study pathways across 20 destinations.",
   path: "/blog",
 })
 

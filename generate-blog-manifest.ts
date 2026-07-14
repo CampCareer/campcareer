@@ -28,6 +28,8 @@ interface PostMeta {
   lastReviewed?: string
   ctaCountry?: string
   ctaMajor?: string
+  ctaCareer?: string
+  ctaOrigin?: string
 }
 
 const files = fs.readdirSync(BLOG_DIR).filter(f => f.endsWith(".mdx"))

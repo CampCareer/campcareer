@@ -6,8 +6,11 @@ import { useEffect, useState } from "react"
 import { createClient } from "@/lib/supabase-client"
 import { LogoMark } from "@/components/logo-mark"
 import { LanguageToggle } from "@/components/language-toggle"
+import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
 import { useTranslations } from "@/lib/i18n/locale-provider"
+import { useLocale } from "@/lib/i18n/locale-provider"
+import { localeFromPathname, localizePath, withoutLocalePrefix } from "@/lib/i18n/config"
 import { cn } from "@/lib/utils"
 import { UserIcon } from "lucide-react"
 import type { User } from "@supabase/supabase-js"
@@ -16,9 +19,12 @@ import type { User } from "@supabase/supabase-js"
 // feature is one click from the top bar. Blog lives in the footer.
 export function TopNav() {
   const pathname = usePathname()
+  const locale = useLocale()
+  const pathLocale = localeFromPathname(pathname) ?? locale
+  const barePathname = withoutLocalePrefix(pathname)
   // /map and /maps are full-screen map surfaces on mobile.
-  const isMap = pathname === "/map" || pathname.startsWith("/map/") || pathname === "/maps" || pathname.startsWith("/maps/")
-  const isCompare = pathname === "/compare" || pathname.startsWith("/compare/")
+  const isMap = barePathname === "/map" || barePathname.startsWith("/map/") || barePathname === "/maps" || barePathname.startsWith("/maps/")
+  const isCompare = barePathname === "/compare" || barePathname.startsWith("/compare/")
   const router = useRouter()
   const t = useTranslations()
   const supabase = createClient()
@@ -44,12 +50,12 @@ export function TopNav() {
   const linkEls = navItems.map((item) => {
     const active =
       item.href === "/"
-        ? pathname === "/"
-        : pathname === item.href || pathname.startsWith(`${item.href}/`)
+        ? barePathname === "/"
+        : barePathname === item.href || barePathname.startsWith(`${item.href}/`)
     return (
       <Link
         key={item.href}
-        href={item.href}
+        href={localizePath(item.href, pathLocale)}
         prefetch={item.href === "/maps" ? false : undefined}
         className={cn(
           "whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors",
@@ -67,7 +73,7 @@ export function TopNav() {
     <header className={cn(isCompare ? "" : "sticky top-0 z-40", "bg-background/90 backdrop-blur-sm border-b border-slate-200")}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="h-14 flex items-center gap-4">
-          <Link href="/" className="flex items-center gap-2.5 shrink-0 mr-auto">
+          <Link href={localizePath("/", pathLocale)} className="flex items-center gap-2.5 shrink-0 mr-auto">
             <LogoMark size={30} />
             <span className="font-semibold text-slate-900 text-base tracking-tight">
               CampCareer
@@ -80,9 +86,10 @@ export function TopNav() {
           </nav>
 
           <div className="flex items-center gap-2 shrink-0 ml-auto">
+            <ThemeToggle className="text-slate-500 hover:text-slate-900 hover:bg-slate-100" />
             <LanguageToggle className="text-slate-500 hover:text-slate-900 hover:bg-slate-100" />
             {user ? (
-              <Link href="/profile">
+              <Link href={localizePath("/profile", pathLocale)}>
                 {avatarUrl ? (
                   <img
                     src={avatarUrl}
@@ -99,7 +106,7 @@ export function TopNav() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => router.push("/login")}
+                onClick={() => router.push(localizePath("/login", pathLocale))}
                 className="border-blue-200 text-blue-600 hover:bg-blue-50 hover:text-blue-700"
               >
                 {t.common.signIn}

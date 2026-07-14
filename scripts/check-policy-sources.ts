@@ -100,20 +100,37 @@ async function readSnapshots(): Promise<Snapshot[]> {
 }
 
 async function fetchWithTimeout(url: string) {
-  const controller = new AbortController()
-  const timeout = setTimeout(() => controller.abort(), 20_000)
-  try {
-    return await fetch(url, {
-      redirect: "follow",
-      signal: controller.signal,
-      headers: {
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0 Safari/537.36 CampCareerPolicyMonitor/1.0",
-        Accept: "text/html,application/xhtml+xml,application/pdf;q=0.8,*/*;q=0.5",
-      },
-    })
-  } finally {
-    clearTimeout(timeout)
+  let lastError: unknown
+
+  // Official sites occasionally reset a single connection or briefly rate
+  // limit an automated monitor. Retry only transient transport/5xx/429
+  // failures; a durable 404 or policy-page change still fails the check and
+  // requires a human decision rather than being silently ignored.
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 20_000)
+    try {
+      const response = await fetch(url, {
+        redirect: "follow",
+        signal: controller.signal,
+        headers: {
+          "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0 Safari/537.36 CampCareerPolicyMonitor/1.0",
+          Accept: "text/html,application/xhtml+xml,application/pdf;q=0.8,*/*;q=0.5",
+        },
+      })
+      if (response.status === 429 || response.status >= 500) {
+        throw new Error(`HTTP ${response.status}`)
+      }
+      return response
+    } catch (error) {
+      lastError = error
+      if (attempt < 2) await new Promise((resolveRetry) => setTimeout(resolveRetry, 350 * (attempt + 1)))
+    } finally {
+      clearTimeout(timeout)
+    }
   }
+
+  throw lastError instanceof Error ? lastError : new Error(String(lastError))
 }
 
 function normalizePolicyDocument(value: string) {
