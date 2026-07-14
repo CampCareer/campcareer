@@ -57,8 +57,8 @@ export const LAUNCH_COUNTRIES: readonly LaunchCountry[] = [
   { ...reviewRequired("SE", "sweden", "Sweden", "SEK"), mapReady: true },
   { ...reviewRequired("DK", "denmark", "Denmark", "DKK"), mapReady: true },
   { ...reviewRequired("FI", "finland", "Finland", "EUR"), mapReady: true },
-  { ...reviewRequired("CH", "switzerland", "Switzerland", "CHF"), mapReady: true },
-  { ...reviewRequired("AE", "united-arab-emirates", "United Arab Emirates", "AED"), mapReady: true },
+  profile("CH", "switzerland", "Switzerland", "CHF"),
+  profile("AE", "united-arab-emirates", "United Arab Emirates", "AED"),
 ] as const
 
 export const LAUNCH_COUNTRY_CODES = LAUNCH_COUNTRIES.map((country) => country.code) as readonly LaunchCountryCode[]
