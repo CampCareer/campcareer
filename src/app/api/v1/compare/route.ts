@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import {
   defaultDecisionCareer,
   parseComparisonScenario,
-  resolveDecisionCareer,
+  resolvePublicCareer,
   resolveLaunchCountries,
   type PublicComparisonResponse,
 } from "@/lib/comparison/public-contract"
@@ -18,10 +18,16 @@ const ISO_CURRENCY = /^[A-Z]{3}$/
  * links, clients, or saved comparison URLs.
  */
 export function GET(request: NextRequest) {
-  const career = resolveDecisionCareer(
-    request.nextUrl.searchParams.get("career"),
-    request.nextUrl.searchParams.get("major"),
-  ) ?? defaultDecisionCareer()
+  const requestedCareer = request.nextUrl.searchParams.get("career")
+  const requestedMajor = request.nextUrl.searchParams.get("major")
+  const resolvedCareer = resolvePublicCareer(
+    requestedCareer,
+    requestedMajor,
+  )
+  if ((requestedCareer || requestedMajor) && !resolvedCareer) {
+    return NextResponse.json({ error: "Unknown canonical career or major" }, { status: 422 })
+  }
+  const career = resolvedCareer ?? defaultDecisionCareer()
   const requestedCountries = (request.nextUrl.searchParams.get("countries") ?? "AU,CA,US,UK")
     .split(",")
   const countries = resolveLaunchCountries(requestedCountries)
@@ -55,6 +61,12 @@ export function GET(request: NextRequest) {
         studentHousing: request.nextUrl.searchParams.get("studentHousing"),
         graduateHousing: request.nextUrl.searchParams.get("graduateHousing"),
       }),
+      ...((request.nextUrl.searchParams.get("budget") || request.nextUrl.searchParams.get("goal")) ? {
+        intent: {
+          ...(["under-30000", "30000-50000", "50000-75000", "75000-100000", "100000-plus"].includes(request.nextUrl.searchParams.get("budget") ?? "") ? { budgetBand: request.nextUrl.searchParams.get("budget") as NonNullable<PublicComparisonResponse["data"]["intent"]>["budgetBand"] } : {}),
+          ...(["career-outcomes", "lower-first-year-cost", "work-and-immigration"].includes(request.nextUrl.searchParams.get("goal") ?? "") ? { goal: request.nextUrl.searchParams.get("goal") as NonNullable<PublicComparisonResponse["data"]["intent"]>["goal"] } : {}),
+        },
+      } : {}),
       comparisons: countries.map((country) => ({
         country: {
           code: country.code,

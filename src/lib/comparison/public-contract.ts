@@ -77,6 +77,11 @@ export type ComparisonScenario = {
   taxHousehold: "single_no_dependants"
 }
 
+export type ComparisonIntent = {
+  budgetBand?: "under-30000" | "30000-50000" | "50000-75000" | "75000-100000" | "100000-plus"
+  goal?: "career-outcomes" | "lower-first-year-cost" | "work-and-immigration"
+}
+
 export type PublicCountryComparison = {
   country: Pick<LaunchCountry, "code" | "slug" | "name" | "currency" | "mapReady">
   readiness: ComparisonReadiness
@@ -91,6 +96,7 @@ export type PublicComparisonData = {
   city?: string
   displayCurrency: string
   scenario: ComparisonScenario
+  intent?: ComparisonIntent
   comparisons: PublicCountryComparison[]
 }
 
@@ -127,6 +133,16 @@ export function getDecisionCareers(): CanonicalCareer[] {
 export function resolveDecisionCareer(value: string | null, major: string | null): CanonicalCareer | null {
   const fromCareer = value ? getCanonicalCareer(value) : null
   if (fromCareer && DECISION_CAREER_IDS.includes(fromCareer.id as DecisionCareerId)) return fromCareer
+  const mappedId = major ? MAJOR_TO_CAREER[major] : undefined
+  return mappedId ? getCanonicalCareer(mappedId) : null
+}
+
+/** A direct comparison may be opened for any canonical career. Decision-ready
+ * publication is evaluated per country later; never replace an unsupported
+ * visitor choice with a different default career. */
+export function resolvePublicCareer(value: string | null, major: string | null): CanonicalCareer | null {
+  const fromCareer = value ? getCanonicalCareer(value) : null
+  if (fromCareer) return fromCareer
   const mappedId = major ? MAJOR_TO_CAREER[major] : undefined
   return mappedId ? getCanonicalCareer(mappedId) : null
 }

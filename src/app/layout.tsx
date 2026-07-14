@@ -10,7 +10,6 @@ import { headers } from "next/headers"
 import { LocaleProvider } from "@/lib/i18n/locale-provider"
 import { LocaleInit } from "@/components/locale-init"
 import { PageViewTracker } from "@/components/analytics/page-view-tracker"
-import { ThemeProvider } from "@/components/theme-provider"
 import { AnalyticsConsent } from "@/components/analytics-consent"
 import { ConsentGatedInsights } from "@/components/consent-gated-insights"
 
@@ -125,17 +124,12 @@ export default async function RootLayout({
   return (
     <html lang={documentLocale || DEFAULT_LOCALE} suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} antialiased`}>
-        <Script id="theme-preference" strategy="beforeInteractive">
-          {`(function(){try{var p=localStorage.getItem('campcareer-theme')||'system';var d=p==='dark'||(p==='system'&&matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.classList.toggle('dark',d);document.documentElement.style.colorScheme=d?'dark':'light'}catch(e){}})()`}
-        </Script>
-        <ThemeProvider>
-          <LocaleProvider locale={locale}>
-            <LocaleInit />
-            <PageViewTracker />
-            <LayoutShell>{children}</LayoutShell>
-            <AnalyticsConsent />
-          </LocaleProvider>
-        </ThemeProvider>
+        <LocaleProvider locale={locale}>
+          <LocaleInit />
+          <PageViewTracker />
+          <LayoutShell>{children}</LayoutShell>
+          <AnalyticsConsent />
+        </LocaleProvider>
         <ConsentGatedInsights />
         {/* Impact affiliate verification — Revolut */}
         <Script id="impact-verification" strategy="beforeInteractive">

@@ -6,7 +6,6 @@ import { useEffect, useState } from "react"
 import { createClient } from "@/lib/supabase-client"
 import { LogoMark } from "@/components/logo-mark"
 import { LanguageToggle } from "@/components/language-toggle"
-import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
 import { useTranslations } from "@/lib/i18n/locale-provider"
 import { useLocale } from "@/lib/i18n/locale-provider"
@@ -41,8 +40,11 @@ export function TopNav() {
 
   const avatarUrl = user?.user_metadata?.avatar_url as string | undefined
 
-  const navItems: { href: string; label: string }[] = [
+  const navItems: { href: string; label: string; accent?: "blue" | "rose" | "amber" }[] = [
     { href: "/", label: t.nav.home },
+    { href: "/countries", label: locale === "ko" ? "국가" : "Countries", accent: "blue" },
+    { href: "/universities", label: locale === "ko" ? "대학" : "Universities", accent: "rose" },
+    { href: "/majors", label: locale === "ko" ? "전공·직업" : "Majors", accent: "amber" },
     { href: "/maps", label: t.nav.map },
     { href: "/compare", label: t.nav.compare },
   ]
@@ -60,7 +62,7 @@ export function TopNav() {
         className={cn(
           "whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors",
           active
-            ? "bg-blue-50 text-blue-600"
+            ? item.accent === "rose" ? "bg-rose-50 text-rose-700" : item.accent === "amber" ? "bg-amber-100 text-amber-900" : "bg-blue-50 text-blue-700"
             : "text-slate-500 hover:text-slate-900 hover:bg-slate-100"
         )}
       >
@@ -86,7 +88,6 @@ export function TopNav() {
           </nav>
 
           <div className="flex items-center gap-2 shrink-0 ml-auto">
-            <ThemeToggle className="text-slate-500 hover:text-slate-900 hover:bg-slate-100" />
             <LanguageToggle className="text-slate-500 hover:text-slate-900 hover:bg-slate-100" />
             {user ? (
               <Link href={localizePath("/profile", pathLocale)}>
