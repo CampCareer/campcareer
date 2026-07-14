@@ -483,3 +483,20 @@ export const FI_REGION_NAMES: Record<FIRegionCode, string> = {
   NKR: "Pohjois-Karjala", SAT: "Satakunta", SKR: "Etelä-Karjala", KYS: "Etelä-Savo",
   KHM: "Kanta-Häme", PHM: "Pohjanmaa", KPK: "Keski-Pohjanmaa", KYR: "Kymenlaakso",
 }
+
+// ── Switzerland (CH) cantons ──────────────────────────────────────────────
+
+export const CH_CANTON_CODES = [
+  "AG", "AI", "AR", "BE", "BL", "BS", "FR", "GE", "GL", "GR", "JU", "LU", "NE",
+  "NW", "OW", "SG", "SH", "SO", "SZ", "TG", "TI", "UR", "VD", "VS", "ZG", "ZH",
+] as const
+
+export type CHCantonCode = typeof CH_CANTON_CODES[number]
+
+export const CH_CANTON_NAMES: Record<CHCantonCode, string> = {
+  AG: "Aargau", AI: "Appenzell Innerrhoden", AR: "Appenzell Ausserrhoden", BE: "Bern",
+  BL: "Basel-Landschaft", BS: "Basel-Stadt", FR: "Fribourg", GE: "Geneva", GL: "Glarus",
+  GR: "Grisons", JU: "Jura", LU: "Lucerne", NE: "Neuchâtel", NW: "Nidwalden", OW: "Obwalden",
+  SG: "St. Gallen", SH: "Schaffhausen", SO: "Solothurn", SZ: "Schwyz", TG: "Thurgau", TI: "Ticino",
+  UR: "Uri", VD: "Vaud", VS: "Valais", ZG: "Zug", ZH: "Zurich",
+}

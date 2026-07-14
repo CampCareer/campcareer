@@ -57,7 +57,7 @@ export const LAUNCH_COUNTRIES: readonly LaunchCountry[] = [
   { ...reviewRequired("SE", "sweden", "Sweden", "SEK"), mapReady: true },
   { ...reviewRequired("DK", "denmark", "Denmark", "DKK"), mapReady: true },
   { ...reviewRequired("FI", "finland", "Finland", "EUR"), mapReady: true },
-  reviewRequired("CH", "switzerland", "Switzerland", "CHF"),
+  { ...reviewRequired("CH", "switzerland", "Switzerland", "CHF"), mapReady: true },
   reviewRequired("AE", "united-arab-emirates", "United Arab Emirates", "AED"),
 ] as const
 

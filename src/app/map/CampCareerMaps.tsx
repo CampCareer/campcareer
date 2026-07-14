@@ -8,7 +8,7 @@ import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useTranslations, useLocale } from "@/lib/i18n/locale-provider"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { STATE_CODES, STATE_NAMES, US_STATE_CODES, US_STATE_NAMES, IE_COUNTY_CODES, IE_COUNTY_NAMES, IE_CITY_TO_COUNTY, CA_PROVINCE_CODES, CA_PROVINCE_NAMES, UK_REGION_CODES, UK_REGION_NAMES, DE_BUNDESLAND_CODES, DE_BUNDESLAND_NAMES, NL_PROVINCE_CODES, NL_PROVINCE_NAMES, BE_REGION_CODES, BE_REGION_NAMES, JP_PREFECTURE_CODES, JP_PREFECTURE_NAMES, KR_SIDO_CODES, KR_SIDO_NAMES, FR_REGION_CODES, FR_REGION_NAMES, NZ_REGION_NAMES, NO_REGION_NAMES, SE_REGION_NAMES, DK_REGION_NAMES, FI_REGION_NAMES, type StateCode, type NZRegionCode, type NORegionCode, type SERegionCode, type DKRegionCode, type FIRegionCode } from "./states"
+import { STATE_CODES, STATE_NAMES, US_STATE_CODES, US_STATE_NAMES, IE_COUNTY_CODES, IE_COUNTY_NAMES, IE_CITY_TO_COUNTY, CA_PROVINCE_CODES, CA_PROVINCE_NAMES, UK_REGION_CODES, UK_REGION_NAMES, DE_BUNDESLAND_CODES, DE_BUNDESLAND_NAMES, NL_PROVINCE_CODES, NL_PROVINCE_NAMES, BE_REGION_CODES, BE_REGION_NAMES, JP_PREFECTURE_CODES, JP_PREFECTURE_NAMES, KR_SIDO_CODES, KR_SIDO_NAMES, FR_REGION_CODES, FR_REGION_NAMES, NZ_REGION_NAMES, NO_REGION_NAMES, SE_REGION_NAMES, DK_REGION_NAMES, FI_REGION_NAMES, CH_CANTON_NAMES, type StateCode, type NZRegionCode, type NORegionCode, type SERegionCode, type DKRegionCode, type FIRegionCode, type CHCantonCode } from "./states"
 import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
 import { WHV_REGIONS } from "@/data/whv-regions"
 import { WHV_SPECIFIED_WORK } from "@/data/whv-occupations"
@@ -38,6 +38,7 @@ import { type NORegion, type NOOccupation, type NOUniversity, NO_OCCUPATION_BY_C
 import { type SERegion, type SEOccupation, type SEUniversity, SE_OCCUPATION_BY_CODE, seJobSearchUrl } from "@/data/se-map-data"
 import { type DKRegion, type DKOccupation, type DKUniversity, DK_OCCUPATION_BY_CODE, dkJobSearchUrl } from "@/data/dk-map-data"
 import { type FIRegion, type FIOccupation, type FIUniversity, FI_OCCUPATION_BY_CODE, fiJobSearchUrl } from "@/data/fi-map-data"
+import { type CHRegion, type CHUniversity, type CHOccupationGroup } from "@/data/ch-map-data"
 
 const LeafletMap = dynamic(() => import("./LeafletMap"), {
   ssr: false,
@@ -56,7 +57,7 @@ const STATE_SEEK_PATH: Record<string, string> = {
 }
 
 type Tab = "stateInfo" | "shortage" | "pay" | "employment" | "whv"
-type ActiveCountry = "AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL" | "BE" | "JP" | "SG" | "KR" | "FR" | "ES" | "NZ" | "NO" | "SE" | "DK" | "FI" | null
+type ActiveCountry = "AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL" | "BE" | "JP" | "SG" | "KR" | "FR" | "ES" | "NZ" | "NO" | "SE" | "DK" | "FI" | "CH" | null
 
 type NeroOccupation = { a4: string; name: string; emp: number }
 type NeroData = Record<string, NeroOccupation[]>
@@ -107,7 +108,7 @@ export default function CampCareerMaps({
   const [selectedFRCityCode, setSelectedFRCityCode] = useState<string | null>(null)
   const [selectedESCityCode, setSelectedESCityCode] = useState<string | null>(null)
   const [selectedUsOcc, setSelectedUsOcc] = useState<USOccupation | null>(null)
-  const [selectedUniv, setSelectedUniv] = useState<USRankedCollege | AURankedCollege | CACollege | UKCollege | DECollege | NLCollege | KoreaUniversity | FranceUniversity | SpainUniversity | NZUniversity | NOUniversity | SEUniversity | DKUniversity | FIUniversity | null>(null)
+  const [selectedUniv, setSelectedUniv] = useState<USRankedCollege | AURankedCollege | CACollege | UKCollege | DECollege | NLCollege | KoreaUniversity | FranceUniversity | SpainUniversity | NZUniversity | NOUniversity | SEUniversity | DKUniversity | FIUniversity | CHUniversity | null>(null)
   const [selectedNeroA4, setSelectedNeroA4] = useState<string | null>(null)
   const initialNeroLoaded = useRef(false)
   const initialSA4Ref = useRef<string | null>(null)
@@ -345,12 +346,17 @@ export default function CampCareerMaps({
       const region = data.fiRegions.find((item) => item.code === raw || item.slug === p.get("state"))
       setSelected(region?.code ?? null)
       setTab("stateInfo")
+    } else if (countryRaw === "ch") {
+      setActiveCountry("CH")
+      const canton = data.chRegions.find((item) => item.code === raw || item.slug === p.get("state"))
+      setSelected(canton?.code ?? null)
+      setTab("stateInfo")
     }
     const tabParam = p.get("tab")
     if (tabParam === "pay") setTab("pay")
     else if (tabParam === "employment") setTab("employment")
     else if (tabParam === "whv") setTab("whv")
-  }, [initialState, initialTab, initialSA4, data.sgAreas, data.frCities, data.esCities, data.esCommunities, data.noRegions, data.seRegions, data.dkRegions, data.fiRegions])
+  }, [initialState, initialTab, initialSA4, data.sgAreas, data.frCities, data.esCities, data.esCommunities, data.noRegions, data.seRegions, data.dkRegions, data.fiRegions, data.chRegions])
 
   useEffect(() => {
     if (!selected || neroFetched.current) return
@@ -530,7 +536,7 @@ export default function CampCareerMaps({
     else if (activeCountry === "ES") setTab("stateInfo")
     else if (activeCountry === "NZ") setTab("stateInfo")
     else if (activeCountry === "NO") setTab("stateInfo")
-    else if (activeCountry === "SE" || activeCountry === "DK" || activeCountry === "FI") setTab("stateInfo")
+    else if (activeCountry === "SE" || activeCountry === "DK" || activeCountry === "FI" || activeCountry === "CH") setTab("stateInfo")
     track("select_state", { country: activeCountry ?? "AU", state: s })
   }, [activeCountry])
 
@@ -541,7 +547,7 @@ export default function CampCareerMaps({
     setSelectedFRCityCode(null)
     setSelectedESCityCode(null)
     setSelectedSA4(null)
-    if (country === "SG" || country === "JP" || country === "KR" || country === "FR" || country === "ES" || country === "NZ" || country === "NO" || country === "SE" || country === "DK" || country === "FI") setTab("stateInfo")
+    if (country === "SG" || country === "JP" || country === "KR" || country === "FR" || country === "ES" || country === "NZ" || country === "NO" || country === "SE" || country === "DK" || country === "FI" || country === "CH") setTab("stateInfo")
   }, [])
 
   // When a US state is already selected and country changes to US, switch to stateInfo
@@ -554,7 +560,7 @@ export default function CampCareerMaps({
     if (activeCountry === "ES" && selected) setTab("stateInfo")
     if (activeCountry === "NZ" && selected) setTab("stateInfo")
     if (activeCountry === "NO" && selected) setTab("stateInfo")
-    if ((activeCountry === "SE" || activeCountry === "DK" || activeCountry === "FI") && selected) setTab("stateInfo")
+    if ((activeCountry === "SE" || activeCountry === "DK" || activeCountry === "FI" || activeCountry === "CH") && selected) setTab("stateInfo")
   }, [activeCountry, selected])
 
   // UK has no shortage tab — reset to pay if needed
@@ -625,7 +631,9 @@ export default function CampCareerMaps({
     if (dkUniv) { setSelectedUniv(dkUniv); setActiveCountry("DK"); setSelected(dkUniv.regionCode); return }
     const fiUniv = data.fiUniversities.find((c) => c.slug === initialUniversity)
     if (fiUniv) { setSelectedUniv(fiUniv); setActiveCountry("FI"); setSelected(fiUniv.regionCode) }
-  }, [initialUniversity, data.usRankedColleges, data.auRankedColleges, data.caColleges, data.ukColleges, data.deColleges, data.nlColleges, data.krUniversities, data.noUniversities, data.seUniversities, data.dkUniversities, data.fiUniversities])
+    const chUniv = data.chUniversities.find((c) => c.slug === initialUniversity)
+    if (chUniv) { setSelectedUniv(chUniv); setActiveCountry("CH"); setSelected(chUniv.cantonCode) }
+  }, [initialUniversity, data.usRankedColleges, data.auRankedColleges, data.caColleges, data.ukColleges, data.deColleges, data.nlColleges, data.krUniversities, data.noUniversities, data.seUniversities, data.dkUniversities, data.fiUniversities, data.chUniversities])
 
   const onReset = useCallback(() => {
     if (selected !== null) {
@@ -743,7 +751,7 @@ export default function CampCareerMaps({
     return ieSchools.filter((s) => IE_CITY_TO_COUNTY[s.city] === selected)
   }, [ieSchools, selected, activeCountry])
 
-  const countryLabel = activeCountry === "AU" ? "🇦🇺 Australia" : activeCountry === "US" ? "🇺🇸 United States" : activeCountry === "CA" ? "🇨🇦 Canada" : activeCountry === "IE" ? "🇮🇪 Ireland" : activeCountry === "UK" ? "🇬🇧 United Kingdom" : activeCountry === "DE" ? "🇩🇪 Germany" : activeCountry === "NL" ? "🇳🇱 Netherlands" : activeCountry === "BE" ? "🇧🇪 Belgium" : activeCountry === "JP" ? "🇯🇵 Japan" : activeCountry === "SG" ? "🇸🇬 Singapore" : activeCountry === "KR" ? "🇰🇷 South Korea" : activeCountry === "FR" ? "🇫🇷 France" : activeCountry === "NZ" ? "🇳🇿 New Zealand" : activeCountry === "NO" ? "🇳🇴 Norway" : activeCountry === "SE" ? "🇸🇪 Sweden" : activeCountry === "DK" ? "🇩🇰 Denmark" : activeCountry === "FI" ? "🇫🇮 Finland" : ""
+  const countryLabel = activeCountry === "AU" ? "🇦🇺 Australia" : activeCountry === "US" ? "🇺🇸 United States" : activeCountry === "CA" ? "🇨🇦 Canada" : activeCountry === "IE" ? "🇮🇪 Ireland" : activeCountry === "UK" ? "🇬🇧 United Kingdom" : activeCountry === "DE" ? "🇩🇪 Germany" : activeCountry === "NL" ? "🇳🇱 Netherlands" : activeCountry === "BE" ? "🇧🇪 Belgium" : activeCountry === "JP" ? "🇯🇵 Japan" : activeCountry === "SG" ? "🇸🇬 Singapore" : activeCountry === "KR" ? "🇰🇷 South Korea" : activeCountry === "FR" ? "🇫🇷 France" : activeCountry === "NZ" ? "🇳🇿 New Zealand" : activeCountry === "NO" ? "🇳🇴 Norway" : activeCountry === "SE" ? "🇸🇪 Sweden" : activeCountry === "DK" ? "🇩🇰 Denmark" : activeCountry === "FI" ? "🇫🇮 Finland" : activeCountry === "CH" ? "🇨🇭 Switzerland" : ""
   const stateLabel = selected
     ? activeCountry === "AU"
       ? STATE_NAMES[selected as StateCode]
@@ -800,7 +808,7 @@ export default function CampCareerMaps({
 
   return (
     <div className="flex h-full w-full flex-col">
-        {(activeCountry === "AU" || activeCountry === "US" || activeCountry === "CA" || activeCountry === "IE" || activeCountry === "UK" || activeCountry === "DE" || activeCountry === "NL" || activeCountry === "BE" || activeCountry === "JP" || activeCountry === "SG" || activeCountry === "KR" || activeCountry === "FR" || activeCountry === "ES" || activeCountry === "NZ" || activeCountry === "NO" || activeCountry === "SE" || activeCountry === "DK" || activeCountry === "FI") && (
+        {(activeCountry === "AU" || activeCountry === "US" || activeCountry === "CA" || activeCountry === "IE" || activeCountry === "UK" || activeCountry === "DE" || activeCountry === "NL" || activeCountry === "BE" || activeCountry === "JP" || activeCountry === "SG" || activeCountry === "KR" || activeCountry === "FR" || activeCountry === "ES" || activeCountry === "NZ" || activeCountry === "NO" || activeCountry === "SE" || activeCountry === "DK" || activeCountry === "FI" || activeCountry === "CH") && (
       <>
         {!toolbarExpanded && (
           <button
@@ -819,7 +827,7 @@ export default function CampCareerMaps({
         <label className="block">
           <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectCountry}</span>
           <Select
-            items={{ AU: "🇦🇺 Australia", US: "🇺🇸 United States", CA: "🇨🇦 Canada", IE: "🇮🇪 Ireland", UK: "🇬🇧 United Kingdom", DE: "🇩🇪 Germany", NL: "🇳🇱 Netherlands", BE: "🇧🇪 Belgium", JP: "🇯🇵 Japan", SG: "🇸🇬 Singapore", KR: "🇰🇷 South Korea", FR: "🇫🇷 France", ES: "🇪🇸 Spain", NZ: "🇳🇿 New Zealand", NO: "🇳🇴 Norway", SE: "🇸🇪 Sweden", DK: "🇩🇰 Denmark", FI: "🇫🇮 Finland" }}
+            items={{ AU: "🇦🇺 Australia", US: "🇺🇸 United States", CA: "🇨🇦 Canada", IE: "🇮🇪 Ireland", UK: "🇬🇧 United Kingdom", DE: "🇩🇪 Germany", NL: "🇳🇱 Netherlands", BE: "🇧🇪 Belgium", JP: "🇯🇵 Japan", SG: "🇸🇬 Singapore", KR: "🇰🇷 South Korea", FR: "🇫🇷 France", ES: "🇪🇸 Spain", NZ: "🇳🇿 New Zealand", NO: "🇳🇴 Norway", SE: "🇸🇪 Sweden", DK: "🇩🇰 Denmark", FI: "🇫🇮 Finland", CH: "🇨🇭 Switzerland" }}
             value={activeCountry ?? undefined}
             onValueChange={(v) => v && onSelectCountry(v as Exclude<ActiveCountry, null>)}
           >
@@ -845,6 +853,7 @@ export default function CampCareerMaps({
               <SelectItem value="SE">🇸🇪 Sweden</SelectItem>
               <SelectItem value="DK">🇩🇰 Denmark</SelectItem>
               <SelectItem value="FI">🇫🇮 Finland</SelectItem>
+              <SelectItem value="CH">🇨🇭 Switzerland</SelectItem>
             </SelectContent>
           </Select>
         </label>
@@ -1227,6 +1236,8 @@ export default function CampCareerMaps({
           <label className="block"><span className="mb-1 block text-xs font-medium text-slate-500">Region</span><Select items={Object.fromEntries((data.dkRegions ?? []).map((r) => [r.code, r.nameEn]))} value={selected} onValueChange={(v) => v && onSelectState(v)}><SelectTrigger className="h-10 w-56 rounded-lg border-slate-200 text-sm"><SelectValue placeholder="Select a region" /></SelectTrigger><SelectContent className="z-[2000] max-h-72">{(data.dkRegions ?? []).map((r) => <SelectItem key={r.code} value={r.code}>{r.nameEn}</SelectItem>)}</SelectContent></Select></label>
         ) : activeCountry === "FI" ? (
           <label className="block"><span className="mb-1 block text-xs font-medium text-slate-500">Region</span><Select items={Object.fromEntries((data.fiRegions ?? []).map((r) => [r.code, r.nameEn]))} value={selected} onValueChange={(v) => v && onSelectState(v)}><SelectTrigger className="h-10 w-56 rounded-lg border-slate-200 text-sm"><SelectValue placeholder="Select a region" /></SelectTrigger><SelectContent className="z-[2000] max-h-72">{(data.fiRegions ?? []).map((r) => <SelectItem key={r.code} value={r.code}>{r.nameEn}</SelectItem>)}</SelectContent></Select></label>
+        ) : activeCountry === "CH" ? (
+          <label className="block"><span className="mb-1 block text-xs font-medium text-slate-500">{locale === "ko" ? "칸톤" : "Canton"}</span><Select items={Object.fromEntries((data.chRegions ?? []).map((r) => [r.code, `${r.nameEn} · ${r.nameLocal}`]))} value={selected} onValueChange={(v) => v && onSelectState(v)}><SelectTrigger className="h-10 w-64 rounded-lg border-slate-200 text-sm"><SelectValue placeholder={locale === "ko" ? "칸톤 선택" : "Select a canton"} /></SelectTrigger><SelectContent className="z-[2000] max-h-72">{(data.chRegions ?? []).map((r) => <SelectItem key={r.code} value={r.code}>{r.nameEn} · {r.nameLocal}</SelectItem>)}</SelectContent></Select></label>
         ) : (
         <>
           <label className="block">
@@ -1444,7 +1455,9 @@ export default function CampCareerMaps({
             const dkUniv = data.dkUniversities?.find((c) => c.slug === slug)
             if (dkUniv) { setSelectedUniv(dkUniv); setActiveCountry("DK"); setSelected(dkUniv.regionCode); return }
             const fiUniv = data.fiUniversities?.find((c) => c.slug === slug)
-            if (fiUniv) { setSelectedUniv(fiUniv); setActiveCountry("FI"); setSelected(fiUniv.regionCode) }
+            if (fiUniv) { setSelectedUniv(fiUniv); setActiveCountry("FI"); setSelected(fiUniv.regionCode); return }
+            const chUniv = data.chUniversities?.find((c) => c.slug === slug)
+            if (chUniv) { setSelectedUniv(chUniv); setActiveCountry("CH"); setSelected(chUniv.cantonCode) }
           }}
           onReset={onReset}
           tab={tab}
@@ -1475,6 +1488,8 @@ export default function CampCareerMaps({
             <NOUniversityInfoCard university={selectedUniv as NOUniversity} onClose={() => setSelectedUniv(null)} locale={locale} />
           ) : selectedUniv && (activeCountry === "SE" || activeCountry === "DK" || activeCountry === "FI") ? (
             <NordicUniversityInfoCard university={selectedUniv as SEUniversity | DKUniversity | FIUniversity} onClose={() => setSelectedUniv(null)} locale={locale} />
+          ) : selectedUniv && activeCountry === "CH" ? (
+            <CHUniversityInfoCard university={selectedUniv as CHUniversity} onClose={() => setSelectedUniv(null)} locale={locale} />
           ) : selectedUniv ? (
             <UniversityInfoCard
               college={selectedUniv as USRankedCollege | AURankedCollege | CACollege | UKCollege | DECollege | NLCollege}
@@ -1931,6 +1946,41 @@ function NordicOccupationDetail({ occ, regionName, universities, currency, local
   return <><div className="flex items-center justify-between border-b border-slate-200 px-5 py-3"><button type="button" onClick={onBack} className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-900"><ChevronLeft className="h-4 w-4" />Back</button><button type="button" onClick={onClose} aria-label="Close" className="rounded-md p-1 text-slate-400 hover:bg-slate-100"><X className="h-4 w-4" /></button></div><div className="min-h-0 flex-1 space-y-4 overflow-y-auto px-5 py-4"><div><p className="text-xs text-slate-500">{regionName} · {occ.classification} {occ.code}</p><h2 className="mt-1 text-xl font-semibold text-slate-950">{locale === "ko" ? occ.nameKo : occ.nameEn}</h2><p className="mt-1 text-sm text-slate-500">{locale === "ko" ? occ.nameEn : occ.nameKo}</p></div><div className="grid grid-cols-2 gap-3"><div className="rounded-lg border border-slate-200 bg-slate-50 p-3"><p className="text-[11px] text-slate-500">{locale === "ko" ? "중위 연봉" : "Median salary"}</p><p className="mt-1 text-base font-semibold">{currency} {occ.medianSalary.toLocaleString()}</p><p className="mt-1 text-[11px] text-slate-500">{occ.sourceYear}</p></div><div className="rounded-lg border border-slate-200 bg-slate-50 p-3"><p className="text-[11px] text-slate-500">{locale === "ko" ? "부족도" : "Shortage rating"}</p><p className="mt-1 text-base font-semibold">{occ.shortageRating}/5</p><p className="mt-1 text-[11px] text-slate-500">{occ.employmentThousands.toLocaleString()}k employed</p></div></div><div className="rounded-lg border border-slate-200 p-3"><p className="text-xs text-slate-500">Related field</p><p className="mt-1 text-sm font-medium">{occ.relatedField}</p></div><NordicUniversities universities={related} locale={locale} /><a href={jobSearchUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 rounded-md border border-slate-200 px-3 py-2 text-sm font-semibold hover:bg-slate-50">{locale === "ko" ? "구인 검색" : "Job search"} <ExternalLink className="h-3.5 w-3.5" /></a></div></>
 }
 
+function CHInfoPanel({ region, cities, universities, shortageCount, locale }: { region: CHRegion | null; cities: MapData["chCities"]; universities: CHUniversity[]; shortageCount: number; locale: string }) {
+  if (!region) return <p className="py-8 text-center text-sm text-slate-400">{locale === "ko" ? "칸톤을 선택하세요" : "Select a canton"}</p>
+  return <div className="space-y-4 px-4 py-3">
+    <section className="rounded-lg border border-slate-200 p-4">
+      <p className="text-xs font-medium text-slate-500">{locale === "ko" ? "칸톤 정보" : "Canton information"}</p>
+      <h3 className="mt-1 text-lg font-semibold text-slate-950">{region.nameEn} <span className="font-normal text-slate-500">· {region.nameLocal}</span></h3>
+      <p className="mt-2 text-xs text-slate-500">{locale === "ko" ? "공용 언어" : "Official language(s)"} · {region.officialLanguages.join(", ")}</p>
+      <div className="mt-3 grid grid-cols-2 gap-3">
+        <div className="rounded-lg bg-slate-50 p-3"><p className="text-xs text-slate-500">{locale === "ko" ? "월 렌트" : "Monthly rent"}</p><p className="mt-1 text-sm font-semibold text-slate-800">{region.rent.monthlyChf == null ? (locale === "ko" ? "공식 비교 수치 없음" : "Not available") : `CHF ${region.rent.monthlyChf.toLocaleString()}`}</p><p className="mt-1 text-[10px] text-slate-400">{region.rent.definition}</p></div>
+        <div className="rounded-lg bg-violet-50 p-3"><p className="text-xs text-violet-700">{locale === "ko" ? "검증된 부족 직군" : "Verified shortage occupations"}</p><p className="mt-1 text-lg font-semibold text-violet-950">{shortageCount}</p><p className="mt-1 text-[10px] text-violet-700">{locale === "ko" ? "칸톤별 공식 원본만 표시" : "Canton-level official data only"}</p></div>
+      </div>
+    </section>
+    {cities.length > 0 && <section className="rounded-lg border border-slate-200 p-4"><p className="text-xs font-medium text-slate-500">{locale === "ko" ? "대표 도시" : "Representative city"}</p>{cities.map((city) => <div key={city.code} className="mt-2 rounded-lg bg-slate-50 px-3 py-2"><p className="text-sm font-medium text-slate-800">{locale === "ko" ? city.nameKo : city.nameEn}</p><p className="text-xs text-slate-500">{city.nameLocal}</p></div>)}</section>}
+    <CHUniversities universities={universities} locale={locale} />
+    <p className="px-1 text-[11px] leading-5 text-slate-500">{locale === "ko" ? "경계: " : "Boundaries: "}<a className="underline hover:text-slate-800" href="https://www.swisstopo.admin.ch/en/landscape-model-swissboundaries3d" target="_blank" rel="noopener noreferrer">swisstopo swissBOUNDARIES3D</a> · {locale === "ko" ? "교육기관: " : "Institutions: "}<a className="underline hover:text-slate-800" href="https://www.swissuniversities.ch/en/topics/studying/accredited-swiss-higher-education-institutions" target="_blank" rel="noopener noreferrer">swissuniversities</a> · {locale === "ko" ? "렌트: " : "Rent: "}<a className="underline hover:text-slate-800" href="https://www.bfs.admin.ch/bfs/en/home/statistics/construction-housing/dwellings/rents.html" target="_blank" rel="noopener noreferrer">FSO</a></p>
+  </div>
+}
+
+function CHUniversities({ universities, locale }: { universities: CHUniversity[]; locale: string }) {
+  if (!universities.length) return null
+  return <section className="rounded-lg border border-slate-200 p-4"><p className="text-xs font-medium text-slate-500">{locale === "ko" ? "공인 고등교육기관" : "Accredited higher-education institutions"}</p><ul className="mt-2 space-y-2">{universities.map((university) => <li key={university.slug} className="flex items-center justify-between gap-3 rounded-lg bg-slate-50 px-3 py-2"><div><p className="text-sm font-medium text-slate-800">{university.nameEn}</p><p className="text-xs text-slate-500">{university.institutionType} · {university.cityName}</p></div><a href={university.officialUrl} target="_blank" rel="noopener noreferrer" aria-label={`${university.nameEn} official website`} className="text-violet-700 hover:text-violet-900"><ExternalLink className="h-4 w-4" /></a></li>)}</ul></section>
+}
+
+function CHHighPayList({ rows, locale }: { rows: CHOccupationGroup[]; locale: string }) {
+  return <div className="space-y-3"><div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">{locale === "ko" ? "FSO의 2024년 스위스 전국 CH-ISCO 직업군 중위 월급입니다. 칸톤별 또는 개별 직업 연봉이 아닙니다." : "FSO 2024 Switzerland-wide CH-ISCO occupation-group median monthly wages; not canton or individual-career salaries."} <a className="font-semibold underline" href="https://www.pxweb.bfs.admin.ch/pxweb/fr/px-x-0304010000_205/px-x-0304010000_205.px/" target="_blank" rel="noopener noreferrer">FSO source</a></div><ol>{rows.map((row, index) => <li key={row.chIscoCode} className="flex items-center gap-3 rounded-lg px-3 py-2.5 hover:bg-slate-50"><span className="w-5 text-sm tabular-nums text-slate-400">{index + 1}</span><span className="min-w-0 flex-1"><span className="block text-sm font-medium text-slate-800">{locale === "ko" ? row.nameKo : row.nameEn}</span><span className="block text-[10px] text-slate-400">CH-ISCO-19 {row.chIscoCode} · {row.sourceYear}</span></span><span className="shrink-0 text-sm font-semibold tabular-nums text-slate-700">CHF {row.medianMonthlyChf.toLocaleString()}</span></li>)}</ol></div>
+}
+
+function CHShortageNotice({ locale }: { locale: string }) {
+  return <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-5 text-sm text-slate-600"><p className="font-medium text-slate-800">{locale === "ko" ? "공식 칸톤별 부족직군 수치가 없습니다" : "No official canton-by-occupation shortage dataset is available"}</p><p className="mt-2 text-xs leading-5">{locale === "ko" ? "SECO의 직업 신고 의무 목록은 실업률 기준 자료이므로 부족직군 순위로 사용하지 않습니다." : "SECO job-registration data is unemployment-based and is not shown as a shortage ranking."} <a className="underline hover:text-slate-800" href="https://www.arbeit.swiss/en/employers/job-registration-requirement-and-check-up-for-2026" target="_blank" rel="noopener noreferrer">SECO</a></p></div>
+}
+
+function CHUniversityInfoCard({ university, onClose, locale }: { university: CHUniversity; onClose: () => void; locale: string }) {
+  return <div className="px-5 py-5"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-medium text-violet-700">{university.institutionType}</p><h2 className="mt-1 text-xl font-semibold text-slate-950">{university.nameEn}</h2><p className="mt-1 text-sm text-slate-500">{university.nameKo} · {university.cityName}</p></div><button type="button" onClick={onClose} aria-label="Close" className="rounded-md p-1 text-slate-400 hover:bg-slate-100"><X className="h-4 w-4" /></button></div><div className="mt-5 rounded-lg border border-slate-200 p-4"><p className="text-xs text-slate-500">{locale === "ko" ? "국제학생 이용 가능 여부" : "International-student availability"}</p><p className="mt-1 text-sm font-medium">{university.internationalStudentAvailability}</p><p className="mt-3 text-xs text-slate-500">{locale === "ko" ? "과정별 자격은 학교 공식 페이지에서 확인하세요." : "Confirm programme-specific eligibility on the institution’s official site."}</p></div><a href={university.officialUrl} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-violet-700 hover:underline">{locale === "ko" ? "공식 웹사이트" : "Official website"}<ExternalLink className="h-3.5 w-3.5" /></a></div>
+}
+
 function KRInfoPanel({
   region,
   universities,
@@ -2092,6 +2142,7 @@ function Panel({
   const isSE = activeCountry === "SE"
   const isDK = activeCountry === "DK"
   const isFI = activeCountry === "FI"
+  const isCH = activeCountry === "CH"
   const isWhv = selected === "WHV"
   const stateName = isWhv ? "Second Visa"
     : isAU ? STATE_NAMES[selected as StateCode] ?? selected
@@ -2110,6 +2161,7 @@ function Panel({
     : isSE ? SE_REGION_NAMES[selected as SERegionCode] ?? selected
     : isDK ? DK_REGION_NAMES[selected as DKRegionCode] ?? selected
     : isFI ? FI_REGION_NAMES[selected as FIRegionCode] ?? selected
+    : isCH ? CH_CANTON_NAMES[selected as CHCantonCode] ?? selected
     : US_STATE_NAMES[selected] ?? selected
 
   const [deExpLevel, setDeExpLevel] = useState<"fachkräfte" | "spezialisten" | "experten">("fachkräfte")
@@ -2155,6 +2207,10 @@ function Panel({
   const fiHighPay = isFI ? (data.fiHighPayByRegion?.[selected] ?? []) : []
   const fiUnivs = isFI ? (data.fiUniversities ?? []).filter((university) => university.regionCode === selected) : []
   const fiCities = isFI ? (data.fiCities ?? []).filter((city) => city.regionCode === selected) : []
+  const chRegion = isCH ? (data.chRegions ?? []).find((region) => region.code === selected) ?? null : null
+  const chCities = isCH ? (data.chCities ?? []).filter((city) => city.cantonCode === selected) : []
+  const chUnivs = isCH ? (data.chUniversities ?? []).filter((university) => university.cantonCode === selected) : []
+  const chShortage = isCH ? data.chShortageByCanton?.[selected] ?? [] : []
   const deSalaryField = deExpLevel === "fachkräfte" ? "median_salary_eur" : deExpLevel === "spezialisten" ? "median_salary_spezialist_eur" : "median_salary_experte_eur"
   const deShortageField = deExpLevel === "fachkräfte" ? "shortage_rating" : deExpLevel === "spezialisten" ? "shortage_rating_spezialist" : "shortage_rating_experte"
   const deHighPayForLevel = useMemo(() => {
@@ -2608,9 +2664,9 @@ function Panel({
       {!isWhv && (
       <div className="px-5 pt-3">
         <div className="inline-flex rounded-lg bg-slate-100 p-1 text-sm">
-          {(isUS || activeCountry === "CA" || isUK || activeCountry === "BE" || isJP || isSG || isKR || isFR || isES || isNZ || isNO || isSE || isDK || isFI) && (
+          {(isUS || activeCountry === "CA" || isUK || activeCountry === "BE" || isJP || isSG || isKR || isFR || isES || isNZ || isNO || isSE || isDK || isFI || isCH) && (
             <TabButton active={tab === "stateInfo"} onClick={() => { onTab("stateInfo"); track("switch_tab", { tab: "stateInfo", state: selected }) }}>
-              {(activeCountry === "CA" || activeCountry === "BE" || isJP || isSG || isKR || isFR || isES || isNZ || isNO || isSE || isDK || isFI) ? (locale === "ko" ? "정보" : "Info") : t.map.tabStateInfo}
+              {(activeCountry === "CA" || activeCountry === "BE" || isJP || isSG || isKR || isFR || isES || isNZ || isNO || isSE || isDK || isFI || isCH) ? (locale === "ko" ? "정보" : "Info") : t.map.tabStateInfo}
             </TabButton>
           )}
           {!isUK && (
@@ -2686,6 +2742,7 @@ function Panel({
         {tab === "stateInfo" && isSE && <NordicInfoPanel region={seRegion ? { nameEn: seRegion.nameEn, monthlyRent: seRegion.rent.monthlySek, weeklyRent: seRegion.rent.weeklySek, period: seRegion.rent.period, definition: seRegion.rent.definition } : null} cities={seCities.map((city) => ({ code: city.code, nameEn: city.nameEn, nameKo: city.nameKo, monthlyRent: city.rent.monthlySek }))} universities={seUnivs} shortageCount={seShortage.length} currency="SEK" locale={locale} />}
         {tab === "stateInfo" && isDK && <NordicInfoPanel region={dkRegion ? { nameEn: dkRegion.nameEn, monthlyRent: dkRegion.rent.monthlyDkk, weeklyRent: dkRegion.rent.weeklyDkk, period: dkRegion.rent.period, definition: dkRegion.rent.definition } : null} cities={dkCities.map((city) => ({ code: city.code, nameEn: city.nameEn, nameKo: city.nameKo, monthlyRent: city.rent.monthlyDkk }))} universities={dkUnivs} shortageCount={dkShortage.length} currency="DKK" locale={locale} />}
         {tab === "stateInfo" && isFI && <NordicInfoPanel region={fiRegion ? { nameEn: fiRegion.nameEn, monthlyRent: fiRegion.rent.monthlyEur, weeklyRent: fiRegion.rent.weeklyEur, period: fiRegion.rent.period, definition: fiRegion.rent.definition } : null} cities={fiCities.map((city) => ({ code: city.code, nameEn: city.nameEn, nameKo: city.nameKo, monthlyRent: city.rent.monthlyEur }))} universities={fiUnivs} shortageCount={fiShortage.length} currency="EUR" locale={locale} />}
+        {tab === "stateInfo" && isCH && <CHInfoPanel region={chRegion} cities={chCities} universities={chUnivs} shortageCount={chShortage.length} locale={locale} />}
         {tab === "shortage" && isAU && (
           selectedSA4 ? (
             <RegionGroupList
@@ -2731,7 +2788,7 @@ function Panel({
         {tab === "shortage" && isKR && <KROccupationList rows={krDemand} kind="demand" onSelect={handleSelectKROccupation} />}
         {tab === "shortage" && isFR && <FRDemandList rows={selectedFRCity ? selectedFRCity.topDemand.map((row) => ({ ...FR_DEMAND_BY_CODE.get(row.code)!, regionalProjects: row.recruitmentProjects })).filter(Boolean) : frDemand} onSelect={handleSelectFRDemand} locale={locale} />}
         {tab === "shortage" && isES && <ESShortageList rows={esShortage} onSelect={handleSelectESShortage} />}
-        {tab === "shortage" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && activeCountry !== "NL" && activeCountry !== "BE" && activeCountry !== "JP" && activeCountry !== "SG" && activeCountry !== "KR" && activeCountry !== "FR" && activeCountry !== "ES" && !isNZ && !isNO && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
+        {tab === "shortage" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && activeCountry !== "NL" && activeCountry !== "BE" && activeCountry !== "JP" && activeCountry !== "SG" && activeCountry !== "KR" && activeCountry !== "FR" && activeCountry !== "ES" && !isNZ && !isNO && !isCH && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
         {tab === "shortage" && isNZ && (
           selected ? (
             <NZShortageList rows={nzShortage} locale={locale} onSelectOcc={handleSelectNZOcc} />
@@ -2745,6 +2802,7 @@ function Panel({
         {tab === "shortage" && isSE && (selected ? <NordicOccupationList rows={seShortage.map((occ) => ({ code: occ.ssykCode, classification: "SSYK 2012", nameEn: occ.nameEn, nameKo: occ.nameKo, medianSalary: occ.medianSalarySek, employmentThousands: occ.employmentThousands, shortageRating: occ.shortageRating, relatedField: occ.relatedField, sourceYear: occ.sourceYear }))} kind="shortage" currency="SEK" locale={locale} onSelect={handleSelectSEOcc} /> : <p className="py-8 text-center text-sm text-slate-400">{t.map.selectStateFirst}</p>)}
         {tab === "shortage" && isDK && (selected ? <NordicOccupationList rows={dkShortage.map((occ) => ({ code: occ.dosCode, classification: "DISCO-08", nameEn: occ.nameEn, nameKo: occ.nameKo, medianSalary: occ.medianSalaryDkk, employmentThousands: occ.employmentThousands, shortageRating: occ.shortageRating, relatedField: occ.relatedField, sourceYear: occ.sourceYear }))} kind="shortage" currency="DKK" locale={locale} onSelect={handleSelectDKOcc} /> : <p className="py-8 text-center text-sm text-slate-400">{t.map.selectStateFirst}</p>)}
         {tab === "shortage" && isFI && (selected ? <NordicOccupationList rows={fiShortage.map((occ) => ({ code: occ.iscoCode, classification: "ISCO-08", nameEn: occ.nameEn, nameKo: occ.nameKo, medianSalary: occ.medianSalaryEur, employmentThousands: occ.employmentThousands, shortageRating: occ.shortageRating, relatedField: occ.relatedField, sourceYear: occ.sourceYear }))} kind="shortage" currency="EUR" locale={locale} onSelect={handleSelectFIOcc} /> : <p className="py-8 text-center text-sm text-slate-400">{t.map.selectStateFirst}</p>)}
+        {tab === "shortage" && isCH && <CHShortageNotice locale={locale} />}
         {tab === "shortage" && activeCountry === "CA" && <CAShortageList rows={Object.values(data.caOccupations)} onSelectOcc={handleSelectCAOcc} />}
         {tab === "pay" && isAU && (
           selectedSA4 ? (
@@ -2828,7 +2886,8 @@ function Panel({
         {tab === "pay" && isSE && (selected ? <NordicOccupationList rows={seHighPay.map((occ) => ({ code: occ.ssykCode, classification: "SSYK 2012", nameEn: occ.nameEn, nameKo: occ.nameKo, medianSalary: occ.medianSalarySek, employmentThousands: occ.employmentThousands, shortageRating: occ.shortageRating, relatedField: occ.relatedField, sourceYear: occ.sourceYear }))} kind="pay" currency="SEK" locale={locale} onSelect={handleSelectSEOcc} /> : <p className="py-8 text-center text-sm text-slate-400">{t.map.selectStateFirst}</p>)}
         {tab === "pay" && isDK && (selected ? <NordicOccupationList rows={dkHighPay.map((occ) => ({ code: occ.dosCode, classification: "DISCO-08", nameEn: occ.nameEn, nameKo: occ.nameKo, medianSalary: occ.medianSalaryDkk, employmentThousands: occ.employmentThousands, shortageRating: occ.shortageRating, relatedField: occ.relatedField, sourceYear: occ.sourceYear }))} kind="pay" currency="DKK" locale={locale} onSelect={handleSelectDKOcc} /> : <p className="py-8 text-center text-sm text-slate-400">{t.map.selectStateFirst}</p>)}
         {tab === "pay" && isFI && (selected ? <NordicOccupationList rows={fiHighPay.map((occ) => ({ code: occ.iscoCode, classification: "ISCO-08", nameEn: occ.nameEn, nameKo: occ.nameKo, medianSalary: occ.medianSalaryEur, employmentThousands: occ.employmentThousands, shortageRating: occ.shortageRating, relatedField: occ.relatedField, sourceYear: occ.sourceYear }))} kind="pay" currency="EUR" locale={locale} onSelect={handleSelectFIOcc} /> : <p className="py-8 text-center text-sm text-slate-400">{t.map.selectStateFirst}</p>)}
-        {tab === "pay" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && activeCountry !== "NL" && activeCountry !== "BE" && activeCountry !== "JP" && activeCountry !== "SG" && activeCountry !== "KR" && activeCountry !== "FR" && activeCountry !== "ES" && !isNZ && !isNO && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
+        {tab === "pay" && isCH && <CHHighPayList rows={data.chHighPayNational ?? []} locale={locale} />}
+        {tab === "pay" && !isAU && !isUS && activeCountry !== "CA" && activeCountry !== "UK" && activeCountry !== "DE" && activeCountry !== "NL" && activeCountry !== "BE" && activeCountry !== "JP" && activeCountry !== "SG" && activeCountry !== "KR" && activeCountry !== "FR" && activeCountry !== "ES" && !isNZ && !isNO && !isCH && <p className="py-8 text-center text-sm text-slate-400">{t.map.noShortageData}</p>}
         {tab === "pay" && activeCountry === "CA" && <CAHighPayList rows={data.caHighPay} provinceRows={selected ? data.caHighPayByProvince[selected] ?? [] : []} onSelectOcc={handleSelectCAOcc} />}
         {tab === "pay" && isUK && <UKHighPayList rows={ukHighPay} onSelectOcc={handleSelectUKOcc} />}
         {tab === "employment" && (
@@ -2853,7 +2912,7 @@ function Panel({
       </div>
 
       <p className="border-t border-slate-100 px-5 py-3 text-xs text-slate-400">
-        {isJP ? "Sources: MHLW · Statistics Bureau of Japan · JILPT Job Tag" : isSG ? "Sources: MOM · URA · SkillsFuture Singapore" : isKR ? "Sources: MOEL · KOSIS · MOLIT · CareerNet · QS" : isFR ? "Sources: France Travail BMO · INSEE · MESR · API Geo" : t.map.source}
+        {isCH ? "Sources: swisstopo swissBOUNDARIES3D · swissuniversities · FSO · SECO" : isJP ? "Sources: MHLW · Statistics Bureau of Japan · JILPT Job Tag" : isSG ? "Sources: MOM · URA · SkillsFuture Singapore" : isKR ? "Sources: MOEL · KOSIS · MOLIT · CareerNet · QS" : isFR ? "Sources: France Travail BMO · INSEE · MESR · API Geo" : t.map.source}
       </p>
     </>
   )

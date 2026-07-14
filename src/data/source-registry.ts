@@ -10,7 +10,7 @@ export const CORE_DATA_CATEGORIES = [
 ] as const
 
 export type CoreDataCategory = (typeof CORE_DATA_CATEGORIES)[number]
-export type RegistryCountryCode = "AU" | "US" | "CA" | "UK" | "IE" | "DE" | "NL" | "BE" | "SG" | "KR" | "FR" | "ES" | "NZ" | "NO" | "SE" | "DK" | "FI"
+export type RegistryCountryCode = "AU" | "US" | "CA" | "UK" | "IE" | "DE" | "NL" | "BE" | "SG" | "KR" | "FR" | "ES" | "NZ" | "NO" | "SE" | "DK" | "FI" | "CH"
 export type SourceConfidence = "official" | "market-estimate" | "internal-estimate"
 export type SourceMethod = "official-api" | "official-download" | "official-web" | "market-estimate"
 export type ReviewStatus = "approved" | "review-required"
@@ -129,6 +129,14 @@ const COUNTRY_SOURCES: Record<RegistryCountryCode, CountrySourceSeed> = {
     rent: { sourceName: "SERPAVI 2026", sourceUrl: "https://serpavi.mivau.gob.es/", method: "official-download", refreshCadence: "annual" },
     "visa-pathway": { sourceName: "Spain Migration information sheets", sourceUrl: "https://www.inclusion.gob.es/web/migraciones/estudiar", method: "official-web", refreshCadence: "monthly" },
     shortage: { sourceName: "SEPE Catálogo de Ocupaciones de Difícil Cobertura", sourceUrl: "https://www.sepe.es/HomeSepe/empresas/informacion-para-empresas/profesiones-de-dificil-cobertura/profesiones-mas-demandadas", method: "official-download", refreshCadence: "quarterly" },
+  },
+  CH: {
+    tuition: { sourceName: "swissuniversities", sourceUrl: "https://www.swissuniversities.ch/en/topics/studying", method: "official-web", refreshCadence: "annual" },
+    "graduate-outcomes": { sourceName: "Federal Statistical Office education statistics", sourceUrl: "https://www.bfs.admin.ch/bfs/en/home/statistics/education-science.html", method: "official-download", refreshCadence: "annual" },
+    occupation: { sourceName: "Federal Statistical Office — Swiss Earnings Structure Survey", sourceUrl: "https://www.pxweb.bfs.admin.ch/pxweb/fr/px-x-0304010000_205/px-x-0304010000_205.px/", method: "official-api", refreshCadence: "annual" },
+    rent: { sourceName: "Federal Statistical Office rents", sourceUrl: "https://www.bfs.admin.ch/bfs/en/home/statistics/construction-housing/dwellings/rents.html", method: "official-web", refreshCadence: "annual" },
+    "visa-pathway": { sourceName: "State Secretariat for Migration", sourceUrl: "https://www.sem.admin.ch/sem/en/home/themen/aufenthalt/einreise.html", method: "official-web", refreshCadence: "monthly" },
+    shortage: { sourceName: "SECO Job-Room", sourceUrl: "https://www.arbeit.swiss/en", method: "official-web", refreshCadence: "quarterly" },
   },
   NZ: {
     tuition: { sourceName: "Education New Zealand — Study with New Zealand", sourceUrl: "https://www.studywithnz.govt.nz/", method: "official-web", refreshCadence: "annual" },

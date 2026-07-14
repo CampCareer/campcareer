@@ -31,6 +31,7 @@ export default async function MapPage() {
         <Link href="/map/se" className="rounded-lg border border-indigo-200 bg-white px-4 py-2 text-sm font-semibold text-indigo-700 shadow-sm hover:bg-indigo-50">Sweden map</Link>
         <Link href="/map/dk" className="rounded-lg border border-indigo-200 bg-white px-4 py-2 text-sm font-semibold text-indigo-700 shadow-sm hover:bg-indigo-50">Denmark map</Link>
         <Link href="/map/fi" className="rounded-lg border border-indigo-200 bg-white px-4 py-2 text-sm font-semibold text-indigo-700 shadow-sm hover:bg-indigo-50">Finland map</Link>
+        <Link href="/map/ch" className="rounded-lg border border-indigo-200 bg-white px-4 py-2 text-sm font-semibold text-indigo-700 shadow-sm hover:bg-indigo-50">Switzerland map</Link>
       </div>
     </div>
   )

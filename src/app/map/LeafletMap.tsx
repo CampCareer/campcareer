@@ -35,6 +35,7 @@ const NO_BOUNDS = L.latLngBounds([57.7, 4.0], [71.5, 32.0])
 const SE_BOUNDS = L.latLngBounds([55.2, 10.4], [69.2, 24.4])
 const DK_BOUNDS = L.latLngBounds([54.3, 7.5], [57.9, 15.3])
 const FI_BOUNDS = L.latLngBounds([59.4, 19.0], [70.2, 32.0])
+const CH_BOUNDS = L.latLngBounds([45.7, 5.8], [47.9, 10.6])
 const WORLD_BOUNDS = L.latLngBounds([-90, -180], [90, 180])
 
 const RAMP_LIGHT = [237, 233, 254]
@@ -107,6 +108,7 @@ function isNorway(properties: Record<string, unknown>): boolean {
 function isSweden(properties: Record<string, unknown>): boolean { return properties?.ISO_A3 === "SWE" || properties?.ADM0_A3 === "SWE" }
 function isDenmark(properties: Record<string, unknown>): boolean { return properties?.ISO_A3 === "DNK" || properties?.ADM0_A3 === "DNK" }
 function isFinland(properties: Record<string, unknown>): boolean { return properties?.ISO_A3 === "FIN" || properties?.ADM0_A3 === "FIN" }
+function isSwitzerland(properties: Record<string, unknown>): boolean { return properties?.ISO_A3 === "CHE" || properties?.ADM0_A3 === "CHE" }
 
 // Natural Earth stores metropolitan France and overseas territories in one
 // country feature. CampCareer currently supports metropolitan France only, so
@@ -147,7 +149,7 @@ export default function LeafletMap({
   data: MapData
   selected: string | null
   selectedSA4: SA4Region | null
-  activeCountry: "AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL" | "BE" | "JP" | "SG" | "KR" | "FR" | "ES" | "NZ" | "NO" | "SE" | "DK" | "FI" | null
+  activeCountry: "AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL" | "BE" | "JP" | "SG" | "KR" | "FR" | "ES" | "NZ" | "NO" | "SE" | "DK" | "FI" | "CH" | null
   selectedFranceCity?: string | null
   selectedSpainCity?: string | null
   ieSchools?: Array<{
@@ -157,7 +159,7 @@ export default function LeafletMap({
     description_ko: string | null;
   }>
   onSelectState: (s: string) => void
-  onSelectCountry: (c: "AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL" | "BE" | "JP" | "SG" | "KR" | "FR" | "ES" | "NZ" | "NO" | "SE" | "DK" | "FI") => void
+  onSelectCountry: (c: "AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL" | "BE" | "JP" | "SG" | "KR" | "FR" | "ES" | "NZ" | "NO" | "SE" | "DK" | "FI" | "CH") => void
   onSelectSA4: (code: string) => void
   onSelectFranceCity?: (code: string) => void
   onSelectSpainCity?: (code: string) => void
@@ -186,11 +188,13 @@ export default function LeafletMap({
   const seLayerRef = useRef<L.GeoJSON | null>(null)
   const dkLayerRef = useRef<L.GeoJSON | null>(null)
   const fiLayerRef = useRef<L.GeoJSON | null>(null)
+  const chLayerRef = useRef<L.GeoJSON | null>(null)
   const nzRegionByCode = useRef<Record<string, L.Polygon>>({})
   const noRegionByCode = useRef<Record<string, L.Polygon>>({})
   const seRegionByCode = useRef<Record<string, L.Polygon>>({})
   const dkRegionByCode = useRef<Record<string, L.Polygon>>({})
   const fiRegionByCode = useRef<Record<string, L.Polygon>>({})
+  const chRegionByCode = useRef<Record<string, L.Polygon>>({})
   const layersByCode = useRef<Partial<Record<StateCode, L.Polygon>>>({})
   const ieLayerRef = useRef<L.GeoJSON | null>(null)
   const ieCountyByCode = useRef<Record<string, L.Polygon>>({})
@@ -279,7 +283,7 @@ export default function LeafletMap({
     return () => { style.remove() }
   }, [])
 
-  function buildMarkers(country: "US" | "AU" | "CA" | "UK" | "DE" | "NL" | "KR" | "FR" | "NZ" | "NO" | "SE" | "DK" | "FI"): L.LayerGroup {
+  function buildMarkers(country: "US" | "AU" | "CA" | "UK" | "DE" | "NL" | "KR" | "FR" | "NZ" | "NO" | "SE" | "DK" | "FI" | "CH"): L.LayerGroup {
     const group = L.layerGroup()
     const colleges = country === "AU"
       ? dataRef.current.auRankedColleges
@@ -305,6 +309,8 @@ export default function LeafletMap({
       ? dataRef.current.dkUniversities.map((u) => ({ college_name: u.nameEn, lat: u.lat, lng: u.lng, slug: u.slug }))
       : country === "FI"
       ? dataRef.current.fiUniversities.map((u) => ({ college_name: u.nameEn, lat: u.lat, lng: u.lng, slug: u.slug }))
+      : country === "CH"
+      ? dataRef.current.chUniversities.map((u) => ({ college_name: u.nameEn, lat: u.lat, lng: u.lng, slug: u.slug }))
       : dataRef.current.usRankedColleges
     const placed: Array<{ key: string; slug: string }> = []
     for (const c of colleges) {
@@ -394,6 +400,10 @@ export default function LeafletMap({
     if (activeCountryRef.current === "SE" && map.getZoom() >= 5) { const group = buildMarkers("SE"); group.addTo(map); markerLayerRef.current = group }
     if (activeCountryRef.current === "DK" && map.getZoom() >= 6) { const group = buildMarkers("DK"); group.addTo(map); markerLayerRef.current = group }
     if (activeCountryRef.current === "FI" && map.getZoom() >= 5) { const group = buildMarkers("FI"); group.addTo(map); markerLayerRef.current = group }
+    // Switzerland is fitted with maxZoom 6. Keeping this threshold at 5 makes
+    // accredited-institution pins available as soon as the canton map opens,
+    // rather than requiring an unreachable zoom level.
+    if (activeCountryRef.current === "CH" && map.getZoom() >= 5) { const group = buildMarkers("CH"); group.addTo(map); markerLayerRef.current = group }
   }
 
   function buildIEMarkers(): L.LayerGroup {
@@ -612,6 +622,7 @@ export default function LeafletMap({
         else if (activeCountryRef.current === "SE") map.fitBounds(SE_BOUNDS)
         else if (activeCountryRef.current === "DK") map.fitBounds(DK_BOUNDS)
         else if (activeCountryRef.current === "FI") map.fitBounds(FI_BOUNDS)
+        else if (activeCountryRef.current === "CH") map.fitBounds(CH_BOUNDS)
         else map.fitBounds(WORLD_BOUNDS)
         didFitRef.current = true
       }
@@ -621,7 +632,7 @@ export default function LeafletMap({
     // Zoom change → update marker visibility
     map.on("zoomend", () => {
       const c = activeCountryRef.current
-      if (c === "US" || c === "AU" || c === "CA" || c === "UK" || c === "DE" || c === "NL" || c === "KR" || c === "FR" || c === "ES" || c === "NZ" || c === "NO" || c === "SE" || c === "DK" || c === "FI") updateMarkers()
+      if (c === "US" || c === "AU" || c === "CA" || c === "UK" || c === "DE" || c === "NL" || c === "KR" || c === "FR" || c === "ES" || c === "NZ" || c === "NO" || c === "SE" || c === "DK" || c === "FI" || c === "CH") updateMarkers()
     })
 
     // World countries layer
@@ -674,6 +685,9 @@ export default function LeafletMap({
             if (feature && isFinland(feature.properties as Record<string, unknown>)) {
               return { fillColor: "#e0f2fe", color: "#0369a1", weight: 2, fillOpacity: 0.55 }
             }
+            if (feature && isSwitzerland(feature.properties as Record<string, unknown>)) {
+              return { fillColor: "#fce7f3", color: "#be185d", weight: 2, fillOpacity: 0.55 }
+            }
             return { fillColor: "#f8fafc", color: "#cbd5e1", weight: 0.8, fillOpacity: 0.6 }
           },
           onEachFeature: (feature, lyr) => {
@@ -696,10 +710,11 @@ export default function LeafletMap({
             const isSE = isSweden(props)
             const isDK = isDenmark(props)
             const isFI = isFinland(props)
-            if (!isAU && !isUS && !isCA && !isIE && !isGB && !isDE && !isNL && !isBE && !isJP && !isSG && !isKR && !isFR && !isES && !isNZ && !isNO && !isSE && !isDK && !isFI) return
+            const isCH = isSwitzerland(props)
+            if (!isAU && !isUS && !isCA && !isIE && !isGB && !isDE && !isNL && !isBE && !isJP && !isSG && !isKR && !isFR && !isES && !isNZ && !isNO && !isSE && !isDK && !isFI && !isCH) return
 
-            const country = isAU ? "AU" : isUS ? "US" : isCA ? "CA" : isIE ? "IE" : isGB ? "UK" : isDE ? "DE" : isNL ? "NL" : isBE ? "BE" : isJP ? "JP" : isSG ? "SG" : isKR ? "KR" : isFR ? "FR" : isES ? "ES" : isNZ ? "NZ" : isNO ? "NO" : isSE ? "SE" : isDK ? "DK" : "FI"
-            const name = isAU ? "Australia" : isUS ? "United States" : isCA ? "Canada" : isIE ? "Ireland" : isGB ? "United Kingdom" : isDE ? "Germany" : isNL ? "Netherlands" : isBE ? "Belgium" : isJP ? "Japan" : isSG ? "Singapore" : isKR ? "South Korea" : isFR ? "France" : isES ? "Spain" : isNZ ? "New Zealand" : isNO ? "Norway" : isSE ? "Sweden" : isDK ? "Denmark" : "Finland"
+            const country = isAU ? "AU" : isUS ? "US" : isCA ? "CA" : isIE ? "IE" : isGB ? "UK" : isDE ? "DE" : isNL ? "NL" : isBE ? "BE" : isJP ? "JP" : isSG ? "SG" : isKR ? "KR" : isFR ? "FR" : isES ? "ES" : isNZ ? "NZ" : isNO ? "NO" : isSE ? "SE" : isDK ? "DK" : isFI ? "FI" : "CH"
+            const name = isAU ? "Australia" : isUS ? "United States" : isCA ? "Canada" : isIE ? "Ireland" : isGB ? "United Kingdom" : isDE ? "Germany" : isNL ? "Netherlands" : isBE ? "Belgium" : isJP ? "Japan" : isSG ? "Singapore" : isKR ? "South Korea" : isFR ? "France" : isES ? "Spain" : isNZ ? "New Zealand" : isNO ? "Norway" : isSE ? "Sweden" : isDK ? "Denmark" : isFI ? "Finland" : "Switzerland"
             lyr.bindTooltip(name, {
               sticky: true,
               direction: "top",
@@ -739,6 +754,8 @@ export default function LeafletMap({
                                           ? { fillColor: "#fef3c7", color: "#b45309", weight: 2, fillOpacity: 0.55 }
                                           : isFI
                                             ? { fillColor: "#e0f2fe", color: "#0369a1", weight: 2, fillOpacity: 0.55 }
+                                            : isCH
+                                              ? { fillColor: "#fce7f3", color: "#be185d", weight: 2, fillOpacity: 0.55 }
                                             : isCA
                                               ? { fillColor: "#fce7f3", color: "#ec4899", weight: 2, fillOpacity: 0.5 }
                                 : { fillColor: "#dcfce7", color: "#22c55e", weight: 2, fillOpacity: 0.5 }
@@ -1610,15 +1627,21 @@ export default function LeafletMap({
     // Boundary requests finish independently. When a user changes country while
     // one is still downloading, never leave the previously loaded country on
     // the map: the last resolved layer must honour the currently selected one.
-    const showOnlyNordicLayer = (country: "NO" | "SE" | "DK" | "FI", layer: L.GeoJSON) => {
+    const showOnlyNordicLayer = (country: "NO" | "SE" | "DK" | "FI" | "CH", layer: L.GeoJSON) => {
       if (activeCountryRef.current !== country) return
-      for (const detailLayer of [noLayerRef.current, seLayerRef.current, dkLayerRef.current, fiLayerRef.current]) {
+      for (const detailLayer of [noLayerRef.current, seLayerRef.current, dkLayerRef.current, fiLayerRef.current, chLayerRef.current]) {
         if (detailLayer && detailLayer !== layer && map.hasLayer(detailLayer)) map.removeLayer(detailLayer)
       }
       if (!map.hasLayer(layer)) layer.addTo(map)
+      if (country === "CH" && worldLayerRef.current) {
+        worldLayerRef.current.eachLayer((worldFeature) => {
+          const props = (worldFeature as L.GeoJSON & { feature?: GeoJSON.Feature }).feature?.properties as Record<string, unknown> | undefined
+          if (props && isSwitzerland(props)) (worldFeature as L.Path).setStyle({ opacity: 0, fillOpacity: 0, weight: 0 })
+        })
+      }
     }
 
-    const loadNordicRegions = (country: "SE" | "DK" | "FI", file: string, color: string, layerRef: MutableRefObject<L.GeoJSON | null>, byCode: MutableRefObject<Record<string, L.Polygon>>) => {
+    const loadNordicRegions = (country: "SE" | "DK" | "FI" | "CH", file: string, color: string, layerRef: MutableRefObject<L.GeoJSON | null>, byCode: MutableRefObject<Record<string, L.Polygon>>) => {
       fetch(file).then((response) => {
         if (!response.ok) throw new Error(`HTTP ${response.status}`)
         return response.json()
@@ -1646,6 +1669,7 @@ export default function LeafletMap({
     loadNordicRegions("SE", "/se-regions.geojson", "#0f766e", seLayerRef, seRegionByCode)
     loadNordicRegions("DK", "/dk-regions.geojson", "#b45309", dkLayerRef, dkRegionByCode)
     loadNordicRegions("FI", "/fi-regions.geojson", "#0369a1", fiLayerRef, fiRegionByCode)
+    loadNordicRegions("CH", "/ch-cantons.geojson", "#be185d", chLayerRef, chRegionByCode)
 
     // SA4 지역 경계 — 한 번만 로드해 두고, 주 선택 시 해당 주의 지역만 렌더한다.
     fetch("/au-sa4.geojson")
@@ -1697,11 +1721,13 @@ export default function LeafletMap({
       seRegionByCode.current = {}
       dkRegionByCode.current = {}
       fiRegionByCode.current = {}
+      chRegionByCode.current = {}
       nzLayerRef.current = null
       noLayerRef.current = null
       seLayerRef.current = null
       dkLayerRef.current = null
       fiLayerRef.current = null
+      chLayerRef.current = null
       didFitRef.current = false
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -1733,6 +1759,7 @@ export default function LeafletMap({
     if (seLayerRef.current && map.hasLayer(seLayerRef.current)) map.removeLayer(seLayerRef.current)
     if (dkLayerRef.current && map.hasLayer(dkLayerRef.current)) map.removeLayer(dkLayerRef.current)
     if (fiLayerRef.current && map.hasLayer(fiLayerRef.current)) map.removeLayer(fiLayerRef.current)
+    if (chLayerRef.current && map.hasLayer(chLayerRef.current)) map.removeLayer(chLayerRef.current)
     if (markerLayerRef.current) {
       map.removeLayer(markerLayerRef.current)
       markerLayerRef.current = null
@@ -1813,6 +1840,10 @@ export default function LeafletMap({
       if (fiLayerRef.current) map.addLayer(fiLayerRef.current)
       fitToBounds(FI_BOUNDS, true)
       updateMarkers()
+    } else if (activeCountry === "CH") {
+      if (chLayerRef.current) map.addLayer(chLayerRef.current)
+      fitToBounds(CH_BOUNDS, true)
+      updateMarkers()
     } else {
       fitToBounds(WORLD_BOUNDS, true)
     }
@@ -1840,6 +1871,7 @@ export default function LeafletMap({
         const isSE = isSweden(props)
         const isDK = isDenmark(props)
         const isFI = isFinland(props)
+        const isCH = isSwitzerland(props)
         const hide = (activeCountry === "AU" && isAU)
           || (activeCountry === "US" && isUS)
           || (activeCountry === "IE" && isIE)
@@ -1857,6 +1889,7 @@ export default function LeafletMap({
           || (activeCountry === "SE" && isSE && seLayerRef.current != null)
           || (activeCountry === "DK" && isDK && dkLayerRef.current != null)
           || (activeCountry === "FI" && isFI && fiLayerRef.current != null)
+          || (activeCountry === "CH" && isCH && chLayerRef.current != null)
         if (hide) return { opacity: 0, fillOpacity: 0, weight: 0 }
         if (isAU) return { fillColor: "#e0e7ff", color: "#6366f1", weight: 2, fillOpacity: 0.5 }
         if (isUS) return { fillColor: "#dcfce7", color: "#22c55e", weight: 2, fillOpacity: 0.5 }
@@ -1875,6 +1908,7 @@ export default function LeafletMap({
         if (isSE) return { fillColor: "#ccfbf1", color: "#0f766e", weight: 2, fillOpacity: 0.55 }
         if (isDK) return { fillColor: "#fef3c7", color: "#b45309", weight: 2, fillOpacity: 0.55 }
         if (isFI) return { fillColor: "#e0f2fe", color: "#0369a1", weight: 2, fillOpacity: 0.55 }
+        if (isCH) return { fillColor: "#fce7f3", color: "#be185d", weight: 2, fillOpacity: 0.55 }
         return { fillColor: "#f8fafc", color: "#cbd5e1", weight: 0.8, fillOpacity: 0.6 }
       })
     }
@@ -1882,6 +1916,19 @@ export default function LeafletMap({
     renderSA4()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeCountry])
+
+  // Country bundles are lazy-loaded after a country is selected. The active
+  // country does not change when that request resolves, so redraw markers from
+  // the newly available bundle instead of leaving an empty map until the user
+  // manually zooms or switches country.
+  useEffect(() => {
+    if (!mapRef.current || !activeCountry) return
+    if (activeCountry === "US" || activeCountry === "AU" || activeCountry === "CA" || activeCountry === "UK" || activeCountry === "DE" || activeCountry === "NL" || activeCountry === "KR" || activeCountry === "FR" || activeCountry === "ES" || activeCountry === "NZ" || activeCountry === "NO" || activeCountry === "SE" || activeCountry === "DK" || activeCountry === "FI" || activeCountry === "CH") {
+      updateMarkers()
+    }
+    // updateMarkers reads the current ref-backed data and map state.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, activeCountry])
 
   // Selected state changed
   useEffect(() => {
@@ -2076,6 +2123,10 @@ export default function LeafletMap({
     } else if (fiLayerRef.current && activeCountry === "FI") {
       fiLayerRef.current.setStyle((feature) => { const code = String((feature?.properties as { code?: string } | undefined)?.code ?? ""); const isSelected = selected === code; return { fillColor: "#e0f2fe", fillOpacity: isSelected ? 0.85 : 0.58, color: isSelected ? "#075985" : "#0369a1", weight: isSelected ? 3 : 1.2 } })
       if (selected) { const bounds = fiRegionByCode.current[selected] ? safeBounds(fiRegionByCode.current[selected].getBounds()) : null; if (bounds) mapRef.current?.flyToBounds(bounds, { padding: [30, 30], maxZoom: 7, duration: 0.6 }) }
+      updateMarkers()
+    } else if (chLayerRef.current && activeCountry === "CH") {
+      chLayerRef.current.setStyle((feature) => { const code = String((feature?.properties as { code?: string } | undefined)?.code ?? ""); const isSelected = selected === code; return { fillColor: "#fce7f3", fillOpacity: isSelected ? 0.85 : 0.58, color: isSelected ? "#831843" : "#be185d", weight: isSelected ? 3 : 1.2 } })
+      if (selected) { const bounds = chRegionByCode.current[selected] ? safeBounds(chRegionByCode.current[selected].getBounds()) : null; if (bounds) mapRef.current?.flyToBounds(bounds, { padding: [30, 30], maxZoom: 8, duration: 0.6 }) }
       updateMarkers()
     }
     // 주가 바뀌면 그 주의 SA4 지역을 (재)렌더한다.

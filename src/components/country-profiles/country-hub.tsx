@@ -5,6 +5,8 @@ import {
 } from "@/lib/new-country-release-gate"
 import { CountryDataNotice } from "./country-data-notice"
 
+type CountryHubCode = NewCountryCode | "CH";
+
 type RegionSummary = {
   code: string;
   nameEn: string;
@@ -12,13 +14,14 @@ type RegionSummary = {
 };
 
 type CountryHubProps = {
-  countryCode: NewCountryCode;
+  countryCode: CountryHubCode;
   countryName: string;
   classificationLabel: string;
   regions: RegionSummary[];
   cityCount: number;
   institutionCount: number;
   jobsPath: string;
+  showDataNotice?: boolean;
 };
 
 export function CountryHub({
@@ -29,6 +32,7 @@ export function CountryHub({
   cityCount,
   institutionCount,
   jobsPath,
+  showDataNotice = true,
 }: CountryHubProps) {
   const searchIndexable = isCountrySearchIndexable(countryCode);
 
@@ -71,7 +75,7 @@ export function CountryHub({
           <Metric value={String(institutionCount)} label="Institutions" note="Institution reference data" />
         </div>
 
-        {!searchIndexable && (
+        {!searchIndexable && showDataNotice && (
           <div className="mt-8">
             <CountryDataNotice countryName={countryName} />
           </div>
