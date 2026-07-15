@@ -56,4 +56,12 @@ test("Germany regional cards use a distinct city thumbnail for every choice", ()
 test("Netherlands regional cards use a distinct city thumbnail for every choice", () => {
   const cards = regionalDiscoveryFor("NL")
   assert.equal(new Set(cards.map((card) => card.image)).size, cards.length)
+  assert.deepEqual(Object.fromEntries(cards.map((card) => [card.city, card.image.match(/photo-([^?]+)/)?.[1]])), {
+    Amsterdam: "1459679749680-18eb1eb37418",
+    Rotterdam: "1614521272693-73052eaefc51",
+    Utrecht: "1564085027787-7f8911ca8d91",
+    Eindhoven: "1707001472432-2eff999bcc9f",
+    "The Hague": "1721643365334-9397c6896b6a",
+    Groningen: "1706775114556-801040d1ca5b",
+  })
 })
