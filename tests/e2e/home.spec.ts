@@ -18,6 +18,17 @@ test("landing sends country, major, and goal to country discovery", async ({ pag
   await expect(page.getByRole("heading", { name: "Where in Australia?" })).toBeVisible()
   await expect(page.getByText("Sydney", { exact: true })).toBeVisible()
   await expect(page.getByText("Gold Coast", { exact: true })).toBeVisible()
+  const sydneyWorkspace = page.getByRole("link", { name: "Open workspace" }).first()
+  await expect(sydneyWorkspace).toHaveAttribute("target", "_blank")
+  await expect(sydneyWorkspace).toHaveAttribute("href", /\/regional-workspace\?country=AU&state=NSW&city=Sydney/)
+})
+
+test("regional selection opens the dedicated ROI workspace instead of Maps", async ({ page }) => {
+  await page.goto("/regional-workspace?country=AU&state=NSW&city=Sydney&major=computer-science&goal=immigration")
+  await expect(page.getByRole("heading", { name: "Sydney, New South Wales" })).toBeVisible()
+  await expect(page.getByRole("heading", { name: "University shortlist" })).toBeVisible()
+  await expect(page.getByRole("heading", { name: "Career demand signals" })).toBeVisible()
+  await expect(page.getByRole("heading", { name: "Cost evidence" })).toBeVisible()
 })
 
 test("product hubs and discovery result pages are available", async ({ page }) => {
