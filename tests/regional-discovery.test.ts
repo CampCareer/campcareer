@@ -27,9 +27,9 @@ test("remaining launch countries offer curated regional choices", () => {
     DE: ["Berlin", "Munich", "Hamburg", "Frankfurt", "Cologne", "Stuttgart"],
     NL: ["Amsterdam", "Rotterdam", "Utrecht", "Eindhoven", "The Hague", "Groningen"],
     BE: ["Brussels", "Leuven", "Ghent", "Antwerp", "Liège", "Bruges"],
-    FR: ["Paris", "Lyon", "Toulouse", "Marseille"],
-    ES: ["Madrid", "Barcelona", "Valencia", "Seville"],
-    SG: ["Central", "CBD", "East", "West"],
+    FR: ["Paris", "Lyon", "Toulouse", "Bordeaux", "Lille", "Marseille"],
+    ES: ["Madrid", "Barcelona", "Valencia", "Seville", "Granada", "Salamanca", "Málaga", "Bilbao"],
+    SG: ["Singapore"],
     KR: ["Seoul", "Busan", "Incheon", "Daejeon"],
     JP: ["Tokyo", "Osaka", "Kyoto", "Fukuoka"],
     NZ: ["Auckland", "Wellington", "Christchurch", "Dunedin"],
@@ -70,4 +70,21 @@ test("Belgium regional cards cover study hubs and a flagship destination with un
   const cards = regionalDiscoveryFor("BE")
   assert.deepEqual(cards.map((card) => card.city), ["Brussels", "Leuven", "Ghent", "Antwerp", "Liège", "Bruges"])
   assert.equal(new Set(cards.map((card) => card.image)).size, cards.length)
+})
+
+test("France regional cards cover major study hubs with unique thumbnails", () => {
+  const cards = regionalDiscoveryFor("FR")
+  assert.deepEqual(cards.map((card) => card.city), ["Paris", "Lyon", "Toulouse", "Bordeaux", "Lille", "Marseille"])
+  assert.equal(new Set(cards.map((card) => card.image)).size, cards.length)
+})
+
+test("Spain regional cards cover major study and destination cities with unique thumbnails", () => {
+  const cards = regionalDiscoveryFor("ES")
+  assert.deepEqual(cards.map((card) => card.city), ["Madrid", "Barcelona", "Valencia", "Seville", "Granada", "Salamanca", "Málaga", "Bilbao"])
+  assert.equal(new Set(cards.map((card) => card.image)).size, cards.length)
+})
+
+test("Singapore is a city-state with one direct workspace choice", () => {
+  const cards = regionalDiscoveryFor("SG")
+  assert.deepEqual(cards.map((card) => [card.code, card.city, card.region]), [["SG", "Singapore", "Singapore"]])
 })

@@ -69,6 +69,7 @@ export function HomeFinder({ locale = "en" }: { locale?: Locale }) {
   const [goal, setGoal] = useState<LandingGoalId | "">("")
   const router = useRouter()
   const searchHref = `${localizePath("/countries/search", localePrefix)}?${new URLSearchParams({ country, major, ...(goal ? { goal } : {}) })}`
+  const singaporeWorkspaceHref = `${localizePath("/regional-workspace", localePrefix)}?${new URLSearchParams({ country: "SG", state: "SG", city: "Singapore", major, ...(goal ? { goal } : {}) })}`
   const countryOptions = useMemo<PickerOption[]>(() => [
     { value: "everywhere", label: t.countryPlaceholder, description: isKo ? "20개국을 함께 비교" : "Compare all 20 destinations", icon: "🌍", keywords: "all global" },
     ...LAUNCH_COUNTRIES.map((item) => ({ value: item.code, label: item.name, description: isKo ? `${item.name} 유학·취업 신호 보기` : `Explore study and career signals`, icon: countryFlag(item.code), keywords: `${item.code} ${item.slug}` })),
@@ -92,7 +93,7 @@ export function HomeFinder({ locale = "en" }: { locale?: Locale }) {
             <p className="mt-5 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">{t.subtitle}</p>
           </div>
 
-          <form action={searchHref} onSubmit={(event) => { event.preventDefault(); const submitted = new FormData(event.currentTarget); const submittedCountry = String(submitted.get("country") ?? "everywhere"); const submittedMajor = String(submitted.get("major") ?? "anything"); const submittedGoal = String(submitted.get("goal") ?? ""); const href = `${localizePath("/countries/search", localePrefix)}?${new URLSearchParams({ country: submittedCountry, major: submittedMajor, ...(submittedGoal ? { goal: submittedGoal } : {}) })}`; recordDiscoveryEvent("recommendation_start", { surface: "landing", country: submittedCountry, major: submittedMajor, goal: submittedGoal }); router.push(href) }} className="mt-9 rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_18px_45px_rgba(15,23,42,.10)]">
+          <form action={searchHref} onSubmit={(event) => { event.preventDefault(); const submitted = new FormData(event.currentTarget); const submittedCountry = String(submitted.get("country") ?? "everywhere"); const submittedMajor = String(submitted.get("major") ?? "anything"); const submittedGoal = String(submitted.get("goal") ?? ""); const href = `${localizePath("/countries/search", localePrefix)}?${new URLSearchParams({ country: submittedCountry, major: submittedMajor, ...(submittedGoal ? { goal: submittedGoal } : {}) })}`; recordDiscoveryEvent("recommendation_start", { surface: "landing", country: submittedCountry, major: submittedMajor, goal: submittedGoal }); if (submittedCountry === "SG" && submittedGoal) { window.open(singaporeWorkspaceHref, "_blank", "noopener,noreferrer"); return } router.push(href) }} className="mt-9 rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_18px_45px_rgba(15,23,42,.10)]">
             <div className="grid gap-2 lg:grid-cols-[1fr_1.15fr_1.2fr_auto]">
               <IconPicker name="country" label={t.country} value={country} options={countryOptions} onChange={setCountry} searchPlaceholder={isKo ? "국가 검색" : "Search countries"} testId="country" />
               <IconPicker name="major" label={t.major} value={major} options={majorOptions} onChange={setMajor} searchPlaceholder={isKo ? "전공 검색" : "Search majors"} testId="major" />

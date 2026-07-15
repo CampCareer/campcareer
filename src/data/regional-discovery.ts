@@ -7,8 +7,6 @@ export type RegionalDiscoveryCard = {
 }
 
 const COUNTRY_CITY_PHOTOS: Record<string, string> = {
-  FR: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34",
-  ES: "https://images.unsplash.com/photo-1539037116277-4db20889f2d4",
   SG: "https://images.unsplash.com/photo-1525625293386-3f8f99389edd",
   KR: "https://images.unsplash.com/photo-1570191913384-7b4ff11716e7",
   JP: "https://images.unsplash.com/photo-1490806843957-31f4c9a91c65",
@@ -66,22 +64,25 @@ export const REGIONAL_DISCOVERY: Partial<Record<string, readonly RegionalDiscove
     { code: "FL", city: "Bruges", region: "Flanders", image: "https://images.unsplash.com/photo-1773866109823-6ee72743ea37?w=900&h=620&fit=crop&auto=format", accent: "from-rose-950/65" },
   ],
   FR: [
-    { code: "11", city: "Paris", region: "Île-de-France", image: cityPhoto("FR", "center"), accent: "from-slate-950/65" },
-    { code: "84", city: "Lyon", region: "Auvergne-Rhône-Alpes", image: cityPhoto("FR", "entropy"), accent: "from-rose-950/65" },
-    { code: "76", city: "Toulouse", region: "Occitanie", image: cityPhoto("FR", "edges"), accent: "from-violet-950/65" },
-    { code: "93", city: "Marseille", region: "Provence-Alpes-Côte d'Azur", image: cityPhoto("FR", "faces"), accent: "from-sky-950/65" },
+    { code: "11", city: "Paris", region: "Île-de-France", image: "https://images.unsplash.com/photo-1742071327447-5cb04ee7ee0a?w=900&h=620&fit=crop&auto=format", accent: "from-slate-950/65" },
+    { code: "84", city: "Lyon", region: "Auvergne-Rhône-Alpes", image: "https://images.unsplash.com/photo-1753170183936-ed0aea2d3948?w=900&h=620&fit=crop&auto=format", accent: "from-rose-950/65" },
+    { code: "76", city: "Toulouse", region: "Occitanie", image: "https://images.unsplash.com/photo-1576367872882-489d040b9bde?w=900&h=620&fit=crop&auto=format", accent: "from-violet-950/65" },
+    { code: "75", city: "Bordeaux", region: "Nouvelle-Aquitaine", image: "https://images.unsplash.com/photo-1748875343539-9e1099eb3557?w=900&h=620&fit=crop&auto=format", accent: "from-amber-950/65" },
+    { code: "32", city: "Lille", region: "Hauts-de-France", image: "https://images.unsplash.com/photo-1722093178530-3426be00d616?w=900&h=620&fit=crop&auto=format", accent: "from-indigo-950/65" },
+    { code: "93", city: "Marseille", region: "Provence-Alpes-Côte d'Azur", image: "https://images.unsplash.com/photo-1744021000461-f8411055a94b?w=900&h=620&fit=crop&auto=format", accent: "from-sky-950/65" },
   ],
   ES: [
-    { code: "MD", city: "Madrid", region: "Community of Madrid", image: cityPhoto("ES", "center"), accent: "from-red-950/65" },
-    { code: "CT", city: "Barcelona", region: "Catalonia", image: cityPhoto("ES", "entropy"), accent: "from-amber-950/65" },
-    { code: "VC", city: "Valencia", region: "Valencian Community", image: cityPhoto("ES", "edges"), accent: "from-orange-950/65" },
-    { code: "AN", city: "Seville", region: "Andalusia", image: cityPhoto("ES", "faces"), accent: "from-rose-950/65" },
+    { code: "MD", city: "Madrid", region: "Community of Madrid", image: "https://images.unsplash.com/photo-1569676814972-31aa39db5817?w=900&h=620&fit=crop&auto=format", accent: "from-red-950/65" },
+    { code: "CT", city: "Barcelona", region: "Catalonia", image: "https://images.unsplash.com/photo-1745091726008-717fb812bd0d?w=900&h=620&fit=crop&auto=format", accent: "from-amber-950/65" },
+    { code: "VC", city: "Valencia", region: "Valencian Community", image: "https://images.unsplash.com/photo-1747996697631-f556d66265f6?w=900&h=620&fit=crop&auto=format", accent: "from-orange-950/65" },
+    { code: "AN", city: "Seville", region: "Andalusia", image: "https://images.unsplash.com/photo-1744698276062-a0ffe2246318?w=900&h=620&fit=crop&auto=format", accent: "from-rose-950/65" },
+    { code: "AN", city: "Granada", region: "Andalusia", image: "https://images.unsplash.com/photo-1770288361252-df2f7e6e3069?w=900&h=620&fit=crop&auto=format", accent: "from-violet-950/65" },
+    { code: "CL", city: "Salamanca", region: "Castile and León", image: "https://images.unsplash.com/photo-1633994504403-1fc4bac4ae75?w=900&h=620&fit=crop&auto=format", accent: "from-amber-950/65" },
+    { code: "AN", city: "Málaga", region: "Andalusia", image: "https://images.unsplash.com/photo-1699972345717-1afc1a32f178?w=900&h=620&fit=crop&auto=format", accent: "from-sky-950/65" },
+    { code: "PV", city: "Bilbao", region: "Basque Country", image: "https://images.unsplash.com/photo-1605483212637-fcf76267509b?w=900&h=620&fit=crop&auto=format", accent: "from-slate-950/65" },
   ],
   SG: [
-    { code: "central", city: "Central", region: "Singapore", image: cityPhoto("SG", "center"), accent: "from-slate-950/65" },
-    { code: "cbd", city: "CBD", region: "Singapore", image: cityPhoto("SG", "entropy"), accent: "from-blue-950/65" },
-    { code: "east", city: "East", region: "Singapore", image: cityPhoto("SG", "edges"), accent: "from-cyan-950/65" },
-    { code: "west", city: "West", region: "Singapore", image: cityPhoto("SG", "faces"), accent: "from-emerald-950/65" },
+    { code: "SG", city: "Singapore", region: "Singapore", image: cityPhoto("SG", "center"), accent: "from-slate-950/65" },
   ],
   KR: [
     { code: "11", city: "Seoul", region: "Seoul", image: cityPhoto("KR", "center"), accent: "from-slate-950/65" },

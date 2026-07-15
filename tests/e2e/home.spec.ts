@@ -48,17 +48,35 @@ test("Ireland country results offer Dublin, Cork, Galway, and Limerick", async (
   )
 })
 
-test("Germany, Netherlands, Belgium, Singapore, and UAE country results offer their regional choices", async ({ page }) => {
+test("Germany, Netherlands, Belgium, France, Spain, Singapore, and UAE country results offer their regional choices", async ({ page }) => {
   for (const [country, cities] of [
     ["DE", ["Berlin", "Munich", "Hamburg", "Frankfurt", "Cologne", "Stuttgart"]],
     ["NL", ["Amsterdam", "Rotterdam", "Utrecht", "Eindhoven", "The Hague", "Groningen"]],
     ["BE", ["Brussels", "Leuven", "Ghent", "Antwerp", "Liège", "Bruges"]],
-    ["SG", ["Central", "CBD", "East", "West"]],
+    ["FR", ["Paris", "Lyon", "Toulouse", "Bordeaux", "Lille", "Marseille"]],
+    ["ES", ["Madrid", "Barcelona", "Valencia", "Seville", "Granada", "Salamanca", "Málaga", "Bilbao"]],
+    ["SG", ["Singapore"]],
     ["AE", ["Dubai", "Abu Dhabi", "Sharjah", "Ras Al Khaimah"]],
   ] as const) {
     await page.goto(`/countries/search?country=${country}&major=computer-science&goal=immigration`)
     for (const city of cities) await expect(page.getByRole("link", { name: new RegExp(`^${city},`) })).toBeVisible()
   }
+})
+
+test("landing opens Singapore's city-state workspace without a regional choice", async ({ page }) => {
+  await page.goto("/")
+  await page.getByLabel("Where do you want to study?", { exact: true }).click()
+  await page.getByTestId("country-option-SG").click()
+  await page.getByLabel("What do you want to study?", { exact: true }).click()
+  await page.getByTestId("major-option-computer-science").click()
+  await page.getByLabel("What matters most?", { exact: true }).click()
+  await page.getByTestId("goal-option-immigration").click()
+
+  const popupPromise = page.context().waitForEvent("page")
+  await page.getByRole("button", { name: "See country rankings" }).click()
+  const workspace = await popupPromise
+  await workspace.waitForLoadState()
+  await expect(workspace).toHaveURL(/\/regional-workspace\?country=SG&state=SG&city=Singapore&major=computer-science&goal=immigration/)
 })
 
 test("regional selection opens the dedicated ROI workspace instead of Maps", async ({ page }) => {
