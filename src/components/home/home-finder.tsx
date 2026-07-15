@@ -172,7 +172,9 @@ function IconPicker({
 }
 
 function countryFlag(code: string) {
-  return code.replace(/./g, (letter) => String.fromCodePoint(127397 + letter.charCodeAt(0)))
+  // The ISO alpha-2 country code is GB, while the product registry uses UK.
+  const emojiCode = code.toUpperCase() === "UK" ? "GB" : code.toUpperCase()
+  return emojiCode.replace(/./g, (letter) => String.fromCodePoint(127397 + letter.charCodeAt(0)))
 }
 
 function majorEmoji(category: string) {

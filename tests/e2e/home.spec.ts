@@ -5,6 +5,7 @@ test("landing sends country, major, and goal to country discovery", async ({ pag
   await expect(page.getByRole("heading", { name: "Compare study paths - from campus to career." })).toBeVisible()
 
   await page.getByLabel("Where do you want to study?", { exact: true }).click()
+  await expect(page.getByTestId("country-option-UK")).toContainText("🇬🇧")
   await page.getByTestId("country-option-CA").click()
   await page.getByLabel("What do you want to study?", { exact: true }).click()
   await page.getByTestId("major-option-computer-science").click()
