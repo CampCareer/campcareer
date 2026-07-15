@@ -30,7 +30,7 @@ test("remaining launch countries offer curated regional choices", () => {
     FR: ["Paris", "Lyon", "Toulouse", "Bordeaux", "Lille", "Marseille"],
     ES: ["Madrid", "Barcelona", "Valencia", "Seville", "Granada", "Salamanca", "Málaga", "Bilbao"],
     SG: ["Singapore"],
-    KR: ["Seoul", "Busan", "Incheon", "Daejeon"],
+    KR: ["Seoul", "Busan", "Incheon", "Daejeon", "Daegu", "Gwangju", "Suwon", "Jeju"],
     JP: ["Tokyo", "Osaka", "Kyoto", "Fukuoka"],
     NZ: ["Auckland", "Wellington", "Christchurch", "Dunedin"],
     NO: ["Oslo", "Bergen", "Trondheim", "Stavanger"],
@@ -81,6 +81,12 @@ test("France regional cards cover major study hubs with unique thumbnails", () =
 test("Spain regional cards cover major study and destination cities with unique thumbnails", () => {
   const cards = regionalDiscoveryFor("ES")
   assert.deepEqual(cards.map((card) => card.city), ["Madrid", "Barcelona", "Valencia", "Seville", "Granada", "Salamanca", "Málaga", "Bilbao"])
+  assert.equal(new Set(cards.map((card) => card.image)).size, cards.length)
+})
+
+test("South Korea regional cards cover major study hubs with unique thumbnails", () => {
+  const cards = regionalDiscoveryFor("KR")
+  assert.deepEqual(cards.map((card) => card.city), ["Seoul", "Busan", "Incheon", "Daejeon", "Daegu", "Gwangju", "Suwon", "Jeju"])
   assert.equal(new Set(cards.map((card) => card.image)).size, cards.length)
 })
 

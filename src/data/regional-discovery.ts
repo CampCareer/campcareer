@@ -8,7 +8,6 @@ export type RegionalDiscoveryCard = {
 
 const COUNTRY_CITY_PHOTOS: Record<string, string> = {
   SG: "https://images.unsplash.com/photo-1525625293386-3f8f99389edd",
-  KR: "https://images.unsplash.com/photo-1570191913384-7b4ff11716e7",
   JP: "https://images.unsplash.com/photo-1490806843957-31f4c9a91c65",
   NZ: "https://images.unsplash.com/photo-1507699622108-4be3abd695ad",
   NO: "https://images.unsplash.com/photo-1475066392170-59d55d96fe51",
@@ -85,10 +84,14 @@ export const REGIONAL_DISCOVERY: Partial<Record<string, readonly RegionalDiscove
     { code: "SG", city: "Singapore", region: "Singapore", image: cityPhoto("SG", "center"), accent: "from-slate-950/65" },
   ],
   KR: [
-    { code: "11", city: "Seoul", region: "Seoul", image: cityPhoto("KR", "center"), accent: "from-slate-950/65" },
-    { code: "26", city: "Busan", region: "Busan", image: cityPhoto("KR", "entropy"), accent: "from-sky-950/65" },
-    { code: "28", city: "Incheon", region: "Incheon", image: cityPhoto("KR", "edges"), accent: "from-cyan-950/65" },
-    { code: "30", city: "Daejeon", region: "Daejeon", image: cityPhoto("KR", "faces"), accent: "from-violet-950/65" },
+    { code: "11", city: "Seoul", region: "Seoul", image: "https://images.unsplash.com/photo-1748273945548-6ef8d73b9325?w=900&h=620&fit=crop&auto=format", accent: "from-slate-950/65" },
+    { code: "26", city: "Busan", region: "Busan", image: "https://images.unsplash.com/photo-1750682385431-b92e0f8ccbd0?w=900&h=620&fit=crop&auto=format", accent: "from-sky-950/65" },
+    { code: "28", city: "Incheon", region: "Incheon", image: "https://images.unsplash.com/photo-1446733993804-c62a351c7239?w=900&h=620&fit=crop&auto=format", accent: "from-cyan-950/65" },
+    { code: "30", city: "Daejeon", region: "Daejeon", image: "https://images.unsplash.com/photo-1756744789026-287c398992d9?w=900&h=620&fit=crop&auto=format", accent: "from-violet-950/65" },
+    { code: "27", city: "Daegu", region: "Daegu", image: "https://images.unsplash.com/photo-1663670889635-0aabebf112ba?w=900&h=620&fit=crop&auto=format", accent: "from-rose-950/65" },
+    { code: "29", city: "Gwangju", region: "Gwangju", image: "https://images.unsplash.com/photo-1611698324848-9c863ce38ba6?w=900&h=620&fit=crop&auto=format", accent: "from-emerald-950/65" },
+    { code: "41", city: "Suwon", region: "Gyeonggi", image: "https://images.unsplash.com/photo-1714905532906-0b9ec1b22dfa?w=900&h=620&fit=crop&auto=format", accent: "from-amber-950/65" },
+    { code: "50", city: "Jeju", region: "Jeju", image: "https://images.unsplash.com/photo-1572609025690-7e948447d2c1?w=900&h=620&fit=crop&auto=format", accent: "from-teal-950/65" },
   ],
   JP: [
     { code: "13", city: "Tokyo", region: "Tokyo", image: cityPhoto("JP", "center"), accent: "from-slate-950/65" },

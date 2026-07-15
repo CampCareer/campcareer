@@ -48,13 +48,14 @@ test("Ireland country results offer Dublin, Cork, Galway, and Limerick", async (
   )
 })
 
-test("Germany, Netherlands, Belgium, France, Spain, Singapore, and UAE country results offer their regional choices", async ({ page }) => {
+test("Germany, Netherlands, Belgium, France, Spain, South Korea, Singapore, and UAE country results offer their regional choices", async ({ page }) => {
   for (const [country, cities] of [
     ["DE", ["Berlin", "Munich", "Hamburg", "Frankfurt", "Cologne", "Stuttgart"]],
     ["NL", ["Amsterdam", "Rotterdam", "Utrecht", "Eindhoven", "The Hague", "Groningen"]],
     ["BE", ["Brussels", "Leuven", "Ghent", "Antwerp", "Liège", "Bruges"]],
     ["FR", ["Paris", "Lyon", "Toulouse", "Bordeaux", "Lille", "Marseille"]],
     ["ES", ["Madrid", "Barcelona", "Valencia", "Seville", "Granada", "Salamanca", "Málaga", "Bilbao"]],
+    ["KR", ["Seoul", "Busan", "Incheon", "Daejeon", "Daegu", "Gwangju", "Suwon", "Jeju"]],
     ["SG", ["Singapore"]],
     ["AE", ["Dubai", "Abu Dhabi", "Sharjah", "Ras Al Khaimah"]],
   ] as const) {
