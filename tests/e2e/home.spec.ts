@@ -4,9 +4,12 @@ test("landing sends country, major, and goal to country discovery", async ({ pag
   await page.goto("/")
   await expect(page.getByRole("heading", { name: "Compare study paths - from campus to career." })).toBeVisible()
 
-  await page.getByLabel("Where do you want to study?", { exact: true }).selectOption("CA")
-  await page.getByLabel("What do you want to study?", { exact: true }).selectOption("computer-science")
-  await page.getByLabel("What matters most?", { exact: true }).selectOption("immigration")
+  await page.getByLabel("Where do you want to study?", { exact: true }).click()
+  await page.getByTestId("country-option-CA").click()
+  await page.getByLabel("What do you want to study?", { exact: true }).click()
+  await page.getByTestId("major-option-computer-science").click()
+  await page.getByLabel("What matters most?", { exact: true }).click()
+  await page.getByTestId("goal-option-immigration").click()
   await page.getByRole("button", { name: "See country rankings" }).click()
 
   await expect(page).toHaveURL(/\/countries\/search\?country=CA&major=computer-science&goal=immigration/)
