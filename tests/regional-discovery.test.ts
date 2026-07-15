@@ -31,13 +31,13 @@ test("remaining launch countries offer curated regional choices", () => {
     ES: ["Madrid", "Barcelona", "Valencia", "Seville", "Granada", "Salamanca", "Málaga", "Bilbao"],
     SG: ["Singapore"],
     KR: ["Seoul", "Busan", "Incheon", "Daejeon", "Daegu", "Gwangju", "Suwon", "Jeju"],
-    JP: ["Tokyo", "Osaka", "Kyoto", "Fukuoka"],
-    NZ: ["Auckland", "Wellington", "Christchurch", "Dunedin"],
-    NO: ["Oslo", "Bergen", "Trondheim", "Stavanger"],
-    SE: ["Stockholm", "Gothenburg", "Malmö", "Uppsala"],
-    DK: ["Copenhagen", "Aarhus", "Odense", "Aalborg"],
-    FI: ["Helsinki", "Tampere", "Turku", "Oulu"],
-    CH: ["Zurich", "Geneva", "Lausanne", "Basel"],
+    JP: ["Tokyo", "Osaka", "Kyoto", "Fukuoka", "Nagoya", "Sapporo", "Sendai", "Yokohama"],
+    NZ: ["Auckland", "Wellington", "Christchurch", "Dunedin", "Hamilton", "Palmerston North", "Queenstown"],
+    NO: ["Oslo", "Bergen", "Trondheim", "Stavanger", "Tromsø", "Kristiansand", "Ålesund"],
+    SE: ["Stockholm", "Gothenburg", "Malmö", "Uppsala", "Lund", "Linköping", "Umeå"],
+    DK: ["Copenhagen", "Aarhus", "Odense", "Aalborg", "Roskilde", "Lyngby", "Esbjerg"],
+    FI: ["Helsinki", "Tampere", "Turku", "Oulu", "Espoo", "Jyväskylä", "Lappeenranta"],
+    CH: ["Zurich", "Geneva", "Lausanne", "Basel", "Bern", "Lugano", "St. Gallen"],
     AE: ["Dubai", "Abu Dhabi", "Sharjah", "Ras Al Khaimah"],
   } as const
 
@@ -87,6 +87,48 @@ test("Spain regional cards cover major study and destination cities with unique 
 test("South Korea regional cards cover major study hubs with unique thumbnails", () => {
   const cards = regionalDiscoveryFor("KR")
   assert.deepEqual(cards.map((card) => card.city), ["Seoul", "Busan", "Incheon", "Daejeon", "Daegu", "Gwangju", "Suwon", "Jeju"])
+  assert.equal(new Set(cards.map((card) => card.image)).size, cards.length)
+})
+
+test("Japan regional cards cover major study hubs with unique thumbnails", () => {
+  const cards = regionalDiscoveryFor("JP")
+  assert.deepEqual(cards.map((card) => card.city), ["Tokyo", "Osaka", "Kyoto", "Fukuoka", "Nagoya", "Sapporo", "Sendai", "Yokohama"])
+  assert.equal(new Set(cards.map((card) => card.image)).size, cards.length)
+})
+
+test("New Zealand regional cards cover major study hubs with unique thumbnails", () => {
+  const cards = regionalDiscoveryFor("NZ")
+  assert.deepEqual(cards.map((card) => card.city), ["Auckland", "Wellington", "Christchurch", "Dunedin", "Hamilton", "Palmerston North", "Queenstown"])
+  assert.equal(new Set(cards.map((card) => card.image)).size, cards.length)
+})
+
+test("Norway regional cards cover major study hubs with unique thumbnails", () => {
+  const cards = regionalDiscoveryFor("NO")
+  assert.deepEqual(cards.map((card) => card.city), ["Oslo", "Bergen", "Trondheim", "Stavanger", "Tromsø", "Kristiansand", "Ålesund"])
+  assert.equal(new Set(cards.map((card) => card.image)).size, cards.length)
+})
+
+test("Sweden regional cards cover major study hubs with unique thumbnails", () => {
+  const cards = regionalDiscoveryFor("SE")
+  assert.deepEqual(cards.map((card) => card.city), ["Stockholm", "Gothenburg", "Malmö", "Uppsala", "Lund", "Linköping", "Umeå"])
+  assert.equal(new Set(cards.map((card) => card.image)).size, cards.length)
+})
+
+test("Denmark regional cards cover major study hubs with unique thumbnails", () => {
+  const cards = regionalDiscoveryFor("DK")
+  assert.deepEqual(cards.map((card) => card.city), ["Copenhagen", "Aarhus", "Odense", "Aalborg", "Roskilde", "Lyngby", "Esbjerg"])
+  assert.equal(new Set(cards.map((card) => card.image)).size, cards.length)
+})
+
+test("Finland regional cards cover major study hubs with unique thumbnails", () => {
+  const cards = regionalDiscoveryFor("FI")
+  assert.deepEqual(cards.map((card) => card.city), ["Helsinki", "Tampere", "Turku", "Oulu", "Espoo", "Jyväskylä", "Lappeenranta"])
+  assert.equal(new Set(cards.map((card) => card.image)).size, cards.length)
+})
+
+test("Switzerland regional cards cover major study hubs with unique thumbnails", () => {
+  const cards = regionalDiscoveryFor("CH")
+  assert.deepEqual(cards.map((card) => card.city), ["Zurich", "Geneva", "Lausanne", "Basel", "Bern", "Lugano", "St. Gallen"])
   assert.equal(new Set(cards.map((card) => card.image)).size, cards.length)
 })
 

@@ -48,7 +48,7 @@ test("Ireland country results offer Dublin, Cork, Galway, and Limerick", async (
   )
 })
 
-test("Germany, Netherlands, Belgium, France, Spain, South Korea, Singapore, and UAE country results offer their regional choices", async ({ page }) => {
+test("Germany, Netherlands, Belgium, France, Spain, South Korea, Japan, New Zealand, Norway, Sweden, Denmark, Finland, Switzerland, Singapore, and UAE country results offer their regional choices", async ({ page }) => {
   for (const [country, cities] of [
     ["DE", ["Berlin", "Munich", "Hamburg", "Frankfurt", "Cologne", "Stuttgart"]],
     ["NL", ["Amsterdam", "Rotterdam", "Utrecht", "Eindhoven", "The Hague", "Groningen"]],
@@ -56,6 +56,13 @@ test("Germany, Netherlands, Belgium, France, Spain, South Korea, Singapore, and 
     ["FR", ["Paris", "Lyon", "Toulouse", "Bordeaux", "Lille", "Marseille"]],
     ["ES", ["Madrid", "Barcelona", "Valencia", "Seville", "Granada", "Salamanca", "Málaga", "Bilbao"]],
     ["KR", ["Seoul", "Busan", "Incheon", "Daejeon", "Daegu", "Gwangju", "Suwon", "Jeju"]],
+    ["JP", ["Tokyo", "Osaka", "Kyoto", "Fukuoka", "Nagoya", "Sapporo", "Sendai", "Yokohama"]],
+    ["NZ", ["Auckland", "Wellington", "Christchurch", "Dunedin", "Hamilton", "Palmerston North", "Queenstown"]],
+    ["NO", ["Oslo", "Bergen", "Trondheim", "Stavanger", "Tromsø", "Kristiansand", "Ålesund"]],
+    ["SE", ["Stockholm", "Gothenburg", "Malmö", "Uppsala", "Lund", "Linköping", "Umeå"]],
+    ["DK", ["Copenhagen", "Aarhus", "Odense", "Aalborg", "Roskilde", "Lyngby", "Esbjerg"]],
+    ["FI", ["Helsinki", "Tampere", "Turku", "Oulu", "Espoo", "Jyväskylä", "Lappeenranta"]],
+    ["CH", ["Zurich", "Geneva", "Lausanne", "Basel", "Bern", "Lugano", "St. Gallen"]],
     ["SG", ["Singapore"]],
     ["AE", ["Dubai", "Abu Dhabi", "Sharjah", "Ras Al Khaimah"]],
   ] as const) {
