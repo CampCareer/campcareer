@@ -41,3 +41,21 @@ export function track(eventName: string, params?: Record<string, EventValue>) {
 
   vercelTrack(eventName, properties)
 }
+
+export function recordDiscoveryEvent(
+  eventName: "recommendation_start" | "recommendation_result_view",
+  context: { surface: "landing" | "country_results"; country: string; major: string; goal: string },
+) {
+  track(eventName, context)
+  if (
+    typeof window === "undefined" ||
+    !document.cookie.split("; ").some((item) => item === "cc_analytics_consent=granted")
+  ) return
+
+  void fetch("/api/v1/discovery-events", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ eventName, context }),
+    keepalive: true,
+  }).catch(() => undefined)
+}

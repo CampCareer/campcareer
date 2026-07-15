@@ -41,7 +41,7 @@ export function TopNav() {
   const avatarUrl = user?.user_metadata?.avatar_url as string | undefined
 
   const navItems: { href: string; label: string; icon?: typeof Globe; accent?: "blue" | "rose" | "amber" }[] = [
-    { href: "/countries", label: locale === "ko" ? "국가" : "Countries", icon: Globe, accent: "blue" },
+    { href: "/", label: locale === "ko" ? "국가" : "Countries", icon: Globe, accent: "blue" },
     { href: "/universities", label: locale === "ko" ? "대학" : "Universities", icon: Building2, accent: "rose" },
     { href: "/majors", label: locale === "ko" ? "전공·직업" : "Majors", icon: Briefcase, accent: "amber" },
     { href: "/maps", label: t.nav.map },
@@ -51,7 +51,7 @@ export function TopNav() {
   const linkEls = navItems.map((item) => {
     const active =
       item.href === "/"
-        ? barePathname === "/"
+        ? barePathname === "/" || barePathname === "/countries" || barePathname.startsWith("/countries/")
         : barePathname === item.href || barePathname.startsWith(`${item.href}/`)
     const Icon = item.icon
     return (

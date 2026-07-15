@@ -1,5 +1,8 @@
-import { CountriesHub } from "@/components/discovery/discovery-hub"
-import { pageMetadata } from "@/lib/seo"
+import { redirect } from "next/navigation"
+import { getLocale } from "@/lib/i18n/server"
 
-export const metadata = pageMetadata({ title: "Explore Study Destinations", description: "Explore 20 study destinations and rank verified career pathways by budget and priority.", path: "/countries" })
-export default function CountriesPage() { return <CountriesHub /> }
+// Countries now lives on the landing page. Keep legacy links working without
+// maintaining two competing discovery hubs.
+export default async function CountriesPage() {
+  redirect((await getLocale()) === "ko" ? "/ko" : "/")
+}
