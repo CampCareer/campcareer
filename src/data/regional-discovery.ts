@@ -153,10 +153,6 @@ export const REGIONAL_DISCOVERY: Partial<Record<string, readonly RegionalDiscove
     { code: "DXB", city: "Dubai", region: "Dubai", image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=900&h=620&fit=crop&auto=format", accent: "from-amber-950/65" },
     { code: "AUH", city: "Abu Dhabi", region: "Abu Dhabi", image: "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=900&h=620&fit=crop&auto=format", accent: "from-slate-950/65" },
     { code: "SHJ", city: "Sharjah", region: "Sharjah", image: "https://images.unsplash.com/photo-1578894381163-e72c17f2d45f?w=900&h=620&fit=crop&auto=format", accent: "from-rose-950/65" },
-    { code: "RAK", city: "Ras Al Khaimah", region: "Ras Al Khaimah", image: "https://images.unsplash.com/photo-1512102459428-0e5e68ebc29b?w=900&h=620&fit=crop&auto=format", accent: "from-orange-950/65" },
-    { code: "AJM", city: "Ajman", region: "Ajman", image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=900&h=620&fit=crop&auto=format", accent: "from-emerald-950/65" },
-    { code: "FUJ", city: "Fujairah", region: "Fujairah", image: "https://images.unsplash.com/photo-1571607383268-e151f1b51a9d?w=900&h=620&fit=crop&auto=format", accent: "from-teal-950/65" },
-    { code: "UAQ", city: "Umm Al Quwain", region: "Umm Al Quwain", image: "https://images.unsplash.com/photo-1519058082700-08a0b56da9b4?w=900&h=620&fit=crop&auto=format", accent: "from-indigo-950/65" },
   ],
   US: [
     { code: "NY", city: "New York", region: "New York", image: "https://images.unsplash.com/photo-1485871981521-5b1fd3805eee?w=900&h=620&fit=crop&auto=format", accent: "from-slate-950/70" },
