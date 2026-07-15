@@ -7,8 +7,6 @@ export type RegionalDiscoveryCard = {
 }
 
 const COUNTRY_CITY_PHOTOS: Record<string, string> = {
-  DE: "https://images.unsplash.com/photo-1560969184-10fe8719e047",
-  NL: "https://images.unsplash.com/photo-1534351590666-13e3e96b5017",
   BE: "https://images.unsplash.com/photo-1559113202-c916b8e44373",
   FR: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34",
   ES: "https://images.unsplash.com/photo-1539037116277-4db20889f2d4",
@@ -53,10 +51,12 @@ export const REGIONAL_DISCOVERY: Partial<Record<string, readonly RegionalDiscove
     { code: "BW", city: "Stuttgart", region: "Baden-Württemberg", image: "https://images.unsplash.com/photo-1778574744503-9c7772f3b9b1?w=900&h=620&fit=crop&auto=format", accent: "from-violet-950/65" },
   ],
   NL: [
-    { code: "NH", city: "Amsterdam", region: "Noord-Holland", image: cityPhoto("NL", "center"), accent: "from-orange-950/65" },
-    { code: "ZH", city: "Rotterdam", region: "Zuid-Holland", image: cityPhoto("NL", "entropy"), accent: "from-sky-950/65" },
-    { code: "UT", city: "Utrecht", region: "Utrecht", image: cityPhoto("NL", "edges"), accent: "from-emerald-950/65" },
-    { code: "NB", city: "Eindhoven", region: "Noord-Brabant", image: cityPhoto("NL", "faces"), accent: "from-rose-950/65" },
+    { code: "NH", city: "Amsterdam", region: "Noord-Holland", image: "https://images.unsplash.com/photo-1564514234724-038c6c49cb46?w=900&h=620&fit=crop&auto=format", accent: "from-orange-950/65" },
+    { code: "ZH", city: "Rotterdam", region: "Zuid-Holland", image: "https://images.unsplash.com/photo-1557218333-95d2300dba01?w=900&h=620&fit=crop&auto=format", accent: "from-sky-950/65" },
+    { code: "UT", city: "Utrecht", region: "Utrecht", image: "https://images.unsplash.com/photo-1722540014178-34a33611b38d?w=900&h=620&fit=crop&auto=format", accent: "from-emerald-950/65" },
+    { code: "NB", city: "Eindhoven", region: "Noord-Brabant", image: "https://images.unsplash.com/photo-1668941362527-1071c9dba5f3?w=900&h=620&fit=crop&auto=format", accent: "from-rose-950/65" },
+    { code: "ZH", city: "The Hague", region: "Zuid-Holland", image: "https://images.unsplash.com/photo-1642002244932-2c4d0a0ff92a?w=900&h=620&fit=crop&auto=format", accent: "from-slate-950/65" },
+    { code: "GR", city: "Groningen", region: "Groningen", image: "https://images.unsplash.com/photo-1657371889253-a95386b14be6?w=900&h=620&fit=crop&auto=format", accent: "from-violet-950/65" },
   ],
   BE: [
     { code: "BR", city: "Brussels", region: "Brussels-Capital", image: cityPhoto("BE", "center"), accent: "from-slate-950/65" },

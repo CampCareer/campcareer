@@ -25,7 +25,7 @@ test("Ireland regional discovery offers the four main city choices", () => {
 test("every remaining launch country offers four regional choices", () => {
   const expectedCities = {
     DE: ["Berlin", "Munich", "Hamburg", "Frankfurt", "Cologne", "Stuttgart"],
-    NL: ["Amsterdam", "Rotterdam", "Utrecht", "Eindhoven"],
+    NL: ["Amsterdam", "Rotterdam", "Utrecht", "Eindhoven", "The Hague", "Groningen"],
     BE: ["Brussels", "Antwerp", "Ghent", "Leuven"],
     FR: ["Paris", "Lyon", "Toulouse", "Marseille"],
     ES: ["Madrid", "Barcelona", "Valencia", "Seville"],
@@ -50,5 +50,10 @@ test("every remaining launch country offers four regional choices", () => {
 
 test("Germany regional cards use a distinct city thumbnail for every choice", () => {
   const cards = regionalDiscoveryFor("DE")
+  assert.equal(new Set(cards.map((card) => card.image)).size, cards.length)
+})
+
+test("Netherlands regional cards use a distinct city thumbnail for every choice", () => {
+  const cards = regionalDiscoveryFor("NL")
   assert.equal(new Set(cards.map((card) => card.image)).size, cards.length)
 })
