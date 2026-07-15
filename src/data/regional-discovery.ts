@@ -11,9 +11,10 @@ export const REGIONAL_DISCOVERY: Partial<Record<string, readonly RegionalDiscove
   AU: [
     { code: "NSW", city: "Sydney", region: "New South Wales", image: "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=900&h=620&fit=crop&auto=format", accent: "from-blue-950/65" },
     { code: "VIC", city: "Melbourne", region: "Victoria", image: "https://images.unsplash.com/photo-1514395462725-fb4566210144?w=900&h=620&fit=crop&auto=format", accent: "from-violet-950/65" },
-    { code: "QLD", city: "Brisbane", region: "Queensland", image: "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=900&h=620&fit=crop&auto=format", accent: "from-amber-950/65" },
-    { code: "WA", city: "Perth", region: "Western Australia", image: "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=900&h=620&fit=crop&auto=format", accent: "from-cyan-950/65" },
-    { code: "SA", city: "Adelaide", region: "South Australia", image: "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=900&h=620&fit=crop&auto=format", accent: "from-rose-950/65" },
+    { code: "QLD", city: "Brisbane", region: "Queensland", image: "https://images.unsplash.com/photo-1623027588467-24b2124f70b1?w=900&h=620&fit=crop&auto=format", accent: "from-amber-950/65" },
+    { code: "WA", city: "Perth", region: "Western Australia", image: "https://images.unsplash.com/photo-1562161092-01d53ec54edd?w=900&h=620&fit=crop&auto=format", accent: "from-cyan-950/65" },
+    { code: "SA", city: "Adelaide", region: "South Australia", image: "https://images.unsplash.com/photo-1596017497096-90ee17fb4e82?w=900&h=620&fit=crop&auto=format", accent: "from-rose-950/65" },
+    { code: "QLD", city: "Gold Coast", region: "Queensland", image: "https://images.unsplash.com/photo-1691028355763-0c4144bf441b?w=900&h=620&fit=crop&auto=format", accent: "from-emerald-950/65" },
   ],
   US: [
     { code: "NY", city: "New York", region: "New York", image: "https://images.unsplash.com/photo-1485871981521-5b1fd3805eee?w=900&h=620&fit=crop&auto=format", accent: "from-slate-950/70" },

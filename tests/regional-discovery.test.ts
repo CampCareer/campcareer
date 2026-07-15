@@ -5,6 +5,7 @@ import { regionalDiscoveryFor } from "../src/data/regional-discovery"
 test("Australia regional discovery starts with the requested city choices", () => {
   const cities = regionalDiscoveryFor("AU")
   assert.deepEqual(cities.slice(0, 4).map((city) => city.city), ["Sydney", "Melbourne", "Brisbane", "Perth"])
+  assert.ok(cities.some((city) => city.city === "Gold Coast" && city.code === "QLD"))
   assert.ok(cities.every((city) => city.image.startsWith("https://images.unsplash.com/")))
 })
 

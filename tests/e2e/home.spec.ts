@@ -17,6 +17,7 @@ test("landing sends country, major, and goal to country discovery", async ({ pag
   await expect(page.getByRole("heading", { name: "Choose your region in Australia" })).toBeVisible()
   await expect(page.getByRole("heading", { name: "Where in Australia?" })).toBeVisible()
   await expect(page.getByText("Sydney", { exact: true })).toBeVisible()
+  await expect(page.getByText("Gold Coast", { exact: true })).toBeVisible()
 })
 
 test("product hubs and discovery result pages are available", async ({ page }) => {
