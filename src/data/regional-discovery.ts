@@ -7,7 +7,6 @@ export type RegionalDiscoveryCard = {
 }
 
 const COUNTRY_CITY_PHOTOS: Record<string, string> = {
-  BE: "https://images.unsplash.com/photo-1559113202-c916b8e44373",
   FR: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34",
   ES: "https://images.unsplash.com/photo-1539037116277-4db20889f2d4",
   SG: "https://images.unsplash.com/photo-1525625293386-3f8f99389edd",
@@ -59,10 +58,12 @@ export const REGIONAL_DISCOVERY: Partial<Record<string, readonly RegionalDiscove
     { code: "GR", city: "Groningen", region: "Groningen", image: "https://images.unsplash.com/photo-1706775114556-801040d1ca5b?w=900&h=620&fit=crop&auto=format", accent: "from-violet-950/65" },
   ],
   BE: [
-    { code: "BR", city: "Brussels", region: "Brussels-Capital", image: cityPhoto("BE", "center"), accent: "from-slate-950/65" },
-    { code: "FL", city: "Antwerp", region: "Flanders", image: cityPhoto("BE", "entropy"), accent: "from-red-950/65" },
-    { code: "FL", city: "Ghent", region: "Flanders", image: cityPhoto("BE", "edges"), accent: "from-indigo-950/65" },
-    { code: "FL", city: "Leuven", region: "Flanders", image: cityPhoto("BE", "faces"), accent: "from-amber-950/65" },
+    { code: "BR", city: "Brussels", region: "Brussels-Capital", image: "https://images.unsplash.com/photo-1726577488579-7f5ff06124a0?w=900&h=620&fit=crop&auto=format", accent: "from-slate-950/65" },
+    { code: "FL", city: "Leuven", region: "Flanders", image: "https://images.unsplash.com/photo-1754506824581-9d3418237d23?w=900&h=620&fit=crop&auto=format", accent: "from-amber-950/65" },
+    { code: "FL", city: "Ghent", region: "Flanders", image: "https://images.unsplash.com/photo-1747359882522-12a00d085d7b?w=900&h=620&fit=crop&auto=format", accent: "from-indigo-950/65" },
+    { code: "FL", city: "Antwerp", region: "Flanders", image: "https://images.unsplash.com/photo-1746997758533-0fddfdf8bee9?w=900&h=620&fit=crop&auto=format", accent: "from-red-950/65" },
+    { code: "WA", city: "Liège", region: "Wallonia", image: "https://images.unsplash.com/photo-1560517000-993dacd20080?w=900&h=620&fit=crop&auto=format", accent: "from-cyan-950/65" },
+    { code: "FL", city: "Bruges", region: "Flanders", image: "https://images.unsplash.com/photo-1773866109823-6ee72743ea37?w=900&h=620&fit=crop&auto=format", accent: "from-rose-950/65" },
   ],
   FR: [
     { code: "11", city: "Paris", region: "Île-de-France", image: cityPhoto("FR", "center"), accent: "from-slate-950/65" },

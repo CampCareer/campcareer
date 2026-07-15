@@ -22,11 +22,11 @@ test("Ireland regional discovery offers the four main city choices", () => {
   assert.ok(cities.every((city) => city.image.startsWith("https://images.unsplash.com/")))
 })
 
-test("every remaining launch country offers four regional choices", () => {
+test("remaining launch countries offer curated regional choices", () => {
   const expectedCities = {
     DE: ["Berlin", "Munich", "Hamburg", "Frankfurt", "Cologne", "Stuttgart"],
     NL: ["Amsterdam", "Rotterdam", "Utrecht", "Eindhoven", "The Hague", "Groningen"],
-    BE: ["Brussels", "Antwerp", "Ghent", "Leuven"],
+    BE: ["Brussels", "Leuven", "Ghent", "Antwerp", "Liège", "Bruges"],
     FR: ["Paris", "Lyon", "Toulouse", "Marseille"],
     ES: ["Madrid", "Barcelona", "Valencia", "Seville"],
     SG: ["Central", "CBD", "East", "West"],
@@ -64,4 +64,10 @@ test("Netherlands regional cards use a distinct city thumbnail for every choice"
     "The Hague": "1721643365334-9397c6896b6a",
     Groningen: "1706775114556-801040d1ca5b",
   })
+})
+
+test("Belgium regional cards cover study hubs and a flagship destination with unique thumbnails", () => {
+  const cards = regionalDiscoveryFor("BE")
+  assert.deepEqual(cards.map((card) => card.city), ["Brussels", "Leuven", "Ghent", "Antwerp", "Liège", "Bruges"])
+  assert.equal(new Set(cards.map((card) => card.image)).size, cards.length)
 })
