@@ -79,9 +79,8 @@ export function HomeFinder({ locale = "en" }: { locale?: Locale }) {
     ...STUDY_CONCEPTS.map((item) => ({ value: item.id, label: isKo ? item.labelKo : item.label, description: isKo ? item.description : item.description, icon: majorEmoji(item.category), keywords: `${item.category} ${item.aliases.join(" ")} ${item.aliasesKo.join(" ")}` })),
   ], [isKo, t.majorPlaceholder])
   const goalOptions = useMemo<PickerOption[]>(() => [
-    { value: "", label: t.goalPlaceholder, description: isKo ? "나중에 국가 우선순위를 정할 수 있어요" : "You can set a country priority later", icon: "🎯" },
     ...LANDING_GOALS.map((item) => ({ value: item.id, label: isKo ? goalCopy(item.id).label : item.label, description: isKo ? goalCopy(item.id).description : goalCopy(item.id).descriptionEn, icon: goalCopy(item.id).icon })),
-  ], [isKo, t.goalPlaceholder])
+  ], [isKo])
 
   return (
     <div className="overflow-hidden bg-white">
