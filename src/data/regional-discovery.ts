@@ -45,10 +45,12 @@ export const REGIONAL_DISCOVERY: Partial<Record<string, readonly RegionalDiscove
     { code: "LK", city: "Limerick", region: "County Limerick", image: "https://images.unsplash.com/photo-1660687446300-b05801428ca9?w=900&h=620&fit=crop&auto=format", accent: "from-emerald-950/65" },
   ],
   DE: [
-    { code: "BE", city: "Berlin", region: "Berlin", image: cityPhoto("DE", "center"), accent: "from-slate-950/65" },
-    { code: "BY", city: "Munich", region: "Bayern", image: cityPhoto("DE", "entropy"), accent: "from-sky-950/65" },
-    { code: "HH", city: "Hamburg", region: "Hamburg", image: cityPhoto("DE", "edges"), accent: "from-cyan-950/65" },
-    { code: "HE", city: "Frankfurt", region: "Hessen", image: cityPhoto("DE", "faces"), accent: "from-amber-950/65" },
+    { code: "BE", city: "Berlin", region: "Berlin", image: "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=900&h=620&fit=crop&auto=format", accent: "from-slate-950/65" },
+    { code: "BY", city: "Munich", region: "Bayern", image: "https://images.unsplash.com/photo-1595867818082-083862f3d630?w=900&h=620&fit=crop&auto=format", accent: "from-sky-950/65" },
+    { code: "HH", city: "Hamburg", region: "Hamburg", image: "https://images.unsplash.com/photo-1553547274-0df401ae03c9?w=900&h=620&fit=crop&auto=format", accent: "from-cyan-950/65" },
+    { code: "HE", city: "Frankfurt", region: "Hessen", image: "https://images.unsplash.com/photo-1617934276076-ec9239067428?w=900&h=620&fit=crop&auto=format", accent: "from-amber-950/65" },
+    { code: "NW", city: "Cologne", region: "Nordrhein-Westfalen", image: "https://images.unsplash.com/photo-1600081925754-e32c08c14c19?w=900&h=620&fit=crop&auto=format", accent: "from-rose-950/65" },
+    { code: "BW", city: "Stuttgart", region: "Baden-Württemberg", image: "https://images.unsplash.com/photo-1778574744503-9c7772f3b9b1?w=900&h=620&fit=crop&auto=format", accent: "from-violet-950/65" },
   ],
   NL: [
     { code: "NH", city: "Amsterdam", region: "Noord-Holland", image: cityPhoto("NL", "center"), accent: "from-orange-950/65" },
