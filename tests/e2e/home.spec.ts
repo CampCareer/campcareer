@@ -23,6 +23,18 @@ test("landing sends country, major, and goal to country discovery", async ({ pag
   await expect(sydneyWorkspace).toHaveAttribute("href", /\/regional-workspace\?country=AU&state=NSW&city=Sydney/)
 })
 
+test("landing keeps the search available when no goal is selected", async ({ page }) => {
+  await page.goto("/")
+  await expect(page.getByLabel("What matters most?", { exact: true })).toContainText("Choose your goal")
+  await page.getByRole("button", { name: "See country rankings" }).click()
+
+  await expect(page).toHaveURL(/\/countries\/search\?country=everywhere&major=anything/)
+  await expect(page.getByRole("heading", { name: "Explore countries before you decide." })).toBeVisible()
+  await expect(page.getByRole("heading", { name: "What should come first?" })).toBeVisible()
+  await expect(page.getByRole("heading", { name: "Explore 20 countries" })).toBeVisible()
+  await expect(page.getByRole("heading", { name: "Australia", exact: true })).toBeVisible()
+})
+
 test("regional selection opens the dedicated ROI workspace instead of Maps", async ({ page }) => {
   await page.goto("/regional-workspace?country=AU&state=NSW&city=Sydney&major=computer-science&goal=immigration")
   await expect(page.getByRole("heading", { name: "Sydney, New South Wales" })).toBeVisible()

@@ -68,10 +68,7 @@ export function HomeFinder({ locale = "en" }: { locale?: Locale }) {
   const [major, setMajor] = useState("anything")
   const [goal, setGoal] = useState<LandingGoalId | "">("")
   const router = useRouter()
-  const ready = Boolean(goal)
-  const searchHref = ready
-    ? `${localizePath("/countries/search", localePrefix)}?${new URLSearchParams({ country, major, goal })}`
-    : "#"
+  const searchHref = `${localizePath("/countries/search", localePrefix)}?${new URLSearchParams({ country, major, ...(goal ? { goal } : {}) })}`
   const countryOptions = useMemo<PickerOption[]>(() => [
     { value: "everywhere", label: t.countryPlaceholder, description: isKo ? "20개국을 함께 비교" : "Compare all 20 destinations", icon: "🌍", keywords: "all global" },
     ...LAUNCH_COUNTRIES.map((item) => ({ value: item.code, label: item.name, description: isKo ? `${item.name} 유학·취업 신호 보기` : `Explore study and career signals`, icon: countryFlag(item.code), keywords: `${item.code} ${item.slug}` })),
@@ -80,12 +77,10 @@ export function HomeFinder({ locale = "en" }: { locale?: Locale }) {
     { value: "anything", label: t.majorPlaceholder, description: isKo ? "국가별 유망 전공부터 확인" : "See promising fields by country", icon: "✨", keywords: "any undecided" },
     ...STUDY_CONCEPTS.map((item) => ({ value: item.id, label: isKo ? item.labelKo : item.label, description: isKo ? item.description : item.description, icon: majorEmoji(item.category), keywords: `${item.category} ${item.aliases.join(" ")} ${item.aliasesKo.join(" ")}` })),
   ], [isKo, t.majorPlaceholder])
-  const goalOptions = useMemo<PickerOption[]>(() => LANDING_GOALS.map((item) => ({
-    value: item.id,
-    label: isKo ? goalCopy(item.id).label : item.label,
-    description: isKo ? goalCopy(item.id).description : goalCopy(item.id).descriptionEn,
-    icon: goalCopy(item.id).icon,
-  })), [isKo])
+  const goalOptions = useMemo<PickerOption[]>(() => [
+    { value: "", label: t.goalPlaceholder, description: isKo ? "나중에 국가 우선순위를 정할 수 있어요" : "You can set a country priority later", icon: "🎯" },
+    ...LANDING_GOALS.map((item) => ({ value: item.id, label: isKo ? goalCopy(item.id).label : item.label, description: isKo ? goalCopy(item.id).description : goalCopy(item.id).descriptionEn, icon: goalCopy(item.id).icon })),
+  ], [isKo, t.goalPlaceholder])
 
   return (
     <div className="overflow-hidden bg-white">
@@ -97,12 +92,12 @@ export function HomeFinder({ locale = "en" }: { locale?: Locale }) {
             <p className="mt-5 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">{t.subtitle}</p>
           </div>
 
-          <form action={searchHref} onSubmit={(event) => { event.preventDefault(); const submitted = new FormData(event.currentTarget); const submittedCountry = String(submitted.get("country") ?? "everywhere"); const submittedMajor = String(submitted.get("major") ?? "anything"); const submittedGoal = String(submitted.get("goal") ?? "") as LandingGoalId; if (!submittedGoal) return; const href = `${localizePath("/countries/search", localePrefix)}?${new URLSearchParams({ country: submittedCountry, major: submittedMajor, goal: submittedGoal })}`; recordDiscoveryEvent("recommendation_start", { surface: "landing", country: submittedCountry, major: submittedMajor, goal: submittedGoal }); router.push(href) }} className="mt-9 rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_18px_45px_rgba(15,23,42,.10)]">
+          <form action={searchHref} onSubmit={(event) => { event.preventDefault(); const submitted = new FormData(event.currentTarget); const submittedCountry = String(submitted.get("country") ?? "everywhere"); const submittedMajor = String(submitted.get("major") ?? "anything"); const submittedGoal = String(submitted.get("goal") ?? ""); const href = `${localizePath("/countries/search", localePrefix)}?${new URLSearchParams({ country: submittedCountry, major: submittedMajor, ...(submittedGoal ? { goal: submittedGoal } : {}) })}`; recordDiscoveryEvent("recommendation_start", { surface: "landing", country: submittedCountry, major: submittedMajor, goal: submittedGoal }); router.push(href) }} className="mt-9 rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_18px_45px_rgba(15,23,42,.10)]">
             <div className="grid gap-2 lg:grid-cols-[1fr_1.15fr_1.2fr_auto]">
               <IconPicker name="country" label={t.country} value={country} options={countryOptions} onChange={setCountry} searchPlaceholder={isKo ? "국가 검색" : "Search countries"} testId="country" />
               <IconPicker name="major" label={t.major} value={major} options={majorOptions} onChange={setMajor} searchPlaceholder={isKo ? "전공 검색" : "Search majors"} testId="major" />
               <IconPicker name="goal" label={t.goal} value={goal} options={goalOptions} onChange={(value) => setGoal(value as LandingGoalId)} testId="goal" />
-              <button type="submit" disabled={!ready} className="mt-auto inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300"><span>{t.submit}</span><ArrowRight className="h-4 w-4" /></button>
+              <button type="submit" className="mt-auto inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700"><span>{t.submit}</span><ArrowRight className="h-4 w-4" /></button>
             </div>
           </form>
 

@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { ArrowRight, Building2, CircleAlert, ExternalLink, MapPinned } from "lucide-react"
@@ -36,11 +37,11 @@ export function CountrySearchClient({ initial }: { initial: { country?: string; 
   const [result, setResult] = useState<LandingDiscoveryResult | null>(null)
   const [loading, setLoading] = useState(false)
   const lastTrackedResult = useRef("")
-  const ready = Boolean(goal)
+  const hasGoal = Boolean(goal)
   const selectedCountry = country === "everywhere" ? null : getLaunchCountry(country)
 
   useEffect(() => {
-    if (!ready || selectedCountry) return
+    if (!hasGoal || selectedCountry) return
     const controller = new AbortController()
     setLoading(true)
     setResult(null)
@@ -51,36 +52,40 @@ export function CountrySearchClient({ initial }: { initial: { country?: string; 
       .catch((error) => { if (error.name !== "AbortError") setResult(null) })
       .finally(() => setLoading(false))
     return () => controller.abort()
-  }, [country, goal, major, ready, selectedCountry])
+  }, [country, goal, hasGoal, major, selectedCountry])
 
   useEffect(() => {
     const key = `${country}:${major}:${goal}`
-    if ((result || selectedCountry) && lastTrackedResult.current !== key) {
+    if ((result || selectedCountry || !hasGoal) && lastTrackedResult.current !== key) {
       lastTrackedResult.current = key
       recordDiscoveryEvent("recommendation_result_view", { surface: "country_results", country, major, goal })
     }
-  }, [country, goal, major, result, selectedCountry])
+  }, [country, goal, hasGoal, major, result, selectedCountry])
 
-  const href = ready ? productHref("/countries/search", locale, { country, major, goal }) : "#"
+  const href = productHref("/countries/search", locale, { country, major, ...(goal ? { goal } : {}) })
   const searchAndResult = <>
-    <form action={href} onSubmit={(event) => { event.preventDefault(); if (!ready) return; recordDiscoveryEvent("recommendation_start", { surface: "country_results", country, major, goal }); router.push(href) }} className="grid gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm lg:grid-cols-[1fr_1.2fr_1.2fr_auto]">
+    <form action={href} onSubmit={(event) => { event.preventDefault(); recordDiscoveryEvent("recommendation_start", { surface: "country_results", country, major, goal }); router.push(href) }} className="grid gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm lg:grid-cols-[1fr_1.2fr_1.2fr_auto]">
       <Select label="Where do you want to study?" value={country} onChange={setCountry} options={[{ value: "everywhere", label: "Everywhere" }, ...LAUNCH_COUNTRIES.map((item) => ({ value: item.code, label: item.name }))]} />
       <Select label="What do you want to study?" value={major} onChange={setMajor} options={[{ value: "anything", label: "Anything" }, ...STUDY_CONCEPTS.map((item) => ({ value: item.id, label: item.label }))]} />
       <Select label="What matters most?" value={goal} onChange={(value) => setGoal(value as LandingGoalId)} options={[{ value: "", label: "Choose your goal" }, ...LANDING_GOALS.map((item) => ({ value: item.id, label: item.label }))]} />
-      <button disabled={!ready} className="mt-auto inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300">See country signals <ArrowRight className="h-4 w-4" /></button>
+      <button className="mt-auto inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white hover:bg-blue-700">See country signals <ArrowRight className="h-4 w-4" /></button>
     </form>
-    {!ready ? <SearchNotice title="Choose what matters most" body="You can leave country as Everywhere and major as Anything; choose a goal to see the best next places and fields to explore." /> : selectedCountry ? <RegionSelection country={selectedCountry} major={major} goal={goal} locale={locale} /> : loading ? <LoadingCards /> : result ? <LandingDiscoveryResults result={result} locale={locale} /> : <SearchNotice title="Discovery results are unavailable" body="Try again in a moment, or open a country profile from the landing page." />}
+    {!hasGoal ? <CountryBrowse major={major} onMajorChange={setMajor} onGoalChange={setGoal} locale={locale} /> : selectedCountry ? <RegionSelection country={selectedCountry} major={major} goal={goal} locale={locale} /> : loading ? <LoadingCards /> : result ? <LandingDiscoveryResults result={result} locale={locale} /> : <SearchNotice title="Discovery results are unavailable" body="Try again in a moment, or open a country profile from the landing page." />}
   </>
 
   if (selectedCountry) return <div className="bg-slate-50"><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 sm:py-10">{searchAndResult}</main></div>
 
-  return <DiscoveryLayout eyebrow="Countries" title="Which destination best fits your goal?" body="Choose a country, a major, or neither. Your goal is all we need to start exploring.">{searchAndResult}</DiscoveryLayout>
+  return <DiscoveryLayout eyebrow="Countries" title={hasGoal ? "Which destination best fits your goal?" : "Explore countries before you decide."} body={hasGoal ? "Choose a country, a major, or neither. Your goal is all we need to start exploring." : "Start broad, then use the filters between the search and country cards to decide what matters most."}>{searchAndResult}</DiscoveryLayout>
+}
+
+function CountryBrowse({ major, onMajorChange, onGoalChange, locale }: { major: string; onMajorChange: (value: string) => void; onGoalChange: (value: LandingGoalId) => void; locale: "en" | "ko" }) {
+  return <section><div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"><div className="flex flex-wrap items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[.18em] text-blue-700">Country filters</p><h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">What should come first?</h2><p className="mt-1 text-sm leading-6 text-slate-600">Choose a priority to rank the country cards. You can also narrow the ranking by study field.</p></div><label className="min-w-52"><span className="mb-1 block text-xs font-semibold text-slate-600">Study field</span><select aria-label="Country card study field filter" value={major} onChange={(event) => onMajorChange(event.target.value)} className="h-10 w-full rounded-lg border border-slate-300 bg-white px-3 text-sm font-medium text-slate-900 outline-none focus:ring-2 focus:ring-blue-500"><option value="anything">Any field</option>{STUDY_CONCEPTS.map((item) => <option key={item.id} value={item.id}>{item.label}</option>)}</select></label></div><div className="mt-5 grid gap-3 sm:grid-cols-3">{LANDING_GOALS.map((item) => <button key={item.id} type="button" onClick={() => onGoalChange(item.id)} className="rounded-xl border border-slate-200 p-4 text-left transition hover:border-blue-300 hover:bg-blue-50"><p className="text-sm font-semibold text-slate-950">{item.label}</p><p className="mt-1 text-xs leading-5 text-slate-500">Show countries in this priority order <ArrowRight className="ml-1 inline h-3.5 w-3.5" /></p></button>)}</div></div><div className="mt-7"><h2 className="text-2xl font-semibold tracking-tight text-slate-950">Explore 20 countries</h2><p className="mt-1 text-sm text-slate-600">No priority selected yet — browse destinations, or choose a filter above to rank them.</p><div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{LAUNCH_COUNTRIES.map((country) => <Link key={country.code} href={localizePath(`/countries/${country.slug}`, locale)} className="group overflow-hidden rounded-xl border border-slate-200 bg-white transition-all hover:border-blue-300 hover:shadow-md"><div className="relative h-40 overflow-hidden"><Image src={country.image} alt={country.name} fill sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-300 group-hover:scale-105" /></div><div className="p-4"><p className="text-xs font-semibold tracking-[.15em] text-blue-700">{country.code}</p><h3 className="mt-1 font-semibold text-slate-950">{country.name}</h3><span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-slate-600 group-hover:text-blue-700">Explore country <ArrowRight className="h-4 w-4" /></span></div></Link>)}</div></div></section>
 }
 
 function LandingDiscoveryResults({ result, locale }: { result: LandingDiscoveryResult; locale: "en" | "ko" }) {
   const majorLabel = result.major?.label ?? "any field"
   const selected = result.selectedCountry
-  const results = selected ? [selected, ...result.similar] : result.ranked.slice(0, 3)
+  const results = selected ? [selected, ...result.similar] : result.ranked
 
   return <section>
     <div className="flex flex-wrap items-end justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[.18em] text-blue-700">Destination signals</p><h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{result.goal.label} for {majorLabel}</h2></div><p className="max-w-xl text-sm leading-6 text-slate-600">{result.note}</p></div>
@@ -91,13 +96,10 @@ function LandingDiscoveryResults({ result, locale }: { result: LandingDiscoveryR
 }
 
 function LandingCountryCard({ country, locale }: { country: LandingDiscoveryResult["ranked"][number]; locale: "en" | "ko" }) {
-  return <article className={`rounded-2xl border bg-white p-5 shadow-sm ${country.selected ? "border-blue-400 ring-2 ring-blue-100" : "border-slate-200"}`}>
-    <div className="flex items-center justify-between gap-3"><span className="inline-flex h-8 min-w-8 items-center justify-center rounded-full bg-blue-600 px-2 text-sm font-bold text-white">{country.rank}</span>{country.selected && <span className="text-xs font-semibold text-blue-700">Your choice</span>}</div>
-    <h3 className="mt-4 text-2xl font-semibold text-slate-950">{country.name}</h3>
-    <p className="mt-2 text-sm leading-6 text-slate-600">{country.why}</p>
-    <dl className="mt-5 space-y-2 text-sm"><Row label="Graduate salary signal" value={country.firstSalary} /><Row label="First-year cost signal" value={country.initialBudget} /><Row label="Post-study route" value={country.policy} /></dl>
-    <p className="mt-4 text-xs leading-5 text-slate-500">Promising fields: {country.bestMajors.join(", ")} · Reviewed {country.evidenceAsOf}</p>
-    <div className="mt-5 flex flex-wrap gap-4"><Link href={localizePath(`/countries/${country.slug}`, locale)} className="inline-flex items-center gap-1 text-sm font-semibold text-blue-700">Open country profile <ArrowRight className="h-4 w-4" /></Link><Link href={localizePath(`/maps?country=${country.code.toLowerCase()}`, locale)} className="inline-flex items-center gap-1 text-sm font-semibold text-slate-700">Explore jobs on Maps <MapPinned className="h-4 w-4" /></Link></div>
+  const launchCountry = LAUNCH_COUNTRIES.find((item) => item.code === country.code)
+  return <article className={`overflow-hidden rounded-xl border bg-white shadow-sm ${country.selected ? "border-blue-400 ring-2 ring-blue-100" : "border-slate-200"}`}>
+    {launchCountry && <div className="relative h-40 overflow-hidden"><Image src={launchCountry.image} alt={country.name} fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover" /></div>}
+    <div className="p-5"><div className="flex items-center justify-between gap-3"><span className="inline-flex h-8 min-w-8 items-center justify-center rounded-full bg-blue-600 px-2 text-sm font-bold text-white">{country.rank}</span>{country.selected && <span className="text-xs font-semibold text-blue-700">Your choice</span>}</div><h3 className="mt-4 text-2xl font-semibold text-slate-950">{country.name}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{country.why}</p><dl className="mt-5 space-y-2 text-sm"><Row label="Graduate salary signal" value={country.firstSalary} /><Row label="First-year cost signal" value={country.initialBudget} /><Row label="Post-study route" value={country.policy} /></dl><p className="mt-4 text-xs leading-5 text-slate-500">Promising fields: {country.bestMajors.join(", ")} · Reviewed {country.evidenceAsOf}</p><div className="mt-5 flex flex-wrap gap-4"><Link href={localizePath(`/countries/${country.slug}`, locale)} className="inline-flex items-center gap-1 text-sm font-semibold text-blue-700">Open country profile <ArrowRight className="h-4 w-4" /></Link><Link href={localizePath(`/maps?country=${country.code.toLowerCase()}`, locale)} className="inline-flex items-center gap-1 text-sm font-semibold text-slate-700">Explore jobs on Maps <MapPinned className="h-4 w-4" /></Link></div></div>
   </article>
 }
 
