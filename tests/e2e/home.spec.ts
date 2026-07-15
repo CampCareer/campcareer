@@ -35,6 +35,30 @@ test("landing keeps the search available when no goal is selected", async ({ pag
   await expect(page.getByRole("heading", { name: "Australia", exact: true })).toBeVisible()
 })
 
+test("Ireland country results offer Dublin, Cork, Galway, and Limerick", async ({ page }) => {
+  await page.goto("/countries/search?country=IE&major=computer-science&goal=immigration")
+
+  await expect(page.getByRole("heading", { name: "Where in Ireland?" })).toBeVisible()
+  for (const city of ["Dublin", "Cork", "Galway", "Limerick"]) {
+    await expect(page.getByText(city, { exact: true })).toBeVisible()
+  }
+  await expect(page.getByRole("link", { name: "Open workspace" }).first()).toHaveAttribute(
+    "href",
+    /\/regional-workspace\?country=IE&state=D&city=Dublin/,
+  )
+})
+
+test("Germany, Singapore, and UAE country results offer their regional choices", async ({ page }) => {
+  for (const [country, cities] of [
+    ["DE", ["Berlin", "Munich", "Hamburg", "Frankfurt"]],
+    ["SG", ["Central", "CBD", "East", "West"]],
+    ["AE", ["Dubai", "Abu Dhabi", "Sharjah", "Ras Al Khaimah"]],
+  ] as const) {
+    await page.goto(`/countries/search?country=${country}&major=computer-science&goal=immigration`)
+    for (const city of cities) await expect(page.getByRole("link", { name: new RegExp(`^${city},`) })).toBeVisible()
+  }
+})
+
 test("regional selection opens the dedicated ROI workspace instead of Maps", async ({ page }) => {
   await page.goto("/regional-workspace?country=AU&state=NSW&city=Sydney&major=computer-science&goal=immigration")
   await expect(page.getByRole("heading", { name: "Sydney, New South Wales" })).toBeVisible()

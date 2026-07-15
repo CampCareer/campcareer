@@ -6,6 +6,28 @@ export type RegionalDiscoveryCard = {
   accent: string
 }
 
+const COUNTRY_CITY_PHOTOS: Record<string, string> = {
+  DE: "https://images.unsplash.com/photo-1560969184-10fe8719e047",
+  NL: "https://images.unsplash.com/photo-1534351590666-13e3e96b5017",
+  BE: "https://images.unsplash.com/photo-1559113202-c916b8e44373",
+  FR: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34",
+  ES: "https://images.unsplash.com/photo-1539037116277-4db20889f2d4",
+  SG: "https://images.unsplash.com/photo-1525625293386-3f8f99389edd",
+  KR: "https://images.unsplash.com/photo-1570191913384-7b4ff11716e7",
+  JP: "https://images.unsplash.com/photo-1490806843957-31f4c9a91c65",
+  NZ: "https://images.unsplash.com/photo-1507699622108-4be3abd695ad",
+  NO: "https://images.unsplash.com/photo-1475066392170-59d55d96fe51",
+  SE: "https://images.unsplash.com/photo-1509356843151-3e7d96241e11",
+  DK: "https://images.unsplash.com/photo-1513622470522-26c3c8a854bc",
+  FI: "https://images.unsplash.com/photo-1570097658726-ed3c922a1bc9",
+  CH: "https://images.unsplash.com/photo-1530841344029-ec3ae0fa4cc4",
+  AE: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c",
+}
+
+function cityPhoto(country: keyof typeof COUNTRY_CITY_PHOTOS, focalPoint: "entropy" | "center" | "edges" | "faces") {
+  return `${COUNTRY_CITY_PHOTOS[country]}?w=900&h=620&fit=crop&crop=${focalPoint}&auto=format`
+}
+
 /** Curated city-first entry points for the regional Maps experience. */
 export const REGIONAL_DISCOVERY: Partial<Record<string, readonly RegionalDiscoveryCard[]>> = {
   AU: [
@@ -15,6 +37,102 @@ export const REGIONAL_DISCOVERY: Partial<Record<string, readonly RegionalDiscove
     { code: "WA", city: "Perth", region: "Western Australia", image: "https://images.unsplash.com/photo-1562161092-01d53ec54edd?w=900&h=620&fit=crop&auto=format", accent: "from-cyan-950/65" },
     { code: "SA", city: "Adelaide", region: "South Australia", image: "https://images.unsplash.com/photo-1596017497096-90ee17fb4e82?w=900&h=620&fit=crop&auto=format", accent: "from-rose-950/65" },
     { code: "QLD", city: "Gold Coast", region: "Queensland", image: "https://images.unsplash.com/photo-1691028355763-0c4144bf441b?w=900&h=620&fit=crop&auto=format", accent: "from-emerald-950/65" },
+  ],
+  IE: [
+    { code: "D", city: "Dublin", region: "County Dublin", image: "https://images.unsplash.com/photo-1666115836913-24e621a54d0b?w=900&h=620&fit=crop&auto=format", accent: "from-sky-950/65" },
+    { code: "CO", city: "Cork", region: "County Cork", image: "https://images.unsplash.com/photo-1633937765115-b5e0987541b3?w=900&h=620&fit=crop&auto=format", accent: "from-rose-950/65" },
+    { code: "G", city: "Galway", region: "County Galway", image: "https://images.unsplash.com/photo-1693824107580-9b05a98ea682?w=900&h=620&fit=crop&auto=format", accent: "from-indigo-950/65" },
+    { code: "LK", city: "Limerick", region: "County Limerick", image: "https://images.unsplash.com/photo-1660687446300-b05801428ca9?w=900&h=620&fit=crop&auto=format", accent: "from-emerald-950/65" },
+  ],
+  DE: [
+    { code: "BE", city: "Berlin", region: "Berlin", image: cityPhoto("DE", "center"), accent: "from-slate-950/65" },
+    { code: "BY", city: "Munich", region: "Bayern", image: cityPhoto("DE", "entropy"), accent: "from-sky-950/65" },
+    { code: "HH", city: "Hamburg", region: "Hamburg", image: cityPhoto("DE", "edges"), accent: "from-cyan-950/65" },
+    { code: "HE", city: "Frankfurt", region: "Hessen", image: cityPhoto("DE", "faces"), accent: "from-amber-950/65" },
+  ],
+  NL: [
+    { code: "NH", city: "Amsterdam", region: "Noord-Holland", image: cityPhoto("NL", "center"), accent: "from-orange-950/65" },
+    { code: "ZH", city: "Rotterdam", region: "Zuid-Holland", image: cityPhoto("NL", "entropy"), accent: "from-sky-950/65" },
+    { code: "UT", city: "Utrecht", region: "Utrecht", image: cityPhoto("NL", "edges"), accent: "from-emerald-950/65" },
+    { code: "NB", city: "Eindhoven", region: "Noord-Brabant", image: cityPhoto("NL", "faces"), accent: "from-rose-950/65" },
+  ],
+  BE: [
+    { code: "BR", city: "Brussels", region: "Brussels-Capital", image: cityPhoto("BE", "center"), accent: "from-slate-950/65" },
+    { code: "FL", city: "Antwerp", region: "Flanders", image: cityPhoto("BE", "entropy"), accent: "from-red-950/65" },
+    { code: "FL", city: "Ghent", region: "Flanders", image: cityPhoto("BE", "edges"), accent: "from-indigo-950/65" },
+    { code: "FL", city: "Leuven", region: "Flanders", image: cityPhoto("BE", "faces"), accent: "from-amber-950/65" },
+  ],
+  FR: [
+    { code: "11", city: "Paris", region: "Île-de-France", image: cityPhoto("FR", "center"), accent: "from-slate-950/65" },
+    { code: "84", city: "Lyon", region: "Auvergne-Rhône-Alpes", image: cityPhoto("FR", "entropy"), accent: "from-rose-950/65" },
+    { code: "76", city: "Toulouse", region: "Occitanie", image: cityPhoto("FR", "edges"), accent: "from-violet-950/65" },
+    { code: "93", city: "Marseille", region: "Provence-Alpes-Côte d'Azur", image: cityPhoto("FR", "faces"), accent: "from-sky-950/65" },
+  ],
+  ES: [
+    { code: "MD", city: "Madrid", region: "Community of Madrid", image: cityPhoto("ES", "center"), accent: "from-red-950/65" },
+    { code: "CT", city: "Barcelona", region: "Catalonia", image: cityPhoto("ES", "entropy"), accent: "from-amber-950/65" },
+    { code: "VC", city: "Valencia", region: "Valencian Community", image: cityPhoto("ES", "edges"), accent: "from-orange-950/65" },
+    { code: "AN", city: "Seville", region: "Andalusia", image: cityPhoto("ES", "faces"), accent: "from-rose-950/65" },
+  ],
+  SG: [
+    { code: "central", city: "Central", region: "Singapore", image: cityPhoto("SG", "center"), accent: "from-slate-950/65" },
+    { code: "cbd", city: "CBD", region: "Singapore", image: cityPhoto("SG", "entropy"), accent: "from-blue-950/65" },
+    { code: "east", city: "East", region: "Singapore", image: cityPhoto("SG", "edges"), accent: "from-cyan-950/65" },
+    { code: "west", city: "West", region: "Singapore", image: cityPhoto("SG", "faces"), accent: "from-emerald-950/65" },
+  ],
+  KR: [
+    { code: "11", city: "Seoul", region: "Seoul", image: cityPhoto("KR", "center"), accent: "from-slate-950/65" },
+    { code: "26", city: "Busan", region: "Busan", image: cityPhoto("KR", "entropy"), accent: "from-sky-950/65" },
+    { code: "28", city: "Incheon", region: "Incheon", image: cityPhoto("KR", "edges"), accent: "from-cyan-950/65" },
+    { code: "30", city: "Daejeon", region: "Daejeon", image: cityPhoto("KR", "faces"), accent: "from-violet-950/65" },
+  ],
+  JP: [
+    { code: "13", city: "Tokyo", region: "Tokyo", image: cityPhoto("JP", "center"), accent: "from-slate-950/65" },
+    { code: "27", city: "Osaka", region: "Osaka", image: cityPhoto("JP", "entropy"), accent: "from-rose-950/65" },
+    { code: "26", city: "Kyoto", region: "Kyoto", image: cityPhoto("JP", "edges"), accent: "from-amber-950/65" },
+    { code: "40", city: "Fukuoka", region: "Fukuoka", image: cityPhoto("JP", "faces"), accent: "from-cyan-950/65" },
+  ],
+  NZ: [
+    { code: "AUK", city: "Auckland", region: "Auckland", image: cityPhoto("NZ", "center"), accent: "from-sky-950/65" },
+    { code: "WGN", city: "Wellington", region: "Wellington", image: cityPhoto("NZ", "entropy"), accent: "from-indigo-950/65" },
+    { code: "CAN", city: "Christchurch", region: "Canterbury", image: cityPhoto("NZ", "edges"), accent: "from-emerald-950/65" },
+    { code: "OTG", city: "Dunedin", region: "Otago", image: cityPhoto("NZ", "faces"), accent: "from-rose-950/65" },
+  ],
+  NO: [
+    { code: "OSL", city: "Oslo", region: "Oslo", image: cityPhoto("NO", "center"), accent: "from-slate-950/65" },
+    { code: "VEL", city: "Bergen", region: "Vestland", image: cityPhoto("NO", "entropy"), accent: "from-emerald-950/65" },
+    { code: "TRN", city: "Trondheim", region: "Trøndelag", image: cityPhoto("NO", "edges"), accent: "from-sky-950/65" },
+    { code: "ROG", city: "Stavanger", region: "Rogaland", image: cityPhoto("NO", "faces"), accent: "from-cyan-950/65" },
+  ],
+  SE: [
+    { code: "AB", city: "Stockholm", region: "Stockholm", image: cityPhoto("SE", "center"), accent: "from-slate-950/65" },
+    { code: "O", city: "Gothenburg", region: "Västra Götaland", image: cityPhoto("SE", "entropy"), accent: "from-blue-950/65" },
+    { code: "M", city: "Malmö", region: "Skåne", image: cityPhoto("SE", "edges"), accent: "from-rose-950/65" },
+    { code: "C", city: "Uppsala", region: "Uppsala", image: cityPhoto("SE", "faces"), accent: "from-violet-950/65" },
+  ],
+  DK: [
+    { code: "HST", city: "Copenhagen", region: "Hovedstaden", image: cityPhoto("DK", "center"), accent: "from-slate-950/65" },
+    { code: "MID", city: "Aarhus", region: "Midtjylland", image: cityPhoto("DK", "entropy"), accent: "from-sky-950/65" },
+    { code: "SDJ", city: "Odense", region: "Syddanmark", image: cityPhoto("DK", "edges"), accent: "from-emerald-950/65" },
+    { code: "NOR", city: "Aalborg", region: "Nordjylland", image: cityPhoto("DK", "faces"), accent: "from-cyan-950/65" },
+  ],
+  FI: [
+    { code: "UUS", city: "Helsinki", region: "Uusimaa", image: cityPhoto("FI", "center"), accent: "from-slate-950/65" },
+    { code: "PIR", city: "Tampere", region: "Pirkanmaa", image: cityPhoto("FI", "entropy"), accent: "from-violet-950/65" },
+    { code: "VRS", city: "Turku", region: "Varsinais-Suomi", image: cityPhoto("FI", "edges"), accent: "from-sky-950/65" },
+    { code: "NPO", city: "Oulu", region: "Pohjois-Pohjanmaa", image: cityPhoto("FI", "faces"), accent: "from-cyan-950/65" },
+  ],
+  CH: [
+    { code: "ZH", city: "Zurich", region: "Zurich", image: cityPhoto("CH", "center"), accent: "from-slate-950/65" },
+    { code: "GE", city: "Geneva", region: "Geneva", image: cityPhoto("CH", "entropy"), accent: "from-blue-950/65" },
+    { code: "VD", city: "Lausanne", region: "Vaud", image: cityPhoto("CH", "edges"), accent: "from-sky-950/65" },
+    { code: "BS", city: "Basel", region: "Basel-Stadt", image: cityPhoto("CH", "faces"), accent: "from-rose-950/65" },
+  ],
+  AE: [
+    { code: "DXB", city: "Dubai", region: "Dubai", image: cityPhoto("AE", "center"), accent: "from-amber-950/65" },
+    { code: "AUH", city: "Abu Dhabi", region: "Abu Dhabi", image: cityPhoto("AE", "entropy"), accent: "from-slate-950/65" },
+    { code: "SHJ", city: "Sharjah", region: "Sharjah", image: cityPhoto("AE", "edges"), accent: "from-rose-950/65" },
+    { code: "RAK", city: "Ras Al Khaimah", region: "Ras Al Khaimah", image: cityPhoto("AE", "faces"), accent: "from-orange-950/65" },
   ],
   US: [
     { code: "NY", city: "New York", region: "New York", image: "https://images.unsplash.com/photo-1485871981521-5b1fd3805eee?w=900&h=620&fit=crop&auto=format", accent: "from-slate-950/70" },
