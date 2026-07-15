@@ -6,16 +6,17 @@ test("landing sends country, major, and goal to country discovery", async ({ pag
 
   await page.getByLabel("Where do you want to study?", { exact: true }).click()
   await expect(page.getByTestId("country-option-UK")).toContainText("🇬🇧")
-  await page.getByTestId("country-option-CA").click()
+  await page.getByTestId("country-option-AU").click()
   await page.getByLabel("What do you want to study?", { exact: true }).click()
   await page.getByTestId("major-option-computer-science").click()
   await page.getByLabel("What matters most?", { exact: true }).click()
   await page.getByTestId("goal-option-immigration").click()
   await page.getByRole("button", { name: "See country rankings" }).click()
 
-  await expect(page).toHaveURL(/\/countries\/search\?country=CA&major=computer-science&goal=immigration/)
-  await expect(page.getByRole("heading", { name: "Which destination best fits your goal?" })).toBeVisible()
-  await expect(page.getByText("Canada is your chosen country.")).toBeVisible()
+  await expect(page).toHaveURL(/\/countries\/search\?country=AU&major=computer-science&goal=immigration/)
+  await expect(page.getByRole("heading", { name: "Choose your region in Australia" })).toBeVisible()
+  await expect(page.getByRole("heading", { name: "Where in Australia?" })).toBeVisible()
+  await expect(page.getByText("Sydney", { exact: true })).toBeVisible()
 })
 
 test("product hubs and discovery result pages are available", async ({ page }) => {

@@ -9,9 +9,11 @@ import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
 import { STUDY_CATEGORIES, STUDY_CONCEPTS } from "@/data/study-concepts"
 import { BUDGET_BANDS, SEARCH_GOALS, type BudgetBandId, type DiscoveryEnvelope, type MajorRecommendationsData, type SearchGoalId, type UniversityMatchesData } from "@/lib/discovery/search-contract"
 import { LANDING_GOALS, type LandingDiscoveryResult, type LandingGoalId } from "@/lib/discovery/landing-discovery"
+import { getLaunchCountry } from "@/data/launch-countries"
 import { localizePath } from "@/lib/i18n/config"
 import { useLocale } from "@/lib/i18n/locale-provider"
 import { recordDiscoveryEvent } from "@/lib/analytics"
+import { RegionSelection } from "@/components/discovery/region-selection"
 
 function usePathLocale() {
   return useLocale() === "ko" ? "ko" : "en"
@@ -35,9 +37,10 @@ export function CountrySearchClient({ initial }: { initial: { country?: string; 
   const [loading, setLoading] = useState(false)
   const lastTrackedResult = useRef("")
   const ready = Boolean(goal)
+  const selectedCountry = country === "everywhere" ? null : getLaunchCountry(country)
 
   useEffect(() => {
-    if (!ready) return
+    if (!ready || selectedCountry) return
     const controller = new AbortController()
     setLoading(true)
     setResult(null)
@@ -48,25 +51,25 @@ export function CountrySearchClient({ initial }: { initial: { country?: string; 
       .catch((error) => { if (error.name !== "AbortError") setResult(null) })
       .finally(() => setLoading(false))
     return () => controller.abort()
-  }, [country, goal, major, ready])
+  }, [country, goal, major, ready, selectedCountry])
 
   useEffect(() => {
     const key = `${country}:${major}:${goal}`
-    if (result && lastTrackedResult.current !== key) {
+    if ((result || selectedCountry) && lastTrackedResult.current !== key) {
       lastTrackedResult.current = key
       recordDiscoveryEvent("recommendation_result_view", { surface: "country_results", country, major, goal })
     }
-  }, [country, goal, major, result])
+  }, [country, goal, major, result, selectedCountry])
 
   const href = ready ? productHref("/countries/search", locale, { country, major, goal }) : "#"
-  return <DiscoveryLayout eyebrow="Countries" title="Which destination best fits your goal?" body="Choose a country, a major, or neither. Your goal is all we need to start exploring.">
+  return <DiscoveryLayout eyebrow="Countries" title={selectedCountry ? `Choose your region in ${selectedCountry.name}` : "Which destination best fits your goal?"} body={selectedCountry ? "Start with a state or city, then explore the local study and career picture." : "Choose a country, a major, or neither. Your goal is all we need to start exploring."}>
     <form action={href} onSubmit={(event) => { event.preventDefault(); if (!ready) return; recordDiscoveryEvent("recommendation_start", { surface: "country_results", country, major, goal }); router.push(href) }} className="grid gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm lg:grid-cols-[1fr_1.2fr_1.2fr_auto]">
       <Select label="Where do you want to study?" value={country} onChange={setCountry} options={[{ value: "everywhere", label: "Everywhere" }, ...LAUNCH_COUNTRIES.map((item) => ({ value: item.code, label: item.name }))]} />
       <Select label="What do you want to study?" value={major} onChange={setMajor} options={[{ value: "anything", label: "Anything" }, ...STUDY_CONCEPTS.map((item) => ({ value: item.id, label: item.label }))]} />
       <Select label="What matters most?" value={goal} onChange={(value) => setGoal(value as LandingGoalId)} options={[{ value: "", label: "Choose your goal" }, ...LANDING_GOALS.map((item) => ({ value: item.id, label: item.label }))]} />
       <button disabled={!ready} className="mt-auto inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300">See country signals <ArrowRight className="h-4 w-4" /></button>
     </form>
-    {!ready ? <SearchNotice title="Choose what matters most" body="You can leave country as Everywhere and major as Anything; choose a goal to see the best next places and fields to explore." /> : loading ? <LoadingCards /> : result ? <LandingDiscoveryResults result={result} locale={locale} /> : <SearchNotice title="Discovery results are unavailable" body="Try again in a moment, or open a country profile from the landing page." />}
+    {!ready ? <SearchNotice title="Choose what matters most" body="You can leave country as Everywhere and major as Anything; choose a goal to see the best next places and fields to explore." /> : selectedCountry ? <RegionSelection country={selectedCountry} major={major} goal={goal} locale={locale} /> : loading ? <LoadingCards /> : result ? <LandingDiscoveryResults result={result} locale={locale} /> : <SearchNotice title="Discovery results are unavailable" body="Try again in a moment, or open a country profile from the landing page." />}
   </DiscoveryLayout>
 }
 
