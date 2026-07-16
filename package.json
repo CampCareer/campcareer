@@ -24,6 +24,8 @@
     "check:data": "npx tsx scripts/check-data-quality.ts",
     "import:au-osca": "npx tsx scripts/import-au-osca-content.ts",
     "check:au-osca": "npx tsx --env-file=.env.local scripts/check-au-osca-content.ts",
+    "import:au-csol": "python3 scripts/import-au-csol-priority-occupations.py",
+    "seed:au-csol": "npx tsx --env-file=.env.local scripts/seed-au-csol-priority-occupations.ts",
     "check:new-countries": "npx tsx scripts/check-new-country-readiness.ts",
     "check:switzerland": "npx tsx scripts/check-switzerland-data.ts",
     "check:pilot": "npx tsx scripts/check-pilot-readiness.ts",

@@ -10,6 +10,7 @@ type OccRow = {
   occupation_en: string
   median_salary_aud: number | null
   shortage_rating: number | null
+  on_csol: boolean
 }
 
 type SortKey = "alpha" | "salary" | "shortage"
@@ -104,6 +105,11 @@ export function AuJobsClient({ occupations }: { occupations: OccRow[] }) {
                 {occ.shortage_rating != null && occ.shortage_rating >= 3 && (
                   <span className="bg-orange-50 text-orange-600 px-1.5 py-0.5 rounded text-[10px] font-semibold">
                     Shortage
+                  </span>
+                )}
+                {occ.on_csol && (
+                  <span className="bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded text-[10px] font-semibold">
+                    CSOL
                   </span>
                 )}
                 <span className="ml-auto">{occ.anzsco_code}</span>

@@ -1,5 +1,5 @@
 // POST-DEPLOY ACTIONS:
-// 1. Check build log for "[sitemap] counts" line — AU occupations: 395, US: 116, CA occupations: 514, CA colleges: ~30
+// 1. Check build log for "[sitemap] counts" line — AU occupations: 600, US: 116, CA occupations: 514, CA colleges: ~30
 // 2. Open https://www.campcareer.com/sitemap.xml in browser and verify 1,900+ URLs are present
 // 3. Go to Google Search Console → Sitemaps → delete old sitemap.xml entry → resubmit
 // 4. Go to Search Console → URL Inspection → manually request indexing for 10 high-priority occupation pages per day
@@ -31,6 +31,11 @@ import { supabaseAdmin } from "@/lib/supabase-admin"
 import { getAuOccupationSlug } from "@/lib/au-occupation-slug"
 
 const BASE = "https://www.campcareer.com"
+
+// Occupation rows are managed independently of deployments. Generate the
+// sitemap from the current published database rows so newly released profiles
+// are discoverable without waiting for a stale route cache to expire.
+export const dynamic = "force-dynamic"
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Hidden legacy routes (career-path, rankings, checklist, timeline, games,

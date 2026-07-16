@@ -145,7 +145,7 @@ export function OccupationDetailClient({ detail, salary, shortageRating, onCSOL,
                 <div>
                   <p className="text-xs text-slate-500">Visa pathways</p>
                   <p className="text-lg font-semibold text-slate-950">
-                    {onCSOL ? "Eligible (CSOL)" : "Check current list"}
+                    {onCSOL ? "CSOL listed (verify visa)" : "Check current list"}
                   </p>
                   <a href="https://immi.homeaffairs.gov.au/visas/working-in-australia/skill-occupation-list" target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline">
                     Verify on HomeAffairs

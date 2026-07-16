@@ -15,12 +15,12 @@ export const metadata: Metadata = pageMetadata({
   path: "/au/jobs",
 })
 
-type OccRow = { anzsco_code: string; occupation_en: string; median_salary_aud: number | null; shortage_rating: number | null }
+type OccRow = { anzsco_code: string; occupation_en: string; median_salary_aud: number | null; shortage_rating: number | null; on_csol: boolean }
 
 async function getOccupations(): Promise<OccRow[]> {
   const { data } = await supabaseAdmin
     .from("occupations_au")
-    .select("anzsco_code, occupation_en, median_salary_aud, shortage_rating")
+    .select("anzsco_code, occupation_en, median_salary_aud, shortage_rating, on_csol")
     .order("occupation_en")
   return (data ?? []) as OccRow[]
 }

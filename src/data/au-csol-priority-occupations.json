@@ -1,0 +1,4808 @@
+{
+  "source": {
+    "name": "Department of Home Affairs Core Skills Occupation List matched via ABS OSCA 2024 v1.0 correspondence Table 2",
+    "csolUrl": "https://immi.homeaffairs.gov.au/Documents/core-sol.pdf",
+    "correspondenceUrl": "https://www.abs.gov.au/statistics/classifications/osca-occupation-standard-classification-australia/2024-version-1-0/data-downloads/OSCA%20correspondence%20tables%20v2.xlsx",
+    "retrievedAt": "2026-07-16T10:24:02.316749+00:00",
+    "csolContentHash": "f3ec1d9e4ebb1eab468a9889b02311b1b93952d12571e55d3f05e9786c5f5978",
+    "correspondenceContentHash": "a88be381b95a7d3c1340588c374e260bd27b9c9198b4d8a48b8c71016bb64ae9"
+  },
+  "csolAnzscoV13Codes": [
+    "111111",
+    "111211",
+    "121111",
+    "121311",
+    "121313",
+    "121315",
+    "121318",
+    "121321",
+    "121611",
+    "131112",
+    "131113",
+    "132111",
+    "132211",
+    "132311",
+    "132411",
+    "132511",
+    "133111",
+    "133112",
+    "133211",
+    "133511",
+    "133512",
+    "133611",
+    "133612",
+    "134211",
+    "134212",
+    "134213",
+    "134311",
+    "134411",
+    "134499",
+    "135111",
+    "135112",
+    "135199",
+    "139911",
+    "139912",
+    "139913",
+    "139916",
+    "139917",
+    "141311",
+    "141411",
+    "141999",
+    "142111",
+    "142116",
+    "149411",
+    "149911",
+    "149912",
+    "149915",
+    "149999",
+    "211212",
+    "212111",
+    "212315",
+    "212316",
+    "212317",
+    "212318",
+    "212413",
+    "212414",
+    "212415",
+    "212416",
+    "212499",
+    "221111",
+    "221112",
+    "221113",
+    "221211",
+    "221213",
+    "221214",
+    "222112",
+    "222113",
+    "222311",
+    "223111",
+    "223112",
+    "223113",
+    "224111",
+    "224112",
+    "224114",
+    "224115",
+    "224116",
+    "224511",
+    "224512",
+    "224712",
+    "224713",
+    "224714",
+    "224914",
+    "224999",
+    "225111",
+    "225113",
+    "225114",
+    "225211",
+    "225212",
+    "225213",
+    "225311",
+    "225411",
+    "225412",
+    "225499",
+    "231111",
+    "231113",
+    "231114",
+    "231199",
+    "231212",
+    "232111",
+    "232112",
+    "232212",
+    "232213",
+    "232214",
+    "232313",
+    "232412",
+    "232413",
+    "232414",
+    "232511",
+    "232611",
+    "233111",
+    "233112",
+    "233211",
+    "233212",
+    "233213",
+    "233214",
+    "233215",
+    "233311",
+    "233411",
+    "233511",
+    "233512",
+    "233513",
+    "233611",
+    "233612",
+    "233911",
+    "233912",
+    "233913",
+    "233914",
+    "233915",
+    "233916",
+    "233999",
+    "234111",
+    "234114",
+    "234115",
+    "234116",
+    "234211",
+    "234212",
+    "234213",
+    "234312",
+    "234399",
+    "234411",
+    "234412",
+    "234413",
+    "234511",
+    "234513",
+    "234515",
+    "234516",
+    "234521",
+    "234522",
+    "234599",
+    "234612",
+    "234711",
+    "234911",
+    "234912",
+    "234913",
+    "234914",
+    "234999",
+    "241111",
+    "241213",
+    "241311",
+    "241411",
+    "241511",
+    "241512",
+    "241513",
+    "241599",
+    "242111",
+    "242211",
+    "249112",
+    "249214",
+    "249299",
+    "251111",
+    "251211",
+    "251212",
+    "251213",
+    "251214",
+    "251312",
+    "251411",
+    "251412",
+    "251511",
+    "251512",
+    "251513",
+    "251912",
+    "251999",
+    "252214",
+    "252299",
+    "252311",
+    "252312",
+    "252411",
+    "252511",
+    "252611",
+    "252711",
+    "252712",
+    "253111",
+    "253112",
+    "253211",
+    "253311",
+    "253312",
+    "253313",
+    "253314",
+    "253315",
+    "253316",
+    "253317",
+    "253318",
+    "253321",
+    "253322",
+    "253323",
+    "253324",
+    "253399",
+    "253411",
+    "253511",
+    "253512",
+    "253513",
+    "253514",
+    "253515",
+    "253516",
+    "253517",
+    "253518",
+    "253521",
+    "253911",
+    "253912",
+    "253913",
+    "253914",
+    "253915",
+    "253917",
+    "253918",
+    "253999",
+    "254111",
+    "254211",
+    "254212",
+    "254411",
+    "254412",
+    "254413",
+    "254414",
+    "254415",
+    "254416",
+    "254417",
+    "254418",
+    "254421",
+    "254422",
+    "254423",
+    "254424",
+    "254425",
+    "254499",
+    "261111",
+    "261112",
+    "261211",
+    "261212",
+    "261311",
+    "261312",
+    "261313",
+    "261314",
+    "261315",
+    "261316",
+    "261317",
+    "261399",
+    "262111",
+    "262113",
+    "262114",
+    "262115",
+    "262116",
+    "262117",
+    "262118",
+    "263111",
+    "263112",
+    "263113",
+    "263211",
+    "263213",
+    "263299",
+    "263312",
+    "271111",
+    "271214",
+    "271299",
+    "271311",
+    "272112",
+    "272114",
+    "272115",
+    "272311",
+    "272312",
+    "272313",
+    "272314",
+    "272399",
+    "272413",
+    "272511",
+    "272612",
+    "311112",
+    "311113",
+    "311114",
+    "311115",
+    "311211",
+    "311212",
+    "311215",
+    "311217",
+    "311299",
+    "311312",
+    "311314",
+    "311399",
+    "311411",
+    "311412",
+    "311499",
+    "312111",
+    "312112",
+    "312113",
+    "312114",
+    "312116",
+    "312199",
+    "312211",
+    "312212",
+    "312311",
+    "312312",
+    "312412",
+    "312511",
+    "312512",
+    "312911",
+    "312912",
+    "312913",
+    "312914",
+    "312999",
+    "313111",
+    "313112",
+    "313113",
+    "313199",
+    "313212",
+    "313213",
+    "313214",
+    "321111",
+    "321211",
+    "321212",
+    "321213",
+    "321214",
+    "322112",
+    "322113",
+    "322114",
+    "322211",
+    "322311",
+    "322312",
+    "322313",
+    "323111",
+    "323112",
+    "323113",
+    "323211",
+    "323212",
+    "323213",
+    "323214",
+    "323215",
+    "323299",
+    "323313",
+    "323314",
+    "323411",
+    "323412",
+    "324111",
+    "324211",
+    "324212",
+    "324311",
+    "331111",
+    "331112",
+    "331211",
+    "331212",
+    "331213",
+    "332111",
+    "332211",
+    "333111",
+    "333211",
+    "333212",
+    "333311",
+    "333411",
+    "334112",
+    "334113",
+    "334114",
+    "334115",
+    "334116",
+    "334117",
+    "341111",
+    "341112",
+    "342111",
+    "342211",
+    "342212",
+    "342311",
+    "342313",
+    "342314",
+    "342315",
+    "342411",
+    "342412",
+    "342413",
+    "342414",
+    "351111",
+    "351112",
+    "351211",
+    "351311",
+    "351411",
+    "361111",
+    "361112",
+    "361311",
+    "362411",
+    "362511",
+    "362512",
+    "362711",
+    "362712",
+    "391111",
+    "392111",
+    "392112",
+    "392211",
+    "392311",
+    "393114",
+    "393311",
+    "394112",
+    "394113",
+    "394211",
+    "394212",
+    "394213",
+    "394299",
+    "399111",
+    "399112",
+    "399211",
+    "399212",
+    "399213",
+    "399513",
+    "399516",
+    "399599",
+    "399611",
+    "399911",
+    "399913",
+    "399914",
+    "399916",
+    "399918",
+    "399999",
+    "411111",
+    "411112",
+    "411211",
+    "411212",
+    "411213",
+    "411214",
+    "411311",
+    "411411",
+    "411611",
+    "411711",
+    "411713",
+    "411715",
+    "411716",
+    "421111",
+    "421114",
+    "431411",
+    "451111",
+    "451412",
+    "451612",
+    "451711",
+    "452311",
+    "452317",
+    "452321",
+    "511111",
+    "511112",
+    "512111",
+    "521212",
+    "599111",
+    "599211",
+    "599612",
+    "599915",
+    "611211",
+    "639211"
+  ],
+  "occupations": [
+    {
+      "oscaCode": "111131",
+      "anzscoV13Codes": [
+        "132111"
+      ],
+      "title": "Corporate Services Manager",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "111231",
+      "anzscoV13Codes": [
+        "132211"
+      ],
+      "title": "Finance Manager",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "111331",
+      "anzscoV13Codes": [
+        "132311"
+      ],
+      "title": "Human Resources Manager",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "111431",
+      "anzscoV13Codes": [
+        "132411"
+      ],
+      "title": "Policy and Planning Manager",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "111531",
+      "anzscoV13Codes": [
+        "132511"
+      ],
+      "title": "Research and Development Manager",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "111633",
+      "anzscoV13Codes": [
+        "132311"
+      ],
+      "title": "Work Health and Safety Manager",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "112131",
+      "anzscoV13Codes": [
+        "131113"
+      ],
+      "title": "Advertising Manager",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "112132",
+      "anzscoV13Codes": [
+        "131112"
+      ],
+      "title": "Business Development Manager",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "112133",
+      "anzscoV13Codes": [
+        "131112"
+      ],
+      "title": "Sales and Marketing Manager",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "113131",
+      "anzscoV13Codes": [
+        "135111"
+      ],
+      "title": "Chief Information Officer",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "113132",
+      "anzscoV13Codes": [
+        "135111"
+      ],
+      "title": "Chief Information Security Officer",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "113231",
+      "anzscoV13Codes": [
+        "135199"
+      ],
+      "title": "ICT Operations Manager",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "113232",
+      "anzscoV13Codes": [
+        "135112"
+      ],
+      "title": "ICT Project Manager",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "113233",
+      "anzscoV13Codes": [
+        "135199"
+      ],
+      "title": "ICT Service Delivery Manager",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "113299",
+      "anzscoV13Codes": [
+        "135199"
+      ],
+      "title": "ICT Managers nec",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "121131",
+      "anzscoV13Codes": [
+        "111111"
+      ],
+      "title": "Chief Executive or Managing Director",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "121231",
+      "anzscoV13Codes": [
+        "111211"
+      ],
+      "title": "Corporate General Manager",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "131131",
+      "anzscoV13Codes": [
+        "133111"
+      ],
+      "title": "Construction Project Manager",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "131231",
+      "anzscoV13Codes": [
+        "133211"
+      ],
+      "title": "Engineering Manager",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "131331",
+      "anzscoV13Codes": [
+        "133112"
+      ],
+      "title": "Project Builder",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "131431",
+      "anzscoV13Codes": [
+        "224511"
+      ],
+      "title": "Property Developer",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "132231",
+      "anzscoV13Codes": [
+        "133511"
+      ],
+      "title": "Forest Manager",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "132232",
+      "anzscoV13Codes": [
+        "133512"
+      ],
+      "title": "Production Manager (Manufacturing)",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "133231",
+      "anzscoV13Codes": [
+        "133612"
+      ],
+      "title": "Procurement Manager",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "133331",
+      "anzscoV13Codes": [
+        "133611"
+      ],
+      "title": "Supply and Distribution Manager",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "141131",
+      "anzscoV13Codes": [
+        "134311"
+      ],
+      "title": "Assistant School Principal",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "141132",
+      "anzscoV13Codes": [
+        "134311"
+      ],
+      "title": "School Principal",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "141331",
+      "anzscoV13Codes": [
+        "134212"
+      ],
+      "title": "Aged Care Manager",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "141332",
+      "anzscoV13Codes": [
+        "134212"
+      ],
+      "title": "Director of Nursing / Midwifery",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "141333",
+      "anzscoV13Codes": [
+        "134211"
+      ],
+      "title": "Medical Administrator",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "141399",
+      "anzscoV13Codes": [
+        "134213"
+      ],
+      "title": "Health and Welfare Service Managers nec",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "141431",
+      "anzscoV13Codes": [
+        "134411"
+      ],
+      "title": "Faculty Manager",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "141499",
+      "anzscoV13Codes": [
+        "134499"
+      ],
+      "title": "Education Managers nec",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "149131",
+      "anzscoV13Codes": [
+        "139911"
+      ],
+      "title": "Arts Administrator or Manager",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "149331",
+      "anzscoV13Codes": [
+        "139912"
+      ],
+      "title": "Environmental Manager",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "149333",
+      "anzscoV13Codes": [
+        "139913"
+      ],
+      "title": "Laboratory Manager",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "151331",
+      "anzscoV13Codes": [
+        "121111"
+      ],
+      "title": "Aquaculture Farmer",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "152231",
+      "anzscoV13Codes": [
+        "121313"
+      ],
+      "title": "Dairy Cattle Farmer",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "152931",
+      "anzscoV13Codes": [
+        "121311"
+      ],
+      "title": "Apiarist",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "152932",
+      "anzscoV13Codes": [
+        "121315"
+      ],
+      "title": "Goat Farmer",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "152934",
+      "anzscoV13Codes": [
+        "121318"
+      ],
+      "title": "Pig Farmer",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "152935",
+      "anzscoV13Codes": [
+        "121321"
+      ],
+      "title": "Poultry Farmer",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "161131",
+      "anzscoV13Codes": [
+        "431411"
+      ],
+      "title": "Accommodation Service Manager",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "161333",
+      "anzscoV13Codes": [
+        "149912"
+      ],
+      "title": "Cinema or Theatre Manager",
+      "skillLevel": 2,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "161399",
+      "anzscoV13Codes": [
+        "149999"
+      ],
+      "title": "Entertainment, Fitness and Sports Venue Managers nec",
+      "skillLevel": 2,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "161431",
+      "anzscoV13Codes": [
+        "141311"
+      ],
+      "title": "Hotel or Motel Manager",
+      "skillLevel": 2,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "161531",
+      "anzscoV13Codes": [
+        "141411"
+      ],
+      "title": "Licensed Club Manager",
+      "skillLevel": 2,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "161631",
+      "anzscoV13Codes": [
+        "351311"
+      ],
+      "title": "Senior Chef",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "161933",
+      "anzscoV13Codes": [
+        "142116"
+      ],
+      "title": "Travel Agency Manager",
+      "skillLevel": 2,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "161999",
+      "anzscoV13Codes": [
+        "141999"
+      ],
+      "title": "Hospitality, Tourism and Venue Managers nec",
+      "skillLevel": 2,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "162131",
+      "anzscoV13Codes": [
+        "142111"
+      ],
+      "title": "Retail Manager (General)",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "171231",
+      "anzscoV13Codes": [
+        "512111"
+      ],
+      "title": "Office Manager",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "172499",
+      "anzscoV13Codes": [
+        "149999"
+      ],
+      "title": "Hair, Body and Beauty Service Managers nec",
+      "skillLevel": 2,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "172531",
+      "anzscoV13Codes": [
+        "149411"
+      ],
+      "title": "Fleet Manager",
+      "skillLevel": 2,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "172931",
+      "anzscoV13Codes": [
+        "149911"
+      ],
+      "title": "Boarding Kennel or Cattery Operator",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "172932",
+      "anzscoV13Codes": [
+        "149915"
+      ],
+      "title": "Equipment Hire Manager",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "172999",
+      "anzscoV13Codes": [
+        "149999"
+      ],
+      "title": "Service Managers nec",
+      "skillLevel": 2,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "211131",
+      "anzscoV13Codes": [
+        "221111"
+      ],
+      "title": "Accountant (General)",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required for certain services such as auditing."
+    },
+    {
+      "oscaCode": "211133",
+      "anzscoV13Codes": [
+        "221111"
+      ],
+      "title": "Forensic Accountant",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required for certain services such as auditing."
+    },
+    {
+      "oscaCode": "211134",
+      "anzscoV13Codes": [
+        "221112"
+      ],
+      "title": "Management Accountant",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "211135",
+      "anzscoV13Codes": [
+        "221113"
+      ],
+      "title": "Taxation Accountant",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "211231",
+      "anzscoV13Codes": [
+        "221213"
+      ],
+      "title": "External Auditor",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "211232",
+      "anzscoV13Codes": [
+        "221214"
+      ],
+      "title": "Internal Auditor",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "212131",
+      "anzscoV13Codes": [
+        "222311"
+      ],
+      "title": "Financial Adviser",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "221231",
+      "anzscoV13Codes": [
+        "225311"
+      ],
+      "title": "Communications Officer (Public Relations)",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "221431",
+      "anzscoV13Codes": [
+        "225212"
+      ],
+      "title": "ICT Business Development Manager",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "221531",
+      "anzscoV13Codes": [
+        "225113"
+      ],
+      "title": "Content Creator (Marketing)",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "221534",
+      "anzscoV13Codes": [
+        "225113"
+      ],
+      "title": "Marketing Specialist",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "221631",
+      "anzscoV13Codes": [
+        "225211"
+      ],
+      "title": "ICT Account Manager",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "221632",
+      "anzscoV13Codes": [
+        "225213"
+      ],
+      "title": "ICT Sales Representative",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "221633",
+      "anzscoV13Codes": [
+        "225411"
+      ],
+      "title": "Sales Representative (Industrial Products)",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "221634",
+      "anzscoV13Codes": [
+        "225412"
+      ],
+      "title": "Sales Representative (Medical and Pharmaceutical Products)",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "221699",
+      "anzscoV13Codes": [
+        "225499"
+      ],
+      "title": "Technical Sales Representatives nec",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "222131",
+      "anzscoV13Codes": [
+        "223111"
+      ],
+      "title": "Human Resources Adviser",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "222132",
+      "anzscoV13Codes": [
+        "223113"
+      ],
+      "title": "Workplace Relations Adviser",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "222231",
+      "anzscoV13Codes": [
+        "223112"
+      ],
+      "title": "Recruitment Consultant",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "222331",
+      "anzscoV13Codes": [
+        "251312"
+      ],
+      "title": "Rehabilitation Consultant",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "222332",
+      "anzscoV13Codes": [
+        "251312"
+      ],
+      "title": "Work Health and Safety Adviser",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "223131",
+      "anzscoV13Codes": [
+        "224111"
+      ],
+      "title": "Actuary",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "223132",
+      "anzscoV13Codes": [
+        "224112"
+      ],
+      "title": "Mathematician",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "223232",
+      "anzscoV13Codes": [
+        "261313"
+      ],
+      "title": "Data Architect",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "223233",
+      "anzscoV13Codes": [
+        "261313"
+      ],
+      "title": "Data Engineer",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "223431",
+      "anzscoV13Codes": [
+        "261111"
+      ],
+      "title": "Enterprise Architect",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "223433",
+      "anzscoV13Codes": [
+        "224712"
+      ],
+      "title": "Organisation and Methods Analyst",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "223531",
+      "anzscoV13Codes": [
+        "224511"
+      ],
+      "title": "Asset Manager (Property)",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "223532",
+      "anzscoV13Codes": [
+        "224512"
+      ],
+      "title": "Valuer",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "223931",
+      "anzscoV13Codes": [
+        "221211"
+      ],
+      "title": "Company Secretary",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "223932",
+      "anzscoV13Codes": [
+        "224999"
+      ],
+      "title": "Cost Controller",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "223934",
+      "anzscoV13Codes": [
+        "224914"
+      ],
+      "title": "Patents Examiner",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "223999",
+      "anzscoV13Codes": [
+        "224999"
+      ],
+      "title": "Information and Organisation Professionals nec",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "231332",
+      "anzscoV13Codes": [
+        "212413"
+      ],
+      "title": "Journalist",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "231334",
+      "anzscoV13Codes": [
+        "212415"
+      ],
+      "title": "Technical Writer",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "231399",
+      "anzscoV13Codes": [
+        "212499"
+      ],
+      "title": "Journalists and Other Writers nec",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "231431",
+      "anzscoV13Codes": [
+        "212111"
+      ],
+      "title": "Artistic Director",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "231438",
+      "anzscoV13Codes": [
+        "212317"
+      ],
+      "title": "Technical Director",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "231632",
+      "anzscoV13Codes": [
+        "211212"
+      ],
+      "title": "Music Director",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "241131",
+      "anzscoV13Codes": [
+        "232111"
+      ],
+      "title": "Architect",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "241132",
+      "anzscoV13Codes": [
+        "232112"
+      ],
+      "title": "Landscape Architect",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "241133",
+      "anzscoV13Codes": [
+        "232112"
+      ],
+      "title": "Urban Designer",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "241231",
+      "anzscoV13Codes": [
+        "232213"
+      ],
+      "title": "Cartographer",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "241232",
+      "anzscoV13Codes": [
+        "232212"
+      ],
+      "title": "Engineering Surveyor",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "241233",
+      "anzscoV13Codes": [
+        "232214"
+      ],
+      "title": "Geospatial Specialist",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "241234",
+      "anzscoV13Codes": [
+        "232212"
+      ],
+      "title": "Land Surveyor",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "241235",
+      "anzscoV13Codes": [
+        "232212"
+      ],
+      "title": "Mine Surveyor",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "241299",
+      "anzscoV13Codes": [
+        "232212"
+      ],
+      "title": "Geospatial Information Professionals and Surveyors nec",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "241331",
+      "anzscoV13Codes": [
+        "232611"
+      ],
+      "title": "Urban and Regional Planner",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "241931",
+      "anzscoV13Codes": [
+        "312113"
+      ],
+      "title": "Building Surveyor",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "241932",
+      "anzscoV13Codes": [
+        "233213"
+      ],
+      "title": "Quantity Surveyor",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "242131",
+      "anzscoV13Codes": [
+        "232413"
+      ],
+      "title": "Multimedia Designer",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "242132",
+      "anzscoV13Codes": [
+        "263299"
+      ],
+      "title": "UI / UX Designer",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "242133",
+      "anzscoV13Codes": [
+        "232414"
+      ],
+      "title": "Web Designer",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "242233",
+      "anzscoV13Codes": [
+        "232313"
+      ],
+      "title": "Jewellery Designer",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "242333",
+      "anzscoV13Codes": [
+        "232412"
+      ],
+      "title": "Illustrator",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "242431",
+      "anzscoV13Codes": [
+        "232511"
+      ],
+      "title": "Interior Designer",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "243131",
+      "anzscoV13Codes": [
+        "233111"
+      ],
+      "title": "Chemical Engineer",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "243132",
+      "anzscoV13Codes": [
+        "234912"
+      ],
+      "title": "Extractive Metallurgist",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "243133",
+      "anzscoV13Codes": [
+        "233112"
+      ],
+      "title": "Materials Engineer",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "243231",
+      "anzscoV13Codes": [
+        "233211"
+      ],
+      "title": "Civil Engineer",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "243232",
+      "anzscoV13Codes": [
+        "233212"
+      ],
+      "title": "Geotechnical Engineer",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "243233",
+      "anzscoV13Codes": [
+        "233215"
+      ],
+      "title": "Rail Engineer",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "243234",
+      "anzscoV13Codes": [
+        "233214"
+      ],
+      "title": "Structural Engineer",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "243235",
+      "anzscoV13Codes": [
+        "233215"
+      ],
+      "title": "Transport Engineer",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "243236",
+      "anzscoV13Codes": [
+        "233211"
+      ],
+      "title": "Water Engineer",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "243331",
+      "anzscoV13Codes": [
+        "233311"
+      ],
+      "title": "Electrical Engineer",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "243332",
+      "anzscoV13Codes": [
+        "233311"
+      ],
+      "title": "Rail Signalling Engineer",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "243431",
+      "anzscoV13Codes": [
+        "233411"
+      ],
+      "title": "Electronics Engineer",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "243531",
+      "anzscoV13Codes": [
+        "233511"
+      ],
+      "title": "Industrial Engineer",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "243532",
+      "anzscoV13Codes": [
+        "233512"
+      ],
+      "title": "Mechanical Engineer",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "243533",
+      "anzscoV13Codes": [
+        "233513"
+      ],
+      "title": "Production or Plant Engineer",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "243631",
+      "anzscoV13Codes": [
+        "233611"
+      ],
+      "title": "Mining Engineer (excluding Petroleum)",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "243632",
+      "anzscoV13Codes": [
+        "233612"
+      ],
+      "title": "Petroleum Engineer",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "243931",
+      "anzscoV13Codes": [
+        "233999"
+      ],
+      "title": "Acoustic Engineer",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "243932",
+      "anzscoV13Codes": [
+        "233911"
+      ],
+      "title": "Aerospace Engineer",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "243933",
+      "anzscoV13Codes": [
+        "233913"
+      ],
+      "title": "Biomedical Engineer",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "243934",
+      "anzscoV13Codes": [
+        "233914"
+      ],
+      "title": "Engineering Technologist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "243935",
+      "anzscoV13Codes": [
+        "233915"
+      ],
+      "title": "Environmental Engineer",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "243936",
+      "anzscoV13Codes": [
+        "233999"
+      ],
+      "title": "Fire Safety Engineer",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "243937",
+      "anzscoV13Codes": [
+        "233999"
+      ],
+      "title": "Mechatronics Engineer",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "243938",
+      "anzscoV13Codes": [
+        "233916"
+      ],
+      "title": "Naval Architect",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "243999",
+      "anzscoV13Codes": [
+        "233912"
+      ],
+      "title": "Engineering Professionals nec",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "244131",
+      "anzscoV13Codes": [
+        "234111"
+      ],
+      "title": "Agricultural Consultant",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "244133",
+      "anzscoV13Codes": [
+        "225499"
+      ],
+      "title": "Agronomist",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "244231",
+      "anzscoV13Codes": [
+        "234211"
+      ],
+      "title": "Chemist",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "244232",
+      "anzscoV13Codes": [
+        "234212"
+      ],
+      "title": "Food Technologist",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "244233",
+      "anzscoV13Codes": [
+        "234213"
+      ],
+      "title": "Winemaker",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "244431",
+      "anzscoV13Codes": [
+        "234312"
+      ],
+      "title": "Environmental Consultant",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "244499",
+      "anzscoV13Codes": [
+        "234399"
+      ],
+      "title": "Environmental Consultants and Scientists nec",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "244531",
+      "anzscoV13Codes": [
+        "234411"
+      ],
+      "title": "Geologist",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "244532",
+      "anzscoV13Codes": [
+        "234412"
+      ],
+      "title": "Geophysicist",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "244533",
+      "anzscoV13Codes": [
+        "234413"
+      ],
+      "title": "Hydrologist",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "244632",
+      "anzscoV13Codes": [
+        "234515"
+      ],
+      "title": "Botanist",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "244634",
+      "anzscoV13Codes": [
+        "234516"
+      ],
+      "title": "Marine Biologist",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "244699",
+      "anzscoV13Codes": [
+        "234511"
+      ],
+      "title": "Life Scientists nec",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "244732",
+      "anzscoV13Codes": [
+        "234914"
+      ],
+      "title": "Medical Physicist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "244931",
+      "anzscoV13Codes": [
+        "234911"
+      ],
+      "title": "Conservator",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "244932",
+      "anzscoV13Codes": [
+        "234913"
+      ],
+      "title": "Meteorologist",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "244933",
+      "anzscoV13Codes": [
+        "234914"
+      ],
+      "title": "Physicist",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "244999",
+      "anzscoV13Codes": [
+        "234999"
+      ],
+      "title": "Natural and Physical Science Professionals nec",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "251131",
+      "anzscoV13Codes": [
+        "241111"
+      ],
+      "title": "Early Childhood (Pre-primary School) Teacher",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "251331",
+      "anzscoV13Codes": [
+        "241311"
+      ],
+      "title": "Secondary School Teacher",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "251431",
+      "anzscoV13Codes": [
+        "241511"
+      ],
+      "title": "Special Education Teacher",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "251432",
+      "anzscoV13Codes": [
+        "241513"
+      ],
+      "title": "Specialist Teacher (Vision Impairment)",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "251433",
+      "anzscoV13Codes": [
+        "241512"
+      ],
+      "title": "Teacher of the Deaf",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "252131",
+      "anzscoV13Codes": [
+        "242111"
+      ],
+      "title": "University Lecturer",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "252231",
+      "anzscoV13Codes": [
+        "242211"
+      ],
+      "title": "Vocational Education Teacher",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "259131",
+      "anzscoV13Codes": [
+        "249299"
+      ],
+      "title": "Academic Tutor (Private Tuition)",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "259299",
+      "anzscoV13Codes": [
+        "249299"
+      ],
+      "title": "Arts and Personal Enrichment Teachers (Private Tuition) nec",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "259331",
+      "anzscoV13Codes": [
+        "232413"
+      ],
+      "title": "Education Adviser",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "259332",
+      "anzscoV13Codes": [
+        "249112"
+      ],
+      "title": "Education Reviewer",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "259431",
+      "anzscoV13Codes": [
+        "249214"
+      ],
+      "title": "Music Teacher (Private Tuition)",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "259931",
+      "anzscoV13Codes": [
+        "242211"
+      ],
+      "title": "Adult Literacy / Numeracy Teacher",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "259999",
+      "anzscoV13Codes": [
+        "241511"
+      ],
+      "title": "Education Professionals nec",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "261132",
+      "anzscoV13Codes": [
+        "272112"
+      ],
+      "title": "Alcohol and Other Drugs Counsellor",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "261134",
+      "anzscoV13Codes": [
+        "272314"
+      ],
+      "title": "Psychotherapist",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "261135",
+      "anzscoV13Codes": [
+        "272114"
+      ],
+      "title": "Rehabilitation Counsellor",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "261136",
+      "anzscoV13Codes": [
+        "272115"
+      ],
+      "title": "School Counsellor",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "261231",
+      "anzscoV13Codes": [
+        "272311"
+      ],
+      "title": "Psychologist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "261331",
+      "anzscoV13Codes": [
+        "272511"
+      ],
+      "title": "Social Worker",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "261931",
+      "anzscoV13Codes": [
+        "252299"
+      ],
+      "title": "Arts Therapist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "261932",
+      "anzscoV13Codes": [
+        "272314"
+      ],
+      "title": "Behaviour Support Practitioner",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "261933",
+      "anzscoV13Codes": [
+        "252299"
+      ],
+      "title": "Music Therapist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "261999",
+      "anzscoV13Codes": [
+        "251999"
+      ],
+      "title": "Allied Health Counsellors, Psychologists, Social Workers and Creative Therapy Professionals nec",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "262331",
+      "anzscoV13Codes": [
+        "252411"
+      ],
+      "title": "Occupational Therapist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "262431",
+      "anzscoV13Codes": [
+        "252511"
+      ],
+      "title": "Physiotherapist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "262531",
+      "anzscoV13Codes": [
+        "252611"
+      ],
+      "title": "Podiatrist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "262631",
+      "anzscoV13Codes": [
+        "252712"
+      ],
+      "title": "Speech Pathologist",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "262931",
+      "anzscoV13Codes": [
+        "251912"
+      ],
+      "title": "Orthotist / Prosthetist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "262999",
+      "anzscoV13Codes": [
+        "251999"
+      ],
+      "title": "Allied Health Physical and Sensory Therapy Professionals nec",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "263131",
+      "anzscoV13Codes": [
+        "251213"
+      ],
+      "title": "Nuclear Medicine Technologist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "263132",
+      "anzscoV13Codes": [
+        "251212"
+      ],
+      "title": "Radiation Therapist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "263133",
+      "anzscoV13Codes": [
+        "251211"
+      ],
+      "title": "Radiographer",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "263231",
+      "anzscoV13Codes": [
+        "251111"
+      ],
+      "title": "Dietitian",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "263331",
+      "anzscoV13Codes": [
+        "251411"
+      ],
+      "title": "Optometrist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "263431",
+      "anzscoV13Codes": [
+        "251513"
+      ],
+      "title": "Community Pharmacist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "263432",
+      "anzscoV13Codes": [
+        "251511"
+      ],
+      "title": "Hospital Pharmacist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "263531",
+      "anzscoV13Codes": [
+        "251214"
+      ],
+      "title": "Sonographer",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "263931",
+      "anzscoV13Codes": [
+        "252711"
+      ],
+      "title": "Audiologist",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "263932",
+      "anzscoV13Codes": [
+        "251214"
+      ],
+      "title": "Cardiac Physiologist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "263934",
+      "anzscoV13Codes": [
+        "234599"
+      ],
+      "title": "Neurophysiology Scientist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "263935",
+      "anzscoV13Codes": [
+        "251412"
+      ],
+      "title": "Orthoptist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "263936",
+      "anzscoV13Codes": [
+        "234999"
+      ],
+      "title": "Respiratory or Sleep Scientist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "263999",
+      "anzscoV13Codes": [
+        "251999"
+      ],
+      "title": "Allied Health Science Professionals nec",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "264131",
+      "anzscoV13Codes": [
+        "253211"
+      ],
+      "title": "Anaesthetist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264231",
+      "anzscoV13Codes": [
+        "253111"
+      ],
+      "title": "General Practitioner",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264331",
+      "anzscoV13Codes": [
+        "253311"
+      ],
+      "title": "General Medicine Physician",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264332",
+      "anzscoV13Codes": [
+        "253312"
+      ],
+      "title": "Cardiologist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264333",
+      "anzscoV13Codes": [
+        "253315"
+      ],
+      "title": "Endocrinologist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264334",
+      "anzscoV13Codes": [
+        "253316"
+      ],
+      "title": "Gastroenterologist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264335",
+      "anzscoV13Codes": [
+        "253399"
+      ],
+      "title": "Geriatrician",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264336",
+      "anzscoV13Codes": [
+        "253313"
+      ],
+      "title": "Haematologist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264337",
+      "anzscoV13Codes": [
+        "253317"
+      ],
+      "title": "Intensive Care Specialist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264338",
+      "anzscoV13Codes": [
+        "253314"
+      ],
+      "title": "Medical Oncologist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264341",
+      "anzscoV13Codes": [
+        "253322"
+      ],
+      "title": "Nephrologist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264342",
+      "anzscoV13Codes": [
+        "253318"
+      ],
+      "title": "Neurologist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264343",
+      "anzscoV13Codes": [
+        "253321"
+      ],
+      "title": "Paediatrician",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264344",
+      "anzscoV13Codes": [
+        "253399"
+      ],
+      "title": "Public Health Physician",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264345",
+      "anzscoV13Codes": [
+        "253321"
+      ],
+      "title": "Respiratory Physician",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264346",
+      "anzscoV13Codes": [
+        "253323"
+      ],
+      "title": "Rheumatologist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264399",
+      "anzscoV13Codes": [
+        "253399"
+      ],
+      "title": "Physicians nec",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264431",
+      "anzscoV13Codes": [
+        "253411"
+      ],
+      "title": "Psychiatrist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264531",
+      "anzscoV13Codes": [
+        "253112"
+      ],
+      "title": "Resident Medical Officer",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264631",
+      "anzscoV13Codes": [
+        "253511"
+      ],
+      "title": "General Surgeon",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264632",
+      "anzscoV13Codes": [
+        "253512"
+      ],
+      "title": "Cardiothoracic Surgeon",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264633",
+      "anzscoV13Codes": [
+        "253513"
+      ],
+      "title": "Neurosurgeon",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264634",
+      "anzscoV13Codes": [
+        "253514"
+      ],
+      "title": "Orthopaedic Surgeon",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264635",
+      "anzscoV13Codes": [
+        "253515"
+      ],
+      "title": "Otolaryngologist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264636",
+      "anzscoV13Codes": [
+        "253516"
+      ],
+      "title": "Paediatric Surgeon",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264637",
+      "anzscoV13Codes": [
+        "253517"
+      ],
+      "title": "Plastic and Reconstructive Surgeon",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264638",
+      "anzscoV13Codes": [
+        "253518"
+      ],
+      "title": "Urologist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264641",
+      "anzscoV13Codes": [
+        "253521"
+      ],
+      "title": "Vascular Surgeon",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264931",
+      "anzscoV13Codes": [
+        "253911"
+      ],
+      "title": "Dermatologist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264932",
+      "anzscoV13Codes": [
+        "253912"
+      ],
+      "title": "Emergency Medicine Specialist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264933",
+      "anzscoV13Codes": [
+        "253913"
+      ],
+      "title": "Obstetrician and Gynaecologist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264934",
+      "anzscoV13Codes": [
+        "253914"
+      ],
+      "title": "Ophthalmologist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264935",
+      "anzscoV13Codes": [
+        "253915"
+      ],
+      "title": "Pathologist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264936",
+      "anzscoV13Codes": [
+        "253918"
+      ],
+      "title": "Radiation Oncologist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264937",
+      "anzscoV13Codes": [
+        "253917"
+      ],
+      "title": "Radiologist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "264999",
+      "anzscoV13Codes": [
+        "253999"
+      ],
+      "title": "Medical Practitioners nec",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "265231",
+      "anzscoV13Codes": [
+        "254211"
+      ],
+      "title": "Nurse Educator",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "265232",
+      "anzscoV13Codes": [
+        "254212"
+      ],
+      "title": "Nurse Researcher",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "265431",
+      "anzscoV13Codes": [
+        "254411"
+      ],
+      "title": "Nurse Practitioner",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "265432",
+      "anzscoV13Codes": [
+        "254415"
+      ],
+      "title": "Registered Nurse (Acute Care)",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "265433",
+      "anzscoV13Codes": [
+        "254412"
+      ],
+      "title": "Registered Nurse (Aged Care)",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "265434",
+      "anzscoV13Codes": [
+        "254422"
+      ],
+      "title": "Registered Nurse (Mental Health)",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "265435",
+      "anzscoV13Codes": [
+        "254413"
+      ],
+      "title": "Registered Nurse (Primary Health Care)",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "265499",
+      "anzscoV13Codes": [
+        "254499"
+      ],
+      "title": "Registered Nurses nec",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "269131",
+      "anzscoV13Codes": [
+        "411211"
+      ],
+      "title": "Dental Hygienist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "269132",
+      "anzscoV13Codes": [
+        "411212"
+      ],
+      "title": "Dental Prosthetist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "269133",
+      "anzscoV13Codes": [
+        "411214"
+      ],
+      "title": "Oral Health Therapist or Dental Therapist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "269231",
+      "anzscoV13Codes": [
+        "252311"
+      ],
+      "title": "Dental Specialist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "269232",
+      "anzscoV13Codes": [
+        "252312"
+      ],
+      "title": "Dentist",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "269431",
+      "anzscoV13Codes": [
+        "411112"
+      ],
+      "title": "Critical Care Paramedic",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "269432",
+      "anzscoV13Codes": [
+        "411111"
+      ],
+      "title": "Paramedic",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "269531",
+      "anzscoV13Codes": [
+        "234711"
+      ],
+      "title": "Veterinarian",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "269932",
+      "anzscoV13Codes": [
+        "252214"
+      ],
+      "title": "Chinese Medicine Practitioner",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "269999",
+      "anzscoV13Codes": [
+        "251999"
+      ],
+      "title": "Health Professionals nec",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "271135",
+      "anzscoV13Codes": [
+        "261313"
+      ],
+      "title": "Cyber Security Engineer",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "271137",
+      "anzscoV13Codes": [
+        "261314"
+      ],
+      "title": "Penetration Tester",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "271231",
+      "anzscoV13Codes": [
+        "262111"
+      ],
+      "title": "Database Administrator",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "271232",
+      "anzscoV13Codes": [
+        "262113"
+      ],
+      "title": "Systems Administrator",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "272131",
+      "anzscoV13Codes": [
+        "263111"
+      ],
+      "title": "ICT Network and Systems Engineer",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "272132",
+      "anzscoV13Codes": [
+        "263112"
+      ],
+      "title": "Network Administrator",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "272133",
+      "anzscoV13Codes": [
+        "263113"
+      ],
+      "title": "Network Architect",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "272231",
+      "anzscoV13Codes": [
+        "263211"
+      ],
+      "title": "ICT Quality Assurance Engineer",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "272233",
+      "anzscoV13Codes": [
+        "261314"
+      ],
+      "title": "ICT Test Analyst",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "273131",
+      "anzscoV13Codes": [
+        "232413"
+      ],
+      "title": "Digital Game Developer",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "273132",
+      "anzscoV13Codes": [
+        "261211"
+      ],
+      "title": "Web Developer",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "273231",
+      "anzscoV13Codes": [
+        "261111"
+      ],
+      "title": "Cloud Architect",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "273232",
+      "anzscoV13Codes": [
+        "261111"
+      ],
+      "title": "ICT Business Analyst",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "273233",
+      "anzscoV13Codes": [
+        "261111"
+      ],
+      "title": "Solution Architect",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "273234",
+      "anzscoV13Codes": [
+        "261112"
+      ],
+      "title": "Systems Analyst",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "273331",
+      "anzscoV13Codes": [
+        "261313"
+      ],
+      "title": "Cloud Engineer",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "273332",
+      "anzscoV13Codes": [
+        "261313"
+      ],
+      "title": "DevOps Engineer",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "273333",
+      "anzscoV13Codes": [
+        "261212"
+      ],
+      "title": "Software Engineer",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "281131",
+      "anzscoV13Codes": [
+        "271111"
+      ],
+      "title": "Barrister",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "281231",
+      "anzscoV13Codes": [
+        "271299"
+      ],
+      "title": "Family Dispute Resolution Practitioner",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "281232",
+      "anzscoV13Codes": [
+        "271214"
+      ],
+      "title": "Intellectual Property Lawyer",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "281237",
+      "anzscoV13Codes": [
+        "271111"
+      ],
+      "title": "Police Prosecutor",
+      "skillLevel": 1,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "281299",
+      "anzscoV13Codes": [
+        "271299"
+      ],
+      "title": "Judicial and Other Legal Professionals nec",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "281331",
+      "anzscoV13Codes": [
+        "271311"
+      ],
+      "title": "Solicitor",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "299131",
+      "anzscoV13Codes": [
+        "231111"
+      ],
+      "title": "Aeroplane Pilot",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "299133",
+      "anzscoV13Codes": [
+        "231113"
+      ],
+      "title": "Flight Instructor",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "299134",
+      "anzscoV13Codes": [
+        "231114"
+      ],
+      "title": "Helicopter Pilot",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "299199",
+      "anzscoV13Codes": [
+        "231199"
+      ],
+      "title": "Air Transport Professionals nec",
+      "skillLevel": 1,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "311137",
+      "anzscoV13Codes": [
+        "311312"
+      ],
+      "title": "Meat Inspector",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "311138",
+      "anzscoV13Codes": [
+        "311399"
+      ],
+      "title": "Primary Products Quality Assurance Officer",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "311199",
+      "anzscoV13Codes": [
+        "311399"
+      ],
+      "title": "Agricultural Technicians and Inspection Officers nec",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "311231",
+      "anzscoV13Codes": [
+        "311211"
+      ],
+      "title": "Anaesthetic Technician",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "311232",
+      "anzscoV13Codes": [
+        "411213"
+      ],
+      "title": "Dental Technician",
+      "skillLevel": 2,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "311235",
+      "anzscoV13Codes": [
+        "311299"
+      ],
+      "title": "Respiratory Technician",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "311299",
+      "anzscoV13Codes": [
+        "311299"
+      ],
+      "title": "Medical and Dental Technicians nec",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "311331",
+      "anzscoV13Codes": [
+        "311215"
+      ],
+      "title": "Community Pharmacy Technician",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "311332",
+      "anzscoV13Codes": [
+        "311215"
+      ],
+      "title": "Hospital Pharmacy Technician",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "311531",
+      "anzscoV13Codes": [
+        "311411"
+      ],
+      "title": "Chemical Technician",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "311532",
+      "anzscoV13Codes": [
+        "311412"
+      ],
+      "title": "Earth Science Technician",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "311533",
+      "anzscoV13Codes": [
+        "312116"
+      ],
+      "title": "Geospatial Technician",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "311599",
+      "anzscoV13Codes": [
+        "311499"
+      ],
+      "title": "Science Technicians nec",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "312131",
+      "anzscoV13Codes": [
+        "312999"
+      ],
+      "title": "Architectural Technician",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "312132",
+      "anzscoV13Codes": [
+        "312111"
+      ],
+      "title": "Building Designer",
+      "skillLevel": 2,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "312133",
+      "anzscoV13Codes": [
+        "312199"
+      ],
+      "title": "Detailer Drafter",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "312134",
+      "anzscoV13Codes": [
+        "232112"
+      ],
+      "title": "Landscape Designer",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "312135",
+      "anzscoV13Codes": [
+        "312116"
+      ],
+      "title": "Surveying Technician",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "312199",
+      "anzscoV13Codes": [
+        "312199"
+      ],
+      "title": "Building and Landscape Designers and Technicians nec",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "312231",
+      "anzscoV13Codes": [
+        "312113"
+      ],
+      "title": "Building Inspector",
+      "skillLevel": 2,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "312232",
+      "anzscoV13Codes": [
+        "312199"
+      ],
+      "title": "Energy Assessor",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "312331",
+      "anzscoV13Codes": [
+        "312114"
+      ],
+      "title": "Construction Estimator",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "312431",
+      "anzscoV13Codes": [
+        "312112"
+      ],
+      "title": "Civil Construction Leading Hand",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "312432",
+      "anzscoV13Codes": [
+        "312112"
+      ],
+      "title": "Construction Site Supervisor",
+      "skillLevel": 2,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "313131",
+      "anzscoV13Codes": [
+        "312211"
+      ],
+      "title": "Civil Engineering Draftsperson",
+      "skillLevel": 2,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "313132",
+      "anzscoV13Codes": [
+        "312212"
+      ],
+      "title": "Civil Engineering Technician",
+      "skillLevel": 2,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "313231",
+      "anzscoV13Codes": [
+        "312311"
+      ],
+      "title": "Electrical Engineering Draftsperson",
+      "skillLevel": 2,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "313232",
+      "anzscoV13Codes": [
+        "312312"
+      ],
+      "title": "Electrical Engineering Technician",
+      "skillLevel": 2,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "313331",
+      "anzscoV13Codes": [
+        "312911"
+      ],
+      "title": "Maintenance Planner",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "313431",
+      "anzscoV13Codes": [
+        "231212"
+      ],
+      "title": "Marine Engineer",
+      "skillLevel": 2,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "313531",
+      "anzscoV13Codes": [
+        "312913"
+      ],
+      "title": "Mining Supervisor",
+      "skillLevel": 2,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "313931",
+      "anzscoV13Codes": [
+        "312999"
+      ],
+      "title": "Biomedical Technician",
+      "skillLevel": 2,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "313932",
+      "anzscoV13Codes": [
+        "312412"
+      ],
+      "title": "Electronic Engineering Technician",
+      "skillLevel": 2,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "313933",
+      "anzscoV13Codes": [
+        "312511"
+      ],
+      "title": "Mechanical Engineering Draftsperson",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "313934",
+      "anzscoV13Codes": [
+        "312512"
+      ],
+      "title": "Mechanical Engineering Technician",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "313935",
+      "anzscoV13Codes": [
+        "312912"
+      ],
+      "title": "Metallurgical or Materials Technician",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "313936",
+      "anzscoV13Codes": [
+        "312912"
+      ],
+      "title": "Non-destructive Testing Technician",
+      "skillLevel": 2,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "313999",
+      "anzscoV13Codes": [
+        "312999"
+      ],
+      "title": "Engineering Technicians nec",
+      "skillLevel": 2,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "314131",
+      "anzscoV13Codes": [
+        "313111"
+      ],
+      "title": "ICT Hardware Technician",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "314133",
+      "anzscoV13Codes": [
+        "313212"
+      ],
+      "title": "Telecommunications Field Engineer",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "314134",
+      "anzscoV13Codes": [
+        "313213"
+      ],
+      "title": "Telecommunications Network Designer",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "314135",
+      "anzscoV13Codes": [
+        "313214"
+      ],
+      "title": "Telecommunications Technical Officer or Technologist",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "314136",
+      "anzscoV13Codes": [
+        "313113"
+      ],
+      "title": "Web Administrator",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "314199",
+      "anzscoV13Codes": [
+        "313199"
+      ],
+      "title": "ICT and Telecommunications Technicians nec",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "314231",
+      "anzscoV13Codes": [
+        "313112"
+      ],
+      "title": "ICT Customer Support Officer",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "321131",
+      "anzscoV13Codes": [
+        "351311"
+      ],
+      "title": "Chef",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "322131",
+      "anzscoV13Codes": [
+        "351111"
+      ],
+      "title": "Baker",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "322231",
+      "anzscoV13Codes": [
+        "351211"
+      ],
+      "title": "Butcher or Smallgoods Maker",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "322331",
+      "anzscoV13Codes": [
+        "351411"
+      ],
+      "title": "Cook",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "322431",
+      "anzscoV13Codes": [
+        "351112"
+      ],
+      "title": "Pastrycook",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "331131",
+      "anzscoV13Codes": [
+        "322311"
+      ],
+      "title": "Metal Fabricator",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "331132",
+      "anzscoV13Codes": [
+        "322312"
+      ],
+      "title": "Pressure Welder",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "331133",
+      "anzscoV13Codes": [
+        "322313"
+      ],
+      "title": "Welder (First Class)",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "331932",
+      "anzscoV13Codes": [
+        "322112"
+      ],
+      "title": "Electroplater",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "331933",
+      "anzscoV13Codes": [
+        "322113"
+      ],
+      "title": "Farrier",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "331934",
+      "anzscoV13Codes": [
+        "322114"
+      ],
+      "title": "Metal Casting Trades Worker",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "331936",
+      "anzscoV13Codes": [
+        "322211"
+      ],
+      "title": "Sheetmetal Worker",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "332131",
+      "anzscoV13Codes": [
+        "323111"
+      ],
+      "title": "Aircraft Maintenance Technician (Avionics)",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "332132",
+      "anzscoV13Codes": [
+        "323112"
+      ],
+      "title": "Aircraft Maintenance Technician (Mechanical)",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "332133",
+      "anzscoV13Codes": [
+        "323113"
+      ],
+      "title": "Aircraft Maintenance Technician (Structures)",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "332134",
+      "anzscoV13Codes": [
+        "323111"
+      ],
+      "title": "Licensed Aircraft Maintenance Engineer",
+      "skillLevel": 2,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "332231",
+      "anzscoV13Codes": [
+        "323211"
+      ],
+      "title": "Fitter (General)",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "332232",
+      "anzscoV13Codes": [
+        "323212"
+      ],
+      "title": "Fitter and Turner",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "332233",
+      "anzscoV13Codes": [
+        "323213"
+      ],
+      "title": "Fitter-Welder",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "332234",
+      "anzscoV13Codes": [
+        "323214"
+      ],
+      "title": "Metal Machinist (First Class)",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "332299",
+      "anzscoV13Codes": [
+        "323215"
+      ],
+      "title": "Metal Fitters and Machinists nec",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "332331",
+      "anzscoV13Codes": [
+        "323411"
+      ],
+      "title": "Engineering Patternmaker",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "332334",
+      "anzscoV13Codes": [
+        "323313"
+      ],
+      "title": "Locksmith",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "332335",
+      "anzscoV13Codes": [
+        "323314"
+      ],
+      "title": "Precision Instrument Maker and Repairer",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "332337",
+      "anzscoV13Codes": [
+        "323412"
+      ],
+      "title": "Toolmaker",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "341131",
+      "anzscoV13Codes": [
+        "361111"
+      ],
+      "title": "Dog Handler or Trainer",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "341132",
+      "anzscoV13Codes": [
+        "361112"
+      ],
+      "title": "Horse Trainer",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "341231",
+      "anzscoV13Codes": [
+        "361311"
+      ],
+      "title": "Veterinary Nurse",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "342931",
+      "anzscoV13Codes": [
+        "362411"
+      ],
+      "title": "Nurseryperson",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "343131",
+      "anzscoV13Codes": [
+        "121111"
+      ],
+      "title": "Aquaculture Supervisor",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "343233",
+      "anzscoV13Codes": [
+        "121313"
+      ],
+      "title": "Senior Dairy Cattle Farm Worker",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "343235",
+      "anzscoV13Codes": [
+        "121318"
+      ],
+      "title": "Senior Piggery Stockperson",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "343299",
+      "anzscoV13Codes": [
+        "121321"
+      ],
+      "title": "Senior Livestock Farm Workers nec",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "351131",
+      "anzscoV13Codes": [
+        "321211"
+      ],
+      "title": "Automotive Technician (General)",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "351231",
+      "anzscoV13Codes": [
+        "321111"
+      ],
+      "title": "Automotive Electrician",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "351331",
+      "anzscoV13Codes": [
+        "324111"
+      ],
+      "title": "Panelbeater",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "351431",
+      "anzscoV13Codes": [
+        "323299"
+      ],
+      "title": "Agricultural Mechanic",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "351433",
+      "anzscoV13Codes": [
+        "321212"
+      ],
+      "title": "Diesel Technician",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "351434",
+      "anzscoV13Codes": [
+        "321111"
+      ],
+      "title": "Electric Vehicle Technician",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "351435",
+      "anzscoV13Codes": [
+        "321211"
+      ],
+      "title": "Marine Technician",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "351436",
+      "anzscoV13Codes": [
+        "321213"
+      ],
+      "title": "Motorcycle Technician",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "351437",
+      "anzscoV13Codes": [
+        "321214"
+      ],
+      "title": "Small Engine Technician",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "351531",
+      "anzscoV13Codes": [
+        "324211"
+      ],
+      "title": "Vehicle Body Builder",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "351532",
+      "anzscoV13Codes": [
+        "324212"
+      ],
+      "title": "Vehicle Trimmer",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "351631",
+      "anzscoV13Codes": [
+        "324311"
+      ],
+      "title": "Vehicle Painter",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "361131",
+      "anzscoV13Codes": [
+        "332111"
+      ],
+      "title": "Floor Finisher",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "361231",
+      "anzscoV13Codes": [
+        "332211"
+      ],
+      "title": "Painter",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "362131",
+      "anzscoV13Codes": [
+        "333111"
+      ],
+      "title": "Glazier",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "362231",
+      "anzscoV13Codes": [
+        "333211"
+      ],
+      "title": "Plasterer (Wall and Ceiling)",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "362232",
+      "anzscoV13Codes": [
+        "333212"
+      ],
+      "title": "Renderer (Solid Plaster)",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "362331",
+      "anzscoV13Codes": [
+        "333311"
+      ],
+      "title": "Roof Tiler",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "362431",
+      "anzscoV13Codes": [
+        "333411"
+      ],
+      "title": "Wall and Floor Tiler",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "363231",
+      "anzscoV13Codes": [
+        "334114"
+      ],
+      "title": "Gasfitter",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "363331",
+      "anzscoV13Codes": [
+        "334115"
+      ],
+      "title": "Roof Plumber",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "363931",
+      "anzscoV13Codes": [
+        "334113"
+      ],
+      "title": "Drainer",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "363933",
+      "anzscoV13Codes": [
+        "334112"
+      ],
+      "title": "Mechanical Services Plumber",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "369931",
+      "anzscoV13Codes": [
+        "331211"
+      ],
+      "title": "Shopfitter",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "371131",
+      "anzscoV13Codes": [
+        "331111"
+      ],
+      "title": "Bricklayer",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "371132",
+      "anzscoV13Codes": [
+        "331112"
+      ],
+      "title": "Stonemason",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "372131",
+      "anzscoV13Codes": [
+        "331211"
+      ],
+      "title": "Carpenter and Joiner",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "372132",
+      "anzscoV13Codes": [
+        "331212"
+      ],
+      "title": "Carpenter",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "372133",
+      "anzscoV13Codes": [
+        "331213"
+      ],
+      "title": "Joiner",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "381131",
+      "anzscoV13Codes": [
+        "342211"
+      ],
+      "title": "Electrical Distribution Trades Worker",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "381231",
+      "anzscoV13Codes": [
+        "341111"
+      ],
+      "title": "Electrician (General)",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "381232",
+      "anzscoV13Codes": [
+        "341111"
+      ],
+      "title": "Electrical Fitter",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "381233",
+      "anzscoV13Codes": [
+        "341111"
+      ],
+      "title": "Industrial Electrician",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "382131",
+      "anzscoV13Codes": [
+        "342111"
+      ],
+      "title": "Air Conditioning and Refrigeration Technician",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "382232",
+      "anzscoV13Codes": [
+        "342313"
+      ],
+      "title": "Electronic Equipment Trades Worker",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "382233",
+      "anzscoV13Codes": [
+        "342314"
+      ],
+      "title": "Electronic Instrument Technician",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "382234",
+      "anzscoV13Codes": [
+        "342311"
+      ],
+      "title": "Office Equipment Technician",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "382331",
+      "anzscoV13Codes": [
+        "342411"
+      ],
+      "title": "Cabler (Data and Telecommunications)",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "382332",
+      "anzscoV13Codes": [
+        "342412"
+      ],
+      "title": "Telecommunications Cable Technician",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "382333",
+      "anzscoV13Codes": [
+        "342413"
+      ],
+      "title": "Telecommunications Linesworker",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "382334",
+      "anzscoV13Codes": [
+        "342414"
+      ],
+      "title": "Telecommunications Technician",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "391231",
+      "anzscoV13Codes": [
+        "399516"
+      ],
+      "title": "Audio Engineer",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "391234",
+      "anzscoV13Codes": [
+        "399513"
+      ],
+      "title": "Lighting Technician",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "391431",
+      "anzscoV13Codes": [
+        "392211"
+      ],
+      "title": "Graphic Pre-press Operator",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "391432",
+      "anzscoV13Codes": [
+        "392111"
+      ],
+      "title": "Print Finisher",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "391433",
+      "anzscoV13Codes": [
+        "392311"
+      ],
+      "title": "Printing Machinist",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "391434",
+      "anzscoV13Codes": [
+        "392112"
+      ],
+      "title": "Screen Printer",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "391531",
+      "anzscoV13Codes": [
+        "399611"
+      ],
+      "title": "Signwriter",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "392131",
+      "anzscoV13Codes": [
+        "391111"
+      ],
+      "title": "Barber",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "392132",
+      "anzscoV13Codes": [
+        "391111"
+      ],
+      "title": "Hairdresser",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "399131",
+      "anzscoV13Codes": [
+        "399211"
+      ],
+      "title": "Chemical Plant Operator",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "399132",
+      "anzscoV13Codes": [
+        "399212"
+      ],
+      "title": "Gas or Petroleum Production Technician",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "399133",
+      "anzscoV13Codes": [
+        "399213"
+      ],
+      "title": "Power Generation Plant Operator",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "399437",
+      "anzscoV13Codes": [
+        "393114"
+      ],
+      "title": "Shoemaker",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "399438",
+      "anzscoV13Codes": [
+        "393311"
+      ],
+      "title": "Upholsterer",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "399531",
+      "anzscoV13Codes": [
+        "394211"
+      ],
+      "title": "Furniture Finisher",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "399533",
+      "anzscoV13Codes": [
+        "394212"
+      ],
+      "title": "Picture Framer",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "399534",
+      "anzscoV13Codes": [
+        "394213"
+      ],
+      "title": "Wood Machinist",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "399599",
+      "anzscoV13Codes": [
+        "394299"
+      ],
+      "title": "Wood Machinists and Other Wood Trades Workers nec",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "399931",
+      "anzscoV13Codes": [
+        "399111"
+      ],
+      "title": "Boat Builder and Repairer",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "399932",
+      "anzscoV13Codes": [
+        "399911"
+      ],
+      "title": "Diver",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "399933",
+      "anzscoV13Codes": [
+        "399918"
+      ],
+      "title": "Fire Protection Equipment Technician",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "399934",
+      "anzscoV13Codes": [
+        "334114"
+      ],
+      "title": "Gas Network Technician",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "399935",
+      "anzscoV13Codes": [
+        "399914"
+      ],
+      "title": "Optical Mechanic",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "399936",
+      "anzscoV13Codes": [
+        "399916"
+      ],
+      "title": "Plastics Technician",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "399938",
+      "anzscoV13Codes": [
+        "399112"
+      ],
+      "title": "Shipwright",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "399999",
+      "anzscoV13Codes": [
+        "399999"
+      ],
+      "title": "Technicians and Trades Workers nec",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "411231",
+      "anzscoV13Codes": [
+        "411711"
+      ],
+      "title": "Community Development Officer",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "411331",
+      "anzscoV13Codes": [
+        "411311"
+      ],
+      "title": "Diversional Therapist",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "411332",
+      "anzscoV13Codes": [
+        "411311"
+      ],
+      "title": "Lifestyle Coordinator",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "411333",
+      "anzscoV13Codes": [
+        "411311"
+      ],
+      "title": "Lifestyle Officer",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "411431",
+      "anzscoV13Codes": [
+        "223112"
+      ],
+      "title": "Employment Consultant",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "411532",
+      "anzscoV13Codes": [
+        "272413"
+      ],
+      "title": "Translator",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "411632",
+      "anzscoV13Codes": [
+        "411713"
+      ],
+      "title": "Family Support Worker",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "411634",
+      "anzscoV13Codes": [
+        "411711"
+      ],
+      "title": "Housing Officer",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "411731",
+      "anzscoV13Codes": [
+        "411715"
+      ],
+      "title": "Residential Youth Worker",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "411732",
+      "anzscoV13Codes": [
+        "411716"
+      ],
+      "title": "Youth Justice Worker",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "411733",
+      "anzscoV13Codes": [
+        "411716"
+      ],
+      "title": "Youth Worker",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "411931",
+      "anzscoV13Codes": [
+        "272612"
+      ],
+      "title": "Recreation Officer",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "411932",
+      "anzscoV13Codes": [
+        "452321"
+      ],
+      "title": "Sports Development Officer",
+      "skillLevel": 2,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "411933",
+      "anzscoV13Codes": [
+        "411711"
+      ],
+      "title": "Volunteer Coordinator",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "421131",
+      "anzscoV13Codes": [
+        "411711"
+      ],
+      "title": "Aged Care Coordinator",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "422132",
+      "anzscoV13Codes": [
+        "411715"
+      ],
+      "title": "Residential Care Officer",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "431131",
+      "anzscoV13Codes": [
+        "421111"
+      ],
+      "title": "Early Childhood Education Room Leader",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "431132",
+      "anzscoV13Codes": [
+        "421111"
+      ],
+      "title": "Early Childhood Educator",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "431231",
+      "anzscoV13Codes": [
+        "411711"
+      ],
+      "title": "Family Day Care Coordinator",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "431431",
+      "anzscoV13Codes": [
+        "421114"
+      ],
+      "title": "Out of School Hours Care Educator",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "441131",
+      "anzscoV13Codes": [
+        "411411"
+      ],
+      "title": "Enrolled Nurse",
+      "skillLevel": 2,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "441231",
+      "anzscoV13Codes": [
+        "411611"
+      ],
+      "title": "Massage Therapist",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "441232",
+      "anzscoV13Codes": [
+        "411611"
+      ],
+      "title": "Myotherapist",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "441233",
+      "anzscoV13Codes": [
+        "411611"
+      ],
+      "title": "Remedial Massage Therapist",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "441933",
+      "anzscoV13Codes": [
+        "311299"
+      ],
+      "title": "Audiometrist",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "442431",
+      "anzscoV13Codes": [
+        "399913"
+      ],
+      "title": "Optical Dispenser",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "442931",
+      "anzscoV13Codes": [
+        "411111"
+      ],
+      "title": "Patient Transport Officer",
+      "skillLevel": 4,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "461131",
+      "anzscoV13Codes": [
+        "451111"
+      ],
+      "title": "Beauty Therapist",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "461132",
+      "anzscoV13Codes": [
+        "451111"
+      ],
+      "title": "Dermal Therapist",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "461632",
+      "anzscoV13Codes": [
+        "451412"
+      ],
+      "title": "Tour Guide",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "461731",
+      "anzscoV13Codes": [
+        "451711"
+      ],
+      "title": "Flight Attendant",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "461831",
+      "anzscoV13Codes": [
+        "451612"
+      ],
+      "title": "Travel Consultant",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "462431",
+      "anzscoV13Codes": [
+        "452317"
+      ],
+      "title": "Basketball Coach",
+      "skillLevel": 4,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "462432",
+      "anzscoV13Codes": [
+        "452311"
+      ],
+      "title": "Diving Instructor (Open Water)",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "462433",
+      "anzscoV13Codes": [
+        "452317"
+      ],
+      "title": "Football Coach",
+      "skillLevel": 4,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "462436",
+      "anzscoV13Codes": [
+        "452317"
+      ],
+      "title": "Martial Arts Instructor",
+      "skillLevel": 4,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "462437",
+      "anzscoV13Codes": [
+        "452317"
+      ],
+      "title": "Netball Coach",
+      "skillLevel": 4,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "462499",
+      "anzscoV13Codes": [
+        "452317"
+      ],
+      "title": "Sports Coaches and Outdoor Adventure Guides nec",
+      "skillLevel": 4,
+      "registrationOrLicensing": "Registration or licensing may be required."
+    },
+    {
+      "oscaCode": "471533",
+      "anzscoV13Codes": [
+        "431411"
+      ],
+      "title": "Front Office Supervisor (Accommodation)",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "471535",
+      "anzscoV13Codes": [
+        "431411"
+      ],
+      "title": "Housekeeping Supervisor",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "511131",
+      "anzscoV13Codes": [
+        "511111"
+      ],
+      "title": "Contract Administrator",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "511231",
+      "anzscoV13Codes": [
+        "511112"
+      ],
+      "title": "Program or Project Administrator",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "521131",
+      "anzscoV13Codes": [
+        "599111"
+      ],
+      "title": "Conveyancer",
+      "skillLevel": 2,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "521231",
+      "anzscoV13Codes": [
+        "599211"
+      ],
+      "title": "Clerk of Court",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "521235",
+      "anzscoV13Codes": [
+        "521212"
+      ],
+      "title": "Legal Secretary",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "531333",
+      "anzscoV13Codes": [
+        "222112"
+      ],
+      "title": "Finance Broker",
+      "skillLevel": 2,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "531334",
+      "anzscoV13Codes": [
+        "222113"
+      ],
+      "title": "Insurance Broker",
+      "skillLevel": 2,
+      "registrationOrLicensing": "Registration or licensing is required."
+    },
+    {
+      "oscaCode": "531532",
+      "anzscoV13Codes": [
+        "599612"
+      ],
+      "title": "Insurance Loss Adjuster",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "599931",
+      "anzscoV13Codes": [
+        "599915"
+      ],
+      "title": "Clinical Coder",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "599941",
+      "anzscoV13Codes": [
+        "223113"
+      ],
+      "title": "Union Organiser",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "619932",
+      "anzscoV13Codes": [
+        "639211"
+      ],
+      "title": "Merchandise Planner",
+      "skillLevel": 2,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "619935",
+      "anzscoV13Codes": [
+        "639211"
+      ],
+      "title": "Retail Buyer",
+      "skillLevel": 3,
+      "registrationOrLicensing": null
+    },
+    {
+      "oscaCode": "621131",
+      "anzscoV13Codes": [
+        "611211"
+      ],
+      "title": "Insurance Agent",
+      "skillLevel": 3,
+      "registrationOrLicensing": "Registration or licensing is required."
+    }
+  ]
+}
