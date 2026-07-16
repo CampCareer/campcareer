@@ -100,9 +100,7 @@ export function HomeFinder({ locale = "en" }: { locale?: Locale }) {
             </div>
           </form>
 
-          <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-600">
-            {[t.trustOne, t.trustTwo, t.trustThree].map((item) => <span key={item} className="inline-flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-blue-600" />{item}</span>)}
-          </div>
+
         </div>
       </section>
 
