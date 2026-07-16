@@ -77,7 +77,7 @@ export function HomeFinder({ locale = "en" }: { locale?: Locale }) {
 
   return (
     <div className="overflow-hidden bg-white">
-      <section className="relative border-b border-slate-200 bg-[radial-gradient(circle_at_84%_12%,rgba(37,99,235,.12),transparent_24rem),linear-gradient(180deg,#f8fbff_0%,#fff_72%)]">
+      <section className="relative border-b border-slate-200 bg-[linear-gradient(180deg,#ffffff_0%,#f0f5ff_100%)]">
         <div className="mx-auto max-w-7xl px-4 pt-6 pb-14 sm:px-6 sm:pt-8 sm:pb-20">
           <div className="max-w-4xl">
             <h1 className="max-w-4xl text-4xl font-semibold leading-[1.03] tracking-[-0.045em] text-slate-950 sm:text-6xl">{t.title}</h1>

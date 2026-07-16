@@ -142,7 +142,7 @@ export function CountrySearchClient({ initial }: { initial: { country?: string; 
   if (selectedCountry) return <div className="bg-slate-50"><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 sm:py-10">{searchBar}{resultContent}</main></div>
 
   return <div className="bg-white">
-    <section className="relative z-40 border-b border-slate-200 bg-[radial-gradient(circle_at_84%_12%,rgba(37,99,235,.12),transparent_24rem),linear-gradient(180deg,#f8fbff_0%,#fff_72%)]">
+    <section className="relative z-40 border-b border-slate-200 bg-[linear-gradient(180deg,#ffffff_0%,#f0f5ff_100%)]">
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
         {searchBar}
       </div>
