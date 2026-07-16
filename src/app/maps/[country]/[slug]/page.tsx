@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
+import { ArrowRight } from "lucide-react"
 import { JsonLd, breadcrumbLd } from "@/components/seo/json-ld"
 import {
   formatMapSalary,
@@ -159,6 +160,18 @@ export default async function MapsOccupationPage(props: { params: Promise<Params
         </section>
 
         <section className="mx-auto grid max-w-6xl gap-5 px-4 py-8 sm:px-6 lg:grid-cols-3 lg:px-8">
+          {occupation.country === "au" && (
+            <div className="rounded-2xl border border-blue-200 bg-blue-50 p-5">
+              <h2 className="text-lg font-semibold text-slate-950">Full occupation page</h2>
+              <p className="mt-3 text-sm leading-6 text-slate-600">
+                Salary, shortage by state, skills map, live jobs, outlook and credentials — all in one place.
+              </p>
+              <Link href={`/au/jobs/${occupation.slug}`} className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-blue-700 hover:underline">
+                View occupation details <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          )}
+
           <div className="rounded-2xl border border-slate-200 bg-white p-5">
             <h2 className="text-lg font-semibold text-slate-950">Study direction</h2>
             <p className="mt-3 text-sm leading-6 text-slate-600">
