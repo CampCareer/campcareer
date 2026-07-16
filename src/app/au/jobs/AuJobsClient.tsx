@@ -285,7 +285,7 @@ export function AuJobsClient({ occupations }: { occupations: OccRow[] }) {
             return (
             <article
               key={occ.anzsco_code}
-              className="group relative min-h-[132px] rounded-xl border border-slate-200 transition-colors hover:border-brand/40 hover:bg-brand-tint"
+              className="group relative min-h-[164px] rounded-xl border border-slate-200 transition-colors hover:border-brand/40 hover:bg-brand-tint"
             >
               <Link
                 href={getAuOccupationPath(occ, occupations)}
@@ -299,31 +299,30 @@ export function AuJobsClient({ occupations }: { occupations: OccRow[] }) {
                     <div className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">
                       {occ.categoryName}
                     </div>
-                    <div className="mt-1 flex items-start justify-between gap-3">
-                      <div className="text-base font-semibold leading-snug text-foreground group-hover:text-brand-press">
-                        {occ.occupation_en}
+                    <div className="mt-1 text-lg font-semibold leading-snug text-foreground group-hover:text-brand-press">
+                      {occ.occupation_en}
+                    </div>
+                    {occ.median_salary_aud && (
+                      <div className="mt-2 text-base font-bold tabular-nums text-slate-800">
+                        A${occ.median_salary_aud.toLocaleString()}
+                        <span className="ml-1.5 text-[11px] font-medium text-slate-400">median annual salary</span>
                       </div>
-                      {occ.median_salary_aud && (
-                        <span className="shrink-0 whitespace-nowrap text-sm font-bold text-slate-800">
-                          A${occ.median_salary_aud.toLocaleString()}
+                    )}
+                    <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-slate-400">
+                      {occ.shortage_rating != null && occ.shortage_rating >= 3 && (
+                        <span className="rounded bg-orange-50 px-1.5 py-0.5 text-[10px] font-semibold text-orange-600">
+                          Shortage
+                        </span>
+                      )}
+                      {occ.on_csol && (
+                        <span className="rounded bg-blue-50 px-1.5 py-0.5 text-[10px] font-semibold text-blue-700">
+                          CSOL
                         </span>
                       )}
                     </div>
                   </div>
                 </div>
-                <div className="ml-[52px] mt-4 flex flex-wrap items-center gap-2 text-xs text-slate-400">
-                  {occ.shortage_rating != null && occ.shortage_rating >= 3 && (
-                    <span className="rounded bg-orange-50 px-1.5 py-0.5 text-[10px] font-semibold text-orange-600">
-                      Shortage
-                    </span>
-                  )}
-                  {occ.on_csol && (
-                    <span className="rounded bg-blue-50 px-1.5 py-0.5 text-[10px] font-semibold text-blue-700">
-                      CSOL
-                    </span>
-                  )}
-                  <span className="ml-auto">{occ.anzsco_code}</span>
-                </div>
+                <span className="absolute bottom-4 right-5 text-xs text-slate-400">{occ.anzsco_code}</span>
               </Link>
               <button
                 type="button"

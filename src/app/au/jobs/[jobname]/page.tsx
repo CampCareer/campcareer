@@ -6,6 +6,7 @@ import { getCoursesForOccupation } from "@/lib/occupations-au"
 import { getAuOccupationSlug, slugifyAuOccupation } from "@/lib/au-occupation-slug"
 import { AU_OSCA_SOURCE, getAuOfficialOccupationContent } from "@/lib/au-osca-content"
 import { getAuJsaOslRatings } from "@/lib/au-jsa-osl"
+import { getAuCareerTaxonomy } from "@/lib/au-career-taxonomy"
 import { pageMetadata } from "@/lib/seo"
 import { JsonLd, breadcrumbLd } from "@/components/seo/json-ld"
 import { getOccupationDetail, getOccupationDetailByAnzsco, type OccupationDetail } from "./sample-data"
@@ -148,6 +149,7 @@ async function getOccupationData(jobname: string) {
 
   const officialContent = getAuOfficialOccupationContent(occupation.anzsco_code)
   const jsaRatings = getAuJsaOslRatings(occupation.anzsco_code)
+  const careerCategory = getAuCareerTaxonomy(occupation.anzsco_code)?.category ?? null
   const mappedMobility = ((mobilityFlowsResult.data ?? []) as JsaMobilityFlow[])
     .flatMap((flow) => {
       const destination = selectMappedOccupation(flow, occupations)
@@ -192,6 +194,7 @@ async function getOccupationData(jobname: string) {
       ? { ...detail, sources: [...new Set([...(jsaRatings ? ["Jobs and Skills Australia OSL"] : []), ...(mobilityPaths.length > 0 || mobilityStockResult.data ? ["Jobs and Skills Australia DOM"] : []), ...detail.sources])] }
       : detail,
     officialContent,
+    careerCategory,
     jsaRatings,
     states: (stateResult.data ?? []) as StateOccRow[],
     courses,
@@ -276,6 +279,7 @@ export default async function AuOccupationPage(props: { params: Promise<Params> 
         }))}
         dataNote={buildDataNote(occupation)}
         officialContent={officialContent}
+        careerCategory={data.careerCategory}
         jsaProfile={jsaProfile}
         jsaPathways={jsaPathways}
         shortageDriver={jsaDriver?.shortage_driver ?? null}
