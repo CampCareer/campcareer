@@ -16,7 +16,7 @@ export function SiteFooter({ className }: { className?: string }) {
   const tf = t.landing.footer
 
   return (
-    <footer className={cn("border-t border-slate-200 bg-background", className)}>
+    <footer className={cn("border-t border-slate-200 bg-[linear-gradient(180deg,#f8fbff_0%,#eef3fc_100%)]", className)}>
       <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-slate-400">
         <span>{tf.copyright}</span>
         <nav className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
