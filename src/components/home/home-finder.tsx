@@ -84,11 +84,10 @@ export function HomeFinder({ locale = "en" }: { locale?: Locale }) {
 
   return (
     <div className="overflow-hidden bg-white">
-      <section className="relative border-b border-slate-200 bg-[radial-gradient(circle_at_84%_12%,rgba(37,99,235,.12),transparent_24rem),linear-gradient(180deg,#f8fbff_0%,#fff_72%)]">
-        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20">
+      <section className="relative bg-[radial-gradient(circle_at_84%_12%,rgba(37,99,235,.12),transparent_24rem),linear-gradient(180deg,#f8fbff_0%,#fff_72%)]">
+        <div className="mx-auto max-w-7xl px-4 pt-6 pb-14 sm:px-6 sm:pt-8 sm:pb-20">
           <div className="max-w-4xl">
-            <p className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-700"><ShieldCheck className="h-3.5 w-3.5" />{t.eyebrow}</p>
-            <h1 className="mt-5 max-w-4xl text-4xl font-semibold leading-[1.03] tracking-[-0.045em] text-slate-950 sm:text-6xl">{t.title}</h1>
+            <h1 className="max-w-4xl text-4xl font-semibold leading-[1.03] tracking-[-0.045em] text-slate-950 sm:text-6xl">{t.title}</h1>
           </div>
 
           <form action={searchHref} onSubmit={(event) => { event.preventDefault(); const submitted = new FormData(event.currentTarget); const submittedCountry = String(submitted.get("country") ?? "everywhere"); const submittedMajor = String(submitted.get("major") ?? "anything"); const submittedGoal = String(submitted.get("goal") ?? ""); const href = `${localizePath("/countries/search", localePrefix)}?${new URLSearchParams({ country: submittedCountry, major: submittedMajor, ...(submittedGoal ? { goal: submittedGoal } : {}) })}`; recordDiscoveryEvent("recommendation_start", { surface: "landing", country: submittedCountry, major: submittedMajor, goal: submittedGoal }); if (submittedCountry === "SG" && submittedGoal) { window.open(singaporeWorkspaceHref, "_blank", "noopener,noreferrer"); return } router.push(href) }} className="mt-9 rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_18px_45px_rgba(15,23,42,.10)]">
