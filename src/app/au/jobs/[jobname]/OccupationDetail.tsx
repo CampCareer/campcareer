@@ -25,6 +25,16 @@ type Props = {
   relatedCourses: RelatedCourse[]
   dataNote: string | null
   officialContent: AuOfficialOccupationContent | null
+  jsaProfile: { employment_total: number | null; part_time_share_pct: number | null; female_share_pct: number | null; median_age: number | null; full_time_share_pct: number | null; average_full_time_hours: number | null; state_distribution: { name: string; share: number }[]; education_distribution: { name: string; share: number }[]; industries: { name: string; share?: number }[] } | null
+  jsaPathways: { qualification_code: string; qualification_title: string; pathway_type: string; licensing_required: boolean; licensing_may_be_required: boolean }[]
+  shortageDriver: string | null
+  vacancies: { state: string; period: string; vacancy_count: number | null; index_value: number | null; series: string }[]
+  outlook: { period_start: string; period_end: string; employment_start: number | null; employment_end: number | null; employment_change: number | null; employment_change_pct: number | null; geography: string }[]
+  regionalEmployment: { state: string | null; sa4_name: string | null; employment_total: number | null; annual_change: number | null; annual_change_pct: number | null }[]
+  mobility: {
+    stock: { financial_year: string; worker_stock: number; stock_delta: number | null; inflow: number | null; outflow: number | null } | null
+    paths: { oscaCode: string; title: string; href: string; workerCount: number; nationalShortage: string | null; outlook2035Pct: number | null; onCsol: boolean }[]
+  }
 }
 
 const AU_STATES = ["NSW", "VIC", "QLD", "WA", "SA", "TAS", "NT", "ACT"]
@@ -72,7 +82,10 @@ function OutlookBar({ level, maxLevel = 5 }: { level: number; maxLevel?: number 
   )
 }
 
-export function OccupationDetailClient({ detail, salary, shortageRating, nationalJsaRating, onCSOL, stateShortages, relatedCourses, dataNote, officialContent }: Props) {
+const DRIVER_LABELS: Record<string, string> = { long_training_gap: "Long training gap", short_training_gap: "Short training gap", suitability_gap: "Suitability gap", retention_gap: "Retention gap", uncertain: "Cause still uncertain" }
+const PATHWAY_LABELS: Record<string, string> = { occupation_ready: "Occupation ready", specialised_training: "Specialised training", progression_pathway: "Progression pathway", pre_vocational: "Pre-vocational", transferable: "Transferable skills" }
+
+export function OccupationDetailClient({ detail, salary, shortageRating, nationalJsaRating, onCSOL, stateShortages, relatedCourses, dataNote, officialContent, jsaProfile, jsaPathways, shortageDriver, vacancies, outlook, regionalEmployment, mobility }: Props) {
   const stateMap = new Map(stateShortages.map((s) => [s.state, s]))
   const visibleStateShortages = AU_STATES
     .map((state) => ({ state, shortage: stateMap.get(state) }))
@@ -145,6 +158,7 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
                 ))}
               </div>
             </>}
+            {shortageDriver && <p className="mt-4 rounded-lg bg-slate-50 p-3 text-xs leading-5 text-slate-600"><span className="font-semibold text-slate-800">Why this shortage:</span> {DRIVER_LABELS[shortageDriver] ?? shortageDriver} <span className="text-slate-400">· JSA ANZSCO unit group</span></p>}
           </div>
 
           {/* Snapshot details */}
@@ -159,6 +173,7 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
                   {salary != null && <p className="text-xs text-slate-400">Full-time annual (JSA / ABS)</p>}
                 </div>
               </div>
+              {jsaProfile?.employment_total != null && <div className="flex items-start gap-3"><div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-indigo-50 text-indigo-700"><MapPin className="h-4 w-4" /></div><div><p className="text-xs text-slate-500">People employed</p><p className="text-lg font-semibold text-slate-950">{jsaProfile.employment_total.toLocaleString()}</p><p className="text-xs text-slate-400">JSA profile · ANZSCO mapping</p></div></div>}
               <div className="flex items-start gap-3">
                 <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-amber-50 text-amber-700"><Star className="h-4 w-4" /></div>
                 <div>
@@ -184,6 +199,43 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
             </div>
           </div>
         </div>
+
+        {jsaProfile && <section className="rounded-2xl border border-slate-200 bg-white p-5">
+          <h2 className="text-lg font-semibold text-slate-950">Where people work</h2>
+          <p className="mt-1 text-xs text-slate-400">JSA occupation profile data, mapped from ANZSCO</p>
+          <div className="mt-4 grid gap-6 md:grid-cols-2">
+            <div><h3 className="text-xs font-semibold uppercase tracking-wide text-slate-400">State / territory distribution</h3><div className="mt-3 space-y-2">{jsaProfile.state_distribution.map((item) => <div key={item.name} className="flex items-center gap-3 text-sm"><span className="w-14 font-medium text-slate-700">{item.name}</span><div className="h-2 flex-1 overflow-hidden rounded bg-slate-100"><div className="h-full rounded bg-blue-600" style={{ width: `${Math.min(item.share, 100)}%` }} /></div><span className="w-10 text-right text-slate-500">{item.share}%</span></div>)}</div></div>
+            <div><h3 className="text-xs font-semibold uppercase tracking-wide text-slate-400">Education & work pattern</h3><div className="mt-3 grid grid-cols-2 gap-3 text-sm">{jsaProfile.part_time_share_pct != null && <div className="rounded-lg bg-slate-50 p-3"><p className="text-xs text-slate-500">Part-time</p><p className="mt-1 font-semibold text-slate-950">{jsaProfile.part_time_share_pct}%</p></div>}{jsaProfile.female_share_pct != null && <div className="rounded-lg bg-slate-50 p-3"><p className="text-xs text-slate-500">Female share</p><p className="mt-1 font-semibold text-slate-950">{jsaProfile.female_share_pct}%</p></div>}{jsaProfile.median_age != null && <div className="rounded-lg bg-slate-50 p-3"><p className="text-xs text-slate-500">Median age</p><p className="mt-1 font-semibold text-slate-950">{jsaProfile.median_age}</p></div>}</div>{jsaProfile.education_distribution.length > 0 && <div className="mt-4 space-y-1.5">{jsaProfile.education_distribution.map((item) => <p key={item.name} className="flex justify-between text-xs text-slate-600"><span>{item.name}</span><span className="font-semibold">{item.share}%</span></p>)}</div>}</div>
+          </div>
+        </section>}
+
+        {regionalEmployment.length > 0 && <section className="rounded-2xl border border-slate-200 bg-white p-5">
+          <h2 className="text-lg font-semibold text-slate-950">Regional demand</h2>
+          <p className="mt-1 text-xs text-slate-400">Largest SA4 employment areas · JSA NERO, June 2026</p>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">{regionalEmployment.map((region) => <div key={`${region.state}-${region.sa4_name}`} className="rounded-xl bg-slate-50 p-3"><p className="text-xs text-slate-500">{region.state ?? "Australia"}</p><p className="mt-1 min-h-10 text-sm font-semibold leading-5 text-slate-950">{region.sa4_name ?? "Regional area"}</p><p className="mt-2 text-lg font-semibold text-slate-950">{region.employment_total?.toLocaleString() ?? "—"}</p><p className="text-xs text-slate-500">estimated employed{region.annual_change_pct != null ? ` · ${region.annual_change_pct > 0 ? "+" : ""}${region.annual_change_pct}% YoY` : ""}</p></div>)}</div>
+        </section>}
+
+        {(mobility.stock || mobility.paths.length > 0) && <section className="rounded-2xl border border-slate-200 bg-white p-5">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <h2 className="text-lg font-semibold text-slate-950">Possible next career moves</h2>
+              <p className="mt-1 text-xs leading-5 text-slate-400">Observed Australian worker transitions, not a personalised recommendation · JSA DOM, last available 2020–21</p>
+            </div>
+            {mobility.stock && <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">{mobility.stock.financial_year.replace("_", "–")}</span>}
+          </div>
+          {mobility.stock && <div className="mt-4 grid gap-3 sm:grid-cols-3">
+            <div className="rounded-xl bg-slate-50 p-3"><p className="text-xs text-slate-500">Workers in this occupation</p><p className="mt-1 text-xl font-semibold text-slate-950">{mobility.stock.worker_stock.toLocaleString()}</p></div>
+            <div className="rounded-xl bg-slate-50 p-3"><p className="text-xs text-slate-500">Moved in from another occupation</p><p className="mt-1 text-xl font-semibold text-slate-950">{mobility.stock.inflow?.toLocaleString() ?? "—"}</p></div>
+            <div className="rounded-xl bg-slate-50 p-3"><p className="text-xs text-slate-500">Moved to another occupation</p><p className="mt-1 text-xl font-semibold text-slate-950">{mobility.stock.outflow?.toLocaleString() ?? "—"}</p></div>
+          </div>}
+          {mobility.paths.length > 0 && <div className="mt-5 grid gap-3 md:grid-cols-2">
+            {mobility.paths.map((path) => <Link key={path.oscaCode} href={path.href} className="group rounded-xl border border-slate-200 p-4 transition hover:border-blue-300 hover:bg-blue-50/40">
+              <div className="flex items-start justify-between gap-3"><div><p className="text-sm font-semibold text-slate-950 group-hover:text-blue-700">{path.title}</p><p className="mt-1 text-xs text-slate-500">{path.workerCount.toLocaleString()} workers made this move in 2020–21</p></div><ArrowRight className="mt-0.5 h-4 w-4 shrink-0 text-slate-400 group-hover:text-blue-600" /></div>
+              <div className="mt-3 flex flex-wrap gap-2">{path.nationalShortage && <JsaRatingBadge rating={path.nationalShortage as AuJsaOslRating} />}{path.outlook2035Pct != null && <span className="rounded-full bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-700">2035 outlook {path.outlook2035Pct > 0 ? "+" : ""}{path.outlook2035Pct}%</span>}{path.onCsol && <span className="rounded-full bg-emerald-50 px-2 py-1 text-xs font-semibold text-emerald-700">CSOL listed</span>}</div>
+            </Link>)}
+          </div>}
+          <p className="mt-4 text-xs leading-5 text-slate-400">Income-tax-return data excludes many contractors and sole traders; transitions below 10 people are not published. Current shortage and outlook labels are shown only as context for each destination.</p>
+        </section>}
 
         {/* What you do + Skills */}
         <div className="grid gap-5 lg:grid-cols-2">
@@ -272,6 +324,7 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
                   <p className="mt-1 text-xs leading-5 text-slate-500">{cred.details}</p>
                 </div>
               )) : <p className="text-sm leading-6 text-slate-500">Licence, registration and qualification requirements vary by employer and state. Verify requirements with the relevant regulator before enrolling or applying.</p>}
+              {jsaPathways.length > 0 && <div className="border-t border-slate-100 pt-4"><p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Official VET pathways (JSA TOP)</p><div className="mt-2 space-y-2">{jsaPathways.map((pathway) => <div key={`${pathway.qualification_code}-${pathway.qualification_title}`} className="rounded-lg bg-blue-50 p-3 text-sm"><p className="font-semibold text-slate-900">{pathway.qualification_title}</p><p className="mt-1 text-xs text-blue-800">{PATHWAY_LABELS[pathway.pathway_type] ?? pathway.pathway_type}{pathway.licensing_required ? " · Licence / registration required" : pathway.licensing_may_be_required ? " · Licence may be required" : ""}</p></div>)}</div></div>}
               {relatedCourses.length > 0 && <div className="border-t border-slate-100 pt-4">
                 <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Related study options</p>
                 <div className="mt-2 space-y-2">
@@ -301,6 +354,7 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
           >
             See all job ads on SEEK <ExternalLink className="h-3.5 w-3.5" />
           </a>
+          {vacancies.length > 0 && <div className="mt-5 border-t border-slate-100 pt-4"><p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Official vacancy signal · JSA IVI 3-month average (ANZSCO unit group)</p><div className="mt-3 grid gap-2 sm:grid-cols-3">{vacancies.slice(0, 6).map((item) => <div key={`${item.state}-${item.period}`} className="rounded-lg bg-slate-50 p-3"><p className="text-xs text-slate-500">{item.state} · {new Date(item.period).toLocaleDateString("en-AU", { month: "short", year: "numeric" })}</p><p className="mt-1 text-base font-semibold text-slate-950">{item.vacancy_count != null ? Math.round(item.vacancy_count).toLocaleString() : item.index_value != null ? item.index_value.toFixed(1) : "—"}</p></div>)}</div></div>}
         </section>
 
         {dataNote && <section className="rounded-2xl border border-slate-200 bg-white p-5">
@@ -309,7 +363,7 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
         </section>}
 
         {/* 3-year outlook */}
-        {detail.outlook && <section className="rounded-2xl border border-slate-200 bg-white p-5">
+        {outlook.length > 0 ? <section className="rounded-2xl border border-slate-200 bg-white p-5"><h2 className="text-lg font-semibold text-slate-950">2030 & 2035 employment outlook</h2><div className="mt-4 grid gap-3 sm:grid-cols-2">{outlook.map((item) => <div key={item.period_end} className="rounded-xl bg-slate-50 p-4"><p className="text-xs text-slate-500">to {new Date(item.period_end).getFullYear()}</p><p className="mt-1 text-xl font-semibold text-slate-950">{item.employment_change_pct != null ? `${item.employment_change_pct > 0 ? "+" : ""}${item.employment_change_pct}%` : "Not available"}</p><p className="mt-1 text-xs text-slate-500">{item.employment_change != null ? `${item.employment_change.toLocaleString()} projected jobs` : "JSA projection · ANZSCO unit group"}</p></div>)}</div></section> : detail.outlook && <section className="rounded-2xl border border-slate-200 bg-white p-5">
           <h2 className="text-lg font-semibold text-slate-950">3-year outlook</h2>
           <div className="mt-4 flex flex-wrap items-end gap-6">
             {detail.outlook.years.map((y) => (

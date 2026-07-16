@@ -62,6 +62,11 @@ type ActiveCountry = "AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL" | "BE" | "JP
 
 type NeroOccupation = { a4: string; name: string; emp: number }
 type NeroData = Record<string, NeroOccupation[]>
+type AuLabourMarket = {
+  regional: { state: string; sa4_code: string; sa4_name: string; employment_total: number | null; annual_change: number | null; annual_change_pct: number | null; five_year_change: number | null; five_year_change_pct: number | null; period: string }[]
+  vacancies: { state: string; period: string; vacancy_count: number | null }[]
+  sources: { regional: string; vacancies: string }
+}
 
 // 지역(SA4) 단위 직업군 데이터 — public/region-occupations.json (IVI 채용공고 + 인구조사 고소득).
 type RegionGroup = { code?: string; title: string; value: number }
@@ -104,6 +109,7 @@ export default function CampCareerMaps({
   const initialUrlApplied = useRef(false)
   // 직업 카드 열림 상태 — 툴바의 직업 검색에서도 열 수 있도록 최상위로 끌어올림.
   const [selectedOccCode, setSelectedOccCode] = useState<string | null>(null)
+  const [auLabourMarket, setAuLabourMarket] = useState<AuLabourMarket | null>(null)
   const [selectedJPCityArea, setSelectedJPCityArea] = useState<string | null>(null)
   const [selectedFRCityCode, setSelectedFRCityCode] = useState<string | null>(null)
   const [selectedESCityCode, setSelectedESCityCode] = useState<string | null>(null)
@@ -459,6 +465,22 @@ export default function CampCareerMaps({
       window.history.replaceState(null, "", `?${p.toString()}`)
     }
   }, [selectedOccCode, selectedUsOcc, activeCountry, selected, data])
+
+  useEffect(() => {
+    if (activeCountry !== "AU" || !selectedOccCode || !selected || selected === "WHV") {
+      setAuLabourMarket(null)
+      return
+    }
+    const controller = new AbortController()
+    setAuLabourMarket(null)
+    fetch(`/api/maps/au/labour-market?occupation=${encodeURIComponent(selectedOccCode)}&state=${encodeURIComponent(selected)}`, { signal: controller.signal })
+      .then((response) => response.ok ? response.json() as Promise<AuLabourMarket> : Promise.reject(new Error(`Labour market request failed (${response.status})`)))
+      .then((payload) => setAuLabourMarket(payload))
+      .catch((error: unknown) => {
+        if (!(error instanceof DOMException && error.name === "AbortError")) setAuLabourMarket(null)
+      })
+    return () => controller.abort()
+  }, [activeCountry, selectedOccCode, selected])
 
   // nero(NERO 고용 코드) URL 파라미터 ↔ state 동기화.
   useEffect(() => {
@@ -1550,6 +1572,7 @@ export default function CampCareerMaps({
               savedOccCodes={savedOccCodes}
               onToggleSave={toggleSaveOcc}
               onShare={shareOcc}
+              auLabourMarket={activeCountry === "AU" ? auLabourMarket : null}
               selectedNeroA4={selectedNeroA4}
               setSelectedNeroA4={setSelectedNeroA4}
               onSelectCollege={(c) => {
@@ -2224,6 +2247,7 @@ function Panel({
   savedOccCodes,
   onToggleSave,
   onShare,
+  auLabourMarket,
   selectedNeroA4,
   setSelectedNeroA4,
   onSelectCollege,
@@ -2248,6 +2272,7 @@ function Panel({
   savedOccCodes: Set<string>
   onToggleSave: (occCode: string, occTitle: string) => void
   onShare: () => void
+  auLabourMarket: AuLabourMarket | null
   selectedNeroA4: string | null
   setSelectedNeroA4: (a4: string | null) => void
   onSelectCollege?: (college: UKCollege) => void
@@ -2738,6 +2763,7 @@ function Panel({
         savedOccCodes={savedOccCodes}
         onToggleSave={onToggleSave}
         onShare={onShare}
+        labourMarket={auLabourMarket}
       />
     )
   }
@@ -4833,6 +4859,7 @@ function OccupationDetail({
   savedOccCodes,
   onToggleSave,
   onShare,
+  labourMarket,
 }: {
   occ: OccRow
   stateShortages: StateShortageByOcc[]
@@ -4844,6 +4871,7 @@ function OccupationDetail({
   savedOccCodes: Set<string>
   onToggleSave: (occCode: string, occTitle: string) => void
   onShare: (occTitle: string) => void
+  labourMarket: AuLabourMarket | null
 }) {
   const locale = useLocale()
   const name = locale === "ko" && occ.occupation_ko ? occ.occupation_ko : occ.occupation_en
@@ -4868,6 +4896,13 @@ function OccupationDetail({
     cricosSearch: cricosSearchUrl(),
 
   }
+  const latestVacancy = labourMarket?.vacancies.at(-1) ?? null
+  const quarterAgoVacancy = labourMarket?.vacancies.at(-4) ?? null
+  const vacancyChange = latestVacancy?.vacancy_count != null && quarterAgoVacancy?.vacancy_count != null && quarterAgoVacancy.vacancy_count !== 0
+    ? ((latestVacancy.vacancy_count - quarterAgoVacancy.vacancy_count) / quarterAgoVacancy.vacancy_count) * 100
+    : null
+  const vacancyBars = labourMarket?.vacancies.slice(-12) ?? []
+  const maxVacancy = Math.max(1, ...vacancyBars.map((item) => item.vacancy_count ?? 0))
 
   return (
     <>
@@ -4987,6 +5022,20 @@ function OccupationDetail({
               </div>
               <p className="mt-1 text-xs text-slate-400">{shortageLabel(occ.shortage_rating, t)}</p>
             </div>
+          )}
+
+          {labourMarket && (
+            <section className="rounded-lg border border-violet-200 bg-violet-50 p-3">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-[11px] font-medium uppercase tracking-wider text-violet-700">JSA regional demand</p>
+                  <p className="mt-1 text-xs leading-5 text-violet-900">{labourMarket.sources.regional}</p>
+                </div>
+                {latestVacancy?.vacancy_count != null && <div className="shrink-0 text-right"><p className="text-lg font-bold tabular-nums text-violet-950">{Math.round(latestVacancy.vacancy_count).toLocaleString()}</p><p className="text-[10px] text-violet-700">latest IVI</p></div>}
+              </div>
+              {vacancyBars.length > 0 && <div className="mt-3"><div className="flex h-10 items-end gap-1">{vacancyBars.map((point) => <div key={point.period} className="min-w-0 flex-1 rounded-t bg-violet-400" title={`${point.period}: ${point.vacancy_count?.toLocaleString() ?? "—"}`} style={{ height: `${Math.max(5, Math.round(((point.vacancy_count ?? 0) / maxVacancy) * 100))}%` }} />)}</div><div className="mt-1 flex justify-between text-[10px] text-violet-700"><span>{new Date(vacancyBars[0].period).toLocaleDateString("en-AU", { month: "short", year: "2-digit" })}</span><span>{vacancyChange != null ? `${vacancyChange >= 0 ? "+" : ""}${vacancyChange.toFixed(0)}% over 90 days` : labourMarket.sources.vacancies}</span><span>{new Date(vacancyBars.at(-1)!.period).toLocaleDateString("en-AU", { month: "short", year: "2-digit" })}</span></div></div>}
+              {labourMarket.regional.length > 0 && <div className="mt-4 border-t border-violet-200 pt-3"><p className="text-[11px] font-medium uppercase tracking-wider text-violet-700">Top SA4 areas in {currentState}</p><ol className="mt-2 space-y-2">{labourMarket.regional.slice(0, 5).map((region, index) => <li key={region.sa4_code} className="flex items-center gap-2 text-xs"><span className="w-4 text-violet-500">{index + 1}</span><span className="min-w-0 flex-1 truncate font-medium text-slate-800">{region.sa4_name}</span><span className="shrink-0 font-semibold tabular-nums text-slate-800">{region.employment_total?.toLocaleString() ?? "—"}</span><span className={`w-12 text-right tabular-nums ${region.annual_change_pct != null && region.annual_change_pct > 0 ? "text-emerald-700" : "text-slate-500"}`}>{region.annual_change_pct != null ? `${region.annual_change_pct > 0 ? "+" : ""}${region.annual_change_pct}%` : "—"}</span></li>)}</ol><p className="mt-2 text-[10px] text-violet-700">Estimated employed · annual change · JSA NERO</p></div>}
+            </section>
           )}
 
           {relatedData.pathway === "degree" ? (

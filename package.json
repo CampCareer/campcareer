@@ -25,6 +25,8 @@
     "import:au-osca": "npx tsx scripts/import-au-osca-content.ts",
     "check:au-osca": "npx tsx --env-file=.env.local scripts/check-au-osca-content.ts",
     "import:au-jsa-osl": "python3 scripts/import-au-jsa-osl.py",
+    "import:au-jsa-labour-market": "npx tsx --env-file=.env.local scripts/import-au-jsa-labour-market.ts",
+    "import:au-jsa-mobility": "npx tsx --env-file=.env.local scripts/import-au-jsa-mobility.ts",
     "build:au-taxonomy": "npx tsx --env-file=.env.local scripts/build-au-career-taxonomy.ts",
     "import:au-csol": "python3 scripts/import-au-csol-priority-occupations.py",
     "seed:au-csol": "npx tsx --env-file=.env.local scripts/seed-au-csol-priority-occupations.ts",
