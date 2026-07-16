@@ -73,7 +73,7 @@ export function TopNav() {
   })
 
   return (
-    <header className={cn(isCompare ? "" : "sticky top-0 z-40", "bg-[radial-gradient(circle_at_84%_12%,rgba(37,99,235,.12),transparent_24rem),linear-gradient(180deg,#f8fbff_0%,#f0f5ff_100%)] backdrop-blur-sm")}>
+    <header className={cn(isCompare ? "" : "sticky top-0 z-40", "bg-[radial-gradient(circle_at_84%_12%,rgba(37,99,235,.12),transparent_24rem),linear-gradient(180deg,#f0f5ff_0%,#f8fbff_100%)] backdrop-blur-sm")}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="h-20 flex items-center gap-4">
           <Link href={localizePath("/", pathLocale)} className="flex items-center gap-2.5 shrink-0 mr-auto">
