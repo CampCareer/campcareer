@@ -4,7 +4,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useEffect, useMemo, useRef, useState } from "react"
-import { ArrowRight, Building2, CircleAlert, ExternalLink, MapPinned, Search } from "lucide-react"
+import { ArrowRight, Building2, CircleAlert, ExternalLink, MapPinned, Search, SlidersHorizontal } from "lucide-react"
 import { CANONICAL_CAREERS, careersForCategory } from "@/data/career-comparison-catalog"
 import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
 import { STUDY_CATEGORIES, STUDY_CONCEPTS } from "@/data/study-concepts"
@@ -39,6 +39,8 @@ export function CountrySearchClient({ initial }: { initial: { country?: string; 
   const [result, setResult] = useState<LandingDiscoveryResult | null>(null)
   const [loading, setLoading] = useState(false)
   const [expanded, setExpanded] = useState(false)
+  const [goalFilterOpen, setGoalFilterOpen] = useState(false)
+  const goalFilterRef = useRef<HTMLDivElement>(null)
   const lastTrackedResult = useRef("")
   const hasGoal = Boolean(goal)
   const selectedCountry = country === "everywhere" ? null : getLaunchCountry(country)
@@ -86,16 +88,27 @@ export function CountrySearchClient({ initial }: { initial: { country?: string; 
     }
   }, [country, goal, hasGoal, major, result, selectedCountry])
 
+  useEffect(() => {
+    if (!goalFilterOpen) return
+    const onPointerDown = (event: MouseEvent) => {
+      if (goalFilterRef.current && !goalFilterRef.current.contains(event.target as Node)) setGoalFilterOpen(false)
+    }
+    document.addEventListener("mousedown", onPointerDown)
+    return () => document.removeEventListener("mousedown", onPointerDown)
+  }, [goalFilterOpen])
+
   const href = productHref("/countries/search", locale, { country, major, ...(goal ? { goal } : {}) })
 
   const countryLabel = country === "everywhere" ? (isKo ? "어디든지" : "Everywhere") : getLaunchCountry(country)?.name ?? country
   const majorLabel = major === "anything" ? (isKo ? "아직 모르겠어요" : "Any major") : (isKo ? STUDY_CONCEPTS.find((c) => c.id === major)?.labelKo : STUDY_CONCEPTS.find((c) => c.id === major)?.label) ?? major
   const goalLabel = goal ? (isKo ? (goal === "high-income" ? "높은 졸업 후 연봉" : goal === "low-cost" ? "낮은 유학비용" : "졸업 후 취업·체류") : LANDING_GOALS.find((g) => g.id === goal)?.label ?? goal) : ""
 
+  const goalLabelShort = goal ? (isKo ? (goal === "high-income" ? "고소득" : goal === "low-cost" ? "저비용" : "취업·체류") : goal === "high-income" ? "High income" : goal === "low-cost" ? "Low cost" : "Immigration") : ""
+
   const searchBar = <>
     <div className="relative z-50 mx-auto max-w-4xl">
-      <button type="button" onClick={() => setExpanded(true)} className={`flex w-full items-center justify-center gap-2.5 rounded-2xl border border-slate-200 bg-white px-5 py-3.5 text-center shadow-sm transition hover:border-blue-300 hover:shadow-md ${expanded ? "pointer-events-none invisible" : ""}`}>
-        <Search className="h-4 w-4 shrink-0 text-slate-400" />
+      <button type="button" onClick={() => setExpanded(true)} className={`relative flex w-full items-center justify-center gap-2.5 rounded-2xl border border-slate-200 bg-white px-5 py-3.5 text-center shadow-sm transition hover:border-blue-300 hover:shadow-md ${expanded ? "pointer-events-none invisible" : ""}`}>
+        <Search className="absolute left-5 h-4 w-4 shrink-0 text-slate-400" />
         <span className="text-sm font-medium text-slate-700">{countryLabel}</span>
         <span className="h-1 w-1 rounded-full bg-slate-300" />
         <span className="text-sm font-medium text-slate-700">{majorLabel}</span>
@@ -105,14 +118,26 @@ export function CountrySearchClient({ initial }: { initial: { country?: string; 
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
           <div className="flex-1"><IconPicker name="country" label={isKo ? "나라" : "Where"} value={country} options={countryOptions} onChange={setCountry} searchPlaceholder={isKo ? "국가 검색" : "Search countries"} testId="country" /></div>
           <div className="flex-1"><IconPicker name="major" label={isKo ? "전공" : "Major"} value={major} options={majorOptions} onChange={setMajor} searchPlaceholder={isKo ? "전공 검색" : "Search majors"} testId="major" /></div>
-          <div className="flex-1"><IconPicker name="goal" label={isKo ? "목표" : "Goal"} value={goal} options={goalOptions} onChange={(value) => setGoal(value as LandingGoalId)} testId="goal" /></div>
+          <div className="flex relative" ref={goalFilterRef}>
+            <button type="button" onClick={() => setGoalFilterOpen((o) => !o)} className="inline-flex h-12 items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-700 transition hover:border-blue-300 hover:bg-slate-50">
+              <SlidersHorizontal className="h-4 w-4 shrink-0 text-slate-400" />
+              <span>{goalLabelShort || (isKo ? "목표" : "Goal")}</span>
+            </button>
+            {goalFilterOpen && <div className="absolute right-0 top-full z-[60] mt-2 w-64 overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-[0_18px_45px_rgba(15,23,42,.16)]">
+              {goalOptions.map((option) => <button key={option.value} type="button" onClick={() => { setGoal(option.value as LandingGoalId); setGoalFilterOpen(false) }} className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition hover:bg-slate-50 ${option.value === goal ? "bg-blue-50" : ""}`}>
+                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-slate-100 text-base">{option.icon}</span>
+                <span className="min-w-0 flex-1"><span className="block text-sm font-semibold text-slate-900">{option.label}</span><span className="block text-xs text-slate-500">{option.description}</span></span>
+                {option.value === goal && <span className="h-2 w-2 shrink-0 rounded-full bg-blue-600" />}
+              </button>)}
+            </div>}
+          </div>
           <button type="submit" className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700">{isKo ? "검색" : "Search"}</button>
         </div>
       </form>}
     </div>
   </>
 
-  const resultContent = !hasGoal ? <CountryBrowse major={major} onMajorChange={setMajor} onGoalChange={setGoal} locale={locale} /> : selectedCountry ? <RegionSelection country={selectedCountry} major={major} goal={goal} locale={locale} /> : loading ? <LoadingCards /> : result ? <LandingDiscoveryResults result={result} locale={locale} /> : <SearchNotice title="Discovery results are unavailable" body="Try again in a moment, or open a country profile from the landing page." />
+  const resultContent = !hasGoal ? <Recommendations locale={locale} isKo={isKo} onGoalChange={setGoal} /> : selectedCountry ? <RegionSelection country={selectedCountry} major={major} goal={goal} locale={locale} /> : loading ? <LoadingCards /> : result ? <LandingDiscoveryResults result={result} locale={locale} /> : <SearchNotice title="Discovery results are unavailable" body="Try again in a moment, or open a country profile from the landing page." />
 
   if (selectedCountry) return <div className="bg-slate-50"><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 sm:py-10">{searchBar}{resultContent}</main></div>
 
@@ -122,15 +147,40 @@ export function CountrySearchClient({ initial }: { initial: { country?: string; 
         {searchBar}
       </div>
     </section>
-    {expanded && <div className="fixed inset-0 top-[88px] z-30 bg-black/40" onClick={() => setExpanded(false)} />}
+    {expanded && <div className="fixed inset-0 top-[88px] z-30 bg-black/40" onClick={() => { setGoalFilterOpen(false); setExpanded(false) }} />}
     <main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 sm:py-10 bg-slate-50">
       {resultContent}
     </main>
   </div>
 }
 
-function CountryBrowse({ major, onMajorChange, onGoalChange, locale }: { major: string; onMajorChange: (value: string) => void; onGoalChange: (value: LandingGoalId) => void; locale: "en" | "ko" }) {
-  return <section><div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"><div className="flex flex-wrap items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[.18em] text-blue-700">Country filters</p><h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">What should come first?</h2><p className="mt-1 text-sm leading-6 text-slate-600">Choose a priority to rank the country cards. You can also narrow the ranking by study field.</p></div><label className="min-w-52"><span className="mb-1 block text-xs font-semibold text-slate-600">Study field</span><select aria-label="Country card study field filter" value={major} onChange={(event) => onMajorChange(event.target.value)} className="h-10 w-full rounded-lg border border-slate-300 bg-white px-3 text-sm font-medium text-slate-900 outline-none focus:ring-2 focus:ring-blue-500"><option value="anything">Any field</option>{STUDY_CONCEPTS.map((item) => <option key={item.id} value={item.id}>{item.label}</option>)}</select></label></div><div className="mt-5 grid gap-3 sm:grid-cols-3">{LANDING_GOALS.map((item) => <button key={item.id} type="button" onClick={() => onGoalChange(item.id)} className="rounded-xl border border-slate-200 p-4 text-left transition hover:border-blue-300 hover:bg-blue-50"><p className="text-sm font-semibold text-slate-950">{item.label}</p><p className="mt-1 text-xs leading-5 text-slate-500">Show countries in this priority order <ArrowRight className="ml-1 inline h-3.5 w-3.5" /></p></button>)}</div></div><div className="mt-7"><h2 className="text-2xl font-semibold tracking-tight text-slate-950">Explore 20 countries</h2><p className="mt-1 text-sm text-slate-600">No priority selected yet — browse destinations, or choose a filter above to rank them.</p><div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{LAUNCH_COUNTRIES.map((country) => <Link key={country.code} href={localizePath(`/countries/${country.slug}`, locale)} className="group overflow-hidden rounded-xl border border-slate-200 bg-white transition-all hover:border-blue-300 hover:shadow-md"><div className="relative h-40 overflow-hidden"><Image src={country.image} alt={country.name} fill sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-300 group-hover:scale-105" /></div><div className="p-4"><p className="text-xs font-semibold tracking-[.15em] text-blue-700">{country.code}</p><h3 className="mt-1 font-semibold text-slate-950">{country.name}</h3><span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-slate-600 group-hover:text-blue-700">Explore country <ArrowRight className="h-4 w-4" /></span></div></Link>)}</div></div></section>
+function Recommendations({ locale, isKo, onGoalChange }: { locale: "en" | "ko"; isKo: boolean; onGoalChange: (goal: LandingGoalId) => void }) {
+  const recommendations = [
+    { country: "US", major: "computer-science", goal: "high-income" as LandingGoalId, emoji: "🇺🇸", majorEmoji: "💻" },
+    { country: "AU", major: "nursing", goal: "immigration" as LandingGoalId, emoji: "🇦🇺", majorEmoji: "🩺" },
+    { country: "UK", major: "business-analytics", goal: "high-income" as LandingGoalId, emoji: "🇬🇧", majorEmoji: "📈" },
+    { country: "DE", major: "engineering", goal: "low-cost" as LandingGoalId, emoji: "🇩🇪", majorEmoji: "⚙️" },
+    { country: "CA", major: "data-analytics", goal: "immigration" as LandingGoalId, emoji: "🇨🇦", majorEmoji: "💻" },
+    { country: "JP", major: "hospitality-management", goal: "low-cost" as LandingGoalId, emoji: "🇯🇵", majorEmoji: "🍽️" },
+  ]
+
+  const countryName = (code: string) => getLaunchCountry(code)?.name ?? code
+  const majorName = (id: string) => { const c = STUDY_CONCEPTS.find((s) => s.id === id); return c ? (isKo ? c.labelKo : c.label) : id }
+  const goalName = (id: LandingGoalId) => isKo ? (id === "high-income" ? "고소득" : id === "low-cost" ? "저비용" : "취업·체류") : id === "high-income" ? "High income" : id === "low-cost" ? "Low cost" : "Immigration"
+
+  return <section>
+    <div><p className="text-xs font-semibold uppercase tracking-[.18em] text-blue-700">{isKo ? "추천 탐색" : "Recommended searches"}</p><h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{isKo ? "어디로 갈지 모르겠나요?" : "Not sure where to go?"}</h2><p className="mt-2 max-w-2xl text-slate-600">{isKo ? "국가·전공·목표 조합을 클릭하면 바로 비교 결과를 볼 수 있습니다." : "Click a country–major–goal combination to see results instantly."}</p></div>
+    <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {recommendations.map((rec) => {
+        const href = productHref("/countries/search", locale, { country: rec.country, major: rec.major, goal: rec.goal })
+        return <Link key={`${rec.country}-${rec.major}-${rec.goal}`} href={href} className="group flex items-center gap-4 rounded-xl border border-slate-200 bg-white p-4 transition-all hover:border-blue-300 hover:shadow-md">
+          <span className="text-3xl">{rec.emoji}</span>
+          <div className="min-w-0 flex-1"><p className="font-semibold text-slate-950">{countryName(rec.country)}</p><p className="mt-0.5 text-sm text-slate-600">{rec.majorEmoji} {majorName(rec.major)}</p></div>
+          <span className="shrink-0 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-600 group-hover:bg-blue-50 group-hover:text-blue-700">{goalName(rec.goal)}</span>
+        </Link>
+      })}
+    </div>
+  </section>
 }
 
 function LandingDiscoveryResults({ result, locale }: { result: LandingDiscoveryResult; locale: "en" | "ko" }) {
