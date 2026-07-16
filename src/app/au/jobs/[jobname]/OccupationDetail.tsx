@@ -95,6 +95,8 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
   const shortageCardMuted = !hasShortageSignal || (nationalJsaRating === "NS" && visibleStateShortages.length === 0)
   const largestRegionalEmployment = Math.max(...regionalEmployment.map((region) => region.employment_total ?? 0), 1)
   const leadingRegion = regionalEmployment[0]
+  // Keep the recommendation order explainable: current shortage has a
+  // higher weight than outlook, while growth rewards are capped by 10% bands.
   const rankedMobilityPaths = mobility.paths
     .map((path) => {
       const shortagePoints = path.nationalShortage && path.nationalShortage !== "NS" ? 2 : 1
