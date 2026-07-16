@@ -95,10 +95,6 @@ export default async function AuJobsPage() {
           <h1 className="text-3xl font-bold tracking-tight mb-2">
             Australian Occupations ({occupations.length})
           </h1>
-          <p className="text-slate-600">
-            Explore every OSCA-classified occupation by career category, with median salary,
-            skills shortage ratings, and permanent residency eligibility.
-          </p>
         </div>
 
         {/* Client-side search + filter, with all occupation data pre-fetched server-side */}

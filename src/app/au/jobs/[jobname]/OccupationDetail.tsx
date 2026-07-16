@@ -4,6 +4,7 @@ import Link from "next/link"
 import { ExternalLink, ArrowRight, MapPin, DollarSign, Star } from "lucide-react"
 import type { OccupationDetail } from "./sample-data"
 import JobListings from "@/app/map/JobListings"
+import { AffiliateCtas } from "@/components/partners/partner-cta"
 import type { AuOfficialOccupationContent } from "@/lib/au-osca-content"
 import type { AuJsaOslRating } from "@/lib/au-jsa-osl"
 
@@ -73,6 +74,9 @@ function OutlookBar({ level, maxLevel = 5 }: { level: number; maxLevel?: number 
 
 export function OccupationDetailClient({ detail, salary, shortageRating, nationalJsaRating, onCSOL, stateShortages, relatedCourses, dataNote, officialContent }: Props) {
   const stateMap = new Map(stateShortages.map((s) => [s.state, s]))
+  const visibleStateShortages = AU_STATES
+    .map((state) => ({ state, shortage: stateMap.get(state) }))
+    .filter(({ shortage }) => shortage && shortage.jsaRating !== "NS")
   const mapsHref = `/maps?country=au&state=NSW&occ=${encodeURIComponent(detail.anzscoCode)}`
 
   return (
@@ -108,7 +112,7 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
 
       <div className="mx-auto max-w-5xl space-y-6 px-4 py-8 sm:px-6">
         {/* Snapshot Card */}
-        <div className="grid gap-5 lg:grid-cols-[280px_1fr]">
+        <div className="grid gap-5 md:grid-cols-2">
           {/* Shortage Now */}
           <div className="rounded-2xl border border-slate-200 bg-white p-5">
             <h2 className="text-xs font-semibold uppercase tracking-wide text-slate-500">Shortage Now</h2>
@@ -124,24 +128,23 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
                 <span className="text-sm text-slate-400">No rating available</span>
               )}
             </div>
-            <p className="mt-1 text-xs text-slate-400">{nationalJsaRating ? "JSA 2025 · by state / territory" : "by region"}</p>
-            <div className="mt-4 space-y-2">
-              {stateShortages.length > 0 ? AU_STATES.map((state) => {
-                const stateRating = stateMap.get(state)
-                return (
+            {stateShortages.length === 0 ? (
+              <p className="mt-4 text-sm leading-5 text-slate-400">State-level shortage data is not yet published for this occupation.</p>
+            ) : visibleStateShortages.length > 0 && <>
+              <p className="mt-1 text-xs text-slate-400">{nationalJsaRating ? "JSA 2025 · states / territories with a shortage signal" : "by region"}</p>
+              <div className="mt-4 space-y-2">
+                {visibleStateShortages.map(({ state, shortage }) => (
                   <div key={state} className="flex items-center justify-between text-sm">
                     <span className="font-medium text-slate-700">{state}</span>
-                    {stateRating?.jsaRating ? (
-                      <JsaRatingBadge rating={stateRating.jsaRating} />
-                    ) : stateRating?.rating != null ? (
-                      <ShortageStars rating={stateRating.rating} />
-                    ) : (
-                      <span className="text-xs text-slate-300">—</span>
-                    )}
+                    {shortage?.jsaRating ? (
+                      <JsaRatingBadge rating={shortage.jsaRating} />
+                    ) : shortage?.rating != null ? (
+                      <ShortageStars rating={shortage.rating} />
+                    ) : null}
                   </div>
-                )
-              }) : <p className="text-sm leading-5 text-slate-400">State-level shortage data is not yet published for this occupation.</p>}
-            </div>
+                ))}
+              </div>
+            </>}
           </div>
 
           {/* Snapshot details */}
@@ -182,43 +185,43 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
           </div>
         </div>
 
-        {/* What you do */}
-        <section className="rounded-2xl border border-slate-200 bg-white p-5">
-          <h2 className="text-lg font-semibold text-slate-950">What you actually do</h2>
-          <p className="mt-3 text-sm leading-6 text-slate-600">{detail.description}</p>
-          {detail.environments.length > 0 && <div className="mt-4">
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Typical environments</p>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {detail.environments.map((env) => (
-                <span key={env} className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">{env}</span>
-              ))}
-            </div>
-          </div>}
-          {officialContent && (officialContent.alternativeTitles.length > 0 || officialContent.specialisations.length > 0) && <div className="mt-4 space-y-3">
-            {officialContent.alternativeTitles.length > 0 && <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Alternative titles</p>
-              <p className="mt-1 text-sm text-slate-600">{officialContent.alternativeTitles.join(" · ")}</p>
-            </div>}
-            {officialContent.specialisations.length > 0 && <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Specialisations</p>
+        {/* What you do + Skills */}
+        <div className="grid gap-5 lg:grid-cols-2">
+          {/* What you do */}
+          <section className="rounded-2xl border border-slate-200 bg-white p-5">
+            <h2 className="text-lg font-semibold text-slate-950">What you actually do</h2>
+            <p className="mt-3 text-sm leading-6 text-slate-600">{detail.description}</p>
+            {detail.environments.length > 0 && <div className="mt-4">
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Typical environments</p>
               <div className="mt-2 flex flex-wrap gap-2">
-                {officialContent.specialisations.map((item) => <span key={item} className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">{item}</span>)}
+                {detail.environments.map((env) => (
+                  <span key={env} className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">{env}</span>
+                ))}
               </div>
             </div>}
-          </div>}
-          {officialContent?.inclusionAndExclusion && <p className="mt-4 rounded-lg bg-slate-50 p-3 text-xs leading-5 text-slate-500">Scope note: {officialContent.inclusionAndExclusion}</p>}
-          {detail.anzscoDescriptionUrl && <a
-            href={detail.anzscoDescriptionUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-blue-600 hover:underline"
-          >
-            Read official OSCA description <ExternalLink className="h-3.5 w-3.5" />
-          </a>}
-        </section>
+            {officialContent && (officialContent.alternativeTitles.length > 0 || officialContent.specialisations.length > 0) && <div className="mt-4 space-y-3">
+              {officialContent.alternativeTitles.length > 0 && <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Alternative titles</p>
+                <p className="mt-1 text-sm text-slate-600">{officialContent.alternativeTitles.join(" · ")}</p>
+              </div>}
+              {officialContent.specialisations.length > 0 && <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Specialisations</p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {officialContent.specialisations.map((item) => <span key={item} className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">{item}</span>)}
+                </div>
+              </div>}
+            </div>}
+            {officialContent?.inclusionAndExclusion && <p className="mt-4 rounded-lg bg-slate-50 p-3 text-xs leading-5 text-slate-500">Scope note: {officialContent.inclusionAndExclusion}</p>}
+            {detail.anzscoDescriptionUrl && <a
+              href={detail.anzscoDescriptionUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-blue-600 hover:underline"
+            >
+              Read official OSCA description <ExternalLink className="h-3.5 w-3.5" />
+            </a>}
+          </section>
 
-        {/* Skills Map + Credentials */}
-        <div className="grid gap-5 lg:grid-cols-2">
           {/* Skills Map */}
           <section className="rounded-2xl border border-slate-200 bg-white p-5">
             <h2 className="text-lg font-semibold text-slate-950">Skills & main tasks</h2>
@@ -252,7 +255,7 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
           </section>
 
           {/* Credentials & Pathway */}
-          <section className="rounded-2xl border border-slate-200 bg-white p-5">
+          <section className="rounded-2xl border border-slate-200 bg-white p-5 lg:col-span-2">
             <h2 className="text-lg font-semibold text-slate-950">Credentials & Pathway</h2>
             <div className="mt-4 space-y-4">
               {officialContent?.skillLevel != null && <div className="rounded-xl bg-slate-50 p-4">
@@ -330,15 +333,10 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
             <Link href={mapsHref} className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700">
               Explore this career on Maps <ArrowRight className="h-4 w-4" />
             </Link>
-            <Link href="/maps?country=au" className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
-              Browse Australia Maps
-            </Link>
-          </div>
-          <div className="mt-5 border-t border-blue-200 pt-4 text-sm text-slate-600">
-            <span>For employers and educators: </span>
-            <Link href="/support/request" className="font-semibold text-blue-700 hover:underline">request a workforce report</Link>
           </div>
         </section>
+
+        <AffiliateCtas />
       </div>
     </main>
   )

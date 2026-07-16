@@ -12,7 +12,6 @@ import { createClient } from "@supabase/supabase-js"
 const OUTPUT = path.resolve("src/data/au-career-taxonomy-au.json")
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL
 const key = process.env.SUPABASE_SERVICE_ROLE_KEY
-if (!url || !key) throw new Error("NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required")
 
 type CategoryId = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
 type TaxonomyRow = { oscaCode: string; categoryId: CategoryId; subcategoryId: string; confidence: "rule-mapped" }
@@ -68,6 +67,7 @@ function classify(occupation: Occupation): TaxonomyRow {
 }
 
 async function main() {
+  if (!url || !key) throw new Error("NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required")
   const supabase = createClient(url, key, { auth: { persistSession: false } })
   const occupations: Occupation[] = []
   for (let from = 0; ; from += 1000) {

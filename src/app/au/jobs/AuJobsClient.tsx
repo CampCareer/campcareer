@@ -6,6 +6,8 @@ import type { User } from "@supabase/supabase-js"
 import {
   ArrowUpDown,
   ChartNoAxesCombined,
+  ChevronLeft,
+  ChevronRight,
   Code2,
   Cog,
   ConciergeBell,
@@ -36,6 +38,9 @@ type OccRow = {
 
 type SortKey = "alpha" | "salary" | "shortage"
 type CategoryFilter = "all" | number
+type PageItem = number | "ellipsis-left" | "ellipsis-right"
+
+const PAGE_SIZE = 20
 
 const CATEGORY_ICONS = {
   hammer: Hammer,
@@ -67,6 +72,7 @@ export function AuJobsClient({ occupations }: { occupations: OccRow[] }) {
   const [query, setQuery] = useState("")
   const [sort, setSort] = useState<SortKey>("alpha")
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>("all")
+  const [page, setPage] = useState(1)
   const [user, setUser] = useState<User | null>(null)
   const [savedCodes, setSavedCodes] = useState<Set<string>>(new Set())
   const [savingCode, setSavingCode] = useState<string | null>(null)
@@ -129,6 +135,26 @@ export function AuJobsClient({ occupations }: { occupations: OccRow[] }) {
     }
     return [...base].sort((a, b) => a.occupation_en.localeCompare(b.occupation_en))
   }, [occupations, query, sort, categoryFilter])
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
+  const currentPage = Math.min(page, totalPages)
+  const paginatedOccupations = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
+  const pageItems = useMemo<PageItem[]>(() => {
+    if (totalPages <= 7) return Array.from({ length: totalPages }, (_, index) => index + 1)
+    if (currentPage <= 4) return [1, 2, 3, 4, 5, "ellipsis-right", totalPages]
+    if (currentPage >= totalPages - 3) return [1, "ellipsis-left", totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages]
+    return [1, "ellipsis-left", currentPage - 1, currentPage, currentPage + 1, "ellipsis-right", totalPages]
+  }, [currentPage, totalPages])
+
+  useEffect(() => {
+    setPage(1)
+  }, [query, sort, categoryFilter])
+
+  function goToPage(nextPage: number) {
+    const targetPage = Math.min(Math.max(nextPage, 1), totalPages)
+    setPage(targetPage)
+    document.getElementById("occupation-results")?.scrollIntoView({ behavior: "smooth", block: "start" })
+  }
 
   async function toggleSaveOccupation(occupation: OccRow) {
     if (!user) {
@@ -239,7 +265,7 @@ export function AuJobsClient({ occupations }: { occupations: OccRow[] }) {
       </div>
 
       {/* Result count */}
-      <p className="mb-4 text-xs text-slate-400">
+      <p id="occupation-results" className="mb-4 scroll-mt-5 text-xs text-slate-400">
         {filtered.length === occupations.length
           ? `${occupations.length} occupations`
           : `${filtered.length} of ${occupations.length} occupations`}
@@ -251,7 +277,7 @@ export function AuJobsClient({ occupations }: { occupations: OccRow[] }) {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {filtered.map((occ) => {
+          {paginatedOccupations.map((occ) => {
             const Icon = CATEGORY_ICONS[occ.categoryIcon as keyof typeof CATEGORY_ICONS]
             const isSaved = savedCodes.has(occ.anzsco_code)
             const isSaving = savingCode === occ.anzsco_code
@@ -259,31 +285,33 @@ export function AuJobsClient({ occupations }: { occupations: OccRow[] }) {
             return (
             <article
               key={occ.anzsco_code}
-              className="group relative rounded-xl border border-slate-200 transition-colors hover:border-brand/40 hover:bg-brand-tint"
+              className="group relative min-h-[132px] rounded-xl border border-slate-200 transition-colors hover:border-brand/40 hover:bg-brand-tint"
             >
               <Link
                 href={getAuOccupationPath(occ, occupations)}
-                className="block p-4 pr-12"
+                className="block h-full p-5 pr-4"
               >
-                <div className="mb-3 flex items-start gap-3">
-                  <span className={`flex size-9 shrink-0 items-center justify-center rounded-lg ${CATEGORY_TONES[occ.categoryId]}`}>
-                    <Icon className="size-[18px]" aria-hidden="true" />
+                <div className="flex items-start gap-3">
+                  <span className={`flex size-10 shrink-0 items-center justify-center rounded-xl ${CATEGORY_TONES[occ.categoryId]}`}>
+                    <Icon className="size-5" aria-hidden="true" />
                   </span>
-                  <div className="min-w-0">
-                    <div className="mb-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-400">
+                  <div className="min-w-0 flex-1 pr-8">
+                    <div className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">
                       {occ.categoryName}
                     </div>
-                    <div className="text-sm font-medium leading-snug text-foreground group-hover:text-brand-press">
-                      {occ.occupation_en}
+                    <div className="mt-1 flex items-start justify-between gap-3">
+                      <div className="text-base font-semibold leading-snug text-foreground group-hover:text-brand-press">
+                        {occ.occupation_en}
+                      </div>
+                      {occ.median_salary_aud && (
+                        <span className="shrink-0 whitespace-nowrap text-sm font-bold text-slate-800">
+                          A${occ.median_salary_aud.toLocaleString()}
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
-                <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400">
-                  {occ.median_salary_aud && (
-                    <span className="font-semibold text-slate-700">
-                      A${occ.median_salary_aud.toLocaleString()}
-                    </span>
-                  )}
+                <div className="ml-[52px] mt-4 flex flex-wrap items-center gap-2 text-xs text-slate-400">
                   {occ.shortage_rating != null && occ.shortage_rating >= 3 && (
                     <span className="rounded bg-orange-50 px-1.5 py-0.5 text-[10px] font-semibold text-orange-600">
                       Shortage
@@ -315,6 +343,46 @@ export function AuJobsClient({ occupations }: { occupations: OccRow[] }) {
             )
           })}
         </div>
+      )}
+
+      {filtered.length > PAGE_SIZE && (
+        <nav className="mt-8 flex items-center justify-center gap-1.5" aria-label="Occupation pagination">
+          <button
+            type="button"
+            onClick={() => goToPage(currentPage - 1)}
+            disabled={currentPage === 1}
+            aria-label="Previous page"
+            className="grid size-9 place-items-center rounded-lg border border-slate-200 bg-white text-slate-500 transition hover:border-brand/40 hover:text-brand disabled:cursor-not-allowed disabled:opacity-35"
+          >
+            <ChevronLeft className="size-4" aria-hidden="true" />
+          </button>
+          {pageItems.map((item, index) => item === "ellipsis-left" || item === "ellipsis-right" ? (
+            <span key={`${item}-${index}`} className="grid size-9 place-items-center text-sm text-slate-400">…</span>
+          ) : (
+            <button
+              key={item}
+              type="button"
+              onClick={() => goToPage(item)}
+              aria-current={item === currentPage ? "page" : undefined}
+              className={`grid size-9 place-items-center rounded-lg border text-sm font-semibold transition ${
+                item === currentPage
+                  ? "border-brand bg-brand text-white"
+                  : "border-slate-200 bg-white text-slate-600 hover:border-brand/40 hover:text-brand"
+              }`}
+            >
+              {item}
+            </button>
+          ))}
+          <button
+            type="button"
+            onClick={() => goToPage(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            aria-label="Next page"
+            className="grid size-9 place-items-center rounded-lg border border-slate-200 bg-white text-slate-500 transition hover:border-brand/40 hover:text-brand disabled:cursor-not-allowed disabled:opacity-35"
+          >
+            <ChevronRight className="size-4" aria-hidden="true" />
+          </button>
+        </nav>
       )}
     </>
   )
