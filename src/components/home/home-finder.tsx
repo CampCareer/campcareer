@@ -26,13 +26,13 @@ const COPY = {
     eyebrow: "Study decisions, made practical",
     title: "Compare study paths - from campus to career.",
     subtitle: "Start with your career and budget. We’ll show the destinations that have enough evidence to earn a place on your shortlist.",
-    country: "Where do you want to study?",
-    major: "What do you want to study?",
-    goal: "What matters most?",
+    country: "Where",
+    major: "Major",
+    goal: "Goal",
     countryPlaceholder: "Everywhere",
     majorPlaceholder: "Anything",
     goalPlaceholder: "Choose your goal",
-    submit: "See country rankings",
+    submit: "Search",
     trustOne: "20 destinations to explore",
     trustTwo: "Evidence before rankings",
     trustThree: "No immigration success claims",
@@ -44,13 +44,13 @@ const COPY = {
     eyebrow: "현실적인 유학 의사결정",
     title: "무엇을 공부할지, 어느 나라로 갈지, 졸업 후 얼마가 남는지 선택하세요.",
     subtitle: "직업과 예산부터 시작하세요. 충분한 근거가 있는 목적지만 우선순위에 올립니다.",
-    country: "어느 나라에서 공부하고 싶나요?",
-    major: "무엇을 공부하고 싶나요?",
-    goal: "가장 중요한 목표",
+    country: "나라",
+    major: "전공",
+    goal: "목표",
     countryPlaceholder: "어디든지",
     majorPlaceholder: "아직 모르겠어요",
     goalPlaceholder: "목표를 선택하세요",
-    submit: "국가 순위 보기",
+    submit: "검색",
     trustOne: "20개국 탐색",
     trustTwo: "근거가 있을 때만 순위 공개",
     trustThree: "이민 성공 확률은 만들지 않음",
@@ -92,11 +92,11 @@ export function HomeFinder({ locale = "en" }: { locale?: Locale }) {
           </div>
 
           <form action={searchHref} onSubmit={(event) => { event.preventDefault(); const submitted = new FormData(event.currentTarget); const submittedCountry = String(submitted.get("country") ?? "everywhere"); const submittedMajor = String(submitted.get("major") ?? "anything"); const submittedGoal = String(submitted.get("goal") ?? ""); const href = `${localizePath("/countries/search", localePrefix)}?${new URLSearchParams({ country: submittedCountry, major: submittedMajor, ...(submittedGoal ? { goal: submittedGoal } : {}) })}`; recordDiscoveryEvent("recommendation_start", { surface: "landing", country: submittedCountry, major: submittedMajor, goal: submittedGoal }); if (submittedCountry === "SG" && submittedGoal) { window.open(singaporeWorkspaceHref, "_blank", "noopener,noreferrer"); return } router.push(href) }} className="mt-9 rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_18px_45px_rgba(15,23,42,.10)]">
-            <div className="grid gap-2 lg:grid-cols-[1fr_1.15fr_1.2fr_auto]">
-              <IconPicker name="country" label={t.country} value={country} options={countryOptions} onChange={setCountry} searchPlaceholder={isKo ? "국가 검색" : "Search countries"} testId="country" />
-              <IconPicker name="major" label={t.major} value={major} options={majorOptions} onChange={setMajor} searchPlaceholder={isKo ? "전공 검색" : "Search majors"} testId="major" />
-              <IconPicker name="goal" label={t.goal} value={goal} options={goalOptions} onChange={(value) => setGoal(value as LandingGoalId)} testId="goal" />
-              <button type="submit" className="mt-auto inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700"><span>{t.submit}</span><ArrowRight className="h-4 w-4" /></button>
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
+              <div className="flex-1"><IconPicker name="country" label={t.country} value={country} options={countryOptions} onChange={setCountry} searchPlaceholder={isKo ? "국가 검색" : "Search countries"} testId="country" /></div>
+              <div className="flex-1"><IconPicker name="major" label={t.major} value={major} options={majorOptions} onChange={setMajor} searchPlaceholder={isKo ? "전공 검색" : "Search majors"} testId="major" /></div>
+              <div className="flex-1"><IconPicker name="goal" label={t.goal} value={goal} options={goalOptions} onChange={(value) => setGoal(value as LandingGoalId)} testId="goal" /></div>
+              <button type="submit" className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700"><span>{t.submit}</span><ArrowRight className="h-4 w-4" /></button>
             </div>
           </form>
 
