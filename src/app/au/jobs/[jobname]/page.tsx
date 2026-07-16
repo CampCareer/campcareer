@@ -14,6 +14,10 @@ import { OccupationDetailClient } from "./OccupationDetail"
 
 export const revalidate = 86400
 export const dynamicParams = true
+// Render detail pages at request time. This avoids Vercel's static-generation
+// worker path for a large data-rich route while keeping deployments independent
+// of the number of occupations.
+export const dynamic = "force-dynamic"
 
 type Params = { jobname: string }
 
@@ -207,13 +211,6 @@ async function getOccupationData(jobname: string) {
       paths: mobilityPaths,
     },
   }
-}
-
-export function generateStaticParams() {
-  // Do not pre-render hundreds of data-heavy occupation pages during every
-  // Vercel build. Pages are generated on their first request, then cached by
-  // Next.js for the same 24-hour interval as the underlying JSA data.
-  return []
 }
 
 export async function generateMetadata(props: { params: Promise<Params> }): Promise<Metadata> {
