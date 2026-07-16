@@ -69,7 +69,7 @@ export function CountrySearchClient({ initial }: { initial: { country?: string; 
   const majorLabel = major === "anything" ? "Any major" : STUDY_CONCEPTS.find((c) => c.id === major)?.label ?? major
   const goalLabel = goal ? LANDING_GOALS.find((g) => g.id === goal)?.label ?? goal : ""
 
-  const searchAndResult = <>
+  const searchBar = <>
     {expanded && <div className="fixed inset-0 z-40 bg-black/40" onClick={() => setExpanded(false)} />}
     <div className={`relative z-50 mx-auto max-w-4xl ${expanded ? "mb-8" : ""}`}>
       {!expanded ? (
@@ -92,12 +92,22 @@ export function CountrySearchClient({ initial }: { initial: { country?: string; 
         </form>
       )}
     </div>
-    {!hasGoal ? <CountryBrowse major={major} onMajorChange={setMajor} onGoalChange={setGoal} locale={locale} /> : selectedCountry ? <RegionSelection country={selectedCountry} major={major} goal={goal} locale={locale} /> : loading ? <LoadingCards /> : result ? <LandingDiscoveryResults result={result} locale={locale} /> : <SearchNotice title="Discovery results are unavailable" body="Try again in a moment, or open a country profile from the landing page." />}
   </>
 
-  if (selectedCountry) return <div className="bg-slate-50"><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 sm:py-10">{searchAndResult}</main></div>
+  const resultContent = !hasGoal ? <CountryBrowse major={major} onMajorChange={setMajor} onGoalChange={setGoal} locale={locale} /> : selectedCountry ? <RegionSelection country={selectedCountry} major={major} goal={goal} locale={locale} /> : loading ? <LoadingCards /> : result ? <LandingDiscoveryResults result={result} locale={locale} /> : <SearchNotice title="Discovery results are unavailable" body="Try again in a moment, or open a country profile from the landing page." />
 
-  return <div className="bg-slate-50"><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 sm:py-10">{searchAndResult}</main></div>
+  if (selectedCountry) return <div className="bg-slate-50"><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 sm:py-10">{searchBar}{resultContent}</main></div>
+
+  return <div className="bg-white">
+    <section className="border-b border-slate-200 bg-[radial-gradient(circle_at_84%_12%,rgba(37,99,235,.12),transparent_24rem),linear-gradient(180deg,#f8fbff_0%,#fff_72%)]">
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
+        {searchBar}
+      </div>
+    </section>
+    <main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 sm:py-10 bg-slate-50">
+      {resultContent}
+    </main>
+  </div>
 }
 
 function CountryBrowse({ major, onMajorChange, onGoalChange, locale }: { major: string; onMajorChange: (value: string) => void; onGoalChange: (value: LandingGoalId) => void; locale: "en" | "ko" }) {
