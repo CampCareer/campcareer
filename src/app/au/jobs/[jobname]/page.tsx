@@ -1,12 +1,10 @@
 import "server-only"
 import type { Metadata } from "next"
-import { cache } from "react"
-import { unstable_cache } from "next/cache"
 import { notFound } from "next/navigation"
 import { supabaseAdmin } from "@/lib/supabase-admin"
 import { getCoursesForOccupation } from "@/lib/occupations-au"
 import { getAuOccupationSlug, slugifyAuOccupation } from "@/lib/au-occupation-slug"
-import { AU_OSCA_SOURCE, getAuOfficialOccupationContent } from "@/lib/au-osca-content"
+import { getAuOfficialOccupationContent } from "@/lib/au-osca-content"
 import { getAuJsaOslRatings } from "@/lib/au-jsa-osl"
 import { getAuCareerTaxonomy } from "@/lib/au-career-taxonomy"
 import { pageMetadata } from "@/lib/seo"
@@ -74,7 +72,7 @@ function selectMappedOccupation(flow: JsaMobilityFlow, occupations: OccRow[]): O
     ?? candidates[0]
 }
 
-const getAllOccupations = unstable_cache(async (): Promise<OccRow[]> => {
+async function getAllOccupations(): Promise<OccRow[]> {
   const { data, error } = await supabaseAdmin
     .from("occupations_au")
     .select("anzsco_code, anzsco_v13, occupation_en, occupation_ko, shortage_rating, median_salary_aud, on_csol, related_broad_field, confidence, source_name, source_url, last_verified")
@@ -87,7 +85,7 @@ const getAllOccupations = unstable_cache(async (): Promise<OccRow[]> => {
   }
 
   return (data ?? []) as OccRow[]
-}, ["au-jobs-all-occupations"], { revalidate })
+}
 
 function findOccupation(jobname: string, occupations: OccRow[]): OccRow | null {
   const normalized = slugifyAuOccupation(jobname)
@@ -118,16 +116,13 @@ function fallbackDetail(occupation: OccRow): OccupationDetail {
 
 function buildDataNote(occupation: OccRow): string | null {
   const details = [
-    `Official occupation content: ${AU_OSCA_SOURCE.classification}, Australian Bureau of Statistics.`,
-    occupation.source_name ? `Source: ${occupation.source_name}.` : null,
-    occupation.last_verified ? `Last verified: ${occupation.last_verified.slice(0, 10)}.` : "The next source refresh date has not yet been recorded.",
     occupation.confidence ? `Data confidence: ${occupation.confidence}.` : null,
     !occupation.on_csol ? "A missing CSOL flag is not a finding of visa ineligibility; check the current Home Affairs list." : null,
   ].filter(Boolean)
   return details.join(" ") || null
 }
 
-const getOccupationData = cache(async (jobname: string) => {
+async function getOccupationData(jobname: string) {
   const occupations = await getAllOccupations()
   const occupation = findOccupation(jobname, occupations)
   if (!occupation) return null
@@ -212,7 +207,7 @@ const getOccupationData = cache(async (jobname: string) => {
       paths: mobilityPaths,
     },
   }
-})
+}
 
 export function generateStaticParams() {
   // Do not pre-render hundreds of data-heavy occupation pages during every

@@ -91,6 +91,8 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
   const visibleStateShortages = AU_STATES
     .map((state) => ({ state, shortage: stateMap.get(state) }))
     .filter(({ shortage }) => shortage && shortage.jsaRating !== "NS")
+  const hasShortageSignal = nationalJsaRating != null || shortageRating != null
+  const shortageCardMuted = !hasShortageSignal || (nationalJsaRating === "NS" && visibleStateShortages.length === 0)
   const largestRegionalEmployment = Math.max(...regionalEmployment.map((region) => region.employment_total ?? 0), 1)
   const leadingRegion = regionalEmployment[0]
   const mapsHref = `/maps?country=au&state=NSW&occ=${encodeURIComponent(detail.anzscoCode)}`
@@ -110,20 +112,13 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
         </div>
       </section>
 
-      {/* H1 + Meta */}
+      {/* H1 */}
       <section className="border-b border-slate-200 bg-white">
         <div className="mx-auto max-w-5xl px-4 pb-8 pt-6 sm:px-6">
           <h1 className="text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
             {detail.name}
           </h1>
-          <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-500">
-            <span>OSCA {detail.anzscoCode}</span>
-            <span>·</span>
-            <span>Updated: {detail.lastVerified}</span>
-            <span>·</span>
-            <span>Sources: {detail.sources.join(", ")}</span>
-            {careerCategory && <><span>·</span><span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-1 font-medium text-blue-800"><BriefcaseBusiness className="h-3.5 w-3.5" />{careerCategory.name}</span></>}
-          </div>
+          {careerCategory && <div className="mt-3"><span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-1 text-sm font-medium text-blue-800"><BriefcaseBusiness className="h-3.5 w-3.5" />{careerCategory.name}</span></div>}
         </div>
       </section>
 
@@ -131,7 +126,7 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
         {/* Snapshot Card */}
         <div className="grid gap-5 md:grid-cols-2">
           {/* Shortage Now */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-5">
+          <div className={"order-last rounded-2xl border p-5 " + (shortageCardMuted ? "border-slate-200 bg-slate-100" : "border-slate-200 bg-white")}>
             <h2 className="text-xs font-semibold uppercase tracking-wide text-slate-500">Shortage Now</h2>
             <div className="mt-3 flex items-center">
               {nationalJsaRating ? (
@@ -142,9 +137,11 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
                   <ShortageLabel rating={shortageRating} />
                 </>
               ) : (
-                <span className="text-sm text-slate-400">No rating available</span>
+                <span className="text-sm font-medium text-slate-600">No current shortage signal</span>
               )}
             </div>
+            {!hasShortageSignal && <p className="mt-3 text-sm leading-5 text-slate-600">No national or state shortage rating is currently published for this occupation.</p>}
+            {nationalJsaRating === "NS" && visibleStateShortages.length === 0 && <p className="mt-3 text-sm leading-5 text-slate-600">JSA currently reports no national or state/territory shortage signal for this occupation.</p>}
             {stateShortages.length === 0 ? (
               <p className="mt-4 text-sm leading-5 text-slate-400">State-level shortage data is not yet published for this occupation.</p>
             ) : visibleStateShortages.length > 0 && <>
@@ -166,7 +163,7 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
           </div>
 
           {/* Snapshot details */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-5">
+          <div className="order-first rounded-2xl border border-slate-200 bg-white p-5">
             <h2 className="text-xs font-semibold uppercase tracking-wide text-slate-500">Snapshot</h2>
             <div className="mt-4 space-y-4">
               <div className="flex items-start gap-3">
@@ -206,7 +203,6 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
 
         {jsaProfile && <section className="rounded-2xl border border-slate-200 bg-white p-5">
           <h2 className="text-lg font-semibold text-slate-950">Where people work</h2>
-          <p className="mt-1 text-xs text-slate-400">JSA occupation profile data, mapped from ANZSCO</p>
           <div className="mt-4 grid gap-6 md:grid-cols-2">
             <div><h3 className="text-xs font-semibold uppercase tracking-wide text-slate-400">State / territory distribution</h3><div className="mt-3 space-y-2">{jsaProfile.state_distribution.map((item) => <div key={item.name} className="flex items-center gap-3 text-sm"><span className="w-14 font-medium text-slate-700">{item.name}</span><div className="h-2 flex-1 overflow-hidden rounded bg-slate-100"><div className="h-full rounded bg-blue-600" style={{ width: `${Math.min(item.share, 100)}%` }} /></div><span className="w-10 text-right text-slate-500">{item.share}%</span></div>)}</div></div>
             <div>
@@ -227,6 +223,7 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
               </div>}
             </div>
           </div>
+          <p className="mt-5 border-t border-slate-100 pt-3 text-xs text-slate-400">JSA occupation profile data, mapped from ANZSCO</p>
         </section>}
 
         {regionalEmployment.length > 0 && <section className="rounded-2xl border border-slate-200 bg-white p-5">
@@ -415,10 +412,15 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
           {vacancies.length > 0 && <div className="mt-5 border-t border-slate-100 pt-4"><p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Official vacancy signal · JSA IVI 3-month average (ANZSCO unit group)</p><div className="mt-3 grid gap-2 sm:grid-cols-3">{vacancies.slice(0, 6).map((item) => <div key={`${item.state}-${item.period}`} className="rounded-lg bg-slate-50 p-3"><p className="text-xs text-slate-500">{item.state} · {new Date(item.period).toLocaleDateString("en-AU", { month: "short", year: "numeric" })}</p><p className="mt-1 text-base font-semibold text-slate-950">{item.vacancy_count != null ? Math.round(item.vacancy_count).toLocaleString() : item.index_value != null ? item.index_value.toFixed(1) : "—"}</p></div>)}</div></div>}
         </section>
 
-        {dataNote && <section className="rounded-2xl border border-slate-200 bg-white p-5">
+        <section className="rounded-2xl border border-slate-200 bg-white p-5">
           <h2 className="text-lg font-semibold text-slate-950">Data status</h2>
-          <p className="mt-2 text-sm leading-6 text-slate-600">{dataNote}</p>
-        </section>}
+          <dl className="mt-4 grid gap-4 text-sm sm:grid-cols-2 lg:grid-cols-3">
+            <div><dt className="text-xs font-semibold uppercase tracking-wide text-slate-400">Classification</dt><dd className="mt-1 font-medium text-slate-900">OSCA {detail.anzscoCode}</dd></div>
+            <div><dt className="text-xs font-semibold uppercase tracking-wide text-slate-400">Last updated</dt><dd className="mt-1 font-medium text-slate-900">{detail.lastVerified}</dd></div>
+            <div className="sm:col-span-2 lg:col-span-1"><dt className="text-xs font-semibold uppercase tracking-wide text-slate-400">Sources</dt><dd className="mt-1 leading-5 text-slate-700">{detail.sources.join(" · ")}</dd></div>
+          </dl>
+          {dataNote && <p className="mt-4 border-t border-slate-100 pt-4 text-sm leading-6 text-slate-600">{dataNote}</p>}
+        </section>
 
         {/* 3-year outlook */}
         {outlook.length > 0 ? <section className="rounded-2xl border border-slate-200 bg-white p-5"><h2 className="text-lg font-semibold text-slate-950">2030 & 2035 employment outlook</h2><div className="mt-4 grid gap-3 sm:grid-cols-2">{outlook.map((item) => <div key={item.period_end} className="rounded-xl bg-slate-50 p-4"><p className="text-xs text-slate-500">to {new Date(item.period_end).getFullYear()}</p><p className="mt-1 text-xl font-semibold text-slate-950">{item.employment_change_pct != null ? `${item.employment_change_pct > 0 ? "+" : ""}${item.employment_change_pct}%` : "Not available"}</p><p className="mt-1 text-xs text-slate-500">{item.employment_change != null ? `${item.employment_change.toLocaleString()} projected jobs` : "JSA projection · ANZSCO unit group"}</p></div>)}</div></section> : detail.outlook && <section className="rounded-2xl border border-slate-200 bg-white p-5">
