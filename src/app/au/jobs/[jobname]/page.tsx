@@ -1,5 +1,7 @@
 import "server-only"
 import type { Metadata } from "next"
+import { cache } from "react"
+import { unstable_cache } from "next/cache"
 import { notFound } from "next/navigation"
 import { supabaseAdmin } from "@/lib/supabase-admin"
 import { getCoursesForOccupation } from "@/lib/occupations-au"
@@ -13,6 +15,7 @@ import { getOccupationDetail, getOccupationDetailByAnzsco, type OccupationDetail
 import { OccupationDetailClient } from "./OccupationDetail"
 
 export const revalidate = 86400
+export const dynamicParams = true
 
 type Params = { jobname: string }
 
@@ -71,7 +74,7 @@ function selectMappedOccupation(flow: JsaMobilityFlow, occupations: OccRow[]): O
     ?? candidates[0]
 }
 
-async function getAllOccupations(): Promise<OccRow[]> {
+const getAllOccupations = unstable_cache(async (): Promise<OccRow[]> => {
   const { data, error } = await supabaseAdmin
     .from("occupations_au")
     .select("anzsco_code, anzsco_v13, occupation_en, occupation_ko, shortage_rating, median_salary_aud, on_csol, related_broad_field, confidence, source_name, source_url, last_verified")
@@ -84,7 +87,7 @@ async function getAllOccupations(): Promise<OccRow[]> {
   }
 
   return (data ?? []) as OccRow[]
-}
+}, ["au-jobs-all-occupations"], { revalidate })
 
 function findOccupation(jobname: string, occupations: OccRow[]): OccRow | null {
   const normalized = slugifyAuOccupation(jobname)
@@ -124,7 +127,7 @@ function buildDataNote(occupation: OccRow): string | null {
   return details.join(" ") || null
 }
 
-async function getOccupationData(jobname: string) {
+const getOccupationData = cache(async (jobname: string) => {
   const occupations = await getAllOccupations()
   const occupation = findOccupation(jobname, occupations)
   if (!occupation) return null
@@ -209,11 +212,13 @@ async function getOccupationData(jobname: string) {
       paths: mobilityPaths,
     },
   }
-}
+})
 
-export async function generateStaticParams() {
-  const occupations = await getAllOccupations()
-  return occupations.map((occupation) => ({ jobname: getAuOccupationSlug(occupation, occupations) }))
+export function generateStaticParams() {
+  // Do not pre-render hundreds of data-heavy occupation pages during every
+  // Vercel build. Pages are generated on their first request, then cached by
+  // Next.js for the same 24-hour interval as the underlying JSA data.
+  return []
 }
 
 export async function generateMetadata(props: { params: Promise<Params> }): Promise<Metadata> {
