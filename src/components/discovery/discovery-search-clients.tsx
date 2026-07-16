@@ -4,7 +4,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useEffect, useMemo, useRef, useState } from "react"
-import { ArrowRight, Building2, CircleAlert, ExternalLink, MapPinned, X } from "lucide-react"
+import { ArrowRight, Building2, CircleAlert, ExternalLink, MapPinned, Search } from "lucide-react"
 import { CANONICAL_CAREERS, careersForCategory } from "@/data/career-comparison-catalog"
 import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
 import { STUDY_CATEGORIES, STUDY_CONCEPTS } from "@/data/study-concepts"
@@ -91,30 +91,22 @@ export function CountrySearchClient({ initial }: { initial: { country?: string; 
   const countryLabel = country === "everywhere" ? (isKo ? "어디든지" : "Everywhere") : getLaunchCountry(country)?.name ?? country
   const majorLabel = major === "anything" ? (isKo ? "아직 모르겠어요" : "Any major") : (isKo ? STUDY_CONCEPTS.find((c) => c.id === major)?.labelKo : STUDY_CONCEPTS.find((c) => c.id === major)?.label) ?? major
   const goalLabel = goal ? (isKo ? (goal === "high-income" ? "높은 졸업 후 연봉" : goal === "low-cost" ? "낮은 유학비용" : "졸업 후 취업·체류") : LANDING_GOALS.find((g) => g.id === goal)?.label ?? goal) : ""
-  const goalIcon = goal === "high-income" ? "💰" : goal === "low-cost" ? "🌱" : goal ? "🧭" : ""
-  const countryIcon = country === "everywhere" ? "🌍" : countryFlag(country)
-  const majorIcon = major === "anything" ? "✨" : majorEmoji(STUDY_CONCEPTS.find((c) => c.id === major)?.category ?? "")
 
   const searchBar = <>
-    {expanded && <div className="fixed inset-0 z-40 bg-black/40" onClick={() => setExpanded(false)} />}
     <div className="relative z-50 mx-auto max-w-4xl">
-      <button type="button" onClick={() => setExpanded(true)} className={`flex w-full items-center gap-3 rounded-2xl border border-slate-200 bg-white px-5 py-3.5 shadow-sm transition hover:border-blue-300 hover:shadow-md ${expanded ? "pointer-events-none invisible" : ""}`}>
-        <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-slate-100 text-base">{countryIcon}</span>
+      <button type="button" onClick={() => setExpanded(true)} className={`flex w-full items-center justify-center gap-2.5 rounded-2xl border border-slate-200 bg-white px-5 py-3.5 text-center shadow-sm transition hover:border-blue-300 hover:shadow-md ${expanded ? "pointer-events-none invisible" : ""}`}>
+        <Search className="h-4 w-4 shrink-0 text-slate-400" />
         <span className="text-sm font-medium text-slate-700">{countryLabel}</span>
         <span className="h-1 w-1 rounded-full bg-slate-300" />
-        <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-slate-100 text-base">{majorIcon}</span>
         <span className="text-sm font-medium text-slate-700">{majorLabel}</span>
-        {goalLabel && <><span className="h-1 w-1 rounded-full bg-slate-300" /><span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-slate-100 text-base">{goalIcon}</span><span className="text-sm font-medium text-slate-700">{goalLabel}</span></>}
+        {goalLabel && <><span className="h-1 w-1 rounded-full bg-slate-300" /><span className="text-sm font-medium text-slate-700">{goalLabel}</span></>}
       </button>
       {expanded && <form action={href} onSubmit={(event) => { event.preventDefault(); recordDiscoveryEvent("recommendation_start", { surface: "country_results", country, major, goal }); router.push(href) }} className="absolute left-0 right-0 top-full z-50 mt-2 rounded-2xl border border-slate-200 bg-white p-3 shadow-lg">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
           <div className="flex-1"><IconPicker name="country" label={isKo ? "나라" : "Where"} value={country} options={countryOptions} onChange={setCountry} searchPlaceholder={isKo ? "국가 검색" : "Search countries"} testId="country" /></div>
           <div className="flex-1"><IconPicker name="major" label={isKo ? "전공" : "Major"} value={major} options={majorOptions} onChange={setMajor} searchPlaceholder={isKo ? "전공 검색" : "Search majors"} testId="major" /></div>
           <div className="flex-1"><IconPicker name="goal" label={isKo ? "목표" : "Goal"} value={goal} options={goalOptions} onChange={(value) => setGoal(value as LandingGoalId)} testId="goal" /></div>
-          <div className="flex gap-2">
-            <button type="submit" className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700"><span>{isKo ? "검색" : "Search"}</span><ArrowRight className="h-4 w-4" /></button>
-            <button type="button" onClick={() => setExpanded(false)} className="inline-flex h-12 w-12 items-center justify-center rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50"><X className="h-4 w-4" /></button>
-          </div>
+          <button type="submit" className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700">{isKo ? "검색" : "Search"}</button>
         </div>
       </form>}
     </div>
@@ -125,11 +117,12 @@ export function CountrySearchClient({ initial }: { initial: { country?: string; 
   if (selectedCountry) return <div className="bg-slate-50"><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 sm:py-10">{searchBar}{resultContent}</main></div>
 
   return <div className="bg-white">
-    <section className="border-b border-slate-200 bg-[radial-gradient(circle_at_84%_12%,rgba(37,99,235,.12),transparent_24rem),linear-gradient(180deg,#f8fbff_0%,#fff_72%)]">
+    <section className="relative z-40 border-b border-slate-200 bg-[radial-gradient(circle_at_84%_12%,rgba(37,99,235,.12),transparent_24rem),linear-gradient(180deg,#f8fbff_0%,#fff_72%)]">
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
         {searchBar}
       </div>
     </section>
+    {expanded && <div className="fixed inset-0 top-[88px] z-30 bg-black/40" onClick={() => setExpanded(false)} />}
     <main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 sm:py-10 bg-slate-50">
       {resultContent}
     </main>
