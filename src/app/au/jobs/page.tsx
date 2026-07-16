@@ -4,6 +4,7 @@ import Link from "next/link"
 import { supabaseAdmin } from "@/lib/supabase-admin"
 import { pageMetadata } from "@/lib/seo"
 import { JsonLd } from "@/components/seo/json-ld"
+import { getAuCareerTaxonomy } from "@/lib/au-career-taxonomy"
 import { AuJobsClient } from "./AuJobsClient"
 
 export const revalidate = 86400
@@ -11,18 +12,42 @@ export const revalidate = 86400
 export const metadata: Metadata = pageMetadata({
   title: "Australia Jobs & Occupations — Salary & PR Eligibility | CampCareer",
   description:
-    "Browse all 395+ OSCA occupations in Australia. Compare median salaries, skills shortage ratings, and permanent residency eligibility for each role.",
+    "Browse 600 Australian occupations by career category. Compare median salaries, skills shortage ratings, and permanent residency eligibility for each role.",
   path: "/au/jobs",
 })
 
-type OccRow = { anzsco_code: string; occupation_en: string; median_salary_aud: number | null; shortage_rating: number | null; on_csol: boolean }
+type OccRow = {
+  anzsco_code: string
+  occupation_en: string
+  median_salary_aud: number | null
+  shortage_rating: number | null
+  on_csol: boolean
+}
 
-async function getOccupations(): Promise<OccRow[]> {
+export type CategorisedOccupation = OccRow & {
+  categoryId: number
+  categoryName: string
+  categoryIcon: string
+  subcategoryId: string
+}
+
+async function getOccupations(): Promise<CategorisedOccupation[]> {
   const { data } = await supabaseAdmin
     .from("occupations_au")
     .select("anzsco_code, occupation_en, median_salary_aud, shortage_rating, on_csol")
     .order("occupation_en")
-  return (data ?? []) as OccRow[]
+  return ((data ?? []) as OccRow[]).flatMap((occupation) => {
+    const taxonomy = getAuCareerTaxonomy(occupation.anzsco_code)
+    if (!taxonomy) return []
+
+    return [{
+      ...occupation,
+      categoryId: taxonomy.categoryId,
+      categoryName: taxonomy.category.name,
+      categoryIcon: taxonomy.category.icon,
+      subcategoryId: taxonomy.subcategoryId,
+    }]
+  })
 }
 
 export default async function AuJobsPage() {
@@ -71,8 +96,8 @@ export default async function AuJobsPage() {
             Australian Occupations ({occupations.length})
           </h1>
           <p className="text-slate-600">
-            All OSCA-classified occupations with median salary, skills shortage ratings,
-            and permanent residency eligibility. Based on Australian government data.
+            Explore every OSCA-classified occupation by career category, with median salary,
+            skills shortage ratings, and permanent residency eligibility.
           </p>
         </div>
 

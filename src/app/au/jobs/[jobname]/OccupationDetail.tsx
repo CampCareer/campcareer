@@ -5,6 +5,7 @@ import { ExternalLink, ArrowRight, MapPin, DollarSign, Star } from "lucide-react
 import type { OccupationDetail } from "./sample-data"
 import JobListings from "@/app/map/JobListings"
 import type { AuOfficialOccupationContent } from "@/lib/au-osca-content"
+import type { AuJsaOslRating } from "@/lib/au-jsa-osl"
 
 type RelatedCourse = {
   id: number
@@ -17,8 +18,9 @@ type Props = {
   detail: OccupationDetail
   salary: number | null
   shortageRating: number | null
+  nationalJsaRating: AuJsaOslRating | null
   onCSOL: boolean
-  stateShortages: { state: string; rating: number }[]
+  stateShortages: { state: string; rating?: number; jsaRating?: AuJsaOslRating }[]
   relatedCourses: RelatedCourse[]
   dataNote: string | null
   officialContent: AuOfficialOccupationContent | null
@@ -41,6 +43,24 @@ function ShortageLabel({ rating }: { rating: number }) {
   return <span className="ml-2 text-sm font-semibold text-slate-900">{labels[rating] ?? "—"}</span>
 }
 
+const JSA_LABELS: Record<AuJsaOslRating, string> = {
+  S: "Shortage",
+  M: "Metropolitan shortage",
+  R: "Regional shortage",
+  NS: "No shortage",
+}
+
+function JsaRatingBadge({ rating }: { rating: AuJsaOslRating }) {
+  const className = rating === "S"
+    ? "border-rose-200 bg-rose-50 text-rose-800"
+    : rating === "M"
+      ? "border-violet-200 bg-violet-50 text-violet-800"
+      : rating === "R"
+        ? "border-amber-200 bg-amber-50 text-amber-800"
+        : "border-slate-200 bg-slate-50 text-slate-500"
+  return <span className={`inline-flex rounded-full border px-2 py-1 text-xs font-semibold ${className}`}>{JSA_LABELS[rating]}</span>
+}
+
 function OutlookBar({ level, maxLevel = 5 }: { level: number; maxLevel?: number }) {
   return (
     <div className="flex gap-1">
@@ -51,8 +71,9 @@ function OutlookBar({ level, maxLevel = 5 }: { level: number; maxLevel?: number 
   )
 }
 
-export function OccupationDetailClient({ detail, salary, shortageRating, onCSOL, stateShortages, relatedCourses, dataNote, officialContent }: Props) {
-  const stateMap = new Map(stateShortages.map((s) => [s.state, s.rating]))
+export function OccupationDetailClient({ detail, salary, shortageRating, nationalJsaRating, onCSOL, stateShortages, relatedCourses, dataNote, officialContent }: Props) {
+  const stateMap = new Map(stateShortages.map((s) => [s.state, s]))
+  const mapsHref = `/maps?country=au&state=NSW&occ=${encodeURIComponent(detail.anzscoCode)}`
 
   return (
     <main className="min-h-screen bg-[#f8f9fa]">
@@ -92,7 +113,9 @@ export function OccupationDetailClient({ detail, salary, shortageRating, onCSOL,
           <div className="rounded-2xl border border-slate-200 bg-white p-5">
             <h2 className="text-xs font-semibold uppercase tracking-wide text-slate-500">Shortage Now</h2>
             <div className="mt-3 flex items-center">
-              {shortageRating != null ? (
+              {nationalJsaRating ? (
+                <JsaRatingBadge rating={nationalJsaRating} />
+              ) : shortageRating != null ? (
                 <>
                   <ShortageStars rating={shortageRating} />
                   <ShortageLabel rating={shortageRating} />
@@ -101,15 +124,17 @@ export function OccupationDetailClient({ detail, salary, shortageRating, onCSOL,
                 <span className="text-sm text-slate-400">No rating available</span>
               )}
             </div>
-            <p className="mt-1 text-xs text-slate-400">by region</p>
+            <p className="mt-1 text-xs text-slate-400">{nationalJsaRating ? "JSA 2025 · by state / territory" : "by region"}</p>
             <div className="mt-4 space-y-2">
               {stateShortages.length > 0 ? AU_STATES.map((state) => {
-                const rating = stateMap.get(state)
+                const stateRating = stateMap.get(state)
                 return (
                   <div key={state} className="flex items-center justify-between text-sm">
                     <span className="font-medium text-slate-700">{state}</span>
-                    {rating != null ? (
-                      <ShortageStars rating={rating} />
+                    {stateRating?.jsaRating ? (
+                      <JsaRatingBadge rating={stateRating.jsaRating} />
+                    ) : stateRating?.rating != null ? (
+                      <ShortageStars rating={stateRating.rating} />
                     ) : (
                       <span className="text-xs text-slate-300">—</span>
                     )}
@@ -136,8 +161,9 @@ export function OccupationDetailClient({ detail, salary, shortageRating, onCSOL,
                 <div>
                   <p className="text-xs text-slate-500">Shortage signal</p>
                   <p className="text-lg font-semibold text-slate-950">
-                    {shortageRating != null ? `${["", "LOW", "MODERATE", "SHORTAGE", "HIGH", "CRITICAL"][shortageRating]} (national)` : "Not rated"}
+                    {nationalJsaRating ? `${JSA_LABELS[nationalJsaRating]} (national)` : shortageRating != null ? `${["", "LOW", "MODERATE", "SHORTAGE", "HIGH", "CRITICAL"][shortageRating]} (national)` : "Not rated"}
                   </p>
+                  {nationalJsaRating && <p className="mt-1 text-xs leading-4 text-slate-400">JSA categories identify where a shortage occurs; they are not a severity score.</p>}
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -294,22 +320,23 @@ export function OccupationDetailClient({ detail, salary, shortageRating, onCSOL,
           <p className="mt-4 text-sm leading-6 text-slate-600">{detail.outlook.reason}</p>
         </section>}
 
-        {/* For employers CTA */}
+        {/* Regional exploration CTA */}
         <section className="rounded-2xl border border-blue-200 bg-blue-50 p-6">
-          <h2 className="text-lg font-semibold text-slate-950">For employers & training providers</h2>
+          <h2 className="text-lg font-semibold text-slate-950">Where could this career take you?</h2>
           <p className="mt-2 text-sm leading-6 text-slate-600">
-            Want this occupation data for your industry or workforce plan?
-          </p>
-          <p className="mt-1 text-sm text-slate-600">
-            Generate a PDF report with role priority, skill gaps, salary pressure and action plan for your region.
+            Compare state-level shortage signals, salary context, study options and visa information for {detail.name}.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
-            <a href="/support/request" className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700">
-              Request a Pilot Report <ArrowRight className="h-4 w-4" />
-            </a>
-            <a href="/methodology" className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
-              See sample report
-            </a>
+            <Link href={mapsHref} className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700">
+              Explore this career on Maps <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link href="/maps?country=au" className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
+              Browse Australia Maps
+            </Link>
+          </div>
+          <div className="mt-5 border-t border-blue-200 pt-4 text-sm text-slate-600">
+            <span>For employers and educators: </span>
+            <Link href="/support/request" className="font-semibold text-blue-700 hover:underline">request a workforce report</Link>
           </div>
         </section>
       </div>

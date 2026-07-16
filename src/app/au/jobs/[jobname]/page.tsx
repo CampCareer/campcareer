@@ -5,6 +5,7 @@ import { supabaseAdmin } from "@/lib/supabase-admin"
 import { getCoursesForOccupation } from "@/lib/occupations-au"
 import { getAuOccupationSlug, slugifyAuOccupation } from "@/lib/au-occupation-slug"
 import { AU_OSCA_SOURCE, getAuOfficialOccupationContent } from "@/lib/au-osca-content"
+import { getAuJsaOslRatings } from "@/lib/au-jsa-osl"
 import { pageMetadata } from "@/lib/seo"
 import { JsonLd, breadcrumbLd } from "@/components/seo/json-ld"
 import { getOccupationDetail, getOccupationDetailByAnzsco, type OccupationDetail } from "./sample-data"
@@ -101,6 +102,7 @@ async function getOccupationData(jobname: string) {
   ])
 
   const officialContent = getAuOfficialOccupationContent(occupation.anzsco_code)
+  const jsaRatings = getAuJsaOslRatings(occupation.anzsco_code)
   const curated = getOccupationDetailByAnzsco(occupation.anzsco_code) ?? getOccupationDetail(getAuOccupationSlug(occupation, occupations))
   // ANZSCO versions can change a code while retaining the occupation label.
   // Keep the hand-reviewed content for the six samples, but always show the
@@ -120,8 +122,11 @@ async function getOccupationData(jobname: string) {
   return {
     occupation,
     occupations,
-    detail,
+    detail: jsaRatings
+      ? { ...detail, sources: [...new Set(["Jobs and Skills Australia OSL", ...detail.sources])] }
+      : detail,
     officialContent,
+    jsaRatings,
     states: (stateResult.data ?? []) as StateOccRow[],
     courses,
   }
@@ -151,7 +156,7 @@ export default async function AuOccupationPage(props: { params: Promise<Params> 
   const data = await getOccupationData(jobname)
   if (!data) notFound()
 
-  const { occupation, occupations, detail, officialContent, states, courses } = data
+  const { occupation, occupations, detail, officialContent, jsaRatings, states, courses } = data
   const slug = getAuOccupationSlug(occupation, occupations)
 
   return (
@@ -182,8 +187,11 @@ export default async function AuOccupationPage(props: { params: Promise<Params> 
         detail={detail}
         salary={occupation.median_salary_aud}
         shortageRating={occupation.shortage_rating}
+        nationalJsaRating={jsaRatings?.nationalRating ?? null}
         onCSOL={occupation.on_csol}
-        stateShortages={states.map((state) => ({ state: state.state, rating: state.shortage_rating }))}
+        stateShortages={jsaRatings
+          ? Object.entries(jsaRatings.stateRatings).map(([state, jsaRating]) => ({ state, jsaRating }))
+          : states.map((state) => ({ state: state.state, rating: state.shortage_rating }))}
         relatedCourses={courses.map((course) => ({
           id: course.id,
           title: course.title,

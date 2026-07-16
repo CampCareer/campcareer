@@ -1,0 +1,3609 @@
+{
+  "source": {
+    "name": "CampCareer OSCA-to-global-career taxonomy rule mapping",
+    "version": 1,
+    "generatedAt": "2026-07-16T11:01:56.167Z"
+  },
+  "occupations": [
+    {
+      "oscaCode": "111131",
+      "categoryId": 5,
+      "subcategoryId": "business_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "111231",
+      "categoryId": 5,
+      "subcategoryId": "business_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "111331",
+      "categoryId": 5,
+      "subcategoryId": "business_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "111431",
+      "categoryId": 5,
+      "subcategoryId": "business_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "111531",
+      "categoryId": 5,
+      "subcategoryId": "business_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "111633",
+      "categoryId": 5,
+      "subcategoryId": "business_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "112131",
+      "categoryId": 5,
+      "subcategoryId": "marketing_sales",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "112132",
+      "categoryId": 5,
+      "subcategoryId": "marketing_sales",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "112133",
+      "categoryId": 5,
+      "subcategoryId": "marketing_sales",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "113131",
+      "categoryId": 3,
+      "subcategoryId": "technology_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "113132",
+      "categoryId": 3,
+      "subcategoryId": "technology_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "113231",
+      "categoryId": 3,
+      "subcategoryId": "technology_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "113232",
+      "categoryId": 3,
+      "subcategoryId": "technology_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "113233",
+      "categoryId": 3,
+      "subcategoryId": "technology_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "113299",
+      "categoryId": 3,
+      "subcategoryId": "technology_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "121131",
+      "categoryId": 5,
+      "subcategoryId": "executive_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "121231",
+      "categoryId": 5,
+      "subcategoryId": "executive_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "131131",
+      "categoryId": 1,
+      "subcategoryId": "construction_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "131231",
+      "categoryId": 1,
+      "subcategoryId": "construction_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "131331",
+      "categoryId": 1,
+      "subcategoryId": "construction_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "131431",
+      "categoryId": 1,
+      "subcategoryId": "construction_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "132231",
+      "categoryId": 4,
+      "subcategoryId": "manufacturing_resources_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "132232",
+      "categoryId": 4,
+      "subcategoryId": "manufacturing_resources_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "132233",
+      "categoryId": 4,
+      "subcategoryId": "manufacturing_resources_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "133231",
+      "categoryId": 10,
+      "subcategoryId": "supply_chain_logistics",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "133331",
+      "categoryId": 10,
+      "subcategoryId": "supply_chain_logistics",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "141131",
+      "categoryId": 6,
+      "subcategoryId": "school_education",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "141132",
+      "categoryId": 6,
+      "subcategoryId": "school_education",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "141231",
+      "categoryId": 6,
+      "subcategoryId": "early_childhood_education",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "141331",
+      "categoryId": 2,
+      "subcategoryId": "aged_care",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "141332",
+      "categoryId": 2,
+      "subcategoryId": "nursing_midwifery",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "141333",
+      "categoryId": 2,
+      "subcategoryId": "health_administration",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "141334",
+      "categoryId": 2,
+      "subcategoryId": "emergency_health",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "141399",
+      "categoryId": 2,
+      "subcategoryId": "health_welfare_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "141431",
+      "categoryId": 6,
+      "subcategoryId": "tertiary_vocational_education",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "141499",
+      "categoryId": 6,
+      "subcategoryId": "education_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "149131",
+      "categoryId": 8,
+      "subcategoryId": "arts_culture_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "149331",
+      "categoryId": 7,
+      "subcategoryId": "environmental_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "149333",
+      "categoryId": 3,
+      "subcategoryId": "laboratory_science",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "151132",
+      "categoryId": 7,
+      "subcategoryId": "farming_aquaculture",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "151232",
+      "categoryId": 7,
+      "subcategoryId": "farming_aquaculture",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "151236",
+      "categoryId": 7,
+      "subcategoryId": "farming_aquaculture",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "151331",
+      "categoryId": 7,
+      "subcategoryId": "farming_aquaculture",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "152131",
+      "categoryId": 7,
+      "subcategoryId": "livestock_farming",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "152231",
+      "categoryId": 7,
+      "subcategoryId": "livestock_farming",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "152931",
+      "categoryId": 7,
+      "subcategoryId": "livestock_farming",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "152932",
+      "categoryId": 7,
+      "subcategoryId": "livestock_farming",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "152934",
+      "categoryId": 7,
+      "subcategoryId": "livestock_farming",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "152935",
+      "categoryId": 7,
+      "subcategoryId": "livestock_farming",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "161131",
+      "categoryId": 9,
+      "subcategoryId": "hospitality_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "161231",
+      "categoryId": 9,
+      "subcategoryId": "hospitality_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "161232",
+      "categoryId": 9,
+      "subcategoryId": "hospitality_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "161333",
+      "categoryId": 9,
+      "subcategoryId": "hospitality_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "161399",
+      "categoryId": 9,
+      "subcategoryId": "hospitality_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "161431",
+      "categoryId": 9,
+      "subcategoryId": "hospitality_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "161531",
+      "categoryId": 9,
+      "subcategoryId": "hospitality_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "161631",
+      "categoryId": 9,
+      "subcategoryId": "hospitality_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "161933",
+      "categoryId": 9,
+      "subcategoryId": "hospitality_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "161999",
+      "categoryId": 9,
+      "subcategoryId": "hospitality_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "162131",
+      "categoryId": 9,
+      "subcategoryId": "retail_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "171231",
+      "categoryId": 5,
+      "subcategoryId": "office_administration",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "172132",
+      "categoryId": 9,
+      "subcategoryId": "customer_personal_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "172499",
+      "categoryId": 9,
+      "subcategoryId": "customer_personal_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "172531",
+      "categoryId": 10,
+      "subcategoryId": "fleet_transport_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "172533",
+      "categoryId": 10,
+      "subcategoryId": "transport_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "172931",
+      "categoryId": 7,
+      "subcategoryId": "animal_care",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "172932",
+      "categoryId": 1,
+      "subcategoryId": "equipment_hire",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "172999",
+      "categoryId": 9,
+      "subcategoryId": "customer_personal_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "211131",
+      "categoryId": 5,
+      "subcategoryId": "accounting",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "211133",
+      "categoryId": 5,
+      "subcategoryId": "accounting",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "211134",
+      "categoryId": 5,
+      "subcategoryId": "accounting",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "211135",
+      "categoryId": 5,
+      "subcategoryId": "accounting",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "211231",
+      "categoryId": 5,
+      "subcategoryId": "accounting",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "211232",
+      "categoryId": 5,
+      "subcategoryId": "accounting",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "212131",
+      "categoryId": 5,
+      "subcategoryId": "financial_advice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "221231",
+      "categoryId": 5,
+      "subcategoryId": "marketing_communications",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "221431",
+      "categoryId": 5,
+      "subcategoryId": "marketing_communications",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "221531",
+      "categoryId": 5,
+      "subcategoryId": "marketing_communications",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "221534",
+      "categoryId": 5,
+      "subcategoryId": "marketing_communications",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "221631",
+      "categoryId": 5,
+      "subcategoryId": "marketing_communications",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "221632",
+      "categoryId": 5,
+      "subcategoryId": "marketing_communications",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "221633",
+      "categoryId": 5,
+      "subcategoryId": "marketing_communications",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "221634",
+      "categoryId": 5,
+      "subcategoryId": "marketing_communications",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "221699",
+      "categoryId": 5,
+      "subcategoryId": "marketing_communications",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "222131",
+      "categoryId": 5,
+      "subcategoryId": "human_resources",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "222132",
+      "categoryId": 5,
+      "subcategoryId": "human_resources",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "222231",
+      "categoryId": 5,
+      "subcategoryId": "human_resources",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "222331",
+      "categoryId": 5,
+      "subcategoryId": "human_resources",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "222332",
+      "categoryId": 5,
+      "subcategoryId": "human_resources",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "223131",
+      "categoryId": 3,
+      "subcategoryId": "data_analytics",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "223132",
+      "categoryId": 3,
+      "subcategoryId": "data_analytics",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "223232",
+      "categoryId": 3,
+      "subcategoryId": "data_analytics",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "223233",
+      "categoryId": 3,
+      "subcategoryId": "data_analytics",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "223431",
+      "categoryId": 3,
+      "subcategoryId": "data_analytics",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "223433",
+      "categoryId": 3,
+      "subcategoryId": "data_analytics",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "223531",
+      "categoryId": 5,
+      "subcategoryId": "property_finance",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "223532",
+      "categoryId": 5,
+      "subcategoryId": "property_finance",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "223931",
+      "categoryId": 5,
+      "subcategoryId": "corporate_governance",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "223932",
+      "categoryId": 5,
+      "subcategoryId": "cost_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "223934",
+      "categoryId": 5,
+      "subcategoryId": "intellectual_property",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "223999",
+      "categoryId": 3,
+      "subcategoryId": "data_analytics",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "231332",
+      "categoryId": 8,
+      "subcategoryId": "media_writing_performing_arts",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "231334",
+      "categoryId": 8,
+      "subcategoryId": "media_writing_performing_arts",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "231399",
+      "categoryId": 8,
+      "subcategoryId": "media_writing_performing_arts",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "231431",
+      "categoryId": 8,
+      "subcategoryId": "media_writing_performing_arts",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "231434",
+      "categoryId": 8,
+      "subcategoryId": "media_writing_performing_arts",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "231435",
+      "categoryId": 8,
+      "subcategoryId": "media_writing_performing_arts",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "231438",
+      "categoryId": 8,
+      "subcategoryId": "media_writing_performing_arts",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "231531",
+      "categoryId": 8,
+      "subcategoryId": "media_writing_performing_arts",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "231532",
+      "categoryId": 8,
+      "subcategoryId": "media_writing_performing_arts",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "231632",
+      "categoryId": 8,
+      "subcategoryId": "media_writing_performing_arts",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "241131",
+      "categoryId": 8,
+      "subcategoryId": "architecture_design",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "241132",
+      "categoryId": 8,
+      "subcategoryId": "architecture_design",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "241133",
+      "categoryId": 8,
+      "subcategoryId": "architecture_design",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "241231",
+      "categoryId": 8,
+      "subcategoryId": "architecture_design",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "241232",
+      "categoryId": 4,
+      "subcategoryId": "engineering",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "241233",
+      "categoryId": 3,
+      "subcategoryId": "geospatial_data",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "241234",
+      "categoryId": 4,
+      "subcategoryId": "surveying",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "241235",
+      "categoryId": 4,
+      "subcategoryId": "surveying",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "241299",
+      "categoryId": 4,
+      "subcategoryId": "surveying",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "241331",
+      "categoryId": 8,
+      "subcategoryId": "architecture_design",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "241931",
+      "categoryId": 1,
+      "subcategoryId": "building_construction",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "241932",
+      "categoryId": 1,
+      "subcategoryId": "construction_management",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "242131",
+      "categoryId": 8,
+      "subcategoryId": "digital_design",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "242132",
+      "categoryId": 8,
+      "subcategoryId": "digital_design",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "242133",
+      "categoryId": 8,
+      "subcategoryId": "digital_design",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "242233",
+      "categoryId": 8,
+      "subcategoryId": "digital_design",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "242333",
+      "categoryId": 8,
+      "subcategoryId": "digital_design",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "242431",
+      "categoryId": 8,
+      "subcategoryId": "digital_design",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "243131",
+      "categoryId": 4,
+      "subcategoryId": "engineering",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "243132",
+      "categoryId": 4,
+      "subcategoryId": "engineering",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "243133",
+      "categoryId": 4,
+      "subcategoryId": "engineering",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "243231",
+      "categoryId": 4,
+      "subcategoryId": "engineering",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "243232",
+      "categoryId": 4,
+      "subcategoryId": "engineering",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "243233",
+      "categoryId": 4,
+      "subcategoryId": "engineering",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "243234",
+      "categoryId": 4,
+      "subcategoryId": "engineering",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "243235",
+      "categoryId": 4,
+      "subcategoryId": "engineering",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "243236",
+      "categoryId": 4,
+      "subcategoryId": "engineering",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "243331",
+      "categoryId": 4,
+      "subcategoryId": "engineering",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "243332",
+      "categoryId": 4,
+      "subcategoryId": "engineering",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "243431",
+      "categoryId": 4,
+      "subcategoryId": "engineering",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "243531",
+      "categoryId": 4,
+      "subcategoryId": "engineering",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "243532",
+      "categoryId": 4,
+      "subcategoryId": "engineering",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "243533",
+      "categoryId": 4,
+      "subcategoryId": "engineering",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "243631",
+      "categoryId": 4,
+      "subcategoryId": "engineering",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "243632",
+      "categoryId": 4,
+      "subcategoryId": "engineering",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "243931",
+      "categoryId": 4,
+      "subcategoryId": "engineering",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "243932",
+      "categoryId": 4,
+      "subcategoryId": "engineering",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "243933",
+      "categoryId": 4,
+      "subcategoryId": "engineering",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "243934",
+      "categoryId": 4,
+      "subcategoryId": "engineering",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "243935",
+      "categoryId": 4,
+      "subcategoryId": "engineering",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "243936",
+      "categoryId": 4,
+      "subcategoryId": "engineering",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "243937",
+      "categoryId": 4,
+      "subcategoryId": "engineering",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "243938",
+      "categoryId": 4,
+      "subcategoryId": "engineering",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "243999",
+      "categoryId": 4,
+      "subcategoryId": "engineering",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "244131",
+      "categoryId": 7,
+      "subcategoryId": "agriculture_environmental_science",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "244132",
+      "categoryId": 7,
+      "subcategoryId": "agriculture_environmental_science",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "244133",
+      "categoryId": 7,
+      "subcategoryId": "agriculture_environmental_science",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "244134",
+      "categoryId": 7,
+      "subcategoryId": "agriculture_environmental_science",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "244135",
+      "categoryId": 7,
+      "subcategoryId": "agriculture_environmental_science",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "244231",
+      "categoryId": 7,
+      "subcategoryId": "agriculture_environmental_science",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "244232",
+      "categoryId": 7,
+      "subcategoryId": "agriculture_environmental_science",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "244233",
+      "categoryId": 7,
+      "subcategoryId": "agriculture_environmental_science",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "244333",
+      "categoryId": 7,
+      "subcategoryId": "agriculture_environmental_science",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "244431",
+      "categoryId": 7,
+      "subcategoryId": "agriculture_environmental_science",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "244432",
+      "categoryId": 7,
+      "subcategoryId": "agriculture_environmental_science",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "244499",
+      "categoryId": 7,
+      "subcategoryId": "agriculture_environmental_science",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "244531",
+      "categoryId": 7,
+      "subcategoryId": "agriculture_environmental_science",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "244532",
+      "categoryId": 7,
+      "subcategoryId": "agriculture_environmental_science",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "244533",
+      "categoryId": 7,
+      "subcategoryId": "agriculture_environmental_science",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "244632",
+      "categoryId": 7,
+      "subcategoryId": "agriculture_environmental_science",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "244634",
+      "categoryId": 7,
+      "subcategoryId": "agriculture_environmental_science",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "244699",
+      "categoryId": 7,
+      "subcategoryId": "agriculture_environmental_science",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "244732",
+      "categoryId": 7,
+      "subcategoryId": "agriculture_environmental_science",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "244931",
+      "categoryId": 7,
+      "subcategoryId": "agriculture_environmental_science",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "244932",
+      "categoryId": 7,
+      "subcategoryId": "agriculture_environmental_science",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "244933",
+      "categoryId": 7,
+      "subcategoryId": "agriculture_environmental_science",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "244999",
+      "categoryId": 7,
+      "subcategoryId": "agriculture_environmental_science",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "251131",
+      "categoryId": 6,
+      "subcategoryId": "school_education",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "251231",
+      "categoryId": 6,
+      "subcategoryId": "school_education",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "251331",
+      "categoryId": 6,
+      "subcategoryId": "school_education",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "251431",
+      "categoryId": 6,
+      "subcategoryId": "school_education",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "251432",
+      "categoryId": 6,
+      "subcategoryId": "school_education",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "251433",
+      "categoryId": 6,
+      "subcategoryId": "school_education",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "251931",
+      "categoryId": 6,
+      "subcategoryId": "school_education",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "252131",
+      "categoryId": 6,
+      "subcategoryId": "tertiary_vocational_education",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "252231",
+      "categoryId": 6,
+      "subcategoryId": "tertiary_vocational_education",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "259131",
+      "categoryId": 6,
+      "subcategoryId": "education_support",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "259299",
+      "categoryId": 6,
+      "subcategoryId": "education_support",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "259331",
+      "categoryId": 6,
+      "subcategoryId": "education_support",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "259332",
+      "categoryId": 6,
+      "subcategoryId": "education_support",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "259431",
+      "categoryId": 6,
+      "subcategoryId": "education_support",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "259931",
+      "categoryId": 6,
+      "subcategoryId": "education_support",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "259999",
+      "categoryId": 6,
+      "subcategoryId": "education_support",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "261132",
+      "categoryId": 2,
+      "subcategoryId": "mental_health",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "261134",
+      "categoryId": 2,
+      "subcategoryId": "mental_health",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "261135",
+      "categoryId": 2,
+      "subcategoryId": "mental_health",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "261136",
+      "categoryId": 2,
+      "subcategoryId": "mental_health",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "261231",
+      "categoryId": 2,
+      "subcategoryId": "mental_health",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "261331",
+      "categoryId": 6,
+      "subcategoryId": "social_work",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "261931",
+      "categoryId": 2,
+      "subcategoryId": "mental_health",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "261932",
+      "categoryId": 2,
+      "subcategoryId": "mental_health",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "261933",
+      "categoryId": 2,
+      "subcategoryId": "mental_health",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "261999",
+      "categoryId": 2,
+      "subcategoryId": "mental_health",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "262131",
+      "categoryId": 2,
+      "subcategoryId": "allied_health",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "262331",
+      "categoryId": 2,
+      "subcategoryId": "allied_health",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "262431",
+      "categoryId": 2,
+      "subcategoryId": "allied_health",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "262531",
+      "categoryId": 2,
+      "subcategoryId": "allied_health",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "262631",
+      "categoryId": 2,
+      "subcategoryId": "allied_health",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "262931",
+      "categoryId": 2,
+      "subcategoryId": "allied_health",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "262932",
+      "categoryId": 2,
+      "subcategoryId": "allied_health",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "262999",
+      "categoryId": 2,
+      "subcategoryId": "allied_health",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "263131",
+      "categoryId": 2,
+      "subcategoryId": "health_diagnostics",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "263132",
+      "categoryId": 2,
+      "subcategoryId": "health_diagnostics",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "263133",
+      "categoryId": 2,
+      "subcategoryId": "health_diagnostics",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "263231",
+      "categoryId": 2,
+      "subcategoryId": "health_diagnostics",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "263331",
+      "categoryId": 2,
+      "subcategoryId": "health_diagnostics",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "263431",
+      "categoryId": 2,
+      "subcategoryId": "health_diagnostics",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "263432",
+      "categoryId": 2,
+      "subcategoryId": "health_diagnostics",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "263531",
+      "categoryId": 2,
+      "subcategoryId": "health_diagnostics",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "263931",
+      "categoryId": 2,
+      "subcategoryId": "health_diagnostics",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "263932",
+      "categoryId": 2,
+      "subcategoryId": "health_diagnostics",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "263934",
+      "categoryId": 2,
+      "subcategoryId": "health_diagnostics",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "263935",
+      "categoryId": 2,
+      "subcategoryId": "health_diagnostics",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "263936",
+      "categoryId": 2,
+      "subcategoryId": "health_diagnostics",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "263999",
+      "categoryId": 2,
+      "subcategoryId": "health_diagnostics",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264131",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264231",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264331",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264332",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264333",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264334",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264335",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264336",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264337",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264338",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264341",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264342",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264343",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264344",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264345",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264346",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264399",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264431",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264531",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264631",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264632",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264633",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264634",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264635",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264636",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264637",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264638",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264641",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264931",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264932",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264933",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264934",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264935",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264936",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264937",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "264999",
+      "categoryId": 2,
+      "subcategoryId": "medical_practice",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "265131",
+      "categoryId": 2,
+      "subcategoryId": "nursing_midwifery",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "265231",
+      "categoryId": 2,
+      "subcategoryId": "nursing_midwifery",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "265232",
+      "categoryId": 2,
+      "subcategoryId": "nursing_midwifery",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "265331",
+      "categoryId": 2,
+      "subcategoryId": "nursing_midwifery",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "265431",
+      "categoryId": 2,
+      "subcategoryId": "nursing_midwifery",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "265432",
+      "categoryId": 2,
+      "subcategoryId": "nursing_midwifery",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "265433",
+      "categoryId": 2,
+      "subcategoryId": "nursing_midwifery",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "265434",
+      "categoryId": 2,
+      "subcategoryId": "nursing_midwifery",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "265435",
+      "categoryId": 2,
+      "subcategoryId": "nursing_midwifery",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "265499",
+      "categoryId": 2,
+      "subcategoryId": "nursing_midwifery",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "269131",
+      "categoryId": 2,
+      "subcategoryId": "dental_oral_health",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "269132",
+      "categoryId": 2,
+      "subcategoryId": "dental_oral_health",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "269133",
+      "categoryId": 2,
+      "subcategoryId": "dental_oral_health",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "269231",
+      "categoryId": 2,
+      "subcategoryId": "dental_oral_health",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "269232",
+      "categoryId": 2,
+      "subcategoryId": "dental_oral_health",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "269331",
+      "categoryId": 2,
+      "subcategoryId": "dental_oral_health",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "269431",
+      "categoryId": 2,
+      "subcategoryId": "dental_oral_health",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "269432",
+      "categoryId": 2,
+      "subcategoryId": "dental_oral_health",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "269531",
+      "categoryId": 2,
+      "subcategoryId": "dental_oral_health",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "269932",
+      "categoryId": 2,
+      "subcategoryId": "dental_oral_health",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "269999",
+      "categoryId": 2,
+      "subcategoryId": "dental_oral_health",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "271131",
+      "categoryId": 3,
+      "subcategoryId": "cybersecurity",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "271132",
+      "categoryId": 3,
+      "subcategoryId": "cybersecurity",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "271133",
+      "categoryId": 3,
+      "subcategoryId": "cybersecurity",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "271134",
+      "categoryId": 3,
+      "subcategoryId": "cybersecurity",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "271135",
+      "categoryId": 3,
+      "subcategoryId": "cybersecurity",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "271136",
+      "categoryId": 3,
+      "subcategoryId": "cybersecurity",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "271137",
+      "categoryId": 3,
+      "subcategoryId": "cybersecurity",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "271231",
+      "categoryId": 3,
+      "subcategoryId": "cybersecurity",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "271232",
+      "categoryId": 3,
+      "subcategoryId": "cybersecurity",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "272131",
+      "categoryId": 3,
+      "subcategoryId": "ict_infrastructure",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "272132",
+      "categoryId": 3,
+      "subcategoryId": "ict_infrastructure",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "272133",
+      "categoryId": 3,
+      "subcategoryId": "ict_infrastructure",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "272231",
+      "categoryId": 3,
+      "subcategoryId": "ict_infrastructure",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "272233",
+      "categoryId": 3,
+      "subcategoryId": "ict_infrastructure",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "273131",
+      "categoryId": 3,
+      "subcategoryId": "software_digital",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "273132",
+      "categoryId": 3,
+      "subcategoryId": "software_digital",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "273231",
+      "categoryId": 3,
+      "subcategoryId": "software_digital",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "273232",
+      "categoryId": 3,
+      "subcategoryId": "software_digital",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "273233",
+      "categoryId": 3,
+      "subcategoryId": "software_digital",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "273234",
+      "categoryId": 3,
+      "subcategoryId": "software_digital",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "273331",
+      "categoryId": 3,
+      "subcategoryId": "software_digital",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "273332",
+      "categoryId": 3,
+      "subcategoryId": "software_digital",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "273333",
+      "categoryId": 3,
+      "subcategoryId": "software_digital",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "281131",
+      "categoryId": 5,
+      "subcategoryId": "legal_public_administration",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "281231",
+      "categoryId": 5,
+      "subcategoryId": "legal_public_administration",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "281232",
+      "categoryId": 5,
+      "subcategoryId": "legal_public_administration",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "281237",
+      "categoryId": 5,
+      "subcategoryId": "legal_public_administration",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "281299",
+      "categoryId": 5,
+      "subcategoryId": "legal_public_administration",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "281331",
+      "categoryId": 5,
+      "subcategoryId": "legal_public_administration",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "299131",
+      "categoryId": 10,
+      "subcategoryId": "aviation",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "299132",
+      "categoryId": 10,
+      "subcategoryId": "aviation",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "299133",
+      "categoryId": 10,
+      "subcategoryId": "aviation",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "299134",
+      "categoryId": 10,
+      "subcategoryId": "aviation",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "299199",
+      "categoryId": 10,
+      "subcategoryId": "aviation",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "311131",
+      "categoryId": 7,
+      "subcategoryId": "agriculture_technology",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "311136",
+      "categoryId": 7,
+      "subcategoryId": "irrigation",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "311137",
+      "categoryId": 7,
+      "subcategoryId": "food_agriculture_processing",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "311138",
+      "categoryId": 7,
+      "subcategoryId": "food_agriculture_processing",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "311199",
+      "categoryId": 7,
+      "subcategoryId": "agriculture_technology",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "311231",
+      "categoryId": 2,
+      "subcategoryId": "health_diagnostics",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "311232",
+      "categoryId": 2,
+      "subcategoryId": "health_diagnostics",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "311235",
+      "categoryId": 2,
+      "subcategoryId": "health_diagnostics",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "311299",
+      "categoryId": 2,
+      "subcategoryId": "health_diagnostics",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "311331",
+      "categoryId": 2,
+      "subcategoryId": "pharmacy",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "311332",
+      "categoryId": 2,
+      "subcategoryId": "pharmacy",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "311531",
+      "categoryId": 3,
+      "subcategoryId": "laboratory_science",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "311532",
+      "categoryId": 7,
+      "subcategoryId": "earth_science",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "311533",
+      "categoryId": 3,
+      "subcategoryId": "geospatial_data",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "311599",
+      "categoryId": 3,
+      "subcategoryId": "laboratory_science",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "312131",
+      "categoryId": 1,
+      "subcategoryId": "building_construction",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "312132",
+      "categoryId": 1,
+      "subcategoryId": "building_construction",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "312133",
+      "categoryId": 1,
+      "subcategoryId": "building_construction",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "312134",
+      "categoryId": 1,
+      "subcategoryId": "building_construction",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "312135",
+      "categoryId": 1,
+      "subcategoryId": "building_construction",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "312199",
+      "categoryId": 1,
+      "subcategoryId": "building_construction",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "312231",
+      "categoryId": 1,
+      "subcategoryId": "building_construction",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "312232",
+      "categoryId": 1,
+      "subcategoryId": "building_construction",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "312331",
+      "categoryId": 1,
+      "subcategoryId": "building_construction",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "312431",
+      "categoryId": 1,
+      "subcategoryId": "building_construction",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "312432",
+      "categoryId": 1,
+      "subcategoryId": "building_construction",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "313131",
+      "categoryId": 4,
+      "subcategoryId": "engineering_technicians",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "313132",
+      "categoryId": 4,
+      "subcategoryId": "engineering_technicians",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "313231",
+      "categoryId": 4,
+      "subcategoryId": "engineering_technicians",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "313232",
+      "categoryId": 4,
+      "subcategoryId": "engineering_technicians",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "313331",
+      "categoryId": 4,
+      "subcategoryId": "engineering_technicians",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "313431",
+      "categoryId": 4,
+      "subcategoryId": "engineering_technicians",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "313432",
+      "categoryId": 4,
+      "subcategoryId": "engineering_technicians",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "313434",
+      "categoryId": 4,
+      "subcategoryId": "engineering_technicians",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "313435",
+      "categoryId": 4,
+      "subcategoryId": "engineering_technicians",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "313436",
+      "categoryId": 4,
+      "subcategoryId": "engineering_technicians",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "313531",
+      "categoryId": 4,
+      "subcategoryId": "engineering_technicians",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "313931",
+      "categoryId": 4,
+      "subcategoryId": "engineering_technicians",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "313932",
+      "categoryId": 4,
+      "subcategoryId": "engineering_technicians",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "313933",
+      "categoryId": 4,
+      "subcategoryId": "engineering_technicians",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "313934",
+      "categoryId": 4,
+      "subcategoryId": "engineering_technicians",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "313935",
+      "categoryId": 4,
+      "subcategoryId": "engineering_technicians",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "313936",
+      "categoryId": 4,
+      "subcategoryId": "engineering_technicians",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "313999",
+      "categoryId": 4,
+      "subcategoryId": "engineering_technicians",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "314131",
+      "categoryId": 3,
+      "subcategoryId": "telecommunications_ict",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "314133",
+      "categoryId": 3,
+      "subcategoryId": "telecommunications_ict",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "314134",
+      "categoryId": 3,
+      "subcategoryId": "telecommunications_ict",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "314135",
+      "categoryId": 3,
+      "subcategoryId": "telecommunications_ict",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "314136",
+      "categoryId": 3,
+      "subcategoryId": "telecommunications_ict",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "314199",
+      "categoryId": 3,
+      "subcategoryId": "telecommunications_ict",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "314231",
+      "categoryId": 3,
+      "subcategoryId": "telecommunications_ict",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "321131",
+      "categoryId": 9,
+      "subcategoryId": "food_preparation",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "322131",
+      "categoryId": 9,
+      "subcategoryId": "food_preparation",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "322231",
+      "categoryId": 9,
+      "subcategoryId": "food_preparation",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "322331",
+      "categoryId": 9,
+      "subcategoryId": "food_preparation",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "322431",
+      "categoryId": 9,
+      "subcategoryId": "food_preparation",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "331131",
+      "categoryId": 1,
+      "subcategoryId": "metal_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "331132",
+      "categoryId": 1,
+      "subcategoryId": "metal_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "331133",
+      "categoryId": 1,
+      "subcategoryId": "metal_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "331932",
+      "categoryId": 1,
+      "subcategoryId": "metal_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "331933",
+      "categoryId": 1,
+      "subcategoryId": "metal_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "331934",
+      "categoryId": 1,
+      "subcategoryId": "metal_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "331936",
+      "categoryId": 1,
+      "subcategoryId": "metal_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "332131",
+      "categoryId": 1,
+      "subcategoryId": "aircraft_maintenance",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "332132",
+      "categoryId": 1,
+      "subcategoryId": "aircraft_maintenance",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "332133",
+      "categoryId": 1,
+      "subcategoryId": "aircraft_maintenance",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "332134",
+      "categoryId": 1,
+      "subcategoryId": "aircraft_maintenance",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "332231",
+      "categoryId": 1,
+      "subcategoryId": "aircraft_maintenance",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "332232",
+      "categoryId": 1,
+      "subcategoryId": "aircraft_maintenance",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "332233",
+      "categoryId": 1,
+      "subcategoryId": "aircraft_maintenance",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "332234",
+      "categoryId": 1,
+      "subcategoryId": "aircraft_maintenance",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "332299",
+      "categoryId": 1,
+      "subcategoryId": "aircraft_maintenance",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "332331",
+      "categoryId": 1,
+      "subcategoryId": "aircraft_maintenance",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "332334",
+      "categoryId": 1,
+      "subcategoryId": "aircraft_maintenance",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "332335",
+      "categoryId": 1,
+      "subcategoryId": "aircraft_maintenance",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "332336",
+      "categoryId": 1,
+      "subcategoryId": "aircraft_maintenance",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "332337",
+      "categoryId": 1,
+      "subcategoryId": "aircraft_maintenance",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "341131",
+      "categoryId": 7,
+      "subcategoryId": "animal_care",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "341132",
+      "categoryId": 7,
+      "subcategoryId": "animal_care",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "341231",
+      "categoryId": 2,
+      "subcategoryId": "veterinary_care",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "342231",
+      "categoryId": 7,
+      "subcategoryId": "horticulture_landcare",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "342232",
+      "categoryId": 7,
+      "subcategoryId": "horticulture_landcare",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "342431",
+      "categoryId": 7,
+      "subcategoryId": "horticulture_landcare",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "342432",
+      "categoryId": 7,
+      "subcategoryId": "horticulture_landcare",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "342531",
+      "categoryId": 7,
+      "subcategoryId": "horticulture_landcare",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "342532",
+      "categoryId": 7,
+      "subcategoryId": "horticulture_landcare",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "342931",
+      "categoryId": 7,
+      "subcategoryId": "horticulture_landcare",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "343131",
+      "categoryId": 7,
+      "subcategoryId": "livestock_aquaculture",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "343233",
+      "categoryId": 7,
+      "subcategoryId": "livestock_aquaculture",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "343235",
+      "categoryId": 7,
+      "subcategoryId": "livestock_aquaculture",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "343299",
+      "categoryId": 7,
+      "subcategoryId": "livestock_aquaculture",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "351131",
+      "categoryId": 1,
+      "subcategoryId": "automotive_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "351231",
+      "categoryId": 1,
+      "subcategoryId": "automotive_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "351331",
+      "categoryId": 1,
+      "subcategoryId": "automotive_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "351431",
+      "categoryId": 1,
+      "subcategoryId": "automotive_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "351433",
+      "categoryId": 1,
+      "subcategoryId": "automotive_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "351434",
+      "categoryId": 1,
+      "subcategoryId": "automotive_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "351435",
+      "categoryId": 1,
+      "subcategoryId": "automotive_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "351436",
+      "categoryId": 1,
+      "subcategoryId": "automotive_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "351437",
+      "categoryId": 1,
+      "subcategoryId": "automotive_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "351531",
+      "categoryId": 1,
+      "subcategoryId": "automotive_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "351532",
+      "categoryId": 1,
+      "subcategoryId": "automotive_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "351631",
+      "categoryId": 1,
+      "subcategoryId": "automotive_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "361131",
+      "categoryId": 1,
+      "subcategoryId": "building_finishing",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "361231",
+      "categoryId": 1,
+      "subcategoryId": "building_finishing",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "362131",
+      "categoryId": 1,
+      "subcategoryId": "building_finishing",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "362231",
+      "categoryId": 1,
+      "subcategoryId": "building_finishing",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "362232",
+      "categoryId": 1,
+      "subcategoryId": "building_finishing",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "362331",
+      "categoryId": 1,
+      "subcategoryId": "building_finishing",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "362431",
+      "categoryId": 1,
+      "subcategoryId": "building_finishing",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "363131",
+      "categoryId": 1,
+      "subcategoryId": "plumbing",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "363231",
+      "categoryId": 1,
+      "subcategoryId": "plumbing",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "363331",
+      "categoryId": 1,
+      "subcategoryId": "plumbing",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "363931",
+      "categoryId": 1,
+      "subcategoryId": "plumbing",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "363932",
+      "categoryId": 1,
+      "subcategoryId": "plumbing",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "363933",
+      "categoryId": 1,
+      "subcategoryId": "plumbing",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "369131",
+      "categoryId": 1,
+      "subcategoryId": "wood_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "369931",
+      "categoryId": 1,
+      "subcategoryId": "wood_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "371131",
+      "categoryId": 1,
+      "subcategoryId": "masonry",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "371132",
+      "categoryId": 1,
+      "subcategoryId": "masonry",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "372131",
+      "categoryId": 1,
+      "subcategoryId": "carpentry",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "372132",
+      "categoryId": 1,
+      "subcategoryId": "carpentry",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "372133",
+      "categoryId": 1,
+      "subcategoryId": "carpentry",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "381131",
+      "categoryId": 1,
+      "subcategoryId": "electrical_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "381231",
+      "categoryId": 1,
+      "subcategoryId": "electrical_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "381232",
+      "categoryId": 1,
+      "subcategoryId": "electrical_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "381233",
+      "categoryId": 1,
+      "subcategoryId": "electrical_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "382131",
+      "categoryId": 1,
+      "subcategoryId": "electrical_electronic_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "382232",
+      "categoryId": 1,
+      "subcategoryId": "electrical_electronic_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "382233",
+      "categoryId": 1,
+      "subcategoryId": "electrical_electronic_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "382234",
+      "categoryId": 1,
+      "subcategoryId": "electrical_electronic_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "382331",
+      "categoryId": 1,
+      "subcategoryId": "electrical_electronic_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "382332",
+      "categoryId": 1,
+      "subcategoryId": "electrical_electronic_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "382333",
+      "categoryId": 1,
+      "subcategoryId": "electrical_electronic_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "382334",
+      "categoryId": 1,
+      "subcategoryId": "electrical_electronic_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "391231",
+      "categoryId": 8,
+      "subcategoryId": "media_production",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "391234",
+      "categoryId": 8,
+      "subcategoryId": "media_production",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "391299",
+      "categoryId": 8,
+      "subcategoryId": "media_production",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "391431",
+      "categoryId": 8,
+      "subcategoryId": "media_production",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "391432",
+      "categoryId": 8,
+      "subcategoryId": "media_production",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "391433",
+      "categoryId": 8,
+      "subcategoryId": "media_production",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "391434",
+      "categoryId": 8,
+      "subcategoryId": "media_production",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "391531",
+      "categoryId": 8,
+      "subcategoryId": "media_production",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "391932",
+      "categoryId": 8,
+      "subcategoryId": "media_production",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "392131",
+      "categoryId": 9,
+      "subcategoryId": "personal_care",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "392132",
+      "categoryId": 9,
+      "subcategoryId": "personal_care",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "399131",
+      "categoryId": 1,
+      "subcategoryId": "skilled_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "399132",
+      "categoryId": 1,
+      "subcategoryId": "skilled_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "399133",
+      "categoryId": 1,
+      "subcategoryId": "skilled_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "399231",
+      "categoryId": 4,
+      "subcategoryId": "resources_operations",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "399437",
+      "categoryId": 1,
+      "subcategoryId": "skilled_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "399438",
+      "categoryId": 1,
+      "subcategoryId": "skilled_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "399531",
+      "categoryId": 1,
+      "subcategoryId": "skilled_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "399532",
+      "categoryId": 1,
+      "subcategoryId": "skilled_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "399533",
+      "categoryId": 1,
+      "subcategoryId": "skilled_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "399534",
+      "categoryId": 1,
+      "subcategoryId": "skilled_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "399599",
+      "categoryId": 1,
+      "subcategoryId": "skilled_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "399931",
+      "categoryId": 1,
+      "subcategoryId": "marine_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "399932",
+      "categoryId": 10,
+      "subcategoryId": "maritime",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "399933",
+      "categoryId": 1,
+      "subcategoryId": "safety_equipment_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "399934",
+      "categoryId": 4,
+      "subcategoryId": "energy_utilities",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "399935",
+      "categoryId": 1,
+      "subcategoryId": "skilled_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "399936",
+      "categoryId": 1,
+      "subcategoryId": "skilled_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "399937",
+      "categoryId": 10,
+      "subcategoryId": "rail_transport",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "399938",
+      "categoryId": 1,
+      "subcategoryId": "marine_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "399999",
+      "categoryId": 1,
+      "subcategoryId": "skilled_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "411131",
+      "categoryId": 6,
+      "subcategoryId": "community_social_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "411132",
+      "categoryId": 6,
+      "subcategoryId": "community_social_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "411231",
+      "categoryId": 6,
+      "subcategoryId": "community_social_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "411232",
+      "categoryId": 6,
+      "subcategoryId": "community_social_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "411331",
+      "categoryId": 6,
+      "subcategoryId": "community_social_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "411332",
+      "categoryId": 6,
+      "subcategoryId": "community_social_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "411333",
+      "categoryId": 6,
+      "subcategoryId": "community_social_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "411431",
+      "categoryId": 6,
+      "subcategoryId": "community_social_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "411532",
+      "categoryId": 6,
+      "subcategoryId": "community_social_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "411632",
+      "categoryId": 6,
+      "subcategoryId": "community_social_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "411633",
+      "categoryId": 6,
+      "subcategoryId": "community_social_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "411634",
+      "categoryId": 6,
+      "subcategoryId": "community_social_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "411636",
+      "categoryId": 6,
+      "subcategoryId": "community_social_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "411731",
+      "categoryId": 6,
+      "subcategoryId": "community_social_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "411732",
+      "categoryId": 6,
+      "subcategoryId": "community_social_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "411733",
+      "categoryId": 6,
+      "subcategoryId": "community_social_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "411931",
+      "categoryId": 6,
+      "subcategoryId": "community_social_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "411932",
+      "categoryId": 6,
+      "subcategoryId": "community_social_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "411933",
+      "categoryId": 6,
+      "subcategoryId": "community_social_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "421131",
+      "categoryId": 2,
+      "subcategoryId": "aged_care",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "421132",
+      "categoryId": 2,
+      "subcategoryId": "aged_care",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "421231",
+      "categoryId": 2,
+      "subcategoryId": "aged_care",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "421331",
+      "categoryId": 2,
+      "subcategoryId": "aged_care",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "422131",
+      "categoryId": 2,
+      "subcategoryId": "disability_care",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "422132",
+      "categoryId": 2,
+      "subcategoryId": "disability_care",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "422231",
+      "categoryId": 2,
+      "subcategoryId": "disability_care",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "422232",
+      "categoryId": 2,
+      "subcategoryId": "disability_care",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "431131",
+      "categoryId": 6,
+      "subcategoryId": "early_childhood_education",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "431132",
+      "categoryId": 6,
+      "subcategoryId": "early_childhood_education",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "431231",
+      "categoryId": 6,
+      "subcategoryId": "early_childhood_education",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "431232",
+      "categoryId": 6,
+      "subcategoryId": "early_childhood_education",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "431431",
+      "categoryId": 6,
+      "subcategoryId": "early_childhood_education",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "441131",
+      "categoryId": 2,
+      "subcategoryId": "health_support",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "441231",
+      "categoryId": 2,
+      "subcategoryId": "health_support",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "441232",
+      "categoryId": 2,
+      "subcategoryId": "health_support",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "441233",
+      "categoryId": 2,
+      "subcategoryId": "health_support",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "441331",
+      "categoryId": 2,
+      "subcategoryId": "health_support",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "441931",
+      "categoryId": 2,
+      "subcategoryId": "health_support",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "441932",
+      "categoryId": 2,
+      "subcategoryId": "health_support",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "441933",
+      "categoryId": 2,
+      "subcategoryId": "health_support",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "442431",
+      "categoryId": 2,
+      "subcategoryId": "health_support",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "442531",
+      "categoryId": 2,
+      "subcategoryId": "health_support",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "442931",
+      "categoryId": 2,
+      "subcategoryId": "health_support",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "451231",
+      "categoryId": 9,
+      "subcategoryId": "emergency_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "451232",
+      "categoryId": 9,
+      "subcategoryId": "emergency_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "452235",
+      "categoryId": 9,
+      "subcategoryId": "protective_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "452238",
+      "categoryId": 9,
+      "subcategoryId": "protective_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "452241",
+      "categoryId": 9,
+      "subcategoryId": "protective_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "461131",
+      "categoryId": 9,
+      "subcategoryId": "personal_travel_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "461132",
+      "categoryId": 9,
+      "subcategoryId": "personal_travel_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "461632",
+      "categoryId": 9,
+      "subcategoryId": "personal_travel_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "461731",
+      "categoryId": 10,
+      "subcategoryId": "aviation",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "461831",
+      "categoryId": 10,
+      "subcategoryId": "travel_transport",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "462431",
+      "categoryId": 9,
+      "subcategoryId": "sport_recreation",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "462432",
+      "categoryId": 9,
+      "subcategoryId": "sport_recreation",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "462433",
+      "categoryId": 9,
+      "subcategoryId": "sport_recreation",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "462434",
+      "categoryId": 9,
+      "subcategoryId": "sport_recreation",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "462436",
+      "categoryId": 9,
+      "subcategoryId": "sport_recreation",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "462437",
+      "categoryId": 9,
+      "subcategoryId": "sport_recreation",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "462438",
+      "categoryId": 9,
+      "subcategoryId": "sport_recreation",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "462442",
+      "categoryId": 9,
+      "subcategoryId": "sport_recreation",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "462499",
+      "categoryId": 9,
+      "subcategoryId": "sport_recreation",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "471131",
+      "categoryId": 9,
+      "subcategoryId": "hospitality",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "471531",
+      "categoryId": 9,
+      "subcategoryId": "hospitality",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "471532",
+      "categoryId": 9,
+      "subcategoryId": "hospitality",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "471533",
+      "categoryId": 9,
+      "subcategoryId": "hospitality",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "471535",
+      "categoryId": 9,
+      "subcategoryId": "hospitality",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "471631",
+      "categoryId": 9,
+      "subcategoryId": "hospitality",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "471632",
+      "categoryId": 9,
+      "subcategoryId": "hospitality",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "511131",
+      "categoryId": 5,
+      "subcategoryId": "project_contract_administration",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "511231",
+      "categoryId": 5,
+      "subcategoryId": "project_contract_administration",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "521131",
+      "categoryId": 5,
+      "subcategoryId": "legal_administration",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "521231",
+      "categoryId": 5,
+      "subcategoryId": "legal_administration",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "521235",
+      "categoryId": 5,
+      "subcategoryId": "legal_administration",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "531333",
+      "categoryId": 5,
+      "subcategoryId": "financial_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "531334",
+      "categoryId": 5,
+      "subcategoryId": "financial_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "531532",
+      "categoryId": 5,
+      "subcategoryId": "financial_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "599931",
+      "categoryId": 2,
+      "subcategoryId": "health_information",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "599937",
+      "categoryId": 5,
+      "subcategoryId": "property_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "599941",
+      "categoryId": 5,
+      "subcategoryId": "workplace_relations",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "619932",
+      "categoryId": 9,
+      "subcategoryId": "retail",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "619935",
+      "categoryId": 9,
+      "subcategoryId": "retail",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "621131",
+      "categoryId": 5,
+      "subcategoryId": "insurance",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "622131",
+      "categoryId": 5,
+      "subcategoryId": "property_services",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "631432",
+      "categoryId": 1,
+      "subcategoryId": "automotive_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "711231",
+      "categoryId": 10,
+      "subcategoryId": "rail_bus_transport",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "711232",
+      "categoryId": 10,
+      "subcategoryId": "rail_bus_transport",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "711331",
+      "categoryId": 10,
+      "subcategoryId": "rail_bus_transport",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "711332",
+      "categoryId": 10,
+      "subcategoryId": "rail_bus_transport",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "713131",
+      "categoryId": 10,
+      "subcategoryId": "road_freight",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "713231",
+      "categoryId": 10,
+      "subcategoryId": "road_freight",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "731131",
+      "categoryId": 4,
+      "subcategoryId": "manufacturing_operations",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "731232",
+      "categoryId": 4,
+      "subcategoryId": "manufacturing_operations",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "731333",
+      "categoryId": 4,
+      "subcategoryId": "manufacturing_operations",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "732131",
+      "categoryId": 4,
+      "subcategoryId": "resources_plant_operations",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "732331",
+      "categoryId": 4,
+      "subcategoryId": "resources_plant_operations",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "732431",
+      "categoryId": 4,
+      "subcategoryId": "resources_plant_operations",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "741131",
+      "categoryId": 1,
+      "subcategoryId": "construction_plant_operations",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "741231",
+      "categoryId": 1,
+      "subcategoryId": "construction_plant_operations",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "741233",
+      "categoryId": 1,
+      "subcategoryId": "construction_plant_operations",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "741234",
+      "categoryId": 1,
+      "subcategoryId": "construction_plant_operations",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "741235",
+      "categoryId": 1,
+      "subcategoryId": "construction_plant_operations",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "741236",
+      "categoryId": 1,
+      "subcategoryId": "construction_plant_operations",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "741931",
+      "categoryId": 1,
+      "subcategoryId": "construction_plant_operations",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "741933",
+      "categoryId": 1,
+      "subcategoryId": "construction_plant_operations",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "741935",
+      "categoryId": 1,
+      "subcategoryId": "construction_plant_operations",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "741936",
+      "categoryId": 1,
+      "subcategoryId": "construction_plant_operations",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "821731",
+      "categoryId": 1,
+      "subcategoryId": "construction_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "821732",
+      "categoryId": 1,
+      "subcategoryId": "construction_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "821733",
+      "categoryId": 1,
+      "subcategoryId": "construction_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "821934",
+      "categoryId": 1,
+      "subcategoryId": "construction_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "821935",
+      "categoryId": 1,
+      "subcategoryId": "construction_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "831231",
+      "categoryId": 7,
+      "subcategoryId": "food_agriculture_processing",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "831232",
+      "categoryId": 7,
+      "subcategoryId": "food_agriculture_processing",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "899231",
+      "categoryId": 10,
+      "subcategoryId": "maritime",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "899431",
+      "categoryId": 1,
+      "subcategoryId": "automotive_trades",
+      "confidence": "rule-mapped"
+    },
+    {
+      "oscaCode": "899432",
+      "categoryId": 1,
+      "subcategoryId": "automotive_trades",
+      "confidence": "rule-mapped"
+    }
+  ]
+}
