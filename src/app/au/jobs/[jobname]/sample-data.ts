@@ -11,7 +11,7 @@ export type OccupationDetail = {
   skillsCore: string[]
   skillsEdge: string[]
   credentials: { title: string; details: string }[]
-  outlook: {
+  outlook?: {
     years: { year: number; level: number }[]
     reason: string
   }
@@ -246,6 +246,10 @@ export const AU_OCCUPATION_DETAILS: Record<string, OccupationDetail> = {
 
 export function getOccupationDetail(slug: string): OccupationDetail | null {
   return AU_OCCUPATION_DETAILS[slug] ?? null
+}
+
+export function getOccupationDetailByAnzsco(anzscoCode: string): OccupationDetail | null {
+  return Object.values(AU_OCCUPATION_DETAILS).find((detail) => detail.anzscoCode === anzscoCode) ?? null
 }
 
 export function getAllOccupationSlugs(): string[] {

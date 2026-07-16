@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react"
 import Link from "next/link"
 import { Search, ArrowUpDown } from "lucide-react"
+import { getAuOccupationPath } from "@/lib/au-occupation-slug"
 
 type OccRow = {
   anzsco_code: string
@@ -12,16 +13,6 @@ type OccRow = {
 }
 
 type SortKey = "alpha" | "salary" | "shortage"
-
-function slugify(value: string): string {
-  return value
-    .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .replace(/&/g, " and ")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-}
 
 export function AuJobsClient({ occupations }: { occupations: OccRow[] }) {
   const [query, setQuery] = useState("")
@@ -98,7 +89,7 @@ export function AuJobsClient({ occupations }: { occupations: OccRow[] }) {
           {filtered.map((occ) => (
             <Link
               key={occ.anzsco_code}
-              href={`/au/jobs/${slugify(occ.occupation_en)}`}
+              href={getAuOccupationPath(occ, occupations)}
               className="group p-4 rounded-xl border border-slate-200 hover:border-brand/40 hover:bg-brand-tint transition-colors"
             >
               <div className="font-medium text-sm text-foreground group-hover:text-brand-press leading-snug mb-2">

@@ -1,9 +1,17 @@
 "use client"
 
 import Link from "next/link"
-import { ExternalLink, ArrowRight, MapPin, Briefcase, DollarSign, Star } from "lucide-react"
+import { ExternalLink, ArrowRight, MapPin, DollarSign, Star } from "lucide-react"
 import type { OccupationDetail } from "./sample-data"
 import JobListings from "@/app/map/JobListings"
+import type { AuOfficialOccupationContent } from "@/lib/au-osca-content"
+
+type RelatedCourse = {
+  id: number
+  title: string
+  courseUrl: string | null
+  durationYears: number | null
+}
 
 type Props = {
   detail: OccupationDetail
@@ -11,6 +19,9 @@ type Props = {
   shortageRating: number | null
   onCSOL: boolean
   stateShortages: { state: string; rating: number }[]
+  relatedCourses: RelatedCourse[]
+  dataNote: string | null
+  officialContent: AuOfficialOccupationContent | null
 }
 
 const AU_STATES = ["NSW", "VIC", "QLD", "WA", "SA", "TAS", "NT", "ACT"]
@@ -40,7 +51,7 @@ function OutlookBar({ level, maxLevel = 5 }: { level: number; maxLevel?: number 
   )
 }
 
-export function OccupationDetailClient({ detail, salary, shortageRating, onCSOL, stateShortages }: Props) {
+export function OccupationDetailClient({ detail, salary, shortageRating, onCSOL, stateShortages, relatedCourses, dataNote, officialContent }: Props) {
   const stateMap = new Map(stateShortages.map((s) => [s.state, s.rating]))
 
   return (
@@ -65,7 +76,7 @@ export function OccupationDetailClient({ detail, salary, shortageRating, onCSOL,
             {detail.name} — Australia
           </h1>
           <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-500">
-            <span>ANZSCO {detail.anzscoCode}</span>
+            <span>OSCA {detail.anzscoCode}</span>
             <span>·</span>
             <span>Updated: {detail.lastVerified}</span>
             <span>·</span>
@@ -92,7 +103,7 @@ export function OccupationDetailClient({ detail, salary, shortageRating, onCSOL,
             </div>
             <p className="mt-1 text-xs text-slate-400">by region</p>
             <div className="mt-4 space-y-2">
-              {AU_STATES.map((state) => {
+              {stateShortages.length > 0 ? AU_STATES.map((state) => {
                 const rating = stateMap.get(state)
                 return (
                   <div key={state} className="flex items-center justify-between text-sm">
@@ -104,7 +115,7 @@ export function OccupationDetailClient({ detail, salary, shortageRating, onCSOL,
                     )}
                   </div>
                 )
-              })}
+              }) : <p className="text-sm leading-5 text-slate-400">State-level shortage data is not yet published for this occupation.</p>}
             </div>
           </div>
 
@@ -149,31 +160,44 @@ export function OccupationDetailClient({ detail, salary, shortageRating, onCSOL,
         <section className="rounded-2xl border border-slate-200 bg-white p-5">
           <h2 className="text-lg font-semibold text-slate-950">What you actually do</h2>
           <p className="mt-3 text-sm leading-6 text-slate-600">{detail.description}</p>
-          <div className="mt-4">
+          {detail.environments.length > 0 && <div className="mt-4">
             <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Typical environments</p>
             <div className="mt-2 flex flex-wrap gap-2">
               {detail.environments.map((env) => (
                 <span key={env} className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">{env}</span>
               ))}
             </div>
-          </div>
-          <a
+          </div>}
+          {officialContent && (officialContent.alternativeTitles.length > 0 || officialContent.specialisations.length > 0) && <div className="mt-4 space-y-3">
+            {officialContent.alternativeTitles.length > 0 && <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Alternative titles</p>
+              <p className="mt-1 text-sm text-slate-600">{officialContent.alternativeTitles.join(" · ")}</p>
+            </div>}
+            {officialContent.specialisations.length > 0 && <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Specialisations</p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {officialContent.specialisations.map((item) => <span key={item} className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">{item}</span>)}
+              </div>
+            </div>}
+          </div>}
+          {officialContent?.inclusionAndExclusion && <p className="mt-4 rounded-lg bg-slate-50 p-3 text-xs leading-5 text-slate-500">Scope note: {officialContent.inclusionAndExclusion}</p>}
+          {detail.anzscoDescriptionUrl && <a
             href={detail.anzscoDescriptionUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-blue-600 hover:underline"
           >
-            Read official ANZSCO description <ExternalLink className="h-3.5 w-3.5" />
-          </a>
+            Read official OSCA description <ExternalLink className="h-3.5 w-3.5" />
+          </a>}
         </section>
 
         {/* Skills Map + Credentials */}
         <div className="grid gap-5 lg:grid-cols-2">
           {/* Skills Map */}
           <section className="rounded-2xl border border-slate-200 bg-white p-5">
-            <h2 className="text-lg font-semibold text-slate-950">Skills Map (What to learn)</h2>
-            <div className="mt-4">
-              <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-400">Must-have (core)</h3>
+            <h2 className="text-lg font-semibold text-slate-950">Skills & main tasks</h2>
+            {detail.skillsCore.length > 0 ? <div className="mt-4">
+              <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-400">Skills to build</h3>
               <ul className="mt-2 space-y-2">
                 {detail.skillsCore.map((skill) => (
                   <li key={skill} className="flex items-start gap-2 text-sm text-slate-700">
@@ -182,8 +206,13 @@ export function OccupationDetailClient({ detail, salary, shortageRating, onCSOL,
                   </li>
                 ))}
               </ul>
-            </div>
-            <div className="mt-5">
+            </div> : officialContent?.mainTasks.length ? <div className="mt-4">
+              <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-400">Official main tasks</h3>
+              <ul className="mt-2 space-y-2">
+                {officialContent.mainTasks.map((task) => <li key={task} className="flex items-start gap-2 text-sm leading-6 text-slate-700"><span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-600" />{task}</li>)}
+              </ul>
+            </div> : <p className="mt-4 text-sm leading-6 text-slate-500">Occupation-specific skills are being verified against an authoritative source.</p>}
+            {detail.skillsEdge.length > 0 && <div className="mt-5">
               <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-400">Nice-to-have (edge)</h3>
               <ul className="mt-2 space-y-2">
                 {detail.skillsEdge.map((skill) => (
@@ -193,19 +222,37 @@ export function OccupationDetailClient({ detail, salary, shortageRating, onCSOL,
                   </li>
                 ))}
               </ul>
-            </div>
+            </div>}
           </section>
 
           {/* Credentials & Pathway */}
           <section className="rounded-2xl border border-slate-200 bg-white p-5">
             <h2 className="text-lg font-semibold text-slate-950">Credentials & Pathway</h2>
             <div className="mt-4 space-y-4">
-              {detail.credentials.map((cred) => (
+              {officialContent?.skillLevel != null && <div className="rounded-xl bg-slate-50 p-4">
+                <p className="text-sm font-semibold text-slate-900">OSCA skill level {officialContent.skillLevel}</p>
+                <p className="mt-1 text-xs leading-5 text-slate-500">A classification attribute describing the occupation; it is not a personal eligibility or qualification decision.</p>
+              </div>}
+              {officialContent?.registrationOrLicensing && <div className="rounded-xl bg-slate-50 p-4">
+                <p className="text-sm font-semibold text-slate-900">Registration or licensing</p>
+                <p className="mt-1 text-xs leading-5 text-slate-500">{officialContent.registrationOrLicensing}</p>
+              </div>}
+              {detail.credentials.length > 0 ? detail.credentials.map((cred) => (
                 <div key={cred.title} className="rounded-xl bg-slate-50 p-4">
                   <p className="text-sm font-semibold text-slate-900">{cred.title}</p>
                   <p className="mt-1 text-xs leading-5 text-slate-500">{cred.details}</p>
                 </div>
-              ))}
+              )) : <p className="text-sm leading-6 text-slate-500">Licence, registration and qualification requirements vary by employer and state. Verify requirements with the relevant regulator before enrolling or applying.</p>}
+              {relatedCourses.length > 0 && <div className="border-t border-slate-100 pt-4">
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Related study options</p>
+                <div className="mt-2 space-y-2">
+                  {relatedCourses.map((course) => (
+                    course.courseUrl ? <a key={course.id} href={course.courseUrl} target="_blank" rel="noopener noreferrer" className="block text-sm font-medium text-blue-700 hover:underline">
+                      {course.title}{course.durationYears ? ` · ${course.durationYears} years` : ""}
+                    </a> : <p key={course.id} className="text-sm text-slate-700">{course.title}{course.durationYears ? ` · ${course.durationYears} years` : ""}</p>
+                  ))}
+                </div>
+              </div>}
             </div>
           </section>
         </div>
@@ -227,8 +274,13 @@ export function OccupationDetailClient({ detail, salary, shortageRating, onCSOL,
           </a>
         </section>
 
+        {dataNote && <section className="rounded-2xl border border-slate-200 bg-white p-5">
+          <h2 className="text-lg font-semibold text-slate-950">Data status</h2>
+          <p className="mt-2 text-sm leading-6 text-slate-600">{dataNote}</p>
+        </section>}
+
         {/* 3-year outlook */}
-        <section className="rounded-2xl border border-slate-200 bg-white p-5">
+        {detail.outlook && <section className="rounded-2xl border border-slate-200 bg-white p-5">
           <h2 className="text-lg font-semibold text-slate-950">3-year outlook</h2>
           <div className="mt-4 flex flex-wrap items-end gap-6">
             {detail.outlook.years.map((y) => (
@@ -240,7 +292,7 @@ export function OccupationDetailClient({ detail, salary, shortageRating, onCSOL,
             <span className="mb-2 text-xs text-slate-400">(forecast)</span>
           </div>
           <p className="mt-4 text-sm leading-6 text-slate-600">{detail.outlook.reason}</p>
-        </section>
+        </section>}
 
         {/* For employers CTA */}
         <section className="rounded-2xl border border-blue-200 bg-blue-50 p-6">

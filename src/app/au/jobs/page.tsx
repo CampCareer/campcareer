@@ -11,7 +11,7 @@ export const revalidate = 86400
 export const metadata: Metadata = pageMetadata({
   title: "Australia Jobs & Occupations — Salary & PR Eligibility | CampCareer",
   description:
-    "Browse all 395+ ANZSCO occupations in Australia. Compare median salaries, skills shortage ratings, and permanent residency eligibility for each role.",
+    "Browse all 395+ OSCA occupations in Australia. Compare median salaries, skills shortage ratings, and permanent residency eligibility for each role.",
   path: "/au/jobs",
 })
 
@@ -71,7 +71,7 @@ export default async function AuJobsPage() {
             Australian Occupations ({occupations.length})
           </h1>
           <p className="text-slate-600">
-            All ANZSCO-classified occupations with median salary, skills shortage ratings,
+            All OSCA-classified occupations with median salary, skills shortage ratings,
             and permanent residency eligibility. Based on Australian government data.
           </p>
         </div>

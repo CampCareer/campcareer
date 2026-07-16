@@ -27,6 +27,8 @@ import { DK_UNIVERSITIES } from "@/data/dk-map-data"
 import { FI_UNIVERSITIES } from "@/data/fi-map-data"
 import { STUDY_CONCEPTS } from "@/data/study-concepts"
 import { isCountrySearchIndexable } from "@/lib/new-country-release-gate"
+import { supabaseAdmin } from "@/lib/supabase-admin"
+import { getAuOccupationSlug } from "@/lib/au-occupation-slug"
 
 const BASE = "https://www.campcareer.com"
 
@@ -125,6 +127,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly" as const,
     })))
   }
+
+  const { data: auOccupations } = await supabaseAdmin
+    .from("occupations_au")
+    .select("anzsco_code, occupation_en, last_verified")
+    .not("anzsco_code", "is", null)
+    .order("occupation_en")
+  const auJobRows = (auOccupations ?? []) as { anzsco_code: string; occupation_en: string; last_verified: string | null }[]
+  const auJobPages: MetadataRoute.Sitemap = auJobRows.map((occupation) => ({
+    url: `${BASE}/au/jobs/${getAuOccupationSlug(occupation, auJobRows)}`,
+    lastModified: occupation.last_verified ? new Date(occupation.last_verified) : lastModStatic,
+    priority: 0.65,
+    changeFrequency: "weekly" as const,
+  }))
 
   const pilotOccupationPages: MetadataRoute.Sitemap = PILOT_OCCUPATIONS
     .filter(isPilotOccupationIndexable)
@@ -288,9 +303,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }))
   })
 
-  const total = staticPages.length + countryProfileStaticPages.length + blogPages.length + countryDetailPages.length + mapOccupationPages.length + pilotOccupationPages.length +
+  const total = staticPages.length + countryProfileStaticPages.length + blogPages.length + countryDetailPages.length + mapOccupationPages.length + auJobPages.length + pilotOccupationPages.length +
     ieLangSchoolPages.length + mapPages.length + jpMapPages.length + sgMapPages.length + krRegionPages.length + krUniversityPages.length + frRegionPages.length + frCityPages.length + frUniversityPages.length + esCommunityPages.length + esProvincePages.length + esCityPages.length + esUniversityPages.length + nzUniversityPages.length + noUniversityPages.length + seUniversityPages.length + dkUniversityPages.length + fiUniversityPages.length + usUnivPages.length + auUnivPages.length + caUnivPages.length + ukUnivPages.length + deUnivPages.length + nlUnivPages.length + fieldPages.length + countryFieldPages.length
-  console.log(`[sitemap] counts — static: ${staticPages.length}, blog: ${blogPages.length}, country details: ${countryDetailPages.length}, map occupations: ${mapOccupationPages.length}, pilot occupations: ${pilotOccupationPages.length}, IE schools: ${ieLangSchoolPages.length}, map: ${mapPages.length}, JP regional maps: ${jpMapPages.length}, SG regional maps: ${sgMapPages.length}, KR regional maps: ${krRegionPages.length}, KR universities: ${krUniversityPages.length}, FR regions: ${frRegionPages.length}, FR cities: ${frCityPages.length}, FR universities: ${frUniversityPages.length}, NZ universities: ${nzUniversityPages.length}, NO universities: ${noUniversityPages.length}, SE universities: ${seUniversityPages.length}, DK universities: ${dkUniversityPages.length}, FI universities: ${fiUniversityPages.length}, US universities: ${usUnivPages.length}, AU universities: ${auUnivPages.length}, CA universities: ${caUnivPages.length}, UK universities: ${ukUnivPages.length}, DE universities: ${deUnivPages.length}, NL universities: ${nlUnivPages.length}, TOTAL: ${total}`)
+  console.log(`[sitemap] counts — static: ${staticPages.length}, blog: ${blogPages.length}, country details: ${countryDetailPages.length}, map occupations: ${mapOccupationPages.length}, AU job details: ${auJobPages.length}, pilot occupations: ${pilotOccupationPages.length}, IE schools: ${ieLangSchoolPages.length}, map: ${mapPages.length}, JP regional maps: ${jpMapPages.length}, SG regional maps: ${sgMapPages.length}, KR regional maps: ${krRegionPages.length}, KR universities: ${krUniversityPages.length}, FR regions: ${frRegionPages.length}, FR cities: ${frCityPages.length}, FR universities: ${frUniversityPages.length}, NZ universities: ${nzUniversityPages.length}, NO universities: ${noUniversityPages.length}, SE universities: ${seUniversityPages.length}, DK universities: ${dkUniversityPages.length}, FI universities: ${fiUniversityPages.length}, US universities: ${usUnivPages.length}, AU universities: ${auUnivPages.length}, CA universities: ${caUnivPages.length}, UK universities: ${ukUnivPages.length}, DE universities: ${deUnivPages.length}, NL universities: ${nlUnivPages.length}, TOTAL: ${total}`)
 
-  return [...staticPages, ...countryProfileStaticPages, ...blogPages, ...countryDetailPages, ...fieldPages, ...countryFieldPages, ...mapOccupationPages, ...pilotOccupationPages, ...ieLangSchoolPages, ...mapPages, ...jpMapPages, ...sgMapPages, ...krRegionPages, ...krUniversityPages, ...frRegionPages, ...frCityPages, ...frUniversityPages, ...esCommunityPages, ...esProvincePages, ...esCityPages, ...esUniversityPages, ...nzUniversityPages, ...noUniversityPages, ...seUniversityPages, ...dkUniversityPages, ...fiUniversityPages, ...usUnivPages, ...auUnivPages, ...caUnivPages, ...ukUnivPages, ...deUnivPages, ...nlUnivPages]
+  return [...staticPages, ...countryProfileStaticPages, ...blogPages, ...countryDetailPages, ...fieldPages, ...countryFieldPages, ...mapOccupationPages, ...auJobPages, ...pilotOccupationPages, ...ieLangSchoolPages, ...mapPages, ...jpMapPages, ...sgMapPages, ...krRegionPages, ...krUniversityPages, ...frRegionPages, ...frCityPages, ...frUniversityPages, ...esCommunityPages, ...esProvincePages, ...esCityPages, ...esUniversityPages, ...nzUniversityPages, ...noUniversityPages, ...seUniversityPages, ...dkUniversityPages, ...fiUniversityPages, ...usUnivPages, ...auUnivPages, ...caUnivPages, ...ukUnivPages, ...deUnivPages, ...nlUnivPages]
 }
