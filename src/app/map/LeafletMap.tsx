@@ -2187,7 +2187,7 @@ export default function LeafletMap({
       <style>{".leaflet-interactive:focus { outline: none !important; }"}</style>
       <div
         ref={containerRef}
-        className="h-full w-full bg-[#dceef9]"
+        className="h-full w-full bg-[#e8f4fd]"
         aria-label="Interactive career and salary map"
       />
 
