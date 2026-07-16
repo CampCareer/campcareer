@@ -97,29 +97,26 @@ export function CountrySearchClient({ initial }: { initial: { country?: string; 
 
   const searchBar = <>
     {expanded && <div className="fixed inset-0 z-40 bg-black/40" onClick={() => setExpanded(false)} />}
-    <div className={`relative z-50 mx-auto max-w-4xl ${expanded ? "mb-8" : ""}`}>
-      {!expanded ? (
-        <button type="button" onClick={() => setExpanded(true)} className="flex w-full items-center gap-3 rounded-2xl border border-slate-200 bg-white px-5 py-3.5 shadow-sm transition hover:border-blue-300 hover:shadow-md">
-          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-slate-100 text-base">{countryIcon}</span>
-          <span className="text-sm font-medium text-slate-700">{countryLabel}</span>
-          <span className="h-1 w-1 rounded-full bg-slate-300" />
-          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-slate-100 text-base">{majorIcon}</span>
-          <span className="text-sm font-medium text-slate-700">{majorLabel}</span>
-          {goalLabel && <><span className="h-1 w-1 rounded-full bg-slate-300" /><span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-slate-100 text-base">{goalIcon}</span><span className="text-sm font-medium text-slate-700">{goalLabel}</span></>}
-        </button>
-      ) : (
-        <form action={href} onSubmit={(event) => { event.preventDefault(); recordDiscoveryEvent("recommendation_start", { surface: "country_results", country, major, goal }); router.push(href) }} className="rounded-2xl border border-slate-200 bg-white p-3 shadow-lg">
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
-            <div className="flex-1"><IconPicker name="country" label={isKo ? "나라" : "Where"} value={country} options={countryOptions} onChange={setCountry} searchPlaceholder={isKo ? "국가 검색" : "Search countries"} testId="country" /></div>
-            <div className="flex-1"><IconPicker name="major" label={isKo ? "전공" : "Major"} value={major} options={majorOptions} onChange={setMajor} searchPlaceholder={isKo ? "전공 검색" : "Search majors"} testId="major" /></div>
-            <div className="flex-1"><IconPicker name="goal" label={isKo ? "목표" : "Goal"} value={goal} options={goalOptions} onChange={(value) => setGoal(value as LandingGoalId)} testId="goal" /></div>
-            <div className="flex gap-2">
-              <button type="submit" className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700"><span>{isKo ? "검색" : "Search"}</span><ArrowRight className="h-4 w-4" /></button>
-              <button type="button" onClick={() => setExpanded(false)} className="inline-flex h-12 w-12 items-center justify-center rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50"><X className="h-4 w-4" /></button>
-            </div>
+    <div className="relative z-50 mx-auto max-w-4xl">
+      <button type="button" onClick={() => setExpanded(true)} className={`flex w-full items-center gap-3 rounded-2xl border border-slate-200 bg-white px-5 py-3.5 shadow-sm transition hover:border-blue-300 hover:shadow-md ${expanded ? "pointer-events-none invisible" : ""}`}>
+        <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-slate-100 text-base">{countryIcon}</span>
+        <span className="text-sm font-medium text-slate-700">{countryLabel}</span>
+        <span className="h-1 w-1 rounded-full bg-slate-300" />
+        <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-slate-100 text-base">{majorIcon}</span>
+        <span className="text-sm font-medium text-slate-700">{majorLabel}</span>
+        {goalLabel && <><span className="h-1 w-1 rounded-full bg-slate-300" /><span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-slate-100 text-base">{goalIcon}</span><span className="text-sm font-medium text-slate-700">{goalLabel}</span></>}
+      </button>
+      {expanded && <form action={href} onSubmit={(event) => { event.preventDefault(); recordDiscoveryEvent("recommendation_start", { surface: "country_results", country, major, goal }); router.push(href) }} className="absolute left-0 right-0 top-full z-50 mt-2 rounded-2xl border border-slate-200 bg-white p-3 shadow-lg">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
+          <div className="flex-1"><IconPicker name="country" label={isKo ? "나라" : "Where"} value={country} options={countryOptions} onChange={setCountry} searchPlaceholder={isKo ? "국가 검색" : "Search countries"} testId="country" /></div>
+          <div className="flex-1"><IconPicker name="major" label={isKo ? "전공" : "Major"} value={major} options={majorOptions} onChange={setMajor} searchPlaceholder={isKo ? "전공 검색" : "Search majors"} testId="major" /></div>
+          <div className="flex-1"><IconPicker name="goal" label={isKo ? "목표" : "Goal"} value={goal} options={goalOptions} onChange={(value) => setGoal(value as LandingGoalId)} testId="goal" /></div>
+          <div className="flex gap-2">
+            <button type="submit" className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700"><span>{isKo ? "검색" : "Search"}</span><ArrowRight className="h-4 w-4" /></button>
+            <button type="button" onClick={() => setExpanded(false)} className="inline-flex h-12 w-12 items-center justify-center rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50"><X className="h-4 w-4" /></button>
           </div>
-        </form>
-      )}
+        </div>
+      </form>}
     </div>
   </>
 
