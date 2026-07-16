@@ -4,7 +4,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useEffect, useMemo, useRef, useState } from "react"
-import { ArrowRight, Building2, CircleAlert, ExternalLink, MapPinned } from "lucide-react"
+import { ArrowRight, Building2, CircleAlert, ExternalLink, MapPinned, Search, X } from "lucide-react"
 import { CANONICAL_CAREERS, careersForCategory } from "@/data/career-comparison-catalog"
 import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
 import { STUDY_CATEGORIES, STUDY_CONCEPTS } from "@/data/study-concepts"
@@ -36,6 +36,7 @@ export function CountrySearchClient({ initial }: { initial: { country?: string; 
   const [goal, setGoal] = useState<LandingGoalId | "">(initial.goal as LandingGoalId ?? "")
   const [result, setResult] = useState<LandingDiscoveryResult | null>(null)
   const [loading, setLoading] = useState(false)
+  const [expanded, setExpanded] = useState(false)
   const lastTrackedResult = useRef("")
   const hasGoal = Boolean(goal)
   const selectedCountry = country === "everywhere" ? null : getLaunchCountry(country)
@@ -63,19 +64,40 @@ export function CountrySearchClient({ initial }: { initial: { country?: string; 
   }, [country, goal, hasGoal, major, result, selectedCountry])
 
   const href = productHref("/countries/search", locale, { country, major, ...(goal ? { goal } : {}) })
+
+  const countryLabel = country === "everywhere" ? "Everywhere" : getLaunchCountry(country)?.name ?? country
+  const majorLabel = major === "anything" ? "Any major" : STUDY_CONCEPTS.find((c) => c.id === major)?.label ?? major
+  const goalLabel = goal ? LANDING_GOALS.find((g) => g.id === goal)?.label ?? goal : ""
+
   const searchAndResult = <>
-    <form action={href} onSubmit={(event) => { event.preventDefault(); recordDiscoveryEvent("recommendation_start", { surface: "country_results", country, major, goal }); router.push(href) }} className="grid gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm lg:grid-cols-[1fr_1.2fr_1.2fr_auto]">
-      <Select label="Where do you want to study?" value={country} onChange={setCountry} options={[{ value: "everywhere", label: "Everywhere" }, ...LAUNCH_COUNTRIES.map((item) => ({ value: item.code, label: item.name }))]} />
-      <Select label="What do you want to study?" value={major} onChange={setMajor} options={[{ value: "anything", label: "Anything" }, ...STUDY_CONCEPTS.map((item) => ({ value: item.id, label: item.label }))]} />
-      <Select label="What matters most?" value={goal} onChange={(value) => setGoal(value as LandingGoalId)} options={LANDING_GOALS.map((item) => ({ value: item.id, label: item.label }))} />
-      <button className="mt-auto inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white hover:bg-blue-700">See country signals <ArrowRight className="h-4 w-4" /></button>
-    </form>
+    {expanded && <div className="fixed inset-0 z-40 bg-black/40" onClick={() => setExpanded(false)} />}
+    <div className={`relative z-50 mx-auto max-w-4xl ${expanded ? "mb-8" : ""}`}>
+      {!expanded ? (
+        <button type="button" onClick={() => setExpanded(true)} className="flex w-full items-center gap-3 rounded-2xl border border-slate-200 bg-white px-5 py-3.5 shadow-sm transition hover:border-blue-300 hover:shadow-md">
+          <Search className="h-4 w-4 shrink-0 text-slate-400" />
+          <span className="text-sm font-medium text-slate-700">{countryLabel}</span>
+          <span className="h-1 w-1 rounded-full bg-slate-300" />
+          <span className="text-sm font-medium text-slate-700">{majorLabel}</span>
+          {goalLabel && <><span className="h-1 w-1 rounded-full bg-slate-300" /><span className="text-sm font-medium text-slate-700">{goalLabel}</span></>}
+        </button>
+      ) : (
+        <form action={href} onSubmit={(event) => { event.preventDefault(); recordDiscoveryEvent("recommendation_start", { surface: "country_results", country, major, goal }); router.push(href) }} className="grid gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-lg lg:grid-cols-[1fr_1.2fr_1.2fr_auto]">
+          <Select label="Where" value={country} onChange={setCountry} options={[{ value: "everywhere", label: "Everywhere" }, ...LAUNCH_COUNTRIES.map((item) => ({ value: item.code, label: item.name }))]} />
+          <Select label="Major" value={major} onChange={setMajor} options={[{ value: "anything", label: "Anything" }, ...STUDY_CONCEPTS.map((item) => ({ value: item.id, label: item.label }))]} />
+          <Select label="Goal" value={goal} onChange={(value) => setGoal(value as LandingGoalId)} options={LANDING_GOALS.map((item) => ({ value: item.id, label: item.label }))} />
+          <div className="flex gap-2">
+            <button type="submit" className="mt-auto inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white hover:bg-blue-700">Search <ArrowRight className="h-4 w-4" /></button>
+            <button type="button" onClick={() => setExpanded(false)} className="mt-auto inline-flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50"><X className="h-4 w-4" /></button>
+          </div>
+        </form>
+      )}
+    </div>
     {!hasGoal ? <CountryBrowse major={major} onMajorChange={setMajor} onGoalChange={setGoal} locale={locale} /> : selectedCountry ? <RegionSelection country={selectedCountry} major={major} goal={goal} locale={locale} /> : loading ? <LoadingCards /> : result ? <LandingDiscoveryResults result={result} locale={locale} /> : <SearchNotice title="Discovery results are unavailable" body="Try again in a moment, or open a country profile from the landing page." />}
   </>
 
   if (selectedCountry) return <div className="bg-slate-50"><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 sm:py-10">{searchAndResult}</main></div>
 
-  return <DiscoveryLayout eyebrow="Countries" title={hasGoal ? "Which destination best fits your goal?" : "Explore countries before you decide."} body={hasGoal ? "Choose a country, a major, or neither. Your goal is all we need to start exploring." : "Start broad, then use the filters between the search and country cards to decide what matters most."}>{searchAndResult}</DiscoveryLayout>
+  return <div className="bg-slate-50"><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 sm:py-10">{searchAndResult}</main></div>
 }
 
 function CountryBrowse({ major, onMajorChange, onGoalChange, locale }: { major: string; onMajorChange: (value: string) => void; onGoalChange: (value: LandingGoalId) => void; locale: "en" | "ko" }) {
