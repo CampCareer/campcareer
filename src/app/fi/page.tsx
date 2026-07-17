@@ -26,6 +26,7 @@ export default function FinlandHubPage() {
       cityCount={FI_CITIES.length}
       institutionCount={FI_UNIVERSITIES.length}
       jobsPath="/fi/jobs"
+      countryRoiCode="FI"
     />
   )
 }

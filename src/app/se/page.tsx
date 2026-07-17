@@ -26,6 +26,7 @@ export default function SwedenHubPage() {
       cityCount={SE_CITIES.length}
       institutionCount={SE_UNIVERSITIES.length}
       jobsPath="/se/jobs"
+      countryRoiCode="SE"
     />
   )
 }

@@ -17,5 +17,5 @@ export const metadata: Metadata = {
 }
 
 export default function SwitzerlandHubPage() {
-  return <CountryHub countryCode="CH" countryName="Switzerland" classificationLabel="CH-ISCO-19" regions={CH_REGIONS} cityCount={CH_CITIES.length} institutionCount={CH_UNIVERSITIES.length} jobsPath="/map?country=ch" showDataNotice={false} />
+  return <CountryHub countryCode="CH" countryName="Switzerland" classificationLabel="CH-ISCO-19" regions={CH_REGIONS} cityCount={CH_CITIES.length} institutionCount={CH_UNIVERSITIES.length} jobsPath="/map?country=ch" showDataNotice={false} countryRoiCode="CH" />
 }

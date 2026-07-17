@@ -26,6 +26,7 @@ export default function DenmarkHubPage() {
       cityCount={DK_CITIES.length}
       institutionCount={DK_UNIVERSITIES.length}
       jobsPath="/dk/jobs"
+      countryRoiCode="DK"
     />
   )
 }

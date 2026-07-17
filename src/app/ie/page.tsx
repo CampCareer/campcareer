@@ -6,6 +6,7 @@ import ieGraduateOutcomesRaw from "@/data/ie-graduate-outcomes.json"
 import { getIrelandOccupations } from "@/lib/country-occupation-data"
 import { getAllSlugs, getCities } from "@/lib/language-schools-ie"
 import { pageMetadata } from "@/lib/seo"
+import { IrelandDecisionOverview, IrelandQuickRoiPreview } from "@/components/country-profiles/australia-decision-overview"
 
 export const revalidate = 86400
 
@@ -46,35 +47,20 @@ export default async function IrelandHubPage() {
       ])} />
 
       <div className="mx-auto max-w-5xl px-4 py-12">
-        <section className="mb-12">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-slate-400">
-            Ireland
-          </p>
-          <h1 className="mb-4 text-4xl font-bold tracking-tight">Work & Live in Ireland</h1>
-          <p className="mb-8 max-w-2xl text-lg text-slate-600">
-            Compare Critical Skills occupation fit, graduate employment outcomes by field,
-            English-language study options, and post-study routes into the Irish labour market.
-          </p>
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href="/ie/jobs"
-              className="rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-press"
-            >
-              Browse {occupations.length} Critical Skills Roles
-            </Link>
-            <Link
-              href="/roi-explorer/ie/language-schools"
-              className="rounded-full border border-slate-200 px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-slate-50"
-            >
-              Language Schools
-            </Link>
-            <Link
-              href="/countries/ireland"
-              className="rounded-full border border-slate-200 px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-slate-50"
-            >
-              Ireland ROI Guide
-            </Link>
+        <section className="mb-12 grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
+          <div>
+            <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-slate-400">Ireland</p>
+            <h1 className="mb-4 text-4xl font-bold tracking-tight">Work & Live in Ireland</h1>
+            <p className="mb-8 max-w-2xl text-lg text-slate-600">
+              Compare Critical Skills occupation fit, graduate employment outcomes by field,
+              English-language study options, and post-study routes into the Irish labour market.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Link href="/ie/jobs" className="rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-press">Browse {occupations.length} Critical Skills Roles</Link>
+              <Link href="/roi-explorer/ie/language-schools" className="rounded-full border border-slate-200 px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-slate-50">Language Schools</Link>
+            </div>
           </div>
+          <IrelandQuickRoiPreview />
         </section>
 
         <section className="mb-12 grid grid-cols-2 gap-4 sm:grid-cols-4">
@@ -116,13 +102,15 @@ export default async function IrelandHubPage() {
           </p>
         </section>
 
+        <IrelandDecisionOverview />
+
         <section>
           <h2 className="mb-4 text-xl font-bold">Start Exploring</h2>
           <div className="grid gap-4 sm:grid-cols-3">
             {[
               { href: "/ie/jobs", title: "Critical Skills Jobs", body: "Role-level shortage signals linked to graduate fields." },
               { href: "/roi-explorer/ie/language-schools", title: "Language Schools", body: "Browse Irish language schools and city pages." },
-              { href: "/countries/ireland", title: "Country ROI", body: "Budget, rent, policy, and graduate route context." },
+              { href: "/roi-explorer?country=ie", title: "University ROI", body: "Compare tuition, salary signals, and payback by institution." },
             ].map((item) => (
               <Link
                 key={item.href}

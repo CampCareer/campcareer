@@ -6,6 +6,10 @@ import beRentRaw from "@/data/be-rent-by-city.json"
 import beUniversitiesRaw from "@/data/be-universities.json"
 import { getBelgiumOccupations } from "@/lib/country-occupation-data"
 import { pageMetadata } from "@/lib/seo"
+import {
+  BelgiumDecisionOverview,
+  BelgiumQuickRoiPreview,
+} from "@/components/country-profiles/australia-decision-overview"
 
 export const revalidate = 86400
 
@@ -46,35 +50,32 @@ export default function BelgiumHubPage() {
       ])} />
 
       <div className="mx-auto max-w-5xl px-4 py-12">
-        <section className="mb-12">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-slate-400">
-            Belgium
-          </p>
-          <h1 className="mb-4 text-4xl font-bold tracking-tight">Work & Live in Belgium</h1>
-          <p className="mb-8 max-w-2xl text-lg text-slate-600">
-            Compare Belgian shortage occupations, gross monthly salary signals, rent by region,
-            and universities across Brussels, Flanders, and Wallonia.
-          </p>
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href="/be/jobs"
-              className="rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-press"
-            >
-              Browse {occupations.length} Occupations
-            </Link>
-            <Link
-              href="/countries/belgium"
-              className="rounded-full border border-slate-200 px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-slate-50"
-            >
-              Belgium ROI Guide
-            </Link>
-            <Link
-              href="/map?country=be"
-              className="rounded-full border border-slate-200 px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-slate-50"
-            >
-              Open Belgium Map
-            </Link>
+        <section className="mb-12 grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
+          <div>
+            <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-slate-400">
+              Belgium
+            </p>
+            <h1 className="mb-4 text-4xl font-bold tracking-tight">Work & Live in Belgium</h1>
+            <p className="mb-8 max-w-2xl text-lg text-slate-600">
+              Compare Belgian shortage occupations, gross monthly salary signals, rent by region,
+              and universities across Brussels, Flanders, and Wallonia.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href="/be/jobs"
+                className="rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-press"
+              >
+                Browse {occupations.length} Occupations
+              </Link>
+              <Link
+                href="/map?country=be"
+                className="rounded-full border border-slate-200 px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-slate-50"
+              >
+                Open Belgium Map
+              </Link>
+            </div>
           </div>
+          <BelgiumQuickRoiPreview />
         </section>
 
         <section className="mb-12 grid grid-cols-2 gap-4 sm:grid-cols-4">
@@ -90,6 +91,8 @@ export default function BelgiumHubPage() {
             </div>
           ))}
         </section>
+
+        <BelgiumDecisionOverview />
 
         <section className="mb-12">
           <h2 className="mb-4 text-xl font-bold">Top Belgian Universities</h2>
@@ -121,7 +124,7 @@ export default function BelgiumHubPage() {
           <div className="grid gap-4 sm:grid-cols-3">
             {[
               { href: "/be/jobs", title: "Jobs & Occupations", body: "Salary, shortage, and regional fit signals." },
-              { href: "/countries/belgium", title: "Country ROI", body: "Budget, tax, rent, and post-study policy preview." },
+              { href: "/roi-explorer?country=be", title: "University ROI", body: "Compare tuition, salary signals, and payback by institution." },
               { href: "/map?country=be", title: "Belgium Map", body: "Universities and regional labour-market context." },
             ].map((item) => (
               <Link

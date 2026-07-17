@@ -5,6 +5,10 @@ import { JsonLd } from "@/components/seo/json-ld"
 import { pageMetadata } from "@/lib/seo"
 import nlCollegesRaw from "@/data/nl-colleges.json"
 import nlOccupationsRaw from "@/data/nl-occupations.json"
+import {
+  NetherlandsDecisionOverview,
+  NetherlandsQuickRoiPreview,
+} from "@/components/country-profiles/australia-decision-overview"
 
 export const revalidate = 86400
 
@@ -51,32 +55,35 @@ export default async function NlHubPage() {
 
       <div className="max-w-5xl mx-auto px-4 py-12">
         {/* Hero */}
-        <section className="mb-12">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-slate-400">
-            Netherlands (Nederland)
-          </p>
-          <h1 className="mb-4 text-4xl font-bold tracking-tight">
-            Work & Live in the Netherlands
-          </h1>
-          <p className="mb-8 max-w-2xl text-lg text-slate-600">
-            Real salary data, CBS shortage ratings, and career pathways for {occCount} SBC-classified
-            occupations — plus tuition and ROI data for all {topColleges.length > 0 ? "13" : ""} top Dutch
-            research universities (WO).
-          </p>
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href="/nl/jobs"
-              className="rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-press"
-            >
-              Browse {occCount} Occupations
-            </Link>
-            <Link
-              href="/map?country=nl"
-              className="rounded-full border border-slate-200 px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-slate-50"
-            >
-              View University Map
-            </Link>
+        <section className="mb-12 grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
+          <div>
+            <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-slate-400">
+              Netherlands (Nederland)
+            </p>
+            <h1 className="mb-4 text-4xl font-bold tracking-tight">
+              Work & Live in the Netherlands
+            </h1>
+            <p className="mb-8 max-w-2xl text-lg text-slate-600">
+              Real salary data, CBS shortage ratings, and career pathways for {occCount} SBC-classified
+              occupations — plus tuition and ROI data for all {topColleges.length > 0 ? "13" : ""} top Dutch
+              research universities (WO).
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href="/nl/jobs"
+                className="rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-press"
+              >
+                Browse {occCount} Occupations
+              </Link>
+              <Link
+                href="/map?country=nl"
+                className="rounded-full border border-slate-200 px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-slate-50"
+              >
+                View University Map
+              </Link>
+            </div>
           </div>
+          <NetherlandsQuickRoiPreview />
         </section>
 
         {/* Stats */}
@@ -93,6 +100,8 @@ export default async function NlHubPage() {
             </div>
           ))}
         </section>
+
+        <NetherlandsDecisionOverview />
 
         {/* Top universities */}
         {topColleges.length > 0 && (

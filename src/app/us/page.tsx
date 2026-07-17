@@ -4,6 +4,7 @@ import Link from "next/link"
 import { getUSOccCodes } from "@/lib/us-occupation-detail"
 import { pageMetadata } from "@/lib/seo"
 import { JsonLd } from "@/components/seo/json-ld"
+import { UnitedStatesDecisionOverview, UnitedStatesQuickRoiPreview } from "@/components/country-profiles/australia-decision-overview"
 
 export const revalidate = 86400
 
@@ -32,27 +33,20 @@ export default function UsHubPage() {
       />
 
       <div className="max-w-5xl mx-auto px-4 py-12">
-        <section className="mb-12">
-          <p className="text-sm font-semibold uppercase tracking-widest text-slate-400 mb-3">United States</p>
-          <h1 className="text-4xl font-bold tracking-tight mb-4">Work & Live in the USA</h1>
-          <p className="text-lg text-slate-600 max-w-2xl mb-8">
-            Median salary data, job outlook, and H-1B / green card pathways for {occCount}+
-            occupations — sourced from the Bureau of Labor Statistics.
-          </p>
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href="/us/jobs"
-              className="px-5 py-2.5 bg-brand text-white rounded-full text-sm font-semibold hover:bg-brand-press transition-colors"
-            >
-              Browse {occCount}+ Occupations
-            </Link>
-            <Link
-              href="/roi-explorer/us"
-              className="px-5 py-2.5 border border-slate-200 rounded-full text-sm font-semibold hover:bg-slate-50 transition-colors"
-            >
-              Explore Universities
-            </Link>
+        <section className="mb-12 grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-widest text-slate-400 mb-3">United States</p>
+            <h1 className="text-4xl font-bold tracking-tight mb-4">Work & Live in the USA</h1>
+            <p className="text-lg text-slate-600 max-w-2xl mb-8">
+              Median salary data, job outlook, and H-1B / green card pathways for {occCount}+
+              occupations — sourced from the Bureau of Labor Statistics.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Link href="/us/jobs" className="px-5 py-2.5 bg-brand text-white rounded-full text-sm font-semibold hover:bg-brand-press transition-colors">Browse {occCount}+ Occupations</Link>
+              <Link href="/roi-explorer/us" className="px-5 py-2.5 border border-slate-200 rounded-full text-sm font-semibold hover:bg-slate-50 transition-colors">Explore Universities</Link>
+            </div>
           </div>
+          <UnitedStatesQuickRoiPreview />
         </section>
 
         <section className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-12">
@@ -68,6 +62,8 @@ export default function UsHubPage() {
             </div>
           ))}
         </section>
+
+        <UnitedStatesDecisionOverview />
 
         <section>
           <h2 className="text-xl font-bold mb-5">Explore the USA</h2>

@@ -26,6 +26,7 @@ export default function NorwayHubPage() {
       cityCount={NO_CITIES.length}
       institutionCount={NO_UNIVERSITIES.length}
       jobsPath="/no/jobs"
+      countryRoiCode="NO"
     />
   )
 }

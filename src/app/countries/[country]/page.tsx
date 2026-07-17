@@ -99,7 +99,7 @@ export default async function CountryDetailPage({ params, searchParams }: PagePr
   const country = getCountry(slug)
 
   if (!country) notFound()
-  if (country.code === "AU") permanentRedirect("/au")
+  if (country.href === country.hubHref) permanentRedirect(country.hubHref)
 
   if (!isCountrySearchIndexable(country.code)) {
     return (

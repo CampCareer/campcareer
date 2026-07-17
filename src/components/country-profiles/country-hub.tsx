@@ -3,6 +3,10 @@ import {
   isCountrySearchIndexable,
   type NewCountryCode,
 } from "@/lib/new-country-release-gate"
+import {
+  CountryDecisionOverview,
+  CountryQuickRoiPreview,
+} from "./australia-decision-overview"
 import { CountryDataNotice } from "./country-data-notice"
 
 type CountryHubCode = NewCountryCode | "CH";
@@ -22,6 +26,7 @@ type CountryHubProps = {
   institutionCount: number;
   jobsPath: string;
   showDataNotice?: boolean;
+  countryRoiCode?: string;
 };
 
 export function CountryHub({
@@ -33,37 +38,41 @@ export function CountryHub({
   institutionCount,
   jobsPath,
   showDataNotice = true,
+  countryRoiCode,
 }: CountryHubProps) {
   const searchIndexable = isCountrySearchIndexable(countryCode);
 
   return (
     <main className="min-h-screen bg-white text-slate-950">
       <section className="border-b border-slate-200 bg-slate-50">
-        <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:py-16">
-          <p className="text-sm font-semibold uppercase tracking-widest text-blue-700">
-            {countryName}
-          </p>
-          <h1 className="mt-3 max-w-4xl text-4xl font-semibold tracking-normal sm:text-5xl">
-            {countryName} study and career profile
-          </h1>
-          <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-600">
-            Explore regional study locations, institutions and the official
-            occupation classification used for comparable career data.
-          </p>
-          <div className="mt-7 flex flex-wrap gap-3">
-            <Link
-              href="/"
-              className="inline-flex h-11 items-center justify-center rounded-lg bg-slate-950 px-5 text-sm font-semibold text-white hover:bg-slate-800"
-            >
-              Compare verified career paths
-            </Link>
-            <Link
-              href={jobsPath}
-              className="inline-flex h-11 items-center justify-center rounded-lg border border-slate-200 bg-white px-5 text-sm font-semibold hover:bg-slate-100"
-            >
-              View occupation methodology
-            </Link>
+        <div className={`mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:py-16${countryRoiCode ? " grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start" : ""}`}>
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-widest text-blue-700">
+              {countryName}
+            </p>
+            <h1 className="mt-3 max-w-4xl text-4xl font-semibold tracking-normal sm:text-5xl">
+              {countryName} study and career profile
+            </h1>
+            <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-600">
+              Explore regional study locations, institutions and the official
+              occupation classification used for comparable career data.
+            </p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Link
+                href="/"
+                className="inline-flex h-11 items-center justify-center rounded-lg bg-slate-950 px-5 text-sm font-semibold text-white hover:bg-slate-800"
+              >
+                Compare verified career paths
+              </Link>
+              <Link
+                href={jobsPath}
+                className="inline-flex h-11 items-center justify-center rounded-lg border border-slate-200 bg-white px-5 text-sm font-semibold hover:bg-slate-100"
+              >
+                View occupation methodology
+              </Link>
+            </div>
           </div>
+          {countryRoiCode && <CountryQuickRoiPreview countryCode={countryRoiCode} />}
         </div>
       </section>
 
@@ -74,6 +83,8 @@ export function CountryHub({
           <Metric value={classificationLabel} label="Occupation classification" note="Used for exact career mappings" />
           <Metric value={String(institutionCount)} label="Institutions" note="Institution reference data" />
         </div>
+
+        {countryRoiCode && <CountryDecisionOverview countryCode={countryRoiCode} />}
 
         {!searchIndexable && showDataNotice && (
           <div className="mt-8">
