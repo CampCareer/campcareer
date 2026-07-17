@@ -157,9 +157,9 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
         </div>
       </section>
 
-      <div className="mx-auto max-w-5xl space-y-6 px-4 py-8 sm:px-6">
+      <div className="mx-auto flex max-w-5xl flex-col gap-6 px-4 py-8 sm:px-6">
         {/* Snapshot Card */}
-        <div className="grid gap-5 md:grid-cols-2">
+        <div className="order-[-4] grid gap-5 md:grid-cols-2">
           {/* Shortage Now */}
           <div className={"order-last rounded-2xl border p-5 " + (shortageCardMuted ? "border-slate-200 bg-slate-100" : "border-slate-200 bg-white")}>
             <h2 className="text-xs font-semibold uppercase tracking-wide text-slate-500">Shortage Now</h2>
@@ -236,7 +236,7 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
           </div>
         </div>
 
-        {/* What you do + Skills — the second information row, directly below Snapshot */}
+        {/* What you do + Skills — follows work distribution and relocation support */}
         <div className="grid gap-5 lg:grid-cols-2">
           {/* What you do */}
           <section className="rounded-2xl border border-slate-200 bg-white p-5">
@@ -306,12 +306,12 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
           </section>
         </div>
 
-        {jsaProfile && <section className="rounded-2xl border border-slate-200 bg-white p-5">
+        {jsaProfile && <section className="order-[-3] rounded-2xl border border-slate-200 bg-white p-5">
           <h2 className="text-lg font-semibold text-slate-950">Where people work</h2>
           <div className="mt-4 grid gap-6 md:grid-cols-2">
             <div>
               <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-400">State / territory distribution</h3>
-              <div className="mt-3 space-y-2">{jsaProfile.state_distribution.map((item) => <div key={item.name} className="flex items-center gap-3 text-sm"><span className="w-14 font-medium text-slate-700">{item.name}</span><div className="h-2 flex-1 overflow-hidden rounded bg-slate-100"><div className="h-full rounded bg-blue-600" style={{ width: Math.min(item.share, 100) + "%" }} /></div><span className="w-10 text-right text-slate-500">{item.share}%</span></div>)}</div>
+              <div className="mt-3 space-y-2">{[...jsaProfile.state_distribution].sort((a, b) => b.share - a.share).map((item) => <div key={item.name} className="flex items-center gap-3 text-sm"><span className="w-14 font-medium text-slate-700">{item.name}</span><div className="h-2 flex-1 overflow-hidden rounded bg-slate-100"><div className="h-full rounded bg-blue-600" style={{ width: Math.min(item.share, 100) + "%" }} /></div><span className="w-10 text-right text-slate-500">{item.share}%</span></div>)}</div>
             </div>
             <div>
               <div className="flex items-center justify-between gap-3"><h3 className="text-xs font-semibold uppercase tracking-wide text-slate-400">Highest education</h3><p className="text-xs text-slate-400">Share of workers</p></div>
@@ -334,7 +334,7 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
           </div>
         </section>}
 
-        {jsaProfile && <div className="w-full">
+        {jsaProfile && <div className="order-[-2] w-full">
           <WiseCta />
         </div>}
 
@@ -421,7 +421,7 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
           </div>
         </section>
 
-        {(regionalEmployment.length > 0 || mobility.stock || rankedMobilityPaths.length > 0) && <div className="grid gap-5 lg:grid-cols-2">
+        {(regionalEmployment.length > 0 || mobility.stock || rankedMobilityPaths.length > 0) && <div className="order-[-1] grid gap-5 lg:grid-cols-2">
         {regionalEmployment.length > 0 && <section className="rounded-2xl border border-slate-200 bg-white p-5">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>

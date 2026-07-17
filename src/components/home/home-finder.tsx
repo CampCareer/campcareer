@@ -16,6 +16,7 @@ type Locale = "en" | "ko-KR"
 
 const COPY = {
   en: {
+    headline: "Thousands of campuses. One career path that fits you.",
     country: "Where",
     major: "Major",
     goal: "Goal",
@@ -27,6 +28,7 @@ const COPY = {
     explore: "Explore country",
   },
   ko: {
+    headline: "수많은 캠퍼스. 당신에게 맞는 하나의 커리어 경로.",
     country: "나라",
     major: "전공",
     goal: "목표",
@@ -65,6 +67,9 @@ export function HomeFinder({ locale = "en" }: { locale?: Locale }) {
     <div className="overflow-hidden bg-transparent">
       <section className="relative border-b-0 bg-transparent">
         <div className="mx-auto max-w-7xl px-4 pt-6 pb-6 sm:px-6 sm:pt-8 sm:pb-8">
+          <h1 className="mx-auto mb-6 max-w-4xl text-center text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
+            {t.headline}
+          </h1>
           <form action={searchHref} onSubmit={(event) => { event.preventDefault(); const submitted = new FormData(event.currentTarget); const submittedCountry = String(submitted.get("country") ?? "everywhere"); const submittedMajor = String(submitted.get("major") ?? "anything"); const submittedGoal = String(submitted.get("goal") ?? ""); const href = `${localizePath("/countries/search", localePrefix)}?${new URLSearchParams({ country: submittedCountry, major: submittedMajor, ...(submittedGoal ? { goal: submittedGoal } : {}) })}`; recordDiscoveryEvent("recommendation_start", { surface: "landing", country: submittedCountry, major: submittedMajor, goal: submittedGoal }); if (submittedCountry === "SG" && submittedGoal) { window.open(singaporeWorkspaceHref, "_blank", "noopener,noreferrer"); return } router.push(href) }} className="mx-auto max-w-4xl rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_18px_45px_rgba(15,23,42,.10)]">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
               <div className="flex-1"><IconPicker name="country" label={t.country} value={country} options={countryOptions} onChange={setCountry} searchPlaceholder={isKo ? "국가 검색" : "Search countries"} testId="country" /></div>

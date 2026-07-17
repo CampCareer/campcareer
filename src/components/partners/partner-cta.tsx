@@ -110,16 +110,10 @@ export function AiraloCta() {
 }
 
 export function AffiliateCtas({ showWise = true }: { showWise?: boolean }) {
-  const t = useTranslations()
   return (
-    <div className="rounded-lg border border-slate-200 bg-white p-3">
-      <p className="mb-3 text-[10px] font-semibold uppercase tracking-widest text-slate-400">
-        {t.map.affiliateProgram}
-      </p>
-      <div className="flex flex-col gap-3">
-        {showWise && <WiseCta />}
-        <AiraloCta />
-      </div>
+    <div className="flex flex-col gap-3">
+      {showWise && <WiseCta />}
+      <AiraloCta />
     </div>
   )
 }
