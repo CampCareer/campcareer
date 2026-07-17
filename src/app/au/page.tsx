@@ -80,6 +80,15 @@ export default async function AuHubPage() {
           <h2 className="text-xl font-bold mb-5">Explore Australia</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Link
+              href="/au/majors"
+              className="group p-5 rounded-xl border border-slate-200 hover:border-brand/40 hover:bg-brand-tint transition-colors"
+            >
+              <div className="font-semibold mb-1">🧭 Explore Majors</div>
+              <div className="text-sm text-slate-500">
+                Find a field that fits your career, salary and PR goals
+              </div>
+            </Link>
+            <Link
               href="/au/jobs"
               className="group p-5 rounded-xl border border-slate-200 hover:border-brand/40 hover:bg-brand-tint transition-colors"
             >
@@ -92,9 +101,9 @@ export default async function AuHubPage() {
               href="/au/study"
               className="group p-5 rounded-xl border border-slate-200 hover:border-brand/40 hover:bg-brand-tint transition-colors"
             >
-              <div className="font-semibold mb-1">🎓 Universities &amp; Courses</div>
+              <div className="font-semibold mb-1">🎓 Study Options</div>
               <div className="text-sm text-slate-500">
-                Find courses linked to in-demand occupations
+                Compare university study options, levels and outcomes
               </div>
             </Link>
             <Link
@@ -104,15 +113,6 @@ export default async function AuHubPage() {
               <div className="font-semibold mb-1">🗺️ State-by-State Map</div>
               <div className="text-sm text-slate-500">
                 Compare shortage &amp; employment by state
-              </div>
-            </Link>
-            <Link
-              href="/au/study"
-              className="group p-5 rounded-xl border border-slate-200 hover:border-brand/40 hover:bg-brand-tint transition-colors"
-            >
-              <div className="font-semibold mb-1">📊 Compare University ROI</div>
-              <div className="text-sm text-slate-500">
-                Compare tuition and graduate outcomes in Australia
               </div>
             </Link>
           </div>
