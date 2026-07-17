@@ -1,7 +1,7 @@
 import "server-only"
 import type { Metadata } from "next"
 import Link from "next/link"
-import { notFound } from "next/navigation"
+import { notFound, permanentRedirect } from "next/navigation"
 import type { ReactNode } from "react"
 import { JsonLd, breadcrumbLd } from "@/components/seo/json-ld"
 import { CountryDataNotice } from "@/components/country-profiles/country-data-notice"
@@ -99,6 +99,7 @@ export default async function CountryDetailPage({ params, searchParams }: PagePr
   const country = getCountry(slug)
 
   if (!country) notFound()
+  if (country.code === "AU") permanentRedirect("/au")
 
   if (!isCountrySearchIndexable(country.code)) {
     return (

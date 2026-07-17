@@ -112,7 +112,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }))
 
   const countryDetailPages: MetadataRoute.Sitemap = COUNTRY_ROI_INSIGHTS
-    .filter((country) => isCountrySearchIndexable(country.code))
+    .filter((country) => country.href !== country.hubHref && isCountrySearchIndexable(country.code))
     .map((country) => ({
       url: `${BASE}${country.href}`,
       lastModified: new Date(COUNTRY_ROI_DATA_META.lastUpdated),

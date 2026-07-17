@@ -124,7 +124,7 @@ export const COUNTRY_ROI_INSIGHTS: CountryRoiInsight[] = [
     code: "AU",
     name: "Australia",
     slug: "australia",
-    href: "/countries/australia",
+    href: "/au",
     hubHref: "/au",
     cities: "Sydney, Melbourne, Brisbane",
     policy: "Post-study work route + skilled occupation pathways",
