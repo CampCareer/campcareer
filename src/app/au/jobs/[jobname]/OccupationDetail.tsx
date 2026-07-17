@@ -4,7 +4,7 @@ import Link from "next/link"
 import { CircleHelp, ExternalLink, ArrowRight, ArrowUpRight, BriefcaseBusiness, GraduationCap, MapPin, DollarSign, Star } from "lucide-react"
 import type { OccupationDetail } from "./sample-data"
 import JobListings from "@/app/map/JobListings"
-import { AffiliateCtas } from "@/components/partners/partner-cta"
+import { AffiliateCtas, WiseCta } from "@/components/partners/partner-cta"
 import type { AuOfficialOccupationContent } from "@/lib/au-osca-content"
 import type { AuJsaOslRating } from "@/lib/au-jsa-osl"
 
@@ -247,6 +247,11 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
           </div>
         </section>}
 
+        {jsaProfile && <div className="mx-auto w-full max-w-xl">
+          <WiseCta />
+        </div>}
+
+        {(regionalEmployment.length > 0 || mobility.stock || rankedMobilityPaths.length > 0) && <div className="grid gap-5 lg:grid-cols-2">
         {regionalEmployment.length > 0 && <section className="rounded-2xl border border-slate-200 bg-white p-5">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
@@ -304,6 +309,7 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
           </div>}
           {rankedMobilityPaths.length > 0 && <><p className="mt-5 text-xs leading-5 text-slate-500"><span className="font-semibold text-slate-700">Recommendation score:</span> shortage = 2 points, no shortage = 1 point, plus 1 point for each 10% of projected growth to 2035.</p><ol className="mt-4 space-y-3">{rankedMobilityPaths.map((path, index) => <li key={path.oscaCode} className="grid grid-cols-[2.25rem_minmax(0,1fr)_auto] items-center gap-3 rounded-xl border border-slate-200 p-3 transition hover:border-blue-300 hover:bg-blue-50/40"><span className={"grid size-9 place-items-center rounded-full text-sm font-bold " + (index === 0 ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-500")}>{index + 1}</span><div className="min-w-0"><Link href={path.href} className="inline-flex items-center gap-1 text-sm font-semibold text-slate-950 hover:text-blue-700">{path.title}<ArrowRight className="h-3.5 w-3.5" /></Link><p className="mt-1 text-xs text-slate-500">{path.workerCount.toLocaleString()} observed moves</p><div className="mt-2 flex flex-wrap gap-2"><span className="rounded-full bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-700">{path.shortagePoints === 2 ? "Shortage +2" : "No shortage +1"}</span>{path.outlook2035Pct != null && <span className="rounded-full bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-700">2035 {path.outlook2035Pct > 0 ? "+" : ""}{path.outlook2035Pct}% · +{path.outlookPoints}</span>}{path.onCsol && <span className="rounded-full bg-emerald-50 px-2 py-1 text-xs font-semibold text-emerald-700">CSOL listed</span>}</div></div><div className="text-right"><p className="text-lg font-bold text-slate-950">{path.recommendationScore}</p><p className="text-xs text-slate-500">points</p></div></li>)}</ol></>}
         </section>}
+        </div>}
 
         {/* What you do + Skills */}
         <div className="grid gap-5 lg:grid-cols-2">
@@ -374,8 +380,11 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
             </div>}
           </section>
 
+        </div>
+
+        <div className="grid gap-5 lg:grid-cols-2">
           {/* Credentials & Pathway */}
-          <section className="rounded-2xl border border-slate-200 bg-white p-5 lg:col-span-2">
+          <section className="rounded-2xl border border-slate-200 bg-white p-5">
             <h2 className="text-lg font-semibold text-slate-950">Credentials & Pathway</h2>
             <div className="mt-4 space-y-4">
               {officialContent?.skillLevel != null && <div className="rounded-xl bg-slate-50 p-4">
@@ -411,10 +420,9 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
               </div>}
             </div>
           </section>
-        </div>
 
-        {/* Real jobs right now */}
-        <section className="rounded-2xl border border-slate-200 bg-white p-5">
+          {/* Real jobs right now */}
+          <section className="rounded-2xl border border-slate-200 bg-white p-5">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold text-slate-950">Real jobs right now</h2>
             <span className="text-xs text-slate-400">Live signal from SEEK, Indeed & more</span>
@@ -429,7 +437,8 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
             See all job ads on SEEK <ExternalLink className="h-3.5 w-3.5" />
           </a>
           {vacancies.length > 0 && <div className="mt-5 border-t border-slate-100 pt-4"><p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Current vacancy signal</p><div className="mt-3 grid gap-2 sm:grid-cols-3">{vacancies.slice(0, 6).map((item) => <div key={`${item.state}-${item.period}`} className="rounded-lg bg-slate-50 p-3"><p className="text-xs text-slate-500">{item.state} · {new Date(item.period).toLocaleDateString("en-AU", { month: "short", year: "numeric" })}</p><p className="mt-1 text-base font-semibold text-slate-950">{item.vacancy_count != null ? Math.round(item.vacancy_count).toLocaleString() : item.index_value != null ? item.index_value.toFixed(1) : "—"}</p></div>)}</div></div>}
-        </section>
+          </section>
+        </div>
 
         <section className="rounded-2xl border border-slate-200 bg-white p-5">
           <h2 className="text-lg font-semibold text-slate-950">Data status</h2>
@@ -473,7 +482,7 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
           </div>
         </section>
 
-        <AffiliateCtas />
+        <AffiliateCtas showWise={!jsaProfile} />
       </div>
     </main>
   )
