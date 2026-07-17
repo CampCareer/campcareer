@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight, BarChart3, MapPin, Search } from 'lucide-react'
 import { AU_AQF_FILTERS, AU_STATES, getAuUniversitiesByIds, isAuAqfFilter, type AuAqfFilter, aqfLabel } from '@/lib/au-universities'
+import { STUDY_CATEGORIES } from '@/data/study-concepts'
 import { fetchRoiData } from '@/lib/roi-query'
 import { pageMetadata } from '@/lib/seo'
 
@@ -13,7 +14,7 @@ export const metadata: Metadata = pageMetadata({
   path: '/universities/au',
 })
 
-type SearchParams = { field?: string; state?: string; level?: string }
+type SearchParams = { field?: string; state?: string; level?: string; category?: string }
 
 type RoiRow = {
   college_id: string
@@ -45,7 +46,26 @@ function readSearchParams(params: SearchParams) {
   const field = params.field?.trim().slice(0, 80) ?? ''
   const state = AU_STATES.includes(params.state as typeof AU_STATES[number]) ? params.state! : 'ALL_STATES'
   const level: AuAqfFilter = isAuAqfFilter(params.level) ? params.level : 'all'
-  return { field, state, level }
+  const category = STUDY_CATEGORIES.some((item) => item.id === params.category) ? params.category! : ''
+  return { field, state, level, category }
+}
+
+const CATEGORY_FIELD_PATTERNS: Record<string, RegExp> = {
+  trades: /apprentice|building|construction|carpentry|electrical|plumbing|welding|trade/i,
+  health: /health|nurs|medical|clinical|pharmacy|therapy|rehabilitation|care/i,
+  technology: /computer|software|information|data|cyber|digital|artificial intelligence|it\b/i,
+  engineering: /engineering|built environment|mechanical|civil|electrical|manufacturing/i,
+  business: /business|commerce|accounting|finance|economics|management|marketing/i,
+  education: /education|teaching|early childhood|social work|community services/i,
+  environment: /environment|agriculture|sustainability|natural resource|science/i,
+  design: /design|architecture|media|creative|visual|communication/i,
+  hospitality: /hospitality|tourism|hotel|culinary|food/i,
+  transport: /aviation|transport|maritime|automotive|logistics/i,
+}
+
+function matchesCategory(fieldName: string | null | undefined, category: string) {
+  if (!category) return true
+  return CATEGORY_FIELD_PATTERNS[category]?.test(fieldName ?? '') ?? true
 }
 
 export default async function AustralianUniversitiesPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
@@ -62,7 +82,7 @@ export default async function AustralianUniversitiesPage({ searchParams }: { sea
   // With no field selected the useful discovery unit is a university, not a
   // repetitive list of the same provider's course groups.
   const rowsByUniversity = new Map<string, RoiRow>()
-  for (const rawRow of result.data as RoiRow[]) {
+  for (const rawRow of (result.data as RoiRow[]).filter((row) => matchesCategory(row.field_name, filters.category))) {
     const current = rowsByUniversity.get(rawRow.college_id)
     if (!current || (rawRow.roi_score ?? 0) > (current.roi_score ?? 0)) {
       rowsByUniversity.set(rawRow.college_id, rawRow)
@@ -85,6 +105,7 @@ export default async function AustralianUniversitiesPage({ searchParams }: { sea
                 <Search className="pointer-events-none absolute bottom-3 left-3 h-4 w-4 text-slate-400" />
                 <input name="field" defaultValue={filters.field} maxLength={80} placeholder="e.g. nursing or software" className="h-12 w-full rounded-xl border border-slate-200 bg-white pl-9 pr-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100" />
               </label>
+              <label className="block min-w-52"><span className="mb-1 block text-xs font-semibold text-slate-600">Major category</span><select name="category" defaultValue={filters.category} className="h-12 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"><option value="">All categories</option>{STUDY_CATEGORIES.map((item) => <option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
               <label className="block min-w-36"><span className="mb-1 block text-xs font-semibold text-slate-600">State</span><select name="state" defaultValue={filters.state} className="h-12 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"><option value="ALL_STATES">All states</option>{AU_STATES.map((state) => <option key={state} value={state}>{state}</option>)}</select></label>
               <label className="block min-w-48"><span className="mb-1 block text-xs font-semibold text-slate-600">Study level</span><select name="level" defaultValue={filters.level} className="h-12 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">{Object.entries(AU_AQF_FILTERS).map(([key, item]) => <option key={key} value={key}>{item.label}</option>)}</select></label>
               <button className="h-12 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700">Search</button>
@@ -96,7 +117,7 @@ export default async function AustralianUniversitiesPage({ searchParams }: { sea
       <section className="bg-white"><div className="mx-auto max-w-6xl px-5 pb-12 pt-12 sm:px-6 sm:pb-16 sm:pt-14">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <h2 className="text-lg font-semibold text-slate-950">{rows.length} university options</h2>
+            <h2 className="text-lg font-semibold text-slate-950">{rows.length} {filters.category ? `${STUDY_CATEGORIES.find((item) => item.id === filters.category)?.label ?? ''} ` : ''}university options</h2>
             <p className="mt-1 text-sm text-slate-500">Sorted by the available ROI estimate. Select a university to review its fields and assumptions.</p>
           </div>
           <Link href="/universities/au/compare" className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-700 hover:text-blue-800">

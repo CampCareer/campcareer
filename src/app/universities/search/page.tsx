@@ -7,5 +7,5 @@ export default async function UniversitySearchPage({ searchParams }: { searchPar
   const query = await searchParams
   const one = (key: string) => typeof query[key] === "string" ? query[key] : undefined
   if (one("country")?.toUpperCase() === "AU") permanentRedirect("/universities/au")
-  return <UniversitySearchClient initial={{ country: one("country"), city: one("city"), career: one("career"), budget: one("budget") }} />
+  return <UniversitySearchClient initial={{ country: one("country"), category: one("category"), city: one("city"), career: one("career"), budget: one("budget") }} />
 }

@@ -29,12 +29,13 @@ function SearchNotice({ title, body }: { title: string; body: string }) {
   return <div className="rounded-2xl border border-blue-200 bg-blue-50 p-5"><div className="flex gap-3"><CircleAlert className="mt-0.5 h-5 w-5 shrink-0 text-blue-700" /><div><h2 className="font-semibold text-blue-950">{title}</h2><p className="mt-1 text-sm leading-6 text-blue-900">{body}</p></div></div></div>
 }
 
-export function CountrySearchClient({ initial }: { initial: { country?: string; major?: string; goal?: string } }) {
+export function CountrySearchClient({ initial }: { initial: { country?: string; category?: string; major?: string; goal?: string } }) {
   const locale = usePathLocale()
   const isKo = locale === "ko"
   const router = useRouter()
   const [country, setCountry] = useState(initial.country ?? "everywhere")
   const [major, setMajor] = useState(initial.major ?? "anything")
+  const [category, setCategory] = useState(initial.category ?? STUDY_CONCEPTS.find((concept) => concept.id === initial.major)?.category ?? "")
   const [goal, setGoal] = useState<LandingGoalId | "">(initial.goal as LandingGoalId ?? "")
   const [result, setResult] = useState<LandingDiscoveryResult | null>(null)
   const [loading, setLoading] = useState(false)
@@ -50,8 +51,8 @@ export function CountrySearchClient({ initial }: { initial: { country?: string; 
     ...LAUNCH_COUNTRIES.map((item) => ({ value: item.code, label: item.name, description: isKo ? `${item.name} 유학·취업 신호 보기` : `Explore study and career signals`, icon: countryFlag(item.code), keywords: `${item.code} ${item.slug}` })),
   ], [isKo])
   const majorOptions = useMemo<PickerOption[]>(() => [
-    { value: "anything", label: isKo ? "아직 모르겠어요" : "Anything", description: isKo ? "국가별 유망 전공부터 확인" : "See promising fields by country", icon: "✨", keywords: "any undecided" },
-    ...STUDY_CONCEPTS.map((item) => ({ value: item.id, label: isKo ? item.labelKo : item.label, description: isKo ? item.description : item.description, icon: majorEmoji(item.category), keywords: `${item.category} ${item.aliases.join(" ")} ${item.aliasesKo.join(" ")}` })),
+    { value: "", label: isKo ? "카테고리 선택" : "Choose a category", description: isKo ? "10개 전공 카테고리에서 선택" : "Choose from 10 study categories", icon: "✨", keywords: "any undecided" },
+    ...STUDY_CATEGORIES.map((item) => ({ value: item.id, label: isKo ? item.labelKo : item.label, description: isKo ? `${item.labelKo} 전공 탐색` : `Explore ${item.label} study paths`, icon: majorEmoji(item.id), keywords: `${item.id} ${item.label} ${item.labelKo}` })),
   ], [isKo])
   const goalOptions = useMemo<PickerOption[]>(() =>
     LANDING_GOALS.map((item) => {
@@ -81,12 +82,12 @@ export function CountrySearchClient({ initial }: { initial: { country?: string; 
   }, [country, goal, hasGoal, major, selectedCountry])
 
   useEffect(() => {
-    const key = `${country}:${major}:${goal}`
+    const key = `${country}:${category}:${major}:${goal}`
     if ((result || selectedCountry || !hasGoal) && lastTrackedResult.current !== key) {
       lastTrackedResult.current = key
       recordDiscoveryEvent("recommendation_result_view", { surface: "country_results", country, major, goal })
     }
-  }, [country, goal, hasGoal, major, result, selectedCountry])
+  }, [category, country, goal, hasGoal, major, result, selectedCountry])
 
   useEffect(() => {
     if (!goalFilterOpen) return
@@ -97,10 +98,10 @@ export function CountrySearchClient({ initial }: { initial: { country?: string; 
     return () => document.removeEventListener("mousedown", onPointerDown)
   }, [goalFilterOpen])
 
-  const href = productHref("/countries/search", locale, { country, major, ...(goal ? { goal } : {}) })
+  const href = productHref("/countries/search", locale, { country, ...(category ? { category } : {}), ...(major !== "anything" ? { major } : {}), ...(goal ? { goal } : {}) })
 
   const countryLabel = country === "everywhere" ? (isKo ? "어디든지" : "Everywhere") : getLaunchCountry(country)?.name ?? country
-  const majorLabel = major === "anything" ? (isKo ? "아직 모르겠어요" : "Any major") : (isKo ? STUDY_CONCEPTS.find((c) => c.id === major)?.labelKo : STUDY_CONCEPTS.find((c) => c.id === major)?.label) ?? major
+  const majorLabel = category ? (isKo ? STUDY_CATEGORIES.find((item) => item.id === category)?.labelKo : STUDY_CATEGORIES.find((item) => item.id === category)?.label) ?? category : (isKo ? "카테고리 선택" : "Choose a category")
   const goalLabel = goal ? (isKo ? (goal === "high-income" ? "높은 졸업 후 연봉" : goal === "low-cost" ? "낮은 유학비용" : "졸업 후 취업·체류") : LANDING_GOALS.find((g) => g.id === goal)?.label ?? goal) : ""
 
   const goalLabelShort = goal ? (isKo ? (goal === "high-income" ? "고소득" : goal === "low-cost" ? "저비용" : "취업·체류") : goal === "high-income" ? "High income" : goal === "low-cost" ? "Low cost" : "Immigration") : ""
@@ -114,10 +115,10 @@ export function CountrySearchClient({ initial }: { initial: { country?: string; 
         <span className="text-sm font-medium text-slate-700">{majorLabel}</span>
         {goalLabel && <><span className="h-1 w-1 rounded-full bg-slate-300" /><span className="text-sm font-medium text-slate-700">{goalLabel}</span></>}
       </button>
-      {expanded && <form action={href} onSubmit={(event) => { event.preventDefault(); recordDiscoveryEvent("recommendation_start", { surface: "country_results", country, major, goal }); router.push(href) }} className="absolute left-0 right-0 top-full z-50 mt-2 rounded-2xl border border-slate-200 bg-white p-3 shadow-lg">
+      {expanded && <form action={href} onSubmit={(event) => { event.preventDefault(); recordDiscoveryEvent("recommendation_start", { surface: "country_results", country, major: major !== "anything" ? major : category || "anything", goal }); router.push(href) }} className="absolute left-0 right-0 top-full z-50 mt-2 rounded-2xl border border-slate-200 bg-white p-3 shadow-lg">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
           <div className="flex-1"><IconPicker name="country" label={isKo ? "나라" : "Where"} value={country} options={countryOptions} onChange={setCountry} searchPlaceholder={isKo ? "국가 검색" : "Search countries"} testId="country" /></div>
-          <div className="flex-1"><IconPicker name="major" label={isKo ? "전공" : "Major"} value={major} options={majorOptions} onChange={setMajor} searchPlaceholder={isKo ? "전공 검색" : "Search majors"} testId="major" /></div>
+          <div className="flex-1"><IconPicker name="category" label={isKo ? "전공" : "Major"} value={category} options={majorOptions} onChange={(value) => { setCategory(value); setMajor("anything") }} searchPlaceholder={isKo ? "전공 카테고리 검색" : "Search categories"} testId="major" /></div>
           <div className="flex relative" ref={goalFilterRef}>
             <button type="button" onClick={() => setGoalFilterOpen((o) => !o)} className="inline-flex h-12 items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-700 transition hover:border-blue-300 hover:bg-slate-50">
               <SlidersHorizontal className="h-4 w-4 shrink-0 text-slate-400" />
@@ -137,7 +138,17 @@ export function CountrySearchClient({ initial }: { initial: { country?: string; 
     </div>
   </>
 
-  const resultContent = !hasGoal ? <Recommendations locale={locale} isKo={isKo} onGoalChange={setGoal} /> : selectedCountry ? <RegionSelection country={selectedCountry} major={major} goal={goal} locale={locale} /> : loading ? <LoadingCards /> : result ? <LandingDiscoveryResults result={result} locale={locale} /> : <SearchNotice title="Discovery results are unavailable" body="Try again in a moment, or open a country profile from the landing page." />
+  const resultContent = selectedCountry && (!hasGoal || major === "anything")
+    ? <CountryStudyPreview country={selectedCountry} locale={locale} isKo={isKo} category={category} major={major} />
+    : !hasGoal
+      ? <Recommendations locale={locale} isKo={isKo} onGoalChange={setGoal} />
+      : selectedCountry
+        ? <RegionSelection country={selectedCountry} major={major} goal={goal} locale={locale} />
+        : loading
+          ? <LoadingCards />
+          : result
+            ? <LandingDiscoveryResults result={result} locale={locale} />
+            : <SearchNotice title="Discovery results are unavailable" body="Try again in a moment, or open a country profile from the landing page." />
 
   if (selectedCountry) return <div className="bg-slate-50"><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 sm:py-10">{searchBar}{resultContent}</main></div>
 
@@ -178,6 +189,43 @@ function Recommendations({ locale, isKo, onGoalChange }: { locale: "en" | "ko"; 
         </Link>
       })}
     </div>
+  </section>
+}
+
+const AU_FEATURED_STUDY_CONCEPT_IDS = [
+  "nursing",
+  "computer-science",
+  "civil-engineering",
+  "data-analytics",
+  "cybersecurity",
+  "electrical-trade",
+  "early-childhood",
+  "aged-care",
+] as const
+
+function CountryStudyPreview({ country, locale, isKo, category, major }: { country: NonNullable<ReturnType<typeof getLaunchCountry>>; locale: "en" | "ko"; isKo: boolean; category: string; major: string }) {
+  const conceptIds = country.code === "AU"
+    ? AU_FEATURED_STUDY_CONCEPT_IDS
+    : STUDY_CONCEPTS.filter((concept) => (concept.coverageByCountry[country.code] ?? "CATALOG") !== "CATALOG").slice(0, 8).map((concept) => concept.id)
+  const concepts = conceptIds.map((id) => STUDY_CONCEPTS.find((concept) => concept.id === id)).filter((concept): concept is typeof STUDY_CONCEPTS[number] => Boolean(concept)).filter((concept) => !category || concept.category === category)
+  const categoryLabel = isKo ? STUDY_CATEGORIES.find((item) => item.id === category)?.labelKo : STUDY_CATEGORIES.find((item) => item.id === category)?.label
+  const title = isKo
+    ? `${country.name}에서 살펴볼 ${categoryLabel ?? "대표"} 전공`
+    : categoryLabel ? `Explore ${categoryLabel} study paths in ${country.name}` : country.code === "AU" ? "Featured study paths in Australia" : `Explore study paths in ${country.name}`
+  const intro = isKo
+    ? "전공을 먼저 고른 뒤, 원하는 목표를 선택해 지역·직업 경로를 비교해보세요."
+    : "Choose a field first, then add the outcome you care about to compare regional career paths."
+
+  return <section>
+    <div><p className="text-xs font-semibold uppercase tracking-[.18em] text-blue-700">{country.name}</p><h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{title}</h2><p className="mt-2 max-w-2xl text-slate-600">{intro}</p></div>
+    <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{concepts.map((concept) => {
+      const selected = major === concept.id
+      const href = productHref("/countries/search", locale, { country: country.code, category: concept.category, major: concept.id })
+      return <Link key={concept.id} href={href} className={`group rounded-2xl border bg-white p-5 transition-all hover:border-blue-300 hover:shadow-md ${selected ? "border-blue-400 ring-2 ring-blue-100" : "border-slate-200"}`}>
+        <div className="flex items-start justify-between gap-3"><span className="grid size-10 place-items-center rounded-xl bg-blue-50 text-xl">{majorEmoji(concept.category)}</span>{selected && <span className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">{isKo ? "선택됨" : "Selected"}</span>}</div>
+        <p className="mt-5 text-xs font-semibold uppercase tracking-[.12em] text-blue-700">{concept.kind.replaceAll("_", " ")}</p><h3 className="mt-1 text-lg font-semibold text-slate-950">{isKo ? concept.labelKo : concept.label}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{concept.description}</p><span className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-slate-700 group-hover:text-blue-700">{isKo ? "이 전공 선택" : "Choose this field"}<ArrowRight className="h-4 w-4" /></span>
+      </Link>
+    })}</div>
   </section>
 }
 
@@ -231,11 +279,11 @@ export function MajorSearchClient({ initial }: { initial: { country?: string; st
   </DiscoveryLayout>
 }
 
-export function UniversitySearchClient({ initial }: { initial: { country?: string; city?: string; career?: string; budget?: string } }) {
+export function UniversitySearchClient({ initial }: { initial: { country?: string; category?: string; city?: string; career?: string; budget?: string } }) {
   const locale = usePathLocale()
   const router = useRouter()
   const [country, setCountry] = useState(initial.country ?? "")
-  const [category, setCategory] = useState(() => CANONICAL_CAREERS.find((item) => item.id === initial.career)?.categoryId ?? "")
+  const [category, setCategory] = useState(() => initial.category ?? CANONICAL_CAREERS.find((item) => item.id === initial.career)?.categoryId ?? "")
   const [career, setCareer] = useState(initial.career ?? "")
   const [budget, setBudget] = useState<BudgetBandId | "">(initial.budget as BudgetBandId ?? "")
   const [city, setCity] = useState(initial.city ?? "")

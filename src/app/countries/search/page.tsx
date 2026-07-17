@@ -5,5 +5,5 @@ export const metadata: Metadata = { title: "Country Rankings", robots: { index: 
 export default async function CountrySearchPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const query = await searchParams
   const one = (key: string) => typeof query[key] === "string" ? query[key] : undefined
-  return <CountrySearchClient initial={{ country: one("country"), major: one("major"), goal: one("goal") }} />
+  return <CountrySearchClient initial={{ country: one("country"), category: one("category"), major: one("major"), goal: one("goal") }} />
 }

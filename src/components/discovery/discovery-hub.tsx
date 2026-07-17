@@ -2,11 +2,13 @@
 
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { ArrowRight, Building2, MapPinned, Search } from "lucide-react"
 import { CANONICAL_CAREERS } from "@/data/career-comparison-catalog"
 import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
+import { STUDY_CATEGORIES } from "@/data/study-concepts"
 import { localizePath } from "@/lib/i18n/config"
+import { IconPicker, type PickerOption, countryFlag, majorEmoji } from "@/components/ui/icon-picker"
 
 export function CountriesHub({ locale = "en" }: { locale?: "en" | "ko" }) {
   return <Hub eyebrow="Countries" title="Explore 20 study destinations." body="Start with a destination, or rank countries from a career, budget, and priority."><Link href={localizePath("/countries/search", locale)} className="hub-cta bg-blue-600 hover:bg-blue-700"><Search className="h-4 w-4" />Rank countries for me</Link><div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{LAUNCH_COUNTRIES.map((country) => <Link key={country.code} href={localizePath(`/countries/${country.slug}`, locale)} className="group overflow-hidden rounded-xl border border-slate-200 bg-white hover:border-blue-300 hover:shadow-md transition-all"><div className="relative h-40 overflow-hidden"><img src={country.image} alt={country.name} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy" /></div><div className="p-4"><p className="text-xs font-semibold tracking-[.15em] text-blue-700">{country.code}</p><h2 className="mt-1 font-semibold text-slate-950">{country.name}</h2><p className="mt-2 text-xs text-slate-500">{country.publicationStage === "DECISION_READY" ? "Decision-ready" : "Discovery data available"}</p></div></Link>)}</div></Hub>
@@ -31,22 +33,27 @@ export function UniversitiesHub({ locale = "en" }: { locale?: "en" | "ko" }) {
 function UniversityFinder({ locale }: { locale: "en" | "ko" }) {
   const router = useRouter()
   const [country, setCountry] = useState("AU")
-  const [field, setField] = useState("")
+  const [category, setCategory] = useState("")
+  const countryOptions = useMemo<PickerOption[]>(() => LAUNCH_COUNTRIES.map((item) => ({ value: item.code, label: item.name, description: `Explore ${item.name} university options`, icon: countryFlag(item.code), keywords: `${item.code} ${item.slug}` })), [])
+  const categoryOptions = useMemo<PickerOption[]>(() => [
+    { value: "", label: "Choose a category", description: "Browse all available study areas", icon: "✨", keywords: "all categories" },
+    ...STUDY_CATEGORIES.map((item) => ({ value: item.id, label: item.label, description: `Explore ${item.label} study options`, icon: majorEmoji(item.id), keywords: `${item.id} ${item.label}` })),
+  ], [])
 
   function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (country === "AU") {
-      const query = field.trim() ? `?${new URLSearchParams({ field: field.trim() })}` : ""
+      const query = category ? `?${new URLSearchParams({ category })}` : ""
       router.push(`${localizePath("/universities/au", locale)}${query}`)
       return
     }
-    router.push(`${localizePath("/universities/search", locale)}?${new URLSearchParams({ country })}`)
+    router.push(`${localizePath("/universities/search", locale)}?${new URLSearchParams({ country, ...(category ? { category } : {}) })}`)
   }
 
   return <form onSubmit={submit} className="max-w-5xl rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_18px_45px_rgba(15,23,42,.10)]">
     <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
-      <label className="block min-w-52 flex-1"><span className="mb-1 block text-xs font-semibold text-slate-600">Where</span><select value={country} onChange={(event) => setCountry(event.target.value)} className="h-12 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">{LAUNCH_COUNTRIES.map((item) => <option key={item.code} value={item.code}>{item.name}</option>)}</select></label>
-      <label className="block flex-[1.5]"><span className="mb-1 block text-xs font-semibold text-slate-600">Field</span><input value={field} onChange={(event) => setField(event.target.value)} placeholder="e.g. nursing or software" className="h-12 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100" /></label>
+      <div className="flex-1"><IconPicker name="country" label="Where" value={country} options={countryOptions} onChange={setCountry} searchPlaceholder="Search countries" testId="university-country" /></div>
+      <div className="flex-1"><IconPicker name="category" label="Major" value={category} options={categoryOptions} onChange={setCategory} searchPlaceholder="Search categories" testId="university-category" /></div>
       <button className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700"><Building2 className="h-4 w-4" />Search universities</button>
     </div>
   </form>

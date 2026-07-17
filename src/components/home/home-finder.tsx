@@ -6,7 +6,7 @@ import { useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
 import { ArrowRight, ShieldCheck } from "lucide-react"
 import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
-import { STUDY_CONCEPTS } from "@/data/study-concepts"
+import { STUDY_CATEGORIES } from "@/data/study-concepts"
 import { LANDING_GOALS, type LandingGoalId } from "@/lib/discovery/landing-discovery"
 import { localizePath } from "@/lib/i18n/config"
 import { recordDiscoveryEvent } from "@/lib/analytics"
@@ -46,18 +46,17 @@ export function HomeFinder({ locale = "en" }: { locale?: Locale }) {
   const t = isKo ? COPY.ko : COPY.en
   const localePrefix = isKo ? "ko" : "en"
   const [country, setCountry] = useState("everywhere")
-  const [major, setMajor] = useState("anything")
+  const [category, setCategory] = useState("")
   const [goal, setGoal] = useState<LandingGoalId | "">("")
   const router = useRouter()
-  const searchHref = `${localizePath("/countries/search", localePrefix)}?${new URLSearchParams({ country, major, ...(goal ? { goal } : {}) })}`
-  const singaporeWorkspaceHref = `${localizePath("/regional-workspace", localePrefix)}?${new URLSearchParams({ country: "SG", state: "SG", city: "Singapore", major, ...(goal ? { goal } : {}) })}`
+  const searchHref = `${localizePath("/countries/search", localePrefix)}?${new URLSearchParams({ country, ...(category ? { category } : {}), ...(goal ? { goal } : {}) })}`
   const countryOptions = useMemo<PickerOption[]>(() => [
     { value: "everywhere", label: t.countryPlaceholder, description: isKo ? "20개국을 함께 비교" : "Compare all 20 destinations", icon: "🌍", keywords: "all global" },
     ...LAUNCH_COUNTRIES.map((item) => ({ value: item.code, label: item.name, description: isKo ? `${item.name} 유학·취업 신호 보기` : `Explore study and career signals`, icon: countryFlag(item.code), keywords: `${item.code} ${item.slug}` })),
   ], [isKo, t.countryPlaceholder])
   const majorOptions = useMemo<PickerOption[]>(() => [
-    { value: "anything", label: t.majorPlaceholder, description: isKo ? "국가별 유망 전공부터 확인" : "See promising fields by country", icon: "✨", keywords: "any undecided" },
-    ...STUDY_CONCEPTS.map((item) => ({ value: item.id, label: isKo ? item.labelKo : item.label, description: isKo ? item.description : item.description, icon: majorEmoji(item.category), keywords: `${item.category} ${item.aliases.join(" ")} ${item.aliasesKo.join(" ")}` })),
+    { value: "", label: t.majorPlaceholder, description: isKo ? "10개 전공 카테고리에서 선택" : "Choose from 10 study categories", icon: "✨", keywords: "any undecided" },
+    ...STUDY_CATEGORIES.map((item) => ({ value: item.id, label: isKo ? item.labelKo : item.label, description: isKo ? `${item.labelKo} 분야 전공 탐색` : `Explore ${item.label} study paths`, icon: majorEmoji(item.id), keywords: `${item.id} ${item.label} ${item.labelKo}` })),
   ], [isKo, t.majorPlaceholder])
   const goalOptions = useMemo<PickerOption[]>(() => [
     ...LANDING_GOALS.map((item) => ({ value: item.id, label: isKo ? goalCopy(item.id).label : item.label, description: isKo ? goalCopy(item.id).description : goalCopy(item.id).descriptionEn, icon: goalCopy(item.id).icon })),
@@ -70,10 +69,10 @@ export function HomeFinder({ locale = "en" }: { locale?: Locale }) {
           <h1 className="mb-5 text-left text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl lg:whitespace-nowrap lg:text-4xl">
             {t.headline}
           </h1>
-          <form action={searchHref} onSubmit={(event) => { event.preventDefault(); const submitted = new FormData(event.currentTarget); const submittedCountry = String(submitted.get("country") ?? "everywhere"); const submittedMajor = String(submitted.get("major") ?? "anything"); const submittedGoal = String(submitted.get("goal") ?? ""); const href = `${localizePath("/countries/search", localePrefix)}?${new URLSearchParams({ country: submittedCountry, major: submittedMajor, ...(submittedGoal ? { goal: submittedGoal } : {}) })}`; recordDiscoveryEvent("recommendation_start", { surface: "landing", country: submittedCountry, major: submittedMajor, goal: submittedGoal }); if (submittedCountry === "SG" && submittedGoal) { window.open(singaporeWorkspaceHref, "_blank", "noopener,noreferrer"); return } router.push(href) }} className="max-w-5xl rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_18px_45px_rgba(15,23,42,.10)]">
+          <form action={searchHref} onSubmit={(event) => { event.preventDefault(); const submitted = new FormData(event.currentTarget); const submittedCountry = String(submitted.get("country") ?? "everywhere"); const submittedCategory = String(submitted.get("category") ?? ""); const submittedGoal = String(submitted.get("goal") ?? ""); const href = `${localizePath("/countries/search", localePrefix)}?${new URLSearchParams({ country: submittedCountry, ...(submittedCategory ? { category: submittedCategory } : {}), ...(submittedGoal ? { goal: submittedGoal } : {}) })}`; recordDiscoveryEvent("recommendation_start", { surface: "landing", country: submittedCountry, major: submittedCategory || "anything", goal: submittedGoal }); router.push(href) }} className="max-w-5xl rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_18px_45px_rgba(15,23,42,.10)]">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
               <div className="flex-1"><IconPicker name="country" label={t.country} value={country} options={countryOptions} onChange={setCountry} searchPlaceholder={isKo ? "국가 검색" : "Search countries"} testId="country" /></div>
-              <div className="flex-1"><IconPicker name="major" label={t.major} value={major} options={majorOptions} onChange={setMajor} searchPlaceholder={isKo ? "전공 검색" : "Search majors"} testId="major" /></div>
+              <div className="flex-1"><IconPicker name="category" label={t.major} value={category} options={majorOptions} onChange={setCategory} searchPlaceholder={isKo ? "전공 카테고리 검색" : "Search categories"} testId="major" /></div>
               <div className="flex-1"><IconPicker name="goal" label={t.goal} value={goal} options={goalOptions} onChange={(value) => setGoal(value as LandingGoalId)} testId="goal" /></div>
               <button type="submit" className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700"><span>{t.submit}</span><ArrowRight className="h-4 w-4" /></button>
             </div>
