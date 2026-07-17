@@ -6,6 +6,13 @@ export const metadata: Metadata = { title: "University Matches", robots: { index
 export default async function UniversitySearchPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const query = await searchParams
   const one = (key: string) => typeof query[key] === "string" ? query[key] : undefined
-  if (one("country")?.toUpperCase() === "AU") permanentRedirect("/universities/au")
+  if (one("country")?.toUpperCase() === "AU") {
+    const target = new URLSearchParams()
+    for (const key of ["category", "field", "city", "career", "budget"]) {
+      const value = one(key)
+      if (value) target.set(key, value)
+    }
+    permanentRedirect(`/au/study${target.size ? `?${target.toString()}` : ""}`)
+  }
   return <UniversitySearchClient initial={{ country: one("country"), category: one("category"), city: one("city"), career: one("career"), budget: one("budget") }} />
 }

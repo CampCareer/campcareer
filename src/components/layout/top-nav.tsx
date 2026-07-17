@@ -22,7 +22,7 @@ export function TopNav() {
   const pathLocale = localeFromPathname(pathname) ?? locale
   const barePathname = withoutLocalePrefix(pathname)
   const isLanding = barePathname === "/"
-  const hasUnifiedHero = isLanding || barePathname === "/countries/search" || barePathname === "/universities" || barePathname === "/universities/au"
+  const hasUnifiedHero = isLanding || barePathname === "/countries/search" || barePathname === "/universities" || barePathname === "/universities/au" || barePathname === "/au/study" || barePathname === "/au/majors"
   // /map and /maps are full-screen map surfaces on mobile.
   const isMap = barePathname === "/map" || barePathname.startsWith("/map/") || barePathname === "/maps" || barePathname.startsWith("/maps/")
   const isCompare = barePathname === "/compare" || barePathname.startsWith("/compare/")

@@ -29,7 +29,7 @@ function SearchNotice({ title, body }: { title: string; body: string }) {
   return <div className="rounded-2xl border border-blue-200 bg-blue-50 p-5"><div className="flex gap-3"><CircleAlert className="mt-0.5 h-5 w-5 shrink-0 text-blue-700" /><div><h2 className="font-semibold text-blue-950">{title}</h2><p className="mt-1 text-sm leading-6 text-blue-900">{body}</p></div></div></div>
 }
 
-export function CountrySearchClient({ initial }: { initial: { country?: string; category?: string; major?: string; goal?: string } }) {
+export function CountrySearchClient({ initial, basePath = "/countries/search" }: { initial: { country?: string; category?: string; major?: string; goal?: string }; basePath?: string }) {
   const locale = usePathLocale()
   const isKo = locale === "ko"
   const router = useRouter()
@@ -45,6 +45,7 @@ export function CountrySearchClient({ initial }: { initial: { country?: string; 
   const lastTrackedResult = useRef("")
   const hasGoal = Boolean(goal)
   const selectedCountry = country === "everywhere" ? null : getLaunchCountry(country)
+  const effectiveBasePath = basePath === "/au/majors" && country !== "AU" ? "/countries/search" : basePath
 
   const countryOptions = useMemo<PickerOption[]>(() => [
     { value: "everywhere", label: isKo ? "어디든지" : "Everywhere", description: isKo ? "20개국을 함께 비교" : "Compare all 20 destinations", icon: "🌍", keywords: "all global" },
@@ -98,7 +99,7 @@ export function CountrySearchClient({ initial }: { initial: { country?: string; 
     return () => document.removeEventListener("mousedown", onPointerDown)
   }, [goalFilterOpen])
 
-  const href = productHref("/countries/search", locale, { country, ...(category ? { category } : {}), ...(major !== "anything" ? { major } : {}), ...(goal ? { goal } : {}) })
+  const href = productHref(effectiveBasePath, locale, { ...(effectiveBasePath === "/au/majors" ? {} : { country }), ...(category ? { category } : {}), ...(major !== "anything" ? { major } : {}), ...(goal ? { goal } : {}) })
 
   const countryLabel = country === "everywhere" ? (isKo ? "어디든지" : "Everywhere") : getLaunchCountry(country)?.name ?? country
   const majorLabel = category ? (isKo ? STUDY_CATEGORIES.find((item) => item.id === category)?.labelKo : STUDY_CATEGORIES.find((item) => item.id === category)?.label) ?? category : (isKo ? "카테고리 선택" : "Choose a category")
@@ -139,9 +140,9 @@ export function CountrySearchClient({ initial }: { initial: { country?: string; 
   </>
 
   const resultContent = selectedCountry && (!hasGoal || major === "anything")
-    ? <CountryStudyPreview country={selectedCountry} locale={locale} isKo={isKo} category={category} major={major} />
+    ? <CountryStudyPreview country={selectedCountry} locale={locale} isKo={isKo} category={category} major={major} basePath={effectiveBasePath} />
     : !hasGoal
-      ? <Recommendations locale={locale} isKo={isKo} onGoalChange={setGoal} />
+      ? <Recommendations locale={locale} isKo={isKo} onGoalChange={setGoal} basePath={effectiveBasePath} />
       : selectedCountry
         ? <RegionSelection country={selectedCountry} major={major} goal={goal} locale={locale} />
         : loading
@@ -163,7 +164,7 @@ export function CountrySearchClient({ initial }: { initial: { country?: string; 
   </div>
 }
 
-function Recommendations({ locale, isKo, onGoalChange }: { locale: "en" | "ko"; isKo: boolean; onGoalChange: (goal: LandingGoalId) => void }) {
+function Recommendations({ locale, isKo, onGoalChange, basePath = "/countries/search" }: { locale: "en" | "ko"; isKo: boolean; onGoalChange: (goal: LandingGoalId) => void; basePath?: string }) {
   const recommendations = [
     { country: "US", major: "computer-science", goal: "high-income" as LandingGoalId, emoji: "🇺🇸", majorEmoji: "💻" },
     { country: "AU", major: "nursing", goal: "immigration" as LandingGoalId, emoji: "🇦🇺", majorEmoji: "🩺" },
@@ -181,7 +182,7 @@ function Recommendations({ locale, isKo, onGoalChange }: { locale: "en" | "ko"; 
     <div><p className="text-xs font-semibold uppercase tracking-[.18em] text-blue-700">{isKo ? "추천 탐색" : "Recommended searches"}</p><h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{isKo ? "어디로 갈지 모르겠나요?" : "Not sure where to go?"}</h2><p className="mt-2 max-w-2xl text-slate-600">{isKo ? "국가·전공·목표 조합을 클릭하면 바로 비교 결과를 볼 수 있습니다." : "Click a country–major–goal combination to see results instantly."}</p></div>
     <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {recommendations.map((rec) => {
-        const href = productHref("/countries/search", locale, { country: rec.country, major: rec.major, goal: rec.goal })
+        const href = productHref(basePath, locale, { country: rec.country, major: rec.major, goal: rec.goal })
         return <Link key={`${rec.country}-${rec.major}-${rec.goal}`} href={href} className="group flex items-center gap-4 rounded-xl border border-slate-200 bg-white p-4 transition-all hover:border-blue-300 hover:shadow-md">
           <span className="text-3xl">{rec.emoji}</span>
           <div className="min-w-0 flex-1"><p className="font-semibold text-slate-950">{countryName(rec.country)}</p><p className="mt-0.5 text-sm text-slate-600">{rec.majorEmoji} {majorName(rec.major)}</p></div>
@@ -203,7 +204,7 @@ const AU_FEATURED_STUDY_CONCEPT_IDS = [
   "aged-care",
 ] as const
 
-function CountryStudyPreview({ country, locale, isKo, category, major }: { country: NonNullable<ReturnType<typeof getLaunchCountry>>; locale: "en" | "ko"; isKo: boolean; category: string; major: string }) {
+function CountryStudyPreview({ country, locale, isKo, category, major, basePath = "/countries/search" }: { country: NonNullable<ReturnType<typeof getLaunchCountry>>; locale: "en" | "ko"; isKo: boolean; category: string; major: string; basePath?: string }) {
   const conceptIds = country.code === "AU"
     ? AU_FEATURED_STUDY_CONCEPT_IDS
     : STUDY_CONCEPTS.filter((concept) => (concept.coverageByCountry[country.code] ?? "CATALOG") !== "CATALOG").slice(0, 8).map((concept) => concept.id)
@@ -220,7 +221,7 @@ function CountryStudyPreview({ country, locale, isKo, category, major }: { count
     <div><p className="text-xs font-semibold uppercase tracking-[.18em] text-blue-700">{country.name}</p><h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{title}</h2><p className="mt-2 max-w-2xl text-slate-600">{intro}</p></div>
     <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{concepts.map((concept) => {
       const selected = major === concept.id
-      const href = productHref("/countries/search", locale, { country: country.code, category: concept.category, major: concept.id })
+      const href = productHref(basePath, locale, { ...(basePath === "/au/majors" ? {} : { country: country.code }), category: concept.category, major: concept.id })
       return <Link key={concept.id} href={href} className={`group rounded-2xl border bg-white p-5 transition-all hover:border-blue-300 hover:shadow-md ${selected ? "border-blue-400 ring-2 ring-blue-100" : "border-slate-200"}`}>
         <div className="flex items-start justify-between gap-3"><span className="grid size-10 place-items-center rounded-xl bg-blue-50 text-xl">{majorEmoji(concept.category)}</span>{selected && <span className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">{isKo ? "선택됨" : "Selected"}</span>}</div>
         <p className="mt-5 text-xs font-semibold uppercase tracking-[.12em] text-blue-700">{concept.kind.replaceAll("_", " ")}</p><h3 className="mt-1 text-lg font-semibold text-slate-950">{isKo ? concept.labelKo : concept.label}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{concept.description}</p><span className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-slate-700 group-hover:text-blue-700">{isKo ? "이 전공 선택" : "Choose this field"}<ArrowRight className="h-4 w-4" /></span>

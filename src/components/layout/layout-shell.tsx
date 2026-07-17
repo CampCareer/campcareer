@@ -8,7 +8,7 @@ import { withoutLocalePrefix } from "@/lib/i18n/config"
 export function LayoutShell({ children }: { children: React.ReactNode }) {
   const pathname = withoutLocalePrefix(usePathname())
   const isLanding = pathname === "/"
-  const hasUnifiedHero = isLanding || pathname === "/countries/search" || pathname === "/universities" || pathname === "/universities/au"
+  const hasUnifiedHero = isLanding || pathname === "/countries/search" || pathname === "/universities" || pathname === "/universities/au" || pathname === "/au/study" || pathname === "/au/majors"
 
   // Focused funnels render full-screen with no shared top nav: the degree-risk
   // quiz, the login screen, and the AU occupation detail page (which renders its

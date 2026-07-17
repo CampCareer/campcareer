@@ -291,7 +291,7 @@ export default async function AuOccupationPage(props: { params: Promise<Params> 
           durationYears: course.duration_years,
           aqfLevel: course.aqf_level,
         }))}
-        universityRoiHref={occupation.related_broad_field ? `/universities/au?field=${encodeURIComponent(occupation.related_broad_field)}` : null}
+        universityRoiHref={occupation.related_broad_field ? `/au/study?field=${encodeURIComponent(occupation.related_broad_field)}` : null}
         dataNote={buildDataNote(occupation)}
         officialContent={officialContent}
         careerCategory={data.careerCategory}

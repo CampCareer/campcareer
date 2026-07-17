@@ -200,7 +200,7 @@ export default async function CollegeDetailPage(props: { params: Promise<Params>
   if (country === 'au') {
     const university = await getAuUniversityById(params.college_id)
       ?? await getAuUniversityBySlug(params.college_id)
-    if (university) permanentRedirect(`/universities/au/${university.institutionId}`)
+    if (university) permanentRedirect(`/au/study/providers/${university.institutionId}`)
   }
 
   const [rows, websiteUrl] = await Promise.all([

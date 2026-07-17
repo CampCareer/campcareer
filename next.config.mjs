@@ -25,6 +25,14 @@ const nextConfig = {
       // 퍼널 단일화: 구 온보딩 → Degree Risk (영구 이전)
       { source: '/onboarding', destination: '/degree-risk', permanent: true },
 
+      // Australia study canonicalisation. `/au/study` covers universities,
+      // TAFE and vocational credentials; keep the former university URLs for
+      // backlinks and existing search results only.
+      { source: '/universities/au/compare', destination: '/au/study/compare', permanent: true },
+      { source: '/universities/au/:institution', destination: '/au/study/providers/:institution', permanent: true },
+      { source: '/universities/au', destination: '/au/study', permanent: true },
+      { source: '/au/universities', destination: '/au/study', permanent: true },
+
       // SEO migration: code-based occupation URLs now resolve through
       // search-term based CampCareer Maps URLs, then canonicalize to slug.
       {

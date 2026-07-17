@@ -28,7 +28,7 @@ export default async function ROIExplorerPage(
     const target = new URLSearchParams()
     if (param("field")) target.set("field", param("field"))
     if (param("state") && param("state") !== "ALL_STATES") target.set("state", param("state"))
-    permanentRedirect(`/universities/au${target.size ? `?${target.toString()}` : ""}`)
+    permanentRedirect(`/au/study${target.size ? `?${target.toString()}` : ""}`)
   }
   const state = param("state") || DEFAULT_STATE[country]
   const field = param("field")

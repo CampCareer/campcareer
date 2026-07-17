@@ -89,7 +89,7 @@ export default async function AuHubPage() {
               </div>
             </Link>
             <Link
-              href="/universities/au"
+              href="/au/study"
               className="group p-5 rounded-xl border border-slate-200 hover:border-brand/40 hover:bg-brand-tint transition-colors"
             >
               <div className="font-semibold mb-1">🎓 Universities &amp; Courses</div>
@@ -107,7 +107,7 @@ export default async function AuHubPage() {
               </div>
             </Link>
             <Link
-              href="/universities/au"
+              href="/au/study"
               className="group p-5 rounded-xl border border-slate-200 hover:border-brand/40 hover:bg-brand-tint transition-colors"
             >
               <div className="font-semibold mb-1">📊 Compare University ROI</div>

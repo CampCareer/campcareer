@@ -26,7 +26,7 @@ export function UniversitiesHub({ locale = "en" }: { locale?: "en" | "ko" }) {
         <UniversityFinder locale={locale} />
       </div>
     </section>
-    <div className="bg-white"><main className="mx-auto max-w-7xl px-4 pb-12 pt-12 sm:px-6 sm:pb-16 sm:pt-14"><div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{LAUNCH_COUNTRIES.map((country) => <Link key={country.code} href={country.code === "AU" ? localizePath("/universities/au", locale) : `${localizePath("/universities/search", locale)}?country=${country.code}`} className="rounded-xl border border-slate-200 bg-white p-4 transition hover:border-blue-300 hover:shadow-sm"><p className="text-xs font-semibold tracking-[.15em] text-blue-700">{country.code}</p><h2 className="mt-1 font-semibold text-slate-950">{country.name}</h2><p className="mt-2 text-xs text-slate-500">{country.code === "AU" ? "Compare tuition and outcomes" : "Institution evidence in progress"}</p></Link>)}</div></main></div>
+    <div className="bg-white"><main className="mx-auto max-w-7xl px-4 pb-12 pt-12 sm:px-6 sm:pb-16 sm:pt-14"><div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{LAUNCH_COUNTRIES.map((country) => <Link key={country.code} href={country.code === "AU" ? localizePath("/au/study", locale) : `${localizePath("/universities/search", locale)}?country=${country.code}`} className="rounded-xl border border-slate-200 bg-white p-4 transition hover:border-blue-300 hover:shadow-sm"><p className="text-xs font-semibold tracking-[.15em] text-blue-700">{country.code}</p><h2 className="mt-1 font-semibold text-slate-950">{country.name}</h2><p className="mt-2 text-xs text-slate-500">{country.code === "AU" ? "Compare tuition and outcomes" : "Institution evidence in progress"}</p></Link>)}</div></main></div>
   </div>
 }
 
@@ -44,7 +44,7 @@ function UniversityFinder({ locale }: { locale: "en" | "ko" }) {
     event.preventDefault()
     if (country === "AU") {
       const query = category ? `?${new URLSearchParams({ category })}` : ""
-      router.push(`${localizePath("/universities/au", locale)}${query}`)
+      router.push(`${localizePath("/au/study", locale)}${query}`)
       return
     }
     router.push(`${localizePath("/universities/search", locale)}?${new URLSearchParams({ country, ...(category ? { category } : {}) })}`)

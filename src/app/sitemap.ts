@@ -47,7 +47,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/maps`, lastModified: lastModStatic, priority: 0.9, changeFrequency: "daily" },
     { url: `${BASE}/countries`, lastModified: lastModStatic, priority: 0.9, changeFrequency: "weekly" },
     { url: `${BASE}/universities`, lastModified: lastModStatic, priority: 0.85, changeFrequency: "weekly" },
-    { url: `${BASE}/universities/au`, lastModified: lastModStatic, priority: 0.9, changeFrequency: "weekly" },
+    { url: `${BASE}/au/study`, lastModified: lastModStatic, priority: 0.9, changeFrequency: "weekly" },
+    { url: `${BASE}/au/majors`, lastModified: lastModStatic, priority: 0.9, changeFrequency: "weekly" },
     { url: `${BASE}/majors`, lastModified: lastModStatic, priority: 0.85, changeFrequency: "weekly" },
     { url: `${BASE}/roi-explorer`, lastModified: lastModStatic, priority: 0.9, changeFrequency: "daily" },
     { url: `${BASE}/blog`, lastModified: lastModStatic, priority: 0.7, changeFrequency: "weekly" },
@@ -164,7 +165,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const auUniversityProfilePages: MetadataRoute.Sitemap = (auUniversityRows ?? [])
     .filter((row): row is { institution_id: string } => Boolean(row.institution_id))
     .map((row) => ({
-      url: `${BASE}/universities/au/${row.institution_id}`,
+      url: `${BASE}/au/study/providers/${row.institution_id}`,
       lastModified: lastMod,
       priority: 0.75,
       changeFrequency: "monthly" as const,
