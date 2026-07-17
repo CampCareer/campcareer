@@ -4,18 +4,10 @@ import { notFound } from "next/navigation"
 import { getOccupationPageData, getOccupationMeta } from "@/lib/occupation-detail"
 import { pageMetadata } from "@/lib/seo"
 import { JsonLd, breadcrumbLd } from "@/components/seo/json-ld"
-import { supabaseAdmin } from "@/lib/supabase-admin"
 import OccupationDetailPage from "./OccupationDetailPage"
 
-// Build-time pre-render all 395 AU occupation pages so Google doesn't encounter
-// on-demand ISR cold starts during crawl — solves the "77 indexed / 1400 submitted" gap.
-export async function generateStaticParams() {
-  const { data } = await supabaseAdmin
-    .from("occupations_au")
-    .select("anzsco_code")
-  return (data ?? []).map((row) => ({ code: row.anzsco_code as string }))
-}
-
+// Vercel permanently redirects this legacy URL family to /maps/au/:code before
+// Next.js serves it, so pre-rendering every legacy code page only slows builds.
 export const revalidate = 3600
 export const dynamicParams = true
 

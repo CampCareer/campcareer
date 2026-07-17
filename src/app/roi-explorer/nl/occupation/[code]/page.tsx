@@ -27,11 +27,6 @@ function getOccupation(code: string): NlOccRow | null {
   return raw[code] ?? null
 }
 
-export function generateStaticParams() {
-  const raw = nlOccupationsRaw as unknown as Record<string, NlOccRow>
-  return Object.keys(raw).map((code) => ({ code }))
-}
-
 function fmt(eur: number | null) {
   return eur != null ? `€${eur.toLocaleString()}` : "—"
 }

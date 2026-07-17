@@ -9,11 +9,6 @@ import deOccupationsRaw from "@/data/de-occupations.json"
 export const revalidate = 3600
 export const dynamicParams = true
 
-export function generateStaticParams() {
-  const raw = deOccupationsRaw as unknown as Record<string, DeOccRow>
-  return Object.keys(raw).map((code) => ({ code }))
-}
-
 type DeOccRow = {
   kldb_code: string
   occupation_de: string
