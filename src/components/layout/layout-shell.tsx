@@ -8,6 +8,7 @@ import { withoutLocalePrefix } from "@/lib/i18n/config"
 export function LayoutShell({ children }: { children: React.ReactNode }) {
   const pathname = withoutLocalePrefix(usePathname())
   const isLanding = pathname === "/"
+  const hasUnifiedHero = isLanding || pathname === "/countries/search" || pathname === "/universities" || pathname === "/universities/au"
 
   // Focused funnels render full-screen with no shared top nav: the degree-risk
   // quiz, the login screen, and the AU occupation detail page (which renders its
@@ -25,9 +26,9 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
   const isMap = pathname === "/map" || pathname.startsWith("/map/") || pathname === "/maps" || pathname.startsWith("/maps/")
 
   return (
-    <div className={`flex min-h-screen flex-col ${isLanding ? "bg-[linear-gradient(180deg,#ffffff_0%,#e7f0ff_46%,#f0f5ff_100%)]" : ""}`}>
+    <div className={`flex min-h-screen flex-col ${hasUnifiedHero ? "bg-[linear-gradient(180deg,#ffffff_0%,#e7f0ff_46%,#f0f5ff_100%)]" : ""}`}>
       <TopNav />
-      <main className={`flex-1 ${isLanding ? "bg-transparent" : "bg-background"}`}>{children}</main>
+      <main className={`flex-1 ${hasUnifiedHero ? "bg-transparent" : "bg-background"}`}>{children}</main>
       <SiteFooter className={isMap ? "hidden sm:block" : undefined} />
     </div>
   )

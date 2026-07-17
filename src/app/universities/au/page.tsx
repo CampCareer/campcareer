@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowRight, BarChart3, Building2, MapPin, Search, ShieldCheck } from 'lucide-react'
+import { ArrowRight, BarChart3, MapPin, Search } from 'lucide-react'
 import { AU_AQF_FILTERS, AU_STATES, getAuUniversitiesByIds, isAuAqfFilter, type AuAqfFilter, aqfLabel } from '@/lib/au-universities'
 import { fetchRoiData } from '@/lib/roi-query'
 import { pageMetadata } from '@/lib/seo'
@@ -74,47 +74,27 @@ export default async function AustralianUniversitiesPage({ searchParams }: { sea
     .slice(0, 60)
 
   return (
-    <main className="min-h-screen bg-slate-50">
-      <section className="border-b border-slate-200 bg-white">
-        <div className="mx-auto max-w-6xl px-5 py-12 sm:px-6">
-          <p className="text-sm font-semibold text-blue-700">Australia · Universities</p>
-          <h1 className="mt-2 max-w-3xl text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
-            Find an Australian university that fits your field and budget
-          </h1>
-          <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">
-            Compare published tuition with provider-level graduate outcomes. ROI is an estimate for comparing options—not a promise of an individual outcome.
-          </p>
-          <div className="mt-6 flex flex-wrap gap-3 text-sm">
-            <span className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1.5 font-medium text-blue-800"><Building2 className="h-4 w-4" /> 41 providers with ROI-ready records</span>
-            <span className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1.5 font-medium text-emerald-800"><ShieldCheck className="h-4 w-4" /> Tuition + QILT provider outcomes</span>
-          </div>
+    <main className="min-h-screen bg-transparent">
+      <section className="border-b border-slate-200/90 bg-transparent">
+        <div className="mx-auto max-w-6xl px-5 pb-8 pt-6 sm:px-6 sm:pb-10 sm:pt-8">
+          <h1 className="mb-5 text-left text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl lg:whitespace-nowrap lg:text-4xl">Find the right university to study</h1>
+          <form className="max-w-5xl rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_18px_45px_rgba(15,23,42,.10)]" action="/universities/au">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
+              <label className="relative block flex-1">
+                <span className="mb-1 block text-xs font-semibold text-slate-600">Study field</span>
+                <Search className="pointer-events-none absolute bottom-3 left-3 h-4 w-4 text-slate-400" />
+                <input name="field" defaultValue={filters.field} maxLength={80} placeholder="e.g. nursing or software" className="h-12 w-full rounded-xl border border-slate-200 bg-white pl-9 pr-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100" />
+              </label>
+              <label className="block min-w-36"><span className="mb-1 block text-xs font-semibold text-slate-600">State</span><select name="state" defaultValue={filters.state} className="h-12 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"><option value="ALL_STATES">All states</option>{AU_STATES.map((state) => <option key={state} value={state}>{state}</option>)}</select></label>
+              <label className="block min-w-48"><span className="mb-1 block text-xs font-semibold text-slate-600">Study level</span><select name="level" defaultValue={filters.level} className="h-12 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">{Object.entries(AU_AQF_FILTERS).map(([key, item]) => <option key={key} value={key}>{item.label}</option>)}</select></label>
+              <button className="h-12 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700">Search</button>
+            </div>
+          </form>
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-5 py-8 sm:px-6">
-        <form className="grid gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:grid-cols-[minmax(0,1fr)_140px_210px_auto]" action="/universities/au">
-          <label className="relative block">
-            <span className="sr-only">Study field</span>
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-            <input name="field" defaultValue={filters.field} maxLength={80} placeholder="Search a field, e.g. nursing or software" className="h-11 w-full rounded-xl border border-slate-200 bg-white pl-9 pr-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100" />
-          </label>
-          <label>
-            <span className="sr-only">State</span>
-            <select name="state" defaultValue={filters.state} className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
-              <option value="ALL_STATES">All states</option>
-              {AU_STATES.map((state) => <option key={state} value={state}>{state}</option>)}
-            </select>
-          </label>
-          <label>
-            <span className="sr-only">Study level</span>
-            <select name="level" defaultValue={filters.level} className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
-              {Object.entries(AU_AQF_FILTERS).map(([key, item]) => <option key={key} value={key}>{item.label}</option>)}
-            </select>
-          </label>
-          <button className="h-11 rounded-xl bg-slate-950 px-5 text-sm font-semibold text-white transition hover:bg-slate-800">Search</button>
-        </form>
-
-        <div className="mt-7 flex flex-wrap items-end justify-between gap-3">
+      <section className="bg-white"><div className="mx-auto max-w-6xl px-5 pb-12 pt-12 sm:px-6 sm:pb-16 sm:pt-14">
+        <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
             <h2 className="text-lg font-semibold text-slate-950">{rows.length} university options</h2>
             <p className="mt-1 text-sm text-slate-500">Sorted by the available ROI estimate. Select a university to review its fields and assumptions.</p>
@@ -164,7 +144,7 @@ export default async function AustralianUniversitiesPage({ searchParams }: { sea
           <p className="font-semibold text-slate-950">How to use this comparison</p>
           <p className="mt-1">Tuition and course counts are grouped by field and AQF level. Graduate earnings, employment and completion data are provider-level QILT measures, so use them to shortlist—not to infer a guaranteed course-specific result.</p>
         </aside>
-      </section>
+      </div></section>
     </main>
   )
 }

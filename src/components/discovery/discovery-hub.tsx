@@ -1,4 +1,8 @@
+"use client"
+
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 import { ArrowRight, Building2, MapPinned, Search } from "lucide-react"
 import { CANONICAL_CAREERS } from "@/data/career-comparison-catalog"
 import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
@@ -9,11 +13,43 @@ export function CountriesHub({ locale = "en" }: { locale?: "en" | "ko" }) {
 }
 
 export function MajorsHub({ locale = "en" }: { locale?: "en" | "ko" }) {
-  return <Hub eyebrow="Majors" title="Explore careers by country and region." body="Tell us where you want to live, then discover which career paths have local evidence."><Link href={localizePath("/majors/search", locale)} className="hub-cta bg-amber-400 text-amber-950 hover:bg-amber-300"><MapPinned className="h-4 w-4" />Find regional paths</Link><div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{CANONICAL_CAREERS.map((career) => <Link key={career.id} href={`${localizePath("/countries/search", locale)}?career=${career.id}&budget=50000-75000&goal=career-outcomes&currency=USD`} className="rounded-xl border border-slate-200 bg-white p-4 hover:border-amber-300"><p className="text-xs font-semibold uppercase tracking-[.12em] text-amber-800">{career.categoryId}</p><h2 className="mt-1 font-semibold text-slate-950">{career.label}</h2><span className="mt-3 inline-flex items-center text-sm font-semibold text-slate-600">Explore <ArrowRight className="ml-1 h-4 w-4" /></span></Link>)}</div></Hub>
+  return <Hub eyebrow="Majors" title="Explore careers by country and region." body="Tell us where you want to live, then discover which career paths have local evidence."><Link href={localizePath("/majors/search", locale)} className="hub-cta bg-blue-600 hover:bg-blue-700"><MapPinned className="h-4 w-4" />Find regional paths</Link><div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{CANONICAL_CAREERS.map((career) => <Link key={career.id} href={`${localizePath("/countries/search", locale)}?career=${career.id}&budget=50000-75000&goal=career-outcomes&currency=USD`} className="rounded-xl border border-slate-200 bg-white p-4 hover:border-blue-300"><p className="text-xs font-semibold uppercase tracking-[.12em] text-blue-700">{career.categoryId}</p><h2 className="mt-1 font-semibold text-slate-950">{career.label}</h2><span className="mt-3 inline-flex items-center text-sm font-semibold text-slate-600">Explore <ArrowRight className="ml-1 h-4 w-4" /></span></Link>)}</div></Hub>
 }
 
 export function UniversitiesHub({ locale = "en" }: { locale?: "en" | "ko" }) {
-  return <Hub eyebrow="Universities" title="Find universities that fit your budget." body="Australia is the first destination with field, tuition and graduate-outcome comparison in one place. More destinations will follow as evidence is normalised."><Link href={localizePath("/universities/au", locale)} className="hub-cta bg-rose-600 hover:bg-rose-700"><Building2 className="h-4 w-4" />Compare Australian universities</Link><div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{LAUNCH_COUNTRIES.map((country) => <Link key={country.code} href={country.code === "AU" ? localizePath("/universities/au", locale) : `${localizePath("/universities/search", locale)}?country=${country.code}`} className="rounded-xl border border-slate-200 bg-white p-4 hover:border-rose-300"><p className="text-xs font-semibold tracking-[.15em] text-rose-700">{country.code}</p><h2 className="mt-1 font-semibold text-slate-950">{country.name}</h2><p className="mt-2 text-xs text-slate-500">{country.code === "AU" ? "Compare tuition and outcomes" : "Institution evidence in progress"}</p></Link>)}</div></Hub>
+  return <div>
+    <section className="border-b border-slate-200/90 bg-transparent">
+      <div className="mx-auto max-w-7xl px-4 pb-8 pt-6 sm:px-6 sm:pb-10 sm:pt-8">
+        <h1 className="mb-5 text-left text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl lg:whitespace-nowrap lg:text-4xl">Find the right university to study</h1>
+        <UniversityFinder locale={locale} />
+      </div>
+    </section>
+    <div className="bg-white"><main className="mx-auto max-w-7xl px-4 pb-12 pt-12 sm:px-6 sm:pb-16 sm:pt-14"><div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{LAUNCH_COUNTRIES.map((country) => <Link key={country.code} href={country.code === "AU" ? localizePath("/universities/au", locale) : `${localizePath("/universities/search", locale)}?country=${country.code}`} className="rounded-xl border border-slate-200 bg-white p-4 transition hover:border-blue-300 hover:shadow-sm"><p className="text-xs font-semibold tracking-[.15em] text-blue-700">{country.code}</p><h2 className="mt-1 font-semibold text-slate-950">{country.name}</h2><p className="mt-2 text-xs text-slate-500">{country.code === "AU" ? "Compare tuition and outcomes" : "Institution evidence in progress"}</p></Link>)}</div></main></div>
+  </div>
+}
+
+function UniversityFinder({ locale }: { locale: "en" | "ko" }) {
+  const router = useRouter()
+  const [country, setCountry] = useState("AU")
+  const [field, setField] = useState("")
+
+  function submit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    if (country === "AU") {
+      const query = field.trim() ? `?${new URLSearchParams({ field: field.trim() })}` : ""
+      router.push(`${localizePath("/universities/au", locale)}${query}`)
+      return
+    }
+    router.push(`${localizePath("/universities/search", locale)}?${new URLSearchParams({ country })}`)
+  }
+
+  return <form onSubmit={submit} className="max-w-5xl rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_18px_45px_rgba(15,23,42,.10)]">
+    <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
+      <label className="block min-w-52 flex-1"><span className="mb-1 block text-xs font-semibold text-slate-600">Where</span><select value={country} onChange={(event) => setCountry(event.target.value)} className="h-12 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">{LAUNCH_COUNTRIES.map((item) => <option key={item.code} value={item.code}>{item.name}</option>)}</select></label>
+      <label className="block flex-[1.5]"><span className="mb-1 block text-xs font-semibold text-slate-600">Field</span><input value={field} onChange={(event) => setField(event.target.value)} placeholder="e.g. nursing or software" className="h-12 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100" /></label>
+      <button className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700"><Building2 className="h-4 w-4" />Search universities</button>
+    </div>
+  </form>
 }
 
 function Hub({ eyebrow, title, body, children }: { eyebrow: string; title: string; body: string; children: React.ReactNode }) {

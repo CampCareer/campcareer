@@ -22,6 +22,7 @@ export function TopNav() {
   const pathLocale = localeFromPathname(pathname) ?? locale
   const barePathname = withoutLocalePrefix(pathname)
   const isLanding = barePathname === "/"
+  const hasUnifiedHero = isLanding || barePathname === "/countries/search" || barePathname === "/universities" || barePathname === "/universities/au"
   // /map and /maps are full-screen map surfaces on mobile.
   const isMap = barePathname === "/map" || barePathname.startsWith("/map/") || barePathname === "/maps" || barePathname.startsWith("/maps/")
   const isCompare = barePathname === "/compare" || barePathname.startsWith("/compare/")
@@ -74,7 +75,7 @@ export function TopNav() {
   })
 
   return (
-    <header className={cn(isCompare ? "" : "sticky top-0 z-40", isLanding ? "bg-transparent" : "bg-[linear-gradient(180deg,#ffffff_0%,#f0f5ff_100%)]", "backdrop-blur-sm")}>
+    <header className={cn(isCompare ? "" : "sticky top-0 z-40", hasUnifiedHero ? "bg-transparent" : "bg-[linear-gradient(180deg,#ffffff_0%,#f0f5ff_100%)]", "backdrop-blur-sm")}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="h-20 flex items-center gap-4">
           <Link href={localizePath("/", pathLocale)} className="flex items-center gap-2.5 shrink-0 mr-auto">

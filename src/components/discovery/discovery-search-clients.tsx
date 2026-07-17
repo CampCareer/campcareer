@@ -26,7 +26,7 @@ function productHref(path: string, locale: "en" | "ko", params: Record<string, s
 }
 
 function SearchNotice({ title, body }: { title: string; body: string }) {
-  return <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5"><div className="flex gap-3"><CircleAlert className="mt-0.5 h-5 w-5 shrink-0 text-amber-700" /><div><h2 className="font-semibold text-amber-950">{title}</h2><p className="mt-1 text-sm leading-6 text-amber-900">{body}</p></div></div></div>
+  return <div className="rounded-2xl border border-blue-200 bg-blue-50 p-5"><div className="flex gap-3"><CircleAlert className="mt-0.5 h-5 w-5 shrink-0 text-blue-700" /><div><h2 className="font-semibold text-blue-950">{title}</h2><p className="mt-1 text-sm leading-6 text-blue-900">{body}</p></div></div></div>
 }
 
 export function CountrySearchClient({ initial }: { initial: { country?: string; major?: string; goal?: string } }) {
@@ -141,16 +141,14 @@ export function CountrySearchClient({ initial }: { initial: { country?: string; 
 
   if (selectedCountry) return <div className="bg-slate-50"><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 sm:py-10">{searchBar}{resultContent}</main></div>
 
-  return <div className="bg-white">
-    <section className="relative z-40 border-b border-slate-200 bg-[linear-gradient(180deg,#ffffff_0%,#f0f5ff_100%)]">
+  return <div>
+    <section className="relative z-40 border-b border-slate-200/90 bg-transparent">
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
         {searchBar}
       </div>
     </section>
     {expanded && <div className="fixed inset-0 top-[88px] z-30 bg-black/40" onClick={() => { setGoalFilterOpen(false); setExpanded(false) }} />}
-    <main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 sm:py-10 bg-slate-50">
-      {resultContent}
-    </main>
+    <div className="bg-slate-50"><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 sm:py-10">{resultContent}</main></div>
   </div>
 }
 
@@ -192,7 +190,7 @@ function LandingDiscoveryResults({ result, locale }: { result: LandingDiscoveryR
     <div className="flex flex-wrap items-end justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[.18em] text-blue-700">Destination signals</p><h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{result.goal.label} for {majorLabel}</h2></div></div>
     {selected && <p className="mt-5 text-sm font-medium text-slate-700"><span className="font-semibold text-blue-700">{selected.name}</span> is your chosen country. These destinations have similarly strong signals for this search.</p>}
     <div className="mt-5 grid gap-4 sm:grid-cols-2">{results.map((country) => <LandingCountryCard key={country.code} country={country} locale={locale} />)}</div>
-    {result.input.major === "anything" && <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50 p-5"><h2 className="font-semibold text-amber-950">Not sure what to study yet?</h2><p className="mt-1 text-sm leading-6 text-amber-900">The country cards show the fields with the strongest country-level signals. Open a country’s map to explore occupations and regions before you choose a major.</p></div>}
+    {result.input.major === "anything" && <div className="mt-8 rounded-2xl border border-blue-200 bg-blue-50 p-5"><h2 className="font-semibold text-blue-950">Not sure what to study yet?</h2><p className="mt-1 text-sm leading-6 text-blue-900">The country cards show the fields with the strongest country-level signals. Open a country’s map to explore occupations and regions before you choose a major.</p></div>}
   </section>
 }
 
@@ -224,10 +222,10 @@ export function MajorSearchClient({ initial }: { initial: { country?: string; st
   return <DiscoveryLayout eyebrow="Majors" title="Which career path fits this place?" body="Choose a destination and optional state or region. Recommendations appear only when regional evidence is complete.">
     <form action={href} onSubmit={(event) => { event.preventDefault(); if (ready) router.push(href) }} className="grid gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm lg:grid-cols-[1.2fr_1fr_1.2fr_1fr_auto]">
       <Select label="Destination country" value={country} onChange={setCountry} options={[{ value: "", label: "Choose a country" }, ...LAUNCH_COUNTRIES.map((item) => ({ value: item.code, label: item.name }))]} />
-      <label className="block"><span className="mb-1 block text-xs font-semibold text-slate-600">State or region (optional)</span><input value={state} onChange={(event) => setState(event.target.value)} placeholder="e.g. NSW" className="h-11 w-full rounded-xl border border-slate-300 px-3 text-sm outline-none focus:ring-2 focus:ring-amber-400" /></label>
+      <label className="block"><span className="mb-1 block text-xs font-semibold text-slate-600">State or region (optional)</span><input value={state} onChange={(event) => setState(event.target.value)} placeholder="e.g. NSW" className="h-11 w-full rounded-xl border border-slate-300 px-3 text-sm outline-none focus:ring-2 focus:ring-blue-500" /></label>
       <Select label="Priority" value={goal} onChange={(value) => setGoal(value as SearchGoalId)} options={[{ value: "", label: "Choose a goal" }, ...SEARCH_GOALS.map((item) => ({ value: item.id, label: item.label }))]} />
       <Select label="Budget (optional)" value={budget} onChange={(value) => setBudget(value as BudgetBandId)} options={[{ value: "", label: "Any budget" }, ...BUDGET_BANDS.map((item) => ({ value: item.id, label: item.label }))]} />
-      <button disabled={!ready} className="mt-auto inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-amber-400 px-5 text-sm font-semibold text-amber-950 hover:bg-amber-300 disabled:cursor-not-allowed disabled:bg-slate-300">Find paths <ArrowRight className="h-4 w-4" /></button>
+      <button disabled={!ready} className="mt-auto inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300">Find paths <ArrowRight className="h-4 w-4" /></button>
     </form>
     {!ready ? <SearchNotice title="Choose a country and priority" body="You can add a state or region when you know where you want to live." /> : <MajorResult result={result} country={country} goal={goal} locale={locale} />}
   </DiscoveryLayout>
@@ -252,21 +250,21 @@ export function UniversitySearchClient({ initial }: { initial: { country?: strin
     return () => controller.abort()
   }, [budget, career, city, country, ready])
   const href = ready ? productHref("/universities/search", locale, { country, career, budget, ...(city ? { city } : {}) }) : "#"
-  return <DiscoveryLayout eyebrow="Universities" title="Which university fits your budget and career?" body="We only call a university an optimal match when programme, cost, entry requirements, and outcome evidence are complete.">
+  return <DiscoveryLayout eyebrow="Universities" title="Find the right university to study">
     <form action={href} onSubmit={(event) => { event.preventDefault(); if (ready) router.push(href) }} className="grid gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm lg:grid-cols-[1fr_1fr_1.1fr_1fr_auto]">
       <Select label="Destination country" value={country} onChange={setCountry} options={[{ value: "", label: "Choose a country" }, ...LAUNCH_COUNTRIES.map((item) => ({ value: item.code, label: item.name }))]} />
       <Select label="Career category" value={category} onChange={(value) => { setCategory(value); setCareer("") }} options={[{ value: "", label: "Choose a category" }, ...STUDY_CATEGORIES.map((item) => ({ value: item.id, label: item.label }))]} />
       <Select label="Career" value={career} disabled={!category} onChange={setCareer} options={[{ value: "", label: "Choose a career" }, ...careers.map((item) => ({ value: item.id, label: item.label }))]} />
       <Select label="First-year budget" value={budget} onChange={(value) => setBudget(value as BudgetBandId)} options={[{ value: "", label: "Choose a budget" }, ...BUDGET_BANDS.map((item) => ({ value: item.id, label: item.label }))]} />
-      <button disabled={!ready} className="mt-auto inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-rose-600 px-5 text-sm font-semibold text-white hover:bg-rose-700 disabled:cursor-not-allowed disabled:bg-slate-300">Find universities <ArrowRight className="h-4 w-4" /></button>
-      <label className="lg:col-span-2 block"><span className="mb-1 block text-xs font-semibold text-slate-600">City (optional)</span><input value={city} onChange={(event) => setCity(event.target.value)} placeholder="e.g. Dublin" className="h-11 w-full rounded-xl border border-slate-300 px-3 text-sm outline-none focus:ring-2 focus:ring-rose-400" /></label>
+      <button disabled={!ready} className="mt-auto inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300">Find universities <ArrowRight className="h-4 w-4" /></button>
+      <label className="lg:col-span-2 block"><span className="mb-1 block text-xs font-semibold text-slate-600">City (optional)</span><input value={city} onChange={(event) => setCity(event.target.value)} placeholder="e.g. Dublin" className="h-11 w-full rounded-xl border border-slate-300 px-3 text-sm outline-none focus:ring-2 focus:ring-blue-500" /></label>
     </form>
     {!ready ? <SearchNotice title="Choose a country, career, and budget" body="City is optional; refine it when location matters to your study plan." /> : <UniversityResult result={result} country={country} locale={locale} />}
   </DiscoveryLayout>
 }
 
-function DiscoveryLayout({ eyebrow, title, body, children }: { eyebrow: string; title: string; body: string; children: React.ReactNode }) {
-  return <div className="bg-slate-50"><section className="border-b border-slate-200 bg-white"><div className="mx-auto max-w-7xl px-4 py-11 sm:px-6"><p className="text-xs font-semibold uppercase tracking-[.18em] text-blue-700">{eyebrow}</p><h1 className="mt-3 max-w-3xl text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">{title}</h1><p className="mt-3 max-w-2xl text-base leading-7 text-slate-600">{body}</p></div></section><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 sm:py-10">{children}</main></div>
+function DiscoveryLayout({ eyebrow, title, body, children }: { eyebrow: string; title: string; body?: string; children: React.ReactNode }) {
+  return <div className="bg-slate-50"><section className="border-b border-slate-200 bg-white"><div className="mx-auto max-w-7xl px-4 py-11 sm:px-6"><p className="text-xs font-semibold uppercase tracking-[.18em] text-blue-700">{eyebrow}</p><h1 className="mt-3 max-w-3xl text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">{title}</h1>{body && <p className="mt-3 max-w-2xl text-base leading-7 text-slate-600">{body}</p>}</div></section><main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 sm:py-10">{children}</main></div>
 }
 
 function Select({ label, value, onChange, options, disabled = false }: { label: string; value: string; onChange: (value: string) => void; options: Array<{ value: string; label: string }>; disabled?: boolean }) {
@@ -278,12 +276,12 @@ function LoadingCards() { return <div className="grid gap-4 md:grid-cols-3">{[1,
 function MajorResult({ result, country, goal, locale }: { result: DiscoveryEnvelope<MajorRecommendationsData> | null; country: string; goal: string; locale: "en" | "ko" }) {
   if (result?.data.recommendations.length) return <div />
   const landingGoal = goal === "lower-first-year-cost" ? "low-cost" : goal === "work-and-immigration" ? "immigration" : "high-income"
-  return <section><SearchNotice title="Regional ranking under review" body="CampCareer will not use nationwide averages to rank a state or region. Explore canonical career paths and the country’s Maps data while local occupation evidence is reviewed." /><div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{(result?.data.discoveryCareers ?? []).slice(0, 8).map((career) => <Link key={career.id} href={productHref("/countries/search", locale, { country: "everywhere", major: "anything", goal: landingGoal })} className="rounded-xl border border-slate-200 bg-white p-4 hover:border-amber-300"><p className="text-sm font-semibold text-slate-950">{career.label}</p><span className="mt-3 inline-flex text-sm font-semibold text-amber-800">Check country fit <ArrowRight className="ml-1 h-4 w-4" /></span></Link>)}</div><Link href={localizePath(`/maps?country=${country.toLowerCase()}`, locale)} className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-slate-700"><MapPinned className="h-4 w-4" />Explore regional Maps data</Link></section>
+  return <section><SearchNotice title="Regional ranking under review" body="CampCareer will not use nationwide averages to rank a state or region. Explore canonical career paths and the country’s Maps data while local occupation evidence is reviewed." /><div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{(result?.data.discoveryCareers ?? []).slice(0, 8).map((career) => <Link key={career.id} href={productHref("/countries/search", locale, { country: "everywhere", major: "anything", goal: landingGoal })} className="rounded-xl border border-slate-200 bg-white p-4 hover:border-blue-300"><p className="text-sm font-semibold text-slate-950">{career.label}</p><span className="mt-3 inline-flex text-sm font-semibold text-blue-700">Check country fit <ArrowRight className="ml-1 h-4 w-4" /></span></Link>)}</div><Link href={localizePath(`/maps?country=${country.toLowerCase()}`, locale)} className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-slate-700"><MapPinned className="h-4 w-4" />Explore regional Maps data</Link></section>
 }
 
 function UniversityResult({ result, country, locale }: { result: DiscoveryEnvelope<UniversityMatchesData> | null; country: string; locale: "en" | "ko" }) {
   if (result?.data.matches.length) return <div />
-  return <section><SearchNotice title="University matches under review" body={result?.data.reason ?? "We are checking programme, tuition, requirements, and graduate-outcome evidence before ranking universities."} /><Link href={localizePath(`/maps?country=${country.toLowerCase()}`, locale)} className="mt-5 inline-flex items-center gap-2 rounded-xl border border-rose-200 bg-white px-4 py-3 text-sm font-semibold text-rose-700 hover:bg-rose-50"><Building2 className="h-4 w-4" />Explore verified institutions on Maps <ExternalLink className="h-4 w-4" /></Link></section>
+  return <section><SearchNotice title="University matches under review" body={result?.data.reason ?? "We are checking programme, tuition, requirements, and graduate-outcome evidence before ranking universities."} /><Link href={localizePath(`/maps?country=${country.toLowerCase()}`, locale)} className="mt-5 inline-flex items-center gap-2 rounded-xl border border-blue-200 bg-white px-4 py-3 text-sm font-semibold text-blue-700 hover:bg-blue-50"><Building2 className="h-4 w-4" />Explore verified institutions on Maps <ExternalLink className="h-4 w-4" /></Link></section>
 }
 
 function Row({ label, value }: { label: string; value: string }) { return <div className="flex justify-between gap-3 border-b border-slate-100 pb-2"><dt className="text-slate-500">{label}</dt><dd className="text-right font-medium capitalize text-slate-800">{value}</dd></div> }
