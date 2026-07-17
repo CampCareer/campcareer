@@ -83,11 +83,16 @@ export async function proxy(request: NextRequest) {
     ? NextResponse.rewrite(rewriteDestination, { request: { headers: requestHeaders } })
     : NextResponse.next({ request: { headers: requestHeaders } })
   const withLocale = (response: NextResponse) => {
-    response.cookies.set(LOCALE_COOKIE, locale, {
-      path: '/',
-      maxAge: 60 * 60 * 24 * 365,
-      sameSite: 'lax',
-    })
+    // Only locale-prefixed URLs need a server-set preference. Setting this on
+    // every public response turns otherwise cacheable pages into per-visitor
+    // responses and makes the Proxy run needlessly expensive.
+    if (routeLocale) {
+      response.cookies.set(LOCALE_COOKIE, locale, {
+        path: '/',
+        maxAge: 60 * 60 * 24 * 365,
+        sameSite: 'lax',
+      })
+    }
     // Attribution is optional measurement. Never create these cookies until a
     // visitor has explicitly allowed it in the in-product privacy control.
     if (request.cookies.get('cc_analytics_consent')?.value === 'granted') {
@@ -153,6 +158,29 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml).*)',
+    // Locale paths need a rewrite and locale headers. Keep ordinary public
+    // pages out of the Node.js Proxy so they can use Vercel's normal cache.
+    '/ko/:path*',
+    '/zh-hans/:path*',
+    '/vi/:path*',
+    '/hi/:path*',
+    '/es-419/:path*',
+    // Authentication is only needed on these account pages.
+    '/dashboard/:path*',
+    '/saved/:path*',
+    '/documents/:path*',
+    '/profile/:path*',
+    // Preserve explicit 410 responses for retired URL families without
+    // charging every active URL to the Proxy.
+    '/category/:path*',
+    '/tag/:path*',
+    '/author/:path*',
+    '/page/:path*',
+    '/feed/:path*',
+    '/comments/feed/:path*',
+    '/sample-page/:path*',
+    '/job/:path*',
+    '/jobs/:path*',
+    '/((?:\\d{4})/(?:\\d{2})(?:/.*)?)',
   ],
 }

@@ -4,9 +4,7 @@ import localFont from "next/font/local"
 import { Fraunces } from "next/font/google"
 import "./globals.css"
 import { LayoutShell } from "@/components/layout/layout-shell"
-import { DEFAULT_LOCALE, PUBLISHED_LOCALE_OPTIONS, isLocaleOption, isPublishedLocaleOption, localizePath, withoutLocalePrefix } from "@/lib/i18n/config"
-import { getDocumentLocale, getLocale } from "@/lib/i18n/server"
-import { headers } from "next/headers"
+import { DEFAULT_LOCALE } from "@/lib/i18n/config"
 import { LocaleProvider } from "@/lib/i18n/locale-provider"
 import { LocaleInit } from "@/components/locale-init"
 import { PageViewTracker } from "@/components/analytics/page-view-tracker"
@@ -38,7 +36,7 @@ const fraunces = Fraunces({
 // - /compare/[field]/[country-a]-vs-[country-b]  — Side-by-side field + country comparison
 // - /visa-pathways/[country]/[field]             — Visa and immigration pathway by country + field
 
-const baseMetadata: Metadata = {
+export const metadata: Metadata = {
   title: {
     default: "CampCareer | Study Abroad & Immigration Decision Engine",
     template: "%s | CampCareer",
@@ -78,53 +76,15 @@ const baseMetadata: Metadata = {
   },
 }
 
-export async function generateMetadata(): Promise<Metadata> {
-  const requestHeaders = await headers()
-  const requestedPath = requestHeaders.get("x-campcareer-pathname") ?? "/"
-  const requestedLocale = requestHeaders.get("x-campcareer-route-locale")
-  const routeLocale = isLocaleOption(requestedLocale) ? requestedLocale : DEFAULT_LOCALE
-  const published = isPublishedLocaleOption(routeLocale)
-  const barePath = withoutLocalePrefix(requestedPath)
-  const canonicalPath = localizePath(barePath, published ? routeLocale : DEFAULT_LOCALE)
-  const languages = Object.fromEntries(
-    PUBLISHED_LOCALE_OPTIONS.map((locale) => [locale === "ko" ? "ko" : "en", localizePath(barePath, locale)]),
-  )
-
-  return {
-    ...baseMetadata,
-    alternates: {
-      canonical: canonicalPath,
-      languages: {
-        ...languages,
-        "x-default": barePath,
-      },
-    },
-    robots: published
-      ? baseMetadata.robots
-      : {
-          index: false,
-          follow: false,
-          googleBot: { index: false, follow: false },
-        },
-    openGraph: {
-      ...baseMetadata.openGraph,
-      url: canonicalPath,
-      locale: routeLocale === "ko" ? "ko_KR" : "en_US",
-    },
-  }
-}
-
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const locale = await getLocale()
-  const documentLocale = await getDocumentLocale()
   return (
-    <html lang={documentLocale || DEFAULT_LOCALE} suppressHydrationWarning>
+    <html lang={DEFAULT_LOCALE} suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} antialiased`}>
-        <LocaleProvider locale={locale}>
+        <LocaleProvider locale={DEFAULT_LOCALE}>
           <LocaleInit />
           <PageViewTracker />
           <LayoutShell>{children}</LayoutShell>

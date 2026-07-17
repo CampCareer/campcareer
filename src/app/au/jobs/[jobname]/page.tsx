@@ -1,6 +1,8 @@
 import "server-only"
 import type { Metadata } from "next"
+import { unstable_cache } from "next/cache"
 import { notFound } from "next/navigation"
+import { cache } from "react"
 import { supabaseAdmin } from "@/lib/supabase-admin"
 import { getCoursesForOccupation } from "@/lib/occupations-au"
 import { getAuOccupationSlug, slugifyAuOccupation } from "@/lib/au-occupation-slug"
@@ -14,10 +16,6 @@ import { OccupationDetailClient } from "./OccupationDetail"
 
 export const revalidate = 86400
 export const dynamicParams = true
-// Render detail pages at request time. This avoids Vercel's static-generation
-// worker path for a large data-rich route while keeping deployments independent
-// of the number of occupations.
-export const dynamic = "force-dynamic"
 
 type Params = { jobname: string }
 
@@ -76,7 +74,7 @@ function selectMappedOccupation(flow: JsaMobilityFlow, occupations: OccRow[]): O
     ?? candidates[0]
 }
 
-async function getAllOccupations(): Promise<OccRow[]> {
+async function getAllOccupationsUncached(): Promise<OccRow[]> {
   const { data, error } = await supabaseAdmin
     .from("occupations_au")
     .select("anzsco_code, anzsco_v13, occupation_en, occupation_ko, shortage_rating, median_salary_aud, on_csol, related_broad_field, confidence, source_name, source_url, last_verified")
@@ -90,6 +88,14 @@ async function getAllOccupations(): Promise<OccRow[]> {
 
   return (data ?? []) as OccRow[]
 }
+
+// The list is reused by every occupation detail page. Cache it independently
+// so a new or revalidated detail page does not scan all 600 occupations again.
+const getAllOccupations = unstable_cache(
+  getAllOccupationsUncached,
+  ["au-job-occupations"],
+  { revalidate: 86400, tags: ["au-job-occupations"] },
+)
 
 function findOccupation(jobname: string, occupations: OccRow[]): OccRow | null {
   const normalized = slugifyAuOccupation(jobname)
@@ -126,7 +132,7 @@ function buildDataNote(occupation: OccRow): string | null {
   return details.join(" ") || null
 }
 
-async function getOccupationData(jobname: string) {
+async function getOccupationDataUncached(jobname: string) {
   const occupations = await getAllOccupations()
   const occupation = findOccupation(jobname, occupations)
   if (!occupation) return null
@@ -212,6 +218,15 @@ async function getOccupationData(jobname: string) {
     },
   }
 }
+
+// Keep occupation detail data out of the hot request path. The React cache
+// deduplicates generateMetadata and the page render within a request, while
+// the persistent cache shares the result across visitors for 24 hours.
+const getOccupationData = cache(async (jobname: string) => unstable_cache(
+  () => getOccupationDataUncached(jobname),
+  ["au-job-detail", jobname],
+  { revalidate: 86400, tags: ["au-job-detail", `au-job:${jobname}`] },
+)())
 
 export async function generateMetadata(props: { params: Promise<Params> }): Promise<Metadata> {
   const { jobname } = await props.params
