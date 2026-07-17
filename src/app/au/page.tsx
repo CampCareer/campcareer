@@ -93,7 +93,7 @@ export default async function AuHubPage() {
               </div>
             </Link>
             <Link
-              href="/roi-explorer/au"
+              href="/universities/au"
               className="group p-5 rounded-xl border border-slate-200 hover:border-brand/40 hover:bg-brand-tint transition-colors"
             >
               <div className="font-semibold mb-1">🎓 Universities &amp; Courses</div>
@@ -111,12 +111,12 @@ export default async function AuHubPage() {
               </div>
             </Link>
             <Link
-              href="/roi-explorer"
+              href="/universities/au"
               className="group p-5 rounded-xl border border-slate-200 hover:border-brand/40 hover:bg-brand-tint transition-colors"
             >
-              <div className="font-semibold mb-1">📊 ROI Explorer</div>
+              <div className="font-semibold mb-1">📊 Compare University ROI</div>
               <div className="text-sm text-slate-500">
-                Calculate study cost vs expected salary
+                Compare tuition and graduate outcomes in Australia
               </div>
             </Link>
           </div>

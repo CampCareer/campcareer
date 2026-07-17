@@ -1,11 +1,12 @@
 import type { Metadata } from "next"
 import { unstable_cache } from "next/cache"
-import { notFound } from "next/navigation"
+import { notFound, permanentRedirect } from "next/navigation"
 import { fetchRoiData, VALID_COUNTRIES, type RoiCountry } from "@/lib/roi-query"
 import { supabase } from "@/lib/supabase"
 import { pageMetadata } from "@/lib/seo"
 import { JsonLd, breadcrumbLd } from "@/components/seo/json-ld"
 import { CollegeDetailClient, type DetailRow } from "./CollegeDetailClient"
+import { getAuUniversityById, getAuUniversityBySlug } from "@/lib/au-universities"
 import nlCollegesRaw from "@/data/nl-colleges.json"
 import nlCitiesRaw from "@/data/nl-cities.json"
 import deCollegesRaw from "@/data/de-colleges.json"
@@ -192,6 +193,15 @@ export default async function CollegeDetailPage(props: { params: Promise<Params>
   const params = await props.params;
   const country = parseCountry(params.country)
   if (!country) notFound()
+
+  // AU now has a country-native university information architecture. Preserve
+  // every indexed ROI URL, including earlier map links that used institution_id,
+  // while making the new canonical page the only rendered destination.
+  if (country === 'au') {
+    const university = await getAuUniversityById(params.college_id)
+      ?? await getAuUniversityBySlug(params.college_id)
+    if (university) permanentRedirect(`/universities/au/${university.institutionId}`)
+  }
 
   const [rows, websiteUrl] = await Promise.all([
     getDetailRows(country, params.college_id),

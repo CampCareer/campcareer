@@ -1,0 +1,97 @@
+[
+  {
+    "institutionId": "macquarie-university",
+    "courseCode": "001365G",
+    "url": "https://www.mq.edu.au/study/find-a-course/courses/bachelor-of-science"
+  },
+  {
+    "institutionId": "macquarie-university",
+    "courseCode": "020161F",
+    "url": "https://www.mq.edu.au/study/find-a-course/courses/bachelor-of-medical-sciences"
+  },
+  {
+    "institutionId": "macquarie-university",
+    "courseCode": "0100139",
+    "url": "https://www.mq.edu.au/study/find-a-course/courses/master-of-business-analytics"
+  },
+  {
+    "institutionId": "macquarie-university",
+    "courseCode": "047327M",
+    "url": "https://www.mq.edu.au/study/find-a-course/courses/bachelor-of-information-technology"
+  },
+  {
+    "institutionId": "macquarie-university",
+    "courseCode": "079306G",
+    "url": "https://www.mq.edu.au/study/find-a-course/courses/bachelor-of-business-analytics"
+  },
+  {
+    "institutionId": "macquarie-university",
+    "courseCode": "080284J",
+    "url": "https://www.mq.edu.au/study/find-a-course/courses/master-of-data-science"
+  },
+  {
+    "institutionId": "university-of-new-south-wales",
+    "courseCode": "056835E",
+    "url": "https://www.unsw.edu.au/study/undergraduate/bachelor-of-engineering-honours"
+  },
+  {
+    "institutionId": "macquarie-university",
+    "courseCode": "060724M",
+    "url": "https://www.mq.edu.au/study/find-a-course/courses/bachelor-of-planning"
+  },
+  {
+    "institutionId": "macquarie-university",
+    "courseCode": "067848J",
+    "url": "https://www.mq.edu.au/study/find-a-course/courses/bachelor-of-biodiversity-and-conservation"
+  },
+  {
+    "institutionId": "macquarie-university",
+    "courseCode": "067858G",
+    "url": "https://www.mq.edu.au/study/find-a-course/courses/bachelor-of-environment"
+  },
+  {
+    "institutionId": "macquarie-university",
+    "courseCode": "027373D",
+    "url": "https://www.mq.edu.au/study/find-a-course/courses/master-of-clinical-audiology"
+  },
+  {
+    "institutionId": "macquarie-university",
+    "courseCode": "028866G",
+    "url": "https://www.mq.edu.au/study/find-a-course/courses/bachelor-of-chiropractic-science"
+  },
+  {
+    "institutionId": "macquarie-university",
+    "courseCode": "037303B",
+    "url": "https://www.mq.edu.au/study/find-a-course/courses/master-of-speech-and-language-pathology"
+  },
+  {
+    "institutionId": "macquarie-university",
+    "courseCode": "047324C",
+    "url": "https://www.mq.edu.au/study/find-a-course/courses/bachelor-of-education-primary"
+  },
+  {
+    "institutionId": "macquarie-university",
+    "courseCode": "027342M",
+    "url": "https://www.mq.edu.au/study/find-a-course/courses/bachelor-of-applied-finance"
+  },
+  {
+    "institutionId": "macquarie-university",
+    "courseCode": "001357G",
+    "url": "https://www.mq.edu.au/study/find-a-course/courses/bachelor-of-arts"
+  },
+  {
+    "institutionId": "macquarie-university",
+    "courseCode": "001362K",
+    "url": "https://www.mq.edu.au/study/find-a-course/courses/bachelor-of-economics"
+  },
+  {
+    "institutionId": "macquarie-university",
+    "courseCode": "084546D",
+    "url": "https://www.mq.edu.au/study/find-a-course/courses/master-of-creative-writing"
+  },
+  {
+    "institutionId": "the-university-of-melbourne",
+    "courseCode": "061970M",
+    "url": "https://study.unimelb.edu.au/find/courses/graduate/master-of-food-science/"
+  }
+]

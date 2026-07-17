@@ -1,6 +1,7 @@
 import { fetchRoiData, normalizeRoiCountry, DEFAULT_STATE } from "@/lib/roi-query"
 import { JsonLd, itemListLd } from "@/components/seo/json-ld"
 import { RoiExplorerClient, type RoiFilters, type RoiRow } from "./RoiExplorerClient"
+import { permanentRedirect } from "next/navigation"
 
 // matview 데이터는 자주 안 바뀜 — 정적 파라미터 조합은 1시간 캐시
 export const revalidate = 3600
@@ -21,6 +22,14 @@ export default async function ROIExplorerPage(
   }
 
   const country = normalizeRoiCountry(param("country") || null)
+  // Australia has moved from the legacy global explorer into the university
+  // product. Keep field/state intent, but make the readable AU route canonical.
+  if (country === "au") {
+    const target = new URLSearchParams()
+    if (param("field")) target.set("field", param("field"))
+    if (param("state") && param("state") !== "ALL_STATES") target.set("state", param("state"))
+    permanentRedirect(`/universities/au${target.size ? `?${target.toString()}` : ""}`)
+  }
   const state = param("state") || DEFAULT_STATE[country]
   const field = param("field")
   const sort = VALID_SORTS.includes(param("sort")) ? param("sort") : "roi_score"

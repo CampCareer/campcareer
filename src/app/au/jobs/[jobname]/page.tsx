@@ -286,9 +286,12 @@ export default async function AuOccupationPage(props: { params: Promise<Params> 
         relatedCourses={courses.map((course) => ({
           id: course.id,
           title: course.title,
-          courseUrl: course.course_url,
+          officialCourseUrl: course.official_url_status === "verified" ? course.official_course_url : null,
+          cricosUrl: course.cricos_url,
           durationYears: course.duration_years,
+          aqfLevel: course.aqf_level,
         }))}
+        universityRoiHref={occupation.related_broad_field ? `/universities/au?field=${encodeURIComponent(occupation.related_broad_field)}` : null}
         dataNote={buildDataNote(occupation)}
         officialContent={officialContent}
         careerCategory={data.careerCategory}

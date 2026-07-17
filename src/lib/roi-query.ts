@@ -126,6 +126,8 @@ export type RoiQueryParams = {
   field?: string | null
   collegeId?: string | null
   nfqLevel?: string | null
+  /** AU only. AQF levels are provider-course grouping metadata, not outcomes. */
+  aqfLevels?: readonly number[] | null
   limit?: number | null
   sort?: string | null
   careerStage?: string | null
@@ -159,6 +161,9 @@ export async function fetchRoiData(params: RoiQueryParams): Promise<RoiQueryResu
   const field = params.field ?? ''
   const collegeId = params.collegeId ?? ''
   const nfqLevelParam = params.nfqLevel ?? null
+  const aqfLevels = country === 'au'
+    ? (params.aqfLevels ?? []).filter((level) => Number.isInteger(level) && level >= 1 && level <= 10)
+    : []
   const requestedLimit = params.limit
   const limit = Math.min(
     typeof requestedLimit === 'number' && Number.isFinite(requestedLimit) && requestedLimit > 0
@@ -208,6 +213,8 @@ export async function fetchRoiData(params: RoiQueryParams): Promise<RoiQueryResu
     }
 
     if (field) query = query.ilike('field_name', `%${field}%`)
+    if (aqfLevels.length === 1) query = query.eq('aqf_level', aqfLevels[0])
+    if (aqfLevels.length > 1) query = query.in('aqf_level', aqfLevels)
     if (country === 'ie' && nfqLevelParam) {
       query = query.eq('nfq_level', parseInt(nfqLevelParam, 10))
     }
@@ -261,6 +268,8 @@ export async function fetchRoiData(params: RoiQueryParams): Promise<RoiQueryResu
       if (country === 'ie' && nfqLevelParam) {
         fbQuery = fbQuery.eq('nfq_level', parseInt(nfqLevelParam, 10))
       }
+      if (aqfLevels.length === 1) fbQuery = fbQuery.eq('aqf_level', aqfLevels[0])
+      if (aqfLevels.length > 1) fbQuery = fbQuery.in('aqf_level', aqfLevels)
 
       const { data: fbData, error: fbError } = await fbQuery
         .order(effectiveSort, { ascending: SORT_ASCENDING[sort], nullsFirst: false })

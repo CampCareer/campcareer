@@ -30,9 +30,8 @@ function normalizeState(raw: string | null): StateCode | null {
   return FULL_NAME_TO_CODE[raw.trim().toLowerCase()] ?? null
 }
 
-type CourseRow = CourseAU & {
+type CourseRow = Omit<CourseAU, "course_url" | "course_link_kind"> & {
   broad_field: string
-  cricos_url: string | null
   qualifax_url: string | null
 }
 
@@ -54,7 +53,7 @@ async function loadAll() {
     supabase.from("occupations_au").select("*"),
     supabase
       .from("courses_au")
-      .select("id, title, course_type, aqf_level, duration_years, tuition_fee_aud, employment_rate, cricos_url, qualifax_url, broad_field")
+      .select("id, title, course_type, aqf_level, duration_years, tuition_fee_aud, employment_rate, official_course_url, official_url_status, official_url_checked_at, cricos_url, qualifax_url, broad_field")
       .order("employment_rate", { ascending: false, nullsFirst: false }),
     supabase.from("country_pr_pathways").select("*").ilike("country", "au").maybeSingle(),
     supabaseAdmin.from("occupation_state_au").select("*"),
@@ -74,15 +73,36 @@ async function loadAll() {
       course_type: c.course_type, aqf_level: c.aqf_level,
       duration_years: c.duration_years, tuition_fee_aud: c.tuition_fee_aud,
       employment_rate: c.employment_rate,
-      course_url: c.cricos_url ?? c.qualifax_url ?? null,
+      official_course_url: c.official_course_url,
+      official_url_status: c.official_url_status,
+      official_url_checked_at: c.official_url_checked_at,
+      cricos_url: c.cricos_url,
+      course_url: c.official_url_status === "verified" && c.official_course_url ? c.official_course_url : c.cricos_url ?? c.qualifax_url ?? null,
+      course_link_kind: c.official_url_status === "verified" && c.official_course_url ? "provider" : Boolean(c.cricos_url ?? c.qualifax_url) ? "registry" : "none",
     })
     else coursesByField.set(c.broad_field, [{
       id: c.id, title: c.title,
       course_type: c.course_type, aqf_level: c.aqf_level,
       duration_years: c.duration_years, tuition_fee_aud: c.tuition_fee_aud,
       employment_rate: c.employment_rate,
-      course_url: c.cricos_url ?? c.qualifax_url ?? null,
+      official_course_url: c.official_course_url,
+      official_url_status: c.official_url_status,
+      official_url_checked_at: c.official_url_checked_at,
+      cricos_url: c.cricos_url,
+      course_url: c.official_url_status === "verified" && c.official_course_url ? c.official_course_url : c.cricos_url ?? c.qualifax_url ?? null,
+      course_link_kind: c.official_url_status === "verified" && c.official_course_url ? "provider" : Boolean(c.cricos_url ?? c.qualifax_url) ? "registry" : "none",
     }])
+  }
+
+  // Provider programme pages are deliberately ranked ahead of registry-only
+  // records. This cache powers the older occupation detail route as well.
+  for (const courses of coursesByField.values()) {
+    courses.sort((a, b) => {
+      const aVerified = a.official_url_status === "verified" && a.official_course_url ? 1 : 0
+      const bVerified = b.official_url_status === "verified" && b.official_course_url ? 1 : 0
+      if (aVerified !== bVerified) return bVerified - aVerified
+      return (b.employment_rate ?? -1) - (a.employment_rate ?? -1) || a.id - b.id
+    })
   }
 
   const statesByCode = new Map<string, { state: string; shortage_rating: number }[]>()

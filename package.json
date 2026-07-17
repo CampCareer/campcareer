@@ -23,6 +23,7 @@
     "refresh:nordic-regions": "node scripts/refresh-nordic-regions.mjs",
     "check:data": "npx tsx scripts/check-data-quality.ts",
     "import:au-osca": "npx tsx scripts/import-au-osca-content.ts",
+    "import:au-official-course-urls": "npx tsx --env-file=.env.local scripts/import-au-official-course-urls.ts",
     "check:au-osca": "npx tsx --env-file=.env.local scripts/check-au-osca-content.ts",
     "import:au-jsa-osl": "python3 scripts/import-au-jsa-osl.py",
     "import:au-jsa-labour-market": "npx tsx --env-file=.env.local scripts/import-au-jsa-labour-market.ts",

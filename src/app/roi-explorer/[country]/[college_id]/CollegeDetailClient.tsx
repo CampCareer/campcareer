@@ -106,10 +106,14 @@ export function CollegeDetailClient({
   country,
   rows,
   websiteUrl,
+  backHref,
+  backLabel,
 }: {
   country: Country
   rows: DetailRow[]
   websiteUrl: string | null
+  backHref?: string
+  backLabel?: string
 }) {
   const t = useTranslations()
   const td = t.roiExplorer.detail
@@ -182,11 +186,11 @@ export function CollegeDetailClient({
 
       {/* Back */}
       <Link
-        href={`/roi-explorer?country=${country}`}
+        href={backHref ?? `/roi-explorer?country=${country}`}
         className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
-        {td.backLink}
+        {backLabel ?? td.backLink}
       </Link>
 
       {/* Header */}
