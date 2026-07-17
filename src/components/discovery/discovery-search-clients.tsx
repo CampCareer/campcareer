@@ -15,7 +15,8 @@ import { localizePath } from "@/lib/i18n/config"
 import { useLocale } from "@/lib/i18n/locale-provider"
 import { recordDiscoveryEvent } from "@/lib/analytics"
 import { RegionSelection } from "@/components/discovery/region-selection"
-import { IconPicker, type PickerOption, countryFlag, majorEmoji } from "@/components/ui/icon-picker"
+import { IconPicker, type PickerOption, countryFlag } from "@/components/ui/icon-picker"
+import { getStudyCategoryVisual } from "@/components/ui/au-career-category-visuals"
 
 function usePathLocale() {
   return useLocale() === "ko" ? "ko" : "en"
@@ -53,7 +54,10 @@ export function CountrySearchClient({ initial, basePath = "/countries/search" }:
   ], [isKo])
   const majorOptions = useMemo<PickerOption[]>(() => [
     { value: "", label: isKo ? "카테고리 선택" : "Choose a category", description: isKo ? "10개 전공 카테고리에서 선택" : "Choose from 10 study categories", icon: "✨", keywords: "any undecided" },
-    ...STUDY_CATEGORIES.map((item) => ({ value: item.id, label: isKo ? item.labelKo : item.label, description: isKo ? `${item.labelKo} 전공 탐색` : `Explore ${item.label} study paths`, icon: majorEmoji(item.id), keywords: `${item.id} ${item.label} ${item.labelKo}` })),
+    ...STUDY_CATEGORIES.map((item) => {
+      const visual = getStudyCategoryVisual(item.id)
+      return { value: item.id, label: isKo ? item.labelKo : item.label, description: isKo ? `${item.labelKo} 전공 탐색` : `Explore ${item.label} study paths`, icon: "", iconComponent: visual.Icon, iconTone: visual.tone, keywords: `${item.id} ${item.label} ${item.labelKo}` }
+    }),
   ], [isKo])
   const goalOptions = useMemo<PickerOption[]>(() =>
     LANDING_GOALS.map((item) => {
@@ -193,21 +197,12 @@ function Recommendations({ locale, isKo, onGoalChange, basePath = "/countries/se
   </section>
 }
 
-const AU_FEATURED_STUDY_CONCEPT_IDS = [
-  "nursing",
-  "computer-science",
-  "civil-engineering",
-  "data-analytics",
-  "cybersecurity",
-  "electrical-trade",
-  "early-childhood",
-  "aged-care",
-] as const
-
 function CountryStudyPreview({ country, locale, isKo, category, major, basePath = "/countries/search" }: { country: NonNullable<ReturnType<typeof getLaunchCountry>>; locale: "en" | "ko"; isKo: boolean; category: string; major: string; basePath?: string }) {
-  const conceptIds = country.code === "AU"
-    ? AU_FEATURED_STUDY_CONCEPT_IDS
-    : STUDY_CONCEPTS.filter((concept) => (concept.coverageByCountry[country.code] ?? "CATALOG") !== "CATALOG").slice(0, 8).map((concept) => concept.id)
+  if (country.code === "AU" && !category) return <AustralianMajorCategoryGrid locale={locale} isKo={isKo} basePath={basePath} />
+
+  const conceptIds = STUDY_CONCEPTS
+    .filter((concept) => country.code === "AU" || (concept.coverageByCountry[country.code] ?? "CATALOG") !== "CATALOG")
+    .map((concept) => concept.id)
   const concepts = conceptIds.map((id) => STUDY_CONCEPTS.find((concept) => concept.id === id)).filter((concept): concept is typeof STUDY_CONCEPTS[number] => Boolean(concept)).filter((concept) => !category || concept.category === category)
   const categoryLabel = isKo ? STUDY_CATEGORIES.find((item) => item.id === category)?.labelKo : STUDY_CATEGORIES.find((item) => item.id === category)?.label
   const title = isKo
@@ -222,9 +217,25 @@ function CountryStudyPreview({ country, locale, isKo, category, major, basePath 
     <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{concepts.map((concept) => {
       const selected = major === concept.id
       const href = productHref(basePath, locale, { ...(basePath === "/au/majors" ? {} : { country: country.code }), category: concept.category, major: concept.id })
+      const { Icon, tone } = getStudyCategoryVisual(concept.category)
       return <Link key={concept.id} href={href} className={`group rounded-2xl border bg-white p-5 transition-all hover:border-blue-300 hover:shadow-md ${selected ? "border-blue-400 ring-2 ring-blue-100" : "border-slate-200"}`}>
-        <div className="flex items-start justify-between gap-3"><span className="grid size-10 place-items-center rounded-xl bg-blue-50 text-xl">{majorEmoji(concept.category)}</span>{selected && <span className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">{isKo ? "선택됨" : "Selected"}</span>}</div>
+        <div className="flex items-start justify-between gap-3"><span className={`grid size-10 place-items-center rounded-xl ${tone}`}><Icon className="size-5" strokeWidth={2.2} /></span>{selected && <span className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">{isKo ? "선택됨" : "Selected"}</span>}</div>
         <p className="mt-5 text-xs font-semibold uppercase tracking-[.12em] text-blue-700">{concept.kind.replaceAll("_", " ")}</p><h3 className="mt-1 text-lg font-semibold text-slate-950">{isKo ? concept.labelKo : concept.label}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{concept.description}</p><span className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-slate-700 group-hover:text-blue-700">{isKo ? "이 전공 선택" : "Choose this field"}<ArrowRight className="h-4 w-4" /></span>
+      </Link>
+    })}</div>
+  </section>
+}
+
+function AustralianMajorCategoryGrid({ locale, isKo, basePath }: { locale: "en" | "ko"; isKo: boolean; basePath: string }) {
+  return <section>
+    <div><p className="text-xs font-semibold uppercase tracking-[.18em] text-blue-700">Australia</p><h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{isKo ? "10개 전공 카테고리 탐색" : "Explore all 10 major categories"}</h2><p className="mt-2 max-w-2xl text-slate-600">{isKo ? "관심 분야를 먼저 고르면 관련 전공과 호주 내 직업 경로를 살펴볼 수 있어요." : "Start with an area of interest, then explore its study paths and Australian career outcomes."}</p></div>
+    <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">{STUDY_CATEGORIES.map((item) => {
+      const { Icon, tone } = getStudyCategoryVisual(item.id)
+      const href = productHref(basePath, locale, { ...(basePath === "/au/majors" ? {} : { country: "AU" }), category: item.id })
+      return <Link key={item.id} href={href} className="group rounded-2xl border border-slate-200 bg-white p-5 transition-all hover:border-blue-300 hover:shadow-md">
+        <span className={`grid size-11 place-items-center rounded-xl ${tone}`}><Icon className="size-5" strokeWidth={2.2} /></span>
+        <h3 className="mt-5 text-base font-semibold leading-6 text-slate-950">{isKo ? item.labelKo : item.label}</h3>
+        <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-slate-600 group-hover:text-blue-700">{isKo ? "전공 보기" : "Explore majors"}<ArrowRight className="h-4 w-4" /></span>
       </Link>
     })}</div>
   </section>

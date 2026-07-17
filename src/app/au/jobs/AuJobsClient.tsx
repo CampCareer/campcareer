@@ -5,24 +5,15 @@ import Link from "next/link"
 import type { User } from "@supabase/supabase-js"
 import {
   ArrowUpDown,
-  ChartNoAxesCombined,
   ChevronLeft,
   ChevronRight,
-  Code2,
-  Cog,
-  ConciergeBell,
-  GraduationCap,
-  Hammer,
   Heart,
-  HeartPulse,
-  Leaf,
-  Palette,
-  Plane,
   Search,
 } from "lucide-react"
 import { getAuOccupationPath } from "@/lib/au-occupation-slug"
 import { createClient } from "@/lib/supabase-client"
 import { AU_CAREER_CATEGORIES } from "@/data/au-career-categories"
+import { getAuCareerCategoryVisual, getAuCareerCategoryVisualByIcon } from "@/components/ui/au-career-category-visuals"
 
 type OccRow = {
   anzsco_code: string
@@ -41,32 +32,6 @@ type CategoryFilter = "all" | number
 type PageItem = number | "ellipsis-left" | "ellipsis-right"
 
 const PAGE_SIZE = 20
-
-const CATEGORY_ICONS = {
-  hammer: Hammer,
-  "heart-pulse": HeartPulse,
-  code: Code2,
-  cog: Cog,
-  chart: ChartNoAxesCombined,
-  "graduation-cap": GraduationCap,
-  leaf: Leaf,
-  palette: Palette,
-  "concierge-bell": ConciergeBell,
-  plane: Plane,
-}
-
-const CATEGORY_TONES: Record<number, string> = {
-  1: "bg-amber-50 text-amber-700",
-  2: "bg-rose-50 text-rose-700",
-  3: "bg-sky-50 text-sky-700",
-  4: "bg-indigo-50 text-indigo-700",
-  5: "bg-violet-50 text-violet-700",
-  6: "bg-fuchsia-50 text-fuchsia-700",
-  7: "bg-emerald-50 text-emerald-700",
-  8: "bg-pink-50 text-pink-700",
-  9: "bg-orange-50 text-orange-700",
-  10: "bg-cyan-50 text-cyan-700",
-}
 
 export function AuJobsClient({ occupations }: { occupations: OccRow[] }) {
   const [query, setQuery] = useState("")
@@ -245,7 +210,7 @@ export function AuJobsClient({ occupations }: { occupations: OccRow[] }) {
           All careers
         </button>
         {AU_CAREER_CATEGORIES.map((category) => {
-          const Icon = CATEGORY_ICONS[category.icon]
+          const { Icon } = getAuCareerCategoryVisualByIcon(category.icon)
           return (
             <button
               key={category.id}
@@ -278,7 +243,7 @@ export function AuJobsClient({ occupations }: { occupations: OccRow[] }) {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {paginatedOccupations.map((occ) => {
-            const Icon = CATEGORY_ICONS[occ.categoryIcon as keyof typeof CATEGORY_ICONS]
+            const { Icon, tone } = getAuCareerCategoryVisual(occ.categoryId)
             const isSaved = savedCodes.has(occ.anzsco_code)
             const isSaving = savingCode === occ.anzsco_code
 
@@ -292,7 +257,7 @@ export function AuJobsClient({ occupations }: { occupations: OccRow[] }) {
                 className="block h-full p-5 pr-4"
               >
                 <div className="flex items-start gap-3">
-                  <span className={`flex size-10 shrink-0 items-center justify-center rounded-xl ${CATEGORY_TONES[occ.categoryId]}`}>
+                  <span className={`flex size-10 shrink-0 items-center justify-center rounded-xl ${tone}`}>
                     <Icon className="size-5" aria-hidden="true" />
                   </span>
                   <div className="min-w-0 flex-1 pr-8">

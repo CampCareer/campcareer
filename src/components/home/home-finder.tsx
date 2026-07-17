@@ -10,7 +10,8 @@ import { STUDY_CATEGORIES } from "@/data/study-concepts"
 import { LANDING_GOALS, type LandingGoalId } from "@/lib/discovery/landing-discovery"
 import { localizePath } from "@/lib/i18n/config"
 import { recordDiscoveryEvent } from "@/lib/analytics"
-import { IconPicker, type PickerOption, countryFlag, majorEmoji } from "@/components/ui/icon-picker"
+import { IconPicker, type PickerOption, countryFlag } from "@/components/ui/icon-picker"
+import { getStudyCategoryVisual } from "@/components/ui/au-career-category-visuals"
 
 type Locale = "en" | "ko-KR"
 
@@ -56,7 +57,10 @@ export function HomeFinder({ locale = "en" }: { locale?: Locale }) {
   ], [isKo, t.countryPlaceholder])
   const majorOptions = useMemo<PickerOption[]>(() => [
     { value: "", label: t.majorPlaceholder, description: isKo ? "10개 전공 카테고리에서 선택" : "Choose from 10 study categories", icon: "✨", keywords: "any undecided" },
-    ...STUDY_CATEGORIES.map((item) => ({ value: item.id, label: isKo ? item.labelKo : item.label, description: isKo ? `${item.labelKo} 분야 전공 탐색` : `Explore ${item.label} study paths`, icon: majorEmoji(item.id), keywords: `${item.id} ${item.label} ${item.labelKo}` })),
+    ...STUDY_CATEGORIES.map((item) => {
+      const visual = getStudyCategoryVisual(item.id)
+      return { value: item.id, label: isKo ? item.labelKo : item.label, description: isKo ? `${item.labelKo} 분야 전공 탐색` : `Explore ${item.label} study paths`, icon: "", iconComponent: visual.Icon, iconTone: visual.tone, keywords: `${item.id} ${item.label} ${item.labelKo}` }
+    }),
   ], [isKo, t.majorPlaceholder])
   const goalOptions = useMemo<PickerOption[]>(() => [
     ...LANDING_GOALS.map((item) => ({ value: item.id, label: isKo ? goalCopy(item.id).label : item.label, description: isKo ? goalCopy(item.id).description : goalCopy(item.id).descriptionEn, icon: goalCopy(item.id).icon })),
