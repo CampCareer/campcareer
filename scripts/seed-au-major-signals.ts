@@ -46,6 +46,7 @@ const oslMap = new Map(oslData.occupations.map((o) => [o.oscaCode, o]))
 // ── Type for occupation rows ─────────────────────────────────────────────────
 interface OccupationRow {
   anzsco_code: string
+  anzsco_v13: string | null
   median_salary_aud: number | null
   on_csol: boolean
   occupation_en: string
@@ -315,13 +316,13 @@ interface AggregatedSignal {
 }
 
 async function fetchOccupations(
-  oscaCodes: string[],
+  anzscoV13Codes: string[],
 ): Promise<OccupationRow[]> {
-  if (oscaCodes.length === 0) return []
+  if (anzscoV13Codes.length === 0) return []
   const { data, error } = await supabase
     .from("occupations_au")
-    .select("anzsco_code, median_salary_aud, on_csol, occupation_en")
-    .in("anzsco_code", oscaCodes)
+    .select("anzsco_code, anzsco_v13, median_salary_aud, on_csol, occupation_en")
+    .in("anzsco_v13", anzscoV13Codes)
   if (error) {
     console.error("[seed] occupations query failed:", error.message)
     return []
@@ -462,7 +463,11 @@ function aggregateConcept(
     ai_exposure_band: editorial?.aiBand ?? null,
     ai_note: editorial?.aiNote ?? null,
     occupation_count: occupations.length,
-    representative_occupations: concept.representativeOccupations,
+    representative_occupations: occupations.slice(0, 6).map((occupation) => ({
+      oscaCode: occupation.anzsco_code,
+      label: occupation.occupation_en,
+      labelKo: occupation.occupation_en,
+    })),
     data_sources: [
       { name: "JSA Occupation Shortage List 2025", url: "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles" },
       { name: "JSA Employment Projections", url: "https://www.jobsandskills.gov.au/data/employment-projections" },

@@ -230,7 +230,9 @@ function buildCountryRecommendation(
       },
     ],
     detailHref: country.href,
-    shortlistHref: `/study-options/${concept.slug}/${country.code.toLowerCase()}`,
+    shortlistHref: country.code.toLowerCase() === "au"
+      ? `/au/study/programs/${concept.slug}`
+      : `/study-options/${concept.slug}/${country.code.toLowerCase()}`,
     originComparison: buildOriginComparison(input.originCountry, country.code),
   }
 }

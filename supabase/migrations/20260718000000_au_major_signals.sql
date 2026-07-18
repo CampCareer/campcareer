@@ -58,10 +58,8 @@ ALTER TABLE public.au_major_signals ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Public read au_major_signals"
   ON public.au_major_signals
   FOR SELECT
+  TO anon, authenticated
   USING (true);
 
-CREATE POLICY "Service role write au_major_signals"
-  ON public.au_major_signals
-  FOR ALL
-  USING (auth.role() = 'service_role')
-  WITH CHECK (auth.role() = 'service_role');
+-- `service_role` bypasses RLS. Do not add an `auth.role()` policy here:
+-- service keys are server-only and a public-schema write policy is unnecessary.

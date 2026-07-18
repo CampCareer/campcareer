@@ -11,7 +11,13 @@
 export interface AuConceptOccupations {
   /** STUDY_CONCEPT id — must match study-concepts.ts exactly */
   conceptId: string
-  /** OSCA 2024 6-digit codes (primary key for occupations_au) */
+  /**
+   * ANZSCO v1.3 6-digit codes used by the original JSA study-to-occupation
+   * mapping. `occupations_au` resolves these to one or more OSCA 2024 codes
+   * through its explicit `anzsco_v13` crosswalk.
+   *
+   * The property name is retained for backwards-compatible imports.
+   */
   oscaCodes: string[]
   /** ANZSCO 4-digit unit groups (for outlook_au, salary lookups) */
   anzsco4Groups: string[]

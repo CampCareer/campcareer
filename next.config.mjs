@@ -34,6 +34,9 @@ const nextConfig = {
       { source: '/universities', destination: '/study', permanent: true },
       { source: '/au/universities', destination: '/au/study', permanent: true },
 
+      // study-options migration: /study-options/:concept/au → /au/study/programs/:concept
+      { source: '/study-options/:concept/au', destination: '/au/study/programs/:concept', permanent: true },
+
       // SEO migration: code-based occupation URLs now resolve through
       // search-term based CampCareer Maps URLs, then canonicalize to slug.
       {

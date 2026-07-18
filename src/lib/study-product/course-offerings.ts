@@ -40,6 +40,7 @@ async function getAustraliaCourses(searchTerm: string, limit: number): Promise<C
     .select("id, institution_id, course_code, title, field_name, aqf_level, course_type, duration_years, tuition_fee_aud, cricos_url, synced_at")
     .ilike("field_name", `%${escapeIlike(searchTerm)}%`)
     .not("cricos_url", "is", null)
+    .eq("cricos_status", "active")
     .order("tuition_fee_aud", { ascending: true, nullsFirst: false })
     .limit(limit)
 
@@ -49,6 +50,7 @@ async function getAustraliaCourses(searchTerm: string, limit: number): Promise<C
       .select("id, institution_id, course_code, title, field_name, aqf_level, course_type, duration_years, tuition_fee_aud, cricos_url, synced_at")
       .ilike("title", `%${escapeIlike(searchTerm)}%`)
       .not("cricos_url", "is", null)
+      .eq("cricos_status", "active")
       .order("tuition_fee_aud", { ascending: true, nullsFirst: false })
       .limit(limit)
     data = fallback.data

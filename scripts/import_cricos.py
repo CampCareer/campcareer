@@ -1,7 +1,10 @@
 # scripts/import_cricos.py
-# CRICOS 2026-04 Excel → courses_au upsert
+# CRICOS Excel → courses_au upsert. The registry remains the authority;
+# provider-page claims are stored separately in program_page_facts_au.
 
-import os, json, pandas as pd
+import argparse, hashlib, json, os
+from datetime import datetime, timezone
+import pandas as pd
 from pathlib import Path
 from supabase import create_client
 
@@ -64,6 +67,10 @@ PROVIDER_MAP = {
 
 # AQF 레벨 매핑
 AQF_MAP = {
+    "certificate i": 1,
+    "certificate ii": 2,
+    "certificate iii": 3,
+    "certificate iv": 4,
     "bachelor degree": 7,
     "bachelor honours degree": 8,
     "graduate certificate": 8,
@@ -177,14 +184,15 @@ def get_aqf_level(course_level: str) -> int | None:
     if not course_level:
         return None
     cl = str(course_level).lower().strip()
-    for k, v in AQF_MAP.items():
+    # Longest labels first: "certificate iii" must not match "certificate i".
+    for k, v in sorted(AQF_MAP.items(), key=lambda item: len(item[0]), reverse=True):
         if k in cl:
             return v
     return None
 
-def run():
+def run(input_file: Path):
     print("📥 CRICOS Excel 로드 중...")
-    df = pd.read_excel('cricos_2026_04.xlsx', sheet_name='Courses', header=0, skiprows=1)
+    df = pd.read_excel(input_file, sheet_name='Courses', header=0, skiprows=1)
     
     # 컬럼명 재설정
     df.columns = [
@@ -198,19 +206,20 @@ def run():
     
     print(f"  총 {len(df):,}개 행 로드")
     
-    # 필터: 만료 안된 것만, 우리 대학만, Bachelor/Masters/Graduate만
-    df = df[df['expired'].str.upper() == 'NO']
+    # Retain expired rows with an explicit lifecycle state. Dropping them
+    # makes an old course look current when a provider retires it.
     df = df[df['provider_code'].isin(PROVIDER_MAP.keys())]
     df = df[df['course_level'].notna()]
     
-    # AQF 7-9만 (Bachelor, Masters)
+    # Include VET and higher education pathways (Certificate I to AQF 10).
     df['aqf_level'] = df['course_level'].apply(get_aqf_level)
-    df = df[df['aqf_level'].isin([7, 8, 9])]
+    df = df[df['aqf_level'].notna()]
     
     print(f"  필터 후: {len(df):,}개")
     
     # 데이터 변환
     courses = []
+    seen_at = datetime.now(timezone.utc).isoformat()
     for _, row in df.iterrows():
         institution_id = PROVIDER_MAP.get(str(row['provider_code']).strip())
         if not institution_id:
@@ -236,6 +245,16 @@ def run():
             row.get('course_name', '')
         )
         
+        expired = str(row.get('expired', '')).strip().upper()
+        fingerprint = json.dumps({
+            'provider': str(row['provider_code']).strip(),
+            'course': str(row['course_code']).strip(),
+            'name': str(row['course_name']).strip(),
+            'level': str(row['course_level']).strip(),
+            'duration_weeks': None if pd.isna(duration_weeks) else float(duration_weeks),
+            'total_cost': None if pd.isna(total_cost) else float(total_cost),
+            'expired': expired,
+        }, sort_keys=True)
         courses.append({
             "institution_id":  institution_id,
             "course_code":     str(row['course_code']).strip(),
@@ -249,6 +268,9 @@ def run():
             "duration_years":  duration_years,
             "tuition_fee_aud": tuition,
             "cricos_url":      f"https://cricos.education.gov.au/Course/CourseDetails.aspx?CourseCode={row['course_code']}",
+            "cricos_status": "expired" if expired == "YES" else "active",
+            "cricos_last_seen_at": seen_at,
+            "cricos_content_hash": hashlib.sha256(fingerprint.encode()).hexdigest(),
         })
     
     print(f"\n✅ 변환 완료: {len(courses):,}개 코스")
@@ -277,4 +299,7 @@ def run():
     print("✅ Supabase 업로드 완료!")
 
 if __name__ == "__main__":
-    run()
+    parser = argparse.ArgumentParser(description="Import an official CRICOS Courses workbook into courses_au")
+    parser.add_argument("--input", type=Path, default=Path("cricos_2026_04.xlsx"), help="CRICOS workbook path")
+    args = parser.parse_args()
+    run(args.input)
