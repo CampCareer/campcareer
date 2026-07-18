@@ -316,17 +316,59 @@ interface AggregatedSignal {
 }
 
 async function fetchOccupations(
-  anzscoV13Codes: string[],
+  concept: AuConceptOccupations,
+  occupationCatalog: OccupationRow[],
 ): Promise<OccupationRow[]> {
-  if (anzscoV13Codes.length === 0) return []
+  const sourceCodes = concept.oscaCodes
+  if (sourceCodes.length === 0) return []
+  const [direct, legacy] = await Promise.all([
+    supabase.from("occupations_au")
+      .select("anzsco_code, anzsco_v13, median_salary_aud, on_csol, occupation_en")
+      .in("anzsco_code", sourceCodes),
+    supabase.from("occupations_au")
+      .select("anzsco_code, anzsco_v13, median_salary_aud, on_csol, occupation_en")
+      .in("anzsco_v13", sourceCodes),
+  ])
+  if (direct.error || legacy.error) {
+    console.error("[seed] occupations query failed:", direct.error?.message ?? legacy.error?.message)
+    return []
+  }
+
+  // The earliest hand-curated major map used a mixture of OSCA and ANZSCO
+  // codes. Keep direct OSCA rows only when their official title agrees with
+  // the mapped role; otherwise resolve the source code through `anzsco_v13`.
+  const expectedTitle = new Map(concept.representativeOccupations.map((item) => [item.oscaCode, normaliseTitle(item.label)]))
+  const directRows = ((direct.data ?? []) as OccupationRow[]).filter((row) => {
+    const expected = expectedTitle.get(row.anzsco_code)
+    return !expected || titleMatches(expected, row.occupation_en)
+  })
+  const directSourceCodes = new Set(directRows.map((row) => row.anzsco_code))
+  const legacyRows = ((legacy.data ?? []) as OccupationRow[]).filter((row) => !directSourceCodes.has(row.anzsco_v13 ?? ""))
+  const titleRows = occupationCatalog.filter((row) => [...expectedTitle.values()].some((title) => titleMatches(title, row.occupation_en)))
+  return [...directRows, ...legacyRows, ...titleRows]
+    .filter((row, index, rows) => rows.findIndex((item) => item.anzsco_code === row.anzsco_code) === index)
+}
+
+function normaliseTitle(value: string) {
+  return value.toLowerCase().replace(/\([^)]*\)/g, "").replace(/[^a-z0-9]+/g, " ").trim()
+}
+
+function titleMatches(expected: string, actual: string) {
+  const expectedTokens = normaliseTitle(expected)
+    .split(" ")
+    .map((token) => token.replace(/s$/, ""))
+    .filter((token) => token.length > 2 && !["general", "professional", "nec", "first", "class"].includes(token))
+  const actualTokens = new Set(normaliseTitle(actual).split(" "))
+  return expectedTokens.length > 0 && expectedTokens.every((token) => actualTokens.has(token) || actualTokens.has(`${token}s`))
+}
+
+async function fetchOccupationCatalog(): Promise<OccupationRow[]> {
   const { data, error } = await supabase
     .from("occupations_au")
     .select("anzsco_code, anzsco_v13, median_salary_aud, on_csol, occupation_en")
-    .in("anzsco_v13", anzscoV13Codes)
-  if (error) {
-    console.error("[seed] occupations query failed:", error.message)
-    return []
-  }
+    .order("anzsco_code")
+    .limit(1_000)
+  if (error) throw new Error(`Could not load OSCA occupation catalog: ${error.message}`)
   return (data ?? []) as OccupationRow[]
 }
 
@@ -483,6 +525,8 @@ function aggregateConcept(
 async function main() {
   console.log("=== seed-au-major-signals ===")
   console.log(`Processing ${AU_CONCEPT_OCCUPATIONS.length} concepts...`)
+  const occupationCatalog = await fetchOccupationCatalog()
+  console.log(`Loaded ${occupationCatalog.length} OSCA occupations for crosswalk validation.`)
 
   const signals: AggregatedSignal[] = []
 
@@ -492,7 +536,7 @@ async function main() {
     process.stdout.write(`  ${label}... `)
 
     const [occupations, outlooks, courses] = await Promise.all([
-      fetchOccupations(concept.oscaCodes),
+      fetchOccupations(concept, occupationCatalog),
       fetchOutlook(concept.anzsco4Groups),
       fetchCourses(concept.broadFields),
     ])

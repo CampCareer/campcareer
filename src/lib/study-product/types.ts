@@ -223,9 +223,11 @@ export type CourseOffering = {
   durationMonths?: number
   campus?: string
   intake?: string
+  eligibilityNote?: string
   internationalEligible: boolean
   registrationStatus: "CURRENT" | "UNKNOWN"
   officialUrl: string
+  officialLinkKind?: "COURSE_PAGE" | "PROVIDER_CATALOGUE" | "REGISTRY"
   sourceName: string
   lastVerifiedAt: string
 }

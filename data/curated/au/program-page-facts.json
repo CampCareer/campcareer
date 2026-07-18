@@ -1,1 +1,105 @@
-[]
+[
+  {
+    "institutionId": "monash-university",
+    "courseCode": "059372G",
+    "fieldKey": "duration",
+    "value": "3 years full-time",
+    "sourceUrl": "https://www.monash.edu/study/courses/find-a-course/architectural-design-f2001",
+    "reviewerNote": "Course page states a three-year full-time duration. Architect registration requires the subsequent accredited master's degree and professional practice."
+  },
+  {
+    "institutionId": "monash-university",
+    "courseCode": "059372G",
+    "fieldKey": "campus",
+    "value": "Caulfield",
+    "sourceUrl": "https://www.monash.edu/study/courses/find-a-course/architectural-design-f2001"
+  },
+  {
+    "institutionId": "monash-university",
+    "courseCode": "059372G",
+    "fieldKey": "intakes",
+    "value": "First semester (February)",
+    "sourceUrl": "https://www.monash.edu/study/courses/find-a-course/architectural-design-f2001"
+  },
+  {
+    "institutionId": "monash-university",
+    "courseCode": "094996F",
+    "fieldKey": "duration",
+    "value": "3 years full-time; 6 years part-time",
+    "sourceUrl": "https://www.monash.edu/study/courses/find-a-course/paramedicine-m2011"
+  },
+  {
+    "institutionId": "monash-university",
+    "courseCode": "094996F",
+    "fieldKey": "campus",
+    "value": "Peninsula (on campus)",
+    "sourceUrl": "https://www.monash.edu/study/courses/find-a-course/paramedicine-m2011"
+  },
+  {
+    "institutionId": "monash-university",
+    "courseCode": "094996F",
+    "fieldKey": "intakes",
+    "value": "First semester (February)",
+    "sourceUrl": "https://www.monash.edu/study/courses/find-a-course/paramedicine-m2011"
+  },
+  {
+    "institutionId": "the-university-of-queensland",
+    "courseCode": "082631A",
+    "fieldKey": "campus",
+    "value": "Gatton",
+    "sourceUrl": "https://study.uq.edu.au/study-options/programs/bachelor-veterinary-science-honours-2378?year=2026"
+  },
+  {
+    "institutionId": "the-university-of-queensland",
+    "courseCode": "082631A",
+    "fieldKey": "english_requirement",
+    "value": "IELTS overall 7.0, with 7.0 in reading, writing, speaking and listening (2026 intake page)",
+    "sourceUrl": "https://study.uq.edu.au/study-options/programs/bachelor-veterinary-science-honours-2378?year=2026",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31",
+    "reviewerNote": "This is a course-specific international English requirement. Applicants should still check the live course page before applying."
+  },
+  {
+    "institutionId": "the-university-of-queensland",
+    "courseCode": "082631A",
+    "fieldKey": "application_deadline",
+    "value": "30 September of the previous year for semester 1 applications submitted directly to UQ",
+    "sourceUrl": "https://study.uq.edu.au/study-options/programs/bachelor-veterinary-science-honours-2378?year=2026",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31",
+    "reviewerNote": "Course-specific date; check live UQ dates before applying."
+  },
+  {
+    "institutionId": "university-of-technology-sydney",
+    "courseCode": "0100398",
+    "fieldKey": "duration",
+    "value": "1.5 years full-time; 3 years part-time",
+    "sourceUrl": "https://www.uts.edu.au/courses/master-of-business-analytics"
+  },
+  {
+    "institutionId": "university-of-technology-sydney",
+    "courseCode": "0100398",
+    "fieldKey": "campus",
+    "value": "City campus",
+    "sourceUrl": "https://www.uts.edu.au/courses/master-of-business-analytics"
+  },
+  {
+    "institutionId": "university-of-technology-sydney",
+    "courseCode": "0100398",
+    "fieldKey": "intakes",
+    "value": "Autumn Session 2026; Spring Session 2026",
+    "sourceUrl": "https://www.uts.edu.au/courses/master-of-business-analytics",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "university-of-technology-sydney",
+    "courseCode": "0100398",
+    "fieldKey": "english_requirement",
+    "value": "IELTS Academic overall 6.5, writing 6.0 (or listed equivalent test score)",
+    "sourceUrl": "https://www.uts.edu.au/courses/master-of-business-analytics",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31",
+    "reviewerNote": "Course-specific English requirement published on the UTS course page; confirm the live requirement before applying."
+  }
+]

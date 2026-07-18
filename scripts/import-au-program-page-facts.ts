@@ -37,6 +37,8 @@ async function main() {
   if (!url || !key) throw new Error("Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY")
   const facts = JSON.parse(await readFile(sourceFile, "utf8")) as Fact[]
   const supabase = createClient(url, key, { auth: { persistSession: false } })
+  let imported = 0
+  let skipped = 0
 
   for (const fact of facts) {
     if (!fact.sourceUrl.startsWith("https://")) throw new Error(`Only HTTPS source URLs are accepted: ${fact.sourceUrl}`)
@@ -50,7 +52,7 @@ async function main() {
 
     console.log(`${apply ? "IMPORT" : "CHECK "} ${course.title} · ${fact.fieldKey}`)
     if (!apply) continue
-    const { error } = await supabase.from("program_page_facts_au").insert({
+    const payload = {
       course_id: course.id,
       field_key: fact.fieldKey,
       value: fact.value,
@@ -60,10 +62,35 @@ async function main() {
       review_status: "verified",
       reviewed_at: new Date().toISOString(),
       reviewer_note: fact.reviewerNote ?? "Verified against provider course page",
-    })
+    }
+    const { data: existing, error: existingError } = await supabase
+      .from("program_page_facts_au")
+      .select("id, value")
+      .eq("course_id", course.id)
+      .eq("field_key", fact.fieldKey)
+      .eq("source_url", fact.sourceUrl)
+      .eq("review_status", "verified")
+      .order("id", { ascending: false })
+      .limit(1)
+    if (existingError) throw existingError
+
+    const latest = existing?.[0]
+    const unchanged = latest && JSON.stringify(latest.value) === JSON.stringify(fact.value)
+    if (unchanged) {
+      console.log(`SKIP   ${course.title} · ${fact.fieldKey} (unchanged)`)
+      skipped += 1
+      continue
+    }
+
+    const { error } = latest
+      ? await supabase.from("program_page_facts_au").update(payload).eq("id", latest.id)
+      : await supabase.from("program_page_facts_au").insert(payload)
     if (error) throw error
+    imported += 1
   }
-  console.log(`${apply ? "Imported" : "Validated"} ${facts.length} provider-page facts.`)
+  console.log(apply
+    ? `Imported or refreshed ${imported} provider-page facts; skipped ${skipped} unchanged facts.`
+    : `Validated ${facts.length} provider-page facts.`)
 }
 
 void main().catch((error) => {

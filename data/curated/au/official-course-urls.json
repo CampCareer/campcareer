@@ -93,5 +93,95 @@
     "institutionId": "the-university-of-melbourne",
     "courseCode": "061970M",
     "url": "https://study.unimelb.edu.au/find/courses/graduate/master-of-food-science/"
+  },
+  {
+    "institutionId": "university-of-new-south-wales",
+    "courseCode": "015784F",
+    "url": "https://www.unsw.edu.au/study/undergraduate/bachelor-of-computer-science"
+  },
+  {
+    "institutionId": "monash-university",
+    "courseCode": "075119J",
+    "url": "https://www.monash.edu/study/courses/find-a-course/nursing-m2006"
+  },
+  {
+    "institutionId": "the-university-of-queensland",
+    "courseCode": "082620D",
+    "url": "https://study.uq.edu.au/study-options/programs/bachelor-dental-science-honours-2367"
+  },
+  {
+    "institutionId": "rmit-university",
+    "courseCode": "114324K",
+    "url": "https://www.rmit.edu.au/study-with-us/levels-of-study/undergraduate-study/bachelor-degrees/bachelor-of-cyber-security-bp355"
+  },
+  {
+    "institutionId": "monash-university",
+    "courseCode": "079336A",
+    "url": "https://www.monash.edu/study/courses/find-a-course/computer-science-c2001?international=true"
+  },
+  {
+    "institutionId": "monash-university",
+    "courseCode": "059372G",
+    "url": "https://www.monash.edu/study/courses/find-a-course/architectural-design-f2001"
+  },
+  {
+    "institutionId": "monash-university",
+    "courseCode": "094996F",
+    "url": "https://www.monash.edu/study/courses/find-a-course/paramedicine-m2011"
+  },
+  {
+    "institutionId": "the-university-of-queensland",
+    "courseCode": "082631A",
+    "url": "https://study.uq.edu.au/study-options/programs/bachelor-veterinary-science-honours-2378?year=2026"
+  },
+  {
+    "institutionId": "monash-university",
+    "courseCode": "0100636",
+    "url": "https://www.monash.edu/study/courses/find-a-course/cybersecurity-c6002"
+  },
+  {
+    "institutionId": "monash-university",
+    "courseCode": "064804A",
+    "url": "https://www.monash.edu/study/courses/find-a-course/physiotherapy-m3002"
+  },
+  {
+    "institutionId": "rmit-university",
+    "courseCode": "110991G",
+    "url": "https://www.rmit.edu.au/study-with-us/levels-of-study/undergraduate-study/honours-degrees/bachelor-of-engineering-mechanical-engineering-honours-bh070"
+  },
+  {
+    "institutionId": "rmit-university",
+    "courseCode": "087986M",
+    "url": "https://www.rmit.edu.au/study-with-us/levels-of-study/postgraduate-study/masters-by-coursework/master-of-engineering-civil-engineering-mc257"
+  },
+  {
+    "institutionId": "rmit-university",
+    "courseCode": "111188D",
+    "url": "https://www.rmit.edu.au/study-with-us/levels-of-study/undergraduate-study/bachelor-degrees/bachelor-of-applied-science-aviation-bp070"
+  },
+  {
+    "institutionId": "rmit-university",
+    "courseCode": "079596C",
+    "url": "https://www.rmit.edu.au/study-with-us/levels-of-study/undergraduate-study/honours-degrees/bachelor-of-social-work-honours-bh105"
+  },
+  {
+    "institutionId": "the-university-of-melbourne",
+    "courseCode": "093002F",
+    "url": "https://study.unimelb.edu.au/find/courses/graduate/master-of-teaching-early-childhood-and-primary"
+  },
+  {
+    "institutionId": "the-university-of-melbourne",
+    "courseCode": "093584A",
+    "url": "https://study.unimelb.edu.au/find/courses/undergraduate/bachelor-of-fine-arts-film-and-television"
+  },
+  {
+    "institutionId": "the-university-of-melbourne",
+    "courseCode": "061212E",
+    "url": "https://study.unimelb.edu.au/find/courses/graduate/master-of-social-work/"
+  },
+  {
+    "institutionId": "university-of-technology-sydney",
+    "courseCode": "0100398",
+    "url": "https://www.uts.edu.au/courses/master-of-business-analytics"
   }
 ]

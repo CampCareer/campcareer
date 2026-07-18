@@ -62,13 +62,15 @@ export const AU_CONCEPT_OCCUPATIONS: AuConceptOccupations[] = [
   },
   {
     conceptId: "cybersecurity",
-    oscaCodes: ["262132"],
+    oscaCodes: ["271131", "271132", "271133", "271134", "271135", "271136"],
     anzsco4Groups: ["2621"],
     broadFields: ["02 - Information Technology"],
     qualificationTypes: ["Bachelor", "Master", "Graduate Certificate"],
     durationYears: { min: 3, max: 2 },
     representativeOccupations: [
-      { oscaCode: "262132", label: "ICT Security Specialist", labelKo: "ICT 보안 전문가" },
+      { oscaCode: "271133", label: "Cyber Security Analyst", labelKo: "사이버 보안 분석가" },
+      { oscaCode: "271134", label: "Cyber Security Architect", labelKo: "사이버 보안 아키텍트" },
+      { oscaCode: "271135", label: "Cyber Security Engineer", labelKo: "사이버 보안 엔지니어" },
     ],
   },
 
@@ -378,7 +380,7 @@ export const AU_CONCEPT_OCCUPATIONS: AuConceptOccupations[] = [
     qualificationTypes: ["Certificate III", "Certificate IV"],
     durationYears: { min: 4, max: 4 },
     representativeOccupations: [
-      { oscaCode: "382131", label: "Air Conditioning and Refrigeration Mechanic", labelKo: "냉난방공조 기술자" },
+      { oscaCode: "382131", label: "Air Conditioning and Refrigeration Technician", labelKo: "냉난방공조 기술자" },
     ],
   },
 
@@ -507,14 +509,14 @@ export const AU_CONCEPT_OCCUPATIONS: AuConceptOccupations[] = [
   // ── Transport ───────────────────────────────────────────────────────────────
   {
     conceptId: "automotive",
-    oscaCodes: ["321231", "321232"],
+    oscaCodes: ["351131", "351231"],
     anzsco4Groups: ["3212"],
     broadFields: ["04 - Engineering and Related Technologies"],
     qualificationTypes: ["Certificate III", "Certificate IV"],
     durationYears: { min: 4, max: 4 },
     representativeOccupations: [
-      { oscaCode: "321231", label: "Motor Mechanic", labelKo: "자동차 정비사" },
-      { oscaCode: "321232", label: "Diesel Motor Mechanic", labelKo: "디젤 정비사" },
+      { oscaCode: "351131", label: "Automotive Technician", labelKo: "자동차 정비사" },
+      { oscaCode: "351231", label: "Automotive Electrician", labelKo: "자동차 전기 정비사" },
     ],
   },
   {

@@ -1,5 +1,8 @@
 import "server-only"
 
+import { getAuProgramShortlistItem } from "@/data/au-top-university-program-shortlist"
+import { getAuVocationalProgramShortlistItem } from "@/data/au-vocational-program-shortlist"
+import { getAuPhaseThreeUniversityCatalogue } from "@/data/au-phase-three-university-catalogues"
 import { getStudyConcept } from "@/data/study-concepts"
 import { supabaseAdmin } from "@/lib/supabase-admin"
 import type { CourseOffering } from "@/lib/study-product/types"
@@ -29,36 +32,89 @@ export async function getVerifiedCourseOfferings(
   const limit = Math.min(Math.max(Math.floor(requestedLimit), 1), 20)
   const country = countryCode.toUpperCase()
 
-  if (country === "AU") return getAustraliaCourses(concept.roiSearchTerm, limit)
+  if (country === "AU") return getAustraliaCourses(concept.id, concept.roiSearchTerm, limit)
   if (country === "IE") return getIrelandCourses(concept.roiSearchTerm, limit)
   return []
 }
 
-async function getAustraliaCourses(searchTerm: string, limit: number): Promise<CourseOffering[]> {
+const AU_COURSE_SELECT = "id, institution_id, course_code, title, field_name, aqf_level, course_type, duration_years, tuition_fee_aud, cricos_url, official_course_url, official_url_status, official_url_checked_at, synced_at"
+
+async function getAustraliaCourses(conceptId: string, searchTerm: string, limit: number): Promise<CourseOffering[]> {
+  const vocationalProgram = getAuVocationalProgramShortlistItem(conceptId)
+  if (vocationalProgram) return [vocationalProgram]
+
+  const shortlistItem = getAuProgramShortlistItem(conceptId)
+  const featuredCourse = shortlistItem?.status === "available" && shortlistItem.institutionId && shortlistItem.courseCode
+    ? await getAustraliaCourseByCode(shortlistItem.institutionId, shortlistItem.courseCode)
+    : null
+
+  const candidates = await getAustraliaCourseCandidates(searchTerm)
+  const selected = diversifyAustraliaCourses([
+    ...(featuredCourse ?? []),
+    ...candidates,
+  ], limit)
+
+  return selected.length ? mapAustraliaCourses(selected) : []
+}
+
+async function getAustraliaCourseByCode(institutionId: string, courseCode: string) {
+  const { data, error } = await supabaseAdmin
+    .from("courses_au")
+    .select(AU_COURSE_SELECT)
+    .eq("institution_id", institutionId)
+    .eq("course_code", courseCode)
+    .eq("cricos_status", "active")
+    .limit(1)
+  return error || !data?.length ? null : data
+}
+
+async function getAustraliaCourseCandidates(searchTerm: string) {
   let { data, error } = await supabaseAdmin
     .from("courses_au")
-    .select("id, institution_id, course_code, title, field_name, aqf_level, course_type, duration_years, tuition_fee_aud, cricos_url, synced_at")
+    .select(AU_COURSE_SELECT)
     .ilike("field_name", `%${escapeIlike(searchTerm)}%`)
     .not("cricos_url", "is", null)
     .eq("cricos_status", "active")
+    .order("official_url_status", { ascending: false, nullsFirst: false })
     .order("tuition_fee_aud", { ascending: true, nullsFirst: false })
-    .limit(limit)
+    .limit(200)
 
   if (!error && (!data || data.length === 0)) {
     const fallback = await supabaseAdmin
       .from("courses_au")
-      .select("id, institution_id, course_code, title, field_name, aqf_level, course_type, duration_years, tuition_fee_aud, cricos_url, synced_at")
+      .select(AU_COURSE_SELECT)
       .ilike("title", `%${escapeIlike(searchTerm)}%`)
       .not("cricos_url", "is", null)
       .eq("cricos_status", "active")
+      .order("official_url_status", { ascending: false, nullsFirst: false })
       .order("tuition_fee_aud", { ascending: true, nullsFirst: false })
-      .limit(limit)
+      .limit(200)
     data = fallback.data
     error = fallback.error
   }
 
   if (error || !data?.length) return []
+  return data
+}
 
+function diversifyAustraliaCourses(data: Array<Record<string, unknown>>, limit: number) {
+  const seenCourseIds = new Set<string>()
+  const seenProviders = new Set<string>()
+  const selected: Array<Record<string, unknown>> = []
+
+  for (const course of data) {
+    const id = String(course.id)
+    const providerId = String(course.institution_id)
+    if (seenCourseIds.has(id) || seenProviders.has(providerId)) continue
+    seenCourseIds.add(id)
+    seenProviders.add(providerId)
+    selected.push(course)
+    if (selected.length >= limit) break
+  }
+  return selected
+}
+
+async function mapAustraliaCourses(data: Array<Record<string, unknown>>): Promise<CourseOffering[]> {
   const providerIds = Array.from(new Set(data.map((row) => row.institution_id as string)))
   const { data: providers } = await supabaseAdmin
     .from("colleges_au")
@@ -69,6 +125,16 @@ async function getAustraliaCourses(searchTerm: string, limit: number): Promise<C
   return data.map((row) => {
     const provider = providerById.get(row.institution_id as string)
     const syncedAt = String(row.synced_at ?? "2026-04-01")
+    const hasVerifiedProviderPage = row.official_url_status === "verified" && typeof row.official_course_url === "string"
+    const providerCatalogue = getAuPhaseThreeUniversityCatalogue(row.institution_id as string)
+    const officialUrl = hasVerifiedProviderPage
+      ? row.official_course_url as string
+      : providerCatalogue?.programmesUrl ?? row.cricos_url as string
+    const officialLinkKind = hasVerifiedProviderPage
+      ? "COURSE_PAGE" as const
+      : providerCatalogue
+        ? "PROVIDER_CATALOGUE" as const
+        : "REGISTRY" as const
     return {
       id: `au:${row.id}`,
       countryCode: "AU",
@@ -83,9 +149,14 @@ async function getAustraliaCourses(searchTerm: string, limit: number): Promise<C
       campus: [provider?.city, provider?.state].filter(Boolean).join(", ") || undefined,
       internationalEligible: true,
       registrationStatus: "CURRENT" as const,
-      officialUrl: row.cricos_url as string,
-      sourceName: "Australian Government CRICOS",
-      lastVerifiedAt: syncedAt,
+      officialUrl,
+      officialLinkKind,
+      sourceName: hasVerifiedProviderPage
+        ? "Provider course page (verified)"
+        : providerCatalogue
+          ? "Official provider course finder"
+          : "Australian Government CRICOS",
+      lastVerifiedAt: String((hasVerifiedProviderPage ? row.official_url_checked_at : null) ?? providerCatalogue?.checkedAt ?? syncedAt),
     }
   })
 }

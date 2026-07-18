@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ArrowLeft, BadgeCheck, Clock3, ExternalLink, GraduationCap, MapPin, ShieldCheck } from "lucide-react"
+import { getAuProgramShortlistItem } from "@/data/au-top-university-program-shortlist"
 import { getStudyConcept } from "@/data/study-concepts"
 import {
   getOfficialCourseRegistry,
@@ -52,6 +53,7 @@ export default async function StudyOptionsPage(
   const isKo = searchParams.locale === "ko-KR"
   const offerings = await getVerifiedCourseOfferings(concept.id, countryCode, 20)
   const registry = getOfficialCourseRegistry(countryCode)
+  const auShortlistItem = countryCode === "AU" ? getAuProgramShortlistItem(concept.id) : null
 
   return (
     <div className="bg-slate-50 text-slate-950">
@@ -102,8 +104,11 @@ export default async function StudyOptionsPage(
                 <div className="mt-5 rounded-xl bg-emerald-50 px-3 py-2.5 text-xs leading-5 text-emerald-800">
                   <strong>{course.sourceName}</strong> · {isKo ? "최종 확인" : "Verified"} {formatDate(course.lastVerifiedAt)}
                 </div>
+                {course.eligibilityNote && <p className="mt-3 rounded-xl bg-amber-50 px-3 py-2.5 text-xs leading-5 text-amber-900">{course.eligibilityNote}</p>}
                 <a href={course.officialUrl} target="_blank" rel="noopener noreferrer" className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-bold text-white hover:bg-blue-700">
-                  {isKo ? "공식 과정 페이지" : "Open official course page"}<ExternalLink className="h-4 w-4" />
+                  {course.officialLinkKind === "PROVIDER_CATALOGUE"
+                    ? (isKo ? "대학 공식 과정 찾기" : "Open official course finder")
+                    : (isKo ? "공식 과정 페이지" : "Open official course page")}<ExternalLink className="h-4 w-4" />
                 </a>
               </article>
             ))}
@@ -111,9 +116,11 @@ export default async function StudyOptionsPage(
         ) : (
           <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center">
             <GraduationCap className="mx-auto h-10 w-10 text-slate-300" />
-            <h2 className="mt-4 text-xl font-bold text-slate-900">{isKo ? "현재 검증된 shortlist가 없습니다" : "No verified shortlist is available yet"}</h2>
+            <h2 className="mt-4 text-xl font-bold text-slate-900">{auShortlistItem && auShortlistItem.status !== "available" ? (isKo ? "대학 과정으로 대체하지 않았습니다" : "We have not substituted an unrelated university degree") : (isKo ? "현재 검증된 shortlist가 없습니다" : "No verified shortlist is available yet")}</h2>
             <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-slate-600">
-              {isKo ? "등록 여부가 확인되지 않은 과정을 임의로 추천하지 않습니다. 아래 공식 등록부에서 최신 과정을 확인하세요." : "CampCareer does not pad this list with unverified courses. Use the official registry below for the current catalogue."}
+              {auShortlistItem && auShortlistItem.status !== "available"
+                ? (isKo ? `${auShortlistItem.note} 해당 제공기관 2차 작업에서 공식 과정 페이지를 추가합니다.` : `${auShortlistItem.note} Official provider pages will be added in the next provider-specific phase.`)
+                : (isKo ? "등록 여부가 확인되지 않은 과정을 임의로 추천하지 않습니다. 아래 공식 등록부에서 최신 과정을 확인하세요." : "CampCareer does not pad this list with unverified courses. Use the official registry below for the current catalogue.")}
             </p>
             {registry && <a href={registry.url} target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-bold text-white hover:bg-blue-700">{registry.name}<ExternalLink className="h-4 w-4" /></a>}
           </div>
