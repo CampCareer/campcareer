@@ -63,7 +63,7 @@ export default async function AustralianUniversityDetailPage({ params }: { param
   return (
     <>
       <JsonLd data={breadcrumbLd([
-        { name: 'Study options', path: '/universities' },
+        { name: 'Study options', path: '/study' },
         { name: 'Australia', path: '/au/study' },
         { name: university.name, path: `/au/study/providers/${university.institutionId}` },
       ])} />

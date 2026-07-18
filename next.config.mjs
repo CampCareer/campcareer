@@ -31,6 +31,7 @@ const nextConfig = {
       { source: '/universities/au/compare', destination: '/au/study/compare', permanent: true },
       { source: '/universities/au/:institution', destination: '/au/study/providers/:institution', permanent: true },
       { source: '/universities/au', destination: '/au/study', permanent: true },
+      { source: '/universities', destination: '/study', permanent: true },
       { source: '/au/universities', destination: '/au/study', permanent: true },
 
       // SEO migration: code-based occupation URLs now resolve through

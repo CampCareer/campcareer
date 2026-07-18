@@ -4,14 +4,14 @@ import { LAUNCH_COUNTRY_CODES } from "@/data/launch-countries"
 export const STUDY_CATEGORIES = [
   { id: "trades", label: "Construction & Skilled Trades", labelKo: "건설·기술직" },
   { id: "health", label: "Health & Care", labelKo: "보건·돌봄" },
-  { id: "technology", label: "IT & Data", labelKo: "IT·데이터" },
-  { id: "engineering", label: "Engineering & Manufacturing", labelKo: "공학·제조" },
-  { id: "business", label: "Business & Finance", labelKo: "비즈니스·금융" },
-  { id: "education", label: "Education & Social Services", labelKo: "교육·사회" },
+  { id: "technology", label: "IT, Data & Science", labelKo: "IT·데이터·과학" },
+  { id: "engineering", label: "Engineering, Manufacturing & Resources", labelKo: "공학·제조·자원" },
+  { id: "business", label: "Business, Finance, Legal & Public Administration", labelKo: "비즈니스·금융·법·공공행정" },
+  { id: "education", label: "Education, Social & Community Services", labelKo: "교육·사회·커뮤니티 서비스" },
   { id: "environment", label: "Environment & Agriculture", labelKo: "환경·농업" },
-  { id: "design", label: "Design & Media", labelKo: "디자인·미디어" },
-  { id: "hospitality", label: "Hospitality & Services", labelKo: "호텔·서비스" },
-  { id: "transport", label: "Transport, Aviation & Maritime", labelKo: "운송·항공·해양" },
+  { id: "design", label: "Design, Media & Culture", labelKo: "디자인·미디어·문화" },
+  { id: "hospitality", label: "Hospitality, Retail & Services", labelKo: "호텔·리테일·서비스" },
+  { id: "transport", label: "Transport, Aviation, Maritime & Logistics", labelKo: "운송·항공·해양·물류" },
 ] as const
 
 const DESTINATIONS = LAUNCH_COUNTRY_CODES

@@ -46,7 +46,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/compare`, lastModified: lastModStatic, priority: 0.95, changeFrequency: "daily" },
     { url: `${BASE}/maps`, lastModified: lastModStatic, priority: 0.9, changeFrequency: "daily" },
     { url: `${BASE}/countries`, lastModified: lastModStatic, priority: 0.9, changeFrequency: "weekly" },
-    { url: `${BASE}/universities`, lastModified: lastModStatic, priority: 0.85, changeFrequency: "weekly" },
+    { url: `${BASE}/study`, lastModified: lastModStatic, priority: 0.85, changeFrequency: "weekly" },
     { url: `${BASE}/au/study`, lastModified: lastModStatic, priority: 0.9, changeFrequency: "weekly" },
     { url: `${BASE}/au/majors`, lastModified: lastModStatic, priority: 0.9, changeFrequency: "weekly" },
     { url: `${BASE}/majors`, lastModified: lastModStatic, priority: 0.85, changeFrequency: "weekly" },

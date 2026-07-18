@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import { permanentRedirect } from "next/navigation"
-import { UniversitySearchClient } from "@/components/discovery/discovery-search-clients"
 
 export const metadata: Metadata = { title: "University Matches", robots: { index: false, follow: true } }
 export default async function UniversitySearchPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
@@ -14,5 +13,10 @@ export default async function UniversitySearchPage({ searchParams }: { searchPar
     }
     permanentRedirect(`/au/study${target.size ? `?${target.toString()}` : ""}`)
   }
-  return <UniversitySearchClient initial={{ country: one("country"), category: one("category"), city: one("city"), career: one("career"), budget: one("budget") }} />
+  const target = new URLSearchParams()
+  for (const [key, value] of Object.entries(query)) {
+    if (typeof value === "string") target.set(key, value)
+    else if (Array.isArray(value)) value.forEach((item) => target.append(key, item))
+  }
+  permanentRedirect(`/study/search${target.size ? `?${target.toString()}` : ""}`)
 }

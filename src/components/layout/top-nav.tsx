@@ -22,7 +22,7 @@ export function TopNav() {
   const pathLocale = localeFromPathname(pathname) ?? locale
   const barePathname = withoutLocalePrefix(pathname)
   const isLanding = barePathname === "/"
-  const hasUnifiedHero = isLanding || barePathname === "/countries/search" || barePathname === "/universities" || barePathname === "/universities/au" || barePathname === "/au/study" || barePathname === "/au/majors"
+  const hasUnifiedHero = isLanding || barePathname === "/countries/search" || barePathname === "/universities" || barePathname === "/universities/au" || barePathname === "/majors" || barePathname === "/study" || barePathname === "/au/study" || barePathname === "/au/majors"
   // /map and /maps are full-screen map surfaces on mobile.
   const isMap = barePathname === "/map" || barePathname.startsWith("/map/") || barePathname === "/maps" || barePathname.startsWith("/maps/")
   const isCompare = barePathname === "/compare" || barePathname.startsWith("/compare/")
@@ -44,10 +44,8 @@ export function TopNav() {
 
   const navItems: { href: string; label: string; icon?: typeof Globe; accent?: "blue" | "rose" | "amber" }[] = [
     { href: "/", label: locale === "ko" ? "국가" : "Countries", icon: Globe, accent: "blue" },
-    { href: "/universities", label: locale === "ko" ? "대학" : "Universities", icon: Building2, accent: "rose" },
-    { href: "/majors", label: locale === "ko" ? "전공·직업" : "Majors", icon: Briefcase, accent: "amber" },
-    { href: "/maps", label: t.nav.map },
-    { href: "/compare", label: t.nav.compare },
+    { href: "/majors", label: locale === "ko" ? "전공" : "Majors", icon: Briefcase, accent: "amber" },
+    { href: "/study", label: locale === "ko" ? "학업" : "Study", icon: Building2, accent: "rose" },
   ]
 
   const linkEls = navItems.map((item) => {

@@ -372,7 +372,7 @@ export function UniversitySearchClient({ initial }: { initial: { country?: strin
     fetch(`/api/v1/university-matches?${query}`, { signal: controller.signal }).then((response) => response.ok ? response.json() : Promise.reject()).then(setResult).catch(() => setResult(null))
     return () => controller.abort()
   }, [budget, career, city, country, ready])
-  const href = ready ? productHref("/universities/search", locale, { country, career, budget, ...(city ? { city } : {}) }) : "#"
+  const href = ready ? productHref("/study/search", locale, { country, career, budget, ...(city ? { city } : {}) }) : "#"
   return <DiscoveryLayout eyebrow="Universities" title="Find the right university to study">
     <form action={href} onSubmit={(event) => { event.preventDefault(); if (ready) router.push(href) }} className="grid gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm lg:grid-cols-[1fr_1fr_1.1fr_1fr_auto]">
       <Select label="Destination country" value={country} onChange={setCountry} options={[{ value: "", label: "Choose a country" }, ...LAUNCH_COUNTRIES.map((item) => ({ value: item.code, label: item.name }))]} />
