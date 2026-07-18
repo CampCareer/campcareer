@@ -262,7 +262,9 @@ function CountryStudyPreview({ country, locale, isKo, category, major, basePath 
     <div><p className="text-xs font-semibold uppercase tracking-[.18em] text-blue-700">{country.name}</p><h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{title}</h2><p className="mt-2 max-w-2xl text-slate-600">{intro}</p></div>
     <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{concepts.map((concept) => {
       const selected = major === concept.id
-      const href = productHref(basePath, locale, { ...(basePath === "/au/majors" ? {} : { country: country.code }), category: concept.category, major: concept.id })
+      const href = country.code === "AU" && basePath === "/au/majors"
+        ? localizePath(`/au/majors/${concept.slug}`, locale)
+        : productHref(basePath, locale, { country: country.code, category: concept.category, major: concept.id })
       const { Icon, tone } = getStudyCategoryVisual(concept.category)
       return <Link key={concept.id} href={href} className={`group rounded-2xl border bg-white p-5 transition-all hover:border-blue-300 hover:shadow-md ${selected ? "border-blue-400 ring-2 ring-blue-100" : "border-slate-200"}`}>
         <div className="flex items-start justify-between gap-3"><span className={`grid size-10 place-items-center rounded-xl ${tone}`}><Icon className="size-5" strokeWidth={2.2} /></span>{selected && <span className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">{isKo ? "선택됨" : "Selected"}</span>}</div>
