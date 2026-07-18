@@ -5,6 +5,8 @@ import {
   ArrowLeft,
   ArrowRight,
   BadgeCheck,
+  ChevronLeft,
+  ChevronRight,
   Clock3,
   ExternalLink,
   GraduationCap,
@@ -19,13 +21,18 @@ import { pageMetadata } from "@/lib/seo"
 
 export const revalidate = 3600
 
+const PAGE_SIZE = 10
+const AU_STATES = ["ACT", "NSW", "NT", "QLD", "SA", "TAS", "VIC", "WA"] as const
+
 type Params = { concept: string }
 
+type QualGroupKey = "certificate-diploma" | "bachelor" | "master"
+
 type QualificationGroup = {
-  aqfLevel: number
+  key: QualGroupKey
   label: string
+  aqfLevels: number[]
   count: number
-  courses: CourseRow[]
 }
 
 type CourseRow = {
@@ -39,17 +46,41 @@ type CourseRow = {
   cricosUrl: string | null
   providerName: string
   campus: string | null
+  state: string | null
   syncedAt: string
 }
 
-const AQF_GROUPS: { aqfLevels: number[]; label: string; shortLabel: string }[] = [
-  { aqfLevels: [1, 2, 3, 4], label: "Certificate I–IV", shortLabel: "Certificate" },
-  { aqfLevels: [5], label: "Diploma", shortLabel: "Diploma" },
-  { aqfLevels: [6], label: "Advanced Diploma", shortLabel: "Adv. Diploma" },
-  { aqfLevels: [7], label: "Bachelor", shortLabel: "Bachelor" },
-  { aqfLevels: [8], label: "Graduate Certificate / Diploma", shortLabel: "Grad. Cert/Dip" },
-  { aqfLevels: [9, 10], label: "Master / Doctoral", shortLabel: "Master" },
+const QUAL_GROUPS: { key: QualGroupKey; label: string; aqfLevels: number[] }[] = [
+  { key: "certificate-diploma", label: "Certificate & Diploma", aqfLevels: [1, 2, 3, 4, 5, 6] },
+  { key: "bachelor", label: "Bachelor", aqfLevels: [7] },
+  { key: "master", label: "Master", aqfLevels: [8, 9, 10] },
 ]
+
+function isQualGroupKey(v: string | undefined): v is QualGroupKey {
+  return !!v && QUAL_GROUPS.some((g) => g.key === v)
+}
+
+function groupCourses(courses: CourseRow[]): QualificationGroup[] {
+  return QUAL_GROUPS.map((group) => ({
+    key: group.key,
+    label: group.label,
+    aqfLevels: group.aqfLevels,
+    count: courses.filter((c) => c.aqfLevel != null && group.aqfLevels.includes(c.aqfLevel)).length,
+  })).filter((g) => g.count > 0)
+}
+
+function filterByGroup(courses: CourseRow[], key: QualGroupKey | null): CourseRow[] {
+  if (!key) return courses
+  const group = QUAL_GROUPS.find((g) => g.key === key)
+  if (!group) return courses
+  return courses.filter((c) => c.aqfLevel != null && group.aqfLevels.includes(c.aqfLevel))
+}
+
+function filterByState(courses: CourseRow[], state: string | null): CourseRow[] {
+  if (!state) return courses
+  const upper = state.toUpperCase()
+  return courses.filter((c) => c.state?.toUpperCase() === upper)
+}
 
 export function generateStaticParams() {
   return STUDY_CONCEPTS.map((concept) => ({ concept: concept.slug }))
@@ -61,7 +92,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   if (!concept) return { title: "Program not found" }
   return pageMetadata({
     title: `${concept.label} programs in Australia — Verified CRICOS courses`,
-    description: `Browse verified ${concept.label} programs across qualification levels in Australia. Compare diploma, bachelor, master and certificate courses from CRICOS-registered providers.`,
+    description: `Browse verified ${concept.label} programs across qualification levels in Australia. Compare certificate, diploma, bachelor and master courses from CRICOS-registered providers.`,
     path: `/au/study/programs/${concept.slug}`,
   })
 }
@@ -70,19 +101,19 @@ async function fetchCourses(conceptId: string): Promise<CourseRow[]> {
   const concept = getStudyConcept(conceptId)
   if (!concept) return []
 
-  const searchTerm = concept.roiSearchTerm
+  const searchTerm = concept.roiSearchTerm.replace(/[%_]/g, "")
 
   let { data, error } = await supabaseAdmin
     .from("courses_au")
     .select(
       "id, institution_id, course_code, title, field_name, aqf_level, course_type, duration_years, tuition_fee_aud, cricos_url, synced_at",
     )
-    .ilike("field_name", `%${searchTerm.replace(/[%_]/g, "")}%`)
+    .ilike("field_name", `%${searchTerm}%`)
     .not("cricos_url", "is", null)
     .eq("cricos_status", "active")
     .order("aqf_level", { ascending: true, nullsFirst: true })
     .order("tuition_fee_aud", { ascending: true, nullsFirst: false })
-    .limit(60)
+    .limit(80)
 
   if (!error && (!data || data.length === 0)) {
     const fallback = await supabaseAdmin
@@ -90,12 +121,12 @@ async function fetchCourses(conceptId: string): Promise<CourseRow[]> {
       .select(
         "id, institution_id, course_code, title, field_name, aqf_level, course_type, duration_years, tuition_fee_aud, cricos_url, synced_at",
       )
-      .ilike("title", `%${searchTerm.replace(/[%_]/g, "")}%`)
+      .ilike("title", `%${searchTerm}%`)
       .not("cricos_url", "is", null)
       .eq("cricos_status", "active")
       .order("aqf_level", { ascending: true, nullsFirst: true })
       .order("tuition_fee_aud", { ascending: true, nullsFirst: false })
-      .limit(60)
+      .limit(80)
     data = fallback.data
     error = fallback.error
   }
@@ -122,23 +153,10 @@ async function fetchCourses(conceptId: string): Promise<CourseRow[]> {
       cricosUrl: row.cricos_url as string,
       providerName: (provider?.name as string | undefined) ?? humanizeSlug(row.institution_id as string),
       campus: [provider?.city, provider?.state].filter(Boolean).join(", ") || null,
+      state: (provider?.state as string | null) ?? null,
       syncedAt: String(row.synced_at ?? "2026-04-01"),
     }
   })
-}
-
-function groupByQualification(courses: CourseRow[]): QualificationGroup[] {
-  return AQF_GROUPS.map((group) => {
-    const matched = courses.filter(
-      (c) => c.aqfLevel != null && group.aqfLevels.includes(c.aqfLevel),
-    )
-    return {
-      aqfLevel: group.aqfLevels[0],
-      label: group.label,
-      count: matched.length,
-      courses: matched,
-    }
-  }).filter((g) => g.count > 0)
 }
 
 export default async function AuStudyProgramsPage({
@@ -146,7 +164,7 @@ export default async function AuStudyProgramsPage({
   searchParams,
 }: {
   params: Promise<Params>
-  searchParams: Promise<{ level?: string }>
+  searchParams: Promise<{ level?: string; state?: string; page?: string }>
 }) {
   const { concept: slug } = await params
   const sp = await searchParams
@@ -154,20 +172,38 @@ export default async function AuStudyProgramsPage({
   if (!concept) notFound()
 
   const allCourses = await fetchCourses(concept.id)
-  const groups = groupByQualification(allCourses)
   const registry = getOfficialCourseRegistry("AU")
 
-  const activeLevel = sp.level
-    ? Number(sp.level)
+  const activeLevel = isQualGroupKey(sp.level) ? sp.level : null
+  const activeState = sp.state && AU_STATES.includes(sp.state.toUpperCase() as typeof AU_STATES[number])
+    ? sp.state.toUpperCase()
     : null
+  const currentPage = Math.max(1, Number(sp.page) || 1)
 
-  const displayCourses = activeLevel != null
-    ? allCourses.filter((c) => c.aqfLevel === activeLevel)
-    : allCourses
+  const afterGroup = filterByGroup(allCourses, activeLevel)
+  const afterState = filterByState(afterGroup, activeState)
+  const filteredCourses = afterState
 
-  const activeGroup = activeLevel != null
-    ? groups.find((g) => g.aqfLevel === activeLevel)
-    : null
+  const groups = groupCourses(allCourses)
+  const statesInData = [...new Set(allCourses.map((c) => c.state).filter((s): s is string => !!s))].sort()
+
+  const totalPages = Math.max(1, Math.ceil(filteredCourses.length / PAGE_SIZE))
+  const safePage = Math.min(currentPage, totalPages)
+  const paginatedCourses = filteredCourses.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE)
+
+  function buildHref(opts: { level?: string | null; state?: string | null; page?: number }) {
+    const parts: string[] = []
+    const level = opts.level !== undefined ? opts.level : activeLevel
+    const state = opts.state !== undefined ? opts.state : activeState
+    const page = opts.page ?? 1
+    if (level) parts.push(`level=${encodeURIComponent(level)}`)
+    if (state) parts.push(`state=${encodeURIComponent(state)}`)
+    if (page > 1) parts.push(`page=${page}`)
+    const qs = parts.length ? `?${parts.join("&")}` : ""
+    return `/au/study/programs/${concept!.slug}${qs}`
+  }
+
+  const activeGroup = activeLevel ? QUAL_GROUPS.find((g) => g.key === activeLevel) : null
 
   return (
     <main className="min-h-screen bg-slate-50">
@@ -198,99 +234,113 @@ export default async function AuStudyProgramsPage({
             </div>
             <div className="inline-flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-bold text-emerald-700">
               <BadgeCheck className="h-5 w-5" />
-              {allCourses.length} verified programs
+              {filteredCourses.length} verified program{filteredCourses.length !== 1 ? "s" : ""}
             </div>
           </div>
         </div>
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:py-14">
-        {groups.length > 0 && (
-          <div className="mb-8">
-            <h2 className="text-lg font-semibold text-slate-950">
-              Browse by qualification level
-            </h2>
-            <p className="mt-1 text-sm text-slate-500">
-              Select a level to filter verified programs.
-            </p>
-            <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {activeLevel == null && (
+        {/* Qualification level cards */}
+        <div className="mb-6">
+          <h2 className="text-lg font-semibold text-slate-950">
+            Browse by qualification level
+          </h2>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <Link
+              href={buildHref({ level: null, page: 1 })}
+              className={`flex items-center justify-between rounded-2xl p-4 transition ${
+                activeLevel == null
+                  ? "border-2 border-blue-600 bg-blue-50"
+                  : "border border-slate-200 bg-white shadow-sm hover:border-blue-300 hover:shadow-md"
+              }`}
+            >
+              <div>
+                <p className={`text-sm font-bold ${activeLevel == null ? "text-blue-700" : "text-slate-700"}`}>
+                  All levels
+                </p>
+                <p className="mt-1 text-2xl font-bold text-slate-950">{allCourses.length}</p>
+              </div>
+              {activeLevel == null ? (
+                <span className="rounded-full bg-blue-600 px-3 py-1 text-xs font-bold text-white">Selected</span>
+              ) : (
+                <ArrowRight className="h-5 w-5 text-slate-400" />
+              )}
+            </Link>
+            {groups.map((group) => {
+              const isActive = activeLevel === group.key
+              return (
                 <Link
-                  href={`/au/study/programs/${concept.slug}`}
-                  className="flex items-center justify-between rounded-2xl border-2 border-blue-600 bg-blue-50 p-4 transition hover:shadow-md"
+                  key={group.key}
+                  href={buildHref({ level: group.key, page: 1 })}
+                  className={`flex items-center justify-between rounded-2xl p-4 transition ${
+                    isActive
+                      ? "border-2 border-blue-600 bg-blue-50"
+                      : "border border-slate-200 bg-white shadow-sm hover:border-blue-300 hover:shadow-md"
+                  }`}
                 >
                   <div>
-                    <p className="text-sm font-bold text-blue-700">All levels</p>
-                    <p className="mt-1 text-2xl font-bold text-slate-950">
-                      {allCourses.length}
+                    <p className={`text-sm font-bold ${isActive ? "text-blue-700" : "text-slate-700"}`}>
+                      {group.label}
                     </p>
+                    <p className="mt-1 text-2xl font-bold text-slate-950">{group.count}</p>
                   </div>
-                  <span className="rounded-full bg-blue-600 px-3 py-1 text-xs font-bold text-white">
-                    Selected
-                  </span>
+                  {isActive ? (
+                    <span className="rounded-full bg-blue-600 px-3 py-1 text-xs font-bold text-white">Selected</span>
+                  ) : (
+                    <ArrowRight className="h-5 w-5 text-slate-400" />
+                  )}
                 </Link>
-              )}
-              {activeLevel != null && (
+              )
+            })}
+          </div>
+        </div>
+
+        {/* State filter */}
+        {statesInData.length > 1 && (
+          <div className="mb-6">
+            <h3 className="text-sm font-semibold text-slate-700">Filter by state</h3>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <Link
+                href={buildHref({ state: null, page: 1 })}
+                className={`rounded-full px-3 py-1.5 text-xs font-bold transition ${
+                  activeState == null
+                    ? "bg-blue-600 text-white"
+                    : "border border-slate-200 bg-white text-slate-700 hover:border-blue-300"
+                }`}
+              >
+                All states
+              </Link>
+              {statesInData.map((s) => (
                 <Link
-                  href={`/au/study/programs/${concept.slug}`}
-                  className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-blue-300 hover:shadow-md"
+                  key={s}
+                  href={buildHref({ state: s, page: 1 })}
+                  className={`rounded-full px-3 py-1.5 text-xs font-bold transition ${
+                    activeState === s
+                      ? "bg-blue-600 text-white"
+                      : "border border-slate-200 bg-white text-slate-700 hover:border-blue-300"
+                  }`}
                 >
-                  <div>
-                    <p className="text-sm font-semibold text-slate-600">
-                      All levels
-                    </p>
-                    <p className="mt-1 text-2xl font-bold text-slate-950">
-                      {allCourses.length}
-                    </p>
-                  </div>
-                  <ArrowRight className="h-5 w-5 text-slate-400" />
+                  {s}
                 </Link>
-              )}
-              {groups.map((group) => {
-                const isActive = activeLevel === group.aqfLevel
-                return (
-                  <Link
-                    key={group.aqfLevel}
-                    href={`/au/study/programs/${concept.slug}?level=${group.aqfLevel}`}
-                    className={`flex items-center justify-between rounded-2xl p-4 transition ${
-                      isActive
-                        ? "border-2 border-blue-600 bg-blue-50"
-                        : "border border-slate-200 bg-white shadow-sm hover:border-blue-300 hover:shadow-md"
-                    }`}
-                  >
-                    <div>
-                      <p
-                        className={`text-sm font-bold ${isActive ? "text-blue-700" : "text-slate-700"}`}
-                      >
-                        {group.label}
-                      </p>
-                      <p className="mt-1 text-2xl font-bold text-slate-950">
-                        {group.count}
-                      </p>
-                    </div>
-                    {isActive ? (
-                      <span className="rounded-full bg-blue-600 px-3 py-1 text-xs font-bold text-white">
-                        Selected
-                      </span>
-                    ) : (
-                      <ArrowRight className="h-5 w-5 text-slate-400" />
-                    )}
-                  </Link>
-                )
-              })}
+              ))}
             </div>
           </div>
         )}
 
-        {activeGroup && (
+        {/* Active filters summary */}
+        {(activeGroup || activeState) && (
           <p className="mb-6 text-sm font-semibold text-blue-700">
-            Showing {activeGroup.count} {activeGroup.label} programs
+            Showing {filteredCourses.length} program{filteredCourses.length !== 1 ? "s" : ""}
+            {activeGroup ? ` in ${activeGroup.label}` : ""}
+            {activeState ? ` · ${activeState}` : ""}
           </p>
         )}
 
-        {displayCourses.length > 0 ? (
+        {/* Course cards */}
+        {paginatedCourses.length > 0 ? (
           <div className="grid gap-5 lg:grid-cols-2">
-            {displayCourses.map((course) => (
+            {paginatedCourses.map((course) => (
               <article
                 key={course.id}
                 className="flex flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
@@ -312,39 +362,22 @@ export default async function AuStudyProgramsPage({
                 </div>
 
                 <div className="mt-5 grid grid-cols-2 gap-3 text-sm">
-                  <CourseFact
-                    icon={GraduationCap}
-                    label="Official code"
-                    value={course.courseCode ?? "—"}
-                  />
+                  <CourseFact icon={GraduationCap} label="Official code" value={course.courseCode ?? "—"} />
                   <CourseFact
                     icon={Clock3}
                     label="Duration"
-                    value={
-                      course.durationYears
-                        ? `${course.durationYears} years`
-                        : "Check provider"
-                    }
+                    value={course.durationYears ? `${course.durationYears} year${course.durationYears !== 1 ? "s" : ""}` : "Check provider"}
                   />
-                  <CourseFact
-                    icon={MapPin}
-                    label="Campus"
-                    value={course.campus ?? "Check provider"}
-                  />
+                  <CourseFact icon={MapPin} label="Campus" value={course.campus ?? "Check provider"} />
                   <CourseFact
                     icon={GraduationCap}
                     label="Annual tuition"
-                    value={
-                      course.tuitionFeeAud
-                        ? `A$${Math.round(course.tuitionFeeAud).toLocaleString()}`
-                        : "Check official page"
-                    }
+                    value={course.tuitionFeeAud ? `A$${Math.round(course.tuitionFeeAud).toLocaleString()}` : "Check official page"}
                   />
                 </div>
 
                 <div className="mt-5 rounded-xl bg-emerald-50 px-3 py-2.5 text-xs leading-5 text-emerald-800">
-                  <strong>Australian Government CRICOS</strong> · Verified{" "}
-                  {formatDate(course.syncedAt)}
+                  <strong>Australian Government CRICOS</strong> · Verified {formatDate(course.syncedAt)}
                 </div>
 
                 <a
@@ -366,8 +399,8 @@ export default async function AuStudyProgramsPage({
               No verified programs found
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-slate-600">
-              {activeLevel != null
-                ? `No verified ${activeGroup?.label ?? "qualifications"} are currently available for ${concept.label}. Try browsing all levels or check the official registry.`
+              {(activeLevel || activeState)
+                ? `No verified ${activeGroup?.label ?? concept.label} programs${activeState ? ` in ${activeState}` : ""} are currently available. Try different filters or check the official registry.`
                 : `No verified ${concept.label} programs are available yet. Use the official registry below for the current catalogue.`}
             </p>
             {registry && (
@@ -384,6 +417,57 @@ export default async function AuStudyProgramsPage({
           </div>
         )}
 
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <nav className="mt-8 flex items-center justify-center gap-1">
+            {safePage > 1 && (
+              <Link
+                href={buildHref({ page: safePage - 1 })}
+                className="inline-flex h-10 items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 text-sm font-semibold text-slate-700 hover:border-blue-300 hover:text-blue-700"
+              >
+                <ChevronLeft className="h-4 w-4" />
+                Prev
+              </Link>
+            )}
+            {Array.from({ length: totalPages }, (_, i) => i + 1)
+              .filter((p) => p === 1 || p === totalPages || Math.abs(p - safePage) <= 2)
+              .reduce<(number | "dots")[]>((acc, p, i, arr) => {
+                if (i > 0 && p - (arr[i - 1] as number) > 1) acc.push("dots")
+                acc.push(p)
+                return acc
+              }, [])
+              .map((item, i) =>
+                item === "dots" ? (
+                  <span key={`dots-${i}`} className="px-2 text-sm text-slate-400">
+                    …
+                  </span>
+                ) : (
+                  <Link
+                    key={item}
+                    href={buildHref({ page: item })}
+                    className={`inline-flex h-10 w-10 items-center justify-center rounded-lg text-sm font-bold transition ${
+                      item === safePage
+                        ? "bg-blue-600 text-white"
+                        : "border border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:text-blue-700"
+                    }`}
+                  >
+                    {item}
+                  </Link>
+                ),
+              )}
+            {safePage < totalPages && (
+              <Link
+                href={buildHref({ page: safePage + 1 })}
+                className="inline-flex h-10 items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 text-sm font-semibold text-slate-700 hover:border-blue-300 hover:text-blue-700"
+              >
+                Next
+                <ChevronRight className="h-4 w-4" />
+              </Link>
+            )}
+          </nav>
+        )}
+
+        {/* Next step CTA */}
         <section className="mt-8 rounded-2xl border border-blue-200 bg-blue-50 p-6">
           <p className="text-sm font-bold text-blue-700">Next step</p>
           <h2 className="mt-2 text-2xl font-semibold text-slate-950">
@@ -425,9 +509,7 @@ function CourseFact({
     <div className="rounded-xl bg-slate-50 p-3">
       <Icon className="h-4 w-4 text-blue-600" />
       <p className="mt-2 text-[11px] font-bold text-slate-400">{label}</p>
-      <p className="mt-1 text-sm font-semibold leading-5 text-slate-800">
-        {value}
-      </p>
+      <p className="mt-1 text-sm font-semibold leading-5 text-slate-800">{value}</p>
     </div>
   )
 }
