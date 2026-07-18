@@ -1,0 +1,1841 @@
+{
+  "signals": [
+    {
+      "concept_id": "computer-science",
+      "country": "AU",
+      "shortage_national_pct": 50,
+      "shortage_states_affected": null,
+      "on_csol_pct": 60,
+      "outlook_2030_change_pct": 12,
+      "outlook_2035_change_pct": 26.400000000000002,
+      "outlook_direction": "growing",
+      "salary_min_aud": 70000,
+      "salary_max_aud": 110000,
+      "salary_median_aud": 90000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 3,
+      "pr_score": 78,
+      "pr_note": "Software Developer on CSOL with strong 189/190 visa outcomes.",
+      "ai_exposure_band": "high",
+      "ai_note": "AI coding assistants reshaping entry-level roles.",
+      "occupation_count": 4,
+      "representative_occupations": [
+        {
+          "oscaCode": "261313",
+          "label": "Software Developer",
+          "labelKo": "소프트웨어 개발자"
+        },
+        {
+          "oscaCode": "261312",
+          "label": "Developer Programmer",
+          "labelKo": "개발 프로그래머"
+        },
+        {
+          "oscaCode": "262131",
+          "label": "Database Administrator",
+          "labelKo": "데이터베이스 관리자"
+        },
+        {
+          "oscaCode": "262132",
+          "label": "Systems Administrator",
+          "labelKo": "시스템 관리자"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "data-analytics",
+      "country": "AU",
+      "shortage_national_pct": 33,
+      "shortage_states_affected": null,
+      "on_csol_pct": 43,
+      "outlook_2030_change_pct": 15,
+      "outlook_2035_change_pct": 33,
+      "outlook_direction": "growing",
+      "salary_min_aud": 75000,
+      "salary_max_aud": 110000,
+      "salary_median_aud": 92000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 3,
+      "pr_score": 75,
+      "pr_note": "Data Analyst roles on CSOL. AI/ML specialisations strengthen applications.",
+      "ai_exposure_band": "medium",
+      "ai_note": "AI augments analytics work.",
+      "occupation_count": 3,
+      "representative_occupations": [
+        {
+          "oscaCode": "261399",
+          "label": "ICT Systems Designer",
+          "labelKo": "ICT 시스템 설계자"
+        },
+        {
+          "oscaCode": "224999",
+          "label": "Information and Organisation Professional nec",
+          "labelKo": "정보·조직 전문가"
+        },
+        {
+          "oscaCode": "224131",
+          "label": "Data Analyst",
+          "labelKo": "데이터 분석가"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "cybersecurity",
+      "country": "AU",
+      "shortage_national_pct": 100,
+      "shortage_states_affected": null,
+      "on_csol_pct": 100,
+      "outlook_2030_change_pct": 18,
+      "outlook_2035_change_pct": 39.6,
+      "outlook_direction": "growing",
+      "salary_min_aud": 80000,
+      "salary_max_aud": 120000,
+      "salary_median_aud": 98000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 3,
+      "pr_score": 85,
+      "pr_note": "ICT Security Specialist on CSOL with national shortage.",
+      "ai_exposure_band": "low",
+      "ai_note": "Cyber threats grow with AI but defenders equally in demand.",
+      "occupation_count": 1,
+      "representative_occupations": [
+        {
+          "oscaCode": "262132",
+          "label": "ICT Security Specialist",
+          "labelKo": "ICT 보안 전문가"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "nursing",
+      "country": "AU",
+      "shortage_national_pct": 100,
+      "shortage_states_affected": null,
+      "on_csol_pct": 100,
+      "outlook_2030_change_pct": 10,
+      "outlook_2035_change_pct": 22,
+      "outlook_direction": "growing",
+      "salary_min_aud": 65000,
+      "salary_max_aud": 85000,
+      "salary_median_aud": 75000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 3,
+      "pr_score": 92,
+      "pr_note": "Registered Nurse — strongest PR pathway. National shortage all states.",
+      "ai_exposure_band": "low",
+      "ai_note": "Fundamentally human-centred care.",
+      "occupation_count": 4,
+      "representative_occupations": [
+        {
+          "oscaCode": "254415",
+          "label": "Registered Nurse",
+          "labelKo": "간호사"
+        },
+        {
+          "oscaCode": "254418",
+          "label": "Enrolled Nurse",
+          "labelKo": "등록간호보조"
+        },
+        {
+          "oscaCode": "254425",
+          "label": "Midwife",
+          "labelKo": "조산사"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "aged-care",
+      "country": "AU",
+      "shortage_national_pct": 100,
+      "shortage_states_affected": null,
+      "on_csol_pct": 100,
+      "outlook_2030_change_pct": 14,
+      "outlook_2035_change_pct": 30.800000000000004,
+      "outlook_direction": "growing",
+      "salary_min_aud": 50000,
+      "salary_max_aud": 62000,
+      "salary_median_aud": 55000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 1,
+      "pr_score": 85,
+      "pr_note": "Aged care workers in critical national shortage.",
+      "ai_exposure_band": "low",
+      "ai_note": "Hands-on care work.",
+      "occupation_count": 3,
+      "representative_occupations": [
+        {
+          "oscaCode": "423331",
+          "label": "Aged or Disabled Carer",
+          "labelKo": "노인·장애인 돌봄원"
+        },
+        {
+          "oscaCode": "423332",
+          "label": "Community Worker",
+          "labelKo": "커뮤니티 워커"
+        },
+        {
+          "oscaCode": "423333",
+          "label": "Disability Support Worker",
+          "labelKo": "장애인 지원원"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "allied-health",
+      "country": "AU",
+      "shortage_national_pct": 50,
+      "shortage_states_affected": null,
+      "on_csol_pct": 60,
+      "outlook_2030_change_pct": 11,
+      "outlook_2035_change_pct": 24.200000000000003,
+      "outlook_direction": "growing",
+      "salary_min_aud": 65000,
+      "salary_max_aud": 90000,
+      "salary_median_aud": 78000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 4,
+      "pr_score": 80,
+      "pr_note": "Physiotherapy and OT on CSOL. Strong employment outcomes.",
+      "ai_exposure_band": "low",
+      "ai_note": "Physical assessment and manual therapy.",
+      "occupation_count": 4,
+      "representative_occupations": [
+        {
+          "oscaCode": "252331",
+          "label": "Physiotherapist",
+          "labelKo": "물리치료사"
+        },
+        {
+          "oscaCode": "252431",
+          "label": "Occupational Therapist",
+          "labelKo": "작업치료사"
+        },
+        {
+          "oscaCode": "252531",
+          "label": "Rehabilitation Therapist",
+          "labelKo": "재활치료사"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "dental",
+      "country": "AU",
+      "shortage_national_pct": 50,
+      "shortage_states_affected": null,
+      "on_csol_pct": 60,
+      "outlook_2030_change_pct": 8,
+      "outlook_2035_change_pct": 18,
+      "outlook_direction": "growing",
+      "salary_min_aud": 65000,
+      "salary_max_aud": 95000,
+      "salary_median_aud": 78000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 3,
+      "pr_score": 70,
+      "pr_note": "Dental Therapist/Hygienist on CSOL. Dentist has moderate shortage.",
+      "ai_exposure_band": "low",
+      "ai_note": "Clinical hands-on dental work resistant to AI.",
+      "occupation_count": 4,
+      "representative_occupations": [
+        {
+          "oscaCode": "269232",
+          "label": "Dentist",
+          "labelKo": "치과의사"
+        },
+        {
+          "oscaCode": "269131",
+          "label": "Dental Hygienist",
+          "labelKo": "치과위생사"
+        },
+        {
+          "oscaCode": "269133",
+          "label": "Oral Health Therapist",
+          "labelKo": "구강건강치료사"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "psychology",
+      "country": "AU",
+      "shortage_national_pct": 50,
+      "shortage_states_affected": null,
+      "on_csol_pct": 60,
+      "outlook_2030_change_pct": 6,
+      "outlook_2035_change_pct": 14,
+      "outlook_direction": "growing",
+      "salary_min_aud": 60000,
+      "salary_max_aud": 90000,
+      "salary_median_aud": 72000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 4,
+      "pr_score": 65,
+      "pr_note": "Psychologist on CSOL. Clinical psychologists strongest pathway.",
+      "ai_exposure_band": "low",
+      "ai_note": "Therapeutic relationships fundamentally human.",
+      "occupation_count": 3,
+      "representative_occupations": [
+        {
+          "oscaCode": "272331",
+          "label": "Psychologist",
+          "labelKo": "심리학자"
+        },
+        {
+          "oscaCode": "272332",
+          "label": "Clinical Psychologist",
+          "labelKo": "임상심리학자"
+        },
+        {
+          "oscaCode": "272333",
+          "label": "Organisational Psychologist",
+          "labelKo": "산업심리학자"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "paramedic-emergency",
+      "country": "AU",
+      "shortage_national_pct": 100,
+      "shortage_states_affected": null,
+      "on_csol_pct": 100,
+      "outlook_2030_change_pct": 12,
+      "outlook_2035_change_pct": 25,
+      "outlook_direction": "growing",
+      "salary_min_aud": 65000,
+      "salary_max_aud": 90000,
+      "salary_median_aud": 76000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 3,
+      "pr_score": 82,
+      "pr_note": "Paramedic on CSOL. National shortage. Strong regional demand.",
+      "ai_exposure_band": "low",
+      "ai_note": "Emergency response requires physical presence and judgment.",
+      "occupation_count": 2,
+      "representative_occupations": [
+        {
+          "oscaCode": "269432",
+          "label": "Paramedic",
+          "labelKo": "구급대원"
+        },
+        {
+          "oscaCode": "269433",
+          "label": "Ambulance Officer",
+          "labelKo": "응급구조대원"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "engineering",
+      "country": "AU",
+      "shortage_national_pct": 0,
+      "shortage_states_affected": null,
+      "on_csol_pct": 10,
+      "outlook_2030_change_pct": 8,
+      "outlook_2035_change_pct": 17.6,
+      "outlook_direction": "growing",
+      "salary_min_aud": 70000,
+      "salary_max_aud": 100000,
+      "salary_median_aud": 82000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 4,
+      "pr_score": 78,
+      "pr_note": "Engineering professionals on CSOL.",
+      "ai_exposure_band": "medium",
+      "ai_note": "CAD tools increasingly AI-assisted.",
+      "occupation_count": 3,
+      "representative_occupations": [
+        {
+          "oscaCode": "233999",
+          "label": "Engineering Professional nec",
+          "labelKo": "공학 전문가"
+        },
+        {
+          "oscaCode": "233911",
+          "label": "Engineering Manager",
+          "labelKo": "공학 관리자"
+        },
+        {
+          "oscaCode": "233912",
+          "label": "Naval Architect",
+          "labelKo": "선박설계사"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "civil-engineering",
+      "country": "AU",
+      "shortage_national_pct": 67,
+      "shortage_states_affected": null,
+      "on_csol_pct": 77,
+      "outlook_2030_change_pct": 10,
+      "outlook_2035_change_pct": 22,
+      "outlook_direction": "growing",
+      "salary_min_aud": 72000,
+      "salary_max_aud": 105000,
+      "salary_median_aud": 85000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 4,
+      "pr_score": 82,
+      "pr_note": "Civil Engineer on CSOL. Infrastructure boom.",
+      "ai_exposure_band": "medium",
+      "ai_note": "Structural analysis software AI-enhanced.",
+      "occupation_count": 3,
+      "representative_occupations": [
+        {
+          "oscaCode": "233231",
+          "label": "Civil Engineer",
+          "labelKo": "토목 엔지니어"
+        },
+        {
+          "oscaCode": "133631",
+          "label": "Construction Manager",
+          "labelKo": "건설 관리자"
+        },
+        {
+          "oscaCode": "233232",
+          "label": "Quantity Surveyor",
+          "labelKo": "도량형사"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "mechanical-engineering",
+      "country": "AU",
+      "shortage_national_pct": 33,
+      "shortage_states_affected": null,
+      "on_csol_pct": 43,
+      "outlook_2030_change_pct": 7,
+      "outlook_2035_change_pct": 15.400000000000002,
+      "outlook_direction": "growing",
+      "salary_min_aud": 70000,
+      "salary_max_aud": 100000,
+      "salary_median_aud": 82000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 4,
+      "pr_score": 76,
+      "pr_note": "Mechanical Engineer on CSOL. Defence and manufacturing.",
+      "ai_exposure_band": "medium",
+      "ai_note": "CAD/CAM increasingly automated.",
+      "occupation_count": 3,
+      "representative_occupations": [
+        {
+          "oscaCode": "233531",
+          "label": "Mechanical Engineer",
+          "labelKo": "기계 엔지니어"
+        },
+        {
+          "oscaCode": "233532",
+          "label": "Production Engineer",
+          "labelKo": "제조 엔지니어"
+        },
+        {
+          "oscaCode": "233533",
+          "label": "Engineering Technologist",
+          "labelKo": "공학기술자"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "mining-resources",
+      "country": "AU",
+      "shortage_national_pct": 67,
+      "shortage_states_affected": null,
+      "on_csol_pct": 77,
+      "outlook_2030_change_pct": 12,
+      "outlook_2035_change_pct": 26.400000000000002,
+      "outlook_direction": "growing",
+      "salary_min_aud": 90000,
+      "salary_max_aud": 140000,
+      "salary_median_aud": 110000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 4,
+      "pr_score": 88,
+      "pr_note": "Mining Engineer on CSOL. National shortage. Strongest salary.",
+      "ai_exposure_band": "medium",
+      "ai_note": "Autonomous mining growing but oversight roles remain.",
+      "occupation_count": 3,
+      "representative_occupations": [
+        {
+          "oscaCode": "243631",
+          "label": "Mining Engineer",
+          "labelKo": "광업 엔지니어"
+        },
+        {
+          "oscaCode": "243632",
+          "label": "Petroleum Engineer",
+          "labelKo": "석유 엔지니어"
+        },
+        {
+          "oscaCode": "312931",
+          "label": "Driller",
+          "labelKo": "시추공"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "business-analytics",
+      "country": "AU",
+      "shortage_national_pct": 0,
+      "shortage_states_affected": null,
+      "on_csol_pct": 10,
+      "outlook_2030_change_pct": 9,
+      "outlook_2035_change_pct": 19.8,
+      "outlook_direction": "growing",
+      "salary_min_aud": 70000,
+      "salary_max_aud": 100000,
+      "salary_median_aud": 82000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 3,
+      "pr_score": 70,
+      "pr_note": "Business Analyst on CSOL. Strong demand in consulting.",
+      "ai_exposure_band": "medium",
+      "ai_note": "AI automates routine analysis.",
+      "occupation_count": 3,
+      "representative_occupations": [
+        {
+          "oscaCode": "224131",
+          "label": "Data Analyst",
+          "labelKo": "데이터 분석가"
+        },
+        {
+          "oscaCode": "224231",
+          "label": "Management Consultant",
+          "labelKo": "경영컨설턴트"
+        },
+        {
+          "oscaCode": "224999",
+          "label": "Information and Organisation Professional nec",
+          "labelKo": "정보·조직 전문가"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "accounting",
+      "country": "AU",
+      "shortage_national_pct": 50,
+      "shortage_states_affected": null,
+      "on_csol_pct": 60,
+      "outlook_2030_change_pct": 5,
+      "outlook_2035_change_pct": 11,
+      "outlook_direction": "stable",
+      "salary_min_aud": 60000,
+      "salary_max_aud": 90000,
+      "salary_median_aud": 72000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 3,
+      "pr_score": 72,
+      "pr_note": "Accountant on CSOL. CPA/CA strengthens PR.",
+      "ai_exposure_band": "high",
+      "ai_note": "AI transforming routine accounting.",
+      "occupation_count": 4,
+      "representative_occupations": [
+        {
+          "oscaCode": "221131",
+          "label": "Accountant",
+          "labelKo": "회계사"
+        },
+        {
+          "oscaCode": "221231",
+          "label": "External Auditor",
+          "labelKo": "외부감사인"
+        },
+        {
+          "oscaCode": "221233",
+          "label": "Taxation Accountant",
+          "labelKo": "세무회계사"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "law",
+      "country": "AU",
+      "shortage_national_pct": 100,
+      "shortage_states_affected": null,
+      "on_csol_pct": 100,
+      "outlook_2030_change_pct": 6,
+      "outlook_2035_change_pct": 13.200000000000001,
+      "outlook_direction": "growing",
+      "salary_min_aud": 65000,
+      "salary_max_aud": 100000,
+      "salary_median_aud": 80000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 4,
+      "pr_score": 65,
+      "pr_note": "Solicitor on CSOL. Australian legal qualification highly regarded.",
+      "ai_exposure_band": "medium",
+      "ai_note": "Legal research increasingly AI-assisted.",
+      "occupation_count": 3,
+      "representative_occupations": [
+        {
+          "oscaCode": "281331",
+          "label": "Solicitor",
+          "labelKo": "변호사"
+        },
+        {
+          "oscaCode": "281332",
+          "label": "Barrister",
+          "labelKo": "변호사(소송)"
+        },
+        {
+          "oscaCode": "281333",
+          "label": "Judicial Member",
+          "labelKo": "판사"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "early-childhood",
+      "country": "AU",
+      "shortage_national_pct": 100,
+      "shortage_states_affected": null,
+      "on_csol_pct": 100,
+      "outlook_2030_change_pct": 12,
+      "outlook_2035_change_pct": 26.400000000000002,
+      "outlook_direction": "growing",
+      "salary_min_aud": 55000,
+      "salary_max_aud": 72000,
+      "salary_median_aud": 62000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 3,
+      "pr_score": 82,
+      "pr_note": "Early Childhood Teacher on CSOL. National shortage.",
+      "ai_exposure_band": "low",
+      "ai_note": "Fundamentally relationship-based.",
+      "occupation_count": 2,
+      "representative_occupations": [
+        {
+          "oscaCode": "241131",
+          "label": "Early Childhood Teacher",
+          "labelKo": "유아교사"
+        },
+        {
+          "oscaCode": "241132",
+          "label": "Early Childhood Centre Manager",
+          "labelKo": "유아교육기관 관리자"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "primary-secondary-education",
+      "country": "AU",
+      "shortage_national_pct": 100,
+      "shortage_states_affected": null,
+      "on_csol_pct": 100,
+      "outlook_2030_change_pct": 8,
+      "outlook_2035_change_pct": 17.6,
+      "outlook_direction": "growing",
+      "salary_min_aud": 65000,
+      "salary_max_aud": 85000,
+      "salary_median_aud": 73000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 4,
+      "pr_score": 80,
+      "pr_note": "Primary and Secondary Teachers on CSOL. National shortage.",
+      "ai_exposure_band": "low",
+      "ai_note": "Teaching requires emotional intelligence.",
+      "occupation_count": 2,
+      "representative_occupations": [
+        {
+          "oscaCode": "241231",
+          "label": "Primary School Teacher",
+          "labelKo": "초등교사"
+        },
+        {
+          "oscaCode": "241331",
+          "label": "Secondary School Teacher",
+          "labelKo": "중등교사"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "social-work",
+      "country": "AU",
+      "shortage_national_pct": 75,
+      "shortage_states_affected": null,
+      "on_csol_pct": 85,
+      "outlook_2030_change_pct": 10,
+      "outlook_2035_change_pct": 22,
+      "outlook_direction": "growing",
+      "salary_min_aud": 60000,
+      "salary_max_aud": 80000,
+      "salary_median_aud": 70000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 4,
+      "pr_score": 78,
+      "pr_note": "Social Worker on CSOL. Persistent shortage.",
+      "ai_exposure_band": "low",
+      "ai_note": "Empathy and crisis intervention.",
+      "occupation_count": 4,
+      "representative_occupations": [
+        {
+          "oscaCode": "272631",
+          "label": "Social Worker",
+          "labelKo": "사회복지사"
+        },
+        {
+          "oscaCode": "411731",
+          "label": "Youth Worker",
+          "labelKo": "청소년 지도사"
+        },
+        {
+          "oscaCode": "272633",
+          "label": "Counsellor",
+          "labelKo": "상담사"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "sport-fitness",
+      "country": "AU",
+      "shortage_national_pct": 50,
+      "shortage_states_affected": null,
+      "on_csol_pct": 60,
+      "outlook_2030_change_pct": 6,
+      "outlook_2035_change_pct": 13.200000000000001,
+      "outlook_direction": "growing",
+      "salary_min_aud": 50000,
+      "salary_max_aud": 70000,
+      "salary_median_aud": 58000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 3,
+      "pr_score": 55,
+      "pr_note": "Limited PR pathways. Some coaching roles regionally.",
+      "ai_exposure_band": "low",
+      "ai_note": "Physical coaching inherently human.",
+      "occupation_count": 4,
+      "representative_occupations": [
+        {
+          "oscaCode": "462434",
+          "label": "Gymnastics Coach",
+          "labelKo": "체조 코치"
+        },
+        {
+          "oscaCode": "462442",
+          "label": "Swimming Instructor",
+          "labelKo": "수영 강사"
+        },
+        {
+          "oscaCode": "451131",
+          "label": "Sportsperson",
+          "labelKo": "스포츠선수"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "carpentry",
+      "country": "AU",
+      "shortage_national_pct": 100,
+      "shortage_states_affected": null,
+      "on_csol_pct": 100,
+      "outlook_2030_change_pct": 10,
+      "outlook_2035_change_pct": 22,
+      "outlook_direction": "growing",
+      "salary_min_aud": 60000,
+      "salary_max_aud": 80000,
+      "salary_median_aud": 70000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 4,
+      "pr_score": 90,
+      "pr_note": "Carpenter in critical national shortage. Strongest trade PR.",
+      "ai_exposure_band": "low",
+      "ai_note": "Hands-on construction.",
+      "occupation_count": 1,
+      "representative_occupations": [
+        {
+          "oscaCode": "372132",
+          "label": "Carpenter",
+          "labelKo": "목수"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "wall-floor-tiling",
+      "country": "AU",
+      "shortage_national_pct": 100,
+      "shortage_states_affected": null,
+      "on_csol_pct": 100,
+      "outlook_2030_change_pct": 8,
+      "outlook_2035_change_pct": 17.6,
+      "outlook_direction": "growing",
+      "salary_min_aud": 58000,
+      "salary_max_aud": 75000,
+      "salary_median_aud": 65000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 3,
+      "pr_score": 88,
+      "pr_note": "Wall and Floor Tiler in national shortage.",
+      "ai_exposure_band": "low",
+      "ai_note": "Manual trade.",
+      "occupation_count": 1,
+      "representative_occupations": [
+        {
+          "oscaCode": "362431",
+          "label": "Wall and Floor Tiler",
+          "labelKo": "타일공"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "electrical-trade",
+      "country": "AU",
+      "shortage_national_pct": 100,
+      "shortage_states_affected": null,
+      "on_csol_pct": 100,
+      "outlook_2030_change_pct": 10,
+      "outlook_2035_change_pct": 22,
+      "outlook_direction": "growing",
+      "salary_min_aud": 65000,
+      "salary_max_aud": 90000,
+      "salary_median_aud": 78000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 4,
+      "pr_score": 92,
+      "pr_note": "Electrician in critical national shortage. Highest-demand trade.",
+      "ai_exposure_band": "low",
+      "ai_note": "Electrical installation requires physical presence.",
+      "occupation_count": 2,
+      "representative_occupations": [
+        {
+          "oscaCode": "381231",
+          "label": "Electrician",
+          "labelKo": "전기공"
+        },
+        {
+          "oscaCode": "381232",
+          "label": "Electrical Trades Worker",
+          "labelKo": "전기기술자"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "plumbing",
+      "country": "AU",
+      "shortage_national_pct": 100,
+      "shortage_states_affected": null,
+      "on_csol_pct": 100,
+      "outlook_2030_change_pct": 9,
+      "outlook_2035_change_pct": 19.8,
+      "outlook_direction": "growing",
+      "salary_min_aud": 62000,
+      "salary_max_aud": 85000,
+      "salary_median_aud": 72000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 4,
+      "pr_score": 90,
+      "pr_note": "Plumber in critical national shortage.",
+      "ai_exposure_band": "low",
+      "ai_note": "On-site physical work.",
+      "occupation_count": 2,
+      "representative_occupations": [
+        {
+          "oscaCode": "334131",
+          "label": "Plumber",
+          "labelKo": "배관공"
+        },
+        {
+          "oscaCode": "334132",
+          "label": "Plumbing Technician",
+          "labelKo": "배관기술자"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "welding",
+      "country": "AU",
+      "shortage_national_pct": 100,
+      "shortage_states_affected": null,
+      "on_csol_pct": 100,
+      "outlook_2030_change_pct": 7,
+      "outlook_2035_change_pct": 15.400000000000002,
+      "outlook_direction": "growing",
+      "salary_min_aud": 58000,
+      "salary_max_aud": 80000,
+      "salary_median_aud": 68000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 3,
+      "pr_score": 85,
+      "pr_note": "Welder in national shortage. Mining and construction.",
+      "ai_exposure_band": "low",
+      "ai_note": "Manual skill and certification.",
+      "occupation_count": 3,
+      "representative_occupations": [
+        {
+          "oscaCode": "323131",
+          "label": "Welder",
+          "labelKo": "용접공"
+        },
+        {
+          "oscaCode": "323132",
+          "label": "Metal Fabricator",
+          "labelKo": "금속가공원"
+        },
+        {
+          "oscaCode": "323133",
+          "label": "Boilermaker",
+          "labelKo": "제관공"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "bricklaying",
+      "country": "AU",
+      "shortage_national_pct": 100,
+      "shortage_states_affected": null,
+      "on_csol_pct": 100,
+      "outlook_2030_change_pct": 8,
+      "outlook_2035_change_pct": 17.6,
+      "outlook_direction": "growing",
+      "salary_min_aud": 58000,
+      "salary_max_aud": 75000,
+      "salary_median_aud": 66000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 3,
+      "pr_score": 88,
+      "pr_note": "Bricklayer in national shortage. Construction boom.",
+      "ai_exposure_band": "low",
+      "ai_note": "Physical trade.",
+      "occupation_count": 2,
+      "representative_occupations": [
+        {
+          "oscaCode": "371131",
+          "label": "Bricklayer",
+          "labelKo": "조적공"
+        },
+        {
+          "oscaCode": "371132",
+          "label": "Stonemason",
+          "labelKo": "석공"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "hvac",
+      "country": "AU",
+      "shortage_national_pct": 100,
+      "shortage_states_affected": null,
+      "on_csol_pct": 100,
+      "outlook_2030_change_pct": 12,
+      "outlook_2035_change_pct": 26.400000000000002,
+      "outlook_direction": "growing",
+      "salary_min_aud": 60000,
+      "salary_max_aud": 80000,
+      "salary_median_aud": 70000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 4,
+      "pr_score": 85,
+      "pr_note": "Air Conditioning Mechanic in national shortage.",
+      "ai_exposure_band": "low",
+      "ai_note": "HVAC installation requires physical presence.",
+      "occupation_count": 1,
+      "representative_occupations": [
+        {
+          "oscaCode": "382131",
+          "label": "Air Conditioning and Refrigeration Mechanic",
+          "labelKo": "냉난방공조 기술자"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "architecture",
+      "country": "AU",
+      "shortage_national_pct": 0,
+      "shortage_states_affected": null,
+      "on_csol_pct": 10,
+      "outlook_2030_change_pct": 5,
+      "outlook_2035_change_pct": 11,
+      "outlook_direction": "stable",
+      "salary_min_aud": 60000,
+      "salary_max_aud": 90000,
+      "salary_median_aud": 72000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 5,
+      "pr_score": 70,
+      "pr_note": "Architect on CSOL. Design skills valued.",
+      "ai_exposure_band": "medium",
+      "ai_note": "Generative AI assisting design concepts.",
+      "occupation_count": 3,
+      "representative_occupations": [
+        {
+          "oscaCode": "232131",
+          "label": "Architect",
+          "labelKo": "건축가"
+        },
+        {
+          "oscaCode": "312131",
+          "label": "Architectural Draftsperson",
+          "labelKo": "건축설계기사"
+        },
+        {
+          "oscaCode": "232132",
+          "label": "Landscape Architect",
+          "labelKo": "조경건축가"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "design-media",
+      "country": "AU",
+      "shortage_national_pct": 0,
+      "shortage_states_affected": null,
+      "on_csol_pct": 10,
+      "outlook_2030_change_pct": 6,
+      "outlook_2035_change_pct": 13.200000000000001,
+      "outlook_direction": "growing",
+      "salary_min_aud": 55000,
+      "salary_max_aud": 85000,
+      "salary_median_aud": 68000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 3,
+      "pr_score": 60,
+      "pr_note": "Moderate PR pathways. UX/UI stronger with tech sponsorship.",
+      "ai_exposure_band": "high",
+      "ai_note": "AI image generation rapidly evolving.",
+      "occupation_count": 3,
+      "representative_occupations": [
+        {
+          "oscaCode": "261231",
+          "label": "Web Designer",
+          "labelKo": "웹 디자이너"
+        },
+        {
+          "oscaCode": "261232",
+          "label": "Graphic Designer",
+          "labelKo": "그래픽 디자이너"
+        },
+        {
+          "oscaCode": "261233",
+          "label": "Multimedia Designer",
+          "labelKo": "멀티미디어 디자이너"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "photography-film",
+      "country": "AU",
+      "shortage_national_pct": 0,
+      "shortage_states_affected": null,
+      "on_csol_pct": 10,
+      "outlook_2030_change_pct": 4,
+      "outlook_2035_change_pct": 8.8,
+      "outlook_direction": "stable",
+      "salary_min_aud": 50000,
+      "salary_max_aud": 80000,
+      "salary_median_aud": 62000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 3,
+      "pr_score": 50,
+      "pr_note": "Limited direct PR pathways.",
+      "ai_exposure_band": "medium",
+      "ai_note": "AI entering video production.",
+      "occupation_count": 3,
+      "representative_occupations": [
+        {
+          "oscaCode": "212331",
+          "label": "Photographer",
+          "labelKo": "촬영감독"
+        },
+        {
+          "oscaCode": "212431",
+          "label": "Film and Video Director",
+          "labelKo": "영화·영상 감독"
+        },
+        {
+          "oscaCode": "212332",
+          "label": "Film and Video Editor",
+          "labelKo": "영상 편집자"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "environmental-science",
+      "country": "AU",
+      "shortage_national_pct": 67,
+      "shortage_states_affected": null,
+      "on_csol_pct": 77,
+      "outlook_2030_change_pct": 10,
+      "outlook_2035_change_pct": 22,
+      "outlook_direction": "growing",
+      "salary_min_aud": 62000,
+      "salary_max_aud": 85000,
+      "salary_median_aud": 72000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 3,
+      "pr_score": 72,
+      "pr_note": "Environmental Scientist on CSOL. Climate policy drives demand.",
+      "ai_exposure_band": "low",
+      "ai_note": "Field research requires physical presence.",
+      "occupation_count": 3,
+      "representative_occupations": [
+        {
+          "oscaCode": "234331",
+          "label": "Environmental Scientist",
+          "labelKo": "환경과학자"
+        },
+        {
+          "oscaCode": "234231",
+          "label": "Conservation Officer",
+          "labelKo": "자연보존전문가"
+        },
+        {
+          "oscaCode": "234332",
+          "label": "Environmental Research Scientist",
+          "labelKo": "환경연구과학자"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "agriculture",
+      "country": "AU",
+      "shortage_national_pct": 67,
+      "shortage_states_affected": null,
+      "on_csol_pct": 77,
+      "outlook_2030_change_pct": 8,
+      "outlook_2035_change_pct": 17.6,
+      "outlook_direction": "growing",
+      "salary_min_aud": 58000,
+      "salary_max_aud": 80000,
+      "salary_median_aud": 68000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 3,
+      "pr_score": 80,
+      "pr_note": "Agricultural Scientist on CSOL. Regional demand strong.",
+      "ai_exposure_band": "low",
+      "ai_note": "Combines field work with lab analysis.",
+      "occupation_count": 3,
+      "representative_occupations": [
+        {
+          "oscaCode": "212331",
+          "label": "Agricultural Scientist",
+          "labelKo": "농업과학자"
+        },
+        {
+          "oscaCode": "212332",
+          "label": "Agronomist",
+          "labelKo": "농업기술자"
+        },
+        {
+          "oscaCode": "212333",
+          "label": "Horticulturist",
+          "labelKo": "원예사"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "veterinary",
+      "country": "AU",
+      "shortage_national_pct": 100,
+      "shortage_states_affected": null,
+      "on_csol_pct": 100,
+      "outlook_2030_change_pct": 9,
+      "outlook_2035_change_pct": 19.8,
+      "outlook_direction": "growing",
+      "salary_min_aud": 65000,
+      "salary_max_aud": 90000,
+      "salary_median_aud": 75000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 5,
+      "pr_score": 75,
+      "pr_note": "Veterinarian on CSOL. National shortage.",
+      "ai_exposure_band": "low",
+      "ai_note": "Hands-on animal care.",
+      "occupation_count": 2,
+      "representative_occupations": [
+        {
+          "oscaCode": "269531",
+          "label": "Veterinarian",
+          "labelKo": "수의사"
+        },
+        {
+          "oscaCode": "269532",
+          "label": "Veterinary Nurse",
+          "labelKo": "수의간호사"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "hospitality-management",
+      "country": "AU",
+      "shortage_national_pct": 0,
+      "shortage_states_affected": null,
+      "on_csol_pct": 10,
+      "outlook_2030_change_pct": 5,
+      "outlook_2035_change_pct": 11,
+      "outlook_direction": "stable",
+      "salary_min_aud": 55000,
+      "salary_max_aud": 80000,
+      "salary_median_aud": 65000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 3,
+      "pr_score": 58,
+      "pr_note": "Hotel Manager on CSOL. Outcomes vary.",
+      "ai_exposure_band": "medium",
+      "ai_note": "AI handles bookings, guest experience remains human.",
+      "occupation_count": 3,
+      "representative_occupations": [
+        {
+          "oscaCode": "141131",
+          "label": "Hotel or Motel Manager",
+          "labelKo": "호텔·모텔 관리자"
+        },
+        {
+          "oscaCode": "141132",
+          "label": "Restaurant Manager",
+          "labelKo": "레스토랑 관리자"
+        },
+        {
+          "oscaCode": "141133",
+          "label": "Licensed Club Manager",
+          "labelKo": "면허클럽 관리자"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "culinary-arts",
+      "country": "AU",
+      "shortage_national_pct": 100,
+      "shortage_states_affected": null,
+      "on_csol_pct": 100,
+      "outlook_2030_change_pct": 10,
+      "outlook_2035_change_pct": 22,
+      "outlook_direction": "growing",
+      "salary_min_aud": 50000,
+      "salary_max_aud": 72000,
+      "salary_median_aud": 58000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 2,
+      "pr_score": 82,
+      "pr_note": "Cook and Baker in national shortage. Fast pathway.",
+      "ai_exposure_band": "low",
+      "ai_note": "Commercial cookery is hands-on craft.",
+      "occupation_count": 3,
+      "representative_occupations": [
+        {
+          "oscaCode": "322331",
+          "label": "Cook",
+          "labelKo": "조리사"
+        },
+        {
+          "oscaCode": "322131",
+          "label": "Baker",
+          "labelKo": "제빵사"
+        },
+        {
+          "oscaCode": "322231",
+          "label": "Butcher",
+          "labelKo": "정육사"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "beauty-wellness",
+      "country": "AU",
+      "shortage_national_pct": 100,
+      "shortage_states_affected": null,
+      "on_csol_pct": 100,
+      "outlook_2030_change_pct": 8,
+      "outlook_2035_change_pct": 17.6,
+      "outlook_direction": "growing",
+      "salary_min_aud": 48000,
+      "salary_max_aud": 65000,
+      "salary_median_aud": 55000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 1,
+      "pr_score": 78,
+      "pr_note": "Beauty Therapist and Hairdresser in national shortage.",
+      "ai_exposure_band": "low",
+      "ai_note": "Physical skill and client interaction.",
+      "occupation_count": 4,
+      "representative_occupations": [
+        {
+          "oscaCode": "461131",
+          "label": "Beauty Therapist",
+          "labelKo": "미용사"
+        },
+        {
+          "oscaCode": "461132",
+          "label": "Dermal Therapist",
+          "labelKo": "피부치료사"
+        },
+        {
+          "oscaCode": "392132",
+          "label": "Hairdresser",
+          "labelKo": "미용사(헤어)"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "automotive",
+      "country": "AU",
+      "shortage_national_pct": 100,
+      "shortage_states_affected": null,
+      "on_csol_pct": 100,
+      "outlook_2030_change_pct": 6,
+      "outlook_2035_change_pct": 13.200000000000001,
+      "outlook_direction": "growing",
+      "salary_min_aud": 55000,
+      "salary_max_aud": 75000,
+      "salary_median_aud": 65000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 4,
+      "pr_score": 85,
+      "pr_note": "Motor Mechanic in national shortage.",
+      "ai_exposure_band": "low",
+      "ai_note": "Physical repair remains essential.",
+      "occupation_count": 2,
+      "representative_occupations": [
+        {
+          "oscaCode": "321231",
+          "label": "Motor Mechanic",
+          "labelKo": "자동차 정비사"
+        },
+        {
+          "oscaCode": "321232",
+          "label": "Diesel Motor Mechanic",
+          "labelKo": "디젤 정비사"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "aviation",
+      "country": "AU",
+      "shortage_national_pct": 50,
+      "shortage_states_affected": null,
+      "on_csol_pct": 60,
+      "outlook_2030_change_pct": 8,
+      "outlook_2035_change_pct": 17.6,
+      "outlook_direction": "growing",
+      "salary_min_aud": 70000,
+      "salary_max_aud": 150000,
+      "salary_median_aud": 95000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 3,
+      "pr_score": 65,
+      "pr_note": "Pilot has moderate PR pathways. High training cost.",
+      "ai_exposure_band": "low",
+      "ai_note": "Autonomous aircraft decades away.",
+      "occupation_count": 4,
+      "representative_occupations": [
+        {
+          "oscaCode": "231131",
+          "label": "Aircraft Pilot",
+          "labelKo": "항공기 조종사"
+        },
+        {
+          "oscaCode": "231132",
+          "label": "Flying Instructor",
+          "labelKo": "비행 강사"
+        },
+        {
+          "oscaCode": "231133",
+          "label": "Air Transport Professional",
+          "labelKo": "항공운송 전문가"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    },
+    {
+      "concept_id": "maritime",
+      "country": "AU",
+      "shortage_national_pct": 100,
+      "shortage_states_affected": null,
+      "on_csol_pct": 100,
+      "outlook_2030_change_pct": 7,
+      "outlook_2035_change_pct": 15.400000000000002,
+      "outlook_direction": "growing",
+      "salary_min_aud": 65000,
+      "salary_max_aud": 100000,
+      "salary_median_aud": 80000,
+      "cost_bachelor_median_aud": null,
+      "cost_diploma_median_aud": null,
+      "cost_duration_years": 3,
+      "pr_score": 80,
+      "pr_note": "Marine Engineer and Deck Officer in national shortage.",
+      "ai_exposure_band": "low",
+      "ai_note": "Maritime operations require physical presence.",
+      "occupation_count": 4,
+      "representative_occupations": [
+        {
+          "oscaCode": "313431",
+          "label": "Marine Engineer",
+          "labelKo": "기관사"
+        },
+        {
+          "oscaCode": "313435",
+          "label": "Ship's Master",
+          "labelKo": "선장"
+        },
+        {
+          "oscaCode": "313436",
+          "label": "Ship's Officer",
+          "labelKo": "항해사"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        }
+      ],
+      "last_verified": "2026-07-18"
+    }
+  ],
+  "generatedAt": "2026-07-18T07:57:20.052Z"
+}

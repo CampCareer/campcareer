@@ -1,0 +1,427 @@
+{
+  "_meta": {
+    "description": "Per-concept university tuition data for Australian international students (AUD/year, 2025 estimates)",
+    "sources": [
+      "CRICOS 2026 data",
+      "Individual university fee schedules",
+      "studyabroadaide.com, uhomes.com, mycoursefinder.com"
+    ],
+    "generatedAt": "2026-07-18"
+  },
+  "computer-science": {
+    "universities": [
+      { "name": "University of Sydney", "qsRank": 18, "bachelorFeeAud": 52000, "duration": 3 },
+      { "name": "UNSW Sydney", "qsRank": 19, "bachelorFeeAud": 49000, "duration": 3 },
+      { "name": "University of Melbourne", "qsRank": 13, "bachelorFeeAud": 48000, "duration": 3 },
+      { "name": "ANU", "qsRank": 30, "bachelorFeeAud": 48000, "duration": 3 },
+      { "name": "Monash University", "qsRank": 37, "bachelorFeeAud": 46000, "duration": 3 },
+      { "name": "University of Queensland", "qsRank": 40, "bachelorFeeAud": 46000, "duration": 3 },
+      { "name": "UTS", "qsRank": 88, "bachelorFeeAud": 42000, "duration": 3 },
+      { "name": "RMIT University", "qsRank": 140, "bachelorFeeAud": 41000, "duration": 3 }
+    ],
+    "diplomaOptions": [
+      { "name": "TAFE NSW", "feeAud": 18000, "duration": 2 },
+      { "name": "RMIT TAFE", "feeAud": 16000, "duration": 2 }
+    ],
+    "notes": "3-year Bachelor (some universities offer 4-year Honours). IT graduates qualify for 485 post-study work visa."
+  },
+  "data-analytics": {
+    "universities": [
+      { "name": "University of Melbourne", "qsRank": 13, "bachelorFeeAud": 48000, "duration": 3 },
+      { "name": "UNSW Sydney", "qsRank": 19, "bachelorFeeAud": 49000, "duration": 3 },
+      { "name": "University of Sydney", "qsRank": 18, "bachelorFeeAud": 52000, "duration": 3 },
+      { "name": "Monash University", "qsRank": 37, "bachelorFeeAud": 46000, "duration": 3 },
+      { "name": "University of Queensland", "qsRank": 40, "bachelorFeeAud": 46000, "duration": 3 },
+      { "name": "UTS", "qsRank": 88, "bachelorFeeAud": 42000, "duration": 3 }
+    ],
+    "notes": "Often studied as Master level. Bachelor in Data Science or IT with data specialisation."
+  },
+  "cybersecurity": {
+    "universities": [
+      { "name": "UNSW Sydney", "qsRank": 19, "bachelorFeeAud": 49000, "duration": 3 },
+      { "name": "University of Melbourne", "qsRank": 13, "bachelorFeeAud": 48000, "duration": 3 },
+      { "name": "ANU", "qsRank": 30, "bachelorFeeAud": 48000, "duration": 3 },
+      { "name": "University of Adelaide", "qsRank": 82, "bachelorFeeAud": 40000, "duration": 3 },
+      { "name": "Curtin University", "qsRank": 174, "bachelorFeeAud": 38000, "duration": 3 },
+      { "name": "Swinburne University", "qsRank": 335, "bachelorFeeAud": 38000, "duration": 3 }
+    ],
+    "notes": "Often postgraduate specialisation. Some universities offer standalone Bachelor of Cybersecurity."
+  },
+  "nursing": {
+    "universities": [
+      { "name": "University of Sydney", "qsRank": 18, "bachelorFeeAud": 52000, "duration": 3 },
+      { "name": "University of Melbourne", "qsRank": 13, "bachelorFeeAud": 48000, "duration": 3 },
+      { "name": "Monash University", "qsRank": 37, "bachelorFeeAud": 42000, "duration": 3 },
+      { "name": "University of Queensland", "qsRank": 40, "bachelorFeeAud": 42000, "duration": 3 },
+      { "name": "Deakin University", "qsRank": 197, "bachelorFeeAud": 39000, "duration": 3 },
+      { "name": "Western Sydney University", "qsRank": 421, "bachelorFeeAud": 34000, "duration": 3 },
+      { "name": "University of Tasmania", "qsRank": 280, "bachelorFeeAud": 38000, "duration": 3 },
+      { "name": "Curtin University", "qsRank": 174, "bachelorFeeAud": 38000, "duration": 3 }
+    ],
+    "notes": "Bachelor of Nursing (3 years). AHPRA registration required. Strong 189/190 visa outcomes. Some universities offer 2-year accelerated programs."
+  },
+  "aged-care": {
+    "universities": [
+      { "name": "TAFE NSW", "feeAud": 12000, "duration": 1 },
+      { "name": "RMIT TAFE", "feeAud": 11000, "duration": 1 },
+      { "name": "TAFE QLD", "feeAud": 10000, "duration": 1 },
+      { "name": "South Metropolitan TAFE (WA)", "feeAud": 11000, "duration": 1 },
+      { "name": "Holmesglen TAFE (VIC)", "feeAud": 12000, "duration": 1 }
+    ],
+    "notes": "Certificate III in Individual Support (12 months). Fastest and cheapest pathway to Aged Care work. High demand, strong PR pathway via employer sponsorship."
+  },
+  "allied-health": {
+    "universities": [
+      { "name": "University of Melbourne", "qsRank": 13, "bachelorFeeAud": 50000, "duration": 4 },
+      { "name": "University of Sydney", "qsRank": 18, "bachelorFeeAud": 55000, "duration": 4 },
+      { "name": "University of Queensland", "qsRank": 40, "bachelorFeeAud": 44000, "duration": 4 },
+      { "name": "Monash University", "qsRank": 37, "bachelorFeeAud": 44000, "duration": 4 },
+      { "name": "University of Western Australia", "qsRank": 77, "bachelorFeeAud": 42000, "duration": 4 },
+      { "name": "University of Adelaide", "qsRank": 82, "bachelorFeeAud": 40000, "duration": 4 }
+    ],
+    "notes": "Physiotherapy (4-5 yr), Occupational Therapy (4 yr), Speech Pathology (4 yr). Most require Honours level. AHPRA registration."
+  },
+  "dental": {
+    "universities": [
+      { "name": "University of Melbourne", "qsRank": 13, "bachelorFeeAud": 78000, "duration": 5 },
+      { "name": "University of Sydney", "qsRank": 18, "bachelorFeeAud": 80000, "duration": 5 },
+      { "name": "University of Queensland", "qsRank": 40, "bachelorFeeAud": 72000, "duration": 5 },
+      { "name": "University of Adelaide", "qsRank": 82, "bachelorFeeAud": 65000, "duration": 5 },
+      { "name": "Griffith University", "qsRank": 298, "bachelorFeeAud": 62000, "duration": 5 },
+      { "name": "James Cook University", "qsRank": 415, "bachelorFeeAud": 58000, "duration": 5 }
+    ],
+    "notes": "Doctor of Dental Surgery/Science (4-5 yr). Very competitive entry. High international tuition but strong PR outcomes."
+  },
+  "psychology": {
+    "universities": [
+      { "name": "University of Melbourne", "qsRank": 13, "bachelorFeeAud": 46000, "duration": 3 },
+      { "name": "University of Sydney", "qsRank": 18, "bachelorFeeAud": 50000, "duration": 3 },
+      { "name": "University of Queensland", "qsRank": 40, "bachelorFeeAud": 42000, "duration": 3 },
+      { "name": "Monash University", "qsRank": 37, "bachelorFeeAud": 44000, "duration": 3 },
+      { "name": "Macquarie University", "qsRank": 130, "bachelorFeeAud": 41000, "duration": 3 },
+      { "name": "Western Sydney University", "qsRank": 421, "bachelorFeeAud": 32000, "duration": 3 }
+    ],
+    "notes": "3-year Bachelor + 1-year Honours + 2-year Master (6-year pathway to registration). Clinical psychology requires Doctorate."
+  },
+  "paramedic-emergency": {
+    "universities": [
+      { "name": "University of Tasmania", "qsRank": 280, "bachelorFeeAud": 38000, "duration": 3 },
+      { "name": "Monash University", "qsRank": 37, "bachelorFeeAud": 42000, "duration": 3 },
+      { "name": "Curtin University", "qsRank": 174, "bachelorFeeAud": 38000, "duration": 3 },
+      { "name": "Flinders University", "qsRank": 377, "bachelorFeeAud": 38000, "duration": 3 },
+      { "name": "Western Sydney University", "qsRank": 421, "bachelorFeeAud": 34000, "duration": 3 }
+    ],
+    "notes": "Bachelor of Paramedic Science (3 years). Limited spots. Strong national shortage."
+  },
+  "engineering": {
+    "universities": [
+      { "name": "University of Melbourne", "qsRank": 13, "bachelorFeeAud": 48000, "duration": 4 },
+      { "name": "UNSW Sydney", "qsRank": 19, "bachelorFeeAud": 49000, "duration": 4 },
+      { "name": "University of Sydney", "qsRank": 18, "bachelorFeeAud": 52000, "duration": 4 },
+      { "name": "University of Queensland", "qsRank": 40, "bachelorFeeAud": 46000, "duration": 4 },
+      { "name": "Monash University", "qsRank": 37, "bachelorFeeAud": 46000, "duration": 4 },
+      { "name": "RMIT University", "qsRank": 140, "bachelorFeeAud": 42000, "duration": 4 }
+    ],
+    "notes": "4-year Bachelor of Engineering (Honours). Engineers Australia accreditation."
+  },
+  "civil-engineering": {
+    "universities": [
+      { "name": "University of Melbourne", "qsRank": 13, "bachelorFeeAud": 48000, "duration": 4 },
+      { "name": "UNSW Sydney", "qsRank": 19, "bachelorFeeAud": 49000, "duration": 4 },
+      { "name": "University of Sydney", "qsRank": 18, "bachelorFeeAud": 52000, "duration": 4 },
+      { "name": "University of Queensland", "qsRank": 40, "bachelorFeeAud": 46000, "duration": 4 },
+      { "name": "Monash University", "qsRank": 37, "bachelorFeeAud": 46000, "duration": 4 },
+      { "name": "University of Western Australia", "qsRank": 77, "bachelorFeeAud": 42000, "duration": 4 }
+    ],
+    "notes": "Specialisation within Engineering Honours. Infrastructure boom drives demand."
+  },
+  "mechanical-engineering": {
+    "universities": [
+      { "name": "University of Melbourne", "qsRank": 13, "bachelorFeeAud": 48000, "duration": 4 },
+      { "name": "UNSW Sydney", "qsRank": 19, "bachelorFeeAud": 49000, "duration": 4 },
+      { "name": "University of Sydney", "qsRank": 18, "bachelorFeeAud": 52000, "duration": 4 },
+      { "name": "Monash University", "qsRank": 37, "bachelorFeeAud": 46000, "duration": 4 },
+      { "name": "RMIT University", "qsRank": 140, "bachelorFeeAud": 42000, "duration": 4 },
+      { "name": "Curtin University", "qsRank": 174, "bachelorFeeAud": 38000, "duration": 4 }
+    ],
+    "notes": "Specialisation within Engineering Honours."
+  },
+  "mining-resources": {
+    "universities": [
+      { "name": "University of Western Australia", "qsRank": 77, "bachelorFeeAud": 46000, "duration": 4 },
+      { "name": "Curtin University", "qsRank": 174, "bachelorFeeAud": 40000, "duration": 4 },
+      { "name": "University of Queensland", "qsRank": 40, "bachelorFeeAud": 48000, "duration": 4 },
+      { "name": "University of Adelaide", "qsRank": 82, "bachelorFeeAud": 42000, "duration": 4 },
+      { "name": "James Cook University", "qsRank": 415, "bachelorFeeAud": 38000, "duration": 4 }
+    ],
+    "notes": "WA and QLD dominate mining. Highest starting salaries among engineering disciplines."
+  },
+  "business-analytics": {
+    "universities": [
+      { "name": "University of Melbourne", "qsRank": 13, "bachelorFeeAud": 46000, "duration": 3 },
+      { "name": "UNSW Sydney", "qsRank": 19, "bachelorFeeAud": 48000, "duration": 3 },
+      { "name": "University of Sydney", "qsRank": 18, "bachelorFeeAud": 52000, "duration": 3 },
+      { "name": "Monash University", "qsRank": 37, "bachelorFeeAud": 46000, "duration": 3 },
+      { "name": "Macquarie University", "qsRank": 130, "bachelorFeeAud": 40000, "duration": 3 },
+      { "name": "UTS", "qsRank": 88, "bachelorFeeAud": 42000, "duration": 3 }
+    ],
+    "notes": "Often studied as Master of Business Analytics. Bachelor in Commerce/IT with analytics major."
+  },
+  "accounting": {
+    "universities": [
+      { "name": "University of Melbourne", "qsRank": 13, "bachelorFeeAud": 46000, "duration": 3 },
+      { "name": "UNSW Sydney", "qsRank": 19, "bachelorFeeAud": 48000, "duration": 3 },
+      { "name": "University of Sydney", "qsRank": 18, "bachelorFeeAud": 52000, "duration": 3 },
+      { "name": "Monash University", "qsRank": 37, "bachelorFeeAud": 46000, "duration": 3 },
+      { "name": "University of Queensland", "qsRank": 40, "bachelorFeeAud": 44000, "duration": 3 },
+      { "name": "Macquarie University", "qsRank": 130, "bachelorFeeAud": 40000, "duration": 3 }
+    ],
+    "notes": "CPA/CA accreditation pathway. Master of Professional Accounting available for non-accounting graduates."
+  },
+  "law": {
+    "universities": [
+      { "name": "University of Melbourne", "qsRank": 13, "bachelorFeeAud": 48000, "duration": 4 },
+      { "name": "University of Sydney", "qsRank": 18, "bachelorFeeAud": 52000, "duration": 4 },
+      { "name": "UNSW Sydney", "qsRank": 19, "bachelorFeeAud": 48000, "duration": 4 },
+      { "name": "ANU", "qsRank": 30, "bachelorFeeAud": 48000, "duration": 4 },
+      { "name": "Monash University", "qsRank": 37, "bachelorFeeAud": 44000, "duration": 4 },
+      { "name": "University of Queensland", "qsRank": 40, "bachelorFeeAud": 44000, "duration": 4 }
+    ],
+    "notes": "LLB (4 years) or JD (3 years for non-law graduates). Admission to the legal profession requires PLT (Practical Legal Training) after degree."
+  },
+  "primary-secondary-education": {
+    "universities": [
+      { "name": "University of Melbourne", "qsRank": 13, "bachelorFeeAud": 44000, "duration": 4 },
+      { "name": "University of Sydney", "qsRank": 18, "bachelorFeeAud": 52000, "duration": 4 },
+      { "name": "Monash University", "qsRank": 37, "bachelorFeeAud": 40000, "duration": 4 },
+      { "name": "University of Queensland", "qsRank": 40, "bachelorFeeAud": 40000, "duration": 4 },
+      { "name": "University of Western Australia", "qsRank": 77, "bachelorFeeAud": 38000, "duration": 4 },
+      { "name": "Deakin University", "qsRank": 197, "bachelorFeeAud": 34000, "duration": 4 }
+    ],
+    "notes": "Bachelor of Education (Primary or Secondary). 4-year program includes teaching placements. VIT/QCT registration required."
+  },
+  "early-childhood": {
+    "universities": [
+      { "name": "University of Melbourne", "qsRank": 13, "bachelorFeeAud": 44000, "duration": 3 },
+      { "name": "Monash University", "qsRank": 37, "bachelorFeeAud": 38000, "duration": 3 },
+      { "name": "Deakin University", "qsRank": 197, "bachelorFeeAud": 32000, "duration": 3 },
+      { "name": "University of Southern Queensland", "feeAud": 28000, "duration": 3 },
+      { "name": "TAFE NSW", "feeAud": 12000, "duration": 2 },
+      { "name": "RMIT TAFE", "feeAud": 11000, "duration": 2 }
+    ],
+    "notes": "Bachelor of Early Childhood Education (3 years) or Diploma (2 years at TAFE). ACECQA registration."
+  },
+  "social-work": {
+    "universities": [
+      { "name": "University of Melbourne", "qsRank": 13, "bachelorFeeAud": 44000, "duration": 4 },
+      { "name": "University of Sydney", "qsRank": 18, "bachelorFeeAud": 48000, "duration": 4 },
+      { "name": "Monash University", "qsRank": 37, "bachelorFeeAud": 40000, "duration": 4 },
+      { "name": "University of Queensland", "qsRank": 40, "bachelorFeeAud": 40000, "duration": 4 },
+      { "name": "Western Sydney University", "qsRank": 421, "bachelorFeeAud": 32000, "duration": 4 },
+      { "name": "La Trobe University", "qsRank": 307, "bachelorFeeAud": 34000, "duration": 4 }
+    ],
+    "notes": "Bachelor of Social Work (4 years). AASW accreditation. Field placements required."
+  },
+  "sport-fitness": {
+    "universities": [
+      { "name": "University of Queensland", "qsRank": 40, "bachelorFeeAud": 42000, "duration": 3 },
+      { "name": "Deakin University", "qsRank": 197, "bachelorFeeAud": 36000, "duration": 3 },
+      { "name": "Griffith University", "qsRank": 298, "bachelorFeeAud": 36000, "duration": 3 },
+      { "name": "La Trobe University", "qsRank": 307, "bachelorFeeAud": 34000, "duration": 3 },
+      { "name": "Western Sydney University", "qsRank": 421, "bachelorFeeAud": 32000, "duration": 3 },
+      { "name": "Australian Catholic University", "bachelorFeeAud": 30000, "duration": 3 }
+    ],
+    "notes": "Bachelor of Sport and Exercise Science (3 years). Exercise Physiology requires Honours. Limited direct PR pathway."
+  },
+  "carpentry": {
+    "universities": [
+      { "name": "TAFE NSW", "feeAud": 12000, "duration": 4 },
+      { "name": "TAFE QLD", "feeAud": 11000, "duration": 4 },
+      { "name": "Holmesglen TAFE (VIC)", "feeAud": 12000, "duration": 4 },
+      { "name": "South Metropolitan TAFE (WA)", "feeAud": 11000, "duration": 4 },
+      { "name": "TAFE SA", "feeAud": 11000, "duration": 4 }
+    ],
+    "notes": "Certificate III in Carpentry (3.5-4 years, apprenticeship). One of the strongest trade PR pathways."
+  },
+  "wall-floor-tiling": {
+    "universities": [
+      { "name": "TAFE NSW", "feeAud": 11000, "duration": 3 },
+      { "name": "TAFE QLD", "feeAud": 10000, "duration": 3 },
+      { "name": "Holmesglen TAFE (VIC)", "feeAud": 11000, "duration": 3 },
+      { "name": "South Metropolitan TAFE (WA)", "feeAud": 10000, "duration": 3 }
+    ],
+    "notes": "Certificate III in Wall and Floor Tiling (3 years, apprenticeship)."
+  },
+  "electrical-trade": {
+    "universities": [
+      { "name": "TAFE NSW", "feeAud": 12000, "duration": 4 },
+      { "name": "TAFE QLD", "feeAud": 11000, "duration": 4 },
+      { "name": "Holmesglen TAFE (VIC)", "feeAud": 12000, "duration": 4 },
+      { "name": "South Metropolitan TAFE (WA)", "feeAud": 11000, "duration": 4 },
+      { "name": "TAFE SA", "feeAud": 11000, "duration": 4 }
+    ],
+    "notes": "Certificate III in Electrotechnology (4 years, apprenticeship). Highest-demand trade in Australia."
+  },
+  "plumbing": {
+    "universities": [
+      { "name": "TAFE NSW", "feeAud": 12000, "duration": 4 },
+      { "name": "TAFE QLD", "feeAud": 11000, "duration": 4 },
+      { "name": "Holmesglen TAFE (VIC)", "feeAud": 12000, "duration": 4 },
+      { "name": "South Metropolitan TAFE (WA)", "feeAud": 11000, "duration": 4 },
+      { "name": "TAFE SA", "feeAud": 11000, "duration": 4 }
+    ],
+    "notes": "Certificate III in Plumbing (4 years, apprenticeship). Critical shortage."
+  },
+  "welding": {
+    "universities": [
+      { "name": "TAFE NSW", "feeAud": 11000, "duration": 3 },
+      { "name": "TAFE QLD", "feeAud": 10000, "duration": 3 },
+      { "name": "Holmesglen TAFE (VIC)", "feeAud": 11000, "duration": 3 },
+      { "name": "South Metropolitan TAFE (WA)", "feeAud": 10000, "duration": 3 }
+    ],
+    "notes": "Certificate III in Engineering — Technical (3 years). Mining sector drives demand."
+  },
+  "bricklaying": {
+    "universities": [
+      { "name": "TAFE NSW", "feeAud": 11000, "duration": 3 },
+      { "name": "TAFE QLD", "feeAud": 10000, "duration": 3 },
+      { "name": "Holmesglen TAFE (VIC)", "feeAud": 11000, "duration": 3 },
+      { "name": "South Metropolitan TAFE (WA)", "feeAud": 10000, "duration": 3 }
+    ],
+    "notes": "Certificate III in Bricklaying/Blocklaying (3 years, apprenticeship)."
+  },
+  "hvac": {
+    "universities": [
+      { "name": "TAFE NSW", "feeAud": 12000, "duration": 4 },
+      { "name": "TAFE QLD", "feeAud": 11000, "duration": 4 },
+      { "name": "Holmesglen TAFE (VIC)", "feeAud": 12000, "duration": 4 },
+      { "name": "South Metropolitan TAFE (WA)", "feeAud": 11000, "duration": 4 }
+    ],
+    "notes": "Certificate III in Refrigeration and Air Conditioning (4 years, apprenticeship). Growing demand with climate change."
+  },
+  "architecture": {
+    "universities": [
+      { "name": "University of Melbourne", "qsRank": 13, "bachelorFeeAud": 48000, "duration": 5 },
+      { "name": "University of Sydney", "qsRank": 18, "bachelorFeeAud": 52000, "duration": 5 },
+      { "name": "UNSW Sydney", "qsRank": 19, "bachelorFeeAud": 48000, "duration": 5 },
+      { "name": "RMIT University", "qsRank": 140, "bachelorFeeAud": 42000, "duration": 5 },
+      { "name": "University of Queensland", "qsRank": 40, "bachelorFeeAud": 44000, "duration": 5 },
+      { "name": "University of Tasmania", "qsRank": 280, "bachelorFeeAud": 36000, "duration": 5 }
+    ],
+    "notes": "Bachelor of Architecture (5 years, includes Honours). AACA accreditation. Registration required to practice."
+  },
+  "design-media": {
+    "universities": [
+      { "name": "RMIT University", "qsRank": 140, "bachelorFeeAud": 42000, "duration": 3 },
+      { "name": "University of Sydney", "qsRank": 18, "bachelorFeeAud": 50000, "duration": 3 },
+      { "name": "UNSW Sydney", "qsRank": 19, "bachelorFeeAud": 46000, "duration": 3 },
+      { "name": "Monash University", "qsRank": 37, "bachelorFeeAud": 42000, "duration": 3 },
+      { "name": "Swinburne University", "qsRank": 335, "bachelorFeeAud": 38000, "duration": 3 },
+      { "name": "UTS", "qsRank": 88, "bachelorFeeAud": 42000, "duration": 3 }
+    ],
+    "notes": "Bachelor of Design / Media / Communication Design. Portfolio may be required."
+  },
+  "photography-film": {
+    "universities": [
+      { "name": "RMIT University", "qsRank": 140, "bachelorFeeAud": 42000, "duration": 3 },
+      { "name": "AFTRS (Australian Film Television and Radio School)", "bachelorFeeAud": 38000, "duration": 3 },
+      { "name": "Swinburne University", "qsRank": 335, "bachelorFeeAud": 36000, "duration": 3 },
+      { "name": "Griffith University", "qsRank": 298, "bachelorFeeAud": 36000, "duration": 3 },
+      { "name": "University of Tasmania", "qsRank": 280, "bachelorFeeAud": 34000, "duration": 3 }
+    ],
+    "notes": "Bachelor of Film/Screen Production. Portfolio and interview required. Limited direct PR pathway."
+  },
+  "environmental-science": {
+    "universities": [
+      { "name": "University of Melbourne", "qsRank": 13, "bachelorFeeAud": 46000, "duration": 3 },
+      { "name": "University of Sydney", "qsRank": 18, "bachelorFeeAud": 50000, "duration": 3 },
+      { "name": "University of Queensland", "qsRank": 40, "bachelorFeeAud": 44000, "duration": 3 },
+      { "name": "ANU", "qsRank": 30, "bachelorFeeAud": 46000, "duration": 3 },
+      { "name": "University of Western Australia", "qsRank": 77, "bachelorFeeAud": 40000, "duration": 3 },
+      { "name": "University of Tasmania", "qsRank": 280, "bachelorFeeAud": 36000, "duration": 3 }
+    ],
+    "notes": "Bachelor of Environmental Science (3 years). Climate policy drives growing demand."
+  },
+  "agriculture": {
+    "universities": [
+      { "name": "University of Queensland", "qsRank": 40, "bachelorFeeAud": 44000, "duration": 3 },
+      { "name": "University of Western Australia", "qsRank": 77, "bachelorFeeAud": 40000, "duration": 3 },
+      { "name": "University of Adelaide", "qsRank": 82, "bachelorFeeAud": 38000, "duration": 3 },
+      { "name": "Charles Sturt University", "bachelorFeeAud": 28000, "duration": 3 },
+      { "name": "University of New England", "bachelorFeeAud": 28000, "duration": 3 },
+      { "name": "La Trobe University", "qsRank": 307, "bachelorFeeAud": 34000, "duration": 3 }
+    ],
+    "notes": "Bachelor of Agricultural Science. Strong regional demand. 491 visa pathway available."
+  },
+  "veterinary": {
+    "universities": [
+      { "name": "University of Melbourne", "qsRank": 13, "bachelorFeeAud": 68000, "duration": 5 },
+      { "name": "University of Sydney", "qsRank": 18, "bachelorFeeAud": 65000, "duration": 5 },
+      { "name": "University of Queensland", "qsRank": 40, "bachelorFeeAud": 62000, "duration": 5 },
+      { "name": "Murdoch University", "qsRank": 490, "bachelorFeeAud": 56000, "duration": 5 },
+      { "name": "Charles Sturt University", "bachelorFeeAud": 52000, "duration": 5 },
+      { "name": "James Cook University", "qsRank": 415, "bachelorFeeAud": 50000, "duration": 5 }
+    ],
+    "notes": "Doctor of Veterinary Medicine (5 years). Very competitive entry. National shortage."
+  },
+  "hospitality-management": {
+    "universities": [
+      { "name": "Griffith University", "qsRank": 298, "bachelorFeeAud": 36000, "duration": 3 },
+      { "name": "Blue Mountains International Hotel Management School", "bachelorFeeAud": 32000, "duration": 3 },
+      { "name": "RMIT University", "qsRank": 140, "bachelorFeeAud": 40000, "duration": 3 },
+      { "name": "Torrens University", "bachelorFeeAud": 26000, "duration": 3 },
+      { "name": "Southern Cross University", "qsRank": 495, "bachelorFeeAud": 28000, "duration": 3 }
+    ],
+    "notes": "Bachelor of International Hotel Management / Tourism. Some include paid industry placements."
+  },
+  "culinary-arts": {
+    "universities": [
+      { "name": "TAFE NSW", "feeAud": 12000, "duration": 2 },
+      { "name": "TAFE QLD", "feeAud": 11000, "duration": 2 },
+      { "name": "Holmesglen TAFE (VIC)", "feeAud": 12000, "duration": 2 },
+      { "name": "South Metropolitan TAFE (WA)", "feeAud": 11000, "duration": 2 },
+      { "name": "Le Cordon Bleu Australia", "bachelorFeeAud": 28000, "duration": 3 },
+      { "name": "Torrens University", "bachelorFeeAud": 26000, "duration": 3 }
+    ],
+    "notes": "Certificate III in Commercial Cookery (12-18 months) or Bachelor of Culinary Arts (3 years). National shortage for Cook and Baker."
+  },
+  "beauty-wellness": {
+    "universities": [
+      { "name": "TAFE NSW", "feeAud": 10000, "duration": 1.5 },
+      { "name": "TAFE QLD", "feeAud": 9000, "duration": 1.5 },
+      { "name": "Holmesglen TAFE (VIC)", "feeAud": 10000, "duration": 1.5 },
+      { "name": "South Metropolitan TAFE (WA)", "feeAud": 9000, "duration": 1.5 },
+      { "name": "Torrens University", "bachelorFeeAud": 26000, "duration": 3 }
+    ],
+    "notes": "Certificate III in Beauty Therapy (12-18 months). National shortage for Beauty Therapist and Hairdresser."
+  },
+  "automotive": {
+    "universities": [
+      { "name": "TAFE NSW", "feeAud": 12000, "duration": 4 },
+      { "name": "TAFE QLD", "feeAud": 11000, "duration": 4 },
+      { "name": "Holmesglen TAFE (VIC)", "feeAud": 12000, "duration": 4 },
+      { "name": "South Metropolitan TAFE (WA)", "feeAud": 11000, "duration": 4 },
+      { "name": "TAFE SA", "feeAud": 11000, "duration": 4 }
+    ],
+    "notes": "Certificate III in Light Vehicle Mechanical Technology (4 years, apprenticeship). Strong demand."
+  },
+  "aviation": {
+    "universities": [
+      { "name": "RMIT University", "qsRank": 140, "bachelorFeeAud": 42000, "duration": 3 },
+      { "name": "University of Tasmania", "qsRank": 280, "bachelorFeeAud": 38000, "duration": 3 },
+      { "name": "Curtin University", "qsRank": 174, "bachelorFeeAud": 38000, "duration": 3 },
+      { "name": " Griffith University", "qsRank": 298, "bachelorFeeAud": 36000, "duration": 3 },
+      { "name": "Charles Darwin University", "bachelorFeeAud": 32000, "duration": 3 }
+    ],
+    "notes": "Bachelor of Aviation (3 years). Pilot training programs have additional flight hour costs (~A$80K-120K on top of tuition)."
+  },
+  "maritime": {
+    "universities": [
+      { "name": "Australian Maritime College (UTAS)", "qsRank": 280, "bachelorFeeAud": 38000, "duration": 3 },
+      { "name": "TAFE NSW (Maritime)", "feeAud": 14000, "duration": 3 },
+      { "name": "South Metropolitan TAFE (WA)", "feeAud": 12000, "duration": 3 },
+      { "name": "TAFE QLD (Maritime)", "feeAud": 12000, "duration": 3 }
+    ],
+    "notes": "Australian Maritime College is the primary institution. Certificate and Bachelor pathways available. National shortage."
+  }
+}

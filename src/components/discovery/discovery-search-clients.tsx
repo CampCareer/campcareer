@@ -10,6 +10,17 @@ import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
 import { STUDY_CATEGORIES, STUDY_CONCEPTS } from "@/data/study-concepts"
 import { BUDGET_BANDS, SEARCH_GOALS, type BudgetBandId, type DiscoveryEnvelope, type MajorRecommendationsData, type SearchGoalId, type UniversityMatchesData } from "@/lib/discovery/search-contract"
 import { LANDING_GOALS, type LandingDiscoveryResult, type LandingGoalId } from "@/lib/discovery/landing-discovery"
+import {
+  type AuMajorSignal,
+  shortageLevel,
+  shortageLabel,
+  shortageColor,
+  formatSalaryRange,
+  formatOutlook,
+  prBadge,
+} from "@/lib/au-major-signals"
+import signalsSnapshot from "@/data/au-major-signals.json"
+import { AU_CONCEPT_OCCUPATIONS } from "@/data/au-major-occupation-map"
 import { getLaunchCountry } from "@/data/launch-countries"
 import { localizePath } from "@/lib/i18n/config"
 import { useLocale } from "@/lib/i18n/locale-provider"
@@ -28,6 +39,41 @@ function productHref(path: string, locale: "en" | "ko", params: Record<string, s
 
 function SearchNotice({ title, body }: { title: string; body: string }) {
   return <div className="rounded-2xl border border-blue-200 bg-blue-50 p-5"><div className="flex gap-3"><CircleAlert className="mt-0.5 h-5 w-5 shrink-0 text-blue-700" /><div><h2 className="font-semibold text-blue-950">{title}</h2><p className="mt-1 text-sm leading-6 text-blue-900">{body}</p></div></div></div>
+}
+
+const SIGNALS = (signalsSnapshot as { signals: AuMajorSignal[] }).signals
+const SIGNAL_MAP = new Map(SIGNALS.map((s) => [s.concept_id, s]))
+
+function getSignal(conceptId: string): AuMajorSignal | null {
+  return SIGNAL_MAP.get(conceptId) ?? null
+}
+
+function ConceptSignalBadges({ conceptId, locale }: { conceptId: string; locale: "en" | "ko" }) {
+  const signal = getSignal(conceptId)
+  if (!signal) return null
+  const isKo = locale === "ko"
+  const level = shortageLevel(signal.shortage_national_pct)
+  const pr = prBadge(signal.pr_score)
+  return (
+    <div className="mt-3 flex flex-wrap gap-1.5">
+      <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold ${shortageColor(level)}`}>
+        {shortageLabel(level, isKo)}
+      </span>
+      {signal.salary_median_aud && (
+        <span className="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[11px] font-semibold text-slate-700">
+          A${(signal.salary_median_aud / 1000).toFixed(0)}K
+        </span>
+      )}
+      {signal.outlook_2030_change_pct != null && (
+        <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold ${signal.outlook_2030_change_pct > 5 ? "border-emerald-200 bg-emerald-50 text-emerald-700" : signal.outlook_2030_change_pct < -2 ? "border-red-200 bg-red-50 text-red-700" : "border-slate-200 bg-slate-50 text-slate-600"}`}>
+          {formatOutlook(signal.outlook_2030_change_pct)}
+        </span>
+      )}
+      <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold ${pr.className}`}>
+        {pr.label}
+      </span>
+    </div>
+  )
 }
 
 export function CountrySearchClient({ initial, basePath = "/countries/search" }: { initial: { country?: string; category?: string; major?: string; goal?: string }; basePath?: string }) {
@@ -220,21 +266,38 @@ function CountryStudyPreview({ country, locale, isKo, category, major, basePath 
       const { Icon, tone } = getStudyCategoryVisual(concept.category)
       return <Link key={concept.id} href={href} className={`group rounded-2xl border bg-white p-5 transition-all hover:border-blue-300 hover:shadow-md ${selected ? "border-blue-400 ring-2 ring-blue-100" : "border-slate-200"}`}>
         <div className="flex items-start justify-between gap-3"><span className={`grid size-10 place-items-center rounded-xl ${tone}`}><Icon className="size-5" strokeWidth={2.2} /></span>{selected && <span className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">{isKo ? "선택됨" : "Selected"}</span>}</div>
-        <p className="mt-5 text-xs font-semibold uppercase tracking-[.12em] text-blue-700">{concept.kind.replaceAll("_", " ")}</p><h3 className="mt-1 text-lg font-semibold text-slate-950">{isKo ? concept.labelKo : concept.label}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{concept.description}</p><span className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-slate-700 group-hover:text-blue-700">{isKo ? "이 전공 선택" : "Choose this field"}<ArrowRight className="h-4 w-4" /></span>
+        <p className="mt-5 text-xs font-semibold uppercase tracking-[.12em] text-blue-700">{concept.kind.replaceAll("_", " ")}</p><h3 className="mt-1 text-lg font-semibold text-slate-950">{isKo ? concept.labelKo : concept.label}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{concept.description}</p>
+        {basePath === "/au/majors" && <ConceptSignalBadges conceptId={concept.id} locale={locale} />}
+        <span className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-slate-700 group-hover:text-blue-700">{isKo ? "이 전공 선택" : "Choose this field"}<ArrowRight className="h-4 w-4" /></span>
       </Link>
     })}</div>
   </section>
 }
 
 function AustralianMajorCategoryGrid({ locale, isKo, basePath }: { locale: "en" | "ko"; isKo: boolean; basePath: string }) {
+  const categoryShortageCounts = STUDY_CATEGORIES.map((cat) => {
+    const conceptsInCat = AU_CONCEPT_OCCUPATIONS.filter((c) => {
+      const sc = STUDY_CONCEPTS.find((s) => s.id === c.conceptId)
+      return sc?.category === cat.id
+    })
+    const shortageCount = conceptsInCat.filter((c) => {
+      const sig = getSignal(c.conceptId)
+      return sig && sig.shortage_national_pct != null && sig.shortage_national_pct >= 50
+    }).length
+    return { categoryId: cat.id, shortageCount }
+  })
+  const shortageMap = new Map(categoryShortageCounts.map((c) => [c.categoryId, c.shortageCount]))
+
   return <section>
-    <div><p className="text-xs font-semibold uppercase tracking-[.18em] text-blue-700">Australia</p><h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{isKo ? "10개 전공 카테고리 탐색" : "Explore all 10 major categories"}</h2><p className="mt-2 max-w-2xl text-slate-600">{isKo ? "관심 분야를 먼저 고르면 관련 전공과 호주 내 직업 경로를 살펴볼 수 있어요." : "Start with an area of interest, then explore its study paths and Australian career outcomes."}</p></div>
+    <div><p className="text-xs font-semibold uppercase tracking-[.18em] text-blue-700">Australia</p><h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{isKo ? "40개 전공 카테고리 탐색" : "Explore all 40 major categories"}</h2><p className="mt-2 max-w-2xl text-slate-600">{isKo ? "관심 분야를 먼저 고르면 관련 전공과 호주 내 직업 경로를 살펴볼 수 있어요." : "Start with an area of interest, then explore its study paths and Australian career outcomes."}</p></div>
     <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">{STUDY_CATEGORIES.map((item) => {
       const { Icon, tone } = getStudyCategoryVisual(item.id)
       const href = productHref(basePath, locale, { ...(basePath === "/au/majors" ? {} : { country: "AU" }), category: item.id })
+      const shortageCount = shortageMap.get(item.id) ?? 0
       return <Link key={item.id} href={href} className="group rounded-2xl border border-slate-200 bg-white p-5 transition-all hover:border-blue-300 hover:shadow-md">
         <span className={`grid size-11 place-items-center rounded-xl ${tone}`}><Icon className="size-5" strokeWidth={2.2} /></span>
         <h3 className="mt-5 text-base font-semibold leading-6 text-slate-950">{isKo ? item.labelKo : item.label}</h3>
+        {shortageCount > 0 && <span className="mt-2 inline-flex items-center rounded-full bg-red-50 px-2 py-0.5 text-[11px] font-semibold text-red-700">{isKo ? `${shortageCount}개 shortage 직업` : `${shortageCount} shortage ${shortageCount === 1 ? "occupation" : "occupations"}`}</span>}
         <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-slate-600 group-hover:text-blue-700">{isKo ? "전공 보기" : "Explore majors"}<ArrowRight className="h-4 w-4" /></span>
       </Link>
     })}</div>
