@@ -69,7 +69,7 @@ export function ToolNavActions({ className }: { className?: string }) {
         <div className="flex items-center justify-between px-2 pb-2"><p className="text-xs font-semibold uppercase tracking-[.14em] text-slate-500">CampCareer</p><span className="text-xs text-slate-400">{locale === "ko" ? "도구" : "Tools"}</span></div>
         <div className="grid grid-cols-2 gap-2">
           <Link href={localizePath("/maps", pathLocale)} role="menuitem" onClick={() => setAppsOpen(false)} className="group rounded-2xl border border-transparent p-3 transition hover:border-blue-200 hover:bg-blue-50"><span className="grid size-12 place-items-center rounded-2xl bg-sky-100 text-2xl shadow-sm transition group-hover:-translate-y-0.5">🗺️</span><span className="mt-3 block text-sm font-semibold text-slate-900">Maps</span></Link>
-          <Link href={localizePath("/dashboard", pathLocale)} role="menuitem" onClick={() => setAppsOpen(false)} className="group rounded-2xl border border-transparent p-3 transition hover:border-violet-200 hover:bg-violet-50"><span className="grid size-12 place-items-center rounded-2xl bg-violet-100 text-2xl shadow-sm transition group-hover:-translate-y-0.5">🧭</span><span className="mt-3 block text-sm font-semibold text-slate-900">Dashboard</span></Link>
+          <Link href={localizePath("/planner", pathLocale)} role="menuitem" onClick={() => setAppsOpen(false)} className="group rounded-2xl border border-transparent p-3 transition hover:border-violet-200 hover:bg-violet-50"><span className="grid size-12 place-items-center rounded-2xl bg-violet-100 text-2xl shadow-sm transition group-hover:-translate-y-0.5">🧭</span><span className="mt-3 block text-sm font-semibold text-slate-900">Planner</span></Link>
         </div>
       </div>}
     </div>

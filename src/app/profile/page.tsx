@@ -169,9 +169,9 @@ export default function ProfilePage() {
         <section className="mt-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-7">
           <p className="text-sm font-semibold text-blue-700">Continue your plan</p>
           <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">See the next useful decision.</h2>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">Your dashboard turns the decisions you have already saved into one clear next step. Progress is based on planning activity, not time spent in the app.</p>
-          <Link href="/dashboard" className="mt-5 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">
-            Open dashboard
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">Use Planner as a flexible space for the decisions you have saved, daily notes, deadlines and the plan you are building.</p>
+          <Link href="/planner" className="mt-5 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">
+            Open Planner
             <ArrowRight className="h-4 w-4" />
           </Link>
         </section>
@@ -204,7 +204,7 @@ function GuestProfile() {
       <section className="max-w-md rounded-3xl border border-slate-200 bg-white p-7 text-center shadow-sm sm:p-9">
         <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-700"><UserRound className="h-6 w-6" /></div>
         <h1 className="mt-5 text-2xl font-semibold tracking-tight text-slate-950">Keep your plan in one place.</h1>
-        <p className="mt-2 text-sm leading-6 text-slate-600">Sign in to save careers and providers, then use your dashboard to decide what to do next.</p>
+        <p className="mt-2 text-sm leading-6 text-slate-600">Sign in to save careers and providers, then organise your research and next steps in Planner.</p>
         <Link href="/login?next=/profile" className="mt-6 inline-flex rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">Sign in</Link>
       </section>
     </main>

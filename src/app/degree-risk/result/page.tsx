@@ -212,8 +212,8 @@ export default async function DegreeRiskResultPage(
 
             {assessmentId && (
               <section className="mt-5 flex flex-col gap-3 rounded-2xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-950 sm:flex-row sm:items-center sm:justify-between">
-                <div><p className="font-semibold">{user ? "This result is saved to your private plan." : "Keep this result in your private plan."}</p><p className="mt-1 leading-6 text-blue-900">{user ? "Open Dashboard whenever you want to continue from this decision." : "Sign in and we will attach this completed check to your Dashboard."}</p></div>
-                <Link href={user ? "/dashboard" : "/login?next=/dashboard"} className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2.5 font-semibold text-white transition hover:bg-blue-700">{user ? "Open Dashboard" : "Sign in to save"}<ArrowRight className="h-4 w-4" /></Link>
+                <div><p className="font-semibold">{user ? "This result is saved to your private Planner." : "Keep this result in your private Planner."}</p><p className="mt-1 leading-6 text-blue-900">{user ? "Open Planner whenever you want to continue from this decision." : "Sign in and we will attach this completed check to your Planner."}</p></div>
+                <Link href={user ? "/planner" : "/login?next=/planner"} className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2.5 font-semibold text-white transition hover:bg-blue-700">{user ? "Open Planner" : "Sign in to save"}<ArrowRight className="h-4 w-4" /></Link>
               </section>
             )}
 

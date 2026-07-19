@@ -710,7 +710,7 @@ const ko: Dictionary = {
     resultBadge: '추천 출발점',
     resultDisclaimer: '이 결과는 입력하신 답변과 이용 가능한 ROI 데이터를 기반으로 한 예상 출발점입니다. 비자 규정, 학비, 장학금, 마감일은 반드시 공식 기관에서 확인하세요.',
     dataNote: 'ROI, 급여, 학비, 회수 기간은 이용 가능한 데이터를 기반으로 한 추정치입니다.',
-    ctaDashboard: '의사결정 대시보드 열기',
+    ctaDashboard: '플래너 열기',
     ctaRoi: 'ROI 비교하기',
     ctaCompare: '국가 비교하기',
     ctaTimeline: '타임라인 만들기',

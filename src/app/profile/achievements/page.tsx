@@ -113,7 +113,7 @@ export default function AchievementsPage() {
       id: "degree-risk",
       title: "Degree-risk decision check",
       description: "Complete a saved comparison of one major across work, visa, market, AI and ROI signals.",
-      verification: riskAssessment ? "Verified from your latest saved Degree Risk assessment." : "Complete the check while signed in, or sign in afterwards to keep it in your Dashboard.",
+      verification: riskAssessment ? "Verified from your latest saved Degree Risk assessment." : "Complete the check while signed in, or sign in afterwards to keep it in your Planner.",
       complete: Boolean(riskAssessment),
       href: "/degree-risk",
       actionLabel: "Check degree risk",

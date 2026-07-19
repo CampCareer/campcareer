@@ -18,7 +18,7 @@ export function TopNav() {
   const barePathname = withoutLocalePrefix(pathname)
   const isLanding = barePathname === "/"
   const hasUnifiedHero = isLanding || barePathname === "/countries/search" || barePathname === "/universities" || barePathname === "/universities/au" || barePathname === "/majors" || barePathname === "/study" || barePathname === "/au/study" || barePathname === "/au/majors"
-  const isToolSurface = barePathname === "/dashboard"
+  const isToolSurface = barePathname === "/planner"
   const isCompare = barePathname === "/compare" || barePathname.startsWith("/compare/")
   const navItems: { href: string; label: string; icon?: typeof Globe; accent?: "blue" | "rose" | "amber" }[] = [
     { href: "/", label: locale === "ko" ? "국가" : "Countries", icon: Globe, accent: "blue" },

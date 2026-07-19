@@ -708,7 +708,7 @@ const en = {
     resultBadge: 'Recommended starting point',
     resultDisclaimer: 'Your result is an estimated starting point based on your answers and available ROI data. Always verify visa rules, tuition, scholarships, and deadlines with official sources.',
     dataNote: 'ROI, salary, tuition, and payback are estimates based on available data.',
-    ctaDashboard: 'Open my decision dashboard',
+    ctaDashboard: 'Open Planner',
     ctaRoi: 'Compare ROI',
     ctaCompare: 'Compare countries',
     ctaTimeline: 'Build my timeline',
