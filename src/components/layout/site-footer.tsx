@@ -32,7 +32,7 @@ export function SiteFooter({ className }: { className?: string }) {
           <Link href={localizePath("/compare", pathLocale)} className="hover:text-slate-600 transition-colors">
             {t.nav.compare}
           </Link>
-          <Link href={localizePath("/dashboard", pathLocale)} className="hover:text-slate-600 transition-colors">
+          <Link href="/dashboard" className="hover:text-slate-600 transition-colors">
             Dashboard
           </Link>
           <Link href={localizePath("/privacy", pathLocale)} className="hover:text-slate-600 transition-colors">

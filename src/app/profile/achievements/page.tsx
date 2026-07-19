@@ -11,6 +11,8 @@ type Preferences = {
   completed_at: string | null
 }
 
+type DegreeRiskAssessment = { id: string }
+
 type Milestone = {
   id: string
   title: string
@@ -31,19 +33,21 @@ export default function AchievementsPage() {
   const [savedCourses, setSavedCourses] = useState(0)
   const [programmeComplete, setProgrammeComplete] = useState(false)
   const [reputationPoints, setReputationPoints] = useState(0)
+  const [riskAssessment, setRiskAssessment] = useState<DegreeRiskAssessment | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     let active = true
 
     async function loadMilestones(userId: string) {
-      const [preferenceResult, careerResult, providerResult, courseResult, programmeResult, reputationResult] = await Promise.all([
+      const [preferenceResult, careerResult, providerResult, courseResult, programmeResult, reputationResult, assessmentResult] = await Promise.all([
         supabase.from("user_preferences").select("completed_at").eq("id", userId).maybeSingle(),
         supabase.from("saved_occupations").select("id", { count: "exact", head: true }).eq("user_id", userId),
         supabase.from("saved_universities").select("id", { count: "exact", head: true }).eq("user_id", userId),
         supabase.from("saved_courses").select("id", { count: "exact", head: true }).eq("user_id", userId),
         supabase.from("program_completions").select("id", { count: "exact", head: true }).eq("user_id", userId).eq("program_id", "research-foundation-v1"),
         supabase.from("reputation_ledger").select("points").eq("user_id", userId),
+        supabase.from("assessments").select("id").eq("user_id", userId).order("created_at", { ascending: false }).limit(1).maybeSingle(),
       ])
 
       if (!active) return
@@ -53,6 +57,7 @@ export default function AchievementsPage() {
       setSavedCourses(courseResult.count ?? 0)
       setProgrammeComplete((programmeResult.count ?? 0) > 0)
       setReputationPoints((reputationResult.data ?? []).reduce((sum, row) => sum + (Number(row.points) || 0), 0))
+      setRiskAssessment((assessmentResult.data as DegreeRiskAssessment | null) ?? null)
       setLoading(false)
     }
 
@@ -79,6 +84,7 @@ export default function AchievementsPage() {
         setSavedCourses(0)
         setProgrammeComplete(false)
         setReputationPoints(0)
+        setRiskAssessment(null)
         setLoading(false)
       }
     })
@@ -102,6 +108,16 @@ export default function AchievementsPage() {
       href: "/onboarding",
       actionLabel: "Set direction",
       icon: Compass,
+    },
+    {
+      id: "degree-risk",
+      title: "Degree-risk decision check",
+      description: "Complete a saved comparison of one major across work, visa, market, AI and ROI signals.",
+      verification: riskAssessment ? "Verified from your latest saved Degree Risk assessment." : "Complete the check while signed in, or sign in afterwards to keep it in your Dashboard.",
+      complete: Boolean(riskAssessment),
+      href: "/degree-risk",
+      actionLabel: "Check degree risk",
+      icon: FileCheck2,
     },
     {
       id: "career",

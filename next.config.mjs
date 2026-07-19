@@ -10,8 +10,8 @@ const nextConfig = {
   },
   async redirects() {
     return [
-      // Soft-hide: redirect hidden routes to landing page
-      { source: '/dashboard/:path*', destination: '/', permanent: false },
+      // Dashboard is a first-class signed-in workspace. Do not redirect it to
+      // landing: its own guest state explains the sign-in path when needed.
       { source: '/career-path/:path*', destination: '/', permanent: false },
       { source: '/games/:path*', destination: '/', permanent: false },
       // Retired planning tools now enter the public Compare journey instead of

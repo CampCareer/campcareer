@@ -19,6 +19,7 @@ import {
   UserRound,
 } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
+import { majorLabel, resolveView } from "@/lib/degree-risk"
 import { cn } from "@/lib/utils"
 
 type Preferences = {
@@ -45,6 +46,13 @@ type SavedUniversity = {
 }
 
 type ProgrammeEvidence = { programme_key: string; evidence_type: string }
+type DegreeRiskAssessment = {
+  id: string
+  major_pref: string
+  country_pref: string
+  primary_goal: string
+  created_at: string
+}
 
 type JourneyStep = {
   title: string
@@ -85,13 +93,14 @@ export default function DashboardPage() {
   const [courseCount, setCourseCount] = useState(0)
   const [foundationComplete, setFoundationComplete] = useState(false)
   const [evidence, setEvidence] = useState<ProgrammeEvidence[]>([])
+  const [riskAssessment, setRiskAssessment] = useState<DegreeRiskAssessment | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     let active = true
 
     async function loadDashboard(userId: string) {
-      const [preferenceResult, occupationResult, universityResult, courseResult, completionResult, evidenceResult] = await Promise.all([
+      const [preferenceResult, occupationResult, universityResult, courseResult, completionResult, evidenceResult, assessmentResult] = await Promise.all([
         supabase
           .from("user_preferences")
           .select("field, goal, budget, english, environment, recommended_country, completed_at")
@@ -112,6 +121,7 @@ export default function DashboardPage() {
         supabase.from("saved_courses").select("id", { count: "exact", head: true }).eq("user_id", userId),
         supabase.from("program_completions").select("id", { count: "exact", head: true }).eq("user_id", userId).eq("program_id", "research-foundation-v1"),
         supabase.from("programme_evidence").select("programme_key, evidence_type").eq("user_id", userId),
+        supabase.from("assessments").select("id, major_pref, country_pref, primary_goal, created_at").eq("user_id", userId).order("created_at", { ascending: false }).limit(1).maybeSingle(),
       ])
 
       if (!active) return
@@ -121,7 +131,23 @@ export default function DashboardPage() {
       setCourseCount(courseResult.count ?? 0)
       setFoundationComplete((completionResult.count ?? 0) > 0)
       setEvidence((evidenceResult.data as ProgrammeEvidence[] | null) ?? [])
+      setRiskAssessment((assessmentResult.data as DegreeRiskAssessment | null) ?? null)
       setLoading(false)
+    }
+
+    async function claimDeferredAssessment() {
+      try {
+        const assessmentId = window.localStorage.getItem("cc_last_aid")
+        if (!assessmentId) return
+        const response = await fetch("/api/degree-risk/claim", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ assessmentId }),
+        })
+        if (response.ok) window.localStorage.removeItem("cc_last_aid")
+      } catch {
+        // Keep the local id for a later signed-in dashboard visit.
+      }
     }
 
     async function initialise() {
@@ -129,7 +155,10 @@ export default function DashboardPage() {
       if (!active) return
       const currentUser = data.user ?? null
       setUser(currentUser)
-      if (currentUser) await loadDashboard(currentUser.id)
+      if (currentUser) {
+        await claimDeferredAssessment()
+        await loadDashboard(currentUser.id)
+      }
       else setLoading(false)
     }
 
@@ -139,7 +168,10 @@ export default function DashboardPage() {
       setUser(currentUser)
       if (currentUser) {
         setLoading(true)
-        void loadDashboard(currentUser.id)
+        void (async () => {
+          await claimDeferredAssessment()
+          await loadDashboard(currentUser.id)
+        })()
       } else {
         setPreferences(null)
         setOccupations([])
@@ -147,6 +179,7 @@ export default function DashboardPage() {
         setCourseCount(0)
         setFoundationComplete(false)
         setEvidence([])
+        setRiskAssessment(null)
         setLoading(false)
       }
     })
@@ -181,6 +214,9 @@ export default function DashboardPage() {
   const displayName = (user.user_metadata?.full_name as string | undefined) || (user.user_metadata?.name as string | undefined) || user.email?.split("@")[0] || "there"
   const avatarUrl = user.user_metadata?.avatar_url as string | undefined
   const NextIcon = nextAction.icon
+  const riskResultHref = riskAssessment
+    ? `/degree-risk/result?${new URLSearchParams({ major: riskAssessment.major_pref, view: resolveView(riskAssessment.country_pref), goal: riskAssessment.primary_goal, aid: riskAssessment.id })}`
+    : "/degree-risk"
 
   return (
     <main className="min-h-screen bg-[#f7f9fc]">
@@ -257,6 +293,19 @@ export default function DashboardPage() {
               </div>
             ) : (
               <EmptyState icon={Target} text="Save a career or provider to turn research into a comparable shortlist." href="/au/majors" label="Explore majors" />
+            )}
+          </section>
+
+          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-7">
+            <div className="flex items-center gap-2"><FileCheck2 className="h-5 w-5 text-blue-600" /><h2 className="text-lg font-semibold text-slate-950">Your degree-risk check</h2></div>
+            {riskAssessment ? (
+              <div className="mt-5 rounded-2xl bg-blue-50 p-4">
+                <p className="text-sm font-semibold text-slate-950">{majorLabel(riskAssessment.major_pref)} · {riskAssessment.country_pref}</p>
+                <p className="mt-1 text-sm leading-6 text-slate-600">Saved {new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric", year: "numeric" }).format(new Date(riskAssessment.created_at))}. This is your private decision check, not an admissions or visa outcome.</p>
+                <Link href={riskResultHref} className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700 hover:text-blue-800">Open saved result <ArrowRight className="h-4 w-4" /></Link>
+              </div>
+            ) : (
+              <EmptyState icon={FileCheck2} text="Score one major against work, visa, market, AI and ROI signals, then keep the result in your private plan." href="/degree-risk" label="Check degree risk" />
             )}
           </section>
         </div>

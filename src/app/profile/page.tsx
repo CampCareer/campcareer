@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react"
 import type { User } from "@supabase/supabase-js"
 import { ArrowRight, BadgeCheck, BookOpen, BriefcaseBusiness, Compass, FileCheck2, Lightbulb, Settings, Sparkles, Trophy, UserRound } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
+import { majorLabel, resolveView } from "@/lib/degree-risk"
 
 type Preferences = {
   field: string | null
@@ -19,6 +20,13 @@ const goalLabels: Record<string, string> = {
   pr: "Long-term pathway",
 }
 
+type DegreeRiskAssessment = {
+  id: string
+  major_pref: string
+  country_pref: string
+  primary_goal: string
+}
+
 export default function ProfilePage() {
   const supabase = useMemo(() => createClient(), [])
   const [user, setUser] = useState<User | null>(null)
@@ -28,13 +36,14 @@ export default function ProfilePage() {
   const [programmeComplete, setProgrammeComplete] = useState(false)
   const [evidenceCount, setEvidenceCount] = useState(0)
   const [reputationPoints, setReputationPoints] = useState(0)
+  const [riskAssessment, setRiskAssessment] = useState<DegreeRiskAssessment | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     let active = true
 
     async function loadProfile(userId: string) {
-      const [preferenceResult, careerResult, providerResult, programmeResult, evidenceResult, reputationResult] = await Promise.all([
+      const [preferenceResult, careerResult, providerResult, programmeResult, evidenceResult, reputationResult, assessmentResult] = await Promise.all([
         supabase
           .from("user_preferences")
           .select("field, goal, recommended_country, completed_at")
@@ -51,6 +60,7 @@ export default function ProfilePage() {
         supabase.from("program_completions").select("id", { count: "exact", head: true }).eq("user_id", userId).eq("program_id", "research-foundation-v1"),
         supabase.from("programme_evidence").select("id", { count: "exact", head: true }).eq("user_id", userId),
         supabase.from("reputation_ledger").select("points").eq("user_id", userId),
+        supabase.from("assessments").select("id, major_pref, country_pref, primary_goal").eq("user_id", userId).order("created_at", { ascending: false }).limit(1).maybeSingle(),
       ])
 
       if (!active) return
@@ -60,6 +70,7 @@ export default function ProfilePage() {
       setProgrammeComplete((programmeResult.count ?? 0) > 0)
       setEvidenceCount(evidenceResult.count ?? 0)
       setReputationPoints((reputationResult.data ?? []).reduce((sum, row) => sum + (Number(row.points) || 0), 0))
+      setRiskAssessment((assessmentResult.data as DegreeRiskAssessment | null) ?? null)
       setLoading(false)
     }
 
@@ -86,6 +97,7 @@ export default function ProfilePage() {
         setProgrammeComplete(false)
         setEvidenceCount(0)
         setReputationPoints(0)
+        setRiskAssessment(null)
         setLoading(false)
       }
     })
@@ -113,6 +125,9 @@ export default function ProfilePage() {
     evidenceCount >= 3 ? "Official evidence pack saved" : null,
     reputationPoints >= 10 ? "Community contributor" : null,
   ].filter(Boolean).slice(0, 3) as string[]
+  const degreeRiskHref = riskAssessment
+    ? `/degree-risk/result?${new URLSearchParams({ major: riskAssessment.major_pref, view: resolveView(riskAssessment.country_pref), goal: riskAssessment.primary_goal, aid: riskAssessment.id })}`
+    : "/degree-risk"
 
   return (
     <main className="min-h-screen bg-[#f7f9fc]">
@@ -167,6 +182,7 @@ export default function ProfilePage() {
           <Link href="/profile/programs" className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-blue-200 hover:text-blue-700"><span className="inline-flex items-center gap-2"><Sparkles className="h-4 w-4 text-blue-600" />Research programme</span><ArrowRight className="h-4 w-4" /></Link>
           <Link href="/profile/portfolio" className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-blue-200 hover:text-blue-700"><span className="inline-flex items-center gap-2"><BookOpen className="h-4 w-4 text-blue-600" />Private portfolio</span><ArrowRight className="h-4 w-4" /></Link>
           <Link href="/profile/evidence" className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-blue-200 hover:text-blue-700"><span className="inline-flex items-center gap-2"><FileCheck2 className="h-4 w-4 text-blue-600" />Official evidence pack</span><ArrowRight className="h-4 w-4" /></Link>
+          <Link href={degreeRiskHref} className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-blue-200 hover:text-blue-700"><span className="inline-flex min-w-0 items-center gap-2"><FileCheck2 className="h-4 w-4 shrink-0 text-blue-600" />{riskAssessment ? `Degree-risk: ${majorLabel(riskAssessment.major_pref)}` : "Degree-risk check"}</span><ArrowRight className="h-4 w-4 shrink-0" /></Link>
         </div>
       </section>
     </main>
