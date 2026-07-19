@@ -1,408 +1,214 @@
 "use client"
 
 import Link from "next/link"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useState, type FormEvent } from "react"
 import type { User } from "@supabase/supabase-js"
 import {
   ArrowRight,
-  Check,
-  ChevronRight,
+  BookOpen,
+  BriefcaseBusiness,
+  CalendarDays,
+  Circle,
   CircleCheck,
-  Compass,
+  DollarSign,
   FileCheck2,
   GraduationCap,
-  LineChart,
-  LockKeyhole,
-  MapPin,
-  Sparkles,
+  Languages,
+  Loader2,
+  NotebookPen,
+  Plus,
   Target,
+  Trash2,
   UserRound,
 } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
 import { majorLabel, resolveView } from "@/lib/degree-risk"
 import { cn } from "@/lib/utils"
 
-type Preferences = {
-  field: string | null
-  goal: string | null
-  budget: string | null
-  english: string | null
-  environment: string | null
-  recommended_country: string | null
-  completed_at: string | null
-}
+type Preferences = { field: string | null; goal: string | null; recommended_country: string | null }
+type SavedOccupation = { id: number; occ_code: string; occ_title: string; country: string }
+type SavedUniversity = { id: number; univ_slug: string; univ_name: string }
+type SavedCourse = { id: number; course_name: string; college_name: string; field_name: string }
+type Assessment = { id: string; major_pref: string; country_pref: string; primary_goal: string; created_at: string }
+type PlanNote = { id: string; entry_date: string; title: string; content: string; created_at: string }
+type PlanTask = { id: string; title: string; notes: string; kind: TaskKind; status: "todo" | "done"; due_date: string | null; completed_at: string | null; created_at: string }
+type PlanBudget = { currency: string; current_savings: number | string; monthly_saving: number | string; target_amount: number | string | null; target_date: string | null }
+type LanguageGoal = { exam_name: string; current_score: number | string | null; target_score: number | string | null; weekly_hours: number | string | null; test_date: string | null }
+type TaskKind = "application" | "english" | "money" | "research" | "personal"
 
-type SavedOccupation = {
-  id: number
-  occ_code: string
-  occ_title: string
-  country: string
-}
-
-type SavedUniversity = {
-  id: number
-  univ_slug: string
-  univ_name: string
-}
-
-type ProgrammeEvidence = { programme_key: string; evidence_type: string }
-type DegreeRiskAssessment = {
-  id: string
-  major_pref: string
-  country_pref: string
-  primary_goal: string
-  created_at: string
-}
-
-type JourneyStep = {
-  title: string
-  description: string
-  complete: boolean
-}
-
-type NextAction = {
-  eyebrow: string
-  title: string
-  description: string
-  completeWhen: string[]
-  href: string
-  label: string
-  icon: typeof Compass
-}
-
-const goalLabel: Record<string, string> = {
-  study: "Study quality",
-  visa: "Post-study work",
-  pr: "Long-term pathway",
-}
-
-const countryLabel: Record<string, string> = {
-  AU: "Australia",
-  CA: "Canada",
-  IE: "Ireland",
-  UK: "United Kingdom",
-  US: "United States",
-}
+const taskLabels: Record<TaskKind, string> = { application: "Application", english: "English", money: "Money", research: "Research", personal: "Personal" }
+const goalLabels: Record<string, string> = { study: "Study quality", visa: "Post-study work", pr: "Long-term pathway" }
+const countryLabels: Record<string, string> = { AU: "Australia", CA: "Canada", IE: "Ireland", UK: "United Kingdom", US: "United States" }
 
 export default function DashboardPage() {
   const supabase = useMemo(() => createClient(), [])
   const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
   const [preferences, setPreferences] = useState<Preferences | null>(null)
   const [occupations, setOccupations] = useState<SavedOccupation[]>([])
   const [universities, setUniversities] = useState<SavedUniversity[]>([])
-  const [courseCount, setCourseCount] = useState(0)
-  const [foundationComplete, setFoundationComplete] = useState(false)
-  const [evidence, setEvidence] = useState<ProgrammeEvidence[]>([])
-  const [riskAssessment, setRiskAssessment] = useState<DegreeRiskAssessment | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [courses, setCourses] = useState<SavedCourse[]>([])
+  const [assessment, setAssessment] = useState<Assessment | null>(null)
+  const [evidenceCount, setEvidenceCount] = useState(0)
+  const [notes, setNotes] = useState<PlanNote[]>([])
+  const [tasks, setTasks] = useState<PlanTask[]>([])
+  const [budget, setBudget] = useState<PlanBudget>({ currency: "AUD", current_savings: 0, monthly_saving: 0, target_amount: null, target_date: null })
+  const [language, setLanguage] = useState<LanguageGoal>({ exam_name: "IELTS", current_score: null, target_score: null, weekly_hours: null, test_date: null })
+  const [noteDraft, setNoteDraft] = useState("")
+  const [taskDraft, setTaskDraft] = useState("")
+  const [taskDate, setTaskDate] = useState("")
+  const [taskKind, setTaskKind] = useState<TaskKind>("application")
+  const [saving, setSaving] = useState<"note" | "task" | "budget" | "language" | null>(null)
 
   useEffect(() => {
     let active = true
-
-    async function loadDashboard(userId: string) {
-      const [preferenceResult, occupationResult, universityResult, courseResult, completionResult, evidenceResult, assessmentResult] = await Promise.all([
-        supabase
-          .from("user_preferences")
-          .select("field, goal, budget, english, environment, recommended_country, completed_at")
-          .eq("id", userId)
-          .maybeSingle(),
-        supabase
-          .from("saved_occupations")
-          .select("id, occ_code, occ_title, country")
-          .eq("user_id", userId)
-          .order("created_at", { ascending: false })
-          .limit(3),
-        supabase
-          .from("saved_universities")
-          .select("id, univ_slug, univ_name")
-          .eq("user_id", userId)
-          .order("created_at", { ascending: false })
-          .limit(3),
-        supabase.from("saved_courses").select("id", { count: "exact", head: true }).eq("user_id", userId),
-        supabase.from("program_completions").select("id", { count: "exact", head: true }).eq("user_id", userId).eq("program_id", "research-foundation-v1"),
-        supabase.from("programme_evidence").select("programme_key, evidence_type").eq("user_id", userId),
+    async function loadWorkspace(userId: string) {
+      const results = await Promise.all([
+        supabase.from("user_preferences").select("field, goal, recommended_country").eq("id", userId).maybeSingle(),
+        supabase.from("saved_occupations").select("id, occ_code, occ_title, country").eq("user_id", userId).order("created_at", { ascending: false }).limit(4),
+        supabase.from("saved_universities").select("id, univ_slug, univ_name").eq("user_id", userId).order("created_at", { ascending: false }).limit(4),
+        supabase.from("saved_courses").select("id, course_name, college_name, field_name").eq("user_id", userId).order("created_at", { ascending: false }).limit(4),
         supabase.from("assessments").select("id, major_pref, country_pref, primary_goal, created_at").eq("user_id", userId).order("created_at", { ascending: false }).limit(1).maybeSingle(),
+        supabase.from("programme_evidence").select("id", { count: "exact", head: true }).eq("user_id", userId),
+        supabase.from("plan_notes").select("id, entry_date, title, content, created_at").eq("user_id", userId).order("entry_date", { ascending: false }).order("created_at", { ascending: false }).limit(6),
+        supabase.from("plan_tasks").select("id, title, notes, kind, status, due_date, completed_at, created_at").eq("user_id", userId).order("status").order("due_date", { ascending: true, nullsFirst: false }).limit(12),
+        supabase.from("plan_budgets").select("currency, current_savings, monthly_saving, target_amount, target_date").eq("user_id", userId).maybeSingle(),
+        supabase.from("plan_language_goals").select("exam_name, current_score, target_score, weekly_hours, test_date").eq("user_id", userId).maybeSingle(),
       ])
-
       if (!active) return
-      setPreferences((preferenceResult.data as Preferences | null) ?? null)
-      setOccupations((occupationResult.data as SavedOccupation[] | null) ?? [])
-      setUniversities((universityResult.data as SavedUniversity[] | null) ?? [])
-      setCourseCount(courseResult.count ?? 0)
-      setFoundationComplete((completionResult.count ?? 0) > 0)
-      setEvidence((evidenceResult.data as ProgrammeEvidence[] | null) ?? [])
-      setRiskAssessment((assessmentResult.data as DegreeRiskAssessment | null) ?? null)
+      setPreferences((results[0].data as Preferences | null) ?? null)
+      setOccupations((results[1].data as SavedOccupation[] | null) ?? [])
+      setUniversities((results[2].data as SavedUniversity[] | null) ?? [])
+      setCourses((results[3].data as SavedCourse[] | null) ?? [])
+      setAssessment((results[4].data as Assessment | null) ?? null)
+      setEvidenceCount(results[5].count ?? 0)
+      setNotes((results[6].data as PlanNote[] | null) ?? [])
+      setTasks((results[7].data as PlanTask[] | null) ?? [])
+      setBudget((results[8].data as PlanBudget | null) ?? { currency: "AUD", current_savings: 0, monthly_saving: 0, target_amount: null, target_date: null })
+      setLanguage((results[9].data as LanguageGoal | null) ?? { exam_name: "IELTS", current_score: null, target_score: null, weekly_hours: null, test_date: null })
       setLoading(false)
     }
-
-    async function claimDeferredAssessment() {
-      try {
-        const assessmentId = window.localStorage.getItem("cc_last_aid")
-        if (!assessmentId) return
-        const response = await fetch("/api/degree-risk/claim", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ assessmentId }),
-        })
-        if (response.ok) window.localStorage.removeItem("cc_last_aid")
-      } catch {
-        // Keep the local id for a later signed-in dashboard visit.
-      }
-    }
-
     async function initialise() {
       const { data } = await supabase.auth.getUser()
       if (!active) return
       const currentUser = data.user ?? null
       setUser(currentUser)
-      if (currentUser) {
-        await claimDeferredAssessment()
-        await loadDashboard(currentUser.id)
-      }
+      if (currentUser) await loadWorkspace(currentUser.id)
       else setLoading(false)
     }
-
     void initialise()
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       const currentUser = session?.user ?? null
       setUser(currentUser)
-      if (currentUser) {
-        setLoading(true)
-        void (async () => {
-          await claimDeferredAssessment()
-          await loadDashboard(currentUser.id)
-        })()
-      } else {
-        setPreferences(null)
-        setOccupations([])
-        setUniversities([])
-        setCourseCount(0)
-        setFoundationComplete(false)
-        setEvidence([])
-        setRiskAssessment(null)
-        setLoading(false)
-      }
+      if (currentUser) { setLoading(true); void loadWorkspace(currentUser.id) }
+      else setLoading(false)
     })
-
-    return () => {
-      active = false
-      subscription.unsubscribe()
-    }
+    return () => { active = false; subscription.unsubscribe() }
   }, [supabase])
 
+  async function saveNote(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    if (!user || !noteDraft.trim()) return
+    setSaving("note")
+    const today = new Date().toISOString().slice(0, 10)
+    const { data } = await supabase.from("plan_notes").insert({ user_id: user.id, entry_date: today, title: "", content: noteDraft.trim() }).select("id, entry_date, title, content, created_at").single()
+    if (data) { setNotes((current) => [data as PlanNote, ...current].slice(0, 6)); setNoteDraft("") }
+    setSaving(null)
+  }
+
+  async function addTask(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    if (!user || !taskDraft.trim()) return
+    setSaving("task")
+    const { data } = await supabase.from("plan_tasks").insert({ user_id: user.id, title: taskDraft.trim(), kind: taskKind, due_date: taskDate || null }).select("id, title, notes, kind, status, due_date, completed_at, created_at").single()
+    if (data) { setTasks((current) => [...current, data as PlanTask].sort(sortTasks)); setTaskDraft(""); setTaskDate("") }
+    setSaving(null)
+  }
+
+  async function toggleTask(task: PlanTask) {
+    const done = task.status !== "done"
+    const { data } = await supabase.from("plan_tasks").update({ status: done ? "done" : "todo", completed_at: done ? new Date().toISOString() : null, updated_at: new Date().toISOString() }).eq("id", task.id).select("id, title, notes, kind, status, due_date, completed_at, created_at").single()
+    if (data) setTasks((current) => current.map((item) => item.id === task.id ? data as PlanTask : item).sort(sortTasks))
+  }
+
+  async function removeTask(taskId: string) {
+    const { error } = await supabase.from("plan_tasks").delete().eq("id", taskId)
+    if (!error) setTasks((current) => current.filter((task) => task.id !== taskId))
+  }
+
+  async function saveBudget(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault(); if (!user) return; setSaving("budget")
+    const next = { user_id: user.id, currency: budget.currency.toUpperCase().slice(0, 3) || "AUD", current_savings: numericValue(budget.current_savings) ?? 0, monthly_saving: numericValue(budget.monthly_saving) ?? 0, target_amount: numericValue(budget.target_amount), target_date: budget.target_date || null, updated_at: new Date().toISOString() }
+    const { data } = await supabase.from("plan_budgets").upsert(next).select("currency, current_savings, monthly_saving, target_amount, target_date").single()
+    if (data) setBudget(data as PlanBudget); setSaving(null)
+  }
+
+  async function saveLanguage(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault(); if (!user) return; setSaving("language")
+    const next = { user_id: user.id, exam_name: language.exam_name.trim().slice(0, 80) || "IELTS", current_score: numericValue(language.current_score), target_score: numericValue(language.target_score), weekly_hours: numericValue(language.weekly_hours), test_date: language.test_date || null, updated_at: new Date().toISOString() }
+    const { data } = await supabase.from("plan_language_goals").upsert(next).select("exam_name, current_score, target_score, weekly_hours, test_date").single()
+    if (data) setLanguage(data as LanguageGoal); setSaving(null)
+  }
+
   if (loading) return <DashboardSkeleton />
-  if (!user) return <GuestDashboard />
+  if (!user) return <GuestPlan />
 
-  const hasDirection = Boolean(preferences?.completed_at)
-  const hasCareer = occupations.length > 0
-  const hasProvider = universities.length > 0
-  const hasCourseComparison = courseCount >= 2
-  const evidenceByProgramme = evidence.reduce<Record<string, Set<string>>>((result, item) => { (result[item.programme_key] ??= new Set()).add(item.evidence_type); return result }, {})
-  const hasEvidencePack = Object.values(evidenceByProgramme).some((types) => types.size >= 3)
-  const stages = { explore: hasDirection, shortlist: hasCareer && hasProvider && hasCourseComparison, verify: hasEvidencePack, plan: foundationComplete && hasEvidencePack, apply: false, career: hasCareer }
-  const completedCount = Object.values(stages).filter(Boolean).length
-  const progress = Math.round((completedCount / 6) * 100)
-  const nextAction = getNextAction({ hasDirection, hasCareer, hasProvider, hasCourseComparison, foundationComplete, hasEvidencePack })
-  const steps: JourneyStep[] = [
-    { title: "Explore", description: "Country, goal and field direction.", complete: stages.explore },
-    { title: "Shortlist", description: "Career, provider and course options saved.", complete: stages.shortlist },
-    { title: "Verify", description: "Official source links saved for one programme.", complete: stages.verify },
-    { title: "Plan", description: "Research Foundation completion recorded.", complete: stages.plan },
-    { title: "Apply", description: "Application evidence will be added when ready.", complete: stages.apply },
-    { title: "Career", description: "Career signal connected to the plan.", complete: stages.career },
-  ]
-  const displayName = (user.user_metadata?.full_name as string | undefined) || (user.user_metadata?.name as string | undefined) || user.email?.split("@")[0] || "there"
+  const name = (user.user_metadata?.full_name as string | undefined) || (user.user_metadata?.name as string | undefined) || user.email?.split("@")[0] || "My"
   const avatarUrl = user.user_metadata?.avatar_url as string | undefined
-  const NextIcon = nextAction.icon
-  const riskResultHref = riskAssessment
-    ? `/degree-risk/result?${new URLSearchParams({ major: riskAssessment.major_pref, view: resolveView(riskAssessment.country_pref), goal: riskAssessment.primary_goal, aid: riskAssessment.id })}`
-    : "/degree-risk"
+  const savings = numericValue(budget.current_savings) ?? 0
+  const monthlySaving = numericValue(budget.monthly_saving) ?? 0
+  const targetAmount = numericValue(budget.target_amount)
+  const remaining = targetAmount == null ? null : Math.max(targetAmount - savings, 0)
+  const monthsToTarget = remaining != null && monthlySaving > 0 ? Math.ceil(remaining / monthlySaving) : null
+  const requiredMonthly = remaining != null && budget.target_date ? requiredMonthlySaving(remaining, budget.target_date) : null
+  const scoreGap = numberOrNull(language.target_score) != null && numberOrNull(language.current_score) != null ? Math.max(numberOrNull(language.target_score)! - numberOrNull(language.current_score)!, 0) : null
+  const assessmentHref = assessment ? `/degree-risk/result?${new URLSearchParams({ major: assessment.major_pref, view: resolveView(assessment.country_pref), goal: assessment.primary_goal, aid: assessment.id })}` : "/degree-risk"
 
-  return (
-    <main className="min-h-screen bg-[#f7f9fc]">
-      <section className="border-b border-slate-200 bg-[radial-gradient(circle_at_top_left,_#e0eeff,_transparent_42%),linear-gradient(180deg,_#ffffff,_#f7f9fc)]">
-        <div className="mx-auto max-w-6xl px-5 pb-10 pt-10 sm:px-6 sm:pb-12 sm:pt-14">
-          <div className="flex flex-col justify-between gap-8 sm:flex-row sm:items-end">
-            <div>
-              <p className="text-sm font-semibold text-blue-700">CampCareer Dashboard</p>
-              <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">Your next step, {displayName}.</h1>
-              <p className="mt-3 max-w-2xl text-base leading-7 text-slate-600">Turn country research into a study and career plan. Your progress is based on useful decisions—not daily logins.</p>
-            </div>
-            <div className="flex flex-wrap gap-2"><Link href="/degree-risk" className="inline-flex items-center gap-2 self-start rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-blue-200 hover:text-blue-700 sm:self-auto">Get policy alerts <ArrowRight className="h-4 w-4" /></Link><Link href="/profile" className="inline-flex items-center gap-2 self-start rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-blue-200 hover:text-blue-700 sm:self-auto">{avatarUrl ? <img src={avatarUrl} alt="" className="h-5 w-5 rounded-full object-cover" /> : <UserRound className="h-4 w-4" />}View profile<ChevronRight className="h-4 w-4" /></Link></div>
-          </div>
-        </div>
-      </section>
+  return <main className="min-h-screen bg-[#f7f9fc]">
+    <header className="border-b border-slate-200 bg-white/90 backdrop-blur">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-5 sm:px-6">
+        <div><h1 className="text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">{name}&apos;s Plan</h1><p className="mt-1 text-sm text-slate-500">{formatLongDate(new Date())}</p></div>
+        <div className="flex items-center gap-2"><a href="#today" className="hidden rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-sm font-semibold text-slate-700 hover:border-blue-200 hover:text-blue-700 sm:inline-flex">New note</a><Link href="/profile" aria-label="Open profile" className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:border-blue-200 hover:text-blue-700">{avatarUrl ? <img src={avatarUrl} alt="" className="h-5 w-5 rounded-full object-cover" /> : <UserRound className="h-4 w-4" />}<span className="hidden sm:inline">Profile</span></Link></div>
+      </div>
+    </header>
 
-      <section className="mx-auto max-w-6xl px-5 py-8 sm:px-6 sm:py-10">
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(320px,.65fr)]">
-          <article className="overflow-hidden rounded-3xl border border-blue-200 bg-white shadow-[0_16px_42px_rgba(15,23,42,.08)]">
-            <div className="border-b border-blue-100 bg-blue-50/70 px-6 py-5 sm:px-7">
-              <div className="flex items-center gap-2 text-sm font-semibold text-blue-700"><Sparkles className="h-4 w-4" />{nextAction.eyebrow}</div>
-              <h2 className="mt-3 text-2xl font-semibold tracking-tight text-slate-950">{nextAction.title}</h2>
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">{nextAction.description}</p>
-            </div>
-            <div className="p-6 sm:p-7">
-              <div className="flex gap-4">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-blue-600 text-white"><NextIcon className="h-5 w-5" /></div>
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold text-slate-950">Move on when you have:</p>
-                  <ul className="mt-3 space-y-2.5">
-                    {nextAction.completeWhen.map((item) => <li key={item} className="flex items-start gap-2.5 text-sm leading-5 text-slate-600"><span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-slate-300"><Check className="h-2.5 w-2.5 text-slate-400" /></span>{item}</li>)}
-                  </ul>
-                </div>
-              </div>
-              <Link href={nextAction.href} className="mt-6 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">
-                {nextAction.label}<ArrowRight className="h-4 w-4" />
-              </Link>
-              <details className="mt-4 text-sm text-slate-600">
-                <summary className="w-fit cursor-pointer font-semibold text-blue-700 hover:text-blue-800">Why this matters?</summary>
-                <p className="mt-2 max-w-2xl leading-6">Each step creates a decision you can revisit: a direction, a real shortlist, official sources, and then a private plan. It is deliberately not a score for browsing or logging in.</p>
-              </details>
-            </div>
-          </article>
+    <section className="mx-auto max-w-7xl px-5 py-7 sm:px-6 sm:py-9">
+      <div className="grid gap-5 xl:grid-cols-[minmax(0,1.3fr)_minmax(350px,.7fr)]">
+        <section id="today" className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7">
+          <div className="flex items-center gap-2"><NotebookPen className="h-5 w-5 text-blue-600" /><h2 className="text-lg font-semibold text-slate-950">Today&apos;s page</h2></div>
+          <form onSubmit={saveNote} className="mt-5"><textarea value={noteDraft} onChange={(event) => setNoteDraft(event.target.value)} rows={5} maxLength={12000} placeholder="Write down what you found, what worries you, or what changed today…" className="w-full resize-y rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-100" /><div className="mt-3 flex justify-end"><button disabled={!noteDraft.trim() || saving === "note"} className="inline-flex items-center gap-2 rounded-xl bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 disabled:opacity-50">{saving === "note" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}Save note</button></div></form>
+          {notes.length > 0 && <div className="mt-7 border-t border-slate-100 pt-5"><p className="text-xs font-semibold uppercase tracking-[.12em] text-slate-400">Recent pages</p><div className="mt-3 space-y-3">{notes.slice(0, 3).map((note) => <article key={note.id} className="rounded-2xl bg-slate-50 px-4 py-3"><p className="text-xs font-medium text-slate-400">{formatShortDate(note.entry_date)}</p><p className="mt-1 whitespace-pre-wrap text-sm leading-6 text-slate-700">{note.content}</p></article>)}</div></div>}
+        </section>
 
-          <aside className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-7">
-            <div className="flex items-center justify-between gap-4"><div><p className="text-sm font-semibold text-slate-950">Path progress</p><p className="mt-1 text-sm text-slate-500">Explore → Shortlist → Verify → Plan → Apply → Career</p></div><span className="text-2xl font-semibold tracking-tight text-slate-950">{progress}%</span></div>
-            <div className="mt-5 h-2 overflow-hidden rounded-full bg-slate-100"><div className="h-full rounded-full bg-blue-600 transition-all" style={{ width: `${progress}%` }} /></div>
-            <ol className="mt-6 space-y-4">
-              {steps.map((step, index) => <li key={step.title} className="flex gap-3"><span className={cn("flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold", step.complete ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-500")}>{step.complete ? <CircleCheck className="h-4 w-4" /> : index + 1}</span><div><p className={cn("text-sm font-semibold", step.complete ? "text-slate-950" : "text-slate-700")}>{step.title}</p><p className="mt-0.5 text-xs leading-5 text-slate-500">{step.description}</p></div></li>)}
-            </ol>
-          </aside>
-        </div>
+        <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7">
+          <div className="flex items-center gap-2"><CalendarDays className="h-5 w-5 text-blue-600" /><h2 className="text-lg font-semibold text-slate-950">Dates to hold</h2></div>
+          <form onSubmit={addTask} className="mt-5 space-y-3"><input value={taskDraft} onChange={(event) => setTaskDraft(event.target.value)} maxLength={240} placeholder="e.g. Confirm September intake deadline" className={inputClass} /><div className="grid grid-cols-[1fr_auto] gap-2"><input type="date" value={taskDate} onChange={(event) => setTaskDate(event.target.value)} className={inputClass} /><select value={taskKind} onChange={(event) => setTaskKind(event.target.value as TaskKind)} className={inputClass}>{(Object.keys(taskLabels) as TaskKind[]).map((kind) => <option key={kind} value={kind}>{taskLabels[kind]}</option>)}</select></div><button disabled={!taskDraft.trim() || saving === "task"} className="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm font-semibold text-slate-700 hover:border-blue-300 hover:text-blue-700 disabled:opacity-50">{saving === "task" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}Add date</button></form>
+          <div className="mt-5 space-y-2">{tasks.slice(0, 5).map((task) => <div key={task.id} className="group flex items-center gap-3 rounded-xl px-2 py-2 hover:bg-slate-50"><button onClick={() => void toggleTask(task)} className="shrink-0 text-slate-400 hover:text-emerald-600" aria-label={task.status === "done" ? "Mark task incomplete" : "Mark task complete"}>{task.status === "done" ? <CircleCheck className="h-5 w-5 text-emerald-600" /> : <Circle className="h-5 w-5" />}</button><div className="min-w-0 flex-1"><p className={cn("truncate text-sm font-medium", task.status === "done" ? "text-slate-400 line-through" : "text-slate-800")}>{task.title}</p><p className="mt-0.5 text-xs text-slate-400">{task.due_date ? formatShortDate(task.due_date) : "No date"} · {taskLabels[task.kind]}</p></div><button onClick={() => void removeTask(task.id)} className="opacity-0 transition group-hover:opacity-100 text-slate-300 hover:text-red-600" aria-label="Remove task"><Trash2 className="h-4 w-4" /></button></div>)}{tasks.length === 0 && <p className="rounded-2xl bg-slate-50 px-4 py-5 text-sm text-slate-500">Keep only the dates that would change your plan.</p>}</div>
+        </section>
+      </div>
 
-        <div className="mt-6 grid gap-6 lg:grid-cols-2">
-          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-7">
-            <div className="flex items-center gap-2"><Target className="h-5 w-5 text-blue-600" /><h2 className="text-lg font-semibold text-slate-950">Your current direction</h2></div>
-            {hasDirection ? (
-              <dl className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
-                <Detail label="Goal" value={goalLabel[preferences?.goal ?? ""] ?? "Personal plan"} />
-                <Detail label="Field" value={preferences?.field || "Still exploring"} />
-                <Detail label="Country" value={countryLabel[preferences?.recommended_country ?? ""] ?? "Comparing options"} />
-              </dl>
-            ) : (
-              <EmptyState icon={Compass} text="Complete the short planning check-in to create a starting direction." href="/onboarding" label="Start planning" />
-            )}
-          </section>
+      <div className="mt-5 grid gap-5 lg:grid-cols-2">
+        <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7"><div className="flex items-center gap-2"><DollarSign className="h-5 w-5 text-emerald-600" /><h2 className="text-lg font-semibold text-slate-950">Money plan</h2></div><form onSubmit={saveBudget} className="mt-5 grid gap-3 sm:grid-cols-2"><Field label="Currency"><input value={budget.currency} onChange={(event) => setBudget({ ...budget, currency: event.target.value.toUpperCase() })} maxLength={3} className={inputClass} /></Field><Field label="Saved now"><input inputMode="decimal" value={budget.current_savings ?? ""} onChange={(event) => setBudget({ ...budget, current_savings: event.target.value })} placeholder="0" className={inputClass} /></Field><Field label="Monthly saving"><input inputMode="decimal" value={budget.monthly_saving ?? ""} onChange={(event) => setBudget({ ...budget, monthly_saving: event.target.value })} placeholder="0" className={inputClass} /></Field><Field label="Target fund"><input inputMode="decimal" value={budget.target_amount ?? ""} onChange={(event) => setBudget({ ...budget, target_amount: event.target.value })} placeholder="e.g. 45000" className={inputClass} /></Field><Field label="Target date"><input type="date" value={budget.target_date ?? ""} onChange={(event) => setBudget({ ...budget, target_date: event.target.value })} className={inputClass} /></Field><div className="flex items-end"><button disabled={saving === "budget"} className="inline-flex h-10 items-center gap-2 rounded-xl bg-emerald-600 px-4 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50">{saving === "budget" && <Loader2 className="h-4 w-4 animate-spin" />}Save money plan</button></div></form><div className="mt-5 grid gap-3 sm:grid-cols-3"><Insight label="Still to save" value={remaining == null ? "Set a target" : money(remaining, budget.currency)} /><Insight label="At this pace" value={monthsToTarget == null ? "Add monthly saving" : monthsToTarget === 0 ? "Ready" : `${monthsToTarget} months`} /><Insight label="Needed each month" value={requiredMonthly == null ? "Add a target date" : money(requiredMonthly, budget.currency)} /></div></section>
 
-          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-7">
-            <div className="flex items-center gap-2"><LineChart className="h-5 w-5 text-blue-600" /><h2 className="text-lg font-semibold text-slate-950">Your shortlist</h2></div>
-            {hasCareer || hasProvider ? (
-              <div className="mt-5 grid gap-4 sm:grid-cols-2">
-                <SavedList icon={MapPin} title="Careers" items={occupations.map((occupation) => occupation.occ_title || occupation.occ_code)} empty="No saved careers yet" href="/au/jobs" />
-                <SavedList icon={GraduationCap} title="Providers" items={universities.map((university) => university.univ_name || university.univ_slug)} empty="No saved providers yet" href="/au/study" />
-              </div>
-            ) : (
-              <EmptyState icon={Target} text="Save a career or provider to turn research into a comparable shortlist." href="/au/majors" label="Explore majors" />
-            )}
-          </section>
+        <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7"><div className="flex items-center gap-2"><Languages className="h-5 w-5 text-violet-600" /><h2 className="text-lg font-semibold text-slate-950">English plan</h2></div><form onSubmit={saveLanguage} className="mt-5 grid gap-3 sm:grid-cols-2"><Field label="Exam"><input value={language.exam_name} onChange={(event) => setLanguage({ ...language, exam_name: event.target.value })} maxLength={80} className={inputClass} /></Field><Field label="Current score"><input inputMode="decimal" value={language.current_score ?? ""} onChange={(event) => setLanguage({ ...language, current_score: event.target.value })} placeholder="e.g. 6.0" className={inputClass} /></Field><Field label="Target score"><input inputMode="decimal" value={language.target_score ?? ""} onChange={(event) => setLanguage({ ...language, target_score: event.target.value })} placeholder="e.g. 7.0" className={inputClass} /></Field><Field label="Study hours / week"><input inputMode="decimal" value={language.weekly_hours ?? ""} onChange={(event) => setLanguage({ ...language, weekly_hours: event.target.value })} placeholder="e.g. 8" className={inputClass} /></Field><Field label="Test date"><input type="date" value={language.test_date ?? ""} onChange={(event) => setLanguage({ ...language, test_date: event.target.value })} className={inputClass} /></Field><div className="flex items-end"><button disabled={saving === "language"} className="inline-flex h-10 items-center gap-2 rounded-xl bg-violet-600 px-4 text-sm font-semibold text-white hover:bg-violet-700 disabled:opacity-50">{saving === "language" && <Loader2 className="h-4 w-4 animate-spin" />}Save English plan</button></div></form><div className="mt-5 rounded-2xl bg-violet-50 px-4 py-3 text-sm text-violet-950">{scoreGap == null ? "Add a current and target score to see the gap you are closing." : scoreGap === 0 ? "Your current score meets the target you entered." : `${language.exam_name || "Your exam"}: ${scoreGap.toFixed(1)} band to close.`}{language.test_date && ` Test date: ${formatShortDate(language.test_date)}.`}</div></section>
+      </div>
 
-          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-7">
-            <div className="flex items-center gap-2"><FileCheck2 className="h-5 w-5 text-blue-600" /><h2 className="text-lg font-semibold text-slate-950">Your degree-risk check</h2></div>
-            {riskAssessment ? (
-              <div className="mt-5 rounded-2xl bg-blue-50 p-4">
-                <p className="text-sm font-semibold text-slate-950">{majorLabel(riskAssessment.major_pref)} · {riskAssessment.country_pref}</p>
-                <p className="mt-1 text-sm leading-6 text-slate-600">Saved {new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric", year: "numeric" }).format(new Date(riskAssessment.created_at))}. This is your private decision check, not an admissions or visa outcome.</p>
-                <Link href={riskResultHref} className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700 hover:text-blue-800">Open saved result <ArrowRight className="h-4 w-4" /></Link>
-              </div>
-            ) : (
-              <EmptyState icon={FileCheck2} text="Score one major against work, visa, market, AI and ROI signals, then keep the result in your private plan." href="/degree-risk" label="Check degree risk" />
-            )}
-          </section>
-        </div>
-
-        <aside className="mt-6 rounded-3xl border border-amber-200 bg-amber-50/70 p-5 text-sm leading-6 text-amber-950 sm:px-6">
-          <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
-            <div><p className="font-semibold">Evidence, not XP</p><p className="mt-1 text-amber-900">Path level is based on saved planning evidence. Official links improve your own Verify pack; they are not represented as CampCareer or regulator approval.</p></div>
-            <Link href="/profile/achievements" className="inline-flex shrink-0 items-center gap-1.5 font-semibold text-amber-900 hover:text-amber-950">View milestones <ArrowRight className="h-4 w-4" /></Link>
-          </div>
-        </aside>
-      </section>
-    </main>
-  )
+      <section className="mt-5 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7"><div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"><div><div className="flex items-center gap-2"><BookOpen className="h-5 w-5 text-blue-600" /><h2 className="text-lg font-semibold text-slate-950">Research library</h2></div><p className="mt-1 text-sm text-slate-500">Saved choices and official evidence, kept beside your own notes.</p></div><Link href="/profile/evidence" className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-700 hover:text-blue-800">Official links <ArrowRight className="h-4 w-4" /></Link></div><div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4"><ResearchCard icon={BriefcaseBusiness} title="Careers" items={occupations.map((item) => item.occ_title || item.occ_code)} href="/au/jobs" empty="No careers saved" /><ResearchCard icon={GraduationCap} title="Schools" items={universities.map((item) => item.univ_name || item.univ_slug)} href="/au/study" empty="No schools saved" /><ResearchCard icon={Target} title="Courses" items={courses.map((item) => item.course_name || item.field_name || item.college_name)} href="/au/study" empty="No courses saved" /><ResearchCard icon={FileCheck2} title="Checks" items={[assessment ? `Degree risk · ${majorLabel(assessment.major_pref)}` : "No degree-risk result", evidenceCount ? `${evidenceCount} official links saved` : "No official links saved"]} href={assessment ? assessmentHref : "/degree-risk"} empty="" /></div>{preferences && <div className="mt-5 rounded-2xl bg-slate-50 px-4 py-3 text-sm text-slate-600">Current direction: <strong className="text-slate-800">{countryLabels[preferences.recommended_country ?? ""] ?? "Comparing countries"}</strong>{preferences.field && ` · ${preferences.field}`}{preferences.goal && ` · ${goalLabels[preferences.goal] ?? preferences.goal}`}</div>}</section>
+    </section>
+  </main>
 }
 
-function getNextAction({ hasDirection, hasCareer, hasProvider, hasCourseComparison, foundationComplete, hasEvidencePack }: { hasDirection: boolean; hasCareer: boolean; hasProvider: boolean; hasCourseComparison: boolean; foundationComplete: boolean; hasEvidencePack: boolean }): NextAction {
-  if (!hasDirection) return {
-    eyebrow: "Start your plan",
-    title: "Choose your study direction",
-    description: "A five-question check-in gives your dashboard a goal, budget and starting country to work from.",
-    completeWhen: ["Choose your main goal", "Set a realistic budget range", "Receive a starting country direction"],
-    href: "/onboarding",
-    label: "Start the check-in",
-    icon: Compass,
-  }
-  if (!hasCareer) return {
-    eyebrow: "Step 2 of 3",
-    title: "Save one career you would genuinely consider",
-    description: "A field becomes useful when you can connect it to a role, its work conditions and its demand signals.",
-    completeWhen: ["Explore a relevant major category", "Open a career or occupation you would consider", "Save it to your shortlist"],
-    href: "/au/jobs",
-    label: "Explore Australian careers",
-    icon: Target,
-  }
-  if (!hasProvider) return {
-    eyebrow: "Step 3 of 3",
-    title: "Add a provider to your shortlist",
-    description: "Compare a real provider before you treat a course title, tuition estimate or ranking as a decision.",
-    completeWhen: ["Search a field or state", "Review tuition and graduate-outcome context", "Save one provider to compare later"],
-    href: "/au/study",
-    label: "Browse Australian providers",
-    icon: GraduationCap,
-  }
-  if (!hasCourseComparison) return {
-    eyebrow: "Shortlist step",
-    title: "Compare two real course options",
-    description: "A provider name is not enough. Save two course options so fees, requirements and career outcomes can be compared.",
-    completeWhen: ["Save a first course option", "Save a second course option", "Review the trade-off you would make"],
-    href: "/roi-explorer",
-    label: "Compare courses",
-    icon: LineChart,
-  }
-  if (!hasEvidencePack) return {
-    eyebrow: "Verify step",
-    title: "Save official evidence for one programme",
-    description: "Your shortlist still needs the official course, registration and fee sources behind a real decision.",
-    completeWhen: ["Official course page", "CRICOS, registration or regulator source", "Tuition or entry-requirement source"],
-    href: "/profile/evidence",
-    label: "Verify programmes",
-    icon: FileCheck2,
-  }
-  if (!foundationComplete) return {
-    eyebrow: "Plan step",
-    title: "Confirm your research foundation",
-    description: "Your direction, shortlist and official sources are ready. Confirm a server-checked completion record before you create a portfolio.",
-    completeWhen: ["One planning direction", "A career and provider shortlist", "Official evidence saved for one programme"],
-    href: "/profile/programs",
-    label: "Confirm programme",
-    icon: Target,
-  }
-  return {
-    eyebrow: "Evidence-ready plan",
-    title: "Use your private portfolio to plan the application",
-    description: "You now have a documented research base. Keep the next application decisions private and evidence-led.",
-    completeWhen: ["Review the programme evidence pack", "Print or save your portfolio", "Set the first application deadline"],
-    href: "/profile/portfolio",
-    label: "Open portfolio",
-    icon: FileCheck2,
-  }
-}
+function ResearchCard({ icon: Icon, title, items, href, empty }: { icon: typeof BookOpen; title: string; items: string[]; href: string; empty: string }) { return <article className="rounded-2xl bg-slate-50 p-4"><div className="flex items-center gap-2 text-sm font-semibold text-slate-900"><Icon className="h-4 w-4 text-blue-600" />{title}</div><div className="mt-3 min-h-16 space-y-1.5">{items.slice(0, 2).map((item) => <p key={item} className="truncate text-sm text-slate-600" title={item}>{item}</p>)}{items.length === 0 && empty && <p className="text-sm text-slate-400">{empty}</p>}</div><Link href={href} className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-blue-700 hover:text-blue-800">Open <ArrowRight className="h-3.5 w-3.5" /></Link></article> }
+function Field({ label, children }: { label: string; children: React.ReactNode }) { return <label className="block text-xs font-semibold text-slate-500">{label}{children}</label> }
+function Insight({ label, value }: { label: string; value: string }) { return <div className="rounded-2xl bg-emerald-50 px-3.5 py-3"><p className="text-xs font-medium text-emerald-800">{label}</p><p className="mt-1 text-sm font-semibold text-emerald-950">{value}</p></div> }
+function GuestPlan() { return <main className="flex min-h-[70vh] items-center justify-center bg-[#f7f9fc] px-5"><section className="max-w-md rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm"><NotebookPen className="mx-auto h-7 w-7 text-blue-600" /><h1 className="mt-4 text-2xl font-semibold tracking-tight text-slate-950">Keep your plan in one place.</h1><p className="mt-2 text-sm leading-6 text-slate-600">Write notes, set dates, work through your budget and keep the research you save in CampCareer together.</p><Link href="/login?next=/dashboard" className="mt-6 inline-flex rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white">Sign in to start</Link></section></main> }
+function DashboardSkeleton() { return <main className="min-h-screen bg-[#f7f9fc]"><div className="mx-auto max-w-7xl px-5 py-10 sm:px-6"><div className="h-10 w-48 animate-pulse rounded-xl bg-slate-200" /><div className="mt-8 grid gap-5 xl:grid-cols-2"><div className="h-96 animate-pulse rounded-3xl bg-slate-200" /><div className="h-96 animate-pulse rounded-3xl bg-slate-200" /></div></div></main> }
 
-function Detail({ label, value }: { label: string; value: string }) {
-  return <div className="rounded-2xl bg-slate-50 px-3.5 py-3"><dt className="text-xs font-medium text-slate-500">{label}</dt><dd className="mt-1 truncate text-sm font-semibold text-slate-900" title={value}>{value}</dd></div>
-}
-
-function SavedList({ icon: Icon, title, items, empty, href }: { icon: typeof MapPin; title: string; items: string[]; empty: string; href: string }) {
-  return <div className="rounded-2xl bg-slate-50 p-4"><div className="flex items-center gap-2 text-sm font-semibold text-slate-800"><Icon className="h-4 w-4 text-blue-600" />{title}</div>{items.length ? <ul className="mt-3 space-y-2">{items.slice(0, 2).map((item) => <li key={item} className="truncate text-sm text-slate-600" title={item}>{item}</li>)}</ul> : <p className="mt-3 text-sm text-slate-500">{empty}</p>}<Link href={href} className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-blue-700 hover:text-blue-800">Manage shortlist <ArrowRight className="h-3.5 w-3.5" /></Link></div>
-}
-
-function EmptyState({ icon: Icon, text, href, label }: { icon: typeof Compass; text: string; href: string; label: string }) {
-  return <div className="mt-5 rounded-2xl bg-slate-50 p-4"><div className="flex gap-3"><Icon className="mt-0.5 h-5 w-5 shrink-0 text-slate-400" /><div><p className="text-sm leading-6 text-slate-600">{text}</p><Link href={href} className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-blue-700 hover:text-blue-800">{label}<ArrowRight className="h-4 w-4" /></Link></div></div></div>
-}
-
-function GuestDashboard() {
-  return <main className="min-h-screen bg-[#f7f9fc]"><section className="mx-auto max-w-3xl px-5 py-16 text-center sm:py-24"><div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-100 text-blue-700"><LockKeyhole className="h-6 w-6" /></div><p className="mt-6 text-sm font-semibold text-blue-700">CampCareer Dashboard</p><h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">Make your next move clearer.</h1><p className="mx-auto mt-4 max-w-xl text-base leading-7 text-slate-600">Save your direction, careers and providers in one private workspace. Your next step is based on what you have already decided—not a generic checklist.</p><div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row"><Link href="/login" className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700">Sign in to start <ArrowRight className="h-4 w-4" /></Link><Link href="/au/majors" className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 hover:border-blue-200 hover:text-blue-700">Explore majors</Link></div></section></main>
-}
-
-function DashboardSkeleton() {
-  return <main className="min-h-screen bg-[#f7f9fc]"><div className="mx-auto max-w-6xl px-5 py-14 sm:px-6"><div className="h-5 w-36 animate-pulse rounded bg-slate-200" /><div className="mt-3 h-10 w-80 max-w-full animate-pulse rounded bg-slate-200" /><div className="mt-10 grid gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(320px,.65fr)]"><div className="h-80 animate-pulse rounded-3xl bg-slate-200" /><div className="h-80 animate-pulse rounded-3xl bg-slate-200" /></div></div></main>
-}
+const inputClass = "mt-1.5 h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-blue-400 focus:ring-4 focus:ring-blue-100"
+function numericValue(value: number | string | null) { if (value === null || value === "") return null; const number = Number(String(value).replace(/,/g, "")); return Number.isFinite(number) && number >= 0 ? number : null }
+function numberOrNull(value: number | string | null) { return numericValue(value) }
+function sortTasks(a: PlanTask, b: PlanTask) { if (a.status !== b.status) return a.status === "todo" ? -1 : 1; if (!a.due_date) return 1; if (!b.due_date) return -1; return a.due_date.localeCompare(b.due_date) }
+function requiredMonthlySaving(remaining: number, targetDate: string) { const months = Math.ceil((new Date(`${targetDate}T00:00:00`).getTime() - Date.now()) / (1000 * 60 * 60 * 24 * 30.44)); return months > 0 ? remaining / months : null }
+function money(value: number, currency: string) { try { return new Intl.NumberFormat(undefined, { style: "currency", currency: currency || "AUD", maximumFractionDigits: 0 }).format(value) } catch { return `${currency || "AUD"} ${Math.round(value).toLocaleString()}` } }
+function formatShortDate(value: string) { return new Intl.DateTimeFormat(undefined, { day: "numeric", month: "short", year: "numeric" }).format(new Date(`${value.slice(0, 10)}T00:00:00`)) }
+function formatLongDate(value: Date) { return new Intl.DateTimeFormat(undefined, { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(value) }
