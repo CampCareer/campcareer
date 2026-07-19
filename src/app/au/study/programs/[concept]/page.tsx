@@ -14,8 +14,9 @@ import {
   ShieldCheck,
 } from "lucide-react"
 import { getStudyConcept, STUDY_CONCEPTS } from "@/data/study-concepts"
+import { getAuVocationalProgramShortlistItem } from "@/data/au-vocational-program-shortlist"
 import { supabaseAdmin } from "@/lib/supabase-admin"
-import { getOfficialCourseRegistry } from "@/lib/study-product/course-offerings"
+import type { CourseOffering } from "@/lib/study-product/types"
 import { aqfLabel } from "@/lib/au-universities"
 import { pageMetadata } from "@/lib/seo"
 
@@ -43,7 +44,9 @@ type CourseRow = {
   courseType: string | null
   durationYears: number | null
   tuitionFeeAud: number | null
-  cricosUrl: string | null
+  officialUrl: string
+  sourceLabel: string
+  eligibilityNote: string | null
   providerName: string
   campus: string | null
   state: string | null
@@ -91,8 +94,8 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const concept = getStudyConcept(slug)
   if (!concept) return { title: "Program not found" }
   return pageMetadata({
-    title: `${concept.label} programs in Australia — Verified CRICOS courses`,
-    description: `Browse verified ${concept.label} programs across qualification levels in Australia. Compare certificate, diploma, bachelor and master courses from CRICOS-registered providers.`,
+    title: `${concept.label} programs in Australia — Official course sources`,
+    description: `Browse ${concept.label} programs across qualification levels in Australia. Compare active CRICOS courses and reviewed official provider or national training-register pathways.`,
     path: `/au/study/programs/${concept.slug}`,
   })
 }
@@ -131,8 +134,20 @@ async function fetchCourses(conceptId: string): Promise<CourseRow[]> {
     error = fallback.error
   }
 
-  if (error || !data?.length) return []
+  const registryCourses = error || !data?.length ? [] : await mapRegistryCourses(data)
+  const vocationalProgram = getAuVocationalProgramShortlistItem(concept.id)
+  const curatedCourse = vocationalProgram ? mapVocationalProgram(vocationalProgram) : null
 
+  // Trade and apprenticeship programmes are often not CRICOS offerings, so
+  // they do not appear in the international-course table. Keep a separately
+  // verified official provider/training-register source instead of showing 0.
+  return [
+    ...(curatedCourse ? [curatedCourse] : []),
+    ...registryCourses,
+  ].filter((course, index, all) => all.findIndex((other) => other.officialUrl === course.officialUrl || (other.courseCode && other.courseCode === course.courseCode && other.providerName === course.providerName)) === index)
+}
+
+async function mapRegistryCourses(data: Array<Record<string, unknown>>): Promise<CourseRow[]> {
   const providerIds = Array.from(new Set(data.map((row) => row.institution_id as string)))
   const { data: providers } = await supabaseAdmin
     .from("colleges_au")
@@ -150,13 +165,49 @@ async function fetchCourses(conceptId: string): Promise<CourseRow[]> {
       courseType: row.course_type as string | null,
       durationYears: row.duration_years as number | null,
       tuitionFeeAud: row.tuition_fee_aud as number | null,
-      cricosUrl: row.cricos_url as string,
+      officialUrl: row.cricos_url as string,
+      sourceLabel: "Australian Government CRICOS",
+      eligibilityNote: null,
       providerName: (provider?.name as string | undefined) ?? humanizeSlug(row.institution_id as string),
       campus: [provider?.city, provider?.state].filter(Boolean).join(", ") || null,
       state: (provider?.state as string | null) ?? null,
       syncedAt: String(row.synced_at ?? "2026-04-01"),
     }
   })
+}
+
+function mapVocationalProgram(program: CourseOffering): CourseRow {
+  return {
+    id: program.id,
+    title: program.title,
+    courseCode: program.courseCode ?? null,
+    aqfLevel: aqfLevelFromQualification(program.qualificationLevel),
+    courseType: program.qualificationLevel ?? null,
+    durationYears: program.durationMonths ? program.durationMonths / 12 : null,
+    tuitionFeeAud: program.tuitionCurrency === "AUD" ? program.tuitionAmount ?? null : null,
+    officialUrl: program.officialUrl,
+    sourceLabel: program.sourceName,
+    eligibilityNote: program.eligibilityNote ?? null,
+    providerName: program.providerName,
+    campus: program.campus ?? null,
+    state: program.campus?.match(/\b(ACT|NSW|NT|QLD|SA|TAS|VIC|WA)\b/)?.[1] ?? null,
+    syncedAt: program.lastVerifiedAt,
+  }
+}
+
+function aqfLevelFromQualification(value: string | undefined) {
+  if (!value) return null
+  if (/certificate\s+i\b/i.test(value)) return 1
+  if (/certificate\s+ii\b/i.test(value)) return 2
+  if (/certificate\s+iii\b/i.test(value)) return 3
+  if (/certificate\s+iv\b/i.test(value)) return 4
+  if (/graduate certificate/i.test(value)) return 8
+  if (/graduate diploma/i.test(value)) return 8
+  if (/advanced diploma/i.test(value)) return 6
+  if (/diploma/i.test(value)) return 5
+  if (/bachelor/i.test(value)) return 7
+  if (/master/i.test(value)) return 9
+  return null
 }
 
 export default async function AuStudyProgramsPage({
@@ -172,8 +223,6 @@ export default async function AuStudyProgramsPage({
   if (!concept) notFound()
 
   const allCourses = await fetchCourses(concept.id)
-  const registry = getOfficialCourseRegistry("AU")
-
   const activeLevel = isQualGroupKey(sp.level) ? sp.level : null
   const activeState = sp.state && AU_STATES.includes(sp.state.toUpperCase() as typeof AU_STATES[number])
     ? sp.state.toUpperCase()
@@ -220,21 +269,21 @@ export default async function AuStudyProgramsPage({
           <div className="mt-7 flex flex-col justify-between gap-6 md:flex-row md:items-end">
             <div>
               <p className="text-sm font-bold text-blue-600">
-                Australia · Verified CRICOS programs
+                Australia · Official programme sources
               </p>
               <h1 className="mt-2 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
                 {concept.label} programs
               </h1>
               <p className="mt-4 max-w-3xl text-base leading-7 text-slate-600">
-                Browse verified {concept.label} courses across all qualification
-                levels. Only offerings traceable to the official CRICOS registry
-                are shown. Confirm current intake and eligibility directly with
-                the provider.
+                Browse {concept.label} courses across all qualification levels.
+                We show active CRICOS offerings plus reviewed official provider
+                and national training-register pathways where CRICOS does not
+                cover an apprenticeship or domestic trade route.
               </p>
             </div>
             <div className="inline-flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-bold text-emerald-700">
               <BadgeCheck className="h-5 w-5" />
-              {filteredCourses.length} verified program{filteredCourses.length !== 1 ? "s" : ""}
+              {filteredCourses.length} official programme source{filteredCourses.length !== 1 ? "s" : ""}
             </div>
           </div>
         </div>
@@ -377,16 +426,18 @@ export default async function AuStudyProgramsPage({
                 </div>
 
                 <div className="mt-5 rounded-xl bg-emerald-50 px-3 py-2.5 text-xs leading-5 text-emerald-800">
-                  <strong>Australian Government CRICOS</strong> · Verified {formatDate(course.syncedAt)}
+                  <strong>{course.sourceLabel}</strong> · Checked {formatDate(course.syncedAt)}
                 </div>
 
+                {course.eligibilityNote && <p className="mt-3 rounded-xl bg-amber-50 px-3 py-2.5 text-xs leading-5 text-amber-900">{course.eligibilityNote}</p>}
+
                 <a
-                  href={course.cricosUrl ?? undefined}
+                  href={course.officialUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-bold text-white hover:bg-blue-700"
                 >
-                  Open official course page
+                  Open official programme page
                   <ExternalLink className="h-4 w-4" />
                 </a>
               </article>
@@ -401,19 +452,9 @@ export default async function AuStudyProgramsPage({
             <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-slate-600">
               {(activeLevel || activeState)
                 ? `No verified ${activeGroup?.label ?? concept.label} programs${activeState ? ` in ${activeState}` : ""} are currently available. Try different filters or check the official registry.`
-                : `No verified ${concept.label} programs are available yet. Use the official registry below for the current catalogue.`}
+                : `No official ${concept.label} programme source is available yet. Check the national registry while we add a provider-verified pathway.`}
             </p>
-            {registry && (
-              <a
-                href={registry.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-6 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-bold text-white hover:bg-blue-700"
-              >
-                {registry.name}
-                <ExternalLink className="h-4 w-4" />
-              </a>
-            )}
+            <a href="https://cricos.education.gov.au/Course/CourseSearch.aspx" target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-bold text-white hover:bg-blue-700">Search CRICOS <ExternalLink className="h-4 w-4" /></a>
           </div>
         )}
 

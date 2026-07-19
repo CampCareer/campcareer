@@ -56,8 +56,8 @@ export const AU_VOCATIONAL_PROGRAM_SHORTLIST: AuVocationalProgram[] = [
     registrationStatus: "CURRENT",
     officialUrl: "https://www.tafensw.edu.au/course-areas/building-and-construction-trades/courses/certificate-iii-in-wall-and-floor-tiling--CPC31320-01",
     sourceName: "TAFE NSW course page",
-    lastVerifiedAt: "2026-07-18",
-    eligibilityNote: "Usually completed through an apprenticeship. State registration or licensing may apply after training.",
+    lastVerifiedAt: "2026-07-19",
+    eligibilityNote: "TAFE NSW lists the qualification, but its current page shows 0 study and location options. Usually completed through an apprenticeship or an approved experienced-worker route; confirm a live intake and NSW licensing steps before relying on this pathway.",
   },
   {
     conceptId: "electrical-trade",
