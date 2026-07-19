@@ -6,6 +6,7 @@ import { useMemo, useState } from "react"
 import { ArrowRight, Building2, Search } from "lucide-react"
 import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
 import { STUDY_CATEGORIES } from "@/data/study-concepts"
+import { AU_MAJOR_CATEGORY_HIGHLIGHTS } from "@/data/au-major-category-highlights"
 import { localizePath } from "@/lib/i18n/config"
 import { IconPicker, type PickerOption, countryFlag } from "@/components/ui/icon-picker"
 import { getStudyCategoryVisual } from "@/components/ui/au-career-category-visuals"
@@ -23,15 +24,23 @@ export function MajorsHub({ locale = "en" }: { locale?: "en" | "ko" }) {
       </div>
     </section>
     <section className="bg-white"><main className="mx-auto max-w-7xl px-4 pb-12 pt-12 sm:px-6 sm:pb-16 sm:pt-14">
-      <h2 className="text-xl font-semibold tracking-tight text-slate-950">Explore all major categories</h2>
+      <h2 className="text-xl font-semibold tracking-tight text-slate-950">Explore Australian major categories</h2>
+      <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">Compare the career signals behind each study area before choosing a major.</p>
       <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">{STUDY_CATEGORIES.map((category) => {
         const { Icon, tone } = getStudyCategoryVisual(category.id)
-        return <Link key={category.id} href={`${localizePath("/countries/search", locale)}?${new URLSearchParams({ country: "everywhere", category: category.id })}`} className="group rounded-2xl border border-slate-200 bg-white p-5 transition-all hover:border-blue-300 hover:shadow-md">
+        const highlight = AU_MAJOR_CATEGORY_HIGHLIGHTS[category.id]
+        return <Link key={category.id} href={`${localizePath("/au/majors", locale)}?${new URLSearchParams({ category: category.id })}`} className="group rounded-2xl border border-slate-200 bg-white p-5 transition-all hover:border-blue-300 hover:shadow-md">
           <span className={`grid size-11 place-items-center rounded-xl ${tone}`}><Icon className="size-5" strokeWidth={2.2} /></span>
           <h3 className="mt-5 text-base font-semibold leading-6 text-slate-950">{category.label}</h3>
-          <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-slate-600 group-hover:text-blue-700">Explore majors <ArrowRight className="h-4 w-4" /></span>
+          <p className="mt-2 min-h-10 text-sm leading-5 text-slate-600">{highlight.demand}</p>
+          <div className="mt-4 border-t border-slate-100 pt-3 text-xs font-semibold text-slate-700">
+            <p>{highlight.salary}</p>
+            <p className="mt-1 text-blue-700">{highlight.outlook}</p>
+          </div>
+          <span className="mt-4 inline-flex text-sm font-semibold text-slate-600 group-hover:text-blue-700">Search</span>
         </Link>
       })}</div>
+      <p className="mt-5 text-xs leading-5 text-slate-500">Australia indicators use representative occupations mapped to each study area. Pay is indicative median occupation pay, not a graduate salary; outlook is a mapped 2035 projection.</p>
     </main></section>
   </div>
 }
@@ -66,7 +75,7 @@ function MajorFinder({ locale }: { locale: "en" | "ko" }) {
     <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
       <div className="flex-1"><IconPicker name="country" label="Where" value={country} options={countryOptions} onChange={setCountry} searchPlaceholder="Search countries" testId="major-country" /></div>
       <div className="flex-1"><IconPicker name="category" label="Major category" value={category} options={categoryOptions} onChange={setCategory} searchPlaceholder="Search categories" testId="major-category" /></div>
-      <button className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700"><Search className="h-4 w-4" />Explore majors</button>
+      <button className="inline-flex h-12 items-center justify-center rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700">Search</button>
     </div>
   </form>
 }

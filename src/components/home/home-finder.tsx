@@ -78,7 +78,7 @@ export function HomeFinder({ locale = "en" }: { locale?: Locale }) {
               <div className="flex-1"><IconPicker name="country" label={t.country} value={country} options={countryOptions} onChange={setCountry} searchPlaceholder={isKo ? "국가 검색" : "Search countries"} testId="country" /></div>
               <div className="flex-1"><IconPicker name="category" label={t.major} value={category} options={majorOptions} onChange={setCategory} searchPlaceholder={isKo ? "전공 카테고리 검색" : "Search categories"} testId="major" /></div>
               <div className="flex-1"><IconPicker name="goal" label={t.goal} value={goal} options={goalOptions} onChange={(value) => setGoal(value as LandingGoalId)} testId="goal" /></div>
-              <button type="submit" className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700"><span>{t.submit}</span><ArrowRight className="h-4 w-4" /></button>
+              <button type="submit" className="inline-flex h-12 items-center justify-center rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700"><span>{t.submit}</span></button>
             </div>
           </form>
 
