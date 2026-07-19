@@ -20,7 +20,6 @@ import {
   prBadge,
 } from "@/lib/au-major-signals"
 import signalsSnapshot from "@/data/au-major-signals.json"
-import { AU_CONCEPT_OCCUPATIONS } from "@/data/au-major-occupation-map"
 import { getLaunchCountry } from "@/data/launch-countries"
 import { localizePath } from "@/lib/i18n/config"
 import { useLocale } from "@/lib/i18n/locale-provider"
@@ -46,6 +45,41 @@ const SIGNAL_MAP = new Map(SIGNALS.map((s) => [s.concept_id, s]))
 
 function getSignal(conceptId: string): AuMajorSignal | null {
   return SIGNAL_MAP.get(conceptId) ?? null
+}
+
+type CategorySignalSummary = {
+  salaryMedian: number | null
+  outlook2030: number | null
+  outlook2035: number | null
+  shortageCount: number
+  coverageCount: number
+}
+
+function average(values: Array<number | null>) {
+  const available = values.filter((value): value is number => value != null)
+  return available.length ? available.reduce((sum, value) => sum + value, 0) / available.length : null
+}
+
+function categorySignalSummary(categoryId: string): CategorySignalSummary {
+  const signals = STUDY_CONCEPTS
+    .filter((concept) => concept.category === categoryId)
+    .map((concept) => getSignal(concept.id))
+    .filter((signal): signal is AuMajorSignal => Boolean(signal))
+  return {
+    salaryMedian: average(signals.map((signal) => signal.salary_median_aud)),
+    outlook2030: average(signals.map((signal) => signal.outlook_2030_change_pct)),
+    outlook2035: average(signals.map((signal) => signal.outlook_2035_change_pct)),
+    shortageCount: signals.filter((signal) => signal.shortage_national_pct != null && signal.shortage_national_pct >= 50).length,
+    coverageCount: signals.length,
+  }
+}
+
+function formatAverageSalary(value: number | null) {
+  return value == null ? "—" : `A$${Math.round(value / 1000)}K`
+}
+
+function formatAverageOutlook(value: number | null) {
+  return value == null ? "—" : `${value > 0 ? "+" : ""}${value.toFixed(1)}%`
 }
 
 function ConceptSignalBadges({ conceptId, locale }: { conceptId: string; locale: "en" | "ko" }) {
@@ -80,9 +114,10 @@ export function CountrySearchClient({ initial, basePath = "/countries/search" }:
   const locale = usePathLocale()
   const isKo = locale === "ko"
   const router = useRouter()
+  const initialCategory = initial.category ?? STUDY_CONCEPTS.find((concept) => concept.id === initial.major)?.category ?? ""
   const [country, setCountry] = useState(initial.country ?? "everywhere")
   const [major, setMajor] = useState(initial.major ?? "anything")
-  const [category, setCategory] = useState(initial.category ?? STUDY_CONCEPTS.find((concept) => concept.id === initial.major)?.category ?? "")
+  const [category, setCategory] = useState(initialCategory)
   const [goal, setGoal] = useState<LandingGoalId | "">(initial.goal as LandingGoalId ?? "")
   const [result, setResult] = useState<LandingDiscoveryResult | null>(null)
   const [loading, setLoading] = useState(false)
@@ -93,6 +128,15 @@ export function CountrySearchClient({ initial, basePath = "/countries/search" }:
   const hasGoal = Boolean(goal)
   const selectedCountry = country === "everywhere" ? null : getLaunchCountry(country)
   const effectiveBasePath = basePath === "/au/majors" && country !== "AU" ? "/countries/search" : basePath
+
+  // Next preserves this client component while only the query string changes.
+  // Keep the visible state in sync when a category card links to ?category=….
+  useEffect(() => {
+    setCountry(initial.country ?? "everywhere")
+    setCategory(initialCategory)
+    setMajor(initial.major ?? "anything")
+    setGoal((initial.goal as LandingGoalId | undefined) ?? "")
+  }, [initial.category, initial.country, initial.goal, initial.major, initialCategory])
 
   const countryOptions = useMemo<PickerOption[]>(() => [
     { value: "everywhere", label: isKo ? "어디든지" : "Everywhere", description: isKo ? "20개국을 함께 비교" : "Compare all 20 destinations", icon: "🌍", keywords: "all global" },
@@ -260,6 +304,7 @@ function CountryStudyPreview({ country, locale, isKo, category, major, basePath 
 
   return <section>
     <div><p className="text-xs font-semibold uppercase tracking-[.18em] text-blue-700">{country.name}</p><h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{title}</h2><p className="mt-2 max-w-2xl text-slate-600">{intro}</p></div>
+    {country.code === "AU" && category && <AustralianCategorySnapshot categoryId={category} isKo={isKo} />}
     <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{concepts.map((concept) => {
       const selected = major === concept.id
       const href = country.code === "AU" && basePath === "/au/majors"
@@ -277,33 +322,32 @@ function CountryStudyPreview({ country, locale, isKo, category, major, basePath 
 }
 
 function AustralianMajorCategoryGrid({ locale, isKo, basePath }: { locale: "en" | "ko"; isKo: boolean; basePath: string }) {
-  const categoryShortageCounts = STUDY_CATEGORIES.map((cat) => {
-    const conceptsInCat = AU_CONCEPT_OCCUPATIONS.filter((c) => {
-      const sc = STUDY_CONCEPTS.find((s) => s.id === c.conceptId)
-      return sc?.category === cat.id
-    })
-    const shortageCount = conceptsInCat.filter((c) => {
-      const sig = getSignal(c.conceptId)
-      return sig && sig.shortage_national_pct != null && sig.shortage_national_pct >= 50
-    }).length
-    return { categoryId: cat.id, shortageCount }
-  })
-  const shortageMap = new Map(categoryShortageCounts.map((c) => [c.categoryId, c.shortageCount]))
-
   return <section>
-    <div><p className="text-xs font-semibold uppercase tracking-[.18em] text-blue-700">Australia</p><h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{isKo ? "40개 전공 카테고리 탐색" : "Explore all 40 major categories"}</h2><p className="mt-2 max-w-2xl text-slate-600">{isKo ? "관심 분야를 먼저 고르면 관련 전공과 호주 내 직업 경로를 살펴볼 수 있어요." : "Start with an area of interest, then explore its study paths and Australian career outcomes."}</p></div>
+    <div><p className="text-xs font-semibold uppercase tracking-[.18em] text-blue-700">Australia</p><h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{isKo ? "10개 전공 분야와 39개 학습 경로 탐색" : "Explore 10 major categories and 39 study paths"}</h2><p className="mt-2 max-w-2xl text-slate-600">{isKo ? "각 분야 카드를 누르면 대표 직업의 임금·고용전망과 관련 학습 경로를 볼 수 있어요." : "Each category combines representative occupation pay, employment outlook and related Australian study paths."}</p></div>
     <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">{STUDY_CATEGORIES.map((item) => {
       const { Icon, tone } = getStudyCategoryVisual(item.id)
       const href = productHref(basePath, locale, { ...(basePath === "/au/majors" ? {} : { country: "AU" }), category: item.id })
-      const shortageCount = shortageMap.get(item.id) ?? 0
+      const summary = categorySignalSummary(item.id)
       return <Link key={item.id} href={href} className="group rounded-2xl border border-slate-200 bg-white p-5 transition-all hover:border-blue-300 hover:shadow-md">
         <span className={`grid size-11 place-items-center rounded-xl ${tone}`}><Icon className="size-5" strokeWidth={2.2} /></span>
         <h3 className="mt-5 text-base font-semibold leading-6 text-slate-950">{isKo ? item.labelKo : item.label}</h3>
-        {shortageCount > 0 && <span className="mt-2 inline-flex items-center rounded-full bg-red-50 px-2 py-0.5 text-[11px] font-semibold text-red-700">{isKo ? `${shortageCount}개 shortage 직업` : `${shortageCount} shortage ${shortageCount === 1 ? "occupation" : "occupations"}`}</span>}
+        <dl className="mt-4 grid grid-cols-2 gap-2 text-xs"><CategoryMetric label={isKo ? "대표 중간임금" : "Mapped median pay"} value={formatAverageSalary(summary.salaryMedian)} /><CategoryMetric label={isKo ? "2030 전망" : "2030 outlook"} value={formatAverageOutlook(summary.outlook2030)} positive={summary.outlook2030 != null && summary.outlook2030 > 0} /><CategoryMetric label={isKo ? "2035 전망" : "2035 outlook"} value={formatAverageOutlook(summary.outlook2035)} positive={summary.outlook2035 != null && summary.outlook2035 > 0} /><CategoryMetric label={isKo ? "부족 직업" : "Shortage roles"} value={summary.shortageCount ? `${summary.shortageCount}` : "—"} /></dl>
         <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-slate-600 group-hover:text-blue-700">{isKo ? "전공 보기" : "Explore majors"}<ArrowRight className="h-4 w-4" /></span>
       </Link>
     })}</div>
+    <p className="mt-5 text-xs leading-5 text-slate-500">{isKo ? "임금은 연결된 대표 직업의 중간임금 평균이며 졸업 직후 연봉이 아닙니다. 고용전망은 해당 전공에 연결된 직업의 JSA 2030·2035 고용변화율 평균입니다." : "Pay is the average median pay of mapped representative occupations, not graduate starting salary. Outlook is the average JSA 2030 and 2035 employment-change signal across mapped study paths."}</p>
   </section>
+}
+
+function CategoryMetric({ label, value, positive = false }: { label: string; value: string; positive?: boolean }) {
+  return <div className="rounded-xl bg-slate-50 px-2.5 py-2"><dt className="text-[10px] font-medium leading-4 text-slate-500">{label}</dt><dd className={`mt-0.5 text-sm font-semibold ${positive ? "text-emerald-700" : "text-slate-900"}`}>{value}</dd></div>
+}
+
+function AustralianCategorySnapshot({ categoryId, isKo }: { categoryId: string; isKo: boolean }) {
+  const category = STUDY_CATEGORIES.find((item) => item.id === categoryId)
+  const summary = categorySignalSummary(categoryId)
+  if (!category || summary.coverageCount === 0) return null
+  return <section className="mt-7 rounded-3xl border border-blue-200 bg-blue-50/60 p-5 sm:p-6"><div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><p className="text-sm font-semibold text-blue-700">{isKo ? "카테고리 스냅샷" : "Category snapshot"}</p><h3 className="mt-1 text-xl font-semibold tracking-tight text-slate-950">{isKo ? category.labelKo : category.label}</h3><p className="mt-1 text-sm text-slate-600">{isKo ? `${summary.coverageCount}개 연결 학습 경로의 대표 직업 신호` : `Representative occupation signals across ${summary.coverageCount} mapped study paths`}</p></div>{summary.shortageCount > 0 && <span className="w-fit rounded-full border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-700">{isKo ? `${summary.shortageCount}개 높은 부족 신호` : `${summary.shortageCount} high-shortage roles`}</span>}</div><dl className="mt-5 grid gap-3 sm:grid-cols-3"><CategoryMetric label={isKo ? "대표 중간임금" : "Mapped median pay"} value={formatAverageSalary(summary.salaryMedian)} /><CategoryMetric label={isKo ? "평균 고용전망 · 2030" : "Average outlook · 2030"} value={formatAverageOutlook(summary.outlook2030)} positive={summary.outlook2030 != null && summary.outlook2030 > 0} /><CategoryMetric label={isKo ? "평균 고용전망 · 2035" : "Average outlook · 2035"} value={formatAverageOutlook(summary.outlook2035)} positive={summary.outlook2035 != null && summary.outlook2035 > 0} /></dl></section>
 }
 
 function LandingDiscoveryResults({ result, locale }: { result: LandingDiscoveryResult; locale: "en" | "ko" }) {
