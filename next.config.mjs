@@ -63,11 +63,6 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: '/blog/monash-university-international-student-guide-2026',
-        destination: '/blog/study-in-australia-2026',
-        permanent: true,
-      },
-      {
         source: '/blog/australia-cost-of-living-real-breakdown-2026',
         destination: '/blog/study-in-australia-2026',
         permanent: true,

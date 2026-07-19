@@ -1,18 +1,58 @@
 [
   {
-    "slug": "ireland-language-school-guide-2026",
-    "title": "아일랜드 어학원 추천 2026 총정리 — 더블린 코크 골웨이 ACELS 인증 영어 학원 학비 비교",
-    "description": "2026년 아일랜드 영어 어학원 완벽 가이드. 더블린·코크·골웨이·리머릭 ACELS/MEI 인증 어학원 18곳의 주당 학비, 과정 종류, 홈스테이 비용, 숙소 옵션을 한눈에 비교합니다.",
-    "date": "2026-06-26",
+    "slug": "monash-university-international-student-guide-2026",
+    "title": "Monash University International Tuition Fees & Scholarships 2026",
+    "description": "Check course-specific Monash international tuition, the 2026 Master of Design fee and entry requirements, and what the Monash International Merit Scholarship actually covers before you apply.",
+    "date": "2026-07-19",
+    "readTime": "7 min",
+    "tag": "Australia",
+    "tagColor": "bg-amber-100 text-amber-700",
+    "featured": false,
+    "author": "CampCareer Editorial Team",
+    "authorTitle": "Study pathway research",
+    "authorRole": "Reviewed 19 July 2026 · Sources: Monash course and scholarship pages",
+    "authorInitials": "CC",
+    "reviewedBy": "CampCareer Editorial Team",
+    "lastReviewed": "2026-07-19",
+    "heroImage": "/blog/images/Melbourne_University.webp",
+    "heroImageAlt": "Australian university campus for international students",
+    "ctaCountry": "AU",
+    "ctaMajor": "design-media"
+  },
+  {
+    "slug": "study-nursing-australia-international-students-2026",
+    "title": "Study Nursing in Australia 2026: International Student Pathway to Registration",
+    "description": "A practical 2026 guide for international students studying nursing in Australia: choose an AHPRA-approved and CRICOS-listed course, understand RN vs enrolled nurse, clinical placement, registration, 485 work rights and the checks to make before treating nursing as a PR plan.",
+    "date": "2026-07-19",
     "readTime": "12 min",
+    "tag": "Australia",
+    "tagColor": "bg-amber-100 text-amber-700",
+    "featured": false,
+    "author": "CampCareer Research Team",
+    "authorRole": "Reviewed July 2026 · Sources: AHPRA, NMBA, Jobs and Skills Australia and Department of Home Affairs",
+    "authorInitials": "CC",
+    "reviewedBy": "CampCareer Editorial Team",
+    "lastReviewed": "2026-07-19",
+    "ctaCountry": "AU",
+    "ctaMajor": "nursing",
+    "heroImage": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1200&q=80",
+    "heroImageAlt": "Healthcare professional in a clinical setting, representing nursing study and registration in Australia"
+  },
+  {
+    "slug": "ireland-language-school-guide-2026",
+    "title": "Ireland English Language Courses 2026: School Choice, Visa Rules and Costs",
+    "description": "A practical 2026 guide to English language courses in Ireland: how to check ILEP and TrustEd Ireland status, when Stamp 2 applies, work conditions, course requirements and costs to confirm before booking.",
+    "date": "2026-06-26",
+    "readTime": "8 min",
     "tag": "Ireland",
     "tagColor": "bg-emerald-100 text-emerald-700",
     "featured": false,
     "author": "CampCareer Research Team",
-    "authorRole": "2026년 6월 업데이트 · 출처: 각 어학원 공시 학비, ACELS(Accreditation and Co-ordination of English Language Services), MEI(Marketing English in Ireland)",
+    "authorRole": "Reviewed July 2026 · Sources: Irish Immigration Service Delivery and QQI",
     "authorInitials": "CC",
+    "lastReviewed": "2026-07-19",
     "heroImage": "/blog/images/TCU.webp",
-    "heroImageAlt": "아일랜드 더블린 트리니티 칼리지 더블린 (TCU)"
+    "heroImageAlt": "Trinity College Dublin in Ireland"
   },
   {
     "slug": "engineering-graduate-salary-comparison-2026",
@@ -71,8 +111,8 @@
     "author": "CampCareer Research Team",
     "authorRole": "Updated June 2026 · Source: QILT 2024 Graduate Outcomes Survey — International Report, Australian Government Department of Education",
     "authorInitials": "CC",
-    "heroImage": "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=1200&q=80",
-    "heroImageAlt": "Sydney Opera House and harbour, representing the career outcomes international graduates pursue in Australia"
+    "heroImage": "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1200&q=80",
+    "heroImageAlt": "Early-career professionals collaborating in an office, representing graduate salary and employment outcomes"
   },
   {
     "slug": "cheapest-universities-australia-2026",
@@ -86,8 +126,8 @@
     "author": "CampCareer Research Team",
     "authorRole": "Updated June 2026 · Sources: individual university fee schedules (verified May–June 2026), Department of Home Affairs, QS World Rankings",
     "authorInitials": "CC",
-    "heroImage": "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=1200&q=80",
-    "heroImageAlt": "Sydney Opera House and harbour, representing the search for affordable Australian university tuition outside the major capital cities"
+    "heroImage": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&q=80",
+    "heroImageAlt": "University students studying together, representing a search for affordable Australian study options"
   },
   {
     "slug": "ielts-score-requirements-2026",
@@ -437,7 +477,7 @@
   {
     "slug": "australia-485-graduate-visa-guide-2026",
     "title": "Australia 485 Graduate Visa Guide 2026: Post-Study Work Rights After Graduation",
-    "description": "The complete 2026 guide to Australia's Temporary Graduate visa (subclass 485) — the three streams explained, the new age 35 cap, IELTS 6.5 English requirement, AUD 4,600 fee, how long you can stay by qualification, and how the 485 fits into your PR plan. Updated June 2026.",
+    "description": "The complete 2026 guide to Australia's Temporary Graduate visa (subclass 485) — the streams explained, the age 35 cap, English requirement, qualification-based stay periods and how the 485 fits into a PR plan.",
     "date": "2026-03-04",
     "readTime": "14 min",
     "tag": "Australia",
@@ -445,12 +485,12 @@
     "featured": false,
     "author": "Yaehun Lee",
     "authorTitle": "Study Abroad Analyst, CampCareer",
-    "authorRole": "Updated June 2026 · Sources: Department of Home Affairs, Study Australia, IDP",
+    "authorRole": "Reviewed July 2026 · Sources: Department of Home Affairs and Study Australia",
     "authorInitials": "CC",
     "reviewedBy": "CampCareer Editorial Team",
-    "lastReviewed": "2026-06-14",
-    "heroImage": "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=1200&q=80",
-    "heroImageAlt": "Sydney Opera House and harbour at sunset, representing the transition from study to work life in Australia"
+    "lastReviewed": "2026-07-19",
+    "heroImage": "https://images.unsplash.com/photo-1529070538774-1843cb3265df?w=1200&q=80",
+    "heroImageAlt": "A traveller preparing documents at an airport, representing the post-study visa process"
   },
   {
     "slug": "best-country-study-chinese-students-2026",
@@ -472,7 +512,7 @@
   },
   {
     "slug": "university-of-toronto-guide-2026",
-    "title": "University of Toronto International Student Guide 2026",
+    "title": "University of Toronto 2026: International Tuition, Entry and Scholarships",
     "description": "The complete guide to the University of Toronto for international students — QS #25 globally, Canada's highest-ranked university, the three campuses explained, tuition fees, the Lester B. Pearson Scholarship, Toronto living costs, and the PGWP pathway to Canadian PR. Updated June 2026.",
     "date": "2026-02-26",
     "readTime": "13 min",
@@ -527,7 +567,7 @@
   },
   {
     "slug": "ucl-international-student-guide-2026",
-    "title": "UCL (University College London) International Student Guide 2026",
+    "title": "UCL 2026: International Tuition, Entry Requirements and London Costs",
     "description": "The complete guide to UCL for international students — QS #9 globally, the Bartlett School of Architecture, tuition fees, entry requirements, scholarships, living in Bloomsbury, and what a UCL degree opens in London's job market. Updated June 2026.",
     "date": "2026-02-18",
     "readTime": "13 min",
@@ -635,8 +675,8 @@
   },
   {
     "slug": "university-of-sydney-guide-2026",
-    "title": "University of Sydney International Student Guide 2026",
-    "description": "The complete guide to the University of Sydney for international students — Australia's oldest university, QS #18 globally, tuition fees, entry requirements, scholarships, life in Sydney's inner west, and the Go8 four-year post-study visa. Updated June 2026.",
+    "title": "University of Sydney 2026: International Tuition, Entry and Scholarships",
+    "description": "University of Sydney guide for international students: how to verify tuition, entry requirements, scholarships, life in Sydney and qualification-based post-study work rules.",
     "date": "2026-01-29",
     "readTime": "13 min",
     "tag": "Australia",
@@ -653,8 +693,8 @@
   },
   {
     "slug": "unsw-sydney-guide-2026",
-    "title": "UNSW Sydney International Student Guide 2026",
-    "description": "The complete guide to UNSW Sydney for international students — QS #19 globally, direct-entry 4-year engineering programs, tuition fees, entry requirements, scholarships, Sydney living costs, and the Go8 four-year post-study visa. Updated June 2026.",
+    "title": "UNSW Sydney for International Students 2026: Engineering, Fees and What to Check",
+    "description": "A practical guide to UNSW for international students: direct-entry engineering, course-specific fees, entry requirements, scholarships, Sydney costs and the current subclass 485 rules.",
     "date": "2026-01-25",
     "readTime": "13 min",
     "tag": "Australia",
@@ -662,17 +702,17 @@
     "featured": false,
     "author": "Yaehun Lee",
     "authorTitle": "Study Abroad Analyst, CampCareer",
-    "authorRole": "Updated June 2026 · Sources: UNSW International Admissions, QS World Rankings, Home Affairs",
+    "authorRole": "Visa section reviewed July 2026 · Sources: UNSW International Admissions, Home Affairs",
     "authorInitials": "CC",
     "reviewedBy": "CampCareer Editorial Team",
-    "lastReviewed": "2026-06-14",
+    "lastReviewed": "2026-07-19",
     "heroImage": "/blog/images/UNSW.webp",
     "heroImageAlt": "Sydney skyline at sunset with Harbour Bridge and Opera House reflected in the water"
   },
   {
     "slug": "university-of-melbourne-guide-2026",
-    "title": "University of Melbourne International Student Guide 2026",
-    "description": "Everything international students need to know about the University of Melbourne — QS #13 globally, the Melbourne Model explained, tuition fees, entry requirements, scholarships, and the 4-year post-study visa advantage. Updated June 2026.",
+    "title": "University of Melbourne for International Students 2026: Fees, Melbourne Model and What to Check",
+    "description": "A practical guide to the University of Melbourne for international students: the Melbourne Model, course-specific fees, entry requirements, scholarships and current subclass 485 rules.",
     "date": "2026-01-21",
     "readTime": "14 min",
     "tag": "Australia",
@@ -680,10 +720,10 @@
     "featured": false,
     "author": "Yaehun Lee",
     "authorTitle": "Study Abroad Analyst, CampCareer",
-    "authorRole": "Updated June 2026 · Sources: University of Melbourne, QS World Rankings, Home Affairs",
+    "authorRole": "Visa section reviewed July 2026 · Sources: University of Melbourne, Home Affairs",
     "authorInitials": "CC",
     "reviewedBy": "CampCareer Editorial Team",
-    "lastReviewed": "2026-06-14",
+    "lastReviewed": "2026-07-19",
     "heroImage": "/blog/images/Melbourne_University.webp",
     "heroImageAlt": "University of Melbourne main quadrangle building with Gothic architecture"
   },
