@@ -846,10 +846,10 @@ export default function CampCareerMaps({
   const toolbarExpanded = !isMobile || expanded
 
   return (
-    <div className="flex h-full w-full flex-col">
+    <div className="relative h-full w-full overflow-hidden">
         {(activeCountry === "AU" || activeCountry === "US" || activeCountry === "CA" || activeCountry === "IE" || activeCountry === "UK" || activeCountry === "DE" || activeCountry === "NL" || activeCountry === "BE" || activeCountry === "JP" || activeCountry === "SG" || activeCountry === "KR" || activeCountry === "FR" || activeCountry === "ES" || activeCountry === "NZ" || activeCountry === "NO" || activeCountry === "SE" || activeCountry === "DK" || activeCountry === "FI" || activeCountry === "CH" || activeCountry === "AE") && (
-      <div className="border-b border-slate-200 bg-white/95 shadow-[0_1px_0_rgba(15,23,42,.03)] backdrop-blur-sm">
-        <div className="flex min-h-14 items-center">
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-[2200] p-3">
+      <div className="pointer-events-auto flex min-h-14 items-center rounded-2xl border border-slate-200 bg-white/95 shadow-[0_14px_35px_rgba(15,23,42,.10)] backdrop-blur-md">
           {!toolbarExpanded && (
           <button
             type="button"
@@ -1389,11 +1389,11 @@ export default function CampCareerMaps({
       </div>
           )}
           <ToolNavActions className="mr-3 self-center" />
-        </div>
+      </div>
       </div>
     )}
 
-      <div className="relative min-h-0 flex-1">
+      <div className="absolute inset-0 z-0">
         {countryDataLoading && (
           <div className="absolute inset-x-4 top-4 z-[1600] mx-auto max-w-sm rounded-xl border border-blue-200 bg-white/95 px-4 py-3 text-center text-sm font-semibold text-blue-800 shadow-lg backdrop-blur" role="status">
             {locale === "ko" ? "국가 데이터를 불러오는 중입니다…" : "Loading country dataset…"}
