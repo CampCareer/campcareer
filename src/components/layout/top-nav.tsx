@@ -1,18 +1,13 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
-import { useEffect, useRef, useState } from "react"
-import { createClient } from "@/lib/supabase-client"
+import { usePathname } from "next/navigation"
 import { LogoMark } from "@/components/logo-mark"
-import { LanguageToggle } from "@/components/language-toggle"
-import { Button } from "@/components/ui/button"
-import { useTranslations } from "@/lib/i18n/locale-provider"
 import { useLocale } from "@/lib/i18n/locale-provider"
 import { localeFromPathname, localizePath, withoutLocalePrefix } from "@/lib/i18n/config"
+import { ToolNavActions } from "@/components/layout/tool-nav-actions"
 import { cn } from "@/lib/utils"
-import { UserIcon, Globe, Building2, Briefcase, LayoutGrid } from "lucide-react"
-import type { User } from "@supabase/supabase-js"
+import { Globe, Building2, Briefcase } from "lucide-react"
 
 // Numbeo-style horizontal category nav. Replaces the old sidebar — every core
 // feature is one click from the top bar. Blog lives in the footer.
@@ -23,44 +18,8 @@ export function TopNav() {
   const barePathname = withoutLocalePrefix(pathname)
   const isLanding = barePathname === "/"
   const hasUnifiedHero = isLanding || barePathname === "/countries/search" || barePathname === "/universities" || barePathname === "/universities/au" || barePathname === "/majors" || barePathname === "/study" || barePathname === "/au/study" || barePathname === "/au/majors"
-  // /map and /maps are full-screen map surfaces on mobile.
-  const isMap = barePathname === "/map" || barePathname.startsWith("/map/") || barePathname === "/maps" || barePathname.startsWith("/maps/")
-  const isToolSurface = isMap || barePathname === "/dashboard"
+  const isToolSurface = barePathname === "/dashboard"
   const isCompare = barePathname === "/compare" || barePathname.startsWith("/compare/")
-  const router = useRouter()
-  const t = useTranslations()
-  const supabase = createClient()
-  const [user, setUser] = useState<User | null>(null)
-  const [appsOpen, setAppsOpen] = useState(false)
-  const appsRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => setUser(data.user))
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
-    })
-    return () => subscription.unsubscribe()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useEffect(() => {
-    if (!appsOpen) return
-    const closeApps = (event: MouseEvent) => {
-      if (appsRef.current && !appsRef.current.contains(event.target as Node)) setAppsOpen(false)
-    }
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setAppsOpen(false)
-    }
-    document.addEventListener("mousedown", closeApps)
-    document.addEventListener("keydown", closeOnEscape)
-    return () => {
-      document.removeEventListener("mousedown", closeApps)
-      document.removeEventListener("keydown", closeOnEscape)
-    }
-  }, [appsOpen])
-
-  const avatarUrl = user?.user_metadata?.avatar_url as string | undefined
-
   const navItems: { href: string; label: string; icon?: typeof Globe; accent?: "blue" | "rose" | "amber" }[] = [
     { href: "/", label: locale === "ko" ? "국가" : "Countries", icon: Globe, accent: "blue" },
     { href: "/majors", label: locale === "ko" ? "전공" : "Majors", icon: Briefcase, accent: "amber" },
@@ -107,58 +66,7 @@ export function TopNav() {
             {linkEls}
           </nav>}
 
-          <div className="flex items-center gap-2 shrink-0 ml-auto">
-            <LanguageToggle className="text-slate-500 hover:text-slate-900 hover:bg-slate-100" />
-            <div className="relative" ref={appsRef}>
-              <button
-                type="button"
-                aria-label={locale === "ko" ? "CampCareer 도구 열기" : "Open CampCareer tools"}
-                aria-expanded={appsOpen}
-                aria-haspopup="menu"
-                onClick={() => setAppsOpen((open) => !open)}
-                className={cn("grid size-9 place-items-center rounded-xl border transition", appsOpen ? "border-blue-200 bg-blue-50 text-blue-700 shadow-sm" : "border-transparent text-slate-500 hover:border-slate-200 hover:bg-white hover:text-slate-900")}
-              >
-                <LayoutGrid className="size-[18px]" strokeWidth={2.1} />
-              </button>
-              {appsOpen && <div role="menu" aria-label={locale === "ko" ? "CampCareer 도구" : "CampCareer tools"} className="absolute right-0 top-full z-50 mt-3 w-[min(20rem,calc(100vw-2rem))] overflow-hidden rounded-3xl border border-slate-200 bg-white p-3 shadow-[0_20px_55px_rgba(15,23,42,.18)]">
-                <div className="flex items-center justify-between px-2 pb-2"><p className="text-xs font-semibold uppercase tracking-[.14em] text-slate-500">CampCareer</p><span className="text-xs text-slate-400">{locale === "ko" ? "도구" : "Tools"}</span></div>
-                <div className="grid grid-cols-2 gap-2">
-                  <Link href={localizePath("/maps", pathLocale)} role="menuitem" onClick={() => setAppsOpen(false)} className="group rounded-2xl border border-transparent p-3 transition hover:border-blue-200 hover:bg-blue-50">
-                    <span className="grid size-12 place-items-center rounded-2xl bg-sky-100 text-2xl shadow-sm transition group-hover:-translate-y-0.5">🗺️</span>
-                    <span className="mt-3 block text-sm font-semibold text-slate-900">Maps</span>
-                  </Link>
-                  <Link href={localizePath("/dashboard", pathLocale)} role="menuitem" onClick={() => setAppsOpen(false)} className="group rounded-2xl border border-transparent p-3 transition hover:border-violet-200 hover:bg-violet-50">
-                    <span className="grid size-12 place-items-center rounded-2xl bg-violet-100 text-2xl shadow-sm transition group-hover:-translate-y-0.5">🧭</span>
-                    <span className="mt-3 block text-sm font-semibold text-slate-900">Dashboard</span>
-                  </Link>
-                </div>
-              </div>}
-            </div>
-            {user ? (
-              <Link href={localizePath("/profile", pathLocale)}>
-                {avatarUrl ? (
-                  <img
-                    src={avatarUrl}
-                    alt=""
-                    className="w-7 h-7 rounded-full object-cover"
-                  />
-                ) : (
-                  <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center">
-                    <UserIcon className="w-4 h-4 text-blue-600" />
-                  </div>
-                )}
-              </Link>
-            ) : (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => router.push(localizePath("/login", pathLocale))}
-                className="border-blue-200 text-blue-600 hover:bg-blue-50 hover:text-blue-700"
-              >
-                {t.common.signIn}
-              </Button>
-            )}
-          </div>
+          <ToolNavActions className="ml-auto" />
         </div>
 
         {/* Mobile: links on a full-width second row, scrolls cleanly. Hidden on

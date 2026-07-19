@@ -20,6 +20,7 @@ import POSTCODE_TO_SA4 from "@/data/postcode-to-sa4"
 import { getPathway, TAFE_BY_STATE, VET_PORTALS, cricosSearchUrl } from "@/lib/au-pathway"
 import { track } from "@/lib/analytics"
 import { AffiliateCtas } from "@/components/partners/partner-cta"
+import { ToolNavActions } from "@/components/layout/tool-nav-actions"
 import JobListings from "./JobListings"
 import { EMPLOYMENT_OCCUPATIONS } from "@/data/employment-occupations"
 import { EMPLOYMENT_SALARIES } from "@/data/employment-salaries"
@@ -847,12 +848,13 @@ export default function CampCareerMaps({
   return (
     <div className="flex h-full w-full flex-col">
         {(activeCountry === "AU" || activeCountry === "US" || activeCountry === "CA" || activeCountry === "IE" || activeCountry === "UK" || activeCountry === "DE" || activeCountry === "NL" || activeCountry === "BE" || activeCountry === "JP" || activeCountry === "SG" || activeCountry === "KR" || activeCountry === "FR" || activeCountry === "ES" || activeCountry === "NZ" || activeCountry === "NO" || activeCountry === "SE" || activeCountry === "DK" || activeCountry === "FI" || activeCountry === "CH" || activeCountry === "AE") && (
-      <>
-        {!toolbarExpanded && (
+      <div className="border-b border-slate-200 bg-white/95 shadow-[0_1px_0_rgba(15,23,42,.03)] backdrop-blur-sm">
+        <div className="flex min-h-14 items-center">
+          {!toolbarExpanded && (
           <button
             type="button"
             onClick={() => setExpanded(true)}
-            className="flex w-full items-center gap-2 border-b border-slate-200 bg-white px-4 py-3 text-left text-sm font-medium text-slate-700"
+            className="flex min-w-0 flex-1 items-center gap-2 px-4 py-3 text-left text-sm font-medium text-slate-700"
           >
             <Search className="h-4 w-4 shrink-0 text-slate-400" />
             <span className="truncate">{toolbarSummary || t.map.selectCountryPlaceholder}</span>
@@ -860,8 +862,8 @@ export default function CampCareerMaps({
           </button>
         )}
 
-        {toolbarExpanded && (
-      <div className="flex flex-wrap items-end gap-3 border-b border-slate-200 bg-white px-4 py-3">
+          {toolbarExpanded && (
+      <div className="flex min-w-0 flex-1 flex-wrap items-end gap-3 px-4 py-3">
         <label className="block">
           <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectCountry}</span>
           <Select
@@ -1006,7 +1008,7 @@ export default function CampCareerMaps({
                   if (isMobile) setExpanded(false)
                 }}
               >
-                <SelectTrigger className="h-10 w-72 rounded-lg border-slate-200 text-sm">
+                <SelectTrigger className="h-10 w-72 xl:w-[min(36vw,34rem)] rounded-lg border-slate-200 text-sm">
                   <SelectValue placeholder={t.map.selectStatePlaceholder} />
                 </SelectTrigger>
                 <SelectContent className="z-[2000] max-h-72">
@@ -1070,7 +1072,7 @@ export default function CampCareerMaps({
                   if (isMobile) setExpanded(false)
                 }}
               >
-                <SelectTrigger className="h-10 w-72 rounded-lg border-slate-200 text-sm">
+                <SelectTrigger className="h-10 w-72 xl:w-[min(36vw,34rem)] rounded-lg border-slate-200 text-sm">
                   <SelectValue placeholder={t.map.selectStatePlaceholder} />
                 </SelectTrigger>
                 <SelectContent className="z-[2000] max-h-72">
@@ -1129,7 +1131,7 @@ export default function CampCareerMaps({
                   if (isMobile) setExpanded(false)
                 }}
               >
-                <SelectTrigger className="h-10 w-72 rounded-lg border-slate-200 text-sm">
+                <SelectTrigger className="h-10 w-72 xl:w-[min(36vw,34rem)] rounded-lg border-slate-200 text-sm">
                   <SelectValue placeholder={t.map.selectStatePlaceholder} />
                 </SelectTrigger>
                 <SelectContent className="z-[2000] max-h-72">
@@ -1188,7 +1190,7 @@ export default function CampCareerMaps({
                   if (isMobile) setExpanded(false)
                 }}
               >
-                <SelectTrigger className="h-10 w-72 rounded-lg border-slate-200 text-sm">
+                <SelectTrigger className="h-10 w-72 xl:w-[min(36vw,34rem)] rounded-lg border-slate-200 text-sm">
                   <SelectValue placeholder={t.map.selectStatePlaceholder} />
                 </SelectTrigger>
                 <SelectContent className="z-[2000] max-h-72">
@@ -1326,7 +1328,7 @@ export default function CampCareerMaps({
                     if (isMobile) setExpanded(false)
                   }}
                 >
-                  <SelectTrigger className="h-10 w-72 rounded-lg border-slate-200 text-sm">
+                  <SelectTrigger className="h-10 w-72 xl:w-[min(36vw,34rem)] rounded-lg border-slate-200 text-sm">
                     <SelectValue placeholder={t.map.selectStatePlaceholder} />
                   </SelectTrigger>
                   <SelectContent className="z-[2000] max-h-72">
@@ -1385,8 +1387,10 @@ export default function CampCareerMaps({
           </button>
         )}
       </div>
-      )}
-    </>
+          )}
+          <ToolNavActions className="mr-3 self-center" />
+        </div>
+      </div>
     )}
 
       <div className="relative min-h-0 flex-1">

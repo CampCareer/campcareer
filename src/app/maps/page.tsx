@@ -18,7 +18,7 @@ export default async function MapsPage() {
   const data = await getInitialMapShellData()
 
   return (
-    <div className="h-[calc(100vh-3.5rem)] w-full">
+    <div className="h-[100dvh] w-full">
       <CampCareerMaps data={data} />
     </div>
   )

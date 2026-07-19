@@ -50,13 +50,13 @@ export default async function WhvSA4Page(props: { params: Promise<{ state: strin
   const sc = toStateCode(params.state)
   if (!sc || !WHV_REGIONS[params.sa4]) {
     return (
-      <div className="h-[calc(100vh-3.5rem)] w-full">
+      <div className="h-[100dvh] w-full">
         <CampCareerMaps data={data} />
       </div>
     )
   }
   return (
-    <div className="h-[calc(100vh-3.5rem)] w-full">
+    <div className="h-[100dvh] w-full">
       <CampCareerMaps data={data} initialState={sc} initialTab="whv" initialSA4={params.sa4} />
     </div>
   )

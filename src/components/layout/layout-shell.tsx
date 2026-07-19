@@ -22,14 +22,15 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
     return <>{children}</>
   }
 
-  // /map and /maps are full-screen tools on mobile — hide the footer there.
-  const isMap = pathname === "/map" || pathname.startsWith("/map/") || pathname === "/maps" || pathname.startsWith("/maps/")
+  // The interactive map owns its own Google Maps-style search bar and account
+  // controls. SEO map articles keep the regular site navigation.
+  const isInteractiveMap = pathname === "/map" || pathname === "/maps" || pathname.startsWith("/map/au/employment/") || pathname.startsWith("/map/au/whv/")
 
   return (
     <div className={`flex min-h-screen flex-col ${hasUnifiedHero ? "bg-[linear-gradient(180deg,#ffffff_0%,#e7f0ff_46%,#f0f5ff_100%)]" : ""}`}>
-      <TopNav />
+      {!isInteractiveMap && <TopNav />}
       <main className={`flex-1 ${hasUnifiedHero ? "bg-transparent" : "bg-background"}`}>{children}</main>
-      <SiteFooter className={isMap ? "hidden sm:block" : undefined} />
+      <SiteFooter className={isInteractiveMap ? "hidden" : undefined} />
     </div>
   )
 }
