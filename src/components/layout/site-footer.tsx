@@ -26,14 +26,8 @@ export function SiteFooter({ className }: { className?: string }) {
           <Link href={localizePath("/methodology", pathLocale)} className="hover:text-slate-600 transition-colors">
             Methodology
           </Link>
-          <Link href={localizePath("/maps", pathLocale)} className="hover:text-slate-600 transition-colors">
-            {t.nav.map}
-          </Link>
           <Link href={localizePath("/compare", pathLocale)} className="hover:text-slate-600 transition-colors">
             {t.nav.compare}
-          </Link>
-          <Link href="/dashboard" className="hover:text-slate-600 transition-colors">
-            Dashboard
           </Link>
           <Link href={localizePath("/privacy", pathLocale)} className="hover:text-slate-600 transition-colors">
             Privacy

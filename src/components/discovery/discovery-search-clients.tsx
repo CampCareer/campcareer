@@ -4,7 +4,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useEffect, useMemo, useRef, useState } from "react"
-import { ArrowRight, Building2, CircleAlert, ExternalLink, MapPinned, Search, SlidersHorizontal } from "lucide-react"
+import { ArrowDownUp, ArrowRight, Building2, CircleAlert, ExternalLink, MapPinned, Search, SlidersHorizontal } from "lucide-react"
 import { CANONICAL_CAREERS, careersForCategory } from "@/data/career-comparison-catalog"
 import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
 import { STUDY_CATEGORIES, STUDY_CONCEPTS } from "@/data/study-concepts"
@@ -51,8 +51,22 @@ type CategorySignalSummary = {
   salaryMedian: number | null
   outlook2030: number | null
   outlook2035: number | null
+  shortageRate: number | null
   shortageCount: number
   coverageCount: number
+}
+
+type AuMajorSort = "recommended" | "salary" | "outlook-2030" | "shortage"
+
+const AU_MAJOR_SORT_OPTIONS: Array<{ value: AuMajorSort; label: string; labelKo: string }> = [
+  { value: "recommended", label: "Recommended", labelKo: "추천순" },
+  { value: "salary", label: "Median salary", labelKo: "중간임금순" },
+  { value: "outlook-2030", label: "2030 outlook", labelKo: "2030 전망순" },
+  { value: "shortage", label: "Shortage signal", labelKo: "부족 신호순" },
+]
+
+function isAuMajorSort(value: string | undefined): value is AuMajorSort {
+  return AU_MAJOR_SORT_OPTIONS.some((option) => option.value === value)
 }
 
 function average(values: Array<number | null>) {
@@ -69,9 +83,47 @@ function categorySignalSummary(categoryId: string): CategorySignalSummary {
     salaryMedian: average(signals.map((signal) => signal.salary_median_aud)),
     outlook2030: average(signals.map((signal) => signal.outlook_2030_change_pct)),
     outlook2035: average(signals.map((signal) => signal.outlook_2035_change_pct)),
+    shortageRate: average(signals.map((signal) => signal.shortage_national_pct)),
     shortageCount: signals.filter((signal) => signal.shortage_national_pct != null && signal.shortage_national_pct >= 50).length,
     coverageCount: signals.length,
   }
+}
+
+function sortAustralianConcepts<T extends typeof STUDY_CONCEPTS[number]>(concepts: T[], sort: AuMajorSort) {
+  if (sort === "recommended") return concepts
+  const valueFor = (concept: T) => {
+    const signal = getSignal(concept.id)
+    if (!signal) return null
+    if (sort === "salary") return signal.salary_median_aud
+    if (sort === "outlook-2030") return signal.outlook_2030_change_pct
+    return signal.shortage_national_pct
+  }
+  return [...concepts].sort((left, right) => {
+    const leftValue = valueFor(left)
+    const rightValue = valueFor(right)
+    if (leftValue == null && rightValue == null) return left.label.localeCompare(right.label)
+    if (leftValue == null) return 1
+    if (rightValue == null) return -1
+    return rightValue - leftValue || left.label.localeCompare(right.label)
+  })
+}
+
+function sortAustralianCategories(sort: AuMajorSort) {
+  if (sort === "recommended") return STUDY_CATEGORIES
+  const valueFor = (categoryId: string) => {
+    const summary = categorySignalSummary(categoryId)
+    if (sort === "salary") return summary.salaryMedian
+    if (sort === "outlook-2030") return summary.outlook2030
+    return summary.shortageRate
+  }
+  return [...STUDY_CATEGORIES].sort((left, right) => {
+    const leftValue = valueFor(left.id)
+    const rightValue = valueFor(right.id)
+    if (leftValue == null && rightValue == null) return left.label.localeCompare(right.label)
+    if (leftValue == null) return 1
+    if (rightValue == null) return -1
+    return rightValue - leftValue || left.label.localeCompare(right.label)
+  })
 }
 
 function formatAverageSalary(value: number | null) {
@@ -110,7 +162,7 @@ function ConceptSignalBadges({ conceptId, locale }: { conceptId: string; locale:
   )
 }
 
-export function CountrySearchClient({ initial, basePath = "/countries/search" }: { initial: { country?: string; category?: string; major?: string; goal?: string }; basePath?: string }) {
+export function CountrySearchClient({ initial, basePath = "/countries/search" }: { initial: { country?: string; category?: string; major?: string; goal?: string; sort?: string }; basePath?: string }) {
   const locale = usePathLocale()
   const isKo = locale === "ko"
   const router = useRouter()
@@ -119,6 +171,7 @@ export function CountrySearchClient({ initial, basePath = "/countries/search" }:
   const [major, setMajor] = useState(initial.major ?? "anything")
   const [category, setCategory] = useState(initialCategory)
   const [goal, setGoal] = useState<LandingGoalId | "">(initial.goal as LandingGoalId ?? "")
+  const [auMajorSort, setAuMajorSort] = useState<AuMajorSort>(isAuMajorSort(initial.sort) ? initial.sort : "recommended")
   const [result, setResult] = useState<LandingDiscoveryResult | null>(null)
   const [loading, setLoading] = useState(false)
   const [expanded, setExpanded] = useState(false)
@@ -136,7 +189,8 @@ export function CountrySearchClient({ initial, basePath = "/countries/search" }:
     setCategory(initialCategory)
     setMajor(initial.major ?? "anything")
     setGoal((initial.goal as LandingGoalId | undefined) ?? "")
-  }, [initial.category, initial.country, initial.goal, initial.major, initialCategory])
+    setAuMajorSort(isAuMajorSort(initial.sort) ? initial.sort : "recommended")
+  }, [initial.category, initial.country, initial.goal, initial.major, initial.sort, initialCategory])
 
   const countryOptions = useMemo<PickerOption[]>(() => [
     { value: "everywhere", label: isKo ? "어디든지" : "Everywhere", description: isKo ? "20개국을 함께 비교" : "Compare all 20 destinations", icon: "🌍", keywords: "all global" },
@@ -193,7 +247,18 @@ export function CountrySearchClient({ initial, basePath = "/countries/search" }:
     return () => document.removeEventListener("mousedown", onPointerDown)
   }, [goalFilterOpen])
 
-  const href = productHref(effectiveBasePath, locale, { ...(effectiveBasePath === "/au/majors" ? {} : { country }), ...(category ? { category } : {}), ...(major !== "anything" ? { major } : {}), ...(goal ? { goal } : {}) })
+  const href = productHref(effectiveBasePath, locale, { ...(effectiveBasePath === "/au/majors" ? {} : { country }), ...(category ? { category } : {}), ...(major !== "anything" ? { major } : {}), ...(goal ? { goal } : {}), ...(effectiveBasePath === "/au/majors" && auMajorSort !== "recommended" ? { sort: auMajorSort } : {}) })
+
+  const changeAuMajorSort = (nextSort: AuMajorSort) => {
+    setAuMajorSort(nextSort)
+    if (effectiveBasePath !== "/au/majors") return
+    const nextHref = productHref(effectiveBasePath, locale, {
+      ...(category ? { category } : {}),
+      ...(goal ? { goal } : {}),
+      ...(nextSort !== "recommended" ? { sort: nextSort } : {}),
+    })
+    router.replace(nextHref, { scroll: false })
+  }
 
   const countryLabel = country === "everywhere" ? (isKo ? "어디든지" : "Everywhere") : getLaunchCountry(country)?.name ?? country
   const majorLabel = category ? (isKo ? STUDY_CATEGORIES.find((item) => item.id === category)?.labelKo : STUDY_CATEGORIES.find((item) => item.id === category)?.label) ?? category : (isKo ? "카테고리 선택" : "Choose a category")
@@ -234,7 +299,7 @@ export function CountrySearchClient({ initial, basePath = "/countries/search" }:
   </>
 
   const resultContent = selectedCountry && (!hasGoal || major === "anything")
-    ? <CountryStudyPreview country={selectedCountry} locale={locale} isKo={isKo} category={category} major={major} basePath={effectiveBasePath} />
+    ? <CountryStudyPreview country={selectedCountry} locale={locale} isKo={isKo} category={category} major={major} basePath={effectiveBasePath} auMajorSort={auMajorSort} onAuMajorSortChange={changeAuMajorSort} />
     : !hasGoal
       ? <Recommendations locale={locale} isKo={isKo} onGoalChange={setGoal} basePath={effectiveBasePath} />
       : selectedCountry
@@ -287,13 +352,14 @@ function Recommendations({ locale, isKo, onGoalChange, basePath = "/countries/se
   </section>
 }
 
-function CountryStudyPreview({ country, locale, isKo, category, major, basePath = "/countries/search" }: { country: NonNullable<ReturnType<typeof getLaunchCountry>>; locale: "en" | "ko"; isKo: boolean; category: string; major: string; basePath?: string }) {
-  if (country.code === "AU" && !category) return <AustralianMajorCategoryGrid locale={locale} isKo={isKo} basePath={basePath} />
+function CountryStudyPreview({ country, locale, isKo, category, major, basePath = "/countries/search", auMajorSort = "recommended", onAuMajorSortChange }: { country: NonNullable<ReturnType<typeof getLaunchCountry>>; locale: "en" | "ko"; isKo: boolean; category: string; major: string; basePath?: string; auMajorSort?: AuMajorSort; onAuMajorSortChange: (sort: AuMajorSort) => void }) {
+  if (country.code === "AU" && !category) return <AustralianMajorCategoryGrid locale={locale} isKo={isKo} basePath={basePath} sort={auMajorSort} onSortChange={onAuMajorSortChange} />
 
   const conceptIds = STUDY_CONCEPTS
     .filter((concept) => country.code === "AU" || (concept.coverageByCountry[country.code] ?? "CATALOG") !== "CATALOG")
     .map((concept) => concept.id)
   const concepts = conceptIds.map((id) => STUDY_CONCEPTS.find((concept) => concept.id === id)).filter((concept): concept is typeof STUDY_CONCEPTS[number] => Boolean(concept)).filter((concept) => !category || concept.category === category)
+  const sortedConcepts = country.code === "AU" && basePath === "/au/majors" ? sortAustralianConcepts(concepts, auMajorSort) : concepts
   const categoryLabel = isKo ? STUDY_CATEGORIES.find((item) => item.id === category)?.labelKo : STUDY_CATEGORIES.find((item) => item.id === category)?.label
   const title = isKo
     ? `${country.name}에서 살펴볼 ${categoryLabel ?? "대표"} 전공`
@@ -303,9 +369,9 @@ function CountryStudyPreview({ country, locale, isKo, category, major, basePath 
     : "Choose a field first, then add the outcome you care about to compare regional career paths."
 
   return <section>
-    <div><p className="text-xs font-semibold uppercase tracking-[.18em] text-blue-700">{country.name}</p><h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{title}</h2><p className="mt-2 max-w-2xl text-slate-600">{intro}</p></div>
+    <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between"><div><p className="text-xs font-semibold uppercase tracking-[.18em] text-blue-700">{country.name}</p><h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{title}</h2><p className="mt-2 max-w-2xl text-slate-600">{intro}</p></div>{country.code === "AU" && basePath === "/au/majors" && <MajorSortControl locale={locale} value={auMajorSort} onChange={onAuMajorSortChange} />}</div>
     {country.code === "AU" && category && <AustralianCategorySnapshot categoryId={category} isKo={isKo} />}
-    <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{concepts.map((concept) => {
+    <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{sortedConcepts.map((concept) => {
       const selected = major === concept.id
       const href = country.code === "AU" && basePath === "/au/majors"
         ? localizePath(`/au/majors/${concept.slug}`, locale)
@@ -321,12 +387,21 @@ function CountryStudyPreview({ country, locale, isKo, category, major, basePath 
   </section>
 }
 
-function AustralianMajorCategoryGrid({ locale, isKo, basePath }: { locale: "en" | "ko"; isKo: boolean; basePath: string }) {
+function MajorSortControl({ locale, value, onChange }: { locale: "en" | "ko"; value: AuMajorSort; onChange: (sort: AuMajorSort) => void }) {
+  const isKo = locale === "ko"
+  return <label className="flex w-full items-center gap-2 rounded-2xl border border-slate-200 bg-white p-2 shadow-sm sm:w-auto">
+    <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-blue-50 text-blue-700"><ArrowDownUp className="size-4" /></span>
+    <span className="min-w-0 flex-1 sm:w-40"><span className="block text-[11px] font-semibold uppercase tracking-[.12em] text-slate-500">{isKo ? "정렬 기준" : "Sort majors"}</span><select aria-label={isKo ? "전공 정렬" : "Sort majors"} value={value} onChange={(event) => onChange(event.target.value as AuMajorSort)} className="mt-0.5 w-full cursor-pointer appearance-none bg-transparent pr-1 text-sm font-semibold text-slate-900 outline-none">{AU_MAJOR_SORT_OPTIONS.map((option) => <option key={option.value} value={option.value}>{isKo ? option.labelKo : option.label}</option>)}</select></span>
+  </label>
+}
+
+function AustralianMajorCategoryGrid({ locale, isKo, basePath, sort, onSortChange }: { locale: "en" | "ko"; isKo: boolean; basePath: string; sort: AuMajorSort; onSortChange: (sort: AuMajorSort) => void }) {
+  const categories = basePath === "/au/majors" ? sortAustralianCategories(sort) : STUDY_CATEGORIES
   return <section>
-    <div><p className="text-xs font-semibold uppercase tracking-[.18em] text-blue-700">Australia</p><h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{isKo ? "10개 전공 분야와 39개 학습 경로 탐색" : "Explore 10 major categories and 39 study paths"}</h2><p className="mt-2 max-w-2xl text-slate-600">{isKo ? "각 분야 카드를 누르면 대표 직업의 임금·고용전망과 관련 학습 경로를 볼 수 있어요." : "Each category combines representative occupation pay, employment outlook and related Australian study paths."}</p></div>
-    <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">{STUDY_CATEGORIES.map((item) => {
+    <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between"><div><p className="text-xs font-semibold uppercase tracking-[.18em] text-blue-700">Australia</p><h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{isKo ? "10개 전공 분야와 39개 학습 경로 탐색" : "Explore 10 major categories and 39 study paths"}</h2><p className="mt-2 max-w-2xl text-slate-600">{isKo ? "대표 직업의 임금·고용전망·부족 신호를 기준으로 정렬하고, 분야 안의 학습 경로를 비교해보세요." : "Sort fields by mapped occupation pay, 2030 outlook or shortage signals, then compare the study paths inside each field."}</p></div>{basePath === "/au/majors" && <MajorSortControl locale={locale} value={sort} onChange={onSortChange} />}</div>
+    <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">{categories.map((item) => {
       const { Icon, tone } = getStudyCategoryVisual(item.id)
-      const href = productHref(basePath, locale, { ...(basePath === "/au/majors" ? {} : { country: "AU" }), category: item.id })
+      const href = productHref(basePath, locale, { ...(basePath === "/au/majors" ? {} : { country: "AU" }), category: item.id, ...(basePath === "/au/majors" && sort !== "recommended" ? { sort } : {}) })
       const summary = categorySignalSummary(item.id)
       return <Link key={item.id} href={href} className="group rounded-2xl border border-slate-200 bg-white p-5 transition-all hover:border-blue-300 hover:shadow-md">
         <span className={`grid size-11 place-items-center rounded-xl ${tone}`}><Icon className="size-5" strokeWidth={2.2} /></span>

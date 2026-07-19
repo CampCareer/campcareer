@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { createClient } from "@/lib/supabase-client"
 import { LogoMark } from "@/components/logo-mark"
 import { LanguageToggle } from "@/components/language-toggle"
@@ -11,7 +11,7 @@ import { useTranslations } from "@/lib/i18n/locale-provider"
 import { useLocale } from "@/lib/i18n/locale-provider"
 import { localeFromPathname, localizePath, withoutLocalePrefix } from "@/lib/i18n/config"
 import { cn } from "@/lib/utils"
-import { UserIcon, Globe, Building2, Briefcase } from "lucide-react"
+import { UserIcon, Globe, Building2, Briefcase, LayoutGrid } from "lucide-react"
 import type { User } from "@supabase/supabase-js"
 
 // Numbeo-style horizontal category nav. Replaces the old sidebar — every core
@@ -30,6 +30,8 @@ export function TopNav() {
   const t = useTranslations()
   const supabase = createClient()
   const [user, setUser] = useState<User | null>(null)
+  const [appsOpen, setAppsOpen] = useState(false)
+  const appsRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setUser(data.user))
@@ -39,6 +41,22 @@ export function TopNav() {
     return () => subscription.unsubscribe()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    if (!appsOpen) return
+    const closeApps = (event: MouseEvent) => {
+      if (appsRef.current && !appsRef.current.contains(event.target as Node)) setAppsOpen(false)
+    }
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setAppsOpen(false)
+    }
+    document.addEventListener("mousedown", closeApps)
+    document.addEventListener("keydown", closeOnEscape)
+    return () => {
+      document.removeEventListener("mousedown", closeApps)
+      document.removeEventListener("keydown", closeOnEscape)
+    }
+  }, [appsOpen])
 
   const avatarUrl = user?.user_metadata?.avatar_url as string | undefined
 
@@ -90,6 +108,33 @@ export function TopNav() {
 
           <div className="flex items-center gap-2 shrink-0 ml-auto">
             <LanguageToggle className="text-slate-500 hover:text-slate-900 hover:bg-slate-100" />
+            <div className="relative" ref={appsRef}>
+              <button
+                type="button"
+                aria-label={locale === "ko" ? "CampCareer 도구 열기" : "Open CampCareer tools"}
+                aria-expanded={appsOpen}
+                aria-haspopup="menu"
+                onClick={() => setAppsOpen((open) => !open)}
+                className={cn("grid size-9 place-items-center rounded-xl border transition", appsOpen ? "border-blue-200 bg-blue-50 text-blue-700 shadow-sm" : "border-transparent text-slate-500 hover:border-slate-200 hover:bg-white hover:text-slate-900")}
+              >
+                <LayoutGrid className="size-[18px]" strokeWidth={2.1} />
+              </button>
+              {appsOpen && <div role="menu" aria-label={locale === "ko" ? "CampCareer 도구" : "CampCareer tools"} className="absolute right-0 top-full z-50 mt-3 w-[min(20rem,calc(100vw-2rem))] overflow-hidden rounded-3xl border border-slate-200 bg-white p-3 shadow-[0_20px_55px_rgba(15,23,42,.18)]">
+                <div className="flex items-center justify-between px-2 pb-2"><p className="text-xs font-semibold uppercase tracking-[.14em] text-slate-500">CampCareer</p><span className="text-xs text-slate-400">{locale === "ko" ? "도구" : "Tools"}</span></div>
+                <div className="grid grid-cols-2 gap-2">
+                  <Link href={localizePath("/maps", pathLocale)} role="menuitem" onClick={() => setAppsOpen(false)} className="group rounded-2xl border border-transparent p-3 transition hover:border-blue-200 hover:bg-blue-50">
+                    <span className="grid size-12 place-items-center rounded-2xl bg-sky-100 text-2xl shadow-sm transition group-hover:-translate-y-0.5">🗺️</span>
+                    <span className="mt-3 block text-sm font-semibold text-slate-900">Maps</span>
+                    <span className="mt-1 block text-xs leading-5 text-slate-500">{locale === "ko" ? "지역·직업 신호" : "Places & career signals"}</span>
+                  </Link>
+                  <Link href={localizePath("/dashboard", pathLocale)} role="menuitem" onClick={() => setAppsOpen(false)} className="group rounded-2xl border border-transparent p-3 transition hover:border-violet-200 hover:bg-violet-50">
+                    <span className="grid size-12 place-items-center rounded-2xl bg-violet-100 text-2xl shadow-sm transition group-hover:-translate-y-0.5">🧭</span>
+                    <span className="mt-3 block text-sm font-semibold text-slate-900">Dashboard</span>
+                    <span className="mt-1 block text-xs leading-5 text-slate-500">{locale === "ko" ? "나의 다음 단계" : "Your next best step"}</span>
+                  </Link>
+                </div>
+              </div>}
+            </div>
             {user ? (
               <Link href={localizePath("/profile", pathLocale)}>
                 {avatarUrl ? (
