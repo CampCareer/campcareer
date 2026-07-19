@@ -52,11 +52,11 @@ export function TopNav() {
 
   return (
     <header className={cn(isCompare ? "" : "sticky top-0 z-40", isToolSurface ? "border-b border-slate-200 bg-white/95" : hasUnifiedHero ? "bg-transparent" : "bg-[linear-gradient(180deg,#ffffff_0%,#f0f5ff_100%)]", "backdrop-blur-sm")}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className={cn("flex items-center", isToolSurface ? "h-14 justify-end" : "h-20 gap-4")}>
-          {!isToolSurface && <Link href={localizePath("/", pathLocale)} className="flex items-center gap-2.5 shrink-0 mr-auto">
-            <LogoMark size={36} />
-            <span className="font-semibold text-slate-900 text-lg tracking-tight">
+      <div className="max-w-7xl mx-auto px-4 max-[360px]:px-3 sm:px-6">
+        <div className={cn("flex items-center", isToolSurface ? "h-14 justify-end" : "h-20 gap-4 max-[360px]:h-16 max-[360px]:gap-2")}>
+          {!isToolSurface && <Link href={localizePath("/", pathLocale)} className="flex shrink-0 items-center gap-2.5 mr-auto max-[360px]:gap-1.5">
+            <LogoMark size={34} />
+            <span className="font-semibold text-slate-900 text-lg tracking-tight max-[360px]:text-base">
               CampCareer
             </span>
           </Link>}
@@ -72,7 +72,7 @@ export function TopNav() {
         {/* Mobile: links on a full-width second row, scrolls cleanly. Hidden on
             /map so the map can use the full mobile screen (home is one tap on the logo). */}
         {!isToolSurface && (
-          <nav className="sm:hidden flex items-center justify-center gap-1 overflow-x-auto no-scrollbar pb-2">
+          <nav className="sm:hidden flex items-center justify-center gap-1 overflow-x-auto no-scrollbar pb-2 max-[360px]:justify-start">
             {linkEls}
           </nav>
         )}

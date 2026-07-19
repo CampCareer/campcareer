@@ -4,7 +4,7 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import type { User } from "@supabase/supabase-js"
-import { LayoutGrid, UserIcon } from "lucide-react"
+import { LayoutGrid, LogIn, UserIcon } from "lucide-react"
 import { LanguageToggle } from "@/components/language-toggle"
 import { Button } from "@/components/ui/button"
 import { useLocale, useTranslations } from "@/lib/i18n/locale-provider"
@@ -52,7 +52,7 @@ export function ToolNavActions({ className }: { className?: string }) {
 
   const avatarUrl = user?.user_metadata?.avatar_url as string | undefined
 
-  return <div className={cn("flex items-center gap-2 shrink-0", className)}>
+  return <div className={cn("flex shrink-0 items-center gap-2 max-[360px]:gap-1", className)}>
     <LanguageToggle className="text-slate-500 hover:text-slate-900 hover:bg-slate-100" />
     <div className="relative" ref={appsRef}>
       <button
@@ -61,7 +61,7 @@ export function ToolNavActions({ className }: { className?: string }) {
         aria-expanded={appsOpen}
         aria-haspopup="menu"
         onClick={() => setAppsOpen((open) => !open)}
-        className={cn("grid size-9 place-items-center rounded-xl border transition", appsOpen ? "border-blue-200 bg-blue-50 text-blue-700 shadow-sm" : "border-transparent text-slate-500 hover:border-slate-200 hover:bg-white hover:text-slate-900")}
+        className={cn("grid size-9 place-items-center rounded-xl border transition max-[360px]:size-8", appsOpen ? "border-blue-200 bg-blue-50 text-blue-700 shadow-sm" : "border-transparent text-slate-500 hover:border-slate-200 hover:bg-white hover:text-slate-900")}
       >
         <LayoutGrid className="size-[18px]" strokeWidth={2.1} />
       </button>
@@ -78,7 +78,7 @@ export function ToolNavActions({ className }: { className?: string }) {
         {avatarUrl ? <img src={avatarUrl} alt="" className="w-7 h-7 rounded-full object-cover" /> : <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center"><UserIcon className="w-4 h-4 text-blue-600" /></div>}
       </Link>
     ) : (
-      <Button variant="outline" size="sm" onClick={() => router.push(localizePath("/login", pathLocale))} className="border-blue-200 text-blue-600 hover:bg-blue-50 hover:text-blue-700">{t.common.signIn}</Button>
+      <Button variant="outline" size="sm" onClick={() => router.push(localizePath("/login", pathLocale))} className="border-blue-200 text-blue-600 hover:bg-blue-50 hover:text-blue-700 max-[360px]:size-8 max-[360px]:px-0"><LogIn className="hidden size-4 max-[360px]:block" /><span className="max-[360px]:sr-only">{t.common.signIn}</span></Button>
     )}
   </div>
 }

@@ -143,13 +143,13 @@ export default async function AustralianUniversityComparePage({ searchParams }: 
               </label>
             ))}
           </div>
-          <div className="mt-4 grid gap-3 md:grid-cols-[minmax(0,1fr)_220px_auto]">
-            <input name="field" defaultValue={field} maxLength={80} placeholder="Optional subject, e.g. nursing" className="h-11 rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" />
-            <select name="aqf" defaultValue={selectedAqf ? String(selectedAqf) : ''} className="h-11 rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium text-slate-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+          <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-[minmax(0,1fr)_220px_auto]">
+            <input name="field" defaultValue={field} maxLength={80} placeholder="Optional subject, e.g. nursing" className="h-11 min-w-0 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" />
+            <select name="aqf" defaultValue={selectedAqf ? String(selectedAqf) : ''} className="h-11 min-w-0 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium text-slate-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
               <option value="">Choose an AQF level</option>
               {AQF_LEVELS.map((aqf) => <option key={aqf} value={aqf}>AQF {aqf} · {aqfLabel(aqf)}</option>)}
             </select>
-            <button className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-slate-950 px-5 text-sm font-semibold text-white hover:bg-slate-800"><BarChart3 className="h-4 w-4" /> Compare</button>
+            <button className="inline-flex h-11 min-w-0 w-full items-center justify-center gap-2 rounded-xl bg-slate-950 px-5 text-sm font-semibold text-white hover:bg-slate-800 md:w-auto"><BarChart3 className="h-4 w-4" /> Compare</button>
           </div>
         </form>
 

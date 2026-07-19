@@ -239,7 +239,7 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
         {/* What you do + Skills — follows work distribution and relocation support */}
         <div className="grid gap-5 lg:grid-cols-2">
           {/* What you do */}
-          <section className="rounded-2xl border border-slate-200 bg-white p-5">
+          <section className="min-w-0 rounded-2xl border border-slate-200 bg-white p-5">
             <h2 className="text-lg font-semibold text-slate-950">What you actually do</h2>
             <p className="mt-3 text-sm leading-6 text-slate-600">{detail.description}</p>
             {detail.environments.length > 0 && <div className="mt-4">
@@ -274,7 +274,7 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
           </section>
 
           {/* Skills Map */}
-          <section className="rounded-2xl border border-slate-200 bg-white p-5">
+          <section className="min-w-0 rounded-2xl border border-slate-200 bg-white p-5">
             <h2 className="text-lg font-semibold text-slate-950">Skills & main tasks</h2>
             {detail.skillsCore.length > 0 ? <div className="mt-4">
               <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-400">Skills to build</h3>
@@ -340,7 +340,7 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
 
         <div className="grid gap-5 lg:grid-cols-2">
           {/* Credentials & Pathway */}
-          <section className="rounded-2xl border border-slate-200 bg-white p-5">
+          <section className="min-w-0 rounded-2xl border border-slate-200 bg-white p-5">
             <h2 className="text-lg font-semibold text-slate-950">Credentials & Pathway</h2>
             <div className="mt-4 space-y-4">
               {officialContent?.skillLevel != null && <div className="rounded-xl bg-slate-50 p-4">
@@ -375,7 +375,7 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
           </section>
 
           {/* Real jobs right now */}
-          <section className="rounded-2xl border border-slate-200 bg-white p-5">
+          <section className="min-w-0 rounded-2xl border border-slate-200 bg-white p-5">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold text-slate-950">Real jobs right now</h2>
             <span className="text-xs text-slate-400">Live signal from SEEK, Indeed & more</span>
@@ -429,7 +429,7 @@ export function OccupationDetailClient({ detail, salary, shortageRating, nationa
                 <h2 className="text-lg font-semibold text-slate-950">Regional demand</h2>
                 <div className="group relative">
                   <button type="button" aria-label="How to read regional demand" aria-describedby="regional-demand-help" className="inline-flex text-slate-400 transition hover:text-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"><CircleHelp className="h-4 w-4" /></button>
-                  <div id="regional-demand-help" role="tooltip" className="pointer-events-none absolute left-0 top-6 z-10 w-72 rounded-lg bg-slate-900 px-3 py-2 text-xs leading-5 text-white opacity-0 shadow-lg transition group-hover:opacity-100 group-focus-within:opacity-100">Longer bars show the size of the local workforce, not job vacancies. The percentage shows whether that employment base grew or fell over the year.</div>
+                  <div id="regional-demand-help" role="tooltip" className="pointer-events-none absolute left-1/2 top-6 z-10 w-52 -translate-x-1/2 rounded-lg bg-slate-900 px-3 py-2 text-xs leading-5 text-white opacity-0 shadow-lg transition group-hover:opacity-100 group-focus-within:opacity-100 min-[380px]:w-64 sm:w-72">Longer bars show the size of the local workforce, not job vacancies. The percentage shows whether that employment base grew or fell over the year.</div>
                 </div>
               </div>
             </div>
