@@ -7,7 +7,7 @@ export const metadata = pageMetadata({
   path: "/privacy",
 })
 
-const LAST_UPDATED = "14 July 2026"
+const LAST_UPDATED = "19 July 2026"
 
 export default function PrivacyPage() {
   return (
@@ -69,6 +69,24 @@ export default function PrivacyPage() {
               with partners.
             </li>
             <li>
+              <strong>Community contributions</strong> — the contribution type, page or topic,
+              text, optional source link, moderation status and reviewer note when you submit a
+              review, correction or source suggestion. Approved contributions create a private
+              reputation ledger entry. We do not publish your identity or contribution in this
+              first release.
+            </li>
+            <li>
+              <strong>Programme completion and portfolio data</strong> — the private snapshot of
+              planning records used when you complete a CampCareer programme, and the current
+              careers, providers and courses shown in your private portfolio. This is not an
+              academic, immigration or employment credential.
+            </li>
+            <li>
+              <strong>Programme evidence links</strong> — programme labels, official source URLs
+              and notes you save for your private Verify step. Saving a link does not mean that
+              CampCareer, a provider or a regulator has approved it.
+            </li>
+            <li>
               <strong>Optional measurement and attribution</strong> — after you choose “Allow
               measurement”, we store a short-lived session identifier, first page path, and UTM
               campaign fields to measure product and partner-link performance. We do not create
@@ -88,6 +106,13 @@ export default function PrivacyPage() {
             reports and private screenshots are retained for up to 180 days, unless a longer period
             is necessary to investigate abuse, security, or a legal claim. Optional attribution
             cookies expire after 30 days; measurement-consent choices expire after 180 days.
+            Community contribution and reputation records are retained while your account remains
+            active and are deleted with your account, unless retention is necessary for abuse,
+            security, or a legal claim.
+            Programme completion and private portfolio records are also retained while your account
+            remains active and are deleted with your account.
+            Programme evidence links are retained on the same basis and are deleted with your
+            account.
           </p>
         </section>
 
@@ -128,11 +153,13 @@ export default function PrivacyPage() {
           <h2 className="font-display text-lg font-semibold text-slate-800 mb-2">6. Your rights and deletion requests</h2>
           <p>
             Depending on where you live (including under the EU/UK GDPR), you may have the right
-            to access, correct, export, or delete your personal data. You can delete saved
-            saved content where the product provides a delete control. To delete your entire
-            account and all associated data, email{" "}
+            to access, correct, export, or delete your personal data. You can manage your profile
+            and delete saved content where the product provides a delete control. You can also
+            permanently delete your account in <Link href="/settings" className="text-blue-600 hover:underline">Account settings</Link>.
+            For an access, correction, or export request, email{" "}
             <a href="mailto:contact@campcareer.com" className="text-blue-600 hover:underline">contact@campcareer.com</a>{" "}
-            from your registered address; we will action verified requests within 30 days.
+            from your registered address; we will action verified requests within 30 days. Limited
+            feedback and security records may be retained for the periods described in section 3.
             Depending on your location, you may also have the right to complain to your local data
             protection authority.
           </p>
