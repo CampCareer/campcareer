@@ -2188,6 +2188,7 @@ export default function LeafletMap({
       <div
         ref={containerRef}
         className="h-full w-full bg-[#e8f4fd]"
+        style={{ backgroundColor: "#edf4fb" }}
         aria-label="Interactive career and salary map"
       />
 
