@@ -5,6 +5,8 @@ import { notFound } from 'next/navigation'
 import { ArrowRight, BarChart3, BookOpen, CheckCircle2, ExternalLink } from 'lucide-react'
 import { CollegeDetailClient, type DetailRow } from '@/app/roi-explorer/[country]/[college_id]/CollegeDetailClient'
 import { aqfLabel, getAuUniversityBySlug } from '@/lib/au-universities'
+import { getAuStudyCardCourseEvidence, getAuStudyEvidenceKey } from '@/lib/au-study-card-evidence'
+import { auProgramDirectoryHref, cleanAuStudyField } from '@/lib/au-study-routing'
 import { fetchRoiData } from '@/lib/roi-query'
 import { pageMetadata } from '@/lib/seo'
 import { JsonLd, breadcrumbLd } from '@/components/seo/json-ld'
@@ -59,6 +61,12 @@ export default async function AustralianUniversityDetailPage({ params }: { param
   const fields = [...rows]
     .sort((a, b) => (b.roi_score ?? 0) - (a.roi_score ?? 0))
     .slice(0, 24)
+  const fieldEvidence = await getAuStudyCardCourseEvidence(fields.map((row) => ({
+    institutionId: university.institutionId,
+    fieldName: row.field_name,
+    aqfLevel: row.aqf_level,
+    providerWebsiteUrl: university.websiteUrl,
+  })))
 
   return (
     <>
@@ -91,24 +99,24 @@ export default async function AustralianUniversityDetailPage({ params }: { param
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
-                <div className="flex items-center gap-2"><BookOpen className="h-5 w-5 text-blue-700" /><h2 className="text-xl font-semibold text-slate-950">Study options & ROI estimates</h2></div>
-                <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">Each row combines a field/AQF tuition group with the university’s published provider-level graduate outcomes. It is not a course-specific employment or salary claim.</p>
+                <div className="flex items-center gap-2"><BookOpen className="h-5 w-5 text-blue-700" /><h2 className="text-xl font-semibold text-slate-950">Which study groups sit behind these outcomes?</h2></div>
+                <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">Each row is the exact field and AQF tuition group used for this estimate. Earnings, employment and completion remain provider-level QILT measures; the program source shows the closest verified course or active CRICOS record we can match to that group.</p>
               </div>
               <span className="rounded-full bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-800">{rows.length} available field groups</span>
             </div>
             <div className="mt-5 overflow-x-auto">
               <table className="w-full min-w-[720px] text-left text-sm">
                 <thead className="border-b border-slate-200 text-xs uppercase tracking-wide text-slate-500">
-                  <tr><th className="pb-3 pr-4 font-semibold">Field & level</th><th className="pb-3 pr-4 font-semibold">Annual tuition</th><th className="pb-3 pr-4 font-semibold">Graduate earnings*</th><th className="pb-3 pr-4 font-semibold">ROI estimate</th><th className="pb-3 font-semibold">Action</th></tr>
+                  <tr><th className="pb-3 pr-4 font-semibold">Field & level</th><th className="pb-3 pr-4 font-semibold">Annual tuition</th><th className="pb-3 pr-4 font-semibold">Graduate earnings*</th><th className="pb-3 pr-4 font-semibold">ROI estimate</th><th className="pb-3 font-semibold">Program evidence & next step</th></tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {fields.map((row, index) => (
                     <tr key={`${row.field_name}-${row.aqf_level}-${index}`} className="align-top">
-                      <td className="py-4 pr-4"><p className="font-semibold text-slate-900">{row.field_name?.replace(/\.$/, '') || 'Available study group'}</p><p className="mt-1 text-xs text-slate-500">{aqfLabel(row.aqf_level)}{row.course_count ? ` · ${row.course_count} course${row.course_count === 1 ? '' : 's'}` : ''}</p></td>
+                      <td className="py-4 pr-4"><p className="font-semibold text-slate-900">{cleanAuStudyField(row.field_name) || 'Available study group'}</p><p className="mt-1 text-xs text-slate-500">{aqfLabel(row.aqf_level)}{row.course_count ? ` · ${row.course_count} course${row.course_count === 1 ? '' : 's'}` : ''}</p></td>
                       <td className="py-4 pr-4 font-medium text-slate-800">{money(row.tuition)}</td>
                       <td className="py-4 pr-4"><p className="font-medium text-slate-800">{money(row.median_earnings)}</p><p className="mt-1 text-xs text-slate-500">Employment {percent(row.employment_rate)}</p></td>
                       <td className="py-4 pr-4"><span className="font-semibold text-blue-700">{row.roi_score?.toFixed(1) ?? '—'}</span><p className="mt-1 text-xs text-slate-500">Payback {row.payback_years ?? '—'} yrs</p></td>
-                      <td className="py-4"><Link href={`/au/study/compare?schools=${encodeURIComponent(university.institutionId)}&field=${encodeURIComponent(row.field_name ?? '')}`} className="inline-flex items-center gap-1 text-xs font-semibold text-blue-700 hover:text-blue-800">Compare <ArrowRight className="h-3.5 w-3.5" /></Link></td>
+                      <td className="py-4"><ProgramEvidenceActions evidence={fieldEvidence[getAuStudyEvidenceKey({ institutionId: university.institutionId, fieldName: row.field_name, aqfLevel: row.aqf_level })]} programHref={auProgramDirectoryHref(row.field_name, row.aqf_level, university.institutionId)} compareHref={`/au/study/compare?schools=${encodeURIComponent(university.institutionId)}&field=${encodeURIComponent(cleanAuStudyField(row.field_name))}&aqf=${row.aqf_level ?? ''}`} /></td>
                     </tr>
                   ))}
                 </tbody>
@@ -124,4 +132,12 @@ export default async function AustralianUniversityDetailPage({ params }: { param
       </main>
     </>
   )
+}
+
+function ProgramEvidenceActions({ evidence, programHref, compareHref }: { evidence: Awaited<ReturnType<typeof getAuStudyCardCourseEvidence>>[string] | undefined; programHref: string; compareHref: string }) {
+  return <div className="flex min-w-48 flex-col items-start gap-2 text-xs">
+    {evidence?.href ? <a href={evidence.href} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-semibold text-slate-700 hover:text-blue-700 hover:underline"><ExternalLink className="size-3.5" />{evidence.label}</a> : <span className="font-medium text-slate-500">Official course link pending</span>}
+    <Link href={programHref} className="inline-flex items-center gap-1 font-semibold text-blue-700 hover:text-blue-800">See matching programs <ArrowRight className="size-3.5" /></Link>
+    <Link href={compareHref} className="inline-flex items-center gap-1 font-semibold text-slate-600 hover:text-blue-700">Compare this group <ArrowRight className="size-3.5" /></Link>
+  </div>
 }

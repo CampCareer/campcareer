@@ -5,6 +5,7 @@ import { supabaseAdmin } from "@/lib/supabase-admin"
 import { pageMetadata } from "@/lib/seo"
 import { JsonLd } from "@/components/seo/json-ld"
 import { getAuCareerTaxonomy } from "@/lib/au-career-taxonomy"
+import { getAuOccupationPath } from "@/lib/au-occupation-slug"
 import { AuJobsClient } from "./AuJobsClient"
 
 export const revalidate = 86400
@@ -78,7 +79,7 @@ export default async function AuJobsPage() {
             itemListElement: occupations.slice(0, 100).map((occ, idx) => ({
               "@type": "ListItem",
               position: idx + 1,
-              url: `https://www.campcareer.com/roi-explorer/au/occupation/${occ.anzsco_code}`,
+              url: `https://www.campcareer.com${getAuOccupationPath(occ, occupations)}`,
               name: occ.occupation_en,
             })),
           },

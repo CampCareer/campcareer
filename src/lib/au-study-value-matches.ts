@@ -2,6 +2,7 @@ import 'server-only'
 
 import { unstable_cache } from 'next/cache'
 import { getAuUniversitiesByIds, type AuUniversity } from '@/lib/au-universities'
+import { getAuStudyCardCourseEvidence, getAuStudyEvidenceKey, type AuStudyCardCourseEvidence } from '@/lib/au-study-card-evidence'
 import { fetchRoiData } from '@/lib/roi-query'
 
 type RoiRow = {
@@ -31,11 +32,15 @@ export type AuStudyValueMatch = {
   graduationRate: number
   roiScore: number
   paybackYears: number
-  courseCount: number | null
+  courseCount: number
+  courseEvidenceKind: 'verified_course' | 'cricos_record'
+  courseEvidenceLabel: string
+  courseEvidenceHref: string
+  courseEvidenceCheckedAt: string | null
   valueReasons: string[]
 }
 
-type Candidate = Omit<AuStudyValueMatch, 'institutionId' | 'university' | 'city' | 'state' | 'valueReasons'>
+type Candidate = Omit<AuStudyValueMatch, 'institutionId' | 'university' | 'city' | 'state' | 'valueReasons' | 'courseEvidenceKind' | 'courseEvidenceLabel' | 'courseEvidenceHref' | 'courseEvidenceCheckedAt'>
 
 function numberValue(value: unknown): number | null {
   const parsed = typeof value === 'number' ? value : Number(value)
@@ -62,11 +67,11 @@ function toCandidate(row: RoiRow): Candidate | null {
   const paybackYears = numberValue(row.payback_years)
   const courseCount = numberValue(row.course_count)
 
-  // A spotlight card is intentionally more conservative than the full study
-  // directory: it must have every decision metric and be a Bachelor field
-  // group. This prevents a missing field from looking like a weak outcome.
-  if (!collegeId || !field || aqfLevel !== 7 || tuition == null || medianEarnings == null || employmentRate == null || graduationRate == null || roiScore == null || paybackYears == null) return null
-  if (tuition <= 0 || medianEarnings <= 0 || employmentRate <= 0 || graduationRate <= 0 || roiScore <= 0 || paybackYears <= 0) return null
+  // Value Match is intentionally more conservative than the directory. A
+  // row must be a real Bachelor field group with every decision metric *and*
+  // a non-zero course count before it can enter the evidence gate below.
+  if (!collegeId || !field || aqfLevel !== 7 || tuition == null || medianEarnings == null || employmentRate == null || graduationRate == null || roiScore == null || paybackYears == null || courseCount == null) return null
+  if (tuition <= 0 || medianEarnings <= 0 || employmentRate <= 0 || graduationRate <= 0 || roiScore <= 0 || paybackYears <= 0 || courseCount <= 0) return null
 
   // The ROI calculator has a dedicated medicine earnings assumption. It is
   // useful in the full explorer with its methodology, but not suitable for a
@@ -83,7 +88,7 @@ function toCandidate(row: RoiRow): Candidate | null {
     graduationRate,
     roiScore,
     paybackYears,
-    courseCount: courseCount && courseCount > 0 ? Math.round(courseCount) : null,
+    courseCount: Math.round(courseCount),
   }
 }
 
@@ -109,17 +114,40 @@ export const getAuStudyValueMatches = unstable_cache(async (): Promise<AuStudyVa
     sort: 'roi_score',
   })
 
-  const bestByUniversity = new Map<string, Candidate>()
-  for (const row of result.data as RoiRow[]) {
-    const candidate = toCandidate(row)
-    if (!candidate) continue
-    const current = bestByUniversity.get(candidate.collegeId)
-    if (!current || candidate.roiScore > current.roiScore) bestByUniversity.set(candidate.collegeId, candidate)
+  const metricCompleteRows = (result.data as RoiRow[])
+    .map(toCandidate)
+    .filter((candidate): candidate is Candidate => candidate !== null)
+  const bestMetricByUniversity = new Map<string, Candidate>()
+  for (const candidate of metricCompleteRows) {
+    const current = bestMetricByUniversity.get(candidate.collegeId)
+    if (!current || candidate.roiScore > current.roiScore) bestMetricByUniversity.set(candidate.collegeId, candidate)
   }
-
-  const universities = await getAuUniversitiesByIds([...bestByUniversity.keys()])
-  const candidates = [...bestByUniversity.values()]
+  const universities = await getAuUniversitiesByIds([...bestMetricByUniversity.keys()])
+  const candidatesWithKnownProvider = [...bestMetricByUniversity.values()]
     .filter((candidate) => universities.has(candidate.collegeId))
+    .sort((left, right) => right.roiScore - left.roiScore)
+
+  if (candidatesWithKnownProvider.length === 0) return []
+
+  // The final gate needs a field/AQF-matched official source. A provider
+  // homepage or a broad catalogue is useful in the directory, but is not
+  // enough evidence to present a provider as a Value Match.
+  const courseEvidence = await getAuStudyCardCourseEvidence(candidatesWithKnownProvider.map((candidate) => {
+    const university = universities.get(candidate.collegeId)!
+    return {
+      institutionId: university.institutionId,
+      fieldName: candidate.field,
+      aqfLevel: candidate.aqfLevel,
+      providerWebsiteUrl: university.websiteUrl,
+    }
+  }))
+  const evidenceCompleteCandidates = candidatesWithKnownProvider.filter((candidate) => {
+    const university = universities.get(candidate.collegeId)!
+    const evidence = courseEvidence[getAuStudyEvidenceKey({ institutionId: university.institutionId, fieldName: candidate.field, aqfLevel: candidate.aqfLevel })]
+    return evidence?.kind === 'verified_course' || evidence?.kind === 'cricos_record'
+  })
+
+  const candidates = evidenceCompleteCandidates
     .sort((left, right) => right.roiScore - left.roiScore)
 
   if (candidates.length === 0) return []
@@ -157,10 +185,14 @@ export const getAuStudyValueMatches = unstable_cache(async (): Promise<AuStudyVa
     }
   }
 
-  return selected.map((candidate) => toValueMatch(candidate, universities.get(candidate.collegeId)!, benchmarks))
+  return selected.map((candidate) => {
+    const university = universities.get(candidate.collegeId)!
+    const evidence = courseEvidence[getAuStudyEvidenceKey({ institutionId: university.institutionId, fieldName: candidate.field, aqfLevel: candidate.aqfLevel })]!
+    return toValueMatch(candidate, university, benchmarks, evidence)
+  })
 }, ['au-study-value-matches'], { revalidate: 86400 })
 
-function toValueMatch(candidate: Candidate, university: AuUniversity, benchmarks: { tuition: number; earnings: number; employment: number; payback: number }): AuStudyValueMatch {
+function toValueMatch(candidate: Candidate, university: AuUniversity, benchmarks: { tuition: number; earnings: number; employment: number; payback: number }, evidence: AuStudyCardCourseEvidence): AuStudyValueMatch {
   return {
     ...candidate,
     institutionId: university.institutionId,
@@ -168,5 +200,9 @@ function toValueMatch(candidate: Candidate, university: AuUniversity, benchmarks
     city: university.city,
     state: university.state,
     valueReasons: reasonsFor(candidate, benchmarks),
+    courseEvidenceKind: evidence.kind as 'verified_course' | 'cricos_record',
+    courseEvidenceLabel: evidence.label,
+    courseEvidenceHref: evidence.href!,
+    courseEvidenceCheckedAt: evidence.checkedAt,
   }
 }

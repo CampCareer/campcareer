@@ -1,7 +1,10 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowRight, BarChart3, MapPin, Search } from 'lucide-react'
+import { ArrowRight, CheckCircle2, Clock3, Database, ExternalLink, MapPin } from 'lucide-react'
 import { AU_AQF_FILTERS, AU_STATES, getAuUniversitiesByIds, isAuAqfFilter, type AuAqfFilter, aqfLabel } from '@/lib/au-universities'
+import { getAuStudyCardCourseEvidence, getAuStudyEvidenceKey, type AuStudyCardCourseEvidence } from '@/lib/au-study-card-evidence'
+import { AuStudyCompareToggle, AuStudyCompareTrayProvider } from '@/components/study/au-study-compare-tray'
+import { AuStudyFilterBar } from '@/components/study/au-study-filter-bar'
 import { STUDY_CATEGORIES } from '@/data/study-concepts'
 import { fetchRoiData } from '@/lib/roi-query'
 import { pageMetadata } from '@/lib/seo'
@@ -14,7 +17,7 @@ export const metadata: Metadata = pageMetadata({
   path: '/au/study',
 })
 
-type SearchParams = { field?: string; state?: string; level?: string; category?: string }
+type SearchParams = { field?: string; state?: string; level?: string; category?: string; compare?: string }
 
 type RoiRow = {
   college_id: string
@@ -42,12 +45,31 @@ function percent(value: number | null | undefined) {
   return typeof value === 'number' && Number.isFinite(value) ? `${Math.round(value * 100)}%` : '—'
 }
 
+function dateLabel(value: string | null) {
+  if (!value) return 'Pending verification'
+  const date = new Date(value)
+  return Number.isNaN(date.getTime())
+    ? 'Pending verification'
+    : new Intl.DateTimeFormat('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }).format(date)
+}
+
+function courseLinkStyle(evidence: AuStudyCardCourseEvidence) {
+  if (evidence.kind === 'verified_course') return 'border-emerald-200 bg-emerald-50 text-emerald-950 hover:bg-emerald-100'
+  if (evidence.kind === 'cricos_record') return 'border-blue-200 bg-blue-50 text-blue-950 hover:bg-blue-100'
+  if (evidence.kind === 'provider_catalogue' || evidence.kind === 'provider_site') return 'border-slate-200 bg-slate-50 text-slate-800 hover:bg-slate-100'
+  return 'border-amber-200 bg-amber-50 text-amber-900'
+}
+
 function readSearchParams(params: SearchParams) {
   const field = params.field?.trim().slice(0, 80) ?? ''
   const state = AU_STATES.includes(params.state as typeof AU_STATES[number]) ? params.state! : 'ALL_STATES'
   const level: AuAqfFilter = isAuAqfFilter(params.level) ? params.level : 'all'
   const category = STUDY_CATEGORIES.some((item) => item.id === params.category) ? params.category! : ''
   return { field, state, level, category }
+}
+
+function compareValues(value: string | undefined) {
+  return [...new Set((value ?? '').split(',').map((item) => item.trim()).filter(Boolean))].slice(0, 3)
 }
 
 const CATEGORY_FIELD_PATTERNS: Record<string, RegExp> = {
@@ -69,7 +91,8 @@ function matchesCategory(fieldName: string | null | undefined, category: string)
 }
 
 export default async function AustralianUniversitiesPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
-  const filters = readSearchParams(await searchParams)
+  const params = await searchParams
+  const filters = readSearchParams(params)
   const result = await fetchRoiData({
     country: 'au',
     state: filters.state,
@@ -92,25 +115,38 @@ export default async function AustralianUniversitiesPage({ searchParams }: { sea
   const rows = [...rowsByUniversity.values()]
     .filter((row) => universities.has(row.college_id))
     .slice(0, 60)
+  const courseEvidence = await getAuStudyCardCourseEvidence(rows.map((row) => {
+    const university = universities.get(row.college_id)!
+    return {
+      institutionId: university.institutionId,
+      fieldName: row.field_name,
+      aqfLevel: row.aqf_level,
+      providerWebsiteUrl: university.websiteUrl,
+    }
+  }))
+  const visibleUniversities = new Map(rows.map((row) => {
+    const university = universities.get(row.college_id)!
+    return [university.institutionId, university]
+  }))
+  const rowByInstitutionId = new Map(rows.map((row) => {
+    const university = universities.get(row.college_id)!
+    return [university.institutionId, row]
+  }))
+  const initialCompare = compareValues(params.compare)
+    .filter((institutionId) => visibleUniversities.has(institutionId))
+    .map((institutionId) => {
+      const university = visibleUniversities.get(institutionId)!
+      const row = rowByInstitutionId.get(institutionId)
+      return { id: university.institutionId, name: university.name, state: university.state, fieldName: row?.field_name?.replace(/\.$/, '') ?? null, aqfLevel: row?.aqf_level ?? null }
+    })
+  const filterKey = [filters.field, filters.category, filters.state, filters.level, initialCompare.map((item) => item.id).join(',')].join('|')
 
   return (
     <main className="min-h-screen bg-transparent">
       <section className="border-b border-slate-200/90 bg-transparent">
         <div className="mx-auto max-w-6xl px-5 pb-8 pt-6 sm:px-6 sm:pb-10 sm:pt-8">
           <h1 className="mb-5 text-left text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl lg:whitespace-nowrap lg:text-4xl">Find the right study option in Australia</h1>
-          <form className="max-w-5xl rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_18px_45px_rgba(15,23,42,.10)]" action="/au/study">
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
-              <label className="relative block flex-1">
-                <span className="mb-1 block text-xs font-semibold text-slate-600">Study field</span>
-                <Search className="pointer-events-none absolute bottom-3 left-3 h-4 w-4 text-slate-400" />
-                <input name="field" defaultValue={filters.field} maxLength={80} placeholder="e.g. nursing or software" className="h-12 w-full rounded-xl border border-slate-200 bg-white pl-9 pr-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100" />
-              </label>
-              <label className="block min-w-52"><span className="mb-1 block text-xs font-semibold text-slate-600">Major category</span><select name="category" defaultValue={filters.category} className="h-12 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"><option value="">All categories</option>{STUDY_CATEGORIES.map((item) => <option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
-              <label className="block min-w-36"><span className="mb-1 block text-xs font-semibold text-slate-600">State</span><select name="state" defaultValue={filters.state} className="h-12 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"><option value="ALL_STATES">All states</option>{AU_STATES.map((state) => <option key={state} value={state}>{state}</option>)}</select></label>
-              <label className="block min-w-48"><span className="mb-1 block text-xs font-semibold text-slate-600">Study level</span><select name="level" defaultValue={filters.level} className="h-12 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">{Object.entries(AU_AQF_FILTERS).map(([key, item]) => <option key={key} value={key}>{item.label}</option>)}</select></label>
-              <button className="h-12 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700">Search</button>
-            </div>
-          </form>
+          <AuStudyFilterBar key={[filters.field, filters.category, filters.state, filters.level].join('|')} initialValues={filters} />
         </div>
       </section>
 
@@ -118,7 +154,7 @@ export default async function AustralianUniversitiesPage({ searchParams }: { sea
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
             <h2 className="text-lg font-semibold text-slate-950">{rows.length} {filters.category ? `${STUDY_CATEGORIES.find((item) => item.id === filters.category)?.label ?? ''} ` : ''}university options</h2>
-            <p className="mt-1 text-sm text-slate-500">Sorted by the available ROI estimate. Select a university to review its fields and assumptions.</p>
+            <p className="mt-1 text-sm text-slate-500">Sorted by the available ROI estimate. Each card separates field-level tuition from provider-level outcomes and shows the best official course source currently available.</p>
           </div>
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
             <Link href="/au/majors" className="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-700 hover:text-blue-700">Explore majors <ArrowRight className="h-4 w-4" /></Link>
@@ -129,34 +165,51 @@ export default async function AustralianUniversitiesPage({ searchParams }: { sea
         </div>
 
         {rows.length > 0 ? (
-          <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <AuStudyCompareTrayProvider key={filterKey} initialSelected={initialCompare} filters={filters}>
+          <div className="mt-5 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {rows.map((row) => {
               const university = universities.get(row.college_id)!
-              const compareHref = `/au/study/compare?schools=${encodeURIComponent(university.institutionId)}`
+              const evidence = courseEvidence[getAuStudyEvidenceKey({ institutionId: university.institutionId, fieldName: row.field_name, aqfLevel: row.aqf_level })]
               return (
-                <article key={row.college_id} className="flex min-h-72 flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md">
+                <article key={row.college_id} className="group relative flex min-h-[31rem] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_2px_8px_rgba(15,23,42,.04)] transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-[0_14px_32px_rgba(37,99,235,.12)]">
+                  <div aria-hidden className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-600 via-indigo-500 to-sky-400 opacity-0 transition group-hover:opacity-100" />
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-wide text-blue-700">{row.field_name?.replace(/\.$/, '') || 'Best available field estimate'}</p>
-                      <h3 className="mt-1 text-lg font-semibold leading-6 text-slate-950">{university.name}</h3>
+                      <p className="inline-flex rounded-full bg-blue-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-blue-700">{row.field_name?.replace(/\.$/, '') || 'Best available field estimate'}</p>
+                      <h3 className="mt-2 text-lg font-semibold leading-6 text-slate-950">{university.name}</h3>
                     </div>
-                    <span className="rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700">ROI {row.roi_score?.toFixed(1) ?? '—'}</span>
+                    <span className="shrink-0 rounded-xl border border-indigo-100 bg-indigo-50 px-2.5 py-1.5 text-right text-xs font-semibold leading-4 text-indigo-900"><span className="block text-[10px] font-medium uppercase tracking-wide text-indigo-500">Value estimate</span>{row.roi_score?.toFixed(1) ?? '—'}</span>
                   </div>
                   <p className="mt-2 inline-flex items-center gap-1.5 text-sm text-slate-500"><MapPin className="h-4 w-4" />{university.city ?? row.college_city ?? 'Australia'}{university.state ? `, ${university.state}` : ''}</p>
-                  <div className="mt-5 grid grid-cols-2 gap-3 border-y border-slate-100 py-4 text-sm">
-                    <div><p className="text-xs text-slate-500">Annual tuition</p><p className="mt-1 font-semibold text-slate-900">{money(row.tuition)}</p></div>
-                    <div><p className="text-xs text-slate-500">Graduate earnings</p><p className="mt-1 font-semibold text-slate-900">{money(row.median_earnings)}</p></div>
-                    <div><p className="text-xs text-slate-500">Study level</p><p className="mt-1 font-medium text-slate-800">{aqfLabel(row.aqf_level)}</p></div>
-                    <div><p className="text-xs text-slate-500">Employment rate</p><p className="mt-1 font-medium text-slate-800">{percent(row.employment_rate)}</p></div>
+                  <div className="mt-4 rounded-xl border border-blue-100 bg-blue-50/70 px-3.5 py-3 text-sm leading-5 text-slate-700">
+                    <p className="font-semibold text-slate-950">Why this option appears</p>
+                    <p className="mt-1">This is the strongest available value estimate for {university.name} in your current search, combining {aqfLabel(row.aqf_level).toLowerCase()} tuition with provider-level QILT outcomes. Estimated payback: <span className="font-semibold text-slate-950">{row.payback_years?.toFixed(1) ?? '—'} years</span>.</p>
                   </div>
+                  <div className="mt-4 grid grid-cols-2 gap-3 border-y border-slate-100 py-4">
+                    <Metric label="Annual tuition" value={money(row.tuition)} detail={`${aqfLabel(row.aqf_level)} field group`} />
+                    <Metric label="Graduate earnings*" value={money(row.median_earnings)} detail="Provider level · QILT 2024" />
+                    <Metric label="Employment*" value={percent(row.employment_rate)} detail="Provider level · QILT 2024" />
+                    <Metric label="Completion*" value={percent(row.graduation_rate)} detail="Provider level · QILT 2024" />
+                  </div>
+                  <div className={`mt-4 rounded-xl border p-3 ${courseLinkStyle(evidence)}`}>
+                    <div className="flex items-start gap-2.5">
+                      {evidence.kind === 'verified_course' ? <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" /> : <Clock3 className="mt-0.5 h-4 w-4 shrink-0" />}
+                      <div className="min-w-0">
+                        {evidence.href ? <a href={evidence.href} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-sm font-semibold underline-offset-2 hover:underline">{evidence.label}<ExternalLink className="h-3.5 w-3.5" /></a> : <p className="text-sm font-semibold">{evidence.label}</p>}
+                        <p className="mt-0.5 text-xs leading-5 opacity-80">{evidence.detail}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-3 flex items-start gap-2 text-xs leading-5 text-slate-500"><Database className="mt-0.5 h-3.5 w-3.5 shrink-0" /><p>Outcomes: QILT GOS 2024 · Course source checked: {dateLabel(evidence.checkedAt)}</p></div>
                   <div className="mt-auto flex items-center justify-between gap-3 pt-5">
                     <Link href={`/au/study/providers/${university.institutionId}`} className="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-950 hover:text-blue-700">Review outcomes <ArrowRight className="h-4 w-4" /></Link>
-                    <Link href={compareHref} className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-700 hover:text-blue-800"><BarChart3 className="h-4 w-4" /> Compare</Link>
+                    <AuStudyCompareToggle option={{ id: university.institutionId, name: university.name, state: university.state, fieldName: row.field_name?.replace(/\.$/, '') ?? null, aqfLevel: row.aqf_level ?? null }} />
                   </div>
                 </article>
               )
             })}
           </div>
+          </AuStudyCompareTrayProvider>
         ) : (
           <div className="mt-4 rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center">
             <h2 className="font-semibold text-slate-950">No matching university estimate yet</h2>
@@ -171,4 +224,12 @@ export default async function AustralianUniversitiesPage({ searchParams }: { sea
       </div></section>
     </main>
   )
+}
+
+function Metric({ label, value, detail }: { label: string; value: string; detail: string }) {
+  return <div>
+    <p className="text-[11px] font-medium text-slate-500">{label}</p>
+    <p className="mt-1 text-xl font-semibold tracking-tight text-slate-950">{value}</p>
+    <p className="mt-1 text-[11px] leading-4 text-slate-500">{detail}</p>
+  </div>
 }

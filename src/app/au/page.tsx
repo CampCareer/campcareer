@@ -51,8 +51,8 @@ export default async function AuHubPage() {
               all sourced from Australian government statistics.
             </p>
             <div className="flex flex-wrap gap-3">
-              <Link href="/au/jobs" className="px-5 py-2.5 bg-brand text-white rounded-full text-sm font-semibold hover:bg-brand-press transition-colors">Browse {occCount}+ Occupations</Link>
-              <Link href="/map?country=au&state=NSW&tab=shortage" className="px-5 py-2.5 border border-slate-200 rounded-full text-sm font-semibold hover:bg-slate-50 transition-colors">View Skills Shortage Map</Link>
+              <Link href="/au/majors" className="px-5 py-2.5 bg-brand text-white rounded-full text-sm font-semibold hover:bg-brand-press transition-colors">Choose a major to start</Link>
+              <Link href="/au/study" className="px-5 py-2.5 border border-slate-200 rounded-full text-sm font-semibold hover:bg-slate-50 transition-colors">Compare schools and programs</Link>
             </div>
           </div>
           <AustraliaQuickRoiPreview />
@@ -77,13 +77,13 @@ export default async function AuHubPage() {
 
         {/* Navigation grid — replaces the retired country-profile next steps. */}
         <section>
-          <h2 className="text-xl font-bold mb-5">Explore Australia</h2>
+          <h2 className="text-xl font-bold mb-5">Build your Australia pathway</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Link
               href="/au/majors"
               className="group p-5 rounded-xl border border-slate-200 hover:border-brand/40 hover:bg-brand-tint transition-colors"
             >
-              <div className="font-semibold mb-1">🧭 Explore Majors</div>
+              <div className="font-semibold mb-1">1 · 🧭 Choose a Major</div>
               <div className="text-sm text-slate-500">
                 Find a field that fits your career, salary and PR goals
               </div>
@@ -92,7 +92,7 @@ export default async function AuHubPage() {
               href="/au/jobs"
               className="group p-5 rounded-xl border border-slate-200 hover:border-brand/40 hover:bg-brand-tint transition-colors"
             >
-              <div className="font-semibold mb-1">💼 Jobs &amp; Occupations</div>
+              <div className="font-semibold mb-1">3 · 💼 Validate the Career</div>
               <div className="text-sm text-slate-500">
                 {occCount}+ occupations with salary, shortage &amp; PR eligibility
               </div>
@@ -101,7 +101,7 @@ export default async function AuHubPage() {
               href="/au/study"
               className="group p-5 rounded-xl border border-slate-200 hover:border-brand/40 hover:bg-brand-tint transition-colors"
             >
-              <div className="font-semibold mb-1">🎓 Study Options</div>
+              <div className="font-semibold mb-1">2 · 🎓 Compare Study Options</div>
               <div className="text-sm text-slate-500">
                 Compare university study options, levels and outcomes
               </div>

@@ -38,14 +38,19 @@ type QualificationGroup = {
 
 type CourseRow = {
   id: string
+  providerId: string | null
   title: string
   courseCode: string | null
   aqfLevel: number | null
   courseType: string | null
   durationYears: number | null
   tuitionFeeAud: number | null
-  officialUrl: string
-  sourceLabel: string
+  officialCourseUrl: string | null
+  officialCourseCheckedAt: string | null
+  cricosUrl: string | null
+  cricosCheckedAt: string | null
+  providerWebsiteUrl: string | null
+  internationalStatus: 'active_cricos' | 'provider_check'
   eligibilityNote: string | null
   providerName: string
   campus: string | null
@@ -85,6 +90,11 @@ function filterByState(courses: CourseRow[], state: string | null): CourseRow[] 
   return courses.filter((c) => c.state?.toUpperCase() === upper)
 }
 
+function filterByProvider(courses: CourseRow[], providerId: string | null): CourseRow[] {
+  if (!providerId) return courses
+  return courses.filter((course) => course.providerId === providerId)
+}
+
 export function generateStaticParams() {
   return STUDY_CONCEPTS.map((concept) => ({ concept: concept.slug }))
 }
@@ -109,7 +119,7 @@ async function fetchCourses(conceptId: string): Promise<CourseRow[]> {
   let { data, error } = await supabaseAdmin
     .from("courses_au")
     .select(
-      "id, institution_id, course_code, title, field_name, aqf_level, course_type, duration_years, tuition_fee_aud, cricos_url, synced_at",
+      "id, institution_id, course_code, title, field_name, aqf_level, course_type, duration_years, tuition_fee_aud, official_course_url, official_url_status, official_url_checked_at, cricos_url, cricos_last_seen_at, cricos_status, synced_at",
     )
     .ilike("field_name", `%${searchTerm}%`)
     .not("cricos_url", "is", null)
@@ -122,7 +132,7 @@ async function fetchCourses(conceptId: string): Promise<CourseRow[]> {
     const fallback = await supabaseAdmin
       .from("courses_au")
       .select(
-        "id, institution_id, course_code, title, field_name, aqf_level, course_type, duration_years, tuition_fee_aud, cricos_url, synced_at",
+        "id, institution_id, course_code, title, field_name, aqf_level, course_type, duration_years, tuition_fee_aud, official_course_url, official_url_status, official_url_checked_at, cricos_url, cricos_last_seen_at, cricos_status, synced_at",
       )
       .ilike("title", `%${searchTerm}%`)
       .not("cricos_url", "is", null)
@@ -144,14 +154,14 @@ async function fetchCourses(conceptId: string): Promise<CourseRow[]> {
   return [
     ...(curatedCourse ? [curatedCourse] : []),
     ...registryCourses,
-  ].filter((course, index, all) => all.findIndex((other) => other.officialUrl === course.officialUrl || (other.courseCode && other.courseCode === course.courseCode && other.providerName === course.providerName)) === index)
+  ].filter((course, index, all) => all.findIndex((other) => (other.officialCourseUrl ?? other.cricosUrl) === (course.officialCourseUrl ?? course.cricosUrl) || (other.courseCode && other.courseCode === course.courseCode && other.providerName === course.providerName)) === index)
 }
 
 async function mapRegistryCourses(data: Array<Record<string, unknown>>): Promise<CourseRow[]> {
   const providerIds = Array.from(new Set(data.map((row) => row.institution_id as string)))
   const { data: providers } = await supabaseAdmin
     .from("colleges_au")
-    .select("institution_id, name, state, city")
+    .select("institution_id, name, state, city, website_url")
     .in("institution_id", providerIds)
   const providerById = new Map((providers ?? []).map((p) => [p.institution_id as string, p]))
 
@@ -159,14 +169,19 @@ async function mapRegistryCourses(data: Array<Record<string, unknown>>): Promise
     const provider = providerById.get(row.institution_id as string)
     return {
       id: String(row.id),
+      providerId: (row.institution_id as string | null) ?? null,
       title: row.title as string,
       courseCode: row.course_code as string | null,
       aqfLevel: row.aqf_level as number | null,
       courseType: row.course_type as string | null,
       durationYears: row.duration_years as number | null,
       tuitionFeeAud: row.tuition_fee_aud as number | null,
-      officialUrl: row.cricos_url as string,
-      sourceLabel: "Australian Government CRICOS",
+      officialCourseUrl: row.official_url_status === "verified" ? row.official_course_url as string | null : null,
+      officialCourseCheckedAt: row.official_url_status === "verified" ? String(row.official_url_checked_at ?? row.synced_at ?? "") || null : null,
+      cricosUrl: row.cricos_url as string | null,
+      cricosCheckedAt: String(row.cricos_last_seen_at ?? row.synced_at ?? "") || null,
+      providerWebsiteUrl: (provider?.website_url as string | null) ?? null,
+      internationalStatus: "active_cricos",
       eligibilityNote: null,
       providerName: (provider?.name as string | undefined) ?? humanizeSlug(row.institution_id as string),
       campus: [provider?.city, provider?.state].filter(Boolean).join(", ") || null,
@@ -179,14 +194,19 @@ async function mapRegistryCourses(data: Array<Record<string, unknown>>): Promise
 function mapVocationalProgram(program: CourseOffering): CourseRow {
   return {
     id: program.id,
+    providerId: null,
     title: program.title,
     courseCode: program.courseCode ?? null,
     aqfLevel: aqfLevelFromQualification(program.qualificationLevel),
     courseType: program.qualificationLevel ?? null,
     durationYears: program.durationMonths ? program.durationMonths / 12 : null,
     tuitionFeeAud: program.tuitionCurrency === "AUD" ? program.tuitionAmount ?? null : null,
-    officialUrl: program.officialUrl,
-    sourceLabel: program.sourceName,
+    officialCourseUrl: program.officialUrl,
+    officialCourseCheckedAt: program.lastVerifiedAt,
+    cricosUrl: null,
+    cricosCheckedAt: null,
+    providerWebsiteUrl: program.officialUrl,
+    internationalStatus: "provider_check",
     eligibilityNote: program.eligibilityNote ?? null,
     providerName: program.providerName,
     campus: program.campus ?? null,
@@ -215,7 +235,7 @@ export default async function AuStudyProgramsPage({
   searchParams,
 }: {
   params: Promise<Params>
-  searchParams: Promise<{ level?: string; state?: string; page?: string }>
+  searchParams: Promise<{ level?: string; state?: string; provider?: string; page?: string }>
 }) {
   const { concept: slug } = await params
   const sp = await searchParams
@@ -227,32 +247,37 @@ export default async function AuStudyProgramsPage({
   const activeState = sp.state && AU_STATES.includes(sp.state.toUpperCase() as typeof AU_STATES[number])
     ? sp.state.toUpperCase()
     : null
+  const activeProvider = sp.provider?.trim() || null
   const currentPage = Math.max(1, Number(sp.page) || 1)
 
-  const afterGroup = filterByGroup(allCourses, activeLevel)
+  const providerScopedCourses = filterByProvider(allCourses, activeProvider)
+  const afterGroup = filterByGroup(providerScopedCourses, activeLevel)
   const afterState = filterByState(afterGroup, activeState)
   const filteredCourses = afterState
 
-  const groups = groupCourses(allCourses)
-  const statesInData = [...new Set(allCourses.map((c) => c.state).filter((s): s is string => !!s))].sort()
+  const groups = groupCourses(providerScopedCourses)
+  const statesInData = [...new Set(providerScopedCourses.map((c) => c.state).filter((s): s is string => !!s))].sort()
 
   const totalPages = Math.max(1, Math.ceil(filteredCourses.length / PAGE_SIZE))
   const safePage = Math.min(currentPage, totalPages)
   const paginatedCourses = filteredCourses.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE)
 
-  function buildHref(opts: { level?: string | null; state?: string | null; page?: number }) {
+  function buildHref(opts: { level?: string | null; state?: string | null; provider?: string | null; page?: number }) {
     const parts: string[] = []
     const level = opts.level !== undefined ? opts.level : activeLevel
     const state = opts.state !== undefined ? opts.state : activeState
+    const provider = opts.provider !== undefined ? opts.provider : activeProvider
     const page = opts.page ?? 1
     if (level) parts.push(`level=${encodeURIComponent(level)}`)
     if (state) parts.push(`state=${encodeURIComponent(state)}`)
+    if (provider) parts.push(`provider=${encodeURIComponent(provider)}`)
     if (page > 1) parts.push(`page=${page}`)
     const qs = parts.length ? `?${parts.join("&")}` : ""
     return `/au/study/programs/${concept!.slug}${qs}`
   }
 
   const activeGroup = activeLevel ? QUAL_GROUPS.find((g) => g.key === activeLevel) : null
+  const activeProviderName = activeProvider ? providerScopedCourses[0]?.providerName ?? null : null
 
   return (
     <main className="min-h-screen bg-slate-50">
@@ -308,7 +333,7 @@ export default async function AuStudyProgramsPage({
                 <p className={`text-sm font-bold ${activeLevel == null ? "text-blue-700" : "text-slate-700"}`}>
                   All levels
                 </p>
-                <p className="mt-1 text-2xl font-bold text-slate-950">{allCourses.length}</p>
+                <p className="mt-1 text-2xl font-bold text-slate-950">{providerScopedCourses.length}</p>
               </div>
               {activeLevel == null ? (
                 <span className="rounded-full bg-blue-600 px-3 py-1 text-xs font-bold text-white">Selected</span>
@@ -378,11 +403,13 @@ export default async function AuStudyProgramsPage({
         )}
 
         {/* Active filters summary */}
-        {(activeGroup || activeState) && (
+        {(activeGroup || activeState || activeProviderName) && (
           <p className="mb-6 text-sm font-semibold text-blue-700">
             Showing {filteredCourses.length} program{filteredCourses.length !== 1 ? "s" : ""}
             {activeGroup ? ` in ${activeGroup.label}` : ""}
             {activeState ? ` · ${activeState}` : ""}
+            {activeProviderName ? ` · ${activeProviderName}` : ""}
+            {activeProvider && <Link href={buildHref({ provider: null, page: 1 })} className="ml-2 underline underline-offset-2 hover:text-blue-900">Clear school</Link>}
           </p>
         )}
 
@@ -425,21 +452,19 @@ export default async function AuStudyProgramsPage({
                   />
                 </div>
 
-                <div className="mt-5 rounded-xl bg-emerald-50 px-3 py-2.5 text-xs leading-5 text-emerald-800">
-                  <strong>{course.sourceLabel}</strong> · Checked {formatDate(course.syncedAt)}
+                <div className="mt-5 space-y-2 rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs leading-5">
+                  <ProgramEvidenceLine label="Official course page" tone="blue" href={course.officialCourseUrl} checkedAt={course.officialCourseCheckedAt} available="Verified provider course page" unavailable="Not yet matched to an exact provider course page" />
+                  <ProgramEvidenceLine label="Entry requirements" tone="slate" href={course.officialCourseUrl ?? course.providerWebsiteUrl} checkedAt={course.officialCourseCheckedAt} available={course.officialCourseUrl ? "Review admission requirements on the official course page" : "Review admission requirements on the provider site"} unavailable="No structured entry-requirement record yet" />
+                  <ProgramEvidenceLine label="International students" tone={course.internationalStatus === "active_cricos" ? "emerald" : "amber"} href={course.cricosUrl} checkedAt={course.cricosCheckedAt} available={course.internationalStatus === "active_cricos" ? "Active CRICOS registration — verify provider conditions" : "International eligibility needs provider confirmation"} unavailable="International eligibility needs provider confirmation" />
                 </div>
 
                 {course.eligibilityNote && <p className="mt-3 rounded-xl bg-amber-50 px-3 py-2.5 text-xs leading-5 text-amber-900">{course.eligibilityNote}</p>}
 
-                <a
-                  href={course.officialUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-bold text-white hover:bg-blue-700"
-                >
-                  Open official programme page
-                  <ExternalLink className="h-4 w-4" />
-                </a>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {course.officialCourseUrl && <a href={course.officialCourseUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-bold text-white hover:bg-blue-700">Open official course page <ExternalLink className="h-4 w-4" /></a>}
+                  {course.cricosUrl && <a href={course.cricosUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold text-slate-800 hover:border-blue-300 hover:text-blue-700">Open CRICOS record <ExternalLink className="h-4 w-4" /></a>}
+                  {course.providerId && <Link href={`/au/study/providers/${course.providerId}`} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold text-slate-800 hover:border-blue-300 hover:text-blue-700">School profile <ArrowRight className="h-4 w-4" /></Link>}
+                </div>
               </article>
             ))}
           </div>
@@ -450,8 +475,8 @@ export default async function AuStudyProgramsPage({
               No verified programs found
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-slate-600">
-              {(activeLevel || activeState)
-                ? `No verified ${activeGroup?.label ?? concept.label} programs${activeState ? ` in ${activeState}` : ""} are currently available. Try different filters or check the official registry.`
+              {(activeLevel || activeState || activeProvider)
+                ? `No verified ${activeGroup?.label ?? concept.label} programs${activeState ? ` in ${activeState}` : ""}${activeProviderName ? ` at ${activeProviderName}` : ""} are currently available. Try different filters or check the official registry.`
                 : `No official ${concept.label} programme source is available yet. Check the national registry while we add a provider-verified pathway.`}
             </p>
             <a href="https://cricos.education.gov.au/Course/CourseSearch.aspx" target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-bold text-white hover:bg-blue-700">Search CRICOS <ExternalLink className="h-4 w-4" /></a>
@@ -510,21 +535,14 @@ export default async function AuStudyProgramsPage({
 
         {/* Next step CTA */}
         <section className="mt-8 rounded-2xl border border-blue-200 bg-blue-50 p-6">
-          <p className="text-sm font-bold text-blue-700">Next step</p>
+          <p className="text-sm font-bold text-blue-700">Continue your pathway</p>
           <h2 className="mt-2 text-2xl font-semibold text-slate-950">
-            Ready to prepare an application?
+            Check this study choice against the career outcome.
           </h2>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-700">
-            Request help from a verified school or agent only after you have
-            reviewed your shortlist and budget. Partner fees never affect course
-            or country ranking.
+            Return to the major pathway to see linked occupations, shortage and salary signals before you save a school or prepare an application. Course selection, provider evidence and career research remain separate so the trade-offs are visible.
           </p>
-          <Link
-            href={`/support/request?concept=${encodeURIComponent(concept.id)}&country=AU`}
-            className="mt-5 inline-flex min-h-11 items-center rounded-xl bg-blue-600 px-5 text-sm font-bold text-white hover:bg-blue-700"
-          >
-            Request application support
-          </Link>
+          <div className="mt-5 flex flex-wrap gap-3"><Link href={`/au/majors/${concept.slug}`} className="inline-flex min-h-11 items-center rounded-xl bg-blue-600 px-5 text-sm font-bold text-white hover:bg-blue-700">View {concept.label} careers <ArrowRight className="ml-2 h-4 w-4" /></Link><Link href="/au/study" className="inline-flex min-h-11 items-center rounded-xl border border-blue-200 bg-white px-5 text-sm font-bold text-blue-800 hover:border-blue-300">Compare schools and outcomes</Link></div>
         </section>
 
         <div className="mt-8 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs leading-5 text-amber-900">
@@ -553,6 +571,16 @@ function CourseFact({
       <p className="mt-1 text-sm font-semibold leading-5 text-slate-800">{value}</p>
     </div>
   )
+}
+
+function ProgramEvidenceLine({ label, href, checkedAt, available, unavailable, tone }: { label: string; href: string | null; checkedAt: string | null; available: string; unavailable: string; tone: 'blue' | 'emerald' | 'slate' | 'amber' }) {
+  const toneClass = {
+    blue: 'text-blue-800',
+    emerald: 'text-emerald-800',
+    slate: 'text-slate-700',
+    amber: 'text-amber-800',
+  }[tone]
+  return <div className="grid grid-cols-[7.5rem_minmax(0,1fr)] gap-2"><p className="font-semibold text-slate-500">{label}</p><div className={toneClass}>{href ? <a href={href} target="_blank" rel="noreferrer" className="font-semibold hover:underline">{available} <ExternalLink className="mb-0.5 inline size-3" /></a> : <span>{unavailable}</span>}{checkedAt && <p className="mt-0.5 text-[11px] font-medium text-slate-500">Checked {formatDate(checkedAt)}</p>}</div></div>
 }
 
 function formatDate(value: string) {
