@@ -115,6 +115,15 @@ export default async function AuHubPage() {
                 Compare shortage &amp; employment by state
               </div>
             </Link>
+            <Link
+              href="/au/budget"
+              className="group p-5 rounded-xl border border-slate-200 hover:border-brand/40 hover:bg-brand-tint transition-colors"
+            >
+              <div className="font-semibold mb-1">💰 Budget Planner</div>
+              <div className="text-sm text-slate-500">
+                Calculate tuition, living costs &amp; break-even timeline
+              </div>
+            </Link>
           </div>
         </section>
       </div>

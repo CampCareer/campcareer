@@ -5,21 +5,18 @@ import CampCareerMaps from "../map/CampCareerMaps"
 export const revalidate = 86400
 
 export const metadata = pageMetadata({
-  title: "CampCareer Maps — Study, Career & Migration Pathways",
+  title: "CampCareer Maps — Australia Study & Career Pathways",
   description:
-    "Explore study, career, salary, university, and migration pathway signals across countries in a Google Maps-style CampCareer experience.",
+    "Explore study, career, salary, university, and migration pathway signals across Australian states and regions.",
   path: "/maps",
 })
 
 export default async function MapsPage() {
-  // Serialize only the initial Australia shell. Every other country bundle is
-  // fetched by CampCareerMaps after selection instead of entering the RSC
-  // payload for every visitor.
   const data = await getInitialMapShellData()
 
   return (
     <div className="h-[100dvh] w-full">
-      <CampCareerMaps data={data} />
+      <CampCareerMaps data={data} auOnly />
     </div>
   )
 }

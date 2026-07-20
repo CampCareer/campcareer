@@ -20,5 +20,5 @@ export default async function AustralianMajorsPage({ searchParams }: { searchPar
   if (one("mode") === "explore" || one("sort")) {
     return <CountrySearchClient basePath="/au/majors" initial={{ country: "AU", category: one("category"), major: one("major"), goal: one("goal"), sort: one("sort") }} />
   }
-  return <AustraliaPathfinder initialProfile={profileFromSearchParams({ category: one("category"), goal: one("goal"), pathGoal: one("pathGoal"), budget: one("budget"), timeline: one("timeline"), stage: one("stage") })} />
+  return <AustraliaPathfinder initialProfile={profileFromSearchParams({ category: one("category"), goal: one("goal"), pathGoal: one("pathGoal"), budget: one("budget"), timeline: one("timeline"), stage: one("stage"), visa: one("visa") })} />
 }

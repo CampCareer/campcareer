@@ -79,12 +79,14 @@ export default function CampCareerMaps({
   initialTab,
   initialSA4,
   initialUniversity,
+  auOnly = false,
 }: {
   data: MapData
   initialState?: string
   initialTab?: Tab
   initialSA4?: string
   initialUniversity?: string
+  auOnly?: boolean
 }) {
   const t = useTranslations()
   const locale = useLocale()
@@ -864,6 +866,7 @@ export default function CampCareerMaps({
 
           {toolbarExpanded && (
       <div className={cn("flex min-w-0 flex-1 flex-wrap items-end gap-3 px-4 py-3", isMobile && "w-full", isMobile && toolbarExpanded && "order-2")}>
+        {!auOnly && (
         <label className="block">
           <span className="mb-1 block text-xs font-medium text-slate-500">{t.map.selectCountry}</span>
           <Select
@@ -898,6 +901,7 @@ export default function CampCareerMaps({
             </SelectContent>
           </Select>
         </label>
+        )}
 
         {activeCountry === "FR" ? (
           <>

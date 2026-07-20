@@ -7,9 +7,11 @@ export type AuPathfinderGoal = "income" | "security" | "residency" | "lower-cost
 export type AuPathfinderBudget = "lower" | "balanced" | "investment"
 export type AuPathfinderTimeline = "fast" | "standard" | "flexible"
 export type AuPathfinderStudyStage = "school" | "degree" | "career"
+export type AuPathfinderVisa = "whv" | "student" | "skilled"
 export type AuPathfinderCategory = (typeof STUDY_CATEGORIES)[number]["id"]
 
 export type AuPathfinderProfile = {
+  visa: AuPathfinderVisa
   goal: AuPathfinderGoal
   budget: AuPathfinderBudget
   timeline: AuPathfinderTimeline
@@ -35,6 +37,7 @@ export type RankedAuPathway = {
   annualTuitionAud: number | null
   durationYears: number | null
   evidenceCount: number
+  whvEligible: boolean
 }
 
 type RuleWeights = Record<Factor, number>
@@ -50,11 +53,16 @@ const BASE_WEIGHTS: Record<AuPathfinderGoal, RuleWeights> = {
 }
 
 export const DEFAULT_AU_PATHFINDER_PROFILE: AuPathfinderProfile = {
+  visa: "whv",
   goal: "income",
   budget: "balanced",
   timeline: "flexible",
   studyStage: "school",
   category: "any",
+}
+
+export function isAuPathfinderVisa(value: string | undefined): value is AuPathfinderVisa {
+  return value === "whv" || value === "student" || value === "skilled"
 }
 
 export function isAuPathfinderGoal(value: string | undefined): value is AuPathfinderGoal {
@@ -81,6 +89,7 @@ export function profileFromSearchParams(input: Record<string, string | undefined
   const landingGoal = input.goal
   const category = isAuPathfinderCategory(input.category) ? input.category : "any"
   return {
+    visa: isAuPathfinderVisa(input.visa) ? input.visa : "whv",
     goal: isAuPathfinderGoal(input.pathGoal)
       ? input.pathGoal
       : landingGoal === "low-cost"
@@ -96,9 +105,13 @@ export function profileFromSearchParams(input: Record<string, string | undefined
 }
 
 export function rankAustralianPathways(profile: AuPathfinderProfile): RankedAuPathway[] {
-  const candidates = STUDY_CONCEPTS
+  const allCandidates = STUDY_CONCEPTS
     .filter((concept) => profile.category === "any" || concept.category === profile.category)
     .map((concept) => toCandidate(concept))
+
+  const candidates = profile.visa === "whv"
+    ? allCandidates.filter((c) => c.whvEligible)
+    : allCandidates
 
   const weights = weightsFor(profile)
   const salaryValues = candidates.map((candidate) => candidate.signal?.salary_median_aud ?? null)
@@ -142,6 +155,7 @@ export function rankAustralianPathways(profile: AuPathfinderProfile): RankedAuPa
         annualTuitionAud: candidate.annualTuitionAud,
         durationYears: candidate.durationYears,
         evidenceCount,
+        whvEligible: candidate.whvEligible,
       }
     })
     .sort((left, right) => right.score - left.score || right.evidenceCount - left.evidenceCount || left.concept.label.localeCompare(right.concept.label))
@@ -154,15 +168,23 @@ export function ruleWeightSummary(profile: AuPathfinderProfile) {
     .sort(([, left], [, right]) => right - left)
 }
 
+function isWhvEligible(durationYears: number | null, qualifications: string[]): boolean {
+  if (durationYears != null && durationYears <= 0.5) return true
+  const joined = qualifications.join(" ").toLowerCase()
+  return /certificate|diploma/.test(joined) && (durationYears == null || durationYears <= 1)
+}
+
 function toCandidate(concept: StudyConcept) {
   const signal = SIGNALS.get(concept.id) ?? null
   const pathway = PATHWAYS.get(concept.id)
+  const durationYears = signal?.cost_duration_years ?? (pathway ? pathway.durationYears.max : null)
   return {
     concept,
     signal,
     qualifications: pathway?.qualificationTypes ?? [],
     annualTuitionAud: signal?.cost_bachelor_median_aud ?? signal?.cost_diploma_median_aud ?? null,
-    durationYears: signal?.cost_duration_years ?? (pathway ? pathway.durationYears.max : null),
+    durationYears,
+    whvEligible: isWhvEligible(durationYears, pathway?.qualificationTypes ?? []),
   }
 }
 
@@ -233,4 +255,57 @@ function topReasons({
 
 export function signalForConcept(conceptId: string): AuMajorSignal | null {
   return SIGNALS.get(conceptId) ?? null
+}
+
+export function rankAllPathways(profile: AuPathfinderProfile): RankedAuPathway[] {
+  const allCandidates = STUDY_CONCEPTS
+    .filter((concept) => profile.category === "any" || concept.category === profile.category)
+    .map((concept) => toCandidate(concept))
+
+  const weights = weightsFor(profile)
+  const salaryValues = allCandidates.map((candidate) => candidate.signal?.salary_median_aud ?? null)
+  const outlookValues = allCandidates.map((candidate) => candidate.signal?.outlook_2035_change_pct ?? null)
+  const shortageValues = allCandidates.map((candidate) => candidate.signal?.shortage_national_pct ?? null)
+  const residencyValues = allCandidates.map((candidate) => candidate.signal?.pr_score ?? null)
+  const costValues = allCandidates.map((candidate) => candidate.annualTuitionAud)
+  const durationValues = allCandidates.map((candidate) => candidate.durationYears)
+
+  return allCandidates
+    .map((candidate) => {
+      const values: Record<Factor, number> = {
+        salary: normalize(candidate.signal?.salary_median_aud ?? null, salaryValues),
+        outlook: normalize(candidate.signal?.outlook_2035_change_pct ?? null, outlookValues),
+        shortage: normalize(candidate.signal?.shortage_national_pct ?? null, shortageValues),
+        residency: normalize(candidate.signal?.pr_score ?? null, residencyValues),
+        cost: normalize(candidate.annualTuitionAud, costValues, true),
+        duration: normalize(candidate.durationYears, durationValues, true),
+        studyFit: studyFit(profile.studyStage, candidate.qualifications),
+      }
+      const score = Math.round(Object.entries(weights).reduce((total, [factor, weight]) => total + values[factor as Factor] * weight, 0))
+      const signal = candidate.signal
+      const reasons = topReasons({ weights, values, candidate })
+      const evidenceCount = [
+        signal?.salary_median_aud,
+        signal?.shortage_national_pct,
+        signal?.outlook_2035_change_pct,
+        signal?.pr_score,
+        candidate.annualTuitionAud,
+        candidate.durationYears,
+      ].filter((value) => value != null).length
+
+      return {
+        concept: candidate.concept,
+        score,
+        reasons,
+        salaryMedianAud: signal?.salary_median_aud ?? null,
+        shortagePct: signal?.shortage_national_pct ?? null,
+        outlook2035Pct: signal?.outlook_2035_change_pct ?? null,
+        prScore: signal?.pr_score ?? null,
+        annualTuitionAud: candidate.annualTuitionAud,
+        durationYears: candidate.durationYears,
+        evidenceCount,
+        whvEligible: candidate.whvEligible,
+      }
+    })
+    .sort((left, right) => right.score - left.score || right.evidenceCount - left.evidenceCount || left.concept.label.localeCompare(right.concept.label))
 }
