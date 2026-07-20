@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
-import { ArrowRight, Check, RotateCcw, Sparkles } from "lucide-react"
+import { ArrowRight, RotateCcw } from "lucide-react"
 import { STUDY_CATEGORIES } from "@/data/study-concepts"
 import {
   DEFAULT_AU_PATHFINDER_PROFILE,
@@ -23,7 +23,7 @@ import { useLocale } from "@/lib/i18n/locale-provider"
 import { track } from "@/lib/analytics"
 import { getStudyCategoryVisual } from "@/components/ui/au-career-category-visuals"
 
-type Choice<T extends string> = { value: T; label: string; detail: string }
+type Choice<T extends string> = { value: T; label: string; detail?: string }
 
 export function AustraliaPathfinder({ initialProfile }: { initialProfile: AuPathfinderProfile }) {
   const locale = useLocale()
@@ -57,49 +57,49 @@ export function AustraliaPathfinder({ initialProfile }: { initialProfile: AuPath
 
   const goals: Choice<AuPathfinderGoal>[] = isKo
     ? [
-        { value: "income", label: "높은 소득", detail: "임금 신호를 가장 크게 반영" },
-        { value: "security", label: "취업 안정성", detail: "부족·고용전망을 더 반영" },
-        { value: "residency", label: "장기 경로", detail: "PR 관련 신호를 더 반영" },
-        { value: "lower-cost", label: "낮은 학비", detail: "학비·기간을 더 반영" },
+        { value: "income", label: "높은 소득" },
+        { value: "security", label: "취업 안정성" },
+        { value: "residency", label: "장기 경로" },
+        { value: "lower-cost", label: "낮은 학비" },
       ]
     : [
-        { value: "income", label: "Higher income", detail: "Prioritise pay signals" },
-        { value: "security", label: "Job security", detail: "Prioritise shortage and outlook" },
-        { value: "residency", label: "Longer-term pathway", detail: "Prioritise PR-related signals" },
-        { value: "lower-cost", label: "Lower tuition", detail: "Prioritise cost and duration" },
+        { value: "income", label: "Higher income" },
+        { value: "security", label: "Job security" },
+        { value: "residency", label: "Longer-term pathway" },
+        { value: "lower-cost", label: "Lower tuition" },
       ]
   const budgets: Choice<AuPathfinderBudget>[] = isKo
     ? [
-        { value: "lower", label: "비용을 낮추고 싶어요", detail: "학비 가중치를 높임" },
-        { value: "balanced", label: "균형 있게", detail: "비용과 결과를 함께 봄" },
-        { value: "investment", label: "결과에 투자 가능", detail: "임금 신호를 조금 더 반영" },
+        { value: "lower", label: "비용을 낮추고 싶어요" },
+        { value: "balanced", label: "균형 있게" },
+        { value: "investment", label: "결과에 투자 가능" },
       ]
     : [
-        { value: "lower", label: "Keep tuition lower", detail: "Adds weight to cost" },
-        { value: "balanced", label: "Keep it balanced", detail: "Balances cost and outcomes" },
-        { value: "investment", label: "Invest for outcomes", detail: "Adds weight to pay" },
+        { value: "lower", label: "Keep tuition lower" },
+        { value: "balanced", label: "Keep it balanced" },
+        { value: "investment", label: "Invest for outcomes" },
       ]
   const timelines: Choice<AuPathfinderTimeline>[] = isKo
     ? [
-        { value: "fast", label: "2년 안쪽", detail: "짧은 학업 기간을 더 반영" },
-        { value: "standard", label: "3–4년 가능", detail: "표준 학위 경로도 고려" },
-        { value: "flexible", label: "기간 유연", detail: "기간보다 결과를 우선" },
+        { value: "fast", label: "2년 안쪽" },
+        { value: "standard", label: "3–4년 가능" },
+        { value: "flexible", label: "기간 유연" },
       ]
     : [
-        { value: "fast", label: "Within 2 years", detail: "Adds weight to duration" },
-        { value: "standard", label: "3–4 years is okay", detail: "Includes standard degrees" },
-        { value: "flexible", label: "Timeline is flexible", detail: "Prioritise the outcome" },
+        { value: "fast", label: "Within 2 years" },
+        { value: "standard", label: "3–4 years is okay" },
+        { value: "flexible", label: "Timeline is flexible" },
       ]
   const stages: Choice<AuPathfinderStudyStage>[] = isKo
     ? [
-        { value: "school", label: "고등학교 이후 시작", detail: "학사·디플로마·수료 경로" },
-        { value: "degree", label: "이미 학위가 있어요", detail: "석사·대학원 수료 옵션도 반영" },
-        { value: "career", label: "경력 전환 중", detail: "수료·디플로마 옵션도 반영" },
+        { value: "school", label: "고등학교 이후 시작" },
+        { value: "degree", label: "이미 학위가 있어요" },
+        { value: "career", label: "경력 전환 중" },
       ]
     : [
-        { value: "school", label: "Starting after school", detail: "Bachelor, diploma and certificate routes" },
-        { value: "degree", label: "I already have a degree", detail: "Also values graduate options" },
-        { value: "career", label: "Changing careers", detail: "Also values certificate and diploma options" },
+        { value: "school", label: "Starting after school" },
+        { value: "degree", label: "I already have a degree" },
+        { value: "career", label: "Changing careers" },
       ]
   const categories: Choice<AuPathfinderCategory | "any">[] = [
     { value: "any", label: isKo ? "아직 열어둘게요" : "Keep every field open", detail: isKo ? "전체 경로에서 순위 보기" : "Rank across all study paths" },
@@ -115,7 +115,6 @@ export function AustraliaPathfinder({ initialProfile }: { initialProfile: AuPath
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
         <p className="text-xs font-semibold uppercase tracking-[.18em] text-blue-700">Australia Pathfinder · beta</p>
         <h1 className="mt-3 max-w-3xl text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">{isKo ? "내 조건에서 가장 유리한 호주 학업·직업 경로를 찾아보세요" : "Find the Australia study path that best fits your constraints"}</h1>
-        <p className="mt-3 max-w-3xl leading-7 text-slate-600">{isKo ? "이 결과는 임금·부족·고용전망·PR·학비·학업 기간의 검증된 신호를 질문에 맞춰 다시 가중한 것입니다. 입학, 취업 또는 비자 결과를 보장하지 않습니다." : "Your shortlist reweights verified pay, shortage, outlook, PR, tuition and study-duration signals around your answers. It does not predict admission, employment or visa outcomes."}</p>
       </div>
     </section>
 
@@ -132,7 +131,7 @@ export function AustraliaPathfinder({ initialProfile }: { initialProfile: AuPath
           <ChoiceGroup label={isKo ? "공부 가능한 기간" : "How soon do you want to qualify?"} value={profile.timeline} choices={timelines} onChange={(value) => updateProfile("timeline", value)} />
           <ChoiceGroup label={isKo ? "현재 단계" : "Where are you starting from?"} value={profile.studyStage} choices={stages} onChange={(value) => updateProfile("studyStage", value)} />
         </div>
-        <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-slate-100 pt-5"><button type="submit" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700"><Sparkles className="size-4" />{isKo ? "내 경로 순위 업데이트" : "Update my path ranking"}</button><p className="text-xs leading-5 text-slate-500">{isKo ? "답변은 이 링크에만 반영됩니다. 계정을 만들기 전에는 저장하지 않습니다." : "Answers stay in this link only; they are not saved before you create a plan."}</p></div>
+        <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-slate-100 pt-5"><button type="submit" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700">{isKo ? "검색" : "Search"}</button><p className="text-xs leading-5 text-slate-500">{isKo ? "답변은 이 링크에만 반영됩니다. 계정을 만들기 전에는 저장하지 않습니다." : "Answers stay in this link only; they are not saved before you create a plan."}</p></div>
       </form>
 
       <section className="mt-8">
@@ -150,7 +149,7 @@ export function AustraliaPathfinder({ initialProfile }: { initialProfile: AuPath
 }
 
 function ChoiceGroup<T extends string>({ label, value, choices, onChange }: { label: string; value: T; choices: Choice<T>[]; onChange: (value: T) => void }) {
-  return <fieldset><legend className="text-sm font-semibold text-slate-900">{label}</legend><div className="mt-3 grid gap-2 sm:grid-cols-3">{choices.map((choice) => <button key={choice.value} type="button" aria-pressed={value === choice.value} onClick={() => onChange(choice.value)} className={`rounded-xl border p-3 text-left transition focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 ${value === choice.value ? "border-blue-500 bg-blue-50 shadow-sm" : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50"}`}><span className="flex items-start justify-between gap-2"><span className="text-sm font-semibold text-slate-900">{choice.label}</span>{value === choice.value && <Check className="size-4 shrink-0 text-blue-700" />}</span><span className="mt-1 block text-xs leading-5 text-slate-500">{choice.detail}</span></button>)}</div></fieldset>
+  return <label className="block"><span className="text-sm font-semibold text-slate-900">{label}</span><select value={value} onChange={(event) => onChange(event.target.value as T)} className="mt-3 block h-12 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm font-semibold text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">{choices.map((choice) => <option key={choice.value} value={choice.value}>{choice.label}</option>)}</select></label>
 }
 
 function CategorySelect({ label, value, choices, onChange }: { label: string; value: AuPathfinderCategory | "any"; choices: Choice<AuPathfinderCategory | "any">[]; onChange: (value: AuPathfinderCategory | "any") => void }) {
