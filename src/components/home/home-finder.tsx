@@ -157,12 +157,12 @@ export function HomeFinder({ locale = "en" }: { locale?: Locale }) {
 
   return (
     <div className="overflow-hidden bg-transparent">
-      <section className="relative border-b border-slate-200/90 bg-transparent">
+      <section className="relative bg-gradient-to-b from-blue-600 to-blue-50">
         <div className="mx-auto max-w-7xl px-4 pb-8 pt-6 sm:px-6 sm:pb-10 sm:pt-8">
-          <h1 className="mb-5 text-left text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl lg:whitespace-nowrap lg:text-4xl">
+          <h1 className="mb-5 text-left text-2xl font-semibold tracking-tight text-white sm:text-3xl lg:whitespace-nowrap lg:text-4xl">
             {t.headline}
           </h1>
-          <form action={searchHref} onSubmit={(event) => { event.preventDefault(); const submitted = new FormData(event.currentTarget); const submittedCategory = String(submitted.get("category") ?? ""); const submittedGoal = String(submitted.get("goal") ?? ""); const href = `${localizePath("/au/majors", localePrefix)}?${new URLSearchParams({ ...(submittedCategory ? { category: submittedCategory } : {}), ...(submittedGoal ? { goal: submittedGoal } : {}) })}`; recordDiscoveryEvent("recommendation_start", { surface: "landing", country: "AU", major: submittedCategory || "anything", goal: submittedGoal }); router.push(href) }} className="max-w-5xl rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_18px_45px_rgba(15,23,42,.10)]">
+          <form action={searchHref} onSubmit={(event) => { event.preventDefault(); const submitted = new FormData(event.currentTarget); const submittedCategory = String(submitted.get("category") ?? ""); const submittedGoal = String(submitted.get("goal") ?? ""); const href = `${localizePath("/au/majors", localePrefix)}?${new URLSearchParams({ ...(submittedCategory ? { category: submittedCategory } : {}), ...(submittedGoal ? { goal: submittedGoal } : {}) })}`; recordDiscoveryEvent("recommendation_start", { surface: "landing", country: "AU", major: submittedCategory || "anything", goal: submittedGoal }); router.push(href) }} className="max-w-5xl rounded-2xl border border-blue-400/30 bg-white p-3 shadow-[0_18px_45px_rgba(15,23,42,.10)]">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
               <input type="hidden" name="country" value="AU" />
               <div className="flex-1">
