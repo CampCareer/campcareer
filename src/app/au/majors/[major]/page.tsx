@@ -64,7 +64,7 @@ export default async function AustralianMajorDetailPage({ params }: { params: Pr
   return <main className="min-h-screen bg-slate-50">
     <section className="border-b border-slate-200 bg-white">
       <div className="mx-auto max-w-6xl px-5 py-8 sm:px-6 sm:py-10">
-        <Link href={`/au/majors?category=${encodeURIComponent(concept.category)}`} className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-blue-700"><ArrowLeft className="h-4 w-4" />Back to {category?.label ?? "majors"}</Link>
+        <Link href="/au/majors" className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-blue-700"><ArrowLeft className="h-4 w-4" />Back to majors</Link>
         <div className="mt-6 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
           <div className="max-w-3xl">
             <div className="flex items-center gap-3"><span className={`grid size-11 place-items-center rounded-xl ${tone}`}><Icon className="size-5" strokeWidth={2.2} /></span><p className="text-sm font-semibold text-blue-700">Australia · {category?.label ?? "Major pathway"}</p></div>
