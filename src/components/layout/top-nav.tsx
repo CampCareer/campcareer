@@ -7,7 +7,7 @@ import { useLocale } from "@/lib/i18n/locale-provider"
 import { localeFromPathname, localizePath, withoutLocalePrefix } from "@/lib/i18n/config"
 import { ToolNavActions } from "@/components/layout/tool-nav-actions"
 import { cn } from "@/lib/utils"
-import { Globe, Building2, Briefcase } from "lucide-react"
+import { Globe, Building2, Clock } from "lucide-react"
 
 // Numbeo-style horizontal category nav. Replaces the old sidebar — every core
 // feature is one click from the top bar. Blog lives in the footer.
@@ -16,14 +16,13 @@ export function TopNav() {
   const locale = useLocale()
   const pathLocale = localeFromPathname(pathname) ?? locale
   const barePathname = withoutLocalePrefix(pathname)
-  const isLanding = barePathname === "/"
-  const hasUnifiedHero = isLanding || barePathname === "/countries/search" || barePathname === "/universities" || barePathname === "/universities/au" || barePathname === "/majors" || barePathname === "/study" || barePathname === "/au/study" || barePathname === "/au/majors"
+  const hasUnifiedHero = barePathname === "/" || barePathname === "/countries/search" || barePathname === "/universities" || barePathname === "/universities/au" || barePathname === "/majors" || barePathname === "/study" || barePathname === "/au/study"
   const isToolSurface = barePathname === "/planner"
   const isCompare = barePathname === "/compare" || barePathname.startsWith("/compare/")
-  const navItems: { href: string; label: string; icon?: typeof Globe; accent?: "blue" | "rose" | "amber" }[] = [
+  const navItems: { href: string; label: string; icon?: typeof Globe; accent?: "blue" | "rose" | "amber" | "slate" }[] = [
     { href: "/", label: locale === "ko" ? "호주" : "Australia", icon: Globe, accent: "blue" },
-    { href: "/au/majors", label: locale === "ko" ? "전공" : "Career paths", icon: Briefcase, accent: "amber" },
     { href: "/au/study", label: locale === "ko" ? "학업" : "Study", icon: Building2, accent: "rose" },
+    { href: "/comingsoon", label: locale === "ko" ? "준비 중" : "Coming Soon", icon: Clock, accent: "slate" },
   ]
 
   const linkEls = navItems.map((item) => {
@@ -40,7 +39,7 @@ export function TopNav() {
         className={cn(
           "whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors flex items-center gap-1.5",
           active
-            ? item.accent === "rose" ? "bg-rose-50 text-rose-700" : item.accent === "amber" ? "bg-amber-100 text-amber-900" : "bg-blue-50 text-blue-700"
+            ? item.accent === "rose" ? "bg-rose-50 text-rose-700" : item.accent === "amber" ? "bg-amber-100 text-amber-900" : item.accent === "slate" ? "bg-slate-100 text-slate-700" : "bg-blue-50 text-blue-700"
             : "text-slate-500 hover:text-slate-900 hover:bg-slate-100"
         )}
       >
