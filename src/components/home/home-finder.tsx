@@ -2,9 +2,9 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
-import { ArrowRight, Clock3, X } from "lucide-react"
+import { ArrowRight, Clock3, Heart, X } from "lucide-react"
 import { LAUNCH_COUNTRIES, type LaunchCountry } from "@/data/launch-countries"
 import { STUDY_CATEGORIES } from "@/data/study-concepts"
 import { LANDING_GOALS, type LandingGoalId } from "@/lib/discovery/landing-discovery"
@@ -76,6 +76,9 @@ export function HomeFinder({ locale = "en" }: { locale?: Locale }) {
   const [goal, setGoal] = useState<LandingGoalId | "">("")
   const [requestedCountry, setRequestedCountry] = useState<LaunchCountry | null>(null)
   const [requestStatus, setRequestStatus] = useState<RequestStatus>("idle")
+  const [likeCounts, setLikeCounts] = useState<Record<string, number>>({})
+  const [likedCountries, setLikedCountries] = useState<Set<string>>(new Set())
+  const [heartAnimating, setHeartAnimating] = useState<string | null>(null)
   const router = useRouter()
   const searchHref = `${localizePath("/au/majors", localePrefix)}?${new URLSearchParams({ ...(category ? { category } : {}), ...(goal ? { goal } : {}) })}`
   const majorOptions = useMemo<PickerOption[]>(() => [
@@ -88,6 +91,43 @@ export function HomeFinder({ locale = "en" }: { locale?: Locale }) {
   const goalOptions = useMemo<PickerOption[]>(() => [
     ...LANDING_GOALS.map((item) => ({ value: item.id, label: isKo ? goalCopy(item.id).label : item.label, description: isKo ? goalCopy(item.id).description : goalCopy(item.id).descriptionEn, icon: goalCopy(item.id).icon })),
   ], [isKo])
+
+  useEffect(() => {
+    const stored = localStorage.getItem("campcareer-liked-countries")
+    if (stored) {
+      try { setLikedCountries(new Set(JSON.parse(stored))) } catch {}
+    }
+    fetch("/api/v1/country-launch-requests")
+      .then((res) => res.json())
+      .then((data) => { if (data.ok) setLikeCounts(data.counts) })
+      .catch(() => {})
+  }, [])
+
+  function toggleLike(country: LaunchCountry) {
+    const code = country.code
+    const isLiked = likedCountries.has(code)
+
+    if (!isLiked) {
+      setHeartAnimating(code)
+      setTimeout(() => setHeartAnimating(null), 600)
+    }
+
+    const next = new Set(likedCountries)
+    if (isLiked) { next.delete(code) } else { next.add(code) }
+    setLikedCountries(next)
+    localStorage.setItem("campcareer-liked-countries", JSON.stringify([...next]))
+
+    setLikeCounts((prev) => ({ ...prev, [code]: Math.max(0, (prev[code] ?? 0) + (isLiked ? -1 : 1)) }))
+
+    if (!isLiked) {
+      const browserRequestId = getCountryRequestBrowserId()
+      fetch("/api/v1/country-launch-requests", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ countryCode: code, browserRequestId }),
+      }).catch(() => {})
+    }
+  }
 
   function openCountryRequest(country: LaunchCountry) {
     setRequestedCountry(country)
@@ -155,12 +195,30 @@ export function HomeFinder({ locale = "en" }: { locale?: Locale }) {
 
           <h2 className="mt-12 text-xl font-semibold tracking-tight text-slate-950">{t.nextDestination}</h2>
           <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {LAUNCH_COUNTRIES.filter((c) => !isPublicProductCountry(c.code)).map((country) => (
-              <button key={country.code} type="button" onClick={() => openCountryRequest(country)} className="group overflow-hidden rounded-xl border border-slate-200 bg-white text-left transition-all hover:border-slate-300 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2" aria-haspopup="dialog" aria-label={`${t.requestCountry}: ${country.name}`}>
-                <div className="relative h-40 overflow-hidden"><Image src={country.image} alt="" fill sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" className="object-cover grayscale opacity-55 transition duration-300 group-hover:scale-105 group-hover:opacity-65" /><div aria-hidden="true" className="absolute inset-0 bg-slate-950/20" /><span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-slate-950/75 px-2.5 py-1 text-xs font-semibold text-white shadow-sm"><Clock3 className="h-3.5 w-3.5" />{t.comingSoon}</span></div>
-                <div className="p-4"><p className="text-xs font-semibold tracking-[.15em] text-slate-500">{country.code}</p><h3 className="mt-1 font-semibold text-slate-700">{country.name}</h3><span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-slate-600 group-hover:text-blue-700">{t.requestCountry}<ArrowRight className="h-4 w-4" /></span></div>
-              </button>
-            ))}
+            {LAUNCH_COUNTRIES.filter((c) => !isPublicProductCountry(c.code)).map((country) => {
+              const isLiked = likedCountries.has(country.code)
+              const count = likeCounts[country.code] ?? 0
+              const animating = heartAnimating === country.code
+              return (
+                <div key={country.code} className="group overflow-hidden rounded-xl border border-slate-200 bg-white transition-all hover:border-slate-300 hover:shadow-md">
+                  <div className="relative h-40 overflow-hidden">
+                    <Image src={country.image} alt="" fill sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" className="object-cover grayscale opacity-55 transition duration-300 group-hover:scale-105 group-hover:opacity-65" />
+                    <div aria-hidden="true" className="absolute inset-0 bg-slate-950/20" />
+                    <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-slate-950/75 px-2.5 py-1 text-xs font-semibold text-white shadow-sm"><Clock3 className="h-3.5 w-3.5" />{t.comingSoon}</span>
+                  </div>
+                  <div className="p-4">
+                    <p className="text-xs font-semibold tracking-[.15em] text-slate-500">{country.code}</p>
+                    <h3 className="mt-1 font-semibold text-slate-700">{country.name}</h3>
+                    <div className="mt-3 flex items-center gap-3">
+                      <button type="button" onClick={() => toggleLike(country)} className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-semibold transition ${isLiked ? "bg-rose-50 text-rose-600" : "bg-slate-100 text-slate-500 hover:bg-rose-50 hover:text-rose-500"}`} aria-label={isLiked ? `Unlike ${country.name}` : `Like ${country.name}`}>
+                        <Heart className={`h-4 w-4 transition-transform ${isLiked ? "fill-rose-500 text-rose-500" : ""} ${animating ? "scale-125" : ""}`} />
+                        <span>{count > 0 ? count : ""}</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
           </div>
         </div>
       </section>

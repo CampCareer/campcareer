@@ -37,6 +37,25 @@ function countryLaunchInterestEmail(countryName: string, countryCode: string) {
   }
 }
 
+export async function GET() {
+  const supabase = getFeedbackAdminClient()
+  if (!supabase) return json({ ok: false, code: "UNAVAILABLE", error: "Service unavailable" }, 503)
+
+  const { data, error } = await supabase
+    .from("country_launch_requests")
+    .select("country_code")
+    .not("country_code", "eq", "AU")
+
+  if (error) return json({ ok: false, code: "QUERY_FAILED", error: "Unable to fetch counts" }, 500)
+
+  const counts: Record<string, number> = {}
+  for (const row of data ?? []) {
+    counts[row.country_code] = (counts[row.country_code] ?? 0) + 1
+  }
+
+  return json({ ok: true, counts })
+}
+
 export async function POST(request: Request) {
   try {
     const parsedBody = await readJsonBody(request, MAX_REQUEST_BYTES)
