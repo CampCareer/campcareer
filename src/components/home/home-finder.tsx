@@ -80,7 +80,13 @@ export function HomeFinder({ locale = "en" }: { locale?: Locale }) {
   const [requestedCountry, setRequestedCountry] = useState<LaunchCountry | null>(null)
   const [requestStatus, setRequestStatus] = useState<RequestStatus>("idle")
   const [likeCounts, setLikeCounts] = useState<Record<string, number>>({})
-  const [likedCountries, setLikedCountries] = useState<Set<string>>(new Set())
+  const [likedCountries, setLikedCountries] = useState<Set<string>>(() => {
+    if (typeof window === "undefined") return new Set()
+    try {
+      const stored = localStorage.getItem("campcareer-liked-countries")
+      return stored ? new Set(JSON.parse(stored)) : new Set()
+    } catch { return new Set() }
+  })
   const [heartAnimating, setHeartAnimating] = useState<string | null>(null)
   const router = useRouter()
   const searchHref = `${localizePath("/au/majors", localePrefix)}?${new URLSearchParams({ ...(category ? { category } : {}), ...(goal ? { goal } : {}) })}`
@@ -96,13 +102,18 @@ export function HomeFinder({ locale = "en" }: { locale?: Locale }) {
   ], [isKo])
 
   useEffect(() => {
-    const stored = localStorage.getItem("campcareer-liked-countries")
-    if (stored) {
-      try { setLikedCountries(new Set(JSON.parse(stored))) } catch {}
-    }
     fetch("/api/v1/country-launch-requests")
       .then((res) => res.json())
-      .then((data) => { if (data.ok) setLikeCounts(data.counts) })
+      .then((data) => {
+        if (!data.ok) return
+        setLikeCounts((prev) => {
+          const next = { ...data.counts }
+          for (const code of likedCountries) {
+            next[code] = Math.max(0, (next[code] ?? 0) + 1)
+          }
+          return next
+        })
+      })
       .catch(() => {})
   }, [])
 
@@ -160,12 +171,8 @@ export function HomeFinder({ locale = "en" }: { locale?: Locale }) {
     <div className="overflow-hidden bg-transparent">
       <section className="relative bg-gradient-to-b from-blue-600 to-blue-50">
         <div className="mx-auto max-w-7xl px-4 pb-8 pt-6 sm:px-6 sm:pb-10 sm:pt-8">
-          <h1 className="mb-2 text-left text-2xl font-semibold tracking-tight text-white sm:text-3xl lg:whitespace-nowrap lg:text-4xl">
-            {t.headline}
-          </h1>
-          <p className="mb-5 max-w-2xl text-sm text-blue-100/80">
-            {isKo ? "10개 전공 카테고리, 20개국 데이터 — 당신에게 맞는 유학 경로를 찾아보세요" : "10 career categories, 20 countries — find your best study path"}
-          </p>
+          <p className="text-xs font-semibold uppercase tracking-[.18em] text-blue-200">{isKo ? "CampCareer" : "CampCareer"}</p>
+          <h1 className="mt-3 max-w-3xl text-3xl font-semibold tracking-tight text-white sm:text-4xl">{t.headline}</h1>
           <form action={searchHref} onSubmit={(event) => { event.preventDefault(); const submitted = new FormData(event.currentTarget); const submittedCategory = String(submitted.get("category") ?? ""); const submittedGoal = String(submitted.get("goal") ?? ""); const href = `${localizePath("/au/majors", localePrefix)}?${new URLSearchParams({ ...(submittedCategory ? { category: submittedCategory } : {}), ...(submittedGoal ? { goal: submittedGoal } : {}) })}`; recordDiscoveryEvent("recommendation_start", { surface: "landing", country: "AU", major: submittedCategory || "anything", goal: submittedGoal }); router.push(href) }} className="max-w-5xl rounded-2xl border border-blue-400/30 bg-white p-3 shadow-[0_18px_45px_rgba(15,23,42,.10)]">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
               <input type="hidden" name="country" value="AU" />
