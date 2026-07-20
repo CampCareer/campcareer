@@ -13,6 +13,7 @@ import { recordDiscoveryEvent } from "@/lib/analytics"
 import { IconPicker, type PickerOption, countryFlag } from "@/components/ui/icon-picker"
 import { getStudyCategoryVisual } from "@/components/ui/au-career-category-visuals"
 import { isPublicProductCountry } from "@/lib/product-scope"
+import { HomeStatsSection, HomeHowItWorksSection, HomeWhySection } from "./home-landing-sections"
 
 type Locale = "en" | "ko-KR"
 
@@ -159,9 +160,12 @@ export function HomeFinder({ locale = "en" }: { locale?: Locale }) {
     <div className="overflow-hidden bg-transparent">
       <section className="relative bg-gradient-to-b from-blue-600 to-blue-50">
         <div className="mx-auto max-w-7xl px-4 pb-8 pt-6 sm:px-6 sm:pb-10 sm:pt-8">
-          <h1 className="mb-5 text-left text-2xl font-semibold tracking-tight text-white sm:text-3xl lg:whitespace-nowrap lg:text-4xl">
+          <h1 className="mb-2 text-left text-2xl font-semibold tracking-tight text-white sm:text-3xl lg:whitespace-nowrap lg:text-4xl">
             {t.headline}
           </h1>
+          <p className="mb-5 max-w-2xl text-sm text-blue-100/80">
+            {isKo ? "10개 전공 카테고리, 20개국 데이터 — 당신에게 맞는 유학 경로를 찾아보세요" : "10 career categories, 20 countries — find your best study path"}
+          </p>
           <form action={searchHref} onSubmit={(event) => { event.preventDefault(); const submitted = new FormData(event.currentTarget); const submittedCategory = String(submitted.get("category") ?? ""); const submittedGoal = String(submitted.get("goal") ?? ""); const href = `${localizePath("/au/majors", localePrefix)}?${new URLSearchParams({ ...(submittedCategory ? { category: submittedCategory } : {}), ...(submittedGoal ? { goal: submittedGoal } : {}) })}`; recordDiscoveryEvent("recommendation_start", { surface: "landing", country: "AU", major: submittedCategory || "anything", goal: submittedGoal }); router.push(href) }} className="max-w-5xl rounded-2xl border border-blue-400/30 bg-white p-3 shadow-[0_18px_45px_rgba(15,23,42,.10)]">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
               <input type="hidden" name="country" value="AU" />
@@ -186,11 +190,25 @@ export function HomeFinder({ locale = "en" }: { locale?: Locale }) {
       <section className="bg-white">
         <div className="mx-auto max-w-7xl px-4 pb-12 pt-12 sm:px-6 sm:pb-16 sm:pt-14">
           <h2 className="text-xl font-semibold tracking-tight text-slate-950">{t.exploreCountries}</h2>
-          <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
             {LAUNCH_COUNTRIES.filter((c) => isPublicProductCountry(c.code)).map((country) => (
               <Link key={country.code} href={localizePath("/au", localePrefix)} className="group overflow-hidden rounded-xl border border-slate-200 bg-white transition-all hover:border-blue-300 hover:shadow-md">
-                <div className="relative h-40 overflow-hidden"><Image src={country.image} alt={country.name} fill sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-300 group-hover:scale-105" /><span className="absolute left-3 top-3 rounded-full bg-emerald-600 px-2.5 py-1 text-xs font-semibold text-white shadow-sm">{t.available}</span></div>
-                <div className="p-4"><p className="text-xs font-semibold tracking-[.15em] text-blue-700">{country.code}</p><h3 className="mt-1 font-semibold text-slate-950">{country.name}</h3><span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-slate-600 group-hover:text-blue-700">{t.explore}<ArrowRight className="h-4 w-4" /></span></div>
+                <div className="flex flex-col sm:flex-row">
+                  <div className="relative h-48 overflow-hidden sm:h-auto sm:w-1/2"><Image src={country.image} alt={country.name} fill sizes="(min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-300 group-hover:scale-105" /><span className="absolute left-3 top-3 rounded-full bg-emerald-600 px-2.5 py-1 text-xs font-semibold text-white shadow-sm">{t.available}</span></div>
+                  <div className="flex flex-1 flex-col p-5 sm:w-1/2">
+                    <p className="text-xs font-semibold tracking-[.15em] text-blue-700">{country.code}</p>
+                    <h3 className="mt-1 font-semibold text-slate-950">{country.name}</h3>
+                    <div className="mt-3 rounded-lg border border-blue-200 bg-blue-50 p-3">
+                      <p className="text-xs font-semibold text-blue-800">{isKo ? "호주의 강점" : "Why Australia?"}</p>
+                      <ul className="mt-2 space-y-1.5 text-xs leading-5 text-slate-600">
+                        <li>{isKo ? "졸업 후 평균 연봉: US$55k" : "Avg salary: US$55k"}</li>
+                        <li>{isKo ? "영주권(PR) 경로 제공" : "PR pathway available"}</li>
+                        <li>{isKo ? "1,700개 이상 직종 데이터" : "1,700+ occupations"}</li>
+                      </ul>
+                    </div>
+                    <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-slate-600 group-hover:text-blue-700">{t.explore}<ArrowRight className="h-4 w-4" /></span>
+                  </div>
+                </div>
               </Link>
             ))}
           </div>
@@ -232,6 +250,11 @@ export function HomeFinder({ locale = "en" }: { locale?: Locale }) {
           </div>
         </div>
       </section>
+
+      <HomeStatsSection isKo={isKo} />
+      <HomeHowItWorksSection isKo={isKo} />
+      <HomeWhySection isKo={isKo} />
+
       {requestedCountry && <CountryRequestModal country={requestedCountry} status={requestStatus} copy={COPY.en} onClose={() => setRequestedCountry(null)} onSubmit={submitCountryRequest} />}
     </div>
   )
