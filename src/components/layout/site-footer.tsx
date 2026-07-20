@@ -20,6 +20,9 @@ export function SiteFooter({ className }: { className?: string }) {
       <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-slate-400">
         <span>{tf.copyright}</span>
         <nav className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+          <Link href={localizePath("/comingsoon", pathLocale)} className="hover:text-slate-600 transition-colors">
+            {locale === "ko" ? "준비 중" : "Coming Soon"}
+          </Link>
           <Link href={localizePath("/blog", pathLocale)} className="hover:text-slate-600 transition-colors">
             {t.nav.blog}
           </Link>
