@@ -18,7 +18,7 @@ type Locale = "en" | "ko-KR"
 
 const COPY = {
   en: {
-    headline: "Start with Australia. Find the study path that fits your career.",
+    headline: "Best option for you in Australia",
     country: "Where",
     major: "Major",
     goal: "Goal",
@@ -41,7 +41,7 @@ const COPY = {
     modalClose: "Close",
   },
   ko: {
-    headline: "호주에서 시작하세요. 당신의 커리어에 맞는 학업 경로를 찾습니다.",
+    headline: "호주에서 당신에게 맞는 최적의 선택",
     country: "나라",
     major: "전공",
     goal: "목표",
