@@ -1,4 +1,14 @@
 import { COUNTRY_ROI_INSIGHTS, type DataConfidence, type DataSource } from "@/data/country-roi-mvp"
+import { getStudyCategoryVisual } from "@/components/ui/au-career-category-visuals"
+
+const MAJOR_TO_CATEGORY: Record<string, string> = {
+  "Nursing": "health", "Software Engineering": "technology", "Civil Engineering": "engineering",
+  "Computer Science": "technology", "Data Science": "technology", "Finance": "business",
+  "Healthcare": "health", "Engineering": "engineering", "Renewable Energy": "environment",
+  "AI": "technology", "Life Sciences": "health", "Logistics": "transport",
+  "Business Analytics": "business", "Hospitality": "hospitality", "Accounting": "business",
+  "Design": "design", "Environmental Science": "environment", "Manufacturing": "engineering",
+}
 
 const confidenceLabel: Record<DataConfidence, string> = {
   official: "Official",
@@ -71,9 +81,17 @@ export function CountryQuickRoiPreview({ countryCode }: { countryCode: string })
       <div className="mt-4 rounded-lg bg-slate-50 p-3">
         <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Strong majors</p>
         <div className="mt-2 flex flex-wrap gap-2">
-          {country.bestMajors.map((major) => (
-            <span key={major} className="rounded-md border border-slate-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-700">{major}</span>
-          ))}
+          {country.bestMajors.map((major) => {
+            const categoryId = MAJOR_TO_CATEGORY[major]
+            const visual = categoryId ? getStudyCategoryVisual(categoryId) : null
+            const Icon = visual?.Icon
+            return (
+              <span key={major} className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold ${visual ? visual.tone : "border border-slate-200 bg-white text-slate-700"}`}>
+                {Icon && <Icon className="h-3.5 w-3.5" strokeWidth={2.2} />}
+                {major}
+              </span>
+            )
+          })}
         </div>
       </div>
     </aside>
