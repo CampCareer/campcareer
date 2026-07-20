@@ -26,7 +26,8 @@ const COPY = {
     majorPlaceholder: "Anything",
     goalPlaceholder: "Choose your goal",
     submit: "Search",
-    exploreCountries: "Australia is live. More countries are coming.",
+    exploreCountries: "Explore Australia",
+    nextDestination: "Next Destination?",
     explore: "Explore Australia",
     available: "Available now",
     comingSoon: "Coming soon",
@@ -48,7 +49,8 @@ const COPY = {
     majorPlaceholder: "아직 모르겠어요",
     goalPlaceholder: "목표를 선택하세요",
     submit: "검색",
-    exploreCountries: "호주 서비스가 먼저 열렸습니다. 더 많은 국가를 준비 중이에요.",
+    exploreCountries: "호주를 시작해보세요",
+    nextDestination: "다음 목적지는?",
     explore: "호주 탐색",
     available: "지금 이용 가능",
     comingSoon: "준비 중",
@@ -143,12 +145,17 @@ export function HomeFinder({ locale = "en" }: { locale?: Locale }) {
         <div className="mx-auto max-w-7xl px-4 pb-12 pt-12 sm:px-6 sm:pb-16 sm:pt-14">
           <h2 className="text-xl font-semibold tracking-tight text-slate-950">{t.exploreCountries}</h2>
           <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {LAUNCH_COUNTRIES.map((country) => isPublicProductCountry(country.code) ? (
+            {LAUNCH_COUNTRIES.filter((c) => isPublicProductCountry(c.code)).map((country) => (
               <Link key={country.code} href={localizePath("/au", localePrefix)} className="group overflow-hidden rounded-xl border border-slate-200 bg-white transition-all hover:border-blue-300 hover:shadow-md">
                 <div className="relative h-40 overflow-hidden"><Image src={country.image} alt={country.name} fill sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-300 group-hover:scale-105" /><span className="absolute left-3 top-3 rounded-full bg-emerald-600 px-2.5 py-1 text-xs font-semibold text-white shadow-sm">{t.available}</span></div>
                 <div className="p-4"><p className="text-xs font-semibold tracking-[.15em] text-blue-700">{country.code}</p><h3 className="mt-1 font-semibold text-slate-950">{country.name}</h3><span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-slate-600 group-hover:text-blue-700">{t.explore}<ArrowRight className="h-4 w-4" /></span></div>
               </Link>
-            ) : (
+            ))}
+          </div>
+
+          <h2 className="mt-12 text-xl font-semibold tracking-tight text-slate-950">{t.nextDestination}</h2>
+          <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {LAUNCH_COUNTRIES.filter((c) => !isPublicProductCountry(c.code)).map((country) => (
               <button key={country.code} type="button" onClick={() => openCountryRequest(country)} className="group overflow-hidden rounded-xl border border-slate-200 bg-white text-left transition-all hover:border-slate-300 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2" aria-haspopup="dialog" aria-label={`${t.requestCountry}: ${country.name}`}>
                 <div className="relative h-40 overflow-hidden"><Image src={country.image} alt="" fill sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" className="object-cover grayscale opacity-55 transition duration-300 group-hover:scale-105 group-hover:opacity-65" /><div aria-hidden="true" className="absolute inset-0 bg-slate-950/20" /><span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-slate-950/75 px-2.5 py-1 text-xs font-semibold text-white shadow-sm"><Clock3 className="h-3.5 w-3.5" />{t.comingSoon}</span></div>
                 <div className="p-4"><p className="text-xs font-semibold tracking-[.15em] text-slate-500">{country.code}</p><h3 className="mt-1 font-semibold text-slate-700">{country.name}</h3><span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-slate-600 group-hover:text-blue-700">{t.requestCountry}<ArrowRight className="h-4 w-4" /></span></div>
