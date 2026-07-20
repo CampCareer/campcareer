@@ -15,7 +15,6 @@ import {
   type AuPathfinderReason,
   type AuPathfinderStudyStage,
   type AuPathfinderTimeline,
-  type AuPathfinderVisa,
   type RankedAuPathway,
 } from "@/lib/au-pathfinder"
 import { localizePath } from "@/lib/i18n/config"
@@ -53,18 +52,6 @@ export function AustraliaPathfinder({ initialProfile }: { initialProfile: AuPath
     track("comparison_personalized", { country: "AU", goal: profile.goal, category: profile.category, timeline: profile.timeline, visa: profile.visa })
     router.replace(`${localizePath("/au/majors", pathLocale)}?${params}`, { scroll: false })
   }
-
-  const visaOptions = useMemo<PickerOption[]>(() => (isKo
-    ? [
-        { value: "whv", label: "워킹홀리데이 비자", description: "최대 12개월, 학업 4개월 제한, 취업 가능", icon: "🎒", keywords: "whv working holiday" },
-        { value: "student", label: "학생 비자", description: "정규 학업, 시간제 취업 가능", icon: "📚", keywords: "student visa 500" },
-        { value: "skilled", label: "스킬 이민", description: "포인트 기반, 영주권 경로", icon: "💼", keywords: "skilled migration pr" },
-      ]
-    : [
-        { value: "whv", label: "Working Holiday Visa", description: "Up to 12 months, study max 4 months, work allowed", icon: "🎒", keywords: "whv working holiday" },
-        { value: "student", label: "Student Visa", description: "Full-time study, part-time work allowed", icon: "📚", keywords: "student visa 500" },
-        { value: "skilled", label: "Skilled Migration", description: "Points-based, PR pathway", icon: "💼", keywords: "skilled migration pr" },
-      ]), [isKo])
 
   const categoryOptions = useMemo<PickerOption[]>(() => [
     { value: "any", label: isKo ? "모든 분야" : "All fields", description: isKo ? "전체 경로에서 순위 보기" : "Rank across all study paths", icon: "✨", keywords: "any all" },
@@ -132,15 +119,14 @@ export function AustraliaPathfinder({ initialProfile }: { initialProfile: AuPath
 
         <form onSubmit={submit} className="mt-6 rounded-2xl border border-blue-400/30 bg-white/95 p-4 shadow-lg backdrop-blur-sm sm:p-5">
           <div className="flex flex-col gap-4 lg:grid lg:grid-cols-3 lg:items-end">
-            <div><IconPicker name="visa" label={isKo ? "비자" : "Visa"} value={profile.visa} options={visaOptions} onChange={(value) => updateProfile("visa", value as AuPathfinderVisa)} testId="visa" /></div>
             <div><IconPicker name="category" label={isKo ? "전공" : "Major"} value={profile.category} options={categoryOptions} onChange={(value) => updateProfile("category", value as AuPathfinderCategory | "any")} searchPlaceholder={isKo ? "전공 검색" : "Search majors"} testId="category" /></div>
             <div><IconPicker name="goal" label={isKo ? "목표" : "Goal"} value={profile.goal} options={goalOptions} onChange={(value) => updateProfile("goal", value as AuPathfinderGoal)} testId="goal" /></div>
+            <div><IconPicker name="budget" label={isKo ? "학비" : "Tuition Fees"} value={profile.budget} options={budgetOptions} onChange={(value) => updateProfile("budget", value as AuPathfinderBudget)} testId="budget" /></div>
           </div>
           <div className="mt-3 flex flex-col gap-4 lg:grid lg:grid-cols-5 lg:items-end">
-            <div><IconPicker name="budget" label={isKo ? "학비" : "Tuition Fees"} value={profile.budget} options={budgetOptions} onChange={(value) => updateProfile("budget", value as AuPathfinderBudget)} testId="budget" /></div>
-            <div><IconPicker name="timeline" label={isKo ? "기간" : "Timeline"} value={profile.timeline} options={timelineOptions} onChange={(value) => updateProfile("timeline", value as AuPathfinderTimeline)} testId="timeline" /></div>
-            <div><IconPicker name="stage" label={isKo ? "단계" : "Stage"} value={profile.studyStage} options={stageOptions} onChange={(value) => updateProfile("studyStage", value as AuPathfinderStudyStage)} testId="stage" /></div>
-            <div className="flex items-end gap-2 lg:col-span-2">
+            <div className="lg:col-span-2"><IconPicker name="timeline" label={isKo ? "기간" : "Timeline"} value={profile.timeline} options={timelineOptions} onChange={(value) => updateProfile("timeline", value as AuPathfinderTimeline)} testId="timeline" /></div>
+            <div className="lg:col-span-2"><IconPicker name="stage" label={isKo ? "단계" : "Stage"} value={profile.studyStage} options={stageOptions} onChange={(value) => updateProfile("studyStage", value as AuPathfinderStudyStage)} testId="stage" /></div>
+            <div className="flex items-end gap-2 lg:col-span-1">
               <button type="submit" className="inline-flex h-10 w-full items-center justify-center rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700">{isKo ? "검색" : "Search"}</button>
               <button type="button" onClick={() => setProfile(DEFAULT_AU_PATHFINDER_PROFILE)} className="inline-flex h-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white px-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 hover:text-blue-700"><RotateCcw className="size-4" /></button>
             </div>
