@@ -219,8 +219,16 @@ export function HomeFinder({ locale = "en" }: { locale?: Locale }) {
               </Link>
             ))}
           </div>
+        </div>
+      </section>
 
-          <h2 className="mt-12 text-xl font-semibold tracking-tight text-slate-950">{t.nextDestination}</h2>
+      <HomeStatsSection isKo={isKo} />
+      <HomeHowItWorksSection isKo={isKo} />
+      <HomeWhySection isKo={isKo} />
+
+      <section className="bg-white">
+        <div className="mx-auto max-w-7xl px-4 pb-12 pt-12 sm:px-6 sm:pb-16 sm:pt-14">
+          <h2 className="text-xl font-semibold tracking-tight text-slate-950">{t.nextDestination}</h2>
           <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {LAUNCH_COUNTRIES.filter((c) => !isPublicProductCountry(c.code)).map((country) => {
               const isLiked = likedCountries.has(country.code)
@@ -257,10 +265,6 @@ export function HomeFinder({ locale = "en" }: { locale?: Locale }) {
           </div>
         </div>
       </section>
-
-      <HomeStatsSection isKo={isKo} />
-      <HomeHowItWorksSection isKo={isKo} />
-      <HomeWhySection isKo={isKo} />
 
       {requestedCountry && <CountryRequestModal country={requestedCountry} status={requestStatus} copy={COPY.en} onClose={() => setRequestedCountry(null)} onSubmit={submitCountryRequest} />}
     </div>
