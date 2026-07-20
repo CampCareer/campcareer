@@ -5,9 +5,9 @@ export const revalidate = 86400
 export const dynamic = "force-static"
 
 export const metadata = pageMetadata({
-  title: "Compare Study Paths by Cost, Career Outcomes & Post-Study Options",
+  title: "Find Your Australia Study & Career Path",
   description:
-    "Search degrees, diplomas and trade qualifications, then compare total cost, career outcomes and post-study options across countries using verified sources.",
+    "Explore Australian study paths and career options with source-backed tuition, outcomes, and post-study pathway evidence.",
   path: "/",
 })
 

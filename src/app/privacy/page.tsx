@@ -7,7 +7,7 @@ export const metadata = pageMetadata({
   path: "/privacy",
 })
 
-const LAST_UPDATED = "19 July 2026"
+const LAST_UPDATED = "20 July 2026"
 
 export default function PrivacyPage() {
   return (
@@ -60,6 +60,12 @@ export default function PrivacyPage() {
               allow-listed product events collected with Vercel Analytics and Speed Insights.
               Product events may include origin country, concept ID, destination, and engine/data
               versions, but never email addresses or free-text responses.
+            </li>
+            <li>
+              <strong>Country launch requests</strong> — the destination you request and a
+              one-way digest of a browser-generated request identifier so we can deduplicate
+              demand signals. We do not collect your email address, IP address, or user-agent
+              for this feature.
             </li>
             <li>
               <strong>Feedback reports</strong> — the category and text you submit, plus an email

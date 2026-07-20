@@ -21,15 +21,15 @@ export function TopNav() {
   const isToolSurface = barePathname === "/planner"
   const isCompare = barePathname === "/compare" || barePathname.startsWith("/compare/")
   const navItems: { href: string; label: string; icon?: typeof Globe; accent?: "blue" | "rose" | "amber" }[] = [
-    { href: "/", label: locale === "ko" ? "국가" : "Countries", icon: Globe, accent: "blue" },
-    { href: "/majors", label: locale === "ko" ? "전공" : "Majors", icon: Briefcase, accent: "amber" },
-    { href: "/study", label: locale === "ko" ? "학업" : "Study", icon: Building2, accent: "rose" },
+    { href: "/", label: locale === "ko" ? "호주" : "Australia", icon: Globe, accent: "blue" },
+    { href: "/au/majors", label: locale === "ko" ? "전공" : "Career paths", icon: Briefcase, accent: "amber" },
+    { href: "/au/study", label: locale === "ko" ? "학업" : "Study", icon: Building2, accent: "rose" },
   ]
 
   const linkEls = navItems.map((item) => {
     const active =
       item.href === "/"
-        ? barePathname === "/" || barePathname === "/countries" || barePathname.startsWith("/countries/")
+        ? barePathname === "/" || barePathname === "/au"
         : barePathname === item.href || barePathname.startsWith(`${item.href}/`)
     const Icon = item.icon
     return (

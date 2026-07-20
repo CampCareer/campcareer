@@ -38,14 +38,13 @@ const fraunces = Fraunces({
 
 export const metadata: Metadata = {
   title: {
-    default: "CampCareer | Study Abroad & Immigration Decision Engine",
+    default: "CampCareer | Australia Study & Career Pathways",
     template: "%s | CampCareer",
   },
-  description: "Search study and career paths across 20 destinations. Compare tuition, take-home pay, living costs, and work pathways only where current evidence supports the result.",
+  description: "Find an Australia study and career path with source-backed tuition, income, and post-study pathway evidence.",
   keywords: [
-    "study abroad", "immigration decision", "ROI", "graduate salary",
-    "Ireland tuition", "Australia student visa", "Canada PR", "UK graduate route",
-    "university comparison", "work visa", "payback period", "study abroad planner",
+    "Australia study", "Australia career", "Australian university", "student visa",
+    "graduate salary", "university comparison", "work pathway", "study abroad planner",
   ],
   authors: [{ name: "CampCareer" }],
   creator: "CampCareer",
@@ -58,14 +57,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "CampCareer",
-    title: "CampCareer | Study Abroad & Immigration Decision Engine",
-    description: "Search study and career paths across 20 destinations with source-backed cost, income, and work-pathway evidence.",
+    title: "CampCareer | Australia Study & Career Pathways",
+    description: "Find an Australia study and career path with source-backed evidence.",
     images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "CampCareer — Study Abroad Decision Engine" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "CampCareer | Study Abroad & Immigration Decision Engine",
-    description: "Search study and career paths across 20 destinations with source-backed comparison evidence.",
+    title: "CampCareer | Australia Study & Career Pathways",
+    description: "Find an Australia study and career path with source-backed evidence.",
     images: ["/opengraph-image"],
     creator: "@campcareer",
   },
