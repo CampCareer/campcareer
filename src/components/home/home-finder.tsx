@@ -207,17 +207,20 @@ export function HomeFinder({ locale = "en" }: { locale?: Locale }) {
                     <Image src={country.image} alt="" fill sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" className="object-cover grayscale opacity-55 transition duration-300 group-hover:scale-105 group-hover:opacity-65" />
                     <div aria-hidden="true" className="absolute inset-0 bg-slate-950/20" />
                     <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-slate-950/75 px-2.5 py-1 text-xs font-semibold text-white shadow-sm"><Clock3 className="h-3.5 w-3.5" />{t.comingSoon}</span>
-                    {isLiked && <span className="absolute right-3 top-3"><Heart className="h-5 w-5 fill-rose-500 text-rose-500 drop-shadow" /></span>}
+                    <span className={`absolute right-3 top-3 inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-bold shadow-sm transition ${isLiked ? "bg-rose-500 text-white" : "bg-black/50 text-white"}`}>
+                      <Heart className={`h-3.5 w-3.5 ${isLiked ? "fill-white" : ""}`} />
+                      <span className="tabular-nums">{count > 0 ? count.toLocaleString() : "0"}</span>
+                    </span>
                   </button>
                   <div className="p-4">
                     <p className="text-xs font-semibold tracking-[.15em] text-slate-500">{country.code}</p>
                     <h3 className="mt-1 font-semibold text-slate-700">{country.name}</h3>
-                    <div className="mt-3 flex items-center gap-2">
-                      <button type="button" onClick={() => toggleLike(country)} className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-semibold transition ${isLiked ? "bg-rose-50 text-rose-600" : "bg-slate-100 text-slate-500 hover:bg-rose-50 hover:text-rose-500"}`} aria-label={isLiked ? `Unlike ${country.name}` : `Like ${country.name}`}>
-                        <Heart className={`h-4 w-4 transition-transform ${isLiked ? "fill-rose-500 text-rose-500" : ""} ${animating ? "scale-125" : ""}`} />
-                        <span>{count > 0 ? count : ""}</span>
+                    <div className="mt-3 flex items-center justify-between">
+                      <button type="button" onClick={() => toggleLike(country)} className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-semibold transition ${isLiked ? "bg-rose-50 text-rose-600" : "bg-slate-100 text-slate-500 hover:bg-rose-50 hover:text-rose-500"}`} aria-label={isLiked ? `Unlike ${country.name}` : `Like ${country.name}`}>
+                        <Heart className={`h-5 w-5 transition-transform ${isLiked ? "fill-rose-500 text-rose-500" : ""} ${animating ? "scale-125" : ""}`} />
+                        <span className="tabular-nums">{count > 0 ? count.toLocaleString() : "0"}</span>
                       </button>
-                      <Link href={localizePath(`/${country.code.toLowerCase()}`, localePrefix)} className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1.5 text-sm font-semibold text-slate-500 transition hover:bg-blue-50 hover:text-blue-600">
+                      <Link href={localizePath(`/${country.code.toLowerCase()}`, localePrefix)} className="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-400 transition hover:text-blue-600">
                         <Eye className="h-4 w-4" />
                         <span>{t.preview}</span>
                       </Link>
