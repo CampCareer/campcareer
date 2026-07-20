@@ -113,12 +113,12 @@ export function AustraliaPathfinder({ initialProfile }: { initialProfile: AuPath
       ]), [isKo])
 
   return <main className="min-h-screen bg-slate-50">
-    <section className="border-b border-slate-200 bg-white">
+    <section className="bg-gradient-to-b from-blue-600 to-blue-50">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
-        <p className="text-xs font-semibold uppercase tracking-[.18em] text-blue-700">Australia Pathfinder · beta</p>
-        <h1 className="mt-3 max-w-3xl text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">{isKo ? "내 조건에 맞는 호주 학업 경로" : "Find the best Australia study path"}</h1>
+        <p className="text-xs font-semibold uppercase tracking-[.18em] text-blue-200">Australia Pathfinder · beta</p>
+        <h1 className="mt-3 max-w-3xl text-3xl font-semibold tracking-tight text-white sm:text-4xl">{isKo ? "내 조건에 맞는 호주 학업 경로" : "Find the best Australia study path"}</h1>
 
-        <form onSubmit={submit} className="mt-6 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+        <form onSubmit={submit} className="mt-6 rounded-2xl border border-blue-400/30 bg-white/95 p-4 shadow-lg backdrop-blur-sm sm:p-5">
           <div className="flex flex-col gap-4 lg:grid lg:grid-cols-5 lg:items-end">
             <div className="lg:col-span-3"><IconPicker name="category" label={isKo ? "전공" : "Major"} value={profile.category} options={categoryOptions} onChange={(value) => updateProfile("category", value as AuPathfinderCategory | "any")} searchPlaceholder={isKo ? "전공 검색" : "Search majors"} testId="category" /></div>
             <div className="lg:col-span-1"><IconPicker name="goal" label={isKo ? "목표" : "Goal"} value={profile.goal} options={goalOptions} onChange={(value) => updateProfile("goal", value as AuPathfinderGoal)} testId="goal" /></div>
