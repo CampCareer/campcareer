@@ -199,7 +199,7 @@ export function CollegeDetailClient({
           <SchoolTypeBadge type={best.school_type} />
           <span className="text-xs text-slate-400">{COUNTRY_LABEL[country]}</span>
         </div>
-        <h1 className="font-display text-3xl font-semibold text-slate-900 tracking-tight">{best.college_name}</h1>
+        <h1 className="text-3xl font-semibold text-slate-950 tracking-tight">{best.college_name}</h1>
         <p className="text-slate-500 text-sm">
           {best.college_state}
         </p>
@@ -254,10 +254,10 @@ export function CollegeDetailClient({
           <CardContent className="pt-5 pb-5">
             <div className="flex items-center gap-1.5 mb-2">
               <TrendingUp className="w-4 h-4 text-blue-500" />
-              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">{td.roiScore}</span>
+              <span className="text-xs font-semibold text-slate-500 uppercase tracking-[.18em]">{td.roiScore}</span>
               <RoiInfo className="ml-auto" />
             </div>
-            <p className="text-2xl font-bold text-blue-600">{best.roi_score.toFixed(1)}</p>
+            <p className="text-2xl font-semibold text-blue-600">{best.roi_score.toFixed(1)}</p>
             <p className="text-xs text-slate-400 mt-0.5">{td.bestCity}</p>
           </CardContent>
         </Card>
@@ -266,9 +266,9 @@ export function CollegeDetailClient({
           <CardContent className="pt-5 pb-5">
             <div className="flex items-center gap-1.5 mb-2">
               <DollarSign className="w-4 h-4 text-emerald-500" />
-              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">{td.netSalary}</span>
+              <span className="text-xs font-semibold text-slate-500 uppercase tracking-[.18em]">{td.netSalary}</span>
             </div>
-            <p className="text-2xl font-bold text-emerald-600">
+            <p className="text-2xl font-semibold text-emerald-600">
               {fmt(estimatedNetSalary, country)}
             </p>
             <p className="text-xs text-slate-400 mt-0.5">
@@ -285,9 +285,9 @@ export function CollegeDetailClient({
           <CardContent className="pt-5 pb-5">
             <div className="flex items-center gap-1.5 mb-2">
               <Clock className="w-4 h-4 text-amber-500" />
-              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">{td.payback}</span>
+              <span className="text-xs font-semibold text-slate-500 uppercase tracking-[.18em]">{td.payback}</span>
             </div>
-            <p className="text-2xl font-bold text-amber-600">{best.payback_years} yrs</p>
+            <p className="text-2xl font-semibold text-amber-600">{best.payback_years} yrs</p>
             <p className="text-xs text-slate-400 mt-0.5">{td.bestCity}</p>
           </CardContent>
         </Card>
@@ -296,9 +296,9 @@ export function CollegeDetailClient({
           <CardContent className="pt-5 pb-5">
             <div className="flex items-center gap-1.5 mb-2">
               <GraduationCap className="w-4 h-4 text-blue-500" />
-              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">{td.gradRate}</span>
+              <span className="text-xs font-semibold text-slate-500 uppercase tracking-[.18em]">{td.gradRate}</span>
             </div>
-            <p className="text-2xl font-bold text-blue-600">{fmtPercent(best.graduation_rate)}</p>
+            <p className="text-2xl font-semibold text-blue-600">{fmtPercent(best.graduation_rate)}</p>
             <p className="text-xs text-slate-400 mt-0.5">{td.graduation}</p>
           </CardContent>
         </Card>
@@ -316,15 +316,15 @@ export function CollegeDetailClient({
             {/* Tuition & Earnings info row */}
             <div className="grid grid-cols-2 gap-4 mb-6 pb-5 border-b border-slate-100">
               <div>
-                <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">{td.annualTuition}</p>
-                <p className="text-xl font-bold text-slate-800">{fmt(best.tuition, country)}</p>
+                <p className="text-xs font-medium text-slate-500 uppercase tracking-[.18em] mb-1">{td.annualTuition}</p>
+                <p className="text-xl font-semibold text-slate-800">{fmt(best.tuition, country)}</p>
                 <p className="text-xs text-slate-400 mt-0.5">
                   {td.perYear} · {fmt(best.tuition * totalYears, country)} {td.totalYears.replace('{years}', String(totalYears))}
                 </p>
               </div>
               <div>
-                <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">{td.medianEarnings}</p>
-                <p className="text-xl font-bold text-slate-800">{fmt(best.median_earnings, country)}</p>
+                <p className="text-xs font-medium text-slate-500 uppercase tracking-[.18em] mb-1">{td.medianEarnings}</p>
+                <p className="text-xl font-semibold text-slate-800">{fmt(best.median_earnings, country)}</p>
                 <p className="text-xs text-slate-400 mt-0.5">{currCode} {td.perYear}</p>
               </div>
             </div>
@@ -390,12 +390,12 @@ export function CollegeDetailClient({
               <div className="border-t-2 border-slate-200 pt-4 mt-2">
                 <div className="flex items-center justify-between">
                   <div>
-                    <span className="text-base font-bold text-slate-900">{td.equalNetSalary}</span>
+                    <span className="text-base font-semibold text-slate-900">{td.equalNetSalary}</span>
                     <span className="text-xs text-slate-400 ml-2">
                       {hasLivingCostData ? td.afterRentLiving : 'before rent & living costs'}
                     </span>
                   </div>
-                  <span className="text-2xl font-bold text-emerald-600">
+                  <span className="text-2xl font-semibold text-emerald-600">
                     {fmt(estimatedNetSalary, country)}
                   </span>
                 </div>

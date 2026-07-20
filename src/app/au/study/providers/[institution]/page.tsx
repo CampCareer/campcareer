@@ -106,7 +106,7 @@ export default async function AustralianUniversityDetailPage({ params }: { param
             </div>
             <div className="mt-5 overflow-x-auto">
               <table className="w-full min-w-[720px] text-left text-sm">
-                <thead className="border-b border-slate-200 text-xs uppercase tracking-wide text-slate-500">
+                <thead className="border-b border-slate-200 text-xs uppercase tracking-[.18em] text-slate-500">
                   <tr><th className="pb-3 pr-4 font-semibold">Field & level</th><th className="pb-3 pr-4 font-semibold">Annual tuition</th><th className="pb-3 pr-4 font-semibold">Graduate earnings*</th><th className="pb-3 pr-4 font-semibold">ROI estimate</th><th className="pb-3 font-semibold">Program evidence & next step</th></tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
