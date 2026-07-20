@@ -8,7 +8,6 @@ import { STUDY_CATEGORIES } from "@/data/study-concepts"
 import {
   DEFAULT_AU_PATHFINDER_PROFILE,
   rankAustralianPathways,
-  ruleWeightSummary,
   type AuPathfinderBudget,
   type AuPathfinderCategory,
   type AuPathfinderGoal,
@@ -31,7 +30,6 @@ export function AustraliaPathfinder({ initialProfile }: { initialProfile: AuPath
   const router = useRouter()
   const [profile, setProfile] = useState(initialProfile)
   const ranked = useMemo(() => rankAustralianPathways(profile), [profile])
-  const ruleSummary = useMemo(() => ruleWeightSummary(profile).slice(0, 3), [profile])
 
   useEffect(() => {
     setProfile(initialProfile)
@@ -115,14 +113,14 @@ export function AustraliaPathfinder({ initialProfile }: { initialProfile: AuPath
   return <main className="min-h-screen bg-slate-50">
     <section className="bg-gradient-to-b from-blue-600 to-blue-50">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
-        <p className="text-xs font-semibold uppercase tracking-[.18em] text-blue-200">Australia Pathfinder · beta</p>
+        <p className="text-xs font-semibold uppercase tracking-[.18em] text-blue-200">Australia Pathfinder</p>
         <h1 className="mt-3 max-w-3xl text-3xl font-semibold tracking-tight text-white sm:text-4xl">{isKo ? "내 조건에 맞는 호주 학업 경로" : "Find the best Australia study path"}</h1>
 
         <form onSubmit={submit} className="mt-6 rounded-2xl border border-blue-400/30 bg-white/95 p-4 shadow-lg backdrop-blur-sm sm:p-5">
-          <div className="flex flex-col gap-4 lg:grid lg:grid-cols-5 lg:items-end">
-            <div className="lg:col-span-3"><IconPicker name="category" label={isKo ? "전공" : "Major"} value={profile.category} options={categoryOptions} onChange={(value) => updateProfile("category", value as AuPathfinderCategory | "any")} searchPlaceholder={isKo ? "전공 검색" : "Search majors"} testId="category" /></div>
-            <div className="lg:col-span-1"><IconPicker name="goal" label={isKo ? "목표" : "Goal"} value={profile.goal} options={goalOptions} onChange={(value) => updateProfile("goal", value as AuPathfinderGoal)} testId="goal" /></div>
-            <div className="lg:col-span-1"><IconPicker name="budget" label={isKo ? "학비" : "Tuition Fees"} value={profile.budget} options={budgetOptions} onChange={(value) => updateProfile("budget", value as AuPathfinderBudget)} testId="budget" /></div>
+          <div className="flex flex-col gap-4 lg:grid lg:grid-cols-3 lg:items-end">
+            <div><IconPicker name="category" label={isKo ? "전공" : "Major"} value={profile.category} options={categoryOptions} onChange={(value) => updateProfile("category", value as AuPathfinderCategory | "any")} searchPlaceholder={isKo ? "전공 검색" : "Search majors"} testId="category" /></div>
+            <div><IconPicker name="goal" label={isKo ? "목표" : "Goal"} value={profile.goal} options={goalOptions} onChange={(value) => updateProfile("goal", value as AuPathfinderGoal)} testId="goal" /></div>
+            <div><IconPicker name="budget" label={isKo ? "학비" : "Tuition Fees"} value={profile.budget} options={budgetOptions} onChange={(value) => updateProfile("budget", value as AuPathfinderBudget)} testId="budget" /></div>
           </div>
           <div className="mt-3 flex flex-col gap-4 lg:grid lg:grid-cols-5 lg:items-end">
             <div className="lg:col-span-2"><IconPicker name="timeline" label={isKo ? "기간" : "Timeline"} value={profile.timeline} options={timelineOptions} onChange={(value) => updateProfile("timeline", value as AuPathfinderTimeline)} testId="timeline" /></div>
@@ -138,11 +136,7 @@ export function AustraliaPathfinder({ initialProfile }: { initialProfile: AuPath
 
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
       <section>
-        <div className="flex flex-col gap-4 rounded-2xl border border-blue-100 bg-blue-50/70 p-5 sm:flex-row sm:items-center sm:justify-between">
-          <div><p className="text-xs font-semibold uppercase tracking-[.16em] text-blue-700">{isKo ? "설명 가능한 규칙" : "Explainable rules"}</p><h2 className="mt-1 text-xl font-semibold tracking-tight text-slate-950">{isKo ? "현재 순위에서 가장 큰 비중" : "What drives this ranking now"}</h2></div>
-          <div className="flex flex-wrap gap-2">{ruleSummary.map(([factor, weight]) => <span key={factor} className="rounded-full border border-blue-200 bg-white px-3 py-1.5 text-xs font-semibold text-blue-900">{factorLabel(factor, isKo)} {weight}%</span>)}</div>
-        </div>
-        <div className="mt-6 grid gap-4 lg:grid-cols-2">
+        <div className="grid gap-4 lg:grid-cols-2">
           {ranked.slice(0, 6).map((pathway, index) => <PathwayCard key={pathway.concept.id} pathway={pathway} rank={index + 1} locale={pathLocale} isKo={isKo} featured={index === 0} />)}
         </div>
         <div className="mt-7 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm"><p className="text-slate-600">{isKo ? "직접 전공을 둘러보고 싶나요?" : "Want to browse every field directly?"}</p><Link href={localizePath("/au/majors?mode=explore", pathLocale)} className="inline-flex items-center gap-1.5 font-semibold text-blue-700 hover:text-blue-800">{isKo ? "전체 전공 탐색" : "Browse all majors"}<ArrowRight className="size-4" /></Link></div>
@@ -170,13 +164,6 @@ function ReasonBadge({ reason, isKo }: { reason: AuPathfinderReason; isKo: boole
 
 function Metric({ label, value }: { label: string; value: string }) {
   return <div className="rounded-lg bg-slate-50 p-2.5"><dt className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">{label}</dt><dd className="mt-1 text-sm font-semibold text-slate-800">{value}</dd></div>
-}
-
-function factorLabel(factor: string, isKo: boolean) {
-  const labels: Record<string, [string, string]> = {
-    salary: ["Pay", "임금"], outlook: ["Outlook", "고용전망"], shortage: ["Shortage", "부족 신호"], residency: ["PR signal", "PR 신호"], cost: ["Tuition", "학비"], duration: ["Study time", "학업 기간"], studyFit: ["Study-format fit", "학업 형태"],
-  }
-  return labels[factor]?.[isKo ? 1 : 0] ?? factor
 }
 
 function reasonLabel(factor: string, isKo: boolean) {
