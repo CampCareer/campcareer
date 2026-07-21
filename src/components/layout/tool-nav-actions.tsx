@@ -13,7 +13,7 @@ import { createClient } from "@/lib/supabase-client"
 import { cn } from "@/lib/utils"
 
 /** Shared account and app controls for focused product surfaces such as Maps. */
-export function ToolNavActions({ className }: { className?: string }) {
+export function ToolNavActions({ className, minimal = false }: { className?: string; minimal?: boolean }) {
   const pathname = usePathname()
   const locale = useLocale()
   const pathLocale = localeFromPathname(pathname) ?? locale
@@ -53,33 +53,70 @@ export function ToolNavActions({ className }: { className?: string }) {
   const avatarUrl = user?.user_metadata?.avatar_url as string | undefined
 
   return <div className={cn("flex shrink-0 items-center gap-2 max-[360px]:gap-1", className)}>
-    <LanguageToggle className="text-slate-500 hover:text-slate-900 hover:bg-slate-100" />
-    <div className="relative" ref={appsRef}>
-      <button
-        type="button"
-        aria-label={locale === "ko" ? "CampCareer 도구 열기" : "Open CampCareer tools"}
-        aria-expanded={appsOpen}
-        aria-haspopup="menu"
-        onClick={() => setAppsOpen((open) => !open)}
-        className={cn("grid size-9 place-items-center rounded-xl border transition max-[360px]:size-8", appsOpen ? "border-blue-200 bg-blue-50 text-blue-700 shadow-sm" : "border-transparent text-slate-500 hover:border-slate-200 hover:bg-white hover:text-slate-900")}
-      >
-        <LayoutGrid className="size-[18px]" strokeWidth={2.1} />
-      </button>
-      {appsOpen && <div role="menu" aria-label={locale === "ko" ? "CampCareer 도구" : "CampCareer tools"} className="absolute right-0 top-full z-[2300] mt-3 w-[min(20rem,calc(100vw-2rem))] overflow-hidden rounded-3xl border border-slate-200 bg-white p-3 shadow-[0_20px_55px_rgba(15,23,42,.18)] max-sm:right-[-3rem]">
-        <div className="flex items-center justify-between px-2 pb-2"><p className="text-xs font-semibold uppercase tracking-[.14em] text-slate-500">CampCareer</p><span className="text-xs text-slate-400">{locale === "ko" ? "도구" : "Tools"}</span></div>
-        <div className="grid grid-cols-3 gap-2">
-          <Link href={localizePath("/", pathLocale)} role="menuitem" onClick={() => setAppsOpen(false)} className="group rounded-2xl border border-transparent p-3 transition hover:border-blue-200 hover:bg-blue-50"><span className="grid size-12 place-items-center rounded-2xl bg-blue-100 text-2xl shadow-sm transition group-hover:-translate-y-0.5">🏠</span><span className="mt-3 block text-sm font-semibold text-slate-900">Home</span></Link>
-          <Link href={localizePath("/maps", pathLocale)} role="menuitem" onClick={() => setAppsOpen(false)} className="group rounded-2xl border border-transparent p-3 transition hover:border-blue-200 hover:bg-blue-50"><span className="grid size-12 place-items-center rounded-2xl bg-sky-100 text-2xl shadow-sm transition group-hover:-translate-y-0.5">🗺️</span><span className="mt-3 block text-sm font-semibold text-slate-900">Maps</span></Link>
-          <Link href={localizePath("/planner", pathLocale)} role="menuitem" onClick={() => setAppsOpen(false)} className="group rounded-2xl border border-transparent p-3 transition hover:border-violet-200 hover:bg-violet-50"><span className="grid size-12 place-items-center rounded-2xl bg-violet-100 text-2xl shadow-sm transition group-hover:-translate-y-0.5">🧭</span><span className="mt-3 block text-sm font-semibold text-slate-900">Planner</span></Link>
+    {minimal ? (
+      <>
+        <LanguageToggle className="text-xs font-medium text-slate-500 hover:text-slate-700" />
+        <div className="relative" ref={appsRef}>
+          <button
+            type="button"
+            aria-label={locale === "ko" ? "CampCareer 도구 열기" : "Open CampCareer tools"}
+            aria-expanded={appsOpen}
+            aria-haspopup="menu"
+            onClick={() => setAppsOpen((open) => !open)}
+            className="text-xl leading-none"
+          >
+            🧭
+          </button>
+          {appsOpen && <div role="menu" aria-label={locale === "ko" ? "CampCareer 도구" : "CampCareer tools"} className="absolute right-0 top-full z-[2300] mt-3 w-[min(20rem,calc(100vw-2rem))] overflow-hidden rounded-3xl border border-slate-200 bg-white p-3 shadow-[0_20px_55px_rgba(15,23,42,.18)] max-sm:right-[-3rem]">
+            <div className="flex items-center justify-between px-2 pb-2"><p className="text-xs font-semibold uppercase tracking-[.14em] text-slate-500">CampCareer</p><span className="text-xs text-slate-400">{locale === "ko" ? "도구" : "Tools"}</span></div>
+            <div className="grid grid-cols-3 gap-2">
+              <Link href={localizePath("/", pathLocale)} role="menuitem" onClick={() => setAppsOpen(false)} className="group rounded-2xl border border-transparent p-3 transition hover:border-blue-200 hover:bg-blue-50"><span className="grid size-12 place-items-center rounded-2xl bg-blue-100 text-2xl shadow-sm transition group-hover:-translate-y-0.5">🏠</span><span className="mt-3 block text-sm font-semibold text-slate-900">Home</span></Link>
+              <Link href={localizePath("/maps", pathLocale)} role="menuitem" onClick={() => setAppsOpen(false)} className="group rounded-2xl border border-transparent p-3 transition hover:border-blue-200 hover:bg-blue-50"><span className="grid size-12 place-items-center rounded-2xl bg-sky-100 text-2xl shadow-sm transition group-hover:-translate-y-0.5">🗺️</span><span className="mt-3 block text-sm font-semibold text-slate-900">Maps</span></Link>
+              <Link href={localizePath("/planner", pathLocale)} role="menuitem" onClick={() => setAppsOpen(false)} className="group rounded-2xl border border-transparent p-3 transition hover:border-violet-200 hover:bg-violet-50"><span className="grid size-12 place-items-center rounded-2xl bg-violet-100 text-2xl shadow-sm transition group-hover:-translate-y-0.5">🧭</span><span className="mt-3 block text-sm font-semibold text-slate-900">Planner</span></Link>
+            </div>
+          </div>}
         </div>
-      </div>}
-    </div>
-    {user ? (
-      <Link href={localizePath("/profile", pathLocale)} aria-label={locale === "ko" ? "프로필 열기" : "Open profile"}>
-        {avatarUrl ? <img src={avatarUrl} alt="" className="w-7 h-7 rounded-full object-cover" /> : <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center"><UserIcon className="w-4 h-4 text-blue-600" /></div>}
-      </Link>
+        {user ? (
+          <Link href={localizePath("/profile", pathLocale)} aria-label={locale === "ko" ? "프로필 열기" : "Open profile"}>
+            {avatarUrl ? <img src={avatarUrl} alt="" className="w-7 h-7 rounded-full object-cover" /> : <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center"><UserIcon className="w-4 h-4 text-blue-600" /></div>}
+          </Link>
+        ) : (
+          <button type="button" onClick={() => router.push(localizePath("/login", pathLocale))} className="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition">
+            <LogIn className="w-3.5 h-3.5 text-slate-500" />
+          </button>
+        )}
+      </>
     ) : (
-      <Button variant="outline" size="sm" onClick={() => router.push(localizePath("/login", pathLocale))} className="border-blue-200 text-blue-600 hover:bg-blue-50 hover:text-blue-700 max-[360px]:size-8 max-[360px]:px-0"><LogIn className="hidden size-4 max-[360px]:block" /><span className="max-[360px]:sr-only">{t.common.signIn}</span></Button>
+      <>
+        <LanguageToggle className="text-slate-500 hover:text-slate-900 hover:bg-slate-100" />
+        <div className="relative" ref={appsRef}>
+          <button
+            type="button"
+            aria-label={locale === "ko" ? "CampCareer 도구 열기" : "Open CampCareer tools"}
+            aria-expanded={appsOpen}
+            aria-haspopup="menu"
+            onClick={() => setAppsOpen((open) => !open)}
+            className={cn("grid size-9 place-items-center rounded-xl border transition max-[360px]:size-8", appsOpen ? "border-blue-200 bg-blue-50 text-blue-700 shadow-sm" : "border-transparent text-slate-500 hover:border-slate-200 hover:bg-white hover:text-slate-900")}
+          >
+            <LayoutGrid className="size-[18px]" strokeWidth={2.1} />
+          </button>
+          {appsOpen && <div role="menu" aria-label={locale === "ko" ? "CampCareer 도구" : "CampCareer tools"} className="absolute right-0 top-full z-[2300] mt-3 w-[min(20rem,calc(100vw-2rem))] overflow-hidden rounded-3xl border border-slate-200 bg-white p-3 shadow-[0_20px_55px_rgba(15,23,42,.18)] max-sm:right-[-3rem]">
+            <div className="flex items-center justify-between px-2 pb-2"><p className="text-xs font-semibold uppercase tracking-[.14em] text-slate-500">CampCareer</p><span className="text-xs text-slate-400">{locale === "ko" ? "도구" : "Tools"}</span></div>
+            <div className="grid grid-cols-3 gap-2">
+              <Link href={localizePath("/", pathLocale)} role="menuitem" onClick={() => setAppsOpen(false)} className="group rounded-2xl border border-transparent p-3 transition hover:border-blue-200 hover:bg-blue-50"><span className="grid size-12 place-items-center rounded-2xl bg-blue-100 text-2xl shadow-sm transition group-hover:-translate-y-0.5">🏠</span><span className="mt-3 block text-sm font-semibold text-slate-900">Home</span></Link>
+              <Link href={localizePath("/maps", pathLocale)} role="menuitem" onClick={() => setAppsOpen(false)} className="group rounded-2xl border border-transparent p-3 transition hover:border-blue-200 hover:bg-blue-50"><span className="grid size-12 place-items-center rounded-2xl bg-sky-100 text-2xl shadow-sm transition group-hover:-translate-y-0.5">🗺️</span><span className="mt-3 block text-sm font-semibold text-slate-900">Maps</span></Link>
+              <Link href={localizePath("/planner", pathLocale)} role="menuitem" onClick={() => setAppsOpen(false)} className="group rounded-2xl border border-transparent p-3 transition hover:border-violet-200 hover:bg-violet-50"><span className="grid size-12 place-items-center rounded-2xl bg-violet-100 text-2xl shadow-sm transition group-hover:-translate-y-0.5">🧭</span><span className="mt-3 block text-sm font-semibold text-slate-900">Planner</span></Link>
+            </div>
+          </div>}
+        </div>
+        {user ? (
+          <Link href={localizePath("/profile", pathLocale)} aria-label={locale === "ko" ? "프로필 열기" : "Open profile"}>
+            {avatarUrl ? <img src={avatarUrl} alt="" className="w-7 h-7 rounded-full object-cover" /> : <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center"><UserIcon className="w-4 h-4 text-blue-600" /></div>}
+          </Link>
+        ) : (
+          <Button variant="outline" size="sm" onClick={() => router.push(localizePath("/login", pathLocale))} className="border-blue-200 text-blue-600 hover:bg-blue-50 hover:text-blue-700 max-[360px]:size-8 max-[360px]:px-0"><LogIn className="hidden size-4 max-[360px]:block" /><span className="max-[360px]:sr-only">{t.common.signIn}</span></Button>
+        )}
+      </>
     )}
   </div>
 }

@@ -125,6 +125,8 @@ export default function CampCareerMaps({
   const [isMobile, setIsMobile] = useState(false)
   // 모바일 접이식 툴바 상태
   const [expanded, setExpanded] = useState(false)
+  const [jobSearch, setJobSearch] = useState("")
+  const [jobSearchOpen, setJobSearchOpen] = useState(false)
 
   useEffect(() => {
     if (!activeCountry || loadedCountries.current.has(activeCountry)) return
@@ -721,6 +723,24 @@ export default function CampCareerMaps({
     )
   }, [data.shortageByState, selected])
 
+  const allAuOccupations = useMemo(() => {
+    const seen = new Map<string, { code: string; title: string; salary: number | null }>()
+    for (const state of Object.values(data.shortageByState)) {
+      for (const occ of state) {
+        if (!seen.has(occ.anzsco_code)) {
+          seen.set(occ.anzsco_code, { code: occ.anzsco_code, title: occ.occupation_en, salary: occ.median_salary_aud })
+        }
+      }
+    }
+    return Array.from(seen.values()).sort((a, b) => a.title.localeCompare(b.title))
+  }, [data.shortageByState])
+
+  const filteredAuJobs = useMemo(() => {
+    if (!jobSearch.trim()) return allAuOccupations.slice(0, 20)
+    const q = jobSearch.toLowerCase()
+    return allAuOccupations.filter((o) => o.title.toLowerCase().includes(q) || o.code.includes(q)).slice(0, 20)
+  }, [allAuOccupations, jobSearch])
+
   const usShortageItems = useMemo<Record<string, string>>(() => {
     if (!selected) return {}
     const occs = data.usShortageByState[selected] ?? []
@@ -849,7 +869,50 @@ export default function CampCareerMaps({
 
   return (
     <div className="relative h-full w-full overflow-hidden">
-        {(activeCountry === "AU" || activeCountry === "US" || activeCountry === "CA" || activeCountry === "IE" || activeCountry === "UK" || activeCountry === "DE" || activeCountry === "NL" || activeCountry === "BE" || activeCountry === "JP" || activeCountry === "SG" || activeCountry === "KR" || activeCountry === "FR" || activeCountry === "ES" || activeCountry === "NZ" || activeCountry === "NO" || activeCountry === "SE" || activeCountry === "DK" || activeCountry === "FI" || activeCountry === "CH" || activeCountry === "AE") && (
+        {auOnly ? (
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-[2200] p-3">
+        <div className="pointer-events-auto flex items-center gap-2">
+          <div className="relative flex-1 max-w-md">
+            <div className="flex items-center h-11 rounded-full bg-white shadow-lg ring-1 ring-slate-200/60 px-4 gap-2.5">
+              <Search className="h-4 w-4 shrink-0 text-slate-400" />
+              <input
+                type="text"
+                placeholder={locale === "ko" ? "직업 검색" : "Search Jobs"}
+                value={jobSearch}
+                onChange={(e) => { setJobSearch(e.target.value); setJobSearchOpen(true) }}
+                onFocus={() => setJobSearchOpen(true)}
+                onBlur={() => setTimeout(() => setJobSearchOpen(false), 150)}
+                className="flex-1 bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400"
+              />
+            </div>
+            {jobSearchOpen && filteredAuJobs.length > 0 && (
+              <div className="absolute top-full left-0 right-0 z-[2300] mt-1 max-h-72 overflow-auto rounded-xl border border-slate-200 bg-white shadow-xl">
+                {filteredAuJobs.map((job) => (
+                  <button
+                    key={job.code}
+                    type="button"
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => {
+                      setJobSearch(job.title)
+                      setJobSearchOpen(false)
+                      setSelectedOccCode(job.code)
+                      track("click_occupation", { type: "au_search", code: job.code, name: job.title })
+                      if (isMobile) setExpanded(false)
+                    }}
+                    className="flex w-full items-center justify-between gap-3 px-4 py-2.5 text-left text-sm hover:bg-slate-50 transition-colors"
+                  >
+                    <span className="truncate text-slate-700">{job.title}</span>
+                    <span className="shrink-0 text-xs text-slate-400">{job.code}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+          <ToolNavActions minimal className="self-center" />
+        </div>
+      </div>
+        ) : (
+        (activeCountry === "AU" || activeCountry === "US" || activeCountry === "CA" || activeCountry === "IE" || activeCountry === "UK" || activeCountry === "DE" || activeCountry === "NL" || activeCountry === "BE" || activeCountry === "JP" || activeCountry === "SG" || activeCountry === "KR" || activeCountry === "FR" || activeCountry === "ES" || activeCountry === "NZ" || activeCountry === "NO" || activeCountry === "SE" || activeCountry === "DK" || activeCountry === "FI" || activeCountry === "CH" || activeCountry === "AE") && (
       <div className="pointer-events-none absolute inset-x-0 top-0 z-[2200] p-3">
       <div className={cn("pointer-events-auto flex min-h-14 rounded-2xl border border-slate-200 bg-white/95 shadow-[0_14px_35px_rgba(15,23,42,.10)] backdrop-blur-md", isMobile && toolbarExpanded ? "flex-col items-stretch" : "items-center")}>
           {!toolbarExpanded && (
@@ -1392,10 +1455,11 @@ export default function CampCareerMaps({
         )}
       </div>
           )}
-          <ToolNavActions className={cn("mr-3 self-center", isMobile && toolbarExpanded && "order-1 mt-3 self-end")} />
+           <ToolNavActions className={cn("mr-3 self-center", isMobile && toolbarExpanded && "order-1 mt-3 self-end")} />
       </div>
       </div>
-    )}
+    ))}
+
 
       <div className="absolute inset-0 z-0">
         {countryDataLoading && (
