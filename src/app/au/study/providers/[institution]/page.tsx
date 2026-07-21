@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { unstable_cache } from 'next/cache'
 import { notFound } from 'next/navigation'
-import { ArrowRight, BarChart3, BookOpen, CheckCircle2, ExternalLink } from 'lucide-react'
+import { ArrowLeft, BarChart3, ExternalLink, MapPin } from 'lucide-react'
 import { CollegeDetailClient, type DetailRow } from '@/app/roi-explorer/[country]/[college_id]/CollegeDetailClient'
 import { aqfLabel, getAuUniversityBySlug } from '@/lib/au-universities'
 import { getAuStudyCardCourseEvidence, getAuStudyEvidenceKey } from '@/lib/au-study-card-evidence'
@@ -10,6 +10,7 @@ import { auProgramDirectoryHref, cleanAuStudyField } from '@/lib/au-study-routin
 import { fetchRoiData } from '@/lib/roi-query'
 import { pageMetadata } from '@/lib/seo'
 import { JsonLd, breadcrumbLd } from '@/components/seo/json-ld'
+import { FieldGroupsSection, type FieldGroupRow } from './FieldGroupsSection'
 
 export const revalidate = 86400
 
@@ -28,10 +29,6 @@ const getUniversityRows = unstable_cache(async (collegeId: string): Promise<AuDe
 
 function money(value: number | null | undefined) {
   return typeof value === 'number' && Number.isFinite(value) ? `A$${Math.round(value).toLocaleString()}` : '—'
-}
-
-function percent(value: number | null | undefined) {
-  return typeof value === 'number' && Number.isFinite(value) ? `${Math.round(value * 100)}%` : '—'
 }
 
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
@@ -68,6 +65,32 @@ export default async function AustralianUniversityDetailPage({ params }: { param
     providerWebsiteUrl: university.websiteUrl,
   })))
 
+  const fieldGroupRows: FieldGroupRow[] = fields.map((row) => {
+    const evidenceKey = getAuStudyEvidenceKey({
+      institutionId: university.institutionId,
+      fieldName: row.field_name,
+      aqfLevel: row.aqf_level,
+    })
+    const evidence = fieldEvidence[evidenceKey]
+    return {
+      fieldName: row.field_name ?? '',
+      cleanFieldName: cleanAuStudyField(row.field_name) || '',
+      aqfLabel: aqfLabel(row.aqf_level),
+      courseCount: row.course_count ?? null,
+      tuition: row.tuition,
+      medianEarnings: row.median_earnings,
+      employmentRate: row.employment_rate ?? null,
+      roiScore: row.roi_score,
+      paybackYears: row.payback_years,
+      programHref: auProgramDirectoryHref(row.field_name, row.aqf_level, university.institutionId),
+      compareHref: `/au/study/compare?schools=${encodeURIComponent(university.institutionId)}&field=${encodeURIComponent(cleanAuStudyField(row.field_name))}&aqf=${row.aqf_level ?? ''}`,
+      evidenceHref: evidence?.href ?? null,
+      evidenceLabel: evidence?.label ?? null,
+    }
+  })
+
+  const best = rows[0]
+
   return (
     <>
       <JsonLd data={breadcrumbLd([
@@ -76,18 +99,64 @@ export default async function AustralianUniversityDetailPage({ params }: { param
         { name: university.name, path: `/au/study/providers/${university.institutionId}` },
       ])} />
       <main className="min-h-screen bg-slate-50">
-        <section className="border-b border-slate-200 bg-white">
-          <div className="mx-auto max-w-5xl px-5 py-9 sm:px-6">
-            <Link href="/au/study" className="text-sm font-semibold text-blue-700 hover:text-blue-800">Australian universities</Link>
-            <div className="mt-4 flex flex-wrap items-start justify-between gap-5">
+        {/* Hero */}
+        <section className="relative overflow-hidden border-b border-slate-200 bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600">
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNCI+PHBhdGggZD0iTTM2IDM0djItSDI0di0yaDEyem0wLTR2Mkg4VjI4aDI4em0wLTR2Mkg0VjI0aDJ6bTAgNHYySDE0di0yaDEyem0wLTR2Mkg0VjIwaDJ6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-40" />
+          <div className="relative mx-auto max-w-5xl px-5 py-10 sm:px-6 sm:py-14">
+            <Link href="/au/study" className="inline-flex items-center gap-1.5 text-sm font-medium text-blue-100 hover:text-white transition-colors">
+              <ArrowLeft className="h-4 w-4" />
+              Australian universities
+            </Link>
+
+            <div className="mt-6 flex flex-wrap items-end justify-between gap-6">
               <div>
-                <p className="text-sm font-semibold text-blue-700">Australia · University profile</p>
-                <h1 className="mt-1 text-3xl font-semibold tracking-tight text-slate-950">{university.name}</h1>
-                <p className="mt-2 text-sm text-slate-600">{[university.city, university.state].filter(Boolean).join(', ') || 'Australia'} · Provider-level outcomes and field-level tuition groups</p>
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm">
+                    Australia
+                  </span>
+                  <span className="inline-flex items-center rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm">
+                    University profile
+                  </span>
+                </div>
+                <h1
+                  className="mt-3 text-4xl font-semibold tracking-tight text-white sm:text-5xl"
+                  style={{ fontFamily: 'var(--font-fraunces), serif' }}
+                >
+                  {university.name}
+                </h1>
+                <div className="mt-3 flex items-center gap-4 text-sm text-blue-100">
+                  {(university.city || university.state) && (
+                    <span className="inline-flex items-center gap-1.5">
+                      <MapPin className="h-4 w-4" />
+                      {[university.city, university.state].filter(Boolean).join(', ') || 'Australia'}
+                    </span>
+                  )}
+                  <span>{rows.length} study fields</span>
+                  {best?.roi_score != null && (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-white/20 px-2.5 py-0.5 text-xs font-bold text-white">
+                      ROI {best.roi_score.toFixed(1)}
+                    </span>
+                  )}
+                </div>
               </div>
+
               <div className="flex flex-wrap gap-2">
-                <Link href={`/au/study/compare?schools=${encodeURIComponent(university.institutionId)}`} className="inline-flex h-10 items-center gap-2 rounded-xl bg-slate-950 px-4 text-sm font-semibold text-white hover:bg-slate-800"><BarChart3 className="h-4 w-4" /> Compare ROI</Link>
-                {university.websiteUrl && <a href={university.websiteUrl} target="_blank" rel="noreferrer" className="inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200 px-4 text-sm font-semibold text-slate-800 hover:bg-slate-50"><ExternalLink className="h-4 w-4" /> Official site</a>}
+                <Link
+                  href={`/au/study/compare?schools=${encodeURIComponent(university.institutionId)}`}
+                  className="inline-flex h-11 items-center gap-2 rounded-xl bg-white px-5 text-sm font-semibold text-blue-700 shadow-lg transition-colors hover:bg-blue-50"
+                >
+                  <BarChart3 className="h-4 w-4" /> Compare ROI
+                </Link>
+                {university.websiteUrl && (
+                  <a
+                    href={university.websiteUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex h-11 items-center gap-2 rounded-xl border border-white/30 px-5 text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:bg-white/10"
+                  >
+                    <ExternalLink className="h-4 w-4" /> Official site
+                  </a>
+                )}
               </div>
             </div>
           </div>
@@ -95,49 +164,12 @@ export default async function AustralianUniversityDetailPage({ params }: { param
 
         <CollegeDetailClient country="au" rows={rows} websiteUrl={university.websiteUrl} backHref="/au/study" backLabel="Back to Australian universities" />
 
-        <section className="mx-auto max-w-5xl px-5 pb-12 sm:px-6">
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-            <div className="flex flex-wrap items-start justify-between gap-4">
-              <div>
-                <div className="flex items-center gap-2"><BookOpen className="h-5 w-5 text-blue-700" /><h2 className="text-xl font-semibold text-slate-950">Which study groups sit behind these outcomes?</h2></div>
-                <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">Each row is the exact field and AQF tuition group used for this estimate. Earnings, employment and completion remain provider-level QILT measures; the program source shows the closest verified course or active CRICOS record we can match to that group.</p>
-              </div>
-              <span className="rounded-full bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-800">{rows.length} available field groups</span>
-            </div>
-            <div className="mt-5 overflow-x-auto">
-              <table className="w-full min-w-[720px] text-left text-sm">
-                <thead className="border-b border-slate-200 text-xs uppercase tracking-[.18em] text-slate-500">
-                  <tr><th className="pb-3 pr-4 font-semibold">Field & level</th><th className="pb-3 pr-4 font-semibold">Annual tuition</th><th className="pb-3 pr-4 font-semibold">Graduate earnings*</th><th className="pb-3 pr-4 font-semibold">ROI estimate</th><th className="pb-3 font-semibold">Program evidence & next step</th></tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {fields.map((row, index) => (
-                    <tr key={`${row.field_name}-${row.aqf_level}-${index}`} className="align-top">
-                      <td className="py-4 pr-4"><p className="font-semibold text-slate-900">{cleanAuStudyField(row.field_name) || 'Available study group'}</p><p className="mt-1 text-xs text-slate-500">{aqfLabel(row.aqf_level)}{row.course_count ? ` · ${row.course_count} course${row.course_count === 1 ? '' : 's'}` : ''}</p></td>
-                      <td className="py-4 pr-4 font-medium text-slate-800">{money(row.tuition)}</td>
-                      <td className="py-4 pr-4"><p className="font-medium text-slate-800">{money(row.median_earnings)}</p><p className="mt-1 text-xs text-slate-500">Employment {percent(row.employment_rate)}</p></td>
-                      <td className="py-4 pr-4"><span className="font-semibold text-blue-700">{row.roi_score?.toFixed(1) ?? '—'}</span><p className="mt-1 text-xs text-slate-500">Payback {row.payback_years ?? '—'} yrs</p></td>
-                      <td className="py-4"><ProgramEvidenceActions evidence={fieldEvidence[getAuStudyEvidenceKey({ institutionId: university.institutionId, fieldName: row.field_name, aqfLevel: row.aqf_level })]} programHref={auProgramDirectoryHref(row.field_name, row.aqf_level, university.institutionId)} compareHref={`/au/study/compare?schools=${encodeURIComponent(university.institutionId)}&field=${encodeURIComponent(cleanAuStudyField(row.field_name))}&aqf=${row.aqf_level ?? ''}`} /></td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div className="mt-5 rounded-2xl border border-emerald-100 bg-emerald-50/70 p-5 text-sm leading-6 text-slate-700">
-            <div className="flex items-center gap-2 font-semibold text-slate-950"><CheckCircle2 className="h-5 w-5 text-emerald-600" /> Data confidence</div>
-            <p className="mt-1">* Graduate earnings, employment and completion measures are reported at provider level from QILT-linked source data; tuition and course counts are grouped by field and AQF level. Confirm course fees, CRICOS status and entry requirements with the university before applying.</p>
-          </div>
-        </section>
+        <FieldGroupsSection
+          fields={fieldGroupRows}
+          rowsLength={rows.length}
+          totalFields={rows.length}
+        />
       </main>
     </>
   )
-}
-
-function ProgramEvidenceActions({ evidence, programHref, compareHref }: { evidence: Awaited<ReturnType<typeof getAuStudyCardCourseEvidence>>[string] | undefined; programHref: string; compareHref: string }) {
-  return <div className="flex min-w-48 flex-col items-start gap-2 text-xs">
-    {evidence?.href ? <a href={evidence.href} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-semibold text-slate-700 hover:text-blue-700 hover:underline"><ExternalLink className="size-3.5" />{evidence.label}</a> : <span className="font-medium text-slate-500">Official course link pending</span>}
-    <Link href={programHref} className="inline-flex items-center gap-1 font-semibold text-blue-700 hover:text-blue-800">See matching programs <ArrowRight className="size-3.5" /></Link>
-    <Link href={compareHref} className="inline-flex items-center gap-1 font-semibold text-slate-600 hover:text-blue-700">Compare this group <ArrowRight className="size-3.5" /></Link>
-  </div>
 }
