@@ -89,7 +89,7 @@ export function profileFromSearchParams(input: Record<string, string | undefined
   const landingGoal = input.goal
   const category = isAuPathfinderCategory(input.category) ? input.category : "any"
   return {
-    visa: isAuPathfinderVisa(input.visa) ? input.visa : "whv",
+    visa: isAuPathfinderVisa(input.visa) ? input.visa : "student",
     goal: isAuPathfinderGoal(input.pathGoal)
       ? input.pathGoal
       : landingGoal === "low-cost"
@@ -109,9 +109,7 @@ export function rankAustralianPathways(profile: AuPathfinderProfile): RankedAuPa
     .filter((concept) => profile.category === "any" || concept.category === profile.category)
     .map((concept) => toCandidate(concept))
 
-  const candidates = profile.visa === "whv"
-    ? allCandidates.filter((c) => c.whvEligible)
-    : allCandidates
+  const candidates = allCandidates
 
   const weights = weightsFor(profile)
   const salaryValues = candidates.map((candidate) => candidate.signal?.salary_median_aud ?? null)
