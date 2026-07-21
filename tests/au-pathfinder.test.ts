@@ -4,7 +4,6 @@ import { rankAustralianPathways, type AuPathfinderProfile } from "../src/lib/au-
 
 test("Australia pathfinder ranks only the requested study category", () => {
   const profile: AuPathfinderProfile = {
-    visa: "student",
     goal: "income",
     budget: "balanced",
     timeline: "flexible",
@@ -21,7 +20,6 @@ test("Australia pathfinder ranks only the requested study category", () => {
 
 test("lower budget and a faster timeline materially change a path score", () => {
   const base: AuPathfinderProfile = {
-    visa: "student",
     goal: "income",
     budget: "investment",
     timeline: "flexible",

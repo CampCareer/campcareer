@@ -4,10 +4,12 @@ import Link from "next/link"
 import { useMemo, useState } from "react"
 import { ArrowLeft, ArrowRight, Calculator, DollarSign, Clock, ShieldCheck, BriefcaseBusiness, TrendingUp, Info } from "lucide-react"
 import { STUDY_CATEGORIES, STUDY_CONCEPTS } from "@/data/study-concepts"
-import { signalForConcept, type AuPathfinderVisa } from "@/lib/au-pathfinder"
+import { signalForConcept } from "@/lib/au-pathfinder"
 import costsSnapshot from "@/data/au-major-costs.json"
 import { getStudyCategoryVisual } from "@/components/ui/au-career-category-visuals"
 import { IconPicker, type PickerOption } from "@/components/ui/icon-picker"
+
+type BudgetVisa = "whv" | "student" | "skilled"
 
 type CostProfile = {
   universities?: Array<{ name: string; qsRank?: number; bachelorFeeAud?: number; feeAud?: number; duration?: number }>
@@ -28,7 +30,7 @@ const LIVING_COSTS = {
 
 const LIVING_TOTAL_MONTHLY = Object.values(LIVING_COSTS).reduce((a, b) => a + b, 0)
 
-const VISA_INFO: Record<AuPathfinderVisa, { koLabel: string; enLabel: string; koDesc: string; enDesc: string; icon: string; maxStudyMonths: number | null; workHoursPerFortnight: number | null; ovhcAnnual: number }> = {
+const VISA_INFO: Record<BudgetVisa, { koLabel: string; enLabel: string; koDesc: string; enDesc: string; icon: string; maxStudyMonths: number | null; workHoursPerFortnight: number | null; ovhcAnnual: number }> = {
   whv: { koLabel: "워킹홀리데이", enLabel: "Working Holiday", koDesc: "최대 12개월, 학업 4개월 제한", enDesc: "Up to 12 months, study max 4 months", icon: "🎒", maxStudyMonths: 4, workHoursPerFortnight: null, ovhcAnnual: 7800 },
   student: { koLabel: "학생 비자", enLabel: "Student Visa", koDesc: "정규 학업, 48시간/2주 취업 가능", enDesc: "Full-time study, 48h/fortnight work", icon: "📚", maxStudyMonths: null, workHoursPerFortnight: 48, ovhcAnnual: 6500 },
   skilled: { koLabel: "스킬 이민", enLabel: "Skilled Migration", koDesc: "포인트 기반, 영주권 경로", enDesc: "Points-based, PR pathway", icon: "💼", maxStudyMonths: null, workHoursPerFortnight: null, ovhcAnnual: 0 },
@@ -36,7 +38,7 @@ const VISA_INFO: Record<AuPathfinderVisa, { koLabel: string; enLabel: string; ko
 
 export default function AuBudgetPage() {
   const [selectedConceptId, setSelectedConceptId] = useState<string>("computer-science")
-  const [visa, setVisa] = useState<AuPathfinderVisa>("student")
+  const [visa, setVisa] = useState<BudgetVisa>("student")
   const [durationOverride, setDurationOverride] = useState<number | "">("")
   const [savings, setSavings] = useState<number | "">("")
   const [monthlySaving, setMonthlySaving] = useState<number | "">("")
@@ -121,7 +123,7 @@ export default function AuBudgetPage() {
             {/* Step 1: Visa */}
             <InputCard title="비자 유형" icon={ShieldCheck}>
               <div className="grid grid-cols-3 gap-2">
-                {(["whv", "student", "skilled"] as AuPathfinderVisa[]).map((v) => (
+                {(["whv", "student", "skilled"] as BudgetVisa[]).map((v) => (
                   <button key={v} type="button" onClick={() => setVisa(v)}
                     className={`flex flex-col items-center gap-2 rounded-xl border-2 p-3 text-center transition ${
                       visa === v ? "border-blue-600 bg-blue-50" : "border-slate-200 hover:border-blue-300"

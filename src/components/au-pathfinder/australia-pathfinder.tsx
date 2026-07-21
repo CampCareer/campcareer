@@ -46,10 +46,9 @@ export function AustraliaPathfinder({ initialProfile }: { initialProfile: AuPath
       budget: profile.budget,
       timeline: profile.timeline,
       stage: profile.studyStage,
-      visa: profile.visa,
       ...(profile.category !== "any" ? { category: profile.category } : {}),
     })
-    track("comparison_personalized", { country: "AU", goal: profile.goal, category: profile.category, timeline: profile.timeline, visa: profile.visa })
+    track("comparison_personalized", { country: "AU", goal: profile.goal, category: profile.category, timeline: profile.timeline })
     router.replace(`${localizePath("/au/majors", pathLocale)}?${params}`, { scroll: false })
   }
 

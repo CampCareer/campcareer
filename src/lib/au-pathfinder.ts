@@ -7,11 +7,9 @@ export type AuPathfinderGoal = "income" | "security" | "residency" | "lower-cost
 export type AuPathfinderBudget = "lower" | "balanced" | "investment"
 export type AuPathfinderTimeline = "fast" | "standard" | "flexible"
 export type AuPathfinderStudyStage = "school" | "degree" | "career"
-export type AuPathfinderVisa = "whv" | "student" | "skilled"
 export type AuPathfinderCategory = (typeof STUDY_CATEGORIES)[number]["id"]
 
 export type AuPathfinderProfile = {
-  visa: AuPathfinderVisa
   goal: AuPathfinderGoal
   budget: AuPathfinderBudget
   timeline: AuPathfinderTimeline
@@ -53,16 +51,11 @@ const BASE_WEIGHTS: Record<AuPathfinderGoal, RuleWeights> = {
 }
 
 export const DEFAULT_AU_PATHFINDER_PROFILE: AuPathfinderProfile = {
-  visa: "whv",
   goal: "income",
   budget: "balanced",
   timeline: "flexible",
   studyStage: "school",
   category: "any",
-}
-
-export function isAuPathfinderVisa(value: string | undefined): value is AuPathfinderVisa {
-  return value === "whv" || value === "student" || value === "skilled"
 }
 
 export function isAuPathfinderGoal(value: string | undefined): value is AuPathfinderGoal {
@@ -89,7 +82,6 @@ export function profileFromSearchParams(input: Record<string, string | undefined
   const landingGoal = input.goal
   const category = isAuPathfinderCategory(input.category) ? input.category : "any"
   return {
-    visa: isAuPathfinderVisa(input.visa) ? input.visa : "student",
     goal: isAuPathfinderGoal(input.pathGoal)
       ? input.pathGoal
       : landingGoal === "low-cost"
@@ -105,11 +97,9 @@ export function profileFromSearchParams(input: Record<string, string | undefined
 }
 
 export function rankAustralianPathways(profile: AuPathfinderProfile): RankedAuPathway[] {
-  const allCandidates = STUDY_CONCEPTS
+  const candidates = STUDY_CONCEPTS
     .filter((concept) => profile.category === "any" || concept.category === profile.category)
     .map((concept) => toCandidate(concept))
-
-  const candidates = allCandidates
 
   const weights = weightsFor(profile)
   const salaryValues = candidates.map((candidate) => candidate.signal?.salary_median_aud ?? null)
