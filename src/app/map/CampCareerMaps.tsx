@@ -968,6 +968,7 @@ export default function CampCareerMaps({
         (activeCountry === "AU" || activeCountry === "US" || activeCountry === "CA" || activeCountry === "IE" || activeCountry === "UK" || activeCountry === "DE" || activeCountry === "NL" || activeCountry === "BE" || activeCountry === "JP" || activeCountry === "SG" || activeCountry === "KR" || activeCountry === "FR" || activeCountry === "ES" || activeCountry === "NZ" || activeCountry === "NO" || activeCountry === "SE" || activeCountry === "DK" || activeCountry === "FI" || activeCountry === "CH" || activeCountry === "AE") && (
       <div className="pointer-events-none absolute inset-x-0 top-0 z-[2200] p-3">
       <div className={cn("pointer-events-auto flex min-h-14 rounded-2xl border border-slate-200 bg-white/95 shadow-[0_14px_35px_rgba(15,23,42,.10)] backdrop-blur-md", isMobile && toolbarExpanded ? "flex-col items-stretch" : "items-center")}>
+           <ToolNavActions className={cn("ml-3 self-center", isMobile && toolbarExpanded && "order-1 mt-3 self-end")} />
           {!toolbarExpanded && (
           <button
             type="button"
@@ -1508,7 +1509,6 @@ export default function CampCareerMaps({
         )}
       </div>
           )}
-           <ToolNavActions className={cn("mr-3 self-center", isMobile && toolbarExpanded && "order-1 mt-3 self-end")} />
       </div>
       </div>
     ))}
