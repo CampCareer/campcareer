@@ -63,9 +63,9 @@ export function ToolNavActions({ className, minimal = false }: { className?: str
             aria-expanded={appsOpen}
             aria-haspopup="menu"
             onClick={() => setAppsOpen((open) => !open)}
-            className="text-xl leading-none"
+            className="grid size-8 place-items-center rounded-lg transition hover:bg-slate-100"
           >
-            🧭
+            <LayoutGrid className="size-[18px] text-slate-500" strokeWidth={2.1} />
           </button>
           {appsOpen && <div role="menu" aria-label={locale === "ko" ? "CampCareer 도구" : "CampCareer tools"} className="absolute right-0 top-full z-[2300] mt-3 w-[min(20rem,calc(100vw-2rem))] overflow-hidden rounded-3xl border border-slate-200 bg-white p-3 shadow-[0_20px_55px_rgba(15,23,42,.18)] max-sm:right-[-3rem]">
             <div className="flex items-center justify-between px-2 pb-2"><p className="text-xs font-semibold uppercase tracking-[.14em] text-slate-500">CampCareer</p><span className="text-xs text-slate-400">{locale === "ko" ? "도구" : "Tools"}</span></div>

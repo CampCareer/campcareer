@@ -639,7 +639,7 @@ export default function LeafletMap({
     if (!container || mapRef.current) return
     const map = L.map(container, {
       attributionControl: false,
-      zoomControl: true,
+      zoomControl: false,
       scrollWheelZoom: true,
       doubleClickZoom: true,
       minZoom: 2,
@@ -647,6 +647,7 @@ export default function LeafletMap({
       maxBounds: WORLD_BOUNDS.pad(0.3),
       maxBoundsViscosity: 0.8,
     })
+    L.control.zoom({ position: "bottomright" }).addTo(map)
     mapRef.current = map
     map.fitBounds(WORLD_BOUNDS)
 

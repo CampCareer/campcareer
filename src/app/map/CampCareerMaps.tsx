@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
-import { RotateCcw, ChevronLeft, ChevronRight, ChevronDown, ChevronUp, ExternalLink, Search, Bookmark, Share2, DollarSign, GraduationCap } from "lucide-react"
+import { RotateCcw, ChevronLeft, ChevronRight, ChevronDown, ChevronUp, ExternalLink, Search, Bookmark, Share2, DollarSign, GraduationCap, SlidersHorizontal } from "lucide-react"
 import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useTranslations, useLocale } from "@/lib/i18n/locale-provider"
@@ -872,43 +872,96 @@ export default function CampCareerMaps({
         {auOnly ? (
       <div className="pointer-events-none absolute inset-x-0 top-0 z-[2200] p-3">
         <div className="pointer-events-auto flex items-center gap-2">
+          <ToolNavActions minimal className="self-center" />
           <div className="relative flex-1 max-w-md">
             <div className="flex items-center h-11 rounded-full bg-white shadow-lg ring-1 ring-slate-200/60 px-4 gap-2.5">
-              <Search className="h-4 w-4 shrink-0 text-slate-400" />
+              {jobSearchOpen ? (
+                <button type="button" onClick={() => { setJobSearch(""); setJobSearchOpen(false) }} className="shrink-0 p-0.5 rounded-full hover:bg-slate-100">
+                  <X className="h-4 w-4 text-slate-400" />
+                </button>
+              ) : (
+                <Search className="h-4 w-4 shrink-0 text-slate-400" />
+              )}
               <input
                 type="text"
                 placeholder={locale === "ko" ? "직업 검색" : "Search Jobs"}
                 value={jobSearch}
                 onChange={(e) => { setJobSearch(e.target.value); setJobSearchOpen(true) }}
                 onFocus={() => setJobSearchOpen(true)}
-                onBlur={() => setTimeout(() => setJobSearchOpen(false), 150)}
+                onBlur={() => setTimeout(() => setJobSearchOpen(false), 200)}
                 className="flex-1 bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400"
               />
+              <button
+                type="button"
+                onClick={() => { setJobSearch(""); setJobSearchOpen(jobSearchOpen ? false : true) }}
+                className="shrink-0 p-1 rounded-full hover:bg-slate-100"
+                aria-label={jobSearchOpen ? "Close filter" : "Open filter"}
+              >
+                {jobSearchOpen ? <X className="h-4 w-4 text-slate-400" /> : <SlidersHorizontal className="h-4 w-4 text-slate-400" />}
+              </button>
             </div>
-            {jobSearchOpen && filteredAuJobs.length > 0 && (
-              <div className="absolute top-full left-0 right-0 z-[2300] mt-1 max-h-72 overflow-auto rounded-xl border border-slate-200 bg-white shadow-xl">
-                {filteredAuJobs.map((job) => (
-                  <button
-                    key={job.code}
-                    type="button"
-                    onMouseDown={(e) => e.preventDefault()}
-                    onClick={() => {
-                      setJobSearch(job.title)
-                      setJobSearchOpen(false)
-                      setSelectedOccCode(job.code)
-                      track("click_occupation", { type: "au_search", code: job.code, name: job.title })
-                      if (isMobile) setExpanded(false)
-                    }}
-                    className="flex w-full items-center justify-between gap-3 px-4 py-2.5 text-left text-sm hover:bg-slate-50 transition-colors"
-                  >
-                    <span className="truncate text-slate-700">{job.title}</span>
-                    <span className="shrink-0 text-xs text-slate-400">{job.code}</span>
-                  </button>
-                ))}
+            {jobSearchOpen && (
+              <div className="absolute top-full left-0 right-0 z-[2300] mt-1 max-h-80 overflow-auto rounded-xl border border-slate-200 bg-white shadow-xl">
+                {!jobSearch.trim() && (
+                  <div className="px-4 pt-3 pb-2">
+                    <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">{locale === "ko" ? "추천 직업" : "Popular Jobs"}</p>
+                    <div className="mt-2 flex flex-wrap gap-1.5">
+                      {(locale === "ko"
+                        ? ["Registered Nurse", "Software Developer", "Construction Worker", "Mining Worker", "Electrician", "Chef"]
+                        : ["Registered Nurse", "Software Developer", "Construction Worker", "Mining Worker", "Electrician", "Chef"]
+                      ).map((title) => {
+                        const match = allAuOccupations.find((o) => o.title === title)
+                        if (!match) return null
+                        return (
+                          <button
+                            key={match.code}
+                            type="button"
+                            onMouseDown={(e) => e.preventDefault()}
+                            onClick={() => {
+                              setJobSearch(match.title)
+                              setSelectedOccCode(match.code)
+                              setJobSearchOpen(false)
+                              track("click_occupation", { type: "au_search", code: match.code, name: match.title })
+                              if (isMobile) setExpanded(false)
+                            }}
+                            className="rounded-full bg-blue-50 px-3 py-1.5 text-xs font-medium text-blue-700 hover:bg-blue-100 transition-colors"
+                          >
+                            {match.title}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )}
+                {filteredAuJobs.length > 0 && (
+                  <div className={cn(!jobSearch.trim() && "border-t border-slate-100")}>
+                    {!jobSearch.trim() && <div className="px-4 pt-2 pb-1"><p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">{locale === "ko" ? "전체 직업" : "All Jobs"}</p></div>}
+                    {filteredAuJobs.map((job) => (
+                      <button
+                        key={job.code}
+                        type="button"
+                        onMouseDown={(e) => e.preventDefault()}
+                        onClick={() => {
+                          setJobSearch(job.title)
+                          setJobSearchOpen(false)
+                          setSelectedOccCode(job.code)
+                          track("click_occupation", { type: "au_search", code: job.code, name: job.title })
+                          if (isMobile) setExpanded(false)
+                        }}
+                        className="flex w-full items-center justify-between gap-3 px-4 py-2.5 text-left text-sm hover:bg-slate-50 transition-colors"
+                      >
+                        <span className="truncate text-slate-700">{job.title}</span>
+                        <span className="shrink-0 text-xs text-slate-400">{job.code}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {filteredAuJobs.length === 0 && jobSearch.trim() && (
+                  <p className="px-4 py-6 text-center text-sm text-slate-400">{locale === "ko" ? "검색 결과 없음" : "No results found"}</p>
+                )}
               </div>
             )}
           </div>
-          <ToolNavActions minimal className="self-center" />
         </div>
       </div>
         ) : (
@@ -1657,7 +1710,7 @@ export default function CampCareerMaps({
           return isMobile ? (
             <MobileSheet>{panel}</MobileSheet>
           ) : (
-            <div className="absolute right-4 top-4 z-[1000] flex max-h-[calc(100%-2rem)] w-[380px] flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl">
+            <div className="absolute left-4 top-4 z-[1000] flex max-h-[calc(100%-2rem)] w-[380px] flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl">
               {panel}
             </div>
           )
