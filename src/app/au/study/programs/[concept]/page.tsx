@@ -64,24 +64,38 @@ const QUAL_GROUPS: { key: QualGroupKey; label: string; aqfLevels: number[] }[] =
   { key: "master", label: "Master", aqfLevels: [8, 9, 10] },
 ]
 
+function isBachelorHonours(c: CourseRow): boolean {
+  return c.aqfLevel === 8 && /bachelor\s+honours/i.test(c.courseType ?? "")
+}
+
 function isQualGroupKey(v: string | undefined): v is QualGroupKey {
   return !!v && QUAL_GROUPS.some((g) => g.key === v)
 }
 
 function groupCourses(courses: CourseRow[]): QualificationGroup[] {
-  return QUAL_GROUPS.map((group) => ({
-    key: group.key,
-    label: group.label,
-    aqfLevels: group.aqfLevels,
-    count: courses.filter((c) => c.aqfLevel != null && group.aqfLevels.includes(c.aqfLevel)).length,
-  })).filter((g) => g.count > 0)
+  const counts: Record<QualGroupKey, number> = { "certificate-diploma": 0, bachelor: 0, master: 0 }
+  for (const c of courses) {
+    if (c.aqfLevel == null) continue
+    if (isBachelorHonours(c)) { counts.bachelor++; continue }
+    for (const group of QUAL_GROUPS) {
+      if (group.aqfLevels.includes(c.aqfLevel)) { counts[group.key]++; break }
+    }
+  }
+  return QUAL_GROUPS
+    .map((group) => ({ key: group.key, label: group.label, aqfLevels: group.aqfLevels, count: counts[group.key] }))
+    .filter((g) => g.count > 0)
 }
 
 function filterByGroup(courses: CourseRow[], key: QualGroupKey | null): CourseRow[] {
   if (!key) return courses
   const group = QUAL_GROUPS.find((g) => g.key === key)
   if (!group) return courses
-  return courses.filter((c) => c.aqfLevel != null && group.aqfLevels.includes(c.aqfLevel))
+  return courses.filter((c) => {
+    if (c.aqfLevel == null) return false
+    if (key === "bachelor" && isBachelorHonours(c)) return true
+    if (key === "master" && isBachelorHonours(c)) return false
+    return group.aqfLevels.includes(c.aqfLevel)
+  })
 }
 
 function filterByState(courses: CourseRow[], state: string | null): CourseRow[] {
