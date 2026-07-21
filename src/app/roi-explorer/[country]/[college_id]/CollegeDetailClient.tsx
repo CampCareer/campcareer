@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, TrendingUp, DollarSign, Clock, GraduationCap, ExternalLink } from 'lucide-react'
+import { ArrowLeft, TrendingUp, DollarSign, Clock, GraduationCap, ExternalLink, Receipt, Home, ShoppingBag } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { RoiInfo } from '@/components/roi-info'
 import { useTranslations } from '@/lib/i18n/locale-provider'
@@ -306,35 +306,53 @@ export function CollegeDetailClient({
 
       {/* Financial Breakdown */}
       <div>
-        <h2 className="text-lg font-semibold text-slate-800 mb-3">{td.financialBreakdown}</h2>
-        <Card>
-          <CardContent className="pt-5 pb-6">
-            <p className="text-xs text-slate-400 mb-5">
+        <div className="flex items-center gap-2.5 mb-4">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50">
+            <Receipt className="h-4 w-4 text-emerald-600" />
+          </div>
+          <h2 className="text-lg font-semibold text-slate-900">{td.financialBreakdown}</h2>
+        </div>
+        <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+          <div className="px-6 pt-6 pb-5">
+            <p className="text-xs text-slate-400">
               {td.netSalaryCalcPrefix} ({displayCity})
             </p>
+          </div>
 
-            {/* Tuition & Earnings info row */}
-            <div className="grid grid-cols-2 gap-4 mb-6 pb-5 border-b border-slate-100">
-              <div>
-                <p className="text-xs font-medium text-slate-500 uppercase tracking-[.18em] mb-1">{td.annualTuition}</p>
-                <p className="text-xl font-semibold text-slate-800">{fmt(best.tuition, country)}</p>
-                <p className="text-xs text-slate-400 mt-0.5">
-                  {td.perYear} · {fmt(best.tuition * totalYears, country)} {td.totalYears.replace('{years}', String(totalYears))}
-                </p>
+          {/* Tuition & Earnings highlight cards */}
+          <div className="mx-6 mb-5 grid grid-cols-2 gap-3">
+            <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
+              <div className="flex items-center gap-1.5 mb-2">
+                <div className="flex h-6 w-6 items-center justify-center rounded-md bg-blue-100">
+                  <GraduationCap className="h-3.5 w-3.5 text-blue-600" />
+                </div>
+                <p className="text-[11px] font-semibold uppercase tracking-[.14em] text-slate-400">{td.annualTuition}</p>
               </div>
-              <div>
-                <p className="text-xs font-medium text-slate-500 uppercase tracking-[.18em] mb-1">{td.medianEarnings}</p>
-                <p className="text-xl font-semibold text-slate-800">{fmt(best.median_earnings, country)}</p>
-                <p className="text-xs text-slate-400 mt-0.5">{currCode} {td.perYear}</p>
-              </div>
+              <p className="text-xl font-bold text-slate-900">{fmt(best.tuition, country)}</p>
+              <p className="text-[11px] text-slate-400 mt-1">
+                {fmt(best.tuition * totalYears, country)} {td.totalYears.replace('{years}', String(totalYears))}
+              </p>
             </div>
+            <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
+              <div className="flex items-center gap-1.5 mb-2">
+                <div className="flex h-6 w-6 items-center justify-center rounded-md bg-emerald-100">
+                  <DollarSign className="h-3.5 w-3.5 text-emerald-600" />
+                </div>
+                <p className="text-[11px] font-semibold uppercase tracking-[.14em] text-slate-400">{td.medianEarnings}</p>
+              </div>
+              <p className="text-xl font-bold text-slate-900">{fmt(best.median_earnings, country)}</p>
+              <p className="text-[11px] text-slate-400 mt-1">{currCode} {td.perYear}</p>
+            </div>
+          </div>
 
-            <p className="mb-4 rounded-xl border border-amber-100 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-700">
-              {td.financialEstimateNote}
-            </p>
+          <p className="mx-6 mb-5 rounded-xl border border-amber-100 bg-amber-50 px-3.5 py-2.5 text-xs leading-relaxed text-amber-700">
+            {td.financialEstimateNote}
+          </p>
 
-            {/* Net Salary waterfall */}
-            <div className="space-y-3">
+          {/* Waterfall */}
+          <div className="mx-6 pb-6">
+            <p className="mb-3 text-[11px] font-semibold uppercase tracking-[.14em] text-slate-400">Where your salary goes</p>
+            <div className="space-y-2.5">
               {[
                 {
                   label: td.medianEarnings,
@@ -342,18 +360,26 @@ export function CollegeDetailClient({
                   value: grossSalary,
                   pct: 100,
                   barColor: 'bg-slate-300',
+                  barGradient: 'from-slate-300 to-slate-400',
                   textColor: 'text-slate-700',
                   sign: '',
+                  icon: <DollarSign className="h-3 w-3" />,
                 },
-                ...taxBreakdown,
+                ...taxBreakdown.map((t) => ({
+                  ...t,
+                  barGradient: 'from-purple-300 to-purple-400',
+                  icon: <Receipt className="h-3 w-3" />,
+                })),
                 {
                   label: td.annualRent,
                   sublabel: hasLivingCostData ? td.cityAvgMonths : 'rent data unavailable',
                   value: annualRent,
                   pct: annualRent && grossSalary > 0 ? (annualRent / grossSalary) * 100 : 0,
                   barColor: 'bg-rose-300',
+                  barGradient: 'from-rose-300 to-rose-400',
                   textColor: 'text-rose-600',
                   sign: hasLivingCostData ? '−' : '',
+                  icon: <Home className="h-3 w-3" />,
                 },
                 {
                   label: td.livingCost,
@@ -361,62 +387,75 @@ export function CollegeDetailClient({
                   value: livingCost,
                   pct: livingCost && grossSalary > 0 ? (livingCost / grossSalary) * 100 : 0,
                   barColor: 'bg-orange-300',
+                  barGradient: 'from-orange-300 to-orange-400',
                   textColor: 'text-orange-600',
                   sign: hasLivingCostData ? '−' : '',
+                  icon: <ShoppingBag className="h-3 w-3" />,
                 },
-              ].map(({ label, sublabel, value, pct, barColor, textColor, sign }) => (
+              ].map(({ label, sublabel, value, pct, barGradient, textColor, sign, icon }) => (
                 <div key={label}>
-                  <div className="flex items-center justify-between mb-1">
-                    <div>
-                      <span className="text-sm font-medium text-slate-700">
-                        {sign && <span className={`${textColor} mr-1`}>{sign}</span>}
-                        {label}
-                      </span>
-                      <span className="text-xs text-slate-400 ml-2">{sublabel}</span>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <div className="flex items-center gap-2">
+                      <span className={`${textColor} opacity-70`}>{icon}</span>
+                      <div>
+                        <span className="text-sm font-medium text-slate-700">
+                          {sign && <span className={`${textColor} mr-0.5`}>{sign}</span>}
+                          {label}
+                        </span>
+                        <span className="text-[11px] text-slate-400 ml-1.5">{sublabel}</span>
+                      </div>
                     </div>
-                    <span className={`text-sm font-semibold ${textColor} whitespace-nowrap`}>
+                    <span className={`text-sm font-bold ${textColor} whitespace-nowrap tabular-nums`}>
                       {fmtMaybe(value, country)}
                     </span>
                   </div>
-                  <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
+                  <div className="h-2.5 rounded-full bg-slate-100 overflow-hidden">
                     <div
-                      className={`h-full rounded-full ${barColor} transition-all`}
+                      className={`h-full rounded-full bg-gradient-to-r ${barGradient} transition-all duration-500 ease-out`}
                       style={{ width: `${Math.min(pct, 100).toFixed(1)}%` }}
                     />
                   </div>
                 </div>
               ))}
+            </div>
 
-              <div className="border-t-2 border-slate-200 pt-4 mt-2">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <span className="text-base font-semibold text-slate-900">{td.equalNetSalary}</span>
-                    <span className="text-xs text-slate-400 ml-2">
-                      {hasLivingCostData ? td.afterRentLiving : 'before rent & living costs'}
-                    </span>
-                  </div>
-                  <span className="text-2xl font-semibold text-emerald-600">
-                    {fmt(estimatedNetSalary, country)}
+            {/* Net Salary result */}
+            <div className="mt-5 rounded-xl border-2 border-emerald-200 bg-emerald-50 p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="text-sm font-semibold text-emerald-900">{td.equalNetSalary}</span>
+                  <span className="text-[11px] text-emerald-600 ml-1.5">
+                    {hasLivingCostData ? td.afterRentLiving : 'before rent & living costs'}
                   </span>
                 </div>
-                <div className="mt-2 h-2 rounded-full bg-slate-100 overflow-hidden">
-                  <div
-                    className="h-full rounded-full bg-emerald-400"
-                    style={{
-                      width: `${retainedPercent !== null ? Math.min(retainedPercent, 100).toFixed(1) : 0}%`
-                    }}
-                  />
-                </div>
-                <p className="text-xs text-slate-400 mt-1.5">
+                <span className="text-2xl font-bold text-emerald-700 tabular-nums">
+                  {fmt(estimatedNetSalary, country)}
+                </span>
+              </div>
+              <div className="mt-3 h-3 rounded-full bg-emerald-100 overflow-hidden">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-emerald-500 transition-all duration-700 ease-out"
+                  style={{
+                    width: `${retainedPercent !== null ? Math.min(retainedPercent, 100).toFixed(1) : 0}%`
+                  }}
+                />
+              </div>
+              <div className="mt-2 flex items-center justify-between">
+                <p className="text-[11px] text-emerald-600">
                   {retainedPercent !== null
                     ? `${retainedPercent.toFixed(1)}${td.earningsRetained}`
                     : 'Living-cost adjustment unavailable'}
                 </p>
+                {retainedPercent !== null && (
+                  <span className="inline-flex items-center rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
+                    {retainedPercent >= 50 ? 'Strong' : retainedPercent >= 30 ? 'Moderate' : 'Low'} retention
+                  </span>
+                )}
               </div>
             </div>
+          </div>
 
-          </CardContent>
-        </Card>
+        </div>
       </div>
 
     </div>
