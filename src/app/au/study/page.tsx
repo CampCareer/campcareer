@@ -1,13 +1,15 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight, CheckCircle2, Clock3, Database, ExternalLink, MapPin } from 'lucide-react'
-import { AU_AQF_FILTERS, AU_STATES, getAuUniversitiesByIds, isAuAqfFilter, type AuAqfFilter, aqfLabel } from '@/lib/au-universities'
+import { AU_AQF_FILTERS, AU_STATES, getAuUniversitiesByIds, isAuAqfFilter, type AuAqfFilter, localizedAqfLabel } from '@/lib/au-universities'
 import { getAuStudyCardCourseEvidence, getAuStudyEvidenceKey, type AuStudyCardCourseEvidence } from '@/lib/au-study-card-evidence'
 import { AuStudyCompareToggle, AuStudyCompareTrayProvider } from '@/components/study/au-study-compare-tray'
 import { AuStudyFilterBar } from '@/components/study/au-study-filter-bar'
 import { STUDY_CATEGORIES } from '@/data/study-concepts'
 import { fetchRoiData } from '@/lib/roi-query'
 import { pageMetadata } from '@/lib/seo'
+import { getLocale, getTranslations } from '@/lib/i18n/server'
+import { localizePath } from '@/lib/i18n/config'
 
 export const revalidate = 86400
 
@@ -45,12 +47,12 @@ function percent(value: number | null | undefined) {
   return typeof value === 'number' && Number.isFinite(value) ? `${Math.round(value * 100)}%` : '—'
 }
 
-function dateLabel(value: string | null) {
-  if (!value) return 'Pending verification'
+function dateLabel(value: string | null, locale: 'en' | 'ko', pendingVerification: string) {
+  if (!value) return pendingVerification
   const date = new Date(value)
   return Number.isNaN(date.getTime())
-    ? 'Pending verification'
-    : new Intl.DateTimeFormat('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }).format(date)
+    ? pendingVerification
+    : new Intl.DateTimeFormat(locale === 'ko' ? 'ko-KR' : 'en-AU', { day: 'numeric', month: 'short', year: 'numeric' }).format(date)
 }
 
 function courseLinkStyle(evidence: AuStudyCardCourseEvidence) {
@@ -91,6 +93,8 @@ function matchesCategory(fieldName: string | null | undefined, category: string)
 }
 
 export default async function AustralianUniversitiesPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
+  const [t, locale] = await Promise.all([getTranslations(), getLocale()])
+  const copy = t.australia.study
   const params = await searchParams
   const filters = readSearchParams(params)
   const result = await fetchRoiData({
@@ -145,7 +149,7 @@ export default async function AustralianUniversitiesPage({ searchParams }: { sea
     <main className="min-h-screen bg-transparent">
       <section className="border-b border-slate-200/90 bg-transparent">
         <div className="mx-auto max-w-6xl px-5 pb-8 pt-6 sm:px-6 sm:pb-10 sm:pt-8">
-          <h1 className="mb-5 text-left text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl lg:whitespace-nowrap lg:text-4xl">Find the right study option in Australia</h1>
+          <h1 className="mb-5 text-left text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl lg:whitespace-nowrap lg:text-4xl">{copy.title}</h1>
           <AuStudyFilterBar key={[filters.field, filters.category, filters.state, filters.level].join('|')} initialValues={filters} />
         </div>
       </section>
@@ -153,13 +157,13 @@ export default async function AustralianUniversitiesPage({ searchParams }: { sea
       <section className="bg-white"><div className="mx-auto max-w-6xl px-5 pb-12 pt-12 sm:px-6 sm:pb-16 sm:pt-14">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <h2 className="text-lg font-semibold text-slate-950">{rows.length} {filters.category ? `${STUDY_CATEGORIES.find((item) => item.id === filters.category)?.label ?? ''} ` : ''}university options</h2>
-            <p className="mt-1 text-sm text-slate-500">Sorted by the available ROI estimate. Each card separates field-level tuition from provider-level outcomes and shows the best official course source currently available.</p>
+            <h2 className="text-lg font-semibold text-slate-950">{format(copy.resultsTitle, { count: rows.length })}{filters.category ? ` · ${locale === 'ko' ? STUDY_CATEGORIES.find((item) => item.id === filters.category)?.labelKo ?? '' : STUDY_CATEGORIES.find((item) => item.id === filters.category)?.label ?? ''}` : ''}</h2>
+            <p className="mt-1 text-sm text-slate-500">{copy.resultsDescription}</p>
           </div>
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-            <Link href="/au/majors" className="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-700 hover:text-blue-700">Explore majors <ArrowRight className="h-4 w-4" /></Link>
-            <Link href="/au/study/compare" className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-700 hover:text-blue-800">
-              Compare universities <ArrowRight className="h-4 w-4" />
+            <Link href={localizePath('/au/majors', locale)} className="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-700 hover:text-blue-700">{copy.exploreMajors} <ArrowRight className="h-4 w-4" /></Link>
+            <Link href={localizePath('/au/study/compare', locale)} className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-700 hover:text-blue-800">
+              {copy.compareUniversities} <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </div>
@@ -175,21 +179,21 @@ export default async function AustralianUniversitiesPage({ searchParams }: { sea
                   <div aria-hidden className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-600 via-indigo-500 to-sky-400 opacity-0 transition group-hover:opacity-100" />
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="inline-flex rounded-full bg-blue-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-blue-700">{row.field_name?.replace(/\.$/, '') || 'Best available field estimate'}</p>
+                      <p className="inline-flex rounded-full bg-blue-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-blue-700">{row.field_name?.replace(/\.$/, '') || copy.bestAvailableFieldEstimate}</p>
                       <h3 className="mt-2 text-lg font-semibold leading-6 text-slate-950">{university.name}</h3>
                     </div>
-                    <span className="shrink-0 rounded-xl border border-indigo-100 bg-indigo-50 px-2.5 py-1.5 text-right text-xs font-semibold leading-4 text-indigo-900"><span className="block text-[10px] font-medium uppercase tracking-wide text-indigo-500">Value estimate</span>{row.roi_score?.toFixed(1) ?? '—'}</span>
+                    <span className="shrink-0 rounded-xl border border-indigo-100 bg-indigo-50 px-2.5 py-1.5 text-right text-xs font-semibold leading-4 text-indigo-900"><span className="block text-[10px] font-medium uppercase tracking-wide text-indigo-500">{copy.valueEstimate}</span>{row.roi_score?.toFixed(1) ?? '—'}</span>
                   </div>
                   <p className="mt-2 inline-flex items-center gap-1.5 text-sm text-slate-500"><MapPin className="h-4 w-4" />{university.city ?? row.college_city ?? 'Australia'}{university.state ? `, ${university.state}` : ''}</p>
                   <div className="mt-4 rounded-xl border border-blue-100 bg-blue-50/70 px-3.5 py-3 text-sm leading-5 text-slate-700">
-                    <p className="font-semibold text-slate-950">Why this option appears</p>
-                    <p className="mt-1">This is the strongest available value estimate for {university.name} in your current search, combining {aqfLabel(row.aqf_level).toLowerCase()} tuition with provider-level QILT outcomes. Estimated payback: <span className="font-semibold text-slate-950">{row.payback_years?.toFixed(1) ?? '—'} years</span>.</p>
+                    <p className="font-semibold text-slate-950">{copy.whyAppears}</p>
+                    <p className="mt-1">{format(copy.whyAppearsBody, { university: university.name, level: localizedAqfLabel(row.aqf_level, locale).toLowerCase(), payback: row.payback_years?.toFixed(1) ?? '—' })}</p>
                   </div>
                   <div className="mt-4 grid grid-cols-2 gap-3 border-y border-slate-100 py-4">
-                    <Metric label="Annual tuition" value={money(row.tuition)} detail={`${aqfLabel(row.aqf_level)} field group`} />
-                    <Metric label="Graduate earnings*" value={money(row.median_earnings)} detail="Provider level · QILT 2024" />
-                    <Metric label="Employment*" value={percent(row.employment_rate)} detail="Provider level · QILT 2024" />
-                    <Metric label="Completion*" value={percent(row.graduation_rate)} detail="Provider level · QILT 2024" />
+                    <Metric label={copy.annualTuition} value={money(row.tuition)} detail={format(copy.fieldGroup, { level: localizedAqfLabel(row.aqf_level, locale) })} />
+                    <Metric label={copy.graduateEarnings} value={money(row.median_earnings)} detail={copy.providerQilt} />
+                    <Metric label={copy.employment} value={percent(row.employment_rate)} detail={copy.providerQilt} />
+                    <Metric label={copy.completion} value={percent(row.graduation_rate)} detail={copy.providerQilt} />
                   </div>
                   <div className={`mt-4 rounded-xl border p-3 ${courseLinkStyle(evidence)}`}>
                     <div className="flex items-start gap-2.5">
@@ -200,9 +204,9 @@ export default async function AustralianUniversitiesPage({ searchParams }: { sea
                       </div>
                     </div>
                   </div>
-                  <div className="mt-3 flex items-start gap-2 text-xs leading-5 text-slate-500"><Database className="mt-0.5 h-3.5 w-3.5 shrink-0" /><p>Outcomes: QILT GOS 2024 · Course source checked: {dateLabel(evidence.checkedAt)}</p></div>
+                  <div className="mt-3 flex items-start gap-2 text-xs leading-5 text-slate-500"><Database className="mt-0.5 h-3.5 w-3.5 shrink-0" /><p>{format(copy.outcomesChecked, { date: dateLabel(evidence.checkedAt, locale, copy.pendingVerification) })}</p></div>
                   <div className="mt-auto flex items-center justify-between gap-3 pt-5">
-                    <Link href={`/au/study/providers/${university.institutionId}`} className="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-950 hover:text-blue-700">Review outcomes <ArrowRight className="h-4 w-4" /></Link>
+                    <Link href={localizePath(`/au/study/providers/${university.institutionId}`, locale)} className="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-950 hover:text-blue-700">{copy.reviewOutcomes} <ArrowRight className="h-4 w-4" /></Link>
                     <AuStudyCompareToggle option={{ id: university.institutionId, name: university.name, state: university.state, fieldName: row.field_name?.replace(/\.$/, '') ?? null, aqfLevel: row.aqf_level ?? null }} />
                   </div>
                 </article>
@@ -212,14 +216,14 @@ export default async function AustralianUniversitiesPage({ searchParams }: { sea
           </AuStudyCompareTrayProvider>
         ) : (
           <div className="mt-4 rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center">
-            <h2 className="font-semibold text-slate-950">No matching university estimate yet</h2>
-            <p className="mt-2 text-sm text-slate-500">Try a broader field name, a different study level, or all states.</p>
+            <h2 className="font-semibold text-slate-950">{copy.noMatching}</h2>
+            <p className="mt-2 text-sm text-slate-500">{copy.noMatchingDescription}</p>
           </div>
         )}
 
         <aside className="mt-8 rounded-2xl border border-blue-100 bg-blue-50/70 p-5 text-sm leading-6 text-slate-700">
-          <p className="font-semibold text-slate-950">How to use this comparison</p>
-          <p className="mt-1">Tuition and course counts are grouped by field and AQF level. Graduate earnings, employment and completion data are provider-level QILT measures, so use them to shortlist—not to infer a guaranteed course-specific result.</p>
+          <p className="font-semibold text-slate-950">{copy.howToUse}</p>
+          <p className="mt-1">{copy.howToUseDescription}</p>
         </aside>
       </div></section>
     </main>
@@ -232,4 +236,8 @@ function Metric({ label, value, detail }: { label: string; value: string; detail
     <p className="mt-1 text-xl font-semibold tracking-tight text-slate-950">{value}</p>
     <p className="mt-1 text-[11px] leading-4 text-slate-500">{detail}</p>
   </div>
+}
+
+function format(template: string, values: Record<string, string | number>) {
+  return template.replace(/\{(\w+)\}/g, (_, key: string) => String(values[key] ?? ''))
 }

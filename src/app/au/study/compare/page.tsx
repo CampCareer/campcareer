@@ -2,9 +2,11 @@ import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 import Link from 'next/link'
 import { ArrowRight, BarChart3, CheckCircle2, ExternalLink, GraduationCap, MapPin, Plus } from 'lucide-react'
-import { AU_AQF_FILTERS, aqfLabel, getAuUniversityCatalog, isAuAqfFilter, type AuAqfFilter } from '@/lib/au-universities'
+import { AU_AQF_FILTERS, getAuUniversityCatalog, isAuAqfFilter, localizedAqfLabel, type AuAqfFilter } from '@/lib/au-universities'
 import { getAuStudyCardCourseEvidence, getAuStudyEvidenceKey } from '@/lib/au-study-card-evidence'
 import { fetchRoiData } from '@/lib/roi-query'
+import { getLocale, getTranslations } from '@/lib/i18n/server'
+import { localizePath } from '@/lib/i18n/config'
 
 export const revalidate = 86400
 
@@ -53,6 +55,8 @@ function bestMatchingRow(rows: Row[], field: string, levels: readonly number[]) 
 }
 
 export default async function AustralianUniversityComparePage({ searchParams }: { searchParams: Promise<SearchParams> }) {
+  const [t, locale] = await Promise.all([getTranslations(), getLocale()])
+  const copy = t.australia.compare
   const params = await searchParams
   const catalog = await getAuUniversityCatalog()
   const bySlug = new Map(catalog.map((university) => [university.institutionId, university]))
@@ -76,21 +80,21 @@ export default async function AustralianUniversityComparePage({ searchParams }: 
   const matchedRows = rows.filter((entry) => entry.row)
   const decisionCues = [
     {
-      label: 'Lowest annual tuition',
+      label: copy.lowestTuition,
       entries: matchedRows.filter(({ row }) => typeof row?.tuition === 'number'),
       value: (row: Row) => money(row.tuition),
       compare: (left: Row, right: Row) => (left.tuition ?? Infinity) - (right.tuition ?? Infinity),
     },
     {
-      label: 'Highest graduate earnings*',
+      label: copy.highestEarnings,
       entries: matchedRows.filter(({ row }) => typeof row?.median_earnings === 'number'),
       value: (row: Row) => money(row.median_earnings),
       compare: (left: Row, right: Row) => (right.median_earnings ?? -Infinity) - (left.median_earnings ?? -Infinity),
     },
     {
-      label: 'Shortest estimated payback',
+      label: copy.shortestPayback,
       entries: matchedRows.filter(({ row }) => typeof row?.payback_years === 'number'),
-      value: (row: Row) => `${row.payback_years?.toFixed(1)} years`,
+      value: (row: Row) => format(copy.years, { years: row.payback_years?.toFixed(1) ?? '—' }),
       compare: (left: Row, right: Row) => (left.payback_years ?? Infinity) - (right.payback_years ?? Infinity),
     },
   ].map((cue) => {
@@ -99,17 +103,17 @@ export default async function AustralianUniversityComparePage({ searchParams }: 
   }).filter((cue): cue is { label: string; value: string; university: string } => cue !== null)
 
   const comparisonMetrics: Array<[string, (entry: typeof rows[number]) => ReactNode]> = [
-    ['Matched field & AQF', ({ row }) => row ? `${row.field_name?.replace(/\.$/, '') || 'Best available'} · ${aqfLabel(row.aqf_level)}` : 'No equivalent course group found'],
-    ['Annual tuition', ({ row }) => money(row?.tuition)],
-    ['Graduate earnings*', ({ row }) => money(row?.median_earnings)],
-    ['Employment rate*', ({ row }) => percent(row?.employment_rate)],
-    ['Completion rate*', ({ row }) => percent(row?.graduation_rate)],
-    ['ROI estimate', ({ row }) => row?.roi_score?.toFixed(1) ?? '—'],
-    ['Estimated payback', ({ row }) => row?.payback_years ? `${row.payback_years.toFixed(1)} years` : '—'],
-    ['Official course source', ({ university, row }) => {
-      if (!row) return <span className="font-normal text-slate-500">No equivalent course group</span>
+    [copy.matchedFieldAqf, ({ row }) => row ? `${row.field_name?.replace(/\.$/, '') || copy.bestAvailable} · ${localizedAqfLabel(row.aqf_level, locale)}` : copy.noEquivalent],
+    [copy.annualTuition, ({ row }) => money(row?.tuition)],
+    [copy.graduateEarnings, ({ row }) => money(row?.median_earnings)],
+    [copy.employmentRate, ({ row }) => percent(row?.employment_rate)],
+    [copy.completionRate, ({ row }) => percent(row?.graduation_rate)],
+    [copy.roiEstimate, ({ row }) => row?.roi_score?.toFixed(1) ?? '—'],
+    [copy.estimatedPayback, ({ row }) => row?.payback_years ? format(copy.years, { years: row.payback_years.toFixed(1) }) : '—'],
+    [copy.officialSource, ({ university, row }) => {
+      if (!row) return <span className="font-normal text-slate-500">{copy.noEquivalent}</span>
       const source = courseEvidence[getAuStudyEvidenceKey({ institutionId: university.institutionId, fieldName: row.field_name, aqfLevel: row.aqf_level })]
-      if (!source?.href) return <span className="font-normal text-slate-500">{source?.label ?? 'Pending verification'}</span>
+      if (!source?.href) return <span className="font-normal text-slate-500">{source?.label ?? copy.pendingVerification}</span>
       return <a href={source.href} target="_blank" rel="noreferrer" className="inline-flex max-w-[13rem] items-center gap-1 text-blue-700 hover:text-blue-800 hover:underline"><span className="truncate">{source.label}</span><ExternalLink className="size-3.5 shrink-0" /></a>
     }],
   ]
@@ -118,38 +122,38 @@ export default async function AustralianUniversityComparePage({ searchParams }: 
     <main className="min-h-screen bg-slate-50">
       <section className="border-b border-blue-100 bg-[radial-gradient(circle_at_top_right,_rgba(191,219,254,.6),_transparent_42%),linear-gradient(180deg,_#ffffff,_#eff6ff)]">
         <div className="mx-auto max-w-6xl px-5 py-10 sm:px-6">
-          <Link href="/au/study" className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-700 hover:text-blue-800"><ArrowRight className="h-4 w-4 rotate-180" /> Australian study options</Link>
+          <Link href={localizePath('/au/study', locale)} className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-700 hover:text-blue-800"><ArrowRight className="h-4 w-4 rotate-180" /> {copy.back}</Link>
           <div className="mt-5 flex flex-wrap items-start justify-between gap-5">
             <div>
-              <p className="inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-white/80 px-3 py-1 text-xs font-semibold text-blue-800"><GraduationCap className="h-3.5 w-3.5" /> Australia · same-country comparison</p>
-              <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">Compare university ROI in Australia</h1>
+              <p className="inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-white/80 px-3 py-1 text-xs font-semibold text-blue-800"><GraduationCap className="h-3.5 w-3.5" /> {copy.badge}</p>
+              <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">{copy.title}</h1>
             </div>
-            {selected.length > 0 && <div className="rounded-2xl border border-blue-100 bg-white/85 px-4 py-3 text-sm shadow-sm"><p className="font-semibold text-slate-950">{selected.length} school{selected.length === 1 ? '' : 's'} selected</p><p className="mt-0.5 text-xs text-slate-500">Add up to three side by side</p></div>}
+            {selected.length > 0 && <div className="rounded-2xl border border-blue-100 bg-white/85 px-4 py-3 text-sm shadow-sm"><p className="font-semibold text-slate-950">{format(selected.length === 1 ? copy.selectedCount : copy.selectedCountPlural, { count: selected.length })}</p><p className="mt-0.5 text-xs text-slate-500">{copy.selectedDetail}</p></div>}
           </div>
-          <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">Keep the country constant, then compare the same field and AQF level against the same kind of provider-level graduate outcome evidence.</p>
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">{copy.intro}</p>
         </div>
       </section>
 
       <section className="mx-auto max-w-6xl px-5 py-8 sm:px-6">
-        <form action="/au/study/compare" className="rounded-3xl border border-slate-200 bg-white p-4 shadow-[0_12px_30px_rgba(15,23,42,.06)] sm:p-5">
+        <form action={localizePath('/au/study/compare', locale)} className="rounded-3xl border border-slate-200 bg-white p-4 shadow-[0_12px_30px_rgba(15,23,42,.06)] sm:p-5">
           <div className="grid gap-3 md:grid-cols-3">
             {[0, 1, 2].map((index) => (
               <label key={index} className="rounded-2xl border border-slate-100 bg-slate-50/70 p-3 transition focus-within:border-blue-200 focus-within:bg-blue-50/50">
-                <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">University {index + 1}{index > 0 ? ' (optional)' : ''}</span>
+                <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">{format(copy.university, { number: index + 1 })}{index > 0 ? ` ${copy.optional}` : ''}</span>
                 <select name="schools" defaultValue={selectedSlugs[index] ?? ''} className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium text-slate-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
-                  <option value="">Choose a university</option>
+                  <option value="">{copy.chooseUniversity}</option>
                   {catalog.map((university) => <option key={university.id} value={university.institutionId}>{university.name}{university.state ? ` · ${university.state}` : ''}</option>)}
                 </select>
               </label>
             ))}
           </div>
           <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-[minmax(0,1fr)_220px_auto]">
-            <input name="field" defaultValue={field} maxLength={80} placeholder="Optional subject, e.g. nursing" className="h-11 min-w-0 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" />
+            <input name="field" defaultValue={field} maxLength={80} placeholder={copy.subjectPlaceholder} className="h-11 min-w-0 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" />
             <select name="aqf" defaultValue={selectedAqf ? String(selectedAqf) : ''} className="h-11 min-w-0 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium text-slate-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
-              <option value="">Choose an AQF level</option>
-              {AQF_LEVELS.map((aqf) => <option key={aqf} value={aqf}>AQF {aqf} · {aqfLabel(aqf)}</option>)}
+              <option value="">{copy.chooseAqf}</option>
+              {AQF_LEVELS.map((aqf) => <option key={aqf} value={aqf}>AQF {aqf} · {localizedAqfLabel(aqf, locale)}</option>)}
             </select>
-            <button className="inline-flex h-11 min-w-0 w-full items-center justify-center gap-2 rounded-xl bg-slate-950 px-5 text-sm font-semibold text-white hover:bg-slate-800 md:w-auto"><BarChart3 className="h-4 w-4" /> Compare</button>
+            <button className="inline-flex h-11 min-w-0 w-full items-center justify-center gap-2 rounded-xl bg-slate-950 px-5 text-sm font-semibold text-white hover:bg-slate-800 md:w-auto"><BarChart3 className="h-4 w-4" /> {copy.compare}</button>
           </div>
         </form>
 
@@ -158,15 +162,15 @@ export default async function AustralianUniversityComparePage({ searchParams }: 
         </div>}
 
         <div className="mt-5 rounded-2xl border border-blue-100 bg-blue-50/70 p-4 sm:flex sm:items-center sm:justify-between sm:gap-5">
-          <div><p className="text-xs font-semibold uppercase tracking-wide text-blue-700">Comparison basis</p><p className="mt-1 text-sm font-semibold text-slate-950">{field || 'Choose a subject'} {selectedAqf ? `· AQF ${selectedAqf} (${aqfLabel(selectedAqf)})` : '· Choose one AQF level'}</p><p className="mt-1 text-xs leading-5 text-slate-600">Each column is matched to this same basis. A blank cell means we could not confirm an equivalent group—not that the university has no course.</p></div>
-          <Link href="/au/study" className="mt-3 inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold text-blue-700 hover:text-blue-800 sm:mt-0">Change shortlist <ArrowRight className="size-4" /></Link>
+          <div><p className="text-xs font-semibold uppercase tracking-wide text-blue-700">{copy.basis}</p><p className="mt-1 text-sm font-semibold text-slate-950">{field || copy.chooseSubject} {selectedAqf ? `· AQF ${selectedAqf} (${localizedAqfLabel(selectedAqf, locale)})` : `· ${copy.chooseAqfLevel}`}</p><p className="mt-1 text-xs leading-5 text-slate-600">{copy.basisDescription}</p></div>
+          <Link href={localizePath('/au/study', locale)} className="mt-3 inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold text-blue-700 hover:text-blue-800 sm:mt-0">{copy.changeShortlist} <ArrowRight className="size-4" /></Link>
         </div>
 
         {selected.length < 2 ? (
           <div className="mt-6 rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center">
             <Plus className="mx-auto h-6 w-6 text-slate-400" />
-            <h2 className="mt-3 font-semibold text-slate-950">Select two or three universities</h2>
-            <p className="mt-2 text-sm text-slate-500">A field is optional. Without one, each university’s highest available ROI group is shown.</p>
+            <h2 className="mt-3 font-semibold text-slate-950">{copy.selectUniversities}</h2>
+            <p className="mt-2 text-sm text-slate-500">{copy.selectDescription}</p>
           </div>
         ) : (
           <>
@@ -176,21 +180,25 @@ export default async function AustralianUniversityComparePage({ searchParams }: 
           <div className="mt-4 overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
             <table className="w-full min-w-[820px] text-left text-sm">
               <thead className="border-b border-slate-200 bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
-                <tr><th className="px-5 py-4 font-semibold">Decision measure</th>{rows.map(({ university }) => <th key={university.id} className="px-5 py-4 font-semibold text-slate-800"><span className="block">{university.name}</span>{university.state && <span className="mt-1 inline-flex items-center gap-1 text-[11px] font-medium normal-case tracking-normal text-slate-500"><MapPin className="size-3" />{university.state}</span>}</th>)}</tr>
+                <tr><th className="px-5 py-4 font-semibold">{copy.decisionMeasure}</th>{rows.map(({ university }) => <th key={university.id} className="px-5 py-4 font-semibold text-slate-800"><span className="block">{university.name}</span>{university.state && <span className="mt-1 inline-flex items-center gap-1 text-[11px] font-medium normal-case tracking-normal text-slate-500"><MapPin className="size-3" />{university.state}</span>}</th>)}</tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {comparisonMetrics.map(([label, render]) => (
                   <tr key={label}><th className="px-5 py-4 font-medium text-slate-600">{label}</th>{rows.map((entry) => <td key={entry.university.id} className="px-5 py-4 font-semibold text-slate-900">{render(entry)}</td>)}</tr>
                 ))}
-                <tr><th className="px-5 py-4 font-medium text-slate-600">Profile</th>{rows.map(({ university }) => <td key={university.id} className="px-5 py-4"><Link className="inline-flex items-center gap-1 text-sm font-semibold text-blue-700 hover:text-blue-800" href={`/au/study/providers/${university.institutionId}`}>View details <ArrowRight className="h-4 w-4" /></Link></td>)}</tr>
+                <tr><th className="px-5 py-4 font-medium text-slate-600">{copy.profile}</th>{rows.map(({ university }) => <td key={university.id} className="px-5 py-4"><Link className="inline-flex items-center gap-1 text-sm font-semibold text-blue-700 hover:text-blue-800" href={localizePath(`/au/study/providers/${university.institutionId}`, locale)}>{copy.viewDetails} <ArrowRight className="h-4 w-4" /></Link></td>)}</tr>
               </tbody>
             </table>
           </div>
           </>
         )}
 
-        <aside className="mt-5 rounded-2xl border border-emerald-100 bg-emerald-50/70 p-5 text-sm leading-6 text-slate-700"><div className="flex items-center gap-2 font-semibold text-slate-950"><CheckCircle2 className="h-5 w-5 text-emerald-600" /> Comparison rule</div><p className="mt-1">* Earnings, employment and completion measures are provider-level outcome data. Tuition and course grouping are field/AQF-specific. Confirm the exact course, fees and entry requirements with each university.</p></aside>
+        <aside className="mt-5 rounded-2xl border border-emerald-100 bg-emerald-50/70 p-5 text-sm leading-6 text-slate-700"><div className="flex items-center gap-2 font-semibold text-slate-950"><CheckCircle2 className="h-5 w-5 text-emerald-600" /> {copy.rule}</div><p className="mt-1">{copy.ruleDescription}</p></aside>
       </section>
     </main>
   )
+}
+
+function format(template: string, values: Record<string, string | number>) {
+  return template.replace(/\{(\w+)\}/g, (_, key: string) => String(values[key] ?? ''))
 }

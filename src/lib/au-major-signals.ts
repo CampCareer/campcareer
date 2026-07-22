@@ -25,7 +25,16 @@ export interface AuMajorSignal {
     label: string
     labelKo: string
   }> | null
-  data_sources: Array<{ name: string; url: string }> | null
+  data_sources: Array<{
+    name: string
+    url: string
+    /** Underlying publication/dataset date. Required before a paid report can use the fact. */
+    dataAsOf?: string | null
+    /** CampCareer review date for this exact source-to-metric mapping. */
+    lastVerified?: string | null
+    confidence?: "high" | "medium" | "low"
+    kind?: "observed" | "calculated" | "estimated"
+  }> | null
   last_verified: string | null
 }
 

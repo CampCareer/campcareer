@@ -51,7 +51,7 @@ export function VisaAlertForm({
       setError(va.errorConsent)
       return
     }
-    if (decisionContext) track("decision_save_click", { country: country ?? "all", field: field ?? "unknown" })
+    if (decisionContext) track("plan_save_requested", { country: country ?? "all", field: field ?? "unknown" })
     setStatus("submitting")
     try {
       const res = await subscribeVisaAlerts({
@@ -64,7 +64,7 @@ export function VisaAlertForm({
         decisionContext,
       })
       if (res.ok) {
-        track("lead_submitted", { country: country ?? "all", field: field ?? "unknown", lead_type: decisionContext ? "decision_brief" : "visa_alert" })
+        track("visa_alert_submitted", { country: country ?? "all", field: field ?? "unknown", lead_type: decisionContext ? "decision_brief" : "visa_alert" })
         setStatus("done")
       } else if (res.duplicate) {
         setStatus("duplicate")

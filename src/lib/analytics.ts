@@ -24,6 +24,10 @@ const ALLOWED_EVENTS = new Set([
   "decision_start",
   "seo_landing_view",
   "visa_alert_submitted",
+  "report_launch_view",
+  "report_launch_interest_started",
+  "report_launch_interest_submitted",
+  "report_workspace_open",
 ])
 
 export function track(eventName: string, params?: Record<string, EventValue>) {
@@ -45,6 +49,24 @@ export function track(eventName: string, params?: Record<string, EventValue>) {
 export function recordDiscoveryEvent(
   eventName: "recommendation_start" | "recommendation_result_view",
   context: { surface: "landing" | "country_results"; country: string; major: string; goal: string },
+) {
+  track(eventName, context)
+  if (
+    typeof window === "undefined" ||
+    !document.cookie.split("; ").some((item) => item === "cc_analytics_consent=granted")
+  ) return
+
+  void fetch("/api/v1/discovery-events", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ eventName, context }),
+    keepalive: true,
+  }).catch(() => undefined)
+}
+
+export function recordReportEvent(
+  eventName: "report_launch_view" | "report_workspace_open",
+  context: { surface: "report_launch" | "report_workspace"; country: "AU"; locale: "en" | "ko" },
 ) {
   track(eventName, context)
   if (

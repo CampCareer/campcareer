@@ -18,13 +18,14 @@ import {
   type RankedAuPathway,
 } from "@/lib/au-pathfinder"
 import { localizePath } from "@/lib/i18n/config"
-import { useLocale } from "@/lib/i18n/locale-provider"
+import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { track } from "@/lib/analytics"
 import { getStudyCategoryVisual } from "@/components/ui/au-career-category-visuals"
 import { IconPicker, type PickerOption } from "@/components/ui/icon-picker"
+import { AustraliaJourneyNav } from "@/components/australia/australia-journey-nav"
 
 export function AustraliaPathfinder({ initialProfile }: { initialProfile: AuPathfinderProfile }) {
-  const locale = useLocale()
+  const locale = useRouteLocale()
   const isKo = locale === "ko"
   const pathLocale = isKo ? "ko" : "en"
   const router = useRouter()
@@ -150,6 +151,7 @@ export function AustraliaPathfinder({ initialProfile }: { initialProfile: AuPath
     </section>
 
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
+      <AustraliaJourneyNav className="mb-6 sm:mb-8" />
       <section>
         <div className="grid gap-4 lg:grid-cols-2">
           {ranked.slice(0, 6).map((pathway, index) => <PathwayCard key={pathway.concept.id} pathway={pathway} rank={index + 1} locale={pathLocale} isKo={isKo} featured={index === 0} />)}

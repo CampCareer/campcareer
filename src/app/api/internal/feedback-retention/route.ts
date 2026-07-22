@@ -19,7 +19,26 @@ function json(body: Record<string, unknown>, status = 200) {
 }
 
 function isMissingRetentionSchema(error: { code?: string; message?: string } | null) {
-  return error?.code === "42703" || /expires_at|schema cache/i.test(error?.message ?? "")
+  return error?.code === "42703" || error?.code === "42P01" || /expires_at|report_launch_interests|schema cache/i.test(error?.message ?? "")
+}
+
+async function deleteExpiredReportLaunchInterests(supabase: ReturnType<typeof getFeedbackAdminClient>) {
+  if (!supabase) return { deleted: 0, hasMore: false, unavailable: true }
+  const { data, error } = await supabase
+    .from("report_launch_interests")
+    .select("id")
+    .lte("retention_expires_at", new Date().toISOString())
+    .order("retention_expires_at", { ascending: true })
+    .limit(BATCH_SIZE)
+  if (error) {
+    if (isMissingRetentionSchema(error)) return { deleted: 0, hasMore: false, unavailable: true }
+    throw error
+  }
+  const ids = (data ?? []).map((row) => row.id)
+  if (ids.length === 0) return { deleted: 0, hasMore: false, unavailable: false }
+  const { error: deleteError } = await supabase.from("report_launch_interests").delete().in("id", ids)
+  if (deleteError) throw deleteError
+  return { deleted: ids.length, hasMore: ids.length === BATCH_SIZE, unavailable: false }
 }
 
 /**
@@ -77,11 +96,20 @@ export async function GET(request: Request) {
     }
   }
 
+  let reportLaunchInterests = { deleted: 0, hasMore: false, unavailable: false }
+  try {
+    reportLaunchInterests = await deleteExpiredReportLaunchInterests(supabase)
+  } catch (error) {
+    console.error("[feedback-retention] report launch-interest deletion failed:", error)
+    return json({ ok: false, code: "REPORT_LAUNCH_RETENTION_DELETE_FAILED" }, 500)
+  }
+
   return json({
     ok: true,
     processed: rows.length,
     deleted: deletableIds.length,
     retainedForScreenshotRetry,
     hasMore: rows.length === BATCH_SIZE,
+    reportLaunchInterests,
   })
 }

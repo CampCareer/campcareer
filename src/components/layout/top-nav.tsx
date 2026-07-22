@@ -4,18 +4,20 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useState, useRef, useEffect, useCallback } from "react"
 import { LogoMark } from "@/components/logo-mark"
-import { useLocale, useSetLocale } from "@/lib/i18n/locale-provider"
+import { useLocale, useRouteLocale, useRouteTranslations, useSetLocale } from "@/lib/i18n/locale-provider"
 import { LOCALE_META, PUBLISHED_LOCALE_OPTIONS, localeForUi, localeFromPathname, localizePath, withoutLocalePrefix, type LocaleOption } from "@/lib/i18n/config"
 import { ToolNavActions } from "@/components/layout/tool-nav-actions"
 import { cn } from "@/lib/utils"
-import { Globe, Map, Compass, Check } from "lucide-react"
+import { Globe, Scale, ClipboardList, Check } from "lucide-react"
 
 export function TopNav() {
   const pathname = usePathname()
   const locale = useLocale()
+  const routeLocale = useRouteLocale()
   const setLocale = useSetLocale()
+  const t = useRouteTranslations()
   const router = useRouter()
-  const pathLocale = localeFromPathname(pathname) ?? locale
+  const pathLocale = localeFromPathname(pathname) ?? routeLocale
   const barePathname = withoutLocalePrefix(pathname)
   const hasUnifiedHero = barePathname === "/" || barePathname === "/countries/search" || barePathname === "/universities" || barePathname === "/universities/au" || barePathname === "/majors" || barePathname === "/study" || barePathname === "/au/study"
   const isToolSurface = barePathname === "/planner"
@@ -23,9 +25,9 @@ export function TopNav() {
   const isLanding = barePathname === "/"
 
   const navItems: { href: string; label: string; icon: typeof Globe; accent?: "blue" | "sky" | "violet" }[] = [
-    { href: "/", label: locale === "ko" ? "호주" : "Australia", icon: Globe, accent: "blue" },
-    { href: "/maps", label: "Maps", icon: Map, accent: "sky" },
-    { href: "/planner", label: "Planner", icon: Compass, accent: "violet" },
+    { href: "/", label: t.australia.journey.findPath, icon: Globe, accent: "blue" },
+    { href: "/au/study", label: t.australia.journey.compareStudy, icon: Scale, accent: "sky" },
+    { href: "/planner", label: t.australia.journey.plan, icon: ClipboardList, accent: "violet" },
   ]
 
   const isActive = useCallback((href: string) => {
@@ -61,7 +63,6 @@ export function TopNav() {
       <Link
         key={item.href}
         href={localizePath(item.href, pathLocale)}
-        prefetch={item.href === "/maps" ? false : undefined}
         className={cn(
           "whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors flex items-center gap-1.5",
           isLanding

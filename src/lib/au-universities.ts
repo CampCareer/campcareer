@@ -125,3 +125,14 @@ export function aqfLabel(level: number | null | undefined): string {
   if (level === 10) return 'Doctoral'
   return 'Study level not specified'
 }
+
+export function localizedAqfLabel(level: number | null | undefined, locale: 'en' | 'ko'): string {
+  if (locale !== 'ko') return aqfLabel(level)
+  if (level === 5) return '디플로마'
+  if (level === 6) return '고급 디플로마 / 준학사'
+  if (level === 7) return '학사'
+  if (level === 8) return '대학원 수료증 / 대학원 디플로마'
+  if (level === 9) return '석사'
+  if (level === 10) return '박사'
+  return '학위 단계 미확인'
+}
