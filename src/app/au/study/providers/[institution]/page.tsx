@@ -11,6 +11,7 @@ import { fetchRoiData } from '@/lib/roi-query'
 import { pageMetadata } from '@/lib/seo'
 import { JsonLd, breadcrumbLd } from '@/components/seo/json-ld'
 import { FieldGroupsSection, type FieldGroupRow } from './FieldGroupsSection'
+import { SaveUniversityButton } from '@/components/saved/saved-university-button'
 
 export const revalidate = 86400
 
@@ -140,6 +141,7 @@ export default async function AustralianUniversityDetailPage({ params }: { param
               </div>
 
               <div className="flex flex-wrap gap-2">
+                <SaveUniversityButton university={{ slug: university.institutionId, name: university.name }} />
                 <Link
                   href={`/au/study/compare?schools=${encodeURIComponent(university.institutionId)}`}
                   className="inline-flex h-11 items-center gap-2 rounded-xl bg-white px-5 text-sm font-semibold text-blue-700 shadow-lg transition-colors hover:bg-blue-50"

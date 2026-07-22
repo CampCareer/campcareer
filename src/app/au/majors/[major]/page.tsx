@@ -8,6 +8,7 @@ import costsSnapshot from "@/data/au-major-costs.json"
 import { formatOutlook, formatSalaryRange, getAuMajorSignal, prBadge, shortageLabel, shortageLevel } from "@/lib/au-major-signals"
 import { pageMetadata } from "@/lib/seo"
 import { getStudyCategoryVisual } from "@/components/ui/au-career-category-visuals"
+import { SavedStudyConceptButton } from "@/components/saved/saved-study-concept-button"
 
 export const revalidate = 86400
 
@@ -71,7 +72,7 @@ export default async function AustralianMajorDetailPage({ params }: { params: Pr
             <h1 className="mt-5 text-3xl font-semibold tracking-tight text-white sm:text-4xl">{concept.label}</h1>
             <p className="mt-3 text-base leading-7 text-blue-50">{concept.description}</p>
           </div>
-          <Link href={`/au/study/programs/${concept.slug}`} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-white px-5 text-sm font-semibold text-blue-700 hover:bg-blue-50">View verified programs <ArrowRight className="h-4 w-4" /></Link>
+          <div className="flex flex-wrap gap-2"><SavedStudyConceptButton concept={{ slug: concept.slug, label: concept.label, labelKo: concept.labelKo, category: concept.category }} /><Link href={`/au/study/programs/${concept.slug}`} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-white px-5 text-sm font-semibold text-blue-700 hover:bg-blue-50">View verified programs <ArrowRight className="h-4 w-4" /></Link></div>
         </div>
       </div>
     </section>

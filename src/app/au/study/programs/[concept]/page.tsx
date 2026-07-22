@@ -19,6 +19,7 @@ import { supabaseAdmin } from "@/lib/supabase-admin"
 import type { CourseOffering } from "@/lib/study-product/types"
 import { aqfLabel } from "@/lib/au-universities"
 import { pageMetadata } from "@/lib/seo"
+import { SaveCourseButton, SavedCoursesProvider } from "@/components/saved/saved-course-button"
 
 export const revalidate = 3600
 
@@ -429,6 +430,7 @@ export default async function AuStudyProgramsPage({
 
         {/* Course cards */}
         {paginatedCourses.length > 0 ? (
+          <SavedCoursesProvider>
           <div className="grid gap-5 lg:grid-cols-2">
             {paginatedCourses.map((course) => (
               <article
@@ -475,6 +477,7 @@ export default async function AuStudyProgramsPage({
                 {course.eligibilityNote && <p className="mt-3 rounded-xl bg-amber-50 px-3 py-2.5 text-xs leading-5 text-amber-900">{course.eligibilityNote}</p>}
 
                 <div className="mt-5 flex flex-wrap gap-2">
+                  <SaveCourseButton course={{ id: course.id, name: course.title, providerName: course.providerName, fieldName: concept.label, tuition: course.tuitionFeeAud }} />
                   {course.officialCourseUrl && <a href={course.officialCourseUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-bold text-white hover:bg-blue-700">Open official course page <ExternalLink className="h-4 w-4" /></a>}
                   {course.cricosUrl && <a href={course.cricosUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold text-slate-800 hover:border-blue-300 hover:text-blue-700">Open CRICOS record <ExternalLink className="h-4 w-4" /></a>}
                   {course.providerId && <Link href={`/au/study/providers/${course.providerId}`} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold text-slate-800 hover:border-blue-300 hover:text-blue-700">School profile <ArrowRight className="h-4 w-4" /></Link>}
@@ -482,6 +485,7 @@ export default async function AuStudyProgramsPage({
               </article>
             ))}
           </div>
+          </SavedCoursesProvider>
         ) : (
           <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center">
             <GraduationCap className="mx-auto h-10 w-10 text-slate-300" />

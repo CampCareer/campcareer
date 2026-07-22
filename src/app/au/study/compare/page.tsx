@@ -7,6 +7,7 @@ import { getAuStudyCardCourseEvidence, getAuStudyEvidenceKey } from '@/lib/au-st
 import { fetchRoiData } from '@/lib/roi-query'
 import { getLocale, getTranslations } from '@/lib/i18n/server'
 import { localizePath } from '@/lib/i18n/config'
+import { SaveUniversityButton, SavedUniversitiesProvider } from '@/components/saved/saved-university-button'
 
 export const revalidate = 86400
 
@@ -157,9 +158,9 @@ export default async function AustralianUniversityComparePage({ searchParams }: 
           </div>
         </form>
 
-        {selected.length > 0 && <div className="mt-5 flex flex-wrap gap-2">
-          {selected.map((university, index) => <div key={university.id} className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-sm shadow-sm"><span className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 text-[11px] font-bold text-white">{index + 1}</span><span className="font-semibold text-slate-800">{university.name}</span>{university.state && <span className="inline-flex items-center gap-1 text-xs text-slate-500"><MapPin className="h-3 w-3" />{university.state}</span>}</div>)}
-        </div>}
+        {selected.length > 0 && <SavedUniversitiesProvider><div className="mt-5 flex flex-wrap gap-2">
+          {selected.map((university, index) => <div key={university.id} className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-2 py-2 text-sm shadow-sm"><span className="ml-1 flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 text-[11px] font-bold text-white">{index + 1}</span><span className="font-semibold text-slate-800">{university.name}</span>{university.state && <span className="inline-flex items-center gap-1 text-xs text-slate-500"><MapPin className="h-3 w-3" />{university.state}</span>}<SaveUniversityButton compact university={{ slug: university.institutionId, name: university.name }} className="rounded-full" /></div>)}
+        </div></SavedUniversitiesProvider>}
 
         <div className="mt-5 rounded-2xl border border-blue-100 bg-blue-50/70 p-4 sm:flex sm:items-center sm:justify-between sm:gap-5">
           <div><p className="text-xs font-semibold uppercase tracking-wide text-blue-700">{copy.basis}</p><p className="mt-1 text-sm font-semibold text-slate-950">{field || copy.chooseSubject} {selectedAqf ? `· AQF ${selectedAqf} (${localizedAqfLabel(selectedAqf, locale)})` : `· ${copy.chooseAqfLevel}`}</p><p className="mt-1 text-xs leading-5 text-slate-600">{copy.basisDescription}</p></div>

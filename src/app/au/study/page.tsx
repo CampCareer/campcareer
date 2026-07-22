@@ -5,6 +5,7 @@ import { AU_AQF_FILTERS, AU_STATES, getAuUniversitiesByIds, isAuAqfFilter, type 
 import { getAuStudyCardCourseEvidence, getAuStudyEvidenceKey, type AuStudyCardCourseEvidence } from '@/lib/au-study-card-evidence'
 import { AuStudyCompareToggle, AuStudyCompareTrayProvider } from '@/components/study/au-study-compare-tray'
 import { AuStudyFilterBar } from '@/components/study/au-study-filter-bar'
+import { SaveUniversityButton, SavedUniversitiesProvider } from '@/components/saved/saved-university-button'
 import { STUDY_CATEGORIES } from '@/data/study-concepts'
 import { fetchRoiData } from '@/lib/roi-query'
 import { pageMetadata } from '@/lib/seo'
@@ -171,6 +172,7 @@ export default async function AustralianUniversitiesPage({ searchParams }: { sea
 
         {rows.length > 0 ? (
           <AuStudyCompareTrayProvider key={filterKey} initialSelected={initialCompare} filters={filters}>
+          <SavedUniversitiesProvider>
           <div className="mt-5 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {rows.map((row) => {
               const university = universities.get(row.college_id)!
@@ -206,14 +208,16 @@ export default async function AustralianUniversitiesPage({ searchParams }: { sea
                     </div>
                   </div>
                   <div className="mt-3 flex items-start gap-2 text-xs leading-5 text-slate-500"><Database className="mt-0.5 h-3.5 w-3.5 shrink-0" /><p>{format(copy.outcomesChecked, { date: dateLabel(evidence.checkedAt, locale, copy.pendingVerification) })}</p></div>
-                  <div className="mt-auto flex items-center justify-between gap-3 pt-5">
-                    <Link href={localizePath(`/au/study/providers/${university.institutionId}`, locale)} className="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-950 hover:text-blue-700">{copy.reviewOutcomes} <ArrowRight className="h-4 w-4" /></Link>
+                  <div className="mt-auto flex flex-wrap items-center gap-2 pt-5">
+                    <Link href={localizePath(`/au/study/providers/${university.institutionId}`, locale)} className="mr-auto inline-flex items-center gap-1.5 text-sm font-semibold text-slate-950 hover:text-blue-700">{copy.reviewOutcomes} <ArrowRight className="h-4 w-4" /></Link>
+                    <SaveUniversityButton university={{ slug: university.institutionId, name: university.name }} />
                     <AuStudyCompareToggle option={{ id: university.institutionId, name: university.name, state: university.state, fieldName: row.field_name?.replace(/\.$/, '') ?? null, aqfLevel: row.aqf_level ?? null }} />
                   </div>
                 </article>
               )
             })}
           </div>
+          </SavedUniversitiesProvider>
           </AuStudyCompareTrayProvider>
         ) : (
           <div className="mt-4 rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center">

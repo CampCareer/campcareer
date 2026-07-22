@@ -20,6 +20,7 @@ import {
   type ReportIntakeDraft,
 } from "@/lib/report-intake"
 import { REPORT_PRODUCTS, formatAud } from "@/lib/report-catalog"
+import { createReportDraftFromMyPlan } from "@/lib/report-plan-bridge"
 import { cn } from "@/lib/utils"
 
 type IntakeRow = {
@@ -56,6 +57,11 @@ type OptionRow = {
 type SavedUniversity = { id: number; univ_slug: string; univ_name: string }
 type SavedCourse = { id: number; course_name: string; college_name: string; field_name: string }
 type Order = { id: string; product_id: string; status: string; created_at: string }
+type PlanGoalProfile = { target_occupation_title: string }
+type PlanGoalOption = { position: number; source_type: "saved_university" | "saved_course"; source_reference: string; title: string; provider_name: string; field_name: string }
+type PlanBudget = { target_amount: number | string | null }
+type PlanMoneyScenario = { scholarship_amount: number | string | null }
+type PlanLanguageGoal = { exam_name: string }
 
 function draftFromRow(row: IntakeRow): ReportIntakeDraft {
   return {
@@ -132,6 +138,7 @@ export function MyAustraliaReportWorkspace() {
   const [savedUniversities, setSavedUniversities] = useState<SavedUniversity[]>([])
   const [savedCourses, setSavedCourses] = useState<SavedCourse[]>([])
   const [orders, setOrders] = useState<Order[]>([])
+  const [importedFromPlan, setImportedFromPlan] = useState(false)
   const [notice, setNotice] = useState<{ type: "success" | "error"; text: string } | null>(null)
 
   useEffect(() => {
@@ -158,6 +165,7 @@ export function MyAustraliaReportWorkspace() {
     option: "Option", titleLabel: "과정 또는 선택지 이름", provider: "대학·교육기관", city: "도시", state: "주/준주", field: "분야", level: "학위·과정 단계", notes: "메모 (선택)",
     clear: "비우기", save: "조건과 선택지 저장", saving: "저장 중…", saved: "저장되었습니다. 이 정보는 리포트 준비용으로만 사용됩니다.",
     savedChoices: "저장한 후보에서 가져오기", noSaved: "저장한 대학·과정이 아직 없습니다. 비교 화면에서 후보를 저장하거나 직접 입력하세요.", useNext: "다음 빈칸에 넣기",
+    planImported: "My Plan에서 리포트 초안을 가져왔습니다", planImportedDescription: "후보, 목표 직업, 총 필요 자금, 장학금과 영어 시험 정보를 반영했습니다. 개인정보 보관 동의 전에는 아무것도 저장되지 않습니다.",
     reportNotOpen: "주문 준비 중", reportNotOpenDescription: "근거 데이터, 결제, 전달·환불 정책이 모두 준비된 뒤에만 주문을 열 예정입니다.",
     orderHistory: "내 리포트 상태", noOrders: "아직 주문한 리포트가 없습니다.", needsConsent: "저장하려면 개인정보 보관 동의가 필요합니다.", invalid: "입력값을 다시 확인해 주세요.",
     savedCount: "선택지 {count}/3개 저장", profileSaved: "조건 저장 준비 완료", reportContents: "완성 시 제공되는 내용", contentList: ["1순위와 근거", "기본·낙관·보수 ROI 시나리오", "선택지별 위험과 확인할 정보", "90일 실행계획", "출처·기준일·신뢰도"],
@@ -182,6 +190,7 @@ export function MyAustraliaReportWorkspace() {
     option: "Option", titleLabel: "Programme or option name", provider: "University or provider", city: "City", state: "State or territory", field: "Field", level: "Qualification level", notes: "Notes (optional)",
     clear: "Clear", save: "Save conditions and options", saving: "Saving…", saved: "Saved. This information is used only to prepare your report.",
     savedChoices: "Use a saved choice", noSaved: "You have not saved a university or course yet. Save one while comparing, or enter an option manually.", useNext: "Use next open option",
+    planImported: "Your My Plan draft has been imported", planImportedDescription: "We brought in your shortlist, career direction, total funding need, scholarship and English exam. Nothing is saved until you review the retention consent.",
     reportNotOpen: "Ordering is being prepared", reportNotOpenDescription: "Orders will open only after evidence, payment, delivery, and refund policies are complete.",
     orderHistory: "My report status", noOrders: "You have not ordered a report yet.", needsConsent: "Please agree to the retention notice before saving.", invalid: "Please review the highlighted input values.",
     savedCount: "{count}/3 options saved", profileSaved: "Profile ready to save", reportContents: "What the finished report will include", contentList: ["A first-ranked option and why", "Base, optimistic and conservative ROI scenarios", "Option risks and items to verify", "A 90-day action plan", "Sources, as-of dates and confidence"],
@@ -189,23 +198,50 @@ export function MyAustraliaReportWorkspace() {
   }
 
   const loadWorkspace = useCallback(async (userId: string) => {
+    const importFromMyPlan = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("from") === "myplan"
     const results = await Promise.all([
       supabase.from("report_intakes").select("id, age, education_work_history, english_level, maximum_budget_aud, expected_scholarship_aud, family_accompaniment, preferred_cities, location_preference, target_occupation, post_study_goal, risk_tolerance, desired_payback_years, report_language, privacy_consent_at").eq("user_id", userId).eq("country", "AU").maybeSingle(),
       supabase.from("saved_universities").select("id, univ_slug, univ_name").eq("user_id", userId).order("created_at", { ascending: false }).limit(6),
       supabase.from("saved_courses").select("id, course_name, college_name, field_name").eq("user_id", userId).order("created_at", { ascending: false }).limit(6),
       supabase.from("report_orders").select("id, product_id, status, created_at").eq("user_id", userId).order("created_at", { ascending: false }).limit(6),
+      supabase.from("plan_goal_profiles").select("target_occupation_title").eq("user_id", userId).maybeSingle(),
+      supabase.from("plan_goal_options").select("position, source_type, source_reference, title, provider_name, field_name").eq("user_id", userId).order("position", { ascending: true }),
+      supabase.from("plan_budgets").select("target_amount").eq("user_id", userId).maybeSingle(),
+      supabase.from("plan_money_scenarios").select("scholarship_amount").eq("user_id", userId).maybeSingle(),
+      supabase.from("plan_language_goals").select("exam_name").eq("user_id", userId).maybeSingle(),
     ])
     const intakeRow = results[0].data as IntakeRow | null
     if (intakeRow) {
       const optionResult = await supabase.from("report_decision_options").select("position, source_type, source_reference, title, provider_name, city, state_or_territory, field_name, study_level, notes").eq("intake_id", intakeRow.id).order("position")
       setIntake(draftFromRow(intakeRow))
       setOptions(optionRows((optionResult.data as OptionRow[] | null) ?? []))
+      setImportedFromPlan(false)
+    } else {
+      const emptyIntake = { ...EMPTY_REPORT_INTAKE, reportLanguage: routeLocale === "ko" ? "ko" : "en" } as ReportIntakeDraft
+      setIntake(emptyIntake)
+      setOptions([emptyDecisionOption(1), emptyDecisionOption(2), emptyDecisionOption(3)])
+      setImportedFromPlan(false)
+      if (importFromMyPlan) {
+        const imported = createReportDraftFromMyPlan({
+          profile: results[4].data as PlanGoalProfile | null,
+          options: (results[5].data as PlanGoalOption[] | null) ?? [],
+          budget: results[6].data as PlanBudget | null,
+          moneyScenario: results[7].data as PlanMoneyScenario | null,
+          language: results[8].data as PlanLanguageGoal | null,
+          reportLanguage: routeLocale === "ko" ? "ko" : "en",
+        })
+        if (imported.hasImportedData) {
+          setIntake(imported.intake)
+          setOptions(imported.options)
+          setImportedFromPlan(true)
+        }
+      }
     }
     setSavedUniversities((results[1].data as SavedUniversity[] | null) ?? [])
     setSavedCourses((results[2].data as SavedCourse[] | null) ?? [])
     setOrders((results[3].data as Order[] | null) ?? [])
     setLoading(false)
-  }, [supabase])
+  }, [routeLocale, supabase])
 
   useEffect(() => {
     let active = true
@@ -321,6 +357,7 @@ export function MyAustraliaReportWorkspace() {
                 <p className="mt-1 text-xs leading-5 text-amber-800">{copy.gateDescription}</p>
               </div>
             </div>
+            {importedFromPlan && <div className="mt-5 flex items-start gap-3 rounded-2xl border border-violet-200 bg-violet-50 px-4 py-3 text-sm text-violet-950"><Sparkles className="mt-0.5 size-4 shrink-0 text-violet-700" /><span><strong>{copy.planImported}</strong><span className="mt-1 block text-xs leading-5 text-violet-800">{copy.planImportedDescription}</span></span></div>}
             <ol className="mt-7 grid gap-2 sm:grid-cols-3" aria-label={isKo ? "리포트 준비 단계" : "Report preparation steps"}>
               {[copy.profile, copy.options, copy.ready].map((label, index) => <li key={label} className={cn("rounded-2xl border px-3 py-3 text-sm font-semibold", index === 0 ? "border-blue-200 bg-white text-blue-800" : "border-slate-200 bg-white/70 text-slate-600")}><span className="mr-2 inline-grid size-5 place-items-center rounded-full bg-slate-100 text-[11px] text-slate-700">{index + 1}</span>{label.replace(/^\d\.\s*/, "")}</li>)}
             </ol>

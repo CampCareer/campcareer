@@ -33,7 +33,7 @@ export function PlannerToolbar({
   return (
     <header className="flex h-12 shrink-0 items-center gap-1 border-b border-slate-200/80 bg-white/95 px-2.5 backdrop-blur-sm">
       <div className="flex shrink-0 items-center">
-        <button type="button" onClick={onToggleSidebar} className="hidden size-8 items-center justify-center rounded-md text-slate-500 transition hover:bg-slate-100 hover:text-slate-800 sm:inline-flex" title={sidebarOpen ? "Close pages" : "Open pages"}>
+        <button type="button" onClick={onToggleSidebar} className="hidden size-8 items-center justify-center rounded-md text-slate-500 transition hover:bg-slate-100 hover:text-slate-800 sm:inline-flex" title={sidebarOpen ? "Close plan navigation" : "Open plan navigation"} aria-label={sidebarOpen ? "Close plan navigation" : "Open plan navigation"}>
           {sidebarOpen ? <PanelLeftClose className="size-4" /> : <PanelLeftOpen className="size-4" />}
         </button>
         <button type="button" onClick={onBack} disabled={!canGoBack} className="inline-flex size-8 items-center justify-center rounded-md text-slate-500 transition hover:bg-slate-100 hover:text-slate-800 disabled:pointer-events-none disabled:opacity-30" title="Go back"><ChevronLeft className="size-4" /></button>
