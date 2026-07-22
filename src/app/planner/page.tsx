@@ -1,9 +1,10 @@
 "use client"
 
 import Link from "next/link"
+import { usePathname, useRouter } from "next/navigation"
 import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from "react"
 import { DndContext, PointerSensor, type DragEndEvent, useSensor, useSensors } from "@dnd-kit/core"
-import { SortableContext, arrayMove, rectSortingStrategy, useSortable } from "@dnd-kit/sortable"
+import { SortableContext, arrayMove, verticalListSortingStrategy, useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import type { User } from "@supabase/supabase-js"
 import {
@@ -22,8 +23,8 @@ import {
   Plus,
   Target,
   GripVertical,
-  Palette,
-  RotateCcw,
+  MoreHorizontal,
+  ArrowUpToLine,
   Trash2,
 } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
@@ -33,12 +34,12 @@ import { PlannerToolbar } from "@/components/planner/planner-toolbar"
 import { PlannerSidebar } from "@/components/planner/planner-sidebar"
 import {
   type PlannerTab,
-  DEFAULT_TAB_TITLE,
   loadTabs,
   saveTabs,
   loadActiveTabId,
   saveActiveTabId,
   createTab,
+  plannerTabTitle,
 } from "@/components/planner/planner-types"
 
 type Preferences = { field: string | null; goal: string | null; recommended_country: string | null }
@@ -61,15 +62,9 @@ const goalLabels: Record<string, string> = { study: "Study quality", visa: "Post
 const countryLabels: Record<string, string> = { AU: "Australia", CA: "Canada", IE: "Ireland", UK: "United Kingdom", US: "United States" }
 const defaultWidgetOrder: WidgetId[] = ["today", "dates", "money", "english", "research"]
 const defaultWidgetSizes: Record<WidgetId, WidgetSize> = { today: "wide", dates: "narrow", money: "half", english: "half", research: "wide" }
-const themeOptions: Array<{ id: PlannerTheme; label: string; swatch: string }> = [
-  { id: "mist", label: "Mist", swatch: "bg-sky-200" },
-  { id: "lavender", label: "Lavender", swatch: "bg-violet-200" },
-  { id: "sage", label: "Sage", swatch: "bg-emerald-200" },
-  { id: "peach", label: "Peach", swatch: "bg-orange-200" },
-  { id: "midnight", label: "Midnight", swatch: "bg-slate-700" },
-]
-
 export default function PlannerPage() {
+  const pathname = usePathname()
+  const router = useRouter()
   const supabase = useMemo(() => createClient(), [])
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
@@ -102,12 +97,14 @@ export default function PlannerPage() {
   const [plannerTheme, setPlannerTheme] = useState<PlannerTheme>("mist")
   const [widgetOrder, setWidgetOrder] = useState<WidgetId[]>(defaultWidgetOrder)
   const [widgetSizes, setWidgetSizes] = useState<Record<WidgetId, WidgetSize>>(defaultWidgetSizes)
-  const [customising, setCustomising] = useState(false)
-  const [paletteOpen, setPaletteOpen] = useState(false)
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }))
 
+  useEffect(() => {
+    if (pathname === "/planner") router.replace("/myplan")
+  }, [pathname, router])
+
   /* ── Tab helpers ── */
-  const activeTab = useMemo(() => tabs.find((t) => t.id === activeTabId) ?? null, [tabs, activeTabId])
+  const activeTab = useMemo(() => tabs.find((tab) => tab.id === activeTabId && !tab.trashedAt) ?? null, [tabs, activeTabId])
 
   const navigateToTab = useCallback((id: string) => {
     const h = historyRef.current
@@ -153,31 +150,71 @@ export default function PlannerPage() {
 
   function renameTab(id: string, title: string) {
     setTabs((prev) => {
-      const next = prev.map((t) => (t.id === id ? { ...t, title } : t))
+      const next = prev.map((tab) => tab.id === id ? { ...tab, title: title.slice(0, 160), updatedAt: new Date().toISOString() } : tab)
       saveTabs(next)
       return next
     })
   }
 
-  function deleteTab(id: string) {
+  function updateTabContent(id: string, content: string) {
     setTabs((prev) => {
-      const next = prev.filter((t) => t.id !== id)
+      const next = prev.map((tab) => tab.id === id ? { ...tab, content: content.slice(0, 12000), updatedAt: new Date().toISOString() } : tab)
       saveTabs(next)
+      return next
+    })
+  }
+
+  function duplicateTab(id: string) {
+    const source = tabs.find((tab) => tab.id === id)
+    if (!source) return
+    const now = new Date().toISOString()
+    const copy: PlannerTab = { ...source, id: crypto.randomUUID(), title: `${plannerTabTitle(source)} copy`.slice(0, 160), createdAt: now, updatedAt: now, trashedAt: null }
+    const next = [...tabs, copy]
+    setTabs(next)
+    saveTabs(next)
+    navigateToTab(copy.id)
+  }
+
+  function moveTabToTrash(id: string) {
+    const now = new Date().toISOString()
+    setTabs((prev) => {
+      const next = prev.map((tab) => tab.id === id ? { ...tab, trashedAt: now, updatedAt: now } : tab)
+      saveTabs(next)
+      if (activeTabId === id) {
+        const nextActive = next.find((tab) => !tab.trashedAt)
+        if (nextActive) navigateToTab(nextActive.id)
+        else {
+          const fresh = createTab()
+          const withFresh = [...next, fresh]
+          saveTabs(withFresh)
+          navigateToTab(fresh.id)
+          return withFresh
+        }
+      }
+      return next
+    })
+  }
+
+  function restoreTab(id: string) {
+    setTabs((prev) => {
+      const next = prev.map((tab) => tab.id === id ? { ...tab, trashedAt: null, updatedAt: new Date().toISOString() } : tab)
+      saveTabs(next)
+      return next
+    })
+  }
+
+  function deleteTabPermanently(id: string) {
+    setTabs((prev) => {
+      const next = prev.filter((tab) => tab.id !== id)
       if (next.length === 0) {
         const fresh = createTab()
         saveTabs([fresh])
         navigateToTab(fresh.id)
         return [fresh]
       }
-      if (activeTabId === id) {
-        navigateToTab(next[next.length - 1].id)
-      }
+      saveTabs(next)
       return next
     })
-  }
-
-  function renameActiveTab(title: string) {
-    if (activeTabId) renameTab(activeTabId, title)
   }
 
   /* ── Data loading ── */
@@ -213,7 +250,9 @@ export default function PlannerPage() {
         const validOrder = savedPlanner.widget_order?.filter((widget): widget is WidgetId => defaultWidgetOrder.includes(widget)) ?? []
         setWidgetOrder([...validOrder, ...defaultWidgetOrder.filter((widget) => !validOrder.includes(widget))])
         setWidgetSizes({ ...defaultWidgetSizes, ...(savedPlanner.widget_sizes ?? {}) })
-        setPlannerTheme(themeOptions.some((theme) => theme.id === savedPlanner.theme) ? savedPlanner.theme : "mist")
+        // My Plan is intentionally a single, quiet canvas. Keep older saved
+        // palette preferences from bringing card-style colours back into it.
+        setPlannerTheme("mist")
       }
       setLoading(false)
     }
@@ -225,15 +264,17 @@ export default function PlannerPage() {
       if (currentUser) {
         await loadWorkspace(currentUser.id)
         const savedTabs = loadTabs()
-        if (savedTabs.length === 0) {
+        const availableTabs = savedTabs.filter((tab) => !tab.trashedAt)
+        if (availableTabs.length === 0) {
           const first = createTab()
-          saveTabs([first])
-          setTabs([first])
+          const next = [...savedTabs, first]
+          saveTabs(next)
+          setTabs(next)
           navigateToTab(first.id)
         } else {
           setTabs(savedTabs)
           const lastActive = loadActiveTabId()
-          const id = lastActive && savedTabs.some((t) => t.id === lastActive) ? lastActive : savedTabs[0].id
+          const id = lastActive && availableTabs.some((tab) => tab.id === lastActive) ? lastActive : availableTabs[0].id
           navigateToTab(id)
         }
       } else {
@@ -300,12 +341,6 @@ export default function PlannerPage() {
     await supabase.from("planner_preferences").upsert({ user_id: user.id, theme: nextTheme, widget_order: nextOrder, widget_sizes: nextSizes, updated_at: new Date().toISOString() })
   }
 
-  function setTheme(nextTheme: PlannerTheme) {
-    setPlannerTheme(nextTheme)
-    setPaletteOpen(false)
-    void savePlannerPreferences(nextTheme, widgetOrder, widgetSizes)
-  }
-
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event
     if (!over || active.id === over.id) return
@@ -317,18 +352,12 @@ export default function PlannerPage() {
     void savePlannerPreferences(plannerTheme, nextOrder, widgetSizes)
   }
 
-  function cycleWidgetSize(widget: WidgetId) {
-    const nextSize: Record<WidgetSize, WidgetSize> = { wide: "half", half: "narrow", narrow: "wide" }
-    const nextSizes = { ...widgetSizes, [widget]: nextSize[widgetSizes[widget]] }
-    setWidgetSizes(nextSizes)
-    void savePlannerPreferences(plannerTheme, widgetOrder, nextSizes)
-  }
-
-  function resetPlannerLayout() {
-    setPlannerTheme("mist")
-    setWidgetOrder(defaultWidgetOrder)
-    setWidgetSizes(defaultWidgetSizes)
-    void savePlannerPreferences("mist", defaultWidgetOrder, defaultWidgetSizes)
+  function moveWidgetToTop(widget: WidgetId) {
+    const index = widgetOrder.indexOf(widget)
+    if (index <= 0) return
+    const nextOrder = arrayMove(widgetOrder, index, 0)
+    setWidgetOrder(nextOrder)
+    void savePlannerPreferences(plannerTheme, nextOrder, widgetSizes)
   }
 
   if (loading) return <PlannerSkeleton />
@@ -342,12 +371,15 @@ export default function PlannerPage() {
   const requiredMonthly = remaining != null && budget.target_date ? requiredMonthlySaving(remaining, budget.target_date) : null
   const scoreGap = numberOrNull(language.target_score) != null && numberOrNull(language.current_score) != null ? Math.max(numberOrNull(language.target_score)! - numberOrNull(language.current_score)!, 0) : null
   const assessmentHref = assessment ? `/degree-risk/result?${new URLSearchParams({ major: assessment.major_pref, view: resolveView(assessment.country_pref), goal: assessment.primary_goal, aid: assessment.id })}` : "/degree-risk"
+  const duplicateActivePage = () => { if (activeTab) duplicateTab(activeTab.id) }
+  const moveActivePageToTrash = () => { if (activeTab) moveTabToTrash(activeTab.id) }
 
   return (
     <div className={cn("flex h-screen flex-col overflow-hidden transition-colors duration-300", plannerThemeClasses[plannerTheme])}>
       {/* ── Toolbar ── */}
       <PlannerToolbar
-        title={activeTab?.title ?? DEFAULT_TAB_TITLE}
+        tabs={tabs.filter((tab) => !tab.trashedAt)}
+        activeTabId={activeTabId}
         sidebarOpen={sidebarOpen}
         canGoBack={historyCursor > 0}
         canGoForward={historyCursor < historyLength - 1}
@@ -355,18 +387,8 @@ export default function PlannerPage() {
         onBack={goBack}
         onForward={goForward}
         onNewTab={addTab}
-        onRename={renameActiveTab}
+        onSelectTab={navigateToTab}
       />
-
-      {/* ── Secondary bar: style + arrange ── */}
-      <div className="flex h-9 shrink-0 items-center gap-2 border-b border-slate-200 bg-white/80 px-4">
-        <div className="relative">
-          <button type="button" onClick={() => setPaletteOpen((o) => !o)} className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs font-medium text-slate-500 transition hover:bg-slate-100 hover:text-slate-800"><Palette className="h-3.5 w-3.5" />Style</button>
-          {paletteOpen && <div className="absolute left-0 z-30 mt-1 w-40 rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl">{themeOptions.map((theme) => <button type="button" key={theme.id} onClick={() => setTheme(theme.id)} className={cn("flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-left text-xs hover:bg-slate-50", plannerTheme === theme.id && "bg-slate-100 font-semibold text-slate-950")}><span className={cn("h-3 w-3 rounded-full ring-1 ring-slate-200", theme.swatch)} />{theme.label}</button>)}</div>}
-        </div>
-        <button type="button" onClick={() => setCustomising((v) => !v)} className={cn("inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium transition", customising ? "bg-blue-600 text-white" : "text-slate-500 hover:bg-slate-100 hover:text-slate-800")}><GripVertical className="h-3.5 w-3.5" />{customising ? "Done" : "Arrange"}</button>
-        {customising && <button type="button" onClick={resetPlannerLayout} className="inline-flex rounded-lg p-1 text-slate-400 hover:text-slate-700" title="Reset layout"><RotateCcw className="h-3.5 w-3.5" /></button>}
-      </div>
 
       {/* ── Body: sidebar + content ── */}
       <div className="flex min-h-0 flex-1">
@@ -377,53 +399,57 @@ export default function PlannerPage() {
             onSelect={navigateToTab}
             onAdd={addTab}
             onRename={renameTab}
-            onDelete={deleteTab}
+            onDuplicate={duplicateTab}
+            onMoveToTrash={moveTabToTrash}
+            onRestore={restoreTab}
+            onDeletePermanently={deleteTabPermanently}
           />
         )}
 
         {/* ── Content ── */}
         <main className="min-h-0 flex-1 overflow-y-auto">
+          {activeTab && <section className="mx-auto max-w-4xl px-6 pb-8 pt-12 sm:px-10 sm:pt-16">
+            <input value={activeTab.title} onChange={(event) => renameTab(activeTab.id, event.target.value)} placeholder="Untitled" maxLength={160} aria-label="Page title" className="w-full bg-transparent text-4xl font-semibold tracking-tight text-slate-950 outline-none placeholder:text-slate-300 sm:text-5xl" />
+            <textarea value={activeTab.content} onChange={(event) => updateTabContent(activeTab.id, event.target.value)} placeholder="Start writing…" maxLength={12000} rows={7} aria-label="Page body" className="mt-5 w-full resize-y bg-transparent text-base leading-8 text-slate-700 outline-none placeholder:text-slate-400" />
+            <p className="mt-3 text-xs text-slate-400">Saved on this device</p>
+          </section>}
           <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-            <SortableContext items={widgetOrder} strategy={rectSortingStrategy}>
-              <section className="mx-auto grid max-w-6xl grid-cols-1 gap-5 px-5 py-6 sm:px-6 lg:grid-cols-12">
-                <div className="contents">
-                  <PlannerWidget id="today" order={widgetOrder.indexOf("today")} size={widgetSizes.today} customising={customising} onResize={cycleWidgetSize}>
-                    <section id="today" className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7">
+            <SortableContext items={widgetOrder} strategy={verticalListSortingStrategy}>
+              <section className="mx-auto max-w-4xl space-y-12 px-6 pb-16 sm:px-10">
+                  <PlannerWidget id="today" order={widgetOrder.indexOf("today")} onMoveToTop={moveWidgetToTop} onDuplicatePage={duplicateActivePage} onMovePageToTrash={moveActivePageToTrash}>
+                    <section id="today" className="relative py-2">
                       <div className="flex items-center gap-2"><NotebookPen className="h-5 w-5 text-blue-600" /><h2 className="text-lg font-semibold text-slate-950">Today&apos;s page</h2></div>
                       <form onSubmit={saveNote} className="mt-5"><textarea value={noteDraft} onChange={(event) => setNoteDraft(event.target.value)} rows={5} maxLength={12000} placeholder="Write down what you found, what worries you, or what changed today…" className="w-full resize-y rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-100" /><div className="mt-3 flex justify-end"><button disabled={!noteDraft.trim() || saving === "note"} className="inline-flex items-center gap-2 rounded-xl bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 disabled:opacity-50">{saving === "note" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}Save note</button></div></form>
                       {notes.length > 0 && <div className="mt-7 border-t border-slate-100 pt-5"><p className="text-xs font-semibold uppercase tracking-[.12em] text-slate-400">Recent pages</p><div className="mt-3 space-y-3">{notes.slice(0, 3).map((note) => <article key={note.id} className="rounded-2xl bg-slate-50 px-4 py-3"><p className="text-xs font-medium text-slate-400">{formatShortDate(note.entry_date)}</p><p className="mt-1 whitespace-pre-wrap text-sm leading-6 text-slate-700">{note.content}</p></article>)}</div></div>}
                     </section>
                   </PlannerWidget>
 
-                  <PlannerWidget id="dates" order={widgetOrder.indexOf("dates")} size={widgetSizes.dates} customising={customising} onResize={cycleWidgetSize}>
-                    <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7">
+                  <PlannerWidget id="dates" order={widgetOrder.indexOf("dates")} onMoveToTop={moveWidgetToTop} onDuplicatePage={duplicateActivePage} onMovePageToTrash={moveActivePageToTrash}>
+                    <section className="relative py-2">
                       <div className="flex items-center gap-2"><CalendarDays className="h-5 w-5 text-blue-600" /><h2 className="text-lg font-semibold text-slate-950">Dates to hold</h2></div>
                       <form onSubmit={addTask} className="mt-5 space-y-3"><input value={taskDraft} onChange={(event) => setTaskDraft(event.target.value)} maxLength={240} placeholder="e.g. Confirm September intake deadline" className={inputClass} /><div className="grid grid-cols-[1fr_auto] gap-2"><input type="date" value={taskDate} onChange={(event) => setTaskDate(event.target.value)} className={inputClass} /><select value={taskKind} onChange={(event) => setTaskKind(event.target.value as TaskKind)} className={inputClass}>{(Object.keys(taskLabels) as TaskKind[]).map((kind) => <option key={kind} value={kind}>{taskLabels[kind]}</option>)}</select></div><button disabled={!taskDraft.trim() || saving === "task"} className="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm font-semibold text-slate-700 hover:border-blue-300 hover:text-blue-700 disabled:opacity-50">{saving === "task" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}Add date</button></form>
                       <div className="mt-5 space-y-2">{tasks.slice(0, 5).map((task) => <div key={task.id} className="group flex items-center gap-3 rounded-xl px-2 py-2 hover:bg-slate-50"><button onClick={() => void toggleTask(task)} className="shrink-0 text-slate-400 hover:text-emerald-600" aria-label={task.status === "done" ? "Mark task incomplete" : "Mark task complete"}>{task.status === "done" ? <CircleCheck className="h-5 w-5 text-emerald-600" /> : <Circle className="h-5 w-5" />}</button><div className="min-w-0 flex-1"><p className={cn("truncate text-sm font-medium", task.status === "done" ? "text-slate-400 line-through" : "text-slate-800")}>{task.title}</p><p className="mt-0.5 text-xs text-slate-400">{task.due_date ? formatShortDate(task.due_date) : "No date"} · {taskLabels[task.kind]}</p></div><button onClick={() => void removeTask(task.id)} className="opacity-0 transition group-hover:opacity-100 text-slate-300 hover:text-red-600" aria-label="Remove task"><Trash2 className="h-4 w-4" /></button></div>)}{tasks.length === 0 && <p className="rounded-2xl bg-slate-50 px-4 py-5 text-sm text-slate-500">Keep only the dates that would change your plan.</p>}</div>
                     </section>
                   </PlannerWidget>
-                </div>
 
-                <div className="contents">
-                  <PlannerWidget id="money" order={widgetOrder.indexOf("money")} size={widgetSizes.money} customising={customising} onResize={cycleWidgetSize}>
-                    <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7">
+                  <PlannerWidget id="money" order={widgetOrder.indexOf("money")} onMoveToTop={moveWidgetToTop} onDuplicatePage={duplicateActivePage} onMovePageToTrash={moveActivePageToTrash}>
+                    <section className="relative py-2">
                       <div className="flex items-center gap-2"><DollarSign className="h-5 w-5 text-emerald-600" /><h2 className="text-lg font-semibold text-slate-950">Money plan</h2></div>
                       <form onSubmit={saveBudget} className="mt-5 grid gap-3 sm:grid-cols-2"><Field label="Currency"><input value={budget.currency} onChange={(event) => setBudget({ ...budget, currency: event.target.value.toUpperCase() })} maxLength={3} className={inputClass} /></Field><Field label="Saved now"><input inputMode="decimal" value={budget.current_savings ?? ""} onChange={(event) => setBudget({ ...budget, current_savings: event.target.value })} placeholder="0" className={inputClass} /></Field><Field label="Monthly saving"><input inputMode="decimal" value={budget.monthly_saving ?? ""} onChange={(event) => setBudget({ ...budget, monthly_saving: event.target.value })} placeholder="0" className={inputClass} /></Field><Field label="Target fund"><input inputMode="decimal" value={budget.target_amount ?? ""} onChange={(event) => setBudget({ ...budget, target_amount: event.target.value })} placeholder="e.g. 45000" className={inputClass} /></Field><Field label="Target date"><input type="date" value={budget.target_date ?? ""} onChange={(event) => setBudget({ ...budget, target_date: event.target.value })} className={inputClass} /></Field><div className="flex items-end"><button disabled={saving === "budget"} className="inline-flex h-10 items-center gap-2 rounded-xl bg-emerald-600 px-4 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50">{saving === "budget" && <Loader2 className="h-4 w-4 animate-spin" />}Save money plan</button></div></form>
                       <div className="mt-5 grid gap-3 sm:grid-cols-3"><Insight label="Still to save" value={remaining == null ? "Set a target" : money(remaining, budget.currency)} /><Insight label="Months left" value={monthsToTarget == null ? "—" : `${monthsToTarget} months`} /><Insight label="Required / month" value={requiredMonthly == null ? "—" : money(requiredMonthly, budget.currency)} /></div>
                     </section>
                   </PlannerWidget>
 
-                  <PlannerWidget id="english" order={widgetOrder.indexOf("english")} size={widgetSizes.english} customising={customising} onResize={cycleWidgetSize}>
-                    <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7">
+                  <PlannerWidget id="english" order={widgetOrder.indexOf("english")} onMoveToTop={moveWidgetToTop} onDuplicatePage={duplicateActivePage} onMovePageToTrash={moveActivePageToTrash}>
+                    <section className="relative py-2">
                       <div className="flex items-center gap-2"><Languages className="h-5 w-5 text-violet-600" /><h2 className="text-lg font-semibold text-slate-950">English plan</h2></div>
                       <form onSubmit={saveLanguage} className="mt-5 grid gap-3 sm:grid-cols-2"><Field label="Exam"><input value={language.exam_name} onChange={(event) => setLanguage({ ...language, exam_name: event.target.value })} maxLength={80} className={inputClass} /></Field><Field label="Current score"><input inputMode="decimal" value={language.current_score ?? ""} onChange={(event) => setLanguage({ ...language, current_score: event.target.value })} placeholder="e.g. 6.0" className={inputClass} /></Field><Field label="Target score"><input inputMode="decimal" value={language.target_score ?? ""} onChange={(event) => setLanguage({ ...language, target_score: event.target.value })} placeholder="e.g. 7.0" className={inputClass} /></Field><Field label="Study hours / week"><input inputMode="decimal" value={language.weekly_hours ?? ""} onChange={(event) => setLanguage({ ...language, weekly_hours: event.target.value })} placeholder="e.g. 8" className={inputClass} /></Field><Field label="Test date"><input type="date" value={language.test_date ?? ""} onChange={(event) => setLanguage({ ...language, test_date: event.target.value })} className={inputClass} /></Field><div className="flex items-end"><button disabled={saving === "language"} className="inline-flex h-10 items-center gap-2 rounded-xl bg-violet-600 px-4 text-sm font-semibold text-white hover:bg-violet-700 disabled:opacity-50">{saving === "language" && <Loader2 className="h-4 w-4 animate-spin" />}Save English plan</button></div></form>
                       <div className="mt-5 rounded-2xl bg-violet-50 px-4 py-3 text-sm text-violet-950">{scoreGap == null ? "Add your current and target scores to see the gap." : scoreGap === 0 ? "You are at your target — well done!" : `You need +${scoreGap.toFixed(1)} points to reach your target.`}</div>
                     </section>
                   </PlannerWidget>
-                </div>
 
-                <PlannerWidget id="research" order={widgetOrder.indexOf("research")} size={widgetSizes.research} customising={customising} onResize={cycleWidgetSize}>
-                  <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7">
+                <PlannerWidget id="research" order={widgetOrder.indexOf("research")} onMoveToTop={moveWidgetToTop} onDuplicatePage={duplicateActivePage} onMovePageToTrash={moveActivePageToTrash}>
+                  <section className="relative py-2">
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                       <div><div className="flex items-center gap-2"><BookOpen className="h-5 w-5 text-blue-600" /><h2 className="text-lg font-semibold text-slate-950">Research library</h2></div><p className="mt-1 text-sm text-slate-500">Saved choices and official evidence, kept beside your own notes.</p></div>
                       <Link href="/profile/evidence" className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-700 hover:text-blue-800">Official links <ArrowRight className="h-4 w-4" /></Link>
@@ -447,18 +473,29 @@ export default function PlannerPage() {
 }
 
 /* ── Sub-components ── */
-function ResearchCard({ icon: Icon, title, items, href, empty }: { icon: typeof BookOpen; title: string; items: string[]; href: string; empty: string }) { return <article className="rounded-2xl bg-slate-50 p-4"><div className="flex items-center gap-2 text-sm font-semibold text-slate-900"><Icon className="h-4 w-4 text-blue-600" />{title}</div><div className="mt-3 min-h-16 space-y-1.5">{items.slice(0, 2).map((item) => <p key={item} className="truncate text-sm text-slate-600" title={item}>{item}</p>)}{items.length === 0 && empty && <p className="text-sm text-slate-400">{empty}</p>}</div><Link href={href} className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-blue-700 hover:text-blue-800">Open <ArrowRight className="h-3.5 w-3.5" /></Link></article> }
+function ResearchCard({ icon: Icon, title, items, href, empty }: { icon: typeof BookOpen; title: string; items: string[]; href: string; empty: string }) { return <article className="border-l border-slate-200 pl-4"><div className="flex items-center gap-2 text-sm font-semibold text-slate-900"><Icon className="h-4 w-4 text-blue-600" />{title}</div><div className="mt-3 min-h-16 space-y-1.5">{items.slice(0, 2).map((item) => <p key={item} className="truncate text-sm text-slate-600" title={item}>{item}</p>)}{items.length === 0 && empty && <p className="text-sm text-slate-400">{empty}</p>}</div><Link href={href} className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-blue-700 hover:text-blue-800">Open <ArrowRight className="h-3.5 w-3.5" /></Link></article> }
 
-function PlannerWidget({ id, order, size, customising, onResize, children }: { id: WidgetId; order: number; size: WidgetSize; customising: boolean; onResize: (id: WidgetId) => void; children: ReactNode }) {
+function PlannerWidget({ id, order, onMoveToTop, onDuplicatePage, onMovePageToTrash, children }: { id: WidgetId; order: number; onMoveToTop: (id: WidgetId) => void; onDuplicatePage: () => void; onMovePageToTrash: () => void; children: ReactNode }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id })
-  const width = id === "research" && size === "wide" ? "lg:col-span-12" : size === "wide" ? "lg:col-span-8" : size === "half" ? "lg:col-span-6" : "lg:col-span-4"
-  const sizeLabel: Record<WidgetSize, string> = { wide: "Wide", half: "Half", narrow: "Small" }
-  return <div ref={setNodeRef} style={{ order, transform: CSS.Transform.toString(transform), transition }} className={cn("relative min-w-0", width, isDragging && "z-20 opacity-70", customising && "rounded-[1.8rem] ring-2 ring-blue-300 ring-offset-4")}>{customising && <div className="absolute right-3 top-3 z-10 flex items-center gap-1.5"><button type="button" {...attributes} {...listeners} className="inline-flex h-8 w-8 cursor-grab items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 shadow-sm active:cursor-grabbing" aria-label={`Move ${id} card`}><GripVertical className="h-4 w-4" /></button><button type="button" onClick={() => onResize(id)} className="rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-xs font-semibold text-slate-600 shadow-sm hover:text-blue-700" title="Change card width">{sizeLabel[size]}</button></div>}{children}</div>
+  const [menuOpen, setMenuOpen] = useState(false)
+  return <div ref={setNodeRef} style={{ order, transform: CSS.Transform.toString(transform), transition }} className={cn("group relative min-w-0 border-t border-slate-200/80 pt-7 first:border-t-0 first:pt-2", isDragging && "z-20 opacity-60")}>
+    <div className="absolute right-0 top-4 z-20">
+      <button type="button" onClick={() => setMenuOpen((open) => !open)} className={cn("grid size-7 place-items-center rounded-md text-slate-400 transition hover:bg-slate-100 hover:text-slate-700", menuOpen ? "opacity-100" : "opacity-0 group-hover:opacity-100 focus:opacity-100")} aria-label={`Arrange ${id} section`} aria-expanded={menuOpen}><MoreHorizontal className="size-4" /></button>
+      {menuOpen && <div role="menu" className="absolute right-0 top-full z-30 mt-1 w-52 rounded-xl border border-slate-200 bg-white p-1.5 text-sm shadow-[0_14px_32px_rgba(15,23,42,.15)]">
+        <button type="button" {...attributes} {...listeners} className="flex w-full cursor-grab items-center gap-2 rounded-lg px-2.5 py-2 text-left text-slate-700 hover:bg-slate-50 active:cursor-grabbing"><GripVertical className="size-3.5" />Drag to arrange</button>
+        <button type="button" role="menuitem" onClick={() => { onMoveToTop(id); setMenuOpen(false) }} className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-slate-700 hover:bg-slate-50"><ArrowUpToLine className="size-3.5" />Move section to top</button>
+        <div className="my-1 border-t border-slate-100" />
+        <button type="button" role="menuitem" onClick={() => { onDuplicatePage(); setMenuOpen(false) }} className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-slate-700 hover:bg-slate-50"><Plus className="size-3.5" />Duplicate page</button>
+        <button type="button" role="menuitem" onClick={() => { onMovePageToTrash(); setMenuOpen(false) }} className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-red-600 hover:bg-red-50"><Trash2 className="size-3.5" />Move page to Trash</button>
+      </div>}
+    </div>
+    {children}
+  </div>
 }
 
 function Field({ label, children }: { label: string; children: ReactNode }) { return <label className="block text-xs font-semibold text-slate-500">{label}{children}</label> }
-function Insight({ label, value }: { label: string; value: string }) { return <div className="rounded-2xl bg-emerald-50 px-3.5 py-3"><p className="text-xs font-medium text-emerald-800">{label}</p><p className="mt-1 text-sm font-semibold text-emerald-950">{value}</p></div> }
-function GuestPlan() { return <main className="flex min-h-[70vh] items-center justify-center bg-[#f7f9fc] px-5"><section className="max-w-md rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm"><NotebookPen className="mx-auto h-7 w-7 text-blue-600" /><h1 className="mt-4 text-2xl font-semibold tracking-tight text-slate-950">Your private Planner.</h1><p className="mt-2 text-sm leading-6 text-slate-600">A flexible place for daily notes, deadlines, budget, English goals and the research you save in CampCareer.</p><Link href="/login?next=/planner" className="mt-6 inline-flex rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white">Sign in to start</Link></section></main> }
+function Insight({ label, value }: { label: string; value: string }) { return <div className="border-l-2 border-emerald-200 pl-3.5"><p className="text-xs font-medium text-emerald-800">{label}</p><p className="mt-1 text-sm font-semibold text-emerald-950">{value}</p></div> }
+function GuestPlan() { return <main className="flex min-h-[70vh] items-center justify-center bg-[#f7f9fc] px-5"><section className="max-w-md rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm"><NotebookPen className="mx-auto h-7 w-7 text-blue-600" /><h1 className="mt-4 text-2xl font-semibold tracking-tight text-slate-950">Your private My Plan.</h1><p className="mt-2 text-sm leading-6 text-slate-600">A flexible place for daily notes, deadlines, budget, English goals and the research you save in CampCareer.</p><Link href="/login?next=/myplan" className="mt-6 inline-flex rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white">Sign in to start</Link></section></main> }
 function PlannerSkeleton() { return <main className="min-h-screen bg-[#f7f9fc]"><div className="mx-auto max-w-7xl px-5 py-10 sm:px-6"><div className="h-10 w-48 animate-pulse rounded-xl bg-slate-200" /><div className="mt-8 grid gap-5 xl:grid-cols-2"><div className="h-96 animate-pulse rounded-3xl bg-slate-200" /><div className="h-96 animate-pulse rounded-3xl bg-slate-200" /></div></div></main> }
 
 const inputClass = "mt-1.5 h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-blue-400 focus:ring-4 focus:ring-blue-100"

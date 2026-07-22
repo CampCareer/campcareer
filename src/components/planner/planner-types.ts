@@ -3,7 +3,10 @@
 export type PlannerTab = {
   id: string
   title: string
+  content: string
   createdAt: string
+  updatedAt: string
+  trashedAt: string | null
 }
 
 export const DEFAULT_TAB_TITLE = "Untitled"
@@ -16,7 +19,19 @@ export function loadTabs(): PlannerTab[] {
     const raw = localStorage.getItem(PLANNER_TABS_KEY)
     if (!raw) return []
     const parsed = JSON.parse(raw)
-    return Array.isArray(parsed) ? parsed : []
+    if (!Array.isArray(parsed)) return []
+    return parsed.flatMap((item): PlannerTab[] => {
+      if (!item || typeof item.id !== "string") return []
+      const createdAt = typeof item.createdAt === "string" ? item.createdAt : new Date().toISOString()
+      return [{
+        id: item.id,
+        title: typeof item.title === "string" ? item.title.slice(0, 160) : "",
+        content: typeof item.content === "string" ? item.content.slice(0, 12000) : "",
+        createdAt,
+        updatedAt: typeof item.updatedAt === "string" ? item.updatedAt : createdAt,
+        trashedAt: typeof item.trashedAt === "string" ? item.trashedAt : null,
+      }]
+    })
   } catch {
     return []
   }
@@ -38,9 +53,17 @@ export function saveActiveTabId(id: string) {
 }
 
 export function createTab(): PlannerTab {
+  const now = new Date().toISOString()
   return {
     id: crypto.randomUUID(),
-    title: DEFAULT_TAB_TITLE,
-    createdAt: new Date().toISOString(),
+    title: "",
+    content: "",
+    createdAt: now,
+    updatedAt: now,
+    trashedAt: null,
   }
+}
+
+export function plannerTabTitle(tab: Pick<PlannerTab, "title">) {
+  return tab.title.trim() || DEFAULT_TAB_TITLE
 }

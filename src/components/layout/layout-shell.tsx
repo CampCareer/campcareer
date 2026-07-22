@@ -10,6 +10,9 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
   const pathname = withoutLocalePrefix(usePathname())
   const hasUnifiedHero = pathname === "/au" || pathname === "/countries/search" || pathname === "/universities" || pathname === "/universities/au" || pathname === "/majors" || pathname === "/study" || pathname === "/au/study"
   const isLanding = pathname === "/"
+  const isMyPlan = pathname === "/planner" || pathname === "/myplan"
+
+  if (isMyPlan) return <>{children}</>
 
   if (
     pathname === "/login" ||

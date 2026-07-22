@@ -7,7 +7,7 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: "*",
         allow: "/",
         // Private/functional routes — keep out of the index.
-        disallow: ["/api/", "/auth/", "/dashboard", "/planner", "/saved", "/documents", "/plans/", "/support/"],
+        disallow: ["/api/", "/auth/", "/dashboard", "/planner", "/myplan", "/saved", "/documents", "/plans/", "/support/"],
       },
       {
         // 매출에 기여하지 않는 SEO·백링크 크롤러는 전면 차단. (이 목록은

@@ -20,16 +20,16 @@ export function TopNav() {
   const pathLocale = localeFromPathname(pathname) ?? routeLocale
   const barePathname = withoutLocalePrefix(pathname)
   const hasUnifiedHero = barePathname === "/" || barePathname === "/countries/search" || barePathname === "/universities" || barePathname === "/universities/au" || barePathname === "/majors" || barePathname === "/study" || barePathname === "/au/study"
-  const isToolSurface = barePathname === "/planner"
+  const isToolSurface = barePathname === "/planner" || barePathname === "/myplan"
   const isCompare = barePathname === "/compare" || barePathname.startsWith("/compare/")
   const isLanding = barePathname === "/"
-  const isAustraliaDiscovery = barePathname === "/au/study" || barePathname.startsWith("/au/study/programs/") || barePathname === "/au/majors" || barePathname.startsWith("/au/majors/")
+  const isAustraliaDiscovery = barePathname === "/au/study" || barePathname === "/au/majors" || barePathname.startsWith("/au/majors/")
   const hasBlueHero = isLanding || isAustraliaDiscovery
 
   const navItems: { href: string; label: string; icon: typeof Globe; accent?: "blue" | "sky" | "violet" }[] = [
     { href: "/", label: t.australia.journey.findPath, icon: Globe, accent: "blue" },
     { href: "/au/study", label: t.australia.journey.compareStudy, icon: Scale, accent: "sky" },
-    { href: "/planner", label: t.australia.journey.plan, icon: ClipboardList, accent: "violet" },
+    { href: "/myplan", label: t.australia.journey.plan, icon: ClipboardList, accent: "violet" },
   ]
 
   const isActive = useCallback((href: string) => {

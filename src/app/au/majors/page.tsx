@@ -36,8 +36,8 @@ export default async function AustralianMajorsPage({
   const conceptCount = STUDY_CONCEPTS.filter((concept) => categories.some((category) => category.id === concept.category)).length
 
   return (
-    <main className="au-discovery-surface min-h-screen">
-      <section>
+    <main className="min-h-screen bg-slate-50">
+      <section className="au-discovery-hero border-b border-blue-200/90">
         <div className="mx-auto max-w-7xl px-5 pb-8 pt-6 sm:px-6 sm:pb-10 sm:pt-8">
           <Link href={localizePath("/", locale)} className="inline-flex items-center gap-2 text-sm font-semibold text-blue-100 transition hover:text-white">
             <ArrowLeft className="size-4" />
@@ -65,45 +65,47 @@ export default async function AustralianMajorsPage({
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-5 pb-12 pt-8 sm:px-6 sm:pb-16 sm:pt-10">
-        {selectedCategory && (
-          <Link href={localizePath("/au/majors", locale)} className="mb-6 inline-flex items-center gap-1.5 text-sm font-semibold text-blue-700 transition hover:text-blue-800">
-            <ArrowLeft className="size-4" />
-            {isKo ? "전체 전공 보기" : "View all fields"}
-          </Link>
-        )}
-        <div className="grid gap-5 lg:grid-cols-2">
-          {categories.map((category) => {
-            const { Icon, tone } = getStudyCategoryVisual(category.id)
-            const concepts = STUDY_CONCEPTS.filter((concept) => concept.category === category.id)
-            return (
-              <article key={category.id} className="rounded-3xl border border-white/80 bg-white/95 p-5 shadow-[0_12px_30px_rgba(15,23,42,.08)] backdrop-blur-sm sm:p-6">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex min-w-0 items-center gap-3">
-                    <span className={`grid size-11 shrink-0 place-items-center rounded-xl ${tone}`}><Icon className="size-5" strokeWidth={2.2} /></span>
-                    <div className="min-w-0">
-                      <p className="text-xs font-semibold uppercase tracking-[.14em] text-blue-700">{isKo ? "전공 분야" : "Study field"}</p>
-                      <h2 className="mt-1 text-lg font-semibold leading-6 text-slate-950">{isKo ? category.labelKo : category.label}</h2>
-                    </div>
-                  </div>
-                  <span className="shrink-0 rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">{concepts.length}</span>
-                </div>
-                <div className="mt-5 grid gap-2 sm:grid-cols-2">
-                  {concepts.map((concept) => (
-                    <Link key={concept.id} href={localizePath(`/au/majors/${concept.slug}`, locale)} className="group rounded-xl border border-slate-200 bg-white px-3.5 py-3 transition hover:border-blue-300 hover:bg-blue-50/60">
-                      <div className="flex items-start justify-between gap-2">
-                        <div className="min-w-0">
-                          <h3 className="text-sm font-semibold text-slate-900">{isKo ? concept.labelKo : concept.label}</h3>
-                          <p className="mt-1 line-clamp-2 text-xs leading-5 text-slate-500">{concept.description}</p>
-                        </div>
-                        <ArrowRight className="mt-0.5 size-4 shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-blue-700" />
+      <section className="bg-white">
+        <div className="mx-auto max-w-7xl px-5 pb-12 pt-8 sm:px-6 sm:pb-16 sm:pt-10">
+          {selectedCategory && (
+            <Link href={localizePath("/au/majors", locale)} className="mb-6 inline-flex items-center gap-1.5 text-sm font-semibold text-blue-700 transition hover:text-blue-800">
+              <ArrowLeft className="size-4" />
+              {isKo ? "전체 전공 보기" : "View all fields"}
+            </Link>
+          )}
+          <div className="grid gap-5 lg:grid-cols-2">
+            {categories.map((category) => {
+              const { Icon, tone } = getStudyCategoryVisual(category.id)
+              const concepts = STUDY_CONCEPTS.filter((concept) => concept.category === category.id)
+              return (
+                <article key={category.id} className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex min-w-0 items-center gap-3">
+                      <span className={`grid size-11 shrink-0 place-items-center rounded-xl ${tone}`}><Icon className="size-5" strokeWidth={2.2} /></span>
+                      <div className="min-w-0">
+                        <p className="text-xs font-semibold uppercase tracking-[.14em] text-blue-700">{isKo ? "전공 분야" : "Study field"}</p>
+                        <h2 className="mt-1 text-lg font-semibold leading-6 text-slate-950">{isKo ? category.labelKo : category.label}</h2>
                       </div>
-                    </Link>
-                  ))}
-                </div>
-              </article>
-            )
-          })}
+                    </div>
+                    <span className="shrink-0 rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">{concepts.length}</span>
+                  </div>
+                  <div className="mt-5 grid gap-2 sm:grid-cols-2">
+                    {concepts.map((concept) => (
+                      <Link key={concept.id} href={localizePath(`/au/majors/${concept.slug}`, locale)} className="group rounded-xl border border-slate-200 bg-white px-3.5 py-3 transition hover:border-blue-300 hover:bg-blue-50/60">
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="min-w-0">
+                            <h3 className="text-sm font-semibold text-slate-900">{isKo ? concept.labelKo : concept.label}</h3>
+                            <p className="mt-1 line-clamp-2 text-xs leading-5 text-slate-500">{concept.description}</p>
+                          </div>
+                          <ArrowRight className="mt-0.5 size-4 shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-blue-700" />
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </article>
+              )
+            })}
+          </div>
         </div>
       </section>
     </main>

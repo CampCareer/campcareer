@@ -77,21 +77,16 @@
 }
 
 @layer components {
-  /* The Australia discovery surfaces share the landing's uninterrupted
-     cobalt-to-airy-white transition. Keep this on a page wrapper (rather than
-     separate hero/content sections) so a horizontal seam never interrupts a
-     visitor before they have made a choice. */
-  .au-discovery-surface {
-    background:
-      radial-gradient(circle at 84% 7rem, rgb(191 219 254 / 0.52), transparent 28rem),
-      linear-gradient(180deg, #2563eb 0, #3b82f6 10rem, #93c5fd 23rem, #dbeafe 34rem, #eff6ff 48rem, #f8fafc 66rem);
-  }
-
-  /* A softer variant for comparison and selected-state surfaces. */
+  /* Keep discovery pages in the original composition: a focused blue hero
+     followed by a clear white decision canvas. */
   .au-discovery-gradient {
     background:
       radial-gradient(circle at 84% 0%, rgb(147 197 253 / 0.5), transparent 29rem),
       linear-gradient(180deg, #dbeafe 0%, #eff6ff 20rem, #f8fafc 38rem);
+  }
+
+  .au-discovery-hero {
+    background: linear-gradient(180deg, #2563eb 0%, #dbeafe 72%, #eff6ff 100%);
   }
 
   .finder-select {

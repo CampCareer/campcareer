@@ -170,7 +170,7 @@ export default function ProfilePage() {
           <p className="text-sm font-semibold text-blue-700">Continue your plan</p>
           <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">See the next useful decision.</h2>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">Use Planner as a flexible space for the decisions you have saved, daily notes, deadlines and the plan you are building.</p>
-          <Link href="/planner" className="mt-5 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">
+          <Link href="/myplan" className="mt-5 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">
             Open Planner
             <ArrowRight className="h-4 w-4" />
           </Link>

@@ -146,15 +146,15 @@ export default async function AustralianUniversitiesPage({ searchParams }: { sea
   const filterKey = [filters.field, filters.category, filters.state, filters.level, initialCompare.map((item) => item.id).join(',')].join('|')
 
   return (
-    <main className="au-discovery-surface min-h-screen">
-      <section>
+    <main className="min-h-screen bg-slate-50">
+      <section className="au-discovery-hero border-b border-blue-200/90">
         <div className="mx-auto max-w-6xl px-5 pb-8 pt-6 sm:px-6 sm:pb-10 sm:pt-8">
           <h1 className="mb-5 text-left text-2xl font-semibold tracking-tight text-white sm:text-3xl lg:whitespace-nowrap lg:text-4xl">{copy.title}</h1>
           <AuStudyFilterBar key={[filters.field, filters.category, filters.state, filters.level].join('|')} initialValues={filters} />
         </div>
       </section>
 
-      <section><div className="mx-auto max-w-6xl px-5 pb-12 pt-12 sm:px-6 sm:pb-16 sm:pt-14">
+      <section className="bg-white"><div className="mx-auto max-w-6xl px-5 pb-12 pt-12 sm:px-6 sm:pb-16 sm:pt-14">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
             <h2 className="text-lg font-semibold text-slate-950">{format(copy.resultsTitle, { count: rows.length })}{filters.category ? ` · ${locale === 'ko' ? STUDY_CATEGORIES.find((item) => item.id === filters.category)?.labelKo ?? '' : STUDY_CATEGORIES.find((item) => item.id === filters.category)?.label ?? ''}` : ''}</h2>
