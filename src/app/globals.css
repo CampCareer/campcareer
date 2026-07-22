@@ -77,6 +77,15 @@
 }
 
 @layer components {
+  /* The Australia discovery surfaces share the landing's blue-to-airy-white
+     focus without forcing white text or a heavy hero on an already-selected
+     profile, map, or personal plan. */
+  .au-discovery-gradient {
+    background:
+      radial-gradient(circle at 84% 0%, rgb(147 197 253 / 0.5), transparent 29rem),
+      linear-gradient(180deg, #dbeafe 0%, #eff6ff 20rem, #f8fafc 38rem);
+  }
+
   .finder-select {
     @apply h-8 w-full appearance-none bg-transparent text-sm font-semibold text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-blue-500;
   }

@@ -8,13 +8,11 @@ import { STUDY_CATEGORIES } from "@/data/study-concepts"
 import {
   DEFAULT_AU_PATHFINDER_PROFILE,
   rankAustralianPathways,
-  type AuPathfinderBudget,
   type AuPathfinderCategory,
   type AuPathfinderGoal,
   type AuPathfinderProfile,
   type AuPathfinderReason,
   type AuPathfinderStudyStage,
-  type AuPathfinderTimeline,
   type RankedAuPathway,
 } from "@/lib/au-pathfinder"
 import { localizePath } from "@/lib/i18n/config"
@@ -44,12 +42,10 @@ export function AustraliaPathfinder({ initialProfile }: { initialProfile: AuPath
     event.preventDefault()
     const params = new URLSearchParams({
       pathGoal: profile.goal,
-      budget: profile.budget,
-      timeline: profile.timeline,
       stage: profile.studyStage,
       ...(profile.category !== "any" ? { category: profile.category } : {}),
     })
-    track("comparison_personalized", { country: "AU", goal: profile.goal, category: profile.category, timeline: profile.timeline })
+    track("comparison_personalized", { country: "AU", goal: profile.goal, category: profile.category, stage: profile.studyStage })
     router.replace(`${localizePath("/au/majors", pathLocale)}?${params}`, { scroll: false })
   }
 
@@ -75,30 +71,6 @@ export function AustraliaPathfinder({ initialProfile }: { initialProfile: AuPath
         { value: "lower-cost", label: "Lower tuition", description: "Prioritise cost and duration", icon: "🌱", keywords: "lower cost tuition" },
       ]), [isKo])
 
-  const budgetOptions = useMemo<PickerOption[]>(() => (isKo
-    ? [
-        { value: "lower", label: "비용을 낮추고", description: "학비 가중치를 높임", icon: "💵", keywords: "lower cost cheap" },
-        { value: "balanced", label: "균형 있게", description: "비용과 결과를 함께 봄", icon: "⚖️", keywords: "balanced" },
-        { value: "investment", label: "결과에 투자", description: "임금 신호를 조금 더 반영", icon: "📈", keywords: "invest outcome" },
-      ]
-    : [
-        { value: "lower", label: "Keep tuition lower", description: "Adds weight to cost", icon: "💵", keywords: "lower cost cheap" },
-        { value: "balanced", label: "Keep it balanced", description: "Balances cost and outcomes", icon: "⚖️", keywords: "balanced" },
-        { value: "investment", label: "Invest for outcomes", description: "Adds weight to pay", icon: "📈", keywords: "invest outcome" },
-      ]), [isKo])
-
-  const timelineOptions = useMemo<PickerOption[]>(() => (isKo
-    ? [
-        { value: "fast", label: "2년 안쪽", description: "짧은 학업 기간을 더 반영", icon: "⚡", keywords: "fast short 2 year" },
-        { value: "standard", label: "3–4년 가능", description: "표준 학위 경로도 고려", icon: "📅", keywords: "standard 3 4 year" },
-        { value: "flexible", label: "기간 유연", description: "기간보다 결과를 우선", icon: "🕐", keywords: "flexible any time" },
-      ]
-    : [
-        { value: "fast", label: "Within 2 years", description: "Adds weight to duration", icon: "⚡", keywords: "fast short 2 year" },
-        { value: "standard", label: "3–4 years is okay", description: "Includes standard degrees", icon: "📅", keywords: "standard 3 4 year" },
-        { value: "flexible", label: "Timeline is flexible", description: "Prioritise the outcome", icon: "🕐", keywords: "flexible any time" },
-      ]), [isKo])
-
   const stageOptions = useMemo<PickerOption[]>(() => (isKo
     ? [
         { value: "school", label: "고등학교 이후", description: "학사·디플로마·수료 경로", icon: "🎓", keywords: "school high school fresh" },
@@ -118,20 +90,16 @@ export function AustraliaPathfinder({ initialProfile }: { initialProfile: AuPath
         <p className="text-xs font-semibold uppercase tracking-[.18em] text-blue-200">Australia Pathfinder</p>
         <h1 className="mt-3 max-w-3xl text-3xl font-semibold tracking-tight text-white sm:text-4xl">{isKo ? "내 조건에 맞는 호주 학업 경로" : "Find the best Australia study path"}</h1>
 
-        {/* Desktop: multi-column form */}
+        {/* Goal already includes a lower-tuition intent. Starting point changes
+            which routes are realistic, so it stays in the quick search while
+            timeline and the duplicate budget weight use safe defaults. */}
         <form onSubmit={submit} className="mt-6 hidden rounded-2xl border border-blue-400/30 bg-white/95 p-4 shadow-lg backdrop-blur-sm sm:p-5 sm:block">
-          <div className="flex flex-col gap-4 lg:grid lg:grid-cols-3 lg:items-end">
+          <div className="grid gap-3 md:grid-cols-3 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1.1fr)_minmax(0,1.1fr)_auto_auto] lg:items-end">
             <div><IconPicker name="category" label={isKo ? "전공" : "Major"} value={profile.category} options={categoryOptions} onChange={(value) => updateProfile("category", value as AuPathfinderCategory | "any")} searchPlaceholder={isKo ? "전공 검색" : "Search majors"} testId="category" /></div>
             <div><IconPicker name="goal" label={isKo ? "목표" : "Goal"} value={profile.goal} options={goalOptions} onChange={(value) => updateProfile("goal", value as AuPathfinderGoal)} testId="goal" /></div>
-            <div><IconPicker name="budget" label={isKo ? "학비" : "Tuition Fees"} value={profile.budget} options={budgetOptions} onChange={(value) => updateProfile("budget", value as AuPathfinderBudget)} testId="budget" /></div>
-          </div>
-          <div className="mt-3 flex flex-col gap-4 lg:grid lg:grid-cols-5 lg:items-end">
-            <div className="lg:col-span-2"><IconPicker name="timeline" label={isKo ? "기간" : "Timeline"} value={profile.timeline} options={timelineOptions} onChange={(value) => updateProfile("timeline", value as AuPathfinderTimeline)} testId="timeline" /></div>
-            <div className="lg:col-span-2"><IconPicker name="stage" label={isKo ? "단계" : "Stage"} value={profile.studyStage} options={stageOptions} onChange={(value) => updateProfile("studyStage", value as AuPathfinderStudyStage)} testId="stage" /></div>
-            <div className="flex items-end gap-2 lg:col-span-1">
-              <button type="submit" className="inline-flex h-10 w-full items-center justify-center rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700">{isKo ? "검색" : "Search"}</button>
-              <button type="button" onClick={() => setProfile(DEFAULT_AU_PATHFINDER_PROFILE)} className="inline-flex h-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white px-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 hover:text-blue-700"><RotateCcw className="size-4" /></button>
-            </div>
+            <div><IconPicker name="stage" label={isKo ? "시작 단계" : "Starting point"} value={profile.studyStage} options={stageOptions} onChange={(value) => updateProfile("studyStage", value as AuPathfinderStudyStage)} testId="stage" /></div>
+            <button type="submit" className="inline-flex h-10 items-center justify-center rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700">{isKo ? "검색" : "Search"}</button>
+            <button type="button" aria-label={isKo ? "검색 조건 초기화" : "Reset search filters"} onClick={() => setProfile(DEFAULT_AU_PATHFINDER_PROFILE)} className="inline-flex h-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white px-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 hover:text-blue-700"><RotateCcw className="size-4" /></button>
           </div>
         </form>
 
@@ -143,8 +111,6 @@ export function AustraliaPathfinder({ initialProfile }: { initialProfile: AuPath
           isKo={isKo}
           categoryOptions={categoryOptions}
           goalOptions={goalOptions}
-          budgetOptions={budgetOptions}
-          timelineOptions={timelineOptions}
           stageOptions={stageOptions}
         />
       </div>
@@ -166,12 +132,14 @@ function PathwayCard({ pathway, rank, locale, isKo, featured }: { pathway: Ranke
   const { Icon, tone } = getStudyCategoryVisual(pathway.concept.category)
   const label = isKo ? pathway.concept.labelKo : pathway.concept.label
   const link = localizePath(`/au/majors/${pathway.concept.slug}`, locale)
-  return <article className={`rounded-2xl border bg-white p-5 shadow-sm ${featured ? "border-blue-300 ring-1 ring-blue-100" : "border-slate-200"}`}>
+  return <Link href={link} aria-label={`${isKo ? `${label} 경로 자세히 보기` : `Explore the ${label} pathway`}`} className="group block rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2">
+    <article className={`rounded-2xl border bg-white p-5 shadow-sm transition duration-200 group-hover:-translate-y-0.5 group-hover:border-blue-300 group-hover:shadow-[0_14px_32px_rgba(37,99,235,.12)] ${featured ? "border-blue-300 ring-1 ring-blue-100" : "border-slate-200"}`}>
     <div className="flex items-start gap-4"><span className={`grid size-11 shrink-0 place-items-center rounded-xl ${tone}`}><Icon className="size-5" strokeWidth={2.2} /></span><div className="min-w-0 flex-1"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[.14em] text-blue-700">{featured ? (isKo ? "가장 잘 맞는 경로" : "Best current fit") : `${isKo ? "추천" : "Rank"} ${rank}`}</p><h3 className="mt-1 text-lg font-semibold text-slate-950">{label}</h3></div><div className="shrink-0 rounded-xl bg-slate-950 px-2.5 py-1.5 text-right text-white"><p className="text-base font-semibold leading-none">{pathway.score}</p><p className="mt-1 text-[10px] font-medium uppercase tracking-wide text-slate-300">{isKo ? "적합도" : "fit"}</p></div></div><p className="mt-2 text-sm leading-6 text-slate-600">{pathway.concept.description}</p></div></div>
     <div className="mt-5 flex flex-wrap gap-2">{pathway.reasons.map((reason) => <ReasonBadge key={reason.factor} reason={reason} isKo={isKo} />)}</div>
     <dl className="mt-5 grid grid-cols-2 gap-3 text-xs sm:grid-cols-3"><Metric label={isKo ? "대표 중간임금" : "Mapped median pay"} value={moneyShort(pathway.salaryMedianAud)} /><Metric label={isKo ? "2035 고용전망" : "2035 outlook"} value={percentage(pathway.outlook2035Pct)} /><Metric label={isKo ? "부족 신호" : "Shortage signal"} value={percentage(pathway.shortagePct)} /><Metric label={isKo ? "PR 신호" : "PR signal"} value={pathway.prScore == null ? "—" : `${pathway.prScore}/100`} /><Metric label={isKo ? "연간 학비 기준" : "Annual tuition basis"} value={moneyShort(pathway.annualTuitionAud)} /><Metric label={isKo ? "일반 기간" : "Typical duration"} value={pathway.durationYears == null ? "—" : `${pathway.durationYears} ${isKo ? "년" : pathway.durationYears === 1 ? "year" : "years"}`} /></dl>
-    <div className="mt-5 flex items-center justify-between gap-3 border-t border-slate-100 pt-4"><p className="text-xs text-slate-500">{isKo ? `검증 신호 ${pathway.evidenceCount}/6개` : `${pathway.evidenceCount}/6 verified signal types`}</p><Link href={link} className="inline-flex items-center gap-1 text-sm font-semibold text-blue-700 hover:text-blue-800">{isKo ? "경로 자세히" : "Explore pathway"}<ArrowRight className="size-4" /></Link></div>
-  </article>
+    <div className="mt-5 flex items-center justify-between gap-3 border-t border-slate-100 pt-4"><p className="text-xs text-slate-500">{isKo ? `검증 신호 ${pathway.evidenceCount}/6개` : `${pathway.evidenceCount}/6 verified signal types`}</p><span className="inline-flex items-center gap-1 text-sm font-semibold text-blue-700 group-hover:text-blue-800">{isKo ? "경로 자세히" : "Explore pathway"}<ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" /></span></div>
+    </article>
+  </Link>
 }
 
 function ReasonBadge({ reason, isKo }: { reason: AuPathfinderReason; isKo: boolean }) {
@@ -199,16 +167,14 @@ function percentage(value: number | null) {
 }
 
 const STEP_DEFS = [
-  { key: "category", labelKo: "전공", labelEn: "Major", icon: "🎓" },
-  { key: "goal", labelKo: "목표", labelEn: "Goal", icon: "🎯" },
-  { key: "budget", labelKo: "학비", labelEn: "Tuition", icon: "💰" },
-  { key: "timeline", labelKo: "기간", labelEn: "Timeline", icon: "📅" },
-  { key: "stage", labelKo: "단계", labelEn: "Stage", icon: "📍" },
+  { key: "category", labelKo: "전공", labelEn: "Major", icon: "🎓", tone: "bg-sky-100 text-sky-700" },
+  { key: "goal", labelKo: "목표", labelEn: "Goal", icon: "🎯", tone: "bg-violet-100 text-violet-700" },
+  { key: "stage", labelKo: "시작 단계", labelEn: "Starting point", icon: "🎓", tone: "bg-amber-100 text-amber-700" },
 ] as const
 
 function MobileSearchBar({
   profile, updateProfile, submit, isKo,
-  categoryOptions, goalOptions, budgetOptions, timelineOptions, stageOptions,
+  categoryOptions, goalOptions, stageOptions,
 }: {
   profile: AuPathfinderProfile
   updateProfile: <Key extends keyof AuPathfinderProfile>(key: Key, value: AuPathfinderProfile[Key]) => void
@@ -216,8 +182,6 @@ function MobileSearchBar({
   isKo: boolean
   categoryOptions: PickerOption[]
   goalOptions: PickerOption[]
-  budgetOptions: PickerOption[]
-  timelineOptions: PickerOption[]
   stageOptions: PickerOption[]
 }) {
   const [modalOpen, setModalOpen] = useState(false)
@@ -226,16 +190,12 @@ function MobileSearchBar({
   const allOptions = useMemo(() => ({
     category: categoryOptions,
     goal: goalOptions,
-    budget: budgetOptions,
-    timeline: timelineOptions,
     stage: stageOptions,
-  }), [categoryOptions, goalOptions, budgetOptions, timelineOptions, stageOptions])
+  }), [categoryOptions, goalOptions, stageOptions])
 
   const profileValues = useMemo(() => ({
     category: profile.category,
     goal: profile.goal,
-    budget: profile.budget,
-    timeline: profile.timeline,
     stage: profile.studyStage,
   }), [profile])
 
@@ -254,8 +214,6 @@ function MobileSearchBar({
   function handleSelect(key: string, value: string) {
     if (key === "category") updateProfile("category", value as AuPathfinderCategory | "any")
     else if (key === "goal") updateProfile("goal", value as AuPathfinderGoal)
-    else if (key === "budget") updateProfile("budget", value as AuPathfinderBudget)
-    else if (key === "timeline") updateProfile("timeline", value as AuPathfinderTimeline)
     else if (key === "stage") updateProfile("studyStage", value as AuPathfinderStudyStage)
   }
 
@@ -279,7 +237,7 @@ function MobileSearchBar({
   return <>
     <button type="button" onClick={openModal} className="mt-6 flex w-full items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-4 shadow-sm transition hover:shadow-md sm:hidden">
       <span className="flex items-center gap-1.5">
-        {summary.map((s) => <span key={s.key} className="grid size-8 shrink-0 place-items-center rounded-full bg-slate-100 text-sm">{s.icon}</span>)}
+        {summary.map((step) => <MobileStepIcon key={step.key} step={step} option={allOptions[step.key as keyof typeof allOptions].find((option) => option.value === step.selected)} compact />)}
       </span>
       <div className="min-w-0 flex-1 text-left border-l border-slate-200 pl-3 ml-1">
         <p className="truncate text-sm font-semibold text-slate-900">{summary[0].selectedLabel}</p>
@@ -300,7 +258,7 @@ function MobileSearchBar({
             const isOpen = activeStep === i
             return <div key={step.key} className="mb-3">
               <button type="button" onClick={() => setActiveStep(isOpen ? null : i)} className="flex w-full items-center gap-3 rounded-xl border border-slate-200 px-4 py-3 text-left transition hover:border-slate-300">
-                <span className="text-lg">{step.icon}</span>
+                <MobileStepIcon step={step} option={allOptions[step.key as keyof typeof allOptions].find((option) => option.value === step.selected)} />
                 <div className="min-w-0 flex-1">
                   <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">{isKo ? step.labelKo : step.labelEn}</p>
                   <p className="mt-0.5 truncate text-sm font-medium text-slate-800">{step.selectedLabel}</p>
@@ -312,7 +270,7 @@ function MobileSearchBar({
               {isOpen && <div className="mt-2 rounded-xl border border-slate-100 bg-slate-50 p-2">
                 {allOptions[step.key as keyof typeof allOptions].map((opt) => (
                   <button key={opt.value} type="button" onClick={() => { handleSelect(step.key, opt.value); setActiveStep(null) }} className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition ${opt.value === step.selected ? "bg-blue-50 text-blue-700" : "text-slate-700 hover:bg-white"}`}>
-                    <span className="text-base">{opt.icon || (opt.iconComponent ? "" : "")}</span>
+                    <MobileOptionIcon option={opt} fallback={step.icon} tone={step.tone} />
                     <span className="min-w-0 flex-1 text-sm font-medium">{opt.label}</span>
                     {opt.value === step.selected && <Check className="size-4 shrink-0 text-blue-600" />}
                   </button>
@@ -330,4 +288,15 @@ function MobileSearchBar({
       </div>
     </div>}
   </>
+}
+
+function MobileStepIcon({ step, option, compact = false }: { step: (typeof STEP_DEFS)[number] & { selected?: string; selectedLabel?: string }; option?: PickerOption; compact?: boolean }) {
+  return <MobileOptionIcon option={option} fallback={step.icon} tone={step.tone} compact={compact} />
+}
+
+function MobileOptionIcon({ option, fallback, tone, compact = false }: { option?: PickerOption; fallback: string; tone: string; compact?: boolean }) {
+  const Icon = option?.iconComponent
+  const iconTone = option?.iconTone ?? tone
+  const size = compact ? "size-8 rounded-full" : "size-9 rounded-xl"
+  return <span aria-hidden="true" className={`grid shrink-0 place-items-center ${size} ${iconTone} ${Icon ? "" : "text-base"}`}>{Icon ? <Icon className={compact ? "size-4" : "size-[18px]"} strokeWidth={2.2} /> : option?.icon || fallback}</span>
 }

@@ -119,8 +119,8 @@ export default async function AustralianUniversityComparePage({ searchParams }: 
   ]
 
   return (
-    <main className="min-h-screen bg-slate-50">
-      <section className="border-b border-blue-100 bg-[radial-gradient(circle_at_top_right,_rgba(191,219,254,.6),_transparent_42%),linear-gradient(180deg,_#ffffff,_#eff6ff)]">
+    <main className="au-discovery-gradient min-h-screen">
+      <section className="border-b border-blue-200/90 bg-transparent">
         <div className="mx-auto max-w-6xl px-5 py-10 sm:px-6">
           <Link href={localizePath('/au/study', locale)} className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-700 hover:text-blue-800"><ArrowRight className="h-4 w-4 rotate-180" /> {copy.back}</Link>
           <div className="mt-5 flex flex-wrap items-start justify-between gap-5">

@@ -61,8 +61,8 @@ export default async function AustralianMajorDetailPage({ params }: { params: Pr
   const annualFees = providers.map((provider) => provider.bachelorFeeAud ?? provider.feeAud).filter((fee): fee is number => typeof fee === "number")
   const feeRange = annualFees.length ? `${money(Math.min(...annualFees))}–${money(Math.max(...annualFees))}/yr` : "Check provider"
 
-  return <main className="min-h-screen bg-slate-50">
-    <section className="border-b border-slate-200 bg-white">
+  return <main className="au-discovery-gradient min-h-screen">
+    <section className="border-b border-blue-200/90 bg-transparent">
       <div className="mx-auto max-w-6xl px-5 py-8 sm:px-6 sm:py-10">
         <Link href="/au/majors" className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-blue-700"><ArrowLeft className="h-4 w-4" />Back to majors</Link>
         <div className="mt-6 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">

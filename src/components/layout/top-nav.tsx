@@ -35,6 +35,7 @@ export function TopNav() {
   }, [barePathname])
 
   const activeNav = navItems.find((item) => isActive(item.href))
+  const ActiveNavIcon = activeNav?.icon
 
   /* ── Globe language modal ── */
   const [langOpen, setLangOpen] = useState(false)
@@ -92,8 +93,8 @@ export function TopNav() {
 
           {/* Mobile: active nav + Globe grouped left */}
           {!isToolSurface && <div className="flex items-center gap-1 sm:hidden">
-            {activeNav && <Link href={localizePath(activeNav.href, pathLocale)} className={cn("flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-medium transition shrink-0", isLanding ? "text-white bg-white/15" : "text-slate-700 bg-slate-100")}>
-              <span className="text-sm leading-none">🇦🇺</span>
+            {activeNav && ActiveNavIcon && <Link href={localizePath(activeNav.href, pathLocale)} className={cn("flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-medium transition shrink-0", isLanding ? "text-white bg-white/15" : "text-slate-700 bg-slate-100")}>
+              <ActiveNavIcon className="size-3.5 shrink-0" strokeWidth={2.1} />
               <span className="max-[380px]:hidden">{activeNav.label}</span>
             </Link>}
             <div className="relative" ref={langRef}>

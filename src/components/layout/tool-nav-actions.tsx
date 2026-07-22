@@ -4,7 +4,7 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import type { User } from "@supabase/supabase-js"
-import { LayoutGrid, LogIn, UserIcon } from "lucide-react"
+import { LayoutGrid, LogIn, Map, UserIcon } from "lucide-react"
 import { LanguageToggle } from "@/components/language-toggle"
 import { Button } from "@/components/ui/button"
 import { useRouteLocale, useRouteTranslations } from "@/lib/i18n/locale-provider"
@@ -69,10 +69,11 @@ export function ToolNavActions({ className, minimal = false, onLanding = false, 
           </button>
           {appsOpen && <div role="menu" aria-label={locale === "ko" ? "CampCareer 도구" : "CampCareer tools"} className="absolute right-0 top-full z-[2300] mt-3 w-[min(20rem,calc(100vw-2rem))] overflow-hidden rounded-3xl border border-slate-200 bg-white p-3 shadow-[0_20px_55px_rgba(15,23,42,.18)] max-sm:right-[-3rem]">
             <div className="flex items-center justify-between px-2 pb-2"><p className="text-xs font-semibold uppercase tracking-[.14em] text-slate-500">CampCareer</p><span className="text-xs text-slate-400">{locale === "ko" ? "도구" : "Tools"}</span></div>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-4 gap-2">
               <Link href={localizePath("/", pathLocale)} role="menuitem" onClick={() => setAppsOpen(false)} className="group rounded-2xl border border-transparent p-3 transition hover:border-blue-200 hover:bg-blue-50"><span className="grid size-12 place-items-center rounded-2xl bg-blue-100 text-2xl shadow-sm transition group-hover:-translate-y-0.5">🔎</span><span className="mt-3 block text-sm font-semibold text-slate-900">{t.australia.journey.findPath}</span></Link>
               <Link href={localizePath("/au/study", pathLocale)} role="menuitem" onClick={() => setAppsOpen(false)} className="group rounded-2xl border border-transparent p-3 transition hover:border-blue-200 hover:bg-blue-50"><span className="grid size-12 place-items-center rounded-2xl bg-sky-100 text-2xl shadow-sm transition group-hover:-translate-y-0.5">⚖️</span><span className="mt-3 block text-sm font-semibold text-slate-900">{t.australia.journey.compareStudy}</span></Link>
               <Link href={localizePath("/planner", pathLocale)} role="menuitem" onClick={() => setAppsOpen(false)} className="group rounded-2xl border border-transparent p-3 transition hover:border-violet-200 hover:bg-violet-50"><span className="grid size-12 place-items-center rounded-2xl bg-violet-100 text-2xl shadow-sm transition group-hover:-translate-y-0.5">🧭</span><span className="mt-3 block text-sm font-semibold text-slate-900">{t.australia.journey.plan}</span></Link>
+              <Link href={`${localizePath("/maps", pathLocale)}?country=au`} role="menuitem" onClick={() => setAppsOpen(false)} className="group rounded-2xl border border-transparent p-3 transition hover:border-emerald-200 hover:bg-emerald-50"><span className="grid size-12 place-items-center rounded-2xl bg-emerald-100 text-emerald-700 shadow-sm transition group-hover:-translate-y-0.5"><Map className="size-6" strokeWidth={2} /></span><span className="mt-3 block text-sm font-semibold text-slate-900">{locale === "ko" ? "지도" : "Maps"}</span></Link>
             </div>
           </div>}
         </div>
@@ -106,10 +107,11 @@ export function ToolNavActions({ className, minimal = false, onLanding = false, 
           </button>
           {appsOpen && <div role="menu" aria-label={locale === "ko" ? "CampCareer 도구" : "CampCareer tools"} className="absolute right-0 top-full z-[2300] mt-3 w-[min(20rem,calc(100vw-2rem))] overflow-hidden rounded-3xl border border-slate-200 bg-white p-3 shadow-[0_20px_55px_rgba(15,23,42,.18)] max-sm:right-[-3rem]">
             <div className="flex items-center justify-between px-2 pb-2"><p className="text-xs font-semibold uppercase tracking-[.14em] text-slate-500">CampCareer</p><span className="text-xs text-slate-400">{locale === "ko" ? "도구" : "Tools"}</span></div>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-4 gap-2">
               <Link href={localizePath("/", pathLocale)} role="menuitem" onClick={() => setAppsOpen(false)} className="group rounded-2xl border border-transparent p-3 transition hover:border-blue-200 hover:bg-blue-50"><span className="grid size-12 place-items-center rounded-2xl bg-blue-100 text-2xl shadow-sm transition group-hover:-translate-y-0.5">🔎</span><span className="mt-3 block text-sm font-semibold text-slate-900">{t.australia.journey.findPath}</span></Link>
               <Link href={localizePath("/au/study", pathLocale)} role="menuitem" onClick={() => setAppsOpen(false)} className="group rounded-2xl border border-transparent p-3 transition hover:border-blue-200 hover:bg-blue-50"><span className="grid size-12 place-items-center rounded-2xl bg-sky-100 text-2xl shadow-sm transition group-hover:-translate-y-0.5">⚖️</span><span className="mt-3 block text-sm font-semibold text-slate-900">{t.australia.journey.compareStudy}</span></Link>
               <Link href={localizePath("/planner", pathLocale)} role="menuitem" onClick={() => setAppsOpen(false)} className="group rounded-2xl border border-transparent p-3 transition hover:border-violet-200 hover:bg-violet-50"><span className="grid size-12 place-items-center rounded-2xl bg-violet-100 text-2xl shadow-sm transition group-hover:-translate-y-0.5">🧭</span><span className="mt-3 block text-sm font-semibold text-slate-900">{t.australia.journey.plan}</span></Link>
+              <Link href={`${localizePath("/maps", pathLocale)}?country=au`} role="menuitem" onClick={() => setAppsOpen(false)} className="group rounded-2xl border border-transparent p-3 transition hover:border-emerald-200 hover:bg-emerald-50"><span className="grid size-12 place-items-center rounded-2xl bg-emerald-100 text-emerald-700 shadow-sm transition group-hover:-translate-y-0.5"><Map className="size-6" strokeWidth={2} /></span><span className="mt-3 block text-sm font-semibold text-slate-900">{locale === "ko" ? "지도" : "Maps"}</span></Link>
             </div>
           </div>}
         </div>

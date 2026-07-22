@@ -80,8 +80,10 @@ const ko: Dictionary = {
         bachelor: '학사',
         postgraduate: '대학원·석사',
         showLevel: '{level} 선택지 보기',
-        subject: '세부 전공으로 좁히기',
-        subjectPlaceholder: '선택: nursing',
+        subject: '세부 전공·직업 검색',
+        subjectPlaceholder: '예: 간호, 소프트웨어 개발자',
+        subjectSuggestions: '추천 세부 전공',
+        careerSuggestions: '연결된 직업 방향',
         search: '검색',
       },
       tray: {

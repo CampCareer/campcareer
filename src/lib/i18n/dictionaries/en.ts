@@ -78,8 +78,10 @@ const en = {
         bachelor: 'Bachelor',
         postgraduate: 'Postgraduate & Master',
         showLevel: 'Show {level} options',
-        subject: 'Fine-tune a subject',
-        subjectPlaceholder: 'Optional: nursing',
+        subject: 'Search a subject or career',
+        subjectPlaceholder: 'e.g. nursing or software developer',
+        subjectSuggestions: 'Suggested study subjects',
+        careerSuggestions: 'Related career directions',
         search: 'Search',
       },
       tray: {
