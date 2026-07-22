@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
-import { ArrowRight, RotateCcw, Check } from "lucide-react"
+import { ArrowRight, Check, Search } from "lucide-react"
 import { STUDY_CATEGORIES } from "@/data/study-concepts"
 import {
   DEFAULT_AU_PATHFINDER_PROFILE,
@@ -93,12 +93,11 @@ export function AustraliaPathfinder({ initialProfile }: { initialProfile: AuPath
             which routes are realistic, so it stays in the quick search while
             timeline and the duplicate budget weight use safe defaults. */}
         <form onSubmit={submit} className="mt-6 hidden rounded-2xl border border-blue-400/30 bg-white/95 p-4 shadow-lg backdrop-blur-sm sm:p-5 sm:block">
-          <div className="grid gap-3 md:grid-cols-3 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1.1fr)_minmax(0,1.1fr)_auto_auto] lg:items-end">
-            <div><IconPicker name="category" label={isKo ? "전공" : "Major"} value={profile.category} options={categoryOptions} onChange={(value) => updateProfile("category", value as AuPathfinderCategory | "any")} searchPlaceholder={isKo ? "전공 검색" : "Search majors"} testId="category" /></div>
-            <div><IconPicker name="goal" label={isKo ? "목표" : "Goal"} value={profile.goal} options={goalOptions} onChange={(value) => updateProfile("goal", value as AuPathfinderGoal)} testId="goal" /></div>
-            <div><IconPicker name="stage" label={isKo ? "학위" : "Degree"} value={profile.studyStage} options={stageOptions} onChange={(value) => updateProfile("studyStage", value as AuPathfinderStudyStage)} menuAlign="end" testId="stage" /></div>
-            <button type="submit" className="inline-flex h-10 items-center justify-center rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700">{isKo ? "검색" : "Search"}</button>
-            <button type="button" aria-label={isKo ? "검색 조건 초기화" : "Reset search filters"} onClick={() => setProfile(DEFAULT_AU_PATHFINDER_PROFILE)} className="inline-flex h-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white px-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 hover:text-blue-700"><RotateCcw className="size-4" /></button>
+          <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_auto] gap-2 sm:gap-3 lg:items-end">
+            <div className="min-w-0"><IconPicker name="category" label={isKo ? "전공" : "Major"} value={profile.category} options={categoryOptions} onChange={(value) => updateProfile("category", value as AuPathfinderCategory | "any")} searchPlaceholder={isKo ? "전공 검색" : "Search majors"} testId="category" /></div>
+            <div className="min-w-0"><IconPicker name="goal" label={isKo ? "목표" : "Goal"} value={profile.goal} options={goalOptions} onChange={(value) => updateProfile("goal", value as AuPathfinderGoal)} testId="goal" /></div>
+            <div className="min-w-0"><IconPicker name="stage" label={isKo ? "학위" : "Degree"} value={profile.studyStage} options={stageOptions} onChange={(value) => updateProfile("studyStage", value as AuPathfinderStudyStage)} menuAlign="end" testId="stage" /></div>
+            <button type="submit" className="inline-flex h-12 min-w-[6.25rem] items-center justify-center rounded-xl bg-blue-600 px-6 text-sm font-semibold text-white transition hover:bg-blue-700">{isKo ? "검색" : "Search"}</button>
           </div>
         </form>
 
@@ -233,14 +232,9 @@ function MobileSearchBar({
   }
 
   return <>
-    <button type="button" onClick={openModal} className="mt-6 flex w-full items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-4 shadow-sm transition hover:shadow-md sm:hidden">
-      <span className="flex items-center gap-1.5">
-        {summary.map((step) => <MobileStepIcon key={step.key} step={step} option={allOptions[step.key as keyof typeof allOptions].find((option) => option.value === step.selected)} compact />)}
-      </span>
-      <div className="min-w-0 flex-1 text-left border-l border-slate-200 pl-3 ml-1">
-        <p className="truncate text-sm font-semibold text-slate-900">{summary[0].selectedLabel}</p>
-        <p className="mt-0.5 truncate text-xs text-slate-500">{summary.slice(1).map((s) => s.selectedLabel).join(" · ")}</p>
-      </div>
+    <button type="button" onClick={openModal} aria-label={isKo ? "검색 조건 시작" : "Start your search"} className="mt-6 flex w-full items-center gap-2.5 rounded-2xl border border-slate-200 bg-white px-4 py-4 text-left shadow-sm transition hover:shadow-md sm:hidden">
+      <Search className="size-5 shrink-0 text-slate-500" aria-hidden="true" />
+      <span className="text-sm font-semibold text-slate-900">{isKo ? "검색 시작" : "Start your search"}</span>
     </button>
 
     {modalOpen && <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:hidden" onClick={closeModal}>

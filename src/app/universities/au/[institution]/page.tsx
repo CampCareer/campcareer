@@ -85,7 +85,7 @@ export default async function AustralianUniversityDetailPage({ params }: { param
           </div>
         </section>
 
-        <CollegeDetailClient country="au" rows={rows} websiteUrl={university.websiteUrl} backHref="/universities/au" backLabel="Back to Australian universities" />
+        <CollegeDetailClient country="au" rows={rows} websiteUrl={university.websiteUrl} backHref="/universities/au" backLabel="Back to Australian universities" hideIdentity />
 
         <section className="mx-auto max-w-5xl px-5 pb-12 sm:px-6">
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">

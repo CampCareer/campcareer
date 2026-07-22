@@ -100,9 +100,9 @@ export default async function AustralianUniversityDetailPage({ params }: { param
       ])} />
       <main className="min-h-screen bg-slate-50">
         {/* Hero */}
-        <section className="relative overflow-hidden border-b border-slate-200 bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600">
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNCI+PHBhdGggZD0iTTM2IDM0djItSDI0di0yaDEyem0wLTR2Mkg4VjI4aDI4em0wLTR2Mkg0VjI0aDJ6bTAgNHYySDE0di0yaDEyem0wLTR2Mkg0VjIwaDJ6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-40" />
-          <div className="relative mx-auto max-w-5xl px-5 py-10 sm:px-6 sm:py-14">
+        <section className="relative overflow-hidden bg-gradient-to-b from-blue-600 to-blue-50">
+          <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-b from-transparent to-slate-50" />
+          <div className="relative z-10 mx-auto max-w-5xl px-5 py-10 sm:px-6 sm:py-14">
             <Link href="/au/study" className="inline-flex items-center gap-1.5 text-sm font-medium text-blue-100 hover:text-white transition-colors">
               <ArrowLeft className="h-4 w-4" />
               Australian universities
@@ -119,8 +119,7 @@ export default async function AustralianUniversityDetailPage({ params }: { param
                   </span>
                 </div>
                 <h1
-                  className="mt-3 text-4xl font-semibold tracking-tight text-white sm:text-5xl"
-                  style={{ fontFamily: 'var(--font-fraunces), serif' }}
+                  className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl"
                 >
                   {university.name}
                 </h1>
@@ -162,7 +161,7 @@ export default async function AustralianUniversityDetailPage({ params }: { param
           </div>
         </section>
 
-        <CollegeDetailClient country="au" rows={rows} websiteUrl={university.websiteUrl} backHref="/au/study" backLabel="Back to Australian universities" />
+        <CollegeDetailClient country="au" rows={rows} websiteUrl={university.websiteUrl} backHref="/au/study" backLabel="Back to Australian universities" hideIdentity />
 
         <FieldGroupsSection
           fields={fieldGroupRows}

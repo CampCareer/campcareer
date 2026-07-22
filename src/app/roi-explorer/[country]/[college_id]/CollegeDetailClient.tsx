@@ -108,12 +108,14 @@ export function CollegeDetailClient({
   websiteUrl,
   backHref,
   backLabel,
+  hideIdentity = false,
 }: {
   country: Country
   rows: DetailRow[]
   websiteUrl: string | null
   backHref?: string
   backLabel?: string
+  hideIdentity?: boolean
 }) {
   const t = useTranslations()
   const td = t.roiExplorer.detail
@@ -185,48 +187,50 @@ export function CollegeDetailClient({
     <div className="max-w-5xl mx-auto px-6 py-10 space-y-8">
 
       {/* Back */}
-      <Link
+      {!hideIdentity && <Link
         href={backHref ?? `/roi-explorer?country=${country}`}
         className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
         {backLabel ?? td.backLink}
-      </Link>
+      </Link>}
 
       {/* Header */}
       <div className="space-y-2">
-        <div className="flex items-center gap-2 flex-wrap">
-          <SchoolTypeBadge type={best.school_type} />
-          <span className="text-xs text-slate-400">{COUNTRY_LABEL[country]}</span>
-        </div>
-        <h1 className="text-3xl font-semibold text-slate-950 tracking-tight">{best.college_name}</h1>
-        <p className="text-slate-500 text-sm">
-          {best.college_state}
-        </p>
+        {!hideIdentity && <>
+          <div className="flex items-center gap-2 flex-wrap">
+            <SchoolTypeBadge type={best.school_type} />
+            <span className="text-xs text-slate-400">{COUNTRY_LABEL[country]}</span>
+          </div>
+          <h1 className="text-3xl font-semibold text-slate-950 tracking-tight">{best.college_name}</h1>
+          <p className="text-slate-500 text-sm">
+            {best.college_state}
+          </p>
 
-        {/* 공식 사이트 링크 — 실제 URL이 있으면 사용, 없으면 구글 검색 폴백 */}
-        <div className="flex items-center gap-2 flex-wrap mt-2">
-          <a
-            href={websiteUrl ?? `https://www.google.com/search?q=${encodeURIComponent(best.college_name)}+official+site`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-xs font-medium text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-100 px-3 py-1.5 rounded-full transition-colors"
-          >
-            <ExternalLink className="w-3.5 h-3.5" />
-            {td.officialWebsite}
-          </a>
-          {country === 'au' && (
+          {/* 공식 사이트 링크 — 실제 URL이 있으면 사용, 없으면 구글 검색 폴백 */}
+          <div className="flex items-center gap-2 flex-wrap mt-2">
             <a
-              href={`https://www.google.com/search?q=${encodeURIComponent(best.college_name)}+CRICOS+registered`}
+              href={websiteUrl ?? `https://www.google.com/search?q=${encodeURIComponent(best.college_name)}+official+site`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-600 hover:text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-100 px-3 py-1.5 rounded-full transition-colors"
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-100 px-3 py-1.5 rounded-full transition-colors"
             >
               <ExternalLink className="w-3.5 h-3.5" />
-              {td.cricosCheck}
+              {td.officialWebsite}
             </a>
-          )}
-        </div>
+            {country === 'au' && (
+              <a
+                href={`https://www.google.com/search?q=${encodeURIComponent(best.college_name)}+CRICOS+registered`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-600 hover:text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-100 px-3 py-1.5 rounded-full transition-colors"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                {td.cricosCheck}
+              </a>
+            )}
+          </div>
+        </>}
 
         <div className="flex items-center gap-2 mt-2">
           <span className="text-xs text-slate-500">{td.gross}</span>

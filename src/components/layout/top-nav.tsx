@@ -23,7 +23,7 @@ export function TopNav() {
   const isToolSurface = barePathname === "/planner" || barePathname === "/myplan"
   const isCompare = barePathname === "/compare" || barePathname.startsWith("/compare/")
   const isLanding = barePathname === "/"
-  const isAustraliaDiscovery = barePathname === "/au/study" || barePathname === "/au/majors" || barePathname.startsWith("/au/majors/")
+  const isAustraliaDiscovery = barePathname === "/au/study" || barePathname === "/au/majors" || barePathname.startsWith("/au/majors/") || barePathname.startsWith("/au/study/providers/")
   const hasBlueHero = isLanding || isAustraliaDiscovery
 
   const navItems: { href: string; label: string; icon: typeof Globe; accent?: "blue" | "sky" | "violet" }[] = [
