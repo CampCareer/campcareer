@@ -20,7 +20,6 @@ import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { track } from "@/lib/analytics"
 import { getStudyCategoryVisual } from "@/components/ui/au-career-category-visuals"
 import { IconPicker, type PickerOption } from "@/components/ui/icon-picker"
-import { AustraliaJourneyNav } from "@/components/australia/australia-journey-nav"
 
 export function AustraliaPathfinder({ initialProfile }: { initialProfile: AuPathfinderProfile }) {
   const locale = useRouteLocale()
@@ -50,37 +49,37 @@ export function AustraliaPathfinder({ initialProfile }: { initialProfile: AuPath
   }
 
   const categoryOptions = useMemo<PickerOption[]>(() => [
-    { value: "any", label: isKo ? "모든 분야" : "All fields", description: isKo ? "전체 경로에서 순위 보기" : "Rank across all study paths", icon: "✨", keywords: "any all" },
+    { value: "any", label: isKo ? "모든 분야" : "All fields", description: "", icon: "✨", keywords: "any all" },
     ...STUDY_CATEGORIES.map((category) => {
       const visual = getStudyCategoryVisual(category.id)
-      return { value: category.id, label: isKo ? category.labelKo : category.label, description: isKo ? `${category.labelKo} 분야만` : `${category.label} only`, icon: "", iconComponent: visual.Icon, iconTone: visual.tone, keywords: `${category.id} ${category.label} ${category.labelKo}` }
+      return { value: category.id, label: isKo ? category.labelKo : category.label, description: "", icon: "", iconComponent: visual.Icon, iconTone: visual.tone, keywords: `${category.id} ${category.label} ${category.labelKo}` }
     }),
   ], [isKo])
 
   const goalOptions = useMemo<PickerOption[]>(() => (isKo
     ? [
-        { value: "income", label: "높은 소득", description: "임금 신호를 가장 크게 반영", icon: "💰", keywords: "income salary pay" },
-        { value: "security", label: "취업 안정성", description: "부족·고용전망을 더 반영", icon: "🛡️", keywords: "security job stable" },
-        { value: "residency", label: "장기 경로", description: "PR 관련 신호를 더 반영", icon: "🧭", keywords: "residency pr pathway" },
-        { value: "lower-cost", label: "낮은 학비", description: "학비·기간을 더 반영", icon: "🌱", keywords: "lower cost tuition" },
+        { value: "income", label: "높은 소득", description: "", icon: "💰", keywords: "income salary pay" },
+        { value: "security", label: "취업 안정성", description: "", icon: "🛡️", keywords: "security job stable" },
+        { value: "residency", label: "장기 경로", description: "", icon: "🧭", keywords: "residency pr pathway" },
+        { value: "lower-cost", label: "낮은 학비", description: "", icon: "🌱", keywords: "lower cost tuition" },
       ]
     : [
-        { value: "income", label: "Higher income", description: "Prioritise pay signals", icon: "💰", keywords: "income salary pay" },
-        { value: "security", label: "Job security", description: "Prioritise shortage and outlook", icon: "🛡️", keywords: "security job stable" },
-        { value: "residency", label: "Longer-term pathway", description: "Prioritise PR-related signals", icon: "🧭", keywords: "residency pr pathway" },
-        { value: "lower-cost", label: "Lower tuition", description: "Prioritise cost and duration", icon: "🌱", keywords: "lower cost tuition" },
+        { value: "income", label: "Higher income", description: "", icon: "💰", keywords: "income salary pay" },
+        { value: "security", label: "Job security", description: "", icon: "🛡️", keywords: "security job stable" },
+        { value: "residency", label: "Longer-term pathway", description: "", icon: "🧭", keywords: "residency pr pathway" },
+        { value: "lower-cost", label: "Lower tuition", description: "", icon: "🌱", keywords: "lower cost tuition" },
       ]), [isKo])
 
   const stageOptions = useMemo<PickerOption[]>(() => (isKo
     ? [
-        { value: "school", label: "고등학교 이후", description: "학사·디플로마·수료 경로", icon: "🎓", keywords: "school high school fresh" },
-        { value: "degree", label: "이미 학위 보유", description: "석사·대학원 수료 옵션도 반영", icon: "🎓", keywords: "degree graduate" },
-        { value: "career", label: "경력 전환 중", description: "수료·디플로마 옵션도 반영", icon: "💼", keywords: "career change" },
+        { value: "certificate", label: "자격증·디플로마", description: "", icon: "📜", keywords: "certificate diploma vet" },
+        { value: "degree", label: "학사·석사", description: "", icon: "🎓", keywords: "bachelor master degree" },
+        { value: "related-degree", label: "관련 학위 보유", description: "", icon: "🧩", keywords: "related degree graduate" },
       ]
     : [
-        { value: "school", label: "Starting after school", description: "Bachelor, diploma and certificate routes", icon: "🎓", keywords: "school high school fresh" },
-        { value: "degree", label: "I already have a degree", description: "Also values graduate options", icon: "🎓", keywords: "degree graduate" },
-        { value: "career", label: "Changing careers", description: "Also values certificate and diploma options", icon: "💼", keywords: "career change" },
+        { value: "certificate", label: "Certificate & diploma", description: "", icon: "📜", keywords: "certificate diploma vet" },
+        { value: "degree", label: "Bachelor & master", description: "", icon: "🎓", keywords: "bachelor master degree" },
+        { value: "related-degree", label: "I have a related degree", description: "", icon: "🧩", keywords: "related degree graduate" },
       ]), [isKo])
 
   return <main className="min-h-screen bg-slate-50">
@@ -97,7 +96,7 @@ export function AustraliaPathfinder({ initialProfile }: { initialProfile: AuPath
           <div className="grid gap-3 md:grid-cols-3 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1.1fr)_minmax(0,1.1fr)_auto_auto] lg:items-end">
             <div><IconPicker name="category" label={isKo ? "전공" : "Major"} value={profile.category} options={categoryOptions} onChange={(value) => updateProfile("category", value as AuPathfinderCategory | "any")} searchPlaceholder={isKo ? "전공 검색" : "Search majors"} testId="category" /></div>
             <div><IconPicker name="goal" label={isKo ? "목표" : "Goal"} value={profile.goal} options={goalOptions} onChange={(value) => updateProfile("goal", value as AuPathfinderGoal)} testId="goal" /></div>
-            <div><IconPicker name="stage" label={isKo ? "시작 단계" : "Starting point"} value={profile.studyStage} options={stageOptions} onChange={(value) => updateProfile("studyStage", value as AuPathfinderStudyStage)} testId="stage" /></div>
+            <div><IconPicker name="stage" label={isKo ? "학위" : "Degree"} value={profile.studyStage} options={stageOptions} onChange={(value) => updateProfile("studyStage", value as AuPathfinderStudyStage)} menuAlign="end" testId="stage" /></div>
             <button type="submit" className="inline-flex h-10 items-center justify-center rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700">{isKo ? "검색" : "Search"}</button>
             <button type="button" aria-label={isKo ? "검색 조건 초기화" : "Reset search filters"} onClick={() => setProfile(DEFAULT_AU_PATHFINDER_PROFILE)} className="inline-flex h-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white px-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 hover:text-blue-700"><RotateCcw className="size-4" /></button>
           </div>
@@ -117,7 +116,6 @@ export function AustraliaPathfinder({ initialProfile }: { initialProfile: AuPath
     </section>
 
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
-      <AustraliaJourneyNav className="mb-6 sm:mb-8" />
       <section>
         <div className="grid gap-4 lg:grid-cols-2">
           {ranked.slice(0, 6).map((pathway, index) => <PathwayCard key={pathway.concept.id} pathway={pathway} rank={index + 1} locale={pathLocale} isKo={isKo} featured={index === 0} />)}
@@ -169,7 +167,7 @@ function percentage(value: number | null) {
 const STEP_DEFS = [
   { key: "category", labelKo: "전공", labelEn: "Major", icon: "🎓", tone: "bg-sky-100 text-sky-700" },
   { key: "goal", labelKo: "목표", labelEn: "Goal", icon: "🎯", tone: "bg-violet-100 text-violet-700" },
-  { key: "stage", labelKo: "시작 단계", labelEn: "Starting point", icon: "🎓", tone: "bg-amber-100 text-amber-700" },
+  { key: "stage", labelKo: "학위", labelEn: "Degree", icon: "📜", tone: "bg-amber-100 text-amber-700" },
 ] as const
 
 function MobileSearchBar({

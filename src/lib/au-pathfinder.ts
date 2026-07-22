@@ -6,7 +6,7 @@ import type { StudyConcept } from "@/lib/study-product/types"
 export type AuPathfinderGoal = "income" | "security" | "residency" | "lower-cost"
 export type AuPathfinderBudget = "lower" | "balanced" | "investment"
 export type AuPathfinderTimeline = "fast" | "standard" | "flexible"
-export type AuPathfinderStudyStage = "school" | "degree" | "career"
+export type AuPathfinderStudyStage = "certificate" | "degree" | "related-degree"
 export type AuPathfinderCategory = (typeof STUDY_CATEGORIES)[number]["id"]
 
 export type AuPathfinderProfile = {
@@ -54,7 +54,7 @@ export const DEFAULT_AU_PATHFINDER_PROFILE: AuPathfinderProfile = {
   goal: "income",
   budget: "balanced",
   timeline: "flexible",
-  studyStage: "school",
+  studyStage: "degree",
   category: "any",
 }
 
@@ -71,7 +71,7 @@ export function isAuPathfinderTimeline(value: string | undefined): value is AuPa
 }
 
 export function isAuPathfinderStudyStage(value: string | undefined): value is AuPathfinderStudyStage {
-  return value === "school" || value === "degree" || value === "career"
+  return value === "certificate" || value === "degree" || value === "related-degree"
 }
 
 export function isAuPathfinderCategory(value: string | undefined): value is AuPathfinderCategory {
@@ -91,7 +91,15 @@ export function profileFromSearchParams(input: Record<string, string | undefined
           : "income",
     budget: isAuPathfinderBudget(input.budget) ? input.budget : "balanced",
     timeline: isAuPathfinderTimeline(input.timeline) ? input.timeline : "flexible",
-    studyStage: isAuPathfinderStudyStage(input.stage) ? input.stage : "school",
+    // Keep previously shared links useful while the UI uses clearer degree
+    // choices. The legacy values map to their closest current intent.
+    studyStage: isAuPathfinderStudyStage(input.stage)
+      ? input.stage
+      : input.stage === "school"
+        ? "certificate"
+        : input.stage === "career"
+          ? "related-degree"
+          : "degree",
     category,
   }
 }
@@ -210,9 +218,9 @@ function normalize(value: number | null, values: Array<number | null>, inverted 
 function studyFit(stage: AuPathfinderStudyStage, qualifications: string[]) {
   if (qualifications.length === 0) return 0.5
   const list = qualifications.join(" ").toLowerCase()
-  if (stage === "school") return /bachelor|diploma|certificate|apprenticeship/.test(list) ? 1 : 0.6
-  if (stage === "degree") return /master|graduate/.test(list) ? 1 : 0.55
-  return /graduate|certificate|diploma/.test(list) ? 1 : 0.65
+  if (stage === "certificate") return /certificate|diploma|apprenticeship/.test(list) ? 1 : 0.55
+  if (stage === "degree") return /bachelor|master|graduate/.test(list) ? 1 : 0.55
+  return /master|graduate/.test(list) ? 1 : 0.5
 }
 
 function topReasons({

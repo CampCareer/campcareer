@@ -86,6 +86,12 @@
       linear-gradient(180deg, #dbeafe 0%, #eff6ff 20rem, #f8fafc 38rem);
   }
 
+  /* Mirrors the public landing hero for pages where the visitor is still
+     deciding, so the blue transition begins directly under TopNav. */
+  .au-discovery-hero {
+    background: linear-gradient(180deg, #2563eb 0%, #dbeafe 72%, #eff6ff 100%);
+  }
+
   .finder-select {
     @apply h-8 w-full appearance-none bg-transparent text-sm font-semibold text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-blue-500;
   }

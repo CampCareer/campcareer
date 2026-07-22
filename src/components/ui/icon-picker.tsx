@@ -29,6 +29,7 @@ export function IconPicker({
   options,
   onChange,
   searchPlaceholder,
+  menuAlign = "start",
   testId,
 }: {
   name: string
@@ -37,6 +38,7 @@ export function IconPicker({
   options: PickerOption[]
   onChange: (value: string) => void
   searchPlaceholder?: string
+  menuAlign?: "start" | "end"
   testId: string
 }) {
   const [open, setOpen] = useState(false)
@@ -60,11 +62,11 @@ export function IconPicker({
       <PickerIcon option={selected} compact />
       <span className="truncate">{selected.label}</span>
     </button>
-    {open && <div className="absolute left-0 top-[calc(100%+0.75rem)] z-30 w-[min(25rem,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-[0_18px_45px_rgba(15,23,42,.16)]">
+    {open && <div className={`absolute top-[calc(100%+0.75rem)] z-30 w-[min(25rem,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-[0_18px_45px_rgba(15,23,42,.16)] ${menuAlign === "end" ? "right-0" : "left-0"}`}>
       {searchPlaceholder && <label className="mb-2 flex items-center gap-2 rounded-xl bg-slate-50 px-3 py-2 text-slate-500"><Search className="h-4 w-4" /><span className="sr-only">{searchPlaceholder}</span><input autoFocus value={query} onChange={(event) => setQuery(event.target.value)} placeholder={searchPlaceholder} className="w-full bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-400" /></label>}
       <div role="listbox" aria-label={`${label} options`} className="max-h-80 space-y-1 overflow-y-auto p-1">{filtered.map((option) => <button key={option.value} type="button" role="option" aria-selected={option.value === value} data-testid={`${testId}-option-${option.value}`} onClick={() => { onChange(option.value); setOpen(false) }} className="flex w-full items-center gap-3 rounded-xl px-2 py-2 text-left transition hover:bg-slate-50 aria-selected:bg-blue-50">
         <PickerIcon option={option} />
-        <span className="min-w-0 flex-1"><span className="block truncate text-sm font-semibold text-slate-900">{option.label}</span><span className="block truncate text-xs text-slate-500">{option.description}</span></span>
+        <span className="min-w-0 flex-1"><span className="block truncate text-sm font-semibold text-slate-900">{option.label}</span>{option.description && <span className="block truncate text-xs text-slate-500">{option.description}</span>}</span>
         {option.value === value && <Check className="h-4 w-4 shrink-0 text-blue-700" aria-hidden="true" />}
       </button>)}</div>
     </div>}

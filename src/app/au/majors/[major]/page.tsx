@@ -61,17 +61,17 @@ export default async function AustralianMajorDetailPage({ params }: { params: Pr
   const annualFees = providers.map((provider) => provider.bachelorFeeAud ?? provider.feeAud).filter((fee): fee is number => typeof fee === "number")
   const feeRange = annualFees.length ? `${money(Math.min(...annualFees))}–${money(Math.max(...annualFees))}/yr` : "Check provider"
 
-  return <main className="au-discovery-gradient min-h-screen">
-    <section className="border-b border-blue-200/90 bg-transparent">
+  return <main className="min-h-screen bg-slate-50">
+    <section className="au-discovery-hero border-b border-blue-200/90">
       <div className="mx-auto max-w-6xl px-5 py-8 sm:px-6 sm:py-10">
-        <Link href="/au/majors" className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-blue-700"><ArrowLeft className="h-4 w-4" />Back to majors</Link>
+        <Link href="/au/majors" className="inline-flex items-center gap-2 text-sm font-semibold text-blue-100 hover:text-white"><ArrowLeft className="h-4 w-4" />Back to majors</Link>
         <div className="mt-6 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
           <div className="max-w-3xl">
-            <div className="flex items-center gap-3"><span className={`grid size-11 place-items-center rounded-xl ${tone}`}><Icon className="size-5" strokeWidth={2.2} /></span><p className="text-sm font-semibold text-blue-700">Australia · {category?.label ?? "Major pathway"}</p></div>
-            <h1 className="mt-5 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">{concept.label}</h1>
-            <p className="mt-3 text-base leading-7 text-slate-600">{concept.description}</p>
+            <div className="flex items-center gap-3"><span className={`grid size-11 place-items-center rounded-xl ${tone}`}><Icon className="size-5" strokeWidth={2.2} /></span><p className="text-sm font-semibold text-blue-100">Australia · {category?.label ?? "Major pathway"}</p></div>
+            <h1 className="mt-5 text-3xl font-semibold tracking-tight text-white sm:text-4xl">{concept.label}</h1>
+            <p className="mt-3 text-base leading-7 text-blue-50">{concept.description}</p>
           </div>
-          <Link href={`/au/study/programs/${concept.slug}`} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white hover:bg-blue-700">View verified programs <ArrowRight className="h-4 w-4" /></Link>
+          <Link href={`/au/study/programs/${concept.slug}`} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-white px-5 text-sm font-semibold text-blue-700 hover:bg-blue-50">View verified programs <ArrowRight className="h-4 w-4" /></Link>
         </div>
       </div>
     </section>

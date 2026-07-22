@@ -7,7 +7,7 @@ test("Australia pathfinder ranks only the requested study category", () => {
     goal: "income",
     budget: "balanced",
     timeline: "flexible",
-    studyStage: "school",
+    studyStage: "degree",
     category: "technology",
   }
   const ranked = rankAustralianPathways(profile)
@@ -23,7 +23,7 @@ test("lower budget and a faster timeline materially change a path score", () => 
     goal: "income",
     budget: "investment",
     timeline: "flexible",
-    studyStage: "school",
+    studyStage: "degree",
     category: "any",
   }
   const costSensitive = rankAustralianPathways({ ...base, budget: "lower", timeline: "fast" })
