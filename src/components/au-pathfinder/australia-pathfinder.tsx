@@ -82,9 +82,8 @@ export function AustraliaPathfinder({ initialProfile }: { initialProfile: AuPath
         { value: "related-degree", label: "I have a related degree", description: "", icon: "🧩", keywords: "related degree graduate" },
       ]), [isKo])
 
-  return <main className="min-h-screen bg-slate-50">
-    <section className="relative bg-gradient-to-b from-blue-600 to-blue-50">
-      <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-b from-transparent to-slate-50 pointer-events-none" />
+  return <main className="au-discovery-surface min-h-screen">
+    <section className="relative">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
         <p className="text-xs font-semibold uppercase tracking-[.18em] text-blue-200">Australia Pathfinder</p>
         <h1 className="mt-3 max-w-3xl text-3xl font-semibold tracking-tight text-white sm:text-4xl">{isKo ? "내 조건에 맞는 호주 학업 경로" : "Find the best Australia study path"}</h1>
@@ -120,7 +119,7 @@ export function AustraliaPathfinder({ initialProfile }: { initialProfile: AuPath
         <div className="grid gap-4 lg:grid-cols-2">
           {ranked.slice(0, 6).map((pathway, index) => <PathwayCard key={pathway.concept.id} pathway={pathway} rank={index + 1} locale={pathLocale} isKo={isKo} featured={index === 0} />)}
         </div>
-        <div className="mt-7 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm"><p className="text-slate-600">{isKo ? "직접 전공을 둘러보고 싶나요?" : "Want to browse every field directly?"}</p><Link href={localizePath("/au/majors?mode=explore", pathLocale)} className="inline-flex items-center gap-1.5 font-semibold text-blue-700 hover:text-blue-800">{isKo ? "전체 전공 탐색" : "Browse all majors"}<ArrowRight className="size-4" /></Link></div>
+        <div className="mt-7 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white/95 px-5 py-4 text-sm shadow-sm backdrop-blur-sm"><p className="text-slate-600">{isKo ? "직접 전공을 둘러보고 싶나요?" : "Want to browse every field directly?"}</p><Link href={localizePath("/au/majors", pathLocale)} className="inline-flex items-center gap-1.5 font-semibold text-blue-700 hover:text-blue-800">{isKo ? "전체 전공 탐색" : "Browse all majors"}<ArrowRight className="size-4" /></Link></div>
       </section>
     </div>
   </main>
