@@ -1,35 +1,61 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
+import { useState, useRef, useEffect, useCallback } from "react"
 import { LogoMark } from "@/components/logo-mark"
-import { useLocale } from "@/lib/i18n/locale-provider"
-import { localeFromPathname, localizePath, withoutLocalePrefix } from "@/lib/i18n/config"
+import { useLocale, useSetLocale } from "@/lib/i18n/locale-provider"
+import { LOCALE_META, PUBLISHED_LOCALE_OPTIONS, localeForUi, localeFromPathname, localizePath, withoutLocalePrefix, type LocaleOption } from "@/lib/i18n/config"
 import { ToolNavActions } from "@/components/layout/tool-nav-actions"
 import { cn } from "@/lib/utils"
-import { Globe, Map, Compass } from "lucide-react"
+import { Globe, Map, Compass, Check } from "lucide-react"
 
-// Numbeo-style horizontal category nav. Replaces the old sidebar — every core
-// feature is one click from the top bar. Blog lives in the footer.
 export function TopNav() {
   const pathname = usePathname()
   const locale = useLocale()
+  const setLocale = useSetLocale()
+  const router = useRouter()
   const pathLocale = localeFromPathname(pathname) ?? locale
   const barePathname = withoutLocalePrefix(pathname)
   const hasUnifiedHero = barePathname === "/" || barePathname === "/countries/search" || barePathname === "/universities" || barePathname === "/universities/au" || barePathname === "/majors" || barePathname === "/study" || barePathname === "/au/study"
   const isToolSurface = barePathname === "/planner"
   const isCompare = barePathname === "/compare" || barePathname.startsWith("/compare/")
-  const navItems: { href: string; label: string; icon?: typeof Globe; accent?: "blue" | "sky" | "violet" }[] = [
+  const isLanding = barePathname === "/"
+
+  const navItems: { href: string; label: string; icon: typeof Globe; accent?: "blue" | "sky" | "violet" }[] = [
     { href: "/", label: locale === "ko" ? "호주" : "Australia", icon: Globe, accent: "blue" },
     { href: "/maps", label: "Maps", icon: Map, accent: "sky" },
     { href: "/planner", label: "Planner", icon: Compass, accent: "violet" },
   ]
 
+  const isActive = useCallback((href: string) => {
+    return href === "/" ? barePathname === "/" || barePathname === "/au" : barePathname === href || barePathname.startsWith(`${href}/`)
+  }, [barePathname])
+
+  const activeNav = navItems.find((item) => isActive(item.href))
+
+  /* ── Globe language modal ── */
+  const [langOpen, setLangOpen] = useState(false)
+  const langRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!langOpen) return
+    const onDown = (e: MouseEvent) => { if (langRef.current && !langRef.current.contains(e.target as Node)) setLangOpen(false) }
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setLangOpen(false) }
+    document.addEventListener("mousedown", onDown)
+    document.addEventListener("keydown", onKey)
+    return () => { document.removeEventListener("mousedown", onDown); document.removeEventListener("keydown", onKey) }
+  }, [langOpen])
+
+  function switchLang(next: LocaleOption) {
+    setLocale(localeForUi(next))
+    router.replace(localizePath(pathname, next))
+    setLangOpen(false)
+  }
+
+  /* ── Desktop nav links ── */
   const linkEls = navItems.map((item) => {
-    const active =
-      item.href === "/"
-        ? barePathname === "/" || barePathname === "/au"
-        : barePathname === item.href || barePathname.startsWith(`${item.href}/`)
+    const active = isActive(item.href)
     const Icon = item.icon
     return (
       <Link
@@ -38,9 +64,11 @@ export function TopNav() {
         prefetch={item.href === "/maps" ? false : undefined}
         className={cn(
           "whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors flex items-center gap-1.5",
-          active
-            ? item.accent === "sky" ? "bg-sky-50 text-sky-700" : item.accent === "violet" ? "bg-violet-50 text-violet-700" : "bg-blue-50 text-blue-700"
-            : "text-slate-500 hover:text-slate-900 hover:bg-slate-100"
+          isLanding
+            ? active ? "bg-white/20 text-white" : "text-blue-100 hover:text-white hover:bg-white/10"
+            : active
+              ? item.accent === "sky" ? "bg-sky-50 text-sky-700" : item.accent === "violet" ? "bg-violet-50 text-violet-700" : "bg-blue-50 text-blue-700"
+              : "text-slate-500 hover:text-slate-900 hover:bg-slate-100"
         )}
       >
         {Icon && <Icon className="w-4 h-4 shrink-0" />}
@@ -50,31 +78,47 @@ export function TopNav() {
   })
 
   return (
-    <header className={cn(isCompare ? "" : "sticky top-0 z-40", isToolSurface ? "border-b border-slate-200 bg-white/95" : hasUnifiedHero ? "bg-transparent" : "bg-[linear-gradient(180deg,#ffffff_0%,#f0f5ff_100%)]", "backdrop-blur-sm")}>
+    <header className={cn(isCompare ? "" : "sticky top-0 z-40", isToolSurface ? "border-b border-slate-200 bg-white/95" : isLanding ? "bg-blue-600" : hasUnifiedHero ? "bg-transparent" : "bg-[linear-gradient(180deg,#ffffff_0%,#f0f5ff_100%)]", "backdrop-blur-sm")}>
       <div className="max-w-7xl mx-auto px-4 max-[360px]:px-3 sm:px-6">
-        <div className={cn("flex items-center", isToolSurface ? "h-14 justify-end" : "h-20 gap-4 max-[360px]:h-16 max-[360px]:gap-2")}>
-          {!isToolSurface && <Link href={localizePath("/", pathLocale)} className="flex shrink-0 items-center gap-2.5 mr-auto max-[360px]:gap-1.5">
-            <LogoMark size={34} />
-            <span className="font-semibold text-slate-900 text-lg tracking-tight max-[360px]:text-base">
+        <div className={cn("flex items-center gap-2", isToolSurface ? "h-14 justify-end" : "h-14 sm:h-20 max-[360px]:h-12")}>
+          {/* Logo */}
+          {!isToolSurface && <Link href={localizePath("/", pathLocale)} className="flex shrink-0 items-center gap-2 sm:gap-2.5 mr-auto max-[360px]:gap-1.5">
+            <LogoMark size={30} />
+            <span className={cn("font-semibold text-base sm:text-lg tracking-tight", isLanding ? "text-white" : "text-slate-900")}>
               CampCareer
             </span>
           </Link>}
+
+          {/* Mobile: active nav + Globe grouped left */}
+          {!isToolSurface && <div className="flex items-center gap-1 sm:hidden">
+            {activeNav && <Link href={localizePath(activeNav.href, pathLocale)} className={cn("flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-medium transition shrink-0", isLanding ? "text-white bg-white/15" : "text-slate-700 bg-slate-100")}>
+              <span className="text-sm leading-none">🇦🇺</span>
+              <span className="max-[380px]:hidden">{activeNav.label}</span>
+            </Link>}
+            <div className="relative" ref={langRef}>
+              <button type="button" onClick={() => setLangOpen((o) => !o)} className={cn("flex items-center justify-center rounded-lg p-2 transition", isLanding ? "text-white hover:bg-white/10" : "text-slate-500 hover:bg-slate-100")}>
+                <Globe className="w-5 h-5" />
+              </button>
+              {langOpen && <div className="absolute left-0 top-full z-50 mt-2 w-52 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl">
+                <p className="px-4 pt-3 pb-2 text-[11px] font-semibold uppercase tracking-wide text-slate-400">{pathLocale === "ko" ? "언어 선택" : "Choose a language"}</p>
+                {PUBLISHED_LOCALE_OPTIONS.map((opt) => (
+                  <button key={opt} type="button" onClick={() => switchLang(opt)} className={cn("flex w-full items-center gap-3 px-4 py-2.5 text-sm transition", opt === pathLocale ? "bg-blue-50 text-blue-700 font-semibold" : "text-slate-700 hover:bg-slate-50")}>
+                    <span className="text-lg">{opt === "ko" ? "🇰🇷" : "🇺🇸"}</span>
+                    <span className="flex-1 text-left">{LOCALE_META[opt].label}</span>
+                    {opt === pathLocale && <Check className="w-4 h-4 shrink-0 text-blue-600" />}
+                  </button>
+                ))}
+              </div>}
+            </div>
+          </div>}
 
           {/* Desktop: links centered */}
           {!isToolSurface && <nav className="hidden sm:flex items-center gap-1 overflow-x-auto no-scrollbar">
             {linkEls}
           </nav>}
 
-          <ToolNavActions className="ml-auto" />
+          <ToolNavActions className="ml-auto" onLanding={isLanding} hideLanguage />
         </div>
-
-        {/* Mobile: links on a full-width second row, scrolls cleanly. Hidden on
-            /map so the map can use the full mobile screen (home is one tap on the logo). */}
-        {!isToolSurface && (
-          <nav className="sm:hidden flex items-center justify-center gap-1 overflow-x-auto no-scrollbar pb-2 max-[360px]:justify-start">
-            {linkEls}
-          </nav>
-        )}
       </div>
     </header>
   )

@@ -126,4 +126,8 @@
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
+  /* iPhone bottom safe area for fixed bottom bar */
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
 }

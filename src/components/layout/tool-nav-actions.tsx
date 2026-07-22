@@ -13,7 +13,7 @@ import { createClient } from "@/lib/supabase-client"
 import { cn } from "@/lib/utils"
 
 /** Shared account and app controls for focused product surfaces such as Maps. */
-export function ToolNavActions({ className, minimal = false }: { className?: string; minimal?: boolean }) {
+export function ToolNavActions({ className, minimal = false, onLanding = false, hideLanguage = false }: { className?: string; minimal?: boolean; onLanding?: boolean; hideLanguage?: boolean }) {
   const pathname = usePathname()
   const locale = useLocale()
   const pathLocale = localeFromPathname(pathname) ?? locale
@@ -55,7 +55,7 @@ export function ToolNavActions({ className, minimal = false }: { className?: str
   return <div className={cn("flex shrink-0 items-center gap-2 max-[360px]:gap-1", className)}>
     {minimal ? (
       <>
-        <LanguageToggle className="text-xs font-medium text-slate-500 hover:text-slate-700" />
+        {!hideLanguage && <LanguageToggle className="text-xs font-medium text-slate-500 hover:text-slate-700" />}
         <div className="relative" ref={appsRef}>
           <button
             type="button"
@@ -88,7 +88,7 @@ export function ToolNavActions({ className, minimal = false }: { className?: str
       </>
     ) : (
       <>
-        <LanguageToggle className="text-slate-500 hover:text-slate-900 hover:bg-slate-100" />
+        {!hideLanguage && <LanguageToggle className={onLanding ? "text-blue-100 hover:text-white hover:bg-white/10" : "text-slate-500 hover:text-slate-900 hover:bg-slate-100"} />}
         <div className="relative" ref={appsRef}>
           <button
             type="button"
@@ -96,7 +96,11 @@ export function ToolNavActions({ className, minimal = false }: { className?: str
             aria-expanded={appsOpen}
             aria-haspopup="menu"
             onClick={() => setAppsOpen((open) => !open)}
-            className={cn("grid size-9 place-items-center rounded-xl border transition max-[360px]:size-8", appsOpen ? "border-blue-200 bg-blue-50 text-blue-700 shadow-sm" : "border-transparent text-slate-500 hover:border-slate-200 hover:bg-white hover:text-slate-900")}
+            className={cn("grid size-9 place-items-center rounded-xl border transition max-[360px]:size-8",
+              onLanding
+                ? appsOpen ? "border-white/30 bg-white/20 text-white shadow-sm" : "border-transparent text-blue-100 hover:border-white/20 hover:bg-white/10 hover:text-white"
+                : appsOpen ? "border-blue-200 bg-blue-50 text-blue-700 shadow-sm" : "border-transparent text-slate-500 hover:border-slate-200 hover:bg-white hover:text-slate-900"
+            )}
           >
             <LayoutGrid className="size-[18px]" strokeWidth={2.1} />
           </button>
@@ -111,10 +115,10 @@ export function ToolNavActions({ className, minimal = false }: { className?: str
         </div>
         {user ? (
           <Link href={localizePath("/profile", pathLocale)} aria-label={locale === "ko" ? "프로필 열기" : "Open profile"}>
-            {avatarUrl ? <img src={avatarUrl} alt="" className="w-7 h-7 rounded-full object-cover" /> : <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center"><UserIcon className="w-4 h-4 text-blue-600" /></div>}
+            {avatarUrl ? <img src={avatarUrl} alt="" className="w-7 h-7 rounded-full object-cover" /> : <div className={cn("w-7 h-7 rounded-full flex items-center justify-center", onLanding ? "bg-white/20" : "bg-blue-100")}><UserIcon className={cn("w-4 h-4", onLanding ? "text-white" : "text-blue-600")} /></div>}
           </Link>
         ) : (
-          <Button variant="outline" size="sm" onClick={() => router.push(localizePath("/login", pathLocale))} className="border-blue-200 text-blue-600 hover:bg-blue-50 hover:text-blue-700 max-[360px]:size-8 max-[360px]:px-0"><LogIn className="hidden size-4 max-[360px]:block" /><span className="max-[360px]:sr-only">{t.common.signIn}</span></Button>
+          <Button variant="outline" size="sm" onClick={() => router.push(localizePath("/login", pathLocale))} className={cn(onLanding ? "border-white/30 text-white hover:bg-white/10 hover:text-white" : "border-blue-200 text-blue-600 hover:bg-blue-50 hover:text-blue-700", "max-[360px]:size-8 max-[360px]:px-0")}><LogIn className="hidden size-4 max-[360px]:block" /><span className="max-[360px]:sr-only">{t.common.signIn}</span></Button>
         )}
       </>
     )}
