@@ -647,7 +647,8 @@ export default function LeafletMap({
       maxBounds: WORLD_BOUNDS.pad(0.3),
       maxBoundsViscosity: 0.8,
     })
-    L.control.zoom({ position: "bottomright" }).addTo(map)
+    const zoomControl = L.control.zoom({ position: "bottomright" }).addTo(map)
+    zoomControl.getContainer()?.classList.add("campcareer-map-zoom")
     mapRef.current = map
     map.fitBounds(WORLD_BOUNDS)
 
@@ -2185,7 +2186,8 @@ export default function LeafletMap({
 
   return (
     <div className="relative h-full w-full">
-      <style>{".leaflet-interactive:focus { outline: none !important; }"}</style>
+      <style>{`.leaflet-interactive:focus { outline: none !important; }
+        .campcareer-map-zoom { margin-bottom: 3.75rem !important; }`}</style>
       <div
         ref={containerRef}
         className="h-full w-full bg-[#e8f4fd]"

@@ -707,6 +707,30 @@ export default function CampCareerMaps({
     }
   }, [selectedUniv, selectedOccCode, selectedUsOcc, selectedNeroA4, isMobile, onReset])
 
+  const hasMapDetail = Boolean(selectedUniv || selectedOccCode || selectedUsOcc || selectedNeroA4)
+
+  const handleMapToolbarBack = useCallback(() => {
+    if (selectedUniv) {
+      setSelectedUniv(null)
+      return
+    }
+    if (selectedUsOcc) {
+      setSelectedUsOcc(null)
+      return
+    }
+    if (selectedNeroA4) {
+      setSelectedNeroA4(null)
+      return
+    }
+    setSelectedOccCode(null)
+  }, [selectedNeroA4, selectedOccCode, selectedUniv, selectedUsOcc])
+
+  const handleMapToolbarClose = useCallback(() => {
+    setJobSearch("")
+    setJobSearchOpen(false)
+    onClosePanel()
+  }, [onClosePanel])
+
   const stateItems = useMemo(() => ({
     ...STATE_NAMES,
     WHV: "Second Visa",
@@ -871,11 +895,19 @@ export default function CampCareerMaps({
     <div className="relative h-full w-full overflow-hidden">
         {auOnly ? (
       <div className="pointer-events-none absolute inset-x-0 top-0 z-[2200] p-3">
-        <div className="pointer-events-auto flex items-center gap-2">
-          <ToolNavActions minimal className="self-center" />
-          <div className="relative flex-1 max-w-md">
+        <div className="pointer-events-auto flex min-w-0 items-center justify-between gap-2">
+          <div className="relative min-w-0 flex-1 max-w-md">
             <div className="flex items-center h-11 rounded-full bg-white shadow-lg ring-1 ring-slate-200/60 px-4 gap-2.5">
-              {jobSearchOpen ? (
+              {hasMapDetail ? (
+                <button
+                  type="button"
+                  onClick={handleMapToolbarBack}
+                  aria-label={locale === "ko" ? "이전 정보로 돌아가기" : "Back to map results"}
+                  className="shrink-0 rounded-full p-1 hover:bg-slate-100"
+                >
+                  <ChevronLeft className="h-4 w-4 text-slate-500" />
+                </button>
+              ) : jobSearchOpen ? (
                 <button type="button" onClick={() => { setJobSearch(""); setJobSearchOpen(false) }} className="shrink-0 p-0.5 rounded-full hover:bg-slate-100">
                   <X className="h-4 w-4 text-slate-400" />
                 </button>
@@ -891,14 +923,25 @@ export default function CampCareerMaps({
                 onBlur={() => setTimeout(() => setJobSearchOpen(false), 200)}
                 className="flex-1 bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400"
               />
-              <button
-                type="button"
-                onClick={() => { setJobSearch(""); setJobSearchOpen(jobSearchOpen ? false : true) }}
-                className="shrink-0 p-1 rounded-full hover:bg-slate-100"
-                aria-label={jobSearchOpen ? "Close filter" : "Open filter"}
-              >
-                {jobSearchOpen ? <X className="h-4 w-4 text-slate-400" /> : <SlidersHorizontal className="h-4 w-4 text-slate-400" />}
-              </button>
+              {hasMapDetail ? (
+                <button
+                  type="button"
+                  onClick={handleMapToolbarClose}
+                  aria-label={locale === "ko" ? "정보 창 닫기" : "Close map information"}
+                  className="shrink-0 rounded-full p-1 hover:bg-slate-100"
+                >
+                  <X className="h-4 w-4 text-slate-500" />
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => { setJobSearch(""); setJobSearchOpen(jobSearchOpen ? false : true) }}
+                  className="shrink-0 p-1 rounded-full hover:bg-slate-100"
+                  aria-label={jobSearchOpen ? "Close filter" : "Open filter"}
+                >
+                  {jobSearchOpen ? <X className="h-4 w-4 text-slate-400" /> : <SlidersHorizontal className="h-4 w-4 text-slate-400" />}
+                </button>
+              )}
             </div>
             {jobSearchOpen && (
               <div className="absolute top-full left-0 right-0 z-[2300] mt-1 max-h-80 overflow-auto rounded-xl border border-slate-200 bg-white shadow-xl">
@@ -962,6 +1005,7 @@ export default function CampCareerMaps({
               </div>
             )}
           </div>
+          <ToolNavActions minimal className="shrink-0 self-center" />
         </div>
       </div>
         ) : (
@@ -1629,7 +1673,7 @@ export default function CampCareerMaps({
           tab={tab}
         />
 
-        {(selected || activeCountry === "IE" || activeCountry === "UK" || selectedUniv) && (() => {
+        {(selected || activeCountry === "IE" || activeCountry === "UK" || selectedUniv || hasMapDetail) && (() => {
           const deCity = activeCountry === "DE" && selectedUniv
             ? data.deCities.find((c) => c.name.toLowerCase() === (selectedUniv as DECollege).city_name.toLowerCase())
             : undefined
@@ -1660,6 +1704,7 @@ export default function CampCareerMaps({
             <UniversityInfoCard
               college={selectedUniv as USRankedCollege | AURankedCollege | CACollege | UKCollege | DECollege | NLCollege}
               onClose={() => setSelectedUniv(null)}
+              showInlineClose={!auOnly}
               isSaved={savedUnivSlugs.has(selectedUniv.slug)}
               onToggleSave={toggleSaveUniv}
               onShare={shareUniv}
@@ -1705,6 +1750,7 @@ export default function CampCareerMaps({
                 setActiveCountry("UK")
                 setSelected(c.region)
               }}
+              searchBarDetailControls={auOnly}
             />
           )
           return isMobile ? (
@@ -2376,6 +2422,7 @@ function Panel({
   selectedNeroA4,
   setSelectedNeroA4,
   onSelectCollege,
+  searchBarDetailControls = false,
 }: {
   data: MapData
   selected: string
@@ -2401,6 +2448,7 @@ function Panel({
   selectedNeroA4: string | null
   setSelectedNeroA4: (a4: string | null) => void
   onSelectCollege?: (college: UKCollege) => void
+  searchBarDetailControls?: boolean
 }) {
   const t = useTranslations()
   const locale = useLocale()
@@ -2889,6 +2937,7 @@ function Panel({
         onToggleSave={onToggleSave}
         onShare={onShare}
         labourMarket={auLabourMarket}
+        showInlineControls={!searchBarDetailControls}
       />
     )
   }
@@ -2909,6 +2958,7 @@ function Panel({
         savedOccCodes={savedOccCodes}
         onToggleSave={onToggleSave}
         onShare={onShare}
+        showInlineControls={!searchBarDetailControls}
       />
     )
   }
@@ -4069,6 +4119,7 @@ function WHVPanel({
 function UniversityInfoCard({
   college,
   onClose,
+  showInlineClose = true,
   isSaved,
   onToggleSave,
   onShare,
@@ -4080,6 +4131,7 @@ function UniversityInfoCard({
 }: {
   college: USRankedCollege | AURankedCollege | CACollege | UKCollege | DECollege | NLCollege
   onClose: () => void
+  showInlineClose?: boolean
   isSaved: boolean
   onToggleSave: (slug: string, name: string) => void
   onShare: (slug: string) => void
@@ -4134,14 +4186,16 @@ function UniversityInfoCard({
           >
             <Share2 className="h-4 w-4" />
           </button>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close"
-            className="-mr-1 rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
-          >
-            <X className="h-4 w-4" />
-          </button>
+          {showInlineClose && (
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close"
+              className="-mr-1 rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
         </div>
       </div>
 
@@ -4985,6 +5039,7 @@ function OccupationDetail({
   onToggleSave,
   onShare,
   labourMarket,
+  showInlineControls = true,
 }: {
   occ: OccRow
   stateShortages: StateShortageByOcc[]
@@ -4997,6 +5052,7 @@ function OccupationDetail({
   onToggleSave: (occCode: string, occTitle: string) => void
   onShare: (occTitle: string) => void
   labourMarket: AuLabourMarket | null
+  showInlineControls?: boolean
 }) {
   const locale = useLocale()
   const name = locale === "ko" && occ.occupation_ko ? occ.occupation_ko : occ.occupation_en
@@ -5031,24 +5087,26 @@ function OccupationDetail({
 
   return (
     <>
-      <div className="flex items-center justify-between px-5 pt-4">
-        <button
-          type="button"
-          onClick={onBack}
-          className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-800 transition-colors"
-        >
-          <ChevronLeft className="h-4 w-4" />
-          {null}
-        </button>
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label={t.map.close}
-          className="-mr-1 rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
-        >
-          <X className="h-4 w-4" />
-        </button>
-      </div>
+      {showInlineControls && (
+        <div className="flex items-center justify-between px-5 pt-4">
+          <button
+            type="button"
+            onClick={onBack}
+            className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-800 transition-colors"
+          >
+            <ChevronLeft className="h-4 w-4" />
+            {null}
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label={t.map.close}
+            className="-mr-1 rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      )}
 
       <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
         <div className="flex items-start justify-between gap-2">
@@ -5560,6 +5618,7 @@ function NeroOccupationDetail({
   savedOccCodes,
   onToggleSave,
   onShare,
+  showInlineControls = true,
 }: {
   a4: string
   stateCode: StateCode
@@ -5574,6 +5633,7 @@ function NeroOccupationDetail({
   savedOccCodes: Set<string>
   onToggleSave: (occCode: string, occTitle: string) => void
   onShare: (occTitle: string) => void
+  showInlineControls?: boolean
 }) {
   const occ = useMemo(() => {
     for (const region of sa4Regions) {
@@ -5669,18 +5729,20 @@ function NeroOccupationDetail({
 
   return (
     <>
-      <div className="flex items-center justify-between px-5 pt-4">
-        <button type="button" onClick={onBack}
-          className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-800 transition-colors">
-          <ChevronLeft className="h-4 w-4" />
-          {null}
-        </button>
-        <button type="button" onClick={onClose}
-          aria-label={t.map.close}
-          className="-mr-1 rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700">
-          <X className="h-4 w-4" />
-        </button>
-      </div>
+      {showInlineControls && (
+        <div className="flex items-center justify-between px-5 pt-4">
+          <button type="button" onClick={onBack}
+            className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-800 transition-colors">
+            <ChevronLeft className="h-4 w-4" />
+            {null}
+          </button>
+          <button type="button" onClick={onClose}
+            aria-label={t.map.close}
+            className="-mr-1 rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700">
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      )}
 
       <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
         <div className="flex items-start justify-between gap-2">
