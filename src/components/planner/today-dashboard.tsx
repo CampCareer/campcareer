@@ -53,6 +53,7 @@ type TodayDashboardProps = {
   leadingOptionTitle?: string | null
   leadingRationale?: string | null
   onUpdatePlanProfile?: (patch: { plan_title?: string; strategy?: string }) => Promise<boolean>
+  onOpenReport?: () => void
 }
 
 export function TodayDashboard({
@@ -73,6 +74,7 @@ export function TodayDashboard({
   leadingOptionTitle = null,
   leadingRationale = null,
   onUpdatePlanProfile,
+  onOpenReport,
 }: TodayDashboardProps) {
   const locale = useRouteLocale()
   const isKo = locale === "ko"
@@ -188,7 +190,7 @@ export function TodayDashboard({
       <MetricCard icon={Languages} tone="violet" label={isKo ? "영어 점수 차이" : "English score gap"} value={scoreGap == null ? (isKo ? "점수 입력" : "Add scores") : scoreGap === 0 ? (isKo ? "목표 달성" : "At target") : `+${scoreGap.toFixed(1)}`} detail={scoreGap == null ? (isKo ? `${englishExam || "IELTS"} 현재·목표 점수를 입력해 보세요.` : `Add your current and target ${englishExam || "IELTS"} scores.`) : `${englishExam || "IELTS"} · ${currentEnglishScore?.toFixed(1)} → ${targetEnglishScore?.toFixed(1)}`} href="/myplan/english" />
     </section>
 
-    <RoiReportCard readiness={roiReportReadiness} isKo={isKo} />
+    <RoiReportCard readiness={roiReportReadiness} isKo={isKo} onOpenReport={onOpenReport} />
 
     <section className="border-t border-slate-200 pt-8" aria-labelledby="journey-title">
       <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between"><div><p className="text-xs font-semibold uppercase tracking-[.14em] text-slate-400">Australia decision journey</p><h2 id="journey-title" className="mt-1 text-xl font-semibold tracking-tight text-slate-950">{isKo ? "한 번에 전부가 아니라, 다음 단계만 선명하게" : "Make the next decision, not every decision at once."}</h2></div><p className="text-sm text-slate-500">{isKo ? `${readyCount}/9 준비 완료` : `${readyCount}/9 essentials ready`}</p></div>
@@ -209,7 +211,7 @@ function healthStatusCopy(status: "on-track" | "attention" | "at-risk", isKo: bo
   return isKo ? "우선 조치 필요" : "Action needed"
 }
 
-function RoiReportCard({ readiness, isKo }: { readiness: RoiReportReadiness; isKo: boolean }) {
+function RoiReportCard({ readiness, isKo, onOpenReport }: { readiness: RoiReportReadiness; isKo: boolean; onOpenReport?: () => void }) {
   const labels = isKo
     ? { career: "목표 직업", shortlist: "비교 후보", budget: "총 필요 자금", english: "영어 현재·목표 점수" }
     : { career: "Target career", shortlist: "Shortlist", budget: "Total funding need", english: "Current and target English score" }
@@ -220,7 +222,7 @@ function RoiReportCard({ readiness, isKo }: { readiness: RoiReportReadiness; isK
   return <section className="border-t border-slate-200 pt-8" aria-labelledby="roi-report-title">
     <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
       <div className="max-w-2xl"><p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[.14em] text-violet-700"><FileCheck2 className="size-4" />MY AUSTRALIA ROI DECISION REPORT</p><h2 id="roi-report-title" className="mt-2 text-xl font-semibold tracking-tight text-slate-950">{readiness.ready ? readyTitle : preparingTitle}</h2><p className="mt-2 text-sm leading-6 text-slate-600">{readiness.ready ? (isKo ? "My Plan의 후보, 자금, 영어 목표와 직업 방향을 리포트 초안으로 가져옵니다. 동의를 검토한 뒤에만 저장됩니다." : "Your shortlist, funding, English goals and career direction will be brought into a report draft. Nothing is saved until you review consent.") : (isKo ? `후보·자금·영어·직업의 네 가지 기준을 채우면 개인화 ROI 분석을 바로 준비할 수 있어요.${missing ? ` 다음은 ${labels[missing.id]}입니다.` : ""}` : "Complete the four decision inputs to begin a personalised ROI analysis.")}</p></div>
-      <Link href={readiness.ready ? "/reports/my-australia?from=myplan" : readiness.nextHref} className={cn("inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition", readiness.ready ? "bg-violet-700 text-white hover:bg-violet-800" : "bg-slate-950 text-white hover:bg-slate-800")}><FileCheck2 className="size-4" />{readiness.ready ? (isKo ? "리포트 초안 준비" : "Prepare report draft") : (isKo ? "다음 조건 채우기" : "Complete next input")}<ArrowRight className="size-4" /></Link>
+      {readiness.ready && onOpenReport ? <button type="button" onClick={onOpenReport} className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-violet-700 px-4 text-sm font-semibold text-white transition hover:bg-violet-800"><FileCheck2 className="size-4" />{isKo ? "리포트 초안 준비" : "Prepare report draft"}<ArrowRight className="size-4" /></button> : <Link href={readiness.ready ? "/myplan/report" : readiness.nextHref} className={cn("inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition", readiness.ready ? "bg-violet-700 text-white hover:bg-violet-800" : "bg-slate-950 text-white hover:bg-slate-800")}><FileCheck2 className="size-4" />{readiness.ready ? (isKo ? "리포트 초안 준비" : "Prepare report draft") : (isKo ? "다음 조건 채우기" : "Complete next input")}<ArrowRight className="size-4" /></Link>}
     </div>
     <div className="mt-5 grid gap-x-5 gap-y-3 sm:grid-cols-2 lg:grid-cols-4">{readiness.checks.map((check) => <Link key={check.id} href={check.href} className={cn("flex min-h-8 items-center gap-2 text-xs font-semibold transition", check.complete ? "text-emerald-800" : "text-slate-500 hover:text-blue-700")}><span className={cn("grid size-5 shrink-0 place-items-center rounded-full", check.complete ? "bg-emerald-600 text-white" : "bg-slate-100 text-slate-400")}>{check.complete ? <Check className="size-3" /> : <Circle className="size-3" />}</span>{labels[check.id]}</Link>)}</div>
   </section>

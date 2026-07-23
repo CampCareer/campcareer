@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { MyAustraliaReportWorkspace } from "@/components/reports/my-australia-report-workspace"
+import { redirect } from "next/navigation"
 
 export const metadata: Metadata = {
   title: "My Australia ROI Decision Report",
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 }
 
 export default function MyAustraliaReportPage() {
-  return <MyAustraliaReportWorkspace />
+  redirect("/myplan/report")
 }

@@ -37,10 +37,10 @@ export function PlannerSearch({ isKo, onNavigate, onOpenPath }: PlannerSearchPro
     { id: "english", label: isKo ? "영어 목표" : "English target", description: isKo ? "목표 점수와 주간 학습 계획" : "Target score and weekly study plan", keywords: "english IELTS score test study", href: "/myplan/english", icon: Languages, area: "english" },
     { id: "research", label: isKo ? "리서치 데스크" : "Research desk", description: isKo ? "저장한 후보와 공식 근거" : "Saved options and official evidence", keywords: "research shortlist watching ruled out evidence", href: "/myplan/research", icon: BookOpenCheck, area: "research" },
     { id: "notes", label: isKo ? "노트" : "Notes", description: isKo ? "결정의 이유와 생각 기록" : "Keep the thinking behind your decisions", keywords: "notes writing journal decisions", href: "/myplan/notes", icon: FileText, area: "notes" },
-    { id: "study", label: isKo ? "학업 비교" : "Compare study", description: isKo ? "호주 대학과 과정 비교" : "Compare Australian universities and courses", keywords: "study university course provider tuition compare", href: "/au/study", icon: GraduationCap },
+    { id: "study", label: isKo ? "비교" : "Compare", description: isKo ? "호주 대학과 과정 비교" : "Compare Australian universities and courses", keywords: "study university course provider tuition compare", href: "/au/study", icon: GraduationCap },
     { id: "majors", label: isKo ? "전공 탐색" : "Explore fields", description: isKo ? "호주 전공과 커리어 방향 탐색" : "Explore Australian fields and career directions", keywords: "major field subject career nursing IT engineering", href: "/au/majors", icon: Target },
     { id: "maps", label: "Maps", description: isKo ? "지역별 직업·학업 정보 지도" : "Explore location-based study and career signals", keywords: "map city location state jobs study", href: "/maps", icon: Map },
-    { id: "report", label: isKo ? "의사결정 리포트" : "Decision report", description: isKo ? "내 조건으로 ROI 리포트 준비" : "Prepare a personalised ROI decision report", keywords: "ROI report decision personalised recommendation", href: "/reports/my-australia?from=myplan", icon: FileText, area: "report" },
+    { id: "report", label: isKo ? "의사결정 리포트" : "Decision report", description: isKo ? "내 조건으로 ROI 리포트 준비" : "Prepare a personalised ROI decision report", keywords: "ROI report decision personalised recommendation", href: "/myplan/report", icon: FileText, area: "report" },
   ], [isKo])
 
   const recents = recentIds.map((id) => items.find((item) => item.id === id)).filter((item): item is SearchItem => Boolean(item))

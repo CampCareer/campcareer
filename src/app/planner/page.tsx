@@ -34,6 +34,7 @@ import { PlannerToolbar, PlannerToolbarControls } from "@/components/planner/pla
 import { PlannerSidebar, type PlannerArea } from "@/components/planner/planner-sidebar"
 import { GoalSetup, type GoalSetupData } from "@/components/planner/goal-setup"
 import { TodayDashboard, type TodayGoalOption } from "@/components/planner/today-dashboard"
+import { MyAustraliaReportWorkspace } from "@/components/reports/my-australia-report-workspace"
 import { buildPlanHealth } from "@/lib/plan-health"
 import { getRoiReportReadiness } from "@/lib/report-plan-bridge"
 import {
@@ -94,7 +95,7 @@ const plannerAreaPaths: Record<PlannerArea, string> = {
   money: "/myplan/money",
   english: "/myplan/english",
   research: "/myplan/research",
-  report: "/reports/my-australia?from=myplan",
+  report: "/myplan/report",
   notes: "/myplan/notes",
 }
 
@@ -168,7 +169,7 @@ export default function PlannerPage({ initialArea = "today" }: { initialArea?: P
   useEffect(() => {
     function handlePopState() {
       const nextArea = plannerAreaFromPath(window.location.pathname)
-      if (nextArea && nextArea !== "report") setActiveArea(nextArea)
+      if (nextArea) setActiveArea(nextArea)
     }
     window.addEventListener("popstate", handlePopState)
     return () => window.removeEventListener("popstate", handlePopState)
@@ -685,7 +686,6 @@ export default function PlannerPage({ initialArea = "today" }: { initialArea?: P
   const researchSources = [...researchSourceMap.values()]
   function navigatePlannerArea(area: PlannerArea) {
     setActiveArea(area)
-    if (area === "report") { router.push(plannerAreaPaths.report); return }
     const nextPath = plannerAreaPaths[area]
     if (window.location.pathname !== nextPath) window.history.pushState({}, "", nextPath)
   }
@@ -693,7 +693,7 @@ export default function PlannerPage({ initialArea = "today" }: { initialArea?: P
   function openPlannerPath(path: string) {
     const cleanPath = path.split("?")[0]
     const nextArea = plannerAreaFromPath(cleanPath)
-    if (nextArea && nextArea !== "report") {
+    if (nextArea) {
       setActiveArea(nextArea)
       if (window.location.pathname !== cleanPath) window.history.pushState({}, "", path)
       return
@@ -751,12 +751,13 @@ export default function PlannerPage({ initialArea = "today" }: { initialArea?: P
         {/* ── Content ── */}
         <main className="min-h-0 flex-1 overflow-y-auto">
           <div key={activeArea} className="tl-stage">
-          {activeArea === "today" && <section className="mx-auto max-w-6xl px-6 pt-7 sm:px-10 sm:pt-10"><TodayDashboard goalProfile={goalProfile!} goalOptions={goalOptions} tasks={tasks} applications={applicationRecords.map((record) => ({ id: record.id, title: record.programme_name || record.provider_name || "Application", deadline_date: record.deadline_date, status: record.status }))} currentSavings={savings} monthlySaving={monthlySaving} targetAmount={targetAmount} targetDate={budget.target_date} currency={budget.currency} currentEnglishScore={numberOrNull(language.current_score)} targetEnglishScore={numberOrNull(language.target_score)} englishExam={language.exam_name} englishTestDate={language.test_date} evidenceCount={evidenceCount} leadingOptionTitle={leadingOption?.title ?? null} leadingRationale={pathwayDecision.rationale} onUpdatePlanProfile={updatePlanProfile} /></section>}
+          {activeArea === "today" && <section className="mx-auto max-w-6xl px-6 pt-7 sm:px-10 sm:pt-10"><TodayDashboard goalProfile={goalProfile!} goalOptions={goalOptions} tasks={tasks} applications={applicationRecords.map((record) => ({ id: record.id, title: record.programme_name || record.provider_name || "Application", deadline_date: record.deadline_date, status: record.status }))} currentSavings={savings} monthlySaving={monthlySaving} targetAmount={targetAmount} targetDate={budget.target_date} currency={budget.currency} currentEnglishScore={numberOrNull(language.current_score)} targetEnglishScore={numberOrNull(language.target_score)} englishExam={language.exam_name} englishTestDate={language.test_date} evidenceCount={evidenceCount} leadingOptionTitle={leadingOption?.title ?? null} leadingRationale={pathwayDecision.rationale} onUpdatePlanProfile={updatePlanProfile} onOpenReport={() => navigatePlannerArea("report")} /></section>}
           {activeArea === "pathway" && <MyPathwaySpace goalTitle={goalProfile!.target_occupation_title} studyTitle={goalProfile!.target_study_concept_label} options={goalOptions as ExecutionGoalOption[]} decision={pathwayDecision} evidenceCount={evidenceCount} onSaveDecision={savePathwayDecision} />}
           {activeArea === "applications" && <ApplicationsSpace applications={applicationRecords} documents={applicationDocuments} legacyDeadlines={tasks.filter((task) => task.kind === "application").map((task) => ({ id: task.id, title: task.title, due_date: task.due_date, status: task.status }))} goalOptions={goalOptions as ExecutionGoalOption[]} onCreateApplication={createApplication} onUpdateApplication={updateApplication} onCreateDocument={createApplicationDocument} onUpdateDocument={updateApplicationDocument} onDeleteDocument={deleteApplicationDocument} />}
           {activeArea === "money" && <MoneyRunwaySpace budget={{ currency: budget.currency, current_savings: savings, monthly_saving: monthlySaving, target_amount: targetAmount, target_date: budget.target_date }} scenario={moneyScenario} onSaveBudget={saveBudgetSpace} onSaveScenario={saveMoneyScenario} />}
           {activeArea === "english" && <EnglishTargetSpace language={{ exam_name: language.exam_name, current_score: numberOrNull(language.current_score), target_score: numberOrNull(language.target_score), weekly_hours: numberOrNull(language.weekly_hours), test_date: language.test_date }} blocks={englishBlocks} onSaveLanguage={saveLanguageSpace} onSaveBlock={saveEnglishBlock} onDeleteBlock={deleteEnglishBlock} />}
           {activeArea === "research" && <ResearchDeskSpace sources={researchSources} researchItems={researchItems} onSetStatus={saveResearchStatus} />}
+          {activeArea === "report" && <MyAustraliaReportWorkspace />}
           {activeArea === "notes" && <section className="mx-auto max-w-4xl px-6 pb-12 pt-12 sm:px-10 sm:pt-16"><p className="text-xs font-semibold uppercase tracking-[.14em] text-blue-700">NOTES</p><h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950">Your decision notes</h1><p className="mt-2 text-sm leading-6 text-slate-600">Keep the thinking behind your Australia pathway beside the actions you take.</p>{activeTab && <div className="mt-10"><input value={activeTab.title} onChange={(event) => renameTab(activeTab.id, event.target.value)} placeholder="Untitled" maxLength={160} aria-label="Page title" className="w-full bg-transparent text-4xl font-semibold tracking-tight text-slate-950 outline-none placeholder:text-slate-300 sm:text-5xl" /><textarea value={activeTab.content} onChange={(event) => updateTabContent(activeTab.id, event.target.value)} placeholder="Start writing…" maxLength={12000} rows={10} aria-label="Page body" className="mt-5 w-full resize-y rounded-2xl border border-slate-200 bg-white px-5 py-4 text-base leading-8 text-slate-700 outline-none placeholder:text-slate-400 focus:border-blue-400 focus:ring-4 focus:ring-blue-100" /><p className="mt-3 text-xs text-slate-400">Saved on this device</p></div>}</section>}
           </div>
           {/* Legacy stacked widgets intentionally retired in favour of independent execution spaces.
