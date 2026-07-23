@@ -661,6 +661,7 @@ export default function PlannerPage({ initialArea = "today" }: { initialArea?: P
         onForward={goForward}
         onNewTab={addTab}
         onSelectTab={navigateToTab}
+        onCloseTab={moveTabToTrash}
       />
 
       {/* ── Body: sidebar + content ── */}

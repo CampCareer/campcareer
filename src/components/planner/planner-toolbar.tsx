@@ -1,6 +1,6 @@
 "use client"
 
-import { ChevronLeft, ChevronRight, PanelLeftClose, PanelLeftOpen, Plus } from "lucide-react"
+import { ChevronLeft, ChevronRight, PanelLeftClose, PanelLeftOpen, Plus, X } from "lucide-react"
 import { ToolNavActions } from "@/components/layout/tool-nav-actions"
 import { cn } from "@/lib/utils"
 import { plannerTabTitle, type PlannerTab } from "./planner-types"
@@ -16,6 +16,7 @@ type PlannerToolbarProps = {
   onForward: () => void
   onNewTab: () => void
   onSelectTab: (id: string) => void
+  onCloseTab: (id: string) => void
 }
 
 export function PlannerToolbar({
@@ -29,6 +30,7 @@ export function PlannerToolbar({
   onForward,
   onNewTab,
   onSelectTab,
+  onCloseTab,
 }: PlannerToolbarProps) {
   return (
     <header className="flex h-12 shrink-0 items-center gap-1 border-b border-slate-200/80 bg-white/95 px-2.5 backdrop-blur-sm">
@@ -41,10 +43,13 @@ export function PlannerToolbar({
       </div>
 
       <div role="tablist" aria-label="My Plan pages" className="flex min-w-0 flex-1 items-center gap-1 overflow-x-auto px-1 no-scrollbar">
-        {tabs.map((tab) => <button key={tab.id} type="button" role="tab" aria-selected={tab.id === activeTabId} onClick={() => onSelectTab(tab.id)} className={cn("relative max-w-44 shrink-0 truncate px-2.5 py-1.5 text-sm transition", tab.id === activeTabId ? "font-semibold text-slate-900" : "text-slate-500 hover:text-slate-800")}>
-          {plannerTabTitle(tab)}
-          {tab.id === activeTabId && <span aria-hidden className="absolute inset-x-2.5 bottom-0 h-0.5 rounded-full bg-blue-600" />}
-        </button>)}
+        {tabs.map((tab) => <div key={tab.id} className="group relative max-w-44 shrink-0">
+          <button type="button" role="tab" aria-selected={tab.id === activeTabId} onClick={() => onSelectTab(tab.id)} className={cn("relative block w-full truncate py-1.5 pl-2.5 pr-8 text-left text-sm transition", tab.id === activeTabId ? "font-semibold text-slate-900" : "text-slate-500 hover:text-slate-800")}>
+            {plannerTabTitle(tab)}
+            {tab.id === activeTabId && <span aria-hidden className="absolute inset-x-2.5 bottom-0 h-0.5 rounded-full bg-blue-600" />}
+          </button>
+          <button type="button" onClick={() => onCloseTab(tab.id)} className="absolute right-1 top-1/2 grid size-6 -translate-y-1/2 place-items-center rounded-md text-slate-400 opacity-0 transition hover:bg-slate-100 hover:text-slate-800 focus:opacity-100 group-hover:opacity-100" title={`Close ${plannerTabTitle(tab)}`} aria-label={`Close ${plannerTabTitle(tab)}`}><X className="size-3.5" /></button>
+        </div>)}
         <button type="button" onClick={onNewTab} className="inline-flex size-7 shrink-0 items-center justify-center rounded-md text-slate-400 transition hover:bg-slate-100 hover:text-slate-800" title="New page" aria-label="New page"><Plus className="size-4" /></button>
       </div>
 
