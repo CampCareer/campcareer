@@ -35,7 +35,7 @@ export function PlannerToolbar({
   showControls = true,
 }: PlannerToolbarProps) {
   return (
-    <header className="flex h-12 shrink-0 items-center gap-1 border-b border-slate-200/80 bg-white/95 px-2.5 backdrop-blur-sm">
+    <header className="relative z-50 flex h-12 shrink-0 items-center gap-1 border-b border-slate-200/80 bg-white/95 px-2.5 backdrop-blur-sm">
       <div className={cn(!showControls && "sm:hidden")}><PlannerToolbarControls sidebarOpen={sidebarOpen} canGoBack={canGoBack} canGoForward={canGoForward} onToggleSidebar={onToggleSidebar} onBack={onBack} onForward={onForward} /></div>
 
       <div role="tablist" aria-label="My Plan pages" className="flex min-w-0 flex-1 items-center gap-1 overflow-x-auto px-1 no-scrollbar">

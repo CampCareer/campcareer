@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { ArrowRight, Banknote, BriefcaseBusiness, CalendarClock, Check, Circle, CircleCheck, Compass, FileCheck2, GraduationCap, Languages, Target, type LucideIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useEffect, useState } from "react"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { buildPlanHealth, type PlanHealthSignal } from "@/lib/plan-health"
 import { getRoiReportReadiness, type RoiReportReadiness } from "@/lib/report-plan-bridge"
@@ -51,6 +52,7 @@ type TodayDashboardProps = {
   evidenceCount: number
   leadingOptionTitle?: string | null
   leadingRationale?: string | null
+  onUpdatePlanProfile?: (patch: { plan_title?: string; strategy?: string }) => Promise<boolean>
 }
 
 export function TodayDashboard({
@@ -70,9 +72,29 @@ export function TodayDashboard({
   evidenceCount,
   leadingOptionTitle = null,
   leadingRationale = null,
+  onUpdatePlanProfile,
 }: TodayDashboardProps) {
   const locale = useRouteLocale()
   const isKo = locale === "ko"
+  const [planTitle, setPlanTitle] = useState(goalProfile.plan_title)
+  const [strategy, setStrategy] = useState(goalProfile.strategy)
+  const [savingField, setSavingField] = useState<"plan_title" | "strategy" | null>(null)
+
+  useEffect(() => {
+    setPlanTitle(goalProfile.plan_title)
+    setStrategy(goalProfile.strategy)
+  }, [goalProfile.plan_title, goalProfile.strategy])
+
+  async function savePlanField(field: "plan_title" | "strategy", value: string) {
+    if (!onUpdatePlanProfile || value === goalProfile[field]) return
+    setSavingField(field)
+    const saved = await onUpdatePlanProfile({ [field]: value.trim() })
+    if (!saved) {
+      if (field === "plan_title") setPlanTitle(goalProfile.plan_title)
+      else setStrategy(goalProfile.strategy)
+    }
+    setSavingField(null)
+  }
   const isReadyGoal = Boolean(goalProfile.target_occupation_title || goalProfile.target_study_concept_label)
   const hasShortlist = goalOptions.length > 0
   const hasIntake = Boolean(goalProfile.target_intake_month)
@@ -126,8 +148,8 @@ export function TodayDashboard({
       <div className="flex flex-col gap-7 lg:flex-row lg:items-start lg:justify-between">
         <div className="max-w-2xl">
           <p className="text-xs font-semibold tracking-[.12em] text-blue-700">MY PLAN · TODAY</p>
-          <h1 id="today-dashboard-title" className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">{goalProfile.plan_title || (isKo ? "나의 호주 경로" : "My Australia pathway")}</h1>
-          <p className="mt-3 text-sm leading-6 text-slate-600 sm:text-base">{goalProfile.strategy || (isKo ? "큰 결정보다 다음 한 걸음에 집중해 계획을 현실로 만들어 보세요." : "Focus on the next useful decision, then turn it into a real plan.")}</p>
+          <input id="today-dashboard-title" value={planTitle} onChange={(event) => setPlanTitle(event.target.value.slice(0, 160))} onBlur={() => void savePlanField("plan_title", planTitle)} onKeyDown={(event) => { if (event.key === "Enter") { event.preventDefault(); event.currentTarget.blur() } if (event.key === "Escape") { setPlanTitle(goalProfile.plan_title); event.currentTarget.blur() } }} placeholder={isKo ? "나의 호주 경로" : "My Australia pathway"} aria-label={isKo ? "플랜 제목 수정" : "Edit plan title"} aria-busy={savingField === "plan_title"} className="-mx-1 mt-3 w-[calc(100%+0.5rem)] cursor-text rounded px-1 text-3xl font-semibold tracking-tight text-slate-950 outline-none transition hover:bg-slate-50/70 focus:bg-slate-50/80 sm:text-4xl" />
+          <textarea value={strategy} onChange={(event) => setStrategy(event.target.value.slice(0, 500))} onBlur={() => void savePlanField("strategy", strategy)} onKeyDown={(event) => { if (event.key === "Escape") { setStrategy(goalProfile.strategy); event.currentTarget.blur() } if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) { event.preventDefault(); event.currentTarget.blur() } }} placeholder={isKo ? "큰 결정보다 다음 한 걸음에 집중해 계획을 현실로 만들어 보세요." : "Focus on the next useful decision, then turn it into a real plan."} aria-label={isKo ? "전략 수정" : "Edit plan strategy"} aria-busy={savingField === "strategy"} rows={2} className="-mx-1 mt-3 w-[calc(100%+0.5rem)] resize-none cursor-text rounded px-1 text-sm leading-6 text-slate-600 outline-none transition hover:bg-slate-50/60 focus:bg-slate-50/70 sm:text-base" />
         </div>
         <div className="min-w-[12rem] border-l border-slate-200 pl-5">
           <p className="text-xs font-semibold uppercase tracking-[.14em] text-slate-400">{isKo ? "준비도" : "Readiness"}</p>
