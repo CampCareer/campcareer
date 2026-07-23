@@ -666,7 +666,7 @@ export default function PlannerPage({ initialArea = "today" }: { initialArea?: P
 
       {/* ── Body: sidebar + content ── */}
       <div className="flex min-h-0 flex-1">
-        {sidebarOpen && (
+        <div aria-hidden={!sidebarOpen} inert={!sidebarOpen} className={cn("hidden h-full shrink-0 overflow-hidden transition-[width,opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] sm:block", sidebarOpen ? "w-72 translate-x-0 opacity-100" : "pointer-events-none w-0 -translate-x-3 opacity-0")}>
           <PlannerSidebar
             activeArea={activeArea}
             readinessCount={readinessCount}
@@ -684,7 +684,7 @@ export default function PlannerPage({ initialArea = "today" }: { initialArea?: P
             reportReady={roiReportReadiness.ready}
             onNavigate={navigatePlannerArea}
           />
-        )}
+        </div>
 
         {/* ── Content ── */}
         <main className="min-h-0 flex-1 overflow-y-auto">
