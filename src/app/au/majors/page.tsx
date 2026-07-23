@@ -7,6 +7,7 @@ import { getStudyCategoryVisual } from "@/components/ui/au-career-category-visua
 import { localizePath } from "@/lib/i18n/config"
 import { getLocale } from "@/lib/i18n/server"
 import { pageMetadata } from "@/lib/seo"
+import { getLocalizedMajorDescription } from "@/lib/au-major-copy"
 
 export const revalidate = 86400
 
@@ -46,7 +47,7 @@ export default async function AustralianMajorsPage({
           </Link>
           <div className="mt-7 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
             <div className="max-w-3xl">
-              <p className="text-sm font-semibold text-blue-100">Australia · Field explorer</p>
+              <p className="text-sm font-semibold text-blue-100">{isKo ? "호주 · 전공 탐색" : "Australia · Field explorer"}</p>
               <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
                 {selectedCategory
                   ? (isKo ? selectedCategory.labelKo : selectedCategory.label)
@@ -96,7 +97,7 @@ export default async function AustralianMajorsPage({
                         <div className="flex items-start justify-between gap-2">
                           <div className="min-w-0">
                             <h3 className="text-sm font-semibold text-slate-900">{isKo ? concept.labelKo : concept.label}</h3>
-                            <p className="mt-1 line-clamp-2 text-xs leading-5 text-slate-500">{concept.description}</p>
+                            <p className="mt-1 line-clamp-2 text-xs leading-5 text-slate-500">{getLocalizedMajorDescription(concept.id, isKo, concept.description)}</p>
                           </div>
                           <ArrowRight className="mt-0.5 size-4 shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-blue-700" />
                         </div>
