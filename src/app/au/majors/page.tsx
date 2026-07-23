@@ -37,8 +37,9 @@ export default async function AustralianMajorsPage({
 
   return (
     <main className="min-h-screen bg-slate-50">
-      <section className="au-discovery-hero border-b border-blue-200/90">
-        <div className="mx-auto max-w-7xl px-5 pb-8 pt-6 sm:px-6 sm:pb-10 sm:pt-8">
+      <section className="relative overflow-hidden au-discovery-hero">
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-b from-transparent to-slate-50" />
+        <div className="relative z-10 mx-auto max-w-7xl px-5 pb-8 pt-6 sm:px-6 sm:pb-10 sm:pt-8">
           <Link href={localizePath("/", locale)} className="inline-flex items-center gap-2 text-sm font-semibold text-blue-100 transition hover:text-white">
             <ArrowLeft className="size-4" />
             {isKo ? "내 경로 찾기로 돌아가기" : "Back to Find my path"}
@@ -65,7 +66,7 @@ export default async function AustralianMajorsPage({
         </div>
       </section>
 
-      <section className="bg-white">
+      <section className="bg-slate-50">
         <div className="mx-auto max-w-7xl px-5 pb-12 pt-8 sm:px-6 sm:pb-16 sm:pt-10">
           {selectedCategory && (
             <Link href={localizePath("/au/majors", locale)} className="mb-6 inline-flex items-center gap-1.5 text-sm font-semibold text-blue-700 transition hover:text-blue-800">

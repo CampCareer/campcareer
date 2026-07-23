@@ -77,8 +77,8 @@
 }
 
 @layer components {
-  /* Keep discovery pages in the original composition: a focused blue hero
-     followed by a clear white decision canvas. */
+  /* Keep discovery pages in the same composition as the landing page: the
+     blue hero resolves into the canvas colour rather than ending at a line. */
   .au-discovery-gradient {
     background:
       radial-gradient(circle at 84% 0%, rgb(147 197 253 / 0.5), transparent 29rem),
@@ -86,7 +86,7 @@
   }
 
   .au-discovery-hero {
-    background: linear-gradient(180deg, #2563eb 0%, #dbeafe 72%, #eff6ff 100%);
+    background: linear-gradient(180deg, #2563eb 0%, #eff6ff 100%);
   }
 
   .finder-select {

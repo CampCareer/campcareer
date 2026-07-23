@@ -94,10 +94,11 @@ export default async function AustralianUniversitiesPage({ searchParams }: { sea
     .slice(0, 60)
 
   return (
-    <main className="min-h-screen bg-transparent">
-      <section className="border-b border-slate-200/90 bg-transparent">
-        <div className="mx-auto max-w-6xl px-5 pb-8 pt-6 sm:px-6 sm:pb-10 sm:pt-8">
-          <h1 className="mb-5 text-left text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl lg:whitespace-nowrap lg:text-4xl">Find the right university to study</h1>
+    <main className="min-h-screen bg-slate-50">
+      <section className="relative overflow-hidden au-discovery-hero">
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-b from-transparent to-slate-50" />
+        <div className="relative z-10 mx-auto max-w-6xl px-5 pb-8 pt-6 sm:px-6 sm:pb-10 sm:pt-8">
+          <h1 className="mb-5 text-left text-2xl font-semibold tracking-tight text-white sm:text-3xl lg:whitespace-nowrap lg:text-4xl">Find the right university to study</h1>
           <form className="max-w-5xl rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_18px_45px_rgba(15,23,42,.10)]" action="/universities/au">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
               <label className="relative block flex-1">
@@ -114,7 +115,7 @@ export default async function AustralianUniversitiesPage({ searchParams }: { sea
         </div>
       </section>
 
-      <section className="bg-white"><div className="mx-auto max-w-6xl px-5 pb-12 pt-12 sm:px-6 sm:pb-16 sm:pt-14">
+      <section className="bg-slate-50"><div className="mx-auto max-w-6xl px-5 pb-12 pt-12 sm:px-6 sm:pb-16 sm:pt-14">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
             <h2 className="text-lg font-semibold text-slate-950">{rows.length} {filters.category ? `${STUDY_CATEGORIES.find((item) => item.id === filters.category)?.label ?? ''} ` : ''}university options</h2>

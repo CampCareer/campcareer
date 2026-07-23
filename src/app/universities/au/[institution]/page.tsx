@@ -68,18 +68,19 @@ export default async function AustralianUniversityDetailPage({ params }: { param
         { name: university.name, path: `/universities/au/${university.institutionId}` },
       ])} />
       <main className="min-h-screen bg-slate-50">
-        <section className="border-b border-slate-200 bg-white">
-          <div className="mx-auto max-w-5xl px-5 py-9 sm:px-6">
-            <Link href="/universities/au" className="text-sm font-semibold text-blue-700 hover:text-blue-800">Australian universities</Link>
+        <section className="relative overflow-hidden au-discovery-hero">
+          <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-b from-transparent to-slate-50" />
+          <div className="relative z-10 mx-auto max-w-5xl px-5 py-9 sm:px-6">
+            <Link href="/universities/au" className="text-sm font-semibold text-blue-100 transition hover:text-white">Australian universities</Link>
             <div className="mt-4 flex flex-wrap items-start justify-between gap-5">
               <div>
-                <p className="text-sm font-semibold text-blue-700">Australia · University profile</p>
-                <h1 className="mt-1 text-3xl font-semibold tracking-tight text-slate-950">{university.name}</h1>
-                <p className="mt-2 text-sm text-slate-600">{[university.city, university.state].filter(Boolean).join(', ') || 'Australia'} · Provider-level outcomes and field-level tuition groups</p>
+                <p className="text-sm font-semibold text-blue-100">Australia · University profile</p>
+                <h1 className="mt-1 text-3xl font-semibold tracking-tight text-white">{university.name}</h1>
+                <p className="mt-2 text-sm text-blue-50">{[university.city, university.state].filter(Boolean).join(', ') || 'Australia'} · Provider-level outcomes and field-level tuition groups</p>
               </div>
               <div className="flex flex-wrap gap-2">
-                <Link href={`/universities/au/compare?schools=${encodeURIComponent(university.institutionId)}`} className="inline-flex h-10 items-center gap-2 rounded-xl bg-slate-950 px-4 text-sm font-semibold text-white hover:bg-slate-800"><BarChart3 className="h-4 w-4" /> Compare ROI</Link>
-                {university.websiteUrl && <a href={university.websiteUrl} target="_blank" rel="noreferrer" className="inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200 px-4 text-sm font-semibold text-slate-800 hover:bg-slate-50"><ExternalLink className="h-4 w-4" /> Official site</a>}
+                <Link href={`/universities/au/compare?schools=${encodeURIComponent(university.institutionId)}`} className="inline-flex h-10 items-center gap-2 rounded-xl bg-white px-4 text-sm font-semibold text-blue-700 hover:bg-blue-50"><BarChart3 className="h-4 w-4" /> Compare ROI</Link>
+                {university.websiteUrl && <a href={university.websiteUrl} target="_blank" rel="noreferrer" className="inline-flex h-10 items-center gap-2 rounded-xl border border-white/30 px-4 text-sm font-semibold text-white transition hover:bg-white/10"><ExternalLink className="h-4 w-4" /> Official site</a>}
               </div>
             </div>
           </div>

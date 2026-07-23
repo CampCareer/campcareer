@@ -59,11 +59,12 @@ export default async function AustralianUniversityComparePage({ searchParams }: 
 
   return (
     <main className="min-h-screen bg-slate-50">
-      <section className="border-b border-slate-200 bg-white">
-        <div className="mx-auto max-w-6xl px-5 py-10 sm:px-6">
-          <Link href="/universities/au" className="text-sm font-semibold text-blue-700 hover:text-blue-800">Australian universities</Link>
-          <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950">Compare university ROI in Australia</h1>
-          <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">Keep the country constant, then compare tuition groups against the same kind of provider-level graduate outcome evidence.</p>
+      <section className="relative overflow-hidden au-discovery-hero">
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-b from-transparent to-slate-50" />
+        <div className="relative z-10 mx-auto max-w-6xl px-5 py-10 sm:px-6">
+          <Link href="/universities/au" className="text-sm font-semibold text-blue-100 transition hover:text-white">Australian universities</Link>
+          <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white">Compare university ROI in Australia</h1>
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-blue-50">Keep the country constant, then compare tuition groups against the same kind of provider-level graduate outcome evidence.</p>
         </div>
       </section>
 

@@ -62,9 +62,10 @@ export default async function AustralianMajorDetailPage({ params }: { params: Pr
   const annualFees = providers.map((provider) => provider.bachelorFeeAud ?? provider.feeAud).filter((fee): fee is number => typeof fee === "number")
   const feeRange = annualFees.length ? `${money(Math.min(...annualFees))}–${money(Math.max(...annualFees))}/yr` : "Check provider"
 
-  return <main className="min-h-screen bg-white">
-    <section className="au-discovery-hero">
-      <div className="mx-auto max-w-6xl px-5 py-8 sm:px-6 sm:py-10">
+  return <main className="min-h-screen bg-slate-50">
+    <section className="relative overflow-hidden au-discovery-hero">
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-b from-transparent to-slate-50" />
+      <div className="relative z-10 mx-auto max-w-6xl px-5 py-8 sm:px-6 sm:py-10">
         <Link href="/au/majors" className="inline-flex items-center gap-2 text-sm font-semibold text-blue-100 hover:text-white"><ArrowLeft className="h-4 w-4" />Back to majors</Link>
         <div className="mt-6 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
           <div className="max-w-3xl">

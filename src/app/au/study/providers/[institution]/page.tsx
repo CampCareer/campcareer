@@ -101,7 +101,7 @@ export default async function AustralianUniversityDetailPage({ params }: { param
       ])} />
       <main className="min-h-screen bg-slate-50">
         {/* Hero */}
-        <section className="relative overflow-hidden bg-gradient-to-b from-blue-600 to-blue-50">
+        <section className="relative overflow-hidden au-discovery-hero">
           <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-b from-transparent to-slate-50" />
           <div className="relative z-10 mx-auto max-w-5xl px-5 py-10 sm:px-6 sm:py-14">
             <Link href="/au/study" className="inline-flex items-center gap-1.5 text-sm font-medium text-blue-100 hover:text-white transition-colors">

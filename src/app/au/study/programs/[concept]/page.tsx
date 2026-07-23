@@ -296,11 +296,12 @@ export default async function AuStudyProgramsPage({
 
   return (
     <main className="min-h-screen bg-slate-50">
-      <section className="border-b border-slate-200 bg-white">
-        <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:py-14">
+      <section className="relative overflow-hidden au-discovery-hero">
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-b from-transparent to-slate-50" />
+        <div className="relative z-10 mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:py-14">
           <Link
             href={`/au/majors/${concept.slug}`}
-            className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-blue-700"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-blue-100 transition hover:text-white"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to {concept.label}
@@ -308,20 +309,20 @@ export default async function AuStudyProgramsPage({
 
           <div className="mt-7 flex flex-col justify-between gap-6 md:flex-row md:items-end">
             <div>
-              <p className="text-sm font-bold text-blue-600">
+              <p className="text-sm font-bold text-blue-100">
                 Australia · Official programme sources
               </p>
-              <h1 className="mt-2 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
+              <h1 className="mt-2 text-4xl font-semibold tracking-tight text-white sm:text-5xl">
                 {concept.label} programs
               </h1>
-              <p className="mt-4 max-w-3xl text-base leading-7 text-slate-600">
+              <p className="mt-4 max-w-3xl text-base leading-7 text-blue-50">
                 Browse {concept.label} courses across all qualification levels.
                 We show active CRICOS offerings plus reviewed official provider
                 and national training-register pathways where CRICOS does not
                 cover an apprenticeship or domestic trade route.
               </p>
             </div>
-            <div className="inline-flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-bold text-emerald-700">
+            <div className="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-white/15 px-4 py-3 text-sm font-bold text-white backdrop-blur-sm">
               <BadgeCheck className="h-5 w-5" />
               {filteredCourses.length} official programme source{filteredCourses.length !== 1 ? "s" : ""}
             </div>
