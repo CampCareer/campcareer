@@ -17,6 +17,7 @@ type PlannerToolbarProps = {
   onNewTab: () => void
   onSelectTab: (id: string) => void
   onCloseTab: (id: string) => void
+  showControls?: boolean
 }
 
 export function PlannerToolbar({
@@ -31,16 +32,11 @@ export function PlannerToolbar({
   onNewTab,
   onSelectTab,
   onCloseTab,
+  showControls = true,
 }: PlannerToolbarProps) {
   return (
     <header className="flex h-12 shrink-0 items-center gap-1 border-b border-slate-200/80 bg-white/95 px-2.5 backdrop-blur-sm">
-      <div className="flex shrink-0 items-center">
-        <button type="button" onClick={onToggleSidebar} className="hidden size-8 items-center justify-center rounded-md text-slate-500 transition hover:bg-slate-100 hover:text-slate-800 sm:inline-flex" title={sidebarOpen ? "Close plan navigation" : "Open plan navigation"} aria-label={sidebarOpen ? "Close plan navigation" : "Open plan navigation"}>
-          {sidebarOpen ? <PanelLeftClose className="size-4" /> : <PanelLeftOpen className="size-4" />}
-        </button>
-        <button type="button" onClick={onBack} disabled={!canGoBack} className="inline-flex size-8 items-center justify-center rounded-md text-slate-500 transition hover:bg-slate-100 hover:text-slate-800 disabled:pointer-events-none disabled:opacity-30" title="Go back"><ChevronLeft className="size-4" /></button>
-        <button type="button" onClick={onForward} disabled={!canGoForward} className="inline-flex size-8 items-center justify-center rounded-md text-slate-500 transition hover:bg-slate-100 hover:text-slate-800 disabled:pointer-events-none disabled:opacity-30" title="Go forward"><ChevronRight className="size-4" /></button>
-      </div>
+      <div className={cn(!showControls && "sm:hidden")}><PlannerToolbarControls sidebarOpen={sidebarOpen} canGoBack={canGoBack} canGoForward={canGoForward} onToggleSidebar={onToggleSidebar} onBack={onBack} onForward={onForward} /></div>
 
       <div role="tablist" aria-label="My Plan pages" className="flex min-w-0 flex-1 items-center gap-1 overflow-x-auto px-1 no-scrollbar">
         {tabs.map((tab) => <div key={tab.id} className="group relative max-w-44 shrink-0">
@@ -56,4 +52,15 @@ export function PlannerToolbar({
       <ToolNavActions minimal className="ml-1 shrink-0" />
     </header>
   )
+}
+
+export function PlannerToolbarControls({ sidebarOpen, canGoBack, canGoForward, onToggleSidebar, onBack, onForward, dark = false }: { sidebarOpen: boolean; canGoBack: boolean; canGoForward: boolean; onToggleSidebar: () => void; onBack: () => void; onForward: () => void; dark?: boolean }) {
+  const buttonClass = dark ? "text-slate-300 hover:bg-white/10 hover:text-white" : "text-slate-500 hover:bg-slate-100 hover:text-slate-800"
+  return <div className="flex shrink-0 items-center">
+    <button type="button" onClick={onToggleSidebar} className={cn("hidden size-8 items-center justify-center rounded-md transition sm:inline-flex", buttonClass)} title={sidebarOpen ? "Close plan navigation" : "Open plan navigation"} aria-label={sidebarOpen ? "Close plan navigation" : "Open plan navigation"}>
+      {sidebarOpen ? <PanelLeftClose className="size-4" /> : <PanelLeftOpen className="size-4" />}
+    </button>
+    <button type="button" onClick={onBack} disabled={!canGoBack} className={cn("inline-flex size-8 items-center justify-center rounded-md transition disabled:pointer-events-none disabled:opacity-30", buttonClass)} title="Go back" aria-label="Go back"><ChevronLeft className="size-4" /></button>
+    <button type="button" onClick={onForward} disabled={!canGoForward} className={cn("inline-flex size-8 items-center justify-center rounded-md transition disabled:pointer-events-none disabled:opacity-30", buttonClass)} title="Go forward" aria-label="Go forward"><ChevronRight className="size-4" /></button>
+  </div>
 }

@@ -30,7 +30,7 @@ import {
 import { createClient } from "@/lib/supabase-client"
 import { majorLabel, resolveView } from "@/lib/degree-risk"
 import { cn } from "@/lib/utils"
-import { PlannerToolbar } from "@/components/planner/planner-toolbar"
+import { PlannerToolbar, PlannerToolbarControls } from "@/components/planner/planner-toolbar"
 import { PlannerSidebar, type PlannerArea } from "@/components/planner/planner-sidebar"
 import { GoalSetup, type GoalSetupData } from "@/components/planner/goal-setup"
 import { TodayDashboard, type TodayGoalOption } from "@/components/planner/today-dashboard"
@@ -648,25 +648,13 @@ export default function PlannerPage({ initialArea = "today" }: { initialArea?: P
   }
 
   return (
-    <div className={cn("flex h-screen flex-col overflow-hidden transition-colors duration-300", plannerThemeClasses[plannerTheme])}>
-      {/* ── Toolbar ── */}
-      <PlannerToolbar
-        tabs={tabs.filter((tab) => !tab.trashedAt)}
-        activeTabId={activeTabId}
-        sidebarOpen={sidebarOpen}
-        canGoBack={historyCursor > 0}
-        canGoForward={historyCursor < historyLength - 1}
-        onToggleSidebar={() => setSidebarOpen((o) => !o)}
-        onBack={goBack}
-        onForward={goForward}
-        onNewTab={addTab}
-        onSelectTab={navigateToTab}
-        onCloseTab={moveTabToTrash}
-      />
-
-      {/* ── Body: sidebar + content ── */}
-      <div className="flex min-h-0 flex-1">
-        <div aria-hidden={!sidebarOpen} inert={!sidebarOpen} className={cn("hidden h-full shrink-0 overflow-hidden transition-[width,opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] sm:block", sidebarOpen ? "w-72 translate-x-0 opacity-100" : "pointer-events-none w-0 -translate-x-3 opacity-0")}>
+    <div className={cn("flex h-screen overflow-hidden transition-colors duration-300", plannerThemeClasses[plannerTheme])}>
+      {/* ── Sidebar rail + workspace ── */}
+      <div aria-hidden={!sidebarOpen} inert={!sidebarOpen} className={cn("hidden h-full shrink-0 flex-col overflow-hidden transition-[width,opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] sm:flex", sidebarOpen ? "w-72 translate-x-0 opacity-100" : "pointer-events-none w-0 -translate-x-3 opacity-0")}>
+        <div className="flex h-12 shrink-0 items-center border-r border-blue-950/30 bg-[#071936] px-2.5">
+          <PlannerToolbarControls sidebarOpen={sidebarOpen} canGoBack={historyCursor > 0} canGoForward={historyCursor < historyLength - 1} onToggleSidebar={() => setSidebarOpen((o) => !o)} onBack={goBack} onForward={goForward} dark />
+        </div>
+        <div className="min-h-0 flex-1">
           <PlannerSidebar
             activeArea={activeArea}
             readinessCount={readinessCount}
@@ -685,6 +673,25 @@ export default function PlannerPage({ initialArea = "today" }: { initialArea?: P
             onNavigate={navigatePlannerArea}
           />
         </div>
+
+      </div>
+
+      <div className="flex min-w-0 min-h-0 flex-1 flex-col">
+        {/* ── Toolbar ── */}
+        <PlannerToolbar
+          tabs={tabs.filter((tab) => !tab.trashedAt)}
+          activeTabId={activeTabId}
+          sidebarOpen={sidebarOpen}
+          canGoBack={historyCursor > 0}
+          canGoForward={historyCursor < historyLength - 1}
+          onToggleSidebar={() => setSidebarOpen((o) => !o)}
+          onBack={goBack}
+          onForward={goForward}
+          onNewTab={addTab}
+          onSelectTab={navigateToTab}
+          onCloseTab={moveTabToTrash}
+          showControls={!sidebarOpen}
+        />
 
         {/* ── Content ── */}
         <main className="min-h-0 flex-1 overflow-y-auto">
