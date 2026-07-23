@@ -7,7 +7,6 @@ import { AU_CONCEPT_OCCUPATIONS } from "@/data/au-major-occupation-map"
 import costsSnapshot from "@/data/au-major-costs.json"
 import { formatOutlook, formatSalaryRange, getAuMajorSignal, prBadge, shortageLabel, shortageLevel } from "@/lib/au-major-signals"
 import { pageMetadata } from "@/lib/seo"
-import { getStudyCategoryVisual } from "@/components/ui/au-career-category-visuals"
 import { SavedStudyConceptButton } from "@/components/saved/saved-study-concept-button"
 import { localizePath } from "@/lib/i18n/config"
 import { getLocale } from "@/lib/i18n/server"
@@ -61,7 +60,6 @@ export default async function AustralianMajorDetailPage({ params }: { params: Pr
   const pathway = AU_CONCEPT_OCCUPATIONS.find((item) => item.conceptId === concept.id)
   const costs = COSTS[concept.id]
   const category = STUDY_CATEGORIES.find((item) => item.id === concept.category)
-  const { Icon, tone } = getStudyCategoryVisual(concept.category)
   const shortage = shortageLevel(signal?.shortage_national_pct ?? null)
   const pr = prBadge(signal?.pr_score ?? null)
   const providers = [...(costs?.universities ?? []), ...(costs?.diplomaOptions ?? [])].slice(0, 6)
@@ -82,14 +80,14 @@ export default async function AustralianMajorDetailPage({ params }: { params: Pr
     <section className="relative overflow-hidden au-discovery-hero">
       <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-b from-transparent to-slate-50" />
       <div className="relative z-10 mx-auto max-w-6xl px-5 py-8 sm:px-6 sm:py-10">
-        <Link href={localizePath("/au/majors", locale)} className="inline-flex items-center gap-2 text-sm font-semibold text-blue-100 hover:text-white"><ArrowLeft className="h-4 w-4" />{isKo ? "전공 목록으로 돌아가기" : "Back to majors"}</Link>
+        <Link href={localizePath("/au/majors", locale)} className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-3.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/20"><ArrowLeft className="h-4 w-4" />{isKo ? "전체 전공 보기" : "Browse all majors"}</Link>
         <div className="mt-6 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
           <div className="max-w-3xl">
-            <div className="flex items-center gap-3"><span className={`grid size-11 place-items-center rounded-xl ${tone}`}><Icon className="size-5" strokeWidth={2.2} /></span><p className="text-sm font-semibold text-blue-100">{isKo ? "호주" : "Australia"} · {isKo ? (category?.labelKo ?? "전공 경로") : (category?.label ?? "Major pathway")}</p></div>
-            <h1 className="mt-5 text-3xl font-semibold tracking-tight text-white sm:text-4xl">{isKo ? concept.labelKo : concept.label}</h1>
+            <p className="text-sm font-semibold text-blue-100">{isKo ? "호주" : "Australia"} · {isKo ? (category?.labelKo ?? "전공 경로") : (category?.label ?? "Major pathway")}</p>
+            <div className="mt-5 flex items-center gap-2.5"><h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">{isKo ? concept.labelKo : concept.label}</h1><SavedStudyConceptButton concept={{ slug: concept.slug, label: concept.label, labelKo: concept.labelKo, category: concept.category }} compact className="size-9 rounded-lg border-0 bg-transparent p-0 text-white hover:bg-white/15 hover:text-white" /></div>
             <p className="mt-3 text-base leading-7 text-blue-50">{getLocalizedMajorDescription(concept.id, isKo, concept.description)}</p>
           </div>
-          <div className="flex flex-wrap gap-2"><SavedStudyConceptButton concept={{ slug: concept.slug, label: concept.label, labelKo: concept.labelKo, category: concept.category }} /><Link href={localizePath(`/au/study/programs/${concept.slug}`, locale)} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-white px-5 text-sm font-semibold text-blue-700 hover:bg-blue-50">{isKo ? "검증된 과정 보기" : "View verified programs"} <ArrowRight className="h-4 w-4" /></Link></div>
+          <div className="flex flex-wrap gap-2"><Link href={localizePath(`/au/study/programs/${concept.slug}`, locale)} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-white px-5 text-sm font-semibold text-blue-700 hover:bg-blue-50">{isKo ? "과정" : "Programs"} <ArrowRight className="h-4 w-4" /></Link></div>
         </div>
       </div>
     </section>

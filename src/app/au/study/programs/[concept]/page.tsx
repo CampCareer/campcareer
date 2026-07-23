@@ -296,7 +296,7 @@ export default async function AuStudyProgramsPage({
 
   return (
     <main className="min-h-screen bg-slate-50">
-      <section className="relative overflow-hidden au-discovery-hero">
+      <section className="relative bg-gradient-to-b from-blue-600 to-blue-50">
         <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-b from-transparent to-slate-50" />
         <div className="relative z-10 mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:py-14">
           <Link
@@ -315,12 +315,6 @@ export default async function AuStudyProgramsPage({
               <h1 className="mt-2 text-4xl font-semibold tracking-tight text-white sm:text-5xl">
                 {concept.label} programs
               </h1>
-              <p className="mt-4 max-w-3xl text-base leading-7 text-blue-50">
-                Browse {concept.label} courses across all qualification levels.
-                We show active CRICOS offerings plus reviewed official provider
-                and national training-register pathways where CRICOS does not
-                cover an apprenticeship or domestic trade route.
-              </p>
             </div>
             <div className="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-white/15 px-4 py-3 text-sm font-bold text-white backdrop-blur-sm">
               <BadgeCheck className="h-5 w-5" />
@@ -336,7 +330,7 @@ export default async function AuStudyProgramsPage({
           <h2 className="text-lg font-semibold text-slate-950">
             Browse by qualification level
           </h2>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <Link
               href={buildHref({ level: null, page: 1 })}
               className={`flex items-center justify-between rounded-2xl p-4 transition ${
@@ -436,52 +430,48 @@ export default async function AuStudyProgramsPage({
             {paginatedCourses.map((course) => (
               <article
                 key={course.id}
-                className="flex flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+                className="group relative flex flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-blue-300 hover:bg-blue-50/20"
               >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-wide text-blue-600">
-                      {course.courseType ??
-                        (course.aqfLevel != null ? aqfLabel(course.aqfLevel) : "Course")}
-                    </p>
-                    <h3 className="mt-2 text-xl font-bold leading-7 text-slate-950">
-                      {course.title}
-                    </h3>
-                    <p className="mt-2 text-sm font-semibold text-slate-600">
-                      {course.providerName}
-                    </p>
+                {course.providerId && <Link href={`/au/study/providers/${course.providerId}`} aria-label={`Open ${course.providerName} school profile`} className="absolute inset-0 z-0 rounded-2xl" />}
+                <div className="relative z-10 pointer-events-none">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-wide text-blue-600">
+                        {course.courseType ??
+                          (course.aqfLevel != null ? aqfLabel(course.aqfLevel) : "Course")}
+                      </p>
+                      <h3 className="mt-2 text-xl font-bold leading-7 text-slate-950">
+                        {course.title}
+                      </h3>
+                      <p className="mt-2 text-sm font-semibold text-slate-600">
+                        {course.providerName}
+                      </p>
+                    </div>
+                    <ShieldCheck className="h-6 w-6 shrink-0 text-emerald-600" />
                   </div>
-                  <ShieldCheck className="h-6 w-6 shrink-0 text-emerald-600" />
+
+                  <div className="mt-5 grid grid-cols-2 gap-3 text-sm">
+                    <CourseFact icon={GraduationCap} label="Official code" value={course.courseCode ?? "—"} />
+                    <CourseFact
+                      icon={Clock3}
+                      label="Duration"
+                      value={course.durationYears ? `${course.durationYears} year${course.durationYears !== 1 ? "s" : ""}` : "Check provider"}
+                    />
+                    <CourseFact icon={MapPin} label="Campus" value={course.campus ?? "Check provider"} />
+                    <CourseFact
+                      icon={GraduationCap}
+                      label="Annual tuition"
+                      value={course.tuitionFeeAud ? `A$${Math.round(course.tuitionFeeAud).toLocaleString()}` : "Check official page"}
+                    />
+                  </div>
                 </div>
 
-                <div className="mt-5 grid grid-cols-2 gap-3 text-sm">
-                  <CourseFact icon={GraduationCap} label="Official code" value={course.courseCode ?? "—"} />
-                  <CourseFact
-                    icon={Clock3}
-                    label="Duration"
-                    value={course.durationYears ? `${course.durationYears} year${course.durationYears !== 1 ? "s" : ""}` : "Check provider"}
-                  />
-                  <CourseFact icon={MapPin} label="Campus" value={course.campus ?? "Check provider"} />
-                  <CourseFact
-                    icon={GraduationCap}
-                    label="Annual tuition"
-                    value={course.tuitionFeeAud ? `A$${Math.round(course.tuitionFeeAud).toLocaleString()}` : "Check official page"}
-                  />
-                </div>
+                {course.eligibilityNote && <p className="relative z-10 pointer-events-none mt-3 rounded-xl bg-amber-50 px-3 py-2.5 text-xs leading-5 text-amber-900">{course.eligibilityNote}</p>}
 
-                <div className="mt-5 space-y-2 rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs leading-5">
-                  <ProgramEvidenceLine label="Official course page" tone="blue" href={course.officialCourseUrl} checkedAt={course.officialCourseCheckedAt} available="Verified provider course page" unavailable="Not yet matched to an exact provider course page" />
-                  <ProgramEvidenceLine label="Entry requirements" tone="slate" href={course.officialCourseUrl ?? course.providerWebsiteUrl} checkedAt={course.officialCourseCheckedAt} available={course.officialCourseUrl ? "Review admission requirements on the official course page" : "Review admission requirements on the provider site"} unavailable="No structured entry-requirement record yet" />
-                  <ProgramEvidenceLine label="International students" tone={course.internationalStatus === "active_cricos" ? "emerald" : "amber"} href={course.cricosUrl} checkedAt={course.cricosCheckedAt} available={course.internationalStatus === "active_cricos" ? "Active CRICOS registration — verify provider conditions" : "International eligibility needs provider confirmation"} unavailable="International eligibility needs provider confirmation" />
-                </div>
-
-                {course.eligibilityNote && <p className="mt-3 rounded-xl bg-amber-50 px-3 py-2.5 text-xs leading-5 text-amber-900">{course.eligibilityNote}</p>}
-
-                <div className="mt-5 flex flex-wrap gap-2">
+                <div className="relative z-20 mt-5 flex flex-wrap gap-2">
                   <SaveCourseButton course={{ id: course.id, name: course.title, providerName: course.providerName, fieldName: concept.label, tuition: course.tuitionFeeAud }} />
                   {course.officialCourseUrl && <a href={course.officialCourseUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-bold text-white hover:bg-blue-700">Open official course page <ExternalLink className="h-4 w-4" /></a>}
                   {course.cricosUrl && <a href={course.cricosUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold text-slate-800 hover:border-blue-300 hover:text-blue-700">Open CRICOS record <ExternalLink className="h-4 w-4" /></a>}
-                  {course.providerId && <Link href={`/au/study/providers/${course.providerId}`} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold text-slate-800 hover:border-blue-300 hover:text-blue-700">School profile <ArrowRight className="h-4 w-4" /></Link>}
                 </div>
               </article>
             ))}
@@ -590,23 +580,6 @@ function CourseFact({
       <p className="mt-1 text-sm font-semibold leading-5 text-slate-800">{value}</p>
     </div>
   )
-}
-
-function ProgramEvidenceLine({ label, href, checkedAt, available, unavailable, tone }: { label: string; href: string | null; checkedAt: string | null; available: string; unavailable: string; tone: 'blue' | 'emerald' | 'slate' | 'amber' }) {
-  const toneClass = {
-    blue: 'text-blue-800',
-    emerald: 'text-emerald-800',
-    slate: 'text-slate-700',
-    amber: 'text-amber-800',
-  }[tone]
-  return <div className="grid grid-cols-[7.5rem_minmax(0,1fr)] gap-2"><p className="font-semibold text-slate-500">{label}</p><div className={toneClass}>{href ? <a href={href} target="_blank" rel="noreferrer" className="font-semibold hover:underline">{available} <ExternalLink className="mb-0.5 inline size-3" /></a> : <span>{unavailable}</span>}{checkedAt && <p className="mt-0.5 text-[11px] font-medium text-slate-500">Checked {formatDate(checkedAt)}</p>}</div></div>
-}
-
-function formatDate(value: string) {
-  const date = new Date(value)
-  return Number.isNaN(date.getTime())
-    ? value.slice(0, 10)
-    : new Intl.DateTimeFormat("en", { dateStyle: "medium" }).format(date)
 }
 
 function humanizeSlug(value: string) {
