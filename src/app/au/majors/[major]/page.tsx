@@ -78,7 +78,7 @@ export default async function AustralianMajorDetailPage({ params }: { params: Pr
       </div>
     </section>
 
-    <div className="mx-auto max-w-6xl space-y-6 px-5 py-8 sm:px-6 sm:py-10">
+    <div className="mx-auto max-w-6xl space-y-12 px-5 py-8 sm:px-6 sm:py-12">
       <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Metric icon={BriefcaseBusiness} label="Shortage signal" value={shortageLabel(shortage, false)} detail={signal?.shortage_national_pct != null ? `${signal.shortage_national_pct}% of mapped occupations` : "Not available"} tone={shortage === "critical" ? "text-red-700" : shortage === "high" ? "text-orange-700" : "text-slate-700"} />
         <Metric icon={WalletCards} label="Typical salary" value={formatSalaryRange(signal?.salary_min_aud ?? null, signal?.salary_max_aud ?? null) || "Not available"} detail={signal?.salary_median_aud ? `Median ${money(signal.salary_median_aud)}` : "Mapped occupation range"} />
@@ -87,7 +87,7 @@ export default async function AustralianMajorDetailPage({ params }: { params: Pr
       </section>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
-        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+        <section className="py-1 sm:py-2">
           <div className="flex items-center gap-2"><GraduationCap className="h-5 w-5 text-blue-700" /><h2 className="text-xl font-semibold text-slate-950">Credentials & pathway</h2></div>
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
             <Fact label="Pathway type" value={humanize(concept.kind)} />
@@ -95,10 +95,10 @@ export default async function AustralianMajorDetailPage({ params }: { params: Pr
             <Fact label="Qualification options" value={pathway?.qualificationTypes.join(" · ") ?? "Check provider"} />
             <Fact label="Related education fields" value={pathway?.broadFields.map(stripCode).join(" · ") ?? "Check provider"} />
           </div>
-          {costs?.notes && <p className="mt-5 rounded-xl bg-blue-50 px-4 py-3 text-sm leading-6 text-blue-900">{costs.notes}</p>}
+          {costs?.notes && <p className="mt-5 text-sm leading-6 text-blue-800">{costs.notes}</p>}
         </section>
 
-        <aside className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+        <aside className="py-1 sm:py-2">
           <div className="flex items-center gap-2"><WalletCards className="h-5 w-5 text-blue-700" /><h2 className="text-xl font-semibold text-slate-950">Cost snapshot</h2></div>
           <p className="mt-4 text-2xl font-semibold text-slate-950">{feeRange}</p>
           <p className="mt-1 text-sm text-slate-500">Indicative annual international tuition from the current snapshot.</p>
@@ -106,31 +106,31 @@ export default async function AustralianMajorDetailPage({ params }: { params: Pr
         </aside>
       </div>
 
-      <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+      <section>
         <div className="flex items-center gap-2"><BriefcaseBusiness className="h-5 w-5 text-blue-700" /><h2 className="text-xl font-semibold text-slate-950">Where this major can lead</h2></div>
-        <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{(signal?.representative_occupations?.length ? signal.representative_occupations : pathway?.representativeOccupations ?? []).map((occupation) => <Link key={occupation.oscaCode} href={`/au/jobs/${occupation.oscaCode}`} className="group rounded-xl border border-slate-200 p-4 transition hover:border-blue-300 hover:bg-blue-50/40"><p className="text-xs font-semibold tracking-wide text-blue-700">OSCA {occupation.oscaCode}</p><h3 className="mt-1 font-semibold text-slate-950">{occupation.label}</h3><span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-slate-600 group-hover:text-blue-700">View occupation <ArrowRight className="h-4 w-4" /></span></Link>)}</div>
+        <div className="mt-5 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">{(signal?.representative_occupations?.length ? signal.representative_occupations : pathway?.representativeOccupations ?? []).map((occupation) => <Link key={occupation.oscaCode} href={`/au/jobs/${occupation.oscaCode}`} className="group -mx-2 rounded-xl px-2 py-1 transition hover:bg-blue-50/70"><p className="text-xs font-semibold tracking-wide text-blue-700">OSCA {occupation.oscaCode}</p><h3 className="mt-1 font-semibold text-slate-950">{occupation.label}</h3><span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-slate-600 group-hover:text-blue-700">View occupation <ArrowRight className="h-4 w-4" /></span></Link>)}</div>
       </section>
 
-      {providers.length > 0 && <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+      {providers.length > 0 && <section>
         <div className="flex items-center justify-between gap-4"><div><div className="flex items-center gap-2"><CalendarDays className="h-5 w-5 text-blue-700" /><h2 className="text-xl font-semibold text-slate-950">Indicative providers & tuition</h2></div><p className="mt-1 text-sm text-slate-500">Use these as a cost benchmark; open verified listings before applying.</p></div><Link href={`/au/study/programs/${concept.slug}`} className="hidden text-sm font-semibold text-blue-700 hover:text-blue-800 sm:inline-flex sm:items-center sm:gap-1">Programs <ArrowRight className="h-4 w-4" /></Link></div>
         <div className="mt-5 overflow-x-auto"><table className="w-full min-w-[560px] text-left text-sm"><thead className="border-b border-slate-200 text-xs uppercase tracking-wide text-slate-500"><tr><th className="pb-3 pr-4 font-semibold">Provider</th><th className="pb-3 pr-4 font-semibold">Annual tuition</th><th className="pb-3 pr-4 font-semibold">Typical duration</th><th className="pb-3 font-semibold">QS rank</th></tr></thead><tbody className="divide-y divide-slate-100">{providers.map((provider) => <tr key={provider.name}><td className="py-4 pr-4 font-semibold text-slate-900">{provider.name}</td><td className="py-4 pr-4 text-slate-700">{money(provider.bachelorFeeAud ?? provider.feeAud)}</td><td className="py-4 pr-4 text-slate-700">{provider.duration ? `${provider.duration} years` : "—"}</td><td className="py-4 text-slate-700">{provider.qsRank ? `#${provider.qsRank}` : "—"}</td></tr>)}</tbody></table></div>
       </section>}
 
-      <section className="rounded-2xl border border-slate-200 bg-white p-5 text-sm leading-6 text-slate-600 shadow-sm sm:p-6">
+      <section className="pb-2 text-sm leading-6 text-slate-600">
         <h2 className="font-semibold text-slate-950">Data status</h2>
         <p className="mt-2">Labour-market signals are derived from the mapped occupations, not a guarantee of a job, visa or admission result. Verify current course fees, CRICOS registration, licensing and visa eligibility with the relevant provider and regulator.</p>
-        <div className="mt-4 flex flex-wrap gap-2">{(signal?.data_sources ?? []).map((source) => <a key={source.name} href={source.url} target="_blank" rel="noreferrer" className="rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:border-blue-300 hover:text-blue-700">{source.name}<ExternalLink className="ml-1 inline h-3 w-3" /></a>)}<span className="rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600">Cost snapshot · CRICOS and provider fee schedules</span>{signal?.last_verified && <span className="rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600">Verified {signal.last_verified}</span>}</div>
+        <div className="mt-4 flex flex-wrap gap-2">{(signal?.data_sources ?? []).map((source) => <a key={source.name} href={source.url} target="_blank" rel="noreferrer" className="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:bg-blue-50 hover:text-blue-700">{source.name}<ExternalLink className="ml-1 inline h-3 w-3" /></a>)}<span className="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-600">Cost snapshot · CRICOS and provider fee schedules</span>{signal?.last_verified && <span className="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-600">Verified {signal.last_verified}</span>}</div>
       </section>
     </div>
   </main>
 }
 
 function Metric({ icon: Icon, label, value, detail, tone = "text-slate-950" }: { icon: typeof BriefcaseBusiness; label: string; value: string; detail: string; tone?: string }) {
-  return <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"><Icon className="h-5 w-5 text-blue-700" /><p className="mt-4 text-xs font-semibold uppercase tracking-wide text-slate-500">{label}</p><p className={`mt-1 text-lg font-semibold ${tone}`}>{value}</p><p className="mt-1 text-xs leading-5 text-slate-500">{detail}</p></article>
+  return <article className="px-1 py-3"><Icon className="h-5 w-5 text-blue-700" /><p className="mt-4 text-xs font-semibold uppercase tracking-wide text-slate-500">{label}</p><p className={`mt-1 text-lg font-semibold ${tone}`}>{value}</p><p className="mt-1 text-xs leading-5 text-slate-500">{detail}</p></article>
 }
 
 function Fact({ label, value }: { label: string; value: string }) {
-  return <div className="rounded-xl bg-slate-50 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-slate-500">{label}</p><p className="mt-2 text-sm font-semibold leading-6 text-slate-800">{value}</p></div>
+  return <div className="py-2"><p className="text-xs font-semibold uppercase tracking-wide text-slate-500">{label}</p><p className="mt-2 text-sm font-semibold leading-6 text-slate-800">{value}</p></div>
 }
 
 function money(value: number | undefined) {
