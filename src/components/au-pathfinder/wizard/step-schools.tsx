@@ -96,8 +96,9 @@ export function StepSchools({
     const params = new URLSearchParams({
       country: "au",
       field: concept.roiSearchTerm,
+      state: "ALL_STATES",
       sort: "roi_score",
-      limit: "50",
+      limit: "100",
     })
 
     fetch(`/api/roi?${params}`)
