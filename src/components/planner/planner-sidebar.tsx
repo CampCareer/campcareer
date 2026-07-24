@@ -39,16 +39,16 @@ export function PlannerSidebar({ activeArea, onNavigate, onOpenPath }: PlannerSi
     { id: "report", icon: LineChart, label: isKo ? "의사결정 리포트" : "Decision report" },
   ]
 
-  return <aside className="hidden h-full w-72 shrink-0 flex-col border-r border-sky-200/80 bg-[#eaf4ff] px-3 py-4 text-slate-900 sm:flex">
+  return <aside className="hidden h-full w-72 shrink-0 flex-col border-r border-white/10 bg-[#141418] px-3 py-4 text-slate-200 sm:flex">
     <div className="flex justify-end px-3 pb-5 pt-1"><PlannerSearch isKo={isKo} onNavigate={onNavigate} onOpenPath={onOpenPath} /></div>
 
     <nav aria-label={isKo ? "My Plan 실행 영역" : "My Plan action areas"} className="space-y-1">
       {items.map((item) => <SidebarButton key={item.id} item={item} active={activeArea === item.id} onClick={() => onNavigate(item.id)} />)}
     </nav>
 
-    <div className="my-4 border-t border-sky-200/80" />
-    <button type="button" onClick={() => onNavigate("notes")} className={cn("group flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition", activeArea === "notes" ? "bg-white/75 text-slate-900" : "text-slate-600 hover:bg-white/65 hover:text-slate-900")}>
-      <span className={cn("grid size-8 shrink-0 place-items-center rounded-lg", activeArea === "notes" ? "bg-white text-blue-700" : "bg-sky-100 text-slate-500 group-hover:bg-white group-hover:text-blue-700")}><NotebookPen className="size-4" /></span>
+    <div className="my-4 border-t border-white/10" />
+    <button type="button" onClick={() => onNavigate("notes")} className={cn("group flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition", activeArea === "notes" ? "bg-white/10 text-white" : "text-slate-400 hover:bg-white/5 hover:text-slate-200")}>
+      <span className={cn("grid size-8 shrink-0 place-items-center rounded-lg", activeArea === "notes" ? "bg-blue-600 text-white" : "bg-white/10 text-slate-400 group-hover:bg-white/15 group-hover:text-blue-400")}><NotebookPen className="size-4" /></span>
       <span className="min-w-0 flex-1 text-sm font-semibold">{isKo ? "노트" : "Notes"}</span>
     </button>
   </aside>
@@ -58,5 +58,5 @@ type SidebarItem = { id: Exclude<PlannerArea, "notes">; icon: LucideIcon; label:
 
 function SidebarButton({ item, active, onClick }: { item: SidebarItem; active: boolean; onClick: () => void }) {
   const Icon = item.icon
-  return <button type="button" onClick={onClick} className={cn("group flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition", active ? "bg-blue-100 text-blue-950 shadow-[0_6px_16px_rgba(37,99,235,.10)]" : "text-slate-600 hover:bg-white/65 hover:text-slate-900")}><span className={cn("grid size-8 shrink-0 place-items-center rounded-lg", active ? "bg-blue-600 text-white" : "bg-sky-100 text-slate-500 group-hover:bg-white group-hover:text-blue-700")}><Icon className="size-4" /></span><span className="min-w-0 flex-1 text-sm font-semibold">{item.label}</span></button>
+  return <button type="button" onClick={onClick} className={cn("group flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition", active ? "bg-blue-600/15 text-blue-300 shadow-[0_6px_16px_rgba(59,130,246,.12)]" : "text-slate-400 hover:bg-white/5 hover:text-slate-200")}><span className={cn("grid size-8 shrink-0 place-items-center rounded-lg", active ? "bg-blue-600 text-white" : "bg-white/10 text-slate-400 group-hover:bg-white/15 group-hover:text-blue-400")}><Icon className="size-4" /></span><span className="min-w-0 flex-1 text-sm font-semibold">{item.label}</span></button>
 }

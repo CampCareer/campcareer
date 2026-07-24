@@ -42,7 +42,7 @@ export function AustraliaReportLaunch() {
     pages: "{min}–{max}페이지 · 목표 {target}페이지",
     whatNow: "지금 무료로 할 수 있는 일",
     freeSteps: [
-      ["1", "탐색", "목표·예산·기간으로 호주 분야를 좁힙니다."],
+      ["1", "검색", "목표·예산·기간으로 호주 분야를 좁힙니다."],
       ["2", "대학·도시 비교", "학비와 교육기관 성과를 같은 기준으로 확인합니다."],
       ["3", "후보 저장", "개인화 리포트에 쓸 선택지를 최대 세 곳까지 정리합니다."],
     ],
@@ -57,7 +57,7 @@ export function AustraliaReportLaunch() {
     duplicate: "이 이메일은 이미 출시 알림을 확인했습니다. 선택한 관심 리포트는 업데이트되었습니다.", waiting: "확인 메일이 이미 발송되었습니다. 최대 15분 정도 기다린 뒤 받은 편지함과 스팸함을 확인해 주세요.",
     errorInvalid: "올바른 이메일 주소를 입력해 주세요.", errorProduct: "관심 있는 리포트를 하나 이상 선택해 주세요.", errorConsent: "출시 알림 수신 동의가 필요합니다.", errorGeneric: "지금은 신청을 완료할 수 없습니다. 잠시 후 다시 시도해 주세요.",
     workspace: "내 선택지로 리포트 준비", workspaceDetail: "로그인 후 조건과 후보를 저장할 수 있습니다.",
-    pathfinder: "탐색", privacy: "개인정보 처리방침", terms: "이용약관", disclaimer: "CampCareer의 데이터와 리포트는 의사결정 보조 자료이며 비자, 입학, 취업, 수입을 보장하지 않습니다.",
+    pathfinder: "검색", privacy: "개인정보 처리방침", terms: "이용약관", disclaimer: "CampCareer의 데이터와 리포트는 의사결정 보조 자료이며 비자, 입학, 취업, 수입을 보장하지 않습니다.",
   } : {
     eyebrow: "Australia report launch preparation",
     title: "Read the numbers behind your Australia decision in the context of your life.",
@@ -73,7 +73,7 @@ export function AustraliaReportLaunch() {
     pages: "{min}–{max} pages · {target}-page target",
     whatNow: "What you can do free today",
     freeSteps: [
-      ["1", "Discovery", "Narrow Australia study fields around your goal, budget, and timeline."],
+      ["1", "Search", "Narrow Australia study fields around your goal, budget, and timeline."],
       ["2", "Compare providers and cities", "Read tuition and provider outcomes on the same basis."],
       ["3", "Save a shortlist", "Prepare up to three options for a future personalised report."],
     ],
@@ -88,7 +88,7 @@ export function AustraliaReportLaunch() {
     duplicate: "This email has already confirmed a launch update. We updated your report interests.", waiting: "A confirmation email was already sent. Please allow up to 15 minutes, then check your inbox and spam folder.",
     errorInvalid: "Enter a valid email address.", errorProduct: "Choose at least one report.", errorConsent: "Please agree to receive the launch update.", errorGeneric: "We could not complete the request right now. Please try again shortly.",
     workspace: "Prepare a report with my shortlist", workspaceDetail: "Sign in to save your conditions and options.",
-    pathfinder: "Discovery", privacy: "Privacy Policy", terms: "Terms of Service", disclaimer: "CampCareer data and reports are decision aids. They do not guarantee visa, admission, employment, income, or investment outcomes.",
+    pathfinder: "Search", privacy: "Privacy Policy", terms: "Terms of Service", disclaimer: "CampCareer data and reports are decision aids. They do not guarantee visa, admission, employment, income, or investment outcomes.",
   }
 
   useEffect(() => {

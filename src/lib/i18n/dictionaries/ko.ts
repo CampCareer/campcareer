@@ -21,7 +21,7 @@ const ko: Dictionary = {
       eyebrow: '호주 유학 의사결정 여정',
       heading: '모든 결정을 한 번에 하지 말고, 다음 결정부터 하세요.',
       summary: '내 조건에 맞는 경로를 찾고, 맞는 학업 선택지를 비교한 뒤, 최종 후보를 실행 계획으로 이어가세요.',
-      findPath: '탐색',
+      findPath: '검색',
       findPathDescription: '목표·예산·기간에 맞는 분야를 찾습니다.',
       compareStudy: '비교',
       compareStudyDescription: '학비·성과·ROI를 나란히 확인합니다.',

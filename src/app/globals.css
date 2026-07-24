@@ -77,6 +77,11 @@
 }
 
 @layer components {
+  @keyframes cc-mobile-step-open {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
   /* Keep discovery pages in the same composition as the landing page: the
      blue hero resolves into the canvas colour rather than ending at a line. */
   .au-discovery-gradient {

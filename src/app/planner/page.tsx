@@ -152,7 +152,7 @@ export default function PlannerPage({ initialArea = "today" }: { initialArea?: P
   const [taskDate, setTaskDate] = useState("")
   const [taskKind, setTaskKind] = useState<TaskKind>("application")
   const [saving, setSaving] = useState<"note" | "task" | "budget" | "language" | null>(null)
-  const [plannerTheme, setPlannerTheme] = useState<PlannerTheme>("mist")
+  const [plannerTheme, setPlannerTheme] = useState<PlannerTheme>("midnight")
   const [widgetOrder, setWidgetOrder] = useState<WidgetId[]>(defaultWidgetOrder)
   const [widgetSizes, setWidgetSizes] = useState<Record<WidgetId, WidgetSize>>(defaultWidgetSizes)
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }))
@@ -340,9 +340,7 @@ export default function PlannerPage({ initialArea = "today" }: { initialArea?: P
         const validOrder = savedPlanner.widget_order?.filter((widget): widget is WidgetId => defaultWidgetOrder.includes(widget)) ?? []
         setWidgetOrder([...validOrder, ...defaultWidgetOrder.filter((widget) => !validOrder.includes(widget))])
         setWidgetSizes({ ...defaultWidgetSizes, ...(savedPlanner.widget_sizes ?? {}) })
-        // My Plan is intentionally a single, quiet canvas. Keep older saved
-        // palette preferences from bringing card-style colours back into it.
-        setPlannerTheme("mist")
+        setPlannerTheme("midnight")
       }
       setLoading(false)
     }
@@ -380,6 +378,42 @@ export default function PlannerPage({ initialArea = "today" }: { initialArea?: P
     })
     return () => { active = false; subscription.unsubscribe() }
   }, [supabase, navigateToTab])
+
+  /* ── Wizard data bridge: read localStorage from pathfinder wizard ── */
+  useEffect(() => {
+    if (goalProfile || loading) return
+    try {
+      const raw = localStorage.getItem("cc_wizard_data")
+      if (!raw) return
+      const wiz = JSON.parse(raw)
+      if (!wiz?.conceptSlug) return
+      const synthetic: PlanGoalProfile = {
+        user_id: user?.id ?? "local",
+        target_occupation_code: "",
+        target_occupation_title: "",
+        target_study_concept_slug: wiz.conceptSlug ?? "",
+        target_study_concept_label: wiz.conceptLabelKo || wiz.conceptLabel || "",
+        target_intake_month: null,
+        plan_title: wiz.conceptLabelKo || wiz.conceptLabel || "My plan",
+        strategy: "",
+        setup_completed_at: new Date().toISOString(),
+      }
+      setGoalProfile(synthetic)
+      // If school was selected, create a goal option from it
+      if (wiz.school) {
+        setGoalOptions([{
+          id: "wizard-school",
+          position: 1,
+          source_type: "saved_university",
+          title: wiz.school,
+          provider_name: wiz.school,
+          field_name: wiz.conceptLabel || "",
+        }])
+      }
+      // Clean up localStorage
+      localStorage.removeItem("cc_wizard_data")
+    } catch {}
+  }, [goalProfile, loading, user])
 
   /* ── Mutations ── */
   async function saveNote(event: FormEvent<HTMLFormElement>) {
@@ -626,7 +660,17 @@ export default function PlannerPage({ initialArea = "today" }: { initialArea?: P
   }
 
   if (loading) return <PlannerSkeleton />
-  if (!user) return <GuestPlan />
+  // TEMP: bypass auth gate for local testing — revert before commit
+  // if (!user) return <GuestPlan />
+  // TEMP: skip GoalSetup for local testing when no user — revert before commit
+  if (!goalProfile?.setup_completed_at && !user) {
+    setGoalProfile({
+      user_id: "local", target_occupation_code: "", target_occupation_title: "",
+      target_study_concept_slug: "", target_study_concept_label: "", target_intake_month: null,
+      plan_title: "My plan", strategy: "", setup_completed_at: new Date().toISOString(),
+    })
+    return <PlannerSkeleton />
+  }
   if (!goalProfile?.setup_completed_at) return <GoalSetup occupations={occupations} studyConcepts={studyConcepts} universities={universities} courses={courses} onComplete={completeGoalSetup} />
 
   const savings = numericValue(budget.current_savings) ?? 0
@@ -705,7 +749,7 @@ export default function PlannerPage({ initialArea = "today" }: { initialArea?: P
     <div className={cn("flex h-screen overflow-hidden transition-colors duration-300", plannerThemeClasses[plannerTheme])}>
       {/* ── Sidebar rail + workspace ── */}
       <div aria-hidden={!sidebarOpen} inert={!sidebarOpen} className={cn("hidden h-full shrink-0 flex-col overflow-hidden transition-[width,opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] sm:flex", sidebarOpen ? "w-72 translate-x-0 opacity-100" : "pointer-events-none w-0 -translate-x-3 opacity-0")}>
-        <div className="flex h-12 shrink-0 items-center border-r border-sky-200/80 bg-[#dceeff] px-2.5">
+        <div className="flex h-12 shrink-0 items-center border-r border-white/10 bg-white/5 px-2.5">
           <PlannerToolbarControls sidebarOpen={sidebarOpen} canGoBack={historyCursor > 0} canGoForward={historyCursor < historyLength - 1} onToggleSidebar={() => setSidebarOpen((o) => !o)} onBack={goBack} onForward={goForward} />
         </div>
         <div className="min-h-0 flex-1">
@@ -758,7 +802,7 @@ export default function PlannerPage({ initialArea = "today" }: { initialArea?: P
           {activeArea === "english" && <EnglishTargetSpace language={{ exam_name: language.exam_name, current_score: numberOrNull(language.current_score), target_score: numberOrNull(language.target_score), weekly_hours: numberOrNull(language.weekly_hours), test_date: language.test_date }} blocks={englishBlocks} onSaveLanguage={saveLanguageSpace} onSaveBlock={saveEnglishBlock} onDeleteBlock={deleteEnglishBlock} />}
           {activeArea === "research" && <ResearchDeskSpace sources={researchSources} researchItems={researchItems} onSetStatus={saveResearchStatus} />}
           {activeArea === "report" && <MyAustraliaReportWorkspace />}
-          {activeArea === "notes" && <section className="mx-auto max-w-4xl px-6 pb-12 pt-12 sm:px-10 sm:pt-16"><p className="text-xs font-semibold uppercase tracking-[.14em] text-blue-700">NOTES</p><h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950">Your decision notes</h1><p className="mt-2 text-sm leading-6 text-slate-600">Keep the thinking behind your Australia pathway beside the actions you take.</p>{activeTab && <div className="mt-10"><input value={activeTab.title} onChange={(event) => renameTab(activeTab.id, event.target.value)} placeholder="Untitled" maxLength={160} aria-label="Page title" className="w-full bg-transparent text-4xl font-semibold tracking-tight text-slate-950 outline-none placeholder:text-slate-300 sm:text-5xl" /><textarea value={activeTab.content} onChange={(event) => updateTabContent(activeTab.id, event.target.value)} placeholder="Start writing…" maxLength={12000} rows={10} aria-label="Page body" className="mt-5 w-full resize-y rounded-2xl border border-slate-200 bg-white px-5 py-4 text-base leading-8 text-slate-700 outline-none placeholder:text-slate-400 focus:border-blue-400 focus:ring-4 focus:ring-blue-100" /><p className="mt-3 text-xs text-slate-400">Saved on this device</p></div>}</section>}
+          {activeArea === "notes" && <section className="mx-auto max-w-4xl px-6 pb-12 pt-12 sm:px-10 sm:pt-16"><p className="text-xs font-semibold uppercase tracking-[.14em] text-blue-400">NOTES</p><h1 className="mt-3 text-3xl font-semibold tracking-tight text-white">Your decision notes</h1><p className="mt-2 text-sm leading-6 text-slate-400">Keep the thinking behind your Australia pathway beside the actions you take.</p>{activeTab && <div className="mt-10"><input value={activeTab.title} onChange={(event) => renameTab(activeTab.id, event.target.value)} placeholder="Untitled" maxLength={160} aria-label="Page title" className="w-full bg-transparent text-4xl font-semibold tracking-tight text-white outline-none placeholder:text-slate-600 sm:text-5xl" /><textarea value={activeTab.content} onChange={(event) => updateTabContent(activeTab.id, event.target.value)} placeholder="Start writing…" maxLength={12000} rows={10} aria-label="Page body" className="mt-5 w-full resize-y rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-base leading-8 text-slate-300 outline-none placeholder:text-slate-500 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20" /><p className="mt-3 text-xs text-slate-500">Saved on this device</p></div>}</section>}
           </div>
           {/* Legacy stacked widgets intentionally retired in favour of independent execution spaces.
           <section className="mx-auto max-w-6xl px-6 pt-7 sm:px-10 sm:pt-10">
@@ -844,7 +888,7 @@ export default function PlannerPage({ initialArea = "today" }: { initialArea?: P
 }
 
 /* ── Sub-components ── */
-function ResearchCard({ icon: Icon, title, items, href, empty }: { icon: typeof BookOpen; title: string; items: string[]; href: string; empty: string }) { return <article className="border-l border-slate-200 pl-4"><div className="flex items-center gap-2 text-sm font-semibold text-slate-900"><Icon className="h-4 w-4 text-blue-600" />{title}</div><div className="mt-3 min-h-16 space-y-1.5">{items.slice(0, 2).map((item) => <p key={item} className="truncate text-sm text-slate-600" title={item}>{item}</p>)}{items.length === 0 && empty && <p className="text-sm text-slate-400">{empty}</p>}</div><Link href={href} className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-blue-700 hover:text-blue-800">Open <ArrowRight className="h-3.5 w-3.5" /></Link></article> }
+function ResearchCard({ icon: Icon, title, items, href, empty }: { icon: typeof BookOpen; title: string; items: string[]; href: string; empty: string }) { return <article className="border-l border-white/10 pl-4"><div className="flex items-center gap-2 text-sm font-semibold text-slate-200"><Icon className="h-4 w-4 text-blue-400" />{title}</div><div className="mt-3 min-h-16 space-y-1.5">{items.slice(0, 2).map((item) => <p key={item} className="truncate text-sm text-slate-400" title={item}>{item}</p>)}{items.length === 0 && empty && <p className="text-sm text-slate-500">{empty}</p>}</div><Link href={href} className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-blue-400 hover:text-blue-300">Open <ArrowRight className="h-3.5 w-3.5" /></Link></article> }
 
 function PlannerWidget({ id, order, onMoveToTop, onDuplicatePage, onMovePageToTrash, children }: { id: WidgetId; order: number; onMoveToTop: (id: WidgetId) => void; onDuplicatePage: () => void; onMovePageToTrash: () => void; children: ReactNode }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id })
@@ -864,18 +908,18 @@ function PlannerWidget({ id, order, onMoveToTop, onDuplicatePage, onMovePageToTr
   </div>
 }
 
-function Field({ label, children }: { label: string; children: ReactNode }) { return <label className="block text-xs font-semibold text-slate-500">{label}{children}</label> }
-function Insight({ label, value }: { label: string; value: string }) { return <div className="border-l-2 border-emerald-200 pl-3.5"><p className="text-xs font-medium text-emerald-800">{label}</p><p className="mt-1 text-sm font-semibold text-emerald-950">{value}</p></div> }
-function GuestPlan() { return <main className="flex min-h-[70vh] items-center justify-center bg-[#f7f9fc] px-5"><section className="max-w-md rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm"><NotebookPen className="mx-auto h-7 w-7 text-blue-600" /><h1 className="mt-4 text-2xl font-semibold tracking-tight text-slate-950">Your private My Plan.</h1><p className="mt-2 text-sm leading-6 text-slate-600">A flexible place for daily notes, deadlines, budget, English goals and the research you save in CampCareer.</p><Link href="/login?next=/myplan" className="mt-6 inline-flex rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white">Sign in to start</Link></section></main> }
-function PlannerSkeleton() { return <main className="min-h-screen bg-[#f7f9fc]"><div className="mx-auto max-w-7xl px-5 py-10 sm:px-6"><div className="h-10 w-48 animate-pulse rounded-xl bg-slate-200" /><div className="mt-8 grid gap-5 xl:grid-cols-2"><div className="h-96 animate-pulse rounded-3xl bg-slate-200" /><div className="h-96 animate-pulse rounded-3xl bg-slate-200" /></div></div></main> }
+function Field({ label, children }: { label: string; children: ReactNode }) { return <label className="block text-xs font-semibold text-slate-400">{label}{children}</label> }
+function Insight({ label, value }: { label: string; value: string }) { return <div className="border-l-2 border-emerald-500/40 pl-3.5"><p className="text-xs font-medium text-emerald-400">{label}</p><p className="mt-1 text-sm font-semibold text-emerald-300">{value}</p></div> }
+function GuestPlan() { return <main className="flex min-h-[70vh] items-center justify-center bg-[#0f0f12] px-5"><section className="max-w-md rounded-3xl border border-white/10 bg-[#1a1a20] p-8 text-center"><NotebookPen className="mx-auto h-7 w-7 text-blue-500" /><h1 className="mt-4 text-2xl font-semibold tracking-tight text-white">Your private My Plan.</h1><p className="mt-2 text-sm leading-6 text-slate-400">A flexible place for daily notes, deadlines, budget, English goals and the research you save in CampCareer.</p><Link href="/login?next=/myplan" className="mt-6 inline-flex rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-500">Sign in to start</Link></section></main> }
+function PlannerSkeleton() { return <main className="min-h-screen bg-[#0f0f12]"><div className="mx-auto max-w-7xl px-5 py-10 sm:px-6"><div className="h-10 w-48 animate-pulse rounded-xl bg-white/10" /><div className="mt-8 grid gap-5 xl:grid-cols-2"><div className="h-96 animate-pulse rounded-3xl bg-white/5" /><div className="h-96 animate-pulse rounded-3xl bg-white/5" /></div></div></main> }
 
-const inputClass = "mt-1.5 h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-blue-400 focus:ring-4 focus:ring-blue-100"
+const inputClass = "mt-1.5 h-10 w-full rounded-xl border border-white/10 bg-white/5 px-3 text-sm text-slate-200 outline-none transition placeholder:text-slate-500 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20"
 const plannerThemeClasses: Record<PlannerTheme, string> = {
   mist: "bg-[radial-gradient(circle_at_top_left,_#e0eeff,_transparent_35%),#f7f9fc]",
   lavender: "bg-[radial-gradient(circle_at_top_left,_#eee5ff,_transparent_35%),#faf8ff]",
   sage: "bg-[radial-gradient(circle_at_top_left,_#def7e7,_transparent_35%),#f7fbf8]",
   peach: "bg-[radial-gradient(circle_at_top_left,_#ffe8d8,_transparent_35%),#fffaf7]",
-  midnight: "bg-[radial-gradient(circle_at_top_left,_#334155,_transparent_35%),#0f172a]",
+  midnight: "bg-[#0f0f12]",
 }
 function numericValue(value: number | string | null) { if (value === null || value === "") return null; const number = Number(String(value).replace(/,/g, "")); return Number.isFinite(number) && number >= 0 ? number : null }
 function numberOrNull(value: number | string | null) { return numericValue(value) }

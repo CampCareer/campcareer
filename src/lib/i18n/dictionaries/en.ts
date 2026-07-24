@@ -19,7 +19,7 @@ const en = {
       eyebrow: 'Australia decision journey',
       heading: 'Make the next decision, not every decision at once.',
       summary: 'Start with your path, compare the study options that fit, then turn the shortlist into a plan.',
-      findPath: 'Discovery',
+      findPath: 'Search',
       findPathDescription: 'Match fields to your goal, budget and timeline.',
       compareStudy: 'Compare',
       compareStudyDescription: 'Review tuition, outcomes and ROI side by side.',

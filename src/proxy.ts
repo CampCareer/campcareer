@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { DEFAULT_LOCALE, LOCALE_COOKIE, isPublishedLocaleOption, localeForUi, localeFromPathname, localizePath, withoutLocalePrefix } from '@/lib/i18n/config'
 
 // 로그인 필요한 페이지 보호 (/timeline, /checklist는 비로그인 체험 허용 정책)
-const PROTECTED_PATHS = ['/dashboard', '/planner', '/myplan', '/saved', '/documents', '/profile', '/reports/my-australia']
+const PROTECTED_PATHS = ['/dashboard', '/planner', '/saved', '/documents', '/profile', '/reports/my-australia']
 
 // 매출에 기여하지 않는 SEO·백링크 분석 크롤러. 검색엔진(Googlebot/Bingbot/
 // DuckDuckBot 등)과 소셜 미리보기 봇(Twitterbot, facebookexternalhit,
@@ -168,7 +168,6 @@ export const config = {
     // Authentication is only needed on these account pages.
     '/dashboard/:path*',
     '/planner/:path*',
-    '/myplan/:path*',
     '/saved/:path*',
     '/documents/:path*',
     '/profile/:path*',

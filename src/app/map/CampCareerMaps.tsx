@@ -125,8 +125,12 @@ export default function CampCareerMaps({
   const [isMobile, setIsMobile] = useState(false)
   // 모바일 접이식 툴바 상태
   const [expanded, setExpanded] = useState(false)
+  // 모바일 시트 닫힘 상태 — 닫아도 selected(지역)는 유지하여 지도가 해당 지역에 고정되도록
+  const [mobileSheetHidden, setMobileSheetHidden] = useState(false)
   const [jobSearch, setJobSearch] = useState("")
   const [jobSearchOpen, setJobSearchOpen] = useState(false)
+  const [shareOpen, setShareOpen] = useState(false)
+  const [copiedLink, setCopiedLink] = useState(false)
 
   useEffect(() => {
     if (!activeCountry || loadedCountries.current.has(activeCountry)) return
@@ -268,10 +272,11 @@ export default function CampCareerMaps({
     url.searchParams.set("country", activeCountry?.toLowerCase() ?? "au")
     if (selected) url.searchParams.set("state", selected)
     const shareUrl = url.toString()
-    if (navigator.share) {
-      navigator.share({ url: shareUrl })
+    if (isMobile && navigator.share) {
+      navigator.share({ title: occLabel || stateLabel, url: shareUrl }).catch(() => {})
     } else {
-      navigator.clipboard.writeText(shareUrl)
+      setShareOpen(true)
+      setCopiedLink(false)
     }
   }
 
@@ -561,11 +566,13 @@ export default function CampCareerMaps({
       : Object.values(SA4_BY_STATE).flat()
     const region = regions.find((r) => r.code === code) ?? null
     setSelectedSA4(region)
+    setMobileSheetHidden(false)
     if (region) track("select_region", { state: selected ?? "", region: region.name })
   }, [selected])
 
   const onSelectState = useCallback((s: string) => {
     setSelected(s)
+    setMobileSheetHidden(false)
     if (activeCountry === "JP") setSelectedJPCityArea(null)
     if (activeCountry === "FR") setSelectedFRCityCode(null)
     if (activeCountry === "ES") setSelectedESCityCode(null)
@@ -586,6 +593,7 @@ export default function CampCareerMaps({
   const onSelectCountry = useCallback((country: Exclude<ActiveCountry, null>) => {
     setActiveCountry(country)
     setSelected(country === "SG" ? "central" : null)
+    setMobileSheetHidden(false)
     setSelectedJPCityArea(null)
     setSelectedFRCityCode(null)
     setSelectedESCityCode(null)
@@ -701,6 +709,7 @@ export default function CampCareerMaps({
       setSelectedNeroA4(null)
     }
     if (isMobile) {
+      setMobileSheetHidden(true)
       setExpanded(false)
     } else if (!hadDetail) {
       onReset()
@@ -708,6 +717,7 @@ export default function CampCareerMaps({
   }, [selectedUniv, selectedOccCode, selectedUsOcc, selectedNeroA4, isMobile, onReset])
 
   const hasMapDetail = Boolean(selectedUniv || selectedOccCode || selectedUsOcc || selectedNeroA4)
+  const hasPanelOpen = Boolean(selected || activeCountry === "IE" || activeCountry === "UK" || selectedUniv || hasMapDetail)
 
   const handleMapToolbarBack = useCallback(() => {
     if (selectedUniv) {
@@ -896,9 +906,9 @@ export default function CampCareerMaps({
         {auOnly ? (
       <div className="pointer-events-none absolute inset-x-0 top-0 z-[2200] p-3">
         <div className="pointer-events-auto flex min-w-0 items-center justify-between gap-2">
-          <div className="relative min-w-0 flex-1 max-w-md">
+          <div className="relative min-w-0 flex-1 max-w-[380px]">
             <div className="flex items-center h-11 rounded-full bg-white shadow-lg ring-1 ring-slate-200/60 px-4 gap-2.5">
-              {hasMapDetail ? (
+              {!isMobile && hasPanelOpen ? (
                 <button
                   type="button"
                   onClick={handleMapToolbarBack}
@@ -914,16 +924,20 @@ export default function CampCareerMaps({
               ) : (
                 <Search className="h-4 w-4 shrink-0 text-slate-400" />
               )}
-              <input
-                type="text"
-                placeholder={locale === "ko" ? "직업 검색" : "Search Jobs"}
-                value={jobSearch}
-                onChange={(e) => { setJobSearch(e.target.value); setJobSearchOpen(true) }}
-                onFocus={() => setJobSearchOpen(true)}
-                onBlur={() => setTimeout(() => setJobSearchOpen(false), 200)}
-                className="flex-1 bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400"
-              />
-              {hasMapDetail ? (
+              {!isMobile && hasPanelOpen && occLabel ? (
+                <span className="flex-1 truncate text-sm font-semibold text-slate-800">{occLabel}</span>
+              ) : (
+                <input
+                  type="text"
+                  placeholder={locale === "ko" ? "직업 검색" : "Search Jobs"}
+                  value={jobSearch}
+                  onChange={(e) => { setJobSearch(e.target.value); setJobSearchOpen(true) }}
+                  onFocus={() => setJobSearchOpen(true)}
+                  onBlur={() => setTimeout(() => setJobSearchOpen(false), 200)}
+                  className="flex-1 bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400"
+                />
+              )}
+              {!isMobile && hasPanelOpen ? (
                 <button
                   type="button"
                   onClick={handleMapToolbarClose}
@@ -1673,7 +1687,7 @@ export default function CampCareerMaps({
           tab={tab}
         />
 
-        {(selected || activeCountry === "IE" || activeCountry === "UK" || selectedUniv || hasMapDetail) && (() => {
+        {((selected && !(isMobile && mobileSheetHidden)) || activeCountry === "IE" || activeCountry === "UK" || selectedUniv || hasMapDetail) && (() => {
           const deCity = activeCountry === "DE" && selectedUniv
             ? data.deCities.find((c) => c.name.toLowerCase() === (selectedUniv as DECollege).city_name.toLowerCase())
             : undefined
@@ -1754,14 +1768,83 @@ export default function CampCareerMaps({
             />
           )
           return isMobile ? (
-            <MobileSheet>{panel}</MobileSheet>
+            <MobileSheet onBack={handleMapToolbarBack} onClose={handleMapToolbarClose}>{panel}</MobileSheet>
           ) : (
-            <div className="absolute left-4 top-4 z-[1000] flex max-h-[calc(100%-2rem)] w-[380px] flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl">
+            <div className={cn("absolute left-4 z-[1000] flex w-[380px] flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl", auOnly && hasPanelOpen ? "top-16 max-h-[calc(100%-4rem)]" : "top-4 max-h-[calc(100%-2rem)]")}>
               {panel}
             </div>
           )
         })()}
       </div>
+
+      {shareOpen && (() => {
+        const shareUrl = (() => {
+          const url = new URL(window.location.href)
+          url.searchParams.set("country", activeCountry?.toLowerCase() ?? "au")
+          if (selected) url.searchParams.set("state", selected)
+          return url.toString()
+        })()
+        const shareOccRow = selectedOccCode
+          ? activeCountry === "AU"
+            ? data.shortageByState[selected as StateCode]?.find((o) => o.anzsco_code === selectedOccCode)
+            : activeCountry === "CA"
+              ? data.caOccupations[selectedOccCode]
+              : activeCountry === "UK"
+                ? data.ukShortageByRegion?.[selected!]?.find((o) => o.soc_code === selectedOccCode)
+                : activeCountry === "DE"
+                  ? data.deShortageByRegion?.[selected!]?.find((o) => o.kldb_code === selectedOccCode)
+                  : activeCountry === "NL"
+                    ? data.nlShortageByRegion?.[selected!]?.find((o) => o.sbc_code === selectedOccCode)
+                    : null
+          : null
+        const _r = shareOccRow as unknown as Record<string, unknown> | null
+        const salary = _r
+          ? (_r.median_salary_aud as number | null)
+            ?? (_r.median_salary_cad as number | null)
+            ?? (_r.median_salary_gbp as number | null)
+            ?? (_r.median_salary_eur as number | null)
+            ?? null
+          : null
+        const currency = activeCountry === "AU" ? "A$" : activeCountry === "CA" ? "C$" : activeCountry === "UK" ? "£" : "€"
+        const shareTitle = occLabel || stateLabel || countryLabel
+        const parts = [stateLabel, salary != null ? `${currency}${salary.toLocaleString()}` : null].filter(Boolean)
+        return (
+          <div className="fixed inset-0 z-[5000] flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={() => setShareOpen(false)}>
+            <div className="w-full max-w-md mx-4 rounded-2xl bg-white p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-slate-900">Share</h3>
+                <button type="button" onClick={() => setShareOpen(false)} className="rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600">
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+              <div className="mb-4">
+                <p className="text-base font-semibold text-slate-900">{shareTitle}</p>
+                {parts.length > 0 && (
+                  <p className="text-sm text-slate-500 mt-0.5">{parts.join(" · ")}</p>
+                )}
+              </div>
+              <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 mb-4">
+                <ExternalLink className="h-4 w-4 shrink-0 text-slate-400" />
+                <span className="flex-1 truncate text-sm text-slate-600">{shareUrl}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  navigator.clipboard.writeText(shareUrl)
+                  setCopiedLink(true)
+                  setTimeout(() => setCopiedLink(false), 2000)
+                }}
+                className={cn(
+                  "w-full rounded-xl px-4 py-2.5 text-sm font-semibold transition-colors",
+                  copiedLink ? "bg-emerald-500 text-white" : "bg-slate-900 text-white hover:bg-slate-800"
+                )}
+              >
+                {copiedLink ? (locale === "ko" ? "클립보드에 복사됨" : "COPIED TO CLIPBOARD") : (locale === "ko" ? "링크 복사" : "COPY LINK")}
+              </button>
+            </div>
+          </div>
+        )
+      })()}
     </div>
   )
 }
@@ -1807,9 +1890,9 @@ function NZInfoPanel({ region, universities, shortageCount, locale }: { region: 
           <div className="mt-3 rounded-lg bg-violet-50 p-3">
             <p className="text-xs text-violet-700">{locale === "ko" ? "부족 직종 수" : "Shortage Occupations"}</p>
             <p className="mt-1 text-lg font-semibold text-violet-950">{shortageCount}</p>
+              </div>
+            )}
           </div>
-        )}
-      </div>
       {universities.length > 0 && (
         <div className="rounded-lg border border-slate-200 p-4">
           <p className="text-xs font-medium text-slate-500">{locale === "ko" ? "대학교" : "Universities"}</p>
@@ -3275,7 +3358,7 @@ function TabButton({
 
 // 모바일 바텀시트 — 구글맵 모바일처럼 손잡이를 위/아래로 끌어 높이를 조절한다.
 // 스냅: peek(맵을 넓게) · 기본(절반) · full(화면 거의 전체). 콘텐츠 영역은 따로 스크롤.
-function MobileSheet({ children }: { children: React.ReactNode }) {
+function MobileSheet({ children, onBack, onClose }: { children: React.ReactNode; onBack?: () => void; onClose?: () => void }) {
   const sheetRef = useRef<HTMLDivElement>(null)
   const [height, setHeight] = useState<number | null>(null)
   const [dragging, setDragging] = useState(false)
@@ -3339,16 +3422,43 @@ function MobileSheet({ children }: { children: React.ReactNode }) {
       )}
       style={{ height: height ?? "55%" }}
     >
+      {/* ── 크롬 바: 백/닫기 + 손잡이 ── */}
       <div
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={endDrag}
         onPointerCancel={endDrag}
-        className="flex shrink-0 cursor-grab touch-none justify-center pt-2.5 pb-1 active:cursor-grabbing"
+        className="flex shrink-0 cursor-grab touch-none items-center justify-between px-3 pt-2.5 pb-1 active:cursor-grabbing"
       >
+        <div className="flex items-center gap-1">
+          {onBack && (
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); onBack() }}
+              onPointerDown={(e) => e.stopPropagation()}
+              className="rounded-full p-1.5 hover:bg-slate-100 active:bg-slate-200"
+              aria-label="Back"
+            >
+              <ChevronLeft className="h-4 w-4 text-slate-500" />
+            </button>
+          )}
+        </div>
         <span className="h-1.5 w-10 rounded-full bg-slate-300" />
+        <div className="flex items-center gap-1">
+          {onClose && (
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); onClose() }}
+              onPointerDown={(e) => e.stopPropagation()}
+              className="rounded-full p-1.5 hover:bg-slate-100 active:bg-slate-200"
+              aria-label="Close"
+            >
+              <X className="h-4 w-4 text-slate-500" />
+            </button>
+          )}
+        </div>
       </div>
-      <div className="flex min-h-0 flex-1 flex-col">{children}</div>
+      <div className="flex min-h-0 flex-1 flex-col [&_button[aria-label='Close']]:hidden [&_button[aria-label='닫기']]:hidden">{children}</div>
     </div>
   )
 }
