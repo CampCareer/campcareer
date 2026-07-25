@@ -41,42 +41,42 @@ export function BirthdayPrompt({ user }: { user: User }) {
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm" role="dialog" aria-modal="true">
-      <div className="w-full max-w-sm rounded-3xl bg-white p-8 shadow-xl">
-        <h2 className="text-center text-xl font-semibold tracking-tight text-slate-950">
+      <div className="w-full max-w-md rounded-3xl bg-white p-10 shadow-xl sm:p-12">
+        <h2 className="text-center text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">
           {isKo ? "생일이 언제인가요?" : "When's your birthday?"}
         </h2>
 
-        <div className="mt-8 grid grid-cols-3 gap-3">
-          <label className="block text-xs font-semibold text-slate-500">
+        <div className="mt-10 grid grid-cols-3 gap-4">
+          <label className="block text-sm font-semibold text-slate-500">
             {isKo ? "연도" : "Year"}
-            <select value={year ?? ""} onChange={(e) => setYear(e.target.value ? Number(e.target.value) : null)} className="mt-1.5 h-11 w-full cursor-pointer rounded-xl border border-slate-200 bg-white px-2 text-sm text-slate-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
+            <select value={year ?? ""} onChange={(e) => setYear(e.target.value ? Number(e.target.value) : null)} className="mt-2 h-14 w-full cursor-pointer rounded-xl border border-slate-200 bg-white px-3 text-base text-slate-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
               <option value=""></option>
               {YEARS.map((y) => <option key={y} value={y}>{y}</option>)}
             </select>
           </label>
 
-          <label className="block text-xs font-semibold text-slate-500">
+          <label className="block text-sm font-semibold text-slate-500">
             {isKo ? "월" : "Month"}
-            <select value={month ?? ""} onChange={(e) => setMonth(e.target.value ? Number(e.target.value) : null)} className="mt-1.5 h-11 w-full cursor-pointer rounded-xl border border-slate-200 bg-white px-2 text-sm text-slate-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
+            <select value={month ?? ""} onChange={(e) => setMonth(e.target.value ? Number(e.target.value) : null)} className="mt-2 h-14 w-full cursor-pointer rounded-xl border border-slate-200 bg-white px-3 text-base text-slate-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
               <option value=""></option>
               {MONTHS.map((m) => <option key={m} value={m}>{m}</option>)}
             </select>
           </label>
 
-          <label className="block text-xs font-semibold text-slate-500">
+          <label className="block text-sm font-semibold text-slate-500">
             {isKo ? "일" : "Day"}
-            <select value={day ?? ""} onChange={(e) => setDay(e.target.value ? Number(e.target.value) : null)} className="mt-1.5 h-11 w-full cursor-pointer rounded-xl border border-slate-200 bg-white px-2 text-sm text-slate-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
+            <select value={day ?? ""} onChange={(e) => setDay(e.target.value ? Number(e.target.value) : null)} className="mt-2 h-14 w-full cursor-pointer rounded-xl border border-slate-200 bg-white px-3 text-base text-slate-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
               <option value=""></option>
               {Array.from({ length: maxDay }, (_, i) => i + 1).map((d) => <option key={d} value={d}>{d}</option>)}
             </select>
           </label>
         </div>
 
-        <p className="mt-6 text-center text-xs text-slate-400">
+        <p className="mt-5 text-center text-xs text-slate-400">
           {isKo ? "입력하신 생년월일은 공개되지 않습니다." : "Your birthday won't be shown publicly."}
         </p>
 
-        <button disabled={!canSubmit || saving} onClick={void handleSubmit} className="mt-4 h-11 w-full rounded-xl bg-blue-600 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:opacity-40">
+        <button disabled={!canSubmit || saving} onClick={void handleSubmit} className="mt-10 h-14 w-full rounded-xl bg-blue-600 text-base font-semibold text-white transition hover:bg-blue-700 disabled:opacity-40">
           {isKo ? "계속하기" : "Continue"}
         </button>
       </div>
