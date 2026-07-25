@@ -141,7 +141,7 @@ export function StepPlan({
 
         {/* Next steps CTA */}
         <div className="mt-10">
-          <h2 className="text-lg font-semibold text-slate-950">
+          <h2 className="text-xl font-semibold text-slate-950 sm:text-2xl">
             {isKo ? "다음 단계" : "Next steps"}
           </h2>
           <button
