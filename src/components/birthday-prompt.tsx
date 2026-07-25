@@ -35,7 +35,7 @@ export function BirthdayPrompt({ user }: { user: User }) {
     const dd = String(day).padStart(2, "0")
     const birthday = `${year}-${mm}-${dd}`
     await supabase.from("user_preferences").upsert({ id: user.id, birthday, updated_at: new Date().toISOString() })
-    window.location.reload()
+    window.location.href = "/planner"
   }
 
   return (
@@ -48,7 +48,7 @@ export function BirthdayPrompt({ user }: { user: User }) {
         <div className="mt-8 grid grid-cols-3 gap-3">
           <label className="block text-xs font-semibold text-slate-500">
             {isKo ? "연도" : "Year"}
-            <select value={year ?? ""} onChange={(e) => setYear(e.target.value ? Number(e.target.value) : null)} className="mt-1.5 h-11 w-full rounded-xl border border-slate-200 bg-white px-2 text-sm text-slate-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
+            <select value={year ?? ""} onChange={(e) => setYear(e.target.value ? Number(e.target.value) : null)} className="mt-1.5 h-11 w-full cursor-pointer rounded-xl border border-slate-200 bg-white px-2 text-sm text-slate-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
               <option value=""></option>
               {YEARS.map((y) => <option key={y} value={y}>{y}</option>)}
             </select>
@@ -56,7 +56,7 @@ export function BirthdayPrompt({ user }: { user: User }) {
 
           <label className="block text-xs font-semibold text-slate-500">
             {isKo ? "월" : "Month"}
-            <select value={month ?? ""} onChange={(e) => setMonth(e.target.value ? Number(e.target.value) : null)} className="mt-1.5 h-11 w-full rounded-xl border border-slate-200 bg-white px-2 text-sm text-slate-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
+            <select value={month ?? ""} onChange={(e) => setMonth(e.target.value ? Number(e.target.value) : null)} className="mt-1.5 h-11 w-full cursor-pointer rounded-xl border border-slate-200 bg-white px-2 text-sm text-slate-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
               <option value=""></option>
               {MONTHS.map((m) => <option key={m} value={m}>{m}</option>)}
             </select>
@@ -64,7 +64,7 @@ export function BirthdayPrompt({ user }: { user: User }) {
 
           <label className="block text-xs font-semibold text-slate-500">
             {isKo ? "일" : "Day"}
-            <select value={day ?? ""} onChange={(e) => setDay(e.target.value ? Number(e.target.value) : null)} className="mt-1.5 h-11 w-full rounded-xl border border-slate-200 bg-white px-2 text-sm text-slate-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
+            <select value={day ?? ""} onChange={(e) => setDay(e.target.value ? Number(e.target.value) : null)} className="mt-1.5 h-11 w-full cursor-pointer rounded-xl border border-slate-200 bg-white px-2 text-sm text-slate-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
               <option value=""></option>
               {Array.from({ length: maxDay }, (_, i) => i + 1).map((d) => <option key={d} value={d}>{d}</option>)}
             </select>
