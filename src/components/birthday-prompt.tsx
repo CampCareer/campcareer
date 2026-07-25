@@ -80,7 +80,7 @@ export function BirthdayPrompt({ user }: { user: User }) {
           {isKo ? "입력하신 생년월일은 공개되지 않습니다." : "Your birthday won't be shown publicly."}
         </p>
 
-        <button disabled={!canSubmit || saving} onClick={void handleSubmit} className="mt-10 h-14 w-full rounded-xl bg-blue-600 text-base font-semibold text-white transition hover:bg-blue-700 disabled:opacity-40">
+        <button disabled={!canSubmit || saving} onClick={() => void handleSubmit()} className="mt-10 h-14 w-full rounded-xl bg-blue-600 text-base font-semibold text-white transition hover:bg-blue-700 disabled:opacity-40">
           {isKo ? "계속하기" : "Continue"}
         </button>
       </div>
