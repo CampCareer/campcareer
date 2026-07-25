@@ -1,12 +1,11 @@
 "use client"
 
-import Link from "next/link"
 import { Banknote, BookOpenCheck, CalendarDays, Languages, LineChart, NotebookPen, Scale, Home, Sparkles, Target, type LucideIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { PlannerSearch } from "./planner-search"
 
-export type PlannerArea = "today" | "pathway" | "applications" | "money" | "english" | "research" | "report" | "notes" | "compare"
+export type PlannerArea = "home" | "today" | "pathway" | "applications" | "money" | "english" | "research" | "report" | "notes" | "compare"
 
 type PlannerSidebarProps = {
   activeArea: PlannerArea
@@ -31,6 +30,7 @@ export function PlannerSidebar({ activeArea, onNavigate, onOpenPath }: PlannerSi
   const locale = useRouteLocale()
   const isKo = locale === "ko"
   const items: SidebarItem[] = [
+    { id: "home", icon: Home, label: isKo ? "홈" : "Home" },
     { id: "today", icon: Sparkles, label: isKo ? "오늘" : "Today" },
     { id: "pathway", icon: Target, label: isKo ? "나의 경로" : "My pathway" },
     { id: "compare", icon: Scale, label: isKo ? "비교" : "Compare" },
@@ -45,15 +45,6 @@ export function PlannerSidebar({ activeArea, onNavigate, onOpenPath }: PlannerSi
     <div className="flex justify-end px-3 pb-5 pt-1"><PlannerSearch isKo={isKo} onNavigate={onNavigate} onOpenPath={onOpenPath} /></div>
 
     <nav aria-label={isKo ? "My Plan 실행 영역" : "My Plan action areas"} className="space-y-1">
-      <Link
-        href="/home"
-        className="group flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition text-slate-500 hover:bg-slate-100 hover:text-slate-700"
-      >
-        <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-slate-100 text-slate-500 group-hover:bg-slate-200 group-hover:text-blue-600">
-          <Home className="size-4" />
-        </span>
-        <span className="min-w-0 flex-1 text-sm font-semibold">{isKo ? "홈" : "Home"}</span>
-      </Link>
       {items.map((item) => <SidebarButton key={item.id} item={item} active={activeArea === item.id} onClick={() => onNavigate(item.id)} />)}
     </nav>
 
