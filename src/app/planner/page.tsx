@@ -35,7 +35,6 @@ import { PlannerToolbar, PlannerToolbarControls } from "@/components/planner/pla
 import { PlannerSidebar, type PlannerArea } from "@/components/planner/planner-sidebar"
 import { GoalSetup, type GoalSetupData } from "@/components/planner/goal-setup"
 import { TodayDashboard, type TodayGoalOption } from "@/components/planner/today-dashboard"
-import { HomeDashboard } from "@/components/planner/home-dashboard"
 import { MyAustraliaReportWorkspace } from "@/components/reports/my-australia-report-workspace"
 import { buildPlanHealth } from "@/lib/plan-health"
 import { getRoiReportReadiness } from "@/lib/report-plan-bridge"
@@ -92,8 +91,7 @@ type PlannerPreferences = { theme: PlannerTheme; widget_order: WidgetId[]; widge
 type PlannerTheme = "mist" | "lavender" | "sage" | "peach" | "midnight"
 
 const plannerAreaPaths: Record<PlannerArea, string> = {
-  home: "/planner",
-  today: "/planner/today",
+  today: "/planner",
   pathway: "/planner/pathway",
   compare: "/planner/compare",
   applications: "/planner/applications",
@@ -105,7 +103,7 @@ const plannerAreaPaths: Record<PlannerArea, string> = {
 }
 
 function plannerAreaFromPath(pathname: string): PlannerArea | null {
-  if (pathname === "/planner") return "home"
+  if (pathname === "/planner") return "today"
   const match = Object.entries(plannerAreaPaths).find(([, path]) => path.split("?")[0] === pathname)
   return (match?.[0] as PlannerArea | undefined) ?? null
 }
@@ -115,7 +113,7 @@ const goalLabels: Record<string, string> = { study: "Study quality", visa: "Post
 const countryLabels: Record<string, string> = { AU: "Australia", CA: "Canada", IE: "Ireland", UK: "United Kingdom", US: "United States" }
 const defaultWidgetOrder: WidgetId[] = ["today", "dates", "money", "english", "research"]
 const defaultWidgetSizes: Record<WidgetId, WidgetSize> = { today: "wide", dates: "narrow", money: "half", english: "half", research: "wide" }
-export default function PlannerPage({ initialArea = "home" }: { initialArea?: PlannerArea }) {
+export default function PlannerPage({ initialArea = "today" }: { initialArea?: PlannerArea }) {
   const pathname = usePathname()
   const router = useRouter()
   const supabase = useMemo(() => createClient(), [])
@@ -420,7 +418,7 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
       }
       // Load ROI school data for compare
       if (wiz.schoolData) {
-        setCompareSchools([{
+        const initial = [{
           id: `wizard-${Date.now()}`,
           college_name: wiz.schoolData.college_name,
           college_state: wiz.schoolData.college_state,
@@ -430,12 +428,21 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
           employment_rate: wiz.schoolData.employment_rate,
           roi_score: wiz.schoolData.roi_score,
           payback_years: wiz.schoolData.payback_years,
-        }])
+        }]
+        setCompareSchools(initial)
+        try { localStorage.setItem("cc_compare_schools", JSON.stringify(initial)) } catch {}
       }
       // Clean up localStorage
       localStorage.removeItem("cc_wizard_data")
     } catch {}
   }, [goalProfile, loading, user])
+
+  // Sync compareSchools to localStorage for Home page
+  useEffect(() => {
+    if (compareSchools.length > 0) {
+      try { localStorage.setItem("cc_compare_schools", JSON.stringify(compareSchools)) } catch {}
+    }
+  }, [compareSchools])
 
   /* ── Mutations ── */
   async function saveNote(event: FormEvent<HTMLFormElement>) {
@@ -817,7 +824,6 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
         {/* ── Content ── */}
         <main className="min-h-0 flex-1 overflow-y-auto">
           <div key={activeArea} className="tl-stage">
-          {activeArea === "home" && <HomeDashboard goalProfile={goalProfile!} goalOptions={goalOptions} tasks={tasks} applications={applicationRecords.map((record) => ({ id: record.id, title: record.programme_name || record.provider_name || "Application", deadline_date: record.deadline_date, status: record.status }))} notes={notes} compareSchools={compareSchools} currentSavings={savings} monthlySaving={monthlySaving} targetAmount={targetAmount} targetDate={budget.target_date} currency={budget.currency} currentEnglishScore={numberOrNull(language.current_score)} targetEnglishScore={numberOrNull(language.target_score)} englishExam={language.exam_name} englishTestDate={language.test_date} leadingOptionTitle={leadingOption?.title ?? null} leadingRationale={pathwayDecision.rationale} onNavigate={(area) => navigatePlannerArea(area as PlannerArea)} />}
           {activeArea === "today" && <section className="mx-auto max-w-6xl px-6 pt-7 sm:px-10 sm:pt-10"><TodayDashboard goalProfile={goalProfile!} goalOptions={goalOptions} tasks={tasks} applications={applicationRecords.map((record) => ({ id: record.id, title: record.programme_name || record.provider_name || "Application", deadline_date: record.deadline_date, status: record.status }))} currentSavings={savings} monthlySaving={monthlySaving} targetAmount={targetAmount} targetDate={budget.target_date} currency={budget.currency} currentEnglishScore={numberOrNull(language.current_score)} targetEnglishScore={numberOrNull(language.target_score)} englishExam={language.exam_name} englishTestDate={language.test_date} evidenceCount={evidenceCount} leadingOptionTitle={leadingOption?.title ?? null} leadingRationale={pathwayDecision.rationale} onUpdatePlanProfile={updatePlanProfile} onOpenReport={() => navigatePlannerArea("report")} /></section>}
           {activeArea === "pathway" && <MyPathwaySpace goalTitle={goalProfile!.target_occupation_title} studyTitle={goalProfile!.target_study_concept_label} options={goalOptions as ExecutionGoalOption[]} decision={pathwayDecision} evidenceCount={evidenceCount} onSaveDecision={savePathwayDecision} />}
           {activeArea === "compare" && <CompareSpace schools={compareSchools} isKo={isKo} onRemove={(id) => setCompareSchools((prev) => prev.filter((s) => s.id !== id))} />}
