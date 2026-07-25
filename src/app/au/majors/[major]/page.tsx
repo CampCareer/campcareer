@@ -141,7 +141,7 @@ export default async function AustralianMajorDetailPage({
         <div className="relative z-10 mx-auto max-w-6xl px-5 py-8 sm:px-6 sm:py-10">
           <div className="flex items-center gap-3">
             <Link href={localizePath("/au/majors", locale)} className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-3.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/20"><ArrowLeft className="h-4 w-4" />{isKo ? "전체 전공" : "All majors"}</Link>
-            <Link href={localizePath("/planner", locale)} className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-3.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/20"><NotebookPen className="h-4 w-4" />MyPlan</Link>
+            <Link href={localizePath("/home", locale)} className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-3.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/20"><NotebookPen className="h-4 w-4" />MyPlan</Link>
           </div>
           <div className="mt-6 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
             <div className="max-w-3xl">

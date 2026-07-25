@@ -56,7 +56,7 @@ export function StepPlan({
       wizardData.schoolData = selectedSchoolData
     }
     try { localStorage.setItem("cc_wizard_data", JSON.stringify(wizardData)) } catch {}
-    router.push(localizePath("/planner", locale))
+    router.push(localizePath("/home", locale))
   }, [selectedConcept, selectedSchool, selectedSchoolData, profile, locale, router])
 
   return (

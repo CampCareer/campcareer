@@ -57,7 +57,7 @@ export function SiteFooter({ className }: { className?: string }) {
               {isKo ? "도구" : "Tools"}
             </h4>
             <ul className="mt-3 space-y-2.5">
-              <FooterLink href="/planner" locale={pathLocale}>
+              <FooterLink href="/home" locale={pathLocale}>
                 {isKo ? "My Plan" : "My Plan"}
               </FooterLink>
               <FooterLink href="/reports/australia" locale={pathLocale}>

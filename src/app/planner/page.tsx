@@ -36,6 +36,7 @@ import { PlannerSidebar, type PlannerArea } from "@/components/planner/planner-s
 import { GoalSetup, type GoalSetupData } from "@/components/planner/goal-setup"
 import { TodayDashboard, type TodayGoalOption } from "@/components/planner/today-dashboard"
 import { HomeDashboard } from "@/components/planner/home-dashboard"
+import { ExploreSpace } from "@/components/planner/explore-space"
 import { MyAustraliaReportWorkspace } from "@/components/reports/my-australia-report-workspace"
 import { buildPlanHealth } from "@/lib/plan-health"
 import { getRoiReportReadiness } from "@/lib/report-plan-bridge"
@@ -93,6 +94,7 @@ type PlannerTheme = "mist" | "lavender" | "sage" | "peach" | "midnight"
 
 const plannerAreaPaths: Record<PlannerArea, string> = {
   home: "/planner",
+  explore: "/planner/explore",
   today: "/planner/today",
   pathway: "/planner/pathway",
   compare: "/planner/compare",
@@ -827,6 +829,7 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
         <main className="min-h-0 flex-1 overflow-y-auto">
           <div key={activeArea} className="tl-stage">
           {activeArea === "home" && <HomeDashboard goalProfile={goalProfile!} goalOptions={goalOptions} tasks={tasks} applications={applicationRecords.map((record) => ({ id: record.id, title: record.programme_name || record.provider_name || "Application", deadline_date: record.deadline_date, status: record.status }))} notes={notes} compareSchools={compareSchools} currentSavings={savings} monthlySaving={monthlySaving} targetAmount={targetAmount} targetDate={budget.target_date} currency={budget.currency} currentEnglishScore={numberOrNull(language.current_score)} targetEnglishScore={numberOrNull(language.target_score)} englishExam={language.exam_name} englishTestDate={language.test_date} leadingOptionTitle={leadingOption?.title ?? null} leadingRationale={pathwayDecision.rationale} onNavigate={(area) => navigatePlannerArea(area as PlannerArea)} />}
+          {activeArea === "explore" && <ExploreSpace isKo={isKo} />}
           {activeArea === "today" && <section className="mx-auto max-w-6xl px-6 pt-7 sm:px-10 sm:pt-10"><TodayDashboard goalProfile={goalProfile!} goalOptions={goalOptions} tasks={tasks} applications={applicationRecords.map((record) => ({ id: record.id, title: record.programme_name || record.provider_name || "Application", deadline_date: record.deadline_date, status: record.status }))} currentSavings={savings} monthlySaving={monthlySaving} targetAmount={targetAmount} targetDate={budget.target_date} currency={budget.currency} currentEnglishScore={numberOrNull(language.current_score)} targetEnglishScore={numberOrNull(language.target_score)} englishExam={language.exam_name} englishTestDate={language.test_date} evidenceCount={evidenceCount} leadingOptionTitle={leadingOption?.title ?? null} leadingRationale={pathwayDecision.rationale} onUpdatePlanProfile={updatePlanProfile} onOpenReport={() => navigatePlannerArea("report")} /></section>}
           {activeArea === "pathway" && <MyPathwaySpace goalTitle={goalProfile!.target_occupation_title} studyTitle={goalProfile!.target_study_concept_label} options={goalOptions as ExecutionGoalOption[]} decision={pathwayDecision} evidenceCount={evidenceCount} onSaveDecision={savePathwayDecision} />}
           {activeArea === "compare" && <CompareSpace schools={compareSchools} isKo={isKo} onRemove={(id) => setCompareSchools((prev) => prev.filter((s) => s.id !== id))} />}
@@ -943,7 +946,7 @@ function PlannerWidget({ id, order, onMoveToTop, onDuplicatePage, onMovePageToTr
 
 function Field({ label, children }: { label: string; children: ReactNode }) { return <label className="block text-xs font-semibold text-slate-400">{label}{children}</label> }
 function Insight({ label, value }: { label: string; value: string }) { return <div className="border-l-2 border-emerald-500 pl-3.5"><p className="text-xs font-medium text-emerald-600">{label}</p><p className="mt-1 text-sm font-semibold text-emerald-700">{value}</p></div> }
-function GuestPlan() { return <main className="flex min-h-[70vh] items-center justify-center bg-slate-50 px-5"><section className="max-w-md rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm"><NotebookPen className="mx-auto h-7 w-7 text-blue-600" /><h1 className="mt-4 text-2xl font-semibold tracking-tight text-slate-950">Your private Planner.</h1><p className="mt-2 text-sm leading-6 text-slate-500">A flexible place for daily notes, deadlines, budget, English goals and the research you save in CampCareer.</p><Link href="/login?next=/planner" className="mt-6 inline-flex rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-700">Sign in to start</Link></section></main> }
+function GuestPlan() { return <main className="flex min-h-[70vh] items-center justify-center bg-slate-50 px-5"><section className="max-w-md rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm"><NotebookPen className="mx-auto h-7 w-7 text-blue-600" /><h1 className="mt-4 text-2xl font-semibold tracking-tight text-slate-950">Your private Planner.</h1><p className="mt-2 text-sm leading-6 text-slate-500">A flexible place for daily notes, deadlines, budget, English goals and the research you save in CampCareer.</p><Link href="/login?next=/home" className="mt-6 inline-flex rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-700">Sign in to start</Link></section></main> }
 function PlannerSkeleton() { return <main className="min-h-screen bg-slate-50"><div className="mx-auto max-w-7xl px-5 py-10 sm:px-6"><div className="h-10 w-48 animate-pulse rounded-xl bg-slate-200" /><div className="mt-8 grid gap-5 xl:grid-cols-2"><div className="h-96 animate-pulse rounded-3xl bg-slate-100" /><div className="h-96 animate-pulse rounded-3xl bg-slate-100" /></div></div></main> }
 
 const inputClass = "mt-1.5 h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20"

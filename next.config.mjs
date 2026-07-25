@@ -10,6 +10,8 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      // /planner is now /home
+      { source: '/planner', destination: '/home', permanent: true },
       // Dashboard is a first-class signed-in workspace. Do not redirect it to
       // landing: its own guest state explains the sign-in path when needed.
       { source: '/career-path/:path*', destination: '/', permanent: false },
@@ -21,7 +23,7 @@ const nextConfig = {
       { source: '/documents/:path*', destination: '/', permanent: false },
       { source: '/saved/:path*', destination: '/', permanent: false },
       { source: '/rankings/:path*', destination: '/', permanent: false },
-      { source: '/explore/:path*', destination: '/', permanent: false },
+      // /explore is now a valid app route — do not redirect
       // 퍼널 단일화: 구 온보딩 → Degree Risk (영구 이전)
       { source: '/onboarding', destination: '/degree-risk', permanent: true },
 

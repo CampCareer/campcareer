@@ -30,7 +30,9 @@ export function PlannerSearch({ isKo, onNavigate, onOpenPath }: PlannerSearchPro
   const [recentIds, setRecentIds] = useState<string[]>([])
 
   const items = useMemo<SearchItem[]>(() => [
-    { id: "today", label: isKo ? "오늘" : "Today", description: isKo ? "플랜 전체 현황과 다음 행동" : "Your plan overview and next action", keywords: "today dashboard next best move readiness", href: "/planner", icon: Target, area: "today" },
+    { id: "home", label: isKo ? "홈" : "Home", description: isKo ? "홈 대시보드" : "Home dashboard", keywords: "home dashboard overview", href: "/home", icon: Target, area: "home" },
+    { id: "explore", label: isKo ? "탐색" : "Explore", description: isKo ? "전공, 학교, 직업 탐색" : "Explore majors, schools, careers", keywords: "explore search major school career", href: "/explore", icon: Target, area: "explore" },
+    { id: "today", label: isKo ? "오늘" : "Today", description: isKo ? "플랜 전체 현황과 다음 행동" : "Your plan overview and next action", keywords: "today dashboard next best move readiness", href: "/home", icon: Target, area: "today" },
     { id: "pathway", label: isKo ? "나의 경로" : "My pathway", description: isKo ? "최대 세 개 경로와 현재 1순위" : "Compare up to three routes and choose a first option", keywords: "pathway route shortlist compare option", href: "/planner/pathway", icon: GraduationCap, area: "pathway" },
     { id: "compare", label: isKo ? "비교" : "Compare", description: isKo ? "대학 비교 (학비, 임금, ROI)" : "Compare universities (tuition, earnings, ROI)", keywords: "compare university tuition earnings ROI school", href: "/planner/compare", icon: Scale, area: "compare" },
     { id: "applications", label: isKo ? "지원 준비" : "Applications", description: isKo ? "마감일과 서류 체크리스트" : "Deadlines and application documents", keywords: "application deadline documents offer apply", href: "/planner/applications", icon: CalendarDays, area: "applications" },

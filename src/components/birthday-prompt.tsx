@@ -40,7 +40,7 @@ export function BirthdayPrompt({ user }: { user: User }) {
     } catch (e) {
       console.error("birthday save exception:", e)
     }
-    window.location.href = "/planner"
+    window.location.href = "/home"
   }
 
   return (

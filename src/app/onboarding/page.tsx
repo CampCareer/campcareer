@@ -338,7 +338,7 @@ export default function OnboardingPage() {
           {/* Primary CTA */}
           <button
             type="button"
-            onClick={() => { router.push('/planner'); router.refresh() }}
+            onClick={() => { router.push('/home'); router.refresh() }}
             disabled={saving}
             className="w-full max-w-md bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-bold py-5 rounded-2xl transition-colors flex items-center justify-center gap-3 text-lg mb-3"
           >

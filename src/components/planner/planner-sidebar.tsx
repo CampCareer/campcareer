@@ -1,11 +1,11 @@
 "use client"
 
-import { Banknote, BookOpenCheck, CalendarDays, Languages, LineChart, NotebookPen, Scale, Home, Sparkles, Target, type LucideIcon } from "lucide-react"
+import { Banknote, BookOpenCheck, CalendarDays, Languages, LineChart, NotebookPen, Scale, Home, Compass, Sparkles, Target, type LucideIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { PlannerSearch } from "./planner-search"
 
-export type PlannerArea = "home" | "today" | "pathway" | "applications" | "money" | "english" | "research" | "report" | "notes" | "compare"
+export type PlannerArea = "home" | "explore" | "today" | "pathway" | "applications" | "money" | "english" | "research" | "report" | "notes" | "compare"
 
 type PlannerSidebarProps = {
   activeArea: PlannerArea
@@ -31,6 +31,7 @@ export function PlannerSidebar({ activeArea, onNavigate, onOpenPath }: PlannerSi
   const isKo = locale === "ko"
   const items: SidebarItem[] = [
     { id: "home", icon: Home, label: isKo ? "홈" : "Home" },
+    { id: "explore", icon: Compass, label: isKo ? "탐색" : "Explore" },
     { id: "today", icon: Sparkles, label: isKo ? "오늘" : "Today" },
     { id: "pathway", icon: Target, label: isKo ? "나의 경로" : "My pathway" },
     { id: "compare", icon: Scale, label: isKo ? "비교" : "Compare" },
