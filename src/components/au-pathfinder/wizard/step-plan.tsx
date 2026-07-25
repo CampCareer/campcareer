@@ -140,28 +140,18 @@ export function StepPlan({
         </div>
 
         {/* Next steps CTA */}
-        <div className="mt-10 rounded-2xl border border-slate-200 bg-white p-6">
+        <div className="mt-10">
           <h2 className="text-lg font-semibold text-slate-950">
             {isKo ? "다음 단계" : "Next steps"}
           </h2>
-          <p className="mt-2 text-sm text-slate-500">
-            {isKo
-              ? "플랜에서 대학 비교, 상세 정보, 지원 준비까지 한 곳에서 관리하세요."
-              : "Compare universities, view details, and manage applications — all in your Planner."}
-          </p>
-          <div className="mt-4 flex flex-col gap-3">
-            <button
-              type="button"
-              onClick={saveAndNavigateToMyPlan}
-              className={cn(
-                "inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-3.5 text-sm font-semibold text-white transition-all",
-                "hover:bg-blue-700 hover:shadow-lg"
-              )}
-            >
-              <ArrowRight className="size-4" />
-              {isKo ? "플랜 열기" : "Open Planner"}
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={saveAndNavigateToMyPlan}
+            className="mt-4 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-3.5 text-sm font-semibold text-white transition-all hover:bg-blue-700 hover:shadow-lg"
+          >
+            <ArrowRight className="size-4" />
+            {isKo ? "플랜 열기" : "Open Planner"}
+          </button>
         </div>
       </motion.div>
     </div>
