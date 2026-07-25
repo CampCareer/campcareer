@@ -31,11 +31,15 @@ export function BirthdayPrompt({ user }: { user: User }) {
   async function handleSubmit() {
     if (!canSubmit || saving) return
     setSaving(true)
-    const mm = String(month).padStart(2, "0")
-    const dd = String(day).padStart(2, "0")
-    const birthday = `${year}-${mm}-${dd}`
-    const { error } = await supabase.from("user_preferences").upsert({ id: user.id, birthday, updated_at: new Date().toISOString() }, { onConflict: "id" })
-    if (error) console.error("birthday save failed:", error.message)
+    try {
+      const mm = String(month).padStart(2, "0")
+      const dd = String(day).padStart(2, "0")
+      const birthday = `${year}-${mm}-${dd}`
+      const { error } = await supabase.from("user_preferences").upsert({ id: user.id, birthday, updated_at: new Date().toISOString() }, { onConflict: "id" })
+      if (error) console.error("birthday save failed:", error.message)
+    } catch (e) {
+      console.error("birthday save exception:", e)
+    }
     window.location.href = "/planner"
   }
 
