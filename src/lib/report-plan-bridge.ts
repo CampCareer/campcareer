@@ -4,11 +4,11 @@ export type RoiReportReadiness = {
   completedCount: number
   totalCount: 4
   ready: boolean
-  nextHref: "/myplan/pathway" | "/myplan/money" | "/myplan/english"
+  nextHref: "/planner/pathway" | "/planner/money" | "/planner/english"
   checks: Array<{
     id: "career" | "shortlist" | "budget" | "english"
     complete: boolean
-    href: "/myplan/pathway" | "/myplan/money" | "/myplan/english"
+    href: "/planner/pathway" | "/planner/money" | "/planner/english"
   }>
 }
 
@@ -22,10 +22,10 @@ type RoiReportReadinessInput = {
 
 export function getRoiReportReadiness(input: RoiReportReadinessInput): RoiReportReadiness {
   const checks: RoiReportReadiness["checks"] = [
-    { id: "career", complete: Boolean(input.targetOccupation?.trim()), href: "/myplan/pathway" },
-    { id: "shortlist", complete: input.shortlistCount > 0, href: "/myplan/pathway" },
-    { id: "budget", complete: input.targetAmount != null, href: "/myplan/money" },
-    { id: "english", complete: input.currentEnglishScore != null && input.targetEnglishScore != null, href: "/myplan/english" },
+    { id: "career", complete: Boolean(input.targetOccupation?.trim()), href: "/planner/pathway" },
+    { id: "shortlist", complete: input.shortlistCount > 0, href: "/planner/pathway" },
+    { id: "budget", complete: input.targetAmount != null, href: "/planner/money" },
+    { id: "english", complete: input.currentEnglishScore != null && input.targetEnglishScore != null, href: "/planner/english" },
   ]
   const completedCount = checks.filter((check) => check.complete).length
   const firstMissing = checks.find((check) => !check.complete)
@@ -33,7 +33,7 @@ export function getRoiReportReadiness(input: RoiReportReadinessInput): RoiReport
     completedCount,
     totalCount: 4,
     ready: completedCount === checks.length,
-    nextHref: firstMissing?.href ?? "/myplan/pathway",
+    nextHref: firstMissing?.href ?? "/planner/pathway",
     checks,
   }
 }

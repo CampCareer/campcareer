@@ -157,6 +157,7 @@ export function PathfinderWizard() {
                     wantsSchool={state.wantsSchool}
                     selectedConcept={state.selectedConcept}
                     selectedSchool={state.selectedSchool}
+                    selectedSchoolData={state.selectedSchoolData}
                   />
                 )}
               </motion.div>

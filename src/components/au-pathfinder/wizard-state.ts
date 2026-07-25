@@ -12,6 +12,18 @@ import {
 
 export type WizardStep = "category" | "goals" | "branch" | "schools" | "generating" | "plan"
 
+export type SchoolData = {
+  college_id: string
+  college_name: string
+  college_state: string
+  college_city?: string | null
+  tuition?: number | null
+  median_earnings?: number | null
+  employment_rate?: number | null
+  roi_score?: number | null
+  payback_years?: number | null
+}
+
 export type WizardState = {
   step: WizardStep
   category: AuPathfinderCategory | "any"
@@ -21,6 +33,7 @@ export type WizardState = {
   selectedConcept: string | null
   wantsSchool: boolean
   selectedSchool: string | null
+  selectedSchoolData: SchoolData | null
 }
 
 const INITIAL_STATE: WizardState = {
@@ -32,6 +45,7 @@ const INITIAL_STATE: WizardState = {
   selectedConcept: null,
   wantsSchool: false,
   selectedSchool: null,
+  selectedSchoolData: null,
 }
 
 const STEP_ORDER: WizardStep[] = ["category", "goals", "branch", "schools", "generating", "plan"]
@@ -75,8 +89,8 @@ export function useWizardState() {
     setState((prev) => ({ ...prev, wantsSchool: false, step: "generating" }))
   }, [])
 
-  const selectSchool = useCallback((school: string) => {
-    setState((prev) => ({ ...prev, selectedSchool: school, step: "generating" }))
+  const selectSchool = useCallback((school: string, schoolData?: SchoolData) => {
+    setState((prev) => ({ ...prev, selectedSchool: school, selectedSchoolData: schoolData ?? null, step: "generating" }))
   }, [])
 
   const goToPrevious = useCallback(() => {

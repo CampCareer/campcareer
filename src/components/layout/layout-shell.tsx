@@ -1,16 +1,36 @@
 "use client"
 
+import { useEffect, useMemo, useState } from "react"
 import { usePathname } from "next/navigation"
+import { createClient } from "@/lib/supabase-client"
 import { TopNav } from "./top-nav"
 import { SiteFooter } from "./site-footer"
 import { MobileBottomBar } from "./mobile-bottom-bar"
+import { BirthdayPrompt } from "@/components/birthday-prompt"
 import { withoutLocalePrefix } from "@/lib/i18n/config"
+import type { User } from "@supabase/supabase-js"
 
 export function LayoutShell({ children }: { children: React.ReactNode }) {
   const pathname = withoutLocalePrefix(usePathname())
   const hasUnifiedHero = pathname === "/au" || pathname === "/countries/search" || pathname === "/universities" || pathname === "/universities/au" || pathname === "/majors" || pathname === "/study" || pathname === "/au/study"
   const isLanding = pathname === "/"
-  const isMyPlan = pathname === "/planner" || pathname.startsWith("/planner/") || pathname === "/myplan" || pathname.startsWith("/myplan/")
+  const isMyPlan = pathname === "/planner" || pathname.startsWith("/planner/")
+
+  const supabase = useMemo(() => createClient(), [])
+  const [user, setUser] = useState<User | null>(null)
+  const [needsBirthday, setNeedsBirthday] = useState(false)
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      const currentUser = data.user
+      setUser(currentUser)
+      if (currentUser) {
+        supabase.from("user_preferences").select("birthday").eq("id", currentUser.id).maybeSingle().then(({ data: pref }) => {
+          if (!pref?.birthday) setNeedsBirthday(true)
+        })
+      }
+    })
+  }, [supabase])
 
   if (isMyPlan) return <>{children}</>
 
@@ -30,6 +50,7 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
       <main className={`flex-1 ${hasUnifiedHero ? "bg-transparent" : "bg-background"} pb-14 sm:pb-0`}>{children}</main>
       <SiteFooter className={isInteractiveMap ? "hidden" : undefined} />
       {!isInteractiveMap && <MobileBottomBar />}
+      {user && needsBirthday && <BirthdayPrompt user={user} />}
     </div>
   )
 }

@@ -24,7 +24,7 @@ export function TopNav() {
   const barePathname = withoutLocalePrefix(pathname)
 
   const isLanding = barePathname === "/"
-  const isToolSurface = barePathname === "/planner" || barePathname === "/myplan"
+  const isToolSurface = barePathname === "/planner" || barePathname === "/planner"
   const isBluePages = isLanding || barePathname === "/au/majors" || barePathname.startsWith("/au/majors/") || barePathname === "/au/study" || barePathname.startsWith("/au/study/")
   const isTransparent = isBluePages
 
@@ -169,7 +169,7 @@ export function TopNav() {
               {/* Get Started */}
               <Button
                 size="sm"
-                onClick={() => router.push(user ? localizePath("/myplan", pathLocale) : localizePath("/login", pathLocale))}
+                onClick={() => router.push(user ? localizePath("/planner", pathLocale) : localizePath("/login", pathLocale))}
                 className={cn(
                   "rounded-lg text-sm font-semibold px-4 py-2 h-auto",
                   isTransparent && !isToolSurface

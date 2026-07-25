@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils"
 const JOURNEY_ITEMS = [
   { href: "/", key: "findPath", icon: Search },
   { href: "/au/study", key: "compareStudy", icon: Scale },
-  { href: "/myplan", key: "plan", icon: ClipboardList },
+  { href: "/planner", key: "plan", icon: ClipboardList },
 ] as const
 
 function isCurrentStep(pathname: string, href: (typeof JOURNEY_ITEMS)[number]["href"]) {

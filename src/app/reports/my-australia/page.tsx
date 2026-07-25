@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 }
 
 export default function MyAustraliaReportPage() {
-  redirect("/myplan/report")
+  redirect("/planner/report")
 }

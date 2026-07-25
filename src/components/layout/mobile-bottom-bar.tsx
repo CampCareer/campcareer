@@ -39,7 +39,7 @@ export function MobileBottomBar() {
 
   const isPathfinder = barePathname === "/" || barePathname.startsWith("/au/majors")
   const isCompare = barePathname === "/au/study" || barePathname.startsWith("/au/study/")
-  const isPlan = barePathname === "/planner" || barePathname.startsWith("/planner/") || barePathname === "/myplan" || barePathname.startsWith("/myplan/")
+  const isPlan = barePathname === "/planner" || barePathname.startsWith("/planner/") || barePathname === "/planner" || barePathname.startsWith("/planner/")
   const isProfile = barePathname === "/profile" || barePathname.startsWith("/profile/")
 
   const avatarUrl = user?.user_metadata?.avatar_url as string | undefined
@@ -57,7 +57,7 @@ export function MobileBottomBar() {
           <span className="truncate">{t.australia.journey.compareStudy}</span>
         </Link>
 
-        <Link href={localizePath("/myplan", pathLocale)} aria-current={isPlan ? "page" : undefined} className={cn("flex flex-col items-center justify-center gap-0.5 px-1 py-1 text-[10px] font-medium transition", isPlan ? "text-violet-700" : "text-slate-400")}>
+        <Link href={localizePath("/planner", pathLocale)} aria-current={isPlan ? "page" : undefined} className={cn("flex flex-col items-center justify-center gap-0.5 px-1 py-1 text-[10px] font-medium transition", isPlan ? "text-violet-700" : "text-slate-400")}>
           <ClipboardList className="size-5" strokeWidth={isPlan ? 2.4 : 1.8} />
           <span className="truncate">{t.australia.journey.plan}</span>
         </Link>

@@ -7,6 +7,7 @@ import { getStudyConcept } from "@/data/study-concepts"
 import { getStudyCategoryVisual } from "@/components/ui/au-career-category-visuals"
 import { cn } from "@/lib/utils"
 import type { AuPathfinderProfile } from "@/lib/au-pathfinder"
+import type { SchoolData } from "../wizard-state"
 
 type RoiSchool = {
   college_id: string
@@ -71,7 +72,7 @@ export function StepSchools({
   profile: AuPathfinderProfile
   isKo: boolean
   selectedConcept: string | null
-  onSelectSchool: (school: string) => void
+  onSelectSchool: (school: string, schoolData?: SchoolData) => void
   onBack: () => void
 }) {
   const [rawSchools, setRawSchools] = useState<RoiSchool[]>([])
@@ -335,7 +336,17 @@ export function StepSchools({
               rank={i + 1}
               isKo={isKo}
               isTop={i === 0}
-              onSelect={() => onSelectSchool(school.college_name)}
+              onSelect={() => onSelectSchool(school.college_name, {
+                college_id: school.college_id,
+                college_name: school.college_name,
+                college_state: school.college_state,
+                college_city: school.college_city,
+                tuition: school.tuition,
+                median_earnings: school.median_earnings,
+                employment_rate: school.employment_rate,
+                roi_score: school.roi_score,
+                payback_years: school.payback_years,
+              })}
             />
           ))}
         </div>

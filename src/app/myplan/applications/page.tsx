@@ -1,5 +1,5 @@
-import PlannerPage from "@/app/planner/page"
+import { redirect } from "next/navigation"
 
 export default function ApplicationsPage() {
-  return <PlannerPage initialArea="applications" />
+  redirect("/planner/applications")
 }

@@ -9,6 +9,7 @@ import { rankAustralianPathways } from "@/lib/au-pathfinder"
 import { localizePath } from "@/lib/i18n/config"
 import { cn } from "@/lib/utils"
 import type { AuPathfinderProfile } from "@/lib/au-pathfinder"
+import type { SchoolData } from "../wizard-state"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 
@@ -19,6 +20,7 @@ export function StepPlan({
   wantsSchool,
   selectedConcept,
   selectedSchool,
+  selectedSchoolData,
 }: {
   profile: AuPathfinderProfile
   isKo: boolean
@@ -26,6 +28,7 @@ export function StepPlan({
   wantsSchool: boolean
   selectedConcept: string | null
   selectedSchool: string | null
+  selectedSchoolData?: SchoolData | null
 }) {
   const router = useRouter()
   const ranked = useMemo(() => rankAustralianPathways(profile), [profile])
@@ -40,7 +43,7 @@ export function StepPlan({
 
   const saveAndNavigateToMyPlan = useCallback(() => {
     const concept = selectedConcept ? getStudyConcept(selectedConcept) : null
-    const wizardData = {
+    const wizardData: Record<string, unknown> = {
       conceptSlug: concept?.slug ?? null,
       conceptLabel: concept?.label ?? null,
       conceptLabelKo: concept?.labelKo ?? null,
@@ -49,9 +52,12 @@ export function StepPlan({
       goal: profile.goal,
       studyStage: profile.studyStage,
     }
+    if (selectedSchoolData) {
+      wizardData.schoolData = selectedSchoolData
+    }
     try { localStorage.setItem("cc_wizard_data", JSON.stringify(wizardData)) } catch {}
-    router.push(localizePath("/myplan", locale))
-  }, [selectedConcept, selectedSchool, profile, locale, router])
+    router.push(localizePath("/planner", locale))
+  }, [selectedConcept, selectedSchool, selectedSchoolData, profile, locale, router])
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-12">
@@ -138,29 +144,12 @@ export function StepPlan({
           <h2 className="text-lg font-semibold text-slate-950">
             {isKo ? "다음 단계" : "Next steps"}
           </h2>
+          <p className="mt-2 text-sm text-slate-500">
+            {isKo
+              ? "플랜에서 대학 비교, 상세 정보, 지원 준비까지 한 곳에서 관리하세요."
+              : "Compare universities, view details, and manage applications — all in your Planner."}
+          </p>
           <div className="mt-4 flex flex-col gap-3">
-            {top && (
-              <Link
-                href={localizePath(`/au/majors/${top.concept.slug}`, locale)}
-                className={cn(
-                  "inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-3.5 text-sm font-semibold text-slate-900 transition-all",
-                  "hover:border-blue-300 hover:bg-blue-50/60 hover:shadow-sm"
-                )}
-              >
-                <ArrowRight className="size-4 text-blue-600" />
-                {isKo ? `${top.concept.labelKo} 상세 보기` : `View ${top.concept.label} details`}
-              </Link>
-            )}
-            <Link
-              href={localizePath("/au/study", locale)}
-              className={cn(
-                "inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-3.5 text-sm font-semibold text-slate-900 transition-all",
-                "hover:border-blue-300 hover:bg-blue-50/60 hover:shadow-sm"
-              )}
-            >
-              <ArrowRight className="size-4 text-blue-600" />
-              {isKo ? "학교 비교하러 가기" : "Compare universities"}
-            </Link>
             <button
               type="button"
               onClick={saveAndNavigateToMyPlan}
@@ -170,7 +159,7 @@ export function StepPlan({
               )}
             >
               <ArrowRight className="size-4" />
-              {isKo ? "MyPlan에서 전체 플랜 보기" : "View full plan in MyPlan"}
+              {isKo ? "플랜 열기" : "Open Planner"}
             </button>
           </div>
         </div>
