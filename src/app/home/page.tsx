@@ -93,10 +93,48 @@ export default function HomePage() {
 
   if (loading) return <main className="min-h-screen bg-slate-50"><div className="flex min-h-screen items-center justify-center"><Loader2 className="size-6 animate-spin text-blue-500" /></div></main>
 
-  if (!user) return <main className="flex min-h-[70vh] items-center justify-center bg-slate-50 px-5"><section className="max-w-md rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm"><NotebookPen className="mx-auto h-7 w-7 text-blue-600" /><h1 className="mt-4 text-2xl font-semibold tracking-tight text-slate-950">Your private Planner.</h1><p className="mt-2 text-sm leading-6 text-slate-500">A flexible place for daily notes, deadlines, budget, English goals and the research you save in CampCareer.</p><Link href="/login?next=/home" className="mt-6 inline-flex rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-700">Sign in to start</Link></section></main>
+  if (!user) {
+    return (
+      <HomeDashboard
+        goalProfile={{ plan_title: "", strategy: "", target_occupation_title: "", target_study_concept_label: "", target_intake_month: null }}
+        goalOptions={[]}
+        tasks={[]}
+        applications={[]}
+        notes={[]}
+        compareSchools={[]}
+        currentSavings={null}
+        monthlySaving={null}
+        targetAmount={null}
+        targetDate={null}
+        currency="AUD"
+        currentEnglishScore={null}
+        targetEnglishScore={null}
+        englishExam="IELTS"
+        onNavigate={(area) => router.push(`/planner/${area === "today" ? "" : area}`)}
+      />
+    )
+  }
 
   if (!goalProfile?.setup_completed_at) {
-    return <main className="flex min-h-[70vh] items-center justify-center bg-slate-50 px-5"><section className="max-w-md rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm"><NotebookPen className="mx-auto h-7 w-7 text-blue-600" /><h1 className="mt-4 text-2xl font-semibold tracking-tight text-slate-950">{isKo ? "플랜을 설정해 주세요" : "Set up your plan"}</h1><p className="mt-2 text-sm leading-6 text-slate-500">{isKo ? "먼저 플래너에서 플랜을 설정하면 홈에서 진행 상황을 볼 수 있습니다." : "Set up your plan in the Planner first to see your progress here."}</p><Link href="/planner" className="mt-6 inline-flex rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-700">{isKo ? "플래너 열기" : "Open Planner"}</Link></section></main>
+    return (
+      <HomeDashboard
+        goalProfile={{ plan_title: "", strategy: "", target_occupation_title: "", target_study_concept_label: "", target_intake_month: null }}
+        goalOptions={[]}
+        tasks={[]}
+        applications={[]}
+        notes={[]}
+        compareSchools={[]}
+        currentSavings={null}
+        monthlySaving={null}
+        targetAmount={null}
+        targetDate={null}
+        currency="AUD"
+        currentEnglishScore={null}
+        targetEnglishScore={null}
+        englishExam="IELTS"
+        onNavigate={(area) => router.push(`/planner/${area === "today" ? "" : area}`)}
+      />
+    )
   }
 
   return (
