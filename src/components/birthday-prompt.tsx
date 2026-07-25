@@ -34,7 +34,8 @@ export function BirthdayPrompt({ user }: { user: User }) {
     const mm = String(month).padStart(2, "0")
     const dd = String(day).padStart(2, "0")
     const birthday = `${year}-${mm}-${dd}`
-    await supabase.from("user_preferences").upsert({ id: user.id, birthday, updated_at: new Date().toISOString() })
+    const { error } = await supabase.from("user_preferences").upsert({ id: user.id, birthday, updated_at: new Date().toISOString() }, { onConflict: "id" })
+    if (error) console.error("birthday save failed:", error.message)
     window.location.href = "/planner"
   }
 
