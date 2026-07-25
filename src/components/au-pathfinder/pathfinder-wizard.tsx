@@ -143,6 +143,7 @@ export function PathfinderWizard() {
                     isKo={isKo}
                     selectedConcept={state.selectedConcept}
                     onSelectSchool={w.selectSchool}
+                    onSkip={w.skipSchool}
                     onBack={w.goToPrevious}
                   />
                 )}

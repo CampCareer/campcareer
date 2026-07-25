@@ -31,7 +31,7 @@ const AU_STATES = [
   { value: "SA", labelEn: "SA", labelKo: "사우스오스트레일리아" },
   { value: "WA", labelEn: "WA", labelKo: "웨스턴오스트레일리아" },
   { value: "TAS", labelEn: "TAS", labelKo: "태즈메이니아" },
-  { value: "ACT", labelEn: "ACT", labelKo: "堪培拉" },
+  { value: "ACT", labelEn: "ACT", labelKo: "캔버라" },
 ]
 
 type SortKey = "roi" | "tuition_low" | "earnings_high" | "employment_high"
@@ -67,12 +67,14 @@ export function StepSchools({
   isKo,
   selectedConcept,
   onSelectSchool,
+  onSkip,
   onBack,
 }: {
   profile: AuPathfinderProfile
   isKo: boolean
   selectedConcept: string | null
   onSelectSchool: (school: string, schoolData?: SchoolData) => void
+  onSkip: () => void
   onBack: () => void
 }) {
   const [rawSchools, setRawSchools] = useState<RoiSchool[]>([])
@@ -371,6 +373,18 @@ export function StepSchools({
           <p className="text-sm font-semibold text-slate-950">
             {isKo ? "해당 전공의 학교 데이터가 없습니다" : "No university data for this major"}
           </p>
+        </div>
+      )}
+
+      {!loading && rawSchools.length > 0 && (
+        <div className="mt-8 flex justify-center">
+          <button
+            type="button"
+            onClick={onSkip}
+            className="text-sm text-slate-400 underline underline-offset-4 transition-colors hover:text-slate-700"
+          >
+            {isKo ? "학교 선택 건너뛰기 →" : "Skip school selection →"}
+          </button>
         </div>
       )}
     </div>

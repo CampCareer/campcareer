@@ -273,7 +273,7 @@ function RankedRow({
           )}
           {pathway.shortagePct != null && pathway.shortagePct > 0 && (
             <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700">
-              Shortage
+              {isKo ? "부족" : "Shortage"}
             </span>
           )}
           {pathway.durationYears != null && (

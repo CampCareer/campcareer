@@ -93,6 +93,10 @@ export function useWizardState() {
     setState((prev) => ({ ...prev, selectedSchool: school, selectedSchoolData: schoolData ?? null, step: "generating" }))
   }, [])
 
+  const skipSchool = useCallback(() => {
+    setState((prev) => ({ ...prev, step: "generating" }))
+  }, [])
+
   const goToPrevious = useCallback(() => {
     setState((prev) => {
       const currentIndex = STEP_ORDER.indexOf(prev.step)
@@ -131,12 +135,13 @@ export function useWizardState() {
     chooseSchoolPath,
     chooseDirectPlan,
     selectSchool,
+    skipSchool,
     goToPrevious,
     reset,
   }), [
     state, profile, stepIndex, totalSteps,
     goToStep, selectCategory, selectConcept, selectMajor, selectGoal, selectStudyStage,
-    confirmGoals, chooseSchoolPath, chooseDirectPlan, selectSchool,
+    confirmGoals, chooseSchoolPath, chooseDirectPlan, selectSchool, skipSchool,
     goToPrevious, reset,
   ])
 }
