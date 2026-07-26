@@ -1,5 +1,5 @@
 import PlannerPage from "@/app/planner/page"
 
-export default function MoneyRunwayPage() {
-  return <PlannerPage initialArea="money" />
+export default function BudgetPage() {
+  return <PlannerPage initialArea="budget" />
 }

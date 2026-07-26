@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState, type FormEvent } from "react"
 import { createPortal } from "react-dom"
-import { ArrowRight, Banknote, BookOpenCheck, CalendarDays, Clock3, FileText, GraduationCap, Languages, Map, Scale, Search, Target, X } from "lucide-react"
+import { ArrowRight, BookOpenCheck, CalendarDays, Clock3, FileText, GraduationCap, Languages, Map, Scale, Search, Target, Wallet, X } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 import type { PlannerArea } from "./planner-sidebar"
 
@@ -31,19 +31,15 @@ export function PlannerSearch({ isKo, onNavigate, onOpenPath }: PlannerSearchPro
 
   const items = useMemo<SearchItem[]>(() => [
     { id: "home", label: isKo ? "홈" : "Home", description: isKo ? "홈 대시보드" : "Home dashboard", keywords: "home dashboard overview", href: "/home", icon: Target, area: "home" },
-    { id: "explore", label: isKo ? "탐색" : "Explore", description: isKo ? "전공, 학교, 직업 탐색" : "Explore majors, schools, careers", keywords: "explore search major school career", href: "/explore", icon: Target, area: "explore" },
-    { id: "today", label: isKo ? "오늘" : "Today", description: isKo ? "플랜 전체 현황과 다음 행동" : "Your plan overview and next action", keywords: "today dashboard next best move readiness", href: "/home", icon: Target, area: "today" },
-    { id: "pathway", label: isKo ? "나의 경로" : "My pathway", description: isKo ? "최대 세 개 경로와 현재 1순위" : "Compare up to three routes and choose a first option", keywords: "pathway route shortlist compare option", href: "/planner/pathway", icon: GraduationCap, area: "pathway" },
-    { id: "compare", label: isKo ? "비교" : "Compare", description: isKo ? "대학 비교 (학비, 임금, ROI)" : "Compare universities (tuition, earnings, ROI)", keywords: "compare university tuition earnings ROI school", href: "/planner/compare", icon: Scale, area: "compare" },
-    { id: "applications", label: isKo ? "지원 준비" : "Applications", description: isKo ? "마감일과 서류 체크리스트" : "Deadlines and application documents", keywords: "application deadline documents offer apply", href: "/planner/applications", icon: CalendarDays, area: "applications" },
-    { id: "money", label: isKo ? "자금 런웨이" : "Money runway", description: isKo ? "총 필요 자금과 저축 시나리오" : "Funding target and saving scenarios", keywords: "money budget funding savings scholarship cost", href: "/planner/money", icon: Banknote, area: "money" },
-    { id: "english", label: isKo ? "영어 목표" : "English target", description: isKo ? "목표 점수와 주간 학습 계획" : "Target score and weekly study plan", keywords: "english IELTS score test study", href: "/planner/english", icon: Languages, area: "english" },
-    { id: "research", label: isKo ? "리서치 데스크" : "Research desk", description: isKo ? "저장한 후보와 공식 근거" : "Saved options and official evidence", keywords: "research shortlist watching ruled out evidence", href: "/planner/research", icon: BookOpenCheck, area: "research" },
-    { id: "notes", label: isKo ? "노트" : "Notes", description: isKo ? "결정의 이유와 생각 기록" : "Keep the thinking behind your decisions", keywords: "notes writing journal decisions", href: "/planner/notes", icon: FileText, area: "notes" },
-    { id: "study", label: isKo ? "비교" : "Compare", description: isKo ? "호주 대학과 과정 비교" : "Compare Australian universities and courses", keywords: "study university course provider tuition compare", href: "/au/study", icon: GraduationCap },
+    { id: "compare", label: isKo ? "비교" : "Compare", description: isKo ? "대학 비교 (학비, 임금, ROI)" : "Compare universities (tuition, earnings, ROI)", keywords: "compare university tuition earnings ROI school", href: "/home/compare", icon: Scale, area: "compare" },
+    { id: "applications", label: isKo ? "지원 관리" : "Applications", description: isKo ? "마감일과 서류 체크리스트" : "Deadlines and application documents", keywords: "application deadline documents offer apply", href: "/home/applications", icon: CalendarDays, area: "applications" },
+    { id: "budget", label: isKo ? "예산" : "Budget", description: isKo ? "총 필요 자금과 저축 시나리오" : "Funding target and saving scenarios", keywords: "budget money funding savings scholarship cost", href: "/home/budget", icon: Wallet, area: "budget" },
+    { id: "english", label: isKo ? "영어 학습" : "English", description: isKo ? "목표 점수와 학습 계획" : "Target score and study plan", keywords: "english IELTS score test study", href: "/home/english", icon: Languages, area: "english" },
+    { id: "research", label: isKo ? "리서치" : "Research", description: isKo ? "저장한 후보와 공식 근거" : "Saved options and official evidence", keywords: "research shortlist watching ruled out evidence", href: "/home/research", icon: BookOpenCheck, area: "research" },
+    { id: "report", label: isKo ? "리포트" : "Report", description: isKo ? "내 조건으로 ROI 리포트 준비" : "Prepare a personalised ROI decision report", keywords: "ROI report decision personalised recommendation", href: "/home/report", icon: FileText, area: "report" },
+    { id: "study", label: isKo ? "학교 비교" : "Study", description: isKo ? "호주 대학과 과정 비교" : "Compare Australian universities and courses", keywords: "study university course provider tuition compare", href: "/au/study", icon: GraduationCap },
     { id: "majors", label: isKo ? "전공 탐색" : "Explore fields", description: isKo ? "호주 전공과 커리어 방향 탐색" : "Explore Australian fields and career directions", keywords: "major field subject career nursing IT engineering", href: "/au/majors", icon: Target },
     { id: "maps", label: "Maps", description: isKo ? "지역별 직업·학업 정보 지도" : "Explore location-based study and career signals", keywords: "map city location state jobs study", href: "/maps", icon: Map },
-    { id: "report", label: isKo ? "의사결정 리포트" : "Decision report", description: isKo ? "내 조건으로 ROI 리포트 준비" : "Prepare a personalised ROI decision report", keywords: "ROI report decision personalised recommendation", href: "/planner/report", icon: FileText, area: "report" },
   ], [isKo])
 
   const recents = recentIds.map((id) => items.find((item) => item.id === id)).filter((item): item is SearchItem => Boolean(item))

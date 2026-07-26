@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation"
 
 export default function NotesPage() {
-  redirect("/planner/notes")
+  redirect("/home")
 }

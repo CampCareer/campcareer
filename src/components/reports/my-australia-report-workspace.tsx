@@ -19,6 +19,7 @@ import {
 import { REPORT_PRODUCTS, formatAud } from "@/lib/report-catalog"
 import { createReportDraftFromMyPlan } from "@/lib/report-plan-bridge"
 import { cn } from "@/lib/utils"
+import { ReportList } from "@/components/planner/report-list"
 
 type IntakeRow = {
   id: string
@@ -395,6 +396,10 @@ export function MyAustraliaReportWorkspace() {
       <p className="mt-5 flex gap-2 text-sm leading-6 text-slate-700"><LockKeyhole className="mt-1 size-4 shrink-0 text-amber-700" /><span><strong>{saved ? copy.savedReady : copy.notOpen}</strong><span className="mt-1 block text-slate-500">{copy.notOpenDetail}</span></span></p>
       <div className="mt-7 grid gap-6 border-t border-slate-100 pt-6 sm:grid-cols-[minmax(0,1fr)_auto]"><div><p className="text-sm font-semibold text-slate-950">{copy.includes}</p><ul className="mt-3 space-y-2 text-sm leading-5 text-slate-600">{copy.contents.map((item) => <li key={item} className="flex gap-2"><Check className="mt-0.5 size-4 shrink-0 text-emerald-600" />{item}</li>)}</ul></div><p className="text-right text-xs text-slate-400">{completeOptionCount}/3 {isKo ? "후보 선택" : "options selected"}</p></div>
     </aside>
+
+    <div className="max-w-2xl">
+      <ReportList />
+    </div>
   </section>
 }
 

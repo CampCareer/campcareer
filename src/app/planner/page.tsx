@@ -3,29 +3,16 @@
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from "react"
-import { DndContext, PointerSensor, type DragEndEvent, useSensor, useSensors } from "@dnd-kit/core"
-import { SortableContext, arrayMove, verticalListSortingStrategy, useSortable } from "@dnd-kit/sortable"
-import { CSS } from "@dnd-kit/utilities"
 import type { User } from "@supabase/supabase-js"
 import {
   ArrowRight,
   BookOpen,
   BriefcaseBusiness,
   CalendarDays,
-  Circle,
-  CircleCheck,
-  DollarSign,
   FileCheck2,
   GraduationCap,
-  Languages,
-  Loader2,
   NotebookPen,
-  Plus,
   Target,
-  GripVertical,
-  MoreHorizontal,
-  ArrowUpToLine,
-  Trash2,
 } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
 import { majorLabel, resolveView } from "@/lib/degree-risk"
@@ -34,17 +21,13 @@ import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { PlannerToolbar, PlannerToolbarControls } from "@/components/planner/planner-toolbar"
 import { PlannerSidebar, type PlannerArea } from "@/components/planner/planner-sidebar"
 import { GoalSetup, type GoalSetupData } from "@/components/planner/goal-setup"
-import { TodayDashboard, type TodayGoalOption } from "@/components/planner/today-dashboard"
 import { HomeDashboard } from "@/components/planner/home-dashboard"
-import { ExploreSpace } from "@/components/planner/explore-space"
 import { MyAustraliaReportWorkspace } from "@/components/reports/my-australia-report-workspace"
 import { buildPlanHealth } from "@/lib/plan-health"
 import { getRoiReportReadiness } from "@/lib/report-plan-bridge"
 import {
   ApplicationsSpace,
-  EnglishTargetSpace,
   MoneyRunwaySpace,
-  MyPathwaySpace,
   ResearchDeskSpace,
   type ExecutionApplication,
   type ExecutionBudget,
@@ -58,6 +41,7 @@ import {
   type ExecutionResearchSource,
 } from "@/components/planner/execution-spaces"
 import { CompareSpace, type CompareSchool } from "@/components/planner/compare-space"
+import { EnglishSpace } from "@/components/planner/english-space"
 import {
   type PlannerTab,
   loadTabs,
@@ -74,7 +58,7 @@ type SavedUniversity = { id: number; univ_slug: string; univ_name: string }
 type SavedCourse = { id: number; course_name: string; college_name: string; field_name: string }
 type SavedStudyConcept = { id: number; concept_slug: string; concept_label: string; concept_label_ko: string }
 type PlanGoalProfile = { user_id: string; target_occupation_code: string; target_occupation_title: string; target_study_concept_slug: string; target_study_concept_label: string; target_intake_month: string | null; plan_title: string; strategy: string; setup_completed_at: string | null }
-type PlanGoalOption = TodayGoalOption
+type PlanGoalOption = { id: string; position: number; source_type: "saved_university" | "saved_course"; title: string; provider_name: string; field_name: string }
 type PlanApplicationRecord = ExecutionApplication
 type PlanApplicationDocument = ExecutionDocument
 type PlanMoneyScenario = ExecutionMoneyScenario
@@ -93,21 +77,17 @@ type PlannerPreferences = { theme: PlannerTheme; widget_order: WidgetId[]; widge
 type PlannerTheme = "mist" | "lavender" | "sage" | "peach" | "midnight"
 
 const plannerAreaPaths: Record<PlannerArea, string> = {
-  home: "/planner",
-  explore: "/planner/explore",
-  today: "/planner/today",
-  pathway: "/planner/pathway",
-  compare: "/planner/compare",
-  applications: "/planner/applications",
-  money: "/planner/money",
-  english: "/planner/english",
-  research: "/planner/research",
-  report: "/planner/report",
-  notes: "/planner/notes",
+  home: "/home",
+  compare: "/home/compare",
+  applications: "/home/applications",
+  budget: "/home/budget",
+  english: "/home/english",
+  research: "/home/research",
+  report: "/home/report",
 }
 
 function plannerAreaFromPath(pathname: string): PlannerArea | null {
-  if (pathname === "/planner") return "home"
+  if (pathname === "/home") return "home"
   const match = Object.entries(plannerAreaPaths).find(([, path]) => path.split("?")[0] === pathname)
   return (match?.[0] as PlannerArea | undefined) ?? null
 }
@@ -165,7 +145,6 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
   const [plannerTheme, setPlannerTheme] = useState<PlannerTheme>("mist")
   const [widgetOrder, setWidgetOrder] = useState<WidgetId[]>(defaultWidgetOrder)
   const [widgetSizes, setWidgetSizes] = useState<Record<WidgetId, WidgetSize>>(defaultWidgetSizes)
-  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }))
 
   useEffect(() => {
     // Routing restructured: /planner is now the primary route
@@ -673,25 +652,6 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
     return true
   }
 
-  function handleDragEnd(event: DragEndEvent) {
-    const { active, over } = event
-    if (!over || active.id === over.id) return
-    const oldIndex = widgetOrder.indexOf(active.id as WidgetId)
-    const newIndex = widgetOrder.indexOf(over.id as WidgetId)
-    if (oldIndex < 0 || newIndex < 0) return
-    const nextOrder = arrayMove(widgetOrder, oldIndex, newIndex)
-    setWidgetOrder(nextOrder)
-    void savePlannerPreferences(plannerTheme, nextOrder, widgetSizes)
-  }
-
-  function moveWidgetToTop(widget: WidgetId) {
-    const index = widgetOrder.indexOf(widget)
-    if (index <= 0) return
-    const nextOrder = arrayMove(widgetOrder, index, 0)
-    setWidgetOrder(nextOrder)
-    void savePlannerPreferences(plannerTheme, nextOrder, widgetSizes)
-  }
-
   if (loading) return <PlannerSkeleton />
   // TEMP: bypass auth gate for local testing — revert before commit
   // if (!user) return <GuestPlan />
@@ -715,8 +675,6 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
   const scoreGap = numberOrNull(language.target_score) != null && numberOrNull(language.current_score) != null ? Math.max(numberOrNull(language.target_score)! - numberOrNull(language.current_score)!, 0) : null
   const roiReportReadiness = getRoiReportReadiness({ targetOccupation: goalProfile.target_occupation_title, shortlistCount: goalOptions.length, targetAmount, currentEnglishScore: numberOrNull(language.current_score), targetEnglishScore: numberOrNull(language.target_score) })
   const assessmentHref = assessment ? `/degree-risk/result?${new URLSearchParams({ major: assessment.major_pref, view: resolveView(assessment.country_pref), goal: assessment.primary_goal, aid: assessment.id })}` : "/degree-risk"
-  const duplicateActivePage = () => { if (activeTab) duplicateTab(activeTab.id) }
-  const moveActivePageToTrash = () => { if (activeTab) moveTabToTrash(activeTab.id) }
   const readinessCount = [
     Boolean(goalProfile.target_occupation_title || goalProfile.target_study_concept_label),
     goalOptions.length > 0,
@@ -792,12 +750,11 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
             shortlistCount={goalOptions.length}
             deadlinesSoon={deadlinesSoon}
             overdueDeadlines={overdueDeadlines}
-            moneyGap={remaining}
+            budgetGap={remaining}
             currency={budget.currency}
             englishExam={language.exam_name}
             englishGap={scoreGap}
             researchToCheck={researchToCheck}
-            noteCount={notes.length}
             healthAttentionCount={planHealth.attentionCount}
             reportReadinessCount={roiReportReadiness.completedCount}
             reportReady={roiReportReadiness.ready}
@@ -828,95 +785,14 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
         {/* ── Content ── */}
         <main className="min-h-0 flex-1 overflow-y-auto">
           <div key={activeArea} className="tl-stage">
-          {activeArea === "home" && <HomeDashboard goalProfile={goalProfile!} goalOptions={goalOptions} tasks={tasks} applications={applicationRecords.map((record) => ({ id: record.id, title: record.programme_name || record.provider_name || "Application", deadline_date: record.deadline_date, status: record.status }))} notes={notes} compareSchools={compareSchools} currentSavings={savings} monthlySaving={monthlySaving} targetAmount={targetAmount} targetDate={budget.target_date} currency={budget.currency} currentEnglishScore={numberOrNull(language.current_score)} targetEnglishScore={numberOrNull(language.target_score)} englishExam={language.exam_name} englishTestDate={language.test_date} leadingOptionTitle={leadingOption?.title ?? null} leadingRationale={pathwayDecision.rationale} onNavigate={(area) => navigatePlannerArea(area as PlannerArea)} />}
-          {activeArea === "explore" && <ExploreSpace isKo={isKo} />}
-          {activeArea === "today" && <section className="mx-auto max-w-6xl px-6 pt-7 sm:px-10 sm:pt-10"><TodayDashboard goalProfile={goalProfile!} goalOptions={goalOptions} tasks={tasks} applications={applicationRecords.map((record) => ({ id: record.id, title: record.programme_name || record.provider_name || "Application", deadline_date: record.deadline_date, status: record.status }))} currentSavings={savings} monthlySaving={monthlySaving} targetAmount={targetAmount} targetDate={budget.target_date} currency={budget.currency} currentEnglishScore={numberOrNull(language.current_score)} targetEnglishScore={numberOrNull(language.target_score)} englishExam={language.exam_name} englishTestDate={language.test_date} evidenceCount={evidenceCount} leadingOptionTitle={leadingOption?.title ?? null} leadingRationale={pathwayDecision.rationale} onUpdatePlanProfile={updatePlanProfile} onOpenReport={() => navigatePlannerArea("report")} /></section>}
-          {activeArea === "pathway" && <MyPathwaySpace goalTitle={goalProfile!.target_occupation_title} studyTitle={goalProfile!.target_study_concept_label} options={goalOptions as ExecutionGoalOption[]} decision={pathwayDecision} evidenceCount={evidenceCount} onSaveDecision={savePathwayDecision} />}
-          {activeArea === "compare" && <CompareSpace schools={compareSchools} isKo={isKo} onRemove={(id) => setCompareSchools((prev) => prev.filter((s) => s.id !== id))} />}
+          {activeArea === "home" && <HomeDashboard goalProfile={goalProfile!} goalOptions={goalOptions} tasks={tasks} applications={applicationRecords.map((record) => ({ id: record.id, title: record.programme_name || record.provider_name || "Application", deadline_date: record.deadline_date, status: record.status }))} notes={notes} compareSchools={compareSchools} currentSavings={savings} monthlySaving={monthlySaving} targetAmount={targetAmount} targetDate={budget.target_date} currency={budget.currency} currentEnglishScore={numberOrNull(language.current_score)} targetEnglishScore={numberOrNull(language.target_score)} englishExam={language.exam_name} englishTestDate={language.test_date} evidenceCount={evidenceCount} leadingOptionTitle={leadingOption?.title ?? null} leadingRationale={pathwayDecision.rationale} onNavigate={(area) => navigatePlannerArea(area as PlannerArea)} />}
+          {activeArea === "compare" && <CompareSpace schools={compareSchools} isKo={isKo} onRemove={(id) => setCompareSchools((prev) => prev.filter((s) => s.id !== id))} goalTitle={goalProfile!.target_occupation_title} studyTitle={goalProfile!.target_study_concept_label} goalOptions={goalOptions as ExecutionGoalOption[]} decision={pathwayDecision} evidenceCount={evidenceCount} onSaveDecision={savePathwayDecision} />}
           {activeArea === "applications" && <ApplicationsSpace applications={applicationRecords} documents={applicationDocuments} legacyDeadlines={tasks.filter((task) => task.kind === "application").map((task) => ({ id: task.id, title: task.title, due_date: task.due_date, status: task.status }))} goalOptions={goalOptions as ExecutionGoalOption[]} onCreateApplication={createApplication} onUpdateApplication={updateApplication} onCreateDocument={createApplicationDocument} onUpdateDocument={updateApplicationDocument} onDeleteDocument={deleteApplicationDocument} />}
-          {activeArea === "money" && <MoneyRunwaySpace budget={{ currency: budget.currency, current_savings: savings, monthly_saving: monthlySaving, target_amount: targetAmount, target_date: budget.target_date }} scenario={moneyScenario} onSaveBudget={saveBudgetSpace} onSaveScenario={saveMoneyScenario} />}
-          {activeArea === "english" && <EnglishTargetSpace language={{ exam_name: language.exam_name, current_score: numberOrNull(language.current_score), target_score: numberOrNull(language.target_score), weekly_hours: numberOrNull(language.weekly_hours), test_date: language.test_date }} blocks={englishBlocks} onSaveLanguage={saveLanguageSpace} onSaveBlock={saveEnglishBlock} onDeleteBlock={deleteEnglishBlock} />}
+          {activeArea === "budget" && <MoneyRunwaySpace budget={{ currency: budget.currency, current_savings: savings, monthly_saving: monthlySaving, target_amount: targetAmount, target_date: budget.target_date }} scenario={moneyScenario} onSaveBudget={saveBudgetSpace} onSaveScenario={saveMoneyScenario} />}
+          {activeArea === "english" && <EnglishSpace isKo={isKo} />}
           {activeArea === "research" && <ResearchDeskSpace sources={researchSources} researchItems={researchItems} onSetStatus={saveResearchStatus} />}
           {activeArea === "report" && <MyAustraliaReportWorkspace />}
-          {activeArea === "notes" && <section className="mx-auto max-w-4xl px-6 pb-12 pt-12 sm:px-10 sm:pt-16"><p className="text-xs font-semibold uppercase tracking-[.14em] text-blue-600">NOTES</p><h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950">Your decision notes</h1><p className="mt-2 text-sm leading-6 text-slate-500">Keep the thinking behind your Australia pathway beside the actions you take.</p>{activeTab && <div className="mt-10"><input value={activeTab.title} onChange={(event) => renameTab(activeTab.id, event.target.value)} placeholder="Untitled" maxLength={160} aria-label="Page title" className="w-full bg-transparent text-4xl font-semibold tracking-tight text-slate-950 outline-none placeholder:text-slate-300 sm:text-5xl" /><textarea value={activeTab.content} onChange={(event) => updateTabContent(activeTab.id, event.target.value)} placeholder="Start writing…" maxLength={12000} rows={10} aria-label="Page body" className="mt-5 w-full resize-y rounded-2xl border border-slate-200 bg-white px-5 py-4 text-base leading-8 text-slate-700 outline-none placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20" /><p className="mt-3 text-xs text-slate-500">Saved on this device</p></div>}</section>}
           </div>
-          {/* Legacy stacked widgets intentionally retired in favour of independent execution spaces.
-          <section className="mx-auto max-w-6xl px-6 pt-7 sm:px-10 sm:pt-10">
-            <TodayDashboard
-              goalProfile={goalProfile}
-              goalOptions={goalOptions}
-              tasks={tasks}
-              currentSavings={savings}
-              monthlySaving={monthlySaving}
-              targetAmount={targetAmount}
-              targetDate={budget.target_date}
-              currency={budget.currency}
-              currentEnglishScore={numberOrNull(language.current_score)}
-              targetEnglishScore={numberOrNull(language.target_score)}
-              englishExam={language.exam_name}
-              evidenceCount={evidenceCount}
-            />
-          </section>
-          {activeTab && <section id="notes" className="mx-auto max-w-4xl scroll-mt-6 px-6 pb-8 pt-12 sm:px-10 sm:pt-16">
-            <input value={activeTab.title} onChange={(event) => renameTab(activeTab.id, event.target.value)} placeholder="Untitled" maxLength={160} aria-label="Page title" className="w-full bg-transparent text-4xl font-semibold tracking-tight text-slate-950 outline-none placeholder:text-slate-300 sm:text-5xl" />
-            <textarea value={activeTab.content} onChange={(event) => updateTabContent(activeTab.id, event.target.value)} placeholder="Start writing…" maxLength={12000} rows={7} aria-label="Page body" className="mt-5 w-full resize-y bg-transparent text-base leading-8 text-slate-700 outline-none placeholder:text-slate-400" />
-            <p className="mt-3 text-xs text-slate-400">Saved on this device</p>
-          </section>}
-          <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-            <SortableContext items={widgetOrder} strategy={verticalListSortingStrategy}>
-              <section className="mx-auto max-w-4xl space-y-12 px-6 pb-16 sm:px-10">
-                  <PlannerWidget id="today" order={widgetOrder.indexOf("today")} onMoveToTop={moveWidgetToTop} onDuplicatePage={duplicateActivePage} onMovePageToTrash={moveActivePageToTrash}>
-                    <section id="today" className="relative py-2">
-                      <div className="flex items-center gap-2"><NotebookPen className="h-5 w-5 text-blue-600" /><h2 className="text-lg font-semibold text-slate-950">Today&apos;s page</h2></div>
-                      <form onSubmit={saveNote} className="mt-5"><textarea value={noteDraft} onChange={(event) => setNoteDraft(event.target.value)} rows={5} maxLength={12000} placeholder="Write down what you found, what worries you, or what changed today…" className="w-full resize-y rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-100" /><div className="mt-3 flex justify-end"><button disabled={!noteDraft.trim() || saving === "note"} className="inline-flex items-center gap-2 rounded-xl bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 disabled:opacity-50">{saving === "note" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}Save note</button></div></form>
-                      {notes.length > 0 && <div className="mt-7 border-t border-slate-100 pt-5"><p className="text-xs font-semibold uppercase tracking-[.12em] text-slate-400">Recent pages</p><div className="mt-3 space-y-3">{notes.slice(0, 3).map((note) => <article key={note.id} className="rounded-2xl bg-slate-50 px-4 py-3"><p className="text-xs font-medium text-slate-400">{formatShortDate(note.entry_date)}</p><p className="mt-1 whitespace-pre-wrap text-sm leading-6 text-slate-700">{note.content}</p></article>)}</div></div>}
-                    </section>
-                  </PlannerWidget>
-
-                  <PlannerWidget id="dates" order={widgetOrder.indexOf("dates")} onMoveToTop={moveWidgetToTop} onDuplicatePage={duplicateActivePage} onMovePageToTrash={moveActivePageToTrash}>
-                    <section id="dates" className="relative py-2">
-                      <div className="flex items-center gap-2"><CalendarDays className="h-5 w-5 text-blue-600" /><h2 className="text-lg font-semibold text-slate-950">Dates to hold</h2></div>
-                      <form onSubmit={addTask} className="mt-5 space-y-3"><input value={taskDraft} onChange={(event) => setTaskDraft(event.target.value)} maxLength={240} placeholder="e.g. Confirm September intake deadline" className={inputClass} /><div className="grid grid-cols-[1fr_auto] gap-2"><input type="date" value={taskDate} onChange={(event) => setTaskDate(event.target.value)} className={inputClass} /><select value={taskKind} onChange={(event) => setTaskKind(event.target.value as TaskKind)} className={inputClass}>{(Object.keys(taskLabels) as TaskKind[]).map((kind) => <option key={kind} value={kind}>{taskLabels[kind]}</option>)}</select></div><button disabled={!taskDraft.trim() || saving === "task"} className="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm font-semibold text-slate-700 hover:border-blue-300 hover:text-blue-700 disabled:opacity-50">{saving === "task" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}Add date</button></form>
-                      <div className="mt-5 space-y-2">{tasks.slice(0, 5).map((task) => <div key={task.id} className="group flex items-center gap-3 rounded-xl px-2 py-2 hover:bg-slate-50"><button onClick={() => void toggleTask(task)} className="shrink-0 text-slate-400 hover:text-emerald-600" aria-label={task.status === "done" ? "Mark task incomplete" : "Mark task complete"}>{task.status === "done" ? <CircleCheck className="h-5 w-5 text-emerald-600" /> : <Circle className="h-5 w-5" />}</button><div className="min-w-0 flex-1"><p className={cn("truncate text-sm font-medium", task.status === "done" ? "text-slate-400 line-through" : "text-slate-800")}>{task.title}</p><p className="mt-0.5 text-xs text-slate-400">{task.due_date ? formatShortDate(task.due_date) : "No date"} · {taskLabels[task.kind]}</p></div><button onClick={() => void removeTask(task.id)} className="opacity-0 transition group-hover:opacity-100 text-slate-300 hover:text-red-600" aria-label="Remove task"><Trash2 className="h-4 w-4" /></button></div>)}{tasks.length === 0 && <p className="rounded-2xl bg-slate-50 px-4 py-5 text-sm text-slate-500">Keep only the dates that would change your plan.</p>}</div>
-                    </section>
-                  </PlannerWidget>
-
-                  <PlannerWidget id="money" order={widgetOrder.indexOf("money")} onMoveToTop={moveWidgetToTop} onDuplicatePage={duplicateActivePage} onMovePageToTrash={moveActivePageToTrash}>
-                    <section id="money" className="relative py-2">
-                      <div className="flex items-center gap-2"><DollarSign className="h-5 w-5 text-emerald-600" /><h2 className="text-lg font-semibold text-slate-950">Money plan</h2></div>
-                      <form onSubmit={saveBudget} className="mt-5 grid gap-3 sm:grid-cols-2"><Field label="Currency"><input value={budget.currency} onChange={(event) => setBudget({ ...budget, currency: event.target.value.toUpperCase() })} maxLength={3} className={inputClass} /></Field><Field label="Saved now"><input inputMode="decimal" value={budget.current_savings ?? ""} onChange={(event) => setBudget({ ...budget, current_savings: event.target.value })} placeholder="0" className={inputClass} /></Field><Field label="Monthly saving"><input inputMode="decimal" value={budget.monthly_saving ?? ""} onChange={(event) => setBudget({ ...budget, monthly_saving: event.target.value })} placeholder="0" className={inputClass} /></Field><Field label="Target fund"><input inputMode="decimal" value={budget.target_amount ?? ""} onChange={(event) => setBudget({ ...budget, target_amount: event.target.value })} placeholder="e.g. 45000" className={inputClass} /></Field><Field label="Target date"><input type="date" value={budget.target_date ?? ""} onChange={(event) => setBudget({ ...budget, target_date: event.target.value })} className={inputClass} /></Field><div className="flex items-end"><button disabled={saving === "budget"} className="inline-flex h-10 items-center gap-2 rounded-xl bg-emerald-600 px-4 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50">{saving === "budget" && <Loader2 className="h-4 w-4 animate-spin" />}Save money plan</button></div></form>
-                      <div className="mt-5 grid gap-3 sm:grid-cols-3"><Insight label="Still to save" value={remaining == null ? "Set a target" : money(remaining, budget.currency)} /><Insight label="Months left" value={monthsToTarget == null ? "—" : `${monthsToTarget} months`} /><Insight label="Required / month" value={requiredMonthly == null ? "—" : money(requiredMonthly, budget.currency)} /></div>
-                    </section>
-                  </PlannerWidget>
-
-                  <PlannerWidget id="english" order={widgetOrder.indexOf("english")} onMoveToTop={moveWidgetToTop} onDuplicatePage={duplicateActivePage} onMovePageToTrash={moveActivePageToTrash}>
-                    <section id="english" className="relative py-2">
-                      <div className="flex items-center gap-2"><Languages className="h-5 w-5 text-violet-600" /><h2 className="text-lg font-semibold text-slate-950">English plan</h2></div>
-                      <form onSubmit={saveLanguage} className="mt-5 grid gap-3 sm:grid-cols-2"><Field label="Exam"><input value={language.exam_name} onChange={(event) => setLanguage({ ...language, exam_name: event.target.value })} maxLength={80} className={inputClass} /></Field><Field label="Current score"><input inputMode="decimal" value={language.current_score ?? ""} onChange={(event) => setLanguage({ ...language, current_score: event.target.value })} placeholder="e.g. 6.0" className={inputClass} /></Field><Field label="Target score"><input inputMode="decimal" value={language.target_score ?? ""} onChange={(event) => setLanguage({ ...language, target_score: event.target.value })} placeholder="e.g. 7.0" className={inputClass} /></Field><Field label="Study hours / week"><input inputMode="decimal" value={language.weekly_hours ?? ""} onChange={(event) => setLanguage({ ...language, weekly_hours: event.target.value })} placeholder="e.g. 8" className={inputClass} /></Field><Field label="Test date"><input type="date" value={language.test_date ?? ""} onChange={(event) => setLanguage({ ...language, test_date: event.target.value })} className={inputClass} /></Field><div className="flex items-end"><button disabled={saving === "language"} className="inline-flex h-10 items-center gap-2 rounded-xl bg-violet-600 px-4 text-sm font-semibold text-white hover:bg-violet-700 disabled:opacity-50">{saving === "language" && <Loader2 className="h-4 w-4 animate-spin" />}Save English plan</button></div></form>
-                      <div className="mt-5 rounded-2xl bg-violet-50 px-4 py-3 text-sm text-violet-950">{scoreGap == null ? "Add your current and target scores to see the gap." : scoreGap === 0 ? "You are at your target — well done!" : `You need +${scoreGap.toFixed(1)} points to reach your target.`}</div>
-                    </section>
-                  </PlannerWidget>
-
-                <PlannerWidget id="research" order={widgetOrder.indexOf("research")} onMoveToTop={moveWidgetToTop} onDuplicatePage={duplicateActivePage} onMovePageToTrash={moveActivePageToTrash}>
-                  <section id="research" className="relative scroll-mt-6 py-2">
-                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                      <div><div className="flex items-center gap-2"><BookOpen className="h-5 w-5 text-blue-600" /><h2 className="text-lg font-semibold text-slate-950">Research library</h2></div><p className="mt-1 text-sm text-slate-500">Saved choices and official evidence, kept beside your own notes.</p></div>
-                      <Link href="/profile/evidence" className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-700 hover:text-blue-800">Official links <ArrowRight className="h-4 w-4" /></Link>
-                    </div>
-                    <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-                      <ResearchCard icon={Target} title="Fields" items={studyConcepts.map((item) => item.concept_label || item.concept_label_ko || item.concept_slug)} href="/au/majors" empty="No fields saved" />
-                      <ResearchCard icon={BriefcaseBusiness} title="Careers" items={occupations.map((item) => item.occ_title || item.occ_code)} href="/au/jobs" empty="No careers saved" />
-                      <ResearchCard icon={GraduationCap} title="Schools" items={universities.map((item) => item.univ_name || item.univ_slug)} href="/au/study" empty="No schools saved" />
-                      <ResearchCard icon={Target} title="Courses" items={courses.map((item) => item.course_name || item.field_name || item.college_name)} href="/au/study" empty="No courses saved" />
-                      <ResearchCard icon={FileCheck2} title="Checks" items={[assessment ? `Degree risk · ${majorLabel(assessment.major_pref)}` : "No degree-risk result", evidenceCount ? `${evidenceCount} official links saved` : "No official links saved"]} href={assessment ? assessmentHref : "/degree-risk"} empty="" />
-                    </div>
-                    {preferences && <div className="mt-5 rounded-2xl bg-slate-50 px-4 py-3 text-sm text-slate-600">Current direction: <strong className="text-slate-800">{countryLabels[preferences.recommended_country ?? ""] ?? "Comparing countries"}</strong>{preferences.field && ` · ${preferences.field}`}{preferences.goal && ` · ${goalLabels[preferences.goal] ?? preferences.goal}`}</div>}
-                  </section>
-                </PlannerWidget>
-              </section>
-            </SortableContext>
-          </DndContext>
-          */}
         </main>
       </div>
     </div>
@@ -924,25 +800,6 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
 }
 
 /* ── Sub-components ── */
-function ResearchCard({ icon: Icon, title, items, href, empty }: { icon: typeof BookOpen; title: string; items: string[]; href: string; empty: string }) { return <article className="border-l border-slate-200 pl-4"><div className="flex items-center gap-2 text-sm font-semibold text-slate-700"><Icon className="h-4 w-4 text-blue-600" />{title}</div><div className="mt-3 min-h-16 space-y-1.5">{items.slice(0, 2).map((item) => <p key={item} className="truncate text-sm text-slate-500" title={item}>{item}</p>)}{items.length === 0 && empty && <p className="text-sm text-slate-400">{empty}</p>}</div><Link href={href} className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700">Open <ArrowRight className="h-3.5 w-3.5" /></Link></article> }
-
-function PlannerWidget({ id, order, onMoveToTop, onDuplicatePage, onMovePageToTrash, children }: { id: WidgetId; order: number; onMoveToTop: (id: WidgetId) => void; onDuplicatePage: () => void; onMovePageToTrash: () => void; children: ReactNode }) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id })
-  const [menuOpen, setMenuOpen] = useState(false)
-  return <div ref={setNodeRef} style={{ order, transform: CSS.Transform.toString(transform), transition }} className={cn("group relative min-w-0 border-t border-slate-200/80 pt-7 first:border-t-0 first:pt-2", isDragging && "z-20 opacity-60")}>
-    <div className="absolute right-0 top-4 z-20">
-      <button type="button" onClick={() => setMenuOpen((open) => !open)} className={cn("grid size-7 place-items-center rounded-md text-slate-400 transition hover:bg-slate-100 hover:text-slate-700", menuOpen ? "opacity-100" : "opacity-0 group-hover:opacity-100 focus:opacity-100")} aria-label={`Arrange ${id} section`} aria-expanded={menuOpen}><MoreHorizontal className="size-4" /></button>
-      {menuOpen && <div role="menu" className="absolute right-0 top-full z-30 mt-1 w-52 rounded-xl border border-slate-200 bg-white p-1.5 text-sm shadow-[0_14px_32px_rgba(15,23,42,.15)]">
-        <button type="button" {...attributes} {...listeners} className="flex w-full cursor-grab items-center gap-2 rounded-lg px-2.5 py-2 text-left text-slate-700 hover:bg-slate-50 active:cursor-grabbing"><GripVertical className="size-3.5" />Drag to arrange</button>
-        <button type="button" role="menuitem" onClick={() => { onMoveToTop(id); setMenuOpen(false) }} className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-slate-700 hover:bg-slate-50"><ArrowUpToLine className="size-3.5" />Move section to top</button>
-        <div className="my-1 border-t border-slate-100" />
-        <button type="button" role="menuitem" onClick={() => { onDuplicatePage(); setMenuOpen(false) }} className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-slate-700 hover:bg-slate-50"><Plus className="size-3.5" />Duplicate page</button>
-        <button type="button" role="menuitem" onClick={() => { onMovePageToTrash(); setMenuOpen(false) }} className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-red-600 hover:bg-red-50"><Trash2 className="size-3.5" />Move page to Trash</button>
-      </div>}
-    </div>
-    {children}
-  </div>
-}
 
 function Field({ label, children }: { label: string; children: ReactNode }) { return <label className="block text-xs font-semibold text-slate-400">{label}{children}</label> }
 function Insight({ label, value }: { label: string; value: string }) { return <div className="border-l-2 border-emerald-500 pl-3.5"><p className="text-xs font-medium text-emerald-600">{label}</p><p className="mt-1 text-sm font-semibold text-emerald-700">{value}</p></div> }

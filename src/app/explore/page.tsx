@@ -1,5 +1,5 @@
-import PlannerPage from "../planner/page"
+import { redirect } from "next/navigation"
 
 export default function ExploreRoute() {
-  return <PlannerPage initialArea="explore" />
+  redirect("/home")
 }

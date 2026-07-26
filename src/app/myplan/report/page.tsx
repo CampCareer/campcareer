@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation"
 
 export default function MyPlanReportPage() {
-  redirect("/planner/report")
+  redirect("/home/report")
 }

@@ -10,6 +10,7 @@ import {
   Check,
   Circle,
   CircleCheck,
+  ClipboardCheck,
   Compass,
   FileCheck2,
   GraduationCap,
@@ -25,7 +26,7 @@ import {
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
-import { buildPlanHealth } from "@/lib/plan-health"
+import { buildPlanHealth, type PlanHealthSignal } from "@/lib/plan-health"
 
 /* ── Types ── */
 
@@ -96,6 +97,7 @@ type HomeDashboardProps = {
   targetEnglishScore: number | null
   englishExam: string
   englishTestDate?: string | null
+  evidenceCount: number
   leadingOptionTitle?: string | null
   leadingRationale?: string | null
   onNavigate: (area: string) => void
@@ -191,6 +193,7 @@ export function HomeDashboard({
   targetEnglishScore,
   englishExam,
   englishTestDate = null,
+  evidenceCount,
   leadingOptionTitle = null,
   leadingRationale = null,
   onNavigate,
@@ -213,6 +216,7 @@ export function HomeDashboard({
   const isReadyGoal = Boolean(goalProfile.target_occupation_title || goalProfile.target_study_concept_label)
   const hasShortlist = goalOptions.length > 0
   const hasIntake = Boolean(goalProfile.target_intake_month)
+  const hasResearch = evidenceCount > 0
   const hasEnglishBaseline = currentEnglishScore != null
   const hasEnglishTarget = targetEnglishScore != null
   const hasFundTarget = targetAmount != null
@@ -220,7 +224,7 @@ export function HomeDashboard({
   const hasApplicationSchedule =
     tasks.some((t) => t.kind === "application") ||
     applications.some((a) => a.status !== "declined" && a.status !== "offer")
-  const readiness = [isReadyGoal, hasShortlist, hasIntake, hasEnglishBaseline, hasEnglishTarget, hasFundTarget, hasSavingPlan, hasApplicationSchedule, hasApplicationSchedule]
+  const readiness = [isReadyGoal, hasShortlist, hasIntake, hasResearch, hasEnglishBaseline, hasEnglishTarget, hasFundTarget, hasSavingPlan, hasApplicationSchedule]
   const readyCount = readiness.filter(Boolean).length
 
   /* Money */
@@ -250,6 +254,37 @@ export function HomeDashboard({
     .sort((a, b) => (b.roi_score ?? 0) - (a.roi_score ?? 0))
     .slice(0, 3)
 
+  /* ── Plan Health ── */
+  const applicationDeadlineItems = [
+    ...tasks.filter((t) => t.kind === "application" && t.status === "todo" && t.due_date).map((t) => ({ title: t.title, dueDate: t.due_date! })),
+    ...applications.filter((a) => a.status !== "declined" && a.status !== "offer" && a.deadline_date).map((a) => ({ title: a.title, dueDate: a.deadline_date! })),
+  ].sort((a, b) => a.dueDate.localeCompare(b.dueDate))
+  const nextDeadline = applicationDeadlineItems[0] ?? null
+  const planHealth = buildPlanHealth({
+    locale: isKo ? "ko" : "en",
+    targetIntakeMonth: goalProfile.target_intake_month,
+    applicationDeadlines: applicationDeadlineItems,
+    currentSavings: currentSavings ?? 0,
+    monthlySaving: monthlySaving ?? 0,
+    targetAmount,
+    targetDate,
+    englishTargetScore: targetEnglishScore,
+    englishTestDate,
+    leadingOptionTitle,
+    leadingRationale,
+  })
+  const nextMove = planHealth.nextAction ?? getNextMove({ isKo, hasShortlist, hasEnglishBaseline, hasFundTarget, hasApplicationSchedule, nextDeadline })
+
+  /* ── Journey ── */
+  const route = [
+    { label: "Choose", complete: isReadyGoal && hasShortlist, detail: isKo ? "목표와 후보" : "Goal & shortlist" },
+    { label: "Qualify", complete: hasEnglishBaseline && hasEnglishTarget, detail: isKo ? "입학 조건" : "Entry conditions" },
+    { label: "Apply", complete: hasApplicationSchedule, detail: isKo ? "지원 일정" : "Application plan" },
+    { label: "Fund", complete: hasFundTarget && hasSavingPlan, detail: isKo ? "자금 계획" : "Funding plan" },
+    { label: "Arrive", complete: hasIntake && hasApplicationSchedule && hasFundTarget, detail: isKo ? "출국 준비" : "Arrival plan" },
+    { label: "Work", complete: Boolean(goalProfile.target_occupation_title), detail: isKo ? "커리어 목표" : "Career direction" },
+  ]
+
   return (
     <section className="mx-auto max-w-5xl space-y-8 px-6 pb-16 pt-8 sm:px-10 sm:pt-12">
       {/* ── Header ── */}
@@ -257,7 +292,6 @@ export function HomeDashboard({
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
             <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[.14em] text-blue-600">
-              <Sparkles className="size-3.5" />
               {isKo ? "홈" : "HOME"}
             </p>
             <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
@@ -309,34 +343,96 @@ export function HomeDashboard({
       {/* ── Quick Actions ── */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <QuickAction
-          icon={Target}
-          label={isKo ? "나의 경로" : "Pathway"}
-          href="/planner/pathway"
-          onNavigate={onNavigate}
-          area="pathway"
-        />
-        <QuickAction
           icon={Scale}
           label={isKo ? "비교" : "Compare"}
-          href="/planner/compare"
+          href="/home/compare"
           onNavigate={onNavigate}
           area="compare"
         />
         <QuickAction
           icon={CalendarClock}
-          label={isKo ? "지원 준비" : "Applications"}
-          href="/planner/applications"
+          label={isKo ? "지원 관리" : "Applications"}
+          href="/home/applications"
           onNavigate={onNavigate}
           area="applications"
         />
         <QuickAction
           icon={Banknote}
-          label={isKo ? "자금 런웨이" : "Money runway"}
-          href="/planner/money"
+          label={isKo ? "예산" : "Budget"}
+          href="/home/budget"
           onNavigate={onNavigate}
-          area="money"
+          area="budget"
+        />
+        <QuickAction
+          icon={Languages}
+          label={isKo ? "영어 학습" : "English"}
+          href="/home/english"
+          onNavigate={onNavigate}
+          area="english"
         />
       </div>
+
+      {/* ── Plan Health ── */}
+      <section className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[.14em] text-blue-600">
+              {isKo ? "다음 단계" : "NEXT STEPS"}
+            </p>
+            <h2 className="mt-1 text-xl font-semibold tracking-tight text-slate-950">
+              {healthStatusCopy(planHealth.status, isKo)}
+            </h2>
+            <p className="mt-1 text-sm leading-6 text-slate-500">
+              {isKo
+                ? "지금 가장 먼저 해야 할 일을 알려드립니다."
+                : "We surface the next priority you should address first."}
+            </p>
+          </div>
+          <div className={cn(
+            "flex shrink-0 items-center gap-3",
+            planHealth.status === "on-track" ? "text-emerald-600"
+              : planHealth.status === "attention" ? "text-amber-600"
+                : "text-rose-600"
+          )}>
+            <span className="text-3xl font-semibold tracking-tight">{planHealth.score}</span>
+            <span className="border-l border-current/20 pl-3 text-xs font-semibold uppercase tracking-[.12em]">
+              {healthStatusCopy(planHealth.status, isKo)}
+            </span>
+          </div>
+        </div>
+        <div className="mt-6 grid gap-x-8 gap-y-4 lg:grid-cols-2">
+          {planHealth.signals.map((signal) => (
+            <HealthSignalCard key={signal.id} signal={signal} />
+          ))}
+        </div>
+      </section>
+
+      {/* ── Next Best Move ── */}
+      <section className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
+        <div className="flex items-start gap-4">
+          <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-blue-600 text-white shadow-[0_10px_20px_rgba(59,130,246,.3)]">
+            <Compass className="size-5" />
+          </span>
+          <div className="min-w-0">
+            <p className="text-xs font-semibold uppercase tracking-[.14em] text-blue-600">
+              {isKo ? "다음 행동 · 10분" : "Next best move · 10 min"}
+            </p>
+            <h2 className="mt-1 text-xl font-semibold tracking-tight text-slate-950">
+              {nextMove.title}
+            </h2>
+            <p className="mt-2 max-w-xl text-sm leading-6 text-slate-500">
+              {nextMove.description}
+            </p>
+          </div>
+        </div>
+        <Link
+          href={nextMove.href}
+          className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white transition hover:bg-blue-500"
+        >
+          {nextMove.cta}
+          <ArrowRight className="size-4" />
+        </Link>
+      </section>
 
       {/* ── Goal Progress ── */}
       <section className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
@@ -412,6 +508,28 @@ export function HomeDashboard({
         </div>
       </section>
 
+      {/* ── Decision Journey ── */}
+      <section className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
+        <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[.14em] text-slate-400">
+              {isKo ? "호주 결정 여정" : "Australia decision journey"}
+            </p>
+            <h2 className="mt-1 text-xl font-semibold tracking-tight text-slate-950">
+              {isKo ? "한 번에 전부가 아니라, 다음 단계만 선명하게" : "Make the next decision, not every decision at once."}
+            </h2>
+          </div>
+          <p className="text-sm text-slate-400">
+            {isKo ? `${readyCount}/9 준비 완료` : `${readyCount}/9 essentials ready`}
+          </p>
+        </div>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-6">
+          {route.map((stage, index) => (
+            <JourneyStep key={stage.label} index={index + 1} label={stage.label} detail={stage.detail} complete={stage.complete} />
+          ))}
+        </div>
+      </section>
+
       {/* ── Two-column: Schools + Activity ── */}
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Recommended Schools */}
@@ -426,7 +544,7 @@ export function HomeDashboard({
               </h2>
             </div>
             <Link
-              href="/planner/compare"
+              href="/home/compare"
               onClick={(e) => { e.preventDefault(); onNavigate("compare") }}
               className="text-xs font-semibold text-blue-600 hover:text-blue-700"
             >
@@ -639,11 +757,11 @@ export function HomeDashboard({
           )}
 
           <Link
-            href="/planner/pathway"
-            onClick={(e) => { e.preventDefault(); onNavigate("pathway") }}
+            href="/home/compare"
+            onClick={(e) => { e.preventDefault(); onNavigate("compare") }}
             className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-700"
           >
-            {isKo ? "경로 상세 보기" : "View full pathway"} <ArrowRight className="size-4" />
+            {isKo ? "비교 상세 보기" : "View comparison"} <ArrowRight className="size-4" />
           </Link>
         </section>
       )}
@@ -722,7 +840,74 @@ function ProgressRow({
   )
 }
 
+function HealthSignalCard({ signal }: { signal: PlanHealthSignal }) {
+  const isPositive = signal.severity === "positive"
+  const isCritical = signal.severity === "critical"
+  return (
+    <Link
+      href={signal.href}
+      className={cn(
+        "group border-l-2 py-1 pl-4 transition",
+        isPositive ? "border-emerald-500/60"
+          : isCritical ? "border-rose-500/60"
+            : "border-amber-500/60"
+      )}
+    >
+      <div className="flex items-start gap-3">
+        <span className={cn(
+          "mt-0.5 grid size-8 shrink-0 place-items-center rounded-xl",
+          isPositive ? "bg-emerald-50 text-emerald-600"
+            : isCritical ? "bg-rose-50 text-rose-600"
+              : "bg-amber-50 text-amber-600"
+        )}>
+          {isPositive ? <CircleCheck className="size-4" /> : <Circle className="size-4 fill-current" />}
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-semibold text-slate-700">{signal.title}</p>
+          <p className="mt-1 text-xs leading-5 text-slate-500">{signal.description}</p>
+          <span className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-slate-600 transition group-hover:gap-1.5">
+            {signal.cta}<ArrowRight className="size-3.5" />
+          </span>
+        </div>
+      </div>
+    </Link>
+  )
+}
+
+function JourneyStep({ index, label, detail, complete }: { index: number; label: string; detail: string; complete: boolean }) {
+  return (
+    <div className="relative min-h-24 border-l border-slate-200 pl-4 first:border-l-0 first:pl-0">
+      <div className="flex items-center justify-between gap-2">
+        <span className={cn(
+          "grid size-6 place-items-center rounded-full text-xs font-bold",
+          complete ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-400"
+        )}>
+          {complete ? <Check className="size-3.5" /> : index}
+        </span>
+        {complete ? <CircleCheck className="size-4 text-blue-500" /> : <Circle className="size-4 text-slate-200" />}
+      </div>
+      <p className={cn("mt-4 text-sm font-semibold", complete ? "text-blue-700" : "text-slate-600")}>{label}</p>
+      <p className="mt-1 text-xs leading-5 text-slate-400">{detail}</p>
+    </div>
+  )
+}
+
 /* ── Helpers ── */
+
+function healthStatusCopy(status: "on-track" | "attention" | "at-risk", isKo: boolean) {
+  if (status === "on-track") return isKo ? "모든 준비 완료" : "All set"
+  if (status === "attention") return isKo ? "확인 필요" : "Needs attention"
+  return isKo ? "우선 조치 필요" : "Action needed"
+}
+
+function getNextMove({ isKo, hasShortlist, hasEnglishBaseline, hasFundTarget, hasApplicationSchedule, nextDeadline }: { isKo: boolean; hasShortlist: boolean; hasEnglishBaseline: boolean; hasFundTarget: boolean; hasApplicationSchedule: boolean; nextDeadline: { title: string; dueDate: string } | null }) {
+  if (!hasShortlist) return { href: "/au/study", title: isKo ? "후보 하나를 저장하세요" : "Save one study option", description: isKo ? "비교할 대학 또는 과정 하나만 고르면, 이후 비용·조건·지원 일정의 기준점이 생깁니다." : "Choose one university or course. It becomes the reference point for cost, requirements and deadlines.", cta: isKo ? "후보 탐색하기" : "Explore options" }
+  if (!hasEnglishBaseline) return { href: "/home/english", title: isKo ? "현재 영어 점수를 기록하세요" : "Record your current English score", description: isKo ? "정확한 점수가 아니어도 괜찮습니다. 현재 위치를 기록하면 필요한 준비 기간을 가늠할 수 있어요." : "An estimate is enough. Once your starting point is visible, you can judge the preparation time you need.", cta: isKo ? "영어 계획 열기" : "Open English plan" }
+  if (!hasFundTarget) return { href: "/home/budget", title: isKo ? "초기 자금 목표를 입력하세요" : "Set your first funding target", description: isKo ? "완벽한 예산이 아니어도 됩니다. 먼저 목표 금액을 잡으면 부족액과 월별 계획이 보입니다." : "It does not need to be a perfect budget. A first target makes the gap and monthly plan visible.", cta: isKo ? "자금 계획 열기" : "Open money plan" }
+  if (!hasApplicationSchedule) return { href: "/home/applications", title: isKo ? "지원 관련 일정 하나를 추가하세요" : "Add one application date", description: isKo ? "마감일 하나만 잡아도 막연한 계획이 실제 일정으로 바뀝니다." : "One date is enough to turn an abstract plan into a real timeline.", cta: isKo ? "일정 추가하기" : "Add a date" }
+  if (nextDeadline) return { href: "/home/applications", title: isKo ? "다음 지원 일정을 10분 안에 확인하세요" : "Review your next date in ten minutes", description: isKo ? `다음 일정은 "${nextDeadline.title}"입니다. 필요한 문서와 다음 행동을 한 줄로 적어보세요.` : `Your next date is "${nextDeadline.title}". Write down the document you need and the immediate next action.`, cta: isKo ? "일정 보기" : "View schedule" }
+  return { href: "/au/study", title: isKo ? "1순위 후보의 입학 조건을 확인하세요" : "Check your first option's entry requirements", description: isKo ? "후보의 영어·학력·지원 시기를 한 번만 확인해도 다음 계획의 정확도가 높아집니다." : "A quick check of English, academic and intake requirements will make your next plan more precise.", cta: isKo ? "후보 비교하기" : "Compare options" }
+}
 
 function formatMoney(value: number, currency: string) {
   try {
