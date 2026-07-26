@@ -24,7 +24,7 @@ export function TopNav() {
   const barePathname = withoutLocalePrefix(pathname)
 
   const isLanding = barePathname === "/"
-  const isToolSurface = barePathname === "/home" || barePathname.startsWith("/home/") || barePathname === "/planner" || barePathname.startsWith("/planner/")
+  const isToolSurface = barePathname === "/home" || barePathname.startsWith("/home/") || barePathname === "/planner" || barePathname.startsWith("/planner/") || barePathname === "/compare" || barePathname === "/applications" || barePathname === "/budget" || barePathname === "/english" || barePathname === "/research" || barePathname === "/report" || barePathname === "/english"
   const isBluePages = isLanding || barePathname === "/au/majors" || barePathname.startsWith("/au/majors/") || barePathname === "/au/study" || barePathname.startsWith("/au/study/")
   const isTransparent = isBluePages
 

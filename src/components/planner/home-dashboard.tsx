@@ -316,11 +316,6 @@ export function HomeDashboard({
             </div>
           </div>
         </div>
-        {goalProfile.plan_title && (
-          <p className="truncate text-sm font-medium text-slate-600">
-            {goalProfile.plan_title}
-          </p>
-        )}
       </header>
 
       {/* ── Today's Insight ── */}
@@ -345,28 +340,28 @@ export function HomeDashboard({
         <QuickAction
           icon={Scale}
           label={isKo ? "비교" : "Compare"}
-          href="/home/compare"
+          href="/compare"
           onNavigate={onNavigate}
           area="compare"
         />
         <QuickAction
           icon={CalendarClock}
           label={isKo ? "지원 관리" : "Applications"}
-          href="/home/applications"
+          href="/applications"
           onNavigate={onNavigate}
           area="applications"
         />
         <QuickAction
           icon={Banknote}
           label={isKo ? "예산" : "Budget"}
-          href="/home/budget"
+          href="/budget"
           onNavigate={onNavigate}
           area="budget"
         />
         <QuickAction
           icon={Languages}
           label={isKo ? "영어 학습" : "English"}
-          href="/home/english"
+          href="/english"
           onNavigate={onNavigate}
           area="english"
         />
@@ -544,7 +539,7 @@ export function HomeDashboard({
               </h2>
             </div>
             <Link
-              href="/home/compare"
+              href="/compare"
               onClick={(e) => { e.preventDefault(); onNavigate("compare") }}
               className="text-xs font-semibold text-blue-600 hover:text-blue-700"
             >
@@ -757,7 +752,7 @@ export function HomeDashboard({
           )}
 
           <Link
-            href="/home/compare"
+            href="/compare"
             onClick={(e) => { e.preventDefault(); onNavigate("compare") }}
             className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-700"
           >
@@ -902,10 +897,10 @@ function healthStatusCopy(status: "on-track" | "attention" | "at-risk", isKo: bo
 
 function getNextMove({ isKo, hasShortlist, hasEnglishBaseline, hasFundTarget, hasApplicationSchedule, nextDeadline }: { isKo: boolean; hasShortlist: boolean; hasEnglishBaseline: boolean; hasFundTarget: boolean; hasApplicationSchedule: boolean; nextDeadline: { title: string; dueDate: string } | null }) {
   if (!hasShortlist) return { href: "/au/study", title: isKo ? "후보 하나를 저장하세요" : "Save one study option", description: isKo ? "비교할 대학 또는 과정 하나만 고르면, 이후 비용·조건·지원 일정의 기준점이 생깁니다." : "Choose one university or course. It becomes the reference point for cost, requirements and deadlines.", cta: isKo ? "후보 탐색하기" : "Explore options" }
-  if (!hasEnglishBaseline) return { href: "/home/english", title: isKo ? "현재 영어 점수를 기록하세요" : "Record your current English score", description: isKo ? "정확한 점수가 아니어도 괜찮습니다. 현재 위치를 기록하면 필요한 준비 기간을 가늠할 수 있어요." : "An estimate is enough. Once your starting point is visible, you can judge the preparation time you need.", cta: isKo ? "영어 계획 열기" : "Open English plan" }
-  if (!hasFundTarget) return { href: "/home/budget", title: isKo ? "초기 자금 목표를 입력하세요" : "Set your first funding target", description: isKo ? "완벽한 예산이 아니어도 됩니다. 먼저 목표 금액을 잡으면 부족액과 월별 계획이 보입니다." : "It does not need to be a perfect budget. A first target makes the gap and monthly plan visible.", cta: isKo ? "자금 계획 열기" : "Open money plan" }
-  if (!hasApplicationSchedule) return { href: "/home/applications", title: isKo ? "지원 관련 일정 하나를 추가하세요" : "Add one application date", description: isKo ? "마감일 하나만 잡아도 막연한 계획이 실제 일정으로 바뀝니다." : "One date is enough to turn an abstract plan into a real timeline.", cta: isKo ? "일정 추가하기" : "Add a date" }
-  if (nextDeadline) return { href: "/home/applications", title: isKo ? "다음 지원 일정을 10분 안에 확인하세요" : "Review your next date in ten minutes", description: isKo ? `다음 일정은 "${nextDeadline.title}"입니다. 필요한 문서와 다음 행동을 한 줄로 적어보세요.` : `Your next date is "${nextDeadline.title}". Write down the document you need and the immediate next action.`, cta: isKo ? "일정 보기" : "View schedule" }
+  if (!hasEnglishBaseline) return { href: "/english", title: isKo ? "현재 영어 점수를 기록하세요" : "Record your current English score", description: isKo ? "정확한 점수가 아니어도 괜찮습니다. 현재 위치를 기록하면 필요한 준비 기간을 가늠할 수 있어요." : "An estimate is enough. Once your starting point is visible, you can judge the preparation time you need.", cta: isKo ? "영어 계획 열기" : "Open English plan" }
+  if (!hasFundTarget) return { href: "/budget", title: isKo ? "초기 자금 목표를 입력하세요" : "Set your first funding target", description: isKo ? "완벽한 예산이 아니어도 됩니다. 먼저 목표 금액을 잡으면 부족액과 월별 계획이 보입니다." : "It does not need to be a perfect budget. A first target makes the gap and monthly plan visible.", cta: isKo ? "자금 계획 열기" : "Open money plan" }
+  if (!hasApplicationSchedule) return { href: "/applications", title: isKo ? "지원 관련 일정 하나를 추가하세요" : "Add one application date", description: isKo ? "마감일 하나만 잡아도 막연한 계획이 실제 일정으로 바뀝니다." : "One date is enough to turn an abstract plan into a real timeline.", cta: isKo ? "일정 추가하기" : "Add a date" }
+  if (nextDeadline) return { href: "/applications", title: isKo ? "다음 지원 일정을 10분 안에 확인하세요" : "Review your next date in ten minutes", description: isKo ? `다음 일정은 "${nextDeadline.title}"입니다. 필요한 문서와 다음 행동을 한 줄로 적어보세요.` : `Your next date is "${nextDeadline.title}". Write down the document you need and the immediate next action.`, cta: isKo ? "일정 보기" : "View schedule" }
   return { href: "/au/study", title: isKo ? "1순위 후보의 입학 조건을 확인하세요" : "Check your first option's entry requirements", description: isKo ? "후보의 영어·학력·지원 시기를 한 번만 확인해도 다음 계획의 정확도가 높아집니다." : "A quick check of English, academic and intake requirements will make your next plan more precise.", cta: isKo ? "후보 비교하기" : "Compare options" }
 }
 

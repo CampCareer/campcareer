@@ -3,7 +3,6 @@
 import { BookOpenCheck, CalendarDays, Languages, LineChart, Scale, Home, Target, Wallet, type LucideIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
-import { PlannerSearch } from "./planner-search"
 
 export type PlannerArea = "home" | "compare" | "applications" | "budget" | "english" | "research" | "report"
 
@@ -39,8 +38,6 @@ export function PlannerSidebar({ activeArea, onNavigate, onOpenPath }: PlannerSi
   ]
 
   return <aside className="hidden h-full w-72 shrink-0 flex-col border-r border-slate-200 bg-white px-3 py-4 text-slate-700 sm:flex">
-    <div className="flex justify-end px-3 pb-5 pt-1"><PlannerSearch isKo={isKo} onNavigate={onNavigate} onOpenPath={onOpenPath} /></div>
-
     <nav aria-label={isKo ? "My Plan 실행 영역" : "My Plan action areas"} className="space-y-1">
       {items.map((item) => <SidebarButton key={item.id} item={item} active={activeArea === item.id} onClick={() => onNavigate(item.id)} />)}
     </nav>

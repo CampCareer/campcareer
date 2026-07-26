@@ -4,6 +4,8 @@ import { ChevronLeft, ChevronRight, PanelLeftClose, PanelLeftOpen, Plus, X } fro
 import { ToolNavActions } from "@/components/layout/tool-nav-actions"
 import { cn } from "@/lib/utils"
 import { plannerTabTitle, type PlannerTab } from "./planner-types"
+import { PlannerSearch } from "./planner-search"
+import type { PlannerArea } from "./planner-sidebar"
 
 type PlannerToolbarProps = {
   tabs: PlannerTab[]
@@ -54,7 +56,7 @@ export function PlannerToolbar({
   )
 }
 
-export function PlannerToolbarControls({ sidebarOpen, canGoBack, canGoForward, onToggleSidebar, onBack, onForward, dark = false }: { sidebarOpen: boolean; canGoBack: boolean; canGoForward: boolean; onToggleSidebar: () => void; onBack: () => void; onForward: () => void; dark?: boolean }) {
+export function PlannerToolbarControls({ sidebarOpen, canGoBack, canGoForward, onToggleSidebar, onBack, onForward, isKo, onNavigate, onOpenPath, dark = false }: { sidebarOpen: boolean; canGoBack: boolean; canGoForward: boolean; onToggleSidebar: () => void; onBack: () => void; onForward: () => void; isKo?: boolean; onNavigate?: (area: PlannerArea) => void; onOpenPath?: (path: string) => void; dark?: boolean }) {
   const buttonClass = dark ? "text-slate-300 hover:bg-white/10 hover:text-white" : "text-slate-500 hover:bg-slate-100 hover:text-slate-800"
   return <div className="flex shrink-0 items-center">
     <button type="button" onClick={onToggleSidebar} className={cn("hidden size-8 items-center justify-center rounded-md transition sm:inline-flex", buttonClass)} title={sidebarOpen ? "Close plan navigation" : "Open plan navigation"} aria-label={sidebarOpen ? "Close plan navigation" : "Open plan navigation"}>
@@ -62,5 +64,6 @@ export function PlannerToolbarControls({ sidebarOpen, canGoBack, canGoForward, o
     </button>
     <button type="button" onClick={onBack} disabled={!canGoBack} className={cn("inline-flex size-8 items-center justify-center rounded-md transition disabled:pointer-events-none disabled:opacity-30", buttonClass)} title="Go back" aria-label="Go back"><ChevronLeft className="size-4" /></button>
     <button type="button" onClick={onForward} disabled={!canGoForward} className={cn("inline-flex size-8 items-center justify-center rounded-md transition disabled:pointer-events-none disabled:opacity-30", buttonClass)} title="Go forward" aria-label="Go forward"><ChevronRight className="size-4" /></button>
+    {sidebarOpen && isKo !== undefined && onNavigate && onOpenPath && <div className="ml-auto"><PlannerSearch isKo={isKo} onNavigate={onNavigate} onOpenPath={onOpenPath} /></div>}
   </div>
 }

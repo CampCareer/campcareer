@@ -1,7 +1,7 @@
 "use client"
 
-import { useEffect, useState, type FormEvent } from "react"
-import { Check, ClipboardCheck, DollarSign, GraduationCap, Target, TrendingUp, Briefcase, Star, Trash2, ArrowRight } from "lucide-react"
+import { useCallback, useEffect, useRef, useState, type FormEvent } from "react"
+import { Check, ClipboardCheck, DollarSign, GraduationCap, Search, Target, TrendingUp, Briefcase, Star, Trash2, ArrowRight, Loader2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export type CompareSchool = {
@@ -30,7 +30,18 @@ export type ComparePathwayDecision = {
   rationale: string
 }
 
-type CompareTab = "schools" | "pathway"
+type CompareTab = "majors" | "schools" | "pathway"
+
+type MajorResult = {
+  field_name: string
+  roi_score: number | null
+  median_earnings: number | null
+  payback_years: number | null
+  tuition: number | null
+  employment_rate?: number | null
+  college_name?: string | null
+  college_state?: string | null
+}
 
 function money(value: number | null | undefined) {
   return typeof value === "number" && Number.isFinite(value)
@@ -65,14 +76,14 @@ export function CompareSpace({
   evidenceCount?: number
   onSaveDecision?: (next: ComparePathwayDecision) => Promise<boolean>
 }) {
+  const [tab, setTab] = useState<CompareTab>("majors")
   const [selectedId, setSelectedId] = useState<string | null>(null)
-  const [tab, setTab] = useState<CompareTab>("schools")
   const [leadingId, setLeadingId] = useState(decision?.leading_option_id ?? "")
   const [rationale, setRationale] = useState(decision?.rationale ?? "")
   const [saving, setSaving] = useState(false)
 
   const options = goalOptions ?? []
-  const hasPathway = options.length > 0 || (goalTitle || studyTitle)
+  const hasPathway = options.length > 0 || Boolean(goalTitle || studyTitle)
 
   useEffect(() => {
     setLeadingId(decision?.leading_option_id ?? options[0]?.id ?? "")
@@ -87,298 +98,535 @@ export function CompareSpace({
     setSaving(false)
   }
 
-  if (schools.length === 0 && !hasPathway) {
-    return (
-      <section className="mx-auto max-w-4xl px-6 pt-7 sm:px-10 sm:pt-10">
+  return (
+    <section className="mx-auto max-w-5xl px-6 pt-7 sm:px-10 sm:pt-10">
+      <div>
         <p className="text-xs font-semibold uppercase tracking-[.14em] text-blue-600">
           {isKo ? "비교" : "COMPARE"}
         </p>
-        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950">
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">
           {isKo ? "비교" : "Compare"}
         </h1>
-        <p className="mt-2 text-sm leading-6 text-slate-500">
+        <p className="mt-1 text-sm text-slate-500">
           {isKo
-            ? "학교를 비교하고, 경로의 1순위를 정하세요."
-            : "Compare universities and choose your first-choice route."}
+            ? "전공, 학교, 경로를 비교하고 최적의 선택을 찾으세요."
+            : "Compare majors, universities, and routes to find your best path."}
         </p>
-        <div className="mt-10 flex flex-col items-center justify-center rounded-3xl border border-slate-200 bg-white p-10 text-center">
-          <p className="text-sm text-slate-500">
-            {isKo
-              ? "먼저 wizard에서 학교를 선택하세요."
-              : "Select a school in the wizard to start comparing."}
-          </p>
-        </div>
-      </section>
-    )
-  }
-
-  return (
-    <section className="mx-auto max-w-5xl px-6 pt-7 sm:px-10 sm:pt-10">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[.14em] text-blue-600">
-            {isKo ? "비교" : "COMPARE"}
-          </p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">
-            {isKo ? "비교" : "Compare"}
-          </h1>
-        </div>
       </div>
 
       {/* Tabs */}
-      {hasPathway && schools.length > 0 && (
-        <div className="mt-6 flex gap-1 rounded-xl border border-slate-200 bg-slate-50 p-1">
-          <button
-            type="button"
-            onClick={() => setTab("schools")}
-            className={cn(
-              "flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold transition",
-              tab === "schools" ? "bg-white text-blue-700 shadow-sm" : "text-slate-500 hover:text-slate-700"
-            )}
-          >
-            {isKo ? "학교 비교" : "School comparison"}
-          </button>
-          <button
-            type="button"
-            onClick={() => setTab("pathway")}
-            className={cn(
-              "flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold transition",
-              tab === "pathway" ? "bg-white text-blue-700 shadow-sm" : "text-slate-500 hover:text-slate-700"
-            )}
-          >
-            {isKo ? "경로 비교" : "Route comparison"}
-          </button>
-        </div>
+      <div className="mt-6 flex gap-1 rounded-xl border border-slate-200 bg-slate-50 p-1">
+        <TabButton active={tab === "majors"} onClick={() => setTab("majors")} label={isKo ? "전공 비교" : "Majors"} />
+        <TabButton active={tab === "schools"} onClick={() => setTab("schools")} label={isKo ? "학교 비교" : "Schools"} count={schools.length} />
+        <TabButton active={tab === "pathway"} onClick={() => setTab("pathway")} label={isKo ? "경로 비교" : "Route"} />
+      </div>
+
+      {/* Majors comparison */}
+      {tab === "majors" && <MajorsTab isKo={isKo} />}
+
+      {/* School comparison */}
+      {tab === "schools" && (
+        schools.length > 0 ? (
+          <SchoolsTab schools={schools} isKo={isKo} onRemove={onRemove} selectedId={selectedId} onSelect={setSelectedId} />
+        ) : (
+          <EmptyState
+            isKo={isKo}
+            message={isKo ? "아직 비교할 학교가 없습니다." : "No schools to compare yet."}
+            hint={isKo ? "학교 탐색에서 학교를 저장하면 여기에서 비교할 수 있어요." : "Save schools from the study explorer to compare them here."}
+          />
+        )
       )}
 
-      {/* School comparison tab */}
-      {(tab === "schools" || !hasPathway) && schools.length > 0 && (
-        <div className="mt-8 space-y-6">
-          <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white">
-            <table className="w-full text-left text-sm">
-              <thead>
-                <tr className="border-b border-slate-200">
-                  <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
-                    {isKo ? "항목" : "Metric"}
-                  </th>
-                  {schools.map((school) => (
-                    <th key={school.id} className="px-5 py-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-sm font-semibold text-slate-950">{school.college_name}</p>
-                          <p className="mt-0.5 text-xs text-slate-500">
-                            {school.college_city || school.college_state || "Australia"}
-                            {school.college_state ? `, ${school.college_state}` : ""}
-                          </p>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => onRemove(school.id)}
-                          className="ml-2 text-slate-600 transition hover:text-red-400"
-                          aria-label={isKo ? "비교에서 제거" : "Remove from comparison"}
-                        >
-                          <Trash2 className="size-3.5" />
-                        </button>
-                      </div>
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                <CompareRow
-                  icon={<DollarSign className="size-4" />}
-                  label={isKo ? "연간 학비" : "Annual tuition"}
-                  schools={schools}
-                  render={(s) => money(s.tuition)}
-                />
-                <CompareRow
-                  icon={<TrendingUp className="size-4" />}
-                  label={isKo ? "졸업 임금" : "Graduate earnings"}
-                  schools={schools}
-                  render={(s) => money(s.median_earnings)}
-                />
-                <CompareRow
-                  icon={<Briefcase className="size-4" />}
-                  label={isKo ? "취업률" : "Employment rate"}
-                  schools={schools}
-                  render={(s) => percent(s.employment_rate)}
-                />
-                <CompareRow
-                  icon={<Star className="size-4" />}
-                  label="ROI"
-                  schools={schools}
-                  render={(s) => s.roi_score != null ? s.roi_score.toFixed(1) : "—"}
-                />
-                <CompareRow
-                  icon={<ArrowRight className="size-4" />}
-                  label={isKo ? "투자 회수 기간" : "Payback period"}
-                  schools={schools}
-                  render={(s) => s.payback_years != null ? `${s.payback_years.toFixed(1)}${isKo ? "년" : " yrs"}` : "—"}
-                />
-              </tbody>
-            </table>
-          </div>
-
-          {/* First choice */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-5">
-            <p className="text-xs font-semibold uppercase tracking-[.14em] text-slate-500">
-              {isKo ? "1순위 선택" : "First choice"}
-            </p>
-            <p className="mt-1 text-sm text-slate-500">
-              {isKo
-                ? "가장 관심 있는 학교를 선택하세요."
-                : "Select the university you are most interested in."}
-            </p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {schools.map((school) => (
-                <button
-                  key={school.id}
-                  type="button"
-                  onClick={() => setSelectedId(school.id === selectedId ? null : school.id)}
-                  className={cn(
-                    "inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition",
-                    selectedId === school.id
-                      ? "bg-blue-600 text-white"
-                      : "bg-slate-50 text-slate-600 hover:bg-slate-100"
-                  )}
-                >
-                  {school.college_name}
-                </button>
-              ))}
-            </div>
-            {selectedId && (
-              <p className="mt-3 text-xs text-blue-600">
-                {isKo ? "1순위가 설정되었습니다." : "First choice set."}
-              </p>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Pathway comparison tab */}
-      {tab === "pathway" && hasPathway && (
-        <div className="mt-8 space-y-6">
-          {/* Current direction */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-5">
-            <div className="flex items-center gap-2">
-              <Target className="size-4 text-blue-600" />
-              <h2 className="text-base font-semibold text-slate-950">
-                {isKo ? "현재 목표" : "Current direction"}
-              </h2>
-            </div>
-            <div className="mt-3 flex flex-wrap gap-2">
-              <Tag icon={GraduationCap} label={studyTitle || (isKo ? "전공 방향 미정" : "Study direction to confirm")} />
-              <Tag icon={Target} label={goalTitle || (isKo ? "직업 목표 미정" : "Career direction to confirm")} />
-              <Tag icon={ClipboardCheck} label={isKo ? `공식 근거 ${evidenceCount ?? 0}개` : `${evidenceCount ?? 0} evidence links`} />
-            </div>
-          </div>
-
-          {/* Route comparison table */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-5">
-            <h2 className="text-base font-semibold text-slate-950">
-              {isKo ? "경로 비교" : "Route comparison"}
-            </h2>
-            <p className="mt-1 text-sm text-slate-500">
-              {isKo
-                ? "저장한 후보를 같은 기준에서 비교하고 1순위를 정하세요."
-                : "Compare your saved options on the same terms and pick a first choice."}
-            </p>
-            {options.length ? (
-              <div className="mt-5 overflow-x-auto">
-                <table className="min-w-[640px] w-full text-left text-sm">
-                  <thead>
-                    <tr className="border-b border-slate-200 text-xs font-semibold uppercase tracking-[.1em] text-slate-500">
-                      <th className="px-3 py-3">{isKo ? "후보" : "Route"}</th>
-                      <th className="px-3 py-3">{isKo ? "교육기관" : "Provider"}</th>
-                      <th className="px-3 py-3">{isKo ? "학업 방향" : "Study focus"}</th>
-                      <th className="px-3 py-3">{isKo ? "판단" : "Decision"}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {options.map((option, index) => (
-                      <tr key={option.id} className="border-b border-slate-200 last:border-0">
-                        <td className="px-3 py-4 font-semibold text-slate-700">{option.title}</td>
-                        <td className="px-3 py-4 text-slate-500">{option.provider_name || "—"}</td>
-                        <td className="px-3 py-4 text-slate-500">{option.field_name || "—"}</td>
-                        <td className="px-3 py-4">
-                          <label className="inline-flex items-center gap-2 text-sm font-medium text-slate-700">
-                            <input
-                              type="radio"
-                              name="leading-pathway"
-                              checked={leadingId === option.id}
-                              onChange={() => setLeadingId(option.id)}
-                              className="size-4 accent-blue-600"
-                            />
-                            {leadingId === option.id
-                              ? (isKo ? "1순위" : "First choice")
-                              : `${isKo ? "후보" : "Option"} ${index + 1}`}
-                          </label>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <div className="mt-5 rounded-xl border border-dashed border-slate-200 p-6 text-center">
-                <p className="text-sm text-slate-500">
-                  {isKo
-                    ? "저장한 대학 또는 과정을 목표 설정에서 후보로 가져오세요."
-                    : "Bring saved universities or courses into your shortlist during goal setup."}
-                </p>
-              </div>
-            )}
-          </div>
-
-          {/* Rationale */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-5">
-            <h2 className="text-base font-semibold text-slate-950">
-              {isKo ? "왜 이 경로가 1순위인가요?" : "Why is this the current first choice?"}
-            </h2>
-            <p className="mt-1 text-sm text-slate-500">
-              {isKo
-                ? "비용, 취업 가능성, 입학 조건 등 지금의 판단 근거를 남기세요."
-                : "Write the reasons that matter now: cost, employment outlook, or entry requirements."}
-            </p>
-            <form onSubmit={saveRationale} className="mt-4">
-              <textarea
-                value={rationale}
-                onChange={(event) => setRationale(event.target.value.slice(0, 1200))}
-                rows={4}
-                placeholder={isKo
-                  ? "예: Option B는 총 비용이 더 낮고, 목표 직업과의 연결이 가장 명확하다."
-                  : "Example: Option B has a lower total cost and the clearest connection to my target career."}
-                className="w-full resize-y rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 text-slate-700 outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/20"
-              />
-              <div className="mt-3 flex items-center justify-between gap-3">
-                <p className="text-xs text-slate-500">{rationale.length}/1200</p>
-                <button
-                  disabled={saving || !leadingId}
-                  className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white hover:bg-blue-500 disabled:opacity-50"
-                >
-                  <Check className="size-4" />
-                  {isKo ? "1순위 판단 저장" : "Save first-choice rationale"}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+      {/* Pathway comparison */}
+      {tab === "pathway" && (
+        hasPathway ? (
+          <PathwayTab
+            isKo={isKo}
+            goalTitle={goalTitle}
+            studyTitle={studyTitle}
+            options={options}
+            leadingId={leadingId}
+            onSetLeadingId={setLeadingId}
+            rationale={rationale}
+            onSetRationale={setRationale}
+            saving={saving}
+            onSaveRationale={saveRationale}
+            evidenceCount={evidenceCount}
+          />
+        ) : (
+          <EmptyState
+            isKo={isKo}
+            message={isKo ? "저장한 후보가 없습니다." : "No saved options yet."}
+            hint={isKo ? "위자드에서 학교나 과정을 저장하면 비교할 수 있어요." : "Save options during wizard setup to compare them here."}
+          />
+        )
       )}
     </section>
   )
 }
 
-function CompareRow({
-  icon,
-  label,
-  schools,
-  render,
-}: {
-  icon: React.ReactNode
-  label: string
-  schools: CompareSchool[]
-  render: (school: CompareSchool) => string
+/* ── Majors Tab ── */
+
+function MajorsTab({ isKo }: { isKo: boolean }) {
+  const [query, setQuery] = useState("")
+  const [searching, setSearching] = useState(false)
+  const [suggestions, setSuggestions] = useState<string[]>([])
+  const [selectedMajors, setSelectedMajors] = useState<string[]>([])
+  const [majorData, setMajorData] = useState<Record<string, MajorResult[]>>({})
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const fetchSuggestions = useCallback(async (q: string) => {
+    if (!q.trim() || q.length < 2) { setSuggestions([]); return }
+    setSearching(true)
+    try {
+      const res = await fetch(`/api/roi/fields?q=${encodeURIComponent(q)}&country=au`)
+      const data = await res.json()
+      setSuggestions((data.fields ?? []).filter((f: string) => !selectedMajors.includes(f)).slice(0, 8))
+    } catch { setSuggestions([]) }
+    setSearching(false)
+  }, [selectedMajors])
+
+  function onQueryChange(value: string) {
+    setQuery(value)
+    if (debounceRef.current) clearTimeout(debounceRef.current)
+    debounceRef.current = setTimeout(() => void fetchSuggestions(value), 250)
+  }
+
+  async function addMajor(fieldName: string) {
+    if (selectedMajors.includes(fieldName) || selectedMajors.length >= 4) return
+    setSelectedMajors((prev) => [...prev, fieldName])
+    setQuery("")
+    setSuggestions([])
+
+    if (!majorData[fieldName]) {
+      try {
+        const res = await fetch(`/api/roi?field=${encodeURIComponent(fieldName)}&country=au&state=ALL_STATES&limit=100`)
+        const json = await res.json()
+        const rows = json.data ?? []
+        setMajorData((prev) => ({ ...prev, [fieldName]: rows }))
+      } catch { /* ignore */ }
+    }
+  }
+
+  function removeMajor(fieldName: string) {
+    setSelectedMajors((prev) => prev.filter((m) => m !== fieldName))
+  }
+
+  const aggregated = selectedMajors.map((field) => {
+    const rows = majorData[field] ?? []
+    if (rows.length === 0) return { field, count: 0, avgRoi: null, avgEarnings: null, avgTuition: null, avgPayback: null }
+    const validRoi = rows.filter((r) => r.roi_score != null)
+    const validEarn = rows.filter((r) => r.median_earnings != null)
+    const validTui = rows.filter((r) => r.tuition != null)
+    const validPay = rows.filter((r) => r.payback_years != null)
+    return {
+      field,
+      count: rows.length,
+      avgRoi: validRoi.length ? validRoi.reduce((s, r) => s + r.roi_score!, 0) / validRoi.length : null,
+      avgEarnings: validEarn.length ? validEarn.reduce((s, r) => s + r.median_earnings!, 0) / validEarn.length : null,
+      avgTuition: validTui.length ? validTui.reduce((s, r) => s + r.tuition!, 0) / validTui.length : null,
+      avgPayback: validPay.length ? validPay.reduce((s, r) => s + r.payback_years!, 0) / validPay.length : null,
+    }
+  })
+
+  return (
+    <div className="mt-8 space-y-6">
+      {/* Search */}
+      <div className="rounded-2xl border border-slate-200 bg-white p-5">
+        <h2 className="text-base font-semibold text-slate-950">
+          {isKo ? "전공 검색" : "Search for a major"}
+        </h2>
+        <p className="mt-1 text-sm text-slate-500">
+          {isKo
+            ? "비교할 전공을 검색하세요. 최대 4개까지 비교 가능합니다."
+            : "Search for majors to compare. You can compare up to 4."}
+        </p>
+        <div className="relative mt-4">
+          <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
+          <input
+            value={query}
+            onChange={(event) => onQueryChange(event.target.value)}
+            placeholder={isKo ? "예: Nursing, Computer Science, Engineering..." : "e.g. Nursing, Computer Science, Engineering..."}
+            className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-10 pr-4 text-sm text-slate-700 outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/20"
+          />
+          {searching && <Loader2 className="absolute right-3 top-1/2 size-4 -translate-y-1/2 animate-spin text-slate-400" />}
+        </div>
+
+        {/* Suggestions */}
+        {suggestions.length > 0 && (
+          <div className="mt-2 rounded-xl border border-slate-200 bg-white shadow-lg">
+            {suggestions.map((field) => (
+              <button
+                key={field}
+                type="button"
+                onClick={() => void addMajor(field)}
+                className="flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm text-slate-700 transition hover:bg-blue-50 hover:text-blue-700"
+              >
+                <GraduationCap className="size-4 shrink-0 text-slate-400" />
+                {field}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Selected majors */}
+      {selectedMajors.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {selectedMajors.map((field) => (
+            <span
+              key={field}
+              className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1.5 text-sm font-medium text-blue-700"
+            >
+              <GraduationCap className="size-3.5" />
+              {field}
+              <button
+                type="button"
+                onClick={() => removeMajor(field)}
+                className="ml-1 text-blue-400 transition hover:text-blue-700"
+                aria-label={`${field} ${isKo ? "제거" : "remove"}`}
+              >
+                ×
+              </button>
+            </span>
+          ))}
+        </div>
+      )}
+
+      {/* Comparison table */}
+      {aggregated.length > 0 && (
+        <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white">
+          <table className="w-full text-left text-sm">
+            <thead>
+              <tr className="border-b border-slate-200">
+                <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  {isKo ? "항목" : "Metric"}
+                </th>
+                {aggregated.map((item) => (
+                  <th key={item.field} className="px-5 py-4">
+                    <p className="text-sm font-semibold text-slate-950">{item.field}</p>
+                    <p className="mt-0.5 text-xs text-slate-500">
+                      {item.count > 0
+                        ? isKo ? `${item.count}개 학교 데이터` : `${item.count} schools`
+                        : isKo ? "데이터 로딩 중..." : "Loading..."}
+                    </p>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              <MajorRow
+                icon={<DollarSign className="size-4" />}
+                label={isKo ? "평균 학비" : "Avg tuition"}
+                items={aggregated}
+                render={(item) => money(item.avgTuition)}
+              />
+              <MajorRow
+                icon={<TrendingUp className="size-4" />}
+                label={isKo ? "평균 졸업 임금" : "Avg graduate earnings"}
+                items={aggregated}
+                render={(item) => money(item.avgEarnings)}
+              />
+              <MajorRow
+                icon={<Star className="size-4" />}
+                label={isKo ? "평균 ROI" : "Avg ROI"}
+                items={aggregated}
+                render={(item) => item.avgRoi != null ? item.avgRoi.toFixed(1) : "—"}
+              />
+              <MajorRow
+                icon={<ArrowRight className="size-4" />}
+                label={isKo ? "평균 투자 회수" : "Avg payback"}
+                items={aggregated}
+                render={(item) => item.avgPayback != null ? `${item.avgPayback.toFixed(1)}${isKo ? "년" : " yrs"}` : "—"}
+              />
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* Empty state */}
+      {selectedMajors.length === 0 && (
+        <div className="rounded-2xl border border-dashed border-slate-200 p-10 text-center">
+          <GraduationCap className="mx-auto size-8 text-slate-300" />
+          <p className="mt-3 text-sm text-slate-500">
+            {isKo
+              ? "검색해서 전공을 추가하면 ROI, 학비, 임금을 나란히 비교할 수 있어요."
+              : "Search to add majors and compare ROI, tuition, and earnings side by side."}
+          </p>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function MajorRow({ icon, label, items, render }: { icon: React.ReactNode; label: string; items: Array<{ field: string; count: number; avgRoi: number | null; avgEarnings: number | null; avgTuition: number | null; avgPayback: number | null }>; render: (item: { field: string; count: number; avgRoi: number | null; avgEarnings: number | null; avgTuition: number | null; avgPayback: number | null }) => string }) {
+  return (
+    <tr className="border-b border-slate-100">
+      <td className="flex items-center gap-2 px-5 py-3.5 text-sm font-medium text-slate-500">
+        <span className="text-blue-600">{icon}</span>
+        {label}
+      </td>
+      {items.map((item) => (
+        <td key={item.field} className="px-5 py-3.5 text-sm font-semibold text-slate-950">
+          {render(item)}
+        </td>
+      ))}
+    </tr>
+  )
+}
+
+/* ── Schools Tab ── */
+
+function SchoolsTab({ schools, isKo, onRemove, selectedId, onSelect }: { schools: CompareSchool[]; isKo: boolean; onRemove: (id: string) => void; selectedId: string | null; onSelect: (id: string | null) => void }) {
+  return (
+    <div className="mt-8 space-y-6">
+      <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white">
+        <table className="w-full text-left text-sm">
+          <thead>
+            <tr className="border-b border-slate-200">
+              <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                {isKo ? "항목" : "Metric"}
+              </th>
+              {schools.map((school) => (
+                <th key={school.id} className="px-5 py-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-semibold text-slate-950">{school.college_name}</p>
+                      <p className="mt-0.5 text-xs text-slate-500">
+                        {school.college_city || school.college_state || "Australia"}
+                        {school.college_state ? `, ${school.college_state}` : ""}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => onRemove(school.id)}
+                      className="ml-2 text-slate-600 transition hover:text-red-400"
+                      aria-label={isKo ? "비교에서 제거" : "Remove from comparison"}
+                    >
+                      <Trash2 className="size-3.5" />
+                    </button>
+                  </div>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            <CompareRow
+              icon={<DollarSign className="size-4" />}
+              label={isKo ? "연간 학비" : "Annual tuition"}
+              schools={schools}
+              render={(s) => money(s.tuition)}
+            />
+            <CompareRow
+              icon={<TrendingUp className="size-4" />}
+              label={isKo ? "졸업 임금" : "Graduate earnings"}
+              schools={schools}
+              render={(s) => money(s.median_earnings)}
+            />
+            <CompareRow
+              icon={<Briefcase className="size-4" />}
+              label={isKo ? "취업률" : "Employment rate"}
+              schools={schools}
+              render={(s) => percent(s.employment_rate)}
+            />
+            <CompareRow
+              icon={<Star className="size-4" />}
+              label="ROI"
+              schools={schools}
+              render={(s) => s.roi_score != null ? s.roi_score.toFixed(1) : "—"}
+            />
+            <CompareRow
+              icon={<ArrowRight className="size-4" />}
+              label={isKo ? "투자 회수 기간" : "Payback period"}
+              schools={schools}
+              render={(s) => s.payback_years != null ? `${s.payback_years.toFixed(1)}${isKo ? "년" : " yrs"}` : "—"}
+            />
+          </tbody>
+        </table>
+      </div>
+
+      {/* First choice */}
+      <div className="rounded-2xl border border-slate-200 bg-white p-5">
+        <p className="text-xs font-semibold uppercase tracking-[.14em] text-slate-500">
+          {isKo ? "1순위 선택" : "First choice"}
+        </p>
+        <p className="mt-1 text-sm text-slate-500">
+          {isKo ? "가장 관심 있는 학교를 선택하세요." : "Select the university you are most interested in."}
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {schools.map((school) => (
+            <button
+              key={school.id}
+              type="button"
+              onClick={() => onSelect(school.id === selectedId ? null : school.id)}
+              className={cn(
+                "inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition",
+                selectedId === school.id
+                  ? "bg-blue-600 text-white"
+                  : "bg-slate-50 text-slate-600 hover:bg-slate-100"
+              )}
+            >
+              {school.college_name}
+            </button>
+          ))}
+        </div>
+        {selectedId && (
+          <p className="mt-3 text-xs text-blue-600">
+            {isKo ? "1순위가 설정되었습니다." : "First choice set."}
+          </p>
+        )}
+      </div>
+    </div>
+  )
+}
+
+/* ── Pathway Tab ── */
+
+function PathwayTab({ isKo, goalTitle, studyTitle, options, leadingId, onSetLeadingId, rationale, onSetRationale, saving, onSaveRationale, evidenceCount }: {
+  isKo: boolean; goalTitle?: string; studyTitle?: string; options: CompareGoalOption[]; leadingId: string; onSetLeadingId: (id: string) => void; rationale: string; onSetRationale: (v: string) => void; saving: boolean; onSaveRationale: (e: FormEvent<HTMLFormElement>) => void; evidenceCount?: number
 }) {
+  return (
+    <div className="mt-8 space-y-6">
+      {/* Current direction */}
+      <div className="rounded-2xl border border-slate-200 bg-white p-5">
+        <div className="flex items-center gap-2">
+          <Target className="size-4 text-blue-600" />
+          <h2 className="text-base font-semibold text-slate-950">
+            {isKo ? "현재 목표" : "Current direction"}
+          </h2>
+        </div>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <Tag icon={GraduationCap} label={studyTitle || (isKo ? "전공 방향 미정" : "Study direction to confirm")} />
+          <Tag icon={Target} label={goalTitle || (isKo ? "직업 목표 미정" : "Career direction to confirm")} />
+          <Tag icon={ClipboardCheck} label={isKo ? `공식 근거 ${evidenceCount ?? 0}개` : `${evidenceCount ?? 0} evidence links`} />
+        </div>
+      </div>
+
+      {/* Route comparison table */}
+      <div className="rounded-2xl border border-slate-200 bg-white p-5">
+        <h2 className="text-base font-semibold text-slate-950">
+          {isKo ? "경로 비교" : "Route comparison"}
+        </h2>
+        <p className="mt-1 text-sm text-slate-500">
+          {isKo
+            ? "저장한 후보를 같은 기준에서 비교하고 1순위를 정하세요."
+            : "Compare your saved options on the same terms and pick a first choice."}
+        </p>
+        {options.length ? (
+          <div className="mt-5 overflow-x-auto">
+            <table className="min-w-[640px] w-full text-left text-sm">
+              <thead>
+                <tr className="border-b border-slate-200 text-xs font-semibold uppercase tracking-[.1em] text-slate-500">
+                  <th className="px-3 py-3">{isKo ? "후보" : "Route"}</th>
+                  <th className="px-3 py-3">{isKo ? "교육기관" : "Provider"}</th>
+                  <th className="px-3 py-3">{isKo ? "학업 방향" : "Study focus"}</th>
+                  <th className="px-3 py-3">{isKo ? "판단" : "Decision"}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {options.map((option, index) => (
+                  <tr key={option.id} className="border-b border-slate-200 last:border-0">
+                    <td className="px-3 py-4 font-semibold text-slate-700">{option.title}</td>
+                    <td className="px-3 py-4 text-slate-500">{option.provider_name || "—"}</td>
+                    <td className="px-3 py-4 text-slate-500">{option.field_name || "—"}</td>
+                    <td className="px-3 py-4">
+                      <label className="inline-flex items-center gap-2 text-sm font-medium text-slate-700">
+                        <input
+                          type="radio"
+                          name="leading-pathway"
+                          checked={leadingId === option.id}
+                          onChange={() => onSetLeadingId(option.id)}
+                          className="size-4 accent-blue-600"
+                        />
+                        {leadingId === option.id
+                          ? (isKo ? "1순위" : "First choice")
+                          : `${isKo ? "후보" : "Option"} ${index + 1}`}
+                      </label>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="mt-5 rounded-xl border border-dashed border-slate-200 p-6 text-center">
+            <p className="text-sm text-slate-500">
+              {isKo
+                ? "저장한 대학 또는 과정을 목표 설정에서 후보로 가져오세요."
+                : "Bring saved universities or courses into your shortlist during goal setup."}
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* Rationale */}
+      <div className="rounded-2xl border border-slate-200 bg-white p-5">
+        <h2 className="text-base font-semibold text-slate-950">
+          {isKo ? "왜 이 경로가 1순위인가요?" : "Why is this the current first choice?"}
+        </h2>
+        <p className="mt-1 text-sm text-slate-500">
+          {isKo
+            ? "비용, 취업 가능성, 입학 조건 등 지금의 판단 근거를 남기세요."
+            : "Write the reasons that matter now: cost, employment outlook, or entry requirements."}
+        </p>
+        <form onSubmit={onSaveRationale} className="mt-4">
+          <textarea
+            value={rationale}
+            onChange={(event) => onSetRationale(event.target.value.slice(0, 1200))}
+            rows={4}
+            placeholder={isKo
+              ? "예: Option B는 총 비용이 더 낮고, 목표 직업과의 연결이 가장 명확하다."
+              : "Example: Option B has a lower total cost and the clearest connection to my target career."}
+            className="w-full resize-y rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 text-slate-700 outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/20"
+          />
+          <div className="mt-3 flex items-center justify-between gap-3">
+            <p className="text-xs text-slate-500">{rationale.length}/1200</p>
+            <button
+              disabled={saving || !leadingId}
+              className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white hover:bg-blue-500 disabled:opacity-50"
+            >
+              <Check className="size-4" />
+              {isKo ? "1순위 판단 저장" : "Save first-choice rationale"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}
+
+/* ── Shared sub-components ── */
+
+function TabButton({ active, onClick, label, count }: { active: boolean; onClick: () => void; label: string; count?: number }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "flex-1 flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition",
+        active ? "bg-white text-blue-700 shadow-sm" : "text-slate-500 hover:text-slate-700"
+      )}
+    >
+      {label}
+      {count != null && count > 0 && (
+        <span className="inline-flex size-5 items-center justify-center rounded-full bg-blue-100 text-[10px] font-bold text-blue-700">
+          {count}
+        </span>
+      )}
+    </button>
+  )
+}
+
+function EmptyState({ isKo, message, hint }: { isKo: boolean; message: string; hint: string }) {
+  return (
+    <div className="mt-10 flex flex-col items-center justify-center rounded-3xl border border-dashed border-slate-200 p-10 text-center">
+      <p className="text-sm font-medium text-slate-700">{message}</p>
+      <p className="mt-1 text-xs text-slate-500">{hint}</p>
+    </div>
+  )
+}
+
+function CompareRow({ icon, label, schools, render }: { icon: React.ReactNode; label: string; schools: CompareSchool[]; render: (school: CompareSchool) => string }) {
   return (
     <tr className="border-b border-slate-100">
       <td className="flex items-center gap-2 px-5 py-3.5 text-sm font-medium text-slate-500">

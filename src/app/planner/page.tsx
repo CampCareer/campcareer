@@ -41,7 +41,7 @@ import {
   type ExecutionResearchSource,
 } from "@/components/planner/execution-spaces"
 import { CompareSpace, type CompareSchool } from "@/components/planner/compare-space"
-import { EnglishSpace } from "@/components/planner/english-space"
+import { EnglishTargetSpace } from "@/components/planner/execution-spaces"
 import {
   type PlannerTab,
   loadTabs,
@@ -78,19 +78,29 @@ type PlannerTheme = "mist" | "lavender" | "sage" | "peach" | "midnight"
 
 const plannerAreaPaths: Record<PlannerArea, string> = {
   home: "/home",
-  compare: "/home/compare",
-  applications: "/home/applications",
-  budget: "/home/budget",
-  english: "/home/english",
-  research: "/home/research",
-  report: "/home/report",
+  compare: "/compare",
+  applications: "/applications",
+  budget: "/budget",
+  english: "/english",
+  research: "/research",
+  report: "/report",
 }
 
 function plannerAreaFromPath(pathname: string): PlannerArea | null {
   if (pathname === "/home") return "home"
+  if (pathname === "/compare") return "compare"
+  if (pathname === "/applications") return "applications"
+  if (pathname === "/budget") return "budget"
+  if (pathname === "/english") return "english"
+  if (pathname === "/research") return "research"
+  if (pathname === "/report") return "report"
   const match = Object.entries(plannerAreaPaths).find(([, path]) => path.split("?")[0] === pathname)
   return (match?.[0] as PlannerArea | undefined) ?? null
 }
+
+const LS_LANGUAGE_KEY = "cc-english-language"
+function loadLanguageLS(): LanguageGoal | null { try { const raw = localStorage.getItem(LS_LANGUAGE_KEY); return raw ? JSON.parse(raw) : null } catch { return null } }
+function saveLanguageLS(data: LanguageGoal) { try { localStorage.setItem(LS_LANGUAGE_KEY, JSON.stringify(data)) } catch {} }
 
 const taskLabels: Record<TaskKind, string> = { application: "Application", english: "English", money: "Money", research: "Research", personal: "Personal" }
 const goalLabels: Record<string, string> = { study: "Study quality", visa: "Post-study work", pr: "Long-term pathway" }
@@ -135,7 +145,7 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
   const [notes, setNotes] = useState<PlanNote[]>([])
   const [tasks, setTasks] = useState<PlanTask[]>([])
   const [budget, setBudget] = useState<PlanBudget>({ currency: "AUD", current_savings: 0, monthly_saving: 0, target_amount: null, target_date: null })
-  const [language, setLanguage] = useState<LanguageGoal>({ exam_name: "IELTS", current_score: null, target_score: null, weekly_hours: null, test_date: null })
+  const [language, setLanguage] = useState<LanguageGoal>(() => loadLanguageLS() ?? { exam_name: "IELTS", current_score: null, target_score: null, weekly_hours: null, test_date: null })
   const [compareSchools, setCompareSchools] = useState<CompareSchool[]>([])
   const [noteDraft, setNoteDraft] = useState("")
   const [taskDraft, setTaskDraft] = useState("")
@@ -151,6 +161,8 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
   }, [pathname, router])
 
   useEffect(() => setActiveArea(initialArea), [initialArea])
+
+  useEffect(() => { if (language.current_score != null || language.target_score != null || language.test_date) saveLanguageLS(language) }, [language])
 
   // Keep the workspace mounted while changing My Plan areas. This preserves
   // the toolbar/sidebar and avoids the skeleton flash caused by a full route
@@ -315,7 +327,7 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
       setNotes((results[7].data as PlanNote[] | null) ?? [])
       setTasks((results[8].data as PlanTask[] | null) ?? [])
       setBudget((results[9].data as PlanBudget | null) ?? { currency: "AUD", current_savings: 0, monthly_saving: 0, target_amount: null, target_date: null })
-      setLanguage((results[10].data as LanguageGoal | null) ?? { exam_name: "IELTS", current_score: null, target_score: null, weekly_hours: null, test_date: null })
+      setLanguage((results[10].data as LanguageGoal | null) ?? loadLanguageLS() ?? { exam_name: "IELTS", current_score: null, target_score: null, weekly_hours: null, test_date: null })
       const savedPlanner = results[11].data as PlannerPreferences | null
       setGoalProfile((results[12].data as PlanGoalProfile | null) ?? null)
       setGoalOptions((results[13].data as PlanGoalOption[] | null) ?? [])
@@ -602,7 +614,8 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
   }
 
   async function saveLanguageSpace(next: ExecutionLanguage) {
-    if (!user) return false
+    saveLanguageLS(next as LanguageGoal)
+    if (!user) return true
     const { data, error } = await supabase
       .from("plan_language_goals")
       .upsert({ user_id: user.id, exam_name: next.exam_name.trim().slice(0, 80) || "IELTS", current_score: next.current_score, target_score: next.target_score, weekly_hours: next.weekly_hours, test_date: next.test_date, updated_at: new Date().toISOString() })
@@ -740,8 +753,8 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
     <div className={cn("flex h-screen overflow-hidden transition-colors duration-300", plannerThemeClasses[plannerTheme])}>
       {/* ── Sidebar rail + workspace ── */}
       <div aria-hidden={!sidebarOpen} inert={!sidebarOpen} className={cn("hidden h-full shrink-0 flex-col overflow-hidden transition-[width,opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] sm:flex", sidebarOpen ? "w-72 translate-x-0 opacity-100" : "pointer-events-none w-0 -translate-x-3 opacity-0")}>
-        <div className="flex h-12 shrink-0 items-center border-r border-slate-200 bg-slate-50 px-2.5">
-          <PlannerToolbarControls sidebarOpen={sidebarOpen} canGoBack={historyCursor > 0} canGoForward={historyCursor < historyLength - 1} onToggleSidebar={() => setSidebarOpen((o) => !o)} onBack={goBack} onForward={goForward} />
+        <div className="flex h-12 shrink-0 items-center border-r border-slate-200 bg-slate-50 pl-2.5 pr-1">
+          <div className="flex-1"><PlannerToolbarControls sidebarOpen={sidebarOpen} canGoBack={historyCursor > 0} canGoForward={historyCursor < historyLength - 1} onToggleSidebar={() => setSidebarOpen((o) => !o)} onBack={goBack} onForward={goForward} isKo={isKo} onNavigate={navigatePlannerArea} onOpenPath={openPlannerPath} /></div>
         </div>
         <div className="min-h-0 flex-1">
           <PlannerSidebar
@@ -789,7 +802,7 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
           {activeArea === "compare" && <CompareSpace schools={compareSchools} isKo={isKo} onRemove={(id) => setCompareSchools((prev) => prev.filter((s) => s.id !== id))} goalTitle={goalProfile!.target_occupation_title} studyTitle={goalProfile!.target_study_concept_label} goalOptions={goalOptions as ExecutionGoalOption[]} decision={pathwayDecision} evidenceCount={evidenceCount} onSaveDecision={savePathwayDecision} />}
           {activeArea === "applications" && <ApplicationsSpace applications={applicationRecords} documents={applicationDocuments} legacyDeadlines={tasks.filter((task) => task.kind === "application").map((task) => ({ id: task.id, title: task.title, due_date: task.due_date, status: task.status }))} goalOptions={goalOptions as ExecutionGoalOption[]} onCreateApplication={createApplication} onUpdateApplication={updateApplication} onCreateDocument={createApplicationDocument} onUpdateDocument={updateApplicationDocument} onDeleteDocument={deleteApplicationDocument} />}
           {activeArea === "budget" && <MoneyRunwaySpace budget={{ currency: budget.currency, current_savings: savings, monthly_saving: monthlySaving, target_amount: targetAmount, target_date: budget.target_date }} scenario={moneyScenario} onSaveBudget={saveBudgetSpace} onSaveScenario={saveMoneyScenario} />}
-          {activeArea === "english" && <EnglishSpace isKo={isKo} />}
+          {activeArea === "english" && <EnglishTargetSpace language={{ exam_name: language.exam_name, current_score: language.current_score == null ? null : Number(language.current_score) || null, target_score: language.target_score == null ? null : Number(language.target_score) || null, weekly_hours: language.weekly_hours == null ? null : Number(language.weekly_hours) || null, test_date: language.test_date }} blocks={englishBlocks} onSaveLanguage={saveLanguageSpace} onSaveBlock={saveEnglishBlock} onDeleteBlock={deleteEnglishBlock} />}
           {activeArea === "research" && <ResearchDeskSpace sources={researchSources} researchItems={researchItems} onSetStatus={saveResearchStatus} />}
           {activeArea === "report" && <MyAustraliaReportWorkspace />}
           </div>

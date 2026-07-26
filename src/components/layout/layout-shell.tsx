@@ -14,7 +14,7 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
   const pathname = withoutLocalePrefix(usePathname())
   const hasUnifiedHero = pathname === "/au" || pathname === "/countries/search" || pathname === "/universities" || pathname === "/universities/au" || pathname === "/majors" || pathname === "/study" || pathname === "/au/study"
   const isLanding = pathname === "/"
-  const isMyPlan = pathname === "/home" || pathname.startsWith("/home/") || pathname === "/planner" || pathname.startsWith("/planner/")
+  const isMyPlan = pathname === "/home" || pathname.startsWith("/home/") || pathname === "/planner" || pathname.startsWith("/planner/") || pathname === "/compare" || pathname === "/applications" || pathname === "/budget" || pathname === "/english" || pathname === "/research" || pathname === "/report"
 
   const supabase = useMemo(() => createClient(), [])
   const [user, setUser] = useState<User | null>(null)
