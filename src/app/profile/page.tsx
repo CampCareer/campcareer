@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { useEffect, useMemo, useState } from "react"
 import type { User } from "@supabase/supabase-js"
-import { ArrowRight, BadgeCheck, BookOpen, BriefcaseBusiness, Compass, FileCheck2, Lightbulb, Settings, Sparkles, Trophy, UserRound } from "lucide-react"
+import { ArrowRight, BadgeCheck, BookOpen, BriefcaseBusiness, Check, Compass, ExternalLink, FileCheck2, Lightbulb, Settings, Sparkles, Trophy, UserRound } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
 import { majorLabel, resolveView } from "@/lib/degree-risk"
 
@@ -12,6 +12,7 @@ type Preferences = {
   goal: string | null
   recommended_country: string | null
   completed_at: string | null
+  username: string | null
 }
 
 const goalLabels: Record<string, string> = {
@@ -38,6 +39,7 @@ export default function ProfilePage() {
   const [reputationPoints, setReputationPoints] = useState(0)
   const [riskAssessment, setRiskAssessment] = useState<DegreeRiskAssessment | null>(null)
   const [loading, setLoading] = useState(true)
+  const [copied, setCopied] = useState(false)
 
   useEffect(() => {
     let active = true
@@ -46,7 +48,7 @@ export default function ProfilePage() {
       const [preferenceResult, careerResult, providerResult, programmeResult, evidenceResult, reputationResult, assessmentResult] = await Promise.all([
         supabase
           .from("user_preferences")
-          .select("field, goal, recommended_country, completed_at")
+          .select("field, goal, recommended_country, completed_at, username")
           .eq("id", userId)
           .maybeSingle(),
         supabase
@@ -145,6 +147,20 @@ export default function ProfilePage() {
               <p className="text-sm font-semibold text-blue-700">Your profile</p>
               <h1 className="mt-1 text-3xl font-semibold tracking-tight text-slate-950">{displayName}</h1>
               <p className="mt-1 text-sm text-slate-500">{user.email}</p>
+              {preferences?.username && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigator.clipboard.writeText(`${window.location.origin}/${preferences.username}`)
+                    setCopied(true)
+                    setTimeout(() => setCopied(false), 2000)
+                  }}
+                  className="mt-2 inline-flex items-center gap-1.5 rounded-lg bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700 transition hover:bg-blue-100"
+                >
+                  {copied ? <Check className="h-3 w-3" /> : <ExternalLink className="h-3 w-3" />}
+                  campcareer.com/{preferences.username}
+                </button>
+              )}
             </div>
           </div>
           <Link href="/settings" className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-blue-200 hover:text-blue-700">

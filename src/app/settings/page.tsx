@@ -1,10 +1,10 @@
 "use client"
 
 import Link from "next/link"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import type { User } from "@supabase/supabase-js"
-import { AlertTriangle, ArrowLeft, Check, ExternalLink, Loader2, LogOut, ShieldCheck, Trash2, UserRound } from "lucide-react"
+import { AlertTriangle, ArrowLeft, Check, ExternalLink, Globe, Loader2, LogOut, ShieldCheck, Trash2, UserRound, X } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
 
 export default function SettingsPage() {
@@ -17,6 +17,11 @@ export default function SettingsPage() {
   const [deletePhrase, setDeletePhrase] = useState("")
   const [deleteState, setDeleteState] = useState<"idle" | "deleting" | "error">("idle")
   const [deleteError, setDeleteError] = useState("")
+  const [username, setUsername] = useState("")
+  const [usernameSaved, setUsernameSaved] = useState<string | null>(null)
+  const [usernameCheck, setUsernameCheck] = useState<"idle" | "checking" | "available" | "taken" | "invalid">("idle")
+  const [usernameMsg, setUsernameMsg] = useState("")
+  const [usernameSaving, setUsernameSaving] = useState(false)
 
   useEffect(() => {
     let active = true
@@ -26,6 +31,10 @@ export default function SettingsPage() {
       const currentUser = data.user ?? null
       setUser(currentUser)
       setDisplayName((currentUser?.user_metadata?.full_name as string | undefined) || (currentUser?.user_metadata?.name as string | undefined) || "")
+      if (currentUser) {
+        const { data: prefs } = await supabase.from("user_preferences").select("username").eq("id", currentUser.id).maybeSingle()
+        if (prefs?.username) { setUsername(prefs.username); setUsernameSaved(prefs.username) }
+      }
       setLoading(false)
     }
     void initialise()
@@ -46,6 +55,36 @@ export default function SettingsPage() {
     setSaveState("saving")
     const { error } = await supabase.auth.updateUser({ data: { full_name: displayName.trim() } })
     setSaveState(error ? "error" : "saved")
+  }
+
+  // ── Username ──
+  const usernameRef = useRef<NodeJS.Timeout | null>(null)
+
+  function onUsernameChange(value: string) {
+    const clean = value.toLowerCase().replace(/[^a-z0-9_]/g, "").slice(0, 30)
+    setUsername(clean)
+    setUsernameCheck("idle")
+    setUsernameMsg("")
+    if (usernameRef.current) clearTimeout(usernameRef.current)
+    if (clean.length < 3) { setUsernameCheck("invalid"); return }
+    if (!/^[a-z][a-z0-9_]*$/.test(clean)) { setUsernameCheck("invalid"); setUsernameMsg("Must start with a letter. Only lowercase letters, numbers and underscores."); return }
+    setUsernameCheck("checking")
+    usernameRef.current = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/username/check?username=${encodeURIComponent(clean)}`)
+        const data = await res.json()
+        if (data.available) { setUsernameCheck("available"); setUsernameMsg("") }
+        else { setUsernameCheck("taken"); setUsernameMsg(data.reason || "This username is already taken.") }
+      } catch { setUsernameCheck("idle") }
+    }, 400)
+  }
+
+  async function saveUsername() {
+    if (!user || usernameCheck !== "available" || username === usernameSaved) return
+    setUsernameSaving(true)
+    const { error } = await supabase.from("user_preferences").upsert({ id: user.id, username }, { onConflict: "id" })
+    if (!error) setUsernameSaved(username)
+    setUsernameSaving(false)
   }
 
   async function signOut() {
@@ -104,7 +143,43 @@ export default function SettingsPage() {
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-7">
-          <div className="flex items-start gap-3"><div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700"><ShieldCheck className="h-5 w-5" /></div><div><h2 className="text-lg font-semibold text-slate-950">Privacy and saved data</h2><p className="mt-1 text-sm leading-6 text-slate-500">Your profile is private. Saved careers, providers and planning inputs are not public.</p></div></div>
+          <div className="flex items-start gap-3"><div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-50 text-violet-700"><Globe className="h-5 w-5" /></div><div><h2 className="text-lg font-semibold text-slate-950">Public username</h2><p className="mt-1 text-sm leading-6 text-slate-500">Your public profile URL: campcareer.com/<strong>{username || "yourname"}</strong></p></div></div>
+          <div className="mt-6 max-w-lg space-y-3">
+            <div className="relative">
+              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm font-medium text-slate-400">@</span>
+              <input
+                id="username"
+                value={username}
+                onChange={(event) => onUsernameChange(event.target.value)}
+                placeholder="yourname"
+                maxLength={30}
+                autoComplete="off"
+                className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-8 pr-10 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+              />
+              {usernameCheck === "available" && <span className="absolute right-3 top-1/2 -translate-y-1/2 text-emerald-600"><Check className="h-4 w-4" /></span>}
+              {usernameCheck === "taken" && <span className="absolute right-3 top-1/2 -translate-y-1/2 text-red-500"><X className="h-4 w-4" /></span>}
+              {usernameCheck === "checking" && <span className="absolute right-3 top-1/2 -translate-y-1/2"><Loader2 className="h-4 w-4 animate-spin text-slate-400" /></span>}
+            </div>
+            {usernameMsg && <p className={`text-xs ${usernameCheck === "available" ? "text-emerald-600" : "text-red-600"}`}>{usernameMsg}</p>}
+            {usernameCheck === "available" && username !== usernameSaved && (
+              <button type="button" onClick={saveUsername} disabled={usernameSaving} className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60">
+                {usernameSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
+                {usernameSaving ? "Saving" : "Save username"}
+              </button>
+            )}
+            {usernameSaved && username === usernameSaved && usernameCheck !== "available" && (
+              <div className="flex items-center gap-3">
+                <Link href={`/${usernameSaved}`} className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-blue-200 hover:text-blue-700">
+                  View public profile →
+                </Link>
+                <span className="text-xs text-slate-500">campcareer.com/{usernameSaved}</span>
+              </div>
+            )}
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-7">
+          <div className="flex items-start gap-3"><div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700"><ShieldCheck className="h-5 w-5" /></div><div><h2 className="text-lg font-semibold text-slate-950">Privacy and saved data</h2><p className="mt-1 text-sm leading-6 text-slate-500">Your public username, display name and avatar are visible on your public profile. Saved careers, providers and planning inputs are private.</p></div></div>
           <div className="mt-6 grid gap-3 sm:grid-cols-2"><Link href="/profile" className="rounded-2xl border border-slate-200 p-4 text-sm font-semibold text-slate-700 transition hover:border-blue-200 hover:text-blue-700">Review your profile <span aria-hidden="true">→</span></Link><Link href="/privacy" className="inline-flex items-center justify-between rounded-2xl border border-slate-200 p-4 text-sm font-semibold text-slate-700 transition hover:border-blue-200 hover:text-blue-700">Read privacy policy <ExternalLink className="h-4 w-4" /></Link></div>
           <p className="mt-4 text-xs leading-5 text-slate-500">Data export and granular communication controls are the next privacy controls we will add. For an access or correction request, contact <a className="font-medium text-blue-700 hover:underline" href="mailto:contact@campcareer.com">contact@campcareer.com</a>.</p>
         </section>

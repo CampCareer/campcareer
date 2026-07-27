@@ -20,6 +20,7 @@ type PlannerToolbarProps = {
   onSelectTab: (id: string) => void
   onCloseTab: (id: string) => void
   showControls?: boolean
+  onAvatarClick?: () => void
 }
 
 export function PlannerToolbar({
@@ -35,6 +36,7 @@ export function PlannerToolbar({
   onSelectTab,
   onCloseTab,
   showControls = true,
+  onAvatarClick,
 }: PlannerToolbarProps) {
   return (
     <header className="relative z-50 flex h-12 shrink-0 items-center gap-1 border-b border-slate-200 bg-white/80 px-2.5 backdrop-blur-sm">
@@ -51,7 +53,7 @@ export function PlannerToolbar({
         <button type="button" onClick={onNewTab} className="inline-flex size-7 shrink-0 items-center justify-center rounded-md text-slate-400 transition hover:bg-slate-100 hover:text-slate-600" title="New page" aria-label="New page"><Plus className="size-4" /></button>
       </div>
 
-      <ToolNavActions minimal className="ml-1 shrink-0" />
+      <ToolNavActions minimal className="ml-1 shrink-0" onAvatarClick={onAvatarClick} />
     </header>
   )
 }

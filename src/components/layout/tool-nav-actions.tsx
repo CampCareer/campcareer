@@ -13,7 +13,7 @@ import { createClient } from "@/lib/supabase-client"
 import { cn } from "@/lib/utils"
 
 /** Shared account and app controls for focused product surfaces such as Maps. */
-export function ToolNavActions({ className, minimal = false, onLanding = false, hideLanguage = false }: { className?: string; minimal?: boolean; onLanding?: boolean; hideLanguage?: boolean }) {
+export function ToolNavActions({ className, minimal = false, onLanding = false, hideLanguage = false, onAvatarClick }: { className?: string; minimal?: boolean; onLanding?: boolean; hideLanguage?: boolean; onAvatarClick?: () => void }) {
   const pathname = usePathname()
   const locale = useRouteLocale()
   const pathLocale = localeFromPathname(pathname) ?? locale
@@ -78,9 +78,15 @@ export function ToolNavActions({ className, minimal = false, onLanding = false, 
           </div>}
         </div>
         {user ? (
-          <Link href={localizePath("/profile", pathLocale)} aria-label={locale === "ko" ? "프로필 열기" : "Open profile"}>
-            {avatarUrl ? <img src={avatarUrl} alt="" className="w-7 h-7 rounded-full object-cover" /> : <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center"><UserIcon className="w-4 h-4 text-blue-600" /></div>}
-          </Link>
+          onAvatarClick ? (
+            <button type="button" onClick={onAvatarClick} aria-label={locale === "ko" ? "프로필 열기" : "Open profile"} className="rounded-full transition hover:ring-2 hover:ring-blue-200">
+              {avatarUrl ? <img src={avatarUrl} alt="" className="w-7 h-7 rounded-full object-cover" /> : <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center"><UserIcon className="w-4 h-4 text-blue-600" /></div>}
+            </button>
+          ) : (
+            <Link href={localizePath("/profile", pathLocale)} aria-label={locale === "ko" ? "프로필 열기" : "Open profile"}>
+              {avatarUrl ? <img src={avatarUrl} alt="" className="w-7 h-7 rounded-full object-cover" /> : <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center"><UserIcon className="w-4 h-4 text-blue-600" /></div>}
+            </Link>
+          )
         ) : (
           <button type="button" onClick={() => router.push(localizePath("/login", pathLocale))} className="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition">
             <LogIn className="w-3.5 h-3.5 text-slate-500" />
@@ -116,9 +122,15 @@ export function ToolNavActions({ className, minimal = false, onLanding = false, 
           </div>}
         </div>
         {user ? (
-          <Link href={localizePath("/profile", pathLocale)} aria-label={locale === "ko" ? "프로필 열기" : "Open profile"}>
-            {avatarUrl ? <img src={avatarUrl} alt="" className="w-7 h-7 rounded-full object-cover" /> : <div className={cn("w-7 h-7 rounded-full flex items-center justify-center", onLanding ? "bg-white/20" : "bg-blue-100")}><UserIcon className={cn("w-4 h-4", onLanding ? "text-white" : "text-blue-600")} /></div>}
-          </Link>
+          onAvatarClick ? (
+            <button type="button" onClick={onAvatarClick} aria-label={locale === "ko" ? "프로필 열기" : "Open profile"} className={cn("rounded-full transition hover:ring-2 hover:ring-blue-200", onLanding && "hover:ring-white/30")}>
+              {avatarUrl ? <img src={avatarUrl} alt="" className="w-7 h-7 rounded-full object-cover" /> : <div className={cn("w-7 h-7 rounded-full flex items-center justify-center", onLanding ? "bg-white/20" : "bg-blue-100")}><UserIcon className={cn("w-4 h-4", onLanding ? "text-white" : "text-blue-600")} /></div>}
+            </button>
+          ) : (
+            <Link href={localizePath("/profile", pathLocale)} aria-label={locale === "ko" ? "프로필 열기" : "Open profile"}>
+              {avatarUrl ? <img src={avatarUrl} alt="" className="w-7 h-7 rounded-full object-cover" /> : <div className={cn("w-7 h-7 rounded-full flex items-center justify-center", onLanding ? "bg-white/20" : "bg-blue-100")}><UserIcon className={cn("w-4 h-4", onLanding ? "text-white" : "text-blue-600")} /></div>}
+            </Link>
+          )
         ) : (
           <Button variant="outline" size="sm" onClick={() => router.push(localizePath("/login", pathLocale))} className={cn(onLanding ? "border-white/30 bg-white/10 text-white hover:bg-white/20 hover:text-white" : "border-blue-200 text-blue-600 hover:bg-blue-50 hover:text-blue-700", "max-[360px]:size-8 max-[360px]:px-0")}><LogIn className="hidden size-4 max-[360px]:block" /><span className="max-[360px]:sr-only">{t.common.signIn}</span></Button>
         )}

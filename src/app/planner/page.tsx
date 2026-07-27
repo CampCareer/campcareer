@@ -42,6 +42,7 @@ import {
 } from "@/components/planner/execution-spaces"
 import { CompareSpace, type CompareSchool } from "@/components/planner/compare-space"
 import { EnglishTargetSpace } from "@/components/planner/execution-spaces"
+import { ProfilePanel } from "@/components/planner/profile-panel"
 import {
   type PlannerTab,
   loadTabs,
@@ -125,6 +126,7 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
   const historyIndexRef = useRef(-1)
   const [historyCursor, setHistoryCursor] = useState(0)
   const [historyLength, setHistoryLength] = useState(0)
+  const [profilePanelOpen, setProfilePanelOpen] = useState(false)
 
   /* ── Workspace data ── */
   const [preferences, setPreferences] = useState<Preferences | null>(null)
@@ -793,6 +795,7 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
           onSelectTab={navigateToTab}
           onCloseTab={moveTabToTrash}
           showControls={!sidebarOpen}
+          onAvatarClick={() => setProfilePanelOpen(true)}
         />
 
         {/* ── Content ── */}
@@ -808,6 +811,8 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
           </div>
         </main>
       </div>
+
+      <ProfilePanel open={profilePanelOpen} onClose={() => setProfilePanelOpen(false)} />
     </div>
   )
 }

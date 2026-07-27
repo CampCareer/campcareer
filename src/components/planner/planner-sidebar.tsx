@@ -1,6 +1,6 @@
 "use client"
 
-import { BookOpenCheck, CalendarDays, Languages, LineChart, Scale, Home, Target, Wallet, type LucideIcon } from "lucide-react"
+import { BookOpenCheck, CalendarDays, Languages, LineChart, Scale, Home, Wallet, type LucideIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 
