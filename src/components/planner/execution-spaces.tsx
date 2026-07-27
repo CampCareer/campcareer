@@ -58,7 +58,7 @@ export function ApplicationsSpace({ applications, documents, legacyDeadlines, go
     if (success) setDocumentLabel("")
   }
 
-  return <SpaceShell eyebrow="APPLICATIONS" title={isKo ? "지원은 감이 아니라, 마감과 서류로 관리합니다." : "Applications move when deadlines and documents are visible."} description={isKo ? "과정별 지원 상태와 서류를 한곳에서 관리하고, 오퍼가 왔을 때 비교할 근거를 남겨두세요." : "Track each application and its documents in one place so you can compare offers with context."} icon={Send} tone="blue">
+  return <SpaceShell eyebrow={isKo ? "지원 관리" : "APPLICATION TRACKER"} title={isKo ? "지원" : "Applications"} icon={Send} tone="blue">
     <div className="grid gap-3 sm:grid-cols-3"><Stat label={isKo ? "지원 준비 중" : "Preparing"} value={String(applications.filter((item) => item.status === "preparing" || item.status === "planning").length)} tone="blue" /><Stat label={isKo ? "제출 완료" : "Submitted"} value={String(submitted)} tone="violet" /><Stat label={isKo ? "오퍼" : "Offers"} value={String(offers)} tone="emerald" /></div>
 
     <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_19rem]"><Panel title={isKo ? "지원 추가" : "Add an application"} description={isKo ? "후보에서 시작하거나 직접 과정과 마감일을 적으세요." : "Start from a saved option or enter the programme and deadline directly."}><form onSubmit={submitApplication} className="grid gap-3 sm:grid-cols-2"><Field label={isKo ? "저장한 후보" : "Saved option"}><select value={optionId} onChange={(event) => { const value = event.target.value; setOptionId(value); const option = goalOptions.find((item) => item.id === value); if (option) { setProviderName(option.provider_name); setProgrammeName(option.title) } }} className={inputClass}><option value="">{isKo ? "직접 입력" : "Enter manually"}</option>{goalOptions.map((option) => <option key={option.id} value={option.id}>{option.title}</option>)}</select></Field><Field label={isKo ? "마감일" : "Deadline"}><input type="date" value={deadline} onChange={(event) => setDeadline(event.target.value)} className={inputClass} /></Field><Field label={isKo ? "교육기관" : "Provider"}><input value={providerName} onChange={(event) => setProviderName(event.target.value)} maxLength={240} placeholder="e.g. University of Melbourne" className={inputClass} /></Field><Field label={isKo ? "과정" : "Programme"}><input value={programmeName} onChange={(event) => setProgrammeName(event.target.value)} maxLength={240} placeholder="e.g. Master of Nursing" className={inputClass} /></Field><div className="sm:col-span-2"><button disabled={saving || (!providerName.trim() && !programmeName.trim())} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white hover:bg-blue-500 disabled:opacity-50"><Plus className="size-4" />{isKo ? "지원 추가" : "Add application"}</button></div></form></Panel>
@@ -99,14 +99,28 @@ export function EnglishTargetSpace({ language, blocks, onSaveLanguage, onSaveBlo
   const [saved, setSaved] = useState(false)
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const saveRef = useRef(onSaveLanguage)
+  const mountedRef = useRef(true)
+  const fromSyncRef = useRef(false)
   saveRef.current = onSaveLanguage
-  useEffect(() => setDraft(language), [language])
   useEffect(() => {
+    if (JSON.stringify(draft) === JSON.stringify(language)) return
+    fromSyncRef.current = true
+    setDraft(language)
+  }, [language])
+  useEffect(() => {
+    mountedRef.current = true
+    return () => { mountedRef.current = false }
+  }, [])
+  useEffect(() => {
+    if (fromSyncRef.current) { fromSyncRef.current = false; return }
     if (saveTimer.current) clearTimeout(saveTimer.current)
     setSaved(false)
     try { localStorage.setItem("cc-english-language", JSON.stringify(draft)) } catch {}
-    saveTimer.current = setTimeout(() => { void saveRef.current(draft).then((ok) => { if (ok) setSaved(true) }) }, 1000)
-    return () => { if (saveTimer.current) clearTimeout(saveTimer.current) }
+    saveTimer.current = setTimeout(() => { void saveRef.current(draft).then((ok) => { if (ok && mountedRef.current) setSaved(true) }) }, 1000)
+    return () => {
+      if (saveTimer.current) clearTimeout(saveTimer.current)
+      void saveRef.current(draft)
+    }
   }, [draft])
   const dday = draft.test_date ? Math.max(Math.ceil((new Date(draft.test_date).getTime() - Date.now()) / 86400000), 0) : null
   async function saveBlock(event: FormEvent<HTMLFormElement>) { event.preventDefault(); if (!focus.trim()) return; const success = await onSaveBlock({ day_of_week: day, focus: focus.trim(), minutes }); if (success) setFocus("") }

@@ -617,7 +617,10 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
 
   async function saveLanguageSpace(next: ExecutionLanguage) {
     saveLanguageLS(next as LanguageGoal)
-    if (!user) return true
+    if (!user) {
+      setLanguage(next as LanguageGoal)
+      return true
+    }
     const { data, error } = await supabase
       .from("plan_language_goals")
       .upsert({ user_id: user.id, exam_name: next.exam_name.trim().slice(0, 80) || "IELTS", current_score: next.current_score, target_score: next.target_score, weekly_hours: next.weekly_hours, test_date: next.test_date, updated_at: new Date().toISOString() })
@@ -629,7 +632,11 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
   }
 
   async function saveEnglishBlock(next: Omit<PlanEnglishStudyBlock, "id">) {
-    if (!user) return false
+    if (!user) {
+      const localBlock = { id: `local-${next.day_of_week}-${Date.now()}`, ...next }
+      setEnglishBlocks((current) => [...current.filter((item) => item.day_of_week !== localBlock.day_of_week), localBlock as PlanEnglishStudyBlock].sort((a, b) => a.day_of_week - b.day_of_week))
+      return true
+    }
     const { data, error } = await supabase
       .from("plan_english_study_blocks")
       .upsert({ user_id: user.id, ...next, updated_at: new Date().toISOString() }, { onConflict: "user_id,day_of_week" })
@@ -668,17 +675,7 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
   }
 
   if (loading) return <PlannerSkeleton />
-  // TEMP: bypass auth gate for local testing — revert before commit
-  // if (!user) return <GuestPlan />
-  // TEMP: skip GoalSetup for local testing when no user — revert before commit
-  if (!goalProfile?.setup_completed_at && !user) {
-    setGoalProfile({
-      user_id: "local", target_occupation_code: "", target_occupation_title: "",
-      target_study_concept_slug: "", target_study_concept_label: "", target_intake_month: null,
-      plan_title: "My plan", strategy: "", setup_completed_at: new Date().toISOString(),
-    })
-    return <PlannerSkeleton />
-  }
+  if (!user) return <GuestPlan />
   if (!goalProfile?.setup_completed_at) return <GoalSetup occupations={occupations} studyConcepts={studyConcepts} universities={universities} courses={courses} onComplete={completeGoalSetup} />
 
   const savings = numericValue(budget.current_savings) ?? 0
