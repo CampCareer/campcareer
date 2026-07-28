@@ -6,7 +6,7 @@ test("ROI report readiness requires a career, shortlist, budget and English base
   const incomplete = getRoiReportReadiness({ targetOccupation: "Registered Nurse", shortlistCount: 1, targetAmount: 60_000, currentEnglishScore: null, targetEnglishScore: 7 })
   assert.equal(incomplete.ready, false)
   assert.equal(incomplete.completedCount, 3)
-  assert.equal(incomplete.nextHref, "/myplan/english")
+  assert.equal(incomplete.nextHref, "/english")
 
   const ready = getRoiReportReadiness({ targetOccupation: "Registered Nurse", shortlistCount: 2, targetAmount: 60_000, currentEnglishScore: 6.5, targetEnglishScore: 7 })
   assert.equal(ready.ready, true)

@@ -1,32 +1,27 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import {
   ArrowRight,
   Banknote,
-  BookOpen,
   BriefcaseBusiness,
   CalendarClock,
-  Check,
   Circle,
   CircleCheck,
-  ClipboardCheck,
   Compass,
   FileCheck2,
   GraduationCap,
   Languages,
   Lightbulb,
-  Map,
-  Newspaper,
-  Scale,
-  Sparkles,
   Target,
-  TrendingUp,
   type LucideIcon,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
+import { localizePath } from "@/lib/i18n/config"
 import { buildPlanHealth, type PlanHealthSignal } from "@/lib/plan-health"
+import { fieldNameToConceptId } from "@/lib/au-major-signals"
 
 /* ── Types ── */
 
@@ -168,9 +163,9 @@ const DAILY_INSIGHTS: Array<{ en: string; ko: string; source: string }> = [
   },
 ]
 
-function getDailyInsight(): { en: string; ko: string; source: string } {
+function getDailyInsight(today: Date): { en: string; ko: string; source: string } {
   const dayOfYear = Math.floor(
-    (Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000,
+    (today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 86400000,
   )
   return DAILY_INSIGHTS[dayOfYear % DAILY_INSIGHTS.length]
 }
@@ -200,9 +195,41 @@ export function HomeDashboard({
 }: HomeDashboardProps) {
   const locale = useRouteLocale()
   const isKo = locale === "ko"
-  const insight = getDailyInsight()
-
   const today = new Date()
+  const insight = getDailyInsight(today)
+
+  /* Occupation signal for selected major */
+  const [occSignal, setOccSignal] = useState<{ shortagePct: number | null; medianSalary: number | null; onCsol: boolean; csolCount: number; representativeOccupations: Array<{ label: string; labelKo: string }> } | null>(null)
+
+  useEffect(() => {
+    const label = goalProfile.target_study_concept_label
+    if (!label) return
+    const conceptId = fieldNameToConceptId(label)
+    if (!conceptId) return
+    let cancelled = false
+    fetch("/api/au/concept-occupation-data", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ concepts: [conceptId] }),
+    })
+      .then((r) => r.json())
+      .then((json) => {
+        if (cancelled) return
+        const item = json.concepts?.[conceptId]
+        if (item) {
+          setOccSignal({
+            shortagePct: item.nationalShortagePct,
+            medianSalary: item.medianSalaryMedian,
+            onCsol: item.csolCount > 0,
+            csolCount: item.csolCount,
+            representativeOccupations: item.representativeOccupations ?? [],
+          })
+        }
+      })
+      .catch(() => {})
+    return () => { cancelled = true }
+  }, [goalProfile.target_study_concept_label])
+
   const greeting = isKo
     ? `${today.getHours() < 12 ? "좋은 아침이에요" : today.getHours() < 18 ? "좋은 오후에요" : "좋은 저녁이에요"}`
     : `${today.getHours() < 12 ? "Good morning" : today.getHours() < 18 ? "Good afternoon" : "Good evening"}`
@@ -236,10 +263,6 @@ export function HomeDashboard({
       ? Math.max(targetEnglishScore - currentEnglishScore, 0)
       : null
 
-  /* Applications */
-  const submittedCount = applications.filter((a) => a.status === "submitted" || a.status === "offer").length
-  const totalApps = applications.length
-
   /* Upcoming tasks */
   const upcomingTasks = tasks
     .filter((t) => t.status === "todo" && t.due_date)
@@ -253,6 +276,20 @@ export function HomeDashboard({
   const topSchools = [...compareSchools]
     .sort((a, b) => (b.roi_score ?? 0) - (a.roi_score ?? 0))
     .slice(0, 3)
+  const savedSchools = goalOptions
+    .filter((option) => option.source_type === "saved_university")
+    .map((option) => ({
+      id: option.id,
+      college_name: option.provider_name || option.title,
+      college_state: "",
+      college_city: null,
+      tuition: null,
+      median_earnings: null,
+      employment_rate: null,
+      roi_score: null,
+    }))
+    .slice(0, 3)
+  const displayedSchools = topSchools.length ? topSchools : savedSchools
 
   /* ── Plan Health ── */
   const applicationDeadlineItems = [
@@ -274,260 +311,132 @@ export function HomeDashboard({
     leadingRationale,
   })
   const nextMove = planHealth.nextAction ?? getNextMove({ isKo, hasShortlist, hasEnglishBaseline, hasFundTarget, hasApplicationSchedule, nextDeadline })
-
-  /* ── Journey ── */
-  const route = [
-    { label: "Choose", complete: isReadyGoal && hasShortlist, detail: isKo ? "목표와 후보" : "Goal & shortlist" },
-    { label: "Qualify", complete: hasEnglishBaseline && hasEnglishTarget, detail: isKo ? "입학 조건" : "Entry conditions" },
-    { label: "Apply", complete: hasApplicationSchedule, detail: isKo ? "지원 일정" : "Application plan" },
-    { label: "Fund", complete: hasFundTarget && hasSavingPlan, detail: isKo ? "자금 계획" : "Funding plan" },
-    { label: "Arrive", complete: hasIntake && hasApplicationSchedule && hasFundTarget, detail: isKo ? "출국 준비" : "Arrival plan" },
-    { label: "Work", complete: Boolean(goalProfile.target_occupation_title), detail: isKo ? "커리어 목표" : "Career direction" },
+  const todayKey = today.toISOString().slice(0, 10)
+  const fundingSignal = planHealth.signals.find((signal) => signal.id.startsWith("funding"))
+  const deadlineIsOverdue = Boolean(nextDeadline && nextDeadline.dueDate < todayKey)
+  const deadlineIsSoon = Boolean(nextDeadline && nextDeadline.dueDate >= todayKey && nextDeadline.dueDate <= addDays(todayKey, 30))
+  const decisionReady = Boolean(goalProfile.target_occupation_title && hasShortlist && hasFundTarget && hasEnglishBaseline && hasEnglishTarget)
+  const dashboardMode = !hasShortlist ? "start" : planHealth.status === "at-risk" ? "risk" : decisionReady ? "ready" : "build"
+  const actionSignals = planHealth.signals.filter((signal) => signal.severity !== "positive")
+  const checkpoints: HomeCheckpoint[] = [
+    {
+      id: "applications",
+      label: isKo ? "지원 일정" : "Application timing",
+      value: deadlineIsOverdue
+        ? (isKo ? "마감 확인 필요" : "Deadline overdue")
+        : deadlineIsSoon
+          ? (isKo ? "30일 이내 마감" : "Due within 30 days")
+          : hasApplicationSchedule
+            ? (isKo ? "일정 설정됨" : "Schedule set")
+            : (isKo ? "일정 추가" : "Add a date"),
+      detail: nextDeadline ? `${nextDeadline.title} · ${formatShortDate(nextDeadline.dueDate, locale)}` : (isKo ? "후보 한 곳의 마감일부터 기록하세요." : "Start with one deadline for a shortlisted option."),
+      href: "/applications",
+      icon: CalendarClock,
+      tone: deadlineIsOverdue ? "critical" : deadlineIsSoon ? "attention" : hasApplicationSchedule ? "complete" : "empty",
+    },
+    {
+      id: "english",
+      label: isKo ? "영어 조건" : "English requirement",
+      value: scoreGap == null
+        ? (isKo ? "점수 입력" : "Add scores")
+        : scoreGap === 0
+          ? (isKo ? "목표 충족" : "Target met")
+          : `+${scoreGap.toFixed(1)}`,
+      detail: scoreGap == null
+        ? (isKo ? "현재와 목표 점수를 기준으로 준비 기간을 잡으세요." : "Record current and target scores to plan your preparation time.")
+        : `${englishExam || "IELTS"} ${currentEnglishScore?.toFixed(1)} → ${targetEnglishScore?.toFixed(1)}`,
+      href: "/english",
+      icon: Languages,
+      tone: scoreGap == null ? "empty" : scoreGap === 0 ? "complete" : "attention",
+    },
+    {
+      id: "funding",
+      label: isKo ? "자금 계획" : "Funding plan",
+      value: targetAmount == null
+        ? (isKo ? "목표 금액 입력" : "Set total need")
+        : remaining === 0
+          ? (isKo ? "목표 충족" : "Target met")
+          : formatMoney(remaining ?? 0, currency),
+      detail: targetAmount == null
+        ? (isKo ? "학비·생활비·초기 비용의 기준을 먼저 잡으세요." : "Start with tuition, living and upfront-cost assumptions.")
+        : fundingSignal?.description ?? (monthlySaving && monthlySaving > 0 ? (isKo ? `월 ${formatMoney(monthlySaving, currency)} 저축` : `${formatMoney(monthlySaving, currency)} saved monthly`) : (isKo ? "월 저축 계획을 추가하세요." : "Add a monthly saving pace.")),
+      href: "/budget",
+      icon: Banknote,
+      tone: fundingSignal?.severity === "critical" ? "critical" : fundingSignal ? "attention" : remaining === 0 ? "complete" : "empty",
+    },
   ]
 
   return (
     <section className="mx-auto max-w-5xl space-y-8 px-6 pb-16 pt-8 sm:px-10 sm:pt-12">
-      {/* ── Header ── */}
-      <header className="space-y-2">
-        <div className="flex items-start justify-between gap-4">
+      <header className="border-b border-slate-200 pb-7 sm:pb-8">
+        <div className="flex items-start justify-between gap-6">
           <div className="min-w-0">
-            <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[.14em] text-blue-600">
-              {isKo ? "홈" : "HOME"}
-            </p>
-            <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
-              {greeting}
-            </h1>
-            <p className="mt-1 text-sm text-slate-500">{dateStr}</p>
+            <p className="text-xs font-semibold uppercase tracking-[.16em] text-blue-700">MY PLAN</p>
+            <h1 className="mt-3 truncate text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">{goalProfile.plan_title || (isKo ? "나의 호주 경로" : "My Australia pathway")}</h1>
+            <p className="mt-2 text-sm text-slate-500">{goalProfile.strategy || `${greeting} · ${dateStr}`}</p>
           </div>
-          <div className="hidden text-right sm:block">
-            <p className="text-xs font-semibold uppercase tracking-[.14em] text-slate-400">
-              {isKo ? "준비도" : "Readiness"}
-            </p>
-            <p className="mt-1 text-2xl font-semibold tracking-tight text-slate-950">
-              {readyCount}<span className="ml-1 text-sm font-medium text-slate-400">/9</span>
-            </p>
-            <div className="mt-2 flex gap-1">
-              {readiness.map((complete, i) => (
-                <span
-                  key={i}
-                  className={cn("h-1.5 w-5 rounded-full", complete ? "bg-blue-500" : "bg-slate-100")}
-                />
-              ))}
-            </div>
+          <div className="hidden shrink-0 text-right sm:block">
+            <p className="text-xs font-semibold uppercase tracking-[.14em] text-slate-400">{isKo ? "준비도" : "Readiness"}</p>
+            <p className="mt-1 text-2xl font-semibold tracking-tight text-slate-950">{readyCount}<span className="ml-1 text-sm font-medium text-slate-400">/9</span></p>
           </div>
+        </div>
+        <div className="mt-5 flex flex-wrap gap-2">
+          <PlanTag icon={GraduationCap} label={goalProfile.target_study_concept_label || (isKo ? "전공 방향 확인" : "Study direction to confirm")} />
+          {goalProfile.target_occupation_title && <PlanTag icon={BriefcaseBusiness} label={goalProfile.target_occupation_title} />}
+          <PlanTag icon={CalendarClock} label={goalProfile.target_intake_month ? formatMonth(goalProfile.target_intake_month, locale) : (isKo ? "입학 시기 미정" : "Intake to confirm")} />
         </div>
       </header>
 
-      {/* ── Today's Insight ── */}
-      <article className="relative overflow-hidden rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 to-white p-6 sm:p-8">
-        <div className="absolute right-4 top-4 text-blue-100">
-          <Lightbulb className="size-16 sm:size-20" />
-        </div>
-        <div className="relative max-w-xl">
-          <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[.14em] text-blue-600">
-            <Newspaper className="size-3.5" />
-            {isKo ? "오늘의 인사이트" : "TODAY'S INSIGHT"}
-          </p>
-          <h2 className="mt-3 text-lg font-semibold leading-relaxed text-slate-900 sm:text-xl">
-            {isKo ? insight.ko : insight.en}
-          </h2>
-          <p className="mt-3 text-xs text-slate-400">Source: {insight.source}</p>
-        </div>
-      </article>
+      <PrimaryActionCard mode={dashboardMode} nextMove={nextMove} score={planHealth.score} status={planHealth.status} isKo={isKo} locale={locale} onNavigate={onNavigate} />
 
-      {/* ── Quick Actions ── */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <QuickAction
-          icon={Scale}
-          label={isKo ? "비교" : "Compare"}
-          href="/compare"
-          onNavigate={onNavigate}
-          area="compare"
-        />
-        <QuickAction
-          icon={CalendarClock}
-          label={isKo ? "지원 관리" : "Applications"}
-          href="/applications"
-          onNavigate={onNavigate}
-          area="applications"
-        />
-        <QuickAction
-          icon={Banknote}
-          label={isKo ? "예산" : "Budget"}
-          href="/budget"
-          onNavigate={onNavigate}
-          area="budget"
-        />
-        <QuickAction
-          icon={Languages}
-          label={isKo ? "영어 학습" : "English"}
-          href="/english"
-          onNavigate={onNavigate}
-          area="english"
-        />
-      </div>
-
-      {/* ── Plan Health ── */}
-      <section className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <section>
+        <div className="flex items-end justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[.14em] text-blue-600">
-              {isKo ? "다음 단계" : "NEXT STEPS"}
-            </p>
-            <h2 className="mt-1 text-xl font-semibold tracking-tight text-slate-950">
-              {healthStatusCopy(planHealth.status, isKo)}
-            </h2>
-            <p className="mt-1 text-sm leading-6 text-slate-500">
-              {isKo
-                ? "지금 가장 먼저 해야 할 일을 알려드립니다."
-                : "We surface the next priority you should address first."}
-            </p>
+            <p className="text-xs font-semibold uppercase tracking-[.14em] text-slate-400">{isKo ? "핵심 점검" : "Critical checks"}</p>
+            <h2 className="mt-1 text-xl font-semibold tracking-tight text-slate-950">{isKo ? "다음 결정 전에 확인하세요" : "Confirm these before your next decision"}</h2>
           </div>
-          <div className={cn(
-            "flex shrink-0 items-center gap-3",
-            planHealth.status === "on-track" ? "text-emerald-600"
-              : planHealth.status === "attention" ? "text-amber-600"
-                : "text-rose-600"
-          )}>
-            <span className="text-3xl font-semibold tracking-tight">{planHealth.score}</span>
-            <span className="border-l border-current/20 pl-3 text-xs font-semibold uppercase tracking-[.12em]">
-              {healthStatusCopy(planHealth.status, isKo)}
-            </span>
-          </div>
+          <p className="hidden text-sm text-slate-400 sm:block">{isKo ? `${readyCount}/9 준비 완료` : `${readyCount}/9 essentials ready`}</p>
         </div>
-        <div className="mt-6 grid gap-x-8 gap-y-4 lg:grid-cols-2">
-          {planHealth.signals.map((signal) => (
-            <HealthSignalCard key={signal.id} signal={signal} />
-          ))}
+        <div className="mt-5 grid gap-3 md:grid-cols-3">
+          {checkpoints.map((checkpoint) => <CheckpointCard key={checkpoint.id} checkpoint={checkpoint} locale={locale} onNavigate={onNavigate} />)}
         </div>
       </section>
 
-      {/* ── Next Best Move ── */}
-      <section className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
-        <div className="flex items-start gap-4">
-          <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-blue-600 text-white shadow-[0_10px_20px_rgba(59,130,246,.3)]">
-            <Compass className="size-5" />
-          </span>
-          <div className="min-w-0">
-            <p className="text-xs font-semibold uppercase tracking-[.14em] text-blue-600">
-              {isKo ? "다음 행동 · 10분" : "Next best move · 10 min"}
-            </p>
-            <h2 className="mt-1 text-xl font-semibold tracking-tight text-slate-950">
-              {nextMove.title}
-            </h2>
-            <p className="mt-2 max-w-xl text-sm leading-6 text-slate-500">
-              {nextMove.description}
-            </p>
+      {actionSignals.length > 0 && (
+        <section className="border-t border-slate-200 pt-7">
+          <div className="flex items-center gap-2"><Circle className={cn("size-3", planHealth.status === "at-risk" ? "fill-rose-500 text-rose-500" : "fill-amber-500 text-amber-500")} /><h2 className="text-base font-semibold text-slate-950">{isKo ? "지금 확인할 항목" : "Needs your attention"}</h2></div>
+          <div className="mt-4 grid gap-3 lg:grid-cols-3">
+            {actionSignals.map((signal) => <HealthSignalCard key={signal.id} signal={signal} locale={locale} onNavigate={onNavigate} />)}
           </div>
-        </div>
-        <Link
-          href={nextMove.href}
-          className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white transition hover:bg-blue-500"
-        >
-          {nextMove.cta}
-          <ArrowRight className="size-4" />
-        </Link>
-      </section>
+        </section>
+      )}
 
-      {/* ── Goal Progress ── */}
+      {/* ── Decision space ── */}
       <section className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
         <div className="flex items-center gap-2">
           <div className="grid size-8 place-items-center rounded-lg bg-blue-50">
             <Target className="size-4 text-blue-600" />
           </div>
           <h2 className="text-base font-semibold text-slate-950">
-            {isKo ? "목표 진행 현황" : "Goal Progress"}
+            {isKo ? "후보와 현재 판단" : "Shortlist and current decision"}
           </h2>
         </div>
 
-        <div className="mt-6 space-y-5">
-          {/* Applications */}
-          <ProgressRow
-            icon={CalendarClock}
-            label={isKo ? "지원" : "Applications"}
-            value={
-              totalApps > 0
-                ? `${submittedCount}/${totalApps} ${isKo ? "제출됨" : "submitted"}`
-                : isKo ? "아직 지원 없음" : "No applications yet"
-            }
-            percentage={totalApps > 0 ? (submittedCount / totalApps) * 100 : 0}
-            tone="blue"
-          />
-
-          {/* Funding */}
-          <ProgressRow
-            icon={Banknote}
-            label={isKo ? "자금" : "Funding"}
-            value={
-              remaining != null
-                ? `${formatMoney(currentSavings ?? 0, currency)} / ${formatMoney(targetAmount!, currency)}`
-                : isKo ? "목표 금액 미정" : "No target set"
-            }
-            percentage={
-              targetAmount != null && targetAmount > 0
-                ? Math.min(((currentSavings ?? 0) / targetAmount) * 100, 100)
-                : 0
-            }
-            tone="emerald"
-          />
-
-          {/* English */}
-          <ProgressRow
-            icon={Languages}
-            label={isKo ? "영어" : "English"}
-            value={
-              scoreGap != null
-                ? `${englishExam || "IELTS"} ${currentEnglishScore?.toFixed(1)} → ${targetEnglishScore?.toFixed(1)}`
-                : isKo ? "점수 미입력" : "No scores entered"
-            }
-            percentage={
-              scoreGap != null && currentEnglishScore != null && targetEnglishScore != null
-                ? Math.min((currentEnglishScore / targetEnglishScore) * 100, 100)
-                : 0
-            }
-            tone="violet"
-          />
-
-          {/* Research */}
-          <ProgressRow
-            icon={BookOpen}
-            label={isKo ? "리서치" : "Research"}
-            value={
-              hasShortlist
-                ? `${goalOptions.length} ${isKo ? "개 후보 저장됨" : "options saved"}`
-                : isKo ? "후보 미저장" : "No options saved"
-            }
-            percentage={hasShortlist ? Math.min((goalOptions.length / 3) * 100, 100) : 0}
-            tone="amber"
-          />
-        </div>
-      </section>
-
-      {/* ── Decision Journey ── */}
-      <section className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
-        <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[.14em] text-slate-400">
-              {isKo ? "호주 결정 여정" : "Australia decision journey"}
-            </p>
-            <h2 className="mt-1 text-xl font-semibold tracking-tight text-slate-950">
-              {isKo ? "한 번에 전부가 아니라, 다음 단계만 선명하게" : "Make the next decision, not every decision at once."}
-            </h2>
-          </div>
-          <p className="text-sm text-slate-400">
-            {isKo ? `${readyCount}/9 준비 완료` : `${readyCount}/9 essentials ready`}
-          </p>
-        </div>
-        <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-6">
-          {route.map((stage, index) => (
-            <JourneyStep key={stage.label} index={index + 1} label={stage.label} detail={stage.detail} complete={stage.complete} />
-          ))}
+        <div className="mt-5">
+          {goalOptions.length ? (
+            <div className="space-y-2">
+              {goalOptions.slice(0, 3).map((option) => <DecisionOptionRow key={option.id} option={option} isLeading={option.title === leadingOptionTitle} isKo={isKo} />)}
+              <PlanActionLink href="/compare" locale={locale} onNavigate={onNavigate} className="mt-4 inline-flex min-h-10 items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-800">{isKo ? "후보 비교 계속하기" : "Continue comparing options"}<ArrowRight className="size-4" /></PlanActionLink>
+            </div>
+          ) : (
+            <div className="rounded-xl border border-dashed border-slate-200 px-4 py-5"><p className="text-sm font-medium text-slate-700">{isKo ? "아직 비교할 후보가 없습니다." : "You do not have a shortlist yet."}</p><p className="mt-1 text-xs leading-5 text-slate-500">{isKo ? "후보 하나를 저장하면 비용·조건·일정을 플랜 기준으로 정리할 수 있어요." : "Save one option to turn cost, requirements and timing into a concrete plan."}</p><PlanActionLink href="/au/study" locale={locale} onNavigate={onNavigate} className="mt-4 inline-flex min-h-10 items-center gap-2 rounded-xl border border-slate-200 px-3 text-sm font-semibold text-slate-700 hover:border-blue-200 hover:text-blue-700">{isKo ? "후보 찾기" : "Find an option"}<ArrowRight className="size-4" /></PlanActionLink></div>
+          )}
         </div>
       </section>
 
       {/* ── Two-column: Schools + Activity ── */}
       <div className="grid gap-6 lg:grid-cols-2">
-        {/* Recommended Schools */}
+        {/* Comparison snapshot */}
         <section className="rounded-2xl border border-slate-200 bg-white p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -535,21 +444,17 @@ export function HomeDashboard({
                 <GraduationCap className="size-4 text-blue-600" />
               </div>
               <h2 className="text-base font-semibold text-slate-950">
-                {isKo ? "추천 학교" : "Recommended Schools"}
+                {isKo ? "비교 스냅샷" : "Comparison snapshot"}
               </h2>
             </div>
-            <Link
-              href="/compare"
-              onClick={(e) => { e.preventDefault(); onNavigate("compare") }}
-              className="text-xs font-semibold text-blue-600 hover:text-blue-700"
-            >
+            <PlanActionLink href="/compare" locale={locale} onNavigate={onNavigate} className="text-xs font-semibold text-blue-600 hover:text-blue-700">
               {isKo ? "전체 보기" : "View all"} <ArrowRight className="inline size-3" />
-            </Link>
+            </PlanActionLink>
           </div>
 
           <div className="mt-5 space-y-3">
-            {topSchools.length > 0 ? (
-              topSchools.map((school, i) => (
+            {displayedSchools.length > 0 ? (
+              displayedSchools.map((school, i) => (
                 <div
                   key={school.id}
                   className="flex items-center gap-3 rounded-xl border border-slate-100 px-4 py-3 transition hover:border-blue-200 hover:bg-blue-50/50"
@@ -594,14 +499,11 @@ export function HomeDashboard({
               <div className="rounded-xl border border-dashed border-slate-200 p-6 text-center">
                 <GraduationCap className="mx-auto size-8 text-slate-300" />
                 <p className="mt-2 text-sm text-slate-500">
-                  {isKo ? "비교에 학교를 추가해 보세요" : "Add schools to compare"}
+                  {isKo ? "후보를 저장하면 비교 지표가 여기에 모입니다" : "Saved options will bring their comparison metrics here"}
                 </p>
-                <Link
-                  href="/au/study"
-                  className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700"
-                >
+                <PlanActionLink href="/au/study" locale={locale} onNavigate={onNavigate} className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700">
                   {isKo ? "학교 둘러보기" : "Browse schools"} <ArrowRight className="size-3" />
-                </Link>
+                </PlanActionLink>
               </div>
             )}
           </div>
@@ -624,10 +526,10 @@ export function HomeDashboard({
               <>
                 {upcomingTasks.map((task) => {
                   const isOverdue =
-                    task.due_date && task.due_date < new Date().toISOString().slice(0, 10)
+                    task.due_date && task.due_date < todayKey
                   const daysLeft = task.due_date
                     ? Math.ceil(
-                        (new Date(task.due_date).getTime() - Date.now()) / 86400000,
+                        (new Date(task.due_date).getTime() - today.getTime()) / 86400000,
                       )
                     : null
                   return (
@@ -678,7 +580,7 @@ export function HomeDashboard({
                         {note.title || (isKo ? "제목 없음" : "Untitled")}
                       </p>
                       <p className="mt-0.5 text-xs text-slate-400">
-                        {formatRelativeTime(note.created_at, isKo)}
+                        {formatRelativeTime(note.created_at, isKo, today.getTime())}
                       </p>
                     </div>
                   </div>
@@ -702,189 +604,105 @@ export function HomeDashboard({
         </section>
       </div>
 
-      {/* ── Current Route ── */}
-      {(goalProfile.target_occupation_title || goalProfile.target_study_concept_label) && (
-        <section className="rounded-2xl border border-slate-200 bg-white p-6">
-          <div className="flex items-center gap-2">
-            <div className="grid size-8 place-items-center rounded-lg bg-blue-50">
-              <Map className="size-4 text-blue-600" />
+      <section className="grid gap-6 border-t border-slate-200 pt-7 lg:grid-cols-[minmax(0,1.25fr)_minmax(18rem,.75fr)]">
+        <article className="border-l-2 border-emerald-500/40 py-1 pl-5">
+          <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[.14em] text-emerald-700"><BriefcaseBusiness className="size-3.5" />{isKo ? "직업 시장 시그널" : "Labour market signal"}</p>
+          {occSignal ? (
+            <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
+              <HomeOccStat label={isKo ? "중위임금" : "Median salary"} value={occSignal.medianSalary != null ? `A$${Math.round(occSignal.medianSalary).toLocaleString()}` : "—"} />
+              <HomeOccStat label={isKo ? "인력 부족률" : "Shortage"} value={occSignal.shortagePct != null ? `${occSignal.shortagePct}%` : "—"} highlight={occSignal.shortagePct != null && occSignal.shortagePct >= 50} />
+              <HomeOccStat label="CSOL" value={occSignal.onCsol ? `${occSignal.csolCount} ${isKo ? "개 직업" : "occupations"}` : (isKo ? "미포함" : "Not listed")} />
+              <HomeOccStat label={isKo ? "대표 직업" : "Key occupations"} value={occSignal.representativeOccupations.length ? occSignal.representativeOccupations.slice(0, 2).map((item) => isKo ? item.labelKo : item.label).join(", ") : "—"} />
             </div>
-            <h2 className="text-base font-semibold text-slate-950">
-              {isKo ? "현재 경로" : "Current Route"}
-            </h2>
-          </div>
-
-          <div className="mt-4 flex flex-wrap gap-3">
-            {goalProfile.target_occupation_title && (
-              <span className="inline-flex items-center gap-1.5 rounded-lg bg-blue-50 px-3 py-1.5 text-sm text-blue-700">
-                <BriefcaseBusiness className="size-3.5" />
-                {goalProfile.target_occupation_title}
-              </span>
-            )}
-            {goalProfile.target_study_concept_label && (
-              <span className="inline-flex items-center gap-1.5 rounded-lg bg-violet-50 px-3 py-1.5 text-sm text-violet-700">
-                <GraduationCap className="size-3.5" />
-                {goalProfile.target_study_concept_label}
-              </span>
-            )}
-            {goalProfile.target_intake_month && (
-              <span className="inline-flex items-center gap-1.5 rounded-lg bg-amber-50 px-3 py-1.5 text-sm text-amber-700">
-                <CalendarClock className="size-3.5" />
-                {formatMonth(goalProfile.target_intake_month, locale)}
-              </span>
-            )}
-          </div>
-
-          {goalOptions.length > 0 && (
-            <div className="mt-4 flex flex-wrap gap-2">
-              {goalOptions.slice(0, 3).map((opt) => (
-                <span
-                  key={opt.id}
-                  className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-medium text-slate-600"
-                >
-                  <span className="grid size-4 place-items-center rounded bg-slate-100 text-[10px] font-bold text-slate-500">
-                    {opt.position}
-                  </span>
-                  {opt.title}
-                </span>
-              ))}
-            </div>
-          )}
-
-          <Link
-            href="/compare"
-            onClick={(e) => { e.preventDefault(); onNavigate("compare") }}
-            className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-700"
-          >
-            {isKo ? "비교 상세 보기" : "View comparison"} <ArrowRight className="size-4" />
-          </Link>
-        </section>
-      )}
+          ) : <p className="mt-3 text-sm leading-6 text-slate-500">{isKo ? "전공 방향을 정하면 연결된 직업 시장 신호를 보여드려요." : "Choose a study direction to see the related labour-market signals."}</p>}
+        </article>
+        <article className="border-l-2 border-blue-500/40 py-1 pl-5">
+          <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[.14em] text-blue-700"><Lightbulb className="size-3.5" />{isKo ? "오늘의 인사이트" : "Today’s insight"}</p>
+          <p className="mt-3 text-sm font-medium leading-6 text-slate-700">{isKo ? insight.ko : insight.en}</p>
+          <p className="mt-2 text-xs text-slate-400">{insight.source}</p>
+        </article>
+      </section>
     </section>
   )
 }
 
 /* ── Sub-components ── */
 
-function QuickAction({
-  icon: Icon,
-  label,
-  href,
-  onNavigate,
-  area,
-}: {
-  icon: LucideIcon
-  label: string
-  href: string
-  onNavigate: (area: string) => void
-  area: string
-}) {
+function HomeOccStat({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
   return (
-    <button
-      type="button"
-      onClick={() => onNavigate(area)}
-      className="group flex flex-col items-center gap-2 rounded-2xl border border-slate-200 bg-white p-4 text-center transition hover:border-blue-200 hover:bg-blue-50/50 hover:shadow-sm"
-    >
-      <div className="grid size-10 place-items-center rounded-xl bg-slate-50 transition group-hover:bg-blue-100">
-        <Icon className="size-5 text-slate-500 transition group-hover:text-blue-600" />
-      </div>
-      <span className="text-xs font-semibold text-slate-600 transition group-hover:text-blue-700">
-        {label}
-      </span>
-    </button>
+    <div className={cn("rounded-xl border p-3", highlight ? "border-emerald-200 bg-emerald-100/50" : "border-slate-200 bg-white")}>
+      <p className="text-xs font-medium text-slate-500">{label}</p>
+      <p className={cn("mt-1 text-sm font-semibold", highlight ? "text-emerald-700" : "text-slate-950")}>{value}</p>
+    </div>
   )
 }
 
-function ProgressRow({
-  icon: Icon,
-  label,
-  value,
-  percentage,
-  tone,
-}: {
-  icon: LucideIcon
+type DashboardMode = "start" | "build" | "risk" | "ready"
+type HomeCheckpoint = {
+  id: string
   label: string
   value: string
-  percentage: number
-  tone: "blue" | "emerald" | "violet" | "amber"
-}) {
-  const barColors = {
-    blue: "bg-blue-500",
-    emerald: "bg-emerald-500",
-    violet: "bg-violet-500",
-    amber: "bg-amber-500",
+  detail: string
+  href: string
+  icon: LucideIcon
+  tone: "critical" | "attention" | "complete" | "empty"
+}
+type NextMove = { href: string; title: string; description: string; cta: string }
+
+const PLANNER_AREAS: Record<string, string> = {
+  "/compare": "compare",
+  "/applications": "applications",
+  "/budget": "budget",
+  "/english": "english",
+  "/research": "research",
+  "/report": "report",
+}
+
+function PlanActionLink({ href, locale, onNavigate, className, children }: { href: string; locale: "en" | "ko"; onNavigate: (area: string) => void; className: string; children: React.ReactNode }) {
+  const area = PLANNER_AREAS[href]
+  if (area) return <button type="button" onClick={() => onNavigate(area)} className={className}>{children}</button>
+  return <Link href={localizePath(href, locale)} className={className}>{children}</Link>
+}
+
+function PlanTag({ icon: Icon, label }: { icon: LucideIcon; label: string }) {
+  return <span className="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 text-xs font-medium text-slate-600"><Icon className="size-3.5 text-slate-400" />{label}</span>
+}
+
+function PrimaryActionCard({ mode, nextMove, score, status, isKo, locale, onNavigate }: { mode: DashboardMode; nextMove: NextMove; score: number; status: "on-track" | "attention" | "at-risk"; isKo: boolean; locale: "en" | "ko"; onNavigate: (area: string) => void }) {
+  const copy = {
+    start: isKo ? "첫 기준점 만들기" : "Create your first reference point",
+    build: isKo ? "다음 한 걸음에 집중하세요" : "Focus on the next useful step",
+    risk: isKo ? "이 항목을 먼저 정리하세요" : "Resolve this before anything else",
+    ready: isKo ? "이제 후보를 판단할 준비가 됐어요" : "You are ready to make a decision",
+  }[mode]
+  const tone = status === "at-risk" ? "border-rose-400/40" : status === "attention" ? "border-amber-300/50" : "border-blue-400/40"
+  return <section className={cn("relative overflow-hidden rounded-3xl border bg-slate-950 p-6 text-white shadow-[0_18px_45px_rgba(15,23,42,.18)] sm:p-8", tone)}>
+    <div className="absolute -right-10 -top-12 size-48 rounded-full bg-blue-500/20 blur-3xl" />
+    <div className="relative flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+      <div className="max-w-2xl"><p className="text-xs font-semibold uppercase tracking-[.16em] text-blue-200">{isKo ? "지금 할 일" : "Your next move"}</p><h2 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">{nextMove.title}</h2><p className="mt-3 text-sm leading-6 text-slate-300">{nextMove.description}</p><p className="mt-4 text-xs font-medium text-slate-400">{copy}</p></div>
+      <div className="flex shrink-0 items-center gap-4"><div className="text-right"><p className="text-xs font-semibold uppercase tracking-[.14em] text-slate-400">{isKo ? "플랜 상태" : "Plan status"}</p><p className="mt-1 text-lg font-semibold">{score}<span className="ml-1 text-xs font-medium text-slate-400">{healthStatusCopy(status, isKo)}</span></p></div><PlanActionLink href={nextMove.href} locale={locale} onNavigate={onNavigate} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-white px-4 text-sm font-semibold text-slate-950 transition hover:bg-blue-50">{nextMove.cta}<ArrowRight className="size-4" /></PlanActionLink></div>
+    </div>
+  </section>
+}
+
+function CheckpointCard({ checkpoint, locale, onNavigate }: { checkpoint: HomeCheckpoint; locale: "en" | "ko"; onNavigate: (area: string) => void }) {
+  const Icon = checkpoint.icon
+  const tones = {
+    critical: "border-rose-200 bg-rose-50/50 text-rose-700",
+    attention: "border-amber-200 bg-amber-50/60 text-amber-700",
+    complete: "border-emerald-200 bg-emerald-50/50 text-emerald-700",
+    empty: "border-slate-200 bg-white text-slate-600",
   }
-  return (
-    <div className="flex items-start gap-3">
-      <span className="mt-0.5 grid size-7 shrink-0 place-items-center rounded-lg bg-slate-50 text-slate-400">
-        <Icon className="size-3.5" />
-      </span>
-      <div className="min-w-0 flex-1">
-        <div className="flex items-center justify-between gap-2">
-          <p className="text-sm font-medium text-slate-700">{label}</p>
-          <p className="text-xs text-slate-500">{value}</p>
-        </div>
-        <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
-          <div
-            className={cn("h-full rounded-full transition-all duration-500", barColors[tone])}
-            style={{ width: `${Math.max(percentage, 2)}%` }}
-          />
-        </div>
-      </div>
-    </div>
-  )
+  return <PlanActionLink href={checkpoint.href} locale={locale} onNavigate={onNavigate} className={cn("group min-h-36 rounded-2xl border p-4 text-left transition hover:-translate-y-0.5 hover:shadow-sm", tones[checkpoint.tone])}><div className="flex items-start justify-between gap-3"><span className="grid size-9 place-items-center rounded-xl bg-white/80"><Icon className="size-4" /></span>{checkpoint.tone === "complete" && <CircleCheck className="size-4" />}</div><p className="mt-5 text-xs font-semibold uppercase tracking-[.12em] opacity-70">{checkpoint.label}</p><p className="mt-1 text-sm font-semibold text-slate-900">{checkpoint.value}</p><p className="mt-2 line-clamp-2 text-xs leading-5 text-slate-500">{checkpoint.detail}</p></PlanActionLink>
 }
 
-function HealthSignalCard({ signal }: { signal: PlanHealthSignal }) {
-  const isPositive = signal.severity === "positive"
-  const isCritical = signal.severity === "critical"
-  return (
-    <Link
-      href={signal.href}
-      className={cn(
-        "group border-l-2 py-1 pl-4 transition",
-        isPositive ? "border-emerald-500/60"
-          : isCritical ? "border-rose-500/60"
-            : "border-amber-500/60"
-      )}
-    >
-      <div className="flex items-start gap-3">
-        <span className={cn(
-          "mt-0.5 grid size-8 shrink-0 place-items-center rounded-xl",
-          isPositive ? "bg-emerald-50 text-emerald-600"
-            : isCritical ? "bg-rose-50 text-rose-600"
-              : "bg-amber-50 text-amber-600"
-        )}>
-          {isPositive ? <CircleCheck className="size-4" /> : <Circle className="size-4 fill-current" />}
-        </span>
-        <div className="min-w-0 flex-1">
-          <p className="text-sm font-semibold text-slate-700">{signal.title}</p>
-          <p className="mt-1 text-xs leading-5 text-slate-500">{signal.description}</p>
-          <span className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-slate-600 transition group-hover:gap-1.5">
-            {signal.cta}<ArrowRight className="size-3.5" />
-          </span>
-        </div>
-      </div>
-    </Link>
-  )
+function HealthSignalCard({ signal, locale, onNavigate }: { signal: PlanHealthSignal; locale: "en" | "ko"; onNavigate: (area: string) => void }) {
+  const critical = signal.severity === "critical"
+  return <PlanActionLink href={signal.href} locale={locale} onNavigate={onNavigate} className={cn("group rounded-2xl border p-4 text-left transition hover:-translate-y-0.5 hover:shadow-sm", critical ? "border-rose-200 bg-rose-50/50" : "border-amber-200 bg-amber-50/50")}><div className="flex items-start gap-3"><span className={cn("grid size-8 shrink-0 place-items-center rounded-xl", critical ? "bg-rose-100 text-rose-700" : "bg-amber-100 text-amber-700")}><Circle className="size-3 fill-current" /></span><div className="min-w-0"><p className="text-sm font-semibold text-slate-800">{signal.title}</p><p className="mt-1 text-xs leading-5 text-slate-500">{signal.description}</p><span className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-slate-700">{signal.cta}<ArrowRight className="size-3.5 transition group-hover:translate-x-0.5" /></span></div></div></PlanActionLink>
 }
 
-function JourneyStep({ index, label, detail, complete }: { index: number; label: string; detail: string; complete: boolean }) {
-  return (
-    <div className="relative min-h-24 border-l border-slate-200 pl-4 first:border-l-0 first:pl-0">
-      <div className="flex items-center justify-between gap-2">
-        <span className={cn(
-          "grid size-6 place-items-center rounded-full text-xs font-bold",
-          complete ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-400"
-        )}>
-          {complete ? <Check className="size-3.5" /> : index}
-        </span>
-        {complete ? <CircleCheck className="size-4 text-blue-500" /> : <Circle className="size-4 text-slate-200" />}
-      </div>
-      <p className={cn("mt-4 text-sm font-semibold", complete ? "text-blue-700" : "text-slate-600")}>{label}</p>
-      <p className="mt-1 text-xs leading-5 text-slate-400">{detail}</p>
-    </div>
-  )
+function DecisionOptionRow({ option, isLeading, isKo }: { option: HomeGoalOption; isLeading: boolean; isKo: boolean }) {
+  return <article className={cn("flex items-center gap-3 rounded-xl border px-3.5 py-3", isLeading ? "border-blue-200 bg-blue-50/60" : "border-slate-100 bg-slate-50/50")}><span className={cn("grid size-7 shrink-0 place-items-center rounded-lg text-xs font-bold", isLeading ? "bg-blue-600 text-white" : "bg-white text-slate-500")}>{option.position}</span><div className="min-w-0 flex-1"><p className="truncate text-sm font-semibold text-slate-800">{option.title}</p><p className="mt-0.5 truncate text-xs text-slate-500">{option.field_name || option.provider_name || (isKo ? "저장한 후보" : "Saved option")}</p></div>{isLeading && <span className="shrink-0 text-[11px] font-semibold text-blue-700">{isKo ? "1순위" : "Leading"}</span>}</article>
 }
 
 /* ── Helpers ── */
@@ -923,8 +741,21 @@ function formatMonth(value: string, locale: string) {
   }).format(new Date(`${value.slice(0, 7)}-01T00:00:00`))
 }
 
-function formatRelativeTime(dateStr: string, isKo: boolean) {
-  const diff = Date.now() - new Date(dateStr).getTime()
+function formatShortDate(value: string, locale: string) {
+  return new Intl.DateTimeFormat(locale === "ko" ? "ko-KR" : "en-AU", {
+    day: "numeric",
+    month: "short",
+  }).format(new Date(`${value.slice(0, 10)}T00:00:00`))
+}
+
+function addDays(value: string, days: number) {
+  const date = new Date(`${value}T00:00:00`)
+  date.setDate(date.getDate() + days)
+  return date.toISOString().slice(0, 10)
+}
+
+function formatRelativeTime(dateStr: string, isKo: boolean, now: number) {
+  const diff = now - new Date(dateStr).getTime()
   const minutes = Math.floor(diff / 60000)
   if (minutes < 1) return isKo ? "방금" : "Just now"
   if (minutes < 60) return isKo ? `${minutes}분 전` : `${minutes}m ago`

@@ -43,6 +43,7 @@ export interface AuMajorSignal {
 // Server-side Supabase queries can be added in a separate server-only module.
 
 import snapshot from "@/data/au-major-signals.json"
+import { STUDY_CONCEPTS } from "@/data/study-concepts"
 
 type SnapshotFile = {
   signals: AuMajorSignal[]
@@ -131,6 +132,31 @@ export function formatOutlook(pct: number | null): string {
   if (pct == null) return ""
   const sign = pct > 0 ? "+" : ""
   return `${sign}${pct.toFixed(1)}%`
+}
+
+/**
+ * Map an ROI `field_name` (from the roi_explorer_au table) to a STUDY_CONCEPT id.
+ * Uses the `roiSearchTerm` on each concept plus alias matching.
+ */
+export function fieldNameToConceptId(fieldName: string): string | null {
+  const normalised = fieldName.trim().toLowerCase()
+  // Direct roiSearchTerm match
+  for (const c of STUDY_CONCEPTS) {
+    if (c.roiSearchTerm && c.roiSearchTerm.toLowerCase() === normalised) return c.id
+  }
+  // Alias / label match
+  for (const c of STUDY_CONCEPTS) {
+    if (
+      c.label.toLowerCase() === normalised ||
+      c.aliases.some((a) => a.toLowerCase() === normalised)
+    )
+      return c.id
+  }
+  // Substring fallback
+  for (const c of STUDY_CONCEPTS) {
+    if (c.label.toLowerCase().includes(normalised) || normalised.includes(c.label.toLowerCase())) return c.id
+  }
+  return null
 }
 
 export function prBadge(score: number | null): {

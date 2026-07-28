@@ -32,7 +32,7 @@ export const NEW_COUNTRY_RELEASE_GATES: Record<
 > = {
   NZ: {
     stage: "REVIEW_REQUIRED",
-    indexable: true,
+    indexable: false,
     comparable: false,
     reasons: [
       "The map bundle has reviewed geography and provider references, but its salary, rent, shortage, and pathway source rows remain unpublished.",
@@ -41,7 +41,7 @@ export const NEW_COUNTRY_RELEASE_GATES: Record<
   },
   NO: {
     stage: "REVIEW_REQUIRED",
-    indexable: true,
+    indexable: false,
     comparable: false,
     reasons: [
       "Official-source snapshots need a completed capture and editorial review.",
@@ -50,7 +50,7 @@ export const NEW_COUNTRY_RELEASE_GATES: Record<
   },
   SE: {
     stage: "REVIEW_REQUIRED",
-    indexable: true,
+    indexable: false,
     comparable: false,
     reasons: [
       "Official-source snapshots need a completed capture and editorial review.",
@@ -59,7 +59,7 @@ export const NEW_COUNTRY_RELEASE_GATES: Record<
   },
   DK: {
     stage: "REVIEW_REQUIRED",
-    indexable: true,
+    indexable: false,
     comparable: false,
     reasons: [
       "Official-source snapshots need a completed capture and editorial review.",
@@ -68,7 +68,7 @@ export const NEW_COUNTRY_RELEASE_GATES: Record<
   },
   FI: {
     stage: "REVIEW_REQUIRED",
-    indexable: true,
+    indexable: false,
     comparable: false,
     reasons: [
       "Official-source snapshots need a completed capture and editorial review.",
@@ -91,7 +91,8 @@ export function getNewCountryReleaseGate(countryCode: string) {
 export function isCountrySearchIndexable(countryCode: string) {
   const gate = getNewCountryReleaseGate(countryCode)
   if (gate) return gate.indexable
-  return getLaunchCountry(countryCode)?.publicationStage !== "REVIEW_REQUIRED"
+  const country = getLaunchCountry(countryCode)
+  return country?.publicationStage === "PROFILE_READY" || country?.publicationStage === "DECISION_READY"
 }
 
 export function isCountryDecisionReady(countryCode: string) {

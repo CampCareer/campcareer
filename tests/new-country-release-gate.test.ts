@@ -29,6 +29,10 @@ test("new country packs cannot enter search or ranked comparison before release"
   }
 })
 
+test("unknown country codes cannot enter search", () => {
+  assert.equal(isCountrySearchIndexable("XX"), false)
+})
+
 test("the legacy country scorecard also excludes gated countries", () => {
   const unreleasedCountries = NEW_COUNTRY_CODES
   const result = recommendCountries(DEFAULT_RECOMMENDATION_INPUT)

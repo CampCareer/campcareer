@@ -1,8 +1,9 @@
 "use client"
 
-import { useCallback, useEffect, useRef, useState, type FormEvent } from "react"
-import { Check, ClipboardCheck, DollarSign, GraduationCap, Search, Target, TrendingUp, Briefcase, Star, Trash2, ArrowRight, Loader2 } from "lucide-react"
+import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from "react"
+import { Check, ClipboardCheck, DollarSign, GraduationCap, Search, Target, TrendingUp, Briefcase, Star, Trash2, ArrowRight, Loader2, AlertTriangle } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { fieldNameToConceptId, shortageLevel, shortageLabel, shortageColor } from "@/lib/au-major-signals"
 
 export type CompareSchool = {
   id: string
@@ -20,6 +21,7 @@ export type CompareGoalOption = {
   id: string
   position: number
   source_type: "saved_university" | "saved_course"
+  source_reference: string
   title: string
   provider_name: string
   field_name: string
@@ -31,6 +33,7 @@ export type ComparePathwayDecision = {
 }
 
 type CompareTab = "majors" | "schools" | "pathway"
+const EMPTY_GOAL_OPTIONS: CompareGoalOption[] = []
 
 type MajorResult = {
   field_name: string
@@ -81,9 +84,48 @@ export function CompareSpace({
   const [leadingId, setLeadingId] = useState(decision?.leading_option_id ?? "")
   const [rationale, setRationale] = useState(decision?.rationale ?? "")
   const [saving, setSaving] = useState(false)
+  const [optionSchools, setOptionSchools] = useState<CompareSchool[]>([])
+  const [hiddenSchoolIds, setHiddenSchoolIds] = useState<string[]>([])
 
-  const options = goalOptions ?? []
+  const options = goalOptions ?? EMPTY_GOAL_OPTIONS
   const hasPathway = options.length > 0 || Boolean(goalTitle || studyTitle)
+  const optionUniversities = useMemo(
+    () => options.filter((option) => option.source_type === "saved_university" && option.source_reference),
+    [options],
+  )
+
+  useEffect(() => {
+    let cancelled = false
+    async function loadOptionSchools() {
+      const resolved = await Promise.all(optionUniversities.map(async (option) => {
+        const fallback: CompareSchool = {
+          id: option.id,
+          college_name: option.provider_name || option.title,
+          college_state: "",
+          college_city: null,
+        }
+        try {
+          const response = await fetch(`/api/roi?country=au&college_id=${encodeURIComponent(option.source_reference)}&limit=100&sort=roi_score`)
+          const json = await response.json()
+          const rows = (json.data ?? []) as Array<CompareSchool & { field_name?: string | null }>
+          const matchingRows = option.field_name
+            ? rows.filter((row) => row.field_name?.toLowerCase().includes(option.field_name.toLowerCase()))
+            : rows
+          const school = matchingRows[0] ?? rows[0]
+          return school ? { ...school, id: option.id } : fallback
+        } catch {
+          return fallback
+        }
+      }))
+      if (!cancelled) setOptionSchools(resolved)
+    }
+    void loadOptionSchools()
+    return () => { cancelled = true }
+  }, [optionUniversities])
+
+  const comparisonSchools = [...schools, ...optionSchools]
+    .filter((school, index, all) => all.findIndex((item) => item.college_name === school.college_name) === index)
+    .filter((school) => !hiddenSchoolIds.includes(school.id))
 
   useEffect(() => {
     setLeadingId(decision?.leading_option_id ?? options[0]?.id ?? "")
@@ -117,7 +159,7 @@ export function CompareSpace({
       {/* Tabs */}
       <div className="mt-6 flex gap-1 rounded-xl border border-slate-200 bg-slate-50 p-1">
         <TabButton active={tab === "majors"} onClick={() => setTab("majors")} label={isKo ? "전공 비교" : "Majors"} />
-        <TabButton active={tab === "schools"} onClick={() => setTab("schools")} label={isKo ? "학교 비교" : "Schools"} count={schools.length} />
+        <TabButton active={tab === "schools"} onClick={() => setTab("schools")} label={isKo ? "학교 비교" : "Schools"} count={comparisonSchools.length} />
         <TabButton active={tab === "pathway"} onClick={() => setTab("pathway")} label={isKo ? "경로 비교" : "Route"} />
       </div>
 
@@ -126,8 +168,11 @@ export function CompareSpace({
 
       {/* School comparison */}
       {tab === "schools" && (
-        schools.length > 0 ? (
-          <SchoolsTab schools={schools} isKo={isKo} onRemove={onRemove} selectedId={selectedId} onSelect={setSelectedId} />
+          comparisonSchools.length > 0 ? (
+          <SchoolsTab schools={comparisonSchools} isKo={isKo} onRemove={(id) => {
+            setHiddenSchoolIds((current) => [...current, id])
+            onRemove(id)
+          }} selectedId={selectedId} onSelect={setSelectedId} />
         ) : (
           <EmptyState
             isKo={isKo}
@@ -173,6 +218,7 @@ function MajorsTab({ isKo }: { isKo: boolean }) {
   const [suggestions, setSuggestions] = useState<string[]>([])
   const [selectedMajors, setSelectedMajors] = useState<string[]>([])
   const [majorData, setMajorData] = useState<Record<string, MajorResult[]>>({})
+  const [occupationData, setOccupationData] = useState<Record<string, { shortagePct: number | null; medianSalary: number | null; onCsol: boolean; csolCount: number; occupationCount: number }>>({})
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const fetchSuggestions = useCallback(async (q: string) => {
@@ -204,6 +250,32 @@ function MajorsTab({ isKo }: { isKo: boolean }) {
         const json = await res.json()
         const rows = json.data ?? []
         setMajorData((prev) => ({ ...prev, [fieldName]: rows }))
+      } catch { /* ignore */ }
+    }
+
+    // Fetch occupation data for this field
+    const conceptId = fieldNameToConceptId(fieldName)
+    if (conceptId && !occupationData[fieldName]) {
+      try {
+        const res = await fetch("/api/au/concept-occupation-data", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ concepts: [conceptId] }),
+        })
+        const json = await res.json()
+        const item = json.concepts?.[conceptId]
+        if (item) {
+          setOccupationData((prev) => ({
+            ...prev,
+            [fieldName]: {
+              shortagePct: item.nationalShortagePct,
+              medianSalary: item.medianSalaryMedian,
+              onCsol: item.csolCount > 0,
+              csolCount: item.csolCount,
+              occupationCount: item.totalOccupations,
+            },
+          }))
+        }
       } catch { /* ignore */ }
     }
   }
@@ -339,6 +411,45 @@ function MajorsTab({ isKo }: { isKo: boolean }) {
                 items={aggregated}
                 render={(item) => item.avgPayback != null ? `${item.avgPayback.toFixed(1)}${isKo ? "년" : " yrs"}` : "—"}
               />
+
+              {/* ── Occupation signal rows ── */}
+              <MajorRow
+                icon={<DollarSign className="size-4 text-emerald-600" />}
+                label={isKo ? "직업 중위임금" : "Median occupation salary"}
+                items={aggregated}
+                render={(item) => {
+                  const occ = occupationData[item.field]
+                  return occ?.medianSalary != null ? money(occ.medianSalary) : "—"
+                }}
+              />
+              <MajorRow
+                icon={<AlertTriangle className="size-4 text-amber-600" />}
+                label={isKo ? "인력 부족률" : "Shortage rate"}
+                items={aggregated}
+                render={(item) => {
+                  const occ = occupationData[item.field]
+                  if (!occ) return "—"
+                  const level = shortageLevel(occ.shortagePct)
+                  return (
+                    <span className={cn("inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium", shortageColor(level))}>
+                      {occ.shortagePct != null ? `${occ.shortagePct}%` : "—"}
+                      <span className="hidden sm:inline">· {shortageLabel(level, isKo)}</span>
+                    </span>
+                  )
+                }}
+              />
+              <MajorRow
+                icon={<Briefcase className="size-4 text-blue-600" />}
+                label={isKo ? "CSOL 포함 직업" : "Occupations on CSOL"}
+                items={aggregated}
+                render={(item) => {
+                  const occ = occupationData[item.field]
+                  if (!occ) return "—"
+                  return occ.onCsol
+                    ? <span className="text-emerald-700 font-medium">{isKo ? `${occ.csolCount}개 직업 포함` : `${occ.csolCount} occupation${occ.csolCount > 1 ? "s" : ""}`}</span>
+                    : <span className="text-slate-400">{isKo ? "CSOL 미포함" : "Not on CSOL"}</span>
+                }}
+              />
             </tbody>
           </table>
         </div>
@@ -359,7 +470,7 @@ function MajorsTab({ isKo }: { isKo: boolean }) {
   )
 }
 
-function MajorRow({ icon, label, items, render }: { icon: React.ReactNode; label: string; items: Array<{ field: string; count: number; avgRoi: number | null; avgEarnings: number | null; avgTuition: number | null; avgPayback: number | null }>; render: (item: { field: string; count: number; avgRoi: number | null; avgEarnings: number | null; avgTuition: number | null; avgPayback: number | null }) => string }) {
+function MajorRow({ icon, label, items, render }: { icon: React.ReactNode; label: string; items: Array<{ field: string; count: number; avgRoi: number | null; avgEarnings: number | null; avgTuition: number | null; avgPayback: number | null }>; render: (item: { field: string; count: number; avgRoi: number | null; avgEarnings: number | null; avgTuition: number | null; avgPayback: number | null }) => React.ReactNode }) {
   return (
     <tr className="border-b border-slate-100">
       <td className="flex items-center gap-2 px-5 py-3.5 text-sm font-medium text-slate-500">
@@ -485,6 +596,40 @@ function SchoolsTab({ schools, isKo, onRemove, selectedId, onSelect }: { schools
 function PathwayTab({ isKo, goalTitle, studyTitle, options, leadingId, onSetLeadingId, rationale, onSetRationale, saving, onSaveRationale, evidenceCount }: {
   isKo: boolean; goalTitle?: string; studyTitle?: string; options: CompareGoalOption[]; leadingId: string; onSetLeadingId: (id: string) => void; rationale: string; onSetRationale: (v: string) => void; saving: boolean; onSaveRationale: (e: FormEvent<HTMLFormElement>) => void; evidenceCount?: number
 }) {
+  const [occSignal, setOccSignal] = useState<{ shortagePct: number | null; medianSalary: number | null; onCsol: boolean; csolCount: number; occupationCount: number; representativeOccupations: Array<{ label: string; labelKo: string }> } | null>(null)
+  const [occLoading, setOccLoading] = useState(false)
+
+  useEffect(() => {
+    if (!studyTitle) return
+    const conceptId = fieldNameToConceptId(studyTitle)
+    if (!conceptId) return
+    let cancelled = false
+    setOccLoading(true)
+    fetch("/api/au/concept-occupation-data", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ concepts: [conceptId] }),
+    })
+      .then((r) => r.json())
+      .then((json) => {
+        if (cancelled) return
+        const item = json.concepts?.[conceptId]
+        if (item) {
+          setOccSignal({
+            shortagePct: item.nationalShortagePct,
+            medianSalary: item.medianSalaryMedian,
+            onCsol: item.csolCount > 0,
+            csolCount: item.csolCount,
+            occupationCount: item.totalOccupations,
+            representativeOccupations: item.representativeOccupations ?? [],
+          })
+        }
+      })
+      .catch(() => {})
+      .finally(() => { if (!cancelled) setOccLoading(false) })
+    return () => { cancelled = true }
+  }, [studyTitle])
+
   return (
     <div className="mt-8 space-y-6">
       {/* Current direction */}
@@ -501,6 +646,32 @@ function PathwayTab({ isKo, goalTitle, studyTitle, options, leadingId, onSetLead
           <Tag icon={ClipboardCheck} label={isKo ? `공식 근거 ${evidenceCount ?? 0}개` : `${evidenceCount ?? 0} evidence links`} />
         </div>
       </div>
+
+      {/* Occupation signal for selected major */}
+      {studyTitle && (
+        <div className="rounded-2xl border border-slate-200 bg-white p-5">
+          <div className="flex items-center gap-2">
+            <Briefcase className="size-4 text-emerald-600" />
+            <h2 className="text-base font-semibold text-slate-950">
+              {isKo ? "직업 시장 시그널" : "Labour market signal"}
+            </h2>
+          </div>
+          {occLoading ? (
+            <div className="mt-4 flex items-center gap-2 text-sm text-slate-500">
+              <Loader2 className="size-4 animate-spin" /> {isKo ? "불러오는 중..." : "Loading..."}
+            </div>
+          ) : occSignal ? (
+            <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
+              <OccStat label={isKo ? "중위임금" : "Median salary"} value={occSignal.medianSalary != null ? money(occSignal.medianSalary) : "—"} />
+              <OccStat label={isKo ? "인력 부족률" : "Shortage"} value={occSignal.shortagePct != null ? `${occSignal.shortagePct}%` : "—"} highlight={occSignal.shortagePct != null && occSignal.shortagePct >= 50} />
+              <OccStat label="CSOL" value={occSignal.onCsol ? `${occSignal.csolCount} ${isKo ? "개 직업" : "occupations"}` : (isKo ? "미포함" : "Not listed")} highlight={occSignal.onCsol} />
+              <OccStat label={isKo ? "대표 직업" : "Key occupations"} value={occSignal.representativeOccupations.length > 0 ? occSignal.representativeOccupations.slice(0, 2).map((o) => isKo ? o.labelKo : o.label).join(", ") : "—"} />
+            </div>
+          ) : (
+            <p className="mt-3 text-sm text-slate-400">{isKo ? "전공을 선택하면 직업 시장 데이터를 보여드려요." : "Select a study focus to see labour market data."}</p>
+          )}
+        </div>
+      )}
 
       {/* Route comparison table */}
       <div className="rounded-2xl border border-slate-200 bg-white p-5">
@@ -639,6 +810,15 @@ function CompareRow({ icon, label, schools, render }: { icon: React.ReactNode; l
         </td>
       ))}
     </tr>
+  )
+}
+
+function OccStat({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
+  return (
+    <div className={cn("rounded-xl border p-3", highlight ? "border-emerald-200 bg-emerald-50" : "border-slate-200 bg-slate-50")}>
+      <p className="text-xs font-medium text-slate-500">{label}</p>
+      <p className={cn("mt-1 text-sm font-semibold", highlight ? "text-emerald-700" : "text-slate-950")}>{value}</p>
+    </div>
   )
 }
 

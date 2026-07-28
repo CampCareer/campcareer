@@ -1,23 +1,19 @@
 "use client"
 
-import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from "react"
 import type { User } from "@supabase/supabase-js"
 import {
-  ArrowRight,
-  BookOpen,
   BriefcaseBusiness,
   CalendarDays,
   FileCheck2,
   GraduationCap,
-  NotebookPen,
-  Target,
 } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
 import { majorLabel, resolveView } from "@/lib/degree-risk"
 import { cn } from "@/lib/utils"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
+import { localizePath, withoutLocalePrefix } from "@/lib/i18n/config"
 import { PlannerToolbar, PlannerToolbarControls } from "@/components/planner/planner-toolbar"
 import { PlannerSidebar, type PlannerArea } from "@/components/planner/planner-sidebar"
 import { GoalSetup, type GoalSetupData } from "@/components/planner/goal-setup"
@@ -59,7 +55,7 @@ type SavedUniversity = { id: number; univ_slug: string; univ_name: string }
 type SavedCourse = { id: number; course_name: string; college_name: string; field_name: string }
 type SavedStudyConcept = { id: number; concept_slug: string; concept_label: string; concept_label_ko: string }
 type PlanGoalProfile = { user_id: string; target_occupation_code: string; target_occupation_title: string; target_study_concept_slug: string; target_study_concept_label: string; target_intake_month: string | null; plan_title: string; strategy: string; setup_completed_at: string | null }
-type PlanGoalOption = { id: string; position: number; source_type: "saved_university" | "saved_course"; title: string; provider_name: string; field_name: string }
+type PlanGoalOption = { id: string; position: number; source_type: "saved_university" | "saved_course"; source_reference: string; title: string; provider_name: string; field_name: string }
 type PlanApplicationRecord = ExecutionApplication
 type PlanApplicationDocument = ExecutionDocument
 type PlanMoneyScenario = ExecutionMoneyScenario
@@ -76,6 +72,24 @@ type WidgetId = "today" | "dates" | "money" | "english" | "research"
 type WidgetSize = "wide" | "half" | "narrow"
 type PlannerPreferences = { theme: PlannerTheme; widget_order: WidgetId[]; widget_sizes: Partial<Record<WidgetId, WidgetSize>> }
 type PlannerTheme = "mist" | "lavender" | "sage" | "peach" | "midnight"
+type WizardHandoffSchool = {
+  college_id: string
+  college_name: string
+  college_state: string
+  college_city?: string | null
+  tuition?: number | null
+  median_earnings?: number | null
+  employment_rate?: number | null
+  roi_score?: number | null
+  payback_years?: number | null
+}
+type WizardHandoff = {
+  conceptSlug: string
+  conceptLabel: string
+  conceptLabelKo: string
+  school: string | null
+  schoolData: WizardHandoffSchool | null
+}
 
 const plannerAreaPaths: Record<PlannerArea, string> = {
   home: "/home",
@@ -157,6 +171,8 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
   const [plannerTheme, setPlannerTheme] = useState<PlannerTheme>("mist")
   const [widgetOrder, setWidgetOrder] = useState<WidgetId[]>(defaultWidgetOrder)
   const [widgetSizes, setWidgetSizes] = useState<Record<WidgetId, WidgetSize>>(defaultWidgetSizes)
+  const [pendingWizardHandoff, setPendingWizardHandoff] = useState<WizardHandoff | null>(null)
+  const [wizardHandoffAction, setWizardHandoffAction] = useState<"add" | "replace" | null>(null)
 
   useEffect(() => {
     // Routing restructured: /planner is now the primary route
@@ -171,7 +187,7 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
   // remount on every internal navigation.
   useEffect(() => {
     function handlePopState() {
-      const nextArea = plannerAreaFromPath(window.location.pathname)
+      const nextArea = plannerAreaFromPath(withoutLocalePrefix(window.location.pathname))
       if (nextArea) setActiveArea(nextArea)
     }
     window.addEventListener("popstate", handlePopState)
@@ -310,7 +326,7 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
         supabase.from("plan_language_goals").select("exam_name, current_score, target_score, weekly_hours, test_date").eq("user_id", userId).maybeSingle(),
         supabase.from("planner_preferences").select("theme, widget_order, widget_sizes").eq("user_id", userId).maybeSingle(),
         supabase.from("plan_goal_profiles").select("user_id, target_occupation_code, target_occupation_title, target_study_concept_slug, target_study_concept_label, target_intake_month, plan_title, strategy, setup_completed_at").eq("user_id", userId).maybeSingle(),
-        supabase.from("plan_goal_options").select("id, position, source_type, title, provider_name, field_name").eq("user_id", userId).order("position", { ascending: true }),
+        supabase.from("plan_goal_options").select("id, position, source_type, source_reference, title, provider_name, field_name").eq("user_id", userId).order("position", { ascending: true }),
         supabase.from("plan_application_records").select("id, goal_option_id, provider_name, programme_name, status, deadline_date, offer_date, notes").eq("user_id", userId).order("deadline_date", { ascending: true, nullsFirst: false }),
         supabase.from("plan_application_documents").select("id, application_id, label, status").eq("user_id", userId).order("created_at", { ascending: true }),
         supabase.from("plan_money_scenarios").select("scholarship_amount, conservative_cost_lift").eq("user_id", userId).maybeSingle(),
@@ -318,6 +334,22 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
         supabase.from("plan_research_items").select("id, source_type, source_reference, title, provider_name, field_name, status").eq("user_id", userId).order("updated_at", { ascending: false }),
         supabase.from("plan_pathway_decisions").select("leading_option_id, rationale").eq("user_id", userId).maybeSingle(),
       ])
+      const storedProfile = (results[12].data as PlanGoalProfile | null) ?? null
+      const storedOptions = (results[13].data as PlanGoalOption[] | null) ?? []
+      const handoff = loadWizardHandoff()
+      let importedProfile = storedProfile
+      let importedOptions = storedOptions
+
+      if (handoff) {
+        const imported = await saveWizardHandoff(userId, handoff, storedProfile, storedOptions)
+        if (imported) {
+          importedProfile = imported.profile
+          importedOptions = imported.options
+          if (imported.consumed) clearWizardHandoff()
+          else setPendingWizardHandoff(handoff)
+        }
+      }
+
       if (!active) return
       setPreferences((results[0].data as Preferences | null) ?? null)
       setOccupations((results[1].data as SavedOccupation[] | null) ?? [])
@@ -331,8 +363,8 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
       setBudget((results[9].data as PlanBudget | null) ?? { currency: "AUD", current_savings: 0, monthly_saving: 0, target_amount: null, target_date: null })
       setLanguage((results[10].data as LanguageGoal | null) ?? loadLanguageLS() ?? { exam_name: "IELTS", current_score: null, target_score: null, weekly_hours: null, test_date: null })
       const savedPlanner = results[11].data as PlannerPreferences | null
-      setGoalProfile((results[12].data as PlanGoalProfile | null) ?? null)
-      setGoalOptions((results[13].data as PlanGoalOption[] | null) ?? [])
+      setGoalProfile(importedProfile)
+      setGoalOptions(importedOptions)
       setApplicationRecords((results[14].data as PlanApplicationRecord[] | null) ?? [])
       setApplicationDocuments((results[15].data as PlanApplicationDocument[] | null) ?? [])
       setMoneyScenario((results[16].data as PlanMoneyScenario | null) ?? { scholarship_amount: 0, conservative_cost_lift: 15 })
@@ -369,6 +401,24 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
           navigateToTab(id)
         }
       } else {
+        const handoff = loadWizardHandoff()
+        /* Guest mode can preview the result, but keeps the handoff until sign-in. */
+        setGoalProfile(handoff ? profileFromWizardHandoff(handoff, "") : { user_id: "", target_occupation_code: "", target_occupation_title: "", target_study_concept_slug: "", target_study_concept_label: "", target_intake_month: null, plan_title: "", strategy: "", setup_completed_at: new Date().toISOString() })
+        setGoalOptions(handoff?.schoolData ? [optionFromWizardSchool(handoff.schoolData, handoff.conceptLabel)] : [])
+        const savedTabs = loadTabs()
+        const availableTabs = savedTabs.filter((tab) => !tab.trashedAt)
+        if (availableTabs.length === 0) {
+          const first = createTab()
+          const next = [...savedTabs, first]
+          saveTabs(next)
+          setTabs(next)
+          navigateToTab(first.id)
+        } else {
+          setTabs(savedTabs)
+          const lastActive = loadActiveTabId()
+          const id = lastActive && availableTabs.some((tab) => tab.id === lastActive) ? lastActive : availableTabs[0].id
+          navigateToTab(id)
+        }
         setLoading(false)
       }
     }
@@ -382,64 +432,146 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
     return () => { active = false; subscription.unsubscribe() }
   }, [supabase, navigateToTab])
 
-  /* ── Wizard data bridge: read localStorage from pathfinder wizard ── */
-  useEffect(() => {
-    if (goalProfile || loading) return
-    try {
-      const raw = localStorage.getItem("cc_wizard_data")
-      if (!raw) return
-      const wiz = JSON.parse(raw)
-      if (!wiz?.conceptSlug) return
-      const synthetic: PlanGoalProfile = {
-        user_id: user?.id ?? "local",
-        target_occupation_code: "",
-        target_occupation_title: "",
-        target_study_concept_slug: wiz.conceptSlug ?? "",
-        target_study_concept_label: wiz.conceptLabelKo || wiz.conceptLabel || "",
-        target_intake_month: null,
-        plan_title: wiz.conceptLabelKo || wiz.conceptLabel || "My plan",
-        strategy: "",
-        setup_completed_at: new Date().toISOString(),
-      }
-      setGoalProfile(synthetic)
-      // If school was selected, create a goal option from it
-      if (wiz.school) {
-        setGoalOptions([{
-          id: "wizard-school",
+  async function saveWizardHandoff(
+    userId: string,
+    handoff: WizardHandoff,
+    existingProfile: PlanGoalProfile | null,
+    existingOptions: PlanGoalOption[],
+    allowDifferentConcept = false,
+  ): Promise<{ profile: PlanGoalProfile; options: PlanGoalOption[]; consumed: boolean } | null> {
+    let profile = existingProfile
+    const options = existingOptions
+
+    if (!profile) {
+      const { data, error } = await supabase
+        .from("plan_goal_profiles")
+        .upsert({
+          user_id: userId,
+          country: "AU",
+          target_occupation_code: "",
+          target_occupation_title: "",
+          target_study_concept_slug: handoff.conceptSlug,
+          target_study_concept_label: handoff.conceptLabelKo || handoff.conceptLabel,
+          target_intake_month: null,
+          plan_title: handoff.conceptLabelKo || handoff.conceptLabel || "My Australia pathway",
+          strategy: "",
+          setup_completed_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+        .select("user_id, target_occupation_code, target_occupation_title, target_study_concept_slug, target_study_concept_label, target_intake_month, plan_title, strategy, setup_completed_at")
+        .single()
+      if (error || !data) return null
+      profile = data as PlanGoalProfile
+    }
+
+    const school = handoff.schoolData
+    if (!school) return { profile, options, consumed: !existingProfile }
+
+    const alreadyAdded = options.some((option) => option.source_type === "saved_university" && option.source_reference === school.college_id)
+    if (alreadyAdded) return { profile, options, consumed: true }
+
+    // Do not overwrite an established plan with a second Pathfinder result.
+    if (existingProfile && existingProfile.target_study_concept_slug !== handoff.conceptSlug && !allowDifferentConcept) {
+      return { profile, options, consumed: false }
+    }
+    if (options.length >= 3) return { profile, options, consumed: false }
+
+    const position = options.length + 1
+    const { data, error } = await supabase
+      .from("plan_goal_options")
+      .upsert({
+        user_id: userId,
+        position,
+        source_type: "saved_university",
+        source_reference: school.college_id,
+        title: school.college_name,
+        provider_name: school.college_name,
+        field_name: handoff.conceptLabel,
+        updated_at: new Date().toISOString(),
+      }, { onConflict: "user_id,source_type,source_reference" })
+      .select("id, position, source_type, source_reference, title, provider_name, field_name")
+      .single()
+    if (error || !data) return { profile, options, consumed: false }
+
+    return { profile, options: [...options, data as PlanGoalOption], consumed: true }
+  }
+
+  async function addPendingWizardHandoff() {
+    if (!user || !goalProfile || !pendingWizardHandoff?.schoolData || goalOptions.length >= 3) return
+    setWizardHandoffAction("add")
+    const imported = await saveWizardHandoff(user.id, pendingWizardHandoff, goalProfile, goalOptions, true)
+    if (imported?.consumed) {
+      setGoalProfile(imported.profile)
+      setGoalOptions(imported.options)
+      clearWizardHandoff()
+      setPendingWizardHandoff(null)
+    }
+    setWizardHandoffAction(null)
+  }
+
+  async function replaceWithPendingWizardHandoff() {
+    if (!user || !goalProfile || !pendingWizardHandoff) return
+    setWizardHandoffAction("replace")
+    const now = new Date().toISOString()
+    const label = pendingWizardHandoff.conceptLabelKo || pendingWizardHandoff.conceptLabel || "My Australia pathway"
+    const { data: profile, error: profileError } = await supabase
+      .from("plan_goal_profiles")
+      .update({
+        target_study_concept_slug: pendingWizardHandoff.conceptSlug,
+        target_study_concept_label: label,
+        plan_title: label,
+        updated_at: now,
+      })
+      .eq("user_id", user.id)
+      .select("user_id, target_occupation_code, target_occupation_title, target_study_concept_slug, target_study_concept_label, target_intake_month, plan_title, strategy, setup_completed_at")
+      .single()
+    if (profileError || !profile) {
+      setWizardHandoffAction(null)
+      return
+    }
+
+    const { error: deleteError } = await supabase.from("plan_goal_options").delete().eq("user_id", user.id)
+    if (deleteError) {
+      setWizardHandoffAction(null)
+      return
+    }
+
+    let options: PlanGoalOption[] = []
+    if (pendingWizardHandoff.schoolData) {
+      const school = pendingWizardHandoff.schoolData
+      const { data, error } = await supabase
+        .from("plan_goal_options")
+        .insert({
+          user_id: user.id,
           position: 1,
           source_type: "saved_university",
-          title: wiz.school,
-          provider_name: wiz.school,
-          field_name: wiz.conceptLabel || "",
-        }])
+          source_reference: school.college_id,
+          title: school.college_name,
+          provider_name: school.college_name,
+          field_name: pendingWizardHandoff.conceptLabel,
+          updated_at: now,
+        })
+        .select("id, position, source_type, source_reference, title, provider_name, field_name")
+        .single()
+      if (error || !data) {
+        setWizardHandoffAction(null)
+        return
       }
-      // Load ROI school data for compare
-      if (wiz.schoolData) {
-        const initial = [{
-          id: `wizard-${Date.now()}`,
-          college_name: wiz.schoolData.college_name,
-          college_state: wiz.schoolData.college_state,
-          college_city: wiz.schoolData.college_city,
-          tuition: wiz.schoolData.tuition,
-          median_earnings: wiz.schoolData.median_earnings,
-          employment_rate: wiz.schoolData.employment_rate,
-          roi_score: wiz.schoolData.roi_score,
-          payback_years: wiz.schoolData.payback_years,
-        }]
-        setCompareSchools(initial)
-        try { localStorage.setItem("cc_compare_schools", JSON.stringify(initial)) } catch {}
-      }
-      // Clean up localStorage
-      localStorage.removeItem("cc_wizard_data")
-    } catch {}
-  }, [goalProfile, loading, user])
-
-  // Sync compareSchools to localStorage for Home page
-  useEffect(() => {
-    if (compareSchools.length > 0) {
-      try { localStorage.setItem("cc_compare_schools", JSON.stringify(compareSchools)) } catch {}
+      options = [data as PlanGoalOption]
     }
-  }, [compareSchools])
+
+    setGoalProfile(profile as PlanGoalProfile)
+    setGoalOptions(options)
+    setApplicationRecords((current) => current.map((record) => ({ ...record, goal_option_id: null })))
+    clearWizardHandoff()
+    setPendingWizardHandoff(null)
+    setWizardHandoffAction(null)
+  }
+
+  function keepCurrentPlan() {
+    clearWizardHandoff()
+    setPendingWizardHandoff(null)
+  }
 
   /* ── Mutations ── */
   async function saveNote(event: FormEvent<HTMLFormElement>) {
@@ -512,9 +644,14 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
 
     const { error: removeOptionsError } = await supabase.from("plan_goal_options").delete().eq("user_id", user.id)
     if (removeOptionsError) return false
+    let nextGoalOptions: PlanGoalOption[] = []
     if (data.options.length) {
-      const { error: optionsError } = await supabase.from("plan_goal_options").insert(data.options.map((option, index) => ({ user_id: user.id, position: index + 1, source_type: option.sourceType, source_reference: option.sourceReference, title: option.title, provider_name: option.providerName, field_name: option.fieldName, updated_at: now })))
+      const { data: savedOptions, error: optionsError } = await supabase
+        .from("plan_goal_options")
+        .insert(data.options.map((option, index) => ({ user_id: user.id, position: index + 1, source_type: option.sourceType, source_reference: option.sourceReference, title: option.title, provider_name: option.providerName, field_name: option.fieldName, updated_at: now })))
+        .select("id, position, source_type, source_reference, title, provider_name, field_name")
       if (optionsError) return false
+      nextGoalOptions = (savedOptions as PlanGoalOption[] | null) ?? []
     }
 
     const { data: completedProfile, error: completeError } = await supabase
@@ -525,6 +662,7 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
       .single()
     if (completeError || !completedProfile) return false
     setGoalProfile(completedProfile as PlanGoalProfile)
+    setGoalOptions(nextGoalOptions)
     return true
   }
 
@@ -675,7 +813,6 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
   }
 
   if (loading) return <PlannerSkeleton />
-  if (!user) return <GuestPlan />
   if (!goalProfile?.setup_completed_at) return <GoalSetup occupations={occupations} studyConcepts={studyConcepts} universities={universities} courses={courses} onComplete={completeGoalSetup} />
 
   const savings = numericValue(budget.current_savings) ?? 0
@@ -731,28 +868,35 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
   courses.forEach((course) => addResearchSource({ source_type: "course", source_reference: String(course.id), title: course.course_name || course.field_name || course.college_name, provider_name: course.college_name, field_name: course.field_name }))
   studyConcepts.forEach((concept) => addResearchSource({ source_type: "field", source_reference: concept.concept_slug, title: concept.concept_label || concept.concept_label_ko || concept.concept_slug, provider_name: "", field_name: concept.concept_label || concept.concept_label_ko || concept.concept_slug }))
   const researchSources = [...researchSourceMap.values()]
+  const plannerLocale = isKo ? "ko" : "en"
   function navigatePlannerArea(area: PlannerArea) {
     setActiveArea(area)
-    const nextPath = plannerAreaPaths[area]
+    const nextPath = localizePath(plannerAreaPaths[area], plannerLocale)
     if (window.location.pathname !== nextPath) window.history.pushState({}, "", nextPath)
   }
 
   function openPlannerPath(path: string) {
-    const cleanPath = path.split("?")[0]
-    const nextArea = plannerAreaFromPath(cleanPath)
+    const [cleanPath, search = ""] = path.split("?")
+    const nextArea = plannerAreaFromPath(withoutLocalePrefix(cleanPath))
+    const localizedPath = `${localizePath(cleanPath, plannerLocale)}${search ? `?${search}` : ""}`
     if (nextArea) {
       setActiveArea(nextArea)
-      if (window.location.pathname !== cleanPath) window.history.pushState({}, "", path)
+      if (window.location.pathname !== localizedPath) window.history.pushState({}, "", localizedPath)
       return
     }
-    router.push(path)
+    router.push(localizedPath)
   }
+
+  const guestLoginHref = `${localizePath("/login", isKo ? "ko" : "en")}?next=${encodeURIComponent(pathname)}`
 
   return (
     <div className={cn("flex h-screen overflow-hidden transition-colors duration-300", plannerThemeClasses[plannerTheme])}>
+      {/* ── Mobile backdrop ── */}
+      {sidebarOpen && <div className="fixed inset-0 z-40 bg-black/30 sm:hidden" onClick={() => setSidebarOpen(false)} />}
+
       {/* ── Sidebar rail + workspace ── */}
-      <div aria-hidden={!sidebarOpen} inert={!sidebarOpen} className={cn("hidden h-full shrink-0 flex-col overflow-hidden transition-[width,opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] sm:flex", sidebarOpen ? "w-72 translate-x-0 opacity-100" : "pointer-events-none w-0 -translate-x-3 opacity-0")}>
-        <div className="flex h-12 shrink-0 items-center border-r border-slate-200 bg-slate-50 pl-2.5 pr-1">
+      <div aria-hidden={!sidebarOpen} inert={!sidebarOpen} className={cn("flex h-full shrink-0 flex-col overflow-hidden transition-[width,opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] max-sm:fixed max-sm:inset-y-0 max-sm:left-0 max-sm:z-50 max-sm:bg-white", sidebarOpen ? "w-72 translate-x-0 opacity-100" : "pointer-events-none w-0 -translate-x-3 opacity-0")}>
+        <div className="hidden sm:flex h-12 shrink-0 items-center border-r border-slate-200 bg-slate-50 pl-2.5 pr-1">
           <div className="flex-1"><PlannerToolbarControls sidebarOpen={sidebarOpen} canGoBack={historyCursor > 0} canGoForward={historyCursor < historyLength - 1} onToggleSidebar={() => setSidebarOpen((o) => !o)} onBack={goBack} onForward={goForward} isKo={isKo} onNavigate={navigatePlannerArea} onOpenPath={openPlannerPath} /></div>
         </div>
         <div className="min-h-0 flex-1">
@@ -797,6 +941,7 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
 
         {/* ── Content ── */}
         <main className="min-h-0 flex-1 overflow-y-auto">
+          {!user && <GuestPlannerNotice isKo={isKo} loginHref={guestLoginHref} />}
           <div key={activeArea} className="tl-stage">
           {activeArea === "home" && <HomeDashboard goalProfile={goalProfile!} goalOptions={goalOptions} tasks={tasks} applications={applicationRecords.map((record) => ({ id: record.id, title: record.programme_name || record.provider_name || "Application", deadline_date: record.deadline_date, status: record.status }))} notes={notes} compareSchools={compareSchools} currentSavings={savings} monthlySaving={monthlySaving} targetAmount={targetAmount} targetDate={budget.target_date} currency={budget.currency} currentEnglishScore={numberOrNull(language.current_score)} targetEnglishScore={numberOrNull(language.target_score)} englishExam={language.exam_name} englishTestDate={language.test_date} evidenceCount={evidenceCount} leadingOptionTitle={leadingOption?.title ?? null} leadingRationale={pathwayDecision.rationale} onNavigate={(area) => navigatePlannerArea(area as PlannerArea)} />}
           {activeArea === "compare" && <CompareSpace schools={compareSchools} isKo={isKo} onRemove={(id) => setCompareSchools((prev) => prev.filter((s) => s.id !== id))} goalTitle={goalProfile!.target_occupation_title} studyTitle={goalProfile!.target_study_concept_label} goalOptions={goalOptions as ExecutionGoalOption[]} decision={pathwayDecision} evidenceCount={evidenceCount} onSaveDecision={savePathwayDecision} />}
@@ -810,6 +955,7 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
       </div>
 
       <ProfilePanel open={profilePanelOpen} onClose={() => setProfilePanelOpen(false)} />
+      {pendingWizardHandoff && <WizardHandoffPrompt handoff={pendingWizardHandoff} isKo={isKo} action={wizardHandoffAction} canAdd={Boolean(pendingWizardHandoff.schoolData) && goalOptions.length < 3} onAdd={addPendingWizardHandoff} onReplace={replaceWithPendingWizardHandoff} onKeepCurrent={keepCurrentPlan} />}
     </div>
   )
 }
@@ -818,7 +964,30 @@ export default function PlannerPage({ initialArea = "home" }: { initialArea?: Pl
 
 function Field({ label, children }: { label: string; children: ReactNode }) { return <label className="block text-xs font-semibold text-slate-400">{label}{children}</label> }
 function Insight({ label, value }: { label: string; value: string }) { return <div className="border-l-2 border-emerald-500 pl-3.5"><p className="text-xs font-medium text-emerald-600">{label}</p><p className="mt-1 text-sm font-semibold text-emerald-700">{value}</p></div> }
-function GuestPlan() { return <main className="flex min-h-[70vh] items-center justify-center bg-slate-50 px-5"><section className="max-w-md rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm"><NotebookPen className="mx-auto h-7 w-7 text-blue-600" /><h1 className="mt-4 text-2xl font-semibold tracking-tight text-slate-950">Your private Planner.</h1><p className="mt-2 text-sm leading-6 text-slate-500">A flexible place for daily notes, deadlines, budget, English goals and the research you save in CampCareer.</p><Link href="/login?next=/home" className="mt-6 inline-flex rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-700">Sign in to start</Link></section></main> }
+function GuestPlannerNotice({ isKo, loginHref }: { isKo: boolean; loginHref: string }) {
+  return <section className="mx-auto max-w-5xl px-6 pt-6 sm:px-10"><div className="flex flex-col gap-3 rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"><p className="text-sm leading-6 text-blue-950">{isKo ? "지금은 플랜을 미리 볼 수 있어요. 로그인하면 Pathfinder 결과와 이후 입력을 안전하게 저장합니다." : "You can preview your plan now. Sign in to keep your Pathfinder result and every update."}</p><a href={loginHref} className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white transition hover:bg-blue-500">{isKo ? "로그인하고 저장" : "Sign in to save"}</a></div></section>
+}
+function WizardHandoffPrompt({ handoff, isKo, action, canAdd, onAdd, onReplace, onKeepCurrent }: { handoff: WizardHandoff; isKo: boolean; action: "add" | "replace" | null; canAdd: boolean; onAdd: () => void; onReplace: () => void; onKeepCurrent: () => void }) {
+  const label = handoff.conceptLabelKo || handoff.conceptLabel
+  const school = handoff.schoolData?.college_name
+  const busy = action !== null
+  return (
+    <div className="fixed inset-0 z-[3100] flex items-center justify-center bg-slate-950/45 p-4 backdrop-blur-sm" role="presentation">
+      <section role="dialog" aria-modal="true" aria-labelledby="wizard-handoff-title" className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl sm:p-7">
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-blue-700">{isKo ? "새 Pathfinder 결과" : "New Pathfinder result"}</p>
+        <h2 id="wizard-handoff-title" className="mt-2 text-xl font-semibold tracking-tight text-slate-950">{isKo ? "현재 플랜에 어떻게 반영할까요?" : "How should this update your plan?"}</h2>
+        <p className="mt-3 text-sm leading-6 text-slate-600">{isKo ? <><strong className="font-semibold text-slate-900">{label}</strong>{school ? ` · ${school}` : ""} 결과를 저장했습니다. 현재 플랜은 선택하기 전까지 바뀌지 않습니다.</> : <><strong className="font-semibold text-slate-900">{label}</strong>{school ? ` · ${school}` : ""} is ready. Your current plan will stay unchanged until you choose.</>}</p>
+        {!canAdd && <p className="mt-3 rounded-xl bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-900">{isKo ? "현재 플랜에는 후보를 최대 3개까지 저장할 수 있습니다." : "Your current plan already has the maximum of three shortlist options."}</p>}
+        <div className="mt-6 grid gap-2.5">
+          {canAdd && <button type="button" disabled={busy} onClick={onAdd} className="min-h-11 rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-wait disabled:opacity-60">{action === "add" ? (isKo ? "후보 추가 중..." : "Adding to shortlist...") : (isKo ? "현재 플랜의 후보로 추가" : "Add to current shortlist")}</button>}
+          <button type="button" disabled={busy} onClick={onReplace} className="min-h-11 rounded-xl border border-slate-300 px-4 text-sm font-semibold text-slate-800 transition hover:bg-slate-50 disabled:cursor-wait disabled:opacity-60">{action === "replace" ? (isKo ? "플랜 교체 중..." : "Replacing plan...") : (isKo ? "이 결과로 플랜 교체" : "Replace with this plan")}</button>
+          <button type="button" disabled={busy} onClick={onKeepCurrent} className="min-h-11 px-4 text-sm font-semibold text-slate-500 transition hover:text-slate-800 disabled:cursor-wait disabled:opacity-60">{isKo ? "현재 플랜 유지 및 새 결과 삭제" : "Keep current plan and discard this result"}</button>
+        </div>
+        <p className="mt-4 text-xs leading-5 text-slate-500">{isKo ? "플랜을 교체하면 기존 후보는 제거되고, 연결된 지원 기록은 유지되지만 후보 연결은 해제됩니다." : "Replacing removes existing shortlist options. Application records stay, but their shortlist links are cleared."}</p>
+      </section>
+    </div>
+  )
+}
 function PlannerSkeleton() { return <main className="min-h-screen bg-slate-50"><div className="mx-auto max-w-7xl px-5 py-10 sm:px-6"><div className="h-10 w-48 animate-pulse rounded-xl bg-slate-200" /><div className="mt-8 grid gap-5 xl:grid-cols-2"><div className="h-96 animate-pulse rounded-3xl bg-slate-100" /><div className="h-96 animate-pulse rounded-3xl bg-slate-100" /></div></div></main> }
 
 const inputClass = "mt-1.5 h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20"
@@ -828,6 +997,55 @@ const plannerThemeClasses: Record<PlannerTheme, string> = {
   sage: "bg-[radial-gradient(circle_at_top_left,_#def7e7,_transparent_35%),#f7fbf8]",
   peach: "bg-[radial-gradient(circle_at_top_left,_#ffe8d8,_transparent_35%),#fffaf7]",
   midnight: "bg-[#0f0f12]",
+}
+function loadWizardHandoff(): WizardHandoff | null {
+  try {
+    const raw = localStorage.getItem("cc_wizard_data")
+    if (!raw) return null
+    const value = JSON.parse(raw) as Partial<WizardHandoff>
+    if (typeof value.conceptSlug !== "string" || !value.conceptSlug) return null
+    const school = value.schoolData
+    const schoolData = school && typeof school.college_id === "string" && typeof school.college_name === "string" && typeof school.college_state === "string"
+      ? school
+      : null
+    return {
+      conceptSlug: value.conceptSlug,
+      conceptLabel: typeof value.conceptLabel === "string" ? value.conceptLabel : "",
+      conceptLabelKo: typeof value.conceptLabelKo === "string" ? value.conceptLabelKo : "",
+      school: typeof value.school === "string" ? value.school : null,
+      schoolData,
+    }
+  } catch {
+    return null
+  }
+}
+function clearWizardHandoff() {
+  try { localStorage.removeItem("cc_wizard_data") } catch {}
+}
+function profileFromWizardHandoff(handoff: WizardHandoff, userId: string): PlanGoalProfile {
+  const label = handoff.conceptLabelKo || handoff.conceptLabel || "My Australia pathway"
+  return {
+    user_id: userId,
+    target_occupation_code: "",
+    target_occupation_title: "",
+    target_study_concept_slug: handoff.conceptSlug,
+    target_study_concept_label: label,
+    target_intake_month: null,
+    plan_title: label,
+    strategy: "",
+    setup_completed_at: new Date().toISOString(),
+  }
+}
+function optionFromWizardSchool(school: WizardHandoffSchool, fieldName: string): PlanGoalOption {
+  return {
+    id: `pathfinder-${school.college_id}`,
+    position: 1,
+    source_type: "saved_university",
+    source_reference: school.college_id,
+    title: school.college_name,
+    provider_name: school.college_name,
+    field_name: fieldName,
+  }
 }
 function numericValue(value: number | string | null) { if (value === null || value === "") return null; const number = Number(String(value).replace(/,/g, "")); return Number.isFinite(number) && number >= 0 ? number : null }
 function numberOrNull(value: number | string | null) { return numericValue(value) }

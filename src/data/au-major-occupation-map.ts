@@ -545,6 +545,130 @@ export const AU_CONCEPT_OCCUPATIONS: AuConceptOccupations[] = [
       { oscaCode: "313436", label: "Ship's Officer", labelKo: "항해사" },
     ],
   },
+
+  // ── Health (additional) ──────────────────────────────────────────────────────
+  {
+    conceptId: "medicine",
+    oscaCodes: ["253111", "253112"],
+    anzsco4Groups: ["2531"],
+    broadFields: ["06 - Health"],
+    qualificationTypes: ["Bachelor of Medicine", "Doctor of Medicine"],
+    durationYears: { min: 4, max: 7 },
+    representativeOccupations: [
+      { oscaCode: "253111", label: "General Practitioner", labelKo: "일반의" },
+      { oscaCode: "253112", label: "Specialist Physician", labelKo: "전문의" },
+    ],
+  },
+  {
+    conceptId: "pharmacy",
+    oscaCodes: ["251511"],
+    anzsco4Groups: ["2515"],
+    broadFields: ["06 - Health"],
+    qualificationTypes: ["Bachelor of Pharmacy", "Master of Pharmacy"],
+    durationYears: { min: 4, max: 4 },
+    representativeOccupations: [
+      { oscaCode: "251511", label: "Pharmacist", labelKo: "약사" },
+    ],
+  },
+
+  // ── Business (additional) ────────────────────────────────────────────────────
+  {
+    conceptId: "finance",
+    oscaCodes: ["222311", "222211"],
+    anzsco4Groups: ["2223", "2222"],
+    broadFields: ["08 - Management and Commerce"],
+    qualificationTypes: ["Bachelor", "Master"],
+    durationYears: { min: 3, max: 2 },
+    representativeOccupations: [
+      { oscaCode: "222311", label: "Financial Investment Adviser", labelKo: "재무투자자문가" },
+      { oscaCode: "222211", label: "Financial Dealer", labelKo: "금융딜러" },
+    ],
+  },
+  {
+    conceptId: "marketing",
+    oscaCodes: ["225111"],
+    anzsco4Groups: ["2251"],
+    broadFields: ["08 - Management and Commerce"],
+    qualificationTypes: ["Bachelor", "Master"],
+    durationYears: { min: 3, max: 2 },
+    representativeOccupations: [
+      { oscaCode: "225111", label: "Advertising Specialist", labelKo: "광고기획자" },
+    ],
+  },
+  {
+    conceptId: "international-business",
+    oscaCodes: ["224711"],
+    anzsco4Groups: ["2247"],
+    broadFields: ["08 - Management and Commerce"],
+    qualificationTypes: ["Bachelor", "Master"],
+    durationYears: { min: 3, max: 2 },
+    representativeOccupations: [
+      { oscaCode: "224711", label: "Management Consultant", labelKo: "경영컨설턴트" },
+    ],
+  },
+  {
+    conceptId: "commerce",
+    oscaCodes: ["224711", "224999"],
+    anzsco4Groups: ["2247", "2249"],
+    broadFields: ["08 - Management and Commerce"],
+    qualificationTypes: ["Bachelor"],
+    durationYears: { min: 3, max: 3 },
+    representativeOccupations: [
+      { oscaCode: "224711", label: "Management Consultant", labelKo: "경영컨설턴트" },
+      { oscaCode: "224999", label: "Information and Organisation Professional nec", labelKo: "정보·조직 전문가" },
+    ],
+  },
+
+  // ── Education (additional) ───────────────────────────────────────────────────
+  {
+    conceptId: "tesol",
+    oscaCodes: ["249299"],
+    anzsco4Groups: ["2492"],
+    broadFields: ["07 - Education"],
+    qualificationTypes: ["Bachelor", "Graduate Diploma"],
+    durationYears: { min: 3, max: 1 },
+    representativeOccupations: [
+      { oscaCode: "249299", label: "Teacher nec", labelKo: "교사" },
+    ],
+  },
+  {
+    conceptId: "community-welfare",
+    oscaCodes: ["272611", "411711"],
+    anzsco4Groups: ["2726", "4117"],
+    broadFields: ["09 - Society and Culture"],
+    qualificationTypes: ["Bachelor"],
+    durationYears: { min: 3, max: 3 },
+    representativeOccupations: [
+      { oscaCode: "272611", label: "Social Worker", labelKo: "사회복지사" },
+      { oscaCode: "411711", label: "Community Worker", labelKo: "커뮤니티워커" },
+    ],
+  },
+
+  // ── Engineering (additional) ─────────────────────────────────────────────────
+  {
+    conceptId: "electrical-engineering",
+    oscaCodes: ["233311"],
+    anzsco4Groups: ["2333"],
+    broadFields: ["04 - Engineering and Related Technologies"],
+    qualificationTypes: ["Bachelor", "Master"],
+    durationYears: { min: 4, max: 2 },
+    representativeOccupations: [
+      { oscaCode: "233311", label: "Electrical Engineer", labelKo: "전기공학자" },
+    ],
+  },
+
+  // ── Design (additional) ──────────────────────────────────────────────────────
+  {
+    conceptId: "interior-design",
+    oscaCodes: ["232511"],
+    anzsco4Groups: ["2325"],
+    broadFields: ["10 - Architecture and Planning"],
+    qualificationTypes: ["Bachelor", "Diploma"],
+    durationYears: { min: 3, max: 4 },
+    representativeOccupations: [
+      { oscaCode: "232511", label: "Interior Designer", labelKo: "인테리어디자이너" },
+    ],
+  },
 ]
 
 // ── Lookup helpers ───────────────────────────────────────────────────────────

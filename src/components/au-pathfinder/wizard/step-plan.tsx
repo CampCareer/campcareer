@@ -139,6 +139,18 @@ export function StepPlan({
           />
         </div>
 
+        <aside className="mt-5 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs leading-5 text-slate-600">
+          <p className="font-semibold text-slate-800">
+            {isKo ? `비교 신호 ${top?.evidenceCount ?? 0}/6개 사용 가능` : `${top?.evidenceCount ?? 0}/6 comparison signals available`}
+          </p>
+          <p className="mt-1">
+            {isKo ? "이 결과는 선택한 우선순위와 사용 가능한 시장 신호를 바탕으로 한 출발점입니다. 과정별 입학 조건과 공식 정보를 확인한 뒤 결정하세요." : "This is a starting point based on your priority and the available market signals. Verify course requirements and official information before deciding."}
+          </p>
+          <Link href={localizePath("/methodology", locale)} className="mt-2 inline-flex font-semibold text-blue-700 hover:text-blue-800">
+            {isKo ? "방법론과 데이터 기준 보기" : "Review methodology and data standards"}
+          </Link>
+        </aside>
+
         {/* Next steps CTA */}
         <div className="mt-10">
           <h2 className="text-xl font-semibold text-slate-950 sm:text-2xl">

@@ -1,11 +1,13 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react"
+import Link from "next/link"
 import type { User } from "@supabase/supabase-js"
 import { ArrowLeft, ArrowRight, Check, CircleAlert, FileCheck2, Loader2, LockKeyhole, MapPin, ShieldCheck, Sparkles, Target, UserRound, WalletCards, X } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
 import { recordReportEvent } from "@/lib/analytics"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
+import { localizePath } from "@/lib/i18n/config"
 import {
   EMPTY_REPORT_INTAKE,
   emptyDecisionOption,
@@ -357,7 +359,7 @@ export function MyAustraliaReportWorkspace() {
   const ActiveIcon = activeStep.icon
 
   if (loading) return <section className="mx-auto max-w-4xl px-6 py-10 sm:px-10"><div className="animate-pulse"><div className="h-3 w-36 rounded bg-slate-200" /><div className="mt-5 h-10 max-w-lg rounded bg-slate-200" /><div className="mt-12 h-48 max-w-2xl rounded bg-slate-100" /></div></section>
-  if (!user) return null
+  if (!user) return <section className="mx-auto max-w-2xl px-6 py-12 sm:px-10"><div className="rounded-3xl border border-slate-200 bg-white p-7"><LockKeyhole className="size-6 text-blue-700" /><h1 className="mt-4 text-2xl font-semibold tracking-tight text-slate-950">{isKo ? "리포트 브리프를 저장하려면 로그인하세요" : "Sign in to save your report brief"}</h1><p className="mt-3 text-sm leading-6 text-slate-600">{isKo ? "후보, 예산, 영어 목표를 계정에 연결한 뒤 개인화 ROI 리포트 브리프를 준비할 수 있어요." : "Connect your shortlist, budget and English goal to your account, then prepare a personalised ROI report brief."}</p><Link href={`${localizePath("/login", routeLocale)}?next=${encodeURIComponent(localizePath("/report", routeLocale))}`} className="mt-6 inline-flex min-h-11 items-center justify-center rounded-xl bg-blue-700 px-4 text-sm font-semibold text-white transition hover:bg-blue-800">{isKo ? "로그인하고 계속하기" : "Sign in to continue"}</Link></div></section>
 
   return <section className="mx-auto max-w-4xl px-6 pb-16 pt-8 sm:px-10 sm:pt-10" data-report-wizard>
     <header className="max-w-3xl">

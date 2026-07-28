@@ -1,8 +1,8 @@
 import { pageMetadata } from "@/lib/seo"
 
 export const metadata = pageMetadata({
-  title: "Get Started — Personalise Your Plan",
-  description: "Tell us your target country and field of study to personalise your CampCareer experience.",
+  title: "Australia Pathfinder — CampCareer",
+  description: "Find an Australia study and career pathway with source-backed data.",
   path: "/onboarding",
 })
 

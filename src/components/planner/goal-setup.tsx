@@ -166,7 +166,21 @@ export function GoalSetup({ occupations, studyConcepts, universities, courses, o
     setNotice("")
   }
 
+  function continueSetup() {
+    if (step === 0 && !occupation && !studyConcept) {
+      setNotice(isKo ? "전공 또는 목표 직업을 하나 선택해 주세요." : "Choose a study field or target career to set your direction.")
+      return
+    }
+    setNotice("")
+    setStep((current) => current + 1)
+  }
+
   async function finish() {
+    if (!occupation && !studyConcept) {
+      setNotice(isKo ? "전공 또는 목표 직업을 하나 선택해 주세요." : "Choose a study field or target career to set your direction.")
+      setStep(0)
+      return
+    }
     if (!title.trim()) {
       setNotice(isKo ? "플랜 제목을 입력해 주세요." : "Give your plan a title first.")
       return
@@ -196,7 +210,7 @@ export function GoalSetup({ occupations, studyConcepts, universities, courses, o
           {step === 2 && <StrategyStep isKo={isKo} occupation={occupation} studyConcept={studyConcept} selectedOptions={selectedOptions} schoolUndecided={schoolUndecided} intakeMonth={intakeMonth} title={title} strategy={strategy} onIntakeChange={(value) => { setIntakeMonth(value); updateSuggestedTitle(occupation, studyConcept, value) }} onTitleChange={(value) => { setTitleTouched(true); setTitle(value) }} onStrategyChange={setStrategy} />}
 
           {notice && <p role="status" className="mt-5 rounded-xl bg-amber-500/15 px-4 py-3 text-sm font-medium text-amber-300">{notice}</p>}
-          <div className="mt-8 flex items-center justify-between gap-3 border-t border-slate-200 pt-5"><button type="button" onClick={() => setStep((current) => Math.max(0, current - 1))} disabled={step === 0 || saving} className="inline-flex min-h-11 items-center gap-1.5 rounded-xl px-3 text-sm font-semibold text-slate-500 transition hover:bg-slate-100 hover:text-slate-700 disabled:invisible"><ArrowLeft className="size-4" />{isKo ? "이전" : "Back"}</button>{step < 2 ? <button type="button" onClick={() => { setNotice(""); setStep((current) => current + 1) }} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-500">{isKo ? "계속" : "Continue"}<ArrowRight className="size-4" /></button> : <button type="button" onClick={() => void finish()} disabled={saving} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-500 disabled:cursor-wait disabled:opacity-70">{saving ? <Loader2 className="size-4 animate-spin" /> : <Target className="size-4" />}{isKo ? "My Plan 시작" : "Start My Plan"}</button>}</div>
+          <div className="mt-8 flex items-center justify-between gap-3 border-t border-slate-200 pt-5"><button type="button" onClick={() => setStep((current) => Math.max(0, current - 1))} disabled={step === 0 || saving} className="inline-flex min-h-11 items-center gap-1.5 rounded-xl px-3 text-sm font-semibold text-slate-500 transition hover:bg-slate-100 hover:text-slate-700 disabled:invisible"><ArrowLeft className="size-4" />{isKo ? "이전" : "Back"}</button>{step < 2 ? <button type="button" onClick={continueSetup} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-500">{isKo ? "계속" : "Continue"}<ArrowRight className="size-4" /></button> : <button type="button" onClick={() => void finish()} disabled={saving} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-500 disabled:cursor-wait disabled:opacity-70">{saving ? <Loader2 className="size-4 animate-spin" /> : <Target className="size-4" />}{isKo ? "My Plan 시작" : "Start My Plan"}</button>}</div>
         </div>
 
         <aside className="rounded-[1.75rem] border border-blue-500/20 bg-blue-950/50 p-6 text-blue-50 shadow-[0_20px_50px_rgba(30,64,175,.18)]"><p className="text-xs font-semibold uppercase tracking-[.16em] text-blue-700">{isKo ? "왜 시작하나요?" : "Why this matters"}</p><p className="mt-4 text-xl font-semibold leading-8">{isKo ? "좋은 계획은 할 일 목록보다, 선명한 선택에서 시작됩니다." : "A useful plan starts with a clear choice, not a long task list."}</p><div className="mt-7 space-y-4 text-sm leading-6 text-blue-200"><p>{isKo ? "전공과 학교는 지금 정하지 않아도 됩니다. 먼저 관심 방향만 잡고, 비교하면서 좁혀가세요." : "You do not need every answer today. Pick a direction, then narrow it as you compare."}</p><p>{isKo ? "제목과 전략은 언제든 바꿀 수 있습니다." : "You can revise the title and strategy whenever your plan changes."}</p></div></aside>

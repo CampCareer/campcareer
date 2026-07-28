@@ -56,13 +56,13 @@ export function StepGenerating({ isKo, onComplete }: { isKo: boolean; onComplete
 
         <h1 className="text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">
           {isKo
-            ? "맞춤 플랜을 만들고 있어요"
-            : "Building your custom plan"}
+            ? "선택한 방향을 정리하고 있어요"
+            : "Preparing your pathway overview"}
         </h1>
         <p className="mt-3 text-sm leading-6 text-slate-500 sm:text-base">
           {isKo
-            ? "호주 시장 데이터를 분석해서 최적의 경로를 계산 중이에요."
-            : "Analysing Australia market data to map your best pathway."}
+            ? "선택한 우선순위와 학력 단계에 맞춰 다음 비교 기준을 준비합니다."
+            : "We are preparing the next comparison steps for your selected priority and study stage."}
         </p>
 
         {/* Progress bar */}

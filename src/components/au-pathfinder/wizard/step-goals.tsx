@@ -172,11 +172,14 @@ export function StepGoals({
         <div className="mb-4 flex items-center justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[.14em] text-blue-700">
-              {isKo ? "맞춤 추천 순위" : "Ranked for you"}
+              {isKo ? "선택 기준 추천" : "Ranked by your priority"}
             </p>
             <h3 className="mt-1 text-lg font-semibold text-slate-950">
-              {isKo ? "이 조건에 맞는 전공" : "Matches for your conditions"}
+              {isKo ? "선택한 우선순위에 맞는 전공" : "Matches for your selected priority"}
             </h3>
+            <p className="mt-1 text-xs leading-5 text-slate-500">
+              {isKo ? "우선순위와 학력 단계에 따라 정렬한 방향성 추천입니다. 입학·비자·취업 결과를 보장하지 않습니다." : "This directional ranking uses your priority and study stage. It does not determine admission, visa or employment outcomes."}
+            </p>
           </div>
         </div>
 

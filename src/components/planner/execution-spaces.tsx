@@ -13,7 +13,7 @@ export type ExecutionLanguage = { exam_name: string; current_score: number | nul
 export type ExecutionEnglishBlock = { id: string; day_of_week: number; focus: string; minutes: number }
 export type ExecutionResearchSource = { source_type: "university" | "course" | "field" | "career"; source_reference: string; title: string; provider_name: string; field_name: string }
 export type ExecutionResearchItem = ExecutionResearchSource & { id: string; status: "shortlist" | "watching" | "ruled_out" }
-export type ExecutionGoalOption = { id: string; position: number; title: string; provider_name: string; field_name: string; source_type: "saved_university" | "saved_course" }
+export type ExecutionGoalOption = { id: string; position: number; title: string; provider_name: string; field_name: string; source_type: "saved_university" | "saved_course"; source_reference: string }
 export type ExecutionPathwayDecision = { leading_option_id: string | null; rationale: string }
 
 const inputClass = "mt-1.5 h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
@@ -97,6 +97,7 @@ export function EnglishTargetSpace({ language, blocks, onSaveLanguage, onSaveBlo
   const [focus, setFocus] = useState("")
   const [minutes, setMinutes] = useState(60)
   const [saved, setSaved] = useState(false)
+  const [now] = useState(() => Date.now())
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const saveRef = useRef(onSaveLanguage)
   const mountedRef = useRef(true)
@@ -122,7 +123,7 @@ export function EnglishTargetSpace({ language, blocks, onSaveLanguage, onSaveBlo
       void saveRef.current(draft)
     }
   }, [draft])
-  const dday = draft.test_date ? Math.max(Math.ceil((new Date(draft.test_date).getTime() - Date.now()) / 86400000), 0) : null
+  const dday = draft.test_date ? Math.max(Math.ceil((new Date(draft.test_date).getTime() - now) / 86400000), 0) : null
   async function saveBlock(event: FormEvent<HTMLFormElement>) { event.preventDefault(); if (!focus.trim()) return; const success = await onSaveBlock({ day_of_week: day, focus: focus.trim(), minutes }); if (success) setFocus("") }
   return <SpaceShell eyebrow={isKo ? "목표 점수" : "TARGET SCORE"} title={isKo ? "영어" : "English"} icon={Languages} tone="violet">
     <div className="grid gap-3 sm:grid-cols-3"><Stat label={isKo ? "목표 점수" : "Target score"} value={draft.target_score != null ? String(draft.target_score) : "—"} tone="violet" /><Stat label={isKo ? "시험일" : "Test date"} value={draft.test_date ? formatDate(draft.test_date, isKo) : "—"} tone="blue" /><Stat label="D-Day" value={dday != null ? `D-${dday}` : "—"} tone="emerald" /></div>
