@@ -13,6 +13,7 @@ export type CompareSchool = {
   tuition?: number | null
   median_earnings?: number | null
   employment_rate?: number | null
+  score?: number | null
   roi_score?: number | null
   payback_years?: number | null
 }
@@ -37,6 +38,7 @@ const EMPTY_GOAL_OPTIONS: CompareGoalOption[] = []
 
 type MajorResult = {
   field_name: string
+  score: number | null
   roi_score: number | null
   median_earnings: number | null
   payback_years: number | null
@@ -105,7 +107,14 @@ export function CompareSpace({
           college_city: null,
         }
         try {
-          const response = await fetch(`/api/roi?country=au&college_id=${encodeURIComponent(option.source_reference)}&limit=100&sort=roi_score`)
+          const params = new URLSearchParams({
+            country: "au",
+            college_id: option.source_reference,
+            field: option.field_name,
+            limit: "100",
+            sort: "score",
+          })
+          const response = await fetch(`/api/roi?${params}`)
           const json = await response.json()
           const rows = (json.data ?? []) as Array<CompareSchool & { field_name?: string | null }>
           const matchingRows = option.field_name
@@ -286,15 +295,15 @@ function MajorsTab({ isKo }: { isKo: boolean }) {
 
   const aggregated = selectedMajors.map((field) => {
     const rows = majorData[field] ?? []
-    if (rows.length === 0) return { field, count: 0, avgRoi: null, avgEarnings: null, avgTuition: null, avgPayback: null }
-    const validRoi = rows.filter((r) => r.roi_score != null)
+    if (rows.length === 0) return { field, count: 0, avgScore: null, avgEarnings: null, avgTuition: null, avgPayback: null }
+    const validScores = rows.filter((r) => r.score != null)
     const validEarn = rows.filter((r) => r.median_earnings != null)
     const validTui = rows.filter((r) => r.tuition != null)
     const validPay = rows.filter((r) => r.payback_years != null)
     return {
       field,
       count: rows.length,
-      avgRoi: validRoi.length ? validRoi.reduce((s, r) => s + r.roi_score!, 0) / validRoi.length : null,
+      avgScore: validScores.length ? validScores.reduce((s, r) => s + r.score!, 0) / validScores.length : null,
       avgEarnings: validEarn.length ? validEarn.reduce((s, r) => s + r.median_earnings!, 0) / validEarn.length : null,
       avgTuition: validTui.length ? validTui.reduce((s, r) => s + r.tuition!, 0) / validTui.length : null,
       avgPayback: validPay.length ? validPay.reduce((s, r) => s + r.payback_years!, 0) / validPay.length : null,
@@ -401,9 +410,9 @@ function MajorsTab({ isKo }: { isKo: boolean }) {
               />
               <MajorRow
                 icon={<Star className="size-4" />}
-                label={isKo ? "평균 ROI" : "Avg ROI"}
+                label={isKo ? "평균 Score" : "Avg Score"}
                 items={aggregated}
-                render={(item) => item.avgRoi != null ? item.avgRoi.toFixed(1) : "—"}
+                render={(item) => item.avgScore != null ? item.avgScore.toFixed(1) : "—"}
               />
               <MajorRow
                 icon={<ArrowRight className="size-4" />}
@@ -461,8 +470,8 @@ function MajorsTab({ isKo }: { isKo: boolean }) {
           <GraduationCap className="mx-auto size-8 text-slate-300" />
           <p className="mt-3 text-sm text-slate-500">
             {isKo
-              ? "검색해서 전공을 추가하면 ROI, 학비, 임금을 나란히 비교할 수 있어요."
-              : "Search to add majors and compare ROI, tuition, and earnings side by side."}
+              ? "검색해서 전공을 추가하면 Score, 학비, 임금을 나란히 비교할 수 있어요."
+              : "Search to add majors and compare Score, tuition, and earnings side by side."}
           </p>
         </div>
       )}
@@ -470,7 +479,7 @@ function MajorsTab({ isKo }: { isKo: boolean }) {
   )
 }
 
-function MajorRow({ icon, label, items, render }: { icon: React.ReactNode; label: string; items: Array<{ field: string; count: number; avgRoi: number | null; avgEarnings: number | null; avgTuition: number | null; avgPayback: number | null }>; render: (item: { field: string; count: number; avgRoi: number | null; avgEarnings: number | null; avgTuition: number | null; avgPayback: number | null }) => React.ReactNode }) {
+function MajorRow({ icon, label, items, render }: { icon: React.ReactNode; label: string; items: Array<{ field: string; count: number; avgScore: number | null; avgEarnings: number | null; avgTuition: number | null; avgPayback: number | null }>; render: (item: { field: string; count: number; avgScore: number | null; avgEarnings: number | null; avgTuition: number | null; avgPayback: number | null }) => React.ReactNode }) {
   return (
     <tr className="border-b border-slate-100">
       <td className="flex items-center gap-2 px-5 py-3.5 text-sm font-medium text-slate-500">
@@ -542,9 +551,9 @@ function SchoolsTab({ schools, isKo, onRemove, selectedId, onSelect }: { schools
             />
             <CompareRow
               icon={<Star className="size-4" />}
-              label="ROI"
+              label="Score"
               schools={schools}
-              render={(s) => s.roi_score != null ? s.roi_score.toFixed(1) : "—"}
+              render={(s) => s.score != null ? s.score.toFixed(1) : "—"}
             />
             <CompareRow
               icon={<ArrowRight className="size-4" />}

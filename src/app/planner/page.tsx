@@ -80,6 +80,7 @@ type WizardHandoffSchool = {
   tuition?: number | null
   median_earnings?: number | null
   employment_rate?: number | null
+  score?: number | null
   roi_score?: number | null
   payback_years?: number | null
 }

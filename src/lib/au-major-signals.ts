@@ -12,6 +12,7 @@ export interface AuMajorSignal {
   salary_min_aud: number | null
   salary_max_aud: number | null
   salary_median_aud: number | null
+  salary_kind?: "observed" | "estimated" | null
   cost_bachelor_median_aud: number | null
   cost_diploma_median_aud: number | null
   cost_duration_years: number | null

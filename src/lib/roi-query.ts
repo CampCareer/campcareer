@@ -9,11 +9,13 @@ import { applyCareerStageEarnings, type CareerStage } from '@/lib/career-stage'
 import { calcTax } from '@/lib/tax'
 import { buildIlikeOrFilter } from '@/lib/postgrest-filter'
 import { degreeYears } from '@/lib/degree-years'
+import { scoreSchools } from '@/lib/school-score'
 
-export const VALID_SORT_FIELDS = ['roi_score', 'payback_years', 'net_salary', 'avg_cao_points'] as const
+export const VALID_SORT_FIELDS = ['score', 'roi_score', 'payback_years', 'net_salary', 'avg_cao_points'] as const
 export type SortField = typeof VALID_SORT_FIELDS[number]
 
 const SORT_ASCENDING: Record<SortField, boolean> = {
+  score: false,
   roi_score: false,
   net_salary: false,
   payback_years: true,
@@ -43,6 +45,49 @@ function getTableName(country: string): string {
   return 'roi_explorer_us'
 }
 
+type AustralianScoreCohort = {
+  rows: Record<string, unknown>[]
+  fallbackApplied: boolean
+}
+
+async function fetchAustralianScoreCohort(field: string, aqfLevels: readonly number[]): Promise<AustralianScoreCohort> {
+  const PAGE_SIZE = 1_000
+
+  async function fetchAll(useAliases: boolean) {
+    const rows: Record<string, unknown>[] = []
+    const aliases = getFieldSearchTerms(field)
+    const orFilter = useAliases ? buildIlikeOrFilter('field_name', aliases) : null
+
+    for (let from = 0; ; from += PAGE_SIZE) {
+      // Score peers must have all three comparable metrics. This deliberately
+      // does not depend on the legacy, formula-specific roi_score column.
+      let query = supabase
+        .from('roi_explorer_au')
+        .select('*')
+        .gt('tuition', 0)
+        .gt('median_earnings', 0)
+        .gt('employment_rate', 0)
+        .range(from, from + PAGE_SIZE - 1)
+
+      query = useAliases && orFilter
+        ? query.or(orFilter)
+        : query.ilike('field_name', `%${field}%`)
+      if (aqfLevels.length === 1) query = query.eq('aqf_level', aqfLevels[0])
+      if (aqfLevels.length > 1) query = query.in('aqf_level', aqfLevels)
+
+      const { data, error } = await query
+      if (error) throw new Error(error.message)
+      const page = (data ?? []) as Record<string, unknown>[]
+      rows.push(...page)
+      if (page.length < PAGE_SIZE) return rows
+    }
+  }
+
+  const direct = await fetchAll(false)
+  if (direct.length > 0) return { rows: direct, fallbackApplied: false }
+  return { rows: await fetchAll(true), fallbackApplied: true }
+}
+
 // Note: roi_explorer_us, roi_explorer_au, etc. are Supabase views (not base
 // tables) built from the underlying datasets.  information_schema.columns may
 // not return rows for them in some Postgres configurations — use pg_views or
@@ -65,6 +110,10 @@ function normalizeKeyPart(value: unknown): string {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function isBetterRow(candidate: any, current: any): boolean {
+  const cScore = candidate.score
+  const kScore = current.score
+  if (typeof cScore === 'number' && typeof kScore === 'number' && cScore !== kScore) return cScore > kScore
+
   const cRoi = candidate.roi_score ?? 0
   const kRoi = current.roi_score ?? 0
   if (cRoi !== kRoi) return cRoi > kRoi
@@ -171,12 +220,13 @@ export async function fetchRoiData(params: RoiQueryParams): Promise<RoiQueryResu
       : 50,
     500
   )
-  const sortParam = params.sort ?? 'roi_score'
+  const sortParam = params.sort ?? (country === 'au' ? 'score' : 'roi_score')
   const careerStage = params.careerStage ?? 'early'
 
   let sort: SortField = VALID_SORT_FIELDS.includes(sortParam as SortField)
     ? (sortParam as SortField)
     : 'roi_score'
+  if (sort === 'score' && country !== 'au') sort = 'roi_score'
   // avg_cao_points exists only on the IE table — sorting other tables by it errors out.
   if (sort === 'avg_cao_points' && country !== 'ie') sort = 'roi_score'
 
@@ -189,7 +239,9 @@ export async function fetchRoiData(params: RoiQueryParams): Promise<RoiQueryResu
 
   // roi_explorer_by_field_us likely does not have roi_score_mid / roi_score_senior columns
   // (those exist only on the institution-level roi_explorer_us view).  Fall back to roi_score.
-  const effectiveSort: string = (country === 'us' && !useUsFieldTable && sort === 'roi_score')
+  const effectiveSort: string = sort === 'score'
+    ? 'roi_score'
+    : (country === 'us' && !useUsFieldTable && sort === 'roi_score')
     ? (careerStage === 'mid' ? 'roi_score_mid' : careerStage === 'senior' ? 'roi_score_senior' : 'roi_score')
     : sort
 
@@ -243,6 +295,7 @@ export async function fetchRoiData(params: RoiQueryParams): Promise<RoiQueryResu
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let enriched: any[] = (data ?? []).map(enrichRow)
+  let rawCount = count
 
   // Alias fallback: when a field search returns zero rows, retry with broader terms.
   // Only for list requests (no college_id) to avoid affecting the detail page.
@@ -317,6 +370,37 @@ export async function fetchRoiData(params: RoiQueryParams): Promise<RoiQueryResu
     })
   }
 
+  let scoreCohortApplied = false
+  if (country === 'au' && field) {
+    const cohort = await fetchAustralianScoreCohort(field, aqfLevels)
+    let scoredRows: any[] = cohort.rows
+
+    if (isMedicineField(field)) {
+      scoredRows = scoredRows.map(row => applyMedicineOverride(row, country))
+    }
+    if (stageNum && !isMedicineField(field)) {
+      scoredRows = scoredRows.map(row => {
+        const oldEarnings = row.median_earnings ?? 0
+        if (oldEarnings <= 0) return row
+        const newEarnings = applyCareerStageEarnings(country, oldEarnings, stageNum)
+        const earningsDelta = newEarnings - oldEarnings
+        const oldNetSalary = row.net_salary ?? 0
+        return enrichRow({
+          ...row,
+          median_earnings: Math.round(newEarnings),
+          net_salary: Math.round(Math.max(0, oldNetSalary + earningsDelta)),
+        })
+      })
+    }
+
+    enriched = scoreSchools(scoredRows.map(row => ({ ...row, country })))
+      .filter(row => state === 'ALL_STATES' || row.college_state === state)
+      .filter(row => !collegeId || row.college_id === collegeId)
+    rawCount = cohort.rows.length
+    fallbackApplied = cohort.fallbackApplied
+    scoreCohortApplied = true
+  }
+
   // Deduplicate list views: one row per college + field + state.
   // Skipped for college_id requests so the detail page still receives all field rows.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -341,18 +425,21 @@ export async function fetchRoiData(params: RoiQueryParams): Promise<RoiQueryResu
 
   // Medicine / career-stage overrides scale each row by a different ratio
   // (rent varies per city), so the DB ordering may no longer hold — re-sort.
-  const resortKey = effectiveSort
+  const resortKey = scoreCohortApplied && (sort === 'score' || sort === 'roi_score')
+    ? 'score'
+    : effectiveSort
   const ascending = SORT_ASCENDING[sort]
   finalData = finalData.slice().sort((a, b) => {
     const av = a[resortKey] ?? (ascending ? Number.POSITIVE_INFINITY : Number.NEGATIVE_INFINITY)
     const bv = b[resortKey] ?? (ascending ? Number.POSITIVE_INFINITY : Number.NEGATIVE_INFINITY)
     return ascending ? av - bv : bv - av
   })
+  finalData = finalData.slice(0, limit)
 
   return {
     data: finalData,
     count: finalData.length,
-    rawCount: count,
+    rawCount,
     ...(fallbackApplied && {
       fieldQuery: {
         requested: field,

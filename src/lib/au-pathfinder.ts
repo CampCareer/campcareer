@@ -29,6 +29,7 @@ export type RankedAuPathway = {
   score: number
   reasons: AuPathfinderReason[]
   salaryMedianAud: number | null
+  salaryKind: AuMajorSignal["salary_kind"]
   shortagePct: number | null
   outlook2035Pct: number | null
   prScore: number | null
@@ -105,9 +106,7 @@ export function profileFromSearchParams(input: Record<string, string | undefined
 }
 
 export function rankAustralianPathways(profile: AuPathfinderProfile): RankedAuPathway[] {
-  const candidates = STUDY_CONCEPTS
-    .filter((concept) => profile.category === "any" || concept.category === profile.category)
-    .map((concept) => toCandidate(concept))
+  const candidates = comparableCandidates(profile)
 
   const weights = weightsFor(profile)
   const salaryValues = candidates.map((candidate) => candidate.signal?.salary_median_aud ?? null)
@@ -145,6 +144,7 @@ export function rankAustralianPathways(profile: AuPathfinderProfile): RankedAuPa
         score,
         reasons,
         salaryMedianAud: signal?.salary_median_aud ?? null,
+        salaryKind: signal?.salary_kind ?? null,
         shortagePct: signal?.shortage_national_pct ?? null,
         outlook2035Pct: signal?.outlook_2035_change_pct ?? null,
         prScore: signal?.pr_score ?? null,
@@ -254,9 +254,7 @@ export function signalForConcept(conceptId: string): AuMajorSignal | null {
 }
 
 export function rankAllPathways(profile: AuPathfinderProfile): RankedAuPathway[] {
-  const allCandidates = STUDY_CONCEPTS
-    .filter((concept) => profile.category === "any" || concept.category === profile.category)
-    .map((concept) => toCandidate(concept))
+  const allCandidates = comparableCandidates(profile)
 
   const weights = weightsFor(profile)
   const salaryValues = allCandidates.map((candidate) => candidate.signal?.salary_median_aud ?? null)
@@ -294,6 +292,7 @@ export function rankAllPathways(profile: AuPathfinderProfile): RankedAuPathway[]
         score,
         reasons,
         salaryMedianAud: signal?.salary_median_aud ?? null,
+        salaryKind: signal?.salary_kind ?? null,
         shortagePct: signal?.shortage_national_pct ?? null,
         outlook2035Pct: signal?.outlook_2035_change_pct ?? null,
         prScore: signal?.pr_score ?? null,
@@ -304,4 +303,20 @@ export function rankAllPathways(profile: AuPathfinderProfile): RankedAuPathway[]
       }
     })
     .sort((left, right) => right.score - left.score || right.evidenceCount - left.evidenceCount || left.concept.label.localeCompare(right.concept.label))
+}
+
+function comparableCandidates(profile: AuPathfinderProfile) {
+  return STUDY_CONCEPTS
+    .filter((concept) => profile.category === "any" || concept.category === profile.category)
+    .map((concept) => toCandidate(concept))
+    .filter((candidate) => {
+      const signal = candidate.signal
+      return Boolean(
+        candidate.qualifications.length > 0
+        && signal?.occupation_count
+        && candidate.annualTuitionAud != null
+        && signal.on_csol_pct != null
+        && (signal.shortage_national_pct != null || signal.outlook_2035_change_pct != null),
+      )
+    })
 }

@@ -83,7 +83,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     ...pageMetadata({
       title: `Study & Work in ${country.name} — Salary, Budget & Visa ROI | CampCareer`,
-      description: `Compare ${country.name} by graduate salary, 3/5/10-year pay, rent, tax, visa policy, best majors, and initial budget.`,
+      description: `Compare ${country.name} by graduate salary, 3/5/10-year pay, rent, tax, visa policy, in-demand majors, and initial budget.`,
       path: country.href,
     }),
     robots: {

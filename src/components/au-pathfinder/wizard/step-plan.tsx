@@ -3,7 +3,7 @@
 import { useMemo, useCallback } from "react"
 import { motion } from "framer-motion"
 import { ArrowRight, DollarSign, MapPin, TrendingUp, Shield, GraduationCap, Briefcase } from "lucide-react"
-import { getStudyConcept, STUDY_CATEGORIES } from "@/data/study-concepts"
+import { getStudyConcept } from "@/data/study-concepts"
 import { getStudyCategoryVisual } from "@/components/ui/au-career-category-visuals"
 import { rankAustralianPathways } from "@/lib/au-pathfinder"
 import { localizePath } from "@/lib/i18n/config"
@@ -98,22 +98,22 @@ export function StepPlan({
           <PlanCard
             icon={<DollarSign className="size-5" />}
             label={isKo ? "예상 연봉" : "Expected salary"}
-            value={top?.salaryMedianAud != null ? `A$${Math.round(top.salaryMedianAud / 1000)}K` : "—"}
-            sublabel={isKo ? "호주 중위 임금 기준" : "Australia median pay"}
+            value={top?.salaryMedianAud != null ? `A$${Math.round(top.salaryMedianAud / 1000)}K` : isKo ? "미공개" : "Not reported"}
+            sublabel={top?.salaryMedianAud != null ? top.salaryKind === "estimated" ? (isKo ? "ANZSCO 직군 단위 추정치" : "ANZSCO unit-group estimate") : (isKo ? "호주 중위 임금 기준" : "Australia median pay") : (isKo ? "연결 직업의 공식 급여 행 없음" : "No official earnings row for mapped occupations")}
             tone="bg-emerald-50 text-emerald-700"
           />
           <PlanCard
             icon={<TrendingUp className="size-5" />}
             label={isKo ? "2035 전망" : "2035 outlook"}
-            value={top?.outlook2035Pct != null ? `${top.outlook2035Pct > 0 ? "+" : ""}${top.outlook2035Pct.toFixed(0)}%` : "—"}
-            sublabel={isKo ? "고용 성장률" : "Employment growth"}
+            value={top?.outlook2035Pct != null ? `${top.outlook2035Pct > 0 ? "+" : ""}${top.outlook2035Pct.toFixed(0)}%` : isKo ? "미공개" : "Not reported"}
+            sublabel={top?.outlook2035Pct != null ? (isKo ? "고용 성장률" : "Employment growth") : (isKo ? "연결 직업의 전망 자료 없음" : "No outlook series for mapped occupations")}
             tone="bg-blue-50 text-blue-700"
           />
           <PlanCard
             icon={<Shield className="size-5" />}
             label={isKo ? "인력 부족" : "Shortage"}
-            value={top?.shortagePct != null && top.shortagePct > 0 ? `${top.shortagePct.toFixed(0)}%` : "—"}
-            sublabel={isKo ? "부족 직업군 비율" : "Shortage occupation share"}
+            value={top?.shortagePct != null ? `${top.shortagePct.toFixed(0)}%` : isKo ? "미공개" : "Not reported"}
+            sublabel={top?.shortagePct != null ? (isKo ? "부족 직업군 비율" : "Shortage occupation share") : (isKo ? "연결 직업의 부족 자료 없음" : "No shortage row for mapped occupations")}
             tone="bg-amber-50 text-amber-700"
           />
           <PlanCard

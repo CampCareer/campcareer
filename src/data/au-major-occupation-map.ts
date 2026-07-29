@@ -1,4 +1,4 @@
-// AU Major ↔ Occupation mapping for the 40 STUDY_CONCEPTS.
+// AU Major ↔ Occupation mapping for the selectable AU STUDY_CONCEPTS.
 // Each concept maps to a cluster of OSCA 2024 codes (occupations_au) and
 // ANZSCO 4-digit unit groups (for outlook/salary lookups).
 //
@@ -11,13 +11,7 @@
 export interface AuConceptOccupations {
   /** STUDY_CONCEPT id — must match study-concepts.ts exactly */
   conceptId: string
-  /**
-   * ANZSCO v1.3 6-digit codes used by the original JSA study-to-occupation
-   * mapping. `occupations_au` resolves these to one or more OSCA 2024 codes
-   * through its explicit `anzsco_v13` crosswalk.
-   *
-   * The property name is retained for backwards-compatible imports.
-   */
+  /** Reviewed OSCA 2024 occupation codes used by occupations_au and JSA OSL. */
   oscaCodes: string[]
   /** ANZSCO 4-digit unit groups (for outlook_au, salary lookups) */
   anzsco4Groups: string[]
@@ -31,7 +25,7 @@ export interface AuConceptOccupations {
   representativeOccupations: Array<{ oscaCode: string; label: string; labelKo: string }>
 }
 
-export const AU_CONCEPT_OCCUPATIONS: AuConceptOccupations[] = [
+const CONCEPT_METADATA: AuConceptOccupations[] = [
   // ── Technology ─────────────────────────────────────────────────────────────
   {
     conceptId: "computer-science",
@@ -670,6 +664,73 @@ export const AU_CONCEPT_OCCUPATIONS: AuConceptOccupations[] = [
     ],
   },
 ]
+
+type VerifiedConceptEvidence = Pick<AuConceptOccupations, "oscaCodes" | "anzsco4Groups" | "broadFields">
+
+// These identifiers were checked against the local ABS OSCA profile snapshot,
+// JSA Occupation Shortage List, CSOL correspondence, and CRICOS broad fields.
+// The older editorial entries above retain study-duration and qualification copy.
+const VERIFIED_CONCEPT_EVIDENCE: Record<string, VerifiedConceptEvidence> = {
+  "computer-science": { oscaCodes: ["273333"], anzsco4Groups: [], broadFields: ["02 - Information Technology"] },
+  "data-analytics": { oscaCodes: ["223231", "223232", "223233", "273333"], anzsco4Groups: [], broadFields: ["02 - Information Technology", "08 - Management and Commerce"] },
+  cybersecurity: { oscaCodes: ["271132", "271133", "271134", "271135", "271136"], anzsco4Groups: ["2613", "2621"], broadFields: ["02 - Information Technology"] },
+  nursing: { oscaCodes: ["265432", "265433", "265434", "265435", "265499"], anzsco4Groups: ["2544"], broadFields: ["06 - Health"] },
+  "aged-care": { oscaCodes: ["421231", "421331"], anzsco4Groups: ["4231", "4233"], broadFields: ["06 - Health", "09 - Society and Culture"] },
+  "allied-health": { oscaCodes: ["261135", "262331", "262431"], anzsco4Groups: ["2524", "2525", "2721"], broadFields: ["06 - Health"] },
+  engineering: { oscaCodes: ["243999"], anzsco4Groups: ["2339"], broadFields: ["03 - Engineering and Related Technologies"] },
+  "civil-engineering": { oscaCodes: ["243231", "243234", "243235"], anzsco4Groups: ["2332"], broadFields: ["03 - Engineering and Related Technologies"] },
+  "mechanical-engineering": { oscaCodes: ["243532", "243937", "243533"], anzsco4Groups: ["2335", "2339"], broadFields: ["03 - Engineering and Related Technologies"] },
+  "business-analytics": { oscaCodes: ["223231", "273232", "223432", "113299"], anzsco4Groups: ["2611"], broadFields: ["02 - Information Technology", "08 - Management and Commerce"] },
+  accounting: { oscaCodes: ["211131", "211134", "211135", "211231"], anzsco4Groups: ["2211", "2212"], broadFields: ["08 - Management and Commerce"] },
+  "early-childhood": { oscaCodes: ["251131", "431132"], anzsco4Groups: ["2411", "4211"], broadFields: ["07 - Education"] },
+  carpentry: { oscaCodes: ["372132"], anzsco4Groups: ["3312"], broadFields: ["03 - Engineering and Related Technologies"] },
+  "wall-floor-tiling": { oscaCodes: ["362431"], anzsco4Groups: ["3334"], broadFields: ["03 - Engineering and Related Technologies"] },
+  "electrical-trade": { oscaCodes: ["381231"], anzsco4Groups: ["3411"], broadFields: ["03 - Engineering and Related Technologies"] },
+  plumbing: { oscaCodes: ["363131", "363231", "363331"], anzsco4Groups: ["3341"], broadFields: ["03 - Engineering and Related Technologies"] },
+  welding: { oscaCodes: ["331131", "331132", "331133"], anzsco4Groups: ["3223"], broadFields: ["03 - Engineering and Related Technologies"] },
+  automotive: { oscaCodes: ["351131", "351231"], anzsco4Groups: ["3211", "3212"], broadFields: ["03 - Engineering and Related Technologies"] },
+  "hospitality-management": { oscaCodes: ["161431", "161231", "161999"], anzsco4Groups: ["1411"], broadFields: ["08 - Management and Commerce"] },
+  architecture: { oscaCodes: ["241131", "312131", "312132"], anzsco4Groups: ["3121"], broadFields: ["04 - Architecture and Building"] },
+  "design-media": { oscaCodes: ["242131", "242132", "242133", "242331", "242332"], anzsco4Groups: [], broadFields: ["10 - Creative Arts"] },
+  "environmental-science": { oscaCodes: ["244332", "244431", "244432"], anzsco4Groups: ["2343"], broadFields: ["01 - Natural and Physical Sciences", "05 - Agriculture, Environmental and Related Studies"] },
+  agriculture: { oscaCodes: ["244131", "244132", "311131"], anzsco4Groups: ["2341", "3111"], broadFields: ["05 - Agriculture, Environmental and Related Studies"] },
+  aviation: { oscaCodes: ["299131", "299133", "299134", "299199", "332131", "332132", "332133"], anzsco4Groups: ["2311", "3231"], broadFields: ["03 - Engineering and Related Technologies"] },
+  "culinary-arts": { oscaCodes: ["321131", "322131", "322331", "322431"], anzsco4Groups: ["3511", "3513", "3514"], broadFields: ["11 - Food, Hospitality and Personal Services"] },
+  "beauty-wellness": { oscaCodes: ["461131", "461132", "392132"], anzsco4Groups: ["3911", "4511"], broadFields: ["11 - Food, Hospitality and Personal Services"] },
+  "social-work": { oscaCodes: ["261331", "411232", "411733", "261131"], anzsco4Groups: ["2725", "4115", "4117"], broadFields: ["09 - Society and Culture"] },
+  dental: { oscaCodes: ["269232", "269131", "269133"], anzsco4Groups: ["2523", "4112"], broadFields: ["06 - Health"] },
+  law: { oscaCodes: ["281131", "281331", "521234"], anzsco4Groups: ["2713"], broadFields: ["09 - Society and Culture"] },
+  "sport-fitness": { oscaCodes: ["262232", "462131", "462434", "462442", "462438"], anzsco4Groups: ["4522", "4523"], broadFields: ["06 - Health", "09 - Society and Culture"] },
+  bricklaying: { oscaCodes: ["371131", "371132"], anzsco4Groups: ["3311"], broadFields: ["03 - Engineering and Related Technologies"] },
+  hvac: { oscaCodes: ["382131"], anzsco4Groups: ["3421"], broadFields: ["03 - Engineering and Related Technologies"] },
+  maritime: { oscaCodes: ["313431", "313432", "313435", "313436"], anzsco4Groups: ["2312"], broadFields: ["03 - Engineering and Related Technologies"] },
+  "mining-resources": { oscaCodes: ["243631", "243632"], anzsco4Groups: ["2336"], broadFields: ["03 - Engineering and Related Technologies"] },
+  psychology: { oscaCodes: ["261231"], anzsco4Groups: ["2723"], broadFields: ["06 - Health", "09 - Society and Culture"] },
+  "paramedic-emergency": { oscaCodes: ["269431", "269432"], anzsco4Groups: ["4111"], broadFields: ["06 - Health"] },
+  veterinary: { oscaCodes: ["269531", "269532", "341231"], anzsco4Groups: ["2347", "3613"], broadFields: ["05 - Agriculture, Environmental and Related Studies", "06 - Health"] },
+  "primary-secondary-education": { oscaCodes: ["251231", "251331"], anzsco4Groups: ["2412", "2413"], broadFields: ["07 - Education"] },
+  "photography-film": { oscaCodes: ["391331", "231433", "231434", "231436", "231533", "391233"], anzsco4Groups: ["2123"], broadFields: ["10 - Creative Arts"] },
+  medicine: { oscaCodes: ["264231", "264531", "264999"], anzsco4Groups: ["2531", "2539"], broadFields: ["06 - Health"] },
+  pharmacy: { oscaCodes: ["263431", "263432"], anzsco4Groups: ["2515"], broadFields: ["06 - Health"] },
+  finance: { oscaCodes: ["212131", "212231", "212332", "212333"], anzsco4Groups: [], broadFields: ["08 - Management and Commerce"] },
+  marketing: { oscaCodes: ["221131", "221531", "221532", "221534"], anzsco4Groups: [], broadFields: ["08 - Management and Commerce"] },
+  "international-business": { oscaCodes: ["133131"], anzsco4Groups: [], broadFields: ["08 - Management and Commerce"] },
+  commerce: { oscaCodes: [], anzsco4Groups: [], broadFields: ["08 - Management and Commerce"] },
+  tesol: { oscaCodes: ["259531"], anzsco4Groups: [], broadFields: ["07 - Education"] },
+  "community-welfare": { oscaCodes: ["411231", "411232", "411636", "411733"], anzsco4Groups: ["2726", "4115", "4117"], broadFields: ["09 - Society and Culture"] },
+  "electrical-engineering": { oscaCodes: ["243331", "243431"], anzsco4Groups: ["2333", "2334"], broadFields: ["03 - Engineering and Related Technologies"] },
+  "interior-design": { oscaCodes: ["242431"], anzsco4Groups: [], broadFields: ["04 - Architecture and Building"] },
+}
+
+export const AU_CONCEPT_OCCUPATIONS: AuConceptOccupations[] = CONCEPT_METADATA.map((concept) => {
+  const evidence = VERIFIED_CONCEPT_EVIDENCE[concept.conceptId]
+  return {
+    ...concept,
+    ...evidence,
+    // Do not display legacy labels that no longer match the reviewed OSCA code.
+    representativeOccupations: concept.representativeOccupations.filter((occupation) => evidence.oscaCodes.includes(occupation.oscaCode)),
+  }
+})
 
 // ── Lookup helpers ───────────────────────────────────────────────────────────
 

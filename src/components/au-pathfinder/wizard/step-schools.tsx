@@ -19,6 +19,7 @@ type RoiSchool = {
   tuition?: number | null
   median_earnings?: number | null
   employment_rate?: number | null
+  score?: number | null
   roi_score?: number | null
   payback_years?: number | null
 }
@@ -34,10 +35,10 @@ const AU_STATES = [
   { value: "ACT", labelEn: "ACT", labelKo: "캔버라" },
 ]
 
-type SortKey = "roi" | "tuition_low" | "earnings_high" | "employment_high"
+type SortKey = "score" | "tuition_low" | "earnings_high" | "employment_high"
 
 const SORT_OPTIONS: { key: SortKey; labelEn: string; labelKo: string }[] = [
-  { key: "roi", labelEn: "ROI", labelKo: "ROI 순" },
+  { key: "score", labelEn: "Score", labelKo: "Score 순" },
   { key: "tuition_low", labelEn: "Low tuition", labelKo: "학비 낮은 순" },
   { key: "earnings_high", labelEn: "High earnings", labelKo: "임금 높은 순" },
   { key: "employment_high", labelEn: "Employment", labelKo: "취업률 높은 순" },
@@ -85,7 +86,7 @@ export function StepSchools({
   // Filters
   const [selectedState, setSelectedState] = useState("ALL")
   const [tuitionRange, setTuitionRange] = useState("all")
-  const [sortBy, setSortBy] = useState<SortKey>("roi")
+  const [sortBy, setSortBy] = useState<SortKey>("score")
 
   const concept = selectedConcept ? getStudyConcept(selectedConcept) : null
   const conceptVisual = concept ? getStudyCategoryVisual(concept.category) : null
@@ -100,7 +101,7 @@ export function StepSchools({
       country: "au",
       field: concept.roiSearchTerm,
       state: "ALL_STATES",
-      sort: "roi_score",
+      sort: "score",
       limit: "100",
     })
 
@@ -111,11 +112,11 @@ export function StepSchools({
           setError(data.error)
           setRawSchools([])
         } else {
-          // Deduplicate to best ROI per university
+          // Retain the strongest Score for each university in the selected field.
           const byUni = new Map<string, RoiSchool>()
           for (const row of (data.data ?? []) as RoiSchool[]) {
             const current = byUni.get(row.college_id)
-            if (!current || (row.roi_score ?? 0) > (current.roi_score ?? 0)) {
+            if (!current || (row.score ?? -1) > (current.score ?? -1)) {
               byUni.set(row.college_id, row)
             }
           }
@@ -144,8 +145,8 @@ export function StepSchools({
     }
 
     // Sort
-    if (sortBy === "roi") {
-      result.sort((a, b) => (b.roi_score ?? 0) - (a.roi_score ?? 0))
+    if (sortBy === "score") {
+      result.sort((a, b) => (b.score ?? -1) - (a.score ?? -1))
     } else if (sortBy === "tuition_low") {
       result.sort((a, b) => (a.tuition ?? Infinity) - (b.tuition ?? Infinity))
     } else if (sortBy === "earnings_high") {
@@ -160,7 +161,7 @@ export function StepSchools({
   const activeFilterCount = [
     selectedState !== "ALL",
     tuitionRange !== "all",
-    sortBy !== "roi",
+    sortBy !== "score",
   ].filter(Boolean).length
 
   return (
@@ -217,6 +218,11 @@ export function StepSchools({
             )}
           </button>
         </div>
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
+          {isKo
+            ? "Score는 같은 전공 비교군에서 졸업 소득 45%, 취업률 30%, 총 학비 부담 25%를 반영합니다."
+            : "Score compares graduate earnings (45%), employment (30%), and total tuition affordability (25%) within this study field."}
+        </p>
       </motion.div>
 
       {/* Filter panel */}
@@ -346,6 +352,7 @@ export function StepSchools({
                 tuition: school.tuition,
                 median_earnings: school.median_earnings,
                 employment_rate: school.employment_rate,
+                score: school.score,
                 roi_score: school.roi_score,
                 payback_years: school.payback_years,
               })}
@@ -439,13 +446,13 @@ function SchoolCard({
             </p>
           </div>
 
-          {/* ROI score */}
+          {/* Cohort-relative school Score */}
           <div className="shrink-0 rounded-lg bg-slate-950 px-2.5 py-1.5 text-right text-white">
-            <p className="text-sm font-semibold leading-none">
-              {school.roi_score?.toFixed(1) ?? "—"}
+            <p className="text-[9px] font-medium uppercase tracking-wide text-slate-400">
+              Score
             </p>
-            <p className="mt-0.5 text-[9px] font-medium uppercase tracking-wide text-slate-400">
-              ROI
+            <p className="mt-0.5 text-sm font-semibold leading-none">
+              {school.score?.toFixed(1) ?? "—"}
             </p>
           </div>
         </div>

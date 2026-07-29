@@ -23,6 +23,7 @@ import {
   type AuConceptOccupations,
 } from "../src/data/au-major-occupation-map"
 import { STUDY_CONCEPTS } from "../src/data/study-concepts"
+import { estimateSalaryForOscaCodes } from "../src/lib/au-occupation-salary"
 
 // ── Supabase client ──────────────────────────────────────────────────────────
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -302,6 +303,7 @@ interface AggregatedSignal {
   salary_min_aud: number | null
   salary_max_aud: number | null
   salary_median_aud: number | null
+  salary_kind: "observed" | "estimated" | null
   cost_bachelor_median_aud: number | null
   cost_diploma_median_aud: number | null
   cost_duration_years: number | null
@@ -315,60 +317,17 @@ interface AggregatedSignal {
   last_verified: string | null
 }
 
-async function fetchOccupations(
-  concept: AuConceptOccupations,
-  occupationCatalog: OccupationRow[],
-): Promise<OccupationRow[]> {
+async function fetchOccupations(concept: AuConceptOccupations): Promise<OccupationRow[]> {
   const sourceCodes = concept.oscaCodes
   if (sourceCodes.length === 0) return []
-  const [direct, legacy] = await Promise.all([
-    supabase.from("occupations_au")
-      .select("anzsco_code, anzsco_v13, median_salary_aud, on_csol, occupation_en")
-      .in("anzsco_code", sourceCodes),
-    supabase.from("occupations_au")
-      .select("anzsco_code, anzsco_v13, median_salary_aud, on_csol, occupation_en")
-      .in("anzsco_v13", sourceCodes),
-  ])
-  if (direct.error || legacy.error) {
-    console.error("[seed] occupations query failed:", direct.error?.message ?? legacy.error?.message)
-    return []
-  }
-
-  // The earliest hand-curated major map used a mixture of OSCA and ANZSCO
-  // codes. Keep direct OSCA rows only when their official title agrees with
-  // the mapped role; otherwise resolve the source code through `anzsco_v13`.
-  const expectedTitle = new Map(concept.representativeOccupations.map((item) => [item.oscaCode, normaliseTitle(item.label)]))
-  const directRows = ((direct.data ?? []) as OccupationRow[]).filter((row) => {
-    const expected = expectedTitle.get(row.anzsco_code)
-    return !expected || titleMatches(expected, row.occupation_en)
-  })
-  const directSourceCodes = new Set(directRows.map((row) => row.anzsco_code))
-  const legacyRows = ((legacy.data ?? []) as OccupationRow[]).filter((row) => !directSourceCodes.has(row.anzsco_v13 ?? ""))
-  const titleRows = occupationCatalog.filter((row) => [...expectedTitle.values()].some((title) => titleMatches(title, row.occupation_en)))
-  return [...directRows, ...legacyRows, ...titleRows]
-    .filter((row, index, rows) => rows.findIndex((item) => item.anzsco_code === row.anzsco_code) === index)
-}
-
-function normaliseTitle(value: string) {
-  return value.toLowerCase().replace(/\([^)]*\)/g, "").replace(/[^a-z0-9]+/g, " ").trim()
-}
-
-function titleMatches(expected: string, actual: string) {
-  const expectedTokens = normaliseTitle(expected)
-    .split(" ")
-    .map((token) => token.replace(/s$/, ""))
-    .filter((token) => token.length > 2 && !["general", "professional", "nec", "first", "class"].includes(token))
-  const actualTokens = new Set(normaliseTitle(actual).split(" "))
-  return expectedTokens.length > 0 && expectedTokens.every((token) => actualTokens.has(token) || actualTokens.has(`${token}s`))
-}
-
-async function fetchOccupationCatalog(): Promise<OccupationRow[]> {
   const { data, error } = await supabase
     .from("occupations_au")
     .select("anzsco_code, anzsco_v13, median_salary_aud, on_csol, occupation_en")
-    .order("anzsco_code")
-    .limit(1_000)
-  if (error) throw new Error(`Could not load OSCA occupation catalog: ${error.message}`)
+    .in("anzsco_code", sourceCodes)
+  if (error) {
+    console.error("[seed] occupations query failed:", error.message)
+    return []
+  }
   return (data ?? []) as OccupationRow[]
 }
 
@@ -468,9 +427,15 @@ function aggregateConcept(
   }
 
   // ── Salary ──────────────────────────────────────────────────────────────────
-  const salaries = occupations
+  const observedSalaries = occupations
     .map((o) => o.median_salary_aud)
     .filter((s): s is number => s != null && s > 0)
+  const estimatedSalary = observedSalaries.length === 0
+    ? estimateSalaryForOscaCodes(occupations.map((occupation) => occupation.anzsco_code))
+    : null
+  const salaries = observedSalaries.length > 0
+    ? observedSalaries
+    : estimatedSalary != null ? [estimatedSalary] : []
 
   // ── Course cost ─────────────────────────────────────────────────────────────
   const bachelorFees = courses
@@ -497,6 +462,7 @@ function aggregateConcept(
     salary_min_aud: salaries.length > 0 ? Math.min(...salaries) : null,
     salary_max_aud: salaries.length > 0 ? Math.max(...salaries) : null,
     salary_median_aud: median(salaries),
+    salary_kind: observedSalaries.length > 0 ? "observed" : estimatedSalary != null ? "estimated" : null,
     cost_bachelor_median_aud: median(bachelorFees),
     cost_diploma_median_aud: median(diplomaFees),
     cost_duration_years: concept.durationYears.min,
@@ -525,9 +491,6 @@ function aggregateConcept(
 async function main() {
   console.log("=== seed-au-major-signals ===")
   console.log(`Processing ${AU_CONCEPT_OCCUPATIONS.length} concepts...`)
-  const occupationCatalog = await fetchOccupationCatalog()
-  console.log(`Loaded ${occupationCatalog.length} OSCA occupations for crosswalk validation.`)
-
   const signals: AggregatedSignal[] = []
 
   for (const concept of AU_CONCEPT_OCCUPATIONS) {
@@ -536,7 +499,7 @@ async function main() {
     process.stdout.write(`  ${label}... `)
 
     const [occupations, outlooks, courses] = await Promise.all([
-      fetchOccupations(concept, occupationCatalog),
+      fetchOccupations(concept),
       fetchOutlook(concept.anzsco4Groups),
       fetchCourses(concept.broadFields),
     ])
@@ -556,9 +519,14 @@ async function main() {
   const BATCH = 10
   for (let i = 0; i < signals.length; i += BATCH) {
     const batch = signals.slice(i, i + BATCH)
+    const databaseSignals = batch.map((signal) => {
+      const { salary_kind, ...databaseSignal } = signal
+      void salary_kind // Snapshot-only metadata; the current database schema does not store it.
+      return databaseSignal
+    })
     const { error } = await supabase
       .from("au_major_signals")
-      .upsert(batch, { onConflict: "concept_id,country" })
+      .upsert(databaseSignals, { onConflict: "concept_id,country" })
     if (error) {
       console.error(`  Batch ${i}-${i + batch.length} failed:`, error.message)
     } else {

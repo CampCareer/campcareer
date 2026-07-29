@@ -73,6 +73,7 @@ export type HomeCompareSchool = {
   tuition?: number | null
   median_earnings?: number | null
   employment_rate?: number | null
+  score?: number | null
   roi_score?: number | null
 }
 
@@ -274,7 +275,7 @@ export function HomeDashboard({
 
   /* Top schools from compare */
   const topSchools = [...compareSchools]
-    .sort((a, b) => (b.roi_score ?? 0) - (a.roi_score ?? 0))
+    .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
     .slice(0, 3)
   const savedSchools = goalOptions
     .filter((option) => option.source_type === "saved_university")
@@ -286,7 +287,7 @@ export function HomeDashboard({
       tuition: null,
       median_earnings: null,
       employment_rate: null,
-      roi_score: null,
+      score: null,
     }))
     .slice(0, 3)
   const displayedSchools = topSchools.length ? topSchools : savedSchools
@@ -483,13 +484,13 @@ export function HomeDashboard({
                       )}
                     </p>
                   </div>
-                  {school.roi_score != null && (
+                  {school.score != null && (
                     <div className="shrink-0 rounded-lg bg-slate-950 px-2 py-1 text-right text-white">
                       <p className="text-xs font-semibold leading-none">
-                        {school.roi_score.toFixed(1)}
+                        {school.score.toFixed(1)}
                       </p>
                       <p className="mt-0.5 text-[8px] font-medium uppercase tracking-wide text-slate-400">
-                        ROI
+                        Score
                       </p>
                     </div>
                   )}

@@ -3,15 +3,16 @@
     {
       "concept_id": "computer-science",
       "country": "AU",
-      "shortage_national_pct": 42.9,
-      "shortage_states_affected": 8,
+      "shortage_national_pct": 0,
+      "shortage_states_affected": null,
       "on_csol_pct": 100,
-      "outlook_2030_change_pct": 15,
-      "outlook_2035_change_pct": 25.5,
-      "outlook_direction": "growing",
-      "salary_min_aud": 125200,
-      "salary_max_aud": 135700,
-      "salary_median_aud": 133650,
+      "outlook_2030_change_pct": null,
+      "outlook_2035_change_pct": null,
+      "outlook_direction": null,
+      "salary_min_aud": null,
+      "salary_max_aud": null,
+      "salary_median_aud": null,
+      "salary_kind": null,
       "cost_bachelor_median_aud": 42600,
       "cost_diploma_median_aud": 38200,
       "cost_duration_years": 3,
@@ -19,7 +20,55 @@
       "pr_note": "Software Developer on CSOL with strong 189/190 visa outcomes. ICT professionals consistently in top invitation rounds.",
       "ai_exposure_band": "high",
       "ai_note": "AI coding assistants are reshaping entry-level roles. Senior architects and systems designers remain in demand.",
-      "occupation_count": 7,
+      "occupation_count": 1,
+      "representative_occupations": [
+        {
+          "oscaCode": "273333",
+          "label": "Software Engineer",
+          "labelKo": "Software Engineer"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        },
+        {
+          "name": "ABS 6306.0 Employee Earnings",
+          "url": "https://www.abs.gov.au/statistics/labour/earnings-and-hours/employee-earnings-hours-australia"
+        },
+        {
+          "name": "CRICOS Course Data",
+          "url": "https://cricos.education.gov.au/"
+        }
+      ],
+      "last_verified": "2026-07-28"
+    },
+    {
+      "concept_id": "data-analytics",
+      "country": "AU",
+      "shortage_national_pct": 0,
+      "shortage_states_affected": null,
+      "on_csol_pct": 100,
+      "outlook_2030_change_pct": null,
+      "outlook_2035_change_pct": null,
+      "outlook_direction": null,
+      "salary_min_aud": 129792,
+      "salary_max_aud": 129792,
+      "salary_median_aud": 129792,
+      "salary_kind": "estimated",
+      "cost_bachelor_median_aud": 49097,
+      "cost_diploma_median_aud": 47385,
+      "cost_duration_years": 3,
+      "pr_score": 75,
+      "pr_note": "Data Analyst roles appear on CSOL. AI/ML specialisations strengthen visa applications.",
+      "ai_exposure_band": "medium",
+      "ai_note": "AI augments analytics work. Demand for AI-literate data professionals is growing faster than traditional BI roles.",
+      "occupation_count": 3,
       "representative_occupations": [
         {
           "oscaCode": "223232",
@@ -32,24 +81,9 @@
           "labelKo": "Data Engineer"
         },
         {
-          "oscaCode": "273331",
-          "label": "Cloud Engineer",
-          "labelKo": "Cloud Engineer"
-        },
-        {
-          "oscaCode": "273332",
-          "label": "DevOps Engineer",
-          "labelKo": "DevOps Engineer"
-        },
-        {
-          "oscaCode": "271135",
-          "label": "Cyber Security Engineer",
-          "labelKo": "Cyber Security Engineer"
-        },
-        {
-          "oscaCode": "271231",
-          "label": "Database Administrator",
-          "labelKo": "Database Administrator"
+          "oscaCode": "273333",
+          "label": "Software Engineer",
+          "labelKo": "Software Engineer"
         }
       ],
       "data_sources": [
@@ -70,72 +104,21 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
-    },
-    {
-      "concept_id": "data-analytics",
-      "country": "AU",
-      "shortage_national_pct": 0,
-      "shortage_states_affected": null,
-      "on_csol_pct": 100,
-      "outlook_2030_change_pct": 16,
-      "outlook_2035_change_pct": 27.33,
-      "outlook_direction": "growing",
-      "salary_min_aud": null,
-      "salary_max_aud": null,
-      "salary_median_aud": null,
-      "cost_bachelor_median_aud": 49097,
-      "cost_diploma_median_aud": 47385,
-      "cost_duration_years": 3,
-      "pr_score": 75,
-      "pr_note": "Data Analyst roles appear on CSOL. AI/ML specialisations strengthen visa applications.",
-      "ai_exposure_band": "medium",
-      "ai_note": "AI augments analytics work. Demand for AI-literate data professionals is growing faster than traditional BI roles.",
-      "occupation_count": 2,
-      "representative_occupations": [
-        {
-          "oscaCode": "223932",
-          "label": "Cost Controller",
-          "labelKo": "Cost Controller"
-        },
-        {
-          "oscaCode": "223999",
-          "label": "Information and Organisation Professionals nec",
-          "labelKo": "Information and Organisation Professionals nec"
-        }
-      ],
-      "data_sources": [
-        {
-          "name": "JSA Occupation Shortage List 2025",
-          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
-        },
-        {
-          "name": "JSA Employment Projections",
-          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
-        },
-        {
-          "name": "ABS 6306.0 Employee Earnings",
-          "url": "https://www.abs.gov.au/statistics/labour/earnings-and-hours/employee-earnings-hours-australia"
-        },
-        {
-          "name": "CRICOS Course Data",
-          "url": "https://cricos.education.gov.au/"
-        }
-      ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "cybersecurity",
       "country": "AU",
-      "shortage_national_pct": 66.7,
+      "shortage_national_pct": 60,
       "shortage_states_affected": 8,
-      "on_csol_pct": 16.7,
-      "outlook_2030_change_pct": 14,
-      "outlook_2035_change_pct": 24,
+      "on_csol_pct": 20,
+      "outlook_2030_change_pct": 15,
+      "outlook_2035_change_pct": 25.5,
       "outlook_direction": "growing",
       "salary_min_aud": 125200,
       "salary_max_aud": 131600,
       "salary_median_aud": 131600,
+      "salary_kind": "observed",
       "cost_bachelor_median_aud": 42600,
       "cost_diploma_median_aud": 38200,
       "cost_duration_years": 3,
@@ -143,17 +126,12 @@
       "pr_note": "ICT Security Specialist on CSOL with national shortage. Critical infrastructure demand drives strong PR outcomes.",
       "ai_exposure_band": "low",
       "ai_note": "Cyber threats grow with AI but defenders are equally in demand. Low AI displacement risk.",
-      "occupation_count": 6,
+      "occupation_count": 5,
       "representative_occupations": [
         {
           "oscaCode": "271132",
           "label": "Cyber Security Advice and Assessment Specialist",
           "labelKo": "Cyber Security Advice and Assessment Specialist"
-        },
-        {
-          "oscaCode": "271131",
-          "label": "Cyber Governance Risk and Compliance Specialist",
-          "labelKo": "Cyber Governance Risk and Compliance Specialist"
         },
         {
           "oscaCode": "271135",
@@ -194,20 +172,21 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "nursing",
       "country": "AU",
-      "shortage_national_pct": 71.4,
+      "shortage_national_pct": 80,
       "shortage_states_affected": 8,
-      "on_csol_pct": 85.7,
+      "on_csol_pct": 100,
       "outlook_2030_change_pct": 14,
       "outlook_2035_change_pct": 26,
       "outlook_direction": "growing",
-      "salary_min_aud": 83200,
-      "salary_max_aud": 135200,
+      "salary_min_aud": 89400,
+      "salary_max_aud": 89400,
       "salary_median_aud": 89400,
+      "salary_kind": "observed",
       "cost_bachelor_median_aud": 42962,
       "cost_diploma_median_aud": 39843,
       "cost_duration_years": 3,
@@ -215,22 +194,12 @@
       "pr_note": "Registered Nurse is one of the strongest PR pathways. National shortage across all states. High 189/190 invitation rates.",
       "ai_exposure_band": "low",
       "ai_note": "Nursing is fundamentally human-centred care. AI assists documentation but cannot replace clinical practice.",
-      "occupation_count": 7,
+      "occupation_count": 5,
       "representative_occupations": [
         {
           "oscaCode": "265432",
           "label": "Registered Nurse (Acute Care)",
           "labelKo": "Registered Nurse (Acute Care)"
-        },
-        {
-          "oscaCode": "265499",
-          "label": "Registered Nurses nec",
-          "labelKo": "Registered Nurses nec"
-        },
-        {
-          "oscaCode": "265131",
-          "label": "Midwife",
-          "labelKo": "Midwife"
         },
         {
           "oscaCode": "265433",
@@ -246,6 +215,11 @@
           "oscaCode": "265435",
           "label": "Registered Nurse (Primary Health Care)",
           "labelKo": "Registered Nurse (Primary Health Care)"
+        },
+        {
+          "oscaCode": "265499",
+          "label": "Registered Nurses nec",
+          "labelKo": "Registered Nurses nec"
         }
       ],
       "data_sources": [
@@ -266,20 +240,21 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "aged-care",
       "country": "AU",
-      "shortage_national_pct": 66.7,
+      "shortage_national_pct": 50,
       "shortage_states_affected": 8,
       "on_csol_pct": 0,
-      "outlook_2030_change_pct": 14,
-      "outlook_2035_change_pct": 25,
+      "outlook_2030_change_pct": 12.5,
+      "outlook_2035_change_pct": 21.5,
       "outlook_direction": "growing",
       "salary_min_aud": 53400,
-      "salary_max_aud": 79500,
-      "salary_median_aud": 53400,
+      "salary_max_aud": 58100,
+      "salary_median_aud": 55750,
+      "salary_kind": "observed",
       "cost_bachelor_median_aud": 44797,
       "cost_diploma_median_aud": 46000,
       "cost_duration_years": 1,
@@ -287,22 +262,17 @@
       "pr_note": "Aged care workers in critical national shortage. Direct pathway to PR via 482→186 and state nomination.",
       "ai_exposure_band": "low",
       "ai_note": "Care work is hands-on and emotionally complex. Minimal AI displacement risk.",
-      "occupation_count": 3,
+      "occupation_count": 2,
       "representative_occupations": [
-        {
-          "oscaCode": "411232",
-          "label": "Community Support Worker",
-          "labelKo": "Community Support Worker"
-        },
         {
           "oscaCode": "421231",
           "label": "Community Aged Care Support Worker",
           "labelKo": "Community Aged Care Support Worker"
         },
         {
-          "oscaCode": "422231",
-          "label": "Disability Support Worker",
-          "labelKo": "Disability Support Worker"
+          "oscaCode": "421331",
+          "label": "Residential Aged Care Worker",
+          "labelKo": "Residential Aged Care Worker"
         }
       ],
       "data_sources": [
@@ -323,7 +293,7 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "allied-health",
@@ -331,12 +301,13 @@
       "shortage_national_pct": 100,
       "shortage_states_affected": 8,
       "on_csol_pct": 100,
-      "outlook_2030_change_pct": 19.67,
-      "outlook_2035_change_pct": 34.67,
+      "outlook_2030_change_pct": 17.33,
+      "outlook_2035_change_pct": 30.33,
       "outlook_direction": "growing",
-      "salary_min_aud": 82200,
+      "salary_min_aud": 73200,
       "salary_max_aud": 131500,
-      "salary_median_aud": 106850,
+      "salary_median_aud": 82200,
+      "salary_kind": "observed",
       "cost_bachelor_median_aud": 42962,
       "cost_diploma_median_aud": 39843,
       "cost_duration_years": 4,
@@ -344,17 +315,22 @@
       "pr_note": "Physiotherapy and OT on CSOL. Strong employment outcomes and state nomination pathways.",
       "ai_exposure_band": "low",
       "ai_note": "Allied health relies on physical assessment and manual therapy. Low AI exposure.",
-      "occupation_count": 2,
+      "occupation_count": 3,
       "representative_occupations": [
         {
-          "oscaCode": "262331",
-          "label": "Occupational Therapist",
-          "labelKo": "Occupational Therapist"
+          "oscaCode": "261135",
+          "label": "Rehabilitation Counsellor",
+          "labelKo": "Rehabilitation Counsellor"
         },
         {
           "oscaCode": "262431",
           "label": "Physiotherapist",
           "labelKo": "Physiotherapist"
+        },
+        {
+          "oscaCode": "262331",
+          "label": "Occupational Therapist",
+          "labelKo": "Occupational Therapist"
         }
       ],
       "data_sources": [
@@ -375,7 +351,7 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "dental",
@@ -383,12 +359,13 @@
       "shortage_national_pct": 100,
       "shortage_states_affected": 8,
       "on_csol_pct": 100,
-      "outlook_2030_change_pct": null,
-      "outlook_2035_change_pct": null,
-      "outlook_direction": null,
+      "outlook_2030_change_pct": 14.5,
+      "outlook_2035_change_pct": 28.5,
+      "outlook_direction": "growing",
       "salary_min_aud": 76000,
       "salary_max_aud": 128500,
-      "salary_median_aud": 102250,
+      "salary_median_aud": 76000,
+      "salary_kind": "observed",
       "cost_bachelor_median_aud": 42962,
       "cost_diploma_median_aud": 39843,
       "cost_duration_years": 3,
@@ -396,7 +373,7 @@
       "pr_note": null,
       "ai_exposure_band": null,
       "ai_note": null,
-      "occupation_count": 4,
+      "occupation_count": 3,
       "representative_occupations": [
         {
           "oscaCode": "269131",
@@ -407,11 +384,6 @@
           "oscaCode": "269133",
           "label": "Oral Health Therapist or Dental Therapist",
           "labelKo": "Oral Health Therapist or Dental Therapist"
-        },
-        {
-          "oscaCode": "269231",
-          "label": "Dental Specialist",
-          "labelKo": "Dental Specialist"
         },
         {
           "oscaCode": "269232",
@@ -437,12 +409,12 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "psychology",
       "country": "AU",
-      "shortage_national_pct": 50,
+      "shortage_national_pct": 100,
       "shortage_states_affected": 8,
       "on_csol_pct": 100,
       "outlook_2030_change_pct": 17,
@@ -451,6 +423,7 @@
       "salary_min_aud": 140000,
       "salary_max_aud": 140000,
       "salary_median_aud": 140000,
+      "salary_kind": "observed",
       "cost_bachelor_median_aud": 44797,
       "cost_diploma_median_aud": 46000,
       "cost_duration_years": 4,
@@ -458,17 +431,12 @@
       "pr_note": null,
       "ai_exposure_band": null,
       "ai_note": null,
-      "occupation_count": 2,
+      "occupation_count": 1,
       "representative_occupations": [
         {
           "oscaCode": "261231",
           "label": "Psychologist",
           "labelKo": "Psychologist"
-        },
-        {
-          "oscaCode": "261999",
-          "label": "Allied Health Counsellors, Psychologists, Social Workers and Creative Therapy Professionals nec",
-          "labelKo": "Allied Health Counsellors, Psychologists, Social Workers and Creative Therapy Professionals nec"
         }
       ],
       "data_sources": [
@@ -489,20 +457,21 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "paramedic-emergency",
       "country": "AU",
-      "shortage_national_pct": 66.7,
+      "shortage_national_pct": 100,
       "shortage_states_affected": 8,
-      "on_csol_pct": 66.7,
-      "outlook_2030_change_pct": null,
-      "outlook_2035_change_pct": null,
-      "outlook_direction": null,
+      "on_csol_pct": 100,
+      "outlook_2030_change_pct": 11,
+      "outlook_2035_change_pct": 23,
+      "outlook_direction": "growing",
       "salary_min_aud": 139700,
-      "salary_max_aud": 141500,
+      "salary_max_aud": 139700,
       "salary_median_aud": 139700,
+      "salary_kind": "observed",
       "cost_bachelor_median_aud": 42962,
       "cost_diploma_median_aud": 39843,
       "cost_duration_years": 3,
@@ -510,22 +479,17 @@
       "pr_note": null,
       "ai_exposure_band": null,
       "ai_note": null,
-      "occupation_count": 3,
+      "occupation_count": 2,
       "representative_occupations": [
-        {
-          "oscaCode": "269432",
-          "label": "Paramedic",
-          "labelKo": "Paramedic"
-        },
-        {
-          "oscaCode": "141334",
-          "label": "Paramedic Manager",
-          "labelKo": "Paramedic Manager"
-        },
         {
           "oscaCode": "269431",
           "label": "Critical Care Paramedic",
           "labelKo": "Critical Care Paramedic"
+        },
+        {
+          "oscaCode": "269432",
+          "label": "Paramedic",
+          "labelKo": "Paramedic"
         }
       ],
       "data_sources": [
@@ -546,58 +510,34 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "engineering",
       "country": "AU",
-      "shortage_national_pct": 55.6,
-      "shortage_states_affected": 8,
+      "shortage_national_pct": 0,
+      "shortage_states_affected": 2,
       "on_csol_pct": 100,
       "outlook_2030_change_pct": 12,
       "outlook_2035_change_pct": 23,
       "outlook_direction": "growing",
-      "salary_min_aud": 43700,
-      "salary_max_aud": 138900,
+      "salary_min_aud": 129500,
+      "salary_max_aud": 129500,
       "salary_median_aud": 129500,
-      "cost_bachelor_median_aud": null,
-      "cost_diploma_median_aud": null,
+      "salary_kind": "observed",
+      "cost_bachelor_median_aud": 43116,
+      "cost_diploma_median_aud": 37740,
       "cost_duration_years": 4,
       "pr_score": 78,
       "pr_note": "Engineering professionals on CSOL. Broad skill set applicable across industries.",
       "ai_exposure_band": "medium",
       "ai_note": "CAD and simulation tools are increasingly AI-assisted but design judgement remains human.",
-      "occupation_count": 18,
+      "occupation_count": 1,
       "representative_occupations": [
-        {
-          "oscaCode": "243936",
-          "label": "Fire Safety Engineer",
-          "labelKo": "Fire Safety Engineer"
-        },
-        {
-          "oscaCode": "243937",
-          "label": "Mechatronics Engineer",
-          "labelKo": "Mechatronics Engineer"
-        },
         {
           "oscaCode": "243999",
           "label": "Engineering Professionals nec",
           "labelKo": "Engineering Professionals nec"
-        },
-        {
-          "oscaCode": "243931",
-          "label": "Acoustic Engineer",
-          "labelKo": "Acoustic Engineer"
-        },
-        {
-          "oscaCode": "243932",
-          "label": "Aerospace Engineer",
-          "labelKo": "Aerospace Engineer"
-        },
-        {
-          "oscaCode": "131231",
-          "label": "Engineering Manager",
-          "labelKo": "Engineering Manager"
         }
       ],
       "data_sources": [
@@ -618,7 +558,7 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "civil-engineering",
@@ -626,14 +566,15 @@
       "shortage_national_pct": 100,
       "shortage_states_affected": 8,
       "on_csol_pct": 100,
-      "outlook_2030_change_pct": 10,
-      "outlook_2035_change_pct": 18.5,
+      "outlook_2030_change_pct": 12,
+      "outlook_2035_change_pct": 21,
       "outlook_direction": "growing",
       "salary_min_aud": 121600,
-      "salary_max_aud": 141400,
+      "salary_max_aud": 121600,
       "salary_median_aud": 121600,
-      "cost_bachelor_median_aud": null,
-      "cost_diploma_median_aud": null,
+      "salary_kind": "observed",
+      "cost_bachelor_median_aud": 43116,
+      "cost_diploma_median_aud": 37740,
       "cost_duration_years": 4,
       "pr_score": 82,
       "pr_note": "Civil Engineer on CSOL with shortage. Infrastructure boom drives demand. Strong 189/190 outcomes.",
@@ -642,19 +583,19 @@
       "occupation_count": 3,
       "representative_occupations": [
         {
-          "oscaCode": "131131",
-          "label": "Construction Project Manager",
-          "labelKo": "Construction Project Manager"
-        },
-        {
-          "oscaCode": "241932",
-          "label": "Quantity Surveyor",
-          "labelKo": "Quantity Surveyor"
-        },
-        {
           "oscaCode": "243231",
           "label": "Civil Engineer",
           "labelKo": "Civil Engineer"
+        },
+        {
+          "oscaCode": "243234",
+          "label": "Structural Engineer",
+          "labelKo": "Structural Engineer"
+        },
+        {
+          "oscaCode": "243235",
+          "label": "Transport Engineer",
+          "labelKo": "Transport Engineer"
         }
       ],
       "data_sources": [
@@ -675,22 +616,23 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "mechanical-engineering",
       "country": "AU",
-      "shortage_national_pct": 33.3,
-      "shortage_states_affected": 7,
+      "shortage_national_pct": 0,
+      "shortage_states_affected": 3,
       "on_csol_pct": 100,
-      "outlook_2030_change_pct": 13,
+      "outlook_2030_change_pct": 12.5,
       "outlook_2035_change_pct": 23,
       "outlook_direction": "growing",
       "salary_min_aud": 129500,
       "salary_max_aud": 139500,
       "salary_median_aud": 134500,
-      "cost_bachelor_median_aud": null,
-      "cost_diploma_median_aud": null,
+      "salary_kind": "observed",
+      "cost_bachelor_median_aud": 43116,
+      "cost_diploma_median_aud": 37740,
       "cost_duration_years": 4,
       "pr_score": 76,
       "pr_note": "Mechanical Engineer on CSOL. Defence and manufacturing sectors drive demand.",
@@ -699,9 +641,9 @@
       "occupation_count": 3,
       "representative_occupations": [
         {
-          "oscaCode": "243532",
-          "label": "Mechanical Engineer",
-          "labelKo": "Mechanical Engineer"
+          "oscaCode": "243937",
+          "label": "Mechatronics Engineer",
+          "labelKo": "Mechatronics Engineer"
         },
         {
           "oscaCode": "243533",
@@ -709,9 +651,9 @@
           "labelKo": "Production or Plant Engineer"
         },
         {
-          "oscaCode": "243934",
-          "label": "Engineering Technologist",
-          "labelKo": "Engineering Technologist"
+          "oscaCode": "243532",
+          "label": "Mechanical Engineer",
+          "labelKo": "Mechanical Engineer"
         }
       ],
       "data_sources": [
@@ -732,28 +674,29 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "mining-resources",
       "country": "AU",
       "shortage_national_pct": 100,
       "shortage_states_affected": 8,
-      "on_csol_pct": 66.7,
-      "outlook_2030_change_pct": 6,
-      "outlook_2035_change_pct": 12,
+      "on_csol_pct": 100,
+      "outlook_2030_change_pct": 11,
+      "outlook_2035_change_pct": 18,
       "outlook_direction": "growing",
-      "salary_min_aud": 152600,
+      "salary_min_aud": 180000,
       "salary_max_aud": 180000,
       "salary_median_aud": 180000,
-      "cost_bachelor_median_aud": null,
-      "cost_diploma_median_aud": null,
+      "salary_kind": "observed",
+      "cost_bachelor_median_aud": 43116,
+      "cost_diploma_median_aud": 37740,
       "cost_duration_years": 4,
       "pr_score": 88,
       "pr_note": "Mining Engineer on CSOL with national shortage. Western Australia and Queensland drive demand. Very strong salary signals.",
       "ai_exposure_band": "medium",
       "ai_note": "Autonomous mining equipment is growing but oversight, planning and safety roles remain human.",
-      "occupation_count": 3,
+      "occupation_count": 2,
       "representative_occupations": [
         {
           "oscaCode": "243631",
@@ -764,11 +707,6 @@
           "oscaCode": "243632",
           "label": "Petroleum Engineer",
           "labelKo": "Petroleum Engineer"
-        },
-        {
-          "oscaCode": "399231",
-          "label": "Driller",
-          "labelKo": "Driller"
         }
       ],
       "data_sources": [
@@ -789,22 +727,23 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "business-analytics",
       "country": "AU",
       "shortage_national_pct": 0,
-      "shortage_states_affected": null,
+      "shortage_states_affected": 1,
       "on_csol_pct": 100,
-      "outlook_2030_change_pct": 16.33,
-      "outlook_2035_change_pct": 28,
+      "outlook_2030_change_pct": 15,
+      "outlook_2035_change_pct": 26,
       "outlook_direction": "growing",
-      "salary_min_aud": null,
-      "salary_max_aud": null,
-      "salary_median_aud": null,
-      "cost_bachelor_median_aud": 46857,
-      "cost_diploma_median_aud": 38601,
+      "salary_min_aud": 142300,
+      "salary_max_aud": 142300,
+      "salary_median_aud": 142300,
+      "salary_kind": "observed",
+      "cost_bachelor_median_aud": 49097,
+      "cost_diploma_median_aud": 47385,
       "cost_duration_years": 3,
       "pr_score": 70,
       "pr_note": "Business Analyst roles on CSOL. Strong demand in financial services and consulting.",
@@ -813,14 +752,14 @@
       "occupation_count": 2,
       "representative_occupations": [
         {
-          "oscaCode": "223932",
-          "label": "Cost Controller",
-          "labelKo": "Cost Controller"
+          "oscaCode": "113299",
+          "label": "ICT Managers nec",
+          "labelKo": "ICT Managers nec"
         },
         {
-          "oscaCode": "223999",
-          "label": "Information and Organisation Professionals nec",
-          "labelKo": "Information and Organisation Professionals nec"
+          "oscaCode": "273232",
+          "label": "ICT Business Analyst",
+          "labelKo": "ICT Business Analyst"
         }
       ],
       "data_sources": [
@@ -841,12 +780,12 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "accounting",
       "country": "AU",
-      "shortage_national_pct": 40,
+      "shortage_national_pct": 50,
       "shortage_states_affected": 8,
       "on_csol_pct": 100,
       "outlook_2030_change_pct": 8,
@@ -855,6 +794,7 @@
       "salary_min_aud": 82100,
       "salary_max_aud": 82100,
       "salary_median_aud": 82100,
+      "salary_kind": "observed",
       "cost_bachelor_median_aud": 46857,
       "cost_diploma_median_aud": 38601,
       "cost_duration_years": 3,
@@ -862,17 +802,12 @@
       "pr_note": "Accountant on CSOL. CPA/CA qualification strengthens PR application. Moderate shortage.",
       "ai_exposure_band": "high",
       "ai_note": "AI and automation are transforming routine accounting. Advisory and forensic roles remain stable.",
-      "occupation_count": 5,
+      "occupation_count": 4,
       "representative_occupations": [
         {
           "oscaCode": "211131",
           "label": "Accountant (General)",
           "labelKo": "Accountant (General)"
-        },
-        {
-          "oscaCode": "211133",
-          "label": "Forensic Accountant",
-          "labelKo": "Forensic Accountant"
         },
         {
           "oscaCode": "211134",
@@ -908,7 +843,7 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "law",
@@ -916,12 +851,13 @@
       "shortage_national_pct": 50,
       "shortage_states_affected": 8,
       "on_csol_pct": 100,
-      "outlook_2030_change_pct": null,
-      "outlook_2035_change_pct": null,
-      "outlook_direction": null,
+      "outlook_2030_change_pct": 12,
+      "outlook_2035_change_pct": 21,
+      "outlook_direction": "growing",
       "salary_min_aud": 119500,
       "salary_max_aud": 119500,
       "salary_median_aud": 119500,
+      "salary_kind": "observed",
       "cost_bachelor_median_aud": 42220,
       "cost_diploma_median_aud": 38528,
       "cost_duration_years": 4,
@@ -960,7 +896,7 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "early-childhood",
@@ -968,21 +904,27 @@
       "shortage_national_pct": 100,
       "shortage_states_affected": 8,
       "on_csol_pct": 100,
-      "outlook_2030_change_pct": 6,
-      "outlook_2035_change_pct": 12,
-      "outlook_direction": "growing",
-      "salary_min_aud": 116500,
+      "outlook_2030_change_pct": 3.5,
+      "outlook_2035_change_pct": 8.5,
+      "outlook_direction": "stable",
+      "salary_min_aud": 46300,
       "salary_max_aud": 116500,
-      "salary_median_aud": 116500,
-      "cost_bachelor_median_aud": 40204,
-      "cost_diploma_median_aud": 35624,
+      "salary_median_aud": 81400,
+      "salary_kind": "observed",
+      "cost_bachelor_median_aud": 35624,
+      "cost_diploma_median_aud": 32796,
       "cost_duration_years": 3,
       "pr_score": 82,
       "pr_note": "Early Childhood Teacher on CSOL with national shortage. Strong demand across all states.",
       "ai_exposure_band": "low",
       "ai_note": "Early childhood education is fundamentally relationship-based. Very low AI exposure.",
-      "occupation_count": 1,
+      "occupation_count": 2,
       "representative_occupations": [
+        {
+          "oscaCode": "431132",
+          "label": "Early Childhood Educator",
+          "labelKo": "Early Childhood Educator"
+        },
         {
           "oscaCode": "251131",
           "label": "Early Childhood (Pre-primary School) Teacher",
@@ -1007,7 +949,7 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "primary-secondary-education",
@@ -1021,6 +963,7 @@
       "salary_min_aud": 116500,
       "salary_max_aud": 116500,
       "salary_median_aud": 116500,
+      "salary_kind": "observed",
       "cost_bachelor_median_aud": 35624,
       "cost_diploma_median_aud": 32796,
       "cost_duration_years": 4,
@@ -1059,20 +1002,21 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "social-work",
       "country": "AU",
-      "shortage_national_pct": 11.1,
-      "shortage_states_affected": 8,
-      "on_csol_pct": 88.9,
-      "outlook_2030_change_pct": 10,
-      "outlook_2035_change_pct": 17.5,
+      "shortage_national_pct": 0,
+      "shortage_states_affected": 3,
+      "on_csol_pct": 66.7,
+      "outlook_2030_change_pct": 10.33,
+      "outlook_2035_change_pct": 19,
       "outlook_direction": "growing",
-      "salary_min_aud": 73200,
+      "salary_min_aud": 79500,
       "salary_max_aud": 100300,
       "salary_median_aud": 80000,
+      "salary_kind": "observed",
       "cost_bachelor_median_aud": 42220,
       "cost_diploma_median_aud": 38528,
       "cost_duration_years": 4,
@@ -1080,37 +1024,22 @@
       "pr_note": "Social Worker on CSOL. Community services sector has persistent national shortage.",
       "ai_exposure_band": "low",
       "ai_note": "Social work requires empathy, advocacy and crisis intervention. Minimal AI displacement.",
-      "occupation_count": 9,
+      "occupation_count": 3,
       "representative_occupations": [
-        {
-          "oscaCode": "411731",
-          "label": "Residential Youth Worker",
-          "labelKo": "Residential Youth Worker"
-        },
-        {
-          "oscaCode": "261132",
-          "label": "Alcohol and Other Drugs Counsellor",
-          "labelKo": "Alcohol and Other Drugs Counsellor"
-        },
-        {
-          "oscaCode": "261135",
-          "label": "Rehabilitation Counsellor",
-          "labelKo": "Rehabilitation Counsellor"
-        },
-        {
-          "oscaCode": "261136",
-          "label": "School Counsellor",
-          "labelKo": "School Counsellor"
-        },
         {
           "oscaCode": "261331",
           "label": "Social Worker",
           "labelKo": "Social Worker"
         },
         {
-          "oscaCode": "261999",
-          "label": "Allied Health Counsellors, Psychologists, Social Workers and Creative Therapy Professionals nec",
-          "labelKo": "Allied Health Counsellors, Psychologists, Social Workers and Creative Therapy Professionals nec"
+          "oscaCode": "411733",
+          "label": "Youth Worker",
+          "labelKo": "Youth Worker"
+        },
+        {
+          "oscaCode": "411232",
+          "label": "Community Support Worker",
+          "labelKo": "Community Support Worker"
         }
       ],
       "data_sources": [
@@ -1131,7 +1060,7 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "sport-fitness",
@@ -1139,14 +1068,15 @@
       "shortage_national_pct": 100,
       "shortage_states_affected": 8,
       "on_csol_pct": 0,
-      "outlook_2030_change_pct": 4,
-      "outlook_2035_change_pct": 11,
-      "outlook_direction": "stable",
+      "outlook_2030_change_pct": 6,
+      "outlook_2035_change_pct": 12,
+      "outlook_direction": "growing",
       "salary_min_aud": 23800,
       "salary_max_aud": 51800,
       "salary_median_aud": 23800,
-      "cost_bachelor_median_aud": 41295,
-      "cost_diploma_median_aud": 40800,
+      "salary_kind": "observed",
+      "cost_bachelor_median_aud": 44797,
+      "cost_diploma_median_aud": 46000,
       "cost_duration_years": 3,
       "pr_score": 55,
       "pr_note": "Sport and fitness roles have limited PR pathways. Some coaching roles on shortage list regionally.",
@@ -1188,7 +1118,7 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "carpentry",
@@ -1202,24 +1132,20 @@
       "salary_min_aud": 86900,
       "salary_max_aud": 86900,
       "salary_median_aud": 86900,
-      "cost_bachelor_median_aud": null,
-      "cost_diploma_median_aud": null,
+      "salary_kind": "observed",
+      "cost_bachelor_median_aud": 43116,
+      "cost_diploma_median_aud": 37740,
       "cost_duration_years": 4,
       "pr_score": 90,
       "pr_note": "Carpenter in critical national shortage. One of the strongest trade PR pathways via 189/190/491.",
       "ai_exposure_band": "low",
       "ai_note": "Hands-on construction work is not automatable. Strong long-term demand.",
-      "occupation_count": 2,
+      "occupation_count": 1,
       "representative_occupations": [
         {
           "oscaCode": "372132",
           "label": "Carpenter",
           "labelKo": "Carpenter"
-        },
-        {
-          "oscaCode": "372131",
-          "label": "Carpenter and Joiner",
-          "labelKo": "Carpenter and Joiner"
         }
       ],
       "data_sources": [
@@ -1240,7 +1166,7 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "wall-floor-tiling",
@@ -1254,8 +1180,9 @@
       "salary_min_aud": 57400,
       "salary_max_aud": 57400,
       "salary_median_aud": 57400,
-      "cost_bachelor_median_aud": null,
-      "cost_diploma_median_aud": null,
+      "salary_kind": "observed",
+      "cost_bachelor_median_aud": 43116,
+      "cost_diploma_median_aud": 37740,
       "cost_duration_years": 3,
       "pr_score": 88,
       "pr_note": "Wall and Floor Tiler in national shortage. Strong trade PR pathway.",
@@ -1287,7 +1214,7 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "electrical-trade",
@@ -1299,36 +1226,22 @@
       "outlook_2035_change_pct": 12,
       "outlook_direction": "growing",
       "salary_min_aud": 110700,
-      "salary_max_aud": 158500,
-      "salary_median_aud": 120700,
-      "cost_bachelor_median_aud": null,
-      "cost_diploma_median_aud": null,
+      "salary_max_aud": 110700,
+      "salary_median_aud": 110700,
+      "salary_kind": "observed",
+      "cost_bachelor_median_aud": 43116,
+      "cost_diploma_median_aud": 37740,
       "cost_duration_years": 4,
       "pr_score": 92,
       "pr_note": "Electrician in critical national shortage. One of the highest-demand trades. Excellent PR outcomes.",
       "ai_exposure_band": "low",
       "ai_note": "Electrical installation requires physical presence and safety certification. Not automatable.",
-      "occupation_count": 4,
+      "occupation_count": 1,
       "representative_occupations": [
         {
           "oscaCode": "381231",
           "label": "Electrician (General)",
           "labelKo": "Electrician (General)"
-        },
-        {
-          "oscaCode": "351231",
-          "label": "Automotive Electrician",
-          "labelKo": "Automotive Electrician"
-        },
-        {
-          "oscaCode": "381131",
-          "label": "Electrical Distribution Trades Worker",
-          "labelKo": "Electrical Distribution Trades Worker"
-        },
-        {
-          "oscaCode": "381233",
-          "label": "Industrial Electrician",
-          "labelKo": "Industrial Electrician"
         }
       ],
       "data_sources": [
@@ -1349,28 +1262,29 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "plumbing",
       "country": "AU",
       "shortage_national_pct": 100,
       "shortage_states_affected": 8,
-      "on_csol_pct": 50,
+      "on_csol_pct": 66.7,
       "outlook_2030_change_pct": 5,
       "outlook_2035_change_pct": 10,
       "outlook_direction": "stable",
       "salary_min_aud": 90800,
       "salary_max_aud": 90800,
       "salary_median_aud": 90800,
-      "cost_bachelor_median_aud": null,
-      "cost_diploma_median_aud": null,
+      "salary_kind": "observed",
+      "cost_bachelor_median_aud": 43116,
+      "cost_diploma_median_aud": 37740,
       "cost_duration_years": 4,
       "pr_score": 90,
       "pr_note": "Plumber in critical national shortage. Strong trade PR pathway across all states.",
       "ai_exposure_band": "low",
       "ai_note": "Plumbing requires on-site physical work in varied environments. Not automatable.",
-      "occupation_count": 4,
+      "occupation_count": 3,
       "representative_occupations": [
         {
           "oscaCode": "363131",
@@ -1378,19 +1292,14 @@
           "labelKo": "Plumber (General)"
         },
         {
+          "oscaCode": "363231",
+          "label": "Gasfitter",
+          "labelKo": "Gasfitter"
+        },
+        {
           "oscaCode": "363331",
           "label": "Roof Plumber",
           "labelKo": "Roof Plumber"
-        },
-        {
-          "oscaCode": "363932",
-          "label": "Fire Protection Plumber",
-          "labelKo": "Fire Protection Plumber"
-        },
-        {
-          "oscaCode": "363933",
-          "label": "Mechanical Services Plumber",
-          "labelKo": "Mechanical Services Plumber"
         }
       ],
       "data_sources": [
@@ -1411,7 +1320,7 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "welding",
@@ -1419,20 +1328,21 @@
       "shortage_national_pct": 100,
       "shortage_states_affected": 8,
       "on_csol_pct": 100,
-      "outlook_2030_change_pct": 2,
+      "outlook_2030_change_pct": 3,
       "outlook_2035_change_pct": 7,
       "outlook_direction": "stable",
       "salary_min_aud": 94400,
-      "salary_max_aud": 129300,
+      "salary_max_aud": 94400,
       "salary_median_aud": 94400,
-      "cost_bachelor_median_aud": null,
-      "cost_diploma_median_aud": null,
+      "salary_kind": "observed",
+      "cost_bachelor_median_aud": 43116,
+      "cost_diploma_median_aud": 37740,
       "cost_duration_years": 3,
       "pr_score": 85,
       "pr_note": "Welder in national shortage. Mining and construction sectors drive demand.",
       "ai_exposure_band": "low",
       "ai_note": "Welding requires manual skill and certification. Robotic welding exists but field work remains human.",
-      "occupation_count": 4,
+      "occupation_count": 3,
       "representative_occupations": [
         {
           "oscaCode": "331131",
@@ -1448,11 +1358,6 @@
           "oscaCode": "331133",
           "label": "Welder (First Class)",
           "labelKo": "Welder (First Class)"
-        },
-        {
-          "oscaCode": "332233",
-          "label": "Fitter-Welder",
-          "labelKo": "Fitter-Welder"
         }
       ],
       "data_sources": [
@@ -1473,7 +1378,7 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "bricklaying",
@@ -1487,8 +1392,9 @@
       "salary_min_aud": 87800,
       "salary_max_aud": 87800,
       "salary_median_aud": 87800,
-      "cost_bachelor_median_aud": null,
-      "cost_diploma_median_aud": null,
+      "salary_kind": "observed",
+      "cost_bachelor_median_aud": 43116,
+      "cost_diploma_median_aud": 37740,
       "cost_duration_years": 3,
       "pr_score": 88,
       "pr_note": "Bricklayer in national shortage. Construction boom drives demand. Strong trade PR pathway.",
@@ -1525,7 +1431,7 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "hvac",
@@ -1539,8 +1445,9 @@
       "salary_min_aud": 107600,
       "salary_max_aud": 107600,
       "salary_median_aud": 107600,
-      "cost_bachelor_median_aud": null,
-      "cost_diploma_median_aud": null,
+      "salary_kind": "observed",
+      "cost_bachelor_median_aud": 43116,
+      "cost_diploma_median_aud": 37740,
       "cost_duration_years": 4,
       "pr_score": 85,
       "pr_note": "Air Conditioning Mechanic in national shortage. Strong demand across all states.",
@@ -1572,58 +1479,44 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "architecture",
       "country": "AU",
-      "shortage_national_pct": 22.2,
-      "shortage_states_affected": 8,
-      "on_csol_pct": 88.9,
-      "outlook_2030_change_pct": 9,
-      "outlook_2035_change_pct": 16.5,
+      "shortage_national_pct": 0,
+      "shortage_states_affected": 1,
+      "on_csol_pct": 100,
+      "outlook_2030_change_pct": 8,
+      "outlook_2035_change_pct": 14,
       "outlook_direction": "growing",
-      "salary_min_aud": 115400,
-      "salary_max_aud": 142300,
-      "salary_median_aud": 131600,
-      "cost_bachelor_median_aud": 41866,
-      "cost_diploma_median_aud": 35752,
+      "salary_min_aud": 119900,
+      "salary_max_aud": 119900,
+      "salary_median_aud": 119900,
+      "salary_kind": "observed",
+      "cost_bachelor_median_aud": 44691,
+      "cost_diploma_median_aud": 37500,
       "cost_duration_years": 5,
       "pr_score": 70,
       "pr_note": "Architect on CSOL. Design skills are valued but employment is project-dependent.",
       "ai_exposure_band": "medium",
       "ai_note": "Generative AI is beginning to assist with design concepts. Creative vision remains human.",
-      "occupation_count": 9,
+      "occupation_count": 3,
       "representative_occupations": [
-        {
-          "oscaCode": "223232",
-          "label": "Data Architect",
-          "labelKo": "Data Architect"
-        },
-        {
-          "oscaCode": "223431",
-          "label": "Enterprise Architect",
-          "labelKo": "Enterprise Architect"
-        },
         {
           "oscaCode": "241131",
           "label": "Architect",
           "labelKo": "Architect"
         },
         {
-          "oscaCode": "241132",
-          "label": "Landscape Architect",
-          "labelKo": "Landscape Architect"
+          "oscaCode": "312131",
+          "label": "Architectural Technician",
+          "labelKo": "Architectural Technician"
         },
         {
-          "oscaCode": "243938",
-          "label": "Naval Architect",
-          "labelKo": "Naval Architect"
-        },
-        {
-          "oscaCode": "271134",
-          "label": "Cyber Security Architect",
-          "labelKo": "Cyber Security Architect"
+          "oscaCode": "312132",
+          "label": "Building Designer",
+          "labelKo": "Building Designer"
         }
       ],
       "data_sources": [
@@ -1644,7 +1537,7 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "design-media",
@@ -1652,20 +1545,21 @@
       "shortage_national_pct": 0,
       "shortage_states_affected": null,
       "on_csol_pct": 100,
-      "outlook_2030_change_pct": 16,
-      "outlook_2035_change_pct": 27,
-      "outlook_direction": "growing",
-      "salary_min_aud": null,
-      "salary_max_aud": null,
-      "salary_median_aud": null,
-      "cost_bachelor_median_aud": 44510,
-      "cost_diploma_median_aud": 42000,
+      "outlook_2030_change_pct": null,
+      "outlook_2035_change_pct": null,
+      "outlook_direction": null,
+      "salary_min_aud": 78000,
+      "salary_max_aud": 78000,
+      "salary_median_aud": 78000,
+      "salary_kind": "estimated",
+      "cost_bachelor_median_aud": 41866,
+      "cost_diploma_median_aud": 35752,
       "cost_duration_years": 3,
       "pr_score": 60,
       "pr_note": "Design roles have moderate PR pathways. Stronger outcomes for UX/UI with tech company sponsorship.",
       "ai_exposure_band": "high",
       "ai_note": "AI image generation and design tools are rapidly evolving. Senior creative direction remains more stable.",
-      "occupation_count": 2,
+      "occupation_count": 3,
       "representative_occupations": [
         {
           "oscaCode": "242131",
@@ -1676,6 +1570,11 @@
           "oscaCode": "242133",
           "label": "Web Designer",
           "labelKo": "Web Designer"
+        },
+        {
+          "oscaCode": "242132",
+          "label": "UI / UX Designer",
+          "labelKo": "UI / UX Designer"
         }
       ],
       "data_sources": [
@@ -1696,7 +1595,7 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "photography-film",
@@ -1710,6 +1609,7 @@
       "salary_min_aud": 104900,
       "salary_max_aud": 104900,
       "salary_median_aud": 104900,
+      "salary_kind": "observed",
       "cost_bachelor_median_aud": 41866,
       "cost_diploma_median_aud": 35752,
       "cost_duration_years": 3,
@@ -1743,7 +1643,7 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "environmental-science",
@@ -1751,14 +1651,15 @@
       "shortage_national_pct": 50,
       "shortage_states_affected": 8,
       "on_csol_pct": 50,
-      "outlook_2030_change_pct": 9.5,
-      "outlook_2035_change_pct": 18.5,
+      "outlook_2030_change_pct": 9,
+      "outlook_2035_change_pct": 17,
       "outlook_direction": "growing",
       "salary_min_aud": 90600,
       "salary_max_aud": 90600,
       "salary_median_aud": 90600,
-      "cost_bachelor_median_aud": 45493,
-      "cost_diploma_median_aud": 39902,
+      "salary_kind": "observed",
+      "cost_bachelor_median_aud": 47049,
+      "cost_diploma_median_aud": 43000,
       "cost_duration_years": 3,
       "pr_score": 72,
       "pr_note": "Environmental Scientist on CSOL. Climate policy drives growing demand.",
@@ -1772,9 +1673,9 @@
           "labelKo": "Environmental Research Scientist"
         },
         {
-          "oscaCode": "244499",
-          "label": "Environmental Consultants and Scientists nec",
-          "labelKo": "Environmental Consultants and Scientists nec"
+          "oscaCode": "244431",
+          "label": "Environmental Consultant",
+          "labelKo": "Environmental Consultant"
         }
       ],
       "data_sources": [
@@ -1795,28 +1696,29 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "agriculture",
       "country": "AU",
       "shortage_national_pct": 100,
       "shortage_states_affected": 8,
-      "on_csol_pct": 50,
-      "outlook_2030_change_pct": 10,
-      "outlook_2035_change_pct": 19,
+      "on_csol_pct": 33.3,
+      "outlook_2030_change_pct": 6,
+      "outlook_2035_change_pct": 13,
       "outlook_direction": "growing",
-      "salary_min_aud": 115400,
-      "salary_max_aud": 136000,
-      "salary_median_aud": 125700,
-      "cost_bachelor_median_aud": null,
-      "cost_diploma_median_aud": null,
+      "salary_min_aud": 87300,
+      "salary_max_aud": 115400,
+      "salary_median_aud": 115400,
+      "salary_kind": "observed",
+      "cost_bachelor_median_aud": 42114,
+      "cost_diploma_median_aud": 28000,
       "cost_duration_years": 3,
       "pr_score": 80,
       "pr_note": "Agricultural Scientist on CSOL. Regional demand is strong. 491 visa pathway available.",
       "ai_exposure_band": "low",
       "ai_note": "Agricultural science combines field work with lab analysis. Low AI displacement.",
-      "occupation_count": 2,
+      "occupation_count": 3,
       "representative_occupations": [
         {
           "oscaCode": "244132",
@@ -1824,9 +1726,14 @@
           "labelKo": "Agricultural Research Scientist"
         },
         {
-          "oscaCode": "244133",
-          "label": "Agronomist",
-          "labelKo": "Agronomist"
+          "oscaCode": "244131",
+          "label": "Agricultural Consultant",
+          "labelKo": "Agricultural Consultant"
+        },
+        {
+          "oscaCode": "311131",
+          "label": "Agricultural and Agritech Technician",
+          "labelKo": "Agricultural and Agritech Technician"
         }
       ],
       "data_sources": [
@@ -1847,7 +1754,7 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "veterinary",
@@ -1855,14 +1762,15 @@
       "shortage_national_pct": 100,
       "shortage_states_affected": 8,
       "on_csol_pct": 100,
-      "outlook_2030_change_pct": null,
-      "outlook_2035_change_pct": null,
-      "outlook_direction": null,
+      "outlook_2030_change_pct": 7.5,
+      "outlook_2035_change_pct": 15,
+      "outlook_direction": "growing",
       "salary_min_aud": 84600,
       "salary_max_aud": 132400,
       "salary_median_aud": 108500,
-      "cost_bachelor_median_aud": null,
-      "cost_diploma_median_aud": null,
+      "salary_kind": "observed",
+      "cost_bachelor_median_aud": 44000,
+      "cost_diploma_median_aud": 41800,
       "cost_duration_years": 5,
       "pr_score": 75,
       "pr_note": "Veterinarian on CSOL. National shortage. Strong demand in regional areas.",
@@ -1899,7 +1807,7 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "hospitality-management",
@@ -1913,6 +1821,7 @@
       "salary_min_aud": 77600,
       "salary_max_aud": 77600,
       "salary_median_aud": 77600,
+      "salary_kind": "observed",
       "cost_bachelor_median_aud": 46857,
       "cost_diploma_median_aud": 38601,
       "cost_duration_years": 3,
@@ -1923,19 +1832,19 @@
       "occupation_count": 3,
       "representative_occupations": [
         {
-          "oscaCode": "161231",
-          "label": "Cafe or Restaurant Manager",
-          "labelKo": "Cafe or Restaurant Manager"
-        },
-        {
           "oscaCode": "161431",
           "label": "Hotel or Motel Manager",
           "labelKo": "Hotel or Motel Manager"
         },
         {
-          "oscaCode": "161531",
-          "label": "Licensed Club Manager",
-          "labelKo": "Licensed Club Manager"
+          "oscaCode": "161999",
+          "label": "Hospitality, Tourism and Venue Managers nec",
+          "labelKo": "Hospitality, Tourism and Venue Managers nec"
+        },
+        {
+          "oscaCode": "161231",
+          "label": "Cafe or Restaurant Manager",
+          "labelKo": "Cafe or Restaurant Manager"
         }
       ],
       "data_sources": [
@@ -1956,28 +1865,29 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "culinary-arts",
       "country": "AU",
-      "shortage_national_pct": 100,
+      "shortage_national_pct": 50,
       "shortage_states_affected": 8,
       "on_csol_pct": 100,
-      "outlook_2030_change_pct": 3,
-      "outlook_2035_change_pct": 7.33,
+      "outlook_2030_change_pct": 5,
+      "outlook_2035_change_pct": 11,
       "outlook_direction": "stable",
-      "salary_min_aud": 72700,
+      "salary_min_aud": 97200,
       "salary_max_aud": 103300,
       "salary_median_aud": 103300,
-      "cost_bachelor_median_aud": 46857,
-      "cost_diploma_median_aud": 38601,
+      "salary_kind": "observed",
+      "cost_bachelor_median_aud": 35040,
+      "cost_diploma_median_aud": 41085,
       "cost_duration_years": 2,
       "pr_score": 82,
       "pr_note": "Cook and Baker in national shortage. Certificate III pathway is fast. Strong 482/186 outcomes.",
       "ai_exposure_band": "low",
       "ai_note": "Commercial cookery is a hands-on craft. Automated kitchens exist but skilled chefs remain essential.",
-      "occupation_count": 3,
+      "occupation_count": 4,
       "representative_occupations": [
         {
           "oscaCode": "322131",
@@ -1990,9 +1900,14 @@
           "labelKo": "Cook"
         },
         {
-          "oscaCode": "322231",
-          "label": "Butcher or Smallgoods Maker",
-          "labelKo": "Butcher or Smallgoods Maker"
+          "oscaCode": "322431",
+          "label": "Pastrycook",
+          "labelKo": "Pastrycook"
+        },
+        {
+          "oscaCode": "321131",
+          "label": "Chef",
+          "labelKo": "Chef"
         }
       ],
       "data_sources": [
@@ -2013,7 +1928,7 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "beauty-wellness",
@@ -2021,20 +1936,21 @@
       "shortage_national_pct": 100,
       "shortage_states_affected": 8,
       "on_csol_pct": 100,
-      "outlook_2030_change_pct": 0,
-      "outlook_2035_change_pct": 5,
+      "outlook_2030_change_pct": 2.5,
+      "outlook_2035_change_pct": 8.5,
       "outlook_direction": "stable",
       "salary_min_aud": 41300,
       "salary_max_aud": 46200,
-      "salary_median_aud": 43750,
-      "cost_bachelor_median_aud": 42220,
-      "cost_diploma_median_aud": 38528,
+      "salary_median_aud": 41300,
+      "salary_kind": "observed",
+      "cost_bachelor_median_aud": 35040,
+      "cost_diploma_median_aud": 41085,
       "cost_duration_years": 1,
       "pr_score": 78,
       "pr_note": "Beauty Therapist and Hairdresser in national shortage. Certificate III pathway. Growing demand.",
       "ai_exposure_band": "low",
       "ai_note": "Beauty therapy requires physical skill and client interaction. Very low AI displacement.",
-      "occupation_count": 4,
+      "occupation_count": 3,
       "representative_occupations": [
         {
           "oscaCode": "461131",
@@ -2045,11 +1961,6 @@
           "oscaCode": "461132",
           "label": "Dermal Therapist",
           "labelKo": "Dermal Therapist"
-        },
-        {
-          "oscaCode": "392131",
-          "label": "Barber",
-          "labelKo": "Barber"
         },
         {
           "oscaCode": "392132",
@@ -2075,7 +1986,7 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "automotive",
@@ -2089,8 +2000,9 @@
       "salary_min_aud": 81200,
       "salary_max_aud": 130700,
       "salary_median_aud": 105950,
-      "cost_bachelor_median_aud": null,
-      "cost_diploma_median_aud": null,
+      "salary_kind": "observed",
+      "cost_bachelor_median_aud": 43116,
+      "cost_diploma_median_aud": 37740,
       "cost_duration_years": 4,
       "pr_score": 85,
       "pr_note": "Motor Mechanic in national shortage. Strong trade PR pathway across all states.",
@@ -2127,7 +2039,7 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "aviation",
@@ -2135,30 +2047,51 @@
       "shortage_national_pct": 100,
       "shortage_states_affected": 8,
       "on_csol_pct": 100,
-      "outlook_2030_change_pct": 11,
-      "outlook_2035_change_pct": 20.5,
-      "outlook_direction": "growing",
-      "salary_min_aud": 140000,
+      "outlook_2030_change_pct": 3.5,
+      "outlook_2035_change_pct": 10.5,
+      "outlook_direction": "stable",
+      "salary_min_aud": 106100,
       "salary_max_aud": 157200,
-      "salary_median_aud": 148600,
-      "cost_bachelor_median_aud": null,
-      "cost_diploma_median_aud": null,
+      "salary_median_aud": 157200,
+      "salary_kind": "observed",
+      "cost_bachelor_median_aud": 43116,
+      "cost_diploma_median_aud": 37740,
       "cost_duration_years": 3,
       "pr_score": 65,
       "pr_note": "Pilot has moderate PR pathways. High training cost but strong long-term demand.",
       "ai_exposure_band": "low",
       "ai_note": "Autonomous aircraft are decades away. Pilot demand remains strong with aviation growth.",
-      "occupation_count": 2,
+      "occupation_count": 7,
       "representative_occupations": [
         {
-          "oscaCode": "261231",
-          "label": "Psychologist",
-          "labelKo": "Psychologist"
+          "oscaCode": "299131",
+          "label": "Aeroplane Pilot",
+          "labelKo": "Aeroplane Pilot"
+        },
+        {
+          "oscaCode": "299133",
+          "label": "Flight Instructor",
+          "labelKo": "Flight Instructor"
+        },
+        {
+          "oscaCode": "299134",
+          "label": "Helicopter Pilot",
+          "labelKo": "Helicopter Pilot"
         },
         {
           "oscaCode": "299199",
           "label": "Air Transport Professionals nec",
           "labelKo": "Air Transport Professionals nec"
+        },
+        {
+          "oscaCode": "332131",
+          "label": "Aircraft Maintenance Technician (Avionics)",
+          "labelKo": "Aircraft Maintenance Technician (Avionics)"
+        },
+        {
+          "oscaCode": "332132",
+          "label": "Aircraft Maintenance Technician (Mechanical)",
+          "labelKo": "Aircraft Maintenance Technician (Mechanical)"
         }
       ],
       "data_sources": [
@@ -2179,7 +2112,7 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
     },
     {
       "concept_id": "maritime",
@@ -2187,14 +2120,15 @@
       "shortage_national_pct": 100,
       "shortage_states_affected": 8,
       "on_csol_pct": 25,
-      "outlook_2030_change_pct": null,
-      "outlook_2035_change_pct": null,
-      "outlook_direction": null,
+      "outlook_2030_change_pct": 5,
+      "outlook_2035_change_pct": 12,
+      "outlook_direction": "stable",
       "salary_min_aud": 96900,
       "salary_max_aud": 121600,
       "salary_median_aud": 121600,
-      "cost_bachelor_median_aud": null,
-      "cost_diploma_median_aud": null,
+      "salary_kind": "observed",
+      "cost_bachelor_median_aud": 43116,
+      "cost_diploma_median_aud": 37740,
       "cost_duration_years": 3,
       "pr_score": 80,
       "pr_note": "Marine Engineer and Deck Officer in national shortage. Strong demand in port cities.",
@@ -2241,8 +2175,510 @@
           "url": "https://cricos.education.gov.au/"
         }
       ],
-      "last_verified": "2026-07-18"
+      "last_verified": "2026-07-28"
+    },
+    {
+      "concept_id": "medicine",
+      "country": "AU",
+      "shortage_national_pct": 100,
+      "shortage_states_affected": 8,
+      "on_csol_pct": 100,
+      "outlook_2030_change_pct": 18,
+      "outlook_2035_change_pct": 33,
+      "outlook_direction": "growing",
+      "salary_min_aud": 138000,
+      "salary_max_aud": 201100,
+      "salary_median_aud": 138000,
+      "salary_kind": "observed",
+      "cost_bachelor_median_aud": 42962,
+      "cost_diploma_median_aud": 39843,
+      "cost_duration_years": 4,
+      "pr_score": null,
+      "pr_note": null,
+      "ai_exposure_band": null,
+      "ai_note": null,
+      "occupation_count": 3,
+      "representative_occupations": [
+        {
+          "oscaCode": "264231",
+          "label": "General Practitioner",
+          "labelKo": "General Practitioner"
+        },
+        {
+          "oscaCode": "264531",
+          "label": "Resident Medical Officer",
+          "labelKo": "Resident Medical Officer"
+        },
+        {
+          "oscaCode": "264999",
+          "label": "Medical Practitioners nec",
+          "labelKo": "Medical Practitioners nec"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        },
+        {
+          "name": "ABS 6306.0 Employee Earnings",
+          "url": "https://www.abs.gov.au/statistics/labour/earnings-and-hours/employee-earnings-hours-australia"
+        },
+        {
+          "name": "CRICOS Course Data",
+          "url": "https://cricos.education.gov.au/"
+        }
+      ],
+      "last_verified": "2026-07-28"
+    },
+    {
+      "concept_id": "pharmacy",
+      "country": "AU",
+      "shortage_national_pct": 50,
+      "shortage_states_affected": 8,
+      "on_csol_pct": 100,
+      "outlook_2030_change_pct": 11,
+      "outlook_2035_change_pct": 20,
+      "outlook_direction": "growing",
+      "salary_min_aud": 80500,
+      "salary_max_aud": 80500,
+      "salary_median_aud": 80500,
+      "salary_kind": "observed",
+      "cost_bachelor_median_aud": 42962,
+      "cost_diploma_median_aud": 39843,
+      "cost_duration_years": 4,
+      "pr_score": null,
+      "pr_note": null,
+      "ai_exposure_band": null,
+      "ai_note": null,
+      "occupation_count": 2,
+      "representative_occupations": [
+        {
+          "oscaCode": "263431",
+          "label": "Community Pharmacist",
+          "labelKo": "Community Pharmacist"
+        },
+        {
+          "oscaCode": "263432",
+          "label": "Hospital Pharmacist",
+          "labelKo": "Hospital Pharmacist"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        },
+        {
+          "name": "ABS 6306.0 Employee Earnings",
+          "url": "https://www.abs.gov.au/statistics/labour/earnings-and-hours/employee-earnings-hours-australia"
+        },
+        {
+          "name": "CRICOS Course Data",
+          "url": "https://cricos.education.gov.au/"
+        }
+      ],
+      "last_verified": "2026-07-28"
+    },
+    {
+      "concept_id": "finance",
+      "country": "AU",
+      "shortage_national_pct": 0,
+      "shortage_states_affected": null,
+      "on_csol_pct": 100,
+      "outlook_2030_change_pct": null,
+      "outlook_2035_change_pct": null,
+      "outlook_direction": null,
+      "salary_min_aud": 120640,
+      "salary_max_aud": 120640,
+      "salary_median_aud": 120640,
+      "salary_kind": "estimated",
+      "cost_bachelor_median_aud": 46857,
+      "cost_diploma_median_aud": 38601,
+      "cost_duration_years": 3,
+      "pr_score": null,
+      "pr_note": null,
+      "ai_exposure_band": null,
+      "ai_note": null,
+      "occupation_count": 1,
+      "representative_occupations": [
+        {
+          "oscaCode": "212131",
+          "label": "Financial Adviser",
+          "labelKo": "Financial Adviser"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        },
+        {
+          "name": "ABS 6306.0 Employee Earnings",
+          "url": "https://www.abs.gov.au/statistics/labour/earnings-and-hours/employee-earnings-hours-australia"
+        },
+        {
+          "name": "CRICOS Course Data",
+          "url": "https://cricos.education.gov.au/"
+        }
+      ],
+      "last_verified": "2026-07-28"
+    },
+    {
+      "concept_id": "marketing",
+      "country": "AU",
+      "shortage_national_pct": 0,
+      "shortage_states_affected": null,
+      "on_csol_pct": 100,
+      "outlook_2030_change_pct": null,
+      "outlook_2035_change_pct": null,
+      "outlook_direction": null,
+      "salary_min_aud": 93756,
+      "salary_max_aud": 93756,
+      "salary_median_aud": 93756,
+      "salary_kind": "estimated",
+      "cost_bachelor_median_aud": 46857,
+      "cost_diploma_median_aud": 38601,
+      "cost_duration_years": 3,
+      "pr_score": null,
+      "pr_note": null,
+      "ai_exposure_band": null,
+      "ai_note": null,
+      "occupation_count": 2,
+      "representative_occupations": [
+        {
+          "oscaCode": "221531",
+          "label": "Content Creator (Marketing)",
+          "labelKo": "Content Creator (Marketing)"
+        },
+        {
+          "oscaCode": "221534",
+          "label": "Marketing Specialist",
+          "labelKo": "Marketing Specialist"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        },
+        {
+          "name": "ABS 6306.0 Employee Earnings",
+          "url": "https://www.abs.gov.au/statistics/labour/earnings-and-hours/employee-earnings-hours-australia"
+        },
+        {
+          "name": "CRICOS Course Data",
+          "url": "https://cricos.education.gov.au/"
+        }
+      ],
+      "last_verified": "2026-07-28"
+    },
+    {
+      "concept_id": "international-business",
+      "country": "AU",
+      "shortage_national_pct": null,
+      "shortage_states_affected": null,
+      "on_csol_pct": null,
+      "outlook_2030_change_pct": null,
+      "outlook_2035_change_pct": null,
+      "outlook_direction": null,
+      "salary_min_aud": null,
+      "salary_max_aud": null,
+      "salary_median_aud": null,
+      "salary_kind": null,
+      "cost_bachelor_median_aud": 46857,
+      "cost_diploma_median_aud": 38601,
+      "cost_duration_years": 3,
+      "pr_score": null,
+      "pr_note": null,
+      "ai_exposure_band": null,
+      "ai_note": null,
+      "occupation_count": 0,
+      "representative_occupations": [],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        },
+        {
+          "name": "ABS 6306.0 Employee Earnings",
+          "url": "https://www.abs.gov.au/statistics/labour/earnings-and-hours/employee-earnings-hours-australia"
+        },
+        {
+          "name": "CRICOS Course Data",
+          "url": "https://cricos.education.gov.au/"
+        }
+      ],
+      "last_verified": "2026-07-28"
+    },
+    {
+      "concept_id": "commerce",
+      "country": "AU",
+      "shortage_national_pct": null,
+      "shortage_states_affected": null,
+      "on_csol_pct": null,
+      "outlook_2030_change_pct": null,
+      "outlook_2035_change_pct": null,
+      "outlook_direction": null,
+      "salary_min_aud": null,
+      "salary_max_aud": null,
+      "salary_median_aud": null,
+      "salary_kind": null,
+      "cost_bachelor_median_aud": 46857,
+      "cost_diploma_median_aud": 38601,
+      "cost_duration_years": 3,
+      "pr_score": null,
+      "pr_note": null,
+      "ai_exposure_band": null,
+      "ai_note": null,
+      "occupation_count": 0,
+      "representative_occupations": [],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        },
+        {
+          "name": "ABS 6306.0 Employee Earnings",
+          "url": "https://www.abs.gov.au/statistics/labour/earnings-and-hours/employee-earnings-hours-australia"
+        },
+        {
+          "name": "CRICOS Course Data",
+          "url": "https://cricos.education.gov.au/"
+        }
+      ],
+      "last_verified": "2026-07-28"
+    },
+    {
+      "concept_id": "tesol",
+      "country": "AU",
+      "shortage_national_pct": null,
+      "shortage_states_affected": null,
+      "on_csol_pct": null,
+      "outlook_2030_change_pct": null,
+      "outlook_2035_change_pct": null,
+      "outlook_direction": null,
+      "salary_min_aud": null,
+      "salary_max_aud": null,
+      "salary_median_aud": null,
+      "salary_kind": null,
+      "cost_bachelor_median_aud": 35624,
+      "cost_diploma_median_aud": 32796,
+      "cost_duration_years": 3,
+      "pr_score": null,
+      "pr_note": null,
+      "ai_exposure_band": null,
+      "ai_note": null,
+      "occupation_count": 0,
+      "representative_occupations": [],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        },
+        {
+          "name": "ABS 6306.0 Employee Earnings",
+          "url": "https://www.abs.gov.au/statistics/labour/earnings-and-hours/employee-earnings-hours-australia"
+        },
+        {
+          "name": "CRICOS Course Data",
+          "url": "https://cricos.education.gov.au/"
+        }
+      ],
+      "last_verified": "2026-07-28"
+    },
+    {
+      "concept_id": "community-welfare",
+      "country": "AU",
+      "shortage_national_pct": 0,
+      "shortage_states_affected": 2,
+      "on_csol_pct": 50,
+      "outlook_2030_change_pct": 10,
+      "outlook_2035_change_pct": 18.33,
+      "outlook_direction": "growing",
+      "salary_min_aud": 79500,
+      "salary_max_aud": 89300,
+      "salary_median_aud": 80000,
+      "salary_kind": "observed",
+      "cost_bachelor_median_aud": 42220,
+      "cost_diploma_median_aud": 38528,
+      "cost_duration_years": 3,
+      "pr_score": null,
+      "pr_note": null,
+      "ai_exposure_band": null,
+      "ai_note": null,
+      "occupation_count": 4,
+      "representative_occupations": [
+        {
+          "oscaCode": "411231",
+          "label": "Community Development Officer",
+          "labelKo": "Community Development Officer"
+        },
+        {
+          "oscaCode": "411733",
+          "label": "Youth Worker",
+          "labelKo": "Youth Worker"
+        },
+        {
+          "oscaCode": "411232",
+          "label": "Community Support Worker",
+          "labelKo": "Community Support Worker"
+        },
+        {
+          "oscaCode": "411636",
+          "label": "Welfare Worker",
+          "labelKo": "Welfare Worker"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        },
+        {
+          "name": "ABS 6306.0 Employee Earnings",
+          "url": "https://www.abs.gov.au/statistics/labour/earnings-and-hours/employee-earnings-hours-australia"
+        },
+        {
+          "name": "CRICOS Course Data",
+          "url": "https://cricos.education.gov.au/"
+        }
+      ],
+      "last_verified": "2026-07-28"
+    },
+    {
+      "concept_id": "electrical-engineering",
+      "country": "AU",
+      "shortage_national_pct": 50,
+      "shortage_states_affected": 4,
+      "on_csol_pct": 100,
+      "outlook_2030_change_pct": 12,
+      "outlook_2035_change_pct": 22.5,
+      "outlook_direction": "growing",
+      "salary_min_aud": 135800,
+      "salary_max_aud": 142400,
+      "salary_median_aud": 139100,
+      "salary_kind": "observed",
+      "cost_bachelor_median_aud": 43116,
+      "cost_diploma_median_aud": 37740,
+      "cost_duration_years": 4,
+      "pr_score": null,
+      "pr_note": null,
+      "ai_exposure_band": null,
+      "ai_note": null,
+      "occupation_count": 2,
+      "representative_occupations": [
+        {
+          "oscaCode": "243331",
+          "label": "Electrical Engineer",
+          "labelKo": "Electrical Engineer"
+        },
+        {
+          "oscaCode": "243431",
+          "label": "Electronics Engineer",
+          "labelKo": "Electronics Engineer"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        },
+        {
+          "name": "ABS 6306.0 Employee Earnings",
+          "url": "https://www.abs.gov.au/statistics/labour/earnings-and-hours/employee-earnings-hours-australia"
+        },
+        {
+          "name": "CRICOS Course Data",
+          "url": "https://cricos.education.gov.au/"
+        }
+      ],
+      "last_verified": "2026-07-28"
+    },
+    {
+      "concept_id": "interior-design",
+      "country": "AU",
+      "shortage_national_pct": 0,
+      "shortage_states_affected": null,
+      "on_csol_pct": 100,
+      "outlook_2030_change_pct": null,
+      "outlook_2035_change_pct": null,
+      "outlook_direction": null,
+      "salary_min_aud": null,
+      "salary_max_aud": null,
+      "salary_median_aud": null,
+      "salary_kind": null,
+      "cost_bachelor_median_aud": 44691,
+      "cost_diploma_median_aud": 37500,
+      "cost_duration_years": 3,
+      "pr_score": null,
+      "pr_note": null,
+      "ai_exposure_band": null,
+      "ai_note": null,
+      "occupation_count": 1,
+      "representative_occupations": [
+        {
+          "oscaCode": "242431",
+          "label": "Interior Designer",
+          "labelKo": "Interior Designer"
+        }
+      ],
+      "data_sources": [
+        {
+          "name": "JSA Occupation Shortage List 2025",
+          "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupation-profiles"
+        },
+        {
+          "name": "JSA Employment Projections",
+          "url": "https://www.jobsandskills.gov.au/data/employment-projections"
+        },
+        {
+          "name": "ABS 6306.0 Employee Earnings",
+          "url": "https://www.abs.gov.au/statistics/labour/earnings-and-hours/employee-earnings-hours-australia"
+        },
+        {
+          "name": "CRICOS Course Data",
+          "url": "https://cricos.education.gov.au/"
+        }
+      ],
+      "last_verified": "2026-07-28"
     }
   ],
-  "generatedAt": "2026-07-18T12:15:18.296Z"
+  "generatedAt": "2026-07-28T14:10:13.516Z"
 }
