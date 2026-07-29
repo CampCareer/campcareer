@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import Script from "next/script"
 import localFont from "next/font/local"
 import { Fraunces } from "next/font/google"
 import "./globals.css"
@@ -29,22 +28,15 @@ const fraunces = Fraunces({
   display: "swap",
 })
 
-// TODO: Future programmatic SEO pages (do not implement now — plan only):
-// - /countries/[country]                         — Country study guide: salary, visa, tuition, PR pathways
-// - /fields/[field]                              — Field comparison across 5 countries
-// - /rankings/[field]/[country]                  — Best universities by field and country
-// - /compare/[field]/[country-a]-vs-[country-b]  — Side-by-side field + country comparison
-// - /visa-pathways/[country]/[field]             — Visa and immigration pathway by country + field
-
 export const metadata: Metadata = {
   title: {
-    default: "CampCareer | Australia Study & Career Pathways",
+    default: "CampCareer | International Career Routes",
     template: "%s | CampCareer",
   },
-  description: "Find an Australia study and career path with source-backed tuition, income, and post-study pathway evidence.",
+  description: "Find source-backed routes from your citizenship to the work you want abroad.",
   keywords: [
-    "Australia study", "Australia career", "Australian university", "student visa",
-    "graduate salary", "university comparison", "work pathway", "study abroad planner",
+    "international career route", "work abroad", "visa conditions", "international job search",
+    "career migration", "work holiday visa", "overseas career",
   ],
   authors: [{ name: "CampCareer" }],
   creator: "CampCareer",
@@ -57,14 +49,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "CampCareer",
-    title: "CampCareer | Australia Study & Career Pathways",
-    description: "Find an Australia study and career path with source-backed evidence.",
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "CampCareer — Study Abroad Decision Engine" }],
+    title: "CampCareer | International Career Routes",
+    description: "Find source-backed routes from citizenship to work abroad.",
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "CampCareer — International Career Routes" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "CampCareer | Australia Study & Career Pathways",
-    description: "Find an Australia study and career path with source-backed evidence.",
+    title: "CampCareer | International Career Routes",
+    description: "Find source-backed routes from citizenship to work abroad.",
     images: ["/opengraph-image"],
     creator: "@campcareer",
   },
@@ -90,17 +82,6 @@ export default function RootLayout({
           <AnalyticsConsent />
         </LocaleProvider>
         <ConsentGatedInsights />
-        {/* Impact affiliate verification — Revolut */}
-        <Script id="impact-verification" strategy="beforeInteractive">
-          {`
-            (function(){
-              var m=document.createElement('meta');
-              m.name='impact-site-verification';
-              m.setAttribute('value','4f336c30-8942-4500-9a4f-e33629d44797');
-              document.head.appendChild(m);
-            })();
-          `}
-        </Script>
       </body>
     </html>
   )

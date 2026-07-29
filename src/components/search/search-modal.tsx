@@ -2,12 +2,10 @@
 
 import { useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Search, ArrowRight, X } from "lucide-react"
+import { Search, ArrowRight, MapPinned, X } from "lucide-react"
 import { AnimatePresence, motion } from "framer-motion"
-import { STUDY_CATEGORIES, STUDY_CONCEPTS } from "@/data/study-concepts"
-import { getStudyCategoryVisual } from "@/components/ui/au-career-category-visuals"
+import { ROUTE_GUIDES, routeGuideHref } from "@/data/route-guides"
 import { localizePath, type LocaleOption } from "@/lib/i18n/config"
-import { cn } from "@/lib/utils"
 
 export function SearchModal({
   open,
@@ -42,13 +40,16 @@ export function SearchModal({
   const results = useMemo(() => {
     if (!query.trim()) return []
     const q = query.toLowerCase()
-    return STUDY_CONCEPTS.filter((concept) => {
+    return ROUTE_GUIDES.filter((guide) => {
       const searchable = [
-        concept.label,
-        concept.labelKo,
-        ...concept.aliases,
-        ...concept.aliasesKo,
-        concept.description,
+        guide.origin.name.en,
+        guide.origin.name.ko,
+        guide.destination.name.en,
+        guide.destination.name.ko,
+        guide.target.en,
+        guide.target.ko,
+        guide.title.en,
+        guide.title.ko,
       ]
         .join(" ")
         .toLowerCase()
@@ -56,8 +57,8 @@ export function SearchModal({
     }).slice(0, 8)
   }, [query])
 
-  function navigate(slug: string) {
-    router.push(localizePath(`/au/majors/${slug}`, locale))
+  function navigate(guide: typeof ROUTE_GUIDES[number]) {
+    router.push(localizePath(routeGuideHref(guide), locale))
     onClose()
   }
 
@@ -88,7 +89,7 @@ export function SearchModal({
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder={isKo ? "전공 검색 (예: 간호, IT, 요리...)" : "Search majors (e.g. nursing, IT, cookery...)"}
+                placeholder={isKo ? "경로 검색 (예: 한국, 호주, 광업...)" : "Search routes (e.g. Korea, Australia, mining...)"}
                 className="flex-1 bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-400"
               />
               <button
@@ -103,30 +104,23 @@ export function SearchModal({
             {/* Results */}
             {results.length > 0 && (
               <div className="max-h-80 overflow-y-auto p-2">
-                {results.map((concept) => {
-                  const visual = getStudyCategoryVisual(concept.category)
-                  const cat = STUDY_CATEGORIES.find((c) => c.id === concept.category)
+                {results.map((guide) => {
                   return (
                     <button
-                      key={concept.id}
+                      key={routeGuideHref(guide)}
                       type="button"
-                      onClick={() => navigate(concept.slug)}
+                      onClick={() => navigate(guide)}
                       className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition hover:bg-slate-50"
                     >
-                      <span
-                        className={cn(
-                          "grid size-9 shrink-0 place-items-center rounded-lg",
-                          visual.tone
-                        )}
-                      >
-                        <visual.Icon className="size-4" strokeWidth={2.2} />
+                      <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-blue-50 text-blue-700">
+                        <MapPinned className="size-4" strokeWidth={2.2} />
                       </span>
                       <div className="min-w-0 flex-1">
                         <p className="text-sm font-semibold text-slate-900">
-                          {isKo ? concept.labelKo : concept.label}
+                          {guide.title[isKo ? "ko" : "en"]}
                         </p>
                         <p className="mt-0.5 text-xs text-slate-500">
-                          {isKo ? cat?.labelKo : cat?.label}
+                          {guide.origin.name[isKo ? "ko" : "en"]} <span aria-hidden="true">-&gt;</span> {guide.destination.name[isKo ? "ko" : "en"]} <span aria-hidden="true">-&gt;</span> {guide.target[isKo ? "ko" : "en"]}
                         </p>
                       </div>
                       <ArrowRight className="size-4 shrink-0 text-slate-300" />
@@ -140,8 +134,8 @@ export function SearchModal({
             {query.trim() && results.length === 0 && (
               <div className="px-4 py-8 text-center text-sm text-slate-500">
                 {isKo
-                  ? `"${query}"에 맞는 전공이 없습니다.`
-                  : `No major matches "${query}".`}
+                  ? `"${query}"에 맞는 검증 경로가 없습니다.`
+                  : `No verified route matches "${query}".`}
               </div>
             )}
 
@@ -149,8 +143,8 @@ export function SearchModal({
             {!query.trim() && (
               <div className="px-4 py-6 text-center text-xs text-slate-400">
                 {isKo
-                  ? "전공 이름을 입력하면 바로 검색됩니다"
-                  : "Type a major name to search instantly"}
+                  ? "시민권, 목적지, 직종을 입력하면 검증된 경로를 검색합니다"
+                  : "Search by citizenship, destination, or occupation"}
               </div>
             )}
           </motion.div>

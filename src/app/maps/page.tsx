@@ -5,9 +5,9 @@ import CampCareerMaps from "../map/CampCareerMaps"
 export const revalidate = 86400
 
 export const metadata = pageMetadata({
-  title: "CampCareer Maps — Australia Study & Career Pathways",
+  title: "CampCareer Maps — Career route regions and work signals",
   description:
-    "Explore study, career, salary, university, and migration pathway signals across Australian states and regions.",
+    "Explore the destination regions, occupation signals, and employers behind a CampCareer route search.",
   path: "/maps",
 })
 

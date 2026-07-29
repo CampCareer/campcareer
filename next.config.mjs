@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  allowedDevOrigins: ['127.0.0.1', 'localhost'],
+  allowedDevOrigins: ["127.0.0.1", "localhost"],
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
@@ -10,72 +10,50 @@ const nextConfig = {
   },
   async redirects() {
     return [
-      // /planner is now /home
-      { source: '/planner', destination: '/home', permanent: true },
-      // Dashboard is a first-class signed-in workspace. Do not redirect it to
-      // landing: its own guest state explains the sign-in path when needed.
-      { source: '/career-path/:path*', destination: '/', permanent: false },
-      { source: '/games/:path*', destination: '/', permanent: false },
-      // Retired planning tools now enter the public Compare journey instead of
-      // silently dropping visitors on the landing page.
-      { source: '/timeline/:path*', destination: '/compare', permanent: false },
-      { source: '/checklist/:path*', destination: '/compare', permanent: false },
-      { source: '/documents/:path*', destination: '/', permanent: false },
-      { source: '/saved/:path*', destination: '/', permanent: false },
-      { source: '/rankings/:path*', destination: '/', permanent: false },
-      // /explore is now a valid app route — do not redirect
-      // 퍼널 단일화: 구 온보딩 → Degree Risk (영구 이전)
-      { source: '/onboarding', destination: '/degree-risk', permanent: true },
+      // CampCareer is a route-search product. Retire every former workspace,
+      // comparison, onboarding, and broad-study funnel rather than presenting
+      // visitors with competing product promises.
+      { source: "/planner/:path*", destination: "/", permanent: false },
+      { source: "/home/:path*", destination: "/", permanent: false },
+      { source: "/myplan/:path*", destination: "/", permanent: false },
+      { source: "/dashboard/:path*", destination: "/", permanent: false },
+      { source: "/profile/:path*", destination: "/", permanent: false },
+      { source: "/settings/:path*", destination: "/", permanent: false },
+      { source: "/plans/:path*", destination: "/", permanent: false },
+      { source: "/compare/:path*", destination: "/", permanent: false },
+      { source: "/applications/:path*", destination: "/", permanent: false },
+      { source: "/budget/:path*", destination: "/", permanent: false },
+      { source: "/english/:path*", destination: "/", permanent: false },
+      { source: "/research/:path*", destination: "/", permanent: false },
+      { source: "/report/:path*", destination: "/", permanent: false },
+      { source: "/reports/:path*", destination: "/", permanent: false },
+      { source: "/onboarding/:path*", destination: "/", permanent: false },
+      { source: "/degree-risk/:path*", destination: "/", permanent: false },
+      { source: "/decision-brief/:path*", destination: "/", permanent: false },
+      { source: "/explore/:path*", destination: "/", permanent: false },
+      { source: "/career-path/:path*", destination: "/", permanent: false },
+      { source: "/games/:path*", destination: "/", permanent: false },
+      { source: "/timeline/:path*", destination: "/", permanent: false },
+      { source: "/checklist/:path*", destination: "/", permanent: false },
+      { source: "/documents/:path*", destination: "/", permanent: false },
+      { source: "/saved/:path*", destination: "/", permanent: false },
+      { source: "/rankings/:path*", destination: "/", permanent: false },
 
-      // Australia study canonicalisation. `/au/study` covers universities,
-      // TAFE and vocational credentials; keep the former university URLs for
-      // backlinks and existing search results only.
-      { source: '/universities/au/compare', destination: '/au/study/compare', permanent: true },
-      { source: '/universities/au/:institution', destination: '/au/study/providers/:institution', permanent: true },
-      { source: '/universities/au', destination: '/au/study', permanent: true },
-      { source: '/universities', destination: '/study', permanent: true },
-      { source: '/au/universities', destination: '/au/study', permanent: true },
-
-      // study-options migration: /study-options/:concept/au → /au/study/programs/:concept
-      { source: '/study-options/:concept/au', destination: '/au/study/programs/:concept', permanent: true },
-
-      // SEO migration: code-based occupation URLs now resolve through
-      // search-term based CampCareer Maps URLs, then canonicalize to slug.
-      {
-        source: '/roi-explorer/:country(au|ca|us|uk|de|nl)/occupation/:code',
-        destination: '/maps/:country/:code',
-        permanent: true,
-      },
-
-      // 레거시 대학 디테일 URL: /roi-explorer/:id?country=xx → /roi-explorer/:country/:id
-      {
-        source: '/roi-explorer/:college_id((?!us$|au$|ca$|uk$|ie$)[^/]+)',
-        has: [{ type: 'query', key: 'country', value: '(?<country>us|au|ca|uk|ie)' }],
-        destination: '/roi-explorer/:country/:college_id',
-        permanent: true,
-      },
-      {
-        source: '/roi-explorer/:college_id((?!us$|au$|ca$|uk$|ie$)[^/]+)',
-        destination: '/roi-explorer/us/:college_id',
-        permanent: true,
-      },
-      {
-        source: '/blog/adelaide-university-international-student-guide-2026',
-        destination: '/blog/study-in-australia-2026',
-        permanent: true,
-      },
-      {
-        source: '/blog/australia-cost-of-living-real-breakdown-2026',
-        destination: '/blog/study-in-australia-2026',
-        permanent: true,
-      },
-      {
-        source: '/blog/radiographer-australia-asmirt-ahpra-visa-guide-2026',
-        destination: '/blog/study-in-australia-2026',
-        permanent: true,
-      },
+      // Raw country, university, and major research is not a public product
+      // until it is assembled into a source-backed citizenship-to-work route.
+      { source: "/au/:path*", destination: "/", permanent: false },
+      { source: "/countries/:path*", destination: "/", permanent: false },
+      { source: "/fields/:path*", destination: "/", permanent: false },
+      { source: "/study/:path*", destination: "/", permanent: false },
+      { source: "/study-options/:path*", destination: "/", permanent: false },
+      { source: "/majors/:path*", destination: "/", permanent: false },
+      { source: "/universities/:path*", destination: "/", permanent: false },
+      { source: "/roi-explorer/:path*", destination: "/", permanent: false },
+      { source: "/blog/:path*", destination: "/", permanent: false },
+      { source: "/:country(au|ca|us|uk|de|nl|ie|be|sg|kr|jp|fr|es|nz|no|se|dk|fi|ch|ae)/:path*", destination: "/", permanent: false },
+      { source: "/ko/:country(au|ca|us|uk|de|nl|ie|be|sg|kr|jp|fr|es|nz|no|se|dk|fi|ch|ae)/:path*", destination: "/ko", permanent: false },
     ]
   },
-};
+}
 
-export default nextConfig;
+export default nextConfig

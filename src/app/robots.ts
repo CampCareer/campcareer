@@ -6,8 +6,8 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        // Private/functional routes — keep out of the index.
-        disallow: ["/api/", "/auth/", "/dashboard", "/planner", "/saved", "/documents", "/plans/", "/support/"],
+        // Private, retired, and non-canonical routes stay out of the index.
+        disallow: ["/api/", "/auth/", "/dashboard", "/planner", "/saved", "/documents", "/plans/", "/support/", "/sitemaps/", "/sitemap-index.xml"],
       },
       {
         // 매출에 기여하지 않는 SEO·백링크 크롤러는 전면 차단. (이 목록은
@@ -26,6 +26,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: "/",
       },
     ],
-    sitemap: "https://www.campcareer.com/sitemap-index.xml",
+    sitemap: "https://www.campcareer.com/sitemap.xml",
   }
 }

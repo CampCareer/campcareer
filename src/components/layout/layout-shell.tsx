@@ -1,56 +1,21 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
 import { usePathname } from "next/navigation"
-import { createClient } from "@/lib/supabase-client"
 import { TopNav } from "./top-nav"
 import { SiteFooter } from "./site-footer"
-import { MobileBottomBar } from "./mobile-bottom-bar"
-import { BirthdayPrompt } from "@/components/birthday-prompt"
 import { withoutLocalePrefix } from "@/lib/i18n/config"
-import type { User } from "@supabase/supabase-js"
 
 export function LayoutShell({ children }: { children: React.ReactNode }) {
   const pathname = withoutLocalePrefix(usePathname())
-  const hasUnifiedHero = pathname === "/au" || pathname === "/countries/search" || pathname === "/universities" || pathname === "/universities/au" || pathname === "/majors" || pathname === "/study" || pathname === "/au/study"
   const isLanding = pathname === "/"
-  const isMyPlan = pathname === "/home" || pathname.startsWith("/home/") || pathname === "/planner" || pathname.startsWith("/planner/") || pathname === "/compare" || pathname === "/applications" || pathname === "/budget" || pathname === "/english" || pathname === "/research" || pathname === "/report"
-
-  const supabase = useMemo(() => createClient(), [])
-  const [user, setUser] = useState<User | null>(null)
-  const [needsBirthday, setNeedsBirthday] = useState(false)
-
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      const currentUser = data.user
-      setUser(currentUser)
-      if (currentUser) {
-        supabase.from("user_preferences").select("birthday").eq("id", currentUser.id).maybeSingle().then(({ data: pref }) => {
-          if (!pref?.birthday) setNeedsBirthday(true)
-        })
-      }
-    })
-  }, [supabase])
-
-  if (isMyPlan) return <>{children}</>
-
-  if (
-    pathname === "/login" ||
-    pathname.startsWith("/degree-risk") ||
-    pathname.startsWith("/roi-explorer/au/occupation")
-  ) {
-    return <>{children}</>
-  }
 
   const isInteractiveMap = pathname === "/map" || pathname === "/maps" || pathname.startsWith("/map/au/employment/") || pathname.startsWith("/map/au/whv/")
 
   return (
-    <div className={`flex min-h-screen flex-col ${isLanding ? "bg-[linear-gradient(180deg,#ffffff_0%,#e7f0ff_46%,#f0f5ff_100%)]" : hasUnifiedHero ? "bg-[linear-gradient(180deg,#ffffff_0%,#e7f0ff_46%,#f0f5ff_100%)]" : ""}`}>
+    <div className={`flex min-h-screen flex-col ${isLanding ? "bg-slate-950" : ""}`}>
       {!isInteractiveMap && <TopNav />}
-      <main className={`flex-1 ${hasUnifiedHero ? "bg-transparent" : "bg-background"} pb-14 sm:pb-0`}>{children}</main>
+      <main className="flex-1">{children}</main>
       <SiteFooter className={isInteractiveMap ? "hidden" : undefined} />
-      {!isInteractiveMap && <MobileBottomBar />}
-      {user && needsBirthday && <BirthdayPrompt user={user} />}
     </div>
   )
 }

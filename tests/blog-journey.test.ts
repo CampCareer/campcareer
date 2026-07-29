@@ -101,8 +101,9 @@ test("published blog CTAs contain no legacy funnel destinations or missing blog 
   }
 })
 
-test("the sitemap publishes Compare instead of the retired degree-risk funnel", () => {
+test("the sitemap publishes source-backed routes instead of retired decision funnels", () => {
   const sitemap = fs.readFileSync(path.join(process.cwd(), "src/app/sitemap.ts"), "utf8")
-  assert.match(sitemap, /\$\{BASE\}\/compare/)
+  assert.match(sitemap, /ROUTE_GUIDES/)
+  assert.doesNotMatch(sitemap, /\$\{BASE\}\/compare/)
   assert.doesNotMatch(sitemap, /\$\{BASE\}\/degree-risk/)
 })

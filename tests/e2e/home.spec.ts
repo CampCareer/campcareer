@@ -1,118 +1,25 @@
 import { expect, test } from "@playwright/test"
 
-test("landing sends country, major, and goal to country discovery", async ({ page }) => {
+test("landing searches a published international career route", async ({ page }) => {
   await page.goto("/")
-  await expect(page.getByRole("heading", { name: "Compare study paths - from campus to career." })).toBeVisible()
 
-  await page.getByLabel("Where do you want to study?", { exact: true }).click()
-  await expect(page.getByTestId("country-option-UK")).toContainText("🇬🇧")
-  await page.getByTestId("country-option-AU").click()
-  await page.getByLabel("What do you want to study?", { exact: true }).click()
-  await page.getByTestId("major-option-computer-science").click()
-  await page.getByLabel("What matters most?", { exact: true }).click()
-  await page.getByTestId("goal-option-immigration").click()
-  await page.getByRole("button", { name: "See country rankings" }).click()
+  await expect(page.getByRole("heading", { name: "Find the route from where you are to the work you want." })).toBeVisible()
+  await expect(page.getByLabel("Citizenship")).toHaveValue("south-korea")
+  await expect(page.getByLabel("Destination")).toHaveValue("australia")
+  await expect(page.getByLabel("Occupation or industry")).toHaveValue("mining-work")
 
-  await expect(page).toHaveURL(/\/countries\/search\?country=AU&major=computer-science&goal=immigration/)
-  await expect(page.getByRole("heading", { name: "Choose your region in Australia" })).toHaveCount(0)
-  await expect(page.getByRole("heading", { name: "Where in Australia?" })).toBeVisible()
-  await expect(page.getByText("Sydney", { exact: true })).toBeVisible()
-  await expect(page.getByText("Gold Coast", { exact: true })).toBeVisible()
-  const sydneyWorkspace = page.getByRole("link", { name: "Open workspace" }).first()
-  await expect(sydneyWorkspace).toHaveAttribute("target", "_blank")
-  await expect(sydneyWorkspace).toHaveAttribute("href", /\/regional-workspace\?country=AU&state=NSW&city=Sydney/)
+  await page.getByRole("button", { name: "Open route" }).click()
+  await expect(page).toHaveURL("/routes/south-korea/australia/mining-work")
+  await expect(page.getByRole("heading", { name: "How a Korean passport holder can pursue mining work in Australia" })).toBeVisible()
+  await expect(page.getByText("Working Holiday visa (subclass 417)")).toBeVisible()
+  await expect(page.getByRole("link", { name: "Explore Western Australia mining regions" })).toBeVisible()
 })
 
-test("landing keeps the search available when no goal is selected", async ({ page }) => {
-  await page.goto("/")
-  await expect(page.getByLabel("What matters most?", { exact: true })).toContainText("Choose your goal")
-  await page.getByRole("button", { name: "See country rankings" }).click()
-
-  await expect(page).toHaveURL(/\/countries\/search\?country=everywhere&major=anything/)
-  await expect(page.getByRole("heading", { name: "Explore countries before you decide." })).toBeVisible()
-  await expect(page.getByRole("heading", { name: "What should come first?" })).toBeVisible()
-  await expect(page.getByRole("heading", { name: "Explore 20 countries" })).toBeVisible()
-  await expect(page.getByRole("heading", { name: "Australia", exact: true })).toBeVisible()
-})
-
-test("Ireland country results offer Dublin, Cork, Galway, and Limerick", async ({ page }) => {
-  await page.goto("/countries/search?country=IE&major=computer-science&goal=immigration")
-
-  await expect(page.getByRole("heading", { name: "Where in Ireland?" })).toBeVisible()
-  for (const city of ["Dublin", "Cork", "Galway", "Limerick"]) {
-    await expect(page.getByText(city, { exact: true })).toBeVisible()
-  }
-  await expect(page.getByRole("link", { name: "Open workspace" }).first()).toHaveAttribute(
-    "href",
-    /\/regional-workspace\?country=IE&state=D&city=Dublin/,
-  )
-})
-
-test("Germany, Netherlands, Belgium, France, Spain, South Korea, Japan, New Zealand, Norway, Sweden, Denmark, Finland, Switzerland, Singapore, and UAE country results offer their regional choices", async ({ page }) => {
-  for (const [country, cities] of [
-    ["DE", ["Berlin", "Munich", "Hamburg", "Frankfurt", "Cologne", "Stuttgart"]],
-    ["NL", ["Amsterdam", "Rotterdam", "Utrecht", "Eindhoven", "The Hague", "Groningen"]],
-    ["BE", ["Brussels", "Leuven", "Ghent", "Antwerp", "Liège", "Bruges"]],
-    ["FR", ["Paris", "Lyon", "Toulouse", "Bordeaux", "Lille", "Marseille"]],
-    ["ES", ["Madrid", "Barcelona", "Valencia", "Seville", "Granada", "Salamanca", "Málaga", "Bilbao"]],
-    ["KR", ["Seoul", "Busan", "Incheon", "Daejeon", "Daegu", "Gwangju", "Suwon", "Jeju"]],
-    ["JP", ["Tokyo", "Osaka", "Kyoto", "Fukuoka", "Nagoya", "Sapporo", "Sendai", "Yokohama"]],
-    ["NZ", ["Auckland", "Wellington", "Christchurch", "Dunedin", "Hamilton", "Palmerston North", "Queenstown"]],
-    ["NO", ["Oslo", "Bergen", "Trondheim", "Stavanger", "Tromsø", "Kristiansand", "Ålesund"]],
-    ["SE", ["Stockholm", "Gothenburg", "Malmö", "Uppsala", "Lund", "Linköping", "Umeå"]],
-    ["DK", ["Copenhagen", "Aarhus", "Odense", "Aalborg", "Roskilde", "Lyngby", "Esbjerg"]],
-    ["FI", ["Helsinki", "Tampere", "Turku", "Oulu", "Espoo", "Jyväskylä", "Lappeenranta"]],
-    ["CH", ["Zurich", "Geneva", "Lausanne", "Basel", "Bern", "Lugano", "St. Gallen"]],
-    ["SG", ["Singapore"]],
-    ["AE", ["Dubai", "Abu Dhabi", "Sharjah", "Ras Al Khaimah"]],
-  ] as const) {
-    await page.goto(`/countries/search?country=${country}&major=computer-science&goal=immigration`)
-    for (const city of cities) await expect(page.getByRole("link", { name: new RegExp(`^${city},`) })).toBeVisible()
-  }
-})
-
-test("landing opens Singapore's city-state workspace without a regional choice", async ({ page }) => {
-  await page.goto("/")
-  await page.getByLabel("Where do you want to study?", { exact: true }).click()
-  await page.getByTestId("country-option-SG").click()
-  await page.getByLabel("What do you want to study?", { exact: true }).click()
-  await page.getByTestId("major-option-computer-science").click()
-  await page.getByLabel("What matters most?", { exact: true }).click()
-  await page.getByTestId("goal-option-immigration").click()
-
-  const popupPromise = page.context().waitForEvent("page")
-  await page.getByRole("button", { name: "See country rankings" }).click()
-  const workspace = await popupPromise
-  await workspace.waitForLoadState()
-  await expect(workspace).toHaveURL(/\/regional-workspace\?country=SG&state=SG&city=Singapore&major=computer-science&goal=immigration/)
-})
-
-test("regional selection opens the dedicated ROI workspace instead of Maps", async ({ page }) => {
-  await page.goto("/regional-workspace?country=AU&state=NSW&city=Sydney&major=computer-science&goal=immigration")
-  await expect(page.getByRole("heading", { name: "Sydney, New South Wales" })).toBeVisible()
-  await expect(page.getByRole("heading", { name: "University shortlist" })).toBeVisible()
-  await expect(page.getByRole("heading", { name: "Career demand signals" })).toBeVisible()
-  await expect(page.getByRole("heading", { name: "Cost evidence" })).toBeVisible()
-})
-
-test("product hubs and discovery result pages are available", async ({ page }) => {
-  await page.goto("/countries")
-  await expect(page.getByRole("heading", { name: "Compare study paths - from campus to career." })).toBeVisible()
-
-  await page.goto("/majors/search?country=AU&goal=career-outcomes")
-  await expect(page.getByRole("heading", { name: "Which career path fits this place?" })).toBeVisible()
-  await expect(page.getByText("Regional ranking under review")).toBeVisible()
-
-  await page.goto("/universities/search?country=AU&career=software-developer&budget=50000-75000")
-  await expect(page.getByRole("heading", { name: "Which university fits your budget and career?" })).toBeVisible()
-  await expect(page.getByText("University matches under review")).toBeVisible()
-})
-
-test("Korean landing is localized and stays light without a theme toggle", async ({ page }) => {
-  await page.emulateMedia({ colorScheme: "dark" })
+test("Korean route search stays localized", async ({ page }) => {
   await page.goto("/ko")
-  await expect(page.getByRole("heading", { name: "무엇을 공부할지, 어느 나라로 갈지, 졸업 후 얼마가 남는지 선택하세요." })).toBeVisible()
-  await expect(page.getByLabel("어느 나라에서 공부하고 싶나요?")).toBeVisible()
-  await expect(page.getByRole("button", { name: /Switch to .* theme/ })).toHaveCount(0)
-  await expect(page.locator("body")).toHaveCSS("color-scheme", "light")
+
+  await expect(page.getByRole("heading", { name: "어디서 왔고, 어디서 어떤 일을 하고 싶은지. 그 경로를 찾습니다." })).toBeVisible()
+  await page.getByRole("button", { name: "경로 보기" }).click()
+  await expect(page).toHaveURL("/ko/routes/south-korea/australia/mining-work")
+  await expect(page.getByRole("heading", { name: "한국 여권자가 호주 광업 취업을 준비하는 경로" })).toBeVisible()
 })

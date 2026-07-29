@@ -1,20 +1,23 @@
 import { expect, test } from "@playwright/test"
 
-test("sitemap index exposes segmented canonical URL sets", async ({ request }) => {
-  const index = await request.get("/sitemap-index.xml")
-  expect(index.ok()).toBeTruthy()
-  expect(index.headers()["content-type"]).toContain("application/xml")
-  expect(await index.text()).toContain("/sitemaps/fields-en.xml")
-
-  const fields = await request.get("/sitemaps/fields-en.xml")
-  expect(fields.ok()).toBeTruthy()
-  expect(Number(fields.headers()["x-sitemap-url-count"])).toBeGreaterThan(5)
-  expect(await fields.text()).toContain("/fields/carpentry")
+test("sitemap exposes only canonical route-product URLs", async ({ request }) => {
+  const sitemap = await request.get("/sitemap.xml")
+  expect(sitemap.ok()).toBeTruthy()
+  expect(sitemap.headers()["content-type"]).toContain("application/xml")
+  const xml = await sitemap.text()
+  expect(xml).toContain("/routes/south-korea/australia/mining-work")
+  expect(xml).toContain("/maps")
+  expect(xml).not.toContain("/au/majors/")
+  expect(xml).not.toContain("/countries/")
 })
 
-test("unknown sitemap segments are not indexable", async ({ request }) => {
-  const response = await request.get("/sitemaps/not-a-template.xml")
+test("retired sitemap endpoints are not indexable", async ({ request }) => {
+  const response = await request.get("/sitemaps/fields-en.xml")
   expect(response.status()).toBe(404)
+
+  const legacyIndex = await request.get("/sitemap-index.xml", { maxRedirects: 0 })
+  expect(legacyIndex.status()).toBe(308)
+  expect(legacyIndex.headers().location).toBe("/sitemap.xml")
 })
 
 test("map country bundles defer oversized detail datasets", async ({ request }) => {
