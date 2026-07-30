@@ -18,29 +18,27 @@ All canonical and ingest schemas are private to `service_role`. `anon` and `auth
 
 ## Migrated data
 
-Production counts at the cutover audit:
+Production counts at the final cutover audit:
 
 - Countries: 6
 - Currencies: 5
 - Qualification frameworks: 3
 - Qualification levels: 28
 - Geographies: 31,892
-- Canonical institutions: 6,388
-- Canonical campuses: 6,478+
+- Canonical institutions: 6,556
+- Canonical campuses: 6,683
 - Canonical programmes: 12,969
 - Canonical offerings: 12,969
-- Programme fees: 9,714+
+- Programme fees: 9,714
 - Programme requirements: 28
 - Programme accreditations: 9,743
 - Evidence sources: 25
 - Source snapshots: 119
-- Metric observations: 10,557+
+- Metric observations: 10,557
 - Labour outcome observations: 744
 - Canonical occupations: 1,390
-- Nursing programme mappings: 181+
+- Nursing programme mappings: 185
 - Nursing occupation mappings: 29
-
-The `+` values can increase as repair and provider-evidence migrations append verified rows.
 
 ## Course mapping closure
 
