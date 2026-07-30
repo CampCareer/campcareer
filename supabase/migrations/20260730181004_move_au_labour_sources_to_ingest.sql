@@ -1,0 +1,9 @@
+alter table public.occupation_profiles_au set schema ingest;
+alter table public.occupation_outlook_au set schema ingest;
+alter table public.occupation_vacancies_au set schema ingest;
+alter table public.occupation_regional_employment_au set schema ingest;
+alter table public.occupation_mobility_flows_au set schema ingest;
+alter table public.occupation_mobility_stocks_au set schema ingest;
+alter table public.occupation_pathways_au set schema ingest;
+alter table public.occupation_shortage_drivers_au set schema ingest;
+alter table public.occupation_sa4_au set schema ingest;
