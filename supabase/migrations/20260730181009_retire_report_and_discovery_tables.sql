@@ -1,0 +1,14 @@
+alter table public.majors set schema retired;
+alter table public.au_major_signals set schema retired;
+alter table public.city_living_cost_profiles_au set schema retired;
+alter table public.report_metric_evidence_au set schema retired;
+alter table public.report_decision_options set schema retired;
+alter table public.report_intakes set schema retired;
+alter table public.report_launch_interests set schema retired;
+alter table public.report_orders set schema retired;
+alter table public.programme_evidence set schema retired;
+alter table public.program_completions set schema retired;
+alter table public.contribution_submissions set schema retired;
+alter table public.reputation_ledger set schema retired;
+alter table public.notifications_sent set schema retired;
+alter table public.occupation_state_nomination set schema retired;
