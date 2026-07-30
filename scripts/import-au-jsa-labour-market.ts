@@ -143,6 +143,8 @@ function profileRows() {
       median_age: numberOrNull(row[6]),
       full_time_share_pct: numberOrNull(fullTime?.[2]),
       average_full_time_hours: numberOrNull(fullTime?.[3]),
+      median_weekly_earnings_aud: numberOrNull(fullTime?.[4]) == null ? null : Math.round(numberOrNull(fullTime?.[4])!),
+      median_hourly_earnings_aud: numberOrNull(fullTime?.[5]),
       state_distribution: statesByCode.get(anzsco_v13) ?? [],
       education_distribution: educationByCode.get(anzsco_v13) ?? [],
       industries: industriesByCode.get(anzsco_v13) ?? [],

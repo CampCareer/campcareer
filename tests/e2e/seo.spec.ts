@@ -5,7 +5,7 @@ test("sitemap exposes only canonical route-product URLs", async ({ request }) =>
   expect(sitemap.ok()).toBeTruthy()
   expect(sitemap.headers()["content-type"]).toContain("application/xml")
   const xml = await sitemap.text()
-  expect(xml).toContain("/routes/south-korea/australia/mining-work")
+  expect(xml).toContain("/routes/australia/mining-work")
   expect(xml).toContain("/maps")
   expect(xml).not.toContain("/au/majors/")
   expect(xml).not.toContain("/countries/")
@@ -13,11 +13,12 @@ test("sitemap exposes only canonical route-product URLs", async ({ request }) =>
 
 test("retired sitemap endpoints are not indexable", async ({ request }) => {
   const response = await request.get("/sitemaps/fields-en.xml")
-  expect(response.status()).toBe(404)
+  expect(response.status()).toBe(410)
+  expect(response.headers()["x-robots-tag"]).toContain("noindex")
 
   const legacyIndex = await request.get("/sitemap-index.xml", { maxRedirects: 0 })
-  expect(legacyIndex.status()).toBe(308)
-  expect(legacyIndex.headers().location).toBe("/sitemap.xml")
+  expect(legacyIndex.status()).toBe(410)
+  expect(legacyIndex.headers()["x-robots-tag"]).toContain("noindex")
 })
 
 test("map country bundles defer oversized detail datasets", async ({ request }) => {

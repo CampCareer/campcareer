@@ -4,9 +4,9 @@ import { pageMetadata } from "@/lib/seo"
 export const revalidate = 86400
 
 export const metadata = pageMetadata({
-  title: "CampCareer — Source-backed international career routes",
+  title: "CampCareer — Verified work and study routes",
   description:
-    "Find a source-backed route from your citizenship to the work you want abroad: visa conditions, preparation, jobs, training, and map context.",
+    "Search source-backed study and work information by destination, career, and goal. Get course, job, and regional links in one place.",
   path: "/",
 })
 

@@ -4,13 +4,20 @@ import { getServerAcquisitionContext } from "@/lib/acquisition"
 export const dynamic = "force-dynamic"
 
 const EVENT_NAMES = new Set([
+  "route_search_started",
+  "route_search_submitted",
+  "route_result_viewed",
+  "route_external_link_clicked",
+  "route_request_submitted",
+  "map_opened_from_route",
+  "guide_interest_submitted",
   "recommendation_start",
   "recommendation_result_view",
   "report_launch_view",
   "report_launch_interest_submitted",
   "report_workspace_open",
 ])
-const CONTEXT_KEYS = ["surface", "country", "major", "goal", "report_products", "locale"] as const
+const CONTEXT_KEYS = ["surface", "country", "major", "goal", "report_products", "locale", "route_id", "link_type"] as const
 
 export async function POST(request: NextRequest) {
   if (request.cookies.get("cc_analytics_consent")?.value !== "granted") {

@@ -30,13 +30,13 @@ const fraunces = Fraunces({
 
 export const metadata: Metadata = {
   title: {
-    default: "CampCareer | International Career Routes",
+    default: "CampCareer | Source-backed work and study routes",
     template: "%s | CampCareer",
   },
-  description: "Find source-backed routes from your citizenship to the work you want abroad.",
+  description: "Search verified work and study routes by passport, destination, and field — with source dates and direct links.",
   keywords: [
-    "international career route", "work abroad", "visa conditions", "international job search",
-    "career migration", "work holiday visa", "overseas career",
+    "international career route", "work abroad", "study abroad", "visa conditions", "international job search",
+    "working holiday visa", "overseas career",
   ],
   authors: [{ name: "CampCareer" }],
   creator: "CampCareer",
@@ -49,14 +49,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "CampCareer",
-    title: "CampCareer | International Career Routes",
-    description: "Find source-backed routes from citizenship to work abroad.",
+    title: "CampCareer | Source-backed work and study routes",
+    description: "Find verified routes from a passport to work or study abroad.",
     images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "CampCareer — International Career Routes" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "CampCareer | International Career Routes",
-    description: "Find source-backed routes from citizenship to work abroad.",
+    title: "CampCareer | Source-backed work and study routes",
+    description: "Find verified routes from a passport to work or study abroad.",
     images: ["/opengraph-image"],
     creator: "@campcareer",
   },

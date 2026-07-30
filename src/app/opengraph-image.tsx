@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og"
 
 export const runtime = "nodejs"
-export const alt = "CampCareer — Compare study paths from qualification to career"
+export const alt = "CampCareer — Verified routes for study and work abroad"
 export const size = { width: 1200, height: 630 }
 export const contentType = "image/png"
 
@@ -17,7 +17,7 @@ export default function OpenGraphImage() {
           justifyContent: "space-between",
           padding: "72px",
           color: "#0f172a",
-          background: "linear-gradient(135deg, #eff6ff 0%, #ffffff 55%, #dbeafe 100%)",
+          background: "linear-gradient(135deg, #f8fbff 0%, #ffffff 58%, #e0f2fe 100%)",
           fontFamily: "Arial, sans-serif",
         }}
       >
@@ -27,10 +27,10 @@ export default function OpenGraphImage() {
         </div>
         <div style={{ display: "flex", flexDirection: "column", maxWidth: 980 }}>
           <div style={{ fontSize: 72, lineHeight: 1.05, letterSpacing: "-3px", fontWeight: 700 }}>
-            Compare study paths—from qualification to career.
+            Verified routes for study and work abroad.
           </div>
           <div style={{ marginTop: 28, fontSize: 28, lineHeight: 1.4, color: "#475569" }}>
-            Cost, career outcomes, qualifications and post-study options from verified sources.
+            Eligibility, courses, jobs, and regions — checked source by source.
           </div>
         </div>
       </div>

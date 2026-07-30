@@ -9,7 +9,9 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
   const pathname = withoutLocalePrefix(usePathname())
   const isLanding = pathname === "/"
 
-  const isInteractiveMap = pathname === "/map" || pathname === "/maps" || pathname.startsWith("/map/au/employment/") || pathname.startsWith("/map/au/whv/")
+  // /maps is the public route-map explainer and should keep ordinary product
+  // navigation. The legacy /map canvas remains an isolated interactive tool.
+  const isInteractiveMap = pathname === "/map" || pathname.startsWith("/map/")
 
   return (
     <div className={`flex min-h-screen flex-col ${isLanding ? "bg-slate-950" : ""}`}>

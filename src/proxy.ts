@@ -44,6 +44,7 @@ const DEDICATED_KOREAN_ROUTE_PATTERNS = [
   /^\/ko\/(?:kr|jp|sg|fr)(?:\/jobs)?\/?$/,
   /^\/ko\/fields\/[^/]+\/?$/,
   /^\/ko\/maps\/[^/]+\/[^/]+\/?$/,
+  /^\/ko\/results\/?$/,
   /^\/ko\/routes(?:\/.*)?$/,
 ]
 

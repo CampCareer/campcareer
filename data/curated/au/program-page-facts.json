@@ -101,5 +101,184 @@
     "effectiveFrom": "2026-01-01",
     "effectiveTo": "2026-12-31",
     "reviewerNote": "Course-specific English requirement published on the UTS course page; confirm the live requirement before applying."
+  },
+  {
+    "institutionId": "monash-university",
+    "courseCode": "075119J",
+    "fieldKey": "campus",
+    "value": {
+      "campuses": [
+        { "name": "Clayton", "state": "VIC" },
+        { "name": "Peninsula", "state": "VIC" }
+      ]
+    },
+    "sourceUrl": "https://www.monash.edu/study/courses/find-a-course/nursing-m2006",
+    "reviewerNote": "Course page lists Clayton and Peninsula as the actual on-campus delivery locations. State is recorded per delivery campus, not from the provider profile."
+  },
+  {
+    "institutionId": "monash-university",
+    "courseCode": "075119J",
+    "fieldKey": "duration",
+    "value": "3 years full-time; 6 years part-time",
+    "sourceUrl": "https://www.monash.edu/study/courses/find-a-course/nursing-m2006"
+  },
+  {
+    "institutionId": "monash-university",
+    "courseCode": "075119J",
+    "fieldKey": "intakes",
+    "value": "First Semester (February)",
+    "sourceUrl": "https://www.monash.edu/study/courses/find-a-course/nursing-m2006"
+  },
+  {
+    "institutionId": "monash-university",
+    "courseCode": "075119J",
+    "fieldKey": "english_requirement",
+    "value": "Nursing has an additional NMBA English standard. IELTS Academic: overall 7.0 in each sitting; listening, reading and speaking 7.0 and writing 6.5 across up to two permitted sittings, with no component below 6.5.",
+    "sourceUrl": "https://www.monash.edu/study/courses/find-a-course/nursing-m2006",
+    "reviewerNote": "Course page says this is in addition to Monash English requirements. Check NMBA and Monash live requirements before applying."
+  },
+  {
+    "institutionId": "monash-university",
+    "courseCode": "075119J",
+    "fieldKey": "entry_requirements",
+    "value": "International applicants apply directly to Monash using course code M2006 and must meet equivalent English and mathematics prerequisite subjects. Admission is assessed against the applicant's education history.",
+    "sourceUrl": "https://www.monash.edu/study/courses/find-a-course/nursing-m2006"
+  },
+  {
+    "institutionId": "monash-university",
+    "courseCode": "079336A",
+    "fieldKey": "annual_tuition_aud",
+    "value": { "amountAud": 55500, "year": 2026, "basis": "48 credit points / standard full-time year" },
+    "sourceUrl": "https://www.monash.edu/study/courses/find-a-course/computer-science-c2001?international=true",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31",
+    "reviewerNote": "International fee published for 2026. Fees change annually."
+  },
+  {
+    "institutionId": "monash-university",
+    "courseCode": "079336A",
+    "fieldKey": "campus",
+    "value": { "campuses": [{ "name": "Clayton", "state": "VIC" }] },
+    "sourceUrl": "https://www.monash.edu/study/courses/find-a-course/computer-science-c2001?international=true",
+    "reviewerNote": "The route result is for Australia, so the Malaysia location listed by the provider is intentionally excluded."
+  },
+  {
+    "institutionId": "monash-university",
+    "courseCode": "079336A",
+    "fieldKey": "duration",
+    "value": "3 years full-time",
+    "sourceUrl": "https://www.monash.edu/study/courses/find-a-course/computer-science-c2001?international=true"
+  },
+  {
+    "institutionId": "monash-university",
+    "courseCode": "079336A",
+    "fieldKey": "intakes",
+    "value": "First Semester (February); Second Semester (July)",
+    "sourceUrl": "https://www.monash.edu/study/courses/find-a-course/computer-science-c2001?international=true"
+  },
+  {
+    "institutionId": "monash-university",
+    "courseCode": "079336A",
+    "fieldKey": "english_requirement",
+    "value": "IELTS Academic 6.5 overall, with 6.0 in listening, reading, speaking and writing (Level A).",
+    "sourceUrl": "https://www.monash.edu/study/courses/find-a-course/computer-science-c2001?international=true",
+    "reviewerNote": "Course-specific international entry score for the 2026 page."
+  },
+  {
+    "institutionId": "monash-university",
+    "courseCode": "079336A",
+    "fieldKey": "entry_requirements",
+    "value": "Applicants must be at least 17 at enrolment, meet the country-specific academic entry score and the course mathematics prerequisite.",
+    "sourceUrl": "https://www.monash.edu/study/courses/find-a-course/computer-science-c2001?international=true"
+  },
+  {
+    "institutionId": "university-of-new-south-wales",
+    "courseCode": "015784F",
+    "fieldKey": "annual_tuition_aud",
+    "value": { "amountAud": 61000, "year": 2026, "basis": "indicative first-year full fee" },
+    "sourceUrl": "https://www.unsw.edu.au/study/undergraduate/bachelor-of-computer-science",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31",
+    "reviewerNote": "Provider describes this as an indicative fee, subject to annual review."
+  },
+  {
+    "institutionId": "university-of-new-south-wales",
+    "courseCode": "015784F",
+    "fieldKey": "campus",
+    "value": { "campuses": [{ "name": "Kensington", "state": "NSW" }] },
+    "sourceUrl": "https://www.unsw.edu.au/study/undergraduate/bachelor-of-computer-science"
+  },
+  {
+    "institutionId": "university-of-new-south-wales",
+    "courseCode": "015784F",
+    "fieldKey": "duration",
+    "value": "3 years full-time",
+    "sourceUrl": "https://www.unsw.edu.au/study/undergraduate/bachelor-of-computer-science"
+  },
+  {
+    "institutionId": "university-of-new-south-wales",
+    "courseCode": "015784F",
+    "fieldKey": "intakes",
+    "value": "Term 1, Term 2 or Term 3",
+    "sourceUrl": "https://www.unsw.edu.au/study/undergraduate/bachelor-of-computer-science"
+  },
+  {
+    "institutionId": "university-of-new-south-wales",
+    "courseCode": "015784F",
+    "fieldKey": "english_requirement",
+    "value": "IELTS Academic 6.5 overall, with 6.0 in each component.",
+    "sourceUrl": "https://www.unsw.edu.au/study/undergraduate/bachelor-of-computer-science"
+  },
+  {
+    "institutionId": "university-of-new-south-wales",
+    "courseCode": "015784F",
+    "fieldKey": "entry_requirements",
+    "value": "Entry is assessed against the applicant's country-specific qualification and the live UNSW international entry requirements.",
+    "sourceUrl": "https://www.unsw.edu.au/study/undergraduate/bachelor-of-computer-science"
+  },
+  {
+    "institutionId": "rmit-university",
+    "courseCode": "087986M",
+    "fieldKey": "annual_tuition_aud",
+    "value": { "amountAud": 49920, "year": 2027, "basis": "annual international fee" },
+    "sourceUrl": "https://www.rmit.edu.au/study-with-us/levels-of-study/postgraduate-study/masters-by-coursework/master-of-engineering-civil-engineering-mc257",
+    "effectiveFrom": "2027-01-01",
+    "effectiveTo": "2027-12-31",
+    "reviewerNote": "Provider page labels this as the 2027 annual international fee; do not present it as a 2026 fee."
+  },
+  {
+    "institutionId": "rmit-university",
+    "courseCode": "087986M",
+    "fieldKey": "campus",
+    "value": { "campuses": [{ "name": "Melbourne City", "state": "VIC" }] },
+    "sourceUrl": "https://www.rmit.edu.au/study-with-us/levels-of-study/postgraduate-study/masters-by-coursework/master-of-engineering-civil-engineering-mc257"
+  },
+  {
+    "institutionId": "rmit-university",
+    "courseCode": "087986M",
+    "fieldKey": "duration",
+    "value": "2 years full-time",
+    "sourceUrl": "https://www.rmit.edu.au/study-with-us/levels-of-study/postgraduate-study/masters-by-coursework/master-of-engineering-civil-engineering-mc257"
+  },
+  {
+    "institutionId": "rmit-university",
+    "courseCode": "087986M",
+    "fieldKey": "intakes",
+    "value": "February; July",
+    "sourceUrl": "https://www.rmit.edu.au/study-with-us/levels-of-study/postgraduate-study/masters-by-coursework/master-of-engineering-civil-engineering-mc257"
+  },
+  {
+    "institutionId": "rmit-university",
+    "courseCode": "087986M",
+    "fieldKey": "english_requirement",
+    "value": "IELTS Academic 6.5 overall, with no individual band below 6.0.",
+    "sourceUrl": "https://www.rmit.edu.au/study-with-us/levels-of-study/postgraduate-study/masters-by-coursework/master-of-engineering-civil-engineering-mc257"
+  },
+  {
+    "institutionId": "rmit-university",
+    "courseCode": "087986M",
+    "fieldKey": "entry_requirements",
+    "value": "A related engineering, science or technology degree with the listed civil/environmental/structural/mining engineering major and GPA; relevant experience pathways may also be considered.",
+    "sourceUrl": "https://www.rmit.edu.au/study-with-us/levels-of-study/postgraduate-study/masters-by-coursework/master-of-engineering-civil-engineering-mc257"
   }
 ]

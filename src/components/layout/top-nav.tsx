@@ -3,12 +3,10 @@
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useState, useRef, useEffect } from "react"
-import { LogoMark } from "@/components/logo-mark"
 import { useRouteLocale, useSetLocale } from "@/lib/i18n/locale-provider"
-import { LOCALE_META, PUBLISHED_LOCALE_OPTIONS, localeForUi, localeFromPathname, localizePath, withoutLocalePrefix, type LocaleOption } from "@/lib/i18n/config"
+import { LOCALE_META, PUBLISHED_LOCALE_OPTIONS, localeForUi, localeFromPathname, localizePath, type LocaleOption } from "@/lib/i18n/config"
 import { cn } from "@/lib/utils"
-import { Globe, Check, MapPinned, Search } from "lucide-react"
-import { SearchModal } from "@/components/search/search-modal"
+import { Globe, Check, MapPinned, UserRound } from "lucide-react"
 
 export function TopNav() {
   const pathname = usePathname()
@@ -16,10 +14,7 @@ export function TopNav() {
   const setLocale = useSetLocale()
   const router = useRouter()
   const pathLocale = localeFromPathname(pathname) ?? routeLocale
-  const barePathname = withoutLocalePrefix(pathname)
-
-  const isLanding = barePathname === "/"
-  const isTransparent = isLanding
+  const isTransparent = false
 
   /* ── Globe language modal ── */
   const [langOpen, setLangOpen] = useState(false)
@@ -40,44 +35,27 @@ export function TopNav() {
     setLangOpen(false)
   }
 
-  /* ── Search modal ── */
-  const [searchOpen, setSearchOpen] = useState(false)
-
   const textColor = isTransparent ? "text-white" : "text-slate-900"
-  const mutedColor = isTransparent ? "text-blue-100" : "text-slate-500"
+  const mutedColor = isTransparent ? "text-slate-200" : "text-slate-500"
   const hoverBg = isTransparent ? "hover:bg-white/10" : "hover:bg-slate-100"
 
   return (
     <>
       <header className={cn(
-        "sticky top-0 z-40 backdrop-blur-sm",
-          isTransparent ? "bg-slate-950" : "border-b border-slate-100 bg-white"
+        "sticky top-0 z-40 h-16 border-b border-[#e7e7e3] bg-[#f7f7f6]",
+        isTransparent && "bg-slate-950"
       )}>
-        <div className="max-w-7xl mx-auto px-4 max-[360px]:px-3 sm:px-6">
-          <div className="flex items-center justify-between h-14 sm:h-16 max-[360px]:h-12">
-            {/* Logo */}
-            <Link href={localizePath("/", pathLocale)} className="flex shrink-0 items-center gap-2 sm:gap-2.5">
-              <LogoMark size={30} />
-              <span className={cn("font-semibold text-base sm:text-lg tracking-tight", textColor)}>
-                CampCareer
-              </span>
+        <div className="mx-auto max-w-[1240px] px-6 max-sm:px-[18px]">
+          <div className="flex h-16 items-center justify-between">
+            {/* Wordmark — intentionally plain, like the search-first prototype. */}
+            <Link href={localizePath("/", pathLocale)} className={cn("campcareer-wordmark shrink-0", textColor)} aria-label="campcareer home">
+              campcareer
             </Link>
 
-            {/* Right side: Search + Language + Auth */}
-            <div className="flex items-center gap-1.5 sm:gap-2">
-              {/* Search */}
-              <button
-                type="button"
-                onClick={() => setSearchOpen(true)}
-                aria-label={pathLocale === "ko" ? "검색" : "Search"}
-                className={cn("flex items-center justify-center rounded-lg p-2 transition", textColor, hoverBg)}
-              >
-                <Search className="w-5 h-5" />
-              </button>
-
-              <Link href={localizePath("/maps", pathLocale)} className={cn("hidden items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition sm:flex", mutedColor, hoverBg)}>
+            {/* Right-side action group: map, language, then login. */}
+            <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
+              <Link href={localizePath("/maps", pathLocale)} aria-label={pathLocale === "ko" ? "지도" : "Maps"} className={cn("hidden items-center justify-center rounded-lg p-2 transition sm:flex", mutedColor, hoverBg)}>
                 <MapPinned className="size-4" />
-                {pathLocale === "ko" ? "지도" : "Map"}
               </Link>
 
               <div className="relative" ref={langRef}>
@@ -101,28 +79,29 @@ export function TopNav() {
                         onClick={() => switchLang(opt)}
                         className={cn(
                           "flex w-full items-center gap-3 px-4 py-2.5 text-sm transition",
-                          opt === pathLocale ? "bg-blue-50 font-semibold text-blue-700" : "text-slate-700 hover:bg-slate-50"
+                          opt === pathLocale ? "bg-[#f1f1ef] font-semibold text-[#1b1b1b]" : "text-slate-700 hover:bg-[#f6f6f4]"
                         )}
                       >
                         <span className="text-lg">{opt === "ko" ? "🇰🇷" : "🇺🇸"}</span>
                         <span className="flex-1 text-left">{LOCALE_META[opt].label}</span>
-                        {opt === pathLocale && <Check className="w-4 h-4 shrink-0 text-blue-600" />}
+                        {opt === pathLocale && <Check className="w-4 h-4 shrink-0 text-slate-700" />}
                       </button>
                     ))}
                   </div>
                 )}
               </div>
 
-              <Link href={localizePath("/", pathLocale)} className={cn("rounded-lg px-3 py-2 text-sm font-semibold transition", isTransparent ? "bg-white text-slate-950 hover:bg-slate-100" : "bg-blue-600 text-white hover:bg-blue-700")}>
-                {pathLocale === "ko" ? "경로 검색" : "Search routes"}
+              <Link
+                href={localizePath("/login", pathLocale)}
+                className={cn("inline-flex items-center gap-1.5 rounded-lg border border-[#d8d8d4] bg-white px-3 py-2 text-sm font-semibold text-[#1b1b1b] transition hover:bg-[#f6f6f4]", isTransparent && "border-white/20 bg-white text-slate-950")}
+              >
+                <UserRound className="size-4" />
+                {pathLocale === "ko" ? "로그인" : "Log in"}
               </Link>
             </div>
           </div>
         </div>
       </header>
-
-      {/* Search modal */}
-      <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} locale={pathLocale} />
     </>
   )
 }

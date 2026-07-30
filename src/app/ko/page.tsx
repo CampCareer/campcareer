@@ -4,8 +4,8 @@ import { pageMetadata } from "@/lib/seo"
 export const revalidate = 86400
 
 export const metadata = pageMetadata({
-  title: "CampCareer — 해외 커리어 경로 검색",
-  description: "시민권, 목적지, 직종을 기준으로 비자 조건, 준비, 구직 링크, 관련 교육, 지도를 한 경로로 확인하세요.",
+  title: "CampCareer — 검증된 해외 취업·학업 경로 검색",
+  description: "목적지와 하고 싶은 일을 검색해 출처가 확인된 과정·구직·지역 정보를 찾으세요.",
   path: "/ko",
 })
 

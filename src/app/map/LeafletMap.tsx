@@ -127,6 +127,7 @@ export default function LeafletMap({
   onSelectFranceCity,
   onSelectSpainCity,
   onSelectUniversity,
+  showUniversities = true,
   onReset,
   tab,
 }: {
@@ -148,6 +149,7 @@ export default function LeafletMap({
   onSelectFranceCity?: (code: string) => void
   onSelectSpainCity?: (code: string) => void
   onSelectUniversity?: (slug: string) => void
+  showUniversities?: boolean
   onReset: () => void
   tab?: string
 }) {
@@ -410,6 +412,7 @@ export default function LeafletMap({
       map.removeLayer(markerLayerRef.current)
       markerLayerRef.current = null
     }
+    if (!showUniversities) return
     if (activeCountryRef.current === "US" && map.getZoom() >= 5) {
       const group = buildMarkers("US")
       group.addTo(map)

@@ -5,6 +5,13 @@ import { track as vercelTrack } from "@vercel/analytics"
 type EventValue = string | number | boolean | undefined
 
 const ALLOWED_EVENTS = new Set([
+  "route_search_started",
+  "route_search_submitted",
+  "route_result_viewed",
+  "route_external_link_clicked",
+  "route_request_submitted",
+  "map_opened_from_route",
+  "guide_interest_submitted",
   "landing_view",
   "recommendation_start",
   "recommendation_result_view",
@@ -67,6 +74,42 @@ export function recordDiscoveryEvent(
 export function recordReportEvent(
   eventName: "report_launch_view" | "report_workspace_open",
   context: { surface: "report_launch" | "report_workspace"; country: "AU"; locale: "en" | "ko" },
+) {
+  track(eventName, context)
+  if (
+    typeof window === "undefined" ||
+    !document.cookie.split("; ").some((item) => item === "cc_analytics_consent=granted")
+  ) return
+
+  void fetch("/api/v1/discovery-events", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ eventName, context }),
+    keepalive: true,
+  }).catch(() => undefined)
+}
+
+export type RouteAnalyticsEvent =
+  | "route_search_started"
+  | "route_search_submitted"
+  | "route_result_viewed"
+  | "route_external_link_clicked"
+  | "route_request_submitted"
+  | "map_opened_from_route"
+  | "guide_interest_submitted"
+
+/**
+ * Route events deliberately accept only a small, non-identifying context.
+ * Never pass an email address, free-text field, or a full URL query here.
+ */
+export function recordRouteEvent(
+  eventName: RouteAnalyticsEvent,
+  context: {
+    route_id?: string
+    locale?: "en" | "ko"
+    link_type?: "visa" | "course" | "job" | "employer" | "map"
+    surface?: "landing" | "route_result" | "maps"
+  },
 ) {
   track(eventName, context)
   if (

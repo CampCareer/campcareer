@@ -8,8 +8,9 @@ export const dynamic = "force-dynamic"
 /**
  * GET /api/au/courses-by-concept?concept=nursing&limit=6
  *
- * Returns CRICOS courses for a given concept (major), grouped by state.
- * Uses broad_field from AU_CONCEPT_OCCUPATIONS to match courses.
+ * Legacy concept-browse endpoint. It uses broad fields and must not be used
+ * by Search → Result route pages. Those pages use the career-specific matcher
+ * and actual-campus gate in /api/au/route-study-options/[candidate].
  */
 export async function GET(request: NextRequest) {
   const conceptId = request.nextUrl.searchParams.get("concept") ?? ""

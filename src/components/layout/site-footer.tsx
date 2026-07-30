@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { localeFromPathname, localizePath, type LocaleOption } from "@/lib/i18n/config"
 import { cn } from "@/lib/utils"
-import { LogoMark } from "@/components/logo-mark"
 
 export function SiteFooter({ className }: { className?: string }) {
   const locale = useRouteLocale()
@@ -18,14 +17,13 @@ export function SiteFooter({ className }: { className?: string }) {
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {/* Brand */}
           <div>
-            <Link href={localizePath("/", pathLocale)} className="flex items-center gap-2">
-              <LogoMark size={24} />
-              <span className="text-base font-semibold text-slate-900">CampCareer</span>
+            <Link href={localizePath("/", pathLocale)} className="campcareer-wordmark text-slate-900">
+              campcareer
             </Link>
             <p className="mt-3 text-sm leading-6 text-slate-500">
               {isKo
-                ? "시민권에서 해외 직종으로 이어지는 검증된 경로를 찾습니다."
-                : "Find verified routes from citizenship to work abroad."}
+                ? "목적지와 하고 싶은 일에 필요한 검증된 유학·취업 정보를 찾습니다."
+                : "Find source-backed study and work information for the destination and career you are considering."}
             </p>
           </div>
 
@@ -66,7 +64,7 @@ export function SiteFooter({ className }: { className?: string }) {
         {/* Bottom bar */}
         <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-slate-200 pt-6 text-xs text-slate-400 sm:flex-row">
           <span>&copy; {new Date().getFullYear()} CampCareer</span>
-          <span>{isKo ? "출신국에서 해외 직종으로" : "From citizenship to work abroad"}</span>
+          <span>{isKo ? "검색부터, 근거를 바탕으로" : "Search first. Decide with evidence."}</span>
         </div>
       </div>
     </footer>

@@ -40,6 +40,53 @@
 
 }
 
+/* The route map is research-only: no account-bound save or share controls. */
+.route-map-mode [aria-label="Save"],
+.route-map-mode [aria-label="저장"],
+.route-map-mode [aria-label="Share"],
+.route-map-mode [aria-label="공유"] {
+  display: none;
+}
+
+/* Search-first wordmark from the 3001 prototype: no icon, no decorative type. */
+.campcareer-wordmark {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.075em;
+  line-height: 1;
+  text-decoration: none;
+}
+
+/* The interactive map retains its geographic signal colours, but its old
+   product controls follow the same ink/fog palette as the 3001 interface. */
+.route-map-mode .bg-blue-50,
+.route-map-mode .hover\:bg-blue-50:hover {
+  background-color: #f6f6f4 !important;
+}
+.route-map-mode .bg-blue-100,
+.route-map-mode .hover\:bg-blue-100:hover {
+  background-color: #ececea !important;
+}
+.route-map-mode .border-blue-100,
+.route-map-mode .border-blue-200 {
+  border-color: #d8d8d4 !important;
+}
+.route-map-mode .text-blue-500,
+.route-map-mode .text-blue-600,
+.route-map-mode .text-blue-700,
+.route-map-mode .text-blue-800,
+.route-map-mode .text-blue-900,
+.route-map-mode .hover\:text-blue-700:hover,
+.route-map-mode .hover\:text-blue-800:hover {
+  color: #1b1b1b !important;
+}
+.route-map-mode .bg-blue-500,
+.route-map-mode .bg-blue-600,
+.route-map-mode .bg-blue-700 {
+  background-color: #1b1b1b !important;
+}
+
 @layer base {
   * {
     @apply border-border;

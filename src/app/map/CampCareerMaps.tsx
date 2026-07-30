@@ -80,6 +80,7 @@ export default function CampCareerMaps({
   initialSA4,
   initialUniversity,
   auOnly = false,
+  routeMode = false,
 }: {
   data: MapData
   initialState?: string
@@ -87,6 +88,7 @@ export default function CampCareerMaps({
   initialSA4?: string
   initialUniversity?: string
   auOnly?: boolean
+  routeMode?: boolean
 }) {
   const t = useTranslations()
   const locale = useLocale()
@@ -188,15 +190,17 @@ export default function CampCareerMaps({
   const [savedUnivSlugs, setSavedUnivSlugs] = useState<Set<string>>(new Set())
 
   useEffect(() => {
+    if (routeMode) return
     supabase.auth.getUser().then(({ data }) => setUser(data.user ?? null))
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
       setUser(session?.user ?? null)
     })
     return () => subscription.unsubscribe()
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [routeMode])
 
   useEffect(() => {
+    if (routeMode) return
     if (!user) { setSavedOccCodes(new Set()); setSavedUnivSlugs(new Set()); return }
     supabase
       .from("saved_occupations")
@@ -213,7 +217,7 @@ export default function CampCareerMaps({
         if (data) setSavedUnivSlugs(new Set(data.map((r) => r.univ_slug)))
       })
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user])
+  }, [routeMode, user])
 
   const toggleSaveOcc = async (occCode: string, occTitle: string) => {
     if (!user) { window.location.href = "/login"; return }
@@ -902,7 +906,7 @@ export default function CampCareerMaps({
   const toolbarExpanded = !isMobile || expanded
 
   return (
-    <div className="relative h-full w-full overflow-hidden">
+    <div className={cn("relative h-full w-full overflow-hidden", routeMode && "route-map-mode")}>
         {auOnly ? (
       <div className="pointer-events-none absolute inset-x-0 top-0 z-[2200] p-3">
         <div className="pointer-events-auto flex min-w-0 items-center justify-between gap-2">
@@ -1019,14 +1023,14 @@ export default function CampCareerMaps({
               </div>
             )}
           </div>
-          <ToolNavActions minimal className="shrink-0 self-center" />
+          {!routeMode && <ToolNavActions minimal className="shrink-0 self-center" />}
         </div>
       </div>
         ) : (
         (activeCountry === "AU" || activeCountry === "US" || activeCountry === "CA" || activeCountry === "IE" || activeCountry === "UK" || activeCountry === "DE" || activeCountry === "NL" || activeCountry === "BE" || activeCountry === "JP" || activeCountry === "SG" || activeCountry === "KR" || activeCountry === "FR" || activeCountry === "ES" || activeCountry === "NZ" || activeCountry === "NO" || activeCountry === "SE" || activeCountry === "DK" || activeCountry === "FI" || activeCountry === "CH" || activeCountry === "AE") && (
       <div className="pointer-events-none absolute inset-x-0 top-0 z-[2200] p-3">
       <div className={cn("pointer-events-auto flex min-h-14 rounded-2xl border border-slate-200 bg-white/95 shadow-[0_14px_35px_rgba(15,23,42,.10)] backdrop-blur-md", isMobile && toolbarExpanded ? "flex-col items-stretch" : "items-center")}>
-           <ToolNavActions className={cn("ml-3 self-center", isMobile && toolbarExpanded && "order-1 mt-3 self-end")} />
+           {!routeMode && <ToolNavActions className={cn("ml-3 self-center", isMobile && toolbarExpanded && "order-1 mt-3 self-end")} />}
           {!toolbarExpanded && (
           <button
             type="button"
@@ -1596,7 +1600,8 @@ export default function CampCareerMaps({
           onSelectSA4={onSelectSA4}
           onSelectFranceCity={(code) => setSelectedFRCityCode(code)}
           onSelectSpainCity={(code) => setSelectedESCityCode(code)}
-          onSelectUniversity={(slug: string) => {
+          showUniversities={!routeMode}
+          onSelectUniversity={routeMode ? undefined : (slug: string) => {
             const usUniv = data.usRankedColleges.find((c) => c.slug === slug)
             if (usUniv) {
               setSelectedUniv(usUniv)
@@ -1759,6 +1764,7 @@ export default function CampCareerMaps({
               auLabourMarket={activeCountry === "AU" ? auLabourMarket : null}
               selectedNeroA4={selectedNeroA4}
               setSelectedNeroA4={setSelectedNeroA4}
+              routeMode={routeMode}
               onSelectCollege={(c) => {
                 setSelectedUniv(c)
                 setActiveCountry("UK")
@@ -2506,6 +2512,7 @@ function Panel({
   setSelectedNeroA4,
   onSelectCollege,
   searchBarDetailControls = false,
+  routeMode = false,
 }: {
   data: MapData
   selected: string
@@ -2532,6 +2539,7 @@ function Panel({
   setSelectedNeroA4: (a4: string | null) => void
   onSelectCollege?: (college: UKCollege) => void
   searchBarDetailControls?: boolean
+  routeMode?: boolean
 }) {
   const t = useTranslations()
   const locale = useLocale()
@@ -3021,6 +3029,7 @@ function Panel({
         onShare={onShare}
         labourMarket={auLabourMarket}
         showInlineControls={!searchBarDetailControls}
+        routeMode={routeMode}
       />
     )
   }
@@ -5150,6 +5159,7 @@ function OccupationDetail({
   onShare,
   labourMarket,
   showInlineControls = true,
+  routeMode = false,
 }: {
   occ: OccRow
   stateShortages: StateShortageByOcc[]
@@ -5163,6 +5173,8 @@ function OccupationDetail({
   onShare: (occTitle: string) => void
   labourMarket: AuLabourMarket | null
   showInlineControls?: boolean
+  /** Route-result handoffs keep only occupation and regional evidence. */
+  routeMode?: boolean
 }) {
   const locale = useLocale()
   const name = locale === "ko" && occ.occupation_ko ? occ.occupation_ko : occ.occupation_en
@@ -5224,14 +5236,14 @@ function OccupationDetail({
             {name}
           </h2>
           <div className="flex items-center gap-1 shrink-0">
-            <button
+            {!routeMode && <button
               type="button"
               onClick={() => onToggleSave(occ.anzsco_code ?? "", name)}
               aria-label="Save occupation"
               className="rounded-md p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
             >
               <Bookmark className="h-4 w-4" fill={savedOccCodes.has(occ.anzsco_code ?? "") ? "currentColor" : "none"} />
-            </button>
+            </button>}
             <button
               type="button"
               onClick={() => onShare(name)}
@@ -5248,7 +5260,7 @@ function OccupationDetail({
           {occ.on_csol && <Badge tone="green">{t.map.visaEligible}</Badge>}
         </div>
 
-        {occ.anzsco_code && (
+        {!routeMode && occ.anzsco_code && (
           <Link
             href={`/roi-explorer/au/occupation/${occ.anzsco_code}`}
             className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors"
@@ -5331,7 +5343,7 @@ function OccupationDetail({
             </section>
           )}
 
-          {relatedData.pathway === "degree" ? (
+          {!routeMode && (relatedData.pathway === "degree" ? (
             <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
               <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider mb-2">
                 {t.map.detailDegreesInState.replace("{state}", currentState)}
@@ -5477,7 +5489,7 @@ function OccupationDetail({
                 </div>
               )}
             </div>
-          )}
+          ))}
 
 
 
@@ -5489,7 +5501,7 @@ function OccupationDetail({
 
           <JobListings what={name} where={currentState} country="AU" />
 
-          <AffiliateCtas />
+          {!routeMode && <AffiliateCtas />}
         </div>
       </div>
 
