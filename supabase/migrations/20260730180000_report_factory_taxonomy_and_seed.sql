@@ -83,9 +83,10 @@ create table if not exists taxonomy.occupation_identifiers (
   source_url text,
   valid_from date,
   valid_to date,
-  created_at timestamptz not null default now(),
-  unique(identifier_system, coalesce(identifier_version,''), identifier_value)
+  created_at timestamptz not null default now()
 );
+create unique index if not exists occupation_identifiers_identity_uidx
+  on taxonomy.occupation_identifiers(identifier_system, coalesce(identifier_version,''), identifier_value);
 create index if not exists occupation_identifiers_occupation_idx
   on taxonomy.occupation_identifiers(occupation_id);
 
