@@ -31,7 +31,9 @@ export function TopNav() {
 
   function switchLang(next: LocaleOption) {
     setLocale(localeForUi(next))
-    router.replace(localizePath(pathname, next))
+    const target = localizePath(pathname, next)
+    const qs = window.location.search
+    router.replace(qs ? `${target}${qs}` : target)
     setLangOpen(false)
   }
 

@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic"
 export async function GET(request: NextRequest, { params }: { params: Promise<{ candidate: string }> }) {
   const { candidate } = await params
   const state = request.nextUrl.searchParams.get("state")?.toUpperCase() ?? null
-  const rawLimit = Number(request.nextUrl.searchParams.get("limit") ?? 12)
+  const rawLimit = Number(request.nextUrl.searchParams.get("limit") ?? 20)
 
   if (state && !(AU_STATE_CODES as readonly string[]).includes(state)) {
     return NextResponse.json({ error: "Invalid Australian state" }, { status: 400 })

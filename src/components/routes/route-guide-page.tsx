@@ -2,10 +2,10 @@
 
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react"
 import { useRouter } from "next/navigation"
-import { ArrowRight, CheckCircle2, ExternalLink, Search } from "lucide-react"
+import { ArrowRight, CheckCircle2, ExternalLink, Filter, Search } from "lucide-react"
 import type { RouteJobs } from "@/data/au-route-jobs-contract"
 import type { RouteOverview, RouteOverviewLabourProfile } from "@/data/au-route-overview-contract"
-import { type AuStateCode, type RouteStudyOption, type RouteStudyOptions } from "@/data/au-route-study-contract"
+import { type AuStateCode, type QualificationLevel, QUALIFICATION_LEVELS, qualificationLevelLabel, type RouteStudyOption, type RouteStudyOptions } from "@/data/au-route-study-contract"
 import { type LocalizedText, type RouteGuide, type RouteLink, type RouteLinkType, type RouteLocale, type RouteSource } from "@/data/route-guides"
 import { findAustraliaRouteCandidates, type AustraliaRouteCandidate } from "@/data/route-taxonomy"
 import { findPublishedRoute, getPublishedAustraliaRouteCandidates, routeResultsHref, type RouteGoal } from "@/lib/route-search"
@@ -343,11 +343,30 @@ function preparationLinkType(source: RouteSource): RouteLinkType {
   return "visa"
 }
 
+function FilterOption({ label, selected, onClick }: { label: string; selected: boolean; onClick: () => void }) {
+  return <button type="button" onClick={onClick} className={`flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm transition ${selected ? "bg-slate-950 font-semibold text-white" : "text-slate-700 hover:bg-slate-100"}`}>
+    <span className={`inline-flex size-4 shrink-0 items-center justify-center rounded-full border ${selected ? "border-white bg-white" : "border-slate-300"}`}>{selected && <span className="size-2 rounded-full bg-slate-950" />}</span>
+    {label}
+  </button>
+}
+
 function Study({ guide, locale }: { guide: RouteGuide; locale: RouteLocale }) {
   const isKo = locale === "ko"
   const [studyData, setStudyData] = useState<RouteStudyOptions | null>(null)
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading")
   const [selectedState, setSelectedState] = useState<AuStateCode | "all">("all")
+  const [selectedQualification, setSelectedQualification] = useState<QualificationLevel | "all">("all")
+  const [filterOpen, setFilterOpen] = useState(false)
+  const filterRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!filterOpen) return
+    const onDown = (e: MouseEvent) => { if (filterRef.current && !filterRef.current.contains(e.target as Node)) setFilterOpen(false) }
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setFilterOpen(false) }
+    document.addEventListener("mousedown", onDown)
+    document.addEventListener("keydown", onKey)
+    return () => { document.removeEventListener("mousedown", onDown); document.removeEventListener("keydown", onKey) }
+  }, [filterOpen])
 
   useEffect(() => {
     const candidateId = guide.candidateId
@@ -360,6 +379,7 @@ function Study({ guide, locale }: { guide: RouteGuide; locale: RouteLocale }) {
     const controller = new AbortController()
     setStatus("loading")
     setSelectedState("all")
+    setSelectedQualification("all")
     void fetch(`/api/au/route-study-options/${encodeURIComponent(candidateId)}`, { signal: controller.signal })
       .then(async (response) => {
         if (!response.ok) throw new Error(`Study options request failed: ${response.status}`)
@@ -382,9 +402,16 @@ function Study({ guide, locale }: { guide: RouteGuide; locale: RouteLocale }) {
     for (const option of studyData?.options ?? []) for (const campus of option.campuses) values.add(campus.state)
     return [...values].sort()
   }, [studyData])
-  const visibleOptions = selectedState === "all"
-    ? studyData?.options ?? []
-    : (studyData?.options ?? []).filter((option) => option.campuses.some((campus) => campus.state === selectedState))
+  const availableQualifications = useMemo(() => {
+    const values = new Set<QualificationLevel>()
+    for (const option of studyData?.options ?? []) if (option.qualificationLevel) values.add(option.qualificationLevel)
+    return QUALIFICATION_LEVELS.filter((level) => values.has(level))
+  }, [studyData])
+  const visibleOptions = (studyData?.options ?? []).filter((option) => {
+    if (selectedState !== "all" && !option.campuses.some((campus) => campus.state === selectedState)) return false
+    if (selectedQualification !== "all" && option.qualificationLevel !== selectedQualification) return false
+    return true
+  })
 
   if (status === "loading") return <StudyLoading locale={locale} />
 
@@ -421,12 +448,32 @@ function Study({ guide, locale }: { guide: RouteGuide; locale: RouteLocale }) {
     />
   }
 
+  const activeCount = (selectedState === "all" ? 0 : 1) + (selectedQualification === "all" ? 0 : 1)
+  const FILTER_STATES = availableStates
+
   return <section>
     <SectionHeading eyebrow={isKo ? "학업" : "Study"} title={isKo ? "검증된 실제 과정" : "Verified course options"} />
     <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">{isKo ? "직업명으로 정확히 매칭한 과정만 표시합니다. 주 필터는 학교 본부가 아니라 공식 과정 페이지의 실제 캠퍼스 기준입니다." : "Only courses matched to this career are shown. State filters use the actual delivery campus on the provider's course page, never the provider's head office."}</p>
-    <div className="mt-5 flex flex-wrap gap-2" aria-label={isKo ? "과정 캠퍼스 주 필터" : "Course campus state filter"}>
-      <StateFilter value="all" selected={selectedState === "all"} onSelect={setSelectedState} locale={locale} />
-      {availableStates.map((state) => <StateFilter key={state} value={state} selected={selectedState === state} onSelect={setSelectedState} locale={locale} />)}
+    <div className="mt-5 flex items-center gap-3">
+      <div className="relative" ref={filterRef}>
+        <button type="button" onClick={() => setFilterOpen((o) => !o)} className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 transition hover:border-slate-400">
+          <Filter className="size-3.5" />
+          {isKo ? "필터" : "Filter"}
+          {activeCount > 0 && <span className="inline-flex size-4 items-center justify-center rounded-full bg-slate-950 text-[10px] font-bold text-white">{activeCount}</span>}
+        </button>
+        {filterOpen && <div className="absolute left-0 top-full z-50 mt-2 w-56 rounded-2xl border border-slate-200 bg-white p-4 shadow-xl">
+          <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-slate-500">{isKo ? "주" : "State"}</p>
+          <div className="mt-2 space-y-1">
+            <FilterOption label={isKo ? "전체 호주" : "All Australia"} selected={selectedState === "all"} onClick={() => setSelectedState("all")} />
+            {FILTER_STATES.map((state) => <FilterOption key={state} label={`${stateLabel(state, locale)} · ${state}`} selected={selectedState === state} onClick={() => setSelectedState(state)} />)}
+          </div>
+          {availableQualifications.length > 1 && <><hr className="my-3 border-slate-100" /><p className="text-[11px] font-bold uppercase tracking-[0.08em] text-slate-500">{isKo ? "학위 수준" : "Qualification"}</p><div className="mt-2 space-y-1">
+            <FilterOption label={isKo ? "전체 학위" : "All levels"} selected={selectedQualification === "all"} onClick={() => setSelectedQualification("all")} />
+            {availableQualifications.map((level) => <FilterOption key={level} label={qualificationLevelLabel(level, locale)} selected={selectedQualification === level} onClick={() => setSelectedQualification(level)} />)}
+          </div></>}
+        </div>}
+      </div>
+      {activeCount > 0 && <button type="button" onClick={() => { setSelectedState("all"); setSelectedQualification("all") }} className="text-xs font-medium text-slate-500 underline underline-offset-2 hover:text-slate-800">{isKo ? "초기화" : "Reset"}</button>}
     </div>
     <p className="mt-3 text-xs leading-5 text-slate-500">{isKo ? "과정 페이지·캠퍼스·핵심 사실이 확인된 기관 링크입니다. 학비·입학 조건은 지원 전 기관 페이지에서 다시 확인하세요." : "These are provider links with a verified course page, campus, and core facts. Recheck fees and entry conditions with the provider before applying."}</p>
     <div className="mt-5 space-y-4">
@@ -449,23 +496,16 @@ function StudyResources({ guide, locale, eyebrow, title, detail, compact = false
   return <section className={compact ? "mt-9 border-t border-slate-200 pt-8" : ""}><SectionHeading eyebrow={eyebrow} title={title} />{detail && <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">{detail}</p>}{researchOnly && <p className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-900">{locale === "ko" ? "아래 링크에는 아직 비교 가능한 학비·기간·영어·캠퍼스 정보가 함께 검증되지 않았습니다." : "The links below do not yet have tuition, duration, English, and campus facts verified together for comparison."}</p>}<div className="mt-4 space-y-3">{resources.map((course) => <ActionCard key={course.url} item={course} locale={locale} guideId={guide.id} />)}</div></section>
 }
 
-function StateFilter({ value, selected, onSelect, locale }: { value: AuStateCode | "all"; selected: boolean; onSelect: (value: AuStateCode | "all") => void; locale: RouteLocale }) {
-  const isKo = locale === "ko"
-  const label = value === "all" ? (isKo ? "전체 호주" : "All Australia") : `${stateLabel(value, locale)} · ${value}`
-  return <button type="button" aria-pressed={selected} onClick={() => onSelect(value)} className={`rounded-full border px-3 py-2 text-xs font-semibold transition ${selected ? "border-slate-950 bg-slate-950 text-white" : "border-slate-200 bg-white text-slate-700 hover:border-slate-400"}`}>{label}</button>
-}
-
 function VerifiedCourseCard({ option, guideId, locale }: { option: RouteStudyOption; guideId: string; locale: RouteLocale }) {
   const isKo = locale === "ko"
   const tuition = option.tuitionAud ? `A$${option.tuitionAud.toLocaleString("en-AU")}${option.tuitionYear ? ` · ${option.tuitionYear}` : ""}` : (isKo ? "학비 확인 필요" : "Fee to confirm")
   const campuses = option.campuses.map((campus) => `${campus.name}, ${stateLabel(campus.state, locale)}`).join(" · ")
-  const checked = option.officialCheckedAt ? formatCourseDate(option.officialCheckedAt, locale) : null
-  return <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.03)] sm:p-6"><div className="flex flex-wrap items-start justify-between gap-4"><div className="min-w-0"><p className="text-xs font-semibold text-slate-500">{option.providerName}</p><h3 className="mt-1 text-lg font-semibold tracking-[-0.025em] text-slate-950">{option.title}</h3>{option.qualification && <p className="mt-1 text-sm text-slate-600">{option.qualification}{option.courseCode ? ` · CRICOS ${option.courseCode}` : ""}</p>}</div><span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-800"><CheckCircle2 className="size-3" />{isKo ? "기관 링크 검증" : "Provider link verified"}</span></div><dl className="mt-5 grid gap-2 sm:grid-cols-3"><CourseFact label={isKo ? "실제 캠퍼스" : "Actual campus"} value={campuses} /><CourseFact label={isKo ? "연간 학비" : "Annual tuition"} value={tuition} hint={option.tuitionSource === "provider" ? (isKo ? "기관 페이지 기준" : "Provider page") : option.tuitionSource === "registry" ? "CRICOS" : undefined} /><CourseFact label={isKo ? "기간" : "Duration"} value={option.duration?.value ?? (isKo ? "확인 필요" : "To confirm")} /></dl>{option.intakes && <CourseDetail label={isKo ? "입학 시기" : "Intakes"} fact={option.intakes} locale={locale} />}{option.englishRequirement && <CourseDetail label={isKo ? "영어 요건" : "English"} fact={option.englishRequirement} locale={locale} />}{option.entryRequirements && <CourseDetail label={isKo ? "입학 요건" : "Entry"} fact={option.entryRequirements} locale={locale} />}<div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-4"><p className="text-[11px] text-slate-500">{checked ? (isKo ? `기관 과정 링크 확인 ${checked}` : `Provider course link checked ${checked}`) : (isKo ? "기관 과정 링크 검증" : "Provider course link verified")}</p><RouteExternalLink href={option.officialUrl} linkType="course" guideId={guideId} locale={locale} className="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-950 hover:underline">{isKo ? "공식 과정 페이지" : "Official course page"}<ExternalLink className="size-3.5" /></RouteExternalLink></div></article>
+  return <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.03)] sm:p-6"><div className="flex flex-wrap items-start justify-between gap-4"><div className="min-w-0"><p className="text-xs font-semibold text-slate-500">{option.providerName}</p><h3 className="mt-1 text-lg font-semibold tracking-[-0.025em] text-slate-950">{option.title}</h3>{option.qualification && <p className="mt-1 text-sm text-slate-600">{option.qualification}{option.courseCode ? ` · CRICOS ${option.courseCode}` : ""}</p>}</div><span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-800"><CheckCircle2 className="size-3" />{isKo ? "기관 링크 검증" : "Provider link verified"}</span></div><dl className="mt-5 grid gap-2 sm:grid-cols-3"><CourseFact label={isKo ? "실제 캠퍼스" : "Actual campus"} value={campuses} /><CourseFact label={isKo ? "연간 학비" : "Annual tuition"} value={tuition} hint={option.tuitionSource === "provider" ? (isKo ? "기관 페이지 기준" : "Provider page") : option.tuitionSource === "registry" ? "CRICOS" : undefined} /><CourseFact label={isKo ? "기간" : "Duration"} value={option.duration?.value ?? (isKo ? "확인 필요" : "To confirm")} /></dl>{option.intakes && <CourseDetail label={isKo ? "입학 시기" : "Intakes"} fact={option.intakes} />}{option.englishRequirement && <CourseDetail label={isKo ? "영어 요건" : "English"} fact={option.englishRequirement} />}{option.entryRequirements && <CourseDetail label={isKo ? "입학 요건" : "Entry"} fact={option.entryRequirements} />}<div className="mt-5 flex justify-end border-t border-slate-100 pt-4"><RouteExternalLink href={option.officialUrl} linkType="course" guideId={guideId} locale={locale} className="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-950 hover:underline">{isKo ? "공식 과정 페이지" : "Official course page"}<ExternalLink className="size-3.5" /></RouteExternalLink></div></article>
 }
 
 function CourseFact({ label, value, hint }: { label: string; value: string; hint?: string }) { return <div className="rounded-xl bg-slate-50 px-3 py-3"><dt className="text-[11px] font-bold uppercase tracking-[0.08em] text-slate-500">{label}</dt><dd className="mt-1 text-sm font-semibold leading-5 text-slate-900">{value}</dd>{hint && <p className="mt-1 text-[11px] text-slate-500">{hint}</p>}</div> }
 
-function CourseDetail({ label, fact, locale }: { label: string; fact: { value: string; sourceUrl: string; reviewedAt: string | null }; locale: RouteLocale }) { return <div className="mt-4 border-t border-slate-100 pt-4"><p className="text-[11px] font-bold uppercase tracking-[0.08em] text-slate-500">{label}</p><p className="mt-1 text-sm leading-6 text-slate-700">{fact.value}</p>{fact.reviewedAt && <p className="mt-1 text-[11px] text-slate-400">{locale === "ko" ? `확인 ${formatCourseDate(fact.reviewedAt, locale)}` : `Reviewed ${formatCourseDate(fact.reviewedAt, locale)}`}</p>}</div> }
+function CourseDetail({ label, fact }: { label: string; fact: { value: string; sourceUrl: string } }) { return <div className="mt-4 border-t border-slate-100 pt-4"><p className="text-[11px] font-bold uppercase tracking-[0.08em] text-slate-500">{label}</p><p className="mt-1 text-sm leading-6 text-slate-700">{fact.value}</p></div> }
 
 function stateLabel(state: AuStateCode, locale: RouteLocale) { const names: Record<AuStateCode, { en: string; ko: string }> = { ACT: { en: "Australian Capital Territory", ko: "수도 준주" }, NSW: { en: "New South Wales", ko: "뉴사우스웨일스" }, NT: { en: "Northern Territory", ko: "노던 테리토리" }, QLD: { en: "Queensland", ko: "퀸즐랜드" }, SA: { en: "South Australia", ko: "사우스오스트레일리아" }, TAS: { en: "Tasmania", ko: "태즈메이니아" }, VIC: { en: "Victoria", ko: "빅토리아" }, WA: { en: "Western Australia", ko: "웨스턴오스트레일리아" } }; return names[state][locale] }
 

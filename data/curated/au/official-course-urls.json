@@ -100,11 +100,6 @@
     "url": "https://www.unsw.edu.au/study/undergraduate/bachelor-of-computer-science"
   },
   {
-    "institutionId": "monash-university",
-    "courseCode": "075119J",
-    "url": "https://www.monash.edu/study/courses/find-a-course/nursing-m2006"
-  },
-  {
     "institutionId": "the-university-of-queensland",
     "courseCode": "082620D",
     "url": "https://study.uq.edu.au/study-options/programs/bachelor-dental-science-honours-2367"
@@ -183,5 +178,85 @@
     "institutionId": "university-of-technology-sydney",
     "courseCode": "0100398",
     "url": "https://www.uts.edu.au/courses/master-of-business-analytics"
+  },
+  {
+    "institutionId": "the-university-of-adelaide",
+    "courseCode": "057076J",
+    "url": "https://adelaide.edu.au/study/degrees/bachelor-of-nursing/"
+  },
+  {
+    "institutionId": "queensland-university-of-technology",
+    "courseCode": "003501K",
+    "url": "https://www.qut.edu.au/courses/bachelor-of-nursing"
+  },
+  {
+    "institutionId": "university-of-the-sunshine-coast",
+    "courseCode": "078086M",
+    "url": "https://www.unisc.edu.au/study/courses-and-programs/bachelor-degrees-undergraduate-programs/bachelor-of-nursing-science"
+  },
+  {
+    "institutionId": "university-of-the-sunshine-coast",
+    "courseCode": "072637M",
+    "url": "https://www.unisc.edu.au/study/courses-and-programs/bachelor-degrees-undergraduate-programs/bachelor-of-nursing-science-graduate-entry"
+  },
+  {
+    "institutionId": "deakin-university",
+    "courseCode": "018327G",
+    "url": "https://www.deakin.edu.au/course/bachelor-nursing-international"
+  },
+  {
+    "institutionId": "rmit-university",
+    "courseCode": "114027H",
+    "url": "https://www.rmit.edu.au/study-with-us/levels-of-study/undergraduate-study/bachelor-degrees/bachelor-of-nursing-bp032"
+  },
+  {
+    "institutionId": "western-sydney-university",
+    "courseCode": "041099M",
+    "url": "https://www.westernsydney.edu.au/future/study/courses/undergraduate/bachelor-of-nursing"
+  },
+  {
+    "institutionId": "flinders-university",
+    "courseCode": "005195K",
+    "url": "https://www.flinders.edu.au/study/courses/bachelor-nursing-preregistration"
+  },
+  {
+    "institutionId": "flinders-university",
+    "courseCode": "002701K",
+    "url": "https://www.flinders.edu.au/study/courses/bachelor-nursing-graduate-entry"
+  },
+  {
+    "institutionId": "edith-cowan-university",
+    "courseCode": "077132G",
+    "url": "https://www.ecu.edu.au/degrees/courses/bachelor-of-science-nursing"
+  },
+  {
+    "institutionId": "edith-cowan-university",
+    "courseCode": "091870M",
+    "url": "https://www.ecu.edu.au/degrees/courses/master-of-nursing-graduate-entry"
+  },
+  {
+    "institutionId": "university-of-tasmania",
+    "courseCode": "102253H",
+    "url": "https://www.utas.edu.au/courses/health/courses/h3o-bachelor-of-nursing"
+  },
+  {
+    "institutionId": "charles-darwin-university",
+    "courseCode": "118197B",
+    "url": "https://www.cdu.edu.au/study/course/bachelor-nursing-wnur02?year=2026"
+  },
+  {
+    "institutionId": "charles-darwin-university",
+    "courseCode": "118951F",
+    "url": "https://www.cdu.edu.au/study/course/master-nursing-practice-pre-registration-snppr2?year=2026"
+  },
+  {
+    "institutionId": "university-of-wollongong",
+    "courseCode": "113585H",
+    "url": "https://www.uow.edu.au/study/courses/bachelor-of-nursing/"
+  },
+  {
+    "institutionId": "the-university-of-queensland",
+    "courseCode": "069418D",
+    "url": "https://study.uq.edu.au/study-options/programs/master-nursing-graduate-entry-5776"
   }
 ]

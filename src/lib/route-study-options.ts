@@ -3,6 +3,7 @@ import "server-only"
 import { getAuRouteCourseMatcher, matchesExactAuRouteCourse } from "@/data/au-route-course-matchers"
 import {
   AU_STATE_CODES,
+  normalizeQualification,
   parseAuState,
   parsePositiveAud,
   parseTuitionYear,
@@ -87,19 +88,18 @@ export async function getAuRouteStudyOptions(candidateId: string, state?: string
 
   const factsByCourse = await getVerifiedFactsByCourse(exactCourses.map((course) => course.id))
   const providerById = await getProvidersById(exactCourses.map((course) => course.institution_id).filter((value): value is string => Boolean(value)))
-  const seenProviders = new Set<string>()
+  const seenCourses = new Set<number>()
   const options: RouteStudyOption[] = []
 
   for (const course of exactCourses) {
     if (!course.official_course_url || course.official_url_status !== "verified") continue
+    if (seenCourses.has(course.id)) continue
     const facts = factsByCourse.get(course.id) ?? new Map()
     const campuses = parseVerifiedCampuses(facts.get("campus")?.value)
     if (!campuses.length) continue
     if (normalizedState && !campuses.some((campus) => campus.state === normalizedState)) continue
 
-    const providerKey = course.institution_id ?? String(course.id)
-    if (seenProviders.has(providerKey)) continue
-    seenProviders.add(providerKey)
+    seenCourses.add(course.id)
     const tuitionFact = facts.get("annual_tuition_aud")
     const providerTuition = parsePositiveAud(tuitionFact?.value)
     const registryTuition = parsePositiveAud(course.tuition_fee_aud)
@@ -110,6 +110,7 @@ export async function getAuRouteStudyOptions(candidateId: string, state?: string
       courseCode: course.course_code,
       title: course.title,
       qualification: course.course_type ?? (course.aqf_level ? `AQF ${course.aqf_level}` : null),
+      qualificationLevel: normalizeQualification(course.course_type),
       duration: factToText(facts.get("duration")) ?? durationFromYears(course.duration_years),
       tuitionAud: providerTuition ?? registryTuition,
       tuitionYear: providerTuition ? parseTuitionYear(tuitionFact?.value) : null,

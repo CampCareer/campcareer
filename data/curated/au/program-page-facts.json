@@ -104,51 +104,13 @@
   },
   {
     "institutionId": "monash-university",
-    "courseCode": "075119J",
-    "fieldKey": "campus",
-    "value": {
-      "campuses": [
-        { "name": "Clayton", "state": "VIC" },
-        { "name": "Peninsula", "state": "VIC" }
-      ]
-    },
-    "sourceUrl": "https://www.monash.edu/study/courses/find-a-course/nursing-m2006",
-    "reviewerNote": "Course page lists Clayton and Peninsula as the actual on-campus delivery locations. State is recorded per delivery campus, not from the provider profile."
-  },
-  {
-    "institutionId": "monash-university",
-    "courseCode": "075119J",
-    "fieldKey": "duration",
-    "value": "3 years full-time; 6 years part-time",
-    "sourceUrl": "https://www.monash.edu/study/courses/find-a-course/nursing-m2006"
-  },
-  {
-    "institutionId": "monash-university",
-    "courseCode": "075119J",
-    "fieldKey": "intakes",
-    "value": "First Semester (February)",
-    "sourceUrl": "https://www.monash.edu/study/courses/find-a-course/nursing-m2006"
-  },
-  {
-    "institutionId": "monash-university",
-    "courseCode": "075119J",
-    "fieldKey": "english_requirement",
-    "value": "Nursing has an additional NMBA English standard. IELTS Academic: overall 7.0 in each sitting; listening, reading and speaking 7.0 and writing 6.5 across up to two permitted sittings, with no component below 6.5.",
-    "sourceUrl": "https://www.monash.edu/study/courses/find-a-course/nursing-m2006",
-    "reviewerNote": "Course page says this is in addition to Monash English requirements. Check NMBA and Monash live requirements before applying."
-  },
-  {
-    "institutionId": "monash-university",
-    "courseCode": "075119J",
-    "fieldKey": "entry_requirements",
-    "value": "International applicants apply directly to Monash using course code M2006 and must meet equivalent English and mathematics prerequisite subjects. Admission is assessed against the applicant's education history.",
-    "sourceUrl": "https://www.monash.edu/study/courses/find-a-course/nursing-m2006"
-  },
-  {
-    "institutionId": "monash-university",
     "courseCode": "079336A",
     "fieldKey": "annual_tuition_aud",
-    "value": { "amountAud": 55500, "year": 2026, "basis": "48 credit points / standard full-time year" },
+    "value": {
+      "amountAud": 55500,
+      "year": 2026,
+      "basis": "48 credit points / standard full-time year"
+    },
     "sourceUrl": "https://www.monash.edu/study/courses/find-a-course/computer-science-c2001?international=true",
     "effectiveFrom": "2026-01-01",
     "effectiveTo": "2026-12-31",
@@ -158,7 +120,14 @@
     "institutionId": "monash-university",
     "courseCode": "079336A",
     "fieldKey": "campus",
-    "value": { "campuses": [{ "name": "Clayton", "state": "VIC" }] },
+    "value": {
+      "campuses": [
+        {
+          "name": "Clayton",
+          "state": "VIC"
+        }
+      ]
+    },
     "sourceUrl": "https://www.monash.edu/study/courses/find-a-course/computer-science-c2001?international=true",
     "reviewerNote": "The route result is for Australia, so the Malaysia location listed by the provider is intentionally excluded."
   },
@@ -195,7 +164,11 @@
     "institutionId": "university-of-new-south-wales",
     "courseCode": "015784F",
     "fieldKey": "annual_tuition_aud",
-    "value": { "amountAud": 61000, "year": 2026, "basis": "indicative first-year full fee" },
+    "value": {
+      "amountAud": 61000,
+      "year": 2026,
+      "basis": "indicative first-year full fee"
+    },
     "sourceUrl": "https://www.unsw.edu.au/study/undergraduate/bachelor-of-computer-science",
     "effectiveFrom": "2026-01-01",
     "effectiveTo": "2026-12-31",
@@ -205,7 +178,14 @@
     "institutionId": "university-of-new-south-wales",
     "courseCode": "015784F",
     "fieldKey": "campus",
-    "value": { "campuses": [{ "name": "Kensington", "state": "NSW" }] },
+    "value": {
+      "campuses": [
+        {
+          "name": "Kensington",
+          "state": "NSW"
+        }
+      ]
+    },
     "sourceUrl": "https://www.unsw.edu.au/study/undergraduate/bachelor-of-computer-science"
   },
   {
@@ -240,7 +220,11 @@
     "institutionId": "rmit-university",
     "courseCode": "087986M",
     "fieldKey": "annual_tuition_aud",
-    "value": { "amountAud": 49920, "year": 2027, "basis": "annual international fee" },
+    "value": {
+      "amountAud": 49920,
+      "year": 2027,
+      "basis": "annual international fee"
+    },
     "sourceUrl": "https://www.rmit.edu.au/study-with-us/levels-of-study/postgraduate-study/masters-by-coursework/master-of-engineering-civil-engineering-mc257",
     "effectiveFrom": "2027-01-01",
     "effectiveTo": "2027-12-31",
@@ -250,7 +234,14 @@
     "institutionId": "rmit-university",
     "courseCode": "087986M",
     "fieldKey": "campus",
-    "value": { "campuses": [{ "name": "Melbourne City", "state": "VIC" }] },
+    "value": {
+      "campuses": [
+        {
+          "name": "Melbourne City",
+          "state": "VIC"
+        }
+      ]
+    },
     "sourceUrl": "https://www.rmit.edu.au/study-with-us/levels-of-study/postgraduate-study/masters-by-coursework/master-of-engineering-civil-engineering-mc257"
   },
   {
@@ -280,5 +271,874 @@
     "fieldKey": "entry_requirements",
     "value": "A related engineering, science or technology degree with the listed civil/environmental/structural/mining engineering major and GPA; relevant experience pathways may also be considered.",
     "sourceUrl": "https://www.rmit.edu.au/study-with-us/levels-of-study/postgraduate-study/masters-by-coursework/master-of-engineering-civil-engineering-mc257"
+  },
+  {
+    "institutionId": "queensland-university-of-technology",
+    "courseCode": "003501K",
+    "fieldKey": "duration",
+    "value": "3 years",
+    "sourceUrl": "https://www.qut.edu.au/courses/bachelor-of-nursing",
+    "reviewerNote": "2026 intake availability was reported as full/closed on the official page; retain as a valid comparison course for future intake planning. Do not label as fully verified until the portal row is captured.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "queensland-university-of-technology",
+    "courseCode": "003501K",
+    "fieldKey": "campus",
+    "value": "Kelvin Grove (QLD)",
+    "sourceUrl": "https://www.qut.edu.au/courses/bachelor-of-nursing",
+    "reviewerNote": "2026 intake availability was reported as full/closed on the official page; retain as a valid comparison course for future intake planning. Do not label as fully verified until the portal row is captured.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "queensland-university-of-technology",
+    "courseCode": "003501K",
+    "fieldKey": "intakes",
+    "value": "February; July",
+    "sourceUrl": "https://www.qut.edu.au/courses/bachelor-of-nursing",
+    "reviewerNote": "2026 intake availability was reported as full/closed on the official page; retain as a valid comparison course for future intake planning. Do not label as fully verified until the portal row is captured.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "queensland-university-of-technology",
+    "courseCode": "003501K",
+    "fieldKey": "annual_tuition_aud",
+    "value": {
+      "amountAud": 43500,
+      "year": 2026,
+      "basis": "annual"
+    },
+    "sourceUrl": "https://www.qut.edu.au/courses/bachelor-of-nursing",
+    "reviewerNote": "2026 intake availability was reported as full/closed on the official page; retain as a valid comparison course for future intake planning. Do not label as fully verified until the portal row is captured.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "queensland-university-of-technology",
+    "courseCode": "003501K",
+    "fieldKey": "english_requirement",
+    "value": "IELTS Academic 7.0 overall; Listening 7.0, Reading 7.0, Speaking 7.0, Writing 6.5, or accepted equivalent",
+    "sourceUrl": "https://www.qut.edu.au/courses/bachelor-of-nursing",
+    "reviewerNote": "2026 intake availability was reported as full/closed on the official page; retain as a valid comparison course for future intake planning. Do not label as fully verified until the portal row is captured.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "queensland-university-of-technology",
+    "courseCode": "003501K",
+    "fieldKey": "entry_requirements",
+    "value": "Australian Year 12 equivalent or recognised tertiary/VET pathway; course-specific English evidence required",
+    "sourceUrl": "https://www.qut.edu.au/courses/bachelor-of-nursing",
+    "reviewerNote": "2026 intake availability was reported as full/closed on the official page; retain as a valid comparison course for future intake planning. Do not label as fully verified until the portal row is captured.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "university-of-the-sunshine-coast",
+    "courseCode": "078086M",
+    "fieldKey": "duration",
+    "value": "3 years for Trimester 1 start; 3.3 years for Trimester 2 start",
+    "sourceUrl": "https://www.unisc.edu.au/study/courses-and-programs/bachelor-degrees-undergraduate-programs/bachelor-of-nursing-science",
+    "reviewerNote": "Online-only study is not available to Student visa holders. Delivery is blended with required campus and placement attendance.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "university-of-the-sunshine-coast",
+    "courseCode": "078086M",
+    "fieldKey": "campus",
+    "value": "Sunshine Coast (QLD); Gympie (QLD); Fraser Coast (QLD); Caboolture (QLD); Moreton Bay (QLD)",
+    "sourceUrl": "https://www.unisc.edu.au/study/courses-and-programs/bachelor-degrees-undergraduate-programs/bachelor-of-nursing-science",
+    "reviewerNote": "Online-only study is not available to Student visa holders. Delivery is blended with required campus and placement attendance.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "university-of-the-sunshine-coast",
+    "courseCode": "078086M",
+    "fieldKey": "intakes",
+    "value": "Trimester 1; Trimester 2",
+    "sourceUrl": "https://www.unisc.edu.au/study/courses-and-programs/bachelor-degrees-undergraduate-programs/bachelor-of-nursing-science",
+    "reviewerNote": "Online-only study is not available to Student visa holders. Delivery is blended with required campus and placement attendance.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "university-of-the-sunshine-coast",
+    "courseCode": "078086M",
+    "fieldKey": "annual_tuition_aud",
+    "value": {
+      "amountAud": 32500,
+      "year": 2026,
+      "basis": "annual"
+    },
+    "sourceUrl": "https://www.unisc.edu.au/study/courses-and-programs/bachelor-degrees-undergraduate-programs/bachelor-of-nursing-science",
+    "reviewerNote": "Online-only study is not available to Student visa holders. Delivery is blended with required campus and placement attendance.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "university-of-the-sunshine-coast",
+    "courseCode": "078086M",
+    "fieldKey": "english_requirement",
+    "value": "Official page references IELTS 7.0 with 7.0 in all subtests for professional registration",
+    "sourceUrl": "https://www.unisc.edu.au/study/courses-and-programs/bachelor-degrees-undergraduate-programs/bachelor-of-nursing-science",
+    "reviewerNote": "Online-only study is not available to Student visa holders. Delivery is blended with required campus and placement attendance.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "university-of-the-sunshine-coast",
+    "courseCode": "078086M",
+    "fieldKey": "entry_requirements",
+    "value": "ATAR/rank 60 or recognised international equivalent; full-time only for Student visa holders",
+    "sourceUrl": "https://www.unisc.edu.au/study/courses-and-programs/bachelor-degrees-undergraduate-programs/bachelor-of-nursing-science",
+    "reviewerNote": "Online-only study is not available to Student visa holders. Delivery is blended with required campus and placement attendance.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "university-of-the-sunshine-coast",
+    "courseCode": "072637M",
+    "fieldKey": "duration",
+    "value": "2.3 years",
+    "sourceUrl": "https://www.unisc.edu.au/study/courses-and-programs/bachelor-degrees-undergraduate-programs/bachelor-of-nursing-science-graduate-entry",
+    "reviewerNote": "Full-time only for Student visa holders. Online-only delivery is not available.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "university-of-the-sunshine-coast",
+    "courseCode": "072637M",
+    "fieldKey": "campus",
+    "value": "Sunshine Coast (QLD); Caboolture (QLD); Moreton Bay (QLD)",
+    "sourceUrl": "https://www.unisc.edu.au/study/courses-and-programs/bachelor-degrees-undergraduate-programs/bachelor-of-nursing-science-graduate-entry",
+    "reviewerNote": "Full-time only for Student visa holders. Online-only delivery is not available.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "university-of-the-sunshine-coast",
+    "courseCode": "072637M",
+    "fieldKey": "intakes",
+    "value": "Trimester 2",
+    "sourceUrl": "https://www.unisc.edu.au/study/courses-and-programs/bachelor-degrees-undergraduate-programs/bachelor-of-nursing-science-graduate-entry",
+    "reviewerNote": "Full-time only for Student visa holders. Online-only delivery is not available.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "university-of-the-sunshine-coast",
+    "courseCode": "072637M",
+    "fieldKey": "annual_tuition_aud",
+    "value": {
+      "amountAud": 32500,
+      "year": 2026,
+      "basis": "annual"
+    },
+    "sourceUrl": "https://www.unisc.edu.au/study/courses-and-programs/bachelor-degrees-undergraduate-programs/bachelor-of-nursing-science-graduate-entry",
+    "reviewerNote": "Full-time only for Student visa holders. Online-only delivery is not available.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "university-of-the-sunshine-coast",
+    "courseCode": "072637M",
+    "fieldKey": "english_requirement",
+    "value": "Official page references IELTS 7.0 with 7.0 in all subtests for professional registration",
+    "sourceUrl": "https://www.unisc.edu.au/study/courses-and-programs/bachelor-degrees-undergraduate-programs/bachelor-of-nursing-science-graduate-entry",
+    "reviewerNote": "Full-time only for Student visa holders. Online-only delivery is not available.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "university-of-the-sunshine-coast",
+    "courseCode": "072637M",
+    "fieldKey": "entry_requirements",
+    "value": "Recognised AQF Level 7 bachelor degree or higher, generally completed within the previous 10 years, subject to UniSC admission rules",
+    "sourceUrl": "https://www.unisc.edu.au/study/courses-and-programs/bachelor-degrees-undergraduate-programs/bachelor-of-nursing-science-graduate-entry",
+    "reviewerNote": "Full-time only for Student visa holders. Online-only delivery is not available.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "deakin-university",
+    "courseCode": "018327G",
+    "fieldKey": "duration",
+    "value": "3 years",
+    "sourceUrl": "https://www.deakin.edu.au/course/bachelor-nursing-international",
+    "reviewerNote": "",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "deakin-university",
+    "courseCode": "018327G",
+    "fieldKey": "campus",
+    "value": "Burwood (Melbourne) (VIC); Waterfront (Geelong) (VIC); Warrnambool (VIC)",
+    "sourceUrl": "https://www.deakin.edu.au/course/bachelor-nursing-international",
+    "reviewerNote": "",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "deakin-university",
+    "courseCode": "018327G",
+    "fieldKey": "intakes",
+    "value": "Trimester 1 (March)",
+    "sourceUrl": "https://www.deakin.edu.au/course/bachelor-nursing-international",
+    "reviewerNote": "",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "deakin-university",
+    "courseCode": "018327G",
+    "fieldKey": "annual_tuition_aud",
+    "value": {
+      "amountAud": 45800,
+      "year": 2026,
+      "basis": "annual"
+    },
+    "sourceUrl": "https://www.deakin.edu.au/course/bachelor-nursing-international",
+    "reviewerNote": "",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "rmit-university",
+    "courseCode": "114027H",
+    "fieldKey": "duration",
+    "value": "3 years",
+    "sourceUrl": "https://www.rmit.edu.au/study-with-us/levels-of-study/undergraduate-study/bachelor-degrees/bachelor-of-nursing-bp032",
+    "reviewerNote": "As checked, Semester 1 2027 applications were scheduled to open on 3 August 2026. Do not merge with plan BP032P24D2, which is an Enrolled Nurse pathway.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "rmit-university",
+    "courseCode": "114027H",
+    "fieldKey": "campus",
+    "value": "Bundoora (VIC)",
+    "sourceUrl": "https://www.rmit.edu.au/study-with-us/levels-of-study/undergraduate-study/bachelor-degrees/bachelor-of-nursing-bp032",
+    "reviewerNote": "As checked, Semester 1 2027 applications were scheduled to open on 3 August 2026. Do not merge with plan BP032P24D2, which is an Enrolled Nurse pathway.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "rmit-university",
+    "courseCode": "114027H",
+    "fieldKey": "intakes",
+    "value": "February for the standard international plan; July listing is associated with a separate EN pathway/plan",
+    "sourceUrl": "https://www.rmit.edu.au/study-with-us/levels-of-study/undergraduate-study/bachelor-degrees/bachelor-of-nursing-bp032",
+    "reviewerNote": "As checked, Semester 1 2027 applications were scheduled to open on 3 August 2026. Do not merge with plan BP032P24D2, which is an Enrolled Nurse pathway.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "rmit-university",
+    "courseCode": "114027H",
+    "fieldKey": "annual_tuition_aud",
+    "value": {
+      "amountAud": 45120,
+      "year": 2027,
+      "basis": "annual"
+    },
+    "sourceUrl": "https://www.rmit.edu.au/study-with-us/levels-of-study/undergraduate-study/bachelor-degrees/bachelor-of-nursing-bp032",
+    "reviewerNote": "As checked, Semester 1 2027 applications were scheduled to open on 3 August 2026. Do not merge with plan BP032P24D2, which is an Enrolled Nurse pathway.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "rmit-university",
+    "courseCode": "114027H",
+    "fieldKey": "english_requirement",
+    "value": "IELTS Academic 7.0 overall; Listening 7.0, Reading 7.0, Speaking 7.0, Writing 6.5; alternatives published",
+    "sourceUrl": "https://www.rmit.edu.au/study-with-us/levels-of-study/undergraduate-study/bachelor-degrees/bachelor-of-nursing-bp032",
+    "reviewerNote": "As checked, Semester 1 2027 applications were scheduled to open on 3 August 2026. Do not merge with plan BP032P24D2, which is an Enrolled Nurse pathway.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "rmit-university",
+    "courseCode": "114027H",
+    "fieldKey": "entry_requirements",
+    "value": "Recognised international secondary qualification equivalent to Australian Year 12; selection and English requirements apply",
+    "sourceUrl": "https://www.rmit.edu.au/study-with-us/levels-of-study/undergraduate-study/bachelor-degrees/bachelor-of-nursing-bp032",
+    "reviewerNote": "As checked, Semester 1 2027 applications were scheduled to open on 3 August 2026. Do not merge with plan BP032P24D2, which is an Enrolled Nurse pathway.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "western-sydney-university",
+    "courseCode": "041099M",
+    "fieldKey": "duration",
+    "value": "3 years",
+    "sourceUrl": "https://www.westernsydney.edu.au/future/study/courses/undergraduate/bachelor-of-nursing",
+    "reviewerNote": "",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "western-sydney-university",
+    "courseCode": "041099M",
+    "fieldKey": "campus",
+    "value": "Campbelltown (NSW); Hawkesbury (NSW); Parramatta (NSW)",
+    "sourceUrl": "https://www.westernsydney.edu.au/future/study/courses/undergraduate/bachelor-of-nursing",
+    "reviewerNote": "",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "western-sydney-university",
+    "courseCode": "041099M",
+    "fieldKey": "intakes",
+    "value": "March",
+    "sourceUrl": "https://www.westernsydney.edu.au/future/study/courses/undergraduate/bachelor-of-nursing",
+    "reviewerNote": "",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "western-sydney-university",
+    "courseCode": "041099M",
+    "fieldKey": "annual_tuition_aud",
+    "value": {
+      "amountAud": 38833,
+      "year": 2026,
+      "basis": "annual"
+    },
+    "sourceUrl": "https://www.westernsydney.edu.au/future/study/courses/undergraduate/bachelor-of-nursing",
+    "reviewerNote": "",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "flinders-university",
+    "courseCode": "005195K",
+    "fieldKey": "duration",
+    "value": "3 years",
+    "sourceUrl": "https://www.flinders.edu.au/study/courses/bachelor-nursing-preregistration",
+    "reviewerNote": "",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "flinders-university",
+    "courseCode": "005195K",
+    "fieldKey": "campus",
+    "value": "Bedford Park (SA); City (SA)",
+    "sourceUrl": "https://www.flinders.edu.au/study/courses/bachelor-nursing-preregistration",
+    "reviewerNote": "",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "flinders-university",
+    "courseCode": "005195K",
+    "fieldKey": "intakes",
+    "value": "March; July",
+    "sourceUrl": "https://www.flinders.edu.au/study/courses/bachelor-nursing-preregistration",
+    "reviewerNote": "",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "flinders-university",
+    "courseCode": "005195K",
+    "fieldKey": "annual_tuition_aud",
+    "value": {
+      "amountAud": 44300,
+      "year": 2026,
+      "basis": "annual"
+    },
+    "sourceUrl": "https://www.flinders.edu.au/study/courses/bachelor-nursing-preregistration",
+    "reviewerNote": "",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "flinders-university",
+    "courseCode": "002701K",
+    "fieldKey": "duration",
+    "value": "2 years",
+    "sourceUrl": "https://www.flinders.edu.au/study/courses/bachelor-nursing-graduate-entry",
+    "reviewerNote": "",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "flinders-university",
+    "courseCode": "002701K",
+    "fieldKey": "campus",
+    "value": "Bedford Park (SA)",
+    "sourceUrl": "https://www.flinders.edu.au/study/courses/bachelor-nursing-graduate-entry",
+    "reviewerNote": "",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "flinders-university",
+    "courseCode": "002701K",
+    "fieldKey": "intakes",
+    "value": "January for international students",
+    "sourceUrl": "https://www.flinders.edu.au/study/courses/bachelor-nursing-graduate-entry",
+    "reviewerNote": "",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "flinders-university",
+    "courseCode": "002701K",
+    "fieldKey": "annual_tuition_aud",
+    "value": {
+      "amountAud": 44300,
+      "year": 2026,
+      "basis": "annual"
+    },
+    "sourceUrl": "https://www.flinders.edu.au/study/courses/bachelor-nursing-graduate-entry",
+    "reviewerNote": "",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "edith-cowan-university",
+    "courseCode": "077132G",
+    "fieldKey": "duration",
+    "value": "3 years",
+    "sourceUrl": "https://www.ecu.edu.au/degrees/courses/bachelor-of-science-nursing",
+    "reviewerNote": "The fee is published as the current estimated first-year international fee, but the page does not visibly label the fee year in the captured content.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "edith-cowan-university",
+    "courseCode": "077132G",
+    "fieldKey": "campus",
+    "value": "Joondalup (WA); South West (Bunbury) (WA)",
+    "sourceUrl": "https://www.ecu.edu.au/degrees/courses/bachelor-of-science-nursing",
+    "reviewerNote": "The fee is published as the current estimated first-year international fee, but the page does not visibly label the fee year in the captured content.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "edith-cowan-university",
+    "courseCode": "077132G",
+    "fieldKey": "intakes",
+    "value": "Semester 1 at Joondalup and South West; Semester 2 at Joondalup",
+    "sourceUrl": "https://www.ecu.edu.au/degrees/courses/bachelor-of-science-nursing",
+    "reviewerNote": "The fee is published as the current estimated first-year international fee, but the page does not visibly label the fee year in the captured content.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "edith-cowan-university",
+    "courseCode": "077132G",
+    "fieldKey": "annual_tuition_aud",
+    "value": {
+      "amountAud": 44000,
+      "year": 2026,
+      "basis": "estimated first-year indicative fee"
+    },
+    "sourceUrl": "https://www.ecu.edu.au/degrees/courses/bachelor-of-science-nursing",
+    "reviewerNote": "The fee is published as the current estimated first-year international fee, but the page does not visibly label the fee year in the captured content.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "edith-cowan-university",
+    "courseCode": "077132G",
+    "fieldKey": "english_requirement",
+    "value": "School of Nursing and Midwifery Band 5; IELTS Academic 7.0 overall with Listening 7.0, Reading 7.0, Speaking 7.0 and Writing 6.5, or accepted equivalent",
+    "sourceUrl": "https://www.ecu.edu.au/degrees/courses/bachelor-of-science-nursing",
+    "reviewerNote": "The fee is published as the current estimated first-year international fee, but the page does not visibly label the fee year in the captured content.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "edith-cowan-university",
+    "courseCode": "077132G",
+    "fieldKey": "entry_requirements",
+    "value": "Recognised secondary qualification equivalent to Australian Year 12; ECU academic and English admission requirements",
+    "sourceUrl": "https://www.ecu.edu.au/degrees/courses/bachelor-of-science-nursing",
+    "reviewerNote": "The fee is published as the current estimated first-year international fee, but the page does not visibly label the fee year in the captured content.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "edith-cowan-university",
+    "courseCode": "091870M",
+    "fieldKey": "duration",
+    "value": "2 years",
+    "sourceUrl": "https://www.ecu.edu.au/degrees/courses/master-of-nursing-graduate-entry",
+    "reviewerNote": "International Student visa holders must study full-time.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "edith-cowan-university",
+    "courseCode": "091870M",
+    "fieldKey": "campus",
+    "value": "Joondalup (WA)",
+    "sourceUrl": "https://www.ecu.edu.au/degrees/courses/master-of-nursing-graduate-entry",
+    "reviewerNote": "International Student visa holders must study full-time.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "edith-cowan-university",
+    "courseCode": "091870M",
+    "fieldKey": "intakes",
+    "value": "Semester 1",
+    "sourceUrl": "https://www.ecu.edu.au/degrees/courses/master-of-nursing-graduate-entry",
+    "reviewerNote": "International Student visa holders must study full-time.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "edith-cowan-university",
+    "courseCode": "091870M",
+    "fieldKey": "annual_tuition_aud",
+    "value": {
+      "amountAud": 45400,
+      "year": 2026,
+      "basis": "estimated first-year indicative fee"
+    },
+    "sourceUrl": "https://www.ecu.edu.au/degrees/courses/master-of-nursing-graduate-entry",
+    "reviewerNote": "International Student visa holders must study full-time.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "edith-cowan-university",
+    "courseCode": "091870M",
+    "fieldKey": "english_requirement",
+    "value": "School of Nursing and Midwifery Band 5; IELTS Academic 7.0 overall with Listening 7.0, Reading 7.0, Speaking 7.0 and Writing 6.5, or accepted equivalent",
+    "sourceUrl": "https://www.ecu.edu.au/degrees/courses/master-of-nursing-graduate-entry",
+    "reviewerNote": "International Student visa holders must study full-time.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "edith-cowan-university",
+    "courseCode": "091870M",
+    "fieldKey": "entry_requirements",
+    "value": "Recognised bachelor or master degree, normally with a weighted average mark of at least 60 percent",
+    "sourceUrl": "https://www.ecu.edu.au/degrees/courses/master-of-nursing-graduate-entry",
+    "reviewerNote": "International Student visa holders must study full-time.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "university-of-tasmania",
+    "courseCode": "102253H",
+    "fieldKey": "duration",
+    "value": "3 years",
+    "sourceUrl": "https://www.utas.edu.au/courses/health/courses/h3o-bachelor-of-nursing",
+    "reviewerNote": "Sydney is a separate delivery state and must not be recorded as Tasmania. The annual fee shown is for 2027.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "university-of-tasmania",
+    "courseCode": "102253H",
+    "fieldKey": "campus",
+    "value": "Hobart (TAS); Cradle Coast (TAS); Launceston (TAS); Sydney (NSW)",
+    "sourceUrl": "https://www.utas.edu.au/courses/health/courses/h3o-bachelor-of-nursing",
+    "reviewerNote": "Sydney is a separate delivery state and must not be recorded as Tasmania. The annual fee shown is for 2027.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "university-of-tasmania",
+    "courseCode": "102253H",
+    "fieldKey": "intakes",
+    "value": "Semester 1",
+    "sourceUrl": "https://www.utas.edu.au/courses/health/courses/h3o-bachelor-of-nursing",
+    "reviewerNote": "Sydney is a separate delivery state and must not be recorded as Tasmania. The annual fee shown is for 2027.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "university-of-tasmania",
+    "courseCode": "102253H",
+    "fieldKey": "annual_tuition_aud",
+    "value": {
+      "amountAud": 42998,
+      "year": 2027,
+      "basis": "annual"
+    },
+    "sourceUrl": "https://www.utas.edu.au/courses/health/courses/h3o-bachelor-of-nursing",
+    "reviewerNote": "Sydney is a separate delivery state and must not be recorded as Tasmania. The annual fee shown is for 2027.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "university-of-tasmania",
+    "courseCode": "102253H",
+    "fieldKey": "english_requirement",
+    "value": "IELTS Academic 7.0 overall; Listening 7.0, Reading 7.0, Speaking 7.0, Writing 6.5; alternatives published",
+    "sourceUrl": "https://www.utas.edu.au/courses/health/courses/h3o-bachelor-of-nursing",
+    "reviewerNote": "Sydney is a separate delivery state and must not be recorded as Tasmania. The annual fee shown is for 2027.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "university-of-tasmania",
+    "courseCode": "102253H",
+    "fieldKey": "entry_requirements",
+    "value": "Recognised international secondary qualification equivalent to Australian Year 12; quota and course admission rules apply",
+    "sourceUrl": "https://www.utas.edu.au/courses/health/courses/h3o-bachelor-of-nursing",
+    "reviewerNote": "Sydney is a separate delivery state and must not be recorded as Tasmania. The annual fee shown is for 2027.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "charles-darwin-university",
+    "courseCode": "118197B",
+    "fieldKey": "duration",
+    "value": "3 years",
+    "sourceUrl": "https://www.cdu.edu.au/study/course/bachelor-nursing-wnur02?year=2026",
+    "reviewerNote": "",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "charles-darwin-university",
+    "courseCode": "118197B",
+    "fieldKey": "campus",
+    "value": "CDU Sydney (NSW); Casuarina (NT)",
+    "sourceUrl": "https://www.cdu.edu.au/study/course/bachelor-nursing-wnur02?year=2026",
+    "reviewerNote": "",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "charles-darwin-university",
+    "courseCode": "118197B",
+    "fieldKey": "intakes",
+    "value": "Semester 1",
+    "sourceUrl": "https://www.cdu.edu.au/study/course/bachelor-nursing-wnur02?year=2026",
+    "reviewerNote": "",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "charles-darwin-university",
+    "courseCode": "118197B",
+    "fieldKey": "annual_tuition_aud",
+    "value": {
+      "amountAud": 38720,
+      "year": 2026,
+      "basis": "annual"
+    },
+    "sourceUrl": "https://www.cdu.edu.au/study/course/bachelor-nursing-wnur02?year=2026",
+    "reviewerNote": "",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "charles-darwin-university",
+    "courseCode": "118951F",
+    "fieldKey": "duration",
+    "value": "2 years",
+    "sourceUrl": "https://www.cdu.edu.au/study/course/master-nursing-practice-pre-registration-snppr2?year=2026",
+    "reviewerNote": "Online study is not available to international students. International CRICOS locations are Alice Springs, CDU Sydney and Casuarina.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "charles-darwin-university",
+    "courseCode": "118951F",
+    "fieldKey": "campus",
+    "value": "Alice Springs (NT); CDU Sydney (NSW); Casuarina (NT)",
+    "sourceUrl": "https://www.cdu.edu.au/study/course/master-nursing-practice-pre-registration-snppr2?year=2026",
+    "reviewerNote": "Online study is not available to international students. International CRICOS locations are Alice Springs, CDU Sydney and Casuarina.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "charles-darwin-university",
+    "courseCode": "118951F",
+    "fieldKey": "intakes",
+    "value": "Semester 1",
+    "sourceUrl": "https://www.cdu.edu.au/study/course/master-nursing-practice-pre-registration-snppr2?year=2026",
+    "reviewerNote": "Online study is not available to international students. International CRICOS locations are Alice Springs, CDU Sydney and Casuarina.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "charles-darwin-university",
+    "courseCode": "118951F",
+    "fieldKey": "annual_tuition_aud",
+    "value": {
+      "amountAud": 40416,
+      "year": 2026,
+      "basis": "annual"
+    },
+    "sourceUrl": "https://www.cdu.edu.au/study/course/master-nursing-practice-pre-registration-snppr2?year=2026",
+    "reviewerNote": "Online study is not available to international students. International CRICOS locations are Alice Springs, CDU Sydney and Casuarina.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "charles-darwin-university",
+    "courseCode": "118951F",
+    "fieldKey": "english_requirement",
+    "value": "IELTS Academic 7.0 overall; Listening 7.0, Reading 7.0, Speaking 7.0, Writing 6.5; alternatives published",
+    "sourceUrl": "https://www.cdu.edu.au/study/course/master-nursing-practice-pre-registration-snppr2?year=2026",
+    "reviewerNote": "Online study is not available to international students. International CRICOS locations are Alice Springs, CDU Sydney and Casuarina.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "charles-darwin-university",
+    "courseCode": "118951F",
+    "fieldKey": "entry_requirements",
+    "value": "Recognised bachelor degree or equivalent international qualification",
+    "sourceUrl": "https://www.cdu.edu.au/study/course/master-nursing-practice-pre-registration-snppr2?year=2026",
+    "reviewerNote": "Online study is not available to international students. International CRICOS locations are Alice Springs, CDU Sydney and Casuarina.",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "university-of-wollongong",
+    "courseCode": "113585H",
+    "fieldKey": "duration",
+    "value": "3 years",
+    "sourceUrl": "https://www.uow.edu.au/study/courses/bachelor-of-nursing/",
+    "reviewerNote": "",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "university-of-wollongong",
+    "courseCode": "113585H",
+    "fieldKey": "campus",
+    "value": "Wollongong (NSW)",
+    "sourceUrl": "https://www.uow.edu.au/study/courses/bachelor-of-nursing/",
+    "reviewerNote": "",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "university-of-wollongong",
+    "courseCode": "113585H",
+    "fieldKey": "intakes",
+    "value": "Autumn",
+    "sourceUrl": "https://www.uow.edu.au/study/courses/bachelor-of-nursing/",
+    "reviewerNote": "",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "university-of-wollongong",
+    "courseCode": "113585H",
+    "fieldKey": "annual_tuition_aud",
+    "value": {
+      "amountAud": 39936,
+      "year": 2026,
+      "basis": "annual"
+    },
+    "sourceUrl": "https://www.uow.edu.au/study/courses/bachelor-of-nursing/",
+    "reviewerNote": "",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "the-university-of-queensland",
+    "courseCode": "069418D",
+    "fieldKey": "duration",
+    "value": "2 years",
+    "sourceUrl": "https://study.uq.edu.au/study-options/programs/master-nursing-graduate-entry-5776",
+    "reviewerNote": "",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "the-university-of-queensland",
+    "courseCode": "069418D",
+    "fieldKey": "campus",
+    "value": "St Lucia (QLD)",
+    "sourceUrl": "https://study.uq.edu.au/study-options/programs/master-nursing-graduate-entry-5776",
+    "reviewerNote": "",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "the-university-of-queensland",
+    "courseCode": "069418D",
+    "fieldKey": "intakes",
+    "value": "Semester 1",
+    "sourceUrl": "https://study.uq.edu.au/study-options/programs/master-nursing-graduate-entry-5776",
+    "reviewerNote": "",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "the-university-of-queensland",
+    "courseCode": "069418D",
+    "fieldKey": "annual_tuition_aud",
+    "value": {
+      "amountAud": 52528,
+      "year": 2027,
+      "basis": "annual"
+    },
+    "sourceUrl": "https://study.uq.edu.au/study-options/programs/master-nursing-graduate-entry-5776",
+    "reviewerNote": "",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31"
+  },
+  {
+    "institutionId": "the-university-of-adelaide",
+    "courseCode": "057076J",
+    "fieldKey": "campus",
+    "value": "Adelaide City Campus (SA); Mount Gambier (SA); Whyalla (SA)",
+    "sourceUrl": "https://adelaide.edu.au/study/degrees/bachelor-of-nursing/"
+  },
+  {
+    "institutionId": "the-university-of-adelaide",
+    "courseCode": "057076J",
+    "fieldKey": "duration",
+    "value": "3 years full-time",
+    "sourceUrl": "https://adelaide.edu.au/study/degrees/bachelor-of-nursing/"
+  },
+  {
+    "institutionId": "the-university-of-adelaide",
+    "courseCode": "057076J",
+    "fieldKey": "annual_tuition_aud",
+    "value": {
+      "amountAud": 46700,
+      "year": 2026,
+      "basis": "standard full-time year"
+    },
+    "sourceUrl": "https://adelaide.edu.au/study/degrees/bachelor-of-nursing/",
+    "effectiveFrom": "2026-01-01",
+    "effectiveTo": "2026-12-31",
+    "reviewerNote": "International fee published for 2026. Fees change annually."
+  },
+  {
+    "institutionId": "the-university-of-adelaide",
+    "courseCode": "057076J",
+    "fieldKey": "intakes",
+    "value": "February, July",
+    "sourceUrl": "https://adelaide.edu.au/study/degrees/bachelor-of-nursing/"
+  },
+  {
+    "institutionId": "the-university-of-adelaide",
+    "courseCode": "057076J",
+    "fieldKey": "english_requirement",
+    "value": "IELTS Overall 7.0 (Reading 7.0, Listening 7.0, Speaking 7.0, Writing 7.0). Nursing has an additional NMBA English Language Skills standard.",
+    "sourceUrl": "https://adelaide.edu.au/study/degrees/bachelor-of-nursing/"
+  },
+  {
+    "institutionId": "the-university-of-adelaide",
+    "courseCode": "057076J",
+    "fieldKey": "entry_requirements",
+    "value": "ATAR 70 or equivalent secondary/VET/higher education qualification. International students must meet NMBA English Language Skills standard and Fitness to Practice requirements.",
+    "sourceUrl": "https://adelaide.edu.au/study/degrees/bachelor-of-nursing/"
   }
 ]
