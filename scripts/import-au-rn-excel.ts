@@ -23,7 +23,7 @@ const workbook = XLSX.readFile(path.join(process.cwd(), "souces/Australia/austra
 
 function parseMainPrograms() {
   const sheet = workbook.Sheets["01_Main_Programs"];
-  const data = XLSX.utils.sheet_to_json(sheet);
+  const data = XLSX.utils.sheet_to_json(sheet) as any[];
   const results = [];
   
   for (let i = 1; i < data.length; i++) {
@@ -91,7 +91,7 @@ function parseMainPrograms() {
 
 function parseVerifiedCandidates() {
   const sheet = workbook.Sheets["05_Verified_Candidates"];
-  const data = XLSX.utils.sheet_to_json(sheet);
+  const data = XLSX.utils.sheet_to_json(sheet) as any[];
   const results = [];
   
   for (let i = 1; i < data.length; i++) {

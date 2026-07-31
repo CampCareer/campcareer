@@ -18,9 +18,9 @@ const workbook = XLSX.readFile(path.join(process.cwd(), "souces/Australia/austra
 function parseAllVerified() {
   // Parse both sheets and merge, with verified candidates taking priority
   const mainSheet = workbook.Sheets["01_Main_Programs"];
-  const mainData = XLSX.utils.sheet_to_json(mainSheet);
+  const mainData = XLSX.utils.sheet_to_json(mainSheet) as any[];
   const verifiedSheet = workbook.Sheets["05_Verified_Candidates"];
-  const verifiedData = XLSX.utils.sheet_to_json(verifiedSheet);
+  const verifiedData = XLSX.utils.sheet_to_json(verifiedSheet) as any[];
   
   const merged = new Map<string, any>();
   

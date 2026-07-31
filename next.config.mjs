@@ -10,17 +10,19 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      // The workspace home is the product home. Route the root landing there.
+      { source: "/", destination: "/home", permanent: false },
+
       // CampCareer is a route-search product. Retire every former workspace,
       // comparison, onboarding, and broad-study funnel rather than presenting
-      // visitors with competing product promises.
+      // visitors with competing product promises. `/home`, `/compare` and
+      // `/countries` now render inside the workspace shell.
       { source: "/planner/:path*", destination: "/", permanent: false },
-      { source: "/home/:path*", destination: "/", permanent: false },
       { source: "/myplan/:path*", destination: "/", permanent: false },
       { source: "/dashboard/:path*", destination: "/", permanent: false },
       { source: "/profile/:path*", destination: "/", permanent: false },
       { source: "/settings/:path*", destination: "/", permanent: false },
       { source: "/plans/:path*", destination: "/", permanent: false },
-      { source: "/compare/:path*", destination: "/", permanent: false },
       { source: "/applications/:path*", destination: "/", permanent: false },
       { source: "/budget/:path*", destination: "/", permanent: false },
       { source: "/english/:path*", destination: "/", permanent: false },
@@ -42,7 +44,6 @@ const nextConfig = {
       // Raw country, university, and major research is not a public product
       // until it is assembled into a source-backed citizenship-to-work route.
       { source: "/au/:path*", destination: "/", permanent: false },
-      { source: "/countries/:path*", destination: "/", permanent: false },
       { source: "/fields/:path*", destination: "/", permanent: false },
       { source: "/study/:path*", destination: "/", permanent: false },
       { source: "/study-options/:path*", destination: "/", permanent: false },
