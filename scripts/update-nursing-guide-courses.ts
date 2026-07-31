@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 
 const filePath = path.join(process.cwd(), "src/data/route-guides.ts");
-let content = fs.readFileSync(filePath, "utf-8");
+const content = fs.readFileSync(filePath, "utf-8");
 
 // Find the nursing guide's courses array (after id: "kr-au-registered-nurse")
 const guideStart = content.indexOf('id: "kr-au-registered-nurse"');

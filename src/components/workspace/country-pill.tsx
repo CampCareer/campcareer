@@ -1,0 +1,129 @@
+"use client"
+
+import { useEffect, useMemo, useRef, useState } from "react"
+import { Check, ChevronDown, Globe2 } from "lucide-react"
+import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
+import { useSelectedCountry } from "./country-context"
+import { cn } from "@/lib/utils"
+
+export function CountryPill({
+  onChange,
+}: {
+  onChange?: (code: string | null) => void
+}) {
+  const [open, setOpen] = useState(false)
+  const rootRef = useRef<HTMLDivElement>(null)
+  const { selectedCountry, setSelectedCountry } = useSelectedCountry()
+
+  const countries = useMemo(
+    () => [...LAUNCH_COUNTRIES].sort((a, b) => a.name.localeCompare(b.name)),
+    []
+  )
+  const selected = selectedCountry
+    ? LAUNCH_COUNTRIES.find((c) => c.code === selectedCountry.code) ?? null
+    : null
+
+  useEffect(() => {
+    function onPointerDown(event: PointerEvent) {
+      if (rootRef.current && !rootRef.current.contains(event.target as Node)) {
+        setOpen(false)
+      }
+    }
+    document.addEventListener("pointerdown", onPointerDown)
+    return () => document.removeEventListener("pointerdown", onPointerDown)
+  }, [])
+
+  function handlePick(code: string) {
+    const country = code === "" ? null : (LAUNCH_COUNTRIES.find((c) => c.code === code) ?? null)
+    setSelectedCountry(
+      country ? { code: country.code, name: country.name, currency: country.currency } : null
+    )
+    onChange?.(code === "" ? null : code)
+    setOpen(false)
+  }
+
+  return (
+    <div ref={rootRef} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((prev) => !prev)}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        className="inline-flex h-9 items-center gap-2 rounded-full border border-[#e0dfdb] bg-white pl-2 pr-3 text-[13px] font-medium text-[#1b1b1b] transition hover:border-[#6d4fc4]/50"
+      >
+        {selected ? (
+          <img
+            src={selected.image}
+            alt=""
+            width={40}
+            height={28}
+            className="size-5 shrink-0 rounded-full object-cover"
+          />
+        ) : (
+          <span className="grid size-5 shrink-0 place-items-center rounded-full bg-[#f3f0fa]">
+            <Globe2 className="size-3 text-[#6d4fc4]" />
+          </span>
+        )}
+        <span className="max-w-28 truncate">{selected?.name ?? "All countries"}</span>
+        <ChevronDown
+          className={cn("size-3.5 shrink-0 text-[#9c9a94] transition", open && "rotate-180")}
+        />
+      </button>
+
+      {open && (
+        <div
+          role="listbox"
+          aria-label="Select country"
+          className="absolute left-0 top-[calc(100%+6px)] z-30 w-56 overflow-hidden rounded-xl border border-[#e7e6e3] bg-white p-1 shadow-xl shadow-black/5"
+        >
+          <ul className="max-h-72 overflow-y-auto">
+            <li>
+              <button
+                type="button"
+                role="option"
+                aria-selected={!selectedCountry}
+                onClick={() => handlePick("")}
+                className={cn(
+                  "flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-[13px] font-medium transition",
+                  !selectedCountry ? "bg-[#f3f0fa] text-[#6d4fc4]" : "text-[#4d4c48] hover:bg-[#fafaf8]"
+                )}
+              >
+                <Globe2 className="size-4 shrink-0 text-[#9c9a94]" />
+                All countries
+                {!selectedCountry && <Check className="ml-auto size-3.5" />}
+              </button>
+            </li>
+            {countries.map((country) => (
+              <li key={country.code}>
+                <button
+                  type="button"
+                  role="option"
+                  aria-selected={selectedCountry?.code === country.code}
+                  onClick={() => handlePick(country.code)}
+                  className={cn(
+                    "flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-[13px] font-medium transition",
+                    selectedCountry?.code === country.code
+                      ? "bg-[#f3f0fa] text-[#6d4fc4]"
+                      : "text-[#4d4c48] hover:bg-[#fafaf8]"
+                  )}
+                >
+                  <img
+                    src={country.image}
+                    alt=""
+                    width={40}
+                    height={28}
+                    className="size-4 shrink-0 rounded-full object-cover"
+                  />
+                  <span className="truncate">{country.name}</span>
+                  {selectedCountry?.code === country.code && (
+                    <Check className="ml-auto size-3.5" />
+                  )}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  )
+}
