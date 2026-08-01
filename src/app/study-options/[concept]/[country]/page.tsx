@@ -59,7 +59,7 @@ export default async function StudyOptionsPage(
     <div className="bg-slate-50 text-slate-950">
       <section className="border-b border-slate-200 bg-white">
         <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:py-14">
-          <Link href={isKo ? "/ko" : "/"} className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-blue-700">
+          <Link href="/home" className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-blue-700">
             <ArrowLeft className="h-4 w-4" />{isKo ? "비교 결과로 돌아가기" : "Back to comparison"}
           </Link>
           <div className="mt-7 flex flex-col justify-between gap-6 md:flex-row md:items-end">

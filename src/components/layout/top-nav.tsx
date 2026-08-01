@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { useState, useRef, useEffect } from "react"
 import { useRouteLocale, useSetLocale } from "@/lib/i18n/locale-provider"
 import { LOCALE_META, PUBLISHED_LOCALE_OPTIONS, localeForUi, localeFromPathname, localizePath, type LocaleOption } from "@/lib/i18n/config"
+import { getLocaleNavigationPath } from "@/lib/i18n/legacy-locale-home"
 import { cn } from "@/lib/utils"
 import { Globe, Check, MapPinned, UserRound } from "lucide-react"
 
@@ -31,7 +32,7 @@ export function TopNav() {
 
   function switchLang(next: LocaleOption) {
     setLocale(localeForUi(next))
-    const target = localizePath(pathname, next)
+    const target = getLocaleNavigationPath(pathname, next)
     const qs = window.location.search
     router.replace(qs ? `${target}${qs}` : target)
     setLangOpen(false)
@@ -50,13 +51,13 @@ export function TopNav() {
         <div className="mx-auto max-w-[1240px] px-6 max-sm:px-[18px]">
           <div className="flex h-16 items-center justify-between">
             {/* Wordmark — intentionally plain, like the search-first prototype. */}
-            <Link href={localizePath("/", pathLocale)} className={cn("campcareer-wordmark shrink-0", textColor)} aria-label="campcareer home">
+            <Link href="/home" className={cn("campcareer-wordmark shrink-0", textColor)} aria-label="campcareer home">
               campcareer
             </Link>
 
             {/* Right-side action group: map, language, then login. */}
             <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
-              <Link href={localizePath("/maps", pathLocale)} aria-label={pathLocale === "ko" ? "지도" : "Maps"} className={cn("hidden items-center justify-center rounded-lg p-2 transition sm:flex", mutedColor, hoverBg)}>
+              <Link href="/maps" aria-label={pathLocale === "ko" ? "지도" : "Maps"} className={cn("hidden items-center justify-center rounded-lg p-2 transition sm:flex", mutedColor, hoverBg)}>
                 <MapPinned className="size-4" />
               </Link>
 

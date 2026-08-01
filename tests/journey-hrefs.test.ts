@@ -24,12 +24,12 @@ test("broad concepts use a canonical comparison route", () => {
   )
 })
 
-test("Korean journeys preserve the public locale prefix", () => {
-  assert.equal(localizeStudyJourneyHref("/maps?country=ca", "ko-KR"), "/ko/maps?country=ca")
+test("Korean journeys keep Workspace landing routes canonical", () => {
+  assert.equal(localizeStudyJourneyHref("/maps?country=ca", "ko-KR"), "/maps?country=ca")
   assert.equal(localizeStudyJourneyHref("/methodology", "en"), "/methodology")
   assert.equal(
     getTaxonomyJourneyHref({ kind: "STUDY_FIELD", slug: "cybersecurity" }, "ko-KR"),
-    "/ko/compare?major=cybersecurity",
+    "/compare?major=cybersecurity",
   )
   assert.equal(
     getTaxonomyJourneyHref({

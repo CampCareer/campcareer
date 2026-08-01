@@ -2,8 +2,8 @@
 
 ## Keep indexed
 
-- `/`, `/ko`
-- `/maps` (and the supporting `/ko/maps` route)
+- `/home`
+- `/maps`
 - public `/routes/**` and `/ko/routes/**`
 - `/methodology`, `/privacy`, `/terms`
 
@@ -16,6 +16,12 @@ An old URL may return a permanent redirect only if its previous intent is fully 
 Planner, onboarding, dashboard, comparison, ranking, degree-risk, ROI, university, major, country-profile, saved-item, and partner-support URLs have no v1 replacement. Once the Search Console and backlink export described in the baseline document has been attached, these should return `410 Gone`, not a root redirect.
 
 The current broad temporary redirects stay unchanged until that URL-level map exists; changing them now would discard the required evidence and risks creating additional soft 404s.
+
+## Retired locale Home aliases
+
+- The former Home/search roots (`/`, `/en`, `/ko`, `/zh-hans`, `/vi`, `/hi`, `/es-419`) permanently redirect to `/home`.
+- Their former top-level Workspace aliases (`/home`, `/maps`, `/compare`, `/visas` under one of those prefixes) permanently redirect to the same bare canonical pathname.
+- Query parameters are preserved by the central 308 redirect. Reviewed Korean content URLs such as `/ko/fr`, `/ko/fields/**`, and `/ko/maps/**/**` are not included in this policy.
 
 ## Sitemap and robots
 

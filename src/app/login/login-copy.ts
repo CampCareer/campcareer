@@ -1,0 +1,16 @@
+export const LOGIN_COPY = {
+  welcome: "Welcome back",
+  welcomeSupporting: "Sign in to save your pathway",
+  signup: "Create account",
+  signupSupporting: "Start exploring for free",
+  google: "Continue with Google",
+  divider: "or continue with email",
+  email: "Email",
+  password: "Password",
+  signIn: "Sign in",
+  createAccount: "Create an account",
+  forgotPassword: "Forgot password?",
+  newAccount: "New to CampCareer?",
+  existingAccount: "Already have an account?",
+  back: "Back to your pathway",
+} as const

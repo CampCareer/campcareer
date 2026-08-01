@@ -1,0 +1,19 @@
+@keyframes compact-search-arrive {
+  from {
+    transform: translateY(44px);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+.compactSearchArrive {
+  animation: compact-search-arrive 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .compactSearchArrive {
+    animation: none;
+  }
+}

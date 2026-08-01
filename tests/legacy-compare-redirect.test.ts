@@ -9,6 +9,6 @@ test("legacy compare URLs keep only v1 decision inputs", () => {
   )
   assert.equal(
     buildLegacyCompareRedirect({ career: ["carpenter", "ignored"], origin: "kr" }, "ko"),
-    "/ko/compare?career=carpenter&origin=kr",
+    "/compare?career=carpenter&origin=kr",
   )
 })

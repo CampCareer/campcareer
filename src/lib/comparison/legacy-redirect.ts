@@ -1,4 +1,4 @@
-import { localizePath, type LocaleOption } from "@/lib/i18n/config"
+import type { LocaleOption } from "@/lib/i18n/config"
 
 type LegacySearchParams = Record<string, string | string[] | undefined>
 
@@ -26,13 +26,13 @@ function first(value: string | string[] | undefined) {
  */
 export function buildLegacyCompareRedirect(
   searchParams: LegacySearchParams,
-  locale: LocaleOption,
+  _locale: LocaleOption,
 ) {
   const params = new URLSearchParams()
   for (const key of SAFE_COMPARE_PARAMETERS) {
     const value = first(searchParams[key])
     if (value) params.set(key, value)
   }
-  const path = localizePath("/compare", locale)
+  const path = "/compare"
   return params.size ? `${path}?${params.toString()}` : path
 }

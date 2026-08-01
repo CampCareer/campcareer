@@ -1,6 +1,7 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 import { DEFAULT_LOCALE, LOCALE_COOKIE, isPublishedLocaleOption, localeForUi, localeFromPathname, localizePath, withoutLocalePrefix } from '@/lib/i18n/config'
+import { getLegacyLocaleHomeRedirect } from '@/lib/i18n/legacy-locale-home'
 
 // 로그인 필요한 페이지 보호
 // 점검 기간: /planner는 비로그인 허용 중 — 정상 가동 시 다시 추가
@@ -31,20 +32,15 @@ const GONE_BODY =
   '<!doctype html><html lang="en"><head><meta charset="utf-8">' +
   '<title>410 Gone</title><meta name="robots" content="noindex"></head>' +
   '<body><h1>410 — Gone</h1><p>This page has been permanently removed.</p>' +
-  '<p><a href="/">Go to CampCareer home</a></p></body></html>'
+  '<p><a href="/home">Go to CampCareer home</a></p></body></html>'
 
 // CampCareer already has a small set of editorial Korean routes under `/ko`.
-// Do not rewrite those to their English counterparts: that would silently
-// replace reviewed Korean copy (and its metadata) with the generic fallback.
-// Every other `/ko/...` core-product path still uses the URL-locale rewrite so
-// `/ko/compare`, `/ko/maps`, `/ko/privacy`, etc. stay available without
-// duplicating route trees.
+// Do not redirect those to English counterparts: that would silently replace
+// reviewed Korean copy (and its metadata) with the generic fallback.
 const DEDICATED_KOREAN_ROUTE_PATTERNS = [
-  /^\/ko\/?$/,
   /^\/ko\/(?:kr|jp|sg|fr)(?:\/jobs)?\/?$/,
   /^\/ko\/fields\/[^/]+\/?$/,
   /^\/ko\/maps\/[^/]+\/[^/]+\/?$/,
-  /^\/ko\/results\/?$/,
   /^\/ko\/routes(?:\/.*)?$/,
 ]
 
@@ -72,6 +68,12 @@ export async function proxy(request: NextRequest) {
   const routeLocale = localeFromPathname(requestedPathname)
   const locale = routeLocale ? localeForUi(routeLocale) : DEFAULT_LOCALE
   const pathname = withoutLocalePrefix(requestedPathname)
+  const legacyHomeRedirect = getLegacyLocaleHomeRedirect(requestedPathname, routeLocale)
+  if (legacyHomeRedirect) {
+    const destination = request.nextUrl.clone()
+    destination.pathname = legacyHomeRedirect
+    return NextResponse.redirect(destination, 308)
+  }
   const isProtected = PROTECTED_PATHS.some(p => pathname.startsWith(p))
 
   const requestHeaders = new Headers(request.headers)
@@ -168,6 +170,11 @@ export const config = {
     '/vi/:path*',
     '/hi/:path*',
     '/es-419/:path*',
+    // Retired locale roots and the former default route are canonicalized to
+    // the single Workspace Home without serving the old search UI.
+    '/en/:path*',
+    '/',
+    '/results/:path*',
     // Authentication is only needed on these account pages.
     '/dashboard/:path*',
     '/planner/:path*',

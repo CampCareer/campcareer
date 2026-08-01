@@ -11,8 +11,7 @@ const lastModified = new Date("2026-07-29")
  */
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages: MetadataRoute.Sitemap = [
-    { url: BASE, lastModified, priority: 1, changeFrequency: "weekly" },
-    { url: `${BASE}/ko`, lastModified, priority: 0.9, changeFrequency: "weekly" },
+    { url: `${BASE}/home`, lastModified, priority: 1, changeFrequency: "weekly" },
     { url: `${BASE}/maps`, lastModified, priority: 0.9, changeFrequency: "daily" },
     { url: `${BASE}/methodology`, lastModified, priority: 0.5, changeFrequency: "monthly" },
     { url: `${BASE}/privacy`, lastModified, priority: 0.2, changeFrequency: "yearly" },

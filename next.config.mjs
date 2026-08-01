@@ -10,8 +10,8 @@ const nextConfig = {
   },
   async redirects() {
     return [
-      // The workspace home is the product home. Route the root landing there.
-      { source: "/", destination: "/home", permanent: false },
+      // The Workspace Home is the single canonical product home.
+      { source: "/", destination: "/home", permanent: true },
 
       // CampCareer is a route-search product. Retire every former workspace,
       // comparison, onboarding, and broad-study funnel rather than presenting
@@ -52,7 +52,6 @@ const nextConfig = {
       { source: "/roi-explorer/:path*", destination: "/", permanent: false },
       { source: "/blog/:path*", destination: "/", permanent: false },
       { source: "/:country(au|ca|us|uk|de|nl|ie|be|sg|kr|jp|fr|es|nz|no|se|dk|fi|ch|ae)/:path*", destination: "/", permanent: false },
-      { source: "/ko/:country(au|ca|us|uk|de|nl|ie|be|sg|kr|jp|fr|es|nz|no|se|dk|fi|ch|ae)/:path*", destination: "/ko", permanent: false },
     ]
   },
 }

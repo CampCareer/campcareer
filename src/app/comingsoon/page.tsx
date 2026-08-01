@@ -146,7 +146,7 @@ export default function ComingSoonPage() {
         </div>
 
         <div className="mt-10 text-center">
-          <Link href={localizePath("/", pathLocale)} className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">
+          <Link href="/home" className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">
             {isKo ? "호주 시작하기" : "Start with Australia"}
           </Link>
         </div>

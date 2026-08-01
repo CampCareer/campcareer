@@ -2,9 +2,12 @@ import type { StudyLocale, TaxonomySearchResult } from "@/lib/study-product/type
 import { resolveDecisionCareer } from "@/lib/comparison/public-contract"
 
 const MAP_DETAIL_HREF = /^\/maps\/[a-z]{2}\/[a-z0-9][a-z0-9-]*(?:\?[^#]*)?$/i
+const CANONICAL_WORKSPACE_PATHS = new Set(["/home", "/maps", "/compare", "/visas"])
 
 export function localizeStudyJourneyHref(href: string, locale: StudyLocale) {
   if (locale !== "ko-KR" || !href.startsWith("/") || href.startsWith("/ko/")) return href
+  const pathname = href.split(/[?#]/, 1)[0]
+  if (CANONICAL_WORKSPACE_PATHS.has(pathname)) return href
   return `/ko${href}`
 }
 

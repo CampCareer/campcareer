@@ -56,8 +56,8 @@ export function StepPlan({
       wizardData.schoolData = selectedSchoolData
     }
     try { localStorage.setItem("cc_wizard_data", JSON.stringify(wizardData)) } catch {}
-    router.push(localizePath("/home", locale))
-  }, [selectedConcept, selectedSchool, selectedSchoolData, profile, locale, router])
+    router.push("/home")
+  }, [selectedConcept, selectedSchool, selectedSchoolData, profile, router])
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-12">

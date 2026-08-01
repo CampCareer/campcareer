@@ -28,7 +28,7 @@ export function PilotCountryPage({ country, locale }: { country: ExpansionCountr
     <main className="min-h-screen bg-slate-50 text-slate-950">
       <section className="border-b border-slate-200 bg-white">
         <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:py-16">
-          <Link href={korean ? "/ko" : "/decision-brief"} className="text-sm font-semibold text-slate-500 hover:text-slate-950">
+          <Link href="/home" className="text-sm font-semibold text-slate-500 hover:text-slate-950">
             {korean ? "CampCareer 한국어" : "CampCareer"}
           </Link>
           <p className="mt-7 text-xs font-semibold uppercase tracking-widest text-brand">

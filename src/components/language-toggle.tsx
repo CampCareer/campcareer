@@ -2,7 +2,8 @@
 
 import { usePathname, useRouter } from 'next/navigation'
 import { useLocale, useSetLocale } from '@/lib/i18n/locale-provider'
-import { LOCALE_META, PUBLISHED_LOCALE_OPTIONS, localeForUi, localeFromPathname, localizePath, type LocaleOption } from '@/lib/i18n/config'
+import { LOCALE_META, PUBLISHED_LOCALE_OPTIONS, localeForUi, localeFromPathname, type LocaleOption } from '@/lib/i18n/config'
+import { getLocaleNavigationPath } from '@/lib/i18n/legacy-locale-home'
 
 export function LanguageToggle({ className }: { className?: string }) {
   const locale = useLocale()
@@ -19,7 +20,7 @@ export function LanguageToggle({ className }: { className?: string }) {
         onChange={(event) => {
           const next = event.target.value as LocaleOption
           setLocale(localeForUi(next))
-          const target = localizePath(pathname, next)
+          const target = getLocaleNavigationPath(pathname, next)
           const qs = window.location.search
           router.replace(qs ? `${target}${qs}` : target)
         }}

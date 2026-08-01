@@ -15,6 +15,7 @@ type WorkspaceUserMenuProps = {
 export function WorkspaceUserMenu({ className, minimal = false }: WorkspaceUserMenuProps) {
   const supabase = useMemo(() => createClient(), [])
   const [user, setUser] = useState<User | null>(null)
+  const [avatarFailed, setAvatarFailed] = useState(false)
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setUser(data.user))
@@ -26,6 +27,10 @@ export function WorkspaceUserMenu({ className, minimal = false }: WorkspaceUserM
 
   const avatarUrl = user?.user_metadata?.avatar_url as string | undefined
 
+  useEffect(() => {
+    setAvatarFailed(false)
+  }, [avatarUrl])
+
   if (user) {
     return (
       <Link
@@ -36,11 +41,12 @@ export function WorkspaceUserMenu({ className, minimal = false }: WorkspaceUserM
         )}
         aria-label="Open profile"
       >
-        {avatarUrl ? (
+        {avatarUrl && !avatarFailed ? (
           <img
             src={avatarUrl}
             alt=""
             className="size-7 rounded-full object-cover"
+            onError={() => setAvatarFailed(true)}
           />
         ) : (
           <div className="flex size-7 items-center justify-center rounded-full bg-blue-100">

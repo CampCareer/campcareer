@@ -17,7 +17,7 @@ export function SiteFooter({ className }: { className?: string }) {
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {/* Brand */}
           <div>
-            <Link href={localizePath("/", pathLocale)} className="campcareer-wordmark text-slate-900">
+            <Link href="/home" className="campcareer-wordmark text-slate-900">
               campcareer
             </Link>
             <p className="mt-3 text-sm leading-6 text-slate-500">
@@ -33,10 +33,10 @@ export function SiteFooter({ className }: { className?: string }) {
               {isKo ? "경로" : "Routes"}
             </h4>
             <ul className="mt-3 space-y-2.5">
-              <FooterLink href="/" locale={pathLocale}>
+              <FooterLink href="/home" locale={pathLocale} canonical>
                 {isKo ? "경로 검색" : "Search routes"}
               </FooterLink>
-              <FooterLink href="/maps" locale={pathLocale}>
+              <FooterLink href="/maps" locale={pathLocale} canonical>
                 {isKo ? "지도" : "Maps"}
               </FooterLink>
             </ul>
@@ -74,16 +74,18 @@ export function SiteFooter({ className }: { className?: string }) {
 function FooterLink({
   href,
   locale,
+  canonical = false,
   children,
 }: {
   href: string
   locale: LocaleOption
+  canonical?: boolean
   children: React.ReactNode
 }) {
   return (
     <li>
       <Link
-        href={localizePath(href, locale)}
+        href={canonical ? href : localizePath(href, locale)}
         className="text-sm text-slate-500 transition hover:text-slate-900"
       >
         {children}

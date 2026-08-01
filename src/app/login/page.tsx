@@ -1,23 +1,21 @@
 'use client'
 
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Suspense, useState } from 'react'
-import { CheckCircle2, ArrowRight, Loader2 } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Loader2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase-client'
-
-const TRUST = [
-  'Official government data',
-  '11,000+ courses tracked',
-  'Free to explore',
-]
+import { getSafeNextPath } from '@/lib/auth/safe-next'
+import { getPathwayBackPath, getPathwaySummaryFromNext } from '@/lib/auth/pathway-next'
+import { LOGIN_COPY } from './login-copy'
 
 function LoginPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const requestedNext = searchParams.get('next') ?? '/profile'
-  const next = requestedNext.startsWith('/') && !requestedNext.startsWith('//') ? requestedNext : '/profile'
+  const requestedNext = searchParams.get('next')
+  const next = getSafeNextPath(requestedNext)
+  const pathwaySummary = getPathwaySummaryFromNext(requestedNext)
+  const pathwayBackPath = getPathwayBackPath(requestedNext)
   const supabase = createClient()
 
   const [email, setEmail] = useState('')
@@ -40,8 +38,8 @@ function LoginPageContent() {
     }
   }
 
-  async function handleEmail(e: React.FormEvent) {
-    e.preventDefault()
+  async function handleEmail(event: React.FormEvent) {
+    event.preventDefault()
     setIsLoading(true)
     setError(null)
 
@@ -54,140 +52,123 @@ function LoginPageContent() {
         router.push(next)
         router.refresh()
       }
-    } else {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: { emailRedirectTo: `${location.origin}/auth/callback?next=${encodeURIComponent(next)}` },
-      })
-      if (error) {
-        setError(error.message)
-        setIsLoading(false)
-      } else {
-        setError('Check your email to confirm your account!')
-        setIsLoading(false)
-      }
+      return
     }
+
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { emailRedirectTo: `${location.origin}/auth/callback?next=${encodeURIComponent(next)}` },
+    })
+    if (error) {
+      setError(error.message)
+    } else {
+      setError('Check your email to confirm your account!')
+    }
+    setIsLoading(false)
   }
 
-  return (
-    <div className="min-h-screen flex">
+  const isSignIn = mode === 'signin'
 
-      {/* 좌측 */}
-      <div className="hidden lg:flex flex-col w-1/2 bg-gradient-to-b from-slate-900 to-blue-950 p-10">
-        <Link href="/" className="flex items-center gap-2.5 w-fit">
-          <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center shrink-0">
-            <span className="text-white text-xs font-bold">CC</span>
-          </div>
-          <span className="font-semibold text-white text-base tracking-tight">CampCareer</span>
+  return (
+    <main className="min-h-screen bg-[#fafaf9] px-5 py-8 sm:px-6 sm:py-12">
+      <div className="mx-auto w-full max-w-[460px]">
+        <Link href="/home" className="campcareer-wordmark text-[#1b1b1b]" aria-label="campcareer home">
+          campcareer
         </Link>
 
-        <div className="flex-1 flex flex-col justify-center">
-          <h2 className="font-display text-4xl font-semibold text-white leading-[1.15] tracking-tight mb-4">
-            Make smarter<br />study abroad<br />decisions.
-          </h2>
-          <p className="text-slate-400 text-base leading-relaxed max-w-xs">
-            Real salary data, government statistics, and ROI analysis — all in one place.
-          </p>
-        </div>
-
-        <div className="flex flex-col gap-3">
-          {TRUST.map((t) => (
-            <div key={t} className="flex items-center gap-2.5 text-sm text-slate-400">
-              <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0" />
-              {t}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* 우측 */}
-      <div className="flex-1 flex flex-col justify-center items-center px-6 py-12 bg-white">
-        <div className="w-full max-w-sm">
-
-          <div className="lg:hidden flex items-center gap-2 mb-10">
-            <div className="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center">
-              <span className="text-white text-[10px] font-bold">CC</span>
-            </div>
-            <span className="font-semibold text-slate-900 text-sm">CampCareer</span>
-          </div>
-
-          <div className="mb-8">
-            <h1 className="font-display text-2xl font-semibold text-slate-900 mb-1">
-              {mode === 'signin' ? 'Welcome back' : 'Create account'}
+        <section className="mt-8 sm:mt-10 sm:rounded-2xl sm:border sm:border-slate-200 sm:bg-white sm:p-8 sm:shadow-sm">
+          <div className="mb-7">
+            <h1 className="text-2xl font-semibold tracking-tight text-slate-950">
+              {isSignIn ? LOGIN_COPY.welcome : LOGIN_COPY.signup}
             </h1>
-            <p className="text-sm text-slate-500">
-              {mode === 'signin' ? 'Sign in to your account' : 'Start exploring for free'}
+            <p className="mt-1.5 text-sm text-slate-600">
+              {isSignIn ? LOGIN_COPY.welcomeSupporting : LOGIN_COPY.signupSupporting}
             </p>
           </div>
 
-          {/* 에러/성공 메시지 */}
+          {pathwaySummary && (
+            <div className="mb-6 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3" aria-label="Pathway to save">
+              <p className="text-xs font-medium text-slate-500">Save this pathway</p>
+              <p className="mt-1 text-sm font-medium text-slate-800">
+                {pathwaySummary.country} · {pathwaySummary.field} · {pathwaySummary.status}
+              </p>
+            </div>
+          )}
+
           {error && (
-            <div className={`text-sm px-4 py-3 rounded-xl mb-5 ${
-              error.includes('Check your email')
-                ? 'bg-green-50 text-green-700 border border-green-200'
-                : 'bg-red-50 text-red-600 border border-red-200'
-            }`}>
+            <div
+              id="login-message"
+              role="alert"
+              aria-live="polite"
+              className={`mb-5 rounded-xl border px-4 py-3 text-sm ${
+                error.includes('Check your email')
+                  ? 'border-green-200 bg-green-50 text-green-700'
+                  : 'border-red-200 bg-red-50 text-red-600'
+              }`}
+            >
               {error}
             </div>
           )}
 
-          {/* Google */}
           <button
             type="button"
             onClick={handleGoogle}
             disabled={isLoading}
-            className="w-full flex items-center justify-center gap-3 border border-slate-200 rounded-xl py-2.5 px-4 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors mb-5 disabled:opacity-50"
+            className="mb-5 flex min-h-12 w-full items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className="w-4 h-4 shrink-0">
-              <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/>
-              <path fill="#FF3D00" d="m6.306 14.691 6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"/>
-              <path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0 1 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/>
-              <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002 6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className="size-4 shrink-0" aria-hidden="true">
+              <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z" />
+              <path fill="#FF3D00" d="m6.306 14.691 6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z" />
+              <path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0 1 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z" />
+              <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002 6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z" />
             </svg>
-            Continue with Google
+            {LOGIN_COPY.google}
           </button>
 
-          <div className="flex items-center gap-3 mb-5">
+          <div className="mb-5 flex items-center gap-3" aria-hidden="true">
             <div className="flex-1 border-t border-slate-200" />
-            <span className="text-xs text-slate-400 whitespace-nowrap">or continue with email</span>
+            <span className="whitespace-nowrap text-xs text-slate-500">{LOGIN_COPY.divider}</span>
             <div className="flex-1 border-t border-slate-200" />
           </div>
 
-          <form onSubmit={handleEmail} className="space-y-4">
+          <form onSubmit={handleEmail} className="space-y-4" aria-busy={isLoading}>
             <div>
-              <label htmlFor="email" className="block text-xs font-medium text-slate-600 mb-1.5">
-                Email
+              <label htmlFor="email" className="mb-1.5 block text-xs font-medium text-slate-700">
+                {LOGIN_COPY.email}
               </label>
               <input
                 id="email"
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(event) => setEmail(event.target.value)}
                 placeholder="name@example.com"
                 required
-                className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                autoComplete="email"
+                aria-describedby={error ? 'login-message' : undefined}
+                className="min-h-12 w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-500 transition focus:border-transparent focus:outline-none focus:ring-2 focus:ring-brand"
               />
             </div>
 
             <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label htmlFor="password" className="text-xs font-medium text-slate-600">
-                  Password
+              <div className="mb-1.5 flex items-center justify-between gap-3">
+                <label htmlFor="password" className="text-xs font-medium text-slate-700">
+                  {LOGIN_COPY.password}
                 </label>
-                {mode === 'signin' && (
+                {isSignIn && (
                   <button
                     type="button"
                     onClick={async () => {
-                      if (!email) { setError('Enter your email first'); return }
-                      await supabase.auth.resetPasswordForEmail(email, {
-                        redirectTo: `${location.origin}/auth/callback`,
-                      })
+                      if (!email) {
+                        setError('Enter your email first')
+                        return
+                      }
+                      await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${location.origin}/auth/callback` })
                       setError('Password reset email sent!')
                     }}
-                    className="text-xs text-blue-600 hover:text-blue-700 transition-colors"
+                    className="shrink-0 text-xs font-medium text-brand transition-colors hover:text-brand-press focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2"
                   >
-                    Forgot password?
+                    {LOGIN_COPY.forgotPassword}
                   </button>
                 )}
               </div>
@@ -195,51 +176,57 @@ function LoginPageContent() {
                 id="password"
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(event) => setPassword(event.target.value)}
                 placeholder="••••••••"
                 required
                 minLength={6}
-                className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                autoComplete={isSignIn ? 'current-password' : 'new-password'}
+                aria-describedby={error ? 'login-message' : undefined}
+                className="min-h-12 w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-500 transition focus:border-transparent focus:outline-none focus:ring-2 focus:ring-brand"
               />
             </div>
 
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full border border-brand bg-brand text-brand-foreground font-semibold tracking-tight shadow-sm transition-colors hover:bg-brand/90 min-h-[48px] rounded-xl text-sm mt-1 flex items-center justify-center gap-2 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2"
+              className="mt-1 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-brand bg-brand text-sm font-semibold tracking-tight text-brand-foreground shadow-sm transition-colors hover:bg-brand/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2 disabled:opacity-50"
             >
-              {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
-              {mode === 'signin' ? 'Sign in' : 'Create account'}
+              {isLoading && <Loader2 className="size-4 animate-spin" aria-hidden="true" />}
+              {isSignIn ? LOGIN_COPY.signIn : LOGIN_COPY.createAccount}
             </button>
           </form>
 
-          <p className="text-center text-sm text-slate-500 mt-6">
-            {mode === 'signin' ? "Don't have an account?" : 'Already have an account?'}{' '}
+          <p className="mt-6 text-center text-sm text-slate-600">
+            {isSignIn ? LOGIN_COPY.newAccount : LOGIN_COPY.existingAccount}{' '}
             <button
               type="button"
-              onClick={() => { setMode(mode === 'signin' ? 'signup' : 'signin'); setError(null) }}
-              className="text-blue-600 hover:text-blue-700 font-medium transition-colors inline-flex items-center gap-0.5"
+              onClick={() => {
+                setMode(isSignIn ? 'signup' : 'signin')
+                setError(null)
+              }}
+              className="inline-flex items-center gap-0.5 font-medium text-brand transition-colors hover:text-brand-press focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2"
             >
-              {mode === 'signin' ? 'Get started' : 'Sign in'}
-              <ArrowRight className="w-3.5 h-3.5" />
+              {isSignIn ? LOGIN_COPY.createAccount : LOGIN_COPY.signIn}
+              <ArrowRight className="size-3.5" aria-hidden="true" />
             </button>
           </p>
 
-          <p className="text-center text-xs text-slate-400 mt-5">
-            By signing in, you agree to our{' '}
-            <a href="#" className="underline hover:text-slate-600 transition-colors">
-              Terms of Service
-            </a>
-          </p>
-        </div>
+          <Link
+            href={pathwayBackPath}
+            className="mt-7 inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-brand transition-colors hover:text-brand-press focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2"
+          >
+            <ArrowLeft className="size-4" aria-hidden="true" />
+            {LOGIN_COPY.back}
+          </Link>
+        </section>
       </div>
-    </div>
+    </main>
   )
 }
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-white" aria-busy="true" />}>
+    <Suspense fallback={<div className="min-h-screen bg-[#fafaf9]" aria-busy="true" />}>
       <LoginPageContent />
     </Suspense>
   )

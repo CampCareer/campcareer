@@ -52,7 +52,7 @@ export default async function AustralianMajorsPage({
       <section className="relative overflow-hidden au-discovery-hero">
         <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-b from-transparent to-slate-50" />
         <div className="relative z-10 mx-auto max-w-7xl px-5 pb-8 pt-6 sm:px-6 sm:pb-10 sm:pt-8">
-          <Link href={localizePath("/", locale)} className="inline-flex items-center gap-2 text-sm font-semibold text-blue-100 transition hover:text-white">
+          <Link href="/home" className="inline-flex items-center gap-2 text-sm font-semibold text-blue-100 transition hover:text-white">
             <ArrowLeft className="size-4" />
             {isKo ? "내 경로 찾기로 돌아가기" : "Back to Find my path"}
           </Link>
@@ -138,7 +138,7 @@ function RankedPathwayResults({ ranked, locale, isKo }: { ranked: RankedAuPathwa
           <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">{isKo ? "다음에 검토할 전공" : "Study pathways to review next"}</h2>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">{isKo ? "목표·학위·분야 조건을 랜딩과 같은 기준으로 계산했습니다. 점수는 후보를 좁히기 위한 신호입니다." : "These scores use the same goal, study-stage and field rules as the landing search. Use them to narrow your shortlist."}</p>
         </div>
-        <Link href={localizePath("/", locale)} className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-700 hover:text-blue-800">{isKo ? "조건 바꾸기" : "Change conditions"}<ArrowRight className="size-4" /></Link>
+        <Link href="/home" className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-700 hover:text-blue-800">{isKo ? "조건 바꾸기" : "Change conditions"}<ArrowRight className="size-4" /></Link>
       </div>
       <div className="grid gap-4 lg:grid-cols-2">
         {ranked.map((pathway, index) => <RankedPathwayCard key={pathway.concept.id} pathway={pathway} rank={index + 1} locale={locale} isKo={isKo} />)}

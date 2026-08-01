@@ -3,11 +3,12 @@ import test from "node:test"
 import sitemap from "../src/app/sitemap"
 import { ROUTE_GUIDES, routeGuideHref } from "../src/data/route-guides"
 
-test("the sitemap only publishes route search, maps, legal pages, and verified routes", () => {
+test("the sitemap publishes canonical Home, maps, legal pages, and verified routes", () => {
   const entries = sitemap()
   const urls = entries.map((entry) => entry.url)
 
-  assert.ok(urls.includes("https://www.campcareer.com"))
+  assert.ok(urls.includes("https://www.campcareer.com/home"))
+  assert.equal(urls.includes("https://www.campcareer.com/ko"), false)
   assert.ok(urls.includes("https://www.campcareer.com/maps"))
   for (const guide of ROUTE_GUIDES) {
     assert.ok(urls.includes(`https://www.campcareer.com${routeGuideHref(guide)}`))

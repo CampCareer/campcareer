@@ -18,6 +18,9 @@ export function WorkspaceShell({ children }: WorkspaceShellProps) {
   // Pages with their own full-bleed hero manage their own content container,
   // so they escape the standard padding to reach the sidebar and topbar.
   const hasFullBleedHero = pathname === "/home" || pathname === "/countries"
+  // Home owns both the authenticated dashboard and result experiences. Its
+  // application-style surfaces should end at their content, not a marketing footer.
+  const hideSiteFooter = pathname === "/home"
 
   return (
     <div className="flex min-h-screen bg-white">
@@ -27,7 +30,7 @@ export function WorkspaceShell({ children }: WorkspaceShellProps) {
         <main className={cn("flex-1", !hasFullBleedHero && "px-4 py-8 sm:px-8 lg:px-10")}>
           <div className={cn(!hasFullBleedHero && "mx-auto w-full max-w-6xl")}>{children}</div>
         </main>
-        <SiteFooter />
+        {!hideSiteFooter && <SiteFooter />}
       </div>
     </div>
   )
