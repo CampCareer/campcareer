@@ -1,118 +1,118 @@
 canonical_schema,table,table_kind,observation_status,row_estimate_or_count,countries_served,runtime_layer,notes
-core,countries,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,exists per migration 20260730172000
-core,currencies,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-core,geographies,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,seed migration 20260730180000
-core,qualification_frameworks,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-core,qualification_levels,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-catalog,institutions,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-catalog,campuses,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-catalog,institution_identifiers,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-catalog,programmes,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-catalog,programme_offerings,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-catalog,programme_identifiers,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-catalog,programme_fees,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-catalog,programme_requirements,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-catalog,programme_accreditations,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-catalog,legacy_entity_map,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-taxonomy,occupations,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-taxonomy,occupation_identifiers,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-taxonomy,concept_occupations,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-taxonomy,study_concepts,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-taxonomy,programme_concepts,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-evidence,sources,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-evidence,source_register_records,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-evidence,source_snapshots,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-evidence,claims,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-evidence,claim_evidence,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-evidence,metric_observations,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-evidence,review_events,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-evidence,data_source_runs,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-labour,outcome_observations,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-reporting,products,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-reporting,report_releases,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-reporting,report_artifacts,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-reporting,report_programmes,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-reporting,analysis_runs,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-reporting,analysis_inputs,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-reporting,analysis_outputs,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-reporting,analysis_pathways,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-reporting,analysis_scenarios,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-reporting,methodology_versions,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-reporting,ranking_models,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-reporting,ranking_weights,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-reporting,monitoring_actions,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-reporting,release_claims,table,STATIC_ANALYSIS_ONLY,unknown,ALL,REPORT_FACTORY,
-ingest,cities_au,view,OBSERVED_VIA_PUBLIC_VIEW,19,AU,PUBLIC_VIEW,public.cities_au
-ingest,cities_ca,view,OBSERVED_VIA_PUBLIC_VIEW,27,CA,PUBLIC_VIEW,public.cities_ca
-ingest,cities_ie,view,OBSERVED_VIA_PUBLIC_VIEW,18,IE,PUBLIC_VIEW,public.cities_ie
-ingest,cities_uk,view,OBSERVED_VIA_PUBLIC_VIEW,37,GB,PUBLIC_VIEW,public.cities_uk
-ingest,cities_us,view,OBSERVED_VIA_PUBLIC_VIEW,31779,US,PUBLIC_VIEW,public.cities_us
-ingest,colleges_au,view,OBSERVED_VIA_PUBLIC_VIEW,42,AU,PUBLIC_VIEW,public.colleges_au
-ingest,colleges_ca,view,OBSERVED_VIA_PUBLIC_VIEW,30,CA,PUBLIC_VIEW,public.colleges_ca
-ingest,colleges_ie,view,OBSERVED_VIA_PUBLIC_VIEW,34,IE,PUBLIC_VIEW,public.colleges_ie
-ingest,colleges_uk,view,OBSERVED_VIA_PUBLIC_VIEW,49,GB,PUBLIC_VIEW,public.colleges_uk
-ingest,colleges_us,view,OBSERVED_VIA_PUBLIC_VIEW,6322,US,PUBLIC_VIEW,public.colleges_us
-ingest,colleges_nl,view,OBSERVED_VIA_PUBLIC_VIEW,13,NL,PUBLIC_VIEW,public.colleges_nl (non-canonical)
-ingest,courses_au,view,OBSERVED_VIA_PUBLIC_VIEW,9743,AU,PUBLIC_VIEW,public.courses_au
-ingest,courses_ca,view,OBSERVED_VIA_PUBLIC_VIEW,165,CA,PUBLIC_VIEW,public.courses_ca
-ingest,courses_ie,view,OBSERVED_VIA_PUBLIC_VIEW,2876,IE,PUBLIC_VIEW,public.courses_ie
-ingest,courses_uk,view,OBSERVED_VIA_PUBLIC_VIEW,185,GB,PUBLIC_VIEW,public.courses_uk
-ingest,programs_us,view,OBSERVED_VIA_PUBLIC_VIEW,106083,US,PUBLIC_VIEW,public.programs_us
-ingest,occupations_au,view,OBSERVED_VIA_PUBLIC_VIEW,600,AU,PUBLIC_VIEW,public.occupations_au
-ingest,occupations_ca,view,OBSERVED_VIA_PUBLIC_VIEW,514,CA,PUBLIC_VIEW,public.occupations_ca
-ingest,occupations_uk,view,OBSERVED_VIA_PUBLIC_VIEW,408,GB,PUBLIC_VIEW,public.occupations_uk
-ingest,occupation_state_au,view,OBSERVED_VIA_PUBLIC_VIEW,2452,AU,PUBLIC_VIEW,public.occupation_state_au
-ingest,occupation_state_ca,view,OBSERVED_VIA_PUBLIC_VIEW,7147,CA,PUBLIC_VIEW,public.occupation_state_ca
-ingest,occupation_state_uk,view,OBSERVED_VIA_PUBLIC_VIEW,3705,GB,PUBLIC_VIEW,public.occupation_state_uk
-ingest,occupation_profiles_au,view,OBSERVED_VIA_PUBLIC_VIEW,1236,AU,PUBLIC_VIEW,public.occupation_profiles_au
-ingest,occupation_outlook_au,view,OBSERVED_VIA_PUBLIC_VIEW,716,AU,PUBLIC_VIEW,public.occupation_outlook_au
-ingest,occupation_vacancies_au,view,OBSERVED_VIA_PUBLIC_VIEW,75816,AU,PUBLIC_VIEW,public.occupation_vacancies_au
-ingest,occupation_regional_employment_au,view,OBSERVED_VIA_PUBLIC_VIEW,31240,AU,PUBLIC_VIEW,public.occupation_regional_employment_au
-ingest,occupation_mobility_flows_au,view,OBSERVED_VIA_PUBLIC_VIEW,193567,AU,PUBLIC_VIEW,public.occupation_mobility_flows_au
-ingest,occupation_mobility_stocks_au,view,OBSERVED_VIA_PUBLIC_VIEW,10889,AU,PUBLIC_VIEW,public.occupation_mobility_stocks_au
-ingest,occupation_pathways_au,view,OBSERVED_VIA_PUBLIC_VIEW,5351,AU,PUBLIC_VIEW,public.occupation_pathways_au
-ingest,occupation_shortage_drivers_au,view,OBSERVED_VIA_PUBLIC_VIEW,47,AU,PUBLIC_VIEW,public.occupation_shortage_drivers_au
-ingest,occupation_sa4_au,view,OBSERVED_VIA_PUBLIC_VIEW,0,AU,PUBLIC_VIEW,public.occupation_sa4_au (empty)
-ingest,field_earnings_au,view,OBSERVED_VIA_PUBLIC_VIEW,82,AU,PUBLIC_VIEW,public.field_earnings_au
-ingest,field_earnings_ca,view,OBSERVED_VIA_PUBLIC_VIEW,70,CA,PUBLIC_VIEW,public.field_earnings_ca
-ingest,field_earnings_ie,view,OBSERVED_VIA_PUBLIC_VIEW,150,IE,PUBLIC_VIEW,public.field_earnings_ie
-ingest,field_earnings_uk,view,OBSERVED_VIA_PUBLIC_VIEW,70,GB,PUBLIC_VIEW,public.field_earnings_uk
-ingest,graduate_outcomes_ie,view,OBSERVED_VIA_PUBLIC_VIEW,64,IE,PUBLIC_VIEW,public.graduate_outcomes_ie
-ingest,shortage_occupations_ie,view,OBSERVED_VIA_PUBLIC_VIEW,79,IE,PUBLIC_VIEW,public.shortage_occupations_ie
-ingest,language_schools_ie,view,OBSERVED_VIA_PUBLIC_VIEW,67,IE,PUBLIC_VIEW,public.language_schools_ie
-ingest,language_courses_ie,view,OBSERVED_VIA_PUBLIC_VIEW,0,IE,PUBLIC_VIEW,public.language_courses_ie (empty)
-ingest,visa_occupation_status_au,view,OBSERVED_VIA_PUBLIC_VIEW,482,AU,PUBLIC_VIEW,public.visa_occupation_status_au
-ingest,regulatory_requirements_au,view,OBSERVED_VIA_PUBLIC_VIEW,29,AU,PUBLIC_VIEW,public.regulatory_requirements_au
-ingest,program_page_facts_au,view,OBSERVED_VIA_PUBLIC_VIEW,118,AU,PUBLIC_VIEW,public.program_page_facts_au
-ingest,state_salary_multiplier,view,OBSERVED_VIA_PUBLIC_VIEW,64,ALL,PUBLIC_VIEW,public.state_salary_multiplier
-ingest,country_pr_pathways,view,OBSERVED_VIA_PUBLIC_VIEW,5,ALL,PUBLIC_VIEW,public.country_pr_pathways
-ingest,roi_explorer_au,view,OBSERVED_VIA_PUBLIC_VIEW,42,AU,PUBLIC_VIEW,public.roi_explorer_au
-ingest,roi_explorer_ca,view,OBSERVED_VIA_PUBLIC_VIEW,30,CA,PUBLIC_VIEW,public.roi_explorer_ca
-ingest,roi_explorer_ie,view,OBSERVED_VIA_PUBLIC_VIEW,34,IE,PUBLIC_VIEW,public.roi_explorer_ie
-ingest,roi_explorer_uk,view,OBSERVED_VIA_PUBLIC_VIEW,49,GB,PUBLIC_VIEW,public.roi_explorer_uk
-ingest,roi_explorer_us,view,OBSERVED_VIA_PUBLIC_VIEW,6322,US,PUBLIC_VIEW,public.roi_explorer_us
-ingest,roi_explorer_by_field_us,view,OBSERVED_VIA_PUBLIC_VIEW,106083,US,PUBLIC_VIEW,public.roi_explorer_by_field_us
-ingest,roi_explorer_nl,view,OBSERVED_VIA_PUBLIC_VIEW,13,NL,PUBLIC_VIEW,public.roi_explorer_nl (non-canonical)
-ingest,roi_explorer_de,view,OBSERVED_VIA_PUBLIC_VIEW,0,DE,PUBLIC_VIEW,public.roi_explorer_de (empty)
-ingest,majors,view,OBSERVED_VIA_PUBLIC_VIEW,1,ALL,PUBLIC_VIEW,public.majors (explore.ts)
-ingest,data_source_runs,view,OBSERVED_VIA_PUBLIC_VIEW,12,ALL,PUBLIC_VIEW,public.data_source_runs
-public,concept_career_mappings,table,STATIC_ANALYSIS_ONLY (404 via REST),unknown,ALL,SERVICE_ROLE,migration 20260712121724; RLS on; grant service_role; NOT exposed to PostgREST (404)
-public,career_compensation_observations,table,STATIC_ANALYSIS_ONLY (404 via REST),unknown,ALL,SERVICE_ROLE,migration 20260712121724; origin-comparison runtime dependency
-public,housing_cost_observations,table,STATIC_ANALYSIS_ONLY (404 via REST),unknown,ALL,SERVICE_ROLE,migration 20260712121724; origin-comparison runtime dependency
-public,country_comparison_coverage,table,STATIC_ANALYSIS_ONLY (404 via REST),unknown,ALL,SERVICE_ROLE,migration 20260712121724; origin-comparison runtime dependency
-public,partner_profiles,table,STATIC_ANALYSIS_ONLY (404 via REST),unknown,ALL,SERVICE_ROLE,migration 20260712121724; RLS; service_role only
-public,partner_members,table,STATIC_ANALYSIS_ONLY (404 via REST),unknown,ALL,SERVICE_ROLE,migration 20260712121724; grant select authenticated
-public,lead_requests,table,STATIC_ANALYSIS_ONLY (404 via REST),unknown,ALL,SERVICE_ROLE,migration 20260712121724
-public,lead_assignments,table,STATIC_ANALYSIS_ONLY (404 via REST),unknown,ALL,SERVICE_ROLE,migration 20260712121724
-public,lead_status_events,table,STATIC_ANALYSIS_ONLY (404 via REST),unknown,ALL,SERVICE_ROLE,migration 20260712121724
-api_private,au_program_catalog_v1,view,OBSERVED,9743,AU,API_PRIVATE,server-only read model
-api_private,au_program_route_options_v1,view,OBSERVED,9743,AU,API_PRIVATE,server-only read model
-api_private,au_program_map_summary_v1,view,OBSERVED,9743,AU,API_PRIVATE,server-only read model
-api_private,au_program_occupation_courses_v1,view,OBSERVED,9743,AU,API_PRIVATE,server-only read model
-api_private,au_program_institution_directory_v1,view,OBSERVED,42,AU,API_PRIVATE,server-only read model
-api_private,au_program_page_facts_v1,view,OBSERVED,118,AU,API_PRIVATE,server-only read model
-api_private,au_nursing_programme_catalog_v1,view,OBSERVED,294,AU,API_PRIVATE,server-only read model (nursing compare)
-api_private,au_nursing_programme_fees_v1,view,OBSERVED,159,AU,API_PRIVATE,server-only read model
-api_private,au_nursing_programme_evidence_v1,view,OBSERVED,179,AU,API_PRIVATE,server-only read model
-api_private,au_nursing_programme_requirements_v1,view,OBSERVED,20,AU,API_PRIVATE,server-only read model
-api_private,au_nursing_programme_accreditations_v1,view,OBSERVED,146,AU,API_PRIVATE,server-only read model
+core,countries,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,exists per migration 20260730172000; not exposed to PostgREST
+core,currencies,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+core,geographies,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,seed migration 20260730180000
+core,qualification_frameworks,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+core,qualification_levels,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+catalog,institutions,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+catalog,campuses,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+catalog,institution_identifiers,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+catalog,programmes,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+catalog,programme_offerings,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+catalog,programme_identifiers,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+catalog,programme_fees,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+catalog,programme_requirements,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+catalog,programme_accreditations,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+catalog,legacy_entity_map,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+taxonomy,occupations,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+taxonomy,occupation_identifiers,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+taxonomy,concept_occupations,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+taxonomy,study_concepts,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+taxonomy,programme_concepts,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+evidence,sources,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+evidence,source_register_records,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+evidence,source_snapshots,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+evidence,claims,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+evidence,claim_evidence,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+evidence,metric_observations,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+evidence,review_events,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+evidence,data_source_runs,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+labour,outcome_observations,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+reporting,products,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+reporting,report_releases,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+reporting,report_artifacts,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+reporting,report_programmes,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+reporting,analysis_runs,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+reporting,analysis_inputs,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+reporting,analysis_outputs,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+reporting,analysis_pathways,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+reporting,analysis_scenarios,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+reporting,methodology_versions,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+reporting,ranking_models,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+reporting,ranking_weights,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+reporting,monitoring_actions,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+reporting,release_claims,table,STATIC_ANALYSIS_ONLY,canonical_database_count: null,ALL,REPORT_FACTORY,
+ingest,cities_au,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 19,AU,PUBLIC_VIEW,public.cities_au
+ingest,cities_ca,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 27,CA,PUBLIC_VIEW,public.cities_ca
+ingest,cities_ie,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 18,IE,PUBLIC_VIEW,public.cities_ie
+ingest,cities_uk,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 37,GB,PUBLIC_VIEW,public.cities_uk
+ingest,cities_us,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 31779,US,PUBLIC_VIEW,public.cities_us
+ingest,colleges_au,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 42,AU,PUBLIC_VIEW,public.colleges_au
+ingest,colleges_ca,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 30,CA,PUBLIC_VIEW,public.colleges_ca
+ingest,colleges_ie,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 34,IE,PUBLIC_VIEW,public.colleges_ie
+ingest,colleges_uk,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 49,GB,PUBLIC_VIEW,public.colleges_uk
+ingest,colleges_us,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 6322,US,PUBLIC_VIEW,public.colleges_us
+ingest,colleges_nl,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 13,NL,PUBLIC_VIEW,public.colleges_nl (non-canonical)
+ingest,courses_au,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 9743,AU,PUBLIC_VIEW,public.courses_au
+ingest,courses_ca,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 165,CA,PUBLIC_VIEW,public.courses_ca
+ingest,courses_ie,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 2876,IE,PUBLIC_VIEW,public.courses_ie
+ingest,courses_uk,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 185,GB,PUBLIC_VIEW,public.courses_uk
+ingest,programs_us,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 106083,US,PUBLIC_VIEW,public.programs_us
+ingest,occupations_au,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 600,AU,PUBLIC_VIEW,public.occupations_au
+ingest,occupations_ca,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 514,CA,PUBLIC_VIEW,public.occupations_ca
+ingest,occupations_uk,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 408,GB,PUBLIC_VIEW,public.occupations_uk
+ingest,occupation_state_au,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 2452,AU,PUBLIC_VIEW,public.occupation_state_au
+ingest,occupation_state_ca,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 7147,CA,PUBLIC_VIEW,public.occupation_state_ca
+ingest,occupation_state_uk,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 3705,GB,PUBLIC_VIEW,public.occupation_state_uk
+ingest,occupation_profiles_au,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 1236,AU,PUBLIC_VIEW,public.occupation_profiles_au
+ingest,occupation_outlook_au,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 716,AU,PUBLIC_VIEW,public.occupation_outlook_au
+ingest,occupation_vacancies_au,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 75816,AU,PUBLIC_VIEW,public.occupation_vacancies_au
+ingest,occupation_regional_employment_au,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 31240,AU,PUBLIC_VIEW,public.occupation_regional_employment_au
+ingest,occupation_mobility_flows_au,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 193567,AU,PUBLIC_VIEW,public.occupation_mobility_flows_au
+ingest,occupation_mobility_stocks_au,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 10889,AU,PUBLIC_VIEW,public.occupation_mobility_stocks_au
+ingest,occupation_pathways_au,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 5351,AU,PUBLIC_VIEW,public.occupation_pathways_au
+ingest,occupation_shortage_drivers_au,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 47,AU,PUBLIC_VIEW,public.occupation_shortage_drivers_au
+ingest,occupation_sa4_au,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 0,AU,PUBLIC_VIEW,public.occupation_sa4_au (empty)
+ingest,field_earnings_au,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 82,AU,PUBLIC_VIEW,public.field_earnings_au
+ingest,field_earnings_ca,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 70,CA,PUBLIC_VIEW,public.field_earnings_ca
+ingest,field_earnings_ie,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 150,IE,PUBLIC_VIEW,public.field_earnings_ie
+ingest,field_earnings_uk,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 70,GB,PUBLIC_VIEW,public.field_earnings_uk
+ingest,graduate_outcomes_ie,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 64,IE,PUBLIC_VIEW,public.graduate_outcomes_ie
+ingest,shortage_occupations_ie,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 79,IE,PUBLIC_VIEW,public.shortage_occupations_ie
+ingest,language_schools_ie,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 67,IE,PUBLIC_VIEW,public.language_schools_ie
+ingest,language_courses_ie,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 0,IE,PUBLIC_VIEW,public.language_courses_ie (empty)
+ingest,visa_occupation_status_au,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 482,AU,PUBLIC_VIEW,public.visa_occupation_status_au
+ingest,regulatory_requirements_au,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 29,AU,PUBLIC_VIEW,public.regulatory_requirements_au
+ingest,program_page_facts_au,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 118,AU,PUBLIC_VIEW,public.program_page_facts_au
+ingest,state_salary_multiplier,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 64,ALL,PUBLIC_VIEW,public.state_salary_multiplier
+ingest,country_pr_pathways,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 5,ALL,PUBLIC_VIEW,public.country_pr_pathways
+ingest,roi_explorer_au,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 42,AU,PUBLIC_VIEW,public.roi_explorer_au
+ingest,roi_explorer_ca,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 30,CA,PUBLIC_VIEW,public.roi_explorer_ca
+ingest,roi_explorer_ie,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 34,IE,PUBLIC_VIEW,public.roi_explorer_ie
+ingest,roi_explorer_uk,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 49,GB,PUBLIC_VIEW,public.roi_explorer_uk
+ingest,roi_explorer_us,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 6322,US,PUBLIC_VIEW,public.roi_explorer_us
+ingest,roi_explorer_by_field_us,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 106083,US,PUBLIC_VIEW,public.roi_explorer_by_field_us
+ingest,roi_explorer_nl,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 13,NL,PUBLIC_VIEW,public.roi_explorer_nl (non-canonical)
+ingest,roi_explorer_de,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 0,DE,PUBLIC_VIEW,public.roi_explorer_de (empty)
+ingest,majors,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 1,ALL,PUBLIC_VIEW,public.majors (explore.ts)
+ingest,data_source_runs,view,OBSERVED_VIA_PUBLIC_VIEW,public_legacy_view_count: 12,ALL,PUBLIC_VIEW,public.data_source_runs
+public,concept_career_mappings,table,STATIC_ANALYSIS_ONLY (PGRST205 via REST),canonical_database_count: null,ALL,SERVICE_ROLE,migration 20260712121724; RLS on; grant service_role; GAP-007: migration_not_applied (tables absent in production)
+public,career_compensation_observations,table,STATIC_ANALYSIS_ONLY (PGRST205 via REST),canonical_database_count: null,ALL,SERVICE_ROLE,migration 20260712121724; GAP-007: migration_not_applied
+public,housing_cost_observations,table,STATIC_ANALYSIS_ONLY (PGRST205 via REST),canonical_database_count: null,ALL,SERVICE_ROLE,migration 20260712121724; GAP-007: migration_not_applied
+public,country_comparison_coverage,table,STATIC_ANALYSIS_ONLY (PGRST205 via REST),canonical_database_count: null,ALL,SERVICE_ROLE,migration 20260712121724; GAP-007: migration_not_applied
+public,partner_profiles,table,STATIC_ANALYSIS_ONLY (PGRST205 via REST),canonical_database_count: null,ALL,SERVICE_ROLE,migration 20260712121724; RLS; service_role only; GAP-007: migration_not_applied
+public,partner_members,table,STATIC_ANALYSIS_ONLY (PGRST205 via REST),canonical_database_count: null,ALL,SERVICE_ROLE,migration 20260712121724; grant select authenticated; GAP-007: migration_not_applied
+public,lead_requests,table,STATIC_ANALYSIS_ONLY (PGRST205 via REST),canonical_database_count: null,ALL,SERVICE_ROLE,migration 20260712121724; GAP-007: migration_not_applied
+public,lead_assignments,table,STATIC_ANALYSIS_ONLY (PGRST205 via REST),canonical_database_count: null,ALL,SERVICE_ROLE,migration 20260712121724; GAP-007: migration_not_applied
+public,lead_status_events,table,STATIC_ANALYSIS_ONLY (PGRST205 via REST),canonical_database_count: null,ALL,SERVICE_ROLE,migration 20260712121724; GAP-007: migration_not_applied
+api_private,au_program_catalog_v1,view,OBSERVED,api_private_read_model_count: 9743,AU,API_PRIVATE,server-only read model
+api_private,au_program_route_options_v1,view,OBSERVED,api_private_read_model_count: 9743,AU,API_PRIVATE,server-only read model
+api_private,au_program_map_summary_v1,view,OBSERVED,api_private_read_model_count: 9743,AU,API_PRIVATE,server-only read model
+api_private,au_program_occupation_courses_v1,view,OBSERVED,api_private_read_model_count: 9743,AU,API_PRIVATE,server-only read model
+api_private,au_program_institution_directory_v1,view,OBSERVED,api_private_read_model_count: 42,AU,API_PRIVATE,server-only read model
+api_private,au_program_page_facts_v1,view,OBSERVED,api_private_read_model_count: 118,AU,API_PRIVATE,server-only read model
+api_private,au_nursing_programme_catalog_v1,view,OBSERVED,api_private_read_model_count: 294,AU,API_PRIVATE,server-only read model (nursing compare)
+api_private,au_nursing_programme_fees_v1,view,OBSERVED,api_private_read_model_count: 159,AU,API_PRIVATE,server-only read model
+api_private,au_nursing_programme_evidence_v1,view,OBSERVED,api_private_read_model_count: 179,AU,API_PRIVATE,server-only read model
+api_private,au_nursing_programme_requirements_v1,view,OBSERVED,api_private_read_model_count: 20,AU,API_PRIVATE,server-only read model
+api_private,au_nursing_programme_accreditations_v1,view,OBSERVED,api_private_read_model_count: 146,AU,API_PRIVATE,server-only read model

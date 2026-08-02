@@ -1,6 +1,6 @@
 {
   "generated": "2026-08-02",
-  "audit_reference": "10.6 Five-Country Canonical Coverage Audit & Expansion Plan v1",
+  "audit_reference": "10.6A Five-Country Canonical Coverage Audit Correction v1",
   "duplicates": [
     {
       "id": "DUP-001",
@@ -10,7 +10,7 @@
       "md5": "58e0494c",
       "canonical_country_relevance": "KR is not canonical; flagged as orphan placeholder",
       "action": "confirm whether both are still required",
-      "10.7_reference": "WP-06"
+      "10.7_reference": "WP-07"
     },
     {
       "id": "DUP-002",
@@ -22,7 +22,7 @@
       "note": "Same document differing only by case/spacing in filename; 17083 vs 16083 bytes; whole souces/ tree is gitignored",
       "canonical_country_relevance": "AU",
       "action": "keep single canonical copy",
-      "10.7_reference": "WP-06"
+      "10.7_reference": "WP-07"
     },
     {
       "id": "DUP-003",
@@ -34,8 +34,8 @@
       ],
       "note": "Same 3 programmes (QUT + 2 UniSC) with consistent A$43,500/A$32,500 tuition and IELTS 7.0. Candidate package validated for 0 production writes.",
       "canonical_country_relevance": "AU",
-      "action": "intentionally mirrored - keep until canonical migration reconciles",
-      "10.7_reference": "WP-07"
+      "action": "intentionally mirrored - keep until canonical migration reconciles (deferred WP-08)",
+      "10.7_reference": "WP-08"
     }
   ],
   "orphans": [
@@ -46,7 +46,7 @@
       "note": ".gitignore line 63 references data/raw/kr but folder does not exist; scripts/import-korea-official-data.ts would fail",
       "canonical_country_relevance": "none (KR)",
       "action": "remove gitignore entry or add folder",
-      "10.7_reference": "WP-06"
+      "10.7_reference": "WP-07"
     },
     {
       "id": "ORP-002",
@@ -54,8 +54,8 @@
       "path": "souces/",
       "note": "Typo for sources/; whole dir gitignored (.gitignore line 60); holds AU/CA/US source docs",
       "canonical_country_relevance": "AU/CA/US",
-      "action": "rename to sources/ and track canonical subset",
-      "10.7_reference": "WP-06"
+      "action": "rename to sources/ and track canonical subset (Tier A manifests under data/source-manifests)",
+      "10.7_reference": "WP-07"
     },
     {
       "id": "ORP-003",
@@ -82,5 +82,6 @@
       "10.7_reference": "WP-03"
     }
   ],
-  "no_duplicate_found_note": "No byte-identical canonical country data files (AU/GB/US/CA/IE) found beyond DUP-001/002/003."
+  "no_duplicate_found_note": "No byte-identical canonical country data files (AU/GB/US/CA/IE) found beyond DUP-001/002/003.",
+  "count_classification_note": "Observed counts referenced here are public_legacy_view_count or api_private_read_model_count; no canonical database counts exist (canonical_database_count: null)."
 }

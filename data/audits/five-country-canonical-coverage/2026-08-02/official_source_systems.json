@@ -1,5 +1,5 @@
 {
-  "methodology": "Sources were verified by web research on 2026-08-02. Priorities follow docs/phase-c-sources.md. No data was downloaded or ingested in this audit (read-only).",
+  "methodology": "Sources were verified by web research on 2026-08-02. Priorities follow docs/phase-c-sources.md. No data was downloaded or ingested in this audit (read-only). Counts referenced in notes are public_legacy_view_count via PostgREST public views over ingest tables (or api_private_read_model_count); they are NOT canonical database counts (canonical_database_count: null).",
   "sources": [
     {
       "id": "AU-01",

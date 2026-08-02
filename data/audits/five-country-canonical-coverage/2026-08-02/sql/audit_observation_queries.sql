@@ -1,7 +1,12 @@
--- Read-only observation queries for the 10.6 five-country canonical coverage audit.
+-- Read-only observation queries for the 10.6/10.6A five-country canonical coverage audit.
 -- All statements are SELECT-only; no DML. Run via psql with a read-only role,
 -- or adapt table references to the public view equivalents observed via PostgREST.
+-- Canonical schema queries (section 5/6) REQUIRE admin-only read access per WP-01
+-- (psql read-only connection / Supabase SQL editor SELECT-only); canonical schemas
+-- stay private - do NOT expose them to PostgREST.
 -- Date of observation: 2026-08-02
+-- Count classification: all counts below are public_legacy_view_count or
+-- api_private_read_model_count; canonical_database_count remains null (not observed).
 
 -- 1. Five-country entity counts (public view layer over ingest.*).
 --    NOTE: PostgREST-only environments must use the /rest/v1 endpoint counts
@@ -35,6 +40,9 @@ where table_schema = 'api_private'
 order by table_name;
 
 -- 4. Origin-comparison runtime dependency presence (GAP-007).
+--    VERIFIED 2026-08-02: all four tables return PGRST205 (404) via REST =>
+--    migration_not_applied + runtime_graceful_degradation_verified. Re-run as
+--    SELECT-ONLY if a read-only connection becomes available (WP-01/WP-05).
 select 'concept_career_mappings' as tbl, count(*) from public.concept_career_mappings
 union all select 'career_compensation_observations', count(*) from public.career_compensation_observations
 union all select 'housing_cost_observations', count(*) from public.housing_cost_observations
@@ -46,7 +54,9 @@ from information_schema.tables
 where table_schema in ('core', 'catalog', 'taxonomy', 'evidence', 'labour', 'reporting', 'ingest', 'retired')
 order by table_schema, table_name;
 
--- 6. Row counts for canonical schemas (requires read access to canonical schemas).
+-- 6. Row counts for canonical schemas (requires ADMIN-ONLY read access to canonical
+--    schemas per WP-01; schema-qualified; run in a READ ONLY transaction).
+begin read only;
 select 'catalog.institutions' as tbl, count(*) from catalog.institutions
 union all select 'catalog.programmes', count(*) from catalog.programmes
 union all select 'catalog.programme_offerings', count(*) from catalog.programme_offerings
@@ -55,3 +65,4 @@ union all select 'taxonomy.occupations', count(*) from taxonomy.occupations
 union all select 'taxonomy.occupation_identifiers', count(*) from taxonomy.occupation_identifiers
 union all select 'evidence.source_register_records', count(*) from evidence.source_register_records
 union all select 'evidence.metric_observations', count(*) from evidence.metric_observations;
+commit;

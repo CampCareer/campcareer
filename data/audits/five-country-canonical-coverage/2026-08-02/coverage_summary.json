@@ -1,8 +1,10 @@
 {
   "audit": {
     "id": "five-country-canonical-coverage-2026-08-02",
-    "plan_reference": "10.6 Five-Country Canonical Coverage Audit & Expansion Plan v1",
+    "plan_reference": "10.6 Five-Country Canonical Coverage Audit & Expansion Plan v1 (corrected by 10.6A)",
+    "correction_reference": "10.6A Five-Country Canonical Coverage Audit Correction",
     "date": "2026-08-02",
+    "correction_date": "2026-08-02",
     "canonical_countries": ["AU", "GB", "US", "CA", "IE"],
     "product_country_codes": { "AU": "au", "GB": "uk", "US": "us", "CA": "ca", "IE": "ie" },
     "mode": "read-only-audit",
@@ -11,18 +13,38 @@
       "exposed_schemas_via_rest": ["public", "graphql_public", "api_private"],
       "canonical_schemas_observable_via_rest": [],
       "canonical_schemas_static_analysis_only": ["core", "catalog", "taxonomy", "evidence", "labour", "reporting", "ingest", "retired"],
-      "note": "core/catalog/taxonomy/evidence/labour/reporting/ingest tables are read from migration SQL only; they are NOT exposed to PostgREST. Public views (restore_public_access.sql) over ingest tables are observable and were counted."
+      "note": "core/catalog/taxonomy/evidence/labour/reporting/ingest tables are read from migration SQL only; they are NOT exposed to PostgREST. Public views (restore_public_access.sql) over ingest tables are observable and were counted as public_legacy_view_count, NOT canonical counts."
     },
+    "final_verdict": "B. Conditional Pass",
+    "verdict_definition": {
+      "not": ["C - Covered with gaps", "Canonical coverage complete", "Full canonical counts verified", "Five-country canonical data complete"],
+      "meaning": [
+        "public/legacy data status confirmed",
+        "canonical schema NOT directly counted (not exposed to PostgREST, no psql)",
+        "some structural verification still required",
+        "10.7 preparation can start",
+        "production data import only after prerequisite checks"
+      ]
+    },
+    "release_blocking": false,
+    "canonical_database_observed": false,
+    "public_counts_observed": true,
     "verification": {
-      "npm_typecheck": "pending",
-      "npm_lint": "pending",
-      "npm_test": "pending",
-      "npm_build": "pending"
+      "npm_typecheck": "PASS (tsc --noEmit exit 0)",
+      "npm_lint": "PASS (0 errors, 121 pre-existing warnings)",
+      "npm_test": "PASS (8/8)",
+      "npm_build": "PASS (next build exit 0)"
     }
+  },
+  "canonical_count_state": {
+    "canonical_database_count": null,
+    "canonical_observation_status": "not_observed",
+    "canonical_observation_reason": "canonical schemas are not exposed through PostgREST and no direct read-only database connection was used",
+    "note": "All observed counts in this audit are public_legacy_view_count (PostgREST public views over ingest tables) or api_private_read_model_count. They are NOT canonical database counts and must not be combined with canonical counts."
   },
   "per_country": {
     "AU": {
-      "entity_counts_observed_public": {
+      "public_legacy_view_counts": {
         "colleges": 42,
         "courses": 9743,
         "cities": 19,
@@ -44,7 +66,7 @@
         "state_salary_multiplier": 64,
         "country_pr_pathways_total": 5
       },
-      "api_private_read_model": {
+      "api_private_read_model_counts": {
         "au_program_catalog_v1": 9743,
         "au_program_route_options_v1": 9743,
         "au_program_map_summary_v1": 9743,
@@ -57,18 +79,21 @@
         "au_nursing_programme_requirements_v1": 20,
         "au_nursing_programme_accreditations_v1": 146
       },
-      "static_fixtures": {
+      "fixture_counts": {
         "tracked_files": 17,
         "generic_au_files": ["employment-occupations.ts", "employment-salaries.ts", "job-search-links.ts", "postcode-to-sa4.ts", "sa4-regions.ts", "whv-job-links.ts", "whv-occupations.ts", "whv-postcodes.ts", "whv-region-employers.ts", "whv-regions.ts", "launch-countries.ts"],
         "nursing_program_fixture": "src/data/programs/australia-nursing.ts (3 programmes)",
         "career_comparison": "src/data/career-comparison/australia.ts"
       },
-      "raw_data": { "data/raw/au": "MISSING", "canonical_candidates": "au-nursing/2026-08-02 (B_PARTIAL_CANDIDATE_PACKAGE, 3 programmes, read-only)" },
+      "candidate_counts": { "canonical_candidates": "au-nursing/2026-08-02 (B_PARTIAL_CANDIDATE_PACKAGE, 3 programmes, read-only)" },
+      "raw_data": { "data/raw/au": "MISSING" },
+      "canonical_database_counts": null,
+      "canonical_observation_status": "not_observed",
       "official_sources_identified": ["CRICOS", "TEQSA National Register", "JSA occupation profiles", "QILT (transparency) 2024", "College Scorecard (program-level)"],
-      "coverage_assessment": "STRONG_ENTITY_COUNTS_PUBLIC_VIEWS_OK; canonical ingest of AU raw sources NOT established; nursing canonical candidate package present"
+      "coverage_assessment": "public/legacy entity counts strong; canonical DB not observed; no raw snapshot lineage; nursing canonical candidate package present"
     },
     "GB": {
-      "entity_counts_observed_public": {
+      "public_legacy_view_counts": {
         "colleges": 49,
         "courses": 185,
         "cities": 37,
@@ -76,33 +101,34 @@
         "occupation_state": 3705,
         "field_earnings": 70
       },
-      "static_fixtures": {
-        "tracked_files": 4,
-        "files": ["uk-cities.json", "uk-colleges.json", "uk-occupations.json", "uk-region-occupations.json"]
-      },
+      "api_private_read_model_counts": {},
+      "fixture_counts": { "tracked_files": 4, "files": ["uk-cities.json", "uk-colleges.json", "uk-occupations.json", "uk-region-occupations.json"] },
+      "candidate_counts": {},
       "raw_data": { "data/raw/gb": "MISSING", "data/raw/uk": "MISSING" },
+      "canonical_database_counts": null,
+      "canonical_observation_status": "not_observed",
       "official_sources_identified": ["OfS Register", "HESA", "ONS SOC 2020", "ONS ASHE", "GOV.UK Shortage Occupation List (2024/2026)"],
-      "coverage_assessment": "PARTIAL_ENTITY_COUNTS; canonical GB label absent from fixtures (uk- prefix); raw sources not ingested"
+      "coverage_assessment": "public/legacy entity counts partial; canonical DB not observed; fixtures use uk- product prefix (GB canonical); raw sources not ingested"
     },
     "US": {
-      "entity_counts_observed_public": {
+      "public_legacy_view_counts": {
         "colleges": 6322,
         "programs": 106083,
         "cities": 31779,
         "roi_explorer": 6322,
         "roi_explorer_by_field": 106083
       },
-      "static_fixtures": {
-        "tracked_files": 4,
-        "files": ["us-cities.json", "us-occupation-state.json", "us-state-info.json", "us-university-rankings.json"],
-        "gitignored_seed": ["us-collegescorecard.json"]
-      },
+      "api_private_read_model_counts": {},
+      "fixture_counts": { "tracked_files": 4, "files": ["us-cities.json", "us-occupation-state.json", "us-state-info.json", "us-university-rankings.json"], "gitignored_seed": ["us-collegescorecard.json"] },
+      "candidate_counts": {},
       "raw_data": { "data/raw/us": "MISSING" },
+      "canonical_database_counts": null,
+      "canonical_observation_status": "not_observed",
       "official_sources_identified": ["College Scorecard API", "BLS OEWS", "BLS SOC 2020", "BLS Employment Projections"],
-      "coverage_assessment": "LARGE_ENTITY_COUNTS_PUBLIC_VIEWS_OK; no canonical occupations row; no raw source ingestion"
+      "coverage_assessment": "public/legacy entity counts large; no US occupations table; canonical DB not observed; no raw source lineage"
     },
     "CA": {
-      "entity_counts_observed_public": {
+      "public_legacy_view_counts": {
         "colleges": 30,
         "courses": 165,
         "cities": 27,
@@ -110,17 +136,17 @@
         "occupation_state": 7147,
         "field_earnings": 70
       },
-      "static_fixtures": {
-        "tracked_files": 3,
-        "files": ["ca-cities.json", "ca-occupation-state.json", "ca-occupation-wages.json"],
-        "gitignored_seed": ["ca-employment-income.json", "ca-occupation-province-sample.json", "ca-province-outlook.json", "ca-shortage-ratings.json"]
-      },
+      "api_private_read_model_counts": {},
+      "fixture_counts": { "tracked_files": 3, "files": ["ca-cities.json", "ca-occupation-state.json", "ca-occupation-wages.json"], "gitignored_seed": ["ca-employment-income.json", "ca-occupation-province-sample.json", "ca-province-outlook.json", "ca-shortage-ratings.json"] },
+      "candidate_counts": {},
       "raw_data": { "data/raw/ca": "MISSING" },
+      "canonical_database_counts": null,
+      "canonical_observation_status": "not_observed",
       "official_sources_identified": ["IRCC DLI list", "NOC 2021 (ESDC)", "Statistics Canada census/earnings"],
-      "coverage_assessment": "PARTIAL_ENTITY_COUNTS; DLI list is the only institutional source; canonical occupations absent"
+      "coverage_assessment": "public/legacy entity counts partial; DLI list is the only institutional source; canonical DB not observed"
     },
     "IE": {
-      "entity_counts_observed_public": {
+      "public_legacy_view_counts": {
         "colleges": 34,
         "courses": 2876,
         "cities": 18,
@@ -131,25 +157,27 @@
         "language_courses": 0,
         "roi_explorer": 34
       },
-      "static_fixtures": {
-        "tracked_files": 1,
-        "files": ["ie-graduate-outcomes.json"]
-      },
+      "api_private_read_model_counts": {},
+      "fixture_counts": { "tracked_files": 1, "files": ["ie-graduate-outcomes.json"] },
+      "candidate_counts": {},
       "raw_data": { "data/raw/ie": "MISSING" },
+      "canonical_database_counts": null,
+      "canonical_observation_status": "not_observed",
       "official_sources_identified": ["QQI (Qualifax)", "CSO earnings/grad outcomes", "HEA"],
-      "coverage_assessment": "PARTIAL_ENTITY_COUNTS; no occupations canonical table; Qualifax raw files gitignored at repo root"
+      "coverage_assessment": "public/legacy entity counts partial; no occupations canonical table; canonical DB not observed"
     }
   },
   "cross_country_summary": {
-    "institution_tables_present": ["colleges_au", "colleges_ca", "colleges_ie", "colleges_uk", "colleges_us"],
-    "course_tables_present": ["courses_au", "courses_ca", "courses_ie", "courses_uk", "programs_us"],
-    "occupation_tables_present": { "occupations": ["occupations_au", "occupations_ca", "occupations_uk"], "ie": "MISSING", "us": "MISSING" },
-    "occupation_state_tables_present": ["occupation_state_au", "occupation_state_ca", "occupation_state_uk"],
-    "field_earnings_present": ["field_earnings_au", "field_earnings_ca", "field_earnings_ie", "field_earnings_uk"],
-    "cities_present": ["cities_au", "cities_ca", "cities_ie", "cities_uk", "cities_us"],
+    "institution_tables_present_public_legacy": ["colleges_au", "colleges_ca", "colleges_ie", "colleges_uk", "colleges_us"],
+    "course_tables_present_public_legacy": ["courses_au", "courses_ca", "courses_ie", "courses_uk", "programs_us"],
+    "occupation_tables_present_public_legacy": { "occupations": ["occupations_au", "occupations_ca", "occupations_uk"], "ie": "MISSING", "us": "MISSING" },
+    "occupation_state_tables_present_public_legacy": ["occupation_state_au", "occupation_state_ca", "occupation_state_uk"],
+    "field_earnings_present_public_legacy": ["field_earnings_au", "field_earnings_ca", "field_earnings_ie", "field_earnings_uk"],
+    "cities_present_public_legacy": ["cities_au", "cities_ca", "cities_ie", "cities_uk", "cities_us"],
     "country_codes_issue": "Product fixtures use uk- prefix; canonical GB code appears only in country-comparison/locations.ts and visa-catalog.ts",
     "raw_data_gap": "data/raw has NO folders for AU/GB/US/CA/IE (only ae tracked, es/fr/jp/sg gitignored)",
     "canonical_candidates": "only au-nursing/2026-08-02",
-    "release_blocking": false
+    "release_blocking": false,
+    "count_classification_note": "All counts above are public_legacy_view_count or api_private_read_model_count. No count in this audit is a canonical database count. canonical_database_count remains null for all countries."
   }
 }

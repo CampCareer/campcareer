@@ -1,7 +1,7 @@
 {
   "generated": "2026-08-02",
-  "audit_reference": "10.6 Five-Country Canonical Coverage Audit & Expansion Plan v1",
-  "verdict": "C - COVERED_WITH_GAPS (no release-blocking findings)",
+  "audit_reference": "10.6A Five-Country Canonical Coverage Audit Correction v1",
+  "verdict": "B - CONDITIONAL_PASS (no release-blocking findings)",
   "artifacts_validated": [
     "coverage_summary.json",
     "country_entity_matrix.csv",
@@ -14,13 +14,22 @@
     "automation_readiness.json",
     "10.7_work_packages.json",
     "validation_report.json",
-    "SHA256SUMS.txt"
+    "SHA256SUMS.txt",
+    "sql/audit_observation_queries.sql",
+    "scripts/count_public_tables.sh",
+    "public_schema_counts.tsv"
   ],
   "checks": {
-    "json_parse": "PASS - all 8 JSON artifacts parsed",
-    "csv_header_and_row_counts": "PASS - country_entity_matrix.csv 37 rows x 9 cols; canonical_table_inventory.csv 117 rows x 8 cols; runtime_surface_matrix.csv 32 rows x 10 cols",
-    "country_code_check": "PASS - canonical codes AU/GB/US/CA/IE used in country columns; uk- fixture prefix documented as product code (GB canonical), no other canonical countries referenced",
-    "sha256_manifest": "PASS - SHA256SUMS.txt verifies all 14 files",
+    "json_parse": "PASS - all 7 JSON artifacts parsed",
+    "csv_header_and_row_counts": "PASS - country_entity_matrix.csv 37 rows x 9 cols; canonical_table_inventory.csv 117 rows x 8 cols; runtime_surface_matrix.csv 32 rows x 10 cols (all uniform)",
+    "count_classification": "PASS - every observed count is public_legacy_view_count or api_private_read_model_count; canonical_database_count is null for all countries; 0 public/canonical count mixing",
+    "country_code_check": "PASS - only canonical codes AU/GB/US/CA/IE in country columns; uk- fixture prefix documented as product alias for canonical GB",
+    "verdict_phrasing": "PASS - 'B. Conditional Pass' used; none of the forbidden phrases present",
+    "no_canonical_exposure_suggestion": "PASS - 0 PostgREST/public-grant/anon-grant/browser-exposure recommendations for canonical schemas (WP-01 is admin-only read-only audit tooling)",
+    "au_nursing_not_blocker": "PASS - AU Nursing enrichment is P4/DEFERRED, release_blocking false, no 10.7 dependencies",
+    "gap007_verification": "PASS - GAP-007 records migration_not_applied + runtime_graceful_degradation_verified; P1 runtime risk, not release blocker",
+    "wp_has_dependencies_and_acceptance": "PASS - all 8 work packages carry dependencies + acceptance criteria",
+    "sha256_manifest": "PASS - SHA256SUMS.txt verifies all 15 files",
     "git_diff_check": "PASS - git diff --check exit 0 (no whitespace errors)",
     "npm_typecheck": "PASS - tsc --noEmit exit 0",
     "npm_lint": "PASS - eslint . 0 errors / 121 pre-existing warnings (none in audit files)",
@@ -29,7 +38,8 @@
   },
   "observation_limitations": [
     "Canonical schema tables (core/catalog/taxonomy/evidence/labour/reporting/ingest) were assessed from migration SQL only; PostgREST exposes only public/graphql_public/api_private.",
-    "origin-comparison tables (concept_career_mappings, career_compensation_observations, housing_cost_observations, country_comparison_coverage) return 404 via REST; presence in production DB unverified.",
-    "All counts are read-only PostgREST COUNT=exact observations on 2026-08-02 (public views over ingest)."
+    "canonical_database_count is null for all countries (canonical schemas not exposed to PostgREST; no direct read-only DB connection used).",
+    "All counts are read-only PostgREST COUNT=exact observations on 2026-08-02 (public views over ingest) classified as public_legacy_view_count; api_private views classified as api_private_read_model_count.",
+    "GAP-007: origin-comparison tables return PGRST205 (404) via REST; verified migration_not_applied + runtime_graceful_degradation_verified."
   ]
 }

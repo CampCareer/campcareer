@@ -1,7 +1,7 @@
 {
   "generated": "2026-08-02",
-  "audit_reference": "10.6 Five-Country Canonical Coverage Audit & Expansion Plan v1",
-  "observation_note": "All report-factory canonical schemas are STATIC_ANALYSIS_ONLY - not exposed to PostgREST, so readiness is assessed from migration SQL + seeded data + runtime usage, not from live row inspection.",
+  "audit_reference": "10.6A Five-Country Canonical Coverage Audit Correction v1",
+  "observation_note": "All report-factory canonical schemas are STATIC_ANALYSIS_ONLY - not exposed to PostgREST, so readiness is assessed from migration SQL + seeded data + runtime usage, not from live row inspection. canonical_database_count: null for all canonical tables; verification via read-only audit tooling is WP-01.",
   "schemas": [
     {
       "schema": "core",
@@ -67,5 +67,5 @@
       "gaps": ["AU-only; no GB/US/CA/IE read-model views", "not browser-exposed"]
     }
   ],
-  "verdict": "All canonical schemas are structurally READY from migration analysis. Data coverage gaps (US/IE occupations, raw lineage) are the binding constraint, not schema readiness. No release-blocking schema issue."
+  "verdict": "All canonical schemas are structurally READY from migration analysis (consistent with B. Conditional Pass - structural verification still required via WP-01 read-only audit). Data coverage gaps (US/IE occupations, source lineage) are the binding constraint, not schema readiness. No release-blocking schema issue."
 }

@@ -1,16 +1,17 @@
 {
   "generated": "2026-08-02",
-  "audit_reference": "10.6 Five-Country Canonical Coverage Audit & Expansion Plan v1",
+  "audit_reference": "10.6A Five-Country Canonical Coverage Audit Correction v1",
   "release_blocking": false,
+  "count_classification_note": "All observed counts in this register are public_legacy_view_count or api_private_read_model_count. canonical_database_count is null (canonical schemas not exposed to PostgREST; no direct read-only DB connection used).",
   "gaps": [
     {
       "gap_id": "GAP-001",
       "country": "ALL",
-      "domain": "canonical schemas",
+      "domain": "canonical schemas observability",
       "gap": "core/catalog/taxonomy/evidence/labour/reporting/ingest schemas are NOT exposed to PostgREST and cannot be observed via REST; they exist only in migrations",
       "severity": "MEDIUM",
       "evidence": "OpenAPI exposes only public/graphql_public/api_private; 86 public paths",
-      "workaround": "None - database observation limited to public views. Automation must either add schemas to exposed list or use psql.",
+      "workaround": "Canonical schemas stay private. Read-only audit via WP-01: psql read-only connection / Supabase SQL editor SELECT-only / admin-only audit script / transaction READ ONLY / schema-qualified counts / audit result files saved; no credentials or raw rows saved.",
       "10.7_reference": "WP-01"
     },
     {
@@ -21,26 +22,26 @@
       "severity": "LOW",
       "evidence": "src/data has uk-cities.json, uk-colleges.json, uk-occupations.json, uk-region-occupations.json; no gb-* files",
       "workaround": "country-normalization.ts already maps UK->GB",
-      "10.7_reference": "WP-02"
+      "10.7_reference": "WP-06"
     },
     {
       "gap_id": "GAP-003",
       "country": "AU",
-      "domain": "raw data lineage",
-      "gap": "No data/raw/au folder; no CRICOS raw snapshots tracked (cricos_* gitignored at repo root); no source lineage for courses_au",
+      "domain": "source lineage",
+      "gap": "No CRICOS source manifest (download URL, retrieved_at, checksum, file size, licence, parser version, schema version); cricos_* raw snapshot is gitignored at repo root; no lineage for courses_au",
       "severity": "MEDIUM",
-      "evidence": "data/raw/au MISSING; scripts/import_cricos.py references repo-root cricos_2026_04.xlsx (gitignored)",
-      "workaround": "None",
+      "evidence": "scripts/import_cricos.py references repo-root cricos_2026_04.xlsx (gitignored); no data/source-manifests/au/cricos manifest",
+      "workaround": "WP-03 3-tier raw policy: Tier A manifest in git (URL/checksum/retrieval instructions), Tier B raw XLSX to object storage, Tier C re-download for restricted licences. Success = reproducible source lineage, NOT presence of data/raw/au.",
       "10.7_reference": "WP-03"
     },
     {
       "gap_id": "GAP-004",
       "country": "GB",
-      "domain": "raw data lineage",
-      "gap": "No data/raw/gb or data/raw/uk folder; no OfS/HESA raw snapshots",
+      "domain": "source lineage",
+      "gap": "No OfS/HESA source manifest; no raw snapshot lineage for GB institutions/programmes",
       "severity": "MEDIUM",
-      "evidence": "data/raw/ has no GB folder",
-      "workaround": "None",
+      "evidence": "No data/source-manifests/gb manifest; OfS Register downloaded manually",
+      "workaround": "WP-03 3-tier raw policy; manifest + checksums in git under data/source-manifests/gb/",
       "10.7_reference": "WP-03"
     },
     {
@@ -50,7 +51,7 @@
       "gap": "No US occupations table (occupations_us) and no occupation_state_us; only static fixtures",
       "severity": "HIGH",
       "evidence": "public counts show occupations_au/ca/uk only; BLS SOC 2020 is canonical source",
-      "workaround": "us-occupation-state.json static fixture only",
+      "workaround": "us-occupation-state.json static fixture only; taxonomy ingestion is WP-04 (taxonomy first)",
       "10.7_reference": "WP-04"
     },
     {
@@ -60,17 +61,21 @@
       "gap": "No IE occupations table; shortage_occupations_ie (79) is a visa/permits list not a full occupation classification",
       "severity": "HIGH",
       "evidence": "public counts: no occupations_ie",
-      "workaround": "CSO occupation codes not ingested",
+      "workaround": "CSO occupation codes not ingested; taxonomy ingestion is WP-04",
       "10.7_reference": "WP-04"
     },
     {
       "gap_id": "GAP-007",
       "country": "ALL",
       "domain": "runtime surface origin comparison",
-      "gap": "origin-comparison.ts reads concept_career_mappings/career_compensation_observations/housing_cost_observations/country_comparison_coverage which return 404 via REST (tables exist only in migration 20260712121724; RLS on; service_role grants)",
+      "gap": "origin-comparison.ts reads concept_career_mappings/career_compensation_observations/housing_cost_observations/country_comparison_coverage which return PGRST205 (404) via REST",
       "severity": "HIGH",
-      "evidence": "REST 404 for all 4 tables; route /api/v3/recommendations/countries depends on attachOriginComparisons",
-      "workaround": "Runtime may degrade gracefully (route try/catch) but data unobservable; must verify at runtime",
+      "evidence": "Migration 20260712121724 creates all 4 tables in public with RLS + service_role grants; ALL tables from migrations 20260711194734 + 20260712121724 return PGRST205 (not in schema cache) - same root cause also affects decision_plans/plan_save_intents/canonical_concepts/course_offerings/taxonomy_nodes; control tables (saved_pathways=200, data_source_runs=206) prove absence",
+      "verification_status": "migration_not_applied",
+      "runtime_status": "runtime_graceful_degradation_verified",
+      "verification_detail": "Runtime origin-comparison.ts uses supabaseAdmin against public, wraps queries in try/catch, returns unavailable() on error - does not throw. Route /api/v3/recommendations/countries degrades gracefully. plan-service.ts reads plan_save_intents (also 404, same root cause).",
+      "release_blocking": false,
+      "workaround": "Runtime degrades gracefully (verified). Keep as P1 runtime risk; verify at runtime before 10.7 ingestion (WP-05): decide apply-migration / backfill / de-scope with recorded decision.",
       "10.7_reference": "WP-05"
     },
     {
@@ -81,16 +86,16 @@
       "severity": "LOW",
       "evidence": "identical 3-byte content; gitignored folder absent",
       "workaround": "None",
-      "10.7_reference": "WP-06"
+      "10.7_reference": "WP-07"
     },
     {
       "gap_id": "GAP-009",
       "country": "US",
-      "domain": "collegescorecard seed data not tracked",
-      "gap": "us-collegescorecard.json (13.7 KB) is gitignored seed; programs_us=106083 in DB but fixture not versioned",
+      "domain": "seed fixtures not tracked",
+      "gap": "us-collegescorecard.json (13.7 KB) is gitignored seed; programs_us=106083 in DB but no source manifest/checksum is versioned",
       "severity": "LOW",
       "evidence": ".gitignore line 57",
-      "workaround": "None",
+      "workaround": "WP-03 Tier A: track sample fixture + manifest (URL/checksum/licence) in git; bulk raw to Tier B",
       "10.7_reference": "WP-03"
     },
     {
@@ -100,7 +105,7 @@
       "gap": "ca-employment-income.json/ca-occupation-province-sample.json/ca-province-outlook.json/ca-shortage-ratings.json gitignored",
       "severity": "LOW",
       "evidence": ".gitignore lines 53-56",
-      "workaround": "None",
+      "workaround": "WP-03 Tier A: track sample fixtures + manifest in git",
       "10.7_reference": "WP-03"
     },
     {
@@ -108,10 +113,11 @@
       "country": "AU",
       "domain": "nursing canonical coverage",
       "gap": "Only 3 AU nursing programmes in canonical candidate package (B_PARTIAL_CANDIDATE_PACKAGE); 294 rows in api_private catalog but candidate gaps: professionalOutcome/accreditation/mandatoryStudyCosts/estimatedTotalTuition missing for all 3",
-      "severity": "MEDIUM",
+      "severity": "LOW",
       "evidence": "data/canonical-candidates/au-nursing/2026-08-02/gap_matrix.json",
-      "workaround": "Candidate package is read-only; not replacing UI fixture",
-      "10.7_reference": "WP-07"
+      "workaround": "Candidate package is read-only; not replacing UI fixture. Deferred to P4 optional enrichment backlog (WP-08) - NOT a launch blocker and has NO 10.7 dependencies.",
+      "release_blocking": false,
+      "10.7_reference": "WP-08"
     },
     {
       "gap_id": "GAP-012",
@@ -130,7 +136,7 @@
       "gap": "Public views over ingest tables (restore_public_access) make REST observation possible but the ingest tables themselves are not exposed - any runtime requiring ingest.catalog columns beyond view surface loses access",
       "severity": "LOW",
       "evidence": "restore_public_access.sql defines select * views",
-      "workaround": "None",
+      "workaround": "None; keep canonical schemas private and rely on read-only audit tooling (WP-01) for observation",
       "10.7_reference": "WP-01"
     }
   ]

@@ -1,8 +1,8 @@
 {
   "generated": "2026-08-02",
-  "audit_reference": "10.6 Five-Country Canonical Coverage Audit & Expansion Plan v1",
+  "audit_reference": "10.6A Five-Country Canonical Coverage Audit Correction v1",
   "release_blocking": false,
-  "verdict": "Automation CAN start now for AU/GB/CA/IE institution+course and AU occupation workloads; US and IE occupations require additional data source work first (GAP-005, GAP-006).",
+  "verdict": "Automation CAN start now for AU/GB/CA/IE institution+course and AU occupation workloads; US and IE occupations require additional data source work first (GAP-005, GAP-006). Counts referenced are public_legacy_view_count / api_private_read_model_count; canonical_database_count is null for all countries.",
   "assessment": {
     "existing_importers": {
       "count": 12,
@@ -29,17 +29,18 @@
       "IE": ["QQI Qualifax -> programmes (ad-hoc merge_to_supabase exists)", "CSO -> occupations (missing)"]
     },
     "gitignore_related": {
-      "note": "cricos_* (AU), hea_* (GB), qualifax_* (IE) repo-root files are gitignored, so raw snapshots are not versioned. data/raw has no AU/GB/US/CA/IE folders.",
-      "risk": "source lineage cannot be reproduced from repo alone"
+      "note": "cricos_* (AU), hea_* (GB), qualifax_* (IE) repo-root files are gitignored, so raw snapshots are not versioned. Under WP-03 3-tier policy: Git holds manifests/checksums/sample fixtures (Tier A), large raw snapshots go to object storage (Tier B), restricted-licence sources are re-download only (Tier C). data/raw/{country} folder presence is NOT a success criterion.",
+      "risk": "source lineage cannot be reproduced from repo alone until Tier A manifests are committed"
     },
     "runtime_dependencies": {
-      "origin_comparison_tables": "concept_career_mappings, career_compensation_observations, housing_cost_observations, country_comparison_coverage return 404 via REST (migration-only). Automation must not assume these are observable.",
+      "origin_comparison_tables": "GAP-007 verified: concept_career_mappings, career_compensation_observations, housing_cost_observations, country_comparison_coverage return PGRST205 (404) - migration_not_applied; runtime degrades gracefully (verified). Automation must not assume these are observable; verify before 10.7 ingestion (WP-05).",
       "api_private": "server-only read model; automation for non-AU read models is out of scope until v1.1"
     },
     "prerequisites_before_automation": [
-      "Decide where raw snapshots live (data/raw/{au,gb,us,ca,ie} tracking policy)",
-      "Establish canonical GB naming (uk-* fixtures vs gb-*)",
-      "Confirm origin-comparison tables exist in production DB (may be migration-not-applied)"
+      "Establish WP-01 canonical read-only audit observability (psql read-only / SQL editor SELECT-only / admin-only audit script; canonical schemas stay private)",
+      "Commit Tier A source manifests + checksums under data/source-manifests/{country}/{source}/ (WP-03)",
+      "Establish canonical GB naming (uk-* fixtures vs gb-*) during GB OfS integration (WP-06)",
+      "GAP-007: verify origin-comparison tables at runtime and record apply-migration / backfill / de-scope decision (WP-05)"
     ],
     "recommended_first_automation": {
       "priority_1": "AU CRICOS snapshot ingestion into catalog via canonical pipeline (replaces ad-hoc public writes)",

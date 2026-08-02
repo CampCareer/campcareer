@@ -15,7 +15,7 @@ RS-013,/maps (non-AU static bundles),src/data/*-map-data.ts,STATIC_FIXTURE,stati
 RS-014,/compare (workspace),src/app/(workspace)/compare/page.tsx,1,API_PRIVATE,au_nursing_programme_catalog_v1+fees+requirements+evidence via AU_NURSING_PROGRAM_COMPARE_REPOSITORY,api_private,AU,,nursing programme compare
 RS-015,/compare (workspace) countries,src/app/(workspace)/compare/countries-compare-matrix.tsx,27,STATIC_FIXTURE,country-comparison/locations.ts+registered-nurse.ts,src/data,AU/IE/GB,,locations catalog: AU/IE/UK only
 RS-016,/compare (legacy) schools,src/app/compare/schools/page.tsx,1,STATIC_FIXTURE,legacy compare data,src/data,,,permanentRedirect to workspace compare
-RS-017,origin comparison (v3 countries),src/lib/study-product/origin-comparison.ts,42,SERVICE_ROLE,concept_career_mappings+career_compensation_observations+housing_cost_observations+country_comparison_coverage,public,ALL,,404 via REST - runtime risk (tables exist only in migration)
+RS-017,origin comparison (v3 countries),src/lib/study-product/origin-comparison.ts,42,SERVICE_ROLE,concept_career_mappings+career_compensation_observations+housing_cost_observations+country_comparison_coverage,public,ALL,,GAP-007: PGRST205 (404) via REST - migration_not_applied + runtime_graceful_degradation_verified (supabaseAdmin try/catch -> unavailable()). Not a release blocker; verify before 10.7 ingestion.
 RS-018,/api/v3/recommendations/countries,src/app/api/v3/recommendations/countries/route.ts,30,SERVICE_ROLE,attachOriginComparisons -> origin-comparison.ts,public,ALL,,force-dynamic
 RS-019,au-study-card evidence,src/lib/au-study-card-evidence.ts,115,API_PRIVATE,courses_au,public,AU,86400,
 RS-020,au-study-value matches,src/lib/au-study-value-matches.ts,193,API_PRIVATE,courses_au etc,public,AU,86400,
