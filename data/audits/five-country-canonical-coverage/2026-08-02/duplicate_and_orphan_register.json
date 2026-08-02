@@ -1,0 +1,86 @@
+{
+  "generated": "2026-08-02",
+  "audit_reference": "10.6 Five-Country Canonical Coverage Audit & Expansion Plan v1",
+  "duplicates": [
+    {
+      "id": "DUP-001",
+      "type": "byte_identical_placeholder",
+      "files": ["data/policy-review-required.json", "src/data/kr-occupations.json"],
+      "content": "[] (3 bytes)",
+      "md5": "58e0494c",
+      "canonical_country_relevance": "KR is not canonical; flagged as orphan placeholder",
+      "action": "confirm whether both are still required",
+      "10.7_reference": "WP-06"
+    },
+    {
+      "id": "DUP-002",
+      "type": "near_duplicate_source_docs",
+      "files": [
+        "souces/Australia/Australia-wide ROI Snapshot for Seven International Student Study Fields.docx",
+        "souces/Australia/Australia-wide ROI snapshot for seven international-student study fields.docx"
+      ],
+      "note": "Same document differing only by case/spacing in filename; 17083 vs 16083 bytes; whole souces/ tree is gitignored",
+      "canonical_country_relevance": "AU",
+      "action": "keep single canonical copy",
+      "10.7_reference": "WP-06"
+    },
+    {
+      "id": "DUP-003",
+      "type": "triple_store_au_nursing",
+      "files": [
+        "src/data/programs/australia-nursing.ts (UI fixture)",
+        "data/canonical-candidates/au-nursing/2026-08-02/* (read-only candidate package)",
+        "api_private.au_nursing_programme_catalog_v1 (production)"
+      ],
+      "note": "Same 3 programmes (QUT + 2 UniSC) with consistent A$43,500/A$32,500 tuition and IELTS 7.0. Candidate package validated for 0 production writes.",
+      "canonical_country_relevance": "AU",
+      "action": "intentionally mirrored - keep until canonical migration reconciles",
+      "10.7_reference": "WP-07"
+    }
+  ],
+  "orphans": [
+    {
+      "id": "ORP-001",
+      "type": "gitignored_folder_missing",
+      "path": "data/raw/kr/",
+      "note": ".gitignore line 63 references data/raw/kr but folder does not exist; scripts/import-korea-official-data.ts would fail",
+      "canonical_country_relevance": "none (KR)",
+      "action": "remove gitignore entry or add folder",
+      "10.7_reference": "WP-06"
+    },
+    {
+      "id": "ORP-002",
+      "type": "typo_directory",
+      "path": "souces/",
+      "note": "Typo for sources/; whole dir gitignored (.gitignore line 60); holds AU/CA/US source docs",
+      "canonical_country_relevance": "AU/CA/US",
+      "action": "rename to sources/ and track canonical subset",
+      "10.7_reference": "WP-06"
+    },
+    {
+      "id": "ORP-003",
+      "type": "empty_audit_sql_dir",
+      "path": "data/audits/five-country-canonical-coverage/2026-08-02/sql/",
+      "note": "Empty directory placeholder for read-only SQL audit queries",
+      "canonical_country_relevance": "ALL",
+      "action": "populate with read-only SELECT queries in this audit",
+      "10.7_reference": "WP-01"
+    },
+    {
+      "id": "ORP-004",
+      "type": "gitignored_seed_fixtures",
+      "paths": [
+        "src/data/us-collegescorecard.json",
+        "src/data/ca-employment-income.json",
+        "src/data/ca-occupation-province-sample.json",
+        "src/data/ca-province-outlook.json",
+        "src/data/ca-shortage-ratings.json"
+      ],
+      "note": "Seed-only CA/US fixtures ignored by .gitignore lines 53-57; not versioned despite backing DB rows",
+      "canonical_country_relevance": "US/CA",
+      "action": "decide tracking policy in 10.7",
+      "10.7_reference": "WP-03"
+    }
+  ],
+  "no_duplicate_found_note": "No byte-identical canonical country data files (AU/GB/US/CA/IE) found beyond DUP-001/002/003."
+}

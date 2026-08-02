@@ -1,0 +1,52 @@
+{
+  "generated": "2026-08-02",
+  "audit_reference": "10.6 Five-Country Canonical Coverage Audit & Expansion Plan v1",
+  "release_blocking": false,
+  "verdict": "Automation CAN start now for AU/GB/CA/IE institution+course and AU occupation workloads; US and IE occupations require additional data source work first (GAP-005, GAP-006).",
+  "assessment": {
+    "existing_importers": {
+      "count": 12,
+      "details": [
+        "scripts/import_cricos.py -> cricos_2026_04.xlsx -> public",
+        "scripts/scraper_hea.py -> hea_field_earnings.json/heainstitution_earnings.json",
+        "scripts/scraper_qualifax.py -> qualifax_raw_all_levels.json",
+        "scripts/merge_to_supabase.py -> qualifax_raw_all_levels.json -> courses_ie",
+        "scripts/import-au-rn-excel.ts",
+        "scripts/import-au-official-course-urls.ts",
+        "scripts/import-au-program-page-facts.ts",
+        "scripts/import-au-regulatory-requirements.ts",
+        "scripts/clean-nursing-courses.ts",
+        "scripts/collect-au-nursing-courses.ts",
+        "scripts/update-nursing-courses.ts",
+        "scripts/sync-nursing-facts.ts"
+      ]
+    },
+    "missing_five_country_importers": {
+      "AU": ["CRICOS snapshot -> canonical (currently ad-hoc python into public)"],
+      "GB": ["OfS Register -> institutions", "HESA -> programmes/earnings", "ONS SOC -> occupations"],
+      "US": ["College Scorecard API -> institutions/programmes (key present in .env.local)", "BLS SOC/OEWS -> occupations"],
+      "CA": ["IRCC DLI list (HTML) -> institutions/programmes", "NOC 2021 -> occupations"],
+      "IE": ["QQI Qualifax -> programmes (ad-hoc merge_to_supabase exists)", "CSO -> occupations (missing)"]
+    },
+    "gitignore_related": {
+      "note": "cricos_* (AU), hea_* (GB), qualifax_* (IE) repo-root files are gitignored, so raw snapshots are not versioned. data/raw has no AU/GB/US/CA/IE folders.",
+      "risk": "source lineage cannot be reproduced from repo alone"
+    },
+    "runtime_dependencies": {
+      "origin_comparison_tables": "concept_career_mappings, career_compensation_observations, housing_cost_observations, country_comparison_coverage return 404 via REST (migration-only). Automation must not assume these are observable.",
+      "api_private": "server-only read model; automation for non-AU read models is out of scope until v1.1"
+    },
+    "prerequisites_before_automation": [
+      "Decide where raw snapshots live (data/raw/{au,gb,us,ca,ie} tracking policy)",
+      "Establish canonical GB naming (uk-* fixtures vs gb-*)",
+      "Confirm origin-comparison tables exist in production DB (may be migration-not-applied)"
+    ],
+    "recommended_first_automation": {
+      "priority_1": "AU CRICOS snapshot ingestion into catalog via canonical pipeline (replaces ad-hoc public writes)",
+      "priority_2": "GB OfS Register + HESA institutions/courses",
+      "priority_3": "US College Scorecard API (key present)",
+      "priority_4": "CA IRCC DLI + NOC occupations",
+      "priority_5": "IE Qualifax formalization + CSO occupations"
+    }
+  }
+}

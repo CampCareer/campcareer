@@ -1,0 +1,33 @@
+surface_id,route_or_component,file,line,data_layer,tables_or_fixtures,schema,countries,revalidate,notes
+RS-001,/map (legacy AU shell),src/lib/map-data.ts,2203,API_PRIVATE/SERVICE_ROLE,map-data aggregate,public,AU,86400,getInitialMapShellData populates only AU bundle; other countries empty placeholders
+RS-002,/map/[country]/[slug],src/lib/map-data.ts,599,API_PRIVATE/SERVICE_ROLE,occupations_au+occupation_state_au+state_salary_multiplier+roi_explorer_us+courses_au,public,AU+US,86400,map-data.ts lazy country loads
+RS-003,/maps/[country],src/lib/map-slugs.ts,137,SERVICE_ROLE,occupations_au/occupations_ca,public,AU+CA,,map-slugs.ts whitelist excludes NZ/JP/NO/SE/DK/FI/CH/AE (quarantined packs)
+RS-004,/map/ca/university/[slug],src/lib/map-data.ts,915,SERVICE_ROLE,cities_ca+colleges_ca,public,CA,86400,
+RS-005,/map/uk/university/[slug],src/lib/map-data.ts,957,SERVICE_ROLE,colleges_uk,public,GB,86400,
+RS-006,/au/jobs/[jobname],src/app/au/jobs/[jobname]/page.tsx,79,SERVICE_ROLE,occupations_au+occupation_state_au+occupation_profiles_au+occupation_pathways_au+occupation_shortage_drivers_au+occupation_vacancies_au+occupation_outlook_au+occupation_regional_employment_au+occupation_mobility_flows_au+occupation_mobility_stocks_au,public,AU,,densest AU DB surface
+RS-007,/au/jobs,src/lib/route-jobs.ts,56,API_PRIVATE/SERVICE_ROLE,occupations_au+occupation_vacancies_au+occupation_regional_employment_au,public,AU,,
+RS-008,occupation detail (AU),src/lib/occupation-detail.ts,53,API_PRIVATE/SERVICE_ROLE,occupations_au+courses_au+country_pr_pathways+occupation_state_au,public,AU,,
+RS-009,occupations listing (AU),src/lib/occupations-au.ts,44,API_PRIVATE,occupations_au+courses_au,public,AU,,
+RS-010,/au/study,src/lib/route-study-options.ts,76,API_PRIVATE/SERVICE_ROLE,courses_au+colleges_au+program_page_facts_au,public,AU,,
+RS-011,roi explorer (AU),src/lib/roi-query.ts,65,API_PRIVATE,roi_explorer_au (matview-based),public,AU,,
+RS-012,/au/majors,src/lib/explore.ts,46,API_PRIVATE,majors,public,ALL,,
+RS-013,/maps (non-AU static bundles),src/data/*-map-data.ts,STATIC_FIXTURE,static JSON map data,,-,US/CA/UK/DE/NL/BE/JP/SG/KR/FR/ES/NZ/NO/SE/DK/FI/CH/AE,,bundled static; AU is DB-backed
+RS-014,/compare (workspace),src/app/(workspace)/compare/page.tsx,1,API_PRIVATE,au_nursing_programme_catalog_v1+fees+requirements+evidence via AU_NURSING_PROGRAM_COMPARE_REPOSITORY,api_private,AU,,nursing programme compare
+RS-015,/compare (workspace) countries,src/app/(workspace)/compare/countries-compare-matrix.tsx,27,STATIC_FIXTURE,country-comparison/locations.ts+registered-nurse.ts,src/data,AU/IE/GB,,locations catalog: AU/IE/UK only
+RS-016,/compare (legacy) schools,src/app/compare/schools/page.tsx,1,STATIC_FIXTURE,legacy compare data,src/data,,,permanentRedirect to workspace compare
+RS-017,origin comparison (v3 countries),src/lib/study-product/origin-comparison.ts,42,SERVICE_ROLE,concept_career_mappings+career_compensation_observations+housing_cost_observations+country_comparison_coverage,public,ALL,,404 via REST - runtime risk (tables exist only in migration)
+RS-018,/api/v3/recommendations/countries,src/app/api/v3/recommendations/countries/route.ts,30,SERVICE_ROLE,attachOriginComparisons -> origin-comparison.ts,public,ALL,,force-dynamic
+RS-019,au-study-card evidence,src/lib/au-study-card-evidence.ts,115,API_PRIVATE,courses_au,public,AU,86400,
+RS-020,au-study-value matches,src/lib/au-study-value-matches.ts,193,API_PRIVATE,courses_au etc,public,AU,86400,
+RS-021,au universities,src/lib/au-universities.ts,38,API_PRIVATE,colleges_au,public,AU,86400,
+RS-022,study product course offerings,src/lib/study-product/course-offerings.ts,62,API_PRIVATE/SERVICE_ROLE,courses_au+colleges_au+courses_ie,public,AU+IE,,
+RS-023,pr pathways,src/lib/pr-pathways.ts,13,API_PRIVATE,country_pr_pathways,public,ALL,,
+RS-024,language schools (IE),src/lib/language-schools-ie.ts,59,API_PRIVATE,language_schools_ie+language_courses_ie,public,IE,,
+RS-025,route overview (AU),src/lib/route-overview.ts,96,API_PRIVATE,occupation_profiles_au,public,AU,,
+RS-026,plan service,src/lib/study-product/plan-service.ts,29,SERVICE_ROLE,plan_save_intents+decision_plans+decision_plan_versions,public,ALL,,AUTH flow
+RS-027,user saved data (home etc),src/lib (workspace),,AUTH_SCOPED,saved_*+user_preferences+plan_*+assessments etc,public,ALL,,RLS user-owned
+RS-028,feedback admin,src/lib/feedback-server.ts,,SERVICE_ROLE,getFeedbackAdminClient,public,ALL,,service-role feedback client
+RS-029,external proxies,src/lib Adzuna/Frankfurter/data.go.kr,,EXTERNAL,Adzuna jobs+Frankfurter FX+KR boundary,external,ALL,,no DB dependency
+RS-030,nursing route (legacy),src/app (nursing),NONE,no route present,src/data/programs/australia-nursing.ts fixture,src/data,AU,,nursing surface served via fixture + api_private compare
+RS-031,visa catalog,src/lib/workspace/visa-catalog.ts,1,STATIC_FIXTURE,visa entries,src/lib,AU+CA+GB+US+IE+more,,
+RS-032,source registry,src/data/source-registry.ts,1,STATIC_FIXTURE,source rows all 20 countries,src/data,ALL,,

@@ -1,0 +1,35 @@
+{
+  "generated": "2026-08-02",
+  "audit_reference": "10.6 Five-Country Canonical Coverage Audit & Expansion Plan v1",
+  "verdict": "C - COVERED_WITH_GAPS (no release-blocking findings)",
+  "artifacts_validated": [
+    "coverage_summary.json",
+    "country_entity_matrix.csv",
+    "canonical_table_inventory.csv",
+    "runtime_surface_matrix.csv",
+    "official_source_systems.json",
+    "gap_register.json",
+    "duplicate_and_orphan_register.json",
+    "schema_readiness.json",
+    "automation_readiness.json",
+    "10.7_work_packages.json",
+    "validation_report.json",
+    "SHA256SUMS.txt"
+  ],
+  "checks": {
+    "json_parse": "PASS - all 8 JSON artifacts parsed",
+    "csv_header_and_row_counts": "PASS - country_entity_matrix.csv 37 rows x 9 cols; canonical_table_inventory.csv 117 rows x 8 cols; runtime_surface_matrix.csv 32 rows x 10 cols",
+    "country_code_check": "PASS - canonical codes AU/GB/US/CA/IE used in country columns; uk- fixture prefix documented as product code (GB canonical), no other canonical countries referenced",
+    "sha256_manifest": "PASS - SHA256SUMS.txt verifies all 14 files",
+    "git_diff_check": "PASS - git diff --check exit 0 (no whitespace errors)",
+    "npm_typecheck": "PASS - tsc --noEmit exit 0",
+    "npm_lint": "PASS - eslint . 0 errors / 121 pre-existing warnings (none in audit files)",
+    "npm_test": "PASS - 8/8 tests passed (incl. country normalization GB + AU nursing candidate package)",
+    "npm_build": "PASS - next build exit 0, no warnings/errors reported"
+  },
+  "observation_limitations": [
+    "Canonical schema tables (core/catalog/taxonomy/evidence/labour/reporting/ingest) were assessed from migration SQL only; PostgREST exposes only public/graphql_public/api_private.",
+    "origin-comparison tables (concept_career_mappings, career_compensation_observations, housing_cost_observations, country_comparison_coverage) return 404 via REST; presence in production DB unverified.",
+    "All counts are read-only PostgREST COUNT=exact observations on 2026-08-02 (public views over ingest)."
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "generated": "2026-08-02",
+  "audit_reference": "10.6 Five-Country Canonical Coverage Audit & Expansion Plan v1",
+  "note": "Work packages are planning artifacts for a FUTURE 10.7 execution. This audit is read-only; no package is executed here.",
+  "packages": [
+    {
+      "wp_id": "WP-01",
+      "title": "Canonical schema observability",
+      "priority": "P1",
+      "countries": "ALL",
+      "resolves": ["GAP-001", "GAP-013"],
+      "effort": "S",
+      "description": "Expose core/catalog/taxonomy/evidence/labour/reporting/ingest to PostgREST (or add psql-based audit tooling) so canonical schemas are observable for verification.",
+      "acceptance": "Canonical table row counts retrievable read-only",
+      "dependencies": []
+    },
+    {
+      "wp_id": "WP-02",
+      "title": "GB/UK naming canonicalization",
+      "priority": "P2",
+      "countries": "GB",
+      "resolves": ["GAP-002"],
+      "effort": "S",
+      "description": "Standardize GB canonical code across fixtures (uk-* -> gb-*) with country-normalization alias maintained for backward compat.",
+      "acceptance": "No uk-* fixtures reference canonical GB data; normalization table remains",
+      "dependencies": []
+    },
+    {
+      "wp_id": "WP-03",
+      "title": "Five-country raw data lineage",
+      "priority": "P1",
+      "countries": "AU/GB/US/CA/IE",
+      "resolves": ["GAP-003", "GAP-004", "GAP-009", "GAP-010"],
+      "effort": "M",
+      "description": "Create data/raw/{au,gb,us,ca,ie} folders with tracked source snapshots (CRICOS, OfS, Scorecard, DLI, Qualifax) and un-gitignore canonical raw files; formalize import scripts.",
+      "acceptance": "data/raw has 5 canonical country folders; importers reference them",
+      "dependencies": ["WP-01"]
+    },
+    {
+      "wp_id": "WP-04",
+      "title": "US + IE occupations ingestion",
+      "priority": "P1",
+      "countries": "US/IE",
+      "resolves": ["GAP-005", "GAP-006", "GAP-012"],
+      "effort": "M",
+      "description": "Ingest BLS SOC 2020 (+OEWS) for US occupations/occupation_state; CSO occupation codes + shortage lists for IE into taxonomy.occupations.",
+      "acceptance": "occupations_us and occupations_ie tables present with verified counts",
+      "dependencies": ["WP-03"]
+    },
+    {
+      "wp_id": "WP-05",
+      "title": "Origin-comparison table verification",
+      "priority": "P1",
+      "countries": "ALL",
+      "resolves": ["GAP-007"],
+      "effort": "S",
+      "description": "Determine whether concept_career_mappings/career_compensation_observations/housing_cost_observations/country_comparison_coverage exist in production; apply migration if missing or add observability.",
+      "acceptance": "attachOriginComparisons returns non-degraded data",
+      "dependencies": []
+    },
+    {
+      "wp_id": "WP-06",
+      "title": "Orphan/duplicate cleanup",
+      "priority": "P3",
+      "countries": "ALL",
+      "resolves": ["GAP-008"],
+      "effort": "S",
+      "description": "Resolve DUP-001/002, ORP-001/002 (data/policy-review-required.json, kr-occupations.json, souces/ typo dir, data/raw/kr gitignore).",
+      "acceptance": "No orphan placeholders or duplicate source docs",
+      "dependencies": []
+    },
+    {
+      "wp_id": "WP-07",
+      "title": "AU nursing canonical package advancement",
+      "priority": "P2",
+      "countries": "AU",
+      "resolves": ["GAP-011", "DUP-003"],
+      "effort": "M",
+      "description": "Advance au-nursing candidate package from B_PARTIAL to A by closing professionalOutcome/accreditation/mandatoryStudyCosts/estimatedTotalTuition gaps; reconcile 3-store duplication.",
+      "acceptance": "Candidate package reaches A_READY; UI fixture linked to canonical",
+      "dependencies": ["WP-03"]
+    },
+    {
+      "wp_id": "WP-08",
+      "title": "GB shortage + US projections enrichment",
+      "priority": "P3",
+      "countries": "GB/US",
+      "resolves": ["GAP-012"],
+      "effort": "M",
+      "description": "Ingest GOV.UK shortage occupation list and BLS employment projections into evidence.metric_observations.",
+      "acceptance": "Shortage + projection rows present with source_register_records lineage",
+      "dependencies": ["WP-04"]
+    }
+  ]
+}

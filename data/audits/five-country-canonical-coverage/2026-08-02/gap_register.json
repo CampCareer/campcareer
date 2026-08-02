@@ -1,0 +1,137 @@
+{
+  "generated": "2026-08-02",
+  "audit_reference": "10.6 Five-Country Canonical Coverage Audit & Expansion Plan v1",
+  "release_blocking": false,
+  "gaps": [
+    {
+      "gap_id": "GAP-001",
+      "country": "ALL",
+      "domain": "canonical schemas",
+      "gap": "core/catalog/taxonomy/evidence/labour/reporting/ingest schemas are NOT exposed to PostgREST and cannot be observed via REST; they exist only in migrations",
+      "severity": "MEDIUM",
+      "evidence": "OpenAPI exposes only public/graphql_public/api_private; 86 public paths",
+      "workaround": "None - database observation limited to public views. Automation must either add schemas to exposed list or use psql.",
+      "10.7_reference": "WP-01"
+    },
+    {
+      "gap_id": "GAP-002",
+      "country": "GB",
+      "domain": "country code canonicalization",
+      "gap": "Product fixtures use uk- prefix and UK product code; canonical GB appears only in country-comparison/locations.ts and visa-catalog.ts. No gb-* fixture files.",
+      "severity": "LOW",
+      "evidence": "src/data has uk-cities.json, uk-colleges.json, uk-occupations.json, uk-region-occupations.json; no gb-* files",
+      "workaround": "country-normalization.ts already maps UK->GB",
+      "10.7_reference": "WP-02"
+    },
+    {
+      "gap_id": "GAP-003",
+      "country": "AU",
+      "domain": "raw data lineage",
+      "gap": "No data/raw/au folder; no CRICOS raw snapshots tracked (cricos_* gitignored at repo root); no source lineage for courses_au",
+      "severity": "MEDIUM",
+      "evidence": "data/raw/au MISSING; scripts/import_cricos.py references repo-root cricos_2026_04.xlsx (gitignored)",
+      "workaround": "None",
+      "10.7_reference": "WP-03"
+    },
+    {
+      "gap_id": "GAP-004",
+      "country": "GB",
+      "domain": "raw data lineage",
+      "gap": "No data/raw/gb or data/raw/uk folder; no OfS/HESA raw snapshots",
+      "severity": "MEDIUM",
+      "evidence": "data/raw/ has no GB folder",
+      "workaround": "None",
+      "10.7_reference": "WP-03"
+    },
+    {
+      "gap_id": "GAP-005",
+      "country": "US",
+      "domain": "occupations canonical data",
+      "gap": "No US occupations table (occupations_us) and no occupation_state_us; only static fixtures",
+      "severity": "HIGH",
+      "evidence": "public counts show occupations_au/ca/uk only; BLS SOC 2020 is canonical source",
+      "workaround": "us-occupation-state.json static fixture only",
+      "10.7_reference": "WP-04"
+    },
+    {
+      "gap_id": "GAP-006",
+      "country": "IE",
+      "domain": "occupations canonical data",
+      "gap": "No IE occupations table; shortage_occupations_ie (79) is a visa/permits list not a full occupation classification",
+      "severity": "HIGH",
+      "evidence": "public counts: no occupations_ie",
+      "workaround": "CSO occupation codes not ingested",
+      "10.7_reference": "WP-04"
+    },
+    {
+      "gap_id": "GAP-007",
+      "country": "ALL",
+      "domain": "runtime surface origin comparison",
+      "gap": "origin-comparison.ts reads concept_career_mappings/career_compensation_observations/housing_cost_observations/country_comparison_coverage which return 404 via REST (tables exist only in migration 20260712121724; RLS on; service_role grants)",
+      "severity": "HIGH",
+      "evidence": "REST 404 for all 4 tables; route /api/v3/recommendations/countries depends on attachOriginComparisons",
+      "workaround": "Runtime may degrade gracefully (route try/catch) but data unobservable; must verify at runtime",
+      "10.7_reference": "WP-05"
+    },
+    {
+      "gap_id": "GAP-008",
+      "country": "ALL",
+      "domain": "orphan/duplicate fixtures",
+      "gap": "kr-occupations.json and data/policy-review-required.json are byte-identical empty [] placeholders; no data/raw/kr exists but gitignore + import script reference it",
+      "severity": "LOW",
+      "evidence": "identical 3-byte content; gitignored folder absent",
+      "workaround": "None",
+      "10.7_reference": "WP-06"
+    },
+    {
+      "gap_id": "GAP-009",
+      "country": "US",
+      "domain": "collegescorecard seed data not tracked",
+      "gap": "us-collegescorecard.json (13.7 KB) is gitignored seed; programs_us=106083 in DB but fixture not versioned",
+      "severity": "LOW",
+      "evidence": ".gitignore line 57",
+      "workaround": "None",
+      "10.7_reference": "WP-03"
+    },
+    {
+      "gap_id": "GAP-010",
+      "country": "CA",
+      "domain": "seed fixtures gitignored",
+      "gap": "ca-employment-income.json/ca-occupation-province-sample.json/ca-province-outlook.json/ca-shortage-ratings.json gitignored",
+      "severity": "LOW",
+      "evidence": ".gitignore lines 53-56",
+      "workaround": "None",
+      "10.7_reference": "WP-03"
+    },
+    {
+      "gap_id": "GAP-011",
+      "country": "AU",
+      "domain": "nursing canonical coverage",
+      "gap": "Only 3 AU nursing programmes in canonical candidate package (B_PARTIAL_CANDIDATE_PACKAGE); 294 rows in api_private catalog but candidate gaps: professionalOutcome/accreditation/mandatoryStudyCosts/estimatedTotalTuition missing for all 3",
+      "severity": "MEDIUM",
+      "evidence": "data/canonical-candidates/au-nursing/2026-08-02/gap_matrix.json",
+      "workaround": "Candidate package is read-only; not replacing UI fixture",
+      "10.7_reference": "WP-07"
+    },
+    {
+      "gap_id": "GAP-012",
+      "country": "GB",
+      "domain": "labour shortage data",
+      "gap": "No GB shortage occupation table; no canonical labour.outcome_observations linkage",
+      "severity": "LOW",
+      "evidence": "GOV.UK SOL exists as source but not ingested",
+      "workaround": "None",
+      "10.7_reference": "WP-04"
+    },
+    {
+      "gap_id": "GAP-013",
+      "country": "ALL",
+      "domain": "public view dependency",
+      "gap": "Public views over ingest tables (restore_public_access) make REST observation possible but the ingest tables themselves are not exposed - any runtime requiring ingest.catalog columns beyond view surface loses access",
+      "severity": "LOW",
+      "evidence": "restore_public_access.sql defines select * views",
+      "workaround": "None",
+      "10.7_reference": "WP-01"
+    }
+  ]
+}

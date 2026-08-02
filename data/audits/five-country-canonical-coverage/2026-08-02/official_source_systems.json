@@ -1,0 +1,215 @@
+{
+  "methodology": "Sources were verified by web research on 2026-08-02. Priorities follow docs/phase-c-sources.md. No data was downloaded or ingested in this audit (read-only).",
+  "sources": [
+    {
+      "id": "AU-01",
+      "country": "AU",
+      "source_name": "CRICOS Register (Course Search / Provider Search)",
+      "url": "https://www.cricos.education.gov.au/",
+      "canonical_data_url": "https://data.gov.au/data/dataset/cricos",
+      "format": "xlsx monthly snapshots + web search",
+      "licence": "CC-BY 2.5 AU",
+      "priority": "P1",
+      "domain": "catalog.programmes + catalog.institutions",
+      "notes": "Monthly national snapshots on data.gov.au; publisher DESE. Primary for AU courses (9,743 courses_au observed)."
+    },
+    {
+      "id": "AU-02",
+      "country": "AU",
+      "source_name": "TEQSA National Register",
+      "url": "https://www.teqsa.gov.au/provider-registration/registered-providers",
+      "format": "web directory",
+      "licence": "public",
+      "priority": "P1",
+      "domain": "catalog.institutions",
+      "notes": "Registered higher-ed providers incl RTO status."
+    },
+    {
+      "id": "AU-03",
+      "country": "AU",
+      "source_name": "JSA Occupation profiles (Jobs and Skills Australia)",
+      "url": "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles",
+      "format": "xlsx",
+      "licence": "CC-BY 4.0",
+      "priority": "P1",
+      "domain": "taxonomy.occupations",
+      "notes": "Occupation/industry profiles; OSCA transition mid-2026, ANZSCO frozen. Also OSL/CSOL on JSA.occupation profiles xlsx."
+    },
+    {
+      "id": "AU-04",
+      "country": "AU",
+      "source_name": "QILT (Quality Indicators for Learning and Teaching) transparency data",
+      "url": "https://www.qilt.edu.au/",
+      "format": "web/xlsx",
+      "licence": "CC-BY",
+      "priority": "P2",
+      "domain": "evidence.metric_observations",
+      "notes": "Field-of-study earnings, employment, satisfaction (HEA)."
+    },
+    {
+      "id": "GB-01",
+      "country": "GB",
+      "source_name": "OfS Register of regulated higher education providers",
+      "url": "https://www.officeforstudents.org.uk/for-providers/registering-with-the-ofs/the-ofs-register/",
+      "format": "web + downloads",
+      "licence": "public",
+      "priority": "P1",
+      "domain": "catalog.institutions",
+      "notes": "49 colleges_uk observed."
+    },
+    {
+      "id": "GB-02",
+      "country": "GB",
+      "source_name": "HESA (Higher Education Statistics Agency) open data",
+      "url": "https://www.hesa.ac.uk/data-and-analysis",
+      "format": "csv/excel",
+      "licence": "CC-BY",
+      "priority": "P2",
+      "domain": "evidence.metric_observations + catalog.programmes",
+      "notes": "Course/programme, graduate outcomes, provider data."
+    },
+    {
+      "id": "GB-03",
+      "country": "GB",
+      "source_name": "ONS SOC 2020 (Standard Occupational Classification)",
+      "url": "https://www.ons.gov.uk/methodology/classificationsandstandards/standardoccupationalclassificationsoc/soc2020",
+      "format": "xlsx/csv",
+      "licence": "OGL v3",
+      "priority": "P1",
+      "domain": "taxonomy.occupations",
+      "notes": "408 occupations_uk observed; GB SOC codes 3/4-digit."
+    },
+    {
+      "id": "GB-04",
+      "country": "GB",
+      "source_name": "ONS ASHE (Annual Survey of Hours and Earnings)",
+      "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours",
+      "format": "xlsx",
+      "licence": "OGL v3",
+      "priority": "P2",
+      "domain": "evidence.metric_observations",
+      "notes": "Field earnings for UK."
+    },
+    {
+      "id": "GB-05",
+      "country": "GB",
+      "source_name": "GOV.UK Shortage Occupation List / Immigration Rules",
+      "url": "https://www.gov.uk/government/publications/skilled-worker-visa-eligible-occupation-codes",
+      "format": "web",
+      "licence": "OGL v3",
+      "priority": "P2",
+      "domain": "taxonomy.occupations",
+      "notes": "Immigration salary list (2024/2026)."
+    },
+    {
+      "id": "US-01",
+      "country": "US",
+      "source_name": "US Department of Education College Scorecard API",
+      "url": "https://collegescorecard.ed.gov/data/api/",
+      "format": "JSON REST API",
+      "licence": "public (US gov)",
+      "priority": "P1",
+      "domain": "catalog.institutions + catalog.programmes",
+      "notes": "6,322 colleges_us / 106,083 programs_us observed. API key required: COLLEGE_SCORECARD_API_KEY present in .env.local."
+    },
+    {
+      "id": "US-02",
+      "country": "US",
+      "source_name": "BLS SOC 2020 + OEWS (Occupational Employment and Wage Statistics)",
+      "url": "https://www.bls.gov/soc/ and https://www.bls.gov/oes/",
+      "format": "downloads + data tools",
+      "licence": "public domain",
+      "priority": "P1",
+      "domain": "taxonomy.occupations",
+      "notes": "No US occupations table exists in DB; BLS is canonical source."
+    },
+    {
+      "id": "US-03",
+      "country": "US",
+      "source_name": "BLS Employment Projections",
+      "url": "https://www.bls.gov/emp/data/occupational-data.htm",
+      "format": "xlsx",
+      "licence": "public domain",
+      "priority": "P2",
+      "domain": "evidence.metric_observations",
+      "notes": "Occupational projections for US."
+    },
+    {
+      "id": "CA-01",
+      "country": "CA",
+      "source_name": "IRCC Designated Learning Institutions (DLI) list",
+      "url": "https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/study-permit/prepare/designated-learning-institutions-list.html",
+      "format": "HTML",
+      "licence": "public",
+      "priority": "P1",
+      "domain": "catalog.institutions + catalog.programmes",
+      "notes": "30 colleges_ca / 165 courses_ca observed."
+    },
+    {
+      "id": "CA-02",
+      "country": "CA",
+      "source_name": "NOC 2021 (National Occupational Classification) ESDC",
+      "url": "https://noc.esdc.gc.ca/",
+      "format": "web + downloads",
+      "licence": "public",
+      "priority": "P1",
+      "domain": "taxonomy.occupations",
+      "notes": "514 occupations_ca observed."
+    },
+    {
+      "id": "CA-03",
+      "country": "CA",
+      "source_name": "Statistics Canada census/earnings tables",
+      "url": "https://www.statcan.gc.ca/",
+      "format": "csv/tab",
+      "licence": "open",
+      "priority": "P2",
+      "domain": "evidence.metric_observations",
+      "notes": "Field earnings 70 rows observed."
+    },
+    {
+      "id": "IE-01",
+      "country": "IE",
+      "source_name": "QQI Qualifax (courses) + QQI provider data",
+      "url": "https://www.qualifax.ie/",
+      "format": "web + export",
+      "licence": "public",
+      "priority": "P1",
+      "domain": "catalog.programmes + catalog.institutions",
+      "notes": "2,876 courses_ie observed; raw qualifax files gitignored at repo root."
+    },
+    {
+      "id": "IE-02",
+      "country": "IE",
+      "source_name": "CSO (Central Statistics Office) earnings + graduate outcomes",
+      "url": "https://www.cso.ie/",
+      "format": "csv/xlsx",
+      "licence": "open",
+      "priority": "P2",
+      "domain": "evidence.metric_observations",
+      "notes": "64 graduate_outcomes_ie / 150 field_earnings_ie observed."
+    },
+    {
+      "id": "IE-03",
+      "country": "IE",
+      "source_name": "Department of Enterprise Critical Skills / ineligible occupations list",
+      "url": "https://enterprise.gov.ie/en/What-We-Do/Workplace-and-Skills/Employment-Permits/",
+      "format": "web",
+      "licence": "public",
+      "priority": "P2",
+      "domain": "taxonomy.occupations",
+      "notes": "79 shortage_occupations_ie observed; no canonical occupations table for IE."
+    },
+    {
+      "id": "IE-04",
+      "country": "IE",
+      "source_name": "ACELS/QQI English language education (MEI) recognised schools",
+      "url": "https://www.qqi.ie/",
+      "format": "web",
+      "licence": "public",
+      "priority": "P3",
+      "domain": "catalog.institutions",
+      "notes": "67 language_schools_ie observed."
+    }
+  ]
+}

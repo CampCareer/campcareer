@@ -1,0 +1,155 @@
+{
+  "audit": {
+    "id": "five-country-canonical-coverage-2026-08-02",
+    "plan_reference": "10.6 Five-Country Canonical Coverage Audit & Expansion Plan v1",
+    "date": "2026-08-02",
+    "canonical_countries": ["AU", "GB", "US", "CA", "IE"],
+    "product_country_codes": { "AU": "au", "GB": "uk", "US": "us", "CA": "ca", "IE": "ie" },
+    "mode": "read-only-audit",
+    "database_access": "PostgREST REST only (service-role SELECT/count; no psql)",
+    "database_observation_scope": {
+      "exposed_schemas_via_rest": ["public", "graphql_public", "api_private"],
+      "canonical_schemas_observable_via_rest": [],
+      "canonical_schemas_static_analysis_only": ["core", "catalog", "taxonomy", "evidence", "labour", "reporting", "ingest", "retired"],
+      "note": "core/catalog/taxonomy/evidence/labour/reporting/ingest tables are read from migration SQL only; they are NOT exposed to PostgREST. Public views (restore_public_access.sql) over ingest tables are observable and were counted."
+    },
+    "verification": {
+      "npm_typecheck": "pending",
+      "npm_lint": "pending",
+      "npm_test": "pending",
+      "npm_build": "pending"
+    }
+  },
+  "per_country": {
+    "AU": {
+      "entity_counts_observed_public": {
+        "colleges": 42,
+        "courses": 9743,
+        "cities": 19,
+        "occupations": 600,
+        "occupation_state": 2452,
+        "occupation_profiles": 1236,
+        "occupation_outlook": 716,
+        "occupation_vacancies": 75816,
+        "occupation_regional_employment": 31240,
+        "occupation_mobility_flows": 193567,
+        "occupation_mobility_stocks": 10889,
+        "occupation_pathways": 5351,
+        "occupation_shortage_drivers": 47,
+        "visa_occupation_status": 482,
+        "field_earnings": 82,
+        "regulatory_requirements": 29,
+        "program_page_facts": 118,
+        "roi_explorer": 42,
+        "state_salary_multiplier": 64,
+        "country_pr_pathways_total": 5
+      },
+      "api_private_read_model": {
+        "au_program_catalog_v1": 9743,
+        "au_program_route_options_v1": 9743,
+        "au_program_map_summary_v1": 9743,
+        "au_program_occupation_courses_v1": 9743,
+        "au_program_institution_directory_v1": 42,
+        "au_program_page_facts_v1": 118,
+        "au_nursing_programme_catalog_v1": 294,
+        "au_nursing_programme_fees_v1": 159,
+        "au_nursing_programme_evidence_v1": 179,
+        "au_nursing_programme_requirements_v1": 20,
+        "au_nursing_programme_accreditations_v1": 146
+      },
+      "static_fixtures": {
+        "tracked_files": 17,
+        "generic_au_files": ["employment-occupations.ts", "employment-salaries.ts", "job-search-links.ts", "postcode-to-sa4.ts", "sa4-regions.ts", "whv-job-links.ts", "whv-occupations.ts", "whv-postcodes.ts", "whv-region-employers.ts", "whv-regions.ts", "launch-countries.ts"],
+        "nursing_program_fixture": "src/data/programs/australia-nursing.ts (3 programmes)",
+        "career_comparison": "src/data/career-comparison/australia.ts"
+      },
+      "raw_data": { "data/raw/au": "MISSING", "canonical_candidates": "au-nursing/2026-08-02 (B_PARTIAL_CANDIDATE_PACKAGE, 3 programmes, read-only)" },
+      "official_sources_identified": ["CRICOS", "TEQSA National Register", "JSA occupation profiles", "QILT (transparency) 2024", "College Scorecard (program-level)"],
+      "coverage_assessment": "STRONG_ENTITY_COUNTS_PUBLIC_VIEWS_OK; canonical ingest of AU raw sources NOT established; nursing canonical candidate package present"
+    },
+    "GB": {
+      "entity_counts_observed_public": {
+        "colleges": 49,
+        "courses": 185,
+        "cities": 37,
+        "occupations": 408,
+        "occupation_state": 3705,
+        "field_earnings": 70
+      },
+      "static_fixtures": {
+        "tracked_files": 4,
+        "files": ["uk-cities.json", "uk-colleges.json", "uk-occupations.json", "uk-region-occupations.json"]
+      },
+      "raw_data": { "data/raw/gb": "MISSING", "data/raw/uk": "MISSING" },
+      "official_sources_identified": ["OfS Register", "HESA", "ONS SOC 2020", "ONS ASHE", "GOV.UK Shortage Occupation List (2024/2026)"],
+      "coverage_assessment": "PARTIAL_ENTITY_COUNTS; canonical GB label absent from fixtures (uk- prefix); raw sources not ingested"
+    },
+    "US": {
+      "entity_counts_observed_public": {
+        "colleges": 6322,
+        "programs": 106083,
+        "cities": 31779,
+        "roi_explorer": 6322,
+        "roi_explorer_by_field": 106083
+      },
+      "static_fixtures": {
+        "tracked_files": 4,
+        "files": ["us-cities.json", "us-occupation-state.json", "us-state-info.json", "us-university-rankings.json"],
+        "gitignored_seed": ["us-collegescorecard.json"]
+      },
+      "raw_data": { "data/raw/us": "MISSING" },
+      "official_sources_identified": ["College Scorecard API", "BLS OEWS", "BLS SOC 2020", "BLS Employment Projections"],
+      "coverage_assessment": "LARGE_ENTITY_COUNTS_PUBLIC_VIEWS_OK; no canonical occupations row; no raw source ingestion"
+    },
+    "CA": {
+      "entity_counts_observed_public": {
+        "colleges": 30,
+        "courses": 165,
+        "cities": 27,
+        "occupations": 514,
+        "occupation_state": 7147,
+        "field_earnings": 70
+      },
+      "static_fixtures": {
+        "tracked_files": 3,
+        "files": ["ca-cities.json", "ca-occupation-state.json", "ca-occupation-wages.json"],
+        "gitignored_seed": ["ca-employment-income.json", "ca-occupation-province-sample.json", "ca-province-outlook.json", "ca-shortage-ratings.json"]
+      },
+      "raw_data": { "data/raw/ca": "MISSING" },
+      "official_sources_identified": ["IRCC DLI list", "NOC 2021 (ESDC)", "Statistics Canada census/earnings"],
+      "coverage_assessment": "PARTIAL_ENTITY_COUNTS; DLI list is the only institutional source; canonical occupations absent"
+    },
+    "IE": {
+      "entity_counts_observed_public": {
+        "colleges": 34,
+        "courses": 2876,
+        "cities": 18,
+        "field_earnings": 150,
+        "graduate_outcomes": 64,
+        "shortage_occupations": 79,
+        "language_schools": 67,
+        "language_courses": 0,
+        "roi_explorer": 34
+      },
+      "static_fixtures": {
+        "tracked_files": 1,
+        "files": ["ie-graduate-outcomes.json"]
+      },
+      "raw_data": { "data/raw/ie": "MISSING" },
+      "official_sources_identified": ["QQI (Qualifax)", "CSO earnings/grad outcomes", "HEA"],
+      "coverage_assessment": "PARTIAL_ENTITY_COUNTS; no occupations canonical table; Qualifax raw files gitignored at repo root"
+    }
+  },
+  "cross_country_summary": {
+    "institution_tables_present": ["colleges_au", "colleges_ca", "colleges_ie", "colleges_uk", "colleges_us"],
+    "course_tables_present": ["courses_au", "courses_ca", "courses_ie", "courses_uk", "programs_us"],
+    "occupation_tables_present": { "occupations": ["occupations_au", "occupations_ca", "occupations_uk"], "ie": "MISSING", "us": "MISSING" },
+    "occupation_state_tables_present": ["occupation_state_au", "occupation_state_ca", "occupation_state_uk"],
+    "field_earnings_present": ["field_earnings_au", "field_earnings_ca", "field_earnings_ie", "field_earnings_uk"],
+    "cities_present": ["cities_au", "cities_ca", "cities_ie", "cities_uk", "cities_us"],
+    "country_codes_issue": "Product fixtures use uk- prefix; canonical GB code appears only in country-comparison/locations.ts and visa-catalog.ts",
+    "raw_data_gap": "data/raw has NO folders for AU/GB/US/CA/IE (only ae tracked, es/fr/jp/sg gitignored)",
+    "canonical_candidates": "only au-nursing/2026-08-02",
+    "release_blocking": false
+  }
+}

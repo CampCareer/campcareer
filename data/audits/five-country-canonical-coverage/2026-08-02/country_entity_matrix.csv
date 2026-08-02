@@ -1,0 +1,38 @@
+country,entity_domain,entity_table_or_fixture,observed_public_count,api_private_count,static_fixture_path,canonical_schema_target,official_source_system,coverage_status
+AU,institutions,colleges_au,42,,src/data/au-phase-three-university-catalogues.ts,catalog.institutions,CRICOS + TEQSA National Register,OBSERVED_OK
+AU,courses,courses_au,9743,9743 (au_program_catalog_v1),,catalog.programmes,CRICOS,OBSERVED_OK
+AU,occupations,occupations_au,600,,src/data/au-osca-occupation-profiles.json,taxonomy.occupations,JSA occupation profiles,OBSERVED_OK
+AU,occupation_state,occupation_state_au,2452,,,taxonomy.occupations,JSA,OBSERVED_OK
+AU,cities,cities_au,19,,src/data/regional-discovery.ts,core.geographies,ABS ASGS,OBSERVED_OK
+AU,field_earnings,field_earnings_au,82,,,evidence.metric_observations,QILT (transparency) 2024,OBSERVED_OK
+AU,program_page_facts,program_page_facts_au,118,,,catalog.programme_offerings,CRICOS page facts,OBSERVED_OK
+AU,regulatory_requirements,regulatory_requirements_au,29,,,catalog.programme_requirements,NMBA + TEQSA,OBSERVED_OK
+AU,pr_pathways,country_pr_pathways (AU share),,,,reporting.analysis_inputs,Department of Home Affairs,OBSERVED_OK (5 total)
+AU,nursing_programmes,au_nursing_programme_catalog_v1,,294,src/data/programs/australia-nursing.ts,catalog.programmes,CRICOS + provider pages,OBSERVED_OK (canonical candidate package B)
+AU,roi,roi_explorer_au,42,,,evidence.metric_observations,QILT + QS,OBSERVED_OK
+GB,institutions,colleges_uk,49,,src/data/uk-colleges.json,catalog.institutions,OfS Register,OBSERVED_OK
+GB,courses,courses_uk,185,,,catalog.programmes,OfS register + HESA,OBSERVED_OK
+GB,occupations,occupations_uk,408,,src/data/uk-occupations.json,taxonomy.occupations,ONS SOC 2020,OBSERVED_OK
+GB,occupation_state,occupation_state_uk,3705,,,taxonomy.occupations,ONS regional data,OBSERVED_OK
+GB,cities,cities_uk,37,,src/data/uk-cities.json,core.geographies,ONS geography,OBSERVED_OK
+GB,field_earnings,field_earnings_uk,70,,,evidence.metric_observations,HESA + ONS ASHE,OBSERVED_OK
+GB,labour_shortage,,,NOT_PRESENT,,taxonomy.occupations,GOV.UK Shortage Occupation List,MISSING
+US,institutions,colleges_us,6322,,src/data/us-university-rankings.json,catalog.institutions,College Scorecard API,OBSERVED_OK
+US,programs,programs_us,106083,,src/data/us-collegescorecard.json (gitignored seed),catalog.programmes,College Scorecard API,OBSERVED_OK
+US,occupations,,,NOT_PRESENT,,taxonomy.occupations,BLS SOC 2020 + OEWS,MISSING
+US,cities,cities_us,31779,,src/data/us-cities.json,core.geographies,US Census Bureau,OBSERVED_OK
+US,roi,roi_explorer_us,6322,,,evidence.metric_observations,College Scorecard,OBSERVED_OK
+CA,institutions,colleges_ca,30,,,catalog.institutions,IRCC DLI list,OBSERVED_OK
+CA,courses,courses_ca,165,,,catalog.programmes,IRCC DLI list (program-level),OBSERVED_OK
+CA,occupations,occupations_ca,514,,src/data/ca-occupation-state.json,taxonomy.occupations,NOC 2021 (ESDC),OBSERVED_OK
+CA,occupation_state,occupation_state_ca,7147,,,taxonomy.occupations,NOC + Statistics Canada,OBSERVED_OK
+CA,cities,cities_ca,27,,src/data/ca-cities.json,core.geographies,Statistics Canada,OBSERVED_OK
+CA,field_earnings,field_earnings_ca,70,,src/data/ca-employment-income.json (gitignored),evidence.metric_observations,Statistics Canada,OBSERVED_OK
+IE,institutions,colleges_ie,34,,,catalog.institutions,QQI (Qualifax),OBSERVED_OK
+IE,courses,courses_ie,2876,,,catalog.programmes,QQI (Qualifax),OBSERVED_OK
+IE,cities,cities_ie,18,,,core.geographies,CSO,OBSERVED_OK
+IE,field_earnings,field_earnings_ie,150,,,evidence.metric_observations,CSO earnings,OBSERVED_OK
+IE,graduate_outcomes,graduate_outcomes_ie,64,,src/data/ie-graduate-outcomes.json,evidence.metric_observations,CSO graduate outcomes,OBSERVED_OK
+IE,shortage_occupations,shortage_occupations_ie,79,,,taxonomy.occupations,Department of Enterprise SOL,MISSING_CANONICAL_LINK
+IE,language_schools,language_schools_ie,67,,,catalog.institutions,ACELS/QQI,OBSERVED_OK
+IE,occupations,,,NOT_PRESENT,,taxonomy.occupations,CSO occupation codes,MISSING

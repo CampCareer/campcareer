@@ -1,0 +1,71 @@
+{
+  "generated": "2026-08-02",
+  "audit_reference": "10.6 Five-Country Canonical Coverage Audit & Expansion Plan v1",
+  "observation_note": "All report-factory canonical schemas are STATIC_ANALYSIS_ONLY - not exposed to PostgREST, so readiness is assessed from migration SQL + seeded data + runtime usage, not from live row inspection.",
+  "schemas": [
+    {
+      "schema": "core",
+      "readiness": "READY",
+      "tables": ["countries", "currencies", "geographies", "qualification_frameworks", "qualification_levels"],
+      "evidence": "Defined in migrations 20260730172000 + 20260730180000; core.geographies seeded",
+      "gaps": ["Not exposed to PostgREST"]
+    },
+    {
+      "schema": "catalog",
+      "readiness": "READY_FOR_INGEST",
+      "tables": ["institutions", "campuses", "institution_identifiers", "programmes", "programme_offerings", "programme_identifiers", "programme_fees", "programme_requirements", "programme_accreditations", "legacy_entity_map"],
+      "evidence": "Migration 20260730172000; 5 countries' public views serve as ingest-shaped sources",
+      "gaps": ["No row-level observation via REST; legacy_entity_map linkage unverified"]
+    },
+    {
+      "schema": "taxonomy",
+      "readiness": "READY_FOR_INGEST",
+      "tables": ["occupations", "occupation_identifiers", "concept_occupations", "study_concepts", "programme_concepts"],
+      "evidence": "Migration 20260730180000 (taxonomy seed); occupations_au/ca/uk exist in public views",
+      "gaps": ["No US/IE occupations ingestion", "occupation_identifiers crosswalk unverified"]
+    },
+    {
+      "schema": "evidence",
+      "readiness": "READY",
+      "tables": ["sources", "source_register_records", "source_snapshots", "claims", "claim_evidence", "metric_observations", "review_events", "data_source_runs"],
+      "evidence": "Migration 20260730172000; au-nursing candidate package validates exact-UUID resolution with evidence gate (tests/data-foundation/au-nursing-minimal-gap-closure.test.ts)",
+      "gaps": ["runtime evidence gate is empty (PUBLISHED_CAREER_COUNTRY_EVIDENCE = [])"]
+    },
+    {
+      "schema": "labour",
+      "readiness": "READY",
+      "tables": ["outcome_observations"],
+      "evidence": "Migration 20260730172000",
+      "gaps": ["No observation via REST"]
+    },
+    {
+      "schema": "reporting",
+      "readiness": "READY",
+      "tables": ["products", "report_releases", "report_artifacts", "report_programmes", "analysis_runs", "analysis_inputs", "analysis_outputs", "analysis_pathways", "analysis_scenarios", "methodology_versions", "ranking_models", "ranking_weights", "monitoring_actions", "release_claims"],
+      "evidence": "Migration 20260730172000; nursing baseline migration 20260730211500 adds analysis_pathways/scenarios",
+      "gaps": ["No observation via REST"]
+    },
+    {
+      "schema": "ingest",
+      "readiness": "OBSERVED_VIAS_PUBLIC_VIEWS",
+      "tables": ["cities_*", "colleges_*", "courses_*", "programs_us", "occupations_*", "occupation_state_*", "occupation_profiles_au", "occupation_outlook_au", "occupation_vacancies_au", "occupation_regional_employment_au", "occupation_mobility_flows_au", "occupation_mobility_stocks_au", "occupation_pathways_au", "occupation_shortage_drivers_au", "occupation_sa4_au", "field_earnings_*", "graduate_outcomes_ie", "shortage_occupations_ie", "language_schools_ie", "language_courses_ie", "visa_occupation_status_au", "regulatory_requirements_au", "program_page_facts_au", "state_salary_multiplier", "country_pr_pathways", "roi_explorer_*", "majors", "data_source_runs"],
+      "evidence": "Counted via public views (85 tables) on 2026-08-02; tables moved public->ingest in 2026073018100x then restored as public views in 20260730183000",
+      "gaps": ["ingest schema not directly exposed; only view layer observable", "language_courses_ie and occupation_sa4_au empty (0)", "roi_explorer_de empty"]
+    },
+    {
+      "schema": "retired",
+      "readiness": "RETIRED",
+      "tables": ["retired.* (moved during 2026073018100x migration set)"],
+      "evidence": "Tables relocated public->ingest with retired schema for superseded",
+      "gaps": []
+    },
+    {
+      "schema": "api_private",
+      "readiness": "READY_READ_ONLY_MODEL",
+      "tables": ["au_program_catalog_v1", "au_program_route_options_v1", "au_program_map_summary_v1", "au_program_occupation_courses_v1", "au_program_institution_directory_v1", "au_program_page_facts_v1", "au_nursing_programme_catalog_v1", "au_nursing_programme_fees_v1", "au_nursing_programme_evidence_v1", "au_nursing_programme_requirements_v1", "au_nursing_programme_accreditations_v1"],
+      "evidence": "12 views, all AU; consumed server-side via supabaseAdmin.schema('api_private')",
+      "gaps": ["AU-only; no GB/US/CA/IE read-model views", "not browser-exposed"]
+    }
+  ],
+  "verdict": "All canonical schemas are structurally READY from migration analysis. Data coverage gaps (US/IE occupations, raw lineage) are the binding constraint, not schema readiness. No release-blocking schema issue."
+}
