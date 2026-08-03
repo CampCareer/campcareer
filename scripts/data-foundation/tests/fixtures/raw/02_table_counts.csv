@@ -1,0 +1,5 @@
+schema_name,table_name,relation_type
+core,countries,table
+catalog,programmes,table
+evidence,review_events,table
+reporting,report_artifacts,table

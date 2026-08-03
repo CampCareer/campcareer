@@ -1,0 +1,14 @@
+entity,country_code,actual_count,resolution_status
+countries,AU,1,resolved
+countries,GB,0,resolved
+countries,UK,1,resolved
+countries,US,1,resolved
+countries,CA,1,resolved
+countries,IE,1,resolved
+
+entity,country_code,actual_count,resolution_status
+institutions,AU,2,resolved
+institutions,GB,0,resolved
+institutions,US,0,resolved
+institutions,CA,0,resolved
+institutions,IE,0,resolved

@@ -1,0 +1,11 @@
+schema_name,relation_name,relation_type,owner,rls_enabled,has_primary_key,foreign_key_count,has_country_column,has_created_updated,has_reviewed_date,has_source_or_snapshot_column
+core,countries,table,postgres,t,t,1,t,t,f,t
+catalog,programmes,table,postgres,t,t,3,t,t,t,t
+evidence,review_events,table,postgres,t,t,1,f,t,t,f
+reporting,report_artifacts,table,postgres,t,f,2,t,t,f,t
+
+schema_name,schema_owner,table_count,view_count,materialized_view_count
+core,postgres,1,0,0
+catalog,postgres,1,0,0
+evidence,postgres,1,0,0
+reporting,postgres,1,0,0

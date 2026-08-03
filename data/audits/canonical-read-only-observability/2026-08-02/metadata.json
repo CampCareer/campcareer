@@ -1,9 +1,9 @@
 {
   "schema": "campcareer.canonical-read-only-audit.metadata.v1",
-  "observation_date": "2026-08-02T20:24:43Z",
+  "observation_date": "2026-08-03T09:46:37Z",
   "direct_connection_method": "none",
   "connection_used": false,
-  "transaction_read_only_verified": "false",
+  "transaction_read_only_verified": false,
   "statement_timeout": "120s",
   "lock_timeout": "5s",
   "psql": { "binary": "/opt/homebrew/opt/libpq/bin/psql", "version": "18" },

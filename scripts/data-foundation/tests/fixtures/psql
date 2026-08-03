@@ -1,0 +1,97 @@
+#!/usr/bin/env python3
+"""Mock psql for the 10.7A-1 runner tests.
+
+NEVER connects to a real database. Emulates the subset of psql behaviour the
+runner relies on:
+
+  * `psql --version`              -> prints a version banner.
+  * `psql -c 'BEGIN...SHOW...'`   -> prints `on` for the read-only check.
+  * `psql --csv -f -` (stdin)     -> cats the matching fixture CSV for the
+                                     SQL file embedded in stdin, or answers an
+                                     exact `select count(*)` query.
+  * MOCK_PARTIAL=1                -> fails SQL file 04 and the count for
+                                     `evidence.review_events`.
+  * MOCK_FAIL_READONLY=1          -> fails the read-only check itself.
+
+State comes only from MOCK_FIXTURES_DIR / MOCK_PARTIAL / MOCK_FAIL_READONLY.
+The DB URL is never read or printed.
+"""
+
+import csv
+import os
+import re
+import sys
+
+FIXTURES = os.environ.get("MOCK_FIXTURES_DIR", "")
+PARTIAL = os.environ.get("MOCK_PARTIAL", "0") == "1"
+FAIL_READONLY = os.environ.get("MOCK_FAIL_READONLY", "0") == "1"
+
+COUNTS = {}
+COUNTS_PATH = os.path.join(FIXTURES, "table_counts_map.csv")
+if os.path.exists(COUNTS_PATH):
+    with open(COUNTS_PATH, newline="") as fh:
+        for row in csv.reader(fh):
+            if not row or row[0] == "schema":
+                continue
+            COUNTS[(row[0], row[1])] = row[2]
+
+
+def emit(path):
+    with open(path) as fh:
+        sys.stdout.write(fh.read())
+    return 0
+
+
+def fail(stderr_msg):
+    sys.stderr.write(stderr_msg + "\n")
+    return 1
+
+
+def main():
+    args = sys.argv[1:]
+
+    if "--version" in args:
+        sys.stdout.write("psql (PostgreSQL 18.1)\n")
+        return 0
+
+    if FAIL_READONLY and "-c" in args:
+        return fail("psql: error: could not connect to server: mock readonly check failure")
+
+    if "-c" in args:
+        sys.stdout.write("on\n")
+        return 0
+
+    script = sys.stdin.read()
+
+    markers = {
+        "-- 01_schema_inventory.sql": "raw/01_schema_inventory.csv",
+        "-- 02_table_counts.sql": "raw/02_table_counts.csv",
+        "-- 03_country_entity_counts.sql": "raw/03_country_entity_counts.csv",
+        "-- 05_privilege_audit.sql": "raw/05_privilege_audit.csv",
+        "-- 06_migration_status.sql": "raw/06_migration_status.csv",
+    }
+    for marker, rel in markers.items():
+        if marker in script:
+            return emit(os.path.join(FIXTURES, rel))
+
+    if "-- 04_relationship_checks.sql" in script:
+        if PARTIAL:
+            return fail("psql: error: mock partial failure in 04_relationship_checks.sql")
+        return emit(os.path.join(FIXTURES, "raw/04_relationship_checks.csv"))
+
+    m = re.search(r'from\s+"([a-z_][a-z0-9_]*)"\s*\.\s*"([a-z0-9_]+)"', script)
+    if m:
+        schema, table = m.group(1), m.group(2)
+        if PARTIAL and (schema, table) == ("evidence", "review_events"):
+            return fail("psql: error: mock partial count failure for evidence.review_events")
+        count = COUNTS.get((schema, table))
+        if count is None:
+            return fail("psql: error: mock: no fixture count for %s.%s" % (schema, table))
+        sys.stdout.write(count + "\n")
+        return 0
+
+    return fail("psql: error: mock: unrecognised input")
+
+
+if __name__ == "__main__":
+    sys.exit(main())

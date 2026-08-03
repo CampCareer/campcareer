@@ -1,0 +1,39 @@
+{
+  "schema": "campcareer.canonical-read-only-audit.observation_summary.v1",
+  "verdict": "B. Conditional Pass",
+  "verdict_reason": "Reusable read-only observability tooling, SQL files and artifact schema are complete. Canonical database counts could not be observed because no direct database credential or psql access was available at run time.",
+  "direct_database_access": "unavailable",
+  "canonical_database_observed": false,
+  "transaction_read_only_verified": false,
+  "failed_sql_files": [],
+  "counters": {
+    "total_relations_observed": null,
+    "total_tables_counted": null,
+    "failed_count_queries": null,
+    "privilege_risk_count": null,
+    "relationship_gap_count": null,
+    "gap007_status": "database_access_unavailable",
+    "transaction_read_only": "false"
+  },
+  "sections": {
+    "canonical_schema": {
+      "status": "unavailable"
+    },
+    "five_country_counts": {
+      "status": "unavailable"
+    },
+    "relationship_checks": {
+      "status": "unavailable"
+    },
+    "privilege_audit": {
+      "status": "unavailable"
+    },
+    "gap007": {
+      "status": "database_access_unavailable"
+    }
+  },
+  "database_write_operations": 0,
+  "migration_changes": 0,
+  "privilege_or_exposure_changes": 0,
+  "exit_code": 2
+}

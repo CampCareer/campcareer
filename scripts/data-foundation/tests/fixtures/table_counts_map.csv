@@ -1,0 +1,5 @@
+schema,table,count
+core,countries,5
+catalog,programmes,3
+evidence,review_events,8
+reporting,report_artifacts,2
