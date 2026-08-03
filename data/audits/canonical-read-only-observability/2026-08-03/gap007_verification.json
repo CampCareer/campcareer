@@ -1,0 +1,59 @@
+{
+  "schema": "campcareer.canonical-read-only-audit.gap007_verification.v1",
+  "gap007": {
+    "migration_version": "20260712121724",
+    "status": "observed_from_database",
+    "migration_applied": true,
+    "tables_present": [
+      {
+        "table": "concept_career_mappings",
+        "present": false
+      },
+      {
+        "table": "career_compensation_observations",
+        "present": false
+      },
+      {
+        "table": "housing_cost_observations",
+        "present": false
+      },
+      {
+        "table": "country_comparison_coverage",
+        "present": false
+      },
+      {
+        "table": "partner_profiles",
+        "present": false
+      },
+      {
+        "table": "partner_members",
+        "present": false
+      },
+      {
+        "table": "lead_requests",
+        "present": false
+      },
+      {
+        "table": "lead_assignments",
+        "present": false
+      },
+      {
+        "table": "lead_status_events",
+        "present": false
+      }
+    ],
+    "rls_enabled": [],
+    "cohort_tables": [
+      {
+        "decision_plans": "",
+        "plan_save_intents": "",
+        "canonical_concepts": "",
+        "course_offerings": "",
+        "taxonomy_nodes": ""
+      }
+    ],
+    "postgrest_404_cause": "not_observable_via_direct_sql",
+    "runtime_graceful_degradation": "static_verified",
+    "requires_direct_recheck": true
+  }
+}

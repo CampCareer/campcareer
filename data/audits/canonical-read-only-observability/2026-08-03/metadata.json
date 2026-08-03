@@ -1,0 +1,13 @@
+{
+  "schema": "campcareer.canonical-read-only-audit.metadata.v1",
+  "observation_date": "2026-08-03T13:27:46Z",
+  "direct_connection_method": "psql",
+  "connection_used": true,
+  "transaction_read_only_verified": true,
+  "statement_timeout": "120s",
+  "lock_timeout": "5s",
+  "psql": { "binary": "/opt/homebrew/opt/libpq/bin/psql", "version": "18" },
+  "supabase_project_ref": "babylusxcknjerxtepoc",
+  "allowed_connection_env_vars": ["SUPABASE_DB_URL", "DIRECT_URL", "DATABASE_URL", "POSTGRES_URL"],
+  "secrets_printed": false
+}

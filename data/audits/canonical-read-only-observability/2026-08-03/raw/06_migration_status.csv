@@ -1,0 +1,7 @@
+migration_version,migration_version_recorded
+20260712121724,t
+concept_career_mappings,career_compensation_observations,housing_cost_observations,country_comparison_coverage,partner_profiles,partner_members,lead_requests,lead_assignments,lead_status_events
+,,,,,,,,
+table_schema,table_name,rls_enabled
+decision_plans,plan_save_intents,canonical_concepts,course_offerings,taxonomy_nodes
+,,,,

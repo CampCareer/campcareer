@@ -1,0 +1,31 @@
+{
+  "schema": "campcareer.canonical-read-only-observability.api_private_observation.v1",
+  "observation_type": "repository_static_scan",
+  "database_observation_status": "verified",
+  "repository_static_scan_status": "complete",
+  "browser_direct_access_found": false,
+  "client_schema_api_private_calls": 0,
+  "service_role_client_exposure_found": false,
+  "service_role_client_exposure_note": "Static analysis only: the single api_private consumer imports 'server-only' and uses supabaseAdmin; no browser path calls schema('api_private'). Migrations 20260802123403 / 20260802123729 / 20260802123754 revoke api_private defaults from service_role and PUBLIC. No live privilege or REST verification was performed.",
+  "known_read_models": [
+    "api_private.au_nursing_programme_catalog_v1",
+    "api_private.au_nursing_programme_fees_v1",
+    "api_private.au_nursing_programme_requirements_v1",
+    "api_private.au_nursing_programme_evidence_v1"
+  ],
+  "consumer": {
+    "file": "src/lib/data-foundation/compare-adapters/au-nursing-programmes-repository.ts",
+    "import": "server-only",
+    "client": "supabaseAdmin",
+    "browser_path": false
+  },
+  "country_coverage": {
+    "read_models": "au_nursing_* v1 views (AU nursing programme compare)",
+    "note": "No other country read models were found in api_private during the static scan."
+  },
+  "limitations": [
+    "Repository static scan only; no live PostgREST exposure test was performed.",
+    "database_observation_status reflects whether a read-only psql connection was verified in this run, not a REST exposure test.",
+    "Requires direct re-check after a DB credential is provided."
+  ]
+}

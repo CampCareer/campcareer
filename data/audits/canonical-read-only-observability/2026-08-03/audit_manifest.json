@@ -1,0 +1,13 @@
+{
+  "schema": "campcareer.canonical-read-only-audit.manifest.v1",
+  "task": "10.7A Canonical Read-Only Observability v1",
+  "description": "Read-only observability of CampCareer canonical (private) schemas. No data collection, no migrations, no privilege or exposure changes.",
+  "observation_date": "2026-08-03T13:27:46Z",
+  "git": { "branch": "audit/canonical-read-only-observability-v1", "commit": "ac7deb652b6dd658ff2e58149cb405841aa09019" },
+  "supabase_project_ref": "babylusxcknjerxtepoc",
+  "direct_database_access": "available",
+  "canonical_database_observed": true,
+  "runner": { "script": "run-canonical-read-only-audit.sh", "version": "1.1.0", "psql_version": "18" },
+  "sql_files": ["01_schema_inventory.sql", "02_table_counts.sql", "03_country_entity_counts.sql", "04_relationship_checks.sql", "05_privilege_audit.sql", "06_migration_status.sql"],
+  "exit_code": 0
+}

@@ -1,0 +1,18 @@
+{
+  "schema": "campcareer.canonical-read-only-audit.summary.v1",
+  "verdict": "A. Pass",
+  "verdict_reason": "All read-only observability SQL files executed inside READ ONLY transactions and all artifacts reflect observed database state.",
+  "direct_database_access": "available",
+  "canonical_database_observed": true,
+  "sections": {
+    "canonical_schema": { "status": "observed", "observation_source": "observed_database" },
+    "five_country_counts": { "status": "observed" },
+    "relationship_checks": { "status": "observed" },
+    "privilege_audit": { "status": "observed" },
+    "gap007": { "status": "observed_from_database" }
+  },
+  "database_write_operations": 0,
+  "migration_changes": 0,
+  "privilege_or_exposure_changes": 0,
+  "exit_code": "0"
+}
