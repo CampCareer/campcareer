@@ -1,0 +1,615 @@
+{
+  "schema": "campcareer.canonical-read-only-audit.table_counts.v1",
+  "observed": false,
+  "rows": [
+    {
+      "schema_name": "core",
+      "table_name": "countries",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "core",
+      "table_name": "currencies",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "core",
+      "table_name": "qualification_frameworks",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "core",
+      "table_name": "qualification_levels",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "core",
+      "table_name": "geographies",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "catalog",
+      "table_name": "institutions",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "catalog",
+      "table_name": "institution_identifiers",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "catalog",
+      "table_name": "campuses",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "catalog",
+      "table_name": "programmes",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "catalog",
+      "table_name": "programme_identifiers",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "catalog",
+      "table_name": "programme_offerings",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "catalog",
+      "table_name": "programme_fees",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "catalog",
+      "table_name": "programme_requirements",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "catalog",
+      "table_name": "programme_accreditations",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "catalog",
+      "table_name": "legacy_entity_map",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "taxonomy",
+      "table_name": "study_concepts",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "taxonomy",
+      "table_name": "occupations",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "taxonomy",
+      "table_name": "occupation_identifiers",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "taxonomy",
+      "table_name": "programme_concepts",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "taxonomy",
+      "table_name": "concept_occupations",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "evidence",
+      "table_name": "sources",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "evidence",
+      "table_name": "source_snapshots",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "evidence",
+      "table_name": "metric_observations",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "evidence",
+      "table_name": "claims",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "evidence",
+      "table_name": "claim_evidence",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "evidence",
+      "table_name": "review_events",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "evidence",
+      "table_name": "source_register_records",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "evidence",
+      "table_name": "ingestion_runs",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "labour",
+      "table_name": "outcome_observations",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "reporting",
+      "table_name": "products",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "reporting",
+      "table_name": "methodology_versions",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "reporting",
+      "table_name": "ranking_models",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "reporting",
+      "table_name": "ranking_weights",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "reporting",
+      "table_name": "analysis_runs",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "reporting",
+      "table_name": "analysis_inputs",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "reporting",
+      "table_name": "analysis_outputs",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "reporting",
+      "table_name": "report_releases",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "reporting",
+      "table_name": "report_artifacts",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "reporting",
+      "table_name": "monitoring_actions",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "reporting",
+      "table_name": "analysis_pathways",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "reporting",
+      "table_name": "analysis_scenarios",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "reporting",
+      "table_name": "report_programmes",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "reporting",
+      "table_name": "release_claims",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "cities_au",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "cities_ca",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "cities_ie",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "cities_uk",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "cities_us",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "colleges_au",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "colleges_ca",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "colleges_ie",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "colleges_uk",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "colleges_us",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "colleges_nl",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "courses_au",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "courses_ca",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "courses_ie",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "courses_uk",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "programs_us",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "field_earnings_au",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "field_earnings_ca",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "field_earnings_ie",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "field_earnings_uk",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "graduate_outcomes_ie",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "occupations_au",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "occupations_ca",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "occupations_uk",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "occupation_state_au",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "occupation_state_ca",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "occupation_state_uk",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "occupation_profiles_au",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "occupation_outlook_au",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "occupation_vacancies_au",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "occupation_regional_employment_au",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "occupation_mobility_flows_au",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "occupation_mobility_stocks_au",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "occupation_pathways_au",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "occupation_shortage_drivers_au",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "occupation_sa4_au",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "visa_occupation_status_au",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "regulatory_requirements_au",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "program_page_facts_au",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "state_salary_multiplier",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "country_pr_pathways",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "shortage_occupations_ie",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "language_schools_ie",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    },
+    {
+      "schema_name": "ingest",
+      "table_name": "language_courses_ie",
+      "actual_row_count": null,
+      "count_status": "unavailable",
+      "observation_source": "static_migration_analysis"
+    }
+  ]
+}

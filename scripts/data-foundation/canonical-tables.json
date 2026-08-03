@@ -1,0 +1,31 @@
+{
+  "schema": "campcareer.canonical-tables.v1",
+  "description": "Static canonical table manifest derived by static analysis of migration SQL (20260730172000 foundation, 20260730180000 taxonomy/geographies, 20260730181002-06 ingest moves, 20260730181014 harden, 20260730211500 nursing baseline). Used by the runner for the no-database-access observation layer. NEVER used as a substitute for live schema inventory.",
+  "source_migrations": [
+    "20260730172000_report_factory_foundation.sql",
+    "20260730180000_report_factory_taxonomy_and_seed.sql",
+    "20260730181002_move_catalog_sources_to_ingest.sql",
+    "20260730181003_move_occupation_catalogs_to_ingest.sql",
+    "20260730181004_move_au_labour_sources_to_ingest.sql",
+    "20260730181005_move_policy_sources_to_ingest.sql",
+    "20260730181006_move_ingestion_history.sql",
+    "20260730181014_harden_canonical_schemas.sql",
+    "20260730211500_nursing_v1_baseline_schema.sql"
+  ],
+  "canonical_schemas": ["core", "catalog", "taxonomy", "evidence", "labour", "reporting", "ingest"],
+  "schemas": {
+    "core": ["countries", "currencies", "qualification_frameworks", "qualification_levels", "geographies"],
+    "catalog": ["institutions", "institution_identifiers", "campuses", "programmes", "programme_identifiers", "programme_offerings", "programme_fees", "programme_requirements", "programme_accreditations", "legacy_entity_map"],
+    "taxonomy": ["study_concepts", "occupations", "occupation_identifiers", "programme_concepts", "concept_occupations"],
+    "evidence": ["sources", "source_snapshots", "metric_observations", "claims", "claim_evidence", "review_events", "source_register_records", "ingestion_runs"],
+    "labour": ["outcome_observations"],
+    "reporting": ["products", "methodology_versions", "ranking_models", "ranking_weights", "analysis_runs", "analysis_inputs", "analysis_outputs", "report_releases", "report_artifacts", "monitoring_actions", "analysis_pathways", "analysis_scenarios", "report_programmes", "release_claims"],
+    "ingest": ["cities_au", "cities_ca", "cities_ie", "cities_uk", "cities_us", "colleges_au", "colleges_ca", "colleges_ie", "colleges_uk", "colleges_us", "colleges_nl", "courses_au", "courses_ca", "courses_ie", "courses_uk", "programs_us", "field_earnings_au", "field_earnings_ca", "field_earnings_ie", "field_earnings_uk", "graduate_outcomes_ie", "occupations_au", "occupations_ca", "occupations_uk", "occupation_state_au", "occupation_state_ca", "occupation_state_uk", "occupation_profiles_au", "occupation_outlook_au", "occupation_vacancies_au", "occupation_regional_employment_au", "occupation_mobility_flows_au", "occupation_mobility_stocks_au", "occupation_pathways_au", "occupation_shortage_drivers_au", "occupation_sa4_au", "visa_occupation_status_au", "regulatory_requirements_au", "program_page_facts_au", "state_salary_multiplier", "country_pr_pathways", "shortage_occupations_ie", "language_schools_ie", "language_courses_ie"]
+  },
+  "server_only_schemas": ["api_private"],
+  "known_canonical_country_codes": ["AU", "GB", "UK", "US", "CA", "IE"],
+  "notes": {
+    "country_code_discrepancy": "The canonical seed (20260730180000) inserts 'UK' as the United Kingdom code, while the five-country programmatic set uses 'GB'. Both are observed; they are never silently merged.",
+    "ingestion_runs": "public.data_source_runs was moved to evidence and renamed ingestion_runs by 20260730181006."
+  }
+}

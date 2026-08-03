@@ -1,0 +1,13 @@
+{
+  "schema": "campcareer.canonical-read-only-audit.migration_status.v1",
+  "gap007": {
+    "migration_version": "20260712121724",
+    "status": "database_access_unavailable",
+    "migration_version_recorded": null,
+    "tables_present": null,
+    "rls_enabled": null,
+    "postgrest_404_cause": null,
+    "runtime_graceful_degradation": null,
+    "observation_source": "static (no direct database access)"
+  }
+}

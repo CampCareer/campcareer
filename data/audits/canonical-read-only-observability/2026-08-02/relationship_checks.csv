@@ -1,0 +1,13 @@
+check_name,subject,result_count,result_kind,check_status
+tables_without_primary_key,all_canonical_tables,,count,unavailable
+duplicate_canonical_country_code,core.countries,,count,unavailable
+uk_country_code_observed,core.countries,,count,unavailable
+orphan_campus,catalog.campuses,,count,unavailable
+orphan_programme,catalog.programmes,,count,unavailable
+orphan_programme_offering,catalog.programme_offerings,,count,unavailable
+orphan_programme_identifier,catalog.programme_identifiers,,count,unavailable
+orphan_occupation_identifier,taxonomy.occupation_identifiers,,count,unavailable
+orphan_source_snapshot,evidence.source_snapshots,,count,unavailable
+metric_observation_without_source,evidence.metric_observations,,count,unavailable
+verified_without_reviewed_date,evidence.metric_observations,,count,unavailable
+duplicate_programme_title,catalog.programmes,,count,unavailable
