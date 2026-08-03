@@ -1,0 +1,27 @@
+{
+  "schema": "campcareer.common-source-ingestion.source_manifest.v1",
+  "package_source_count": 1,
+  "country_code_database_compatibility": "blocked_pending_uk_to_gb_resolution",
+  "sources": [
+    {
+      "source_id": "ie-hea-programme-catalog-v1",
+      "country_code": "IE",
+      "data_domain": "programme",
+      "authority": "Higher Education Authority (Ireland)",
+      "official_url": "https://hea.ie/statistics/data-for-download-and-reuse/",
+      "retrieval_method": "http_download",
+      "licence": "Open Data / CC BY 4.0",
+      "usage_restriction": "attribution required",
+      "refresh_cadence": "yearly",
+      "retrieved_at": "2026-08-04T00:00:00Z",
+      "reviewed_at": "2026-08-04T00:00:00Z",
+      "content_type": "text/csv",
+      "checksum": "sha256:bae63723ce0307ef4b018cf5d7e7e7538dfe1d0371f93a6e58bb87f57a412edc",
+      "file_size": 312045,
+      "parser_version": "1.0.0",
+      "candidate_schema_version": "1.0.0",
+      "raw_storage_tier": "t1",
+      "notes": "Official programme catalogue used to source programme identifiers and institutional data."
+    }
+  ]
+}

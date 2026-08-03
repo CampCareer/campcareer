@@ -53,7 +53,14 @@
     "import:fr": "npx tsx scripts/import-france-official-data.ts",
     "check:fr": "npx tsx scripts/check-france-data.ts",
     "import:es": "npx tsx scripts/import-spain-official-data.ts",
-    "check:es": "npx tsx scripts/check-spain-data.ts"
+    "check:es": "npx tsx scripts/check-spain-data.ts",
+    "data:ingest:test": "PYTHONPATH=scripts/data-foundation/common-ingestion python3 -m unittest discover -s scripts/data-foundation/common-ingestion/tests",
+    "data:ingest:manifest-validate": "python3 scripts/data-foundation/common-ingestion/runner.py manifest-validate",
+    "data:ingest:candidate-validate": "python3 scripts/data-foundation/common-ingestion/runner.py candidate-validate",
+    "data:ingest:package-build": "python3 scripts/data-foundation/common-ingestion/runner.py package-build",
+    "data:ingest:report-generate": "python3 scripts/data-foundation/common-ingestion/runner.py report-generate",
+    "data:ingest:checksum-verify": "python3 scripts/data-foundation/common-ingestion/runner.py checksum-verify",
+    "data:ingest:duplicate-queue": "python3 scripts/data-foundation/common-ingestion/runner.py duplicate-queue"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",

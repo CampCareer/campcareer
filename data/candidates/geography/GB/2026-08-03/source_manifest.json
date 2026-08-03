@@ -1,0 +1,47 @@
+{
+  "schema": "campcareer.common-source-ingestion.source_manifest.v1",
+  "package_source_count": 2,
+  "country_code_database_compatibility": "blocked_pending_uk_to_gb_resolution",
+  "sources": [
+    {
+      "source_id": "ons-countries-geography-v1",
+      "country_code": "GB",
+      "data_domain": "geography",
+      "authority": "Office for National Statistics (UK)",
+      "official_url": "https://www.ons.gov.uk/methodology/geography/geographical-products",
+      "retrieval_method": "http_download",
+      "licence": "Open Government Licence v3.0",
+      "usage_restriction": "attribution required",
+      "refresh_cadence": "yearly",
+      "retrieved_at": "2026-08-04T00:00:00Z",
+      "reviewed_at": "2026-08-04T00:00:00Z",
+      "content_type": "text/csv",
+      "checksum": "sha256:b7a01e9f3cbfa97fbadc28b52804f19ac3096837d532fdefcedeff939930bd1d",
+      "file_size": 245887,
+      "parser_version": "1.0.0",
+      "candidate_schema_version": "1.0.0",
+      "raw_storage_tier": "t1",
+      "notes": "Official geography products used to source country-level geographic facts."
+    },
+    {
+      "source_id": "gb-ons-restricted-gazetteer-v1",
+      "country_code": "GB",
+      "data_domain": "geography",
+      "authority": "Office for National Statistics (UK)",
+      "official_url": "https://www.ons.gov.uk/restricted/gazetteer",
+      "retrieval_method": "http_webpage",
+      "licence": "Restricted licence: internal research use only, no redistribution",
+      "usage_restriction": "no_redistribution_no_repackaging",
+      "refresh_cadence": "quarterly",
+      "retrieved_at": "2026-08-04T00:00:00Z",
+      "reviewed_at": "2026-08-04T00:00:00Z",
+      "content_type": "text/csv",
+      "checksum": "sha256:ef6345d30ced13eb3e9030b34679c7e87eb6fc9393c5bd1cb3ac3e5afdf0b46d",
+      "file_size": 5120933,
+      "parser_version": "1.0.0",
+      "candidate_schema_version": "1.0.0",
+      "raw_storage_tier": "t3",
+      "notes": "Licence-restricted dataset. Raw data must not be stored or committed; only this manifest, the checksum and retrieval instructions are kept."
+    }
+  ]
+}

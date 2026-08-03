@@ -1,0 +1,27 @@
+{
+  "schema": "campcareer.common-source-ingestion.source_manifest.v1",
+  "package_source_count": 1,
+  "country_code_database_compatibility": "blocked_pending_uk_to_gb_resolution",
+  "sources": [
+    {
+      "source_id": "au-home-affairs-visa-listing-v1",
+      "country_code": "AU",
+      "data_domain": "visa",
+      "authority": "Australian Government Department of Home Affairs",
+      "official_url": "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing",
+      "retrieval_method": "http_download",
+      "licence": "Australian Government Open Licence 3.0 (CC BY 4.0)",
+      "usage_restriction": "attribution required",
+      "refresh_cadence": "monthly",
+      "retrieved_at": "2026-08-04T00:00:00Z",
+      "reviewed_at": "2026-08-04T00:00:00Z",
+      "content_type": "application/json",
+      "checksum": "sha256:f846a4265c0b595b75f1a67126f7c21601efc66ab4a0bfc873ece4b70a46aad9",
+      "file_size": 184502,
+      "parser_version": "1.0.0",
+      "candidate_schema_version": "1.0.0",
+      "raw_storage_tier": "t1",
+      "notes": "Official visa listing used to source visa category facts for Australia."
+    }
+  ]
+}

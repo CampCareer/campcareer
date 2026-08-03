@@ -74,6 +74,8 @@ public/Germany_Shortage/
 
 # Python cache
 scripts/__pycache__/
+**/__pycache__/
+*.pyc
 
 # Browser test artifacts
 test-results/
