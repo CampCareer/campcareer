@@ -9,7 +9,7 @@
     "five_country_counts": { "status": "observed" },
     "relationship_checks": { "status": "observed" },
     "privilege_audit": { "status": "observed" },
-    "gap007": { "status": "observed_from_database" }
+    "gap007": { "status": "migration_applied_tables_missing" }
   },
   "database_write_operations": 0,
   "migration_changes": 0,

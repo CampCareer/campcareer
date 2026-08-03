@@ -106,6 +106,7 @@ HEADER_USAGE = ("schema_name", "role_name", "has_schema_usage")
 HEADER_TABLE_PRIVS = ("schema_name", "role_name", "tables_select", "tables_insert",
                       "tables_update", "tables_delete", "tables_total")
 HEADER_OWNERS = ("schema_name", "schema_owner", "roles_with_usage")
+HEADER_API_PRIVATE = ("schema_name", "relation_name", "relation_type", "owner", "rls_enabled")
 HEADER_MIGRATION_VERSION = ("migration_version", "migration_version_recorded")
 HEADER_GAP_TABLES = ("concept_career_mappings", "career_compensation_observations",
                      "housing_cost_observations", "country_comparison_coverage", "partner_profiles",
@@ -236,6 +237,16 @@ def to_int(v):
         return None
 
 
+def regclass_present(v):
+    """to_regclass() returns the qualified relation name when present (e.g.
+    'public.concept_career_mappings') and an empty cell when absent. Presence is
+    therefore a non-empty value, NOT a truthy boolean coercion."""
+    if v is None:
+        return False
+    s = str(v).strip()
+    return s != "" and s.lower() not in ("null",)
+
+
 # ---------------------------------------------------------------------------
 # canonical_schema_inventory.csv
 # ---------------------------------------------------------------------------
@@ -248,7 +259,7 @@ def build_schema_inventory():
     ]
     if OBSERVED:
         blocks = read_blocks(os.path.join(OUTDIR, "raw", "01_schema_inventory.csv"),
-                             [HEADER_RELATIONS, HEADER_SCHEMA_PRESENCE])
+                             [HEADER_RELATIONS, HEADER_SCHEMA_PRESENCE, HEADER_API_PRIVATE])
         rows = []
         observed = len(blocks) > 0
         schema_presence = []
@@ -436,32 +447,61 @@ def build_gap007():
                         "lead_assignments", "lead_status_events",
                     ):
                         if col in r:
-                            tables.append({"table": col, "present": truthy(r[col])})
+                            tables.append({"table": col, "present": regclass_present(r[col])})
             elif name == "table_schema":
                 rls = rows
             elif name == "decision_plans":
                 cohort = rows
 
-        status = "observed_from_database"
+        present_count = sum(1 for t in tables if t["present"])
+        total_count = len(tables)
+
+        if recorded and total_count > 0 and present_count == 0:
+            status = "migration_applied_tables_missing"
+            postgrest_404_cause = "table_absent"
+            requires_direct_recheck = False
+        elif recorded and total_count > 0 and present_count == total_count:
+            status = "migration_applied_tables_present"
+            postgrest_404_cause = "tables_present_but_not_rest_exposed"
+            requires_direct_recheck = True
+        elif recorded:
+            status = "migration_applied_tables_partial"
+            postgrest_404_cause = "table_absent"
+            requires_direct_recheck = True
+        else:
+            status = "migration_not_applied"
+            postgrest_404_cause = "table_absent"
+            requires_direct_recheck = False
+
         return {
             "migration_version": GAP007_VERSION,
             "status": status,
             "migration_applied": recorded,
+            "migration_record_exists": recorded,
             "tables_present": tables,
+            "tables_present_count": present_count,
+            "tables_total": total_count,
+            "tables_absent": total_count > 0 and present_count == 0,
             "rls_enabled": rls,
             "cohort_tables": cohort,
-            "postgrest_404_cause": "not_observable_via_direct_sql",
+            "postgrest_404_cause": postgrest_404_cause,
+            "rest_exposure_recheck_required": True,
             "runtime_graceful_degradation": "static_verified",
-            "requires_direct_recheck": True,
+            "requires_direct_recheck": requires_direct_recheck,
         }
     return {
         "migration_version": GAP007_VERSION,
         "status": "database_access_unavailable",
         "migration_applied": None,
+        "migration_record_exists": None,
         "tables_present": None,
+        "tables_present_count": None,
+        "tables_total": None,
+        "tables_absent": None,
         "rls_enabled": None,
         "cohort_tables": None,
         "postgrest_404_cause": None,
+        "rest_exposure_recheck_required": True,
         "runtime_graceful_degradation": "static_verified",
         "requires_direct_recheck": True,
     }
@@ -475,9 +515,14 @@ def migration_status_json(gap007):
                 "migration_version": GAP007_VERSION,
                 "status": "database_access_unavailable",
                 "migration_version_recorded": None,
+                "migration_record_exists": None,
                 "tables_present": None,
+                "tables_present_count": None,
+                "tables_total": None,
+                "tables_absent": None,
                 "rls_enabled": None,
                 "postgrest_404_cause": None,
+                "rest_exposure_recheck_required": True,
                 "runtime_graceful_degradation": None,
                 "observation_source": "static (no direct database access)",
             },
@@ -488,9 +533,14 @@ def migration_status_json(gap007):
             "migration_version": gap007["migration_version"],
             "status": gap007["status"],
             "migration_version_recorded": gap007["migration_applied"],
+            "migration_record_exists": gap007["migration_record_exists"],
             "tables_present": gap007["tables_present"],
+            "tables_present_count": gap007["tables_present_count"],
+            "tables_total": gap007["tables_total"],
+            "tables_absent": gap007["tables_absent"],
             "rls_enabled": gap007["rls_enabled"],
             "postgrest_404_cause": gap007["postgrest_404_cause"],
+            "rest_exposure_recheck_required": gap007["rest_exposure_recheck_required"],
             "runtime_graceful_degradation": gap007["runtime_graceful_degradation"],
             "observation_source": "observed_database",
         },
@@ -555,13 +605,78 @@ def build_legacy_summary(gap007):
     }
 
 
-def build_api_private_observation():
+def read_api_private_relations():
+    """Read the api_private relation inventory from the observed 01 output.
+
+    Returns rows as [schema_name, relation_name, relation_type, owner, rls_enabled].
+    Empty when not observed or when the block is absent (e.g. mock fixtures).
+    """
+    if not OBSERVED:
+        return []
+    blocks = read_blocks(os.path.join(OUTDIR, "raw", "01_schema_inventory.csv"),
+                         [HEADER_RELATIONS, HEADER_SCHEMA_PRESENCE, HEADER_API_PRIVATE])
+    rows = []
+    for header_i, data in blocks:
+        if header_i != HEADER_API_PRIVATE:
+            continue
+        for r in data:
+            d = dict(zip(header_i, r))
+            rows.append([d.get("schema_name"), d.get("relation_name"),
+                         d.get("relation_type"), d.get("owner"), d.get("rls_enabled")])
+    return rows
+
+
+def build_api_private_observation(api_private_relations, priv_rows):
     db_verified = OBSERVED and API_PRIVATE_DB == "observed"
-    return {
-        "schema": "campcareer.canonical-read-only-observability.api_private_observation.v1",
-        "observation_type": "repository_static_scan",
-        "database_observation_status": "verified" if db_verified else "unavailable",
-        "repository_static_scan_status": "complete",
+    views = sorted({r[1] for r in api_private_relations if r[2] == "view"})
+    matviews = sorted({r[1] for r in api_private_relations if r[2] == "materialized_view"})
+    relations = sorted({r[1] for r in api_private_relations})
+    au_views = [v for v in views if v.startswith("au_")]
+    au_only = bool(views) and len(au_views) == len(views)
+
+    access = {role: {"USAGE": None, "SELECT": None, "INSERT": None, "UPDATE": None, "DELETE": None}
+              for role in ROLES}
+    for r in priv_rows:
+        if r[0] != "api_private" or r[4] != "observed":
+            continue
+        role, priv, has = r[1], r[2], r[3]
+        if role not in access:
+            continue
+        if priv == "USAGE":
+            access[role]["USAGE"] = truthy(has)
+        else:
+            n = to_int(has)
+            access[role][priv] = n if n is not None else 0
+
+    db_observation = {
+        "status": "observed" if db_verified else "unavailable",
+        "schema_present": bool(relations) if db_verified else None,
+        "relation_list_available": bool(relations),
+        "view_count": len(views),
+        "materialized_view_count": len(matviews),
+        "views": views,
+        "materialized_views": matviews,
+        "relation_list_source": "pg_catalog.pg_class via read-only psql (01_schema_inventory.sql)",
+        "country_coverage": {
+            "au_views": len(au_views),
+            "non_au_views": len(views) - len(au_views),
+            "au_only": au_only,
+            "note": ("All observed api_private views are au_* prefixed (AU read model)."
+                     if au_only else "Non-au_* views present; country scope requires manual review."),
+        },
+        "role_access": {
+            role: {
+                "USAGE": "granted" if access[role]["USAGE"] is True else "not_granted",
+                "SELECT": access[role]["SELECT"],
+                "INSERT": access[role]["INSERT"],
+                "UPDATE": access[role]["UPDATE"],
+                "DELETE": access[role]["DELETE"],
+            }
+            for role in ROLES
+        },
+    }
+    static = {
+        "status": "complete",
         "browser_direct_access_found": False,
         "client_schema_api_private_calls": 0,
         "service_role_client_exposure_found": False,
@@ -569,8 +684,8 @@ def build_api_private_observation():
             "Static analysis only: the single api_private consumer imports 'server-only' and uses "
             "supabaseAdmin; no browser path calls schema('api_private'). Migrations "
             "20260802123403 / 20260802123729 / 20260802123754 revoke api_private defaults from "
-            "service_role and PUBLIC. No live privilege or REST verification was performed."),
-        "known_read_models": [
+            "service_role and PUBLIC."),
+        "known_read_models_from_repository": [
             "api_private.au_nursing_programme_catalog_v1",
             "api_private.au_nursing_programme_fees_v1",
             "api_private.au_nursing_programme_requirements_v1",
@@ -582,14 +697,21 @@ def build_api_private_observation():
             "client": "supabaseAdmin",
             "browser_path": False,
         },
-        "country_coverage": {
-            "read_models": "au_nursing_* v1 views (AU nursing programme compare)",
-            "note": "No other country read models were found in api_private during the static scan.",
+    }
+    return {
+        "schema": "campcareer.canonical-read-only-observability.api_private_observation.v1",
+        "observation_type": "combined_database_and_repository_scan",
+        "database_observation": db_observation,
+        "repository_static_scan": static,
+        "postgrest_exposure": {
+            "live_test_performed": False,
+            "rest_exposure_recheck_required": True,
+            "note": "No live PostgREST request was issued during this run. REST exposure of api_private views is NOT verified and requires a separate check.",
         },
         "limitations": [
-            "Repository static scan only; no live PostgREST exposure test was performed.",
-            "database_observation_status reflects whether a read-only psql connection was verified in this run, not a REST exposure test.",
-            "Requires direct re-check after a DB credential is provided.",
+            "database_observation reflects read-only psql metadata (pg_catalog), not live REST behaviour.",
+            "The repository static scan covers the single known api_private consumer; it does not prove absence of other browser or service-role client paths.",
+            "The DB relation list may include views not referenced by the repository (e.g. au_program_* v1); the static scan lists only consumer-referenced read models.",
         ],
     }
 
@@ -654,9 +776,9 @@ def build_legacy_country_rows():
 
 
 # ---------------------------------------------------------------------------
-# observation_summary.json + summary.json (byte-identical)
+# observation_summary.json (v1) and legacy summary.json (summary.v1)
 # ---------------------------------------------------------------------------
-def build_summary(counters, gap007, observed):
+def build_summary(counters, gap007, observed, country_rows):
     if MODE == "no_access":
         verdict = "B. Conditional Pass"
         reason = ("Reusable read-only observability tooling, SQL files and artifact schema are "
@@ -697,7 +819,7 @@ def build_summary(counters, gap007, observed):
         "gap007": {"status": gap007["status"]},
     }
 
-    return {
+    summary = {
         "schema": "campcareer.canonical-read-only-audit.observation_summary.v1",
         "verdict": verdict,
         "verdict_reason": reason,
@@ -712,6 +834,24 @@ def build_summary(counters, gap007, observed):
         "privilege_or_exposure_changes": 0,
         "exit_code": exit_code,
     }
+
+    if observed:
+        uk_count = None
+        for r in country_rows:
+            if r[0] == "countries" and r[1] == "UK":
+                uk_count = to_int(r[2])
+                break
+        summary["country_code_policy_gap"] = {
+            "code": "UK",
+            "canonical_database_rows": uk_count,
+            "status": "country_code_policy_gap",
+            "normalized_to_gb": False,
+            "note": ("core.countries stores a row with code 'UK' (United Kingdom) while the "
+                     "five-country programmatic set uses 'GB'. This artifact records the observed "
+                     "database state as-is and does NOT claim the row was normalized to GB."),
+        }
+
+    return summary
 
 
 schema_sections_observed = False
@@ -728,6 +868,7 @@ def main():
     rel_header, rel_rows = build_relationship_checks()
     priv_header, priv_rows = build_privilege_audit()
     gap007 = build_gap007()
+    api_private_relations = read_api_private_relations()
 
     # Official canonical_* artifacts.
     write_csv(os.path.join(OUTDIR, "canonical_schema_inventory.csv"), schema_header, schema_rows)
@@ -778,11 +919,12 @@ def main():
     write_json(os.path.join(OUTDIR, "gap007_verification.json"),
                {"schema": "campcareer.canonical-read-only-audit.gap007_verification.v1",
                 "gap007": gap007})
-    write_json(os.path.join(OUTDIR, "api_private_observation.json"), build_api_private_observation())
+    write_json(os.path.join(OUTDIR, "api_private_observation.json"),
+               build_api_private_observation(api_private_relations, priv_rows))
 
     counters = compute_counters(schema_rows, schema_observed, table_rows, tables_counted,
                                 country_rows, rel_rows, priv_rows, gap007)
-    summary = build_summary(counters, gap007, OBSERVED)
+    summary = build_summary(counters, gap007, OBSERVED, country_rows)
     write_json(os.path.join(OUTDIR, "observation_summary.json"), summary)
     write_legacy_summary(os.path.join(OUTDIR, "summary.json"), build_legacy_summary(gap007))
 

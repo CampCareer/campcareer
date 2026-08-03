@@ -1,6 +1,6 @@
 {
   "schema": "campcareer.canonical-read-only-audit.metadata.v1",
-  "observation_date": "2026-08-03T13:27:46Z",
+  "observation_date": "2026-08-03T13:56:44Z",
   "direct_connection_method": "psql",
   "connection_used": true,
   "transaction_read_only_verified": true,

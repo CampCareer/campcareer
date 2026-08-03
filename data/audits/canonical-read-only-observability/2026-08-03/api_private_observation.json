@@ -1,31 +1,84 @@
 {
   "schema": "campcareer.canonical-read-only-observability.api_private_observation.v1",
-  "observation_type": "repository_static_scan",
-  "database_observation_status": "verified",
-  "repository_static_scan_status": "complete",
-  "browser_direct_access_found": false,
-  "client_schema_api_private_calls": 0,
-  "service_role_client_exposure_found": false,
-  "service_role_client_exposure_note": "Static analysis only: the single api_private consumer imports 'server-only' and uses supabaseAdmin; no browser path calls schema('api_private'). Migrations 20260802123403 / 20260802123729 / 20260802123754 revoke api_private defaults from service_role and PUBLIC. No live privilege or REST verification was performed.",
-  "known_read_models": [
-    "api_private.au_nursing_programme_catalog_v1",
-    "api_private.au_nursing_programme_fees_v1",
-    "api_private.au_nursing_programme_requirements_v1",
-    "api_private.au_nursing_programme_evidence_v1"
-  ],
-  "consumer": {
-    "file": "src/lib/data-foundation/compare-adapters/au-nursing-programmes-repository.ts",
-    "import": "server-only",
-    "client": "supabaseAdmin",
-    "browser_path": false
+  "observation_type": "combined_database_and_repository_scan",
+  "database_observation": {
+    "status": "observed",
+    "schema_present": true,
+    "relation_list_available": true,
+    "view_count": 11,
+    "materialized_view_count": 0,
+    "views": [
+      "au_nursing_programme_accreditations_v1",
+      "au_nursing_programme_catalog_v1",
+      "au_nursing_programme_evidence_v1",
+      "au_nursing_programme_fees_v1",
+      "au_nursing_programme_requirements_v1",
+      "au_program_catalog_v1",
+      "au_program_institution_directory_v1",
+      "au_program_map_summary_v1",
+      "au_program_occupation_courses_v1",
+      "au_program_page_facts_v1",
+      "au_program_route_options_v1"
+    ],
+    "materialized_views": [],
+    "relation_list_source": "pg_catalog.pg_class via read-only psql (01_schema_inventory.sql)",
+    "country_coverage": {
+      "au_views": 11,
+      "non_au_views": 0,
+      "au_only": true,
+      "note": "All observed api_private views are au_* prefixed (AU read model)."
+    },
+    "role_access": {
+      "anon": {
+        "USAGE": "not_granted",
+        "SELECT": 0,
+        "INSERT": 0,
+        "UPDATE": 0,
+        "DELETE": 0
+      },
+      "authenticated": {
+        "USAGE": "not_granted",
+        "SELECT": 0,
+        "INSERT": 0,
+        "UPDATE": 0,
+        "DELETE": 0
+      },
+      "service_role": {
+        "USAGE": "granted",
+        "SELECT": 11,
+        "INSERT": 0,
+        "UPDATE": 0,
+        "DELETE": 0
+      }
+    }
   },
-  "country_coverage": {
-    "read_models": "au_nursing_* v1 views (AU nursing programme compare)",
-    "note": "No other country read models were found in api_private during the static scan."
+  "repository_static_scan": {
+    "status": "complete",
+    "browser_direct_access_found": false,
+    "client_schema_api_private_calls": 0,
+    "service_role_client_exposure_found": false,
+    "service_role_client_exposure_note": "Static analysis only: the single api_private consumer imports 'server-only' and uses supabaseAdmin; no browser path calls schema('api_private'). Migrations 20260802123403 / 20260802123729 / 20260802123754 revoke api_private defaults from service_role and PUBLIC.",
+    "known_read_models_from_repository": [
+      "api_private.au_nursing_programme_catalog_v1",
+      "api_private.au_nursing_programme_fees_v1",
+      "api_private.au_nursing_programme_requirements_v1",
+      "api_private.au_nursing_programme_evidence_v1"
+    ],
+    "consumer": {
+      "file": "src/lib/data-foundation/compare-adapters/au-nursing-programmes-repository.ts",
+      "import": "server-only",
+      "client": "supabaseAdmin",
+      "browser_path": false
+    }
+  },
+  "postgrest_exposure": {
+    "live_test_performed": false,
+    "rest_exposure_recheck_required": true,
+    "note": "No live PostgREST request was issued during this run. REST exposure of api_private views is NOT verified and requires a separate check."
   },
   "limitations": [
-    "Repository static scan only; no live PostgREST exposure test was performed.",
-    "database_observation_status reflects whether a read-only psql connection was verified in this run, not a REST exposure test.",
-    "Requires direct re-check after a DB credential is provided."
+    "database_observation reflects read-only psql metadata (pg_catalog), not live REST behaviour.",
+    "The repository static scan covers the single known api_private consumer; it does not prove absence of other browser or service-role client paths.",
+    "The DB relation list may include views not referenced by the repository (e.g. au_program_* v1); the static scan lists only consumer-referenced read models."
   ]
 }

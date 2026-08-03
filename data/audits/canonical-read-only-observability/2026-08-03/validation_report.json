@@ -1,79 +1,19 @@
 {
   "schema": "campcareer.canonical-read-only-observability.validation_report.v1",
-  "task": "10.7A-1 Canonical Read-Only Observability Runner Correction",
-  "observation_date": "2026-08-03T13:27:46Z",
-  "git": {
-    "branch": "audit/canonical-read-only-observability-v1",
-    "commit": "ac7deb652b6dd658ff2e58149cb405841aa09019"
-  },
-  "runner_shell_syntax": {
-    "status": "pass",
-    "detail": ""
-  },
-  "sql_forbidden_scan": {
-    "status": "pass",
-    "detail": "0 forbidden statements across: 01_schema_inventory.sql 02_table_counts.sql 03_country_entity_counts.sql 04_relationship_checks.sql 05_privilege_audit.sql 06_migration_status.sql"
-  },
-  "identifier_validation_test": {
-    "status": "pass",
-    "detail": "regex ^[a-z_][a-z0-9_]*$ accepted/failed expected cases"
-  },
-  "mode_tests": {
-    "no_access": {
-      "exit_code": "2",
-      "status": "pass"
-    },
-    "mocked_success": {
-      "exit_code": "0",
-      "status": "pass"
-    },
-    "mocked_partial": {
-      "exit_code": "3",
-      "status": "pass"
-    },
-    "mocked_failure": {
-      "exit_code": "1",
-      "status": "pass"
-    }
-  },
-  "checksum_verification": {
-    "status": "pass",
-    "detail": "SHA256SUMS.txt verified for all four output dirs"
-  },
-  "json_parse": {
-    "status": "pass",
-    "detail": "all JSON files parse"
-  },
-  "csv_consistency": {
-    "status": "pass",
-    "detail": "headers/row counts verified"
-  },
-  "secret_scan": {
-    "status": "pass",
-    "detail": "no connection-string credentials or JWT-like tokens"
-  },
-  "typecheck": {
-    "status": "pass",
-    "detail": "exit 0"
-  },
-  "lint": {
-    "status": "pass",
-    "detail": "exit 0"
-  },
-  "test": {
-    "status": "pass",
-    "detail": "exit 0"
-  },
-  "build": {
-    "status": "pass",
-    "detail": "exit 0"
-  },
-  "git_diff_check": {
-    "status": "pass",
-    "detail": "git diff --check clean"
-  },
+  "task": "10.7A-2 Credentialed Canonical Read-Only Observation",
+  "report_kind": "actual_database_observation",
+  "report_scope": "Real credentialed read-only psql observation of the canonical schemas. Tooling-level 4-mode harness results are recorded separately in validation_report.tooling.json.",
+  "observation_date": "2026-08-03T13:56:44Z",
+  "git": { "branch": "audit/canonical-read-only-observability-v1", "commit": "ba05bfd5eac265954e25044a86229167cd1e8a92" },
+  "supabase_project_ref": "babylusxcknjerxtepoc",
+  "runner": { "script": "run-canonical-read-only-audit.sh", "version": "1.1.0", "psql_version": "18" },
+  "direct_database_access": "available",
+  "canonical_database_observed": true,
+  "transaction_read_only_verified": true,
+  "sql_files": { "01_schema_inventory.sql": "ok", "02_table_counts.sql": "ok", "03_country_entity_counts.sql": "ok", "04_relationship_checks.sql": "ok", "05_privilege_audit.sql": "ok", "06_migration_status.sql": "ok" },
+  "exit_code": 0,
   "production_write_count": 0,
   "migration_count": 0,
   "privilege_change_count": 0,
-  "database_impact_note": "Observability-only: no DB writes, no migrations, no privilege or exposure changes."
+  "database_impact_note": "Observability-only: no DB writes, no migrations, no privilege or exposure changes. Every SQL file executed inside a READ ONLY transaction and rolled back."
 }

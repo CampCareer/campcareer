@@ -2,8 +2,9 @@
   "schema": "campcareer.canonical-read-only-audit.gap007_verification.v1",
   "gap007": {
     "migration_version": "20260712121724",
-    "status": "observed_from_database",
+    "status": "migration_applied_tables_missing",
     "migration_applied": true,
+    "migration_record_exists": true,
     "tables_present": [
       {
         "table": "concept_career_mappings",
@@ -42,6 +43,9 @@
         "present": false
       }
     ],
+    "tables_present_count": 0,
+    "tables_total": 9,
+    "tables_absent": true,
     "rls_enabled": [],
     "cohort_tables": [
       {
@@ -52,8 +56,9 @@
         "taxonomy_nodes": ""
       }
     ],
-    "postgrest_404_cause": "not_observable_via_direct_sql",
+    "postgrest_404_cause": "table_absent",
+    "rest_exposure_recheck_required": true,
     "runtime_graceful_degradation": "static_verified",
-    "requires_direct_recheck": true
+    "requires_direct_recheck": false
   }
 }

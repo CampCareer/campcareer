@@ -94,3 +94,15 @@ ingest,postgres,44,0,0
 labour,postgres,1,0,0
 reporting,postgres,14,0,0
 taxonomy,postgres,5,0,0
+schema_name,relation_name,relation_type,owner,rls_enabled
+api_private,au_nursing_programme_accreditations_v1,view,postgres,f
+api_private,au_nursing_programme_catalog_v1,view,postgres,f
+api_private,au_nursing_programme_evidence_v1,view,postgres,f
+api_private,au_nursing_programme_fees_v1,view,postgres,f
+api_private,au_nursing_programme_requirements_v1,view,postgres,f
+api_private,au_program_catalog_v1,view,postgres,f
+api_private,au_program_institution_directory_v1,view,postgres,f
+api_private,au_program_map_summary_v1,view,postgres,f
+api_private,au_program_occupation_courses_v1,view,postgres,f
+api_private,au_program_page_facts_v1,view,postgres,f
+api_private,au_program_route_options_v1,view,postgres,f

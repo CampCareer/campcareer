@@ -12,7 +12,7 @@
     "failed_count_queries": 0,
     "privilege_risk_count": 0,
     "relationship_gap_count": 2,
-    "gap007_status": "observed_from_database",
+    "gap007_status": "migration_applied_tables_missing",
     "transaction_read_only": "true"
   },
   "sections": {
@@ -29,11 +29,18 @@
       "status": "observed"
     },
     "gap007": {
-      "status": "observed_from_database"
+      "status": "migration_applied_tables_missing"
     }
   },
   "database_write_operations": 0,
   "migration_changes": 0,
   "privilege_or_exposure_changes": 0,
-  "exit_code": 0
+  "exit_code": 0,
+  "country_code_policy_gap": {
+    "code": "UK",
+    "canonical_database_rows": 1,
+    "status": "country_code_policy_gap",
+    "normalized_to_gb": false,
+    "note": "core.countries stores a row with code 'UK' (United Kingdom) while the five-country programmatic set uses 'GB'. This artifact records the observed database state as-is and does NOT claim the row was normalized to GB."
+  }
 }

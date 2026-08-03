@@ -16,9 +16,9 @@ core,service_role,5,0,0,0,5
 catalog,anon,0,0,0,0,10
 catalog,authenticated,0,0,0,0,10
 catalog,service_role,10,0,0,0,10
-api_private,anon,0,0,0,0,4
-api_private,authenticated,0,0,0,0,4
-api_private,service_role,4,0,0,0,4
+api_private,anon,0,0,0,0,11
+api_private,authenticated,0,0,0,0,11
+api_private,service_role,11,0,0,0,11
 
 schema_name,schema_owner,roles_with_usage
 core,postgres,"{service_role}"

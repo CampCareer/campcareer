@@ -167,6 +167,58 @@ write_checksums() {
 }
 
 # ---------------------------------------------------------------------------
+# validation_report.json (actual observation report, auto-generated).
+# Records the real credentialed read-only observation, distinct from the
+# tooling harness report (validation_report.tooling.json).
+# ---------------------------------------------------------------------------
+write_validation_report() {
+  local observed="false"
+  local exit_code="2"
+  case "$RUN_MODE" in
+    success) observed=true; exit_code=0 ;;
+    partial) observed=true; exit_code=3 ;;
+    *) return 0 ;;
+  esac
+
+  local sql_status=""
+  local f base st sep=""
+  for f in $ALLOWED_SQL_FILES; do
+    base="${f%.sql}"
+    st="ok"
+    if printf ' %s ' "$FAILED_SQL_FILES " | grep -q " $base "; then
+      st="failed"
+    fi
+    sql_status="$sql_status$sep\"$f\": \"$st\""
+    sep=", "
+  done
+
+  local ro_verified=false
+  [ "$TXN_READONLY" = true ] && ro_verified=true
+
+  cat > "$AUDIT_OUTPUT_DIR/validation_report.json" <<EOF
+{
+  "schema": "campcareer.canonical-read-only-observability.validation_report.v1",
+  "task": "10.7A-2 Credentialed Canonical Read-Only Observation",
+  "report_kind": "actual_database_observation",
+  "report_scope": "Real credentialed read-only psql observation of the canonical schemas. Tooling-level 4-mode harness results are recorded separately in validation_report.tooling.json.",
+  "observation_date": "$OBS_DATE",
+  "git": { "branch": "$GIT_BRANCH", "commit": "$GIT_SHA" },
+  "supabase_project_ref": "$PROJECT_REF",
+  "runner": { "script": "$SCRIPT_NAME", "version": "$SCRIPT_VERSION", "psql_version": "$PSQL_VERSION" },
+  "direct_database_access": "available",
+  "canonical_database_observed": $observed,
+  "transaction_read_only_verified": $ro_verified,
+  "sql_files": { $sql_status },
+  "exit_code": $exit_code,
+  "production_write_count": 0,
+  "migration_count": 0,
+  "privilege_change_count": 0,
+  "database_impact_note": "Observability-only: no DB writes, no migrations, no privilege or exposure changes. Every SQL file executed inside a READ ONLY transaction and rolled back."
+}
+EOF
+}
+
+# ---------------------------------------------------------------------------
 # Access-mode execution (only when a DB URL is provided).
 # ---------------------------------------------------------------------------
 is_valid_identifier() {
@@ -337,6 +389,7 @@ if [ "$HAS_DB" = 1 ]; then
     echo "Provide a working read-only DB credential to observe canonical state." >&2
     exit 1
   fi
+  write_validation_report
   write_checksums
   echo "Done. Artifacts in $AUDIT_OUTPUT_DIR"
   exit "$rc"

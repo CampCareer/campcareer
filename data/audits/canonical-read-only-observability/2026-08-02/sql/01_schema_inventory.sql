@@ -70,3 +70,18 @@ left join pg_catalog.pg_class c on c.relnamespace = n.oid
 where n.nspname in ('core', 'catalog', 'taxonomy', 'evidence', 'labour', 'reporting', 'ingest')
 group by n.nspname, n.nspowner
 order by n.nspname;
+
+-- 3. api_private (server-only read model) relation inventory. Separate from the
+--    canonical allowlist above so the server-only read model is observed on its
+--    own and never mixed into canonical schema counts.
+select
+  n.nspname as schema_name,
+  c.relname as relation_name,
+  case c.relkind when 'v' then 'view' when 'm' then 'materialized_view' else c.relkind::text end as relation_type,
+  pg_get_userbyid(c.relowner) as owner,
+  c.relrowsecurity as rls_enabled
+from pg_catalog.pg_namespace n
+join pg_catalog.pg_class c on c.relnamespace = n.oid
+where n.nspname = 'api_private'
+  and c.relkind in ('v', 'm')
+order by c.relname;
