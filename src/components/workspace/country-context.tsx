@@ -11,6 +11,7 @@ export type SelectedCountry = {
 type CountryContextValue = {
   selectedCountry: SelectedCountry | null
   setSelectedCountry: (country: SelectedCountry | null) => void
+  hydrated: boolean
 }
 
 const STORAGE_KEY = "campcareer:selected-country"
@@ -19,6 +20,7 @@ const CountryContext = createContext<CountryContextValue | null>(null)
 
 export function CountryProvider({ children }: { children: ReactNode }) {
   const [selectedCountry, setSelectedCountryState] = useState<SelectedCountry | null>(null)
+  const [hydrated, setHydrated] = useState(false)
 
   useEffect(() => {
     try {
@@ -26,6 +28,8 @@ export function CountryProvider({ children }: { children: ReactNode }) {
       if (raw) setSelectedCountryState(JSON.parse(raw) as SelectedCountry)
     } catch {
       // Ignore corrupted or blocked storage.
+    } finally {
+      setHydrated(true)
     }
   }, [])
 
@@ -43,7 +47,7 @@ export function CountryProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <CountryContext.Provider value={{ selectedCountry, setSelectedCountry }}>
+    <CountryContext.Provider value={{ selectedCountry, setSelectedCountry, hydrated }}>
       {children}
     </CountryContext.Provider>
   )
