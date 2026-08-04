@@ -1,4 +1,4 @@
-import { CountriesExplorer } from "./countries-explorer"
+import { CountriesRouteShell } from "./countries-route-shell"
 
 export const metadata = {
   title: "Countries",
@@ -13,5 +13,5 @@ export default async function CountriesPage({
 }) {
   const sp = await searchParams
   const q = typeof sp.q === "string" ? sp.q : ""
-  return <CountriesExplorer initialQuery={q} />
+  return <CountriesRouteShell initialQuery={q} />
 }
