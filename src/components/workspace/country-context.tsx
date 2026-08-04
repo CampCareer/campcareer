@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react"
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react"
 
 export type SelectedCountry = {
   code: string
@@ -33,7 +33,7 @@ export function CountryProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
-  function setSelectedCountry(country: SelectedCountry | null) {
+  const setSelectedCountry = useCallback((country: SelectedCountry | null) => {
     setSelectedCountryState(country)
     try {
       if (country) {
@@ -44,7 +44,7 @@ export function CountryProvider({ children }: { children: ReactNode }) {
     } catch {
       // Ignore storage errors (private mode etc.).
     }
-  }
+  }, [])
 
   return (
     <CountryContext.Provider value={{ selectedCountry, setSelectedCountry, hydrated }}>
