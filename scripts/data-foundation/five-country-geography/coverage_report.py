@@ -54,7 +54,7 @@ def build_report(country_results, package_date):
         "schema": SCHEMA,
         "generated_at": now_utc_iso(),
         "package_date": package_date,
-        "selection_policy": {"limit": 100, "per_region_cap": 20},
+        "selection_policy": {"limit": 100, "per_region_cap": None},
         "totals": totals,
         "countries": countries,
     }
@@ -67,9 +67,8 @@ def render_markdown(report):
         "Package date: %s  " % report["package_date"],
         "Generated: %s  " % report["generated_at"],
         "",
-        "Selection policy: top-%d cities per country, %d-city per-region cap."
-        % (report["selection_policy"]["limit"],
-           report["selection_policy"]["per_region_cap"]),
+        "Selection policy: top-%d cities per country (population descending, no per-region cap)."
+        % report["selection_policy"]["limit"],
         "",
         "| Country | status | regions | cities (total) | cities (selected) | "
         "candidates | sources |",
@@ -103,8 +102,12 @@ def render_markdown(report):
             lines.append("- `%s`" % sid)
         lines.append("")
         dist = c["selection"].get("region_distribution", {})
-        lines.append("City selection by region (cap %d):" %
-                     report["selection_policy"]["per_region_cap"])
+        cap = report["selection_policy"].get("per_region_cap")
+        if cap:
+            lines.append("City selection by region (cap %d):" % cap)
+        else:
+            lines.append("City selection by population (top-%d):"
+                         % report["selection_policy"]["limit"])
         for region, d in sorted(dist.items()):
             lines.append("- %s: %d/%d selected" % (region, d["selected"],
                                                    d["available"]))

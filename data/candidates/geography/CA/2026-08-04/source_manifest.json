@@ -37,7 +37,7 @@
       "checksum": "sha256:79a6b5022e33f2c89ead0356bf9b51c645b47684f643e916700e97842a69dbb2",
       "file_size": 40389252,
       "raw_storage_tier": "t2",
-      "notes": "2021 Census Subdivision cartographic boundary file; used for CSD polygon centroids.",
+      "notes": "2021 Census Subdivision cartographic boundary file; used for CSD polygon centroids. Seed-only: no stable public download URL; archived raw file required (provide via seed_dir).",
       "retrieved_at": "2026-08-04T00:00:00Z",
       "reviewed_at": "2026-08-04T00:00:00Z",
       "parser_version": "1.0.0",

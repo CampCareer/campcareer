@@ -90,7 +90,7 @@ def build_country_manifest(cc, retrieval, retrieved_at):
 
 
 def run_country(cc, raw_dir, retrieved_at, seed_dir=None, out_dir=None,
-                force=False, limit=100, per_region_cap=20):
+                 force=False, limit=100):
     """Run the full pipeline for one country; returns a build summary dict."""
     retrieval = ensure_raw(raw_dir, seed_dir=seed_dir, force=force)
     missing = [sid for sid, info in retrieval.items() if not info["ok"]]
@@ -100,7 +100,8 @@ def run_country(cc, raw_dir, retrieved_at, seed_dir=None, out_dir=None,
 
     parsed = PARSERS[cc](raw_dir)
 
-    records, selection = mapper.build_country_records(parsed, cc, retrieved_at)
+    records, selection = mapper.build_country_records(parsed, cc,
+                                                         retrieved_at)
 
     manifest_dir = os.path.join(raw_dir, ".run", cc)
     os.makedirs(manifest_dir, exist_ok=True)

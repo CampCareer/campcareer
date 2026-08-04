@@ -2,9 +2,7 @@
 
 Selection rule (deterministic, documented):
   cities are ordered by population descending (ties broken by source key);
-  each parent region receives up to `per_region_cap` guaranteed seats so
-  smaller regions are represented, then the remaining seats are filled by
-  population. The result is capped at `limit` cities total.
+  the top `limit` cities are selected with no per-region cap.
 
 The mapper also converts parsed entities (see parsers._common.entity) into
 10.7B candidate envelope records. Payload fields are the geography candidate
@@ -27,37 +25,30 @@ ENTITY_PAYLOAD_FIELDS = [
 ]
 
 
-def select_top_cities(cities, limit=100, per_region_cap=20):
-    """Select up to `limit` cities with per-region guarantees.
+def select_top_cities(cities, limit=100):
+    """Select the top `limit` cities by population descending.
 
-    Returns (selected, summary) where summary describes the region
-    distribution for the coverage report.
+    Returns (selected, summary) where summary describes the selection
+    profile and region distribution for the coverage report.
     """
     eligible = [c for c in cities if c.get("population") is not None]
     eligible.sort(key=lambda c: (-(c["population"] or 0),
                                  c.get("source_record_key") or ""))
 
+    selected = OrderedDict()
+    for c in eligible[:limit]:
+        selected[c["source_record_key"]] = c
+
+    ordered = [c for c in eligible if c["source_record_key"] in selected]
+
     by_region = OrderedDict()
     for c in eligible:
         by_region.setdefault(c.get("parent_region_code"), []).append(c)
 
-    selected = OrderedDict()
-    for region, group in by_region.items():
-        for c in group[:per_region_cap]:
-            selected[c["source_record_key"]] = c
-    remaining = limit - len(selected)
-    if remaining > 0:
-        for c in eligible:
-            if len(selected) >= limit:
-                break
-            if c["source_record_key"] not in selected:
-                selected[c["source_record_key"]] = c
-
-    ordered = [c for c in eligible if c["source_record_key"] in selected][:limit]
-
     summary = {
+        "selection_profile": "population_descending_top_100",
         "limit": limit,
-        "per_region_cap": per_region_cap,
+        "per_region_cap": None,
         "eligible_cities": len(eligible),
         "selected_cities": len(ordered),
         "region_distribution": {
@@ -72,6 +63,18 @@ def select_top_cities(cities, limit=100, per_region_cap=20):
     return ordered, summary
 
 
+def _resolve_parent(city, region_codes, country_code):
+    """If a city's parent_region_code is not an emitted region, reassign
+    to the country code so the parent reference is always resolvable."""
+    parent = city.get("parent_region_code")
+    if parent is not None and parent not in region_codes:
+        city = dict(city)
+        city["parent_region_code"] = country_code
+        city["parent_region_name"] = None
+        city["parent_join_method"] = "country_fallback"
+    return city
+
+
 def entity_to_payload(entity_dict, place_type, selection_rank=None):
     """Build the geography payload dict from a parsed entity dict."""
     payload = {"place_type": place_type}
@@ -82,10 +85,35 @@ def entity_to_payload(entity_dict, place_type, selection_rank=None):
     return payload
 
 
+def _build_evidence(entity_dict, place_type, parent_region_codes):
+    """Build evidence dict preserving source-side identifiers and
+    transformation information."""
+    evidence = {
+        "source_id": entity_dict.get("source_id"),
+        "source_record_key": entity_dict.get("source_record_key"),
+        "coordinate_derivation": entity_dict.get("coordinate_derivation"),
+    }
+    if place_type == "city":
+        evidence["parent_region_code_original"] = entity_dict.get("parent_region_code")
+        evidence["parent_join_method_original"] = entity_dict.get("parent_join_method")
+        evidence["parent_resolved"] = entity_dict.get("parent_region_code") not in parent_region_codes
+    if place_type == "region":
+        evidence["centroid_derivation"] = entity_dict.get("coordinate_derivation")
+    if place_type == "country":
+        evidence["population_source"] = entity_dict.get("source_id")
+    return evidence
+
+
 def make_record(entity_dict, place_type, country_code, retrieved_at,
-                selection_rank=None, evidence=None):
-    """Create a raw candidate envelope record for the framework builder."""
+                region_codes=None, selection_rank=None):
+    """Create a raw candidate envelope record for the framework builder.
+
+    reviewed_at is null (not set) until human review occurs.
+    """
     observed = entity_dict.get("population_reference_date")
+    if region_codes is None:
+        region_codes = set()
+    evidence = _build_evidence(entity_dict, place_type, region_codes)
     return {
         "source_id": entity_dict["source_id"],
         "source_record_key": entity_dict["source_record_key"],
@@ -93,11 +121,11 @@ def make_record(entity_dict, place_type, country_code, retrieved_at,
         "data_domain": DATA_DOMAIN,
         "observed_at": ("%sT00:00:00Z" % observed) if observed else retrieved_at,
         "retrieved_at": retrieved_at,
-        "reviewed_at": retrieved_at,
+        "reviewed_at": None,
         "parser_version": PARSER_VERSION,
         "candidate_schema_version": CANDIDATE_SCHEMA_VERSION,
         "payload": entity_to_payload(entity_dict, place_type, selection_rank),
-        "evidence": evidence or {},
+        "evidence": evidence,
     }
 
 
@@ -110,13 +138,19 @@ def build_country_records(parsed, country_code, retrieved_at):
     country = parsed.get("country")
     if country is not None:
         records.append(make_record(country, "country", country_code,
-                                   retrieved_at))
-    for region in parsed.get("regions", []):
+                                     retrieved_at))
+    regions = parsed.get("regions", [])
+    region_codes = {r["statistical_code"] for r in regions if r.get("statistical_code")}
+    for region in regions:
         records.append(make_record(region, "region", country_code,
-                                   retrieved_at))
+                                     retrieved_at,
+                                     region_codes=region_codes))
 
     selected, summary = select_top_cities(parsed.get("cities", []))
     for rank, city in enumerate(selected, 1):
-        records.append(make_record(city, "city", country_code, retrieved_at,
-                                   selection_rank=rank))
+        city = _resolve_parent(city, region_codes, country_code)
+        records.append(make_record(city, "city", country_code,
+                                     retrieved_at,
+                                     region_codes=region_codes,
+                                     selection_rank=rank))
     return records, summary

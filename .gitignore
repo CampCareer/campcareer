@@ -83,3 +83,4 @@ playwright-report/
 
 # five-country geography pipeline raw artifacts
 scripts/data-foundation/five-country-geography/.raw/
+scripts/data-foundation/five-country-geography/seed/

@@ -3,7 +3,7 @@
   "task": "10.7B Common Source Ingestion Framework v1",
   "framework_version": "1.0.0",
   "candidate_schema_version": "1.0.0",
-  "generated_at": "2026-08-04T08:58:19Z",
+  "generated_at": "2026-08-04T10:18:11Z",
   "package_dir": "data/candidates/geography/CA/2026-08-04",
   "overall_status": "valid",
   "record_counts": {
