@@ -1,0 +1,134 @@
+{
+  "schema": "campcareer.common-source-ingestion.validation_report.v1",
+  "task": "10.7B Common Source Ingestion Framework v1",
+  "framework_version": "1.0.0",
+  "candidate_schema_version": "1.0.0",
+  "generated_at": "2026-08-04T09:02:14Z",
+  "package_dir": "data/candidates/geography/GB/2026-08-04",
+  "overall_status": "valid",
+  "record_counts": {
+    "valid": 110
+  },
+  "rules": [
+    {
+      "rule_id": "manifest_valid",
+      "rule_name": "Manifest validation",
+      "status": "pass",
+      "detail": "6/6 source manifests valid",
+      "records_checked": null,
+      "fail_count": 0,
+      "warn_count": 0
+    },
+    {
+      "rule_id": "file_checksum",
+      "rule_name": "File checksum validation",
+      "status": "pass",
+      "detail": "6/6 source checksums format-valid (raw files not stored)",
+      "records_checked": null,
+      "fail_count": 0,
+      "warn_count": 0
+    },
+    {
+      "rule_id": "schema_valid",
+      "rule_name": "Schema validation",
+      "status": "pass",
+      "detail": "per-record rule",
+      "records_checked": 110,
+      "fail_count": 0,
+      "warn_count": 0
+    },
+    {
+      "rule_id": "required_fields",
+      "rule_name": "Required field validation",
+      "status": "pass",
+      "detail": "per-record rule",
+      "records_checked": 110,
+      "fail_count": 0,
+      "warn_count": 0
+    },
+    {
+      "rule_id": "country_code_normalization",
+      "rule_name": "Country code normalization",
+      "status": "pass",
+      "detail": "per-record rule",
+      "records_checked": 110,
+      "fail_count": 0,
+      "warn_count": 0
+    },
+    {
+      "rule_id": "date_valid",
+      "rule_name": "Date validation",
+      "status": "pass",
+      "detail": "per-record rule",
+      "records_checked": 110,
+      "fail_count": 0,
+      "warn_count": 0
+    },
+    {
+      "rule_id": "source_lineage",
+      "rule_name": "Source lineage validation",
+      "status": "pass",
+      "detail": "per-record rule",
+      "records_checked": 110,
+      "fail_count": 0,
+      "warn_count": 0
+    },
+    {
+      "rule_id": "duplicate_source_key",
+      "rule_name": "Duplicate source key validation",
+      "status": "pass",
+      "detail": "per-record rule",
+      "records_checked": 110,
+      "fail_count": 0,
+      "warn_count": 0
+    },
+    {
+      "rule_id": "candidate_identity",
+      "rule_name": "Candidate identity validation",
+      "status": "pass",
+      "detail": "per-record rule",
+      "records_checked": 110,
+      "fail_count": 0,
+      "warn_count": 0
+    },
+    {
+      "rule_id": "null_unknown",
+      "rule_name": "Null/unknown handling",
+      "status": "pass",
+      "detail": "per-record rule",
+      "records_checked": 110,
+      "fail_count": 0,
+      "warn_count": 0
+    },
+    {
+      "rule_id": "import_safety",
+      "rule_name": "Import safety validation",
+      "status": "pass",
+      "detail": "per-record rule",
+      "records_checked": 110,
+      "fail_count": 0,
+      "warn_count": 0
+    }
+  ],
+  "duplicate_review_count": 0,
+  "unresolved_identity_count": 0,
+  "uk_input_count": 0,
+  "uk_output_canonical_count": 0,
+  "production_database_writes": 0,
+  "migration_count": 0,
+  "privilege_change_count": 0,
+  "canonical_import_count": 0,
+  "fuzzy_match_count": 0,
+  "arbitrary_uuid_count": 0,
+  "null_to_zero_conversion_count": 0,
+  "uk_new_canonical_code_count": 0,
+  "raw_large_file_in_git": 0,
+  "country_code_database_compatibility": "blocked_pending_uk_to_gb_resolution",
+  "notes": [
+    "Unknown values are preserved as null; no 0/empty-string substitution.",
+    "UK is an input alias only; every UK input normalizes to GB and the raw source value is kept in evidence.",
+    "Duplicate candidates are never auto-deleted; they are queued for manual review.",
+    "No fuzzy matching, no auto-merge, no arbitrary canonical UUIDs.",
+    "Canonical import is NOT part of this framework; import_status is always candidate_only."
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "schema": "campcareer.common-source-ingestion.package_manifest.v1",
+  "framework_version": "1.0.0",
+  "runner_version": "1.0.0",
+  "candidate_schema_version": "1.0.0",
+  "domain": "geography",
+  "country_code": "US",
+  "package_date": "2026-08-04",
+  "built_at": "2026-08-04T08:57:10Z",
+  "source_count": 4,
+  "candidate_count": 152,
+  "record_status_counts": {
+    "valid": 152
+  },
+  "duplicate_group_count": 0,
+  "duplicate_review_count": 0,
+  "unresolved_identity_count": 0,
+  "import_status": "candidate_only",
+  "import_blocked_reason": "canonical import is a separate controlled step requiring human approval; this framework only produces candidate packages",
+  "country_code_database_compatibility": "blocked_pending_uk_to_gb_resolution",
+  "uk_input_records": 0,
+  "production_database_writes": 0,
+  "migration_count": 0,
+  "canonical_import_count": 0,
+  "fuzzy_match_count": 0,
+  "arbitrary_uuid_count": 0
+}

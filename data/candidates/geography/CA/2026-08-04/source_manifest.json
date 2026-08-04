@@ -1,0 +1,47 @@
+{
+  "schema": "campcareer.common-source-ingestion.source_manifest.v1",
+  "package_source_count": 2,
+  "country_code_database_compatibility": "blocked_pending_uk_to_gb_resolution",
+  "sources": [
+    {
+      "source_id": "ca-statcan-98100002-v1",
+      "country_code": "CA",
+      "data_domain": "geography",
+      "authority": "Statistics Canada",
+      "official_url": "https://www150.statcan.gc.ca/n1/tbl/csv/98100002-eng.zip",
+      "retrieval_method": "http_download",
+      "licence": "Statistics Canada Open Licence",
+      "usage_restriction": "attribution required",
+      "refresh_cadence": "five-yearly",
+      "content_type": "application/zip",
+      "checksum": "sha256:36ab6c8f3f6b82d70d9dea927cb5cf04f6fbf9b543a7ad543695e6ea70d22876",
+      "file_size": 551875,
+      "raw_storage_tier": "t2",
+      "notes": "2021 Census population counts by province and census subdivision; DGUID encodes the province in positions 10-11.",
+      "retrieved_at": "2026-08-04T00:00:00Z",
+      "reviewed_at": "2026-08-04T00:00:00Z",
+      "parser_version": "1.0.0",
+      "candidate_schema_version": "1.0.0"
+    },
+    {
+      "source_id": "ca-statcan-lcsd-2021-v1",
+      "country_code": "CA",
+      "data_domain": "geography",
+      "authority": "Statistics Canada",
+      "official_url": "https://www12.statcan.gc.ca/census-recensement/2021/geo/sip-pis/boundary-limites/files-geometriques-eng.cfm",
+      "retrieval_method": "http_download",
+      "licence": "Statistics Canada Open Licence",
+      "usage_restriction": "attribution required",
+      "refresh_cadence": "five-yearly",
+      "content_type": "application/zip",
+      "checksum": "sha256:79a6b5022e33f2c89ead0356bf9b51c645b47684f643e916700e97842a69dbb2",
+      "file_size": 40389252,
+      "raw_storage_tier": "t2",
+      "notes": "2021 Census Subdivision cartographic boundary file; used for CSD polygon centroids.",
+      "retrieved_at": "2026-08-04T00:00:00Z",
+      "reviewed_at": "2026-08-04T00:00:00Z",
+      "parser_version": "1.0.0",
+      "candidate_schema_version": "1.0.0"
+    }
+  ]
+}
