@@ -12,13 +12,12 @@ export function ActiveCountrySync({
   name: string
   currency: string
 }) {
-  const { selectedCountry, setSelectedCountry } = useSelectedCountry()
+  const { setSelectedCountry } = useSelectedCountry()
 
   useEffect(() => {
-    if (selectedCountry?.code !== code) {
-      setSelectedCountry({ code, name, currency })
-    }
-  }, [code, currency, name, selectedCountry?.code, setSelectedCountry])
+    setSelectedCountry({ code, name, currency })
+    return () => setSelectedCountry(null)
+  }, [code, currency, name])
 
   return null
 }
