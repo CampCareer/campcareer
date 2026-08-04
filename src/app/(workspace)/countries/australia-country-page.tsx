@@ -40,31 +40,15 @@ function metricMoney(metric: AustraliaCountryMetric | undefined, suffix: string)
   return `${metric.currency} ${number.format(metric.amount)} ${suffix}`
 }
 
-function SourceLink({ label, url }: { label: string; url: string }) {
-  return (
-    <a
-      href={url}
-      target="_blank"
-      rel="noreferrer"
-      className="inline-flex items-center gap-1 text-[11px] font-medium text-[#2563eb] hover:underline"
-    >
-      {label}
-      <ArrowUpRight className="size-3" />
-    </a>
-  )
-}
-
 function MetricCard({
   icon,
   label,
   value,
-  source,
   accent,
 }: {
   icon: React.ReactNode
   label: string
   value: string
-  source?: AustraliaCountryMetric
   accent: string
 }) {
   return (
@@ -75,12 +59,9 @@ function MetricCard({
           {label}
         </p>
       </div>
-      <p className="mt-3 text-[23px] font-semibold tracking-[-0.02em] text-[#1b1b1b]">{value}</p>
-      {source && (
-        <div className="mt-2">
-          <SourceLink label={source.sourceName} url={source.sourceUrl} />
-        </div>
-      )}
+      <p className="mt-3 text-[23px] font-semibold tracking-[-0.02em] text-[#1b1b1b]">
+        {value}
+      </p>
     </article>
   )
 }
@@ -111,9 +92,14 @@ export function AustraliaCountryPage({ metrics }: { metrics: AustraliaCountryMet
             backgroundImage: `url(${country.image.replace(/\?.*$/, "?w=1600&h=700&fit=crop&auto=format")})`,
           }}
         />
-        <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-black/20" />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-black/20"
+        />
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-24 pt-16 sm:px-8 sm:pt-20 lg:px-10">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/70">Countries</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/70">
+            Countries
+          </p>
           <h1 className="mt-2 text-[38px] font-semibold leading-tight tracking-[-0.025em] text-white sm:text-[48px]">
             Australia
           </h1>
@@ -142,21 +128,18 @@ export function AustraliaCountryPage({ metrics }: { metrics: AustraliaCountryMet
             accent="bg-[#eef4ff]"
             label="Average salary"
             value={metricMoney(annualSalary, "/ year")}
-            source={annualSalary}
           />
           <MetricCard
             icon={<Wallet className="size-4 text-[#c2691e]" />}
             accent="bg-[#fbf0e7]"
             label="Shared living cost"
             value={metricMoney(livingCost, "/ month")}
-            source={livingCost}
           />
           <MetricCard
             icon={<TrendingUp className="size-4 text-[#3e7a2e]" />}
             accent="bg-[#edf5ea]"
             label="Minimum wage"
             value={metricMoney(minimumWage, "/ hour")}
-            source={minimumWage}
           />
         </div>
 
@@ -171,13 +154,13 @@ export function AustraliaCountryPage({ metrics }: { metrics: AustraliaCountryMet
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
               {profile.academicYear.intakes.map((intake) => (
-                <span key={intake} className="rounded-full bg-[#eef4ff] px-3 py-1.5 text-[11px] font-semibold text-[#2563eb]">
+                <span
+                  key={intake}
+                  className="rounded-full bg-[#eef4ff] px-3 py-1.5 text-[11px] font-semibold text-[#2563eb]"
+                >
                   {intake}
                 </span>
               ))}
-            </div>
-            <div className="mt-3">
-              <SourceLink label={profile.academicYear.source.label} url={profile.academicYear.source.url} />
             </div>
           </section>
 
@@ -188,13 +171,13 @@ export function AustraliaCountryPage({ metrics }: { metrics: AustraliaCountryMet
             </div>
             <div className="mt-3 flex flex-wrap gap-2">
               {profile.strongMajors.map((major) => (
-                <span key={major.id} className="rounded-lg border border-[#dfe8db] bg-[#f7faf5] px-3 py-2 text-[12px] font-semibold text-[#2f5f25]">
+                <span
+                  key={major.id}
+                  className="rounded-lg border border-[#dfe8db] bg-[#f7faf5] px-3 py-2 text-[12px] font-semibold text-[#2f5f25]"
+                >
                   {major.label}
                 </span>
               ))}
-            </div>
-            <div className="mt-3">
-              <SourceLink label={profile.sources[0].label} url={profile.sources[0].url} />
             </div>
           </section>
         </div>
@@ -206,17 +189,18 @@ export function AustraliaCountryPage({ metrics }: { metrics: AustraliaCountryMet
           </div>
           <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
             {profile.majorInstitutions.map((institution) => (
-              <div key={institution.name} className="rounded-lg border border-[#f0efec] bg-[#fafaf8] px-3 py-3">
-                <p className="text-[12px] font-semibold leading-4 text-[#1b1b1b]">{institution.name}</p>
+              <div
+                key={institution.name}
+                className="rounded-lg border border-[#f0efec] bg-[#fafaf8] px-3 py-3"
+              >
+                <p className="text-[12px] font-semibold leading-4 text-[#1b1b1b]">
+                  {institution.name}
+                </p>
                 <p className="mt-1 text-[10.5px] text-[#9a978f]">
-                  {institution.type === "public_vet" ? "Public VET" : "Research university"} · {institution.location}
+                  {institution.type === "public_vet" ? "Public VET" : "Research university"} ·{" "}
+                  {institution.location}
                 </p>
               </div>
-            ))}
-          </div>
-          <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2">
-            {profile.sources.slice(1).map((source) => (
-              <SourceLink key={source.url} label={source.label} url={source.url} />
             ))}
           </div>
         </section>
@@ -233,7 +217,12 @@ export function AustraliaCountryPage({ metrics }: { metrics: AustraliaCountryMet
             <ul className="divide-y divide-[#f0efec]">
               {visas.map((visa) => (
                 <li key={visa.name} className="flex items-start gap-3 px-5 py-3.5">
-                  <span className={cn("mt-0.5 inline-flex shrink-0 rounded-md px-2 py-0.5 text-[10.5px] font-bold uppercase tracking-wide", KIND_STYLES[visa.kind] ?? KIND_STYLES.Temporary)}>
+                  <span
+                    className={cn(
+                      "mt-0.5 inline-flex shrink-0 rounded-md px-2 py-0.5 text-[10.5px] font-bold uppercase tracking-wide",
+                      KIND_STYLES[visa.kind] ?? KIND_STYLES.Temporary
+                    )}
+                  >
                     {visa.kind}
                   </span>
                   <span className="min-w-0 flex-1">
@@ -246,9 +235,13 @@ export function AustraliaCountryPage({ metrics }: { metrics: AustraliaCountryMet
                       {visa.name}
                       <ArrowUpRight className="size-3.5 text-[#c4c2bc] transition group-hover:text-[#2563eb]" />
                     </a>
-                    <span className="mt-0.5 block text-[12.5px] leading-5 text-[#6f6d68]">{visa.note}</span>
+                    <span className="mt-0.5 block text-[12.5px] leading-5 text-[#6f6d68]">
+                      {visa.note}
+                    </span>
                   </span>
-                  <span className="shrink-0 pt-0.5 text-[11px] font-medium text-[#c4c2bc]">{visa.authority}</span>
+                  <span className="shrink-0 pt-0.5 text-[11px] font-medium text-[#c4c2bc]">
+                    {visa.authority}
+                  </span>
                 </li>
               ))}
             </ul>
@@ -261,7 +254,9 @@ export function AustraliaCountryPage({ metrics }: { metrics: AustraliaCountryMet
             </div>
             {countryProfile.workOpportunities && (
               <div className="px-5 py-4">
-                <p className="text-[12.5px] font-semibold text-[#1b1b1b]">{countryProfile.workOpportunities.headline}</p>
+                <p className="text-[12.5px] font-semibold text-[#1b1b1b]">
+                  {countryProfile.workOpportunities.headline}
+                </p>
                 <ul className="mt-3 space-y-2.5">
                   {countryProfile.workOpportunities.items.map((item) => (
                     <li key={item.title} className="flex items-center gap-2">
@@ -270,9 +265,6 @@ export function AustraliaCountryPage({ metrics }: { metrics: AustraliaCountryMet
                     </li>
                   ))}
                 </ul>
-                <div className="mt-4">
-                  <SourceLink label={countryProfile.workOpportunities.source} url={countryProfile.workOpportunities.url} />
-                </div>
               </div>
             )}
           </section>
@@ -293,7 +285,10 @@ export function AustraliaCountryPage({ metrics }: { metrics: AustraliaCountryMet
                 </h3>
                 <div className="mt-2 flex flex-wrap gap-1.5">
                   {region.cities.map((city) => (
-                    <span key={city} className="rounded-md border border-[#e7e6e3] bg-[#fafaf8] px-2.5 py-1 text-[12px] font-medium text-[#4d4c48]">
+                    <span
+                      key={city}
+                      className="rounded-md border border-[#e7e6e3] bg-[#fafaf8] px-2.5 py-1 text-[12px] font-medium text-[#4d4c48]"
+                    >
                       {city}
                     </span>
                   ))}
