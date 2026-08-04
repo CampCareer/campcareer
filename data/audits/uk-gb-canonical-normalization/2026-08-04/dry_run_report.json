@@ -1,0 +1,110 @@
+{
+  "schema": "campcareer.uk-gb-canonical-normalization.dry_run_report.v1",
+  "audit_date": "2026-08-04",
+  "task": "10.8A UK/GB Canonical Normalization Plan",
+  "git_branch": "audit/uk-gb-canonical-normalization-v1",
+  "git_commit": "40e0848a52ef306e32387a15e2665862a382055",
+  "supabase_project_ref": "babylusxcknjerxtepoc",
+  "dry_run_mode": true,
+  "production_database_modified": false,
+  "migration_candidate_file": "migration_candidate.sql",
+  "rollback_candidate_file": "rollback_candidate.sql",
+  "case": "A",
+  "case_description": "UK row exists in core.countries; no GB row exists",
+  "pre_migration_state": {
+    "core_countries_uk_row": {"code": "UK", "name": "United Kingdom", "default_currency": "GBP", "active": true},
+    "core_countries_gb_row": null,
+    "fk_references_to_uk": {
+      "core.geographies": 37,
+      "core.qualification_frameworks": 1,
+      "public.campuses": 50,
+      "public.institutions": 50,
+      "public.outcome_observations": 140,
+      "public.occupations": 408,
+      "public.country_pr_pathways": 1
+    },
+    "jsonb_uk_references": {
+      "core.geographies.metadata": 37,
+      "core.qualification_frameworks.metadata": 1,
+      "public.campuses.metadata": 50,
+      "public.institutions.metadata": 50,
+      "public.outcome_observations.metadata": 140,
+      "public.occupations.metadata": 408
+    },
+    "total_uk_references": 686
+  },
+  "post_migration_state_expected": {
+    "core_countries_uk_row": null,
+    "core_countries_gb_row": {"code": "GB", "name": "United Kingdom", "default_currency": "GBP", "active": true},
+    "fk_references_to_gb": {
+      "core.geographies": 37,
+      "core.qualification_frameworks": 1,
+      "public.campuses": 50,
+      "public.institutions": 50,
+      "public.outcome_observations": 140,
+      "public.occupations": 408,
+      "public.country_pr_pathways": 1
+    },
+    "fk_references_to_uk": {
+      "core.geographies": 0,
+      "core.qualification_frameworks": 0,
+      "public.campuses": 0,
+      "public.institutions": 0,
+      "public.outcome_observations": 0,
+      "public.occupations": 0,
+      "public.country_pr_pathways": 0
+    },
+    "jsonb_gb_references": {
+      "core.geographies.metadata": 37,
+      "core.qualification_frameworks.metadata": 1,
+      "public.campuses.metadata": 50,
+      "public.institutions.metadata": 50,
+      "public.outcome_observations.metadata": 140,
+      "public.occupations.metadata": 408
+    },
+    "jsonb_uk_references": {
+      "core.geographies.metadata": 0,
+      "core.qualification_frameworks.metadata": 0,
+      "public.campuses.metadata": 0,
+      "public.institutions.metadata": 0,
+      "public.outcome_observations.metadata": 0,
+      "public.occupations.metadata": 0
+    },
+    "total_gb_references": 686,
+    "total_uk_references": 0
+  },
+  "application_code_changes_required": {
+    "count": 18,
+    "files": [
+      "src/lib/data-foundation/entity-aliases.ts",
+      "src/lib/data-foundation/country-normalization.ts",
+      "src/app/api/maps/data/[country]/route.ts",
+      "src/app/map/LeafletMap.tsx",
+      "src/app/map/CampCareerMaps.tsx",
+      "src/lib/workspace/visa-catalog.ts",
+      "src/lib/workspace/country-explorer.ts",
+      "src/lib/blog/compare-link.ts",
+      "src/lib/map-slugs.ts",
+      "src/lib/i18n/dictionaries/en.ts",
+      "src/lib/i18n/dictionaries/ko.ts",
+      "src/lib/degree-risk.ts",
+      "src/data/launch-countries.ts",
+      "src/data/study-concepts.ts",
+      "src/app/(workspace)/compare/countries-compare-matrix.tsx",
+      "src/app/(workspace)/countries/countries-explorer.tsx",
+      "src/app/api/compare/majors/route.ts",
+      "src/app/api/compare/careers/route.ts"
+    ],
+    "note": "Application code changes are NOT part of the DB migration candidate. They require a separate deployment."
+  },
+  "risk_assessment": {
+    "data_loss_risk": "low",
+    "reversibility": "high - rollback candidate provided",
+    "fk_constraint_integrity": "maintained - all FK references updated atomically",
+    "application_compatibility": "requires coordinated application code deployment",
+    "estimated_downtime": "none - transaction-only change"
+  },
+  "approval_required": true,
+  "approved_by": null,
+  "approved_at": null
+}

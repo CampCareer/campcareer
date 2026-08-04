@@ -1,0 +1,52 @@
+{
+  "schema": "campcareer.uk-gb-canonical-normalization.country_rows.v1",
+  "audit_date": "2026-08-04",
+  "core_countries": {
+    "table": "core.countries",
+    "schema": "core",
+    "columns": ["code", "name", "default_currency", "active", "created_at", "updated_at"],
+    "primary_key": ["code"],
+    "rows": [
+      {
+        "code": "AU",
+        "name": "Australia",
+        "default_currency": "AUD",
+        "active": true,
+        "note": "Already canonical"
+      },
+      {
+        "code": "CA",
+        "name": "Canada",
+        "default_currency": "CAD",
+        "active": true,
+        "note": "Already canonical"
+      },
+      {
+        "code": "IE",
+        "name": "Ireland",
+        "default_currency": "EUR",
+        "active": true,
+        "note": "Already canonical"
+      },
+      {
+        "code": "UK",
+        "name": "United Kingdom",
+        "default_currency": "GBP",
+        "active": true,
+        "note": "NON-CANONICAL: must be normalized to GB"
+      },
+      {
+        "code": "US",
+        "name": "United States",
+        "default_currency": "USD",
+        "active": true,
+        "note": "Already canonical"
+      }
+    ],
+    "migration_action": {
+      "type": "UPDATE",
+      "description": "Update core.countries row code from 'UK' to 'GB'",
+      "sql": "UPDATE core.countries SET code = 'GB', updated_at = NOW() WHERE code = 'UK';"
+    }
+  }
+}

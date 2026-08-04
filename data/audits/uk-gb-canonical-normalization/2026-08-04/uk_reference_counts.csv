@@ -1,0 +1,9 @@
+table,column,uk_reference_count,reference_type,notes
+core.countries,code,1,row_value,UK row exists; no GB row (Case A)
+core.geographies,country_code,37,FK_reference,37 city records reference UK
+core.qualification_frameworks,country_code,1,FK_reference,RQF framework references UK
+public.campuses,country_code,50,FK_reference,50 campus records reference UK
+public.institutions,country_code,50,FK_reference,50 institution records reference UK
+public.outcome_observations,country_code,140,FK_reference,140 observation records reference UK
+public.occupations,country_code,408,FK_reference,408 occupation records reference UK
+public.country_pr_pathways,country_code,1,FK_reference,1 pathway record references UK

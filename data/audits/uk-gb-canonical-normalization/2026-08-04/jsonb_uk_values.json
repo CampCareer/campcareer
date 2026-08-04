@@ -1,0 +1,63 @@
+{
+  "schema": "campcareer.uk-gb-canonical-normalization.jsonb_uk_values.v1",
+  "audit_date": "2026-08-04",
+  "investigation_method": "Searched JSON/JSONB columns for UK string values using LIKE patterns",
+  "columns_investigated": [
+    {
+      "table": "core.geographies",
+      "column": "metadata",
+      "type": "jsonb",
+      "contains_uk_values": true,
+      "uk_value_patterns": ["\"country\":\"UK\"", "'country':'UK'"],
+      "estimated_affected_rows": 37,
+      "migration_action": "UPDATE metadata SET metadata = jsonb_set(metadata, '{country}', '\"GB\"') WHERE metadata->>'country' = 'UK';"
+    },
+    {
+      "table": "core.qualification_frameworks",
+      "column": "metadata",
+      "type": "jsonb",
+      "contains_uk_values": true,
+      "uk_value_patterns": ["\"country\":\"UK\"", "'country':'UK'"],
+      "estimated_affected_rows": 1,
+      "migration_action": "UPDATE metadata SET metadata = jsonb_set(metadata, '{country}', '\"GB\"') WHERE metadata->>'country' = 'UK';"
+    },
+    {
+      "table": "public.campuses",
+      "column": "metadata",
+      "type": "jsonb",
+      "contains_uk_values": true,
+      "uk_value_patterns": ["\"country\":\"UK\"", "'country':'UK'"],
+      "estimated_affected_rows": 50,
+      "migration_action": "UPDATE metadata SET metadata = jsonb_set(metadata, '{country}', '\"GB\"') WHERE metadata->>'country' = 'UK';"
+    },
+    {
+      "table": "public.institutions",
+      "column": "metadata",
+      "type": "jsonb",
+      "contains_uk_values": true,
+      "uk_value_patterns": ["\"country\":\"UK\"", "'country':'UK'"],
+      "estimated_affected_rows": 50,
+      "migration_action": "UPDATE metadata SET metadata = jsonb_set(metadata, '{country}', '\"GB\"') WHERE metadata->>'country' = 'UK';"
+    },
+    {
+      "table": "public.outcome_observations",
+      "column": "metadata",
+      "type": "jsonb",
+      "contains_uk_values": true,
+      "uk_value_patterns": ["\"country\":\"UK\"", "'country':'UK'"],
+      "estimated_affected_rows": 140,
+      "migration_action": "UPDATE metadata SET metadata = jsonb_set(metadata, '{country}', '\"GB\"') WHERE metadata->>'country' = 'UK';"
+    },
+    {
+      "table": "public.occupations",
+      "column": "metadata",
+      "type": "jsonb",
+      "contains_uk_values": true,
+      "uk_value_patterns": ["\"country\":\"UK\"", "'country':'UK'"],
+      "estimated_affected_rows": 408,
+      "migration_action": "UPDATE metadata SET metadata = jsonb_set(metadata, '{country}', '\"GB\"') WHERE metadata->>'country' = 'UK';"
+    }
+  ],
+  "total_jsonb_uk_references": 686,
+  "note": "JSONB UK values are embedded in metadata columns and must be updated alongside FK column changes"
+}

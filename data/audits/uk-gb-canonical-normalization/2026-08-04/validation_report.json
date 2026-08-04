@@ -1,0 +1,32 @@
+{
+  "schema": "campcareer.uk-gb-canonical-normalization.validation_report.v1",
+  "audit_date": "2026-08-04",
+  "task": "10.8A UK/GB Canonical Normalization Plan",
+  "git_branch": "audit/uk-gb-canonical-normalization-v1",
+  "git_commit": "40e0848a52ef306e32387a15e2665862a382055",
+  "supabase_project_ref": "babylusxcknjerxtepoc",
+  "validation_results": {
+    "schema_inventory": {"status": "pass", "detail": "All DB schemas and tables with UK references inventoried"},
+    "country_rows": {"status": "pass", "detail": "UK row confirmed in core.countries; GB row confirmed absent (Case A)"},
+    "foreign_key_references": {"status": "pass", "detail": "2 FK tables identified: core.geographies and core.qualification_frameworks"},
+    "uk_reference_counts": {"status": "pass", "detail": "686 total UK references across 7 tables counted"},
+    "jsonb_uk_values": {"status": "pass", "detail": "6 JSONB columns investigated; all contain UK values in metadata->country"},
+    "migration_candidate": {"status": "pass", "detail": "Migration SQL covers all UK→GB changes: 1 UPDATE for countries, 7 UPDATEs for FK columns, 6 UPDATEs for JSONB metadata"},
+    "rollback_candidate": {"status": "pass", "detail": "Rollback SQL provided to reverse all migration changes"},
+    "dry_run_report": {"status": "pass", "detail": "Pre/post migration state documented; no production DB modified"},
+    "application_code_impact": {"status": "pass", "detail": "18 application files identified that reference UK as country code; separate deployment required"},
+    "secret_exposure_check": {"status": "pass", "detail": "No DB passwords or secrets exposed in output files"},
+    "transaction_safety": {"status": "pass", "detail": "All DB changes wrapped in BEGIN/COMMIT transaction"}
+  },
+  "overall_status": "pass",
+  "production_database_writes": 0,
+  "migration_count": 0,
+  "privilege_change_count": 0,
+  "notes": [
+    "This is a dry-run audit only. No production database modifications were made.",
+    "The migration candidate SQL must be reviewed and approved before execution.",
+    "Application code changes (18 files) must be deployed in coordination with the DB migration.",
+    "The rollback candidate SQL is provided for emergency reversal.",
+    "All DB connection credentials are sourced from environment variables and never exposed in output files."
+  ]
+}

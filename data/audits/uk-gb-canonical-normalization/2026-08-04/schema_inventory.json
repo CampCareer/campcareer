@@ -1,0 +1,90 @@
+{
+  "schema": "campcareer.uk-gb-canonical-normalization.schema_inventory.v1",
+  "audit_date": "2026-08-04",
+  "supabase_project_ref": "babylusxcknjerxtepoc",
+  "git_branch": "audit/uk-gb-canonical-normalization-v1",
+  "git_commit": "40e0848a52ef306e32387a15e2665862a382055",
+  "case": "A",
+  "case_description": "UK row exists in core.countries; no GB row exists",
+  "schemas_observed": [
+    {
+      "schema_name": "core",
+      "tables": [
+        {
+          "table_name": "countries",
+          "row_count_estimate": 5,
+          "uk_row_present": true,
+          "gb_row_present": false,
+          "columns": [
+            {"name": "code", "type": "text", "primary_key": true},
+            {"name": "name", "type": "text"},
+            {"name": "default_currency", "type": "text"},
+            {"name": "active", "type": "boolean"},
+            {"name": "created_at", "type": "timestamptz"},
+            {"name": "updated_at", "type": "timestamptz"}
+          ],
+          "uk_row": {"code": "UK", "name": "United Kingdom", "default_currency": "GBP", "active": true}
+        },
+        {
+          "table_name": "geographies",
+          "country_code_column": "country_code",
+          "references": "core.countries(code)",
+          "uk_reference_count": 37,
+          "uk_reference_tables": ["core.geographies"]
+        },
+        {
+          "table_name": "qualification_frameworks",
+          "country_code_column": "country_code",
+          "references": "core.countries(code)",
+          "uk_reference_count": 1,
+          "uk_reference_tables": ["core.qualification_frameworks"]
+        }
+      ]
+    },
+    {
+      "schema_name": "public",
+      "tables_with_country_code": [
+        {"table_name": "campuses", "country_code_column": "country_code", "uk_reference_count": 50},
+        {"table_name": "institutions", "country_code_column": "country_code", "uk_reference_count": 50},
+        {"table_name": "outcome_observations", "country_code_column": "country_code", "uk_reference_count": 140},
+        {"table_name": "occupations", "country_code_column": "country_code", "uk_reference_count": 408},
+        {"table_name": "country_pr_pathways", "country_code_column": "country_code", "uk_reference_count": 1}
+      ]
+    }
+  ],
+  "jsonb_columns_investigated": [
+    {"table": "core.geographies", "column": "metadata", "contains_uk": true},
+    {"table": "core.qualification_frameworks", "column": "metadata", "contains_uk": true},
+    {"table": "public.campuses", "column": "metadata", "contains_uk": true},
+    {"table": "public.institutions", "column": "metadata", "contains_uk": true},
+    {"table": "public.outcome_observations", "column": "metadata", "contains_uk": true},
+    {"table": "public.occupations", "column": "metadata", "contains_uk": true}
+  ],
+  "application_code_references": {
+    "files_using_uk_as_country_code": [
+      "src/lib/data-foundation/entity-aliases.ts",
+      "src/lib/data-foundation/country-normalization.ts",
+      "src/app/api/maps/data/[country]/route.ts",
+      "src/app/map/LeafletMap.tsx",
+      "src/app/map/CampCareerMaps.tsx",
+      "src/lib/workspace/visa-catalog.ts",
+      "src/lib/workspace/country-explorer.ts",
+      "src/lib/blog/compare-link.ts",
+      "src/lib/map-slugs.ts",
+      "src/lib/i18n/dictionaries/en.ts",
+      "src/lib/i18n/dictionaries/ko.ts",
+      "src/lib/degree-risk.ts",
+      "src/data/launch-countries.ts",
+      "src/data/study-concepts.ts",
+      "src/app/(workspace)/compare/countries-compare-matrix.tsx",
+      "src/app/(workspace)/countries/countries-explorer.tsx",
+      "src/app/api/compare/majors/route.ts",
+      "src/app/api/compare/careers/route.ts"
+    ],
+    "normalization_already_in_place": true,
+    "normalization_files": [
+      "src/lib/data-foundation/entity-aliases.ts (UK -> GB in toCanonicalCountryCode)",
+      "src/lib/data-foundation/country-normalization.ts (UK -> GB in toCanonicalProgramCountryCode)"
+    ]
+  }
+}

@@ -1,0 +1,3 @@
+source_table,source_column,target_table,target_column,constraint_name,uk_reference_count,on_delete,on_update
+core.geographies,country_code,core.countries,code,geographies_country_code_fkey,37,NO ACTION,NO ACTION
+core.qualification_frameworks,country_code,core.countries,code,qualification_frameworks_country_code_fkey,1,NO ACTION,NO ACTION
