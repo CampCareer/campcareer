@@ -6,10 +6,12 @@ import { useRouter } from "next/navigation"
 import { BriefcaseBusiness, Globe2, MousePointerClick } from "lucide-react"
 import { CANONICAL_CAREERS, type CanonicalCareer } from "@/data/career-comparison-catalog"
 import { STUDY_CATEGORIES } from "@/data/study-concepts"
+import type { AustraliaCountryMetrics } from "@/lib/workspace/australia-country-metrics"
 import { getOccupationDetail } from "@/lib/workspace/occupation-detail"
 import { CategorySearch } from "@/components/workspace/category-search"
 import { WorkspacePageHeader } from "@/components/workspace/workspace-page-header"
 import { useSelectedCountry } from "@/components/workspace/country-context"
+import { AustraliaCountryOverview } from "./australia-country-overview"
 import { OccupationDetailPanel } from "./occupation-detail-view"
 import { cn } from "@/lib/utils"
 
@@ -52,9 +54,11 @@ function initialSelection(
 export function OccupationExplorer({
   initialQuery,
   initialOccupation,
+  australiaCountryMetrics,
 }: {
   initialQuery: string
   initialOccupation: string
+  australiaCountryMetrics: AustraliaCountryMetrics
 }) {
   const router = useRouter()
   const { selectedCountry } = useSelectedCountry()
@@ -115,6 +119,10 @@ export function OccupationExplorer({
               </Link>
             </span>
           </div>
+        )}
+
+        {selectedCountry?.code === "AU" && (
+          <AustraliaCountryOverview metrics={australiaCountryMetrics} />
         )}
 
         <aside className="lg:sticky lg:top-20 lg:max-h-[calc(100dvh-6.5rem)] lg:overflow-y-auto lg:pb-2">
