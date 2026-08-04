@@ -1,0 +1,20 @@
+{
+  "schema": "campcareer.controlled-import.candidate-validation.v1",
+  "overall_status": "valid",
+  "candidate_count": 42,
+  "country_count": 1,
+  "region_count": 9,
+  "city_count": 32,
+  "all_country_au": true,
+  "no_uk_reference": true,
+  "checksum_valid": true,
+  "manifest_valid": true,
+  "duplicate_source_keys": [],
+  "place_types": [
+    "country",
+    "city",
+    "region"
+  ],
+  "errors": [],
+  "warnings": []
+}

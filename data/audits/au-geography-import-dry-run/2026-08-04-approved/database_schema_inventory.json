@@ -1,0 +1,191 @@
+{
+  "schema": "campcareer.controlled-import.schema-inventory.v1",
+  "generated_at": "2026-08-04T16:25:07Z",
+  "base_git_sha": "40e0848a52ef306e32387a15e2665862a3820555",
+  "project_reference": "supabase-postgres-babylusxcknjerxtepoc",
+  "schema_fingerprint": "ba7ef4e4752d43731593c4cccefb9b31e0ba98d923c34b2a8d664d1161bdc4a8",
+  "tables": {
+    "core.countries": {
+      "columns": [
+        {
+          "column_name": "code",
+          "data_type": "text",
+          "is_nullable": "NO",
+          "column_default": ""
+        },
+        {
+          "column_name": "name",
+          "data_type": "text",
+          "is_nullable": "NO",
+          "column_default": ""
+        },
+        {
+          "column_name": "default_currency",
+          "data_type": "text",
+          "is_nullable": "NO",
+          "column_default": ""
+        },
+        {
+          "column_name": "active",
+          "data_type": "boolean",
+          "is_nullable": "NO",
+          "column_default": "true"
+        },
+        {
+          "column_name": "created_at",
+          "data_type": "timestamp with time zone",
+          "is_nullable": "NO",
+          "column_default": "now()"
+        },
+        {
+          "column_name": "updated_at",
+          "data_type": "timestamp with time zone",
+          "is_nullable": "NO",
+          "column_default": "now()"
+        }
+      ],
+      "constraints": [
+        {
+          "conname": "countries_code_check",
+          "definition": "CHECK ((code ~ '^[A-Z]{2}$'::text))",
+          "contype": "c"
+        },
+        {
+          "conname": "countries_default_currency_check",
+          "definition": "CHECK ((default_currency ~ '^[A-Z]{3}$'::text))",
+          "contype": "c"
+        },
+        {
+          "conname": "countries_pkey",
+          "definition": "PRIMARY KEY (code)",
+          "contype": "p"
+        }
+      ],
+      "primary_key": "code (text)",
+      "exists": true
+    },
+    "core.geographies": {
+      "columns": [
+        {
+          "column_name": "id",
+          "data_type": "uuid",
+          "is_nullable": "NO",
+          "column_default": "gen_random_uuid()"
+        },
+        {
+          "column_name": "country_code",
+          "data_type": "text",
+          "is_nullable": "NO",
+          "column_default": ""
+        },
+        {
+          "column_name": "geography_type",
+          "data_type": "text",
+          "is_nullable": "NO",
+          "column_default": ""
+        },
+        {
+          "column_name": "code",
+          "data_type": "text",
+          "is_nullable": "YES",
+          "column_default": ""
+        },
+        {
+          "column_name": "name",
+          "data_type": "text",
+          "is_nullable": "NO",
+          "column_default": ""
+        },
+        {
+          "column_name": "region_code",
+          "data_type": "text",
+          "is_nullable": "YES",
+          "column_default": ""
+        },
+        {
+          "column_name": "parent_id",
+          "data_type": "uuid",
+          "is_nullable": "YES",
+          "column_default": ""
+        },
+        {
+          "column_name": "latitude",
+          "data_type": "numeric",
+          "is_nullable": "YES",
+          "column_default": ""
+        },
+        {
+          "column_name": "longitude",
+          "data_type": "numeric",
+          "is_nullable": "YES",
+          "column_default": ""
+        },
+        {
+          "column_name": "metadata",
+          "data_type": "jsonb",
+          "is_nullable": "NO",
+          "column_default": "'{}'::jsonb"
+        },
+        {
+          "column_name": "created_at",
+          "data_type": "timestamp with time zone",
+          "is_nullable": "NO",
+          "column_default": "now()"
+        },
+        {
+          "column_name": "updated_at",
+          "data_type": "timestamp with time zone",
+          "is_nullable": "NO",
+          "column_default": "now()"
+        }
+      ],
+      "constraints": [
+        {
+          "conname": "geographies_country_code_fkey",
+          "definition": "FOREIGN KEY (country_code) REFERENCES core.countries(code)",
+          "contype": "f"
+        },
+        {
+          "conname": "geographies_geography_type_check",
+          "definition": "CHECK ((geography_type = ANY (ARRAY['country'::text, 'state'::text, 'province'::text, 'region'::text, 'city'::text, 'sa4'::text, 'other'::text])))",
+          "contype": "c"
+        },
+        {
+          "conname": "geographies_parent_id_fkey",
+          "definition": "FOREIGN KEY (parent_id) REFERENCES core.geographies(id) ON DELETE SET NULL",
+          "contype": "f"
+        },
+        {
+          "conname": "geographies_pkey",
+          "definition": "PRIMARY KEY (id)",
+          "contype": "p"
+        }
+      ],
+      "indexes": [
+        {
+          "indexname": "geographies_pkey",
+          "indexdef": "CREATE UNIQUE INDEX geographies_pkey ON core.geographies USING btree (id)"
+        },
+        {
+          "indexname": "geographies_identity_uidx",
+          "indexdef": "CREATE UNIQUE INDEX geographies_identity_uidx ON core.geographies USING btree (country_code, geography_type, COALESCE(code, ''::text), lower(name), COALESCE(region_code, ''::text))"
+        },
+        {
+          "indexname": "geographies_parent_idx",
+          "indexdef": "CREATE INDEX geographies_parent_idx ON core.geographies USING btree (parent_id)"
+        }
+      ],
+      "primary_key": "id (uuid)",
+      "exists": true
+    }
+  },
+  "geography_type_values": [
+    {
+      "geography_type": "city",
+      "cnt": "31892"
+    }
+  ],
+  "uk_row_present": true,
+  "gb_row_present": false,
+  "au_country_row": "absent"
+}

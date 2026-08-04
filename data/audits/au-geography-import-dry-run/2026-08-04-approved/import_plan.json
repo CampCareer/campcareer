@@ -1,0 +1,2022 @@
+{
+  "schema": "campcareer.controlled-import.geography.v1",
+  "generated_at": "2026-08-04T16:25:07Z",
+  "base_git_sha": "40e0848a52ef306e32387a15e2665862a3820555",
+  "candidate_package_path": "data/candidates/geography/AU/2026-08-04-approved",
+  "candidate_package_checksum": "92c181ac482a130130c459da2d2420995044e886c9b2c9222c98e78d35796508",
+  "database_project_reference": "supabase-postgres-babylusxcknjerxtepoc",
+  "database_schema_fingerprint": "ba7ef4e4752d43731593c4cccefb9b31e0ba98d923c34b2a8d664d1161bdc4a8",
+  "country": "AU",
+  "candidate_counts": {
+    "total": 42,
+    "country": 1,
+    "region": 9,
+    "city": 32
+  },
+  "db_pre_state_counts": {
+    "city": 19,
+    "country": 0,
+    "region": 0
+  },
+  "actions": [
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:4001",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "4001",
+        "name": "Adelaide",
+        "short_name": "Adelaide",
+        "region_code": "4",
+        "latitude": -34.90882795154794,
+        "longitude": 138.65976547032446,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:4001",
+          "original_official_name": "Adelaide",
+          "original_short_name": "Adelaide"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:4",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:4001"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:1001",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "1001",
+        "name": "Albury",
+        "short_name": "Albury",
+        "region_code": "2",
+        "latitude": -36.120772783744606,
+        "longitude": 146.90535575719272,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:1001",
+          "original_official_name": "Albury - Wodonga",
+          "original_short_name": "Albury - Wodonga"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:2",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:1001"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:2003",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "2003",
+        "name": "Ballarat",
+        "short_name": "Ballarat",
+        "region_code": "2",
+        "latitude": -37.5539742532402,
+        "longitude": 143.8367094150973,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:2003",
+          "original_official_name": "Ballarat",
+          "original_short_name": "Ballarat"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:2",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:2003"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:2004",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "2004",
+        "name": "Bendigo",
+        "short_name": "Bendigo",
+        "region_code": "2",
+        "latitude": -36.745861591412876,
+        "longitude": 144.28892568948731,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:2004",
+          "original_official_name": "Bendigo",
+          "original_short_name": "Bendigo"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:2",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:2004"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:3002",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "3002",
+        "name": "Brisbane",
+        "short_name": "Brisbane",
+        "region_code": "3",
+        "latitude": -27.64996304202788,
+        "longitude": 152.9228542370596,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:3002",
+          "original_official_name": "Brisbane",
+          "original_short_name": "Brisbane"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:3",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:3002"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:5003",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "5003",
+        "name": "Bunbury",
+        "short_name": "Bunbury",
+        "region_code": "5",
+        "latitude": -33.35584013803835,
+        "longitude": 115.66285021720986,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:5003",
+          "original_official_name": "Bunbury",
+          "original_short_name": "Bunbury"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:5",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:5003"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:3003",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "3003",
+        "name": "Bundaberg",
+        "short_name": "Bundaberg",
+        "region_code": "3",
+        "latitude": -24.863050423414297,
+        "longitude": 152.3733685086647,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:3003",
+          "original_official_name": "Bundaberg",
+          "original_short_name": "Bundaberg"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:3",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:3003"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:3004",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "3004",
+        "name": "Cairns",
+        "short_name": "Cairns",
+        "region_code": "3",
+        "latitude": -16.890226977993333,
+        "longitude": 145.71255149068602,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:3004",
+          "original_official_name": "Cairns",
+          "original_short_name": "Cairns"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:3",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:3004"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:8001",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "8001",
+        "name": "Canberra",
+        "short_name": "Canberra",
+        "region_code": "8",
+        "latitude": -35.301649814607536,
+        "longitude": 149.1320696973573,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:8001",
+          "original_official_name": "Canberra - Queanbeyan",
+          "original_short_name": "Canberra - Queanbeyan"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:8",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:8001"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:1010",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "1010",
+        "name": "Central Coast",
+        "short_name": "Central Coast",
+        "region_code": "1",
+        "latitude": -33.34300508994691,
+        "longitude": 151.27545303783089,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:1010",
+          "original_official_name": "Central Coast",
+          "original_short_name": "Central Coast"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:1",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:1010"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:1011",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "1011",
+        "name": "Coffs Harbour",
+        "short_name": "Coffs Harbour",
+        "region_code": "1",
+        "latitude": -30.161879941988275,
+        "longitude": 153.12555926336483,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:1011",
+          "original_official_name": "Coffs Harbour",
+          "original_short_name": "Coffs Harbour"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:1",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:1011"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:7002",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "7002",
+        "name": "Darwin",
+        "short_name": "Darwin",
+        "region_code": "7",
+        "latitude": -12.467499258458423,
+        "longitude": 130.97408774449548,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:7002",
+          "original_official_name": "Darwin",
+          "original_short_name": "Darwin"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:7",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:7002"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:2008",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "2008",
+        "name": "Geelong",
+        "short_name": "Geelong",
+        "region_code": "2",
+        "latitude": -38.09239035108074,
+        "longitude": 144.3916701526539,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:2008",
+          "original_official_name": "Geelong",
+          "original_short_name": "Geelong"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:2",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:2008"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:3006",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "3006",
+        "name": "Gladstone",
+        "short_name": "Gladstone",
+        "region_code": "3",
+        "latitude": -23.923585073213975,
+        "longitude": 151.30378667781866,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:3006",
+          "original_official_name": "Gladstone",
+          "original_short_name": "Gladstone"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:3",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:3006"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:3007",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "3007",
+        "name": "Gold Coast",
+        "short_name": "Gold Coast",
+        "region_code": "3",
+        "latitude": -28.077128712535135,
+        "longitude": 153.38491584259268,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:3007",
+          "original_official_name": "Gold Coast - Tweed Heads",
+          "original_short_name": "Gold Coast - Tweed Heads"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:3",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:3007"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:3009",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "3009",
+        "name": "Hervey Bay",
+        "short_name": "Hervey Bay",
+        "region_code": "3",
+        "latitude": -25.291675976239073,
+        "longitude": 152.81297526990392,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:3009",
+          "original_official_name": "Hervey Bay",
+          "original_short_name": "Hervey Bay"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:3",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:3009"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:6003",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "6003",
+        "name": "Hobart",
+        "short_name": "Hobart",
+        "region_code": "6",
+        "latitude": -42.82442370911179,
+        "longitude": 147.38164684052109,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:6003",
+          "original_official_name": "Hobart",
+          "original_short_name": "Hobart"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:6",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:6003"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:6004",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "6004",
+        "name": "Launceston",
+        "short_name": "Launceston",
+        "region_code": "6",
+        "latitude": -41.46266978609577,
+        "longitude": 147.08388701832232,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:6004",
+          "original_official_name": "Launceston",
+          "original_short_name": "Launceston"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:6",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:6004"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:3011",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "3011",
+        "name": "Mackay",
+        "short_name": "Mackay",
+        "region_code": "3",
+        "latitude": -21.118781343944317,
+        "longitude": 149.16051614795472,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:3011",
+          "original_official_name": "Mackay",
+          "original_short_name": "Mackay"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:3",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:3011"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:2011",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "2011",
+        "name": "Melbourne",
+        "short_name": "Melbourne",
+        "region_code": "2",
+        "latitude": -37.83185580419497,
+        "longitude": 145.15528791531713,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:2011",
+          "original_official_name": "Melbourne",
+          "original_short_name": "Melbourne"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:2",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:2011"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:2012",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "2012",
+        "name": "Mildura",
+        "short_name": "Mildura",
+        "region_code": "2",
+        "latitude": -34.15703548250081,
+        "longitude": 142.07234587429593,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:2012",
+          "original_official_name": "Mildura - Buronga",
+          "original_short_name": "Mildura - Buronga"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:2",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:2012"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:1025",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "1025",
+        "name": "Newcastle",
+        "short_name": "Newcastle",
+        "region_code": "1",
+        "latitude": -32.83340581987179,
+        "longitude": 151.59760613487435,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:1025",
+          "original_official_name": "Newcastle - Maitland",
+          "original_short_name": "Newcastle - Maitland"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:1",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:1025"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:5009",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "5009",
+        "name": "Perth",
+        "short_name": "Perth",
+        "region_code": "5",
+        "latitude": -32.181657943890514,
+        "longitude": 115.89919240432182,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:5009",
+          "original_official_name": "Perth",
+          "original_short_name": "Perth"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:5",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:5009"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:1028",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "1028",
+        "name": "Port Macquarie",
+        "short_name": "Port Macquarie",
+        "region_code": "1",
+        "latitude": -31.45580216655661,
+        "longitude": 152.87717664025234,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:1028",
+          "original_official_name": "Port Macquarie",
+          "original_short_name": "Port Macquarie"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:1",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:1028"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:3014",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "3014",
+        "name": "Rockhampton",
+        "short_name": "Rockhampton",
+        "region_code": "3",
+        "latitude": -23.348548972560533,
+        "longitude": 150.4732226767262,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:3014",
+          "original_official_name": "Rockhampton",
+          "original_short_name": "Rockhampton"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:3",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:3014"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:2016",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "2016",
+        "name": "Shepparton",
+        "short_name": "Shepparton",
+        "region_code": "2",
+        "latitude": -36.40227267155176,
+        "longitude": 145.41043561248347,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:2016",
+          "original_official_name": "Shepparton - Mooroopna",
+          "original_short_name": "Shepparton - Mooroopna"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:2",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:2016"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:3015",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "3015",
+        "name": "Sunshine Coast",
+        "short_name": "Sunshine Coast",
+        "region_code": "3",
+        "latitude": -26.554616336300057,
+        "longitude": 152.9761092687036,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:3015",
+          "original_official_name": "Sunshine Coast",
+          "original_short_name": "Sunshine Coast"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:3",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:3015"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:1031",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "1031",
+        "name": "Sydney",
+        "short_name": "Sydney",
+        "region_code": "1",
+        "latitude": -33.764307318604764,
+        "longitude": 150.90953711508573,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:1031",
+          "original_official_name": "Sydney",
+          "original_short_name": "Sydney"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:1",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:1031"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:3016",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "3016",
+        "name": "Toowoomba",
+        "short_name": "Toowoomba",
+        "region_code": "3",
+        "latitude": -27.563108412342014,
+        "longitude": 151.89582271527337,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:3016",
+          "original_official_name": "Toowoomba",
+          "original_short_name": "Toowoomba"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:3",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:3016"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:3017",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "3017",
+        "name": "Townsville",
+        "short_name": "Townsville",
+        "region_code": "3",
+        "latitude": -19.334144172931087,
+        "longitude": 146.72113471371117,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:3017",
+          "original_official_name": "Townsville",
+          "original_short_name": "Townsville"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:3",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:3017"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:1035",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "1035",
+        "name": "Wagga Wagga",
+        "short_name": "Wagga Wagga",
+        "region_code": "1",
+        "latitude": -35.123271865246416,
+        "longitude": 147.36677410138657,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:1035",
+          "original_official_name": "Wagga Wagga",
+          "original_short_name": "Wagga Wagga"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:1",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:1035"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:1036",
+      "entity_type": "city",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "city",
+        "code": "1036",
+        "name": "Wollongong",
+        "short_name": "Wollongong",
+        "region_code": "1",
+        "latitude": -34.42032512194619,
+        "longitude": 150.850025372501,
+        "metadata": {
+          "source_id": "au-abs-32180ds0004-v1",
+          "source_record_key": "AU:sua:1036",
+          "original_official_name": "Wollongong",
+          "original_short_name": "Wollongong"
+        },
+        "parent_id": null
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:ste:1",
+        "target_db_identity": null,
+        "resolution_method": "planned_region_insert"
+      },
+      "source_reference": {
+        "source_id": "au-abs-32180ds0004-v1",
+        "source_record_key": "AU:sua:1036"
+      },
+      "matching_reason": "none",
+      "precondition": "parent region/country exists or is planned",
+      "reason": "New city in DB; parent planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-31010do002-v1:AU:country",
+      "entity_type": "country",
+      "operation": "NOOP",
+      "target_table": "core.countries",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "country",
+        "code": null,
+        "name": "Australia",
+        "short_name": "Australia",
+        "region_code": null,
+        "latitude": -25.72806177626865,
+        "longitude": 134.4901657969426,
+        "metadata": {
+          "source_id": "au-abs-31010do002-v1",
+          "source_record_key": "AU:country",
+          "original_official_name": "Australia",
+          "original_short_name": "Australia"
+        }
+      },
+      "parent_reference": {
+        "candidate_key": null,
+        "target_db_identity": null,
+        "resolution_method": null
+      },
+      "source_reference": {
+        "source_id": "au-abs-31010do002-v1",
+        "source_record_key": "AU:country"
+      },
+      "matching_reason": "exact_country_code_match",
+      "precondition": "core.countries.code = 'AU' exists with default_currency='AUD'",
+      "reason": "Country row already exists with matching currency"
+    },
+    {
+      "candidate_key": "au-abs-31010do002-v1:AU:ste:8",
+      "entity_type": "region",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "region",
+        "code": "8",
+        "name": "Australian Capital Territory",
+        "short_name": "Australian Capital Territory",
+        "region_code": null,
+        "latitude": -35.48870967604144,
+        "longitude": 149.00249532876538,
+        "metadata": {
+          "source_id": "au-abs-31010do002-v1",
+          "source_record_key": "AU:ste:8",
+          "original_official_name": "Australian Capital Territory",
+          "original_short_name": "Australian Capital Territory"
+        }
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:country",
+        "target_db_identity": null,
+        "resolution_method": "exact_country_code"
+      },
+      "source_reference": {
+        "source_id": "au-abs-31010do002-v1",
+        "source_record_key": "AU:ste:8"
+      },
+      "matching_reason": "none",
+      "precondition": "parent country 'AU' exists in DB",
+      "reason": "New region in DB; INSERT planned"
+    },
+    {
+      "candidate_key": "au-abs-31010do002-v1:AU:ste:1",
+      "entity_type": "region",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "region",
+        "code": "1",
+        "name": "New South Wales",
+        "short_name": "New South Wales",
+        "region_code": null,
+        "latitude": -32.16563284289995,
+        "longitude": 147.008189601602,
+        "metadata": {
+          "source_id": "au-abs-31010do002-v1",
+          "source_record_key": "AU:ste:1",
+          "original_official_name": "New South Wales",
+          "original_short_name": "New South Wales"
+        }
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:country",
+        "target_db_identity": null,
+        "resolution_method": "exact_country_code"
+      },
+      "source_reference": {
+        "source_id": "au-abs-31010do002-v1",
+        "source_record_key": "AU:ste:1"
+      },
+      "matching_reason": "none",
+      "precondition": "parent country 'AU' exists in DB",
+      "reason": "New region in DB; INSERT planned"
+    },
+    {
+      "candidate_key": "au-abs-31010do002-v1:AU:ste:7",
+      "entity_type": "region",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "region",
+        "code": "7",
+        "name": "Northern Territory",
+        "short_name": "Northern Territory",
+        "region_code": null,
+        "latitude": -19.414805825766056,
+        "longitude": 133.36483051047097,
+        "metadata": {
+          "source_id": "au-abs-31010do002-v1",
+          "source_record_key": "AU:ste:7",
+          "original_official_name": "Northern Territory",
+          "original_short_name": "Northern Territory"
+        }
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:country",
+        "target_db_identity": null,
+        "resolution_method": "exact_country_code"
+      },
+      "source_reference": {
+        "source_id": "au-abs-31010do002-v1",
+        "source_record_key": "AU:ste:7"
+      },
+      "matching_reason": "none",
+      "precondition": "parent country 'AU' exists in DB",
+      "reason": "New region in DB; INSERT planned"
+    },
+    {
+      "candidate_key": "au-abs-31010do002-v1:AU:ste:9",
+      "entity_type": "region",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "region",
+        "code": "9",
+        "name": "Other Territories",
+        "short_name": "Other Territories",
+        "region_code": null,
+        "latitude": -20.760280702060182,
+        "longitude": 128.3106504707467,
+        "metadata": {
+          "source_id": "au-abs-31010do002-v1",
+          "source_record_key": "AU:ste:9",
+          "original_official_name": "Other Territories",
+          "original_short_name": "Other Territories"
+        }
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:country",
+        "target_db_identity": null,
+        "resolution_method": "exact_country_code"
+      },
+      "source_reference": {
+        "source_id": "au-abs-31010do002-v1",
+        "source_record_key": "AU:ste:9"
+      },
+      "matching_reason": "none",
+      "precondition": "parent country 'AU' exists in DB",
+      "reason": "New region in DB; INSERT planned"
+    },
+    {
+      "candidate_key": "au-abs-31010do002-v1:AU:ste:3",
+      "entity_type": "region",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "region",
+        "code": "3",
+        "name": "Queensland",
+        "short_name": "Queensland",
+        "region_code": null,
+        "latitude": -22.567076776298986,
+        "longitude": 144.54591014845013,
+        "metadata": {
+          "source_id": "au-abs-31010do002-v1",
+          "source_record_key": "AU:ste:3",
+          "original_official_name": "Queensland",
+          "original_short_name": "Queensland"
+        }
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:country",
+        "target_db_identity": null,
+        "resolution_method": "exact_country_code"
+      },
+      "source_reference": {
+        "source_id": "au-abs-31010do002-v1",
+        "source_record_key": "AU:ste:3"
+      },
+      "matching_reason": "none",
+      "precondition": "parent country 'AU' exists in DB",
+      "reason": "New region in DB; INSERT planned"
+    },
+    {
+      "candidate_key": "au-abs-31010do002-v1:AU:ste:4",
+      "entity_type": "region",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "region",
+        "code": "4",
+        "name": "South Australia",
+        "short_name": "South Australia",
+        "region_code": null,
+        "latitude": -30.108096862102542,
+        "longitude": 135.83181463704014,
+        "metadata": {
+          "source_id": "au-abs-31010do002-v1",
+          "source_record_key": "AU:ste:4",
+          "original_official_name": "South Australia",
+          "original_short_name": "South Australia"
+        }
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:country",
+        "target_db_identity": null,
+        "resolution_method": "exact_country_code"
+      },
+      "source_reference": {
+        "source_id": "au-abs-31010do002-v1",
+        "source_record_key": "AU:ste:4"
+      },
+      "matching_reason": "none",
+      "precondition": "parent country 'AU' exists in DB",
+      "reason": "New region in DB; INSERT planned"
+    },
+    {
+      "candidate_key": "au-abs-31010do002-v1:AU:ste:6",
+      "entity_type": "region",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "region",
+        "code": "6",
+        "name": "Tasmania",
+        "short_name": "Tasmania",
+        "region_code": null,
+        "latitude": -41.936457132012556,
+        "longitude": 146.59515266180614,
+        "metadata": {
+          "source_id": "au-abs-31010do002-v1",
+          "source_record_key": "AU:ste:6",
+          "original_official_name": "Tasmania",
+          "original_short_name": "Tasmania"
+        }
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:country",
+        "target_db_identity": null,
+        "resolution_method": "exact_country_code"
+      },
+      "source_reference": {
+        "source_id": "au-abs-31010do002-v1",
+        "source_record_key": "AU:ste:6"
+      },
+      "matching_reason": "none",
+      "precondition": "parent country 'AU' exists in DB",
+      "reason": "New region in DB; INSERT planned"
+    },
+    {
+      "candidate_key": "au-abs-31010do002-v1:AU:ste:2",
+      "entity_type": "region",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "region",
+        "code": "2",
+        "name": "Victoria",
+        "short_name": "Victoria",
+        "region_code": null,
+        "latitude": -36.85009837279301,
+        "longitude": 144.30428363185078,
+        "metadata": {
+          "source_id": "au-abs-31010do002-v1",
+          "source_record_key": "AU:ste:2",
+          "original_official_name": "Victoria",
+          "original_short_name": "Victoria"
+        }
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:country",
+        "target_db_identity": null,
+        "resolution_method": "exact_country_code"
+      },
+      "source_reference": {
+        "source_id": "au-abs-31010do002-v1",
+        "source_record_key": "AU:ste:2"
+      },
+      "matching_reason": "none",
+      "precondition": "parent country 'AU' exists in DB",
+      "reason": "New region in DB; INSERT planned"
+    },
+    {
+      "candidate_key": "au-abs-31010do002-v1:AU:ste:5",
+      "entity_type": "region",
+      "operation": "INSERT",
+      "target_table": "core.geographies",
+      "target_identity_fields": [
+        "country_code",
+        "geography_type",
+        "code"
+      ],
+      "planned_values": {
+        "country_code": "AU",
+        "geography_type": "region",
+        "code": "5",
+        "name": "Western Australia",
+        "short_name": "Western Australia",
+        "region_code": null,
+        "latitude": -25.46654245470071,
+        "longitude": 122.18173592090447,
+        "metadata": {
+          "source_id": "au-abs-31010do002-v1",
+          "source_record_key": "AU:ste:5",
+          "original_official_name": "Western Australia",
+          "original_short_name": "Western Australia"
+        }
+      },
+      "parent_reference": {
+        "candidate_key": "au-abs-31010do002-v1:AU:country",
+        "target_db_identity": null,
+        "resolution_method": "exact_country_code"
+      },
+      "source_reference": {
+        "source_id": "au-abs-31010do002-v1",
+        "source_record_key": "AU:ste:5"
+      },
+      "matching_reason": "none",
+      "precondition": "parent country 'AU' exists in DB",
+      "reason": "New region in DB; INSERT planned"
+    }
+  ],
+  "parent_dependencies": [
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:4001",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:4",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:1001",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:2",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:2003",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:2",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:2004",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:2",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:3002",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:3",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:5003",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:5",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:3003",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:3",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:3004",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:3",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:8001",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:8",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:1010",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:1",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:1011",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:1",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:7002",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:7",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:2008",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:2",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:3006",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:3",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:3007",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:3",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:3009",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:3",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:6003",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:6",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:6004",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:6",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:3011",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:3",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:2011",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:2",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:2012",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:2",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:1025",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:1",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:5009",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:5",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:1028",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:1",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:3014",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:3",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:2016",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:2",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:3015",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:3",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:1031",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:1",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:3016",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:3",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:3017",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:3",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:1035",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:1",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-32180ds0004-v1:AU:sua:1036",
+      "entity_type": "city",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:ste:1",
+      "parent_db_identity": null,
+      "resolution_method": "planned_region_insert"
+    },
+    {
+      "candidate_key": "au-abs-31010do002-v1:AU:ste:8",
+      "entity_type": "region",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:country",
+      "parent_db_identity": null,
+      "resolution_method": "exact_country_code"
+    },
+    {
+      "candidate_key": "au-abs-31010do002-v1:AU:ste:1",
+      "entity_type": "region",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:country",
+      "parent_db_identity": null,
+      "resolution_method": "exact_country_code"
+    },
+    {
+      "candidate_key": "au-abs-31010do002-v1:AU:ste:7",
+      "entity_type": "region",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:country",
+      "parent_db_identity": null,
+      "resolution_method": "exact_country_code"
+    },
+    {
+      "candidate_key": "au-abs-31010do002-v1:AU:ste:9",
+      "entity_type": "region",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:country",
+      "parent_db_identity": null,
+      "resolution_method": "exact_country_code"
+    },
+    {
+      "candidate_key": "au-abs-31010do002-v1:AU:ste:3",
+      "entity_type": "region",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:country",
+      "parent_db_identity": null,
+      "resolution_method": "exact_country_code"
+    },
+    {
+      "candidate_key": "au-abs-31010do002-v1:AU:ste:4",
+      "entity_type": "region",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:country",
+      "parent_db_identity": null,
+      "resolution_method": "exact_country_code"
+    },
+    {
+      "candidate_key": "au-abs-31010do002-v1:AU:ste:6",
+      "entity_type": "region",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:country",
+      "parent_db_identity": null,
+      "resolution_method": "exact_country_code"
+    },
+    {
+      "candidate_key": "au-abs-31010do002-v1:AU:ste:2",
+      "entity_type": "region",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:country",
+      "parent_db_identity": null,
+      "resolution_method": "exact_country_code"
+    },
+    {
+      "candidate_key": "au-abs-31010do002-v1:AU:ste:5",
+      "entity_type": "region",
+      "parent_candidate_key": "au-abs-31010do002-v1:AU:country",
+      "parent_db_identity": null,
+      "resolution_method": "exact_country_code"
+    }
+  ],
+  "exact_matching_method": "exact_official_identifier_or_composite_key",
+  "conflict_list": [],
+  "unresolved_list": [],
+  "expected_post_state": {
+    "country": 0,
+    "region": 9,
+    "city": 51
+  },
+  "delete_count": 0,
+  "update_count": 0,
+  "other_country_impact": 0,
+  "production_db_writes": 0,
+  "approval_status": "pending",
+  "plan_checksum": "a457dfa9de27dc32db40210f0006835f794d541bebac7146d0da0878d398ef56",
+  "safety": {
+    "production_db_writes": 0,
+    "read_only_transaction": true,
+    "fuzzy_match_count": 0,
+    "arbitrary_uuid_count": 0,
+    "country_code_db_compatibility": "blocked_pending_uk_to_gb_resolution",
+    "non_au_rows_read": 0,
+    "privilege_changes": 0,
+    "schema_changes": 0
+  },
+  "classification_counts": {
+    "INSERT": 41,
+    "NOOP": 1,
+    "CONFLICT": 0,
+    "UNRESOLVED_PARENT": 0,
+    "UNSUPPORTED": 0,
+    "INVALID": 0
+  },
+  "notes": [
+    "Read-only dry-run: no production data was written or modified.",
+    "All classifications use exact identity matching only \u2014 no fuzzy logic.",
+    "AU is the only supported country for 10.9A.",
+    "UK and GB references in candidate data would cause immediate failure.",
+    "Rollback plan: delete only migration-created rows identified by source_id.",
+    "No UPDATE operations are planned in this version."
+  ]
+}

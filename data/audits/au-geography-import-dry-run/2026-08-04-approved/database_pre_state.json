@@ -1,0 +1,14 @@
+{
+  "schema": "campcareer.controlled-import.db-pre-state.v1",
+  "generated_at": "2026-08-04T16:25:07Z",
+  "base_git_sha": "40e0848a52ef306e32387a15e2665862a3820555",
+  "country_counts": {
+    "city": 19,
+    "country": 0,
+    "region": 0
+  },
+  "uk_row_status": "present_as_legacy_no_change",
+  "gb_row_status": "absent",
+  "total_geography_rows_au": 19,
+  "note": "Production DB is read-only during dry-run; no modifications made."
+}

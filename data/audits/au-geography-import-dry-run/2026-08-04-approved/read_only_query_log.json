@@ -1,0 +1,45 @@
+{
+  "schema": "campcareer.controlled-import.query-log.v1",
+  "generated_at": "2026-08-04T16:25:07Z",
+  "query_count": 12,
+  "queries": [
+    {
+      "query": "SELECT 1 AS test;"
+    },
+    {
+      "query": "SELECT geography_type, COUNT(*) as cnt\n        FROM core.geographies\n        WHERE country_code = 'AU'\n        GROUP BY geography_type;"
+    },
+    {
+      "query": "SELECT code, name, default_currency, active\n        FROM core.countries\n        WHERE code = 'AU';"
+    },
+    {
+      "query": "SELECT id, code, name, geography_type, country_code, region_code, metadata\n            FROM core.geographies\n            WHERE country_code = 'AU' AND geography_type = 'country';"
+    },
+    {
+      "query": "SELECT id, code, name, geography_type, country_code, region_code, metadata\n            FROM core.geographies\n            WHERE country_code = 'AU' AND geography_type IN ('region', 'state', 'province')"
+    },
+    {
+      "query": "SELECT id, code, name, geography_type, country_code, region_code, metadata,\n                   latitude, longitude\n            FROM core.geographies\n            WHERE country_code = 'AU' AND geography"
+    },
+    {
+      "query": "SELECT column_name, data_type, is_nullable, column_default\n        FROM information_schema.columns\n        WHERE table_schema = 'core' AND table_name = 'countries'\n        ORDER BY ordinal_position;"
+    },
+    {
+      "query": "SELECT conname, pg_get_constraintdef(c.oid) as definition, contype\n        FROM pg_constraint c\n        JOIN pg_class rel ON c.conrelid = rel.oid\n        WHERE rel.relname = 'countries';"
+    },
+    {
+      "query": "SELECT column_name, data_type, is_nullable, column_default\n        FROM information_schema.columns\n        WHERE table_schema = 'core' AND table_name = 'geographies'\n        ORDER BY ordinal_position;"
+    },
+    {
+      "query": "SELECT conname, pg_get_constraintdef(c.oid) as definition, contype\n        FROM pg_constraint c\n        JOIN pg_class rel ON c.conrelid = rel.oid\n        WHERE rel.relname = 'geographies';"
+    },
+    {
+      "query": "SELECT indexname, indexdef\n        FROM pg_indexes\n        WHERE tablename = 'geographies' AND schemaname = 'core';"
+    },
+    {
+      "query": "SELECT DISTINCT geography_type, COUNT(*) as cnt\n        FROM core.geographies\n        GROUP BY geography_type\n        ORDER BY geography_type;"
+    }
+  ],
+  "write_commands_detected": 0,
+  "credentials_redacted": true
+}

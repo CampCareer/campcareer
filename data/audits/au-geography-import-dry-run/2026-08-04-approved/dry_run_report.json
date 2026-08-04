@@ -1,0 +1,47 @@
+{
+  "schema": "campcareer.controlled-import.dry-run-report.v1",
+  "generated_at": "2026-08-04T16:25:07Z",
+  "base_git_sha": "40e0848a52ef306e32387a15e2665862a3820555",
+  "candidate_package": "data/candidates/geography/AU/2026-08-04-approved",
+  "country": "AU",
+  "candidate_totals": {
+    "total": 42,
+    "country": 1,
+    "region": 9,
+    "city": 32
+  },
+  "db_pre_state": {
+    "AU country rows": 0,
+    "AU region rows": 0,
+    "AU city rows": 19,
+    "total AU geography rows": 19,
+    "UK country row status": "present (legacy \u2014 no change)",
+    "GB country row status": "absent"
+  },
+  "classification": {
+    "INSERT": 41,
+    "NOOP": 1,
+    "CONFLICT": 0,
+    "UNRESOLVED_PARENT": 0,
+    "UNSUPPORTED": 0,
+    "INVALID": 0
+  },
+  "safety": {
+    "production_db_writes": 0,
+    "non_au_rows_read": 0,
+    "non_au_rows_modified": 0,
+    "uk_gb_rows_modified": 0,
+    "privilege_changes": 0,
+    "schema_changes": 0,
+    "fuzzy_match_count": 0,
+    "arbitrary_uuid_count": 0
+  },
+  "expected_post_state": {
+    "country": 0,
+    "region": 9,
+    "city": 51
+  },
+  "plan_checksum": "a457dfa9de27dc32db40210f0006835f794d541bebac7146d0da0878d398ef56",
+  "approval_status": "pending",
+  "decision": "A Pass: candidate count verified (42); country code all AU; no UK/GB input alias leakage; checksum valid; read-only transaction enforced; 0 production DB writes"
+}
