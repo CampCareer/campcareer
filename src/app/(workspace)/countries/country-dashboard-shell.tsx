@@ -24,7 +24,7 @@ export function CountryDashboardShell({
   children?: ReactNode
 }) {
   const router = useRouter()
-  const { selectedCountry, setSelectedCountry, hydrated } = useSelectedCountry()
+  const { setSelectedCountry, hydrated } = useSelectedCountry()
   const routeCountry = countryCode ? getLaunchCountry(countryCode) : null
   const [query, setQuery] = useState(routeCountry?.name ?? initialQuery)
   const [open, setOpen] = useState(false)
@@ -35,20 +35,25 @@ export function CountryDashboardShell({
     if (!hydrated) return
 
     if (routeCountry) {
-      if (selectedCountry?.code !== routeCountry.code) {
-        setSelectedCountry({
-          code: routeCountry.code,
-          name: routeCountry.name,
-          currency: routeCountry.currency,
-        })
-      }
+      setSelectedCountry({
+        code: routeCountry.code,
+        name: routeCountry.name,
+        currency: routeCountry.currency,
+      })
       setQuery(routeCountry.name)
       return
     }
 
-    if (selectedCountry) setSelectedCountry(null)
+    setSelectedCountry(null)
     setQuery(initialQuery)
-  }, [hydrated, initialQuery, routeCountry, selectedCountry, setSelectedCountry])
+  }, [
+    hydrated,
+    initialQuery,
+    routeCountry?.code,
+    routeCountry?.currency,
+    routeCountry?.name,
+    setSelectedCountry,
+  ])
 
   const results = useMemo(() => {
     const normalized = query.trim().toLowerCase()
