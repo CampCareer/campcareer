@@ -1,6 +1,8 @@
 export type MapSearchParams = Record<string, string | string[] | undefined>
 
 /** Preserve legacy deep-link state while moving the interactive map to /maps. */
+import { toProductCountryCode } from "@/lib/data-foundation/entity-aliases"
+
 export function buildMapsHref(
   searchParams: MapSearchParams,
   countryCode?: string,
@@ -15,7 +17,10 @@ export function buildMapsHref(
     }
   }
 
-  if (countryCode) target.set("country", countryCode.toLowerCase())
+  if (countryCode) {
+    const normalizedCountryCode = toProductCountryCode(countryCode)
+    if (normalizedCountryCode) target.set("country", normalizedCountryCode.toLowerCase())
+  }
   const query = target.toString()
   return query ? `/maps?${query}` : "/maps"
 }

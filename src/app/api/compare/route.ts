@@ -5,13 +5,13 @@ import { buildIlikeOrFilter } from '@/lib/postgrest-filter'
 import { MEDICINE_FIRST_YEAR_SALARY, isMedicineField } from '@/lib/medicine-constants'
 import { applyCareerStageEarnings, type CareerStage } from '@/lib/career-stage'
 
-const COUNTRIES = ['us', 'au', 'ca', 'uk', 'ie'] as const
+const COUNTRIES = ['us', 'au', 'ca', 'gb', 'ie'] as const
 type Country = typeof COUNTRIES[number]
 
 const NON_US_TABLE: Record<Exclude<Country, 'us'>, string> = {
   au: 'roi_explorer_au',
   ca: 'roi_explorer_ca',
-  uk: 'roi_explorer_uk',
+  gb: 'roi_explorer_uk',
   ie: 'roi_explorer_ie',
 }
 

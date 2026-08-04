@@ -28,7 +28,7 @@ const COUNTRIES = [
   { value: "us", label: "United States" },
   { value: "au", label: "Australia" },
   { value: "ca", label: "Canada" },
-  { value: "uk", label: "United Kingdom" },
+  { value: "gb", label: "United Kingdom" },
   { value: "ie", label: "Ireland" },
 ]
 
@@ -54,7 +54,7 @@ function countryToCcy(country: string): CurrencyCode {
   return country === "us" ? "USD"
     : country === "au" ? "AUD"
     : country === "ca" ? "CAD"
-    : country === "uk" ? "GBP"
+    : country === "gb" ? "GBP"
     : "EUR"
 }
 
@@ -171,8 +171,8 @@ export default function CareerCompareClient() {
 
   const sym = CURRENCIES.find(c => c.code === currency)?.symbol ?? "$"
   const tc = t.compare.careers
-  const unsupportedA = countryA === "ca" || countryA === "uk"
-  const unsupportedB = countryB === "ca" || countryB === "uk"
+  const unsupportedA = countryA === "ca" || countryA === "gb"
+  const unsupportedB = countryB === "ca" || countryB === "gb"
 
   useEffect(() => {
     if (unsupportedA) { setCareersA([]); setDetailA(null); setCodeA(""); return }

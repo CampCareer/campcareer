@@ -1,16 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
+import { toProductCountryCode } from '@/lib/data-foundation/entity-aliases'
 
 const COUNTRY_MAP: Record<string, string> = {
   us: 'US',
   au: 'AU',
   ca: 'CA',
-  uk: 'UK',
+  gb: 'UK',
   ie: 'IE',
 }
 
 export async function GET(request: NextRequest) {
-  const country = request.nextUrl.searchParams.get('country') || 'us'
+  const rawCountry = request.nextUrl.searchParams.get('country') || 'us'
+  const country = toProductCountryCode(rawCountry) ?? rawCountry.toLowerCase()
   const slug = request.nextUrl.searchParams.get('slug')
   const dbCountry = COUNTRY_MAP[country]
 

@@ -1,4 +1,4 @@
-export type CountryCompareCode = "AU" | "IE" | "UK"
+export type CountryCompareCode = "AU" | "IE" | "GB"
 export type CountryCompareExternalIsoCode = "AU" | "IE" | "GB"
 export type CountryCompareCurrencyCode = "AUD" | "EUR" | "GBP"
 
@@ -62,18 +62,18 @@ export const COUNTRY_COMPARE_CATALOG: readonly CountryCompareCountry[] = [
     ],
   },
   {
-    productCode: "UK",
+    productCode: "GB",
     externalIsoCode: "GB",
     countryName: "United Kingdom",
     currencyCode: "GBP",
     currencySymbol: "£",
     defaultCitySlug: null,
     cities: [
-      city("UK", "london", "London", "England"),
-      city("UK", "manchester", "Manchester", "England"),
-      city("UK", "birmingham", "Birmingham", "England"),
-      city("UK", "glasgow", "Glasgow", "Scotland"),
-      city("UK", "belfast", "Belfast", "Northern Ireland"),
+      city("GB", "london", "London", "England"),
+      city("GB", "manchester", "Manchester", "England"),
+      city("GB", "birmingham", "Birmingham", "England"),
+      city("GB", "glasgow", "Glasgow", "Scotland"),
+      city("GB", "belfast", "Belfast", "Northern Ireland"),
     ],
   },
 ] as const

@@ -33,7 +33,7 @@ export async function toExploreRows(rows: MajorRow[], nameMode: "country" | "maj
     return {
       href: `/degree-risk/result?major=${row.slug}&view=${row.country}`,
       name: nameMode === "country" ? rr.countries[row.country] : opts[row.slug] ?? majorLabel(row.slug),
-      flag: nameMode === "country" ? COUNTRY_META[row.country].flag : undefined,
+      flag: nameMode === "country" ? COUNTRY_META[row.country as keyof typeof COUNTRY_META].flag : undefined,
       risk: row.overall_risk,
       riskLabel: rr.risk[row.overall_risk],
       riskClass: RISK_BADGE[row.overall_risk].className,

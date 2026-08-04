@@ -134,7 +134,7 @@ export default function LeafletMap({
   data: MapData
   selected: string | null
   selectedSA4: SA4Region | null
-  activeCountry: "AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL" | "BE" | "JP" | "SG" | "KR" | "FR" | "ES" | "NZ" | "NO" | "SE" | "DK" | "FI" | "CH" | "AE" | null
+  activeCountry: "AU" | "US" | "CA" | "IE" | "GB" | "DE" | "NL" | "BE" | "JP" | "SG" | "KR" | "FR" | "ES" | "NZ" | "NO" | "SE" | "DK" | "FI" | "CH" | "AE" | null
   selectedFranceCity?: string | null
   selectedSpainCity?: string | null
   ieSchools?: Array<{
@@ -144,7 +144,7 @@ export default function LeafletMap({
     description_ko: string | null;
   }>
   onSelectState: (s: string) => void
-  onSelectCountry: (c: "AU" | "US" | "CA" | "IE" | "UK" | "DE" | "NL" | "BE" | "JP" | "SG" | "KR" | "FR" | "ES" | "NZ" | "NO" | "SE" | "DK" | "FI" | "CH" | "AE") => void
+  onSelectCountry: (c: "AU" | "US" | "CA" | "IE" | "GB" | "DE" | "NL" | "BE" | "JP" | "SG" | "KR" | "FR" | "ES" | "NZ" | "NO" | "SE" | "DK" | "FI" | "CH" | "AE") => void
   onSelectSA4: (code: string) => void
   onSelectFranceCity?: (code: string) => void
   onSelectSpainCity?: (code: string) => void
@@ -269,7 +269,7 @@ export default function LeafletMap({
         || (country === "US" && isUS && usLayerRef.current != null)
         || (country === "CA" && isCA && caLayerRef.current != null)
         || (country === "IE" && isIE && ieLayerRef.current != null)
-        || (country === "UK" && isGB && ukLayerRef.current != null)
+        || (country === "GB" && isGB && ukLayerRef.current != null)
         || (country === "DE" && isDE && deLayerRef.current != null)
         || (country === "NL" && isNL && nlLayerRef.current != null)
         || (country === "BE" && isBE && beLayerRef.current != null)
@@ -348,13 +348,13 @@ export default function LeafletMap({
     return () => { style.remove() }
   }, [])
 
-  function buildMarkers(country: "US" | "AU" | "CA" | "UK" | "DE" | "NL" | "KR" | "FR" | "NZ" | "NO" | "SE" | "DK" | "FI" | "CH"): L.LayerGroup {
+  function buildMarkers(country: "US" | "AU" | "CA" | "GB" | "DE" | "NL" | "KR" | "FR" | "NZ" | "NO" | "SE" | "DK" | "FI" | "CH"): L.LayerGroup {
     const group = L.layerGroup()
     const colleges = country === "AU"
       ? dataRef.current.auRankedColleges
       : country === "CA"
       ? dataRef.current.caColleges
-      : country === "UK"
+      : country === "GB"
       ? dataRef.current.ukColleges
       : country === "DE"
       ? dataRef.current.deColleges
@@ -428,8 +428,8 @@ export default function LeafletMap({
       group.addTo(map)
       markerLayerRef.current = group
     }
-    if (activeCountryRef.current === "UK" && map.getZoom() >= 6) {
-      const group = buildMarkers("UK")
+    if (activeCountryRef.current === "GB" && map.getZoom() >= 6) {
+      const group = buildMarkers("GB")
       group.addTo(map)
       markerLayerRef.current = group
     }
@@ -676,7 +676,7 @@ export default function LeafletMap({
         else if (activeCountryRef.current === "US") map.fitBounds(US_BOUNDS)
         else if (activeCountryRef.current === "CA") map.fitBounds(CA_BOUNDS)
         else if (activeCountryRef.current === "IE") map.fitBounds(IE_BOUNDS)
-        else if (activeCountryRef.current === "UK") map.fitBounds(UK_BOUNDS)
+        else if (activeCountryRef.current === "GB") map.fitBounds(UK_BOUNDS)
         else if (activeCountryRef.current === "DE") map.fitBounds(DE_BOUNDS)
         else if (activeCountryRef.current === "NL") map.fitBounds(NL_BOUNDS)
         else if (activeCountryRef.current === "BE") map.fitBounds(BE_BOUNDS)
@@ -700,7 +700,7 @@ export default function LeafletMap({
     // Zoom change → update marker visibility
     map.on("zoomend", () => {
       const c = activeCountryRef.current
-      if (c === "US" || c === "AU" || c === "CA" || c === "UK" || c === "DE" || c === "NL" || c === "KR" || c === "FR" || c === "ES" || c === "NZ" || c === "NO" || c === "SE" || c === "DK" || c === "FI" || c === "CH") updateMarkers()
+      if (c === "US" || c === "AU" || c === "CA" || c === "GB" || c === "DE" || c === "NL" || c === "KR" || c === "FR" || c === "ES" || c === "NZ" || c === "NO" || c === "SE" || c === "DK" || c === "FI" || c === "CH") updateMarkers()
     })
 
     // World countries layer
@@ -785,7 +785,7 @@ export default function LeafletMap({
             const isAE = isUAE(props)
             if (!isAU && !isUS && !isCA && !isIE && !isGB && !isDE && !isNL && !isBE && !isJP && !isSG && !isKR && !isFR && !isES && !isNZ && !isNO && !isSE && !isDK && !isFI && !isCH && !isAE) return
 
-            const country = isAU ? "AU" : isUS ? "US" : isCA ? "CA" : isIE ? "IE" : isGB ? "UK" : isDE ? "DE" : isNL ? "NL" : isBE ? "BE" : isJP ? "JP" : isSG ? "SG" : isKR ? "KR" : isFR ? "FR" : isES ? "ES" : isNZ ? "NZ" : isNO ? "NO" : isSE ? "SE" : isDK ? "DK" : isFI ? "FI" : isAE ? "AE" : "CH"
+            const country = isAU ? "AU" : isUS ? "US" : isCA ? "CA" : isIE ? "IE" : isGB ? "GB" : isDE ? "DE" : isNL ? "NL" : isBE ? "BE" : isJP ? "JP" : isSG ? "SG" : isKR ? "KR" : isFR ? "FR" : isES ? "ES" : isNZ ? "NZ" : isNO ? "NO" : isSE ? "SE" : isDK ? "DK" : isFI ? "FI" : isAE ? "AE" : "CH"
             const name = isAU ? "Australia" : isUS ? "United States" : isCA ? "Canada" : isIE ? "Ireland" : isGB ? "United Kingdom" : isDE ? "Germany" : isNL ? "Netherlands" : isBE ? "Belgium" : isJP ? "Japan" : isSG ? "Singapore" : isKR ? "South Korea" : isFR ? "France" : isES ? "Spain" : isNZ ? "New Zealand" : isNO ? "Norway" : isSE ? "Sweden" : isDK ? "Denmark" : isFI ? "Finland" : isAE ? "United Arab Emirates" : "Switzerland"
             lyr.bindTooltip(name, {
               sticky: true,
@@ -1160,7 +1160,7 @@ export default function LeafletMap({
             ;(lyr as L.Path).on({
               click: () => {
                 if (itl1Code) {
-                  onSelectCountryRef.current("UK")
+                  onSelectCountryRef.current("GB")
                   onSelectStateRef.current(itl1Code)
                 }
               },
@@ -1191,7 +1191,7 @@ export default function LeafletMap({
               el.addEventListener("keydown", (e: KeyboardEvent) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault()
-                  onSelectCountryRef.current("UK")
+                  onSelectCountryRef.current("GB")
                   onSelectStateRef.current(itl1Code)
                 }
               })
@@ -1199,7 +1199,7 @@ export default function LeafletMap({
           },
         })
         ukLayerRef.current = ukLayer
-        if (activeCountryRef.current === "UK") {
+        if (activeCountryRef.current === "GB") {
           map.addLayer(ukLayer)
         }
       })
@@ -1853,7 +1853,7 @@ export default function LeafletMap({
       if (ieLayerRef.current) map.addLayer(ieLayerRef.current)
       fitToBounds(IE_BOUNDS, true)
       updateIEMarkers()
-    } else if (activeCountry === "UK") {
+    } else if (activeCountry === "GB") {
       if (ukLayerRef.current) map.addLayer(ukLayerRef.current)
       fitToBounds(UK_BOUNDS, true)
       updateMarkers()
@@ -1933,7 +1933,7 @@ export default function LeafletMap({
   // manually zooms or switches country.
   useEffect(() => {
     if (!mapRef.current || !activeCountry) return
-    if (activeCountry === "US" || activeCountry === "AU" || activeCountry === "CA" || activeCountry === "UK" || activeCountry === "DE" || activeCountry === "NL" || activeCountry === "KR" || activeCountry === "FR" || activeCountry === "ES" || activeCountry === "NZ" || activeCountry === "NO" || activeCountry === "SE" || activeCountry === "DK" || activeCountry === "FI" || activeCountry === "CH" || activeCountry === "AE") {
+    if (activeCountry === "US" || activeCountry === "AU" || activeCountry === "CA" || activeCountry === "GB" || activeCountry === "DE" || activeCountry === "NL" || activeCountry === "KR" || activeCountry === "FR" || activeCountry === "ES" || activeCountry === "NZ" || activeCountry === "NO" || activeCountry === "SE" || activeCountry === "DK" || activeCountry === "FI" || activeCountry === "CH" || activeCountry === "AE") {
       updateMarkers()
     }
     // updateMarkers reads the current ref-backed data and map state.
@@ -1994,7 +1994,7 @@ export default function LeafletMap({
         if (b) mapRef.current?.flyToBounds(b, { padding: [30, 30], maxZoom: 8, duration: 0.6 })
       }
       updateIEMarkers()
-    } else if (ukLayerRef.current && activeCountry === "UK") {
+    } else if (ukLayerRef.current && activeCountry === "GB") {
       ukLayerRef.current.setStyle((feature) => {
         const props = feature?.properties as Record<string, string> | undefined
         const itl1Code = props?.ITL121CD ?? ""

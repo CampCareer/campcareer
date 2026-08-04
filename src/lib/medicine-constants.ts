@@ -6,6 +6,7 @@ export const MEDICINE_FIRST_YEAR_SALARY: Record<string, number> = {
   us: 280000,  // USD — attending physician, first-year (MGMA/AAMC 2024 weighted avg)
   ie: 120000,  // EUR — HSE Consultant Type B entry (2024)
   uk: 100000,  // GBP — NHS Consultant starting (2024)
+  gb: 100000,  // GBP — NHS Consultant starting (2024)
   ca: 280000,  // CAD — Specialist physician, first-year (CIHI 2024)
   au: 300000,  // AUD — Medical specialist consultant (AMA 2024)
 }

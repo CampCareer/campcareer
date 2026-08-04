@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase-admin'
 import { withStableIds } from '@/lib/checklist-id'
 import { FEATURE_FLAGS } from '@/lib/feature-flags'
+import { toProductCountryCode } from '@/lib/data-foundation/entity-aliases'
 
 const VISA_PROMPTS: Record<string, string> = {
   'student':        'student visa / study permit',
@@ -16,27 +17,34 @@ export async function POST(req: NextRequest) {
   if (Number(req.headers.get('content-length') ?? 0) > 8_192) {
     return NextResponse.json({ error: 'Request is too large' }, { status: 413 })
   }
-  const { country, visa_type } = await req.json()
-
-  if (!country || !visa_type) {
+  const { country: rawCountry, visa_type } = await req.json()
+ 
+  if (!rawCountry || !visa_type) {
     return NextResponse.json({ error: 'Missing country or visa_type' }, { status: 400 })
   }
-
+ 
+  const country = toProductCountryCode(rawCountry)
+  if (!country) {
+    return NextResponse.json({ error: 'Invalid country' }, { status: 400 })
+  }
+ 
   // 1. 캐시 확인
-  const { data: cached } = await supabaseAdmin
+  const { data: cachedRows } = await supabaseAdmin
     .from('checklist_cache')
     .select('items')
     .eq('country', country)
     .eq('visa_type', visa_type)
-    .single()
+    .limit(1)
+ 
+  const cached = (cachedRows ?? [])[0] as { items: unknown } | null
 
   if (cached) {
     return NextResponse.json({ items: withStableIds(cached.items), cached: true })
   }
-
+ 
   // 2. Claude API 호출
   const countryName: Record<string, string> = {
-    IE: 'Ireland', AU: 'Australia', CA: 'Canada', UK: 'United Kingdom', US: 'United States'
+    AU: 'Australia', IE: 'Ireland', GB: 'United Kingdom', US: 'United States'
   }
 
   const prompt = `You are an immigration and study abroad expert. Generate a comprehensive visa application checklist for an international student applying for a ${VISA_PROMPTS[visa_type] ?? visa_type} in ${countryName[country] ?? country}.

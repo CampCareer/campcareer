@@ -10,6 +10,7 @@ import { calcTax } from '@/lib/tax'
 import { buildIlikeOrFilter } from '@/lib/postgrest-filter'
 import { degreeYears } from '@/lib/degree-years'
 import { scoreSchools } from '@/lib/school-score'
+import { toProductCountryCode } from '@/lib/data-foundation/entity-aliases'
 
 export const VALID_SORT_FIELDS = ['score', 'roi_score', 'payback_years', 'net_salary', 'avg_cao_points'] as const
 export type SortField = typeof VALID_SORT_FIELDS[number]
@@ -22,14 +23,14 @@ const SORT_ASCENDING: Record<SortField, boolean> = {
   avg_cao_points: false,
 }
 
-export const VALID_COUNTRIES = ['us', 'au', 'ca', 'uk', 'ie', 'de', 'nl'] as const
+export const VALID_COUNTRIES = ['us', 'au', 'ca', 'gb', 'ie', 'de', 'nl'] as const
 export type RoiCountry = typeof VALID_COUNTRIES[number]
 
 export const DEFAULT_STATE: Record<RoiCountry, string> = {
   us: 'CA',
   au: 'NSW',
   ca: 'ON',
-  uk: 'ALL_STATES',
+  gb: 'ALL_STATES',
   ie: 'Leinster',
   de: 'ALL_STATES',
   nl: 'ALL_STATES',
@@ -38,7 +39,7 @@ export const DEFAULT_STATE: Record<RoiCountry, string> = {
 function getTableName(country: string): string {
   if (country === 'au') return 'roi_explorer_au'
   if (country === 'ca') return 'roi_explorer_ca'
-  if (country === 'uk') return 'roi_explorer_uk'
+  if (country === 'gb') return 'roi_explorer_uk'
   if (country === 'ie') return 'roi_explorer_ie'
   if (country === 'de') return 'roi_explorer_de'
   if (country === 'nl') return 'roi_explorer_nl'
@@ -192,8 +193,10 @@ export type RoiQueryResult = {
 }
 
 export function normalizeRoiCountry(countryParam: string | null | undefined): RoiCountry {
-  return (VALID_COUNTRIES as readonly string[]).includes(countryParam ?? '')
-    ? (countryParam as RoiCountry)
+  const normalized = countryParam ? toProductCountryCode(countryParam) : null
+  const country = normalized?.toLowerCase() ?? countryParam?.toLowerCase() ?? ''
+  return (VALID_COUNTRIES as readonly string[]).includes(country)
+    ? (country as RoiCountry)
     : 'us'
 }
 
@@ -205,7 +208,7 @@ export async function fetchRoiData(params: RoiQueryParams): Promise<RoiQueryResu
   const rawState = stateParam || defaultState
   // 'London' is not a valid college_state in roi_explorer_uk; normalise to ALL_STATES
   // so legacy bookmarks / old UI code never returns zero rows.
-  const state = (country === 'uk' && rawState === 'London') ? 'ALL_STATES' : rawState
+  const state = (country === 'gb' && rawState === 'London') ? 'ALL_STATES' : rawState
   const regionNormalised = state !== rawState
   const field = params.field ?? ''
   const collegeId = params.collegeId ?? ''

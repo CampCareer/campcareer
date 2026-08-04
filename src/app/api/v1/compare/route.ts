@@ -28,7 +28,7 @@ export function GET(request: NextRequest) {
     return NextResponse.json({ error: "Unknown canonical career or major" }, { status: 422 })
   }
   const career = resolvedCareer ?? defaultDecisionCareer()
-  const requestedCountries = (request.nextUrl.searchParams.get("countries") ?? "AU,CA,US,UK")
+  const requestedCountries = (request.nextUrl.searchParams.get("countries") ?? "AU,CA,US,GB")
     .split(",")
   const countries = resolveLaunchCountries(requestedCountries)
   const displayCurrency = (request.nextUrl.searchParams.get("currency") ?? "USD").toUpperCase()

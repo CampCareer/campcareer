@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabase"
 import { pageMetadata } from "@/lib/seo"
 import { JsonLd, breadcrumbLd } from "@/components/seo/json-ld"
 import { CollegeDetailClient, type DetailRow } from "./CollegeDetailClient"
+import { toProductCountryCode } from '@/lib/data-foundation/entity-aliases'
 import { getAuUniversityById, getAuUniversityBySlug } from "@/lib/au-universities"
 import nlCollegesRaw from "@/data/nl-colleges.json"
 import nlCitiesRaw from "@/data/nl-cities.json"
@@ -18,21 +19,21 @@ const COLLEGES_TABLE: Record<RoiCountry, string> = {
   us: "colleges_us",
   au: "colleges_au",
   ca: "colleges_ca",
-  uk: "colleges_uk",
+  gb: "colleges_uk",
   ie: "colleges_ie",
   de: "colleges_de",
   nl: "colleges_nl",
 }
 
 const CURRENCY_SYMBOL: Record<RoiCountry, string> = {
-  us: "$", au: "A$", ca: "C$", uk: "£", ie: "€", de: "€", nl: "€",
+  us: "$", au: "A$", ca: "C$", gb: "£", ie: "€", de: "€", nl: "€",
 }
 
 const COUNTRY_LABEL: Record<RoiCountry, string> = {
   us: "United States",
   au: "Australia",
   ca: "Canada",
-  uk: "United Kingdom",
+  gb: "United Kingdom",
   ie: "Ireland",
   de: "Germany",
   nl: "Netherlands",
@@ -123,7 +124,11 @@ function makeDetailRowsFromJSON(collegeId: string, country: 'nl' | 'de'): Detail
 type Params = { country: string; college_id: string }
 
 function parseCountry(raw: string): RoiCountry | null {
-  return (VALID_COUNTRIES as readonly string[]).includes(raw) ? (raw as RoiCountry) : null
+  const normalized = toProductCountryCode(raw)
+  if (!normalized) return null
+  return (VALID_COUNTRIES as readonly string[]).includes(normalized.toLowerCase())
+    ? (normalized.toLowerCase() as RoiCountry)
+    : null
 }
 
 function getJSONFallbackCountry(country: RoiCountry): 'nl' | 'de' | null {

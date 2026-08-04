@@ -147,8 +147,13 @@ export function resolvePublicCareer(value: string | null, major: string | null):
   return mappedId ? getCanonicalCareer(mappedId) : null
 }
 
+import { toProductCountryCode } from "@/lib/data-foundation/entity-aliases"
+
 export function resolveLaunchCountries(values: string[]): LaunchCountry[] {
-  const requested = new Set(values.map((value) => value.trim().toUpperCase()).filter(Boolean))
+  const requested = new Set(values
+    .map((value) => toProductCountryCode(value.trim()) ?? value.trim().toUpperCase())
+    .filter(Boolean),
+  )
   return LAUNCH_COUNTRIES.filter((country) => requested.has(country.code)).slice(0, 4) as LaunchCountry[]
 }
 

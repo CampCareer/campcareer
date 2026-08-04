@@ -1,16 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
+import { toProductCountryCode } from '@/lib/data-foundation/entity-aliases'
 
 const ROI_TABLES: Record<string, string> = {
   us: 'roi_explorer_us',
   au: 'roi_explorer_au',
   ca: 'roi_explorer_ca',
-  uk: 'roi_explorer_uk',
+  gb: 'roi_explorer_uk',
   ie: 'roi_explorer_ie',
 }
 
 export async function GET(request: NextRequest) {
-  const country = request.nextUrl.searchParams.get('country') || 'us'
+  const rawCountry = request.nextUrl.searchParams.get('country') || 'us'
+  const country = toProductCountryCode(rawCountry) ?? rawCountry.toLowerCase()
   const collegeId = request.nextUrl.searchParams.get('collegeId')
   const table = ROI_TABLES[country]
 

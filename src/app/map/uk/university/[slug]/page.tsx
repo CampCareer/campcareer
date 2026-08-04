@@ -31,7 +31,7 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
   return pageMetadata({
     title,
     description,
-    path: `/map/uk/university/${params.slug}`,
+    path: `/map/gb/university/${params.slug}`,
   })
 }
 
@@ -59,7 +59,7 @@ export default async function UniversityPage(props: { params: Promise<{ slug: st
           name: college.college_name,
           cityName: college.city_name,
           locationLabel: regionName,
-          countryCode: "UK",
+          countryCode: "GB",
           countryLabel: "United Kingdom",
           qsRank: college.qs_rank,
           website: college.website,
@@ -74,7 +74,7 @@ export default async function UniversityPage(props: { params: Promise<{ slug: st
       />
       <section className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
         <Link
-          href={`/maps?country=uk&university=${params.slug}`}
+          href={`/map?country=gb&university=${params.slug}`}
           className="inline-flex rounded-lg bg-slate-950 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
         >
           Open interactive map

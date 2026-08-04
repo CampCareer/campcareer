@@ -10,7 +10,7 @@ export const CORE_DATA_CATEGORIES = [
 ] as const
 
 export type CoreDataCategory = (typeof CORE_DATA_CATEGORIES)[number]
-export type RegistryCountryCode = "AU" | "US" | "CA" | "UK" | "IE" | "DE" | "NL" | "BE" | "SG" | "KR" | "JP" | "FR" | "ES" | "NZ" | "NO" | "SE" | "DK" | "FI" | "CH" | "AE"
+export type RegistryCountryCode = "AU" | "US" | "CA" | "GB" | "IE" | "DE" | "NL" | "BE" | "SG" | "KR" | "JP" | "FR" | "ES" | "NZ" | "NO" | "SE" | "DK" | "FI" | "CH" | "AE"
 export type SourceConfidence = "official" | "market-estimate" | "internal-estimate"
 export type SourceMethod = "official-api" | "official-download" | "official-web" | "market-estimate"
 export type ReviewStatus = "approved" | "review-required"
@@ -64,7 +64,7 @@ const COUNTRY_SOURCES: Record<RegistryCountryCode, CountrySourceSeed> = {
     "visa-pathway": { sourceName: "IRCC Post-Graduation Work Permit", sourceUrl: "https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/work/after-graduation.html", method: "official-web", refreshCadence: "monthly" },
     shortage: { sourceName: "Government of Canada Job Bank outlook", sourceUrl: "https://www.jobbank.gc.ca/trend-analysis", method: "official-web", refreshCadence: "quarterly" },
   },
-  UK: {
+  GB: {
     tuition: { sourceName: "Discover Uni", sourceUrl: "https://discoveruni.gov.uk/", method: "official-web", refreshCadence: "annual" },
     "graduate-outcomes": { sourceName: "HESA Graduate Outcomes", sourceUrl: "https://www.hesa.ac.uk/data-and-analysis/graduates", method: "official-download", refreshCadence: "annual" },
     occupation: { sourceName: "Office for National Statistics ASHE", sourceUrl: "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours", method: "official-download", refreshCadence: "annual" },

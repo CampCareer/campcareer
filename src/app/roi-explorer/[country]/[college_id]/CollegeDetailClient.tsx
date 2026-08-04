@@ -30,13 +30,13 @@ export type DetailRow = {
   duration_years?: number | null
 }
 
-type Country = 'us' | 'au' | 'ca' | 'uk' | 'ie' | 'de' | 'nl'
+type Country = 'us' | 'au' | 'ca' | 'gb' | 'ie' | 'de' | 'nl'
 
 const CURRENCY: Record<Country, { symbol: string; code: string }> = {
   us: { symbol: '$',  code: 'USD' },
   au: { symbol: 'A$', code: 'AUD' },
   ca: { symbol: 'C$', code: 'CAD' },
-  uk: { symbol: '£',  code: 'GBP' },
+  gb: { symbol: '£',  code: 'GBP' },
   ie: { symbol: '€',  code: 'EUR' },
   de: { symbol: '€',  code: 'EUR' },
   nl: { symbol: '€',  code: 'EUR' },
@@ -46,7 +46,7 @@ const COUNTRY_LABEL: Record<Country, string> = {
   us: 'United States',
   au: 'Australia',
   ca: 'Canada',
-  uk: 'United Kingdom',
+  gb: 'United Kingdom',
   ie: 'Ireland',
   de: 'Germany',
   nl: 'Netherlands',
@@ -158,7 +158,7 @@ export function CollegeDetailClient({
   const afterTaxAvailable = incomeAfterTax !== null
   const taxBreakdown = showAfterTax && taxAmount !== null
     ? [{
-        label: `${td.incomeTax} ${country === 'ie' ? 'USC/PRSI' : country === 'uk' ? 'NI' : country === 'au' ? 'Medicare' : country === 'ca' ? 'CPP/EI' : 'FICA'}`,
+        label: `${td.incomeTax} ${country === 'ie' ? 'USC/PRSI' : country === 'gb' ? 'NI' : country === 'au' ? 'Medicare' : country === 'ca' ? 'CPP/EI' : 'FICA'}`,
         sublabel: `${country.toUpperCase()} ${td.taxEstimated}`,
         value: taxAmount,
         pct: grossSalary > 0 ? (taxAmount / grossSalary) * 100 : 0,

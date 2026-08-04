@@ -18,7 +18,7 @@ test("legacy map redirects preserve deep-link state", () => {
   )
   assert.equal(
     buildMapsHref({ tab: "shortage", q: ["nurse", "teacher"] }, "UK"),
-    "/maps?tab=shortage&q=nurse&q=teacher&country=uk",
+    "/maps?tab=shortage&q=nurse&q=teacher&country=gb",
   )
 })
 

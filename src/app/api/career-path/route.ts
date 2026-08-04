@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { FEATURE_FLAGS } from '@/lib/feature-flags'
+import { toProductCountryCode } from '@/lib/data-foundation/entity-aliases'
 
 export async function POST(req: NextRequest) {
   if (!FEATURE_FLAGS.aiGeneration) {
@@ -8,11 +9,16 @@ export async function POST(req: NextRequest) {
   if (Number(req.headers.get('content-length') ?? 0) > 16_384) {
     return NextResponse.json({ error: 'Request is too large' }, { status: 413 })
   }
-  const { country, field, currentStatus, experience, goalText, goal, english } = await req.json()
-  if (!country || !field || !currentStatus) {
+  const { country: rawCountry, field, currentStatus, experience, goalText, goal, english } = await req.json()
+  if (!rawCountry || !field || !currentStatus) {
     return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
   }
-
+ 
+  const country = toProductCountryCode(rawCountry)
+  if (!country) {
+    return NextResponse.json({ error: 'Invalid country' }, { status: 400 })
+  }
+ 
   const STATUS_LABEL: Record<string, string> = {
     student: 'currently a student',
     fresh_grad: 'a recent graduate (0–1 year)',
@@ -25,8 +31,7 @@ export async function POST(req: NextRequest) {
     study: 'pursue academic excellence and strong ROI',
   }
   const COUNTRY_NAME: Record<string, string> = {
-    ie: 'Ireland', au: 'Australia', ca: 'Canada', uk: 'United Kingdom', us: 'United States',
-    IE: 'Ireland', AU: 'Australia', CA: 'Canada', UK: 'United Kingdom', US: 'United States',
+    AU: 'Australia', IE: 'Ireland', GB: 'United Kingdom', US: 'United States',
   }
 
   const systemPrompt = `You are a career path advisor specializing in international study and work migration.

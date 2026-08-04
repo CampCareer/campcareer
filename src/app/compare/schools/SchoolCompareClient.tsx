@@ -29,7 +29,7 @@ const COUNTRIES = [
   { value: "us", label: "United States" },
   { value: "au", label: "Australia" },
   { value: "ca", label: "Canada" },
-  { value: "uk", label: "United Kingdom" },
+  { value: "gb", label: "United Kingdom" },
   { value: "ie", label: "Ireland" },
 ]
 
@@ -55,7 +55,7 @@ function countryToCcy(country: string): CurrencyCode {
   return country === "us" ? "USD"
     : country === "au" ? "AUD"
     : country === "ca" ? "CAD"
-    : country === "uk" ? "GBP"
+    : country === "gb" ? "GBP"
     : "EUR"
 }
 

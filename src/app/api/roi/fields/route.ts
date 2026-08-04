@@ -1,19 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 import { getFieldSearchTerms } from '@/lib/field-aliases'
+import { toProductCountryCode } from '@/lib/data-foundation/entity-aliases'
 
 function tableForCountry(country: string): string {
   if (country === 'ie') return 'roi_explorer_ie'
   if (country === 'au') return 'roi_explorer_au'
   if (country === 'ca') return 'roi_explorer_ca'
-  if (country === 'uk') return 'roi_explorer_uk'
+  if (country === 'gb') return 'roi_explorer_uk'
   return 'roi_explorer_by_field_us'
 }
 
 export async function GET(req: NextRequest) {
   const q       = req.nextUrl.searchParams.get('q') ?? ''
-  const country = req.nextUrl.searchParams.get('country') ?? 'us'
-
+  const rawCountry = req.nextUrl.searchParams.get('country') ?? 'us'
+  const country = toProductCountryCode(rawCountry) ?? rawCountry.toLowerCase()
+ 
   if (!q.trim()) {
     return NextResponse.json({ fields: [] })
   }

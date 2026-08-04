@@ -1,7 +1,7 @@
 import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
 import { resolveDecisionCareer } from "@/lib/comparison/public-contract"
 
-const DEFAULT_COUNTRIES = ["AU", "CA", "US", "UK"]
+const DEFAULT_COUNTRIES = ["AU", "CA", "US", "GB"]
 const ISO_CODE = /^[A-Z]{2}$/
 const ISO_CURRENCY = /^[A-Z]{3}$/
 

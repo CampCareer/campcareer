@@ -21,7 +21,7 @@ import { FI_OCCUPATIONS, isFIOccupationIndexable } from "@/data/fi-map-data"
 // The five rebuilt country packs remain unavailable to Maps until their
 // country-level Map v2 gate passes. Keeping them out of the route whitelist
 // prevents direct URLs from exposing quarantined occupation numbers.
-export const MAP_COUNTRIES = ["au", "ca", "us", "ie", "uk", "de", "nl", "be", "sg", "kr", "fr", "es"] as const
+export const MAP_COUNTRIES = ["au", "ca", "us", "ie", "gb", "de", "nl", "be", "sg", "kr", "fr", "es"] as const
 
 export type MapCountry = (typeof MAP_COUNTRIES)[number]
 
@@ -53,7 +53,7 @@ const COUNTRY_NAME: Record<MapCountry, string> = {
   ca: "Canada",
   us: "United States",
   ie: "Ireland",
-  uk: "United Kingdom",
+  gb: "United Kingdom",
   de: "Germany",
   nl: "Netherlands",
   be: "Belgium",
@@ -68,7 +68,7 @@ const SOURCE_COUNTRY: Record<MapCountry, SourceRecord["country"]> = {
   ca: "CA",
   us: "US",
   ie: "IE",
-  uk: "UK",
+  gb: "GB",
   de: "DE",
   nl: "NL",
   be: "BE",
@@ -424,7 +424,7 @@ export const getMapOccupations = cache(async (country: MapCountry): Promise<MapO
     country === "ca" ? await loadCanada() :
     country === "us" ? loadUnitedStates() :
     country === "ie" ? loadIreland() :
-    country === "uk" ? loadUnitedKingdom() :
+    country === "gb" ? loadUnitedKingdom() :
     country === "de" ? loadGermany() :
     country === "nl" ? loadNetherlands() :
     country === "be" ? loadBelgium() :
@@ -443,7 +443,7 @@ export async function resolveMapOccupation(country: MapCountry, slugOrCode: stri
 }
 
 export async function getMapOccupationStaticParams() {
-  const countries: MapCountry[] = ["us", "ie", "uk", "de", "nl", "be", "sg", "kr", "fr", "es"]
+  const countries: MapCountry[] = ["us", "ie", "gb", "de", "nl", "be", "sg", "kr", "fr", "es"]
   const params: Array<{ country: MapCountry; slug: string }> = []
 
   for (const country of countries) {

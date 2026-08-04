@@ -7,7 +7,8 @@ import { buildMapsHref, type MapSearchParams } from "@/app/map/maps-route"
 import { notFound, permanentRedirect } from "next/navigation"
 
 const LEGACY_COUNTRY_ALIASES: Record<string, LaunchCountryCode> = {
-  gb: "UK",
+  gb: "GB",
+  uk: "GB",
   uae: "AE",
   usa: "US",
 }

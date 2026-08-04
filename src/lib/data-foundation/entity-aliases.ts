@@ -5,7 +5,7 @@ import {
 } from "@/data/career-comparison/australia"
 import { AUSTRALIA_NURSING_PROGRAMS } from "@/data/programs/australia-nursing"
 
-export const PRODUCT_COUNTRY_CODES = ["AU", "IE", "UK"] as const
+export const PRODUCT_COUNTRY_CODES = ["AU", "IE", "GB"] as const
 export type ProductCountryCode = (typeof PRODUCT_COUNTRY_CODES)[number]
 
 export const CANONICAL_COUNTRY_CODES = ["AU", "IE", "GB"] as const
@@ -86,11 +86,29 @@ const COUNTRY_ALIASES: readonly CountryAlias[] = [
   },
   {
     entityType: "country",
-    inputId: "UK",
-    productId: "UK",
+    inputId: "GB",
+    productId: "GB",
     canonicalResolverKey: "core.country:GB",
     canonicalEntityId: "GB",
     relation: "exact",
+    status: "resolved",
+  },
+  {
+    entityType: "country",
+    inputId: "UK",
+    productId: "GB",
+    canonicalResolverKey: "core.country:GB",
+    canonicalEntityId: "GB",
+    relation: "legacy",
+    status: "resolved",
+  },
+  {
+    entityType: "country",
+    inputId: "united-kingdom",
+    productId: "GB",
+    canonicalResolverKey: "core.country:GB",
+    canonicalEntityId: "GB",
+    relation: "legacy",
     status: "resolved",
   },
 ]
@@ -100,10 +118,10 @@ const PRODUCT_COUNTRY_BY_INPUT = new Map<string, ProductCountryCode>([
   ["australia", "AU"],
   ["ie", "IE"],
   ["ireland", "IE"],
-  ["uk", "UK"],
-  ["united-kingdom", "UK"],
-  ["united kingdom", "UK"],
-  ["gb", "UK"],
+  ["gb", "GB"],
+  ["uk", "GB"],
+  ["united-kingdom", "GB"],
+  ["united kingdom", "GB"],
 ])
 
 function normalizeCountryInput(value: string): string {
@@ -114,7 +132,7 @@ function normalizeCountryInput(value: string): string {
 export function toCanonicalCountryCode(value: string): CanonicalCountryCode | null {
   const productCode = PRODUCT_COUNTRY_BY_INPUT.get(normalizeCountryInput(value))
   if (!productCode) return null
-  return productCode === "UK" ? "GB" : productCode
+  return productCode
 }
 
 /** Converts product, ISO, Maps, or supported country-slug input to product code. */

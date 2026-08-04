@@ -210,7 +210,7 @@ const COUNTRY_OPTIONS = [
   { value: "us", label: "🇺🇸 United States" },
   { value: "au", label: "🇦🇺 Australia" },
   { value: "ca", label: "🇨🇦 Canada" },
-  { value: "uk", label: "🇬🇧 United Kingdom" },
+  { value: "gb", label: "🇬🇧 United Kingdom" },
   { value: "ie", label: "🇮🇪 Ireland" },
   { value: "de", label: "🇩🇪 Germany" },
   { value: "nl", label: "🇳🇱 Netherlands" },
@@ -222,7 +222,7 @@ const CURRENCY: Record<string, { symbol: string; code: string }> = {
   us: { symbol: '$',  code: 'USD' },
   au: { symbol: 'A$', code: 'AUD' },
   ca: { symbol: 'C$', code: 'CAD' },
-  uk: { symbol: '£',  code: 'GBP' },
+  gb: { symbol: '£',  code: 'GBP' },
   ie: { symbol: '€',  code: 'EUR' },
   de: { symbol: '€',  code: 'EUR' },
   nl: { symbol: '€',  code: 'EUR' },
@@ -359,7 +359,7 @@ function FieldCombobox({
   )
 }
 
-type Country = 'us' | 'au' | 'ca' | 'uk' | 'ie' | 'de' | 'nl'
+type Country = 'us' | 'au' | 'ca' | 'gb' | 'ie' | 'de' | 'nl'
 
 export type RoiFilters = {
   country: Country
@@ -406,23 +406,23 @@ export function RoiExplorerClient({
 
   const stateList = country === "au" ? AU_STATES
     : country === "ca" ? CA_PROVINCES
-    : country === "uk" ? UK_REGIONS
+    : country === "gb" ? UK_REGIONS
     : country === "ie" ? IE_PROVINCES
     : country === "de" ? DE_BUNDESLANDER
     : country === "nl" ? NL_PROVINCES
     : US_STATES
   const stateName = stateList.find((s) => s.abbr === state)?.name ?? state
   const stateLabel = country === "ca" ? "Province"
-    : country === "uk" ? "Region"
+    : country === "gb" ? "Region"
     : country === "ie" ? "Province"
     : country === "de" ? "Bundesland"
     : country === "nl" ? "Province"
     : "State"
 
   function handleCountryChange(v: string) {
-    const c = v as "us" | "au" | "ca" | "uk" | "ie" | "de" | "nl"
+    const c = v as "us" | "au" | "ca" | "gb" | "ie" | "de" | "nl"
     setCountry(c)
-    setState(c === "au" ? "NSW" : c === "ca" ? "ON" : c === "uk" ? "ALL_STATES" : c === "ie" ? "Leinster" : c === "de" ? "ALL_STATES" : c === "nl" ? "ALL_STATES" : "CA")
+    setState(c === "au" ? "NSW" : c === "ca" ? "ON" : c === "gb" ? "ALL_STATES" : c === "ie" ? "Leinster" : c === "de" ? "ALL_STATES" : c === "nl" ? "ALL_STATES" : "CA")
     setField("")
     setCareerStage("early")
   }
@@ -753,7 +753,7 @@ export function RoiExplorerClient({
 
             <div className="space-y-1.5">
               <label className="text-xs font-medium text-slate-600">{tr.filterField}</label>
-              {country === "us" || country === "ie" || country === "au" || country === "ca" || country === "uk" ? (
+              {country === "us" || country === "ie" || country === "au" || country === "ca" || country === "gb" ? (
                 <FieldCombobox
                   value={field}
                   onChange={(v) => { setField(v); if (v) loadGraph(v); else { setGraphField(""); setGraphRows([]) } }}

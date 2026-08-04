@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 import { readFileSync } from 'fs'
 import { join } from 'path'
+import { toProductCountryCode } from '@/lib/data-foundation/entity-aliases'
 
 interface RawUSOcc {
   occ_code: string
@@ -22,7 +23,7 @@ const COUNTRY_MAP: Record<string, string> = {
   us: 'US',
   au: 'AU',
   ca: 'CA',
-  uk: 'UK',
+  gb: 'UK',
   ie: 'IE',
 }
 
@@ -49,7 +50,8 @@ function loadUSOccs(): Map<string, { regions: RegionEntry[]; score: number }> {
 }
 
 export async function GET(request: NextRequest) {
-  const country = request.nextUrl.searchParams.get('country') || 'us'
+  const rawCountry = request.nextUrl.searchParams.get('country') || 'us'
+  const country = toProductCountryCode(rawCountry) ?? rawCountry.toLowerCase()
   const code = request.nextUrl.searchParams.get('code')
   const dbCountry = COUNTRY_MAP[country]
 

@@ -54,11 +54,11 @@ test("country comparison accepts only the registered nurse starting profile", ()
 
 test("locations normalize pairs, validate country membership, dedupe countries, and cap at five", () => {
   assert.deepEqual(
-    normalizeCountryLocations(" au:SYDNEY , IE:dublin,AU:melbourne,IE:sydney,UK:london,UK:glasgow,AU:brisbane,XX:sydney,IE:unknown"),
+    normalizeCountryLocations(" au:SYDNEY , IE:dublin,AU:melbourne,IE:sydney,GB:london,GB:glasgow,AU:brisbane,XX:sydney,IE:unknown"),
     [
       { countryCode: "AU", citySlug: "sydney" },
       { countryCode: "IE", citySlug: "dublin" },
-      { countryCode: "UK", citySlug: "london" },
+      { countryCode: "GB", citySlug: "london" },
     ],
   )
   assert.deepEqual(normalizeCountryLocations("AU, :sydney, AU:, AU:dublin, IE:sydney"), [])

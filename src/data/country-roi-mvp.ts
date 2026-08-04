@@ -519,8 +519,8 @@ export const COUNTRY_ROI_INSIGHTS: CountryRoiInsight[] = [
       ],
       nextSteps: [
         { label: "Browse UK occupations", href: "/uk/jobs", note: "Check salary and shortage signals." },
-        { label: "Open UK map", href: "/map?country=uk&region=TLI&tab=pay", note: "Compare regions before choosing a city." },
-        { label: "Run ROI Explorer", href: "/roi-explorer?country=uk", note: "Compare UK study cost and salary." },
+        { label: "Open UK map", href: "/map?country=gb&region=TLI&tab=pay", note: "Compare regions before choosing a city." },
+        { label: "Run ROI Explorer", href: "/roi-explorer?country=gb", note: "Compare UK study cost and salary." },
       ],
     },
     sources: {

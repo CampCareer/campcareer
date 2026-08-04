@@ -6,7 +6,7 @@
  * accidentally appear in one surface before its publication gate allows it.
  */
 export type LaunchCountryCode =
-  | "AU" | "CA" | "US" | "IE" | "UK" | "DE" | "NL" | "BE" | "FR" | "ES"
+  | "AU" | "CA" | "US" | "IE" | "GB" | "DE" | "NL" | "BE" | "FR" | "ES"
   | "SG" | "KR" | "JP" | "NZ" | "NO" | "SE" | "DK" | "FI" | "CH" | "AE"
 
 export type CountryPublicationStage = "REVIEW_REQUIRED" | "PROFILE_READY" | "DECISION_READY"
@@ -44,7 +44,7 @@ export const LAUNCH_COUNTRIES: readonly LaunchCountry[] = [
   profile("AU", "australia", "Australia", "AUD", "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=400&h=250&fit=crop&auto=format"),
   profile("CA", "canada", "Canada", "CAD", "https://images.unsplash.com/photo-1503614472-8c93d56e92ce?w=400&h=250&fit=crop&auto=format"),
   profile("US", "united-states", "United States", "USD", "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=400&h=250&fit=crop&auto=format"),
-  profile("UK", "united-kingdom", "United Kingdom", "GBP", "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=400&h=250&fit=crop&auto=format"),
+  profile("GB", "united-kingdom", "United Kingdom", "GBP", "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=400&h=250&fit=crop&auto=format"),
   profile("IE", "ireland", "Ireland", "EUR", "https://images.unsplash.com/photo-1751235332025-a2f2bf7f24b8?w=400&h=250&fit=crop&auto=format"),
   profile("DE", "germany", "Germany", "EUR", "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=400&h=250&fit=crop&auto=format"),
   profile("NL", "netherlands", "Netherlands", "EUR", "https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=400&h=250&fit=crop&auto=format"),

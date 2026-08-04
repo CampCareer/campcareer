@@ -19,6 +19,7 @@ import {
 } from "@/lib/country-recommendation"
 import { pageMetadata } from "@/lib/seo"
 import { isCountrySearchIndexable } from "@/lib/new-country-release-gate"
+import { toProductCountryCode } from "@/lib/data-foundation/entity-aliases"
 
 export const revalidate = 86400
 
@@ -48,7 +49,9 @@ const sourceRows: { key: keyof CountryRoiInsight["sources"]; label: string }[] =
 ]
 
 function getCountry(slug: string) {
-  return COUNTRY_ROI_INSIGHTS.find((country) => country.slug === slug)
+  const productCode = toProductCountryCode(slug)
+  if (!productCode) return null
+  return COUNTRY_ROI_INSIGHTS.find((country) => country.code === productCode) ?? null
 }
 
 function formatDate(value: string) {
@@ -97,8 +100,9 @@ export default async function CountryDetailPage({ params, searchParams }: PagePr
   const { country: slug } = await params
   const query = await searchParams
   const country = getCountry(slug)
-
+ 
   if (!country) notFound()
+  if (slug.toLowerCase() !== country.slug) permanentRedirect(country.href)
   if (country.href === country.hubHref) permanentRedirect(country.hubHref)
 
   if (!isCountrySearchIndexable(country.code)) {

@@ -58,6 +58,8 @@ export function toExternalIsoCountryCode(countryCode: CountryCompareCode): "AU" 
 export function fromExternalIsoCountryCode(value: string): CountryCompareCode | null {
   const normalized = value.trim().toUpperCase()
   if (!(CANONICAL_COUNTRY_CODES as readonly string[]).includes(normalized)) return null
+
+  return normalized as CountryCompareCode
   return toProductCountryCode(normalized) as CountryCompareCode
 }
 

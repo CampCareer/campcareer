@@ -3,11 +3,11 @@
 import type { Locale } from "@/lib/i18n/config"
 
 export type RiskLevel = "low" | "medium" | "high"
-export type CountryCode = "US" | "CA" | "UK" | "AU" | "IE"
+export type CountryCode = "US" | "CA" | "GB" | "AU" | "IE"
 export type ResultView = CountryCode | "all"
 
 // Display order everywhere multiple countries are shown.
-export const ALL_COUNTRIES: CountryCode[] = ["US", "CA", "UK", "AU", "IE"]
+export const ALL_COUNTRIES: CountryCode[] = ["US", "CA", "GB", "AU", "IE"]
 
 export interface MajorSource {
   name: string
@@ -154,7 +154,7 @@ export const QUESTIONS: Question[] = [
     options: [
       { value: "United States", label: "United States" },
       { value: "Canada", label: "Canada" },
-      { value: "UK", label: "UK" },
+      { value: "GB", label: "GB" },
       { value: "Australia", label: "Australia" },
       { value: "Ireland", label: "Ireland" },
       { value: "Not sure", label: "Not sure" },
@@ -216,7 +216,7 @@ export const QUESTIONS: Question[] = [
 const COUNTRY_PREF_TO_CODE: Record<string, CountryCode> = {
   "United States": "US",
   "Canada": "CA",
-  "UK": "UK",
+  "GB": "GB",
   "Australia": "AU",
   "Ireland": "IE",
 }
@@ -241,7 +241,7 @@ export function normalizeView(v: string | undefined): ResultView {
 export const COUNTRY_META: Record<CountryCode, { name: string; flag: string; currency: string }> = {
   US: { name: "United States", flag: "🇺🇸", currency: "$" },
   CA: { name: "Canada", flag: "🇨🇦", currency: "C$" },
-  UK: { name: "United Kingdom", flag: "🇬🇧", currency: "£" },
+  GB: { name: "United Kingdom", flag: "🇬🇧", currency: "£" },
   AU: { name: "Australia", flag: "🇦🇺", currency: "A$" },
   IE: { name: "Ireland", flag: "🇮🇪", currency: "€" },
 }
@@ -253,7 +253,7 @@ export const RISK_BADGE: Record<RiskLevel, { label: string; className: string }>
 }
 
 export function formatMoney(amount: number, country: CountryCode): string {
-  return `${COUNTRY_META[country].currency}${Math.round(amount).toLocaleString("en-US")}`
+  return `${COUNTRY_META[country as keyof typeof COUNTRY_META].currency}${Math.round(amount).toLocaleString("en-US")}`
 }
 
 // Read a layer's metadata with a safe fallback (handles rows not yet

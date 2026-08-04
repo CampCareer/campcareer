@@ -60,7 +60,7 @@ export default async function UkHubPage() {
                 Browse {occCount}+ Occupations
               </Link>
               <Link
-                href="/map?country=uk&region=TLI&tab=shortage"
+                href="/map?country=gb&region=TLI&tab=shortage"
                 className="px-5 py-2.5 border border-slate-200 rounded-full text-sm font-semibold hover:bg-slate-50 transition-colors"
               >
                 View Skills Shortage Map
@@ -99,7 +99,7 @@ export default async function UkHubPage() {
               </div>
             </Link>
             <Link
-              href="/roi-explorer?country=uk"
+              href="/roi-explorer?country=gb"
               className="group p-5 rounded-xl border border-slate-200 hover:border-brand/40 hover:bg-brand-tint transition-colors"
             >
               <div className="font-semibold mb-1">🎓 Universities & Courses</div>
@@ -108,7 +108,7 @@ export default async function UkHubPage() {
               </div>
             </Link>
             <Link
-              href="/map?country=uk&region=TLI&tab=shortage"
+              href="/map?country=gb&region=TLI&tab=shortage"
               className="group p-5 rounded-xl border border-slate-200 hover:border-brand/40 hover:bg-brand-tint transition-colors"
             >
               <div className="font-semibold mb-1">🗺️ Regional Map</div>

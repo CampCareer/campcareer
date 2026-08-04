@@ -59,7 +59,7 @@ export const COUNTRY_EXPLORER: readonly CountryExplorerEntry[] = [
     ],
   },
   {
-    code: "UK",
+    code: "GB",
     regions: [
       { name: "England", cities: ["London", "Manchester", "Birmingham", "Leeds", "Liverpool"] },
       { name: "Scotland", cities: ["Glasgow", "Edinburgh", "Aberdeen", "Dundee"] },

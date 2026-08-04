@@ -13,7 +13,7 @@ import {
   Legend,
 } from "recharts"
 
-const SYMBOL: Record<string, string> = { us: "$", au: "A$", ca: "C$", uk: "£", ie: "€" }
+const SYMBOL: Record<string, string> = { us: "$", au: "A$", ca: "C$", gb: "£", ie: "€" }
 
 export default function SalaryGrowthChart({
   data,

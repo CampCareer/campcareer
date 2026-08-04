@@ -4,15 +4,17 @@ import {
   selectMapCountryBundle,
   type MapDataCountry,
 } from "@/lib/map-data"
+import { toProductCountryCode } from "@/lib/data-foundation/entity-aliases"
 import { buildMapDataEnvelope } from "../contract"
 
-const COUNTRIES = new Set<MapDataCountry>(["AU", "US", "CA", "IE", "UK", "DE", "NL", "BE", "JP", "SG", "KR", "FR", "ES", "NZ", "NO", "SE", "DK", "FI", "CH", "AE"])
+const COUNTRIES = new Set<MapDataCountry>(["AU", "US", "CA", "IE", "GB", "DE", "NL", "BE", "JP", "SG", "KR", "FR", "ES", "NZ", "NO", "SE", "DK", "FI", "CH", "AE"])
 
 export const revalidate = 86400
 
 export async function GET(_request: Request, { params }: { params: Promise<{ country: string }> }) {
-  const country = (await params).country.toUpperCase() as MapDataCountry
-  if (!COUNTRIES.has(country)) {
+  const rawCountry = (await params).country
+  const country = toProductCountryCode(rawCountry)
+  if (!country || !COUNTRIES.has(country)) {
     return NextResponse.json({ error: "Unsupported map country" }, { status: 404 })
   }
 
