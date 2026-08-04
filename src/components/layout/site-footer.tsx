@@ -15,7 +15,6 @@ export function SiteFooter({ className }: { className?: string }) {
     <footer className={cn("border-t border-slate-200 bg-slate-50", className)}>
       <div className="mx-auto max-w-6xl px-5 py-12 sm:px-6 sm:py-16">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {/* Brand */}
           <div>
             <Link href="/home" className="campcareer-wordmark text-slate-900">
               campcareer
@@ -27,7 +26,6 @@ export function SiteFooter({ className }: { className?: string }) {
             </p>
           </div>
 
-          {/* Product */}
           <div>
             <h4 className="text-sm font-semibold text-slate-900">
               {isKo ? "경로" : "Routes"}
@@ -42,14 +40,13 @@ export function SiteFooter({ className }: { className?: string }) {
             </ul>
           </div>
 
-          {/* Info */}
           <div>
             <h4 className="text-sm font-semibold text-slate-900">
               {isKo ? "정보" : "Info"}
             </h4>
             <ul className="mt-3 space-y-2.5">
               <FooterLink href="/methodology" locale={pathLocale}>
-                {isKo ? "방법론" : "Methodology"}
+                {isKo ? "출처 및 방법론" : "Sources & methodology"}
               </FooterLink>
               <FooterLink href="/privacy" locale={pathLocale}>
                 {isKo ? "개인정보처리방침" : "Privacy policy"}
@@ -61,7 +58,6 @@ export function SiteFooter({ className }: { className?: string }) {
           </div>
         </div>
 
-        {/* Bottom bar */}
         <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-slate-200 pt-6 text-xs text-slate-400 sm:flex-row">
           <span>&copy; {new Date().getFullYear()} CampCareer</span>
           <span>{isKo ? "검색부터, 근거를 바탕으로" : "Search first. Decide with evidence."}</span>
