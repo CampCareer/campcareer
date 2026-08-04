@@ -1,4 +1,3 @@
-import { getAustraliaCountryMetrics } from "@/lib/workspace/australia-country-metrics"
 import { OccupationExplorer } from "./occupation-explorer"
 
 export const metadata = {
@@ -12,17 +11,8 @@ export default async function OccupationPage({
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>
 }) {
-  const [sp, australiaCountryMetrics] = await Promise.all([
-    searchParams,
-    getAustraliaCountryMetrics(),
-  ])
+  const sp = await searchParams
   const q = typeof sp.q === "string" ? sp.q : ""
   const occupation = typeof sp.occupation === "string" ? sp.occupation : ""
-  return (
-    <OccupationExplorer
-      initialQuery={q}
-      initialOccupation={occupation}
-      australiaCountryMetrics={australiaCountryMetrics}
-    />
-  )
+  return <OccupationExplorer initialQuery={q} initialOccupation={occupation} />
 }
