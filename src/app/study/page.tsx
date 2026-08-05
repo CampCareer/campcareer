@@ -2,7 +2,9 @@ import { StudyHub } from '@/components/study/study-hub'
 import { getAuStudyValueMatches } from '@/lib/au-study-value-matches'
 import { pageMetadata } from '@/lib/seo'
 
-export const revalidate = 86400
+// Study value matches are live Supabase-backed data. Render per request so CI
+// static generation does not require production database credentials.
+export const dynamic = 'force-dynamic'
 
 export const metadata = pageMetadata({
   title: 'Study Options — Tuition, Graduate Outcomes & Value Matches',
