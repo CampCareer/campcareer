@@ -23,13 +23,18 @@ export async function getSavedPathwayState(input: unknown): Promise<PathwaySaveR
   const { supabase, user } = await getAuthenticatedUser()
   if (!user) return { state: "unauthenticated" }
 
-  const { data, error } = await supabase
+  let query = supabase
     .from("saved_pathways")
     .select("status_slug")
     .eq("user_id", user.id)
     .eq("country_code", pathway.country)
     .eq("field_slug", pathway.field)
-    .maybeSingle()
+
+  query = pathway.origin
+    ? query.eq("origin_country_code", pathway.origin)
+    : query.is("origin_country_code", null)
+
+  const { data, error } = await query.maybeSingle()
 
   if (error) return { state: "error" }
   return { state: "ready", saved: data?.status_slug === pathway.status }
