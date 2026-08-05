@@ -23,18 +23,27 @@ type PublishedMetricRow = {
 const PUBLISHED_METRIC_TABLES: Record<string, readonly string[]> = {
   AU: ["report_metric_evidence_country", "report_metric_evidence_au"],
   CA: ["report_metric_evidence_country"],
+  US: ["report_metric_evidence_country"],
 }
 
 const CURRENCY_BY_COUNTRY: Record<string, string> = {
   AU: "AUD",
   CA: "CAD",
+  US: "USD",
 }
 
 function metricUnit(countryCode: string, metricKey: string) {
   const currency = CURRENCY_BY_COUNTRY[countryCode]
   if (!currency) return null
 
-  if (metricKey === "full_time_annual_earnings_range") return `${currency}/year`
+  if (
+    metricKey === "full_time_annual_earnings_range" ||
+    metricKey === "average_annual_salary" ||
+    metricKey === "tuition_annual_low" ||
+    metricKey === "tuition_annual_high"
+  ) {
+    return `${currency}/year`
+  }
   if (metricKey === "national_minimum_hourly_wage") return `${currency}/hour`
   if (
     metricKey === "student_living_cost_monthly_range" ||
@@ -42,6 +51,8 @@ function metricUnit(countryCode: string, metricKey: string) {
   ) {
     return `${currency}/month`
   }
+  if (metricKey === "visa_application_fee") return currency
+  if (metricKey === "student_work_hours_limit") return "hours/week"
 
   return null
 }
@@ -53,6 +64,11 @@ function sourceOrganisation(row: PublishedMetricRow) {
   if (row.source_url.includes("canada.ca")) return "Government of Canada"
   if (row.source_url.includes("educanada.ca")) return "EduCanada"
   if (row.source_url.includes("campcareer.com/methodology/canada")) return "CampCareer"
+  if (row.source_url.includes("bls.gov")) return "U.S. Bureau of Labor Statistics"
+  if (row.source_url.includes("dol.gov")) return "U.S. Department of Labor"
+  if (row.source_url.includes("collegeboard.org")) return "College Board"
+  if (row.source_url.includes("travel.state.gov")) return "U.S. Department of State"
+  if (row.source_url.includes("studyinthestates.dhs.gov")) return "U.S. Department of Homeland Security"
   return row.source_name
 }
 

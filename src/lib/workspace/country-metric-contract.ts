@@ -1,10 +1,23 @@
-export const COUNTRY_METRIC_KEYS = [
+export const COUNTRY_DISPLAY_METRIC_KEYS = [
   "full_time_annual_earnings_range",
   "student_living_cost_monthly_range",
   "national_minimum_hourly_wage",
   "student_living_cost_shared_monthly_low",
   "student_living_cost_shared_monthly_average",
   "student_living_cost_shared_monthly_high",
+] as const
+
+export const COUNTRY_CALCULATION_METRIC_KEYS = [
+  "average_annual_salary",
+  "tuition_annual_low",
+  "tuition_annual_high",
+  "visa_application_fee",
+  "student_work_hours_limit",
+] as const
+
+export const COUNTRY_METRIC_KEYS = [
+  ...COUNTRY_DISPLAY_METRIC_KEYS,
+  ...COUNTRY_CALCULATION_METRIC_KEYS,
 ] as const
 
 export type CountryMetricKey = (typeof COUNTRY_METRIC_KEYS)[number]
@@ -222,7 +235,7 @@ export function buildCountryMetrics(
 }
 
 function compactAmount(amount: number) {
-  if (Math.abs(amount) < 1_000) return new Intl.NumberFormat("en-AU", { maximumFractionDigits: 0 }).format(amount)
+  if (Math.abs(amount) < 1_000) return new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(amount)
   const digits = Math.abs(amount) < 10_000 ? 1 : 0
   return `${(amount / 1_000).toFixed(digits).replace(/\.0$/, "")}k`
 }
