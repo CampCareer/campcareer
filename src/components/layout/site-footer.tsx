@@ -57,6 +57,9 @@ export function SiteFooter({ className }: { className?: string }) {
               <FooterLink href="/methodology/united-states" locale={pathLocale}>
                 {isKo ? "미국 출처" : "United States sources"}
               </FooterLink>
+              <FooterLink href="/methodology/united-kingdom" locale={pathLocale}>
+                {isKo ? "영국 출처" : "United Kingdom sources"}
+              </FooterLink>
               <FooterLink href="/privacy" locale={pathLocale}>
                 {isKo ? "개인정보처리방침" : "Privacy policy"}
               </FooterLink>
