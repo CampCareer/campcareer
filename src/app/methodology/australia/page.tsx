@@ -145,7 +145,7 @@ export default function AustraliaMethodologyPage() {
 
       <p className="mt-8 text-xs leading-5 text-slate-500">
         Last reviewed 5 August 2026. A national range describes the source population or stated student
-        scenario; it does not predict an individual's salary, expenses or visa outcome.
+        scenario; it does not predict an individual&apos;s salary, expenses or visa outcome.
       </p>
     </main>
   )
