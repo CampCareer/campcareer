@@ -1,6 +1,7 @@
 import { Suspense } from "react"
 import { createClient } from "@/lib/supabase-server"
 import { HomeDashboard } from "./home-dashboard"
+import { HomeDashboardBackground } from "./home-dashboard-background"
 import { getHomeMode, toDashboardPathways, type SavedPathwayRecord } from "./home-dashboard-config"
 import { HomeHub } from "./home-hub"
 
@@ -47,5 +48,9 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 
   const pathways = toDashboardPathways((data as SavedPathwayRecord[] | null) ?? [])
 
-  return <HomeDashboard pathways={pathways} loadError={Boolean(error)} />
+  return (
+    <HomeDashboardBackground countryCode={pathways[0]?.values.country}>
+      <HomeDashboard pathways={pathways} loadError={Boolean(error)} />
+    </HomeDashboardBackground>
+  )
 }
