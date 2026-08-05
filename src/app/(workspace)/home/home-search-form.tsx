@@ -16,18 +16,19 @@ import {
   FIELD_OPTIONS,
   getOptionLabel,
   NO_FIELD_STATUS,
+  ORIGIN_OPTIONS,
   STATUS_OPTIONS,
   validateForm,
   type FormErrors,
-  type FormValues,
   type OpenMenu,
+  type PathwaySearchValues,
   type SelectOption,
 } from "./home-search-config"
 
 type HomeSearchFormProps = {
-  values: FormValues
-  onValuesChange: (values: FormValues) => void
-  onSubmit: (values: FormValues) => void
+  values: PathwaySearchValues
+  onValuesChange: (values: PathwaySearchValues) => void
+  onSubmit: (values: PathwaySearchValues) => void
   onCancel?: () => void
   autoFocus?: boolean
   className?: string
@@ -43,15 +44,16 @@ export function HomeSearchForm({
 }: HomeSearchFormProps) {
   const [errors, setErrors] = useState<FormErrors>({})
   const [openMenu, setOpenMenu] = useState<OpenMenu>(null)
+  const originRef = useRef<HTMLInputElement>(null)
   const countryRef = useRef<HTMLInputElement>(null)
   const fieldRef = useRef<HTMLInputElement>(null)
   const statusRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
-    if (autoFocus) countryRef.current?.focus()
+    if (autoFocus) originRef.current?.focus()
   }, [autoFocus])
 
-  const updateValue = (key: keyof FormValues, value: string) => {
+  const updateValue = (key: keyof PathwaySearchValues, value: string) => {
     const nextValues = { ...values, [key]: value }
     if (key === "status") {
       nextValues.field = value === NO_FIELD_STATUS
@@ -80,8 +82,9 @@ export function HomeSearchForm({
 
     if (Object.keys(nextErrors).length) {
       setErrors(nextErrors)
-      const firstInvalid = (Object.keys(nextErrors) as Array<keyof FormValues>)[0]
-      const refs: Record<keyof FormValues, RefObject<HTMLInputElement | HTMLButtonElement | null>> = {
+      const firstInvalid = (Object.keys(nextErrors) as Array<keyof PathwaySearchValues>)[0]
+      const refs: Record<keyof PathwaySearchValues, RefObject<HTMLInputElement | HTMLButtonElement | null>> = {
+        origin: originRef,
         country: countryRef,
         field: fieldRef,
         status: statusRef,
@@ -94,10 +97,23 @@ export function HomeSearchForm({
   }
 
   return (
-    <form onSubmit={submit} className={cn("grid gap-3 lg:grid-cols-[1fr_1fr_1.25fr_auto] lg:items-start", className)} noValidate>
+    <form onSubmit={submit} className={cn("grid gap-3 md:grid-cols-2", className)} noValidate>
+      <SearchSelect
+        id="origin"
+        label="Starting from"
+        value={values.origin}
+        options={ORIGIN_OPTIONS}
+        open={openMenu === "origin"}
+        error={errors.origin}
+        inputRef={originRef}
+        onOpenChange={(open) => setOpenMenu(open ? "origin" : null)}
+        onChange={(value) => updateValue("origin", value)}
+        onEscape={onCancel}
+        placeholder="Where are you a citizen?"
+      />
       <SearchSelect
         id="country"
-        label="Country"
+        label="Destination"
         value={values.country}
         options={COUNTRY_OPTIONS}
         open={openMenu === "country"}
@@ -106,11 +122,11 @@ export function HomeSearchForm({
         onOpenChange={(open) => setOpenMenu(open ? "country" : null)}
         onChange={(value) => updateValue("country", value)}
         onEscape={onCancel}
-        placeholder="Search countries"
+        placeholder="Where do you want to go?"
       />
       <SearchSelect
         id="field"
-        label="Field"
+        label="Target field"
         value={values.field}
         options={FIELD_OPTIONS}
         open={openMenu === "field"}
@@ -119,11 +135,11 @@ export function HomeSearchForm({
         onOpenChange={(open) => setOpenMenu(open ? "field" : null)}
         onChange={(value) => updateValue("field", value)}
         onEscape={onCancel}
-        placeholder="Search fields"
+        placeholder="What career are you aiming for?"
       />
       <SelectMenu
         id="status"
-        label="Status"
+        label="Current situation"
         value={values.status}
         options={STATUS_OPTIONS}
         open={openMenu === "status"}
@@ -132,14 +148,14 @@ export function HomeSearchForm({
         onOpenChange={(open) => setOpenMenu(open ? "status" : null)}
         onChange={(value) => updateValue("status", value)}
         onEscape={onCancel}
-        placeholder="Choose your status"
+        placeholder="Where are you now?"
       />
-      <div className="mt-[25px] flex gap-2">
+      <div className="flex gap-2 md:col-span-2">
         <button
           type="submit"
-          className="inline-flex h-12 min-w-28 flex-1 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/35 focus-visible:ring-offset-2"
+          className="inline-flex h-12 min-w-36 flex-1 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/35 focus-visible:ring-offset-2"
         >
-          Explore <ArrowRight className="size-4" />
+          Find my pathways <ArrowRight className="size-4" />
         </button>
         {onCancel && (
           <button
@@ -156,7 +172,7 @@ export function HomeSearchForm({
 }
 
 type BaseMenuProps = {
-  id: keyof FormValues
+  id: keyof PathwaySearchValues
   label: string
   value: string
   options: readonly SelectOption[]
@@ -339,7 +355,7 @@ function SelectMenu({
         <ChevronDown className={cn("size-4 shrink-0 text-[#8c8a84] transition", open && "rotate-180")} />
       </button>
       <FieldError id={errorId} message={error} />
-      {open && <OptionList id={`${id}-options`} fieldId={id} options={options} value={value} activeIndex={activeIndex} emptyText="No status found." onActiveChange={setActiveIndex} onSelect={choose} />}
+      {open && <OptionList id={`${id}-options`} fieldId={id} options={options} value={value} activeIndex={activeIndex} emptyText="No situation found." onActiveChange={setActiveIndex} onSelect={choose} />}
     </div>
   )
 }
@@ -350,7 +366,7 @@ function FieldError({ id, message }: { id: string; message?: string }) {
 
 type OptionListProps = {
   id: string
-  fieldId: keyof FormValues
+  fieldId: keyof PathwaySearchValues
   options: readonly SelectOption[]
   value: string
   activeIndex: number

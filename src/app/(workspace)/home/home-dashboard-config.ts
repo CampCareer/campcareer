@@ -3,11 +3,13 @@ import {
   FIELD_OPTIONS,
   getHomeSearchQuery,
   getOptionLabel,
+  hasOption,
   NO_FIELD_STATUS,
   NOT_SURE_FIELD,
+  ORIGIN_OPTIONS,
   STATUS_OPTIONS,
   toHomeSearchQuery,
-  type FormValues,
+  type PathwaySearchValues,
   type SearchParamsLike,
 } from "./home-search-config"
 
@@ -15,6 +17,7 @@ export type HomeMode = "result" | "dashboard" | "explore"
 
 export type SavedPathwayRecord = {
   id: number
+  origin_country_code?: string | null
   country_code: string
   field_slug: string
   status_slug: string
@@ -23,20 +26,21 @@ export type SavedPathwayRecord = {
 
 export type DashboardPathway = {
   id: number
-  values: FormValues
+  values: PathwaySearchValues
+  originLabel: string
   countryLabel: string
   fieldLabel: string
   statusLabel: string
+  routeLabel: string
   updatedAt: string
   href: string
+  isComplete: boolean
 }
 
-export const PATHWAY_STAGES = [
-  { status: NO_FIELD_STATUS, label: "Choose a field" },
-  { status: "choosing-school", label: "Choose a school" },
-  { status: "preparing-application", label: "Prepare application" },
-  { status: "preparing-visa", label: "Prepare visa" },
-] as const
+export type PathwayStage = {
+  id: string
+  label: string
+}
 
 type PathwayAction = { label: string; anchor: string }
 
@@ -74,6 +78,24 @@ export const STATUS_ACTIONS: Record<string, StatusActionConfig> = {
       { label: "Shortlist programs", anchor: "#programs" },
     ],
   },
+  "already-qualified": {
+    primaryLabel: "Check qualification recognition",
+    primaryAnchor: "#key-requirements",
+    actions: [
+      { label: "Review recognition requirements", anchor: "#key-requirements" },
+      { label: "Check the main risks", anchor: "#main-risks" },
+      { label: "Verify official sources", anchor: "#official-sources" },
+    ],
+  },
+  "looking-for-job": {
+    primaryLabel: "Review employment route",
+    primaryAnchor: "#key-requirements",
+    actions: [
+      { label: "Confirm work eligibility", anchor: "#key-requirements" },
+      { label: "Review sponsorship risks", anchor: "#main-risks" },
+      { label: "Verify official sources", anchor: "#official-sources" },
+    ],
+  },
   "preparing-visa": {
     primaryLabel: "Continue visa preparation",
     primaryAnchor: "#visa-pathways",
@@ -85,6 +107,66 @@ export const STATUS_ACTIONS: Record<string, StatusActionConfig> = {
   },
 }
 
+const FIELD_EXPLORATION_STAGES: readonly PathwayStage[] = [
+  { id: "goal", label: "Define your destination" },
+  { id: "field", label: "Compare fields" },
+  { id: "routes", label: "Review realistic routes" },
+  { id: "decision", label: "Choose a direction" },
+]
+
+const STUDY_ROUTE_STAGES: readonly PathwayStage[] = [
+  { id: "eligibility", label: "Check eligibility" },
+  { id: "program", label: "Compare programs" },
+  { id: "application", label: "Prepare application" },
+  { id: "visa", label: "Prepare visa" },
+  { id: "study", label: "Complete the program" },
+  { id: "career", label: "Enter the target career" },
+]
+
+const QUALIFICATION_ROUTE_STAGES: readonly PathwayStage[] = [
+  { id: "qualification", label: "Confirm your qualification" },
+  { id: "recognition", label: "Check recognition" },
+  { id: "registration", label: "Complete registration or licensing" },
+  { id: "employment", label: "Find suitable employers" },
+  { id: "work-route", label: "Confirm the work route" },
+]
+
+const EMPLOYMENT_ROUTE_STAGES: readonly PathwayStage[] = [
+  { id: "eligibility", label: "Confirm work eligibility" },
+  { id: "employers", label: "Target suitable employers" },
+  { id: "applications", label: "Apply for roles" },
+  { id: "sponsorship", label: "Secure sponsorship if required" },
+  { id: "visa", label: "Prepare the work visa" },
+]
+
+export function getPathwayStages(status: string): readonly PathwayStage[] {
+  if (status === NO_FIELD_STATUS) return FIELD_EXPLORATION_STAGES
+  if (status === "already-qualified") return QUALIFICATION_ROUTE_STAGES
+  if (status === "looking-for-job") return EMPLOYMENT_ROUTE_STAGES
+  return STUDY_ROUTE_STAGES
+}
+
+export function getStageIndex(status: string) {
+  if (status === NO_FIELD_STATUS) return 1
+  if (status === "choosing-school") return 1
+  if (status === "preparing-application") return 2
+  if (status === "preparing-visa") return 3
+  if (status === "already-qualified") return 1
+  if (status === "looking-for-job") return 2
+  return 0
+}
+
+export function getPathwayRouteLabel(values: Pick<PathwaySearchValues, "field" | "status">) {
+  const fieldLabel = values.field === NOT_SURE_FIELD.value
+    ? "Career direction"
+    : getOptionLabel(FIELD_OPTIONS, values.field) || "Target career"
+
+  if (values.status === NO_FIELD_STATUS) return "Compare fields → review realistic routes → choose a direction"
+  if (values.status === "already-qualified") return `${fieldLabel} qualification → recognition → registration → employment`
+  if (values.status === "looking-for-job") return `${fieldLabel} eligibility → employer search → sponsorship or work visa`
+  return `${fieldLabel} program → application → visa → career entry`
+}
+
 export function getHomeMode(searchParams: SearchParamsLike, isAuthenticated: boolean): HomeMode {
   if (getHomeSearchQuery(searchParams)) return "result"
   if (isAuthenticated && searchParams.get("mode") === "explore") return "explore"
@@ -92,23 +174,38 @@ export function getHomeMode(searchParams: SearchParamsLike, isAuthenticated: boo
 }
 
 export function toDashboardPathway(record: SavedPathwayRecord): DashboardPathway | null {
-  const values = getHomeSearchQuery(new URLSearchParams({
+  const core = getHomeSearchQuery(new URLSearchParams({
     country: record.country_code,
     field: record.field_slug,
     status: record.status_slug,
   }))
-  if (!values) return null
+  if (!core) return null
 
+  const origin = record.origin_country_code?.toUpperCase() ?? ""
+  const isComplete = hasOption(ORIGIN_OPTIONS, origin)
+  const values: PathwaySearchValues = {
+    origin: isComplete ? origin : "",
+    ...core,
+  }
   const statusText = getOptionLabel(STATUS_OPTIONS, values.status).replace(/^I’m\s+/, "")
+  const prefill = new URLSearchParams({
+    mode: "explore",
+    country: values.country,
+    field: values.field,
+    status: values.status,
+  })
 
   return {
     id: record.id,
     values,
+    originLabel: isComplete ? getOptionLabel(ORIGIN_OPTIONS, values.origin) : "Starting country not set",
     countryLabel: getOptionLabel(COUNTRY_OPTIONS, values.country),
     fieldLabel: values.field === NOT_SURE_FIELD.value ? "Field not selected" : getOptionLabel(FIELD_OPTIONS, values.field),
-    statusLabel: values.status === NO_FIELD_STATUS ? "Exploring fields" : `${statusText.charAt(0).toUpperCase()}${statusText.slice(1)}`,
+    statusLabel: values.status === NO_FIELD_STATUS ? "Exploring options" : `${statusText.charAt(0).toUpperCase()}${statusText.slice(1)}`,
+    routeLabel: getPathwayRouteLabel(values),
     updatedAt: record.updated_at,
-    href: `/home?${toHomeSearchQuery(values).toString()}`,
+    href: isComplete ? `/home?${toHomeSearchQuery(values).toString()}` : `/home?${prefill.toString()}`,
+    isComplete,
   }
 }
 
@@ -118,10 +215,6 @@ export function toDashboardPathways(records: readonly SavedPathwayRecord[]) {
     .map(toDashboardPathway)
     .filter((pathway): pathway is DashboardPathway => pathway !== null)
     .sort((first, second) => Date.parse(second.updatedAt) - Date.parse(first.updatedAt))
-}
-
-export function getStageIndex(status: string) {
-  return PATHWAY_STAGES.findIndex((stage) => stage.status === status)
 }
 
 export function formatPathwayDate(value: string) {

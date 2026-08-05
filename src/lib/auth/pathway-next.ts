@@ -1,10 +1,11 @@
 import {
   COUNTRY_OPTIONS,
   FIELD_OPTIONS,
-  getHomeSearchQuery,
   getOptionLabel,
+  getPathwaySearchQuery,
   NO_FIELD_STATUS,
   NOT_SURE_FIELD,
+  ORIGIN_OPTIONS,
   STATUS_OPTIONS,
 } from "@/app/(workspace)/home/home-search-config"
 import { getSafeNextPath } from "./safe-next"
@@ -16,7 +17,7 @@ export type PathwaySummary = {
 }
 
 function getPathwayStatusLabel(status: string) {
-  if (status === NO_FIELD_STATUS) return "Exploring fields"
+  if (status === NO_FIELD_STATUS) return "Exploring options"
 
   const label = getOptionLabel(STATUS_OPTIONS, status).replace(/^I’m\s+/, "")
   return label ? `${label[0].toUpperCase()}${label.slice(1)}` : ""
@@ -29,11 +30,14 @@ export function getPathwaySummaryFromNext(requestedNext: string | null): Pathway
 
   if (url.pathname !== "/home") return null
 
-  const query = getHomeSearchQuery(url.searchParams)
+  const query = getPathwaySearchQuery(url.searchParams)
   if (!query) return null
 
+  const destination = getOptionLabel(COUNTRY_OPTIONS, query.country)
+  const origin = getOptionLabel(ORIGIN_OPTIONS, query.origin)
+
   return {
-    country: getOptionLabel(COUNTRY_OPTIONS, query.country),
+    country: origin ? `${origin} → ${destination}` : destination,
     field: query.field === NOT_SURE_FIELD.value ? "Field not selected" : getOptionLabel(FIELD_OPTIONS, query.field),
     status: getPathwayStatusLabel(query.status),
   }
