@@ -6,7 +6,7 @@ const lastModified = new Date("2026-08-05")
 
 /**
  * Index only completed, source-backed product pages. Country pages are added
- * individually after their numeric metrics and source footer are verified.
+ * individually after their numeric metrics and methodology are verified.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages: MetadataRoute.Sitemap = [
@@ -14,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/maps`, lastModified, priority: 0.9, changeFrequency: "daily" },
     { url: `${BASE}/countries/au`, lastModified, priority: 0.85, changeFrequency: "monthly" },
     { url: `${BASE}/methodology`, lastModified, priority: 0.5, changeFrequency: "monthly" },
+    { url: `${BASE}/methodology/australia`, lastModified, priority: 0.45, changeFrequency: "monthly" },
     { url: `${BASE}/privacy`, lastModified, priority: 0.2, changeFrequency: "yearly" },
     { url: `${BASE}/terms`, lastModified, priority: 0.2, changeFrequency: "yearly" },
   ]

@@ -3,7 +3,6 @@ import {
   Banknote,
   Building2,
   CalendarDays,
-  ExternalLink,
   GraduationCap,
   MapPin,
   Sparkles,
@@ -17,7 +16,6 @@ import {
 import {
   formatMoneyRange,
   formatRankingValue,
-  type CountryMetricSource,
   type CountryMetrics,
 } from "@/lib/workspace/country-metric-contract"
 import { getCountryExplorer } from "@/lib/workspace/country-explorer"
@@ -67,31 +65,6 @@ function MetricCard({
   return <article className={className}>{content}</article>
 }
 
-function dateLabel(value: string | null) {
-  if (!value) return null
-  const date = new Date(value)
-  if (Number.isNaN(date.getTime())) return null
-  return new Intl.DateTimeFormat("en-AU", { month: "short", year: "numeric" }).format(date)
-}
-
-type DisplaySource = {
-  label: string
-  url: string
-  organisation?: string
-  dataAsOf?: string | null
-  verifiedAt?: string | null
-}
-
-function metricSource(source: CountryMetricSource): DisplaySource {
-  return {
-    label: source.sourceName,
-    url: source.url,
-    organisation: source.organisationName,
-    dataAsOf: source.dataAsOf,
-    verifiedAt: source.verifiedAt,
-  }
-}
-
 export function AustraliaCountryDashboard({ metrics }: { metrics: CountryMetrics }) {
   const explorer = getCountryExplorer("AU")
   const countryProfile = getCountryProfile("AU")
@@ -107,12 +80,6 @@ export function AustraliaCountryDashboard({ metrics }: { metrics: CountryMetrics
   const livingHint = metrics.livingCostRange
     ? "Typical shared-housing student estimate · monthly"
     : "Verified student estimate coming soon"
-  const sources: DisplaySource[] = [
-    ...metrics.sources.map(metricSource),
-    profile.academicYear.source,
-    ...profile.sources,
-  ]
-  const dedupedSources = [...new Map(sources.map((source) => [source.url, source])).values()]
 
   return (
     <div>
@@ -255,36 +222,6 @@ export function AustraliaCountryDashboard({ metrics }: { metrics: CountryMetrics
           )}
         </section>
       </div>
-
-      <section className="mt-4 rounded-xl border border-[#e7e6e3] bg-white p-5" aria-labelledby="country-sources-heading">
-        <h2 id="country-sources-heading" className="text-[14.5px] font-semibold text-[#1b1b1b]">Sources</h2>
-        <ul className="mt-3 grid gap-2 md:grid-cols-2">
-          {dedupedSources.map((source) => {
-            const dataAsOf = dateLabel(source.dataAsOf ?? null)
-            const verifiedAt = dateLabel(source.verifiedAt ?? null)
-            return (
-              <li key={source.url} className="rounded-lg border border-[#f0efec] bg-[#fafaf8] px-3 py-2.5">
-                <a
-                  href={source.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-start gap-1 text-[11.5px] font-semibold leading-4 text-[#3a3935] transition hover:text-[#2563eb]"
-                >
-                  {source.label}
-                  <ExternalLink className="mt-0.5 size-3 shrink-0" aria-hidden="true" />
-                </a>
-                {(source.organisation || dataAsOf || verifiedAt) && (
-                  <p className="mt-1 text-[10px] leading-4 text-[#918e87]">
-                    {[source.organisation, dataAsOf ? `Data: ${dataAsOf}` : null, verifiedAt ? `Verified: ${verifiedAt}` : null]
-                      .filter(Boolean)
-                      .join(" · ")}
-                  </p>
-                )}
-              </li>
-            )
-          })}
-        </ul>
-      </section>
     </div>
   )
 }
