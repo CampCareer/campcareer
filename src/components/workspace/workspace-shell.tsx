@@ -17,7 +17,8 @@ export function WorkspaceShell({ children }: WorkspaceShellProps) {
   const pathname = withoutLocalePrefix(usePathname())
   // Pages with their own full-bleed hero manage their own content container,
   // so they escape the standard padding to reach the sidebar and topbar.
-  const hasFullBleedHero = pathname === "/home" || pathname === "/countries"
+  const hasFullBleedHero =
+    pathname === "/home" || pathname === "/countries" || pathname.startsWith("/countries/")
   // Home owns both the authenticated dashboard and result experiences. Its
   // application-style surfaces should end at their content, not a marketing footer.
   const hideSiteFooter = pathname === "/home"
