@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useState } from "react"
 import type { User } from "@supabase/supabase-js"
 import { LogIn, UserIcon } from "lucide-react"
 import { createClient } from "@/lib/supabase-client"
@@ -13,17 +13,30 @@ type WorkspaceUserMenuProps = {
 }
 
 export function WorkspaceUserMenu({ className, minimal = false }: WorkspaceUserMenuProps) {
-  const supabase = useMemo(() => createClient(), [])
   const [user, setUser] = useState<User | null>(null)
   const [avatarFailed, setAvatarFailed] = useState(false)
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => setUser(data.user))
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
+    // Create the browser client only after hydration. Static generation and CI
+    // therefore do not require public Supabase environment variables.
+    const supabase = createClient()
+    let active = true
+
+    void supabase.auth.getUser().then(({ data }) => {
+      if (active) setUser(data.user)
     })
-    return () => subscription.unsubscribe()
-  }, [supabase])
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (active) setUser(session?.user ?? null)
+    })
+
+    return () => {
+      active = false
+      subscription.unsubscribe()
+    }
+  }, [])
 
   const avatarUrl = user?.user_metadata?.avatar_url as string | undefined
 
