@@ -1,10 +1,17 @@
-import { getHomeSearchQuery, toHomeSearchQuery, type FormValues } from "./home-search-config"
+import {
+  getHomeSearchQuery,
+  hasOption,
+  ORIGIN_OPTIONS,
+  toHomeSearchQuery,
+  type FormValues,
+} from "./home-search-config"
 
-export type SavedPathwayInput = Pick<FormValues, "country" | "field" | "status">
-export const SAVED_PATHWAY_CONFLICT_COLUMNS = "user_id,country_code,field_slug"
+export type SavedPathwayInput = FormValues & { origin?: string }
+export const SAVED_PATHWAY_CONFLICT_COLUMNS = "user_id,origin_country_code,country_code,field_slug"
 
 export type SavedPathwayWrite = {
   user_id: string
+  origin_country_code: string | null
   country_code: string
   field_slug: string
   status_slug: string
@@ -17,17 +24,26 @@ export function normalizeSavedPathwayInput(input: unknown): SavedPathwayInput | 
   const candidate = input as Partial<SavedPathwayInput>
   if (typeof candidate.country !== "string" || typeof candidate.field !== "string" || typeof candidate.status !== "string") return null
 
-  return getHomeSearchQuery(new URLSearchParams({
+  const core = getHomeSearchQuery(new URLSearchParams({
     country: candidate.country,
     field: candidate.field,
     status: candidate.status,
   }))
+  if (!core) return null
+
+  if (candidate.origin === undefined || candidate.origin === "") return core
+  if (typeof candidate.origin !== "string") return null
+
+  const origin = candidate.origin.toUpperCase()
+  if (!hasOption(ORIGIN_OPTIONS, origin)) return null
+  return { origin, ...core }
 }
 
-/** The unique saved-path identity is user + country + field; status is updateable progress. */
+/** The saved-path identity is user + origin + destination + field; status is updateable progress. */
 export function toSavedPathwayWrite(userId: string, pathway: SavedPathwayInput, updatedAt: string): SavedPathwayWrite {
   return {
     user_id: userId,
+    origin_country_code: pathway.origin || null,
     country_code: pathway.country,
     field_slug: pathway.field,
     status_slug: pathway.status,
