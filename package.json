@@ -105,7 +105,7 @@
     "eslint-config-next": "16.2.12",
     "pg": "^8.22.0",
     "playwright": "^1.60.0",
-    "postcss": "^8",
+    "postcss": "8.5.23",
     "shadcn": "4.8.1",
     "tailwindcss": "^3.4.1",
     "ts-node": "^10.9.2",
@@ -118,7 +118,7 @@
       "js-yaml": "3.15.0"
     },
     "next": {
-      "postcss": "8.5.15",
+      "postcss": "8.5.23",
       "sharp": "0.35.3"
     }
   }
