@@ -13,5 +13,6 @@ export default async function VisasPage({
 }) {
   const sp = await searchParams
   const q = typeof sp.q === "string" ? sp.q : ""
-  return <VisasExplorer initialQuery={q} />
+  const country = typeof sp.country === "string" ? sp.country.toUpperCase() : ""
+  return <VisasExplorer initialQuery={q} initialCountry={country} />
 }

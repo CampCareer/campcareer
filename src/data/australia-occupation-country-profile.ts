@@ -1,27 +1,44 @@
-export type AustraliaProfileSource = {
+export type CountryProfileSource = {
   label: string
   url: string
 }
 
-export type AustraliaStrongMajor = {
+export type CountryStrongMajor = {
   id: string
   label: string
   reason: string
 }
 
-export type AustraliaMajorInstitution = {
+export type CountryInstitutionType =
+  | "university"
+  | "college_polytechnic"
+  | "vocational_provider"
+  | "public_technical_institute"
+  | "specialist_institution"
+
+export type CountryMajorInstitution = {
   name: string
-  type: "research_university" | "public_vet"
+  type: CountryInstitutionType
   location: string
+}
+
+export const COUNTRY_INSTITUTION_TYPE_LABELS: Record<CountryInstitutionType, string> = {
+  university: "Research university",
+  college_polytechnic: "College / Polytechnic",
+  vocational_provider: "Vocational provider",
+  public_technical_institute: "Public TAFE / VET",
+  specialist_institution: "Specialist institution",
 }
 
 export const AUSTRALIA_OCCUPATION_COUNTRY_PROFILE = {
   countryCode: "AU",
   countryName: "Australia",
+  introduction:
+    "Australia combines a large university and vocational sector with clear study, labour-market and student-cost pathways across major cities.",
   academicYear: {
     headline: "Two main university semesters",
     summary:
-      "Most undergraduate and postgraduate courses use two semesters and usually begin in March. Some providers use three trimesters, and selected courses offer a mid-year or second-semester start.",
+      "Most undergraduate and postgraduate courses begin in February or March. Selected providers and courses also offer a July intake, while some institutions use trimester calendars.",
     intakes: ["February–March", "July (selected courses)"],
     source: {
       label: "Study Australia — Australia’s education system",
@@ -32,46 +49,46 @@ export const AUSTRALIA_OCCUPATION_COUNTRY_PROFILE = {
     {
       id: "nursing-health",
       label: "Nursing & Allied Health",
-      reason: "Health occupations remain a major area of persistent skills shortage.",
+      reason: "Persistent national shortages across health occupations.",
     },
     {
       id: "teaching-education",
       label: "Teaching & Education",
-      reason: "Qualified applicant shortages continue across teaching and education roles.",
+      reason: "Continued shortages in qualified teaching roles.",
     },
     {
       id: "construction-built-environment",
       label: "Construction & Built Environment",
-      reason: "Construction remains one of Australia’s clearest shortage areas.",
+      reason: "Construction remains a major shortage area.",
     },
     {
       id: "skilled-trades",
       label: "Skilled Trades & Engineering Technologies",
-      reason: "Nearly half of trade occupations were assessed as being in shortage in 2025.",
+      reason: "Many trade occupations continue to face shortages.",
     },
     {
       id: "selected-engineering",
       label: "Selected Engineering Fields",
-      reason: "Some engineering employers continue to report experience and suitability gaps.",
+      reason: "Employers report persistent experience and suitability gaps.",
     },
     {
       id: "community-care",
       label: "Community Services & Care",
-      reason: "Care and service roles continue to face recruitment and retention pressure.",
+      reason: "Care roles continue to face recruitment pressure.",
     },
-  ] satisfies AustraliaStrongMajor[],
+  ] satisfies CountryStrongMajor[],
   majorInstitutions: [
-    { name: "Adelaide University", type: "research_university", location: "South Australia" },
-    { name: "Australian National University", type: "research_university", location: "Australian Capital Territory" },
-    { name: "University of Melbourne", type: "research_university", location: "Victoria" },
-    { name: "Monash University", type: "research_university", location: "Victoria" },
-    { name: "UNSW Sydney", type: "research_university", location: "New South Wales" },
-    { name: "University of Queensland", type: "research_university", location: "Queensland" },
-    { name: "University of Sydney", type: "research_university", location: "New South Wales" },
-    { name: "University of Western Australia", type: "research_university", location: "Western Australia" },
-    { name: "TAFE NSW", type: "public_vet", location: "New South Wales" },
-    { name: "TAFE Queensland", type: "public_vet", location: "Queensland" },
-  ] satisfies AustraliaMajorInstitution[],
+    { name: "Adelaide University", type: "university", location: "South Australia" },
+    { name: "Australian National University", type: "university", location: "Australian Capital Territory" },
+    { name: "University of Melbourne", type: "university", location: "Victoria" },
+    { name: "Monash University", type: "university", location: "Victoria" },
+    { name: "UNSW Sydney", type: "university", location: "New South Wales" },
+    { name: "University of Queensland", type: "university", location: "Queensland" },
+    { name: "University of Sydney", type: "university", location: "New South Wales" },
+    { name: "University of Western Australia", type: "university", location: "Western Australia" },
+    { name: "TAFE NSW", type: "public_technical_institute", location: "New South Wales" },
+    { name: "TAFE Queensland", type: "public_technical_institute", location: "Queensland" },
+  ] satisfies CountryMajorInstitution[],
   sources: [
     {
       label: "Jobs and Skills Australia — 2025 Occupation Shortage List",
@@ -85,5 +102,5 @@ export const AUSTRALIA_OCCUPATION_COUNTRY_PROFILE = {
       label: "Study Australia — list of Australian universities",
       url: "https://www.studyaustralia.gov.au/en/plan-your-studies/list-of-australian-universities",
     },
-  ] satisfies AustraliaProfileSource[],
+  ] satisfies CountryProfileSource[],
 } as const

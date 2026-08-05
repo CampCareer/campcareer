@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import {
   CalendarRange,
   ChevronRight,
@@ -26,11 +27,19 @@ const KIND_BADGE: Record<string, string> = {
   Temporary: "bg-[#f4f0ee] text-[#8a5a4a]",
 }
 
-export function VisasExplorer({ initialQuery }: { initialQuery: string }) {
+export function VisasExplorer({
+  initialQuery,
+  initialCountry,
+}: {
+  initialQuery: string
+  initialCountry: string
+}) {
+  const router = useRouter()
+  const searchParams = useSearchParams()
   const { selectedCountry } = useSelectedCountry()
   const [query, setQuery] = useState(initialQuery)
   const [kind, setKind] = useState<string>("all")
-  const [country, setCountry] = useState<string>("all")
+  const [country, setCountry] = useState<string>(initialCountry || "all")
   const [selectedKey, setSelectedKey] = useState<string | null>(null)
 
   const countries = useMemo(() => {
@@ -44,10 +53,29 @@ export function VisasExplorer({ initialQuery }: { initialQuery: string }) {
   }, [])
 
   useEffect(() => {
-    if (selectedCountry && countries.some((c) => c.code === selectedCountry.code)) {
+    const validUrlCountry = countries.some((item) => item.code === initialCountry)
+      ? initialCountry
+      : null
+    if (validUrlCountry) {
+      setCountry(validUrlCountry)
+      return
+    }
+    if (selectedCountry && countries.some((item) => item.code === selectedCountry.code)) {
       setCountry(selectedCountry.code)
     }
-  }, [selectedCountry, countries])
+  }, [initialCountry, selectedCountry, countries])
+
+  function updateCountry(code: string | null) {
+    const nextCountry = code ?? "all"
+    setCountry(nextCountry)
+    setSelectedKey(null)
+
+    const params = new URLSearchParams(searchParams.toString())
+    if (nextCountry === "all") params.delete("country")
+    else params.set("country", nextCountry)
+    const nextQuery = params.toString()
+    router.replace(nextQuery ? `/visas?${nextQuery}` : "/visas", { scroll: false })
+  }
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -66,7 +94,7 @@ export function VisasExplorer({ initialQuery }: { initialQuery: string }) {
 
   const activeVisa = useMemo(() => {
     if (selectedKey) {
-      const match = results.find((v) => `${v.countryCode}:${v.name}` === selectedKey)
+      const match = results.find((visa) => `${visa.countryCode}:${visa.name}` === selectedKey)
       if (match) return match
     }
     return results[0] ?? null
@@ -90,9 +118,7 @@ export function VisasExplorer({ initialQuery }: { initialQuery: string }) {
             <h1 className="text-[26px] font-semibold leading-tight tracking-[-0.02em] text-[#1b1b1b] sm:text-3xl">
               Visas
             </h1>
-            <CountryPill
-              onChange={(code) => setCountry(code ?? "all")}
-            />
+            <CountryPill onChange={updateCountry} />
           </div>
         </div>
       </div>
@@ -118,19 +144,19 @@ export function VisasExplorer({ initialQuery }: { initialQuery: string }) {
         >
           All
         </button>
-        {VISA_KINDS.map((k) => (
+        {VISA_KINDS.map((visaKind) => (
           <button
-            key={k}
+            key={visaKind}
             type="button"
-            onClick={() => setKind(k)}
+            onClick={() => setKind(visaKind)}
             className={cn(
               "rounded-lg border px-3 py-1.5 text-[12.5px] font-medium transition",
-              kind === k
+              kind === visaKind
                 ? "border-[#6d4fc4] bg-[#6d4fc4] text-white"
                 : "border-[#e0dfdb] bg-white text-[#6f6d68] hover:border-[#6d4fc4]/50 hover:text-[#6d4fc4]"
             )}
           >
-            {k}
+            {visaKind}
           </button>
         ))}
       </div>
