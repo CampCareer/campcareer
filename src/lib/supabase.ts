@@ -1,11 +1,34 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 
-// 클라이언트 (읽기 전용 - 브라우저 안전)
+// 읽기 전용 클라이언트. 환경변수 검사는 실제 첫 요청 시점까지 지연한다.
+// 이렇게 하면 GitHub CI처럼 Supabase 자격 증명이 없는 환경에서도 Next.js가
+// API route와 page module을 안전하게 분석하고 production build를 수행할 수 있다.
 // 쓰기용 service role 클라이언트는 '@/lib/supabase-admin' (server-only) 참조.
-export const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
+let client: SupabaseClient | null = null
+
+function getSupabaseClient(): SupabaseClient {
+  if (client) return client
+
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  if (!url || !anonKey) {
+    throw new Error(
+      'Supabase public environment variables are required when a database request is executed.'
+    )
+  }
+
+  client = createClient(url, anonKey)
+  return client
+}
+
+export const supabase = new Proxy({} as SupabaseClient, {
+  get(_target, property) {
+    const activeClient = getSupabaseClient()
+    const value = Reflect.get(activeClient, property, activeClient)
+    return typeof value === 'function' ? value.bind(activeClient) : value
+  },
+})
 
 // 타입 정의
 // US 스키마(unit_id) 기준 — 타국 colleges_* 테이블은 institution_id를 사용함.
