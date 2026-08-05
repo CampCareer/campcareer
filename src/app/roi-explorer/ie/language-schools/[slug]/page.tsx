@@ -5,7 +5,7 @@ import { pageMetadata } from "@/lib/seo"
 import { JsonLd, breadcrumbLd } from "@/components/seo/json-ld"
 import SchoolDetailPage from "./SchoolDetailPage"
 
-export const revalidate = 86400
+export const dynamic = "force-dynamic"
 
 export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const params = await props.params;
