@@ -21,7 +21,7 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
-      - name: Upgrade patched dependencies
+      - name: Reconcile patched dependency tree
         run: |
           npm install --save-exact next@16.2.12
           npm install --save-dev --save-exact eslint-config-next@16.2.12
@@ -42,7 +42,8 @@ jobs:
           }
           fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n')
           NODE
-          npm install --package-lock-only
+          rm -rf node_modules/next/node_modules/postcss node_modules/next/node_modules/sharp
+          npm install --force
       - name: Commit dependency lock update
         run: |
           git config user.name github-actions[bot]
@@ -51,7 +52,7 @@ jobs:
           if git diff --cached --quiet; then
             echo 'No dependency changes to commit.'
           else
-            git commit -m 'chore(deps): apply transitive security overrides [skip ci]'
+            git commit -m 'chore(deps): reconcile security overrides [skip ci]'
             git push origin HEAD:chore/fix-ci-security-audit-v1
           fi
       - name: Reinstall from updated lockfile
