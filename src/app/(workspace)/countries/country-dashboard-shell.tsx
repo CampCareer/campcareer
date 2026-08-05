@@ -24,9 +24,15 @@ export function CountryDashboardShell({
   children?: ReactNode
 }) {
   const router = useRouter()
-  const { setSelectedCountry, hydrated } = useSelectedCountry()
+  const { selectedCountry, setSelectedCountry, hydrated } = useSelectedCountry()
   const routeCountry = countryCode ? getLaunchCountry(countryCode) : null
-  const [query, setQuery] = useState(routeCountry?.name ?? initialQuery)
+  const rememberedCountry = selectedCountry ? getLaunchCountry(selectedCountry.code) : null
+  const routeCode = routeCountry?.code
+  const routeName = routeCountry?.name
+  const routeCurrency = routeCountry?.currency
+  const rememberedCode = rememberedCountry?.code
+  const rememberedName = rememberedCountry?.name
+  const [query, setQuery] = useState(routeName ?? initialQuery)
   const [open, setOpen] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -34,24 +40,37 @@ export function CountryDashboardShell({
   useEffect(() => {
     if (!hydrated) return
 
-    if (routeCountry) {
+    if (routeCode && routeName && routeCurrency) {
       setSelectedCountry({
-        code: routeCountry.code,
-        name: routeCountry.name,
-        currency: routeCountry.currency,
+        code: routeCode,
+        name: routeName,
+        currency: routeCurrency,
       })
-      setQuery(routeCountry.name)
+      setQuery(routeName)
       return
     }
 
-    setSelectedCountry(null)
-    setQuery(initialQuery)
+    if (initialQuery) {
+      setQuery(initialQuery)
+      return
+    }
+
+    if (rememberedCode && rememberedName) {
+      setQuery(rememberedName)
+      router.replace(`/countries/${rememberedCode.toLowerCase()}`)
+      return
+    }
+
+    setQuery("")
   }, [
     hydrated,
     initialQuery,
-    routeCountry?.code,
-    routeCountry?.currency,
-    routeCountry?.name,
+    rememberedCode,
+    rememberedName,
+    routeCode,
+    routeCurrency,
+    routeName,
+    router,
     setSelectedCountry,
   ])
 
