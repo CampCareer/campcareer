@@ -1,14 +1,12 @@
+import Link from "next/link"
 import {
-  ArrowUpRight,
   Banknote,
   Building2,
   CalendarDays,
   GraduationCap,
   MapPin,
-  ScrollText,
   Sparkles,
   Stamp,
-  TrendingUp,
   Wallet,
 } from "lucide-react"
 import { AUSTRALIA_OCCUPATION_COUNTRY_PROFILE } from "@/data/australia-occupation-country-profile"
@@ -20,15 +18,6 @@ import { getCountryExplorer } from "@/lib/workspace/country-explorer"
 import { getCountryProfile } from "@/lib/workspace/country-profile"
 import { VISA_CATALOG } from "@/lib/workspace/visa-catalog"
 import { cn } from "@/lib/utils"
-
-const KIND_STYLES: Record<string, string> = {
-  Study: "bg-[#eef4ff] text-[#2563eb]",
-  Work: "bg-[#fbf0e7] text-[#c2691e]",
-  Skilled: "bg-[#f3f0fa] text-[#6d4fc4]",
-  "Working holiday": "bg-[#edf5ea] text-[#3e7a2e]",
-  Family: "bg-[#f5f3f0] text-[#6f6d68]",
-  Temporary: "bg-[#f5f3f0] text-[#6f6d68]",
-}
 
 const number = new Intl.NumberFormat("en-AU", { maximumFractionDigits: 0 })
 
@@ -42,14 +31,16 @@ function MetricCard({
   label,
   value,
   accent,
+  href,
 }: {
   icon: React.ReactNode
   label: string
   value: string
   accent: string
+  href?: string
 }) {
-  return (
-    <article className="rounded-xl border border-[#e7e6e3] bg-white p-4">
+  const content = (
+    <>
       <div className="flex items-center gap-2">
         <span className={cn("grid size-8 place-items-center rounded-lg", accent)}>{icon}</span>
         <p className="text-[11.5px] font-semibold uppercase tracking-[0.08em] text-[#8f8c85]">
@@ -57,8 +48,21 @@ function MetricCard({
         </p>
       </div>
       <p className="mt-3 text-[23px] font-semibold tracking-[-0.02em] text-[#1b1b1b]">{value}</p>
-    </article>
+    </>
   )
+
+  const className =
+    "rounded-xl border border-[#e7e6e3] bg-white p-4 transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#2563eb]/15"
+
+  if (href) {
+    return (
+      <Link href={href} className={cn(className, "block hover:border-[#c9d7f5] hover:shadow-sm")}>
+        {content}
+      </Link>
+    )
+  }
+
+  return <article className={className}>{content}</article>
 }
 
 export function AustraliaCountryDashboard({ metrics }: { metrics: AustraliaCountryMetrics }) {
@@ -72,16 +76,16 @@ export function AustraliaCountryDashboard({ metrics }: { metrics: AustraliaCount
   const cityCount = explorer.regions.reduce((total, region) => total + region.cities.length, 0)
   const annualSalary = metrics.average_full_time_annual_earnings
   const livingCost = metrics.student_living_cost_shared_monthly_average
-  const minimumWage = metrics.national_minimum_hourly_wage
 
   return (
     <div>
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-3">
         <MetricCard
           icon={<Stamp className="size-4 text-[#6d4fc4]" />}
           accent="bg-[#f3f0fa]"
           label="Visa options"
           value={String(visas.length)}
+          href="/visas"
         />
         <MetricCard
           icon={<Banknote className="size-4 text-[#2563eb]" />}
@@ -92,14 +96,8 @@ export function AustraliaCountryDashboard({ metrics }: { metrics: AustraliaCount
         <MetricCard
           icon={<Wallet className="size-4 text-[#c2691e]" />}
           accent="bg-[#fbf0e7]"
-          label="Shared living cost"
+          label="Living cost"
           value={metricMoney(livingCost, "/ month")}
-        />
-        <MetricCard
-          icon={<TrendingUp className="size-4 text-[#3e7a2e]" />}
-          accent="bg-[#edf5ea]"
-          label="Minimum wage"
-          value={metricMoney(minimumWage, "/ hour")}
         />
       </div>
 
@@ -165,42 +163,31 @@ export function AustraliaCountryDashboard({ metrics }: { metrics: AustraliaCount
 
       <div className="mt-4 grid gap-4 lg:grid-cols-3">
         <section className="min-w-0 rounded-xl border border-[#e7e6e3] bg-white lg:col-span-2">
-          <div className="flex items-center justify-between border-b border-[#f0efec] px-5 py-4">
-            <div className="flex items-center gap-2.5">
-              <ScrollText className="size-4 text-[#6d4fc4]" />
-              <h2 className="text-[14.5px] font-semibold text-[#1b1b1b]">Visa options</h2>
-            </div>
-            <span className="text-[11.5px] font-medium text-[#a3a19b]">{visas.length} pathways</span>
+          <div className="flex items-center gap-2.5 border-b border-[#f0efec] px-5 py-4">
+            <MapPin className="size-4 text-[#3e7a2e]" />
+            <h2 className="text-[14.5px] font-semibold text-[#1b1b1b]">Regions &amp; cities</h2>
+            <span className="ml-auto text-[11.5px] font-medium text-[#a3a19b]">{cityCount} cities</span>
           </div>
-          <ul className="divide-y divide-[#f0efec]">
-            {visas.map((visa) => (
-              <li key={visa.name} className="flex items-start gap-3 px-5 py-3.5">
-                <span
-                  className={cn(
-                    "mt-0.5 inline-flex shrink-0 rounded-md px-2 py-0.5 text-[10.5px] font-bold uppercase tracking-wide",
-                    KIND_STYLES[visa.kind] ?? KIND_STYLES.Temporary
-                  )}
-                >
-                  {visa.kind}
-                </span>
-                <span className="min-w-0 flex-1">
-                  <a
-                    href={visa.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="group inline-flex items-center gap-1 text-[13.5px] font-semibold text-[#1b1b1b] transition hover:text-[#2563eb]"
-                  >
-                    {visa.name}
-                    <ArrowUpRight className="size-3.5 text-[#c4c2bc] transition group-hover:text-[#2563eb]" />
-                  </a>
-                  <span className="mt-0.5 block text-[12.5px] leading-5 text-[#6f6d68]">{visa.note}</span>
-                </span>
-                <span className="shrink-0 pt-0.5 text-[11px] font-medium text-[#c4c2bc]">
-                  {visa.authority}
-                </span>
-              </li>
+          <div className="grid gap-x-8 gap-y-5 px-5 py-5 sm:grid-cols-2">
+            {explorer.regions.map((region) => (
+              <div key={region.name}>
+                <h3 className="flex items-center gap-1.5 text-[13px] font-semibold text-[#1b1b1b]">
+                  <MapPin className="size-3.5 text-[#9c9a94]" />
+                  {region.name}
+                </h3>
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {region.cities.map((city) => (
+                    <span
+                      key={city}
+                      className="rounded-md border border-[#e7e6e3] bg-[#fafaf8] px-2.5 py-1 text-[12px] font-medium text-[#4d4c48]"
+                    >
+                      {city}
+                    </span>
+                  ))}
+                </div>
+              </div>
             ))}
-          </ul>
+          </div>
         </section>
 
         <section className="rounded-xl border border-[#e7e6e3] bg-white">
@@ -225,34 +212,6 @@ export function AustraliaCountryDashboard({ metrics }: { metrics: AustraliaCount
           )}
         </section>
       </div>
-
-      <section className="mt-4 rounded-xl border border-[#e7e6e3] bg-white">
-        <div className="flex items-center gap-2.5 border-b border-[#f0efec] px-5 py-4">
-          <MapPin className="size-4 text-[#3e7a2e]" />
-          <h2 className="text-[14.5px] font-semibold text-[#1b1b1b]">Regions &amp; cities</h2>
-          <span className="ml-auto text-[11.5px] font-medium text-[#a3a19b]">{cityCount} cities</span>
-        </div>
-        <div className="grid gap-x-8 gap-y-5 px-5 py-5 sm:grid-cols-2">
-          {explorer.regions.map((region) => (
-            <div key={region.name}>
-              <h3 className="flex items-center gap-1.5 text-[13px] font-semibold text-[#1b1b1b]">
-                <MapPin className="size-3.5 text-[#9c9a94]" />
-                {region.name}
-              </h3>
-              <div className="mt-2 flex flex-wrap gap-1.5">
-                {region.cities.map((city) => (
-                  <span
-                    key={city}
-                    className="rounded-md border border-[#e7e6e3] bg-[#fafaf8] px-2.5 py-1 text-[12px] font-medium text-[#4d4c48]"
-                  >
-                    {city}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
     </div>
   )
 }
