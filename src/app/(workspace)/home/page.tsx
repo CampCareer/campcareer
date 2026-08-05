@@ -6,7 +6,7 @@ import { HomeHub } from "./home-hub"
 
 export const metadata = {
   title: "Home",
-  description: "Plan your study-abroad career end to end: countries, occupations, visas and courses.",
+  description: "Find and continue realistic cross-border study, work and visa pathways.",
   robots: { index: false, follow: false } as const,
 }
 
@@ -40,7 +40,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 
   const { data, error } = await supabase
     .from("saved_pathways")
-    .select("id, country_code, field_slug, status_slug, updated_at")
+    .select("id, origin_country_code, country_code, field_slug, status_slug, updated_at")
     .eq("user_id", user!.id)
     .order("updated_at", { ascending: false })
     .limit(6)
