@@ -2,7 +2,9 @@ import { pageMetadata } from "@/lib/seo"
 import { getInitialMapShellData } from "@/lib/map-data"
 import CampCareerMaps from "@/app/map/CampCareerMaps"
 
-export const revalidate = 86400
+// The map shell reads live Supabase datasets. Render per request so CI static
+// generation does not require production service-role credentials.
+export const dynamic = "force-dynamic"
 
 export const metadata = pageMetadata({
   title: "Australia opportunity map | CampCareer",
