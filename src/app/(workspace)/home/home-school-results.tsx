@@ -1,6 +1,6 @@
 "use client"
 
-import Image, { type StaticImageData } from "next/image"
+import Image from "next/image"
 import { useState } from "react"
 import { Check } from "lucide-react"
 import {
@@ -9,16 +9,13 @@ import {
   type SchoolProgramFixture,
   type SchoolResultsFixture,
 } from "./home-school-fixtures"
-import unswCampus from "../../../../public/blog/images/UNSW.webp"
-import universityOfTorontoCampus from "../../../../public/blog/images/UoT.webp"
-import melbourneUniversityCampus from "../../../../public/blog/images/Melbourne_University.webp"
 import { HomePathSaveFooter } from "./home-path-save"
 import { HomeResultHeader, HomeResultMetrics } from "./home-result-ui"
 
-const CAMPUS_CONTEXT_IMAGES: Record<SchoolProgramFixture["imageKey"], StaticImageData> = {
-  "campus-a": unswCampus,
-  "campus-b": universityOfTorontoCampus,
-  "campus-c": melbourneUniversityCampus,
+const CAMPUS_CONTEXT_IMAGES: Record<SchoolProgramFixture["imageKey"], string> = {
+  "campus-a": "/blog/images/UNSW.webp",
+  "campus-b": "/blog/images/UoT.webp",
+  "campus-c": "/blog/images/Melbourne_University.webp",
 }
 
 type HomeSchoolResultsProps = {
