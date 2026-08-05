@@ -16,6 +16,13 @@ export const metadata: Metadata = pageMetadata({
 })
 
 async function getOccupationCount() {
+  // Static CI builds intentionally do not receive production service-role
+  // credentials. The public copy already has a controlled fallback, while
+  // deployed environments continue to use the live count.
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return 395
+  }
+
   const { count } = await supabaseAdmin
     .from("occupations_au")
     .select("*", { count: "exact", head: true })
