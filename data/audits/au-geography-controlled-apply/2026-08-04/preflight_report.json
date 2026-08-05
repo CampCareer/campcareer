@@ -1,0 +1,39 @@
+{
+  "schema": "campcareer.controlled-import.preflight.v1",
+  "generated_at": "2026-08-04T16:43:07Z",
+  "plan_path": "data/audits/au-geography-import-dry-run/2026-08-04-approved/import_plan.json",
+  "plan_sha256": "39c2bbb1202cc636e6f1bc93f9f13cef597f4820041e26ddb34a5e4a0c10da14",
+  "expected_plan_sha": "39c2bbb1202cc636e6f1bc93f9f13cef597f4820041e26ddb34a5e4a0c10da14",
+  "plan_sha_match": true,
+  "plan_checksum": "a457dfa9de27dc32db40210f0006835f794d541bebac7146d0da0878d398ef56",
+  "expected_plan_checksum": "a457dfa9de27dc32db40210f0006835f794d541bebac7146d0da0878d398ef56",
+  "plan_checksum_match": true,
+  "classification_counts": {
+    "INSERT": 41,
+    "NOOP": 1,
+    "CONFLICT": 0,
+    "UNRESOLVED_PARENT": 0,
+    "UNSUPPORTED": 0,
+    "INVALID": 0
+  },
+  "expected_inserts": 41,
+  "expected_noops": 1,
+  "expected_regions": 9,
+  "expected_cities": 32,
+  "plan_content_verification": "PASSED",
+  "errors": [],
+  "db_pre_state": {
+    "au_country_count": 1,
+    "au_region_count": 0,
+    "au_city_count": 19,
+    "uk_gb_country_count": 1,
+    "uk_gb_geography_count": 37
+  },
+  "preflight_checks": {
+    "au_country_count_ok": true,
+    "au_region_count_ok": true,
+    "uk_gb_country_count": 1,
+    "uk_gb_geography_count": 37
+  },
+  "preflight_passed": true
+}

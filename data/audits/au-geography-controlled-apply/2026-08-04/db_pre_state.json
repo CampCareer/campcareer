@@ -1,0 +1,15 @@
+{
+  "schema": "campcareer.controlled-import.db-pre-state.v1",
+  "generated_at": "2026-08-04T16:43:41Z",
+  "country_counts": {
+    "AU": 1,
+    "UK_GB": 1
+  },
+  "geography_counts": {
+    "AU_country": 1,
+    "AU_region": 0,
+    "AU_city": 19,
+    "UK_GB": 37
+  },
+  "note": "Pre-apply state captured immediately before transaction begin."
+}

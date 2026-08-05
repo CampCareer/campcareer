@@ -1,0 +1,21 @@
+{
+  "schema": "campcareer.controlled-import.other-country-impact.v1",
+  "generated_at": "2026-08-04T16:52:56Z",
+  "uk_gb_country_before": 1,
+  "uk_gb_country_after": 1,
+  "uk_gb_geography_before": 37,
+  "uk_gb_geography_after": 37,
+  "all_other_countries_unchanged": true,
+  "details": {
+    "country_impact": {
+      "before": 1,
+      "after": 1,
+      "delta": 0
+    },
+    "geography_impact": {
+      "before": 37,
+      "after": 37,
+      "delta": 0
+    }
+  }
+}

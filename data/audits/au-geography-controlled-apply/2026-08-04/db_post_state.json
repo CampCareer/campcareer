@@ -1,0 +1,12 @@
+{
+  "schema": "campcareer.controlled-import.db-post-state.v1",
+  "generated_at": "2026-08-04T16:52:56Z",
+  "au_country_count": 1,
+  "au_region_count": 9,
+  "au_city_count": 51,
+  "uk_gb_country_count": 1,
+  "uk_gb_geography_count": 37,
+  "orphan_count": 0,
+  "duplicate_count": 0,
+  "note": "Post-commit verification state after 10.9B apply."
+}

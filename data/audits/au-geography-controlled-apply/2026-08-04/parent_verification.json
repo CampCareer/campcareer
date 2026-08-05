@@ -1,0 +1,419 @@
+{
+  "schema": "campcareer.controlled-import.parent-verification.v1",
+  "generated_at": "2026-08-04T16:52:56Z",
+  "total_cities": 51,
+  "cities_with_parent": 32,
+  "cities_without_parent": 19,
+  "orphan_count": 0,
+  "all_parents_are_regions": true,
+  "details": [
+    {
+      "city_name": "Albury",
+      "city_code": "1001",
+      "city_type": "city",
+      "parent_id": "411b2ec1-c513-982d-d06a-62e38af6dfe6",
+      "parent_name": "Victoria",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Central Coast",
+      "city_code": "1010",
+      "city_type": "city",
+      "parent_id": "c73f2a49-2fb8-9b61-d04e-f486697d39fc",
+      "parent_name": "New South Wales",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Coffs Harbour",
+      "city_code": "1011",
+      "city_type": "city",
+      "parent_id": "c73f2a49-2fb8-9b61-d04e-f486697d39fc",
+      "parent_name": "New South Wales",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Newcastle",
+      "city_code": "1025",
+      "city_type": "city",
+      "parent_id": "c73f2a49-2fb8-9b61-d04e-f486697d39fc",
+      "parent_name": "New South Wales",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Port Macquarie",
+      "city_code": "1028",
+      "city_type": "city",
+      "parent_id": "c73f2a49-2fb8-9b61-d04e-f486697d39fc",
+      "parent_name": "New South Wales",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Sydney",
+      "city_code": "1031",
+      "city_type": "city",
+      "parent_id": "c73f2a49-2fb8-9b61-d04e-f486697d39fc",
+      "parent_name": "New South Wales",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Wagga Wagga",
+      "city_code": "1035",
+      "city_type": "city",
+      "parent_id": "c73f2a49-2fb8-9b61-d04e-f486697d39fc",
+      "parent_name": "New South Wales",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Wollongong",
+      "city_code": "1036",
+      "city_type": "city",
+      "parent_id": "c73f2a49-2fb8-9b61-d04e-f486697d39fc",
+      "parent_name": "New South Wales",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Ballarat",
+      "city_code": "2003",
+      "city_type": "city",
+      "parent_id": "411b2ec1-c513-982d-d06a-62e38af6dfe6",
+      "parent_name": "Victoria",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Bendigo",
+      "city_code": "2004",
+      "city_type": "city",
+      "parent_id": "411b2ec1-c513-982d-d06a-62e38af6dfe6",
+      "parent_name": "Victoria",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Geelong",
+      "city_code": "2008",
+      "city_type": "city",
+      "parent_id": "411b2ec1-c513-982d-d06a-62e38af6dfe6",
+      "parent_name": "Victoria",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Melbourne",
+      "city_code": "2011",
+      "city_type": "city",
+      "parent_id": "411b2ec1-c513-982d-d06a-62e38af6dfe6",
+      "parent_name": "Victoria",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Mildura",
+      "city_code": "2012",
+      "city_type": "city",
+      "parent_id": "411b2ec1-c513-982d-d06a-62e38af6dfe6",
+      "parent_name": "Victoria",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Shepparton",
+      "city_code": "2016",
+      "city_type": "city",
+      "parent_id": "411b2ec1-c513-982d-d06a-62e38af6dfe6",
+      "parent_name": "Victoria",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Brisbane",
+      "city_code": "3002",
+      "city_type": "city",
+      "parent_id": "8fd23322-0044-83a4-9167-0eeca98276aa",
+      "parent_name": "Queensland",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Bundaberg",
+      "city_code": "3003",
+      "city_type": "city",
+      "parent_id": "8fd23322-0044-83a4-9167-0eeca98276aa",
+      "parent_name": "Queensland",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Cairns",
+      "city_code": "3004",
+      "city_type": "city",
+      "parent_id": "8fd23322-0044-83a4-9167-0eeca98276aa",
+      "parent_name": "Queensland",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Gladstone",
+      "city_code": "3006",
+      "city_type": "city",
+      "parent_id": "8fd23322-0044-83a4-9167-0eeca98276aa",
+      "parent_name": "Queensland",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Gold Coast",
+      "city_code": "3007",
+      "city_type": "city",
+      "parent_id": "8fd23322-0044-83a4-9167-0eeca98276aa",
+      "parent_name": "Queensland",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Hervey Bay",
+      "city_code": "3009",
+      "city_type": "city",
+      "parent_id": "8fd23322-0044-83a4-9167-0eeca98276aa",
+      "parent_name": "Queensland",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Mackay",
+      "city_code": "3011",
+      "city_type": "city",
+      "parent_id": "8fd23322-0044-83a4-9167-0eeca98276aa",
+      "parent_name": "Queensland",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Rockhampton",
+      "city_code": "3014",
+      "city_type": "city",
+      "parent_id": "8fd23322-0044-83a4-9167-0eeca98276aa",
+      "parent_name": "Queensland",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Sunshine Coast",
+      "city_code": "3015",
+      "city_type": "city",
+      "parent_id": "8fd23322-0044-83a4-9167-0eeca98276aa",
+      "parent_name": "Queensland",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Toowoomba",
+      "city_code": "3016",
+      "city_type": "city",
+      "parent_id": "8fd23322-0044-83a4-9167-0eeca98276aa",
+      "parent_name": "Queensland",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Townsville",
+      "city_code": "3017",
+      "city_type": "city",
+      "parent_id": "8fd23322-0044-83a4-9167-0eeca98276aa",
+      "parent_name": "Queensland",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Adelaide",
+      "city_code": "4001",
+      "city_type": "city",
+      "parent_id": "d5d08946-72a0-1787-f88c-3d065d0cff70",
+      "parent_name": "South Australia",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Bunbury",
+      "city_code": "5003",
+      "city_type": "city",
+      "parent_id": "0d3b20b8-aed3-5f35-e197-b19f7cf8d09e",
+      "parent_name": "Western Australia",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Perth",
+      "city_code": "5009",
+      "city_type": "city",
+      "parent_id": "0d3b20b8-aed3-5f35-e197-b19f7cf8d09e",
+      "parent_name": "Western Australia",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Hobart",
+      "city_code": "6003",
+      "city_type": "city",
+      "parent_id": "0da64182-5219-b32e-9642-b2e88614aec6",
+      "parent_name": "Tasmania",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Launceston",
+      "city_code": "6004",
+      "city_type": "city",
+      "parent_id": "0da64182-5219-b32e-9642-b2e88614aec6",
+      "parent_name": "Tasmania",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Darwin",
+      "city_code": "7002",
+      "city_type": "city",
+      "parent_id": "740997dc-1f14-a501-db89-9f22f5ac38e6",
+      "parent_name": "Northern Territory",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Canberra",
+      "city_code": "8001",
+      "city_type": "city",
+      "parent_id": "25398693-0618-8200-f387-e9bec239a0cb",
+      "parent_name": "Australian Capital Territory",
+      "parent_type": "region"
+    },
+    {
+      "city_name": "Adelaide",
+      "city_code": "adelaide-sa",
+      "city_type": "city",
+      "parent_id": "",
+      "parent_name": "",
+      "parent_type": ""
+    },
+    {
+      "city_name": "Armidale",
+      "city_code": "armidale-nsw",
+      "city_type": "city",
+      "parent_id": "",
+      "parent_name": "",
+      "parent_type": ""
+    },
+    {
+      "city_name": "Ballarat",
+      "city_code": "ballarat-vic",
+      "city_type": "city",
+      "parent_id": "",
+      "parent_name": "",
+      "parent_type": ""
+    },
+    {
+      "city_name": "Bathurst",
+      "city_code": "bathurst-nsw",
+      "city_type": "city",
+      "parent_id": "",
+      "parent_name": "",
+      "parent_type": ""
+    },
+    {
+      "city_name": "Brisbane",
+      "city_code": "brisbane-qld",
+      "city_type": "city",
+      "parent_id": "",
+      "parent_name": "",
+      "parent_type": ""
+    },
+    {
+      "city_name": "Canberra",
+      "city_code": "canberra-act",
+      "city_type": "city",
+      "parent_id": "",
+      "parent_name": "",
+      "parent_type": ""
+    },
+    {
+      "city_name": "Darwin",
+      "city_code": "darwin-nt",
+      "city_type": "city",
+      "parent_id": "",
+      "parent_name": "",
+      "parent_type": ""
+    },
+    {
+      "city_name": "Gold Coast",
+      "city_code": "gold-coast-qld",
+      "city_type": "city",
+      "parent_id": "",
+      "parent_name": "",
+      "parent_type": ""
+    },
+    {
+      "city_name": "Hobart",
+      "city_code": "hobart-tas",
+      "city_type": "city",
+      "parent_id": "",
+      "parent_name": "",
+      "parent_type": ""
+    },
+    {
+      "city_name": "Lismore",
+      "city_code": "lismore-nsw",
+      "city_type": "city",
+      "parent_id": "",
+      "parent_name": "",
+      "parent_type": ""
+    },
+    {
+      "city_name": "Melbourne",
+      "city_code": "melbourne-vic",
+      "city_type": "city",
+      "parent_id": "",
+      "parent_name": "",
+      "parent_type": ""
+    },
+    {
+      "city_name": "Newcastle",
+      "city_code": "newcastle-nsw",
+      "city_type": "city",
+      "parent_id": "",
+      "parent_name": "",
+      "parent_type": ""
+    },
+    {
+      "city_name": "Perth",
+      "city_code": "perth-wa",
+      "city_type": "city",
+      "parent_id": "",
+      "parent_name": "",
+      "parent_type": ""
+    },
+    {
+      "city_name": "Rockhampton",
+      "city_code": "rockhampton-qld",
+      "city_type": "city",
+      "parent_id": "",
+      "parent_name": "",
+      "parent_type": ""
+    },
+    {
+      "city_name": "Sippy Downs",
+      "city_code": "sippy-downs-qld",
+      "city_type": "city",
+      "parent_id": "",
+      "parent_name": "",
+      "parent_type": ""
+    },
+    {
+      "city_name": "Sydney",
+      "city_code": "sydney-nsw",
+      "city_type": "city",
+      "parent_id": "",
+      "parent_name": "",
+      "parent_type": ""
+    },
+    {
+      "city_name": "Toowoomba",
+      "city_code": "toowoomba-qld",
+      "city_type": "city",
+      "parent_id": "",
+      "parent_name": "",
+      "parent_type": ""
+    },
+    {
+      "city_name": "Townsville",
+      "city_code": "townsville-qld",
+      "city_type": "city",
+      "parent_id": "",
+      "parent_name": "",
+      "parent_type": ""
+    },
+    {
+      "city_name": "Wollongong",
+      "city_code": "wollongong-nsw",
+      "city_type": "city",
+      "parent_id": "",
+      "parent_name": "",
+      "parent_type": ""
+    }
+  ]
+}

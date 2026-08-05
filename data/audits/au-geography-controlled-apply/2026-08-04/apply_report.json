@@ -1,0 +1,72 @@
+{
+  "schema": "campcareer.controlled-import.apply-report.v1",
+  "generated_at": "2026-08-04T16:53:52Z",
+  "branch": "feat/au-geography-controlled-apply-v1",
+  "source_sha": "7a29c51bc49ba91fc6cc4efed3a5dc0ff3c56d3c",
+  "operation": "controlled_apply",
+  "country": "AU",
+  "plan_path": "data/audits/au-geography-import-dry-run/2026-08-04-approved/import_plan.json",
+  "plan_sha256": "39c2bbb1202cc636e6f1bc93f9f13cef597f4820041e26ddb34a5e4a0c10da14",
+  "plan_checksum": "a457dfa9de27dc32db40210f0006835f794d541bebac7146d0da0878d398ef56",
+  "transaction": {
+    "isolation_level": "SERIALIZABLE",
+    "advisory_lock_id": 10942,
+    "advisory_lock_acquired": true,
+    "pre_state_checks": {
+      "au_country_count_expected": 1,
+      "au_country_count_actual": 1,
+      "au_region_count_expected": 0,
+      "au_region_count_actual": 0,
+      "pre_state_passed": true
+    }
+  },
+  "operations": {
+    "INSERT": 41,
+    "NOOP": 1,
+    "UPDATE": 0,
+    "DELETE": 0,
+    "UPSERT": 0
+  },
+  "inserted": {
+    "regions": 9,
+    "cities": 32,
+    "total": 41
+  },
+  "noop": {
+    "country": 1,
+    "entity": "core.countries",
+    "country_code": "AU",
+    "reason": "Country row already exists with matching currency"
+  },
+  "verification": {
+    "post_state_checks": {
+      "au_country_count": 1,
+      "au_region_count": 9,
+      "au_city_count": 51,
+      "orphan_count": 0,
+      "duplicate_count": 0
+    },
+    "other_country_checks": {
+      "uk_gb_country_before": 1,
+      "uk_gb_country_after": 1,
+      "uk_gb_geography_before": 37,
+      "uk_gb_geography_after": 37,
+      "all_unchanged": true
+    },
+    "all_checks_passed": true
+  },
+  "transaction_status": "COMMITTED",
+  "schema_impact": 0,
+  "other_country_impact": 0,
+  "production_db_writes": 41,
+  "rollback_artifacts": {
+    "inserted_rows_file": "inserted_rows.json",
+    "rollback_plan_file": "rollback_plan.json",
+    "rollback_sql_file": "rollback.sql"
+  },
+  "safety": {
+    "fuzzy_match_count": 0,
+    "arbitrary_uuid_count": 0,
+    "schema_migration": false
+  }
+}

@@ -1,0 +1,315 @@
+{
+  "schema": "campcareer.controlled-import.representative-name-verification.v1",
+  "generated_at": "2026-08-04T16:52:56Z",
+  "total_cities": 51,
+  "normalized_names_found": 6,
+  "original_names_preserved": 51,
+  "details": [
+    {
+      "name": "Adelaide",
+      "original_official_name": "Adelaide",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Adelaide",
+      "original_official_name": "Adelaide",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Albury",
+      "original_official_name": "Albury - Wodonga",
+      "was_normalized": true,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Armidale",
+      "original_official_name": "Armidale",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Ballarat",
+      "original_official_name": "Ballarat",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Ballarat",
+      "original_official_name": "Ballarat",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Bathurst",
+      "original_official_name": "Bathurst",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Bendigo",
+      "original_official_name": "Bendigo",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Brisbane",
+      "original_official_name": "Brisbane",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Brisbane",
+      "original_official_name": "Brisbane",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Bunbury",
+      "original_official_name": "Bunbury",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Bundaberg",
+      "original_official_name": "Bundaberg",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Cairns",
+      "original_official_name": "Cairns",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Canberra",
+      "original_official_name": "Canberra - Queanbeyan",
+      "was_normalized": true,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Canberra",
+      "original_official_name": "Canberra",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Central Coast",
+      "original_official_name": "Central Coast",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Coffs Harbour",
+      "original_official_name": "Coffs Harbour",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Darwin",
+      "original_official_name": "Darwin",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Darwin",
+      "original_official_name": "Darwin",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Geelong",
+      "original_official_name": "Geelong",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Gladstone",
+      "original_official_name": "Gladstone",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Gold Coast",
+      "original_official_name": "Gold Coast",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Gold Coast",
+      "original_official_name": "Gold Coast - Tweed Heads",
+      "was_normalized": true,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Hervey Bay",
+      "original_official_name": "Hervey Bay",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Hobart",
+      "original_official_name": "Hobart",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Hobart",
+      "original_official_name": "Hobart",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Launceston",
+      "original_official_name": "Launceston",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Lismore",
+      "original_official_name": "Lismore",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Mackay",
+      "original_official_name": "Mackay",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Melbourne",
+      "original_official_name": "Melbourne",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Melbourne",
+      "original_official_name": "Melbourne",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Mildura",
+      "original_official_name": "Mildura - Buronga",
+      "was_normalized": true,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Newcastle",
+      "original_official_name": "Newcastle",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Newcastle",
+      "original_official_name": "Newcastle - Maitland",
+      "was_normalized": true,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Perth",
+      "original_official_name": "Perth",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Perth",
+      "original_official_name": "Perth",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Port Macquarie",
+      "original_official_name": "Port Macquarie",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Rockhampton",
+      "original_official_name": "Rockhampton",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Rockhampton",
+      "original_official_name": "Rockhampton",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Shepparton",
+      "original_official_name": "Shepparton - Mooroopna",
+      "was_normalized": true,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Sippy Downs",
+      "original_official_name": "Sippy Downs",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Sunshine Coast",
+      "original_official_name": "Sunshine Coast",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Sydney",
+      "original_official_name": "Sydney",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Sydney",
+      "original_official_name": "Sydney",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Toowoomba",
+      "original_official_name": "Toowoomba",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Toowoomba",
+      "original_official_name": "Toowoomba",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Townsville",
+      "original_official_name": "Townsville",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Townsville",
+      "original_official_name": "Townsville",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Wagga Wagga",
+      "original_official_name": "Wagga Wagga",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Wollongong",
+      "original_official_name": "Wollongong",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    },
+    {
+      "name": "Wollongong",
+      "original_official_name": "Wollongong",
+      "was_normalized": false,
+      "original_preserved_in_metadata": true
+    }
+  ]
+}

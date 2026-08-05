@@ -1,0 +1,30 @@
+{
+  "schema": "campcareer.controlled-import.approved-plan-verification.v1",
+  "generated_at": "2026-08-04T16:54:07Z",
+  "plan_path": "data/audits/au-geography-import-dry-run/2026-08-04-approved/import_plan.json",
+  "expected_plan_sha256": "39c2bbb1202cc636e6f1bc93f9f13cef597f4820041e26ddb34a5e4a0c10da14",
+  "actual_plan_sha256": "39c2bbb1202cc636e6f1bc93f9f13cef597f4820041e26ddb34a5e4a0c10da14",
+  "sha256_match": true,
+  "expected_plan_checksum": "a457dfa9de27dc32db40210f0006835f794d541bebac7146d0da0878d398ef56",
+  "actual_plan_checksum": "a457dfa9de27dc32db40210f0006835f794d541bebac7146d0da0878d398ef56",
+  "checksum_match": true,
+  "candidate_total": 42,
+  "entity_breakdown": {
+    "country": 1,
+    "region": 9,
+    "city": 32
+  },
+  "classification_counts": {
+    "INSERT": 41,
+    "NOOP": 1,
+    "CONFLICT": 0,
+    "UNRESOLVED_PARENT": 0,
+    "UNSUPPORTED": 0,
+    "INVALID": 0
+  },
+  "no_forbidden_operations": true,
+  "all_countries_au": true,
+  "no_uk_gb_references": true,
+  "duplicate_source_keys": [],
+  "verification_passed": true
+}

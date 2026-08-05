@@ -1,0 +1,380 @@
+{
+  "schema": "campcareer.controlled-import.rollback-plan.v1",
+  "description": "Rollback plan for 10.9B AU Geography Controlled Apply",
+  "rollback_target": "Delete only the 41 rows inserted by this apply transaction",
+  "total_rows_to_delete": 41,
+  "rows": [
+    {
+      "id": "40efec60-df13-307c-ea32-b8aaad10e2a8",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "1001",
+      "name": "Albury",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:1001"
+    },
+    {
+      "id": "0f25fa89-dd6f-b7a6-2517-ee046d0bc1c7",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "1010",
+      "name": "Central Coast",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:1010"
+    },
+    {
+      "id": "4fd6a0bf-d129-9fbc-fea8-ce97934435ab",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "1011",
+      "name": "Coffs Harbour",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:1011"
+    },
+    {
+      "id": "818d2d6f-c903-0a85-f326-984c9ed5c5d4",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "1025",
+      "name": "Newcastle",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:1025"
+    },
+    {
+      "id": "7835b24e-625d-0046-738f-3dbd4bc8c79f",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "1028",
+      "name": "Port Macquarie",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:1028"
+    },
+    {
+      "id": "efe4c42f-cd2b-09bd-3834-624a53d2f9fb",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "1031",
+      "name": "Sydney",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:1031"
+    },
+    {
+      "id": "778332ea-dcbc-cceb-9eca-2c5ed50d1a93",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "1035",
+      "name": "Wagga Wagga",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:1035"
+    },
+    {
+      "id": "a131c859-8ff2-880c-80e4-bc9b6ebc54c7",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "1036",
+      "name": "Wollongong",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:1036"
+    },
+    {
+      "id": "5d05724d-6d74-ab2c-e6e8-53997522bf18",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "2003",
+      "name": "Ballarat",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:2003"
+    },
+    {
+      "id": "c9acc3d6-fbd1-585f-2710-b44079541558",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "2004",
+      "name": "Bendigo",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:2004"
+    },
+    {
+      "id": "90c71d50-1f99-33fc-356a-2f9be4255e74",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "2008",
+      "name": "Geelong",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:2008"
+    },
+    {
+      "id": "8f42442b-2645-0706-dcbe-60d804f96146",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "2011",
+      "name": "Melbourne",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:2011"
+    },
+    {
+      "id": "50fa2e3a-3879-6a02-66b2-2073526ae6c6",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "2012",
+      "name": "Mildura",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:2012"
+    },
+    {
+      "id": "0c2659f0-0b5c-f4b2-da08-cf20f9ee0537",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "2016",
+      "name": "Shepparton",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:2016"
+    },
+    {
+      "id": "1b389596-4b1f-96a1-5f33-e6d8f675402d",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "3002",
+      "name": "Brisbane",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:3002"
+    },
+    {
+      "id": "8c66a5dc-055d-dc21-ddbe-854ea146b9d0",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "3003",
+      "name": "Bundaberg",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:3003"
+    },
+    {
+      "id": "75c50f37-dfe9-1b56-db4b-8de3a2d70965",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "3004",
+      "name": "Cairns",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:3004"
+    },
+    {
+      "id": "874e520f-e8c6-362e-eb81-0f68e0a45997",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "3006",
+      "name": "Gladstone",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:3006"
+    },
+    {
+      "id": "3b3e3cfb-dddd-d4ad-8d3c-81adc783fb9b",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "3007",
+      "name": "Gold Coast",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:3007"
+    },
+    {
+      "id": "fdfe40b4-3c36-16a0-e1c4-5d58e13de0cc",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "3009",
+      "name": "Hervey Bay",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:3009"
+    },
+    {
+      "id": "39da3c03-43f0-fdda-6168-20531b09b119",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "3011",
+      "name": "Mackay",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:3011"
+    },
+    {
+      "id": "7f33d502-a686-f2b8-6be8-7ec9e419814f",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "3014",
+      "name": "Rockhampton",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:3014"
+    },
+    {
+      "id": "1f51d3a1-a785-f2ca-9591-8af147809c9a",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "3015",
+      "name": "Sunshine Coast",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:3015"
+    },
+    {
+      "id": "555631da-b1dc-ad77-8e02-96c10fa90ddc",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "3016",
+      "name": "Toowoomba",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:3016"
+    },
+    {
+      "id": "65f97318-2f33-08f3-c20c-ff18610ad2c5",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "3017",
+      "name": "Townsville",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:3017"
+    },
+    {
+      "id": "a0cbe90e-6bf8-3b39-d4b1-091e03a8e429",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "4001",
+      "name": "Adelaide",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:4001"
+    },
+    {
+      "id": "dcf6f37b-89bc-2081-c6de-a7f4a4d7de27",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "5003",
+      "name": "Bunbury",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:5003"
+    },
+    {
+      "id": "ce80bdf1-f6f6-bde4-1bd6-5b742663b96b",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "5009",
+      "name": "Perth",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:5009"
+    },
+    {
+      "id": "4ffe2f13-0b31-869e-c4b1-ba6c193bdeb3",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "6003",
+      "name": "Hobart",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:6003"
+    },
+    {
+      "id": "f4b20b7f-ee15-fe53-b386-b04702f38e5c",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "6004",
+      "name": "Launceston",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:6004"
+    },
+    {
+      "id": "2a98dbca-f2d6-a626-9298-23d110b5d475",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "7002",
+      "name": "Darwin",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:7002"
+    },
+    {
+      "id": "b234e544-e5bc-d117-e073-fe70c42202ef",
+      "country_code": "AU",
+      "geography_type": "city",
+      "code": "8001",
+      "name": "Canberra",
+      "source_id": "au-abs-32180ds0004-v1",
+      "source_record_key": "AU:sua:8001"
+    },
+    {
+      "id": "c73f2a49-2fb8-9b61-d04e-f486697d39fc",
+      "country_code": "AU",
+      "geography_type": "region",
+      "code": "1",
+      "name": "New South Wales",
+      "source_id": "au-abs-31010do002-v1",
+      "source_record_key": "AU:ste:1"
+    },
+    {
+      "id": "411b2ec1-c513-982d-d06a-62e38af6dfe6",
+      "country_code": "AU",
+      "geography_type": "region",
+      "code": "2",
+      "name": "Victoria",
+      "source_id": "au-abs-31010do002-v1",
+      "source_record_key": "AU:ste:2"
+    },
+    {
+      "id": "8fd23322-0044-83a4-9167-0eeca98276aa",
+      "country_code": "AU",
+      "geography_type": "region",
+      "code": "3",
+      "name": "Queensland",
+      "source_id": "au-abs-31010do002-v1",
+      "source_record_key": "AU:ste:3"
+    },
+    {
+      "id": "d5d08946-72a0-1787-f88c-3d065d0cff70",
+      "country_code": "AU",
+      "geography_type": "region",
+      "code": "4",
+      "name": "South Australia",
+      "source_id": "au-abs-31010do002-v1",
+      "source_record_key": "AU:ste:4"
+    },
+    {
+      "id": "0d3b20b8-aed3-5f35-e197-b19f7cf8d09e",
+      "country_code": "AU",
+      "geography_type": "region",
+      "code": "5",
+      "name": "Western Australia",
+      "source_id": "au-abs-31010do002-v1",
+      "source_record_key": "AU:ste:5"
+    },
+    {
+      "id": "0da64182-5219-b32e-9642-b2e88614aec6",
+      "country_code": "AU",
+      "geography_type": "region",
+      "code": "6",
+      "name": "Tasmania",
+      "source_id": "au-abs-31010do002-v1",
+      "source_record_key": "AU:ste:6"
+    },
+    {
+      "id": "740997dc-1f14-a501-db89-9f22f5ac38e6",
+      "country_code": "AU",
+      "geography_type": "region",
+      "code": "7",
+      "name": "Northern Territory",
+      "source_id": "au-abs-31010do002-v1",
+      "source_record_key": "AU:ste:7"
+    },
+    {
+      "id": "25398693-0618-8200-f387-e9bec239a0cb",
+      "country_code": "AU",
+      "geography_type": "region",
+      "code": "8",
+      "name": "Australian Capital Territory",
+      "source_id": "au-abs-31010do002-v1",
+      "source_record_key": "AU:ste:8"
+    },
+    {
+      "id": "3adb4116-3deb-ac2f-57e1-09ea82c98e17",
+      "country_code": "AU",
+      "geography_type": "region",
+      "code": "9",
+      "name": "Other Territories",
+      "source_id": "au-abs-31010do002-v1",
+      "source_record_key": "AU:ste:9"
+    }
+  ],
+  "rollback_sql_file": "rollback.sql",
+  "instructions": "Execute rollback.sql to delete only the rows inserted by apply 10.9B. DO NOT use blanket DELETE WHERE country_code = \"AU\".",
+  "warning": "Rollback should only be executed after explicit human approval. This will delete ONLY the 41 rows inserted in this transaction."
+}
