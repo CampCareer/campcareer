@@ -8,7 +8,7 @@ import { getSavedPathwayState, savePathway } from "./home-pathway-actions"
 import { getPathwayLoginPath, type SavedPathwayInput } from "./home-pathway-save"
 
 type SaveState = "idle" | "saving" | "saved" | "error"
-type HomePathSaveContextValue = { state: SaveState; message: string; save: () => Promise<void> }
+type HomePathSaveContextValue = { state: SaveState; message: string; canSave: boolean; save: () => Promise<void> }
 const HomePathSaveContext = createContext<HomePathSaveContextValue | null>(null)
 
 export function HomePathSaveProvider({ values, children }: { values: SavedPathwayInput; children: ReactNode }) {
@@ -18,19 +18,22 @@ export function HomePathSaveProvider({ values, children }: { values: SavedPathwa
   const [message, setMessage] = useState("")
   const autoSaveAttempted = useRef<string | null>(null)
   const pathwayKey = `${values.origin ?? ""}:${values.country}:${values.field}:${values.status}`
-  const shouldAutoSave = searchParams.get("save") === "1"
+  const canSave = Boolean(values.origin)
+  const shouldAutoSave = searchParams.get("save") === "1" && canSave
 
   useEffect(() => {
     let active = true
     setState("idle")
-    setMessage("")
+    setMessage(canSave ? "" : "Add your starting country to save this pathway.")
+    if (!canSave) return () => { active = false }
+
     void getSavedPathwayState(values).then((result) => {
       if (!active || result.state !== "ready" || !result.saved) return
       setState("saved")
       setMessage("Saved to your Home dashboard.")
     })
     return () => { active = false }
-  }, [pathwayKey, values])
+  }, [canSave, pathwayKey, values])
 
   const clearSaveRequest = useCallback(() => {
     const params = new URLSearchParams(searchParams.toString())
@@ -39,6 +42,12 @@ export function HomePathSaveProvider({ values, children }: { values: SavedPathwa
   }, [router, searchParams])
 
   const save = useCallback(async () => {
+    if (!canSave) {
+      setState("error")
+      setMessage("Add your starting country to save this pathway.")
+      return
+    }
+
     setState("saving")
     setMessage("")
     const result = await savePathway(values)
@@ -53,7 +62,7 @@ export function HomePathSaveProvider({ values, children }: { values: SavedPathwa
     }
     setState("error")
     setMessage(result.state === "invalid" ? "This pathway is no longer valid. Update your search and try again." : "We couldn’t save this pathway. Please try again.")
-  }, [router, values])
+  }, [canSave, router, values])
 
   useEffect(() => {
     if (!shouldAutoSave || autoSaveAttempted.current === pathwayKey) return
@@ -78,7 +87,7 @@ export function HomePathSaveProvider({ values, children }: { values: SavedPathwa
     })()
   }, [clearSaveRequest, pathwayKey, shouldAutoSave, values])
 
-  const value = useMemo(() => ({ state, message, save }), [message, save, state])
+  const value = useMemo(() => ({ state, message, canSave, save }), [canSave, message, save, state])
   return <HomePathSaveContext.Provider value={value}>{children}</HomePathSaveContext.Provider>
 }
 
@@ -89,17 +98,17 @@ function useHomePathSave() {
 }
 
 export function HomePathSaveButton({ compact = false, prominent = false }: { compact?: boolean; prominent?: boolean }) {
-  const { state, save } = useHomePathSave()
+  const { state, canSave, save } = useHomePathSave()
   const saved = state === "saved"
   const saving = state === "saving"
-  const label = saved ? "Saved" : compact ? "Save pathway" : "Save this pathway"
+  const label = !canSave ? "Add starting country" : saved ? "Saved" : compact ? "Save pathway" : "Save this pathway"
   const className = compact
     ? "inline-flex min-h-9 shrink-0 items-center justify-center gap-1.5 rounded-lg border border-[#d5d3ce] bg-white px-3 text-xs font-semibold text-[#3a3935] transition hover:border-[#aaa8a1] hover:bg-[#fafaf9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/35 focus-visible:ring-offset-2 disabled:cursor-default disabled:border-blue-200 disabled:bg-blue-50 disabled:text-blue-800"
     : prominent
       ? "inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/35 focus-visible:ring-offset-2 disabled:cursor-default disabled:bg-blue-100 disabled:text-blue-800"
       : "inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl border border-[#d5d3ce] px-4 text-sm font-semibold text-[#1b1b1b] transition hover:border-[#aaa8a1] hover:bg-[#fafaf9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/35 focus-visible:ring-offset-2 disabled:cursor-default disabled:border-blue-200 disabled:bg-blue-50 disabled:text-blue-800"
 
-  return <button type="button" onClick={() => void save()} disabled={saving || saved} aria-pressed={saved} className={className}>{saving ? <Loader2 className="size-4 animate-spin" /> : saved ? <BookmarkCheck className="size-4" /> : <Bookmark className="size-4" />}{label}</button>
+  return <button type="button" onClick={() => void save()} disabled={saving || saved || !canSave} aria-pressed={saved} className={className}>{saving ? <Loader2 className="size-4 animate-spin" /> : saved ? <BookmarkCheck className="size-4" /> : <Bookmark className="size-4" />}{label}</button>
 }
 
 export function HomePathSaveFooter({ headingId = "save-path-heading" }: { headingId?: string }) {
