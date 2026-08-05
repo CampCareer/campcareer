@@ -11,7 +11,7 @@ import { getSchoolsByCity, type LanguageSchool } from "@/lib/language-schools-ie
 import { pageMetadata } from "@/lib/seo"
 import { JsonLd, breadcrumbLd } from "@/components/seo/json-ld"
 
-export const revalidate = 86400
+export const dynamic = "force-dynamic"
 
 function capitalize(s: string) {
   return s.charAt(0).toUpperCase() + s.slice(1)
