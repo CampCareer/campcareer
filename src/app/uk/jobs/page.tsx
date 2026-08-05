@@ -6,7 +6,7 @@ import { pageMetadata } from "@/lib/seo"
 import { JsonLd } from "@/components/seo/json-ld"
 import { UkJobsClient } from "./UkJobsClient"
 
-export const revalidate = 86400
+export const dynamic = "force-dynamic"
 
 export const metadata: Metadata = pageMetadata({
   title: "UK Jobs & Occupations — Salary & Skills Shortage Guide | CampCareer",
