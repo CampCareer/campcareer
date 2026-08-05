@@ -24,7 +24,7 @@ jobs:
       - name: Reconcile patched dependency tree
         run: |
           npm install --save-exact next@16.2.12
-          npm install --save-dev --save-exact eslint-config-next@16.2.12
+          npm install --save-dev --save-exact eslint-config-next@16.2.12 postcss@8.5.23
           node - <<'NODE'
           const fs = require('node:fs')
           const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'))
@@ -36,7 +36,7 @@ jobs:
             },
             'next': {
               ...((pkg.overrides || {})['next'] || {}),
-              'postcss': '8.5.15',
+              'postcss': '8.5.23',
               'sharp': '0.35.3'
             }
           }
@@ -52,7 +52,7 @@ jobs:
           if git diff --cached --quiet; then
             echo 'No dependency changes to commit.'
           else
-            git commit -m 'chore(deps): reconcile security overrides [skip ci]'
+            git commit -m 'chore(deps): update PostCSS security patch [skip ci]'
             git push origin HEAD:chore/fix-ci-security-audit-v1
           fi
       - name: Reinstall from updated lockfile
