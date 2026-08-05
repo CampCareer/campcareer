@@ -31,8 +31,10 @@ export function normalizeSavedPathwayInput(input: unknown): SavedPathwayInput | 
   }))
   if (!core) return null
 
-  if (candidate.origin === undefined || candidate.origin === "") return core
-  if (typeof candidate.origin !== "string") return null
+  // Undefined is accepted only for legacy records and tests. An explicit blank
+  // origin comes from an old result URL and must be completed before a new save.
+  if (candidate.origin === undefined) return core
+  if (typeof candidate.origin !== "string" || candidate.origin === "") return null
 
   const origin = candidate.origin.toUpperCase()
   if (!hasOption(ORIGIN_OPTIONS, origin)) return null
