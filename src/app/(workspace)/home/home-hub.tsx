@@ -101,7 +101,7 @@ export function HomeHub({ showDashboardBackLink = false }: { showDashboardBackLi
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-24 pt-16 sm:px-8 sm:pb-28 sm:pt-20 lg:px-10 lg:pt-24">
           <div className="max-w-3xl">
             <h1 className="text-4xl font-semibold tracking-[-0.04em] text-white sm:text-5xl lg:text-[56px] lg:leading-[1.08]">
-              Find Your Pathway Abroad
+              Explore, Compare, Find Your Future
             </h1>
             <p className="mt-5 max-w-2xl text-[16px] leading-7 text-white/90 sm:text-[17px]">
               Compare realistic study, work and visa routes with the conditions, timing, risks and official checks you need.
