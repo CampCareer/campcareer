@@ -89,6 +89,23 @@ export const COUNTRY_PROFILES: Record<string, CountryProfile> = {
       url: "https://www.bls.gov/emp/",
     },
   },
+
+  UK: {
+    code: "UK",
+    workOpportunities: {
+      headline: "Occupations in critical or elevated demand",
+      items: [
+        { title: "Specialist medical practitioners", detail: "Critical demand" },
+        { title: "IT business analysts, architects and systems designers", detail: "Critical demand" },
+        { title: "Senior care workers", detail: "Critical demand" },
+        { title: "Medical radiographers", detail: "Critical demand" },
+        { title: "Programmers and software development professionals", detail: "Elevated demand" },
+        { title: "Secondary education teaching professionals", detail: "Elevated demand" },
+      ],
+      source: "Skills England — Occupations in demand 2025",
+      url: "https://www.gov.uk/government/publications/occupations-in-demand-2025",
+    },
+  },
 }
 
 export function getCountryProfile(code: string): CountryProfile | null {

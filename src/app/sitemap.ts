@@ -15,10 +15,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/countries/au`, lastModified, priority: 0.85, changeFrequency: "monthly" },
     { url: `${BASE}/countries/ca`, lastModified, priority: 0.85, changeFrequency: "monthly" },
     { url: `${BASE}/countries/us`, lastModified, priority: 0.85, changeFrequency: "monthly" },
+    { url: `${BASE}/countries/uk`, lastModified, priority: 0.85, changeFrequency: "monthly" },
     { url: `${BASE}/methodology`, lastModified, priority: 0.5, changeFrequency: "monthly" },
     { url: `${BASE}/methodology/australia`, lastModified, priority: 0.45, changeFrequency: "monthly" },
     { url: `${BASE}/methodology/canada`, lastModified, priority: 0.45, changeFrequency: "monthly" },
     { url: `${BASE}/methodology/united-states`, lastModified, priority: 0.45, changeFrequency: "monthly" },
+    { url: `${BASE}/methodology/united-kingdom`, lastModified, priority: 0.45, changeFrequency: "monthly" },
     { url: `${BASE}/privacy`, lastModified, priority: 0.2, changeFrequency: "yearly" },
     { url: `${BASE}/terms`, lastModified, priority: 0.2, changeFrequency: "yearly" },
   ]
