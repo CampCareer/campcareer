@@ -16,6 +16,10 @@ export const metadata: Metadata = pageMetadata({
 })
 
 async function getOccupationCount() {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return 514
+  }
+
   const { count } = await supabaseAdmin
     .from("occupations_ca")
     .select("*", { count: "exact", head: true })
