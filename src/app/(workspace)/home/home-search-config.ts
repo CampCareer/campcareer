@@ -6,14 +6,20 @@ export type SelectOption = {
   label: string
 }
 
+/** Existing result dimensions used by country, field and status fixtures. */
 export type FormValues = {
   country: string
   field: string
   status: string
 }
 
-export type FormErrors = Partial<Record<keyof FormValues, string>>
-export type OpenMenu = keyof FormValues | null
+/** Canonical Home pathway input. `country` remains the destination for backwards compatibility. */
+export type PathwaySearchValues = FormValues & {
+  origin: string
+}
+
+export type FormErrors = Partial<Record<keyof PathwaySearchValues, string>>
+export type OpenMenu = keyof PathwaySearchValues | null
 export type HomeScreenMode = "search" | "results"
 export type SearchParamsLike = Pick<URLSearchParams, "get">
 
@@ -26,15 +32,19 @@ export const COUNTRY_OPTIONS: readonly SelectOption[] = LAUNCH_COUNTRIES.map((co
   label: country.name,
 }))
 
+export const ORIGIN_OPTIONS = COUNTRY_OPTIONS
+
 export const FIELD_OPTIONS: readonly SelectOption[] = [
   NOT_SURE_FIELD,
   ...FIELDS.map((field) => ({ value: field.slug, label: field.label })),
 ]
 
 export const STATUS_OPTIONS: readonly SelectOption[] = [
-  { value: NO_FIELD_STATUS, label: "I haven’t chosen a field" },
-  { value: "choosing-school", label: "I’m choosing a school" },
+  { value: NO_FIELD_STATUS, label: "I’m exploring my options" },
+  { value: "choosing-school", label: "I’m choosing a program" },
   { value: "preparing-application", label: "I’m preparing my application" },
+  { value: "already-qualified", label: "I’m already qualified" },
+  { value: "looking-for-job", label: "I’m looking for a job or sponsor" },
   { value: "preparing-visa", label: "I’m preparing my visa" },
 ]
 
@@ -46,7 +56,7 @@ export function getOptionLabel(options: readonly SelectOption[], value: string) 
   return options.find((option) => option.value === value)?.label ?? ""
 }
 
-export function readFormValues(searchParams: SearchParamsLike): FormValues {
+function readCoreValues(searchParams: SearchParamsLike): FormValues {
   const country = searchParams.get("country")?.toUpperCase() ?? DEFAULT_COUNTRY
   const field = searchParams.get("field") ?? ""
   const status = searchParams.get("status") ?? ""
@@ -58,19 +68,28 @@ export function readFormValues(searchParams: SearchParamsLike): FormValues {
   }
 }
 
-export function validateForm(values: FormValues): FormErrors {
+export function readFormValues(searchParams: SearchParamsLike): PathwaySearchValues {
+  const origin = searchParams.get("origin")?.toUpperCase() ?? ""
+  return {
+    origin: hasOption(ORIGIN_OPTIONS, origin) ? origin : "",
+    ...readCoreValues(searchParams),
+  }
+}
+
+export function validateForm(values: PathwaySearchValues): FormErrors {
   const errors: FormErrors = {}
 
-  if (!values.country) errors.country = "Select a country"
-  if (!values.status) errors.status = "Select your current status"
+  if (!values.origin) errors.origin = "Select your starting country"
+  if (!values.country) errors.country = "Select a destination"
+  if (!values.status) errors.status = "Select your current situation"
   if (values.status && values.status !== NO_FIELD_STATUS && (!values.field || values.field === NOT_SURE_FIELD.value)) {
-    errors.field = "Select a field"
+    errors.field = "Select a target field"
   }
 
   return errors
 }
 
-/** A normalized, result-safe query shared by the Home form and future result services. */
+/** A normalized, result-safe query retained for existing result fixtures and legacy URLs. */
 export function getHomeSearchQuery(searchParams: SearchParamsLike): FormValues | null {
   const country = searchParams.get("country")?.toUpperCase() ?? null
   const field = searchParams.get("field")
@@ -86,14 +105,40 @@ export function getHomeSearchQuery(searchParams: SearchParamsLike): FormValues |
   return { country: country!, field: field!, status: status! }
 }
 
+/** Adds the optional starting country to a validated legacy result query. */
+export function getPathwaySearchQuery(searchParams: SearchParamsLike): PathwaySearchValues | null {
+  const core = getHomeSearchQuery(searchParams)
+  if (!core) return null
+
+  const origin = searchParams.get("origin")?.toUpperCase() ?? ""
+  return {
+    origin: hasOption(ORIGIN_OPTIONS, origin) ? origin : "",
+    ...core,
+  }
+}
+
 export function getHomeScreenMode(searchParams: SearchParamsLike): HomeScreenMode {
   return getHomeSearchQuery(searchParams) ? "results" : "search"
 }
 
-export function toHomeSearchQuery(values: FormValues) {
-  return new URLSearchParams({
-    country: values.country,
-    field: values.status === NO_FIELD_STATUS ? NOT_SURE_FIELD.value : values.field,
-    status: values.status,
-  })
+function getBrowserOrigin() {
+  if (typeof window === "undefined") return ""
+  const origin = new URLSearchParams(window.location.search).get("origin")?.toUpperCase() ?? ""
+  return hasOption(ORIGIN_OPTIONS, origin) ? origin : ""
+}
+
+/**
+ * Serializes the canonical pathway query. Older client-side result helpers pass
+ * only the legacy dimensions, so the current URL origin is retained when safe.
+ */
+export function toHomeSearchQuery(values: FormValues | PathwaySearchValues, fallbackOrigin?: string) {
+  const explicitOrigin = "origin" in values ? values.origin : ""
+  const origin = explicitOrigin || fallbackOrigin || getBrowserOrigin()
+  const params = new URLSearchParams()
+
+  if (hasOption(ORIGIN_OPTIONS, origin)) params.set("origin", origin)
+  params.set("country", values.country)
+  params.set("field", values.status === NO_FIELD_STATUS ? NOT_SURE_FIELD.value : values.field)
+  params.set("status", values.status)
+  return params
 }
