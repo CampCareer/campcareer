@@ -10,7 +10,7 @@ import { getAllSchools, getCities, type LanguageSchool } from "@/lib/language-sc
 import { pageMetadata } from "@/lib/seo"
 import { JsonLd, breadcrumbLd } from "@/components/seo/json-ld"
 
-export const revalidate = 86400
+export const dynamic = "force-dynamic"
 
 export const metadata: Metadata = pageMetadata({
   title: "아일랜드 어학원 추천 2026 — ACELS/MEI 인증 영어 학교",
