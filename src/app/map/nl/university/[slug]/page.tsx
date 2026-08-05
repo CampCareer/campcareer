@@ -5,15 +5,12 @@ import { pageMetadata } from "@/lib/seo"
 import { NL_PROVINCE_NAMES } from "../../../states"
 import UniversityStaticCard from "../../../UniversityStaticCard"
 
-export const revalidate = 86400
-
-export async function generateStaticParams() {
-  const data = await getNLMapData()
-  return data.nlColleges.map((c) => ({ slug: c.slug }))
-}
+// This page depends on live Supabase data. Render it per request instead of
+// executing service-role queries while GitHub CI is collecting static pages.
+export const dynamic = "force-dynamic"
 
 export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
-  const params = await props.params;
+  const params = await props.params
   const data = await getNLMapData()
   const college = data.nlColleges.find((c) => c.slug === params.slug)
   if (!college) return pageMetadata({ title: "University Details", description: "", path: "/map" })
@@ -34,7 +31,7 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
 }
 
 export default async function UniversityPage(props: { params: Promise<{ slug: string }> }) {
-  const params = await props.params;
+  const params = await props.params
   const data = await getNLMapData()
   const college = data.nlColleges.find((c) => c.slug === params.slug)
   if (!college) notFound()
