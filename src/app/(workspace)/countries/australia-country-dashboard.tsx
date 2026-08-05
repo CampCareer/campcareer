@@ -3,39 +3,40 @@ import {
   Banknote,
   Building2,
   CalendarDays,
+  ExternalLink,
   GraduationCap,
   MapPin,
   Sparkles,
   Stamp,
   Wallet,
 } from "lucide-react"
-import { AUSTRALIA_OCCUPATION_COUNTRY_PROFILE } from "@/data/australia-occupation-country-profile"
-import type {
-  AustraliaCountryMetric,
-  AustraliaCountryMetrics,
-} from "@/lib/workspace/australia-country-metrics"
+import {
+  AUSTRALIA_OCCUPATION_COUNTRY_PROFILE,
+  COUNTRY_INSTITUTION_TYPE_LABELS,
+} from "@/data/australia-occupation-country-profile"
+import {
+  formatMoneyRange,
+  formatRankingValue,
+  type CountryMetricSource,
+  type CountryMetrics,
+} from "@/lib/workspace/country-metric-contract"
 import { getCountryExplorer } from "@/lib/workspace/country-explorer"
 import { getCountryProfile } from "@/lib/workspace/country-profile"
 import { VISA_CATALOG } from "@/lib/workspace/visa-catalog"
 import { cn } from "@/lib/utils"
 
-const number = new Intl.NumberFormat("en-AU", { maximumFractionDigits: 0 })
-
-function metricMoney(metric: AustraliaCountryMetric | undefined, suffix: string) {
-  if (!metric) return "—"
-  return `${metric.currency} ${number.format(metric.amount)} ${suffix}`
-}
-
 function MetricCard({
   icon,
   label,
   value,
+  hint,
   accent,
   href,
 }: {
   icon: React.ReactNode
   label: string
   value: string
+  hint: string
   accent: string
   href?: string
 }) {
@@ -47,7 +48,8 @@ function MetricCard({
           {label}
         </p>
       </div>
-      <p className="mt-3 text-[23px] font-semibold tracking-[-0.02em] text-[#1b1b1b]">{value}</p>
+      <p className="mt-3 text-[25px] font-semibold tracking-[-0.03em] text-[#1b1b1b]">{value}</p>
+      <p className="mt-1.5 text-[11.5px] leading-5 text-[#77746e]">{hint}</p>
     </>
   )
 
@@ -65,7 +67,32 @@ function MetricCard({
   return <article className={className}>{content}</article>
 }
 
-export function AustraliaCountryDashboard({ metrics }: { metrics: AustraliaCountryMetrics }) {
+function dateLabel(value: string | null) {
+  if (!value) return null
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return null
+  return new Intl.DateTimeFormat("en-AU", { month: "short", year: "numeric" }).format(date)
+}
+
+type DisplaySource = {
+  label: string
+  url: string
+  organisation?: string
+  dataAsOf?: string | null
+  verifiedAt?: string | null
+}
+
+function metricSource(source: CountryMetricSource): DisplaySource {
+  return {
+    label: source.sourceName,
+    url: source.url,
+    organisation: source.organisationName,
+    dataAsOf: source.dataAsOf,
+    verifiedAt: source.verifiedAt,
+  }
+}
+
+export function AustraliaCountryDashboard({ metrics }: { metrics: CountryMetrics }) {
   const explorer = getCountryExplorer("AU")
   const countryProfile = getCountryProfile("AU")
   const profile = AUSTRALIA_OCCUPATION_COUNTRY_PROFILE
@@ -74,30 +101,45 @@ export function AustraliaCountryDashboard({ metrics }: { metrics: AustraliaCount
   if (!explorer || !countryProfile) return null
 
   const cityCount = explorer.regions.reduce((total, region) => total + region.cities.length, 0)
-  const annualSalary = metrics.average_full_time_annual_earnings
-  const livingCost = metrics.student_living_cost_shared_monthly_average
+  const salaryHint = metrics.salaryRange
+    ? `Middle 50% of full-time earnings · median ${formatRankingValue(metrics.salaryRange)}`
+    : "Verified national range coming soon"
+  const livingHint = metrics.livingCostRange
+    ? "Typical shared-housing student estimate · monthly"
+    : "Verified student estimate coming soon"
+  const sources: DisplaySource[] = [
+    ...metrics.sources.map(metricSource),
+    profile.academicYear.source,
+    ...profile.sources,
+  ]
+  const dedupedSources = [...new Map(sources.map((source) => [source.url, source])).values()]
 
   return (
     <div>
+      <p className="mb-4 max-w-3xl text-[13px] leading-6 text-[#6f6d68]">{profile.introduction}</p>
+
       <div className="grid gap-4 sm:grid-cols-3">
         <MetricCard
           icon={<Stamp className="size-4 text-[#6d4fc4]" />}
           accent="bg-[#f3f0fa]"
           label="Visa options"
           value={String(visas.length)}
-          href="/visas"
+          hint="Study, work and skilled pathways"
+          href="/visas?country=AU"
         />
         <MetricCard
           icon={<Banknote className="size-4 text-[#2563eb]" />}
           accent="bg-[#eef4ff]"
-          label="Average salary"
-          value={metricMoney(annualSalary, "/ year")}
+          label="Salary range"
+          value={formatMoneyRange(metrics.salaryRange)}
+          hint={salaryHint}
         />
         <MetricCard
           icon={<Wallet className="size-4 text-[#c2691e]" />}
           accent="bg-[#fbf0e7]"
-          label="Living cost"
-          value={metricMoney(livingCost, "/ month")}
+          label="Living costs"
+          value={formatMoneyRange(metrics.livingCostRange)}
+          hint={livingHint}
         />
       </div>
 
@@ -110,6 +152,7 @@ export function AustraliaCountryDashboard({ metrics }: { metrics: AustraliaCount
           <p className="mt-3 text-[20px] font-semibold tracking-[-0.02em] text-[#1b1b1b]">
             {profile.academicYear.headline}
           </p>
+          <p className="mt-2 text-[12.5px] leading-5 text-[#6f6d68]">{profile.academicYear.summary}</p>
           <div className="mt-3 flex flex-wrap gap-2">
             {profile.academicYear.intakes.map((intake) => (
               <span
@@ -127,14 +170,15 @@ export function AustraliaCountryDashboard({ metrics }: { metrics: AustraliaCount
             <GraduationCap className="size-4" />
             <h2 className="text-[14.5px] font-semibold">Strong majors by workforce demand</h2>
           </div>
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div className="mt-3 grid gap-2 sm:grid-cols-2">
             {profile.strongMajors.map((major) => (
-              <span
+              <div
                 key={major.id}
-                className="rounded-lg border border-[#dfe8db] bg-[#f7faf5] px-3 py-2 text-[12px] font-semibold text-[#2f5f25]"
+                className="rounded-lg border border-[#dfe8db] bg-[#f7faf5] px-3 py-2.5"
               >
-                {major.label}
-              </span>
+                <p className="text-[12px] font-semibold text-[#2f5f25]">{major.label}</p>
+                <p className="mt-1 text-[10.5px] leading-4 text-[#66805f]">{major.reason}</p>
+              </div>
             ))}
           </div>
         </section>
@@ -153,8 +197,7 @@ export function AustraliaCountryDashboard({ metrics }: { metrics: AustraliaCount
             >
               <p className="text-[12px] font-semibold leading-4 text-[#1b1b1b]">{institution.name}</p>
               <p className="mt-1 text-[10.5px] text-[#9a978f]">
-                {institution.type === "public_vet" ? "Public VET" : "Research university"} ·{" "}
-                {institution.location}
+                {COUNTRY_INSTITUTION_TYPE_LABELS[institution.type]} · {institution.location}
               </p>
             </div>
           ))}
@@ -212,6 +255,36 @@ export function AustraliaCountryDashboard({ metrics }: { metrics: AustraliaCount
           )}
         </section>
       </div>
+
+      <section className="mt-4 rounded-xl border border-[#e7e6e3] bg-white p-5" aria-labelledby="country-sources-heading">
+        <h2 id="country-sources-heading" className="text-[14.5px] font-semibold text-[#1b1b1b]">Sources</h2>
+        <ul className="mt-3 grid gap-2 md:grid-cols-2">
+          {dedupedSources.map((source) => {
+            const dataAsOf = dateLabel(source.dataAsOf ?? null)
+            const verifiedAt = dateLabel(source.verifiedAt ?? null)
+            return (
+              <li key={source.url} className="rounded-lg border border-[#f0efec] bg-[#fafaf8] px-3 py-2.5">
+                <a
+                  href={source.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-start gap-1 text-[11.5px] font-semibold leading-4 text-[#3a3935] transition hover:text-[#2563eb]"
+                >
+                  {source.label}
+                  <ExternalLink className="mt-0.5 size-3 shrink-0" aria-hidden="true" />
+                </a>
+                {(source.organisation || dataAsOf || verifiedAt) && (
+                  <p className="mt-1 text-[10px] leading-4 text-[#918e87]">
+                    {[source.organisation, dataAsOf ? `Data: ${dataAsOf}` : null, verifiedAt ? `Verified: ${verifiedAt}` : null]
+                      .filter(Boolean)
+                      .join(" · ")}
+                  </p>
+                )}
+              </li>
+            )
+          })}
+        </ul>
+      </section>
     </div>
   )
 }
