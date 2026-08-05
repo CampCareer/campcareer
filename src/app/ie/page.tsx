@@ -8,7 +8,7 @@ import { getAllSlugs, getCities } from "@/lib/language-schools-ie"
 import { pageMetadata } from "@/lib/seo"
 import { IrelandDecisionOverview, IrelandQuickRoiPreview } from "@/components/country-profiles/australia-decision-overview"
 
-export const revalidate = 86400
+export const dynamic = "force-dynamic"
 
 export const metadata: Metadata = pageMetadata({
   title: "Work & Study in Ireland — Graduate Outcomes, Critical Skills & Schools | CampCareer",
