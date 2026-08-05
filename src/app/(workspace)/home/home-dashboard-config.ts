@@ -17,7 +17,7 @@ export type HomeMode = "result" | "dashboard" | "explore"
 
 export type SavedPathwayRecord = {
   id: number
-  origin_country_code: string | null
+  origin_country_code?: string | null
   country_code: string
   field_slug: string
   status_slug: string
