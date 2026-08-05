@@ -1,0 +1,64 @@
+name: Security dependency repair
+
+on:
+  push:
+    branches: [chore/fix-ci-security-audit-v1]
+
+permissions:
+  contents: write
+
+jobs:
+  repair-and-verify:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: chore/fix-ci-security-audit-v1
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Upgrade patched dependencies
+        run: |
+          npm install --save-exact next@16.2.12
+          npm install --save-dev --save-exact eslint-config-next@16.2.12
+          node - <<'NODE'
+          const fs = require('node:fs')
+          const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'))
+          pkg.overrides = {
+            ...(pkg.overrides || {}),
+            'gray-matter': {
+              ...((pkg.overrides || {})['gray-matter'] || {}),
+              'js-yaml': '3.15.0'
+            }
+          }
+          fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n')
+          NODE
+          npm install --package-lock-only
+      - name: Commit dependency lock update
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add package.json package-lock.json
+          if git diff --cached --quiet; then
+            echo 'No dependency changes to commit.'
+          else
+            git commit -m 'chore(deps): apply security patches [skip ci]'
+            git push origin HEAD:chore/fix-ci-security-audit-v1
+          fi
+      - name: Reinstall from updated lockfile
+        run: |
+          rm -rf node_modules
+          npm ci
+      - name: Production dependency audit
+        run: npm audit --omit=dev --audit-level=high
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+      - name: Dependency tree summary
+        if: always()
+        run: npm ls next eslint-config-next js-yaml postcss sharp || true
