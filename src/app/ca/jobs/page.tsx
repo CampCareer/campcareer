@@ -5,7 +5,7 @@ import { supabaseAdmin } from "@/lib/supabase-admin"
 import { pageMetadata } from "@/lib/seo"
 import { JsonLd } from "@/components/seo/json-ld"
 
-export const revalidate = 86400
+export const dynamic = "force-dynamic"
 
 export const metadata: Metadata = pageMetadata({
   title: "Canada Jobs & Occupations — Salary & Express Entry | CampCareer",
