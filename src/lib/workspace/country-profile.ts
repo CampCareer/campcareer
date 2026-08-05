@@ -1,9 +1,7 @@
 /**
- * Country profile data for the Countries explorer dashboard.
- *
- * Priority countries (AU, CA, US) carry real, sourced figures derived from the
- * workshop data registry. Other launch countries fall back to a shell profile
- * with placeholder "source pending" cards until their data is imported.
+ * Workforce opportunity summaries used by the standard country dashboards.
+ * Numeric salary and living-cost evidence is read from Supabase through the
+ * country metric publication layer instead of being duplicated here.
  */
 
 export type CountryStat = {
@@ -77,34 +75,18 @@ export const COUNTRY_PROFILES: Record<string, CountryProfile> = {
 
   US: {
     code: "US",
-    salary: {
-      value: 75561,
-      currency: "USD",
-      unit: "median household income",
-      note: "Median of state median household incomes across all 50 states + DC.",
-      source: "US Census Bureau ACS",
-      url: "https://www.census.gov/acs/www/data/data-tables-and-tools/",
-    },
-    livingCost: {
-      value: 1162,
-      currency: "USD",
-      unit: "median monthly gross rent",
-      note: "Median of state median gross rents across all 50 states + DC.",
-      source: "US Census Bureau ACS",
-      url: "https://www.census.gov/acs/www/data/data-tables-and-tools/",
-    },
     workOpportunities: {
-      headline: "Occupations with the strongest shortage signals",
+      headline: "Occupations with strong projected growth",
       items: [
-        { title: "Software Developers", detail: "High shortage score across states" },
-        { title: "Financial Managers", detail: "High shortage score across states" },
-        { title: "Medical and Health Services Managers", detail: "High shortage score across states" },
-        { title: "Computer and Information Systems Managers", detail: "High shortage score across states" },
-        { title: "Nurse Practitioners", detail: "High shortage score across states" },
-        { title: "Management Analysts", detail: "High shortage score across states" },
+        { title: "Software Developers", detail: "267,700 projected new jobs, 2024–34" },
+        { title: "Registered Nurses", detail: "166,100 projected new jobs, 2024–34" },
+        { title: "Nurse Practitioners", detail: "40.1% projected growth, 2024–34" },
+        { title: "Data Scientists", detail: "33.5% projected growth, 2024–34" },
+        { title: "Information Security Analysts", detail: "28.5% projected growth, 2024–34" },
+        { title: "Medical and Health Services Managers", detail: "23.2% projected growth, 2024–34" },
       ],
-      source: "BLS shortage score by state",
-      url: "https://www.bls.gov",
+      source: "U.S. Bureau of Labor Statistics — 2024–34 Employment Projections",
+      url: "https://www.bls.gov/emp/",
     },
   },
 }
