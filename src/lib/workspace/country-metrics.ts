@@ -24,12 +24,14 @@ const PUBLISHED_METRIC_TABLES: Record<string, readonly string[]> = {
   AU: ["report_metric_evidence_country", "report_metric_evidence_au"],
   CA: ["report_metric_evidence_country"],
   US: ["report_metric_evidence_country"],
+  UK: ["report_metric_evidence_country"],
 }
 
 const CURRENCY_BY_COUNTRY: Record<string, string> = {
   AU: "AUD",
   CA: "CAD",
   US: "USD",
+  UK: "GBP",
 }
 
 function metricUnit(countryCode: string, metricKey: string) {
@@ -69,6 +71,9 @@ function sourceOrganisation(row: PublishedMetricRow) {
   if (row.source_url.includes("collegeboard.org")) return "College Board"
   if (row.source_url.includes("travel.state.gov")) return "U.S. Department of State"
   if (row.source_url.includes("studyinthestates.dhs.gov")) return "U.S. Department of Homeland Security"
+  if (row.source_url.includes("ons.gov.uk")) return "Office for National Statistics"
+  if (row.source_url.includes("britishcouncil.org")) return "British Council"
+  if (row.source_url.includes("gov.uk")) return "UK Government"
   return row.source_name
 }
 
