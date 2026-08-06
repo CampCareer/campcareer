@@ -11,9 +11,10 @@ const EXPECTED_COUNTS: Record<string, number> = {
   NL: 4,
   BE: 3,
   FR: 3,
+  ES: 6,
 }
 
-test("completed European visa countries have full detail coverage", () => {
+test("completed visa countries have full detail coverage", () => {
   for (const [countryCode, expectedCount] of Object.entries(EXPECTED_COUNTS)) {
     const visas = VISA_CATALOG.filter((visa) => visa.countryCode === countryCode)
     assert.equal(visas.length, expectedCount, `${countryCode} catalog count`)
