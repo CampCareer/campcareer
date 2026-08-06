@@ -1,7 +1,22 @@
-import { buildCountryMetadata, CountryRoute } from "../country-route"
+import { Batch3CountryDashboard } from "../batch-3-country-dashboard"
+import { CountryDashboardShell } from "../country-dashboard-shell"
+import { BATCH_3_COUNTRY_CONTENT } from "@/data/batch-3-country-content"
+import { getBatch3CountryMetrics } from "@/lib/workspace/batch-3-country-metrics"
 
-export const metadata = buildCountryMetadata("NO")
+export const dynamic = "force-dynamic"
 
-export default function NorwayPage() {
-  return <CountryRoute code="NO" />
+export const metadata = {
+  title: "Study and Work in Norway",
+  description: "Norway salary ranges, student living costs, tuition, study calendar, strong fields, institutions and cities with official sources.",
+  alternates: { canonical: "/countries/no" },
+  robots: { index: true, follow: true } as const,
+}
+
+export default async function NorwayPage() {
+  const metrics = await getBatch3CountryMetrics("NO")
+  return (
+    <CountryDashboardShell countryCode="NO">
+      <Batch3CountryDashboard metrics={metrics} profile={BATCH_3_COUNTRY_CONTENT.NO} />
+    </CountryDashboardShell>
+  )
 }
