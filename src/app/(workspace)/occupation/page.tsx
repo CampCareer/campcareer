@@ -14,5 +14,13 @@ export default async function OccupationPage({
   const sp = await searchParams
   const q = typeof sp.q === "string" ? sp.q : ""
   const occupation = typeof sp.occupation === "string" ? sp.occupation : ""
-  return <OccupationExplorer initialQuery={q} initialOccupation={occupation} />
+  const country = typeof sp.country === "string" ? sp.country : ""
+
+  return (
+    <OccupationExplorer
+      initialQuery={q}
+      initialOccupation={occupation}
+      initialCountry={country}
+    />
+  )
 }
