@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Menu } from "lucide-react"
+import { LanguageMenu } from "@/components/layout/language-menu"
 import { getWorkspaceNavItem } from "@/lib/workspace/navigation"
 import { withoutLocalePrefix } from "@/lib/i18n/config"
 import { useSelectedCountry } from "./country-context"
@@ -35,7 +36,7 @@ export function WorkspaceTopbar({ onMenuClick }: WorkspaceTopbarProps) {
       <button
         type="button"
         onClick={onMenuClick}
-        className="grid size-8 -ml-1 place-items-center rounded-lg text-[#6f6d68] transition hover:bg-[#f6f6f4] hover:text-[#1b1b1b] sm:hidden"
+        className="-ml-1 grid size-8 place-items-center rounded-lg text-[#6f6d68] transition hover:bg-[#f6f6f4] hover:text-[#1b1b1b] sm:hidden"
         aria-label="Open navigation menu"
       >
         <Menu className="size-5" />
@@ -53,6 +54,7 @@ export function WorkspaceTopbar({ onMenuClick }: WorkspaceTopbarProps) {
 
       <div className="flex-1" />
 
+      <LanguageMenu />
       <WorkspaceUserMenu minimal />
     </header>
   )
