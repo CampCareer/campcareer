@@ -3,6 +3,7 @@ import test from "node:test"
 
 import { VISA_CATALOG } from "../src/lib/workspace/visa-catalog"
 import { applyBatch1VisaCatalog } from "../src/lib/workspace/visa-catalog-batch-1"
+import { applyNewZealandVisaCatalog } from "../src/lib/workspace/visa-catalog-new-zealand"
 import { getVisaDetail } from "../src/lib/workspace/visa-detail-resolver"
 
 const EXPECTED_COUNTS: Record<string, number> = {
@@ -16,9 +17,10 @@ const EXPECTED_COUNTS: Record<string, number> = {
   SG: 6,
   KR: 5,
   JP: 6,
+  NZ: 7,
 }
 
-const catalog = applyBatch1VisaCatalog(VISA_CATALOG)
+const catalog = applyNewZealandVisaCatalog(applyBatch1VisaCatalog(VISA_CATALOG))
 
 test("completed visa countries have full detail coverage", () => {
   for (const [countryCode, expectedCount] of Object.entries(EXPECTED_COUNTS)) {
