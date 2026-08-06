@@ -29,7 +29,7 @@ export const WORKSPACE_NAV_ITEMS: NavItem[] = [
   { id: "countries", label: "Countries", href: "/countries", icon: Globe2, blurb: "Find your destination, from country to city.", accent: "#2563eb", tint: "#eef4ff" },
   { id: "visas", label: "Visas", href: "/visas", icon: FileBadge2, blurb: "Understand the visa that fits your plan.", accent: "#6d4fc4", tint: "#f3f0fa" },
   { id: "occupation", label: "Occupation", href: "/occupation", icon: BriefcaseBusiness, blurb: "Search in-demand careers by field and country.", accent: "#c2691e", tint: "#fbf0e7" },
-  { id: "courses", label: "Programs", href: "/courses", icon: GraduationCap, blurb: "Discover degrees and trade qualifications.", accent: "#3e7a2e", tint: "#edf5ea" },
+  { id: "programs", label: "Programs", href: "/programs", icon: GraduationCap, blurb: "Discover degrees and trade qualifications.", accent: "#3e7a2e", tint: "#edf5ea" },
 ]
 
 /** Routes that render inside the workspace shell (sidebar + topbar). */
@@ -39,6 +39,7 @@ export const WORKSPACE_ROUTES = [
   "/countries",
   "/visas",
   "/occupation",
+  "/programs",
   "/courses",
 ] as const
 

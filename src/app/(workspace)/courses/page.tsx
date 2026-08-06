@@ -1,17 +1,24 @@
-import { CoursesExplorer } from "./courses-explorer"
+import { permanentRedirect } from "next/navigation"
 
-export const metadata = {
-  title: "Programs",
-  description: "Discover degrees, qualifications and trade pathways that lead to work.",
-  robots: { index: false, follow: false } as const,
-}
-
-export default async function CoursesPage({
+export default async function CoursesRedirect({
   searchParams,
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>
 }) {
   const sp = await searchParams
-  const q = typeof sp.q === "string" ? sp.q : ""
-  return <CoursesExplorer initialQuery={q} />
+  const params = new URLSearchParams()
+
+  for (const [key, value] of Object.entries(sp)) {
+    if (typeof value === "string") {
+      params.set(key, value)
+      continue
+    }
+
+    if (Array.isArray(value)) {
+      value.forEach((item) => params.append(key, item))
+    }
+  }
+
+  const query = params.toString()
+  permanentRedirect(query ? `/programs?${query}` : "/programs")
 }

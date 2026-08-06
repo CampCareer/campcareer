@@ -8,6 +8,7 @@ test("isWorkspaceRoute returns true for workspace routes", () => {
   assert.equal(isWorkspaceRoute("/countries"), true)
   assert.equal(isWorkspaceRoute("/visas"), true)
   assert.equal(isWorkspaceRoute("/occupation"), true)
+  assert.equal(isWorkspaceRoute("/programs"), true)
   assert.equal(isWorkspaceRoute("/courses"), true)
 })
 
@@ -39,13 +40,13 @@ test("WORKSPACE_NAV_ITEMS contains exactly 7 entries", () => {
 test("WORKSPACE_NAV_ITEMS has the expected ids in order", () => {
   assert.deepEqual(
     WORKSPACE_NAV_ITEMS.map((item) => item.id),
-    ["home", "map", "compare", "countries", "visas", "occupation", "courses"]
+    ["home", "map", "compare", "countries", "visas", "occupation", "programs"]
   )
 })
 
-test("every workspace route has a matching nav item", () => {
+test("every primary workspace route has a matching nav item", () => {
   const hrefs = new Set(WORKSPACE_NAV_ITEMS.map((item) => item.href))
-  for (const route of ["/home", "/compare", "/countries", "/visas", "/occupation", "/courses"]) {
+  for (const route of ["/home", "/compare", "/countries", "/visas", "/occupation", "/programs"]) {
     assert.ok(hrefs.has(route), `missing nav item for ${route}`)
   }
 })

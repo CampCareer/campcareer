@@ -1,12 +1,11 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import Link from "next/link"
-import { Globe2, GraduationCap } from "lucide-react"
+import { GraduationCap } from "lucide-react"
 import { STUDY_CONCEPTS, STUDY_CATEGORIES } from "@/data/study-concepts"
 import { AU_TOP_UNIVERSITY_PROGRAM_SHORTLIST } from "@/data/au-top-university-program-shortlist"
 import { CategorySearch } from "@/components/workspace/category-search"
-import { WorkspacePageHeader } from "@/components/workspace/workspace-page-header"
+import { CountryPill } from "@/components/workspace/country-pill"
 import { useSelectedCountry } from "@/components/workspace/country-context"
 import { cn } from "@/lib/utils"
 
@@ -56,28 +55,21 @@ export function CoursesExplorer({ initialQuery }: { initialQuery: string }) {
 
   return (
     <>
-      <WorkspacePageHeader
-        eyebrow="Explore"
-        title="Programs"
-        description="Degrees, qualifications and trade pathways that lead to real work — matched to verified providers and course codes where available."
-      />
-
-      {selectedCountry && (
-        <div className="mt-4 flex items-center gap-2.5 rounded-xl border border-[#2563eb]/25 bg-[#eef4ff] px-4 py-2.5 text-[13px] font-medium text-[#1b1b1b]">
-          <Globe2 className="size-4 shrink-0 text-[#2563eb]" />
-          <span>
-            Scoped to <span className="font-semibold">{selectedCountry.name}</span>
-            {selectedCountry.code === "AU"
-              ? " — AU-available programs are shown first."
-              : " — availability currently focuses on Australia."}{" "}
-            <Link href="/countries" className="font-semibold text-[#2563eb] hover:underline">
-              Change country
-            </Link>
-          </span>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#3e7a2e]">
+            Explore
+          </p>
+          <div className="mt-1.5 flex flex-wrap items-center gap-3">
+            <h1 className="text-[26px] font-semibold leading-tight tracking-[-0.02em] text-[#1b1b1b] sm:text-3xl">
+              Programs
+            </h1>
+            <CountryPill />
+          </div>
         </div>
-      )}
+      </div>
 
-      <div className="mt-6 max-w-2xl">
+      <div className="mt-6 lg:max-w-xl">
         <CategorySearch
           value={query}
           onChange={setQuery}
