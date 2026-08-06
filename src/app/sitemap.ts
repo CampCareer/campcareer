@@ -10,6 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages: MetadataRoute.Sitemap = [
     { url: `${BASE}/home`, lastModified, priority: 1, changeFrequency: "weekly" },
     { url: `${BASE}/maps`, lastModified, priority: 0.9, changeFrequency: "daily" },
+    { url: `${BASE}/programs?country=AU`, lastModified, priority: 0.9, changeFrequency: "daily" },
     ...countries.map((slug) => ({ url: `${BASE}/countries/${slug}`, lastModified, priority: 0.85, changeFrequency: "monthly" as const })),
     { url: `${BASE}/methodology`, lastModified, priority: 0.5, changeFrequency: "monthly" },
     ...methodologies.map((slug) => ({ url: `${BASE}/methodology/${slug}`, lastModified, priority: 0.45, changeFrequency: "monthly" as const })),
