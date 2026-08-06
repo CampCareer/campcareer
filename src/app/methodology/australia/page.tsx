@@ -227,7 +227,7 @@ const occupationSourceSections: readonly OccupationSourceSection[] = [
         source: "OSCA 3721 Carpenters and Joiners",
         url: "https://www.abs.gov.au/statistics/classifications/osca-occupation-standard-classification-australia/2024-version-1-0/browse-classification/3/37/372/3721",
         use:
-          "Defines Carpenter and Joiner, Carpenter and Joiner as the three occupations included in the CampCareer carpenter rollup.",
+          "Defines Carpenter and Joiner, Carpenter, and Joiner as the three occupations included in the CampCareer carpenter rollup.",
       },
       {
         title: "Employment and earnings",
