@@ -134,6 +134,27 @@ function getProgramCards(profile: CountryOccupationProfile): ProgramCard[] {
   return [...nursingCards, ...vocationalCards]
 }
 
+type ProfileLink = CountryOccupationProfile["links"][number]
+
+function LinkList({ links, hoverClass = "hover:border-[#cfd8ed]" }: { links: ProfileLink[]; hoverClass?: string }) {
+  return (
+    <div className="mt-4 space-y-2">
+      {links.map((link) => (
+        <a
+          key={`${link.linkType}-${link.url}`}
+          href={link.url}
+          target="_blank"
+          rel="noreferrer"
+          className={`flex items-center justify-between rounded-xl border border-[#f0efec] bg-[#fafaf8] px-3.5 py-2.5 text-[12px] font-medium text-[#1b1b1b] transition ${hoverClass}`}
+        >
+          <span className="min-w-0 truncate">{link.label}</span>
+          <ArrowUpRight className="ml-3 size-3.5 shrink-0 text-[#9c9a94]" />
+        </a>
+      ))}
+    </div>
+  )
+}
+
 export function CountryOccupationDashboard({
   career,
   profile,
@@ -152,6 +173,8 @@ export function CountryOccupationDashboard({
   )
   const sources = profile.links.filter((link) => link.linkType === "source")
   const programs = getProgramCards(profile)
+  const isAustraliaRegisteredNurse =
+    profile.countryCode === "AU" && career.id === "registered-nurse"
 
   return (
     <div className="space-y-4">
@@ -322,64 +345,66 @@ export function CountryOccupationDashboard({
             <div key={region.regionCode} className="rounded-xl border border-[#f0e5d9] bg-[#fffaf5] p-3 text-center">
               <p className="text-[11px] font-bold text-[#c2691e]">{region.regionCode}</p>
               <p className="mt-1 text-[18px] font-semibold text-[#1b1b1b]">{number(region.vacancyCount)}</p>
-              <p className="mt-0.5 text-[10px] text-[#8f8c85]">3-mo vacancies · shortage {region.shortageRating ?? "—"}/3</p>
+              <p className="mt-0.5 text-[10px] text-[#8f8c85]">
+                3-mo vacancies · shortage {region.shortageRating ?? "—"}/3
+              </p>
             </div>
           ))}
         </div>
       </section>
 
-      <div className="grid gap-4 lg:grid-cols-2">
-        <section className="rounded-2xl border border-[#e7e6e3] bg-white p-6">
-          <div className="flex items-center gap-2 text-[#2563eb]">
-            <Building2 className="size-4" />
-            <h3 className="text-[15px] font-semibold">Employers and live searches</h3>
-          </div>
-          {countryEditorial?.jobMarketNote && (
-            <p className="mt-3 text-[12.5px] leading-5 text-[#6f6d68]">{countryEditorial.jobMarketNote}</p>
-          )}
-          <div className="mt-4 space-y-2">
-            {[...jobLinks, ...employers, ...entryLinks].map((link) => (
-              <a
-                key={`${link.linkType}-${link.url}`}
-                href={link.url}
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center justify-between rounded-xl border border-[#f0efec] bg-[#fafaf8] px-3.5 py-2.5 text-[12px] font-medium text-[#1b1b1b] transition hover:border-[#cfd8ed]"
-              >
-                <span className="min-w-0 truncate">{link.label}</span>
-                <ArrowUpRight className="ml-3 size-3.5 shrink-0 text-[#9c9a94]" />
-              </a>
-            ))}
-          </div>
-        </section>
+      {isAustraliaRegisteredNurse ? (
+        <div className="grid gap-4 lg:grid-cols-2">
+          <section className="rounded-2xl border border-[#e7e6e3] bg-white p-6">
+            <div className="flex items-center gap-2 text-[#2563eb]">
+              <BriefcaseBusiness className="size-4" />
+              <h3 className="text-[15px] font-semibold">Jobs and entry pathways</h3>
+            </div>
+            {countryEditorial?.jobMarketNote && (
+              <p className="mt-3 text-[12.5px] leading-5 text-[#6f6d68]">{countryEditorial.jobMarketNote}</p>
+            )}
+            <LinkList links={[...jobLinks, ...entryLinks]} />
+          </section>
 
-        <section className="rounded-2xl border border-[#e7e6e3] bg-white p-6">
-          <div className="flex items-center gap-2 text-[#6d4fc4]">
-            <Sparkles className="size-4" />
-            <h3 className="text-[15px] font-semibold">Sources and freshness</h3>
-          </div>
-          <p className="mt-3 text-[11.5px] leading-5 text-[#77746e]">
-            Metrics are stored as dated snapshots so the same record can power Occupation and Compare without copying values into UI code.
-          </p>
-          <div className="mt-4 space-y-2">
-            {sources.map((source) => (
-              <a
-                key={source.url}
-                href={source.url}
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center justify-between rounded-xl border border-[#f0efec] bg-[#fafaf8] px-3.5 py-2.5 text-[12px] font-medium text-[#1b1b1b] transition hover:border-[#d8d8d4]"
-              >
-                <span className="min-w-0 truncate">{source.label}</span>
-                <ArrowUpRight className="ml-3 size-3.5 shrink-0 text-[#9c9a94]" />
-              </a>
-            ))}
-          </div>
-          <p className="mt-3 text-[10.5px] text-[#9c9a94]">
-            Snapshot {metric.asOfDate} · sources checked {metric.sourceCheckedAt ?? profile.sourceCheckedAt ?? "—"}
-          </p>
-        </section>
-      </div>
+          <section className="rounded-2xl border border-[#e7e6e3] bg-white p-6">
+            <div className="flex items-center gap-2 text-[#3e7a2e]">
+              <Building2 className="size-4" />
+              <h3 className="text-[15px] font-semibold">Major employers</h3>
+            </div>
+            <p className="mt-3 text-[11.5px] leading-5 text-[#77746e]">
+              Major public health systems and private hospital groups with official nursing career pages.
+            </p>
+            <LinkList links={employers} hoverClass="hover:border-[#cfe0ca]" />
+          </section>
+        </div>
+      ) : (
+        <div className="grid gap-4 lg:grid-cols-2">
+          <section className="rounded-2xl border border-[#e7e6e3] bg-white p-6">
+            <div className="flex items-center gap-2 text-[#2563eb]">
+              <Building2 className="size-4" />
+              <h3 className="text-[15px] font-semibold">Employers and live searches</h3>
+            </div>
+            {countryEditorial?.jobMarketNote && (
+              <p className="mt-3 text-[12.5px] leading-5 text-[#6f6d68]">{countryEditorial.jobMarketNote}</p>
+            )}
+            <LinkList links={[...jobLinks, ...employers, ...entryLinks]} />
+          </section>
+
+          <section className="rounded-2xl border border-[#e7e6e3] bg-white p-6">
+            <div className="flex items-center gap-2 text-[#6d4fc4]">
+              <Sparkles className="size-4" />
+              <h3 className="text-[15px] font-semibold">Sources and freshness</h3>
+            </div>
+            <p className="mt-3 text-[11.5px] leading-5 text-[#77746e]">
+              Metrics are stored as dated snapshots so the same record can power Occupation and Compare without copying values into UI code.
+            </p>
+            <LinkList links={sources} hoverClass="hover:border-[#d8d8d4]" />
+            <p className="mt-3 text-[10.5px] text-[#9c9a94]">
+              Snapshot {metric.asOfDate} · sources checked {metric.sourceCheckedAt ?? profile.sourceCheckedAt ?? "—"}
+            </p>
+          </section>
+        </div>
+      )}
     </div>
   )
 }
