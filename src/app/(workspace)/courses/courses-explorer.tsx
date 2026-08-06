@@ -7,6 +7,7 @@ import { AU_TOP_UNIVERSITY_PROGRAM_SHORTLIST } from "@/data/au-top-university-pr
 import { CategorySearch } from "@/components/workspace/category-search"
 import { CountryPill } from "@/components/workspace/country-pill"
 import { useSelectedCountry } from "@/components/workspace/country-context"
+import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { cn } from "@/lib/utils"
 
 const KIND_LABEL: Record<string, string> = {
@@ -28,6 +29,7 @@ const AU_STATUS_BADGE: Record<string, { label: string; tone: "green" | "amber" }
 
 export function CoursesExplorer({ initialQuery }: { initialQuery: string }) {
   const { selectedCountry } = useSelectedCountry()
+  const locale = useRouteLocale()
   const [query, setQuery] = useState(initialQuery)
   const [category, setCategory] = useState<string>("all")
 
@@ -40,7 +42,8 @@ export function CoursesExplorer({ initialQuery }: { initialQuery: string }) {
         concept.label.toLowerCase().includes(q) ||
         concept.labelKo.toLowerCase().includes(q) ||
         concept.description.toLowerCase().includes(q) ||
-        concept.aliases.some((alias) => alias.toLowerCase().includes(q))
+        concept.aliases.some((alias) => alias.toLowerCase().includes(q)) ||
+        concept.aliasesKo.some((alias) => alias.toLowerCase().includes(q))
       )
     })
     if (selectedCountry?.code === "AU") {
@@ -123,6 +126,7 @@ export function CoursesExplorer({ initialQuery }: { initialQuery: string }) {
           {results.map((concept) => {
             const auStatus = AU_STATUS_BY_CONCEPT.get(concept.id)
             const badge = auStatus ? AU_STATUS_BADGE[auStatus] : undefined
+            const displayLabel = locale === "ko" ? concept.labelKo : concept.label
             return (
               <div
                 key={concept.id}
@@ -130,13 +134,12 @@ export function CoursesExplorer({ initialQuery }: { initialQuery: string }) {
               >
                 <div className="flex items-start justify-between gap-3">
                   <p className="text-[14.5px] font-semibold leading-snug tracking-[-0.01em] text-[#1b1b1b]">
-                    {concept.label}
+                    {displayLabel}
                   </p>
                   <span className="shrink-0 rounded-md bg-[#f6f6f4] px-2 py-0.5 text-[10.5px] font-semibold uppercase tracking-wide text-[#6f6d68]">
                     {KIND_LABEL[concept.kind] ?? concept.kind}
                   </span>
                 </div>
-                <p className="mt-0.5 text-[12.5px] text-[#a3a19b]">{concept.labelKo}</p>
                 <p className="mt-2 line-clamp-2 text-[12.5px] leading-5 text-[#6f6d68]">
                   {concept.description}
                 </p>

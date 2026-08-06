@@ -56,6 +56,7 @@ export type CountryOccupationRegionMetric = {
 export type CountryOccupationLinkType =
   | "job_search"
   | "employer"
+  | "entry_program"
   | "graduate_program"
   | "source"
 
