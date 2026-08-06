@@ -19,6 +19,7 @@ const NAV_ID_BY_PATH: Record<string, string> = {
   "/countries": "countries",
   "/visas": "visas",
   "/occupation": "occupation",
+  "/programs": "programs",
   "/courses": "programs",
 }
 
