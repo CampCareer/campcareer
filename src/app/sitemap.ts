@@ -5,8 +5,8 @@ const BASE = "https://www.campcareer.com"
 const lastModified = new Date("2026-08-06")
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const countries = ["au", "ca", "us", "uk", "ie", "de", "nl", "be", "fr"]
-  const methodologies = ["australia", "canada", "united-states", "united-kingdom", "ireland", "germany", "netherlands", "belgium", "france"]
+  const countries = ["au", "ca", "us", "uk", "ie", "de", "nl", "be", "fr", "es", "sg", "kr", "jp", "nz"]
+  const methodologies = ["australia", "canada", "united-states", "united-kingdom", "ireland", "germany", "netherlands", "belgium", "france", "spain", "singapore", "south-korea", "japan", "new-zealand"]
   const staticPages: MetadataRoute.Sitemap = [
     { url: `${BASE}/home`, lastModified, priority: 1, changeFrequency: "weekly" },
     { url: `${BASE}/maps`, lastModified, priority: 0.9, changeFrequency: "daily" },

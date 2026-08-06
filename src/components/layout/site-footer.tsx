@@ -16,42 +16,26 @@ const methodologyLinks = [
   ["/methodology/netherlands", "네덜란드 출처", "Netherlands sources"],
   ["/methodology/belgium", "벨기에 출처", "Belgium sources"],
   ["/methodology/france", "프랑스 출처", "France sources"],
+  ["/methodology/spain", "스페인 출처", "Spain sources"],
+  ["/methodology/singapore", "싱가포르 출처", "Singapore sources"],
+  ["/methodology/south-korea", "한국 출처", "South Korea sources"],
+  ["/methodology/japan", "일본 출처", "Japan sources"],
+  ["/methodology/new-zealand", "뉴질랜드 출처", "New Zealand sources"],
 ] as const
 
 export function SiteFooter({ className }: { className?: string }) {
   const locale = useRouteLocale()
   const pathLocale = localeFromPathname(usePathname()) ?? locale
   const isKo = pathLocale === "ko"
-
   return (
     <footer className={cn("border-t border-slate-200 bg-slate-50", className)}>
       <div className="mx-auto max-w-6xl px-5 py-12 sm:px-6 sm:py-16">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          <div>
-            <Link href="/home" className="campcareer-wordmark text-slate-900">campcareer</Link>
-            <p className="mt-3 text-sm leading-6 text-slate-500">{isKo ? "목적지와 하고 싶은 일에 필요한 검증된 유학·취업 정보를 찾습니다." : "Find source-backed study and work information for the destination and career you are considering."}</p>
-          </div>
-          <div>
-            <h4 className="text-sm font-semibold text-slate-900">{isKo ? "경로" : "Routes"}</h4>
-            <ul className="mt-3 space-y-2.5">
-              <FooterLink href="/home" locale={pathLocale} canonical>{isKo ? "경로 검색" : "Search routes"}</FooterLink>
-              <FooterLink href="/maps" locale={pathLocale} canonical>{isKo ? "지도" : "Maps"}</FooterLink>
-            </ul>
-          </div>
-          <div>
-            <h4 className="text-sm font-semibold text-slate-900">{isKo ? "정보" : "Info"}</h4>
-            <ul className="mt-3 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-1">
-              <FooterLink href="/methodology" locale={pathLocale}>{isKo ? "출처 및 방법론" : "Sources & methodology"}</FooterLink>
-              {methodologyLinks.map(([href, ko, en]) => <FooterLink key={href} href={href} locale={pathLocale}>{isKo ? ko : en}</FooterLink>)}
-              <FooterLink href="/privacy" locale={pathLocale}>{isKo ? "개인정보처리방침" : "Privacy policy"}</FooterLink>
-              <FooterLink href="/terms" locale={pathLocale}>{isKo ? "이용약관" : "Terms of service"}</FooterLink>
-            </ul>
-          </div>
+          <div><Link href="/home" className="campcareer-wordmark text-slate-900">campcareer</Link><p className="mt-3 text-sm leading-6 text-slate-500">{isKo ? "목적지와 하고 싶은 일에 필요한 검증된 유학·취업 정보를 찾습니다." : "Find source-backed study and work information for the destination and career you are considering."}</p></div>
+          <div><h4 className="text-sm font-semibold text-slate-900">{isKo ? "경로" : "Routes"}</h4><ul className="mt-3 space-y-2.5"><FooterLink href="/home" locale={pathLocale} canonical>{isKo ? "경로 검색" : "Search routes"}</FooterLink><FooterLink href="/maps" locale={pathLocale} canonical>{isKo ? "지도" : "Maps"}</FooterLink></ul></div>
+          <div><h4 className="text-sm font-semibold text-slate-900">{isKo ? "정보" : "Info"}</h4><ul className="mt-3 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-1"><FooterLink href="/methodology" locale={pathLocale}>{isKo ? "출처 및 방법론" : "Sources & methodology"}</FooterLink>{methodologyLinks.map(([href, ko, en]) => <FooterLink key={href} href={href} locale={pathLocale}>{isKo ? ko : en}</FooterLink>)}<FooterLink href="/privacy" locale={pathLocale}>{isKo ? "개인정보처리방침" : "Privacy policy"}</FooterLink><FooterLink href="/terms" locale={pathLocale}>{isKo ? "이용약관" : "Terms of service"}</FooterLink></ul></div>
         </div>
-        <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-slate-200 pt-6 text-xs text-slate-400 sm:flex-row">
-          <span>&copy; {new Date().getFullYear()} CampCareer</span>
-          <span>{isKo ? "검색부터, 근거를 바탕으로" : "Search first. Decide with evidence."}</span>
-        </div>
+        <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-slate-200 pt-6 text-xs text-slate-400 sm:flex-row"><span>&copy; {new Date().getFullYear()} CampCareer</span><span>{isKo ? "검색부터, 근거를 바탕으로" : "Search first. Decide with evidence."}</span></div>
       </div>
     </footer>
   )
