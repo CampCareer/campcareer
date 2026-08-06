@@ -50,7 +50,7 @@ insert into public.country_occupation_metric_snapshots (
     'employer_diversity_basis', 'Curated coverage of national builders, contractors and apprenticeship networks; replace with posting-level unique-employer data when available.',
     'entry_level_basis', 'A paid apprenticeship and CPC30220 provide a structured entry route, but no standardised national apprentice-posting share is published.',
     'entry_burden_basis', 'A multi-year apprenticeship, Certificate III trade training and construction induction are normally required; contractor or builder licensing varies by jurisdiction.',
-    'scope_note', 'Rollup includes Carpenter and Joiner, Carpenter and Joiner under OSCA 3721 and legacy ANZSCO 3312.',
+    'scope_note', 'Rollup includes Carpenter and Joiner, Carpenter, and Joiner under OSCA 3721 and legacy ANZSCO 3312.',
     'data_note', 'Vacancy and projection values are stored against the current dated JSA series while the occupation profile remains on the legacy ANZSCO basis.',
     'score_note', 'Provisional until posting-level entry experience and employer counts are ingested.'
   ),
