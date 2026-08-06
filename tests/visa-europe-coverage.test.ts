@@ -15,6 +15,7 @@ const EXPECTED_COUNTS: Record<string, number> = {
   ES: 6,
   SG: 6,
   KR: 5,
+  JP: 6,
 }
 
 const catalog = applyBatch1VisaCatalog(VISA_CATALOG)
