@@ -1,3 +1,4 @@
+import { loadVisaCatalog } from "@/lib/workspace/visa-catalog-loader"
 import { VisasExplorer } from "./visas-explorer"
 
 export const metadata = {
@@ -13,6 +14,9 @@ export default async function VisasPage({
 }) {
   const sp = await searchParams
   const q = typeof sp.q === "string" ? sp.q : ""
-  const country = typeof sp.country === "string" ? sp.country.toUpperCase() : ""
-  return <VisasExplorer initialQuery={q} initialCountry={country} />
+  const rawCountry = typeof sp.country === "string" ? sp.country.toUpperCase() : ""
+  const country = rawCountry === "GB" ? "UK" : rawCountry
+  const catalog = await loadVisaCatalog()
+
+  return <VisasExplorer initialQuery={q} initialCountry={country} catalog={catalog} />
 }
