@@ -6,7 +6,7 @@ import { pageMetadata } from "@/lib/seo"
 export const metadata = pageMetadata({
   title: "Australia Sources & Methodology",
   description:
-    "Official sources and calculation methods used for CampCareer's Australia salary, student living-cost, study-calendar, workforce-demand and institution information.",
+    "Official sources and calculation methods used for CampCareer's Australia salary, student living-cost, study-calendar, workforce-demand, institution and occupation information.",
   path: "/methodology/australia",
 })
 
@@ -75,6 +75,57 @@ const sources = [
   },
 ] as const
 
+const registeredNurseSources = [
+  {
+    title: "Official occupation scope",
+    publisher: "Australian Bureau of Statistics",
+    source: "OSCA 2654 Registered Nurses",
+    url: "https://www.abs.gov.au/statistics/classifications/osca-occupation-standard-classification-australia/2024-version-1-0/browse-classification/2/26/265/2654",
+    use:
+      "Defines the Australian occupation group and the included registered nurse specialisations used in the CampCareer rollup.",
+  },
+  {
+    title: "Employment and earnings",
+    publisher: "Jobs and Skills Australia",
+    source: "Registered Nurses occupation profile",
+    url: "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupations/2544-registered-nurses",
+    use:
+      "Supplies the employment total, weekly and hourly earnings, part-time share, female share, median age and working-hours snapshot. The page remains on the legacy ANZSCO basis while JSA transitions to OSCA.",
+  },
+  {
+    title: "Vacancies and state demand",
+    publisher: "Jobs and Skills Australia",
+    source: "Internet Vacancy Index",
+    url: "https://www.jobsandskills.gov.au/data/internet-vacancy-index",
+    use:
+      "Supplies the dated national and state or territory online-vacancy series used for vacancy intensity and trend calculations.",
+  },
+  {
+    title: "Employment outlook",
+    publisher: "Jobs and Skills Australia",
+    source: "Employment projections",
+    url: "https://www.jobsandskills.gov.au/data/employment-projections",
+    use:
+      "Supplies the five-year and ten-year employment-growth inputs used in the Career Opportunity Score.",
+  },
+  {
+    title: "Registration requirements",
+    publisher: "Nursing and Midwifery Board of Australia",
+    source: "Registration standards",
+    url: "https://www.nursingmidwiferyboard.gov.au/Registration-Standards.aspx",
+    use:
+      "Defines the professional registration standards that applicants and practising registered nurses must meet.",
+  },
+  {
+    title: "Skilled visa pathways",
+    publisher: "Australian Department of Home Affairs",
+    source: "Skilled occupation list",
+    url: "https://immi.homeaffairs.gov.au/visas/working-in-australia/skill-occupation-list",
+    use:
+      "Checks whether the included nursing occupations appear in current skilled visa pathways. Individual eligibility is not inferred from list inclusion.",
+  },
+] as const
+
 export default function AustraliaMethodologyPage() {
   return (
     <main className="mx-auto max-w-4xl px-5 py-12 sm:px-6 sm:py-16">
@@ -92,8 +143,8 @@ export default function AustraliaMethodologyPage() {
         Australia sources
       </h1>
       <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
-        The official sources and calculation rules behind the Australia country page. Values remain in
-        Australian dollars and are removed from display when the published evidence cannot be read or is no
+        The official sources and calculation rules behind Australia country and occupation pages. Values remain
+        in Australian dollars and are removed from display when the published evidence cannot be read or is no
         longer verified.
       </p>
 
@@ -143,9 +194,48 @@ export default function AustraliaMethodologyPage() {
         ))}
       </div>
 
+      <section id="registered-nurse" className="mt-12 rounded-3xl border border-blue-100 bg-blue-50/50 p-5 sm:p-7">
+        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-blue-600">Occupation sources</p>
+        <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h2 className="font-display text-2xl font-semibold tracking-tight text-slate-900">
+              Registered Nurse
+            </h2>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
+              Evidence supporting the Australia Registered Nurse occupation dashboard and its Career Opportunity Score.
+            </p>
+          </div>
+          <span className="shrink-0 text-xs font-medium text-slate-500">Snapshot: 1 May 2026</span>
+        </div>
+
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          {registeredNurseSources.map((item) => (
+            <article key={item.url} className="rounded-2xl border border-blue-100 bg-white p-4">
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">{item.title}</p>
+              <p className="mt-2 text-sm font-semibold text-slate-900">{item.publisher}</p>
+              <a
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:underline"
+              >
+                {item.source}
+                <ExternalLink className="size-3.5" aria-hidden="true" />
+              </a>
+              <p className="mt-3 text-xs leading-5 text-slate-600">{item.use}</p>
+            </article>
+          ))}
+        </div>
+
+        <p className="mt-5 text-xs leading-5 text-slate-500">
+          Source links checked 6 August 2026. Numeric values are stored as dated Supabase snapshots so the
+          Occupation and Compare pages can reuse the same record without copying figures into UI code.
+        </p>
+      </section>
+
       <p className="mt-8 text-xs leading-5 text-slate-500">
-        Last reviewed 5 August 2026. A national range describes the source population or stated student
-        scenario; it does not predict an individual&apos;s salary, expenses or visa outcome.
+        Last reviewed 6 August 2026. A national range or occupation snapshot describes the stated source
+        population; it does not predict an individual&apos;s salary, expenses, registration or visa outcome.
       </p>
     </main>
   )
