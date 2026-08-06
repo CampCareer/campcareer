@@ -12,6 +12,7 @@ import {
   Users,
 } from "lucide-react"
 import type { CanonicalCareer } from "@/data/career-comparison-catalog"
+import { AU_VOCATIONAL_PROGRAM_SHORTLIST } from "@/data/au-vocational-program-shortlist"
 import { getLaunchCountry } from "@/data/launch-countries"
 import { getOccupationEditorial } from "@/data/occupation-editorial"
 import { AUSTRALIA_NURSING_PROGRAMS } from "@/data/programs/australia-nursing"
@@ -26,7 +27,7 @@ const SCORE_LABELS: Array<{ key: keyof OpportunityScoreBreakdown; label: string 
   { key: "vacancyIntensity", label: "Vacancy intensity" },
   { key: "employerDiversity", label: "Employer diversity" },
   { key: "vacancyTrend", label: "Vacancy trend" },
-  { key: "entryLevel", label: "New-graduate access" },
+  { key: "entryLevel", label: "Entry-level access" },
   { key: "salary", label: "Relative salary" },
   { key: "growth", label: "Employment growth" },
   { key: "visa", label: "Visa pathways" },
@@ -85,6 +86,54 @@ function MetricCard({
   )
 }
 
+type ProgramCard = {
+  id: string
+  title: string
+  provider: string
+  url: string
+  meta: string
+  note?: string
+}
+
+function getProgramCards(profile: CountryOccupationProfile): ProgramCard[] {
+  if (profile.countryCode !== "AU") return []
+
+  const programRefs = new Set(profile.programLinks.map((link) => link.programRef))
+  const nursingCards: ProgramCard[] = AUSTRALIA_NURSING_PROGRAMS.filter((program) =>
+    programRefs.has(program.id)
+  ).map((program) => ({
+    id: program.id,
+    title: program.programName,
+    provider: program.institutionName,
+    url: program.source.url,
+    meta: `${program.durationLabel} · ${program.tuitionLabel}`,
+    note: program.registrationOutcome,
+  }))
+
+  const vocationalCards: ProgramCard[] = AU_VOCATIONAL_PROGRAM_SHORTLIST.filter((program) =>
+    programRefs.has(program.id)
+  ).map((program) => {
+    const fee =
+      program.tuitionAmount && program.tuitionCurrency
+        ? money(program.tuitionCurrency, program.tuitionAmount)
+        : program.internationalEligible
+          ? "Check current fee"
+          : "Apprenticeship / domestic pathway"
+    const duration = program.durationMonths ? `${program.durationMonths} months` : program.qualificationLevel
+
+    return {
+      id: program.id,
+      title: program.title,
+      provider: program.providerName,
+      url: program.officialUrl,
+      meta: `${duration} · ${fee}`,
+      note: program.eligibilityNote,
+    }
+  })
+
+  return [...nursingCards, ...vocationalCards]
+}
+
 export function CountryOccupationDashboard({
   career,
   profile,
@@ -98,13 +147,11 @@ export function CountryOccupationDashboard({
   const countryName = getLaunchCountry(profile.countryCode)?.name ?? profile.countryCode
   const jobLinks = profile.links.filter((link) => link.linkType === "job_search")
   const employers = profile.links.filter((link) => link.linkType === "employer")
-  const graduateLinks = profile.links.filter((link) => link.linkType === "graduate_program")
+  const entryLinks = profile.links.filter(
+    (link) => link.linkType === "entry_program" || link.linkType === "graduate_program"
+  )
   const sources = profile.links.filter((link) => link.linkType === "source")
-  const programRefs = new Set(profile.programLinks.map((link) => link.programRef))
-  const programs =
-    profile.countryCode === "AU"
-      ? AUSTRALIA_NURSING_PROGRAMS.filter((program) => programRefs.has(program.id))
-      : []
+  const programs = getProgramCards(profile)
 
   return (
     <div className="space-y-4">
@@ -117,7 +164,7 @@ export function CountryOccupationDashboard({
                 {countryName} · {profile.officialCodeSystem} {profile.officialUnitGroupCode}
               </span>
               <span className="rounded-full bg-white/15 px-2.5 py-1 text-[11px] font-medium">
-                {profile.specialisations.length} RN specialisations
+                {profile.specialisations.length} official occupations
               </span>
             </div>
             <h2 className="mt-4 text-[30px] font-semibold tracking-[-0.025em]">
@@ -217,21 +264,22 @@ export function CountryOccupationDashboard({
               {programs.map((program) => (
                 <a
                   key={program.id}
-                  href={program.source.url}
+                  href={program.url}
                   target="_blank"
                   rel="noreferrer"
                   className="block rounded-xl border border-[#f0efec] bg-[#fafaf8] p-3.5 transition hover:border-[#cfcac2]"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="text-[12.5px] font-semibold text-[#1b1b1b]">{program.programName}</p>
-                      <p className="mt-0.5 text-[11px] text-[#77746e]">{program.institutionName}</p>
+                      <p className="text-[12.5px] font-semibold text-[#1b1b1b]">{program.title}</p>
+                      <p className="mt-0.5 text-[11px] text-[#77746e]">{program.provider}</p>
                     </div>
                     <ArrowUpRight className="size-3.5 shrink-0 text-[#9c9a94]" />
                   </div>
-                  <p className="mt-2 text-[10.5px] text-[#8f8c85]">
-                    {program.durationLabel} · {program.tuitionLabel}
-                  </p>
+                  <p className="mt-2 text-[10.5px] text-[#8f8c85]">{program.meta}</p>
+                  {program.note && (
+                    <p className="mt-1.5 text-[10.5px] leading-4 text-[#77746e]">{program.note}</p>
+                  )}
                 </a>
               ))}
             </div>
@@ -241,7 +289,7 @@ export function CountryOccupationDashboard({
         <section className="rounded-2xl border border-[#e7e6e3] bg-white p-6">
           <div className="flex items-center gap-2 text-[#3e7a2e]">
             <BadgeCheck className="size-4" />
-            <h3 className="text-[15px] font-semibold">RN specialisations included</h3>
+            <h3 className="text-[15px] font-semibold">Official occupations included</h3>
           </div>
           <div className="mt-4 space-y-2">
             {profile.specialisations.map((item) => (
@@ -253,7 +301,10 @@ export function CountryOccupationDashboard({
                   </span>
                 </div>
                 <p className="mt-1 text-[10.5px] text-[#7d8b78]">
-                  Legacy {item.legacyCodeSystem} {item.legacyCode ?? "—"} · {item.visaEligible ? "visa-list eligible" : "verify visa status"}
+                  {item.legacyCodeSystem && item.legacyCode
+                    ? `Legacy ${item.legacyCodeSystem} ${item.legacyCode} · `
+                    : ""}
+                  {item.visaEligible ? "visa-list eligible" : "verify visa status"}
                 </p>
               </div>
             ))}
@@ -287,7 +338,7 @@ export function CountryOccupationDashboard({
             <p className="mt-3 text-[12.5px] leading-5 text-[#6f6d68]">{countryEditorial.jobMarketNote}</p>
           )}
           <div className="mt-4 space-y-2">
-            {[...jobLinks, ...employers, ...graduateLinks].map((link) => (
+            {[...jobLinks, ...employers, ...entryLinks].map((link) => (
               <a
                 key={`${link.linkType}-${link.url}`}
                 href={link.url}
