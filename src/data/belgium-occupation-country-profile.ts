@@ -1,0 +1,35 @@
+export const BELGIUM_OCCUPATION_COUNTRY_PROFILE = {
+  countryCode: "BE",
+  countryName: "Belgium",
+  introduction: "Belgium offers Dutch-, French- and English-taught higher education across Flanders, Brussels and Wallonia, close to major European institutions and employers.",
+  academicYear: {
+    headline: "Mid-September start",
+    summary: "Teaching commonly begins in mid-September. Examination periods usually fall in January and June, with resits in August or September.",
+    intakes: ["September", "February (very limited)"],
+    source: { label: "Study in Flanders — higher education", url: "https://www.studyinflanders.be/higher-education-in-flanders" },
+  },
+  strongMajors: [
+    { id: "health", label: "Nursing & Healthcare", reason: "Nursing and care roles feature prominently on regional shortage lists." },
+    { id: "electromechanics", label: "Industrial Electromechanics & Maintenance", reason: "Technical maintenance and industrial roles face persistent recruitment difficulty." },
+    { id: "construction", label: "Construction & Built Environment", reason: "Construction trades and technical professions remain shortage areas." },
+    { id: "finance", label: "Accounting & Finance", reason: "Accounting and financial profiles recur on regional shortage lists." },
+    { id: "ict", label: "ICT & Software", reason: "Digital and ICT skills remain difficult for employers to recruit." },
+    { id: "education", label: "Teaching & Education", reason: "Education occupations face shortages in both major language communities." },
+  ],
+  majorInstitutions: [
+    { name: "KU Leuven", type: "university", location: "Leuven" },
+    { name: "Ghent University", type: "university", location: "Ghent" },
+    { name: "University of Antwerp", type: "university", location: "Antwerp" },
+    { name: "Vrije Universiteit Brussel", type: "university", location: "Brussels" },
+    { name: "Université libre de Bruxelles", type: "university", location: "Brussels" },
+    { name: "UCLouvain", type: "university", location: "Louvain-la-Neuve" },
+    { name: "University of Liège", type: "university", location: "Liège" },
+    { name: "University of Mons", type: "university", location: "Mons" },
+    { name: "Hasselt University", type: "university", location: "Hasselt" },
+    { name: "Thomas More University of Applied Sciences", type: "college_polytechnic", location: "Flanders" },
+  ],
+  sources: [
+    { label: "VDAB — shortage occupations", url: "https://www.vdab.be/trends-en-cijfers/knelpuntberoepenlijst" },
+    { label: "Le Forem — occupations in shortage", url: "https://www.leforem.be/a-propos/communiques-presse/metiers-en-penurie-2025.html" },
+  ],
+} as const

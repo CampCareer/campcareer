@@ -1,0 +1,35 @@
+export const IRELAND_OCCUPATION_COUNTRY_PROFILE = {
+  countryCode: "IE",
+  countryName: "Ireland",
+  introduction: "Ireland combines an English-speaking higher-education system with strong technology, life-sciences, financial-services and healthcare employment clusters.",
+  academicYear: {
+    headline: "September to May academic year",
+    summary: "Most degree programmes begin in September and run through May, with examinations commonly held in December or January and again in May. Selected programmes offer January entry.",
+    intakes: ["September", "January (selected programmes)"],
+    source: { label: "Education in Ireland — plan your study", url: "https://www.educationinireland.com/en/plan-your-study-abroad/" },
+  },
+  strongMajors: [
+    { id: "computing", label: "Computing, Software & Data", reason: "Software, ICT systems, data and specialist technology roles appear in critical-skills pathways." },
+    { id: "engineering", label: "Engineering & Electronics", reason: "Engineering and electronics occupations support Ireland's technology and advanced-manufacturing base." },
+    { id: "life-sciences", label: "Pharma & Life Sciences", reason: "Biological science, medical laboratory and pharmaceutical roles align with major industry clusters." },
+    { id: "health", label: "Nursing & Health", reason: "Nurses, doctors and selected allied-health roles remain important critical-skills occupations." },
+    { id: "finance", label: "Accounting, Finance & Analytics", reason: "International financial-services employers create demand for accounting, risk and analytics skills." },
+    { id: "construction", label: "Construction & Built Environment", reason: "Engineering and construction skills support housing and infrastructure delivery." },
+  ],
+  majorInstitutions: [
+    { name: "Trinity College Dublin", type: "university", location: "Dublin" },
+    { name: "University College Dublin", type: "university", location: "Dublin" },
+    { name: "University College Cork", type: "university", location: "Cork" },
+    { name: "University of Galway", type: "university", location: "Galway" },
+    { name: "Dublin City University", type: "university", location: "Dublin" },
+    { name: "University of Limerick", type: "university", location: "Limerick" },
+    { name: "Maynooth University", type: "university", location: "Kildare" },
+    { name: "Technological University Dublin", type: "college_polytechnic", location: "Dublin" },
+    { name: "Munster Technological University", type: "college_polytechnic", location: "Cork / Kerry" },
+    { name: "Atlantic Technological University", type: "college_polytechnic", location: "West / North-West" },
+  ],
+  sources: [
+    { label: "Department of Enterprise — Critical Skills Occupations List", url: "https://enterprise.gov.ie/en/what-we-do/workplace-and-skills/employment-permits/employment-permit-eligibility/highly-skilled-eligible-occupations-list/" },
+    { label: "Education in Ireland — where can I study?", url: "https://www.educationinireland.com/en/where-can-i-study-/" },
+  ],
+} as const

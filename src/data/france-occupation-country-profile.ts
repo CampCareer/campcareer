@@ -1,0 +1,35 @@
+export const FRANCE_OCCUPATION_COUNTRY_PROFILE = {
+  countryCode: "FR",
+  countryName: "France",
+  introduction: "France combines a broad public-university system, grandes écoles and specialist institutions with major healthcare, engineering, digital, construction and hospitality labour markets.",
+  academicYear: {
+    headline: "September or October start",
+    summary: "Most programmes begin in September or October. Second-semester teaching and examinations usually finish in May or June, with dates set by each institution.",
+    intakes: ["September–October", "January (selected programmes)"],
+    source: { label: "Campus France — French higher education", url: "https://www.campusfrance.org/en/French-higher-education" },
+  },
+  strongMajors: [
+    { id: "health", label: "Health, Nursing & Social Care", reason: "France Travail records high planned hiring across health and social-care occupations." },
+    { id: "ict", label: "Computer Science & Telecommunications", reason: "Digital and telecom roles show substantial difficult recruitment demand." },
+    { id: "construction", label: "Construction & Civil Engineering", reason: "Construction reports a high share of difficult recruitment projects." },
+    { id: "industry", label: "Industrial Engineering & Maintenance", reason: "Maintenance and industrial technical skills remain hard to recruit." },
+    { id: "education", label: "Teaching & Education", reason: "Education and training support a large national public-service and private market." },
+    { id: "hospitality", label: "Hospitality & Food Service Management", reason: "Hospitality has large hiring volumes, though many roles are seasonal." },
+  ],
+  majorInstitutions: [
+    { name: "Université Paris-Saclay", type: "university", location: "Île-de-France" },
+    { name: "Sorbonne University", type: "university", location: "Paris" },
+    { name: "Université Paris Cité", type: "university", location: "Paris" },
+    { name: "University of Strasbourg", type: "university", location: "Strasbourg" },
+    { name: "Université Grenoble Alpes", type: "university", location: "Grenoble" },
+    { name: "Aix-Marseille University", type: "university", location: "Marseille" },
+    { name: "University of Bordeaux", type: "university", location: "Bordeaux" },
+    { name: "Université de Lille", type: "university", location: "Lille" },
+    { name: "INSA Lyon", type: "specialist_institution", location: "Lyon" },
+    { name: "CentraleSupélec", type: "specialist_institution", location: "Île-de-France" },
+  ],
+  sources: [
+    { label: "France Travail — workforce needs 2026", url: "https://statistiques.francetravail.org/bmo/bmopub?year=2026" },
+    { label: "France Universités — member institutions", url: "https://franceuniversites.fr/les-etablissements-membres/" },
+  ],
+} as const

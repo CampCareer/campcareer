@@ -1,0 +1,35 @@
+export const GERMANY_OCCUPATION_COUNTRY_PROFILE = {
+  countryCode: "DE",
+  countryName: "Germany",
+  introduction: "Germany offers a large public-university and applied-sciences sector alongside deep engineering, industrial, digital and healthcare labour markets.",
+  academicYear: {
+    headline: "Winter and summer semesters",
+    summary: "The winter semester commonly begins in October and the summer semester in April. Application deadlines and teaching dates vary by institution and programme.",
+    intakes: ["October", "April (selected programmes)"],
+    source: { label: "DAAD — studying in Germany", url: "https://www.daad.de/en/studying-in-germany/requirements/" },
+  },
+  strongMajors: [
+    { id: "engineering", label: "Mechanical, Electrical & Industrial Engineering", reason: "Engineers and technical specialists remain central to Germany's industrial base." },
+    { id: "it", label: "Computer Science, Software & Cybersecurity", reason: "IT specialists are highlighted among professions in demand." },
+    { id: "health", label: "Nursing, Medicine & Health", reason: "Healthcare and nursing roles face persistent staffing demand." },
+    { id: "green", label: "Energy & Environmental Technologies", reason: "Energy transition and infrastructure investment support technical demand." },
+    { id: "construction", label: "Civil Engineering & Construction", reason: "Construction and skilled technical work remain important shortage areas." },
+    { id: "business", label: "Business, Logistics & Supply Chain", reason: "Germany's export economy supports logistics, operations and business analytics." },
+  ],
+  majorInstitutions: [
+    { name: "Technical University of Munich", type: "university", location: "Munich" },
+    { name: "LMU Munich", type: "university", location: "Munich" },
+    { name: "Heidelberg University", type: "university", location: "Heidelberg" },
+    { name: "Humboldt University of Berlin", type: "university", location: "Berlin" },
+    { name: "Free University of Berlin", type: "university", location: "Berlin" },
+    { name: "RWTH Aachen University", type: "university", location: "Aachen" },
+    { name: "Karlsruhe Institute of Technology", type: "university", location: "Karlsruhe" },
+    { name: "TU Berlin", type: "university", location: "Berlin" },
+    { name: "Hamburg University of Applied Sciences", type: "college_polytechnic", location: "Hamburg" },
+    { name: "Munich University of Applied Sciences", type: "college_polytechnic", location: "Munich" },
+  ],
+  sources: [
+    { label: "Make it in Germany — professions in demand", url: "https://www.make-it-in-germany.com/en/working-in-germany/professions-in-demand" },
+    { label: "DAAD — higher education institutions", url: "https://www.daad.de/en/studying-in-germany/universities/" },
+  ],
+} as const
