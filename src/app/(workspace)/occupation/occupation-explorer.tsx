@@ -11,6 +11,7 @@ import type { CountryOccupationProfile } from "@/lib/workspace/country-occupatio
 import { CategorySearch } from "@/components/workspace/category-search"
 import { CountryPill } from "@/components/workspace/country-pill"
 import { useSelectedCountry } from "@/components/workspace/country-context"
+import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { CountryAwareOccupationDetail } from "./country-aware-occupation-detail"
 import { cn } from "@/lib/utils"
 
@@ -48,7 +49,10 @@ function initialSelection(
 ): string | undefined {
   if (initialOccupation && matches.some((c) => c.id === initialOccupation)) return initialOccupation
   if (!query.trim()) return undefined
-  const exact = matches.find((c) => c.label.toLowerCase() === query.trim().toLowerCase())
+  const normalizedQuery = query.trim().toLowerCase()
+  const exact = matches.find(
+    (c) => c.label.toLowerCase() === normalizedQuery || c.labelKo.toLowerCase() === normalizedQuery
+  )
   return exact?.id ?? matches[0]?.id
 }
 
@@ -63,6 +67,7 @@ export function OccupationExplorer({
 }) {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const locale = useRouteLocale()
   const { selectedCountry, setSelectedCountry } = useSelectedCountry()
   const [query, setQuery] = useState(initialQuery)
   const [category, setCategory] = useState<string>("all")
@@ -229,8 +234,8 @@ export function OccupationExplorer({
           </p>
         </div>
       ) : (
-        <div className="mt-3 grid gap-4 lg:grid-cols-5 lg:items-start">
-          <aside className="min-w-0 lg:sticky lg:top-20 lg:col-span-2 lg:max-h-[calc(100dvh-6.5rem)] lg:overflow-y-auto lg:pr-1 lg:pb-2">
+        <div className="mt-3 grid gap-4 lg:grid-cols-12 lg:items-start">
+          <aside className="min-w-0 lg:sticky lg:top-20 lg:col-span-4 lg:max-h-[calc(100dvh-6.5rem)] lg:overflow-y-auto lg:pr-1 lg:pb-2">
             <div className="space-y-4">
               {grouped.map(([categoryId, careers]) => (
                 <div key={categoryId}>
@@ -247,6 +252,7 @@ export function OccupationExplorer({
                       const detail = getOccupationDetail(career.id)
                       const accent = CATEGORY_ACCENT.get(career.categoryId) ?? "#c2691e"
                       const isSelected = career.id === selectedId
+                      const displayLabel = locale === "ko" ? career.labelKo : career.label
                       const countryDemand = selectedCountry
                         ? detail?.demand.find(
                             (entry) => entry.countryCode === selectedCountry.code
@@ -274,18 +280,13 @@ export function OccupationExplorer({
                             className="size-2 shrink-0 rounded-full"
                             style={{ backgroundColor: accent }}
                           />
-                          <span className="min-w-0 flex-1">
-                            <span
-                              className={cn(
-                                "block truncate text-[13.5px] font-medium",
-                                isSelected ? "text-[#c2691e]" : "text-[#1b1b1b]"
-                              )}
-                            >
-                              {career.label}
-                            </span>
-                            <span className="block truncate text-[11.5px] text-[#a3a19b]">
-                              {career.labelKo}
-                            </span>
+                          <span
+                            className={cn(
+                              "min-w-0 flex-1 truncate text-[13.5px] font-medium",
+                              isSelected ? "text-[#c2691e]" : "text-[#1b1b1b]"
+                            )}
+                          >
+                            {displayLabel}
                           </span>
                           {selectedScore != null ? (
                             <span className="shrink-0 rounded-full bg-[#eef4ff] px-2 py-0.5 text-[10px] font-bold text-[#2563eb]">
@@ -305,7 +306,7 @@ export function OccupationExplorer({
             </div>
           </aside>
 
-          <section className="min-w-0 lg:col-span-3">
+          <section className="min-w-0 lg:col-span-8">
             {selected ? (
               <CountryAwareOccupationDetail
                 career={selected}

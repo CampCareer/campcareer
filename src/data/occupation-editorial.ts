@@ -40,6 +40,32 @@ export const OCCUPATION_EDITORIAL: readonly OccupationEditorial[] = [
       },
     },
   },
+  {
+    id: "electrician",
+    overview:
+      "Electricians install, test, commission, maintain and repair electrical wiring, equipment and control systems across homes, commercial buildings, infrastructure, utilities, manufacturing and industrial sites.",
+    tasks: [
+      "Interpret technical drawings, wiring diagrams, equipment schedules and electrical standards",
+      "Install wiring, switchboards, protection devices, lighting, controls and electrical equipment",
+      "Connect systems to power supplies and test continuity, resistance and safe operation",
+      "Diagnose faults with electrical and electronic test instruments",
+      "Repair, replace and maintain wiring, components, machinery and control systems",
+      "Document completed work and confirm compliance with the relevant electrical safety rules",
+    ],
+    countries: {
+      AU: {
+        headline: "A licensed trade with national shortage and broad infrastructure demand",
+        entryPathway:
+          "The standard domestic route is a paid electrical apprenticeship combined with the UEE30820 Certificate III in Electrotechnology Electrician. The training contract, workplace experience and final licensing requirements are administered through the relevant state or territory system.",
+        registration:
+          "Electrical work is licensed. After completing the required trade training and assessments, workers must obtain the correct electrical licence from the state or territory regulator for the jurisdiction and type of work.",
+        jobMarketNote:
+          "Construction contractors, utilities, mining, manufacturing and maintenance employers recruit electricians. Apprenticeship intakes create a structured entry route, while licensed vacancies span metropolitan, regional and remote locations.",
+        scoreCaveat:
+          "The opportunity score is provisional until posting-level unique-employer counts and the share of advertisements open to apprentices or newly licensed electricians are ingested regularly.",
+      },
+    },
+  },
 ] as const
 
 const BY_ID = new Map(OCCUPATION_EDITORIAL.map((item) => [item.id, item]))
