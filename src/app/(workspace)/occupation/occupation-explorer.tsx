@@ -1,14 +1,14 @@
 "use client"
 
-import { useMemo, useState } from "react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { BriefcaseBusiness, Globe2, MousePointerClick } from "lucide-react"
+import { useEffect, useMemo, useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { BriefcaseBusiness, MousePointerClick } from "lucide-react"
 import { CANONICAL_CAREERS, type CanonicalCareer } from "@/data/career-comparison-catalog"
+import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
 import { STUDY_CATEGORIES } from "@/data/study-concepts"
 import { getOccupationDetail } from "@/lib/workspace/occupation-detail"
 import { CategorySearch } from "@/components/workspace/category-search"
-import { WorkspacePageHeader } from "@/components/workspace/workspace-page-header"
+import { CountryPill } from "@/components/workspace/country-pill"
 import { useSelectedCountry } from "@/components/workspace/country-context"
 import { OccupationDetailPanel } from "./occupation-detail-view"
 import { cn } from "@/lib/utils"
@@ -52,14 +52,29 @@ function initialSelection(
 export function OccupationExplorer({
   initialQuery,
   initialOccupation,
+  initialCountry,
 }: {
   initialQuery: string
   initialOccupation: string
+  initialCountry: string
 }) {
   const router = useRouter()
-  const { selectedCountry } = useSelectedCountry()
+  const searchParams = useSearchParams()
+  const { selectedCountry, setSelectedCountry } = useSelectedCountry()
   const [query, setQuery] = useState(initialQuery)
   const [category, setCategory] = useState<string>("all")
+
+  useEffect(() => {
+    if (!initialCountry) return
+    const country = LAUNCH_COUNTRIES.find((item) => item.code === initialCountry)
+    if (!country) return
+
+    setSelectedCountry({
+      code: country.code,
+      name: country.name,
+      currency: country.currency,
+    })
+  }, [initialCountry, setSelectedCountry])
 
   const filtered = useMemo(() => {
     return CANONICAL_CAREERS.filter((career) => {
@@ -73,7 +88,7 @@ export function OccupationExplorer({
   )
 
   const selected = selectedId
-    ? CANONICAL_CAREERS.find((c) => c.id === selectedId)
+    ? CANONICAL_CAREERS.find((career) => career.id === selectedId)
     : undefined
   const selectedDetail = selected ? getOccupationDetail(selected.id) : undefined
 
@@ -87,123 +102,149 @@ export function OccupationExplorer({
     return [...map.entries()]
   }, [filtered])
 
+  function updateCountry(code: string | null) {
+    const params = new URLSearchParams(searchParams.toString())
+    if (code) params.set("country", code)
+    else params.delete("country")
+
+    const nextQuery = params.toString()
+    router.replace(nextQuery ? `/occupation?${nextQuery}` : "/occupation", { scroll: false })
+  }
+
   function select(career: CanonicalCareer) {
     setSelectedId(career.id)
-    const params = new URLSearchParams()
+    const params = new URLSearchParams(searchParams.toString())
     if (query.trim()) params.set("q", query.trim())
+    else params.delete("q")
     params.set("occupation", career.id)
     router.replace(`/occupation?${params.toString()}`, { scroll: false })
   }
 
   return (
     <>
-      <WorkspacePageHeader
-        eyebrow="Explore"
-        title="Occupation"
-        description="Browse the global career catalogue — trades, health, tech, engineering and more. Every entry is cross-checked before it appears here."
-      />
-
-      <div className="mt-6 grid gap-6 lg:grid-cols-[340px_1fr] lg:items-start">
-        {selectedCountry && (
-          <div className="flex items-center gap-2.5 rounded-xl border border-[#2563eb]/25 bg-[#eef4ff] px-4 py-2.5 text-[13px] font-medium text-[#1b1b1b] lg:col-span-2">
-            <Globe2 className="size-4 shrink-0 text-[#2563eb]" />
-            <span>
-              Scoped to <span className="font-semibold">{selectedCountry.name}</span> — matching
-              occupation data is highlighted.{" "}
-              <Link href="/countries" className="font-semibold text-[#2563eb] hover:underline">
-                Change country
-              </Link>
-            </span>
-          </div>
-        )}
-
-        <aside className="lg:sticky lg:top-20 lg:max-h-[calc(100dvh-6.5rem)] lg:overflow-y-auto lg:pb-2">
-          <CategorySearch
-            value={query}
-            onChange={setQuery}
-            placeholder="Search occupations, e.g. Nurse or Electrician…"
-          />
-
-          <div className="mt-4 flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={() => setCategory("all")}
-              className={cn(
-                "rounded-lg border px-3 py-1.5 text-[12.5px] font-medium transition",
-                category === "all"
-                  ? "border-[#1b1b1b] bg-[#1b1b1b] text-white"
-                  : "border-[#e0dfdb] bg-white text-[#6f6d68] hover:border-[#d0cfcb] hover:text-[#1b1b1b]"
-              )}
-            >
-              All
-            </button>
-            {STUDY_CATEGORIES.map((c) => (
-              <button
-                key={c.id}
-                type="button"
-                onClick={() => setCategory(c.id)}
-                className={cn(
-                  "rounded-lg border px-3 py-1.5 text-[12.5px] font-medium transition",
-                  category === c.id
-                    ? "border-[#2563eb] bg-[#2563eb] text-white"
-                    : "border-[#e0dfdb] bg-white text-[#6f6d68] hover:border-[#2563eb]/50 hover:text-[#2563eb]"
-                )}
-              >
-                {c.label}
-              </button>
-            ))}
-          </div>
-
-          <p className="mt-5 text-[12.5px] font-medium text-[#a3a19b]">
-            {filtered.length} occupations
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#c2691e]">
+            Explore
           </p>
+          <div className="mt-1.5 flex flex-wrap items-center gap-3">
+            <h1 className="text-[26px] font-semibold leading-tight tracking-[-0.02em] text-[#1b1b1b] sm:text-3xl">
+              Occupation
+            </h1>
+            <CountryPill onChange={updateCountry} />
+          </div>
+        </div>
+      </div>
 
-          {filtered.length === 0 ? (
-            <div className="mt-3 flex h-48 flex-col items-center justify-center rounded-xl border border-dashed border-[#e7e6e3] bg-white/50 text-center">
-              <BriefcaseBusiness className="size-6 text-[#c4c2bc]" />
-              <p className="mt-3 text-[13.5px] font-medium text-[#6f6d68]">
-                No occupations match “{query}”.
-              </p>
-            </div>
-          ) : (
-            <div className="mt-3 space-y-4">
+      <div className="mt-6 lg:max-w-xl">
+        <CategorySearch
+          value={query}
+          onChange={setQuery}
+          placeholder="Search occupations, e.g. Nurse or Electrician…"
+        />
+      </div>
+
+      <div className="mt-5 flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={() => setCategory("all")}
+          className={cn(
+            "rounded-lg border px-3 py-1.5 text-[12.5px] font-medium transition",
+            category === "all"
+              ? "border-[#c2691e] bg-[#c2691e] text-white"
+              : "border-[#e0dfdb] bg-white text-[#6f6d68] hover:border-[#c2691e]/50 hover:text-[#c2691e]"
+          )}
+        >
+          All
+        </button>
+        {STUDY_CATEGORIES.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            onClick={() => setCategory(item.id)}
+            className={cn(
+              "rounded-lg border px-3 py-1.5 text-[12.5px] font-medium transition",
+              category === item.id
+                ? "border-[#c2691e] bg-[#c2691e] text-white"
+                : "border-[#e0dfdb] bg-white text-[#6f6d68] hover:border-[#c2691e]/50 hover:text-[#c2691e]"
+            )}
+          >
+            {item.label}
+          </button>
+        ))}
+      </div>
+
+      <div className="mt-6 flex items-center justify-between">
+        <p className="text-[12.5px] font-medium text-[#a3a19b]">
+          {filtered.length} occupations
+        </p>
+      </div>
+
+      {filtered.length === 0 ? (
+        <div className="mt-4 flex h-56 flex-col items-center justify-center rounded-xl border border-dashed border-[#e7e6e3] bg-white/50 text-center">
+          <BriefcaseBusiness className="size-6 text-[#c4c2bc]" />
+          <p className="mt-3 text-[13.5px] font-medium text-[#6f6d68]">
+            No occupations match “{query}”.
+          </p>
+        </div>
+      ) : (
+        <div className="mt-3 grid gap-4 lg:grid-cols-5 lg:items-start">
+          <aside className="min-w-0 lg:sticky lg:top-20 lg:col-span-2 lg:max-h-[calc(100dvh-6.5rem)] lg:overflow-y-auto lg:pr-1 lg:pb-2">
+            <div className="space-y-4">
               {grouped.map(([categoryId, careers]) => (
                 <div key={categoryId}>
                   <div className="flex items-baseline justify-between">
-                    <h3 className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#a3a19b]">
+                    <h2 className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#a3a19b]">
                       {CATEGORY_LABELS.get(categoryId)}
-                    </h3>
-                    <span className="text-[10.5px] font-medium text-[#c4c2bc]">{careers.length}</span>
+                    </h2>
+                    <span className="text-[10.5px] font-medium text-[#c4c2bc]">
+                      {careers.length}
+                    </span>
                   </div>
                   <div className="mt-2 space-y-1">
                     {careers.map((career) => {
                       const detail = getOccupationDetail(career.id)
-                      const accent = CATEGORY_ACCENT.get(career.categoryId) ?? "#2563eb"
+                      const accent = CATEGORY_ACCENT.get(career.categoryId) ?? "#c2691e"
                       const isSelected = career.id === selectedId
+                      const countryDemand = selectedCountry
+                        ? detail?.demand.find(
+                            (entry) => entry.countryCode === selectedCountry.code
+                          )
+                        : undefined
+                      const demand = countryDemand ?? detail?.demand[0]
+
                       return (
                         <button
                           key={career.id}
                           type="button"
                           onClick={() => select(career)}
                           className={cn(
-                            "flex w-full items-center gap-2.5 rounded-lg border px-3 py-2 text-left transition",
+                            "flex w-full items-center gap-2.5 rounded-xl border bg-white px-3 py-2.5 text-left transition",
                             isSelected
-                              ? "border-[#2563eb]/40 bg-[#eef4ff]"
-                              : "border-transparent hover:bg-[#fafaf8]"
+                              ? "border-[#c2691e]/60 bg-[#fffaf5] ring-1 ring-[#c2691e]/20"
+                              : "border-[#e7e6e3] hover:border-[#dfc4a9] hover:bg-[#fffaf5]"
                           )}
                         >
-                          <span className="size-2 shrink-0 rounded-full" style={{ backgroundColor: accent }} />
+                          <span
+                            className="size-2 shrink-0 rounded-full"
+                            style={{ backgroundColor: accent }}
+                          />
                           <span className="min-w-0 flex-1">
-                            <span className={cn("block truncate text-[13.5px] font-medium", isSelected ? "text-[#2563eb]" : "text-[#1b1b1b]")}>
+                            <span
+                              className={cn(
+                                "block truncate text-[13.5px] font-medium",
+                                isSelected ? "text-[#c2691e]" : "text-[#1b1b1b]"
+                              )}
+                            >
                               {career.label}
                             </span>
                             <span className="block truncate text-[11.5px] text-[#a3a19b]">
                               {career.labelKo}
                             </span>
                           </span>
-                          {detail?.demand[0] && (
+                          {demand && (
                             <span className="shrink-0 rounded-full bg-[#edf5ea] px-2 py-0.5 text-[10px] font-bold text-[#3e7a2e]">
-                              {detail.demand[0].rating.toUpperCase()}
+                              {demand.rating.toUpperCase()}
                             </span>
                           )}
                         </button>
@@ -213,33 +254,33 @@ export function OccupationExplorer({
                 </div>
               ))}
             </div>
-          )}
-        </aside>
+          </aside>
 
-        <section>
-          {selected ? (
-            <OccupationDetailPanel
-              career={selected}
-              detail={selectedDetail}
-              countryCode={selectedCountry?.code}
-              countryName={selectedCountry?.name}
-            />
-          ) : (
-            <div className="flex min-h-[420px] flex-col items-center justify-center rounded-2xl border border-dashed border-[#e7e6e3] bg-white/50 p-10 text-center">
-              <span className="grid size-14 place-items-center rounded-2xl bg-[#eef4ff] text-[#2563eb]">
-                <MousePointerClick className="size-6" />
-              </span>
-              <h2 className="mt-5 text-[18px] font-semibold tracking-[-0.01em] text-[#1b1b1b]">
-                Pick an occupation to open its dashboard
-              </h2>
-              <p className="mt-2 max-w-sm text-[13.5px] leading-6 text-[#6f6d68]">
-                Search or browse the list on the left. Demand ratings, salary ranges and
-                tasks update instantly here — no page reload needed.
-              </p>
-            </div>
-          )}
-        </section>
-      </div>
+          <section className="min-w-0 lg:col-span-3">
+            {selected ? (
+              <OccupationDetailPanel
+                career={selected}
+                detail={selectedDetail}
+                countryCode={selectedCountry?.code}
+                countryName={selectedCountry?.name}
+              />
+            ) : (
+              <div className="flex min-h-[420px] flex-col items-center justify-center rounded-2xl border border-dashed border-[#e7e6e3] bg-white/50 p-10 text-center">
+                <span className="grid size-14 place-items-center rounded-2xl bg-[#fff4e8] text-[#c2691e]">
+                  <MousePointerClick className="size-6" />
+                </span>
+                <h2 className="mt-5 text-[18px] font-semibold tracking-[-0.01em] text-[#1b1b1b]">
+                  Pick an occupation to open its dashboard
+                </h2>
+                <p className="mt-2 max-w-sm text-[13.5px] leading-6 text-[#6f6d68]">
+                  Search or browse the list. Demand ratings, salary ranges and tasks update
+                  instantly here without a page reload.
+                </p>
+              </div>
+            )}
+          </section>
+        </div>
+      )}
     </>
   )
 }
