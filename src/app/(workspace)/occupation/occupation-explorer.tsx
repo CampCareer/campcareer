@@ -7,10 +7,11 @@ import { CANONICAL_CAREERS, type CanonicalCareer } from "@/data/career-compariso
 import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
 import { STUDY_CATEGORIES } from "@/data/study-concepts"
 import { getOccupationDetail } from "@/lib/workspace/occupation-detail"
+import type { CountryOccupationProfile } from "@/lib/workspace/country-occupation-contract"
 import { CategorySearch } from "@/components/workspace/category-search"
 import { CountryPill } from "@/components/workspace/country-pill"
 import { useSelectedCountry } from "@/components/workspace/country-context"
-import { OccupationDetailPanel } from "./occupation-detail-view"
+import { CountryAwareOccupationDetail } from "./country-aware-occupation-detail"
 import { cn } from "@/lib/utils"
 
 const CATEGORY_LABELS = new Map<string, string>(STUDY_CATEGORIES.map((c) => [c.id, c.label]))
@@ -26,6 +27,8 @@ const CATEGORY_ACCENT = new Map<string, string>([
   ["hospitality", "#c2691e"],
   ["transport", "#6d4fc4"],
 ])
+
+type CountryProfileStatus = "idle" | "loading" | "ready" | "missing" | "error"
 
 function matchCareer(career: CanonicalCareer, q: string) {
   const query = q.trim().toLowerCase()
@@ -63,6 +66,8 @@ export function OccupationExplorer({
   const { selectedCountry, setSelectedCountry } = useSelectedCountry()
   const [query, setQuery] = useState(initialQuery)
   const [category, setCategory] = useState<string>("all")
+  const [countryProfile, setCountryProfile] = useState<CountryOccupationProfile | null>(null)
+  const [countryProfileStatus, setCountryProfileStatus] = useState<CountryProfileStatus>("idle")
 
   useEffect(() => {
     if (!initialCountry) return
@@ -91,6 +96,42 @@ export function OccupationExplorer({
     ? CANONICAL_CAREERS.find((career) => career.id === selectedId)
     : undefined
   const selectedDetail = selected ? getOccupationDetail(selected.id) : undefined
+
+  useEffect(() => {
+    if (!selectedId || !selectedCountry?.code) {
+      setCountryProfile(null)
+      setCountryProfileStatus("idle")
+      return
+    }
+
+    const controller = new AbortController()
+    setCountryProfile(null)
+    setCountryProfileStatus("loading")
+
+    const params = new URLSearchParams({
+      country: selectedCountry.code,
+      career: selectedId,
+    })
+
+    fetch(`/api/occupations/profile?${params.toString()}`, { signal: controller.signal })
+      .then(async (response) => {
+        if (response.status === 404) return { profile: null }
+        if (!response.ok) throw new Error(`Occupation profile request failed: ${response.status}`)
+        return (await response.json()) as { profile: CountryOccupationProfile | null }
+      })
+      .then(({ profile }) => {
+        setCountryProfile(profile)
+        setCountryProfileStatus(profile ? "ready" : "missing")
+      })
+      .catch((error) => {
+        if (controller.signal.aborted) return
+        console.error("[occupation] country profile failed", error)
+        setCountryProfile(null)
+        setCountryProfileStatus("error")
+      })
+
+    return () => controller.abort()
+  }, [selectedCountry?.code, selectedId])
 
   const grouped = useMemo(() => {
     const map = new Map<string, CanonicalCareer[]>()
@@ -211,7 +252,11 @@ export function OccupationExplorer({
                             (entry) => entry.countryCode === selectedCountry.code
                           )
                         : undefined
-                      const demand = countryDemand ?? detail?.demand[0]
+                      const demand = selectedCountry ? countryDemand : detail?.demand[0]
+                      const selectedScore =
+                        isSelected && countryProfile?.canonicalCareerId === career.id
+                          ? countryProfile.metric.opportunityScore
+                          : null
 
                       return (
                         <button
@@ -242,11 +287,15 @@ export function OccupationExplorer({
                               {career.labelKo}
                             </span>
                           </span>
-                          {demand && (
+                          {selectedScore != null ? (
+                            <span className="shrink-0 rounded-full bg-[#eef4ff] px-2 py-0.5 text-[10px] font-bold text-[#2563eb]">
+                              {selectedScore}
+                            </span>
+                          ) : demand ? (
                             <span className="shrink-0 rounded-full bg-[#edf5ea] px-2 py-0.5 text-[10px] font-bold text-[#3e7a2e]">
                               {demand.rating.toUpperCase()}
                             </span>
-                          )}
+                          ) : null}
                         </button>
                       )
                     })}
@@ -258,11 +307,13 @@ export function OccupationExplorer({
 
           <section className="min-w-0 lg:col-span-3">
             {selected ? (
-              <OccupationDetailPanel
+              <CountryAwareOccupationDetail
                 career={selected}
                 detail={selectedDetail}
                 countryCode={selectedCountry?.code}
                 countryName={selectedCountry?.name}
+                countryProfile={countryProfile}
+                countryProfileStatus={countryProfileStatus}
               />
             ) : (
               <div className="flex min-h-[420px] flex-col items-center justify-center rounded-2xl border border-dashed border-[#e7e6e3] bg-white/50 p-10 text-center">
