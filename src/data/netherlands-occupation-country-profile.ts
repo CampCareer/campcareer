@@ -1,0 +1,35 @@
+export const NETHERLANDS_OCCUPATION_COUNTRY_PROFILE = {
+  countryCode: "NL",
+  countryName: "Netherlands",
+  introduction: "The Netherlands combines research universities and professionally oriented universities of applied sciences with an international, English-taught study market.",
+  academicYear: {
+    headline: "September start, with selected February entry",
+    summary: "Most programmes begin in late August or September and run through June. A smaller number of programmes offer February entry.",
+    intakes: ["August–September", "February (selected programmes)"],
+    source: { label: "University of Amsterdam — academic calendar", url: "https://student.uva.nl/en/academic-calendar/2026-2027" },
+  },
+  strongMajors: [
+    { id: "ict", label: "ICT, Data & Cybersecurity", reason: "UWV identifies multiple higher-education ICT occupations with strong prospects." },
+    { id: "health", label: "Healthcare & Life Sciences", reason: "Healthcare occupations remain prominent among promising roles." },
+    { id: "engineering", label: "Engineering & High-Tech Systems", reason: "Technical and engineering roles support major industrial clusters." },
+    { id: "energy", label: "Energy & Installation Technology", reason: "Energy-transition and installation occupations face sustained demand." },
+    { id: "construction", label: "Construction & Built Environment", reason: "Construction, civil engineering and spatial-planning skills are in demand." },
+    { id: "education", label: "Teaching & Education", reason: "Teacher shortages create opportunities across several education levels." },
+  ],
+  majorInstitutions: [
+    { name: "University of Amsterdam", type: "university", location: "Amsterdam" },
+    { name: "Delft University of Technology", type: "university", location: "Delft" },
+    { name: "Erasmus University Rotterdam", type: "university", location: "Rotterdam" },
+    { name: "Utrecht University", type: "university", location: "Utrecht" },
+    { name: "Leiden University", type: "university", location: "Leiden" },
+    { name: "Eindhoven University of Technology", type: "university", location: "Eindhoven" },
+    { name: "University of Groningen", type: "university", location: "Groningen" },
+    { name: "University of Twente", type: "university", location: "Enschede" },
+    { name: "Amsterdam University of Applied Sciences", type: "college_polytechnic", location: "Amsterdam" },
+    { name: "Fontys University of Applied Sciences", type: "college_polytechnic", location: "Eindhoven / Venlo" },
+  ],
+  sources: [
+    { label: "UWV — promising occupations", url: "https://www.uwv.nl/nl/arbeidsmarktinformatie/kansen-beroep/kansrijke-beroepen-hbo-wo" },
+    { label: "Study in NL — institution types", url: "https://www.studyinnl.org/dutch-education" },
+  ],
+} as const
