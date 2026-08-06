@@ -75,56 +75,219 @@ const sources = [
   },
 ] as const
 
-const registeredNurseSources = [
+type OccupationSource = {
+  title: string
+  publisher: string
+  source: string
+  url: string
+  use: string
+}
+
+type OccupationSourceSection = {
+  id: string
+  title: string
+  description: string
+  snapshot: string
+  sources: readonly OccupationSource[]
+}
+
+const occupationSourceSections: readonly OccupationSourceSection[] = [
   {
-    title: "Official occupation scope",
-    publisher: "Australian Bureau of Statistics",
-    source: "OSCA 2654 Registered Nurses",
-    url: "https://www.abs.gov.au/statistics/classifications/osca-occupation-standard-classification-australia/2024-version-1-0/browse-classification/2/26/265/2654",
-    use:
-      "Defines the Australian occupation group and the included registered nurse specialisations used in the CampCareer rollup.",
+    id: "registered-nurse",
+    title: "Registered Nurse",
+    description:
+      "Evidence supporting the Australia Registered Nurse occupation dashboard and its Career Opportunity Score.",
+    snapshot: "1 May 2026",
+    sources: [
+      {
+        title: "Official occupation scope",
+        publisher: "Australian Bureau of Statistics",
+        source: "OSCA 2654 Registered Nurses",
+        url: "https://www.abs.gov.au/statistics/classifications/osca-occupation-standard-classification-australia/2024-version-1-0/browse-classification/2/26/265/2654",
+        use:
+          "Defines the Australian occupation group and the included registered nurse specialisations used in the CampCareer rollup.",
+      },
+      {
+        title: "Employment and earnings",
+        publisher: "Jobs and Skills Australia",
+        source: "Registered Nurses occupation profile",
+        url: "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupations/2544-registered-nurses",
+        use:
+          "Supplies the employment total, weekly and hourly earnings, part-time share, female share, median age and working-hours snapshot. The page remains on the legacy ANZSCO basis while JSA transitions to OSCA.",
+      },
+      {
+        title: "Vacancies and state demand",
+        publisher: "Jobs and Skills Australia",
+        source: "Internet Vacancy Index",
+        url: "https://www.jobsandskills.gov.au/data/internet-vacancy-index",
+        use:
+          "Supplies the dated national and state or territory online-vacancy series used for vacancy intensity and trend calculations.",
+      },
+      {
+        title: "Employment outlook",
+        publisher: "Jobs and Skills Australia",
+        source: "Employment projections",
+        url: "https://www.jobsandskills.gov.au/data/employment-projections",
+        use:
+          "Supplies the five-year and ten-year employment-growth inputs used in the Career Opportunity Score.",
+      },
+      {
+        title: "Registration requirements",
+        publisher: "Nursing and Midwifery Board of Australia",
+        source: "Registration standards",
+        url: "https://www.nursingmidwiferyboard.gov.au/Registration-Standards.aspx",
+        use:
+          "Defines the professional registration standards that applicants and practising registered nurses must meet.",
+      },
+      {
+        title: "Skilled visa pathways",
+        publisher: "Australian Department of Home Affairs",
+        source: "Skilled occupation list",
+        url: "https://immi.homeaffairs.gov.au/visas/working-in-australia/skill-occupation-list",
+        use:
+          "Checks whether the included nursing occupations appear in current skilled visa pathways. Individual eligibility is not inferred from list inclusion.",
+      },
+    ],
   },
   {
-    title: "Employment and earnings",
-    publisher: "Jobs and Skills Australia",
-    source: "Registered Nurses occupation profile",
-    url: "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupations/2544-registered-nurses",
-    use:
-      "Supplies the employment total, weekly and hourly earnings, part-time share, female share, median age and working-hours snapshot. The page remains on the legacy ANZSCO basis while JSA transitions to OSCA.",
+    id: "electrician",
+    title: "Electrician",
+    description:
+      "Evidence supporting the Australia Electrician occupation dashboard, licensing pathway and Career Opportunity Score.",
+    snapshot: "1 May 2026",
+    sources: [
+      {
+        title: "Official occupation scope",
+        publisher: "Australian Bureau of Statistics",
+        source: "OSCA 3812 Electricians",
+        url: "https://www.abs.gov.au/statistics/classifications/osca-occupation-standard-classification-australia/2024-version-1-0/browse-classification/3/38/381/3812",
+        use:
+          "Defines Electrician (General), Electrical Fitter and Industrial Electrician as the occupations included in the CampCareer electrician rollup.",
+      },
+      {
+        title: "Employment and earnings",
+        publisher: "Jobs and Skills Australia",
+        source: "Electricians occupation profile",
+        url: "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupations/3411-electricians",
+        use:
+          "Supplies the employment, earnings, demographic and working-hours snapshot on the legacy ANZSCO series.",
+      },
+      {
+        title: "Vacancies and state demand",
+        publisher: "Jobs and Skills Australia",
+        source: "Internet Vacancy Index",
+        url: "https://www.jobsandskills.gov.au/data/internet-vacancy-index",
+        use:
+          "Supplies the national and state or territory vacancy series used for vacancy intensity and trend calculations.",
+      },
+      {
+        title: "Employment outlook",
+        publisher: "Jobs and Skills Australia",
+        source: "Employment projections",
+        url: "https://www.jobsandskills.gov.au/data/employment-projections",
+        use:
+          "Supplies the five-year and ten-year employment-growth inputs used in the Career Opportunity Score.",
+      },
+      {
+        title: "Training pathway",
+        publisher: "Australian Government National Training Register",
+        source: "UEE30820 Certificate III in Electrotechnology Electrician",
+        url: "https://training.gov.au/training/details/UEE30820",
+        use:
+          "Defines the principal trade qualification connected to the paid electrical apprenticeship pathway.",
+      },
+      {
+        title: "Electrical licensing",
+        publisher: "Electrical Regulatory Authorities Council",
+        source: "Electrical licensing",
+        url: "https://www.erac.gov.au/licensing/electrical-licensing/",
+        use:
+          "Explains that electrical licensing is administered by state and territory regulators and must be checked for the relevant jurisdiction.",
+      },
+      {
+        title: "Skilled visa pathways",
+        publisher: "Australian Department of Home Affairs",
+        source: "Skilled occupation list",
+        url: "https://immi.homeaffairs.gov.au/visas/working-in-australia/skill-occupation-list",
+        use:
+          "Checks current skilled-work pathway coverage. Occupation-list inclusion does not determine an individual's eligibility.",
+      },
+    ],
   },
   {
-    title: "Vacancies and state demand",
-    publisher: "Jobs and Skills Australia",
-    source: "Internet Vacancy Index",
-    url: "https://www.jobsandskills.gov.au/data/internet-vacancy-index",
-    use:
-      "Supplies the dated national and state or territory online-vacancy series used for vacancy intensity and trend calculations.",
+    id: "carpenter",
+    title: "Carpenter",
+    description:
+      "Evidence supporting the Australia Carpenter occupation dashboard, apprenticeship pathway and Career Opportunity Score.",
+    snapshot: "1 May 2026",
+    sources: [
+      {
+        title: "Official occupation scope",
+        publisher: "Australian Bureau of Statistics",
+        source: "OSCA 3721 Carpenters and Joiners",
+        url: "https://www.abs.gov.au/statistics/classifications/osca-occupation-standard-classification-australia/2024-version-1-0/browse-classification/3/37/372/3721",
+        use:
+          "Defines Carpenter and Joiner, Carpenter and Joiner as the three occupations included in the CampCareer carpenter rollup.",
+      },
+      {
+        title: "Employment and earnings",
+        publisher: "Jobs and Skills Australia",
+        source: "Carpenters and Joiners occupation profile",
+        url: "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupations/3312-carpenters-and-joiners",
+        use:
+          "Supplies employment, weekly and hourly earnings, part-time share, female share, median age and working-hours data on the legacy ANZSCO series.",
+      },
+      {
+        title: "Vacancies and state demand",
+        publisher: "Jobs and Skills Australia",
+        source: "Internet Vacancy Index",
+        url: "https://www.jobsandskills.gov.au/data/internet-vacancy-index",
+        use:
+          "Supplies the dated national and state or territory vacancy series used for vacancy intensity and trend calculations.",
+      },
+      {
+        title: "Employment outlook",
+        publisher: "Jobs and Skills Australia",
+        source: "Employment projections",
+        url: "https://www.jobsandskills.gov.au/data/employment-projections",
+        use:
+          "Supplies the five-year and ten-year employment-growth inputs used in the Career Opportunity Score.",
+      },
+      {
+        title: "Shortage status",
+        publisher: "Jobs and Skills Australia",
+        source: "Occupation Shortage List",
+        url: "https://www.jobsandskills.gov.au/data/occupation-shortage",
+        use:
+          "Provides the national and state or territory shortage evidence used in the shortage component of the score.",
+      },
+      {
+        title: "Training pathway",
+        publisher: "Australian Government National Training Register",
+        source: "CPC30220 Certificate III in Carpentry",
+        url: "https://training.gov.au/Training/Details/CPC30220",
+        use:
+          "Defines the principal trade qualification connected to the Australian carpentry apprenticeship pathway.",
+      },
+      {
+        title: "Construction induction",
+        publisher: "Safe Work Australia",
+        source: "Working on a construction site",
+        url: "https://www.safeworkaustralia.gov.au/safety-topic/industry-and-business/construction/working-construction-site",
+        use:
+          "Explains the general construction induction training and White Card requirement for construction-site work.",
+      },
+      {
+        title: "Skilled visa pathways",
+        publisher: "Australian Department of Home Affairs",
+        source: "Skilled occupation list",
+        url: "https://immi.homeaffairs.gov.au/visas/working-in-australia/skill-occupation-list",
+        use:
+          "Checks current skilled-work pathway coverage. Occupation-list inclusion does not determine an individual's eligibility.",
+      },
+    ],
   },
-  {
-    title: "Employment outlook",
-    publisher: "Jobs and Skills Australia",
-    source: "Employment projections",
-    url: "https://www.jobsandskills.gov.au/data/employment-projections",
-    use:
-      "Supplies the five-year and ten-year employment-growth inputs used in the Career Opportunity Score.",
-  },
-  {
-    title: "Registration requirements",
-    publisher: "Nursing and Midwifery Board of Australia",
-    source: "Registration standards",
-    url: "https://www.nursingmidwiferyboard.gov.au/Registration-Standards.aspx",
-    use:
-      "Defines the professional registration standards that applicants and practising registered nurses must meet.",
-  },
-  {
-    title: "Skilled visa pathways",
-    publisher: "Australian Department of Home Affairs",
-    source: "Skilled occupation list",
-    url: "https://immi.homeaffairs.gov.au/visas/working-in-australia/skill-occupation-list",
-    use:
-      "Checks whether the included nursing occupations appear in current skilled visa pathways. Individual eligibility is not inferred from list inclusion.",
-  },
-] as const
+]
 
 export default function AustraliaMethodologyPage() {
   return (
@@ -194,44 +357,52 @@ export default function AustraliaMethodologyPage() {
         ))}
       </div>
 
-      <section id="registered-nurse" className="mt-12 rounded-3xl border border-blue-100 bg-blue-50/50 p-5 sm:p-7">
-        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-blue-600">Occupation sources</p>
-        <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <h2 className="font-display text-2xl font-semibold tracking-tight text-slate-900">
-              Registered Nurse
-            </h2>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-              Evidence supporting the Australia Registered Nurse occupation dashboard and its Career Opportunity Score.
+      <div className="mt-12 space-y-6">
+        {occupationSourceSections.map((section) => (
+          <section
+            key={section.id}
+            id={section.id}
+            className="scroll-mt-20 rounded-3xl border border-blue-100 bg-blue-50/50 p-5 sm:p-7"
+          >
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-blue-600">Occupation sources</p>
+            <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <h2 className="font-display text-2xl font-semibold tracking-tight text-slate-900">
+                  {section.title}
+                </h2>
+                <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">{section.description}</p>
+              </div>
+              <span className="shrink-0 text-xs font-medium text-slate-500">
+                Snapshot: {section.snapshot}
+              </span>
+            </div>
+
+            <div className="mt-6 grid gap-3 sm:grid-cols-2">
+              {section.sources.map((item) => (
+                <article key={item.url} className="rounded-2xl border border-blue-100 bg-white p-4">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">{item.title}</p>
+                  <p className="mt-2 text-sm font-semibold text-slate-900">{item.publisher}</p>
+                  <a
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:underline"
+                  >
+                    {item.source}
+                    <ExternalLink className="size-3.5" aria-hidden="true" />
+                  </a>
+                  <p className="mt-3 text-xs leading-5 text-slate-600">{item.use}</p>
+                </article>
+              ))}
+            </div>
+
+            <p className="mt-5 text-xs leading-5 text-slate-500">
+              Source links checked 6 August 2026. Numeric values are stored as dated Supabase snapshots so the
+              Occupation and Compare pages can reuse the same record without copying figures into UI code.
             </p>
-          </div>
-          <span className="shrink-0 text-xs font-medium text-slate-500">Snapshot: 1 May 2026</span>
-        </div>
-
-        <div className="mt-6 grid gap-3 sm:grid-cols-2">
-          {registeredNurseSources.map((item) => (
-            <article key={item.url} className="rounded-2xl border border-blue-100 bg-white p-4">
-              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">{item.title}</p>
-              <p className="mt-2 text-sm font-semibold text-slate-900">{item.publisher}</p>
-              <a
-                href={item.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:underline"
-              >
-                {item.source}
-                <ExternalLink className="size-3.5" aria-hidden="true" />
-              </a>
-              <p className="mt-3 text-xs leading-5 text-slate-600">{item.use}</p>
-            </article>
-          ))}
-        </div>
-
-        <p className="mt-5 text-xs leading-5 text-slate-500">
-          Source links checked 6 August 2026. Numeric values are stored as dated Supabase snapshots so the
-          Occupation and Compare pages can reuse the same record without copying figures into UI code.
-        </p>
-      </section>
+          </section>
+        ))}
+      </div>
 
       <p className="mt-8 text-xs leading-5 text-slate-500">
         Last reviewed 6 August 2026. A national range or occupation snapshot describes the stated source
