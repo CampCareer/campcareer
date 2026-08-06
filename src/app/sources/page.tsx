@@ -59,6 +59,12 @@ const countries = [
   { name: "South Korea", href: "/methodology/south-korea", summary: "Salary, student costs, education, workforce, institutions and immigration references.", additions: [] },
   { name: "Japan", href: "/methodology/japan", summary: "Salary, student costs, education, workforce, institutions and immigration references.", additions: [] },
   { name: "New Zealand", href: "/methodology/new-zealand", summary: "Salary, student costs, education, workforce, institutions and immigration references.", additions: [] },
+  { name: "Norway", href: "/methodology/norway", summary: "Salary, student costs, education, workforce, institutions and immigration references.", additions: [] },
+  { name: "Sweden", href: "/methodology/sweden", summary: "Salary, student costs, education, workforce, institutions and immigration references.", additions: [] },
+  { name: "Denmark", href: "/methodology/denmark", summary: "Salary, student costs, education, workforce, institutions and immigration references.", additions: [] },
+  { name: "Finland", href: "/methodology/finland", summary: "Salary, student costs, education, workforce, institutions and immigration references.", additions: [] },
+  { name: "Switzerland", href: "/methodology/switzerland", summary: "Salary, student costs, education, workforce, institutions and immigration references.", additions: [] },
+  { name: "United Arab Emirates", href: "/methodology/united-arab-emirates", summary: "Wage-policy benchmarks, student costs, education, workforce, institutions and immigration references.", additions: [] },
 ] as const
 
 export default function SourcesPage() {
