@@ -229,8 +229,8 @@ export function OccupationExplorer({
           </p>
         </div>
       ) : (
-        <div className="mt-3 grid gap-4 lg:grid-cols-5 lg:items-start">
-          <aside className="min-w-0 lg:sticky lg:top-20 lg:col-span-2 lg:max-h-[calc(100dvh-6.5rem)] lg:overflow-y-auto lg:pr-1 lg:pb-2">
+        <div className="mt-3 grid gap-4 lg:grid-cols-12 lg:items-start">
+          <aside className="min-w-0 lg:sticky lg:top-20 lg:col-span-4 lg:max-h-[calc(100dvh-6.5rem)] lg:overflow-y-auto lg:pr-1 lg:pb-2">
             <div className="space-y-4">
               {grouped.map(([categoryId, careers]) => (
                 <div key={categoryId}>
@@ -305,7 +305,7 @@ export function OccupationExplorer({
             </div>
           </aside>
 
-          <section className="min-w-0 lg:col-span-3">
+          <section className="min-w-0 lg:col-span-8">
             {selected ? (
               <CountryAwareOccupationDetail
                 career={selected}
