@@ -77,6 +77,7 @@ export function VisaDetailPanel({
   detail: VisaDetail | null
   cities?: string[]
 }) {
+  const hasPublishedCosts = Boolean(detail?.costBreakdown.items.length)
   const total = detail
     ? detail.costBreakdown.items.reduce((n, item) => n + item.amount, 0)
     : 0
@@ -218,31 +219,39 @@ export function VisaDetailPanel({
               title="Cost breakdown"
             />
             <div className="px-5 py-4">
-              <ul className="divide-y divide-[#f0efec]">
-                {detail.costBreakdown.items.map((item) => (
-                  <li key={item.item} className="flex items-center justify-between py-2">
-                    <span className="flex items-center gap-2 text-[13px] font-medium text-[#4d4c48]">
-                      {item.item}
-                      {item.optional && (
-                        <span className="rounded-md bg-[#f5f3f0] px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#8a8578]">
-                          Optional
+              {hasPublishedCosts ? (
+                <>
+                  <ul className="divide-y divide-[#f0efec]">
+                    {detail.costBreakdown.items.map((item) => (
+                      <li key={item.item} className="flex items-center justify-between py-2">
+                        <span className="flex items-center gap-2 text-[13px] font-medium text-[#4d4c48]">
+                          {item.item}
+                          {item.optional && (
+                            <span className="rounded-md bg-[#f5f3f0] px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#8a8578]">
+                              Optional
+                            </span>
+                          )}
                         </span>
-                      )}
+                        <span className="text-[13px] font-semibold text-[#1b1b1b]">
+                          {formatMoney(item.amount, detail.costBreakdown.currency)}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="mt-3 flex items-center justify-between rounded-lg bg-[#fafaf8] px-3.5 py-2.5">
+                    <span className="text-[12px] font-semibold uppercase tracking-wide text-[#6f6d68]">
+                      Total listed cost
                     </span>
-                    <span className="text-[13px] font-semibold text-[#1b1b1b]">
-                      {formatMoney(item.amount, detail.costBreakdown.currency)}
+                    <span className="text-[16px] font-bold tracking-[-0.01em] text-[#6d4fc4]">
+                      {formatMoney(total, detail.costBreakdown.currency)}
                     </span>
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-3 flex items-center justify-between rounded-lg bg-[#fafaf8] px-3.5 py-2.5">
-                <span className="text-[12px] font-semibold uppercase tracking-wide text-[#6f6d68]">
-                  Total estimated cost
-                </span>
-                <span className="text-[16px] font-bold tracking-[-0.01em] text-[#6d4fc4]">
-                  {formatMoney(total, detail.costBreakdown.currency)}
-                </span>
-              </div>
+                  </div>
+                </>
+              ) : (
+                <div className="rounded-lg border border-[#eeeae4] bg-[#fafaf8] px-3.5 py-3 text-[12.5px] leading-5 text-[#6f6d68]">
+                  No fixed amount is shown because the official fee depends on the route, applicant or application location.
+                </div>
+              )}
               <p className="mt-2 text-[11.5px] text-[#a3a19b]">{detail.costNote}</p>
             </div>
           </div>

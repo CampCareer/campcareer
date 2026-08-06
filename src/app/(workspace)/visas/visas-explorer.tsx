@@ -9,8 +9,8 @@ import {
   FileBadge2,
   TrendingUp,
 } from "lucide-react"
-import { VISA_CATALOG, VISA_KINDS } from "@/lib/workspace/visa-catalog"
-import { getVisaDetail } from "@/lib/workspace/visa-detail"
+import { VISA_KINDS, type VisaEntry } from "@/lib/workspace/visa-catalog"
+import { getVisaDetail } from "@/lib/workspace/visa-detail-resolver"
 import { getCountryExplorer } from "@/lib/workspace/country-explorer"
 import { CategorySearch } from "@/components/workspace/category-search"
 import { CountryPill } from "@/components/workspace/country-pill"
@@ -30,9 +30,11 @@ const KIND_BADGE: Record<string, string> = {
 export function VisasExplorer({
   initialQuery,
   initialCountry,
+  catalog,
 }: {
   initialQuery: string
   initialCountry: string
+  catalog: readonly VisaEntry[]
 }) {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -44,13 +46,13 @@ export function VisasExplorer({
 
   const countries = useMemo(() => {
     const byCode = new Map<string, string>()
-    for (const visa of VISA_CATALOG) {
+    for (const visa of catalog) {
       if (!byCode.has(visa.countryCode)) byCode.set(visa.countryCode, visa.country)
     }
     return [...byCode.entries()]
       .map(([code, name]) => ({ code, name }))
       .sort((a, b) => a.name.localeCompare(b.name))
-  }, [])
+  }, [catalog])
 
   useEffect(() => {
     const validUrlCountry = countries.some((item) => item.code === initialCountry)
@@ -79,7 +81,7 @@ export function VisasExplorer({
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase()
-    return VISA_CATALOG.filter((visa) => {
+    return catalog.filter((visa) => {
       if (kind !== "all" && visa.kind !== kind) return false
       if (country !== "all" && visa.countryCode !== country) return false
       if (!q) return true
@@ -90,7 +92,7 @@ export function VisasExplorer({
         visa.kind.toLowerCase().includes(q)
       )
     })
-  }, [query, kind, country])
+  }, [catalog, query, kind, country])
 
   const activeVisa = useMemo(() => {
     if (selectedKey) {
