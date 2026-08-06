@@ -2,6 +2,7 @@ import "server-only"
 
 import { createClient } from "@/lib/supabase-server"
 import { VISA_CATALOG, type VisaEntry } from "./visa-catalog"
+import { applyBatch1VisaCatalog } from "./visa-catalog-batch-1"
 
 const VISA_KINDS = new Set<VisaEntry["kind"]>([
   "Study",
@@ -43,6 +44,8 @@ function rowToVisaEntry(row: VisaPathwayRow): VisaEntry | null {
 }
 
 export async function loadVisaCatalog(): Promise<readonly VisaEntry[]> {
+  const staticCatalog = applyBatch1VisaCatalog(VISA_CATALOG)
+
   try {
     const supabase = await createClient()
     const { data, error } = await supabase
@@ -53,10 +56,10 @@ export async function loadVisaCatalog(): Promise<readonly VisaEntry[]> {
       .order("country_name", { ascending: true })
       .order("display_order", { ascending: true })
 
-    if (error || !data?.length) return VISA_CATALOG
+    if (error || !data?.length) return staticCatalog
 
     const merged = new Map(
-      VISA_CATALOG.map((visa) => [`${visa.countryCode}:${visa.name}`, visa] as const),
+      staticCatalog.map((visa) => [`${visa.countryCode}:${visa.name}`, visa] as const),
     )
 
     for (const row of data as VisaPathwayRow[]) {
@@ -64,8 +67,8 @@ export async function loadVisaCatalog(): Promise<readonly VisaEntry[]> {
       if (visa) merged.set(`${visa.countryCode}:${visa.name}`, visa)
     }
 
-    return [...merged.values()]
+    return applyBatch1VisaCatalog([...merged.values()])
   } catch {
-    return VISA_CATALOG
+    return staticCatalog
   }
 }
