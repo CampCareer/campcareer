@@ -92,6 +92,32 @@ export const OCCUPATION_EDITORIAL: readonly OccupationEditorial[] = [
       },
     },
   },
+  {
+    id: "plumber",
+    overview:
+      "Plumbers install, maintain and repair pipework, fixtures, drainage, gas, roofing and mechanical-service systems used for water supply, sewerage, heating, cooling and fire protection.",
+    tasks: [
+      "Read plans and specifications to determine plumbing layouts, materials and connection points",
+      "Set out, cut, join and install pipes, fittings, fixtures and water-supply systems",
+      "Install and repair sanitary plumbing, drainage, sewerage and stormwater systems",
+      "Test pipework and equipment for pressure, leaks, blockages and safe operation",
+      "Install or maintain gas, roof, fire-protection and mechanical-service systems within the authorised licence class",
+      "Diagnose faults, clear obstructions and repair plumbing systems in buildings and infrastructure",
+    ],
+    countries: {
+      AU: {
+        headline: "A licensed apprenticeship trade with broad building, maintenance and utility demand",
+        entryPathway:
+          "The standard route is a paid plumbing apprenticeship combined with the CPC32420 Certificate III in Plumbing. A training contract links supervised employment with an approved registered training organisation, followed by the licence or registration steps required in the relevant jurisdiction.",
+        registration:
+          "Plumbing work is regulated by states and territories. Workers must hold the licence or registration class required for their jurisdiction and work type, including specialist gas, drainage, roofing, fire-protection or mechanical-services work. A White Card is also required for construction-site work.",
+        jobMarketNote:
+          "Residential and commercial contractors, facilities-service providers, water utilities and infrastructure organisations recruit plumbers. Apprenticeships provide a structured entry route, while licensed workers are used for installation, maintenance and emergency response.",
+        scoreCaveat:
+          "The score is provisional and not yet directly comparable with fully populated occupations because the national and all-state IVI vacancy series is awaiting verified workbook ingestion; the vacancy-intensity and vacancy-trend components currently contribute zero.",
+      },
+    },
+  },
 ] as const
 
 const BY_ID = new Map(OCCUPATION_EDITORIAL.map((item) => [item.id, item]))

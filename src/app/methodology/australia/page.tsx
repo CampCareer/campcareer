@@ -10,7 +10,19 @@ export const metadata = pageMetadata({
   path: "/methodology/australia",
 })
 
-const sources = [
+type CountrySource = {
+  title: string
+  publisher: string
+  source: string
+  url: string
+  secondaryUrl?: string
+  secondaryLabel?: string
+  method: string
+  coverage: string
+  dataDate: string
+}
+
+const sources: readonly CountrySource[] = [
   {
     title: "Salary range",
     publisher: "Australian Bureau of Statistics",
@@ -58,6 +70,7 @@ const sources = [
     source: "Australian university and member lists",
     url: "https://www.studyaustralia.gov.au/en/plan-your-studies/list-of-australian-universities",
     secondaryUrl: "https://go8.edu.au/about/the-go8",
+    secondaryLabel: "Group of Eight members",
     method:
       "The country page shows a concise representative set of major universities and public TAFE or VET providers. It is not a ranking and is not intended to be a complete provider directory.",
     coverage: "Representative national list used for country exploration.",
@@ -73,7 +86,7 @@ const sources = [
     coverage: "Planning and discovery only. Not immigration or legal advice.",
     dataDate: "Checked August 2026",
   },
-] as const
+]
 
 type OccupationSource = {
   title: string
@@ -91,6 +104,41 @@ type OccupationSourceSection = {
   sources: readonly OccupationSource[]
 }
 
+const sharedLabourSources = {
+  vacancies: {
+    title: "Vacancies and state demand",
+    publisher: "Jobs and Skills Australia",
+    source: "Internet Vacancy Index",
+    url: "https://www.jobsandskills.gov.au/data/internet-vacancy-index",
+    use:
+      "Supplies the dated national and state or territory online-vacancy series. Values remain unavailable in CampCareer when the underlying workbook row has not been directly verified.",
+  },
+  projections: {
+    title: "Employment outlook",
+    publisher: "Jobs and Skills Australia",
+    source: "Employment projections",
+    url: "https://www.jobsandskills.gov.au/data/employment-projections",
+    use:
+      "Supplies the five-year and ten-year employment-growth inputs used in the Career Opportunity Score.",
+  },
+  shortage: {
+    title: "Shortage status",
+    publisher: "Jobs and Skills Australia",
+    source: "Occupation Shortage List",
+    url: "https://www.jobsandskills.gov.au/data/occupation-shortage",
+    use:
+      "Provides the official national and jurisdiction-level shortage evidence used in the shortage component of the score.",
+  },
+  visa: {
+    title: "Skilled visa pathways",
+    publisher: "Australian Department of Home Affairs",
+    source: "Skilled occupation list",
+    url: "https://immi.homeaffairs.gov.au/visas/working-in-australia/skill-occupation-list",
+    use:
+      "Checks current skilled-work pathway coverage. Occupation-list inclusion does not determine an individual's eligibility.",
+  },
+} satisfies Record<string, OccupationSource>
+
 const occupationSourceSections: readonly OccupationSourceSection[] = [
   {
     id: "registered-nurse",
@@ -105,7 +153,7 @@ const occupationSourceSections: readonly OccupationSourceSection[] = [
         source: "OSCA 2654 Registered Nurses",
         url: "https://www.abs.gov.au/statistics/classifications/osca-occupation-standard-classification-australia/2024-version-1-0/browse-classification/2/26/265/2654",
         use:
-          "Defines the Australian occupation group and the included registered nurse specialisations used in the CampCareer rollup.",
+          "Defines the Australian occupation group and the registered nurse specialisations included in the CampCareer rollup.",
       },
       {
         title: "Employment and earnings",
@@ -113,24 +161,10 @@ const occupationSourceSections: readonly OccupationSourceSection[] = [
         source: "Registered Nurses occupation profile",
         url: "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupations/2544-registered-nurses",
         use:
-          "Supplies the employment total, weekly and hourly earnings, part-time share, female share, median age and working-hours snapshot. The page remains on the legacy ANZSCO basis while JSA transitions to OSCA.",
+          "Supplies the employment, earnings, demographic and working-hours snapshot on the published legacy ANZSCO series.",
       },
-      {
-        title: "Vacancies and state demand",
-        publisher: "Jobs and Skills Australia",
-        source: "Internet Vacancy Index",
-        url: "https://www.jobsandskills.gov.au/data/internet-vacancy-index",
-        use:
-          "Supplies the dated national and state or territory online-vacancy series used for vacancy intensity and trend calculations.",
-      },
-      {
-        title: "Employment outlook",
-        publisher: "Jobs and Skills Australia",
-        source: "Employment projections",
-        url: "https://www.jobsandskills.gov.au/data/employment-projections",
-        use:
-          "Supplies the five-year and ten-year employment-growth inputs used in the Career Opportunity Score.",
-      },
+      sharedLabourSources.vacancies,
+      sharedLabourSources.projections,
       {
         title: "Registration requirements",
         publisher: "Nursing and Midwifery Board of Australia",
@@ -139,14 +173,7 @@ const occupationSourceSections: readonly OccupationSourceSection[] = [
         use:
           "Defines the professional registration standards that applicants and practising registered nurses must meet.",
       },
-      {
-        title: "Skilled visa pathways",
-        publisher: "Australian Department of Home Affairs",
-        source: "Skilled occupation list",
-        url: "https://immi.homeaffairs.gov.au/visas/working-in-australia/skill-occupation-list",
-        use:
-          "Checks whether the included nursing occupations appear in current skilled visa pathways. Individual eligibility is not inferred from list inclusion.",
-      },
+      sharedLabourSources.visa,
     ],
   },
   {
@@ -170,29 +197,15 @@ const occupationSourceSections: readonly OccupationSourceSection[] = [
         source: "Electricians occupation profile",
         url: "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupations/3411-electricians",
         use:
-          "Supplies the employment, earnings, demographic and working-hours snapshot on the legacy ANZSCO series.",
+          "Supplies the employment, earnings, demographic and working-hours snapshot on the published legacy ANZSCO series.",
       },
-      {
-        title: "Vacancies and state demand",
-        publisher: "Jobs and Skills Australia",
-        source: "Internet Vacancy Index",
-        url: "https://www.jobsandskills.gov.au/data/internet-vacancy-index",
-        use:
-          "Supplies the national and state or territory vacancy series used for vacancy intensity and trend calculations.",
-      },
-      {
-        title: "Employment outlook",
-        publisher: "Jobs and Skills Australia",
-        source: "Employment projections",
-        url: "https://www.jobsandskills.gov.au/data/employment-projections",
-        use:
-          "Supplies the five-year and ten-year employment-growth inputs used in the Career Opportunity Score.",
-      },
+      sharedLabourSources.vacancies,
+      sharedLabourSources.projections,
       {
         title: "Training pathway",
         publisher: "Australian Government National Training Register",
         source: "UEE30820 Certificate III in Electrotechnology Electrician",
-        url: "https://training.gov.au/training/details/UEE30820",
+        url: "https://training.gov.au/Training/Details/UEE30820",
         use:
           "Defines the principal trade qualification connected to the paid electrical apprenticeship pathway.",
       },
@@ -204,14 +217,7 @@ const occupationSourceSections: readonly OccupationSourceSection[] = [
         use:
           "Explains that electrical licensing is administered by state and territory regulators and must be checked for the relevant jurisdiction.",
       },
-      {
-        title: "Skilled visa pathways",
-        publisher: "Australian Department of Home Affairs",
-        source: "Skilled occupation list",
-        url: "https://immi.homeaffairs.gov.au/visas/working-in-australia/skill-occupation-list",
-        use:
-          "Checks current skilled-work pathway coverage. Occupation-list inclusion does not determine an individual's eligibility.",
-      },
+      sharedLabourSources.visa,
     ],
   },
   {
@@ -235,32 +241,11 @@ const occupationSourceSections: readonly OccupationSourceSection[] = [
         source: "Carpenters and Joiners occupation profile",
         url: "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupations/3312-carpenters-and-joiners",
         use:
-          "Supplies employment, weekly and hourly earnings, part-time share, female share, median age and working-hours data on the legacy ANZSCO series.",
+          "Supplies employment, earnings, demographic and working-hours data on the published legacy ANZSCO series.",
       },
-      {
-        title: "Vacancies and state demand",
-        publisher: "Jobs and Skills Australia",
-        source: "Internet Vacancy Index",
-        url: "https://www.jobsandskills.gov.au/data/internet-vacancy-index",
-        use:
-          "Supplies the dated national and state or territory vacancy series used for vacancy intensity and trend calculations.",
-      },
-      {
-        title: "Employment outlook",
-        publisher: "Jobs and Skills Australia",
-        source: "Employment projections",
-        url: "https://www.jobsandskills.gov.au/data/employment-projections",
-        use:
-          "Supplies the five-year and ten-year employment-growth inputs used in the Career Opportunity Score.",
-      },
-      {
-        title: "Shortage status",
-        publisher: "Jobs and Skills Australia",
-        source: "Occupation Shortage List",
-        url: "https://www.jobsandskills.gov.au/data/occupation-shortage",
-        use:
-          "Provides the national and state or territory shortage evidence used in the shortage component of the score.",
-      },
+      sharedLabourSources.vacancies,
+      sharedLabourSources.projections,
+      sharedLabourSources.shortage,
       {
         title: "Training pathway",
         publisher: "Australian Government National Training Register",
@@ -277,14 +262,52 @@ const occupationSourceSections: readonly OccupationSourceSection[] = [
         use:
           "Explains the general construction induction training and White Card requirement for construction-site work.",
       },
+      sharedLabourSources.visa,
+    ],
+  },
+  {
+    id: "plumber",
+    title: "Plumber",
+    description:
+      "Evidence supporting the Australia Plumber occupation dashboard, apprenticeship and licensing pathway, and provisional Career Opportunity Score.",
+    snapshot: "1 May 2026",
+    sources: [
       {
-        title: "Skilled visa pathways",
-        publisher: "Australian Department of Home Affairs",
-        source: "Skilled occupation list",
-        url: "https://immi.homeaffairs.gov.au/visas/working-in-australia/skill-occupation-list",
+        title: "Official occupation scope",
+        publisher: "Australian Bureau of Statistics",
+        source: "OSCA Minor Group 363 Plumbers",
+        url: "https://www.abs.gov.au/statistics/classifications/osca-occupation-standard-classification-australia/2024-version-1-0/browse-classification/3/36/363",
         use:
-          "Checks current skilled-work pathway coverage. Occupation-list inclusion does not determine an individual's eligibility.",
+          "Defines the six plumbing occupations included in the CampCareer rollup and their current OSCA codes.",
       },
+      {
+        title: "Employment and earnings",
+        publisher: "Jobs and Skills Australia",
+        source: "Plumbers occupation profile",
+        url: "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupations/3341-plumbers",
+        use:
+          "Supplies employment, weekly and hourly earnings, part-time share, female share, median age and working-hours data on the published legacy ANZSCO series.",
+      },
+      sharedLabourSources.vacancies,
+      sharedLabourSources.projections,
+      sharedLabourSources.shortage,
+      {
+        title: "Training pathway",
+        publisher: "Australian Government National Training Register",
+        source: "CPC32420 Certificate III in Plumbing",
+        url: "https://training.gov.au/Training/Details/CPC32420",
+        use:
+          "Defines the principal trade qualification connected to the Australian plumbing apprenticeship pathway.",
+      },
+      {
+        title: "Plumbing licensing",
+        publisher: "Australian Building Codes Board",
+        source: "State and territory building and plumbing administrations",
+        url: "https://www.abcb.gov.au/support/state-and-territory-building-and-plumbing-administrations",
+        use:
+          "Identifies the jurisdictional administrations responsible for plumbing registration, licensing and technical requirements.",
+      },
+      sharedLabourSources.visa,
     ],
   },
 ]
@@ -331,14 +354,14 @@ export default function AustraliaMethodologyPage() {
               {item.source}
               <ExternalLink className="size-3.5" aria-hidden="true" />
             </a>
-            {"secondaryUrl" in item && item.secondaryUrl ? (
+            {item.secondaryUrl ? (
               <a
                 href={item.secondaryUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="ml-4 inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:underline"
               >
-                Group of Eight members
+                {item.secondaryLabel}
                 <ExternalLink className="size-3.5" aria-hidden="true" />
               </a>
             ) : null}
@@ -379,7 +402,7 @@ export default function AustraliaMethodologyPage() {
 
             <div className="mt-6 grid gap-3 sm:grid-cols-2">
               {section.sources.map((item) => (
-                <article key={item.url} className="rounded-2xl border border-blue-100 bg-white p-4">
+                <article key={`${section.id}-${item.url}`} className="rounded-2xl border border-blue-100 bg-white p-4">
                   <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">{item.title}</p>
                   <p className="mt-2 text-sm font-semibold text-slate-900">{item.publisher}</p>
                   <a
@@ -397,7 +420,7 @@ export default function AustraliaMethodologyPage() {
             </div>
 
             <p className="mt-5 text-xs leading-5 text-slate-500">
-              Source links checked 6 August 2026. Numeric values are stored as dated Supabase snapshots so the
+              Source links checked 7 August 2026. Numeric values are stored as dated Supabase snapshots so the
               Occupation and Compare pages can reuse the same record without copying figures into UI code.
             </p>
           </section>
@@ -405,7 +428,7 @@ export default function AustraliaMethodologyPage() {
       </div>
 
       <p className="mt-8 text-xs leading-5 text-slate-500">
-        Last reviewed 6 August 2026. A national range or occupation snapshot describes the stated source
+        Last reviewed 7 August 2026. A national range or occupation snapshot describes the stated source
         population; it does not predict an individual&apos;s salary, expenses, registration or visa outcome.
       </p>
     </main>
