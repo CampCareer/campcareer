@@ -2,11 +2,12 @@ import { readFile } from "node:fs/promises"
 import path from "node:path"
 import { Client } from "pg"
 
-const CKAN_BASE = "https://data.gov.au/data/api/action/datastore_search"
+const CKAN_SEARCH = "https://data.gov.au/data/api/action/datastore_search"
+const CKAN_PACKAGE = "https://data.gov.au/data/api/action/package_show"
+const PACKAGE_ID = "e5ae7059-bfa8-4fa4-a5c0-c13cf3520193"
 const DATASET_URL = "https://data.gov.au/data/dataset/commonwealth-register-of-institutions-and-courses-for-overseas-students-cricos"
 const LOCATIONS_RESOURCE = "45d29535-1360-4486-8242-3850e61b5524"
 const COURSE_LOCATIONS_RESOURCE = "4cd2de02-8ba3-4eb2-bac2-fe272cae3f5f"
-const SOURCE_LAST_MODIFIED = "2026-08-04T08:04:04.780467+00:00"
 const PAGE_SIZE = 5000
 
 type CkanRecord = Record<string, unknown>
@@ -15,6 +16,13 @@ type CkanResponse = {
   result: {
     total: number
     records: CkanRecord[]
+  }
+}
+
+type PackageResponse = {
+  success: boolean
+  result: {
+    resources: Array<{ id: string; last_modified?: string | null }>
   }
 }
 
@@ -29,13 +37,26 @@ function integer(value: unknown) {
   return Number.isFinite(result) ? result : null
 }
 
+async function resourceLastModified(resourceId: string) {
+  const url = new URL(CKAN_PACKAGE)
+  url.searchParams.set("id", PACKAGE_ID)
+  const response = await fetch(url, { headers: { Accept: "application/json" } })
+  if (!response.ok) throw new Error(`CRICOS package metadata request failed (${response.status})`)
+  const payload = (await response.json()) as PackageResponse
+  const resource = payload.result.resources.find((item) => item.id === resourceId)
+  if (!payload.success || !resource?.last_modified) {
+    throw new Error(`CRICOS resource metadata unavailable for ${resourceId}`)
+  }
+  return resource.last_modified
+}
+
 async function fetchResource(resourceId: string) {
   const records: CkanRecord[] = []
   let offset = 0
   let total = Number.POSITIVE_INFINITY
 
   while (offset < total) {
-    const url = new URL(CKAN_BASE)
+    const url = new URL(CKAN_SEARCH)
     url.searchParams.set("resource_id", resourceId)
     url.searchParams.set("limit", String(PAGE_SIZE))
     url.searchParams.set("offset", String(offset))
@@ -83,6 +104,18 @@ async function insertRows(
 }
 
 async function refreshDerivedData(client: Client) {
+  // Anything missing from the new official snapshot becomes inactive/stale first;
+  // the historical materialisation SQL below reactivates/re-verifies current rows.
+  await client.query(`
+    update catalog.campuses
+    set status='inactive', updated_at=now()
+    where metadata->>'source_system'='AU_CRICOS_LOCATIONS';
+
+    update catalog.programme_offerings
+    set verification_status='stale', updated_at=now()
+    where source_system='AU_CRICOS_COURSE_LOCATION';
+  `)
+
   const root = process.cwd()
   const files = [
     "supabase/migrations/20260807125832_materialize_au_cricos_campuses_v1.sql",
@@ -94,6 +127,32 @@ async function refreshDerivedData(client: Client) {
     const sql = await readFile(path.join(root, file), "utf8")
     await client.query(sql)
   }
+
+  // The historical publication migration pre-dates stale-location handling.
+  // Remove any inactive campus that it may have copied to the Sydney snapshot,
+  // then recompute the published counts from active official locations only.
+  await client.query(`
+    delete from public.city_institution_directory_au_v1 d
+    using catalog.campuses c
+    where d.campus_id=c.id and c.status<>'active';
+
+    update public.city_directory_au_v1 d
+    set linked_campus_count=x.campus_count,
+        linked_institution_count=x.institution_count,
+        updated_at=now()
+    from (
+      select c.geography_id as city_id,
+             count(*)::int as campus_count,
+             count(distinct c.institution_id)::int as institution_count
+      from catalog.campuses c
+      where c.country_code='AU'
+        and c.status='active'
+        and c.metadata->>'source_system'='AU_CRICOS_LOCATIONS'
+        and c.geography_id is not null
+      group by c.geography_id
+    ) x
+    where d.city_id=x.city_id;
+  `)
 }
 
 async function main() {
@@ -103,9 +162,11 @@ async function main() {
   }
 
   console.log("Fetching official CRICOS Locations and Course Locations…")
-  const [locations, courseLocations] = await Promise.all([
+  const [locations, courseLocations, locationsModified, courseLocationsModified] = await Promise.all([
     fetchResource(LOCATIONS_RESOURCE),
     fetchResource(COURSE_LOCATIONS_RESOURCE),
+    resourceLastModified(LOCATIONS_RESOURCE),
+    resourceLastModified(COURSE_LOCATIONS_RESOURCE),
   ])
 
   const client = new Client({ connectionString, ssl: { rejectUnauthorized: false } })
@@ -123,7 +184,7 @@ async function main() {
       return [[
         integer(row._id), providerCode, institutionName, locationName, text(row["Location Type"]),
         text(row["Address Line 1"]), text(row["Address Line 2"]), text(row["Address Line 3"]), text(row["Address Line 4"]),
-        text(row.City), text(row.State), text(row.Postcode), LOCATIONS_RESOURCE, SOURCE_LAST_MODIFIED,
+        text(row.City), text(row.State), text(row.Postcode), LOCATIONS_RESOURCE, locationsModified,
       ]]
     })
 
@@ -146,7 +207,7 @@ async function main() {
       const key = [providerCode, courseCode, locationName, locationCity ?? "", locationState ?? ""].join("|")
       if (seen.has(key)) return []
       seen.add(key)
-      return [[integer(row._id), providerCode, institutionName, courseCode, locationName, locationCity, locationState, COURSE_LOCATIONS_RESOURCE, SOURCE_LAST_MODIFIED]]
+      return [[integer(row._id), providerCode, institutionName, courseCode, locationName, locationCity, locationState, COURSE_LOCATIONS_RESOURCE, courseLocationsModified]]
     })
 
     await insertRows(
@@ -165,7 +226,12 @@ async function main() {
         (select count(*) from ingest.cricos_course_locations_au) as course_locations,
         (select count(*) from ingest.courses_au where cricos_status='active' and verified_city_slugs @> array['sydney']::text[]) as sydney_programs
     `)
-    console.log("CRICOS location sync complete", { ...result.rows[0], source: DATASET_URL })
+    console.log("CRICOS location sync complete", {
+      ...result.rows[0],
+      source: DATASET_URL,
+      locationsModified,
+      courseLocationsModified,
+    })
   } catch (error) {
     await client.query("rollback")
     throw error
