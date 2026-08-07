@@ -8,6 +8,7 @@ import {
   MapPin,
 } from "lucide-react"
 import { getLaunchCountry } from "@/data/launch-countries"
+import { auCityPath } from "@/lib/cities/city-routes"
 import {
   institutionCountryPath,
 } from "@/lib/institutions/institution-search"
@@ -103,9 +104,11 @@ function BreakdownList({
 function CampusList({
   campuses,
   total,
+  countryCode,
 }: {
   campuses: InstitutionCampusLocation[]
   total: number
+  countryCode: InstitutionDetail["countryCode"]
 }) {
   if (campuses.length === 0) {
     return (
@@ -121,6 +124,8 @@ function CampusList({
         {campuses.map((campus) => {
           const officialUrl = safeWebsiteUrl(campus.officialUrl)
           const address = campusAddress(campus)
+          const cityHref = countryCode === "AU" ? auCityPath(campus.citySlug) : null
+          const location = campusLocationLabel(campus)
 
           return (
             <article key={campus.id} className="rounded-xl border border-[#e7e6e3] bg-white p-4">
@@ -132,9 +137,17 @@ function CampusList({
                   <h3 className="text-[13px] font-semibold leading-5 text-[#1b1b1b]">
                     {campus.name ?? "Campus"}
                   </h3>
-                  <p className="mt-1 text-[11.5px] leading-5 text-[#6f6d68]">
-                    {campusLocationLabel(campus)}
-                  </p>
+                  {cityHref ? (
+                    <Link
+                      href={cityHref}
+                      className="mt-1 inline-flex items-center gap-1 text-[11.5px] font-semibold leading-5 text-[#2563eb] hover:underline"
+                    >
+                      {location}
+                      <ArrowUpRight className="size-3" />
+                    </Link>
+                  ) : (
+                    <p className="mt-1 text-[11.5px] leading-5 text-[#6f6d68]">{location}</p>
+                  )}
                   {address ? (
                     <p className="mt-1 text-[10.5px] leading-4 text-[#9a9790]">{address}</p>
                   ) : null}
@@ -356,10 +369,14 @@ export function InstitutionDetailView({
               <h2 className="text-[16px] font-semibold text-[#1b1b1b]">Campuses</h2>
             </div>
             <p className="mt-1.5 text-[11.5px] leading-5 text-[#77746e]">
-              Current campus records from the canonical institution catalogue. City names use normalized geography where available.
+              Current campus records from the canonical institution catalogue. Published Australian city names link to their CampCareer city profiles.
             </p>
             <div className="mt-4">
-              <CampusList campuses={institution.campuses} total={institution.campusCount} />
+              <CampusList
+                campuses={institution.campuses}
+                total={institution.campusCount}
+                countryCode={institution.countryCode}
+              />
             </div>
           </section>
 
