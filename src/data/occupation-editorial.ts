@@ -93,6 +93,32 @@ export const OCCUPATION_EDITORIAL: readonly OccupationEditorial[] = [
     },
   },
   {
+    id: "physiotherapist",
+    overview:
+      "Physiotherapists assess, diagnose, treat and prevent disorders of movement and physical function caused by injury, illness or disability. They use exercise, movement retraining, education and other evidence-based physical therapies to reduce pain, restore function and support long-term participation.",
+    tasks: [
+      "Assess movement, strength, joint, nerve and functional ability to identify physical problems and treatment priorities",
+      "Design and deliver individual treatment and rehabilitation programs based on clinical findings and patient goals",
+      "Use exercise, manual therapy, movement retraining and other physiotherapy techniques to reduce pain and improve function",
+      "Monitor progress, reassess outcomes and modify treatment plans as a patient's condition changes",
+      "Educate patients, families and carers about home exercises, self-management, prevention and safe activity",
+      "Collaborate with medical, nursing and allied health professionals and maintain accurate clinical records",
+    ],
+    countries: {
+      AU: {
+        headline: "A regulated allied-health profession in national shortage with very strong projected employment growth",
+        entryPathway:
+          "The standard Australian route is an approved entry-to-practice physiotherapy qualification followed by registration with the Physiotherapy Board of Australia through Ahpra. Entry routes include four-year Bachelor or Bachelor (Honours) programs and graduate-entry Master or Doctor of Physiotherapy programs for applicants who meet the relevant prior-study prerequisites. The Australian Physiotherapy Council is the national accreditation authority for entry-level physiotherapy programs, while the Physiotherapy Board decides whether accredited programs are approved for registration purposes.",
+        registration:
+          "Registration with the Physiotherapy Board of Australia through Ahpra is mandatory before practising as a physiotherapist. Applicants must complete an approved qualification or otherwise satisfy the Board's eligibility pathway and meet the applicable registration standards, including English-language, identity, criminal-history and other professional requirements.",
+        jobMarketNote:
+          "Physiotherapists work across public and private hospitals, community health, rehabilitation, aged care, disability services, sports, private practice and regional health services. The 2025 Occupation Shortage List records Physiotherapist in shortage nationally and in every state and territory, while JSA projects particularly strong employment growth over both five and ten years.",
+        scoreCaveat:
+          "The opportunity score is provisional until posting-level unique-employer counts and the share of vacancies suitable for new graduates are ingested. Current employment, earnings, vacancy and projection data are published on legacy ANZSCO 2525 Physiotherapists, while CampCareer maps the career itself exactly to OSCA 262431 Physiotherapist and labels that scope difference explicitly.",
+      },
+    },
+  },
+  {
     id: "carpenter",
     overview:
       "Carpenters set out, construct, install, renovate and repair timber and lightweight structural systems, fixtures and finishes across residential, commercial and infrastructure projects.",
