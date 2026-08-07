@@ -152,7 +152,7 @@ left join lateral (
             'programmeType', preview.programme_type,
             'fieldName', preview.field_name
           )
-          order by preview.has_legacy_route desc, preview.canonical_title, preview.id
+          order by preview.has_public_route desc, preview.canonical_title, preview.id
         ),
         '[]'::jsonb
       )
@@ -162,17 +162,20 @@ left join lateral (
           p4.canonical_title,
           p4.programme_type,
           p4.field_name,
-          api.legacy_program_id,
-          (api.legacy_program_id is not null) as has_legacy_route
+          active_course.id as legacy_program_id,
+          (active_course.id is not null) as has_public_route
         from catalog.programmes p4
         left join public.au_program_identity_v1 api
           on api.programme_id = p4.id
          and api.institution_id = i.id
+        left join ingest.courses_au active_course
+          on active_course.id = api.legacy_program_id
+         and active_course.cricos_status = 'active'
         where p4.institution_id = i.id
           and p4.status = 'active'
           and nullif(btrim(p4.canonical_title), '') is not null
         order by
-          (api.legacy_program_id is not null) desc,
+          (active_course.id is not null) desc,
           p4.canonical_title,
           p4.id
         limit 12
@@ -196,14 +199,13 @@ where i.status <> 'inactive'
   and i.country_code in ('AU', 'CA');
 
 comment on view public.institution_detail_v1 is
-  'Service-role institution detail read model with canonical campus/program summaries and AU legacy program route identities.';
+  'Service-role institution detail read model with canonical campus/program summaries and active AU public program route identities.';
 
 revoke all on public.institution_detail_v1 from public, anon, authenticated;
 grant select on public.institution_detail_v1 to service_role;
 
--- The existing Australian public program surface has 11,670 legacy routes.
--- Fail closed if any of those active records lose their canonical institution
--- or program identity before this integration is installed.
+-- Fail closed if any currently public Australian Program route loses its
+-- canonical institution or programme identity before this integration lands.
 do $$
 declare
   unresolved_active_program_count integer;
