@@ -453,6 +453,61 @@ const occupationSourceSections: readonly OccupationSourceSection[] = [
       sharedLabourSources.visa,
     ],
   },
+  {
+    id: "hvac-technician",
+    title: "HVAC Technician",
+    description:
+      "Evidence supporting the Australia HVAC Technician dashboard, regulated refrigerant-handling pathway and provisional Career Opportunity Score. The current official occupation is OSCA 382131 Air Conditioning and Refrigeration Technician, mapped directly to legacy ANZSCO 342111. Current IVI values remain unavailable until the official ANZSCO4 workbook row is directly ingested; projection values retain indexed extraction provenance in the dated snapshot.",
+    snapshot: "1 May 2026",
+    sources: [
+      {
+        title: "Official occupation scope",
+        publisher: "Australian Bureau of Statistics",
+        source: "OSCA 382131 Air Conditioning and Refrigeration Technician",
+        url: "https://www.abs.gov.au/statistics/classifications/osca-occupation-standard-classification-australia/2024-version-1-0/browse-classification/3/38/382/3821/382131",
+        use: "Defines the current occupation, its installation, maintenance and refrigerant-handling tasks, and states that registration or licensing is required. Mechanical Services Plumber is explicitly excluded.",
+      },
+      {
+        title: "Employment and earnings",
+        publisher: "Jobs and Skills Australia",
+        source: "Airconditioning and Refrigeration Mechanics occupation profile",
+        url: "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupations/3421-airconditioning-and-refrigeration-mechanics",
+        use: "Supplies the February 2026 employment total and the published earnings, hours, part-time, gender and age indicators on the legacy ANZSCO 3421 series.",
+      },
+      sharedLabourSources.vacancies,
+      sharedLabourSources.projections,
+      sharedLabourSources.shortage,
+      {
+        title: "Training pathway",
+        publisher: "Australian Government National Training Register",
+        source: "UEE32225 Certificate III in Air Conditioning and Refrigeration",
+        url: "https://training.gov.au/Training/Details/UEE32225",
+        use: "Defines the current Certificate III replacing UEE32220. The qualification covers installation, commissioning, fault finding, service and refrigerant handling and may require an apprenticeship training contract or relevant employment for workplace competency development.",
+      },
+      {
+        title: "Refrigerant handling licence",
+        publisher: "Department of Climate Change, Energy, the Environment and Water",
+        source: "Refrigeration and air conditioning technicians",
+        url: "https://www.dcceew.gov.au/environment/protection/ozone/rac/technicians",
+        use: "States that a Refrigerant Handling Licence is required for work with regulated refrigerants that could cause leakage, including installation, commissioning, service, maintenance and decommissioning, and identifies ARC as the licensing administrator.",
+      },
+      {
+        title: "Construction induction",
+        publisher: "Safe Work Australia",
+        source: "Working on a construction site",
+        url: "https://www.safeworkaustralia.gov.au/safety-topic/industry-and-business/construction/working-construction-site",
+        use: "Supports the White Card requirement when air-conditioning and refrigeration work is performed as construction work on a construction site.",
+      },
+      {
+        title: "Skills assessment",
+        publisher: "Trades Recognition Australia",
+        source: "OSAP nominated occupations, countries and SARs",
+        url: "https://www.tradesrecognitionaustralia.gov.au/osap-nominated-occupations-countries-and-sars",
+        use: "Confirms Airconditioning and Refrigeration Mechanic 342111 is an OSAP occupation and separates migration skills assessment from domestic refrigerant and jurisdictional licensing requirements.",
+      },
+      sharedLabourSources.visa,
+    ],
+  },
 ]
 
 export default function AustraliaMethodologyPage() {
