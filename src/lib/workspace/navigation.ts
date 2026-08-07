@@ -6,6 +6,7 @@ import {
   FileBadge2,
   BriefcaseBusiness,
   GraduationCap,
+  Building2,
   type LucideIcon,
 } from "lucide-react"
 
@@ -30,6 +31,7 @@ export const WORKSPACE_NAV_ITEMS: NavItem[] = [
   { id: "visas", label: "Visas", href: "/visas", icon: FileBadge2, blurb: "Understand the visa that fits your plan.", accent: "#6d4fc4", tint: "#f3f0fa" },
   { id: "occupation", label: "Occupation", href: "/occupation", icon: BriefcaseBusiness, blurb: "Search in-demand careers by field and country.", accent: "#c2691e", tint: "#fbf0e7" },
   { id: "programs", label: "Programs", href: "/programs", icon: GraduationCap, blurb: "Discover degrees and trade qualifications.", accent: "#3e7a2e", tint: "#edf5ea" },
+  { id: "institutions", label: "Institutions", href: "/institutions", icon: Building2, blurb: "Explore verified institutions, campuses and connected programs.", accent: "#2563eb", tint: "#eef4ff" },
 ]
 
 /** Routes that render inside the workspace shell (sidebar + topbar). */
@@ -40,6 +42,7 @@ export const WORKSPACE_ROUTES = [
   "/visas",
   "/occupation",
   "/programs",
+  "/institutions",
   "/courses",
 ] as const
 
