@@ -122,6 +122,7 @@ async function refreshDerivedData(client: Client) {
     "supabase/migrations/20260807125930_verify_au_cricos_programme_locations_v1.sql",
     "supabase/migrations/20260807133904_normalize_melbourne_cricos_city_v1.sql",
     "supabase/migrations/20260807174234_normalize_brisbane_cricos_city_v1.sql",
+    "supabase/migrations/20260807181433_normalize_perth_cricos_city_v1.sql",
   ]
 
   for (const file of files) {
@@ -225,7 +226,8 @@ async function main() {
         (select count(*) from ingest.cricos_course_locations_au) as course_locations,
         (select count(*) from ingest.courses_au where cricos_status='active' and verified_city_slugs @> array['sydney']::text[]) as sydney_programs,
         (select count(*) from ingest.courses_au where cricos_status='active' and verified_city_slugs @> array['melbourne']::text[]) as melbourne_programs,
-        (select count(*) from ingest.courses_au where cricos_status='active' and verified_city_slugs @> array['brisbane']::text[]) as brisbane_programs
+        (select count(*) from ingest.courses_au where cricos_status='active' and verified_city_slugs @> array['brisbane']::text[]) as brisbane_programs,
+        (select count(*) from ingest.courses_au where cricos_status='active' and verified_city_slugs @> array['perth']::text[]) as perth_programs
     `)
     console.log("CRICOS location sync complete", {
       ...result.rows[0],
