@@ -6,7 +6,6 @@ import { useRouter, useSearchParams } from "next/navigation"
 import {
   appendCareer,
   buildCareerCompareHref,
-  getCareerCompareOptions,
   getCareerSelectionStatusMessage,
   parseCareerComparisonState,
   removeCareerAtIndex,
@@ -21,21 +20,29 @@ import {
   type CareerCompareId,
 } from "@/data/career-comparison/australia"
 import {
-  getCareerComparisonRows,
+  getCareerRowsBySection,
   type CareerComparisonDisplayValue,
-  type CareerComparisonFieldKey,
   type CareerComparisonRow,
 } from "@/data/career-comparison/rows"
 
-type CareerDisplaySection = {
-  title: string
+type Props = {
+  availableCareers: readonly AustraliaCareerComparison[]
+}
+
+type DisplaySection = {
+  section: string
   rows: readonly CareerComparisonRow[]
 }
 
-export default function CareersCompareMatrix() {
+export default function CareersCompareMatrix({ availableCareers }: Props) {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const comparison = parseCareerComparisonState(searchParams)
+  const parsed = parseCareerComparisonState(searchParams)
+  const hydratedById = new Map(availableCareers.map((career) => [career.id, career]))
+  const comparison: CareerComparisonState = {
+    ...parsed,
+    careers: parsed.careerIds.map((id, index) => hydratedById.get(id) ?? parsed.careers[index]).filter((career): career is AustraliaCareerComparison => Boolean(career)),
+  }
   const [thirdOpen, setThirdOpen] = useState(comparison.careerIds.length >= CAREER_COMPARE_MAX_CAREERS)
   const [chooserSlot, setChooserSlot] = useState<number | null>(null)
   const triggerRefs = useRef<Array<HTMLButtonElement | null>>([])
@@ -49,7 +56,7 @@ export default function CareersCompareMatrix() {
   const slots = Array.from({ length: visibleSlotCount }, (_, index) => index)
   const canCompare = comparison.careers.length >= 2
   const showAdd = comparison.careerIds.length === 2 && !thirdOpen
-  const sections = buildCareerSections(comparison.careers)
+  const sections = getCareerRowsBySection(comparison.careers)
 
   const updateUrl = (citySlug: string | null, careerIds: readonly CareerCompareId[]) => {
     router.replace(buildCareerCompareHref(citySlug, careerIds), { scroll: false })
@@ -118,6 +125,7 @@ export default function CareersCompareMatrix() {
 
       {chooserSlot !== null ? (
         <CareerChooser
+          availableCareers={availableCareers}
           selectedIds={comparison.careerIds}
           currentId={comparison.careerIds[chooserSlot]}
           onChoose={(careerId) => chooseCareer(chooserSlot, careerId)}
@@ -128,47 +136,9 @@ export default function CareersCompareMatrix() {
   )
 }
 
-function buildCareerSections(careers: readonly AustraliaCareerComparison[]): readonly CareerDisplaySection[] {
-  const rows = getCareerComparisonRows(careers)
-  const byKey = new Map(rows.map((row) => [row.key, row]))
-  const pick = (keys: readonly CareerComparisonFieldKey[]) => keys.flatMap((key) => {
-    const row = byKey.get(key)
-    return row ? [row] : []
-  })
-
-  return [
-    {
-      title: "Key metrics",
-      rows: pick(["studyDuration", "annualTuition", "typicalEarnings", "shortageStatus"]),
-    },
-    {
-      title: "Entry & requirements",
-      rows: pick([
-        "typicalEducationRoute",
-        "typicalEntryQualification",
-        "qualificationOutcome",
-        "registrationRequirement",
-        "registrationAuthority",
-      ]),
-    },
-    {
-      title: "Costs",
-      rows: pick(["estimatedTotalTuition", "mandatoryStudyCosts"]),
-    },
-    {
-      title: "Outcomes",
-      rows: pick(["startingIncome", "incomeBasis", "employmentOutlook", "geographicScope"]),
-    },
-    {
-      title: "Other details",
-      rows: pick(["timeToProfessionalEntry", "registrationOrOnboardingTime", "officialSources", "reviewed"]),
-    },
-  ]
-}
-
 type MatrixProps = {
   comparison: CareerComparisonState
-  sections: readonly CareerDisplaySection[]
+  sections: readonly DisplaySection[]
   slots: readonly number[]
   chooserSlot: number | null
   showAdd: boolean
@@ -229,7 +199,7 @@ function DesktopMatrix({ comparison, sections, slots, chooserSlot, showAdd, trig
         {comparison.careers.length >= 2 ? (
           <tbody>
             {sections.map((section) => (
-              <CareerSectionRows key={section.title} section={section} slots={slots} careers={comparison.careers} />
+              <CareerSectionRows key={section.section} section={section} slots={slots} careers={comparison.careers} />
             ))}
           </tbody>
         ) : null}
@@ -238,11 +208,11 @@ function DesktopMatrix({ comparison, sections, slots, chooserSlot, showAdd, trig
   )
 }
 
-function CareerSectionRows({ section, slots, careers }: { section: CareerDisplaySection; slots: readonly number[]; careers: readonly AustraliaCareerComparison[] }) {
+function CareerSectionRows({ section, slots, careers }: { section: DisplaySection; slots: readonly number[]; careers: readonly AustraliaCareerComparison[] }) {
   return (
     <>
       <tr>
-        <th colSpan={slots.length + 1} className="border-b border-[#e7e6e3] bg-[#f7f7f5] px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-[0.1em] text-[#6f6d68]">{section.title}</th>
+        <th colSpan={slots.length + 1} className="border-b border-[#e7e6e3] bg-[#f7f7f5] px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-[0.1em] text-[#6f6d68]">{section.section}</th>
       </tr>
       {section.rows.map((row) => (
         <tr key={row.key}>
@@ -287,8 +257,8 @@ function MobileMatrix({ comparison, sections, slots, chooserSlot, showAdd, trigg
       {comparison.careers.length >= 2 ? (
         <div className="mt-5 space-y-7">
           {sections.map((section) => (
-            <section key={section.title}>
-              <h3 className="text-xs font-semibold uppercase tracking-[0.1em] text-[#6f6d68]">{section.title}</h3>
+            <section key={section.section}>
+              <h3 className="text-xs font-semibold uppercase tracking-[0.1em] text-[#6f6d68]">{section.section}</h3>
               <div className="mt-2 divide-y divide-[#ecebe7] border-y border-[#ecebe7]">
                 {section.rows.map((row) => (
                   <div key={row.key} className="py-4">
@@ -386,8 +356,24 @@ function CareerValue({ value }: { value: CareerComparisonDisplayValue }) {
   )
 }
 
-function CareerChooser({ selectedIds, currentId, onChoose, onClose }: { selectedIds: readonly CareerCompareId[]; currentId?: CareerCompareId; onChoose: (careerId: CareerCompareId) => void; onClose: () => void }) {
-  const options = getCareerCompareOptions(selectedIds, currentId)
+function CareerChooser({
+  availableCareers,
+  selectedIds,
+  currentId,
+  onChoose,
+  onClose,
+}: {
+  availableCareers: readonly AustraliaCareerComparison[]
+  selectedIds: readonly CareerCompareId[]
+  currentId?: CareerCompareId
+  onChoose: (careerId: CareerCompareId) => void
+  onClose: () => void
+}) {
+  const options = availableCareers.map((career) => ({
+    id: career.id,
+    label: career.label,
+    disabled: career.id !== currentId && selectedIds.includes(career.id),
+  }))
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => { if (event.key === "Escape") onClose() }
