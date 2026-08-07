@@ -19,6 +19,7 @@ export function WorkspaceShell({ children }: WorkspaceShellProps) {
   // so they escape the standard padding to reach the sidebar and topbar.
   const hasFullBleedHero =
     pathname === "/home" || pathname === "/countries" || pathname.startsWith("/countries/")
+  const isComparePage = pathname === "/compare"
   // Home owns both the authenticated dashboard and result experiences. Its
   // application-style surfaces should end at their content, not a marketing footer.
   const hideSiteFooter = pathname === "/home"
@@ -28,8 +29,20 @@ export function WorkspaceShell({ children }: WorkspaceShellProps) {
       <WorkspaceSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex min-w-0 flex-1 flex-col">
         <WorkspaceTopbar onMenuClick={() => setSidebarOpen((prev) => !prev)} />
-        <main className={cn("flex-1", !hasFullBleedHero && "px-4 py-8 sm:px-8 lg:px-10")}>
-          <div className={cn(!hasFullBleedHero && "mx-auto w-full max-w-6xl")}>{children}</div>
+        <main
+          className={cn(
+            "flex-1",
+            !hasFullBleedHero && (isComparePage ? "px-4 py-4 sm:px-6 lg:px-8" : "px-4 py-8 sm:px-8 lg:px-10"),
+          )}
+        >
+          <div
+            className={cn(
+              !hasFullBleedHero &&
+                (isComparePage ? "mx-auto w-full max-w-[1440px]" : "mx-auto w-full max-w-6xl"),
+            )}
+          >
+            {children}
+          </div>
         </main>
         {!hideSiteFooter && <SiteFooter />}
       </div>
