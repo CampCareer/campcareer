@@ -26,6 +26,7 @@ import { cn } from "@/lib/utils"
 const CITY_LINKS: Record<string, string> = {
   Sydney: "/cities/au/sydney",
   Melbourne: "/cities/au/melbourne",
+  Brisbane: "/cities/au/brisbane",
 }
 
 function MetricCard({
