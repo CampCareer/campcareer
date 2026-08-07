@@ -144,6 +144,32 @@ export const OCCUPATION_EDITORIAL: readonly OccupationEditorial[] = [
       },
     },
   },
+  {
+    id: "welder",
+    overview:
+      "Welders and fabrication trades workers cut, shape, assemble, join and repair metal components and structures using welding, thermal cutting, fabrication and finishing techniques across manufacturing, construction, mining, defence and shipbuilding.",
+    tasks: [
+      "Read engineering drawings, specifications and welding symbols to determine fabrication and joining requirements",
+      "Measure, mark, cut, shape and prepare metal stock, plate, pipe and structural sections",
+      "Set up welding equipment and select suitable processes, consumables and parameters for the material and job",
+      "Align and join components using welding, bolting, riveting and related fabrication techniques",
+      "Inspect welded joints for penetration, profile, defects and compliance with the required specification",
+      "Grind, clean, finish and repair fabricated or welded components while following workplace safety controls",
+    ],
+    countries: {
+      AU: {
+        headline: "A nationally short fabrication trade with strong manufacturing, resources and shipbuilding demand",
+        entryPathway:
+          "The standard route is a paid fabrication engineering apprenticeship combined with the MEM31925 Certificate III in Engineering – Fabrication Trade. The national training register says the qualification was specifically developed for apprentices and must be completed through a Training Contract or a formal trade-recognition assessment process.",
+        registration:
+          "There is no single national occupational licence for general welding or metal fabrication. Work must meet employer, project, safety and welding-standard requirements, and a White Card is required when the role involves construction-site work. Trades Recognition Australia skills assessment requirements can also apply to migration pathways, but a skills assessment is separate from a domestic occupational licence.",
+        jobMarketNote:
+          "Manufacturing, construction and mining are major industries for the occupation group. Shipbuilders, defence contractors, resources and maintenance companies, heavy engineering firms and rail manufacturers recruit welders, boilermakers and fabricators, while apprenticeship pathways provide a structured route for new entrants.",
+        scoreCaveat:
+          "The opportunity score is provisional until the official IVI and employment-projection workbook rows are directly machine-ingested and posting-level employer counts and apprentice-entry shares can replace the current curated evidence.",
+      },
+    },
+  },
 ] as const
 
 const BY_ID = new Map(OCCUPATION_EDITORIAL.map((item) => [item.id, item]))
