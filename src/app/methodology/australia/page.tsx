@@ -350,6 +350,54 @@ const occupationSourceSections: readonly OccupationSourceSection[] = [
       sharedLabourSources.visa,
     ],
   },
+  {
+    id: "welder",
+    title: "Welder",
+    description:
+      "Evidence supporting the Australia Welder occupation dashboard, fabrication apprenticeship pathway and provisional Career Opportunity Score. CampCareer rolls the canonical career to OSCA 3311 so the three mapped welding and fabrication occupations align with the JSA ANZSCO 3223 labour-market series. May 2026 vacancy and May 2025–2035 projection figures retain indexed extraction provenance until the official workbook rows can be directly machine-ingested.",
+    snapshot: "1 May 2026",
+    sources: [
+      {
+        title: "Official occupation scope",
+        publisher: "Australian Bureau of Statistics",
+        source: "OSCA 3311 Structural Steel and Welding Trades Workers",
+        url: "https://www.abs.gov.au/statistics/classifications/osca-occupation-standard-classification-australia/2024-version-1-0/browse-classification/3/33/331/3311",
+        use: "Defines Metal Fabricator, Pressure Welder and Welder (First Class) as the three current occupations included in the CampCareer welder rollup.",
+      },
+      {
+        title: "Employment and earnings",
+        publisher: "Jobs and Skills Australia",
+        source: "Structural Steel and Welding Trades Workers occupation profile",
+        url: "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupations/3223-structural-steel-and-welding-trades-workers",
+        use: "Supplies employment, earnings, part-time share, female share, median age and full-time hours on the published legacy ANZSCO 3223 series used for the rollup.",
+      },
+      sharedLabourSources.vacancies,
+      sharedLabourSources.projections,
+      sharedLabourSources.shortage,
+      {
+        title: "Training pathway",
+        publisher: "Australian Government National Training Register",
+        source: "MEM31925 Certificate III in Engineering – Fabrication Trade",
+        url: "https://training.gov.au/Training/Details/MEM31925",
+        use: "Defines the current fabrication trade qualification, which is specifically developed for apprentices and undertaken through a Training Contract or formal trade-recognition assessment process.",
+      },
+      {
+        title: "Construction induction",
+        publisher: "Safe Work Australia",
+        source: "Working on a construction site",
+        url: "https://www.safeworkaustralia.gov.au/safety-topic/industry-and-business/construction/working-construction-site",
+        use: "Supports the general construction induction and White Card requirement where welding or fabrication work is performed on a construction site.",
+      },
+      {
+        title: "Skills assessment",
+        publisher: "Trades Recognition Australia",
+        source: "OSAP nominated occupations, countries and SARs",
+        url: "https://www.tradesrecognitionaustralia.gov.au/osap-nominated-occupations-countries-and-sars",
+        use: "Lists Metal Fabricator, Pressure Welder and Welder (First Class) among trade occupations assessed through relevant TRA programs and distinguishes skills assessment from domestic occupational licensing.",
+      },
+      sharedLabourSources.visa,
+    ],
+  },
 ]
 
 export default function AustraliaMethodologyPage() {
@@ -428,7 +476,7 @@ export default function AustraliaMethodologyPage() {
             className="scroll-mt-20 rounded-3xl border border-blue-100 bg-blue-50/50 p-5 sm:p-7"
           >
             <p className="text-xs font-semibold uppercase tracking-[0.12em] text-blue-600">Occupation sources</p>
-            <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
               <div>
                 <h2 className="font-display text-2xl font-semibold tracking-tight text-slate-900">
                   {section.title}
