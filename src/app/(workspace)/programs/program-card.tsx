@@ -29,12 +29,26 @@ function duration(value: number | null) {
   }`
 }
 
+function programLocation(program: AuProgramListItem) {
+  if (program.deliveryLocations.length > 0) {
+    const first = program.deliveryLocations[0]
+    const primary = program.verifiedCitySlugs.includes("sydney")
+      ? "Sydney"
+      : [first.locality, first.state].filter(Boolean).join(", ") || first.locationName
+    const extra = program.deliveryLocations.length - 1
+    return extra > 0 ? `${primary} + ${extra} registered ${extra === 1 ? "location" : "locations"}` : primary
+  }
+
+  return [program.city, program.state].filter(Boolean).join(", ")
+}
+
 export function ProgramCard({ program }: { program: AuProgramListItem }) {
   const tuition = money(program.tuitionFeeAud)
   const studyDuration = duration(program.durationYears)
-  const location = [program.city, program.state].filter(Boolean).join(", ")
+  const location = programLocation(program)
   const detailHref = programDetailPath(program.id, program.title)
   const verified = program.officialUrlStatus === "verified"
+  const locationVerified = program.deliveryLocations.length > 0
   const discipline = getProgramDiscipline({
     title: program.title,
     fieldName: program.fieldName,
@@ -68,6 +82,12 @@ export function ProgramCard({ program }: { program: AuProgramListItem }) {
                   <span className="inline-flex items-center gap-1 rounded-md bg-[#edf5ea] px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-[#3e7a2e]">
                     <BadgeCheck className="size-3" />
                     Official page verified
+                  </span>
+                )}
+                {locationVerified && (
+                  <span className="inline-flex items-center gap-1 rounded-md bg-[#eef4ff] px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-[#2563eb]">
+                    <MapPin className="size-3" />
+                    CRICOS location verified
                   </span>
                 )}
               </div>
@@ -112,7 +132,7 @@ export function ProgramCard({ program }: { program: AuProgramListItem }) {
             {program.cricosCode && (
               <span className="inline-flex items-center gap-1.5">
                 <ShieldCheck className="size-3.5 text-[#a3a19b]" />
-                CRICOS {program.cricosCode}
+                Provider {program.cricosCode}
               </span>
             )}
           </div>
@@ -128,7 +148,7 @@ export function ProgramCard({ program }: { program: AuProgramListItem }) {
 
           <div className="mt-4 border-t border-[#efeeea] pt-3">
             <p className="text-[10.5px] font-medium text-[#aaa7a0]">
-              {program.cricosStatus === "active" ? "Active CRICOS record" : "Source review required"}
+              {locationVerified ? "Official CRICOS delivery locations synced" : "Active CRICOS record · location review pending"}
             </p>
           </div>
         </div>
