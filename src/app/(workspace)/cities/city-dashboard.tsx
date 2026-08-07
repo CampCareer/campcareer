@@ -13,22 +13,22 @@ import {
 } from "lucide-react"
 import type { AuCityProfile } from "@/lib/cities/au-city-profile.server"
 
-const SYDNEY_IMAGE =
-  "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=1800&h=800&fit=crop&auto=format"
+const CITY_IMAGES: Record<string, string> = {
+  sydney: "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=1800&h=800&fit=crop&auto=format",
+  melbourne: "https://images.unsplash.com/photo-1514395462725-fb4566210144?w=1800&h=800&fit=crop&auto=format",
+}
 
-function money(value: number, currency = "AUD") {
+function money(value: number, currency = "AUD", decimals = 0) {
   return new Intl.NumberFormat("en-AU", {
     style: "currency",
     currency,
-    maximumFractionDigits: 0,
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
   }).format(value)
 }
 
 function population(value: number) {
-  return new Intl.NumberFormat("en-AU", {
-    notation: "compact",
-    maximumFractionDigits: 2,
-  }).format(value)
+  return new Intl.NumberFormat("en-AU", { notation: "compact", maximumFractionDigits: 2 }).format(value)
 }
 
 function MetricCard({ icon, label, value, note }: { icon: React.ReactNode; label: string; value: string; note: string }) {
@@ -41,13 +41,27 @@ function MetricCard({ icon, label, value, note }: { icon: React.ReactNode; label
   )
 }
 
+function transportNote(profile: AuCityProfile) {
+  if (!profile.transport) return "Verified student transport reference unavailable"
+  if (profile.transport.referenceKind === "student_pass_weekly_equivalent") {
+    const pass = profile.transport.annualPass ? `${money(profile.transport.annualPass)} annual pass` : "annual student pass"
+    return `${pass} ÷ 52 · eligible international students only · calculated reference`
+  }
+  if (profile.transport.eligibleConcessionAmount != null) {
+    return `Full-fare weekly cap · eligible concession ${money(profile.transport.eligibleConcessionAmount)}`
+  }
+  return profile.transport.eligibilityRequired ? "Eligibility conditions apply" : "Published weekly reference"
+}
+
 export function CityDashboard({ profile }: { profile: AuCityProfile }) {
   const scopeLabel = profile.population?.geography ?? `Greater ${profile.name}`
+  const image = CITY_IMAGES[profile.slug] ?? CITY_IMAGES.sydney
+  const compareAvailable = ["sydney", "melbourne"].includes(profile.slug)
 
   return (
     <div>
       <section className="relative overflow-hidden">
-        <div aria-hidden="true" className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${SYDNEY_IMAGE})` }} />
+        <div aria-hidden="true" className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${image})` }} />
         <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/45 to-black/20" />
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-24 pt-14 sm:px-8 sm:pt-20 lg:px-10">
           <nav className="flex flex-wrap items-center gap-2 text-[11px] font-medium text-white/70" aria-label="Breadcrumb">
@@ -66,17 +80,20 @@ export function CityDashboard({ profile }: { profile: AuCityProfile }) {
               <p className="text-[12px] font-semibold text-[#3e7a2e]">Student decision snapshot</p>
               <h2 className="mt-1 text-[20px] font-semibold tracking-[-0.02em] text-[#1b1b1b]">Study, living and work context in one place</h2>
               <p className="mt-1.5 max-w-2xl text-[12px] leading-5 text-[#77746e]">
-                Sydney study providers and programs now use official CRICOS registered delivery locations linked to the canonical Greater Sydney city ID.
+                {profile.name} providers and programs use official CRICOS registered delivery locations linked to the canonical Greater {profile.name} city ID.
               </p>
             </div>
-            <Link href="/countries/au" className="inline-flex shrink-0 items-center gap-1.5 text-[12px] font-semibold text-[#2563eb] hover:underline">Australia dashboard <ArrowRight className="size-3.5" /></Link>
+            <div className="flex flex-wrap gap-2">
+              {compareAvailable && <Link href="/cities/au/compare" className="inline-flex items-center gap-1.5 rounded-lg border border-[#cfd9ca] px-3.5 py-2 text-[11.5px] font-semibold text-[#3e7a2e] hover:bg-[#f7faf5]">Compare Sydney vs Melbourne <ArrowRight className="size-3.5" /></Link>}
+              <Link href="/countries/au" className="inline-flex items-center gap-1.5 px-2 py-2 text-[11.5px] font-semibold text-[#2563eb] hover:underline">Australia dashboard <ArrowRight className="size-3.5" /></Link>
+            </div>
           </div>
         </div>
 
         <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <MetricCard icon={<Users className="size-4 text-[#2563eb]" />} label="Population" value={profile.population ? population(profile.population.amount) : "—"} note={profile.population ? `${profile.population.geography} · ${profile.population.dataAsOf}` : "Verified city population unavailable"} />
-          <MetricCard icon={<Wallet className="size-4 text-[#c2691e]" />} label="Student living" value={profile.livingCost ? `${money(profile.livingCost.low)}–${money(profile.livingCost.high)}` : "—"} note="Indicative monthly range · tuition excluded" />
-          <MetricCard icon={<TrainFront className="size-4 text-[#6d4fc4]" />} label="Public transport" value={profile.transport ? `${money(profile.transport.adultWeeklyCap)}/week` : "—"} note={profile.transport?.concessionWeeklyCap != null ? `Adult Opal cap · eligible concession cap ${money(profile.transport.concessionWeeklyCap)}` : "Adult Opal weekly cap"} />
+          <MetricCard icon={<Wallet className="size-4 text-[#c2691e]" />} label="Student living" value={profile.livingCost ? `${money(profile.livingCost.low)}–${money(profile.livingCost.high)}` : "—"} note={`Indicative monthly range · tuition excluded${profile.livingCost?.evidenceKind === "calculated" ? " · calculated" : ""}`} />
+          <MetricCard icon={<TrainFront className="size-4 text-[#6d4fc4]" />} label="Student transport" value={profile.transport ? `${money(profile.transport.weeklyReference, profile.transport.currency, profile.transport.weeklyReference < 20 ? 2 : 0)}/week` : "—"} note={transportNote(profile)} />
           <MetricCard icon={<Clock3 className="size-4 text-[#3e7a2e]" />} label="Student work" value={profile.workRights ? `${profile.workRights.hoursPerFortnight} h / fortnight` : "—"} note={profile.workRights?.unrestrictedWhenCourseNotInSession ? "During study periods · no hour cap when the course is not in session" : "Check current visa conditions"} />
         </div>
 
@@ -84,7 +101,7 @@ export function CityDashboard({ profile }: { profile: AuCityProfile }) {
           <section className="rounded-xl border border-[#e7e6e3] bg-white p-5 sm:p-6">
             <div className="flex flex-wrap items-center gap-2 text-[#2563eb]">
               <GraduationCap className="size-4" />
-              <h2 className="text-[15px] font-semibold">Study providers with registered Sydney locations</h2>
+              <h2 className="text-[15px] font-semibold">Study providers with registered {profile.name} locations</h2>
               <span className="ml-auto rounded-full bg-[#eef4ff] px-2.5 py-1 text-[10.5px] font-semibold text-[#2563eb]">{profile.linkedInstitutionCount} providers · {profile.linkedCampusCount} locations</span>
             </div>
             <p className="mt-2 text-[11.5px] leading-5 text-[#77746e]">Provider and campus membership comes from the Australian Government CRICOS Locations register.</p>
@@ -97,9 +114,7 @@ export function CityDashboard({ profile }: { profile: AuCityProfile }) {
                       <p className="text-[12.5px] font-semibold leading-5 text-[#1b1b1b]">{institution.name}</p>
                       <p className="mt-0.5 text-[10.5px] text-[#8f8c85]">{institution.type ?? "Education provider"} · {institution.campuses.length} registered {institution.campuses.length === 1 ? "location" : "locations"}</p>
                       <div className="mt-2 flex flex-wrap gap-1">
-                        {institution.campuses.slice(0, 3).map((campus) => (
-                          <span key={campus.id} className="rounded-md bg-white px-2 py-1 text-[9.5px] text-[#77746e]">{campus.locality ?? campus.name}</span>
-                        ))}
+                        {institution.campuses.slice(0, 3).map((campus) => <span key={campus.id} className="rounded-md bg-white px-2 py-1 text-[9.5px] text-[#77746e]">{campus.locality ?? campus.name}</span>)}
                         {institution.campuses.length > 3 && <span className="rounded-md bg-white px-2 py-1 text-[9.5px] text-[#77746e]">+{institution.campuses.length - 3}</span>}
                       </div>
                       {institution.websiteUrl && <a href={institution.websiteUrl} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1 text-[10.5px] font-semibold text-[#2563eb] hover:underline">Official site <ExternalLink className="size-3" /></a>}
@@ -113,15 +128,15 @@ export function CityDashboard({ profile }: { profile: AuCityProfile }) {
           <div className="space-y-5">
             <section className="rounded-xl border border-[#e7e6e3] bg-white p-5">
               <div className="flex items-center gap-2 text-[#3e7a2e]"><BriefcaseBusiness className="size-4" /><h2 className="text-[14.5px] font-semibold">Career environment</h2></div>
-              <p className="mt-2 text-[11.5px] leading-5 text-[#77746e]">Study NSW highlights these sectors as prominent Sydney work environments. They are context signals, not shortage rankings.</p>
+              <p className="mt-2 text-[11.5px] leading-5 text-[#77746e]">Official state study guidance highlights these sectors as local career context. They are not shortage rankings.</p>
               <div className="mt-3 flex flex-wrap gap-2">{profile.employmentSectors.map((sector) => <span key={sector} className="rounded-full border border-[#dfe8db] bg-[#f7faf5] px-3 py-1.5 text-[11px] font-semibold text-[#3e7a2e]">{sector}</span>)}</div>
             </section>
 
             <section className="rounded-xl border border-[#d9e3f7] bg-[#f7f9fe] p-5">
-              <div className="flex items-center gap-2 text-[#2563eb]"><MapPin className="size-4" /><h2 className="text-[14.5px] font-semibold">Verified Sydney programs</h2></div>
+              <div className="flex items-center gap-2 text-[#2563eb]"><MapPin className="size-4" /><h2 className="text-[14.5px] font-semibold">Verified {profile.name} programs</h2></div>
               <p className="mt-2 text-[27px] font-semibold tracking-[-0.03em] text-[#1b1b1b]">{profile.verifiedProgramCount.toLocaleString("en-AU")}</p>
-              <p className="mt-1 text-[11px] leading-5 text-[#5e6f91]">Active CRICOS courses with at least one registered delivery location mapped to Greater Sydney.</p>
-              <Link href="/programs?country=AU&city=sydney" className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-[#2563eb] px-3.5 py-2 text-[11.5px] font-semibold text-white transition hover:bg-[#1f55c9]">Browse Sydney programs <ArrowRight className="size-3.5" /></Link>
+              <p className="mt-1 text-[11px] leading-5 text-[#5e6f91]">Active CRICOS courses with at least one registered delivery location mapped to Greater {profile.name}.</p>
+              <Link href={`/programs?country=AU&city=${profile.slug}`} className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-[#2563eb] px-3.5 py-2 text-[11.5px] font-semibold text-white transition hover:bg-[#1f55c9]">Browse {profile.name} programs <ArrowRight className="size-3.5" /></Link>
               <p className="mt-3 text-[10.5px] leading-4 text-[#8090ad]">Each program detail page lists the registered CRICOS delivery locations used for this filter.</p>
             </section>
           </div>
