@@ -398,6 +398,61 @@ const occupationSourceSections: readonly OccupationSourceSection[] = [
       sharedLabourSources.visa,
     ],
   },
+  {
+    id: "bricklayer",
+    title: "Bricklayer",
+    description:
+      "Evidence supporting the Australia Bricklayer occupation dashboard, apprenticeship and jurisdiction-specific licensing pathway, and provisional Career Opportunity Score. CampCareer rolls the canonical career to OSCA 3711 so Bricklayer and Stonemason align with the JSA ANZSCO 3311 labour-market series. Current IVI values remain unavailable until the official ANZSCO4 workbook row can be directly machine-ingested.",
+    snapshot: "1 May 2026",
+    sources: [
+      {
+        title: "Official occupation scope",
+        publisher: "Australian Bureau of Statistics",
+        source: "OSCA 3711 Bricklayers and Stonemasons",
+        url: "https://www.abs.gov.au/statistics/classifications/osca-occupation-standard-classification-australia/2024-version-1-0/browse-classification/3/37/371/3711",
+        use: "Defines Bricklayer and Stonemason as the two current occupations included in the CampCareer bricklayer rollup; OSCA 371131 Bricklayer notes that registration or licensing may be required.",
+      },
+      {
+        title: "Employment and earnings",
+        publisher: "Jobs and Skills Australia",
+        source: "Bricklayers and Stonemasons occupation profile",
+        url: "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupations/3311-bricklayers-and-stonemasons",
+        use: "Supplies employment, median weekly and hourly earnings, part-time share, female share, median age and full-time hours on the published legacy ANZSCO 3311 series used for the rollup.",
+      },
+      sharedLabourSources.vacancies,
+      sharedLabourSources.projections,
+      sharedLabourSources.shortage,
+      {
+        title: "Training pathway",
+        publisher: "Australian Government National Training Register",
+        source: "CPC33020 Certificate III in Bricklaying and Blocklaying",
+        url: "https://training.gov.au/Training/Details/CPC33020",
+        use: "Defines the current Bricklayer trade qualification. The qualification is used in apprenticeship pathways and is also listed by NSW as a current qualification for bricklaying licensing.",
+      },
+      {
+        title: "Trade licensing example",
+        publisher: "NSW Government",
+        source: "Bricklaying work",
+        url: "https://www.nsw.gov.au/business-and-economy/licences-and-credentials/building-and-trade-licences-and-registrations/bricklaying-work",
+        use: "Shows a current jurisdiction-specific rule: NSW requires the relevant contractor licence or certificate for regulated residential bricklaying work above AUD 5,000 and lists CPC33020 among the accepted qualifications.",
+      },
+      {
+        title: "Construction induction",
+        publisher: "Safe Work Australia",
+        source: "Working on a construction site",
+        url: "https://www.safeworkaustralia.gov.au/safety-topic/industry-and-business/construction/working-construction-site",
+        use: "Supports the general construction induction and White Card requirement for construction-site work.",
+      },
+      {
+        title: "Skills assessment",
+        publisher: "Trades Recognition Australia",
+        source: "Occupations assessed by Trades Recognition Australia",
+        url: "https://www.tradesrecognitionaustralia.gov.au/occupations-assessed-trades-recognition-australia",
+        use: "Confirms Bricklayer is within the trade occupations assessed by TRA for relevant migration skills-assessment programs; skills assessment is separate from domestic licensing.",
+      },
+      sharedLabourSources.visa,
+    ],
+  },
 ]
 
 export default function AustraliaMethodologyPage() {
