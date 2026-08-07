@@ -22,6 +22,22 @@ type CountrySource = {
   dataDate: string
 }
 
+type OccupationSource = {
+  title: string
+  publisher: string
+  source: string
+  url: string
+  use: string
+}
+
+type OccupationSourceSection = {
+  id: string
+  title: string
+  description: string
+  snapshot: string
+  sources: readonly OccupationSource[]
+}
+
 const sources: readonly CountrySource[] = [
   {
     title: "Salary range",
@@ -88,22 +104,6 @@ const sources: readonly CountrySource[] = [
   },
 ]
 
-type OccupationSource = {
-  title: string
-  publisher: string
-  source: string
-  url: string
-  use: string
-}
-
-type OccupationSourceSection = {
-  id: string
-  title: string
-  description: string
-  snapshot: string
-  sources: readonly OccupationSource[]
-}
-
 const sharedLabourSources = {
   vacancies: {
     title: "Vacancies and state demand",
@@ -111,7 +111,7 @@ const sharedLabourSources = {
     source: "Internet Vacancy Index",
     url: "https://www.jobsandskills.gov.au/data/internet-vacancy-index",
     use:
-      "Supplies the dated national and state or territory online-vacancy series. Values remain unavailable in CampCareer when the underlying workbook row has not been directly verified.",
+      "Supplies the dated national and state or territory online-vacancy series. When a workbook row cannot be directly machine-ingested, CampCareer either leaves the value unavailable or records the indexed extraction provenance in the dated snapshot.",
   },
   projections: {
     title: "Employment outlook",
@@ -119,7 +119,7 @@ const sharedLabourSources = {
     source: "Employment projections",
     url: "https://www.jobsandskills.gov.au/data/employment-projections",
     use:
-      "Supplies the five-year and ten-year employment-growth inputs used in the Career Opportunity Score.",
+      "Supplies the five-year and ten-year employment-growth inputs used in the Career Opportunity Score. Extraction provenance is retained when the official workbook cannot be directly machine-read.",
   },
   shortage: {
     title: "Shortage status",
@@ -152,16 +152,14 @@ const occupationSourceSections: readonly OccupationSourceSection[] = [
         publisher: "Australian Bureau of Statistics",
         source: "OSCA 2654 Registered Nurses",
         url: "https://www.abs.gov.au/statistics/classifications/osca-occupation-standard-classification-australia/2024-version-1-0/browse-classification/2/26/265/2654",
-        use:
-          "Defines the Australian occupation group and the registered nurse specialisations included in the CampCareer rollup.",
+        use: "Defines the registered nurse occupations included in the CampCareer rollup.",
       },
       {
         title: "Employment and earnings",
         publisher: "Jobs and Skills Australia",
         source: "Registered Nurses occupation profile",
         url: "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupations/2544-registered-nurses",
-        use:
-          "Supplies the employment, earnings, demographic and working-hours snapshot on the published legacy ANZSCO series.",
+        use: "Supplies the employment, earnings, demographic and working-hours snapshot on the published legacy ANZSCO series.",
       },
       sharedLabourSources.vacancies,
       sharedLabourSources.projections,
@@ -170,8 +168,7 @@ const occupationSourceSections: readonly OccupationSourceSection[] = [
         publisher: "Nursing and Midwifery Board of Australia",
         source: "Registration standards",
         url: "https://www.nursingmidwiferyboard.gov.au/Registration-Standards.aspx",
-        use:
-          "Defines the professional registration standards that applicants and practising registered nurses must meet.",
+        use: "Defines the professional registration standards that applicants and practising registered nurses must meet.",
       },
       sharedLabourSources.visa,
     ],
@@ -188,16 +185,14 @@ const occupationSourceSections: readonly OccupationSourceSection[] = [
         publisher: "Australian Bureau of Statistics",
         source: "OSCA 3812 Electricians",
         url: "https://www.abs.gov.au/statistics/classifications/osca-occupation-standard-classification-australia/2024-version-1-0/browse-classification/3/38/381/3812",
-        use:
-          "Defines Electrician (General), Electrical Fitter and Industrial Electrician as the occupations included in the CampCareer electrician rollup.",
+        use: "Defines Electrician (General), Electrical Fitter and Industrial Electrician as the occupations included in the CampCareer electrician rollup.",
       },
       {
         title: "Employment and earnings",
         publisher: "Jobs and Skills Australia",
         source: "Electricians occupation profile",
         url: "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupations/3411-electricians",
-        use:
-          "Supplies the employment, earnings, demographic and working-hours snapshot on the published legacy ANZSCO series.",
+        use: "Supplies the employment, earnings, demographic and working-hours snapshot on the published legacy ANZSCO series.",
       },
       sharedLabourSources.vacancies,
       sharedLabourSources.projections,
@@ -206,16 +201,14 @@ const occupationSourceSections: readonly OccupationSourceSection[] = [
         publisher: "Australian Government National Training Register",
         source: "UEE30820 Certificate III in Electrotechnology Electrician",
         url: "https://training.gov.au/Training/Details/UEE30820",
-        use:
-          "Defines the principal trade qualification connected to the paid electrical apprenticeship pathway.",
+        use: "Defines the principal trade qualification connected to the paid electrical apprenticeship pathway.",
       },
       {
         title: "Electrical licensing",
         publisher: "Electrical Regulatory Authorities Council",
         source: "Electrical licensing",
         url: "https://www.erac.gov.au/licensing/electrical-licensing/",
-        use:
-          "Explains that electrical licensing is administered by state and territory regulators and must be checked for the relevant jurisdiction.",
+        use: "Explains that electrical licensing is administered by state and territory regulators.",
       },
       sharedLabourSources.visa,
     ],
@@ -232,16 +225,14 @@ const occupationSourceSections: readonly OccupationSourceSection[] = [
         publisher: "Australian Bureau of Statistics",
         source: "OSCA 3721 Carpenters and Joiners",
         url: "https://www.abs.gov.au/statistics/classifications/osca-occupation-standard-classification-australia/2024-version-1-0/browse-classification/3/37/372/3721",
-        use:
-          "Defines Carpenter and Joiner, Carpenter, and Joiner as the three occupations included in the CampCareer carpenter rollup.",
+        use: "Defines Carpenter and Joiner, Carpenter, and Joiner as the three occupations included in the CampCareer carpenter rollup.",
       },
       {
         title: "Employment and earnings",
         publisher: "Jobs and Skills Australia",
         source: "Carpenters and Joiners occupation profile",
         url: "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupations/3312-carpenters-and-joiners",
-        use:
-          "Supplies employment, earnings, demographic and working-hours data on the published legacy ANZSCO series.",
+        use: "Supplies employment, earnings, demographic and working-hours data on the published legacy ANZSCO series.",
       },
       sharedLabourSources.vacancies,
       sharedLabourSources.projections,
@@ -251,16 +242,14 @@ const occupationSourceSections: readonly OccupationSourceSection[] = [
         publisher: "Australian Government National Training Register",
         source: "CPC30220 Certificate III in Carpentry",
         url: "https://training.gov.au/Training/Details/CPC30220",
-        use:
-          "Defines the principal trade qualification connected to the Australian carpentry apprenticeship pathway.",
+        use: "Defines the principal trade qualification connected to the Australian carpentry apprenticeship pathway.",
       },
       {
         title: "Construction induction",
         publisher: "Safe Work Australia",
         source: "Working on a construction site",
         url: "https://www.safeworkaustralia.gov.au/safety-topic/industry-and-business/construction/working-construction-site",
-        use:
-          "Explains the general construction induction training and White Card requirement for construction-site work.",
+        use: "Explains the general construction induction training and White Card requirement for construction-site work.",
       },
       sharedLabourSources.visa,
     ],
@@ -277,16 +266,14 @@ const occupationSourceSections: readonly OccupationSourceSection[] = [
         publisher: "Australian Bureau of Statistics",
         source: "OSCA Minor Group 363 Plumbers",
         url: "https://www.abs.gov.au/statistics/classifications/osca-occupation-standard-classification-australia/2024-version-1-0/browse-classification/3/36/363",
-        use:
-          "Defines the six plumbing occupations included in the CampCareer rollup and their current OSCA codes.",
+        use: "Defines the six plumbing occupations included in the CampCareer rollup and their current OSCA codes.",
       },
       {
         title: "Employment and earnings",
         publisher: "Jobs and Skills Australia",
         source: "Plumbers occupation profile",
         url: "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupations/3341-plumbers",
-        use:
-          "Supplies employment, weekly and hourly earnings, part-time share, female share, median age and working-hours data on the published legacy ANZSCO series.",
+        use: "Supplies employment, earnings, demographic and working-hours data on the published legacy ANZSCO series.",
       },
       sharedLabourSources.vacancies,
       sharedLabourSources.projections,
@@ -296,16 +283,69 @@ const occupationSourceSections: readonly OccupationSourceSection[] = [
         publisher: "Australian Government National Training Register",
         source: "CPC32420 Certificate III in Plumbing",
         url: "https://training.gov.au/Training/Details/CPC32420",
-        use:
-          "Defines the principal trade qualification connected to the Australian plumbing apprenticeship pathway.",
+        use: "Defines the principal trade qualification connected to the Australian plumbing apprenticeship pathway.",
       },
       {
         title: "Plumbing licensing",
         publisher: "Australian Building Codes Board",
         source: "State and territory building and plumbing administrations",
         url: "https://www.abcb.gov.au/support/state-and-territory-building-and-plumbing-administrations",
-        use:
-          "Identifies the jurisdictional administrations responsible for plumbing registration, licensing and technical requirements.",
+        use: "Identifies the jurisdictional administrations responsible for plumbing registration, licensing and technical requirements.",
+      },
+      sharedLabourSources.visa,
+    ],
+  },
+  {
+    id: "wall-floor-tiler",
+    title: "Wall and Floor Tiler",
+    description:
+      "Evidence supporting the Australia Wall and Floor Tiler occupation dashboard, apprenticeship and jurisdiction-specific licensing pathway, and provisional Career Opportunity Score. JSA publishes occupation earnings as N/A; May 2026 vacancy and May 2025–2035 projection figures are tied to the official JSA releases with indexed extraction provenance retained in the Supabase snapshot until direct workbook ingestion is available.",
+    snapshot: "1 May 2026",
+    sources: [
+      {
+        title: "Official occupation scope",
+        publisher: "Australian Bureau of Statistics",
+        source: "OSCA 362431 Wall and Floor Tiler",
+        url: "https://www.abs.gov.au/statistics/classifications/osca-occupation-standard-classification-australia/2024-version-1-0/browse-classification/3/36/362/3624/362431",
+        use: "Defines the current occupation, skill level, specialisations and tasks. It also notes that registration or licensing may be required.",
+      },
+      {
+        title: "Employment and earnings",
+        publisher: "Jobs and Skills Australia",
+        source: "Wall and Floor Tilers occupation profile",
+        url: "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupations/3334-wall-and-floor-tilers",
+        use: "Supplies employment, part-time share, female share, median age and full-time hours on the published legacy ANZSCO series. Median weekly and hourly earnings are officially N/A because of a high standard error and are not estimated by CampCareer.",
+      },
+      sharedLabourSources.vacancies,
+      sharedLabourSources.projections,
+      sharedLabourSources.shortage,
+      {
+        title: "Training pathway",
+        publisher: "Australian Government National Training Register",
+        source: "CPC31320 Certificate III in Wall and Floor Tiling",
+        url: "https://training.gov.au/Training/Details/CPC31320",
+        use: "Defines the current trade qualification, identifies it as suitable for an Australian apprenticeship pathway and notes jurisdiction-specific regulatory requirements and construction induction.",
+      },
+      {
+        title: "Trade licensing example",
+        publisher: "NSW Government",
+        source: "Wall and floor tiling work",
+        url: "https://www.nsw.gov.au/business-and-economy/licences-and-credentials/building-and-trade-licences-and-registrations/wall-and-floor-tiling-work",
+        use: "Shows a current jurisdiction-specific licensing rule: NSW requires the relevant contractor licence or certificate for regulated residential wall and floor tiling work, including work above the published value threshold.",
+      },
+      {
+        title: "Construction induction",
+        publisher: "Safe Work Australia",
+        source: "Working on a construction site",
+        url: "https://www.safeworkaustralia.gov.au/safety-topic/industry-and-business/construction/working-construction-site",
+        use: "Supports the general construction induction and White Card requirement for construction-site work.",
+      },
+      {
+        title: "Skills assessment",
+        publisher: "Trades Recognition Australia",
+        source: "Occupations assessed by Trades Recognition Australia",
+        url: "https://www.tradesrecognitionaustralia.gov.au/occupations-assessed-trades-recognition-australia",
+        use: "Confirms Wall and Floor Tiler is within the trade occupations assessed by TRA for relevant skills-assessment programs.",
       },
       sharedLabourSources.visa,
     ],
