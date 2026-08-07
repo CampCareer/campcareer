@@ -22,6 +22,7 @@ type InstitutionDetailRow = {
   campus_locations: unknown
   study_areas: unknown
   programme_types: unknown
+  programme_preview: unknown
 }
 
 export type InstitutionCampusLocation = {
@@ -39,6 +40,14 @@ export type InstitutionCampusLocation = {
 export type InstitutionCountBreakdown = {
   name: string
   count: number
+}
+
+export type InstitutionProgrammePreview = {
+  id: string
+  legacyProgramId: number | null
+  title: string
+  programmeType: string | null
+  fieldName: string | null
 }
 
 export type InstitutionDetail = {
@@ -59,6 +68,7 @@ export type InstitutionDetail = {
   campuses: InstitutionCampusLocation[]
   studyAreas: InstitutionCountBreakdown[]
   programmeTypes: InstitutionCountBreakdown[]
+  programs: InstitutionProgrammePreview[]
 }
 
 function safeNumber(value: unknown) {
@@ -68,6 +78,11 @@ function safeNumber(value: unknown) {
     return Number.isFinite(parsed) ? parsed : 0
   }
   return 0
+}
+
+function safePositiveIntegerOrNull(value: unknown) {
+  const parsed = safeNumber(value)
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : null
 }
 
 function safeNullableString(value: unknown) {
@@ -115,6 +130,24 @@ function parseBreakdown(value: unknown): InstitutionCountBreakdown[] {
   })
 }
 
+function parsePrograms(value: unknown): InstitutionProgrammePreview[] {
+  if (!Array.isArray(value)) return []
+
+  return value.flatMap((item) => {
+    const id = safeNullableString(recordValue(item, "id"))
+    const title = safeNullableString(recordValue(item, "title"))
+    if (!id || !title) return []
+
+    return [{
+      id,
+      legacyProgramId: safePositiveIntegerOrNull(recordValue(item, "legacyProgramId")),
+      title,
+      programmeType: safeNullableString(recordValue(item, "programmeType")),
+      fieldName: safeNullableString(recordValue(item, "fieldName")),
+    }]
+  })
+}
+
 export const getInstitutionDetail = cache(async (
   countryCode: InstitutionMvpCountryCode,
   slug: string,
@@ -140,6 +173,7 @@ export const getInstitutionDetail = cache(async (
         "campus_locations",
         "study_areas",
         "programme_types",
+        "programme_preview",
       ].join(","),
     )
     .eq("country_code", countryCode)
@@ -174,5 +208,6 @@ export const getInstitutionDetail = cache(async (
     campuses: parseCampuses(row.campus_locations),
     studyAreas: parseBreakdown(row.study_areas),
     programmeTypes: parseBreakdown(row.programme_types),
+    programs: parsePrograms(row.programme_preview),
   }
 })
