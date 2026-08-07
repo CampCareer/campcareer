@@ -34,6 +34,7 @@ function programLocation(program: AuProgramListItem) {
     const cityNames = [
       program.verifiedCitySlugs.includes("sydney") ? "Sydney" : null,
       program.verifiedCitySlugs.includes("melbourne") ? "Melbourne" : null,
+      program.verifiedCitySlugs.includes("brisbane") ? "Brisbane" : null,
     ].filter((value): value is string => Boolean(value))
 
     if (cityNames.length > 0) {
