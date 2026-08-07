@@ -15,7 +15,7 @@ import {
 } from "../../program-detail-components"
 
 const BASE_URL = "https://www.campcareer.com"
-const CITY_PROFILE_SLUGS = new Set(["sydney", "melbourne"])
+const CITY_PROFILE_SLUGS = new Set(["sydney", "melbourne", "brisbane"])
 
 type Params = { params: Promise<{ program: string }> }
 
@@ -30,6 +30,7 @@ function programLocationSummary(program: Awaited<ReturnType<typeof loadProgram>>
     const cityNames = [
       program.verifiedCitySlugs.includes("sydney") ? "Sydney" : null,
       program.verifiedCitySlugs.includes("melbourne") ? "Melbourne" : null,
+      program.verifiedCitySlugs.includes("brisbane") ? "Brisbane" : null,
     ].filter((value): value is string => Boolean(value))
 
     if (cityNames.length > 0) {
