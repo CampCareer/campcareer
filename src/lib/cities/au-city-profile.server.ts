@@ -96,6 +96,7 @@ export type AuCityProfile = {
   } | null
   transport: {
     weeklyReference: number
+    period: string
     currency: string
     referenceKind: string
     eligibilityRequired: boolean
@@ -242,9 +243,9 @@ async function loadAuCityProfile(slug: string): Promise<AuCityProfile | null> {
   const livingLow = numberValue(livingValue.low)
   const livingHigh = numberValue(livingValue.high)
 
-  const transportRow = metrics.get("student_transport_weekly_reference") ?? metrics.get("public_transport_weekly_cap")
+  const transportRow = metrics.get("public_transport_flat_fare") ?? metrics.get("student_transport_weekly_reference") ?? metrics.get("public_transport_weekly_cap")
   const transportValue = record(transportRow?.value)
-  const transportWeeklyReference = numberValue(transportValue.amount) ?? numberValue(transportValue.adult)
+  const transportReference = numberValue(transportValue.amount) ?? numberValue(transportValue.adult)
 
   const workRow = metrics.get("student_work_hours_fortnight")
   const workValue = record(workRow?.value)
@@ -267,7 +268,7 @@ async function loadAuCityProfile(slug: string): Promise<AuCityProfile | null> {
     ).values(),
   )
 
-  if (["sydney", "melbourne"].includes(normalizedSlug)) {
+  if (["sydney", "melbourne", "brisbane"].includes(normalizedSlug)) {
     sources.push({
       name: "CRICOS Locations and Course Locations",
       url: "https://data.gov.au/data/dataset/commonwealth-register-of-institutions-and-courses-for-overseas-students-cricos",
@@ -311,9 +312,10 @@ async function loadAuCityProfile(slug: string): Promise<AuCityProfile | null> {
           }
         : null,
     transport:
-      transportRow && transportWeeklyReference != null
+      transportRow && transportReference != null
         ? {
-            weeklyReference: transportWeeklyReference,
+            weeklyReference: transportReference,
+            period: stringValue(transportValue.period) ?? "week",
             currency: stringValue(transportValue.currency) ?? "AUD",
             referenceKind: stringValue(transportValue.transport_kind) ?? "weekly_reference",
             eligibilityRequired: transportValue.eligibility_required === true,
