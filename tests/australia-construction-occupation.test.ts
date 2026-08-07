@@ -49,3 +49,27 @@ test("Australia Plumber connects to the current CPC32420 shortlist record", () =
   assert.equal(program.courseCode, "CPC32420")
   assert.equal(program.registrationStatus, "CURRENT")
 })
+
+test("Australia Wall and Floor Tiler has a complete apprenticeship and licensing pathway", () => {
+  const tiler = getOccupationEditorial("wall-floor-tiler")
+  const australia = tiler?.countries.AU
+
+  assert.ok(tiler)
+  assert.ok(australia)
+  assert.ok(tiler.tasks.length >= 6)
+  assert.match(australia.entryPathway, /CPC31320/)
+  assert.match(australia.entryPathway, /apprenticeship/i)
+  assert.match(australia.registration, /licen[cs]e|licensing/i)
+  assert.match(australia.registration, /White Card/)
+})
+
+test("Australia Wall and Floor Tiler connects to the current CPC31320 shortlist record", () => {
+  const program = AU_VOCATIONAL_PROGRAM_SHORTLIST.find(
+    (item) => item.id === "au-vet:tafe-nsw:CPC31320"
+  )
+
+  assert.ok(program)
+  assert.equal(program.conceptId, "wall-floor-tiling")
+  assert.equal(program.courseCode, "CPC31320")
+  assert.equal(program.registrationStatus, "CURRENT")
+})
