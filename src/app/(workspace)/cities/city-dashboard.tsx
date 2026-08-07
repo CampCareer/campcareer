@@ -122,13 +122,22 @@ export function CityDashboard({ profile }: { profile: AuCityProfile }) {
                   <div className="flex items-start gap-3">
                     <span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-lg bg-white text-[#3e7a2e] shadow-sm"><Building2 className="size-4" /></span>
                     <div className="min-w-0 flex-1">
-                      <p className="text-[12.5px] font-semibold leading-5 text-[#1b1b1b]">{institution.name}</p>
+                      {institution.profilePath ? (
+                        <Link href={institution.profilePath} className="text-[12.5px] font-semibold leading-5 text-[#1b1b1b] transition hover:text-[#3e7a2e] hover:underline">
+                          {institution.name}
+                        </Link>
+                      ) : (
+                        <p className="text-[12.5px] font-semibold leading-5 text-[#1b1b1b]">{institution.name}</p>
+                      )}
                       <p className="mt-0.5 text-[10.5px] text-[#8f8c85]">{institution.type ?? "Education provider"} · {institution.campuses.length} registered {institution.campuses.length === 1 ? "location" : "locations"}</p>
                       <div className="mt-2 flex flex-wrap gap-1">
                         {institution.campuses.slice(0, 3).map((campus) => <span key={campus.id} className="rounded-md bg-white px-2 py-1 text-[9.5px] text-[#77746e]">{campus.locality ?? campus.name}</span>)}
                         {institution.campuses.length > 3 && <span className="rounded-md bg-white px-2 py-1 text-[9.5px] text-[#77746e]">+{institution.campuses.length - 3}</span>}
                       </div>
-                      {institution.websiteUrl && <a href={institution.websiteUrl} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1 text-[10.5px] font-semibold text-[#2563eb] hover:underline">Official site <ExternalLink className="size-3" /></a>}
+                      <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
+                        {institution.profilePath && <Link href={institution.profilePath} className="inline-flex items-center gap-1 text-[10.5px] font-semibold text-[#3e7a2e] hover:underline">Institution profile <ArrowRight className="size-3" /></Link>}
+                        {institution.websiteUrl && <a href={institution.websiteUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-[10.5px] font-semibold text-[#2563eb] hover:underline">Official site <ExternalLink className="size-3" /></a>}
+                      </div>
                     </div>
                   </div>
                 </article>
