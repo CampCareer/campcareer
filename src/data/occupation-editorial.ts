@@ -170,6 +170,32 @@ export const OCCUPATION_EDITORIAL: readonly OccupationEditorial[] = [
       },
     },
   },
+  {
+    id: "bricklayer",
+    overview:
+      "Bricklayers and masonry trades workers set out, cut, shape, lay and repair bricks, blocks and stone to construct walls, partitions, arches, paving and other structural or finishing masonry across residential, commercial and restoration projects.",
+    tasks: [
+      "Read plans and specifications to determine dimensions, materials, bonds and installation procedures",
+      "Set out masonry work and prepare foundations, damp-proofing, mortar and supporting materials",
+      "Cut and shape bricks, blocks and stone using hand tools and powered cutting equipment",
+      "Lay masonry in mortar while checking line, level, plumb, alignment and joint thickness",
+      "Install lintels, flashings, reinforcement and related components required by the design",
+      "Repair, repoint and maintain brick, block and stone structures and complete the required finish",
+    ],
+    countries: {
+      AU: {
+        headline: "A nationally short masonry trade with a paid apprenticeship route and strong earnings at the occupation-group level",
+        entryPathway:
+          "The standard Bricklayer route is a paid apprenticeship combined with the CPC33020 Certificate III in Bricklaying and Blocklaying. Training combines workplace experience with registered training, while Brick & Block Careers and other apprenticeship networks help connect entrants with employers. The current TAFE NSW shortlist record is a qualification reference and its live study locations should be checked before relying on it.",
+        registration:
+          "There is no single national Bricklayer licence. State and territory building, contractor and trade-licensing rules vary. NSW, for example, requires the relevant contractor licence or qualified supervisor certificate for regulated residential bricklaying work above the published value threshold. A White Card is required for construction-site work.",
+        jobMarketNote:
+          "Bricklayers and stonemasons work mainly in construction, with masonry-material businesses, residential and commercial builders, specialist subcontractors and apprenticeship networks supporting employment and training. The 2025 Occupation Shortage List records Bricklayer in shortage nationally and in every state and territory.",
+        scoreCaveat:
+          "The score is provisional and not yet directly comparable with profiles whose IVI occupation row is complete. JSA earnings and projection values are stored at the ANZSCO 3311 Bricklayers and Stonemasons group level; current national and regional IVI values remain unavailable until the official workbook row is directly ingested.",
+      },
+    },
+  },
 ] as const
 
 const BY_ID = new Map(OCCUPATION_EDITORIAL.map((item) => [item.id, item]))
