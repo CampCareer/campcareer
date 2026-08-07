@@ -30,6 +30,7 @@ export type ProgramField = "all" | (typeof PROGRAM_FIELDS)[number]["value"]
 export const AU_PROGRAM_CITIES = [
   { value: "sydney", label: "Sydney", labelKo: "시드니", state: "NSW" },
   { value: "melbourne", label: "Melbourne", labelKo: "멜버른", state: "VIC" },
+  { value: "brisbane", label: "Brisbane", labelKo: "브리즈번", state: "QLD" },
 ] as const
 
 export type ProgramCity = "all" | (typeof AU_PROGRAM_CITIES)[number]["value"]
