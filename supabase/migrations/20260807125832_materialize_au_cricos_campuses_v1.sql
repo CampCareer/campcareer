@@ -1,5 +1,5 @@
 -- Materialize official CRICOS registered locations as canonical campuses.
--- Greater Sydney, Greater Melbourne and Greater Brisbane membership use conservative locality whitelists
+-- Greater Sydney, Greater Melbourne, Greater Brisbane and Greater Perth membership use conservative locality whitelists
 -- over the current official CRICOS snapshot. State membership is mandatory to prevent
 -- cross-city locality collisions such as Richmond NSW vs Richmond VIC.
 
@@ -26,7 +26,10 @@ select
     'BRISBANE','BRISBANE CITY','FORTITUDE VALLEY','HERSTON','BANYO','SPRINGFIELD LAKES',
     'KELVIN GROVE QLD','ST LUCIA','SOUTH BANK','SOUTH BRISBANE','WOOLLOONGABBA','NATHAN',
     'MOUNT GRAVATT','MT GRAVATT','MEADOWBROOK','IPSWICH','PETRIE','CABOOLTURE'
-  ) as is_greater_brisbane
+  ) as is_greater_brisbane,
+  upper(btrim(coalesce(l.state,'')))='WA' and upper(btrim(coalesce(l.city,''))) in (
+    'PERTH','CRAWLEY','JOONDALUP','MT LAWLEY','BENTLEY','MURDOCH','FREMANTLE'
+  ) as is_greater_perth
 from ingest.cricos_locations_au l
 join catalog.institution_identifiers ii
   on ii.identifier_system='AU_CRICOS_PROVIDER_CODE'
@@ -42,6 +45,7 @@ select
     when s.is_greater_sydney then 'Sydney'
     when s.is_greater_melbourne then 'Melbourne'
     when s.is_greater_brisbane then 'Brisbane'
+    when s.is_greater_perth then 'Perth'
     else initcap(coalesce(nullif(btrim(s.city),''),'Unknown'))
   end,
   s.state,
@@ -49,7 +53,7 @@ select
   'active',
   g.id,
   case
-    when s.is_greater_sydney or s.is_greater_melbourne or s.is_greater_brisbane then initcap(nullif(btrim(s.city),''))
+    when s.is_greater_sydney or s.is_greater_melbourne or s.is_greater_brisbane or s.is_greater_perth then initcap(nullif(btrim(s.city),''))
     else null
   end,
   nullif(concat_ws(', ',nullif(btrim(s.address_line_1),''),nullif(btrim(s.address_line_2),''),nullif(btrim(s.address_line_3),''),nullif(btrim(s.address_line_4),'')),''),
@@ -67,7 +71,8 @@ select
     'source_last_modified',s.source_last_modified,
     'greater_sydney_v1',s.is_greater_sydney,
     'greater_melbourne_v1',s.is_greater_melbourne,
-    'greater_brisbane_v1',s.is_greater_brisbane
+    'greater_brisbane_v1',s.is_greater_brisbane,
+    'greater_perth_v1',s.is_greater_perth
   )
 from _cricos_location_stage s
 left join core.geographies g
@@ -79,6 +84,7 @@ left join core.geographies g
    when s.is_greater_sydney then 'sydney'
    when s.is_greater_melbourne then 'melbourne'
    when s.is_greater_brisbane then 'brisbane'
+   when s.is_greater_perth then 'perth'
    else null
  end
 on conflict (institution_id,name,city)
@@ -109,6 +115,7 @@ join catalog.campuses c
    when s.is_greater_sydney then 'Sydney'
    when s.is_greater_melbourne then 'Melbourne'
    when s.is_greater_brisbane then 'Brisbane'
+   when s.is_greater_perth then 'Perth'
    else initcap(coalesce(nullif(btrim(s.city),''),'Unknown'))
  end
 on conflict (identifier_system,identifier_value)
