@@ -1,9 +1,10 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { ArrowLeft, ArrowUpRight, BookOpenCheck, CalendarDays, Clock3, GraduationCap, Languages, MapPin, ShieldCheck, WalletCards } from "lucide-react"
+import { ArrowLeft, ArrowUpRight, BookOpenCheck, Building2, CalendarDays, Clock3, GraduationCap, Languages, MapPin, ShieldCheck, WalletCards } from "lucide-react"
 import { getAuProgramById } from "@/lib/programs/au-programs.server"
 import { parseProgramId, programDetailPath } from "@/lib/programs/program-search"
+import { institutionDetailPath } from "@/lib/institutions/institution-search"
 import {
   formatProgramDuration,
   formatProgramMoney,
@@ -52,6 +53,9 @@ export default async function ProgramDetailPage({ params }: Params) {
   const officialUrl = safeProgramUrl(program.officialCourseUrl)
   const cricosUrl = safeProgramUrl(program.cricosUrl)
   const institutionUrl = safeProgramUrl(program.institutionWebsite)
+  const institutionProfilePath = program.institutionSlug
+    ? institutionDetailPath("AU", program.institutionSlug)
+    : null
   const verified = program.officialUrlStatus === "verified"
 
   return (
@@ -69,7 +73,17 @@ export default async function ProgramDetailPage({ params }: Params) {
               {verified && <span className="rounded-full bg-[#3e7a2e] px-3 py-1 text-white">Official page verified</span>}
             </div>
             <h1 className="mt-5 text-[28px] font-semibold leading-tight tracking-[-0.03em] text-[#1b1b1b] sm:text-[36px]">{program.title}</h1>
-            <p className="mt-3 text-[14px] font-semibold text-[#4f4d48]">{program.institutionName}</p>
+            {institutionProfilePath ? (
+              <Link
+                href={institutionProfilePath}
+                className="mt-3 inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#4f4d48] transition hover:text-[#3e7a2e] hover:underline"
+              >
+                <Building2 className="size-4" />
+                {program.institutionName}
+              </Link>
+            ) : (
+              <p className="mt-3 text-[14px] font-semibold text-[#4f4d48]">{program.institutionName}</p>
+            )}
             {location && <p className="mt-2 flex items-center gap-2 text-[12.5px] text-[#77746e]"><MapPin className="size-4" />{location}</p>}
             {program.fieldName && <p className="mt-5 text-[13px] leading-6 text-[#65625c]">{program.fieldName}</p>}
           </header>
@@ -104,6 +118,15 @@ export default async function ProgramDetailPage({ params }: Params) {
             <div className="flex justify-between gap-4"><dt className="text-[#8f8c85]">AQF level</dt><dd className="font-semibold">{program.aqfLevel ?? "—"}</dd></div>
           </dl>
           <div className="mt-5 space-y-2">
+            {institutionProfilePath && (
+              <Link
+                href={institutionProfilePath}
+                className="flex items-center justify-center gap-2 rounded-lg border border-[#cfd9ca] bg-[#f7faf5] px-4 py-2.5 text-[12px] font-semibold text-[#3e7a2e] transition hover:bg-[#edf5ea]"
+              >
+                Institution profile
+                <Building2 className="size-3.5" />
+              </Link>
+            )}
             {officialUrl && <SourceLink href={officialUrl} primary>{verified ? "Official program page" : "Provider page · unverified"}</SourceLink>}
             {cricosUrl && <SourceLink href={cricosUrl}>View CRICOS record</SourceLink>}
             {institutionUrl && <SourceLink href={institutionUrl}>Institution website</SourceLink>}
