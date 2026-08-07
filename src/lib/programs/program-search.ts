@@ -111,7 +111,11 @@ function firstValue(value: string | string[] | undefined) {
   return Array.isArray(value) ? value[0] : value
 }
 
-function allowedValue<T extends string>(value: string | undefined, allowed: readonly T[], fallback: T): T {
+function allowedValue<T extends string>(
+  value: string | undefined,
+  allowed: readonly T[],
+  fallback: T,
+): T {
   return value && allowed.includes(value as T) ? (value as T) : fallback
 }
 
@@ -124,7 +128,9 @@ const feeValues = PROGRAM_FEES.map((item) => item.value)
 const sourceValues = PROGRAM_SOURCES.map((item) => item.value)
 const sortValues = PROGRAM_SORTS.map((item) => item.value)
 
-export function parseProgramSearchParams(params: Record<string, string | string[] | undefined>): ProgramSearchFilters {
+export function parseProgramSearchParams(
+  params: Record<string, string | string[] | undefined>,
+): ProgramSearchFilters {
   const rawPage = Number.parseInt(firstValue(params.page) ?? "1", 10)
   const country = (firstValue(params.country) ?? "AU").toUpperCase().slice(0, 2)
   const q = (firstValue(params.q) ?? "").trim().slice(0, 80)
@@ -151,13 +157,23 @@ export function programLevelTypes(level: ProgramLevel): readonly string[] | null
 
 export function hasProgramFilters(filters: ProgramSearchFilters) {
   return Boolean(
-    filters.q || filters.level !== "all" || filters.field !== "all" || filters.city !== "all" ||
-      filters.state !== "all" || filters.duration !== "all" || filters.fee !== "all" ||
-      filters.source !== "all" || filters.sort !== "recommended" || filters.page > 1,
+    filters.q ||
+      filters.level !== "all" ||
+      filters.field !== "all" ||
+      filters.city !== "all" ||
+      filters.state !== "all" ||
+      filters.duration !== "all" ||
+      filters.fee !== "all" ||
+      filters.source !== "all" ||
+      filters.sort !== "recommended" ||
+      filters.page > 1,
   )
 }
 
-export function buildProgramsUrl(filters: ProgramSearchFilters, overrides: Partial<ProgramSearchFilters> = {}) {
+export function buildProgramsUrl(
+  filters: ProgramSearchFilters,
+  overrides: Partial<ProgramSearchFilters> = {},
+) {
   const next = { ...filters, ...overrides }
   const params = new URLSearchParams()
   params.set("country", next.country)
