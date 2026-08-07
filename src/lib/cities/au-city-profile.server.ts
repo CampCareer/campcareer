@@ -40,14 +40,18 @@ type MetricRow = {
   confidence: string
 }
 
+export type AuCityCampus = {
+  id: string
+  name: string
+  locality: string | null
+}
+
 export type AuCityInstitution = {
   id: string
   name: string
   type: string | null
   websiteUrl: string | null
-  campusId: string
-  campusName: string
-  locality: string | null
+  campuses: AuCityCampus[]
 }
 
 export type CityMetricSource = {
@@ -70,7 +74,7 @@ export type AuCityProfile = {
   longitude: number | null
   linkedCampusCount: number
   linkedInstitutionCount: number
-  representativeProgramCount: number
+  verifiedProgramCount: number
   population: {
     amount: number
     geography: string
@@ -133,6 +137,29 @@ function stringArray(value: unknown): string[] {
   return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : []
 }
 
+function groupInstitutions(rows: InstitutionRow[]): AuCityInstitution[] {
+  const grouped = new Map<string, AuCityInstitution>()
+
+  for (const row of rows) {
+    const existing = grouped.get(row.institution_id)
+    const campus = { id: row.campus_id, name: row.campus_name, locality: row.locality }
+    if (existing) {
+      existing.campuses.push(campus)
+      continue
+    }
+
+    grouped.set(row.institution_id, {
+      id: row.institution_id,
+      name: row.institution_name,
+      type: row.institution_type,
+      websiteUrl: row.website_url,
+      campuses: [campus],
+    })
+  }
+
+  return [...grouped.values()].sort((a, b) => a.name.localeCompare(b.name))
+}
+
 async function loadAuCityProfile(slug: string): Promise<AuCityProfile | null> {
   const normalizedSlug = slug.trim().toLowerCase()
   const { data: cityData, error: cityError } = await supabaseAdmin
@@ -147,48 +174,45 @@ async function loadAuCityProfile(slug: string): Promise<AuCityProfile | null> {
   if (!cityData) return null
 
   const city = cityData as CityRow
-  const [{ data: institutionData, error: institutionError }, { data: metricData, error: metricError }] =
-    await Promise.all([
-      supabaseAdmin
-        .from("city_institution_directory_au_v1")
-        .select(
-          "city_id, campus_id, institution_id, institution_name, institution_type, website_url, campus_name, locality, region, legacy_provider_id",
-        )
-        .eq("city_id", city.city_id)
-        .order("institution_name", { ascending: true }),
-      supabaseAdmin
-        .from("report_metric_evidence_city")
-        .select(
-          "metric_key, value, source_name, source_url, data_as_of, last_verified_at, confidence",
-        )
-        .eq("geography_id", city.city_id)
-        .eq("scope_type", "city")
-        .eq("review_status", "verified")
-        .order("metric_key", { ascending: true }),
-    ])
+  const [
+    { data: institutionData, error: institutionError },
+    { data: metricData, error: metricError },
+    { count: verifiedProgramCount, error: programCountError },
+  ] = await Promise.all([
+    supabaseAdmin
+      .from("city_institution_directory_au_v1")
+      .select(
+        "city_id, campus_id, institution_id, institution_name, institution_type, website_url, campus_name, locality, region, legacy_provider_id",
+      )
+      .eq("city_id", city.city_id)
+      .order("institution_name", { ascending: true }),
+    supabaseAdmin
+      .from("report_metric_evidence_city")
+      .select(
+        "metric_key, value, source_name, source_url, data_as_of, last_verified_at, confidence",
+      )
+      .eq("geography_id", city.city_id)
+      .eq("scope_type", "city")
+      .eq("review_status", "verified")
+      .order("metric_key", { ascending: true }),
+    supabaseAdmin
+      .from("courses_au")
+      .select("id", { count: "exact", head: true })
+      .eq("cricos_status", "active")
+      .contains("verified_city_slugs", [normalizedSlug]),
+  ])
 
   if (institutionError) {
     throw new Error(`Unable to load Australian city institutions: ${institutionError.message}`)
   }
   if (metricError) throw new Error(`Unable to load Australian city metrics: ${metricError.message}`)
+  if (programCountError) {
+    throw new Error(`Unable to count verified Australian city programs: ${programCountError.message}`)
+  }
 
   const institutionRows = (institutionData ?? []) as InstitutionRow[]
   const metricRows = (metricData ?? []) as MetricRow[]
   const metrics = new Map(metricRows.map((row) => [row.metric_key, row]))
-  const legacyProviderIds = institutionRows
-    .map((row) => row.legacy_provider_id)
-    .filter((value): value is string => Boolean(value))
-
-  let representativeProgramCount = 0
-  if (legacyProviderIds.length > 0) {
-    const { count, error } = await supabaseAdmin
-      .from("courses_au")
-      .select("id", { count: "exact", head: true })
-      .in("institution_id", legacyProviderIds)
-      .eq("cricos_status", "active")
-    if (error) throw new Error(`Unable to count Australian city program mappings: ${error.message}`)
-    representativeProgramCount = count ?? 0
-  }
 
   const populationRow = metrics.get("city_population")
   const populationValue = record(populationRow?.value)
@@ -225,6 +249,15 @@ async function loadAuCityProfile(slug: string): Promise<AuCityProfile | null> {
     ).values(),
   )
 
+  if (normalizedSlug === "sydney") {
+    sources.push({
+      name: "CRICOS Locations and Course Locations",
+      url: "https://data.gov.au/data/dataset/commonwealth-register-of-institutions-and-courses-for-overseas-students-cricos",
+      dataAsOf: "2026-08-04",
+      confidence: "high",
+    })
+  }
+
   return {
     id: city.city_id,
     slug: city.slug,
@@ -238,7 +271,7 @@ async function loadAuCityProfile(slug: string): Promise<AuCityProfile | null> {
     longitude: numberValue(city.longitude),
     linkedCampusCount: city.linked_campus_count,
     linkedInstitutionCount: city.linked_institution_count,
-    representativeProgramCount,
+    verifiedProgramCount: verifiedProgramCount ?? 0,
     population:
       populationRow && populationAmount != null && populationGeography
         ? {
@@ -276,15 +309,7 @@ async function loadAuCityProfile(slug: string): Promise<AuCityProfile | null> {
           }
         : null,
     employmentSectors: stringArray(sectorsValue.sectors),
-    institutions: institutionRows.map((row) => ({
-      id: row.institution_id,
-      name: row.institution_name,
-      type: row.institution_type,
-      websiteUrl: row.website_url,
-      campusId: row.campus_id,
-      campusName: row.campus_name,
-      locality: row.locality,
-    })),
+    institutions: groupInstitutions(institutionRows),
     sources,
   }
 }
