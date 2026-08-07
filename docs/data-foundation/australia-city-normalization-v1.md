@@ -10,6 +10,7 @@ Normalize Australian institution/campus city data to stable `core.geographies` I
 - A program belongs to a city only when an official course-location record points to a registered campus that has been mapped to that canonical city.
 - An institution's representative/headquarter city is never sufficient evidence for a program-city claim.
 - Metro locality matching must include the state. A locality name alone is not enough because names such as `Richmond` occur in multiple states.
+- Postcode is not used as the primary metro-membership rule because the CRICOS location snapshot contains postcode inconsistencies; reviewed `state + locality` membership is used instead.
 
 ## Step 2 normalization result
 - 44 active Australian catalog campuses in the original representative-campus layer
@@ -89,7 +90,22 @@ For the current CRICOS snapshot:
 - 47 / 47 expected Melbourne locations resolve to the canonical Melbourne ID
 - 397 active programs are registered in both Sydney and Melbourne and therefore correctly carry both city slugs
 
-Melbourne is normalized in the data layer first. Product exposure can be added separately when the Sydney-vs-Melbourne comparison UI is implemented.
+## Brisbane verified result
+Brisbane follows the same official CRICOS delivery-location rule. Greater Brisbane membership is reviewed using QLD plus locality, not postcode.
+
+The current CRICOS locality set includes Brisbane/Brisbane City, Fortitude Valley, Herston, Banyo, Kelvin Grove, St Lucia, South Bank/South Brisbane, Woolloongabba, Nathan, Mount Gravatt, Meadowbrook, Springfield Lakes, Ipswich, Petrie and Caboolture.
+
+Gold Coast locations such as Coomera, Southport, Bilinga and Robina remain outside Brisbane. Sunshine Coast and regional Queensland locations such as Sippy Downs, Toowoomba and Gatton are also kept separate.
+
+For the current CRICOS snapshot:
+- canonical Brisbane ID: `1b389596-4b1f-96a1-5f33-e6d8f675402d`
+- 26 official CRICOS registered delivery locations mapped to Greater Brisbane
+- 14 education providers with at least one mapped Brisbane location
+- 1,330 active CRICOS programs with at least one verified Brisbane delivery location
+- 26 / 26 reviewed Brisbane locations resolve to the canonical Brisbane ID
+- 0 official CRICOS campuses outside QLD remain mapped to Brisbane
+
+Brisbane city evidence is published separately from the CRICOS membership layer. Its initial student-decision profile uses ABS population, UQ living-cost guidance, Translink's flat 50-cent fare, Australian Government student work rights, and Brisbane Economic Development Agency industry context. The Translink fare is stored as `AUD/trip`; it is deliberately not converted into an arbitrary weekly estimate.
 
 ## Program catalog repair
 The previous importer omitted nine catalog institutions and contained outdated provider codes. The official provider-code layer now covers all 44 institutions, including:
@@ -106,7 +122,7 @@ The previous importer omitted nine catalog institutions and contained outdated p
 `scripts/import_cricos.py` has been updated so a future course import does not recreate the old omissions.
 
 ## Refresh procedure
-`scripts/sync-au-cricos-locations.ts` downloads the official CKAN Locations and Course Locations resources, replaces the raw location snapshots, and rebuilds verified campuses, offerings and Sydney/Melbourne city publication rows.
+`scripts/sync-au-cricos-locations.ts` downloads the official CKAN Locations and Course Locations resources, replaces the raw location snapshots, and rebuilds verified campuses, offerings and Sydney/Melbourne/Brisbane city publication rows.
 
 It requires a direct Postgres connection string in `SUPABASE_DB_URL` or `DATABASE_URL`. Database outbound HTTP is not left enabled after the one-time bootstrap.
 
@@ -119,7 +135,7 @@ Before refreshing locations, refresh the CRICOS Courses catalogue when the offic
 - `verified_delivery_locations`
 - CRICOS location source/freshness fields
 
-The current `/programs?city=sydney` product filter reads only `verified_city_slugs`; program detail pages show the exact registered locations behind city membership. Melbourne now has the same verified data-layer index and can be exposed without reverting to representative-city logic.
+The `/programs?city=<slug>` product filter reads only `verified_city_slugs`; program detail pages show the exact registered locations behind city membership. Sydney, Melbourne and Brisbane now use the same verified data-layer rule and do not fall back to institution representative cities.
 
 ## Migrations
 - `20260807095621_normalize_australia_campus_city_ids_v1.sql`
@@ -129,3 +145,6 @@ The current `/programs?city=sydney` product filter reads only `verified_city_slu
 - `20260807125930_verify_au_cricos_programme_locations_v1.sql`
 - `20260807130206_republish_sydney_cricos_campus_directory_v1.sql`
 - `20260807133904_normalize_melbourne_cricos_city_v1.sql`
+- `20260807134828_publish_melbourne_city_metrics_v1.sql`
+- `20260807174234_normalize_brisbane_cricos_city_v1.sql`
+- `20260807174510_publish_brisbane_city_metrics_v1.sql`
