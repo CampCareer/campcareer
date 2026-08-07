@@ -120,7 +120,7 @@ async function refreshDerivedData(client: Client) {
   const files = [
     "supabase/migrations/20260807125832_materialize_au_cricos_campuses_v1.sql",
     "supabase/migrations/20260807125930_verify_au_cricos_programme_locations_v1.sql",
-    "supabase/migrations/20260807130206_republish_sydney_cricos_campus_directory_v1.sql",
+    "supabase/migrations/20260807133904_normalize_melbourne_cricos_city_v1.sql",
   ]
 
   for (const file of files) {
@@ -128,9 +128,7 @@ async function refreshDerivedData(client: Client) {
     await client.query(sql)
   }
 
-  // The historical publication migration pre-dates stale-location handling.
-  // Remove any inactive campus that it may have copied to the Sydney snapshot,
-  // then recompute the published counts from active official locations only.
+  // Keep published city snapshots limited to active official locations after refresh.
   await client.query(`
     delete from public.city_institution_directory_au_v1 d
     using catalog.campuses c
@@ -224,7 +222,8 @@ async function main() {
       select
         (select count(*) from ingest.cricos_locations_au) as locations,
         (select count(*) from ingest.cricos_course_locations_au) as course_locations,
-        (select count(*) from ingest.courses_au where cricos_status='active' and verified_city_slugs @> array['sydney']::text[]) as sydney_programs
+        (select count(*) from ingest.courses_au where cricos_status='active' and verified_city_slugs @> array['sydney']::text[]) as sydney_programs,
+        (select count(*) from ingest.courses_au where cricos_status='active' and verified_city_slugs @> array['melbourne']::text[]) as melbourne_programs
     `)
     console.log("CRICOS location sync complete", {
       ...result.rows[0],
