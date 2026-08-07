@@ -1,7 +1,7 @@
 # Australia city normalization v1
 
 ## Goal
-Normalize Australian institution/campus city data to stable `core.geographies` IDs, then use official CRICOS registered delivery locations for city-aware program search.
+Normalize Australian institution/campus city data to stable `core.geographies` IDs, then use official CRICOS registered delivery locations for city-aware program search and city comparison.
 
 ## Canonical rule
 - Prefer the existing ABS-backed Significant Urban Area (`au-abs-32180ds0004-v1`) geography when the campus `city + state` has an exact match.
@@ -9,6 +9,7 @@ Normalize Australian institution/campus city data to stable `core.geographies` I
 - Treat a suburb/locality separately from the city/metro geography.
 - A program belongs to a city only when an official course-location record points to a registered campus that has been mapped to that canonical city.
 - An institution's representative/headquarter city is never sufficient evidence for a program-city claim.
+- Metro locality matching must include the state. A locality name alone is not enough because names such as `Richmond` occur in multiple states.
 
 ## Step 2 normalization result
 - 44 active Australian catalog campuses in the original representative-campus layer
@@ -62,15 +63,33 @@ Current source snapshot (4 August 2026):
 The old July `programme_offerings` representative-campus backfill is retained for compatibility but marked `source_system = legacy_backfill` and `verification_status = unverified`. City filtering does not use it.
 
 ## Sydney verified result
-Sydney continues to mean the Greater Sydney student destination rather than only the City of Sydney local government area.
+Sydney means the Greater Sydney student destination rather than only the City of Sydney local government area.
+
+The initial locality whitelist did not require the CRICOS location state and therefore incorrectly classified the University of Melbourne Burnley campus at Richmond VIC as Sydney. The state-aware normalization removes that collision.
+
+For the current CRICOS snapshot after correction:
+- canonical Sydney ID: `efe4c42f-cd2b-09bd-3834-624a53d2f9fb`
+- 79 official CRICOS registered delivery locations mapped to Greater Sydney
+- 22 education providers with at least one mapped Sydney location
+- 3,332 active CRICOS programs with at least one verified Sydney delivery location
+- 0 official CRICOS campuses outside NSW remain mapped to Sydney
+
+This supersedes both the earlier representative-city count and the temporary 80 / 23 / 3,334 CRICOS result before the Richmond VIC state collision was removed.
+
+## Melbourne verified result
+Melbourne uses the same delivery-location rule as Sydney. The metro whitelist includes registered CRICOS localities such as Melbourne CBD, Parkville, Southbank, Docklands, Footscray, Sunshine, St Albans, Point Cook, Werribee, Brunswick, Fitzroy, Bundoora, Donvale, Richmond, Hawthorn, Wantirna, Burwood, Box Hill, Caulfield East, Chadstone, Prahran, Frankston, Clayton and Berwick when the official state is VIC.
+
+Regional Victorian destinations remain separate. Geelong, Ballarat, Bendigo, Warrnambool, Mildura, Wodonga and similar locations are not folded into Melbourne.
 
 For the current CRICOS snapshot:
-- canonical Sydney ID: `efe4c42f-cd2b-09bd-3834-624a53d2f9fb`
-- 80 official CRICOS registered delivery locations mapped to Greater Sydney
-- 23 education providers with at least one mapped Sydney location
-- 3,334 active CRICOS programs with at least one verified Sydney delivery location
+- canonical Melbourne ID: `8f42442b-2645-0706-dcbe-60d804f96146`
+- 47 official CRICOS registered delivery locations mapped to Greater Melbourne
+- 17 education providers with at least one mapped Melbourne location
+- 3,025 active CRICOS programs with at least one verified Melbourne delivery location
+- 47 / 47 expected Melbourne locations resolve to the canonical Melbourne ID
+- 397 active programs are registered in both Sydney and Melbourne and therefore correctly carry both city slugs
 
-This supersedes the earlier provisional count based on an institution's representative city.
+Melbourne is normalized in the data layer first. Product exposure can be added separately when the Sydney-vs-Melbourne comparison UI is implemented.
 
 ## Program catalog repair
 The previous importer omitted nine catalog institutions and contained outdated provider codes. The official provider-code layer now covers all 44 institutions, including:
@@ -87,20 +106,20 @@ The previous importer omitted nine catalog institutions and contained outdated p
 `scripts/import_cricos.py` has been updated so a future course import does not recreate the old omissions.
 
 ## Refresh procedure
-`scripts/sync-au-cricos-locations.ts` downloads the official CKAN Locations and Course Locations resources, replaces the raw location snapshots, and rebuilds verified campuses, offerings and Sydney publication rows.
+`scripts/sync-au-cricos-locations.ts` downloads the official CKAN Locations and Course Locations resources, replaces the raw location snapshots, and rebuilds verified campuses, offerings and Sydney/Melbourne city publication rows.
 
 It requires a direct Postgres connection string in `SUPABASE_DB_URL` or `DATABASE_URL`. Database outbound HTTP is not left enabled after the one-time bootstrap.
 
 Before refreshing locations, refresh the CRICOS Courses catalogue when the official Courses resource has materially changed so new course codes are present in `ingest.courses_au`.
 
 ## Compatibility
-`public.courses_au` remains the Programs read model. It now exposes:
+`public.courses_au` remains the Programs read model. It exposes:
 - `verified_city_ids`
 - `verified_city_slugs`
 - `verified_delivery_locations`
 - CRICOS location source/freshness fields
 
-The `/programs?city=sydney` filter reads only `verified_city_slugs`; program detail pages show the exact registered locations behind that city membership.
+The current `/programs?city=sydney` product filter reads only `verified_city_slugs`; program detail pages show the exact registered locations behind city membership. Melbourne now has the same verified data-layer index and can be exposed without reverting to representative-city logic.
 
 ## Migrations
 - `20260807095621_normalize_australia_campus_city_ids_v1.sql`
@@ -109,3 +128,4 @@ The `/programs?city=sydney` filter reads only `verified_city_slugs`; program det
 - `20260807125832_materialize_au_cricos_campuses_v1.sql`
 - `20260807125930_verify_au_cricos_programme_locations_v1.sql`
 - `20260807130206_republish_sydney_cricos_campus_directory_v1.sql`
+- `20260807133904_normalize_melbourne_cricos_city_v1.sql`
