@@ -67,6 +67,32 @@ export const OCCUPATION_EDITORIAL: readonly OccupationEditorial[] = [
     },
   },
   {
+    id: "care-worker",
+    overview:
+      "Care Workers support older people and people with disability with daily living, personal care, mobility, meals, household tasks, community participation, emotional wellbeing and individual support plans in home and community settings.",
+    tasks: [
+      "Support clients with mobility, personal care, dressing, hygiene and other daily activities",
+      "Prepare meals and assist with household tasks while following the person's support plan and preferences",
+      "Provide companionship, emotional support and assistance with community participation and social inclusion",
+      "Observe changes in a person's condition or support needs and report concerns through the required care channels",
+      "Support medication routines only within the worker's training, delegation and organisational procedures",
+      "Manage risks and emergencies and maintain records while respecting dignity, privacy, choice and independence",
+    ],
+    countries: {
+      AU: {
+        headline: "A very large frontline care workforce with strong shortage signals and accessible vocational entry routes",
+        entryPathway:
+          "A common entry route is CHC33021 Certificate III in Individual Support, which can be packaged with Ageing, Disability, or Ageing and Disability specialisations and requires at least 120 hours of work as specified by the qualification. Certificate IV in Ageing Support can support progression into more advanced aged-care responsibilities. Employers may set additional experience, first-aid, driving, manual-handling or service-specific training requirements.",
+        registration:
+          "There is no single national Care Worker occupational licence. Screening is role and sector specific. Paid and volunteer aged-care workers need an accepted aged-care screening clearance, while workers in risk-assessed roles for registered NDIS providers need an NDIS Worker Screening Clearance. Provider policies and state or territory requirements can add further checks.",
+        jobMarketNote:
+          "Home-care, community aged-care and disability-support providers recruit across metropolitan, regional and remote Australia. CampCareer currently rolls up Community Aged Care Support Worker and Disability Support Worker, while Residential Aged Care Worker is kept outside this profile because OSCA treats it as a separate occupation. The 2025 Occupation Shortage List records both included occupations in shortage nationally and in every state and territory.",
+        scoreCaveat:
+          "The opportunity score is provisional because JSA employment, earnings, vacancy and projection data remain published on the broader legacy ANZSCO 4231 Aged and Disabled Carers series. Visa scoring is also partial: the Aged Care Industry Labour Agreement can cover eligible aged-care employers using legacy ANZSCO 423111, but Home Affairs states disability-sector employers cannot use that agreement.",
+      },
+    },
+  },
+  {
     id: "carpenter",
     overview:
       "Carpenters set out, construct, install, renovate and repair timber and lightweight structural systems, fixtures and finishes across residential, commercial and infrastructure projects.",
