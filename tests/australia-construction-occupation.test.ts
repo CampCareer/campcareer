@@ -145,3 +145,30 @@ test("Australia HVAC Technician connects to the current UEE32225 shortlist recor
   assert.equal(program.courseCode, "UEE32225")
   assert.equal(program.registrationStatus, "CURRENT")
 })
+
+test("Australia Construction Manager has a complete professional entry pathway", () => {
+  const manager = getOccupationEditorial("construction-manager")
+  const australia = manager?.countries.AU
+
+  assert.ok(manager)
+  assert.ok(australia)
+  assert.ok(manager.tasks.length >= 6)
+  assert.match(australia.entryPathway, /Bachelor/i)
+  assert.match(australia.entryPathway, /VETASSESS/)
+  assert.match(australia.entryPathway, /CPC50320/)
+  assert.match(australia.registration, /state and territory/i)
+  assert.match(australia.registration, /White Card/)
+})
+
+test("Australia Construction Manager connects CPC50320 as a progression qualification", () => {
+  const program = AU_VOCATIONAL_PROGRAM_SHORTLIST.find(
+    (item) => item.id === "au-vet:training-gov:CPC50320"
+  )
+
+  assert.ok(program)
+  assert.equal(program.conceptId, "construction-management")
+  assert.equal(program.courseCode, "CPC50320")
+  assert.equal(program.registrationStatus, "CURRENT")
+  assert.match(program.eligibilityNote ?? "", /progression/i)
+  assert.match(program.eligibilityNote ?? "", /VETASSESS/)
+})
