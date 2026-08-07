@@ -70,6 +70,11 @@ test("verified city filters take precedence over representative state filters", 
   assert.equal(brisbane.city, "brisbane")
   assert.equal(brisbane.state, "all")
   assert.equal(buildProgramsUrl(brisbane), "/programs?country=AU&city=brisbane")
+
+  const perth = parseProgramSearchParams({ city: "perth", state: "QLD" })
+  assert.equal(perth.city, "perth")
+  assert.equal(perth.state, "all")
+  assert.equal(buildProgramsUrl(perth), "/programs?country=AU&city=perth")
 })
 
 test("program URLs preserve country and omit default filters", () => {
