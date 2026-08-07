@@ -118,6 +118,32 @@ export const OCCUPATION_EDITORIAL: readonly OccupationEditorial[] = [
       },
     },
   },
+  {
+    id: "wall-floor-tiler",
+    overview:
+      "Wall and Floor Tilers prepare surfaces and install ceramic, porcelain, stone, glass and other tiles on walls and floors across residential, commercial, renovation and wet-area projects.",
+    tasks: [
+      "Interpret plans, measure and mark surfaces, and set out tile layouts before installation",
+      "Remove old materials and fill, clean and level wall and floor surfaces ready for tiling",
+      "Apply waterproofing systems where the work is within the worker's competency and authorised scope",
+      "Measure, cut and shape tiles to fit edges, corners, fittings, pipes and other penetrations",
+      "Spread adhesive and set tiles while checking alignment, spacing, level and the required finish",
+      "Grout, clean and polish tiled surfaces and inspect, repair or replace damaged tiles",
+    ],
+    countries: {
+      AU: {
+        headline: "A nationally short finishing trade with a paid apprenticeship route and jurisdiction-specific licensing",
+        entryPathway:
+          "The standard route is a paid wall and floor tiling apprenticeship combined with the CPC31320 Certificate III in Wall and Floor Tiling. A training contract combines employment with registered training, and a White Card is required for construction work. The current TAFE NSW shortlist record should be treated as a qualification reference rather than a guaranteed live intake because its listed study and location options can change.",
+        registration:
+          "There is no single national Wall and Floor Tiler licence. State and territory building, contractor and trade-licensing rules apply differently by jurisdiction. For example, NSW requires the relevant licence or certificate for residential wall and floor tiling work above the regulated value threshold. Waterproofing or contracting work can trigger additional requirements, and a White Card is required for construction-site work.",
+        jobMarketNote:
+          "Residential and commercial builders, renovation and bathroom specialists, tiling contractors, pool and wet-area businesses and tile-sector employers use tiling skills. Apprenticeship networks can connect new entrants with host employers, while licensing and contracting rules need to be checked for the state or territory where the work is performed.",
+        scoreCaveat:
+          "The score is provisional because Jobs and Skills Australia publishes median earnings for this occupation as N/A due to a high standard error. Current vacancy and projection figures are tied to the official JSA series but were captured through an indexed representation until the source workbooks can be directly machine-ingested.",
+      },
+    },
+  },
 ] as const
 
 const BY_ID = new Map(OCCUPATION_EDITORIAL.map((item) => [item.id, item]))
