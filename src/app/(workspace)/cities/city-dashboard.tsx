@@ -66,7 +66,7 @@ export function CityDashboard({ profile }: { profile: AuCityProfile }) {
           style={{ backgroundImage: `url(${SYDNEY_IMAGE})` }}
         />
         <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/45 to-black/20" />
-        <div className="relative mx-auto w-full max-w-6xl px-4 pb-24 pt-14 sm:px-8 sm:pt-18 lg:px-10">
+        <div className="relative mx-auto w-full max-w-6xl px-4 pb-24 pt-14 sm:px-8 sm:pt-20 lg:px-10">
           <nav className="flex flex-wrap items-center gap-2 text-[11px] font-medium text-white/70" aria-label="Breadcrumb">
             <Link href="/countries" className="hover:text-white">Countries</Link>
             <span>/</span>
@@ -85,7 +85,7 @@ export function CityDashboard({ profile }: { profile: AuCityProfile }) {
       </section>
 
       <main className="mx-auto w-full max-w-6xl px-4 pb-12 sm:px-8 lg:px-10">
-        <div className="-mt-8 rounded-2xl border border-[#e7e6e3] bg-white p-5 shadow-xl shadow-black/8 sm:p-6">
+        <div className="-mt-8 rounded-2xl border border-[#e7e6e3] bg-white p-5 shadow-xl shadow-black/10 sm:p-6">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-[12px] font-semibold text-[#3e7a2e]">Student decision snapshot</p>
