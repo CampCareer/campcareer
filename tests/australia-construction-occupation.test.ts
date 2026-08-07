@@ -97,3 +97,27 @@ test("Australia Welder connects to the current MEM31925 shortlist record", () =>
   assert.equal(program.courseCode, "MEM31925")
   assert.equal(program.registrationStatus, "CURRENT")
 })
+
+test("Australia Bricklayer has a complete apprenticeship and licensing pathway", () => {
+  const bricklayer = getOccupationEditorial("bricklayer")
+  const australia = bricklayer?.countries.AU
+
+  assert.ok(bricklayer)
+  assert.ok(australia)
+  assert.ok(bricklayer.tasks.length >= 6)
+  assert.match(australia.entryPathway, /CPC33020/)
+  assert.match(australia.entryPathway, /apprenticeship/i)
+  assert.match(australia.registration, /no single national Bricklayer licence/i)
+  assert.match(australia.registration, /White Card/)
+})
+
+test("Australia Bricklayer connects to the current CPC33020 shortlist record", () => {
+  const program = AU_VOCATIONAL_PROGRAM_SHORTLIST.find(
+    (item) => item.id === "au-vet:tafe-nsw:CPC33020"
+  )
+
+  assert.ok(program)
+  assert.equal(program.conceptId, "bricklaying")
+  assert.equal(program.courseCode, "CPC33020")
+  assert.equal(program.registrationStatus, "CURRENT")
+})
