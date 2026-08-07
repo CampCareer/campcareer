@@ -1,11 +1,17 @@
 import assert from "node:assert/strict"
 import { readFileSync } from "node:fs"
 import test from "node:test"
+import { AU_VOCATIONAL_PROGRAM_SHORTLIST } from "../src/data/au-vocational-program-shortlist"
 import { getCanonicalCareer } from "../src/data/career-comparison-catalog"
 import { getOccupationEditorial } from "../src/data/occupation-editorial"
 
 const midwifeMigration = readFileSync(
   new URL("../supabase/migrations/20260807191500_australia_midwife_profile.sql", import.meta.url),
+  "utf8",
+)
+
+const careWorkerMigration = readFileSync(
+  new URL("../supabase/migrations/20260807195500_australia_care_worker_profile.sql", import.meta.url),
   "utf8",
 )
 
@@ -52,4 +58,53 @@ test("Australia Midwife exposes current regulator, pathway and visa sources", ()
   assert.match(midwifeMigration, /MidStart/)
   assert.match(midwifeMigration, /Core Skills Occupation List includes legacy ANZSCO 254111 Midwife/)
   assert.match(midwifeMigration, /Home Affairs — Skilled occupation list/)
+})
+
+test("Australia Care Worker uses a deliberately narrow OSCA rollup", () => {
+  const career = getCanonicalCareer("care-worker")
+
+  assert.ok(career)
+  assert.equal(career.categoryId, "health")
+  assert.match(careWorkerMigration, /'421231', 'Community Aged Care Support Worker'/)
+  assert.match(careWorkerMigration, /'422231', 'Disability Support Worker'/)
+  assert.match(careWorkerMigration, /Residential Aged Care Worker is excluded/)
+  assert.doesNotMatch(careWorkerMigration, /'421331', 'Residential Aged Care Worker'/)
+})
+
+test("Australia Care Worker has a complete vocational and screening pathway", () => {
+  const careWorker = getOccupationEditorial("care-worker")
+  const australia = careWorker?.countries.AU
+
+  assert.ok(careWorker)
+  assert.ok(australia)
+  assert.ok(careWorker.tasks.length >= 6)
+  assert.match(australia.entryPathway, /CHC33021/)
+  assert.match(australia.entryPathway, /Ageing and Disability/i)
+  assert.match(australia.registration, /no single national Care Worker occupational licence/i)
+  assert.match(australia.registration, /NDIS Worker Screening Clearance/i)
+})
+
+test("Australia Care Worker keeps verified JSA labour-market and all-state shortage inputs", () => {
+  assert.match(careWorkerMigration, /376300, 1761, 46, 91572/)
+  assert.match(careWorkerMigration, /3520\.33333/)
+  assert.match(careWorkerMigration, /-0\.19/)
+  assert.match(careWorkerMigration, /10\.75, 18\.12/)
+
+  for (const region of ["ACT", "NSW", "NT", "QLD", "SA", "TAS", "VIC", "WA"]) {
+    assert.match(careWorkerMigration, new RegExp(`'AU:care-worker', '${region}', '2026-05-01', 3`))
+  }
+})
+
+test("Australia Care Worker connects CHC33021 directly and keeps aged-care visa scope conditional", () => {
+  const program = AU_VOCATIONAL_PROGRAM_SHORTLIST.find(
+    (item) => item.id === "au-vet:training-gov:CHC33021"
+  )
+
+  assert.ok(program)
+  assert.equal(program.conceptId, "aged-care")
+  assert.equal(program.courseCode, "CHC33021")
+  assert.equal(program.registrationStatus, "CURRENT")
+  assert.match(careWorkerMigration, /'au-vet:training-gov:CHC33021', 'direct'/)
+  assert.match(careWorkerMigration, /Aged Care Industry Labour Agreement/)
+  assert.match(careWorkerMigration, /disability-sector employers cannot use that agreement/)
 })
