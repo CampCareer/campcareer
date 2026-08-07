@@ -271,7 +271,7 @@ async function loadAuCityProfile(slug: string): Promise<AuCityProfile | null> {
     ).values(),
   )
 
-  if (["sydney", "melbourne", "brisbane", "perth"].includes(normalizedSlug)) {
+  if (["sydney", "melbourne", "brisbane", "perth", "adelaide"].includes(normalizedSlug)) {
     sources.push({
       name: "CRICOS Locations and Course Locations",
       url: "https://data.gov.au/data/dataset/commonwealth-register-of-institutions-and-courses-for-overseas-students-cricos",
