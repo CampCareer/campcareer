@@ -1,12 +1,12 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname, useSearchParams } from "next/navigation"
+import { usePathname } from "next/navigation"
 import { useEffect, useState, type CSSProperties } from "react"
 import { ChevronDown, Globe2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { WORKSPACE_NAV_ITEMS } from "@/lib/workspace/navigation"
-import { COMPARE_MODE_NAV_ITEMS } from "@/lib/compare-navigation"
+import { COMPARE_MODE_NAV_ITEMS, type CompareModeType } from "@/lib/compare-navigation"
 import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
 import { useSelectedCountry } from "./country-context"
 
@@ -17,14 +17,17 @@ type WorkspaceSidebarProps = {
 
 export function WorkspaceSidebar({ open, onClose }: WorkspaceSidebarProps) {
   const pathname = usePathname()
-  const searchParams = useSearchParams()
   const { selectedCountry, setSelectedCountry } = useSelectedCountry()
   const isCompareRoute = pathname === "/compare" || pathname.startsWith("/compare/")
   const [compareOpen, setCompareOpen] = useState(isCompareRoute)
-  const compareType = searchParams.get("type") ?? "program"
+  const [compareType, setCompareType] = useState<CompareModeType>("program")
 
   useEffect(() => {
-    if (isCompareRoute) setCompareOpen(true)
+    if (!isCompareRoute) return
+    setCompareOpen(true)
+    const rawType = new URLSearchParams(window.location.search).get("type")
+    const matched = COMPARE_MODE_NAV_ITEMS.find((item) => item.type === rawType)
+    setCompareType(matched?.type ?? "program")
   }, [isCompareRoute])
 
   function handleCountryChange(code: string) {
@@ -102,7 +105,10 @@ export function WorkspaceSidebar({ open, onClose }: WorkspaceSidebarProps) {
                           <Link
                             key={mode.type}
                             href={mode.href}
-                            onClick={onClose}
+                            onClick={() => {
+                              setCompareType(mode.type)
+                              onClose()
+                            }}
                             aria-current={modeActive ? "page" : undefined}
                             className={cn(
                               "flex min-h-9 items-center rounded-lg px-3 text-[12.5px] font-medium transition",
