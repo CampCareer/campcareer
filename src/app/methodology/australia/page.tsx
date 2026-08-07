@@ -368,7 +368,7 @@ const occupationSourceSections: readonly OccupationSourceSection[] = [
         title: "Employment and earnings",
         publisher: "Jobs and Skills Australia",
         source: "Structural Steel and Welding Trades Workers occupation profile",
-        url: "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupations/3223-structural-steel-and-welding-trades-workers",
+        url: "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupations-anzsco/3223-structural-steel-and-welding-trades-workers",
         use: "Supplies employment, earnings, part-time share, female share, median age and full-time hours on the published legacy ANZSCO 3223 series used for the rollup.",
       },
       sharedLabourSources.vacancies,
@@ -476,7 +476,7 @@ export default function AustraliaMethodologyPage() {
             className="scroll-mt-20 rounded-3xl border border-blue-100 bg-blue-50/50 p-5 sm:p-7"
           >
             <p className="text-xs font-semibold uppercase tracking-[0.12em] text-blue-600">Occupation sources</p>
-            <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
+            <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <h2 className="font-display text-2xl font-semibold tracking-tight text-slate-900">
                   {section.title}
