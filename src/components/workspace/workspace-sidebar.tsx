@@ -1,11 +1,12 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
-import type { CSSProperties } from "react"
+import { usePathname, useSearchParams } from "next/navigation"
+import { useEffect, useState, type CSSProperties } from "react"
 import { ChevronDown, Globe2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { WORKSPACE_NAV_ITEMS } from "@/lib/workspace/navigation"
+import { COMPARE_MODE_NAV_ITEMS } from "@/lib/compare-navigation"
 import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
 import { useSelectedCountry } from "./country-context"
 
@@ -16,7 +17,15 @@ type WorkspaceSidebarProps = {
 
 export function WorkspaceSidebar({ open, onClose }: WorkspaceSidebarProps) {
   const pathname = usePathname()
+  const searchParams = useSearchParams()
   const { selectedCountry, setSelectedCountry } = useSelectedCountry()
+  const isCompareRoute = pathname === "/compare" || pathname.startsWith("/compare/")
+  const [compareOpen, setCompareOpen] = useState(isCompareRoute)
+  const compareType = searchParams.get("type") ?? "program"
+
+  useEffect(() => {
+    if (isCompareRoute) setCompareOpen(true)
+  }, [isCompareRoute])
 
   function handleCountryChange(code: string) {
     const country = LAUNCH_COUNTRIES.find((c) => c.code === code) ?? null
@@ -48,6 +57,70 @@ export function WorkspaceSidebar({ open, onClose }: WorkspaceSidebarProps) {
             const Icon = item.icon
             const label =
               item.id === "countries" && selectedCountry ? selectedCountry.name : item.label
+
+            if (item.id === "compare") {
+              return (
+                <div key={item.id}>
+                  <button
+                    type="button"
+                    onClick={() => setCompareOpen((current) => !current)}
+                    aria-expanded={compareOpen}
+                    aria-controls="workspace-compare-modes"
+                    className={cn(
+                      "group flex w-full items-center gap-3 rounded-lg px-3 py-2 text-[13.5px] transition",
+                      isActive
+                        ? "font-semibold text-white"
+                        : "font-medium text-[#1b1b1b] hover:bg-[var(--item-tint)]"
+                    )}
+                    style={
+                      {
+                        ["--item-tint" as string]: item.tint,
+                        backgroundColor: isActive ? item.accent : undefined,
+                      } as CSSProperties
+                    }
+                  >
+                    <Icon
+                      className="size-[17px] shrink-0 transition"
+                      strokeWidth={2}
+                      style={{ color: isActive ? "rgba(255,255,255,0.95)" : item.accent }}
+                    />
+                    <span className="min-w-0 flex-1 text-left">Compare</span>
+                    <ChevronDown
+                      className={cn(
+                        "size-3.5 shrink-0 transition-transform",
+                        isActive ? "text-white/80" : "text-[#9c9a94]",
+                        compareOpen && "rotate-180"
+                      )}
+                    />
+                  </button>
+
+                  {compareOpen && (
+                    <div id="workspace-compare-modes" className="mt-1 space-y-0.5 pl-8">
+                      {COMPARE_MODE_NAV_ITEMS.map((mode) => {
+                        const modeActive = isCompareRoute && compareType === mode.type
+                        return (
+                          <Link
+                            key={mode.type}
+                            href={mode.href}
+                            onClick={onClose}
+                            aria-current={modeActive ? "page" : undefined}
+                            className={cn(
+                              "flex min-h-9 items-center rounded-lg px-3 text-[12.5px] font-medium transition",
+                              modeActive
+                                ? "bg-[#f3f0fa] font-semibold text-[#6d4fc4]"
+                                : "text-[#6f6d68] hover:bg-[#f8f7fb] hover:text-[#4f3895]"
+                            )}
+                          >
+                            {mode.label}
+                          </Link>
+                        )
+                      })}
+                    </div>
+                  )}
+                </div>
+              )
+            }
+
             return (
               <Link
                 key={item.id}
