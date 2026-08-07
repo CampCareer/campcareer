@@ -2,6 +2,7 @@ import "server-only"
 
 import { cache } from "react"
 import { supabaseAdmin } from "@/lib/supabase-admin"
+import { auInstitutionPathFromProviderId } from "@/lib/cities/au-institution-route"
 
 type CityRow = {
   city_id: string
@@ -56,6 +57,7 @@ export type AuCityInstitution = {
   name: string
   type: string | null
   websiteUrl: string | null
+  profilePath: string | null
   campuses: AuCityCampus[]
 }
 
@@ -163,6 +165,7 @@ function groupInstitutions(rows: InstitutionRow[]): AuCityInstitution[] {
       name: row.institution_name,
       type: row.institution_type,
       websiteUrl: row.website_url,
+      profilePath: auInstitutionPathFromProviderId(row.legacy_provider_id),
       campuses: [campus],
     })
   }
