@@ -186,14 +186,24 @@ export function AustraliaCountryDashboard({ metrics }: { metrics: CountryMetrics
                   {region.name}
                 </h3>
                 <div className="mt-2 flex flex-wrap gap-1.5">
-                  {region.cities.map((city) => (
-                    <span
-                      key={city}
-                      className="rounded-md border border-[#e7e6e3] bg-[#fafaf8] px-2.5 py-1 text-[12px] font-medium text-[#4d4c48]"
-                    >
-                      {city}
-                    </span>
-                  ))}
+                  {region.cities.map((city) =>
+                    city === "Sydney" ? (
+                      <Link
+                        key={city}
+                        href="/cities/au/sydney"
+                        className="rounded-md border border-[#bfcff0] bg-[#eef4ff] px-2.5 py-1 text-[12px] font-semibold text-[#2563eb] transition hover:border-[#2563eb] hover:bg-white"
+                      >
+                        {city}
+                      </Link>
+                    ) : (
+                      <span
+                        key={city}
+                        className="rounded-md border border-[#e7e6e3] bg-[#fafaf8] px-2.5 py-1 text-[12px] font-medium text-[#4d4c48]"
+                      >
+                        {city}
+                      </span>
+                    ),
+                  )}
                 </div>
               </div>
             ))}
