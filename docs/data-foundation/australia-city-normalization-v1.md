@@ -107,6 +107,23 @@ For the current CRICOS snapshot:
 
 Brisbane city evidence is published separately from the CRICOS membership layer. Its initial student-decision profile uses ABS population, UQ living-cost guidance, Translink's flat 50-cent fare, Australian Government student work rights, and Brisbane Economic Development Agency industry context. The Translink fare is stored as `AUD/trip`; it is deliberately not converted into an arbitrary weekly estimate.
 
+## Perth verified result
+Perth follows the same official delivery-location rule. Greater Perth membership is reviewed using WA plus locality rather than postcode.
+
+The current CampCareer provider set maps the following CRICOS localities to the Greater Perth study destination: Perth, Crawley, Joondalup, Mt Lawley, Bentley, Murdoch and Fremantle.
+
+Regional Western Australian destinations remain separate. Stake Hill and Mandurah are not folded into Perth, and Bunbury, Kalgoorlie, Broome and Margaret River retain their own regional location identity.
+
+For the current CRICOS snapshot:
+- canonical Perth ID: `ce80bdf1-f6f6-bde4-1bd6-5b742663b96b`
+- 11 official CRICOS registered delivery locations mapped to Greater Perth
+- 6 education providers with at least one mapped Perth location
+- 1,215 active CRICOS programs with at least one verified Perth delivery location
+- 11 / 11 reviewed Perth locations resolve to the canonical Perth ID
+- 0 official CRICOS campuses outside WA remain mapped to Perth
+
+Perth city evidence uses ABS Greater Perth population, Murdoch University's approximate A$500/week living-cost guide, Transperth's tertiary concession Go Anywhere fare, Australian Government student work rights, and City of Perth economic-development sectors. The living-cost headline is stored as a calculated monthly equivalent (`500 × 52 ÷ 12 ≈ A$2,167/month`) and remains explicitly marked `calculated`. The Transperth fare is stored per trip rather than converted into a weekly estimate.
+
 ## Program catalog repair
 The previous importer omitted nine catalog institutions and contained outdated provider codes. The official provider-code layer now covers all 44 institutions, including:
 - University of Sydney: `00026A`
@@ -122,7 +139,7 @@ The previous importer omitted nine catalog institutions and contained outdated p
 `scripts/import_cricos.py` has been updated so a future course import does not recreate the old omissions.
 
 ## Refresh procedure
-`scripts/sync-au-cricos-locations.ts` downloads the official CKAN Locations and Course Locations resources, replaces the raw location snapshots, and rebuilds verified campuses, offerings and Sydney/Melbourne/Brisbane city publication rows.
+`scripts/sync-au-cricos-locations.ts` downloads the official CKAN Locations and Course Locations resources, replaces the raw location snapshots, and rebuilds verified campuses, offerings and Sydney/Melbourne/Brisbane/Perth city publication rows.
 
 It requires a direct Postgres connection string in `SUPABASE_DB_URL` or `DATABASE_URL`. Database outbound HTTP is not left enabled after the one-time bootstrap.
 
@@ -135,7 +152,7 @@ Before refreshing locations, refresh the CRICOS Courses catalogue when the offic
 - `verified_delivery_locations`
 - CRICOS location source/freshness fields
 
-The `/programs?city=<slug>` product filter reads only `verified_city_slugs`; program detail pages show the exact registered locations behind city membership. Sydney, Melbourne and Brisbane now use the same verified data-layer rule and do not fall back to institution representative cities.
+The `/programs?city=<slug>` product filter reads only `verified_city_slugs`; program detail pages show the exact registered locations behind city membership. Sydney, Melbourne, Brisbane and Perth now use the same verified data-layer rule and do not fall back to institution representative cities.
 
 ## Migrations
 - `20260807095621_normalize_australia_campus_city_ids_v1.sql`
@@ -148,3 +165,5 @@ The `/programs?city=<slug>` product filter reads only `verified_city_slugs`; pro
 - `20260807134828_publish_melbourne_city_metrics_v1.sql`
 - `20260807174234_normalize_brisbane_cricos_city_v1.sql`
 - `20260807174510_publish_brisbane_city_metrics_v1.sql`
+- `20260807181433_normalize_perth_cricos_city_v1.sql`
+- `20260807181551_publish_perth_city_metrics_v1.sql`
