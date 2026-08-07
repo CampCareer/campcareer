@@ -1,6 +1,5 @@
 import Link from "next/link"
 import {
-  ArrowUpRight,
   BadgeCheck,
   Building2,
   Clock3,
@@ -8,7 +7,9 @@ import {
   MapPin,
   ShieldCheck,
 } from "lucide-react"
+import { InstitutionLogo } from "./institution-logo"
 import type { AuProgramListItem } from "@/lib/programs/au-programs.server"
+import { getProgramDiscipline } from "@/lib/programs/program-discipline"
 import { programDetailPath } from "@/lib/programs/program-search"
 
 function money(value: number | null) {
@@ -28,31 +29,31 @@ function duration(value: number | null) {
   }`
 }
 
-function institutionInitials(name: string) {
-  const words = name
-    .replace(/^the\s+/i, "")
-    .split(/\s+/)
-    .filter(Boolean)
-
-  return words
-    .slice(0, 3)
-    .map((word) => word[0]?.toUpperCase())
-    .join("")
-}
-
 export function ProgramCard({ program }: { program: AuProgramListItem }) {
   const tuition = money(program.tuitionFeeAud)
   const studyDuration = duration(program.durationYears)
   const location = [program.city, program.state].filter(Boolean).join(", ")
   const detailHref = programDetailPath(program.id, program.title)
   const verified = program.officialUrlStatus === "verified"
+  const discipline = getProgramDiscipline({
+    title: program.title,
+    fieldName: program.fieldName,
+    broadField: program.broadField,
+  })
 
   return (
-    <article className="group rounded-xl border border-[#e6e5e1] bg-white p-4 transition hover:border-[#bfcdb9] hover:shadow-[0_12px_30px_rgba(40,70,30,0.07)] sm:p-5">
-      <div className="flex gap-4">
-        <div className="hidden size-16 shrink-0 place-items-center rounded-xl bg-[#edf5ea] text-[14px] font-bold tracking-wide text-[#3e7a2e] sm:grid">
-          {institutionInitials(program.institutionName) || <GraduationCap className="size-5" />}
-        </div>
+    <article className="group relative h-full cursor-pointer rounded-xl border border-[#e6e5e1] bg-white p-4 transition hover:border-[#bfcdb9] hover:shadow-[0_12px_30px_rgba(40,70,30,0.07)] focus-within:border-[#3e7a2e] focus-within:ring-4 focus-within:ring-[#3e7a2e]/15 sm:p-5">
+      <Link
+        href={detailHref}
+        aria-label={`View ${program.title} at ${program.institutionName}`}
+        className="absolute inset-0 z-10 rounded-xl outline-none"
+      />
+
+      <div className="pointer-events-none flex gap-4">
+        <InstitutionLogo
+          institutionName={program.institutionName}
+          websiteUrl={program.institutionWebsite}
+        />
 
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-start justify-between gap-3">
@@ -71,10 +72,8 @@ export function ProgramCard({ program }: { program: AuProgramListItem }) {
                 )}
               </div>
 
-              <h2 className="mt-2 text-[16px] font-semibold leading-snug tracking-[-0.015em] text-[#1b1b1b] sm:text-[17px]">
-                <Link href={detailHref} className="transition group-hover:text-[#3e7a2e]">
-                  {program.title}
-                </Link>
+              <h2 className="mt-2 text-[16px] font-semibold leading-snug tracking-[-0.015em] text-[#1b1b1b] transition group-hover:text-[#3e7a2e] sm:text-[17px]">
+                {program.title}
               </h2>
 
               <p className="mt-1.5 flex items-center gap-1.5 text-[12.5px] font-medium text-[#5e5c57]">
@@ -120,21 +119,17 @@ export function ProgramCard({ program }: { program: AuProgramListItem }) {
 
           {(program.fieldName || program.broadField) && (
             <p className="mt-3 line-clamp-2 text-[12.5px] leading-5 text-[#74716b]">
+              <span aria-hidden="true" className="mr-1.5 text-[13px]">
+                {discipline.emoji}
+              </span>
               {program.fieldName ?? program.broadField}
             </p>
           )}
 
-          <div className="mt-4 flex items-center justify-between border-t border-[#efeeea] pt-3">
+          <div className="mt-4 border-t border-[#efeeea] pt-3">
             <p className="text-[10.5px] font-medium text-[#aaa7a0]">
               {program.cricosStatus === "active" ? "Active CRICOS record" : "Source review required"}
             </p>
-            <Link
-              href={detailHref}
-              className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[#3e7a2e] transition hover:text-[#2e5e24]"
-            >
-              View details
-              <ArrowUpRight className="size-3.5" />
-            </Link>
           </div>
         </div>
       </div>
