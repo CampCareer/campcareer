@@ -4,37 +4,37 @@ import {
   type CareerCompareId,
   type RegistrationValue,
 } from "./australia"
-import type { DurationValue, MoneyValue, TextValue } from "@/data/country-comparison/contracts"
+import type { TextValue } from "@/data/country-comparison/contracts"
 
 export type CareerComparisonDisplayValue = {
   primary: string
   secondary?: string
 }
 
-export type CareerComparisonRowSection = "Pathway" | "Study cost" | "Career outcome" | "Time" | "Source"
+export type CareerComparisonRowSection = "Key metrics" | "Entry & requirements" | "Outcomes" | "Other details"
 
 export type CareerComparisonFieldKey =
+  | "opportunityScore"
+  | "annualisedMedianSalary"
+  | "medianWeeklyEarnings"
+  | "employmentTotal"
+  | "vacanciesThreeMonthAvg"
   | "typicalEducationRoute"
-  | "typicalEntryQualification"
-  | "studyDuration"
-  | "qualificationOutcome"
   | "registrationRequirement"
   | "registrationAuthority"
-  | "annualTuition"
-  | "estimatedTotalTuition"
-  | "mandatoryStudyCosts"
-  | "startingIncome"
-  | "typicalEarnings"
-  | "incomeBasis"
-  | "employmentOutlook"
+  | "registrationProcess"
+  | "employmentGrowth5yPct"
+  | "employmentGrowth10yPct"
+  | "vacancyYoyPct"
   | "shortageStatus"
-  | "geographicScope"
-  | "timeToProfessionalEntry"
-  | "registrationOrOnboardingTime"
+  | "employmentOutlook"
+  | "officialClassification"
+  | "publicationStatus"
+  | "scoreStatus"
   | "officialSources"
   | "reviewed"
 
-type CareerComparisonValue = MoneyValue | DurationValue | TextValue | RegistrationValue | readonly string[] | string | null
+type CareerComparisonValue = TextValue | RegistrationValue | readonly string[] | string | number | null
 
 export type CareerComparisonRowDefinition = {
   key: CareerComparisonFieldKey
@@ -48,38 +48,52 @@ export type CareerComparisonRow = CareerComparisonRowDefinition & {
   values: readonly (CareerComparisonDisplayValue & { careerId: CareerCompareId })[]
 }
 
-function formatMoney(value: MoneyValue): CareerComparisonDisplayValue {
-  if (value.amount !== null) return { primary: `${value.currency ?? ""}${value.amount.toLocaleString("en-AU")}`.trim() }
-  if (value.min !== null || value.max !== null) {
-    const min = value.min === null ? "" : `${value.currency ?? ""}${value.min.toLocaleString("en-AU")}`
-    const max = value.max === null ? "" : `${value.currency ?? ""}${value.max.toLocaleString("en-AU")}`
-    return { primary: `${min}–${max}` }
-  }
-  return { primary: CAREER_COMPARE_MISSING_VALUE }
-}
+const missing = (): CareerComparisonDisplayValue => ({ primary: CAREER_COMPARE_MISSING_VALUE })
 
-function formatDuration(value: DurationValue): CareerComparisonDisplayValue {
-  if (value.value !== null) return { primary: `${value.value} ${value.unit ?? ""}`.trim() }
-  if (value.min !== null || value.max !== null) return { primary: `${value.min ?? ""}–${value.max ?? ""} ${value.unit ?? ""}`.trim() }
-  return { primary: CAREER_COMPARE_MISSING_VALUE }
-}
-
-function formatText(value: TextValue | null): CareerComparisonDisplayValue {
-  return { primary: value?.value?.trim() || CAREER_COMPARE_MISSING_VALUE }
-}
-
-function formatRegistration(value: RegistrationValue): CareerComparisonDisplayValue {
-  return { primary: value?.value || CAREER_COMPARE_MISSING_VALUE }
-}
-
-function formatValue(value: CareerComparisonValue): CareerComparisonDisplayValue {
-  if (value === null) return { primary: CAREER_COMPARE_MISSING_VALUE }
+function formatText(value: CareerComparisonValue): CareerComparisonDisplayValue {
+  if (value === null) return missing()
   if (Array.isArray(value)) return { primary: value.length ? value.join(", ") : CAREER_COMPARE_MISSING_VALUE }
-  if (typeof value === "string") return { primary: value || CAREER_COMPARE_MISSING_VALUE }
-  if ("amount" in value) return formatMoney(value)
-  if ("unit" in value) return formatDuration(value)
-  if ("valueType" in value) return formatText(value)
-  return formatRegistration(value as NonNullable<RegistrationValue>)
+  if (typeof value === "string") return { primary: value.trim() || CAREER_COMPARE_MISSING_VALUE }
+  if (typeof value === "number") return { primary: value.toLocaleString("en-AU") }
+  if ("valueType" in value) return { primary: value.value?.trim() || CAREER_COMPARE_MISSING_VALUE }
+  const registration = value as NonNullable<RegistrationValue>
+  if (!registration.value) return missing()
+  const labels = {
+    required: "Required",
+    "not-required": "Not required",
+    conditional: "Conditional",
+    unknown: "Unknown",
+  } as const
+  return { primary: labels[registration.value] }
+}
+
+function formatInteger(value: CareerComparisonValue): CareerComparisonDisplayValue {
+  return typeof value === "number" && Number.isFinite(value)
+    ? { primary: Math.round(value).toLocaleString("en-AU") }
+    : missing()
+}
+
+function formatAud(value: CareerComparisonValue): CareerComparisonDisplayValue {
+  return typeof value === "number" && Number.isFinite(value)
+    ? { primary: `AUD ${Math.round(value).toLocaleString("en-AU")}` }
+    : missing()
+}
+
+function formatPercent(value: CareerComparisonValue): CareerComparisonDisplayValue {
+  if (typeof value !== "number" || !Number.isFinite(value)) return missing()
+  const sign = value > 0 ? "+" : ""
+  return { primary: `${sign}${value.toFixed(1)}%` }
+}
+
+function formatScore(value: CareerComparisonValue): CareerComparisonDisplayValue {
+  return typeof value === "number" && Number.isFinite(value)
+    ? { primary: `${Math.round(value)}/100` }
+    : missing()
+}
+
+function titleCaseStatus(value: CareerComparisonValue): CareerComparisonDisplayValue {
+  if (typeof value !== "string" || !value.trim()) return missing()
+  return { primary: value.replaceAll("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase()) }
 }
 
 const row = (
@@ -87,28 +101,35 @@ const row = (
   section: CareerComparisonRowSection,
   label: string,
   getValue: (career: AustraliaCareerComparison) => CareerComparisonValue,
-): CareerComparisonRowDefinition => ({ key, section, label, getValue, format: formatValue })
+  format: CareerComparisonRowDefinition["format"] = formatText,
+): CareerComparisonRowDefinition => ({ key, section, label, getValue, format })
 
 export const CAREER_COMPARISON_ROW_DEFINITIONS: readonly CareerComparisonRowDefinition[] = [
-  row("typicalEducationRoute", "Pathway", "Typical education route", (career) => career.pathway.typicalEducationRoute),
-  row("typicalEntryQualification", "Pathway", "Typical entry qualification", (career) => career.pathway.typicalEntryQualification),
-  row("studyDuration", "Pathway", "Study duration", (career) => career.pathway.studyDuration),
-  row("qualificationOutcome", "Pathway", "Qualification outcome", (career) => career.pathway.qualificationOutcome),
-  row("registrationRequirement", "Pathway", "Professional registration", (career) => career.registration.requirement),
-  row("registrationAuthority", "Pathway", "Registration authority", (career) => career.registration.authority),
-  row("annualTuition", "Study cost", "Annual international tuition", (career) => career.studyCost.annualTuition),
-  row("estimatedTotalTuition", "Study cost", "Estimated total tuition", (career) => career.studyCost.estimatedTotalTuition),
-  row("mandatoryStudyCosts", "Study cost", "Mandatory study costs", (career) => career.studyCost.mandatoryStudyCosts),
-  row("startingIncome", "Career outcome", "Starting income", (career) => career.outcome.startingIncome),
-  row("typicalEarnings", "Career outcome", "Typical earnings", (career) => career.outcome.typicalEarnings),
-  row("incomeBasis", "Career outcome", "Income basis", (career) => career.outcome.incomeBasis),
-  row("employmentOutlook", "Career outcome", "Employment outlook", (career) => career.outcome.employmentOutlook),
-  row("shortageStatus", "Career outcome", "Shortage or demand status", (career) => career.outcome.shortageStatus),
-  row("geographicScope", "Career outcome", "Geographic scope", (career) => career.outcome.geographicScope),
-  row("timeToProfessionalEntry", "Time", "Time to professional entry", (career) => career.time.timeToProfessionalEntry),
-  row("registrationOrOnboardingTime", "Time", "Registration or onboarding time", (career) => career.time.registrationOrOnboardingTime),
-  row("officialSources", "Source", "Official sources", (career) => career.sourceIds),
-  row("reviewed", "Source", "Reviewed", (career) => career.reviewedAt),
+  row("opportunityScore", "Key metrics", "Opportunity score", (career) => career.snapshot.opportunityScore, formatScore),
+  row("annualisedMedianSalary", "Key metrics", "Annualised median earnings", (career) => career.snapshot.annualisedMedianSalary, formatAud),
+  row("medianWeeklyEarnings", "Key metrics", "Median weekly earnings", (career) => career.snapshot.medianWeeklyEarnings, formatAud),
+  row("employmentTotal", "Key metrics", "Employment", (career) => career.snapshot.employmentTotal, formatInteger),
+  row("vacanciesThreeMonthAvg", "Key metrics", "Vacancies · 3-month average", (career) => career.snapshot.vacanciesThreeMonthAvg, formatInteger),
+
+  row("typicalEducationRoute", "Entry & requirements", "Typical entry route", (career) => career.pathway.typicalEducationRoute),
+  row("registrationRequirement", "Entry & requirements", "Registration / licence required", (career) => career.registration.requirement),
+  row("registrationAuthority", "Entry & requirements", "Registration authority", (career) => career.registration.authority),
+  row("registrationProcess", "Entry & requirements", "Registration / licensing", (career) => career.registration.process),
+
+  row("employmentGrowth5yPct", "Outcomes", "Employment growth · 5 years", (career) => career.snapshot.employmentGrowth5yPct, formatPercent),
+  row("employmentGrowth10yPct", "Outcomes", "Employment growth · 10 years", (career) => career.snapshot.employmentGrowth10yPct, formatPercent),
+  row("vacancyYoyPct", "Outcomes", "Vacancy trend · year on year", (career) => career.snapshot.vacancyYoyPct, formatPercent),
+  row("shortageStatus", "Outcomes", "Shortage evidence", (career) => career.outcome.shortageStatus),
+  row("employmentOutlook", "Outcomes", "Job market", (career) => career.outcome.employmentOutlook),
+
+  row("officialClassification", "Other details", "Official classification", (career) => {
+    const mapping = career.codeMappings[0]
+    return mapping ? `${mapping.system} ${mapping.code} · ${mapping.version}` : null
+  }),
+  row("publicationStatus", "Other details", "Profile status", (career) => career.snapshot.publicationStatus, titleCaseStatus),
+  row("scoreStatus", "Other details", "Score status", (career) => career.snapshot.scoreStatus, titleCaseStatus),
+  row("officialSources", "Other details", "Official sources", (career) => career.sources.map((source) => source.label)),
+  row("reviewed", "Other details", "Reviewed", (career) => career.reviewedAt),
 ]
 
 export function getCareerComparisonRows(careers: readonly AustraliaCareerComparison[]): readonly CareerComparisonRow[] {
@@ -123,7 +144,7 @@ export function getCareerComparisonRows(careers: readonly AustraliaCareerCompari
 
 export function getCareerRowsBySection(careers: readonly AustraliaCareerComparison[]) {
   const rows = getCareerComparisonRows(careers)
-  return ["Pathway", "Study cost", "Career outcome", "Time", "Source"].map((section) => ({
+  return ["Key metrics", "Entry & requirements", "Outcomes", "Other details"].map((section) => ({
     section: section as CareerComparisonRowSection,
     rows: rows.filter((row) => row.section === section),
   }))
