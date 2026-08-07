@@ -14,6 +14,7 @@ test("program search params default to Australia and safe filter values", () => 
     q: "",
     level: "all",
     field: "all",
+    city: "all",
     state: "all",
     duration: "all",
     fee: "all",
@@ -41,6 +42,7 @@ test("program search params keep supported filters and reject unknown values", (
   assert.equal(parsed.q, "Nursing")
   assert.equal(parsed.level, "bachelor")
   assert.equal(parsed.field, "06 - Health")
+  assert.equal(parsed.city, "all")
   assert.equal(parsed.state, "NSW")
   assert.equal(parsed.duration, "2-3")
   assert.equal(parsed.fee, "40000-50000")
@@ -49,7 +51,15 @@ test("program search params keep supported filters and reject unknown values", (
   assert.equal(parsed.page, 3)
 
   assert.equal(parseProgramSearchParams({ level: "unknown" }).level, "all")
+  assert.equal(parseProgramSearchParams({ city: "unknown" }).city, "all")
   assert.equal(parseProgramSearchParams({ page: "-4" }).page, 1)
+})
+
+test("verified city filters take precedence over representative state filters", () => {
+  const filters = parseProgramSearchParams({ city: "sydney", state: "VIC" })
+  assert.equal(filters.city, "sydney")
+  assert.equal(filters.state, "all")
+  assert.equal(buildProgramsUrl(filters), "/programs?country=AU&city=sydney")
 })
 
 test("program URLs preserve country and omit default filters", () => {
@@ -66,7 +76,7 @@ test("program URLs preserve country and omit default filters", () => {
     "/programs?country=AU&q=Data+Science&level=master&state=VIC&page=2",
   )
   assert.equal(
-    buildProgramsUrl(filters, { q: "", level: "all", state: "all", page: 1 }),
+    buildProgramsUrl(filters, { q: "", level: "all", city: "all", state: "all", page: 1 }),
     "/programs?country=AU",
   )
 })
