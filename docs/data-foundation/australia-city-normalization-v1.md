@@ -124,6 +124,23 @@ For the current CRICOS snapshot:
 
 Perth city evidence uses ABS Greater Perth population, Murdoch University's approximate A$500/week living-cost guide, Transperth's tertiary concession Go Anywhere fare, Australian Government student work rights, and City of Perth economic-development sectors. The living-cost headline is stored as a calculated monthly equivalent (`500 × 52 ÷ 12 ≈ A$2,167/month`) and remains explicitly marked `calculated`. The Transperth fare is stored per trip rather than converted into a weekly estimate.
 
+## Adelaide verified result
+Adelaide follows the same official delivery-location rule. Greater Adelaide membership is reviewed using South Australia plus an explicit locality list rather than postcode.
+
+The current reviewed metro set includes Adelaide, North Adelaide, Regency Park, Wayville, Bedford Park, Clovelly Park, Netherby, Urrbrae, Magill, Gilles Plains, Mawson Lakes and Parafield Airport. Regional South Australian delivery locations including Mount Gambier, Renmark, Nuriootpa, Wasleys and Whyalla remain separate.
+
+The CRICOS source contains two North Terrace records whose city value is `AUSTRALIA` even though the registered address is 230 North Terrace, Adelaide SA 5005. These are mapped to Adelaide only when the state is SA and the exact registered location name is `The University of Adelaide, North Terrace`; CampCareer does not generalise the anomaly into a postcode rule.
+
+For the current CRICOS snapshot:
+- canonical Adelaide ID: `a0cbe90e-6bf8-3b39-d4b1-091e03a8e429`
+- 27 official CRICOS registered delivery locations mapped to Greater Adelaide
+- 10 education providers with at least one mapped Adelaide location
+- 1,302 active CRICOS programs with at least one verified Adelaide delivery location
+- 27 / 27 reviewed Adelaide locations resolve to the canonical Adelaide ID
+- 0 official CRICOS campuses outside SA remain mapped to Adelaide
+
+Adelaide city evidence uses ABS Greater Adelaide population, StudyAdelaide's A$350-A$700/week international-student living-cost range, Adelaide Metro tertiary concession fares, Australian Government student work rights, and Government of South Australia industry context. The living range is stored as calculated monthly equivalents (`weekly × 52 ÷ 12 ≈ A$1,517-A$3,033/month`). The transport headline is the tertiary concession peak fare, A$2.25/trip; the A$1.30 off-peak fare and A$59.60 28-day concession pass are retained in the evidence record. The cheaper Adelaide Metro `Student` category is not used because that category applies to school students rather than tertiary students.
+
 ## Program catalog repair
 The previous importer omitted nine catalog institutions and contained outdated provider codes. The official provider-code layer now covers all 44 institutions, including:
 - University of Sydney: `00026A`
@@ -139,7 +156,7 @@ The previous importer omitted nine catalog institutions and contained outdated p
 `scripts/import_cricos.py` has been updated so a future course import does not recreate the old omissions.
 
 ## Refresh procedure
-`scripts/sync-au-cricos-locations.ts` downloads the official CKAN Locations and Course Locations resources, replaces the raw location snapshots, and rebuilds verified campuses, offerings and Sydney/Melbourne/Brisbane/Perth city publication rows.
+`scripts/sync-au-cricos-locations.ts` downloads the official CKAN Locations and Course Locations resources, replaces the raw location snapshots, and rebuilds verified campuses, offerings and Sydney/Melbourne/Brisbane/Perth/Adelaide city publication rows.
 
 It requires a direct Postgres connection string in `SUPABASE_DB_URL` or `DATABASE_URL`. Database outbound HTTP is not left enabled after the one-time bootstrap.
 
@@ -152,7 +169,7 @@ Before refreshing locations, refresh the CRICOS Courses catalogue when the offic
 - `verified_delivery_locations`
 - CRICOS location source/freshness fields
 
-The `/programs?city=<slug>` product filter reads only `verified_city_slugs`; program detail pages show the exact registered locations behind city membership. Sydney, Melbourne, Brisbane and Perth now use the same verified data-layer rule and do not fall back to institution representative cities.
+The `/programs?city=<slug>` product filter reads only `verified_city_slugs`; program detail pages show the exact registered locations behind city membership. Sydney, Melbourne, Brisbane, Perth and Adelaide now use the same verified data-layer rule and do not fall back to institution representative cities.
 
 ## Migrations
 - `20260807095621_normalize_australia_campus_city_ids_v1.sql`
@@ -167,3 +184,5 @@ The `/programs?city=<slug>` product filter reads only `verified_city_slugs`; pro
 - `20260807174510_publish_brisbane_city_metrics_v1.sql`
 - `20260807181433_normalize_perth_cricos_city_v1.sql`
 - `20260807181551_publish_perth_city_metrics_v1.sql`
+- `20260807185359_normalize_adelaide_cricos_city_v1.sql`
+- `20260807185458_publish_adelaide_city_metrics_v1.sql`
