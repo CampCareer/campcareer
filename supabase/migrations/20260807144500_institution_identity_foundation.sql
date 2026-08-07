@@ -86,26 +86,32 @@ where ownership_type is null
   );
 
 -- Persist slugs once. Existing non-empty slugs are deliberately never
--- regenerated when canonical_name changes. For the rare same-country slug
--- collision, prefer the country's official/provider identifier as the stable
--- suffix and fall back to the UUID only if no identifier exists.
+-- regenerated when canonical_name changes. A leading definite article is
+-- omitted for concise public URLs (for example, university-of-sydney).
+-- For the rare same-country slug collision, prefer the country's
+-- official/provider identifier as the stable suffix and fall back to the UUID
+-- only if no identifier exists.
 with slug_candidates as (
   select
     i.id,
     i.country_code,
-    left(
-      trim(
-        both '-'
-        from lower(
-          regexp_replace(
-            replace(i.canonical_name, '&', ' and '),
-            '[^A-Za-z0-9]+',
-            '-',
-            'g'
+    regexp_replace(
+      left(
+        trim(
+          both '-'
+          from lower(
+            regexp_replace(
+              replace(i.canonical_name, '&', ' and '),
+              '[^A-Za-z0-9]+',
+              '-',
+              'g'
+            )
           )
-        )
+        ),
+        100
       ),
-      100
+      '^the-',
+      ''
     ) as slug_base,
     (
       select ii.identifier_value
