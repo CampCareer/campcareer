@@ -276,7 +276,7 @@ export async function searchAuPrograms(
 
   if (error) throw new Error(`Unable to load Australian programs: ${error.message}`)
 
-  const courseRows = (data ?? []) as CourseRow[]
+  const courseRows = (data ?? []) as unknown as CourseRow[]
   const ids = [
     ...new Set(
       courseRows
@@ -335,7 +335,7 @@ async function loadAuProgramById(id: number): Promise<AuProgramDetail | null> {
   if (error) throw new Error(`Unable to load Australian program: ${error.message}`)
   if (!data) return null
 
-  const course = data as CourseRow
+  const course = data as unknown as CourseRow
   const institutions = await institutionMap(
     course.institution_id ? [course.institution_id] : [],
   )
