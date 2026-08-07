@@ -11,6 +11,7 @@ import { InstitutionLogo } from "./institution-logo"
 import type { AuProgramListItem } from "@/lib/programs/au-programs.server"
 import { getProgramDiscipline } from "@/lib/programs/program-discipline"
 import { programDetailPath } from "@/lib/programs/program-search"
+import { institutionDetailPath } from "@/lib/institutions/institution-search"
 
 function money(value: number | null) {
   if (value == null) return null
@@ -34,6 +35,9 @@ export function ProgramCard({ program }: { program: AuProgramListItem }) {
   const studyDuration = duration(program.durationYears)
   const location = [program.city, program.state].filter(Boolean).join(", ")
   const detailHref = programDetailPath(program.id, program.title)
+  const institutionHref = program.institutionSlug
+    ? institutionDetailPath("AU", program.institutionSlug)
+    : null
   const verified = program.officialUrlStatus === "verified"
   const discipline = getProgramDiscipline({
     title: program.title,
@@ -49,7 +53,7 @@ export function ProgramCard({ program }: { program: AuProgramListItem }) {
         className="absolute inset-0 z-10 rounded-xl outline-none"
       />
 
-      <div className="pointer-events-none flex gap-4">
+      <div className="flex gap-4">
         <InstitutionLogo
           institutionName={program.institutionName}
           websiteUrl={program.institutionWebsite}
@@ -78,7 +82,17 @@ export function ProgramCard({ program }: { program: AuProgramListItem }) {
 
               <p className="mt-1.5 flex items-center gap-1.5 text-[12.5px] font-medium text-[#5e5c57]">
                 <Building2 className="size-3.5 shrink-0 text-[#9b9891]" />
-                <span className="truncate">{program.institutionName}</span>
+                {institutionHref ? (
+                  <Link
+                    href={institutionHref}
+                    className="relative z-20 truncate transition hover:text-[#3e7a2e] hover:underline"
+                    aria-label={`View ${program.institutionName} institution profile`}
+                  >
+                    {program.institutionName}
+                  </Link>
+                ) : (
+                  <span className="truncate">{program.institutionName}</span>
+                )}
               </p>
             </div>
 
