@@ -41,7 +41,7 @@ export function HomeHub({ showDashboardBackLink = false }: { showDashboardBackLi
     ?? LAUNCH_COUNTRIES.find((country) => country.code === DEFAULT_COUNTRY)!
 
   const submitSearch = (nextValues: PathwaySearchValues) => {
-    router.push(`/home?${toHomeSearchQuery(nextValues).toString()}`, { scroll: false })
+    router.push(`/?${toHomeSearchQuery(nextValues).toString()}`, { scroll: false })
   }
 
   const closeCompactEditor = () => {
@@ -106,7 +106,7 @@ export function HomeHub({ showDashboardBackLink = false }: { showDashboardBackLi
             <p className="mt-5 max-w-2xl text-[16px] leading-7 text-white/90 sm:text-[17px]">
               Compare realistic study, work and visa routes with the conditions, timing, risks and official checks you need.
             </p>
-            {showDashboardBackLink && <Link href="/home" className="mt-5 inline-flex min-h-11 items-center rounded-xl border border-white/35 bg-white/10 px-4 text-sm font-semibold text-white transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#1b1b1b]">Back to dashboard</Link>}
+            {showDashboardBackLink && <Link href="/" className="mt-5 inline-flex min-h-11 items-center rounded-xl border border-white/35 bg-white/10 px-4 text-sm font-semibold text-white transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#1b1b1b]">Back to dashboard</Link>}
           </div>
         </div>
       </section>

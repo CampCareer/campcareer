@@ -1,7 +1,6 @@
 import type { LocaleOption } from "@/lib/i18n/config"
 
 const CANONICAL_WORKSPACE_PATHS = new Set([
-  "/home",
   "/maps",
   "/compare",
   "/visas",
@@ -16,9 +15,8 @@ export function getLegacyLocaleHomeRedirect(
   requestedPathname: string,
   routeLocale: LocaleOption | null,
 ) {
-  if (requestedPathname === "/" || requestedPathname === "/results") {
-    return "/home"
-  }
+  if (requestedPathname === "/") return null
+  if (requestedPathname === "/results" || requestedPathname === "/home") return "/"
 
   const isLegacyLocaleAlias = requestedPathname === "/en" || requestedPathname.startsWith("/en/")
   if (!routeLocale && !isLegacyLocaleAlias) return null
@@ -27,14 +25,14 @@ export function getLegacyLocaleHomeRedirect(
     ? requestedPathname.slice(`/${routeLocale === "es" ? "es-419" : routeLocale.toLowerCase()}`.length) || "/"
     : requestedPathname.slice("/en".length) || "/"
 
-  if (pathname === "/" || pathname === "/results") return "/home"
+  if (pathname === "/" || pathname === "/results" || pathname === "/home") return "/"
   return CANONICAL_WORKSPACE_PATHS.has(pathname) ? pathname : null
 }
 
 export function getLocaleNavigationPath(pathname: string, locale: LocaleOption) {
   const barePathname = pathname.replace(/^\/(?:ko|zh-hans|vi|hi|es-419)(?=\/|$)/, "") || "/"
-  if (barePathname === "/" || CANONICAL_WORKSPACE_PATHS.has(barePathname)) {
-    return barePathname === "/" ? "/home" : barePathname
+  if (barePathname === "/" || barePathname === "/home" || CANONICAL_WORKSPACE_PATHS.has(barePathname)) {
+    return barePathname === "/home" ? "/" : barePathname
   }
 
   const prefix = locale === "en" ? "" : locale === "es" ? "/es-419" : `/${locale.toLowerCase()}`
