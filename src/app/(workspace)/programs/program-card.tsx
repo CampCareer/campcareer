@@ -36,6 +36,7 @@ function programLocation(program: AuProgramListItem) {
       program.verifiedCitySlugs.includes("melbourne") ? "Melbourne" : null,
       program.verifiedCitySlugs.includes("brisbane") ? "Brisbane" : null,
       program.verifiedCitySlugs.includes("perth") ? "Perth" : null,
+      program.verifiedCitySlugs.includes("adelaide") ? "Adelaide" : null,
     ].filter((value): value is string => Boolean(value))
 
     if (cityNames.length > 0) {
