@@ -49,3 +49,126 @@ test("Australia Plumber connects to the current CPC32420 shortlist record", () =
   assert.equal(program.courseCode, "CPC32420")
   assert.equal(program.registrationStatus, "CURRENT")
 })
+
+test("Australia Wall and Floor Tiler has a complete apprenticeship and licensing pathway", () => {
+  const tiler = getOccupationEditorial("wall-floor-tiler")
+  const australia = tiler?.countries.AU
+
+  assert.ok(tiler)
+  assert.ok(australia)
+  assert.ok(tiler.tasks.length >= 6)
+  assert.match(australia.entryPathway, /CPC31320/)
+  assert.match(australia.entryPathway, /apprenticeship/i)
+  assert.match(australia.registration, /licen[cs]e|licensing/i)
+  assert.match(australia.registration, /White Card/)
+})
+
+test("Australia Wall and Floor Tiler connects to the current CPC31320 shortlist record", () => {
+  const program = AU_VOCATIONAL_PROGRAM_SHORTLIST.find(
+    (item) => item.id === "au-vet:tafe-nsw:CPC31320"
+  )
+
+  assert.ok(program)
+  assert.equal(program.conceptId, "wall-floor-tiling")
+  assert.equal(program.courseCode, "CPC31320")
+  assert.equal(program.registrationStatus, "CURRENT")
+})
+
+test("Australia Welder has a complete fabrication apprenticeship pathway", () => {
+  const welder = getOccupationEditorial("welder")
+  const australia = welder?.countries.AU
+
+  assert.ok(welder)
+  assert.ok(australia)
+  assert.ok(welder.tasks.length >= 6)
+  assert.match(australia.entryPathway, /MEM31925/)
+  assert.match(australia.entryPathway, /apprenticeship/i)
+  assert.match(australia.registration, /no single national occupational licence/i)
+  assert.match(australia.registration, /White Card/)
+})
+
+test("Australia Welder connects to the current MEM31925 shortlist record", () => {
+  const program = AU_VOCATIONAL_PROGRAM_SHORTLIST.find(
+    (item) => item.id === "au-vet:training-gov:MEM31925"
+  )
+
+  assert.ok(program)
+  assert.equal(program.conceptId, "welding")
+  assert.equal(program.courseCode, "MEM31925")
+  assert.equal(program.registrationStatus, "CURRENT")
+})
+
+test("Australia Bricklayer has a complete apprenticeship and licensing pathway", () => {
+  const bricklayer = getOccupationEditorial("bricklayer")
+  const australia = bricklayer?.countries.AU
+
+  assert.ok(bricklayer)
+  assert.ok(australia)
+  assert.ok(bricklayer.tasks.length >= 6)
+  assert.match(australia.entryPathway, /CPC33020/)
+  assert.match(australia.entryPathway, /apprenticeship/i)
+  assert.match(australia.registration, /no single national Bricklayer licence/i)
+  assert.match(australia.registration, /White Card/)
+})
+
+test("Australia Bricklayer connects to the current CPC33020 shortlist record", () => {
+  const program = AU_VOCATIONAL_PROGRAM_SHORTLIST.find(
+    (item) => item.id === "au-vet:tafe-nsw:CPC33020"
+  )
+
+  assert.ok(program)
+  assert.equal(program.conceptId, "bricklaying")
+  assert.equal(program.courseCode, "CPC33020")
+  assert.equal(program.registrationStatus, "CURRENT")
+})
+
+test("Australia HVAC Technician has a complete apprenticeship and refrigerant licensing pathway", () => {
+  const hvac = getOccupationEditorial("hvac-technician")
+  const australia = hvac?.countries.AU
+
+  assert.ok(hvac)
+  assert.ok(australia)
+  assert.ok(hvac.tasks.length >= 6)
+  assert.match(australia.entryPathway, /UEE32225/)
+  assert.match(australia.entryPathway, /apprenticeship/i)
+  assert.match(australia.registration, /Refrigerant Handling Licence/i)
+  assert.match(australia.registration, /White Card/)
+})
+
+test("Australia HVAC Technician connects to the current UEE32225 shortlist record", () => {
+  const program = AU_VOCATIONAL_PROGRAM_SHORTLIST.find(
+    (item) => item.id === "au-vet:training-gov:UEE32225"
+  )
+
+  assert.ok(program)
+  assert.equal(program.conceptId, "hvac")
+  assert.equal(program.courseCode, "UEE32225")
+  assert.equal(program.registrationStatus, "CURRENT")
+})
+
+test("Australia Construction Manager has a complete professional entry pathway", () => {
+  const manager = getOccupationEditorial("construction-manager")
+  const australia = manager?.countries.AU
+
+  assert.ok(manager)
+  assert.ok(australia)
+  assert.ok(manager.tasks.length >= 6)
+  assert.match(australia.entryPathway, /Bachelor/i)
+  assert.match(australia.entryPathway, /VETASSESS/)
+  assert.match(australia.entryPathway, /CPC50320/)
+  assert.match(australia.registration, /state and territory/i)
+  assert.match(australia.registration, /White Card/)
+})
+
+test("Australia Construction Manager connects CPC50320 as a progression qualification", () => {
+  const program = AU_VOCATIONAL_PROGRAM_SHORTLIST.find(
+    (item) => item.id === "au-vet:training-gov:CPC50320"
+  )
+
+  assert.ok(program)
+  assert.equal(program.conceptId, "construction-management")
+  assert.equal(program.courseCode, "CPC50320")
+  assert.equal(program.registrationStatus, "CURRENT")
+  assert.match(program.eligibilityNote ?? "", /progression/i)
+  assert.match(program.eligibilityNote ?? "", /VETASSESS/)
+})

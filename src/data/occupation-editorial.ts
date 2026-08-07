@@ -118,6 +118,136 @@ export const OCCUPATION_EDITORIAL: readonly OccupationEditorial[] = [
       },
     },
   },
+  {
+    id: "wall-floor-tiler",
+    overview:
+      "Wall and Floor Tilers prepare surfaces and install ceramic, porcelain, stone, glass and other tiles on walls and floors across residential, commercial, renovation and wet-area projects.",
+    tasks: [
+      "Interpret plans, measure and mark surfaces, and set out tile layouts before installation",
+      "Remove old materials and fill, clean and level wall and floor surfaces ready for tiling",
+      "Apply waterproofing systems where the work is within the worker's competency and authorised scope",
+      "Measure, cut and shape tiles to fit edges, corners, fittings, pipes and other penetrations",
+      "Spread adhesive and set tiles while checking alignment, spacing, level and the required finish",
+      "Grout, clean and polish tiled surfaces and inspect, repair or replace damaged tiles",
+    ],
+    countries: {
+      AU: {
+        headline: "A nationally short finishing trade with a paid apprenticeship route and jurisdiction-specific licensing",
+        entryPathway:
+          "The standard route is a paid wall and floor tiling apprenticeship combined with the CPC31320 Certificate III in Wall and Floor Tiling. A training contract combines employment with registered training, and a White Card is required for construction work. The current TAFE NSW shortlist record should be treated as a qualification reference rather than a guaranteed live intake because its listed study and location options can change.",
+        registration:
+          "There is no single national Wall and Floor Tiler licence. State and territory building, contractor and trade-licensing rules apply differently by jurisdiction. For example, NSW requires the relevant licence or certificate for residential wall and floor tiling work above the regulated value threshold. Waterproofing or contracting work can trigger additional requirements, and a White Card is required for construction-site work.",
+        jobMarketNote:
+          "Residential and commercial builders, renovation and bathroom specialists, tiling contractors, pool and wet-area businesses and tile-sector employers use tiling skills. Apprenticeship networks can connect new entrants with host employers, while licensing and contracting rules need to be checked for the state or territory where the work is performed.",
+        scoreCaveat:
+          "The score is provisional because Jobs and Skills Australia publishes median earnings for this occupation as N/A due to a high standard error. Current vacancy and projection figures are tied to the official JSA series but were captured through an indexed representation until the source workbooks can be directly machine-ingested.",
+      },
+    },
+  },
+  {
+    id: "welder",
+    overview:
+      "Welders and fabrication trades workers cut, shape, assemble, join and repair metal components and structures using welding, thermal cutting, fabrication and finishing techniques across manufacturing, construction, mining, defence and shipbuilding.",
+    tasks: [
+      "Read engineering drawings, specifications and welding symbols to determine fabrication and joining requirements",
+      "Measure, mark, cut, shape and prepare metal stock, plate, pipe and structural sections",
+      "Set up welding equipment and select suitable processes, consumables and parameters for the material and job",
+      "Align and join components using welding, bolting, riveting and related fabrication techniques",
+      "Inspect welded joints for penetration, profile, defects and compliance with the required specification",
+      "Grind, clean, finish and repair fabricated or welded components while following workplace safety controls",
+    ],
+    countries: {
+      AU: {
+        headline: "A nationally short fabrication trade with strong manufacturing, resources and shipbuilding demand",
+        entryPathway:
+          "The standard route is a paid fabrication engineering apprenticeship combined with the MEM31925 Certificate III in Engineering – Fabrication Trade. The national training register says the qualification was specifically developed for apprentices and must be completed through a Training Contract or a formal trade-recognition assessment process.",
+        registration:
+          "There is no single national occupational licence for general welding or metal fabrication. Work must meet employer, project, safety and welding-standard requirements, and a White Card is required when the role involves construction-site work. Trades Recognition Australia skills assessment requirements can also apply to migration pathways, but a skills assessment is separate from a domestic occupational licence.",
+        jobMarketNote:
+          "Manufacturing, construction and mining are major industries for the occupation group. Shipbuilders, defence contractors, resources and maintenance companies, heavy engineering firms and rail manufacturers recruit welders, boilermakers and fabricators, while apprenticeship pathways provide a structured route for new entrants.",
+        scoreCaveat:
+          "The opportunity score is provisional until the official IVI and employment-projection workbook rows are directly machine-ingested and posting-level employer counts and apprentice-entry shares can replace the current curated evidence.",
+      },
+    },
+  },
+  {
+    id: "bricklayer",
+    overview:
+      "Bricklayers and masonry trades workers set out, cut, shape, lay and repair bricks, blocks and stone to construct walls, partitions, arches, paving and other structural or finishing masonry across residential, commercial and restoration projects.",
+    tasks: [
+      "Read plans and specifications to determine dimensions, materials, bonds and installation procedures",
+      "Set out masonry work and prepare foundations, damp-proofing, mortar and supporting materials",
+      "Cut and shape bricks, blocks and stone using hand tools and powered cutting equipment",
+      "Lay masonry in mortar while checking line, level, plumb, alignment and joint thickness",
+      "Install lintels, flashings, reinforcement and related components required by the design",
+      "Repair, repoint and maintain brick, block and stone structures and complete the required finish",
+    ],
+    countries: {
+      AU: {
+        headline: "A nationally short masonry trade with a paid apprenticeship route and strong earnings at the occupation-group level",
+        entryPathway:
+          "The standard Bricklayer route is a paid apprenticeship combined with the CPC33020 Certificate III in Bricklaying and Blocklaying. Training combines workplace experience with registered training, while Brick & Block Careers and other apprenticeship networks help connect entrants with employers. The current TAFE NSW shortlist record is a qualification reference and its live study locations should be checked before relying on it.",
+        registration:
+          "There is no single national Bricklayer licence. State and territory building, contractor and trade-licensing rules vary. NSW, for example, requires the relevant contractor licence or qualified supervisor certificate for regulated residential bricklaying work above the published value threshold. A White Card is required for construction-site work.",
+        jobMarketNote:
+          "Bricklayers and stonemasons work mainly in construction, with masonry-material businesses, residential and commercial builders, specialist subcontractors and apprenticeship networks supporting employment and training. The 2025 Occupation Shortage List records Bricklayer in shortage nationally and in every state and territory.",
+        scoreCaveat:
+          "The score is provisional and not yet directly comparable with profiles whose IVI occupation row is complete. JSA earnings and projection values are stored at the ANZSCO 3311 Bricklayers and Stonemasons group level; current national and regional IVI values remain unavailable until the official workbook row is directly ingested.",
+      },
+    },
+  },
+  {
+    id: "hvac-technician",
+    overview:
+      "Air Conditioning and Refrigeration Technicians install, commission, maintain, diagnose and repair refrigeration and air-conditioning systems, refrigerant circuits, controls and associated mechanical and electrical components across homes, commercial buildings, cold storage and industrial facilities.",
+    tasks: [
+      "Interpret drawings and specifications and set out installation reference points for refrigeration and air-conditioning equipment",
+      "Install pipework, supports and components such as compressors, motors, condensers, evaporators, pumps, switches and gauges",
+      "Pressure-test systems, check for leaks and evacuate refrigerant circuits before commissioning",
+      "Recover, handle and charge refrigerants within the worker's licensed scope and the equipment requirements",
+      "Commission and test system operation, controls, temperatures, pressures and overall performance",
+      "Diagnose faults, repair or replace defective components and record servicing and corrective work",
+    ],
+    countries: {
+      AU: {
+        headline: "A nationally short licensed refrigeration trade with a structured apprenticeship route",
+        entryPathway:
+          "The standard route is a paid air-conditioning and refrigeration apprenticeship combined with the current UEE32225 Certificate III in Air Conditioning and Refrigeration. The qualification covers installation, commissioning, service, fault finding and refrigerant handling, and a training contract or relevant employment may be required for workplace competency development.",
+        registration:
+          "A Refrigerant Handling Licence is required for work with regulated refrigerants that could cause a release, including installation, commissioning, servicing, maintenance and decommissioning. The Australian Refrigeration Council administers the national licensing scheme. State or territory electrical, refrigeration, contractor and other permissions can also apply depending on the work scope, and a White Card is required when the work is performed on a construction site.",
+        jobMarketNote:
+          "Construction, commercial facilities, cold-chain and food-storage operations, supermarkets, healthcare, data centres and industrial maintenance all use refrigeration and air-conditioning technicians. JSA shortage evidence identifies the occupation as a persistent long-training-gap trade shortage, while specialist contractors and major HVAC manufacturers continue to recruit technicians and apprentices.",
+        scoreCaveat:
+          "The opportunity score is provisional because the current JSA IVI 3421 workbook row has not yet been directly machine-ingested, so national and regional vacancy values and vacancy-related score components remain unavailable. Five-year and ten-year growth values retain indexed extraction provenance until the official projection workbook row is directly ingested.",
+      },
+    },
+  },
+  {
+    id: "construction-manager",
+    overview:
+      "Construction Project Managers plan, coordinate and control building and civil construction delivery, including budgets, schedules, procurement, labour, subcontractors, quality, safety, contracts and stakeholder requirements from planning through completion.",
+    tasks: [
+      "Interpret drawings, specifications, contracts and project objectives and establish the delivery plan",
+      "Prepare and control budgets, construction programs, procurement packages and resource plans",
+      "Coordinate labour, materials, plant, consultants and subcontractors across the construction program",
+      "Manage tenders, contracts, variations, negotiations and communication with clients and authorities",
+      "Monitor cost, schedule, risk, safety, quality and compliance and take corrective action when required",
+      "Lead project and site teams, report progress and manage changes through commissioning and handover",
+    ],
+    countries: {
+      AU: {
+        headline: "A nationally short, high-earning management occupation with a substantial education and experience barrier",
+        entryPathway:
+          "A common professional route is a Bachelor degree in construction management, building, civil engineering or another highly relevant built-environment field followed by progressive project, site or contract-management experience. For a Construction Project Manager migration skills assessment, VETASSESS Group A requires an AQF Bachelor-equivalent highly relevant qualification plus qualifying post-qualification employment. CPC50320 Diploma of Building and Construction (Management) can support industry-management progression, but it does not replace the VETASSESS Bachelor-level requirement.",
+        registration:
+          "There is no single national Construction Project Manager licence. State and territory builder, contractor or project-management registration can apply depending on the jurisdiction, project and work scope. A White Card is required when the role involves carrying out construction work on site. A VETASSESS migration skills assessment is separate from domestic building or occupational licensing.",
+        jobMarketNote:
+          "Major commercial builders, civil and infrastructure contractors and property-delivery organisations employ construction managers across metropolitan and regional projects. The 2025 Occupation Shortage List records Construction Project Manager in shortage nationally and in every state and territory, but this is generally an experienced professional role rather than a direct graduate appointment.",
+        scoreCaveat:
+          "The score is provisional because the current IVI occupation row and a directly verified ten-year occupation projection are unavailable. JSA currently publishes employment and earnings on the broader legacy ANZSCO 1331 Construction Managers series, which also includes Project Builder, while CampCareer maps the canonical career itself only to OSCA 131131 Construction Project Manager.",
+      },
+    },
+  },
 ] as const
 
 const BY_ID = new Map(OCCUPATION_EDITORIAL.map((item) => [item.id, item]))
