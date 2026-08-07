@@ -59,6 +59,9 @@ function transportNote(profile: AuCityProfile) {
   if (profile.transport.referenceKind === "tertiary_concession_go_anywhere_fare") {
     return "Transperth Go Anywhere concession fare · full-time tertiary eligibility and Tertiary SmartRider required"
   }
+  if (profile.transport.referenceKind === "tertiary_concession_peak_fare") {
+    return "Adelaide Metro tertiary concession peak fare · lower off-peak fares available · valid full-time student ID required"
+  }
   if (profile.transport.referenceKind === "student_pass_weekly_equivalent") {
     const pass = profile.transport.annualPass ? `${money(profile.transport.annualPass)} annual pass` : "annual student pass"
     return `${pass} ÷ 52 · eligible international students only · calculated reference`
@@ -78,13 +81,13 @@ function transportValue(profile: AuCityProfile) {
 
 export function CityDashboard({ profile }: { profile: AuCityProfile }) {
   const scopeLabel = profile.population?.geography ?? `Greater ${profile.name}`
-  const image = CITY_IMAGES[profile.slug] ?? CITY_IMAGES.sydney
+  const image = CITY_IMAGES[profile.slug]
   const compareAvailable = ["sydney", "melbourne"].includes(profile.slug)
 
   return (
     <div>
-      <section className="relative overflow-hidden">
-        <div aria-hidden="true" className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${image})` }} />
+      <section className="relative overflow-hidden bg-[#273444]">
+        {image && <div aria-hidden="true" className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${image})` }} />}
         <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/45 to-black/20" />
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-24 pt-14 sm:px-8 sm:pt-20 lg:px-10">
           <nav className="flex flex-wrap items-center gap-2 text-[11px] font-medium text-white/70" aria-label="Breadcrumb">
