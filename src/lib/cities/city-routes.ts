@@ -1,4 +1,4 @@
-export const PUBLISHED_AU_CITY_SLUGS = ["sydney", "melbourne", "brisbane"] as const
+export const PUBLISHED_AU_CITY_SLUGS = ["sydney", "melbourne", "brisbane", "perth"] as const
 export type PublishedAuCitySlug = (typeof PUBLISHED_AU_CITY_SLUGS)[number]
 
 const CITY_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
