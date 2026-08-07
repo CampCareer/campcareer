@@ -16,6 +16,7 @@ import type { AuCityProfile } from "@/lib/cities/au-city-profile.server"
 const CITY_IMAGES: Record<string, string> = {
   sydney: "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=1800&h=800&fit=crop&auto=format",
   melbourne: "https://images.unsplash.com/photo-1514395462725-fb4566210144?w=1800&h=800&fit=crop&auto=format",
+  brisbane: "https://images.unsplash.com/photo-1659563270346-e54a44b06677?w=1800&h=800&fit=crop&auto=format",
 }
 
 function money(value: number, currency = "AUD", decimals = 0) {
@@ -43,6 +44,9 @@ function MetricCard({ icon, label, value, note }: { icon: React.ReactNode; label
 
 function transportNote(profile: AuCityProfile) {
   if (!profile.transport) return "Verified student transport reference unavailable"
+  if (profile.transport.referenceKind === "flat_fare_per_journey") {
+    return "Flat Translink fare per journey · distance independent · Airtrain excluded"
+  }
   if (profile.transport.referenceKind === "student_pass_weekly_equivalent") {
     const pass = profile.transport.annualPass ? `${money(profile.transport.annualPass)} annual pass` : "annual student pass"
     return `${pass} ÷ 52 · eligible international students only · calculated reference`
@@ -50,7 +54,14 @@ function transportNote(profile: AuCityProfile) {
   if (profile.transport.eligibleConcessionAmount != null) {
     return `Full-fare weekly cap · eligible concession ${money(profile.transport.eligibleConcessionAmount)}`
   }
-  return profile.transport.eligibilityRequired ? "Eligibility conditions apply" : "Published weekly reference"
+  return profile.transport.eligibilityRequired ? "Eligibility conditions apply" : "Published transport reference"
+}
+
+function transportValue(profile: AuCityProfile) {
+  if (!profile.transport) return "—"
+  const decimals = profile.transport.weeklyReference < 20 ? 2 : 0
+  const period = profile.transport.period === "trip" ? "trip" : "week"
+  return `${money(profile.transport.weeklyReference, profile.transport.currency, decimals)}/${period}`
 }
 
 export function CityDashboard({ profile }: { profile: AuCityProfile }) {
@@ -93,7 +104,7 @@ export function CityDashboard({ profile }: { profile: AuCityProfile }) {
         <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <MetricCard icon={<Users className="size-4 text-[#2563eb]" />} label="Population" value={profile.population ? population(profile.population.amount) : "—"} note={profile.population ? `${profile.population.geography} · ${profile.population.dataAsOf}` : "Verified city population unavailable"} />
           <MetricCard icon={<Wallet className="size-4 text-[#c2691e]" />} label="Student living" value={profile.livingCost ? `${money(profile.livingCost.low)}–${money(profile.livingCost.high)}` : "—"} note={`Indicative monthly range · tuition excluded${profile.livingCost?.evidenceKind === "calculated" ? " · calculated" : ""}`} />
-          <MetricCard icon={<TrainFront className="size-4 text-[#6d4fc4]" />} label="Student transport" value={profile.transport ? `${money(profile.transport.weeklyReference, profile.transport.currency, profile.transport.weeklyReference < 20 ? 2 : 0)}/week` : "—"} note={transportNote(profile)} />
+          <MetricCard icon={<TrainFront className="size-4 text-[#6d4fc4]" />} label="Student transport" value={transportValue(profile)} note={transportNote(profile)} />
           <MetricCard icon={<Clock3 className="size-4 text-[#3e7a2e]" />} label="Student work" value={profile.workRights ? `${profile.workRights.hoursPerFortnight} h / fortnight` : "—"} note={profile.workRights?.unrestrictedWhenCourseNotInSession ? "During study periods · no hour cap when the course is not in session" : "Check current visa conditions"} />
         </div>
 
@@ -128,7 +139,7 @@ export function CityDashboard({ profile }: { profile: AuCityProfile }) {
           <div className="space-y-5">
             <section className="rounded-xl border border-[#e7e6e3] bg-white p-5">
               <div className="flex items-center gap-2 text-[#3e7a2e]"><BriefcaseBusiness className="size-4" /><h2 className="text-[14.5px] font-semibold">Career environment</h2></div>
-              <p className="mt-2 text-[11.5px] leading-5 text-[#77746e]">Official state study guidance highlights these sectors as local career context. They are not shortage rankings.</p>
+              <p className="mt-2 text-[11.5px] leading-5 text-[#77746e]">Official city or state economic guidance highlights these sectors as local career context. They are not shortage rankings.</p>
               <div className="mt-3 flex flex-wrap gap-2">{profile.employmentSectors.map((sector) => <span key={sector} className="rounded-full border border-[#dfe8db] bg-[#f7faf5] px-3 py-1.5 text-[11px] font-semibold text-[#3e7a2e]">{sector}</span>)}</div>
             </section>
 
