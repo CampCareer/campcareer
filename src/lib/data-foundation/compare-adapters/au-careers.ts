@@ -91,6 +91,12 @@ function shortageSummary(profile: CountryOccupationProfile) {
   return `${shortage} of ${included.length} mapped occupations have a recorded shortage rating`
 }
 
+function registrationRequirement(profile: CountryOccupationProfile) {
+  if (profile.registrationRequired) return "required" as const
+  if (profile.registrationAuthority) return "conditional" as const
+  return "not-required" as const
+}
+
 function mapProfile(profile: CountryOccupationProfile): AustraliaCareerComparison {
   const id = profile.canonicalCareerId as CareerCompareId
   const editorial = getOccupationEditorial(id)?.countries.AU
@@ -118,12 +124,12 @@ function mapProfile(profile: CountryOccupationProfile): AustraliaCareerCompariso
     },
     registration: {
       requirement: {
-        value: profile.registrationRequired ? "required" : "not-required",
+        value: registrationRequirement(profile),
         sourceIds,
       },
       authority: text(profile.registrationAuthority, sourceIds),
       process: text(editorial?.registration, sourceIds),
-      scope: text(profile.registrationRequired ? "State, territory or national regulator requirements apply as described." : "No single national occupational registration requirement is recorded for this profile.", sourceIds),
+      scope: text(profile.registrationRequired ? "State, territory or national regulator requirements apply as described." : "No single national occupational registration requirement is recorded for this profile; jurisdictional requirements may still apply.", sourceIds),
     },
     studyCost: {
       annualTuition: emptyMoney(),
