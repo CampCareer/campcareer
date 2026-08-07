@@ -29,6 +29,12 @@ type CourseRow = {
   cricos_status: string | null
   cricos_last_seen_at: string | null
   synced_at: string | null
+  verified_city_ids: string[] | null
+  verified_city_slugs: string[] | null
+  verified_delivery_locations: unknown
+  location_source_resource: string | null
+  location_source_last_modified: string | null
+  location_verified_at: string | null
 }
 
 type InstitutionRow = {
@@ -37,6 +43,20 @@ type InstitutionRow = {
   state: string | null
   city: string | null
   website_url: string | null
+}
+
+export type AuProgramDeliveryLocation = {
+  providerCode: string | null
+  courseCode: string | null
+  locationName: string
+  locality: string | null
+  state: string | null
+  postcode: string | null
+  campusId: string | null
+  cityId: string | null
+  citySlug: string | null
+  canonicalCity: string | null
+  source: string | null
 }
 
 export type AuProgramListItem = {
@@ -63,6 +83,12 @@ export type AuProgramListItem = {
   cricosStatus: string | null
   cricosLastSeenAt: string | null
   syncedAt: string | null
+  verifiedCityIds: string[]
+  verifiedCitySlugs: string[]
+  deliveryLocations: AuProgramDeliveryLocation[]
+  locationSourceResource: string | null
+  locationSourceLastModified: string | null
+  locationVerifiedAt: string | null
 }
 
 export type AuProgramSearchResult = {
@@ -97,6 +123,35 @@ function numberOrNull(value: number | string | null) {
   if (value == null) return null
   const number = typeof value === "number" ? value : Number.parseFloat(value)
   return Number.isFinite(number) ? number : null
+}
+
+function text(value: unknown) {
+  return typeof value === "string" && value.trim() ? value : null
+}
+
+function deliveryLocations(value: unknown): AuProgramDeliveryLocation[] {
+  if (!Array.isArray(value)) return []
+
+  return value.flatMap((item) => {
+    if (!item || typeof item !== "object" || Array.isArray(item)) return []
+    const row = item as Record<string, unknown>
+    const locationName = text(row.locationName)
+    if (!locationName) return []
+
+    return [{
+      providerCode: text(row.providerCode),
+      courseCode: text(row.courseCode),
+      locationName,
+      locality: text(row.locality),
+      state: text(row.state),
+      postcode: text(row.postcode),
+      campusId: text(row.campusId),
+      cityId: text(row.cityId),
+      citySlug: text(row.citySlug),
+      canonicalCity: text(row.canonicalCity),
+      source: text(row.source),
+    }]
+  })
 }
 
 function safeSearchTerm(value: string) {
@@ -135,6 +190,12 @@ function mapProgram(
     cricosStatus: course.cricos_status,
     cricosLastSeenAt: course.cricos_last_seen_at,
     syncedAt: course.synced_at,
+    verifiedCityIds: course.verified_city_ids ?? [],
+    verifiedCitySlugs: course.verified_city_slugs ?? [],
+    deliveryLocations: deliveryLocations(course.verified_delivery_locations),
+    locationSourceResource: course.location_source_resource,
+    locationSourceLastModified: course.location_source_last_modified,
+    locationVerifiedAt: course.location_verified_at,
   }
 }
 
@@ -169,12 +230,42 @@ async function institutionIdsForState(state: string): Promise<string[]> {
     .filter((value): value is string => Boolean(value))
 }
 
+const COURSE_SELECT = [
+  "id",
+  "institution_id",
+  "course_code",
+  "cricos_code",
+  "title",
+  "field_name",
+  "broad_field",
+  "narrow_field",
+  "aqf_level",
+  "course_type",
+  "duration_years",
+  "tuition_fee_aud",
+  "cricos_url",
+  "official_course_url",
+  "official_url_status",
+  "official_url_checked_at",
+  "cricos_status",
+  "cricos_last_seen_at",
+  "synced_at",
+  "verified_city_ids",
+  "verified_city_slugs",
+  "verified_delivery_locations",
+  "location_source_resource",
+  "location_source_last_modified",
+  "location_verified_at",
+].join(",")
+
 export async function searchAuPrograms(
   filters: ProgramSearchFilters,
 ): Promise<AuProgramSearchResult> {
   let filteredInstitutionIds: string[] | null = null
 
-  if (filters.state !== "all") {
+  // State remains the legacy institution-state filter. A verified city filter takes precedence
+  // because an institution headquartered in another state can operate a registered Sydney campus.
+  if (filters.city === "all" && filters.state !== "all") {
     const stateInstitutionIds = await institutionIdsForState(filters.state)
     if (stateInstitutionIds.length === 0) {
       return {
@@ -190,36 +281,12 @@ export async function searchAuPrograms(
 
   let query = supabaseAdmin
     .from("courses_au")
-    .select(
-      [
-        "id",
-        "institution_id",
-        "course_code",
-        "cricos_code",
-        "title",
-        "field_name",
-        "broad_field",
-        "narrow_field",
-        "aqf_level",
-        "course_type",
-        "duration_years",
-        "tuition_fee_aud",
-        "cricos_url",
-        "official_course_url",
-        "official_url_status",
-        "official_url_checked_at",
-        "cricos_status",
-        "cricos_last_seen_at",
-        "synced_at",
-      ].join(","),
-      { count: "exact" },
-    )
+    .select(COURSE_SELECT, { count: "exact" })
     .eq("cricos_status", "active")
     .not("title", "is", null)
 
-  if (filteredInstitutionIds) {
-    query = query.in("institution_id", filteredInstitutionIds)
-  }
+  if (filteredInstitutionIds) query = query.in("institution_id", filteredInstitutionIds)
+  if (filters.city !== "all") query = query.contains("verified_city_slugs", [filters.city])
 
   const search = safeSearchTerm(filters.q)
   if (search) {
@@ -234,26 +301,16 @@ export async function searchAuPrograms(
   if (filters.field !== "all") query = query.eq("broad_field", filters.field)
 
   if (filters.duration === "under-1") query = query.lte("duration_years", 1)
-  if (filters.duration === "1-2") {
-    query = query.gt("duration_years", 1).lte("duration_years", 2)
-  }
-  if (filters.duration === "2-3") {
-    query = query.gt("duration_years", 2).lte("duration_years", 3)
-  }
+  if (filters.duration === "1-2") query = query.gt("duration_years", 1).lte("duration_years", 2)
+  if (filters.duration === "2-3") query = query.gt("duration_years", 2).lte("duration_years", 3)
   if (filters.duration === "3-plus") query = query.gt("duration_years", 3)
 
   if (filters.fee === "under-30000") query = query.lt("tuition_fee_aud", 30000)
-  if (filters.fee === "30000-40000") {
-    query = query.gte("tuition_fee_aud", 30000).lt("tuition_fee_aud", 40000)
-  }
-  if (filters.fee === "40000-50000") {
-    query = query.gte("tuition_fee_aud", 40000).lt("tuition_fee_aud", 50000)
-  }
+  if (filters.fee === "30000-40000") query = query.gte("tuition_fee_aud", 30000).lt("tuition_fee_aud", 40000)
+  if (filters.fee === "40000-50000") query = query.gte("tuition_fee_aud", 40000).lt("tuition_fee_aud", 50000)
   if (filters.fee === "50000-plus") query = query.gte("tuition_fee_aud", 50000)
 
-  if (filters.source === "verified") {
-    query = query.eq("official_url_status", "verified")
-  }
+  if (filters.source === "verified") query = query.eq("official_url_status", "verified")
 
   if (filters.sort === "fee-low") {
     query = query.order("tuition_fee_aud", { ascending: true, nullsFirst: false })
@@ -305,29 +362,7 @@ export async function searchAuPrograms(
 async function loadAuProgramById(id: number): Promise<AuProgramDetail | null> {
   const { data, error } = await supabaseAdmin
     .from("courses_au")
-    .select(
-      [
-        "id",
-        "institution_id",
-        "course_code",
-        "cricos_code",
-        "title",
-        "field_name",
-        "broad_field",
-        "narrow_field",
-        "aqf_level",
-        "course_type",
-        "duration_years",
-        "tuition_fee_aud",
-        "cricos_url",
-        "official_course_url",
-        "official_url_status",
-        "official_url_checked_at",
-        "cricos_status",
-        "cricos_last_seen_at",
-        "synced_at",
-      ].join(","),
-    )
+    .select(COURSE_SELECT)
     .eq("id", id)
     .eq("cricos_status", "active")
     .maybeSingle()
@@ -336,9 +371,7 @@ async function loadAuProgramById(id: number): Promise<AuProgramDetail | null> {
   if (!data) return null
 
   const course = data as unknown as CourseRow
-  const institutions = await institutionMap(
-    course.institution_id ? [course.institution_id] : [],
-  )
+  const institutions = await institutionMap(course.institution_id ? [course.institution_id] : [])
 
   const { data: factRows, error: factsError } = await supabaseAdmin
     .from("program_page_facts_au")
