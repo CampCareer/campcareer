@@ -30,6 +30,8 @@ export const INSTITUTION_KIND_OPTIONS: readonly {
   { value: "other", label: "Other" },
 ]
 
+const INSTITUTION_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
+
 function firstValue(value: string | string[] | undefined) {
   return Array.isArray(value) ? value[0] : value
 }
@@ -49,8 +51,24 @@ export function normalizeInstitutionCountrySegment(
   return isInstitutionMvpCountry(code) ? code : null
 }
 
+export function normalizeInstitutionSlugSegment(value: string) {
+  const slug = value.trim().toLowerCase()
+  return INSTITUTION_SLUG_PATTERN.test(slug) ? slug : null
+}
+
 export function institutionCountryPath(countryCode: InstitutionMvpCountryCode) {
   return `/institutions/${countryCode.toLowerCase()}`
+}
+
+export function institutionDetailPath(
+  countryCode: InstitutionMvpCountryCode,
+  slug: string,
+) {
+  const normalizedSlug = normalizeInstitutionSlugSegment(slug)
+  if (!normalizedSlug) {
+    throw new Error(`Invalid institution slug: ${slug}`)
+  }
+  return `${institutionCountryPath(countryCode)}/${normalizedSlug}`
 }
 
 export function parseInstitutionSearchParams(

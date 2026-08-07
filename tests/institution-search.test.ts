@@ -3,7 +3,9 @@ import test from "node:test"
 import {
   buildInstitutionExplorerUrl,
   institutionCountryPath,
+  institutionDetailPath,
   normalizeInstitutionCountrySegment,
+  normalizeInstitutionSlugSegment,
   parseInstitutionSearchParams,
 } from "../src/lib/institutions/institution-search"
 
@@ -32,6 +34,16 @@ test("institution country routes use stable lower-case country segments", () => 
   assert.equal(normalizeInstitutionCountrySegment("CA"), "CA")
   assert.equal(normalizeInstitutionCountrySegment("us"), null)
   assert.equal(institutionCountryPath("AU"), "/institutions/au")
+})
+
+test("institution detail paths normalize stable persisted slugs", () => {
+  assert.equal(normalizeInstitutionSlugSegment("University-of-Sydney"), "university-of-sydney")
+  assert.equal(normalizeInstitutionSlugSegment("not/a/slug"), null)
+  assert.equal(
+    institutionDetailPath("CA", "University-of-Toronto"),
+    "/institutions/ca/university-of-toronto",
+  )
+  assert.throws(() => institutionDetailPath("AU", "bad/slug"))
 })
 
 test("institution explorer URLs preserve search filters and omit defaults", () => {

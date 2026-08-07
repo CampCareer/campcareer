@@ -1,6 +1,7 @@
 import Link from "next/link"
 import {
   Building2,
+  ChevronRight,
   DatabaseZap,
   ExternalLink,
   GraduationCap,
@@ -13,6 +14,7 @@ import {
   INSTITUTION_KIND_OPTIONS,
   INSTITUTION_MVP_COUNTRIES,
   institutionCountryPath,
+  institutionDetailPath,
   parseInstitutionSearchParams,
   type InstitutionMvpCountryCode,
   type InstitutionSearchFilters,
@@ -78,6 +80,7 @@ function InstitutionCard({ institution }: { institution: InstitutionExplorerItem
   const kind = verifiedKindLabel(institution.institutionKind)
   const ownership = ownershipLabel(institution.ownershipType)
   const website = safeWebsiteUrl(institution.websiteUrl)
+  const detailPath = institutionDetailPath(institution.countryCode, institution.slug)
 
   return (
     <article className="rounded-xl border border-[#e7e6e3] bg-white p-5 transition hover:border-[#cfd9ca] hover:shadow-sm">
@@ -87,9 +90,13 @@ function InstitutionCard({ institution }: { institution: InstitutionExplorerItem
         </span>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <h2 className="text-[16px] font-semibold leading-6 tracking-[-0.01em] text-[#1b1b1b]">
-              {institution.name}
-            </h2>
+            <Link
+              href={detailPath}
+              className="group inline-flex min-w-0 items-center gap-1.5 text-[16px] font-semibold leading-6 tracking-[-0.01em] text-[#1b1b1b] transition hover:text-[#3e7a2e]"
+            >
+              <span className="truncate">{institution.name}</span>
+              <ChevronRight className="size-3.5 shrink-0 text-[#aaa7a0] transition group-hover:translate-x-0.5 group-hover:text-[#3e7a2e]" />
+            </Link>
             {kind ? (
               <span className="rounded-full bg-[#f3f4f1] px-2.5 py-1 text-[10.5px] font-semibold text-[#686660]">
                 {kind}
@@ -114,17 +121,25 @@ function InstitutionCard({ institution }: { institution: InstitutionExplorerItem
             <span>{institution.campusCount.toLocaleString()} campuses</span>
           </div>
 
-          {website ? (
-            <a
-              href={website}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-3 inline-flex items-center gap-1.5 text-[11.5px] font-semibold text-[#3e7a2e] hover:underline"
+          <div className="mt-3 flex flex-wrap items-center gap-4">
+            <Link
+              href={detailPath}
+              className="text-[11.5px] font-semibold text-[#3e7a2e] hover:underline"
             >
-              Official website
-              <ExternalLink className="size-3" />
-            </a>
-          ) : null}
+              View institution
+            </Link>
+            {website ? (
+              <a
+                href={website}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 text-[11.5px] font-semibold text-[#6f6d68] hover:text-[#3e7a2e]"
+              >
+                Official website
+                <ExternalLink className="size-3" />
+              </a>
+            ) : null}
+          </div>
         </div>
       </div>
     </article>
