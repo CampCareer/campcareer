@@ -17,6 +17,7 @@ const CITY_IMAGES: Record<string, string> = {
   sydney: "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=1800&h=800&fit=crop&auto=format",
   melbourne: "https://images.unsplash.com/photo-1514395462725-fb4566210144?w=1800&h=800&fit=crop&auto=format",
   brisbane: "https://images.unsplash.com/photo-1659563270346-e54a44b06677?w=1800&h=800&fit=crop&auto=format",
+  perth: "https://pw-cdn.watercorporation.com.au/-/media/WaterCorp/Image-Gallery/Page-Images/Help-and-advice/Business-customers/Case-studies/City-of-Perth-Page-Image.png?h=440&w=1200",
 }
 
 function money(value: number, currency = "AUD", decimals = 0) {
@@ -42,10 +43,21 @@ function MetricCard({ icon, label, value, note }: { icon: React.ReactNode; label
   )
 }
 
+function livingCostValue(profile: AuCityProfile) {
+  if (!profile.livingCost) return "—"
+  if (Math.abs(profile.livingCost.high - profile.livingCost.low) < 1) {
+    return `~${money(profile.livingCost.low)}`
+  }
+  return `${money(profile.livingCost.low)}–${money(profile.livingCost.high)}`
+}
+
 function transportNote(profile: AuCityProfile) {
   if (!profile.transport) return "Verified student transport reference unavailable"
   if (profile.transport.referenceKind === "flat_fare_per_journey") {
     return "Flat Translink fare per journey · distance independent · Airtrain excluded"
+  }
+  if (profile.transport.referenceKind === "tertiary_concession_go_anywhere_fare") {
+    return "Transperth Go Anywhere concession fare · full-time tertiary eligibility and Tertiary SmartRider required"
   }
   if (profile.transport.referenceKind === "student_pass_weekly_equivalent") {
     const pass = profile.transport.annualPass ? `${money(profile.transport.annualPass)} annual pass` : "annual student pass"
@@ -103,7 +115,7 @@ export function CityDashboard({ profile }: { profile: AuCityProfile }) {
 
         <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <MetricCard icon={<Users className="size-4 text-[#2563eb]" />} label="Population" value={profile.population ? population(profile.population.amount) : "—"} note={profile.population ? `${profile.population.geography} · ${profile.population.dataAsOf}` : "Verified city population unavailable"} />
-          <MetricCard icon={<Wallet className="size-4 text-[#c2691e]" />} label="Student living" value={profile.livingCost ? `${money(profile.livingCost.low)}–${money(profile.livingCost.high)}` : "—"} note={`Indicative monthly range · tuition excluded${profile.livingCost?.evidenceKind === "calculated" ? " · calculated" : ""}`} />
+          <MetricCard icon={<Wallet className="size-4 text-[#c2691e]" />} label="Student living" value={livingCostValue(profile)} note={`Indicative monthly reference · tuition excluded${profile.livingCost?.evidenceKind === "calculated" ? " · calculated" : ""}`} />
           <MetricCard icon={<TrainFront className="size-4 text-[#6d4fc4]" />} label="Student transport" value={transportValue(profile)} note={transportNote(profile)} />
           <MetricCard icon={<Clock3 className="size-4 text-[#3e7a2e]" />} label="Student work" value={profile.workRights ? `${profile.workRights.hoursPerFortnight} h / fortnight` : "—"} note={profile.workRights?.unrestrictedWhenCourseNotInSession ? "During study periods · no hour cap when the course is not in session" : "Check current visa conditions"} />
         </div>
