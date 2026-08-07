@@ -27,6 +27,12 @@ export const PROGRAM_FIELDS = [
 
 export type ProgramField = "all" | (typeof PROGRAM_FIELDS)[number]["value"]
 
+export const AU_PROGRAM_CITIES = [
+  { value: "sydney", label: "Sydney", labelKo: "시드니", state: "NSW" },
+] as const
+
+export type ProgramCity = "all" | (typeof AU_PROGRAM_CITIES)[number]["value"]
+
 export const AU_PROGRAM_STATES = [
   { value: "NSW", label: "New South Wales", labelKo: "뉴사우스웨일스" },
   { value: "VIC", label: "Victoria", labelKo: "빅토리아" },
@@ -82,6 +88,7 @@ export type ProgramSearchFilters = {
   q: string
   level: ProgramLevel
   field: ProgramField
+  city: ProgramCity
   state: ProgramState
   duration: ProgramDuration
   fee: ProgramFee
@@ -113,6 +120,7 @@ function allowedValue<T extends string>(
 
 const levelValues = PROGRAM_LEVELS.map((item) => item.value)
 const fieldValues = ["all", ...PROGRAM_FIELDS.map((item) => item.value)] as const
+const cityValues = ["all", ...AU_PROGRAM_CITIES.map((item) => item.value)] as const
 const stateValues = ["all", ...AU_PROGRAM_STATES.map((item) => item.value)] as const
 const durationValues = PROGRAM_DURATIONS.map((item) => item.value)
 const feeValues = PROGRAM_FEES.map((item) => item.value)
@@ -125,13 +133,15 @@ export function parseProgramSearchParams(
   const rawPage = Number.parseInt(firstValue(params.page) ?? "1", 10)
   const country = (firstValue(params.country) ?? "AU").toUpperCase().slice(0, 2)
   const q = (firstValue(params.q) ?? "").trim().slice(0, 80)
+  const city = allowedValue(firstValue(params.city), cityValues, "all")
 
   return {
     country: /^[A-Z]{2}$/.test(country) ? country : "AU",
     q,
     level: allowedValue(firstValue(params.level), levelValues, "all"),
     field: allowedValue(firstValue(params.field), fieldValues, "all"),
-    state: allowedValue(firstValue(params.state), stateValues, "all"),
+    city,
+    state: city === "all" ? allowedValue(firstValue(params.state), stateValues, "all") : "all",
     duration: allowedValue(firstValue(params.duration), durationValues, "all"),
     fee: allowedValue(firstValue(params.fee), feeValues, "all"),
     source: allowedValue(firstValue(params.source), sourceValues, "all"),
@@ -149,6 +159,7 @@ export function hasProgramFilters(filters: ProgramSearchFilters) {
     filters.q ||
       filters.level !== "all" ||
       filters.field !== "all" ||
+      filters.city !== "all" ||
       filters.state !== "all" ||
       filters.duration !== "all" ||
       filters.fee !== "all" ||
@@ -169,7 +180,8 @@ export function buildProgramsUrl(
   if (next.q) params.set("q", next.q)
   if (next.level !== "all") params.set("level", next.level)
   if (next.field !== "all") params.set("field", next.field)
-  if (next.state !== "all") params.set("state", next.state)
+  if (next.city !== "all") params.set("city", next.city)
+  if (next.city === "all" && next.state !== "all") params.set("state", next.state)
   if (next.duration !== "all") params.set("duration", next.duration)
   if (next.fee !== "all") params.set("fee", next.fee)
   if (next.source !== "all") params.set("source", next.source)
