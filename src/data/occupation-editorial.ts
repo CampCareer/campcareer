@@ -222,6 +222,32 @@ export const OCCUPATION_EDITORIAL: readonly OccupationEditorial[] = [
       },
     },
   },
+  {
+    id: "construction-manager",
+    overview:
+      "Construction Project Managers plan, coordinate and control building and civil construction delivery, including budgets, schedules, procurement, labour, subcontractors, quality, safety, contracts and stakeholder requirements from planning through completion.",
+    tasks: [
+      "Interpret drawings, specifications, contracts and project objectives and establish the delivery plan",
+      "Prepare and control budgets, construction programs, procurement packages and resource plans",
+      "Coordinate labour, materials, plant, consultants and subcontractors across the construction program",
+      "Manage tenders, contracts, variations, negotiations and communication with clients and authorities",
+      "Monitor cost, schedule, risk, safety, quality and compliance and take corrective action when required",
+      "Lead project and site teams, report progress and manage changes through commissioning and handover",
+    ],
+    countries: {
+      AU: {
+        headline: "A nationally short, high-earning management occupation with a substantial education and experience barrier",
+        entryPathway:
+          "A common professional route is a Bachelor degree in construction management, building, civil engineering or another highly relevant built-environment field followed by progressive project, site or contract-management experience. For a Construction Project Manager migration skills assessment, VETASSESS Group A requires an AQF Bachelor-equivalent highly relevant qualification plus qualifying post-qualification employment. CPC50320 Diploma of Building and Construction (Management) can support industry-management progression, but it does not replace the VETASSESS Bachelor-level requirement.",
+        registration:
+          "There is no single national Construction Project Manager licence. State and territory builder, contractor or project-management registration can apply depending on the jurisdiction, project and work scope. A White Card is required when the role involves carrying out construction work on site. A VETASSESS migration skills assessment is separate from domestic building or occupational licensing.",
+        jobMarketNote:
+          "Major commercial builders, civil and infrastructure contractors and property-delivery organisations employ construction managers across metropolitan and regional projects. The 2025 Occupation Shortage List records Construction Project Manager in shortage nationally and in every state and territory, but this is generally an experienced professional role rather than a direct graduate appointment.",
+        scoreCaveat:
+          "The score is provisional because the current IVI occupation row and a directly verified ten-year occupation projection are unavailable. JSA currently publishes employment and earnings on the broader legacy ANZSCO 1331 Construction Managers series, which also includes Project Builder, while CampCareer maps the canonical career itself only to OSCA 131131 Construction Project Manager.",
+      },
+    },
+  },
 ] as const
 
 const BY_ID = new Map(OCCUPATION_EDITORIAL.map((item) => [item.id, item]))
