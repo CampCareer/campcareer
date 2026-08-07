@@ -38,6 +38,7 @@ type MetricRow = {
   data_as_of: string
   last_verified_at: string
   confidence: string
+  evidence_kind: string
 }
 
 type LocationFreshnessRow = {
@@ -91,12 +92,16 @@ export type AuCityProfile = {
     high: number
     currency: string
     period: string
+    evidenceKind: string
   } | null
   transport: {
-    adultWeeklyCap: number
-    concessionWeeklyCap: number | null
+    weeklyReference: number
     currency: string
-    modes: string[]
+    referenceKind: string
+    eligibilityRequired: boolean
+    eligibleConcessionAmount: number | null
+    annualPass: number | null
+    evidenceKind: string
   } | null
   workRights: {
     hoursPerFortnight: number
@@ -194,7 +199,7 @@ async function loadAuCityProfile(slug: string): Promise<AuCityProfile | null> {
     supabaseAdmin
       .from("report_metric_evidence_city")
       .select(
-        "metric_key, value, source_name, source_url, data_as_of, last_verified_at, confidence",
+        "metric_key, value, source_name, source_url, data_as_of, last_verified_at, confidence, evidence_kind",
       )
       .eq("geography_id", city.city_id)
       .eq("scope_type", "city")
@@ -216,16 +221,10 @@ async function loadAuCityProfile(slug: string): Promise<AuCityProfile | null> {
       .maybeSingle(),
   ])
 
-  if (institutionError) {
-    throw new Error(`Unable to load Australian city institutions: ${institutionError.message}`)
-  }
+  if (institutionError) throw new Error(`Unable to load Australian city institutions: ${institutionError.message}`)
   if (metricError) throw new Error(`Unable to load Australian city metrics: ${metricError.message}`)
-  if (programCountError) {
-    throw new Error(`Unable to count verified Australian city programs: ${programCountError.message}`)
-  }
-  if (locationFreshnessError) {
-    throw new Error(`Unable to load Australian city location freshness: ${locationFreshnessError.message}`)
-  }
+  if (programCountError) throw new Error(`Unable to count verified Australian city programs: ${programCountError.message}`)
+  if (locationFreshnessError) throw new Error(`Unable to load Australian city location freshness: ${locationFreshnessError.message}`)
 
   const institutionRows = (institutionData ?? []) as InstitutionRow[]
   const metricRows = (metricData ?? []) as MetricRow[]
@@ -243,9 +242,9 @@ async function loadAuCityProfile(slug: string): Promise<AuCityProfile | null> {
   const livingLow = numberValue(livingValue.low)
   const livingHigh = numberValue(livingValue.high)
 
-  const transportRow = metrics.get("public_transport_weekly_cap")
+  const transportRow = metrics.get("student_transport_weekly_reference") ?? metrics.get("public_transport_weekly_cap")
   const transportValue = record(transportRow?.value)
-  const adultWeeklyCap = numberValue(transportValue.adult)
+  const transportWeeklyReference = numberValue(transportValue.amount) ?? numberValue(transportValue.adult)
 
   const workRow = metrics.get("student_work_hours_fortnight")
   const workValue = record(workRow?.value)
@@ -268,7 +267,7 @@ async function loadAuCityProfile(slug: string): Promise<AuCityProfile | null> {
     ).values(),
   )
 
-  if (normalizedSlug === "sydney") {
+  if (["sydney", "melbourne"].includes(normalizedSlug)) {
     sources.push({
       name: "CRICOS Locations and Course Locations",
       url: "https://data.gov.au/data/dataset/commonwealth-register-of-institutions-and-courses-for-overseas-students-cricos",
@@ -308,23 +307,26 @@ async function loadAuCityProfile(slug: string): Promise<AuCityProfile | null> {
             high: livingHigh,
             currency: stringValue(livingValue.currency) ?? "AUD",
             period: stringValue(livingValue.period) ?? "month",
+            evidenceKind: livingRow.evidence_kind,
           }
         : null,
     transport:
-      transportRow && adultWeeklyCap != null
+      transportRow && transportWeeklyReference != null
         ? {
-            adultWeeklyCap,
-            concessionWeeklyCap: numberValue(transportValue.concession),
+            weeklyReference: transportWeeklyReference,
             currency: stringValue(transportValue.currency) ?? "AUD",
-            modes: stringArray(transportValue.modes),
+            referenceKind: stringValue(transportValue.transport_kind) ?? "weekly_reference",
+            eligibilityRequired: transportValue.eligibility_required === true,
+            eligibleConcessionAmount: numberValue(transportValue.eligible_concession_amount) ?? numberValue(transportValue.concession),
+            annualPass: numberValue(transportValue.annual_pass),
+            evidenceKind: transportRow.evidence_kind,
           }
         : null,
     workRights:
       workRow && workHours != null
         ? {
             hoursPerFortnight: workHours,
-            unrestrictedWhenCourseNotInSession:
-              workValue.unrestricted_when_course_not_in_session === true,
+            unrestrictedWhenCourseNotInSession: workValue.unrestricted_when_course_not_in_session === true,
           }
         : null,
     employmentSectors: stringArray(sectorsValue.sectors),
