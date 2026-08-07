@@ -7,10 +7,11 @@ test("published Australian city routes are stable and lower-case", () => {
   assert.equal(auCityPath("Sydney"), "/cities/au/sydney")
   assert.equal(auCityPath("MELBOURNE"), "/cities/au/melbourne")
   assert.equal(auCityPath("Brisbane"), "/cities/au/brisbane")
+  assert.equal(auCityPath("Perth"), "/cities/au/perth")
 })
 
 test("unpublished or invalid Australian city routes are not linked", () => {
-  assert.equal(auCityPath("perth"), null)
+  assert.equal(auCityPath("adelaide"), null)
   assert.equal(auCityPath("not/a/city"), null)
   assert.equal(auCityPath(null), null)
 })
