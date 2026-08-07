@@ -1,5 +1,6 @@
 import Link from "next/link"
 import {
+  ArrowUpRight,
   Building2,
   ExternalLink,
   GraduationCap,
@@ -10,10 +11,12 @@ import { getLaunchCountry } from "@/data/launch-countries"
 import {
   institutionCountryPath,
 } from "@/lib/institutions/institution-search"
+import { programDetailPath } from "@/lib/programs/program-search"
 import type {
   InstitutionCampusLocation,
   InstitutionCountBreakdown,
   InstitutionDetail,
+  InstitutionProgrammePreview,
 } from "@/lib/institutions/institution-detail.server"
 
 function verifiedKindLabel(kind: string | null) {
@@ -161,6 +164,88 @@ function CampusList({
   )
 }
 
+function ProgramPreviewContent({ program }: { program: InstitutionProgrammePreview }) {
+  return (
+    <>
+      <div className="flex flex-wrap items-center gap-1.5">
+        {program.programmeType ? (
+          <span className="rounded-md bg-[#f4f4f1] px-2 py-1 text-[9.5px] font-semibold uppercase tracking-wide text-[#77746e]">
+            {program.programmeType}
+          </span>
+        ) : null}
+      </div>
+      <h3 className="mt-2 text-[13px] font-semibold leading-5 text-[#1b1b1b]">
+        {program.title}
+      </h3>
+      {program.fieldName ? (
+        <p className="mt-1 line-clamp-2 text-[11px] leading-4.5 text-[#77746e]">
+          {cleanStudyAreaLabel(program.fieldName)}
+        </p>
+      ) : null}
+    </>
+  )
+}
+
+function ProgramList({
+  programs,
+  total,
+  countryCode,
+}: {
+  programs: InstitutionProgrammePreview[]
+  total: number
+  countryCode: InstitutionDetail["countryCode"]
+}) {
+  if (programs.length === 0) {
+    return (
+      <div className="rounded-xl border border-dashed border-[#dcdad4] bg-[#fbfbf9] p-6">
+        <p className="text-[12px] text-[#77746e]">No active program records are currently published for this institution.</p>
+      </div>
+    )
+  }
+
+  return (
+    <>
+      <div className="grid gap-3 sm:grid-cols-2">
+        {programs.map((program) => {
+          const href = countryCode === "AU" && program.legacyProgramId
+            ? programDetailPath(program.legacyProgramId, program.title)
+            : null
+
+          if (href) {
+            return (
+              <Link
+                key={program.id}
+                href={href}
+                className="group rounded-xl border border-[#e7e6e3] bg-white p-4 transition hover:border-[#bfcdb9] hover:shadow-sm"
+              >
+                <ProgramPreviewContent program={program} />
+                <span className="mt-3 inline-flex items-center gap-1 text-[10.5px] font-semibold text-[#3e7a2e]">
+                  View program
+                  <ArrowUpRight className="size-3" />
+                </span>
+              </Link>
+            )
+          }
+
+          return (
+            <article key={program.id} className="rounded-xl border border-[#e7e6e3] bg-[#fbfbf9] p-4">
+              <ProgramPreviewContent program={program} />
+              <p className="mt-3 text-[10px] font-medium text-[#aaa7a0]">
+                Program detail page not yet published
+              </p>
+            </article>
+          )
+        })}
+      </div>
+      {total > programs.length ? (
+        <p className="mt-3 text-[10.5px] text-[#9c9a94]">
+          Showing {programs.length} of {total.toLocaleString()} active programs.
+        </p>
+      ) : null}
+    </>
+  )
+}
+
 export function InstitutionDetailView({
   institution,
 }: {
@@ -250,6 +335,23 @@ export function InstitutionDetailView({
         <main className="min-w-0 space-y-5">
           <section className="rounded-2xl border border-[#e7e6e3] bg-white p-5 sm:p-6">
             <div className="flex items-center gap-2">
+              <GraduationCap className="size-4 text-[#3e7a2e]" />
+              <h2 className="text-[16px] font-semibold text-[#1b1b1b]">Programs</h2>
+            </div>
+            <p className="mt-1.5 text-[11.5px] leading-5 text-[#77746e]">
+              Active canonical programs connected to this institution. Australian records link directly to the existing CampCareer program detail pages.
+            </p>
+            <div className="mt-4">
+              <ProgramList
+                programs={institution.programs}
+                total={institution.programCount}
+                countryCode={institution.countryCode}
+              />
+            </div>
+          </section>
+
+          <section className="rounded-2xl border border-[#e7e6e3] bg-white p-5 sm:p-6">
+            <div className="flex items-center gap-2">
               <MapPin className="size-4 text-[#3e7a2e]" />
               <h2 className="text-[16px] font-semibold text-[#1b1b1b]">Campuses</h2>
             </div>
@@ -267,7 +369,7 @@ export function InstitutionDetailView({
               <h2 className="text-[16px] font-semibold text-[#1b1b1b]">Program profile</h2>
             </div>
             <p className="mt-1.5 text-[11.5px] leading-5 text-[#77746e]">
-              The largest study areas and qualification types among active canonical programs. Individual program links are connected in the next Programs integration step.
+              The largest study areas and qualification types among active canonical programs at this institution.
             </p>
 
             <div className="mt-5 grid gap-5 md:grid-cols-2">
