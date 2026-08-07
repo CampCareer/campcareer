@@ -32,6 +32,7 @@ export const AU_PROGRAM_CITIES = [
   { value: "melbourne", label: "Melbourne", labelKo: "멜버른", state: "VIC" },
   { value: "brisbane", label: "Brisbane", labelKo: "브리즈번", state: "QLD" },
   { value: "perth", label: "Perth", labelKo: "퍼스", state: "WA" },
+  { value: "adelaide", label: "Adelaide", labelKo: "애들레이드", state: "SA" },
 ] as const
 
 export type ProgramCity = "all" | (typeof AU_PROGRAM_CITIES)[number]["value"]
