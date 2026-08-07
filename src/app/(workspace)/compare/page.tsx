@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { AU_NURSING_PROGRAM_IDS } from "@/lib/data-foundation/compare-adapters/au-nursing-programmes"
 import { AU_NURSING_PROGRAM_COMPARE_REPOSITORY } from "@/lib/data-foundation/compare-adapters/au-nursing-programmes-repository"
+import { getAustraliaCareerComparisonCatalog } from "@/lib/data-foundation/compare-adapters/au-careers"
 import { parseCareerComparisonState, type CareerComparisonState } from "@/lib/career-comparison"
 import { parseCountryComparisonState, resolveComparisonPageType, type CountryComparisonState, type ComparisonPageType } from "@/lib/country-comparison"
 import ProgramsCompareMatrix from "./programs-compare-matrix"
@@ -77,7 +78,7 @@ function CountriesCompare({ comparison }: { comparison: CountryComparisonState }
   )
 }
 
-function CareersCompare({ comparison, countryCode }: { comparison: CareerComparisonState; countryCode: string }) {
+async function CareersCompare({ comparison, countryCode }: { comparison: CareerComparisonState; countryCode: string }) {
   if (comparison.contextState === "unsupported") {
     return (
       <UnsupportedSurface
@@ -89,10 +90,12 @@ function CareersCompare({ comparison, countryCode }: { comparison: CareerCompari
       />
     )
   }
+
+  const careers = await getAustraliaCareerComparisonCatalog()
   return (
     <section className="w-full pb-4" aria-label="Careers comparison">
       <ComparePageHeader activeType="career" countryCode={countryCode} />
-      <CareersCompareMatrix />
+      <CareersCompareMatrix availableCareers={careers} />
     </section>
   )
 }
