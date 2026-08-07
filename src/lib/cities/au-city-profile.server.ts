@@ -40,6 +40,10 @@ type MetricRow = {
   confidence: string
 }
 
+type LocationFreshnessRow = {
+  location_source_last_modified: string | null
+}
+
 export type AuCityCampus = {
   id: string
   name: string
@@ -178,6 +182,7 @@ async function loadAuCityProfile(slug: string): Promise<AuCityProfile | null> {
     { data: institutionData, error: institutionError },
     { data: metricData, error: metricError },
     { count: verifiedProgramCount, error: programCountError },
+    { data: locationFreshnessData, error: locationFreshnessError },
   ] = await Promise.all([
     supabaseAdmin
       .from("city_institution_directory_au_v1")
@@ -200,6 +205,15 @@ async function loadAuCityProfile(slug: string): Promise<AuCityProfile | null> {
       .select("id", { count: "exact", head: true })
       .eq("cricos_status", "active")
       .contains("verified_city_slugs", [normalizedSlug]),
+    supabaseAdmin
+      .from("courses_au")
+      .select("location_source_last_modified")
+      .eq("cricos_status", "active")
+      .contains("verified_city_slugs", [normalizedSlug])
+      .not("location_source_last_modified", "is", null)
+      .order("location_source_last_modified", { ascending: false })
+      .limit(1)
+      .maybeSingle(),
   ])
 
   if (institutionError) {
@@ -209,10 +223,15 @@ async function loadAuCityProfile(slug: string): Promise<AuCityProfile | null> {
   if (programCountError) {
     throw new Error(`Unable to count verified Australian city programs: ${programCountError.message}`)
   }
+  if (locationFreshnessError) {
+    throw new Error(`Unable to load Australian city location freshness: ${locationFreshnessError.message}`)
+  }
 
   const institutionRows = (institutionData ?? []) as InstitutionRow[]
   const metricRows = (metricData ?? []) as MetricRow[]
   const metrics = new Map(metricRows.map((row) => [row.metric_key, row]))
+  const locationFreshness = locationFreshnessData as LocationFreshnessRow | null
+  const cricosDataAsOf = locationFreshness?.location_source_last_modified?.slice(0, 10) ?? "2026-08-04"
 
   const populationRow = metrics.get("city_population")
   const populationValue = record(populationRow?.value)
@@ -253,7 +272,7 @@ async function loadAuCityProfile(slug: string): Promise<AuCityProfile | null> {
     sources.push({
       name: "CRICOS Locations and Course Locations",
       url: "https://data.gov.au/data/dataset/commonwealth-register-of-institutions-and-courses-for-overseas-students-cricos",
-      dataAsOf: "2026-08-04",
+      dataAsOf: cricosDataAsOf,
       confidence: "high",
     })
   }
