@@ -15,6 +15,7 @@ import {
 } from "../../program-detail-components"
 
 const BASE_URL = "https://www.campcareer.com"
+const CITY_PROFILE_SLUGS = new Set(["sydney", "melbourne"])
 
 type Params = { params: Promise<{ program: string }> }
 
@@ -29,7 +30,9 @@ function programLocationSummary(program: Awaited<ReturnType<typeof loadProgram>>
     const first = program.deliveryLocations[0]
     const primary = program.verifiedCitySlugs.includes("sydney")
       ? "Sydney"
-      : [first.locality, first.state].filter(Boolean).join(", ") || first.locationName
+      : program.verifiedCitySlugs.includes("melbourne")
+        ? "Melbourne"
+        : [first.locality, first.state].filter(Boolean).join(", ") || first.locationName
     const extra = program.deliveryLocations.length - 1
     return extra > 0 ? `${primary} + ${extra} registered ${extra === 1 ? "location" : "locations"}` : primary
   }
@@ -44,9 +47,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const index = program.officialUrlStatus === "verified" || program.facts.length >= 3
   return {
     title: `${program.title} · ${program.institutionName}`,
-    description: [program.courseType, program.institutionName, programLocationSummary(program)]
-      .filter(Boolean)
-      .join(" · "),
+    description: [program.courseType, program.institutionName, programLocationSummary(program)].filter(Boolean).join(" · "),
     alternates: { canonical: `${BASE_URL}${programDetailPath(program.id, program.title)}` },
     robots: { index, follow: true },
   }
@@ -109,15 +110,17 @@ export default async function ProgramDetailPage({ params }: Params) {
               <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
                 {program.deliveryLocations.map((item, index) => {
                   const address = [item.locality, item.state, item.postcode].filter(Boolean).join(" ")
+                  const cityHref = item.citySlug && CITY_PROFILE_SLUGS.has(item.citySlug) ? `/cities/au/${item.citySlug}` : null
+                  const cityLabel = item.canonicalCity ?? (item.citySlug ? item.citySlug.charAt(0).toUpperCase() + item.citySlug.slice(1) : null)
                   const body = (
                     <>
                       <p className="text-[12px] font-semibold leading-5 text-[#1b1b1b]">{item.locationName}</p>
                       {address && <p className="mt-1 text-[10.5px] text-[#77746e]">{address}</p>}
-                      {item.citySlug === "sydney" && <p className="mt-2 text-[10px] font-semibold text-[#2563eb]">Greater Sydney · open city profile →</p>}
+                      {cityHref && <p className="mt-2 text-[10px] font-semibold text-[#2563eb]">Greater {cityLabel} · open city profile →</p>}
                     </>
                   )
-                  return item.citySlug === "sydney" ? (
-                    <Link key={item.campusId ?? `${item.locationName}-${index}`} href="/cities/au/sydney" className="rounded-lg border border-[#dbe5f7] bg-[#f8faff] p-3.5 transition hover:border-[#9db7e8] hover:bg-white">
+                  return cityHref ? (
+                    <Link key={item.campusId ?? `${item.locationName}-${index}`} href={cityHref} className="rounded-lg border border-[#dbe5f7] bg-[#f8faff] p-3.5 transition hover:border-[#9db7e8] hover:bg-white">
                       {body}
                     </Link>
                   ) : (
@@ -125,9 +128,7 @@ export default async function ProgramDetailPage({ params }: Params) {
                   )
                 })}
               </div>
-              {program.locationSourceLastModified && (
-                <p className="mt-3 text-[10px] text-[#9b9891]">CRICOS location dataset updated {new Date(program.locationSourceLastModified).toLocaleDateString("en-AU")}</p>
-              )}
+              {program.locationSourceLastModified && <p className="mt-3 text-[10px] text-[#9b9891]">CRICOS location dataset updated {new Date(program.locationSourceLastModified).toLocaleDateString("en-AU")}</p>}
             </section>
           )}
 
