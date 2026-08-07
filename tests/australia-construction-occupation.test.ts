@@ -73,3 +73,27 @@ test("Australia Wall and Floor Tiler connects to the current CPC31320 shortlist 
   assert.equal(program.courseCode, "CPC31320")
   assert.equal(program.registrationStatus, "CURRENT")
 })
+
+test("Australia Welder has a complete fabrication apprenticeship pathway", () => {
+  const welder = getOccupationEditorial("welder")
+  const australia = welder?.countries.AU
+
+  assert.ok(welder)
+  assert.ok(australia)
+  assert.ok(welder.tasks.length >= 6)
+  assert.match(australia.entryPathway, /MEM31925/)
+  assert.match(australia.entryPathway, /apprenticeship/i)
+  assert.match(australia.registration, /no single national occupational licence/i)
+  assert.match(australia.registration, /White Card/)
+})
+
+test("Australia Welder connects to the current MEM31925 shortlist record", () => {
+  const program = AU_VOCATIONAL_PROGRAM_SHORTLIST.find(
+    (item) => item.id === "au-vet:training-gov:MEM31925"
+  )
+
+  assert.ok(program)
+  assert.equal(program.conceptId, "welding")
+  assert.equal(program.courseCode, "MEM31925")
+  assert.equal(program.registrationStatus, "CURRENT")
+})
