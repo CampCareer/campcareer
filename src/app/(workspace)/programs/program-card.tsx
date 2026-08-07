@@ -31,12 +31,19 @@ function duration(value: number | null) {
 
 function programLocation(program: AuProgramListItem) {
   if (program.deliveryLocations.length > 0) {
+    const cityNames = [
+      program.verifiedCitySlugs.includes("sydney") ? "Sydney" : null,
+      program.verifiedCitySlugs.includes("melbourne") ? "Melbourne" : null,
+    ].filter((value): value is string => Boolean(value))
+
+    if (cityNames.length > 0) {
+      return `${cityNames.join(" & ")} · ${program.deliveryLocations.length} registered ${
+        program.deliveryLocations.length === 1 ? "location" : "locations"
+      }`
+    }
+
     const first = program.deliveryLocations[0]
-    const primary = program.verifiedCitySlugs.includes("sydney")
-      ? "Sydney"
-      : program.verifiedCitySlugs.includes("melbourne")
-        ? "Melbourne"
-        : [first.locality, first.state].filter(Boolean).join(", ") || first.locationName
+    const primary = [first.locality, first.state].filter(Boolean).join(", ") || first.locationName
     const extra = program.deliveryLocations.length - 1
     return extra > 0 ? `${primary} + ${extra} registered ${extra === 1 ? "location" : "locations"}` : primary
   }
