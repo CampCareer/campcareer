@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { DatabaseZap, GraduationCap, MapPinned } from "lucide-react"
 import { getLaunchCountry } from "@/data/launch-countries"
+import { SITE_URL, programsCanonicalPath } from "@/lib/seo-routes.mjs"
 import { ProgramCard } from "./program-card"
 import { ProgramsHeader } from "./programs-header"
 import { ProgramsSidebar } from "./programs-filters"
@@ -13,8 +14,6 @@ import {
   parseProgramSearchParams,
   type ProgramSearchFilters,
 } from "@/lib/programs/program-search"
-
-const BASE_URL = "https://www.campcareer.com"
 
 export const revalidate = 3600
 
@@ -48,7 +47,7 @@ export async function generateMetadata({
         ? "Search Australian university and vocational programs by verified city, study level, field, state, duration and tuition."
         : `Explore study programs in ${countryName}. Country data will be published after source review.`,
     alternates: {
-      canonical: `${BASE_URL}/programs?country=${filters.country}`,
+      canonical: `${SITE_URL}${programsCanonicalPath(filters.country)}`,
     },
     robots: {
       index: isAustraliaBase,
