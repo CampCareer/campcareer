@@ -7,7 +7,7 @@ import {
   normalizeInstitutionCountrySegment,
   normalizeInstitutionSlugSegment,
 } from "@/lib/institutions/institution-search"
-import { getInstitutionDetail } from "@/lib/institutions/institution-detail.server"
+import { getInstitutionDetail, type InstitutionDetail } from "@/lib/institutions/institution-detail.server"
 import { InstitutionDetailView } from "../../institution-detail"
 
 export const revalidate = 3600
@@ -76,11 +76,9 @@ export default async function InstitutionDetailPage({
     permanentRedirect(canonicalPath)
   }
 
+  let detail: InstitutionDetail | null = null
   try {
-    const detail = await getInstitutionDetail(countryCode, slug)
-    if (!detail) notFound()
-
-    return <InstitutionDetailView institution={detail} />
+    detail = await getInstitutionDetail(countryCode, slug)
   } catch (error) {
     console.error("Unable to load institution detail page", error)
 
@@ -96,4 +94,7 @@ export default async function InstitutionDetailPage({
       </div>
     )
   }
+
+  if (!detail) notFound()
+  return <InstitutionDetailView institution={detail} />
 }
