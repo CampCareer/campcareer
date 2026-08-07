@@ -2,11 +2,11 @@ import Link from "next/link"
 import { AU_NURSING_PROGRAM_IDS } from "@/lib/data-foundation/compare-adapters/au-nursing-programmes"
 import { AU_NURSING_PROGRAM_COMPARE_REPOSITORY } from "@/lib/data-foundation/compare-adapters/au-nursing-programmes-repository"
 import { parseCareerComparisonState, type CareerComparisonState } from "@/lib/career-comparison"
-import { parseCountryComparisonState, resolveComparisonPageType, type CountryComparisonState } from "@/lib/country-comparison"
+import { parseCountryComparisonState, resolveComparisonPageType, type CountryComparisonState, type ComparisonPageType } from "@/lib/country-comparison"
 import ProgramsCompareMatrix from "./programs-compare-matrix"
 import CountriesCompareMatrix from "./countries-compare-matrix"
 import CareersCompareMatrix from "./careers-compare-matrix"
-import { CompareModeNavigation } from "./compare-mode-navigation"
+import { ComparePageHeader } from "./compare-mode-navigation"
 
 export const dynamic = "force-dynamic"
 
@@ -34,7 +34,10 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
   const pageType = resolveComparisonPageType(params.get("type"))
 
   if (pageType === "country") return <CountriesCompare comparison={parseCountryComparisonState(params)} />
-  if (pageType === "career") return <CareersCompare comparison={parseCareerComparisonState(params)} />
+  if (pageType === "career") {
+    const country = params.get("country")?.toUpperCase() ?? "AU"
+    return <CareersCompare comparison={parseCareerComparisonState(params)} countryCode={country} />
+  }
   if (pageType === "unsupported") return <UnsupportedComparisonType />
 
   return <ProgramsCompare params={params} />
@@ -43,12 +46,22 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
 async function ProgramsCompare({ params }: { params: URLSearchParams }) {
   const country = params.get("country")?.toUpperCase() ?? "AU"
   const field = params.get("field") ?? "nursing"
-  if (country !== "AU" || field !== "nursing") return <UnsupportedProgramContext />
+  if (country !== "AU" || field !== "nursing") {
+    return (
+      <UnsupportedSurface
+        type="Programs"
+        href="/compare?type=program&country=AU&field=nursing"
+        label="Compare Australian Nursing programs"
+        activeType="program"
+        countryCode={country}
+      />
+    )
+  }
 
   const programs = await AU_NURSING_PROGRAM_COMPARE_REPOSITORY.getProgramCompareItems(AU_NURSING_PROGRAM_IDS)
   return (
     <section className="w-full pb-4" aria-label="Programs comparison">
-      <CompareModeNavigation activeType="program" />
+      <ComparePageHeader activeType="program" countryCode={country} />
       <ProgramsCompareMatrix availablePrograms={programs} />
     </section>
   )
@@ -58,45 +71,73 @@ function CountriesCompare({ comparison }: { comparison: CountryComparisonState }
   if (comparison.contextState === "unsupported") return <UnsupportedCountryComparison />
   return (
     <section className="w-full pb-4" aria-label="Countries comparison">
-      <CompareModeNavigation activeType="country" />
+      <ComparePageHeader activeType="country" />
       <CountriesCompareMatrix initialLocations={comparison.locations} />
     </section>
   )
 }
 
-function CareersCompare({ comparison }: { comparison: CareerComparisonState }) {
-  if (comparison.contextState === "unsupported") return <UnsupportedCareerComparison />
+function CareersCompare({ comparison, countryCode }: { comparison: CareerComparisonState; countryCode: string }) {
+  if (comparison.contextState === "unsupported") {
+    return (
+      <UnsupportedSurface
+        type="Careers"
+        href="/compare?type=career&country=AU&profile=starting-from-scratch"
+        label="Compare Australian careers"
+        activeType="career"
+        countryCode={countryCode}
+      />
+    )
+  }
   return (
     <section className="w-full pb-4" aria-label="Careers comparison">
-      <CompareModeNavigation activeType="career" />
+      <ComparePageHeader activeType="career" countryCode={countryCode} />
       <CareersCompareMatrix />
     </section>
   )
 }
 
 function UnsupportedCountryComparison() {
-  return <UnsupportedSurface type="Countries" href="/compare?type=country&goal=registered-nurse&profile=starting-from-scratch" label="Start a country comparison" />
-}
-
-function UnsupportedCareerComparison() {
-  return <UnsupportedSurface type="Careers" href="/compare?type=career&country=AU&profile=starting-from-scratch" label="Start a careers comparison" />
-}
-
-function UnsupportedProgramContext() {
-  return <UnsupportedSurface type="Programs" href="/compare?type=program&country=AU&field=nursing" label="Compare Australian Nursing programs" />
+  return (
+    <UnsupportedSurface
+      type="Countries"
+      href="/compare?type=country&goal=registered-nurse&profile=starting-from-scratch"
+      label="Start a country comparison"
+      activeType="country"
+    />
+  )
 }
 
 function UnsupportedComparisonType() {
-  return <UnsupportedSurface type="Compare" href="/compare?type=program" label="Open Programs Compare" activeType="unsupported" />
+  return (
+    <section className="w-full pb-4" aria-label="Compare unavailable">
+      <div className="max-w-xl rounded-2xl border border-[#e7e6e3] bg-white p-5 sm:p-6">
+        <h1 className="text-xl font-semibold tracking-[-0.02em] text-[#1b1b1b]">Comparison not available</h1>
+        <p className="mt-2 text-sm leading-6 text-[#6f6d68]">This comparison context is not supported yet.</p>
+        <Link href="/compare?type=program&country=AU&field=nursing" className="mt-5 inline-flex min-h-11 items-center rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white">Open Programs Compare</Link>
+      </div>
+    </section>
+  )
 }
 
-function UnsupportedSurface({ type, href, label, activeType }: { type: "Programs" | "Countries" | "Careers" | "Compare"; href: string; label: string; activeType?: "program" | "country" | "career" | "unsupported" }) {
-  const resolvedActiveType = activeType ?? ({ Programs: "program", Countries: "country", Careers: "career", Compare: "unsupported" } as const)[type]
+function UnsupportedSurface({
+  type,
+  href,
+  label,
+  activeType,
+  countryCode,
+}: {
+  type: "Programs" | "Countries" | "Careers"
+  href: string
+  label: string
+  activeType: Exclude<ComparisonPageType, "unsupported">
+  countryCode?: string | null
+}) {
   return (
     <section className="w-full pb-4" aria-label={`${type} comparison unavailable`}>
-      <CompareModeNavigation activeType={resolvedActiveType} />
-      <div className="mt-3 max-w-xl rounded-2xl border border-[#e7e6e3] bg-white p-5 sm:p-6">
-        <h1 className="text-xl font-semibold tracking-[-0.02em] text-[#1b1b1b]">Comparison not available</h1>
+      <ComparePageHeader activeType={activeType} countryCode={countryCode} />
+      <div className="max-w-xl rounded-2xl border border-[#e7e6e3] bg-white p-5 sm:p-6">
+        <h2 className="text-xl font-semibold tracking-[-0.02em] text-[#1b1b1b]">Comparison not available</h2>
         <p className="mt-2 text-sm leading-6 text-[#6f6d68]">This comparison context is not supported yet.</p>
         <Link href={href} className="mt-5 inline-flex min-h-11 items-center rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white">{label}</Link>
       </div>
