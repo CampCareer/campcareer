@@ -13,6 +13,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/programs`, lastModified, priority: 0.8, changeFrequency: "weekly" },
     ...countries.map((slug) => ({ url: `${BASE}/countries/${slug}`, lastModified, priority: 0.85, changeFrequency: "monthly" as const })),
     { url: `${BASE}/cities/au/sydney`, lastModified, priority: 0.8, changeFrequency: "monthly" },
+    { url: `${BASE}/cities/au/melbourne`, lastModified, priority: 0.8, changeFrequency: "monthly" },
+    { url: `${BASE}/cities/au/compare`, lastModified, priority: 0.82, changeFrequency: "monthly" },
     { url: `${BASE}/methodology`, lastModified, priority: 0.5, changeFrequency: "monthly" },
     ...methodologies.map((slug) => ({ url: `${BASE}/methodology/${slug}`, lastModified, priority: 0.45, changeFrequency: "monthly" as const })),
     { url: `${BASE}/privacy`, lastModified, priority: 0.2, changeFrequency: "yearly" },
