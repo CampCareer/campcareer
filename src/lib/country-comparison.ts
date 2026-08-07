@@ -18,7 +18,7 @@ import {
 } from "@/lib/data-foundation/entity-aliases"
 
 export const COUNTRY_COMPARE_TYPE = "country" as const
-export const COUNTRY_COMPARE_MAX_LOCATIONS = 5
+export const COUNTRY_COMPARE_MAX_LOCATIONS = 3
 export const COUNTRY_COMPARE_MIN_LOCATIONS = 2
 
 export type CountryCompareLocation = {
