@@ -121,3 +121,27 @@ test("Australia Bricklayer connects to the current CPC33020 shortlist record", (
   assert.equal(program.courseCode, "CPC33020")
   assert.equal(program.registrationStatus, "CURRENT")
 })
+
+test("Australia HVAC Technician has a complete apprenticeship and refrigerant licensing pathway", () => {
+  const hvac = getOccupationEditorial("hvac-technician")
+  const australia = hvac?.countries.AU
+
+  assert.ok(hvac)
+  assert.ok(australia)
+  assert.ok(hvac.tasks.length >= 6)
+  assert.match(australia.entryPathway, /UEE32225/)
+  assert.match(australia.entryPathway, /apprenticeship/i)
+  assert.match(australia.registration, /Refrigerant Handling Licence/i)
+  assert.match(australia.registration, /White Card/)
+})
+
+test("Australia HVAC Technician connects to the current UEE32225 shortlist record", () => {
+  const program = AU_VOCATIONAL_PROGRAM_SHORTLIST.find(
+    (item) => item.id === "au-vet:training-gov:UEE32225"
+  )
+
+  assert.ok(program)
+  assert.equal(program.conceptId, "hvac")
+  assert.equal(program.courseCode, "UEE32225")
+  assert.equal(program.registrationStatus, "CURRENT")
+})
