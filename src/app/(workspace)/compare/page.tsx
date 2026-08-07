@@ -47,14 +47,8 @@ async function ProgramsCompare({ params }: { params: URLSearchParams }) {
 
   const programs = await AU_NURSING_PROGRAM_COMPARE_REPOSITORY.getProgramCompareItems(AU_NURSING_PROGRAM_IDS)
   return (
-    <section className="mx-auto max-w-6xl pb-4" aria-label="Programs comparison">
+    <section className="w-full pb-4" aria-label="Programs comparison">
       <CompareModeNavigation activeType="program" />
-      <header className="border-b border-[#e7e6e3] pb-6 sm:pb-7">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-blue-700">Programs</p>
-        <h1 className="mt-2 text-[32px] font-semibold leading-tight tracking-[-0.025em] text-[#1b1b1b] sm:text-[40px]">Compare programs</h1>
-        <p className="mt-3 max-w-2xl text-[15px] leading-7 text-[#6f6d68]">Compare institution, qualification, duration, international tuition and source-backed availability.</p>
-        <p className="mt-3 text-sm font-medium text-[#4a4842]">Australia · Nursing</p>
-      </header>
       <ProgramsCompareMatrix availablePrograms={programs} />
     </section>
   )
@@ -63,14 +57,8 @@ async function ProgramsCompare({ params }: { params: URLSearchParams }) {
 function CountriesCompare({ comparison }: { comparison: CountryComparisonState }) {
   if (comparison.contextState === "unsupported") return <UnsupportedCountryComparison />
   return (
-    <section className="mx-auto max-w-6xl pb-4" aria-label="Countries comparison">
+    <section className="w-full pb-4" aria-label="Countries comparison">
       <CompareModeNavigation activeType="country" />
-      <header className="border-b border-[#e7e6e3] pb-6 sm:pb-7">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-blue-700">Countries</p>
-        <h1 className="mt-2 text-[32px] font-semibold leading-tight tracking-[-0.025em] text-[#1b1b1b] sm:text-[40px]">Compare countries</h1>
-        <p className="mt-3 max-w-2xl text-[15px] leading-7 text-[#6f6d68]">Compare the pathway to become a Registered Nurse across selected countries and cities.</p>
-        <p className="mt-3 text-sm font-medium text-[#4a4842]">International student · Starting without a nursing qualification</p>
-      </header>
       <CountriesCompareMatrix initialLocations={comparison.locations} />
     </section>
   )
@@ -79,14 +67,8 @@ function CountriesCompare({ comparison }: { comparison: CountryComparisonState }
 function CareersCompare({ comparison }: { comparison: CareerComparisonState }) {
   if (comparison.contextState === "unsupported") return <UnsupportedCareerComparison />
   return (
-    <section className="mx-auto max-w-6xl pb-4" aria-label="Careers comparison">
+    <section className="w-full pb-4" aria-label="Careers comparison">
       <CompareModeNavigation activeType="career" />
-      <header className="border-b border-[#e7e6e3] pb-6 sm:pb-7">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-blue-700">Careers</p>
-        <h1 className="mt-2 text-[32px] font-semibold leading-tight tracking-[-0.025em] text-[#1b1b1b] sm:text-[40px]">Compare careers</h1>
-        <p className="mt-3 max-w-2xl text-[15px] leading-7 text-[#6f6d68]">Compare education routes, career outcomes and registration requirements in Australia.</p>
-        <p className="mt-3 text-sm font-medium text-[#4a4842]">International student · Starting from scratch</p>
-      </header>
       <CareersCompareMatrix />
     </section>
   )
@@ -111,14 +93,13 @@ function UnsupportedComparisonType() {
 function UnsupportedSurface({ type, href, label, activeType }: { type: "Programs" | "Countries" | "Careers" | "Compare"; href: string; label: string; activeType?: "program" | "country" | "career" | "unsupported" }) {
   const resolvedActiveType = activeType ?? ({ Programs: "program", Countries: "country", Careers: "career", Compare: "unsupported" } as const)[type]
   return (
-    <section className="mx-auto max-w-6xl pb-4" aria-label={`${type} comparison unavailable`}>
+    <section className="w-full pb-4" aria-label={`${type} comparison unavailable`}>
       <CompareModeNavigation activeType={resolvedActiveType} />
-      <header className="border-b border-[#e7e6e3] pb-6 sm:pb-7">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-blue-700">{type}</p>
-        <h1 className="mt-2 text-[32px] font-semibold leading-tight tracking-[-0.025em] text-[#1b1b1b] sm:text-[40px]">Comparison not available</h1>
-        <p className="mt-3 max-w-2xl text-[15px] leading-7 text-[#6f6d68]">This comparison context is not supported yet.</p>
-      </header>
-      <Link href={href} className="mt-7 inline-flex min-h-11 items-center rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white">{label}</Link>
+      <div className="mt-3 max-w-xl rounded-2xl border border-[#e7e6e3] bg-white p-5 sm:p-6">
+        <h1 className="text-xl font-semibold tracking-[-0.02em] text-[#1b1b1b]">Comparison not available</h1>
+        <p className="mt-2 text-sm leading-6 text-[#6f6d68]">This comparison context is not supported yet.</p>
+        <Link href={href} className="mt-5 inline-flex min-h-11 items-center rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white">{label}</Link>
+      </div>
     </section>
   )
 }
