@@ -56,10 +56,15 @@ test("program search params keep supported filters and reject unknown values", (
 })
 
 test("verified city filters take precedence over representative state filters", () => {
-  const filters = parseProgramSearchParams({ city: "sydney", state: "VIC" })
-  assert.equal(filters.city, "sydney")
-  assert.equal(filters.state, "all")
-  assert.equal(buildProgramsUrl(filters), "/programs?country=AU&city=sydney")
+  const sydney = parseProgramSearchParams({ city: "sydney", state: "VIC" })
+  assert.equal(sydney.city, "sydney")
+  assert.equal(sydney.state, "all")
+  assert.equal(buildProgramsUrl(sydney), "/programs?country=AU&city=sydney")
+
+  const melbourne = parseProgramSearchParams({ city: "melbourne", state: "NSW" })
+  assert.equal(melbourne.city, "melbourne")
+  assert.equal(melbourne.state, "all")
+  assert.equal(buildProgramsUrl(melbourne), "/programs?country=AU&city=melbourne")
 })
 
 test("program URLs preserve country and omit default filters", () => {
