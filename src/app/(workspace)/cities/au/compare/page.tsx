@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { ArrowRight, Building2, GraduationCap, MapPin, TrainFront, Users, Wallet, BriefcaseBusiness } from "lucide-react"
+import { ArrowRight, BriefcaseBusiness, Building2, Clock3, GraduationCap, MapPin, TrainFront, Users, Wallet } from "lucide-react"
 import { getSydneyMelbourneComparison } from "@/lib/cities/au-city-comparison.server"
 import type { AuCityProfile } from "@/lib/cities/au-city-profile.server"
 
@@ -28,9 +28,13 @@ function compact(value: number) {
   return new Intl.NumberFormat("en-AU", { notation: "compact", maximumFractionDigits: 2 }).format(value)
 }
 
-function cityValue(profile: AuCityProfile, kind: "living" | "transport" | "population" | "programs" | "providers" | "locations") {
+function cityValue(
+  profile: AuCityProfile,
+  kind: "living" | "transport" | "work" | "population" | "programs" | "providers" | "locations",
+) {
   if (kind === "living") return profile.livingCost ? `${money(profile.livingCost.low)}–${money(profile.livingCost.high)} / month` : "—"
   if (kind === "transport") return profile.transport ? `${money(profile.transport.weeklyReference, profile.transport.weeklyReference < 20 ? 2 : 0)} / week` : "—"
+  if (kind === "work") return profile.workRights ? `${profile.workRights.hoursPerFortnight} h / fortnight` : "—"
   if (kind === "population") return profile.population ? compact(profile.population.amount) : "—"
   if (kind === "programs") return profile.verifiedProgramCount.toLocaleString("en-AU")
   if (kind === "providers") return profile.linkedInstitutionCount.toLocaleString("en-AU")
@@ -59,8 +63,14 @@ function ComparisonRow({
           {note && <p className="mt-1 text-[10px] font-normal leading-4 text-[#9a978f]">{note}</p>}
         </div>
       </div>
-      <div className="border-t border-[#f0efec] px-4 py-4 text-[14px] font-semibold text-[#1b1b1b] md:border-l md:border-t-0 md:px-5">{left}</div>
-      <div className="border-t border-[#f0efec] px-4 py-4 text-[14px] font-semibold text-[#1b1b1b] md:border-l md:border-t-0 md:px-5">{right}</div>
+      <div className="border-t border-[#f0efec] px-4 py-4 text-[14px] font-semibold text-[#1b1b1b] md:border-l md:border-t-0 md:px-5">
+        <span className="mr-2 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#9a978f] md:hidden">Sydney</span>
+        {left}
+      </div>
+      <div className="border-t border-[#f0efec] px-4 py-4 text-[14px] font-semibold text-[#1b1b1b] md:border-l md:border-t-0 md:px-5">
+        <span className="mr-2 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#9a978f] md:hidden">Melbourne</span>
+        {right}
+      </div>
     </div>
   )
 }
@@ -115,6 +125,7 @@ export default async function SydneyMelbourneComparePage() {
         </div>
         <ComparisonRow icon={<Wallet className="size-4" />} label="Student living" note="Indicative monthly range · tuition excluded" left={cityValue(sydney, "living")} right={cityValue(melbourne, "living")} />
         <ComparisonRow icon={<TrainFront className="size-4" />} label="Transport reference" note="Not directly equivalent: Sydney is a full-fare weekly cap; Melbourne is an eligible 365-day international-student pass divided by 52." left={cityValue(sydney, "transport")} right={cityValue(melbourne, "transport")} />
+        <ComparisonRow icon={<Clock3 className="size-4" />} label="Student work rule" note="National student-visa work-hours rule during study periods" left={cityValue(sydney, "work")} right={cityValue(melbourne, "work")} />
         <ComparisonRow icon={<GraduationCap className="size-4" />} label="Verified CRICOS programs" note="Active programs with at least one registered delivery location in the city" left={cityValue(sydney, "programs")} right={cityValue(melbourne, "programs")} />
         <ComparisonRow icon={<Building2 className="size-4" />} label="Registered providers" left={cityValue(sydney, "providers")} right={cityValue(melbourne, "providers")} />
         <ComparisonRow icon={<MapPin className="size-4" />} label="Registered locations" left={cityValue(sydney, "locations")} right={cityValue(melbourne, "locations")} />
