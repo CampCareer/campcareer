@@ -28,6 +28,7 @@ const CITY_LINKS: Record<string, string> = {
   Melbourne: "/cities/au/melbourne",
   Brisbane: "/cities/au/brisbane",
   Perth: "/cities/au/perth",
+  Adelaide: "/cities/au/adelaide",
 }
 
 function MetricCard({
