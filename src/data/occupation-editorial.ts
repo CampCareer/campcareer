@@ -41,6 +41,32 @@ export const OCCUPATION_EDITORIAL: readonly OccupationEditorial[] = [
     },
   },
   {
+    id: "midwife",
+    overview:
+      "Midwives provide clinical care, advice and support during pregnancy, labour, birth and the postnatal period. They monitor maternal and fetal wellbeing, recognise complications, support informed decision-making and coordinate referral or collaborative care when required.",
+    tasks: [
+      "Provide antenatal care, physical assessment and advice on pregnancy, nutrition and wellbeing",
+      "Monitor women and babies during labour and support safe childbirth and pain-management needs",
+      "Provide postnatal care, newborn assessment, breastfeeding and early-parenting support",
+      "Recognise abnormal or potentially abnormal pregnancy and birth findings and arrange referral or escalation",
+      "Educate women and families about pregnancy, childbirth, reproductive health and newborn care",
+      "Document care and collaborate with obstetric, neonatal, nursing and allied health teams when required",
+    ],
+    countries: {
+      AU: {
+        headline: "A regulated maternity-care profession in national shortage across every state and territory",
+        entryPathway:
+          "There are two main Australian pathways. New entrants can complete an NMBA-approved Bachelor of Midwifery that leads toward registration. Registered nurses can instead complete an approved postgraduate midwifery program; NSW Health MidStart is one current example that combines postgraduate study with paid employment in a dedicated midwifery student position. Newly registered midwives can also enter supported graduate programs such as NSW Health GradStart.",
+        registration:
+          "Registration with the Nursing and Midwifery Board of Australia is mandatory and the title 'midwife' is protected. Graduates must complete an NMBA-approved program of study and then meet the Board's current registration standards, including applicable identity, criminal-history, recency and English-language requirements, before practising.",
+        jobMarketNote:
+          "Public maternity services are major employers across hospitals, birth centres, community services and continuity-of-care models. NSW, Queensland and Western Australian public health systems all recruit nurses and midwives, while graduate and transition programs provide structured entry for newly registered midwives and registered nurses moving into midwifery.",
+        scoreCaveat:
+          "The opportunity score is provisional until posting-level unique-employer counts and a standardised national measure of vacancies open to new graduates are ingested. The employment, earnings, vacancy, shortage and projection inputs themselves are directly sourced from the current JSA series, with the legacy ANZSCO 2541 labour-market scope labelled separately from the exact OSCA 265131 Midwife mapping.",
+      },
+    },
+  },
+  {
     id: "carpenter",
     overview:
       "Carpenters set out, construct, install, renovate and repair timber and lightweight structural systems, fixtures and finishes across residential, commercial and infrastructure projects.",
