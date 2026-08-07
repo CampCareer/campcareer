@@ -508,6 +508,54 @@ const occupationSourceSections: readonly OccupationSourceSection[] = [
       sharedLabourSources.visa,
     ],
   },
+  {
+    id: "construction-manager",
+    title: "Construction Manager",
+    description:
+      "Evidence supporting the Australia Construction Manager dashboard and provisional Career Opportunity Score. The canonical career maps to OSCA 131131 Construction Project Manager only; Project Builder is a separate OSCA occupation. Current earnings and employment values use the broader legacy ANZSCO 1331 Construction Managers series and are labelled accordingly. Current IVI and ten-year projection values remain unavailable until directly verified.",
+    snapshot: "1 May 2026",
+    sources: [
+      {
+        title: "Official occupation scope",
+        publisher: "Australian Bureau of Statistics",
+        source: "OSCA 131131 Construction Project Manager",
+        url: "https://www.abs.gov.au/statistics/classifications/osca-occupation-standard-classification-australia/2024-version-1-0/browse-classification/1/13/131/1311/131131",
+        use: "Defines Construction Project Manager as a Skill Level 1 occupation and explicitly excludes Project Builder, which is classified separately as OSCA 131331.",
+      },
+      {
+        title: "Employment and earnings",
+        publisher: "Jobs and Skills Australia",
+        source: "Construction Managers occupation profile",
+        url: "https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupations/1331-construction-managers",
+        use: "Supplies the published legacy ANZSCO 1331 employment and earnings series used for this dated snapshot. The series includes Construction Project Managers and Project Builders, so CampCareer does not present it as an OSCA 131131-only measure.",
+      },
+      sharedLabourSources.vacancies,
+      sharedLabourSources.projections,
+      sharedLabourSources.shortage,
+      {
+        title: "Management qualification",
+        publisher: "Australian Government National Training Register",
+        source: "CPC50320 Diploma of Building and Construction (Management)",
+        url: "https://training.gov.au/Training/Details/CPC50320",
+        use: "Defines a current senior-management qualification used as a progression pathway. The register describes it as designed for senior managers and notes that additional units may be required for builder or project-manager registration in some jurisdictions.",
+      },
+      {
+        title: "Skills assessment",
+        publisher: "VETASSESS",
+        source: "Construction Project Manager",
+        url: "https://www.vetassess.com.au/check-my-occupation/professional-occupations/construction-project-manager",
+        use: "Provides the migration skills-assessment pathway for ANZSCO 133111 and sets the qualification and employment-evidence requirements used in relevant skilled-migration applications.",
+      },
+      {
+        title: "Construction induction",
+        publisher: "Safe Work Australia",
+        source: "Working on a construction site",
+        url: "https://www.safeworkaustralia.gov.au/safety-topic/industry-and-business/construction/working-construction-site",
+        use: "Supports the White Card requirement when the role requires carrying out construction work or unaccompanied access to construction work areas under the relevant jurisdictional rules.",
+      },
+      sharedLabourSources.visa,
+    ],
+  },
 ]
 
 export default function AustraliaMethodologyPage() {
