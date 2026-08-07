@@ -196,6 +196,32 @@ export const OCCUPATION_EDITORIAL: readonly OccupationEditorial[] = [
       },
     },
   },
+  {
+    id: "hvac-technician",
+    overview:
+      "Air Conditioning and Refrigeration Technicians install, commission, maintain, diagnose and repair refrigeration and air-conditioning systems, refrigerant circuits, controls and associated mechanical and electrical components across homes, commercial buildings, cold storage and industrial facilities.",
+    tasks: [
+      "Interpret drawings and specifications and set out installation reference points for refrigeration and air-conditioning equipment",
+      "Install pipework, supports and components such as compressors, motors, condensers, evaporators, pumps, switches and gauges",
+      "Pressure-test systems, check for leaks and evacuate refrigerant circuits before commissioning",
+      "Recover, handle and charge refrigerants within the worker's licensed scope and the equipment requirements",
+      "Commission and test system operation, controls, temperatures, pressures and overall performance",
+      "Diagnose faults, repair or replace defective components and record servicing and corrective work",
+    ],
+    countries: {
+      AU: {
+        headline: "A nationally short licensed refrigeration trade with a structured apprenticeship route",
+        entryPathway:
+          "The standard route is a paid air-conditioning and refrigeration apprenticeship combined with the current UEE32225 Certificate III in Air Conditioning and Refrigeration. The qualification covers installation, commissioning, service, fault finding and refrigerant handling, and a training contract or relevant employment may be required for workplace competency development.",
+        registration:
+          "A Refrigerant Handling Licence is required for work with regulated refrigerants that could cause a release, including installation, commissioning, servicing, maintenance and decommissioning. The Australian Refrigeration Council administers the national licensing scheme. State or territory electrical, refrigeration, contractor and other permissions can also apply depending on the work scope, and a White Card is required when the work is performed on a construction site.",
+        jobMarketNote:
+          "Construction, commercial facilities, cold-chain and food-storage operations, supermarkets, healthcare, data centres and industrial maintenance all use refrigeration and air-conditioning technicians. JSA shortage evidence identifies the occupation as a persistent long-training-gap trade shortage, while specialist contractors and major HVAC manufacturers continue to recruit technicians and apprentices.",
+        scoreCaveat:
+          "The opportunity score is provisional because the current JSA IVI 3421 workbook row has not yet been directly machine-ingested, so national and regional vacancy values and vacancy-related score components remain unavailable. Five-year and ten-year growth values retain indexed extraction provenance until the official projection workbook row is directly ingested.",
+      },
+    },
+  },
 ] as const
 
 const BY_ID = new Map(OCCUPATION_EDITORIAL.map((item) => [item.id, item]))
