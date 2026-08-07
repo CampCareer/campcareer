@@ -15,8 +15,9 @@ export const CAREER_COMPARE_MISSING_VALUE = COUNTRY_COMPARISON_MISSING_VALUE
 
 export const CAREER_COMPARE_IDS = [
   "registered-nurse",
-  "software-engineer",
-  "early-childhood-teacher",
+  "electrician",
+  "carpenter",
+  "plumber",
 ] as const
 
 export type CareerCompareId = (typeof CAREER_COMPARE_IDS)[number]
@@ -70,6 +71,20 @@ export type CareerTime = {
   registrationOrOnboardingTime: DurationValue | null
 }
 
+export type CareerSnapshot = {
+  asOfDate: string | null
+  employmentTotal: number | null
+  medianWeeklyEarnings: number | null
+  annualisedMedianSalary: number | null
+  vacanciesThreeMonthAvg: number | null
+  vacancyYoyPct: number | null
+  employmentGrowth5yPct: number | null
+  employmentGrowth10yPct: number | null
+  opportunityScore: number | null
+  scoreStatus: string | null
+  publicationStatus: string | null
+}
+
 export type AustraliaCareerComparison = {
   id: CareerCompareId
   label: string
@@ -80,7 +95,10 @@ export type AustraliaCareerComparison = {
   studyCost: CareerStudyCost
   outcome: CareerOutcome
   time: CareerTime
+  snapshot: CareerSnapshot
+  sources: readonly SourceReference[]
   sourceIds: readonly string[]
+  programRefs: readonly string[]
   reviewedAt: string | null
 }
 
@@ -147,32 +165,48 @@ const emptyTime = (): CareerTime => ({
   registrationOrOnboardingTime: unavailableDuration(),
 })
 
+const emptySnapshot = (): CareerSnapshot => ({
+  asOfDate: null,
+  employmentTotal: null,
+  medianWeeklyEarnings: null,
+  annualisedMedianSalary: null,
+  vacanciesThreeMonthAvg: null,
+  vacancyYoyPct: null,
+  employmentGrowth5yPct: null,
+  employmentGrowth10yPct: null,
+  opportunityScore: null,
+  scoreStatus: null,
+  publicationStatus: null,
+})
+
 function career(id: CareerCompareId, label: string): AustraliaCareerComparison {
   return {
     id,
     label,
     countryCode: CAREER_COMPARE_COUNTRY,
-    // Official code adapters are intentionally empty until a separately
-    // reviewed AU data-ingestion step is approved.
     codeMappings: [],
     pathway: emptyPathway(),
     registration: emptyRegistration(),
     studyCost: emptyStudyCost(),
     outcome: emptyOutcome(),
     time: emptyTime(),
+    snapshot: emptySnapshot(),
+    sources: [],
     sourceIds: [],
+    programRefs: [],
     reviewedAt: null,
   }
 }
 
 /**
- * Contract-only AU catalog. It deliberately contains no occupational,
- * tuition, wage, demand, or city-cost facts.
+ * The catalog is the client-side allowlist only. Runtime comparison values are
+ * hydrated from country_occupation_* tables on the server before rendering.
  */
 export const AU_CAREER_COMPARISON_CATALOG: readonly AustraliaCareerComparison[] = [
   career("registered-nurse", "Registered Nurse"),
-  career("software-engineer", "Software Engineer"),
-  career("early-childhood-teacher", "Early Childhood Teacher"),
+  career("electrician", "Electrician"),
+  career("carpenter", "Carpenter"),
+  career("plumber", "Plumber"),
 ]
 
 export const AU_CAREER_COMPARISON_BY_ID = new Map(
