@@ -27,12 +27,19 @@ async function loadProgram(segment: string) {
 function programLocationSummary(program: Awaited<ReturnType<typeof loadProgram>>) {
   if (!program) return ""
   if (program.deliveryLocations.length > 0) {
+    const cityNames = [
+      program.verifiedCitySlugs.includes("sydney") ? "Sydney" : null,
+      program.verifiedCitySlugs.includes("melbourne") ? "Melbourne" : null,
+    ].filter((value): value is string => Boolean(value))
+
+    if (cityNames.length > 0) {
+      return `${cityNames.join(" & ")} · ${program.deliveryLocations.length} registered ${
+        program.deliveryLocations.length === 1 ? "location" : "locations"
+      }`
+    }
+
     const first = program.deliveryLocations[0]
-    const primary = program.verifiedCitySlugs.includes("sydney")
-      ? "Sydney"
-      : program.verifiedCitySlugs.includes("melbourne")
-        ? "Melbourne"
-        : [first.locality, first.state].filter(Boolean).join(", ") || first.locationName
+    const primary = [first.locality, first.state].filter(Boolean).join(", ") || first.locationName
     const extra = program.deliveryLocations.length - 1
     return extra > 0 ? `${primary} + ${extra} registered ${extra === 1 ? "location" : "locations"}` : primary
   }
@@ -47,7 +54,9 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const index = program.officialUrlStatus === "verified" || program.facts.length >= 3
   return {
     title: `${program.title} · ${program.institutionName}`,
-    description: [program.courseType, program.institutionName, programLocationSummary(program)].filter(Boolean).join(" · "),
+    description: [program.courseType, program.institutionName, programLocationSummary(program)]
+      .filter(Boolean)
+      .join(" · "),
     alternates: { canonical: `${BASE_URL}${programDetailPath(program.id, program.title)}` },
     robots: { index, follow: true },
   }
@@ -128,7 +137,9 @@ export default async function ProgramDetailPage({ params }: Params) {
                   )
                 })}
               </div>
-              {program.locationSourceLastModified && <p className="mt-3 text-[10px] text-[#9b9891]">CRICOS location dataset updated {new Date(program.locationSourceLastModified).toLocaleDateString("en-AU")}</p>}
+              {program.locationSourceLastModified && (
+                <p className="mt-3 text-[10px] text-[#9b9891]">CRICOS location dataset updated {new Date(program.locationSourceLastModified).toLocaleDateString("en-AU")}</p>
+              )}
             </section>
           )}
 
