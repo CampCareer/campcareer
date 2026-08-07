@@ -15,6 +15,11 @@ const careWorkerMigration = readFileSync(
   "utf8",
 )
 
+const physiotherapistMigration = readFileSync(
+  new URL("../supabase/migrations/20260807211500_australia_physiotherapist_profile.sql", import.meta.url),
+  "utf8",
+)
+
 test("Australia Midwife uses the exact current OSCA occupation mapping", () => {
   const career = getCanonicalCareer("midwife")
 
@@ -107,4 +112,48 @@ test("Australia Care Worker connects CHC33021 directly and keeps aged-care visa 
   assert.match(careWorkerMigration, /'au-vet:training-gov:CHC33021', 'direct'/)
   assert.match(careWorkerMigration, /Aged Care Industry Labour Agreement/)
   assert.match(careWorkerMigration, /disability-sector employers cannot use that agreement/)
+})
+
+test("Australia Physiotherapist uses the exact current OSCA mapping", () => {
+  const career = getCanonicalCareer("physiotherapist")
+
+  assert.ok(career)
+  assert.equal(career.categoryId, "health")
+  assert.match(physiotherapistMigration, /'AU:physiotherapist'/)
+  assert.match(physiotherapistMigration, /'262431', 'Physiotherapist'/)
+  assert.match(physiotherapistMigration, /'252511'/)
+  assert.match(physiotherapistMigration, /'2624'/)
+})
+
+test("Australia Physiotherapist has a regulated accredited entry pathway", () => {
+  const physiotherapist = getOccupationEditorial("physiotherapist")
+  const australia = physiotherapist?.countries.AU
+
+  assert.ok(physiotherapist)
+  assert.ok(australia)
+  assert.ok(physiotherapist.tasks.length >= 6)
+  assert.match(australia.entryPathway, /Bachelor|Master|Doctor of Physiotherapy/i)
+  assert.match(australia.entryPathway, /Australian Physiotherapy Council/)
+  assert.match(australia.registration, /Physiotherapy Board of Australia/)
+  assert.match(australia.registration, /mandatory/i)
+})
+
+test("Australia Physiotherapist keeps direct JSA labour-market, growth and shortage inputs", () => {
+  assert.match(physiotherapistMigration, /46600, 1888, 50, 98176/)
+  assert.match(physiotherapistMigration, /1205\.66667/)
+  assert.match(physiotherapistMigration, /4\.42/)
+  assert.match(physiotherapistMigration, /19\.69, 35\.10/)
+  assert.match(physiotherapistMigration, /20, 15, 5, 6, 13, 5, 10, 10, 2, 86/)
+
+  for (const region of ["ACT", "NSW", "NT", "QLD", "SA", "TAS", "VIC", "WA"]) {
+    assert.match(physiotherapistMigration, new RegExp(`'AU:physiotherapist', '${region}', '2026-05-01', 3`))
+  }
+})
+
+test("Australia Physiotherapist connects canonical study and visa evidence", () => {
+  assert.match(physiotherapistMigration, /Australian Physiotherapy Council — Education providers and accreditation/)
+  assert.match(physiotherapistMigration, /Core Skills Occupation List includes legacy ANZSCO 252511 Physiotherapist/)
+  assert.match(physiotherapistMigration, /'au-program:804', 'direct'/)
+  assert.match(physiotherapistMigration, /'au-program:19250', 'direct'/)
+  assert.match(physiotherapistMigration, /'au-program:4744', 'graduate_entry'/)
 })
