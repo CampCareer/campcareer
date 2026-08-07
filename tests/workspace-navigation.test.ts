@@ -3,7 +3,7 @@ import test from "node:test"
 import { isWorkspaceRoute, WORKSPACE_NAV_ITEMS } from "../src/lib/workspace/navigation"
 
 test("isWorkspaceRoute returns true for workspace routes", () => {
-  assert.equal(isWorkspaceRoute("/home"), true)
+  assert.equal(isWorkspaceRoute("/"), true)
   assert.equal(isWorkspaceRoute("/compare"), true)
   assert.equal(isWorkspaceRoute("/countries"), true)
   assert.equal(isWorkspaceRoute("/visas"), true)
@@ -19,12 +19,12 @@ test("isWorkspaceRoute returns true for workspace sub-paths", () => {
 })
 
 test("isWorkspaceRoute returns false for standalone tools and public pages", () => {
+  assert.equal(isWorkspaceRoute("/home"), false)
   assert.equal(isWorkspaceRoute("/maps"), false)
   assert.equal(isWorkspaceRoute("/map"), false)
   assert.equal(isWorkspaceRoute("/planner"), false)
   assert.equal(isWorkspaceRoute("/profile"), false)
   assert.equal(isWorkspaceRoute("/login"), false)
-  assert.equal(isWorkspaceRoute("/"), false)
 })
 
 test("isWorkspaceRoute returns false for paths that merely contain a workspace segment", () => {
@@ -46,7 +46,7 @@ test("WORKSPACE_NAV_ITEMS has the expected ids in order", () => {
 
 test("every primary workspace route has a matching nav item", () => {
   const hrefs = new Set(WORKSPACE_NAV_ITEMS.map((item) => item.href))
-  for (const route of ["/home", "/compare", "/countries", "/visas", "/occupation", "/programs"]) {
+  for (const route of ["/", "/compare", "/countries", "/visas", "/occupation", "/programs"]) {
     assert.ok(hrefs.has(route), `missing nav item for ${route}`)
   }
 })

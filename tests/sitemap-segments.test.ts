@@ -2,19 +2,24 @@ import assert from "node:assert/strict"
 import test from "node:test"
 import sitemap from "../src/app/sitemap"
 import { ROUTE_GUIDES, routeGuideHref } from "../src/data/route-guides"
+import { CANONICAL_COUNTRY_SLUGS, SITE_URL, countryCanonicalPath } from "../src/lib/seo-routes.mjs"
 
-test("the sitemap publishes canonical Home, maps, legal pages, and verified routes", () => {
+test("the sitemap publishes canonical Home, countries, maps, legal pages, and verified routes", () => {
   const entries = sitemap()
   const urls = entries.map((entry) => entry.url)
 
-  assert.ok(urls.includes("https://www.campcareer.com/home"))
-  assert.equal(urls.includes("https://www.campcareer.com/ko"), false)
-  assert.ok(urls.includes("https://www.campcareer.com/maps"))
+  assert.ok(urls.includes(`${SITE_URL}/`))
+  assert.equal(urls.includes(`${SITE_URL}/home`), false)
+  assert.equal(urls.includes(`${SITE_URL}/ko`), false)
+  assert.ok(urls.includes(`${SITE_URL}/maps`))
+  for (const slug of CANONICAL_COUNTRY_SLUGS) {
+    assert.ok(urls.includes(`${SITE_URL}${countryCanonicalPath(slug)}`))
+    assert.equal(urls.includes(`${SITE_URL}/${slug}`), false)
+  }
   for (const guide of ROUTE_GUIDES) {
-    assert.ok(urls.includes(`https://www.campcareer.com${routeGuideHref(guide)}`))
-    assert.ok(urls.includes(`https://www.campcareer.com/ko${routeGuideHref(guide)}`))
+    assert.ok(urls.includes(`${SITE_URL}${routeGuideHref(guide)}`))
+    assert.ok(urls.includes(`${SITE_URL}/ko${routeGuideHref(guide)}`))
   }
   assert.equal(urls.some((url) => url.includes("/au/majors/")), false)
   assert.equal(urls.some((url) => url.includes("/roi-explorer")), false)
-  assert.equal(urls.some((url) => url.includes("/countries/")), false)
 })

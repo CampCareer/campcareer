@@ -1,3 +1,5 @@
+import { LEGACY_SEO_REDIRECTS } from "./src/lib/seo-routes.mjs"
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   allowedDevOrigins: ["127.0.0.1", "localhost"],
@@ -10,12 +12,14 @@ const nextConfig = {
   },
   async redirects() {
     return [
-      // The Workspace Home is the single canonical product home.
-      { source: "/", destination: "/home", permanent: true },
+      // Canonical SEO replacements are exact and permanent. Keep them before
+      // the broader retired-funnel rules below so legacy roots do not get
+      // swallowed by temporary redirects.
+      ...LEGACY_SEO_REDIRECTS,
 
       // CampCareer is a route-search product. Retire every former workspace,
       // comparison, onboarding, and broad-study funnel rather than presenting
-      // visitors with competing product promises. `/home`, `/compare` and
+      // visitors with competing product promises. `/`, `/compare` and
       // `/countries` now render inside the workspace shell.
       { source: "/planner/:path*", destination: "/", permanent: false },
       { source: "/myplan/:path*", destination: "/", permanent: false },

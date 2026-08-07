@@ -16,13 +16,13 @@ export function SiteFooter({ className }: { className?: string }) {
       <div className="mx-auto max-w-6xl px-5 py-12 sm:px-6 sm:py-16">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           <div>
-            <Link href="/home" className="campcareer-wordmark text-slate-900">campcareer</Link>
+            <Link href="/" className="campcareer-wordmark text-slate-900">campcareer</Link>
             <p className="mt-3 text-sm leading-6 text-slate-500">{isKo ? "목적지와 하고 싶은 일에 필요한 검증된 유학·취업 정보를 찾습니다." : "Find source-backed study and work information for the destination and career you are considering."}</p>
           </div>
           <div>
             <h4 className="text-sm font-semibold text-slate-900">{isKo ? "경로" : "Routes"}</h4>
             <ul className="mt-3 space-y-2.5">
-              <FooterLink href="/home" locale={pathLocale} canonical>{isKo ? "경로 검색" : "Search routes"}</FooterLink>
+              <FooterLink href="/" locale={pathLocale} canonical>{isKo ? "경로 검색" : "Search routes"}</FooterLink>
               <FooterLink href="/maps" locale={pathLocale} canonical>{isKo ? "지도" : "Maps"}</FooterLink>
             </ul>
           </div>

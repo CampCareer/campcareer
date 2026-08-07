@@ -1,14 +1,26 @@
 import { expect, test } from "@playwright/test"
 
-test("sitemap exposes only canonical route-product URLs", async ({ request }) => {
+test("sitemap exposes only canonical route-product and country URLs", async ({ request }) => {
   const sitemap = await request.get("/sitemap.xml")
   expect(sitemap.ok()).toBeTruthy()
   expect(sitemap.headers()["content-type"]).toContain("application/xml")
   const xml = await sitemap.text()
+  expect(xml).toContain("https://www.campcareer.com/")
   expect(xml).toContain("/routes/australia/mining-work")
   expect(xml).toContain("/maps")
+  expect(xml).toContain("/countries/au")
+  expect(xml).not.toContain("https://www.campcareer.com/home")
   expect(xml).not.toContain("/au/majors/")
-  expect(xml).not.toContain("/countries/")
+})
+
+test("legacy Home and country roots redirect permanently to canonical URLs", async ({ request }) => {
+  const home = await request.get("/home", { maxRedirects: 0 })
+  expect(home.status()).toBe(308)
+  expect(home.headers().location).toBe("/")
+
+  const australia = await request.get("/au", { maxRedirects: 0 })
+  expect(australia.status()).toBe(308)
+  expect(australia.headers().location).toBe("/countries/au")
 })
 
 test("retired sitemap endpoints are not indexable", async ({ request }) => {

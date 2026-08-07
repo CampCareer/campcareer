@@ -23,7 +23,7 @@ export type NavItem = {
 }
 
 export const WORKSPACE_NAV_ITEMS: NavItem[] = [
-  { id: "home", label: "Home", href: "/home", icon: LayoutDashboard, blurb: "Overview of every tool in one place.", accent: "#2563eb", tint: "#eef4ff" },
+  { id: "home", label: "Home", href: "/", icon: LayoutDashboard, blurb: "Overview of every tool in one place.", accent: "#2563eb", tint: "#eef4ff" },
   { id: "map", label: "Map", href: "/maps", icon: Map, blurb: "Explore countries and regions on an interactive map.", accent: "#3e7a2e", tint: "#edf5ea" },
   { id: "compare", label: "Compare", href: "/compare", icon: Scale, blurb: "Side-by-side country and career comparison.", accent: "#6d4fc4", tint: "#f3f0fa" },
   { id: "countries", label: "Countries", href: "/countries", icon: Globe2, blurb: "Find your destination, from country to city.", accent: "#2563eb", tint: "#eef4ff" },
@@ -34,7 +34,7 @@ export const WORKSPACE_NAV_ITEMS: NavItem[] = [
 
 /** Routes that render inside the workspace shell (sidebar + topbar). */
 export const WORKSPACE_ROUTES = [
-  "/home",
+  "/",
   "/compare",
   "/countries",
   "/visas",

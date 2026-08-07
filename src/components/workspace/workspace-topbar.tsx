@@ -14,7 +14,7 @@ type WorkspaceTopbarProps = {
 }
 
 const NAV_ID_BY_PATH: Record<string, string> = {
-  "/home": "home",
+  "/": "home",
   "/maps": "map",
   "/compare": "compare",
   "/countries": "countries",
@@ -42,7 +42,7 @@ export function WorkspaceTopbar({ onMenuClick }: WorkspaceTopbarProps) {
         <Menu className="size-5" />
       </button>
 
-      <Link href="/home" className="campcareer-wordmark text-[#1b1b1b]" aria-label="campcareer home">
+      <Link href="/" className="campcareer-wordmark text-[#1b1b1b]" aria-label="campcareer home">
         campcareer
       </Link>
 
