@@ -24,9 +24,13 @@ export async function generateMetadata({
 
   const launchCountry = getLaunchCountry(countryCode)
   const locationLabel = countryCode === "AU" ? "campuses" : "locations"
+  const description = countryCode === "NL"
+    ? `Explore verified institutions in ${launchCountry?.name ?? countryCode} with official BRIN identity and source-backed ${locationLabel}. Program data will be added as the Netherlands catalogue is verified.`
+    : `Explore verified institutions in ${launchCountry?.name ?? countryCode} with connected programs, ${locationLabel} and normalized location data.`
+
   return {
     title: `${launchCountry?.name ?? countryCode} Institutions`,
-    description: `Explore verified institutions in ${launchCountry?.name ?? countryCode} with connected programs, ${locationLabel} and normalized location data.`,
+    description,
     alternates: { canonical: `/institutions/${countryCode.toLowerCase()}` },
     robots: { index: true, follow: true },
   }
