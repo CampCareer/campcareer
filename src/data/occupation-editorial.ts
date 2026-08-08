@@ -119,6 +119,110 @@ export const OCCUPATION_EDITORIAL: readonly OccupationEditorial[] = [
     },
   },
   {
+    id: "medical-laboratory-technician",
+    overview:
+      "Medical Laboratory Technicians perform routine diagnostic laboratory tests and prepare, process and analyse biological specimens under established laboratory procedures, supporting medical scientists and pathologists in the production of reliable test results.",
+    tasks: [
+      "Receive, identify, label and prepare blood, tissue and other specimens for laboratory testing",
+      "Set up, operate and maintain laboratory instruments and routine testing equipment",
+      "Perform routine haematology, biochemistry, microbiology, histology or other pathology tests within the authorised scope",
+      "Prepare reagents, solutions, cultures, slides and other materials needed for diagnostic testing",
+      "Record, check and communicate test observations and results through laboratory information and quality systems",
+      "Follow infection-control, specimen-handling, quality-assurance, safety and waste-disposal procedures",
+    ],
+    countries: {
+      AU: {
+        headline: "A pathology support occupation with vocational entry routes but incomplete occupation-specific market evidence",
+        entryPathway:
+          "A practical entry route begins with MSL40122 Certificate IV in Laboratory Techniques. For pathology-focused technician work, MSL50122 Diploma of Laboratory Technology can be packaged with the Pathology specialisation and has formal entry requirements, including an appropriate Certificate IV, another relevant STEM qualification, or demonstrated technical laboratory skills and experience. Employers may require additional pathology-specific competencies or experience.",
+        registration:
+          "There is no statutory national occupational registration or licensing scheme for Medical Laboratory Technicians. AIMS is the relevant professional and migration-assessment body, while laboratories and employers can impose accreditation, competency, quality and workplace requirements for particular roles.",
+        jobMarketNote:
+          "Medical Laboratory Technicians work mainly in public and private pathology laboratories, hospitals and diagnostic services. JSA publishes an exact six-digit employment count for legacy ANZSCO 311213, but current vacancy and employment-projection series are only available for the broader ANZSCO 3112 Medical Technicians group, which includes occupations outside the CampCareer career scope.",
+        scoreCaveat:
+          "The opportunity score is deliberately conservative. Six-digit median earnings are not published, no current shortage or CSOL record was verified for OSCA 311233, and vacancy intensity is not scored because the IVI numerator is broader ANZSCO 3112 while employment is exact ANZSCO 311213. Broader-group growth is retained only with explicit provenance and partial scoring.",
+      },
+    },
+  },
+  {
+    id: "radiographer",
+    overview:
+      "Radiographers produce diagnostic medical images using x-ray and related imaging equipment, position and prepare patients, apply radiation-safety controls and work with medical teams to obtain images suitable for clinical diagnosis and treatment decisions.",
+    tasks: [
+      "Review imaging requests and prepare patients for diagnostic radiography procedures",
+      "Position patients and imaging equipment to obtain the required anatomical views and diagnostic image quality",
+      "Operate x-ray and related medical imaging equipment within professional and radiation-safety requirements",
+      "Select and adjust imaging parameters according to the examination, patient condition and approved protocols",
+      "Assess image quality, identify technical issues and repeat or escalate examinations when clinically appropriate",
+      "Maintain clinical records, explain procedures and collaborate with radiologists, nurses and other health professionals",
+    ],
+    countries: {
+      AU: {
+        headline: "A regulated medical-imaging profession with national shortage and strong long-term demand",
+        entryPathway:
+          "The standard route is a Medical Radiation Practice Board-approved entry-to-practice program followed by registration through Ahpra. Direct Bachelor programs in diagnostic radiography and graduate-entry Master programs are available. Applicants should verify that the exact course remains on the current approved-program list before relying on it as a registration pathway.",
+        registration:
+          "Registration with the Medical Radiation Practice Board of Australia through Ahpra is mandatory for practising as a diagnostic radiographer. Graduates must complete an approved qualification and satisfy the Board's current registration standards before practising.",
+        jobMarketNote:
+          "Radiographers work across public and private hospitals, medical-imaging networks, specialist clinics and regional health services. The current shortage data records OSCA 263133 in shortage nationally and in all eight states and territories. Exact six-digit employment is available for legacy ANZSCO 251211, while JSA vacancy and projection series remain published for broader ANZSCO 2512 Medical Imaging Professionals.",
+        scoreCaveat:
+          "The opportunity score does not treat the broader ANZSCO 2512 median earnings or vacancy count as radiographer-specific. Salary and vacancy-intensity components are therefore zero, while the directly verified shortage and CSOL signals remain fully credited and broader-group vacancy trend and growth are used only with explicit scope caveats.",
+      },
+    },
+  },
+  {
+    id: "pharmacist",
+    overview:
+      "Pharmacists ensure the safe and effective use of medicines by reviewing prescriptions and medication histories, dispensing and supplying medicines, counselling patients, identifying medicine-related risks and working with health professionals to optimise treatment.",
+    tasks: [
+      "Review prescriptions, medicine histories, allergies and clinical information for safety and appropriateness",
+      "Dispense, prepare, label and supply medicines in accordance with legal, professional and quality requirements",
+      "Counsel patients and carers about medicine use, dosage, precautions, interactions, adherence and storage",
+      "Identify medication-related problems and communicate recommendations with prescribers and other health professionals",
+      "Maintain medication, dispensing, inventory and controlled-drug records and supervise pharmacy workflows within the authorised scope",
+      "Support medication-management, public-health and quality-improvement services in community or hospital pharmacy settings",
+    ],
+    countries: {
+      AU: {
+        headline: "A regulated medicines profession with strong community shortage but a mixed hospital shortage signal",
+        entryPathway:
+          "The Australian route starts with an Australian Pharmacy Council-accredited and Pharmacy Board-approved pharmacy degree. Graduates generally move into provisional registration, supervised practice and an accredited intern training program, then complete the Board-required written and oral examinations before becoming eligible for general registration. Entry-to-practice study includes Bachelor, Master and Doctor of Pharmacy pathways depending on prior study and the university.",
+        registration:
+          "Registration with the Pharmacy Board of Australia through Ahpra is mandatory. Completing a pharmacy degree alone does not confer general registration; the provisional-registration, supervised-practice, intern-training and examination requirements must also be completed under the current Board rules.",
+        jobMarketNote:
+          "CampCareer's current OSCA roll-up includes Community Pharmacist and Hospital Pharmacist only. Community Pharmacist is in shortage across all eight jurisdictions, while Hospital Pharmacist has a more mixed shortage result. Legacy ANZSCO 2515 labour-market series also include Industrial Pharmacists, so those broader vacancy, salary and projection series are not treated as exact current-scope observations.",
+        scoreCaveat:
+          "The score is conservative because Industrial Pharmacists are outside the current OSCA 2634 roll-up but remain inside the legacy ANZSCO 2515 market series. The canonical employment count uses only the two included six-digit occupations, salary and vacancy intensity receive zero rather than mixing incompatible scopes, and the broader-group negative vacancy trend is not awarded points.",
+      },
+    },
+  },
+  {
+    id: "occupational-therapist",
+    overview:
+      "Occupational Therapists assess how health conditions, disability, injury or environmental barriers affect everyday activities and design interventions that help people participate safely and independently in self-care, work, education, home and community life.",
+    tasks: [
+      "Assess physical, cognitive, psychosocial and environmental factors affecting a person's daily activities and participation",
+      "Develop goal-based therapy and rehabilitation plans with clients, families and other health professionals",
+      "Train clients in daily living, work, school, mobility and community-participation skills",
+      "Recommend and trial assistive equipment, home modifications, splinting or environmental adaptations where appropriate",
+      "Monitor functional progress, review outcomes and adjust intervention plans as needs change",
+      "Document assessments and care, coordinate services and provide education to clients, carers, employers and support teams",
+    ],
+    countries: {
+      AU: {
+        headline: "A regulated allied-health profession with national shortage, high vacancy intensity and strong projected growth",
+        entryPathway:
+          "The standard route is an Occupational Therapy Board-approved entry-to-practice qualification followed by registration through Ahpra. Approved Bachelor and graduate-entry Master of Occupational Therapy programs are available. The Occupational Therapy Council accredits programs, while the Board approves programs for registration purposes, so applicants should verify the current status of the exact course before enrolling.",
+        registration:
+          "Registration with the Occupational Therapy Board of Australia through Ahpra is mandatory before practising as an occupational therapist. Graduates of approved programs must still satisfy the Board's current registration standards and application requirements.",
+        jobMarketNote:
+          "Occupational therapists work in hospitals, community health, rehabilitation, disability and NDIS services, aged care, mental health, schools, private practice and regional services. OSCA 262331 is recorded in shortage nationally and in all eight states and territories, and the JSA legacy ANZSCO 2524 series maps directly to the Occupational Therapist career scope for employment, earnings, vacancies and projections.",
+        scoreCaveat:
+          "The opportunity score remains provisional because entry-level vacancy shares and posting-level employer counts are not yet directly measured. The May 2026 vacancy level is high relative to employment and long-term growth is strong, but the year-on-year vacancy trend is negative, so the vacancy-trend component is deliberately scored at zero.",
+      },
+    },
+  },
+  {
     id: "carpenter",
     overview:
       "Carpenters set out, construct, install, renovate and repair timber and lightweight structural systems, fixtures and finishes across residential, commercial and infrastructure projects.",
