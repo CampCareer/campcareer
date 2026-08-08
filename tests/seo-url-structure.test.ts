@@ -60,7 +60,12 @@ test("legacy redirect sources never appear in the sitemap and targets do", () =>
 })
 
 test("Next redirects wire the centralized permanent SEO registry before broad legacy rules", async () => {
-  const redirects = await nextConfig.redirects()
+  const redirectsFactory = nextConfig.redirects
+  if (!redirectsFactory) {
+    throw new Error("next.config.mjs must define redirects")
+  }
+
+  const redirects = await redirectsFactory()
 
   assert.deepEqual(redirects.slice(0, LEGACY_SEO_REDIRECTS.length), [...LEGACY_SEO_REDIRECTS])
   assert.ok(!redirects.some((redirect) => redirect.source === "/" && redirect.destination === "/home"))
