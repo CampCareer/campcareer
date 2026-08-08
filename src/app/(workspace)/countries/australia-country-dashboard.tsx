@@ -23,6 +23,14 @@ import { getCountryProfile } from "@/lib/workspace/country-profile"
 import { VISA_CATALOG } from "@/lib/workspace/visa-catalog"
 import { cn } from "@/lib/utils"
 
+const CITY_LINKS: Record<string, string> = {
+  Sydney: "/cities/au/sydney",
+  Melbourne: "/cities/au/melbourne",
+  Brisbane: "/cities/au/brisbane",
+  Perth: "/cities/au/perth",
+  Adelaide: "/cities/au/adelaide",
+}
+
 function MetricCard({
   icon,
   label,
@@ -186,17 +194,36 @@ export function AustraliaCountryDashboard({ metrics }: { metrics: CountryMetrics
                   {region.name}
                 </h3>
                 <div className="mt-2 flex flex-wrap gap-1.5">
-                  {region.cities.map((city) => (
-                    <span
-                      key={city}
-                      className="rounded-md border border-[#e7e6e3] bg-[#fafaf8] px-2.5 py-1 text-[12px] font-medium text-[#4d4c48]"
-                    >
-                      {city}
-                    </span>
-                  ))}
+                  {region.cities.map((city) => {
+                    const href = CITY_LINKS[city]
+                    return href ? (
+                      <Link
+                        key={city}
+                        href={href}
+                        className="rounded-md border border-[#bfcff0] bg-[#eef4ff] px-2.5 py-1 text-[12px] font-semibold text-[#2563eb] transition hover:border-[#2563eb] hover:bg-white"
+                      >
+                        {city}
+                      </Link>
+                    ) : (
+                      <span
+                        key={city}
+                        className="rounded-md border border-[#e7e6e3] bg-[#fafaf8] px-2.5 py-1 text-[12px] font-medium text-[#4d4c48]"
+                      >
+                        {city}
+                      </span>
+                    )
+                  })}
                 </div>
               </div>
             ))}
+          </div>
+          <div className="border-t border-[#f0efec] px-5 py-4">
+            <Link
+              href="/cities/au/compare"
+              className="text-[11.5px] font-semibold text-[#3e7a2e] hover:underline"
+            >
+              Compare Sydney vs Melbourne →
+            </Link>
           </div>
         </section>
 

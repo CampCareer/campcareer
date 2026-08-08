@@ -14,6 +14,7 @@ test("program search params default to Australia and safe filter values", () => 
     q: "",
     level: "all",
     field: "all",
+    city: "all",
     state: "all",
     duration: "all",
     fee: "all",
@@ -41,6 +42,7 @@ test("program search params keep supported filters and reject unknown values", (
   assert.equal(parsed.q, "Nursing")
   assert.equal(parsed.level, "bachelor")
   assert.equal(parsed.field, "06 - Health")
+  assert.equal(parsed.city, "all")
   assert.equal(parsed.state, "NSW")
   assert.equal(parsed.duration, "2-3")
   assert.equal(parsed.fee, "40000-50000")
@@ -49,7 +51,35 @@ test("program search params keep supported filters and reject unknown values", (
   assert.equal(parsed.page, 3)
 
   assert.equal(parseProgramSearchParams({ level: "unknown" }).level, "all")
+  assert.equal(parseProgramSearchParams({ city: "unknown" }).city, "all")
   assert.equal(parseProgramSearchParams({ page: "-4" }).page, 1)
+})
+
+test("verified city filters take precedence over representative state filters", () => {
+  const sydney = parseProgramSearchParams({ city: "sydney", state: "VIC" })
+  assert.equal(sydney.city, "sydney")
+  assert.equal(sydney.state, "all")
+  assert.equal(buildProgramsUrl(sydney), "/programs?country=AU&city=sydney")
+
+  const melbourne = parseProgramSearchParams({ city: "melbourne", state: "NSW" })
+  assert.equal(melbourne.city, "melbourne")
+  assert.equal(melbourne.state, "all")
+  assert.equal(buildProgramsUrl(melbourne), "/programs?country=AU&city=melbourne")
+
+  const brisbane = parseProgramSearchParams({ city: "brisbane", state: "NSW" })
+  assert.equal(brisbane.city, "brisbane")
+  assert.equal(brisbane.state, "all")
+  assert.equal(buildProgramsUrl(brisbane), "/programs?country=AU&city=brisbane")
+
+  const perth = parseProgramSearchParams({ city: "perth", state: "QLD" })
+  assert.equal(perth.city, "perth")
+  assert.equal(perth.state, "all")
+  assert.equal(buildProgramsUrl(perth), "/programs?country=AU&city=perth")
+
+  const adelaide = parseProgramSearchParams({ city: "adelaide", state: "WA" })
+  assert.equal(adelaide.city, "adelaide")
+  assert.equal(adelaide.state, "all")
+  assert.equal(buildProgramsUrl(adelaide), "/programs?country=AU&city=adelaide")
 })
 
 test("program URLs preserve country and omit default filters", () => {
@@ -66,7 +96,7 @@ test("program URLs preserve country and omit default filters", () => {
     "/programs?country=AU&q=Data+Science&level=master&state=VIC&page=2",
   )
   assert.equal(
-    buildProgramsUrl(filters, { q: "", level: "all", state: "all", page: 1 }),
+    buildProgramsUrl(filters, { q: "", level: "all", city: "all", state: "all", page: 1 }),
     "/programs?country=AU",
   )
 })

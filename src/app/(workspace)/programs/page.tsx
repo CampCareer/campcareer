@@ -44,7 +44,7 @@ export async function generateMetadata({
     title: filters.country === "AU" ? "Australian Programs" : `${countryName} Programs`,
     description:
       filters.country === "AU"
-        ? "Search Australian university and vocational programs by study level, field, state, duration and tuition."
+        ? "Search Australian university and vocational programs by verified city, study level, field, state, duration and tuition."
         : `Explore study programs in ${countryName}. Country data will be published after source review.`,
     alternates: {
       canonical: `${SITE_URL}${programsCanonicalPath(filters.country)}`,
@@ -107,13 +107,14 @@ function EmptyResults({ filters }: { filters: ProgramSearchFilters }) {
       </span>
       <h2 className="mt-4 text-[17px] font-semibold text-[#1b1b1b]">No programs match these filters</h2>
       <p className="mt-2 max-w-md text-[12.5px] leading-5 text-[#77746e]">
-        Try a broader study level, field, state, duration or tuition range.
+        Try a broader city, study level, field, state, duration or tuition range.
       </p>
       <Link
         href={buildProgramsUrl(filters, {
           q: "",
           level: "all",
           field: "all",
+          city: "all",
           state: "all",
           duration: "all",
           fee: "all",
@@ -221,9 +222,9 @@ export default async function ProgramsPage({
               />
 
               <p className="mt-4 text-[10.5px] leading-5 text-[#aaa7a0]">
-                Catalogue records are limited to active Australian CRICOS courses. Tuition and
-                duration values are shown when present in the current source record; official page
-                verification is displayed separately.
+                Catalogue records are limited to active Australian CRICOS courses. City filtering
+                uses official CRICOS registered delivery locations; tuition, duration and provider-page
+                verification are shown separately.
               </p>
               </>
             ) : null}
