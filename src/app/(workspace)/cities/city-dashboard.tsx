@@ -82,7 +82,16 @@ function transportValue(profile: AuCityProfile) {
 export function CityDashboard({ profile }: { profile: AuCityProfile }) {
   const scopeLabel = profile.population?.geography ?? `Greater ${profile.name}`
   const image = CITY_IMAGES[profile.slug]
-  const compareAvailable = ["sydney", "melbourne"].includes(profile.slug)
+  const compareAvailable = Boolean(
+    profile.population &&
+      profile.livingCost &&
+      profile.transport &&
+      profile.workRights &&
+      profile.employmentSectors.length > 0 &&
+      profile.linkedCampusCount > 0 &&
+      profile.linkedInstitutionCount > 0 &&
+      profile.verifiedProgramCount > 0,
+  )
 
   return (
     <div>
@@ -110,7 +119,7 @@ export function CityDashboard({ profile }: { profile: AuCityProfile }) {
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
-              {compareAvailable && <Link href="/compare?type=city&country=AU" className="inline-flex items-center gap-1.5 rounded-lg border border-[#cfd9ca] px-3.5 py-2 text-[11.5px] font-semibold text-[#3e7a2e] hover:bg-[#f7faf5]">Compare Sydney vs Melbourne <ArrowRight className="size-3.5" /></Link>}
+              {compareAvailable && <Link href={`/compare?type=city&country=AU&left=${profile.slug}`} className="inline-flex items-center gap-1.5 rounded-lg border border-[#cfd9ca] px-3.5 py-2 text-[11.5px] font-semibold text-[#3e7a2e] hover:bg-[#f7faf5]">Compare {profile.name} with another city <ArrowRight className="size-3.5" /></Link>}
               <Link href="/countries/au" className="inline-flex items-center gap-1.5 px-2 py-2 text-[11.5px] font-semibold text-[#2563eb] hover:underline">Australia dashboard <ArrowRight className="size-3.5" /></Link>
             </div>
           </div>
