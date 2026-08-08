@@ -4,6 +4,16 @@ import { cache } from "react"
 import { supabaseAdmin } from "@/lib/supabase-admin"
 import { getCaCityProfile, type CaCityProfile } from "@/lib/cities/ca-city-profile.server"
 
+export const PUBLISHED_CA_CITY_SLUGS = [
+  "toronto",
+  "vancouver",
+  "montreal",
+  "ottawa",
+  "calgary",
+  "waterloo",
+  "edmonton",
+] as const
+
 export type CaCityCompareOption = {
   slug: string
   name: string
@@ -65,6 +75,7 @@ async function loadCompareReadyCaCities(): Promise<CaCityProfile[]> {
     supabaseAdmin
       .from("city_directory_ca_v1")
       .select("city_id,slug,linked_campus_count,linked_institution_count,linked_program_count")
+      .in("slug", [...PUBLISHED_CA_CITY_SLUGS])
       .gt("linked_campus_count", 0)
       .gt("linked_institution_count", 0)
       .gt("linked_program_count", 0),
