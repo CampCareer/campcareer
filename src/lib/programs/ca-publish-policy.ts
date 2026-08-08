@@ -66,17 +66,18 @@ function admissionHoldReason(admissionStatus: string | null): CaProgramHoldReaso
 
   if (status.includes("not_assessed_non_core")) return "admission_non_core"
 
-  const unverified = [
+  const explicitlyUnverified = [
     "not_yet_verified",
     "not verified",
     "should_be_checked",
-    "check_current_intake_availability",
-    "current_intake_check",
-    "availability_separate",
     "dli_and_study_permit_eligibility_not_verified",
   ]
 
-  if (unverified.some((marker) => status.includes(marker))) {
+  const separateOrCheckRequired =
+    (status.includes("intake") || status.includes("availability")) &&
+    (status.includes("check") || status.includes("separate"))
+
+  if (explicitlyUnverified.some((marker) => status.includes(marker)) || separateOrCheckRequired) {
     return "admission_unverified"
   }
 
@@ -121,13 +122,7 @@ export function classifyCaProgramPublication(
 
   const pgwpState = caProgramPgwpState(input.irccProgramEligible)
 
-  if (holdReason) {
-    return { tier: "C", holdReason, pgwpState, indexableDetail: false }
-  }
-
-  if (text(input.officialProgramUrl)) {
-    return { tier: "A", holdReason: null, pgwpState, indexableDetail: true }
-  }
-
+  if (holdReason) return { tier: "C", holdReason, pgwpState, indexableDetail: false }
+  if (text(input.officialProgramUrl)) return { tier: "A", holdReason: null, pgwpState, indexableDetail: true }
   return { tier: "B", holdReason: null, pgwpState, indexableDetail: false }
 }
