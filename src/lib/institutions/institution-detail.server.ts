@@ -9,6 +9,11 @@ type InstitutionLogoRow = {
   logo_url: string | null
 }
 
+type InstitutionUkIdentityRow = {
+  ukprn: string | null
+  ukprn_source_url: string | null
+}
+
 type InstitutionDetailRow = {
   institution_id: string
   country_code: string
@@ -71,6 +76,8 @@ export type InstitutionDetail = {
   cityNames: string[]
   cricosProviderCode: string | null
   cricosSourceUrl: string | null
+  ukprn: string | null
+  ukprnSourceUrl: string | null
   campuses: InstitutionCampusLocation[]
   studyAreas: InstitutionCountBreakdown[]
   programmeTypes: InstitutionCountBreakdown[]
@@ -197,17 +204,41 @@ export const getInstitutionDetail = cache(async (
   if (!data) return null
 
   const row = data as unknown as InstitutionDetailRow
-  const { data: logoData, error: logoError } = await supabaseAdmin
+  const logoPromise = supabaseAdmin
     .from("institution_logo_v1")
     .select("logo_url")
     .eq("institution_id", row.institution_id)
     .maybeSingle()
 
-  if (logoError) {
-    console.error("Unable to load institution logo", logoError)
+  const ukIdentityPromise = countryCode === "UK"
+    ? supabaseAdmin
+      .from("institution_identity_uk_v1")
+      .select("ukprn,ukprn_source_url")
+      .eq("institution_id", row.institution_id)
+      .maybeSingle()
+    : Promise.resolve({ data: null, error: null })
+
+  const [logoResult, ukIdentityResult] = await Promise.all([
+    logoPromise,
+    ukIdentityPromise,
+  ])
+
+  if (logoResult.error) {
+    console.error("Unable to load institution logo", logoResult.error)
   }
 
-  const logoRow = logoData as unknown as InstitutionLogoRow | null
+  if (ukIdentityResult.error) {
+    throw new Error(`Unable to load UK institution identity: ${ukIdentityResult.error.message}`)
+  }
+
+  const logoRow = logoResult.data as unknown as InstitutionLogoRow | null
+  const ukIdentityRow = ukIdentityResult.data as unknown as InstitutionUkIdentityRow | null
+  const ukprn = safeNullableString(ukIdentityRow?.ukprn)
+  const ukprnSourceUrl = safeNullableString(ukIdentityRow?.ukprn_source_url)
+
+  if (countryCode === "UK" && (!ukprn || !ukprnSourceUrl)) {
+    throw new Error(`UK institution ${row.institution_id} is missing its official UKPRN identity`)
+  }
 
   return {
     id: row.institution_id,
@@ -227,6 +258,8 @@ export const getInstitutionDetail = cache(async (
       : [],
     cricosProviderCode: row.cricos_provider_code,
     cricosSourceUrl: row.cricos_source_url,
+    ukprn,
+    ukprnSourceUrl,
     campuses: parseCampuses(row.campus_locations),
     studyAreas: parseBreakdown(row.study_areas),
     programmeTypes: parseBreakdown(row.programme_types),
