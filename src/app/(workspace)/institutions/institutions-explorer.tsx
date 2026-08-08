@@ -71,7 +71,7 @@ function safeWebsiteUrl(value: string | null) {
 function citySummary(institution: InstitutionExplorerItem) {
   const cities = institution.cityNames
   if (cities.length === 0) {
-    return institution.campusCount > 0 ? "Campus locations available" : "Location unavailable"
+    return institution.campusCount > 0 ? "Location records available" : "Location unavailable"
   }
   if (cities.length <= 2) return cities.join(", ")
   return `${cities.slice(0, 2).join(", ")} +${cities.length - 2}`
@@ -82,6 +82,7 @@ function InstitutionCard({ institution }: { institution: InstitutionExplorerItem
   const ownership = ownershipLabel(institution.ownershipType)
   const website = safeWebsiteUrl(institution.websiteUrl)
   const detailPath = institutionDetailPath(institution.countryCode, institution.slug)
+  const locationLabel = institution.countryCode === "UK" ? "locations" : "campuses"
 
   return (
     <article className="rounded-xl border border-[#e7e6e3] bg-white p-5 transition hover:border-[#cfd9ca] hover:shadow-sm">
@@ -117,7 +118,7 @@ function InstitutionCard({ institution }: { institution: InstitutionExplorerItem
               <GraduationCap className="size-3.5 text-[#9c9a94]" />
               {institution.programCount.toLocaleString()} programs
             </span>
-            <span>{institution.campusCount.toLocaleString()} campuses</span>
+            <span>{institution.campusCount.toLocaleString()} {locationLabel}</span>
           </div>
 
           <div className="mt-3 flex flex-wrap items-center gap-4">
@@ -198,6 +199,7 @@ export async function InstitutionsExplorer({
   const country = getLaunchCountry(countryCode)
   const filters = parseInstitutionSearchParams(searchParams)
   const countryPath = institutionCountryPath(countryCode)
+  const connectionLabel = countryCode === "UK" ? "location" : "campus"
 
   let result: InstitutionSearchResult | null = null
   let errorMessage: string | null = null
@@ -237,7 +239,7 @@ export async function InstitutionsExplorer({
         </div>
       </div>
       <p className="mt-2 max-w-2xl text-[12.5px] leading-5 text-[#77746e]">
-        Search verified institution identities and their current CampCareer program and campus connections in {country?.name ?? countryCode}.
+        Search verified institution identities and their current CampCareer program and {connectionLabel} connections in {country?.name ?? countryCode}.
       </p>
 
       <form action={countryPath} method="get" className="mt-6 grid gap-3 sm:grid-cols-[minmax(0,1fr)_210px_auto]">
@@ -314,7 +316,9 @@ export async function InstitutionsExplorer({
       </section>
 
       <p className="mt-4 text-[10.5px] leading-5 text-[#aaa7a0]">
-        Institution type and ownership are shown only when they have been normalized from source-backed classifications. Program counts include active canonical programs only; city labels use normalized geography links.
+        {countryCode === "UK"
+          ? "UK location counts prefer institution-official campus and study-location records. Where a full official campus inventory has not yet been normalized, CampCareer falls back to the existing city-level institution location rather than inventing campuses."
+          : "Institution type and ownership are shown only when they have been normalized from source-backed classifications. Program counts include active canonical programs only; city labels use normalized geography links."}
       </p>
     </>
   )
