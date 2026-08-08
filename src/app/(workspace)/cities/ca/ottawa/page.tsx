@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   description:
     "Compare Ottawa student living costs, U-Pass transport, international student work rules, canonical institutions and linked programmes.",
   alternates: { canonical: "/cities/ca/ottawa" },
+  robots: { index: true, follow: true },
 }
 
 export default async function OttawaCityPage() {
