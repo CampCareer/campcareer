@@ -117,7 +117,7 @@ function LocationList({
               </span>
               <div className="min-w-0">
                 <h3 className="text-[13px] font-semibold leading-5 text-[#1b1b1b]">
-                  {location.name ?? "DLI-listed location"}
+                  {location.name ?? "Study location"}
                 </h3>
                 <p className="mt-1 text-[11.5px] leading-5 text-[#6f6d68]">{locationLabel(location)}</p>
               </div>
@@ -267,7 +267,7 @@ export function CanadianInstitutionDetailView({
               <h2 className="text-[16px] font-semibold text-[#1b1b1b]">Study locations</h2>
             </div>
             <p className="mt-1.5 text-[11.5px] leading-5 text-[#77746e]">
-              Current locations published on the IRCC Designated Learning Institutions list. Some rows represent multiple campuses or collaborative study sites exactly as IRCC groups them.
+              Source-backed study locations from the IRCC DLI list or official institution program catalogues. These records support institution discovery and do not claim that every program is offered at every listed location.
             </p>
             <div className="mt-4"><LocationList locations={institution.campuses} total={institution.campusCount} /></div>
           </section>
@@ -329,7 +329,7 @@ export function CanadianInstitutionDetailView({
           <section className="rounded-2xl border border-[#e7e6e3] bg-[#fbfbf9] p-5">
             <h2 className="text-[12.5px] font-semibold text-[#4d4c48]">About this profile</h2>
             <p className="mt-2 text-[10.5px] leading-5 text-[#8b8881]">
-              Canadian institution identity and study locations are tied to the IRCC DLI listing. A DLI listing alone does not mean every program is eligible for a post-graduation work permit; program-level eligibility must be checked separately.
+              DLI identity is shown only when verified from IRCC. Study locations may come from the IRCC DLI list or an official institution program catalogue. A DLI listing alone does not mean every program is eligible for a post-graduation work permit; program-level eligibility must be checked separately.
             </p>
           </section>
         </aside>
