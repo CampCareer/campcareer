@@ -266,10 +266,6 @@ export const getInstitutionDetail = cache(async (
   const dliNumber = safeNullableString(caIdentityRow?.dli_number)
   const dliSourceUrl = safeNullableString(caIdentityRow?.dli_source_url)
 
-  if (countryCode === "CA" && (!dliNumber || !dliSourceUrl)) {
-    throw new Error(`Canadian institution ${row.institution_id} is missing its official DLI identity`)
-  }
-
   return {
     id: row.institution_id,
     countryCode,
