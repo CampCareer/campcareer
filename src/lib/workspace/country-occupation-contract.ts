@@ -68,9 +68,18 @@ export type CountryOccupationLink = {
   regionCode: string | null
 }
 
+export type CountryOccupationResolvedProgram = {
+  title: string
+  provider: string
+  durationYears: number | null
+  tuitionFeeAud: number | null
+  url: string | null
+}
+
 export type CountryOccupationProgramLink = {
   programRef: string
   relationType: "direct" | "graduate_entry" | "progression" | "related"
+  program: CountryOccupationResolvedProgram | null
 }
 
 export type CountryOccupationProfile = {
