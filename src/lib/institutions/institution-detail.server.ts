@@ -28,6 +28,12 @@ type InstitutionDetailRow = {
   study_areas: unknown
   programme_types: unknown
   programme_preview: unknown
+  identity_system?: string | null
+  identity_value?: string | null
+  identity_source_url?: string | null
+  operator_name?: string | null
+  operator_website_url?: string | null
+  operator_source_url?: string | null
 }
 
 export type InstitutionCampusLocation = {
@@ -75,6 +81,12 @@ export type InstitutionDetail = {
   studyAreas: InstitutionCountBreakdown[]
   programmeTypes: InstitutionCountBreakdown[]
   programs: InstitutionProgrammePreview[]
+  identitySystem: string | null
+  identityValue: string | null
+  identitySourceUrl: string | null
+  operatorName: string | null
+  operatorWebsiteUrl: string | null
+  operatorSourceUrl: string | null
 }
 
 function safeNumber(value: unknown) {
@@ -154,34 +166,49 @@ function parsePrograms(value: unknown): InstitutionProgrammePreview[] {
   })
 }
 
+const BASE_DETAIL_COLUMNS = [
+  "institution_id",
+  "country_code",
+  "slug",
+  "canonical_name",
+  "institution_kind",
+  "ownership_type",
+  "website_url",
+  "status",
+  "program_count",
+  "campus_count",
+  "city_count",
+  "city_names",
+  "cricos_provider_code",
+  "cricos_source_url",
+  "campus_locations",
+  "study_areas",
+  "programme_types",
+  "programme_preview",
+]
+
+const IE_DETAIL_COLUMNS = [
+  ...BASE_DETAIL_COLUMNS,
+  "identity_system",
+  "identity_value",
+  "identity_source_url",
+  "operator_name",
+  "operator_website_url",
+  "operator_source_url",
+]
+
 export const getInstitutionDetail = cache(async (
   countryCode: InstitutionMvpCountryCode,
   slug: string,
 ): Promise<InstitutionDetail | null> => {
+  const detailView = countryCode === "IE"
+    ? "institution_detail_ie_v1"
+    : "institution_detail_v1"
+  const columns = countryCode === "IE" ? IE_DETAIL_COLUMNS : BASE_DETAIL_COLUMNS
+
   const { data, error } = await supabaseAdmin
-    .from("institution_detail_v1")
-    .select(
-      [
-        "institution_id",
-        "country_code",
-        "slug",
-        "canonical_name",
-        "institution_kind",
-        "ownership_type",
-        "website_url",
-        "status",
-        "program_count",
-        "campus_count",
-        "city_count",
-        "city_names",
-        "cricos_provider_code",
-        "cricos_source_url",
-        "campus_locations",
-        "study_areas",
-        "programme_types",
-        "programme_preview",
-      ].join(","),
-    )
+    .from(detailView)
+    .select(columns.join(","))
     .eq("country_code", countryCode)
     .eq("slug", slug)
     .maybeSingle()
@@ -227,5 +254,11 @@ export const getInstitutionDetail = cache(async (
     studyAreas: parseBreakdown(row.study_areas),
     programmeTypes: parseBreakdown(row.programme_types),
     programs: parsePrograms(row.programme_preview),
+    identitySystem: safeNullableString(row.identity_system),
+    identityValue: safeNullableString(row.identity_value),
+    identitySourceUrl: safeNullableString(row.identity_source_url),
+    operatorName: safeNullableString(row.operator_name),
+    operatorWebsiteUrl: safeNullableString(row.operator_website_url),
+    operatorSourceUrl: safeNullableString(row.operator_source_url),
   }
 })
