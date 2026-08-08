@@ -3,13 +3,12 @@
 
 -- Add the current Data Analytics (DAS) replacement for legacy Business Analytics (BAN).
 insert into public.program_catalog_ca_staging (
-  id, source_name, source_program_key, institution_name, institution_id,
+  source_name, source_program_key, institution_name, institution_id,
   title, credential_type, education_level, field_name, language,
   province, city, duration_years, tuition_fee_cad, program_code,
   official_program_url, source_url, source_as_of, source_status, collected_at
 )
 select
-  nextval('public.program_catalog_ca_staging_id_seq'),
   'Seneca Polytechnic Catalogue',
   md5('Seneca Polytechnic Catalogue|DAS'),
   'Seneca Polytechnic',
@@ -35,7 +34,7 @@ where not exists (
 );
 
 insert into public.program_pgwp_ca_staging (
-  id, program_catalog_id, institution_id, source_program_key, credential_type,
+  program_catalog_id, institution_id, source_program_key, credential_type,
   education_level, matched_dli_number, matched_campus,
   institution_offers_pgwp_eligible_programs, international_students_eligible,
   pgwp_rule_category, field_of_study_required, cip_code, field_of_study_eligible,
@@ -44,7 +43,7 @@ insert into public.program_pgwp_ca_staging (
   rule_notes
 )
 select
-  nextval('public.program_pgwp_ca_staging_id_seq'), c.id, c.institution_id,
+  c.id, c.institution_id,
   c.source_program_key, c.credential_type, c.education_level,
   'O19395536013', 'Newnham', true, true,
   'college_polytechnic_non_degree_field_of_study_requirement', true,
