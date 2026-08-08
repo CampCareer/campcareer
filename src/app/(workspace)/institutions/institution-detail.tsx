@@ -7,6 +7,7 @@ import {
   Landmark,
   MapPin,
 } from "lucide-react"
+import { InstitutionLogo } from "@/components/institution-logo"
 import { getLaunchCountry } from "@/data/launch-countries"
 import { auCityPath } from "@/lib/cities/city-routes"
 import {
@@ -285,24 +286,27 @@ export function InstitutionDetailView({
 
       <header className="mt-5 rounded-2xl border border-[#e7e6e3] bg-white p-6 sm:p-7">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
-          <div className="min-w-0">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#3e7a2e]">
-              {country?.name ?? institution.countryCode} institution
-            </p>
-            <h1 className="mt-2 max-w-3xl text-[27px] font-semibold leading-tight tracking-[-0.025em] text-[#1b1b1b] sm:text-3xl">
-              {institution.name}
-            </h1>
-            <div className="mt-3 flex flex-wrap items-center gap-2">
-              {kind ? (
-                <span className="rounded-full bg-[#edf5ea] px-3 py-1.5 text-[11px] font-semibold text-[#3e7a2e]">
-                  {kind}
-                </span>
-              ) : null}
-              {ownership ? (
-                <span className="rounded-full border border-[#e3e2dd] px-3 py-1.5 text-[11px] font-medium text-[#686660]">
-                  {ownership}
-                </span>
-              ) : null}
+          <div className="flex min-w-0 items-start gap-4">
+            <InstitutionLogo name={institution.name} logoUrl={institution.logoUrl} size="detail" />
+            <div className="min-w-0">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#3e7a2e]">
+                {country?.name ?? institution.countryCode} institution
+              </p>
+              <h1 className="mt-2 max-w-3xl text-[27px] font-semibold leading-tight tracking-[-0.025em] text-[#1b1b1b] sm:text-3xl">
+                {institution.name}
+              </h1>
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                {kind ? (
+                  <span className="rounded-full bg-[#edf5ea] px-3 py-1.5 text-[11px] font-semibold text-[#3e7a2e]">
+                    {kind}
+                  </span>
+                ) : null}
+                {ownership ? (
+                  <span className="rounded-full border border-[#e3e2dd] px-3 py-1.5 text-[11px] font-medium text-[#686660]">
+                    {ownership}
+                  </span>
+                ) : null}
+              </div>
             </div>
           </div>
 

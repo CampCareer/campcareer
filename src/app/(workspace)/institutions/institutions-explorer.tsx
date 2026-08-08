@@ -8,6 +8,7 @@ import {
   MapPin,
   Search,
 } from "lucide-react"
+import { InstitutionLogo } from "@/components/institution-logo"
 import { getLaunchCountry } from "@/data/launch-countries"
 import {
   buildInstitutionExplorerUrl,
@@ -85,9 +86,7 @@ function InstitutionCard({ institution }: { institution: InstitutionExplorerItem
   return (
     <article className="rounded-xl border border-[#e7e6e3] bg-white p-5 transition hover:border-[#cfd9ca] hover:shadow-sm">
       <div className="flex items-start gap-4">
-        <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-[#edf5ea] text-[#3e7a2e]">
-          <Building2 className="size-5" />
-        </span>
+        <InstitutionLogo name={institution.name} logoUrl={institution.logoUrl} />
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
             <Link

@@ -1,6 +1,7 @@
 import "server-only"
 
 import { supabaseAdmin } from "@/lib/supabase-admin"
+import { safeInstitutionLogoUrl } from "@/lib/institutions/institution-logo"
 import type {
   InstitutionMvpCountryCode,
   InstitutionSearchFilters,
@@ -22,6 +23,11 @@ type InstitutionExplorerRow = {
   city_names: string[] | null
 }
 
+type InstitutionLogoRow = {
+  institution_id: string
+  logo_url: string | null
+}
+
 export type InstitutionExplorerItem = {
   id: string
   countryCode: InstitutionMvpCountryCode
@@ -30,6 +36,7 @@ export type InstitutionExplorerItem = {
   institutionKind: string | null
   ownershipType: string | null
   websiteUrl: string | null
+  logoUrl: string | null
   programCount: number
   campusCount: number
   cityCount: number
@@ -61,6 +68,7 @@ function safeSearchTerm(value: string) {
 function mapInstitution(
   row: InstitutionExplorerRow,
   countryCode: InstitutionMvpCountryCode,
+  logoUrl: string | null,
 ): InstitutionExplorerItem {
   return {
     id: row.institution_id,
@@ -70,6 +78,7 @@ function mapInstitution(
     institutionKind: row.institution_kind,
     ownershipType: row.ownership_type,
     websiteUrl: row.website_url,
+    logoUrl,
     programCount: safeNumber(row.program_count),
     campusCount: safeNumber(row.campus_count),
     cityCount: safeNumber(row.city_count),
@@ -77,6 +86,27 @@ function mapInstitution(
       ? row.city_names.filter((city): city is string => Boolean(city))
       : [],
   }
+}
+
+async function loadInstitutionLogos(ids: string[]) {
+  const logos = new Map<string, string | null>()
+  if (ids.length === 0) return logos
+
+  const { data, error } = await supabaseAdmin
+    .from("institution_logo_v1")
+    .select("institution_id,logo_url")
+    .in("institution_id", ids)
+
+  if (error) {
+    console.error("Unable to load institution logos", error)
+    return logos
+  }
+
+  for (const row of (data ?? []) as unknown as InstitutionLogoRow[]) {
+    logos.set(row.institution_id, safeInstitutionLogoUrl(row.logo_url))
+  }
+
+  return logos
 }
 
 export async function searchInstitutions(
@@ -126,7 +156,10 @@ export async function searchInstitutions(
   }
 
   const rows = (data ?? []) as unknown as InstitutionExplorerRow[]
-  const institutions = rows.map((row) => mapInstitution(row, countryCode))
+  const logos = await loadInstitutionLogos(rows.map((row) => row.institution_id))
+  const institutions = rows.map((row) =>
+    mapInstitution(row, countryCode, logos.get(row.institution_id) ?? null),
+  )
   const total = count ?? institutions.length
 
   return {
