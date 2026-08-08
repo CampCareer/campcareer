@@ -280,7 +280,7 @@ grant select on public.institution_explorer_ca_v1 to service_role;
 
 -- Keep all Canadian canonical institutions detail-readable. DLI remains nullable
 -- for institutions such as Nunavut Arctic College where no current IRCC DLI row
--- was verified; absence is not converted into a fabricated identifier.
+-- was verified; absence is never converted into an invented DLI value.
 create or replace view public.institution_detail_ca_v1
 with (security_invoker=true) as
 select
