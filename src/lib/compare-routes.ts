@@ -8,13 +8,18 @@ export const COUNTRY_COMPARE_PROFILE = "starting-from-scratch" as const
 
 export type CanonicalCompareMode = "programs" | "countries" | "cities" | "careers"
 
-export function compareModePath(mode: CanonicalCompareMode) {
-  return `/compare/${mode}`
+export function compareModePath(_mode: CanonicalCompareMode) {
+  return "/compare"
 }
 
 export function buildProgramCompareCanonicalHref(items: readonly string[] = []) {
-  const base = `${compareModePath("programs")}?country=${PROGRAM_COMPARE_COUNTRY}&field=${PROGRAM_COMPARE_FIELD}`
-  return items.length ? `${base}&items=${items.join(",")}` : base
+  const params = new URLSearchParams({
+    type: "program",
+    country: PROGRAM_COMPARE_COUNTRY,
+    field: PROGRAM_COMPARE_FIELD,
+  })
+  if (items.length) params.set("items", items.join(","))
+  return `/compare?${params.toString()}`
 }
 
 export function buildCityCompareCanonicalHref({
@@ -26,10 +31,10 @@ export function buildCityCompareCanonicalHref({
   left?: string
   right?: string
 } = {}) {
-  const params = new URLSearchParams({ country: country.toUpperCase() })
+  const params = new URLSearchParams({ type: "city", country: country.toUpperCase() })
   if (left) params.set("left", left.toLowerCase())
   if (right) params.set("right", right.toLowerCase())
-  return `${compareModePath("cities")}?${params.toString()}`
+  return `/compare?${params.toString()}`
 }
 
 export function buildCareerCompareCanonicalHref({
@@ -43,9 +48,14 @@ export function buildCareerCompareCanonicalHref({
   city?: string | null
   careers?: readonly string[]
 } = {}) {
-  const cityPart = city ? `&city=${city}` : ""
-  const careerPart = careers.length ? `&careers=${careers.join(",")}` : ""
-  return `${compareModePath("careers")}?country=${country}&profile=${profile}${cityPart}${careerPart}`
+  const params = new URLSearchParams({
+    type: "career",
+    country: country.toUpperCase(),
+    profile,
+  })
+  if (city) params.set("city", city)
+  if (careers.length) params.set("careers", careers.join(","))
+  return `/compare?${params.toString()}`
 }
 
 export function buildCountryCompareCanonicalHref({
@@ -57,8 +67,13 @@ export function buildCountryCompareCanonicalHref({
   profile?: string
   locations?: string
 } = {}) {
-  const locationPart = locations ? `&locations=${locations}` : ""
-  return `${compareModePath("countries")}?goal=${goal}&profile=${profile}${locationPart}`
+  const params = new URLSearchParams({
+    type: "country",
+    goal,
+    profile,
+  })
+  if (locations) params.set("locations", locations)
+  return `/compare?${params.toString()}`
 }
 
 export function canonicalCompareModeFromLegacyType(rawType: string | null): CanonicalCompareMode | null {

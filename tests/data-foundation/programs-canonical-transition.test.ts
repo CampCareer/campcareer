@@ -94,12 +94,12 @@ test("missing canonical values remain unavailable rather than zero or fixture va
 })
 
 test("programs runtime imports canonical adapter instead of the Home fixture", () => {
-  const page = readFileSync(join(process.cwd(), "src/app/(workspace)/compare/[mode]/page.tsx"), "utf8")
-  const legacyPage = readFileSync(join(process.cwd(), "src/app/(workspace)/compare/page.tsx"), "utf8")
+  const page = readFileSync(join(process.cwd(), "src/app/(workspace)/compare/page.tsx"), "utf8")
+  const legacyModePage = readFileSync(join(process.cwd(), "src/app/(workspace)/compare/[mode]/page.tsx"), "utf8")
   const matrix = readFileSync(join(process.cwd(), "src/app/(workspace)/compare/programs-compare-matrix.tsx"), "utf8")
   assert.match(page, /AU_NURSING_PROGRAM_COMPARE_REPOSITORY/)
-  assert.match(legacyPage, /permanentRedirect/)
+  assert.match(legacyModePage, /permanentRedirect/)
   assert.doesNotMatch(page, /home-school-fixtures|australia-nursing/)
-  assert.doesNotMatch(legacyPage, /home-school-fixtures|australia-nursing/)
+  assert.doesNotMatch(legacyModePage, /home-school-fixtures|australia-nursing/)
   assert.doesNotMatch(matrix, /home-school-fixtures|australia-nursing/)
 })
