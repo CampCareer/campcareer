@@ -27,6 +27,8 @@ const CITY_LINKS: Record<string, string> = {
   Montreal: "/cities/ca/montreal",
   Ottawa: "/cities/ca/ottawa",
   Calgary: "/cities/ca/calgary",
+  Waterloo: "/cities/ca/waterloo",
+  Edmonton: "/cities/ca/edmonton",
 }
 
 function MetricCard({
