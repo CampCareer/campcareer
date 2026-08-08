@@ -19,6 +19,11 @@ const dataAnalystMigration = readFileSync(
   "utf8",
 )
 
+const dataEngineerMigration = readFileSync(
+  new URL("../supabase/migrations/20260808131500_australia_data_engineer_profile.sql", import.meta.url),
+  "utf8",
+)
+
 test("Australia Software Developer maps exactly to current OSCA Software Engineer", () => {
   const career = getCanonicalCareer("software-developer")
   const editorial = getOccupationEditorial("software-developer")
@@ -167,9 +172,81 @@ test("Australia Data Analyst links representative analytics study routes", () =>
   assert.match(dataAnalystMigration, /Australian Public Service — Data Stream/)
 })
 
+test("Australia Data Engineer maps exactly to current OSCA 223233 without inventing a dedicated legacy code", () => {
+  const career = getCanonicalCareer("data-engineer")
+  const editorial = getOccupationEditorial("data-engineer")
+  const australia = editorial?.countries.AU
+
+  assert.ok(career)
+  assert.equal(career.categoryId, "technology")
+  assert.ok(editorial)
+  assert.ok(australia)
+  assert.ok(editorial.tasks.length >= 6)
+  assert.match(dataEngineerMigration, /'AU:data-engineer'/)
+  assert.match(dataEngineerMigration, /'OSCA', '2024 v1\.0', '2232'/)
+  assert.match(
+    dataEngineerMigration,
+    /'223233', 'Data Engineer', 'ANZSCO', '2022', '261313', null, true/,
+  )
+  assert.match(dataEngineerMigration, /did not have a dedicated ANZSCO 2022 six-digit occupation/)
+})
+
+test("Australia Data Engineer keeps broader 2613 labour metrics out of exact fields", () => {
+  assert.match(
+    dataEngineerMigration,
+    /'AU:data-engineer', '2026-05-01', null, null, null, null/,
+  )
+  assert.match(dataEngineerMigration, /'broader_anzsco_2613_context'/)
+  assert.match(dataEngineerMigration, /'employment_total', 203200/)
+  assert.match(dataEngineerMigration, /'median_weekly_earnings_aud', 2537/)
+  assert.match(dataEngineerMigration, /3392, '2026-05-01', -9\.86/)
+  assert.match(dataEngineerMigration, /15\.69, 26\.67/)
+  assert.match(dataEngineerMigration, /0, 0, 5, 0, 10, 0, 5, 10, 4, 34/)
+})
+
+test("Australia Data Engineer leaves shortage unscored and qualifies visa evidence", () => {
+  const editorial = getOccupationEditorial("data-engineer")
+  const australia = editorial?.countries.AU
+
+  assert.ok(australia)
+  assert.match(dataEngineerMigration, /No exact current OSCA 223233 national or state shortage rating has been verified/)
+  assert.match(dataEngineerMigration, /Shortage rating remains null and the shortage component is zero/)
+  assert.match(dataEngineerMigration, /current legal CSOL instrument lists ANZSCO 261313 rather than Data Engineer by title/)
+  assert.match(australia.registration, /no single statutory national occupational registration or licence/i)
+  assert.match(australia.scoreCaveat, /reviewed OSCA-to-ANZSCO CSOL correspondence/)
+})
+
+test("Australia Data Engineer stores broader 2613 regional vacancies without state shortage claims", () => {
+  const expected = new Map([
+    ["ACT", "312"],
+    ["NSW", "1196.66667"],
+    ["NT", "15.33333"],
+    ["QLD", "507"],
+    ["SA", "195.33333"],
+    ["TAS", "24"],
+    ["VIC", "910.33333"],
+    ["WA", "231.33333"],
+  ])
+
+  for (const [region, vacancies] of expected) {
+    assert.match(
+      dataEngineerMigration,
+      new RegExp(`'AU:data-engineer', '${region}', '2026-05-01', null, ${vacancies.replace(".", "\\.")}`),
+    )
+  }
+})
+
+test("Australia Data Engineer links direct bachelor and graduate-entry data engineering routes", () => {
+  assert.match(dataEngineerMigration, /'au-program:18429', 'direct'/)
+  assert.match(dataEngineerMigration, /'au-program:8247', 'graduate_entry'/)
+  assert.match(dataEngineerMigration, /TAFE NSW — Bachelor of Information Technology \(Data Engineering\)/)
+  assert.match(dataEngineerMigration, /ACS — Migration skills assessment/)
+})
+
 test("Technology editorial composition preserves existing occupation editorial", () => {
   assert.ok(getOccupationEditorial("registered-nurse"))
   assert.ok(getOccupationEditorial("construction-manager"))
   assert.ok(getOccupationEditorial("software-developer"))
   assert.ok(getOccupationEditorial("data-analyst"))
+  assert.ok(getOccupationEditorial("data-engineer"))
 })
