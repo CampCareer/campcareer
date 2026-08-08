@@ -6,6 +6,7 @@
 -- 4) Which institutions still contain the largest candidate-review queues?
 --
 -- Keep the classification logic synchronized with src/lib/programs/ca-publish-policy.ts.
+-- For richer duplicate classification and current readiness reporting, prefer v2.
 
 with program_state as (
   select
@@ -48,7 +49,7 @@ with program_state as (
           (lower(coalesce(p.international_program_admission_status,'')) like '%check%'
            or lower(coalesce(p.international_program_admission_status,'')) like '%separate%')
         ) then 'admission_unverified'
-      when lower(coalesce(p.international_program_admission_status,'')) ~ '(suspended|cancelled|not_accepting|not currently|not_current|unavailable|closed|restricted_not_open|temporarily_paused|not_eligible_for_study_permit|legacy_program)'
+      when lower(coalesce(p.international_program_admission_status,'')) ~ '(suspended|cancelled|not_accepting|not currently|not_current|unavailable|closed|not_yet_open|not yet open|restricted_not_open|temporarily_paused|not_eligible_for_study_permit|legacy_program)'
         then 'admission_closed_or_restricted'
       else null
     end as hold_reason,
@@ -117,7 +118,7 @@ with program_state as (
       when lower(coalesce(p.international_program_admission_status,'')) ~ '(not_yet_verified|not verified|should_be_checked|dli_and_study_permit_eligibility_not_verified)'
         or (((lower(coalesce(p.international_program_admission_status,'')) like '%intake%') or (lower(coalesce(p.international_program_admission_status,'')) like '%availability%'))
             and ((lower(coalesce(p.international_program_admission_status,'')) like '%check%') or (lower(coalesce(p.international_program_admission_status,'')) like '%separate%'))) then 'admission_unverified'
-      when lower(coalesce(p.international_program_admission_status,'')) ~ '(suspended|cancelled|not_accepting|not currently|not_current|unavailable|closed|restricted_not_open|temporarily_paused|not_eligible_for_study_permit|legacy_program)' then 'admission_closed_or_restricted'
+      when lower(coalesce(p.international_program_admission_status,'')) ~ '(suspended|cancelled|not_accepting|not currently|not_current|unavailable|closed|not_yet_open|not yet open|restricted_not_open|temporarily_paused|not_eligible_for_study_permit|legacy_program)' then 'admission_closed_or_restricted'
       else null end hold_reason
   from public.program_catalog_ca_staging c
   left join public.program_pgwp_ca_staging p on p.program_catalog_id=c.id
@@ -154,7 +155,7 @@ with program_state as (
       when lower(coalesce(p.international_program_admission_status,'')) ~ '(not_yet_verified|not verified|should_be_checked|dli_and_study_permit_eligibility_not_verified)'
         or (((lower(coalesce(p.international_program_admission_status,'')) like '%intake%') or (lower(coalesce(p.international_program_admission_status,'')) like '%availability%'))
             and ((lower(coalesce(p.international_program_admission_status,'')) like '%check%') or (lower(coalesce(p.international_program_admission_status,'')) like '%separate%'))) then 'admission_unverified'
-      when lower(coalesce(p.international_program_admission_status,'')) ~ '(suspended|cancelled|not_accepting|not currently|not_current|unavailable|closed|restricted_not_open|temporarily_paused|not_eligible_for_study_permit|legacy_program)' then 'admission_closed_or_restricted'
+      when lower(coalesce(p.international_program_admission_status,'')) ~ '(suspended|cancelled|not_accepting|not currently|not_current|unavailable|closed|not_yet_open|not yet open|restricted_not_open|temporarily_paused|not_eligible_for_study_permit|legacy_program)' then 'admission_closed_or_restricted'
       else null end hold_reason
   from public.program_catalog_ca_staging c
   left join public.program_pgwp_ca_staging p on p.program_catalog_id=c.id
@@ -178,7 +179,7 @@ group by c.institution_name
 order by candidate_links desc,c.institution_name;
 
 -- Duplicate audit. Source keys must remain unique. Title+credential duplicates need manual
--- canonicalization because some are legitimate delivery/campus/major variants.
+-- canonicalization because some are legitimate delivery/campus/major variants. Use v2 for classification.
 select 'source_key_duplicate' as duplicate_type,source_name || ' / ' || source_program_key as duplicate_key,count(*) as rows
 from public.program_catalog_ca_staging
 group by source_name,source_program_key
