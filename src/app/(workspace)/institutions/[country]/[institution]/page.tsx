@@ -8,6 +8,7 @@ import {
   normalizeInstitutionSlugSegment,
 } from "@/lib/institutions/institution-search"
 import { getInstitutionDetail, type InstitutionDetail } from "@/lib/institutions/institution-detail.server"
+import { CanadianInstitutionDetailView } from "../../canadian-institution-detail"
 import { InstitutionDetailView } from "../../institution-detail"
 
 export const revalidate = 3600
@@ -97,5 +98,7 @@ export default async function InstitutionDetailPage({
   }
 
   if (!detail) notFound()
-  return <InstitutionDetailView institution={detail} />
+  return countryCode === "CA"
+    ? <CanadianInstitutionDetailView institution={detail} />
+    : <InstitutionDetailView institution={detail} />
 }
