@@ -9,6 +9,11 @@ type InstitutionLogoRow = {
   logo_url: string | null
 }
 
+type InstitutionCaIdentityRow = {
+  dli_number: string | null
+  dli_source_url: string | null
+}
+
 type InstitutionDetailRow = {
   institution_id: string
   country_code: string
@@ -71,6 +76,8 @@ export type InstitutionDetail = {
   cityNames: string[]
   cricosProviderCode: string | null
   cricosSourceUrl: string | null
+  dliNumber: string | null
+  dliSourceUrl: string | null
   campuses: InstitutionCampusLocation[]
   studyAreas: InstitutionCountBreakdown[]
   programmeTypes: InstitutionCountBreakdown[]
@@ -197,17 +204,41 @@ export const getInstitutionDetail = cache(async (
   if (!data) return null
 
   const row = data as unknown as InstitutionDetailRow
-  const { data: logoData, error: logoError } = await supabaseAdmin
+  const logoPromise = supabaseAdmin
     .from("institution_logo_v1")
     .select("logo_url")
     .eq("institution_id", row.institution_id)
     .maybeSingle()
 
-  if (logoError) {
-    console.error("Unable to load institution logo", logoError)
+  const caIdentityPromise = countryCode === "CA"
+    ? supabaseAdmin
+      .from("institution_identity_ca_v1")
+      .select("dli_number,dli_source_url")
+      .eq("institution_id", row.institution_id)
+      .maybeSingle()
+    : Promise.resolve({ data: null, error: null })
+
+  const [logoResult, caIdentityResult] = await Promise.all([
+    logoPromise,
+    caIdentityPromise,
+  ])
+
+  if (logoResult.error) {
+    console.error("Unable to load institution logo", logoResult.error)
   }
 
-  const logoRow = logoData as unknown as InstitutionLogoRow | null
+  if (caIdentityResult.error) {
+    throw new Error(`Unable to load Canadian institution identity: ${caIdentityResult.error.message}`)
+  }
+
+  const logoRow = logoResult.data as unknown as InstitutionLogoRow | null
+  const caIdentityRow = caIdentityResult.data as unknown as InstitutionCaIdentityRow | null
+  const dliNumber = safeNullableString(caIdentityRow?.dli_number)
+  const dliSourceUrl = safeNullableString(caIdentityRow?.dli_source_url)
+
+  if (countryCode === "CA" && (!dliNumber || !dliSourceUrl)) {
+    throw new Error(`Canadian institution ${row.institution_id} is missing its official DLI identity`)
+  }
 
   return {
     id: row.institution_id,
@@ -227,6 +258,8 @@ export const getInstitutionDetail = cache(async (
       : [],
     cricosProviderCode: row.cricos_provider_code,
     cricosSourceUrl: row.cricos_source_url,
+    dliNumber,
+    dliSourceUrl,
     campuses: parseCampuses(row.campus_locations),
     studyAreas: parseBreakdown(row.study_areas),
     programmeTypes: parseBreakdown(row.programme_types),
