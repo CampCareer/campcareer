@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { notFound } from "next/navigation"
+import { notFound, permanentRedirect } from "next/navigation"
 import { getLaunchCountry } from "@/data/launch-countries"
 import {
   INSTITUTION_MVP_COUNTRIES,
@@ -27,6 +27,8 @@ export async function generateMetadata({
   return {
     title: `${launchCountry?.name ?? countryCode} Institutions`,
     description: `Explore verified institutions in ${launchCountry?.name ?? countryCode} with connected programs, ${locationLabel} and normalized location data.`,
+    alternates: { canonical: `/institutions/${countryCode.toLowerCase()}` },
+    robots: { index: true, follow: true },
   }
 }
 
@@ -40,6 +42,7 @@ export default async function InstitutionCountryPage({
   const { country } = await params
   const countryCode = normalizeInstitutionCountrySegment(country)
   if (!countryCode) notFound()
+  if (country !== countryCode.toLowerCase()) permanentRedirect(`/institutions/${countryCode.toLowerCase()}`)
 
   return (
     <InstitutionsExplorer
