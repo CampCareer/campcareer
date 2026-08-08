@@ -86,7 +86,7 @@ export function CityDashboard({ profile }: { profile: AuCityProfile }) {
 
   return (
     <div>
-      <section className="relative overflow-hidden bg-[#273444]">
+      <section className="relative z-0 overflow-hidden bg-[#273444]">
         {image && <div aria-hidden="true" className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${image})` }} />}
         <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/45 to-black/20" />
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-24 pt-14 sm:px-8 sm:pt-20 lg:px-10">
@@ -99,8 +99,8 @@ export function CityDashboard({ profile }: { profile: AuCityProfile }) {
         </div>
       </section>
 
-      <main className="mx-auto w-full max-w-6xl px-4 pb-12 sm:px-8 lg:px-10">
-        <div className="-mt-8 rounded-2xl border border-[#e7e6e3] bg-white p-5 shadow-xl shadow-black/10 sm:p-6">
+      <main className="relative z-10 mx-auto w-full max-w-6xl px-4 pb-12 sm:px-8 lg:px-10">
+        <div className="relative z-20 -mt-8 rounded-2xl border border-[#e7e6e3] bg-white p-5 shadow-xl shadow-black/10 sm:p-6">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-[12px] font-semibold text-[#3e7a2e]">Student decision snapshot</p>

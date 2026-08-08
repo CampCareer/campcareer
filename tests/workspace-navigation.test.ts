@@ -6,6 +6,7 @@ test("isWorkspaceRoute returns true for workspace routes", () => {
   assert.equal(isWorkspaceRoute("/"), true)
   assert.equal(isWorkspaceRoute("/compare"), true)
   assert.equal(isWorkspaceRoute("/countries"), true)
+  assert.equal(isWorkspaceRoute("/cities"), true)
   assert.equal(isWorkspaceRoute("/visas"), true)
   assert.equal(isWorkspaceRoute("/occupation"), true)
   assert.equal(isWorkspaceRoute("/programs"), true)
@@ -15,6 +16,8 @@ test("isWorkspaceRoute returns true for workspace routes", () => {
 test("isWorkspaceRoute returns true for workspace sub-paths", () => {
   assert.equal(isWorkspaceRoute("/visas/timeline"), true)
   assert.equal(isWorkspaceRoute("/countries/australia"), true)
+  assert.equal(isWorkspaceRoute("/cities/au/melbourne"), true)
+  assert.equal(isWorkspaceRoute("/cities/au/compare"), true)
   assert.equal(isWorkspaceRoute("/compare/schools"), true)
 })
 
