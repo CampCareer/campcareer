@@ -7,6 +7,7 @@ const migration = readFileSync(
   join(process.cwd(), "supabase/migrations/20260808210529_publish_uk_tier_a_city_linkage_v1.sql"),
   "utf8",
 )
+const linkageDoc = readFileSync(join(process.cwd(), "docs/data-foundation/uk-city-linkage-v1.md"), "utf8")
 
 const tierASlugs = [
   "london",
@@ -25,10 +26,9 @@ test("UK Phase 3 publishes exactly the ten approved Tier A cities", () => {
   assert.match(migration, /city_directory_uk_v1/)
   assert.match(migration, /publication_tier'='A'/)
   assert.match(migration, /count\(\*\) from public\.city_directory_uk_v1\) <> 10/)
+  assert.match(linkageDoc, /10 Tier A cities/)
   for (const slug of tierASlugs) {
-    if (slug === "london" || slug === "manchester") {
-      assert.match(migration, new RegExp(`'${slug}'`))
-    }
+    assert.match(linkageDoc, new RegExp(`\\b${slug}\\b`, "i"))
   }
 })
 
@@ -48,6 +48,8 @@ test("London follows Greater London scope while Manchester never absorbs Salford
   assert.match(migration, /verified_official_location_within_greater_london/)
   assert.match(migration, /c\.slug='manchester' and d\.institution_slug='university-of-salford'/)
   assert.match(migration, /Manchester city scope must not absorb University of Salford/)
+  assert.match(linkageDoc, /Brunel University of London's verified Uxbridge location/)
+  assert.match(linkageDoc, /University of Salford.*Salford/s)
 })
 
 test("programme linkage is explicit and never inferred from institution presence", () => {
@@ -57,6 +59,7 @@ test("programme linkage is explicit and never inferred from institution presence
   assert.match(migration, /po\.source_url is not null/)
   assert.match(migration, /programme_assignment_verified'='true'/)
   assert.match(migration, /verified_programme_offerings\.campus_id/)
+  assert.match(linkageDoc, /0 verified city-programme links/)
 })
 
 test("Phase 3 read models stay service-role only", () => {
