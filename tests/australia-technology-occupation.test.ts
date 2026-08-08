@@ -9,6 +9,11 @@ const softwareDeveloperMigration = readFileSync(
   "utf8",
 )
 
+const softwareDeveloperProgramAlignment = readFileSync(
+  new URL("../supabase/migrations/20260808123500_australia_software_developer_program_alignment.sql", import.meta.url),
+  "utf8",
+)
+
 test("Australia Software Developer maps exactly to current OSCA Software Engineer", () => {
   const career = getCanonicalCareer("software-developer")
   const editorial = getOccupationEditorial("software-developer")
@@ -75,8 +80,9 @@ test("Australia Software Developer stores broader 2613 vacancies without inventi
   }
 })
 
-test("Australia Software Developer links representative ACS-accredited study routes", () => {
-  assert.match(softwareDeveloperMigration, /'au-program:7132', 'direct'/)
+test("Australia Software Developer ends with representative ACS-accredited study routes", () => {
+  assert.match(softwareDeveloperProgramAlignment, /program_ref = 'au-program:7132'/)
+  assert.match(softwareDeveloperProgramAlignment, /'au-program:3384', 'direct'/)
   assert.match(softwareDeveloperMigration, /'au-program:5838', 'direct'/)
   assert.match(softwareDeveloperMigration, /'au-program:4972', 'graduate_entry'/)
   assert.match(softwareDeveloperMigration, /ACS — Accredited courses/)
