@@ -28,8 +28,7 @@ set official_course_url = 'https://www.rmit.edu.au/study-with-us/levels-of-study
     official_url_status = 'verified',
     official_url_checked_at = now(),
     official_url_source = 'Provider course page, manually verified'
-where id = 5792
-  and institution_id = 'rmit-university'
+where institution_id = 'rmit-university'
   and course_code = '110998M';
 
 update public.courses_au
@@ -37,8 +36,7 @@ set official_course_url = 'https://www.rmit.edu.au/study-with-us/levels-of-study
     official_url_status = 'verified',
     official_url_checked_at = now(),
     official_url_source = 'Provider course page, manually verified'
-where id = 5679
-  and institution_id = 'rmit-university'
+where institution_id = 'rmit-university'
   and course_code = '087983C';
 
 insert into public.country_occupation_profiles (
@@ -216,9 +214,14 @@ on conflict (profile_key, link_type, url) do update set
 
 insert into public.country_occupation_program_links (
   profile_key, program_ref, relation_type, source_checked_at
-) values
-  ('AU:environmental-engineer', 'au-program:5792', 'direct', '2026-08-08'),
-  ('AU:environmental-engineer', 'au-program:5679', 'graduate_entry', '2026-08-08')
+)
+select 'AU:environmental-engineer', 'au-program:' || id::text, 'direct', '2026-08-08'
+from public.courses_au
+where institution_id = 'rmit-university' and course_code = '110998M'
+union all
+select 'AU:environmental-engineer', 'au-program:' || id::text, 'graduate_entry', '2026-08-08'
+from public.courses_au
+where institution_id = 'rmit-university' and course_code = '087983C'
 on conflict (profile_key, program_ref) do update set
   relation_type = excluded.relation_type,
   source_checked_at = excluded.source_checked_at;
