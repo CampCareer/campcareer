@@ -9,11 +9,13 @@ import {
 } from "@/lib/institutions/institution-search"
 import { INDEXABLE_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo"
 import { INDEXABLE_NL_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-nl"
+import { INDEXABLE_NZ_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-nz"
 import { INDEXABLE_UK_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-uk"
 import { getInstitutionDetail, type InstitutionDetail } from "@/lib/institutions/institution-detail.server"
 import { CanadianInstitutionDetailView } from "../../canadian-institution-detail"
 import { InstitutionDetailView } from "../../institution-detail"
 import { NetherlandsInstitutionDetailView } from "../../netherlands-institution-detail"
+import { NewZealandInstitutionDetailView } from "../../new-zealand-institution-detail"
 
 export const revalidate = 3600
 
@@ -30,6 +32,8 @@ function isIndexableInstitutionRoute(countryCode: string, slug: string) {
   ) || INDEXABLE_UK_INSTITUTION_ROUTES.some(
     ([routeCountryCode, routeSlug]) => routeCountryCode === countryCode && routeSlug === slug,
   ) || INDEXABLE_NL_INSTITUTION_ROUTES.some(
+    ([routeCountryCode, routeSlug]) => routeCountryCode === countryCode && routeSlug === slug,
+  ) || INDEXABLE_NZ_INSTITUTION_ROUTES.some(
     ([routeCountryCode, routeSlug]) => routeCountryCode === countryCode && routeSlug === slug,
   )
 }
@@ -61,7 +65,9 @@ export async function generateMetadata({
     const locationLabel = countryCode === "AU" ? "campuses" : "locations"
     const description = countryCode === "NL"
       ? `Explore ${detail.name} official institution identity, BRIN registration and source-backed ${locationLabel} on CampCareer. Program data will be added as the Netherlands catalogue is verified.`
-      : `Explore ${detail.name} programs, ${locationLabel} and source-backed institution details on CampCareer.`
+      : countryCode === "NZ"
+        ? `Explore ${detail.name} NZQA provider identity and source-backed ${locationLabel} on CampCareer. Program data will be added as the New Zealand catalogue is verified.`
+        : `Explore ${detail.name} programs, ${locationLabel} and source-backed institution details on CampCareer.`
 
     return {
       title: `${detail.name} | Institutions`,
@@ -118,5 +124,6 @@ export default async function InstitutionDetailPage({
   if (!detail) notFound()
   if (countryCode === "CA") return <CanadianInstitutionDetailView institution={detail} />
   if (countryCode === "NL") return <NetherlandsInstitutionDetailView institution={detail} />
+  if (countryCode === "NZ") return <NewZealandInstitutionDetailView institution={detail} />
   return <InstitutionDetailView institution={detail} />
 }
