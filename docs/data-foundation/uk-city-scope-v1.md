@@ -1,64 +1,59 @@
 # United Kingdom city scope v1
 
-Status: `PHASE_1_COMPLETE`
+Status: `PHASE_2_COMPLETE`
 
-Branch: `agent/uk-cities-scope-v1`
+Current branch: `agent/uk-cities-foundation-v1`
+
+Phase 1 branch: `agent/uk-cities-scope-v1`
 
 Parent readiness branch: `agent/uk-cities-readiness-v1`
 
 ## Purpose
 
-Define the first public UK study-destination set for CampCareer `/cities` before any slug/scope normalization is applied.
+Define and normalize the first public UK study-destination set for CampCareer `/cities` before institution/programme linkage verification.
 
-The UK already has 37 legacy city geographies, 50 active institutions and 185 legacy programme offerings. Those rows are discovery material only. Phase 1 deliberately selects a smaller publication allowlist so later normalization, linkage verification, five-metric collection and City/Compare work remain bounded and auditable.
+The UK legacy catalogue is useful discovery material, but city publication is bounded to a small explicit allowlist. Existing campus and programme links are not treated as authoritative until Phase 3 verifies them against explicit provider/location evidence.
 
 ## Selection contract
 
-Tier A selection balances six signals:
+Tier A selection balances:
 
-1. international-student relevance and current UK higher-education scale;
-2. institution density and breadth within the named city;
-3. current CampCareer campus/programme linkage as a discovery signal;
+1. international-student relevance and UK higher-education scale;
+2. institution density and breadth;
+3. current CampCareer linkage as a discovery signal only;
 4. useful geographic coverage across England, Scotland, Wales and Northern Ireland;
-5. student decision value for City/Compare;
-6. likely availability of official evidence for population, living cost, transport and employment context.
+5. City/Compare decision value;
+6. availability of official evidence for the five city metrics.
 
-Current legacy programme counts are not treated as verified programme coverage. They only indicate where the existing catalogue already contains useful discovery material.
+HESA 2024/25 Higher Education Student Statistics supports London, Manchester and Birmingham as major first-batch study markets. The four-nation structure is retained rather than treating the UK as England-only.
 
-The external UK-wide benchmark is HESA's 2024/25 Higher Education Student Statistics, published 27 January 2026. HESA reports 304 providers and identifies University College London, The University of Manchester, King's College London, The University of Birmingham and Manchester Metropolitan University among the five largest non-Open-University providers by enrolment. This strongly supports London, Manchester and Birmingham as first-batch city markets.
-
-Official reference:
+Official references:
 
 - HESA, Where do HE students study?: https://www.hesa.ac.uk/data-and-analysis/students/where-study
 - HESA, Higher Education Student Statistics: UK, 2024/25: https://www.hesa.ac.uk/news/27-01-2026/sb273-higher-education-student-statistics/location
-
-The four-nation structure is retained. Wales had 143,825 enrolments at Welsh HE providers in 2024/25 according to Medr, and Northern Ireland's Department for the Economy publishes a separate HE enrolment series for NI institutions. City selection therefore must not collapse the UK into an England-only list.
-
-References:
-
 - Medr, Students in Higher Education 2024/25: https://www.medr.cymru/en/News/sta-medr-01-2026-students-in-higher-education-2024-25/
 - Northern Ireland Department for the Economy, Higher education enrolments: https://www.economy-ni.gov.uk/articles/higher-education-enrolments
 
-## Tier A — first public UK city set
+## Phase 1 final Tier A set
 
-Publish and compare these twelve destinations first unless product scope is deliberately reduced before Phase 2.
+The product owner reduced the provisional twelve-city list to ten before normalization. Leeds and Nottingham were moved to Tier B.
 
-| Order | City | Nation / region | Current institutions | Legacy programmes | Why Tier A |
-| ---: | --- | --- | ---: | ---: | --- |
-| 1 | London | England / London | 8 | 40 | Largest current CampCareer UK city cluster; HESA's largest-provider list includes UCL and King's College London; uniquely broad institution and career-market coverage. |
-| 2 | Manchester | England / North West | 2 | 12 | University of Manchester is among HESA's largest UK providers; major multi-provider student and employment market. |
-| 3 | Birmingham | England / West Midlands | 2 | 11 | University of Birmingham is among HESA's largest UK providers; Aston adds institution breadth and the city is a major regional employment hub. |
-| 4 | Edinburgh | Scotland | 2 | 12 | Strong Scotland study destination with University of Edinburgh and Heriot-Watt already linked in the current graph. |
-| 5 | Glasgow | Scotland | 2 | 5 | Distinct large Scottish urban study market with University of Glasgow and Strathclyde; useful City/Compare contrast with Edinburgh. |
-| 6 | Cardiff | Wales | 1 | 6 | Primary Wales city-market anchor in the current catalogue and necessary four-nation decision coverage. |
-| 7 | Belfast | Northern Ireland | 1 | 6 | Primary Northern Ireland city-market anchor in the current catalogue and necessary four-nation decision coverage. |
-| 8 | Oxford | England / South East | 1 | 9 | Globally important institution-concentrated study destination; must remain a named-city scope rather than a regional proxy. |
-| 9 | Cambridge | England / South East | 1 | 9 | Globally important institution-concentrated study destination with a distinct technology/life-sciences employment context. |
-| 10 | Bristol | England / South West | 1 | 8 | Strong South West student/career market and useful regional balance beyond London/South East. |
-| 11 | Leeds | England / Yorkshire | 1 | 3 | Large northern student and employment market; current CampCareer coverage is visibly incomplete, making it a priority verification city rather than a reason to exclude it. |
-| 12 | Nottingham | England / East Midlands | 2 | 6 | Two-institution current cluster (University of Nottingham and Nottingham Trent) and useful East Midlands coverage. |
+Publish and compare these ten destinations first:
 
-Approved provisional public slugs for Phase 2:
+| Order | City | Nation / region | Phase 1 discovery signal | Public slug |
+| ---: | --- | --- | --- | --- |
+| 1 | London | England / London | largest current UK cluster | `london` |
+| 2 | Manchester | England / North West | major multi-provider market | `manchester` |
+| 3 | Birmingham | England / West Midlands | major regional study/employment hub | `birmingham` |
+| 4 | Edinburgh | Scotland | major Scottish study destination | `edinburgh` |
+| 5 | Glasgow | Scotland | distinct Scottish urban comparison market | `glasgow` |
+| 6 | Cardiff | Wales | Wales city-market anchor | `cardiff` |
+| 7 | Belfast | Northern Ireland | Northern Ireland city-market anchor | `belfast` |
+| 8 | Oxford | England / South East | institution-concentrated global destination | `oxford` |
+| 9 | Cambridge | England / South East | institution-concentrated technology/life-sciences destination | `cambridge` |
+| 10 | Bristol | England / South West | strong South West student/career market | `bristol` |
+
+Approved public slugs are exactly:
 
 - `london`
 - `manchester`
@@ -70,73 +65,100 @@ Approved provisional public slugs for Phase 2:
 - `oxford`
 - `cambridge`
 - `bristol`
-- `leeds`
-- `nottingham`
 
-The list is deliberately capped at twelve. If product scope is reduced before Phase 2, cut from the bottom of the allowlist and update this document before any normalization migration is applied.
+## Tier B
 
-## Tier B — high-priority later expansion
+Leeds and Nottingham are explicitly outside the first publication allowlist after the Phase 1 product decision. They remain high-priority expansion candidates together with Coventry, Sheffield, Newcastle, Southampton, Exeter, Bath, York, St Andrews, Aberdeen and Swansea.
 
-Retain these as strong expansion candidates but do not normalize or publish them in the first batch:
+A canonical slug existing in `core.geographies` does not by itself authorize publication. Publication requires `metadata.publication_tier = 'A'` plus the later linkage, metric and SEO gates.
 
-- Coventry — current graph contains Coventry University and University of Warwick with 10 legacy programmes. Requires explicit campus-location verification because the Warwick name can be mistaken for the separate town/county geography while the university's main campus is in Coventry.
-- Sheffield — strong Yorkshire study market; current graph has University of Sheffield and five legacy programmes.
-- Newcastle — useful North East coverage; current graph has one institution and four legacy programmes.
-- Southampton — strong South Coast university market but current canonical breadth is narrow.
-- Exeter — strong South West institution but overlaps Bristol for first-batch regional coverage.
-- Bath — valuable compact student city but first-batch breadth is narrower than Bristol.
-- York — strong study destination but current graph is institution-concentrated.
-- St Andrews — internationally important university town but small and institution-concentrated; better as a later specialist-city comparison.
-- Aberdeen — additional Scotland market, held behind Edinburgh and Glasgow for first batch.
-- Swansea — additional Wales market, held behind Cardiff for first batch.
+## Phase 2 scope contract
 
-## Explicit exclusions from automatic publication
+Production migration `20260808205309_normalize_uk_tier_a_city_slugs_v1.sql` normalizes only the approved ten Tier A city entities and preserves their existing geography UUIDs.
 
-The remaining legacy city geographies are not rejected permanently. They are simply outside the first publication allowlist.
+All ten use `scope_kind = 'city'`, but their actual decision boundary is explicit in metadata.
 
-Do not publish all 37 legacy cities just because they exist in `core.geographies`.
+| City | Education nation | Study-destination scope | Boundary contract |
+| --- | --- | --- | --- |
+| London | England | `greater_london` | Greater London administrative area |
+| Manchester | England | `named_city` | City of Manchester local authority |
+| Birmingham | England | `named_city` | Birmingham local authority |
+| Edinburgh | Scotland | `named_city` | City of Edinburgh council area |
+| Glasgow | Scotland | `named_city` | Glasgow City council area |
+| Cardiff | Wales | `named_city` | Cardiff local authority |
+| Belfast | Northern Ireland | `named_city` | Belfast local government district |
+| Oxford | England | `named_city` | Oxford local authority |
+| Cambridge | England | `named_city` | Cambridge local authority |
+| Bristol | England | `named_city` | Bristol, City of local authority |
 
-Do not use current legacy programme count as a completeness score. For example, Leeds has only three legacy programmes in the canonical graph even though it is a major UK university market. Phase 3 must verify institution and programme coverage independently.
+### London
 
-## Named-city scope rule for Phase 2
+`London` means the Greater London study destination, not the small City of London local authority. A provider or campus is not included merely because it uses “London” in its institution name. Phase 3 must establish explicit location evidence within Greater London.
 
-Phase 2 must normalize the twelve Tier A rows as named cities only. No metro-area inference is authorized by this selection.
+### Manchester
 
-Important scope notes:
+`Manchester` means the City of Manchester. It does not automatically absorb Salford or the wider Greater Manchester area. The legacy graph currently associates University of Salford with Manchester; Phase 3 must correct or exclude that linkage unless explicit evidence places a relevant delivery location inside the City of Manchester scope.
 
-- London requires an explicit Greater London / named-city contract because multiple institutions use London in their identity while campuses may sit across London boroughs.
-- Manchester must not automatically absorb Salford. The current legacy graph contains University of Salford under Manchester and this must be checked rather than preserved blindly.
-- Oxford and Cambridge remain exact named-city destinations and must not absorb neighbouring science parks or satellite campuses without evidence.
-- Edinburgh and Glasgow remain separate city markets.
-- Cardiff and Belfast are nation-representative city markets, not proxies for all of Wales or Northern Ireland.
-- Nottingham must not absorb campuses outside the named-city boundary without explicit campus evidence.
+### Other cities
 
-## Known Phase 2/3 data issues discovered during selection
+No Tier A city automatically absorbs a neighbouring authority, county, council area or marketing region. Oxford and Cambridge do not become county-wide markets, Glasgow does not become Greater Glasgow, Cardiff does not proxy all of South Wales, and Belfast does not proxy all of Northern Ireland.
 
-The current city graph is not yet authoritative:
+## Normalization metadata contract
 
-- all 37 UK city geographies currently have `slug IS NULL` and `scope_kind IS NULL`;
-- 49 of 50 campuses have a `geography_id`;
-- University of Hertfordshire remains the one currently unlinked campus;
-- institution identity still uses legacy slug-like `UK_PROVIDER_ID` values instead of verified UKPRNs;
-- all 185 programme offerings remain `legacy_backfill` and `unverified` with no official source URL;
-- Manchester currently contains University of Salford in its legacy city linkage and therefore needs an exact municipal/campus check in Phase 2/3.
+Each Tier A geography now records:
 
-These issues do not block Phase 1 selection. They are explicit work items for normalization and linkage verification.
+- `uk_city_normalization_v1 = true`
+- `publication_tier = A`
+- `public_slug`
+- `education_nation`
+- `study_destination_scope`
+- `scope_boundary_label`
+- `scope_note`
+- `campus_membership_contract = phase_3_explicit_location_evidence_required`
 
-## Phase 1 completion gate
+The migration also registers aliases for:
 
-Phase 1 is complete because:
+- canonical city name;
+- legacy `public.cities_uk` source name;
+- legacy source slug such as `manchester-uk`;
+- public route slug such as `manchester`.
 
-- a bounded Tier A allowlist exists;
-- four-nation coverage is explicit;
-- selection criteria and external benchmark are documented;
-- Tier B is separated from publication scope;
-- provisional slugs are fixed for normalization;
-- named-city scope and known linkage risks are documented before database mutation.
+These aliases improve matching but do not change city membership.
+
+## Phase 2 production verification
+
+Post-migration checks confirmed:
+
+- exactly 10 UK geographies have `publication_tier = A`;
+- all 10 have the approved public slug;
+- all 10 have `scope_kind = 'city'`;
+- all 10 have an explicit education nation and boundary contract;
+- each Tier A geography has four provenance/matching alias rows covering `canonical_name`, `source` and `slug` types;
+- Leeds and Nottingham are not Tier A and remain outside the first publication allowlist.
+
+No campus, institution, programme or programme-offering membership was changed by this migration.
+
+## Concurrent UK institution foundation
+
+During Phase 2, production also received separate migration `20260808205212_uk_institution_identity_foundation_phase3` from the UK institution workstream. Current production now has official website values for all 50 active UK institutions and both legacy `UK_PROVIDER_ID` and `UK_UKPRN` identifiers for all 50.
+
+That migration is outside this city-normalization change. Phase 3 should consume the improved institution identity data while independently verifying city/campus membership and programme delivery. Do not merge the two evidence questions into one.
+
+## Phase 2 completion gate
+
+Phase 2 is complete because:
+
+- the final ten-city Tier A allowlist is fixed;
+- stable public slugs are assigned;
+- existing geography UUIDs are preserved;
+- London and the nine named-city scopes are explicit;
+- four-nation identity is stored per city;
+- provenance aliases are registered;
+- campus membership remains deliberately gated for Phase 3;
+- Tier B cities cannot become public merely because they have a slug.
 
 Next branch:
 
-`agent/uk-cities-foundation-v1`
+`agent/uk-cities-linkage-v1`
 
-Phase 2 should normalize only the approved Tier A rows and preserve all existing geography UUIDs wherever possible.
+Phase 3 must verify `campus -> city -> institution -> programme` relationships using explicit location and offering evidence. It must not preserve legacy Manchester/Salford or London-labelled membership blindly.
