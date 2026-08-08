@@ -84,6 +84,13 @@ function citySummary(institution: InstitutionExplorerItem) {
   return `${cities.slice(0, 2).join(", ")} +${cities.length - 2}`
 }
 
+function programSummary(institution: InstitutionExplorerItem) {
+  if (institution.countryCode === "NL" && institution.programCount === 0) {
+    return "Program catalog pending"
+  }
+  return `${institution.programCount.toLocaleString()} programs`
+}
+
 function InstitutionCard({ institution }: { institution: InstitutionExplorerItem }) {
   const kind = verifiedKindLabel(institution.institutionKind)
   const ownership = ownershipLabel(institution.ownershipType)
@@ -123,7 +130,7 @@ function InstitutionCard({ institution }: { institution: InstitutionExplorerItem
             </span>
             <span className="inline-flex items-center gap-1.5">
               <GraduationCap className="size-3.5 text-[#9c9a94]" />
-              {institution.programCount.toLocaleString()} programs
+              {programSummary(institution)}
             </span>
             <span>{institution.campusCount.toLocaleString()} {locationUnit}</span>
           </div>
@@ -246,7 +253,9 @@ export async function InstitutionsExplorer({
         </div>
       </div>
       <p className="mt-2 max-w-2xl text-[12.5px] leading-5 text-[#77746e]">
-        Search verified institution identities and their current CampCareer program and {connectionLabel} connections in {country?.name ?? countryCode}.
+        {countryCode === "NL"
+          ? `Search verified institution identities and source-backed ${connectionLabel} data in ${country?.name ?? countryCode}. The CampCareer Netherlands program catalog is not yet published.`
+          : `Search verified institution identities and their current CampCareer program and ${connectionLabel} connections in ${country?.name ?? countryCode}.`}
       </p>
 
       <form action={countryPath} method="get" className="mt-6 grid gap-3 sm:grid-cols-[minmax(0,1fr)_210px_auto]">
@@ -325,7 +334,9 @@ export async function InstitutionsExplorer({
       <p className="mt-4 text-[10.5px] leading-5 text-[#aaa7a0]">
         {countryCode === "UK"
           ? "UK location counts prefer institution-official campus and study-location records. Where a full official campus inventory has not yet been normalized, CampCareer falls back to the existing city-level institution location rather than inventing campuses."
-          : "Institution type and ownership are shown only when they have been normalized from source-backed classifications. Program counts include active canonical programs only; city labels use normalized geography links."}
+          : countryCode === "NL"
+            ? "Netherlands locations use the DUO/RIO-backed institution location layer. Program counts remain canonical; while the NL program catalogue is pending, zero records must not be read as evidence that an institution offers no programs."
+            : "Institution type and ownership are shown only when they have been normalized from source-backed classifications. Program counts include active canonical programs only; city labels use normalized geography links."}
       </p>
     </>
   )
