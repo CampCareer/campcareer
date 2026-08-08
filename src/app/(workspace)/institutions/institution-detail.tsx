@@ -276,6 +276,7 @@ export function InstitutionDetailView({
   const ownership = ownershipLabel(institution.ownershipType)
   const website = safeWebsiteUrl(institution.websiteUrl)
   const cricosSource = safeWebsiteUrl(institution.cricosSourceUrl)
+  const ukprnSource = safeWebsiteUrl(institution.ukprnSourceUrl)
   const countryPath = institutionCountryPath(institution.countryCode)
   const isUk = institution.countryCode === "UK"
 
@@ -451,6 +452,25 @@ export function InstitutionDetailView({
                     {isUk ? "Locations" : "Cities"}
                   </dt>
                   <dd className="mt-1 text-[12px] leading-5 text-[#4d4c48]">{institution.cityNames.join(", ")}</dd>
+                </div>
+              ) : null}
+              {isUk && institution.ukprn ? (
+                <div>
+                  <dt className="text-[10px] font-semibold uppercase tracking-[0.07em] text-[#aaa7a0]">UKPRN</dt>
+                  <dd className="mt-1 flex items-center gap-2 text-[12.5px] font-semibold text-[#4d4c48]">
+                    {institution.ukprn}
+                    {ukprnSource ? (
+                      <a
+                        href={ukprnSource}
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label="Open UKPRN provider source"
+                        className="text-[#3e7a2e]"
+                      >
+                        <ExternalLink className="size-3.5" />
+                      </a>
+                    ) : null}
+                  </dd>
                 </div>
               ) : null}
               {institution.cricosProviderCode ? (
