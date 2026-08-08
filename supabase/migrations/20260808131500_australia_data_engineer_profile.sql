@@ -68,7 +68,7 @@ insert into public.country_occupation_metric_snapshots (
     'entry_level_basis', 'OSCA assigns Skill Level 1. Australia has direct Bachelor-level Data Engineering study and postgraduate Data Engineering pathways, but many employers recruit Data Engineers after experience in software, analytics, databases, cloud or platform engineering. Entry-level credit is therefore lower than for broader graduate software or analyst roles.',
     'entry_burden_basis', 'OSCA Skill Level 1 corresponds to a Bachelor degree or higher qualification, or at least five years of relevant experience. No additional statutory occupational licence applies.',
     'employer_diversity_basis', 'Curated coverage across banking, product technology, telecommunications, government and digital platforms; replace with posting-level unique-employer counts when available.',
-    'score_note', 'Conservative provisional score. Exact Data Engineer employment, earnings, shortage and vacancy intensity are not inferred from legacy ANZSCO 2613 or 261313. Broader vacancy trend is negative, broader long-term growth receives partial credit, entry-level access is recognised but moderated, and visa credit is based only on CampCareer\'s reviewed OSCA-to-CSOL correspondence.'
+    'score_note', 'Conservative provisional score. Exact Data Engineer employment, earnings, shortage and vacancy intensity are not inferred from legacy ANZSCO 2613 or 261313. Broader vacancy trend is negative, broader long-term growth receives partial credit, entry-level access is recognised but moderated, and visa credit is based only on CampCareer''s reviewed OSCA-to-CSOL correspondence.'
   ),
   '2026-08-08'
 )
@@ -116,7 +116,7 @@ on conflict (profile_key, official_code) do update set
   legacy_code = excluded.legacy_code,
   shortage_rating = excluded.shortage_rating,
   visa_eligible = excluded.visa_eligible,
-  included_in_rollup = excluded.included_in_rollup,
+  included_in_rollup = excluded.included_rollup,
   sort_order = excluded.sort_order,
   source_url = excluded.source_url,
   source_checked_at = excluded.source_checked_at;
