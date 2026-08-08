@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   description:
     "Compare Toronto student living costs, TTC student transport, international student work rules, canonical institutions and linked programs.",
   alternates: { canonical: "/cities/ca/toronto" },
+  robots: { index: true, follow: true },
 }
 
 export default async function TorontoCityPage() {
