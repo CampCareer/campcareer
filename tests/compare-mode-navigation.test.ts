@@ -1,4 +1,5 @@
 import assert from "node:assert/strict"
+import { readFileSync } from "node:fs"
 import test from "node:test"
 import { COMPARE_MODE_NAV_ITEMS, resolveCompareModeType } from "../src/lib/compare-navigation"
 
@@ -26,4 +27,12 @@ test("Compare mode resolver accepts Cities as a first-class mode", () => {
   assert.equal(resolveCompareModeType("city"), "city")
   assert.equal(resolveCompareModeType("career"), "career")
   assert.equal(resolveCompareModeType("cities"), "unsupported")
+})
+
+test("legacy city compare route permanently redirects to Compare Cities and is not in the sitemap", () => {
+  const legacyRoute = readFileSync("src/app/(workspace)/cities/au/compare/page.tsx", "utf8")
+  const sitemapSource = readFileSync("src/app/sitemap.ts", "utf8")
+
+  assert.ok(legacyRoute.includes('permanentRedirect("/compare?type=city&country=AU")'))
+  assert.ok(!sitemapSource.includes("/cities/au/compare"))
 })
