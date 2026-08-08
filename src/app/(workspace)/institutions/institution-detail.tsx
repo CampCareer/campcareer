@@ -368,7 +368,9 @@ export function InstitutionDetailView({
               <h2 className="text-[16px] font-semibold text-[#1b1b1b]">Programs</h2>
             </div>
             <p className="mt-1.5 text-[11.5px] leading-5 text-[#77746e]">
-              Active canonical programs connected to this institution. Australian records link directly to the existing CampCareer program detail pages.
+              {isUk
+                ? "Active canonical program records currently connected to this institution. UK program detail pages are not yet published, so these records are shown as previews without invented links."
+                : "Active canonical programs connected to this institution. Australian records link directly to the existing CampCareer program detail pages."}
             </p>
             <div className="mt-4">
               <ProgramList
