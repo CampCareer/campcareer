@@ -92,13 +92,14 @@ with inserted as (
 )
 insert into public.program_occupation_ca_staging (
   program_catalog_id, canonical_career_id, relation_type, match_basis,
-  rule_version, review_status, source_checked_at, reviewer_note, reviewed_at
+  match_pattern, rule_version, review_status, source_checked_at, reviewer_note, reviewed_at
 )
 select
   p.program_catalog_id,
   'wall-floor-tiler',
   'direct',
   'manual',
+  '(tiling|tile setting|tilesetter|ceramic tile)',
   'v1',
   'approved',
   date '2026-08-08',
@@ -108,6 +109,7 @@ from pgwp_inserted p
 on conflict (program_catalog_id, canonical_career_id) do update
 set relation_type=excluded.relation_type,
     match_basis=excluded.match_basis,
+    match_pattern=excluded.match_pattern,
     rule_version=excluded.rule_version,
     review_status=excluded.review_status,
     source_checked_at=excluded.source_checked_at,
