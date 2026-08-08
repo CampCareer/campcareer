@@ -1,0 +1,4 @@
+-- Applied through the Supabase connector on 2026-08-08.
+-- Canonical migration logic is retained in:
+--   20260808212500_nl_campus_location_quality.sql
+-- This no-op marker keeps the connector-generated remote migration version aligned locally.
