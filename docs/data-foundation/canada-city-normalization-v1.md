@@ -88,7 +88,7 @@ Population uses named-city/census-subdivision geography rather than CMA populati
 
 ## Canada City Compare
 
-`/compare?type=city&country=CA` uses the same first-class Cities mode as Australia but a Canada-specific comparison adapter.
+`/compare/cities?country=CA` uses the same first-class canonical Cities mode as Australia but a Canada-specific comparison adapter. Legacy query-based Compare links continue to redirect to this canonical route.
 
 A Canada city enters the selector automatically only when:
 
