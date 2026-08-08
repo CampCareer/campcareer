@@ -9,6 +9,7 @@ import {
 } from "lucide-react"
 import { InstitutionLogo } from "./institution-logo"
 import type { AuProgramListItem } from "@/lib/programs/au-programs.server"
+import { institutionDetailPath } from "@/lib/institutions/institution-search"
 import { getProgramDiscipline } from "@/lib/programs/program-discipline"
 import { programDetailPath } from "@/lib/programs/program-search"
 
@@ -59,6 +60,9 @@ export function ProgramCard({ program }: { program: AuProgramListItem }) {
   const studyDuration = duration(program.durationYears)
   const location = programLocation(program)
   const detailHref = programDetailPath(program.id, program.title)
+  const institutionHref = program.institutionSlug
+    ? institutionDetailPath("AU", program.institutionSlug)
+    : null
   const verified = program.officialUrlStatus === "verified"
   const locationVerified = program.deliveryLocations.length > 0
   const discipline = getProgramDiscipline({
@@ -110,7 +114,16 @@ export function ProgramCard({ program }: { program: AuProgramListItem }) {
 
               <p className="mt-1.5 flex items-center gap-1.5 text-[12.5px] font-medium text-[#5e5c57]">
                 <Building2 className="size-3.5 shrink-0 text-[#9b9891]" />
-                <span className="truncate">{program.institutionName}</span>
+                {institutionHref ? (
+                  <Link
+                    href={institutionHref}
+                    className="pointer-events-auto relative z-20 truncate transition hover:text-[#3e7a2e] hover:underline"
+                  >
+                    {program.institutionName}
+                  </Link>
+                ) : (
+                  <span className="truncate">{program.institutionName}</span>
+                )}
               </p>
             </div>
 
