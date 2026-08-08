@@ -21,8 +21,7 @@ const base: CaProgramPublicationInput = {
 }
 
 test("Tier A requires a publishable row with a program-specific official URL", () => {
-  const decision = classifyCaProgramPublication(base)
-  assert.deepEqual(decision, {
+  assert.deepEqual(classifyCaProgramPublication(base), {
     tier: "A",
     holdReason: null,
     pgwpState: "eligible",
@@ -43,14 +42,8 @@ test("missing DLI evidence holds a program in Tier C", () => {
 })
 
 test("suspended and excluded rows never publish", () => {
-  assert.equal(
-    classifyCaProgramPublication({ ...base, sourceStatus: "suspended_2026_27" }).holdReason,
-    "suspended",
-  )
-  assert.equal(
-    classifyCaProgramPublication({ ...base, sourceStatus: "excluded_non_core_pathway" }).holdReason,
-    "excluded_non_core",
-  )
+  assert.equal(classifyCaProgramPublication({ ...base, sourceStatus: "suspended_2026_27" }).holdReason, "suspended")
+  assert.equal(classifyCaProgramPublication({ ...base, sourceStatus: "excluded_non_core_pathway" }).holdReason, "excluded_non_core")
 })
 
 test("closed international admissions hold a program", () => {
@@ -69,11 +62,9 @@ test("program-level international admission must be verified before publication"
     "school_pgwp_aligned_check_current_intake_availability",
     "school_pgwp_aligned_list_current_program_availability_should_be_checked",
     "school_pgwp_aligned_program_availability_separate",
+    "nbcc_pgwp_status_verified_current_intake_check_application_portal",
   ]) {
-    const decision = classifyCaProgramPublication({
-      ...base,
-      internationalProgramAdmissionStatus: admissionStatus,
-    })
+    const decision = classifyCaProgramPublication({ ...base, internationalProgramAdmissionStatus: admissionStatus })
     assert.equal(decision.tier, "C")
     assert.equal(decision.holdReason, "admission_unverified")
   }
