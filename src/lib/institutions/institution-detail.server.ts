@@ -24,6 +24,11 @@ type InstitutionNlIdentityRow = {
   brin_source_url: string | null
 }
 
+type InstitutionNzIdentityRow = {
+  provider_number: string | null
+  provider_source_url: string | null
+}
+
 type InstitutionDetailRow = {
   institution_id: string
   country_code: string
@@ -92,6 +97,8 @@ export type InstitutionDetail = {
   dliSourceUrl: string | null
   brinCode: string | null
   brinSourceUrl: string | null
+  providerNumber: string | null
+  providerSourceUrl: string | null
   campuses: InstitutionCampusLocation[]
   studyAreas: InstitutionCountBreakdown[]
   programmeTypes: InstitutionCountBreakdown[]
@@ -185,7 +192,9 @@ export const getInstitutionDetail = cache(async (
       ? "institution_detail_ca_v1"
       : countryCode === "NL"
         ? "institution_detail_nl_v1"
-        : "institution_detail_v1"
+        : countryCode === "NZ"
+          ? "institution_detail_nz_v1"
+          : "institution_detail_v1"
 
   const { data, error } = await supabaseAdmin
     .from(detailView)
@@ -252,11 +261,26 @@ export const getInstitutionDetail = cache(async (
       .maybeSingle()
     : Promise.resolve({ data: null, error: null })
 
-  const [logoResult, ukIdentityResult, caIdentityResult, nlIdentityResult] = await Promise.all([
+  const nzIdentityPromise = countryCode === "NZ"
+    ? supabaseAdmin
+      .from("institution_identity_nz_v1")
+      .select("provider_number,provider_source_url")
+      .eq("institution_id", row.institution_id)
+      .maybeSingle()
+    : Promise.resolve({ data: null, error: null })
+
+  const [
+    logoResult,
+    ukIdentityResult,
+    caIdentityResult,
+    nlIdentityResult,
+    nzIdentityResult,
+  ] = await Promise.all([
     logoPromise,
     ukIdentityPromise,
     caIdentityPromise,
     nlIdentityPromise,
+    nzIdentityPromise,
   ])
 
   if (logoResult.error) {
@@ -283,6 +307,10 @@ export const getInstitutionDetail = cache(async (
     throw new Error(`Unable to load Netherlands institution identity: ${nlIdentityResult.error.message}`)
   }
 
+  if (nzIdentityResult.error) {
+    throw new Error(`Unable to load New Zealand institution identity: ${nzIdentityResult.error.message}`)
+  }
+
   const logoRow = logoResult.data as unknown as InstitutionLogoRow | null
   const caIdentityRow = caIdentityResult.data as unknown as InstitutionCaIdentityRow | null
   const dliNumber = safeNullableString(caIdentityRow?.dli_number)
@@ -290,9 +318,16 @@ export const getInstitutionDetail = cache(async (
   const nlIdentityRow = nlIdentityResult.data as unknown as InstitutionNlIdentityRow | null
   const brinCode = safeNullableString(nlIdentityRow?.brin_code)
   const brinSourceUrl = safeNullableString(nlIdentityRow?.brin_source_url)
+  const nzIdentityRow = nzIdentityResult.data as unknown as InstitutionNzIdentityRow | null
+  const providerNumber = safeNullableString(nzIdentityRow?.provider_number)
+  const providerSourceUrl = safeNullableString(nzIdentityRow?.provider_source_url)
 
   if (countryCode === "NL" && (!brinCode || !brinSourceUrl)) {
     throw new Error(`NL institution ${row.institution_id} is missing its official BRIN identity`)
+  }
+
+  if (countryCode === "NZ" && (!providerNumber || !providerSourceUrl)) {
+    throw new Error(`NZ institution ${row.institution_id} is missing its official NZQA provider identity`)
   }
 
   return {
@@ -319,6 +354,8 @@ export const getInstitutionDetail = cache(async (
     dliSourceUrl,
     brinCode,
     brinSourceUrl,
+    providerNumber,
+    providerSourceUrl,
     campuses: parseCampuses(row.campus_locations),
     studyAreas: parseBreakdown(row.study_areas),
     programmeTypes: parseBreakdown(row.programme_types),
