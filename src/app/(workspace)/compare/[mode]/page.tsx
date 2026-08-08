@@ -9,6 +9,7 @@ import {
   type ComparisonPageType,
 } from "@/lib/country-comparison"
 import { getAuCityComparison } from "@/lib/cities/au-city-comparison.server"
+import { getCaCityComparison } from "@/lib/cities/ca-city-comparison.server"
 import {
   buildCareerCompareCanonicalHref,
   buildCityCompareCanonicalHref,
@@ -22,6 +23,7 @@ import ProgramsCompareMatrix from "../programs-compare-matrix"
 import CountriesCompareMatrix from "../countries-compare-matrix"
 import CareersCompareMatrix from "../careers-compare-matrix"
 import { CitiesCompareMatrix } from "../cities-compare-matrix"
+import { CanadaCitiesCompareMatrix } from "../canada-cities-compare-matrix"
 import { ComparePageHeader } from "../compare-mode-navigation"
 
 export const dynamic = "force-dynamic"
@@ -95,21 +97,39 @@ export default async function CompareModePage({ params, searchParams }: CompareM
 
   if (mode === "cities") {
     const country = sp.get("country")?.toUpperCase() ?? "AU"
-    if (country !== "AU") {
-      return <UnsupportedSurface type="Cities" href={buildCityCompareCanonicalHref()} label="Compare Australian cities" activeType="city" countryCode={country} />
+
+    if (country === "AU") {
+      const comparison = await getAuCityComparison(sp.get("left"), sp.get("right"))
+      if (!comparison) {
+        return <UnsupportedSurface type="Cities" href={buildCityCompareCanonicalHref()} label="Compare Australian cities" activeType="city" countryCode={country} />
+      }
+      const href = buildCityCompareCanonicalHref({ country, left: comparison.left.slug, right: comparison.right.slug })
+      if (rawMode !== mode || !isCanonicalQuery(sp, href)) permanentRedirect(href)
+      return (
+        <section className="w-full pb-4" aria-label="Cities comparison">
+          <ComparePageHeader activeType="city" countryCode={country} />
+          <CitiesCompareMatrix left={comparison.left} right={comparison.right} options={comparison.options} sharedProgramCount={comparison.sharedProgramCount} />
+        </section>
+      )
     }
-    const comparison = await getAuCityComparison(sp.get("left"), sp.get("right"))
-    if (!comparison) {
-      return <UnsupportedSurface type="Cities" href={buildCityCompareCanonicalHref()} label="Compare Australian cities" activeType="city" countryCode={country} />
+
+    if (country === "CA") {
+      const comparison = await getCaCityComparison(sp.get("left"), sp.get("right"))
+      const canadaHref = buildCityCompareCanonicalHref({ country: "CA" })
+      if (!comparison) {
+        return <UnsupportedSurface type="Cities" href={canadaHref} label="Compare Canadian cities" activeType="city" countryCode={country} />
+      }
+      const href = buildCityCompareCanonicalHref({ country, left: comparison.left.slug, right: comparison.right.slug })
+      if (rawMode !== mode || !isCanonicalQuery(sp, href)) permanentRedirect(href)
+      return (
+        <section className="w-full pb-4" aria-label="Cities comparison">
+          <ComparePageHeader activeType="city" countryCode={country} />
+          <CanadaCitiesCompareMatrix left={comparison.left} right={comparison.right} options={comparison.options} sharedProgramCount={comparison.sharedProgramCount} />
+        </section>
+      )
     }
-    const href = buildCityCompareCanonicalHref({ country, left: comparison.left.slug, right: comparison.right.slug })
-    if (rawMode !== mode || !isCanonicalQuery(sp, href)) permanentRedirect(href)
-    return (
-      <section className="w-full pb-4" aria-label="Cities comparison">
-        <ComparePageHeader activeType="city" countryCode={country} />
-        <CitiesCompareMatrix left={comparison.left} right={comparison.right} options={comparison.options} sharedProgramCount={comparison.sharedProgramCount} />
-      </section>
-    )
+
+    return <UnsupportedSurface type="Cities" href={buildCityCompareCanonicalHref()} label="Compare Australian cities" activeType="city" countryCode={country} />
   }
 
   const comparison = parseCareerComparisonState(sp)
