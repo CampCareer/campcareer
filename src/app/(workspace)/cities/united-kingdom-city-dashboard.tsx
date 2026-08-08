@@ -1,5 +1,6 @@
 import Link from "next/link"
 import {
+  ArrowRight,
   BriefcaseBusiness,
   Building2,
   Clock3,
@@ -12,6 +13,7 @@ import {
   Wallet,
 } from "lucide-react"
 import type { UkCityProfile } from "@/lib/cities/uk-city-profile.server"
+import { buildCityCompareCanonicalHref } from "@/lib/compare-routes"
 
 function money(value: number, currency = "GBP", decimals = 0) {
   return new Intl.NumberFormat("en-GB", {
@@ -62,6 +64,16 @@ export function UnitedKingdomCityDashboard({ profile }: { profile: UkCityProfile
     profile.studyDestinationScope === "greater_london"
       ? "London uses the Greater London study-destination boundary. Campus membership still requires verified official location evidence inside that boundary."
       : `${profile.name} uses the approved named-city/local-authority study-destination boundary. Neighbouring authorities are not silently merged.`
+  const compareReady = Boolean(
+    profile.population &&
+      profile.livingCost &&
+      profile.transport &&
+      profile.workRights &&
+      profile.employmentSectors.length > 0 &&
+      profile.linkedCampusCount > 0 &&
+      profile.linkedInstitutionCount > 0,
+  )
+  const compareHref = buildCityCompareCanonicalHref({ country: "UK", left: profile.slug })
 
   return (
     <div>
@@ -84,13 +96,22 @@ export function UnitedKingdomCityDashboard({ profile }: { profile: UkCityProfile
 
       <main className="mx-auto w-full max-w-6xl px-4 pb-12 sm:px-8 lg:px-10">
         <section className="-mt-8 rounded-2xl border border-[#e7e6e3] bg-white p-5 shadow-xl shadow-black/10 sm:p-6">
-          <p className="text-[12px] font-semibold text-[#2563eb]">Student decision snapshot</p>
-          <h2 className="mt-1 text-[20px] font-semibold tracking-[-0.02em] text-[#1b1b1b]">Study destination evidence for {profile.name}</h2>
-          <p className="mt-1.5 max-w-3xl text-[12px] leading-5 text-[#77746e]">{scopeCopy}</p>
-          <div className="mt-4 flex flex-wrap gap-2 text-[10.5px] font-semibold text-[#5d6470]">
-            <span className="rounded-full bg-[#f4f6f9] px-2.5 py-1">{profile.linkedInstitutionCount} verified institutions</span>
-            <span className="rounded-full bg-[#f4f6f9] px-2.5 py-1">{profile.linkedCampusCount} verified locations</span>
-            <span className="rounded-full bg-[#f4f6f9] px-2.5 py-1">5 verified city metrics</span>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-[12px] font-semibold text-[#2563eb]">Student decision snapshot</p>
+              <h2 className="mt-1 text-[20px] font-semibold tracking-[-0.02em] text-[#1b1b1b]">Study destination evidence for {profile.name}</h2>
+              <p className="mt-1.5 max-w-3xl text-[12px] leading-5 text-[#77746e]">{scopeCopy}</p>
+              <div className="mt-4 flex flex-wrap gap-2 text-[10.5px] font-semibold text-[#5d6470]">
+                <span className="rounded-full bg-[#f4f6f9] px-2.5 py-1">{profile.linkedInstitutionCount} verified institutions</span>
+                <span className="rounded-full bg-[#f4f6f9] px-2.5 py-1">{profile.linkedCampusCount} verified locations</span>
+                <span className="rounded-full bg-[#f4f6f9] px-2.5 py-1">5 verified city metrics</span>
+              </div>
+            </div>
+            {compareReady ? (
+              <Link href={compareHref} className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-[#bfcff0] px-3.5 py-2 text-[11.5px] font-semibold text-[#2563eb] hover:bg-[#f7f9fe]">
+                Compare {profile.name} <ArrowRight className="size-3.5" />
+              </Link>
+            ) : null}
           </div>
         </section>
 
