@@ -21,7 +21,7 @@ test("final SEO publication inventories remain intentionally bounded", () => {
   assert.equal(INDEXABLE_OCCUPATION_PROFILES.length, 16)
   assert.equal(AU_PROGRAMMATIC_STUDY_PAGES.length, 42)
   assert.equal(AU_OCCUPATION_STATE_PAGES.length, 40)
-  assert.equal(INDEXABLE_INSTITUTION_PATHS.length, 74)
+  assert.equal(INDEXABLE_INSTITUTION_PATHS.length, 116)
 
   const visaRoutes = getIndexableVisaRoutes(getCompletedVisaCatalog())
   assert.ok(visaRoutes.length >= 100)
@@ -43,6 +43,9 @@ test("sitemap contains every explicit SEO inventory exactly once", () => {
   assert.ok(urlSet.has(`${SITE_URL}/institutions`))
   assert.ok(urlSet.has(`${SITE_URL}/institutions/au`))
   assert.ok(urlSet.has(`${SITE_URL}/institutions/ca`))
+  assert.ok(urlSet.has(`${SITE_URL}/institutions/ie`))
+  assert.ok(urlSet.has(`${SITE_URL}/institutions/ie/atlantic-technological-university`))
+  assert.ok(urlSet.has(`${SITE_URL}/institutions/ie/iob`))
   assert.ok(urlSet.has(`${SITE_URL}/cities/au/sydney`))
   assert.ok(urlSet.has(`${SITE_URL}/cities/au/adelaide`))
   assert.ok(!urls.some((url) => url.includes("/compare/programs")))
