@@ -17,6 +17,7 @@ export type CaProgramHoldReason =
   | "closed_delivery"
   | "ambiguous_parent"
   | "admission_non_core"
+  | "admission_unverified"
   | "admission_closed_or_restricted"
 
 export type CaProgramPublicationInput = {
@@ -61,9 +62,22 @@ function sourceHoldReason(sourceStatus: string | null): CaProgramHoldReason | nu
 
 function admissionHoldReason(admissionStatus: string | null): CaProgramHoldReason | null {
   const status = normalized(admissionStatus)
-  if (!status) return null
+  if (!status) return "admission_unverified"
 
   if (status.includes("not_assessed_non_core")) return "admission_non_core"
+
+  const unverified = [
+    "not_yet_verified",
+    "not verified",
+    "should_be_checked",
+    "check_current_intake_availability",
+    "availability_separate",
+    "dli_and_study_permit_eligibility_not_verified",
+  ]
+
+  if (unverified.some((marker) => status.includes(marker))) {
+    return "admission_unverified"
+  }
 
   const closedOrRestricted = [
     "suspended",
