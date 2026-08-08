@@ -37,7 +37,7 @@ const approvedSlugs = [
 
 test("UK Phase 2 normalization is bounded to the approved ten-city allowlist", () => {
   for (const code of approvedCodes) assert.match(migration, new RegExp(`'${code}'`))
-  for (const slug of approvedSlugs) assert.match(scopeDoc, new RegExp(`\\`${slug}\\``))
+  for (const slug of approvedSlugs) assert.ok(scopeDoc.includes("`" + slug + "`"))
 
   assert.match(migration, /publication_tier', 'A'/)
   assert.match(migration, /normalized_count <> 10/)
