@@ -10,6 +10,11 @@
 -- and falls back to the legacy Qualifax anchor layer only when no verified
 -- official location has been curated.
 
+-- Correct the current official website discovered during location-source QA.
+update catalog.institutions
+set website_url='https://opentrainingcollege.com/', updated_at=now()
+where country_code='IE' and slug='open-training-college' and status<>'inactive';
+
 with location_rows(
   institution_slug,
   location_key,
@@ -289,7 +294,7 @@ begin
 
   select count(distinct v.institution_id)
   into qqi_private_verified_count
-  from public.institution_identity_ie_private_v1 identity
+  from public.institution_identity_ie_qqi_private_v1 identity
   join public.institution_location_ie_v1 v
     on v.institution_id=identity.institution_id
   where v.metadata->>'location_quality'='verified_official';
