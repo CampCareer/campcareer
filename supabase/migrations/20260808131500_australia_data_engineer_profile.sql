@@ -116,7 +116,7 @@ on conflict (profile_key, official_code) do update set
   legacy_code = excluded.legacy_code,
   shortage_rating = excluded.shortage_rating,
   visa_eligible = excluded.visa_eligible,
-  included_in_rollup = excluded.included_rollup,
+  included_in_rollup = excluded.included_in_rollup,
   sort_order = excluded.sort_order,
   source_url = excluded.source_url,
   source_checked_at = excluded.source_checked_at;
