@@ -41,10 +41,12 @@ async function loadAuOccupationStatePageData(stateSlug: string, careerSlug: stri
     (link, index, items) => items.findIndex((item) => item.url === link.url) === index,
   )
 
+  const verifiedRegion = { ...region, sourceUrl: region.sourceUrl }
+
   return {
     route,
     profile,
-    region,
+    region: verifiedRegion,
     vacancyRank,
     rankedRegionCount: rankedRegions.length,
     totalRegionalVacancies,
