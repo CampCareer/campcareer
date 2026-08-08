@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   description:
     "Compare Calgary student living costs, U-Pass transport, international student work rules, canonical institutions and linked programmes.",
   alternates: { canonical: "/cities/ca/calgary" },
+  robots: { index: true, follow: true },
 }
 
 export default async function CalgaryCityPage() {
