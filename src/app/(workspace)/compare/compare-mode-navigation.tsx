@@ -2,24 +2,29 @@
 
 import { useRouter, useSearchParams } from "next/navigation"
 import { CountryPill } from "@/components/workspace/country-pill"
-import type { ComparisonPageType } from "@/lib/country-comparison"
-import { COMPARE_MODE_NAV_ITEMS } from "@/lib/compare-navigation"
+import { COMPARE_MODE_NAV_ITEMS, type CompareModeType } from "@/lib/compare-navigation"
 
 export { COMPARE_MODE_NAV_ITEMS }
 
 type ComparePageHeaderProps = {
-  activeType: ComparisonPageType
+  activeType: CompareModeType
   countryCode?: string | null
 }
 
 export function ComparePageHeader({ activeType, countryCode }: ComparePageHeaderProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const showCountry = activeType === "program" || activeType === "career"
+  const showCountry = activeType === "program" || activeType === "career" || activeType === "city"
   const resolvedCountry = countryCode?.toUpperCase() || "AU"
 
   function updateCountry(code: string | null) {
     if (!code) return
+
+    if (activeType === "city") {
+      router.replace(`/compare?type=city&country=${encodeURIComponent(code)}`, { scroll: false })
+      return
+    }
+
     const params = new URLSearchParams(searchParams.toString())
     params.set("type", activeType === "career" ? "career" : "program")
     params.set("country", code)

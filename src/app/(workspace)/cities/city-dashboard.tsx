@@ -82,11 +82,20 @@ function transportValue(profile: AuCityProfile) {
 export function CityDashboard({ profile }: { profile: AuCityProfile }) {
   const scopeLabel = profile.population?.geography ?? `Greater ${profile.name}`
   const image = CITY_IMAGES[profile.slug]
-  const compareAvailable = ["sydney", "melbourne"].includes(profile.slug)
+  const compareAvailable = Boolean(
+    profile.population &&
+      profile.livingCost &&
+      profile.transport &&
+      profile.workRights &&
+      profile.employmentSectors.length > 0 &&
+      profile.linkedCampusCount > 0 &&
+      profile.linkedInstitutionCount > 0 &&
+      profile.verifiedProgramCount > 0,
+  )
 
   return (
     <div>
-      <section className="relative overflow-hidden bg-[#273444]">
+      <section className="relative z-0 overflow-hidden bg-[#273444]">
         {image && <div aria-hidden="true" className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${image})` }} />}
         <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/45 to-black/20" />
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-24 pt-14 sm:px-8 sm:pt-20 lg:px-10">
@@ -99,8 +108,8 @@ export function CityDashboard({ profile }: { profile: AuCityProfile }) {
         </div>
       </section>
 
-      <main className="mx-auto w-full max-w-6xl px-4 pb-12 sm:px-8 lg:px-10">
-        <div className="-mt-8 rounded-2xl border border-[#e7e6e3] bg-white p-5 shadow-xl shadow-black/10 sm:p-6">
+      <main className="relative z-10 mx-auto w-full max-w-6xl px-4 pb-12 sm:px-8 lg:px-10">
+        <div className="relative z-20 -mt-8 rounded-2xl border border-[#e7e6e3] bg-white p-5 shadow-xl shadow-black/10 sm:p-6">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-[12px] font-semibold text-[#3e7a2e]">Student decision snapshot</p>
@@ -110,7 +119,7 @@ export function CityDashboard({ profile }: { profile: AuCityProfile }) {
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
-              {compareAvailable && <Link href="/cities/au/compare" className="inline-flex items-center gap-1.5 rounded-lg border border-[#cfd9ca] px-3.5 py-2 text-[11.5px] font-semibold text-[#3e7a2e] hover:bg-[#f7faf5]">Compare Sydney vs Melbourne <ArrowRight className="size-3.5" /></Link>}
+              {compareAvailable && <Link href={`/compare?type=city&country=AU&left=${profile.slug}`} className="inline-flex items-center gap-1.5 rounded-lg border border-[#cfd9ca] px-3.5 py-2 text-[11.5px] font-semibold text-[#3e7a2e] hover:bg-[#f7faf5]">Compare {profile.name} with another city <ArrowRight className="size-3.5" /></Link>}
               <Link href="/countries/au" className="inline-flex items-center gap-1.5 px-2 py-2 text-[11.5px] font-semibold text-[#2563eb] hover:underline">Australia dashboard <ArrowRight className="size-3.5" /></Link>
             </div>
           </div>

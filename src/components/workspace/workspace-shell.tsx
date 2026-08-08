@@ -15,10 +15,14 @@ type WorkspaceShellProps = {
 export function WorkspaceShell({ children }: WorkspaceShellProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const pathname = withoutLocalePrefix(usePathname())
+  const isCityProfile = pathname.startsWith("/cities/") && !pathname.endsWith("/compare")
   // Pages with their own full-bleed hero manage their own content container,
   // so they escape the standard padding to reach the sidebar and topbar.
   const hasFullBleedHero =
-    pathname === "/" || pathname === "/countries" || pathname.startsWith("/countries/")
+    pathname === "/" ||
+    pathname === "/countries" ||
+    pathname.startsWith("/countries/") ||
+    isCityProfile
   const isComparePage = pathname === "/compare"
   // Home owns both the authenticated dashboard and result experiences. Its
   // application-style surfaces should end at their content, not a marketing footer.

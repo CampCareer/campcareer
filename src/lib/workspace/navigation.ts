@@ -39,6 +39,7 @@ export const WORKSPACE_ROUTES = [
   "/",
   "/compare",
   "/countries",
+  "/cities",
   "/visas",
   "/occupation",
   "/programs",
