@@ -6,6 +6,7 @@ import { AU_OCCUPATION_STATE_PAGES } from "@/lib/workspace/au-occupation-state-s
 import { INDEXABLE_OCCUPATION_PROFILES, occupationCanonicalPath } from "@/lib/workspace/occupation-routes"
 import { getCompletedVisaCatalog } from "@/lib/workspace/visa-catalog-complete"
 import { getIndexableVisaRoutes } from "@/lib/workspace/visa-routes"
+import { INDEXABLE_DE_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-de"
 import { INDEXABLE_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo"
 import { INDEXABLE_NL_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-nl"
 import { INDEXABLE_NZ_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-nz"
@@ -28,6 +29,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/institutions/nl`, lastModified, priority: 0.82, changeFrequency: "weekly" },
     { url: `${SITE_URL}/institutions/nz`, lastModified, priority: 0.82, changeFrequency: "weekly" },
     { url: `${SITE_URL}/institutions/sg`, lastModified, priority: 0.82, changeFrequency: "weekly" },
+    { url: `${SITE_URL}/institutions/de`, lastModified, priority: 0.82, changeFrequency: "weekly" },
     ...CANONICAL_COUNTRY_SLUGS.map((slug) => ({ url: `${SITE_URL}${countryCanonicalPath(slug)}`, lastModified, priority: 0.85, changeFrequency: "monthly" as const })),
     { url: `${SITE_URL}/cities/au/sydney`, lastModified, priority: 0.8, changeFrequency: "monthly" },
     { url: `${SITE_URL}/cities/au/melbourne`, lastModified, priority: 0.8, changeFrequency: "monthly" },
@@ -50,6 +52,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...INDEXABLE_NL_INSTITUTION_PATHS,
     ...INDEXABLE_NZ_INSTITUTION_PATHS,
     ...INDEXABLE_SG_INSTITUTION_PATHS,
+    ...INDEXABLE_DE_INSTITUTION_PATHS,
   ].map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.72, changeFrequency: "weekly" as const }))
   const routePages: MetadataRoute.Sitemap = ROUTE_GUIDES.flatMap((guide) => [
     { url: `${SITE_URL}${routeGuideHref(guide)}`, lastModified: new Date(guide.lastVerified), priority: 0.95, changeFrequency: "weekly" as const },
