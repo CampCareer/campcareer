@@ -33,9 +33,11 @@ test("institution country routes use stable lower-case country segments", () => 
   assert.equal(normalizeInstitutionCountrySegment("au"), "AU")
   assert.equal(normalizeInstitutionCountrySegment("CA"), "CA")
   assert.equal(normalizeInstitutionCountrySegment("uk"), "UK")
+  assert.equal(normalizeInstitutionCountrySegment("nl"), "NL")
   assert.equal(normalizeInstitutionCountrySegment("us"), null)
   assert.equal(institutionCountryPath("AU"), "/institutions/au")
   assert.equal(institutionCountryPath("UK"), "/institutions/uk")
+  assert.equal(institutionCountryPath("NL"), "/institutions/nl")
 })
 
 test("institution detail paths normalize stable persisted slugs", () => {
@@ -48,6 +50,10 @@ test("institution detail paths normalize stable persisted slugs", () => {
   assert.equal(
     institutionDetailPath("UK", "City-St-Georges-University-of-London"),
     "/institutions/uk/city-st-georges-university-of-london",
+  )
+  assert.equal(
+    institutionDetailPath("NL", "Delft-University-of-Technology"),
+    "/institutions/nl/delft-university-of-technology",
   )
   assert.throws(() => institutionDetailPath("AU", "bad/slug"))
 })
