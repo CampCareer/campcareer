@@ -115,7 +115,9 @@ export async function searchInstitutions(
 ): Promise<InstitutionSearchResult> {
   const explorerView = countryCode === "UK"
     ? "institution_explorer_uk_v1"
-    : "institution_explorer_v1"
+    : countryCode === "CA"
+      ? "institution_explorer_ca_v1"
+      : "institution_explorer_v1"
 
   let query = supabaseAdmin
     .from(explorerView)

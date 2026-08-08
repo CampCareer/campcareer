@@ -68,10 +68,17 @@ function safeWebsiteUrl(value: string | null) {
   }
 }
 
+function usesLocationLanguage(countryCode: InstitutionMvpCountryCode) {
+  return countryCode !== "AU"
+}
+
 function citySummary(institution: InstitutionExplorerItem) {
   const cities = institution.cityNames
   if (cities.length === 0) {
-    return institution.campusCount > 0 ? "Location records available" : "Location unavailable"
+    if (institution.campusCount === 0) return "Location unavailable"
+    return usesLocationLanguage(institution.countryCode)
+      ? "Locations available"
+      : "Campus locations available"
   }
   if (cities.length <= 2) return cities.join(", ")
   return `${cities.slice(0, 2).join(", ")} +${cities.length - 2}`
@@ -82,7 +89,7 @@ function InstitutionCard({ institution }: { institution: InstitutionExplorerItem
   const ownership = ownershipLabel(institution.ownershipType)
   const website = safeWebsiteUrl(institution.websiteUrl)
   const detailPath = institutionDetailPath(institution.countryCode, institution.slug)
-  const locationLabel = institution.countryCode === "UK" ? "locations" : "campuses"
+  const locationUnit = usesLocationLanguage(institution.countryCode) ? "locations" : "campuses"
 
   return (
     <article className="rounded-xl border border-[#e7e6e3] bg-white p-5 transition hover:border-[#cfd9ca] hover:shadow-sm">
@@ -118,7 +125,7 @@ function InstitutionCard({ institution }: { institution: InstitutionExplorerItem
               <GraduationCap className="size-3.5 text-[#9c9a94]" />
               {institution.programCount.toLocaleString()} programs
             </span>
-            <span>{institution.campusCount.toLocaleString()} {locationLabel}</span>
+            <span>{institution.campusCount.toLocaleString()} {locationUnit}</span>
           </div>
 
           <div className="mt-3 flex flex-wrap items-center gap-4">
@@ -199,7 +206,7 @@ export async function InstitutionsExplorer({
   const country = getLaunchCountry(countryCode)
   const filters = parseInstitutionSearchParams(searchParams)
   const countryPath = institutionCountryPath(countryCode)
-  const connectionLabel = countryCode === "UK" ? "location" : "campus"
+  const connectionLabel = usesLocationLanguage(countryCode) ? "location" : "campus"
 
   let result: InstitutionSearchResult | null = null
   let errorMessage: string | null = null

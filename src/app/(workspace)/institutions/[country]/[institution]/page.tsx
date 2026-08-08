@@ -8,6 +8,7 @@ import {
   normalizeInstitutionSlugSegment,
 } from "@/lib/institutions/institution-search"
 import { getInstitutionDetail, type InstitutionDetail } from "@/lib/institutions/institution-detail.server"
+import { CanadianInstitutionDetailView } from "../../canadian-institution-detail"
 import { InstitutionDetailView } from "../../institution-detail"
 
 export const revalidate = 3600
@@ -43,7 +44,7 @@ export async function generateMetadata({
     }
 
     const canonicalPath = institutionDetailPath(countryCode, detail.slug)
-    const locationLabel = countryCode === "UK" ? "locations" : "campuses"
+    const locationLabel = countryCode === "AU" ? "campuses" : "locations"
     return {
       title: `${detail.name} | Institutions`,
       description: `Explore ${detail.name} programs, ${locationLabel} and source-backed institution details on CampCareer.`,
@@ -97,5 +98,7 @@ export default async function InstitutionDetailPage({
   }
 
   if (!detail) notFound()
-  return <InstitutionDetailView institution={detail} />
+  return countryCode === "CA"
+    ? <CanadianInstitutionDetailView institution={detail} />
+    : <InstitutionDetailView institution={detail} />
 }

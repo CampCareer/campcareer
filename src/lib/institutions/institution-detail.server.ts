@@ -14,6 +14,11 @@ type InstitutionUkIdentityRow = {
   ukprn_source_url: string | null
 }
 
+type InstitutionCaIdentityRow = {
+  dli_number: string | null
+  dli_source_url: string | null
+}
+
 type InstitutionDetailRow = {
   institution_id: string
   country_code: string
@@ -78,6 +83,8 @@ export type InstitutionDetail = {
   cricosSourceUrl: string | null
   ukprn: string | null
   ukprnSourceUrl: string | null
+  dliNumber: string | null
+  dliSourceUrl: string | null
   campuses: InstitutionCampusLocation[]
   studyAreas: InstitutionCountBreakdown[]
   programmeTypes: InstitutionCountBreakdown[]
@@ -167,7 +174,9 @@ export const getInstitutionDetail = cache(async (
 ): Promise<InstitutionDetail | null> => {
   const detailView = countryCode === "UK"
     ? "institution_detail_uk_v1"
-    : "institution_detail_v1"
+    : countryCode === "CA"
+      ? "institution_detail_ca_v1"
+      : "institution_detail_v1"
 
   const { data, error } = await supabaseAdmin
     .from(detailView)
@@ -218,9 +227,18 @@ export const getInstitutionDetail = cache(async (
       .maybeSingle()
     : Promise.resolve({ data: null, error: null })
 
-  const [logoResult, ukIdentityResult] = await Promise.all([
+  const caIdentityPromise = countryCode === "CA"
+    ? supabaseAdmin
+      .from("institution_identity_ca_v1")
+      .select("dli_number,dli_source_url")
+      .eq("institution_id", row.institution_id)
+      .maybeSingle()
+    : Promise.resolve({ data: null, error: null })
+
+  const [logoResult, ukIdentityResult, caIdentityResult] = await Promise.all([
     logoPromise,
     ukIdentityPromise,
+    caIdentityPromise,
   ])
 
   if (logoResult.error) {
@@ -231,13 +249,25 @@ export const getInstitutionDetail = cache(async (
     throw new Error(`Unable to load UK institution identity: ${ukIdentityResult.error.message}`)
   }
 
-  const logoRow = logoResult.data as unknown as InstitutionLogoRow | null
   const ukIdentityRow = ukIdentityResult.data as unknown as InstitutionUkIdentityRow | null
   const ukprn = safeNullableString(ukIdentityRow?.ukprn)
   const ukprnSourceUrl = safeNullableString(ukIdentityRow?.ukprn_source_url)
 
   if (countryCode === "UK" && (!ukprn || !ukprnSourceUrl)) {
     throw new Error(`UK institution ${row.institution_id} is missing its official UKPRN identity`)
+  }
+
+  if (caIdentityResult.error) {
+    throw new Error(`Unable to load Canadian institution identity: ${caIdentityResult.error.message}`)
+  }
+
+  const logoRow = logoResult.data as unknown as InstitutionLogoRow | null
+  const caIdentityRow = caIdentityResult.data as unknown as InstitutionCaIdentityRow | null
+  const dliNumber = safeNullableString(caIdentityRow?.dli_number)
+  const dliSourceUrl = safeNullableString(caIdentityRow?.dli_source_url)
+
+  if (countryCode === "CA" && (!dliNumber || !dliSourceUrl)) {
+    throw new Error(`Canadian institution ${row.institution_id} is missing its official DLI identity`)
   }
 
   return {
@@ -260,6 +290,8 @@ export const getInstitutionDetail = cache(async (
     cricosSourceUrl: row.cricos_source_url,
     ukprn,
     ukprnSourceUrl,
+    dliNumber,
+    dliSourceUrl,
     campuses: parseCampuses(row.campus_locations),
     studyAreas: parseBreakdown(row.study_areas),
     programmeTypes: parseBreakdown(row.programme_types),
