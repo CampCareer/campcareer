@@ -18,11 +18,10 @@ where anzsco_code = '271133'
 
 -- Fill the reviewed visa-status model for the current Cyber Security Analyst mapping.
 insert into ingest.visa_occupation_status_au (
-  id, osca_code, anzsco_v13_code, list_name, visa_stream, status,
+  osca_code, anzsco_v13_code, list_name, visa_stream, status,
   effective_from, effective_to, source_url, retrieved_at, reviewed_at, reviewer_note
 )
 select
-  nextval('ingest.visa_occupation_status_au_id_seq'),
   '271133', '262116', 'Core Skills Occupation List (CSOL)',
   'Check current Home Affairs visa instrument', 'eligible',
   '2024-12-07', null,
