@@ -12,6 +12,7 @@ type InstitutionNlIdentityRow = { brin_code: string | null; brin_source_url: str
 type InstitutionNzIdentityRow = { provider_number: string | null; provider_source_url: string | null }
 type InstitutionSgIdentityRow = { uen: string | null; uen_source_url: string | null }
 type InstitutionDeIdentityRow = { official_domain: string | null; official_domain_source_url: string | null }
+type InstitutionFrIdentityRow = { uai: string | null; uai_source_url: string | null }
 
 type InstitutionDetailRow = {
   institution_id: string
@@ -83,6 +84,8 @@ export type InstitutionDetail = {
   uenSourceUrl: string | null
   officialDomain: string | null
   officialDomainSourceUrl: string | null
+  uai: string | null
+  uaiSourceUrl: string | null
   campuses: InstitutionCampusLocation[]
   studyAreas: InstitutionCountBreakdown[]
   programmeTypes: InstitutionCountBreakdown[]
@@ -165,7 +168,9 @@ export const getInstitutionDetail = cache(async (
             ? "institution_detail_sg_v1"
             : countryCode === "DE"
               ? "institution_detail_de_v1"
-              : "institution_detail_v1"
+              : countryCode === "FR"
+                ? "institution_detail_fr_v1"
+                : "institution_detail_v1"
 
   const { data, error } = await supabaseAdmin
     .from(detailView)
@@ -190,9 +195,10 @@ export const getInstitutionDetail = cache(async (
   const nzIdentityPromise = countryCode === "NZ" ? supabaseAdmin.from("institution_identity_nz_v1").select("provider_number,provider_source_url").eq("institution_id", row.institution_id).maybeSingle() : Promise.resolve({ data: null, error: null })
   const sgIdentityPromise = countryCode === "SG" ? supabaseAdmin.from("institution_identity_sg_v1").select("uen,uen_source_url").eq("institution_id", row.institution_id).maybeSingle() : Promise.resolve({ data: null, error: null })
   const deIdentityPromise = countryCode === "DE" ? supabaseAdmin.from("institution_identity_de_v1").select("official_domain,official_domain_source_url").eq("institution_id", row.institution_id).maybeSingle() : Promise.resolve({ data: null, error: null })
+  const frIdentityPromise = countryCode === "FR" ? supabaseAdmin.from("institution_identity_fr_v1").select("uai,uai_source_url").eq("institution_id", row.institution_id).maybeSingle() : Promise.resolve({ data: null, error: null })
 
-  const [logoResult, ukIdentityResult, caIdentityResult, nlIdentityResult, nzIdentityResult, sgIdentityResult, deIdentityResult] = await Promise.all([
-    logoPromise, ukIdentityPromise, caIdentityPromise, nlIdentityPromise, nzIdentityPromise, sgIdentityPromise, deIdentityPromise,
+  const [logoResult, ukIdentityResult, caIdentityResult, nlIdentityResult, nzIdentityResult, sgIdentityResult, deIdentityResult, frIdentityResult] = await Promise.all([
+    logoPromise, ukIdentityPromise, caIdentityPromise, nlIdentityPromise, nzIdentityPromise, sgIdentityPromise, deIdentityPromise, frIdentityPromise,
   ])
 
   if (logoResult.error) console.error("Unable to load institution logo", logoResult.error)
@@ -202,6 +208,7 @@ export const getInstitutionDetail = cache(async (
   if (nzIdentityResult.error) throw new Error(`Unable to load New Zealand institution identity: ${nzIdentityResult.error.message}`)
   if (sgIdentityResult.error) throw new Error(`Unable to load Singapore institution identity: ${sgIdentityResult.error.message}`)
   if (deIdentityResult.error) throw new Error(`Unable to load Germany institution identity: ${deIdentityResult.error.message}`)
+  if (frIdentityResult.error) throw new Error(`Unable to load France institution identity: ${frIdentityResult.error.message}`)
 
   const logoRow = logoResult.data as unknown as InstitutionLogoRow | null
   const ukRow = ukIdentityResult.data as unknown as InstitutionUkIdentityRow | null
@@ -210,6 +217,7 @@ export const getInstitutionDetail = cache(async (
   const nzRow = nzIdentityResult.data as unknown as InstitutionNzIdentityRow | null
   const sgRow = sgIdentityResult.data as unknown as InstitutionSgIdentityRow | null
   const deRow = deIdentityResult.data as unknown as InstitutionDeIdentityRow | null
+  const frRow = frIdentityResult.data as unknown as InstitutionFrIdentityRow | null
 
   const ukprn = safeNullableString(ukRow?.ukprn)
   const ukprnSourceUrl = safeNullableString(ukRow?.ukprn_source_url)
@@ -223,12 +231,15 @@ export const getInstitutionDetail = cache(async (
   const uenSourceUrl = safeNullableString(sgRow?.uen_source_url)
   const officialDomain = safeNullableString(deRow?.official_domain)
   const officialDomainSourceUrl = safeNullableString(deRow?.official_domain_source_url)
+  const uai = safeNullableString(frRow?.uai)
+  const uaiSourceUrl = safeNullableString(frRow?.uai_source_url)
 
   if (countryCode === "UK" && (!ukprn || !ukprnSourceUrl)) throw new Error(`UK institution ${row.institution_id} is missing its official UKPRN identity`)
   if (countryCode === "NL" && (!brinCode || !brinSourceUrl)) throw new Error(`NL institution ${row.institution_id} is missing its official BRIN identity`)
   if (countryCode === "NZ" && (!providerNumber || !providerSourceUrl)) throw new Error(`NZ institution ${row.institution_id} is missing its official NZQA provider identity`)
   if (countryCode === "SG" && (!uen || !uenSourceUrl)) throw new Error(`SG institution ${row.institution_id} is missing its official UEN identity`)
   if (countryCode === "DE" && (!officialDomain || !officialDomainSourceUrl)) throw new Error(`DE institution ${row.institution_id} is missing its HRK-verified official domain identity`)
+  if (countryCode === "FR" && (!uai || !uaiSourceUrl)) throw new Error(`FR institution ${row.institution_id} is missing its official UAI identity`)
 
   return {
     id: row.institution_id,
@@ -258,6 +269,8 @@ export const getInstitutionDetail = cache(async (
     uenSourceUrl,
     officialDomain,
     officialDomainSourceUrl,
+    uai,
+    uaiSourceUrl,
     campuses: parseCampuses(row.campus_locations),
     studyAreas: parseBreakdown(row.study_areas),
     programmeTypes: parseBreakdown(row.programme_types),
