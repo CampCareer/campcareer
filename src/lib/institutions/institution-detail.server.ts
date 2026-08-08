@@ -11,6 +11,7 @@ type InstitutionCaIdentityRow = { dli_number: string | null; dli_source_url: str
 type InstitutionNlIdentityRow = { brin_code: string | null; brin_source_url: string | null }
 type InstitutionNzIdentityRow = { provider_number: string | null; provider_source_url: string | null }
 type InstitutionSgIdentityRow = { uen: string | null; uen_source_url: string | null }
+type InstitutionDeIdentityRow = { official_domain: string | null; official_domain_source_url: string | null }
 
 type InstitutionDetailRow = {
   institution_id: string
@@ -80,6 +81,8 @@ export type InstitutionDetail = {
   providerSourceUrl: string | null
   uen: string | null
   uenSourceUrl: string | null
+  officialDomain: string | null
+  officialDomainSourceUrl: string | null
   campuses: InstitutionCampusLocation[]
   studyAreas: InstitutionCountBreakdown[]
   programmeTypes: InstitutionCountBreakdown[]
@@ -94,20 +97,16 @@ function safeNumber(value: unknown) {
   }
   return 0
 }
-
 function safePositiveIntegerOrNull(value: unknown) {
   const parsed = safeNumber(value)
   return Number.isInteger(parsed) && parsed > 0 ? parsed : null
 }
-
 function safeNullableString(value: unknown) {
   return typeof value === "string" && value.trim() ? value : null
 }
-
 function recordValue(value: unknown, key: string) {
   return value && typeof value === "object" ? (value as Record<string, unknown>)[key] : undefined
 }
-
 function parseCampuses(value: unknown): InstitutionCampusLocation[] {
   if (!Array.isArray(value)) return []
   return value.flatMap((item) => {
@@ -126,7 +125,6 @@ function parseCampuses(value: unknown): InstitutionCampusLocation[] {
     }]
   })
 }
-
 function parseBreakdown(value: unknown): InstitutionCountBreakdown[] {
   if (!Array.isArray(value)) return []
   return value.flatMap((item) => {
@@ -135,7 +133,6 @@ function parseBreakdown(value: unknown): InstitutionCountBreakdown[] {
     return [{ name, count: safeNumber(recordValue(item, "count")) }]
   })
 }
-
 function parsePrograms(value: unknown): InstitutionProgrammePreview[] {
   if (!Array.isArray(value)) return []
   return value.flatMap((item) => {
@@ -166,7 +163,9 @@ export const getInstitutionDetail = cache(async (
           ? "institution_detail_nz_v1"
           : countryCode === "SG"
             ? "institution_detail_sg_v1"
-            : "institution_detail_v1"
+            : countryCode === "DE"
+              ? "institution_detail_de_v1"
+              : "institution_detail_v1"
 
   const { data, error } = await supabaseAdmin
     .from(detailView)
@@ -190,9 +189,10 @@ export const getInstitutionDetail = cache(async (
   const nlIdentityPromise = countryCode === "NL" ? supabaseAdmin.from("institution_identity_nl_v1").select("brin_code,brin_source_url").eq("institution_id", row.institution_id).maybeSingle() : Promise.resolve({ data: null, error: null })
   const nzIdentityPromise = countryCode === "NZ" ? supabaseAdmin.from("institution_identity_nz_v1").select("provider_number,provider_source_url").eq("institution_id", row.institution_id).maybeSingle() : Promise.resolve({ data: null, error: null })
   const sgIdentityPromise = countryCode === "SG" ? supabaseAdmin.from("institution_identity_sg_v1").select("uen,uen_source_url").eq("institution_id", row.institution_id).maybeSingle() : Promise.resolve({ data: null, error: null })
+  const deIdentityPromise = countryCode === "DE" ? supabaseAdmin.from("institution_identity_de_v1").select("official_domain,official_domain_source_url").eq("institution_id", row.institution_id).maybeSingle() : Promise.resolve({ data: null, error: null })
 
-  const [logoResult, ukIdentityResult, caIdentityResult, nlIdentityResult, nzIdentityResult, sgIdentityResult] = await Promise.all([
-    logoPromise, ukIdentityPromise, caIdentityPromise, nlIdentityPromise, nzIdentityPromise, sgIdentityPromise,
+  const [logoResult, ukIdentityResult, caIdentityResult, nlIdentityResult, nzIdentityResult, sgIdentityResult, deIdentityResult] = await Promise.all([
+    logoPromise, ukIdentityPromise, caIdentityPromise, nlIdentityPromise, nzIdentityPromise, sgIdentityPromise, deIdentityPromise,
   ])
 
   if (logoResult.error) console.error("Unable to load institution logo", logoResult.error)
@@ -201,6 +201,7 @@ export const getInstitutionDetail = cache(async (
   if (nlIdentityResult.error) throw new Error(`Unable to load Netherlands institution identity: ${nlIdentityResult.error.message}`)
   if (nzIdentityResult.error) throw new Error(`Unable to load New Zealand institution identity: ${nzIdentityResult.error.message}`)
   if (sgIdentityResult.error) throw new Error(`Unable to load Singapore institution identity: ${sgIdentityResult.error.message}`)
+  if (deIdentityResult.error) throw new Error(`Unable to load Germany institution identity: ${deIdentityResult.error.message}`)
 
   const logoRow = logoResult.data as unknown as InstitutionLogoRow | null
   const ukRow = ukIdentityResult.data as unknown as InstitutionUkIdentityRow | null
@@ -208,6 +209,7 @@ export const getInstitutionDetail = cache(async (
   const nlRow = nlIdentityResult.data as unknown as InstitutionNlIdentityRow | null
   const nzRow = nzIdentityResult.data as unknown as InstitutionNzIdentityRow | null
   const sgRow = sgIdentityResult.data as unknown as InstitutionSgIdentityRow | null
+  const deRow = deIdentityResult.data as unknown as InstitutionDeIdentityRow | null
 
   const ukprn = safeNullableString(ukRow?.ukprn)
   const ukprnSourceUrl = safeNullableString(ukRow?.ukprn_source_url)
@@ -219,11 +221,14 @@ export const getInstitutionDetail = cache(async (
   const providerSourceUrl = safeNullableString(nzRow?.provider_source_url)
   const uen = safeNullableString(sgRow?.uen)
   const uenSourceUrl = safeNullableString(sgRow?.uen_source_url)
+  const officialDomain = safeNullableString(deRow?.official_domain)
+  const officialDomainSourceUrl = safeNullableString(deRow?.official_domain_source_url)
 
   if (countryCode === "UK" && (!ukprn || !ukprnSourceUrl)) throw new Error(`UK institution ${row.institution_id} is missing its official UKPRN identity`)
   if (countryCode === "NL" && (!brinCode || !brinSourceUrl)) throw new Error(`NL institution ${row.institution_id} is missing its official BRIN identity`)
   if (countryCode === "NZ" && (!providerNumber || !providerSourceUrl)) throw new Error(`NZ institution ${row.institution_id} is missing its official NZQA provider identity`)
   if (countryCode === "SG" && (!uen || !uenSourceUrl)) throw new Error(`SG institution ${row.institution_id} is missing its official UEN identity`)
+  if (countryCode === "DE" && (!officialDomain || !officialDomainSourceUrl)) throw new Error(`DE institution ${row.institution_id} is missing its HRK-verified official domain identity`)
 
   return {
     id: row.institution_id,
@@ -251,6 +256,8 @@ export const getInstitutionDetail = cache(async (
     providerSourceUrl,
     uen,
     uenSourceUrl,
+    officialDomain,
+    officialDomainSourceUrl,
     campuses: parseCampuses(row.campus_locations),
     studyAreas: parseBreakdown(row.study_areas),
     programmeTypes: parseBreakdown(row.programme_types),
