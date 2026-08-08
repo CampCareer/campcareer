@@ -44,12 +44,14 @@ test("suspended and excluded rows never publish", () => {
 })
 
 test("closed international admissions hold a program", () => {
-  const decision = classifyCaProgramPublication({
-    ...base,
-    internationalProgramAdmissionStatus: "international_unavailable_or_not_open_for_current_2026_27_intake",
-  })
-  assert.equal(decision.tier, "C")
-  assert.equal(decision.holdReason, "admission_closed_or_restricted")
+  for (const admissionStatus of [
+    "international_unavailable_or_not_open_for_current_2026_27_intake",
+    "international_program_confirmed_current_but_september_2026_new_applications_closed_2027_opens_october_2026",
+  ]) {
+    const decision = classifyCaProgramPublication({ ...base, internationalProgramAdmissionStatus: admissionStatus })
+    assert.equal(decision.tier, "C")
+    assert.equal(decision.holdReason, "admission_closed_or_restricted")
+  }
 })
 
 test("program-level international admission must be verified before publication", () => {
