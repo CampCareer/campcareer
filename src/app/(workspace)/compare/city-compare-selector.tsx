@@ -1,7 +1,8 @@
 "use client"
 
 import { ArrowLeftRight } from "lucide-react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
+import { buildCityCompareCanonicalHref } from "@/lib/compare-routes"
 
 export type CityCompareOption = {
   slug: string
@@ -13,20 +14,27 @@ type CityCompareSelectorProps = {
   options: readonly CityCompareOption[]
   leftSlug: string
   rightSlug: string
+  countryCode?: string
 }
 
-export function CityCompareSelector({ options, leftSlug, rightSlug }: CityCompareSelectorProps) {
+export function CityCompareSelector({
+  options,
+  leftSlug,
+  rightSlug,
+  countryCode = "AU",
+}: CityCompareSelectorProps) {
   const router = useRouter()
-  const searchParams = useSearchParams()
 
   function navigate(left: string, right: string) {
     if (!left || !right || left === right) return
-    const params = new URLSearchParams(searchParams.toString())
-    params.set("type", "city")
-    params.set("country", "AU")
-    params.set("left", left)
-    params.set("right", right)
-    router.replace(`/compare?${params.toString()}`, { scroll: false })
+    router.replace(
+      buildCityCompareCanonicalHref({
+        country: countryCode,
+        left,
+        right,
+      }),
+      { scroll: false },
+    )
   }
 
   return (
