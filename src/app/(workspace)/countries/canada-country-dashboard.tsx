@@ -23,6 +23,10 @@ import { cn } from "@/lib/utils"
 
 const CITY_LINKS: Record<string, string> = {
   Toronto: "/cities/ca/toronto",
+  Vancouver: "/cities/ca/vancouver",
+  Montreal: "/cities/ca/montreal",
+  Ottawa: "/cities/ca/ottawa",
+  Calgary: "/cities/ca/calgary",
 }
 
 function MetricCard({
