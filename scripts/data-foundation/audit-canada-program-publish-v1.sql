@@ -31,7 +31,7 @@ with joined as (
       when lower(coalesce(source_status,'')) like '%parent_program_multiple_credentials%' then 'ambiguous_parent'
       when lower(coalesce(international_program_admission_status,'')) like '%not_assessed_non_core%' then 'admission_non_core'
       when nullif(btrim(international_program_admission_status),'') is null then 'admission_unverified'
-      when lower(coalesce(international_program_admission_status,'')) ~ '(not_yet_verified|not verified|should_be_checked|check_current_intake_availability|availability_separate|dli_and_study_permit_eligibility_not_verified)'
+      when lower(coalesce(international_program_admission_status,'')) ~ '(not_yet_verified|not verified|should_be_checked|check_current_intake_availability|current_intake_check|availability_separate|dli_and_study_permit_eligibility_not_verified)'
         then 'admission_unverified'
       when lower(coalesce(international_program_admission_status,'')) ~ '(suspended|cancelled|not_accepting|not currently|not_current|unavailable|restricted_not_open|temporarily_paused|not_eligible_for_study_permit|legacy_program)'
         then 'admission_closed_or_restricted'
@@ -53,7 +53,6 @@ from classified
 group by publication_tier,pgwp_state
 order by publication_tier,pgwp_state;
 
--- Hold-reason breakdown for Tier C investigation.
 with joined as (
   select c.*,p.matched_dli_number,p.international_students_eligible,p.international_program_admission_status
   from public.program_catalog_ca_staging c
@@ -76,7 +75,7 @@ with joined as (
       when lower(coalesce(source_status,'')) like '%parent_program_multiple_credentials%' then 'ambiguous_parent'
       when lower(coalesce(international_program_admission_status,'')) like '%not_assessed_non_core%' then 'admission_non_core'
       when nullif(btrim(international_program_admission_status),'') is null then 'admission_unverified'
-      when lower(coalesce(international_program_admission_status,'')) ~ '(not_yet_verified|not verified|should_be_checked|check_current_intake_availability|availability_separate|dli_and_study_permit_eligibility_not_verified)'
+      when lower(coalesce(international_program_admission_status,'')) ~ '(not_yet_verified|not verified|should_be_checked|check_current_intake_availability|current_intake_check|availability_separate|dli_and_study_permit_eligibility_not_verified)'
         then 'admission_unverified'
       when lower(coalesce(international_program_admission_status,'')) ~ '(suspended|cancelled|not_accepting|not currently|not_current|unavailable|restricted_not_open|temporarily_paused|not_eligible_for_study_permit|legacy_program)'
         then 'admission_closed_or_restricted'
