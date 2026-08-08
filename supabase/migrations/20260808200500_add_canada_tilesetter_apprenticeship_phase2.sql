@@ -4,16 +4,13 @@
 -- DLI/study-permit eligibility is intentionally not inferred. The row remains Tier C
 -- until official international-student eligibility evidence is available.
 
-with next_catalog_id as (
-  select coalesce(max(id),0) + 1 as id from public.program_catalog_ca_staging
-), inserted as (
+with inserted as (
   insert into public.program_catalog_ca_staging (
-    id, source_name, source_program_key, institution_name, institution_id,
+    source_name, source_program_key, institution_name, institution_id,
     title, credential_type, education_level, field_name, language,
     province, city, official_program_url, source_url, source_as_of, source_status
   )
-  select
-    n.id,
+  values (
     'SkilledTradesBC',
     'tilesetter-apprenticeship-ttta-surrey',
     'Trowel Trades Training Association',
@@ -29,7 +26,7 @@ with next_catalog_id as (
     'https://skilledtradesbc.ca/training-providers/non-public-approved-training-providers',
     date '2026-08-08',
     'official_skilledtradesbc_designated_training_provider_dli_not_verified'
-  from next_catalog_id n
+  )
   on conflict (source_name, source_program_key) do update
     set institution_name=excluded.institution_name,
         institution_id=excluded.institution_id,
@@ -45,11 +42,9 @@ with next_catalog_id as (
         source_as_of=excluded.source_as_of,
         source_status=excluded.source_status
   returning id, source_program_key, institution_id, credential_type, education_level
-), next_pgwp_id as (
-  select coalesce(max(id),0) + 1 as id from public.program_pgwp_ca_staging
 ), pgwp_inserted as (
   insert into public.program_pgwp_ca_staging (
-    id, program_catalog_id, institution_id, source_program_key, credential_type,
+    program_catalog_id, institution_id, source_program_key, credential_type,
     education_level, matched_dli_number, matched_campus,
     institution_offers_pgwp_eligible_programs, international_students_eligible,
     pgwp_rule_category, field_of_study_required, cip_code, field_of_study_eligible,
@@ -57,7 +52,6 @@ with next_catalog_id as (
     verified_at, international_program_admission_status, rule_notes
   )
   select
-    p.id,
     i.id,
     i.institution_id,
     i.source_program_key,
@@ -78,7 +72,7 @@ with next_catalog_id as (
     now(),
     'dli_and_study_permit_eligibility_not_verified',
     'Official SkilledTradesBC trade and provider evidence confirms the Tilesetter apprenticeship training pathway. No DLI or study-permit eligibility is inferred; keep non-publishable until separately verified.'
-  from inserted i cross join next_pgwp_id p
+  from inserted i
   on conflict (program_catalog_id) do update
     set institution_id=excluded.institution_id,
         source_program_key=excluded.source_program_key,
