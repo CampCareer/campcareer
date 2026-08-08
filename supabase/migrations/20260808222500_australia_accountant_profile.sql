@@ -214,19 +214,18 @@ on conflict (profile_key, link_type, url) do update set
   source_checked_at = excluded.source_checked_at;
 
 insert into public.country_occupation_program_links (
-  profile_key, program_ref, relation, sort_order, source_checked_at
+  profile_key, program_ref, relation_type, source_checked_at
 )
-select 'AU:accountant', 'au-program:' || id::text, relation, sort_order, '2026-08-08'::date
+select 'AU:accountant', 'au-program:' || id::text, relation_type, '2026-08-08'::date
 from (
-  select id, 'direct'::text as relation, 1 as sort_order
+  select id, 'direct'::text as relation_type
   from public.courses_au
   where institution_id = 'macquarie-university' and course_code = '099149E'
   union all
-  select id, 'graduate_entry'::text as relation, 2 as sort_order
+  select id, 'graduate_entry'::text as relation_type
   from public.courses_au
   where institution_id = 'macquarie-university' and course_code = '099183C'
 ) programs
 on conflict (profile_key, program_ref) do update set
-  relation = excluded.relation,
-  sort_order = excluded.sort_order,
+  relation_type = excluded.relation_type,
   source_checked_at = excluded.source_checked_at;
