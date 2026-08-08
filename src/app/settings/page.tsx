@@ -4,7 +4,8 @@ import Link from "next/link"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import type { User } from "@supabase/supabase-js"
-import { AlertTriangle, ArrowLeft, Check, ExternalLink, Globe, Loader2, LogOut, ShieldCheck, Trash2, UserRound, X } from "lucide-react"
+import { AlertTriangle, ArrowLeft, BarChart3, Check, ExternalLink, Globe, Loader2, LogOut, ShieldCheck, Trash2, UserRound, X } from "lucide-react"
+import { clearOptionalMeasurementCookies, createOptionalMeasurementSession, getAnalyticsConsent, setAnalyticsConsent, type AnalyticsConsent } from "@/lib/analytics-consent"
 import { createClient } from "@/lib/supabase-client"
 
 export default function SettingsPage() {
@@ -22,6 +23,7 @@ export default function SettingsPage() {
   const [usernameCheck, setUsernameCheck] = useState<"idle" | "checking" | "available" | "taken" | "invalid">("idle")
   const [usernameMsg, setUsernameMsg] = useState("")
   const [usernameSaving, setUsernameSaving] = useState(false)
+  const [measurementConsent, setMeasurementConsent] = useState<AnalyticsConsent>(null)
 
   useEffect(() => {
     let active = true
@@ -31,6 +33,7 @@ export default function SettingsPage() {
       const currentUser = data.user ?? null
       setUser(currentUser)
       setDisplayName((currentUser?.user_metadata?.full_name as string | undefined) || (currentUser?.user_metadata?.name as string | undefined) || "")
+      setMeasurementConsent(getAnalyticsConsent())
       if (currentUser) {
         const { data: prefs } = await supabase.from("user_preferences").select("username").eq("id", currentUser.id).maybeSingle()
         if (prefs?.username) { setUsername(prefs.username); setUsernameSaved(prefs.username) }
@@ -91,6 +94,13 @@ export default function SettingsPage() {
     await supabase.auth.signOut({ scope: "local" })
     router.replace("/login")
     router.refresh()
+  }
+
+  async function updateMeasurementConsent(value: Exclude<AnalyticsConsent, null>) {
+    setAnalyticsConsent(value)
+    setMeasurementConsent(value)
+    if (value === "granted") await createOptionalMeasurementSession()
+    else await clearOptionalMeasurementCookies()
   }
 
   async function deleteAccount() {
@@ -181,14 +191,27 @@ export default function SettingsPage() {
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-7">
           <div className="flex items-start gap-3"><div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700"><ShieldCheck className="h-5 w-5" /></div><div><h2 className="text-lg font-semibold text-slate-950">Privacy and saved data</h2><p className="mt-1 text-sm leading-6 text-slate-500">Your public username, display name and avatar are visible on your public profile. Saved careers, providers and planning inputs are private.</p></div></div>
           <div className="mt-6 grid gap-3 sm:grid-cols-2"><Link href="/profile" className="rounded-2xl border border-slate-200 p-4 text-sm font-semibold text-slate-700 transition hover:border-blue-200 hover:text-blue-700">Review your profile <span aria-hidden="true">→</span></Link><Link href="/privacy" className="inline-flex items-center justify-between rounded-2xl border border-slate-200 p-4 text-sm font-semibold text-slate-700 transition hover:border-blue-200 hover:text-blue-700">Read privacy policy <ExternalLink className="h-4 w-4" /></Link></div>
-          <p className="mt-4 text-xs leading-5 text-slate-500">Data export and granular communication controls are the next privacy controls we will add. For an access or correction request, contact <a className="font-medium text-blue-700 hover:underline" href="mailto:contact@campcareer.com">contact@campcareer.com</a>.</p>
+          <p className="mt-4 text-xs leading-5 text-slate-500">Data export and granular communication controls are the next privacy controls we will add. For an access or correction request, contact <a className="font-medium text-blue-700 hover:underline" href="mailto:leeyaehun@gmail.com">leeyaehun@gmail.com</a>.</p>
+        </section>
+
+        <section id="measurement" className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-7">
+          <div className="flex items-start gap-3"><div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-700"><BarChart3 className="h-5 w-5" /></div><div><h2 className="text-lg font-semibold text-slate-950">Privacy &amp; measurement</h2><p className="mt-1 text-sm leading-6 text-slate-500">Choose whether CampCareer can collect optional product measurement. This never includes your email or free-text answers.</p></div></div>
+          <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <p className="text-sm font-semibold text-slate-900">{measurementConsent === "granted" ? "Measurement is allowed" : measurementConsent === "denied" ? "Essential functionality only" : "No preference recorded yet"}</p>
+            <p className="mt-1 text-xs leading-5 text-slate-500">{measurementConsent === "granted" ? "Vercel product and performance measurement can run in this browser." : "Search, comparison, planning and account functionality continue to work without optional measurement."}</p>
+            <div className="mt-4 grid gap-2 sm:grid-cols-2">
+              <button type="button" onClick={() => void updateMeasurementConsent("denied")} aria-pressed={measurementConsent === "denied"} className={`min-h-10 rounded-xl border px-3 text-sm font-semibold transition ${measurementConsent === "denied" ? "border-slate-700 bg-slate-700 text-white" : "border-slate-300 bg-white text-slate-700 hover:border-slate-400 hover:bg-slate-50"}`}>Use essential only</button>
+              <button type="button" onClick={() => void updateMeasurementConsent("granted")} aria-pressed={measurementConsent === "granted"} className={`min-h-10 rounded-xl border px-3 text-sm font-semibold transition ${measurementConsent === "granted" ? "border-blue-600 bg-blue-600 text-white" : "border-blue-300 bg-white text-blue-700 hover:border-blue-500 hover:bg-blue-50"}`}>Allow measurement</button>
+            </div>
+          </div>
+          <p className="mt-4 text-xs leading-5 text-slate-500">You can change this choice at any time. Choosing essential functionality only stops future optional measurement and clears CampCareer&apos;s optional measurement cookies.</p>
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-7"><h2 className="text-lg font-semibold text-slate-950">Session</h2><p className="mt-1 text-sm leading-6 text-slate-500">Sign out from this browser. You can sign in again whenever you are ready.</p><button type="button" onClick={signOut} className="mt-5 inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"><LogOut className="h-4 w-4" />Sign out</button></section>
 
         <section className="rounded-3xl border border-red-200 bg-red-50/50 p-6 shadow-sm sm:p-7">
           <div className="flex items-start gap-3"><div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-100 text-red-700"><AlertTriangle className="h-5 w-5" /></div><div><h2 className="text-lg font-semibold text-red-950">Delete account</h2><p className="mt-1 text-sm leading-6 text-red-800">This permanently removes your CampCareer account, saved planning data, private evidence and contribution record linked to it. It cannot be undone.</p></div></div>
-          <div className="mt-6 max-w-lg"><label htmlFor="delete-confirmation" className="text-sm font-semibold text-red-950">Type <code className="rounded bg-red-100 px-1.5 py-0.5">DELETE</code> to continue</label><input id="delete-confirmation" value={deletePhrase} onChange={(event) => { setDeletePhrase(event.target.value); setDeleteState("idle"); setDeleteError("") }} autoComplete="off" className="mt-2 w-full rounded-xl border border-red-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-red-500 focus:ring-4 focus:ring-red-100" /><button type="button" disabled={deletePhrase !== "DELETE" || deleteState === "deleting"} onClick={deleteAccount} className="mt-4 inline-flex items-center gap-2 rounded-xl bg-red-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50">{deleteState === "deleting" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}{deleteState === "deleting" ? "Deleting account" : "Permanently delete account"}</button>{deleteError && <p className="mt-3 text-sm leading-6 text-red-700">{deleteError} If this continues, contact <a href="mailto:contact@campcareer.com" className="font-semibold underline">contact@campcareer.com</a>.</p>}</div>
+          <div className="mt-6 max-w-lg"><label htmlFor="delete-confirmation" className="text-sm font-semibold text-red-950">Type <code className="rounded bg-red-100 px-1.5 py-0.5">DELETE</code> to continue</label><input id="delete-confirmation" value={deletePhrase} onChange={(event) => { setDeletePhrase(event.target.value); setDeleteState("idle"); setDeleteError("") }} autoComplete="off" className="mt-2 w-full rounded-xl border border-red-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-red-500 focus:ring-4 focus:ring-red-100" /><button type="button" disabled={deletePhrase !== "DELETE" || deleteState === "deleting"} onClick={deleteAccount} className="mt-4 inline-flex items-center gap-2 rounded-xl bg-red-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50">{deleteState === "deleting" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}{deleteState === "deleting" ? "Deleting account" : "Permanently delete account"}</button>{deleteError && <p className="mt-3 text-sm leading-6 text-red-700">{deleteError} If this continues, contact <a href="mailto:leeyaehun@gmail.com" className="font-semibold underline">leeyaehun@gmail.com</a>.</p>}</div>
         </section>
       </section>
     </main>

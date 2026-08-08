@@ -8,7 +8,7 @@ export const metadata = pageMetadata({
   path: "/terms",
 })
 
-const LAST_UPDATED = "22 July 2026"
+const LAST_UPDATED = "8 August 2026"
 
 export default async function TermsPage() {
   if (await getLocale() === "ko") return <KoreanTermsPage />
@@ -21,8 +21,8 @@ export default async function TermsPage() {
         <section>
           <h2 className="font-display text-lg font-semibold text-slate-800 mb-2">1. Acceptance</h2>
           <p>
-            By using campcareer.com (&quot;CampCareer&quot;, the &quot;Service&quot;) you agree to
-            these terms. If you do not agree, please do not use the Service.
+            By using campcareer.com (&quot;CampCareer&quot;, the &quot;Service&quot;), operated by Yaehun Lee,
+            you agree to these terms. If you do not agree, please do not use the Service.
           </p>
         </section>
 
@@ -117,7 +117,7 @@ export default async function TermsPage() {
           <h2 className="font-display text-lg font-semibold text-slate-800 mb-2">10. Contact</h2>
           <p>
             Questions about these terms:{" "}
-            <a href="mailto:contact@campcareer.com" className="text-blue-600 hover:underline">contact@campcareer.com</a>
+            <a href="mailto:leeyaehun@gmail.com" className="text-blue-600 hover:underline">leeyaehun@gmail.com</a>
           </p>
         </section>
       </div>
@@ -133,9 +133,9 @@ function KoreanTermsPage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
       <h1 className="font-display text-3xl font-semibold tracking-tight text-slate-900">이용약관</h1>
-      <p className="mb-10 mt-2 text-sm text-slate-400">최종 업데이트: {LAST_UPDATED}</p>
+      <p className="mb-10 mt-2 text-sm text-slate-400">최종 업데이트: 2026년 8월 8일</p>
       <div className="space-y-8 text-sm leading-relaxed text-slate-600">
-        <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">1. 약관 동의</h2><p>campcareer.com과 CampCareer 서비스를 이용하면 본 약관에 동의하게 됩니다. 동의하지 않으면 서비스를 이용하지 마세요.</p></section>
+        <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">1. 약관 동의</h2><p>Yaehun Lee가 운영하는 campcareer.com과 CampCareer 서비스를 이용하면 본 약관에 동의하게 됩니다. 동의하지 않으면 서비스를 이용하지 마세요.</p></section>
         <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">2. 데이터의 성격과 비조언 고지</h2><p>ROI, 연봉, 학비, 세금 추정, 투자회수기간, 비자·이민 정보는 출처 기반 데이터·추정치·미확인 항목으로 표시됩니다. 이는 일반 정보이며 금융·법률·세무·입학·이민 자문이 아닙니다. CampCareer는 입학, 취업, 스폰서십, 비자 승인, 영주권, 소득, 투자수익을 보장하지 않습니다. 중요한 수치와 요건은 반드시 공식 기관과 교육기관에서 확인해야 합니다.</p></section>
         <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">3. 계정과 제출 정보</h2><p>이용자는 계정 자격증명과 본인이 제출하는 저장 계획·지원 요청·피드백의 책임을 집니다. 이용자는 자신의 콘텐츠 권리를 보유하며, CampCareer에는 서비스 보관·검토·보안·운영에 필요한 범위의 권한만 부여합니다. 타인의 기밀 정보나 공유 권한이 없는 정보를 제출해서는 안 됩니다.</p></section>
         <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">4. 피드백과 외부 링크</h2><p>피드백은 서비스 개선에 사용되지만 지원 의무를 만들지 않습니다. 비밀번호, 여권번호, 결제 정보, 민감한 개인정보를 포함하지 마세요. 공식 출처·학교·채용·제3자 링크는 편의를 위한 것이며, 외부 사이트의 내용·가용성·개인정보 처리는 해당 사이트가 책임집니다.</p></section>
@@ -144,7 +144,7 @@ function KoreanTermsPage() {
         <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">7. 허용되는 이용</h2><p>다른 이용자의 데이터에 접근하려 하거나, 서비스를 저해할 정도로 자동 수집을 하거나, 서비스 운영을 방해해서는 안 됩니다.</p></section>
         <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">8. 가용성과 변경</h2><p>서비스는 어떠한 보증 없이 제공됩니다. 기능은 언제든 수정·중단될 수 있으며, 약관이 바뀐 뒤 계속 이용하면 변경된 약관에 동의한 것으로 봅니다.</p></section>
         <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">9. 책임 제한</h2><p>법이 허용하는 최대 범위에서 CampCareer는 추정 데이터에 의존해 내린 결정이나 서비스 이용으로 발생한 간접·결과적 손해에 책임지지 않습니다.</p></section>
-        <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">10. 문의</h2><p>약관 관련 문의는 <a href="mailto:contact@campcareer.com" className="text-blue-600 hover:underline">contact@campcareer.com</a>으로 보내주세요.</p></section>
+        <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">10. 문의</h2><p>약관 관련 문의는 <a href="mailto:leeyaehun@gmail.com" className="text-blue-600 hover:underline">leeyaehun@gmail.com</a>으로 보내주세요.</p></section>
       </div>
       <div className="mt-12 border-t border-slate-200 pt-6 text-sm"><Link href="/ko/privacy" className="text-blue-600 hover:underline">개인정보 처리방침</Link></div>
     </div>
