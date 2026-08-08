@@ -8,6 +8,7 @@ import { ENGINEERING_OCCUPATION_EDITORIAL } from "./occupation-editorial-enginee
 import { INDUSTRIAL_ENGINEER_OCCUPATION_EDITORIAL } from "./occupation-editorial-industrial-engineer"
 import { CHEMICAL_ENGINEER_OCCUPATION_EDITORIAL } from "./occupation-editorial-chemical-engineer"
 import { ENVIRONMENTAL_ENGINEER_OCCUPATION_EDITORIAL } from "./occupation-editorial-environmental-engineer"
+import { ENGINEERING_TECHNICIAN_OCCUPATION_EDITORIAL } from "./occupation-editorial-engineering-technician"
 
 export type { CountryOccupationEditorial, OccupationEditorial } from "./occupation-editorial-base"
 
@@ -22,6 +23,7 @@ export const OCCUPATION_EDITORIAL = [
   ...INDUSTRIAL_ENGINEER_OCCUPATION_EDITORIAL,
   ...CHEMICAL_ENGINEER_OCCUPATION_EDITORIAL,
   ...ENVIRONMENTAL_ENGINEER_OCCUPATION_EDITORIAL,
+  ...ENGINEERING_TECHNICIAN_OCCUPATION_EDITORIAL,
 ] as const
 
 const BY_ID = new Map(OCCUPATION_EDITORIAL.map((item) => [item.id, item]))
