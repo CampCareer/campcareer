@@ -121,7 +121,9 @@ export async function searchInstitutions(
         ? "institution_explorer_nl_v1"
         : countryCode === "NZ"
           ? "institution_explorer_nz_v1"
-          : "institution_explorer_v1"
+          : countryCode === "SG"
+            ? "institution_explorer_sg_v1"
+            : "institution_explorer_v1"
 
   let query = supabaseAdmin
     .from(explorerView)
