@@ -4,6 +4,7 @@ import type { ReactNode } from "react"
 import { Check, ChevronDown, Clock3, MapPin, RotateCcw, Search, ShieldCheck, SlidersHorizontal, WalletCards } from "lucide-react"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import {
+  AU_PROGRAM_CITIES,
   AU_PROGRAM_STATES,
   PROGRAM_DURATIONS,
   PROGRAM_FEES,
@@ -40,7 +41,7 @@ function FilterButton({ active, label, onClick }: { active: boolean; label: stri
 function FiltersContent({ filters }: { filters: ProgramSearchFilters }) {
   const locale = useRouteLocale()
   const replace = useProgramNavigation()
-  const clear = () => replace({ q: null, level: null, field: null, state: null, duration: null, fee: null, source: null, sort: null })
+  const clear = () => replace({ q: null, level: null, field: null, city: null, state: null, duration: null, fee: null, source: null, sort: null })
 
   return (
     <>
@@ -56,9 +57,24 @@ function FiltersContent({ filters }: { filters: ProgramSearchFilters }) {
         </div>
       </FilterSection>
 
+      <FilterSection icon={<MapPin className="size-3.5 text-[#2563eb]" />} title={locale === "ko" ? "검증된 도시" : "Verified city"}>
+        <FilterButton active={filters.city === "all"} label={locale === "ko" ? "전체 도시" : "All cities"} onClick={() => replace({ city: null })} />
+        {AU_PROGRAM_CITIES.map((city) => (
+          <FilterButton
+            key={city.value}
+            active={filters.city === city.value}
+            label={`${locale === "ko" ? city.labelKo : city.label} · CRICOS`}
+            onClick={() => replace({ city: city.value, state: null })}
+          />
+        ))}
+        <p className="px-2.5 pt-2 text-[10px] leading-4 text-[#9b9891]">
+          {locale === "ko" ? "공식 CRICOS 등록 교육 장소 기준입니다." : "Based on official CRICOS registered delivery locations."}
+        </p>
+      </FilterSection>
+
       <FilterSection icon={<MapPin className="size-3.5 text-[#8a8882]" />} title={locale === "ko" ? "주·준주" : "State or territory"}>
-        <FilterButton active={filters.state === "all"} label={locale === "ko" ? "호주 전체" : "All Australia"} onClick={() => replace({ state: null })} />
-        {AU_PROGRAM_STATES.map((state) => <FilterButton key={state.value} active={filters.state === state.value} label={`${state.value} · ${locale === "ko" ? state.labelKo : state.label}`} onClick={() => replace({ state: state.value })} />)}
+        <FilterButton active={filters.state === "all"} label={locale === "ko" ? "호주 전체" : "All Australia"} onClick={() => replace({ state: null, city: null })} />
+        {AU_PROGRAM_STATES.map((state) => <FilterButton key={state.value} active={filters.state === state.value} label={`${state.value} · ${locale === "ko" ? state.labelKo : state.label}`} onClick={() => replace({ state: state.value, city: null })} />)}
       </FilterSection>
 
       <FilterSection icon={<Clock3 className="size-3.5 text-[#8a8882]" />} title={locale === "ko" ? "과정 기간" : "Duration"}>

@@ -1,0 +1,21 @@
+import type { Metadata } from "next"
+import { notFound } from "next/navigation"
+import { CityDashboard } from "../../city-dashboard"
+import { getAuCityProfile } from "@/lib/cities/au-city-profile.server"
+
+export const dynamic = "force-dynamic"
+
+export const metadata: Metadata = {
+  title: "Study in Adelaide, Australia",
+  description:
+    "Adelaide student living costs, tertiary public transport fares, work rights, verified CRICOS delivery locations and city context from primary sources.",
+  alternates: { canonical: "/cities/au/adelaide" },
+  robots: { index: true, follow: true },
+}
+
+export default async function AdelaideCityPage() {
+  const profile = await getAuCityProfile("adelaide")
+  if (!profile) notFound()
+
+  return <CityDashboard profile={profile} />
+}

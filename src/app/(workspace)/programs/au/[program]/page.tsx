@@ -15,12 +15,38 @@ import {
 } from "../../program-detail-components"
 
 const BASE_URL = "https://www.campcareer.com"
+const CITY_PROFILE_SLUGS = new Set(["sydney", "melbourne", "brisbane", "perth", "adelaide"])
 
 type Params = { params: Promise<{ program: string }> }
 
 async function loadProgram(segment: string) {
   const id = parseProgramId(segment)
   return id ? getAuProgramById(id) : null
+}
+
+function programLocationSummary(program: Awaited<ReturnType<typeof loadProgram>>) {
+  if (!program) return ""
+  if (program.deliveryLocations.length > 0) {
+    const cityNames = [
+      program.verifiedCitySlugs.includes("sydney") ? "Sydney" : null,
+      program.verifiedCitySlugs.includes("melbourne") ? "Melbourne" : null,
+      program.verifiedCitySlugs.includes("brisbane") ? "Brisbane" : null,
+      program.verifiedCitySlugs.includes("perth") ? "Perth" : null,
+      program.verifiedCitySlugs.includes("adelaide") ? "Adelaide" : null,
+    ].filter((value): value is string => Boolean(value))
+
+    if (cityNames.length > 0) {
+      return `${cityNames.join(" & ")} · ${program.deliveryLocations.length} registered ${
+        program.deliveryLocations.length === 1 ? "location" : "locations"
+      }`
+    }
+
+    const first = program.deliveryLocations[0]
+    const primary = [first.locality, first.state].filter(Boolean).join(", ") || first.locationName
+    const extra = program.deliveryLocations.length - 1
+    return extra > 0 ? `${primary} + ${extra} registered ${extra === 1 ? "location" : "locations"}` : primary
+  }
+  return [program.city, program.state].filter(Boolean).join(", ")
 }
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
@@ -31,7 +57,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const index = program.officialUrlStatus === "verified" || program.facts.length >= 3
   return {
     title: `${program.title} · ${program.institutionName}`,
-    description: [program.courseType, program.institutionName, program.city, program.state]
+    description: [program.courseType, program.institutionName, programLocationSummary(program)]
       .filter(Boolean)
       .join(" · "),
     alternates: { canonical: `${BASE_URL}${programDetailPath(program.id, program.title)}` },
@@ -45,7 +71,7 @@ export default async function ProgramDetailPage({ params }: Params) {
   if (!program) notFound()
 
   const facts = programFactsByKey(program.facts)
-  const location = [program.city, program.state].filter(Boolean).join(", ")
+  const location = programLocationSummary(program)
   const campus = programFactValue(facts.get("campus"))
   const duration = programFactValue(facts.get("duration")) ?? formatProgramDuration(program.durationYears)
   const tuition = programFactValue(facts.get("annual_tuition_aud")) ?? formatProgramMoney(program.tuitionFeeAud)
@@ -53,6 +79,7 @@ export default async function ProgramDetailPage({ params }: Params) {
   const cricosUrl = safeProgramUrl(program.cricosUrl)
   const institutionUrl = safeProgramUrl(program.institutionWebsite)
   const verified = program.officialUrlStatus === "verified"
+  const locationsVerified = program.deliveryLocations.length > 0
 
   return (
     <div className="mx-auto max-w-5xl">
@@ -67,6 +94,7 @@ export default async function ProgramDetailPage({ params }: Params) {
               {program.courseType && <span className="rounded-full bg-white px-3 py-1">{program.courseType}</span>}
               <span className="inline-flex items-center gap-1 rounded-full bg-[#eef4ff] px-3 py-1 text-[#2563eb]"><ShieldCheck className="size-3" />Active CRICOS</span>
               {verified && <span className="rounded-full bg-[#3e7a2e] px-3 py-1 text-white">Official page verified</span>}
+              {locationsVerified && <span className="rounded-full bg-[#eaf1ff] px-3 py-1 text-[#2563eb]">Delivery locations verified</span>}
             </div>
             <h1 className="mt-5 text-[28px] font-semibold leading-tight tracking-[-0.03em] text-[#1b1b1b] sm:text-[36px]">{program.title}</h1>
             <p className="mt-3 text-[14px] font-semibold text-[#4f4d48]">{program.institutionName}</p>
@@ -78,8 +106,45 @@ export default async function ProgramDetailPage({ params }: Params) {
             <ProgramDetailMetric icon={<GraduationCap className="size-4" />} label="Study level" value={program.courseType ?? `AQF level ${program.aqfLevel ?? "—"}`} />
             <ProgramDetailMetric icon={<Clock3 className="size-4" />} label="Duration" value={duration ?? "Not published"} />
             <ProgramDetailMetric icon={<WalletCards className="size-4" />} label="Annual tuition" value={tuition ?? "Not published"} />
-            <ProgramDetailMetric icon={<MapPin className="size-4" />} label="Location" value={campus ?? location ?? "Not published"} />
+            <ProgramDetailMetric icon={<MapPin className="size-4" />} label="Location" value={locationsVerified ? `${program.deliveryLocations.length} registered ${program.deliveryLocations.length === 1 ? "location" : "locations"}` : campus ?? location ?? "Not published"} />
           </div>
+
+          {locationsVerified && (
+            <section className="mt-5 rounded-xl border border-[#d9e3f7] bg-white p-5 sm:p-6">
+              <div className="flex flex-wrap items-center gap-2">
+                <MapPin className="size-4 text-[#2563eb]" />
+                <h2 className="text-[14.5px] font-semibold text-[#1b1b1b]">Registered delivery locations</h2>
+                <span className="rounded-full bg-[#eef4ff] px-2.5 py-1 text-[10px] font-semibold text-[#2563eb]">Official CRICOS</span>
+              </div>
+              <p className="mt-2 text-[11.5px] leading-5 text-[#77746e]">
+                These locations come from the Australian Government CRICOS Course Locations register, not the institution&apos;s representative city.
+              </p>
+              <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
+                {program.deliveryLocations.map((item, index) => {
+                  const address = [item.locality, item.state, item.postcode].filter(Boolean).join(" ")
+                  const cityHref = item.citySlug && CITY_PROFILE_SLUGS.has(item.citySlug) ? `/cities/au/${item.citySlug}` : null
+                  const cityLabel = item.canonicalCity ?? (item.citySlug ? item.citySlug.charAt(0).toUpperCase() + item.citySlug.slice(1) : null)
+                  const body = (
+                    <>
+                      <p className="text-[12px] font-semibold leading-5 text-[#1b1b1b]">{item.locationName}</p>
+                      {address && <p className="mt-1 text-[10.5px] text-[#77746e]">{address}</p>}
+                      {cityHref && <p className="mt-2 text-[10px] font-semibold text-[#2563eb]">Greater {cityLabel} · open city profile →</p>}
+                    </>
+                  )
+                  return cityHref ? (
+                    <Link key={item.campusId ?? `${item.locationName}-${index}`} href={cityHref} className="rounded-lg border border-[#dbe5f7] bg-[#f8faff] p-3.5 transition hover:border-[#9db7e8] hover:bg-white">
+                      {body}
+                    </Link>
+                  ) : (
+                    <div key={item.campusId ?? `${item.locationName}-${index}`} className="rounded-lg border border-[#eeece8] bg-[#fafaf8] p-3.5">{body}</div>
+                  )
+                })}
+              </div>
+              {program.locationSourceLastModified && (
+                <p className="mt-3 text-[10px] text-[#9b9891]">CRICOS location dataset updated {new Date(program.locationSourceLastModified).toLocaleDateString("en-AU")}</p>
+              )}
+            </section>
+          )}
 
           <div className="mt-5 grid gap-3">
             <ProgramFactSection icon={<BookOpenCheck className="size-4" />} title="Entry requirements" fact={facts.get("entry_requirements")} />
@@ -91,7 +156,7 @@ export default async function ProgramDetailPage({ params }: Params) {
           {program.facts.length === 0 && (
             <section className="mt-5 rounded-xl border border-dashed border-[#dcdad4] bg-[#fbfbf9] p-5">
               <h2 className="text-[14px] font-semibold">Detailed admission facts are under review</h2>
-              <p className="mt-2 text-[12.5px] leading-5 text-[#77746e]">The active CRICOS record is available now. Entry requirements, intakes and campus facts appear after the institution page is verified.</p>
+              <p className="mt-2 text-[12.5px] leading-5 text-[#77746e]">The active CRICOS record and registered delivery locations are available now. Entry requirements and intakes appear after the institution page is verified.</p>
             </section>
           )}
         </main>
@@ -99,8 +164,8 @@ export default async function ProgramDetailPage({ params }: Params) {
         <aside className="rounded-2xl border border-[#e7e6e3] bg-white p-5 lg:sticky lg:top-20">
           <h2 className="text-[14px] font-semibold">At a glance</h2>
           <dl className="mt-4 space-y-3 text-[11.5px]">
-            <div className="flex justify-between gap-4"><dt className="text-[#8f8c85]">CRICOS code</dt><dd className="font-semibold">{program.cricosCode ?? "—"}</dd></div>
-            <div className="flex justify-between gap-4"><dt className="text-[#8f8c85]">Course code</dt><dd className="font-semibold">{program.courseCode ?? "—"}</dd></div>
+            <div className="flex justify-between gap-4"><dt className="text-[#8f8c85]">Provider code</dt><dd className="font-semibold">{program.cricosCode ?? "—"}</dd></div>
+            <div className="flex justify-between gap-4"><dt className="text-[#8f8c85]">CRICOS course</dt><dd className="font-semibold">{program.courseCode ?? "—"}</dd></div>
             <div className="flex justify-between gap-4"><dt className="text-[#8f8c85]">AQF level</dt><dd className="font-semibold">{program.aqfLevel ?? "—"}</dd></div>
           </dl>
           <div className="mt-5 space-y-2">
