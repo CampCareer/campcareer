@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { CityDashboard } from "../../city-dashboard"
+import { CityStudyFieldLinks } from "../city-study-field-links"
 import { getAuCityProfile } from "@/lib/cities/au-city-profile.server"
 
 export const dynamic = "force-dynamic"
@@ -17,5 +18,5 @@ export default async function BrisbaneCityPage() {
   const profile = await getAuCityProfile("brisbane")
   if (!profile) notFound()
 
-  return <CityDashboard profile={profile} />
+  return <><CityDashboard profile={profile} /><CityStudyFieldLinks citySlug="brisbane" cityName="Brisbane" /></>
 }

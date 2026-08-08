@@ -7,6 +7,8 @@ export const metadata: Metadata = {
   title: "Institutions",
   description:
     "Explore verified higher-education institutions and their connected programs, campuses and normalized cities.",
+  alternates: { canonical: "/institutions" },
+  robots: { index: true, follow: true },
 }
 
 export default async function InstitutionsPage({

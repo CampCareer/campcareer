@@ -1,3 +1,5 @@
+import { permanentRedirect } from "next/navigation"
+import { getIndexableOccupationRoute } from "@/lib/workspace/occupation-routes"
 import { OccupationExplorer } from "./occupation-explorer"
 
 export const metadata = {
@@ -15,12 +17,17 @@ export default async function OccupationPage({
   const q = typeof sp.q === "string" ? sp.q : ""
   const occupation = typeof sp.occupation === "string" ? sp.occupation : ""
   const country = typeof sp.country === "string" ? sp.country : ""
+  const canonicalRoute = country && occupation
+    ? getIndexableOccupationRoute(country, occupation)
+    : null
+
+  if (canonicalRoute) permanentRedirect(canonicalRoute.path)
 
   return (
     <OccupationExplorer
       initialQuery={q}
       initialOccupation={occupation}
-      initialCountry={country}
+      initialCountry={country.toUpperCase() === "GB" ? "UK" : country.toUpperCase()}
     />
   )
 }

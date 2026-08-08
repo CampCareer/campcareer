@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { permanentRedirect } from "next/navigation"
 import { DatabaseZap, GraduationCap, MapPinned } from "lucide-react"
 import { getLaunchCountry } from "@/data/launch-countries"
 import { SITE_URL, programsCanonicalPath } from "@/lib/seo-routes.mjs"
@@ -19,6 +20,16 @@ export const revalidate = 3600
 
 function firstValue(value: string | string[] | undefined) {
   return Array.isArray(value) ? value[0] : value
+}
+
+function queryWithoutCountry(params: Record<string, string | string[] | undefined>) {
+  const next = new URLSearchParams()
+  for (const [key, value] of Object.entries(params)) {
+    if (key === "country" || value === undefined) continue
+    if (typeof value === "string") next.set(key, value)
+    else for (const item of value) next.append(key, item)
+  }
+  return next.toString()
 }
 
 function normalizedFilters(
@@ -149,7 +160,7 @@ function CountryComingSoon({ countryCode }: { countryCode: string }) {
         institutions, course identifiers, fees and official source links pass the same review.
       </p>
       <Link
-        href="/programs?country=AU"
+        href="/programs"
         className="mt-5 rounded-lg bg-[#3e7a2e] px-4 py-2.5 text-[12.5px] font-semibold text-white transition hover:bg-[#326625]"
       >
         Browse Australia
@@ -164,6 +175,11 @@ export default async function ProgramsPage({
   searchParams: Promise<Record<string, string | string[] | undefined>>
 }) {
   const params = await searchParams
+  if (typeof params.country === "string" && params.country.trim().toUpperCase() === "AU") {
+    const query = queryWithoutCountry(params)
+    permanentRedirect(query ? `/programs?${query}` : "/programs")
+  }
+
   const filters = normalizedFilters(params)
   const rawCountry = firstValue(params.country)
   const countryExplicit = Boolean(rawCountry && getLaunchCountry(rawCountry))
@@ -195,37 +211,33 @@ export default async function ProgramsPage({
           <section className="min-w-0">
             {errorMessage ? (
               <div className="flex min-h-72 flex-col items-center justify-center rounded-xl border border-[#f0d8d2] bg-[#fff9f7] p-8 text-center">
-              <DatabaseZap className="size-6 text-[#b65c45]" />
-              <h2 className="mt-3 text-[16px] font-semibold text-[#1b1b1b]">
-                Australian program data is temporarily unavailable
-              </h2>
-              <p className="mt-2 max-w-lg text-[12px] leading-5 text-[#786b66]">{errorMessage}</p>
+                <DatabaseZap className="size-6 text-[#b65c45]" />
+                <h2 className="mt-3 text-[16px] font-semibold text-[#1b1b1b]">
+                  Australian program data is temporarily unavailable
+                </h2>
+                <p className="mt-2 max-w-lg text-[12px] leading-5 text-[#786b66]">{errorMessage}</p>
               </div>
             ) : result ? (
-            <>
-              <ProgramsSortControl filters={filters} total={result.total} />
+              <>
+                <ProgramsSortControl filters={filters} total={result.total} />
 
-              {result.programs.length === 0 ? (
-                <EmptyResults filters={filters} />
-              ) : (
-                <div className="mt-3 space-y-3">
-                  {result.programs.map((program) => (
-                    <ProgramCard key={program.id} program={program} />
-                  ))}
-                </div>
-              )}
+                {result.programs.length === 0 ? (
+                  <EmptyResults filters={filters} />
+                ) : (
+                  <div className="mt-3 space-y-3">
+                    {result.programs.map((program) => (
+                      <ProgramCard key={program.id} program={program} />
+                    ))}
+                  </div>
+                )}
 
-              <Pagination
-                filters={filters}
-                page={result.page}
-                pageCount={result.pageCount}
-              />
+                <Pagination filters={filters} page={result.page} pageCount={result.pageCount} />
 
-              <p className="mt-4 text-[10.5px] leading-5 text-[#aaa7a0]">
-                Catalogue records are limited to active Australian CRICOS courses. City filtering
-                uses official CRICOS registered delivery locations; tuition, duration and provider-page
-                verification are shown separately.
-              </p>
+                <p className="mt-4 text-[10.5px] leading-5 text-[#aaa7a0]">
+                  Catalogue records are limited to active Australian CRICOS courses. City filtering
+                  uses official CRICOS registered delivery locations; tuition, duration and provider-page
+                  verification are shown separately.
+                </p>
               </>
             ) : null}
           </section>

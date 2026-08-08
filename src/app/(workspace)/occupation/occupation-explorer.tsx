@@ -152,6 +152,9 @@ export function OccupationExplorer({
     const params = new URLSearchParams(searchParams.toString())
     if (code) params.set("country", code)
     else params.delete("country")
+    if (selectedId) params.set("occupation", selectedId)
+    if (query.trim()) params.set("q", query.trim())
+    else params.delete("q")
 
     const nextQuery = params.toString()
     router.replace(nextQuery ? `/occupation?${nextQuery}` : "/occupation", { scroll: false })
@@ -162,6 +165,8 @@ export function OccupationExplorer({
     const params = new URLSearchParams(searchParams.toString())
     if (query.trim()) params.set("q", query.trim())
     else params.delete("q")
+    const effectiveCountry = selectedCountry?.code || initialCountry
+    if (effectiveCountry) params.set("country", effectiveCountry)
     params.set("occupation", career.id)
     router.replace(`/occupation?${params.toString()}`, { scroll: false })
   }

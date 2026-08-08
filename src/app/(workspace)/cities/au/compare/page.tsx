@@ -1,5 +1,6 @@
 import { permanentRedirect } from "next/navigation"
+import { buildCityCompareCanonicalHref } from "@/lib/compare-routes"
 
 export default function LegacySydneyMelbourneComparePage() {
-  permanentRedirect("/compare?type=city&country=AU")
+  permanentRedirect(buildCityCompareCanonicalHref({ left: "sydney", right: "melbourne" }))
 }

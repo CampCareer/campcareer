@@ -1,23 +1,30 @@
+import {
+  buildCareerCompareCanonicalHref,
+  buildCityCompareCanonicalHref,
+  buildCountryCompareCanonicalHref,
+  buildProgramCompareCanonicalHref,
+} from "@/lib/compare-routes"
+
 export const COMPARE_MODE_NAV_ITEMS = [
   {
     type: "program",
     label: "Programs",
-    href: "/compare?type=program&country=AU&field=nursing",
+    href: buildProgramCompareCanonicalHref(),
   },
   {
     type: "country",
     label: "Countries",
-    href: "/compare?type=country&goal=registered-nurse&profile=starting-from-scratch",
+    href: buildCountryCompareCanonicalHref(),
   },
   {
     type: "city",
     label: "Cities",
-    href: "/compare?type=city&country=AU",
+    href: buildCityCompareCanonicalHref(),
   },
   {
     type: "career",
     label: "Careers",
-    href: "/compare?type=career&country=AU&profile=starting-from-scratch",
+    href: buildCareerCompareCanonicalHref(),
   },
 ] as const
 
