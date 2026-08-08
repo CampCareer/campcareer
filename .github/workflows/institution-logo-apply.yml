@@ -1,0 +1,128 @@
+name: Apply institution logo integration
+
+on:
+  push:
+    branches: [agent/institution-official-logos]
+    paths:
+      - .github/workflows/institution-logo-apply.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/institution-official-logos
+      - name: Patch institution logo integration
+        run: |
+          python <<'PY'
+          from pathlib import Path
+
+          def replace_once(path: str, old: str, new: str):
+              p = Path(path)
+              text = p.read_text()
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f"{path}: expected one match, found {count}")
+              p.write_text(text.replace(old, new, 1))
+
+          explorer = "src/app/(workspace)/institutions/institutions-explorer.tsx"
+          replace_once(
+              explorer,
+              'import { getLaunchCountry } from "@/data/launch-countries"\n',
+              'import { InstitutionLogo } from "@/components/institution-logo"\nimport { getLaunchCountry } from "@/data/launch-countries"\n',
+          )
+          replace_once(
+              explorer,
+              '''        <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-[#edf5ea] text-[#3e7a2e]">\n          <Building2 className="size-5" />\n        </span>''',
+              '''        <InstitutionLogo name={institution.name} logoUrl={institution.logoUrl} />''',
+          )
+
+          server = "src/lib/institutions/institutions.server.ts"
+          replace_once(
+              server,
+              'import { supabaseAdmin } from "@/lib/supabase-admin"\n',
+              'import { supabaseAdmin } from "@/lib/supabase-admin"\nimport { safeInstitutionLogoUrl } from "@/lib/institutions/institution-logo"\n',
+          )
+          replace_once(
+              server,
+              '''type InstitutionExplorerRow = {\n  institution_id: string\n  country_code: string\n  slug: string\n  canonical_name: string\n  institution_kind: string | null\n  ownership_type: string | null\n  website_url: string | null\n  program_count: number | string | null\n  campus_count: number | string | null\n  city_count: number | string | null\n  city_names: string[] | null\n}\n''',
+              '''type InstitutionExplorerRow = {\n  institution_id: string\n  country_code: string\n  slug: string\n  canonical_name: string\n  institution_kind: string | null\n  ownership_type: string | null\n  website_url: string | null\n  program_count: number | string | null\n  campus_count: number | string | null\n  city_count: number | string | null\n  city_names: string[] | null\n}\n\ntype InstitutionLogoRow = {\n  institution_id: string\n  logo_url: string | null\n}\n''',
+          )
+          replace_once(
+              server,
+              '''  websiteUrl: string | null\n  programCount: number\n''',
+              '''  websiteUrl: string | null\n  logoUrl: string | null\n  programCount: number\n''',
+          )
+          replace_once(
+              server,
+              '''function mapInstitution(\n  row: InstitutionExplorerRow,\n  countryCode: InstitutionMvpCountryCode,\n): InstitutionExplorerItem {''',
+              '''function mapInstitution(\n  row: InstitutionExplorerRow,\n  countryCode: InstitutionMvpCountryCode,\n  logoUrl: string | null,\n): InstitutionExplorerItem {''',
+          )
+          replace_once(
+              server,
+              '''    websiteUrl: row.website_url,\n    programCount: safeNumber(row.program_count),''',
+              '''    websiteUrl: row.website_url,\n    logoUrl,\n    programCount: safeNumber(row.program_count),''',
+          )
+          replace_once(
+              server,
+              '''export async function searchInstitutions(\n''',
+              '''async function loadInstitutionLogos(ids: string[]) {\n  const logos = new Map<string, string | null>()\n  if (ids.length === 0) return logos\n\n  const { data, error } = await supabaseAdmin\n    .from("institution_logo_v1")\n    .select("institution_id,logo_url")\n    .in("institution_id", ids)\n\n  if (error) {\n    console.error("Unable to load institution logos", error)\n    return logos\n  }\n\n  for (const row of (data ?? []) as unknown as InstitutionLogoRow[]) {\n    logos.set(row.institution_id, safeInstitutionLogoUrl(row.logo_url))\n  }\n\n  return logos\n}\n\nexport async function searchInstitutions(\n''',
+          )
+          replace_once(
+              server,
+              '''  const rows = (data ?? []) as unknown as InstitutionExplorerRow[]\n  const institutions = rows.map((row) => mapInstitution(row, countryCode))\n  const total = count ?? institutions.length\n''',
+              '''  const rows = (data ?? []) as unknown as InstitutionExplorerRow[]\n  const logos = await loadInstitutionLogos(rows.map((row) => row.institution_id))\n  const institutions = rows.map((row) =>\n    mapInstitution(row, countryCode, logos.get(row.institution_id) ?? null),\n  )\n  const total = count ?? institutions.length\n''',
+          )
+
+          detail_server = "src/lib/institutions/institution-detail.server.ts"
+          replace_once(
+              detail_server,
+              'import { supabaseAdmin } from "@/lib/supabase-admin"\n',
+              'import { supabaseAdmin } from "@/lib/supabase-admin"\nimport { safeInstitutionLogoUrl } from "@/lib/institutions/institution-logo"\n',
+          )
+          replace_once(
+              detail_server,
+              '''type InstitutionDetailRow = {\n''',
+              '''type InstitutionLogoRow = {\n  logo_url: string | null\n}\n\ntype InstitutionDetailRow = {\n''',
+          )
+          replace_once(
+              detail_server,
+              '''  websiteUrl: string | null\n  status: string\n''',
+              '''  websiteUrl: string | null\n  logoUrl: string | null\n  status: string\n''',
+          )
+          replace_once(
+              detail_server,
+              '''  const row = data as unknown as InstitutionDetailRow\n\n  return {\n''',
+              '''  const row = data as unknown as InstitutionDetailRow\n  const { data: logoData, error: logoError } = await supabaseAdmin\n    .from("institution_logo_v1")\n    .select("logo_url")\n    .eq("institution_id", row.institution_id)\n    .maybeSingle()\n\n  if (logoError) {\n    console.error("Unable to load institution logo", logoError)\n  }\n\n  const logoRow = logoData as unknown as InstitutionLogoRow | null\n\n  return {\n''',
+          )
+          replace_once(
+              detail_server,
+              '''    websiteUrl: row.website_url,\n    status: row.status,\n''',
+              '''    websiteUrl: row.website_url,\n    logoUrl: safeInstitutionLogoUrl(logoRow?.logo_url),\n    status: row.status,\n''',
+          )
+
+          detail = "src/app/(workspace)/institutions/institution-detail.tsx"
+          replace_once(
+              detail,
+              'import { getLaunchCountry } from "@/data/launch-countries"\n',
+              'import { InstitutionLogo } from "@/components/institution-logo"\nimport { getLaunchCountry } from "@/data/launch-countries"\n',
+          )
+          replace_once(
+              detail,
+              '''          <div className="min-w-0">\n            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#3e7a2e]">\n              {country?.name ?? institution.countryCode} institution\n            </p>\n            <h1 className="mt-2 max-w-3xl text-[27px] font-semibold leading-tight tracking-[-0.025em] text-[#1b1b1b] sm:text-3xl">\n              {institution.name}\n            </h1>\n            <div className="mt-3 flex flex-wrap items-center gap-2">\n              {kind ? (\n                <span className="rounded-full bg-[#edf5ea] px-3 py-1.5 text-[11px] font-semibold text-[#3e7a2e]">\n                  {kind}\n                </span>\n              ) : null}\n              {ownership ? (\n                <span className="rounded-full border border-[#e3e2dd] px-3 py-1.5 text-[11px] font-medium text-[#686660]">\n                  {ownership}\n                </span>\n              ) : null}\n            </div>\n          </div>''',
+              '''          <div className="flex min-w-0 items-start gap-4">\n            <InstitutionLogo name={institution.name} logoUrl={institution.logoUrl} size="detail" />\n            <div className="min-w-0">\n              <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#3e7a2e]">\n                {country?.name ?? institution.countryCode} institution\n              </p>\n              <h1 className="mt-2 max-w-3xl text-[27px] font-semibold leading-tight tracking-[-0.025em] text-[#1b1b1b] sm:text-3xl">\n                {institution.name}\n              </h1>\n              <div className="mt-3 flex flex-wrap items-center gap-2">\n                {kind ? (\n                  <span className="rounded-full bg-[#edf5ea] px-3 py-1.5 text-[11px] font-semibold text-[#3e7a2e]">\n                    {kind}\n                  </span>\n                ) : null}\n                {ownership ? (\n                  <span className="rounded-full border border-[#e3e2dd] px-3 py-1.5 text-[11px] font-medium text-[#686660]">\n                    {ownership}\n                  </span>\n                ) : null}\n              </div>\n            </div>\n          </div>''',
+          )
+          PY
+          git diff --check
+      - name: Commit integration
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src tests supabase
+          git diff --cached --quiet && exit 0
+          git commit -m "Show official institution brand marks"
+          git push origin HEAD:agent/institution-official-logos
