@@ -77,7 +77,7 @@ export function SingaporeInstitutionDetailView({ institution }: { institution: I
               {institution.uen ? <div><dt className="text-[10px] font-semibold uppercase tracking-[0.07em] text-[#aaa7a0]">Unique Entity Number</dt><dd className="mt-1 flex items-center gap-2 text-[12.5px] font-semibold text-[#4d4c48]">{institution.uen}{uenSource ? <a href={uenSource} target="_blank" rel="noreferrer" aria-label="Open UEN source" className="text-[#3e7a2e]"><ExternalLink className="size-3.5" /></a> : null}</dd></div> : null}
             </dl>
           </section>
-          <section className="rounded-2xl border border-[#e7e6e3] bg-[#fbfbf9] p-5"><h2 className="text-[12.5px] font-semibold text-[#4d4c48]">About this profile</h2><p className="mt-2 text-[10.5px] leading-5 text-[#8b8881]">The Tier A cohort follows Singapore MOE's Autonomous Universities. UEN identity and location fields are source-backed; ownership is left unpublished rather than inferred from public funding status.</p></section>
+          <section className="rounded-2xl border border-[#e7e6e3] bg-[#fbfbf9] p-5"><h2 className="text-[12.5px] font-semibold text-[#4d4c48]">About this profile</h2><p className="mt-2 text-[10.5px] leading-5 text-[#8b8881]">The Tier A cohort follows the Autonomous Universities identified by Singapore MOE. UEN identity and location fields are source-backed; ownership is left unpublished rather than inferred from public funding status.</p></section>
         </aside>
       </div>
     </>
