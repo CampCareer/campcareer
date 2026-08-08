@@ -23,9 +23,10 @@ export async function generateMetadata({
   if (!countryCode) return { robots: { index: false, follow: true } }
 
   const launchCountry = getLaunchCountry(countryCode)
+  const locationTerm = countryCode === "IE" ? "locations" : "campuses"
   return {
     title: `${launchCountry?.name ?? countryCode} Institutions`,
-    description: `Explore verified institutions in ${launchCountry?.name ?? countryCode} with connected programs, campuses and normalized cities.`,
+    description: `Explore verified institutions in ${launchCountry?.name ?? countryCode} with connected programs, ${locationTerm} and normalized location areas.`,
     alternates: { canonical: `/institutions/${countryCode.toLowerCase()}` },
     robots: { index: true, follow: true },
   }
