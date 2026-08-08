@@ -37,7 +37,7 @@ with joined as (
             and (lower(coalesce(international_program_admission_status,'')) like '%check%'
                  or lower(coalesce(international_program_admission_status,'')) like '%separate%'))
         then 'admission_unverified'
-      when lower(coalesce(international_program_admission_status,'')) ~ '(suspended|cancelled|not_accepting|not currently|not_current|unavailable|restricted_not_open|temporarily_paused|not_eligible_for_study_permit|legacy_program)'
+      when lower(coalesce(international_program_admission_status,'')) ~ '(suspended|cancelled|not_accepting|not currently|not_current|unavailable|closed|restricted_not_open|temporarily_paused|not_eligible_for_study_permit|legacy_program)'
         then 'admission_closed_or_restricted'
       else null
     end as hold_reason,
@@ -85,7 +85,7 @@ with joined as (
             and (lower(coalesce(international_program_admission_status,'')) like '%check%'
                  or lower(coalesce(international_program_admission_status,'')) like '%separate%'))
         then 'admission_unverified'
-      when lower(coalesce(international_program_admission_status,'')) ~ '(suspended|cancelled|not_accepting|not currently|not_current|unavailable|restricted_not_open|temporarily_paused|not_eligible_for_study_permit|legacy_program)'
+      when lower(coalesce(international_program_admission_status,'')) ~ '(suspended|cancelled|not_accepting|not currently|not_current|unavailable|closed|restricted_not_open|temporarily_paused|not_eligible_for_study_permit|legacy_program)'
         then 'admission_closed_or_restricted'
       else null
     end as hold_reason
