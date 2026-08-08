@@ -7,6 +7,8 @@ import {
   normalizeInstitutionCountrySegment,
   normalizeInstitutionSlugSegment,
 } from "@/lib/institutions/institution-search"
+import { INDEXABLE_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo"
+import { INDEXABLE_UK_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-uk"
 import { getInstitutionDetail, type InstitutionDetail } from "@/lib/institutions/institution-detail.server"
 import { CanadianInstitutionDetailView } from "../../canadian-institution-detail"
 import { InstitutionDetailView } from "../../institution-detail"
@@ -18,6 +20,14 @@ type InstitutionDetailPageProps = {
     country: string
     institution: string
   }>
+}
+
+function isIndexableInstitutionRoute(countryCode: string, slug: string) {
+  return INDEXABLE_INSTITUTION_ROUTES.some(
+    ([routeCountryCode, routeSlug]) => routeCountryCode === countryCode && routeSlug === slug,
+  ) || INDEXABLE_UK_INSTITUTION_ROUTES.some(
+    ([routeCountryCode, routeSlug]) => routeCountryCode === countryCode && routeSlug === slug,
+  )
 }
 
 export async function generateMetadata({
@@ -52,7 +62,7 @@ export async function generateMetadata({
         canonical: `${SITE_URL}${canonicalPath}`,
       },
       robots: {
-        index: true,
+        index: isIndexableInstitutionRoute(countryCode, detail.slug),
         follow: true,
       },
     }
