@@ -78,9 +78,11 @@ test("Australia Environmental Engineer stores shortage in all eight regions", ()
   }
 })
 
-test("Australia Environmental Engineer links verified RMIT study routes", () => {
-  assert.match(migration, /'au-program:5792', 'direct'/)
-  assert.match(migration, /'au-program:5679', 'graduate_entry'/)
+test("Australia Environmental Engineer links verified RMIT study routes without generated IDs", () => {
+  assert.match(migration, /course_code = '110998M'/)
+  assert.match(migration, /course_code = '087983C'/)
+  assert.match(migration, /'au-program:' \|\| id::text, 'direct'/)
+  assert.match(migration, /'au-program:' \|\| id::text, 'graduate_entry'/)
   assert.match(migration, /RMIT — Bachelor of Engineering \(Environmental Engineering\) \(Honours\)/)
   assert.match(migration, /RMIT — Master of Engineering \(Environmental Engineering\)/)
   assert.match(migration, /official_url_status = 'verified'/)
