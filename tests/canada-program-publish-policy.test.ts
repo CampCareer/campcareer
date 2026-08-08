@@ -62,6 +62,23 @@ test("closed international admissions hold a program", () => {
   assert.equal(decision.holdReason, "admission_closed_or_restricted")
 })
 
+test("program-level international admission must be verified before publication", () => {
+  for (const admissionStatus of [
+    null,
+    "institution_dli_confirmed_program_level_admission_not_yet_verified",
+    "school_pgwp_aligned_check_current_intake_availability",
+    "school_pgwp_aligned_list_current_program_availability_should_be_checked",
+    "school_pgwp_aligned_program_availability_separate",
+  ]) {
+    const decision = classifyCaProgramPublication({
+      ...base,
+      internationalProgramAdmissionStatus: admissionStatus,
+    })
+    assert.equal(decision.tier, "C")
+    assert.equal(decision.holdReason, "admission_unverified")
+  }
+})
+
 test("PGWP unknown remains unknown and is never inferred", () => {
   assert.equal(caProgramPgwpState(null), "unknown")
   const decision = classifyCaProgramPublication({ ...base, irccProgramEligible: null })
