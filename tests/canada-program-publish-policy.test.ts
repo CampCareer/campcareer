@@ -22,10 +22,7 @@ const base: CaProgramPublicationInput = {
 
 test("Tier A requires a publishable row with a program-specific official URL", () => {
   assert.deepEqual(classifyCaProgramPublication(base), {
-    tier: "A",
-    holdReason: null,
-    pgwpState: "eligible",
-    indexableDetail: true,
+    tier: "A", holdReason: null, pgwpState: "eligible", indexableDetail: true,
   })
 })
 
@@ -63,6 +60,7 @@ test("program-level international admission must be verified before publication"
     "school_pgwp_aligned_list_current_program_availability_should_be_checked",
     "school_pgwp_aligned_program_availability_separate",
     "nbcc_pgwp_status_verified_current_intake_check_application_portal",
+    "program_pgwp_noneligible_current_intake_separate",
   ]) {
     const decision = classifyCaProgramPublication({ ...base, internationalProgramAdmissionStatus: admissionStatus })
     assert.equal(decision.tier, "C")
