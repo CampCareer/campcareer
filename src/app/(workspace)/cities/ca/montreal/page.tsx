@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   description:
     "Compare Montreal student living costs, STM student transport, international student work rules, canonical institutions and linked programmes.",
   alternates: { canonical: "/cities/ca/montreal" },
+  robots: { index: true, follow: true },
 }
 
 export default async function MontrealCityPage() {
