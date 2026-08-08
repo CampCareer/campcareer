@@ -1,12 +1,14 @@
 import "server-only"
 
 import { supabase } from "@/lib/supabase"
+import { supabaseAdmin } from "@/lib/supabase-admin"
 import type {
   CountryOccupationLink,
   CountryOccupationMetric,
   CountryOccupationProfile,
   CountryOccupationProgramLink,
   CountryOccupationRegionMetric,
+  CountryOccupationResolvedProgram,
   CountryOccupationSpecialisation,
 } from "@/lib/workspace/country-occupation-contract"
 
@@ -14,6 +16,13 @@ const numeric = (value: unknown): number | null => {
   if (value == null || value === "") return null
   const result = Number(value)
   return Number.isFinite(result) ? result : null
+}
+
+const auProgramId = (programRef: string): number | null => {
+  const match = /^au-program:(\d+)$/.exec(programRef)
+  if (!match) return null
+  const id = Number(match[1])
+  return Number.isSafeInteger(id) ? id : null
 }
 
 export async function getCountryOccupationProfile(
@@ -74,6 +83,60 @@ export async function getCountryOccupationProfile(
 
   for (const result of [specialisationsResult, regionsResult, linksResult, programsResult]) {
     if (result.error) throw result.error
+  }
+
+  const rawProgramLinks = programsResult.data ?? []
+  const resolvedPrograms = new Map<number, CountryOccupationResolvedProgram>()
+  const auProgramIds =
+    country === "AU"
+      ? Array.from(
+          new Set(
+            rawProgramLinks
+              .map((row) => auProgramId(row.program_ref))
+              .filter((id): id is number => id != null)
+          )
+        )
+      : []
+
+  if (auProgramIds.length > 0) {
+    // courses_au and the institution identity read model are deliberately not exposed to anon.
+    // Resolve only the already-curated occupation program IDs through the server-only service-role client.
+    const coursesResult = await supabaseAdmin
+      .from("courses_au")
+      .select("id, institution_id, title, duration_years, tuition_fee_aud, official_course_url, cricos_url, qualifax_url")
+      .in("id", auProgramIds)
+
+    if (coursesResult.error) throw coursesResult.error
+
+    const courseRows = coursesResult.data ?? []
+    const institutionIds = Array.from(
+      new Set(courseRows.map((row) => row.institution_id).filter((id): id is string => Boolean(id)))
+    )
+    const institutionNames = new Map<string, string>()
+
+    if (institutionIds.length > 0) {
+      const institutionsResult = await supabaseAdmin
+        .from("au_institution_identity_v1")
+        .select("legacy_provider_id, institution_name")
+        .in("legacy_provider_id", institutionIds)
+
+      if (institutionsResult.error) throw institutionsResult.error
+      for (const row of institutionsResult.data ?? []) {
+        institutionNames.set(row.legacy_provider_id, row.institution_name)
+      }
+    }
+
+    for (const row of courseRows) {
+      const id = Number(row.id)
+      if (!Number.isSafeInteger(id)) continue
+      resolvedPrograms.set(id, {
+        title: row.title,
+        provider: institutionNames.get(row.institution_id) ?? "Australian provider",
+        durationYears: numeric(row.duration_years),
+        tuitionFeeAud: numeric(row.tuition_fee_aud),
+        url: row.official_course_url ?? row.cricos_url ?? row.qualifax_url ?? null,
+      })
+    }
   }
 
   const metric: CountryOccupationMetric = {
@@ -137,10 +200,14 @@ export async function getCountryOccupationProfile(
     regionCode: row.region_code,
   }))
 
-  const programLinks: CountryOccupationProgramLink[] = (programsResult.data ?? []).map((row) => ({
-    programRef: row.program_ref,
-    relationType: row.relation_type,
-  }))
+  const programLinks: CountryOccupationProgramLink[] = rawProgramLinks.map((row) => {
+    const programId = auProgramId(row.program_ref)
+    return {
+      programRef: row.program_ref,
+      relationType: row.relation_type,
+      program: programId == null ? null : resolvedPrograms.get(programId) ?? null,
+    }
+  })
 
   return {
     profileKey: profile.profile_key,

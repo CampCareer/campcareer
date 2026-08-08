@@ -11,6 +11,22 @@ type AuVocationalProgram = CourseOffering & { conceptId: string }
 export const AU_VOCATIONAL_PROGRAM_SHORTLIST: AuVocationalProgram[] = [
   {
     conceptId: "aged-care",
+    id: "au-vet:training-gov:CHC33021",
+    countryCode: "AU",
+    providerId: "training-gov-au",
+    providerName: "Australian Government training register",
+    title: "Certificate III in Individual Support",
+    courseCode: "CHC33021",
+    qualificationLevel: "Certificate III",
+    internationalEligible: false,
+    registrationStatus: "CURRENT",
+    officialUrl: "https://training.gov.au/training/details/CHC33021",
+    sourceName: "Australian Government training.gov.au",
+    lastVerifiedAt: "2026-08-07",
+    eligibilityNote: "Current national qualification for person-centred support work. Ageing, Disability, or Ageing and Disability specialisations can be packaged through the elective rules. This training.gov.au record is a qualification reference rather than a live international intake; confirm a current RTO, CRICOS status where relevant, placement requirements and worker screening before enrolling.",
+  },
+  {
+    conceptId: "aged-care",
     id: "au-vet:tafe-nsw:CHC43015",
     countryCode: "AU",
     providerId: "tafe-nsw",

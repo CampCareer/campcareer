@@ -41,6 +41,188 @@ export const OCCUPATION_EDITORIAL: readonly OccupationEditorial[] = [
     },
   },
   {
+    id: "midwife",
+    overview:
+      "Midwives provide clinical care, advice and support during pregnancy, labour, birth and the postnatal period. They monitor maternal and fetal wellbeing, recognise complications, support informed decision-making and coordinate referral or collaborative care when required.",
+    tasks: [
+      "Provide antenatal care, physical assessment and advice on pregnancy, nutrition and wellbeing",
+      "Monitor women and babies during labour and support safe childbirth and pain-management needs",
+      "Provide postnatal care, newborn assessment, breastfeeding and early-parenting support",
+      "Recognise abnormal or potentially abnormal pregnancy and birth findings and arrange referral or escalation",
+      "Educate women and families about pregnancy, childbirth, reproductive health and newborn care",
+      "Document care and collaborate with obstetric, neonatal, nursing and allied health teams when required",
+    ],
+    countries: {
+      AU: {
+        headline: "A regulated maternity-care profession in national shortage across every state and territory",
+        entryPathway:
+          "There are two main Australian pathways. New entrants can complete an NMBA-approved Bachelor of Midwifery that leads toward registration. Registered nurses can instead complete an approved postgraduate midwifery program; NSW Health MidStart is one current example that combines postgraduate study with paid employment in a dedicated midwifery student position. Newly registered midwives can also enter supported graduate programs such as NSW Health GradStart.",
+        registration:
+          "Registration with the Nursing and Midwifery Board of Australia is mandatory and the title 'midwife' is protected. Graduates must complete an NMBA-approved program of study and then meet the Board's current registration standards, including applicable identity, criminal-history, recency and English-language requirements, before practising.",
+        jobMarketNote:
+          "Public maternity services are major employers across hospitals, birth centres, community services and continuity-of-care models. NSW, Queensland and Western Australian public health systems all recruit nurses and midwives, while graduate and transition programs provide structured entry for newly registered midwives and registered nurses moving into midwifery.",
+        scoreCaveat:
+          "The opportunity score is provisional until posting-level unique-employer counts and a standardised national measure of vacancies open to new graduates are ingested. The employment, earnings, vacancy, shortage and projection inputs themselves are directly sourced from the current JSA series, with the legacy ANZSCO 2541 labour-market scope labelled separately from the exact OSCA 265131 Midwife mapping.",
+      },
+    },
+  },
+  {
+    id: "care-worker",
+    overview:
+      "Care Workers support older people and people with disability with daily living, personal care, mobility, meals, household tasks, community participation, emotional wellbeing and individual support plans in home and community settings.",
+    tasks: [
+      "Support clients with mobility, personal care, dressing, hygiene and other daily activities",
+      "Prepare meals and assist with household tasks while following the person's support plan and preferences",
+      "Provide companionship, emotional support and assistance with community participation and social inclusion",
+      "Observe changes in a person's condition or support needs and report concerns through the required care channels",
+      "Support medication routines only within the worker's training, delegation and organisational procedures",
+      "Manage risks and emergencies and maintain records while respecting dignity, privacy, choice and independence",
+    ],
+    countries: {
+      AU: {
+        headline: "A very large frontline care workforce with strong shortage signals and accessible vocational entry routes",
+        entryPathway:
+          "A common entry route is CHC33021 Certificate III in Individual Support, which can be packaged with Ageing, Disability, or Ageing and Disability specialisations and requires at least 120 hours of work as specified by the qualification. Certificate IV in Ageing Support can support progression into more advanced aged-care responsibilities. Employers may set additional experience, first-aid, driving, manual-handling or service-specific training requirements.",
+        registration:
+          "There is no single national Care Worker occupational licence. Screening is role and sector specific. Paid and volunteer aged-care workers need an accepted aged-care screening clearance, while workers in risk-assessed roles for registered NDIS providers need an NDIS Worker Screening Clearance. Provider policies and state or territory requirements can add further checks.",
+        jobMarketNote:
+          "Home-care, community aged-care and disability-support providers recruit across metropolitan, regional and remote Australia. CampCareer currently rolls up Community Aged Care Support Worker and Disability Support Worker, while Residential Aged Care Worker is kept outside this profile because OSCA treats it as a separate occupation. The 2025 Occupation Shortage List records both included occupations in shortage nationally and in every state and territory.",
+        scoreCaveat:
+          "The opportunity score is provisional because JSA employment, earnings, vacancy and projection data remain published on the broader legacy ANZSCO 4231 Aged and Disabled Carers series. Visa scoring is also partial: the Aged Care Industry Labour Agreement can cover eligible aged-care employers using legacy ANZSCO 423111, but Home Affairs states disability-sector employers cannot use that agreement.",
+      },
+    },
+  },
+  {
+    id: "physiotherapist",
+    overview:
+      "Physiotherapists assess, diagnose, treat and prevent disorders of movement and physical function caused by injury, illness or disability. They use exercise, movement retraining, education and other evidence-based physical therapies to reduce pain, restore function and support long-term participation.",
+    tasks: [
+      "Assess movement, strength, joint, nerve and functional ability to identify physical problems and treatment priorities",
+      "Design and deliver individual treatment and rehabilitation programs based on clinical findings and patient goals",
+      "Use exercise, manual therapy, movement retraining and other physiotherapy techniques to reduce pain and improve function",
+      "Monitor progress, reassess outcomes and modify treatment plans as a patient's condition changes",
+      "Educate patients, families and carers about home exercises, self-management, prevention and safe activity",
+      "Collaborate with medical, nursing and allied health professionals and maintain accurate clinical records",
+    ],
+    countries: {
+      AU: {
+        headline: "A regulated allied-health profession in national shortage with very strong projected employment growth",
+        entryPathway:
+          "The standard Australian route is an approved entry-to-practice physiotherapy qualification followed by registration with the Physiotherapy Board of Australia through Ahpra. Entry routes include four-year Bachelor or Bachelor (Honours) programs and graduate-entry Master or Doctor of Physiotherapy programs for applicants who meet the relevant prior-study prerequisites. The Australian Physiotherapy Council is the national accreditation authority for entry-level physiotherapy programs, while the Physiotherapy Board decides whether accredited programs are approved for registration purposes.",
+        registration:
+          "Registration with the Physiotherapy Board of Australia through Ahpra is mandatory before practising as a physiotherapist. Applicants must complete an approved qualification or otherwise satisfy the Board's eligibility pathway and meet the applicable registration standards, including English-language, identity, criminal-history and other professional requirements.",
+        jobMarketNote:
+          "Physiotherapists work across public and private hospitals, community health, rehabilitation, aged care, disability services, sports, private practice and regional health services. The 2025 Occupation Shortage List records Physiotherapist in shortage nationally and in every state and territory, while JSA projects particularly strong employment growth over both five and ten years.",
+        scoreCaveat:
+          "The opportunity score is provisional until posting-level unique-employer counts and the share of vacancies suitable for new graduates are ingested. Current employment, earnings, vacancy and projection data are published on legacy ANZSCO 2525 Physiotherapists, while CampCareer maps the career itself exactly to OSCA 262431 Physiotherapist and labels that scope difference explicitly.",
+      },
+    },
+  },
+  {
+    id: "medical-laboratory-technician",
+    overview:
+      "Medical Laboratory Technicians perform routine diagnostic laboratory tests and prepare, process and analyse biological specimens under established laboratory procedures, supporting medical scientists and pathologists in the production of reliable test results.",
+    tasks: [
+      "Receive, identify, label and prepare blood, tissue and other specimens for laboratory testing",
+      "Set up, operate and maintain laboratory instruments and routine testing equipment",
+      "Perform routine haematology, biochemistry, microbiology, histology or other pathology tests within the authorised scope",
+      "Prepare reagents, solutions, cultures, slides and other materials needed for diagnostic testing",
+      "Record, check and communicate test observations and results through laboratory information and quality systems",
+      "Follow infection-control, specimen-handling, quality-assurance, safety and waste-disposal procedures",
+    ],
+    countries: {
+      AU: {
+        headline: "A pathology support occupation with vocational entry routes but incomplete occupation-specific market evidence",
+        entryPathway:
+          "A practical entry route begins with MSL40122 Certificate IV in Laboratory Techniques. For pathology-focused technician work, MSL50122 Diploma of Laboratory Technology can be packaged with the Pathology specialisation and has formal entry requirements, including an appropriate Certificate IV, another relevant STEM qualification, or demonstrated technical laboratory skills and experience. Employers may require additional pathology-specific competencies or experience.",
+        registration:
+          "There is no statutory national occupational registration or licensing scheme for Medical Laboratory Technicians. AIMS is the relevant professional and migration-assessment body, while laboratories and employers can impose accreditation, competency, quality and workplace requirements for particular roles.",
+        jobMarketNote:
+          "Medical Laboratory Technicians work mainly in public and private pathology laboratories, hospitals and diagnostic services. JSA publishes an exact six-digit employment count for legacy ANZSCO 311213, but current vacancy and employment-projection series are only available for the broader ANZSCO 3112 Medical Technicians group, which includes occupations outside the CampCareer career scope.",
+        scoreCaveat:
+          "The opportunity score is deliberately conservative. Six-digit median earnings are not published, no current shortage or CSOL record was verified for OSCA 311233, and vacancy intensity is not scored because the IVI numerator is broader ANZSCO 3112 while employment is exact ANZSCO 311213. Broader-group growth is retained only with explicit provenance and partial scoring.",
+      },
+    },
+  },
+  {
+    id: "radiographer",
+    overview:
+      "Radiographers produce diagnostic medical images using x-ray and related imaging equipment, position and prepare patients, apply radiation-safety controls and work with medical teams to obtain images suitable for clinical diagnosis and treatment decisions.",
+    tasks: [
+      "Review imaging requests and prepare patients for diagnostic radiography procedures",
+      "Position patients and imaging equipment to obtain the required anatomical views and diagnostic image quality",
+      "Operate x-ray and related medical imaging equipment within professional and radiation-safety requirements",
+      "Select and adjust imaging parameters according to the examination, patient condition and approved protocols",
+      "Assess image quality, identify technical issues and repeat or escalate examinations when clinically appropriate",
+      "Maintain clinical records, explain procedures and collaborate with radiologists, nurses and other health professionals",
+    ],
+    countries: {
+      AU: {
+        headline: "A regulated medical-imaging profession with national shortage and strong long-term demand",
+        entryPathway:
+          "The standard route is a Medical Radiation Practice Board-approved entry-to-practice program followed by registration through Ahpra. Direct Bachelor programs in diagnostic radiography and graduate-entry Master programs are available. Applicants should verify that the exact course remains on the current approved-program list before relying on it as a registration pathway.",
+        registration:
+          "Registration with the Medical Radiation Practice Board of Australia through Ahpra is mandatory for practising as a diagnostic radiographer. Graduates must complete an approved qualification and satisfy the Board's current registration standards before practising.",
+        jobMarketNote:
+          "Radiographers work across public and private hospitals, medical-imaging networks, specialist clinics and regional health services. The current shortage data records OSCA 263133 in shortage nationally and in all eight states and territories. Exact six-digit employment is available for legacy ANZSCO 251211, while JSA vacancy and projection series remain published for broader ANZSCO 2512 Medical Imaging Professionals.",
+        scoreCaveat:
+          "The opportunity score does not treat the broader ANZSCO 2512 median earnings or vacancy count as radiographer-specific. Salary and vacancy-intensity components are therefore zero, while the directly verified shortage and CSOL signals remain fully credited and broader-group vacancy trend and growth are used only with explicit scope caveats.",
+      },
+    },
+  },
+  {
+    id: "pharmacist",
+    overview:
+      "Pharmacists ensure the safe and effective use of medicines by reviewing prescriptions and medication histories, dispensing and supplying medicines, counselling patients, identifying medicine-related risks and working with health professionals to optimise treatment.",
+    tasks: [
+      "Review prescriptions, medicine histories, allergies and clinical information for safety and appropriateness",
+      "Dispense, prepare, label and supply medicines in accordance with legal, professional and quality requirements",
+      "Counsel patients and carers about medicine use, dosage, precautions, interactions, adherence and storage",
+      "Identify medication-related problems and communicate recommendations with prescribers and other health professionals",
+      "Maintain medication, dispensing, inventory and controlled-drug records and supervise pharmacy workflows within the authorised scope",
+      "Support medication-management, public-health and quality-improvement services in community or hospital pharmacy settings",
+    ],
+    countries: {
+      AU: {
+        headline: "A regulated medicines profession with strong community shortage but a mixed hospital shortage signal",
+        entryPathway:
+          "The Australian route starts with an Australian Pharmacy Council-accredited and Pharmacy Board-approved pharmacy degree. Graduates generally move into provisional registration, supervised practice and an accredited intern training program, then complete the Board-required written and oral examinations before becoming eligible for general registration. Entry-to-practice study includes Bachelor, Master and Doctor of Pharmacy pathways depending on prior study and the university.",
+        registration:
+          "Registration with the Pharmacy Board of Australia through Ahpra is mandatory. Completing a pharmacy degree alone does not confer general registration; the provisional-registration, supervised-practice, intern-training and examination requirements must also be completed under the current Board rules.",
+        jobMarketNote:
+          "CampCareer's current OSCA roll-up includes Community Pharmacist and Hospital Pharmacist only. Community Pharmacist is in shortage across all eight jurisdictions, while Hospital Pharmacist has a more mixed shortage result. Legacy ANZSCO 2515 labour-market series also include Industrial Pharmacists, so those broader vacancy, salary and projection series are not treated as exact current-scope observations.",
+        scoreCaveat:
+          "The score is conservative because Industrial Pharmacists are outside the current OSCA 2634 roll-up but remain inside the legacy ANZSCO 2515 market series. The canonical employment count uses only the two included six-digit occupations, salary and vacancy intensity receive zero rather than mixing incompatible scopes, and the broader-group negative vacancy trend is not awarded points.",
+      },
+    },
+  },
+  {
+    id: "occupational-therapist",
+    overview:
+      "Occupational Therapists assess how health conditions, disability, injury or environmental barriers affect everyday activities and design interventions that help people participate safely and independently in self-care, work, education, home and community life.",
+    tasks: [
+      "Assess physical, cognitive, psychosocial and environmental factors affecting a person's daily activities and participation",
+      "Develop goal-based therapy and rehabilitation plans with clients, families and other health professionals",
+      "Train clients in daily living, work, school, mobility and community-participation skills",
+      "Recommend and trial assistive equipment, home modifications, splinting or environmental adaptations where appropriate",
+      "Monitor functional progress, review outcomes and adjust intervention plans as needs change",
+      "Document assessments and care, coordinate services and provide education to clients, carers, employers and support teams",
+    ],
+    countries: {
+      AU: {
+        headline: "A regulated allied-health profession with national shortage, high vacancy intensity and strong projected growth",
+        entryPathway:
+          "The standard route is an Occupational Therapy Board-approved entry-to-practice qualification followed by registration through Ahpra. Approved Bachelor and graduate-entry Master of Occupational Therapy programs are available. The Occupational Therapy Council accredits programs, while the Board approves programs for registration purposes, so applicants should verify the current status of the exact course before enrolling.",
+        registration:
+          "Registration with the Occupational Therapy Board of Australia through Ahpra is mandatory before practising as an occupational therapist. Graduates of approved programs must still satisfy the Board's current registration standards and application requirements.",
+        jobMarketNote:
+          "Occupational therapists work in hospitals, community health, rehabilitation, disability and NDIS services, aged care, mental health, schools, private practice and regional services. OSCA 262331 is recorded in shortage nationally and in all eight states and territories, and the JSA legacy ANZSCO 2524 series maps directly to the Occupational Therapist career scope for employment, earnings, vacancies and projections.",
+        scoreCaveat:
+          "The opportunity score remains provisional because entry-level vacancy shares and posting-level employer counts are not yet directly measured. The May 2026 vacancy level is high relative to employment and long-term growth is strong, but the year-on-year vacancy trend is negative, so the vacancy-trend component is deliberately scored at zero.",
+      },
+    },
+  },
+  {
     id: "carpenter",
     overview:
       "Carpenters set out, construct, install, renovate and repair timber and lightweight structural systems, fixtures and finishes across residential, commercial and infrastructure projects.",
