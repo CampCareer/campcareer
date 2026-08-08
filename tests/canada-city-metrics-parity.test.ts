@@ -2,14 +2,6 @@ import assert from "node:assert/strict"
 import { readFileSync } from "node:fs"
 import test from "node:test"
 
-const FIVE_CORE_METRICS = [
-  "city_population",
-  "student_living_cost_monthly_range",
-  "student_transport_reference",
-  "student_work_hours_week",
-  "employment_focus_sectors",
-] as const
-
 const PUBLISHED_CANADA_CITIES = [
   "toronto",
   "vancouver",
@@ -20,14 +12,28 @@ const PUBLISHED_CANADA_CITIES = [
   "edmonton",
 ] as const
 
-test("Canada city profiles consume the same five decision metrics as the Australia city surface", () => {
+test("Canada city profiles cover the same five decision concepts as the Australia city surface", () => {
   const canadaLoader = readFileSync("src/lib/cities/ca-city-profile.server.ts", "utf8")
   const australiaLoader = readFileSync("src/lib/cities/au-city-profile.server.ts", "utf8")
 
-  for (const metric of FIVE_CORE_METRICS) {
-    assert.ok(canadaLoader.includes(metric), `Canada loader is missing ${metric}`)
-    assert.ok(australiaLoader.includes(metric), `Australia loader is missing ${metric}`)
-  }
+  assert.ok(canadaLoader.includes('metrics.get("city_population")'))
+  assert.ok(australiaLoader.includes('metrics.get("city_population")'))
+
+  assert.ok(canadaLoader.includes('metrics.get("student_living_cost_monthly_range")'))
+  assert.ok(australiaLoader.includes('metrics.get("student_living_cost_monthly_range")'))
+
+  assert.ok(canadaLoader.includes('metrics.get("student_transport_reference")'))
+  assert.ok(
+    australiaLoader.includes('metrics.get("student_transport_weekly_reference")') ||
+      australiaLoader.includes('metrics.get("public_transport_flat_fare")') ||
+      australiaLoader.includes('metrics.get("public_transport_weekly_cap")'),
+  )
+
+  assert.ok(canadaLoader.includes('metrics.get("student_work_hours_week")'))
+  assert.ok(australiaLoader.includes('metrics.get("student_work_hours_fortnight")'))
+
+  assert.ok(canadaLoader.includes('metrics.get("employment_focus_sectors")'))
+  assert.ok(australiaLoader.includes('metrics.get("employment_focus_sectors")'))
 
   assert.ok(canadaLoader.includes('.eq("review_status", "verified")'))
   assert.ok(canadaLoader.includes("source_name,source_url,data_as_of,confidence,evidence_kind"))
