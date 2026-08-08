@@ -2,7 +2,12 @@ import "server-only"
 
 import { cache } from "react"
 import { supabaseAdmin } from "@/lib/supabase-admin"
+import { safeInstitutionLogoUrl } from "@/lib/institutions/institution-logo"
 import type { InstitutionMvpCountryCode } from "@/lib/institutions/institution-search"
+
+type InstitutionLogoRow = {
+  logo_url: string | null
+}
 
 type InstitutionDetailRow = {
   institution_id: string
@@ -58,6 +63,7 @@ export type InstitutionDetail = {
   institutionKind: string | null
   ownershipType: string | null
   websiteUrl: string | null
+  logoUrl: string | null
   status: string
   programCount: number
   campusCount: number
@@ -187,6 +193,17 @@ export const getInstitutionDetail = cache(async (
   if (!data) return null
 
   const row = data as unknown as InstitutionDetailRow
+  const { data: logoData, error: logoError } = await supabaseAdmin
+    .from("institution_logo_v1")
+    .select("logo_url")
+    .eq("institution_id", row.institution_id)
+    .maybeSingle()
+
+  if (logoError) {
+    console.error("Unable to load institution logo", logoError)
+  }
+
+  const logoRow = logoData as unknown as InstitutionLogoRow | null
 
   return {
     id: row.institution_id,
@@ -196,6 +213,7 @@ export const getInstitutionDetail = cache(async (
     institutionKind: row.institution_kind,
     ownershipType: row.ownership_type,
     websiteUrl: row.website_url,
+    logoUrl: safeInstitutionLogoUrl(logoRow?.logo_url),
     status: row.status,
     programCount: safeNumber(row.program_count),
     campusCount: safeNumber(row.campus_count),
