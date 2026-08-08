@@ -19,6 +19,7 @@ const CITY_IMAGES: Record<string, string> = {
   vancouver: "https://unsplash.com/photos/SbrSpd8Ei2A/download?force=true&w=1800",
   montreal: "https://unsplash.com/photos/A_YKzd73HHA/download?force=true&w=1800",
   ottawa: "https://unsplash.com/photos/r4gsIYkI97c/download?force=true&w=1800",
+  calgary: "https://unsplash.com/photos/hyDnHG9cPj0/download?force=true&w=1800",
 }
 
 function money(value: number, currency = "CAD", decimals = 0) {
@@ -98,6 +99,9 @@ function transportNote(profile: CaCityProfile) {
   if (profile.transport.referenceKind === "ottawa_upass_term") {
     return "uOttawa U-Pass · current four-month term reference · eligibility and exemption rules apply"
   }
+  if (profile.transport.referenceKind === "calgary_upass_fall_term") {
+    return "Calgary Transit Fall 2026 U-Pass · term-based student fee · eligibility rules apply"
+  }
   return profile.transport.eligibilityRequired
     ? "Published student transport reference · eligibility conditions apply"
     : "Published transport reference"
@@ -111,6 +115,16 @@ function workValue(profile: CaCityProfile) {
 export function CanadaCityDashboard({ profile }: { profile: CaCityProfile }) {
   const image = CITY_IMAGES[profile.slug]
   const scopeLabel = profile.population?.geography ?? profile.name
+  const compareAvailable = Boolean(
+    profile.population &&
+      profile.livingCost &&
+      profile.transport &&
+      profile.workRights &&
+      profile.employmentSectors.length > 0 &&
+      profile.linkedCampusCount > 0 &&
+      profile.linkedInstitutionCount > 0 &&
+      profile.linkedProgramCount > 0,
+  )
 
   return (
     <div>
@@ -151,12 +165,22 @@ export function CanadaCityDashboard({ profile }: { profile: CaCityProfile }) {
                 Canada city profiles use named-city study markets. {profile.name} programme counts include only canonical offerings attached to {profile.name} campus records; neighbouring municipalities are not inferred into the city without explicit campus evidence.
               </p>
             </div>
-            <Link
-              href="/countries/ca"
-              className="inline-flex items-center gap-1.5 px-2 py-2 text-[11.5px] font-semibold text-[#2563eb] hover:underline"
-            >
-              Canada dashboard <ArrowRight className="size-3.5" />
-            </Link>
+            <div className="flex flex-wrap gap-2">
+              {compareAvailable ? (
+                <Link
+                  href={`/compare?type=city&country=CA&left=${profile.slug}`}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-[#cfd9ca] px-3.5 py-2 text-[11.5px] font-semibold text-[#3e7a2e] hover:bg-[#f7faf5]"
+                >
+                  Compare {profile.name} with another city <ArrowRight className="size-3.5" />
+                </Link>
+              ) : null}
+              <Link
+                href="/countries/ca"
+                className="inline-flex items-center gap-1.5 px-2 py-2 text-[11.5px] font-semibold text-[#2563eb] hover:underline"
+              >
+                Canada dashboard <ArrowRight className="size-3.5" />
+              </Link>
+            </div>
           </div>
         </div>
 
