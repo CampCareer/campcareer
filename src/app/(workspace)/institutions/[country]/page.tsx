@@ -28,7 +28,9 @@ export async function generateMetadata({ params }: { params: Promise<{ country: 
         ? `Explore Singapore Autonomous Universities with source-backed UEN identity and official ${locationLabel}. Program data will be added as the Singapore catalogue is verified.`
         : countryCode === "DE"
           ? `Explore Germany Tier A universities with HRK-verified official identity and DFG-verified ${locationLabel}. Program data will be added as the Germany catalogue is verified.`
-          : `Explore verified institutions in ${launchCountry?.name ?? countryCode} with connected programs, ${locationLabel} and normalized location data.`
+          : countryCode === "FR"
+            ? `Explore France IdEx universities with official UAI identity and source-backed ${locationLabel}. Program data will be added as the France catalogue is verified.`
+            : `Explore verified institutions in ${launchCountry?.name ?? countryCode} with connected programs, ${locationLabel} and normalized location data.`
 
   return {
     title: `${launchCountry?.name ?? countryCode} Institutions`,
