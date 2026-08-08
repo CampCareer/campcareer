@@ -79,4 +79,30 @@ export const ENGINEERING_OCCUPATION_EDITORIAL = [
       },
     },
   },
+  {
+    id: "manufacturing-engineer",
+    overview:
+      "Manufacturing Engineer is an official specialisation of Australia's current OSCA 243531 Industrial Engineer occupation rather than a separate six-digit occupation. The work focuses on improving how products are made by designing and optimising production sequences, manufacturing systems, quality controls, automation, resource use and safe industrial processes.",
+    tasks: [
+      "Plan and optimise manufacturing sequences, layouts, workflows and resource use to improve productivity and reliability",
+      "Estimate production costs and analyse risks associated with product design, process changes, tooling and fabrication",
+      "Design or improve manufacturing processes, automation, robotics and production systems to reduce waste and bottlenecks",
+      "Analyse product and process data to identify quality issues and implement quality-control and continuous-improvement measures",
+      "Work with design, mechanical, mechatronics, operations and supply-chain teams to improve design-for-manufacture and production readiness",
+      "Identify safety, quality and operational risks in manufacturing facilities and implement engineering controls and process improvements",
+    ],
+    countries: {
+      AU: {
+        headline: "A CSOL-linked advanced-manufacturing pathway with positive broader demand growth and several regional shortages, but a 2025 national No Shortage parent rating",
+        entryPathway:
+          "Manufacturing Engineer sits under OSCA 243531 Industrial Engineer, a Skill Level 1 occupation. Direct Australian study routes include four-year professional engineering degrees in advanced manufacturing and mechatronics, manufacturing-focused engineering and related mechanical or industrial engineering, followed by graduate roles in production, process improvement, automation, quality or manufacturing systems. Postgraduate Manufacturing Engineering and Advanced Manufacturing programs provide additional routes for engineering graduates. Employers commonly value CAD and design-for-manufacture, robotics and automation, lean methods, quality systems, materials, production data and practical factory or project experience.",
+        registration:
+          "ABS notes that registration or licensing may be required for the parent Industrial Engineer occupation, with professional-engineer registration requirements varying by state, territory and engineering service. For migration, Manufacturing Engineer is not separately named on the Core Skills Occupation List; the relevant listed occupation is ANZSCO 233511 Industrial Engineer, assessed by Engineers Australia. The applicant's actual duties must align with that nominated occupation, and migration skills assessment is separate from domestic professional registration.",
+        jobMarketNote:
+          "Manufacturing Engineer is an official specialisation of OSCA 243531 Industrial Engineer. The 2025 Occupation Shortage List records the parent occupation as No Shortage nationally, with shortage signals in the ACT, Northern Territory, Queensland and South Australia. JSA's six-digit ANZSCO 233511 profile reports about 4,700 Industrial Engineers, but that figure covers Manufacturing Engineer and other industrial-engineering work, so CampCareer does not present it as an exact Manufacturing Engineer employment figure. Earnings, vacancy and projection data are broader again at ANZSCO 2335 and are shown only as context.",
+        scoreCaveat:
+          "The opportunity score keeps the national shortage component at zero and does not infer exact Manufacturing Engineer employment or earnings from parent or broader groups. Broader ANZSCO 2335 vacancies rose about 7.00% year on year to May 2026 and long-run projections are positive, so trend and growth receive partial credit. Strong advanced-manufacturing study pathways and the verified CSOL link through Industrial Engineer support entry and visa components, while possible state registration requirements add some entry burden.",
+      },
+    },
+  },
 ] as const satisfies readonly OccupationEditorial[]
