@@ -8,10 +8,12 @@ import {
   normalizeInstitutionSlugSegment,
 } from "@/lib/institutions/institution-search"
 import { INDEXABLE_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo"
+import { INDEXABLE_NL_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-nl"
 import { INDEXABLE_UK_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-uk"
 import { getInstitutionDetail, type InstitutionDetail } from "@/lib/institutions/institution-detail.server"
 import { CanadianInstitutionDetailView } from "../../canadian-institution-detail"
 import { InstitutionDetailView } from "../../institution-detail"
+import { NetherlandsInstitutionDetailView } from "../../netherlands-institution-detail"
 
 export const revalidate = 3600
 
@@ -26,6 +28,8 @@ function isIndexableInstitutionRoute(countryCode: string, slug: string) {
   return INDEXABLE_INSTITUTION_ROUTES.some(
     ([routeCountryCode, routeSlug]) => routeCountryCode === countryCode && routeSlug === slug,
   ) || INDEXABLE_UK_INSTITUTION_ROUTES.some(
+    ([routeCountryCode, routeSlug]) => routeCountryCode === countryCode && routeSlug === slug,
+  ) || INDEXABLE_NL_INSTITUTION_ROUTES.some(
     ([routeCountryCode, routeSlug]) => routeCountryCode === countryCode && routeSlug === slug,
   )
 }
@@ -55,9 +59,13 @@ export async function generateMetadata({
 
     const canonicalPath = institutionDetailPath(countryCode, detail.slug)
     const locationLabel = countryCode === "AU" ? "campuses" : "locations"
+    const description = countryCode === "NL"
+      ? `Explore ${detail.name} official institution identity, BRIN registration and source-backed ${locationLabel} on CampCareer. Program data will be added as the Netherlands catalogue is verified.`
+      : `Explore ${detail.name} programs, ${locationLabel} and source-backed institution details on CampCareer.`
+
     return {
       title: `${detail.name} | Institutions`,
-      description: `Explore ${detail.name} programs, ${locationLabel} and source-backed institution details on CampCareer.`,
+      description,
       alternates: {
         canonical: `${SITE_URL}${canonicalPath}`,
       },
@@ -108,7 +116,7 @@ export default async function InstitutionDetailPage({
   }
 
   if (!detail) notFound()
-  return countryCode === "CA"
-    ? <CanadianInstitutionDetailView institution={detail} />
-    : <InstitutionDetailView institution={detail} />
+  if (countryCode === "CA") return <CanadianInstitutionDetailView institution={detail} />
+  if (countryCode === "NL") return <NetherlandsInstitutionDetailView institution={detail} />
+  return <InstitutionDetailView institution={detail} />
 }
