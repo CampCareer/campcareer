@@ -13,9 +13,15 @@ type CityCompareSelectorProps = {
   options: readonly CityCompareOption[]
   leftSlug: string
   rightSlug: string
+  countryCode: string
 }
 
-export function CityCompareSelector({ options, leftSlug, rightSlug }: CityCompareSelectorProps) {
+export function CityCompareSelector({
+  options,
+  leftSlug,
+  rightSlug,
+  countryCode,
+}: CityCompareSelectorProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -23,7 +29,7 @@ export function CityCompareSelector({ options, leftSlug, rightSlug }: CityCompar
     if (!left || !right || left === right) return
     const params = new URLSearchParams(searchParams.toString())
     params.set("type", "city")
-    params.set("country", "AU")
+    params.set("country", countryCode.toUpperCase())
     params.set("left", left)
     params.set("right", right)
     router.replace(`/compare?${params.toString()}`, { scroll: false })
