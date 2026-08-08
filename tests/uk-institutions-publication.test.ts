@@ -75,6 +75,15 @@ test("UK Institution UI exposes UKPRN and uses location-safe wording", () => {
   assert.match(detailPage, /countryCode === "UK" \? "locations" : "campuses"/)
 })
 
+test("UK Institution routes preserve canonical SEO and lowercase redirects", () => {
+  assert.match(countryPage, /alternates: \{ canonical: `\/institutions\/\$\{countryCode\.toLowerCase\(\)\}` \}/)
+  assert.match(countryPage, /robots: \{ index: true, follow: true \}/)
+  assert.match(countryPage, /permanentRedirect\(`\/institutions\/\$\{countryCode\.toLowerCase\(\)\}`\)/)
+  assert.match(detailPage, /alternates:/)
+  assert.match(detailPage, /canonical: `\$\{SITE_URL\}\$\{canonicalPath\}`/)
+  assert.match(detailPage, /permanentRedirect\(canonicalPath\)/)
+})
+
 test("UK explorer and all 50 institution detail routes are included in the canonical sitemap inventory", () => {
   const routes = ukSeo.match(/\["UK", "[a-z0-9-]+"\]/g) ?? []
 
