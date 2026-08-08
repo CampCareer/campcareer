@@ -13,14 +13,14 @@ type CityCompareSelectorProps = {
   options: readonly CityCompareOption[]
   leftSlug: string
   rightSlug: string
-  countryCode: string
+  countryCode?: string
 }
 
 export function CityCompareSelector({
   options,
   leftSlug,
   rightSlug,
-  countryCode,
+  countryCode = "AU",
 }: CityCompareSelectorProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
