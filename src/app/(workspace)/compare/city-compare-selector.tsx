@@ -39,14 +39,14 @@ export function CityCompareSelector({
 
   return (
     <div className="grid gap-3 rounded-2xl border border-[#e7e6e3] bg-white p-4 sm:grid-cols-[minmax(0,1fr)_44px_minmax(0,1fr)] sm:items-end sm:p-5">
-      <label className="block">
+      <label className="block min-w-0">
         <span className="mb-1.5 block text-[10.5px] font-semibold uppercase tracking-[0.08em] text-[#8f8c85]">
           First city
         </span>
         <select
           value={leftSlug}
           onChange={(event) => navigate(event.target.value, rightSlug)}
-          className="h-11 w-full rounded-xl border border-[#dfded9] bg-[#fafaf8] px-3 text-[13px] font-semibold text-[#1b1b1b] outline-none focus:border-[#6d4fc4] focus:ring-4 focus:ring-[#6d4fc4]/10"
+          className="h-11 w-full min-w-0 rounded-xl border border-[#dfded9] bg-[#fafaf8] px-3 text-[13px] font-semibold text-[#1b1b1b] outline-none focus:border-[#6d4fc4] focus:ring-4 focus:ring-[#6d4fc4]/10"
           aria-label="First city to compare"
         >
           {options.map((city) => (
@@ -60,21 +60,22 @@ export function CityCompareSelector({
       <button
         type="button"
         onClick={() => navigate(rightSlug, leftSlug)}
-        className="grid h-11 w-full place-items-center rounded-xl border border-[#ded9eb] bg-[#f8f6fc] text-[#6d4fc4] transition hover:bg-[#f3f0fa] sm:w-11"
+        className="flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-[#ded9eb] bg-[#f8f6fc] px-3 text-[#6d4fc4] transition hover:bg-[#f3f0fa] focus:outline-none focus:ring-4 focus:ring-[#6d4fc4]/10 sm:grid sm:w-11 sm:place-items-center sm:px-0"
         aria-label="Swap compared cities"
         title="Swap cities"
       >
         <ArrowLeftRight className="size-4" />
+        <span className="text-[12px] font-semibold sm:hidden">Swap cities</span>
       </button>
 
-      <label className="block">
+      <label className="block min-w-0">
         <span className="mb-1.5 block text-[10.5px] font-semibold uppercase tracking-[0.08em] text-[#8f8c85]">
           Second city
         </span>
         <select
           value={rightSlug}
           onChange={(event) => navigate(leftSlug, event.target.value)}
-          className="h-11 w-full rounded-xl border border-[#dfded9] bg-[#fafaf8] px-3 text-[13px] font-semibold text-[#1b1b1b] outline-none focus:border-[#6d4fc4] focus:ring-4 focus:ring-[#6d4fc4]/10"
+          className="h-11 w-full min-w-0 rounded-xl border border-[#dfded9] bg-[#fafaf8] px-3 text-[13px] font-semibold text-[#1b1b1b] outline-none focus:border-[#6d4fc4] focus:ring-4 focus:ring-[#6d4fc4]/10"
           aria-label="Second city to compare"
         >
           {options.map((city) => (
