@@ -16,14 +16,21 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: npm
-      - run: npm ci
-      - name: Capture production audit
-        run: npm audit --omit=dev --audit-level=high --json > npm-audit.json || true
-      - name: Upload production audit
+      - name: Generate CI dependency fixes
+        run: |
+          npm view js-yaml@3.15.1 version
+          npm install --package-lock-only --ignore-scripts --save-dev @types/pg@latest
+          npm pkg set 'overrides.gray-matter.js-yaml=3.15.1'
+          npm install --package-lock-only --ignore-scripts
+      - name: Upload generated dependency manifests
         uses: actions/upload-artifact@v4
         with:
-          name: npm-audit
-          path: npm-audit.json
+          name: ci-dependency-fix
+          path: |
+            package.json
+            package-lock.json
+      - run: npm ci
+      - run: npm audit --omit=dev --audit-level=high
       - run: npm run typecheck
       - run: npm run lint
       - run: npm test
