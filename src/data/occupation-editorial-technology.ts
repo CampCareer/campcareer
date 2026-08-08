@@ -79,4 +79,30 @@ export const TECHNOLOGY_OCCUPATION_EDITORIAL = [
       },
     },
   },
+  {
+    id: "cybersecurity-analyst",
+    overview:
+      "Cyber Security Analysts assess vulnerabilities across software, hardware and networks, investigate security incidents, analyse threat and security telemetry, evaluate damage and recovery options, and recommend controls that reduce the likelihood and impact of future attacks.",
+    tasks: [
+      "Assess systems, networks and applications to identify, prioritise and explain security vulnerabilities and risks",
+      "Analyse security alerts, logs and threat intelligence to identify suspicious activity and potential incidents",
+      "Investigate breaches and security incidents, determine root causes and recommend containment, recovery and mitigation actions",
+      "Research cyber threats, attacker techniques, malware and emerging vulnerabilities to maintain an up-to-date threat picture",
+      "Perform risk and vulnerability assessments and help design controls, detection rules and security improvements",
+      "Communicate technical findings, incident impacts and recommended actions to engineering, operations, risk and business stakeholders",
+    ],
+    countries: {
+      AU: {
+        headline: "A CSOL-listed cyber occupation with regional shortage signals and strong broader growth, but no national shortage in 2025",
+        entryPathway:
+          "OSCA assigns Cyber Security Analyst Skill Level 1. Common routes include ACS-accredited Bachelor degrees in Cyber Security, Computer Science or Information Technology and postgraduate cyber security programs for eligible graduates. Deakin and Edith Cowan offer current ACS Cybersecurity Professional-accredited Bachelor pathways, while the University of Newcastle has an accredited Master of Cyber Security pathway that includes Cyber Security Analyst. Structured entry also exists through ASD, CommBank and the CyberCX Academy, although government pathways can require Australian citizenship and security clearance and many private analyst roles still value hands-on networking, systems and security-operations experience.",
+        registration:
+          "There is no single statutory national occupational registration or licence required to work as a Cyber Security Analyst in Australia. ACS currently assesses ANZSCO 262116 Cyber Security Analyst for migration and explicitly derives that occupation description from OSCA 271133. An ACS skills assessment is an immigration and professional-assessment process rather than a domestic licence to practise.",
+        jobMarketNote:
+          "The exact current occupation is OSCA 271133 Cyber Security Analyst and the current migration occupation is ANZSCO 262116. JSA labour-market statistics remain published at broader ANZSCO 2621, which combines database and systems administrators with several ICT security occupations, so its employment and earnings are not treated as Cyber Security Analyst exact values. JSA's 2025 shortage analysis records Cyber Security Analyst as No Shortage nationally, with shortage in ACT, Queensland and South Australia. Cyber roles span national security, specialist cyber consultancies, banking, telecommunications and professional services.",
+        scoreCaveat:
+          "The opportunity score is deliberately conservative. Exact Cyber Security Analyst employment and earnings are not inferred from broader ANZSCO 2621, so salary and vacancy-intensity components remain zero. Broader 2621 vacancies fell about 6.56% year on year to May 2026, so vacancy trend scores zero; broader five- and ten-year growth projections receive only partial credit. Regional shortage is retained in the state rows but the national 2025 No Shortage result leaves the national shortage component at zero, while the verified CSOL signal remains credited.",
+      },
+    },
+  },
 ] as const satisfies readonly OccupationEditorial[]
