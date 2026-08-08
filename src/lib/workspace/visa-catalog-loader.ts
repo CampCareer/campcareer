@@ -1,12 +1,11 @@
 import "server-only"
 
 import { createClient } from "@/lib/supabase-server"
-import { VISA_CATALOG, type VisaEntry } from "./visa-catalog"
-import { applyBatch1VisaCatalog } from "./visa-catalog-batch-1"
-import { applyBatch2VisaCatalog } from "./visa-catalog-batch-2"
-import { applyNewZealandVisaCatalog } from "./visa-catalog-new-zealand"
-import { applySwitzerlandVisaCatalog } from "./visa-catalog-switzerland"
-import { applyUaeVisaCatalog } from "./visa-catalog-uae"
+import { type VisaEntry } from "./visa-catalog"
+import {
+  applyCompletedVisaCatalog,
+  getCompletedVisaCatalog,
+} from "./visa-catalog-complete"
 
 const VISA_KINDS = new Set<VisaEntry["kind"]>([
   "Study",
@@ -47,20 +46,8 @@ function rowToVisaEntry(row: VisaPathwayRow): VisaEntry | null {
   }
 }
 
-function applyCompletedVisaCatalog(
-  base: readonly VisaEntry[],
-): readonly VisaEntry[] {
-  return applyUaeVisaCatalog(
-    applySwitzerlandVisaCatalog(
-      applyBatch2VisaCatalog(
-        applyNewZealandVisaCatalog(applyBatch1VisaCatalog(base)),
-      ),
-    ),
-  )
-}
-
 export async function loadVisaCatalog(): Promise<readonly VisaEntry[]> {
-  const staticCatalog = applyCompletedVisaCatalog(VISA_CATALOG)
+  const staticCatalog = getCompletedVisaCatalog()
 
   try {
     const supabase = await createClient()

@@ -3,6 +3,11 @@
 import { useRouter, useSearchParams } from "next/navigation"
 import { CountryPill } from "@/components/workspace/country-pill"
 import { COMPARE_MODE_NAV_ITEMS, type CompareModeType } from "@/lib/compare-navigation"
+import {
+  buildCareerCompareCanonicalHref,
+  buildCityCompareCanonicalHref,
+  buildProgramCompareCanonicalHref,
+} from "@/lib/compare-routes"
 
 export { COMPARE_MODE_NAV_ITEMS }
 
@@ -21,16 +26,24 @@ export function ComparePageHeader({ activeType, countryCode }: ComparePageHeader
     if (!code) return
 
     if (activeType === "city") {
-      router.replace(`/compare?type=city&country=${encodeURIComponent(code)}`, { scroll: false })
+      router.replace(buildCityCompareCanonicalHref({ country: code }), { scroll: false })
       return
     }
 
-    const params = new URLSearchParams(searchParams.toString())
-    params.set("type", activeType === "career" ? "career" : "program")
-    params.set("country", code)
-    if (activeType === "program" && !params.get("field")) params.set("field", "nursing")
-    if (activeType === "career" && !params.get("profile")) params.set("profile", "starting-from-scratch")
-    router.replace(`/compare?${params.toString()}`, { scroll: false })
+    if (activeType === "career") {
+      router.replace(
+        buildCareerCompareCanonicalHref({
+          country: code,
+          profile: searchParams.get("profile") ?? undefined,
+          city: searchParams.get("city"),
+          careers: (searchParams.get("careers") ?? "").split(",").filter(Boolean),
+        }),
+        { scroll: false },
+      )
+      return
+    }
+
+    router.replace(buildProgramCompareCanonicalHref(), { scroll: false })
   }
 
   return (

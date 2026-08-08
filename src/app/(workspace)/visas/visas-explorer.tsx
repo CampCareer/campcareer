@@ -11,6 +11,7 @@ import {
 } from "lucide-react"
 import { VISA_KINDS, type VisaEntry } from "@/lib/workspace/visa-catalog"
 import { getVisaDetail } from "@/lib/workspace/visa-detail-resolver"
+import { visaCanonicalPath } from "@/lib/workspace/visa-routes"
 import { getCountryExplorer } from "@/lib/workspace/country-explorer"
 import { CategorySearch } from "@/components/workspace/category-search"
 import { CountryPill } from "@/components/workspace/country-pill"
@@ -30,10 +31,12 @@ const KIND_BADGE: Record<string, string> = {
 export function VisasExplorer({
   initialQuery,
   initialCountry,
+  initialVisaName,
   catalog,
 }: {
   initialQuery: string
   initialCountry: string
+  initialVisaName?: string
   catalog: readonly VisaEntry[]
 }) {
   const router = useRouter()
@@ -42,7 +45,9 @@ export function VisasExplorer({
   const [query, setQuery] = useState(initialQuery)
   const [kind, setKind] = useState<string>("all")
   const [country, setCountry] = useState<string>(initialCountry || "all")
-  const [selectedKey, setSelectedKey] = useState<string | null>(null)
+  const [selectedKey, setSelectedKey] = useState<string | null>(() =>
+    initialCountry && initialVisaName ? `${initialCountry}:${initialVisaName}` : null
+  )
 
   const countries = useMemo(() => {
     const byCode = new Map<string, string>()
@@ -67,6 +72,11 @@ export function VisasExplorer({
     }
   }, [initialCountry, selectedCountry, countries])
 
+  useEffect(() => {
+    if (!initialCountry || !initialVisaName) return
+    setSelectedKey(`${initialCountry}:${initialVisaName}`)
+  }, [initialCountry, initialVisaName])
+
   function updateCountry(code: string | null) {
     const nextCountry = code ?? "all"
     setCountry(nextCountry)
@@ -77,6 +87,11 @@ export function VisasExplorer({
     else params.set("country", nextCountry)
     const nextQuery = params.toString()
     router.replace(nextQuery ? `/visas?${nextQuery}` : "/visas", { scroll: false })
+  }
+
+  function selectVisa(visa: VisaEntry) {
+    setSelectedKey(`${visa.countryCode}:${visa.name}`)
+    router.replace(visaCanonicalPath(visa.countryCode, visa.name), { scroll: false })
   }
 
   const results = useMemo(() => {
@@ -183,7 +198,7 @@ export function VisasExplorer({
                 <button
                   key={key}
                   type="button"
-                  onClick={() => setSelectedKey(key)}
+                  onClick={() => selectVisa(visa)}
                   className={cn(
                     "rounded-xl border bg-white p-4 text-left transition",
                     isActive

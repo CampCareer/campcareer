@@ -1,9 +1,10 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { notFound } from "next/navigation"
+import { notFound, permanentRedirect } from "next/navigation"
 import { ArrowLeft, ArrowUpRight, BookOpenCheck, Building2, CalendarDays, Clock3, GraduationCap, Languages, MapPin, ShieldCheck, WalletCards } from "lucide-react"
 import { getAuProgramById } from "@/lib/programs/au-programs.server"
 import { institutionDetailPath } from "@/lib/institutions/institution-search"
+import { isIndexableAuProgramId } from "@/lib/programs/program-routes"
 import { parseProgramId, programDetailPath } from "@/lib/programs/program-search"
 import {
   formatProgramDuration,
@@ -55,7 +56,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const program = await loadProgram(segment)
   if (!program) return { title: "Program not found", robots: { index: false, follow: false } }
 
-  const index = program.officialUrlStatus === "verified" || program.facts.length >= 3
+  const index = isIndexableAuProgramId(program.id) && program.officialUrlStatus === "verified"
   return {
     title: `${program.title} · ${program.institutionName}`,
     description: [program.courseType, program.institutionName, programLocationSummary(program)]
@@ -70,6 +71,10 @@ export default async function ProgramDetailPage({ params }: Params) {
   const { program: segment } = await params
   const program = await loadProgram(segment)
   if (!program) notFound()
+
+  const canonicalPath = programDetailPath(program.id, program.title)
+  const canonicalSegment = canonicalPath.split("/").pop()
+  if (segment !== canonicalSegment) permanentRedirect(canonicalPath)
 
   const facts = programFactsByKey(program.facts)
   const location = programLocationSummary(program)
@@ -87,7 +92,7 @@ export default async function ProgramDetailPage({ params }: Params) {
 
   return (
     <div className="mx-auto max-w-5xl">
-      <Link href="/programs?country=AU" className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[#6f6d68] hover:text-[#3e7a2e]">
+      <Link href="/programs" className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[#6f6d68] hover:text-[#3e7a2e]">
         <ArrowLeft className="size-3.5" /> Back to Australian programs
       </Link>
 
@@ -102,12 +107,8 @@ export default async function ProgramDetailPage({ params }: Params) {
             </div>
             <h1 className="mt-5 text-[28px] font-semibold leading-tight tracking-[-0.03em] text-[#1b1b1b] sm:text-[36px]">{program.title}</h1>
             {institutionProfilePath ? (
-              <Link
-                href={institutionProfilePath}
-                className="mt-3 inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#4f4d48] transition hover:text-[#3e7a2e] hover:underline"
-              >
-                <Building2 className="size-4" />
-                {program.institutionName}
+              <Link href={institutionProfilePath} className="mt-3 inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#4f4d48] transition hover:text-[#3e7a2e] hover:underline">
+                <Building2 className="size-4" />{program.institutionName}
               </Link>
             ) : (
               <p className="mt-3 text-[14px] font-semibold text-[#4f4d48]">{program.institutionName}</p>
@@ -146,9 +147,7 @@ export default async function ProgramDetailPage({ params }: Params) {
                     </>
                   )
                   return cityHref ? (
-                    <Link key={item.campusId ?? `${item.locationName}-${index}`} href={cityHref} className="rounded-lg border border-[#dbe5f7] bg-[#f8faff] p-3.5 transition hover:border-[#9db7e8] hover:bg-white">
-                      {body}
-                    </Link>
+                    <Link key={item.campusId ?? `${item.locationName}-${index}`} href={cityHref} className="rounded-lg border border-[#dbe5f7] bg-[#f8faff] p-3.5 transition hover:border-[#9db7e8] hover:bg-white">{body}</Link>
                   ) : (
                     <div key={item.campusId ?? `${item.locationName}-${index}`} className="rounded-lg border border-[#eeece8] bg-[#fafaf8] p-3.5">{body}</div>
                   )
@@ -184,12 +183,8 @@ export default async function ProgramDetailPage({ params }: Params) {
           </dl>
           <div className="mt-5 space-y-2">
             {institutionProfilePath && (
-              <Link
-                href={institutionProfilePath}
-                className="flex items-center justify-center gap-2 rounded-lg border border-[#cfd9ca] bg-[#f7faf5] px-4 py-2.5 text-[12px] font-semibold text-[#3e7a2e] transition hover:bg-[#edf5ea]"
-              >
-                Institution profile
-                <Building2 className="size-3.5" />
+              <Link href={institutionProfilePath} className="flex items-center justify-center gap-2 rounded-lg border border-[#cfd9ca] bg-[#f7faf5] px-4 py-2.5 text-[12px] font-semibold text-[#3e7a2e] transition hover:bg-[#edf5ea]">
+                Institution profile<Building2 className="size-3.5" />
               </Link>
             )}
             {officialUrl && <SourceLink href={officialUrl} primary>{verified ? "Official program page" : "Provider page · unverified"}</SourceLink>}
