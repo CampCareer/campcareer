@@ -8,12 +8,14 @@ import {
   normalizeInstitutionSlugSegment,
 } from "@/lib/institutions/institution-search"
 import { INDEXABLE_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo"
+import { INDEXABLE_DE_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-de"
 import { INDEXABLE_NL_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-nl"
 import { INDEXABLE_NZ_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-nz"
 import { INDEXABLE_SG_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-sg"
 import { INDEXABLE_UK_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-uk"
 import { getInstitutionDetail, type InstitutionDetail } from "@/lib/institutions/institution-detail.server"
 import { CanadianInstitutionDetailView } from "../../canadian-institution-detail"
+import { GermanyInstitutionDetailView } from "../../germany-institution-detail"
 import { InstitutionDetailView } from "../../institution-detail"
 import { NetherlandsInstitutionDetailView } from "../../netherlands-institution-detail"
 import { NewZealandInstitutionDetailView } from "../../new-zealand-institution-detail"
@@ -29,6 +31,7 @@ function isIndexableInstitutionRoute(countryCode: string, slug: string) {
     || INDEXABLE_NL_INSTITUTION_ROUTES.some(([c, s]) => c === countryCode && s === slug)
     || INDEXABLE_NZ_INSTITUTION_ROUTES.some(([c, s]) => c === countryCode && s === slug)
     || INDEXABLE_SG_INSTITUTION_ROUTES.some(([c, s]) => c === countryCode && s === slug)
+    || INDEXABLE_DE_INSTITUTION_ROUTES.some(([c, s]) => c === countryCode && s === slug)
 }
 
 export async function generateMetadata({ params }: InstitutionDetailPageProps): Promise<Metadata> {
@@ -48,7 +51,9 @@ export async function generateMetadata({ params }: InstitutionDetailPageProps): 
         ? `Explore ${detail.name} NZQA provider identity and source-backed ${locationLabel} on CampCareer. Program data will be added as the New Zealand catalogue is verified.`
         : countryCode === "SG"
           ? `Explore ${detail.name} UEN identity and source-backed ${locationLabel} on CampCareer. Program data will be added as the Singapore catalogue is verified.`
-          : `Explore ${detail.name} programs, ${locationLabel} and source-backed institution details on CampCareer.`
+          : countryCode === "DE"
+            ? `Explore ${detail.name} HRK-verified official identity and DFG-verified ${locationLabel} on CampCareer. Program data will be added as the Germany catalogue is verified.`
+            : `Explore ${detail.name} programs, ${locationLabel} and source-backed institution details on CampCareer.`
 
     return {
       title: `${detail.name} | Institutions`,
@@ -89,5 +94,6 @@ export default async function InstitutionDetailPage({ params }: InstitutionDetai
   if (countryCode === "NL") return <NetherlandsInstitutionDetailView institution={detail} />
   if (countryCode === "NZ") return <NewZealandInstitutionDetailView institution={detail} />
   if (countryCode === "SG") return <SingaporeInstitutionDetailView institution={detail} />
+  if (countryCode === "DE") return <GermanyInstitutionDetailView institution={detail} />
   return <InstitutionDetailView institution={detail} />
 }
