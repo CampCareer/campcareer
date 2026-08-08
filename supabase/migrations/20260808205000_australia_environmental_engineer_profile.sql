@@ -215,11 +215,11 @@ on conflict (profile_key, link_type, url) do update set
 insert into public.country_occupation_program_links (
   profile_key, program_ref, relation_type, source_checked_at
 )
-select 'AU:environmental-engineer', 'au-program:' || id::text, 'direct', '2026-08-08'
+select 'AU:environmental-engineer', 'au-program:' || id::text, 'direct', '2026-08-08'::date
 from public.courses_au
 where institution_id = 'rmit-university' and course_code = '110998M'
 union all
-select 'AU:environmental-engineer', 'au-program:' || id::text, 'graduate_entry', '2026-08-08'
+select 'AU:environmental-engineer', 'au-program:' || id::text, 'graduate_entry', '2026-08-08'::date
 from public.courses_au
 where institution_id = 'rmit-university' and course_code = '087983C'
 on conflict (profile_key, program_ref) do update set
