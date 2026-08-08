@@ -67,11 +67,12 @@ test("UK work-rights copy keeps Student visa qualification", () => {
   assert.ok(dashboard.includes("other study categories can have different or no work permission"))
 })
 
-test("London scope is Greater London and Phase 5 stays out of Compare/SEO publication", () => {
+test("London scope remains Greater London while approved UK profiles are published and Compare-enabled", () => {
   assert.ok(profile.includes('city.study_destination_scope === "greater_london"'))
   assert.ok(dashboard.includes("London uses the Greater London study-destination boundary"))
   assert.ok(page.includes("generateStaticParams"))
   assert.ok(page.includes("PUBLISHED_UK_CITY_SLUGS"))
-  assert.ok(page.includes("robots: { index: false, follow: true }"))
-  assert.doesNotMatch(dashboard, /buildCityCompareCanonicalHref|Compare .*<|country: "UK"/)
+  assert.ok(page.includes("robots: { index: true, follow: true }"))
+  assert.ok(page.includes("robots: { index: false, follow: false }"))
+  assert.ok(dashboard.includes('buildCityCompareCanonicalHref({ country: "UK", left: profile.slug })'))
 })
