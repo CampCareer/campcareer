@@ -1,6 +1,7 @@
 import "server-only"
 
 import { supabase } from "@/lib/supabase"
+import { supabaseAdmin } from "@/lib/supabase-admin"
 import type {
   CountryOccupationLink,
   CountryOccupationMetric,
@@ -98,7 +99,9 @@ export async function getCountryOccupationProfile(
       : []
 
   if (auProgramIds.length > 0) {
-    const coursesResult = await supabase
+    // courses_au and the institution identity read model are deliberately not exposed to anon.
+    // Resolve only the already-curated occupation program IDs through the server-only service-role client.
+    const coursesResult = await supabaseAdmin
       .from("courses_au")
       .select("id, institution_id, title, duration_years, tuition_fee_aud, official_course_url, cricos_url, qualifax_url")
       .in("id", auProgramIds)
@@ -112,7 +115,7 @@ export async function getCountryOccupationProfile(
     const institutionNames = new Map<string, string>()
 
     if (institutionIds.length > 0) {
-      const institutionsResult = await supabase
+      const institutionsResult = await supabaseAdmin
         .from("au_institution_identity_v1")
         .select("legacy_provider_id, institution_name")
         .in("legacy_provider_id", institutionIds)
