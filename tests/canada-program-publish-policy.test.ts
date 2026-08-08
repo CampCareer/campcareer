@@ -47,6 +47,8 @@ test("closed international admissions hold a program", () => {
   for (const admissionStatus of [
     "international_unavailable_or_not_open_for_current_2026_27_intake",
     "international_program_confirmed_current_but_september_2026_new_applications_closed_2027_opens_october_2026",
+    "fall_2027_application_cycle_not_yet_open",
+    "fall 2027 application cycle not yet open",
   ]) {
     const decision = classifyCaProgramPublication({ ...base, internationalProgramAdmissionStatus: admissionStatus })
     assert.equal(decision.tier, "C")
