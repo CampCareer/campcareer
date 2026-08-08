@@ -15,5 +15,5 @@ export const OCCUPATION_EDITORIAL = [
 const BY_ID = new Map(OCCUPATION_EDITORIAL.map((item) => [item.id, item]))
 
 export function getOccupationEditorial(id: string) {
-  return BY_ID.get(id) ?? null
+  return BY_ID.get(id)
 }
