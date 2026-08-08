@@ -59,6 +59,23 @@ In particular:
 
 If a future U.S. product decision adopts metro study markets, add a separate explicit scope model instead of changing named-city membership implicitly.
 
+## Phase 2 normalization status
+
+Production migration `20260808151041_normalize_us_tier_a_city_slugs_v1.sql` normalizes only the eight approved Tier A rows.
+
+The migration:
+
+- preserves all existing canonical geography UUIDs;
+- assigns the approved public slugs;
+- sets `scope_kind = 'city'` and keeps the rows active;
+- records `study_destination_scope = 'named_city'` and `publication_tier = 'A'` in geography metadata;
+- records a scope note that prohibits metro, borough and neighbouring-municipality inference without explicit evidence;
+- creates canonical-name, source-name and legacy source-slug aliases for future matching.
+
+Post-migration verification confirmed all eight rows have the expected slug, scope and Tier A metadata. Each approved city has three provenance aliases: canonical name, `public.cities_us` source name and the legacy state-qualified source slug such as `new-york-ny`.
+
+New York remains a named-city legacy geography at this stage. No Brooklyn, Queens, Bronx or Staten Island campus records are silently reassigned to it. Campus-level scope quality is verified separately in the institution/programme linkage phase.
+
 ## Publication limit
 
 The initial U.S. Cities selector, sitemap and City Compare must be bounded to these eight Tier A slugs. Tier B cities remain non-public until separately approved and fully satisfy the same data, metric, linkage and SEO gates used for Australia and Canada.
