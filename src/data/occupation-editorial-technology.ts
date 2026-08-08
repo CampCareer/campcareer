@@ -53,4 +53,30 @@ export const TECHNOLOGY_OCCUPATION_EDITORIAL = [
       },
     },
   },
+  {
+    id: "data-engineer",
+    overview:
+      "Data Engineers design, build, operationalise and maintain the pipelines, storage systems and processing infrastructure that move and transform data for analytics, reporting, machine learning and other data products. The role focuses on reliable data platforms and scalable data delivery rather than primarily interpreting business results.",
+    tasks: [
+      "Build, test and maintain batch and streaming data pipelines that move information between source, storage and analytics systems",
+      "Develop and optimise extraction, transformation and loading processes and reusable data-processing workflows",
+      "Design and operate data warehouses, lakehouses, cloud storage and related data-platform infrastructure",
+      "Automate data delivery, monitoring, validation and recovery processes to improve reliability and scalability",
+      "Implement access controls, secure handling, privacy protections and governance requirements across data systems",
+      "Work with analysts, data scientists, software engineers and platform teams to make trusted datasets available for downstream use",
+    ],
+    countries: {
+      AU: {
+        headline: "A newly distinct OSCA data-platform occupation with direct study pathways and strong broader tech growth, but limited occupation-specific labour data",
+        entryPathway:
+          "OSCA assigns Data Engineer Skill Level 1. A direct Australian pathway is available through programs such as TAFE NSW's Bachelor of Information Technology (Data Engineering), while postgraduate routes include Western Sydney University's Master of Data Engineering. Computer Science, Software Engineering, Information Technology, Data Science and related degrees can also lead into the field when combined with database, SQL, programming, cloud and data-platform skills. Compared with general analyst roles, many employers expect stronger production engineering experience, so graduate entry exists but is less universal.",
+        registration:
+          "There is no single statutory national occupational registration or licence required to work as a Data Engineer in Australia. Data Engineer did not have its own legacy ANZSCO 2022 occupation code. For migration, CampCareer's reviewed Australian correspondence maps OSCA 223233 to legacy ANZSCO 261313 Software Engineer, for which ACS is the assessing authority. That correspondence is not a domestic licence and applicants must ensure their actual duties fit the nominated occupation under current ACS and Home Affairs rules.",
+        jobMarketNote:
+          "The exact current occupation is OSCA 223233 Data Engineer. JSA's current labour-market series remain ANZSCO-based, so CampCareer uses broader 2613 Software and Applications Programmers only as contextual evidence and does not present its employment or earnings as Data Engineer figures. No exact current OSCA 223233 shortage rating has been verified, so shortage remains unscored. The broader 2613 market still shows strong five- and ten-year projected growth, while its May 2026 vacancy level was lower than a year earlier.",
+        scoreCaveat:
+          "The opportunity score is deliberately conservative. Exact Data Engineer employment, earnings, shortage and vacancy intensity are not reconstructed from legacy 2613 or 261313 data. Broader 2613 vacancies fell about 9.86% year on year to May 2026 and therefore add no trend points; broader five- and ten-year growth receives only partial credit. Entry-level access receives moderated credit because direct degrees exist but many roles expect prior software, database, cloud or analytics engineering experience. Visa credit reflects only the reviewed OSCA-to-ANZSCO CSOL correspondence, not a direct Data Engineer title in the current legal list.",
+      },
+    },
+  },
 ] as const satisfies readonly OccupationEditorial[]
