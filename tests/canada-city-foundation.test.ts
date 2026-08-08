@@ -5,11 +5,13 @@ import test from "node:test"
 test("Toronto city profile is published as a Canada workspace city", () => {
   const page = readFileSync("src/app/(workspace)/cities/ca/toronto/page.tsx", "utf8")
   const dashboard = readFileSync("src/app/(workspace)/cities/canada-city-dashboard.tsx", "utf8")
+  const loader = readFileSync("src/lib/cities/ca-city-profile.server.ts", "utf8")
 
   assert.ok(page.includes('getCaCityProfile("toronto")'))
   assert.ok(page.includes('canonical: "/cities/ca/toronto"'))
   assert.ok(dashboard.includes("City of Toronto"))
-  assert.ok(dashboard.includes("24 h / week"))
+  assert.ok(dashboard.includes("h / week"))
+  assert.ok(loader.includes('metrics.get("student_work_hours_week")'))
   assert.ok(dashboard.includes("Canonical linked programs"))
 })
 
