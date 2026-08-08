@@ -88,6 +88,7 @@ function admissionHoldReason(admissionStatus: string | null): CaProgramHoldReaso
     "not currently",
     "not_current",
     "unavailable",
+    "closed",
     "restricted_not_open",
     "temporarily_paused",
     "not_eligible_for_study_permit",
