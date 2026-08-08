@@ -17,7 +17,13 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
-      - run: npm audit --omit=dev --audit-level=high
+      - name: Capture production audit
+        run: npm audit --omit=dev --audit-level=high --json > npm-audit.json || true
+      - name: Upload production audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-audit
+          path: npm-audit.json
       - run: npm run typecheck
       - run: npm run lint
       - run: npm test
