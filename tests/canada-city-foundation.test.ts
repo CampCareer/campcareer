@@ -2,9 +2,17 @@ import assert from "node:assert/strict"
 import { readFileSync } from "node:fs"
 import test from "node:test"
 
-const CANADA_CITY_SLUGS = ["toronto", "vancouver", "montreal", "ottawa", "calgary"] as const
+const CANADA_CITY_SLUGS = [
+  "toronto",
+  "vancouver",
+  "montreal",
+  "ottawa",
+  "calgary",
+  "waterloo",
+  "edmonton",
+] as const
 
-test("five Canada city profiles are published as workspace cities", () => {
+test("seven Canada city profiles are published as workspace cities", () => {
   for (const slug of CANADA_CITY_SLUGS) {
     const page = readFileSync(`src/app/(workspace)/cities/ca/${slug}/page.tsx`, "utf8")
     assert.ok(page.includes(`getCaCityProfile("${slug}")`))
@@ -34,7 +42,7 @@ test("Canada city normalization does not infer GTA programme membership", () => 
   assert.ok(torontoMigration.includes("Mississauga, Brampton and Oakville are not inferred"))
 })
 
-test("Canada dashboard and sitemap link all published launch cities", () => {
+test("Canada dashboard and sitemap link all published comparison-ready cities", () => {
   const dashboard = readFileSync(
     "src/app/(workspace)/countries/canada-country-dashboard.tsx",
     "utf8",
@@ -49,6 +57,8 @@ test("Canada dashboard and sitemap link all published launch cities", () => {
   assert.ok(dashboard.includes('Montreal: "/cities/ca/montreal"'))
   assert.ok(dashboard.includes('Ottawa: "/cities/ca/ottawa"'))
   assert.ok(dashboard.includes('Calgary: "/cities/ca/calgary"'))
+  assert.ok(dashboard.includes('Waterloo: "/cities/ca/waterloo"'))
+  assert.ok(dashboard.includes('Edmonton: "/cities/ca/edmonton"'))
 })
 
 test("Canada City Compare is country-aware, canonical and data-driven", () => {
