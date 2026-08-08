@@ -126,9 +126,13 @@ function chooseComparisonPair(
 
   const requestedRightProfile =
     rightSlug && rightSlug !== left.slug ? bySlug.get(rightSlug) : undefined
+  const defaultRight =
+    left.slug === "sydney"
+      ? bySlug.get("melbourne")
+      : bySlug.get("sydney")
   const right =
     requestedRightProfile ??
-    (left.slug !== "melbourne" ? bySlug.get("melbourne") : undefined) ??
+    (defaultRight?.slug !== left.slug ? defaultRight : undefined) ??
     profiles.find((profile) => profile.slug !== left.slug)
 
   if (!right || left.slug === right.slug) return null
