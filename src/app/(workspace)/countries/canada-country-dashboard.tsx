@@ -21,6 +21,10 @@ import { getCountryProfile } from "@/lib/workspace/country-profile"
 import { VISA_CATALOG } from "@/lib/workspace/visa-catalog"
 import { cn } from "@/lib/utils"
 
+const CITY_LINKS: Record<string, string> = {
+  Toronto: "/cities/ca/toronto",
+}
+
 function MetricCard({
   icon,
   label,
@@ -184,14 +188,20 @@ export function CanadaCountryDashboard({ metrics }: { metrics: CountryMetrics })
                   {region.name}
                 </h3>
                 <div className="mt-2 flex flex-wrap gap-1.5">
-                  {region.cities.map((city) => (
-                    <span
-                      key={city}
-                      className="rounded-md border border-[#e7e6e3] bg-[#fafaf8] px-2.5 py-1 text-[12px] font-medium text-[#4d4c48]"
-                    >
-                      {city}
-                    </span>
-                  ))}
+                  {region.cities.map((city) => {
+                    const href = CITY_LINKS[city]
+                    const className = "rounded-md border border-[#e7e6e3] bg-[#fafaf8] px-2.5 py-1 text-[12px] font-medium text-[#4d4c48]"
+
+                    return href ? (
+                      <Link key={city} href={href} className={`${className} transition hover:border-[#cfd9ca] hover:bg-white hover:text-[#3e7a2e]`}>
+                        {city}
+                      </Link>
+                    ) : (
+                      <span key={city} className={className}>
+                        {city}
+                      </span>
+                    )
+                  })}
                 </div>
               </div>
             ))}
