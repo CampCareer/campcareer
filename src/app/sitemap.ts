@@ -7,6 +7,7 @@ import { INDEXABLE_OCCUPATION_PROFILES, occupationCanonicalPath } from "@/lib/wo
 import { getCompletedVisaCatalog } from "@/lib/workspace/visa-catalog-complete"
 import { getIndexableVisaRoutes } from "@/lib/workspace/visa-routes"
 import { INDEXABLE_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo"
+import { PUBLISHED_US_CITY_SLUGS } from "@/lib/cities/city-routes"
 import { CANONICAL_COUNTRY_SLUGS, SITE_URL, countryCanonicalPath } from "@/lib/seo-routes.mjs"
 
 const lastModified = new Date("2026-08-08")
@@ -34,6 +35,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/cities/ca/calgary`, lastModified, priority: 0.8, changeFrequency: "monthly" },
     { url: `${SITE_URL}/cities/ca/waterloo`, lastModified, priority: 0.78, changeFrequency: "monthly" },
     { url: `${SITE_URL}/cities/ca/edmonton`, lastModified, priority: 0.78, changeFrequency: "monthly" },
+    ...PUBLISHED_US_CITY_SLUGS.map((slug) => ({
+      url: `${SITE_URL}/cities/us/${slug}`,
+      lastModified,
+      priority: 0.8,
+      changeFrequency: "monthly" as const,
+    })),
     { url: `${SITE_URL}/methodology`, lastModified, priority: 0.5, changeFrequency: "monthly" },
     ...methodologies.map((slug) => ({ url: `${SITE_URL}/methodology/${slug}`, lastModified, priority: 0.45, changeFrequency: "monthly" as const })),
     { url: `${SITE_URL}/privacy`, lastModified, priority: 0.2, changeFrequency: "yearly" },
