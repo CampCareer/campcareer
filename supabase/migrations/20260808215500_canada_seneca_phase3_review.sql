@@ -153,7 +153,7 @@ insert into public.program_occupation_ca_staging (
   program_catalog_id, canonical_career_id, rule_version, match_basis, match_pattern,
   review_status, relation_type, source_checked_at, reviewer_note, matched_at, reviewed_at
 )
-select c.id, v.career_id, 'ca-phase3-seneca-2026-08-08', 'manual_official_program_review',
+select c.id, v.career_id, 'ca-phase3-seneca-2026-08-08', 'manual',
        'seneca_current_replacement_2026', 'approved', v.relation_type, '2026-08-08', v.note, now(), now()
 from public.program_catalog_ca_staging c
 join (values
