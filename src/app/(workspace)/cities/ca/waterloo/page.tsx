@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   description:
     "Compare Waterloo student living costs, GRT UPass transport, international student work rules, canonical institutions and linked programmes.",
   alternates: { canonical: "/cities/ca/waterloo" },
+  robots: { index: true, follow: true },
 }
 
 export default async function WaterlooCityPage() {
