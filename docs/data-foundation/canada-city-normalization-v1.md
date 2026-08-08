@@ -15,7 +15,7 @@ For Toronto this means:
 - Mississauga, Brampton, Oakville, Markham and other GTA municipalities are not inferred into Toronto programme delivery.
 - A Toronto CMA or GTA-wide statistic must not be mixed with City of Toronto programme scope unless the UI explicitly labels the different geography and the comparison is methodologically justified.
 
-The same named-city rule applies to Vancouver, Montreal, Ottawa and Calgary. This prevents institution-wide DLI records or broad marketing labels from becoming false campus-level programme claims.
+The same named-city rule applies to Vancouver, Montreal, Ottawa, Calgary, Waterloo and Edmonton. This prevents institution-wide DLI records or broad marketing labels from becoming false campus-level programme claims.
 
 ## Canonical geography normalization
 
@@ -27,7 +27,7 @@ Migration `20260808100208_normalize_canada_city_slugs_v1.sql`:
 - records the named-city scope in geography metadata;
 - stores canonical/source aliases for future matching.
 
-No replacement UUIDs are created for the five launch cities.
+No replacement UUIDs are created for the published Canada cities.
 
 ## Read models
 
@@ -43,7 +43,7 @@ Migration `20260808102538_publish_canada_city_programme_directory_v1.sql` create
 
 The programme directory is a thin read index over canonical `catalog.programme_offerings` and campus geographies. It is used for city programme counts and exact shared-programme intersections in City Compare.
 
-## Five launch cities
+## Seven comparison-ready cities
 
 Current comparison-ready canonical coverage:
 
@@ -53,13 +53,15 @@ Current comparison-ready canonical coverage:
 | Montreal | 4 | 4 | 23 |
 | Ottawa | 2 | 2 | 16 |
 | Vancouver | 1 | 1 | 13 |
+| Waterloo | 2 | 2 | 12 |
+| Edmonton | 2 | 2 | 10 |
 | Calgary | 1 | 1 | 9 |
 
 The richer official Canada programme catalogue is being normalized in a separate programme-data workflow. Staging rows are not added to city-facing linked-program counts until they become canonical offerings.
 
 ## Metric publication
 
-The five launch cities each require the same five verified metric families:
+Each comparison-ready city requires the same five verified metric families:
 
 1. `city_population`
 2. `student_living_cost_monthly_range`
@@ -72,6 +74,8 @@ Production migrations:
 - `20260808100251_publish_toronto_city_mvp_v1.sql`
 - `20260808101741_publish_canada_city_metrics_batch_v1.sql` — Vancouver, Montreal, Ottawa and generic Canada transport contract
 - `20260808102328_publish_calgary_city_metrics_v1.sql`
+- `20260808104907_publish_waterloo_city_metrics_v1.sql`
+- `20260808105144_publish_edmonton_city_metrics_v1.sql`
 
 Metric periods remain source-native:
 
@@ -80,7 +84,9 @@ Metric periods remain source-native:
 - Vancouver transport: U-Pass BC monthly fee;
 - Montreal transport: STM student monthly All Modes A fare;
 - Ottawa transport: U-Pass term fee;
-- Calgary transport: Calgary Transit Fall 2026 U-Pass term fee.
+- Calgary transport: Calgary Transit Fall 2026 U-Pass term fee;
+- Waterloo transport: Fall 2026 GRT UPass term fee;
+- Edmonton transport: University of Alberta U-Pass term fee.
 
 Do not convert transport or work metrics into Australian weekly/fortnight formats merely to make the UI look uniform.
 
@@ -97,7 +103,7 @@ A Canada city enters the selector automatically only when:
 - canonical institution count is greater than zero;
 - canonical linked programme count is greater than zero.
 
-The current automatic selector therefore contains Toronto, Montreal, Ottawa, Vancouver and Calgary. New Canada cities can enter without adding their names to Compare code once they satisfy the same data contract.
+The current automatic selector therefore contains Toronto, Montreal, Ottawa, Vancouver, Waterloo, Edmonton and Calgary. New Canada cities can enter without adding their names to Compare code once they satisfy the same data contract.
 
 Shared programme count is calculated from canonical city-programme links only. It does not use DLI location strings or staging programme rows.
 
