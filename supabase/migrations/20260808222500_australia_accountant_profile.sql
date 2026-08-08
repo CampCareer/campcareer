@@ -32,10 +32,10 @@ where institution_id = 'macquarie-university'
   and course_code = '099149E';
 
 update public.courses_au
-set official_course_url = 'https://coursehandbook.mq.edu.au/2024/courses/c000083',
+set official_course_url = 'https://coursehandbook.mq.edu.au/2026/courses/c000083',
     official_url_status = 'verified',
     official_url_checked_at = now(),
-    official_url_source = 'Provider course handbook, manually verified'
+    official_url_source = 'Provider 2026 course handbook, manually verified'
 where institution_id = 'macquarie-university'
   and course_code = '099183C';
 
@@ -198,7 +198,7 @@ insert into public.country_occupation_links (
   ('AU:accountant', 'entry_program', 'CPA Australia — Migration skills assessment', 'https://www.cpaaustralia.com.au/migration-services/migration-to-australia', 'official_skills_assessment', null, 1, '2026-08-08'),
   ('AU:accountant', 'entry_program', 'CA ANZ — Migration skills assessment', 'https://www.charteredaccountantsanz.com/become-a-member/migration-assessment', 'official_skills_assessment', null, 2, '2026-08-08'),
   ('AU:accountant', 'entry_program', 'Macquarie — Bachelor of Professional Accounting', 'https://coursehandbook.mq.edu.au/2026/courses/c000014', 'university_program', null, 3, '2026-08-08'),
-  ('AU:accountant', 'entry_program', 'Macquarie — Master of Professional Accounting', 'https://coursehandbook.mq.edu.au/2024/courses/c000083', 'university_program', null, 4, '2026-08-08'),
+  ('AU:accountant', 'entry_program', 'Macquarie — Master of Professional Accounting', 'https://coursehandbook.mq.edu.au/2026/courses/c000083', 'university_program', null, 4, '2026-08-08'),
   ('AU:accountant', 'source', 'ABS — OSCA 211131 Accountant (General)', 'https://www.abs.gov.au/statistics/classifications/osca-occupation-standard-classification-australia/2024-version-1-0/browse-classification/2/21/211/2111/211131', 'official_statistics', null, 1, '2026-08-08'),
   ('AU:accountant', 'source', 'JSA — Accountants (General) ANZSCO 221111 profile', 'https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupations/221111-accountants-general', 'official_labour_market', null, 2, '2026-08-08'),
   ('AU:accountant', 'source', 'JSA — Accountants ANZSCO 2211 profile', 'https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupations/2211-accountants', 'official_labour_market', null, 3, '2026-08-08'),
@@ -206,8 +206,8 @@ insert into public.country_occupation_links (
   ('AU:accountant', 'source', 'JSA — Employment Projections', 'https://www.jobsandskills.gov.au/data/employment-projections', 'official_labour_market', null, 5, '2026-08-08'),
   ('AU:accountant', 'source', 'JSA — 2025 Occupation Shortage List', 'https://www.jobsandskills.gov.au/data/occupation-shortages-analysis/occupation-shortage-list', 'official_labour_market', null, 6, '2026-08-08'),
   ('AU:accountant', 'source', 'Home Affairs — Skilled occupation list', 'https://immi.homeaffairs.gov.au/visas/working-in-australia/skill-occupation-list', 'official_migration', null, 7, '2026-08-08')
-on conflict (profile_key, link_type, label) do update set
-  url = excluded.url,
+on conflict (profile_key, link_type, url) do update set
+  label = excluded.label,
   provider_type = excluded.provider_type,
   region_code = excluded.region_code,
   sort_order = excluded.sort_order,
