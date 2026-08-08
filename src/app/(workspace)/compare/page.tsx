@@ -4,11 +4,13 @@ import { AU_NURSING_PROGRAM_COMPARE_REPOSITORY } from "@/lib/data-foundation/com
 import { parseCareerComparisonState, type CareerComparisonState } from "@/lib/career-comparison"
 import { parseCountryComparisonState, type CountryComparisonState } from "@/lib/country-comparison"
 import { getAuCityComparison } from "@/lib/cities/au-city-comparison.server"
+import { getCaCityComparison } from "@/lib/cities/ca-city-comparison.server"
 import { resolveCompareModeType, type CompareModeType } from "@/lib/compare-navigation"
 import ProgramsCompareMatrix from "./programs-compare-matrix"
 import CountriesCompareMatrix from "./countries-compare-matrix"
 import CareersCompareMatrix from "./careers-compare-matrix"
 import { CitiesCompareMatrix } from "./cities-compare-matrix"
+import { CanadaCitiesCompareMatrix } from "./canada-cities-compare-matrix"
 import { ComparePageHeader } from "./compare-mode-navigation"
 
 export const dynamic = "force-dynamic"
@@ -86,41 +88,68 @@ function CountriesCompare({ comparison }: { comparison: CountryComparisonState }
 }
 
 async function CitiesCompare({ countryCode, params }: { countryCode: string; params: URLSearchParams }) {
-  if (countryCode !== "AU") {
+  if (countryCode === "AU") {
+    const comparison = await getAuCityComparison(params.get("left"), params.get("right"))
+    if (!comparison) {
+      return (
+        <UnsupportedSurface
+          type="Cities"
+          href="/compare?type=city&country=AU"
+          label="Compare Australian cities"
+          activeType="city"
+          countryCode={countryCode}
+        />
+      )
+    }
+
     return (
-      <UnsupportedSurface
-        type="Cities"
-        href="/compare?type=city&country=AU"
-        label="Compare Australian cities"
-        activeType="city"
-        countryCode={countryCode}
-      />
+      <section className="w-full pb-4" aria-label="Cities comparison">
+        <ComparePageHeader activeType="city" countryCode={countryCode} />
+        <CitiesCompareMatrix
+          left={comparison.left}
+          right={comparison.right}
+          options={comparison.options}
+          sharedProgramCount={comparison.sharedProgramCount}
+        />
+      </section>
     )
   }
 
-  const comparison = await getAuCityComparison(params.get("left"), params.get("right"))
-  if (!comparison) {
+  if (countryCode === "CA") {
+    const comparison = await getCaCityComparison(params.get("left"), params.get("right"))
+    if (!comparison) {
+      return (
+        <UnsupportedSurface
+          type="Cities"
+          href="/compare?type=city&country=CA"
+          label="Compare Canadian cities"
+          activeType="city"
+          countryCode={countryCode}
+        />
+      )
+    }
+
     return (
-      <UnsupportedSurface
-        type="Cities"
-        href="/compare?type=city&country=AU"
-        label="Compare Australian cities"
-        activeType="city"
-        countryCode={countryCode}
-      />
+      <section className="w-full pb-4" aria-label="Cities comparison">
+        <ComparePageHeader activeType="city" countryCode={countryCode} />
+        <CanadaCitiesCompareMatrix
+          left={comparison.left}
+          right={comparison.right}
+          options={comparison.options}
+          sharedProgramCount={comparison.sharedProgramCount}
+        />
+      </section>
     )
   }
 
   return (
-    <section className="w-full pb-4" aria-label="Cities comparison">
-      <ComparePageHeader activeType="city" countryCode={countryCode} />
-      <CitiesCompareMatrix
-        left={comparison.left}
-        right={comparison.right}
-        options={comparison.options}
-        sharedProgramCount={comparison.sharedProgramCount}
-      />
-    </section>
+    <UnsupportedSurface
+      type="Cities"
+      href="/compare?type=city&country=AU"
+      label="Compare Australian cities"
+      activeType="city"
+      countryCode={countryCode}
+    />
   )
 }
 
