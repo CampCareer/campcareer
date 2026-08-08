@@ -152,10 +152,7 @@ function stringArray(value: unknown): string[] {
   return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : []
 }
 
-function groupInstitutions(
-  rows: InstitutionRow[],
-  slugs: Map<string, string>,
-): CaCityInstitution[] {
+function groupInstitutions(rows: InstitutionRow[], slugs: Map<string, string>): CaCityInstitution[] {
   const grouped = new Map<string, CaCityInstitution>()
 
   for (const row of rows) {
@@ -248,7 +245,8 @@ async function loadCaCityProfile(slug: string): Promise<CaCityProfile | null> {
   const livingLow = numberValue(livingValue.low)
   const livingHigh = numberValue(livingValue.high)
 
-  const transportRow = metrics.get("student_transport_monthly_reference")
+  const transportRow =
+    metrics.get("student_transport_reference") ?? metrics.get("student_transport_monthly_reference")
   const transportValue = record(transportRow?.value)
   const transportAmount = numberValue(transportValue.amount)
 
@@ -310,7 +308,8 @@ async function loadCaCityProfile(slug: string): Promise<CaCityProfile | null> {
             currency: stringValue(transportValue.currency) ?? "CAD",
             referenceKind: stringValue(transportValue.transport_kind) ?? "student_transport_reference",
             eligibilityRequired: transportValue.eligibility_required === true,
-            adultSingleFare: numberValue(transportValue.adult_presto_single),
+            adultSingleFare:
+              numberValue(transportValue.adult_single_fare) ?? numberValue(transportValue.adult_presto_single),
             evidenceKind: transportRow.evidence_kind,
           }
         : null,
