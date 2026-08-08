@@ -98,6 +98,35 @@ function getProgramCards(profile: CountryOccupationProfile): ProgramCard[] {
   if (profile.countryCode !== "AU") return []
 
   const programRefs = new Set(profile.programLinks.map((link) => link.programRef))
+  const canonicalCards: ProgramCard[] = profile.programLinks.flatMap((link) => {
+    const program = link.program
+    if (!program?.url) return []
+
+    const duration =
+      program.durationYears == null
+        ? "Duration —"
+        : `${program.durationYears} ${program.durationYears === 1 ? "year" : "years"}`
+    const relationNote =
+      link.relationType === "graduate_entry"
+        ? "Graduate-entry pathway"
+        : link.relationType === "progression"
+          ? "Progression pathway"
+          : link.relationType === "related"
+            ? "Related study option"
+            : "Direct entry-to-practice pathway"
+
+    return [
+      {
+        id: link.programRef,
+        title: program.title,
+        provider: program.provider,
+        url: program.url,
+        meta: `${duration} · ${money("AUD", program.tuitionFeeAud)} annual tuition`,
+        note: relationNote,
+      },
+    ]
+  })
+
   const nursingCards: ProgramCard[] = AUSTRALIA_NURSING_PROGRAMS.filter((program) =>
     programRefs.has(program.id)
   ).map((program) => ({
@@ -130,7 +159,7 @@ function getProgramCards(profile: CountryOccupationProfile): ProgramCard[] {
     }
   })
 
-  return [...nursingCards, ...vocationalCards]
+  return [...canonicalCards, ...nursingCards, ...vocationalCards]
 }
 
 type ProfileLink = CountryOccupationProfile["links"][number]
