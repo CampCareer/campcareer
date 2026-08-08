@@ -94,18 +94,37 @@ Population uses named-city/census-subdivision geography rather than CMA populati
 
 ## Canada City Compare
 
-`/compare/cities?country=CA` uses the same first-class canonical Cities mode as Australia but a Canada-specific comparison adapter. Legacy query-based Compare links continue to redirect to this canonical route.
+The primary city comparison surface is the single root Compare route with query parameters:
 
-A Canada city enters the selector automatically only when:
+`/compare?type=city&country=CA&left=toronto&right=vancouver`
+
+Compatibility routes such as `/compare/cities` are redirects only and are not primary UI or sitemap destinations.
+
+A Canada city is comparison-ready only when:
 
 - all five required metric families are verified;
 - canonical campus count is greater than zero;
 - canonical institution count is greater than zero;
 - canonical linked programme count is greater than zero.
 
-The current automatic selector therefore contains Toronto, Montreal, Ottawa, Vancouver, Waterloo, Edmonton and Calgary. New Canada cities can enter without adding their names to Compare code once they satisfy the same data contract.
+Public Canada Compare is additionally bounded by the explicit `PUBLISHED_CA_CITY_SLUGS` allowlist. The approved v1 scope is Toronto, Vancouver, Montreal, Ottawa, Calgary, Waterloo and Edmonton. A newly enriched Canadian city must not silently enter public Compare merely because it satisfies the data contract.
 
-Shared programme count is calculated from canonical city-programme links only. It does not use DLI location strings or staging programme rows.
+Shared programme count is calculated from exact canonical city-programme IDs only. It does not use DLI location strings, fuzzy title matching or staging programme rows.
+
+Compare itself remains non-indexable. City profile links return to `/cities/ca/{city}` and city profile Compare CTAs enter the root query route with the current city preserved as `left`.
+
+## SEO publication gate
+
+Each approved Canada city page is indexable only when all of the following are true:
+
+- the five city metric families are verified and source-backed;
+- canonical institution, campus and programme link counts are non-zero;
+- the route is the canonical `/cities/ca/{city}` path;
+- page metadata contains a unique title and description;
+- `robots` explicitly allows `index` and `follow`;
+- the canonical route appears exactly once in `sitemap.ts`;
+- no Compare route appears in the sitemap;
+- audit, typecheck, lint, tests and production build pass.
 
 ## Expansion rule
 
@@ -113,7 +132,9 @@ For each subsequent Canada city:
 
 1. keep or create one stable canonical city geography;
 2. verify explicit campus/city membership;
-3. publish the city only after population, living cost, transport, work-rule and employment-context evidence is available;
+3. publish the city data only after population, living cost, transport, work-rule and employment-context evidence is available;
 4. link only canonical programmes to the user-facing programme count;
-5. add the route and Canada dashboard link only when the city page is publishable;
-6. let Compare register the city automatically through the readiness contract rather than hardcoding city names.
+5. create the city route only when the city page is publication-ready;
+6. add the city to public Compare only after explicit product approval and allowlist update;
+7. add indexable metadata and sitemap inventory only after the SEO publication gate passes;
+8. run the full QA suite before merge or deployment.
