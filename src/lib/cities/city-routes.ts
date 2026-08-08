@@ -13,6 +13,20 @@ export const PUBLISHED_US_CITY_SLUGS = [
 ] as const
 export type PublishedUsCitySlug = (typeof PUBLISHED_US_CITY_SLUGS)[number]
 
+export const PUBLISHED_UK_CITY_SLUGS = [
+  "london",
+  "manchester",
+  "birmingham",
+  "edinburgh",
+  "glasgow",
+  "cardiff",
+  "belfast",
+  "oxford",
+  "cambridge",
+  "bristol",
+] as const
+export type PublishedUkCitySlug = (typeof PUBLISHED_UK_CITY_SLUGS)[number]
+
 const CITY_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
 export function normalizeCitySlug(value: string | null | undefined) {
@@ -29,6 +43,10 @@ export function isPublishedUsCitySlug(value: string): value is PublishedUsCitySl
   return PUBLISHED_US_CITY_SLUGS.includes(value as PublishedUsCitySlug)
 }
 
+export function isPublishedUkCitySlug(value: string): value is PublishedUkCitySlug {
+  return PUBLISHED_UK_CITY_SLUGS.includes(value as PublishedUkCitySlug)
+}
+
 export function auCityPath(value: string | null | undefined) {
   const slug = normalizeCitySlug(value)
   if (!slug || !isPublishedAuCitySlug(slug)) return null
@@ -39,4 +57,10 @@ export function usCityPath(value: string | null | undefined) {
   const slug = normalizeCitySlug(value)
   if (!slug || !isPublishedUsCitySlug(slug)) return null
   return `/cities/us/${slug}`
+}
+
+export function ukCityPath(value: string | null | undefined) {
+  const slug = normalizeCitySlug(value)
+  if (!slug || !isPublishedUkCitySlug(slug)) return null
+  return `/cities/uk/${slug}`
 }
