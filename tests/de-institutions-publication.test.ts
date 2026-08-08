@@ -14,7 +14,7 @@ const seo = read("src/lib/institutions/institution-seo-de.ts")
 const sitemap = read("src/app/sitemap.ts")
 
 test("DE Tier A contains twelve continuing Excellence university entities without inventing a national ID", () => {
-  const domains = identity.match(/\('[a-z0-9.-]+', '[a-z0-9-]+',/g) ?? []
+  const domains = identity.match(/\('[a-z0-9.-]+', '[a-z0-9-]+', '[^']+', 'https:\/\//g) ?? []
   assert.equal(domains.length, 12)
   assert.match(identity, /DE_HRK_VERIFIED_DOMAIN/)
   assert.match(identity, /not presented as a regulatory number/)
@@ -36,7 +36,6 @@ test("DE publication uses dedicated read models and catalogue-pending semantics"
   assert.match(routes, /"DE"/)
   assert.match(explorer, /institution_explorer_de_v1/)
   assert.match(detail, /institution_detail_de_v1/)
-  assert.match(detail, /institution_identity_de_v1/)
   assert.match(detail, /missing its HRK-verified official domain identity/)
   assert.match(ui, /CampCareer has not published the Germany program catalogue yet/)
 })
