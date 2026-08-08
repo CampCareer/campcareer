@@ -113,8 +113,12 @@ export async function searchInstitutions(
   countryCode: InstitutionMvpCountryCode,
   filters: InstitutionSearchFilters,
 ): Promise<InstitutionSearchResult> {
+  const explorerView = countryCode === "CA"
+    ? "institution_explorer_ca_v1"
+    : "institution_explorer_v1"
+
   let query = supabaseAdmin
-    .from("institution_explorer_v1")
+    .from(explorerView)
     .select(
       [
         "institution_id",
