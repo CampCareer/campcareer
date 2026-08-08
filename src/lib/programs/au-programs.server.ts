@@ -43,6 +43,15 @@ type InstitutionRow = {
   state: string | null
   city: string | null
   website_url: string | null
+  canonical_institution_id: string | null
+  institution_slug: string | null
+}
+
+type InstitutionIdentityRow = {
+  legacy_provider_id: string
+  institution_id: string
+  institution_slug: string
+  institution_name: string
 }
 
 export type AuProgramDeliveryLocation = {
@@ -62,6 +71,8 @@ export type AuProgramDeliveryLocation = {
 export type AuProgramListItem = {
   id: number
   institutionId: string | null
+  canonicalInstitutionId: string | null
+  institutionSlug: string | null
   institutionName: string
   institutionWebsite: string | null
   state: string | null
@@ -169,6 +180,8 @@ function mapProgram(
   return {
     id: course.id,
     institutionId: course.institution_id,
+    canonicalInstitutionId: institution?.canonical_institution_id ?? null,
+    institutionSlug: institution?.institution_slug ?? null,
     institutionName: institution?.name ?? course.institution_id ?? "Institution unavailable",
     institutionWebsite: institution?.website_url ?? null,
     state: institution?.state ?? null,
@@ -202,18 +215,49 @@ function mapProgram(
 async function institutionMap(institutionIds: readonly string[]) {
   if (institutionIds.length === 0) return new Map<string, InstitutionRow>()
 
-  const { data, error } = await supabaseAdmin
-    .from("colleges_au")
-    .select("institution_id, name, state, city, website_url")
-    .in("institution_id", [...institutionIds])
+  const [legacyResult, identityResult] = await Promise.all([
+    supabaseAdmin
+      .from("colleges_au")
+      .select("institution_id, name, state, city, website_url")
+      .in("institution_id", [...institutionIds]),
+    supabaseAdmin
+      .from("au_institution_identity_v1")
+      .select("legacy_provider_id, institution_id, institution_slug, institution_name")
+      .in("legacy_provider_id", [...institutionIds]),
+  ])
 
-  if (error) throw new Error(`Unable to load Australian institutions: ${error.message}`)
+  if (legacyResult.error) {
+    throw new Error(`Unable to load Australian institutions: ${legacyResult.error.message}`)
+  }
+  if (identityResult.error) {
+    throw new Error(`Unable to resolve canonical Australian institutions: ${identityResult.error.message}`)
+  }
 
-  return new Map(
-    ((data ?? []) as InstitutionRow[])
+  const legacyRows = (legacyResult.data ?? []) as Array<Omit<InstitutionRow, "canonical_institution_id" | "institution_slug">>
+  const identityRows = (identityResult.data ?? []) as InstitutionIdentityRow[]
+  const legacyById = new Map(
+    legacyRows
       .filter((row) => row.institution_id)
       .map((row) => [row.institution_id as string, row]),
   )
+  const identityById = new Map(identityRows.map((row) => [row.legacy_provider_id, row]))
+  const result = new Map<string, InstitutionRow>()
+
+  for (const legacyProviderId of institutionIds) {
+    const legacy = legacyById.get(legacyProviderId)
+    const identity = identityById.get(legacyProviderId)
+    result.set(legacyProviderId, {
+      institution_id: legacyProviderId,
+      name: legacy?.name ?? identity?.institution_name ?? legacyProviderId,
+      state: legacy?.state ?? null,
+      city: legacy?.city ?? null,
+      website_url: legacy?.website_url ?? null,
+      canonical_institution_id: identity?.institution_id ?? null,
+      institution_slug: identity?.institution_slug ?? null,
+    })
+  }
+
+  return result
 }
 
 async function institutionIdsForState(state: string): Promise<string[]> {
