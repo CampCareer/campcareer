@@ -21,6 +21,8 @@ const countryPage = readRepoFile("src/app/(workspace)/institutions/[country]/pag
 const detailPage = readRepoFile(
   "src/app/(workspace)/institutions/[country]/[institution]/page.tsx",
 )
+const ukSeo = readRepoFile("src/lib/institutions/institution-seo-uk.ts")
+const sitemap = readRepoFile("src/app/sitemap.ts")
 
 test("UK publication cohort keeps 50 source-backed institutions and current successor names", () => {
   assert.match(foundation, /Expected 50 existing UK provider identities/)
@@ -71,4 +73,14 @@ test("UK Institution UI exposes UKPRN and uses location-safe wording", () => {
   assert.match(detailUi, /rather than inventing a campus/)
   assert.match(countryPage, /countryCode === "UK" \? "locations" : "campuses"/)
   assert.match(detailPage, /countryCode === "UK" \? "locations" : "campuses"/)
+})
+
+test("UK explorer and all 50 institution detail routes are included in the canonical sitemap inventory", () => {
+  const routes = ukSeo.match(/\["UK", "[a-z0-9-]+"\]/g) ?? []
+
+  assert.equal(routes.length, 50)
+  assert.match(ukSeo, /city-st-georges-university-of-london/)
+  assert.match(ukSeo, /brunel-university-of-london/)
+  assert.match(sitemap, /institutions\/uk/)
+  assert.match(sitemap, /INDEXABLE_UK_INSTITUTION_PATHS/)
 })
