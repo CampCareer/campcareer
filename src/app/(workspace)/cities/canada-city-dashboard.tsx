@@ -12,6 +12,7 @@ import {
   Wallet,
 } from "lucide-react"
 import type { CaCityProfile } from "@/lib/cities/ca-city-profile.server"
+import { buildCityCompareCanonicalHref } from "@/lib/compare-routes"
 
 const CITY_IMAGES: Record<string, string> = {
   toronto:
@@ -125,6 +126,7 @@ export function CanadaCityDashboard({ profile }: { profile: CaCityProfile }) {
       profile.linkedInstitutionCount > 0 &&
       profile.linkedProgramCount > 0,
   )
+  const compareHref = buildCityCompareCanonicalHref({ country: "CA", left: profile.slug })
 
   return (
     <div>
@@ -168,7 +170,7 @@ export function CanadaCityDashboard({ profile }: { profile: CaCityProfile }) {
             <div className="flex flex-wrap gap-2">
               {compareAvailable ? (
                 <Link
-                  href={`/compare?type=city&country=CA&left=${profile.slug}`}
+                  href={compareHref}
                   className="inline-flex items-center gap-1.5 rounded-lg border border-[#cfd9ca] px-3.5 py-2 text-[11.5px] font-semibold text-[#3e7a2e] hover:bg-[#f7faf5]"
                 >
                   Compare {profile.name} with another city <ArrowRight className="size-3.5" />
