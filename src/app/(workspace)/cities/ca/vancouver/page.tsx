@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   description:
     "Compare Vancouver student living costs, U-Pass BC transport, international student work rules, canonical institutions and linked programmes.",
   alternates: { canonical: "/cities/ca/vancouver" },
+  robots: { index: true, follow: true },
 }
 
 export default async function VancouverCityPage() {
