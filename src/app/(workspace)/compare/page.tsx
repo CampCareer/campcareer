@@ -3,7 +3,7 @@ import { AU_NURSING_PROGRAM_IDS } from "@/lib/data-foundation/compare-adapters/a
 import { AU_NURSING_PROGRAM_COMPARE_REPOSITORY } from "@/lib/data-foundation/compare-adapters/au-nursing-programmes-repository"
 import { parseCareerComparisonState, type CareerComparisonState } from "@/lib/career-comparison"
 import { parseCountryComparisonState, type CountryComparisonState } from "@/lib/country-comparison"
-import { getSydneyMelbourneComparison } from "@/lib/cities/au-city-comparison.server"
+import { getAuCityComparison } from "@/lib/cities/au-city-comparison.server"
 import { resolveCompareModeType, type CompareModeType } from "@/lib/compare-navigation"
 import ProgramsCompareMatrix from "./programs-compare-matrix"
 import CountriesCompareMatrix from "./countries-compare-matrix"
@@ -40,7 +40,7 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
   if (pageType === "country") return <CountriesCompare comparison={parseCountryComparisonState(params)} />
   if (pageType === "city") {
     const country = params.get("country")?.toUpperCase() ?? "AU"
-    return <CitiesCompare countryCode={country} />
+    return <CitiesCompare countryCode={country} params={params} />
   }
   if (pageType === "career") {
     const country = params.get("country")?.toUpperCase() ?? "AU"
@@ -85,7 +85,7 @@ function CountriesCompare({ comparison }: { comparison: CountryComparisonState }
   )
 }
 
-async function CitiesCompare({ countryCode }: { countryCode: string }) {
+async function CitiesCompare({ countryCode, params }: { countryCode: string; params: URLSearchParams }) {
   if (countryCode !== "AU") {
     return (
       <UnsupportedSurface
@@ -98,7 +98,7 @@ async function CitiesCompare({ countryCode }: { countryCode: string }) {
     )
   }
 
-  const comparison = await getSydneyMelbourneComparison()
+  const comparison = await getAuCityComparison(params.get("left"), params.get("right"))
   if (!comparison) {
     return (
       <UnsupportedSurface
@@ -115,8 +115,9 @@ async function CitiesCompare({ countryCode }: { countryCode: string }) {
     <section className="w-full pb-4" aria-label="Cities comparison">
       <ComparePageHeader activeType="city" countryCode={countryCode} />
       <CitiesCompareMatrix
-        sydney={comparison.left}
-        melbourne={comparison.right}
+        left={comparison.left}
+        right={comparison.right}
+        options={comparison.options}
         sharedProgramCount={comparison.sharedProgramCount}
       />
     </section>
