@@ -43,9 +43,10 @@ export async function generateMetadata({
     }
 
     const canonicalPath = institutionDetailPath(countryCode, detail.slug)
+    const locationLabel = countryCode === "UK" ? "locations" : "campuses"
     return {
       title: `${detail.name} | Institutions`,
-      description: `Explore ${detail.name} programs, campuses and source-backed institution details on CampCareer.`,
+      description: `Explore ${detail.name} programs, ${locationLabel} and source-backed institution details on CampCareer.`,
       alternates: {
         canonical: `${SITE_URL}${canonicalPath}`,
       },
