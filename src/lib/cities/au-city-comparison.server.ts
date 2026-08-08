@@ -73,7 +73,7 @@ async function loadCompareReadyAuCities(): Promise<AuCityProfile[]> {
       .select("geography_id, metric_key")
       .eq("scope_type", "city")
       .eq("review_status", "verified")
-      .in("metric_key", ALL_COMPARE_METRIC_KEYS),
+      .in("metric_key", [...ALL_COMPARE_METRIC_KEYS]),
   ])
 
   if (cityError) throw new Error(`Unable to load Australian compare cities: ${cityError.message}`)
@@ -122,9 +122,13 @@ function chooseComparisonPair(
   const rightSlug = normalizeSlug(requestedRight)
 
   const left = bySlug.get(leftSlug) ?? bySlug.get("sydney") ?? profiles[0]
+  if (!left) return null
+
+  const requestedRightProfile =
+    rightSlug && rightSlug !== left.slug ? bySlug.get(rightSlug) : undefined
   const right =
-    (rightSlug && rightSlug !== left.slug ? bySlug.get(rightSlug) : null) ??
-    (left.slug !== "melbourne" ? bySlug.get("melbourne") : null) ??
+    requestedRightProfile ??
+    (left.slug !== "melbourne" ? bySlug.get("melbourne") : undefined) ??
     profiles.find((profile) => profile.slug !== left.slug)
 
   if (!right || left.slug === right.slug) return null
