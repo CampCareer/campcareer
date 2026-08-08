@@ -61,20 +61,24 @@ test("Canada dashboard and sitemap link all published comparison-ready cities", 
   assert.ok(dashboard.includes('Edmonton: "/cities/ca/edmonton"'))
 })
 
-test("Canada City Compare is country-aware, canonical and locked to seven published cities", () => {
-  const compareModePage = readFileSync("src/app/(workspace)/compare/[mode]/page.tsx", "utf8")
+test("Canada City Compare is root-based, country-aware and locked to seven published cities", () => {
+  const compareRootPage = readFileSync("src/app/(workspace)/compare/page.tsx", "utf8")
+  const legacyModePage = readFileSync("src/app/(workspace)/compare/[mode]/page.tsx", "utf8")
   const selector = readFileSync("src/app/(workspace)/compare/city-compare-selector.tsx", "utf8")
   const header = readFileSync("src/app/(workspace)/compare/compare-mode-navigation.tsx", "utf8")
   const loader = readFileSync("src/lib/cities/ca-city-comparison.server.ts", "utf8")
   const matrix = readFileSync("src/app/(workspace)/compare/canada-cities-compare-matrix.tsx", "utf8")
   const routes = readFileSync("src/lib/compare-routes.ts", "utf8")
 
-  assert.ok(compareModePage.includes('country === "CA"'))
-  assert.ok(compareModePage.includes("getCaCityComparison"))
+  assert.ok(compareRootPage.includes('countryCode === "CA"'))
+  assert.ok(compareRootPage.includes("getCaCityComparison"))
+  assert.ok(compareRootPage.includes("CanadaCitiesCompareMatrix"))
+  assert.ok(legacyModePage.includes("permanentRedirect"))
   assert.ok(selector.includes('countryCode = "AU"'))
   assert.ok(selector.includes("buildCityCompareCanonicalHref"))
   assert.ok(header.includes("buildCityCompareCanonicalHref({ country: code })"))
-  assert.ok(routes.includes('compareModePath("cities")'))
+  assert.ok(routes.includes('return "/compare"'))
+  assert.ok(routes.includes('type: "city"'))
   assert.ok(loader.includes("PUBLISHED_CA_CITY_SLUGS"))
   assert.ok(loader.includes('.in("slug", [...PUBLISHED_CA_CITY_SLUGS])'))
   for (const slug of CANADA_CITY_SLUGS) {
