@@ -158,8 +158,12 @@ export const getInstitutionDetail = cache(async (
   countryCode: InstitutionMvpCountryCode,
   slug: string,
 ): Promise<InstitutionDetail | null> => {
+  const detailView = countryCode === "UK"
+    ? "institution_detail_uk_v1"
+    : "institution_detail_v1"
+
   const { data, error } = await supabaseAdmin
-    .from("institution_detail_v1")
+    .from(detailView)
     .select(
       [
         "institution_id",
