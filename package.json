@@ -98,6 +98,7 @@
     "@types/adm-zip": "^0.5.8",
     "@types/mdx": "^2.0.13",
     "@types/node": "^20",
+    "@types/pg": "^8.21.0",
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.2",
     "adm-zip": "^0.5.17",
@@ -115,7 +116,7 @@
   },
   "overrides": {
     "gray-matter": {
-      "js-yaml": "3.15.0"
+      "js-yaml": "3.15.1"
     }
   }
 }
