@@ -9,6 +9,7 @@ import {
 } from "@/lib/institutions/institution-search"
 import { getInstitutionDetail, type InstitutionDetail } from "@/lib/institutions/institution-detail.server"
 import { InstitutionDetailView } from "../../institution-detail"
+import { IrishInstitutionDetailView } from "../../irish-institution-detail"
 
 export const revalidate = 3600
 
@@ -43,9 +44,10 @@ export async function generateMetadata({
     }
 
     const canonicalPath = institutionDetailPath(countryCode, detail.slug)
+    const locationTerm = countryCode === "IE" ? "locations" : "campuses"
     return {
       title: `${detail.name} | Institutions`,
-      description: `Explore ${detail.name} programs, campuses and source-backed institution details on CampCareer.`,
+      description: `Explore ${detail.name} programs, ${locationTerm} and source-backed institution details on CampCareer.`,
       alternates: {
         canonical: `${SITE_URL}${canonicalPath}`,
       },
@@ -96,5 +98,6 @@ export default async function InstitutionDetailPage({
   }
 
   if (!detail) notFound()
+  if (countryCode === "IE") return <IrishInstitutionDetailView institution={detail} />
   return <InstitutionDetailView institution={detail} />
 }
