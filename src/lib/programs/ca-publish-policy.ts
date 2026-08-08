@@ -71,6 +71,7 @@ function admissionHoldReason(admissionStatus: string | null): CaProgramHoldReaso
     "not verified",
     "should_be_checked",
     "check_current_intake_availability",
+    "current_intake_check",
     "availability_separate",
     "dli_and_study_permit_eligibility_not_verified",
   ]
@@ -121,27 +122,12 @@ export function classifyCaProgramPublication(
   const pgwpState = caProgramPgwpState(input.irccProgramEligible)
 
   if (holdReason) {
-    return {
-      tier: "C",
-      holdReason,
-      pgwpState,
-      indexableDetail: false,
-    }
+    return { tier: "C", holdReason, pgwpState, indexableDetail: false }
   }
 
   if (text(input.officialProgramUrl)) {
-    return {
-      tier: "A",
-      holdReason: null,
-      pgwpState,
-      indexableDetail: true,
-    }
+    return { tier: "A", holdReason: null, pgwpState, indexableDetail: true }
   }
 
-  return {
-    tier: "B",
-    holdReason: null,
-    pgwpState,
-    indexableDetail: false,
-  }
+  return { tier: "B", holdReason: null, pgwpState, indexableDetail: false }
 }
