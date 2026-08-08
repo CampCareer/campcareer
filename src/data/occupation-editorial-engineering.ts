@@ -53,4 +53,30 @@ export const ENGINEERING_OCCUPATION_EDITORIAL = [
       },
     },
   },
+  {
+    id: "electrical-engineer",
+    overview:
+      "Electrical Engineers design, develop, implement and oversee systems used to generate, transmit, distribute, control and use electrical power from renewable and non-renewable sources. Australia's current OSCA classification separates Rail Signalling Engineer from Electrical Engineer, so some legacy ANZSCO labour-market data are broader than the current occupation.",
+    tasks: [
+      "Plan, design and test electrical power generation, transmission, distribution and utilisation systems",
+      "Specify circuits, transformers, switchgear, protection systems, transmission equipment and other electrical infrastructure",
+      "Design and integrate renewable generation, battery storage, grid-connection and power-control solutions",
+      "Prepare electrical calculations, specifications, drawings, standards and technical documentation for engineering projects",
+      "Supervise installation, commissioning, testing, operation and maintenance of electrical systems and equipment",
+      "Coordinate electrical infrastructure projects across utilities, renewables, transport, manufacturing, construction and multidisciplinary engineering teams",
+    ],
+    countries: {
+      AU: {
+        headline: "A nationally shortage-rated, CSOL-listed professional engineering occupation with strong power, grid and renewable-energy pathways",
+        entryPathway:
+          "OSCA assigns Electrical Engineer Skill Level 1. The most direct Australian route is a four-year professional engineering degree in Electrical Engineering or an equivalent Engineers Australia-accredited qualification. Graduate programs across utilities, renewables, grid operators, consultancies and industrial employers provide common entry pathways. Power systems, control, protection, renewable-energy integration, design projects and industry placements are especially valuable, with professional postgraduate Electrical Engineering programs available for suitable graduates.",
+        registration:
+          "ABS notes that registration or licensing may be required for Electrical Engineers. Australia does not use one identical national licence for every role; professional-engineer registration depends on the state or territory and the engineering services being performed. For migration, legacy ANZSCO 233311 Electrical Engineer is on the current Core Skills Occupation List and Engineers Australia is the assessing authority. Migration skills assessment and domestic professional registration are separate processes.",
+        jobMarketNote:
+          "The exact current occupation is OSCA 243331 Electrical Engineer. The 2025 Occupation Shortage List records it as Shortage nationally, with state shortage signals in New South Wales, the Northern Territory, South Australia and Western Australia. Legacy ANZSCO 233311 remains the migration occupation, but that code also corresponds to the newly separate OSCA 243332 Rail Signalling Engineer, so CampCareer does not treat legacy 2333 employment or earnings as exact current Electrical Engineer figures. Broader ANZSCO 2333 vacancy and projection data are shown only as context.",
+        scoreCaveat:
+          "The opportunity score gives full credit to the verified national shortage signal and current CSOL inclusion. Exact current OSCA employment and salary are not inferred from broader legacy ANZSCO 2333, so salary and vacancy-intensity components remain zero. Broader 2333 vacancies rose about 4.07% year on year to May 2026 and long-run projections are positive, so trend and growth receive partial credit. Strong professional study and graduate pathways support entry-level credit, while possible state registration requirements add some entry burden.",
+      },
+    },
+  },
 ] as const satisfies readonly OccupationEditorial[]
