@@ -15,6 +15,7 @@ import {
 } from "lucide-react"
 import { getCanonicalCareer } from "@/data/career-comparison-catalog"
 import { institutionDetailPath } from "@/lib/institutions/institution-search"
+import { caProgramCityPath } from "@/lib/programs/ca-program-city-routes"
 import {
   caAdmissionPresentation,
   caPgwpLabel,
@@ -101,6 +102,7 @@ export default async function CanadaProgramDetailPage({ params }: Params) {
   const institutionProfilePath = program.institutionSlug
     ? institutionDetailPath("CA", program.institutionSlug)
     : null
+  const cityProfilePath = caProgramCityPath(program.city)
   const careers = program.careerIds
     .map((id) => getCanonicalCareer(id))
     .filter((career): career is NonNullable<ReturnType<typeof getCanonicalCareer>> => Boolean(career))
@@ -159,9 +161,18 @@ export default async function CanadaProgramDetailPage({ params }: Params) {
               <p className="mt-3 text-[14px] font-semibold text-[#4f4d48]">{program.institutionName}</p>
             )}
             {location && (
-              <p className="mt-2 flex items-center gap-2 text-[12.5px] text-[#77746e]">
-                <MapPin className="size-4" /> {location}
-              </p>
+              cityProfilePath ? (
+                <Link
+                  href={cityProfilePath}
+                  className="mt-2 inline-flex items-center gap-2 text-[12.5px] text-[#77746e] transition hover:text-[#3e7a2e] hover:underline"
+                >
+                  <MapPin className="size-4" /> {location}
+                </Link>
+              ) : (
+                <p className="mt-2 flex items-center gap-2 text-[12.5px] text-[#77746e]">
+                  <MapPin className="size-4" /> {location}
+                </p>
+              )
             )}
             {program.fieldName && <p className="mt-5 text-[13px] leading-6 text-[#65625c]">{program.fieldName}</p>}
           </header>
@@ -230,6 +241,14 @@ export default async function CanadaProgramDetailPage({ params }: Params) {
                 className="flex items-center justify-center gap-2 rounded-lg border border-[#cfd9ca] bg-[#f7faf5] px-4 py-2.5 text-[12px] font-semibold text-[#3e7a2e] transition hover:bg-[#edf5ea]"
               >
                 Institution profile <Building2 className="size-3.5" />
+              </Link>
+            )}
+            {cityProfilePath && (
+              <Link
+                href={cityProfilePath}
+                className="flex items-center justify-center gap-2 rounded-lg border border-[#d9e3f7] bg-[#f7f9fe] px-4 py-2.5 text-[12px] font-semibold text-[#2563eb] transition hover:bg-[#eef4ff]"
+              >
+                City profile <MapPin className="size-3.5" />
               </Link>
             )}
             {officialUrl && <SourceLink href={officialUrl} primary>Official program page</SourceLink>}
