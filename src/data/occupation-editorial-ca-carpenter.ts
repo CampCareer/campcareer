@@ -7,6 +7,7 @@ import { BRICKLAYER_CA_OCCUPATION_EDITORIAL } from "./occupation-editorial-ca-br
 import { HVAC_TECHNICIAN_CA_OCCUPATION_EDITORIAL } from "./occupation-editorial-ca-hvac-technician"
 import { CONSTRUCTION_MANAGER_CA_OCCUPATION_EDITORIAL } from "./occupation-editorial-ca-construction-manager"
 import { REGISTERED_NURSE_CA_OCCUPATION_EDITORIAL } from "./occupation-editorial-ca-registered-nurse"
+import { MIDWIFE_CA_OCCUPATION_EDITORIAL } from "./occupation-editorial-ca-midwife"
 
 export type CanadaOccupationEditorialOverride = {
   id: string
@@ -40,4 +41,5 @@ export const CANADA_OCCUPATION_EDITORIAL_OVERRIDES: readonly CanadaOccupationEdi
   HVAC_TECHNICIAN_CA_OCCUPATION_EDITORIAL,
   CONSTRUCTION_MANAGER_CA_OCCUPATION_EDITORIAL,
   REGISTERED_NURSE_CA_OCCUPATION_EDITORIAL,
+  MIDWIFE_CA_OCCUPATION_EDITORIAL,
 ]
