@@ -9,7 +9,7 @@ import { getIndexableVisaRoutes } from "@/lib/workspace/visa-routes"
 import { INDEXABLE_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo"
 import { CANONICAL_COUNTRY_SLUGS, SITE_URL, countryCanonicalPath } from "@/lib/seo-routes.mjs"
 
-const lastModified = new Date("2026-08-08")
+const lastModified = new Date("2026-08-09")
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const methodologies = ["australia", "canada", "united-states", "united-kingdom", "ireland", "germany", "netherlands", "belgium", "france", "spain", "singapore", "south-korea", "japan", "new-zealand", "norway", "sweden", "denmark", "finland", "switzerland", "united-arab-emirates"]
@@ -18,6 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/`, lastModified, priority: 1, changeFrequency: "weekly" },
     { url: `${SITE_URL}/maps`, lastModified, priority: 0.9, changeFrequency: "daily" },
     { url: `${SITE_URL}/programs`, lastModified, priority: 0.85, changeFrequency: "weekly" },
+    { url: `${SITE_URL}/programs?country=CA`, lastModified, priority: 0.85, changeFrequency: "weekly" },
     { url: `${SITE_URL}/institutions`, lastModified, priority: 0.85, changeFrequency: "weekly" },
     { url: `${SITE_URL}/institutions/au`, lastModified, priority: 0.82, changeFrequency: "weekly" },
     { url: `${SITE_URL}/institutions/ca`, lastModified, priority: 0.82, changeFrequency: "weekly" },
