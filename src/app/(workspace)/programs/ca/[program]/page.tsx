@@ -15,10 +15,17 @@ import {
 } from "lucide-react"
 import { getCanonicalCareer } from "@/data/career-comparison-catalog"
 import { institutionDetailPath } from "@/lib/institutions/institution-search"
+import {
+  caAdmissionPresentation,
+  caPgwpLabel,
+  caPublicationEvidenceLabel,
+  formatCaEvidenceDate,
+  type CaAdmissionTone,
+} from "@/lib/programs/ca-program-presentation"
 import { getCaProgramById } from "@/lib/programs/ca-programs.server"
 import { caProgramDetailPath, parseProgramId } from "@/lib/programs/program-search"
+import { SITE_URL } from "@/lib/seo-routes.mjs"
 
-const BASE_URL = "https://www.campcareer.com"
 type Params = { params: Promise<{ program: string }> }
 
 async function loadProgram(segment: string) {
@@ -51,19 +58,11 @@ function duration(value: number | null) {
   return `${new Intl.NumberFormat("en-CA", { maximumFractionDigits: 1 }).format(value)} ${value === 1 ? "year" : "years"}`
 }
 
-function statusText(value: string | null) {
-  if (!value) return "Not separately published"
-  return value
-    .replace(/_/g, " ")
-    .replace(/\b\d{4} \d{2} \d{2}\b/g, (date) => date.replace(/ /g, "-"))
-    .replace(/\s+/g, " ")
-    .trim()
-}
-
-function pgwpText(state: "eligible" | "ineligible" | "unknown") {
-  if (state === "eligible") return "Eligible"
-  if (state === "ineligible") return "Ineligible"
-  return "Not confirmed"
+function admissionToneClass(tone: CaAdmissionTone) {
+  if (tone === "positive") return "border-[#cfe2ca] bg-[#f2f8ef] text-[#3e7a2e]"
+  if (tone === "caution") return "border-[#ead9af] bg-[#fff9eb] text-[#8a6820]"
+  if (tone === "negative") return "border-[#efd2ca] bg-[#fff4f1] text-[#a94e38]"
+  return "border-[#e2e1dc] bg-[#f8f8f6] text-[#686660]"
 }
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
@@ -77,11 +76,11 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
       program.credentialType,
       program.institutionName,
       [program.city, program.province].filter(Boolean).join(", "),
-      `PGWP: ${pgwpText(program.pgwpState)}`,
+      caPgwpLabel(program.pgwpState),
     ]
       .filter(Boolean)
       .join(" · "),
-    alternates: { canonical: `${BASE_URL}${caProgramDetailPath(program.id, program.title)}` },
+    alternates: { canonical: `${SITE_URL}${caProgramDetailPath(program.id, program.title)}` },
     robots: { index: program.indexableDetail, follow: true },
   }
 }
@@ -106,6 +105,9 @@ export default async function CanadaProgramDetailPage({ params }: Params) {
     .map((id) => getCanonicalCareer(id))
     .filter((career): career is NonNullable<ReturnType<typeof getCanonicalCareer>> => Boolean(career))
   const location = [program.city, program.province].filter(Boolean).join(", ")
+  const admission = caAdmissionPresentation(program.internationalAdmissionStatus)
+  const evidenceDate = formatCaEvidenceDate(program.verifiedAt)
+  const publicationEvidence = caPublicationEvidenceLabel(program.publicationTier)
 
   return (
     <div className="mx-auto max-w-5xl">
@@ -121,11 +123,14 @@ export default async function CanadaProgramDetailPage({ params }: Params) {
           <header className="rounded-2xl border border-[#dfe6dc] bg-gradient-to-br from-[#f4f8f2] via-white to-[#eef4ff] p-6 sm:p-8">
             <div className="flex flex-wrap gap-2 text-[10.5px] font-semibold">
               {program.credentialType && <span className="rounded-full bg-white px-3 py-1">{program.credentialType}</span>}
-              <span className="rounded-full bg-[#edf5ea] px-3 py-1 text-[#3e7a2e]">
-                Phase 3 reviewed
-              </span>
-              <span className="rounded-full bg-[#eef4ff] px-3 py-1 text-[#2563eb]">
-                Tier {program.publicationTier}
+              <span
+                className={
+                  program.publicationTier === "A"
+                    ? "rounded-full bg-[#edf5ea] px-3 py-1 text-[#3e7a2e]"
+                    : "rounded-full bg-[#f5f3ee] px-3 py-1 text-[#786f60]"
+                }
+              >
+                {publicationEvidence}
               </span>
               <span
                 className={`rounded-full px-3 py-1 ${
@@ -136,7 +141,7 @@ export default async function CanadaProgramDetailPage({ params }: Params) {
                       : "bg-[#f1f1ef] text-[#77746e]"
                 }`}
               >
-                PGWP {pgwpText(program.pgwpState)}
+                {caPgwpLabel(program.pgwpState)}
               </span>
             </div>
 
@@ -168,8 +173,8 @@ export default async function CanadaProgramDetailPage({ params }: Params) {
               value={program.educationLevel ?? program.credentialType ?? "Not published"}
             />
             <Metric icon={<Clock3 className="size-4" />} label="Duration" value={duration(program.durationYears) ?? "Not published"} />
-            <Metric icon={<WalletCards className="size-4" />} label="Tuition" value={money(program.tuitionFeeCad) ?? "Not published"} />
-            <Metric icon={<ShieldCheck className="size-4" />} label="PGWP" value={pgwpText(program.pgwpState)} />
+            <Metric icon={<WalletCards className="size-4" />} label="Published tuition" value={money(program.tuitionFeeCad) ?? "Not published"} />
+            <Metric icon={<ShieldCheck className="size-4" />} label="PGWP" value={caPgwpLabel(program.pgwpState).replace("PGWP ", "")} />
           </div>
 
           <section className="mt-5 rounded-xl border border-[#e7e6e3] bg-white p-5 sm:p-6">
@@ -177,11 +182,15 @@ export default async function CanadaProgramDetailPage({ params }: Params) {
               <CalendarDays className="size-4 text-[#3e7a2e]" />
               <h2 className="text-[14.5px] font-semibold text-[#1b1b1b]">International admission evidence</h2>
             </div>
-            <p className="mt-3 text-[12.5px] leading-6 text-[#65625c]">
-              {statusText(program.internationalAdmissionStatus)}
-            </p>
-            <p className="mt-3 text-[10.5px] leading-5 text-[#9b9891]">
-              This status is separate from PGWP eligibility. CampCareer does not infer current international availability from a generic institution Apply link.
+            <div className={`mt-3 rounded-lg border px-4 py-3 ${admissionToneClass(admission.tone)}`}>
+              <p className="text-[12.5px] font-semibold">{admission.label}</p>
+              {admission.detail && <p className="mt-1 text-[11.5px] leading-5 opacity-90">{admission.detail}</p>}
+            </div>
+            {evidenceDate && (
+              <p className="mt-3 text-[10.5px] font-medium text-[#8f8c85]">Evidence checked {evidenceDate}</p>
+            )}
+            <p className="mt-2 text-[10.5px] leading-5 text-[#9b9891]">
+              Admission evidence is separate from PGWP eligibility. CampCareer does not infer current international availability from a generic institution Apply link.
             </p>
           </section>
 
@@ -210,8 +219,8 @@ export default async function CanadaProgramDetailPage({ params }: Params) {
             <Row label="DLI" value={program.dliNumber ?? "—"} />
             <Row label="Program code" value={program.programCode ?? "—"} />
             <Row label="CIP" value={program.cipCode ?? "—"} />
-            <Row label="PGWP" value={pgwpText(program.pgwpState)} />
-            <Row label="Publication" value={`Tier ${program.publicationTier}`} />
+            <Row label="PGWP" value={caPgwpLabel(program.pgwpState).replace("PGWP ", "")} />
+            <Row label="Publication evidence" value={publicationEvidence} />
           </dl>
 
           <div className="mt-5 space-y-2">
@@ -254,7 +263,7 @@ function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex justify-between gap-4">
       <dt className="text-[#8f8c85]">{label}</dt>
-      <dd className="text-right font-semibold">{value}</dd>
+      <dd className="max-w-[170px] text-right font-semibold leading-5">{value}</dd>
     </div>
   )
 }
