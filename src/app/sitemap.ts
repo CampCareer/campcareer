@@ -29,7 +29,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/`, lastModified, priority: 1, changeFrequency: "weekly" },
     { url: `${SITE_URL}/maps`, lastModified, priority: 0.9, changeFrequency: "daily" },
     { url: `${SITE_URL}/programs`, lastModified, priority: 0.85, changeFrequency: "weekly" },
-    { url: `${SITE_URL}/programs?country=CA`, lastModified, priority: 0.85, changeFrequency: "weekly" },
     { url: `${SITE_URL}/institutions`, lastModified, priority: 0.85, changeFrequency: "weekly" },
     { url: `${SITE_URL}/institutions/au`, lastModified, priority: 0.82, changeFrequency: "weekly" },
     { url: `${SITE_URL}/institutions/ca`, lastModified, priority: 0.82, changeFrequency: "weekly" },
