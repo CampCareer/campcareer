@@ -8,6 +8,7 @@ import { getCompletedVisaCatalog } from "@/lib/workspace/visa-catalog-complete"
 import { getIndexableVisaRoutes } from "@/lib/workspace/visa-routes"
 import { INDEXABLE_DE_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-de"
 import { INDEXABLE_ES_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-es"
+import { INDEXABLE_EU_FASTPATH_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-eu-fastpath"
 import { INDEXABLE_FR_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-fr"
 import { INDEXABLE_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo"
 import { INDEXABLE_NL_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-nl"
@@ -16,7 +17,7 @@ import { INDEXABLE_SG_INSTITUTION_PATHS } from "@/lib/institutions/institution-s
 import { INDEXABLE_UK_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-uk"
 import { CANONICAL_COUNTRY_SLUGS, SITE_URL, countryCanonicalPath } from "@/lib/seo-routes.mjs"
 
-const lastModified = new Date("2026-08-08")
+const lastModified = new Date("2026-08-09")
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const methodologies = ["australia", "canada", "united-states", "united-kingdom", "ireland", "germany", "netherlands", "belgium", "france", "spain", "singapore", "south-korea", "japan", "new-zealand", "norway", "sweden", "denmark", "finland", "switzerland", "united-arab-emirates"]
@@ -34,6 +35,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/institutions/de`, lastModified, priority: 0.82, changeFrequency: "weekly" },
     { url: `${SITE_URL}/institutions/fr`, lastModified, priority: 0.82, changeFrequency: "weekly" },
     { url: `${SITE_URL}/institutions/es`, lastModified, priority: 0.82, changeFrequency: "weekly" },
+    { url: `${SITE_URL}/institutions/be`, lastModified, priority: 0.82, changeFrequency: "weekly" },
+    { url: `${SITE_URL}/institutions/ch`, lastModified, priority: 0.82, changeFrequency: "weekly" },
+    { url: `${SITE_URL}/institutions/se`, lastModified, priority: 0.82, changeFrequency: "weekly" },
+    { url: `${SITE_URL}/institutions/dk`, lastModified, priority: 0.82, changeFrequency: "weekly" },
     ...CANONICAL_COUNTRY_SLUGS.map((slug) => ({ url: `${SITE_URL}${countryCanonicalPath(slug)}`, lastModified, priority: 0.85, changeFrequency: "monthly" as const })),
     { url: `${SITE_URL}/cities/au/sydney`, lastModified, priority: 0.8, changeFrequency: "monthly" },
     { url: `${SITE_URL}/cities/au/melbourne`, lastModified, priority: 0.8, changeFrequency: "monthly" },
@@ -66,6 +71,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...INDEXABLE_DE_INSTITUTION_PATHS,
     ...INDEXABLE_FR_INSTITUTION_PATHS,
     ...INDEXABLE_ES_INSTITUTION_PATHS,
+    ...INDEXABLE_EU_FASTPATH_INSTITUTION_PATHS,
   ].map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.72, changeFrequency: "weekly" as const }))
   const routePages: MetadataRoute.Sitemap = ROUTE_GUIDES.flatMap((guide) => [
     { url: `${SITE_URL}${routeGuideHref(guide)}`, lastModified: new Date(guide.lastVerified), priority: 0.95, changeFrequency: "weekly" as const },
