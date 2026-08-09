@@ -55,8 +55,8 @@ test("Australia Social Worker records AASW migration assessment without inventin
 test("Australia Social Worker links verified undergraduate and qualifying master routes dynamically", () => {
   const australia = getOccupationEditorial("social-worker")?.countries.AU
   assert.ok(australia)
-  assert.match(migration, /rmit-university' and course_code='079596C'/)
-  assert.match(migration, /the-university-of-melbourne' and course_code='061212E'/)
+  assert.match(migration, /rmit-university'\s+and course_code\s*=\s*'079596C'/)
+  assert.match(migration, /the-university-of-melbourne'\s+and course_code\s*=\s*'061212E'/)
   assert.match(migration, /'au-program:'\|\|id::text/)
   assert.doesNotMatch(migration, /'au-program:5589'/)
   assert.doesNotMatch(migration, /'au-program:4702'/)
