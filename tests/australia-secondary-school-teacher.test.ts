@@ -51,8 +51,8 @@ test("Australia Secondary School Teacher records AITSL migration and teacher-reg
 test("Australia Secondary School Teacher links verified undergraduate and graduate-entry routes", () => {
   const australia = getOccupationEditorial("secondary-school-teacher")?.countries.AU
   assert.ok(australia)
-  assert.match(migration, /the-university-of-notre-dame-australia' and course_code='116885E'/)
-  assert.match(migration, /rmit-university' and course_code='113706D'/)
+  assert.match(migration, /the-university-of-notre-dame-australia'\s+and course_code\s*=\s*'116885E'/)
+  assert.match(migration, /rmit-university'\s+and course_code\s*=\s*'113706D'/)
   assert.match(migration, /'au-program:'\|\|id::text/)
   assert.doesNotMatch(migration, /'au-program:18605'/)
   assert.doesNotMatch(migration, /'au-program:5813'/)
