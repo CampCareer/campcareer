@@ -35,70 +35,21 @@ insert into public.country_occupation_metric_snapshots (
   opportunity_score,score_methodology_version,score_status,score_evidence,source_checked_at
 ) values
   ('CA:civil-engineer','2025-11-19',null,48.56,15,0,0,0,12,10,0,10,2,49,'career-opportunity-ca-v1','provisional',
-    jsonb_build_object(
-      'classification_scope','Exact NOC 21300 Civil engineers.',
-      'shortage_note','Reviewed Canada labour snapshot classifies NOC 21300 as MODERATE RISK OF SHORTAGE over the long-term projection period, earning 15/20.',
-      'visa_basis','NOC 21300 is in the current Express Entry STEM occupations category, earning 10/10.',
-      'registration_basis','Professional engineering practice and protected engineer title use are regulated by provincial and territorial engineering regulators.',
-      'salary_method','Job Bank national median hourly wage CAD 48.56 earns 10/10.',
-      'vacancy_scope','Current Job Bank postings are point-in-time and do not earn vacancy-intensity or trend credit.'
-    ),'2026-08-09'),
+    jsonb_build_object('classification_scope','Exact NOC 21300 Civil engineers.','shortage_note','Reviewed Canada labour snapshot classifies NOC 21300 as MODERATE RISK OF SHORTAGE over the long-term projection period, earning 15/20.','visa_basis','NOC 21300 is in the current Express Entry STEM occupations category, earning 10/10.','registration_basis','Professional engineering practice and protected engineer title use are regulated by provincial and territorial engineering regulators.','salary_method','Job Bank national median hourly wage CAD 48.56 earns 10/10.','vacancy_scope','Current Job Bank postings are point-in-time and do not earn vacancy-intensity or trend credit.'),'2026-08-09'),
   ('CA:mechanical-engineer','2025-11-19',null,45.67,15,0,0,0,12,10,0,10,2,49,'career-opportunity-ca-v1','provisional',
-    jsonb_build_object(
-      'classification_scope','Exact NOC 21301 Mechanical engineers.',
-      'shortage_note','Reviewed Canada labour snapshot classifies NOC 21301 as MODERATE RISK OF SHORTAGE, earning 15/20.',
-      'visa_basis','NOC 21301 is in the current Express Entry STEM occupations category.',
-      'registration_basis','Professional engineering practice and engineer title use are regulated provincially and territorially.',
-      'salary_method','Job Bank national median hourly wage CAD 45.67 earns 10/10.'
-    ),'2026-08-09'),
+    jsonb_build_object('classification_scope','Exact NOC 21301 Mechanical engineers.','shortage_note','Reviewed Canada labour snapshot classifies NOC 21301 as MODERATE RISK OF SHORTAGE, earning 15/20.','visa_basis','NOC 21301 is in the current Express Entry STEM occupations category.','registration_basis','Professional engineering practice and engineer title use are regulated provincially and territorially.','salary_method','Job Bank national median hourly wage CAD 45.67 earns 10/10.'),'2026-08-09'),
   ('CA:electrical-engineer','2025-11-19',null,50.67,15,0,0,0,12,10,0,10,2,49,'career-opportunity-ca-v1','provisional',
-    jsonb_build_object(
-      'classification_scope','Exact NOC 21310 Electrical and electronics engineers.',
-      'shortage_note','Reviewed Canada labour snapshot classifies NOC 21310 as MODERATE RISK OF SHORTAGE, earning 15/20.',
-      'visa_basis','NOC 21310 is in the current Express Entry STEM occupations category.',
-      'registration_basis','Professional engineering practice and engineer title use are regulated provincially and territorially.',
-      'salary_method','Job Bank national median hourly wage CAD 50.67 earns 10/10.'
-    ),'2026-08-09'),
+    jsonb_build_object('classification_scope','Exact NOC 21310 Electrical and electronics engineers.','shortage_note','Reviewed Canada labour snapshot classifies NOC 21310 as MODERATE RISK OF SHORTAGE, earning 15/20.','visa_basis','NOC 21310 is in the current Express Entry STEM occupations category.','registration_basis','Professional engineering practice and engineer title use are regulated provincially and territorially.','salary_method','Job Bank national median hourly wage CAD 50.67 earns 10/10.'),'2026-08-09'),
   ('CA:manufacturing-engineer','2025-11-19',null,44.23,10,0,0,0,12,10,0,10,2,44,'career-opportunity-ca-v1','provisional',
-    jsonb_build_object(
-      'classification_scope','Canonical Manufacturing Engineer is narrower than combined NOC 21321 Industrial and manufacturing engineers.',
-      'shortage_note','NOC 21321 has a moderate shortage signal; canonical shortage credit is capped at 10/20 because the evidence covers the combined unit group.',
-      'visa_basis','NOC 21321 is in the current Express Entry STEM occupations category.',
-      'registration_basis','Professional engineering practice and engineer title use are regulated provincially and territorially.',
-      'salary_method','Shared NOC 21321 Job Bank national median hourly wage CAD 44.23 earns 10/10.'
-    ),'2026-08-09'),
+    jsonb_build_object('classification_scope','Canonical Manufacturing Engineer is narrower than combined NOC 21321 Industrial and manufacturing engineers.','shortage_note','NOC 21321 has a moderate shortage signal; canonical shortage credit is capped at 10/20 because the evidence covers the combined unit group.','visa_basis','NOC 21321 is in the current Express Entry STEM occupations category.','registration_basis','Professional engineering practice and engineer title use are regulated provincially and territorially.','salary_method','Shared NOC 21321 Job Bank national median hourly wage CAD 44.23 earns 10/10.'),'2026-08-09'),
   ('CA:industrial-engineer','2025-11-19',null,44.23,10,0,0,0,12,10,0,10,2,44,'career-opportunity-ca-v1','provisional',
-    jsonb_build_object(
-      'classification_scope','Canonical Industrial Engineer is a title within combined NOC 21321 Industrial and manufacturing engineers.',
-      'shortage_note','NOC 21321 has a moderate shortage signal; canonical shortage credit is capped at 10/20 because the evidence covers both industrial and manufacturing engineers.',
-      'visa_basis','NOC 21321 is in the current Express Entry STEM occupations category.',
-      'registration_basis','Professional engineering practice and engineer title use are regulated provincially and territorially.',
-      'salary_method','Shared NOC 21321 Job Bank national median hourly wage CAD 44.23 earns 10/10.'
-    ),'2026-08-09'),
+    jsonb_build_object('classification_scope','Canonical Industrial Engineer is a title within combined NOC 21321 Industrial and manufacturing engineers.','shortage_note','NOC 21321 has a moderate shortage signal; canonical shortage credit is capped at 10/20 because the evidence covers both industrial and manufacturing engineers.','visa_basis','NOC 21321 is in the current Express Entry STEM occupations category.','registration_basis','Professional engineering practice and engineer title use are regulated provincially and territorially.','salary_method','Shared NOC 21321 Job Bank national median hourly wage CAD 44.23 earns 10/10.'),'2026-08-09'),
   ('CA:chemical-engineer','2025-11-19',null,51.92,0,0,0,0,12,10,0,0,2,24,'career-opportunity-ca-v1','provisional',
-    jsonb_build_object(
-      'classification_scope','Exact NOC 21320 Chemical engineers.',
-      'shortage_note','Reviewed Canada labour snapshot classifies NOC 21320 as BALANCE, so no shortage credit is awarded.',
-      'visa_basis','NOC 21320 is not in the current Express Entry STEM occupations category.',
-      'registration_basis','Professional engineering practice and engineer title use are regulated provincially and territorially.',
-      'salary_method','Job Bank national median hourly wage CAD 51.92 earns 10/10.'
-    ),'2026-08-09'),
+    jsonb_build_object('classification_scope','Exact NOC 21320 Chemical engineers.','shortage_note','Reviewed Canada labour snapshot classifies NOC 21320 as BALANCE, so no shortage credit is awarded.','visa_basis','NOC 21320 is not in the current Express Entry STEM occupations category.','registration_basis','Professional engineering practice and engineer title use are regulated provincially and territorially.','salary_method','Job Bank national median hourly wage CAD 51.92 earns 10/10.'),'2026-08-09'),
   ('CA:environmental-engineer','2025-11-19',null,48.56,10,0,0,0,12,10,0,10,2,44,'career-opportunity-ca-v1','provisional',
-    jsonb_build_object(
-      'classification_scope','Environmental Engineer is a narrower official title within NOC 21300 Civil engineers.',
-      'shortage_note','NOC 21300 has a moderate shortage signal; Environmental Engineer receives capped 10/20 shortage credit because the signal is broader than the canonical title.',
-      'visa_basis','NOC 21300 is in the current Express Entry STEM occupations category.',
-      'registration_basis','Professional engineering practice and engineer title use are regulated provincially and territorially.',
-      'salary_method','Job Bank Environmental Engineer national median hourly wage CAD 48.56 earns 10/10.'
-    ),'2026-08-09'),
+    jsonb_build_object('classification_scope','Environmental Engineer is a narrower official title within NOC 21300 Civil engineers.','shortage_note','NOC 21300 has a moderate shortage signal; Environmental Engineer receives capped 10/20 shortage credit because the signal is broader than the canonical title.','visa_basis','NOC 21300 is in the current Express Entry STEM occupations category.','registration_basis','Professional engineering practice and engineer title use are regulated provincially and territorially.','salary_method','Job Bank Environmental Engineer national median hourly wage CAD 48.56 earns 10/10.'),'2026-08-09'),
   ('CA:engineering-technician','2025-11-19',null,null,10,0,0,0,15,0,0,7,4,36,'career-opportunity-ca-v1','provisional',
-    jsonb_build_object(
-      'classification_scope','Canonical Engineering Technician is a multi-NOC umbrella spanning 22300, 22301, 22302 and 22310; no single NOC is presented as the whole occupation.',
-      'shortage_note','Reviewed national evidence is moderate shortage for 22300, 22301 and 22310 but balance for 22302, so umbrella shortage credit is capped at 10/20.',
-      'visa_basis','Current STEM eligibility includes 22300, 22301 and 22310 but not 22302; umbrella visa credit is partial at 7/10.',
-      'salary_method','No synthetic umbrella wage is calculated across unlike technician disciplines, so salary remains unscored.',
-      'registration_basis','The umbrella is not treated as one nationally licensed P.Eng. occupation; technician and technologist certification rules vary by province and discipline.'
-    ),'2026-08-09')
+    jsonb_build_object('classification_scope','Canonical Engineering Technician is a multi-NOC umbrella spanning 22300, 22301, 22302 and 22310; no single NOC is presented as the whole occupation.','shortage_note','Reviewed national evidence is moderate shortage for 22300, 22301 and 22310 but balance for 22302, so umbrella shortage credit is capped at 10/20.','visa_basis','Current STEM eligibility includes 22300, 22301 and 22310 but not 22302; umbrella visa credit is partial at 7/10.','salary_method','No synthetic umbrella wage is calculated across unlike technician disciplines, so salary remains unscored.','registration_basis','The umbrella is not treated as one nationally licensed P.Eng. occupation; technician and technologist certification rules vary by province and discipline.'),'2026-08-09')
 on conflict (profile_key,as_of_date) do update set
   employment_total=excluded.employment_total,
   median_hourly_earnings=excluded.median_hourly_earnings,
@@ -175,7 +126,7 @@ insert into public.country_occupation_program_links (profile_key,program_ref,rel
   ('CA:civil-engineer','ca-program:193','direct','2026-08-09'),
   ('CA:mechanical-engineer','ca-program:5249','direct','2026-08-09'),
   ('CA:electrical-engineer','ca-program:5247','direct','2026-08-09'),
-  ('CA:manufacturing-engineer','ca-program:5248','common_pathway','2026-08-09'),
+  ('CA:manufacturing-engineer','ca-program:5248','related','2026-08-09'),
   ('CA:industrial-engineer','ca-program:5248','direct','2026-08-09'),
   ('CA:chemical-engineer','ca-program:5243','direct','2026-08-09'),
   ('CA:environmental-engineer','ca-program:173','related','2026-08-09'),
