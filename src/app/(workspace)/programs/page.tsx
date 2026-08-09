@@ -14,6 +14,7 @@ import { JpProgramsExplorer } from "./jp-programs-explorer"
 import { NoProgramsExplorer } from "./no-programs-explorer"
 import { FiProgramsExplorer } from "./fi-programs-explorer"
 import { DkProgramsExplorer } from "./dk-programs-explorer"
+import { SeProgramsExplorer } from "./se-programs-explorer"
 import { searchAuPrograms, type AuProgramSearchResult } from "@/lib/programs/au-programs.server"
 import { searchAePrograms, type AeProgramSearchResult } from "@/lib/programs/ae-programs.server"
 import { searchKrPrograms, type KrProgramSearchResult } from "@/lib/programs/kr-programs.server"
@@ -21,6 +22,7 @@ import { searchJpPrograms, type JpProgramSearchResult } from "@/lib/programs/jp-
 import { searchNoPrograms, type NoProgramSearchResult } from "@/lib/programs/no-programs.server"
 import { searchFiPrograms, type FiProgramSearchResult } from "@/lib/programs/fi-programs.server"
 import { searchDkPrograms, type DkProgramSearchResult } from "@/lib/programs/dk-programs.server"
+import { searchSePrograms, type SeProgramSearchResult } from "@/lib/programs/se-programs.server"
 import { buildProgramsUrl, hasProgramFilters, parseProgramSearchParams, type ProgramSearchFilters } from "@/lib/programs/program-search"
 
 export const revalidate = 3600
@@ -45,7 +47,7 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
   const params = await searchParams
   const filters = normalizedFilters(params)
   const country = getLaunchCountry(filters.country)
-  const isPublishedBase = ["AU", "AE", "KR", "JP", "NO", "FI", "DK"].includes(filters.country) && !hasProgramFilters(filters)
+  const isPublishedBase = ["AU", "AE", "KR", "JP", "NO", "FI", "DK", "SE"].includes(filters.country) && !hasProgramFilters(filters)
   const countryName = country?.name ?? "Australia"
   const description = filters.country === "AU"
     ? "Search Australian university and vocational programs by verified city, study level, field, state, duration and tuition."
@@ -61,7 +63,9 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
               ? "Explore Finland English-language university programs from current official university listings, with Studyinfo and institutional application windows tracked separately from programme existence."
               : filters.country === "DK"
                 ? "Explore Denmark English-taught university programs from Study in Denmark and current university sources, with programme existence and current application windows tracked separately."
-                : `Explore study programs in ${countryName}. Country data will be published after source review.`
+                : filters.country === "SE"
+                  ? "Explore source-verified Sweden English-taught university programs, with University Admissions application timing tracked separately from programme existence."
+                  : `Explore study programs in ${countryName}. Country data will be published after source review.`
   return { title: filters.country === "AU" ? "Australian Programs" : `${countryName} Programs`, description, alternates: { canonical: `${SITE_URL}${programsCanonicalPath(filters.country)}` }, robots: { index: isPublishedBase, follow: true } }
 }
 
@@ -94,6 +98,7 @@ export default async function ProgramsPage({ searchParams }: { searchParams: Pro
   let noResult: NoProgramSearchResult | null = null
   let fiResult: FiProgramSearchResult | null = null
   let dkResult: DkProgramSearchResult | null = null
+  let seResult: SeProgramSearchResult | null = null
   let errorMessage: string | null = null
   if (filters.country === "AU") { try { auResult = await searchAuPrograms(filters) } catch (error) { console.error("Unable to load Australian program catalogue", error); errorMessage = "Please try again shortly. No cached or substitute country data has been shown." } }
   else if (filters.country === "AE") { try { aeResult = await searchAePrograms(filters) } catch (error) { console.error("Unable to load UAE program catalogue", error); errorMessage = "Please try again shortly. No cached or substitute UAE program data has been shown." } }
@@ -102,11 +107,13 @@ export default async function ProgramsPage({ searchParams }: { searchParams: Pro
   else if (filters.country === "NO") { try { noResult = await searchNoPrograms(filters) } catch (error) { console.error("Unable to load Norway program catalogue", error); errorMessage = "Please try again shortly. No cached or substitute Norway program data has been shown." } }
   else if (filters.country === "FI") { try { fiResult = await searchFiPrograms(filters) } catch (error) { console.error("Unable to load Finland program catalogue", error); errorMessage = "Please try again shortly. No cached or substitute Finland program data has been shown." } }
   else if (filters.country === "DK") { try { dkResult = await searchDkPrograms(filters) } catch (error) { console.error("Unable to load Denmark program catalogue", error); errorMessage = "Please try again shortly. No cached or substitute Denmark program data has been shown." } }
-  const published = ["AU", "AE", "KR", "JP", "NO", "FI", "DK"].includes(filters.country)
+  else if (filters.country === "SE") { try { seResult = await searchSePrograms(filters) } catch (error) { console.error("Unable to load Sweden program catalogue", error); errorMessage = "Please try again shortly. No cached or substitute Sweden program data has been shown." } }
+  const published = ["AU", "AE", "KR", "JP", "NO", "FI", "DK", "SE"].includes(filters.country)
   return <>
     <ProgramsHeader filters={filters} countryExplicit={countryExplicit} />
     {!published ? <div className="mt-7"><CountryComingSoon countryCode={filters.country} /></div>
       : errorMessage ? <div className="mt-7 flex min-h-72 flex-col items-center justify-center rounded-xl border border-[#f0d8d2] bg-[#fff9f7] p-8 text-center"><DatabaseZap className="size-6 text-[#b65c45]" /><h2 className="mt-3 text-[16px] font-semibold text-[#1b1b1b]">Program data is temporarily unavailable</h2><p className="mt-2 max-w-lg text-[12px] leading-5 text-[#786b66]">{errorMessage}</p></div>
+      : filters.country === "SE" && seResult ? <SeProgramsExplorer filters={filters} result={seResult} />
       : filters.country === "DK" && dkResult ? <DkProgramsExplorer filters={filters} result={dkResult} />
       : filters.country === "FI" && fiResult ? <FiProgramsExplorer filters={filters} result={fiResult} />
       : filters.country === "NO" && noResult ? <NoProgramsExplorer filters={filters} result={noResult} />
