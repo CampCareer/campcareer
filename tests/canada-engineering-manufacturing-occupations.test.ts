@@ -65,6 +65,6 @@ test("Canada Engineering and Manufacturing programme links use reviewed internat
   ]) {
     assert.ok(migration.includes(programRef))
   }
-  assert.ok(migration.includes("'CA:manufacturing-engineer','ca-program:5248','common_pathway'"))
+  assert.ok(migration.includes("'CA:manufacturing-engineer','ca-program:5248','related'"))
   assert.ok(migration.includes("'CA:environmental-engineer','ca-program:173','related'"))
 })
