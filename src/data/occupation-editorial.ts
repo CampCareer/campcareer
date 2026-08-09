@@ -48,6 +48,7 @@ import { HOTEL_MANAGER_OCCUPATION_EDITORIAL } from "./occupation-editorial-hotel
 import { RESTAURANT_MANAGER_OCCUPATION_EDITORIAL } from "./occupation-editorial-restaurant-manager"
 import { BAKER_OCCUPATION_EDITORIAL } from "./occupation-editorial-baker"
 import { TOURISM_MANAGER_OCCUPATION_EDITORIAL } from "./occupation-editorial-tourism-manager"
+import { EVENT_PLANNER_OCCUPATION_EDITORIAL } from "./occupation-editorial-event-planner"
 
 export type { CountryOccupationEditorial, OccupationEditorial } from "./occupation-editorial-base"
 
@@ -101,6 +102,7 @@ export const OCCUPATION_EDITORIAL: readonly OccupationEditorialType[] = [
   ...RESTAURANT_MANAGER_OCCUPATION_EDITORIAL,
   ...BAKER_OCCUPATION_EDITORIAL,
   ...TOURISM_MANAGER_OCCUPATION_EDITORIAL,
+  ...EVENT_PLANNER_OCCUPATION_EDITORIAL,
 ]
 
 const BY_ID = new Map(OCCUPATION_EDITORIAL.map((item) => [item.id, item]))
