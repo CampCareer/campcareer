@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: { params: Promise<{ city: str
     title: `Study in ${name}, Ireland`,
     description: `Explore ${name} student living costs, transport, Stamp 2 work context, verified institutions and current programme-delivery coverage.`,
     alternates: { canonical: `/cities/ie/${normalized}` },
-    robots: { index: false, follow: true },
+    robots: { index: true, follow: true },
   }
 }
 
