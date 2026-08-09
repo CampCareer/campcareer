@@ -10,6 +10,7 @@ test("Canada program sitemap is gated to public indexable detail rows", () => {
   assert.ok(server.includes('.eq("indexable_detail", true)'))
   assert.ok(server.includes("getIndexableCaProgramsForSitemap"))
   assert.ok(sitemap.includes("getIndexableCaProgramsForSitemap"))
+  assert.ok(sitemap.includes('programsCanonicalPath("CA")'))
   assert.ok(sitemap.includes("caProgramDetailPath"))
 })
 
