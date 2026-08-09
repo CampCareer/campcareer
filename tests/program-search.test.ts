@@ -1,6 +1,7 @@
 import assert from "node:assert/strict"
 import test from "node:test"
 import {
+  CA_PROGRAM_CITIES,
   buildProgramsUrl,
   caProgramDetailPath,
   parseProgramId,
@@ -123,6 +124,28 @@ test("Canadian filters keep city, career, institution, province and PGWP inside 
   assert.equal(parseProgramSearchParams({ country: "CA", pgwp: "maybe" }).pgwp, "all")
   assert.equal(parseProgramSearchParams({ country: "AU", institution: "some-school" }).institution, "all")
   assert.equal(parseProgramSearchParams({ country: "AU", city: "toronto" }).city, "all")
+})
+
+test("Canada program city filter covers published geographic city values without exposing campus labels", () => {
+  assert.equal(CA_PROGRAM_CITIES.length, 25)
+  assert.ok(CA_PROGRAM_CITIES.some((city) => city.value === "burnaby" && city.province === "BC"))
+  assert.ok(CA_PROGRAM_CITIES.some((city) => city.value === "new westminster" && city.province === "BC"))
+  assert.ok(CA_PROGRAM_CITIES.some((city) => city.value === "st. john's" && city.province === "NL"))
+  assert.ok(CA_PROGRAM_CITIES.some((city) => city.value === "sault ste. marie" && city.province === "ON"))
+  assert.ok(!CA_PROGRAM_CITIES.some((city) => city.value === "ottawa - perley health"))
+
+  const newWestminster = parseProgramSearchParams({ country: "CA", city: "new westminster" })
+  assert.equal(newWestminster.city, "new westminster")
+  assert.equal(buildProgramsUrl(newWestminster), "/programs?country=CA&city=new+westminster")
+
+  const stJohns = parseProgramSearchParams({ country: "CA", city: "st. john's" })
+  assert.equal(stJohns.city, "st. john's")
+  assert.equal(buildProgramsUrl(stJohns), "/programs?country=CA&city=st.+john%27s")
+
+  assert.equal(
+    parseProgramSearchParams({ country: "CA", city: "ottawa - perley health" }).city,
+    "all",
+  )
 })
 
 test("program URLs preserve country and omit default filters", () => {
