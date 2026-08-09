@@ -158,3 +158,20 @@ Phase 3 is complete for the current bounded 92-programme UK cohort when all of t
 - Tier C provider-identity gaps remain unpublished until their institution scope is intentionally resolved.
 
 Phase 4 should canonicalize and publish only the Tier A/B cohort, with Tier B accessible but non-indexable unless the shared publication policy is changed deliberately. Tier C must not leak into the public UK programme explorer.
+
+## Phase 4 handoff
+
+Phase 4.1 canonicalization was completed on 2026-08-09 after this Phase 3 gate closed.
+
+- Production migration: `20260809212018_uk_program_phase4_canonicalization.sql`.
+- Tier A/B canonical programmes: 76 across 19 canonical institutions.
+- Tier A canonical programmes: 75.
+- Tier B canonical programmes: 1.
+- Tier C canonical leaks: 0.
+- Canonical international offerings: 76; programme-specific `campus_id` remains NULL for all 76 until a separate evidence-backed city/campus linkage step.
+- Canonical offering verification: 75 verified, 1 unverified corresponding to Tier B.
+- Legacy UK programmes: 185 retained but marked inactive; their legacy offerings are stale/closed for provenance.
+- UK catalogue after Phase 4.1: 261 total programmes, 76 active, 185 inactive.
+- `public.program_catalog_canonical_uk_v1` is `security_invoker`, blocked from `anon` / `authenticated`, and readable by `service_role` only.
+
+Phase 4.2 should next materialize reviewed Occupation → canonical Programme links without using staging IDs as durable identity.
