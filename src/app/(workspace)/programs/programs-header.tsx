@@ -127,6 +127,7 @@ export function ProgramsHeader({
       state: null,
       province: null,
       career: null,
+      institution: null,
       pgwp: null,
       duration: null,
       fee: null,
