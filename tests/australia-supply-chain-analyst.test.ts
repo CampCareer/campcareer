@@ -19,7 +19,7 @@ test("Australia Supply Chain Analyst maps exactly to current OSCA 223434", () =>
   assert.ok(editorial)
   assert.ok(australia)
   assert.ok(editorial.tasks.length >= 6)
-  assert.match(migration, /'AU:supply-chain-analyst'.*'Supply Chain Analyst'/s)
+  assert.match(migration, /'AU:supply-chain-analyst'[\s\S]*'Supply Chain Analyst'/)
   assert.match(migration, /'OSCA', '2024 v1\.0', '2234'/)
   assert.match(migration, /'223434', 'Supply Chain Analyst'/)
   assert.match(editorial.overview, /standalone Skill Level 1 occupation/i)
