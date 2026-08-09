@@ -37,7 +37,7 @@ function hasPendingProgrammeCatalog(countryCode: InstitutionMvpCountryCode) {
   return countryCode === "NL" || countryCode === "NZ" || countryCode === "SG" || countryCode === "DE"
     || countryCode === "FR" || countryCode === "ES" || countryCode === "BE" || countryCode === "CH"
     || countryCode === "SE" || countryCode === "DK" || countryCode === "FI" || countryCode === "NO"
-    || countryCode === "JP" || countryCode === "KR"
+    || countryCode === "JP" || countryCode === "KR" || countryCode === "AE"
 }
 function citySummary(institution: InstitutionExplorerItem) {
   const cities = institution.cityNames
@@ -81,7 +81,7 @@ export async function InstitutionsExplorer({ countryCode, searchParams }: { coun
   const countryPath = institutionCountryPath(countryCode)
   const connectionLabel = usesLocationLanguage(countryCode) ? "location" : "campus"
   const euFastpath = countryCode === "BE" || countryCode === "CH" || countryCode === "SE" || countryCode === "DK"
-  const authorityFastpath = countryCode === "FI" || countryCode === "NO" || countryCode === "JP" || countryCode === "KR"
+  const authorityFastpath = countryCode === "FI" || countryCode === "NO" || countryCode === "JP" || countryCode === "KR" || countryCode === "AE"
   let result: InstitutionSearchResult | null = null
   let errorMessage: string | null = null
   try { result = await searchInstitutions(countryCode, filters) } catch (error) { console.error("Unable to load institution explorer", error); errorMessage = "Please try again shortly. No substitute institution data has been shown." }
