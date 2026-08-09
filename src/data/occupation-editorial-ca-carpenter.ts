@@ -1,4 +1,5 @@
 import type { CountryOccupationEditorial } from "./occupation-editorial-base"
+import { ELECTRICIAN_CA_OCCUPATION_EDITORIAL } from "./occupation-editorial-ca-electrician"
 
 export type CanadaOccupationEditorialOverride = {
   id: string
@@ -24,4 +25,5 @@ export const CARPENTER_CA_OCCUPATION_EDITORIAL: CanadaOccupationEditorialOverrid
 
 export const CANADA_OCCUPATION_EDITORIAL_OVERRIDES: readonly CanadaOccupationEditorialOverride[] = [
   CARPENTER_CA_OCCUPATION_EDITORIAL,
+  ELECTRICIAN_CA_OCCUPATION_EDITORIAL,
 ]
