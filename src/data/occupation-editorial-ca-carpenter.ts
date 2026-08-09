@@ -1,10 +1,12 @@
 import type { CountryOccupationEditorial } from "./occupation-editorial-base"
 
-export const CARPENTER_CA_OCCUPATION_EDITORIAL: {
+export type CanadaOccupationEditorialOverride = {
   id: string
-  countryCode: string
+  countryCode: "CA"
   editorial: CountryOccupationEditorial
-} = {
+}
+
+export const CARPENTER_CA_OCCUPATION_EDITORIAL: CanadaOccupationEditorialOverride = {
   id: "carpenter",
   countryCode: "CA",
   editorial: {
@@ -19,3 +21,7 @@ export const CARPENTER_CA_OCCUPATION_EDITORIAL: {
       "The score uses exact NOC 72310 national wage and COPS employment/shortage evidence. Current Job Bank posting counts are point-in-time rather than a three-month vacancy series, so vacancy intensity and trend are not scored, and the current Canada course catalogue has no verified carpenter programme link.",
   },
 }
+
+export const CANADA_OCCUPATION_EDITORIAL_OVERRIDES: readonly CanadaOccupationEditorialOverride[] = [
+  CARPENTER_CA_OCCUPATION_EDITORIAL,
+]
