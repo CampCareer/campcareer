@@ -15,7 +15,7 @@ import { PROGRAM_LEVELS, type ProgramSearchFilters } from "@/lib/programs/progra
 import { cn } from "@/lib/utils"
 import { useProgramNavigation } from "./programs-navigation"
 
-const PUBLISHED_PROGRAM_COUNTRIES = new Set(["AU", "AE", "KR", "JP", "NO"])
+const PUBLISHED_PROGRAM_COUNTRIES = new Set(["AU", "AE", "KR", "JP", "NO", "FI"])
 
 function ProgramCountryPicker({ countryCode, onPick }: { countryCode: string; onPick: (countryCode: string) => void }) {
   const locale = useRouteLocale()
