@@ -71,11 +71,12 @@ test("Dublin scope remains the four-local-authority study market", () => {
   assert.ok(dashboard.includes("Campus membership still requires verified official location evidence"))
 })
 
-test("Phase 5 Ireland profiles stay noindex and do not enable Compare early", () => {
+test("Phase 6 Ireland profiles remain noindex while linking to City Compare", () => {
   assert.ok(page.includes("generateStaticParams"))
   assert.ok(page.includes("PUBLISHED_IE_CITY_SLUGS"))
   assert.ok(page.includes("robots: { index: false, follow: true }"))
   assert.ok(page.includes("robots: { index: false, follow: false }"))
   assert.ok(page.includes("/cities/ie/${normalized}"))
-  assert.doesNotMatch(dashboard, /buildCityCompareCanonicalHref|Compare \{profile\.name\}/)
+  assert.ok(dashboard.includes('buildCityCompareCanonicalHref({ country: "IE", left: profile.slug })'))
+  assert.ok(dashboard.includes("Compare {profile.name}"))
 })
