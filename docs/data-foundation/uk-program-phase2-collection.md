@@ -137,3 +137,20 @@ Continue evidence-first collection on the remaining 25 careers. Prioritise exact
 6. transport/logistics: logistics coordinator and truck driver.
 
 If a target career has no defensible Student-route programme, retain it as an evidence gap rather than manufacturing coverage.
+
+## Phase 2 closeout — supersedes the checkpoint above
+
+The checkpoint above is retained as historical collection context. Subsequent same-day collection batches expanded the live Phase 2 state before Phase 3 began.
+
+Final Phase 2 state on 2026-08-09:
+
+- Programme staging rows: **92**.
+- Programme-level international-evidence rows: **92**.
+- Programme ↔ international evidence: **92/92**.
+- Approved programme-occupation relations: **108**.
+- Candidate occupation relations: **0**.
+- Approved target-career coverage: **74/80**.
+- Six deliberate evidence gaps remain: `bricklayer`, `forestry-technician`, `hvac-technician`, `truck-driver`, `wall-floor-tiler`, `welder`.
+- No unrelated, domestic-only or weakly evidenced programme was force-mapped solely to reach 80/80.
+
+Phase 2 is therefore closed for the bounded UK collection cohort and Phase 3 verification proceeds on these 92 programmes. See `docs/data-foundation/uk-program-phase3-verification.md` for publication-readiness results.
