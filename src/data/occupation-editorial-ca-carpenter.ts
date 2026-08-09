@@ -14,6 +14,7 @@ import { MEDICAL_LABORATORY_TECHNICIAN_CA_OCCUPATION_EDITORIAL } from "./occupat
 import { RADIOGRAPHER_CA_OCCUPATION_EDITORIAL } from "./occupation-editorial-ca-radiographer"
 import { PHARMACIST_CA_OCCUPATION_EDITORIAL } from "./occupation-editorial-ca-pharmacist"
 import { OCCUPATIONAL_THERAPIST_CA_OCCUPATION_EDITORIAL } from "./occupation-editorial-ca-occupational-therapist"
+import { CANADA_TECHNOLOGY_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-ca-technology"
 
 export type CanadaOccupationEditorialOverride = {
   id: string
@@ -54,4 +55,5 @@ export const CANADA_OCCUPATION_EDITORIAL_OVERRIDES: readonly CanadaOccupationEdi
   RADIOGRAPHER_CA_OCCUPATION_EDITORIAL,
   PHARMACIST_CA_OCCUPATION_EDITORIAL,
   OCCUPATIONAL_THERAPIST_CA_OCCUPATION_EDITORIAL,
+  ...CANADA_TECHNOLOGY_OCCUPATION_EDITORIAL_OVERRIDES,
 ]
