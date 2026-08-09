@@ -13,28 +13,36 @@ export function generateStaticParams() {
   return INSTITUTION_MVP_COUNTRIES.map((country) => ({ country: country.toLowerCase() }))
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ country: string }>
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ country: string }> }): Promise<Metadata> {
   const { country } = await params
   const countryCode = normalizeInstitutionCountrySegment(country)
   if (!countryCode) return { robots: { index: false, follow: true } }
 
   const launchCountry = getLaunchCountry(countryCode)
+  const locationLabel = countryCode === "AU" ? "campuses" : "locations"
+  const description = countryCode === "NL"
+    ? `Explore verified institutions in ${launchCountry?.name ?? countryCode} with official BRIN identity and source-backed ${locationLabel}. Program data will be added as the Netherlands catalogue is verified.`
+    : countryCode === "NZ"
+      ? `Explore verified universities in ${launchCountry?.name ?? countryCode} with NZQA provider identity and source-backed ${locationLabel}. Program data will be added as the New Zealand catalogue is verified.`
+      : countryCode === "SG"
+        ? `Explore Singapore Autonomous Universities with source-backed UEN identity and official ${locationLabel}. Program data will be added as the Singapore catalogue is verified.`
+        : countryCode === "DE"
+          ? `Explore Germany Tier A universities with HRK-verified official identity and DFG-verified ${locationLabel}. Program data will be added as the Germany catalogue is verified.`
+          : countryCode === "FR"
+            ? `Explore France IdEx universities with official UAI identity and source-backed ${locationLabel}. Program data will be added as the France catalogue is verified.`
+            : countryCode === "ES"
+              ? `Explore Spain Tier A public universities with source-backed official identity, RUCT registry context and verified administrative ${locationLabel}. Program data will be added as the Spain catalogue is verified.`
+              : `Explore verified institutions in ${launchCountry?.name ?? countryCode} with connected programs, ${locationLabel} and normalized location data.`
+
   return {
     title: `${launchCountry?.name ?? countryCode} Institutions`,
-    description: `Explore verified institutions in ${launchCountry?.name ?? countryCode} with connected programs, campuses and normalized cities.`,
+    description,
     alternates: { canonical: `/institutions/${countryCode.toLowerCase()}` },
     robots: { index: true, follow: true },
   }
 }
 
-export default async function InstitutionCountryPage({
-  params,
-  searchParams,
-}: {
+export default async function InstitutionCountryPage({ params, searchParams }: {
   params: Promise<{ country: string }>
   searchParams: Promise<Record<string, string | string[] | undefined>>
 }) {
@@ -42,11 +50,5 @@ export default async function InstitutionCountryPage({
   const countryCode = normalizeInstitutionCountrySegment(country)
   if (!countryCode) notFound()
   if (country !== countryCode.toLowerCase()) permanentRedirect(`/institutions/${countryCode.toLowerCase()}`)
-
-  return (
-    <InstitutionsExplorer
-      countryCode={countryCode}
-      searchParams={await searchParams}
-    />
-  )
+  return <InstitutionsExplorer countryCode={countryCode} searchParams={await searchParams} />
 }

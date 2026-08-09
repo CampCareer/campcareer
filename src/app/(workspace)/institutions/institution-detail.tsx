@@ -111,10 +111,16 @@ function CampusList({
   total: number
   countryCode: InstitutionDetail["countryCode"]
 }) {
+  const isUk = countryCode === "UK"
+
   if (campuses.length === 0) {
     return (
       <div className="rounded-xl border border-dashed border-[#dcdad4] bg-[#fbfbf9] p-6">
-        <p className="text-[12px] text-[#77746e]">No campus records are currently published for this institution.</p>
+        <p className="text-[12px] text-[#77746e]">
+          {isUk
+            ? "No location records are currently published for this institution."
+            : "No campus records are currently published for this institution."}
+        </p>
       </div>
     )
   }
@@ -136,7 +142,7 @@ function CampusList({
                 </span>
                 <div className="min-w-0">
                   <h3 className="text-[13px] font-semibold leading-5 text-[#1b1b1b]">
-                    {campus.name ?? "Campus"}
+                    {campus.name ?? (isUk ? "Location" : "Campus")}
                   </h3>
                   {cityHref ? (
                     <Link
@@ -159,7 +165,7 @@ function CampusList({
                       rel="noreferrer"
                       className="mt-2 inline-flex items-center gap-1 text-[10.5px] font-semibold text-[#3e7a2e] hover:underline"
                     >
-                      Campus website
+                      {isUk ? "Official location page" : "Campus website"}
                       <ExternalLink className="size-3" />
                     </a>
                   ) : null}
@@ -171,7 +177,7 @@ function CampusList({
       </div>
       {total > campuses.length ? (
         <p className="mt-3 text-[10.5px] text-[#9c9a94]">
-          Showing {campuses.length} of {total.toLocaleString()} current campus records.
+          Showing {campuses.length} of {total.toLocaleString()} current {isUk ? "location" : "campus"} records.
         </p>
       ) : null}
     </>
@@ -270,7 +276,9 @@ export function InstitutionDetailView({
   const ownership = ownershipLabel(institution.ownershipType)
   const website = safeWebsiteUrl(institution.websiteUrl)
   const cricosSource = safeWebsiteUrl(institution.cricosSourceUrl)
+  const ukprnSource = safeWebsiteUrl(institution.ukprnSourceUrl)
   const countryPath = institutionCountryPath(institution.countryCode)
+  const isUk = institution.countryCode === "UK"
 
   return (
     <>
@@ -336,14 +344,18 @@ export function InstitutionDetailView({
             <p className="mt-2 text-[22px] font-semibold tracking-[-0.02em] text-[#1b1b1b]">
               {institution.campusCount.toLocaleString()}
             </p>
-            <p className="mt-0.5 text-[10.5px] font-medium uppercase tracking-[0.06em] text-[#929089]">Campus records</p>
+            <p className="mt-0.5 text-[10.5px] font-medium uppercase tracking-[0.06em] text-[#929089]">
+              {isUk ? "Location records" : "Campus records"}
+            </p>
           </div>
           <div className="rounded-xl bg-[#fafaf8] p-4">
             <MapPin className="size-4 text-[#3e7a2e]" />
             <p className="mt-2 text-[22px] font-semibold tracking-[-0.02em] text-[#1b1b1b]">
               {institution.cityCount.toLocaleString()}
             </p>
-            <p className="mt-0.5 text-[10.5px] font-medium uppercase tracking-[0.06em] text-[#929089]">Normalized cities</p>
+            <p className="mt-0.5 text-[10.5px] font-medium uppercase tracking-[0.06em] text-[#929089]">
+              {isUk ? "Location areas" : "Normalized cities"}
+            </p>
           </div>
         </div>
       </header>
@@ -356,7 +368,9 @@ export function InstitutionDetailView({
               <h2 className="text-[16px] font-semibold text-[#1b1b1b]">Programs</h2>
             </div>
             <p className="mt-1.5 text-[11.5px] leading-5 text-[#77746e]">
-              Active canonical programs connected to this institution. Australian records link directly to the existing CampCareer program detail pages.
+              {isUk
+                ? "Active canonical program records currently connected to this institution. UK program detail pages are not yet published, so these records are shown as previews without invented links."
+                : "Active canonical programs connected to this institution. Australian records link directly to the existing CampCareer program detail pages."}
             </p>
             <div className="mt-4">
               <ProgramList
@@ -370,10 +384,14 @@ export function InstitutionDetailView({
           <section className="rounded-2xl border border-[#e7e6e3] bg-white p-5 sm:p-6">
             <div className="flex items-center gap-2">
               <MapPin className="size-4 text-[#3e7a2e]" />
-              <h2 className="text-[16px] font-semibold text-[#1b1b1b]">Campuses</h2>
+              <h2 className="text-[16px] font-semibold text-[#1b1b1b]">
+                {isUk ? "Campuses & locations" : "Campuses"}
+              </h2>
             </div>
             <p className="mt-1.5 text-[11.5px] leading-5 text-[#77746e]">
-              Current campus records from the canonical institution catalogue. Published Australian city names link to their CampCareer city profiles.
+              {isUk
+                ? "Institution-official campus and study-location records are shown where normalized. Otherwise CampCareer keeps the existing city-level institution location rather than inventing a campus."
+                : "Current campus records from the canonical institution catalogue. Published Australian city names link to their CampCareer city profiles."}
             </p>
             <div className="mt-4">
               <CampusList
@@ -432,8 +450,29 @@ export function InstitutionDetailView({
               ) : null}
               {institution.cityNames.length ? (
                 <div>
-                  <dt className="text-[10px] font-semibold uppercase tracking-[0.07em] text-[#aaa7a0]">Cities</dt>
+                  <dt className="text-[10px] font-semibold uppercase tracking-[0.07em] text-[#aaa7a0]">
+                    {isUk ? "Locations" : "Cities"}
+                  </dt>
                   <dd className="mt-1 text-[12px] leading-5 text-[#4d4c48]">{institution.cityNames.join(", ")}</dd>
+                </div>
+              ) : null}
+              {isUk && institution.ukprn ? (
+                <div>
+                  <dt className="text-[10px] font-semibold uppercase tracking-[0.07em] text-[#aaa7a0]">UKPRN</dt>
+                  <dd className="mt-1 flex items-center gap-2 text-[12.5px] font-semibold text-[#4d4c48]">
+                    {institution.ukprn}
+                    {ukprnSource ? (
+                      <a
+                        href={ukprnSource}
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label="Open UKPRN provider source"
+                        className="text-[#3e7a2e]"
+                      >
+                        <ExternalLink className="size-3.5" />
+                      </a>
+                    ) : null}
+                  </dd>
                 </div>
               ) : null}
               {institution.cricosProviderCode ? (
