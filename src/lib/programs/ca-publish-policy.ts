@@ -17,6 +17,7 @@ export type CaProgramHoldReason =
   | "closed_delivery"
   | "ambiguous_parent"
   | "admission_non_core"
+  | "admission_evidence_unavailable"
   | "admission_unverified"
   | "admission_closed_or_restricted"
 
@@ -65,6 +66,7 @@ function admissionHoldReason(admissionStatus: string | null): CaProgramHoldReaso
   if (!status) return "admission_unverified"
 
   if (status.includes("not_assessed_non_core")) return "admission_non_core"
+  if (status.includes("phase3_reviewed_unresolved")) return "admission_evidence_unavailable"
 
   const explicitlyUnverified = [
     "not_yet_verified",
