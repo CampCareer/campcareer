@@ -137,7 +137,7 @@ function ProgramPreview({ program }: { program: CaProgramListItem }) {
 }
 
 function PublicationPrograms({ institution, publication }: { institution: InstitutionDetail; publication: CaInstitutionProgramSummary }) {
-  const allProgramsHref = `/programs?country=CA&q=${encodeURIComponent(institution.name)}`
+  const allProgramsHref = `/programs?country=CA&institution=${encodeURIComponent(institution.slug)}`
 
   if (publication.total === 0) {
     return (
