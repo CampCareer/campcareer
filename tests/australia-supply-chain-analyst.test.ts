@@ -41,6 +41,7 @@ test("Australia Supply Chain Analyst does not invent exact employment or earning
 
 test("Australia Supply Chain Analyst uses exact no-shortage and conservative broader demand data", () => {
   const australia = getOccupationEditorial("supply-chain-analyst")?.countries.AU
+
   assert.ok(australia)
   assert.match(migration, /779\.66667, '2026-05-01', -1\.56/)
   assert.match(migration, /16\.15, 27\.31/)
@@ -51,6 +52,7 @@ test("Australia Supply Chain Analyst uses exact no-shortage and conservative bro
 
 test("Australia Supply Chain Analyst keeps Logistics Officer outside the occupation", () => {
   const editorial = getOccupationEditorial("supply-chain-analyst")
+
   assert.ok(editorial)
   assert.match(editorial.overview, /Logistics Analyst as an alternative title/i)
   assert.match(editorial.overview, /excluding Logistics Officers/i)
@@ -58,6 +60,7 @@ test("Australia Supply Chain Analyst keeps Logistics Officer outside the occupat
 
 test("Australia Supply Chain Analyst records the VETASSESS migration pathway", () => {
   const australia = getOccupationEditorial("supply-chain-analyst")?.countries.AU
+
   assert.ok(australia)
   assert.match(migration, /VETASSESS currently assesses ANZSCO 224714 Supply Chain Analyst as a Group B occupation/i)
   assert.match(migration, /Core Skills stream of subclass 482 and Direct Entry stream of subclass 186/i)
@@ -66,6 +69,7 @@ test("Australia Supply Chain Analyst records the VETASSESS migration pathway", (
 
 test("Australia Supply Chain Analyst links verified study routes without generated IDs", () => {
   const australia = getOccupationEditorial("supply-chain-analyst")?.countries.AU
+
   assert.ok(australia)
   assert.match(migration, /university-of-tasmania'\n  and course_code = '095526F'/)
   assert.match(migration, /rmit-university'\n  and course_code = '077513E'/)
