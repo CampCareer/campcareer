@@ -29,7 +29,7 @@ Sources checked 2026-08-09:
 - Register of licensed Student sponsors: https://www.gov.uk/government/publications/register-of-licensed-sponsors-students
 - Student sponsor licence/CAS guidance: https://www.gov.uk/guidance/apply-for-a-student-sponsor-licence
 
-The licensed-sponsor register was last updated 2026-07-28 at the time of this verification.
+The GOV.UK licensed-sponsor publication was last updated 2026-07-28 at the time of this verification. Existing programme-level sponsor flags remain grounded in the official provider/sponsor evidence collected in Phase 2; this Phase 3 pass did not silently replace that evidence with a new inferred institution-wide programme entitlement.
 
 ## Tier rules
 
