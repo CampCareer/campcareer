@@ -135,7 +135,7 @@ export function CanadaCityDashboard({ profile }: { profile: CaCityProfile }) {
               <p className="text-[12px] font-semibold text-[#3e7a2e]">Student decision snapshot</p>
               <h2 className="mt-1 text-[20px] font-semibold tracking-[-0.02em] text-[#1b1b1b]">Study, living and work context in one place</h2>
               <p className="mt-1.5 max-w-2xl text-[12px] leading-5 text-[#77746e]">
-                Program counts below use CampCareer&apos;s reviewed Canada publication set for the 80 target careers. Institution and location records remain source-backed city connections and are kept separate from program publication eligibility.
+                Program counts below use CampCareer&apos;s reviewed Canada program set for the 80 target careers. Institution and location records remain source-backed city connections and are kept separate from program publication eligibility.
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -160,11 +160,11 @@ export function CanadaCityDashboard({ profile }: { profile: CaCityProfile }) {
           <section className="rounded-xl border border-[#e7e6e3] bg-white p-5 sm:p-6">
             <div className="flex flex-wrap items-center gap-2 text-[#2563eb]">
               <GraduationCap className="size-4" />
-              <h2 className="text-[15px] font-semibold">Canonical institutions with {profile.name} locations</h2>
+              <h2 className="text-[15px] font-semibold">Institutions with {profile.name} locations</h2>
               <span className="ml-auto rounded-full bg-[#eef4ff] px-2.5 py-1 text-[10.5px] font-semibold text-[#2563eb]">{profile.linkedInstitutionCount} institutions · {profile.linkedCampusCount} locations</span>
             </div>
             <p className="mt-2 text-[11.5px] leading-5 text-[#77746e]">
-              This section uses source-backed canonical institution and location records. Program publication counts are shown separately so a campus link is never treated as proof that every program is offered at that location.
+              This section uses source-backed institution and location records. Program publication counts are shown separately so a location link is never treated as proof that every program is offered there.
             </p>
             <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
               {profile.institutions.map((institution) => (
@@ -173,7 +173,7 @@ export function CanadaCityDashboard({ profile }: { profile: CaCityProfile }) {
                     <span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-lg bg-white text-[#3e7a2e] shadow-sm"><Building2 className="size-4" /></span>
                     <div className="min-w-0 flex-1">
                       {institution.profilePath ? <Link href={institution.profilePath} className="text-[12.5px] font-semibold leading-5 text-[#1b1b1b] transition hover:text-[#3e7a2e] hover:underline">{institution.name}</Link> : <p className="text-[12.5px] font-semibold leading-5 text-[#1b1b1b]">{institution.name}</p>}
-                      <p className="mt-0.5 text-[10.5px] text-[#8f8c85]">{institution.type ?? "Education provider"} · {institution.campuses.length} canonical {institution.campuses.length === 1 ? "location" : "locations"}</p>
+                      <p className="mt-0.5 text-[10.5px] text-[#8f8c85]">{institution.type ?? "Education provider"} · {institution.campuses.length} verified {institution.campuses.length === 1 ? "location" : "locations"}</p>
                       <div className="mt-2 flex flex-wrap gap-1">{institution.campuses.map((campus) => <span key={campus.id} className="rounded-md bg-white px-2 py-1 text-[9.5px] text-[#77746e]">{campus.locality ?? campus.name}</span>)}</div>
                       <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
                         {institution.profilePath ? <Link href={institution.profilePath} className="inline-flex items-center gap-1 text-[10.5px] font-semibold text-[#3e7a2e] hover:underline">Institution profile <ArrowRight className="size-3" /></Link> : null}
@@ -196,7 +196,7 @@ export function CanadaCityDashboard({ profile }: { profile: CaCityProfile }) {
             <section className="rounded-xl border border-[#d9e3f7] bg-[#f7f9fe] p-5">
               <div className="flex items-center gap-2 text-[#2563eb]"><MapPin className="size-4" /><h2 className="text-[14.5px] font-semibold">Published target-career programs</h2></div>
               <p className="mt-2 text-[27px] font-semibold tracking-[-0.03em] text-[#1b1b1b]">{published?.totalPrograms.toLocaleString("en-CA") ?? "0"}</p>
-              <p className="mt-1 text-[11px] leading-5 text-[#5e6f91]">Programs in the reviewed Canada publication set whose published city is {profile.name}. This is intentionally narrower than an institution&apos;s full catalogue.</p>
+              <p className="mt-1 text-[11px] leading-5 text-[#5e6f91]">Programs in CampCareer&apos;s reviewed Canada set whose published city is {profile.name}. This is intentionally narrower than an institution&apos;s full catalogue.</p>
               {published ? (
                 <div className="mt-3 grid grid-cols-2 gap-2 text-[10.5px]">
                   <div className="rounded-lg bg-white/70 px-3 py-2"><p className="font-semibold text-[#1b1b1b]">{published.indexablePrograms}</p><p className="text-[#6f6d68]">Official page verified</p></div>
@@ -209,7 +209,7 @@ export function CanadaCityDashboard({ profile }: { profile: CaCityProfile }) {
             {published && published.pgwpUnknownPrograms > 0 ? (
               <section className="rounded-xl border border-[#e5e3dc] bg-[#fbfbf9] p-5">
                 <div className="flex items-center gap-2 text-[#77746e]"><ShieldCheck className="size-4" /><h2 className="text-[13px] font-semibold">PGWP evidence note</h2></div>
-                <p className="mt-2 text-[11px] leading-5 text-[#77746e]">{published.pgwpUnknownPrograms} published {profile.name} programs keep PGWP as not confirmed because official provider or IRCC-aligned evidence is insufficient. Unknown is not treated as ineligible.</p>
+                <p className="mt-2 text-[11px] leading-5 text-[#77746e]">{published.pgwpUnknownPrograms} published {profile.name} programs keep PGWP as not confirmed because official provider or IRCC-aligned evidence is insufficient. Not confirmed does not mean ineligible.</p>
               </section>
             ) : null}
           </div>
