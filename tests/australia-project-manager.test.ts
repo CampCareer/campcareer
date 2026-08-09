@@ -39,7 +39,7 @@ test("Australia Project Manager preserves no-shortage proxy and conservative sco
   const australia = getOccupationEditorial("project-manager")?.countries.AU
 
   assert.ok(australia)
-  assert.match(migration, /2,107\.33333/i)
+  assert.match(migration, /2107\.33333/)
   assert.match(migration, /about \+1\.01% year on year/i)
   assert.match(migration, /9\.54, 17\.33, 0, 0, 5, 0, 10, 0, 5, 5, 5, 30/)
   assert.match(migration, /No Shortage nationally/i)
