@@ -19,7 +19,7 @@ test("Australia Human Resources Specialist maps to current OSCA Human Resources 
   assert.ok(editorial)
   assert.ok(australia)
   assert.ok(editorial.tasks.length >= 6)
-  assert.match(migration, /'AU:human-resources-specialist'.*'Human Resources Adviser'/s)
+  assert.match(migration, /'AU:human-resources-specialist'[\s\S]*'Human Resources Adviser'/)
   assert.match(migration, /'OSCA', '2024 v1\.0', '2221'/)
   assert.match(migration, /'222131', 'Human Resources Adviser'/)
   assert.match(migration, /'2013 v1\.3', '223111'/)
@@ -37,7 +37,6 @@ test("Australia Human Resources Specialist uses aligned six-digit employment and
 
 test("Australia Human Resources Specialist preserves national no-shortage and SA NT shortage signals", () => {
   const australia = getOccupationEditorial("human-resources-specialist")?.countries.AU
-
   assert.ok(australia)
   assert.match(migration, /No Shortage nationally/i)
   assert.match(migration, /South Australia and the Northern Territory have shortage signals/i)
@@ -48,7 +47,6 @@ test("Australia Human Resources Specialist preserves national no-shortage and SA
 
 test("Australia Human Resources Specialist keeps broader vacancy and growth context conservative", () => {
   const australia = getOccupationEditorial("human-resources-specialist")?.countries.AU
-
   assert.ok(australia)
   assert.match(migration, /2355\.66667, '2026-05-01', -4\.69/)
   assert.match(migration, /7\.39, 14\.77/)
@@ -58,7 +56,6 @@ test("Australia Human Resources Specialist keeps broader vacancy and growth cont
 
 test("Australia Human Resources Specialist records current CSOL and VETASSESS Group B pathway", () => {
   const australia = getOccupationEditorial("human-resources-specialist")?.countries.AU
-
   assert.ok(australia)
   assert.match(migration, /Core Skills Occupation List includes legacy ANZSCO 223111 Human Resource Adviser/i)
   assert.match(migration, /VETASSESS classifies 223111 as Group B/i)
@@ -68,7 +65,6 @@ test("Australia Human Resources Specialist records current CSOL and VETASSESS Gr
 
 test("Australia Human Resources Specialist links verified AHRI-aligned undergraduate and postgraduate routes", () => {
   const australia = getOccupationEditorial("human-resources-specialist")?.countries.AU
-
   assert.ok(australia)
   assert.match(migration, /deakin-university'\n  and course_code = '0101801'/)
   assert.match(migration, /rmit-university'\n  and course_code = '088784B'/)
