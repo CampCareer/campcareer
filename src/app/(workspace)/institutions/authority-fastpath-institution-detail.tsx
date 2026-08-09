@@ -9,6 +9,7 @@ const COUNTRY_CONFIG = {
   NO: { name: "Norway", profile: "NOKUT-accredited university", authority: "NOKUT" },
   JP: { name: "Japan", profile: "Designated National University", authority: "MEXT" },
   KR: { name: "South Korea", profile: "IEQAS-certified Tier A university", authority: "Ministry of Education / NIIED Study in Korea" },
+  AE: { name: "United Arab Emirates", profile: "CAA-active Group 1 launch university", authority: "CAA / Ministry of Higher Education and Scientific Research" },
 } as const
 
 function safeWebsiteUrl(value: string | null) {
