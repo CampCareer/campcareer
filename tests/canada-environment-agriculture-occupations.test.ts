@@ -76,4 +76,4 @@ test("Canada Environment and Agriculture programme links keep qualification stre
   assert.ok(migration.includes("'CA:forestry-technician','ca-program:2795','direct'"))
   assert.ok(migration.includes("'CA:food-technologist','ca-program:98','direct'"))
   assert.ok(migration.includes("'CA:horticulturist','ca-program:2202','direct'"))
-}
+})
