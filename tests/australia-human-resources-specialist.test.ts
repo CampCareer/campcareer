@@ -19,7 +19,7 @@ test("Australia Human Resources Specialist maps to current OSCA Human Resources 
   assert.ok(editorial)
   assert.ok(australia)
   assert.ok(editorial.tasks.length >= 6)
-  assert.match(migration, /'AU:human-resources-specialist'.*'Human Resources Adviser'/s)
+  assert.match(migration, /'AU:human-resources-specialist'[\s\S]*'Human Resources Adviser'/)
   assert.match(migration, /'OSCA', '2024 v1\.0', '2221'/)
   assert.match(migration, /'222131', 'Human Resources Adviser'/)
   assert.match(migration, /'2013 v1\.3', '223111'/)
