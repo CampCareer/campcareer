@@ -21,6 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ country: 
   const launchCountry = getLaunchCountry(countryCode)
   const locationLabel = countryCode === "AU" ? "campuses" : "locations"
   const euFastpath = countryCode === "BE" || countryCode === "CH" || countryCode === "SE" || countryCode === "DK"
+  const authorityFastpath = countryCode === "FI" || countryCode === "NO" || countryCode === "JP" || countryCode === "KR"
   const description = countryCode === "NL"
     ? `Explore verified institutions in ${launchCountry?.name ?? countryCode} with official BRIN identity and source-backed ${locationLabel}. Program data will be added as the Netherlands catalogue is verified.`
     : countryCode === "NZ"
@@ -33,7 +34,7 @@ export async function generateMetadata({ params }: { params: Promise<{ country: 
             ? `Explore France IdEx universities with official UAI identity and source-backed ${locationLabel}. Program data will be added as the France catalogue is verified.`
             : countryCode === "ES"
               ? `Explore Spain Tier A public universities with source-backed official identity, RUCT registry context and verified administrative ${locationLabel}. Program data will be added as the Spain catalogue is verified.`
-              : euFastpath
+              : euFastpath || authorityFastpath
                 ? `Explore authority-verified universities in ${launchCountry?.name ?? countryCode} with source-backed city-level ${locationLabel}. Program data will be added as the country catalogue is verified.`
                 : `Explore verified institutions in ${launchCountry?.name ?? countryCode} with connected programs, ${locationLabel} and normalized location data.`
 

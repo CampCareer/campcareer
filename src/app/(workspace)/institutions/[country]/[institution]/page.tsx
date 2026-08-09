@@ -8,6 +8,7 @@ import {
   normalizeInstitutionSlugSegment,
 } from "@/lib/institutions/institution-search"
 import { INDEXABLE_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo"
+import { INDEXABLE_AUTHORITY_FASTPATH_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-authority-fastpath"
 import { INDEXABLE_DE_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-de"
 import { INDEXABLE_ES_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-es"
 import { INDEXABLE_EU_FASTPATH_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-eu-fastpath"
@@ -18,11 +19,17 @@ import { INDEXABLE_SG_INSTITUTION_ROUTES } from "@/lib/institutions/institution-
 import { INDEXABLE_UK_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-uk"
 import { getInstitutionDetail, type InstitutionDetail } from "@/lib/institutions/institution-detail.server"
 import {
+  getAuthorityFastpathInstitutionDetail,
+  type AuthorityFastpathCountryCode,
+  type AuthorityFastpathInstitutionDetailResult,
+} from "@/lib/institutions/authority-fastpath-institution-detail.server"
+import {
   getEuFastpathInstitutionDetail,
   type EuFastpathCountryCode,
   type EuFastpathInstitutionDetailResult,
 } from "@/lib/institutions/eu-fastpath-institution-detail.server"
 import { getSpainInstitutionDetail, type SpainInstitutionDetailResult } from "@/lib/institutions/spain-institution-detail.server"
+import { AuthorityFastpathInstitutionDetailView } from "../../authority-fastpath-institution-detail"
 import { CanadianInstitutionDetailView } from "../../canadian-institution-detail"
 import { EuFastpathInstitutionDetailView } from "../../eu-fastpath-institution-detail"
 import { FranceInstitutionDetailView } from "../../france-institution-detail"
@@ -41,6 +48,10 @@ function isEuFastpathCountry(countryCode: string): countryCode is EuFastpathCoun
   return countryCode === "BE" || countryCode === "CH" || countryCode === "SE" || countryCode === "DK"
 }
 
+function isAuthorityFastpathCountry(countryCode: string): countryCode is AuthorityFastpathCountryCode {
+  return countryCode === "FI" || countryCode === "NO" || countryCode === "JP" || countryCode === "KR"
+}
+
 function isIndexableInstitutionRoute(countryCode: string, slug: string) {
   return INDEXABLE_INSTITUTION_ROUTES.some(([c, s]) => c === countryCode && s === slug)
     || INDEXABLE_UK_INSTITUTION_ROUTES.some(([c, s]) => c === countryCode && s === slug)
@@ -51,6 +62,7 @@ function isIndexableInstitutionRoute(countryCode: string, slug: string) {
     || INDEXABLE_FR_INSTITUTION_ROUTES.some(([c, s]) => c === countryCode && s === slug)
     || INDEXABLE_ES_INSTITUTION_ROUTES.some(([c, s]) => c === countryCode && s === slug)
     || INDEXABLE_EU_FASTPATH_INSTITUTION_ROUTES.some(([c, s]) => c === countryCode && s === slug)
+    || INDEXABLE_AUTHORITY_FASTPATH_INSTITUTION_ROUTES.some(([c, s]) => c === countryCode && s === slug)
 }
 
 export async function generateMetadata({ params }: InstitutionDetailPageProps): Promise<Metadata> {
@@ -64,7 +76,9 @@ export async function generateMetadata({ params }: InstitutionDetailPageProps): 
       ? (await getSpainInstitutionDetail(slug))?.institution ?? null
       : isEuFastpathCountry(countryCode)
         ? (await getEuFastpathInstitutionDetail(countryCode, slug))?.institution ?? null
-        : await getInstitutionDetail(countryCode, slug)
+        : isAuthorityFastpathCountry(countryCode)
+          ? (await getAuthorityFastpathInstitutionDetail(countryCode, slug))?.institution ?? null
+          : await getInstitutionDetail(countryCode, slug)
 
     if (!detail) return { title: "Institution not found", robots: { index: false, follow: true } }
     const canonicalPath = institutionDetailPath(countryCode, detail.slug)
@@ -81,7 +95,7 @@ export async function generateMetadata({ params }: InstitutionDetailPageProps): 
               ? `Explore ${detail.name} official UAI identity and source-backed ${locationLabel} on CampCareer. Program data will be added as the France catalogue is verified.`
               : countryCode === "ES"
                 ? `Explore ${detail.name} source-backed official identity, RUCT registry context and verified administrative ${locationLabel} on CampCareer. Program data will be added as the Spain catalogue is verified.`
-                : isEuFastpathCountry(countryCode)
+                : isEuFastpathCountry(countryCode) || isAuthorityFastpathCountry(countryCode)
                   ? `Explore ${detail.name} authority-backed institution identity and verified city-level ${locationLabel} on CampCareer. Program data will be added as the country catalogue is verified.`
                   : `Explore ${detail.name} programs, ${locationLabel} and source-backed institution details on CampCareer.`
 
@@ -127,6 +141,18 @@ export default async function InstitutionDetailPage({ params }: InstitutionDetai
     }
     if (!result) notFound()
     return <EuFastpathInstitutionDetailView result={result} />
+  }
+
+  if (isAuthorityFastpathCountry(countryCode)) {
+    let result: AuthorityFastpathInstitutionDetailResult | null = null
+    try {
+      result = await getAuthorityFastpathInstitutionDetail(countryCode, slug)
+    } catch (error) {
+      console.error(`Unable to load ${countryCode} institution detail page`, error)
+      return <InstitutionUnavailable />
+    }
+    if (!result) notFound()
+    return <AuthorityFastpathInstitutionDetailView result={result} />
   }
 
   let detail: InstitutionDetail | null = null
