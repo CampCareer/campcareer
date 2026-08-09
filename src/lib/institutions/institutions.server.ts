@@ -171,31 +171,48 @@ export async function searchInstitutions(
     query = query.eq("institution_kind", filters.kind)
   }
 
-  query = query
-    .order("program_count", { ascending: false })
-    .order("canonical_name", { ascending: true })
-
   const from = (filters.page - 1) * INSTITUTION_PAGE_SIZE
   const to = from + INSTITUTION_PAGE_SIZE - 1
-  const { data, error, count } = await query.range(from, to)
+
+  if (countryCode === "CA") {
+    const { data, error, count } = await query.order("canonical_name", { ascending: true })
+    if (error) throw new Error(`Unable to load institution explorer: ${error.message}`)
+
+    const allRows = (data ?? []) as unknown as InstitutionExplorerRow[]
+    const programCounts = await getCaPublishedProgramCountsByInstitution(allRows.map((row) => row.slug))
+    const sortedRows = [...allRows].sort((left, right) => {
+      const countDifference = (programCounts.get(right.slug) ?? 0) - (programCounts.get(left.slug) ?? 0)
+      return countDifference || left.canonical_name.localeCompare(right.canonical_name)
+    })
+    const rows = sortedRows.slice(from, to + 1)
+    const logos = await loadInstitutionLogos(rows.map((row) => row.institution_id))
+    const institutions = rows.map((row) =>
+      mapInstitution(row, countryCode, logos.get(row.institution_id) ?? null, programCounts.get(row.slug) ?? 0),
+    )
+    const total = count ?? allRows.length
+
+    return {
+      institutions,
+      total,
+      page: filters.page,
+      pageSize: INSTITUTION_PAGE_SIZE,
+      pageCount: total === 0 ? 0 : Math.ceil(total / INSTITUTION_PAGE_SIZE),
+    }
+  }
+
+  const { data, error, count } = await query
+    .order("program_count", { ascending: false })
+    .order("canonical_name", { ascending: true })
+    .range(from, to)
 
   if (error) {
     throw new Error(`Unable to load institution explorer: ${error.message}`)
   }
 
   const rows = (data ?? []) as unknown as InstitutionExplorerRow[]
-  const logosPromise = loadInstitutionLogos(rows.map((row) => row.institution_id))
-  const caProgramCountsPromise = countryCode === "CA"
-    ? getCaPublishedProgramCountsByInstitution(rows.map((row) => row.slug))
-    : Promise.resolve(new Map<string, number>())
-  const [logos, caProgramCounts] = await Promise.all([logosPromise, caProgramCountsPromise])
+  const logos = await loadInstitutionLogos(rows.map((row) => row.institution_id))
   const institutions = rows.map((row) =>
-    mapInstitution(
-      row,
-      countryCode,
-      logos.get(row.institution_id) ?? null,
-      countryCode === "CA" ? (caProgramCounts.get(row.slug) ?? 0) : undefined,
-    ),
+    mapInstitution(row, countryCode, logos.get(row.institution_id) ?? null),
   )
   const total = count ?? institutions.length
 
