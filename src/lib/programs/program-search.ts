@@ -35,7 +35,20 @@ export const AU_PROGRAM_CITIES = [
   { value: "adelaide", label: "Adelaide", labelKo: "애들레이드", state: "SA" },
 ] as const
 
-export type ProgramCity = "all" | (typeof AU_PROGRAM_CITIES)[number]["value"]
+export const CA_PROGRAM_CITIES = [
+  { value: "toronto", label: "Toronto", labelKo: "토론토", province: "ON" },
+  { value: "vancouver", label: "Vancouver", labelKo: "밴쿠버", province: "BC" },
+  { value: "montreal", label: "Montreal", labelKo: "몬트리올", province: "QC" },
+  { value: "ottawa", label: "Ottawa", labelKo: "오타와", province: "ON" },
+  { value: "calgary", label: "Calgary", labelKo: "캘거리", province: "AB" },
+  { value: "waterloo", label: "Waterloo", labelKo: "워털루", province: "ON" },
+  { value: "edmonton", label: "Edmonton", labelKo: "에드먼턴", province: "AB" },
+] as const
+
+export type ProgramCity =
+  | "all"
+  | (typeof AU_PROGRAM_CITIES)[number]["value"]
+  | (typeof CA_PROGRAM_CITIES)[number]["value"]
 
 export const AU_PROGRAM_STATES = [
   { value: "NSW", label: "New South Wales", labelKo: "뉴사우스웨일스" },
@@ -160,7 +173,8 @@ function safeSlug(value: string | undefined) {
 
 const levelValues = PROGRAM_LEVELS.map((item) => item.value)
 const fieldValues = ["all", ...PROGRAM_FIELDS.map((item) => item.value)] as const
-const cityValues = ["all", ...AU_PROGRAM_CITIES.map((item) => item.value)] as const
+const auCityValues = ["all", ...AU_PROGRAM_CITIES.map((item) => item.value)] as const
+const caCityValues = ["all", ...CA_PROGRAM_CITIES.map((item) => item.value)] as const
 const stateValues = ["all", ...AU_PROGRAM_STATES.map((item) => item.value)] as const
 const provinceValues = ["all", ...CA_PROGRAM_PROVINCES.map((item) => item.value)] as const
 const pgwpValues = CA_PROGRAM_PGWP_STATES.map((item) => item.value)
@@ -177,8 +191,10 @@ export function parseProgramSearchParams(
   const normalizedCountry = /^[A-Z]{2}$/.test(country) ? country : "AU"
   const q = (firstValue(params.q) ?? "").trim().slice(0, 80)
   const city = normalizedCountry === "AU"
-    ? allowedValue(firstValue(params.city), cityValues, "all")
-    : "all"
+    ? allowedValue(firstValue(params.city), auCityValues, "all")
+    : normalizedCountry === "CA"
+      ? allowedValue(firstValue(params.city), caCityValues, "all")
+      : "all"
 
   return {
     country: normalizedCountry,
