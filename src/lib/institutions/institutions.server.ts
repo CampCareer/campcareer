@@ -121,36 +121,22 @@ async function loadCaPublishedProgramCounts() {
     .select("institution_slug")
     .eq("publicly_listed", true)
 
-  if (error) {
-    throw new Error(`Unable to load Canadian institution publication counts: ${error.message}`)
-  }
+  if (error) throw new Error(`Unable to load Canadian institution publication counts: ${error.message}`)
 
   for (const row of (data ?? []) as unknown as CaPublishedInstitutionRow[]) {
     if (!row.institution_slug) continue
     counts.set(row.institution_slug, (counts.get(row.institution_slug) ?? 0) + 1)
   }
-
   return counts
 }
 
 async function searchCaInstitutions(filters: InstitutionSearchFilters): Promise<InstitutionSearchResult> {
   let query = supabaseAdmin
-    .from("institution_explorer_v1")
-    .select(
-      [
-        "institution_id",
-        "country_code",
-        "slug",
-        "canonical_name",
-        "institution_kind",
-        "ownership_type",
-        "website_url",
-        "program_count",
-        "campus_count",
-        "city_count",
-        "city_names",
-      ].join(","),
-    )
+    .from("institution_explorer_ca_v1")
+    .select([
+      "institution_id", "country_code", "slug", "canonical_name", "institution_kind",
+      "ownership_type", "website_url", "program_count", "campus_count", "city_count", "city_names",
+    ].join(","))
     .eq("country_code", "CA")
 
   const search = safeSearchTerm(filters.q)
@@ -164,17 +150,17 @@ async function searchCaInstitutions(filters: InstitutionSearchFilters): Promise<
     query.order("canonical_name", { ascending: true }),
     loadCaPublishedProgramCounts(),
   ])
-
   if (error) throw new Error(`Unable to load institution explorer: ${error.message}`)
 
   const rows = (data ?? []) as unknown as InstitutionExplorerRow[]
-  const sortedRows = rows.sort((a, b) => {
+  rows.sort((a, b) => {
     const countDelta = (publishedCounts.get(b.slug) ?? 0) - (publishedCounts.get(a.slug) ?? 0)
     return countDelta || a.canonical_name.localeCompare(b.canonical_name)
   })
-  const total = sortedRows.length
+
+  const total = rows.length
   const from = (filters.page - 1) * INSTITUTION_PAGE_SIZE
-  const pageRows = sortedRows.slice(from, from + INSTITUTION_PAGE_SIZE)
+  const pageRows = rows.slice(from, from + INSTITUTION_PAGE_SIZE)
   const logos = await loadInstitutionLogos(pageRows.map((row) => row.institution_id))
   const institutions = pageRows.map((row) =>
     mapInstitution(row, "CA", logos.get(row.institution_id) ?? null, publishedCounts.get(row.slug) ?? 0),
@@ -195,8 +181,32 @@ export async function searchInstitutions(
 ): Promise<InstitutionSearchResult> {
   if (countryCode === "CA") return searchCaInstitutions(filters)
 
+  const explorerView = countryCode === "UK"
+    ? "institution_explorer_uk_v1"
+    : countryCode === "NL"
+      ? "institution_explorer_nl_v1"
+      : countryCode === "NZ"
+        ? "institution_explorer_nz_v1"
+        : countryCode === "SG"
+          ? "institution_explorer_sg_v1"
+          : countryCode === "DE"
+            ? "institution_explorer_de_v1"
+            : countryCode === "FR"
+              ? "institution_explorer_fr_v1"
+              : countryCode === "ES"
+                ? "institution_explorer_es_v1"
+                : countryCode === "AE"
+                  ? "institution_explorer_ae_v1"
+                  : countryCode === "US"
+                    ? "institution_explorer_us_tier_a_v1"
+                    : (["BE", "CH", "SE", "DK"] as const).includes(countryCode as "BE" | "CH" | "SE" | "DK")
+                      ? "institution_explorer_eu_fastpath_v1"
+                      : (["FI", "NO", "JP", "KR"] as const).includes(countryCode as "FI" | "NO" | "JP" | "KR")
+                        ? "institution_explorer_authority_fastpath_v1"
+                        : "institution_explorer_v1"
+
   let query = supabaseAdmin
-    .from("institution_explorer_v1")
+    .from(explorerView)
     .select(
       [
         "institution_id",
