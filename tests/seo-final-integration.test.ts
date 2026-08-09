@@ -47,11 +47,10 @@ test("sitemap contains every explicit SEO inventory exactly once", () => {
   assert.ok(urlSet.has(`${SITE_URL}/institutions/ca`))
   assert.ok(urlSet.has(`${SITE_URL}/cities/au/sydney`))
   assert.ok(urlSet.has(`${SITE_URL}/cities/au/adelaide`))
-  assert.ok(!urls.some((url) => url.includes("/compare/programs")))
-  assert.ok(!urls.some((url) => url.includes("/compare/careers")))
+  assert.ok(!urls.some((url) => url.includes("/compare/")))
 })
 
-test("legacy compare modes map to canonical path modes including cities", () => {
+test("legacy compare type resolver still covers every root compare mode", () => {
   assert.equal(canonicalCompareModeFromLegacyType(null), "programs")
   assert.equal(canonicalCompareModeFromLegacyType("program"), "programs")
   assert.equal(canonicalCompareModeFromLegacyType("country"), "countries")
@@ -66,8 +65,8 @@ test("route pages enforce canonical redirects and strict indexing gates", () => 
   const caProgramDetail = readFileSync("src/app/(workspace)/programs/ca/[program]/page.tsx", "utf8")
   const occupation = readFileSync("src/app/(workspace)/occupation/page.tsx", "utf8")
   const visaExplorer = readFileSync("src/app/(workspace)/visas/visas-explorer.tsx", "utf8")
-  const compareLegacy = readFileSync("src/app/(workspace)/compare/page.tsx", "utf8")
-  const compareCanonical = readFileSync("src/app/(workspace)/compare/[mode]/page.tsx", "utf8")
+  const compareRoot = readFileSync("src/app/(workspace)/compare/page.tsx", "utf8")
+  const compareLegacyMode = readFileSync("src/app/(workspace)/compare/[mode]/page.tsx", "utf8")
 
   assert.ok(programs.includes("queryWithoutCountry"))
   assert.ok(programs.includes("permanentRedirect"))
@@ -80,8 +79,10 @@ test("route pages enforce canonical redirects and strict indexing gates", () => 
   assert.ok(occupation.includes("getIndexableOccupationRoute"))
   assert.ok(occupation.includes("permanentRedirect(canonicalRoute.path)"))
   assert.ok(visaExplorer.includes("visaCanonicalPath"))
-  assert.ok(compareLegacy.includes("permanentRedirect"))
-  assert.ok(compareCanonical.includes('["programs", "countries", "cities", "careers"]'))
+  assert.ok(compareRoot.includes("resolveCompareModeType"))
+  assert.ok(compareRoot.includes("getAuCityComparison"))
+  assert.ok(compareRoot.includes("getCaCityComparison"))
+  assert.ok(compareLegacyMode.includes("permanentRedirect"))
 })
 
 test("institutions and city fallback pages declare canonical behavior", () => {
