@@ -22,7 +22,7 @@ import { getEuFastpathInstitutionDetail, type EuFastpathCountryCode, type EuFast
 import { getSpainInstitutionDetail, type SpainInstitutionDetailResult } from "@/lib/institutions/spain-institution-detail.server"
 import { getUsInstitutionDetail, type UsInstitutionDetailResult } from "@/lib/institutions/us-institution-detail.server"
 import { AuthorityFastpathInstitutionDetailView } from "../../authority-fastpath-institution-detail"
-import { CanadianInstitutionDetailView } from "../../canadian-institution-detail"
+import { CaInstitutionDetailView } from "../../ca-institution-detail"
 import { EuFastpathInstitutionDetailView } from "../../eu-fastpath-institution-detail"
 import { FranceInstitutionDetailView } from "../../france-institution-detail"
 import { GermanyInstitutionDetailView } from "../../germany-institution-detail"
@@ -119,7 +119,7 @@ export default async function InstitutionDetailPage({ params }: InstitutionDetai
   let detail: InstitutionDetail | null = null
   try { detail = await getInstitutionDetail(countryCode, slug) } catch (error) { console.error("Unable to load institution detail page", error); return <InstitutionUnavailable /> }
   if (!detail) notFound()
-  if (countryCode === "CA") return <CanadianInstitutionDetailView institution={detail} />
+  if (countryCode === "CA") return <CaInstitutionDetailView institution={detail} />
   if (countryCode === "NL") return <NetherlandsInstitutionDetailView institution={detail} />
   if (countryCode === "NZ") return <NewZealandInstitutionDetailView institution={detail} />
   if (countryCode === "SG") return <SingaporeInstitutionDetailView institution={detail} />
