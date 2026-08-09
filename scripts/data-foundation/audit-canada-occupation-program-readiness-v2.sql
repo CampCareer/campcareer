@@ -36,6 +36,7 @@ with program_state as (
       when lower(coalesce(c.source_status,'')) like '%one_time_delivery_closed%' then 'closed_delivery'
       when lower(coalesce(c.source_status,'')) like '%parent_program_multiple_credentials%' then 'ambiguous_parent'
       when lower(coalesce(p.international_program_admission_status,'')) like '%not_assessed_non_core%' then 'admission_non_core'
+      when lower(coalesce(p.international_program_admission_status,'')) like '%phase3_reviewed_unresolved%' then 'admission_evidence_unavailable'
       when nullif(btrim(p.international_program_admission_status),'') is null then 'admission_unverified'
       when lower(coalesce(p.international_program_admission_status,'')) ~ '(not_yet_verified|not verified|should_be_checked|dli_and_study_permit_eligibility_not_verified)'
         or (
@@ -106,6 +107,7 @@ with program_state as (
       when lower(coalesce(c.source_status,'')) like '%pending_review%' then 'pending_review'
       when lower(coalesce(c.source_status,'')) like '%cancelled%' then 'cancelled'
       when lower(coalesce(c.source_status,'')) like '%legacy_%' then 'legacy'
+      when lower(coalesce(p.international_program_admission_status,'')) like '%phase3_reviewed_unresolved%' then 'admission_evidence_unavailable'
       when nullif(btrim(p.international_program_admission_status),'') is null then 'admission_unverified'
       when lower(coalesce(p.international_program_admission_status,'')) ~ '(not_yet_verified|not verified|should_be_checked|dli_and_study_permit_eligibility_not_verified)'
         or (((lower(coalesce(p.international_program_admission_status,'')) like '%intake%') or (lower(coalesce(p.international_program_admission_status,'')) like '%availability%'))
