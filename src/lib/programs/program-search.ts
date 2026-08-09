@@ -36,13 +36,31 @@ export const AU_PROGRAM_CITIES = [
 ] as const
 
 export const CA_PROGRAM_CITIES = [
+  { value: "brampton", label: "Brampton", labelKo: "브램턴", province: "ON" },
+  { value: "burnaby", label: "Burnaby", labelKo: "버나비", province: "BC" },
+  { value: "calgary", label: "Calgary", labelKo: "캘거리", province: "AB" },
+  { value: "edmonton", label: "Edmonton", labelKo: "에드먼턴", province: "AB" },
+  { value: "fredericton", label: "Fredericton", labelKo: "프레더릭턴", province: "NB" },
+  { value: "halifax", label: "Halifax", labelKo: "핼리팩스", province: "NS" },
+  { value: "kitchener", label: "Kitchener", labelKo: "키치너", province: "ON" },
+  { value: "london", label: "London", labelKo: "런던", province: "ON" },
+  { value: "mississauga", label: "Mississauga", labelKo: "미시소거", province: "ON" },
+  { value: "montreal", label: "Montreal", labelKo: "몬트리올", province: "QC" },
+  { value: "nanaimo", label: "Nanaimo", labelKo: "나나이모", province: "BC" },
+  { value: "new westminster", label: "New Westminster", labelKo: "뉴웨스트민스터", province: "BC" },
+  { value: "ottawa", label: "Ottawa", labelKo: "오타와", province: "ON" },
+  { value: "pembroke", label: "Pembroke", labelKo: "펨브로크", province: "ON" },
+  { value: "prince george", label: "Prince George", labelKo: "프린스조지", province: "BC" },
+  { value: "saint john", label: "Saint John", labelKo: "세인트존", province: "NB" },
+  { value: "sault ste. marie", label: "Sault Ste. Marie", labelKo: "수세인트마리", province: "ON" },
+  { value: "st. john's", label: "St. John's", labelKo: "세인트존스", province: "NL" },
+  { value: "surrey", label: "Surrey", labelKo: "서리", province: "BC" },
+  { value: "thunder bay", label: "Thunder Bay", labelKo: "선더베이", province: "ON" },
   { value: "toronto", label: "Toronto", labelKo: "토론토", province: "ON" },
   { value: "vancouver", label: "Vancouver", labelKo: "밴쿠버", province: "BC" },
-  { value: "montreal", label: "Montreal", labelKo: "몬트리올", province: "QC" },
-  { value: "ottawa", label: "Ottawa", labelKo: "오타와", province: "ON" },
-  { value: "calgary", label: "Calgary", labelKo: "캘거리", province: "AB" },
   { value: "waterloo", label: "Waterloo", labelKo: "워털루", province: "ON" },
-  { value: "edmonton", label: "Edmonton", labelKo: "에드먼턴", province: "AB" },
+  { value: "whitehorse", label: "Whitehorse", labelKo: "화이트호스", province: "YT" },
+  { value: "winnipeg", label: "Winnipeg", labelKo: "위니펙", province: "MB" },
 ] as const
 
 export type ProgramCity =
