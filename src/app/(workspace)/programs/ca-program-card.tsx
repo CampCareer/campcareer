@@ -2,6 +2,7 @@ import Link from "next/link"
 import { BadgeCheck, Building2, Clock3, GraduationCap, MapPin, ShieldCheck } from "lucide-react"
 import { getCanonicalCareer } from "@/data/career-comparison-catalog"
 import { institutionDetailPath } from "@/lib/institutions/institution-search"
+import { caProgramCityPath } from "@/lib/programs/ca-program-city-routes"
 import {
   caPgwpLabel,
   caPublicationEvidenceLabel,
@@ -32,6 +33,7 @@ export function CaProgramCard({ program }: { program: CaProgramListItem }) {
   const tuition = money(program.tuitionFeeCad)
   const studyDuration = duration(program.durationYears)
   const location = [program.city, program.province].filter(Boolean).join(", ")
+  const cityHref = caProgramCityPath(program.city)
   const detailHref = caProgramDetailPath(program.id, program.title)
   const institutionHref = program.institutionSlug
     ? institutionDetailPath("CA", program.institutionSlug)
@@ -113,9 +115,18 @@ export function CaProgramCard({ program }: { program: CaProgramListItem }) {
 
           <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-[11.5px] text-[#76736d]">
             {location && (
-              <span className="inline-flex items-center gap-1.5">
-                <MapPin className="size-3.5 text-[#a3a19b]" /> {location}
-              </span>
+              cityHref ? (
+                <Link
+                  href={cityHref}
+                  className="pointer-events-auto relative z-20 inline-flex items-center gap-1.5 transition hover:text-[#3e7a2e] hover:underline"
+                >
+                  <MapPin className="size-3.5 text-[#a3a19b]" /> {location}
+                </Link>
+              ) : (
+                <span className="inline-flex items-center gap-1.5">
+                  <MapPin className="size-3.5 text-[#a3a19b]" /> {location}
+                </span>
+              )
             )}
             {studyDuration && (
               <span className="inline-flex items-center gap-1.5">
