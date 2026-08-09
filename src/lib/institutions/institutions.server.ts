@@ -6,6 +6,7 @@ import type {
   InstitutionMvpCountryCode,
   InstitutionSearchFilters,
 } from "@/lib/institutions/institution-search"
+import { getCaPublishedProgramCountsByInstitution } from "@/lib/programs/ca-programs.server"
 
 export const INSTITUTION_PAGE_SIZE = 20
 
@@ -69,6 +70,7 @@ function mapInstitution(
   row: InstitutionExplorerRow,
   countryCode: InstitutionMvpCountryCode,
   logoUrl: string | null,
+  programCountOverride?: number,
 ): InstitutionExplorerItem {
   return {
     id: row.institution_id,
@@ -79,7 +81,7 @@ function mapInstitution(
     ownershipType: row.ownership_type,
     websiteUrl: row.website_url,
     logoUrl,
-    programCount: safeNumber(row.program_count),
+    programCount: programCountOverride ?? safeNumber(row.program_count),
     campusCount: safeNumber(row.campus_count),
     cityCount: safeNumber(row.city_count),
     cityNames: Array.isArray(row.city_names)
@@ -182,9 +184,18 @@ export async function searchInstitutions(
   }
 
   const rows = (data ?? []) as unknown as InstitutionExplorerRow[]
-  const logos = await loadInstitutionLogos(rows.map((row) => row.institution_id))
+  const logosPromise = loadInstitutionLogos(rows.map((row) => row.institution_id))
+  const caProgramCountsPromise = countryCode === "CA"
+    ? getCaPublishedProgramCountsByInstitution(rows.map((row) => row.slug))
+    : Promise.resolve(new Map<string, number>())
+  const [logos, caProgramCounts] = await Promise.all([logosPromise, caProgramCountsPromise])
   const institutions = rows.map((row) =>
-    mapInstitution(row, countryCode, logos.get(row.institution_id) ?? null),
+    mapInstitution(
+      row,
+      countryCode,
+      logos.get(row.institution_id) ?? null,
+      countryCode === "CA" ? (caProgramCounts.get(row.slug) ?? 0) : undefined,
+    ),
   )
   const total = count ?? institutions.length
 
