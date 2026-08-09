@@ -5,6 +5,7 @@ import { TECHNOLOGY_CLOUD_OCCUPATION_EDITORIAL } from "./occupation-editorial-te
 import { TECHNOLOGY_DATABASE_OCCUPATION_EDITORIAL } from "./occupation-editorial-technology-database"
 import { TECHNOLOGY_SUPPORT_OCCUPATION_EDITORIAL } from "./occupation-editorial-technology-support"
 import { ENGINEERING_OCCUPATION_EDITORIAL } from "./occupation-editorial-engineering"
+import type { OccupationEditorial } from "./occupation-editorial-base"
 
 export type { CountryOccupationEditorial, OccupationEditorial } from "./occupation-editorial-base"
 
@@ -18,8 +19,10 @@ export const OCCUPATION_EDITORIAL = [
   ...ENGINEERING_OCCUPATION_EDITORIAL,
 ] as const
 
-const BY_ID = new Map(OCCUPATION_EDITORIAL.map((item) => [item.id, item]))
+const BY_ID = new Map<string, OccupationEditorial>(
+  OCCUPATION_EDITORIAL.map((item) => [item.id, item]),
+)
 
-export function getOccupationEditorial(id: string) {
+export function getOccupationEditorial(id: string): OccupationEditorial | undefined {
   return BY_ID.get(id)
 }
