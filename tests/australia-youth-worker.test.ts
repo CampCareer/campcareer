@@ -53,8 +53,8 @@ test("Australia Youth Worker has no universal statutory registration", () => {
 test("Australia Youth Worker links two direct degree routes dynamically", () => {
   const australia = getOccupationEditorial("youth-worker")?.countries.AU
   assert.ok(australia)
-  assert.match(migration, /rmit-university' and course_code='098456B'/)
-  assert.match(migration, /australian-catholic-university' and course_code='084316G'/)
+  assert.match(migration, /rmit-university'\s+and course_code\s*=\s*'098456B'/)
+  assert.match(migration, /australian-catholic-university'\s+and course_code\s*=\s*'084316G'/)
   assert.match(migration, /'au-program:'\|\|id::text/)
   assert.doesNotMatch(migration, /'au-program:5708'/)
   assert.doesNotMatch(migration, /'au-program:584'/)
