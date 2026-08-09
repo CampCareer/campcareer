@@ -40,6 +40,7 @@ import { MULTIMEDIA_DESIGNER_OCCUPATION_EDITORIAL } from "./occupation-editorial
 import { ANIMATOR_OCCUPATION_EDITORIAL } from "./occupation-editorial-animator"
 import { INTERIOR_DESIGNER_OCCUPATION_EDITORIAL } from "./occupation-editorial-interior-designer"
 import { FILM_EDITOR_OCCUPATION_EDITORIAL } from "./occupation-editorial-film-editor"
+import { ARCHITECT_OCCUPATION_EDITORIAL } from "./occupation-editorial-architect"
 
 export type { CountryOccupationEditorial, OccupationEditorial } from "./occupation-editorial-base"
 
@@ -85,6 +86,7 @@ export const OCCUPATION_EDITORIAL: readonly OccupationEditorialType[] = [
   ...ANIMATOR_OCCUPATION_EDITORIAL,
   ...INTERIOR_DESIGNER_OCCUPATION_EDITORIAL,
   ...FILM_EDITOR_OCCUPATION_EDITORIAL,
+  ...ARCHITECT_OCCUPATION_EDITORIAL,
 ]
 
 const BY_ID = new Map(OCCUPATION_EDITORIAL.map((item) => [item.id, item]))
