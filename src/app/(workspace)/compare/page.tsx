@@ -5,6 +5,7 @@ import { parseCareerComparisonState, type CareerComparisonState } from "@/lib/ca
 import { parseCountryComparisonState, type CountryComparisonState } from "@/lib/country-comparison"
 import { getAuCityComparison } from "@/lib/cities/au-city-comparison.server"
 import { getCaCityComparison } from "@/lib/cities/ca-city-comparison.server"
+import { getIeCityComparison } from "@/lib/cities/ie-city-comparison.server"
 import { getUkCityComparison } from "@/lib/cities/uk-city-comparison.server"
 import { getUsCityComparison } from "@/lib/cities/us-city-comparison.server"
 import { resolveCompareModeType, type CompareModeType } from "@/lib/compare-navigation"
@@ -19,6 +20,7 @@ import CountriesCompareMatrix from "./countries-compare-matrix"
 import CareersCompareMatrix from "./careers-compare-matrix"
 import { CitiesCompareMatrix } from "./cities-compare-matrix"
 import { CanadaCitiesCompareMatrix } from "./canada-cities-compare-matrix"
+import { IrelandCitiesCompareMatrix } from "./ireland-cities-compare-matrix"
 import { UnitedKingdomCitiesCompareMatrix } from "./united-kingdom-cities-compare-matrix"
 import { UnitedStatesCitiesCompareMatrix } from "./united-states-cities-compare-matrix"
 import { ComparePageHeader } from "./compare-mode-navigation"
@@ -147,6 +149,32 @@ async function CitiesCompare({ countryCode, params }: { countryCode: string; par
           right={comparison.right}
           options={comparison.options}
           sharedProgramCount={comparison.sharedProgramCount}
+        />
+      </section>
+    )
+  }
+
+  if (countryCode === "IE") {
+    const comparison = await getIeCityComparison(params.get("left"), params.get("right"))
+    if (!comparison) {
+      return (
+        <UnsupportedSurface
+          type="Cities"
+          href={buildCityCompareCanonicalHref({ country: "IE" })}
+          label="Compare Ireland cities"
+          activeType="city"
+          countryCode={countryCode}
+        />
+      )
+    }
+
+    return (
+      <section className="w-full pb-4" aria-label="Cities comparison">
+        <ComparePageHeader activeType="city" countryCode={countryCode} />
+        <IrelandCitiesCompareMatrix
+          left={comparison.left}
+          right={comparison.right}
+          options={comparison.options}
         />
       </section>
     )
