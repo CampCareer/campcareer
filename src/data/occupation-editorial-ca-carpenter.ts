@@ -9,6 +9,7 @@ import { CONSTRUCTION_MANAGER_CA_OCCUPATION_EDITORIAL } from "./occupation-edito
 import { REGISTERED_NURSE_CA_OCCUPATION_EDITORIAL } from "./occupation-editorial-ca-registered-nurse"
 import { MIDWIFE_CA_OCCUPATION_EDITORIAL } from "./occupation-editorial-ca-midwife"
 import { CARE_WORKER_CA_OCCUPATION_EDITORIAL } from "./occupation-editorial-ca-care-worker"
+import { PHYSIOTHERAPIST_CA_OCCUPATION_EDITORIAL } from "./occupation-editorial-ca-physiotherapist"
 
 export type CanadaOccupationEditorialOverride = {
   id: string
@@ -44,4 +45,5 @@ export const CANADA_OCCUPATION_EDITORIAL_OVERRIDES: readonly CanadaOccupationEdi
   REGISTERED_NURSE_CA_OCCUPATION_EDITORIAL,
   MIDWIFE_CA_OCCUPATION_EDITORIAL,
   CARE_WORKER_CA_OCCUPATION_EDITORIAL,
+  PHYSIOTHERAPIST_CA_OCCUPATION_EDITORIAL,
 ]
