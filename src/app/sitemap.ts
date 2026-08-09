@@ -17,6 +17,7 @@ import { INDEXABLE_NL_INSTITUTION_PATHS } from "@/lib/institutions/institution-s
 import { INDEXABLE_NZ_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-nz"
 import { INDEXABLE_SG_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-sg"
 import { INDEXABLE_UK_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-uk"
+import { INDEXABLE_US_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-us"
 import { PUBLISHED_UK_CITY_SLUGS, PUBLISHED_US_CITY_SLUGS } from "@/lib/cities/city-routes"
 import { CANONICAL_COUNTRY_SLUGS, SITE_URL, countryCanonicalPath } from "@/lib/seo-routes.mjs"
 
@@ -47,6 +48,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/institutions/jp`, lastModified, priority: 0.82, changeFrequency: "weekly" },
     { url: `${SITE_URL}/institutions/kr`, lastModified, priority: 0.82, changeFrequency: "weekly" },
     { url: `${SITE_URL}/institutions/ae`, lastModified, priority: 0.82, changeFrequency: "weekly" },
+    { url: `${SITE_URL}/institutions/us`, lastModified, priority: 0.82, changeFrequency: "weekly" },
     ...CANONICAL_COUNTRY_SLUGS.map((slug) => ({ url: `${SITE_URL}${countryCanonicalPath(slug)}`, lastModified, priority: 0.85, changeFrequency: "monthly" as const })),
     { url: `${SITE_URL}/cities/au/sydney`, lastModified, priority: 0.8, changeFrequency: "monthly" },
     { url: `${SITE_URL}/cities/au/melbourne`, lastModified, priority: 0.8, changeFrequency: "monthly" },
@@ -84,6 +86,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...INDEXABLE_EU_FASTPATH_INSTITUTION_PATHS,
     ...INDEXABLE_AUTHORITY_FASTPATH_INSTITUTION_PATHS,
     ...INDEXABLE_AE_INSTITUTION_PATHS,
+    ...INDEXABLE_US_INSTITUTION_PATHS,
   ].map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.72, changeFrequency: "weekly" as const }))
   const routePages: MetadataRoute.Sitemap = ROUTE_GUIDES.flatMap((guide) => [
     { url: `${SITE_URL}${routeGuideHref(guide)}`, lastModified: new Date(guide.lastVerified), priority: 0.95, changeFrequency: "weekly" as const },

@@ -22,21 +22,23 @@ export async function generateMetadata({ params }: { params: Promise<{ country: 
   const locationLabel = countryCode === "AU" ? "campuses" : "locations"
   const euFastpath = countryCode === "BE" || countryCode === "CH" || countryCode === "SE" || countryCode === "DK"
   const authorityFastpath = countryCode === "FI" || countryCode === "NO" || countryCode === "JP" || countryCode === "KR" || countryCode === "AE"
-  const description = countryCode === "NL"
-    ? `Explore verified institutions in ${launchCountry?.name ?? countryCode} with official BRIN identity and source-backed ${locationLabel}. Program data will be added as the Netherlands catalogue is verified.`
-    : countryCode === "NZ"
-      ? `Explore verified universities in ${launchCountry?.name ?? countryCode} with NZQA provider identity and source-backed ${locationLabel}. Program data will be added as the New Zealand catalogue is verified.`
-      : countryCode === "SG"
-        ? `Explore Singapore Autonomous Universities with source-backed UEN identity and official ${locationLabel}. Program data will be added as the Singapore catalogue is verified.`
-        : countryCode === "DE"
-          ? `Explore Germany Tier A universities with HRK-verified official identity and DFG-verified ${locationLabel}. Program data will be added as the Germany catalogue is verified.`
-          : countryCode === "FR"
-            ? `Explore France IdEx universities with official UAI identity and source-backed ${locationLabel}. Program data will be added as the France catalogue is verified.`
-            : countryCode === "ES"
-              ? `Explore Spain Tier A public universities with source-backed official identity, RUCT registry context and verified administrative ${locationLabel}. Program data will be added as the Spain catalogue is verified.`
-              : euFastpath || authorityFastpath
-                ? `Explore authority-verified universities in ${launchCountry?.name ?? countryCode} with source-backed city-level ${locationLabel}. Program data will be added as the country catalogue is verified.`
-                : `Explore verified institutions in ${launchCountry?.name ?? countryCode} with connected programs, ${locationLabel} and normalized location data.`
+  const description = countryCode === "US"
+    ? `Explore the CampCareer US launch cohort of 25 research universities with NCES/IPEDS UNITID identity, NCSES selection context and source-backed city-level ${locationLabel}. The US degree-program catalogue is pending.`
+    : countryCode === "NL"
+      ? `Explore verified institutions in ${launchCountry?.name ?? countryCode} with official BRIN identity and source-backed ${locationLabel}. Program data will be added as the Netherlands catalogue is verified.`
+      : countryCode === "NZ"
+        ? `Explore verified universities in ${launchCountry?.name ?? countryCode} with NZQA provider identity and source-backed ${locationLabel}. Program data will be added as the New Zealand catalogue is verified.`
+        : countryCode === "SG"
+          ? `Explore Singapore Autonomous Universities with source-backed UEN identity and official ${locationLabel}. Program data will be added as the Singapore catalogue is verified.`
+          : countryCode === "DE"
+            ? `Explore Germany Tier A universities with HRK-verified official identity and DFG-verified ${locationLabel}. Program data will be added as the Germany catalogue is verified.`
+            : countryCode === "FR"
+              ? `Explore France IdEx universities with official UAI identity and source-backed ${locationLabel}. Program data will be added as the France catalogue is verified.`
+              : countryCode === "ES"
+                ? `Explore Spain Tier A public universities with source-backed official identity, RUCT registry context and verified administrative ${locationLabel}. Program data will be added as the Spain catalogue is verified.`
+                : euFastpath || authorityFastpath
+                  ? `Explore authority-verified universities in ${launchCountry?.name ?? countryCode} with source-backed city-level ${locationLabel}. Program data will be added as the country catalogue is verified.`
+                  : `Explore verified institutions in ${launchCountry?.name ?? countryCode} with connected programs, ${locationLabel} and normalized location data.`
 
   return {
     title: `${launchCountry?.name ?? countryCode} Institutions`,

@@ -2,11 +2,7 @@ import type { Metadata } from "next"
 import { notFound, permanentRedirect } from "next/navigation"
 import { DatabaseZap } from "lucide-react"
 import { SITE_URL } from "@/lib/seo-routes.mjs"
-import {
-  institutionDetailPath,
-  normalizeInstitutionCountrySegment,
-  normalizeInstitutionSlugSegment,
-} from "@/lib/institutions/institution-search"
+import { institutionDetailPath, normalizeInstitutionCountrySegment, normalizeInstitutionSlugSegment } from "@/lib/institutions/institution-search"
 import { INDEXABLE_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo"
 import { INDEXABLE_AE_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-ae"
 import { INDEXABLE_AUTHORITY_FASTPATH_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-authority-fastpath"
@@ -18,19 +14,13 @@ import { INDEXABLE_NL_INSTITUTION_ROUTES } from "@/lib/institutions/institution-
 import { INDEXABLE_NZ_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-nz"
 import { INDEXABLE_SG_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-sg"
 import { INDEXABLE_UK_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-uk"
+import { INDEXABLE_US_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-us"
 import { getInstitutionDetail, type InstitutionDetail } from "@/lib/institutions/institution-detail.server"
 import { getAeInstitutionDetail, type AeInstitutionDetailResult } from "@/lib/institutions/ae-institution-detail.server"
-import {
-  getAuthorityFastpathInstitutionDetail,
-  type AuthorityFastpathCountryCode,
-  type AuthorityFastpathInstitutionDetailResult,
-} from "@/lib/institutions/authority-fastpath-institution-detail.server"
-import {
-  getEuFastpathInstitutionDetail,
-  type EuFastpathCountryCode,
-  type EuFastpathInstitutionDetailResult,
-} from "@/lib/institutions/eu-fastpath-institution-detail.server"
+import { getAuthorityFastpathInstitutionDetail, type AuthorityFastpathCountryCode, type AuthorityFastpathInstitutionDetailResult } from "@/lib/institutions/authority-fastpath-institution-detail.server"
+import { getEuFastpathInstitutionDetail, type EuFastpathCountryCode, type EuFastpathInstitutionDetailResult } from "@/lib/institutions/eu-fastpath-institution-detail.server"
 import { getSpainInstitutionDetail, type SpainInstitutionDetailResult } from "@/lib/institutions/spain-institution-detail.server"
+import { getUsInstitutionDetail, type UsInstitutionDetailResult } from "@/lib/institutions/us-institution-detail.server"
 import { AuthorityFastpathInstitutionDetailView } from "../../authority-fastpath-institution-detail"
 import { CanadianInstitutionDetailView } from "../../canadian-institution-detail"
 import { EuFastpathInstitutionDetailView } from "../../eu-fastpath-institution-detail"
@@ -41,31 +31,25 @@ import { NetherlandsInstitutionDetailView } from "../../netherlands-institution-
 import { NewZealandInstitutionDetailView } from "../../new-zealand-institution-detail"
 import { SingaporeInstitutionDetailView } from "../../singapore-institution-detail"
 import { SpainInstitutionDetailView } from "../../spain-institution-detail"
+import { UsInstitutionDetailView } from "../../us-institution-detail"
 
 export const revalidate = 3600
-
 type InstitutionDetailPageProps = { params: Promise<{ country: string; institution: string }> }
-
-function isEuFastpathCountry(countryCode: string): countryCode is EuFastpathCountryCode {
-  return countryCode === "BE" || countryCode === "CH" || countryCode === "SE" || countryCode === "DK"
-}
-
-function isAuthorityFastpathCountry(countryCode: string): countryCode is AuthorityFastpathCountryCode {
-  return countryCode === "FI" || countryCode === "NO" || countryCode === "JP" || countryCode === "KR"
-}
-
+function isEuFastpathCountry(countryCode: string): countryCode is EuFastpathCountryCode { return countryCode === "BE" || countryCode === "CH" || countryCode === "SE" || countryCode === "DK" }
+function isAuthorityFastpathCountry(countryCode: string): countryCode is AuthorityFastpathCountryCode { return countryCode === "FI" || countryCode === "NO" || countryCode === "JP" || countryCode === "KR" }
 function isIndexableInstitutionRoute(countryCode: string, slug: string) {
-  return INDEXABLE_INSTITUTION_ROUTES.some(([c, s]) => c === countryCode && s === slug)
-    || INDEXABLE_UK_INSTITUTION_ROUTES.some(([c, s]) => c === countryCode && s === slug)
-    || INDEXABLE_NL_INSTITUTION_ROUTES.some(([c, s]) => c === countryCode && s === slug)
-    || INDEXABLE_NZ_INSTITUTION_ROUTES.some(([c, s]) => c === countryCode && s === slug)
-    || INDEXABLE_SG_INSTITUTION_ROUTES.some(([c, s]) => c === countryCode && s === slug)
-    || INDEXABLE_DE_INSTITUTION_ROUTES.some(([c, s]) => c === countryCode && s === slug)
-    || INDEXABLE_FR_INSTITUTION_ROUTES.some(([c, s]) => c === countryCode && s === slug)
-    || INDEXABLE_ES_INSTITUTION_ROUTES.some(([c, s]) => c === countryCode && s === slug)
-    || INDEXABLE_EU_FASTPATH_INSTITUTION_ROUTES.some(([c, s]) => c === countryCode && s === slug)
-    || INDEXABLE_AUTHORITY_FASTPATH_INSTITUTION_ROUTES.some(([c, s]) => c === countryCode && s === slug)
-    || INDEXABLE_AE_INSTITUTION_ROUTES.some(([c, s]) => c === countryCode && s === slug)
+  return INDEXABLE_INSTITUTION_ROUTES.some(([c,s]) => c===countryCode && s===slug)
+    || INDEXABLE_UK_INSTITUTION_ROUTES.some(([c,s]) => c===countryCode && s===slug)
+    || INDEXABLE_NL_INSTITUTION_ROUTES.some(([c,s]) => c===countryCode && s===slug)
+    || INDEXABLE_NZ_INSTITUTION_ROUTES.some(([c,s]) => c===countryCode && s===slug)
+    || INDEXABLE_SG_INSTITUTION_ROUTES.some(([c,s]) => c===countryCode && s===slug)
+    || INDEXABLE_DE_INSTITUTION_ROUTES.some(([c,s]) => c===countryCode && s===slug)
+    || INDEXABLE_FR_INSTITUTION_ROUTES.some(([c,s]) => c===countryCode && s===slug)
+    || INDEXABLE_ES_INSTITUTION_ROUTES.some(([c,s]) => c===countryCode && s===slug)
+    || INDEXABLE_EU_FASTPATH_INSTITUTION_ROUTES.some(([c,s]) => c===countryCode && s===slug)
+    || INDEXABLE_AUTHORITY_FASTPATH_INSTITUTION_ROUTES.some(([c,s]) => c===countryCode && s===slug)
+    || INDEXABLE_AE_INSTITUTION_ROUTES.some(([c,s]) => c===countryCode && s===slug)
+    || INDEXABLE_US_INSTITUTION_ROUTES.some(([c,s]) => c===countryCode && s===slug)
 }
 
 export async function generateMetadata({ params }: InstitutionDetailPageProps): Promise<Metadata> {
@@ -73,48 +57,29 @@ export async function generateMetadata({ params }: InstitutionDetailPageProps): 
   const countryCode = normalizeInstitutionCountrySegment(country)
   const slug = normalizeInstitutionSlugSegment(institution)
   if (!countryCode || !slug) return { title: "Institution not found", robots: { index: false, follow: true } }
-
   try {
-    const detail = countryCode === "ES"
-      ? (await getSpainInstitutionDetail(slug))?.institution ?? null
-      : countryCode === "AE"
-        ? (await getAeInstitutionDetail(slug))?.institution ?? null
-        : isEuFastpathCountry(countryCode)
-          ? (await getEuFastpathInstitutionDetail(countryCode, slug))?.institution ?? null
-          : isAuthorityFastpathCountry(countryCode)
-            ? (await getAuthorityFastpathInstitutionDetail(countryCode, slug))?.institution ?? null
-            : await getInstitutionDetail(countryCode, slug)
-
+    const detail = countryCode === "ES" ? (await getSpainInstitutionDetail(slug))?.institution ?? null
+      : countryCode === "AE" ? (await getAeInstitutionDetail(slug))?.institution ?? null
+      : countryCode === "US" ? (await getUsInstitutionDetail(slug))?.institution ?? null
+      : isEuFastpathCountry(countryCode) ? (await getEuFastpathInstitutionDetail(countryCode, slug))?.institution ?? null
+      : isAuthorityFastpathCountry(countryCode) ? (await getAuthorityFastpathInstitutionDetail(countryCode, slug))?.institution ?? null
+      : await getInstitutionDetail(countryCode, slug)
     if (!detail) return { title: "Institution not found", robots: { index: false, follow: true } }
     const canonicalPath = institutionDetailPath(countryCode, detail.slug)
     const locationLabel = countryCode === "AU" ? "campuses" : "locations"
-    const description = countryCode === "NL"
-      ? `Explore ${detail.name} official institution identity, BRIN registration and source-backed ${locationLabel} on CampCareer. Program data will be added as the Netherlands catalogue is verified.`
-      : countryCode === "NZ"
-        ? `Explore ${detail.name} NZQA provider identity and source-backed ${locationLabel} on CampCareer. Program data will be added as the New Zealand catalogue is verified.`
-        : countryCode === "SG"
-          ? `Explore ${detail.name} UEN identity and source-backed ${locationLabel} on CampCareer. Program data will be added as the Singapore catalogue is verified.`
-          : countryCode === "DE"
-            ? `Explore ${detail.name} HRK-verified official identity and DFG-verified ${locationLabel} on CampCareer. Program data will be added as the Germany catalogue is verified.`
-            : countryCode === "FR"
-              ? `Explore ${detail.name} official UAI identity and source-backed ${locationLabel} on CampCareer. Program data will be added as the France catalogue is verified.`
-              : countryCode === "ES"
-                ? `Explore ${detail.name} source-backed official identity, RUCT registry context and verified administrative ${locationLabel} on CampCareer. Program data will be added as the Spain catalogue is verified.`
-                : countryCode === "AE"
-                  ? `Explore ${detail.name} current CAA institution identity and verified city-level ${locationLabel} on CampCareer. Program data will be added as the UAE catalogue is verified.`
-                  : isEuFastpathCountry(countryCode) || isAuthorityFastpathCountry(countryCode)
-                    ? `Explore ${detail.name} authority-backed institution identity and verified city-level ${locationLabel} on CampCareer. Program data will be added as the country catalogue is verified.`
-                    : `Explore ${detail.name} programs, ${locationLabel} and source-backed institution details on CampCareer.`
-
-    return {
-      title: `${detail.name} | Institutions`,
-      description,
-      alternates: { canonical: `${SITE_URL}${canonicalPath}` },
-      robots: { index: isIndexableInstitutionRoute(countryCode, detail.slug), follow: true },
-    }
-  } catch {
-    return { title: "Institution | CampCareer", robots: { index: false, follow: true } }
-  }
+    const description = countryCode === "US"
+      ? `Explore ${detail.name} verified NCES/IPEDS UNITID identity, NCSES launch-cohort context and city-level ${locationLabel} on CampCareer. The US degree-program catalogue is pending.`
+      : countryCode === "NL" ? `Explore ${detail.name} official institution identity, BRIN registration and source-backed ${locationLabel} on CampCareer. Program data will be added as the Netherlands catalogue is verified.`
+      : countryCode === "NZ" ? `Explore ${detail.name} NZQA provider identity and source-backed ${locationLabel} on CampCareer. Program data will be added as the New Zealand catalogue is verified.`
+      : countryCode === "SG" ? `Explore ${detail.name} UEN identity and source-backed ${locationLabel} on CampCareer. Program data will be added as the Singapore catalogue is verified.`
+      : countryCode === "DE" ? `Explore ${detail.name} HRK-verified official identity and DFG-verified ${locationLabel} on CampCareer. Program data will be added as the Germany catalogue is verified.`
+      : countryCode === "FR" ? `Explore ${detail.name} official UAI identity and source-backed ${locationLabel} on CampCareer. Program data will be added as the France catalogue is verified.`
+      : countryCode === "ES" ? `Explore ${detail.name} source-backed official identity, RUCT registry context and verified administrative ${locationLabel} on CampCareer. Program data will be added as the Spain catalogue is verified.`
+      : countryCode === "AE" ? `Explore ${detail.name} current CAA institution identity and verified city-level ${locationLabel} on CampCareer. Program data will be added as the UAE catalogue is verified.`
+      : isEuFastpathCountry(countryCode) || isAuthorityFastpathCountry(countryCode) ? `Explore ${detail.name} authority-backed institution identity and verified city-level ${locationLabel} on CampCareer. Program data will be added as the country catalogue is verified.`
+      : `Explore ${detail.name} programs, ${locationLabel} and source-backed institution details on CampCareer.`
+    return { title: `${detail.name} | Institutions`, description, alternates: { canonical: `${SITE_URL}${canonicalPath}` }, robots: { index: isIndexableInstitutionRoute(countryCode, detail.slug), follow: true } }
+  } catch { return { title: "Institution | CampCareer", robots: { index: false, follow: true } } }
 }
 
 export default async function InstitutionDetailPage({ params }: InstitutionDetailPageProps) {
@@ -122,66 +87,36 @@ export default async function InstitutionDetailPage({ params }: InstitutionDetai
   const countryCode = normalizeInstitutionCountrySegment(country)
   const slug = normalizeInstitutionSlugSegment(institution)
   if (!countryCode || !slug) notFound()
-
   const canonicalPath = institutionDetailPath(countryCode, slug)
   if (country !== countryCode.toLowerCase() || institution !== slug) permanentRedirect(canonicalPath)
 
   if (countryCode === "ES") {
     let result: SpainInstitutionDetailResult | null = null
-    try {
-      result = await getSpainInstitutionDetail(slug)
-    } catch (error) {
-      console.error("Unable to load Spain institution detail page", error)
-      return <InstitutionUnavailable />
-    }
-    if (!result) notFound()
-    return <SpainInstitutionDetailView institution={result.institution} identity={result.identity} />
+    try { result = await getSpainInstitutionDetail(slug) } catch (error) { console.error("Unable to load Spain institution detail page", error); return <InstitutionUnavailable /> }
+    if (!result) notFound(); return <SpainInstitutionDetailView institution={result.institution} identity={result.identity} />
   }
-
   if (countryCode === "AE") {
     let result: AeInstitutionDetailResult | null = null
-    try {
-      result = await getAeInstitutionDetail(slug)
-    } catch (error) {
-      console.error("Unable to load UAE institution detail page", error)
-      return <InstitutionUnavailable />
-    }
-    if (!result) notFound()
-    return <AuthorityFastpathInstitutionDetailView result={result} />
+    try { result = await getAeInstitutionDetail(slug) } catch (error) { console.error("Unable to load UAE institution detail page", error); return <InstitutionUnavailable /> }
+    if (!result) notFound(); return <AuthorityFastpathInstitutionDetailView result={result} />
   }
-
+  if (countryCode === "US") {
+    let result: UsInstitutionDetailResult | null = null
+    try { result = await getUsInstitutionDetail(slug) } catch (error) { console.error("Unable to load US institution detail page", error); return <InstitutionUnavailable /> }
+    if (!result) notFound(); return <UsInstitutionDetailView result={result} />
+  }
   if (isEuFastpathCountry(countryCode)) {
     let result: EuFastpathInstitutionDetailResult | null = null
-    try {
-      result = await getEuFastpathInstitutionDetail(countryCode, slug)
-    } catch (error) {
-      console.error(`Unable to load ${countryCode} institution detail page`, error)
-      return <InstitutionUnavailable />
-    }
-    if (!result) notFound()
-    return <EuFastpathInstitutionDetailView result={result} />
+    try { result = await getEuFastpathInstitutionDetail(countryCode, slug) } catch (error) { console.error(`Unable to load ${countryCode} institution detail page`, error); return <InstitutionUnavailable /> }
+    if (!result) notFound(); return <EuFastpathInstitutionDetailView result={result} />
   }
-
   if (isAuthorityFastpathCountry(countryCode)) {
     let result: AuthorityFastpathInstitutionDetailResult | null = null
-    try {
-      result = await getAuthorityFastpathInstitutionDetail(countryCode, slug)
-    } catch (error) {
-      console.error(`Unable to load ${countryCode} institution detail page`, error)
-      return <InstitutionUnavailable />
-    }
-    if (!result) notFound()
-    return <AuthorityFastpathInstitutionDetailView result={result} />
+    try { result = await getAuthorityFastpathInstitutionDetail(countryCode, slug) } catch (error) { console.error(`Unable to load ${countryCode} institution detail page`, error); return <InstitutionUnavailable /> }
+    if (!result) notFound(); return <AuthorityFastpathInstitutionDetailView result={result} />
   }
-
   let detail: InstitutionDetail | null = null
-  try {
-    detail = await getInstitutionDetail(countryCode, slug)
-  } catch (error) {
-    console.error("Unable to load institution detail page", error)
-    return <InstitutionUnavailable />
-  }
-
+  try { detail = await getInstitutionDetail(countryCode, slug) } catch (error) { console.error("Unable to load institution detail page", error); return <InstitutionUnavailable /> }
   if (!detail) notFound()
   if (countryCode === "CA") return <CanadianInstitutionDetailView institution={detail} />
   if (countryCode === "NL") return <NetherlandsInstitutionDetailView institution={detail} />
@@ -193,11 +128,5 @@ export default async function InstitutionDetailPage({ params }: InstitutionDetai
 }
 
 function InstitutionUnavailable() {
-  return (
-    <div className="flex min-h-[420px] flex-col items-center justify-center rounded-2xl border border-[#f0d8d2] bg-[#fff9f7] p-10 text-center">
-      <DatabaseZap className="size-7 text-[#b65c45]" />
-      <h1 className="mt-4 text-[20px] font-semibold tracking-[-0.02em] text-[#1b1b1b]">Institution data is temporarily unavailable</h1>
-      <p className="mt-2 max-w-lg text-[12px] leading-5 text-[#786b66]">Please try again shortly. No cached or substitute institution profile has been shown.</p>
-    </div>
-  )
+  return <div className="flex min-h-[420px] flex-col items-center justify-center rounded-2xl border border-[#f0d8d2] bg-[#fff9f7] p-10 text-center"><DatabaseZap className="size-7 text-[#b65c45]" /><h1 className="mt-4 text-[20px] font-semibold tracking-[-0.02em] text-[#1b1b1b]">Institution data is temporarily unavailable</h1><p className="mt-2 max-w-lg text-[12px] leading-5 text-[#786b66]">Please try again shortly. No cached or substitute institution profile has been shown.</p></div>
 }
