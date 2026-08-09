@@ -16,6 +16,7 @@ import { FiProgramsExplorer } from "./fi-programs-explorer"
 import { DkProgramsExplorer } from "./dk-programs-explorer"
 import { SeProgramsExplorer } from "./se-programs-explorer"
 import { ChProgramsExplorer } from "./ch-programs-explorer"
+import { BeProgramsExplorer } from "./be-programs-explorer"
 import { searchAuPrograms, type AuProgramSearchResult } from "@/lib/programs/au-programs.server"
 import { searchAePrograms, type AeProgramSearchResult } from "@/lib/programs/ae-programs.server"
 import { searchKrPrograms, type KrProgramSearchResult } from "@/lib/programs/kr-programs.server"
@@ -25,6 +26,7 @@ import { searchFiPrograms, type FiProgramSearchResult } from "@/lib/programs/fi-
 import { searchDkPrograms, type DkProgramSearchResult } from "@/lib/programs/dk-programs.server"
 import { searchSePrograms, type SeProgramSearchResult } from "@/lib/programs/se-programs.server"
 import { searchChPrograms, type ChProgramSearchResult } from "@/lib/programs/ch-programs.server"
+import { searchBePrograms, type BeProgramSearchResult } from "@/lib/programs/be-programs.server"
 import { buildProgramsUrl, hasProgramFilters, parseProgramSearchParams, type ProgramSearchFilters } from "@/lib/programs/program-search"
 
 export const revalidate = 3600
@@ -49,7 +51,7 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
   const params = await searchParams
   const filters = normalizedFilters(params)
   const country = getLaunchCountry(filters.country)
-  const isPublishedBase = ["AU", "AE", "KR", "JP", "NO", "FI", "DK", "SE", "CH"].includes(filters.country) && !hasProgramFilters(filters)
+  const isPublishedBase = ["AU", "AE", "KR", "JP", "NO", "FI", "DK", "SE", "CH", "BE"].includes(filters.country) && !hasProgramFilters(filters)
   const countryName = country?.name ?? "Australia"
   const description = filters.country === "AU"
     ? "Search Australian university and vocational programs by verified city, study level, field, state, duration and tuition."
@@ -69,7 +71,9 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
                   ? "Explore source-verified Sweden English-taught university programs, with University Admissions application timing tracked separately from programme existence."
                   : filters.country === "CH"
                     ? "Explore source-verified Switzerland university programs from swissuniversities and current university sources, with programme existence and current international application windows tracked separately."
-                    : `Explore study programs in ${countryName}. Country data will be published after source review.`
+                    : filters.country === "BE"
+                      ? "Explore source-verified Belgium university programmes, with English-accessible programme identity and applicant-specific international admission timing tracked separately."
+                      : `Explore study programs in ${countryName}. Country data will be published after source review.`
   return { title: filters.country === "AU" ? "Australian Programs" : `${countryName} Programs`, description, alternates: { canonical: `${SITE_URL}${programsCanonicalPath(filters.country)}` }, robots: { index: isPublishedBase, follow: true } }
 }
 
@@ -104,6 +108,7 @@ export default async function ProgramsPage({ searchParams }: { searchParams: Pro
   let dkResult: DkProgramSearchResult | null = null
   let seResult: SeProgramSearchResult | null = null
   let chResult: ChProgramSearchResult | null = null
+  let beResult: BeProgramSearchResult | null = null
   let errorMessage: string | null = null
   if (filters.country === "AU") { try { auResult = await searchAuPrograms(filters) } catch (error) { console.error("Unable to load Australian program catalogue", error); errorMessage = "Please try again shortly. No cached or substitute country data has been shown." } }
   else if (filters.country === "AE") { try { aeResult = await searchAePrograms(filters) } catch (error) { console.error("Unable to load UAE program catalogue", error); errorMessage = "Please try again shortly. No cached or substitute UAE program data has been shown." } }
@@ -114,11 +119,13 @@ export default async function ProgramsPage({ searchParams }: { searchParams: Pro
   else if (filters.country === "DK") { try { dkResult = await searchDkPrograms(filters) } catch (error) { console.error("Unable to load Denmark program catalogue", error); errorMessage = "Please try again shortly. No cached or substitute Denmark program data has been shown." } }
   else if (filters.country === "SE") { try { seResult = await searchSePrograms(filters) } catch (error) { console.error("Unable to load Sweden program catalogue", error); errorMessage = "Please try again shortly. No cached or substitute Sweden program data has been shown." } }
   else if (filters.country === "CH") { try { chResult = await searchChPrograms(filters) } catch (error) { console.error("Unable to load Switzerland program catalogue", error); errorMessage = "Please try again shortly. No cached or substitute Switzerland program data has been shown." } }
-  const published = ["AU", "AE", "KR", "JP", "NO", "FI", "DK", "SE", "CH"].includes(filters.country)
+  else if (filters.country === "BE") { try { beResult = await searchBePrograms(filters) } catch (error) { console.error("Unable to load Belgium program catalogue", error); errorMessage = "Please try again shortly. No cached or substitute Belgium program data has been shown." } }
+  const published = ["AU", "AE", "KR", "JP", "NO", "FI", "DK", "SE", "CH", "BE"].includes(filters.country)
   return <>
     <ProgramsHeader filters={filters} countryExplicit={countryExplicit} />
     {!published ? <div className="mt-7"><CountryComingSoon countryCode={filters.country} /></div>
       : errorMessage ? <div className="mt-7 flex min-h-72 flex-col items-center justify-center rounded-xl border border-[#f0d8d2] bg-[#fff9f7] p-8 text-center"><DatabaseZap className="size-6 text-[#b65c45]" /><h2 className="mt-3 text-[16px] font-semibold text-[#1b1b1b]">Program data is temporarily unavailable</h2><p className="mt-2 max-w-lg text-[12px] leading-5 text-[#786b66]">{errorMessage}</p></div>
+      : filters.country === "BE" && beResult ? <BeProgramsExplorer filters={filters} result={beResult} />
       : filters.country === "CH" && chResult ? <ChProgramsExplorer filters={filters} result={chResult} />
       : filters.country === "SE" && seResult ? <SeProgramsExplorer filters={filters} result={seResult} />
       : filters.country === "DK" && dkResult ? <DkProgramsExplorer filters={filters} result={dkResult} />
