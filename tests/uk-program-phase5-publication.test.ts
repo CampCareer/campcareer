@@ -18,11 +18,12 @@ test("UK programme explorer is enabled on the shared Programs route", () => {
   assert.match(header, /Search UK programmes or institutions/)
 })
 
-test("UK programme server reads only canonical Phase 4 read models", () => {
-  assert.match(server, /from\("program_explorer_uk_v1"\)/)
-  assert.match(server, /from\("program_detail_uk_v1"\)/)
+test("UK programme server reads the canonical Phase 4 detail model, not staging", () => {
+  const detailReads = server.match(/from\("program_detail_uk_v1"\)/g) ?? []
+  assert.equal(detailReads.length, 2)
   assert.doesNotMatch(server, /program_catalog_uk_staging/)
   assert.match(server, /ukProgramSlug\(row\.institution_slug, sourceKey\)/)
+  assert.match(server, /source_program_key/)
 })
 
 test("UK SEO allowlist contains exactly the 75 indexable programme routes", () => {
