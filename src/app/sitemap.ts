@@ -8,6 +8,7 @@ import { INDEXABLE_JP_PROGRAM_PATHS } from "@/lib/programs/jp-program-seo"
 import { INDEXABLE_NO_PROGRAM_PATHS } from "@/lib/programs/no-program-seo"
 import { INDEXABLE_FI_PROGRAM_PATHS } from "@/lib/programs/fi-program-seo"
 import { INDEXABLE_DK_PROGRAM_PATHS } from "@/lib/programs/dk-program-seo"
+import { INDEXABLE_SE_PROGRAM_PATHS } from "@/lib/programs/se-program-seo"
 import { AU_OCCUPATION_STATE_PAGES } from "@/lib/workspace/au-occupation-state-seo"
 import { INDEXABLE_OCCUPATION_PROFILES, occupationCanonicalPath } from "@/lib/workspace/occupation-routes"
 import { getCompletedVisaCatalog } from "@/lib/workspace/visa-catalog-complete"
@@ -83,6 +84,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...INDEXABLE_NO_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
     ...INDEXABLE_FI_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
     ...INDEXABLE_DK_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
+    ...INDEXABLE_SE_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
   ]
   const occupationPages: MetadataRoute.Sitemap = INDEXABLE_OCCUPATION_PROFILES.map((profile) => ({ url: `${SITE_URL}${occupationCanonicalPath(profile.countryCode, profile.careerId)}`, lastModified: new Date(profile.sourceCheckedAt), priority: 0.74, changeFrequency: "weekly" as const }))
   const visaPages: MetadataRoute.Sitemap = getIndexableVisaRoutes(getCompletedVisaCatalog()).map((route) => ({ url: `${SITE_URL}${route.path}`, lastModified, priority: 0.7, changeFrequency: "monthly" as const }))
