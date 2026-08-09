@@ -19,6 +19,7 @@ test("program search params default to Australia and safe filter values", () => 
     state: "all",
     province: "all",
     career: "all",
+    institution: "all",
     pgwp: "all",
     duration: "all",
     fee: "all",
@@ -50,6 +51,7 @@ test("program search params keep supported Australian filters and reject unknown
   assert.equal(parsed.state, "NSW")
   assert.equal(parsed.province, "all")
   assert.equal(parsed.career, "all")
+  assert.equal(parsed.institution, "all")
   assert.equal(parsed.pgwp, "all")
   assert.equal(parsed.duration, "2-3")
   assert.equal(parsed.fee, "40000-50000")
@@ -89,11 +91,12 @@ test("verified Australian city filters take precedence over representative state
   assert.equal(buildProgramsUrl(adelaide), "/programs?country=AU&city=adelaide")
 })
 
-test("Canadian filters keep career, province and PGWP separate from Australian geography", () => {
+test("Canadian filters keep career, institution, province and PGWP separate from Australian geography", () => {
   const parsed = parseProgramSearchParams({
     country: "ca",
     q: "Nursing",
     career: "registered-nurse",
+    institution: "british-columbia-institute-of-technology",
     province: "BC",
     pgwp: "eligible",
     city: "sydney",
@@ -106,15 +109,18 @@ test("Canadian filters keep career, province and PGWP separate from Australian g
   assert.equal(parsed.state, "all")
   assert.equal(parsed.province, "BC")
   assert.equal(parsed.career, "registered-nurse")
+  assert.equal(parsed.institution, "british-columbia-institute-of-technology")
   assert.equal(parsed.pgwp, "eligible")
   assert.equal(
     buildProgramsUrl(parsed),
-    "/programs?country=CA&q=Nursing&province=BC&career=registered-nurse&pgwp=eligible&source=verified",
+    "/programs?country=CA&q=Nursing&province=BC&career=registered-nurse&institution=british-columbia-institute-of-technology&pgwp=eligible&source=verified",
   )
 
   assert.equal(parseProgramSearchParams({ country: "CA", province: "XX" }).province, "all")
   assert.equal(parseProgramSearchParams({ country: "CA", career: "BAD CAREER" }).career, "all")
+  assert.equal(parseProgramSearchParams({ country: "CA", institution: "BAD INSTITUTION" }).institution, "all")
   assert.equal(parseProgramSearchParams({ country: "CA", pgwp: "maybe" }).pgwp, "all")
+  assert.equal(parseProgramSearchParams({ country: "AU", institution: "some-school" }).institution, "all")
 })
 
 test("program URLs preserve country and omit default filters", () => {
