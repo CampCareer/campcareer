@@ -19,6 +19,7 @@ import { MARKETING_SPECIALIST_OCCUPATION_EDITORIAL } from "./occupation-editoria
 import { AUDITOR_OCCUPATION_EDITORIAL } from "./occupation-editorial-auditor"
 import { PROJECT_MANAGER_OCCUPATION_EDITORIAL } from "./occupation-editorial-project-manager"
 import { EARLY_CHILDHOOD_TEACHER_OCCUPATION_EDITORIAL } from "./occupation-editorial-early-childhood-teacher"
+import { PRIMARY_SCHOOL_TEACHER_OCCUPATION_EDITORIAL } from "./occupation-editorial-primary-school-teacher"
 
 export type { CountryOccupationEditorial, OccupationEditorial } from "./occupation-editorial-base"
 
@@ -43,6 +44,7 @@ export const OCCUPATION_EDITORIAL: readonly OccupationEditorialType[] = [
   ...AUDITOR_OCCUPATION_EDITORIAL,
   ...PROJECT_MANAGER_OCCUPATION_EDITORIAL,
   ...EARLY_CHILDHOOD_TEACHER_OCCUPATION_EDITORIAL,
+  ...PRIMARY_SCHOOL_TEACHER_OCCUPATION_EDITORIAL,
 ]
 
 const BY_ID = new Map(OCCUPATION_EDITORIAL.map((item) => [item.id, item]))
