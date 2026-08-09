@@ -21,6 +21,7 @@ import { PROJECT_MANAGER_OCCUPATION_EDITORIAL } from "./occupation-editorial-pro
 import { EARLY_CHILDHOOD_TEACHER_OCCUPATION_EDITORIAL } from "./occupation-editorial-early-childhood-teacher"
 import { PRIMARY_SCHOOL_TEACHER_OCCUPATION_EDITORIAL } from "./occupation-editorial-primary-school-teacher"
 import { SECONDARY_SCHOOL_TEACHER_OCCUPATION_EDITORIAL } from "./occupation-editorial-secondary-school-teacher"
+import { SPECIAL_EDUCATION_TEACHER_OCCUPATION_EDITORIAL } from "./occupation-editorial-special-education-teacher"
 
 export type { CountryOccupationEditorial, OccupationEditorial } from "./occupation-editorial-base"
 
@@ -47,6 +48,7 @@ export const OCCUPATION_EDITORIAL: readonly OccupationEditorialType[] = [
   ...EARLY_CHILDHOOD_TEACHER_OCCUPATION_EDITORIAL,
   ...PRIMARY_SCHOOL_TEACHER_OCCUPATION_EDITORIAL,
   ...SECONDARY_SCHOOL_TEACHER_OCCUPATION_EDITORIAL,
+  ...SPECIAL_EDUCATION_TEACHER_OCCUPATION_EDITORIAL,
 ]
 
 const BY_ID = new Map(OCCUPATION_EDITORIAL.map((item) => [item.id, item]))
