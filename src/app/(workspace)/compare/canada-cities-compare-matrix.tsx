@@ -155,7 +155,7 @@ export function CanadaCitiesCompareMatrix({ left, right, options, sharedCareerCo
         <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#3e7a2e]">Canada city comparison</p>
         <h2 className="mt-2 text-[30px] font-semibold leading-tight tracking-[-0.035em] text-[#1b1b1b] sm:text-[40px]">{left.name} vs {right.name}</h2>
         <p className="mt-3 max-w-3xl text-[13px] leading-6 text-[#6f6d68]">
-          Compare named-city student living, transport, work rules and CampCareer&apos;s reviewed program publication set for the 80 target careers. Campus/location records remain a separate source-backed layer.
+          Compare named-city student living, transport, work rules and CampCareer&apos;s reviewed program set for the 80 target careers. Verified location records remain a separate source-backed layer.
         </p>
         <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
           <Link href={`/cities/ca/${left.slug}`} className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-[#2563eb] px-3.5 py-2.5 text-[11.5px] font-semibold text-white sm:w-auto sm:py-2">View {left.name} <ArrowRight className="size-3.5" /></Link>
@@ -172,9 +172,9 @@ export function CanadaCitiesCompareMatrix({ left, right, options, sharedCareerCo
         <ComparisonRow icon={<Wallet className="size-4" />} label="Student living" note="Indicative monthly reference · tuition excluded where the source permits separation" left={cityValue(left, "living")} right={cityValue(right, "living")} leftName={left.name} rightName={right.name} />
         <ComparisonRow icon={<TrainFront className="size-4" />} label="Student transport" note="Student products use source-native periods and eligibility rules; monthly and term products are not directly equivalent." left={cityValue(left, "transport")} right={cityValue(right, "transport")} leftName={left.name} rightName={right.name} />
         <ComparisonRow icon={<Clock3 className="size-4" />} label="Student work rule" note="National IRCC off-campus rule during regular academic sessions; this is not a city differentiator." left={cityValue(left, "work")} right={cityValue(right, "work")} leftName={left.name} rightName={right.name} />
-        <ComparisonRow icon={<GraduationCap className="size-4" />} label="Published target programs" note="Public programs in the reviewed Canada 80-career publication set; this is not each institution's full catalogue." left={cityValue(left, "programs")} right={cityValue(right, "programs")} leftName={left.name} rightName={right.name} />
+        <ComparisonRow icon={<GraduationCap className="size-4" />} label="Published target programs" note="Public programs in CampCareer's reviewed Canada 80-career set; this is not each institution's full catalogue." left={cityValue(left, "programs")} right={cityValue(right, "programs")} leftName={left.name} rightName={right.name} />
         <ComparisonRow icon={<Building2 className="size-4" />} label="Institutions with published programs" note="Distinct institutions represented in the published target-program set." left={cityValue(left, "providers")} right={cityValue(right, "providers")} leftName={left.name} rightName={right.name} />
-        <ComparisonRow icon={<MapPin className="size-4" />} label="Canonical location records" note="Source-backed location links remain separate from program publication eligibility." left={cityValue(left, "locations")} right={cityValue(right, "locations")} leftName={left.name} rightName={right.name} />
+        <ComparisonRow icon={<MapPin className="size-4" />} label="Verified location records" note="Source-backed location links remain separate from program publication eligibility." left={cityValue(left, "locations")} right={cityValue(right, "locations")} leftName={left.name} rightName={right.name} />
         <ComparisonRow icon={<Users className="size-4" />} label="City population" note="Named-city / census-subdivision geography, not CMA population" left={cityValue(left, "population")} right={cityValue(right, "population")} leftName={left.name} rightName={right.name} />
         <ComparisonRow icon={<BriefcaseBusiness className="size-4" />} label="Career context" note="Official city economic guidance, not occupation-shortage rankings" left={left.employmentSectors.slice(0, 5).join(" · ")} right={right.employmentSectors.slice(0, 5).join(" · ")} leftName={left.name} rightName={right.name} />
       </section>
@@ -193,7 +193,7 @@ export function CanadaCitiesCompareMatrix({ left, right, options, sharedCareerCo
         <article className="rounded-xl border border-[#e7e6e3] bg-white p-5">
           <p className="text-[10.5px] font-semibold uppercase tracking-[0.08em] text-[#3e7a2e]">Target careers in both</p>
           <p className="mt-2 text-[18px] font-semibold leading-6 text-[#1b1b1b]">{sharedCareerSignal}</p>
-          <p className="mt-2 text-[11.5px] leading-5 text-[#77746e]">This compares approved target-career coverage across published programs; it does not require the same program identity to exist in both cities.</p>
+          <p className="mt-2 text-[11.5px] leading-5 text-[#77746e]">This compares reviewed target-career coverage across published programs; it does not require the same program identity to exist in both cities.</p>
         </article>
       </div>
 
