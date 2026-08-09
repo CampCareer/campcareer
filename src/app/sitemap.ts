@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next"
 import { ROUTE_GUIDES, routeGuideHref } from "@/data/route-guides"
 import { AU_PROGRAMMATIC_STUDY_PAGES } from "@/lib/programs/au-programmatic-seo"
 import { INDEXABLE_AU_PROGRAMS, indexableAuProgramPath } from "@/lib/programs/program-routes"
+import { INDEXABLE_AE_PROGRAM_PATHS } from "@/lib/programs/ae-program-seo"
 import { AU_OCCUPATION_STATE_PAGES } from "@/lib/workspace/au-occupation-state-seo"
 import { INDEXABLE_OCCUPATION_PROFILES, occupationCanonicalPath } from "@/lib/workspace/occupation-routes"
 import { getCompletedVisaCatalog } from "@/lib/workspace/visa-catalog-complete"
@@ -69,7 +70,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/privacy`, lastModified, priority: 0.2, changeFrequency: "yearly" },
     { url: `${SITE_URL}/terms`, lastModified, priority: 0.2, changeFrequency: "yearly" },
   ]
-  const programPages: MetadataRoute.Sitemap = INDEXABLE_AU_PROGRAMS.map((program) => ({ url: `${SITE_URL}${indexableAuProgramPath(program)}`, lastModified: new Date(program.sourceCheckedAt), priority: 0.74, changeFrequency: "weekly" as const }))
+  const programPages: MetadataRoute.Sitemap = [
+    ...INDEXABLE_AU_PROGRAMS.map((program) => ({ url: `${SITE_URL}${indexableAuProgramPath(program)}`, lastModified: new Date(program.sourceCheckedAt), priority: 0.74, changeFrequency: "weekly" as const })),
+    ...INDEXABLE_AE_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
+  ]
   const occupationPages: MetadataRoute.Sitemap = INDEXABLE_OCCUPATION_PROFILES.map((profile) => ({ url: `${SITE_URL}${occupationCanonicalPath(profile.countryCode, profile.careerId)}`, lastModified: new Date(profile.sourceCheckedAt), priority: 0.74, changeFrequency: "weekly" as const }))
   const visaPages: MetadataRoute.Sitemap = getIndexableVisaRoutes(getCompletedVisaCatalog()).map((route) => ({ url: `${SITE_URL}${route.path}`, lastModified, priority: 0.7, changeFrequency: "monthly" as const }))
   const studyPages: MetadataRoute.Sitemap = AU_PROGRAMMATIC_STUDY_PAGES.map((page) => ({ url: `${SITE_URL}${page.path}`, lastModified, priority: 0.72, changeFrequency: "weekly" as const }))
