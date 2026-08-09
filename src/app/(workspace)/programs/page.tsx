@@ -8,7 +8,9 @@ import { ProgramCard } from "./program-card"
 import { ProgramsHeader } from "./programs-header"
 import { ProgramsSidebar } from "./programs-filters"
 import { ProgramsSortControl } from "./programs-sort-control"
+import { UkProgramsExplorer } from "./uk-programs-explorer"
 import { searchAuPrograms, type AuProgramSearchResult } from "@/lib/programs/au-programs.server"
+import { searchUkPrograms, type UkProgramSearchResult } from "@/lib/programs/uk-programs.server"
 import {
   buildProgramsUrl,
   hasProgramFilters,
@@ -48,7 +50,7 @@ export async function generateMetadata({
   const params = await searchParams
   const filters = normalizedFilters(params)
   const country = getLaunchCountry(filters.country)
-  const isAustraliaBase = filters.country === "AU" && !hasProgramFilters(filters)
+  const isPublishedBase = ["AU", "UK"].includes(filters.country) && !hasProgramFilters(filters)
   const countryName = country?.name ?? "Australia"
 
   return {
@@ -56,12 +58,14 @@ export async function generateMetadata({
     description:
       filters.country === "AU"
         ? "Search Australian university and vocational programs by verified city, study level, field, state, duration and tuition."
-        : `Explore study programs in ${countryName}. Country data will be published after source review.`,
+        : filters.country === "UK"
+          ? "Explore source-verified UK programmes with international-student eligibility, Student sponsor evidence and current application timing tracked separately."
+          : `Explore study programs in ${countryName}. Country data will be published after source review.`,
     alternates: {
       canonical: `${SITE_URL}${programsCanonicalPath(filters.country)}`,
     },
     robots: {
-      index: isAustraliaBase,
+      index: isPublishedBase,
       follow: true,
     },
   }
@@ -156,8 +160,7 @@ function CountryComingSoon({ countryCode }: { countryCode: string }) {
         Program data is being prepared
       </h2>
       <p className="mt-3 max-w-lg text-[13px] leading-6 text-[#6f6d68]">
-        Australia is the first complete program catalogue. Other countries will open after their
-        institutions, course identifiers, fees and official source links pass the same review.
+        Country catalogues open after programme identities, official sources and international-admission evidence pass review.
       </p>
       <Link
         href="/programs"
@@ -184,65 +187,71 @@ export default async function ProgramsPage({
   const rawCountry = firstValue(params.country)
   const countryExplicit = Boolean(rawCountry && getLaunchCountry(rawCountry))
 
-  let result: AuProgramSearchResult | null = null
+  let auResult: AuProgramSearchResult | null = null
+  let ukResult: UkProgramSearchResult | null = null
   let errorMessage: string | null = null
 
   if (filters.country === "AU") {
     try {
-      result = await searchAuPrograms(filters)
+      auResult = await searchAuPrograms(filters)
     } catch (error) {
       console.error("Unable to load Australian program catalogue", error)
       errorMessage = "Please try again shortly. No cached or substitute country data has been shown."
     }
+  } else if (filters.country === "UK") {
+    try {
+      ukResult = await searchUkPrograms(filters)
+    } catch (error) {
+      console.error("Unable to load UK programme catalogue", error)
+      errorMessage = "Please try again shortly. No cached or substitute UK programme data has been shown."
+    }
   }
+
+  const published = filters.country === "AU" || filters.country === "UK"
 
   return (
     <>
       <ProgramsHeader filters={filters} countryExplicit={countryExplicit} />
 
-      {filters.country !== "AU" ? (
+      {!published ? (
         <div className="mt-7">
           <CountryComingSoon countryCode={filters.country} />
         </div>
-      ) : (
+      ) : errorMessage ? (
+        <div className="mt-7 flex min-h-72 flex-col items-center justify-center rounded-xl border border-[#f0d8d2] bg-[#fff9f7] p-8 text-center">
+          <DatabaseZap className="size-6 text-[#b65c45]" />
+          <h2 className="mt-3 text-[16px] font-semibold text-[#1b1b1b]">Program data is temporarily unavailable</h2>
+          <p className="mt-2 max-w-lg text-[12px] leading-5 text-[#786b66]">{errorMessage}</p>
+        </div>
+      ) : filters.country === "UK" && ukResult ? (
+        <UkProgramsExplorer filters={filters} result={ukResult} />
+      ) : filters.country === "AU" && auResult ? (
         <div className="mt-7 grid gap-5 lg:grid-cols-[260px_minmax(0,1fr)] lg:items-start">
           <ProgramsSidebar filters={filters} />
 
           <section className="min-w-0">
-            {errorMessage ? (
-              <div className="flex min-h-72 flex-col items-center justify-center rounded-xl border border-[#f0d8d2] bg-[#fff9f7] p-8 text-center">
-                <DatabaseZap className="size-6 text-[#b65c45]" />
-                <h2 className="mt-3 text-[16px] font-semibold text-[#1b1b1b]">
-                  Australian program data is temporarily unavailable
-                </h2>
-                <p className="mt-2 max-w-lg text-[12px] leading-5 text-[#786b66]">{errorMessage}</p>
+            <ProgramsSortControl filters={filters} total={auResult.total} />
+
+            {auResult.programs.length === 0 ? (
+              <EmptyResults filters={filters} />
+            ) : (
+              <div className="mt-3 space-y-3">
+                {auResult.programs.map((program) => (
+                  <ProgramCard key={program.id} program={program} />
+                ))}
               </div>
-            ) : result ? (
-              <>
-                <ProgramsSortControl filters={filters} total={result.total} />
+            )}
 
-                {result.programs.length === 0 ? (
-                  <EmptyResults filters={filters} />
-                ) : (
-                  <div className="mt-3 space-y-3">
-                    {result.programs.map((program) => (
-                      <ProgramCard key={program.id} program={program} />
-                    ))}
-                  </div>
-                )}
+            <Pagination filters={filters} page={auResult.page} pageCount={auResult.pageCount} />
 
-                <Pagination filters={filters} page={result.page} pageCount={result.pageCount} />
-
-                <p className="mt-4 text-[10.5px] leading-5 text-[#aaa7a0]">
-                  Catalogue records are limited to active Australian CRICOS courses. City filtering
-                  uses official CRICOS registered delivery locations; tuition, duration and provider-page
-                  verification are shown separately.
-                </p>
-              </>
-            ) : null}
+            <p className="mt-4 text-[10.5px] leading-5 text-[#aaa7a0]">
+              Catalogue records are limited to active Australian CRICOS courses. City filtering
+              uses official CRICOS registered delivery locations; tuition, duration and provider-page
+              verification are shown separately.
+            </p>
           </section>
         </div>
-      )}
+      ) : null}
     </>
   )
 }
