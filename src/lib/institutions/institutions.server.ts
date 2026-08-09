@@ -113,8 +113,26 @@ export async function searchInstitutions(
   countryCode: InstitutionMvpCountryCode,
   filters: InstitutionSearchFilters,
 ): Promise<InstitutionSearchResult> {
+  const explorerView = countryCode === "UK"
+    ? "institution_explorer_uk_v1"
+    : countryCode === "CA"
+      ? "institution_explorer_ca_v1"
+      : countryCode === "NL"
+        ? "institution_explorer_nl_v1"
+        : countryCode === "NZ"
+          ? "institution_explorer_nz_v1"
+          : countryCode === "SG"
+            ? "institution_explorer_sg_v1"
+            : countryCode === "DE"
+              ? "institution_explorer_de_v1"
+              : countryCode === "FR"
+                ? "institution_explorer_fr_v1"
+                : countryCode === "ES"
+                  ? "institution_explorer_es_v1"
+                  : "institution_explorer_v1"
+
   let query = supabaseAdmin
-    .from("institution_explorer_v1")
+    .from(explorerView)
     .select(
       [
         "institution_id",
