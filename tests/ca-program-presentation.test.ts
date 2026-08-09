@@ -16,6 +16,9 @@ test("Canada admission presentation distinguishes open, limited, held and no-int
   assert.match(open.detail ?? "", /Winter 2027/)
   assert.match(open.detail ?? "", /Deadline Sep 30, 2026/)
 
+  const alternateOpen = caAdmissionPresentation("official_program_page_open_international_2026")
+  assert.equal(alternateOpen.label, "International applications open")
+
   const limited = caAdmissionPresentation(
     "official_program_page_international_open_or_waitlisted_2026_27",
   )
@@ -32,10 +35,17 @@ test("Canada admission presentation distinguishes open, limited, held and no-int
   assert.match(noIntake.detail ?? "", /Fall 2027/)
 })
 
-test("Canada admission presentation does not turn a current listing into an open application claim", () => {
+test("Canada admission presentation keeps listings and application paths distinct from open claims", () => {
   const listing = caAdmissionPresentation("bcit_current_official_international_program_list_2026")
   assert.equal(listing.label, "Current international program listing")
   assert.equal(listing.tone, "neutral")
+
+  const applicationPath = caAdmissionPresentation(
+    "official_current_program_with_international_application_path_fall_2026",
+  )
+  assert.equal(applicationPath.label, "International application path published")
+  assert.equal(applicationPath.tone, "neutral")
+  assert.match(applicationPath.detail ?? "", /Fall 2026/)
 })
 
 test("Canada publication and PGWP labels avoid internal tier language", () => {
