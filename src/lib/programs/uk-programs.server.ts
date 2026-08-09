@@ -188,7 +188,7 @@ const EXPLORER_SELECT = [
 ].join(",")
 
 export async function searchUkPrograms(filters: ProgramSearchFilters): Promise<UkProgramSearchResult> {
-  let query = supabaseAdmin.from("program_explorer_uk_v1").select(EXPLORER_SELECT, { count: "exact" })
+  let query = supabaseAdmin.from("program_detail_uk_v1").select(EXPLORER_SELECT, { count: "exact" })
   const search = safeSearchTerm(filters.q)
   if (search) {
     const pattern = `%${search.replace(/\s+/g, "%")}%`
