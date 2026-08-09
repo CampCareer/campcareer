@@ -26,6 +26,7 @@ import { SOCIAL_WORKER_OCCUPATION_EDITORIAL } from "./occupation-editorial-socia
 import { YOUTH_WORKER_OCCUPATION_EDITORIAL } from "./occupation-editorial-youth-worker"
 import { COMMUNITY_WORKER_OCCUPATION_EDITORIAL } from "./occupation-editorial-community-worker"
 import { COUNSELLOR_OCCUPATION_EDITORIAL } from "./occupation-editorial-counsellor"
+import { ENVIRONMENTAL_SCIENTIST_OCCUPATION_EDITORIAL } from "./occupation-editorial-environmental-scientist"
 
 export type { CountryOccupationEditorial, OccupationEditorial } from "./occupation-editorial-base"
 
@@ -57,6 +58,7 @@ export const OCCUPATION_EDITORIAL: readonly OccupationEditorialType[] = [
   ...YOUTH_WORKER_OCCUPATION_EDITORIAL,
   ...COMMUNITY_WORKER_OCCUPATION_EDITORIAL,
   ...COUNSELLOR_OCCUPATION_EDITORIAL,
+  ...ENVIRONMENTAL_SCIENTIST_OCCUPATION_EDITORIAL,
 ]
 
 const BY_ID = new Map(OCCUPATION_EDITORIAL.map((item) => [item.id, item]))
