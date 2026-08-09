@@ -1,11 +1,11 @@
 # UK city QA v1
 
-Status: PHASE_8_IN_PROGRESS
+Status: PHASE_8_COMPLETE
 
 Branch: `agent/uk-cities-qa-v1`
 Parent publication branch: `agent/uk-cities-publication-v1`
 
-This document records the Phase 8 QA gate for the ten approved UK Tier A city profiles and UK City Compare.
+This document records the completed Phase 8 QA gate for the ten approved UK Tier A city profiles and UK City Compare.
 
 ## QA scope
 
@@ -45,7 +45,7 @@ All ten Tier A cities currently have:
 - `linked_program_count = 0`
 - `programme_coverage_status = verification_pending`
 
-This is accepted by the UK publication contract because programme delivery is not inferred from institution presence. City profile and Compare must keep the verification-pending disclosure instead of displaying a misleading zero-programme result.
+This is accepted by the UK publication contract because programme delivery is not inferred from institution presence. City profile and Compare keep the verification-pending disclosure instead of displaying a misleading zero-programme result.
 
 ### Institution and location evidence
 
@@ -56,7 +56,7 @@ Current UK city institution read model:
 - 0 rows with invalid/missing UKPRN, website, source URL or `verified_official` location quality
 - 0 University of Salford rows in Manchester
 
-Royal Holloway is intentionally represented in London only through its verified Central London Campus evidence, not through its Egham main campus. The current official Royal Holloway London-campus material confirms teaching locations in Bloomsbury and programmes delivered from the central London campus.
+Royal Holloway is intentionally represented in London only through its verified Central London Campus evidence, not through its Egham main campus. Current official Royal Holloway material confirms its Central London Campus in Bloomsbury and identifies degrees delivered there.
 
 ### Read-model access controls
 
@@ -102,7 +102,7 @@ The profile and Compare copy preserve the qualified UK Student visa rule. The 20
 
 ## Supabase platform compatibility check
 
-The 2026 Supabase breaking-change review found no new blocker for this QA phase. The relevant existing-platform change is the public-table Data API auto-exposure change, which is scheduled to be enforced for existing projects on 2026-10-30. The UK city read models already use explicit grants and are server-only, so this phase does not require a permission migration.
+The 2026 Supabase breaking-change review found no new blocker for this QA phase. The relevant existing-platform change is the public-table Data API auto-exposure change, scheduled to be enforced for existing projects on 2026-10-30. The UK city read models already use explicit grants and are server-only, so this phase does not require a permission migration.
 
 ## Automated contract coverage
 
@@ -118,24 +118,38 @@ Added `tests/uk-city-qa-contract.test.ts` to assert the final cross-phase contra
 - UK City Compare
 - qualified Student visa work-rights copy
 
-The repository CI workflow runs `npm ci`, production dependency audit, TypeScript, ESLint, unit tests, Next.js build and gitleaks on pull requests.
+## CI discovery and fix
 
-## Remaining execution gate
+A draft QA pull request was created only to trigger the repository CI against this branch.
 
-A draft QA pull request is used only to trigger the repository CI against this branch. It must not be merged as an integration/release action.
+The first CI run correctly discovered a pre-existing compatibility issue in `tests/uk-city-linkage-contract.test.ts`: two regexes used the `/s` dotAll flag, while the repository TypeScript target rejected that flag. The test was changed to equivalent `[\s\S]*` patterns without changing the underlying Phase 3 contract.
 
-Vercel preview has recently been blocked by an account deployment-rate limit. Preview/build availability must therefore be recorded separately from code/test failures.
+After the fix, GitHub Actions CI run `31302974012` completed successfully:
+
+- `npm ci`: pass
+- `npm audit --omit=dev --audit-level=high`: pass
+- `npm run typecheck`: pass
+- `npm run lint`: pass
+- `npm test`: pass
+- `npm run build`: pass
+- gitleaks history scan: pass
+
+GitHub Actions also emitted a non-blocking warning that `actions/checkout@v4` and `actions/setup-node@v4` target the deprecated Node.js 20 action runtime and are currently forced to Node.js 24 by the runner. This is repository CI maintenance, not a UK city rollout blocker.
+
+## Vercel preview
+
+The previous deployment-rate-limit condition has cleared for this QA branch. Vercel reported `Deployment has completed` successfully for commit `79c491e269304a26610c683659d65c9d2fb24b92`.
 
 ## Phase 8 completion gate
 
-Phase 8 can be marked complete when:
-
 - [x] production DB contracts pass
 - [x] source and verification-state checks pass
-- [x] programme empty-state contract passes static review
-- [x] route allowlist and canonical metadata pass static review
-- [x] City Compare contract passes static review
-- [x] sitemap contract passes static review
+- [x] programme empty-state contract passes
+- [x] route allowlist and canonical metadata pass
+- [x] City Compare contract passes
+- [x] sitemap contract passes
 - [x] cross-phase QA contract test is committed
-- [ ] repository CI result is recorded
-- [ ] Vercel preview/build status is recorded
+- [x] repository CI passes through production build and secret scan
+- [x] Vercel preview deployment completes successfully
+
+Result: UK `/cities` rollout has reached `PUBLISH_READY` through Phase 8. Phase 9 integration remains separate and must not merge to `main` until release approval.
