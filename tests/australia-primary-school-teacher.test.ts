@@ -46,8 +46,8 @@ test("Australia Primary School Teacher records AITSL migration and registration 
 test("Australia Primary School Teacher links verified initial-teacher-education routes without generated ids", () => {
   const australia = getOccupationEditorial("primary-school-teacher")?.countries.AU
   assert.ok(australia)
-  assert.match(migration, /deakin-university' and course_code='118365B'/)
-  assert.match(migration, /rmit-university' and course_code='113707C'/)
+  assert.match(migration, /deakin-university'\s+and course_code\s*=\s*'118365B'/)
+  assert.match(migration, /rmit-university'\s+and course_code\s*=\s*'113707C'/)
   assert.match(migration, /'au-program:'\|\|id::text/)
   assert.doesNotMatch(migration, /'au-program:4006'/)
   assert.doesNotMatch(migration, /'au-program:5814'/)
