@@ -6,7 +6,6 @@ import type {
   InstitutionMvpCountryCode,
   InstitutionSearchFilters,
 } from "@/lib/institutions/institution-search"
-import { getCaPublishedProgramCountsByInstitution } from "@/lib/programs/ca-programs.server"
 
 export const INSTITUTION_PAGE_SIZE = 20
 
@@ -70,7 +69,6 @@ function mapInstitution(
   row: InstitutionExplorerRow,
   countryCode: InstitutionMvpCountryCode,
   logoUrl: string | null,
-  programCountOverride?: number,
 ): InstitutionExplorerItem {
   return {
     id: row.institution_id,
@@ -81,7 +79,7 @@ function mapInstitution(
     ownershipType: row.ownership_type,
     websiteUrl: row.website_url,
     logoUrl,
-    programCount: programCountOverride ?? safeNumber(row.program_count),
+    programCount: safeNumber(row.program_count),
     campusCount: safeNumber(row.campus_count),
     cityCount: safeNumber(row.city_count),
     cityNames: Array.isArray(row.city_names)
@@ -171,39 +169,13 @@ export async function searchInstitutions(
     query = query.eq("institution_kind", filters.kind)
   }
 
-  const from = (filters.page - 1) * INSTITUTION_PAGE_SIZE
-  const to = from + INSTITUTION_PAGE_SIZE - 1
-
-  if (countryCode === "CA") {
-    const { data, error, count } = await query.order("canonical_name", { ascending: true })
-    if (error) throw new Error(`Unable to load institution explorer: ${error.message}`)
-
-    const allRows = (data ?? []) as unknown as InstitutionExplorerRow[]
-    const programCounts = await getCaPublishedProgramCountsByInstitution(allRows.map((row) => row.slug))
-    const sortedRows = [...allRows].sort((left, right) => {
-      const countDifference = (programCounts.get(right.slug) ?? 0) - (programCounts.get(left.slug) ?? 0)
-      return countDifference || left.canonical_name.localeCompare(right.canonical_name)
-    })
-    const rows = sortedRows.slice(from, to + 1)
-    const logos = await loadInstitutionLogos(rows.map((row) => row.institution_id))
-    const institutions = rows.map((row) =>
-      mapInstitution(row, countryCode, logos.get(row.institution_id) ?? null, programCounts.get(row.slug) ?? 0),
-    )
-    const total = count ?? allRows.length
-
-    return {
-      institutions,
-      total,
-      page: filters.page,
-      pageSize: INSTITUTION_PAGE_SIZE,
-      pageCount: total === 0 ? 0 : Math.ceil(total / INSTITUTION_PAGE_SIZE),
-    }
-  }
-
-  const { data, error, count } = await query
+  query = query
     .order("program_count", { ascending: false })
     .order("canonical_name", { ascending: true })
-    .range(from, to)
+
+  const from = (filters.page - 1) * INSTITUTION_PAGE_SIZE
+  const to = from + INSTITUTION_PAGE_SIZE - 1
+  const { data, error, count } = await query.range(from, to)
 
   if (error) {
     throw new Error(`Unable to load institution explorer: ${error.message}`)
