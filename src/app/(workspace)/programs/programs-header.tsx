@@ -15,6 +15,8 @@ import { PROGRAM_LEVELS, type ProgramSearchFilters } from "@/lib/programs/progra
 import { cn } from "@/lib/utils"
 import { useProgramNavigation } from "./programs-navigation"
 
+const PUBLISHED_PROGRAM_COUNTRIES = new Set(["AU", "AE"])
+
 function ProgramCountryPicker({
   countryCode,
   onPick,
@@ -57,11 +59,12 @@ function ProgramCountryPicker({
           className="absolute left-0 top-[calc(100%+6px)] z-40 w-64 overflow-hidden rounded-xl border border-[#e7e6e3] bg-white p-1 shadow-xl shadow-black/5"
         >
           <p className="px-2.5 pb-1 pt-2 text-[10.5px] font-semibold uppercase tracking-[0.08em] text-[#a3a19b]">
-            {locale === "ko" ? "호주부터 순차 공개" : "Australia first · more countries next"}
+            {locale === "ko" ? "검증 완료 국가부터 순차 공개" : "Published as country sources pass review"}
           </p>
           <ul className="max-h-72 overflow-y-auto">
             {LAUNCH_COUNTRIES.map((country) => {
               const isSelected = country.code === selected.code
+              const published = PUBLISHED_PROGRAM_COUNTRIES.has(country.code)
               return (
                 <li key={country.code}>
                   <button
@@ -80,7 +83,7 @@ function ProgramCountryPicker({
                     <img src={country.image} alt="" width={40} height={28} className="size-4 shrink-0 rounded-full object-cover" />
                     <span className="truncate">{country.name}</span>
                     <span className="ml-auto flex items-center gap-2">
-                      {country.code !== "AU" && <span className="text-[10px] font-semibold uppercase text-[#b0ada6]">Soon</span>}
+                      {!published && <span className="text-[10px] font-semibold uppercase text-[#b0ada6]">Soon</span>}
                       {isSelected && <Check className="size-3.5" />}
                     </span>
                   </button>
@@ -105,6 +108,7 @@ export function ProgramsHeader({
   const replace = useProgramNavigation()
   const { setSelectedCountry } = useSelectedCountry()
   const [query, setQuery] = useState(filters.q)
+  const searchable = PUBLISHED_PROGRAM_COUNTRIES.has(filters.country)
 
   useEffect(() => setQuery(filters.q), [filters.q])
   useEffect(() => {
@@ -133,7 +137,7 @@ export function ProgramsHeader({
         <ProgramCountryPicker countryCode={filters.country} onPick={pickCountry} />
       </div>
 
-      {filters.country === "AU" && (
+      {searchable && (
         <>
           <form onSubmit={submitSearch} className="mt-6 max-w-3xl">
             <label className="relative block">
@@ -142,7 +146,7 @@ export function ProgramsHeader({
                 type="search"
                 value={query}
                 onChange={(event: ChangeEvent<HTMLInputElement>) => setQuery(event.target.value)}
-                placeholder={locale === "ko" ? "과정명으로 검색하세요. 예: Nursing, Data Science" : "Search programs, e.g. Nursing or Data Science…"}
+                placeholder={locale === "ko" ? "과정명이나 학교명으로 검색하세요" : "Search programs or institutions…"}
                 className="h-[52px] w-full rounded-xl border border-[#deddd8] bg-white pl-11 pr-24 text-[14px] text-[#1b1b1b] outline-none transition placeholder:text-[#aaa8a2] focus:border-[#3e7a2e] focus:ring-2 focus:ring-[#3e7a2e]/10"
               />
               <button type="submit" className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-lg bg-[#3e7a2e] px-4 py-2 text-[12px] font-semibold text-white transition hover:bg-[#326625]">
