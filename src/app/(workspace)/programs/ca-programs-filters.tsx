@@ -101,8 +101,8 @@ function FiltersContent({ filters }: { filters: ProgramSearchFilters }) {
         </select>
         <p className="px-1 pt-2 text-[10px] leading-4 text-[#9b9891]">
           {locale === "ko"
-            ? "Phase 3에서 Approved로 검토된 교육 관계만 포함합니다."
-            : "Only education relationships approved in the Phase 3 review are included."}
+            ? "CampCareer 교육 관계 검토에서 승인된 과정만 포함합니다."
+            : "Only programs with an approved education relationship in CampCareer's review are included."}
         </p>
       </FilterSection>
 
