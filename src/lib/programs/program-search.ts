@@ -66,6 +66,7 @@ export const CA_PROGRAM_PROVINCES = [
 
 export type ProgramProvince = "all" | (typeof CA_PROGRAM_PROVINCES)[number]["value"]
 export type ProgramCareer = "all" | string
+export type ProgramInstitution = "all" | string
 
 export const CA_PROGRAM_PGWP_STATES = [
   { value: "all", label: "Any PGWP status", labelKo: "전체 PGWP 상태" },
@@ -122,6 +123,7 @@ export type ProgramSearchFilters = {
   state: ProgramState
   province: ProgramProvince
   career: ProgramCareer
+  institution: ProgramInstitution
   pgwp: ProgramPgwp
   duration: ProgramDuration
   fee: ProgramFee
@@ -151,9 +153,9 @@ function allowedValue<T extends string>(
   return value && allowed.includes(value as T) ? (value as T) : fallback
 }
 
-function safeCareer(value: string | undefined) {
+function safeSlug(value: string | undefined) {
   if (!value || value === "all") return "all"
-  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value) && value.length <= 80 ? value : "all"
+  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value) && value.length <= 100 ? value : "all"
 }
 
 const levelValues = PROGRAM_LEVELS.map((item) => item.value)
@@ -192,7 +194,8 @@ export function parseProgramSearchParams(
       normalizedCountry === "CA"
         ? allowedValue(firstValue(params.province), provinceValues, "all")
         : "all",
-    career: normalizedCountry === "CA" ? safeCareer(firstValue(params.career)) : "all",
+    career: normalizedCountry === "CA" ? safeSlug(firstValue(params.career)) : "all",
+    institution: normalizedCountry === "CA" ? safeSlug(firstValue(params.institution)) : "all",
     pgwp:
       normalizedCountry === "CA"
         ? allowedValue(firstValue(params.pgwp), pgwpValues, "all")
@@ -218,6 +221,7 @@ export function hasProgramFilters(filters: ProgramSearchFilters) {
       filters.state !== "all" ||
       filters.province !== "all" ||
       filters.career !== "all" ||
+      filters.institution !== "all" ||
       filters.pgwp !== "all" ||
       filters.duration !== "all" ||
       filters.fee !== "all" ||
@@ -242,6 +246,7 @@ export function buildProgramsUrl(
   if (next.city === "all" && next.state !== "all") params.set("state", next.state)
   if (next.province !== "all") params.set("province", next.province)
   if (next.career !== "all") params.set("career", next.career)
+  if (next.institution !== "all") params.set("institution", next.institution)
   if (next.pgwp !== "all") params.set("pgwp", next.pgwp)
   if (next.duration !== "all") params.set("duration", next.duration)
   if (next.fee !== "all") params.set("fee", next.fee)
