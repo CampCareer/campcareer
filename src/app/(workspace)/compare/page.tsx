@@ -146,7 +146,7 @@ async function CitiesCompare({ countryCode, params }: { countryCode: string; par
           left={comparison.left}
           right={comparison.right}
           options={comparison.options}
-          sharedProgramCount={comparison.sharedProgramCount}
+          sharedCareerCount={comparison.sharedCareerCount}
         />
       </section>
     )
