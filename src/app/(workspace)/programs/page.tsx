@@ -261,7 +261,7 @@ export default async function ProgramsPage({
                 )}
                 <Pagination filters={filters} page={caResult.page} pageCount={caResult.pageCount} />
                 <p className="mt-4 text-[10.5px] leading-5 text-[#aaa7a0]">
-                  Canada results are limited to programs with an approved relationship to one of the 80 target careers and a completed Phase 3 publication decision. Tier C programs are held back. PGWP status is shown independently and remains unknown where provider or IRCC-aligned evidence is insufficient.
+                  Canada results include only programs connected to one of the 80 target careers with a completed publication review and sufficient international-admission evidence for public listing. Records without enough current evidence remain hidden. PGWP status is evaluated separately and stays not confirmed where provider or IRCC-aligned evidence is insufficient.
                 </p>
               </>
             ) : null}
