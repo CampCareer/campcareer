@@ -6,8 +6,8 @@
 -- provider page on the internet has a current intake signal".
 --
 -- Scope is deliberately limited to programmes with at least one approved
--- relationship to the 80 target careers. Non-target catalogue rows are left
--- untouched.
+-- relationship to the 80 target careers. Non-target catalogue rows and rows
+-- already held by a higher-priority publication rule are left untouched.
 
 with approved_target_programs as (
   select distinct program_catalog_id
@@ -22,17 +22,34 @@ with approved_target_programs as (
   join approved_target_programs t on t.program_catalog_id = c.id
   join public.program_pgwp_ca_staging p on p.program_catalog_id = c.id
   where
-    nullif(btrim(p.international_program_admission_status), '') is null
-    or lower(coalesce(p.international_program_admission_status, '')) ~
-       '(not_yet_verified|not verified|should_be_checked|dli_and_study_permit_eligibility_not_verified)'
-    or (
-      (
-        lower(coalesce(p.international_program_admission_status, '')) like '%intake%'
-        or lower(coalesce(p.international_program_admission_status, '')) like '%availability%'
-      )
-      and (
-        lower(coalesce(p.international_program_admission_status, '')) like '%check%'
-        or lower(coalesce(p.international_program_admission_status, '')) like '%separate%'
+    nullif(btrim(c.title), '') is not null
+    and nullif(btrim(c.institution_id), '') is not null
+    and nullif(btrim(c.source_url), '') is not null
+    and (c.source_as_of is not null or c.collected_at is not null)
+    and nullif(btrim(p.matched_dli_number), '') is not null
+    and p.international_students_eligible is true
+    and lower(coalesce(c.source_status, '')) not like '%excluded_%'
+    and lower(coalesce(c.source_status, '')) not like '%suspended%'
+    and lower(coalesce(c.source_status, '')) not like '%not_accepting%'
+    and lower(coalesce(c.source_status, '')) not like '%pending_review%'
+    and lower(coalesce(c.source_status, '')) not like '%cancelled%'
+    and lower(coalesce(c.source_status, '')) not like '%legacy_%'
+    and lower(coalesce(c.source_status, '')) not like '%one_time_delivery_closed%'
+    and lower(coalesce(c.source_status, '')) not like '%parent_program_multiple_credentials%'
+    and lower(coalesce(p.international_program_admission_status, '')) not like '%not_assessed_non_core%'
+    and (
+      nullif(btrim(p.international_program_admission_status), '') is null
+      or lower(coalesce(p.international_program_admission_status, '')) ~
+         '(not_yet_verified|not verified|should_be_checked|dli_and_study_permit_eligibility_not_verified)'
+      or (
+        (
+          lower(coalesce(p.international_program_admission_status, '')) like '%intake%'
+          or lower(coalesce(p.international_program_admission_status, '')) like '%availability%'
+        )
+        and (
+          lower(coalesce(p.international_program_admission_status, '')) like '%check%'
+          or lower(coalesce(p.international_program_admission_status, '')) like '%separate%'
+        )
       )
     )
 )
