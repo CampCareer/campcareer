@@ -157,11 +157,14 @@ export function caAdmissionPresentation(value: string | null): CaAdmissionPresen
   } else if (status.includes("application_cycle_opens_") || status.includes("opening_soon")) {
     label = "Application cycle opens later"
     tone = "neutral"
-  } else if (status.includes("potentially_accepting")) {
+  } else if (status.includes("potentially_accepting") || status.includes("space_permitting")) {
     label = "Seat-dependent international availability"
     tone = "caution"
   } else if (status.includes("planned_international_spaces")) {
     label = "International spaces planned"
+    tone = "neutral"
+  } else if (status.includes("international_application_path")) {
+    label = "International application path published"
     tone = "neutral"
   } else if (status.includes("waitlisted") || status.includes("limited")) {
     label = "International availability limited"
@@ -173,11 +176,21 @@ export function caAdmissionPresentation(value: string | null): CaAdmissionPresen
     status.includes("currently_accepting") ||
     status.includes("international_apply_") ||
     status.includes("international_open") ||
+    status.includes("open_international") ||
+    status.includes("next_intake_open") ||
+    status.includes("entry_open") ||
+    status.includes("windows_open") ||
+    status.includes("international_winter_2027_open") ||
     status.includes("late_applications_accepted")
   ) {
     label = "International applications open"
     tone = "positive"
-  } else if (status.includes("international_available") || status.includes("international_availability")) {
+  } else if (
+    status.includes("international_available") ||
+    status.includes("international_availability") ||
+    status.includes("next_available") ||
+    status.includes("international_students_accepted")
+  ) {
     label = "International intake available"
     tone = "positive"
   } else if (
@@ -186,6 +199,7 @@ export function caAdmissionPresentation(value: string | null): CaAdmissionPresen
     status.includes("listed_current") ||
     status.includes("listed_for_international_intake") ||
     status.includes("international_program_listed") ||
+    status.includes("international_intake_listed") ||
     status.includes("school_pgwp_aligned")
   ) {
     label = "Current international program listing"
