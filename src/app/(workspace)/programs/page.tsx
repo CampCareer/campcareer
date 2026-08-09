@@ -9,8 +9,10 @@ import { ProgramsHeader } from "./programs-header"
 import { ProgramsSidebar } from "./programs-filters"
 import { ProgramsSortControl } from "./programs-sort-control"
 import { AeProgramsExplorer } from "./ae-programs-explorer"
+import { KrProgramsExplorer } from "./kr-programs-explorer"
 import { searchAuPrograms, type AuProgramSearchResult } from "@/lib/programs/au-programs.server"
 import { searchAePrograms, type AeProgramSearchResult } from "@/lib/programs/ae-programs.server"
+import { searchKrPrograms, type KrProgramSearchResult } from "@/lib/programs/kr-programs.server"
 import {
   buildProgramsUrl,
   hasProgramFilters,
@@ -50,14 +52,16 @@ export async function generateMetadata({
   const params = await searchParams
   const filters = normalizedFilters(params)
   const country = getLaunchCountry(filters.country)
-  const isPublishedBase = (filters.country === "AU" || filters.country === "AE") && !hasProgramFilters(filters)
+  const isPublishedBase = ["AU", "AE", "KR"].includes(filters.country) && !hasProgramFilters(filters)
   const countryName = country?.name ?? "Australia"
 
   const description = filters.country === "AU"
     ? "Search Australian university and vocational programs by verified city, study level, field, state, duration and tuition."
     : filters.country === "AE"
       ? "Explore source-verified UAE higher education, aviation, maritime and vocational programs with accreditation and international admission tracked separately."
-      : `Explore study programs in ${countryName}. Country data will be published after source review.`
+      : filters.country === "KR"
+        ? "Explore South Korea programs published from Study in Korea/NIIED and current university sources, with international eligibility kept separate from current application windows."
+        : `Explore study programs in ${countryName}. Country data will be published after source review.`
 
   return {
     title: filters.country === "AU" ? "Australian Programs" : `${countryName} Programs`,
@@ -131,6 +135,7 @@ export default async function ProgramsPage({
 
   let auResult: AuProgramSearchResult | null = null
   let aeResult: AeProgramSearchResult | null = null
+  let krResult: KrProgramSearchResult | null = null
   let errorMessage: string | null = null
 
   if (filters.country === "AU") {
@@ -145,13 +150,21 @@ export default async function ProgramsPage({
       console.error("Unable to load UAE program catalogue", error)
       errorMessage = "Please try again shortly. No cached or substitute UAE program data has been shown."
     }
+  } else if (filters.country === "KR") {
+    try { krResult = await searchKrPrograms(filters) }
+    catch (error) {
+      console.error("Unable to load South Korea program catalogue", error)
+      errorMessage = "Please try again shortly. No cached or substitute South Korea program data has been shown."
+    }
   }
+
+  const published = filters.country === "AU" || filters.country === "AE" || filters.country === "KR"
 
   return (
     <>
       <ProgramsHeader filters={filters} countryExplicit={countryExplicit} />
 
-      {filters.country !== "AU" && filters.country !== "AE" ? (
+      {!published ? (
         <div className="mt-7"><CountryComingSoon countryCode={filters.country} /></div>
       ) : errorMessage ? (
         <div className="mt-7 flex min-h-72 flex-col items-center justify-center rounded-xl border border-[#f0d8d2] bg-[#fff9f7] p-8 text-center">
@@ -159,6 +172,8 @@ export default async function ProgramsPage({
           <h2 className="mt-3 text-[16px] font-semibold text-[#1b1b1b]">Program data is temporarily unavailable</h2>
           <p className="mt-2 max-w-lg text-[12px] leading-5 text-[#786b66]">{errorMessage}</p>
         </div>
+      ) : filters.country === "KR" && krResult ? (
+        <KrProgramsExplorer filters={filters} result={krResult} />
       ) : filters.country === "AE" && aeResult ? (
         <AeProgramsExplorer filters={filters} result={aeResult} />
       ) : filters.country === "AU" && auResult ? (
