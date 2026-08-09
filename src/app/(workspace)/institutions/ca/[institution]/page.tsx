@@ -7,8 +7,11 @@ import {
   normalizeInstitutionSlugSegment,
 } from "@/lib/institutions/institution-search"
 import { INDEXABLE_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo"
-import { getInstitutionDetail } from "@/lib/institutions/institution-detail.server"
-import { getCaInstitutionProgramSummary } from "@/lib/programs/ca-programs.server"
+import { getInstitutionDetail, type InstitutionDetail } from "@/lib/institutions/institution-detail.server"
+import {
+  getCaInstitutionProgramSummary,
+  type CaInstitutionProgramSummary,
+} from "@/lib/programs/ca-programs.server"
 import { CanadianInstitutionProgramDetailView } from "../../canadian-institution-program-detail"
 
 export const revalidate = 3600
@@ -47,17 +50,25 @@ export default async function CanadaInstitutionDetailPage({ params }: Params) {
   const canonicalPath = institutionDetailPath("CA", slug)
   if (institution !== slug) permanentRedirect(canonicalPath)
 
+  let detail: InstitutionDetail | null = null
+  let publication: CaInstitutionProgramSummary | null = null
+  let loadFailed = false
+
   try {
-    const [detail, publication] = await Promise.all([
+    ;[detail, publication] = await Promise.all([
       getInstitutionDetail("CA", slug),
       getCaInstitutionProgramSummary(slug),
     ])
-    if (!detail) notFound()
-    return <CanadianInstitutionProgramDetailView institution={detail} publication={publication} />
   } catch (error) {
     console.error("Unable to load Canadian institution detail page", error)
-    return <InstitutionUnavailable />
+    loadFailed = true
   }
+
+  if (loadFailed) return <InstitutionUnavailable />
+  if (!detail) notFound()
+  if (!publication) return <InstitutionUnavailable />
+
+  return <CanadianInstitutionProgramDetailView institution={detail} publication={publication} />
 }
 
 function InstitutionUnavailable() {
