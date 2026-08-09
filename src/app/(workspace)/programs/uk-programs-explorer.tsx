@@ -49,7 +49,7 @@ function Pagination({ filters, result }: { filters: ProgramSearchFilters; result
 export function UkProgramsExplorer({ filters, result }: { filters: ProgramSearchFilters; result: UkProgramSearchResult }) {
   return (
     <section className="mt-7 min-w-0">
-      <ProgramsSortControl filters={filters} total={result.total} />
+      <ProgramsSortControl filters={filters} total={result.total} availableSorts={["recommended", "duration-short", "title"]} />
       <div className="mt-3 space-y-3">
         {result.programs.map((program) => (
           <Link key={program.id} href={ukProgramDetailPath(program.slug)} className="block rounded-xl border border-[#e7e6e3] bg-white p-5 transition hover:border-[#b9cdb2] hover:shadow-sm">
