@@ -35,14 +35,6 @@ type InstitutionDetailRow = {
   programme_preview: unknown
 }
 
-type CaPublishedProgramRow = {
-  program_catalog_id: number
-  title: string | null
-  credential_type: string | null
-  field_name: string | null
-  publication_tier: "A" | "B"
-}
-
 export type InstitutionCampusLocation = {
   id: string
   name: string | null
@@ -159,28 +151,6 @@ function parsePrograms(value: unknown): InstitutionProgrammePreview[] {
     }]
   })
 }
-function caBreakdown(rows: CaPublishedProgramRow[], key: "credential_type" | "field_name") {
-  const counts = new Map<string, number>()
-  for (const row of rows) {
-    const value = safeNullableString(row[key])
-    if (!value) continue
-    counts.set(value, (counts.get(value) ?? 0) + 1)
-  }
-  return [...counts.entries()]
-    .map(([name, count]) => ({ name, count }))
-    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
-}
-async function loadCaPublishedPrograms(slug: string) {
-  const { data, error } = await supabaseAdmin
-    .from("ca_program_publication_v1")
-    .select("program_catalog_id,title,credential_type,field_name,publication_tier")
-    .eq("institution_slug", slug)
-    .eq("publicly_listed", true)
-    .order("publication_tier", { ascending: true })
-    .order("title", { ascending: true })
-  if (error) throw new Error(`Unable to load published Canadian institution programs: ${error.message}`)
-  return (data ?? []) as unknown as CaPublishedProgramRow[]
-}
 
 export const getInstitutionDetail = cache(async (
   countryCode: InstitutionMvpCountryCode,
@@ -226,10 +196,9 @@ export const getInstitutionDetail = cache(async (
   const sgIdentityPromise = countryCode === "SG" ? supabaseAdmin.from("institution_identity_sg_v1").select("uen,uen_source_url").eq("institution_id", row.institution_id).maybeSingle() : Promise.resolve({ data: null, error: null })
   const deIdentityPromise = countryCode === "DE" ? supabaseAdmin.from("institution_identity_de_v1").select("official_domain,official_domain_source_url").eq("institution_id", row.institution_id).maybeSingle() : Promise.resolve({ data: null, error: null })
   const frIdentityPromise = countryCode === "FR" ? supabaseAdmin.from("institution_identity_fr_v1").select("uai,uai_source_url").eq("institution_id", row.institution_id).maybeSingle() : Promise.resolve({ data: null, error: null })
-  const caProgramsPromise = countryCode === "CA" ? loadCaPublishedPrograms(slug) : Promise.resolve(null)
 
-  const [logoResult, ukIdentityResult, caIdentityResult, nlIdentityResult, nzIdentityResult, sgIdentityResult, deIdentityResult, frIdentityResult, caPrograms] = await Promise.all([
-    logoPromise, ukIdentityPromise, caIdentityPromise, nlIdentityPromise, nzIdentityPromise, sgIdentityPromise, deIdentityPromise, frIdentityPromise, caProgramsPromise,
+  const [logoResult, ukIdentityResult, caIdentityResult, nlIdentityResult, nzIdentityResult, sgIdentityResult, deIdentityResult, frIdentityResult] = await Promise.all([
+    logoPromise, ukIdentityPromise, caIdentityPromise, nlIdentityPromise, nzIdentityPromise, sgIdentityPromise, deIdentityPromise, frIdentityPromise,
   ])
 
   if (logoResult.error) console.error("Unable to load institution logo", logoResult.error)
@@ -272,8 +241,6 @@ export const getInstitutionDetail = cache(async (
   if (countryCode === "DE" && (!officialDomain || !officialDomainSourceUrl)) throw new Error(`DE institution ${row.institution_id} is missing its HRK-verified official domain identity`)
   if (countryCode === "FR" && (!uai || !uaiSourceUrl)) throw new Error(`FR institution ${row.institution_id} is missing its official UAI identity`)
 
-  const publishedPrograms = caPrograms ?? null
-
   return {
     id: row.institution_id,
     countryCode,
@@ -284,7 +251,7 @@ export const getInstitutionDetail = cache(async (
     websiteUrl: row.website_url,
     logoUrl: safeInstitutionLogoUrl(logoRow?.logo_url),
     status: row.status,
-    programCount: publishedPrograms ? publishedPrograms.length : safeNumber(row.program_count),
+    programCount: safeNumber(row.program_count),
     campusCount: safeNumber(row.campus_count),
     cityCount: safeNumber(row.city_count),
     cityNames: Array.isArray(row.city_names) ? row.city_names.filter((city): city is string => typeof city === "string" && Boolean(city)) : [],
@@ -305,16 +272,8 @@ export const getInstitutionDetail = cache(async (
     uai,
     uaiSourceUrl,
     campuses: parseCampuses(row.campus_locations),
-    studyAreas: publishedPrograms ? caBreakdown(publishedPrograms, "field_name") : parseBreakdown(row.study_areas),
-    programmeTypes: publishedPrograms ? caBreakdown(publishedPrograms, "credential_type") : parseBreakdown(row.programme_types),
-    programs: publishedPrograms
-      ? publishedPrograms.slice(0, 12).map((program) => ({
-          id: `ca-program-${program.program_catalog_id}`,
-          legacyProgramId: program.program_catalog_id,
-          title: program.title ?? "Untitled program",
-          programmeType: program.credential_type,
-          fieldName: program.field_name,
-        }))
-      : parsePrograms(row.programme_preview),
+    studyAreas: parseBreakdown(row.study_areas),
+    programmeTypes: parseBreakdown(row.programme_types),
+    programs: parsePrograms(row.programme_preview),
   }
 })
