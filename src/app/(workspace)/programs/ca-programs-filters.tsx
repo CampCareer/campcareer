@@ -104,28 +104,33 @@ function FiltersContent({ filters }: { filters: ProgramSearchFilters }) {
         </select>
         <p className="px-1 pt-2 text-[10px] leading-4 text-[#9b9891]">
           {locale === "ko"
-            ? "Phase 3에서 Approved로 검토된 교육 관계만 포함합니다."
-            : "Only education relationships approved in the Phase 3 review are included."}
+            ? "CampCareer가 교육 경로로 검토해 공개한 직종 연결만 포함합니다."
+            : "Only career-to-program relationships reviewed for CampCareer publication are included."}
         </p>
       </FilterSection>
 
       <FilterSection
         icon={<MapPin className="size-3.5 text-[#2563eb]" />}
-        title={locale === "ko" ? "도시" : "Published city"}
+        title={locale === "ko" ? "프로그램 도시" : "Program city"}
       >
         <FilterButton
           active={filters.city === "all"}
-          label={locale === "ko" ? "도시 전체" : "All published cities"}
+          label={locale === "ko" ? "전체 프로그램 도시" : "All program cities"}
           onClick={() => replace({ city: null })}
         />
         {CA_PROGRAM_CITIES.map((city) => (
           <FilterButton
             key={city.value}
             active={filters.city === city.value}
-            label={locale === "ko" ? city.labelKo : city.label}
+            label={`${locale === "ko" ? city.labelKo : city.label} · ${city.province}`}
             onClick={() => replace({ city: city.value })}
           />
         ))}
+        <p className="px-2.5 pt-2 text-[10px] leading-4 text-[#9b9891]">
+          {locale === "ko"
+            ? "공개 프로그램 기록의 도시 기준입니다. City profile 링크는 별도 검증된 도시에만 표시됩니다."
+            : "Cities come from published program records. City profile links appear only where a separate city profile has been verified."}
+        </p>
       </FilterSection>
 
       <FilterSection
@@ -161,18 +166,18 @@ function FiltersContent({ filters }: { filters: ProgramSearchFilters }) {
         ))}
         <p className="px-2.5 pt-2 text-[10px] leading-4 text-[#9b9891]">
           {locale === "ko"
-            ? "미확인은 불가를 뜻하지 않습니다. 공식 근거가 없으면 unknown을 유지합니다."
-            : "Not confirmed does not mean ineligible. Unknown is preserved when official evidence is insufficient."}
+            ? "미확인은 불가를 뜻하지 않습니다. 공식 근거가 충분하지 않으면 미확인으로 표시합니다."
+            : "Not confirmed does not mean ineligible. We show not confirmed when official evidence is insufficient."}
         </p>
       </FilterSection>
 
       <FilterSection
         icon={<ShieldCheck className="size-3.5 text-[#8a8882]" />}
-        title={locale === "ko" ? "공개 근거" : "Publication evidence"}
+        title={locale === "ko" ? "출처 근거" : "Source evidence"}
       >
         <FilterButton
           active={filters.source === "all"}
-          label={locale === "ko" ? "공개 가능한 과정 전체" : "All publishable programs"}
+          label={locale === "ko" ? "검토 완료 프로그램 전체" : "All reviewed programs"}
           onClick={() => replace({ source: null })}
         />
         <FilterButton
