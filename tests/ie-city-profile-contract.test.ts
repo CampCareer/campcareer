@@ -58,8 +58,10 @@ test("Ireland work-rights copy keeps Stamp 2 conditions and both hour limits", (
   assert.ok(profile.includes("hours_term_time"))
   assert.ok(profile.includes("hours_designated_holidays"))
   assert.ok(profile.includes("stamp_2_student_permission"))
-  assert.ok(dashboard.includes("20 hours per week during term"))
-  assert.ok(dashboard.includes("40 hours per week during designated holiday periods"))
+  assert.ok(dashboard.includes("hoursTermTime"))
+  assert.ok(dashboard.includes("hoursDesignatedHolidays"))
+  assert.ok(dashboard.includes("hours per week during term"))
+  assert.ok(dashboard.includes("hours per week during designated holiday periods"))
   assert.ok(dashboard.includes("immigration permission"))
 })
 
