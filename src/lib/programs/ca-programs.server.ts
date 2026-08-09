@@ -203,6 +203,7 @@ export async function searchCaPrograms(
     )
   }
 
+  if (filters.city !== "all") query = query.ilike("city", filters.city)
   if (filters.province !== "all") query = query.eq("province", filters.province)
   if (filters.career !== "all") query = query.contains("career_ids", [filters.career])
   if (filters.institution !== "all") query = query.eq("institution_slug", filters.institution)
