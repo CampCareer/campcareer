@@ -205,6 +205,7 @@ export async function searchCaPrograms(
 
   if (filters.province !== "all") query = query.eq("province", filters.province)
   if (filters.career !== "all") query = query.contains("career_ids", [filters.career])
+  if (filters.institution !== "all") query = query.eq("institution_slug", filters.institution)
   if (filters.pgwp !== "all") query = query.eq("pgwp_state", filters.pgwp)
   if (filters.source === "verified") query = query.eq("publication_tier", "A")
 
