@@ -13,6 +13,7 @@ import { PHYSIOTHERAPIST_CA_OCCUPATION_EDITORIAL } from "./occupation-editorial-
 import { MEDICAL_LABORATORY_TECHNICIAN_CA_OCCUPATION_EDITORIAL } from "./occupation-editorial-ca-medical-laboratory-technician"
 import { RADIOGRAPHER_CA_OCCUPATION_EDITORIAL } from "./occupation-editorial-ca-radiographer"
 import { PHARMACIST_CA_OCCUPATION_EDITORIAL } from "./occupation-editorial-ca-pharmacist"
+import { OCCUPATIONAL_THERAPIST_CA_OCCUPATION_EDITORIAL } from "./occupation-editorial-ca-occupational-therapist"
 
 export type CanadaOccupationEditorialOverride = {
   id: string
@@ -52,4 +53,5 @@ export const CANADA_OCCUPATION_EDITORIAL_OVERRIDES: readonly CanadaOccupationEdi
   MEDICAL_LABORATORY_TECHNICIAN_CA_OCCUPATION_EDITORIAL,
   RADIOGRAPHER_CA_OCCUPATION_EDITORIAL,
   PHARMACIST_CA_OCCUPATION_EDITORIAL,
+  OCCUPATIONAL_THERAPIST_CA_OCCUPATION_EDITORIAL,
 ]
