@@ -76,6 +76,45 @@ Post-migration verification confirmed all eight rows have the expected slug, sco
 
 New York remains a named-city legacy geography at this stage. No Brooklyn, Queens, Bronx or Staten Island campus records are silently reassigned to it. Campus-level scope quality is verified separately in the institution/programme linkage phase.
 
+## Phase 3 institution/programme linkage status
+
+Production migration `20260808184326_publish_us_tier_a_city_linkage_v1.sql` publishes the U.S. Tier A city linkage read model.
+
+Institution linkage is locked to canonical `catalog.campuses.geography_id` membership. Current active linkage is:
+
+| City | Campus links | Institution links |
+| --- | ---: | ---: |
+| New York | 73 | 73 |
+| Boston | 26 | 26 |
+| Los Angeles | 51 | 51 |
+| Chicago | 65 | 65 |
+| Seattle | 17 | 17 |
+| San Diego | 30 | 30 |
+| Philadelphia | 34 | 34 |
+| Tempe | 12 | 12 |
+
+Across the eight cities there are 308 campus-city linkage rows representing 306 distinct canonical institutions. Every published Tier A institution link has both a canonical institution slug and a `US_UNIT_ID` identifier.
+
+Programme linkage deliberately remains empty. The canonical catalogue currently contains no U.S. `catalog.programmes`, `catalog.programme_offerings` or programme identifiers, so the city layer must not infer programme delivery from institution presence. `city_programme_directory_us_v1` only accepts future programme rows supported by explicit `programme_offerings.campus_id` evidence.
+
+This completes Phase 3 institution linkage and records programme coverage as a data gap, not a zero-offering claim. City and Compare surfaces must label linked programme counts conservatively until a canonical U.S. programme catalogue exists.
+
+## Phase 4 five-metric status
+
+Production migration `20260808185727_publish_us_tier_a_city_metrics_v1.sql` publishes the same five decision metrics used by the Canada city contract for every Tier A U.S. city:
+
+- `city_population`
+- `student_living_cost_monthly_range`
+- `student_transport_reference`
+- `student_work_hours_week`
+- `employment_focus_sectors`
+
+Post-migration verification confirms exactly 40 verified rows, five for each of the eight Tier A cities. Population uses U.S. Census Bureau 2025 city estimates. Living costs are normalized to indicative monthly USD references from official 2026/27 university student budgets. Transport preserves each city's actual pass or fare-cap period rather than forcing all systems into a monthly value. Employment sectors come from city or regional economic-development sources.
+
+The F-1 work metric is deliberately qualified. It records the general on-campus limit of 20 hours per week while school is in session and explicitly states that off-campus employment requires separate authorization. It must not be presented as an unconditional 20-hour off-campus work entitlement.
+
+This completes Phase 4 data readiness. Phase 5 may now expose the eight approved U.S. destinations through City and City Compare while retaining the programme-data-gap disclosure.
+
 ## Publication limit
 
 The initial U.S. Cities selector, sitemap and City Compare must be bounded to these eight Tier A slugs. Tier B cities remain non-public until separately approved and fully satisfy the same data, metric, linkage and SEO gates used for Australia and Canada.
