@@ -92,6 +92,14 @@ export type CaProgramSitemapItem = {
   lastModified: string
 }
 
+export type CaInstitutionProgramSummary = {
+  total: number
+  indexableCount: number
+  pgwpEligibleCount: number
+  pgwpUnknownCount: number
+  programs: CaProgramListItem[]
+}
+
 const CA_PROGRAM_SELECT = [
   "program_catalog_id",
   "source_name",
@@ -251,6 +259,52 @@ async function loadCaProgramById(id: number): Promise<CaProgramListItem | null> 
 }
 
 export const getCaProgramById = cache(loadCaProgramById)
+
+async function loadCaInstitutionProgramSummary(slug: string): Promise<CaInstitutionProgramSummary> {
+  const { data, error } = await supabaseAdmin
+    .from("ca_program_publication_v1")
+    .select(CA_PROGRAM_SELECT)
+    .eq("publicly_listed", true)
+    .eq("institution_slug", slug)
+    .order("publication_tier", { ascending: true })
+    .order("title", { ascending: true })
+
+  if (error) throw new Error(`Unable to load Canadian institution programs: ${error.message}`)
+
+  const programs = ((data ?? []) as unknown as CaProgramRow[]).map(mapProgram)
+  return {
+    total: programs.length,
+    indexableCount: programs.filter((program) => program.indexableDetail).length,
+    pgwpEligibleCount: programs.filter((program) => program.pgwpState === "eligible").length,
+    pgwpUnknownCount: programs.filter((program) => program.pgwpState === "unknown").length,
+    programs: programs.slice(0, 6),
+  }
+}
+
+export const getCaInstitutionProgramSummary = cache(loadCaInstitutionProgramSummary)
+
+export async function getCaPublishedProgramCountsByInstitution(
+  institutionSlugs: string[],
+): Promise<Map<string, number>> {
+  const uniqueSlugs = Array.from(new Set(institutionSlugs.filter(Boolean)))
+  const counts = new Map<string, number>()
+  if (uniqueSlugs.length === 0) return counts
+
+  const { data, error } = await supabaseAdmin
+    .from("ca_program_publication_v1")
+    .select("institution_slug,program_catalog_id")
+    .eq("publicly_listed", true)
+    .in("institution_slug", uniqueSlugs)
+
+  if (error) throw new Error(`Unable to load Canadian institution program counts: ${error.message}`)
+
+  for (const row of (data ?? []) as Array<{ institution_slug: string | null; program_catalog_id: number }>) {
+    if (!row.institution_slug) continue
+    counts.set(row.institution_slug, (counts.get(row.institution_slug) ?? 0) + 1)
+  }
+
+  return counts
+}
 
 export async function getIndexableCaProgramsForSitemap(): Promise<CaProgramSitemapItem[]> {
   const { data, error } = await supabaseAdmin
