@@ -12,6 +12,7 @@ type FilterKey =
   | "state"
   | "province"
   | "career"
+  | "institution"
   | "pgwp"
   | "duration"
   | "fee"
