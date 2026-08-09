@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ country: 
   const launchCountry = getLaunchCountry(countryCode)
   const locationLabel = countryCode === "AU" ? "campuses" : "locations"
   const euFastpath = countryCode === "BE" || countryCode === "CH" || countryCode === "SE" || countryCode === "DK"
-  const authorityFastpath = countryCode === "FI" || countryCode === "NO" || countryCode === "JP" || countryCode === "KR"
+  const authorityFastpath = countryCode === "FI" || countryCode === "NO" || countryCode === "JP" || countryCode === "KR" || countryCode === "AE"
   const description = countryCode === "NL"
     ? `Explore verified institutions in ${launchCountry?.name ?? countryCode} with official BRIN identity and source-backed ${locationLabel}. Program data will be added as the Netherlands catalogue is verified.`
     : countryCode === "NZ"
