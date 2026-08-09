@@ -5,6 +5,7 @@ import { BriefcaseBusiness, Check, ChevronDown, MapPin, RotateCcw, ShieldCheck, 
 import { CANONICAL_CAREERS } from "@/data/career-comparison-catalog"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import {
+  CA_PROGRAM_CITIES,
   CA_PROGRAM_PGWP_STATES,
   CA_PROGRAM_PROVINCES,
   type ProgramSearchFilters,
@@ -55,6 +56,7 @@ function FiltersContent({ filters }: { filters: ProgramSearchFilters }) {
   const clear = () =>
     replace({
       q: null,
+      city: null,
       province: null,
       career: null,
       institution: null,
@@ -105,6 +107,25 @@ function FiltersContent({ filters }: { filters: ProgramSearchFilters }) {
             ? "Phase 3에서 Approved로 검토된 교육 관계만 포함합니다."
             : "Only education relationships approved in the Phase 3 review are included."}
         </p>
+      </FilterSection>
+
+      <FilterSection
+        icon={<MapPin className="size-3.5 text-[#2563eb]" />}
+        title={locale === "ko" ? "도시" : "Published city"}
+      >
+        <FilterButton
+          active={filters.city === "all"}
+          label={locale === "ko" ? "도시 전체" : "All published cities"}
+          onClick={() => replace({ city: null })}
+        />
+        {CA_PROGRAM_CITIES.map((city) => (
+          <FilterButton
+            key={city.value}
+            active={filters.city === city.value}
+            label={locale === "ko" ? city.labelKo : city.label}
+            onClick={() => replace({ city: city.value })}
+          />
+        ))}
       </FilterSection>
 
       <FilterSection
