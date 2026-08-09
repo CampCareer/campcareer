@@ -52,8 +52,8 @@ test("Australia Special Education Teacher records AITSL migration and registrati
 test("Australia Special Education Teacher links direct special and inclusive education programs", () => {
   const australia = getOccupationEditorial("special-education-teacher")?.countries.AU
   assert.ok(australia)
-  assert.match(migration, /australian-catholic-university' and course_code='0102078'/)
-  assert.match(migration, /flinders-university' and course_code='117254F'/)
+  assert.match(migration, /australian-catholic-university'\s+and course_code\s*=\s*'0102078'/)
+  assert.match(migration, /flinders-university'\s+and course_code\s*=\s*'117254F'/)
   assert.match(migration, /'au-program:'\|\|id::text/)
   assert.doesNotMatch(migration, /'au-program:530'/)
   assert.doesNotMatch(migration, /'au-program:4371'/)
