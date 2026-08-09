@@ -40,6 +40,8 @@ test("sitemap contains every explicit SEO inventory exactly once", () => {
   for (const page of AU_OCCUPATION_STATE_PAGES) assert.ok(urlSet.has(`${SITE_URL}${page.path}`))
   for (const path of INDEXABLE_INSTITUTION_PATHS) assert.ok(urlSet.has(`${SITE_URL}${path}`))
 
+  assert.ok(urlSet.has(`${SITE_URL}/programs`))
+  assert.ok(urlSet.has(`${SITE_URL}/programs?country=CA`))
   assert.ok(urlSet.has(`${SITE_URL}/institutions`))
   assert.ok(urlSet.has(`${SITE_URL}/institutions/au`))
   assert.ok(urlSet.has(`${SITE_URL}/institutions/ca`))
@@ -60,7 +62,8 @@ test("legacy compare modes map to canonical path modes including cities", () => 
 
 test("route pages enforce canonical redirects and strict indexing gates", () => {
   const programs = readFileSync("src/app/(workspace)/programs/page.tsx", "utf8")
-  const programDetail = readFileSync("src/app/(workspace)/programs/au/[program]/page.tsx", "utf8")
+  const auProgramDetail = readFileSync("src/app/(workspace)/programs/au/[program]/page.tsx", "utf8")
+  const caProgramDetail = readFileSync("src/app/(workspace)/programs/ca/[program]/page.tsx", "utf8")
   const occupation = readFileSync("src/app/(workspace)/occupation/page.tsx", "utf8")
   const visaExplorer = readFileSync("src/app/(workspace)/visas/visas-explorer.tsx", "utf8")
   const compareLegacy = readFileSync("src/app/(workspace)/compare/page.tsx", "utf8")
@@ -68,8 +71,12 @@ test("route pages enforce canonical redirects and strict indexing gates", () => 
 
   assert.ok(programs.includes("queryWithoutCountry"))
   assert.ok(programs.includes("permanentRedirect"))
-  assert.ok(programDetail.includes("isIndexableAuProgramId"))
-  assert.ok(programDetail.includes("permanentRedirect(canonicalPath)"))
+  assert.ok(programs.includes("searchCaPrograms"))
+  assert.ok(programs.includes("CaProgramsSidebar"))
+  assert.ok(auProgramDetail.includes("isIndexableAuProgramId"))
+  assert.ok(auProgramDetail.includes("permanentRedirect(canonicalPath)"))
+  assert.ok(caProgramDetail.includes("program.indexableDetail"))
+  assert.ok(caProgramDetail.includes("permanentRedirect(canonicalPath)"))
   assert.ok(occupation.includes("getIndexableOccupationRoute"))
   assert.ok(occupation.includes("permanentRedirect(canonicalRoute.path)"))
   assert.ok(visaExplorer.includes("visaCanonicalPath"))
