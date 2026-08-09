@@ -129,11 +129,13 @@ export async function searchInstitutions(
                 ? "institution_explorer_fr_v1"
                 : countryCode === "ES"
                   ? "institution_explorer_es_v1"
-                  : (["BE", "CH", "SE", "DK"] as const).includes(countryCode as "BE" | "CH" | "SE" | "DK")
-                    ? "institution_explorer_eu_fastpath_v1"
-                    : (["FI", "NO", "JP", "KR"] as const).includes(countryCode as "FI" | "NO" | "JP" | "KR")
-                      ? "institution_explorer_authority_fastpath_v1"
-                      : "institution_explorer_v1"
+                  : countryCode === "AE"
+                    ? "institution_explorer_ae_v1"
+                    : (["BE", "CH", "SE", "DK"] as const).includes(countryCode as "BE" | "CH" | "SE" | "DK")
+                      ? "institution_explorer_eu_fastpath_v1"
+                      : (["FI", "NO", "JP", "KR"] as const).includes(countryCode as "FI" | "NO" | "JP" | "KR")
+                        ? "institution_explorer_authority_fastpath_v1"
+                        : "institution_explorer_v1"
 
   let query = supabaseAdmin
     .from(explorerView)
