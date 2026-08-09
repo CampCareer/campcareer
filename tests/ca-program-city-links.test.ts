@@ -20,3 +20,12 @@ test("Canada program cards and details link only resolvable city profiles", () =
   assert.ok(detail.includes("cityProfilePath"))
   assert.ok(detail.includes("City profile"))
 })
+
+test("Canada program detail hands supported cities to the canonical compare surface", () => {
+  const detail = readFileSync("src/app/(workspace)/programs/ca/[program]/page.tsx", "utf8")
+
+  assert.ok(detail.includes("buildCityCompareCanonicalHref"))
+  assert.ok(detail.includes('country: "CA"'))
+  assert.ok(detail.includes("cityComparePath"))
+  assert.ok(detail.includes("Compare this city"))
+})
