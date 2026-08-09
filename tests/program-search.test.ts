@@ -127,12 +127,14 @@ test("Canadian filters keep city, career, institution, province and PGWP inside 
 })
 
 test("Canada program city filter covers published geographic city values without exposing campus labels", () => {
+  const cityValues = new Set<string>(CA_PROGRAM_CITIES.map((city) => city.value))
+
   assert.equal(CA_PROGRAM_CITIES.length, 25)
   assert.ok(CA_PROGRAM_CITIES.some((city) => city.value === "burnaby" && city.province === "BC"))
   assert.ok(CA_PROGRAM_CITIES.some((city) => city.value === "new westminster" && city.province === "BC"))
   assert.ok(CA_PROGRAM_CITIES.some((city) => city.value === "st. john's" && city.province === "NL"))
   assert.ok(CA_PROGRAM_CITIES.some((city) => city.value === "sault ste. marie" && city.province === "ON"))
-  assert.ok(!CA_PROGRAM_CITIES.some((city) => city.value === "ottawa - perley health"))
+  assert.ok(!cityValues.has("ottawa - perley health"))
 
   const newWestminster = parseProgramSearchParams({ country: "CA", city: "new westminster" })
   assert.equal(newWestminster.city, "new westminster")
