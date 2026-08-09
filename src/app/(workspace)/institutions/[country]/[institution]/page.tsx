@@ -22,7 +22,7 @@ import { getEuFastpathInstitutionDetail, type EuFastpathCountryCode, type EuFast
 import { getSpainInstitutionDetail, type SpainInstitutionDetailResult } from "@/lib/institutions/spain-institution-detail.server"
 import { getUsInstitutionDetail, type UsInstitutionDetailResult } from "@/lib/institutions/us-institution-detail.server"
 import { AuthorityFastpathInstitutionDetailView } from "../../authority-fastpath-institution-detail"
-import { CaInstitutionDetailView } from "../../ca-institution-detail"
+import { CanadianInstitutionDetailView } from "../../canadian-institution-detail"
 import { EuFastpathInstitutionDetailView } from "../../eu-fastpath-institution-detail"
 import { FranceInstitutionDetailView } from "../../france-institution-detail"
 import { GermanyInstitutionDetailView } from "../../germany-institution-detail"
@@ -69,7 +69,6 @@ export async function generateMetadata({ params }: InstitutionDetailPageProps): 
     const locationLabel = countryCode === "AU" ? "campuses" : "locations"
     const description = countryCode === "US"
       ? `Explore ${detail.name} verified NCES/IPEDS UNITID identity, NCSES launch-cohort context and city-level ${locationLabel} on CampCareer. The US degree-program catalogue is pending.`
-      : countryCode === "CA" ? `Explore ${detail.name} programs that pass CampCareer's Canada target-career publication review, plus DLI identity and source-backed ${locationLabel}.`
       : countryCode === "NL" ? `Explore ${detail.name} official institution identity, BRIN registration and source-backed ${locationLabel} on CampCareer. Program data will be added as the Netherlands catalogue is verified.`
       : countryCode === "NZ" ? `Explore ${detail.name} NZQA provider identity and source-backed ${locationLabel} on CampCareer. Program data will be added as the New Zealand catalogue is verified.`
       : countryCode === "SG" ? `Explore ${detail.name} UEN identity and source-backed ${locationLabel} on CampCareer. Program data will be added as the Singapore catalogue is verified.`
@@ -119,7 +118,7 @@ export default async function InstitutionDetailPage({ params }: InstitutionDetai
   let detail: InstitutionDetail | null = null
   try { detail = await getInstitutionDetail(countryCode, slug) } catch (error) { console.error("Unable to load institution detail page", error); return <InstitutionUnavailable /> }
   if (!detail) notFound()
-  if (countryCode === "CA") return <CaInstitutionDetailView institution={detail} />
+  if (countryCode === "CA") return <CanadianInstitutionDetailView institution={detail} />
   if (countryCode === "NL") return <NetherlandsInstitutionDetailView institution={detail} />
   if (countryCode === "NZ") return <NewZealandInstitutionDetailView institution={detail} />
   if (countryCode === "SG") return <SingaporeInstitutionDetailView institution={detail} />
