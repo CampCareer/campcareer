@@ -27,6 +27,9 @@ export const PUBLISHED_UK_CITY_SLUGS = [
 ] as const
 export type PublishedUkCitySlug = (typeof PUBLISHED_UK_CITY_SLUGS)[number]
 
+export const PUBLISHED_IE_CITY_SLUGS = ["dublin", "cork", "galway", "limerick"] as const
+export type PublishedIeCitySlug = (typeof PUBLISHED_IE_CITY_SLUGS)[number]
+
 const CITY_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
 export function normalizeCitySlug(value: string | null | undefined) {
@@ -47,6 +50,10 @@ export function isPublishedUkCitySlug(value: string): value is PublishedUkCitySl
   return PUBLISHED_UK_CITY_SLUGS.includes(value as PublishedUkCitySlug)
 }
 
+export function isPublishedIeCitySlug(value: string): value is PublishedIeCitySlug {
+  return PUBLISHED_IE_CITY_SLUGS.includes(value as PublishedIeCitySlug)
+}
+
 export function auCityPath(value: string | null | undefined) {
   const slug = normalizeCitySlug(value)
   if (!slug || !isPublishedAuCitySlug(slug)) return null
@@ -63,4 +70,10 @@ export function ukCityPath(value: string | null | undefined) {
   const slug = normalizeCitySlug(value)
   if (!slug || !isPublishedUkCitySlug(slug)) return null
   return `/cities/uk/${slug}`
+}
+
+export function ieCityPath(value: string | null | undefined) {
+  const slug = normalizeCitySlug(value)
+  if (!slug || !isPublishedIeCitySlug(slug)) return null
+  return `/cities/ie/${slug}`
 }
