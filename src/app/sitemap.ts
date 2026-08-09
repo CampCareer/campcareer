@@ -6,6 +6,7 @@ import { AU_OCCUPATION_STATE_PAGES } from "@/lib/workspace/au-occupation-state-s
 import { INDEXABLE_OCCUPATION_PROFILES, occupationCanonicalPath } from "@/lib/workspace/occupation-routes"
 import { getCompletedVisaCatalog } from "@/lib/workspace/visa-catalog-complete"
 import { getIndexableVisaRoutes } from "@/lib/workspace/visa-routes"
+import { INDEXABLE_AUTHORITY_FASTPATH_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-authority-fastpath"
 import { INDEXABLE_DE_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-de"
 import { INDEXABLE_ES_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-es"
 import { INDEXABLE_EU_FASTPATH_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-eu-fastpath"
@@ -39,6 +40,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/institutions/ch`, lastModified, priority: 0.82, changeFrequency: "weekly" },
     { url: `${SITE_URL}/institutions/se`, lastModified, priority: 0.82, changeFrequency: "weekly" },
     { url: `${SITE_URL}/institutions/dk`, lastModified, priority: 0.82, changeFrequency: "weekly" },
+    { url: `${SITE_URL}/institutions/fi`, lastModified, priority: 0.82, changeFrequency: "weekly" },
+    { url: `${SITE_URL}/institutions/no`, lastModified, priority: 0.82, changeFrequency: "weekly" },
+    { url: `${SITE_URL}/institutions/jp`, lastModified, priority: 0.82, changeFrequency: "weekly" },
+    { url: `${SITE_URL}/institutions/kr`, lastModified, priority: 0.82, changeFrequency: "weekly" },
     ...CANONICAL_COUNTRY_SLUGS.map((slug) => ({ url: `${SITE_URL}${countryCanonicalPath(slug)}`, lastModified, priority: 0.85, changeFrequency: "monthly" as const })),
     { url: `${SITE_URL}/cities/au/sydney`, lastModified, priority: 0.8, changeFrequency: "monthly" },
     { url: `${SITE_URL}/cities/au/melbourne`, lastModified, priority: 0.8, changeFrequency: "monthly" },
@@ -72,6 +77,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...INDEXABLE_FR_INSTITUTION_PATHS,
     ...INDEXABLE_ES_INSTITUTION_PATHS,
     ...INDEXABLE_EU_FASTPATH_INSTITUTION_PATHS,
+    ...INDEXABLE_AUTHORITY_FASTPATH_INSTITUTION_PATHS,
   ].map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.72, changeFrequency: "weekly" as const }))
   const routePages: MetadataRoute.Sitemap = ROUTE_GUIDES.flatMap((guide) => [
     { url: `${SITE_URL}${routeGuideHref(guide)}`, lastModified: new Date(guide.lastVerified), priority: 0.95, changeFrequency: "weekly" as const },
