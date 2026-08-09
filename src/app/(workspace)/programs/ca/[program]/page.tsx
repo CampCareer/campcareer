@@ -14,6 +14,7 @@ import {
   WalletCards,
 } from "lucide-react"
 import { getCanonicalCareer } from "@/data/career-comparison-catalog"
+import { buildCityCompareCanonicalHref } from "@/lib/compare-routes"
 import { institutionDetailPath } from "@/lib/institutions/institution-search"
 import { caProgramCityPath } from "@/lib/programs/ca-program-city-routes"
 import {
@@ -103,6 +104,9 @@ export default async function CanadaProgramDetailPage({ params }: Params) {
     ? institutionDetailPath("CA", program.institutionSlug)
     : null
   const cityProfilePath = caProgramCityPath(program.city)
+  const cityComparePath = cityProfilePath && program.city
+    ? buildCityCompareCanonicalHref({ country: "CA", left: program.city })
+    : null
   const careers = program.careerIds
     .map((id) => getCanonicalCareer(id))
     .filter((career): career is NonNullable<ReturnType<typeof getCanonicalCareer>> => Boolean(career))
@@ -249,6 +253,14 @@ export default async function CanadaProgramDetailPage({ params }: Params) {
                 className="flex items-center justify-center gap-2 rounded-lg border border-[#d9e3f7] bg-[#f7f9fe] px-4 py-2.5 text-[12px] font-semibold text-[#2563eb] transition hover:bg-[#eef4ff]"
               >
                 City profile <MapPin className="size-3.5" />
+              </Link>
+            )}
+            {cityComparePath && (
+              <Link
+                href={cityComparePath}
+                className="flex items-center justify-center gap-2 rounded-lg border border-[#d9e3f7] px-4 py-2.5 text-[12px] font-semibold text-[#2563eb] transition hover:bg-[#eef4ff]"
+              >
+                Compare this city <MapPin className="size-3.5" />
               </Link>
             )}
             {officialUrl && <SourceLink href={officialUrl} primary>Official program page</SourceLink>}
