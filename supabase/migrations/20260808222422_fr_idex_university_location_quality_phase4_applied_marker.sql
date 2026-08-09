@@ -1,0 +1,3 @@
+-- Applied remotely by the Supabase connector as 20260808222422.
+-- Canonical implementation lives in:
+-- 20260808235500_fr_idex_university_location_quality.sql
