@@ -74,11 +74,12 @@ test("New Zealand transport and population keep source methodology visible", () 
   assert.ok(dashboard.includes("Population evidence keeps its own source geography label visible"))
 })
 
-test("Phase 5 New Zealand profiles stay noindex and do not enable Compare early", () => {
+test("Phase 7 New Zealand profiles are published while linking to City Compare", () => {
   assert.ok(page.includes("generateStaticParams"))
   assert.ok(page.includes("PUBLISHED_NZ_CITY_SLUGS"))
-  assert.ok(page.includes("robots: { index: false, follow: true }"))
+  assert.ok(page.includes("robots: { index: true, follow: true }"))
   assert.ok(page.includes("robots: { index: false, follow: false }"))
   assert.ok(page.includes("/cities/nz/${normalized}"))
-  assert.doesNotMatch(dashboard, /buildCityCompareCanonicalHref|Compare \{profile\.name\}/)
+  assert.ok(dashboard.includes('buildCityCompareCanonicalHref({ country: "NZ", left: profile.slug })'))
+  assert.ok(dashboard.includes("Compare {profile.name}"))
 })
