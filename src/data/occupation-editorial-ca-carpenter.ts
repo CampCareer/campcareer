@@ -2,6 +2,7 @@ import type { CountryOccupationEditorial } from "./occupation-editorial-base"
 import { ELECTRICIAN_CA_OCCUPATION_EDITORIAL } from "./occupation-editorial-ca-electrician"
 import { PLUMBER_CA_OCCUPATION_EDITORIAL } from "./occupation-editorial-ca-plumber"
 import { WALL_FLOOR_TILER_CA_OCCUPATION_EDITORIAL } from "./occupation-editorial-ca-wall-floor-tiler"
+import { WELDER_CA_OCCUPATION_EDITORIAL } from "./occupation-editorial-ca-welder"
 
 export type CanadaOccupationEditorialOverride = {
   id: string
@@ -30,4 +31,5 @@ export const CANADA_OCCUPATION_EDITORIAL_OVERRIDES: readonly CanadaOccupationEdi
   ELECTRICIAN_CA_OCCUPATION_EDITORIAL,
   PLUMBER_CA_OCCUPATION_EDITORIAL,
   WALL_FLOOR_TILER_CA_OCCUPATION_EDITORIAL,
+  WELDER_CA_OCCUPATION_EDITORIAL,
 ]
