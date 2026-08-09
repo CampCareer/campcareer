@@ -16,7 +16,7 @@ import { INDEXABLE_NZ_INSTITUTION_ROUTES } from "@/lib/institutions/institution-
 import { INDEXABLE_SG_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-sg"
 import { INDEXABLE_UK_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-uk"
 import { getInstitutionDetail, type InstitutionDetail } from "@/lib/institutions/institution-detail.server"
-import { getSpainInstitutionDetail } from "@/lib/institutions/spain-institution-detail.server"
+import { getSpainInstitutionDetail, type SpainInstitutionDetailResult } from "@/lib/institutions/spain-institution-detail.server"
 import { CanadianInstitutionDetailView } from "../../canadian-institution-detail"
 import { FranceInstitutionDetailView } from "../../france-institution-detail"
 import { GermanyInstitutionDetailView } from "../../germany-institution-detail"
@@ -90,14 +90,15 @@ export default async function InstitutionDetailPage({ params }: InstitutionDetai
   if (country !== countryCode.toLowerCase() || institution !== slug) permanentRedirect(canonicalPath)
 
   if (countryCode === "ES") {
+    let result: SpainInstitutionDetailResult | null = null
     try {
-      const result = await getSpainInstitutionDetail(slug)
-      if (!result) notFound()
-      return <SpainInstitutionDetailView institution={result.institution} identity={result.identity} />
+      result = await getSpainInstitutionDetail(slug)
     } catch (error) {
       console.error("Unable to load Spain institution detail page", error)
       return <InstitutionUnavailable />
     }
+    if (!result) notFound()
+    return <SpainInstitutionDetailView institution={result.institution} identity={result.identity} />
   }
 
   let detail: InstitutionDetail | null = null
