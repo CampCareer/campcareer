@@ -16,6 +16,7 @@ import { PHARMACIST_CA_OCCUPATION_EDITORIAL } from "./occupation-editorial-ca-ph
 import { OCCUPATIONAL_THERAPIST_CA_OCCUPATION_EDITORIAL } from "./occupation-editorial-ca-occupational-therapist"
 import { CANADA_TECHNOLOGY_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-ca-technology"
 import { CANADA_ENGINEERING_MANUFACTURING_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-ca-engineering-manufacturing"
+import { CANADA_BUSINESS_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-ca-business"
 
 export type CanadaOccupationEditorialOverride = {
   id: string
@@ -58,4 +59,5 @@ export const CANADA_OCCUPATION_EDITORIAL_OVERRIDES: readonly CanadaOccupationEdi
   OCCUPATIONAL_THERAPIST_CA_OCCUPATION_EDITORIAL,
   ...CANADA_TECHNOLOGY_OCCUPATION_EDITORIAL_OVERRIDES,
   ...CANADA_ENGINEERING_MANUFACTURING_OCCUPATION_EDITORIAL_OVERRIDES,
+  ...CANADA_BUSINESS_OCCUPATION_EDITORIAL_OVERRIDES,
 ]
