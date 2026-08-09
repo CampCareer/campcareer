@@ -17,8 +17,8 @@ const seo = read("src/lib/institutions/institution-seo-es.ts")
 const sitemap = read("src/app/sitemap.ts")
 
 test("ES Tier A publishes ten source-backed public universities without inventing a numeric RUCT ID", () => {
-  const officialNames = identity.match(/\('(?:[^']|'')+', '[a-z0-9-]+',/g) ?? []
-  assert.equal(officialNames.length, 10)
+  const canonicalRows = identity.match(/\('(?:[^']|'')+', '[a-z0-9-]+', '(?:[^']|'')+', 'https:\/\/[^']+', 'https:\/\/[^']+'\)/g) ?? []
+  assert.equal(canonicalRows.length, 10)
   assert.match(identity, /ES_OFFICIAL_UNIVERSITY_NAME/)
   assert.match(identity, /do not invent a numeric RUCT identifier/i)
   assert.match(identity, /ownership_type is distinct from 'public'/)
