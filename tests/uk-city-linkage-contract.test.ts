@@ -40,7 +40,7 @@ test("UK institution linkage requires canonical identity and official location e
   assert.match(migration, /c\.source_url is not null/)
   assert.match(migration, /i\.slug is not null/)
   assert.match(migration, /i\.website_url is not null/)
-  assert.doesNotMatch(migration, /location_quality'='legacy_city'.*insert into public\.city_institution_directory_uk_v1/s)
+  assert.doesNotMatch(migration, /location_quality'='legacy_city'[\s\S]*insert into public\.city_institution_directory_uk_v1/)
 })
 
 test("London follows Greater London scope while Manchester never absorbs Salford", () => {
@@ -49,7 +49,7 @@ test("London follows Greater London scope while Manchester never absorbs Salford
   assert.match(migration, /c\.slug='manchester' and d\.institution_slug='university-of-salford'/)
   assert.match(migration, /Manchester city scope must not absorb University of Salford/)
   assert.match(linkageDoc, /Brunel University of London's verified Uxbridge location/)
-  assert.match(linkageDoc, /University of Salford.*Salford/s)
+  assert.match(linkageDoc, /University of Salford[\s\S]*Salford/)
 })
 
 test("programme linkage is explicit and never inferred from institution presence", () => {
