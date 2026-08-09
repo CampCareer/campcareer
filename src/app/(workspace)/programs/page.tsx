@@ -141,6 +141,7 @@ function EmptyResults({ filters }: { filters: ProgramSearchFilters }) {
           state: "all",
           province: "all",
           career: "all",
+          institution: "all",
           pgwp: "all",
           duration: "all",
           fee: "all",
