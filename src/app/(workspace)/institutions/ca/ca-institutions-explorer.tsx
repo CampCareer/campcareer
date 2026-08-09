@@ -71,6 +71,7 @@ function InstitutionCard({ institution }: { institution: InstitutionExplorerItem
   const ownership = ownershipLabel(institution.ownershipType)
   const website = safeWebsiteUrl(institution.websiteUrl)
   const detailPath = institutionDetailPath("CA", institution.slug)
+  const programsPath = `/programs?country=CA&institution=${encodeURIComponent(institution.slug)}`
 
   return (
     <article className="rounded-xl border border-[#e7e6e3] bg-white p-5 transition hover:border-[#cfd9ca] hover:shadow-sm">
@@ -92,6 +93,9 @@ function InstitutionCard({ institution }: { institution: InstitutionExplorerItem
           </div>
           <div className="mt-3 flex flex-wrap items-center gap-4">
             <Link href={detailPath} className="text-[11.5px] font-semibold text-[#3e7a2e] hover:underline">View institution</Link>
+            {institution.programCount > 0 ? (
+              <Link href={programsPath} className="text-[11.5px] font-semibold text-[#2563eb] hover:underline">View published programs</Link>
+            ) : null}
             {website ? <a href={website} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-[11.5px] font-semibold text-[#6f6d68] hover:text-[#3e7a2e]">Official website <ExternalLink className="size-3" /></a> : null}
           </div>
         </div>
