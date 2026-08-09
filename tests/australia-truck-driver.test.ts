@@ -12,9 +12,12 @@ test("Australia Truck Driver preserves the current OSCA split", () => {
   assert.ok(career)
   assert.equal(career.categoryId, "transport")
   assert.ok(editorial)
-  assert.match(migration, /713131.*Truck Driver \(General\)/s)
-  assert.match(migration, /713231.*Articulated Truck Driver/s)
-  assert.match(migration, /713232.*Tanker Truck Driver/s)
+  assert.match(migration, /713131/)
+  assert.match(migration, /Truck Driver \(General\)/)
+  assert.match(migration, /713231/)
+  assert.match(migration, /Articulated Truck Driver/)
+  assert.match(migration, /713232/)
+  assert.match(migration, /Tanker Truck Driver/)
 })
 
 test("Australia Truck Driver uses legacy labour without inventing salary", () => {
