@@ -2,6 +2,11 @@ import Link from "next/link"
 import { BadgeCheck, Building2, Clock3, GraduationCap, MapPin, ShieldCheck } from "lucide-react"
 import { getCanonicalCareer } from "@/data/career-comparison-catalog"
 import { institutionDetailPath } from "@/lib/institutions/institution-search"
+import {
+  caPgwpLabel,
+  caPublicationEvidenceLabel,
+  formatCaEvidenceDate,
+} from "@/lib/programs/ca-program-presentation"
 import type { CaProgramListItem } from "@/lib/programs/ca-programs.server"
 import { caProgramDetailPath } from "@/lib/programs/program-search"
 import { InstitutionLogo } from "./institution-logo"
@@ -23,12 +28,6 @@ function duration(value: number | null) {
   }`
 }
 
-function pgwpLabel(program: CaProgramListItem) {
-  if (program.pgwpState === "eligible") return "PGWP eligible"
-  if (program.pgwpState === "ineligible") return "PGWP ineligible"
-  return "PGWP not confirmed"
-}
-
 export function CaProgramCard({ program }: { program: CaProgramListItem }) {
   const tuition = money(program.tuitionFeeCad)
   const studyDuration = duration(program.durationYears)
@@ -37,6 +36,7 @@ export function CaProgramCard({ program }: { program: CaProgramListItem }) {
   const institutionHref = program.institutionSlug
     ? institutionDetailPath("CA", program.institutionSlug)
     : null
+  const evidenceDate = formatCaEvidenceDate(program.verifiedAt)
   const careers = program.careerIds
     .map((id) => getCanonicalCareer(id))
     .filter((career): career is NonNullable<typeof career> => Boolean(career))
@@ -61,15 +61,16 @@ export function CaProgramCard({ program }: { program: CaProgramListItem }) {
                     {program.credentialType}
                   </span>
                 )}
-                {program.publicationTier === "A" ? (
-                  <span className="inline-flex items-center gap-1 rounded-md bg-[#edf5ea] px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-[#3e7a2e]">
-                    <BadgeCheck className="size-3" /> Official page verified
-                  </span>
-                ) : (
-                  <span className="inline-flex items-center gap-1 rounded-md bg-[#f5f3ee] px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-[#786f60]">
-                    Reviewed program record
-                  </span>
-                )}
+                <span
+                  className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-[10px] font-semibold uppercase tracking-wide ${
+                    program.publicationTier === "A"
+                      ? "bg-[#edf5ea] text-[#3e7a2e]"
+                      : "bg-[#f5f3ee] text-[#786f60]"
+                  }`}
+                >
+                  {program.publicationTier === "A" ? <BadgeCheck className="size-3" /> : <ShieldCheck className="size-3" />}
+                  {caPublicationEvidenceLabel(program.publicationTier)}
+                </span>
                 <span
                   className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-[10px] font-semibold uppercase tracking-wide ${
                     program.pgwpState === "eligible"
@@ -79,7 +80,7 @@ export function CaProgramCard({ program }: { program: CaProgramListItem }) {
                         : "bg-[#f4f4f2] text-[#77746e]"
                   }`}
                 >
-                  <ShieldCheck className="size-3" /> {pgwpLabel(program)}
+                  <ShieldCheck className="size-3" /> {caPgwpLabel(program.pgwpState)}
                 </span>
               </div>
 
@@ -150,7 +151,8 @@ export function CaProgramCard({ program }: { program: CaProgramListItem }) {
 
           <div className="mt-4 border-t border-[#efeeea] pt-3">
             <p className="text-[10.5px] font-medium text-[#aaa7a0]">
-              International admission reviewed · PGWP shown independently from publication eligibility
+              {evidenceDate ? `Evidence checked ${evidenceDate} · ` : ""}
+              International admission and PGWP are evaluated separately
             </p>
           </div>
         </div>
