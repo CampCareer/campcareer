@@ -65,6 +65,7 @@ export type CaProgramListItem = {
   officialProgramUrl: string | null
   sourceUrl: string | null
   sourceAsOf: string | null
+  verifiedAt: string | null
   dliNumber: string | null
   internationalAdmissionStatus: string | null
   pgwpProgramStatus: string | null
@@ -83,6 +84,12 @@ export type CaProgramSearchResult = {
   page: number
   pageSize: number
   pageCount: number
+}
+
+export type CaProgramSitemapItem = {
+  id: number
+  title: string
+  lastModified: string
 }
 
 const CA_PROGRAM_SELECT = [
@@ -158,6 +165,7 @@ function mapProgram(row: CaProgramRow): CaProgramListItem {
     officialProgramUrl: row.official_program_url,
     sourceUrl: row.source_url,
     sourceAsOf: row.source_as_of,
+    verifiedAt: row.verified_at,
     dliNumber: row.matched_dli_number,
     internationalAdmissionStatus: row.international_program_admission_status,
     pgwpProgramStatus: row.pgwp_program_status,
@@ -243,3 +251,26 @@ async function loadCaProgramById(id: number): Promise<CaProgramListItem | null> 
 }
 
 export const getCaProgramById = cache(loadCaProgramById)
+
+export async function getIndexableCaProgramsForSitemap(): Promise<CaProgramSitemapItem[]> {
+  const { data, error } = await supabaseAdmin
+    .from("ca_program_publication_v1")
+    .select("program_catalog_id,title,source_as_of,verified_at")
+    .eq("publicly_listed", true)
+    .eq("indexable_detail", true)
+    .order("program_catalog_id", { ascending: true })
+
+  if (error) throw new Error(`Unable to load Canadian program sitemap: ${error.message}`)
+
+  return ((data ?? []) as Array<{
+    program_catalog_id: number
+    title: string | null
+    source_as_of: string | null
+    verified_at: string | null
+  }>).flatMap((row) => {
+    const title = row.title?.trim()
+    const lastModified = row.source_as_of ?? row.verified_at
+    if (!title || !lastModified) return []
+    return [{ id: row.program_catalog_id, title, lastModified }]
+  })
+}
