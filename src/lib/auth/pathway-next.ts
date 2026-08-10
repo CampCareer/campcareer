@@ -1,11 +1,11 @@
 import {
+  CITIZENSHIP_OPTIONS,
   COUNTRY_OPTIONS,
-  FIELD_OPTIONS,
+  getHomeFieldLabel,
   getOptionLabel,
   getPathwaySearchQuery,
   NO_FIELD_STATUS,
   NOT_SURE_FIELD,
-  ORIGIN_OPTIONS,
   STATUS_OPTIONS,
 } from "@/app/(workspace)/home/home-search-config"
 import { getSafeNextPath } from "./safe-next"
@@ -34,11 +34,11 @@ export function getPathwaySummaryFromNext(requestedNext: string | null): Pathway
   if (!query) return null
 
   const destination = getOptionLabel(COUNTRY_OPTIONS, query.country)
-  const origin = getOptionLabel(ORIGIN_OPTIONS, query.origin)
+  const origin = getOptionLabel(CITIZENSHIP_OPTIONS, query.origin)
 
   return {
     country: origin ? `${origin} → ${destination}` : destination,
-    field: query.field === NOT_SURE_FIELD.value ? "Field not selected" : getOptionLabel(FIELD_OPTIONS, query.field),
+    field: query.field === NOT_SURE_FIELD.value ? "Field not selected" : getHomeFieldLabel(query.field),
     status: getPathwayStatusLabel(query.status),
   }
 }

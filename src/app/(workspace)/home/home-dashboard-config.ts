@@ -1,17 +1,18 @@
 import {
+  CITIZENSHIP_OPTIONS,
   COUNTRY_OPTIONS,
-  FIELD_OPTIONS,
+  getHomeFieldLabel,
   getHomeSearchQuery,
   getOptionLabel,
   hasOption,
   NO_FIELD_STATUS,
   NOT_SURE_FIELD,
-  ORIGIN_OPTIONS,
   STATUS_OPTIONS,
   toHomeSearchQuery,
   type PathwaySearchValues,
   type SearchParamsLike,
 } from "./home-search-config"
+import { getOverviewSearchQuery } from "./home-overview-config"
 
 export type HomeMode = "result" | "dashboard" | "explore"
 
@@ -159,7 +160,7 @@ export function getStageIndex(status: string) {
 export function getPathwayRouteLabel(values: Pick<PathwaySearchValues, "field" | "status">) {
   const fieldLabel = values.field === NOT_SURE_FIELD.value
     ? "Career direction"
-    : getOptionLabel(FIELD_OPTIONS, values.field) || "Target career"
+    : getHomeFieldLabel(values.field) || "Target career"
 
   if (values.status === NO_FIELD_STATUS) return "Compare fields → review realistic routes → choose a direction"
   if (values.status === "already-qualified") return `${fieldLabel} qualification → recognition → registration → employment`
@@ -168,7 +169,7 @@ export function getPathwayRouteLabel(values: Pick<PathwaySearchValues, "field" |
 }
 
 export function getHomeMode(searchParams: SearchParamsLike, isAuthenticated: boolean): HomeMode {
-  if (getHomeSearchQuery(searchParams)) return "result"
+  if (getOverviewSearchQuery(searchParams) || getHomeSearchQuery(searchParams)) return "result"
   if (isAuthenticated && searchParams.get("mode") === "explore") return "explore"
   return isAuthenticated ? "dashboard" : "explore"
 }
@@ -182,7 +183,7 @@ export function toDashboardPathway(record: SavedPathwayRecord): DashboardPathway
   if (!core) return null
 
   const origin = record.origin_country_code?.toUpperCase() ?? ""
-  const isComplete = hasOption(ORIGIN_OPTIONS, origin)
+  const isComplete = hasOption(CITIZENSHIP_OPTIONS, origin)
   const values: PathwaySearchValues = {
     origin: isComplete ? origin : "",
     ...core,
@@ -198,9 +199,9 @@ export function toDashboardPathway(record: SavedPathwayRecord): DashboardPathway
   return {
     id: record.id,
     values,
-    originLabel: isComplete ? getOptionLabel(ORIGIN_OPTIONS, values.origin) : "Starting country not set",
+    originLabel: isComplete ? getOptionLabel(CITIZENSHIP_OPTIONS, values.origin) : "Citizenship not set",
     countryLabel: getOptionLabel(COUNTRY_OPTIONS, values.country),
-    fieldLabel: values.field === NOT_SURE_FIELD.value ? "Field not selected" : getOptionLabel(FIELD_OPTIONS, values.field),
+    fieldLabel: values.field === NOT_SURE_FIELD.value ? "Field not selected" : getHomeFieldLabel(values.field),
     statusLabel: values.status === NO_FIELD_STATUS ? "Exploring options" : `${statusText.charAt(0).toUpperCase()}${statusText.slice(1)}`,
     routeLabel: getPathwayRouteLabel(values),
     updatedAt: record.updated_at,

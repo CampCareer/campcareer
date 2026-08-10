@@ -164,6 +164,7 @@ export async function searchInstitutions(
     const pattern = `%${search.replace(/\s+/g, "%")}%`
     query = query.ilike("canonical_name", pattern)
   }
+  if (filters.city) query = query.contains("city_names", [filters.city])
 
   if (filters.kind !== "all") {
     query = query.eq("institution_kind", filters.kind)

@@ -9,12 +9,12 @@ import { OccupationExplorer } from "../../occupation-explorer"
 export const dynamic = "force-dynamic"
 
 type OccupationDetailPageProps = {
-  params: Promise<{ country: string; occupation: string }>
+  params: Promise<{ slug: string; occupation: string }>
 }
 
 export async function generateMetadata({ params }: OccupationDetailPageProps): Promise<Metadata> {
-  const { country, occupation } = await params
-  const route = getIndexableOccupationRoute(country, occupation)
+  const { slug, occupation } = await params
+  const route = getIndexableOccupationRoute(slug, occupation)
 
   if (!route) {
     return {
@@ -32,11 +32,11 @@ export async function generateMetadata({ params }: OccupationDetailPageProps): P
 }
 
 export default async function OccupationDetailPage({ params }: OccupationDetailPageProps) {
-  const { country, occupation } = await params
-  const route = getIndexableOccupationRoute(country, occupation)
+  const { slug, occupation } = await params
+  const route = getIndexableOccupationRoute(slug, occupation)
   if (!route) notFound()
 
-  if (country !== route.country.code.toLowerCase() || occupation !== route.career.id) {
+  if (slug !== route.country.code.toLowerCase() || occupation !== route.career.id) {
     permanentRedirect(route.path)
   }
 
@@ -53,6 +53,7 @@ export default async function OccupationDetailPage({ params }: OccupationDetailP
         initialQuery=""
         initialOccupation={route.career.id}
         initialCountry={route.country.code}
+        initialCategory={route.career.categoryId}
       />
       {statePages.length > 0 ? (
         <section className="mt-6 rounded-2xl border border-[#e7e6e3] bg-white p-5 sm:p-6" aria-label={`${route.career.label} demand by Australian state`}>

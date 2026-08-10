@@ -1,237 +1,99 @@
 # CampCareer Product Doctrine
 
 Status: Foundational and durable
+
 Owner: CampCareer
-Effective date: 2026-07-29
+Effective date: 2026-08-09
 
-## 1. Permanent product purpose
+## Permanent product purpose
 
-CampCareer exists to answer one question exceptionally well:
+CampCareer helps a person choose and execute the overseas study-to-career path that gives them the strongest realistic chance of building a sustainable working life abroad.
 
-> A person from country A wants to enter country B through career or study field C. What realistic routes are available, what does each route require, and what should the person do next?
+The starting question may be specific or open:
 
-This is the product's permanent core. It must remain valid for the next 10 to 20 years even when countries, visa rules, occupations, courses, technologies, interfaces, and business models change.
+> Given my citizenship and situation, which country, city, occupation, and study path should I seriously consider—and why?
 
-CampCareer is not a generic study-abroad portal, productivity suite, social network, personal planner, university directory, immigration agency, or job board.
+CampCareer is not a generic study-abroad directory, visa list, university ranking, immigration agency, job board, productivity workspace, or generic AI chat. It is a source-backed cross-border career opportunity engine.
 
-CampCareer is a source-backed cross-border career pathway engine.
+## The customer problem
 
-## 2. Core user outcome
+The core customer is excited by studying or working abroad but fears spending years and substantial money only to be unable to get work, obtain a legal work path, or remain after study. The product must reduce that uncertainty without promising a job, visa approval, or residency outcome.
 
-For one origin country, destination country, and target field or occupation, CampCareer must produce a decision-ready pathway showing:
+## Customer promise
 
-1. Available route options
-2. Visa or legal-entry options and eligibility conditions
-3. Required qualifications, licences, registrations, language scores, and experience
-4. Relevant courses and training providers
-5. Relevant job sources and employers
-6. Expected costs and preparation time
-7. Labour-market and location signals
-8. Major constraints, risks, and disqualifiers
-9. Official or authoritative sources
-10. A clear next-action sequence
+CampCareer gives users two distinct answers:
 
-The product is successful when a user can understand what is possible, what is not possible, and what to do next without assembling the answer across dozens of disconnected websites.
+1. **Market Opportunity** — an evidence-based view of a country, city, and occupation: hiring demand, early-career access, future strength, and work quality.
+2. **My Pathway Fit** — a personalised view after the user supplies relevant facts such as citizenship, education, experience, English, budget, and time horizon.
 
-## 3. Product primitives
+Neither score is a job-probability, visa-approval, or residency guarantee. Missing or weak evidence lowers confidence; it is never silently treated as an average result.
 
-All durable product work must strengthen one or more of these primitives:
+## Primary customer flow
 
-- Origin country
-- Destination country
-- Target field or occupation
-- Route
-- Visa or legal status
-- Requirement
-- Qualification or licence
-- Course or training provider
-- Job source or employer
-- Location
-- Cost
-- Timeline
-- Risk or constraint
-- Evidence source
-- Next action
+1. **Start lightly, but intentionally.** A user chooses Passport, destination, and career. `My country isn't listed` and `I'm not sure yet` are explicit valid choices; broad defaults such as Anywhere are not used until comparison coverage is ready.
+2. **See a useful answer immediately.** Show a general market or destination overview before login. Explain why a country, city, or occupation is worth exploring.
+3. **Narrow only when useful.** Ask short, contextual questions only when they materially change the recommendation: education, experience, English, budget, time, licence, and age where relevant.
+4. **Receive a personal route view.** Rank realistic country–city–occupation–study routes; explain the strongest signals, blockers, uncertainty, and the next action.
+5. **Continue deliberately.** Account creation unlocks saved comparisons, scenarios, updates, and deeper route tracking. It must not gate the first useful result.
+6. **Explore without a forced funnel.** Users who decline sign-in can continue to relevant occupations, institutions, programmes, cities, and maps.
 
-Features that do not improve the quality, coverage, reliability, discoverability, or execution of these primitives are outside the core product.
+The experience must feel like the user's own question, not a questionnaire or a generic dashboard.
 
-## 4. Primary interface
+## Product surfaces
 
-The primary experience consists of only two product surfaces:
+- **Home:** light entry, discovery, and the first Overview.
+- **Map:** geographic exploration of cities, labour demand, employers, cost, and study locations.
+- **Explore careers:** occupation-led evidence, requirements, programmes, employers, and city opportunities.
+- **Route result:** the joined country–city–occupation–programme–institution–legal-path answer.
 
-### Search
+Navigation and calls to action must prioritise these surfaces. Planner, task manager, generic onboarding wizard, application tracker, budget tracker, English tracker, and social features are not core surfaces.
 
-Search captures or infers the user's origin country, destination country, and target field or occupation. It returns relevant pathway results rather than generic content results.
+## Score and evidence rules
 
-Example:
+Every score is versioned, explainable, and source-backed.
 
-- South Korean citizen
-- Australia
-- Mining jobs
-- Working Holiday visa route
+- Market Opportunity is calculated at the country/occupation level, with city detail where available.
+- My Pathway Fit is calculated only after the necessary user facts are present.
+- Legal eligibility, required registration, and other hard blockers are shown before a final rank—not hidden inside a high score.
+- Data confidence is displayed separately from opportunity: source authority, freshness, coverage, and granularity determine it.
+- A result with insufficient evidence is an exploration lead, not a confident recommendation.
 
-The result should include visa eligibility, required tickets and licences, training links, job boards, major employers, locations, costs, timing, risks, and official sources.
+## Data model principle
 
-### Maps
+All work should strengthen the connected graph:
 
-Maps provides the geographic view of the same pathway data. It must help users determine where courses, jobs, labour demand, employers, licensing bodies, and route constraints are located.
+`Citizenship → Country → City → Occupation → Programme → Institution → legal/work pathway`
 
-Maps is not a separate product. It is a geographic representation of Search and pathway results.
+Every material observation should retain source, source URL, publication date or period, retrieval date, geographic scope, occupation/programme identifier, and verification state.
 
-## 5. Scope decision
+Priority evidence is:
 
-### Keep and strengthen
+1. Official legal-entry and work conditions.
+2. Employment, vacancies, shortage, earnings, and forward outlook.
+3. Early-career access: graduate, internship, apprenticeship, and experience requirements.
+4. Professional recognition, registration, language, time, and cost barriers.
+5. Accredited programme-to-occupation pathways and placement evidence.
+6. City-level job density, employer presence, pay, and living cost.
 
-- Search
-- Maps
-- Country, field, occupation, visa, course, job, employer, location, cost, and requirement data
-- Source verification and freshness controls
-- Pathway result pages
-- Comparison between route options inside the same user question
-- Save, export, or purchase of a pathway result when directly useful
+## Expansion rule
 
-### Remove from the primary product
+CampCareer may be broad in discovery but must be honest in depth. Country and occupation coverage is released by evidence confidence tier, not by page count. A user must be able to distinguish an early exploration signal from a decision-ready route.
 
-- Planner workspace
-- Wizard-based multi-step onboarding
-- Personal dashboard
-- Task management
-- Budget tracker
-- English study tracker
-- Application tracker
-- Research notes workspace
-- Gamification and achievements
-- Social-profile features
+## Monetisation rule
 
-These may be archived rather than immediately deleted, but they must not define navigation, acquisition, onboarding, or product positioning.
+The likely first paid value is a subscription for saved scenarios, personal comparisons, monitoring, and deeper decision support. Reports remain optional and must not be assumed as the primary product. Paid placement or referral relationships can never alter evidence, eligibility, or ranking.
 
-### Explicitly reject
+## Success metric
 
-- Features added only because competitors have them
-- Generic AI chat without structured pathway output
-- Community or social-feed features
-- Broad productivity tools
-- Unverified rankings
-- Content volume without pathway usefulness
-- Expansion to a new country or field before the current pathway standard is met
+The main metric is a completed, useful career decision—not a page view. Track the path from a light search to Overview comprehension, route exploration, personalisation, saved scenario, and useful action.
 
-## 6. Feature admission test
+## Feature admission test
 
-Every proposed feature must pass all five tests:
+Every feature must answer yes to all of the following:
 
-1. Does it help answer the permanent core question?
-2. Does it improve route accuracy, depth, trust, speed, or actionability?
-3. Can its value be measured through completed pathway decisions?
-4. Can it be maintained with reliable data and source controls?
-5. Is it more important than improving Search, Maps, or pathway coverage?
+1. Does it reduce uncertainty about a sustainable overseas career path?
+2. Does it improve the quality, speed, clarity, or actionability of Market Opportunity or My Pathway Fit?
+3. Is it supported by maintainable, visible evidence?
+4. Does it help users move from exploration to a concrete next action?
 
-A feature that fails any test is rejected or deferred.
-
-When a request conflicts with this doctrine, the default response is to stop the work and explain the conflict before implementation.
-
-## 7. Pathway quality standard
-
-A pathway is not publishable merely because a page exists. A publishable pathway should contain, where applicable:
-
-- Route name and intended user
-- Eligibility rules
-- Visa or legal-entry conditions
-- Required qualifications and licences
-- Course and training options
-- Job sources and employers
-- Geographic opportunities
-- Cost range
-- Preparation and execution timeline
-- Risks, blockers, and uncertainty
-- Source links
-- Last verified date
-- Next actions
-
-Missing information must be labelled as missing or uncertain. CampCareer must not fabricate completeness.
-
-## 8. Expansion rule
-
-CampCareer expands route by route, not feature by feature.
-
-A new origin-country, destination-country, and field combination should be added only after the pathway schema, source standard, and maintenance process are proven on a narrow initial market.
-
-The recommended initial wedge is:
-
-- Destination: Australia
-- Interface language: English first, Korean supported
-- Initial route clusters: fields with clear legal, training, licensing, course, and employment pathways
-
-The company should achieve exceptional depth in a small number of routes before broad geographic expansion.
-
-## 9. Monetisation doctrine
-
-Monetisation must be designed now but introduced only where it does not weaken trust or discovery.
-
-### Free layer
-
-- Search and pathway discovery
-- Basic visa and requirement summary
-- Key official sources
-- Limited course, job, and location results
-
-### Paid layer
-
-- Full pathway report
-- Detailed cost and timeline model
-- Route comparison and scenario analysis
-- Verified course, qualification, licence, job-source, and employer directory
-- Source freshness and change alerts
-- Exportable decision pack
-
-### Additional revenue paths
-
-- Clearly disclosed course or service referrals
-- Employer or training-provider lead generation after quality thresholds are met
-- Institutional data products or APIs
-
-Paid placement must never alter pathway eligibility conclusions or evidence-based rankings. Commercial relationships must be disclosed.
-
-The first revenue product should be a paid, high-depth pathway report attached to a free pathway result. It should not require building a separate planner product.
-
-## 10. Primary metrics
-
-The main metric is not page views. It is completed useful pathway decisions.
-
-Track:
-
-- Searches containing origin, destination, and field or occupation
-- Pathway-result completion rate
-- Official-source click-through rate
-- Course, qualification, licence, and job-source engagement
-- Save or export rate
-- Paid pathway conversion rate
-- Pathway freshness and verified-source coverage
-- User reports of missing or incorrect route information
-
-Traffic without pathway engagement is not product success.
-
-## 11. Immediate repository implications
-
-The next implementation programme should proceed in this order:
-
-1. Freeze new Planner, Wizard, Onboarding, dashboard, profile, and gamification development.
-2. Define the canonical pathway data contract.
-3. Replace the landing-page Wizard with direct pathway Search.
-4. Unify Search results and Maps around the same pathway entities.
-5. Remove Planner calls to action from global navigation.
-6. Redirect or archive non-core primary routes without deleting valuable source data.
-7. Build one end-to-end route to the full quality standard.
-8. Attach the first paid pathway report to that route.
-
-No broad redesign or mass deletion should happen before the pathway contract and redirect plan are approved.
-
-## 12. Governance
-
-This document governs product scope. Changes require an explicit product decision explaining:
-
-- Why the permanent core question is no longer sufficient
-- What user evidence supports the change
-- What existing scope will be removed in exchange
-- How the change improves pathway quality
-
-Absent that evidence, this doctrine remains unchanged.
+Otherwise, defer it.

@@ -14,6 +14,7 @@ export type InstitutionKindFilter = (typeof INSTITUTION_KIND_VALUES)[number]
 
 export type InstitutionSearchFilters = {
   q: string
+  city: string
   kind: InstitutionKindFilter
   page: number
 }
@@ -75,6 +76,7 @@ export function parseInstitutionSearchParams(
   params: Record<string, string | string[] | undefined>,
 ): InstitutionSearchFilters {
   const q = (firstValue(params.q) ?? "").trim().slice(0, 80)
+  const city = (firstValue(params.city) ?? "").trim().replace(/\s+/g, " ").slice(0, 60)
   const rawKind = firstValue(params.kind) ?? "all"
   const kind = INSTITUTION_KIND_VALUES.includes(rawKind as InstitutionKindFilter)
     ? (rawKind as InstitutionKindFilter)
@@ -82,7 +84,7 @@ export function parseInstitutionSearchParams(
   const rawPage = Number.parseInt(firstValue(params.page) ?? "1", 10)
   const page = Number.isFinite(rawPage) && rawPage > 0 ? rawPage : 1
 
-  return { q, kind, page }
+  return { q, city, kind, page }
 }
 
 export function buildInstitutionExplorerUrl(
@@ -94,6 +96,7 @@ export function buildInstitutionExplorerUrl(
   const params = new URLSearchParams()
 
   if (next.q) params.set("q", next.q)
+  if (next.city) params.set("city", next.city)
   if (next.kind !== "all") params.set("kind", next.kind)
   if (next.page > 1) params.set("page", String(next.page))
 

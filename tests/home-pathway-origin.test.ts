@@ -28,16 +28,35 @@ test("canonical Home query carries origin through the pathway URL", () => {
   })
   assert.equal(
     toHomeSearchQuery(query!).toString(),
-    "origin=KR&country=AU&field=nursing&status=choosing-school"
+    "origin=KR&country=AU&field=nursing"
   )
 })
 
-test("new pathway form requires a starting country", () => {
+test("new Home URLs derive the default internal status without exposing it", () => {
+  const query = getPathwaySearchQuery(new URLSearchParams("origin=PH&country=AU&field=health"))
+
+  assert.deepEqual(query, {
+    origin: "PH",
+    country: "AU",
+    field: "health",
+    status: "choosing-school",
+  })
+})
+
+test("new pathway form requires a citizenship", () => {
   const values = readFormValues(new URLSearchParams("country=AU&field=nursing&status=choosing-school"))
 
   assert.equal(values.origin, "")
-  assert.equal(validateForm(values).origin, "Select your starting country")
+  assert.equal(validateForm(values).origin, "Select your citizenship")
   assert.deepEqual(validateForm({ ...values, origin: "KR" }), {})
+})
+
+test("priority-source and unlisted citizenship choices survive the legacy origin query", () => {
+  const prioritySource = getPathwaySearchQuery(new URLSearchParams("origin=PH&country=AU&field=nursing&status=choosing-school"))
+  const unlisted = getPathwaySearchQuery(new URLSearchParams("origin=OTHER&country=AU&field=nursing&status=choosing-school"))
+
+  assert.equal(prioritySource?.origin, "PH")
+  assert.equal(unlisted?.origin, "OTHER")
 })
 
 test("new saved pathways persist origin and use the four-part identity", () => {
@@ -86,7 +105,7 @@ test("legacy saved pathways remain readable without inventing an origin", () => 
     status: "preparing-visa",
   })
   assert.equal(toSavedPathwayWrite("user-1", input!, "2026-08-05T12:00:00.000Z").origin_country_code, null)
-  assert.equal(pathway?.originLabel, "Starting country not set")
+  assert.equal(pathway?.originLabel, "Citizenship not set")
   assert.equal(pathway?.isComplete, false)
   assert.equal(pathway?.href, "/home?mode=explore&country=AU&field=nursing&status=preparing-visa")
 })

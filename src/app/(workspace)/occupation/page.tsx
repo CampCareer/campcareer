@@ -17,6 +17,7 @@ export default async function OccupationPage({
   const q = typeof sp.q === "string" ? sp.q : ""
   const occupation = typeof sp.occupation === "string" ? sp.occupation : ""
   const country = typeof sp.country === "string" ? sp.country : ""
+  const category = typeof sp.category === "string" ? sp.category : ""
   const canonicalRoute = country && occupation
     ? getIndexableOccupationRoute(country, occupation)
     : null
@@ -28,6 +29,7 @@ export default async function OccupationPage({
       initialQuery={q}
       initialOccupation={occupation}
       initialCountry={country.toUpperCase() === "GB" ? "UK" : country.toUpperCase()}
+      initialCategory={category}
     />
   )
 }

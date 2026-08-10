@@ -30,6 +30,17 @@ const PUBLISHED_METRIC_TABLES: Record<string, readonly string[]> = {
   NL: ["report_metric_evidence_country"],
   BE: ["report_metric_evidence_country"],
   FR: ["report_metric_evidence_country"],
+  ES: ["report_metric_evidence_country"],
+  SG: ["report_metric_evidence_country"],
+  KR: ["report_metric_evidence_country"],
+  JP: ["report_metric_evidence_country"],
+  NZ: ["report_metric_evidence_country"],
+  NO: ["report_metric_evidence_country"],
+  SE: ["report_metric_evidence_country"],
+  DK: ["report_metric_evidence_country"],
+  FI: ["report_metric_evidence_country"],
+  CH: ["report_metric_evidence_country"],
+  AE: ["report_metric_evidence_country"],
 }
 
 const CURRENCY_BY_COUNTRY: Record<string, string> = {
@@ -42,6 +53,17 @@ const CURRENCY_BY_COUNTRY: Record<string, string> = {
   NL: "EUR",
   BE: "EUR",
   FR: "EUR",
+  ES: "EUR",
+  SG: "SGD",
+  KR: "KRW",
+  JP: "JPY",
+  NZ: "NZD",
+  NO: "NOK",
+  SE: "SEK",
+  DK: "DKK",
+  FI: "EUR",
+  CH: "CHF",
+  AE: "AED",
 }
 
 function metricUnit(countryCode: string, metricKey: string) {

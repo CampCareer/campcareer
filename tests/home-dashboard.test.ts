@@ -35,12 +35,15 @@ test("saved pathways reuse Home labels and produce a stable result href", () => 
 
   assert.deepEqual(pathway, {
     id: 10,
-    values: { country: "AU", field: "nursing", status: "choosing-school" },
+    values: { origin: "", country: "AU", field: "nursing", status: "choosing-school" },
+    originLabel: "Citizenship not set",
     countryLabel: "Australia",
     fieldLabel: "Nursing",
-    statusLabel: "Choosing a school",
+    statusLabel: "Choosing a program",
+    routeLabel: "Nursing program → application → visa → career entry",
     updatedAt: "2026-08-01T12:00:00.000Z",
-    href: "/home?country=AU&field=nursing&status=choosing-school",
+    href: "/home?mode=explore&country=AU&field=nursing&status=choosing-school",
+    isComplete: false,
   })
 })
 
@@ -54,7 +57,7 @@ test("no-field saved pathways show friendly labels and invalid records are ignor
   })
 
   assert.equal(noField?.fieldLabel, "Field not selected")
-  assert.equal(noField?.statusLabel, "Exploring fields")
+  assert.equal(noField?.statusLabel, "Exploring options")
   assert.equal(toDashboardPathway({ id: 12, country_code: "AU", field_slug: "unknown", status_slug: "choosing-school", updated_at: "2026-08-01T12:00:00.000Z" }), null)
 })
 
@@ -76,7 +79,7 @@ test("the saved-path write contract upserts one country and field identity while
   const schoolWrite = toSavedPathwayWrite("user-1", { ...common, status: "choosing-school" }, "2026-08-01T10:00:00.000Z")
   const applicationWrite = toSavedPathwayWrite("user-1", { ...common, status: "preparing-application" }, "2026-08-01T11:00:00.000Z")
 
-  assert.equal(SAVED_PATHWAY_CONFLICT_COLUMNS, "user_id,country_code,field_slug")
+  assert.equal(SAVED_PATHWAY_CONFLICT_COLUMNS, "user_id,origin_country_code,country_code,field_slug")
   assert.deepEqual(
     { user_id: applicationWrite.user_id, country_code: applicationWrite.country_code, field_slug: applicationWrite.field_slug },
     { user_id: schoolWrite.user_id, country_code: schoolWrite.country_code, field_slug: schoolWrite.field_slug }
