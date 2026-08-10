@@ -93,11 +93,11 @@ test("Germany work-rights copy preserves the federal 20-hour and 140/280-day con
   assert.ok(dashboard.includes("eligible third-country students"))
 })
 
-test("Phase 5 Germany profiles stay noindex and do not enable Compare early", () => {
+test("published Germany profiles are indexable, canonical and retain unsupported noindex handling", () => {
   assert.ok(page.includes("generateStaticParams"))
   assert.ok(page.includes("PUBLISHED_DE_CITY_SLUGS"))
-  assert.ok(page.includes("robots: { index: false, follow: true }"))
+  assert.ok(page.includes("robots: { index: true, follow: true }"))
   assert.ok(page.includes("robots: { index: false, follow: false }"))
   assert.ok(page.includes("/cities/de/${normalized}"))
-  assert.doesNotMatch(dashboard, /buildCityCompareCanonicalHref|Compare \{profile\.name\}/)
+  assert.ok(page.includes('buildCityCompareCanonicalHref({ country: "DE", left: profile.slug })'))
 })
