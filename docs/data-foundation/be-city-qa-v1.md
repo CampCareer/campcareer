@@ -1,10 +1,10 @@
 # Belgium city cross-phase QA v1
 
-Status: `PHASE_8_COMPLETE_PENDING_CI`
+Status: `PHASE_8_COMPLETE`
 
 Branch: `agent/be-cities-v1`
 
-Checkpoint target: `PUBLISH_READY`
+Checkpoint: `PUBLISH_READY`
 
 Audit date: 2026-08-10
 
@@ -56,8 +56,18 @@ These source rechecks do not change the stored Phase 2–4 data contract. They c
 10. City Compare requires all five verified metrics plus positive verified teaching-location and institution linkage.
 11. Approved city profiles are indexable; unsupported slugs and the parameterized Compare surface remain non-indexable.
 
-## CI gate
+## CI validation
 
-Phase 8 requires the branch-head GitHub Actions workflow to pass dependency audit, typecheck, lint, full tests including the Belgium cross-phase contracts, production build and Git-history secret scan.
+GitHub Actions CI run `31431882409` (#1191) passed on validated Phase 8 head `32f156ec2d3643a5a45202b49df608ae72e354ba` after correcting one Belgium Compare JSX lint issue from the preceding run.
+
+Passed gates:
+
+- `npm ci`
+- production dependency audit
+- typecheck
+- lint
+- full test suite including Belgium Phase 6–8 contracts
+- production build
+- Git-history secret scan
 
 No production DB mutation is introduced by Phase 8.
