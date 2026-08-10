@@ -21,16 +21,14 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ city: string }> }): Promise<Metadata> {
   const { city } = await params
   const normalized = city.trim().toLowerCase()
-  if (!isPublishedDkCitySlug(normalized)) {
-    return { robots: { index: false, follow: false } }
-  }
+  if (!isPublishedDkCitySlug(normalized)) return { robots: { index: false, follow: false } }
 
   const name = CITY_NAMES[normalized]
   return {
     title: `Study in ${name}, Denmark`,
     description: `Explore ${name} municipality population, student budget and transport references, student work context, verified university locations and verified-partial programme coverage.`,
     alternates: { canonical: `/cities/dk/${normalized}` },
-    robots: { index: false, follow: true },
+    robots: { index: true, follow: true },
   }
 }
 
