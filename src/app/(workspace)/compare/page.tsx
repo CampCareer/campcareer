@@ -8,6 +8,7 @@ import { getCaCityComparison } from "@/lib/cities/ca-city-comparison.server"
 import { getDeCityComparison } from "@/lib/cities/de-city-comparison.server"
 import { getNlCityComparison } from "@/lib/cities/nl-city-comparison.server"
 import { getNzCityComparison } from "@/lib/cities/nz-city-comparison.server"
+import { getSeCityComparison } from "@/lib/cities/se-city-comparison.server"
 import { getUkCityComparison } from "@/lib/cities/uk-city-comparison.server"
 import { getUsCityComparison } from "@/lib/cities/us-city-comparison.server"
 import { resolveCompareModeType, type CompareModeType } from "@/lib/compare-navigation"
@@ -25,6 +26,7 @@ import { CanadaCitiesCompareMatrix } from "./canada-cities-compare-matrix"
 import { GermanyCitiesCompareMatrix } from "./germany-cities-compare-matrix"
 import { NetherlandsCitiesCompareMatrix } from "./netherlands-cities-compare-matrix"
 import { NewZealandCitiesCompareMatrix } from "./new-zealand-cities-compare-matrix"
+import { SwedenCitiesCompareMatrix } from "./sweden-cities-compare-matrix"
 import { UnitedKingdomCitiesCompareMatrix } from "./united-kingdom-cities-compare-matrix"
 import { UnitedStatesCitiesCompareMatrix } from "./united-states-cities-compare-matrix"
 import { ComparePageHeader } from "./compare-mode-navigation"
@@ -145,7 +147,6 @@ async function CitiesCompare({ countryCode, params }: { countryCode: string; par
         />
       )
     }
-
     return (
       <section className="w-full pb-4" aria-label="Cities comparison">
         <ComparePageHeader activeType="city" countryCode={countryCode} />
@@ -180,6 +181,19 @@ async function CitiesCompare({ countryCode, params }: { countryCode: string; par
       <section className="w-full pb-4" aria-label="Cities comparison">
         <ComparePageHeader activeType="city" countryCode={countryCode} />
         <NetherlandsCitiesCompareMatrix left={comparison.left} right={comparison.right} options={comparison.options} />
+      </section>
+    )
+  }
+
+  if (countryCode === "SE") {
+    const comparison = await getSeCityComparison(params.get("left"), params.get("right"))
+    if (!comparison) {
+      return <UnsupportedSurface type="Cities" href={buildCityCompareCanonicalHref({ country: "SE" })} label="Compare Swedish cities" activeType="city" countryCode={countryCode} />
+    }
+    return (
+      <section className="w-full pb-4" aria-label="Sweden cities comparison">
+        <ComparePageHeader activeType="city" countryCode={countryCode} />
+        <SwedenCitiesCompareMatrix left={comparison.left} right={comparison.right} options={comparison.options} />
       </section>
     )
   }
