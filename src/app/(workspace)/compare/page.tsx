@@ -100,6 +100,8 @@ function CountriesCompare({ comparison }: { comparison: CountryComparisonState }
 }
 
 async function CitiesCompare({ countryCode, params }: { countryCode: string; params: URLSearchParams }) {
+  if (countryCode === "SG") return <SingaporeCityStateDecision />
+
   if (countryCode === "AU") {
     const comparison = await getAuCityComparison(params.get("left"), params.get("right"))
     if (!comparison) {
@@ -240,6 +242,26 @@ async function CitiesCompare({ countryCode, params }: { countryCode: string; par
       activeType="city"
       countryCode={countryCode}
     />
+  )
+}
+
+function SingaporeCityStateDecision() {
+  return (
+    <section className="w-full pb-4" aria-label="Singapore city-state comparison guidance">
+      <ComparePageHeader activeType="city" countryCode="SG" />
+      <div className="max-w-2xl rounded-2xl border border-[#e7e6e3] bg-white p-5 sm:p-6">
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">Singapore city-state</p>
+        <h2 className="mt-2 text-xl font-semibold tracking-[-0.02em] text-[#1b1b1b]">There is no Singapore city shortlist to compare</h2>
+        <p className="mt-2 text-sm leading-6 text-[#6f6d68]">
+          CampCareer treats Singapore as one country-level study destination. Central, East, North, North-East, West and CBD remain living and commute contexts rather than separate canonical study cities.
+        </p>
+        <div className="mt-5 flex flex-wrap gap-3">
+          <Link href="/sg" className="inline-flex min-h-11 items-center rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white">Open Singapore destination</Link>
+          <Link href="/map?country=sg&area=central" className="inline-flex min-h-11 items-center rounded-xl border border-[#e7e6e3] px-4 text-sm font-semibold text-[#1b1b1b]">Compare living areas</Link>
+          <Link href={buildCountryCompareCanonicalHref()} className="inline-flex min-h-11 items-center rounded-xl border border-[#e7e6e3] px-4 text-sm font-semibold text-[#1b1b1b]">Compare countries</Link>
+        </div>
+      </div>
+    </section>
   )
 }
 
