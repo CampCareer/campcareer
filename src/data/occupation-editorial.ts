@@ -63,6 +63,7 @@ import { JAPAN_CONSTRUCTION_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-
 import { JAPAN_HEALTH_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-jp-health"
 import { JAPAN_TECHNOLOGY_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-jp-technology"
 import { JAPAN_ENGINEERING_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-jp-engineering"
+import { JAPAN_BUSINESS_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-jp-business"
 
 export type { CountryOccupationEditorial, OccupationEditorial } from "./occupation-editorial-base"
 
@@ -134,6 +135,7 @@ const COUNTRY_OCCUPATION_EDITORIAL_OVERRIDES = [
   ...JAPAN_HEALTH_OCCUPATION_EDITORIAL_OVERRIDES,
   ...JAPAN_TECHNOLOGY_OCCUPATION_EDITORIAL_OVERRIDES,
   ...JAPAN_ENGINEERING_OCCUPATION_EDITORIAL_OVERRIDES,
+  ...JAPAN_BUSINESS_OCCUPATION_EDITORIAL_OVERRIDES,
 ] as const
 
 export const OCCUPATION_EDITORIAL: readonly OccupationEditorialType[] = RAW_OCCUPATION_EDITORIAL.map((item) => {
