@@ -10,6 +10,10 @@ const seed = readFileSync(
   "supabase/migrations/20260810130426_nz_program_phase2_bounded_seed.sql",
   "utf8",
 )
+const indexes = readFileSync(
+  "supabase/migrations/20260810131112_nz_program_phase2_staging_indexes.sql",
+  "utf8",
+)
 
 const stagingTables = [
   "program_catalog_nz_staging",
@@ -24,6 +28,11 @@ test("NZ Phase 2 creates private server-only staging layers", () => {
     assert.match(foundation, new RegExp(`REVOKE ALL ON public\\.${table} FROM public, anon, authenticated`))
     assert.match(foundation, new RegExp(`GRANT SELECT, INSERT, UPDATE, DELETE ON public\\.${table} TO service_role`))
   }
+})
+
+test("NZ Phase 2 covers the catalogue institution foreign key", () => {
+  assert.match(indexes, /program_catalog_nz_staging_institution_idx/)
+  assert.match(indexes, /ON public\.program_catalog_nz_staging \(institution_id\)/)
 })
 
 test("NZ Phase 2 seed is deliberately bounded to the occupation-led cohort", () => {
