@@ -16,7 +16,7 @@ Phase 9 prepares the completed Singapore destination rollout for integration int
 
 The SG rollout branch stack originally diverged from `main` at `e709212c92d18c0bfb7ae6b4bd5db478c0c6591a`. Current `main` advanced to `e41f7cd6fe95821d895d72b7236614410574d9be` with the Programs entry-route fix while the SG work was in progress.
 
-Phase 9 explicitly reconciles current `main` into the Singapore integration branch with merge commit `97e1a5cb9d3403f9f8eeb5e4ae13eb1c585e2915`. The current Programs changes are preserved unchanged, and the resulting integration branch is zero commits behind `main`.
+Phase 9 therefore transplants the validated final SG snapshot onto the current-main tree as a clean linear integration commit `93d7bc469e7b82c8e5db4521830a12ab143f2d06`. This preserves the current Programs changes while removing the obsolete branch divergence from the integration history.
 
 ## Completed rollout
 
@@ -81,8 +81,6 @@ Phase 7 established:
 
 Phase 8 GitHub Actions CI run `31388308371` completed successfully on the QA code head `5176d3922e8821524cc70c16f947f319e5f2f84a`.
 
-The subsequently committed QA document update changes documentation only and records the observed successful result.
-
 Validated repository checks included:
 
 - npm ci
@@ -93,15 +91,17 @@ Validated repository checks included:
 - production build
 - Git-history secret scan
 
+The first Phase 9 PR CI attempt also passed install, audit, typecheck, lint, tests and production build. Its Gitleaks step did not report a leak; it failed because the temporary non-linear integration history produced an invalid Git revision range. The integration branch was rebuilt linearly from current `main` to remove that CI-history artifact.
+
 ## Current-main reconciliation
 
-Comparison after the Phase 9 merge reports:
+The final Phase 9 integration history is linear from current `main`.
 
-- integration branch status against `main`: ahead
+- parent baseline: `e41f7cd6fe95821d895d72b7236614410574d9be`
+- validated SG snapshot integration commit: `93d7bc469e7b82c8e5db4521830a12ab143f2d06`
 - commits behind `main`: 0
-- merge base: current main `e41f7cd6fe95821d895d72b7236614410574d9be`
 - unrelated current-main Programs changes preserved
-- SG diff restricted to the destination rollout files and shared `/sg`, Compare and sitemap integrations
+- SG product diff remains restricted to the destination rollout files and shared `/sg`, Compare and sitemap integrations
 
 ## Integration rule
 
@@ -110,7 +110,7 @@ This branch is the Phase 9 integration candidate for `main`.
 Before merge:
 
 - confirm the branch remains mergeable with current `main`
-- run repository CI on the Phase 9 integration head
+- run repository CI on the final linear Phase 9 integration head
 - preserve the city-state publication boundary
 - do not infer Singapore programme delivery
 
