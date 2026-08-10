@@ -59,6 +59,7 @@ import { DECK_OFFICER_OCCUPATION_EDITORIAL } from "./occupation-editorial-deck-o
 import { WAREHOUSE_MANAGER_OCCUPATION_EDITORIAL } from "./occupation-editorial-warehouse-manager"
 import { AUTOMOTIVE_SERVICE_TECHNICIAN_OCCUPATION_EDITORIAL } from "./occupation-editorial-automotive-service-technician"
 import { CANADA_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-ca-carpenter"
+import { KOREA_HOSPITALITY_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-kr-hospitality"
 
 export type { CountryOccupationEditorial, OccupationEditorial } from "./occupation-editorial-base"
 
@@ -128,6 +129,12 @@ export const OCCUPATION_EDITORIAL: readonly OccupationEditorialType[] = RAW_OCCU
   let countries = item.countries
 
   for (const override of CANADA_OCCUPATION_EDITORIAL_OVERRIDES) {
+    if (override.id === item.id) {
+      countries = { ...countries, [override.countryCode]: override.editorial }
+    }
+  }
+
+  for (const override of KOREA_HOSPITALITY_OCCUPATION_EDITORIAL_OVERRIDES) {
     if (override.id === item.id) {
       countries = { ...countries, [override.countryCode]: override.editorial }
     }
