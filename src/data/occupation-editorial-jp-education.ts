@@ -56,15 +56,15 @@ export const JAPAN_EDUCATION_OCCUPATION_EDITORIAL_OVERRIDES: readonly JapanEduca
     id: "special-education-teacher",
     countryCode: "JP",
     editorial: {
-      headline: "A licensed special-support school teaching occupation mapped directly to MHLW 031-06",
+      headline: "A special-support school teaching occupation mapped to MHLW 031-06 with a required base teacher licence and a specialist-licence exception",
       entryPathway:
-        "MHLW 031-06 directly classifies 特別支援学校教員. MEXT guidance requires a foundational kindergarten, elementary, middle-school or high-school teacher licence together with the required special-support education study before application for the applicable 特別支援学校教諭免許状. The reviewed Japanese special-needs-education programme is retained as a direct academic pathway subject to those licensing requirements.",
+        "MHLW 031-06 directly classifies 特別支援学校教員. The professional route starts with the relevant kindergarten, elementary, middle-school or high-school teacher licence. MEXT sets out additional study for the 特別支援学校教諭免許状, and the reviewed Japanese special-needs-education programme is retained as a direct academic pathway toward that specialist preparation.",
       registration:
-        "The canonical role is treated as licensed because the professional pathway requires the relevant base teacher licence and special-support teacher licensing requirements. Study in special education alone is not equivalent to holding the licence or being appointed to a teaching post.",
+        "The occupation remains registration-required because a foundational school-type teacher licence is required. The specialist 特別支援学校教諭免許状 is the principle qualification for special-support school teaching, but Education Personnel Certification Act Supplementary Provision 16 currently allows appointment without that specialist licence as a transitional exception. CampCareer therefore does not describe the specialist licence itself as universally mandatory.",
       jobMarketNote:
-        "Special-support school teachers are kept distinct from general school teachers and from residential support staff such as 特別支援学校寄宿舎指導員.",
+        "Special-support school teachers are kept distinct from general school teachers and from residential support staff such as 特別支援学校寄宿舎指導員. Specialist-licence possession is tracked separately by MEXT because the statutory exception still exists.",
       scoreCaveat:
-        "The current score reflects the comparatively structured multi-step licensing path. No shortage, vacancy, salary, growth or visa credit is assigned before the later comparable market-data enrichment phase.",
+        "The current score reflects the required base teaching qualification and the additional specialist pathway, while recognising the statutory specialist-licence exception. No shortage, vacancy, salary, growth or visa credit is assigned before the later comparable market-data enrichment phase.",
     },
   },
   {
