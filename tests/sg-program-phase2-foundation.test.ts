@@ -14,7 +14,7 @@ test("Singapore Phase 1 fixes the six-university publication cohort", () => {
     "singapore-university-of-social-sciences",
     "singapore-university-of-technology-and-design",
   ]) {
-    assert.match(discovery, new RegExp(`\\`${slug}\\``))
+    assert.ok(discovery.includes("`" + slug + "`"))
   }
   assert.match(discovery, /https:\/\/www\.ica\.gov\.sg\/reside\/STP\/apply\/ihl/)
   assert.match(discovery, /No country after Singapore is in scope for this branch\./)
