@@ -87,7 +87,7 @@ select p.id,null,null,null,null,'current_september_2026_course_student_route_sta
   'official_2026_program_verified_international_status_unresolved',
   'No international eligibility or CAS is inferred. Programme identity and occupation linkage remain independently usable for Phase 2.',now()
 from public.program_catalog_uk_staging p
-where p.source_name='Bishop Burton College' and p.source_program_key='applied-animal-health-welfare-fdsc-2026'
+where p.source_name='Bishop Burton College' and p.source_program_key='applied-animal-health-welfare-fdsc-2026' -- gitleaks:allow (public course slug, not a credential)
 on conflict (program_catalog_id) do update set
   student_sponsor_record_id=excluded.student_sponsor_record_id,student_sponsor_eligible=excluded.student_sponsor_eligible,
   international_students_eligible=excluded.international_students_eligible,cas_eligibility=excluded.cas_eligibility,
