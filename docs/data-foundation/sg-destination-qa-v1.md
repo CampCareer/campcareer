@@ -1,8 +1,8 @@
 # Singapore destination QA v1
 
-Status: `PHASE_8_QA_READY`
+Status: `PHASE_8_COMPLETE`
 
-Checkpoint: `CI_PENDING`
+Checkpoint: `CI_COMPLETE`
 
 Current branch: `agent/sg-destination-qa-v1`
 
@@ -93,11 +93,13 @@ Added `tests/sg-destination-qa-contract.test.ts` to assert the final Phase 2 thr
 - canonical `/sg` publication
 - sitemap boundary
 
-## CI gate
+## CI result
 
-A temporary draft Phase 8 QA pull request should run repository CI against the completed Phase 7 publication branch.
+Temporary draft PR #165 ran repository CI against the completed Phase 7 publication branch and the Phase 8 QA contract.
 
-Required checks:
+GitHub Actions CI run `31388308371` completed successfully on head `5176d3922e8821524cc70c16f947f319e5f2f84a`.
+
+Validated checks:
 
 - npm ci
 - production dependency audit
@@ -106,8 +108,6 @@ Required checks:
 - tests
 - production build
 - Git-history secret scan
-
-The document will be updated to `PHASE_8_COMPLETE` after the repository CI result is observed.
 
 ## Phase 8 completion gate
 
@@ -119,6 +119,8 @@ The document will be updated to `PHASE_8_COMPLETE` after the repository CI resul
 - [x] city-state route boundary verified
 - [x] publication/SEO boundary verified
 - [x] cross-phase QA contract committed
-- [ ] repository CI completed
+- [x] repository CI completed
 
-Next branch after CI: `agent/sg-destination-main-integration-v1`
+Phase 8 checkpoint: `QA_COMPLETE`
+
+Next branch: `agent/sg-destination-main-integration-v1`
