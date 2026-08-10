@@ -42,7 +42,8 @@ test("UAE pages never equate active accreditation with open applications", () =>
 test("UAE explorer is published while unready countries remain coming soon", () => {
   assert.match(programsPage, /filters\.country === "AE"/)
   assert.match(programsPage, /searchAePrograms/)
-  assert.match(header, /new Set\(\["AU", "AE"\]\)/)
+  assert.match(header, /PUBLISHED_PROGRAM_COUNTRIES/)
+  assert.match(header, /"AE"/)
   assert.match(explorer, /69 of the 80 CampCareer target careers/)
 })
 
