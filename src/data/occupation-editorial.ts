@@ -58,10 +58,11 @@ import { MARINE_ENGINEER_OCCUPATION_EDITORIAL } from "./occupation-editorial-mar
 import { DECK_OFFICER_OCCUPATION_EDITORIAL } from "./occupation-editorial-deck-officer"
 import { WAREHOUSE_MANAGER_OCCUPATION_EDITORIAL } from "./occupation-editorial-warehouse-manager"
 import { AUTOMOTIVE_SERVICE_TECHNICIAN_OCCUPATION_EDITORIAL } from "./occupation-editorial-automotive-service-technician"
+import { CANADA_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-ca-carpenter"
 
 export type { CountryOccupationEditorial, OccupationEditorial } from "./occupation-editorial-base"
 
-export const OCCUPATION_EDITORIAL: readonly OccupationEditorialType[] = [
+const RAW_OCCUPATION_EDITORIAL: readonly OccupationEditorialType[] = [
   ...BASE_OCCUPATION_EDITORIAL,
   ...TECHNOLOGY_OCCUPATION_EDITORIAL,
   ...TECHNOLOGY_NETWORK_OCCUPATION_EDITORIAL,
@@ -122,6 +123,18 @@ export const OCCUPATION_EDITORIAL: readonly OccupationEditorialType[] = [
   ...WAREHOUSE_MANAGER_OCCUPATION_EDITORIAL,
   ...AUTOMOTIVE_SERVICE_TECHNICIAN_OCCUPATION_EDITORIAL,
 ]
+
+export const OCCUPATION_EDITORIAL: readonly OccupationEditorialType[] = RAW_OCCUPATION_EDITORIAL.map((item) => {
+  let countries = item.countries
+
+  for (const override of CANADA_OCCUPATION_EDITORIAL_OVERRIDES) {
+    if (override.id === item.id) {
+      countries = { ...countries, [override.countryCode]: override.editorial }
+    }
+  }
+
+  return countries === item.countries ? item : { ...item, countries }
+})
 
 const BY_ID = new Map(OCCUPATION_EDITORIAL.map((item) => [item.id, item]))
 

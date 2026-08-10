@@ -22,7 +22,7 @@ test("seven Canada city profiles are published as workspace cities", () => {
   const dashboard = readFileSync("src/app/(workspace)/cities/canada-city-dashboard.tsx", "utf8")
   const loader = readFileSync("src/lib/cities/ca-city-profile.server.ts", "utf8")
   assert.ok(dashboard.includes("h / week"))
-  assert.ok(dashboard.includes("Canonical linked programmes"))
+  assert.ok(dashboard.includes("Published target-career programs"))
   assert.ok(loader.includes('metrics.get("student_transport_reference")'))
   assert.ok(loader.includes('metrics.get("student_work_hours_week")'))
 })
@@ -85,7 +85,7 @@ test("Canada City Compare is root-based, country-aware and locked to seven publi
     assert.ok(loader.includes(`"${slug}"`))
   }
   assert.ok(loader.includes('"student_transport_reference"'))
-  assert.ok(loader.includes('from("city_programme_directory_ca_v1")'))
+  assert.ok(loader.includes("getCaPublishedCityPairSummary"))
   assert.ok(matrix.includes('countryCode="CA"'))
-  assert.ok(matrix.includes("Canonical linked programmes"))
+  assert.ok(matrix.includes("Published target programs"))
 })
