@@ -35,7 +35,38 @@ export const AU_PROGRAM_CITIES = [
   { value: "adelaide", label: "Adelaide", labelKo: "애들레이드", state: "SA" },
 ] as const
 
-export type ProgramCity = "all" | (typeof AU_PROGRAM_CITIES)[number]["value"]
+export const CA_PROGRAM_CITIES = [
+  { value: "brampton", label: "Brampton", labelKo: "브램턴", province: "ON" },
+  { value: "burnaby", label: "Burnaby", labelKo: "버나비", province: "BC" },
+  { value: "calgary", label: "Calgary", labelKo: "캘거리", province: "AB" },
+  { value: "edmonton", label: "Edmonton", labelKo: "에드먼턴", province: "AB" },
+  { value: "fredericton", label: "Fredericton", labelKo: "프레더릭턴", province: "NB" },
+  { value: "halifax", label: "Halifax", labelKo: "핼리팩스", province: "NS" },
+  { value: "kitchener", label: "Kitchener", labelKo: "키치너", province: "ON" },
+  { value: "london", label: "London", labelKo: "런던", province: "ON" },
+  { value: "mississauga", label: "Mississauga", labelKo: "미시소거", province: "ON" },
+  { value: "montreal", label: "Montreal", labelKo: "몬트리올", province: "QC" },
+  { value: "nanaimo", label: "Nanaimo", labelKo: "나나이모", province: "BC" },
+  { value: "new westminster", label: "New Westminster", labelKo: "뉴웨스트민스터", province: "BC" },
+  { value: "ottawa", label: "Ottawa", labelKo: "오타와", province: "ON" },
+  { value: "pembroke", label: "Pembroke", labelKo: "펨브로크", province: "ON" },
+  { value: "prince george", label: "Prince George", labelKo: "프린스조지", province: "BC" },
+  { value: "saint john", label: "Saint John", labelKo: "세인트존", province: "NB" },
+  { value: "sault ste. marie", label: "Sault Ste. Marie", labelKo: "수세인트마리", province: "ON" },
+  { value: "st. john's", label: "St. John's", labelKo: "세인트존스", province: "NL" },
+  { value: "surrey", label: "Surrey", labelKo: "서리", province: "BC" },
+  { value: "thunder bay", label: "Thunder Bay", labelKo: "선더베이", province: "ON" },
+  { value: "toronto", label: "Toronto", labelKo: "토론토", province: "ON" },
+  { value: "vancouver", label: "Vancouver", labelKo: "밴쿠버", province: "BC" },
+  { value: "waterloo", label: "Waterloo", labelKo: "워털루", province: "ON" },
+  { value: "whitehorse", label: "Whitehorse", labelKo: "화이트호스", province: "YT" },
+  { value: "winnipeg", label: "Winnipeg", labelKo: "위니펙", province: "MB" },
+] as const
+
+export type ProgramCity =
+  | "all"
+  | (typeof AU_PROGRAM_CITIES)[number]["value"]
+  | (typeof CA_PROGRAM_CITIES)[number]["value"]
 
 export const AU_PROGRAM_STATES = [
   { value: "NSW", label: "New South Wales", labelKo: "뉴사우스웨일스" },
@@ -49,6 +80,33 @@ export const AU_PROGRAM_STATES = [
 ] as const
 
 export type ProgramState = "all" | (typeof AU_PROGRAM_STATES)[number]["value"]
+
+export const CA_PROGRAM_PROVINCES = [
+  { value: "AB", label: "Alberta", labelKo: "앨버타" },
+  { value: "BC", label: "British Columbia", labelKo: "브리티시컬럼비아" },
+  { value: "MB", label: "Manitoba", labelKo: "매니토바" },
+  { value: "NB", label: "New Brunswick", labelKo: "뉴브런즈윅" },
+  { value: "NL", label: "Newfoundland and Labrador", labelKo: "뉴펀들랜드 래브라도" },
+  { value: "NS", label: "Nova Scotia", labelKo: "노바스코샤" },
+  { value: "ON", label: "Ontario", labelKo: "온타리오" },
+  { value: "PE", label: "Prince Edward Island", labelKo: "프린스에드워드아일랜드" },
+  { value: "QC", label: "Quebec", labelKo: "퀘벡" },
+  { value: "SK", label: "Saskatchewan", labelKo: "서스캐처원" },
+  { value: "YT", label: "Yukon", labelKo: "유콘" },
+] as const
+
+export type ProgramProvince = "all" | (typeof CA_PROGRAM_PROVINCES)[number]["value"]
+export type ProgramCareer = "all" | string
+export type ProgramInstitution = "all" | string
+
+export const CA_PROGRAM_PGWP_STATES = [
+  { value: "all", label: "Any PGWP status", labelKo: "전체 PGWP 상태" },
+  { value: "eligible", label: "PGWP eligible", labelKo: "PGWP 가능" },
+  { value: "ineligible", label: "PGWP ineligible", labelKo: "PGWP 불가" },
+  { value: "unknown", label: "PGWP not confirmed", labelKo: "PGWP 미확인" },
+] as const
+
+export type ProgramPgwp = (typeof CA_PROGRAM_PGWP_STATES)[number]["value"]
 
 export const PROGRAM_DURATIONS = [
   { value: "all", label: "Any duration", labelKo: "전체 기간" },
@@ -94,6 +152,10 @@ export type ProgramSearchFilters = {
   field: ProgramField
   city: ProgramCity
   state: ProgramState
+  province: ProgramProvince
+  career: ProgramCareer
+  institution: ProgramInstitution
+  pgwp: ProgramPgwp
   duration: ProgramDuration
   fee: ProgramFee
   source: ProgramSource
@@ -122,10 +184,18 @@ function allowedValue<T extends string>(
   return value && allowed.includes(value as T) ? (value as T) : fallback
 }
 
+function safeSlug(value: string | undefined) {
+  if (!value || value === "all") return "all"
+  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value) && value.length <= 100 ? value : "all"
+}
+
 const levelValues = PROGRAM_LEVELS.map((item) => item.value)
 const fieldValues = ["all", ...PROGRAM_FIELDS.map((item) => item.value)] as const
-const cityValues = ["all", ...AU_PROGRAM_CITIES.map((item) => item.value)] as const
+const auCityValues = ["all", ...AU_PROGRAM_CITIES.map((item) => item.value)] as const
+const caCityValues = ["all", ...CA_PROGRAM_CITIES.map((item) => item.value)] as const
 const stateValues = ["all", ...AU_PROGRAM_STATES.map((item) => item.value)] as const
+const provinceValues = ["all", ...CA_PROGRAM_PROVINCES.map((item) => item.value)] as const
+const pgwpValues = CA_PROGRAM_PGWP_STATES.map((item) => item.value)
 const durationValues = PROGRAM_DURATIONS.map((item) => item.value)
 const feeValues = PROGRAM_FEES.map((item) => item.value)
 const sourceValues = PROGRAM_SOURCES.map((item) => item.value)
@@ -136,16 +206,34 @@ export function parseProgramSearchParams(
 ): ProgramSearchFilters {
   const rawPage = Number.parseInt(firstValue(params.page) ?? "1", 10)
   const country = (firstValue(params.country) ?? "AU").toUpperCase().slice(0, 2)
+  const normalizedCountry = /^[A-Z]{2}$/.test(country) ? country : "AU"
   const q = (firstValue(params.q) ?? "").trim().slice(0, 80)
-  const city = allowedValue(firstValue(params.city), cityValues, "all")
+  const city = normalizedCountry === "AU"
+    ? allowedValue(firstValue(params.city), auCityValues, "all")
+    : normalizedCountry === "CA"
+      ? allowedValue(firstValue(params.city), caCityValues, "all")
+      : "all"
 
   return {
-    country: /^[A-Z]{2}$/.test(country) ? country : "AU",
+    country: normalizedCountry,
     q,
     level: allowedValue(firstValue(params.level), levelValues, "all"),
     field: allowedValue(firstValue(params.field), fieldValues, "all"),
     city,
-    state: city === "all" ? allowedValue(firstValue(params.state), stateValues, "all") : "all",
+    state:
+      normalizedCountry === "AU" && city === "all"
+        ? allowedValue(firstValue(params.state), stateValues, "all")
+        : "all",
+    province:
+      normalizedCountry === "CA"
+        ? allowedValue(firstValue(params.province), provinceValues, "all")
+        : "all",
+    career: normalizedCountry === "CA" ? safeSlug(firstValue(params.career)) : "all",
+    institution: normalizedCountry === "CA" ? safeSlug(firstValue(params.institution)) : "all",
+    pgwp:
+      normalizedCountry === "CA"
+        ? allowedValue(firstValue(params.pgwp), pgwpValues, "all")
+        : "all",
     duration: allowedValue(firstValue(params.duration), durationValues, "all"),
     fee: allowedValue(firstValue(params.fee), feeValues, "all"),
     source: allowedValue(firstValue(params.source), sourceValues, "all"),
@@ -165,6 +253,10 @@ export function hasProgramFilters(filters: ProgramSearchFilters) {
       filters.field !== "all" ||
       filters.city !== "all" ||
       filters.state !== "all" ||
+      filters.province !== "all" ||
+      filters.career !== "all" ||
+      filters.institution !== "all" ||
+      filters.pgwp !== "all" ||
       filters.duration !== "all" ||
       filters.fee !== "all" ||
       filters.source !== "all" ||
@@ -186,6 +278,10 @@ export function buildProgramsUrl(
   if (next.field !== "all") params.set("field", next.field)
   if (next.city !== "all") params.set("city", next.city)
   if (next.city === "all" && next.state !== "all") params.set("state", next.state)
+  if (next.province !== "all") params.set("province", next.province)
+  if (next.career !== "all") params.set("career", next.career)
+  if (next.institution !== "all") params.set("institution", next.institution)
+  if (next.pgwp !== "all") params.set("pgwp", next.pgwp)
   if (next.duration !== "all") params.set("duration", next.duration)
   if (next.fee !== "all") params.set("fee", next.fee)
   if (next.source !== "all") params.set("source", next.source)
@@ -210,6 +306,10 @@ export function slugifyProgramTitle(title: string) {
 
 export function programDetailPath(id: number, title: string) {
   return `/programs/au/${id}-${slugifyProgramTitle(title)}`
+}
+
+export function caProgramDetailPath(id: number, title: string) {
+  return `/programs/ca/${id}-${slugifyProgramTitle(title)}`
 }
 
 export function parseProgramId(segment: string) {

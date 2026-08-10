@@ -3,6 +3,7 @@ import "server-only"
 import { cache } from "react"
 import { supabaseAdmin } from "@/lib/supabase-admin"
 import { getCaCityProfile, type CaCityProfile } from "@/lib/cities/ca-city-profile.server"
+import { getCaPublishedCityPairSummary } from "@/lib/programs/ca-program-city-publication.server"
 
 export const PUBLISHED_CA_CITY_SLUGS = [
   "toronto",
@@ -24,7 +25,7 @@ export type CaCityComparison = {
   left: CaCityProfile
   right: CaCityProfile
   options: CaCityCompareOption[]
-  sharedProgramCount: number
+  sharedCareerCount: number
 }
 
 type CityDirectoryCandidate = {
@@ -32,17 +33,11 @@ type CityDirectoryCandidate = {
   slug: string
   linked_campus_count: number
   linked_institution_count: number
-  linked_program_count: number
 }
 
 type CityMetricCandidate = {
   geography_id: string
   metric_key: string
-}
-
-type CityProgrammeRow = {
-  city_id: string
-  programme_id: string
 }
 
 const REQUIRED_METRIC_KEYS = [
@@ -66,7 +61,8 @@ function isCompareReadyProfile(profile: CaCityProfile) {
       profile.employmentSectors.length > 0 &&
       profile.linkedCampusCount > 0 &&
       profile.linkedInstitutionCount > 0 &&
-      profile.linkedProgramCount > 0,
+      profile.publishedPrograms &&
+      profile.publishedPrograms.totalPrograms > 0,
   )
 }
 
@@ -74,11 +70,10 @@ async function loadCompareReadyCaCities(): Promise<CaCityProfile[]> {
   const [{ data: cityData, error: cityError }, { data: metricData, error: metricError }] = await Promise.all([
     supabaseAdmin
       .from("city_directory_ca_v1")
-      .select("city_id,slug,linked_campus_count,linked_institution_count,linked_program_count")
+      .select("city_id,slug,linked_campus_count,linked_institution_count")
       .in("slug", [...PUBLISHED_CA_CITY_SLUGS])
       .gt("linked_campus_count", 0)
-      .gt("linked_institution_count", 0)
-      .gt("linked_program_count", 0),
+      .gt("linked_institution_count", 0),
     supabaseAdmin
       .from("report_metric_evidence_city")
       .select("geography_id,metric_key")
@@ -109,7 +104,9 @@ async function loadCompareReadyCaCities(): Promise<CaCityProfile[]> {
   )
 
   return profiles.sort((a, b) => {
-    if (b.linkedProgramCount !== a.linkedProgramCount) return b.linkedProgramCount - a.linkedProgramCount
+    const leftPrograms = a.publishedPrograms?.totalPrograms ?? 0
+    const rightPrograms = b.publishedPrograms?.totalPrograms ?? 0
+    if (rightPrograms !== leftPrograms) return rightPrograms - leftPrograms
     return a.name.localeCompare(b.name)
   })
 }
@@ -140,28 +137,6 @@ function chooseComparisonPair(
   return { left, right }
 }
 
-async function countSharedProgrammes(leftCityId: string, rightCityId: string) {
-  const { data, error } = await supabaseAdmin
-    .from("city_programme_directory_ca_v1")
-    .select("city_id,programme_id")
-    .in("city_id", [leftCityId, rightCityId])
-
-  if (error) throw new Error(`Unable to load shared Canadian city programmes: ${error.message}`)
-
-  const leftProgrammes = new Set<string>()
-  const rightProgrammes = new Set<string>()
-  for (const row of (data ?? []) as CityProgrammeRow[]) {
-    if (row.city_id === leftCityId) leftProgrammes.add(row.programme_id)
-    if (row.city_id === rightCityId) rightProgrammes.add(row.programme_id)
-  }
-
-  let shared = 0
-  for (const programmeId of leftProgrammes) {
-    if (rightProgrammes.has(programmeId)) shared += 1
-  }
-  return shared
-}
-
 async function loadCaCityComparison(
   requestedLeft?: string | null,
   requestedRight?: string | null,
@@ -169,6 +144,9 @@ async function loadCaCityComparison(
   const profiles = await getCompareReadyCaCities()
   const pair = chooseComparisonPair(profiles, requestedLeft, requestedRight)
   if (!pair) return null
+
+  const publicationPair = await getCaPublishedCityPairSummary(pair.left.slug, pair.right.slug)
+  if (!publicationPair) return null
 
   return {
     left: pair.left,
@@ -178,7 +156,7 @@ async function loadCaCityComparison(
       name: profile.name,
       regionName: profile.regionName,
     })),
-    sharedProgramCount: await countSharedProgrammes(pair.left.id, pair.right.id),
+    sharedCareerCount: publicationPair.sharedCareerCount,
   }
 }
 
