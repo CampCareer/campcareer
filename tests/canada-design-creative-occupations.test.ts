@@ -5,7 +5,7 @@ import { getCanonicalCareer } from "../src/data/career-comparison-catalog"
 import { getOccupationEditorial } from "../src/data/occupation-editorial"
 
 const migration = readFileSync(
-  new URL("../supabase/migrations/20260810150000_canada_design_creative_occupations.sql", import.meta.url),
+  new URL("../supabase/migrations/20260810102220_canada_design_creative_occupations.sql", import.meta.url),
   "utf8",
 )
 
