@@ -8,6 +8,10 @@ const migration = readFileSync(
   new URL("../supabase/migrations/20260810215246_japan_education_occupations.sql", import.meta.url),
   "utf8",
 )
+const specialSupportCorrection = readFileSync(
+  new URL("../supabase/migrations/20260810215617_japan_education_special_support_licence_correction.sql", import.meta.url),
+  "utf8",
+)
 
 const careers = [
   "early-childhood-teacher",
@@ -63,7 +67,9 @@ test("Japan education models licensing without overclaiming broad support roles"
 
   assert.match(getOccupationEditorial("early-childhood-teacher")?.countries.JP?.jobMarketNote ?? "", /保育士/)
   assert.match(getOccupationEditorial("secondary-school-teacher")?.countries.JP?.registration ?? "", /school-type and subject teacher licence/i)
-  assert.match(getOccupationEditorial("special-education-teacher")?.countries.JP?.entryPathway ?? "", /foundational.*teacher licence.*special-support/s)
+  assert.match(getOccupationEditorial("special-education-teacher")?.countries.JP?.registration ?? "", /Supplementary Provision 16.*transitional exception/s)
+  assert.match(specialSupportCorrection, /foundational kindergarten, elementary, middle or high-school teacher licence is required/i)
+  assert.match(specialSupportCorrection, /does not describe the specialist licence itself as universally mandatory/i)
   assert.match(getOccupationEditorial("social-worker")?.countries.JP?.registration ?? "", /protected national title/i)
   assert.match(getOccupationEditorial("youth-worker")?.countries.JP?.registration ?? "", /no single universal Youth Worker licence/i)
   assert.match(getOccupationEditorial("counsellor")?.countries.JP?.registration ?? "", /not one universally licensed occupation/i)
