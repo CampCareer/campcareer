@@ -9,7 +9,7 @@ const dashboard = readFileSync("src/app/(workspace)/cities/belgium-city-dashboar
 
 const published = ["brussels", "ghent", "leuven", "antwerp", "louvain-la-neuve", "liege"]
 
-test("Belgium Phase 5 route allowlist is exact", () => {
+test("Belgium city route allowlist remains exact", () => {
   assert.match(routes, /PUBLISHED_BE_CITY_SLUGS = \[/)
   for (const slug of published) assert.ok(routes.includes(`"${slug}"`))
   assert.ok(routes.includes("isPublishedBeCitySlug"))
@@ -45,10 +45,11 @@ test("Belgium profiles disclose source-native metrics and incomplete provider co
   assert.ok(dashboard.includes("not shortage rankings, job guarantees"))
 })
 
-test("Phase 5 Belgium profiles remain noindex and Compare is deferred", () => {
+test("Published Belgium profiles are indexable while unsupported slugs remain blocked", () => {
   assert.ok(page.includes("generateStaticParams"))
-  assert.ok(page.includes("robots: { index: false, follow: true }"))
+  assert.ok(page.includes("robots: { index: true, follow: true }"))
   assert.ok(page.includes("robots: { index: false, follow: false }"))
   assert.ok(page.includes("/cities/be/${normalized}"))
-  assert.doesNotMatch(dashboard, /buildCityCompareCanonicalHref|Compare \{profile\.name\}/)
+  assert.ok(page.includes("buildCityCompareCanonicalHref"))
+  assert.ok(page.includes("Compare {profile.name}"))
 })
