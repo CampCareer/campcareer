@@ -200,6 +200,7 @@ export function CountryOccupationDashboard({
     (link) => link.linkType === "entry_program" || link.linkType === "graduate_program"
   )
   const programs = getProgramCards(profile)
+  const rankedRegions = [...profile.regions].sort((first, second) => (second.vacancyCount ?? -1) - (first.vacancyCount ?? -1))
 
   return (
     <div className="space-y-4">
@@ -363,18 +364,23 @@ export function CountryOccupationDashboard({
       <section className="rounded-2xl border border-[#e7e6e3] bg-white p-6">
         <div className="flex items-center gap-2 text-[#c2691e]">
           <MapPinned className="size-4" />
-          <h3 className="text-[15px] font-semibold">State demand and vacancies</h3>
+          <h3 className="text-[15px] font-semibold">State demand ranking</h3>
         </div>
-        <div className="mt-4 grid gap-2 sm:grid-cols-4">
-          {profile.regions.map((region) => (
-            <div key={region.regionCode} className="rounded-xl border border-[#f0e5d9] bg-[#fffaf5] p-3 text-center">
+        <p className="mt-1.5 text-[10.5px] leading-4 text-[#8f8c85]">Ranked by published 3-month vacancies — not a personal outcome or visa ranking.</p>
+        <div className="mt-4 grid grid-cols-3 gap-1.5 sm:grid-cols-4 sm:gap-2">
+          {rankedRegions.map((region, index) => {
+            const rank = index + 1
+            const rankTone = rank === 1 ? "border-[#ead29a] bg-[#fffaf0]" : rank === 2 ? "border-[#dce1e8] bg-[#f7f9fc]" : rank === 3 ? "border-[#d69a72] bg-[#fff4ed]" : "border-[#f0e5d9] bg-[#fffaf5]"
+            const rankLabelTone = rank === 1 ? "text-[#9c7a4f]" : rank === 2 ? "text-[#6d7787]" : rank === 3 ? "text-[#b86636]" : "text-[#9c7a4f]"
+            return <div key={region.regionCode} className={`relative rounded-xl border p-2.5 text-center sm:p-3 ${rankTone}`}>
+              <span className={`absolute left-2 top-1.5 text-[9px] font-bold sm:left-2.5 sm:top-2 ${rankLabelTone}`}>#{rank}</span>
               <p className="text-[11px] font-bold text-[#c2691e]">{region.regionCode}</p>
-              <p className="mt-1 text-[18px] font-semibold text-[#1b1b1b]">{number(region.vacancyCount)}</p>
-              <p className="mt-0.5 text-[10px] text-[#8f8c85]">
+              <p className="mt-1 text-[16px] font-semibold text-[#1b1b1b] sm:text-[18px]">{number(region.vacancyCount)}</p>
+              <p className="mt-0.5 text-[9px] leading-3 text-[#8f8c85] sm:text-[10px] sm:leading-normal">
                 3-mo vacancies · shortage {region.shortageRating ?? "—"}/3
               </p>
             </div>
-          ))}
+          })}
         </div>
       </section>
 

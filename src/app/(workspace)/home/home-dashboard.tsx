@@ -10,7 +10,7 @@ import {
 
 type HomeDashboardProps = { pathways: DashboardPathway[]; loadError?: boolean }
 
-const exploreHref = "/home?mode=explore"
+const exploreHref = "/?mode=explore"
 const primaryLink = "inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/35 focus-visible:ring-offset-2"
 const secondaryLink = "inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#d5d3ce] bg-white px-4 text-sm font-semibold text-[#3a3935] transition hover:border-[#aaa8a1] hover:bg-[#fafaf9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/35 focus-visible:ring-offset-2"
 
@@ -39,7 +39,7 @@ function DashboardError() {
     <section className="mt-7 rounded-2xl border border-[#e7e6e3] bg-[#fafaf9] p-5 sm:p-6" aria-labelledby="dashboard-error-heading">
       <h2 id="dashboard-error-heading" className="text-xl font-semibold tracking-[-0.02em] text-[#1b1b1b]">We couldn’t load your saved pathways.</h2>
       <div className="mt-5 flex flex-col gap-3 sm:flex-row">
-        <Link href="/home" className={primaryLink}><RefreshCw className="size-4" aria-hidden="true" />Try again</Link>
+        <Link href="/" className={primaryLink}><RefreshCw className="size-4" aria-hidden="true" />Try again</Link>
         <Link href={exploreHref} className={secondaryLink}>Explore a pathway</Link>
       </div>
     </section>
@@ -50,7 +50,7 @@ function DashboardEmpty() {
   return (
     <section className="mt-7 rounded-2xl border border-[#e7e6e3] bg-[#fafaf9] p-5 sm:p-6" aria-labelledby="dashboard-empty-heading">
       <h2 id="dashboard-empty-heading" className="text-xl font-semibold tracking-[-0.02em] text-[#1b1b1b]">No saved pathways yet</h2>
-      <p className="mt-2 max-w-xl text-sm leading-6 text-[#6f6d68]">Choose a starting country, destination and target field to create your first pathway.</p>
+          <p className="mt-2 max-w-xl text-sm leading-6 text-[#6f6d68]">Choose your citizenship, a country and an occupation category to create your first pathway.</p>
       <Link href={exploreHref} className={`mt-5 ${primaryLink}`}>Find a pathway <ArrowRight className="size-4" aria-hidden="true" /></Link>
     </section>
   )
@@ -82,8 +82,7 @@ function DashboardContent({ pathways }: { pathways: DashboardPathway[] }) {
               This pathway was saved before starting countries were recorded. Add yours to complete the pathway.
             </p>
           )}
-          <dl className="mt-5 grid gap-4 border-t border-[#dce6f7] pt-5 text-sm sm:grid-cols-2">
-            <div><dt className="font-medium text-[#6f6d68]">Current situation</dt><dd className="mt-1 font-semibold text-[#3a3935]">{primary.statusLabel}</dd></div>
+          <dl className="mt-5 border-t border-[#dce6f7] pt-5 text-sm">
             <div><dt className="font-medium text-[#6f6d68]">Last updated</dt><dd className="mt-1 font-semibold text-[#3a3935]">{formatPathwayDate(primary.updatedAt)}</dd></div>
           </dl>
           <Link href={resultHref(primary, actions.primaryAnchor)} className={`mt-6 w-full sm:w-auto ${primaryLink}`} aria-label={`${primaryLabel}: ${primary.originLabel} to ${primary.countryLabel}, ${primary.fieldLabel}`}>

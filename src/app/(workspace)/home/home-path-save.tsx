@@ -24,7 +24,7 @@ export function HomePathSaveProvider({ values, children }: { values: SavedPathwa
   useEffect(() => {
     let active = true
     setState("idle")
-    setMessage(canSave ? "" : "Add your starting country to save this pathway.")
+    setMessage(canSave ? "" : "Add your citizenship to save this pathway.")
     if (!canSave) return () => { active = false }
 
     void getSavedPathwayState(values).then((result) => {
@@ -44,7 +44,7 @@ export function HomePathSaveProvider({ values, children }: { values: SavedPathwa
   const save = useCallback(async () => {
     if (!canSave) {
       setState("error")
-      setMessage("Add your starting country to save this pathway.")
+      setMessage("Add your citizenship to save this pathway.")
       return
     }
 
@@ -101,7 +101,7 @@ export function HomePathSaveButton({ compact = false, prominent = false }: { com
   const { state, canSave, save } = useHomePathSave()
   const saved = state === "saved"
   const saving = state === "saving"
-  const label = !canSave ? "Add starting country" : saved ? "Saved" : compact ? "Save pathway" : "Save this pathway"
+  const label = !canSave ? "Add citizenship" : saved ? "Saved" : compact ? "Save pathway" : "Save this pathway"
   const className = compact
     ? "inline-flex min-h-9 shrink-0 items-center justify-center gap-1.5 rounded-lg border border-[#d5d3ce] bg-white px-3 text-xs font-semibold text-[#3a3935] transition hover:border-[#aaa8a1] hover:bg-[#fafaf9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/35 focus-visible:ring-offset-2 disabled:cursor-default disabled:border-blue-200 disabled:bg-blue-50 disabled:text-blue-800"
     : prominent

@@ -1,7 +1,7 @@
 import {
+  CITIZENSHIP_OPTIONS,
   getHomeSearchQuery,
   hasOption,
-  ORIGIN_OPTIONS,
   toHomeSearchQuery,
   type FormValues,
 } from "./home-search-config"
@@ -37,7 +37,7 @@ export function normalizeSavedPathwayInput(input: unknown): SavedPathwayInput | 
   if (typeof candidate.origin !== "string" || candidate.origin === "") return null
 
   const origin = candidate.origin.toUpperCase()
-  if (!hasOption(ORIGIN_OPTIONS, origin)) return null
+  if (!hasOption(CITIZENSHIP_OPTIONS, origin)) return null
   return { origin, ...core }
 }
 

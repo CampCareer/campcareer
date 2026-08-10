@@ -10,9 +10,10 @@ import {
 } from "../src/lib/institutions/institution-search"
 
 test("institution search params keep only supported filters", () => {
-  assert.deepEqual(parseInstitutionSearchParams({}), { q: "", kind: "all", page: 1 })
-  const parsed = parseInstitutionSearchParams({ q: "  University of Sydney  ", kind: "university", page: "3" })
+  assert.deepEqual(parseInstitutionSearchParams({}), { q: "", city: "", kind: "all", page: 1 })
+  const parsed = parseInstitutionSearchParams({ q: "  University of Sydney  ", city: "  Sydney ", kind: "university", page: "3" })
   assert.equal(parsed.q, "University of Sydney")
+  assert.equal(parsed.city, "Sydney")
   assert.equal(parsed.kind, "university")
   assert.equal(parsed.page, 3)
   assert.equal(parseInstitutionSearchParams({ kind: "unknown" }).kind, "all")
@@ -27,7 +28,7 @@ test("institution country routes use stable lower-case country segments", () => 
   assert.equal(normalizeInstitutionCountrySegment("nz"), "NZ")
   assert.equal(normalizeInstitutionCountrySegment("sg"), "SG")
   assert.equal(normalizeInstitutionCountrySegment("de"), "DE")
-  assert.equal(normalizeInstitutionCountrySegment("us"), null)
+  assert.equal(normalizeInstitutionCountrySegment("us"), "US")
   assert.equal(institutionCountryPath("AU"), "/institutions/au")
   assert.equal(institutionCountryPath("UK"), "/institutions/uk")
   assert.equal(institutionCountryPath("NL"), "/institutions/nl")
@@ -49,7 +50,7 @@ test("institution detail paths normalize stable persisted slugs", () => {
 })
 
 test("institution explorer URLs preserve search filters and omit defaults", () => {
-  const filters = parseInstitutionSearchParams({ q: "Sydney", kind: "tafe_vet", page: "2" })
-  assert.equal(buildInstitutionExplorerUrl("AU", filters), "/institutions/au?q=Sydney&kind=tafe_vet&page=2")
-  assert.equal(buildInstitutionExplorerUrl("AU", filters, { q: "", kind: "all", page: 1 }), "/institutions/au")
+  const filters = parseInstitutionSearchParams({ q: "Sydney", city: "Sydney", kind: "tafe_vet", page: "2" })
+  assert.equal(buildInstitutionExplorerUrl("AU", filters), "/institutions/au?q=Sydney&city=Sydney&kind=tafe_vet&page=2")
+  assert.equal(buildInstitutionExplorerUrl("AU", filters, { q: "", city: "", kind: "all", page: 1 }), "/institutions/au")
 })
