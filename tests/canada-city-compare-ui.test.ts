@@ -25,16 +25,16 @@ test("Canada city compare decision signals handle ties without inventing a winne
   const matrix = readFileSync("src/app/(workspace)/compare/canada-cities-compare-matrix.tsx", "utf8")
 
   assert.ok(matrix.includes("Current published midpoints are effectively the same"))
-  assert.ok(matrix.includes("Current linked programme counts are equal"))
+  assert.ok(matrix.includes("Published target-program counts are equal"))
   assert.ok(matrix.includes("programmeDifference === 0"))
   assert.ok(matrix.includes("Math.abs(livingDifference) < 1"))
 })
 
-test("Canada city compare distinguishes national rules and canonical overlap limits", () => {
+test("Canada city compare distinguishes national rules and published coverage limits", () => {
   const matrix = readFileSync("src/app/(workspace)/compare/canada-cities-compare-matrix.tsx", "utf8")
 
   assert.ok(matrix.includes("this is not a city differentiator"))
-  assert.ok(matrix.includes("The student work-hours row is a national rule"))
-  assert.ok(matrix.includes("No shared canonical programme IDs in current coverage"))
-  assert.ok(matrix.includes("zero does not mean the cities lack similar study fields"))
+  assert.ok(matrix.includes("The work-hours row is a national rule"))
+  assert.ok(matrix.includes("No shared target careers in current published coverage"))
+  assert.ok(matrix.includes("it does not require the same program identity to exist in both cities"))
 })
