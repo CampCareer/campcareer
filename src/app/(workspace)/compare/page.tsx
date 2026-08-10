@@ -4,6 +4,7 @@ import { AU_NURSING_PROGRAM_COMPARE_REPOSITORY } from "@/lib/data-foundation/com
 import { parseCareerComparisonState, type CareerComparisonState } from "@/lib/career-comparison"
 import { parseCountryComparisonState, type CountryComparisonState } from "@/lib/country-comparison"
 import { getAuCityComparison } from "@/lib/cities/au-city-comparison.server"
+import { getBeCityComparison } from "@/lib/cities/be-city-comparison.server"
 import { getCaCityComparison } from "@/lib/cities/ca-city-comparison.server"
 import { getDeCityComparison } from "@/lib/cities/de-city-comparison.server"
 import { getNlCityComparison } from "@/lib/cities/nl-city-comparison.server"
@@ -23,6 +24,7 @@ import ProgramsCompareMatrix from "./programs-compare-matrix"
 import CountriesCompareMatrix from "./countries-compare-matrix"
 import CareersCompareMatrix from "./careers-compare-matrix"
 import { CitiesCompareMatrix } from "./cities-compare-matrix"
+import { BelgiumCitiesCompareMatrix } from "./belgium-cities-compare-matrix"
 import { CanadaCitiesCompareMatrix } from "./canada-cities-compare-matrix"
 import { GermanyCitiesCompareMatrix } from "./germany-cities-compare-matrix"
 import { NetherlandsCitiesCompareMatrix } from "./netherlands-cities-compare-matrix"
@@ -119,6 +121,32 @@ async function CitiesCompare({ countryCode, params }: { countryCode: string; par
       <section className="w-full pb-4" aria-label="Cities comparison">
         <ComparePageHeader activeType="city" countryCode={countryCode} />
         <CitiesCompareMatrix left={comparison.left} right={comparison.right} options={comparison.options} sharedProgramCount={comparison.sharedProgramCount} />
+      </section>
+    )
+  }
+
+  if (countryCode === "BE") {
+    const comparison = await getBeCityComparison(params.get("left"), params.get("right"))
+    if (!comparison) {
+      return (
+        <UnsupportedSurface
+          type="Cities"
+          href={buildCityCompareCanonicalHref({ country: "BE" })}
+          label="Compare Belgian cities"
+          activeType="city"
+          countryCode={countryCode}
+        />
+      )
+    }
+
+    return (
+      <section className="w-full pb-4" aria-label="Cities comparison">
+        <ComparePageHeader activeType="city" countryCode={countryCode} />
+        <BelgiumCitiesCompareMatrix
+          left={comparison.left}
+          right={comparison.right}
+          options={comparison.options}
+        />
       </section>
     )
   }
