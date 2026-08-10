@@ -85,7 +85,7 @@ test("Ireland Engineering does not infer environmental shortage from green-trans
 
 test("Ireland Engineering exposes a verified technician work-based route without making it universal", () => {
   assert.ok(migration.includes("'IE:engineering-technician','entry_program','Generation Apprenticeship — Civil Engineering Technician L6'"))
-  assert.ok(migration.includes("one verified structured technician pathway"))
+  assert.ok(migration.includes("structured apprenticeships such as Civil Engineering Technician"))
 })
 
 test("Ireland Engineering keeps Engineers Ireland titles separate from universal statutory registration", () => {
