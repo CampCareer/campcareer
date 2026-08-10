@@ -61,6 +61,7 @@ import { AUTOMOTIVE_SERVICE_TECHNICIAN_OCCUPATION_EDITORIAL } from "./occupation
 import { CANADA_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-ca-carpenter"
 import { UK_CONSTRUCTION_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-uk-construction"
 import { UK_HEALTH_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-uk-health"
+import { UK_TECHNOLOGY_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-uk-technology"
 
 export type { CountryOccupationEditorial, OccupationEditorial } from "./occupation-editorial-base"
 
@@ -130,6 +131,7 @@ const COUNTRY_OCCUPATION_EDITORIAL_OVERRIDES = [
   ...CANADA_OCCUPATION_EDITORIAL_OVERRIDES,
   ...UK_CONSTRUCTION_OCCUPATION_EDITORIAL_OVERRIDES,
   ...UK_HEALTH_OCCUPATION_EDITORIAL_OVERRIDES,
+  ...UK_TECHNOLOGY_OCCUPATION_EDITORIAL_OVERRIDES,
 ] as const
 
 export const OCCUPATION_EDITORIAL: readonly OccupationEditorialType[] = RAW_OCCUPATION_EDITORIAL.map((item) => {
