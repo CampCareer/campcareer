@@ -13,8 +13,8 @@ import {
 export const dynamic = "force-dynamic"
 
 export const metadata: Metadata = pageMetadata({
-  title: "Work & Study in Singapore - Jobs, Salary and Work-Pass Context | CampCareer",
-  description: "Compare official Singapore job-demand signals, MOM wages, URA rental market segments, SkillsFuture pathways and work-pass context.",
+  title: "Study in Singapore - Universities, Costs, Work Rules and Career Context | CampCareer",
+  description: "Compare verified Singapore university locations, student cost and transport references, student-work conditions, programme coverage status, job signals and work-pass context.",
   path: "/sg",
 })
 
