@@ -5,6 +5,7 @@ import { parseCareerComparisonState, type CareerComparisonState } from "@/lib/ca
 import { parseCountryComparisonState, type CountryComparisonState } from "@/lib/country-comparison"
 import { getAuCityComparison } from "@/lib/cities/au-city-comparison.server"
 import { getCaCityComparison } from "@/lib/cities/ca-city-comparison.server"
+import { getNlCityComparison } from "@/lib/cities/nl-city-comparison.server"
 import { getNzCityComparison } from "@/lib/cities/nz-city-comparison.server"
 import { getUkCityComparison } from "@/lib/cities/uk-city-comparison.server"
 import { getUsCityComparison } from "@/lib/cities/us-city-comparison.server"
@@ -20,6 +21,7 @@ import CountriesCompareMatrix from "./countries-compare-matrix"
 import CareersCompareMatrix from "./careers-compare-matrix"
 import { CitiesCompareMatrix } from "./cities-compare-matrix"
 import { CanadaCitiesCompareMatrix } from "./canada-cities-compare-matrix"
+import { NetherlandsCitiesCompareMatrix } from "./netherlands-cities-compare-matrix"
 import { NewZealandCitiesCompareMatrix } from "./new-zealand-cities-compare-matrix"
 import { UnitedKingdomCitiesCompareMatrix } from "./united-kingdom-cities-compare-matrix"
 import { UnitedStatesCitiesCompareMatrix } from "./united-states-cities-compare-matrix"
@@ -105,26 +107,12 @@ async function CitiesCompare({ countryCode, params }: { countryCode: string; par
   if (countryCode === "AU") {
     const comparison = await getAuCityComparison(params.get("left"), params.get("right"))
     if (!comparison) {
-      return (
-        <UnsupportedSurface
-          type="Cities"
-          href={buildCityCompareCanonicalHref({ country: "AU" })}
-          label="Compare Australian cities"
-          activeType="city"
-          countryCode={countryCode}
-        />
-      )
+      return <UnsupportedSurface type="Cities" href={buildCityCompareCanonicalHref({ country: "AU" })} label="Compare Australian cities" activeType="city" countryCode={countryCode} />
     }
-
     return (
       <section className="w-full pb-4" aria-label="Cities comparison">
         <ComparePageHeader activeType="city" countryCode={countryCode} />
-        <CitiesCompareMatrix
-          left={comparison.left}
-          right={comparison.right}
-          options={comparison.options}
-          sharedProgramCount={comparison.sharedProgramCount}
-        />
+        <CitiesCompareMatrix left={comparison.left} right={comparison.right} options={comparison.options} sharedProgramCount={comparison.sharedProgramCount} />
       </section>
     )
   }
@@ -132,26 +120,12 @@ async function CitiesCompare({ countryCode, params }: { countryCode: string; par
   if (countryCode === "CA") {
     const comparison = await getCaCityComparison(params.get("left"), params.get("right"))
     if (!comparison) {
-      return (
-        <UnsupportedSurface
-          type="Cities"
-          href={buildCityCompareCanonicalHref({ country: "CA" })}
-          label="Compare Canadian cities"
-          activeType="city"
-          countryCode={countryCode}
-        />
-      )
+      return <UnsupportedSurface type="Cities" href={buildCityCompareCanonicalHref({ country: "CA" })} label="Compare Canadian cities" activeType="city" countryCode={countryCode} />
     }
-
     return (
       <section className="w-full pb-4" aria-label="Cities comparison">
         <ComparePageHeader activeType="city" countryCode={countryCode} />
-        <CanadaCitiesCompareMatrix
-          left={comparison.left}
-          right={comparison.right}
-          options={comparison.options}
-          sharedCareerCount={comparison.sharedCareerCount}
-        />
+        <CanadaCitiesCompareMatrix left={comparison.left} right={comparison.right} options={comparison.options} sharedCareerCount={comparison.sharedCareerCount} />
       </section>
     )
   }
@@ -159,25 +133,25 @@ async function CitiesCompare({ countryCode, params }: { countryCode: string; par
   if (countryCode === "NZ") {
     const comparison = await getNzCityComparison(params.get("left"), params.get("right"))
     if (!comparison) {
-      return (
-        <UnsupportedSurface
-          type="Cities"
-          href={buildCityCompareCanonicalHref({ country: "NZ" })}
-          label="Compare New Zealand cities"
-          activeType="city"
-          countryCode={countryCode}
-        />
-      )
+      return <UnsupportedSurface type="Cities" href={buildCityCompareCanonicalHref({ country: "NZ" })} label="Compare New Zealand cities" activeType="city" countryCode={countryCode} />
     }
-
     return (
       <section className="w-full pb-4" aria-label="Cities comparison">
         <ComparePageHeader activeType="city" countryCode={countryCode} />
-        <NewZealandCitiesCompareMatrix
-          left={comparison.left}
-          right={comparison.right}
-          options={comparison.options}
-        />
+        <NewZealandCitiesCompareMatrix left={comparison.left} right={comparison.right} options={comparison.options} />
+      </section>
+    )
+  }
+
+  if (countryCode === "NL") {
+    const comparison = await getNlCityComparison(params.get("left"), params.get("right"))
+    if (!comparison) {
+      return <UnsupportedSurface type="Cities" href={buildCityCompareCanonicalHref({ country: "NL" })} label="Compare Netherlands cities" activeType="city" countryCode={countryCode} />
+    }
+    return (
+      <section className="w-full pb-4" aria-label="Cities comparison">
+        <ComparePageHeader activeType="city" countryCode={countryCode} />
+        <NetherlandsCitiesCompareMatrix left={comparison.left} right={comparison.right} options={comparison.options} />
       </section>
     )
   }
@@ -185,25 +159,12 @@ async function CitiesCompare({ countryCode, params }: { countryCode: string; par
   if (countryCode === "UK") {
     const comparison = await getUkCityComparison(params.get("left"), params.get("right"))
     if (!comparison) {
-      return (
-        <UnsupportedSurface
-          type="Cities"
-          href={buildCityCompareCanonicalHref({ country: "UK" })}
-          label="Compare UK cities"
-          activeType="city"
-          countryCode={countryCode}
-        />
-      )
+      return <UnsupportedSurface type="Cities" href={buildCityCompareCanonicalHref({ country: "UK" })} label="Compare UK cities" activeType="city" countryCode={countryCode} />
     }
-
     return (
       <section className="w-full pb-4" aria-label="Cities comparison">
         <ComparePageHeader activeType="city" countryCode={countryCode} />
-        <UnitedKingdomCitiesCompareMatrix
-          left={comparison.left}
-          right={comparison.right}
-          options={comparison.options}
-        />
+        <UnitedKingdomCitiesCompareMatrix left={comparison.left} right={comparison.right} options={comparison.options} />
       </section>
     )
   }
@@ -211,38 +172,17 @@ async function CitiesCompare({ countryCode, params }: { countryCode: string; par
   if (countryCode === "US") {
     const comparison = await getUsCityComparison(params.get("left"), params.get("right"))
     if (!comparison) {
-      return (
-        <UnsupportedSurface
-          type="Cities"
-          href={buildCityCompareCanonicalHref({ country: "US" })}
-          label="Compare U.S. cities"
-          activeType="city"
-          countryCode={countryCode}
-        />
-      )
+      return <UnsupportedSurface type="Cities" href={buildCityCompareCanonicalHref({ country: "US" })} label="Compare U.S. cities" activeType="city" countryCode={countryCode} />
     }
-
     return (
       <section className="w-full pb-4" aria-label="Cities comparison">
         <ComparePageHeader activeType="city" countryCode={countryCode} />
-        <UnitedStatesCitiesCompareMatrix
-          left={comparison.left}
-          right={comparison.right}
-          options={comparison.options}
-        />
+        <UnitedStatesCitiesCompareMatrix left={comparison.left} right={comparison.right} options={comparison.options} />
       </section>
     )
   }
 
-  return (
-    <UnsupportedSurface
-      type="Cities"
-      href={buildCityCompareCanonicalHref({ country: "AU" })}
-      label="Compare Australian cities"
-      activeType="city"
-      countryCode={countryCode}
-    />
-  )
+  return <UnsupportedSurface type="Cities" href={buildCityCompareCanonicalHref({ country: "AU" })} label="Compare Australian cities" activeType="city" countryCode={countryCode} />
 }
 
 function SingaporeCityStateDecision() {
@@ -252,9 +192,7 @@ function SingaporeCityStateDecision() {
       <div className="max-w-2xl rounded-2xl border border-[#e7e6e3] bg-white p-5 sm:p-6">
         <p className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">Singapore city-state</p>
         <h2 className="mt-2 text-xl font-semibold tracking-[-0.02em] text-[#1b1b1b]">There is no Singapore city shortlist to compare</h2>
-        <p className="mt-2 text-sm leading-6 text-[#6f6d68]">
-          CampCareer treats Singapore as one country-level study destination. Central, East, North, North-East, West and CBD remain living and commute contexts rather than separate canonical study cities.
-        </p>
+        <p className="mt-2 text-sm leading-6 text-[#6f6d68]">CampCareer treats Singapore as one country-level study destination. Central, East, North, North-East, West and CBD remain living and commute contexts rather than separate canonical study cities.</p>
         <div className="mt-5 flex flex-wrap gap-3">
           <Link href="/sg" className="inline-flex min-h-11 items-center rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white">Open Singapore destination</Link>
           <Link href="/map?country=sg&area=central" className="inline-flex min-h-11 items-center rounded-xl border border-[#e7e6e3] px-4 text-sm font-semibold text-[#1b1b1b]">Compare living areas</Link>
@@ -267,15 +205,7 @@ function SingaporeCityStateDecision() {
 
 function CareersCompare({ comparison, countryCode }: { comparison: CareerComparisonState; countryCode: string }) {
   if (comparison.contextState === "unsupported") {
-    return (
-      <UnsupportedSurface
-        type="Careers"
-        href={buildCareerCompareCanonicalHref()}
-        label="Compare Australian careers"
-        activeType="career"
-        countryCode={countryCode}
-      />
-    )
+    return <UnsupportedSurface type="Careers" href={buildCareerCompareCanonicalHref()} label="Compare Australian careers" activeType="career" countryCode={countryCode} />
   }
   return (
     <section className="w-full pb-4" aria-label="Careers comparison">
@@ -286,14 +216,7 @@ function CareersCompare({ comparison, countryCode }: { comparison: CareerCompari
 }
 
 function UnsupportedCountryComparison() {
-  return (
-    <UnsupportedSurface
-      type="Countries"
-      href={buildCountryCompareCanonicalHref()}
-      label="Start a country comparison"
-      activeType="country"
-    />
-  )
+  return <UnsupportedSurface type="Countries" href={buildCountryCompareCanonicalHref()} label="Start a country comparison" activeType="country" />
 }
 
 function UnsupportedComparisonType() {
@@ -302,24 +225,13 @@ function UnsupportedComparisonType() {
       <div className="max-w-xl rounded-2xl border border-[#e7e6e3] bg-white p-5 sm:p-6">
         <h1 className="text-xl font-semibold tracking-[-0.02em] text-[#1b1b1b]">Comparison not available</h1>
         <p className="mt-2 text-sm leading-6 text-[#6f6d68]">This comparison context is not supported yet.</p>
-        <Link
-          href={buildProgramCompareCanonicalHref()}
-          className="mt-5 inline-flex min-h-11 items-center rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white"
-        >
-          Open Programs Compare
-        </Link>
+        <Link href={buildProgramCompareCanonicalHref()} className="mt-5 inline-flex min-h-11 items-center rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white">Open Programs Compare</Link>
       </div>
     </section>
   )
 }
 
-function UnsupportedSurface({
-  type,
-  href,
-  label,
-  activeType,
-  countryCode,
-}: {
+function UnsupportedSurface({ type, href, label, activeType, countryCode }: {
   type: "Programs" | "Countries" | "Cities" | "Careers"
   href: string
   label: string
@@ -332,12 +244,7 @@ function UnsupportedSurface({
       <div className="max-w-xl rounded-2xl border border-[#e7e6e3] bg-white p-5 sm:p-6">
         <h2 className="text-xl font-semibold tracking-[-0.02em] text-[#1b1b1b]">Comparison not available</h2>
         <p className="mt-2 text-sm leading-6 text-[#6f6d68]">This comparison context is not supported yet.</p>
-        <Link
-          href={href}
-          className="mt-5 inline-flex min-h-11 items-center rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white"
-        >
-          {label}
-        </Link>
+        <Link href={href} className="mt-5 inline-flex min-h-11 items-center rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white">{label}</Link>
       </div>
     </section>
   )
