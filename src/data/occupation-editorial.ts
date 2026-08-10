@@ -59,6 +59,7 @@ import { DECK_OFFICER_OCCUPATION_EDITORIAL } from "./occupation-editorial-deck-o
 import { WAREHOUSE_MANAGER_OCCUPATION_EDITORIAL } from "./occupation-editorial-warehouse-manager"
 import { AUTOMOTIVE_SERVICE_TECHNICIAN_OCCUPATION_EDITORIAL } from "./occupation-editorial-automotive-service-technician"
 import { CANADA_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-ca-carpenter"
+import { KOREA_CONSTRUCTION_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-kr-construction"
 
 export type { CountryOccupationEditorial, OccupationEditorial } from "./occupation-editorial-base"
 
@@ -124,10 +125,15 @@ const RAW_OCCUPATION_EDITORIAL: readonly OccupationEditorialType[] = [
   ...AUTOMOTIVE_SERVICE_TECHNICIAN_OCCUPATION_EDITORIAL,
 ]
 
+const COUNTRY_OCCUPATION_EDITORIAL_OVERRIDES = [
+  ...CANADA_OCCUPATION_EDITORIAL_OVERRIDES,
+  ...KOREA_CONSTRUCTION_OCCUPATION_EDITORIAL_OVERRIDES,
+] as const
+
 export const OCCUPATION_EDITORIAL: readonly OccupationEditorialType[] = RAW_OCCUPATION_EDITORIAL.map((item) => {
   let countries = item.countries
 
-  for (const override of CANADA_OCCUPATION_EDITORIAL_OVERRIDES) {
+  for (const override of COUNTRY_OCCUPATION_EDITORIAL_OVERRIDES) {
     if (override.id === item.id) {
       countries = { ...countries, [override.countryCode]: override.editorial }
     }
