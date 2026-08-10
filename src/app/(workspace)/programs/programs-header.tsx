@@ -77,10 +77,8 @@ function ProgramCountryPicker({
 
 export function ProgramsHeader({
   filters,
-  countryExplicit,
 }: {
   filters: ProgramSearchFilters
-  countryExplicit: boolean
 }) {
   const locale = useRouteLocale()
   const replace = useProgramNavigation()
@@ -93,8 +91,7 @@ export function ProgramsHeader({
     const country =
       LAUNCH_COUNTRIES.find((item) => item.code === filters.country) ?? LAUNCH_COUNTRIES[0]
     setSelectedCountry({ code: country.code, name: country.name, currency: country.currency })
-    if (!countryExplicit) replace({ country: country.code })
-  }, [countryExplicit, filters.country, replace, setSelectedCountry])
+  }, [filters.country, setSelectedCountry])
 
   function pickCountry(countryCode: string) {
     const country = LAUNCH_COUNTRIES.find((item) => item.code === countryCode)

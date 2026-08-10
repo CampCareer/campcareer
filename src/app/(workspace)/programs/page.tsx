@@ -23,10 +23,6 @@ import {
 
 export const revalidate = 3600
 
-function firstValue(value: string | string[] | undefined) {
-  return Array.isArray(value) ? value[0] : value
-}
-
 function queryWithoutCountry(params: Record<string, string | string[] | undefined>) {
   const next = new URLSearchParams()
   for (const [key, value] of Object.entries(params)) {
@@ -217,8 +213,6 @@ export default async function ProgramsPage({
   }
 
   const filters = normalizedFilters(params)
-  const rawCountry = firstValue(params.country)
-  const countryExplicit = Boolean(rawCountry && getLaunchCountry(rawCountry))
 
   let auResult: AuProgramSearchResult | null = null
   let caResult: CaProgramSearchResult | null = null
@@ -238,7 +232,7 @@ export default async function ProgramsPage({
 
   return (
     <>
-      <ProgramsHeader filters={filters} countryExplicit={countryExplicit} />
+      <ProgramsHeader filters={filters} />
 
       {!countryIsPublished ? (
         <div className="mt-7">
