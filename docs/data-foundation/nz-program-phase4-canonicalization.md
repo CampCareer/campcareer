@@ -90,7 +90,7 @@ Explorer/detail/compare preserve:
 - reviewed occupation relations;
 - official programme and international/visa source provenance.
 
-## Security
+## Security and advisor checks
 
 All Phase 4 views use `security_invoker=true`.
 
@@ -99,6 +99,8 @@ Privileges are intentionally server-only:
 - `anon`: no SELECT;
 - `authenticated`: no SELECT;
 - `service_role`: SELECT.
+
+Supabase security/performance advisors were re-run after Phase 4. No new NZ Phase 4 view vulnerability or unindexed foreign key was introduced. Existing project-wide advisor items remain, including the intentional server-only `RLS enabled / no policy` staging pattern and the unrelated Auth leaked-password warning.
 
 This keeps staging/canonical programme evidence behind the server boundary until the Phase 5 application layer exposes curated fields.
 
