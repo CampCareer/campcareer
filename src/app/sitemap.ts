@@ -12,6 +12,7 @@ import { INDEXABLE_SE_PROGRAM_PATHS } from "@/lib/programs/se-program-seo"
 import { INDEXABLE_CH_PROGRAM_PATHS } from "@/lib/programs/ch-program-seo"
 import { INDEXABLE_BE_PROGRAM_PATHS } from "@/lib/programs/be-program-seo"
 import { INDEXABLE_ES_PROGRAM_PATHS } from "@/lib/programs/es-program-seo"
+import { INDEXABLE_FR_PROGRAM_PATHS } from "@/lib/programs/fr-program-seo"
 import { AU_OCCUPATION_STATE_PAGES } from "@/lib/workspace/au-occupation-state-seo"
 import { INDEXABLE_OCCUPATION_PROFILES, occupationCanonicalPath } from "@/lib/workspace/occupation-routes"
 import { getCompletedVisaCatalog } from "@/lib/workspace/visa-catalog-complete"
@@ -47,7 +48,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ]
   const programPages:MetadataRoute.Sitemap=[
     ...INDEXABLE_AU_PROGRAMS.map(program=>({url:`${SITE_URL}${indexableAuProgramPath(program)}`,lastModified:new Date(program.sourceCheckedAt),priority:.74,changeFrequency:"weekly" as const})),
-    ...[...INDEXABLE_AE_PROGRAM_PATHS,...INDEXABLE_KR_PROGRAM_PATHS,...INDEXABLE_JP_PROGRAM_PATHS,...INDEXABLE_NO_PROGRAM_PATHS,...INDEXABLE_FI_PROGRAM_PATHS,...INDEXABLE_DK_PROGRAM_PATHS,...INDEXABLE_SE_PROGRAM_PATHS,...INDEXABLE_CH_PROGRAM_PATHS,...INDEXABLE_BE_PROGRAM_PATHS,...INDEXABLE_ES_PROGRAM_PATHS].map(path=>({url:`${SITE_URL}${path}`,lastModified,priority:.74,changeFrequency:"weekly" as const}))
+    ...[...INDEXABLE_AE_PROGRAM_PATHS,...INDEXABLE_KR_PROGRAM_PATHS,...INDEXABLE_JP_PROGRAM_PATHS,...INDEXABLE_NO_PROGRAM_PATHS,...INDEXABLE_FI_PROGRAM_PATHS,...INDEXABLE_DK_PROGRAM_PATHS,...INDEXABLE_SE_PROGRAM_PATHS,...INDEXABLE_CH_PROGRAM_PATHS,...INDEXABLE_BE_PROGRAM_PATHS,...INDEXABLE_ES_PROGRAM_PATHS,...INDEXABLE_FR_PROGRAM_PATHS].map(path=>({url:`${SITE_URL}${path}`,lastModified,priority:.74,changeFrequency:"weekly" as const}))
   ]
   const occupationPages:MetadataRoute.Sitemap=INDEXABLE_OCCUPATION_PROFILES.map(profile=>({url:`${SITE_URL}${occupationCanonicalPath(profile.countryCode,profile.careerId)}`,lastModified:new Date(profile.sourceCheckedAt),priority:.74,changeFrequency:"weekly" as const}))
   const visaPages:MetadataRoute.Sitemap=getIndexableVisaRoutes(getCompletedVisaCatalog()).map(route=>({url:`${SITE_URL}${route.path}`,lastModified,priority:.7,changeFrequency:"monthly" as const}))
