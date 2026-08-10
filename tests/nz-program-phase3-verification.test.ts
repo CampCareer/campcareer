@@ -6,6 +6,10 @@ const migration = readFileSync(
   "supabase/migrations/20260810132813_nz_program_phase3_verification.sql",
   "utf8",
 )
+const aviationCorrection = readFileSync(
+  "supabase/migrations/20260810133548_nz_program_phase3_massey_aviation_deadline_correction.sql",
+  "utf8",
+)
 
 test("NZ Phase 3 stays inside the bounded occupation-led cohort", () => {
   assert.match(migration, /expected 24 programme\/international rows 1:1/)
@@ -37,12 +41,17 @@ test("NZ Phase 3 records only source-backed live application windows", () => {
     ["otago-bmlsc", "2026-08-13"],
     ["waikato-btchg-early-childhood", "2026-08-24"],
     ["waikato-btchg-primary", "2026-08-24"],
-    ["massey-bav-air-transport-pilot", "2026-10-01"],
   ] as const
 
   for (const [key, deadline] of expected) {
     assert.match(migration, new RegExp(`'${key}', DATE '${deadline}'`))
   }
+
+  assert.match(aviationCorrection, /massey-bav-air-transport-pilot/)
+  assert.match(aviationCorrection, /DATE '2026-10-30'/)
+  assert.match(aviationCorrection, /Semester One 2027 selected-entry intake/)
+  assert.match(aviationCorrection, /admission-application-due-dates/)
+  assert.match(aviationCorrection, /open_count <> 6 OR schedule_unknown_count <> 18/)
 })
 
 test("NZ Phase 3 preserves visa and professional-registration boundaries", () => {
