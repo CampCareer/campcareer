@@ -75,12 +75,12 @@ test("transport remains source-native and work context preserves the 16-hour/TWV
   assert.ok(dashboard.includes("The employer needs a TWV"))
 })
 
-test("Phase 5 Netherlands routes remain noindex and City Compare is not enabled early", () => {
+test("Phase 7 Netherlands routes are indexable and profiles link into City Compare", () => {
   assert.ok(page.includes("generateStaticParams"))
   assert.ok(page.includes("PUBLISHED_NL_CITY_SLUGS"))
-  assert.ok(page.includes("robots: { index: false, follow: true }"))
+  assert.ok(page.includes("robots: { index: true, follow: true }"))
   assert.ok(page.includes("robots: { index: false, follow: false }"))
   assert.ok(page.includes("/cities/nl/${normalized}"))
-  assert.doesNotMatch(dashboard, /buildCityCompareCanonicalHref/)
-  assert.doesNotMatch(dashboard, /Compare \{profile\.name\}/)
+  assert.ok(dashboard.includes('buildCityCompareCanonicalHref({ country: "NL", left: profile.slug })'))
+  assert.ok(dashboard.includes("Compare {profile.name}"))
 })
