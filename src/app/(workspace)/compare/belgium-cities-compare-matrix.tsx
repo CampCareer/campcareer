@@ -129,7 +129,7 @@ export function BelgiumCitiesCompareMatrix({ left, right, options }: Props) {
         <article className="rounded-xl border border-[#dce3eb] bg-[#f7f9fb] p-5">
           <p className="text-[10.5px] font-semibold uppercase tracking-[0.08em] text-[#4d657c]">Comparison guardrail</p>
           <p className="mt-2 text-[18px] font-semibold leading-6 text-[#1b1b1b]">Source-native evidence stays source-native</p>
-          <p className="mt-2 text-[11.5px] leading-5 text-[#64748b]">Belgium's linguistic communities, transport operators and destination boundaries differ. CampCareer therefore shows the evidence side by side without manufacturing one composite city score.</p>
+          <p className="mt-2 text-[11.5px] leading-5 text-[#64748b]">Belgian linguistic communities, transport operators and destination boundaries differ. CampCareer therefore shows the evidence side by side without manufacturing one composite city score.</p>
         </article>
         <article className="rounded-xl border border-[#eadfca] bg-[#fffaf1] p-5">
           <div className="flex items-center gap-2 text-[#a86514]"><Info className="size-4" /><p className="text-[10.5px] font-semibold uppercase tracking-[0.08em]">Programme coverage</p></div>
