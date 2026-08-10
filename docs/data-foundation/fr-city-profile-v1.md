@@ -1,12 +1,12 @@
 # France city profile v1
 
-Status: `PHASE_5_COMPLETE_PENDING_CI`
+Status: `PHASE_5_COMPLETE`
 
 Branch: `agent/fr-cities-v1`
 
 Audit date: 2026-08-10
 
-Checkpoint target: `PROFILE_COMPLETE`
+Checkpoint: `PROFILE_COMPLETE`
 
 ## Exact profile routes
 
@@ -47,5 +47,17 @@ The profile keeps these distinctions visible:
 Phase 5 approved routes use `noindex, follow`. Unsupported slugs use `noindex, nofollow`.
 
 Search indexing and sitemap publication remain deferred to Phase 7. City Compare remains deferred to Phase 6.
+
+## Validation
+
+GitHub Actions CI run `31439408299` (#1250) passed on the Phase 2–5 implementation head `c05b6088525691a689f6a7756f16802e46a35479`:
+
+- npm ci
+- production dependency audit
+- typecheck
+- lint
+- full tests including France Phase 2–5 contracts
+- production build
+- Git-history secret scan
 
 No main merge or Vercel deployment is part of Phase 5.
