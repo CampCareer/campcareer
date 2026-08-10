@@ -22,6 +22,7 @@ Applied migrations:
 
 - `20260810125846_nz_program_phase2_staging_foundation`
 - `20260810130426_nz_program_phase2_bounded_seed`
+- `20260810131112_nz_program_phase2_staging_indexes`
 
 Server-only staging tables:
 
@@ -29,7 +30,7 @@ Server-only staging tables:
 - `public.program_occupation_nz_staging`
 - `public.program_international_nz_staging`
 
-All three staging tables have RLS enabled. `anon` and `authenticated` access is revoked; the operational staging surface is service-role only.
+All three staging tables have RLS enabled. `anon` and `authenticated` access is revoked; the operational staging surface is service-role only. The catalogue `institution_id` foreign key has a covering index after the Phase 2 performance-advisor pass.
 
 ## Bounded cohort
 
