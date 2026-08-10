@@ -60,6 +60,9 @@ export type PublishedFrCitySlug = (typeof PUBLISHED_FR_CITY_SLUGS)[number]
 export const PUBLISHED_SE_CITY_SLUGS = ["stockholm", "gothenburg", "uppsala", "lund", "linkoping", "umea"] as const
 export type PublishedSeCitySlug = (typeof PUBLISHED_SE_CITY_SLUGS)[number]
 
+export const PUBLISHED_DK_CITY_SLUGS = ["copenhagen", "frederiksberg", "odense", "aarhus", "aalborg"] as const
+export type PublishedDkCitySlug = (typeof PUBLISHED_DK_CITY_SLUGS)[number]
+
 const CITY_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
 export function normalizeCitySlug(value: string | null | undefined) {
@@ -98,6 +101,10 @@ export function isPublishedFrCitySlug(value: string): value is PublishedFrCitySl
 
 export function isPublishedSeCitySlug(value: string): value is PublishedSeCitySlug {
   return PUBLISHED_SE_CITY_SLUGS.includes(value as PublishedSeCitySlug)
+}
+
+export function isPublishedDkCitySlug(value: string): value is PublishedDkCitySlug {
+  return PUBLISHED_DK_CITY_SLUGS.includes(value as PublishedDkCitySlug)
 }
 
 export function auCityPath(value: string | null | undefined) {
@@ -146,4 +153,10 @@ export function seCityPath(value: string | null | undefined) {
   const slug = normalizeCitySlug(value)
   if (!slug || !isPublishedSeCitySlug(slug)) return null
   return `/cities/se/${slug}`
+}
+
+export function dkCityPath(value: string | null | undefined) {
+  const slug = normalizeCitySlug(value)
+  if (!slug || !isPublishedDkCitySlug(slug)) return null
+  return `/cities/dk/${slug}`
 }
