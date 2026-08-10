@@ -66,6 +66,7 @@ import { UK_ENGINEERING_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-edit
 import { UK_BUSINESS_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-uk-business"
 import { UK_EDUCATION_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-uk-education"
 import { UK_ENVIRONMENT_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-uk-environment"
+import { UK_DESIGN_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-uk-design"
 
 export type { CountryOccupationEditorial, OccupationEditorial } from "./occupation-editorial-base"
 
@@ -140,6 +141,7 @@ const COUNTRY_OCCUPATION_EDITORIAL_OVERRIDES = [
   ...UK_BUSINESS_OCCUPATION_EDITORIAL_OVERRIDES,
   ...UK_EDUCATION_OCCUPATION_EDITORIAL_OVERRIDES,
   ...UK_ENVIRONMENT_OCCUPATION_EDITORIAL_OVERRIDES,
+  ...UK_DESIGN_OCCUPATION_EDITORIAL_OVERRIDES,
 ] as const
 
 export const OCCUPATION_EDITORIAL: readonly OccupationEditorialType[] = RAW_OCCUPATION_EDITORIAL.map((item) => {
