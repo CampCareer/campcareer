@@ -29,8 +29,8 @@ test("NL canonical identities are stable and preserve official RIO codes", () =>
 })
 
 test("NL Phase 4 does not invent qualification or campus linkage", () => {
-  assert.match(canonicalization, /qualification_level_id,NULL/)
-  assert.match(canonicalization, /campus_id,NULL/)
+  assert.match(canonicalization, /qualification_level_id=NULL/)
+  assert.match(canonicalization, /campus_id=NULL/)
   assert.match(canonicalization, /offering_with_campus_count<>0/)
 })
 
