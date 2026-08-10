@@ -23,9 +23,10 @@ A current programme can be internationally eligible without having a currently v
 
 ## Production result
 
-Applied migration:
+Applied migrations:
 
 - `20260810132813_nz_program_phase3_verification`
+- `20260810133548_nz_program_phase3_massey_aviation_deadline_correction`
 
 Verified cohort:
 
@@ -55,7 +56,9 @@ Open source-backed routes:
 - University of Otago — Physiotherapy: deadline 2026-08-13;
 - University of Waikato — Early Childhood Teaching: deadline 2026-08-24 for Trimester A 2027;
 - University of Waikato — Primary Teaching: deadline 2026-08-24 for Trimester A 2027;
-- Massey University — Air Transport Pilot: international Semester One selected-entry deadline 2026-10-01.
+- Massey University — Air Transport Pilot: international Semester One 2027 deadline 2026-10-30.
+
+Massey’s Air Transport Pilot major page contains generic wording that says international Semester One applications close on 1 October. The current intake-specific admission due-date table lists 30 October 2026 for international Bachelor of Aviation Semester One 2027 applications. Phase 3 therefore uses the intake-specific 2027 table as the canonical current deadline and records the correction in a separate production migration.
 
 Canonical staging admission distribution:
 
