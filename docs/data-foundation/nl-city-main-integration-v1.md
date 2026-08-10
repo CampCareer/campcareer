@@ -1,12 +1,16 @@
 # Netherlands city main integration v1
 
-Status: `PHASE_9_GATE_PENDING`
+Status: `PHASE_9_COMPLETE`
+
+Integration state: `READY_FOR_PHASE_10_RELEASE_APPROVAL`
 
 Branch: `agent/nl-cities-main-integration-v1`
 
 Base main commit: `cf9913d7eee78c73d5d4cf01fdeff6b3b6722a7f`
 
 Source QA branch: `agent/nl-cities-qa-v1`
+
+Integration PR: `#196` — draft / unmerged
 
 Audit date: 2026-08-10
 
@@ -16,15 +20,13 @@ Integrate the completed Netherlands Cities Phase 0–8 rollout onto the current 
 
 ## Current-main reconciliation
 
-At Phase 9 start, GitHub comparison returned:
+At Phase 9 start and again after integration CI, current main remains:
 
-- QA lineage ahead of current main: 31 commits
-- QA lineage behind current main: 0 commits
-- merge base: current main `cf9913d7eee78c73d5d4cf01fdeff6b3b6722a7f`
+`cf9913d7eee78c73d5d4cf01fdeff6b3b6722a7f`
 
-Current main therefore remains a direct ancestor of the completed Netherlands rollout. No newer main-only commit needs transplantation or conflict reconciliation in this phase.
+GitHub comparison confirms the Netherlands integration lineage is zero commits behind current main. Current main remains a direct ancestor of the rollout, so no newer main-only commit needs transplantation or conflict reconciliation.
 
-The integration branch is created directly from the final Phase 8 QA lineage. This preserves current main unchanged while providing a single Phase 0–9 release candidate for a later Phase 10 merge.
+The integration branch therefore uses the completed Phase 8 QA lineage directly and provides one Phase 0–9 release candidate for a later explicit Phase 10 merge.
 
 ## Integrated scope
 
@@ -39,6 +41,7 @@ The integration candidate contains the completed Netherlands city stack:
 - Phase 6 City Compare
 - Phase 7 publication and SEO
 - Phase 8 cross-phase QA
+- Phase 9 current-main integration gate
 
 Published cities remain exactly:
 
@@ -58,11 +61,11 @@ The rollout touches three shared runtime/publication surfaces:
 - `src/app/(workspace)/compare/page.tsx`
 - `src/app/sitemap.ts`
 
-Because current main is still the rollout ancestor and the integration branch is `0` commits behind main, no additional shared-file reconciliation is necessary at Phase 9 start. The existing AU/CA/NZ/UK/US/SG behaviour already present on main is retained by the Netherlands lineage.
+Because current main remains the rollout ancestor and the integration branch is `0` commits behind main, no additional shared-file reconciliation was required. Existing AU/CA/NZ/UK/US/SG behaviour already present on main is retained by the Netherlands lineage.
 
 ## Data state
 
-No new Phase 9 production migration is required.
+No Phase 9 production migration is required.
 
 Production already contains the three Netherlands city migrations:
 
@@ -89,22 +92,49 @@ The Phase 9 candidate retains:
 - `/cities/nl/{approved-slug}` as canonical city routes
 - `index, follow` on the five approved profiles
 - sitemap generation from `PUBLISHED_NL_CITY_SLUGS`
-- `/compare?type=city&country=NL` as the noindex comparison surface
+- `/compare?type=city&country=NL` as the `noindex, nofollow` comparison surface
 - programme-delivery and HBO coverage gaps as explicit incomplete states
 
-## Release hold
+## Phase 8 verification
 
-Vercel preview remains externally blocked by the account `build-rate-limit` condition recorded in Phase 8.
+The Phase 8 QA code commit `646302a11b9d19347a6a71dc1d33072dbdc07aea` passed GitHub Actions CI run `#1113` (`31416456716`).
 
-GitHub Actions production build is the code/build verification path for Phase 9. Phase 10 deployment must still recheck Vercel capacity or another approved deployment validation path.
+The final Phase 8 documentation head `b2820fea63d6459f4ed6b8a1ce26331b21b179bb` also passed follow-up CI run `#1120` (`31416834342`).
 
-## Phase 9 gate
+Both validation lines preserve the same runtime/data contracts.
 
-Phase 9 completes only when the integration PR against current `main` confirms:
+## Phase 9 integration CI
 
-- branch remains zero commits behind main;
-- diff contains the intended Netherlands Cities rollout only;
-- repository CI passes dependency install/audit, typecheck, lint, full tests, production build and Git-history secret scan;
-- no main merge is performed.
+Draft integration PR `#196` targets `main` from `agent/nl-cities-main-integration-v1` and remains intentionally unmerged.
 
-Phase 10 remains explicitly out of scope until the user schedules release.
+Integration code/documentation commit `0c2f02ec587b65e6de24cbafe7ab4621da9abbca` passed GitHub Actions CI run `#1122` (`31416953509`).
+
+All verification steps passed:
+
+- `npm ci`
+- `npm audit --omit=dev --audit-level=high`
+- `npm run typecheck`
+- `npm run lint`
+- `npm test`
+- `npm run build`
+- Git-history secret scan
+
+## Vercel preview / release hold
+
+Vercel status remains externally blocked by the account `build-rate-limit` condition. The status points to the account build-limit path rather than an application build failure.
+
+GitHub Actions production build passed for the Phase 9 integration candidate. Phase 10 deployment must still recheck Vercel capacity or use another approved deployment validation path.
+
+## Phase 9 completion gate
+
+- [x] completed Phase 0–8 lineage integrated into one release candidate
+- [x] current main rechecked and unchanged
+- [x] integration branch remains zero commits behind main at the Phase 9 gate
+- [x] intended Netherlands Cities scope preserved
+- [x] production migration/data contracts remain verified
+- [x] Phase 8 QA and follow-up documentation CI passed
+- [x] Phase 9 integration CI passed through production build and secret scan
+- [x] integration PR `#196` remains draft and unmerged
+- [x] no Phase 10 main merge/deploy performed
+
+Result: Netherlands Cities Phase 0–9 is complete and ready for a separately approved Phase 10 release.
