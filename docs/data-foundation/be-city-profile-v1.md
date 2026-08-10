@@ -39,6 +39,18 @@ Belgium currently has 188 verified programme offering records, but no Phase 3 te
 
 The linked institutions form an initial verified university set, not a complete Belgian higher-education universe. Universities of applied sciences and university colleges may be absent until independently verified.
 
+## Production readiness
+
+Verified after Phase 4:
+
+- six Tier A city-directory rows;
+- seven verified university teaching-location rows;
+- Brussels 2 institutions / 2 locations; every other Tier A destination 1 / 1;
+- 30 verified core metric rows, exactly 5 per destination;
+- city programme directory remains empty and all six destinations remain `verification_pending`;
+- all three Belgium city read-model views use `security_invoker=true`;
+- `service_role` has SELECT while `anon` and `authenticated` do not.
+
 ## Phase 6 handoff
 
 City Compare readiness for Belgium must require:
