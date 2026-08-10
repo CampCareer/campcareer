@@ -19,7 +19,7 @@ import { INDEXABLE_NZ_INSTITUTION_PATHS } from "@/lib/institutions/institution-s
 import { INDEXABLE_SG_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-sg"
 import { INDEXABLE_UK_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-uk"
 import { INDEXABLE_US_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-us"
-import { PUBLISHED_NZ_CITY_SLUGS, PUBLISHED_UK_CITY_SLUGS, PUBLISHED_US_CITY_SLUGS } from "@/lib/cities/city-routes"
+import { PUBLISHED_NL_CITY_SLUGS, PUBLISHED_NZ_CITY_SLUGS, PUBLISHED_UK_CITY_SLUGS, PUBLISHED_US_CITY_SLUGS } from "@/lib/cities/city-routes"
 import { CANONICAL_COUNTRY_SLUGS, SITE_URL, countryCanonicalPath } from "@/lib/seo-routes.mjs"
 
 const lastModified = new Date("2026-08-09")
@@ -67,6 +67,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...PUBLISHED_US_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/us/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
     ...PUBLISHED_UK_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/uk/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
     ...PUBLISHED_NZ_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/nz/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
+    ...PUBLISHED_NL_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/nl/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
     { url: `${SITE_URL}/methodology`, lastModified, priority: 0.5, changeFrequency: "monthly" },
     ...methodologies.map((slug) => ({ url: `${SITE_URL}/methodology/${slug}`, lastModified, priority: 0.45, changeFrequency: "monthly" as const })),
     { url: `${SITE_URL}/privacy`, lastModified, priority: 0.2, changeFrequency: "yearly" },
