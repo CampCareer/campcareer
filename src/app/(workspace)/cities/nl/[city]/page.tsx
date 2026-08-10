@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: { params: Promise<{ city: str
     title: `Study in ${name}, Netherlands`,
     description: `Explore ${name} student living costs, transport, student work context, verified university locations and current programme-delivery coverage.`,
     alternates: { canonical: `/cities/nl/${normalized}` },
-    robots: { index: false, follow: true },
+    robots: { index: true, follow: true },
   }
 }
 
