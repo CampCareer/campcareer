@@ -38,9 +38,10 @@ test("Phase 8 keeps all Singapore destination metrics source-backed and conditio
 })
 
 test("Phase 8 keeps city compare from inventing Singapore cities", () => {
-  assert.match(compare, /country === "SG"/)
-  assert.match(compare, /Singapore is one city-state destination/)
-  assert.match(compare, /\/sg/)
+  assert.match(compare, /countryCode === "SG"/)
+  assert.match(compare, /There is no Singapore city shortlist to compare/)
+  assert.match(compare, /CampCareer treats Singapore as one country-level study destination/)
+  assert.match(compare, /href="\/sg"/)
 })
 
 test("Phase 8 keeps publication and discovery bounded to /sg", () => {
