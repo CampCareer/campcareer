@@ -15,7 +15,7 @@ import { PROGRAM_LEVELS, type ProgramSearchFilters } from "@/lib/programs/progra
 import { cn } from "@/lib/utils"
 import { useProgramNavigation } from "./programs-navigation"
 
-const PUBLISHED_PROGRAM_COUNTRIES = new Set(["AU", "CA", "UK", "NZ"])
+const PUBLISHED_PROGRAM_COUNTRIES = new Set(["AU", "CA", "UK", "NZ", "NL"])
 
 function ProgramCountryPicker({
   countryCode,
@@ -131,7 +131,9 @@ export function ProgramsHeader({
           ? "Search UK programmes or institutions…"
           : filters.country === "NZ"
             ? "Search New Zealand programmes or universities…"
-            : "Search programs, e.g. Nursing or Data Science…"
+            : filters.country === "NL"
+              ? "Search Netherlands programmes or institutions…"
+              : "Search programs, e.g. Nursing or Data Science…"
 
   return (
     <>
