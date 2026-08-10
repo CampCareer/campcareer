@@ -1,7 +1,9 @@
 import assert from "node:assert/strict"
 import test from "node:test"
 import {
+  CA_PROGRAM_CITIES,
   buildProgramsUrl,
+  caProgramDetailPath,
   parseProgramId,
   parseProgramSearchParams,
   programDetailPath,
@@ -16,6 +18,10 @@ test("program search params default to Australia and safe filter values", () => 
     field: "all",
     city: "all",
     state: "all",
+    province: "all",
+    career: "all",
+    institution: "all",
+    pgwp: "all",
     duration: "all",
     fee: "all",
     source: "all",
@@ -24,7 +30,7 @@ test("program search params default to Australia and safe filter values", () => 
   })
 })
 
-test("program search params keep supported filters and reject unknown values", () => {
+test("program search params keep supported Australian filters and reject unknown values", () => {
   const parsed = parseProgramSearchParams({
     country: "au",
     q: "  Nursing  ",
@@ -44,6 +50,10 @@ test("program search params keep supported filters and reject unknown values", (
   assert.equal(parsed.field, "06 - Health")
   assert.equal(parsed.city, "all")
   assert.equal(parsed.state, "NSW")
+  assert.equal(parsed.province, "all")
+  assert.equal(parsed.career, "all")
+  assert.equal(parsed.institution, "all")
+  assert.equal(parsed.pgwp, "all")
   assert.equal(parsed.duration, "2-3")
   assert.equal(parsed.fee, "40000-50000")
   assert.equal(parsed.source, "verified")
@@ -55,7 +65,7 @@ test("program search params keep supported filters and reject unknown values", (
   assert.equal(parseProgramSearchParams({ page: "-4" }).page, 1)
 })
 
-test("verified city filters take precedence over representative state filters", () => {
+test("verified Australian city filters take precedence over representative state filters", () => {
   const sydney = parseProgramSearchParams({ city: "sydney", state: "VIC" })
   assert.equal(sydney.city, "sydney")
   assert.equal(sydney.state, "all")
@@ -82,6 +92,64 @@ test("verified city filters take precedence over representative state filters", 
   assert.equal(buildProgramsUrl(adelaide), "/programs?country=AU&city=adelaide")
 })
 
+test("Canadian filters keep city, career, institution, province and PGWP inside Canada", () => {
+  const parsed = parseProgramSearchParams({
+    country: "ca",
+    q: "Nursing",
+    city: "toronto",
+    career: "registered-nurse",
+    institution: "george-brown-college",
+    province: "ON",
+    pgwp: "eligible",
+    state: "NSW",
+    source: "verified",
+  })
+
+  assert.equal(parsed.country, "CA")
+  assert.equal(parsed.city, "toronto")
+  assert.equal(parsed.state, "all")
+  assert.equal(parsed.province, "ON")
+  assert.equal(parsed.career, "registered-nurse")
+  assert.equal(parsed.institution, "george-brown-college")
+  assert.equal(parsed.pgwp, "eligible")
+  assert.equal(
+    buildProgramsUrl(parsed),
+    "/programs?country=CA&q=Nursing&city=toronto&province=ON&career=registered-nurse&institution=george-brown-college&pgwp=eligible&source=verified",
+  )
+
+  assert.equal(parseProgramSearchParams({ country: "CA", city: "sydney" }).city, "all")
+  assert.equal(parseProgramSearchParams({ country: "CA", province: "XX" }).province, "all")
+  assert.equal(parseProgramSearchParams({ country: "CA", career: "BAD CAREER" }).career, "all")
+  assert.equal(parseProgramSearchParams({ country: "CA", institution: "BAD INSTITUTION" }).institution, "all")
+  assert.equal(parseProgramSearchParams({ country: "CA", pgwp: "maybe" }).pgwp, "all")
+  assert.equal(parseProgramSearchParams({ country: "AU", institution: "some-school" }).institution, "all")
+  assert.equal(parseProgramSearchParams({ country: "AU", city: "toronto" }).city, "all")
+})
+
+test("Canada program city filter covers published geographic city values without exposing campus labels", () => {
+  const cityValues = new Set<string>(CA_PROGRAM_CITIES.map((city) => city.value))
+
+  assert.equal(CA_PROGRAM_CITIES.length, 25)
+  assert.ok(CA_PROGRAM_CITIES.some((city) => city.value === "burnaby" && city.province === "BC"))
+  assert.ok(CA_PROGRAM_CITIES.some((city) => city.value === "new westminster" && city.province === "BC"))
+  assert.ok(CA_PROGRAM_CITIES.some((city) => city.value === "st. john's" && city.province === "NL"))
+  assert.ok(CA_PROGRAM_CITIES.some((city) => city.value === "sault ste. marie" && city.province === "ON"))
+  assert.ok(!cityValues.has("ottawa - perley health"))
+
+  const newWestminster = parseProgramSearchParams({ country: "CA", city: "new westminster" })
+  assert.equal(newWestminster.city, "new westminster")
+  assert.equal(buildProgramsUrl(newWestminster), "/programs?country=CA&city=new+westminster")
+
+  const stJohns = parseProgramSearchParams({ country: "CA", city: "st. john's" })
+  assert.equal(stJohns.city, "st. john's")
+  assert.equal(buildProgramsUrl(stJohns), "/programs?country=CA&city=st.+john%27s")
+
+  assert.equal(
+    parseProgramSearchParams({ country: "CA", city: "ottawa - perley health" }).city,
+    "all",
+  )
+})
+
 test("program URLs preserve country and omit default filters", () => {
   const filters = parseProgramSearchParams({
     country: "AU",
@@ -101,9 +169,13 @@ test("program URLs preserve country and omit default filters", () => {
   )
 })
 
-test("program detail paths use a stable numeric id and readable slug", () => {
-  const path = programDetailPath(856, "Bachelor of Computer Science & Data")
-  assert.equal(path, "/programs/au/856-bachelor-of-computer-science-and-data")
+test("program detail paths use stable numeric ids and readable country routes", () => {
+  const auPath = programDetailPath(856, "Bachelor of Computer Science & Data")
+  assert.equal(auPath, "/programs/au/856-bachelor-of-computer-science-and-data")
+
+  const caPath = caProgramDetailPath(17, "Accounting (Bachelor of Business Administration)")
+  assert.equal(caPath, "/programs/ca/17-accounting-bachelor-of-business-administration")
+
   assert.equal(parseProgramId("856-bachelor-of-computer-science-and-data"), 856)
   assert.equal(parseProgramId("not-a-program"), null)
   assert.equal(parseProgramId("856oops"), null)

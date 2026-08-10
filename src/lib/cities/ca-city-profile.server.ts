@@ -2,6 +2,10 @@ import "server-only"
 
 import { cache } from "react"
 import { supabaseAdmin } from "@/lib/supabase-admin"
+import {
+  getCaPublishedCityProgramSummary,
+  type CaPublishedCityProgramSummary,
+} from "@/lib/programs/ca-program-city-publication.server"
 
 type CityRow = {
   city_id: string
@@ -80,6 +84,7 @@ export type CaCityProfile = {
   linkedCampusCount: number
   linkedInstitutionCount: number
   linkedProgramCount: number
+  publishedPrograms: CaPublishedCityProgramSummary | null
   population: {
     amount: number
     geography: string
@@ -191,7 +196,7 @@ async function loadCaCityProfile(slug: string): Promise<CaCityProfile | null> {
   if (!cityData) return null
 
   const city = cityData as CityRow
-  const [institutionResult, metricResult] = await Promise.all([
+  const [institutionResult, metricResult, publishedPrograms] = await Promise.all([
     supabaseAdmin
       .from("city_institution_directory_ca_v1")
       .select(
@@ -206,6 +211,7 @@ async function loadCaCityProfile(slug: string): Promise<CaCityProfile | null> {
       .eq("scope_type", "city")
       .eq("review_status", "verified")
       .order("metric_key", { ascending: true }),
+    getCaPublishedCityProgramSummary(normalizedSlug),
   ])
 
   if (institutionResult.error) {
@@ -285,6 +291,7 @@ async function loadCaCityProfile(slug: string): Promise<CaCityProfile | null> {
     linkedCampusCount: city.linked_campus_count,
     linkedInstitutionCount: city.linked_institution_count,
     linkedProgramCount: city.linked_program_count,
+    publishedPrograms,
     population:
       populationRow && populationAmount != null && populationGeography
         ? { amount: populationAmount, geography: populationGeography, dataAsOf: populationRow.data_as_of }

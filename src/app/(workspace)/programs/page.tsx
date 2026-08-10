@@ -5,11 +5,14 @@ import { DatabaseZap, GraduationCap, MapPinned } from "lucide-react"
 import { getLaunchCountry } from "@/data/launch-countries"
 import { SITE_URL, programsCanonicalPath } from "@/lib/seo-routes.mjs"
 import { ProgramCard } from "./program-card"
+import { CaProgramCard } from "./ca-program-card"
 import { ProgramsHeader } from "./programs-header"
 import { ProgramsSidebar } from "./programs-filters"
+import { CaProgramsSidebar } from "./ca-programs-filters"
 import { ProgramsSortControl } from "./programs-sort-control"
 import { UkProgramsExplorer } from "./uk-programs-explorer"
 import { searchAuPrograms, type AuProgramSearchResult } from "@/lib/programs/au-programs.server"
+import { searchCaPrograms, type CaProgramSearchResult } from "@/lib/programs/ca-programs.server"
 import { searchUkPrograms, type UkProgramSearchResult } from "@/lib/programs/uk-programs.server"
 import {
   buildProgramsUrl,
@@ -50,17 +53,26 @@ export async function generateMetadata({
   const params = await searchParams
   const filters = normalizedFilters(params)
   const country = getLaunchCountry(filters.country)
-  const isPublishedBase = ["AU", "UK"].includes(filters.country) && !hasProgramFilters(filters)
+  const isPublishedBase = ["AU", "CA", "UK"].includes(filters.country) && !hasProgramFilters(filters)
   const countryName = country?.name ?? "Australia"
 
-  return {
-    title: filters.country === "AU" ? "Australian Programs" : `${countryName} Programs`,
-    description:
-      filters.country === "AU"
-        ? "Search Australian university and vocational programs by verified city, study level, field, state, duration and tuition."
+  const description =
+    filters.country === "AU"
+      ? "Search Australian university and vocational programs by verified city, study level, field, state, duration and tuition."
+      : filters.country === "CA"
+        ? "Explore Canadian programs reviewed against 80 target careers, current international admission evidence and PGWP status."
         : filters.country === "UK"
           ? "Explore source-verified UK programmes with international-student eligibility, Student sponsor evidence and current application timing tracked separately."
-          : `Explore study programs in ${countryName}. Country data will be published after source review.`,
+          : `Explore study programs in ${countryName}. Country data will be published after source review.`
+
+  return {
+    title:
+      filters.country === "AU"
+        ? "Australian Programs"
+        : filters.country === "CA"
+          ? "Canadian Programs"
+          : `${countryName} Programs`,
+    description,
     alternates: {
       canonical: `${SITE_URL}${programsCanonicalPath(filters.country)}`,
     },
@@ -122,7 +134,7 @@ function EmptyResults({ filters }: { filters: ProgramSearchFilters }) {
       </span>
       <h2 className="mt-4 text-[17px] font-semibold text-[#1b1b1b]">No programs match these filters</h2>
       <p className="mt-2 max-w-md text-[12.5px] leading-5 text-[#77746e]">
-        Try a broader city, study level, field, state, duration or tuition range.
+        Try a broader search or remove one of the active filters.
       </p>
       <Link
         href={buildProgramsUrl(filters, {
@@ -131,6 +143,10 @@ function EmptyResults({ filters }: { filters: ProgramSearchFilters }) {
           field: "all",
           city: "all",
           state: "all",
+          province: "all",
+          career: "all",
+          institution: "all",
+          pgwp: "all",
           duration: "all",
           fee: "all",
           source: "all",
@@ -160,14 +176,31 @@ function CountryComingSoon({ countryCode }: { countryCode: string }) {
         Program data is being prepared
       </h2>
       <p className="mt-3 max-w-lg text-[13px] leading-6 text-[#6f6d68]">
-        Country catalogues open after programme identities, official sources and international-admission evidence pass review.
+        Published catalogues are available after programme identities, official sources and international-admission evidence pass review.
       </p>
-      <Link
-        href="/programs"
-        className="mt-5 rounded-lg bg-[#3e7a2e] px-4 py-2.5 text-[12.5px] font-semibold text-white transition hover:bg-[#326625]"
-      >
-        Browse Australia
-      </Link>
+      <div className="mt-5 flex flex-wrap justify-center gap-2">
+        <Link href="/programs" className="rounded-lg bg-[#3e7a2e] px-4 py-2.5 text-[12.5px] font-semibold text-white transition hover:bg-[#326625]">
+          Browse Australia
+        </Link>
+        <Link href="/programs?country=CA" className="rounded-lg border border-[#cfd9ca] bg-white px-4 py-2.5 text-[12.5px] font-semibold text-[#3e7a2e] transition hover:bg-[#edf5ea]">
+          Browse Canada
+        </Link>
+        <Link href="/programs?country=UK" className="rounded-lg border border-[#cfd9ca] bg-white px-4 py-2.5 text-[12.5px] font-semibold text-[#3e7a2e] transition hover:bg-[#edf5ea]">
+          Browse the UK
+        </Link>
+      </div>
+    </div>
+  )
+}
+
+function ProgramLoadError({ countryName, message }: { countryName: string; message: string }) {
+  return (
+    <div className="flex min-h-72 flex-col items-center justify-center rounded-xl border border-[#f0d8d2] bg-[#fff9f7] p-8 text-center">
+      <DatabaseZap className="size-6 text-[#b65c45]" />
+      <h2 className="mt-3 text-[16px] font-semibold text-[#1b1b1b]">
+        {countryName} program data is temporarily unavailable
+      </h2>
+      <p className="mt-2 max-w-lg text-[12px] leading-5 text-[#786b66]">{message}</p>
     </div>
   )
 }
@@ -188,50 +221,60 @@ export default async function ProgramsPage({
   const countryExplicit = Boolean(rawCountry && getLaunchCountry(rawCountry))
 
   let auResult: AuProgramSearchResult | null = null
+  let caResult: CaProgramSearchResult | null = null
   let ukResult: UkProgramSearchResult | null = null
   let errorMessage: string | null = null
 
-  if (filters.country === "AU") {
-    try {
-      auResult = await searchAuPrograms(filters)
-    } catch (error) {
-      console.error("Unable to load Australian program catalogue", error)
-      errorMessage = "Please try again shortly. No cached or substitute country data has been shown."
-    }
-  } else if (filters.country === "UK") {
-    try {
-      ukResult = await searchUkPrograms(filters)
-    } catch (error) {
-      console.error("Unable to load UK programme catalogue", error)
-      errorMessage = "Please try again shortly. No cached or substitute UK programme data has been shown."
-    }
+  try {
+    if (filters.country === "AU") auResult = await searchAuPrograms(filters)
+    if (filters.country === "CA") caResult = await searchCaPrograms(filters)
+    if (filters.country === "UK") ukResult = await searchUkPrograms(filters)
+  } catch (error) {
+    console.error(`Unable to load ${filters.country} program catalogue`, error)
+    errorMessage = "Please try again shortly. No cached or substitute country data has been shown."
   }
 
-  const published = filters.country === "AU" || filters.country === "UK"
+  const countryIsPublished = ["AU", "CA", "UK"].includes(filters.country)
 
   return (
     <>
       <ProgramsHeader filters={filters} countryExplicit={countryExplicit} />
 
-      {!published ? (
+      {!countryIsPublished ? (
         <div className="mt-7">
           <CountryComingSoon countryCode={filters.country} />
         </div>
       ) : errorMessage ? (
-        <div className="mt-7 flex min-h-72 flex-col items-center justify-center rounded-xl border border-[#f0d8d2] bg-[#fff9f7] p-8 text-center">
-          <DatabaseZap className="size-6 text-[#b65c45]" />
-          <h2 className="mt-3 text-[16px] font-semibold text-[#1b1b1b]">Program data is temporarily unavailable</h2>
-          <p className="mt-2 max-w-lg text-[12px] leading-5 text-[#786b66]">{errorMessage}</p>
+        <div className="mt-7">
+          <ProgramLoadError countryName={getLaunchCountry(filters.country)?.name ?? filters.country} message={errorMessage} />
         </div>
       ) : filters.country === "UK" && ukResult ? (
         <UkProgramsExplorer filters={filters} result={ukResult} />
+      ) : filters.country === "CA" && caResult ? (
+        <div className="mt-7 grid gap-5 lg:grid-cols-[260px_minmax(0,1fr)] lg:items-start">
+          <CaProgramsSidebar filters={filters} />
+          <section className="min-w-0">
+            <ProgramsSortControl filters={filters} total={caResult.total} />
+            {caResult.programs.length === 0 ? (
+              <EmptyResults filters={filters} />
+            ) : (
+              <div className="mt-3 space-y-3">
+                {caResult.programs.map((program) => (
+                  <CaProgramCard key={program.id} program={program} />
+                ))}
+              </div>
+            )}
+            <Pagination filters={filters} page={caResult.page} pageCount={caResult.pageCount} />
+            <p className="mt-4 text-[10.5px] leading-5 text-[#aaa7a0]">
+              Canada results include only programs connected to one of the 80 target careers with a completed publication review and sufficient international-admission evidence for public listing. Records without enough current evidence remain hidden. PGWP status is evaluated separately and stays not confirmed where provider or IRCC-aligned evidence is insufficient.
+            </p>
+          </section>
+        </div>
       ) : filters.country === "AU" && auResult ? (
         <div className="mt-7 grid gap-5 lg:grid-cols-[260px_minmax(0,1fr)] lg:items-start">
           <ProgramsSidebar filters={filters} />
-
           <section className="min-w-0">
             <ProgramsSortControl filters={filters} total={auResult.total} />
-
             {auResult.programs.length === 0 ? (
               <EmptyResults filters={filters} />
             ) : (
@@ -241,13 +284,9 @@ export default async function ProgramsPage({
                 ))}
               </div>
             )}
-
             <Pagination filters={filters} page={auResult.page} pageCount={auResult.pageCount} />
-
             <p className="mt-4 text-[10.5px] leading-5 text-[#aaa7a0]">
-              Catalogue records are limited to active Australian CRICOS courses. City filtering
-              uses official CRICOS registered delivery locations; tuition, duration and provider-page
-              verification are shown separately.
+              Catalogue records are limited to active Australian CRICOS courses. City filtering uses official CRICOS registered delivery locations; tuition, duration and provider-page verification are shown separately.
             </p>
           </section>
         </div>
