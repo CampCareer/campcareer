@@ -16,10 +16,9 @@ test("Sweden profile route is restricted to the six Tier A cities", () => {
   assert.match(page, /notFound\(\)/)
 })
 
-test("Sweden Phase 5 remains pre-publication noindex", () => {
-  assert.match(page, /robots: \{ index: false, follow: true \}/)
+test("Sweden profile preserves unsupported-route noindex protection", () => {
   assert.match(page, /robots: \{ index: false, follow: false \}/)
-  assert.doesNotMatch(page, /sitemap/)
+  assert.match(page, /alternates: \{ canonical: `\/cities\/se\/\$\{normalized\}` \}/)
 })
 
 test("Sweden profile uses verified read models and exposes coverage gaps", () => {
