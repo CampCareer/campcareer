@@ -14,7 +14,13 @@ Phase 9 repeatedly re-read `main` because other country-city branches were being
 
 The current integrated main checkpoint for this candidate is:
 
-`d81dcaf42917fe45e90208850643dae8c45a645f`
+Current-main integration commit:
+
+`25a19477ac4de5939515ee729fbc802a9c126ec1`
+
+At that integration checkpoint the France branch was `6` commits ahead and `0` commits behind latest main.
+
+This main contains the France Phase 0–5 foundation plus Germany, Netherlands, Sweden and Denmark Cities work that landed concurrently while France Phase 6–9 was being completed.
 
 Latest current-main integration commit before this documentation checkpoint:
 
@@ -120,6 +126,8 @@ The final branch-head CI must pass:
 - Git-history secret scan
 
 A final `main` recheck must also show `behind = 0` before this candidate is reported complete.
+
+Because Denmark Cities landed after CI #1302, this document commit triggers the final validation on the `da82e0fa...` current-main candidate. Phase 9 is complete when that final branch-head CI passes and a final main recheck confirms `behind = 0`.
 
 ## Release boundary
 
