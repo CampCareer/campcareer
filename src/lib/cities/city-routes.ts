@@ -83,6 +83,9 @@ export type PublishedEsCitySlug = (typeof PUBLISHED_ES_CITY_SLUGS)[number]
 export const SUPPORTED_ES_CITY_SLUGS = PUBLISHED_ES_CITY_SLUGS
 export type SupportedEsCitySlug = PublishedEsCitySlug
 
+export const SUPPORTED_KR_CITY_SLUGS = ["seoul", "busan", "daejeon", "suwon", "yongin", "pohang"] as const
+export type SupportedKrCitySlug = (typeof SUPPORTED_KR_CITY_SLUGS)[number]
+
 const CITY_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
 export function normalizeCitySlug(value: string | null | undefined) {
@@ -145,6 +148,10 @@ export function isSupportedFiCitySlug(value: string): value is SupportedFiCitySl
 
 export function isSupportedEsCitySlug(value: string): value is SupportedEsCitySlug {
   return isPublishedEsCitySlug(value)
+}
+
+export function isSupportedKrCitySlug(value: string): value is SupportedKrCitySlug {
+  return SUPPORTED_KR_CITY_SLUGS.includes(value as SupportedKrCitySlug)
 }
 
 export function auCityPath(value: string | null | undefined) {
@@ -217,4 +224,10 @@ export function esCityPath(value: string | null | undefined) {
   const slug = normalizeCitySlug(value)
   if (!slug || !isPublishedEsCitySlug(slug)) return null
   return `/cities/es/${slug}`
+}
+
+export function krCityPath(value: string | null | undefined) {
+  const slug = normalizeCitySlug(value)
+  if (!slug || !isSupportedKrCitySlug(slug)) return null
+  return `/cities/kr/${slug}`
 }
