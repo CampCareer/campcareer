@@ -78,6 +78,9 @@ export type PublishedFiCitySlug = (typeof PUBLISHED_FI_CITY_SLUGS)[number]
 export const SUPPORTED_FI_CITY_SLUGS = PUBLISHED_FI_CITY_SLUGS
 export type SupportedFiCitySlug = PublishedFiCitySlug
 
+export const SUPPORTED_ES_CITY_SLUGS = ["madrid", "barcelona", "valencia", "sevilla", "granada", "malaga", "bilbao"] as const
+export type SupportedEsCitySlug = (typeof SUPPORTED_ES_CITY_SLUGS)[number]
+
 const CITY_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
 export function normalizeCitySlug(value: string | null | undefined) {
@@ -132,6 +135,10 @@ export function isPublishedFiCitySlug(value: string): value is PublishedFiCitySl
 
 export function isSupportedFiCitySlug(value: string): value is SupportedFiCitySlug {
   return isPublishedFiCitySlug(value)
+}
+
+export function isSupportedEsCitySlug(value: string): value is SupportedEsCitySlug {
+  return SUPPORTED_ES_CITY_SLUGS.includes(value as SupportedEsCitySlug)
 }
 
 export function auCityPath(value: string | null | undefined) {
@@ -198,4 +205,10 @@ export function fiCityPath(value: string | null | undefined) {
   const slug = normalizeCitySlug(value)
   if (!slug || !isPublishedFiCitySlug(slug)) return null
   return `/cities/fi/${slug}`
+}
+
+export function esCityPath(value: string | null | undefined) {
+  const slug = normalizeCitySlug(value)
+  if (!slug || !isSupportedEsCitySlug(slug)) return null
+  return `/cities/es/${slug}`
 }
