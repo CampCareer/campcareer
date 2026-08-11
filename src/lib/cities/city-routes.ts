@@ -78,6 +78,10 @@ export type PublishedFiCitySlug = (typeof PUBLISHED_FI_CITY_SLUGS)[number]
 export const SUPPORTED_FI_CITY_SLUGS = PUBLISHED_FI_CITY_SLUGS
 export type SupportedFiCitySlug = PublishedFiCitySlug
 
+// Norway Cities Phase 5 support allowlist. These routes remain noindex until a later publication/SEO phase.
+export const SUPPORTED_NO_CITY_SLUGS = ["oslo", "trondheim", "stavanger", "as", "tromso"] as const
+export type SupportedNoCitySlug = (typeof SUPPORTED_NO_CITY_SLUGS)[number]
+
 const CITY_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
 export function normalizeCitySlug(value: string | null | undefined) {
@@ -132,6 +136,10 @@ export function isPublishedFiCitySlug(value: string): value is PublishedFiCitySl
 
 export function isSupportedFiCitySlug(value: string): value is SupportedFiCitySlug {
   return isPublishedFiCitySlug(value)
+}
+
+export function isSupportedNoCitySlug(value: string): value is SupportedNoCitySlug {
+  return SUPPORTED_NO_CITY_SLUGS.includes(value as SupportedNoCitySlug)
 }
 
 export function auCityPath(value: string | null | undefined) {
@@ -198,4 +206,10 @@ export function fiCityPath(value: string | null | undefined) {
   const slug = normalizeCitySlug(value)
   if (!slug || !isPublishedFiCitySlug(slug)) return null
   return `/cities/fi/${slug}`
+}
+
+export function noCityPath(value: string | null | undefined) {
+  const slug = normalizeCitySlug(value)
+  if (!slug || !isSupportedNoCitySlug(slug)) return null
+  return `/cities/no/${slug}`
 }
