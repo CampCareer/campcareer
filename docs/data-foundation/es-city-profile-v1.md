@@ -51,6 +51,8 @@ The server loader reads only the private Phase 3–4 read models through the ser
 
 The page does not read raw rectorate/contact rows and does not infer programme city delivery from institution presence.
 
+All four views are `security_invoker=true`, grant SELECT to `service_role`, and deny SELECT to `anon` and `authenticated`.
+
 ## Profile content
 
 Every supported route can surface:
@@ -87,6 +89,14 @@ Living-cost references are intentionally heterogeneous because the official sour
 Transport also keeps source-native product periods rather than normalising every product to a synthetic monthly fare.
 
 Employment sectors are context only, not shortage rankings or job guarantees. The 30-hour student-work rule is national immigration context, not a city differentiator.
+
+## Validation
+
+Phase 2 CI run `31487988191` (#1353) completed successfully before Phase 3–5 work.
+
+The first Phase 5 CI attempt (#1366) reached typecheck and failed only because two Phase 3 contract-test regular expressions used the ES2018-only dotAll flag. Those assertions were replaced with equivalent string-inclusion checks without changing production code or evidence logic.
+
+A clean follow-up CI run is required on the final Phase 5 head before later phases or integration.
 
 ## Phase 5 conclusion
 
