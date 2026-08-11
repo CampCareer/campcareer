@@ -30,6 +30,19 @@ export type PublishedUkCitySlug = (typeof PUBLISHED_UK_CITY_SLUGS)[number]
 export const PUBLISHED_NZ_CITY_SLUGS = ["auckland", "christchurch", "hamilton", "wellington", "dunedin"] as const
 export type PublishedNzCitySlug = (typeof PUBLISHED_NZ_CITY_SLUGS)[number]
 
+export const PUBLISHED_DE_CITY_SLUGS = [
+  "berlin",
+  "munich",
+  "hamburg",
+  "aachen",
+  "bonn",
+  "dresden",
+  "heidelberg",
+  "karlsruhe",
+  "tuebingen",
+] as const
+export type PublishedDeCitySlug = (typeof PUBLISHED_DE_CITY_SLUGS)[number]
+
 const CITY_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
 export function normalizeCitySlug(value: string | null | undefined) {
@@ -54,6 +67,10 @@ export function isPublishedNzCitySlug(value: string): value is PublishedNzCitySl
   return PUBLISHED_NZ_CITY_SLUGS.includes(value as PublishedNzCitySlug)
 }
 
+export function isPublishedDeCitySlug(value: string): value is PublishedDeCitySlug {
+  return PUBLISHED_DE_CITY_SLUGS.includes(value as PublishedDeCitySlug)
+}
+
 export function auCityPath(value: string | null | undefined) {
   const slug = normalizeCitySlug(value)
   if (!slug || !isPublishedAuCitySlug(slug)) return null
@@ -76,4 +93,10 @@ export function nzCityPath(value: string | null | undefined) {
   const slug = normalizeCitySlug(value)
   if (!slug || !isPublishedNzCitySlug(slug)) return null
   return `/cities/nz/${slug}`
+}
+
+export function deCityPath(value: string | null | undefined) {
+  const slug = normalizeCitySlug(value)
+  if (!slug || !isPublishedDeCitySlug(slug)) return null
+  return `/cities/de/${slug}`
 }

@@ -5,6 +5,7 @@ import { parseCareerComparisonState, type CareerComparisonState } from "@/lib/ca
 import { parseCountryComparisonState, type CountryComparisonState } from "@/lib/country-comparison"
 import { getAuCityComparison } from "@/lib/cities/au-city-comparison.server"
 import { getCaCityComparison } from "@/lib/cities/ca-city-comparison.server"
+import { getDeCityComparison } from "@/lib/cities/de-city-comparison.server"
 import { getNzCityComparison } from "@/lib/cities/nz-city-comparison.server"
 import { getUkCityComparison } from "@/lib/cities/uk-city-comparison.server"
 import { getUsCityComparison } from "@/lib/cities/us-city-comparison.server"
@@ -20,6 +21,7 @@ import CountriesCompareMatrix from "./countries-compare-matrix"
 import CareersCompareMatrix from "./careers-compare-matrix"
 import { CitiesCompareMatrix } from "./cities-compare-matrix"
 import { CanadaCitiesCompareMatrix } from "./canada-cities-compare-matrix"
+import { GermanyCitiesCompareMatrix } from "./germany-cities-compare-matrix"
 import { NewZealandCitiesCompareMatrix } from "./new-zealand-cities-compare-matrix"
 import { UnitedKingdomCitiesCompareMatrix } from "./united-kingdom-cities-compare-matrix"
 import { UnitedStatesCitiesCompareMatrix } from "./united-states-cities-compare-matrix"
@@ -151,6 +153,32 @@ async function CitiesCompare({ countryCode, params }: { countryCode: string; par
           right={comparison.right}
           options={comparison.options}
           sharedCareerCount={comparison.sharedCareerCount}
+        />
+      </section>
+    )
+  }
+
+  if (countryCode === "DE") {
+    const comparison = await getDeCityComparison(params.get("left"), params.get("right"))
+    if (!comparison) {
+      return (
+        <UnsupportedSurface
+          type="Cities"
+          href={buildCityCompareCanonicalHref({ country: "DE" })}
+          label="Compare German cities"
+          activeType="city"
+          countryCode={countryCode}
+        />
+      )
+    }
+
+    return (
+      <section className="w-full pb-4" aria-label="Cities comparison">
+        <ComparePageHeader activeType="city" countryCode={countryCode} />
+        <GermanyCitiesCompareMatrix
+          left={comparison.left}
+          right={comparison.right}
+          options={comparison.options}
         />
       </section>
     )
