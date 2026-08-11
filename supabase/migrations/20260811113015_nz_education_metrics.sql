@@ -1,0 +1,3 @@
+-- Production-only idempotent Education metrics upsert created by a parallel session.
+-- The canonical Education scoring state is defined by 20260811101524_nz_education_metrics.sql.
+-- This placeholder preserves the production migration version in repository history; the final production state was reconciled by 20260811113520_nz_education_parallel_reconcile.sql.
