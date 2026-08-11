@@ -8,18 +8,13 @@ Branch: `agent/no-cities-v1`
 
 ## Scope decision
 
-The first Norway Cities publication cohort is locked to exactly ten municipality-based study destinations:
+The first Norway Cities publication cohort is locked to exactly five municipality-based study destinations, selected by current verified Study in Norway programme volume in the canonical foundation:
 
-1. Oslo — `oslo`
-2. Trondheim — `trondheim`
-3. Stavanger — `stavanger`
-4. Ås — `as`
-5. Tromsø — `tromso`
-6. Bodø — `bodo`
-7. Kongsberg — `kongsberg`
-8. Kristiansand — `kristiansand`
-9. Bergen — `bergen`
-10. Elverum — `elverum`
+1. Oslo — `oslo` — 34 programmes
+2. Trondheim — `trondheim` — 27 programmes
+3. Stavanger — `stavanger` — 14 programmes
+4. Ås — `as` — 11 programmes
+5. Tromsø — `tromso` — 11 programmes
 
 Planned route shape:
 
@@ -28,42 +23,42 @@ Planned route shape:
 - `/cities/no/stavanger`
 - `/cities/no/as`
 - `/cities/no/tromso`
-- `/cities/no/bodo`
-- `/cities/no/kongsberg`
-- `/cities/no/kristiansand`
-- `/cities/no/bergen`
-- `/cities/no/elverum`
 
 Phase 1 does not publish these routes. Phase 2 must first normalize the municipality geography contract.
 
-## Why these ten
+## Why these five
 
-Phase 1 is an initial publication cohort, not a ranking of Norwegian student cities and not a claim that these are the only important higher-education destinations in Norway.
+This is a deliberately constrained initial cohort, not a ranking of Norwegian student-city quality and not a claim that these are the only important higher-education destinations in Norway.
 
-The ten are selected because all of the following are already true in the current canonical foundation:
+The selection rule is deterministic: take the five municipality labels with the largest current Tier A Study in Norway programme cohorts in CampCareer's Norway staging foundation.
 
-- each has an existing stable Norway city UUID/slug seed
-- each is linked to at least one of the 11 canonical NOKUT universities through the existing fast-path foundation
-- each appears in the current 140-row official Study in Norway programme staging foundation
-- each has non-zero current programme evidence
-- together they span the current university foundation across eastern, western, southern, central and northern Norway
+| Rank | Tier A city | Current staged programmes | Current university institutions represented |
+|---:|---|---:|---:|
+| 1 | Oslo | 34 | 2 |
+| 2 | Trondheim | 27 | 1 |
+| 3 | Stavanger | 14 | 1 |
+| 4 | Ås | 11 | 1 |
+| 5 | Tromsø | 11 | 1 |
 
-Current programme evidence by source city:
+Together the five contain 97 of the current 140 Norway staged programmes and six of the 11 canonical NOKUT university-category institutions.
 
-| Tier A city | Current staged programmes | Current university institutions represented |
-|---|---:|---:|
-| Oslo | 34 | 2 |
-| Trondheim | 27 | 1 |
-| Stavanger | 14 | 1 |
-| Ås | 11 | 1 |
-| Tromsø | 11 | 1 |
-| Bodø | 10 | 1 |
-| Kongsberg | 10 | 1 |
-| Kristiansand | 10 | 1 |
-| Bergen | 9 | 1 |
-| Elverum | 4 | 1 |
+There is no tie-expansion beyond five. Ås and Tromsø are tied at 11 programmes and occupy positions four and five. The next cohort is Bodø, Kongsberg and Kristiansand at 10 programmes each, so the five-city boundary remains unambiguous.
 
 These counts are scope-selection evidence only. They must not be presented as complete municipality-wide programme totals until physical delivery and wider HEI coverage are verified.
+
+## Explicitly deferred cities
+
+The previous ten-city draft also included:
+
+- Bodø — 10 programmes
+- Kongsberg — 10 programmes
+- Kristiansand — 10 programmes
+- Bergen — 9 programmes
+- Elverum — 4 programmes
+
+Those municipalities are now outside Tier A v1. Their existing canonical geographies and programme data remain reusable foundation data, but Phase 2–5 must not mark them as Tier A, expose City profile routes for them, or include them in Norway City metrics.
+
+Their exclusion is a rollout-size decision, not a quality judgement.
 
 ## Geography principle
 
@@ -71,146 +66,100 @@ The public comparison boundary for each Tier A destination is the official Stati
 
 https://www.ssb.no/en/klass/klassifikasjoner/131
 
-SSB defines municipality as an administrative and statistical regional level. Phase 2 must therefore normalize city comparison on municipality boundaries, not on Study in Norway macro-regions or informal metropolitan areas.
+Phase 2 must normalize city comparison on municipality boundaries, not Study in Norway macro-regions or informal metropolitan areas.
 
 Rules:
 
 - Oslo means Oslo municipality
-- Stavanger means Stavanger municipality
-- Bergen means Bergen municipality
 - Trondheim means Trondheim municipality
+- Stavanger means Stavanger municipality
+- Ås means Ås municipality
+- Tromsø means Tromsø municipality
 - regional labels such as `East Norway` or `North Norway` are discovery context only
 - no municipality may absorb a neighbouring campus or programme without explicit location evidence
 
-## Coverage rationale
+ASCII slugs are routing identifiers only:
 
-### Oslo / eastern university core
+- Ås -> `as`
+- Tromsø -> `tromso`
 
-- Oslo
-- Ås
-- Kongsberg
-- Elverum
-
-This captures the current eastern university foundation without collapsing separate municipalities into a generic Oslo/East Norway destination.
-
-Oslo currently represents two canonical universities. Ås, Kongsberg and Elverum each represent a separate municipality and separate institution/location seed.
-
-### Western Norway
-
-- Bergen
-- Stavanger
-
-Both have current university and programme foundations and remain separate municipal study destinations.
-
-### Southern Norway
-
-- Kristiansand
-
-Kristiansand is the current University of Agder primary publication municipality in the existing fast-path foundation.
-
-### Mid Norway
-
-- Trondheim
-
-Trondheim is the current NTNU primary publication municipality and the largest current programme cohort outside Oslo.
-
-### Northern Norway
-
-- Bodø
-- Tromsø
-
-Bodø and Tromsø provide separate northern municipality anchors for Nord University and UiT respectively.
+They must never replace official display names.
 
 ## Multi-campus rule
 
-Several institutions represented in the ten-city cohort operate across multiple campuses or study locations.
+Several institutions represented in the five-city cohort operate across multiple campuses or study locations. In particular, NTNU and UiT have important locations outside the selected municipality represented here.
 
-Phase 1 therefore locks destination scope without converting current primary publication locations into delivery claims.
+Phase 1 therefore locks destination scope without converting current `Primary publication location` rows into complete campus inventories.
 
-The following remain mandatory for Phase 3:
+Phase 3 must:
 
-- verify actual teaching/study locations
-- reconcile each programme to the verified location where it is delivered
-- preserve secondary campuses as separate municipality relationships when supported
-- do not assign all programmes of a multi-campus university to the current primary publication city
+- verify the selected municipality as a real official institution study location
+- require the programme source city to match the verified municipality before City publication
+- preserve `campus_inventory_complete=false`
+- never assign an institution's programmes to the selected city solely because the institution has a location there
 
-The exact Tier A city allowlist may remain stable while later phases add verified secondary locations. Adding a secondary location does not automatically make that municipality Tier A; promotion requires an explicit scope decision.
+A verified secondary campus outside the five-city allowlist does not automatically promote that municipality to Tier A.
 
 ## Institution coverage state carried forward
 
-All ten Tier A destinations inherit the Phase 0 disclosure:
+All five Tier A destinations inherit the Phase 0 disclosure:
 
-`all_nokut_universities_full_hei_coverage_pending`
+`selected_nokut_university_core_full_hei_coverage_pending`
 
-The current canonical foundation represents all 11 institutions in NOKUT's university category, but Norway has a broader approved HEI universe including specialised universities and university colleges.
+The current canonical foundation represents the 11 institutions in NOKUT's university category, while Norway has a broader approved higher-education universe including specialised universities and university colleges.
 
 Therefore:
 
-- city institution counts cannot yet be described as complete HEI totals
-- a city with specialised-university or university-college activity outside the current 11-university foundation is not considered absent from higher education
-- later expansion must reconcile those provider categories before full-coverage language is allowed
-
-## Explicit exclusions and expansion boundary
-
-No Norway municipality outside the ten-city allowlist is Tier A in v1.
-
-This exclusion is not a quality judgement. It is a data-governance decision based on the current canonical foundation.
-
-Priority expansion work after the initial cohort must come from one of two evidence paths:
-
-1. verified secondary campuses/study locations of the current 11 universities
-2. verified institutions from NOKUT's specialised-university, university-college/UAS, or accredited-programme college categories
-
-A municipality may enter a later cohort only when it has:
-
-- an official SSB municipality identity
-- a verified teaching/study location
-- a recognised canonical institution relationship
-- current programme evidence suitable for City linkage
-
-No additional city may be silently promoted during Phase 2 geography normalization.
+- City institution counts are not complete municipality-wide HEI totals
+- absence from the current 11-university foundation is not evidence that a municipality lacks higher education
+- profile copy must retain the partial-coverage disclosure
+- later expansion must reconcile additional approved provider categories before full-coverage language is allowed
 
 ## Programme publication boundary
 
-The ten-city allowlist does not automatically publish all 140 current staged programmes as city-verified programmes.
+The five-city allowlist does not automatically turn all 97 matching staging rows into city-verified programmes.
 
-Later city programme publication requires the evidence chain:
+Phase 3 publication requires the complete evidence chain:
 
 `SSB municipality -> verified study location -> recognised canonical institution -> verified programme offering -> canonical programme`
 
+For this cohort, the existing 97 offerings are candidates because their current source-city labels and assigned campus-city labels agree. Phase 3 must still make that agreement an explicit publication contract.
+
 Rules:
 
-- current source city text is reconciliation evidence, not sufficient by itself
-- current primary publication campus rows are not sufficient by themselves
-- institution presence never implies programme delivery in every institution city
-- multi-campus institutions require location-specific verification
+- source city text is reconciliation evidence, not sufficient by itself
+- current `Primary publication location` metadata is not sufficient by itself
+- institution presence never implies programme delivery
+- exact `NO_STUDYINNORWAY` offering provenance must be retained
 - `verified_general` international evidence remains distinct from programme-specific current admissions verification
 
 ## Phase 2 normalization targets
 
-Phase 2 must preserve existing UUIDs/slugs for the ten Tier A municipalities where there is no identity conflict while adding:
+Phase 2 must preserve the existing UUIDs and route slugs for exactly these five municipalities while adding:
 
 - official SSB 2026 municipality number
 - municipality `scope_kind`
 - official county relationship / county code
 - SSB source metadata
-- publication tier/status metadata
-- canonical aliases where needed for Norwegian characters and ASCII routing
+- Tier A publication metadata
+- canonical name and slug aliases
 
-Special attention is required for routing aliases:
+Expected municipality contracts:
 
-- Ås -> `as`
-- Tromsø -> `tromso`
-- Bodø -> `bodo`
+| City | Slug | SSB municipality | County code | County |
+|---|---|---|---|---|
+| Oslo | `oslo` | `0301` | `03` | Oslo |
+| Trondheim | `trondheim` | `5001` | `50` | Trøndelag |
+| Stavanger | `stavanger` | `1103` | `11` | Rogaland |
+| Ås | `as` | `3218` | `32` | Akershus |
+| Tromsø | `tromso` | `5501` | `55` | Troms |
 
-ASCII slugs are routing aliases only and must not replace the official municipality names.
+No other Norway geography may be silently promoted to Tier A during Phase 2.
 
 ## Phase 1 conclusion
 
-The exact Norway Tier A v1 allowlist is locked to:
+The exact Norway Tier A v1 allowlist is now locked to:
 
-`oslo, trondheim, stavanger, as, tromso, bodo, kongsberg, kristiansand, bergen, elverum`
+`oslo, trondheim, stavanger, as, tromso`
 
-Phase 1 is complete.
-
-Do not start Phase 2 on this branch until explicitly instructed. The branch must remain Norway-only and Phase 0–1 only for the current delivery boundary.
+Phase 1 is complete with the five-city scope. Phase 2 may proceed on the same Norway-only branch.
