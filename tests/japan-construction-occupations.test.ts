@@ -42,9 +42,9 @@ test("Japan construction preserves shared and umbrella classification boundaries
 
   const hvac = getOccupationEditorial("hvac-technician")?.countries.JP
   assert.match(hvac?.entryPathway ?? "", /does not provide one single/i)
-  assert.match(migration, /'JP:hvac-technician','JP','hvac-technician'.*null,'JPY',false/s)
+  assert.match(migration, /'JP:hvac-technician','JP','hvac-technician'[\s\S]*null,'JPY',false/)
   for (const code of ["075-01", "075-02", "091-06", "094-05"]) {
-    assert.match(migration, new RegExp(`'JP:hvac-technician','${code}'.*false`, "s"), code)
+    assert.match(migration, new RegExp(`'JP:hvac-technician','${code}'[\\s\\S]*false`), code)
   }
 })
 
@@ -55,7 +55,7 @@ test("Japan construction models universal licensing separately from role-specifi
   const manager = getOccupationEditorial("construction-manager")?.countries.JP
 
   assert.match(electrician?.registration ?? "", /requires the applicable 電気工事士 qualification/i)
-  assert.match(migration, /'JP:electrician'.*'JPY',true,'経済産業省 — 電気工事士'/s)
+  assert.match(migration, /'JP:electrician'[\s\S]*'JPY',true,'経済産業省 — 電気工事士'/)
 
   assert.match(plumber?.registration ?? "", /no single universal personal plumber licence/i)
   assert.match(plumber?.registration ?? "", /給水装置工事主任技術者/)
@@ -66,7 +66,7 @@ test("Japan construction models universal licensing separately from role-specifi
   assert.match(manager?.registration ?? "", /主任技術者|監理技術者/)
 
   for (const id of ["carpenter", "plumber", "wall-floor-tiler", "welder", "bricklayer", "hvac-technician", "construction-manager"]) {
-    assert.match(migration, new RegExp(`'JP:${id}'.*'JPY',false`, "s"), id)
+    assert.match(migration, new RegExp(`'JP:${id}'[\\s\\S]*'JPY',false`), id)
   }
 })
 
