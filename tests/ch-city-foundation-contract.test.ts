@@ -26,9 +26,10 @@ test("Switzerland city foundation locks exactly six FSO/BFS municipalities", () 
 
 test("Switzerland foundation preserves multilingual aliases and UUIDs", () => {
   assert.match(migration, /UUID preservation contract failed/)
-  assert.match(migration, /'zurich','Zürich','official_name'/)
-  assert.match(migration, /'geneva','Genève','official_name'/)
-  assert.match(migration, /'fribourg','Freiburg','language_alias'/)
+  assert.match(migration, /'zurich','Zürich','canonical_name'/)
+  assert.match(migration, /'geneva','Genève','canonical_name'/)
+  assert.match(migration, /'fribourg','Freiburg','other'/)
+  assert.match(migration, /geography_aliases accepts the existing controlled alias types only/)
   for (const excluded of ["neuchatel", "bern", "st-gallen", "lucerne"]) {
     assert.doesNotMatch(migration, new RegExp(`\\('${excluded}'`))
   }
