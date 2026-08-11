@@ -55,7 +55,7 @@ test("UK Technology scoring separates targeted TSL access from standard Skilled 
   }
 
   assert.ok(migration.includes("career-opportunity-uk-v1"))
-  assert.ok(migration.includes("no occupation-specific final recommendation for 3131"))
+  assert.ok(migration.includes("does not publish an occupation-specific recommendation for 3131"))
   assert.ok(migration.includes("no occupation-specific final recommendation is published in the July 2026 MAC report"))
 })
 
