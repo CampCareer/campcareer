@@ -37,37 +37,37 @@ test("Japan education cohort covers the canonical eight education careers", () =
 })
 
 test("Japan education preserves school-type and welfare classification boundaries", () => {
-  assert.match(migration, /'JP:early-childhood-teacher'.*'029-02','JPY',true/s)
-  assert.match(migration, /'JP:primary-school-teacher'.*'031-01','JPY',true/s)
-  assert.match(migration, /'JP:secondary-school-teacher'.*null,'JPY',true/s)
+  assert.match(migration, /'JP:early-childhood-teacher'[\s\S]*'029-02','JPY',true/)
+  assert.match(migration, /'JP:primary-school-teacher'[\s\S]*'031-01','JPY',true/)
+  assert.match(migration, /'JP:secondary-school-teacher'[\s\S]*null,'JPY',true/)
   for (const code of ["031-02", "031-04", "031-05"]) {
     assert.match(migration, new RegExp(`'JP:secondary-school-teacher','${code}'`), code)
   }
-  assert.match(migration, /'JP:special-education-teacher'.*'031-06','JPY',true/s)
+  assert.match(migration, /'JP:special-education-teacher'[\s\S]*'031-06','JPY',true/)
 
-  assert.match(migration, /'JP:social-worker'.*null,'JPY',true/s)
+  assert.match(migration, /'JP:social-worker'[\s\S]*null,'JPY',true/)
   for (const code of ["049-02", "049-03", "049-04", "049-05", "049-99"]) {
     assert.match(migration, new RegExp(`'JP:social-worker','${code}'`), code)
   }
 
-  assert.match(migration, /'JP:youth-worker'.*null,'JPY',false/s)
+  assert.match(migration, /'JP:youth-worker'[\s\S]*null,'JPY',false/)
   assert.match(migration, /'JP:youth-worker','030-02'/)
   assert.match(migration, /'JP:youth-worker','049-05'/)
-  assert.match(migration, /'JP:community-worker'.*'049-99','JPY',false/s)
-  assert.match(migration, /'JP:counsellor'.*'019-03','JPY',false/s)
+  assert.match(migration, /'JP:community-worker'[\s\S]*'049-99','JPY',false/)
+  assert.match(migration, /'JP:counsellor'[\s\S]*'019-03','JPY',false/)
 })
 
 test("Japan education models licensing without overclaiming broad support roles", () => {
   for (const id of ["early-childhood-teacher", "primary-school-teacher", "secondary-school-teacher", "special-education-teacher", "social-worker"]) {
-    assert.match(migration, new RegExp(`'JP:${id}'.*'JPY',true`, "s"), id)
+    assert.match(migration, new RegExp(`'JP:${id}'[\\s\\S]*'JPY',true`), id)
   }
   for (const id of ["youth-worker", "community-worker", "counsellor"]) {
-    assert.match(migration, new RegExp(`'JP:${id}'.*'JPY',false`, "s"), id)
+    assert.match(migration, new RegExp(`'JP:${id}'[\\s\\S]*'JPY',false`), id)
   }
 
   assert.match(getOccupationEditorial("early-childhood-teacher")?.countries.JP?.jobMarketNote ?? "", /保育士/)
   assert.match(getOccupationEditorial("secondary-school-teacher")?.countries.JP?.registration ?? "", /school-type and subject teacher licence/i)
-  assert.match(getOccupationEditorial("special-education-teacher")?.countries.JP?.registration ?? "", /Supplementary Provision 16.*transitional exception/s)
+  assert.match(getOccupationEditorial("special-education-teacher")?.countries.JP?.registration ?? "", /Supplementary Provision 16[\s\S]*transitional exception/)
   assert.match(specialSupportCorrection, /foundational kindergarten, elementary, middle or high-school teacher licence is required/i)
   assert.match(specialSupportCorrection, /does not describe the specialist licence itself as universally mandatory/i)
   assert.match(getOccupationEditorial("social-worker")?.countries.JP?.registration ?? "", /protected national title/i)
