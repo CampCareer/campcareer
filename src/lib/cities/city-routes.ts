@@ -78,9 +78,10 @@ export type PublishedFiCitySlug = (typeof PUBLISHED_FI_CITY_SLUGS)[number]
 export const SUPPORTED_FI_CITY_SLUGS = PUBLISHED_FI_CITY_SLUGS
 export type SupportedFiCitySlug = PublishedFiCitySlug
 
-// Norway Cities Phase 5 support allowlist. These routes remain noindex until a later publication/SEO phase.
-export const SUPPORTED_NO_CITY_SLUGS = ["oslo", "trondheim", "stavanger", "as", "tromso"] as const
-export type SupportedNoCitySlug = (typeof SUPPORTED_NO_CITY_SLUGS)[number]
+export const PUBLISHED_NO_CITY_SLUGS = ["oslo", "trondheim", "stavanger", "as", "tromso"] as const
+export type PublishedNoCitySlug = (typeof PUBLISHED_NO_CITY_SLUGS)[number]
+export const SUPPORTED_NO_CITY_SLUGS = PUBLISHED_NO_CITY_SLUGS
+export type SupportedNoCitySlug = PublishedNoCitySlug
 
 const CITY_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
@@ -138,8 +139,12 @@ export function isSupportedFiCitySlug(value: string): value is SupportedFiCitySl
   return isPublishedFiCitySlug(value)
 }
 
+export function isPublishedNoCitySlug(value: string): value is PublishedNoCitySlug {
+  return PUBLISHED_NO_CITY_SLUGS.includes(value as PublishedNoCitySlug)
+}
+
 export function isSupportedNoCitySlug(value: string): value is SupportedNoCitySlug {
-  return SUPPORTED_NO_CITY_SLUGS.includes(value as SupportedNoCitySlug)
+  return isPublishedNoCitySlug(value)
 }
 
 export function auCityPath(value: string | null | undefined) {
@@ -210,6 +215,6 @@ export function fiCityPath(value: string | null | undefined) {
 
 export function noCityPath(value: string | null | undefined) {
   const slug = normalizeCitySlug(value)
-  if (!slug || !isSupportedNoCitySlug(slug)) return null
+  if (!slug || !isPublishedNoCitySlug(slug)) return null
   return `/cities/no/${slug}`
 }
