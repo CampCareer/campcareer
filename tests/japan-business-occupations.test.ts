@@ -33,13 +33,13 @@ test("Japan business cohort covers the canonical eight business careers", () => 
 })
 
 test("Japan business preserves direct codes and honest umbrellas", () => {
-  assert.match(migration, /'JP:accountant'.*'038-03','JPY',false/s)
-  assert.match(migration, /'JP:financial-analyst'.*'013-99','JPY',false/s)
-  assert.match(migration, /'JP:human-resources-specialist'.*'033-02','JPY',false/s)
-  assert.match(migration, /'JP:marketing-specialist'.*'033-03','JPY',false/s)
+  assert.match(migration, /'JP:accountant'[\s\S]*'038-03','JPY',false/)
+  assert.match(migration, /'JP:financial-analyst'[\s\S]*'013-99','JPY',false/)
+  assert.match(migration, /'JP:human-resources-specialist'[\s\S]*'033-02','JPY',false/)
+  assert.match(migration, /'JP:marketing-specialist'[\s\S]*'033-03','JPY',false/)
 
   for (const id of ["business-analyst", "supply-chain-analyst", "auditor", "project-manager"]) {
-    assert.match(migration, new RegExp(`'JP:${id}'.*null,'JPY',false`, "s"), id)
+    assert.match(migration, new RegExp(`'JP:${id}'[\\s\\S]*null,'JPY',false`), id)
   }
 
   assert.match(migration, /'JP:business-analyst','013-99'/)
@@ -58,7 +58,7 @@ test("Japan auditor separates CPA external audit from internal audit", () => {
   assert.match(editorial?.registration ?? "", /Internal auditors/i)
   assert.match(migration, /FSA — CPA and audit system/)
   assert.match(migration, /CPAAOB — CPA registration requirements/)
-  assert.match(migration, /'JP:auditor'.*'JPY',false/s)
+  assert.match(migration, /'JP:auditor'[\s\S]*'JPY',false/)
 })
 
 test("Japan business v1 keeps unsupported market and visa components at zero", () => {
@@ -81,8 +81,8 @@ test("Japan business reuses only reviewed programme mappings with direct preserv
 })
 
 test("Japan business editorial documents key classification boundaries", () => {
-  assert.match(getOccupationEditorial("accountant")?.countries.JP?.registration ?? "", /038-03.*013-01/s)
-  assert.match(getOccupationEditorial("business-analyst")?.countries.JP?.entryPathway ?? "", /013-99.*033-03/s)
-  assert.match(getOccupationEditorial("supply-chain-analyst")?.countries.JP?.entryPathway ?? "", /033-03.*039-01.*039-02/s)
-  assert.match(getOccupationEditorial("project-manager")?.countries.JP?.entryPathway ?? "", /010-03.*035-99/s)
+  assert.match(getOccupationEditorial("accountant")?.countries.JP?.registration ?? "", /038-03[\s\S]*013-01/)
+  assert.match(getOccupationEditorial("business-analyst")?.countries.JP?.entryPathway ?? "", /013-99[\s\S]*033-03/)
+  assert.match(getOccupationEditorial("supply-chain-analyst")?.countries.JP?.entryPathway ?? "", /033-03[\s\S]*039-01[\s\S]*039-02/)
+  assert.match(getOccupationEditorial("project-manager")?.countries.JP?.entryPathway ?? "", /010-03[\s\S]*035-99/)
 })
