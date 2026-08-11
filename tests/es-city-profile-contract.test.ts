@@ -9,17 +9,17 @@ const dashboard = fs.readFileSync("src/app/(workspace)/cities/spain-city-dashboa
 
 const exactSlugs = ["madrid", "barcelona", "valencia", "sevilla", "granada", "malaga", "bilbao"]
 
-test("Spain Phase 5 supports exactly the seven Tier A profile slugs without declaring SEO publication", () => {
-  assert.match(routes, /SUPPORTED_ES_CITY_SLUGS = \["madrid", "barcelona", "valencia", "sevilla", "granada", "malaga", "bilbao"\] as const/)
-  assert.doesNotMatch(routes, /PUBLISHED_ES_CITY_SLUGS/)
+test("Spain profile route cohort remains exactly the seven Tier A slugs", () => {
+  assert.match(routes, /PUBLISHED_ES_CITY_SLUGS = \["madrid", "barcelona", "valencia", "sevilla", "granada", "malaga", "bilbao"\] as const/)
+  assert.match(routes, /SUPPORTED_ES_CITY_SLUGS = PUBLISHED_ES_CITY_SLUGS/)
   for (const slug of exactSlugs) assert.ok(routes.includes(`"${slug}"`), `missing ${slug}`)
   assert.match(routes, /return `\/cities\/es\/\$\{slug\}`/)
 })
 
-test("Spain Phase 5 routes are functional but remain noindex", () => {
+test("Spain published routes are indexable while unsupported routes remain excluded", () => {
   assert.match(page, /generateStaticParams/)
-  assert.match(page, /SUPPORTED_ES_CITY_SLUGS/)
-  assert.match(page, /robots: \{ index: false, follow: true \}/)
+  assert.match(page, /PUBLISHED_ES_CITY_SLUGS/)
+  assert.match(page, /robots: \{ index: true, follow: true \}/)
   assert.match(page, /robots: \{ index: false, follow: false \}/)
   assert.match(page, /notFound\(\)/)
 })
