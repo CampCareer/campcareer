@@ -40,14 +40,16 @@ where g.id=a.expected_uuid
   and g.canonical_geography_id is null
   and g.name=a.city_name;
 
+-- core.geography_aliases accepts the existing controlled alias types only.
+-- English routing displays and non-primary language forms use `other`; official/local names use `canonical_name`.
 with alias_seed(slug,alias,alias_type) as (
   values
-    ('zurich','Zurich','routing_display'),('zurich','Zürich','official_name'),
-    ('lausanne','Lausanne','official_name'),
-    ('basel','Basel','official_name'),
-    ('lugano','Lugano','official_name'),
-    ('fribourg','Fribourg','official_name'),('fribourg','Freiburg','language_alias'),
-    ('geneva','Geneva','routing_display'),('geneva','Genève','official_name')
+    ('zurich','Zurich','other'),('zurich','Zürich','canonical_name'),
+    ('lausanne','Lausanne','canonical_name'),
+    ('basel','Basel','canonical_name'),
+    ('lugano','Lugano','canonical_name'),
+    ('fribourg','Fribourg','canonical_name'),('fribourg','Freiburg','other'),
+    ('geneva','Geneva','other'),('geneva','Genève','canonical_name')
 )
 insert into core.geography_aliases(geography_id,country_code,alias,alias_normalized,region_code,alias_type,source_system,source_url)
 select g.id,'CH',a.alias,lower(trim(a.alias)),g.region_code,a.alias_type,'FSO/BFS Official Directory of Municipalities','https://www.agvchapp.bfs.admin.ch/'
