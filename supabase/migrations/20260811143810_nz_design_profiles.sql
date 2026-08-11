@@ -1,0 +1,10 @@
+insert into public.country_occupation_profiles (profile_key,country_code,canonical_career_id,official_title,official_code_system,official_code_version,official_unit_group_code,currency,registration_required,registration_authority,registration_url,publication_status,source_checked_at,updated_at) values
+('NZ:graphic-designer','NZ','graphic-designer','Graphic Designer','ANZSCO','1.3','232411','NZD',false,null,null,'profile_ready','2026-08-11',now()),
+('NZ:ux-designer','NZ','ux-designer','User Experience Designer — digital design scope','NZ career scope','2026-08-11',null,'NZD',false,null,null,'profile_ready','2026-08-11',now()),
+('NZ:multimedia-designer','NZ','multimedia-designer','Multimedia Designer','ANZSCO','1.3','232413','NZD',false,null,null,'profile_ready','2026-08-11',now()),
+('NZ:animator','NZ','animator','Illustrator — Animator specialisation','ANZSCO','1.3','232412','NZD',false,null,null,'profile_ready','2026-08-11',now()),
+('NZ:interior-designer','NZ','interior-designer','Interior Designer','ANZSCO','1.3','232511','NZD',false,null,null,'profile_ready','2026-08-11',now()),
+('NZ:film-editor','NZ','film-editor','Film and Video Editor','ANZSCO','1.3','212314','NZD',false,null,null,'profile_ready','2026-08-11',now()),
+('NZ:architect','NZ','architect','Architect','ANZSCO','1.3','232111','NZD',true,'New Zealand Registered Architects Board','https://www.nzrab.nz/c/initial-registration','profile_ready','2026-08-11',now()),
+('NZ:web-designer','NZ','web-designer','Web Designer','ANZSCO','1.3','232414','NZD',false,null,null,'profile_ready','2026-08-11',now())
+on conflict (profile_key) do update set official_title=excluded.official_title,official_code_system=excluded.official_code_system,official_code_version=excluded.official_code_version,official_unit_group_code=excluded.official_unit_group_code,currency=excluded.currency,registration_required=excluded.registration_required,registration_authority=excluded.registration_authority,registration_url=excluded.registration_url,publication_status=excluded.publication_status,source_checked_at=excluded.source_checked_at,updated_at=now();
