@@ -1,0 +1,10 @@
+insert into public.country_occupation_profiles (profile_key,country_code,canonical_career_id,official_title,official_code_system,official_code_version,official_unit_group_code,currency,registration_required,registration_authority,registration_url,publication_status,source_checked_at,updated_at) values
+('NZ:chef','NZ','chef','Chef','ANZSCO','1.3','351311','NZD',false,null,null,'profile_ready','2026-08-11',now()),
+('NZ:cook','NZ','cook','Cook','ANZSCO','1.3','351411','NZD',false,null,null,'profile_ready','2026-08-11',now()),
+('NZ:hotel-manager','NZ','hotel-manager','Hotel or Motel Manager','ANZSCO','1.3','141311','NZD',false,null,null,'profile_ready','2026-08-11',now()),
+('NZ:restaurant-manager','NZ','restaurant-manager','Cafe or Restaurant Manager','ANZSCO','1.3','141111','NZD',false,null,null,'profile_ready','2026-08-11',now()),
+('NZ:baker','NZ','baker','Baker','ANZSCO','1.3','351111','NZD',false,null,null,'profile_ready','2026-08-11',now()),
+('NZ:tourism-manager','NZ','tourism-manager','Travel Agency Manager — tourism-management scope','ANZSCO','1.3','142116','NZD',false,null,null,'profile_ready','2026-08-11',now()),
+('NZ:event-planner','NZ','event-planner','Conference and Event Organiser','ANZSCO','1.3','149311','NZD',false,null,null,'profile_ready','2026-08-11',now()),
+('NZ:hospitality-supervisor','NZ','hospitality-supervisor','Food Service Worker Supervisor — NZ career scope','NZ career scope','2026-08-11',null,'NZD',false,null,null,'profile_ready','2026-08-11',now())
+on conflict (profile_key) do update set official_title=excluded.official_title,official_code_system=excluded.official_code_system,official_code_version=excluded.official_code_version,official_unit_group_code=excluded.official_unit_group_code,currency=excluded.currency,registration_required=excluded.registration_required,registration_authority=excluded.registration_authority,registration_url=excluded.registration_url,publication_status=excluded.publication_status,source_checked_at=excluded.source_checked_at,updated_at=now();
