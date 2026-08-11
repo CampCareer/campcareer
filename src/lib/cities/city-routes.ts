@@ -78,6 +78,10 @@ export type PublishedFiCitySlug = (typeof PUBLISHED_FI_CITY_SLUGS)[number]
 export const SUPPORTED_FI_CITY_SLUGS = PUBLISHED_FI_CITY_SLUGS
 export type SupportedFiCitySlug = PublishedFiCitySlug
 
+// Switzerland Cities Phase 5 support allowlist. Publication/indexing remains Phase 7 work.
+export const SUPPORTED_CH_CITY_SLUGS = ["zurich", "lausanne", "basel", "lugano", "fribourg", "geneva"] as const
+export type SupportedChCitySlug = (typeof SUPPORTED_CH_CITY_SLUGS)[number]
+
 const CITY_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
 export function normalizeCitySlug(value: string | null | undefined) {
@@ -132,6 +136,10 @@ export function isPublishedFiCitySlug(value: string): value is PublishedFiCitySl
 
 export function isSupportedFiCitySlug(value: string): value is SupportedFiCitySlug {
   return isPublishedFiCitySlug(value)
+}
+
+export function isSupportedChCitySlug(value: string): value is SupportedChCitySlug {
+  return SUPPORTED_CH_CITY_SLUGS.includes(value as SupportedChCitySlug)
 }
 
 export function auCityPath(value: string | null | undefined) {
@@ -198,4 +206,10 @@ export function fiCityPath(value: string | null | undefined) {
   const slug = normalizeCitySlug(value)
   if (!slug || !isPublishedFiCitySlug(slug)) return null
   return `/cities/fi/${slug}`
+}
+
+export function chCityPath(value: string | null | undefined) {
+  const slug = normalizeCitySlug(value)
+  if (!slug || !isSupportedChCitySlug(slug)) return null
+  return `/cities/ch/${slug}`
 }
