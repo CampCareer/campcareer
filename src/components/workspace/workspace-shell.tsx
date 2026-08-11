@@ -24,13 +24,14 @@ export function WorkspaceShell({ children }: WorkspaceShellProps) {
     pathname.startsWith("/countries/") ||
     isCityProfile
   const isComparePage = pathname === "/compare"
+  const isPathfinder = pathname === "/"
   // Home owns both the authenticated dashboard and result experiences. Its
   // application-style surfaces should end at their content, not a marketing footer.
   const hideSiteFooter = pathname === "/"
 
   return (
     <div className="flex min-h-screen bg-white">
-      <WorkspaceSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      {!isPathfinder && <WorkspaceSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />}
       <div className="flex min-w-0 flex-1 flex-col">
         <WorkspaceTopbar onMenuClick={() => setSidebarOpen((prev) => !prev)} />
         <main
