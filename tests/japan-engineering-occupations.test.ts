@@ -33,7 +33,7 @@ test("Japan engineering cohort covers the canonical eight engineering careers", 
 
 test("Japan engineering preserves multi-code MHLW scopes instead of false rollups", () => {
   for (const id of careers) {
-    assert.match(migration, new RegExp(`'JP:${id}'.*null,'JPY',false`, "s"), id)
+    assert.match(migration, new RegExp(`'JP:${id}'[\\s\\S]*null,'JPY',false`), id)
   }
 
   for (const code of ["008-04", "008-05", "008-06"]) assert.match(migration, new RegExp(`'JP:civil-engineer','${code}'`))
@@ -56,7 +56,7 @@ test("Japan manufacturing and industrial engineering remain reviewed umbrellas",
 
 test("Japan engineering does not invent universal occupational licensing", () => {
   for (const id of careers) {
-    assert.match(migration, new RegExp(`'JP:${id}'.*'JPY',false`, "s"), id)
+    assert.match(migration, new RegExp(`'JP:${id}'[\\s\\S]*'JPY',false`), id)
   }
   assert.match(getOccupationEditorial("civil-engineer")?.countries.JP?.registration ?? "", /主任技術者|監理技術者/)
   assert.match(getOccupationEditorial("electrical-engineer")?.countries.JP?.registration ?? "", /電気主任技術者/)
