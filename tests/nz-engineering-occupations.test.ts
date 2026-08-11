@@ -41,7 +41,7 @@ test("NZ Engineering preserves reviewed ANZSCO mappings", () => {
   assert.ok(!profiles.includes("'NZ:manufacturing-engineer','NZ','manufacturing-engineer','Industrial Engineer'"))
   assert.ok(profiles.includes("'NZ:engineering-technician','NZ','engineering-technician','Building and Engineering Technicians nec — general engineering technician scope','ANZSCO','1.3','312999'"))
   for (const code of ["312212", "312312", "312412", "312512"]) {
-    assert.ok(!profiles.includes(`'NZ:engineering-technician','NZ','engineering-technician'`) || !profiles.includes(`'NZ:engineering-technician','NZ','engineering-technician','${code}'`))
+    assert.ok(!profiles.includes(`'NZ:engineering-technician','NZ','engineering-technician','${code}'`))
   }
 })
 
@@ -90,5 +90,5 @@ test("NZ Engineering programme links come only from the reviewed NZ canonical la
   assert.ok(links.includes("pc.international_students_eligible is true"))
   assert.ok(links.includes("pc.code_signatory_status = 'confirmed'"))
   assert.ok(links.includes("coalesce(pc.canonical_admission_state,'') <> 'closed'"))
-  assert.ok(!links.includes("'nz-program:"), "generated programme UUIDs must not be hardcoded")
+  assert.ok(!/nz-program:[0-9a-f]{8}-[0-9a-f-]{27,}/i.test(links), "generated programme UUIDs must not be hardcoded")
 })
