@@ -65,6 +65,7 @@ import { SINGAPORE_TECHNOLOGY_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupatio
 import { SINGAPORE_ENGINEERING_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-sg-engineering"
 import { SINGAPORE_BUSINESS_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-sg-business"
 import { SINGAPORE_EDUCATION_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-sg-education"
+import { SINGAPORE_ENVIRONMENT_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-sg-environment"
 
 export type { CountryOccupationEditorial, OccupationEditorial } from "./occupation-editorial-base"
 
@@ -138,6 +139,7 @@ const COUNTRY_OCCUPATION_EDITORIAL_OVERRIDES = [
   ...SINGAPORE_ENGINEERING_OCCUPATION_EDITORIAL_OVERRIDES,
   ...SINGAPORE_BUSINESS_OCCUPATION_EDITORIAL_OVERRIDES,
   ...SINGAPORE_EDUCATION_OCCUPATION_EDITORIAL_OVERRIDES,
+  ...SINGAPORE_ENVIRONMENT_OCCUPATION_EDITORIAL_OVERRIDES,
 ] as const
 
 export const OCCUPATION_EDITORIAL: readonly OccupationEditorialType[] = RAW_OCCUPATION_EDITORIAL.map((item) => {
