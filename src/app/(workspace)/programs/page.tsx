@@ -11,9 +11,15 @@ import { ProgramsSidebar } from "./programs-filters"
 import { CaProgramsSidebar } from "./ca-programs-filters"
 import { ProgramsSortControl } from "./programs-sort-control"
 import { UkProgramsExplorer } from "./uk-programs-explorer"
+import { NzProgramsExplorer } from "./nz-programs-explorer"
+import { NlProgramsExplorer } from "./nl-programs-explorer"
+import { AeProgramsExplorer } from "./ae-programs-explorer"
 import { searchAuPrograms, type AuProgramSearchResult } from "@/lib/programs/au-programs.server"
+import { searchAePrograms, type AeProgramSearchResult } from "@/lib/programs/ae-programs.server"
 import { searchCaPrograms, type CaProgramSearchResult } from "@/lib/programs/ca-programs.server"
 import { searchUkPrograms, type UkProgramSearchResult } from "@/lib/programs/uk-programs.server"
+import { searchNzPrograms, type NzProgramSearchResult } from "@/lib/programs/nz-programs.server"
+import { searchNlPrograms, type NlProgramSearchResult } from "@/lib/programs/nl-programs.server"
 import {
   buildProgramsUrl,
   hasProgramFilters,
@@ -49,7 +55,7 @@ export async function generateMetadata({
   const params = await searchParams
   const filters = normalizedFilters(params)
   const country = getLaunchCountry(filters.country)
-  const isPublishedBase = ["AU", "CA", "UK"].includes(filters.country) && !hasProgramFilters(filters)
+  const isPublishedBase = ["AU", "CA", "UK", "AE", "NZ", "NL"].includes(filters.country) && !hasProgramFilters(filters)
   const countryName = country?.name ?? "Australia"
 
   const description =
@@ -57,9 +63,15 @@ export async function generateMetadata({
       ? "Search Australian university and vocational programs by verified city, study level, field, state, duration and tuition."
       : filters.country === "CA"
         ? "Explore Canadian programs reviewed against 80 target careers, current international admission evidence and PGWP status."
+        : filters.country === "AE"
+          ? "Explore source-verified UAE programs with accreditation and international admission tracked separately."
         : filters.country === "UK"
           ? "Explore source-verified UK programmes with international-student eligibility, Student sponsor evidence and current application timing tracked separately."
-          : `Explore study programs in ${countryName}. Country data will be published after source review.`
+          : filters.country === "NZ"
+            ? "Explore verified New Zealand programmes connected to CampCareer target occupations, with NZQCF, international-study, Code and application evidence tracked separately."
+          : filters.country === "NL"
+            ? "Explore source-verified Netherlands programmes with Dutch recognition, international-student eligibility, recognised sponsor evidence and current application timing tracked separately."
+            : `Explore study programs in ${countryName}. Country data will be published after source review.`
 
   return {
     title:
@@ -67,7 +79,13 @@ export async function generateMetadata({
         ? "Australian Programs"
         : filters.country === "CA"
           ? "Canadian Programs"
-          : `${countryName} Programs`,
+          : filters.country === "AE"
+            ? "UAE Programs"
+          : filters.country === "NZ"
+            ? "New Zealand Programs"
+            : filters.country === "NL"
+              ? "Netherlands Programs"
+              : `${countryName} Programs`,
     description,
     alternates: {
       canonical: `${SITE_URL}${programsCanonicalPath(filters.country)}`,
@@ -184,6 +202,9 @@ function CountryComingSoon({ countryCode }: { countryCode: string }) {
         <Link href="/programs?country=UK" className="rounded-lg border border-[#cfd9ca] bg-white px-4 py-2.5 text-[12.5px] font-semibold text-[#3e7a2e] transition hover:bg-[#edf5ea]">
           Browse the UK
         </Link>
+        <Link href="/programs?country=NZ" className="rounded-lg border border-[#cfd9ca] bg-white px-4 py-2.5 text-[12.5px] font-semibold text-[#3e7a2e] transition hover:bg-[#edf5ea]">
+          Browse New Zealand
+        </Link>
       </div>
     </div>
   )
@@ -217,18 +238,24 @@ export default async function ProgramsPage({
   let auResult: AuProgramSearchResult | null = null
   let caResult: CaProgramSearchResult | null = null
   let ukResult: UkProgramSearchResult | null = null
+  let nzResult: NzProgramSearchResult | null = null
+  let nlResult: NlProgramSearchResult | null = null
+  let aeResult: AeProgramSearchResult | null = null
   let errorMessage: string | null = null
 
   try {
     if (filters.country === "AU") auResult = await searchAuPrograms(filters)
     if (filters.country === "CA") caResult = await searchCaPrograms(filters)
     if (filters.country === "UK") ukResult = await searchUkPrograms(filters)
+    if (filters.country === "NZ") nzResult = await searchNzPrograms(filters)
+    if (filters.country === "NL") nlResult = await searchNlPrograms(filters)
+    if (filters.country === "AE") aeResult = await searchAePrograms(filters)
   } catch (error) {
     console.error(`Unable to load ${filters.country} program catalogue`, error)
     errorMessage = "Please try again shortly. No cached or substitute country data has been shown."
   }
 
-  const countryIsPublished = ["AU", "CA", "UK"].includes(filters.country)
+  const countryIsPublished = ["AU", "CA", "UK", "AE", "NZ", "NL"].includes(filters.country)
 
   return (
     <>
@@ -242,8 +269,14 @@ export default async function ProgramsPage({
         <div className="mt-7">
           <ProgramLoadError countryName={getLaunchCountry(filters.country)?.name ?? filters.country} message={errorMessage} />
         </div>
+      ) : filters.country === "NZ" && nzResult ? (
+        <NzProgramsExplorer filters={filters} result={nzResult} />
+      ) : filters.country === "NL" && nlResult ? (
+        <NlProgramsExplorer filters={filters} result={nlResult} />
       ) : filters.country === "UK" && ukResult ? (
         <UkProgramsExplorer filters={filters} result={ukResult} />
+      ) : filters.country === "AE" && aeResult ? (
+        <AeProgramsExplorer filters={filters} result={aeResult} />
       ) : filters.country === "CA" && caResult ? (
         <div className="mt-7 grid gap-5 lg:grid-cols-[260px_minmax(0,1fr)] lg:items-start">
           <CaProgramsSidebar filters={filters} />
