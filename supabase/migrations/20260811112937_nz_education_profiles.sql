@@ -1,0 +1,3 @@
+-- Production-only idempotent Education profile upsert created by a parallel session.
+-- The canonical Education profile state is defined by 20260811101442_nz_education_profiles.sql.
+-- This placeholder preserves the production migration version in repository history; the final production state was reconciled by 20260811113520_nz_education_parallel_reconcile.sql.
