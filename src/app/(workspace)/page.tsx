@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { Suspense } from "react"
 import { HOME_CANONICAL_PATH } from "@/lib/seo-routes.mjs"
 import { HomeHub } from "./home/home-hub"
 
@@ -10,5 +11,13 @@ export const metadata: Metadata = {
 }
 
 export default function HomePage() {
-  return <HomeHub />
+  return (
+    <Suspense fallback={<HomeHubFallback />}>
+      <HomeHub />
+    </Suspense>
+  )
+}
+
+function HomeHubFallback() {
+  return <main className="min-h-[calc(100vh-3.5rem)] bg-[#fbfbfa]" />
 }
