@@ -1,0 +1,7 @@
+-- Production-only reconciliation after overlapping Education work on the same cumulative NZ branch.
+-- The canonical Education data, scoring, links and programme mappings remain defined by:
+--   20260811101442_nz_education_profiles.sql
+--   20260811101524_nz_education_metrics.sql
+--   20260811101558_nz_education_links_and_programs.sql
+-- Production was restored to that canonical state before this version was recorded.
+-- This no-op placeholder keeps local migration history aligned with the production migration ledger.
