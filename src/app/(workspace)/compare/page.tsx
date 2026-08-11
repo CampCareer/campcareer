@@ -10,6 +10,7 @@ import { getDeCityComparison } from "@/lib/cities/de-city-comparison.server"
 import { getEsCityComparison } from "@/lib/cities/es-city-comparison.server"
 import { getFiCityComparison } from "@/lib/cities/fi-city-comparison.server"
 import { getFrCityComparison } from "@/lib/cities/fr-city-comparison.server"
+import { getKrCityComparison } from "@/lib/cities/kr-city-comparison.server"
 import { getNlCityComparison } from "@/lib/cities/nl-city-comparison.server"
 import { getDkCityComparison } from "@/lib/cities/dk-city-comparison.server"
 import { getNzCityComparison } from "@/lib/cities/nz-city-comparison.server"
@@ -30,6 +31,7 @@ import { GermanyCitiesCompareMatrix } from "./germany-cities-compare-matrix"
 import { NetherlandsCitiesCompareMatrix } from "./netherlands-cities-compare-matrix"
 import { DenmarkCitiesCompareMatrix } from "./denmark-cities-compare-matrix"
 import { NewZealandCitiesCompareMatrix } from "./new-zealand-cities-compare-matrix"
+import { SouthKoreaCitiesCompareMatrix } from "./south-korea-cities-compare-matrix"
 import { SpainCitiesCompareMatrix } from "./spain-cities-compare-matrix"
 import { SwedenCitiesCompareMatrix } from "./sweden-cities-compare-matrix"
 import { UnitedKingdomCitiesCompareMatrix } from "./united-kingdom-cities-compare-matrix"
@@ -103,6 +105,12 @@ async function CitiesCompare({ countryCode, params }: { countryCode: string; par
     const comparison = await getFiCityComparison(params.get("left"), params.get("right"))
     if (!comparison) return <UnsupportedSurface type="Cities" href={buildCityCompareCanonicalHref({ country: "FI" })} label="Compare Finnish cities" activeType="city" countryCode={countryCode} />
     return <section className="w-full pb-4" aria-label="Finland cities comparison"><ComparePageHeader activeType="city" countryCode={countryCode} /><FinlandCitiesCompareMatrix left={comparison.left} right={comparison.right} options={comparison.options} /></section>
+  }
+
+  if (countryCode === "KR") {
+    const comparison = await getKrCityComparison(params.get("left"), params.get("right"))
+    if (!comparison) return <UnsupportedSurface type="Cities" href={buildCityCompareCanonicalHref({ country: "KR" })} label="Compare South Korean cities" activeType="city" countryCode={countryCode} />
+    return <section className="w-full pb-4" aria-label="South Korea cities comparison"><ComparePageHeader activeType="city" countryCode={countryCode} /><SouthKoreaCitiesCompareMatrix left={comparison.left} right={comparison.right} options={comparison.options} /></section>
   }
 
   if (countryCode === "NZ") {
