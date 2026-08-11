@@ -33,30 +33,30 @@ test("Japan technology cohort covers the canonical eight technology careers", ()
 })
 
 test("Japan technology preserves honest MHLW classification scopes", () => {
-  assert.match(migration, /'JP:software-developer'.*null,'JPY',false/s)
+  assert.match(migration, /'JP:software-developer'[\s\S]*null,'JPY',false/)
   for (const code of ["009-01", "009-02", "009-03", "009-99"]) {
     assert.match(migration, new RegExp(`'JP:software-developer','${code}'`), code)
   }
 
-  assert.match(migration, /'JP:data-analyst'.*null,'JPY',false/s)
-  assert.match(migration, /'JP:data-analyst','011-99'.*false/s)
-  assert.match(migration, /'JP:data-engineer'.*'010-99','JPY',false/s)
+  assert.match(migration, /'JP:data-analyst'[\s\S]*null,'JPY',false/)
+  assert.match(migration, /'JP:data-analyst','011-99'[\s\S]*false/)
+  assert.match(migration, /'JP:data-engineer'[\s\S]*'010-99','JPY',false/)
 
-  assert.match(migration, /'JP:cybersecurity-analyst'.*null,'JPY',false/s)
+  assert.match(migration, /'JP:cybersecurity-analyst'[\s\S]*null,'JPY',false/)
   assert.match(migration, /'JP:cybersecurity-analyst','010-04'/)
   assert.match(migration, /'JP:cybersecurity-analyst','010-99'/)
 
-  assert.match(migration, /'JP:network-administrator'.*'010-04','JPY',false/s)
-  assert.match(migration, /'JP:cloud-engineer'.*null,'JPY',false/s)
+  assert.match(migration, /'JP:network-administrator'[\s\S]*'010-04','JPY',false/)
+  assert.match(migration, /'JP:cloud-engineer'[\s\S]*null,'JPY',false/)
   assert.match(migration, /'JP:cloud-engineer','010-02'/)
   assert.match(migration, /'JP:cloud-engineer','010-04'/)
-  assert.match(migration, /'JP:database-administrator'.*'010-04','JPY',false/s)
-  assert.match(migration, /'JP:ict-support-technician'.*'010-05','JPY',false/s)
+  assert.match(migration, /'JP:database-administrator'[\s\S]*'010-04','JPY',false/)
+  assert.match(migration, /'JP:ict-support-technician'[\s\S]*'010-05','JPY',false/)
 })
 
 test("Japan technology does not invent statutory licensing", () => {
   for (const id of careers) {
-    assert.match(migration, new RegExp(`'JP:${id}'.*'JPY',false`, "s"), id)
+    assert.match(migration, new RegExp(`'JP:${id}'[\\s\\S]*'JPY',false`), id)
     assert.match(getOccupationEditorial(id)?.countries.JP?.registration ?? "", /no universal statutory occupational licence|no universal statutory licence/i, id)
   }
 })
@@ -82,8 +82,8 @@ test("Japan technology reuses only reviewed programme mappings with direct prese
 })
 
 test("Japan technology editorial explains umbrella boundaries", () => {
-  assert.match(getOccupationEditorial("software-developer")?.countries.JP?.entryPathway ?? "", /009-01.*009-02.*009-03.*009-99/s)
+  assert.match(getOccupationEditorial("software-developer")?.countries.JP?.entryPathway ?? "", /009-01[\s\S]*009-02[\s\S]*009-03[\s\S]*009-99/)
   assert.match(getOccupationEditorial("data-analyst")?.countries.JP?.entryPathway ?? "", /does not publish a standalone Data Analyst code/i)
-  assert.match(getOccupationEditorial("cybersecurity-analyst")?.countries.JP?.entryPathway ?? "", /010-04.*010-99/s)
-  assert.match(getOccupationEditorial("cloud-engineer")?.countries.JP?.entryPathway ?? "", /010-02.*010-04/s)
+  assert.match(getOccupationEditorial("cybersecurity-analyst")?.countries.JP?.entryPathway ?? "", /010-04[\s\S]*010-99/)
+  assert.match(getOccupationEditorial("cloud-engineer")?.countries.JP?.entryPathway ?? "", /010-02[\s\S]*010-04/)
 })
