@@ -6,6 +6,7 @@ import { parseCountryComparisonState, type CountryComparisonState } from "@/lib/
 import { getAuCityComparison } from "@/lib/cities/au-city-comparison.server"
 import { getBeCityComparison } from "@/lib/cities/be-city-comparison.server"
 import { getCaCityComparison } from "@/lib/cities/ca-city-comparison.server"
+import { getChCityComparison } from "@/lib/cities/ch-city-comparison.server"
 import { getDeCityComparison } from "@/lib/cities/de-city-comparison.server"
 import { getFiCityComparison } from "@/lib/cities/fi-city-comparison.server"
 import { getFrCityComparison } from "@/lib/cities/fr-city-comparison.server"
@@ -30,6 +31,7 @@ import { NetherlandsCitiesCompareMatrix } from "./netherlands-cities-compare-mat
 import { DenmarkCitiesCompareMatrix } from "./denmark-cities-compare-matrix"
 import { NewZealandCitiesCompareMatrix } from "./new-zealand-cities-compare-matrix"
 import { SwedenCitiesCompareMatrix } from "./sweden-cities-compare-matrix"
+import { SwitzerlandCitiesCompareMatrix } from "./switzerland-cities-compare-matrix"
 import { UnitedKingdomCitiesCompareMatrix } from "./united-kingdom-cities-compare-matrix"
 import { UnitedStatesCitiesCompareMatrix } from "./united-states-cities-compare-matrix"
 import { ComparePageHeader } from "./compare-mode-navigation"
@@ -109,6 +111,17 @@ async function CitiesCompare({ countryCode, params }: { countryCode: string; par
       <section className="w-full pb-4" aria-label="Cities comparison">
         <ComparePageHeader activeType="city" countryCode={countryCode} />
         <CanadaCitiesCompareMatrix left={comparison.left} right={comparison.right} options={comparison.options} sharedCareerCount={comparison.sharedCareerCount} />
+      </section>
+    )
+  }
+
+  if (countryCode === "CH") {
+    const comparison = await getChCityComparison(params.get("left"), params.get("right"))
+    if (!comparison) return <UnsupportedSurface type="Cities" href={buildCityCompareCanonicalHref({ country: "CH" })} label="Compare Swiss cities" activeType="city" countryCode={countryCode} />
+    return (
+      <section className="w-full pb-4" aria-label="Switzerland cities comparison">
+        <ComparePageHeader activeType="city" countryCode={countryCode} />
+        <SwitzerlandCitiesCompareMatrix left={comparison.left} right={comparison.right} options={comparison.options} />
       </section>
     )
   }
