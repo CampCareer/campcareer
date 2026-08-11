@@ -16,7 +16,11 @@ The current integrated main checkpoint for this candidate is:
 
 `d81dcaf42917fe45e90208850643dae8c45a645f`
 
-That main already contains the France Phase 0–5 foundation as well as the Germany and Netherlands city work that landed while Phase 6–9 was in progress.
+Latest current-main integration commit before this documentation checkpoint:
+
+`1c469a5aef7dc9117fb3b437adea1b67efbbc27f`
+
+This main includes the France Phase 0–5 foundation plus Germany, Netherlands and Sweden Cities work that landed while France Phase 6–9 was being completed.
 
 France Phase 6–8 was then applied on top and current main was integrated as a second parent.
 
@@ -96,6 +100,12 @@ The France Phase 2–4 SQL migration files are committed and reproduce the verif
 During the operational Phase 2–4 session, the Supabase migration-history action was blocked by the tool safety gateway, so production changes were applied through controlled SQL and independently re-queried.
 
 This candidate therefore does **not** claim that these three France migration filenames are already recorded in Supabase migration history. Reconciliation remains a later controlled operations step.
+
+## Validation history
+
+CI run `31453194513` (#1298) passed the full Phase 6–9 branch before the Sweden current-main refresh.
+
+Because Sweden Cities landed on main during that run, the candidate was refreshed against `e66da5686062f52b033463578d4ff340ca89426d`. This documentation checkpoint intentionally triggers the final CI for that refreshed head.
 
 ## Final validation contract
 
