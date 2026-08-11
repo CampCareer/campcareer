@@ -22,8 +22,8 @@ test("Spain city linkage allows only exact source-city programme evidence", () =
   assert.match(migration, /ES strict city programme linkage expected 97 rows/)
   assert.match(migration, /ES programme source-city mismatch detected/)
   assert.match(migration, /ES locality-to-destination programme leakage detected/)
-  assert.match(migration, /city_slug='bilbao'.*Euskal Herriko Unibertsitatea \(EHU\)/s)
-  assert.match(migration, /city_slug='barcelona'.*Universitat Autònoma de Barcelona/s)
+  assert.ok(migration.includes("city_slug='bilbao' and institution_name='Euskal Herriko Unibertsitatea (EHU)'"))
+  assert.ok(migration.includes("city_slug='barcelona' and institution_name='Universitat Autònoma de Barcelona'"))
 })
 
 test("Spain Phase 3 read models stay private and security-invoker", () => {
