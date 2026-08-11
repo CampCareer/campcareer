@@ -33,27 +33,27 @@ test("Japan design cohort covers the canonical eight design careers", () => {
 })
 
 test("Japan design preserves direct and umbrella MHLW classification boundaries", () => {
-  assert.match(migration, /'JP:graphic-designer'.*'017-02','JPY',false/s)
-  assert.match(migration, /'JP:ux-designer'.*'009-99','JPY',false/s)
-  assert.match(migration, /'JP:multimedia-designer'.*null,'JPY',false/s)
+  assert.match(migration, /'JP:graphic-designer'[\s\S]*'017-02','JPY',false/)
+  assert.match(migration, /'JP:ux-designer'[\s\S]*'009-99','JPY',false/)
+  assert.match(migration, /'JP:multimedia-designer'[\s\S]*null,'JPY',false/)
   assert.match(migration, /'JP:multimedia-designer','017-99'/)
   assert.match(migration, /'JP:multimedia-designer','020-99'/)
-  assert.match(migration, /'JP:animator'.*null,'JPY',false/s)
+  assert.match(migration, /'JP:animator'[\s\S]*null,'JPY',false/)
   assert.match(migration, /'JP:animator','080-03'/)
   assert.match(migration, /'JP:animator','017-99'/)
-  assert.match(migration, /'JP:interior-designer'.*'017-99','JPY',false/s)
-  assert.match(migration, /'JP:film-editor'.*'020-99','JPY',false/s)
-  assert.match(migration, /'JP:architect'.*'008-01','JPY',true/s)
-  assert.match(migration, /'JP:web-designer'.*'017-01','JPY',false/s)
+  assert.match(migration, /'JP:interior-designer'[\s\S]*'017-99','JPY',false/)
+  assert.match(migration, /'JP:film-editor'[\s\S]*'020-99','JPY',false/)
+  assert.match(migration, /'JP:architect'[\s\S]*'008-01','JPY',true/)
+  assert.match(migration, /'JP:web-designer'[\s\S]*'017-01','JPY',false/)
 })
 
 test("Japan design models architect licensing without overclaiming other creative roles", () => {
   for (const id of ["graphic-designer", "ux-designer", "multimedia-designer", "animator", "interior-designer", "film-editor", "web-designer"]) {
-    assert.match(migration, new RegExp(`'JP:${id}'.*'JPY',false`, "s"), id)
+    assert.match(migration, new RegExp(`'JP:${id}'[\\s\\S]*'JPY',false`), id)
   }
-  assert.match(migration, /'JP:architect'.*'JPY',true/s)
-  assert.match(getOccupationEditorial("architect")?.countries.JP?.registration ?? "", /一級建築士.*national examination.*licence/s)
-  assert.match(getOccupationEditorial("interior-designer")?.countries.JP?.registration ?? "", /architectural design.*建築士/s)
+  assert.match(migration, /'JP:architect'[\s\S]*'JPY',true/)
+  assert.match(getOccupationEditorial("architect")?.countries.JP?.registration ?? "", /一級建築士[\s\S]*national examination[\s\S]*licence/)
+  assert.match(getOccupationEditorial("interior-designer")?.countries.JP?.registration ?? "", /architectural design[\s\S]*建築士/)
 })
 
 test("Japan design v1 keeps market and visa enrichment deferred", () => {
@@ -76,7 +76,7 @@ test("Japan design reuses only reviewed programme mappings and preserves direct 
 
 test("Japan design editorial explains important classification separations", () => {
   assert.match(getOccupationEditorial("ux-designer")?.countries.JP?.entryPathway ?? "", /009-99/)
-  assert.match(getOccupationEditorial("animator")?.countries.JP?.entryPathway ?? "", /080-03.*017-99/s)
+  assert.match(getOccupationEditorial("animator")?.countries.JP?.entryPathway ?? "", /080-03[\s\S]*017-99/)
   assert.match(getOccupationEditorial("web-designer")?.countries.JP?.entryPathway ?? "", /009-03/)
   assert.match(getOccupationEditorial("film-editor")?.countries.JP?.entryPathway ?? "", /020-99/)
 })
