@@ -6,7 +6,7 @@ Checkpoint: `TIER_A_SCOPE_LOCKED`
 
 Country: `AE` — United Arab Emirates
 
-Audit date: 2026-08-11
+Audit date: 2026-08-12
 
 Branch: `agent/ae-cities-v1`
 
@@ -14,29 +14,23 @@ Branch: `agent/ae-cities-v1`
 
 Phase 1 locks the exact UAE Cities v1 rollout cohort before geography normalization, study-location verification, metrics, profile publication or Compare work begins.
 
-No City route is published by this phase.
+The rollout was reduced from the initial seven-City draft to the top four current programme destinations. No City route is published by this phase.
 
 ## Locked City cohort
 
-The UAE Cities v1 Tier A rollout is exactly seven study-destination Cities:
+The UAE Cities v1 Tier A rollout is exactly four study-destination Cities, ranked by current CampCareer UAE programme volume:
 
-1. Abu Dhabi — `abu-dhabi`
-2. Dubai — `dubai`
-3. Sharjah — `sharjah`
-4. Al Ain — `al-ain`
-5. Khor Fakkan — `khor-fakkan`
-6. Ajman — `ajman`
-7. Fujairah — `fujairah`
+1. Abu Dhabi — `abu-dhabi` — 41 programmes
+2. Sharjah — `sharjah` — 26 programmes
+3. Al Ain — `al-ain` — 18 programmes
+4. Dubai — `dubai` — 17 programmes
 
 Planned canonical routes after later publication gates:
 
 - `/cities/ae/abu-dhabi`
-- `/cities/ae/dubai`
 - `/cities/ae/sharjah`
 - `/cities/ae/al-ain`
-- `/cities/ae/khor-fakkan`
-- `/cities/ae/ajman`
-- `/cities/ae/fujairah`
+- `/cities/ae/dubai`
 
 Phase 1 does not make these routes indexable or publicly supported.
 
@@ -46,6 +40,7 @@ Every selected City currently has all of the following:
 
 - at least one source-backed UAE programme in `program_catalog_ae_staging`
 - at least one linked active canonical provider institution
+- an existing canonical City geography row
 - a current provider/location source path that can be independently rechecked in Phase 3
 - an unambiguous intended City/locality interpretation distinct from the containing emirate
 
@@ -57,16 +52,31 @@ Programme evidence at the Phase 1 checkpoint:
 | Sharjah | Sharjah | 26 | 1 | yes |
 | Al Ain | Abu Dhabi | 18 | 1 | yes |
 | Dubai | Dubai | 17 | 6 | yes |
-| Khor Fakkan | Sharjah | 3 | 1 | no |
-| Ajman | Ajman | 2 | 1 | no |
-| Fujairah | Fujairah | 1 | 1 | no |
 
-Total foundation represented by the scope:
+Total foundation represented by the locked scope:
 
-- Cities: 7
-- emirates represented: 5
-- source programmes: 108
-- active provider institutions: 15
+- Cities: 4
+- emirates represented: 3
+- source programmes: 102
+- active provider institutions: 12
+
+## Deferred Cities
+
+The following Cities from the original seven-City draft are now explicitly deferred:
+
+- Khor Fakkan — 3 current collection programmes
+- Ajman — 2 current collection programmes
+- Fujairah — 1 current collection programme
+
+Also deferred:
+
+- Ras Al Khaimah
+- Umm Al Quwain
+- every other UAE locality not in the exact four-City allowlist
+
+The six programmes attached to Khor Fakkan, Ajman and Fujairah remain valid country/programme foundation data. They must not enter Phase 2–5 City geography, linkage, metrics, routes or publication contracts.
+
+No later phase may silently promote a deferred City into Tier A. A scope change requires an explicit new scope decision.
 
 ## Tier A meaning
 
@@ -82,15 +92,10 @@ The City product must use physical study-destination locality semantics.
 
 It must not use emirate-wide semantics even when the City and emirate share the same English name.
 
-Examples:
-
 - `Abu Dhabi` City is not all of Abu Dhabi emirate.
 - `Dubai` City is not all of Dubai emirate.
 - `Sharjah` City is not all of Sharjah emirate.
-- `Ajman` City is not all of Ajman emirate.
-- `Fujairah` City is not all of Fujairah emirate.
 - `Al Ain` is a distinct City within Abu Dhabi emirate.
-- `Khor Fakkan` is a distinct study-location candidate within Sharjah emirate.
 
 The containing emirate is context/region metadata, not a replacement for City verification.
 
@@ -98,7 +103,7 @@ The containing emirate is context/region metadata, not a replacement for City ve
 
 The authoritative publication chain for UAE Cities is:
 
-`verified City/locality -> verified physical study location -> recognised canonical provider -> verified programme offering -> canonical programme`
+`verified City/locality -> verified physical study location -> recognised canonical provider -> verified programme recognition/provenance -> canonical programme`
 
 A programme may enter a City profile only when every link in that chain is supported.
 
@@ -113,109 +118,81 @@ The following are explicitly insufficient on their own:
 
 Phase 3 must verify the physical teaching location and programme relationship.
 
-## Existing four-City identity preservation
+## Existing City identity preservation
 
-Phase 2 must preserve the existing canonical geography identities where the current interpretation remains valid:
+Phase 2 must preserve the existing canonical geography identities for all four selected Cities:
 
 - Abu Dhabi — `abu-dhabi`
+- Sharjah — `sharjah`
 - Al Ain — `al-ain`
 - Dubai — `dubai`
-- Sharjah — `sharjah`
 
 The existing UUIDs must not be replaced merely to add normalized scope metadata.
 
-Phase 2 may create new canonical geography rows for:
-
-- Khor Fakkan — `khor-fakkan`
-- Ajman — `ajman`
-- Fujairah — `fujairah`
-
-only after official locality validation.
+Phase 2 is not authorized to create canonical City geography rows for Khor Fakkan, Ajman, Fujairah or any other deferred locality.
 
 ## Geography authority rule
 
 There is no Phase 1 assumption of a single federal municipality code that can safely identify every selected City.
 
-Phase 2 must use official local-government/municipal geography evidence and record the containing emirate separately.
+Phase 2 must use official local-government/municipal geography evidence, make the City/locality scope explicit, and record the containing emirate separately.
 
-For the Abu Dhabi emirate candidates, the Department of Municipalities and Transport explicitly distinguishes Abu Dhabi City Municipality and Al Ain City Municipality.
+For the Abu Dhabi emirate candidates, the Department of Municipalities and Transport distinguishes Abu Dhabi City Municipality and Al Ain City Municipality.
 
-For other emirates, equivalent local-government evidence must be attached before canonical geography normalization is considered complete.
+Equivalent official local-government evidence must support Dubai and Sharjah scope normalization.
 
 ## Provider identity gate
 
-The seven-City programme foundation uses 15 active provider institutions.
+The four-City programme foundation uses 12 active provider institutions.
 
-At the Phase 1 audit:
-
-- 7 have at least one persisted institution identifier row
-- 8 programme-linked providers have no persisted identifier row
-
-Phase 1 does not remove those providers from the scope because their programme records retain source provenance and the Cities are valid verification candidates.
-
-However, Phase 3 publication linkage must resolve provider identity before a missing-identifier provider contributes City programme evidence.
+Several programme-provider rows currently lack a persisted durable identifier even though the existing UAE programme snapshot carries source-provider identity evidence. Phase 3 must reconcile those selected-provider identifiers before they contribute publication linkage.
 
 Name-only canonical matching is not an acceptable final publication contract.
 
+The provider type must also remain source-specific:
+
+- CAA higher-education provider identity
+- MoE TVET provider identity
+- GCAA training-provider identity
+
+A TVET or aviation training provider must not be described as a CAA university merely because it is part of the UAE programme foundation.
+
 ## Programme coverage boundary
 
-The 108-programme collection is a verified working foundation, not a complete inventory of all programmes offered by all licensed UAE institutions.
+The 102 selected programmes are a verified working foundation, not a complete inventory of all programmes offered by all licensed UAE institutions in the four Cities.
 
-The selected seven Cities therefore must use conservative coverage language such as:
+The selected Cities therefore use conservative coverage language:
 
 `verified_partial`
 
-until a broader national provider/programme coverage audit proves otherwise.
+A programme count describes current CampCareer source coverage only. It must not be presented as a complete City programme market count.
 
-A low programme count does not mean that a City has few total programmes.
-
-Examples:
-
-- Fujairah currently has one programme in the CampCareer collection.
-- Ajman currently has two.
-- Khor Fakkan currently has three.
-
-Those counts describe current verified collection coverage only.
-
-## Deferred UAE Cities / emirates
-
-The following are not part of Tier A v1:
-
-- Ras Al Khaimah
-- Umm Al Quwain
-- any other UAE locality not listed in the locked seven-City cohort
-
-Reason:
-
-The current 108-programme foundation contains no City-level programme cohort for those destinations that satisfies the Phase 1 selection basis.
-
-Their exclusion must not be interpreted as absence of licensed higher education. CAA/MoHESR list a broader UAE institutional universe.
-
-No later phase may silently promote a deferred City into Tier A.
-
-A scope change requires an explicit new scope decision.
+International-admission state remains a separate evidence dimension. City inclusion must not imply that applications are currently open or that a visa is guaranteed.
 
 ## Phase 2 handoff
 
-Phase 2 is authorized to normalize exactly these seven Cities and no others.
+Phase 2 is authorized to normalize exactly these four Cities and no others:
+
+`abu-dhabi, sharjah, al-ain, dubai`
 
 Required Phase 2 outputs:
 
-- preserve four existing City UUIDs/slugs where valid
-- add three missing canonical City geographies after official verification
-- assign explicit City/locality `scope_kind`
-- record containing emirate/region metadata without collapsing City into emirate
+- preserve all four existing City UUIDs and slugs
+- assign explicit City/locality scope semantics
+- record containing emirate metadata without collapsing City into emirate
 - attach official geography provenance
-- add safe aliases where source-backed
+- add safe aliases only where source-backed
 - keep all routes unpublished
 - leave programme delivery unassigned until Phase 3
 
 ## Phase 1 conclusion
 
-UAE Cities has reached `TIER_A_SCOPE_LOCKED` for exactly:
+UAE Cities has reached `TIER_A_SCOPE_LOCKED` for exactly four destinations:
 
-`abu-dhabi, dubai, sharjah, al-ain, khor-fakkan, ajman, fujairah`
+`abu-dhabi, sharjah, al-ain, dubai`
 
-The scope covers all 108 programmes in the current UAE programme collection across 15 providers and five emirates, while deliberately excluding Ras Al Khaimah, Umm Al Quwain and all other localities from automatic promotion.
+The scope covers 102 programmes across 12 current provider institutions and three emirates.
 
-Phase 2 may begin geography normalization for this exact seven-City cohort. Phase 3 remains responsible for physical study-location, provider-identity and programme-delivery verification.
+Khor Fakkan, Ajman and Fujairah are explicitly removed from the active rollout despite having six combined programmes in the country foundation. Phase 2–5 must not create geography normalization, City metrics, City profile routes or programme linkage for those deferred destinations.
+
+Phase 2 may begin geography normalization for the exact four-City cohort. Phase 3 remains responsible for physical study-location, provider-identity and programme-delivery verification.
