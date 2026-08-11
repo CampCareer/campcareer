@@ -19,10 +19,10 @@ import { INDEXABLE_NZ_INSTITUTION_PATHS } from "@/lib/institutions/institution-s
 import { INDEXABLE_SG_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-sg"
 import { INDEXABLE_UK_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-uk"
 import { INDEXABLE_US_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-us"
-import { PUBLISHED_NZ_CITY_SLUGS, PUBLISHED_UK_CITY_SLUGS, PUBLISHED_US_CITY_SLUGS } from "@/lib/cities/city-routes"
+import { PUBLISHED_FI_CITY_SLUGS, PUBLISHED_NZ_CITY_SLUGS, PUBLISHED_UK_CITY_SLUGS, PUBLISHED_US_CITY_SLUGS } from "@/lib/cities/city-routes"
 import { CANONICAL_COUNTRY_SLUGS, SITE_URL, countryCanonicalPath } from "@/lib/seo-routes.mjs"
 
-const lastModified = new Date("2026-08-09")
+const lastModified = new Date("2026-08-11")
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const methodologies = ["australia", "canada", "united-states", "united-kingdom", "ireland", "germany", "netherlands", "belgium", "france", "spain", "singapore", "south-korea", "japan", "new-zealand", "norway", "sweden", "denmark", "finland", "switzerland", "united-arab-emirates"]
@@ -67,6 +67,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...PUBLISHED_US_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/us/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
     ...PUBLISHED_UK_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/uk/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
     ...PUBLISHED_NZ_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/nz/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
+    ...PUBLISHED_FI_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/fi/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
     { url: `${SITE_URL}/methodology`, lastModified, priority: 0.5, changeFrequency: "monthly" },
     ...methodologies.map((slug) => ({ url: `${SITE_URL}/methodology/${slug}`, lastModified, priority: 0.45, changeFrequency: "monthly" as const })),
     { url: `${SITE_URL}/privacy`, lastModified, priority: 0.2, changeFrequency: "yearly" },
@@ -81,18 +82,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const studyPages: MetadataRoute.Sitemap = AU_PROGRAMMATIC_STUDY_PAGES.map((page) => ({ url: `${SITE_URL}${page.path}`, lastModified, priority: 0.72, changeFrequency: "weekly" as const }))
   const occupationStatePages: MetadataRoute.Sitemap = AU_OCCUPATION_STATE_PAGES.map((page) => ({ url: `${SITE_URL}${page.path}`, lastModified, priority: 0.71, changeFrequency: "monthly" as const }))
   const institutionPages: MetadataRoute.Sitemap = [
-    ...INDEXABLE_INSTITUTION_PATHS,
-    ...INDEXABLE_UK_INSTITUTION_PATHS,
-    ...INDEXABLE_NL_INSTITUTION_PATHS,
-    ...INDEXABLE_NZ_INSTITUTION_PATHS,
-    ...INDEXABLE_SG_INSTITUTION_PATHS,
-    ...INDEXABLE_DE_INSTITUTION_PATHS,
-    ...INDEXABLE_FR_INSTITUTION_PATHS,
-    ...INDEXABLE_ES_INSTITUTION_PATHS,
-    ...INDEXABLE_EU_FASTPATH_INSTITUTION_PATHS,
-    ...INDEXABLE_AUTHORITY_FASTPATH_INSTITUTION_PATHS,
-    ...INDEXABLE_AE_INSTITUTION_PATHS,
-    ...INDEXABLE_US_INSTITUTION_PATHS,
+    ...INDEXABLE_INSTITUTION_PATHS, ...INDEXABLE_UK_INSTITUTION_PATHS, ...INDEXABLE_NL_INSTITUTION_PATHS, ...INDEXABLE_NZ_INSTITUTION_PATHS, ...INDEXABLE_SG_INSTITUTION_PATHS, ...INDEXABLE_DE_INSTITUTION_PATHS, ...INDEXABLE_FR_INSTITUTION_PATHS, ...INDEXABLE_ES_INSTITUTION_PATHS, ...INDEXABLE_EU_FASTPATH_INSTITUTION_PATHS, ...INDEXABLE_AUTHORITY_FASTPATH_INSTITUTION_PATHS, ...INDEXABLE_AE_INSTITUTION_PATHS, ...INDEXABLE_US_INSTITUTION_PATHS,
   ].map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.72, changeFrequency: "weekly" as const }))
   const routePages: MetadataRoute.Sitemap = ROUTE_GUIDES.flatMap((guide) => [
     { url: `${SITE_URL}${routeGuideHref(guide)}`, lastModified: new Date(guide.lastVerified), priority: 0.95, changeFrequency: "weekly" as const },
