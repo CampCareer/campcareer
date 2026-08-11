@@ -73,6 +73,11 @@ export const PUBLISHED_BE_CITY_SLUGS = [
 ] as const
 export type PublishedBeCitySlug = (typeof PUBLISHED_BE_CITY_SLUGS)[number]
 
+export const PUBLISHED_FI_CITY_SLUGS = ["helsinki", "espoo", "tampere", "turku", "oulu", "jyvaskyla", "lappeenranta", "joensuu"] as const
+export type PublishedFiCitySlug = (typeof PUBLISHED_FI_CITY_SLUGS)[number]
+export const SUPPORTED_FI_CITY_SLUGS = PUBLISHED_FI_CITY_SLUGS
+export type SupportedFiCitySlug = PublishedFiCitySlug
+
 const CITY_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
 export function normalizeCitySlug(value: string | null | undefined) {
@@ -119,6 +124,14 @@ export function isPublishedDkCitySlug(value: string): value is PublishedDkCitySl
 
 export function isPublishedBeCitySlug(value: string): value is PublishedBeCitySlug {
   return PUBLISHED_BE_CITY_SLUGS.includes(value as PublishedBeCitySlug)
+}
+
+export function isPublishedFiCitySlug(value: string): value is PublishedFiCitySlug {
+  return PUBLISHED_FI_CITY_SLUGS.includes(value as PublishedFiCitySlug)
+}
+
+export function isSupportedFiCitySlug(value: string): value is SupportedFiCitySlug {
+  return isPublishedFiCitySlug(value)
 }
 
 export function auCityPath(value: string | null | undefined) {
@@ -179,4 +192,10 @@ export function beCityPath(value: string | null | undefined) {
   const slug = normalizeCitySlug(value)
   if (!slug || !isPublishedBeCitySlug(slug)) return null
   return `/cities/be/${slug}`
+}
+
+export function fiCityPath(value: string | null | undefined) {
+  const slug = normalizeCitySlug(value)
+  if (!slug || !isPublishedFiCitySlug(slug)) return null
+  return `/cities/fi/${slug}`
 }
