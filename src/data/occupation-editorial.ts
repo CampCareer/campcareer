@@ -59,6 +59,16 @@ import { DECK_OFFICER_OCCUPATION_EDITORIAL } from "./occupation-editorial-deck-o
 import { WAREHOUSE_MANAGER_OCCUPATION_EDITORIAL } from "./occupation-editorial-warehouse-manager"
 import { AUTOMOTIVE_SERVICE_TECHNICIAN_OCCUPATION_EDITORIAL } from "./occupation-editorial-automotive-service-technician"
 import { CANADA_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-ca-carpenter"
+import { UK_CONSTRUCTION_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-uk-construction"
+import { UK_HEALTH_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-uk-health"
+import { UK_TECHNOLOGY_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-uk-technology"
+import { UK_ENGINEERING_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-uk-engineering"
+import { UK_BUSINESS_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-uk-business"
+import { UK_EDUCATION_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-uk-education"
+import { UK_ENVIRONMENT_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-uk-environment"
+import { UK_DESIGN_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-uk-design"
+import { UK_HOSPITALITY_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-uk-hospitality"
+import { UK_TRANSPORT_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-uk-transport"
 import { NZ_CONSTRUCTION_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-nz-construction"
 import { NZ_HEALTH_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-nz-health"
 import { NZ_TECHNOLOGY_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-nz-technology"
@@ -132,6 +142,16 @@ const RAW_OCCUPATION_EDITORIAL: readonly OccupationEditorialType[] = [
 
 const COUNTRY_OCCUPATION_EDITORIAL_OVERRIDES = [
   ...CANADA_OCCUPATION_EDITORIAL_OVERRIDES,
+  ...UK_CONSTRUCTION_OCCUPATION_EDITORIAL_OVERRIDES,
+  ...UK_HEALTH_OCCUPATION_EDITORIAL_OVERRIDES,
+  ...UK_TECHNOLOGY_OCCUPATION_EDITORIAL_OVERRIDES,
+  ...UK_ENGINEERING_OCCUPATION_EDITORIAL_OVERRIDES,
+  ...UK_BUSINESS_OCCUPATION_EDITORIAL_OVERRIDES,
+  ...UK_EDUCATION_OCCUPATION_EDITORIAL_OVERRIDES,
+  ...UK_ENVIRONMENT_OCCUPATION_EDITORIAL_OVERRIDES,
+  ...UK_DESIGN_OCCUPATION_EDITORIAL_OVERRIDES,
+  ...UK_HOSPITALITY_OCCUPATION_EDITORIAL_OVERRIDES,
+  ...UK_TRANSPORT_OCCUPATION_EDITORIAL_OVERRIDES,
   ...NZ_CONSTRUCTION_OCCUPATION_EDITORIAL_OVERRIDES,
   ...NZ_HEALTH_OCCUPATION_EDITORIAL_OVERRIDES,
   ...NZ_TECHNOLOGY_OCCUPATION_EDITORIAL_OVERRIDES,
