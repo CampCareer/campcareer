@@ -15,7 +15,7 @@ import { PROGRAM_LEVELS, type ProgramSearchFilters } from "@/lib/programs/progra
 import { cn } from "@/lib/utils"
 import { useProgramNavigation } from "./programs-navigation"
 
-const PUBLISHED_PROGRAM_COUNTRIES = new Set(["AU", "CA", "UK", "NZ", "NL"])
+const PUBLISHED_PROGRAM_COUNTRIES = new Set(["AU", "CA", "UK", "AE", "NZ", "NL"])
 
 function ProgramCountryPicker({
   countryCode,
