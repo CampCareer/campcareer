@@ -1,41 +1,55 @@
-import { CITIZENSHIP_OPTIONS as CITIZENSHIP_REGISTRY_OPTIONS } from "@/data/citizenship-countries"
+import { CANONICAL_CAREERS } from "@/data/career-comparison-catalog"
 import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
-import { STUDY_CATEGORIES, STUDY_CONCEPTS } from "@/data/study-concepts"
 
-export type OverviewOption = { value: string; label: string }
+export type OverviewOption = { value: string; label: string; searchTerms?: string[] }
+export type CareerCheckLocale = "en" | "ko"
 
 export type OverviewSearchValues = {
-  citizenship: string
   country: string
-  category: string
+  occupation: string
 }
 
 export type OverviewSearchErrors = Partial<Record<keyof OverviewSearchValues, string>>
 export type OverviewOpenMenu = keyof OverviewSearchValues | null
 export type SearchParamsLike = Pick<URLSearchParams, "get">
 
-export const OTHER_CITIZENSHIP_VALUE = "OTHER"
-export const EXPLORING_CATEGORY: OverviewOption = { value: "not-sure", label: "I’m not sure yet" }
-export const DEFAULT_OVERVIEW_COUNTRY = "AU"
+export const NOT_SURE_COUNTRY: OverviewOption = { value: "not-sure", label: "아직 모르겠어요" }
+export const NOT_SURE_OCCUPATION: OverviewOption = { value: "not-sure", label: "아직 모르겠어요" }
 
-export const CITIZENSHIP_OPTIONS: readonly OverviewOption[] = CITIZENSHIP_REGISTRY_OPTIONS.map((option) => ({
-  value: option.value,
-  label: option.label,
-}))
-
-export const COUNTRY_OPTIONS: readonly OverviewOption[] = LAUNCH_COUNTRIES.map((country) => ({
-  value: country.code,
-  label: country.name,
-}))
-
-export const CATEGORY_OPTIONS: readonly OverviewOption[] = [
-  EXPLORING_CATEGORY,
-  ...STUDY_CATEGORIES.map((category) => ({ value: category.id, label: category.label })),
+// The default arrays also validate URL values. Visible labels come from the
+// locale-aware factories below, so switching the global language changes the
+// whole two-question flow without changing its URL contract.
+export const COUNTRY_OPTIONS: readonly OverviewOption[] = [
+  NOT_SURE_COUNTRY,
+  ...LAUNCH_COUNTRIES.map((country) => ({ value: country.code, label: country.name })),
 ]
 
-const legacyCategoryByField = new Map(
-  STUDY_CONCEPTS.map((concept) => [concept.slug, concept.category]),
-)
+export const OCCUPATION_OPTIONS: readonly OverviewOption[] = [
+  NOT_SURE_OCCUPATION,
+  ...CANONICAL_CAREERS.map((career) => ({
+    value: career.id,
+    label: career.labelKo,
+    searchTerms: [career.label, ...career.aliases, ...career.aliasesKo],
+  })),
+]
+
+export function getCountryOptions(locale: CareerCheckLocale): readonly OverviewOption[] {
+  return [
+    { value: NOT_SURE_COUNTRY.value, label: locale === "ko" ? "아직 모르겠어요" : "I'm not sure yet" },
+    ...LAUNCH_COUNTRIES.map((country) => ({ value: country.code, label: country.name })),
+  ]
+}
+
+export function getOccupationOptions(locale: CareerCheckLocale): readonly OverviewOption[] {
+  return [
+    { value: NOT_SURE_OCCUPATION.value, label: locale === "ko" ? "아직 모르겠어요" : "I'm not sure yet" },
+    ...CANONICAL_CAREERS.map((career) => ({
+      value: career.id,
+      label: locale === "ko" ? career.labelKo : career.label,
+      searchTerms: [career.label, career.labelKo, ...career.aliases, ...career.aliasesKo],
+    })),
+  ]
+}
 
 export function hasOverviewOption(options: readonly OverviewOption[], value: string | null) {
   return Boolean(value && options.some((option) => option.value === value))
@@ -45,30 +59,21 @@ export function getOverviewOptionLabel(options: readonly OverviewOption[], value
   return options.find((option) => option.value === value)?.label ?? ""
 }
 
-function readLegacyCategory(value: string | null) {
-  if (!value) return ""
-  if (hasOverviewOption(CATEGORY_OPTIONS, value)) return value
-  return legacyCategoryByField.get(value) ?? ""
-}
-
-/** Reads the new canonical query and, temporarily, prior origin/field URLs. */
 export function readOverviewSearchValues(searchParams: SearchParamsLike): OverviewSearchValues {
-  const citizenship = (searchParams.get("citizenship") ?? searchParams.get("origin") ?? "").toUpperCase()
-  const country = (searchParams.get("country") ?? "").toUpperCase()
-  const category = readLegacyCategory(searchParams.get("category") ?? searchParams.get("field"))
+  const rawCountry = searchParams.get("country") ?? ""
+  const country = rawCountry === NOT_SURE_COUNTRY.value ? rawCountry : rawCountry.toUpperCase()
+  const occupation = searchParams.get("occupation") ?? ""
 
   return {
-    citizenship: hasOverviewOption(CITIZENSHIP_OPTIONS, citizenship) ? citizenship : "",
     country: hasOverviewOption(COUNTRY_OPTIONS, country) ? country : "",
-    category,
+    occupation: hasOverviewOption(OCCUPATION_OPTIONS, occupation) ? occupation : "",
   }
 }
 
-export function validateOverviewSearch(values: OverviewSearchValues): OverviewSearchErrors {
+export function validateOverviewSearch(values: OverviewSearchValues, locale: CareerCheckLocale = "ko"): OverviewSearchErrors {
   const errors: OverviewSearchErrors = {}
-  if (!values.citizenship) errors.citizenship = "Select your passport"
-  if (!values.country) errors.country = "Select a destination"
-  if (!values.category) errors.category = "Select a career"
+  if (!values.country) errors.country = locale === "ko" ? "가고 싶은 나라를 선택해 주세요" : "Choose a destination."
+  if (!values.occupation) errors.occupation = locale === "ko" ? "하고 싶은 일을 선택해 주세요" : "Choose an occupation."
   return errors
 }
 
@@ -79,14 +84,11 @@ export function getOverviewSearchQuery(searchParams: SearchParamsLike): Overview
 
 export function toOverviewSearchQuery(values: OverviewSearchValues) {
   const params = new URLSearchParams()
-  params.set("citizenship", values.citizenship)
   params.set("country", values.country)
-  params.set("category", values.category)
+  params.set("occupation", values.occupation)
   return params
 }
 
 export function isCanonicalOverviewQuery(searchParams: SearchParamsLike) {
-  return searchParams.get("citizenship") !== null
-    && searchParams.get("country") !== null
-    && searchParams.get("category") !== null
+  return searchParams.get("country") !== null && searchParams.get("occupation") !== null
 }

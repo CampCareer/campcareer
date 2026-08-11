@@ -2,7 +2,10 @@ import type { MetadataRoute } from "next"
 import { ROUTE_GUIDES, routeGuideHref } from "@/data/route-guides"
 import { AU_PROGRAMMATIC_STUDY_PAGES } from "@/lib/programs/au-programmatic-seo"
 import { INDEXABLE_AU_PROGRAMS, indexableAuProgramPath } from "@/lib/programs/program-routes"
+import { INDEXABLE_AE_PROGRAM_PATHS } from "@/lib/programs/ae-program-seo"
 import { INDEXABLE_UK_PROGRAM_PATHS } from "@/lib/programs/uk-program-seo"
+import { INDEXABLE_NZ_PROGRAM_PATHS } from "@/lib/programs/nz-program-seo"
+import { INDEXABLE_NL_PROGRAM_PATHS } from "@/lib/programs/nl-program-seo"
 import { AU_OCCUPATION_STATE_PAGES } from "@/lib/workspace/au-occupation-state-seo"
 import { INDEXABLE_OCCUPATION_PROFILES, occupationCanonicalPath } from "@/lib/workspace/occupation-routes"
 import { getCompletedVisaCatalog } from "@/lib/workspace/visa-catalog-complete"
@@ -19,10 +22,11 @@ import { INDEXABLE_NZ_INSTITUTION_PATHS } from "@/lib/institutions/institution-s
 import { INDEXABLE_SG_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-sg"
 import { INDEXABLE_UK_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-uk"
 import { INDEXABLE_US_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-us"
-import { PUBLISHED_FI_CITY_SLUGS, PUBLISHED_NZ_CITY_SLUGS, PUBLISHED_UK_CITY_SLUGS, PUBLISHED_US_CITY_SLUGS } from "@/lib/cities/city-routes"
+import { PUBLISHED_BE_CITY_SLUGS, PUBLISHED_DE_CITY_SLUGS, PUBLISHED_DK_CITY_SLUGS, PUBLISHED_FI_CITY_SLUGS, PUBLISHED_FR_CITY_SLUGS, PUBLISHED_NL_CITY_SLUGS, PUBLISHED_NZ_CITY_SLUGS, PUBLISHED_SE_CITY_SLUGS, PUBLISHED_UK_CITY_SLUGS, PUBLISHED_US_CITY_SLUGS } from "@/lib/cities/city-routes"
 import { CANONICAL_COUNTRY_SLUGS, SITE_URL, countryCanonicalPath } from "@/lib/seo-routes.mjs"
 
-const lastModified = new Date("2026-08-11")
+const lastModified = new Date("2026-08-10")
+const franceCityLastModified = new Date("2026-08-11")
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const methodologies = ["australia", "canada", "united-states", "united-kingdom", "ireland", "germany", "netherlands", "belgium", "france", "spain", "singapore", "south-korea", "japan", "new-zealand", "norway", "sweden", "denmark", "finland", "switzerland", "united-arab-emirates"]
@@ -64,10 +68,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/cities/ca/calgary`, lastModified, priority: 0.8, changeFrequency: "monthly" },
     { url: `${SITE_URL}/cities/ca/waterloo`, lastModified, priority: 0.78, changeFrequency: "monthly" },
     { url: `${SITE_URL}/cities/ca/edmonton`, lastModified, priority: 0.78, changeFrequency: "monthly" },
+    ...PUBLISHED_DE_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/de/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
+    ...PUBLISHED_BE_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/be/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
+    ...PUBLISHED_FR_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/fr/${slug}`, lastModified: franceCityLastModified, priority: 0.8, changeFrequency: "monthly" as const })),
+    ...PUBLISHED_FI_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/fi/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
     ...PUBLISHED_US_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/us/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
     ...PUBLISHED_UK_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/uk/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
     ...PUBLISHED_NZ_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/nz/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
-    ...PUBLISHED_FI_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/fi/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
+    ...PUBLISHED_NL_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/nl/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
+    ...PUBLISHED_SE_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/se/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
+    ...PUBLISHED_DK_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/dk/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
     { url: `${SITE_URL}/methodology`, lastModified, priority: 0.5, changeFrequency: "monthly" },
     ...methodologies.map((slug) => ({ url: `${SITE_URL}/methodology/${slug}`, lastModified, priority: 0.45, changeFrequency: "monthly" as const })),
     { url: `${SITE_URL}/privacy`, lastModified, priority: 0.2, changeFrequency: "yearly" },
@@ -75,18 +85,32 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ]
   const programPages: MetadataRoute.Sitemap = [
     ...INDEXABLE_AU_PROGRAMS.map((program) => ({ url: `${SITE_URL}${indexableAuProgramPath(program)}`, lastModified: new Date(program.sourceCheckedAt), priority: 0.74, changeFrequency: "weekly" as const })),
+    ...INDEXABLE_AE_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
     ...INDEXABLE_UK_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
+    ...INDEXABLE_NZ_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
+    ...INDEXABLE_NL_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
   ]
   const occupationPages: MetadataRoute.Sitemap = INDEXABLE_OCCUPATION_PROFILES.map((profile) => ({ url: `${SITE_URL}${occupationCanonicalPath(profile.countryCode, profile.careerId)}`, lastModified: new Date(profile.sourceCheckedAt), priority: 0.74, changeFrequency: "weekly" as const }))
   const visaPages: MetadataRoute.Sitemap = getIndexableVisaRoutes(getCompletedVisaCatalog()).map((route) => ({ url: `${SITE_URL}${route.path}`, lastModified, priority: 0.7, changeFrequency: "monthly" as const }))
   const studyPages: MetadataRoute.Sitemap = AU_PROGRAMMATIC_STUDY_PAGES.map((page) => ({ url: `${SITE_URL}${page.path}`, lastModified, priority: 0.72, changeFrequency: "weekly" as const }))
   const occupationStatePages: MetadataRoute.Sitemap = AU_OCCUPATION_STATE_PAGES.map((page) => ({ url: `${SITE_URL}${page.path}`, lastModified, priority: 0.71, changeFrequency: "monthly" as const }))
   const institutionPages: MetadataRoute.Sitemap = [
-    ...INDEXABLE_INSTITUTION_PATHS, ...INDEXABLE_UK_INSTITUTION_PATHS, ...INDEXABLE_NL_INSTITUTION_PATHS, ...INDEXABLE_NZ_INSTITUTION_PATHS, ...INDEXABLE_SG_INSTITUTION_PATHS, ...INDEXABLE_DE_INSTITUTION_PATHS, ...INDEXABLE_FR_INSTITUTION_PATHS, ...INDEXABLE_ES_INSTITUTION_PATHS, ...INDEXABLE_EU_FASTPATH_INSTITUTION_PATHS, ...INDEXABLE_AUTHORITY_FASTPATH_INSTITUTION_PATHS, ...INDEXABLE_AE_INSTITUTION_PATHS, ...INDEXABLE_US_INSTITUTION_PATHS,
+    ...INDEXABLE_INSTITUTION_PATHS,
+    ...INDEXABLE_UK_INSTITUTION_PATHS,
+    ...INDEXABLE_NL_INSTITUTION_PATHS,
+    ...INDEXABLE_NZ_INSTITUTION_PATHS,
+    ...INDEXABLE_SG_INSTITUTION_PATHS,
+    ...INDEXABLE_DE_INSTITUTION_PATHS,
+    ...INDEXABLE_FR_INSTITUTION_PATHS,
+    ...INDEXABLE_ES_INSTITUTION_PATHS,
+    ...INDEXABLE_EU_FASTPATH_INSTITUTION_PATHS,
+    ...INDEXABLE_AUTHORITY_FASTPATH_INSTITUTION_PATHS,
+    ...INDEXABLE_AE_INSTITUTION_PATHS,
+    ...INDEXABLE_US_INSTITUTION_PATHS,
   ].map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.72, changeFrequency: "weekly" as const }))
   const routePages: MetadataRoute.Sitemap = ROUTE_GUIDES.flatMap((guide) => [
     { url: `${SITE_URL}${routeGuideHref(guide)}`, lastModified: new Date(guide.lastVerified), priority: 0.95, changeFrequency: "weekly" as const },
-    { url: `${SITE_URL}/ko${routeGuideHref(guide)}`, lastModified: new Date(guide.lastVerified), priority: 0.9, changeFrequency: "weekly" as const },
+    { url: `${SITE_URL}/ko${routeGuideHref(guide)}`, lastModified, priority: 0.9, changeFrequency: "weekly" as const },
   ])
   return Array.from(new Map([...staticPages, ...programPages, ...occupationPages, ...visaPages, ...studyPages, ...occupationStatePages, ...institutionPages, ...routePages].map((entry) => [entry.url, entry])).values())
 }
