@@ -6,21 +6,20 @@ const routes = fs.readFileSync("src/lib/cities/city-routes.ts", "utf8")
 const page = fs.readFileSync("src/app/(workspace)/cities/fi/[city]/page.tsx", "utf8")
 const loader = fs.readFileSync("src/lib/cities/fi-city-profile.server.ts", "utf8")
 const dashboard = fs.readFileSync("src/app/(workspace)/cities/finland-city-dashboard.tsx", "utf8")
-
 const slugs = ["helsinki", "espoo", "tampere", "turku", "oulu", "jyvaskyla", "lappeenranta", "joensuu"]
 
-test("Finland Phase 5 profile route is restricted to exactly eight supported cities", () => {
+test("Finland profile route is restricted to exactly eight published cities", () => {
   for (const slug of slugs) assert.ok(routes.includes(`"${slug}"`), `missing ${slug}`)
-  assert.match(routes, /SUPPORTED_FI_CITY_SLUGS/)
-  assert.match(page, /isSupportedFiCitySlug/)
+  assert.match(routes, /PUBLISHED_FI_CITY_SLUGS/)
+  assert.match(page, /isPublishedFiCitySlug/)
   assert.match(page, /notFound\(\)/)
 })
 
-test("Finland Phase 5 preserves pre-publication robots protection", () => {
-  assert.match(page, /robots: \{ index: false, follow: true \}/)
+test("Finland Phase 7 publishes supported profiles but protects unsupported routes", () => {
+  assert.match(page, /robots: \{ index: true, follow: true \}/)
   assert.match(page, /robots: \{ index: false, follow: false \}/)
   assert.match(page, /alternates: \{ canonical: `\/cities\/fi\/\$\{normalized\}` \}/)
-  assert.doesNotMatch(page, /City Compare/)
+  assert.match(page, /City Compare/)
 })
 
 test("Finland profiles use verified read models and expose coverage gaps", () => {
