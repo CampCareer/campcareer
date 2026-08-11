@@ -33,35 +33,35 @@ test("Japan hospitality cohort covers the canonical eight hospitality careers", 
 })
 
 test("Japan hospitality preserves cooking and management classification boundaries", () => {
-  assert.match(migration, /'JP:chef'.*null,'JPY',false/s)
+  assert.match(migration, /'JP:chef'[\s\S]*null,'JPY',false/)
   for (const code of ["055-01", "055-02", "055-03", "055-04"]) {
     assert.match(migration, new RegExp(`'JP:chef','${code}'`), code)
   }
 
-  assert.match(migration, /'JP:cook'.*null,'JPY',false/s)
+  assert.match(migration, /'JP:cook'[\s\S]*null,'JPY',false/)
   for (const code of ["055-05", "055-06", "055-07", "055-99"]) {
     assert.match(migration, new RegExp(`'JP:cook','${code}'`), code)
   }
 
-  assert.match(migration, /'JP:hotel-manager'.*null,'JPY',false/s)
+  assert.match(migration, /'JP:hotel-manager'[\s\S]*null,'JPY',false/)
   assert.match(migration, /'JP:hotel-manager','002-01'/)
   assert.match(migration, /'JP:hotel-manager','056-02'/)
 
-  assert.match(migration, /'JP:restaurant-manager'.*null,'JPY',false/s)
+  assert.match(migration, /'JP:restaurant-manager'[\s\S]*null,'JPY',false/)
   for (const code of ["002-01", "003-99", "056-01"]) {
     assert.match(migration, new RegExp(`'JP:restaurant-manager','${code}'`), code)
   }
 
-  assert.match(migration, /'JP:baker'.*'072-01','JPY',false/s)
-  assert.match(migration, /'JP:event-planner'.*'033-03','JPY',false/s)
-  assert.match(migration, /'JP:tourism-manager'.*null,'JPY',false/s)
+  assert.match(migration, /'JP:baker'[\s\S]*'072-01','JPY',false/)
+  assert.match(migration, /'JP:event-planner'[\s\S]*'033-03','JPY',false/)
+  assert.match(migration, /'JP:tourism-manager'[\s\S]*null,'JPY',false/)
   assert.match(migration, /'JP:tourism-manager','033-03'/)
-  assert.match(migration, /'JP:hospitality-supervisor'.*null,'JPY',false/s)
+  assert.match(migration, /'JP:hospitality-supervisor'[\s\S]*null,'JPY',false/)
 })
 
 test("Japan hospitality does not convert optional or venue-specific credentials into universal licences", () => {
   for (const id of careers) {
-    assert.match(migration, new RegExp(`'JP:${id}'.*'JPY',false`, "s"), id)
+    assert.match(migration, new RegExp(`'JP:${id}'[\\s\\S]*'JPY',false`), id)
   }
 
   assert.match(getOccupationEditorial("chef")?.countries.JP?.registration ?? "", /no universal statutory Chef licence/i)
