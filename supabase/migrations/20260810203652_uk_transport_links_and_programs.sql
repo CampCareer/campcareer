@@ -1,0 +1,35 @@
+insert into public.country_occupation_specialisations (profile_key,official_code,official_title,shortage_rating,visa_eligible,included_in_rollup,sort_order,source_url,source_checked_at) values
+('UK:truck-driver','8211/00','Heavy and large goods vehicle drivers',null,false,true,1,'https://skillsengland.education.gov.uk/apprenticeship-standards/large-goods-vehicle-lgv-driver-c-plus-e-v1-4','2026-08-10'),
+('UK:logistics-coordinator','4134/00','Transport and distribution clerks and assistants — Transport Coordinator scope',null,false,true,1,'https://occupational-maps.skillsengland.education.gov.uk/maps/occupation/OCC0647A','2026-08-10'),
+('UK:aircraft-maintenance-technician','5234/00','Aircraft maintenance and related trades — core technician scope',null,false,true,1,'https://occupational-maps.skillsengland.education.gov.uk/maps/occupation/OCC1315','2026-08-10'),
+('UK:aircraft-maintenance-technician','3112/01','Avionics technicians — related Skills England sub-unit',null,true,true,2,'https://occupational-maps.skillsengland.education.gov.uk/maps/occupation/OCC1315','2026-08-10'),
+('UK:aircraft-maintenance-technician','3113/01','Aerospace technicians — related Skills England sub-unit',null,true,true,3,'https://occupational-maps.skillsengland.education.gov.uk/maps/occupation/OCC1315','2026-08-10'),
+('UK:commercial-pilot','3511','Aircraft pilots and air traffic controllers — commercial pilot scope',null,true,true,1,'https://www.caa.co.uk/commercial-industry/pilot-licences/aeroplanes/commercial-pilot-licence-for-aeroplanes-guidance/','2026-08-10'),
+('UK:marine-engineer','3512/02','Marine engineers',null,false,true,1,'https://occupational-maps.skillsengland.education.gov.uk/maps/occupation/OCC0364','2026-08-10'),
+('UK:deck-officer','3512/01','Ship and hovercraft captains and deck officers',null,false,true,1,'https://occupational-maps.skillsengland.education.gov.uk/maps/occupation/OCC0842','2026-08-10'),
+('UK:warehouse-manager','1242','Managers in storage and warehousing',null,false,true,1,'https://occupational-maps.skillsengland.education.gov.uk/maps/occupation/OCC0647B','2026-08-10'),
+('UK:automotive-service-technician','5231/02','Car/light vehicle technicians',null,true,true,1,'https://occupational-maps.skillsengland.education.gov.uk/maps/occupation/OCC0033','2026-08-10')
+on conflict (profile_key,official_code) do update set official_title=excluded.official_title,shortage_rating=excluded.shortage_rating,visa_eligible=excluded.visa_eligible,included_in_rollup=excluded.included_in_rollup,sort_order=excluded.sort_order,source_url=excluded.source_url,source_checked_at=excluded.source_checked_at;
+
+insert into public.country_occupation_links (profile_key,link_type,label,url,provider_type,region_code,sort_order,source_checked_at) values
+('UK:truck-driver','entry_program','Skills England — Large Goods Vehicle Driver C+E','https://skillsengland.education.gov.uk/apprenticeship-standards/large-goods-vehicle-lgv-driver-c-plus-e-v1-4','official_training',null,1,'2026-08-10'),
+('UK:logistics-coordinator','entry_program','Skills England — Transport Operations Supervisor','https://occupational-maps.skillsengland.education.gov.uk/maps/occupation/OCC0647A','official_training',null,1,'2026-08-10'),
+('UK:aircraft-maintenance-technician','entry_program','Skills England — Aircraft Maintenance Technician','https://occupational-maps.skillsengland.education.gov.uk/maps/occupation/OCC1315','official_training',null,1,'2026-08-10'),
+('UK:commercial-pilot','entry_program','UK CAA — Commercial Pilot Licence for Aeroplanes','https://www.caa.co.uk/commercial-industry/pilot-licences/aeroplanes/commercial-pilot-licence-for-aeroplanes-guidance/','official_training',null,1,'2026-08-10'),
+('UK:marine-engineer','entry_program','Skills England — Marine Engineer','https://occupational-maps.skillsengland.education.gov.uk/maps/occupation/OCC0364','official_training',null,1,'2026-08-10'),
+('UK:deck-officer','entry_program','Skills England — Officer of the Watch','https://occupational-maps.skillsengland.education.gov.uk/maps/occupation/OCC0842','official_training',null,1,'2026-08-10'),
+('UK:warehouse-manager','entry_program','Skills England — Warehouse Operations Supervisor progression','https://occupational-maps.skillsengland.education.gov.uk/maps/occupation/OCC0647B','official_training',null,1,'2026-08-10'),
+('UK:automotive-service-technician','entry_program','Skills England — Motor Vehicle Service and Maintenance Technician','https://occupational-maps.skillsengland.education.gov.uk/maps/occupation/OCC0033','official_training',null,1,'2026-08-10'),
+('UK:truck-driver','source','Home Office — Appendix Skilled Occupations','https://www.gov.uk/guidance/immigration-rules/immigration-rules-appendix-skilled-occupations','official_immigration',null,2,'2026-08-10'),
+('UK:logistics-coordinator','source','Home Office — Appendix Skilled Occupations','https://www.gov.uk/guidance/immigration-rules/immigration-rules-appendix-skilled-occupations','official_immigration',null,2,'2026-08-10'),
+('UK:aircraft-maintenance-technician','source','MAC — Temporary Shortage List Stage 2','https://www.gov.uk/government/publications/temporary-shortage-list-stage-2-report/temporary-shortage-list-stage-2-report-accessible','official_shortage',null,2,'2026-08-10'),
+('UK:commercial-pilot','source','UK CAA — Commercial Pilot Licence','https://www.caa.co.uk/commercial-industry/pilot-licences/aeroplanes/commercial-pilot-licence-for-aeroplanes-guidance/','official_regulator',null,2,'2026-08-10'),
+('UK:marine-engineer','source','MAC — Temporary Shortage List Stage 2','https://www.gov.uk/government/publications/temporary-shortage-list-stage-2-report/temporary-shortage-list-stage-2-report-accessible','official_shortage',null,2,'2026-08-10'),
+('UK:deck-officer','source','MCA — UK Certificate of Competency','https://www.gov.uk/guidance/apply-for-a-uk-seafarer-coc-deck-and-engineer-officers','official_regulator',null,2,'2026-08-10'),
+('UK:warehouse-manager','source','Home Office — Appendix Skilled Occupations','https://www.gov.uk/guidance/immigration-rules/immigration-rules-appendix-skilled-occupations','official_immigration',null,2,'2026-08-10'),
+('UK:automotive-service-technician','source','MAC — Temporary Shortage List Stage 2','https://www.gov.uk/government/publications/temporary-shortage-list-stage-2-report/temporary-shortage-list-stage-2-report-accessible','official_shortage',null,2,'2026-08-10')
+on conflict (profile_key,link_type,url) do update set label=excluded.label,provider_type=excluded.provider_type,region_code=excluded.region_code,sort_order=excluded.sort_order,source_checked_at=excluded.source_checked_at;
+
+insert into public.country_occupation_program_links (profile_key,program_ref,relation_type,source_checked_at) values
+('UK:warehouse-manager','uk-program:28523c4e-d9d5-fc17-6285-31d09babbd46','direct','2026-08-10')
+on conflict (profile_key,program_ref) do update set relation_type=excluded.relation_type,source_checked_at=excluded.source_checked_at;

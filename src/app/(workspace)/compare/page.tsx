@@ -7,6 +7,7 @@ import { getAuCityComparison } from "@/lib/cities/au-city-comparison.server"
 import { getBeCityComparison } from "@/lib/cities/be-city-comparison.server"
 import { getCaCityComparison } from "@/lib/cities/ca-city-comparison.server"
 import { getDeCityComparison } from "@/lib/cities/de-city-comparison.server"
+import { getFiCityComparison } from "@/lib/cities/fi-city-comparison.server"
 import { getFrCityComparison } from "@/lib/cities/fr-city-comparison.server"
 import { getNlCityComparison } from "@/lib/cities/nl-city-comparison.server"
 import { getDkCityComparison } from "@/lib/cities/dk-city-comparison.server"
@@ -22,6 +23,7 @@ import CareersCompareMatrix from "./careers-compare-matrix"
 import { CitiesCompareMatrix } from "./cities-compare-matrix"
 import { BelgiumCitiesCompareMatrix } from "./belgium-cities-compare-matrix"
 import { CanadaCitiesCompareMatrix } from "./canada-cities-compare-matrix"
+import { FinlandCitiesCompareMatrix } from "./finland-cities-compare-matrix"
 import { FranceCitiesCompareMatrix } from "./france-cities-compare-matrix"
 import { GermanyCitiesCompareMatrix } from "./germany-cities-compare-matrix"
 import { NetherlandsCitiesCompareMatrix } from "./netherlands-cities-compare-matrix"
@@ -143,6 +145,17 @@ async function CitiesCompare({ countryCode, params }: { countryCode: string; par
       <section className="w-full pb-4" aria-label="Cities comparison">
         <ComparePageHeader activeType="city" countryCode={countryCode} />
         <DenmarkCitiesCompareMatrix left={comparison.left} right={comparison.right} options={comparison.options} />
+      </section>
+    )
+  }
+
+  if (countryCode === "FI") {
+    const comparison = await getFiCityComparison(params.get("left"), params.get("right"))
+    if (!comparison) return <UnsupportedSurface type="Cities" href={buildCityCompareCanonicalHref({ country: "FI" })} label="Compare Finnish cities" activeType="city" countryCode={countryCode} />
+    return (
+      <section className="w-full pb-4" aria-label="Finland cities comparison">
+        <ComparePageHeader activeType="city" countryCode={countryCode} />
+        <FinlandCitiesCompareMatrix left={comparison.left} right={comparison.right} options={comparison.options} />
       </section>
     )
   }

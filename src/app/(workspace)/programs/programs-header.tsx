@@ -15,7 +15,7 @@ import { PROGRAM_LEVELS, type ProgramSearchFilters } from "@/lib/programs/progra
 import { cn } from "@/lib/utils"
 import { useProgramNavigation } from "./programs-navigation"
 
-const PUBLISHED_PROGRAM_COUNTRIES = new Set(["AU", "CA", "UK"])
+const PUBLISHED_PROGRAM_COUNTRIES = new Set(["AU", "CA", "UK", "NZ", "NL", "AE", "KR", "JP", "NO", "FI", "DK", "SE", "CH", "BE", "ES", "FR", "DE", "SG"])
 
 function ProgramCountryPicker({
   countryCode,
@@ -122,12 +122,18 @@ export function ProgramsHeader({
     locale === "ko"
       ? filters.country === "CA"
         ? "과정·학교·도시로 검색하세요. 예: Nursing, Toronto"
-        : "과정명 또는 학교명으로 검색하세요"
+        : filters.country === "NZ"
+          ? "뉴질랜드 과정명 또는 대학명으로 검색하세요"
+          : "과정명 또는 학교명으로 검색하세요"
       : filters.country === "CA"
         ? "Search programs, institutions or cities…"
         : filters.country === "UK"
           ? "Search UK programmes or institutions…"
-          : "Search programs, e.g. Nursing or Data Science…"
+          : filters.country === "NZ"
+            ? "Search New Zealand programmes or universities…"
+            : filters.country === "NL"
+              ? "Search Netherlands programmes or institutions…"
+              : "Search programs, e.g. Nursing or Data Science…"
 
   return (
     <>
