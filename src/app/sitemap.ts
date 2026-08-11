@@ -34,12 +34,12 @@ import { INDEXABLE_NZ_INSTITUTION_PATHS } from "@/lib/institutions/institution-s
 import { INDEXABLE_SG_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-sg"
 import { INDEXABLE_UK_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-uk"
 import { INDEXABLE_US_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-us"
-import { PUBLISHED_BE_CITY_SLUGS, PUBLISHED_CH_CITY_SLUGS, PUBLISHED_DE_CITY_SLUGS, PUBLISHED_DK_CITY_SLUGS, PUBLISHED_FI_CITY_SLUGS, PUBLISHED_FR_CITY_SLUGS, PUBLISHED_NL_CITY_SLUGS, PUBLISHED_NZ_CITY_SLUGS, PUBLISHED_SE_CITY_SLUGS, PUBLISHED_UK_CITY_SLUGS, PUBLISHED_US_CITY_SLUGS } from "@/lib/cities/city-routes"
+import { PUBLISHED_BE_CITY_SLUGS, PUBLISHED_DE_CITY_SLUGS, PUBLISHED_DK_CITY_SLUGS, PUBLISHED_ES_CITY_SLUGS, PUBLISHED_FI_CITY_SLUGS, PUBLISHED_FR_CITY_SLUGS, PUBLISHED_NL_CITY_SLUGS, PUBLISHED_NZ_CITY_SLUGS, PUBLISHED_SE_CITY_SLUGS, PUBLISHED_UK_CITY_SLUGS, PUBLISHED_US_CITY_SLUGS } from "@/lib/cities/city-routes"
 import { CANONICAL_COUNTRY_SLUGS, SITE_URL, countryCanonicalPath } from "@/lib/seo-routes.mjs"
 
 const lastModified = new Date("2026-08-10")
 const franceCityLastModified = new Date("2026-08-11")
-const switzerlandCityLastModified = new Date("2026-08-11")
+const spainCityLastModified = new Date("2026-08-11")
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const methodologies = ["australia", "canada", "united-states", "united-kingdom", "ireland", "germany", "netherlands", "belgium", "france", "spain", "singapore", "south-korea", "japan", "new-zealand", "norway", "sweden", "denmark", "finland", "switzerland", "united-arab-emirates"]
@@ -84,8 +84,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...PUBLISHED_DE_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/de/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
     ...PUBLISHED_BE_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/be/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
     ...PUBLISHED_FR_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/fr/${slug}`, lastModified: franceCityLastModified, priority: 0.8, changeFrequency: "monthly" as const })),
+    ...PUBLISHED_ES_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/es/${slug}`, lastModified: spainCityLastModified, priority: 0.8, changeFrequency: "monthly" as const })),
     ...PUBLISHED_FI_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/fi/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
-    ...PUBLISHED_CH_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/ch/${slug}`, lastModified: switzerlandCityLastModified, priority: 0.8, changeFrequency: "monthly" as const })),
     ...PUBLISHED_US_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/us/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
     ...PUBLISHED_UK_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/uk/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
     ...PUBLISHED_NZ_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/nz/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
