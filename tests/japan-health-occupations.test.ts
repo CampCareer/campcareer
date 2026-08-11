@@ -36,9 +36,9 @@ test("Japan health cohort covers the canonical eight health careers", () => {
 
 test("Japan registered nurse preserves workplace classification boundaries", () => {
   const editorial = getOccupationEditorial("registered-nurse")?.countries.JP
-  assert.match(editorial?.entryPathway ?? "", /023-01.*023-02.*023-03.*023-99/s)
+  assert.match(editorial?.entryPathway ?? "", /023-01[\s\S]*023-02[\s\S]*023-03[\s\S]*023-99/)
   assert.match(editorial?.entryPathway ?? "", /restricts this canonical profile to 看護師/)
-  assert.match(migration, /'JP:registered-nurse'.*null,'JPY',true/s)
+  assert.match(migration, /'JP:registered-nurse'[\s\S]*null,'JPY',true/)
   for (const code of ["023-01", "023-02", "023-03", "023-99"]) {
     assert.match(migration, new RegExp(`'JP:registered-nurse','${code}'`), code)
   }
@@ -49,7 +49,7 @@ test("Japan care worker remains a non-licensed facility and home-care umbrella",
   assert.match(editorial?.entryPathway ?? "", /050-01\/02\/03\/99.*051-01\/02/)
   assert.match(editorial?.registration ?? "", /not universally licensed/i)
   assert.match(editorial?.registration ?? "", /介護福祉士/)
-  assert.match(migration, /'JP:care-worker'.*null,'JPY',false/s)
+  assert.match(migration, /'JP:care-worker'[\s\S]*null,'JPY',false/)
   for (const code of ["050-01", "050-02", "050-03", "050-99", "051-01", "051-02"]) {
     assert.match(migration, new RegExp(`'JP:care-worker','${code}'`), code)
   }
@@ -67,10 +67,10 @@ test("Japan health licensing flags distinguish care work from regulated professi
   ]
 
   for (const id of licensed) {
-    assert.match(migration, new RegExp(`'JP:${id}'.*'JPY',true`, "s"), id)
+    assert.match(migration, new RegExp(`'JP:${id}'[\\s\\S]*'JPY',true`), id)
     assert.match(getOccupationEditorial(id)?.countries.JP?.registration ?? "", /licen|免許|licensed/i, id)
   }
-  assert.match(migration, /'JP:care-worker'.*'JPY',false/s)
+  assert.match(migration, /'JP:care-worker'[\s\S]*'JPY',false/)
 })
 
 test("Japan health v1 does not fabricate market or visa evidence", () => {
