@@ -3,6 +3,18 @@ import { ROUTE_GUIDES, routeGuideHref } from "@/data/route-guides"
 import { AU_PROGRAMMATIC_STUDY_PAGES } from "@/lib/programs/au-programmatic-seo"
 import { INDEXABLE_AU_PROGRAMS, indexableAuProgramPath } from "@/lib/programs/program-routes"
 import { INDEXABLE_AE_PROGRAM_PATHS } from "@/lib/programs/ae-program-seo"
+import { INDEXABLE_KR_PROGRAM_PATHS } from "@/lib/programs/kr-program-seo"
+import { INDEXABLE_JP_PROGRAM_PATHS } from "@/lib/programs/jp-program-seo"
+import { INDEXABLE_NO_PROGRAM_PATHS } from "@/lib/programs/no-program-seo"
+import { INDEXABLE_FI_PROGRAM_PATHS } from "@/lib/programs/fi-program-seo"
+import { INDEXABLE_DK_PROGRAM_PATHS } from "@/lib/programs/dk-program-seo"
+import { INDEXABLE_SE_PROGRAM_PATHS } from "@/lib/programs/se-program-seo"
+import { INDEXABLE_CH_PROGRAM_PATHS } from "@/lib/programs/ch-program-seo"
+import { INDEXABLE_BE_PROGRAM_PATHS } from "@/lib/programs/be-program-seo"
+import { INDEXABLE_ES_PROGRAM_PATHS } from "@/lib/programs/es-program-seo"
+import { INDEXABLE_FR_PROGRAM_PATHS } from "@/lib/programs/fr-program-seo"
+import { INDEXABLE_DE_PROGRAM_PATHS } from "@/lib/programs/de-program-seo"
+import { INDEXABLE_SG_PROGRAM_PATHS } from "@/lib/programs/sg-program-seo"
 import { INDEXABLE_UK_PROGRAM_PATHS } from "@/lib/programs/uk-program-seo"
 import { INDEXABLE_NZ_PROGRAM_PATHS } from "@/lib/programs/nz-program-seo"
 import { INDEXABLE_NL_PROGRAM_PATHS } from "@/lib/programs/nl-program-seo"
@@ -85,6 +97,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const programPages: MetadataRoute.Sitemap = [
     ...INDEXABLE_AU_PROGRAMS.map((program) => ({ url: `${SITE_URL}${indexableAuProgramPath(program)}`, lastModified: new Date(program.sourceCheckedAt), priority: 0.74, changeFrequency: "weekly" as const })),
     ...INDEXABLE_AE_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
+    ...INDEXABLE_KR_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
+    ...INDEXABLE_JP_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
+    ...INDEXABLE_NO_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
+    ...INDEXABLE_FI_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
+    ...INDEXABLE_DK_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
+    ...INDEXABLE_SE_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
+    ...INDEXABLE_CH_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
+    ...INDEXABLE_BE_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
+    ...INDEXABLE_ES_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
+    ...INDEXABLE_FR_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
+    ...INDEXABLE_DE_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
+    ...INDEXABLE_SG_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
     ...INDEXABLE_UK_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
     ...INDEXABLE_NZ_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
     ...INDEXABLE_NL_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
