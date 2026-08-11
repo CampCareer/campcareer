@@ -33,20 +33,22 @@ export function WorkspaceTopbar({ onMenuClick }: WorkspaceTopbarProps) {
 
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-[#e7e6e3] bg-white/85 px-4 backdrop-blur-md sm:px-6">
-      <button
-        type="button"
-        onClick={onMenuClick}
-        className="-ml-1 grid size-8 place-items-center rounded-lg text-[#6f6d68] transition hover:bg-[#f6f6f4] hover:text-[#1b1b1b] sm:hidden"
-        aria-label="Open navigation menu"
-      >
-        <Menu className="size-5" />
-      </button>
+      {pathname !== "/" && (
+        <button
+          type="button"
+          onClick={onMenuClick}
+          className="-ml-1 grid size-8 place-items-center rounded-lg text-[#6f6d68] transition hover:bg-[#f6f6f4] hover:text-[#1b1b1b] sm:hidden"
+          aria-label="Open navigation menu"
+        >
+          <Menu className="size-5" />
+        </button>
+      )}
 
       <Link href="/" className="campcareer-wordmark text-[#1b1b1b]" aria-label="campcareer home">
         campcareer
       </Link>
 
-      {breadcrumb && (
+      {breadcrumb && pathname !== "/" && (
         <span className="hidden text-[13px] font-medium text-[#a3a19b] sm:block">
           / {breadcrumb}
         </span>

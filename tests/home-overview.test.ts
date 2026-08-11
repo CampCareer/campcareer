@@ -8,32 +8,25 @@ import {
 } from "@/app/(workspace)/home/home-overview-config"
 import { getHomeMode } from "@/app/(workspace)/home/home-dashboard-config"
 
-test("Overview uses citizenship, country and category as its canonical query", () => {
-  const query = getOverviewSearchQuery(new URLSearchParams("citizenship=PH&country=AU&category=health"))
+test("Career check uses country and occupation as its canonical query", () => {
+  const query = getOverviewSearchQuery(new URLSearchParams("country=AU&occupation=electrician"))
 
-  assert.deepEqual(query, { citizenship: "PH", country: "AU", category: "health" })
-  assert.equal(
-    toOverviewSearchQuery(query!).toString(),
-    "citizenship=PH&country=AU&category=health"
-  )
+  assert.deepEqual(query, { country: "AU", occupation: "electrician" })
+  assert.equal(toOverviewSearchQuery(query!).toString(), "country=AU&occupation=electrician")
+  assert.equal(getHomeMode(new URLSearchParams("country=AU&occupation=electrician"), false), "result")
 })
 
-test("Overview accepts the unlisted-country selection without inventing coverage", () => {
-  const query = getOverviewSearchQuery(new URLSearchParams("citizenship=OTHER&country=CA&category=not-sure"))
+test("Career check allows either country or occupation to remain undecided", () => {
+  const countryUndecided = getOverviewSearchQuery(new URLSearchParams("country=not-sure&occupation=electrician"))
+  const occupationUndecided = getOverviewSearchQuery(new URLSearchParams("country=AU&occupation=not-sure"))
 
-  assert.deepEqual(query, { citizenship: "OTHER", country: "CA", category: "not-sure" })
+  assert.deepEqual(countryUndecided, { country: "not-sure", occupation: "electrician" })
+  assert.deepEqual(occupationUndecided, { country: "AU", occupation: "not-sure" })
 })
 
-test("legacy origin and field URLs migrate to a category overview", () => {
-  const values = readOverviewSearchValues(new URLSearchParams("origin=KR&country=AU&field=nursing&status=preparing-visa"))
-
-  assert.deepEqual(values, { citizenship: "KR", country: "AU", category: "health" })
-  assert.equal(getHomeMode(new URLSearchParams("citizenship=KR&country=AU&category=health"), false), "result")
-})
-
-test("Overview requires all three decision inputs", () => {
+test("Career check requires exactly the two decision inputs", () => {
   const values = readOverviewSearchValues(new URLSearchParams("country=AU"))
 
-  assert.equal(validateOverviewSearch(values).citizenship, "Select your passport")
-  assert.equal(validateOverviewSearch(values).category, "Select a career")
+  assert.equal(validateOverviewSearch(values).occupation, "하고 싶은 일을 선택해 주세요")
+  assert.equal(validateOverviewSearch(values).country, undefined)
 })
