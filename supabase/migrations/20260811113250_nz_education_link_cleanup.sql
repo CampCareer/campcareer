@@ -1,0 +1,3 @@
+-- Production-only cleanup created while reconciling parallel Education work.
+-- Fresh databases already reach the canonical link state from 20260811101558_nz_education_links_and_programs.sql.
+-- This placeholder preserves the production migration version in repository history; the final production state was reconciled by 20260811113520_nz_education_parallel_reconcile.sql.
