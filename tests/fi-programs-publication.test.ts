@@ -55,11 +55,12 @@ test("Finland server and UI separate programme existence from application state"
   assert.match(detail, /International admission restricted/)
 })
 
-test("Finland is published in the shared Programs route and country picker", () => {
-  assert.match(header, /\["AU", "AE", "KR", "JP", "NO", "FI"\]/)
+test("Finland remains published in the shared Programs route and country picker", () => {
+  assert.match(header, /PUBLISHED_PROGRAM_COUNTRIES/)
+  assert.match(header, /"FI"/)
   assert.match(page, /searchFiPrograms/)
   assert.match(page, /FiProgramsExplorer/)
-  assert.match(page, /\["AU", "AE", "KR", "JP", "NO", "FI"\]/)
+  assert.match(page, /filters\.country === "FI"/)
 })
 
 test("Finland SEO indexes 314 non-closed programme routes and excludes verified-closed cohorts", () => {

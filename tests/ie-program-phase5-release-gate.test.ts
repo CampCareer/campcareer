@@ -38,9 +38,8 @@ test("IE Phase 5 release gate remains server-only", () => {
 })
 
 test("IE remains unpublished in the shared Programs country picker", () => {
-  const publishedSet = header.match(/const PUBLISHED_PROGRAM_COUNTRIES = new Set\((\[[^\n]+\])\)/)
-  assert.ok(publishedSet, "PUBLISHED_PROGRAM_COUNTRIES declaration must remain explicit")
-  assert.doesNotMatch(publishedSet[1], /["']IE["']/)
+  assert.match(header, /const PUBLISHED_PROGRAM_COUNTRIES = new Set/)
+  assert.doesNotMatch(header, /["']IE["']/)
   assert.match(phase5, /continue to show Ireland as unpublished/)
 })
 

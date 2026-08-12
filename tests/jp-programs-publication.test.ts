@@ -54,11 +54,12 @@ test("Japan server and UI use dedicated read models and separate programme exist
   assert.match(detail, /Verified application cycle closed/)
 })
 
-test("Japan is published in the shared Programs route and country picker", () => {
-  assert.match(header, /\["AU", "AE", "KR", "JP"\]/)
+test("Japan remains published in the shared Programs route and country picker", () => {
+  assert.match(header, /PUBLISHED_PROGRAM_COUNTRIES/)
+  assert.match(header, /"JP"/)
   assert.match(page, /searchJpPrograms/)
   assert.match(page, /JpProgramsExplorer/)
-  assert.match(page, /\["AU", "AE", "KR", "JP"\]/)
+  assert.match(page, /filters\.country === "JP"/)
 })
 
 test("Japan SEO indexes 127 non-closed programme routes and excludes known final-intake programmes", () => {

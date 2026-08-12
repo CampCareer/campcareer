@@ -46,8 +46,8 @@ test("Korea hospitality keeps umbrella classifications explicit", () => {
   for (const code of ["0141", "0142", "5230", "5322"]) {
     assert.match(migration, new RegExp(`'KR:hospitality-supervisor','${code}'`), code)
   }
-  assert.match(migration, /'KR:cook','KR','cook'.*null,'KRW',false/s)
-  assert.match(migration, /'KR:hospitality-supervisor','KR','hospitality-supervisor'.*null,'KRW',false/s)
+  assert.match(migration, /'KR:cook','KR','cook'[\s\S]*null,'KRW',false/)
+  assert.match(migration, /'KR:hospitality-supervisor','KR','hospitality-supervisor'[\s\S]*null,'KRW',false/)
 })
 
 test("Korea hospitality distinguishes universal licensing from regulated food-service settings", () => {

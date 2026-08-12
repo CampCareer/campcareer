@@ -45,7 +45,7 @@ export const SINGAPORE_ENGINEERING_OCCUPATION_EDITORIAL_OVERRIDES: readonly Sing
       entryPathway:
         "SSOC 2024 maps general Electrical engineer to 21511. Power generation/distribution engineer 21512 and Lift engineer 21513 are distinct occupations. Five approved electrical and electronic engineering programmes are retained as direct academic pathways.",
       registration:
-        "Electrical engineering is a prescribed PE branch for regulated professional engineering work, while EMA Licensed Electrical Worker rules apply to defined electrical-work scopes. Those legal regimes do not mean every person employed under SSOC 21511 must personally hold both registrations.",
+        "Electrical engineering is a prescribed PE branch for regulated professional engineering work, while EMA Licensed Electrical Worker rules apply to defined electrical-work scopes. Employees may work under a registered PE's direction or supervision, so those legal regimes do not mean every person employed under SSOC 21511 must personally hold both registrations.",
       jobMarketNote:
         "CampCareer keeps professional-engineering and electrical-work permissions separate from labour-market evidence; market components remain pending.",
       scoreCaveat:

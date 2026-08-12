@@ -43,10 +43,10 @@ test("Korea Health preserves licensed entry requirements", () => {
 
 test("Korea Health keeps shared KECO groups scoped to the canonical profession", () => {
   assert.match(getOccupationEditorial("midwife")?.countries.KR?.entryPathway ?? "", /broader 3040/i)
-  assert.match(getOccupationEditorial("physiotherapist")?.countries.KR?.entryPathway ?? "", /3065.*restricted.*물리치료사/i)
-  assert.match(getOccupationEditorial("occupational-therapist")?.countries.KR?.entryPathway ?? "", /3065.*restricted.*작업치료사/i)
-  assert.match(migration, /'KR:pharmacist'.*'3031'/s)
-  assert.doesNotMatch(migration, /'KR:pharmacist'.*'3030'/s)
+  assert.match(getOccupationEditorial("physiotherapist")?.countries.KR?.entryPathway ?? "", /3065.*restrict(?:ed|s).*물리치료사/i)
+  assert.match(getOccupationEditorial("occupational-therapist")?.countries.KR?.entryPathway ?? "", /3065.*restrict(?:ed|s).*작업치료사/i)
+  assert.match(migration, /'KR:pharmacist'[\s\S]*'3031'/)
+  assert.doesNotMatch(migration, /'KR:pharmacist'[\s\S]*'3030'/)
 })
 
 test("Korea Health v1 does not fabricate labour-market or visa scoring", () => {

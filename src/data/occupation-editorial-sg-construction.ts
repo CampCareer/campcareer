@@ -122,7 +122,7 @@ export const SINGAPORE_CONSTRUCTION_OCCUPATION_EDITORIAL_OVERRIDES: readonly Sin
       registration:
         "The broad Construction Manager occupation is not one universally licensed personal profession. BCA's Builders Licensing Scheme applies to builders undertaking prescribed works and requires designated Approved Person and Technical Controller personnel; those appointments and qualifications are not attributed to every construction manager.",
       jobMarketNote:
-        "The approved Infrastructure and Project Management, Infrastructure and Systems Engineering and Sustainable Built Environment programmes are related academic pathways only. They do not themselves confer BCA builder licensing or statutory appointment rights.",
+        "The three reviewed Singapore programmes—Infrastructure and Project Management, Infrastructure and Systems Engineering, and Sustainable Built Environment—are related academic pathways only. They do not themselves confer BCA builder licensing or statutory appointment rights.",
       scoreCaveat:
         "SG v1 gives moderate entry credit because management is experience-sensitive. Builder licensing, programme availability and designated personnel requirements are not treated as labour-demand evidence; market and visa components remain unscored.",
     },

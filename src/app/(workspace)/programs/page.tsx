@@ -14,12 +14,36 @@ import { UkProgramsExplorer } from "./uk-programs-explorer"
 import { NzProgramsExplorer } from "./nz-programs-explorer"
 import { NlProgramsExplorer } from "./nl-programs-explorer"
 import { AeProgramsExplorer } from "./ae-programs-explorer"
+import { KrProgramsExplorer } from "./kr-programs-explorer"
+import { JpProgramsExplorer } from "./jp-programs-explorer"
+import { NoProgramsExplorer } from "./no-programs-explorer"
+import { FiProgramsExplorer } from "./fi-programs-explorer"
+import { DkProgramsExplorer } from "./dk-programs-explorer"
+import { SeProgramsExplorer } from "./se-programs-explorer"
+import { ChProgramsExplorer } from "./ch-programs-explorer"
+import { BeProgramsExplorer } from "./be-programs-explorer"
+import { EsProgramsExplorer } from "./es-programs-explorer"
+import { FrProgramsExplorer } from "./fr-programs-explorer"
+import { DeProgramsExplorer } from "./de-programs-explorer"
+import { SgProgramsExplorer } from "./sg-programs-explorer"
 import { searchAuPrograms, type AuProgramSearchResult } from "@/lib/programs/au-programs.server"
 import { searchAePrograms, type AeProgramSearchResult } from "@/lib/programs/ae-programs.server"
 import { searchCaPrograms, type CaProgramSearchResult } from "@/lib/programs/ca-programs.server"
 import { searchUkPrograms, type UkProgramSearchResult } from "@/lib/programs/uk-programs.server"
 import { searchNzPrograms, type NzProgramSearchResult } from "@/lib/programs/nz-programs.server"
 import { searchNlPrograms, type NlProgramSearchResult } from "@/lib/programs/nl-programs.server"
+import { searchKrPrograms, type KrProgramSearchResult } from "@/lib/programs/kr-programs.server"
+import { searchJpPrograms, type JpProgramSearchResult } from "@/lib/programs/jp-programs.server"
+import { searchNoPrograms, type NoProgramSearchResult } from "@/lib/programs/no-programs.server"
+import { searchFiPrograms, type FiProgramSearchResult } from "@/lib/programs/fi-programs.server"
+import { searchDkPrograms, type DkProgramSearchResult } from "@/lib/programs/dk-programs.server"
+import { searchSePrograms, type SeProgramSearchResult } from "@/lib/programs/se-programs.server"
+import { searchChPrograms, type ChProgramSearchResult } from "@/lib/programs/ch-programs.server"
+import { searchBePrograms, type BeProgramSearchResult } from "@/lib/programs/be-programs.server"
+import { searchEsPrograms, type EsProgramSearchResult } from "@/lib/programs/es-programs.server"
+import { searchFrPrograms, type FrProgramSearchResult } from "@/lib/programs/fr-programs.server"
+import { searchDePrograms, type DeProgramSearchResult } from "@/lib/programs/de-programs.server"
+import { searchSgPrograms, type SgProgramSearchResult } from "@/lib/programs/sg-programs.server"
 import {
   buildProgramsUrl,
   hasProgramFilters,
@@ -28,10 +52,7 @@ import {
 } from "@/lib/programs/program-search"
 
 export const revalidate = 3600
-const PUBLISHED = ["AU", "AE", "KR", "JP", "NO", "FI", "DK", "SE", "CH", "BE", "ES", "FR", "DE", "SG"]
-function firstValue(value:string|string[]|undefined){return Array.isArray(value)?value[0]:value}
-function queryWithoutCountry(params:Record<string,string|string[]|undefined>){const next=new URLSearchParams();for(const[key,value]of Object.entries(params)){if(key==="country"||value===undefined)continue;if(typeof value==="string")next.set(key,value);else for(const item of value)next.append(key,item)}return next.toString()}
-function normalizedFilters(params:Record<string,string|string[]|undefined>):ProgramSearchFilters{const parsed=parseProgramSearchParams(params);const country=getLaunchCountry(parsed.country);return{...parsed,country:country?.code??"AU"}}
+const PUBLISHED_PROGRAM_COUNTRIES = ["AU", "CA", "UK", "AE", "NZ", "NL", "KR", "JP", "NO", "FI", "DK", "SE", "CH", "BE", "ES", "FR", "DE", "SG"] as const
 
 function queryWithoutCountry(params: Record<string, string | string[] | undefined>) {
   const next = new URLSearchParams()
@@ -59,7 +80,7 @@ export async function generateMetadata({
   const params = await searchParams
   const filters = normalizedFilters(params)
   const country = getLaunchCountry(filters.country)
-  const isPublishedBase = ["AU", "CA", "UK", "AE", "NZ", "NL"].includes(filters.country) && !hasProgramFilters(filters)
+  const isPublishedBase = PUBLISHED_PROGRAM_COUNTRIES.includes(filters.country as (typeof PUBLISHED_PROGRAM_COUNTRIES)[number]) && !hasProgramFilters(filters)
   const countryName = country?.name ?? "Australia"
 
   const description =
@@ -75,6 +96,8 @@ export async function generateMetadata({
             ? "Explore verified New Zealand programmes connected to CampCareer target occupations, with NZQCF, international-study, Code and application evidence tracked separately."
           : filters.country === "NL"
             ? "Explore source-verified Netherlands programmes with Dutch recognition, international-student eligibility, recognised sponsor evidence and current application timing tracked separately."
+            : filters.country === "SG"
+              ? "Explore source-verified Singapore undergraduate programmes with full-time study mode and international-admission evidence tracked separately."
             : `Explore study programs in ${countryName}. Country data will be published after source review.`
 
   return {
@@ -245,6 +268,18 @@ export default async function ProgramsPage({
   let nzResult: NzProgramSearchResult | null = null
   let nlResult: NlProgramSearchResult | null = null
   let aeResult: AeProgramSearchResult | null = null
+  let krResult: KrProgramSearchResult | null = null
+  let jpResult: JpProgramSearchResult | null = null
+  let noResult: NoProgramSearchResult | null = null
+  let fiResult: FiProgramSearchResult | null = null
+  let dkResult: DkProgramSearchResult | null = null
+  let seResult: SeProgramSearchResult | null = null
+  let chResult: ChProgramSearchResult | null = null
+  let beResult: BeProgramSearchResult | null = null
+  let esResult: EsProgramSearchResult | null = null
+  let frResult: FrProgramSearchResult | null = null
+  let deResult: DeProgramSearchResult | null = null
+  let sgResult: SgProgramSearchResult | null = null
   let errorMessage: string | null = null
 
   try {
@@ -254,12 +289,24 @@ export default async function ProgramsPage({
     if (filters.country === "NZ") nzResult = await searchNzPrograms(filters)
     if (filters.country === "NL") nlResult = await searchNlPrograms(filters)
     if (filters.country === "AE") aeResult = await searchAePrograms(filters)
+    if (filters.country === "KR") krResult = await searchKrPrograms(filters)
+    if (filters.country === "JP") jpResult = await searchJpPrograms(filters)
+    if (filters.country === "NO") noResult = await searchNoPrograms(filters)
+    if (filters.country === "FI") fiResult = await searchFiPrograms(filters)
+    if (filters.country === "DK") dkResult = await searchDkPrograms(filters)
+    if (filters.country === "SE") seResult = await searchSePrograms(filters)
+    if (filters.country === "CH") chResult = await searchChPrograms(filters)
+    if (filters.country === "BE") beResult = await searchBePrograms(filters)
+    if (filters.country === "ES") esResult = await searchEsPrograms(filters)
+    if (filters.country === "FR") frResult = await searchFrPrograms(filters)
+    if (filters.country === "DE") deResult = await searchDePrograms(filters)
+    if (filters.country === "SG") sgResult = await searchSgPrograms(filters)
   } catch (error) {
     console.error(`Unable to load ${filters.country} program catalogue`, error)
     errorMessage = "Please try again shortly. No cached or substitute country data has been shown."
   }
 
-  const countryIsPublished = ["AU", "CA", "UK", "AE", "NZ", "NL"].includes(filters.country)
+  const countryIsPublished = PUBLISHED_PROGRAM_COUNTRIES.includes(filters.country as (typeof PUBLISHED_PROGRAM_COUNTRIES)[number])
 
   return (
     <>
@@ -273,6 +320,30 @@ export default async function ProgramsPage({
         <div className="mt-7">
           <ProgramLoadError countryName={getLaunchCountry(filters.country)?.name ?? filters.country} message={errorMessage} />
         </div>
+      ) : filters.country === "SG" && sgResult ? (
+        <SgProgramsExplorer filters={filters} result={sgResult} />
+      ) : filters.country === "DE" && deResult ? (
+        <DeProgramsExplorer filters={filters} result={deResult} />
+      ) : filters.country === "FR" && frResult ? (
+        <FrProgramsExplorer filters={filters} result={frResult} />
+      ) : filters.country === "ES" && esResult ? (
+        <EsProgramsExplorer filters={filters} result={esResult} />
+      ) : filters.country === "BE" && beResult ? (
+        <BeProgramsExplorer filters={filters} result={beResult} />
+      ) : filters.country === "CH" && chResult ? (
+        <ChProgramsExplorer filters={filters} result={chResult} />
+      ) : filters.country === "SE" && seResult ? (
+        <SeProgramsExplorer filters={filters} result={seResult} />
+      ) : filters.country === "DK" && dkResult ? (
+        <DkProgramsExplorer filters={filters} result={dkResult} />
+      ) : filters.country === "FI" && fiResult ? (
+        <FiProgramsExplorer filters={filters} result={fiResult} />
+      ) : filters.country === "NO" && noResult ? (
+        <NoProgramsExplorer filters={filters} result={noResult} />
+      ) : filters.country === "JP" && jpResult ? (
+        <JpProgramsExplorer filters={filters} result={jpResult} />
+      ) : filters.country === "KR" && krResult ? (
+        <KrProgramsExplorer filters={filters} result={krResult} />
       ) : filters.country === "NZ" && nzResult ? (
         <NzProgramsExplorer filters={filters} result={nzResult} />
       ) : filters.country === "NL" && nlResult ? (

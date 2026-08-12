@@ -45,8 +45,8 @@ test("Korea education keeps regulated and broad roles distinct", () => {
     assert.match(migration, new RegExp(`'KR:${id}'.*'KRW',true`, "s"), id)
   }
 
-  assert.match(migration, /'KR:community-worker'.*'KRW',false/s)
-  assert.match(migration, /'KR:counsellor'.*'KRW',false/s)
+  assert.match(migration, /'KR:community-worker'[\s\S]*'KRW',false/)
+  assert.match(migration, /'KR:counsellor'[\s\S]*'KRW',false/)
   assert.match(getOccupationEditorial("community-worker")?.countries.KR?.entryPathway ?? "", /does not publish a standalone Community Worker/i)
   assert.match(getOccupationEditorial("counsellor")?.countries.KR?.registration ?? "", /no single universal statutory licence/i)
 })

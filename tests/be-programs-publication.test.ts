@@ -57,13 +57,12 @@ test("Belgium server and UI separate programme identity from applicant-specific 
   assert.match(detail, /not claims of Belgian professional recognition, protected-title eligibility, licensing or guaranteed employment/)
 })
 
-test("Belgium is published in the shared Programs route while Spain remains unpublished", () => {
-  assert.match(header, /\["AU", "AE", "KR", "JP", "NO", "FI", "DK", "SE", "CH", "BE"\]/)
+test("Belgium remains published in the shared Programs route", () => {
+  assert.match(header, /PUBLISHED_PROGRAM_COUNTRIES/)
+  assert.match(header, /"BE"/)
   assert.match(page, /searchBePrograms/)
   assert.match(page, /BeProgramsExplorer/)
-  assert.match(page, /\["AU", "AE", "KR", "JP", "NO", "FI", "DK", "SE", "CH", "BE"\]/)
-  assert.doesNotMatch(page, /searchEsPrograms/)
-  assert.doesNotMatch(header, /"BE", "ES"/)
+  assert.match(page, /filters\.country === "BE"/)
 })
 
 test("Belgium SEO indexes exactly 96 source-backed applicant routes", () => {

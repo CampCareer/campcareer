@@ -55,12 +55,12 @@ test("Denmark server and UI separate programme existence from application state"
   assert.match(detail, /Institutional accreditation and quality assurance are not represented as programme-level accreditation claims/)
 })
 
-test("Denmark is published in the shared Programs route and country picker without publishing Sweden", () => {
-  assert.match(header, /\["AU", "AE", "KR", "JP", "NO", "FI", "DK"\]/)
-  assert.doesNotMatch(header, /\["AU", "AE", "KR", "JP", "NO", "FI", "DK", "SE"\]/)
+test("Denmark remains published in the shared Programs route and country picker", () => {
+  assert.match(header, /PUBLISHED_PROGRAM_COUNTRIES/)
+  assert.match(header, /"DK"/)
   assert.match(page, /searchDkPrograms/)
   assert.match(page, /DkProgramsExplorer/)
-  assert.match(page, /\["AU", "AE", "KR", "JP", "NO", "FI", "DK"\]/)
+  assert.match(page, /filters\.country === "DK"/)
 })
 
 test("Denmark SEO keeps a curated 80-route Tier A cohort while the full catalogue remains accessible", () => {

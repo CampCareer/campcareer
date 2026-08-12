@@ -39,7 +39,7 @@ test("Korea transport keeps cross-mode logistics classification explicit", () =>
 
   assert.match(editorial?.headline ?? "", /umbrella/i)
   assert.match(editorial?.entryPathway ?? "", /0282, 0283, 0284 and 0289/)
-  assert.match(migration, /'KR:logistics-coordinator','KR','logistics-coordinator'.*'2025',null,'KRW',false/s)
+  assert.match(migration, /'KR:logistics-coordinator','KR','logistics-coordinator'[\s\S]*'2025',null,'KRW',false/)
   for (const code of ["0282", "0283", "0284", "0289"]) {
     assert.match(migration, new RegExp(`'KR:logistics-coordinator','${code}'.*false`, "s"), code)
   }
@@ -68,7 +68,7 @@ test("Korea transport preserves regulated qualification boundaries", () => {
 })
 
 test("Korea transport keeps overlapping KECO scopes from becoming exact market claims", () => {
-  assert.match(getOccupationEditorial("marine-engineer")?.countries.KR?.jobMarketNote ?? "", /broad 6212/i)
+  assert.match(getOccupationEditorial("marine-engineer")?.countries.KR?.jobMarketNote ?? "", /6212 combines/i)
   assert.match(getOccupationEditorial("deck-officer")?.countries.KR?.jobMarketNote ?? "", /broad 6212/i)
   assert.match(getOccupationEditorial("warehouse-manager")?.countries.KR?.jobMarketNote ?? "", /broader manager/i)
   assert.match(migration, /'KR:warehouse-manager','0152'/)
