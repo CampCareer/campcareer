@@ -2,19 +2,19 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { UaeCityDashboard } from "@/app/(workspace)/cities/uae-city-dashboard"
 import { getAeCityProfile } from "@/lib/cities/ae-city-profile.server"
-import { SUPPORTED_AE_CITY_SLUGS, isSupportedAeCitySlug } from "@/lib/cities/city-routes"
+import { PUBLISHED_AE_CITY_SLUGS, isPublishedAeCitySlug } from "@/lib/cities/city-routes"
 
 export const dynamic = "force-dynamic"
 
 export function generateStaticParams() {
-  return SUPPORTED_AE_CITY_SLUGS.map((city) => ({ city }))
+  return PUBLISHED_AE_CITY_SLUGS.map((city) => ({ city }))
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ city: string }> }): Promise<Metadata> {
   const { city } = await params
   const normalized = city.trim().toLowerCase()
 
-  if (!isSupportedAeCitySlug(normalized)) return { robots: { index: false, follow: false } }
+  if (!isPublishedAeCitySlug(normalized)) return { robots: { index: false, follow: false } }
 
   const profile = await getAeCityProfile(normalized)
   if (!profile) return { robots: { index: false, follow: false } }
@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ city: str
     title: `Study in ${profile.name}, United Arab Emirates`,
     description: `Explore ${profile.name} City-locality evidence, source-native student cost and transport references, UAE student work-permit context, verified study locations and conservative programme coverage.`,
     alternates: { canonical: `/cities/ae/${normalized}` },
-    robots: { index: false, follow: true },
+    robots: { index: true, follow: true },
   }
 }
 
@@ -31,7 +31,7 @@ export default async function UaeCityPage({ params }: { params: Promise<{ city: 
   const { city } = await params
   const normalized = city.trim().toLowerCase()
 
-  if (!isSupportedAeCitySlug(normalized)) notFound()
+  if (!isPublishedAeCitySlug(normalized)) notFound()
 
   const profile = await getAeCityProfile(normalized)
   if (!profile) notFound()

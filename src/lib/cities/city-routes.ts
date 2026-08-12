@@ -83,8 +83,10 @@ export type PublishedEsCitySlug = (typeof PUBLISHED_ES_CITY_SLUGS)[number]
 export const SUPPORTED_ES_CITY_SLUGS = PUBLISHED_ES_CITY_SLUGS
 export type SupportedEsCitySlug = PublishedEsCitySlug
 
-export const SUPPORTED_AE_CITY_SLUGS = ["abu-dhabi", "sharjah", "al-ain", "dubai"] as const
-export type SupportedAeCitySlug = (typeof SUPPORTED_AE_CITY_SLUGS)[number]
+export const PUBLISHED_AE_CITY_SLUGS = ["abu-dhabi", "sharjah", "al-ain", "dubai"] as const
+export type PublishedAeCitySlug = (typeof PUBLISHED_AE_CITY_SLUGS)[number]
+export const SUPPORTED_AE_CITY_SLUGS = PUBLISHED_AE_CITY_SLUGS
+export type SupportedAeCitySlug = PublishedAeCitySlug
 
 const CITY_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
@@ -142,6 +144,10 @@ export function isPublishedEsCitySlug(value: string): value is PublishedEsCitySl
   return PUBLISHED_ES_CITY_SLUGS.includes(value as PublishedEsCitySlug)
 }
 
+export function isPublishedAeCitySlug(value: string): value is PublishedAeCitySlug {
+  return PUBLISHED_AE_CITY_SLUGS.includes(value as PublishedAeCitySlug)
+}
+
 export function isSupportedFiCitySlug(value: string): value is SupportedFiCitySlug {
   return isPublishedFiCitySlug(value)
 }
@@ -151,7 +157,7 @@ export function isSupportedEsCitySlug(value: string): value is SupportedEsCitySl
 }
 
 export function isSupportedAeCitySlug(value: string): value is SupportedAeCitySlug {
-  return SUPPORTED_AE_CITY_SLUGS.includes(value as SupportedAeCitySlug)
+  return isPublishedAeCitySlug(value)
 }
 
 export function auCityPath(value: string | null | undefined) {
@@ -228,6 +234,6 @@ export function esCityPath(value: string | null | undefined) {
 
 export function aeCityPath(value: string | null | undefined) {
   const slug = normalizeCitySlug(value)
-  if (!slug || !isSupportedAeCitySlug(slug)) return null
+  if (!slug || !isPublishedAeCitySlug(slug)) return null
   return `/cities/ae/${slug}`
 }
