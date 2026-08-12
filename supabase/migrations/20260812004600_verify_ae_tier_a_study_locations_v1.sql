@@ -79,8 +79,8 @@ join catalog.campuses c on c.institution_id=i.id and c.geography_id=g.id and c.s
 join catalog.programmes pr on pr.institution_id=i.id and pr.id=md5('AE|PROGRAM|'||s.source_name||'|'||s.source_program_key)::uuid and pr.status='active'
 join catalog.programme_accreditations pa on pa.programme_id=pr.id and pa.review_status='verified' and pa.status='active'
 where po.programme_id=pr.id
-  and po.source_system='AE_CAA_PROGRAMS'
-  and po.source_record_key=s.source_name||':'||s.source_program_key
+  and po.source_system='AE_PROGRAM_STAGING'
+  and po.source_record_key=s.source_program_key
   and s.accreditation_status='active'
   and s.verification_tier in ('A','B')
   and lower(trim(s.city))=lower(trim(g.name));
@@ -102,7 +102,7 @@ begin
 
   select count(*) into assigned_n
   from catalog.programme_offerings po
-  join public.program_catalog_ae_staging s on po.source_system='AE_CAA_PROGRAMS' and po.source_record_key=s.source_name||':'||s.source_program_key
+  join public.program_catalog_ae_staging s on po.source_system='AE_PROGRAM_STAGING' and po.source_record_key=s.source_program_key
   join catalog.campuses c on c.id=po.campus_id and c.metadata->>'normalization_batch'='ae_city_linkage_v1'
   where s.city in ('Abu Dhabi','Sharjah','Al Ain','Dubai') and coalesce((c.metadata->>'programme_assignment_verified')::boolean,false) is true;
   if assigned_n<>98 then raise exception 'AE Phase 3 expected 98 verified programme-location assignments, found %',assigned_n; end if;
