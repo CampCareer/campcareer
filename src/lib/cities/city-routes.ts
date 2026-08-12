@@ -83,6 +83,9 @@ export type PublishedEsCitySlug = (typeof PUBLISHED_ES_CITY_SLUGS)[number]
 export const SUPPORTED_ES_CITY_SLUGS = PUBLISHED_ES_CITY_SLUGS
 export type SupportedEsCitySlug = PublishedEsCitySlug
 
+export const SUPPORTED_JP_CITY_SLUGS = ["tokyo", "kyoto", "nagoya", "sendai", "suita", "tsukuba", "fukuoka"] as const
+export type SupportedJpCitySlug = (typeof SUPPORTED_JP_CITY_SLUGS)[number]
+
 const CITY_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
 export function normalizeCitySlug(value: string | null | undefined) {
@@ -145,6 +148,10 @@ export function isSupportedFiCitySlug(value: string): value is SupportedFiCitySl
 
 export function isSupportedEsCitySlug(value: string): value is SupportedEsCitySlug {
   return isPublishedEsCitySlug(value)
+}
+
+export function isSupportedJpCitySlug(value: string): value is SupportedJpCitySlug {
+  return SUPPORTED_JP_CITY_SLUGS.includes(value as SupportedJpCitySlug)
 }
 
 export function auCityPath(value: string | null | undefined) {
@@ -217,4 +224,10 @@ export function esCityPath(value: string | null | undefined) {
   const slug = normalizeCitySlug(value)
   if (!slug || !isPublishedEsCitySlug(slug)) return null
   return `/cities/es/${slug}`
+}
+
+export function jpCityPath(value: string | null | undefined) {
+  const slug = normalizeCitySlug(value)
+  if (!slug || !isSupportedJpCitySlug(slug)) return null
+  return `/cities/jp/${slug}`
 }
