@@ -1,8 +1,8 @@
 # United Arab Emirates Cities — Phase 9 current-main integration v1
 
-Status: `PHASE_9_COMPLETE_PENDING_FINAL_CI`
+Status: `PHASE_9_COMPLETE`
 
-Checkpoint: `CURRENT_MAIN_CANDIDATE`
+Checkpoint: `CURRENT_MAIN_CANDIDATE_GREEN`
 
 Country: `AE` — United Arab Emirates
 
@@ -14,14 +14,16 @@ Branch: `agent/ae-cities-v1`
 
 Immediately before final Phase 9 validation, `agent/ae-cities-v1` was compared with authoritative `main`.
 
-Result:
+Final validated application/test head: `fa2f80809941e16e947e2f271594cf27b5ed0048`
+
+Result at that head:
 
 - branch status: ahead
-- ahead of main: `30` commits
+- ahead of main: `32` commits
 - behind main: `0`
 - current merge base: `2019dbe23235171cb6bb6b848a95da20f31c5731`
 
-No main-to-UAE reconciliation commit was required at this checkpoint.
+No main-to-UAE reconciliation commit was required.
 
 ## Shared-surface preservation
 
@@ -68,14 +70,29 @@ The Phase 9 candidate contains:
 
 The production data foundation has also been restored through Phase 4 and re-verified. The Phase 4 migration includes the required PostgreSQL date cast for `data_as_of`.
 
+## Final CI
+
+GitHub Actions CI run `1508` completed successfully on the validated application/test head.
+
+Successful gates:
+
+- dependency install
+- production dependency audit at high severity threshold
+- TypeScript typecheck
+- lint
+- full automated test suite
+- production build
+- Git history secret scan
+
+The follow-up commit that changes this document from pending to complete is documentation-only and does not alter application, database or test code.
+
 ## Release boundary
 
 Phase 9 does not merge the UAE branch into `main` and does not deploy production application code.
 
-The intended terminal state for this task remains:
+Terminal state for this task:
 
-- PR Draft / Open / Unmerged
+- Phase 9: complete
+- PR: Draft / Open / Unmerged
 - no merge into `main`
 - no automatic Phase 10 release
-
-Final CI and a final `main` comparison are required before changing this document status from `PHASE_9_COMPLETE_PENDING_FINAL_CI` to complete.
