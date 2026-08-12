@@ -77,7 +77,7 @@ join tmp_ae_city_provider p on p.institution_slug=i.slug and p.programme_assignm
 join core.geographies g on g.country_code='AE' and g.slug=p.city_slug and g.metadata->>'publication_tier'='A'
 join catalog.campuses c on c.institution_id=i.id and c.geography_id=g.id and c.status='active' and c.metadata->>'normalization_batch'='ae_city_linkage_v1'
 join catalog.programmes pr on pr.institution_id=i.id and pr.id=md5('AE|PROGRAM|'||s.source_name||'|'||s.source_program_key)::uuid and pr.status='active'
-join catalog.programme_accreditations pa on pa.programme_id=pr.id and pa.source_system='AE_CAA_PROGRAMS' and pa.review_status='verified'
+join catalog.programme_accreditations pa on pa.programme_id=pr.id and pa.review_status='verified' and pa.status='active'
 where po.programme_id=pr.id
   and po.source_system='AE_CAA_PROGRAMS'
   and po.source_record_key=s.source_name||':'||s.source_program_key
