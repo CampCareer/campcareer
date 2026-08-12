@@ -32,12 +32,12 @@ select g.id city_id,g.slug city_slug,g.name city_name,g.metadata->>'containing_e
        s.programme_level source_degree_level,po.id offering_id,po.market,po.delivery_mode,po.enrolment_status,
        coalesce(s.official_program_url,po.source_url,s.source_url) official_program_url,
        s.source_program_key,s.verification_tier,s.collection_status,
-       pa.source_url accreditation_source_url,pa.review_status accreditation_review_status,
+       pa.authority_url accreditation_source_url,pa.review_status accreditation_review_status,
        po.verification_status international_evidence_status
 from catalog.programme_offerings po
 join public.program_catalog_ae_staging s on po.source_system='AE_CAA_PROGRAMS' and po.source_record_key=s.source_name||':'||s.source_program_key
 join catalog.programmes pr on pr.id=po.programme_id and pr.status='active' and pr.institution_id=s.institution_id
-join catalog.programme_accreditations pa on pa.programme_id=pr.id and pa.source_system='AE_CAA_PROGRAMS' and pa.review_status='verified'
+join catalog.programme_accreditations pa on pa.programme_id=pr.id and pa.review_status='verified' and pa.status='active'
 join catalog.institutions i on i.id=pr.institution_id and i.country_code='AE' and i.status='active'
 join catalog.campuses c on c.id=po.campus_id and c.institution_id=i.id and c.status='active'
 join core.geographies g on g.id=c.geography_id and g.country_code='AE' and g.metadata->>'publication_tier'='A'
