@@ -199,6 +199,12 @@ export const OCCUPATION_EDITORIAL: readonly OccupationEditorialType[] = RAW_OCCU
     }
   }
 
+  for (const override of KOREA_ENGINEERING_OCCUPATION_EDITORIAL_OVERRIDES) {
+    if (override.id === item.id) {
+      countries = { ...countries, [override.countryCode]: override.editorial }
+    }
+  }
+
   return countries === item.countries ? item : { ...item, countries }
 })
 
