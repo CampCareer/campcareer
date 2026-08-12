@@ -3,6 +3,7 @@ import { AU_NURSING_PROGRAM_IDS } from "@/lib/data-foundation/compare-adapters/a
 import { AU_NURSING_PROGRAM_COMPARE_REPOSITORY } from "@/lib/data-foundation/compare-adapters/au-nursing-programmes-repository"
 import { parseCareerComparisonState, type CareerComparisonState } from "@/lib/career-comparison"
 import { parseCountryComparisonState, type CountryComparisonState } from "@/lib/country-comparison"
+import { getAeCityComparison } from "@/lib/cities/ae-city-comparison.server"
 import { getAuCityComparison } from "@/lib/cities/au-city-comparison.server"
 import { getBeCityComparison } from "@/lib/cities/be-city-comparison.server"
 import { getCaCityComparison } from "@/lib/cities/ca-city-comparison.server"
@@ -22,6 +23,7 @@ import ProgramsCompareMatrix from "./programs-compare-matrix"
 import CountriesCompareMatrix from "./countries-compare-matrix"
 import CareersCompareMatrix from "./careers-compare-matrix"
 import { CitiesCompareMatrix } from "./cities-compare-matrix"
+import { UaeCitiesCompareMatrix } from "./uae-cities-compare-matrix"
 import { BelgiumCitiesCompareMatrix } from "./belgium-cities-compare-matrix"
 import { CanadaCitiesCompareMatrix } from "./canada-cities-compare-matrix"
 import { FinlandCitiesCompareMatrix } from "./finland-cities-compare-matrix"
@@ -62,6 +64,12 @@ function CountriesCompare({ comparison }: { comparison: CountryComparisonState }
 
 async function CitiesCompare({ countryCode, params }: { countryCode: string; params: URLSearchParams }) {
   if (countryCode === "SG") return <SingaporeCityStateDecision />
+
+  if (countryCode === "AE") {
+    const comparison = await getAeCityComparison(params.get("left"), params.get("right"))
+    if (!comparison) return <UnsupportedSurface type="Cities" href={buildCityCompareCanonicalHref({ country: "AE" })} label="Compare UAE cities" activeType="city" countryCode={countryCode} />
+    return <section className="w-full pb-4" aria-label="United Arab Emirates cities comparison"><ComparePageHeader activeType="city" countryCode={countryCode} /><UaeCitiesCompareMatrix left={comparison.left} right={comparison.right} options={comparison.options} /></section>
+  }
 
   if (countryCode === "AU") {
     const comparison = await getAuCityComparison(params.get("left"), params.get("right"))
