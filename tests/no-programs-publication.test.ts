@@ -54,11 +54,12 @@ test("Norway server and UI keep programme existence separate from the current ap
   assert.match(detail, /International admission restricted/)
 })
 
-test("Norway is the only new country published in the shared Programs route", () => {
-  assert.match(header, /\["AU", "AE", "KR", "JP", "NO"\]/)
+test("Norway remains published in the shared Programs route", () => {
+  assert.match(header, /PUBLISHED_PROGRAM_COUNTRIES/)
+  assert.match(header, /"NO"/)
   assert.match(page, /searchNoPrograms/)
   assert.match(page, /NoProgramsExplorer/)
-  assert.match(page, /\["AU", "AE", "KR", "JP", "NO"\]/)
+  assert.match(page, /filters\.country === "NO"/)
 })
 
 test("Norway SEO indexes 139 non-closed Tier A routes and excludes the verified closed UiA route", () => {

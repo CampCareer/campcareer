@@ -38,9 +38,9 @@ test("Spain UI separates official programme identity from vacancy-dependent admi
   assert.match(detail,/Programme existence does not prove a place is available/);assert.match(detail,/RUCT official-degree registration and Spanish quality-assurance processes are not converted/);assert.match(detail,/not claims of Spanish professional recognition/)
 })
 
-test("Spain is published while France remains unpublished",()=>{
-  assert.match(header,/\["AU", "AE", "KR", "JP", "NO", "FI", "DK", "SE", "CH", "BE", "ES"\]/)
-  assert.match(page,/searchEsPrograms/);assert.match(page,/EsProgramsExplorer/);assert.match(page,/"ES"/);assert.doesNotMatch(page,/searchFrPrograms/);assert.doesNotMatch(header,/"ES", "FR"/)
+test("Spain remains published in the shared Programs route",()=>{
+  assert.match(header,/PUBLISHED_PROGRAM_COUNTRIES/);assert.match(header,/"ES"/)
+  assert.match(page,/searchEsPrograms/);assert.match(page,/EsProgramsExplorer/);assert.match(page,/filters\.country === "ES"/)
 })
 
 test("Spain SEO indexes exactly 116 source-backed admission routes",()=>{

@@ -53,13 +53,12 @@ test("Switzerland server and UI separate programme existence from the applicatio
   assert.match(detail, /not claims of Swiss professional authorisation, protected-title eligibility or guaranteed employment/)
 })
 
-test("Switzerland is published in the shared Programs route while Belgium remains unpublished", () => {
-  assert.match(header, /\["AU", "AE", "KR", "JP", "NO", "FI", "DK", "SE", "CH"\]/)
+test("Switzerland remains published in the shared Programs route", () => {
+  assert.match(header, /PUBLISHED_PROGRAM_COUNTRIES/)
+  assert.match(header, /"CH"/)
   assert.match(page, /searchChPrograms/)
   assert.match(page, /ChProgramsExplorer/)
-  assert.match(page, /\["AU", "AE", "KR", "JP", "NO", "FI", "DK", "SE", "CH"\]/)
-  assert.doesNotMatch(page, /searchBePrograms/)
-  assert.doesNotMatch(header, /"CH", "BE"/)
+  assert.match(page, /filters\.country === "CH"/)
 })
 
 test("Switzerland SEO indexes exactly 38 source-backed future-application routes", () => {

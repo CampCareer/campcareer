@@ -1,12 +1,6 @@
 "use client"
 
-import {
-  useEffect,
-  useRef,
-  useState,
-  type ChangeEvent,
-  type FormEvent,
-} from "react"
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "react"
 import { Check, ChevronDown, Search } from "lucide-react"
 import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
 import { useSelectedCountry } from "@/components/workspace/country-context"
@@ -15,7 +9,9 @@ import { PROGRAM_LEVELS, type ProgramSearchFilters } from "@/lib/programs/progra
 import { cn } from "@/lib/utils"
 import { useProgramNavigation } from "./programs-navigation"
 
-const PUBLISHED_PROGRAM_COUNTRIES = new Set(["AU", "CA", "UK", "NZ", "NL", "AE", "KR", "JP", "NO", "FI", "DK", "SE", "CH", "BE", "ES", "FR", "DE", "SG"])
+const PUBLISHED_PROGRAM_COUNTRIES = new Set([
+  "AU", "CA", "UK", "NZ", "NL", "AE", "KR", "JP", "NO", "FI", "DK", "SE", "CH", "BE", "ES", "FR", "DE", "SG",
+])
 
 function ProgramCountryPicker({
   countryCode,

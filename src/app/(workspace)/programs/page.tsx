@@ -52,10 +52,9 @@ import {
 } from "@/lib/programs/program-search"
 
 export const revalidate = 3600
-
 const PUBLISHED_PROGRAM_COUNTRIES = [
   "AU", "CA", "UK", "NZ", "NL", "AE", "KR", "JP", "NO", "FI", "DK", "SE", "CH", "BE", "ES", "FR", "DE", "SG",
-]
+] as const
 
 const PROGRAM_DESCRIPTIONS: Record<string, string> = {
   AU: "Search Australian university and vocational programs by verified city, study level, field, state, duration and tuition.",
@@ -105,7 +104,9 @@ export async function generateMetadata({
   const filters = normalizedFilters(params)
   const country = getLaunchCountry(filters.country)
   const countryName = country?.name ?? "Australia"
-  const isPublishedBase = PUBLISHED_PROGRAM_COUNTRIES.includes(filters.country) && !hasProgramFilters(filters)
+  const isPublishedBase = PUBLISHED_PROGRAM_COUNTRIES.includes(
+    filters.country as (typeof PUBLISHED_PROGRAM_COUNTRIES)[number],
+  ) && !hasProgramFilters(filters)
 
   return {
     title:
@@ -283,13 +284,13 @@ export default async function ProgramsPage({
     if (filters.country === "ES") esResult = await searchEsPrograms(filters)
     if (filters.country === "FR") frResult = await searchFrPrograms(filters)
     if (filters.country === "DE") deResult = await searchDePrograms(filters)
-    if(filters.country==="SG") sgResult = await searchSgPrograms(filters)
+    if (filters.country === "SG") sgResult = await searchSgPrograms(filters)
   } catch (error) {
     console.error(`Unable to load ${filters.country} program catalogue`, error)
     errorMessage = "Please try again shortly. No cached or substitute country data has been shown."
   }
 
-  const countryIsPublished = PUBLISHED_PROGRAM_COUNTRIES.includes(filters.country)
+  const countryIsPublished = PUBLISHED_PROGRAM_COUNTRIES.includes(filters.country as (typeof PUBLISHED_PROGRAM_COUNTRIES)[number])
 
   return (
     <>
@@ -298,8 +299,10 @@ export default async function ProgramsPage({
       {!countryIsPublished ? (
         <div className="mt-7"><CountryComingSoon countryCode={filters.country} /></div>
       ) : errorMessage ? (
-        <div className="mt-7"><ProgramLoadError countryName={getLaunchCountry(filters.country)?.name ?? filters.country} message={errorMessage} /></div>
-      ) : filters.country==="SG" && sgResult ? (
+        <div className="mt-7">
+          <ProgramLoadError countryName={getLaunchCountry(filters.country)?.name ?? filters.country} message={errorMessage} />
+        </div>
+      ) : filters.country === "SG" && sgResult ? (
         <SgProgramsExplorer filters={filters} result={sgResult} />
       ) : filters.country === "DE" && deResult ? (
         <DeProgramsExplorer filters={filters} result={deResult} />
