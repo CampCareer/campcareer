@@ -22,7 +22,7 @@ const metrics = [
 test("UAE Phase 8 records the production publish-ready checkpoint", () => {
   assert.match(qa, /PHASE_8_COMPLETE/)
   assert.match(qa, /PUBLISH_READY/)
-  for (const expected of ["Tier A canonical City rows: `4`", "strict City-linked programme rows: `98`", "verified core metric rows: `20`", "Compare-ready Cities: `4\/4`", "readiness failures: `0`"]) {
+  for (const expected of ["Tier A canonical City rows: `4`", "strict City-linked programme rows: `98`", "verified core metric rows: `20`", "Compare-ready Cities: `4/4`", "readiness failures: `0`"]) {
     assert.ok(qa.includes(expected), `missing production QA fact: ${expected}`)
   }
 })
