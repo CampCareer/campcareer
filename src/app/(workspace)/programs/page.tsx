@@ -28,6 +28,10 @@ import {
 } from "@/lib/programs/program-search"
 
 export const revalidate = 3600
+const PUBLISHED = ["AU", "AE", "KR", "JP", "NO", "FI", "DK", "SE", "CH", "BE", "ES", "FR", "DE", "SG"]
+function firstValue(value:string|string[]|undefined){return Array.isArray(value)?value[0]:value}
+function queryWithoutCountry(params:Record<string,string|string[]|undefined>){const next=new URLSearchParams();for(const[key,value]of Object.entries(params)){if(key==="country"||value===undefined)continue;if(typeof value==="string")next.set(key,value);else for(const item of value)next.append(key,item)}return next.toString()}
+function normalizedFilters(params:Record<string,string|string[]|undefined>):ProgramSearchFilters{const parsed=parseProgramSearchParams(params);const country=getLaunchCountry(parsed.country);return{...parsed,country:country?.code??"AU"}}
 
 function queryWithoutCountry(params: Record<string, string | string[] | undefined>) {
   const next = new URLSearchParams()
