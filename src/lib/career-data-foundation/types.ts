@@ -1,4 +1,4 @@
-export const FOUNDATION_FORMULA_VERSION = "career-opportunity-v2-foundation" as const
+export const FOUNDATION_FORMULA_VERSION = "career-opportunity-v3-foundation" as const
 
 export const FOUNDATION_COMPONENT_MAXIMA = {
   shortage_signal: 20,
@@ -18,6 +18,15 @@ export type FoundationDirectness = "direct" | "proxy"
 export type FoundationMappingQuality = "high" | "medium" | "low" | "not_applicable"
 export type FoundationSourceType = "official_primary" | "official_service" | "government_aggregator"
 export type FoundationQuality = "high" | "medium" | "low"
+export type FoundationEvidenceStatus =
+  | "direct_verified"
+  | "derived"
+  | "proxy"
+  | "fallback"
+  | "no_evidence_found"
+  | "confirmed_not_shortage"
+  | "insufficient_industry_coverage"
+export type FoundationScoreConfidence = "verified" | "estimated" | "limited_evidence"
 
 export type CareerFoundationSource = {
   sourceKey: string
@@ -104,6 +113,29 @@ export type CareerFoundationScoreComponent = {
   confidence: number
   explanation: string
   reason: string | null
+  evidenceStatus: FoundationEvidenceStatus
+}
+
+export type CareerFoundationNormalizedMetricInput = {
+  normalizedMetricKey: string
+  observationKey: string
+  inputRole: string
+  usageType: "input" | "benchmark" | "policy_evidence" | "fallback_evidence"
+  inputWeight: number | null
+}
+
+export type CareerFoundationScoreComponentMetricInput = {
+  snapshotKey: string
+  componentKey: FoundationComponentKey
+  normalizedMetricKey: string
+  inputRole: string
+}
+
+export type CareerFoundationScoreComponentRawInput = {
+  snapshotKey: string
+  componentKey: FoundationComponentKey
+  observationKey: string
+  inputRole: string
 }
 
 export type CareerFoundationBlocker = {
@@ -128,6 +160,59 @@ export type CareerFoundationEntryPoint = {
   lastVerifiedOn: string
   notes: string | null
   sortOrder: number
+}
+
+export type CareerFoundationLicensingEvidence = {
+  evidenceKey: string
+  jurisdictionCode: string
+  jurisdictionName: string
+  jurisdictionLevel: "national" | "state" | "province" | "territory" | "city" | "local"
+  requirementType: "occupational_license" | "contractor_license" | "certification" | "registration" | "safety_training"
+  mandatory: boolean
+  appliesTo: "employee" | "self_employed" | "contractor" | "business" | "mixed"
+  authority: string
+  sourceKey: string
+  officialSourceUrl: string
+  verifiedOn: string
+  costAmount: number | null
+  costCurrency: string | null
+  expectedDurationDays: number | null
+  exceptions: string | null
+  evidenceQuality: FoundationQuality
+  notes: string | null
+}
+
+export type CareerFoundationVisaPathway = {
+  pathwayKey: string
+  routeRole: "primary" | "secondary"
+  pathwayName: string
+  sourceKey: string
+  officialSourceUrl: string
+  occupationApplicabilityPoints: number
+  employerDependencyPoints: number
+  eligibilityBurdenPoints: number
+  longTermPathwayPoints: number
+  usedForPrimaryScore: boolean
+  applicabilityScope: string
+  lastVerifiedOn: string
+  notes: string | null
+}
+
+export type CareerFoundationJobOpportunity = {
+  opportunityKey: string
+  sourceKey: string
+  title: string
+  employer: string
+  locationText: string
+  postedOn: string | null
+  applicationDeadline: string | null
+  sourceName: string
+  listingUrl: string
+  applyUrl: string
+  lastCheckedOn: string
+  status: "active" | "expired" | "unknown"
+  relationQuality: "exact" | "related"
+  notes: string | null
 }
 
 export type CareerFoundationDecisionMetrics = {
@@ -165,12 +250,19 @@ export type CareerDataFoundationResult = {
     calculationTimestamp: string | null
   }
   opportunityScore: number | null
+  scoreConfidence: FoundationScoreConfidence
   scoreExplanation: string
   decisionMetrics: CareerFoundationDecisionMetrics
   sources: CareerFoundationSource[]
   rawObservations: CareerFoundationRawObservation[]
   normalizedMetrics: CareerFoundationNormalizedMetric[]
   scoreComponents: CareerFoundationScoreComponent[]
+  normalizedMetricInputs: CareerFoundationNormalizedMetricInput[]
+  scoreComponentMetricInputs: CareerFoundationScoreComponentMetricInput[]
+  scoreComponentRawInputs: CareerFoundationScoreComponentRawInput[]
+  licensingEvidence: CareerFoundationLicensingEvidence[]
+  visaPathways: CareerFoundationVisaPathway[]
+  jobOpportunities: CareerFoundationJobOpportunity[]
   blockers: CareerFoundationBlocker[]
   entryPoints: CareerFoundationEntryPoint[]
 }
