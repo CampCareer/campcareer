@@ -1,15 +1,23 @@
 import "server-only"
 
 import { supabase } from "@/lib/supabase"
+import { foundationScoreConfidence } from "./opportunity-score"
 import type {
   CareerDataFoundationResult,
   CareerFoundationBlocker,
   CareerFoundationEntryPoint,
+  CareerFoundationJobOpportunity,
+  CareerFoundationLicensingEvidence,
   CareerFoundationNormalizedMetric,
+  CareerFoundationNormalizedMetricInput,
   CareerFoundationRawObservation,
   CareerFoundationScoreComponent,
+  CareerFoundationScoreComponentMetricInput,
+  CareerFoundationScoreComponentRawInput,
   CareerFoundationSource,
+  CareerFoundationVisaPathway,
   FoundationComponentKey,
+  FoundationEvidenceStatus,
   FoundationMappingQuality,
   FoundationSourceType,
 } from "./types"
@@ -43,10 +51,7 @@ type ResultRow = {
   calculation_timestamp: string | null
 }
 
-type MappingRow = {
-  mapping_key: string
-  source_key: string
-}
+type MappingRow = { mapping_key: string; source_key: string }
 
 type RawRow = {
   observation_key: string
@@ -106,6 +111,7 @@ type ComponentRow = {
   confidence: number | string
   explanation: string
   reason: string | null
+  evidence_status: FoundationEvidenceStatus
 }
 
 type BlockerRow = {
@@ -142,8 +148,82 @@ type SourceRow = {
   notes: string | null
 }
 
-const numberOrNull = (value: number | string | null | undefined) =>
-  value == null ? null : Number(value)
+type LicensingRow = {
+  evidence_key: string
+  jurisdiction_code: string
+  jurisdiction_name: string
+  jurisdiction_level: CareerFoundationLicensingEvidence["jurisdictionLevel"]
+  requirement_type: CareerFoundationLicensingEvidence["requirementType"]
+  mandatory: boolean
+  applies_to: CareerFoundationLicensingEvidence["appliesTo"]
+  authority: string
+  source_key: string
+  official_source_url: string
+  verified_on: string
+  cost_amount: number | string | null
+  cost_currency: string | null
+  expected_duration_days: number | null
+  exceptions: string | null
+  evidence_quality: CareerFoundationLicensingEvidence["evidenceQuality"]
+  notes: string | null
+}
+
+type VisaPathwayRow = {
+  pathway_key: string
+  route_role: CareerFoundationVisaPathway["routeRole"]
+  pathway_name: string
+  source_key: string
+  official_source_url: string
+  occupation_applicability_points: number
+  employer_dependency_points: number
+  eligibility_burden_points: number
+  long_term_pathway_points: number
+  used_for_primary_score: boolean
+  applicability_scope: string
+  last_verified_on: string
+  notes: string | null
+}
+
+type JobOpportunityRow = {
+  opportunity_key: string
+  source_key: string
+  title: string
+  employer: string
+  location_text: string
+  posted_on: string | null
+  application_deadline: string | null
+  source_name: string
+  listing_url: string
+  apply_url: string
+  last_checked_on: string
+  status: CareerFoundationJobOpportunity["status"]
+  relation_quality: CareerFoundationJobOpportunity["relationQuality"]
+  notes: string | null
+}
+
+type NormalizedMetricInputRow = {
+  normalized_metric_key: string
+  observation_key: string
+  input_role: string
+  usage_type: CareerFoundationNormalizedMetricInput["usageType"]
+  input_weight: number | string | null
+}
+
+type ScoreMetricInputRow = {
+  snapshot_key: string
+  component_key: FoundationComponentKey
+  normalized_metric_key: string
+  input_role: string
+}
+
+type ScoreRawInputRow = {
+  snapshot_key: string
+  component_key: FoundationComponentKey
+  observation_key: string
+  input_role: string
+}
+
+const numberOrNull = (value: number | string | null | undefined) => value == null ? null : Number(value)
 
 const rawNumber = (observations: CareerFoundationRawObservation[], metricKey: string) => {
   const value = observations.find((item) => item.metricKey === metricKey && item.availability === "available")?.rawValue
@@ -174,16 +254,19 @@ export async function getCareerDataFoundation({
   if (!resultQuery.data) return null
   const result = resultQuery.data as ResultRow
 
-  const [mappingQuery, rawQuery, normalizedQuery, componentQuery, blockerQuery, entryPointQuery] = await Promise.all([
+  const [mappingQuery, rawQuery, normalizedQuery, componentQuery, blockerQuery, entryPointQuery, licensingQuery, visaPathwayQuery, jobOpportunityQuery] = await Promise.all([
     supabase.from("career_occupation_mappings").select("mapping_key,source_key").eq("profile_key", result.profile_key).eq("is_primary", true).single(),
     supabase.from("career_raw_observations").select("*").eq("profile_key", result.profile_key).order("observation_key"),
     supabase.from("career_normalized_metrics").select("*").eq("profile_key", result.profile_key).order("normalized_metric_key"),
     supabase.from("career_score_components").select("*").eq("snapshot_key", result.snapshot_key).order("component_key"),
     supabase.from("career_foundation_blockers").select("*").eq("profile_key", result.profile_key).eq("active", true).order("blocker_type"),
     supabase.from("career_foundation_entry_points").select("*").eq("profile_key", result.profile_key).order("sort_order"),
+    supabase.from("career_foundation_licensing_evidence").select("*").eq("profile_key", result.profile_key).order("jurisdiction_code"),
+    supabase.from("career_foundation_visa_pathways").select("*").eq("profile_key", result.profile_key).order("route_role"),
+    supabase.from("career_foundation_job_opportunities").select("*").eq("profile_key", result.profile_key).eq("status", "active").order("last_checked_on", { ascending: false }),
   ])
 
-  for (const query of [mappingQuery, rawQuery, normalizedQuery, componentQuery, blockerQuery, entryPointQuery]) {
+  for (const query of [mappingQuery, rawQuery, normalizedQuery, componentQuery, blockerQuery, entryPointQuery, licensingQuery, visaPathwayQuery, jobOpportunityQuery]) {
     if (query.error) throw query.error
   }
 
@@ -246,6 +329,7 @@ export async function getCareerDataFoundation({
     confidence: Number(row.confidence),
     explanation: row.explanation,
     reason: row.reason,
+    evidenceStatus: row.evidence_status,
   }))
 
   const blockers: CareerFoundationBlocker[] = ((blockerQuery.data ?? []) as BlockerRow[]).map((row) => ({
@@ -272,11 +356,100 @@ export async function getCareerDataFoundation({
     sortOrder: row.sort_order,
   }))
 
+  const licensingEvidence: CareerFoundationLicensingEvidence[] = ((licensingQuery.data ?? []) as LicensingRow[]).map((row) => ({
+    evidenceKey: row.evidence_key,
+    jurisdictionCode: row.jurisdiction_code,
+    jurisdictionName: row.jurisdiction_name,
+    jurisdictionLevel: row.jurisdiction_level,
+    requirementType: row.requirement_type,
+    mandatory: row.mandatory,
+    appliesTo: row.applies_to,
+    authority: row.authority,
+    sourceKey: row.source_key,
+    officialSourceUrl: row.official_source_url,
+    verifiedOn: row.verified_on,
+    costAmount: numberOrNull(row.cost_amount),
+    costCurrency: row.cost_currency,
+    expectedDurationDays: row.expected_duration_days,
+    exceptions: row.exceptions,
+    evidenceQuality: row.evidence_quality,
+    notes: row.notes,
+  }))
+
+  const visaPathways: CareerFoundationVisaPathway[] = ((visaPathwayQuery.data ?? []) as VisaPathwayRow[]).map((row) => ({
+    pathwayKey: row.pathway_key,
+    routeRole: row.route_role,
+    pathwayName: row.pathway_name,
+    sourceKey: row.source_key,
+    officialSourceUrl: row.official_source_url,
+    occupationApplicabilityPoints: row.occupation_applicability_points,
+    employerDependencyPoints: row.employer_dependency_points,
+    eligibilityBurdenPoints: row.eligibility_burden_points,
+    longTermPathwayPoints: row.long_term_pathway_points,
+    usedForPrimaryScore: row.used_for_primary_score,
+    applicabilityScope: row.applicability_scope,
+    lastVerifiedOn: row.last_verified_on,
+    notes: row.notes,
+  }))
+
+  const jobOpportunities: CareerFoundationJobOpportunity[] = ((jobOpportunityQuery.data ?? []) as JobOpportunityRow[]).map((row) => ({
+    opportunityKey: row.opportunity_key,
+    sourceKey: row.source_key,
+    title: row.title,
+    employer: row.employer,
+    locationText: row.location_text,
+    postedOn: row.posted_on,
+    applicationDeadline: row.application_deadline,
+    sourceName: row.source_name,
+    listingUrl: row.listing_url,
+    applyUrl: row.apply_url,
+    lastCheckedOn: row.last_checked_on,
+    status: row.status,
+    relationQuality: row.relation_quality,
+    notes: row.notes,
+  }))
+
+  const normalizedMetricKeys = normalizedMetrics.map((item) => item.normalizedMetricKey)
+  const [normalizedInputQuery, scoreMetricInputQuery, scoreRawInputQuery] = await Promise.all([
+    normalizedMetricKeys.length
+      ? supabase.from("career_normalized_metric_inputs").select("*").in("normalized_metric_key", normalizedMetricKeys).order("normalized_metric_key")
+      : Promise.resolve({ data: [], error: null }),
+    supabase.from("career_score_component_metric_inputs").select("*").eq("snapshot_key", result.snapshot_key).order("component_key"),
+    supabase.from("career_score_component_raw_inputs").select("*").eq("snapshot_key", result.snapshot_key).order("component_key"),
+  ])
+
+  for (const query of [normalizedInputQuery, scoreMetricInputQuery, scoreRawInputQuery]) {
+    if (query.error) throw query.error
+  }
+
+  const normalizedMetricInputs: CareerFoundationNormalizedMetricInput[] = ((normalizedInputQuery.data ?? []) as NormalizedMetricInputRow[]).map((row) => ({
+    normalizedMetricKey: row.normalized_metric_key,
+    observationKey: row.observation_key,
+    inputRole: row.input_role,
+    usageType: row.usage_type,
+    inputWeight: numberOrNull(row.input_weight),
+  }))
+  const scoreComponentMetricInputs: CareerFoundationScoreComponentMetricInput[] = ((scoreMetricInputQuery.data ?? []) as ScoreMetricInputRow[]).map((row) => ({
+    snapshotKey: row.snapshot_key,
+    componentKey: row.component_key,
+    normalizedMetricKey: row.normalized_metric_key,
+    inputRole: row.input_role,
+  }))
+  const scoreComponentRawInputs: CareerFoundationScoreComponentRawInput[] = ((scoreRawInputQuery.data ?? []) as ScoreRawInputRow[]).map((row) => ({
+    snapshotKey: row.snapshot_key,
+    componentKey: row.component_key,
+    observationKey: row.observation_key,
+    inputRole: row.input_role,
+  }))
+
   const sourceKeys = [...new Set([
     mappingRow.source_key,
     ...rawObservations.map((item) => item.sourceKey),
     ...blockers.map((item) => item.sourceKey),
     ...entryPoints.map((item) => item.sourceKey),
+    ...licensingEvidence.map((item) => item.sourceKey),
+    ...visaPathways.map((item) => item.sourceKey),
+    ...jobOpportunities.map((item) => item.sourceKey),
   ])]
   const sourceQuery = await supabase.from("career_official_sources").select("*").in("source_key", sourceKeys).order("source_key")
   if (sourceQuery.error) throw sourceQuery.error
@@ -298,6 +471,7 @@ export async function getCareerDataFoundation({
   const projectedEmployment = rawObservation(rawObservations, "projected_employment_total")
   const projectedGrowth = rawObservation(rawObservations, "projected_growth_pct")
   const annualOpenings = rawObservation(rawObservations, "projected_annual_openings")
+  const scoreConfidence = foundationScoreConfidence({ scoreReady: result.score_ready, components: scoreComponents })
 
   return {
     profileKey: result.profile_key,
@@ -333,6 +507,7 @@ export async function getCareerDataFoundation({
       calculationTimestamp: result.calculation_timestamp,
     },
     opportunityScore: numberOrNull(result.opportunity_score),
+    scoreConfidence,
     scoreExplanation: result.score_explanation,
     decisionMetrics: {
       employmentTotal: rawNumber(rawObservations, "employment_total"),
@@ -345,14 +520,20 @@ export async function getCareerDataFoundation({
       projectedAnnualOpenings: rawNumber(rawObservations, "projected_annual_openings"),
       projectionsReferencePeriod: annualOpenings?.referencePeriod ?? projectedGrowth?.referencePeriod ?? projectedEmployment?.referencePeriod ?? null,
       vacancyAvailability: vacancy?.availability ?? "unavailable",
-      vacancyReason: vacancy?.reason ?? "No validated vacancy observation is available.",
+      vacancyReason: vacancy?.reason ?? "No validated direct vacancy observation is available.",
       shortageAvailability: shortage?.availability ?? "unavailable",
-      shortageReason: shortage?.reason ?? "No validated shortage observation is available.",
+      shortageReason: shortage?.reason ?? "No validated direct shortage observation is available.",
     },
     sources,
     rawObservations,
     normalizedMetrics,
     scoreComponents,
+    normalizedMetricInputs,
+    scoreComponentMetricInputs,
+    scoreComponentRawInputs,
+    licensingEvidence,
+    visaPathways,
+    jobOpportunities,
     blockers,
     entryPoints,
   }
