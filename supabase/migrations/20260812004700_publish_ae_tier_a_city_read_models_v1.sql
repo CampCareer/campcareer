@@ -35,7 +35,7 @@ select g.id city_id,g.slug city_slug,g.name city_name,g.metadata->>'containing_e
        pa.authority_url accreditation_source_url,pa.review_status accreditation_review_status,
        po.verification_status international_evidence_status
 from catalog.programme_offerings po
-join public.program_catalog_ae_staging s on po.source_system='AE_CAA_PROGRAMS' and po.source_record_key=s.source_name||':'||s.source_program_key
+join public.program_catalog_ae_staging s on po.source_system='AE_PROGRAM_STAGING' and po.source_record_key=s.source_program_key
 join catalog.programmes pr on pr.id=po.programme_id and pr.status='active' and pr.institution_id=s.institution_id
 join catalog.programme_accreditations pa on pa.programme_id=pr.id and pa.review_status='verified' and pa.status='active'
 join catalog.institutions i on i.id=pr.institution_id and i.country_code='AE' and i.status='active'
