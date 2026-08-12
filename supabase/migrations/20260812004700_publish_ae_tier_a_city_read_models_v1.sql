@@ -37,7 +37,7 @@ select g.id city_id,g.slug city_slug,g.name city_name,g.metadata->>'containing_e
 from catalog.programme_offerings po
 join public.program_catalog_ae_staging s on po.source_system='AE_PROGRAM_STAGING' and po.source_record_key=s.source_program_key
 join catalog.programmes pr on pr.id=po.programme_id and pr.status='active' and pr.institution_id=s.institution_id
-join catalog.programme_accreditations pa on pa.programme_id=pr.id and pa.review_status='verified' and pa.status='active'
+join catalog.programme_accreditations pa on pa.programme_id=pr.id and pa.review_status='verified' and pa.status='approved'
 join catalog.institutions i on i.id=pr.institution_id and i.country_code='AE' and i.status='active'
 join catalog.campuses c on c.id=po.campus_id and c.institution_id=i.id and c.status='active'
 join core.geographies g on g.id=c.geography_id and g.country_code='AE' and g.metadata->>'publication_tier'='A'
