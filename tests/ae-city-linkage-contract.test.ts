@@ -10,7 +10,7 @@ test("UAE Phase 3 requires verified provider identity, location and accreditatio
   assert.match(locations, /campus_inventory_complete',false/)
   assert.match(locations, /programme_assignment_verified/)
   assert.match(locations, /AE_PROGRAM_STAGING/)
-  assert.match(locations, /programme_accreditations pa on pa\.programme_id=pr\.id and pa\.review_status='verified' and pa\.status='active'/)
+  assert.match(locations, /programme_accreditations pa on pa\.programme_id=pr\.id and pa\.review_status='verified' and pa\.status='approved'/)
   assert.match(models, /with \(security_invoker=true\)/)
   assert.match(models, /grant select on public\.city_programme_directory_ae_v1 to service_role/)
 })
