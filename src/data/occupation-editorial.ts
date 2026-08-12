@@ -90,6 +90,16 @@ import { IE_TECHNOLOGY_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-edito
 import { IE_ENGINEERING_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-ie-engineering"
 import { IE_BUSINESS_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-ie-business"
 import { IE_EDUCATION_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-ie-education"
+import { KOREA_BUSINESS_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-kr-business"
+import { KOREA_CONSTRUCTION_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-kr-construction"
+import { KOREA_DESIGN_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-kr-design"
+import { KOREA_EDUCATION_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-kr-education"
+import { KOREA_ENGINEERING_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-kr-engineering"
+import { KOREA_ENVIRONMENT_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-kr-environment"
+import { KOREA_HEALTH_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-kr-health"
+import { KOREA_HOSPITALITY_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-kr-hospitality"
+import { KOREA_TECHNOLOGY_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-kr-technology"
+import { KOREA_TRANSPORT_OCCUPATION_EDITORIAL_OVERRIDES } from "./occupation-editorial-kr-transport"
 
 export type { CountryOccupationEditorial, OccupationEditorial } from "./occupation-editorial-base"
 
@@ -173,6 +183,16 @@ const COUNTRY_OCCUPATION_EDITORIAL_OVERRIDES = [
   ...IE_ENGINEERING_OCCUPATION_EDITORIAL_OVERRIDES,
   ...IE_BUSINESS_OCCUPATION_EDITORIAL_OVERRIDES,
   ...IE_EDUCATION_OCCUPATION_EDITORIAL_OVERRIDES,
+  ...KOREA_BUSINESS_OCCUPATION_EDITORIAL_OVERRIDES,
+  ...KOREA_CONSTRUCTION_OCCUPATION_EDITORIAL_OVERRIDES,
+  ...KOREA_DESIGN_OCCUPATION_EDITORIAL_OVERRIDES,
+  ...KOREA_EDUCATION_OCCUPATION_EDITORIAL_OVERRIDES,
+  ...KOREA_ENGINEERING_OCCUPATION_EDITORIAL_OVERRIDES,
+  ...KOREA_ENVIRONMENT_OCCUPATION_EDITORIAL_OVERRIDES,
+  ...KOREA_HEALTH_OCCUPATION_EDITORIAL_OVERRIDES,
+  ...KOREA_HOSPITALITY_OCCUPATION_EDITORIAL_OVERRIDES,
+  ...KOREA_TECHNOLOGY_OCCUPATION_EDITORIAL_OVERRIDES,
+  ...KOREA_TRANSPORT_OCCUPATION_EDITORIAL_OVERRIDES,
   ...NZ_CONSTRUCTION_OCCUPATION_EDITORIAL_OVERRIDES,
   ...NZ_HEALTH_OCCUPATION_EDITORIAL_OVERRIDES,
   ...NZ_TECHNOLOGY_OCCUPATION_EDITORIAL_OVERRIDES,
@@ -194,18 +214,6 @@ export const OCCUPATION_EDITORIAL: readonly OccupationEditorialType[] = RAW_OCCU
   let countries = item.countries
 
   for (const override of COUNTRY_OCCUPATION_EDITORIAL_OVERRIDES) {
-    if (override.id === item.id) {
-      countries = { ...countries, [override.countryCode]: override.editorial }
-    }
-  }
-
-  for (const override of KOREA_ENGINEERING_OCCUPATION_EDITORIAL_OVERRIDES) {
-    if (override.id === item.id) {
-      countries = { ...countries, [override.countryCode]: override.editorial }
-    }
-  }
-
-  for (const override of KOREA_HOSPITALITY_OCCUPATION_EDITORIAL_OVERRIDES) {
     if (override.id === item.id) {
       countries = { ...countries, [override.countryCode]: override.editorial }
     }
