@@ -4,6 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Menu } from "lucide-react"
 import { LanguageMenu } from "@/components/layout/language-menu"
+import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { getWorkspaceNavItem } from "@/lib/workspace/navigation"
 import { withoutLocalePrefix } from "@/lib/i18n/config"
 import { useSelectedCountry } from "./country-context"
@@ -26,6 +27,7 @@ const NAV_ID_BY_PATH: Record<string, string> = {
 
 export function WorkspaceTopbar({ onMenuClick }: WorkspaceTopbarProps) {
   const pathname = withoutLocalePrefix(usePathname())
+  const locale = useRouteLocale()
   const current = getWorkspaceNavItem(NAV_ID_BY_PATH[pathname])
   const { selectedCountry } = useSelectedCountry()
   const breadcrumb =
@@ -33,17 +35,15 @@ export function WorkspaceTopbar({ onMenuClick }: WorkspaceTopbarProps) {
 
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-[#e7e6e3] bg-[#f7f7f5]/90 px-4 backdrop-blur-md sm:px-6">
-      {pathname !== "/home" && (
-        <button
-          type="button"
-          onClick={onMenuClick}
-          className="-ml-1 grid size-8 place-items-center rounded-lg text-[#6f6d68] transition hover:bg-[#f6f6f4] hover:text-[#1b1b1b] sm:hidden"
-          aria-label="Open navigation menu"
-        >
-          <Menu className="size-5" />
-        </button>
-      )}
-
+      <button
+        type="button"
+        onClick={onMenuClick}
+        className="-ml-1 inline-flex h-9 items-center gap-1.5 rounded-lg px-2.5 text-xs font-semibold text-[#5f5d57] transition hover:bg-[#f0f0ed] hover:text-[#1b1b1b] sm:hidden"
+        aria-label={locale === "ko" ? "카테고리 메뉴 열기" : "Open navigation menu"}
+      >
+        <Menu className="size-4" />
+        <span>{locale === "ko" ? "카테고리" : "Menu"}</span>
+      </button>
       <Link href="/home" className="campcareer-wordmark text-[#1b1b1b]" aria-label="campcareer home">
         campcareer
       </Link>
