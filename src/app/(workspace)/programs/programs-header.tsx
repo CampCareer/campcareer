@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils"
 import { useProgramNavigation } from "./programs-navigation"
 
 const PUBLISHED_PROGRAM_COUNTRIES = new Set([
-  "AU", "CA", "UK", "AE", "NZ", "NL", "KR", "JP", "NO", "FI", "DK", "SE", "CH", "BE", "ES", "FR", "DE", "SG",
+  "AU", "CA", "UK", "NZ", "NL", "AE", "KR", "JP", "NO", "FI", "DK", "SE", "CH", "BE", "ES", "FR", "DE", "SG",
 ])
 
 function ProgramCountryPicker({

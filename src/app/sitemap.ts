@@ -3,6 +3,18 @@ import { ROUTE_GUIDES, routeGuideHref } from "@/data/route-guides"
 import { AU_PROGRAMMATIC_STUDY_PAGES } from "@/lib/programs/au-programmatic-seo"
 import { INDEXABLE_AU_PROGRAMS, indexableAuProgramPath } from "@/lib/programs/program-routes"
 import { INDEXABLE_AE_PROGRAM_PATHS } from "@/lib/programs/ae-program-seo"
+import { INDEXABLE_KR_PROGRAM_PATHS } from "@/lib/programs/kr-program-seo"
+import { INDEXABLE_JP_PROGRAM_PATHS } from "@/lib/programs/jp-program-seo"
+import { INDEXABLE_NO_PROGRAM_PATHS } from "@/lib/programs/no-program-seo"
+import { INDEXABLE_FI_PROGRAM_PATHS } from "@/lib/programs/fi-program-seo"
+import { INDEXABLE_DK_PROGRAM_PATHS } from "@/lib/programs/dk-program-seo"
+import { INDEXABLE_SE_PROGRAM_PATHS } from "@/lib/programs/se-program-seo"
+import { INDEXABLE_CH_PROGRAM_PATHS } from "@/lib/programs/ch-program-seo"
+import { INDEXABLE_BE_PROGRAM_PATHS } from "@/lib/programs/be-program-seo"
+import { INDEXABLE_ES_PROGRAM_PATHS } from "@/lib/programs/es-program-seo"
+import { INDEXABLE_FR_PROGRAM_PATHS } from "@/lib/programs/fr-program-seo"
+import { INDEXABLE_DE_PROGRAM_PATHS } from "@/lib/programs/de-program-seo"
+import { INDEXABLE_SG_PROGRAM_PATHS } from "@/lib/programs/sg-program-seo"
 import { INDEXABLE_UK_PROGRAM_PATHS } from "@/lib/programs/uk-program-seo"
 import { INDEXABLE_NZ_PROGRAM_PATHS } from "@/lib/programs/nz-program-seo"
 import { INDEXABLE_NL_PROGRAM_PATHS } from "@/lib/programs/nl-program-seo"
@@ -34,11 +46,13 @@ import { INDEXABLE_NZ_INSTITUTION_PATHS } from "@/lib/institutions/institution-s
 import { INDEXABLE_SG_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-sg"
 import { INDEXABLE_UK_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-uk"
 import { INDEXABLE_US_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-us"
-import { PUBLISHED_BE_CITY_SLUGS, PUBLISHED_DE_CITY_SLUGS, PUBLISHED_DK_CITY_SLUGS, PUBLISHED_FR_CITY_SLUGS, PUBLISHED_NL_CITY_SLUGS, PUBLISHED_NZ_CITY_SLUGS, PUBLISHED_SE_CITY_SLUGS, PUBLISHED_UK_CITY_SLUGS, PUBLISHED_US_CITY_SLUGS } from "@/lib/cities/city-routes"
+import { PUBLISHED_AE_CITY_SLUGS, PUBLISHED_BE_CITY_SLUGS, PUBLISHED_DE_CITY_SLUGS, PUBLISHED_DK_CITY_SLUGS, PUBLISHED_ES_CITY_SLUGS, PUBLISHED_FI_CITY_SLUGS, PUBLISHED_FR_CITY_SLUGS, PUBLISHED_NL_CITY_SLUGS, PUBLISHED_NZ_CITY_SLUGS, PUBLISHED_SE_CITY_SLUGS, PUBLISHED_UK_CITY_SLUGS, PUBLISHED_US_CITY_SLUGS } from "@/lib/cities/city-routes"
 import { CANONICAL_COUNTRY_SLUGS, SITE_URL, countryCanonicalPath } from "@/lib/seo-routes.mjs"
 
 const lastModified = new Date("2026-08-10")
 const franceCityLastModified = new Date("2026-08-11")
+const spainCityLastModified = new Date("2026-08-11")
+const uaeCityLastModified = new Date("2026-08-12")
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const methodologies = ["australia", "canada", "united-states", "united-kingdom", "ireland", "germany", "netherlands", "belgium", "france", "spain", "singapore", "south-korea", "japan", "new-zealand", "norway", "sweden", "denmark", "finland", "switzerland", "united-arab-emirates"]
@@ -83,6 +97,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...PUBLISHED_DE_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/de/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
     ...PUBLISHED_BE_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/be/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
     ...PUBLISHED_FR_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/fr/${slug}`, lastModified: franceCityLastModified, priority: 0.8, changeFrequency: "monthly" as const })),
+    ...PUBLISHED_ES_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/es/${slug}`, lastModified: spainCityLastModified, priority: 0.8, changeFrequency: "monthly" as const })),
+    ...PUBLISHED_AE_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/ae/${slug}`, lastModified: uaeCityLastModified, priority: 0.8, changeFrequency: "monthly" as const })),
+    ...PUBLISHED_FI_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/fi/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
     ...PUBLISHED_US_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/us/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
     ...PUBLISHED_UK_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/uk/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
     ...PUBLISHED_NZ_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/nz/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
@@ -97,6 +114,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const programPages: MetadataRoute.Sitemap = [
     ...INDEXABLE_AU_PROGRAMS.map((program) => ({ url: `${SITE_URL}${indexableAuProgramPath(program)}`, lastModified: new Date(program.sourceCheckedAt), priority: 0.74, changeFrequency: "weekly" as const })),
     ...INDEXABLE_AE_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
+    ...INDEXABLE_KR_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
+    ...INDEXABLE_JP_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
+    ...INDEXABLE_NO_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
+    ...INDEXABLE_FI_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
+    ...INDEXABLE_DK_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
+    ...INDEXABLE_SE_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
+    ...INDEXABLE_CH_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
+    ...INDEXABLE_BE_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
+    ...INDEXABLE_ES_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
+    ...INDEXABLE_FR_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
+    ...INDEXABLE_DE_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
+    ...INDEXABLE_SG_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
     ...INDEXABLE_UK_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
     ...INDEXABLE_NZ_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
     ...INDEXABLE_NL_PROGRAM_PATHS.map((path) => ({ url: `${SITE_URL}${path}`, lastModified, priority: 0.74, changeFrequency: "weekly" as const })),
