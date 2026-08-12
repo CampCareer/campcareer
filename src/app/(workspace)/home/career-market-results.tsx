@@ -152,13 +152,21 @@ function GenericCountryCareerInsight({ insight, query, locale, authenticated, pe
   const learningLinks = profile?.links.filter((link) => link.linkType === "entry_program" || link.linkType === "graduate_program") ?? []
   const programLinks = profile?.programLinks.filter((link) => link.program) ?? []
   const t = (ko: string, en: string) => tr(locale, ko, en)
+  const scoreConfidence = insight.foundation?.scoreConfidence ?? null
+  const scoreConfidenceLabel = scoreConfidence === "verified"
+    ? t("검증됨", "Verified")
+    : scoreConfidence === "estimated"
+      ? t("추정", "Estimated")
+      : scoreConfidence === "limited_evidence"
+        ? t("제한적 근거", "Limited evidence")
+        : null
   const registrationAuthority = englishSafeText(locale, profile?.registrationAuthority, locale === "ko" ? "현지 등록 기관" : "the local regulator")
 
   return <section className={cn("mx-auto max-w-5xl", presentation === "page" ? "mt-5" : "mt-12")} aria-live="polite">
     <div className="rounded-3xl border border-[#dfe4ee] bg-white p-6 shadow-[0_20px_45px_-38px_rgba(15,23,42,.42)] sm:p-8">
       <div className="flex flex-col gap-5 border-b border-[#eceee9] pb-7 sm:flex-row sm:items-start sm:justify-between">
         <div><p className="text-xs font-bold tracking-[0.12em] text-blue-700">FREE CAREER MARKET BRIEF</p><h2 className="mt-3 text-2xl font-semibold tracking-[-0.05em] text-slate-950 sm:text-3xl">{locale === "ko" ? `${insight.country?.name}에서 ${insight.career.labelKo}로 일하기` : `Working as ${insight.career.label} in ${insight.country?.name}`}</h2><p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">{locale === "ko" ? (insight.demand?.note ?? insight.career.overview?.ko ?? "현지 직업 시장과 실제 진입 조건을 함께 확인하세요.") : (insight.career.overview?.en ?? "Review the local job market and real entry conditions together.")}</p></div>
-        {marketScore != null && <div className="w-fit rounded-2xl bg-[#f4f6fb] px-4 py-3 text-right"><p className="text-[11px] font-semibold tracking-[0.08em] text-slate-500">{t("취업시장 점수", "Job market score")}</p><p className="mt-1 text-2xl font-semibold tracking-[-0.06em] text-slate-950">{marketScore}<span className="text-sm text-slate-400">/100</span></p></div>}
+        {marketScore != null && <div className="w-fit rounded-2xl bg-[#f4f6fb] px-4 py-3 text-right"><p className="text-[11px] font-semibold tracking-[0.08em] text-slate-500">{t("취업시장 점수", "Job market score")}</p><p className="mt-1 text-2xl font-semibold tracking-[-0.06em] text-slate-950">{marketScore}<span className="text-sm text-slate-400">/100</span>{scoreConfidenceLabel && <span className="ml-2 text-xs font-semibold tracking-normal text-slate-500">· {scoreConfidenceLabel}</span>}</p></div>}
       </div>
 
       <p className="mt-5 flex gap-2 rounded-xl bg-[#f8f8f6] px-4 py-3 text-xs leading-5 text-slate-600"><CircleAlert className="mt-0.5 size-4 shrink-0 text-slate-500" />{locale === "ko" ? "이 점수는 수요·채용·진입 조건의 시장 신호입니다. 개인의 취업 가능성을 확정하지 않으며, 아래에서 내 조건을 더해 정확히 좁힐 수 있어요." : "This is a market signal based on demand, hiring and entry conditions. It does not confirm personal eligibility; add your profile below to narrow it down."}</p>
