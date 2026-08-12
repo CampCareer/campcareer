@@ -24,7 +24,6 @@ insert into tmp_ae_city_provider values
   ('emirates-flight-training-academy','dubai','Dubai South training academy','Dubai South, Dubai World Central, Dubai','https://www.emiratesflighttrainingacademy.com/en/campus/',true),
   ('mohammed-bin-rashid-university-of-medicine-and-health-sciences','dubai','Dubai Healthcare City campus','Building 14, Dubai Healthcare City, Dubai','https://www.mbru.ac.ae/contact-us/plan-a-visit/',true);
 
--- Reconcile source-specific identities already declared by the UAE programme collection snapshot.
 with expected(slug,identifier_system,identifier_value,source_url) as (values
   ('abu-dhabi-hospitality-academy-les-roches','AE_CAA_PROGRAM_PROVIDER_NAME','ABU DHABI HOSPITALITY ACADEMY – LES ROCHES','https://www.caa.ae/Pages/Programs/All.aspx'),
   ('emirates-college-for-advanced-education','AE_CAA_PROGRAM_PROVIDER_NAME','EMIRATES COLLEGE FOR ADVANCED EDUCATION','https://www.caa.ae/Pages/Programs/All.aspx'),
@@ -68,7 +67,6 @@ join core.geographies g on g.country_code='AE' and g.slug=p.city_slug and g.meta
 where c.institution_id=i.id and c.country_code='AE' and c.status='active'
   and lower(trim(coalesce(c.city,c.locality,g.name)))=lower(trim(g.name));
 
--- Attach only the 98 programmes whose provider location is verified and programme assignment is allowed.
 update catalog.programme_offerings po
 set campus_id=c.id,updated_at=now()
 from public.program_catalog_ae_staging s
@@ -77,7 +75,7 @@ join tmp_ae_city_provider p on p.institution_slug=i.slug and p.programme_assignm
 join core.geographies g on g.country_code='AE' and g.slug=p.city_slug and g.metadata->>'publication_tier'='A'
 join catalog.campuses c on c.institution_id=i.id and c.geography_id=g.id and c.status='active' and c.metadata->>'normalization_batch'='ae_city_linkage_v1'
 join catalog.programmes pr on pr.institution_id=i.id and pr.id=md5('AE|PROGRAM|'||s.source_name||'|'||s.source_program_key)::uuid and pr.status='active'
-join catalog.programme_accreditations pa on pa.programme_id=pr.id and pa.review_status='verified' and pa.status='active'
+join catalog.programme_accreditations pa on pa.programme_id=pr.id and pa.review_status='verified' and pa.status='approved'
 where po.programme_id=pr.id
   and po.source_system='AE_PROGRAM_STAGING'
   and po.source_record_key=s.source_program_key
