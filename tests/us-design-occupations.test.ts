@@ -20,8 +20,12 @@ const designCareers = [
   ["web-designer", "15-1255", 57],
 ] as const
 
-function metricRow(id: string) {
-  return migration.split("\n").find((line) => line.startsWith(`  ('US:${id}','2026-08-12'`))
+function metricBlock(id: string) {
+  const marker = `  ('US:${id}','2026-08-12'`
+  const start = migration.indexOf(marker)
+  if (start < 0) return undefined
+  const next = migration.indexOf("\n  ('US:", start + marker.length)
+  return migration.slice(start, next < 0 ? migration.length : next)
 }
 
 test("US Design covers the canonical eight Design careers", () => {
@@ -45,10 +49,10 @@ test("US Design preserves shared-SOC scope boundaries instead of fabricating sep
   assert.ok(migration.includes("UX Designer and Web Designer intentionally share employment, pay, projection, industry and posting data"))
   assert.ok(migration.includes("Multimedia Designer and Animator intentionally share national labor metrics"))
 
-  const ux = metricRow("ux-designer")
-  const web = metricRow("web-designer")
-  const multimedia = metricRow("multimedia-designer")
-  const animator = metricRow("animator")
+  const ux = metricBlock("ux-designer")
+  const web = metricBlock("web-designer")
+  const multimedia = metricBlock("multimedia-designer")
+  const animator = metricBlock("animator")
   assert.ok(ux && web && multimedia && animator)
   assert.match(ux, /113330,50\.00,104000,6\.98,\s*0,11,4,6,9,10,7,5,5,57/)
   assert.match(web, /113330,50\.00,104000,6\.98,\s*0,11,4,6,9,10,7,5,5,57/)
@@ -75,10 +79,10 @@ test("US Design v2 locks granular labor-market component calculations", () => {
   }
 
   for (const [id, , score] of designCareers) {
-    const row = metricRow(id)
-    assert.ok(row)
-    assert.match(row, expectedRows[id])
-    assert.ok(row.includes(`,${score},'career-opportunity-us-v2','provisional'`))
+    const block = metricBlock(id)
+    assert.ok(block)
+    assert.match(block, expectedRows[id])
+    assert.ok(block.includes(`,${score},'career-opportunity-us-v2','provisional'`))
   }
 })
 
@@ -108,12 +112,12 @@ test("US Design stores raw demand, concentration, wage and momentum evidence beh
 test("US Design does not label OEWS employment momentum as vacancy YoY", () => {
   assert.ok(migration.includes("NOT vacancy YoY"))
   assert.ok(migration.includes("Employment-stock momentum proxy, not vacancy YoY"))
-  assert.ok(migration.includes("not a historical vacancy-series claim"))
+  assert.ok(migration.includes("not a historical vacancy YoY series"))
 
   for (const id of designCareers.map(([id]) => id)) {
-    const row = metricRow(id)
-    assert.ok(row)
-    assert.match(row, /,0,/)
+    const block = metricBlock(id)
+    assert.ok(block)
+    assert.match(block, /\n\s*0,/)
   }
   assert.ok(migration.includes("No authoritative federal Graphic Designer shortage designation"))
   assert.ok(migration.includes("No authoritative federal Architect shortage designation"))
