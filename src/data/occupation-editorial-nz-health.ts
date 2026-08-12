@@ -68,7 +68,7 @@ export const NZ_HEALTH_OCCUPATION_EDITORIAL_OVERRIDES: readonly NzHealthOccupati
     },
   },
   {
-    id: "medical-lab-tech",
+    id: "medical-laboratory-technician",
     countryCode: "NZ",
     editorial: {
       headline: "A regulated ANZSCO 311213 laboratory-technician scope on Green List Tier 1, distinct from Medical Laboratory Scientist 234611",

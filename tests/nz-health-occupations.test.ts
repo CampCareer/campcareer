@@ -13,7 +13,7 @@ const healthCareers = [
   ["midwife", "254111", 47],
   ["care-worker", "423313", 45],
   ["physiotherapist", "252511", 49],
-  ["medical-lab-tech", "311213", 50],
+  ["medical-laboratory-technician", "311213", 50],
   ["radiographer", "251211", 51],
   ["pharmacist", "2515", 47],
   ["occupational-therapist", "252411", 47],
@@ -53,7 +53,7 @@ test("NZ Health preserves Tier 1 and care-workforce residence policy separately"
     assert.ok(metrics.includes(`,${score},'career-opportunity-nz-v1'`))
   }
 
-  for (const id of ["registered-nurse", "midwife", "physiotherapist", "medical-lab-tech", "radiographer", "pharmacist", "occupational-therapist"]) {
+  for (const id of ["registered-nurse", "midwife", "physiotherapist", "medical-laboratory-technician", "radiographer", "pharmacist", "occupational-therapist"]) {
     const start = metrics.indexOf(`'NZ:${id}'`)
     assert.ok(start >= 0)
     assert.ok(metrics.slice(start, start + 1300).includes("Green List Tier 1"), `${id} must use current Tier 1 evidence`)
@@ -65,7 +65,7 @@ test("NZ Health preserves Tier 1 and care-workforce residence policy separately"
 })
 
 test("NZ Health locks regulated professional scopes", () => {
-  for (const id of ["registered-nurse", "midwife", "physiotherapist", "medical-lab-tech", "radiographer", "pharmacist", "occupational-therapist"]) {
+  for (const id of ["registered-nurse", "midwife", "physiotherapist", "medical-laboratory-technician", "radiographer", "pharmacist", "occupational-therapist"]) {
     const line = profiles.split("\n").find((value) => value.includes(`'NZ:${id}'`))
     assert.ok(line?.includes("'NZD',true"), `${id} must be marked registration-required`)
   }
@@ -82,7 +82,7 @@ test("NZ Health publishes an official entry route for every career", () => {
     "NZ:midwife",
     "NZ:care-worker",
     "NZ:physiotherapist",
-    "NZ:medical-lab-tech",
+    "NZ:medical-laboratory-technician",
     "NZ:radiographer",
     "NZ:pharmacist",
     "NZ:occupational-therapist",
