@@ -31,7 +31,7 @@ with selected as (
   ('dubai','employment_focus_sectors',jsonb_build_object('basis','Dubai Department of Economy and Tourism current economy/tourism activity context','sectors',jsonb_build_array('Tourism and hospitality','Advanced manufacturing','Technology and digital business','Trade and logistics','Financial and business services'),'indicative',true,'not_shortage_ranking',true,'not_job_guarantee',true),'Dubai Department of Economy and Tourism — Economy and Tourism','https://www.dubaidet.gov.ae/en/','2026-07-07','medium','observed')
 )
 insert into public.report_metric_evidence_city(id,geography_id,scope_type,scope_id,metric_key,value,source_name,source_url,data_as_of,last_verified_at,confidence,evidence_kind,review_status,created_at,updated_at)
-select md5('ae_city_phase4:'||s.id||':'||m.metric_key)::uuid,s.id,'city',s.id::text,m.metric_key,m.value,m.source_name,m.source_url,m.data_as_of,now(),m.confidence,m.evidence_kind,'verified',now(),now()
+select md5('ae_city_phase4:'||s.id||':'||m.metric_key)::uuid,s.id,'city',s.id::text,m.metric_key,m.value,m.source_name,m.source_url,m.data_as_of::date,now(),m.confidence,m.evidence_kind,'verified',now(),now()
 from metric_rows m join selected s using(slug)
 on conflict(geography_id,metric_key) do update set
   value=excluded.value,source_name=excluded.source_name,source_url=excluded.source_url,data_as_of=excluded.data_as_of,
