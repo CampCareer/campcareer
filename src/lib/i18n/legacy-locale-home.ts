@@ -16,7 +16,11 @@ export function getLegacyLocaleHomeRedirect(
   routeLocale: LocaleOption | null,
 ) {
   if (requestedPathname === "/") return null
-  if (requestedPathname === "/results" || requestedPathname === "/home") return "/"
+  if (requestedPathname === "/results") return "/"
+
+  // Korean is now a durable, shareable product URL for the landing page and
+  // career result. Do not fold it back into the English default route.
+  if (routeLocale === "ko" && (requestedPathname === "/ko" || requestedPathname === "/ko/")) return null
 
   const isLegacyLocaleAlias = requestedPathname === "/en" || requestedPathname.startsWith("/en/")
   if (!routeLocale && !isLegacyLocaleAlias) return null
@@ -25,14 +29,17 @@ export function getLegacyLocaleHomeRedirect(
     ? requestedPathname.slice(`/${routeLocale === "es" ? "es-419" : routeLocale.toLowerCase()}`.length) || "/"
     : requestedPathname.slice("/en".length) || "/"
 
-  if (pathname === "/" || pathname === "/results" || pathname === "/home") return "/"
+  if (pathname === "/" || pathname === "/results") return "/"
   return CANONICAL_WORKSPACE_PATHS.has(pathname) ? pathname : null
 }
 
 export function getLocaleNavigationPath(pathname: string, locale: LocaleOption) {
   const barePathname = pathname.replace(/^\/(?:ko|zh-hans|vi|hi|es-419)(?=\/|$)/, "") || "/"
-  if (barePathname === "/" || barePathname === "/home" || CANONICAL_WORKSPACE_PATHS.has(barePathname)) {
-    return barePathname === "/home" ? "/" : barePathname
+  if (barePathname === "/") {
+    return locale === "ko" ? "/ko" : "/"
+  }
+  if (barePathname === "/home" || CANONICAL_WORKSPACE_PATHS.has(barePathname)) {
+    return barePathname
   }
 
   const prefix = locale === "en" ? "" : locale === "es" ? "/es-419" : `/${locale.toLowerCase()}`

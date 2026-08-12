@@ -13,6 +13,17 @@ import {
   type OverviewSearchValues,
 } from "./home-overview-config"
 
+const RECOMMENDED_OCCUPATION_IDS = [
+  "registered-nurse",
+  "software-developer",
+  "electrician",
+  "civil-engineer",
+  "chef",
+  "carpenter",
+  "data-analyst",
+  "early-childhood-educator",
+] as const
+
 type HomeSearchFormProps = {
   values: OverviewSearchValues
   locale: CareerCheckLocale
@@ -45,7 +56,7 @@ export function HomeSearchForm({ values, locale, onValuesChange, onSubmit, compa
   return (
     <form onSubmit={submit} noValidate className={cn("grid gap-3 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] md:items-end", className)}>
       <SearchSelect id="country" label={copy.country} value={values.country} options={countryOptions} placeholder={copy.countryPlaceholder} error={errors.country} emptyText={copy.empty} onChange={(value) => update("country", value)} />
-      <SearchSelect id="occupation" label={copy.occupation} value={values.occupation} options={occupationOptions} placeholder={copy.occupationPlaceholder} error={errors.occupation} emptyText={copy.empty} onChange={(value) => update("occupation", value)} />
+      <SearchSelect id="occupation" label={copy.occupation} value={values.occupation} options={occupationOptions} placeholder={copy.occupationPlaceholder} error={errors.occupation} emptyText={copy.empty} recommendedIds={RECOMMENDED_OCCUPATION_IDS} recommendedLabel={locale === "ko" ? "추천 직종" : "Recommended occupations"} resultsLabel={locale === "ko" ? "관련 직종" : "Related occupations"} onChange={(value) => update("occupation", value)} />
       <button type="submit" className={cn("inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-[#1d4ed8] px-5 text-sm font-semibold text-white transition hover:bg-[#1e40af] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-600/20", compact ? "md:min-w-36" : "md:min-w-44")}>
         {copy.submit} <ArrowRight className="size-4" />
       </button>
@@ -53,7 +64,7 @@ export function HomeSearchForm({ values, locale, onValuesChange, onSubmit, compa
   )
 }
 
-function SearchSelect({ id, label, value, options, placeholder, error, emptyText, onChange }: {
+function SearchSelect({ id, label, value, options, placeholder, error, emptyText, recommendedIds, recommendedLabel, resultsLabel, onChange }: {
   id: string
   label: string
   value: string
@@ -61,6 +72,9 @@ function SearchSelect({ id, label, value, options, placeholder, error, emptyText
   placeholder: string
   error?: string
   emptyText: string
+  recommendedIds?: readonly string[]
+  recommendedLabel?: string
+  resultsLabel?: string
   onChange: (value: string) => void
 }) {
   const [query, setQuery] = useState("")
@@ -68,10 +82,14 @@ function SearchSelect({ id, label, value, options, placeholder, error, emptyText
   const selected = options.find((option) => option.value === value)
   const matches = useMemo(() => {
     const normalized = query.trim().toLocaleLowerCase()
-    if (!normalized) return options
+    if (!normalized && recommendedIds) {
+      const recommended = new Map(options.map((option) => [option.value, option]))
+      return recommendedIds.map((id) => recommended.get(id)).filter((option): option is OverviewOption => Boolean(option))
+    }
+    if (!normalized) return options.slice(0, 12)
     return options.filter((option) => [option.label, ...(option.searchTerms ?? [])]
-      .some((term) => term.toLocaleLowerCase().includes(normalized)))
-  }, [options, query])
+      .some((term) => term.toLocaleLowerCase().includes(normalized))).slice(0, 12)
+  }, [options, query, recommendedIds])
 
   const choose = (option: OverviewOption) => {
     onChange(option.value)
@@ -109,6 +127,9 @@ function SearchSelect({ id, label, value, options, placeholder, error, emptyText
       {error && <p className="mt-1.5 text-xs font-medium text-red-600">{error}</p>}
       {open && (
         <div id={`${id}-options`} role="listbox" className="absolute z-40 mt-2 max-h-64 w-full overflow-y-auto rounded-xl border border-[#e4e4e1] bg-white p-1.5 shadow-xl">
+          {(recommendedIds || query.trim()) && matches.length > 0 && (
+            <p className="px-3 pb-1 pt-1.5 text-[11px] font-semibold tracking-[0.08em] text-[#8a8a90]">{query.trim() ? resultsLabel : recommendedLabel}</p>
+          )}
           {matches.length ? matches.map((option) => (
             <button key={option.value} type="button" role="option" aria-selected={option.value === value} onMouseDown={(event) => event.preventDefault()} onClick={() => choose(option)} className="flex min-h-10 w-full items-center justify-between rounded-lg px-3 text-left text-sm text-[#27272a] transition hover:bg-blue-50">
               <span>{option.label}</span>

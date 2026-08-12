@@ -29,7 +29,7 @@ export function TopNav() {
         <div className="mx-auto max-w-[1240px] px-6 max-sm:px-[18px]">
           <div className="flex h-16 items-center justify-between">
             <Link
-              href="/"
+              href={localizePath("/", pathLocale)}
               className={cn("campcareer-wordmark shrink-0", textColor)}
               aria-label="campcareer home"
             >

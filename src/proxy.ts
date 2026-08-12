@@ -6,7 +6,7 @@ import { isLegacyGonePath } from '@/lib/seo-routes.mjs'
 
 // 로그인 필요한 페이지 보호
 // 점검 기간: /planner는 비로그인 허용 중 — 정상 가동 시 다시 추가
-const PROTECTED_PATHS = ['/dashboard', '/saved', '/documents', '/profile', '/reports/my-australia']
+const PROTECTED_PATHS = ['/home', '/dashboard', '/saved', '/documents', '/profile', '/reports/my-australia', '/onboarding']
 
 // 매출에 기여하지 않는 SEO·백링크 분석 크롤러. 검색엔진(Googlebot/Bingbot/
 // DuckDuckBot 등)과 소셜 미리보기 봇(Twitterbot, facebookexternalhit,
@@ -141,7 +141,9 @@ export async function proxy(request: NextRequest) {
 
   if (!user && isProtected) {
     const loginPath = localizePath('/login', routeLocale ?? locale)
-    return withLocale(NextResponse.redirect(new URL(loginPath, request.url)))
+    const loginUrl = new URL(loginPath, request.url)
+    loginUrl.searchParams.set('next', `${pathname}${request.nextUrl.search}`)
+    return withLocale(NextResponse.redirect(loginUrl))
   }
 
   return withLocale(supabaseResponse)
@@ -162,11 +164,13 @@ export const config = {
     '/results/:path*',
     // Authentication is only needed on these account pages.
     '/dashboard/:path*',
+    '/home/:path*',
     '/planner/:path*',
     '/saved/:path*',
     '/documents/:path*',
     '/profile/:path*',
     '/reports/:path*',
+    '/onboarding/:path*',
     // Preserve explicit 410 responses for retired URL families without
     // charging every active URL to the Proxy.
     '/category/:path*',

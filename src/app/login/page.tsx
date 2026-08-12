@@ -73,7 +73,7 @@ function LoginPageContent() {
   return (
     <main className="min-h-screen bg-[#fafaf9] px-5 py-8 sm:px-6 sm:py-12">
       <div className="mx-auto w-full max-w-[460px]">
-        <Link href="/home" className="campcareer-wordmark text-[#1b1b1b]" aria-label="campcareer home">
+        <Link href="/" className="campcareer-wordmark text-[#1b1b1b]" aria-label="campcareer home">
           campcareer
         </Link>
 

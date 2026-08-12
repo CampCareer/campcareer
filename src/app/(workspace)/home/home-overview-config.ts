@@ -14,7 +14,6 @@ export type OverviewOpenMenu = keyof OverviewSearchValues | null
 export type SearchParamsLike = Pick<URLSearchParams, "get">
 
 export const NOT_SURE_COUNTRY: OverviewOption = { value: "not-sure", label: "아직 모르겠어요" }
-export const NOT_SURE_OCCUPATION: OverviewOption = { value: "not-sure", label: "아직 모르겠어요" }
 
 // The default arrays also validate URL values. Visible labels come from the
 // locale-aware factories below, so switching the global language changes the
@@ -25,7 +24,6 @@ export const COUNTRY_OPTIONS: readonly OverviewOption[] = [
 ]
 
 export const OCCUPATION_OPTIONS: readonly OverviewOption[] = [
-  NOT_SURE_OCCUPATION,
   ...CANONICAL_CAREERS.map((career) => ({
     value: career.id,
     label: career.labelKo,
@@ -41,14 +39,11 @@ export function getCountryOptions(locale: CareerCheckLocale): readonly OverviewO
 }
 
 export function getOccupationOptions(locale: CareerCheckLocale): readonly OverviewOption[] {
-  return [
-    { value: NOT_SURE_OCCUPATION.value, label: locale === "ko" ? "아직 모르겠어요" : "I'm not sure yet" },
-    ...CANONICAL_CAREERS.map((career) => ({
-      value: career.id,
-      label: locale === "ko" ? career.labelKo : career.label,
-      searchTerms: [career.label, career.labelKo, ...career.aliases, ...career.aliasesKo],
-    })),
-  ]
+  return CANONICAL_CAREERS.map((career) => ({
+    value: career.id,
+    label: locale === "ko" ? career.labelKo : career.label,
+    searchTerms: [career.label, career.labelKo, ...career.aliases, ...career.aliasesKo],
+  }))
 }
 
 export function hasOverviewOption(options: readonly OverviewOption[], value: string | null) {

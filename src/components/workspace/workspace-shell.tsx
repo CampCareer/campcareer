@@ -15,6 +15,11 @@ type WorkspaceShellProps = {
 export function WorkspaceShell({ children }: WorkspaceShellProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const pathname = withoutLocalePrefix(usePathname())
+  // The career result is a focused public reading surface. Its parent shell
+  // provides the shared product top navigation, so rendering the workspace
+  // topbar here would duplicate navigation chrome.
+  if (pathname === "/career") return <>{children}</>
+
   const isCityProfile = pathname.startsWith("/cities/") && !pathname.endsWith("/compare")
   // Pages with their own full-bleed hero manage their own content container,
   // so they escape the standard padding to reach the sidebar and topbar.

@@ -93,7 +93,7 @@ export function WorkspaceUserMenu({ className, minimal = false }: WorkspaceUserM
 
     setIsOpen(false)
     setIsSigningOut(false)
-    router.replace(localizePath("/home", locale))
+    router.replace(localizePath("/", locale))
     router.refresh()
   }
 
@@ -195,7 +195,7 @@ export function WorkspaceUserMenu({ className, minimal = false }: WorkspaceUserM
       )}
     >
       <LogIn className="size-4" />
-      {!minimal && <span>Log in</span>}
+      {!minimal && <span>{locale === "ko" ? "로그인" : "Log in"}</span>}
     </Link>
   )
 }

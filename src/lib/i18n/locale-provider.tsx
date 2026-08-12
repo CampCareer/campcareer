@@ -22,11 +22,9 @@ export function LocaleProvider({
   locale: Locale
   children: React.ReactNode
 }) {
-  // `locale` seeds the initial state only. We intentionally do NOT re-sync it
-  // via an effect: pages are statically rendered in DEFAULT_LOCALE, then
-  // <LocaleInit> reads the NEXT_LOCALE cookie after mount and calls setLocale().
-  // A `useEffect(() => setCurrentLocale(locale), [locale])` here would run after
-  // LocaleInit's child effect and clobber the cookie value back to DEFAULT_LOCALE.
+  // `locale` seeds the initial state only. <LocaleInit> then derives the
+  // rendered language from the current URL, so a shared /ko link cannot be
+  // overridden by an old local preference.
   const [currentLocale, setCurrentLocale] = useState<Locale>(locale)
 
   const setLocale = useCallback((newLocale: Locale) => {

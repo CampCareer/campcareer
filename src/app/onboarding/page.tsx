@@ -1,6 +1,6 @@
-import { permanentRedirect } from "next/navigation"
+import { Suspense } from "react"
+import { CareerPersonalisationOnboarding } from "@/components/onboarding/career-personalisation-onboarding"
 
-// The Australia Pathfinder is the single public planning entry point.
-export default async function OnboardingPage() {
-  permanentRedirect("/home")
+export default function OnboardingPage() {
+  return <Suspense fallback={<main className="min-h-[70vh] bg-[#fafafa]" />}><CareerPersonalisationOnboarding /></Suspense>
 }

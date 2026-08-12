@@ -124,6 +124,38 @@
 }
 
 @layer components {
+  /* The landing signal panel communicates live analysis without introducing
+     decorative motion. One signal is legible at a time, and the complete set
+     remains available to assistive technology in the component. */
+  @keyframes cc-signal-live-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgb(74 135 91 / 0.18); opacity: 1; }
+    50% { box-shadow: 0 0 0 4px rgb(74 135 91 / 0); opacity: 0.72; }
+  }
+
+  @keyframes cc-signal-enter {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .cc-signal-live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 9999px;
+    background: #4a875b;
+    animation: cc-signal-live-pulse 1.8s ease-in-out infinite;
+  }
+
+  .cc-signal-rotator {
+    min-height: 64px;
+  }
+
+  .cc-signal-slide {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    animation: cc-signal-enter 220ms ease-out both;
+  }
+
   @keyframes cc-mobile-step-open {
     from { opacity: 0; transform: translateY(-4px); }
     to { opacity: 1; transform: translateY(0); }
@@ -167,6 +199,11 @@
     animation: tl-fade-up 0.3s ease both;
   }
   @media (prefers-reduced-motion: reduce) {
+    .cc-signal-live-dot,
+    .cc-signal-slide {
+      animation: none;
+    }
+
     .tl-stage {
       animation: none;
     }

@@ -14,7 +14,7 @@ type WorkspaceTopbarProps = {
 }
 
 const NAV_ID_BY_PATH: Record<string, string> = {
-  "/": "home",
+  "/home": "home",
   "/maps": "map",
   "/compare": "compare",
   "/countries": "countries",
@@ -32,8 +32,8 @@ export function WorkspaceTopbar({ onMenuClick }: WorkspaceTopbarProps) {
     current?.id === "countries" && selectedCountry ? selectedCountry.name : current?.label
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-[#e7e6e3] bg-white/85 px-4 backdrop-blur-md sm:px-6">
-      {pathname !== "/" && (
+    <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-[#e7e6e3] bg-[#f7f7f5]/90 px-4 backdrop-blur-md sm:px-6">
+      {pathname !== "/home" && (
         <button
           type="button"
           onClick={onMenuClick}
@@ -44,11 +44,11 @@ export function WorkspaceTopbar({ onMenuClick }: WorkspaceTopbarProps) {
         </button>
       )}
 
-      <Link href="/" className="campcareer-wordmark text-[#1b1b1b]" aria-label="campcareer home">
+      <Link href="/home" className="campcareer-wordmark text-[#1b1b1b]" aria-label="campcareer home">
         campcareer
       </Link>
 
-      {breadcrumb && pathname !== "/" && (
+      {breadcrumb && pathname !== "/home" && (
         <span className="hidden text-[13px] font-medium text-[#a3a19b] sm:block">
           / {breadcrumb}
         </span>
@@ -57,7 +57,7 @@ export function WorkspaceTopbar({ onMenuClick }: WorkspaceTopbarProps) {
       <div className="flex-1" />
 
       <LanguageMenu />
-      <WorkspaceUserMenu minimal />
+      <WorkspaceUserMenu />
     </header>
   )
 }

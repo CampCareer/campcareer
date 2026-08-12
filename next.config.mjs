@@ -33,7 +33,6 @@ const nextConfig = {
       { source: "/research/:path*", destination: "/", permanent: false },
       { source: "/report/:path*", destination: "/", permanent: false },
       { source: "/reports/:path*", destination: "/", permanent: false },
-      { source: "/onboarding/:path*", destination: "/", permanent: false },
       { source: "/degree-risk/:path*", destination: "/", permanent: false },
       { source: "/decision-brief/:path*", destination: "/", permanent: false },
       { source: "/explore/:path*", destination: "/", permanent: false },
