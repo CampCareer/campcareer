@@ -2,328 +2,331 @@
 
 Verified: 2026-08-12
 
-Scope: United States × Carpenter only. This pilot does not seed or convert any second country or occupation. Australia × Registered Nurse remains the existing landing-result reference implementation and legacy regression fixture.
+Scope: United States × Carpenter only. No second country or occupation is seeded by this work. Australia × Registered Nurse remains the existing regression/reference path.
 
 ## Outcome
 
-| State | Result | Meaning |
-| --- | --- | --- |
-| `decision_ready` | `true` | Sufficient verified market, entry, work-right/visa, jurisdiction-sensitive licensing, job-search and apprenticeship information exists for a practical country × occupation result. |
-| `score_ready` | `false` | Five of nine required Opportunity Score components do not yet meet the cross-country definition and source standard. |
-| `publish_ready` | `false` | Defined as `decision_ready AND score_ready`. |
-| `opportunity_score` | `null` | No incomplete score is scaled, zero-filled or published. |
-| scoreable component coverage | 4 of 9 components, 45 maximum-weight points | Coverage metadata only. It is not a partial Opportunity Score. |
-
-The landing read model can use the foundation because the record is decision-ready. Ranking and comparison cannot use it because the record is not score-ready.
-
-## Architecture
-
-The implemented path is:
-
-`official source -> raw observation -> canonical occupation mapping -> normalized metric -> score component -> opportunity score snapshot -> result/rank read model -> career-insight API -> landing result`
-
-The layers are stored separately:
-
-- `career_official_sources`: source register and verification metadata.
-- `career_foundation_profiles`: country × canonical occupation and decision readiness.
-- `career_occupation_mappings`: canonical-to-official taxonomy mappings.
-- `career_raw_observations`: source observations, including explicit unavailable observations.
-- `career_normalized_metrics`: deterministic transformations from raw observation references.
-- `career_score_components`: component inputs and generated component scores.
-- `career_opportunity_score_snapshots`: versioned required-component set.
-- `career_foundation_blockers`: hard, conditional and informational blockers.
-- `career_foundation_entry_points`: job-search, apprenticeship, visa and licensing-check starting points.
-- `career_opportunity_score_calculated_v1`: calculates readiness and final score.
-- `career_foundation_result_v1`: latest landing/API result.
-- `career_foundation_rankable_v1`: only score-ready and publish-ready rows.
-
-`score_value` is a generated database column. The final `opportunity_score` is calculated by a view only when all required components are present and scoreable. There is no manually seeded final score column in the foundation.
+| State | Result |
+| --- | --- |
+| `decision_ready` | `true` |
+| `score_ready` | `true` |
+| `publish_ready` | `true` |
+| `opportunity_score` | `45.06 / 100` |
+| score components | `9 / 9` |
+| score coverage weight | `100 / 100` |
+| formula | `career-opportunity-v3-foundation` |
+| user-facing confidence | `Estimated` |
 
-## Source hierarchy
+`score_ready=true` now means that every required component has been evaluated under the frozen CampCareer v1 methodology. It does not mean every component is based on a complete direct national statistical series.
 
-Priority used for this pilot:
+The score is marked `Estimated` because deterministic proxy/fallback rules remain in shortage, vacancy, industry diversity, visa accessibility and entry burden. Those states are explicit and provenance-backed.
 
-1. Official federal primary sources and official taxonomies.
-2. Official federal services when the service is the appropriate user entry point.
-3. No commercial aggregation was promoted into a score input.
-4. Legacy CampCareer v1/v2 values were used only as regression comparison data.
+## Score model
 
-Registered sources:
+The Opportunity Score remains a 100-point base model:
 
-| Source key | Authority | Use |
-| --- | --- | --- |
-| `us-soc-2018` | U.S. Bureau of Labor Statistics | Federal occupation taxonomy. |
-| `us-onet-carpenters` | U.S. Department of Labor / O*NET | Detailed Carpenter occupation definition and apprenticeship linkage. |
-| `us-bls-oews-2025` | U.S. Bureau of Labor Statistics | May 2025 national wage benchmark. |
-| `us-bls-ep-2024-2034` | U.S. Bureau of Labor Statistics | 2024 to 2034 employment projections and annual openings. |
-| `us-bls-ooh-carpenters` | U.S. Bureau of Labor Statistics | Entry pathway and employer-industry context. |
-| `us-careeronestop` | U.S. Department of Labor ETA | Official job-search entry point and annual wage display context. |
-| `us-apprenticeship-job-finder` | U.S. Department of Labor | Verified apprenticeship search starting point. |
-| `us-dol-h2b` | U.S. Department of Labor | H-2B temporary non-agricultural requirements. |
-| `us-dol-perm` | U.S. Department of Labor | Permanent labor certification requirements. |
-| `us-osha-outreach` | Occupational Safety and Health Administration | Federal Outreach Training status and caveats. |
+| Component | Max | US Carpenter | Evidence status |
+| --- | ---: | ---: | --- |
+| Shortage Signal | 20 | 0.00 | `no_evidence_found` |
+| Vacancy Intensity | 15 | 4.00 | `fallback` |
+| Industry Diversity | 5 | 0.00 | `insufficient_industry_coverage` |
+| Employment Momentum | 10 | 3.48 | `derived` |
+| Entry Accessibility | 15 | 14.00 | `proxy` |
+| Relative Salary | 10 | 6.88 | `derived` |
+| Projected Growth | 10 | 5.70 | `derived` |
+| Visa Accessibility | 10 | 6.00 | `proxy` |
+| Entry Burden / Licensing | 5 | 5.00 | `proxy` |
+| Total | 100 | 45.06 | `Estimated` |
 
-Source URLs and `last_verified_on` are stored in `career_official_sources` and repeated where blocker applicability requires direct traceability.
+The final score is not manually entered. Component scores are generated from normalized values, and the final score is calculated by the foundation score view.
 
-## Canonical occupation mapping
+## Important zero semantics
 
-Primary mapping:
+A score of zero is not always the same factual claim.
 
-- canonical occupation: `carpenter`
-- country: `US`
-- taxonomy: `SOC`
-- taxonomy version: `2018`
-- official code: `47-2031`
-- official title: `Carpenters`
-- relation: `exact`
-- mapping quality: `high`
-- rationale: CampCareer Carpenter scope matches the federal detailed SOC occupation without broadening or narrowing.
+Shortage is `0 + no_evidence_found`, meaning the official-source review did not validate a comparable official Carpenter shortage designation. It does not assert that an authority explicitly classified Carpenter as not in shortage.
 
-Companion detailed mapping:
+Industry Diversity is `0 + insufficient_industry_coverage`, meaning the available categories cannot yet support the agreed cross-country HHI normalization. It does not assert proven maximum concentration.
 
-- taxonomy: `O*NET-SOC`
-- version recorded for verification: `2026`
-- code: `47-2031.00`
-- title: `Carpenters`
-- relation: `exact`
-- mapping quality: `high`
+Raw missing observations continue to obey the original foundation rule: unavailable raw data remains `raw_value=null`, `availability=unavailable`, with a required reason. The conservative score occurs only in the normalized/component layer after the methodology-defined research completion rule is applied.
 
-The mapping is not inferred from legacy occupation rows.
+## Shortage methodology v1
 
-## Raw observations
+Shortage is separate from growth, annual openings and vacancy.
 
-| Metric | Raw value | Availability | Direct/proxy | Source |
-| --- | ---: | --- | --- | --- |
-| occupation definition | O*NET 47-2031.00 Carpenters | available | direct | O*NET |
-| median hourly wage | USD 29.12/hour, May 2025 | available | direct | BLS OEWS |
-| all-occupations median hourly benchmark | USD 24.51/hour, May 2025 | available | direct | BLS OEWS |
-| median annual wage for result display | USD 60,580/year, May 2025 | available | direct | CareerOneStop, BLS OEWS-backed official service |
-| employment total | 959,000, 2024 projection base | available | direct | BLS Employment Projections |
-| projected employment | 1,002,100, 2034 | available | direct | BLS Employment Projections |
-| projected growth | 4.5%, 2024 to 2034 | available | direct | BLS Employment Projections |
-| all-occupations growth benchmark | 3.1%, 2024 to 2034 | available | direct benchmark | BLS Employment Projections |
-| projected annual openings | 74,100/year, 2024 to 2034 average | available | direct | BLS Employment Projections |
-| all-occupations annual openings | 18,863,300/year | available | direct benchmark | BLS Employment Projections |
-| all-occupations employment | 169,956,100 | available | direct benchmark | BLS Employment Projections |
-| major employer-industry shares | 84% published coverage across listed major groups | available | direct | BLS OOH |
-| typical entry education | High school diploma or equivalent | available | direct | BLS Employment Projections |
-| related work experience | None | available | direct | BLS Employment Projections |
-| typical on-the-job training | Apprenticeship | available | direct | BLS Employment Projections |
-| nationwide formal shortage signal | `null` | unavailable | direct assessment of source gap | See reason below |
-| nationally comparable vacancy intensity | `null` | unavailable | direct assessment of source gap | CareerOneStop evaluated but not promoted |
-| H-2B route conditions | employer required; qualifying temporary need required | available | direct | U.S. DOL |
-| PERM route conditions | employer-filed, case-specific labor certification | available | direct | U.S. DOL |
-| single federal Carpenter personal license | `null` | unavailable as a national rule | direct assessment of scope | BLS national entry context |
-| OSHA Outreach status | voluntary federally; not a certification or license | available | direct | OSHA |
+CampCareer normalized severity:
 
-Unavailable observations always have `raw_value = null`, `availability = unavailable` and a non-empty reason.
+- `not_shortage` = 0
+- `pressure` = 5
+- `shortage` = 12
+- `severe` = 18
+- `critical` = 20
 
-## Normalized metrics
+Geographic multipliers:
 
-### Relative salary
+- `national` = 1.00
+- `broad_subnational` = 0.75
+- `regional` = 0.50
+- `local` = 0.25
 
-Input:
+Formula: severity points × geographic multiplier.
 
-`29.12 / 24.51`
+For US Carpenter no validated official shortage designation was found under the v1 source standard, so the component is 0 with `no_evidence_found`. BLS growth and annual openings are not relabeled as shortage.
 
-Result:
+## Vacancy methodology v1
 
-`relative_salary_ratio = 1.1880864953...`
+Primary definition: distinct job postings over a 90-day period divided by occupation employment stock, expressed per 1,000 workers when a clean numerator and denominator exist.
 
-This uses an occupation wage divided by the same-period national all-occupations benchmark. It does not use absolute USD bands.
+Intensity bases:
 
-### Projected growth relative to national benchmark
+- no evidence = 0
+- low = 3
+- moderate = 6
+- high = 9
+- very high = 12
 
-Input:
+Persistence adds 0 to 3 points.
 
-`4.5% - 3.1%`
+Source-quality caps:
 
-Result:
+- official comprehensive = 15
+- official partial / validated major source = 12
+- government job portal / large job board = 9
+- limited or unknown coverage = 6
 
-`projected_growth_excess_pp = 1.4 percentage points`
+For US Carpenter, CareerOneStop/NLx supplied broad current listing evidence across multiple states, but not a clean nationally comprehensive distinct 90-day numerator. The v1 fallback therefore applies:
 
-### Employment momentum
+- intensity = low = 3
+- repeated-period persistence = +1
+- result = 4 / 15
 
-Input:
+The current listing inventory is explicitly stored with `clean_distinct_90_day_numerator=false` and is not divided by employment as though it were a clean 90-day statistic.
 
-`(74,100 / 959,000) / (18,863,300 / 169,956,100)`
+## Live job opportunities
 
-Result:
+Scoring evidence and user-facing live examples are separate data products.
 
-`annual_openings_intensity_ratio = 0.6961754204...`
+Two official live examples were stored for the reference implementation:
 
-This is named `employment_momentum`. It is not called vacancy trend or vacancy intensity because the input is projected annual openings, not a live vacancy observation.
+- New York State Office of Mental Health, `Trades Specialist - Carpenter`, Albany, NY.
+- State of Hawaii, `Carpenter I - Oahu`, Oahu, HI.
 
-### Entry accessibility proxy
+Each stored opportunity includes title, employer, location, posted date when available, source, listing/apply URL, last checked date, status and occupation relation quality.
 
-BLS qualitative inputs are converted through a deterministic CampCareer rubric:
+The existing foundation entry-point compatibility path also includes these jobs so the current landing can surface practical apply links without treating individual listings as the Vacancy Score numerator.
 
-- high school diploma or equivalent: 7 points
-- no related work experience: 3 points
-- apprenticeship training burden: 0 points
+## Industry Diversity methodology v1
 
-Result: `10 / 15`
+Industry Diversity measures employment resilience rather than current hiring volume.
 
-This normalized metric is explicitly stored as `directness = proxy`, `mapping_quality = medium` with `proxy_reason`. It must never be represented as a BLS score.
+Country-specific industry categories must first be mapped to comparable broad sectors. HHI is then calculated from employment shares.
 
-## Opportunity Score components
+Score bands:
 
-Formula version: `career-opportunity-v2-foundation`
+- HHI >= 0.60, or top industry >= 75% = 0
+- 0.45 to <0.60 = 1
+- 0.30 to <0.45 = 2
+- 0.20 to <0.30 = 3
+- 0.12 to <0.20 = 4
+- <0.12 = 5
 
-| Component | Max | Normalized input | Score | Availability | Direct/proxy | Decision |
-| --- | ---: | ---: | ---: | --- | --- | --- |
-| `shortage_signal` | 20 | `null` | `null` | unavailable | direct | No validated nationwide comparable Carpenter shortage designation. Growth/openings are not relabeled as shortage. |
-| `vacancy_intensity` | 15 | `null` | `null` | unavailable | direct | CareerOneStop has listings, but a comprehensive national SOC-level vacancy series with stable denominator and cross-country methodology was not validated. |
-| `industry_diversity` | 5 | `null` | `null` | unavailable | direct | Major industry shares exist, but residual coverage and cross-country normalization are not yet sufficient for a score. |
-| `employment_momentum` | 10 | 0.6961754204... | 3.48 | available | direct | Relative projected openings intensity. |
-| `entry_accessibility` | 15 | 10 | 10.00 | available | proxy | Deterministic ordinal rubric from BLS entry categories. |
-| `relative_salary` | 10 | 1.1880864953... | 6.88 | available | direct | Same-country relative wage benchmark. |
-| `projected_growth` | 10 | 1.4 pp | 5.70 | available | direct | Growth above the all-occupations benchmark. |
-| `visa_accessibility` | 10 | `null` | `null` | unavailable | direct | H-2B and PERM are employer/case/status dependent and do not justify a single occupation-level access score independent of the applicant. |
-| `entry_burden` | 5 | `null` | `null` | unavailable | direct | State, municipal, contractor, employer, project and safety requirements vary too much for one national Carpenter burden score. |
+Normal HHI scoring requires roughly 80% or more usable coverage and comparable broad-sector categories.
 
-Because five required components are unavailable, `score_ready = false` and final `opportunity_score = null`. The four component scores are diagnostic intermediates and are not summed or rescaled into a public score.
+The US BLS Carpenter major-share table has 84% published coverage, but the categories mix self-employment status with construction subindustries. CampCareer does not invent a residual/common-sector allocation. The v1 result is therefore 0 with `insufficient_industry_coverage`.
 
-## Visa and work-right blockers
+## Entry Accessibility methodology v1
 
-`work_rights` is a hard blocker for a foreign national who does not otherwise hold applicable U.S. employment authorization. The foundation does not infer an individual's right to work.
+Maximum 15 points:
 
-`visa` is a conditional blocker. H-2B requires a qualifying employer temporary need. PERM is employer-filed and case-specific. Neither route is an occupation-specific Carpenter entitlement or a sponsorship/approval guarantee.
+- education = 0 to 7
+- prior related experience = 0 to 3
+- training burden before earning/employment = 0 to 5
 
-These facts are exposed as decision data and blockers, while `visa_accessibility` remains unavailable as a country × occupation score component until a defensible non-personalized comparative method exists.
+Training duration alone is not the burden measure. Paid, employment-linked structured training receives materially more credit than multi-year unpaid pre-employment study.
 
-## Licensing, registration and safety training
+US Carpenter:
 
-The foundation does not assert one nationwide Carpenter personal-license requirement.
+- high school diploma or equivalent = 7
+- no related work experience = 3
+- paid, employment-linked apprenticeship = 4
+- total = 14 / 15
 
-A conditional licensing blocker instructs the read model to check state, municipality, contractor role, project and employer rules for the intended work location. OSHA Outreach Training is recorded separately: federal OSHA describes the Outreach program as voluntary and not a certification or license, while state/local/employer/union requirements may still apply.
+This remains a CampCareer proxy. Official BLS inputs are direct, while the point conversion records `proxy_reason`, formula version and evidence quality.
 
-For that reason `entry_burden` remains unavailable instead of treating absence of a federal personal license as a low burden score.
+## Visa Accessibility methodology v1
 
-## Employer, job-search and training entry points
+Maximum 10 points:
 
-Decision-ready entry points:
+- occupation-applicable work path = 0 to 3
+- employer dependency = 0 to 3
+- eligibility burden = 0 to 2
+- long-term pathway = 0 to 2
 
-- CareerOneStop job search: official government-sponsored job-search starting point. Listing counts are not used as a national vacancy statistic.
-- Apprenticeship.gov Job Finder: verified training/apprenticeship search starting point.
-- U.S. DOL H-2B requirements: official temporary-work route context.
-- U.S. DOL PERM requirements: official permanent labor-certification context.
-- OSHA Outreach: official federal safety-training status plus prompt to verify subnational requirements.
+The representative route is the most realistic general overseas-worker route, not simply the most favorable visa.
 
-The pilot does not invent an employer list. A real official job-search entry point satisfies the employer/job-search decision requirement without presenting scraped or stale employer names as canonical data.
+US Carpenter uses:
 
-## Landing and API read behavior
+- primary representative route: H-2B
+- secondary long-term evidence: PERM
 
-`/api/home/career-insight` continues to use the existing route but its server read layer now checks the foundation first.
+US component result:
 
-For United States × Carpenter:
+- occupation applicability = 2
+- employer dependency = 1
+- eligibility burden = 2
+- conditional long-term pathway evidence = 1
+- total = 6 / 10
 
-- `readModelSource = career_data_foundation`
-- the full `foundation` object is returned with readiness, raw observations, normalized metrics, score components, blockers, sources and entry points
-- the compatibility `profile` is derived from foundation data only so the existing landing layout does not require a redesign
-- `profile.metric.opportunityScore = null`
-- `profile.metric.scoreStatus = not_ready`
-- `vacanciesThreeMonthAvg = null`
-- `employmentGrowth5yPct = null`
-- BLS 2024 to 2034 growth is carried only as the ten-year projection field
-- market-demand display context uses projected annual openings and growth with an explicit statement that these are not live vacancies or a formal shortage signal
-- CareerOneStop and Apprenticeship.gov feed work/training entry links
-- H-2B/PERM feed official visa-pathway context
+This is an occupation-level structural accessibility score, not a personal immigration eligibility or sponsorship determination.
 
-If a foundation row exists but is not decision-ready, the read layer suppresses legacy country-occupation data rather than falling back to it. This prevents an old record from silently overriding a newer but incomplete foundation record.
+## Subnational licensing model and Entry Burden
 
-For ranking/comparison:
+Licensing evidence is now stored by jurisdiction and separates employee requirements from contractor/business requirements.
 
-- any country present in foundation is removed from the legacy recommendation candidate set
-- the foundation country is added back only when `decision_ready`, `score_ready`, `publish_ready` and final score are all valid
-- current US Carpenter is therefore not rankable
+Reference evidence includes:
 
-## Legacy regression comparison
+- California C-5 Framing and Rough Carpentry Contractor classification.
+- New York City Home Improvement Contractor licensing for covered contracting/business activity.
+- Federal OSHA Outreach Training, which is retained as safety-training evidence rather than a Carpenter occupational license.
 
-Legacy values are not used as facts in the foundation.
+Entry Burden formula:
 
-Current legacy regression snapshots in Supabase at verification time:
+`5 - geographic scope burden - legal requirement burden - acquisition difficulty burden`
 
-| Profile | Legacy state | Legacy score | Legacy formula |
-| --- | --- | ---: | --- |
-| `US:carpenter` | `profile_ready` | 30 provisional | `career-opportunity-us-v1` |
-| `AU:registered-nurse` | `decision_ready` | 93 provisional | `career-opportunity-v1` |
+The general employee score is not reduced for contractor-only licensing rules.
 
-The old US Carpenter score is intentionally suppressed whenever the foundation row exists. The new foundation returns no final score because required inputs are missing rather than interpreting missing shortage/vacancy/etc. as zero.
+No nationwide general employee Carpenter occupational-license requirement was identified in this reference review, so US Carpenter general employee Entry Burden is 5 / 5. Subnational contractor and safety requirements remain visible as evidence and blockers rather than being generalized nationally.
 
-Australia × Registered Nurse has no new foundation profile in this pilot. It therefore continues through the existing legacy/reference path and its dedicated landing implementation remains unchanged.
+## Employment Momentum, Relative Salary and Projected Growth
 
-## QA and database validation
+These three pilot formulas are carried forward unchanged in v3 so the newly frozen components can be implemented without silently recalibrating the remaining 30 points.
 
-Validated against the live Supabase project after migration:
+Current formulas:
 
-- foundation profile count: 1
-- profile: `US:carpenter` only
-- normalized-metric references missing a raw observation: 0
-- component raw-input references missing a raw observation: 0
-- component normalized references missing a normalized metric: 0
-- unavailable raw observations violating null/reason rules: 0
-- proxy normalized/component rows missing a proxy reason: 0
-- `US:carpenter` rows in `career_foundation_rankable_v1`: 0
-- `decision_ready = true`
-- `score_ready = false`
-- `publish_ready = false`
-- `opportunity_score = null`
-- scored required components: 4 of 9
-- scoreable weight coverage: 45 of 100, metadata only
+- Relative Salary: same-country occupation median hourly wage divided by all-occupations median hourly wage; score `clamp(5 + (ratio - 1) × 10, 0, 10)`.
+- Projected Growth: occupation projected growth minus same-country all-occupations projected growth; score `clamp(5 + excess_percentage_points / 2, 0, 10)`.
+- Employment Momentum: occupation annual-openings/employment intensity divided by the same-country all-occupations openings/employment benchmark; score `clamp(5 + (ratio - 1) × 5, 0, 10)`.
 
-Supabase security advisor initially detected mutable `search_path` on the two new scoring functions. A follow-up migration fixes both functions to `search_path = pg_catalog`. Performance advisor initially identified four new foreign keys without covering indexes; the follow-up index migration fixes them. Remaining advisor findings are pre-existing project-wide items or expected unused-index notices on newly created indexes and were not changed as part of this pilot.
+US results remain:
 
-## Test coverage
+- Employment Momentum = 3.48 / 10
+- Relative Salary = 6.88 / 10
+- Projected Growth = 5.70 / 10
 
-Repository tests cover:
+These formulas still need their separate cross-country methodology freeze before expanding beyond the US Carpenter reference implementation.
 
-- 100-point component maxima contract
-- deterministic score formulas
-- missing data remains null and cannot become zero
-- unavailable reason requirement
-- proxy reason requirement
-- incomplete component set cannot yield a final score
-- non-score-ready record cannot become rankable
+## Relational lineage
+
+Relational lineage is promoted to the provenance source of truth. Existing array references remain compatibility/derived fields.
+
+New lineage structures:
+
+- `career_normalized_metric_inputs`
+- `career_score_component_metric_inputs`
+- `career_score_component_raw_inputs`
+
+The chain is now explicitly queryable:
+
+`official source -> raw observation -> occupation mapping -> normalized metric input -> normalized metric -> score component input -> score component -> score snapshot -> result/read model`
+
+Each relation stores an `input_role`, such as `occupation_value`, `country_benchmark`, `primary_pathway`, `earning_structure` or `fallback_market_evidence`.
+
+This allows both forward explanation and reverse impact analysis when an official observation changes.
+
+## New evidence tables
+
+The v1 methodology adds:
+
+- `career_foundation_licensing_evidence`
+- `career_foundation_visa_pathways`
+- `career_foundation_job_opportunities`
+
+All have RLS enabled, public read policies for the same foundation read use case, explicit Data API grants, and service-role write grants.
+
+## Read model and landing behavior
+
+Foundation remains authoritative whenever a foundation row exists. Legacy US Carpenter cannot override the foundation result.
+
+The server foundation object now exposes:
+
+- `scoreConfidence`
+- component `evidenceStatus`
+- normalized metric lineage
+- component-to-metric lineage
+- component-to-raw lineage
+- subnational licensing evidence
+- visa pathways
+- live job opportunities
+
+The compatibility profile still does not fabricate a clean vacancy count or a five-year employment-growth value. The fallback Vacancy Score remains separate from `vacanciesThreeMonthAvg`.
+
+US Carpenter is now eligible for the foundation ranking path because `decision_ready`, `score_ready` and `publish_ready` are true and the calculated final score exists.
+
+The intended minimal UI state is a numeric score plus evidence confidence, for example `45.06/100 · Estimated`, rather than hiding the score after the methodology review is complete.
+
+## Legacy regression
+
+Legacy data remains regression/reference only.
+
+- US Carpenter legacy score must remain suppressed when foundation exists.
+- Australia Registered Nurse has no new foundation row in this work and remains on its existing legacy/reference implementation.
+- No second country or occupation was seeded.
+
+## Database validation
+
+Live Supabase validation after migration `career_data_foundation_methodology_v1`:
+
+- latest foundation formula for `US:carpenter`: `career-opportunity-v3-foundation`
+- `decision_ready=true`
+- `score_ready=true`
+- `publish_ready=true`
+- `opportunity_score=45.06`
+- scored components = 9 of 9
+- coverage weight = 100 of 100
+
+The v2 pilot snapshot remains preserved; v3 is a new versioned snapshot.
+
+## Security and database hygiene
+
+The new foundation tables use RLS and explicit read/write grants. The scoring function retains a fixed `search_path = pg_catalog`.
+
+The Supabase security advisor does not report a new warning tied to these new foundation tables/functions. Project-wide pre-existing advisor notices remain outside this scoped implementation.
+
+## Tests
+
+The repository test suite now covers:
+
+- 100-point maxima contract
+- shortage severity/scope and no-evidence zero semantics
+- vacancy intensity, persistence and source-quality caps
+- denominator-free very-high protection
+- HHI bands and insufficient-industry-coverage fallback
+- deterministic visa rubric
+- deterministic Entry Burden formula
+- paid employment-linked Entry Accessibility rubric
+- US Carpenter component reproduction
+- US Carpenter total `45.06`
+- raw missing data remains null
+- conservative evaluated zero differs from unavailable
+- required proxy/fallback explanations
+- estimated vs verified score confidence
+- relational lineage schema
+- subnational licensing separation
+- visa pathway model
+- scoring-evidence vs live-job separation
 - foundation precedence over legacy US Carpenter
-- legacy fallback remains available for AU Registered Nurse when no foundation exists
-- schema layer separation
-- raw unavailable constraint contract
-- generated component scores and calculated final score
-- exact SOC/O*NET canonical mapping
-- rank-view readiness filter
-- career-insight suppression of legacy data when foundation exists
-- no fake vacancy, five-year growth or final score in compatibility projection
-- foundation API read includes provenance, normalized metrics, components, blockers and entry points
+- Australia Registered Nurse legacy fallback regression
 
-## Structural issues to resolve before a second occupation
+## Remaining work before a second country or occupation
 
-Do not start a second country × occupation until the team makes explicit decisions on these cross-country contracts:
+Do not start AU Carpenter or any other second profile yet.
 
-1. Define or source a country-comparable `shortage_signal` methodology that does not relabel generic growth/openings as shortage.
-2. Define a vacancy-intensity source standard with occupation coverage, denominator, observation window and cross-country comparability.
-3. Define `industry_diversity` normalization and the minimum sector-share coverage required for scoring.
-4. Define a non-personalized `visa_accessibility` market score, or remove it from the country × occupation score if it cannot be separated from applicant/employer circumstances.
-5. Build a subnational licensing/registration evidence model if `entry_burden` is to be comparable for decentralized occupations such as U.S. Carpenter.
-6. Replace array-based lineage references with relational lineage tables if database-enforced observation-to-normalization-to-component foreign-key integrity is required at scale. The pilot currently combines DB constraints with QA reference checks.
-7. Add an explicit landing readiness/status treatment so users can see `score_ready = false` without depending on the absence of a number. The API contract already exposes the state.
-8. Freeze and review the entry-accessibility proxy rubric before reuse. It is deterministic and labeled as a proxy, but it is still a CampCareer methodology choice rather than an official-source score.
+Before cross-country expansion, finish and validate:
 
-## Checklist for the next country × occupation worker
+1. CI typecheck, lint, unit tests, build and secret scan for this v3 branch.
+2. Minimal landing confidence label so the numeric score visibly communicates `Estimated` versus `Verified`.
+3. Separate methodology freeze/review for Employment Momentum, Relative Salary and Projected Growth.
+4. Final lineage integrity and reverse-impact DB queries.
+5. Final PR/DB regression check confirming AU Registered Nurse remains unchanged.
 
-- [ ] Start from the reviewed foundation schema and do not alter the legacy values to make the new profile look complete.
-- [ ] Create one canonical country × occupation profile only.
-- [ ] Register every source with authority, source type and verification date.
-- [ ] Record canonical mapping relation and mapping quality before ingesting market observations.
-- [ ] Store official observations as raw data before normalization.
-- [ ] Record unavailable observations explicitly with `null` and a reason.
-- [ ] Keep direct observations and proxies separate; proxies require `proxy_reason` and quality metadata.
-- [ ] Use same-country benchmark normalization for cross-country score inputs where the concept is relative.
-- [ ] Name metrics after what is actually observed.
-- [ ] Add licensing/work-right/visa facts both to decision data and blocker records with applicability scope.
-- [ ] Add a real official employer/job-search starting point and a verified education/training path.
-- [ ] Calculate component scores deterministically from normalized inputs.
-- [ ] Do not calculate a final score until every required component satisfies its source and formula definition.
-- [ ] Verify `decision_ready`, `score_ready` and `publish_ready` independently.
-- [ ] Confirm a foundation row suppresses the corresponding legacy row in API, ranking and comparison selection.
-- [ ] Run provenance, missing-data, proxy, deterministic-formula, API and regression tests before considering the profile complete.
+Only after these pass should the Carpenter cross-country sequence begin.
