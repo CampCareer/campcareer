@@ -83,6 +83,11 @@ export type PublishedEsCitySlug = (typeof PUBLISHED_ES_CITY_SLUGS)[number]
 export const SUPPORTED_ES_CITY_SLUGS = PUBLISHED_ES_CITY_SLUGS
 export type SupportedEsCitySlug = PublishedEsCitySlug
 
+export const PUBLISHED_KR_CITY_SLUGS = ["seoul", "busan", "daejeon", "suwon", "yongin", "pohang"] as const
+export type PublishedKrCitySlug = (typeof PUBLISHED_KR_CITY_SLUGS)[number]
+export const SUPPORTED_KR_CITY_SLUGS = PUBLISHED_KR_CITY_SLUGS
+export type SupportedKrCitySlug = PublishedKrCitySlug
+
 export const PUBLISHED_AE_CITY_SLUGS = ["abu-dhabi", "sharjah", "al-ain", "dubai"] as const
 export type PublishedAeCitySlug = (typeof PUBLISHED_AE_CITY_SLUGS)[number]
 export const SUPPORTED_AE_CITY_SLUGS = PUBLISHED_AE_CITY_SLUGS
@@ -144,6 +149,10 @@ export function isPublishedEsCitySlug(value: string): value is PublishedEsCitySl
   return PUBLISHED_ES_CITY_SLUGS.includes(value as PublishedEsCitySlug)
 }
 
+export function isPublishedKrCitySlug(value: string): value is PublishedKrCitySlug {
+  return PUBLISHED_KR_CITY_SLUGS.includes(value as PublishedKrCitySlug)
+}
+
 export function isPublishedAeCitySlug(value: string): value is PublishedAeCitySlug {
   return PUBLISHED_AE_CITY_SLUGS.includes(value as PublishedAeCitySlug)
 }
@@ -154,6 +163,10 @@ export function isSupportedFiCitySlug(value: string): value is SupportedFiCitySl
 
 export function isSupportedEsCitySlug(value: string): value is SupportedEsCitySlug {
   return isPublishedEsCitySlug(value)
+}
+
+export function isSupportedKrCitySlug(value: string): value is SupportedKrCitySlug {
+  return isPublishedKrCitySlug(value)
 }
 
 export function isSupportedAeCitySlug(value: string): value is SupportedAeCitySlug {
@@ -230,6 +243,12 @@ export function esCityPath(value: string | null | undefined) {
   const slug = normalizeCitySlug(value)
   if (!slug || !isPublishedEsCitySlug(slug)) return null
   return `/cities/es/${slug}`
+}
+
+export function krCityPath(value: string | null | undefined) {
+  const slug = normalizeCitySlug(value)
+  if (!slug || !isPublishedKrCitySlug(slug)) return null
+  return `/cities/kr/${slug}`
 }
 
 export function aeCityPath(value: string | null | undefined) {
