@@ -78,6 +78,11 @@ export type PublishedFiCitySlug = (typeof PUBLISHED_FI_CITY_SLUGS)[number]
 export const SUPPORTED_FI_CITY_SLUGS = PUBLISHED_FI_CITY_SLUGS
 export type SupportedFiCitySlug = PublishedFiCitySlug
 
+export const PUBLISHED_NO_CITY_SLUGS = ["oslo", "trondheim", "stavanger", "as", "tromso"] as const
+export type PublishedNoCitySlug = (typeof PUBLISHED_NO_CITY_SLUGS)[number]
+export const SUPPORTED_NO_CITY_SLUGS = PUBLISHED_NO_CITY_SLUGS
+export type SupportedNoCitySlug = PublishedNoCitySlug
+
 export const PUBLISHED_ES_CITY_SLUGS = ["madrid", "barcelona", "valencia", "sevilla", "granada", "malaga", "bilbao"] as const
 export type PublishedEsCitySlug = (typeof PUBLISHED_ES_CITY_SLUGS)[number]
 export const SUPPORTED_ES_CITY_SLUGS = PUBLISHED_ES_CITY_SLUGS
@@ -145,6 +150,10 @@ export function isPublishedFiCitySlug(value: string): value is PublishedFiCitySl
   return PUBLISHED_FI_CITY_SLUGS.includes(value as PublishedFiCitySlug)
 }
 
+export function isPublishedNoCitySlug(value: string): value is PublishedNoCitySlug {
+  return PUBLISHED_NO_CITY_SLUGS.includes(value as PublishedNoCitySlug)
+}
+
 export function isPublishedEsCitySlug(value: string): value is PublishedEsCitySlug {
   return PUBLISHED_ES_CITY_SLUGS.includes(value as PublishedEsCitySlug)
 }
@@ -159,6 +168,10 @@ export function isPublishedAeCitySlug(value: string): value is PublishedAeCitySl
 
 export function isSupportedFiCitySlug(value: string): value is SupportedFiCitySlug {
   return isPublishedFiCitySlug(value)
+}
+
+export function isSupportedNoCitySlug(value: string): value is SupportedNoCitySlug {
+  return isPublishedNoCitySlug(value)
 }
 
 export function isSupportedEsCitySlug(value: string): value is SupportedEsCitySlug {
@@ -237,6 +250,12 @@ export function fiCityPath(value: string | null | undefined) {
   const slug = normalizeCitySlug(value)
   if (!slug || !isPublishedFiCitySlug(slug)) return null
   return `/cities/fi/${slug}`
+}
+
+export function noCityPath(value: string | null | undefined) {
+  const slug = normalizeCitySlug(value)
+  if (!slug || !isPublishedNoCitySlug(slug)) return null
+  return `/cities/no/${slug}`
 }
 
 export function esCityPath(value: string | null | undefined) {
