@@ -8,6 +8,15 @@ import { cn } from "@/lib/utils"
 import { WORKSPACE_NAV_ITEMS } from "@/lib/workspace/navigation"
 import { COMPARE_MODE_NAV_ITEMS, type CompareModeType } from "@/lib/compare-navigation"
 import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
+import { localizePath } from "@/lib/i18n/config"
+import { useRouteLocale } from "@/lib/i18n/locale-provider"
+import { resolveCareerCompareHref } from "@/lib/workspace/career-compare-context"
+import {
+  compareModeLabel,
+  workspaceCountryLabel,
+  workspaceNavLabel,
+  workspaceSidebarCopy,
+} from "@/lib/workspace/sidebar-i18n"
 import { useSelectedCountry } from "./country-context"
 
 type WorkspaceSidebarProps = {
@@ -17,10 +26,34 @@ type WorkspaceSidebarProps = {
 
 export function WorkspaceSidebar({ open, onClose }: WorkspaceSidebarProps) {
   const pathname = usePathname()
+  const locale = useRouteLocale()
+  const copy = workspaceSidebarCopy(locale)
   const { selectedCountry, setSelectedCountry } = useSelectedCountry()
-  const isCompareRoute = pathname === "/compare" || pathname.startsWith("/compare/")
+  const comparePath = localizePath("/compare", locale)
+  const careerPath = localizePath("/career", locale)
+  const isCompareRoute = pathname === comparePath || pathname.startsWith(comparePath + "/")
+  const isCareerRoute = pathname === careerPath || pathname.startsWith(careerPath + "/")
+  const [currentCareerCompareHref, setCurrentCareerCompareHref] = useState<string | null>(null)
   const [compareOpen, setCompareOpen] = useState(isCompareRoute)
   const [compareType, setCompareType] = useState<CompareModeType>("program")
+  const selectedCountryProfile = selectedCountry
+    ? LAUNCH_COUNTRIES.find((country) => country.code === selectedCountry.code) ?? null
+    : null
+  const selectedCountryLabel = selectedCountryProfile
+    ? workspaceCountryLabel(locale, selectedCountryProfile)
+    : selectedCountry?.name ?? null
+
+  useEffect(() => {
+    if (!isCareerRoute) {
+      setCurrentCareerCompareHref(null)
+      return
+    }
+
+    const params = new URLSearchParams(window.location.search)
+    setCurrentCareerCompareHref(
+      resolveCareerCompareHref(params.get("country") ?? "", params.get("occupation") ?? ""),
+    )
+  }, [isCareerRoute, pathname])
 
   useEffect(() => {
     if (!isCompareRoute) return
@@ -56,10 +89,11 @@ export function WorkspaceSidebar({ open, onClose }: WorkspaceSidebarProps) {
       >
         <nav className="flex-1 space-y-0.5 overflow-y-auto px-3 py-4" aria-label="Workspace">
           {WORKSPACE_NAV_ITEMS.map((item) => {
-            const isActive = pathname === item.href || pathname.startsWith(item.href + "/")
+            const itemHref = localizePath(item.href, locale)
+            const isActive = pathname === itemHref || pathname.startsWith(itemHref + "/")
             const Icon = item.icon
-            const label =
-              item.id === "countries" && selectedCountry ? selectedCountry.name : item.label
+            const baseLabel = workspaceNavLabel(locale, item)
+            const label = item.id === "countries" && selectedCountryLabel ? selectedCountryLabel : baseLabel
 
             if (item.id === "compare") {
               return (
@@ -87,7 +121,7 @@ export function WorkspaceSidebar({ open, onClose }: WorkspaceSidebarProps) {
                       strokeWidth={2}
                       style={{ color: isActive ? "rgba(255,255,255,0.95)" : item.accent }}
                     />
-                    <span className="min-w-0 flex-1 text-left">Compare</span>
+                    <span className="min-w-0 flex-1 text-left">{baseLabel}</span>
                     <ChevronDown
                       className={cn(
                         "size-3.5 shrink-0 transition-transform",
@@ -101,10 +135,13 @@ export function WorkspaceSidebar({ open, onClose }: WorkspaceSidebarProps) {
                     <div id="workspace-compare-modes" className="mt-1 space-y-0.5 pl-8">
                       {COMPARE_MODE_NAV_ITEMS.map((mode) => {
                         const modeActive = isCompareRoute && compareType === mode.type
+                        const contextualHref = mode.type === "career" && currentCareerCompareHref
+                          ? currentCareerCompareHref
+                          : mode.href
                         return (
                           <Link
                             key={mode.type}
-                            href={mode.href}
+                            href={localizePath(contextualHref, locale)}
                             onClick={() => {
                               setCompareType(mode.type)
                               onClose()
@@ -117,7 +154,7 @@ export function WorkspaceSidebar({ open, onClose }: WorkspaceSidebarProps) {
                                 : "text-[#6f6d68] hover:bg-[#f8f7fb] hover:text-[#4f3895]"
                             )}
                           >
-                            {mode.label}
+                            {compareModeLabel(locale, mode.type)}
                           </Link>
                         )
                       })}
@@ -130,10 +167,10 @@ export function WorkspaceSidebar({ open, onClose }: WorkspaceSidebarProps) {
             return (
               <Link
                 key={item.id}
-                href={item.href}
+                href={itemHref}
                 onClick={onClose}
                 aria-current={isActive ? "page" : undefined}
-                title={item.id === "countries" && selectedCountry ? `${item.label} · ${selectedCountry.name}` : item.label}
+                title={item.id === "countries" && selectedCountryLabel ? `${baseLabel} · ${selectedCountryLabel}` : baseLabel}
                 className={cn(
                   "group flex items-center gap-3 rounded-lg px-3 py-2 text-[13.5px] transition",
                   isActive
@@ -176,7 +213,7 @@ export function WorkspaceSidebar({ open, onClose }: WorkspaceSidebarProps) {
             className="flex items-center gap-2 px-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#a3a19b]"
           >
             <Globe2 className="size-3.5 text-[#2563eb]" />
-            Country
+            {copy.country}
           </label>
           <div className="relative mt-1.5">
             <select
@@ -184,21 +221,21 @@ export function WorkspaceSidebar({ open, onClose }: WorkspaceSidebarProps) {
               value={selectedCountry?.code ?? ""}
               onChange={(event) => handleCountryChange(event.target.value)}
               className="h-10 w-full appearance-none rounded-lg border border-[#d8d8d4] bg-white pr-8 pl-3 text-[13px] font-medium text-[#1b1b1b] outline-none transition focus:border-[#2563eb] focus:ring-4 focus:ring-[#2563eb]/10"
-              aria-label="Selected country"
+              aria-label={copy.selectedCountryAria}
             >
-              <option value="">All countries</option>
+              <option value="">{copy.allCountries}</option>
               {LAUNCH_COUNTRIES.map((country) => (
                 <option key={country.code} value={country.code}>
-                  {country.name}
+                  {workspaceCountryLabel(locale, country)}
                 </option>
               ))}
             </select>
             <ChevronDown className="pointer-events-none absolute right-3 top-1/2 size-3.5 -translate-y-1/2 text-[#9c9a94]" />
           </div>
           <p className="mt-1.5 px-3 text-[11px] leading-4 text-[#a3a19b]">
-            {selectedCountry
-              ? `Visas, occupation and programs follow ${selectedCountry.name}.`
-              : "Visas, occupation and programs follow the selected country."}
+            {selectedCountryLabel
+              ? copy.followSelected(selectedCountryLabel)
+              : copy.followDefault}
           </p>
         </div>
 
@@ -208,7 +245,7 @@ export function WorkspaceSidebar({ open, onClose }: WorkspaceSidebarProps) {
               className="size-1.5 rounded-full"
               style={{ background: "linear-gradient(90deg,#2563eb,#6d4fc4,#c2691e,#3e7a2e)" }}
             />
-            Plan. Compare. Go.
+            {copy.tagline}
           </p>
         </div>
       </aside>
