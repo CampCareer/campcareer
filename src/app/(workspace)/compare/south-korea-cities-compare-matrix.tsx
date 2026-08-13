@@ -1,100 +1,36 @@
 import Link from "next/link"
 import { ArrowRight, BriefcaseBusiness, Building2, Clock3, Info, MapPin, TrainFront, Users, Wallet } from "lucide-react"
 import type { KrCityProfile } from "@/lib/cities/kr-city-profile.server"
+import { localizePath, type Locale } from "@/lib/i18n/config"
+import { getLocale } from "@/lib/i18n/server"
 import { CityCompareSelector, type CityCompareOption } from "./city-compare-selector"
 
 type Props = { left: KrCityProfile; right: KrCityProfile; options: readonly CityCompareOption[] }
 
-function money(value: number, currency = "KRW") {
-  return new Intl.NumberFormat("en-KR", {
-    style: "currency",
-    currency,
-    maximumFractionDigits: currency === "KRW" ? 0 : value % 1 === 0 ? 0 : 2,
-  }).format(value)
-}
+function money(value:number,currency:string,locale:Locale){return new Intl.NumberFormat(locale==="ko"?"ko-KR":"en-KR",{style:"currency",currency,maximumFractionDigits:currency==="KRW"?0:value%1===0?0:2}).format(value)}
+function compact(value:number,locale:Locale){return new Intl.NumberFormat(locale==="ko"?"ko-KR":"en-KR",{notation:"compact",maximumFractionDigits:2}).format(value)}
+function period(value:string,locale:Locale){if(locale==="ko"){if(value==="month")return"월";if(value==="week")return"주";if(value==="semester")return"학기"}return value.replaceAll("_"," ")}
+function living(profile:KrCityProfile,locale:Locale){if(!profile.livingCost)return"—";return `${money(profile.livingCost.low,profile.livingCost.currency,locale)}–${money(profile.livingCost.high,profile.livingCost.currency,locale)} / ${period(profile.livingCost.period,locale)} · ${locale==="ko"?"국가 단위 계획 참고값":"national planning reference"}`}
+function transport(profile:KrCityProfile,locale:Locale){if(!profile.transport)return"—";return `${money(profile.transport.amount,profile.transport.currency,locale)} / ${period(profile.transport.period,locale)}`}
+function work(profile:KrCityProfile,locale:Locale){if(!profile.workRights)return"—";return `${profile.workRights.hoursNormalPeriod}${locale==="ko"?"시간":" h"} / ${period(profile.workRights.period,locale)} · ${locale==="ko"?"국가 단위 조건부 참고":"conditional national context"}`}
+function programmes(profile:KrCityProfile,locale:Locale){return profile.programmeCoverage.status==="verified_partial"?`${profile.linkedProgramCount}${locale==="ko"?"개 부분 검증 과정":" verified-partial programmes"}`:(locale==="ko"?"검증 진행 중":"Verification pending")}
+function Row({icon,label,note,left,right,leftName,rightName}:{icon:React.ReactNode;label:string;note?:string;left:string;right:string;leftName:string;rightName:string}){return <div className="grid grid-cols-2 border-t border-[#ecebe7] md:grid-cols-[220px_minmax(0,1fr)_minmax(0,1fr)]"><div className="col-span-2 flex items-start gap-2 px-4 py-3.5 text-[12px] font-semibold text-[#5f5d57] md:col-span-1 md:px-5 md:py-4"><span className="mt-0.5 text-[#8f8c85]">{icon}</span><div><p>{label}</p>{note?<p className="mt-1 text-[10px] font-normal leading-4 text-[#9a978f]">{note}</p>:null}</div></div><div className="min-w-0 border-t border-[#f0efec] px-3 py-3.5 text-[13px] font-semibold leading-5 text-[#1b1b1b] md:border-l md:border-t-0 md:px-5 md:py-4 md:text-[14px]"><span className="mb-1 block text-[9.5px] uppercase tracking-[0.08em] text-[#9a978f] md:hidden">{leftName}</span>{left}</div><div className="min-w-0 border-l border-t border-[#f0efec] px-3 py-3.5 text-[13px] font-semibold leading-5 text-[#1b1b1b] md:px-5 md:py-4 md:text-[14px]"><span className="mb-1 block text-[9.5px] uppercase tracking-[0.08em] text-[#9a978f] md:hidden">{rightName}</span>{right}</div></div>}
+function Header({city,locale}:{city:KrCityProfile;locale:Locale}){const ko=locale==="ko";return <div className="min-w-0 px-3 py-4 sm:px-4 md:px-5 md:py-5"><p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-[#8f8c85]">{city.regionName}</p><h2 className="mt-1 text-[20px] font-semibold tracking-[-0.03em] text-[#1b1b1b] md:text-[24px]">{city.name}</h2><p className="mt-1 text-[10.5px] text-[#77746e]">{ko?`행정안전부 행정코드 ${city.adminCode}`:`MOIS administrative code ${city.adminCode}`}</p><Link href={localizePath(`/cities/kr/${city.slug}`,locale)} className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-[#315ea8] hover:underline">{ko?"도시 프로필":"City profile"} <ArrowRight className="size-3"/></Link></div>}
 
-function compact(value: number) {
-  return new Intl.NumberFormat("en-KR", { notation: "compact", maximumFractionDigits: 2 }).format(value)
-}
-
-function period(value: string) {
-  return value.replaceAll("_", " ")
-}
-
-function living(profile: KrCityProfile) {
-  if (!profile.livingCost) return "—"
-  return `${money(profile.livingCost.low, profile.livingCost.currency)}–${money(profile.livingCost.high, profile.livingCost.currency)} / ${period(profile.livingCost.period)} · national planning reference`
-}
-
-function transport(profile: KrCityProfile) {
-  if (!profile.transport) return "—"
-  return `${money(profile.transport.amount, profile.transport.currency)} / ${period(profile.transport.period)}`
-}
-
-function work(profile: KrCityProfile) {
-  if (!profile.workRights) return "—"
-  return `${profile.workRights.hoursNormalPeriod} h / ${period(profile.workRights.period)} · conditional national context`
-}
-
-function programmes(profile: KrCityProfile) {
-  return profile.programmeCoverage.status === "verified_partial"
-    ? `${profile.linkedProgramCount} verified-partial programmes`
-    : "Verification pending"
-}
-
-function Row({ icon, label, note, left, right, leftName, rightName }: {
-  icon: React.ReactNode
-  label: string
-  note?: string
-  left: string
-  right: string
-  leftName: string
-  rightName: string
-}) {
-  return <div className="grid grid-cols-2 border-t border-[#ecebe7] md:grid-cols-[220px_minmax(0,1fr)_minmax(0,1fr)]">
-    <div className="col-span-2 flex items-start gap-2 px-4 py-3.5 text-[12px] font-semibold text-[#5f5d57] md:col-span-1 md:px-5 md:py-4">
-      <span className="mt-0.5 text-[#8f8c85]">{icon}</span>
-      <div><p>{label}</p>{note ? <p className="mt-1 text-[10px] font-normal leading-4 text-[#9a978f]">{note}</p> : null}</div>
-    </div>
-    <div className="min-w-0 border-t border-[#f0efec] px-3 py-3.5 text-[13px] font-semibold leading-5 text-[#1b1b1b] md:border-l md:border-t-0 md:px-5 md:py-4 md:text-[14px]">
-      <span className="mb-1 block text-[9.5px] uppercase tracking-[0.08em] text-[#9a978f] md:hidden">{leftName}</span>{left}
-    </div>
-    <div className="min-w-0 border-l border-t border-[#f0efec] px-3 py-3.5 text-[13px] font-semibold leading-5 text-[#1b1b1b] md:px-5 md:py-4 md:text-[14px]">
-      <span className="mb-1 block text-[9.5px] uppercase tracking-[0.08em] text-[#9a978f] md:hidden">{rightName}</span>{right}
-    </div>
-  </div>
-}
-
-function Header({ city }: { city: KrCityProfile }) {
-  return <div className="min-w-0 px-3 py-4 sm:px-4 md:px-5 md:py-5">
-    <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-[#8f8c85]">{city.regionName}</p>
-    <h2 className="mt-1 text-[20px] font-semibold tracking-[-0.03em] text-[#1b1b1b] md:text-[24px]">{city.name}</h2>
-    <p className="mt-1 text-[10.5px] text-[#77746e]">MOIS administrative code {city.adminCode}</p>
-    <Link href={`/cities/kr/${city.slug}`} className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-[#315ea8] hover:underline">City profile <ArrowRight className="size-3" /></Link>
-  </div>
-}
-
-export function SouthKoreaCitiesCompareMatrix({ left, right, options }: Props) {
+export async function SouthKoreaCitiesCompareMatrix({left,right,options}:Props){
+  const locale=await getLocale();const ko=locale==="ko"
   return <div className="w-full">
-    <CityCompareSelector options={options} leftSlug={left.slug} rightSlug={right.slug} countryCode="KR" />
-
-    <header className="mt-4 rounded-2xl border border-[#dce5f3] bg-gradient-to-br from-[#f4f8ff] via-white to-[#f8f5ee] p-5 sm:p-8">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#315ea8]">South Korea city comparison</p>
-      <h2 className="mt-2 text-[30px] font-semibold leading-tight tracking-[-0.035em] text-[#1b1b1b] sm:text-[40px]">{left.name} vs {right.name}</h2>
-      <p className="mt-3 max-w-3xl text-[13px] leading-6 text-[#6f6d68]">Compare the same MOIS/KOSIS administrative population boundary, verified teaching-location evidence and the five reviewed decision metrics. The current living-cost planning range is national and is therefore never used to rank Korean cities by affordability.</p>
-    </header>
-
-    <div className="mt-4 overflow-hidden rounded-2xl border border-[#e7e6e3] bg-white">
-      <div className="grid grid-cols-2 md:grid-cols-[220px_minmax(0,1fr)_minmax(0,1fr)]"><div className="hidden md:block" /><Header city={left} /><div className="border-l border-[#ecebe7]"><Header city={right} /></div></div>
-      <Row icon={<MapPin className="size-3.5" />} label="Administrative population" note="Same MOIS resident-registration boundary and June 2026 reference month" left={left.population ? compact(left.population.amount) : "—"} right={right.population ? compact(right.population.amount) : "—"} leftName={left.name} rightName={right.name} />
-      <Row icon={<Wallet className="size-3.5" />} label="Student living-cost planning range" note="National Study in Korea planning reference; city_specific=false and ranking_safe=false" left={living(left)} right={living(right)} leftName={left.name} rightName={right.name} />
-      <Row icon={<TrainFront className="size-3.5" />} label="Local transport reference" note="Source-native operator fare; no synthetic monthly normalization" left={transport(left)} right={transport(right)} leftName={left.name} rightName={right.name} />
-      <Row icon={<Clock3 className="size-3.5" />} label="Student work context" note="National immigration context with permission and eligibility conditions; not a city differentiator" left={work(left)} right={work(right)} leftName={left.name} rightName={right.name} />
-      <Row icon={<Building2 className="size-3.5" />} label="Verified teaching locations" note="Current Study in Korea provider foundation, not a complete Korean HEI inventory" left={`${left.linkedInstitutionCount} institutions · ${left.linkedCampusCount} locations`} right={`${right.linkedInstitutionCount} institutions · ${right.linkedCampusCount} locations`} leftName={left.name} rightName={right.name} />
-      <Row icon={<Users className="size-3.5" />} label="Programme evidence" note="Strict source-city linkage only; no inherited Seoul leakage from Suwon or Yongin" left={programmes(left)} right={programmes(right)} leftName={left.name} rightName={right.name} />
-      <Row icon={<BriefcaseBusiness className="size-3.5" />} label="Career environment" note="Official local economic context; not a shortage ranking or job guarantee" left={left.employmentSectors.join(" · ") || "—"} right={right.employmentSectors.join(" · ") || "—"} leftName={left.name} rightName={right.name} />
+    <CityCompareSelector options={options} leftSlug={left.slug} rightSlug={right.slug} countryCode="KR"/>
+    <header className="mt-4 rounded-2xl border border-[#dce5f3] bg-gradient-to-br from-[#f4f8ff] via-white to-[#f8f5ee] p-5 sm:p-8"><p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#315ea8]">{ko?"대한민국 도시 비교":"South Korea city comparison"}</p><h2 className="mt-2 text-[30px] font-semibold leading-tight tracking-[-0.035em] text-[#1b1b1b] sm:text-[40px]">{left.name} vs {right.name}</h2><p className="mt-3 max-w-3xl text-[13px] leading-6 text-[#6f6d68]">{ko?"동일한 행정안전부·KOSIS 인구 경계, 검증된 교육 장소 근거와 검토된 의사결정 지표를 비교합니다. 현재 생활비 계획 범위는 국가 단위 참고값이므로 한국 도시의 생활비 순위를 매기는 데 사용하지 않습니다.":"Compare the same MOIS/KOSIS administrative population boundary, verified teaching-location evidence and the reviewed decision metrics. The current living-cost planning range is national and is not used to rank Korean cities by affordability."}</p></header>
+    <div className="mt-4 overflow-hidden rounded-2xl border border-[#e7e6e3] bg-white"><div className="grid grid-cols-2 md:grid-cols-[220px_minmax(0,1fr)_minmax(0,1fr)]"><div className="hidden md:block"/><Header city={left} locale={locale}/><div className="border-l border-[#ecebe7]"><Header city={right} locale={locale}/></div></div>
+      <Row icon={<MapPin className="size-3.5"/>} label={ko?"행정구역 인구":"Administrative population"} note={ko?"동일한 행정안전부 주민등록 인구 경계 · 2026년 6월 기준":"Same MOIS resident-registration boundary and June 2026 reference month"} left={left.population?compact(left.population.amount,locale):"—"} right={right.population?compact(right.population.amount,locale):"—"} leftName={left.name} rightName={right.name}/>
+      <Row icon={<Wallet className="size-3.5"/>} label={ko?"학생 생활비 계획 범위":"Student living-cost planning range"} note={ko?"Study in Korea 국가 단위 계획 참고값이며 도시별 생활비 순위에는 사용하지 않습니다.":"National Study in Korea planning reference; not used for city affordability ranking."} left={living(left,locale)} right={living(right,locale)} leftName={left.name} rightName={right.name}/>
+      <Row icon={<TrainFront className="size-3.5"/>} label={ko?"지역 교통비 참고값":"Local transport reference"} note={ko?"공식 출처의 요금 단위를 그대로 유지하며 임의의 월 환산값을 만들지 않습니다.":"Source-native operator fare; no synthetic monthly normalization."} left={transport(left,locale)} right={transport(right,locale)} leftName={left.name} rightName={right.name}/>
+      <Row icon={<Clock3 className="size-3.5"/>} label={ko?"학생 근로시간 참고":"Student work context"} note={ko?"국가 단위 조건부 참고값이며 도시별 차이를 나타내지 않습니다. 세부 조건은 공식 출처에서 확인하세요.":"National conditional context; not a city differentiator. Check official conditions."} left={work(left,locale)} right={work(right,locale)} leftName={left.name} rightName={right.name}/>
+      <Row icon={<Building2 className="size-3.5"/>} label={ko?"검증된 교육 장소":"Verified teaching locations"} note={ko?"현재 Study in Korea 교육기관 기반 자료이며 한국 전체 고등교육기관 목록은 아닙니다.":"Current Study in Korea provider foundation, not a complete Korean HEI inventory."} left={ko?`${left.linkedInstitutionCount}개 기관 · ${left.linkedCampusCount}개 장소`:`${left.linkedInstitutionCount} institutions · ${left.linkedCampusCount} locations`} right={ko?`${right.linkedInstitutionCount}개 기관 · ${right.linkedCampusCount}개 장소`:`${right.linkedInstitutionCount} institutions · ${right.linkedCampusCount} locations`} leftName={left.name} rightName={right.name}/>
+      <Row icon={<Users className="size-3.5"/>} label={ko?"과정 근거":"Programme evidence"} note={ko?"출처에서 확인된 도시 연결만 사용하며 다른 도시의 과정을 자동으로 포함하지 않습니다.":"Strict source-city linkage only; no inherited city leakage."} left={programmes(left,locale)} right={programmes(right,locale)} leftName={left.name} rightName={right.name}/>
+      <Row icon={<BriefcaseBusiness className="size-3.5"/>} label={ko?"취업 환경":"Career environment"} note={ko?"공식 지역 경제 맥락이며 인력부족 순위나 취업 보장이 아닙니다.":"Official local economic context; not a shortage ranking or job guarantee."} left={ko?`${left.employmentSectors.length}개 주요 분야`:(left.employmentSectors.join(" · ")||"—")} right={ko?`${right.employmentSectors.length}개 주요 분야`:(right.employmentSectors.join(" · ")||"—")} leftName={left.name} rightName={right.name}/>
     </div>
-
-    <div className="mt-4 rounded-xl border border-[#e4e3df] bg-[#fafaf8] p-4 text-[11px] leading-5 text-[#74716b]"><div className="flex items-start gap-2"><Info className="mt-0.5 size-3.5 shrink-0" /><p>South Korea Compare intentionally does not score a winner. Living-cost evidence is currently a national planning range, local transport products retain their source-native fare basis, student-work rules are conditional national context, and programme counts are limited to strict city-linked evidence.</p></div></div>
+    <div className="mt-4 rounded-xl border border-[#e4e3df] bg-[#fafaf8] p-4 text-[11px] leading-5 text-[#74716b]"><div className="flex items-start gap-2"><Info className="mt-0.5 size-3.5 shrink-0"/><p>{ko?"대한민국 도시 비교는 의도적으로 승자를 점수화하지 않습니다. 현재 생활비 근거는 국가 단위 계획 범위이고, 교통비는 출처의 원래 요금 단위를 유지하며, 학생 근로시간은 국가 단위 조건부 맥락입니다. 과정 수 역시 엄격하게 도시와 연결된 근거만 사용합니다.":"South Korea Compare intentionally does not score a winner. Living-cost evidence is a national planning range, local transport retains its source-native fare basis, student-work rules are national conditional context, and programme counts use strict city-linked evidence."}</p></div></div>
   </div>
 }
