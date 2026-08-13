@@ -6,7 +6,7 @@ import { isLegacyGonePath } from '@/lib/seo-routes.mjs'
 
 // 로그인 필요한 페이지 보호
 // 점검 기간: /planner는 비로그인 허용 중 — 정상 가동 시 다시 추가
-const PROTECTED_PATHS = ['/home', '/dashboard', '/saved', '/documents', '/profile', '/reports/my-australia', '/onboarding']
+const PROTECTED_PATHS = ['/home', '/dashboard', '/saved', '/documents', '/profile', '/settings', '/reports/my-australia', '/onboarding']
 
 // 매출에 기여하지 않는 SEO·백링크 분석 크롤러. 검색엔진(Googlebot/Bingbot/
 // DuckDuckBot 등)과 소셜 미리보기 봇(Twitterbot, facebookexternalhit,
@@ -172,6 +172,7 @@ export const config = {
     '/saved/:path*',
     '/documents/:path*',
     '/profile/:path*',
+    '/settings/:path*',
     '/reports/:path*',
     '/onboarding/:path*',
     // Preserve explicit 410 responses for retired URL families without

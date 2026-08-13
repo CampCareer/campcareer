@@ -4,7 +4,7 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import type { User } from "@supabase/supabase-js"
-import { LayoutGrid, LogIn, Map, UserIcon } from "lucide-react"
+import { LayoutGrid, LogIn, Map } from "lucide-react"
 import { LanguageToggle } from "@/components/language-toggle"
 import { Button } from "@/components/ui/button"
 import { useRouteLocale, useRouteTranslations } from "@/lib/i18n/locale-provider"
@@ -51,6 +51,10 @@ export function ToolNavActions({ className, minimal = false, onLanding = false, 
   }, [appsOpen])
 
   const avatarUrl = user?.user_metadata?.avatar_url as string | undefined
+  const displayName = user
+    ? ((user.user_metadata?.full_name as string | undefined) || (user.user_metadata?.name as string | undefined) || user.email?.split("@")[0] || "C")
+    : "C"
+  const accountInitial = Array.from(displayName.trim())[0]?.toLocaleUpperCase() || "C"
 
   return <div className={cn("flex shrink-0 items-center gap-2 max-[360px]:gap-1", className)}>
     {minimal ? (
@@ -80,11 +84,11 @@ export function ToolNavActions({ className, minimal = false, onLanding = false, 
         {user ? (
           onAvatarClick ? (
             <button type="button" onClick={onAvatarClick} aria-label={locale === "ko" ? "프로필 열기" : "Open profile"} className="rounded-full transition hover:ring-2 hover:ring-blue-200">
-              {avatarUrl ? <img src={avatarUrl} alt="" className="w-7 h-7 rounded-full object-cover" /> : <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center"><UserIcon className="w-4 h-4 text-blue-600" /></div>}
+              {avatarUrl ? <img src={avatarUrl} alt="" className="w-7 h-7 rounded-full object-cover" /> : <div className="grid size-7 place-items-center rounded-full bg-blue-100 text-[11px] font-semibold text-blue-700" aria-hidden="true">{accountInitial}</div>}
             </button>
           ) : (
             <Link href={localizePath("/profile", pathLocale)} aria-label={locale === "ko" ? "프로필 열기" : "Open profile"}>
-              {avatarUrl ? <img src={avatarUrl} alt="" className="w-7 h-7 rounded-full object-cover" /> : <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center"><UserIcon className="w-4 h-4 text-blue-600" /></div>}
+              {avatarUrl ? <img src={avatarUrl} alt="" className="w-7 h-7 rounded-full object-cover" /> : <div className="grid size-7 place-items-center rounded-full bg-blue-100 text-[11px] font-semibold text-blue-700" aria-hidden="true">{accountInitial}</div>}
             </Link>
           )
         ) : (
@@ -124,11 +128,11 @@ export function ToolNavActions({ className, minimal = false, onLanding = false, 
         {user ? (
           onAvatarClick ? (
             <button type="button" onClick={onAvatarClick} aria-label={locale === "ko" ? "프로필 열기" : "Open profile"} className={cn("rounded-full transition hover:ring-2 hover:ring-blue-200", onLanding && "hover:ring-white/30")}>
-              {avatarUrl ? <img src={avatarUrl} alt="" className="w-7 h-7 rounded-full object-cover" /> : <div className={cn("w-7 h-7 rounded-full flex items-center justify-center", onLanding ? "bg-white/20" : "bg-blue-100")}><UserIcon className={cn("w-4 h-4", onLanding ? "text-white" : "text-blue-600")} /></div>}
+              {avatarUrl ? <img src={avatarUrl} alt="" className="w-7 h-7 rounded-full object-cover" /> : <div className={cn("grid size-7 place-items-center rounded-full text-[11px] font-semibold", onLanding ? "bg-white/20 text-white" : "bg-blue-100 text-blue-700")} aria-hidden="true">{accountInitial}</div>}
             </button>
           ) : (
             <Link href={localizePath("/profile", pathLocale)} aria-label={locale === "ko" ? "프로필 열기" : "Open profile"}>
-              {avatarUrl ? <img src={avatarUrl} alt="" className="w-7 h-7 rounded-full object-cover" /> : <div className={cn("w-7 h-7 rounded-full flex items-center justify-center", onLanding ? "bg-white/20" : "bg-blue-100")}><UserIcon className={cn("w-4 h-4", onLanding ? "text-white" : "text-blue-600")} /></div>}
+              {avatarUrl ? <img src={avatarUrl} alt="" className="w-7 h-7 rounded-full object-cover" /> : <div className={cn("grid size-7 place-items-center rounded-full text-[11px] font-semibold", onLanding ? "bg-white/20 text-white" : "bg-blue-100 text-blue-700")} aria-hidden="true">{accountInitial}</div>}
             </Link>
           )
         ) : (
