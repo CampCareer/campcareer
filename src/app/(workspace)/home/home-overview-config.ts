@@ -1,5 +1,6 @@
 import { CANONICAL_CAREERS } from "@/data/career-comparison-catalog"
 import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
+import { countryDisplayName } from "@/lib/i18n/config"
 
 export type OverviewOption = { value: string; label: string; searchTerms?: string[] }
 export type CareerCheckLocale = "en" | "ko"
@@ -34,7 +35,11 @@ export const OCCUPATION_OPTIONS: readonly OverviewOption[] = [
 export function getCountryOptions(locale: CareerCheckLocale): readonly OverviewOption[] {
   return [
     { value: NOT_SURE_COUNTRY.value, label: locale === "ko" ? "아직 모르겠어요" : "I'm not sure yet" },
-    ...LAUNCH_COUNTRIES.map((country) => ({ value: country.code, label: country.name })),
+    ...LAUNCH_COUNTRIES.map((country) => ({
+      value: country.code,
+      label: countryDisplayName(locale, country.code, country.name),
+      searchTerms: [country.name, countryDisplayName(locale === "ko" ? "en" : "ko", country.code, country.name)],
+    })),
   ]
 }
 
