@@ -1,7 +1,9 @@
 import Link from "next/link"
 import { ArrowRight, BriefcaseBusiness, Building2, Clock3, Info, MapPin, TrainFront, Users, Wallet } from "lucide-react"
 import type { EsCityProfile } from "@/lib/cities/es-city-profile.server"
+import { getLocale } from "@/lib/i18n/server"
 import { CityCompareSelector, type CityCompareOption } from "./city-compare-selector"
+import { SpainCitiesCompareMatrixKo } from "./spain-cities-compare-matrix-ko"
 
 type Props = { left: EsCityProfile; right: EsCityProfile; options: readonly CityCompareOption[] }
 
@@ -90,7 +92,7 @@ function Header({ city }: { city: EsCityProfile }) {
   </div>
 }
 
-export function SpainCitiesCompareMatrix({ left, right, options }: Props) {
+function SpainCitiesCompareMatrixEn({ left, right, options }: Props) {
   return <div className="w-full">
     <CityCompareSelector options={options} leftSlug={left.slug} rightSlug={right.slug} countryCode="ES" />
 
@@ -124,4 +126,8 @@ export function SpainCitiesCompareMatrix({ left, right, options }: Props) {
       </div>
     </div>
   </div>
+}
+
+export async function SpainCitiesCompareMatrix(props: Props) {
+  return (await getLocale()) === "ko" ? <SpainCitiesCompareMatrixKo {...props} /> : <SpainCitiesCompareMatrixEn {...props} />
 }
