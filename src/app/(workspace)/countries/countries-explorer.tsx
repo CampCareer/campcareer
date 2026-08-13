@@ -20,6 +20,8 @@ import { getCountryExplorer } from "@/lib/workspace/country-explorer"
 import { getCountryProfile } from "@/lib/workspace/country-profile"
 import { VISA_CATALOG } from "@/lib/workspace/visa-catalog"
 import { useSelectedCountry } from "@/components/workspace/country-context"
+import { countryDisplayName, localizePath, type Locale } from "@/lib/i18n/config"
+import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { cn } from "@/lib/utils"
 
 const POPULAR_CODES = ["AU", "CA", "US"] as const
@@ -38,8 +40,13 @@ const KIND_STYLES: Record<string, string> = {
   Temporary: "bg-[#f5f3f0] text-[#6f6d68]",
 }
 
-function formatMoney(value: number, currency: string) {
-  return new Intl.NumberFormat("en-US", {
+function visaKindLabel(locale: Locale, kind: string) {
+  if (locale !== "ko") return kind
+  return ({ Study: "학업", Work: "취업", Skilled: "기술", "Working holiday": "워킹홀리데이", Family: "가족", Temporary: "임시" } as Record<string, string>)[kind] ?? kind
+}
+
+function formatMoney(value: number, currency: string, locale: Locale) {
+  return new Intl.NumberFormat(locale === "ko" ? "ko-KR" : "en-US", {
     style: "currency",
     currency,
     maximumFractionDigits: 0,
@@ -100,6 +107,8 @@ function StatCard({
 }
 
 export function CountriesExplorer({ initialQuery }: { initialQuery: string }) {
+  const locale = useRouteLocale()
+  const ko = locale === "ko"
   const [query, setQuery] = useState(initialQuery)
   const [open, setOpen] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
@@ -107,29 +116,29 @@ export function CountriesExplorer({ initialQuery }: { initialQuery: string }) {
   const { selectedCountry, setSelectedCountry } = useSelectedCountry()
 
   const results = useMemo(() => {
-    const q = query.trim().toLowerCase()
-    const countries = LAUNCH_COUNTRIES.filter((country) => {
+    const q = query.trim().toLocaleLowerCase()
+    return LAUNCH_COUNTRIES.filter((country) => {
       if (!q) return true
-      if (country.name.toLowerCase().includes(q)) return true
-      if (country.currency.toLowerCase().includes(q)) return true
+      const localName = countryDisplayName(locale, country.code, country.name)
+      if (country.name.toLocaleLowerCase().includes(q) || localName.toLocaleLowerCase().includes(q)) return true
+      if (country.currency.toLocaleLowerCase().includes(q)) return true
       const explorer = getCountryExplorer(country.code)
       return explorer?.regions.some(
         (region) =>
-          region.name.toLowerCase().includes(q) ||
-          region.cities.some((city) => city.toLowerCase().includes(q))
+          region.name.toLocaleLowerCase().includes(q) ||
+          region.cities.some((city) => city.toLocaleLowerCase().includes(q))
       )
     })
-    return countries
-  }, [query])
+  }, [locale, query])
 
   function pickCountry(code: string, name: string, currency: string) {
     setSelectedCountry({ code, name, currency })
-    setQuery(name)
+    setQuery(countryDisplayName(locale, code, name))
     setOpen(false)
   }
 
-  function pick(code: (typeof LAUNCH_COUNTRIES)[number]) {
-    pickCountry(code.code, code.name, code.currency)
+  function pick(country: (typeof LAUNCH_COUNTRIES)[number]) {
+    pickCountry(country.code, country.name, country.currency)
   }
 
   function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -163,6 +172,7 @@ export function CountriesExplorer({ initialQuery }: { initialQuery: string }) {
   const popular = LAUNCH_COUNTRIES.filter((c) => (POPULAR_CODES as readonly string[]).includes(c.code))
   const cityCount = explorer?.regions.reduce((n, r) => n + r.cities.length, 0) ?? 0
   const bgImage = countryData ? heroImage(countryData.image) : heroImage(DEFAULT_IMAGE)
+  const displayedCountry = countryData ? countryDisplayName(locale, countryData.code, countryData.name) : ""
 
   return (
     <div>
@@ -178,25 +188,25 @@ export function CountriesExplorer({ initialQuery }: { initialQuery: string }) {
         />
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-32 pt-16 sm:px-8 sm:pt-20 lg:px-10">
           <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/70">
-            Countries
+            {ko ? "국가" : "Countries"}
           </p>
           {countryData ? (
             <>
               <h1 className="mt-2 text-[34px] font-semibold leading-tight tracking-[-0.025em] text-white sm:text-[44px]">
-                {countryData.name}
+                {displayedCountry}
               </h1>
               <p className="mt-2 text-[14px] font-medium text-white/85">
-                {countryData.code} · {explorer?.regions.length ?? 0} regions · {cityCount} cities ·{" "}
+                {countryData.code} · {explorer?.regions.length ?? 0}{ko ? "개 지역" : " regions"} · {cityCount}{ko ? "개 도시" : " cities"} ·{" "}
                 {countryData.currency}
               </p>
             </>
           ) : (
             <>
               <h1 className="mt-2 text-[34px] font-semibold leading-tight tracking-[-0.025em] text-white sm:text-[44px]">
-                Explore countries
+                {ko ? "국가 둘러보기" : "Explore countries"}
               </h1>
               <p className="mt-2 text-[14px] font-medium text-white/85">
-                Pick a destination to open its dashboard
+                {ko ? "목표 국가를 선택해 국가 대시보드를 열어보세요." : "Pick a destination to open its dashboard"}
               </p>
             </>
           )}
@@ -221,8 +231,8 @@ export function CountriesExplorer({ initialQuery }: { initialQuery: string }) {
                   setActiveIndex(0)
                 }}
                 onKeyDown={onKeyDown}
-                placeholder="Search by country, currency, region or city…"
-                aria-label="Search countries"
+                placeholder={ko ? "국가, 통화, 지역 또는 도시 검색…" : "Search by country, currency, region or city…"}
+                aria-label={ko ? "국가 검색" : "Search countries"}
                 aria-expanded={open}
                 aria-controls="country-suggestions"
                 aria-activedescendant={open ? `country-option-${activeIndex}` : undefined}
@@ -231,7 +241,7 @@ export function CountriesExplorer({ initialQuery }: { initialQuery: string }) {
               {open && results.length > 0 && (
                 <div className="absolute inset-x-0 top-[calc(100%+6px)] z-20 overflow-hidden rounded-xl border border-[#e7e6e3] bg-white shadow-xl shadow-black/5">
                   <p className="border-b border-[#f0efec] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.1em] text-[#a3a19b]">
-                    {results.length} {results.length === 1 ? "destination" : "destinations"}
+                    {ko ? `${results.length}개 국가` : `${results.length} ${results.length === 1 ? "destination" : "destinations"}`}
                   </p>
                   <ul role="listbox" id="country-suggestions" className="max-h-72 overflow-y-auto">
                     {results.map((country, index) => (
@@ -266,11 +276,11 @@ export function CountriesExplorer({ initialQuery }: { initialQuery: string }) {
                                   activeIndex === index ? "text-[#2563eb]" : "text-[#1b1b1b]"
                                 )}
                               >
-                                {country.name}
+                                {countryDisplayName(locale, country.code, country.name)}
                               </span>
                               {selectedCountry?.code === country.code && (
                                 <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[#edf5ea] px-1.5 py-0.5 text-[9.5px] font-bold uppercase tracking-wide text-[#3e7a2e]">
-                                  <BadgeCheck className="size-2.5" /> Active
+                                  <BadgeCheck className="size-2.5" /> {ko ? "선택됨" : "Active"}
                                 </span>
                               )}
                             </span>
@@ -288,7 +298,7 @@ export function CountriesExplorer({ initialQuery }: { initialQuery: string }) {
           </div>
 
           <div className="mt-3 flex flex-wrap items-center gap-2 px-1">
-            <span className="text-[12px] font-medium text-[#a3a19b]">Popular:</span>
+            <span className="text-[12px] font-medium text-[#a3a19b]">{ko ? "인기:" : "Popular:"}</span>
             {popular.map((country) => (
               <button
                 key={country.code}
@@ -304,7 +314,7 @@ export function CountriesExplorer({ initialQuery }: { initialQuery: string }) {
                     : "border-[#e0dfdb] bg-white text-[#4d4c48] hover:border-[#2563eb] hover:text-[#2563eb]"
                 )}
               >
-                <Globe2 className="size-3" /> {country.name}
+                <Globe2 className="size-3" /> {countryDisplayName(locale, country.code, country.name)}
               </button>
             ))}
           </div>
@@ -316,32 +326,32 @@ export function CountriesExplorer({ initialQuery }: { initialQuery: string }) {
               <StatCard
                 icon={<Stamp className="size-4 text-[#6d4fc4]" />}
                 accent="bg-[#f3f0fa]"
-                label="Visa options"
+                label={ko ? "비자 경로" : "Visa options"}
                 value={String(visas.length)}
-                hint={`${visas.length} ${visas.length === 1 ? "pathway" : "pathways"} to study, work or settle`}
-                href="/visas"
+                hint={ko ? `학업·취업·정착 관련 ${visas.length}개 경로` : `${visas.length} ${visas.length === 1 ? "pathway" : "pathways"} to study, work or settle`}
+                href={localizePath("/visas", locale)}
               />
               <StatCard
                 icon={<Banknote className="size-4 text-[#2563eb]" />}
                 accent="bg-[#eef4ff]"
-                label="Average salary"
+                label={ko ? "평균 연봉" : "Average salary"}
                 value={
                   profile.salary
-                    ? formatMoney(profile.salary.value, profile.salary.currency)
+                    ? formatMoney(profile.salary.value, profile.salary.currency, locale)
                     : "—"
                 }
-                hint={profile.salary ? profile.salary.unit : "Source pending — data coming soon"}
+                hint={profile.salary ? profile.salary.unit : ko ? "출처 확인 중 — 데이터 준비 중" : "Source pending — data coming soon"}
               />
               <StatCard
                 icon={<Wallet className="size-4 text-[#c2691e]" />}
                 accent="bg-[#fbf0e7]"
-                label="Living costs"
+                label={ko ? "생활비" : "Living costs"}
                 value={
                   profile.livingCost
-                    ? formatMoney(profile.livingCost.value, profile.livingCost.currency)
+                    ? formatMoney(profile.livingCost.value, profile.livingCost.currency, locale)
                     : "—"
                 }
-                hint={profile.livingCost ? profile.livingCost.unit : "Source pending — data coming soon"}
+                hint={profile.livingCost ? profile.livingCost.unit : ko ? "출처 확인 중 — 데이터 준비 중" : "Source pending — data coming soon"}
               />
             </div>
 
@@ -350,10 +360,10 @@ export function CountriesExplorer({ initialQuery }: { initialQuery: string }) {
               <div className="flex items-center justify-between border-b border-[#f0efec] px-5 py-4">
                 <div className="flex items-center gap-2.5">
                   <ScrollText className="size-4 text-[#6d4fc4]" />
-                  <h3 className="text-[14.5px] font-semibold text-[#1b1b1b]">Visa options</h3>
+                  <h3 className="text-[14.5px] font-semibold text-[#1b1b1b]">{ko ? "비자 경로" : "Visa options"}</h3>
                 </div>
                 <span className="text-[11.5px] font-medium text-[#a3a19b]">
-                  {visas.length} pathways
+                  {ko ? `${visas.length}개 경로` : `${visas.length} pathways`}
                 </span>
               </div>
               <ul className="divide-y divide-[#f0efec]">
@@ -365,7 +375,7 @@ export function CountriesExplorer({ initialQuery }: { initialQuery: string }) {
                         KIND_STYLES[visa.kind] ?? KIND_STYLES.Temporary
                       )}
                     >
-                      {visa.kind}
+                      {visaKindLabel(locale, visa.kind)}
                     </span>
                     <span className="min-w-0 flex-1">
                       <a
@@ -389,7 +399,7 @@ export function CountriesExplorer({ initialQuery }: { initialQuery: string }) {
               </ul>
               {visas.length === 0 && (
                 <p className="px-5 py-8 text-center text-[13px] text-[#a3a19b]">
-                  Visa pathways for {countryData.name} are being catalogued.
+                  {ko ? `${displayedCountry}의 비자 경로를 정리하고 있습니다.` : `Visa pathways for ${countryData.name} are being catalogued.`}
                 </p>
               )}
             </div>
@@ -399,14 +409,14 @@ export function CountriesExplorer({ initialQuery }: { initialQuery: string }) {
                 <div className="flex items-center gap-2.5 border-b border-[#f0efec] px-5 py-4">
                   <Sparkles className="size-4 text-[#2563eb]" />
                   <h3 className="text-[14.5px] font-semibold text-[#1b1b1b]">
-                    Salary &amp; work opportunities
+                    {ko ? "연봉 및 취업 기회" : "Salary & work opportunities"}
                   </h3>
                 </div>
                 <div className="px-5 py-4">
                   {profile.salary ? (
                     <>
                       <p className="text-[26px] font-semibold tracking-[-0.02em] text-[#1b1b1b]">
-                        {formatMoney(profile.salary.value, profile.salary.currency)}
+                        {formatMoney(profile.salary.value, profile.salary.currency, locale)}
                       </p>
                       <p className="text-[12px] font-medium text-[#6f6d68]">{profile.salary.unit}</p>
                       <p className="mt-1 text-[11.5px] leading-4.5 text-[#a3a19b]">
@@ -418,7 +428,7 @@ export function CountriesExplorer({ initialQuery }: { initialQuery: string }) {
                     </>
                   ) : (
                     <p className="text-[13px] leading-5.5 text-[#a3a19b]">
-                      Average salary data for {countryData.name} is being sourced.
+                      {ko ? `${displayedCountry} 평균 연봉 데이터를 확인하고 있습니다.` : `Average salary data for ${countryData.name} is being sourced.`}
                     </p>
                   )}
                 </div>
@@ -431,7 +441,7 @@ export function CountriesExplorer({ initialQuery }: { initialQuery: string }) {
                       {profile.workOpportunities.items.map((item) => (
                         <li key={item.title} className="flex items-center gap-2">
                           <span className="size-1.5 shrink-0 rounded-full bg-[#2563eb]" />
-                          <span className="min-w-0">
+                          <span className="min-w-0 flex-1">
                             <span className="block truncate text-[12.5px] font-medium text-[#4d4c48]">
                               {item.title}
                             </span>
@@ -452,13 +462,13 @@ export function CountriesExplorer({ initialQuery }: { initialQuery: string }) {
               <div className="rounded-xl border border-[#e7e6e3] bg-white">
                 <div className="flex items-center gap-2.5 border-b border-[#f0efec] px-5 py-4">
                   <Building2 className="size-4 text-[#c2691e]" />
-                  <h3 className="text-[14.5px] font-semibold text-[#1b1b1b]">Living costs</h3>
+                  <h3 className="text-[14.5px] font-semibold text-[#1b1b1b]">{ko ? "생활비" : "Living costs"}</h3>
                 </div>
                 <div className="px-5 py-4">
                   {profile.livingCost ? (
                     <>
                       <p className="text-[26px] font-semibold tracking-[-0.02em] text-[#1b1b1b]">
-                        {formatMoney(profile.livingCost.value, profile.livingCost.currency)}
+                        {formatMoney(profile.livingCost.value, profile.livingCost.currency, locale)}
                       </p>
                       <p className="text-[12px] font-medium text-[#6f6d68]">
                         {profile.livingCost.unit}
@@ -472,7 +482,7 @@ export function CountriesExplorer({ initialQuery }: { initialQuery: string }) {
                     </>
                   ) : (
                     <p className="text-[13px] leading-5.5 text-[#a3a19b]">
-                      Rent and cost-of-living data for {countryData.name} is being sourced.
+                      {ko ? `${displayedCountry}의 주거비와 생활비 데이터를 확인하고 있습니다.` : `Rent and cost-of-living data for ${countryData.name} is being sourced.`}
                     </p>
                   )}
                 </div>
@@ -483,9 +493,9 @@ export function CountriesExplorer({ initialQuery }: { initialQuery: string }) {
           <div className="mt-4 rounded-xl border border-[#e7e6e3] bg-white">
             <div className="flex items-center gap-2.5 border-b border-[#f0efec] px-5 py-4">
               <MapPin className="size-4 text-[#3e7a2e]" />
-              <h3 className="text-[14.5px] font-semibold text-[#1b1b1b]">Regions &amp; cities</h3>
+              <h3 className="text-[14.5px] font-semibold text-[#1b1b1b]">{ko ? "지역 및 도시" : "Regions & cities"}</h3>
               <span className="ml-auto text-[11.5px] font-medium text-[#a3a19b]">
-                {explorer.regions.reduce((n, r) => n + r.cities.length, 0)} cities
+                {explorer.regions.reduce((n, r) => n + r.cities.length, 0)}{ko ? "개 도시" : " cities"}
               </span>
             </div>
             <div className="grid gap-x-8 gap-y-5 px-5 py-5 sm:grid-cols-2">
@@ -517,11 +527,10 @@ export function CountriesExplorer({ initialQuery }: { initialQuery: string }) {
             <Globe2 className="size-5 text-[#2563eb]" />
           </span>
           <h3 className="mt-4 text-[16px] font-semibold text-[#1b1b1b]">
-            Pick a country to open its dashboard
+            {ko ? "국가를 선택해 대시보드를 열어보세요." : "Pick a country to open its dashboard"}
           </h3>
           <p className="mt-1.5 max-w-md text-[13px] leading-5.5 text-[#6f6d68]">
-            Each country dashboard shows visa options, average salary, living costs and work
-            opportunities — pick one from the search bar or a popular chip above.
+            {ko ? "국가 대시보드에서 비자 경로, 평균 연봉, 생활비와 취업 기회를 확인할 수 있어요. 검색창이나 위의 인기 국가에서 하나를 선택하세요." : "Each country dashboard shows visa options, average salary, living costs and work opportunities — pick one from the search bar or a popular chip above."}
           </p>
         </div>
       )}
