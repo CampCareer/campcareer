@@ -7,13 +7,77 @@ import { ArrowLeft, ArrowRight, Loader2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase-client'
 import { getSafeNextPath } from '@/lib/auth/safe-next'
 import { getPostLoginDestination } from '@/lib/auth/post-login-destination'
-import { getPathwayBackPath, getPathwaySummaryFromNext } from '@/lib/auth/pathway-next'
-import { DEFAULT_LOCALE, localeForUi, localeFromPathname, localizePath } from '@/lib/i18n/config'
+import { getPathwayBackPath, getPathwaySummaryFromNext, type PathwaySummary } from '@/lib/auth/pathway-next'
+import { DEFAULT_LOCALE, localeForUi, localeFromPathname, localizePath, type Locale } from '@/lib/i18n/config'
 import { LOGIN_COPY } from './login-copy'
 
 type LoginNotice = {
   tone: 'error' | 'success'
   message: string
+}
+
+const PATHWAY_FIELD_KO: Record<string, string> = {
+  trades: '건설·기술직',
+  health: '보건·돌봄',
+  technology: 'IT·데이터·과학',
+  engineering: '공학·제조·자원',
+  business: '비즈니스·금융·법·공공행정',
+  education: '교육·사회·커뮤니티 서비스',
+  environment: '환경·농업',
+  design: '디자인·미디어·문화',
+  hospitality: '호텔·리테일·서비스',
+  transport: '운송·항공·해양·물류',
+  'not-sure': '분야 미선택',
+  'computer-science': '컴퓨터과학',
+  'data-science': '데이터과학',
+  'artificial-intelligence': '인공지능',
+  'software-engineering': '소프트웨어공학',
+  'information-technology': '정보기술',
+  finance: '금융',
+  accounting: '회계학',
+  marketing: '마케팅',
+  economics: '경제학',
+  nursing: '간호학',
+  medicine: '의학',
+  pharmacy: '약학',
+  law: '법학',
+  psychology: '심리학',
+  biology: '생물학',
+  'mechanical-engineering': '기계공학',
+  'electrical-engineering': '전기공학',
+  'chemical-engineering': '화학공학',
+  mathematics: '수학',
+  communications: '커뮤니케이션',
+  'political-science': '정치학',
+  architecture: '건축학',
+}
+
+const PATHWAY_STATUS_KO: Record<string, string> = {
+  'no-field': '선택지를 탐색 중',
+  'choosing-school': '프로그램 선택 중',
+  'preparing-application': '지원 준비 중',
+  'already-qualified': '이미 자격 보유',
+  'looking-for-job': '취업 또는 스폰서 찾는 중',
+  'preparing-visa': '비자 준비 중',
+}
+
+function localizePathwaySummary(summary: PathwaySummary, next: string, locale: Locale): PathwaySummary {
+  if (locale !== 'ko') return summary
+
+  const url = new URL(next, 'https://campcareer.local')
+  const origin = url.searchParams.get('origin')?.toUpperCase() ?? ''
+  const destination = url.searchParams.get('country')?.toUpperCase() ?? ''
+  const field = url.searchParams.get('field') ?? ''
+  const status = url.searchParams.get('status') ?? (field === 'not-sure' ? 'no-field' : 'choosing-school')
+  const regionNames = new Intl.DisplayNames(['ko'], { type: 'region' })
+  const destinationLabel = (destination && regionNames.of(destination)) || summary.country
+  const originLabel = (origin && regionNames.of(origin)) || ''
+
+  return {
+    country: originLabel ? `${originLabel} → ${destinationLabel}` : destinationLabel,
+    field: PATHWAY_FIELD_KO[field] ?? summary.field,
+    status: PATHWAY_STATUS_KO[status] ?? summary.status,
+  }
 }
 
 function LoginPageContent() {
@@ -25,7 +89,8 @@ function LoginPageContent() {
   const uiLocale = localeForUi(routeLocale)
   const copy = LOGIN_COPY[uiLocale]
   const next = getSafeNextPath(requestedNext, localizePath('/home', routeLocale))
-  const pathwaySummary = getPathwaySummaryFromNext(requestedNext)
+  const rawPathwaySummary = getPathwaySummaryFromNext(requestedNext)
+  const pathwaySummary = rawPathwaySummary ? localizePathwaySummary(rawPathwaySummary, next, uiLocale) : null
   const pathwayBackPath = localizePath(getPathwayBackPath(requestedNext), routeLocale)
   const supabase = createClient()
 
