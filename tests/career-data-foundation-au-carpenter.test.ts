@@ -8,7 +8,7 @@ import {
   foundationScoreConfidence,
 } from "../src/lib/career-data-foundation/opportunity-score"
 
-const migration = readFileSync("supabase/migrations/20260813023500_career_data_foundation_au_carpenter.sql", "utf8")
+const migration = readFileSync("supabase/migrations/20260813024158_career_data_foundation_au_carpenter.sql", "utf8")
 
 test("AU Carpenter uses exact current OSCA mapping with explicit ANZSCO proxy lineage", () => {
   assert.match(migration, /'AU:carpenter:OSCA:372132'/)
