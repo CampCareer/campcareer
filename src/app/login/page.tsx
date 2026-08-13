@@ -1,14 +1,15 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Suspense, useState } from 'react'
 import { ArrowLeft, ArrowRight, Loader2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase-client'
 import { getSafeNextPath } from '@/lib/auth/safe-next'
 import { getPostLoginDestination } from '@/lib/auth/post-login-destination'
 import { getPathwayBackPath, getPathwaySummaryFromNext, type PathwaySummary } from '@/lib/auth/pathway-next'
-import { DEFAULT_LOCALE, localeForUi, localeFromPathname, localizePath, type Locale } from '@/lib/i18n/config'
+import { localizePath, withoutLocalePrefix, type Locale } from '@/lib/i18n/config'
+import { useRouteLocale } from '@/lib/i18n/locale-provider'
 import { LOGIN_COPY } from './login-copy'
 
 type LoginNotice = {
@@ -80,17 +81,20 @@ function localizePathwaySummary(summary: PathwaySummary, next: string, locale: L
   }
 }
 
+function getPathwaySummaryInput(next: string) {
+  const url = new URL(next, 'https://campcareer.local')
+  return `${withoutLocalePrefix(url.pathname)}${url.search}${url.hash}`
+}
+
 function LoginPageContent() {
   const router = useRouter()
-  const pathname = usePathname()
   const searchParams = useSearchParams()
   const requestedNext = searchParams.get('next')
-  const routeLocale = localeFromPathname(pathname) ?? DEFAULT_LOCALE
-  const uiLocale = localeForUi(routeLocale)
-  const copy = LOGIN_COPY[uiLocale]
+  const routeLocale = useRouteLocale()
+  const copy = LOGIN_COPY[routeLocale]
   const next = getSafeNextPath(requestedNext, localizePath('/home', routeLocale))
-  const rawPathwaySummary = getPathwaySummaryFromNext(requestedNext)
-  const pathwaySummary = rawPathwaySummary ? localizePathwaySummary(rawPathwaySummary, next, uiLocale) : null
+  const rawPathwaySummary = getPathwaySummaryFromNext(getPathwaySummaryInput(next))
+  const pathwaySummary = rawPathwaySummary ? localizePathwaySummary(rawPathwaySummary, next, routeLocale) : null
   const pathwayBackPath = localizePath(getPathwayBackPath(requestedNext), routeLocale)
   const supabase = createClient()
 
