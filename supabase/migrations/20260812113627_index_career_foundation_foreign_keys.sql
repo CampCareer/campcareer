@@ -1,0 +1,4 @@
+create index career_occupation_mappings_source_idx on public.career_occupation_mappings(source_key);
+create index career_raw_observations_mapping_idx on public.career_raw_observations(mapping_key) where mapping_key is not null;
+create index career_foundation_blockers_source_idx on public.career_foundation_blockers(source_key);
+create index career_foundation_entry_points_source_idx on public.career_foundation_entry_points(source_key);

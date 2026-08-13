@@ -2,9 +2,18 @@ import "server-only"
 
 import { CANONICAL_CAREER_BY_ID } from "@/data/career-comparison-catalog"
 import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
+import { getCareerDataFoundation, getFoundationCountriesForCareer } from "@/lib/career-data-foundation/read"
+import { isFoundationRankable } from "@/lib/career-data-foundation/opportunity-score"
+import type { CareerDataFoundationResult } from "@/lib/career-data-foundation/types"
 import { supabase } from "@/lib/supabase"
 import { getCountryOccupationProfile } from "./country-occupation-read"
-import type { CareerMarketDemand, CareerMarketInsight, CareerMarketRecommendation, CareerVisaPathway } from "./career-market-contract"
+import type {
+  CareerMarketDemand,
+  CareerMarketInsight,
+  CareerMarketProfile,
+  CareerMarketRecommendation,
+  CareerVisaPathway,
+} from "./career-market-contract"
 import { OCCUPATION_DETAILS } from "./occupation-detail"
 
 const countryName = (countryCode: string) =>
@@ -24,6 +33,162 @@ const toDemand = (careerId: string, countryCode: string): CareerMarketDemand | n
   }
 }
 
+const toFoundationDemand = (foundation: CareerDataFoundationResult): CareerMarketDemand => {
+  const openings = foundation.decisionMetrics.projectedAnnualOpenings
+  const growth = foundation.decisionMetrics.projectedGrowthPct
+  const source = foundation.sources.find((item) => item.sourceKey === "us-bls-ep-2024-2034")
+  const signal = [
+    openings == null ? null : `Projection: ${new Intl.NumberFormat("en-US").format(openings)} openings/year`,
+    growth == null ? null : `${growth}% growth`,
+  ].filter(Boolean).join(" · ")
+  return {
+    countryCode: foundation.countryCode,
+    countryName: countryName(foundation.countryCode),
+    rating: signal || null,
+    note: "BLS annual openings and employment growth are projection signals, not a live vacancy count, formal shortage finding, personal employment assessment, or visa outcome.",
+    sourceLabel: source?.title ?? null,
+    sourceUrl: source?.url ?? null,
+  }
+}
+
+const toFoundationVisas = (foundation: CareerDataFoundationResult): CareerVisaPathway[] => {
+  const visaBlocker = foundation.blockers.find((item) => item.blockerType === "visa")
+  const sources = new Map(foundation.sources.map((source) => [source.sourceKey, source]))
+  return foundation.entryPoints
+    .filter((entryPoint) => entryPoint.entryType === "visa")
+    .map((entryPoint) => {
+      const source = sources.get(entryPoint.sourceKey)
+      const h2b = /h-2b/i.test(entryPoint.label)
+      return {
+        name: entryPoint.label,
+        kind: h2b ? "Temporary" as const : "Work" as const,
+        note: `${entryPoint.applicabilityScope} ${visaBlocker?.reason ?? entryPoint.notes ?? "Eligibility is case-specific."}`,
+        authority: entryPoint.provider,
+        sourceUrl: entryPoint.url,
+        sourceTitle: source?.title ?? entryPoint.label,
+        lastVerifiedOn: entryPoint.lastVerifiedOn,
+      }
+    })
+}
+
+const foundationCareerContext = (foundation: CareerDataFoundationResult) => {
+  const metrics = foundation.decisionMetrics
+  const employment = metrics.employmentTotal == null
+    ? "verified employment data"
+    : `${new Intl.NumberFormat("en-US").format(metrics.employmentTotal)} jobs in the BLS 2024 projection base`
+  const openings = metrics.projectedAnnualOpenings == null
+    ? "projected openings data"
+    : `${new Intl.NumberFormat("en-US").format(metrics.projectedAnnualOpenings)} projected annual openings through 2034`
+  const growth = metrics.projectedGrowthPct == null
+    ? "the published outlook"
+    : `${metrics.projectedGrowthPct}% projected employment growth through 2034`
+  const blockerSummary = foundation.blockers
+    .filter((item) => item.blockerType === "licensing" || item.blockerType === "safety_training")
+    .map((item) => item.reason)
+    .join(" ")
+
+  return {
+    overview: {
+      en: `For ${foundation.mapping.officialTitle}, the foundation records ${employment}, ${openings}, and ${growth}. These are market observations and projections, not a personal employment or immigration assessment.`,
+      ko: `${foundation.mapping.officialTitle}에 대해 공식 데이터 기반 고용 규모, 연평균 채용 전망, 성장 전망을 제공합니다. 이는 시장 데이터이며 개인의 취업 가능성이나 비자 승인 여부를 판단하는 결과가 아닙니다.`,
+    },
+    registration: {
+      en: blockerSummary || "Licensing, registration and safety requirements must be checked for the intended state, municipality, employer and project.",
+      ko: "미국 전체에 단일 Carpenter 개인 면허 요건이 있다고 보지 않습니다. 주, 지방정부, 고용주, 프로젝트별 면허·등록·안전교육 요건을 실제 근무 지역 기준으로 확인해야 합니다.",
+    },
+    sources: foundation.sources.map((source) => ({ label: source.title, url: source.url })),
+  }
+}
+
+const toFoundationCompatibilityProfile = (foundation: CareerDataFoundationResult): CareerMarketProfile => {
+  const entryLinks: CareerMarketProfile["links"] = foundation.entryPoints
+    .filter((entryPoint) => ["job_search", "employer", "apprenticeship", "training"].includes(entryPoint.entryType))
+    .map((entryPoint) => ({
+      linkType: entryPoint.entryType === "job_search"
+        ? "job_search" as const
+        : entryPoint.entryType === "employer"
+          ? "employer" as const
+          : "entry_program" as const,
+      label: entryPoint.label,
+      url: entryPoint.url,
+      providerType: entryPoint.provider,
+      regionCode: null,
+    }))
+
+  return {
+    profileKey: foundation.profileKey,
+    countryCode: foundation.countryCode,
+    canonicalCareerId: foundation.canonicalOccupationId,
+    officialTitle: foundation.mapping.officialTitle,
+    officialCodeSystem: foundation.mapping.officialTaxonomy,
+    officialCodeVersion: foundation.mapping.officialTaxonomyVersion,
+    officialUnitGroupCode: foundation.mapping.officialCode,
+    currency: foundation.currency,
+    registrationRequired: false,
+    registrationAuthority: null,
+    registrationUrl: null,
+    publicationStatus: "decision_ready",
+    sourceCheckedAt: foundation.sourceCheckedOn,
+    metric: {
+      asOfDate: foundation.sourceCheckedOn,
+      employmentTotal: foundation.decisionMetrics.employmentTotal,
+      medianWeeklyEarnings: null,
+      medianHourlyEarnings: foundation.decisionMetrics.medianHourlyWage,
+      annualisedMedianSalary: foundation.decisionMetrics.medianAnnualWage,
+      allOccupationsMedianWeekly: null,
+      partTimeSharePct: null,
+      femaleSharePct: null,
+      medianAge: null,
+      averageFullTimeHours: null,
+      vacanciesThreeMonthAvg: null,
+      vacancyPeriod: null,
+      vacancyYoyPct: null,
+      employmentGrowth5yPct: null,
+      employmentGrowth10yPct: foundation.decisionMetrics.projectedGrowthPct,
+      opportunityScore: foundation.opportunityScore,
+      scoreMethodologyVersion: foundation.readiness.formulaVersion,
+      scoreStatus: foundation.readiness.scoreReady ? "foundation_ready" : "not_ready",
+      scoreEvidence: {
+        source: "career_data_foundation",
+        readiness: foundation.readiness,
+        components: foundation.scoreComponents.map((component) => ({
+          componentKey: component.componentKey,
+          availability: component.availability,
+          directness: component.directness,
+          scoreValue: component.scoreValue,
+          reason: component.reason,
+          proxyReason: component.proxyReason,
+        })),
+      },
+      score: {
+        shortage: null,
+        vacancyIntensity: null,
+        employerDiversity: null,
+        vacancyTrend: null,
+        entryLevel: null,
+        salary: null,
+        growth: null,
+        visa: null,
+        entryBurden: null,
+      },
+      sourceCheckedAt: foundation.sourceCheckedOn,
+    },
+    specialisations: [{
+      officialCode: foundation.mapping.officialCode,
+      officialTitle: foundation.mapping.officialTitle,
+      legacyCodeSystem: null,
+      legacyCodeVersion: null,
+      legacyCode: null,
+      shortageRating: null,
+      visaEligible: null,
+      includedInRollup: true,
+    }],
+    regions: [],
+    links: entryLinks,
+    programLinks: [],
+  }
+}
+
 type ProfileRow = {
   profile_key: string
   country_code: string
@@ -40,15 +205,20 @@ type MetricRow = {
 }
 
 export async function getCareerCountryRecommendations(careerId: string): Promise<CareerMarketRecommendation[]> {
-  const profilesResult = await supabase
-    .from("country_occupation_profiles")
-    .select("profile_key,country_code,official_title,registration_required,publication_status")
-    .eq("canonical_career_id", careerId)
-    .in("publication_status", ["profile_ready", "decision_ready"])
+  const [profilesResult, foundationRows] = await Promise.all([
+    supabase
+      .from("country_occupation_profiles")
+      .select("profile_key,country_code,official_title,registration_required,publication_status")
+      .eq("canonical_career_id", careerId)
+      .in("publication_status", ["profile_ready", "decision_ready"]),
+    getFoundationCountriesForCareer(careerId),
+  ])
 
   if (profilesResult.error) throw profilesResult.error
   const profiles = (profilesResult.data ?? []) as ProfileRow[]
-  const profileKeys = profiles.map((profile) => profile.profile_key)
+  const foundationCountries = new Set(foundationRows.map((row) => row.countryCode))
+  const legacyProfiles = profiles.filter((profile) => !foundationCountries.has(profile.country_code))
+  const profileKeys = legacyProfiles.map((profile) => profile.profile_key)
   const latestMetrics = new Map<string, MetricRow>()
 
   if (profileKeys.length) {
@@ -64,7 +234,27 @@ export async function getCareerCountryRecommendations(careerId: string): Promise
   }
 
   const byCountry = new Map<string, CareerMarketRecommendation>()
-  for (const profile of profiles) {
+
+  for (const foundation of foundationRows) {
+    if (!isFoundationRankable({
+      decisionReady: foundation.decisionReady,
+      scoreReady: foundation.scoreReady,
+      publishReady: foundation.publishReady,
+      opportunityScore: foundation.opportunityScore,
+    })) continue
+    byCountry.set(foundation.countryCode, {
+      countryCode: foundation.countryCode,
+      countryName: countryName(foundation.countryCode),
+      officialTitle: foundation.officialTitle,
+      opportunityScore: foundation.opportunityScore,
+      scoreStatus: "foundation_ready",
+      registrationRequired: null,
+      publicationStatus: "decision_ready",
+      demand: null,
+    })
+  }
+
+  for (const profile of legacyProfiles) {
     const metric = latestMetrics.get(profile.profile_key)
     byCountry.set(profile.country_code, {
       countryCode: profile.country_code,
@@ -79,18 +269,17 @@ export async function getCareerCountryRecommendations(careerId: string): Promise
   }
 
   for (const demand of OCCUPATION_DETAILS.find((detail) => detail.id === careerId)?.demand ?? []) {
-    if (!byCountry.has(demand.countryCode)) {
-      byCountry.set(demand.countryCode, {
-        countryCode: demand.countryCode,
-        countryName: demand.countryLabel,
-        officialTitle: null,
-        opportunityScore: null,
-        scoreStatus: null,
-        registrationRequired: null,
-        publicationStatus: null,
-        demand: toDemand(careerId, demand.countryCode),
-      })
-    }
+    if (foundationCountries.has(demand.countryCode) || byCountry.has(demand.countryCode)) continue
+    byCountry.set(demand.countryCode, {
+      countryCode: demand.countryCode,
+      countryName: demand.countryLabel,
+      officialTitle: null,
+      opportunityScore: null,
+      scoreStatus: null,
+      registrationRequired: null,
+      publicationStatus: null,
+      demand: toDemand(careerId, demand.countryCode),
+    })
   }
 
   return [...byCountry.values()]
@@ -129,13 +318,53 @@ export async function getCareerMarketInsight({ countryCode, careerId }: { countr
       career: base,
       country: null,
       profile: null,
+      foundation: null,
+      readModelSource: "editorial_only",
       demand: null,
       recommendations: await getCareerCountryRecommendations(careerId),
       visas: [],
     }
   }
 
-  const [profile, visaResult, recommendations] = await Promise.all([
+  const [foundation, recommendations] = await Promise.all([
+    getCareerDataFoundation({ countryCode: country, careerId }),
+    getCareerCountryRecommendations(careerId),
+  ])
+
+  if (foundation?.readiness.decisionReady) {
+    const context = foundationCareerContext(foundation)
+    return {
+      career: {
+        ...base,
+        overview: context.overview,
+        registration: context.registration,
+        mainTasks: [],
+        sources: context.sources,
+      },
+      country: { code: country, name: countryName(country) },
+      profile: toFoundationCompatibilityProfile(foundation),
+      foundation,
+      readModelSource: "career_data_foundation",
+      demand: toFoundationDemand(foundation),
+      recommendations,
+      visas: toFoundationVisas(foundation),
+    }
+  }
+
+  if (foundation) {
+    return {
+      career: base,
+      country: { code: country, name: countryName(country) },
+      profile: null,
+      foundation,
+      readModelSource: "editorial_only",
+      demand: null,
+      recommendations,
+      visas: [],
+    }
+  }
+
+  const [profile, visaResult] = await Promise.all([
     getCountryOccupationProfile(country, careerId),
     supabase
       .from("visa_pathways")
@@ -143,7 +372,6 @@ export async function getCareerMarketInsight({ countryCode, careerId }: { countr
       .eq("country_code", country)
       .order("display_order", { ascending: true })
       .limit(4),
-    getCareerCountryRecommendations(careerId),
   ])
   if (visaResult.error) throw visaResult.error
 
@@ -151,6 +379,8 @@ export async function getCareerMarketInsight({ countryCode, careerId }: { countr
     career: base,
     country: { code: country, name: countryName(country) },
     profile,
+    foundation: null,
+    readModelSource: profile ? "legacy_country_occupation" : "editorial_only",
     demand: toDemand(careerId, country),
     recommendations,
     visas: ((visaResult.data ?? []) as VisaRow[]).map((visa) => ({

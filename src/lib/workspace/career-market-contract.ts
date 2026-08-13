@@ -1,4 +1,5 @@
-import type { CountryOccupationProfile } from "./country-occupation-contract"
+import type { CareerDataFoundationResult } from "@/lib/career-data-foundation/types"
+import type { CountryOccupationMetric, CountryOccupationProfile, OpportunityScoreBreakdown } from "./country-occupation-contract"
 
 export type CareerMarketDemand = {
   countryCode: string
@@ -14,10 +15,20 @@ export type CareerMarketRecommendation = {
   countryName: string
   officialTitle: string | null
   opportunityScore: number | null
-  scoreStatus: "provisional" | "reviewed" | "published" | null
+  scoreStatus: "provisional" | "reviewed" | "published" | "foundation_ready" | null
   registrationRequired: boolean | null
   publicationStatus: "review_required" | "profile_ready" | "decision_ready" | null
   demand: CareerMarketDemand | null
+}
+
+export type CareerMarketMetric = Omit<CountryOccupationMetric, "opportunityScore" | "scoreStatus" | "score"> & {
+  opportunityScore: number | null
+  scoreStatus: CountryOccupationMetric["scoreStatus"] | "foundation_ready" | "not_ready"
+  score: { [Key in keyof OpportunityScoreBreakdown]: number | null }
+}
+
+export type CareerMarketProfile = Omit<CountryOccupationProfile, "metric"> & {
+  metric: CareerMarketMetric
 }
 
 export type CareerVisaPathway = {
@@ -41,7 +52,9 @@ export type CareerMarketInsight = {
     sources: { label: string; url: string }[]
   }
   country: { code: string; name: string } | null
-  profile: CountryOccupationProfile | null
+  profile: CareerMarketProfile | null
+  foundation: CareerDataFoundationResult | null
+  readModelSource: "career_data_foundation" | "legacy_country_occupation" | "editorial_only"
   demand: CareerMarketDemand | null
   recommendations: CareerMarketRecommendation[]
   visas: CareerVisaPathway[]
