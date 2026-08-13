@@ -16,6 +16,6 @@ test("saved career results are restricted to the authenticated owner", () => {
   assert.match(migration, /for insert to authenticated/i)
   assert.match(migration, /for update to authenticated/i)
   assert.match(migration, /for delete to authenticated/i)
-  assert.match(migration, /auth\.uid\(\).*user_id/is)
-  assert.match(migration, /revoke all privileges.*from anon, authenticated/is)
+  assert.match(migration, /auth\.uid\(\)[\s\S]*user_id/i)
+  assert.match(migration, /revoke all privileges[\s\S]*from anon, authenticated/i)
 })
