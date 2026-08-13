@@ -2,11 +2,15 @@ name: UK Carpenter Regression Probe
 on:
   push:
     branches: [tmp/uk-carpenter-regression-probe]
+permissions:
+  contents: write
 jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
@@ -14,3 +18,15 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
       - run: npm test
+      - name: Save generated lockfile
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          sha=$(gh api repos/${{ github.repository }}/contents/package-lock.json?ref=${{ github.ref_name }} --jq .sha)
+          content=$(base64 -w0 package-lock.json)
+          gh api --method PUT repos/${{ github.repository }}/contents/package-lock.json \
+            -f message='chore: refresh nanoid lockfile [skip ci]' \
+            -f content="$content" \
+            -f branch='${{ github.ref_name }}' \
+            -f sha="$sha"
