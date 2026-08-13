@@ -35,20 +35,20 @@ test("AU Carpenter component inputs reproduce 53.98 under frozen v4 scoring", ()
 
 test("AU vacancy and diversity keep fallback semantics explicit", () => {
   assert.match(migration, /clean_distinct_90_day_numerator',false/)
-  assert.match(migration, /'vacancy_intensity'.*'fallback'/s)
-  assert.match(migration, /'industry_diversity'.*'insufficient_industry_coverage'/s)
+  assert.match(migration, /'vacancy_intensity'[\s\S]*'fallback'/)
+  assert.match(migration, /'industry_diversity'[\s\S]*'insufficient_industry_coverage'/)
 })
 
 test("AU visa score uses one primary 189 route and does not add the secondary 482 route", () => {
-  assert.match(migration, /'AU:carpenter:189'.*true/s)
-  assert.match(migration, /'AU:carpenter:482'.*false/s)
+  assert.match(migration, /'AU:carpenter:189'[\s\S]*true/)
+  assert.match(migration, /'AU:carpenter:482'[\s\S]*false/)
   assert.match(migration, /Secondary flexibility evidence only; not added to the primary pathway score/)
 })
 
 test("AU licensing evidence separates employee safety training from contractor licences", () => {
-  assert.match(migration, /'AU:carpenter:white-card'.*'safety_training',true,'employee'/s)
-  assert.match(migration, /'AU:carpenter:NSW:contractor'.*'contractor_license',true,'contractor'/s)
-  assert.match(migration, /'AU:carpenter:WA:builder'.*'contractor_license',true,'contractor'/s)
+  assert.match(migration, /'AU:carpenter:white-card'[\s\S]*'safety_training',true,'employee'/)
+  assert.match(migration, /'AU:carpenter:NSW:contractor'[\s\S]*'contractor_license',true,'contractor'/)
+  assert.match(migration, /'AU:carpenter:WA:builder'[\s\S]*'contractor_license',true,'contractor'/)
   assert.match(migration, /Employee of a registered builder does not need a Carpenter licence/)
 })
 
