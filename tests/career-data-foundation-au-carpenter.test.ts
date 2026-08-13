@@ -37,8 +37,8 @@ test("AU raw market inputs reproduce frozen normalized values and 53.98", () => 
   const salaryRatio = occupationWage / nationalWage
   assert.ok(Math.abs(salaryRatio - 0.9574468085106383) < 1e-12)
 
-  const occupationProjectedStart = capture(base, /'employment_2025',149259/)
-  assert.equal(occupationProjectedStart, 149259)
+  assert.match(base, /'employment_2025',149259,'employment_2035',165554,'years',10/)
+  assert.match(base, /'employment_2025',14701000,'employment_2035',16655500,'years',10/)
   const occupationProjectedCagr = Math.pow(165554 / 149259, 1 / 10) - 1
   const nationalProjectedCagr = Math.pow(16655500 / 14701000, 1 / 10) - 1
   const projectedGrowth = (occupationProjectedCagr - nationalProjectedCagr) * 100
