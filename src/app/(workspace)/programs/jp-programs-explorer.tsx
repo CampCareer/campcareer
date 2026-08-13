@@ -1,15 +1,25 @@
 import Link from "next/link"
 import { CalendarClock, GraduationCap, Languages, MapPin, ShieldCheck } from "lucide-react"
+import { localizePath, type Locale } from "@/lib/i18n/config"
+import { getLocale } from "@/lib/i18n/server"
 import type { JpProgramSearchResult } from "@/lib/programs/jp-programs.server"
 import { jpProgramDetailPath } from "@/lib/programs/jp-program-seo"
 import { buildProgramsUrl, type ProgramSearchFilters } from "@/lib/programs/program-search"
 import { ProgramsSortControl } from "./programs-sort-control"
 
-function admissionLabel(status: string, verified: string) {
+function admissionLabel(status: string, verified: string, locale: Locale) {
+  if (locale === "ko") {
+    if (verified === "unverified" || verified === "stale" || verified === "rejected") return "현재 모집 일정 미검증"
+    if (status === "open") return "현재 모집 일정 확인됨"
+    if (status === "closed") return "확인된 모집 주기 종료"
+    if (status === "restricted") return "추가 조건 확인 필요"
+    if (status === "not_yet_open") return "다음 모집 주기 시작 전"
+    return "국제학생 경로 검증 완료 · 현재 일정 미확인"
+  }
   if (verified === "unverified" || verified === "stale" || verified === "rejected") return "Current admission not verified"
-  if (status === "open") return "International applications open"
+  if (status === "open") return "Current intake confirmed"
   if (status === "closed") return "Verified cycle closed"
-  if (status === "restricted") return "International admission restricted"
+  if (status === "restricted") return "Additional conditions need review"
   if (status === "not_yet_open") return "Next cycle not yet open"
   return "International pathway verified · current window unknown"
 }
@@ -20,50 +30,39 @@ function admissionClass(status: string) {
   return "bg-[#eef4ff] text-[#2563eb]"
 }
 
-function durationLabel(months: number | null) {
+function durationLabel(months: number | null, locale: Locale) {
   if (!months) return null
+  if (locale === "ko") return months % 12 === 0 ? `${months / 12}년` : `${months}개월`
   if (months % 12 === 0) return `${months / 12} ${months === 12 ? "year" : "years"}`
   return `${months} months`
 }
 
-function Pagination({ filters, result }: { filters: ProgramSearchFilters; result: JpProgramSearchResult }) {
+function Pagination({ filters, result, locale }: { filters: ProgramSearchFilters; result: JpProgramSearchResult; locale: Locale }) {
   if (result.pageCount <= 1) return null
-  return (
-    <nav aria-label="Japan program pages" className="mt-6 flex items-center justify-between rounded-xl border border-[#e7e6e3] bg-white px-4 py-3">
-      {result.page > 1 ? <Link href={buildProgramsUrl(filters, { page: result.page - 1 })} className="rounded-lg border border-[#deddd8] px-3 py-2 text-[12px] font-semibold text-[#4d4c48]">Previous</Link> : <span />}
-      <p className="text-[11.5px] font-medium text-[#8f8c85]">Page {result.page} of {result.pageCount}</p>
-      {result.page < result.pageCount ? <Link href={buildProgramsUrl(filters, { page: result.page + 1 })} className="rounded-lg bg-[#3e7a2e] px-3.5 py-2 text-[12px] font-semibold text-white">Next</Link> : <span />}
-    </nav>
-  )
+  const href = (page: number) => localizePath(buildProgramsUrl(filters, { page }), locale)
+  return <nav aria-label={locale === "ko" ? "일본 과정 결과 페이지" : "Japan program pages"} className="mt-6 flex items-center justify-between rounded-xl border border-[#e7e6e3] bg-white px-4 py-3">
+    {result.page > 1 ? <Link href={href(result.page - 1)} className="rounded-lg border border-[#deddd8] px-3 py-2 text-[12px] font-semibold text-[#4d4c48]">{locale === "ko" ? "이전" : "Previous"}</Link> : <span />}
+    <p className="text-[11.5px] font-medium text-[#8f8c85]">{locale === "ko" ? `${result.page} / ${result.pageCount}페이지` : `Page ${result.page} of ${result.pageCount}`}</p>
+    {result.page < result.pageCount ? <Link href={href(result.page + 1)} className="rounded-lg bg-[#3e7a2e] px-3.5 py-2 text-[12px] font-semibold text-white">{locale === "ko" ? "다음" : "Next"}</Link> : <span />}
+  </nav>
 }
 
-export function JpProgramsExplorer({ filters, result }: { filters: ProgramSearchFilters; result: JpProgramSearchResult }) {
-  return (
-    <section className="mt-7 min-w-0">
-      <ProgramsSortControl filters={filters} total={result.total} />
-      <div className="mt-3 space-y-3">
-        {result.programs.map((program) => (
-          <Link key={program.id} href={jpProgramDetailPath(program.slug)} className="block rounded-xl border border-[#e7e6e3] bg-white p-5 transition hover:border-[#b9cdb2] hover:shadow-sm">
-            <div className="flex flex-wrap items-center gap-2 text-[10.5px] font-semibold">
-              <span className="rounded-full bg-[#f3f4f1] px-2.5 py-1 text-[#686660]">{program.degreeLevel}</span>
-              <span className="inline-flex items-center gap-1 rounded-full bg-[#eef4ff] px-2.5 py-1 text-[#2563eb]"><ShieldCheck className="size-3" />Source verified</span>
-              <span className={`rounded-full px-2.5 py-1 ${admissionClass(program.internationalAdmissionStatus)}`}>{admissionLabel(program.internationalAdmissionStatus, program.admissionVerificationStatus)}</span>
-            </div>
-            <h2 className="mt-3 text-[17px] font-semibold tracking-[-0.015em] text-[#1b1b1b]">{program.title}</h2>
-            <p className="mt-1 text-[12.5px] font-medium text-[#585650]">{program.institutionName}</p>
-            <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-[11.5px] text-[#77746e]">
-              {program.city && <span className="inline-flex items-center gap-1.5"><MapPin className="size-3.5" />{program.city}</span>}
-              {program.languageContext && <span className="inline-flex items-center gap-1.5"><Languages className="size-3.5" />{program.languageContext}</span>}
-              {durationLabel(program.durationMonths) && <span className="inline-flex items-center gap-1.5"><GraduationCap className="size-3.5" />{durationLabel(program.durationMonths)}</span>}
-              {program.intakeLabel && <span className="inline-flex items-center gap-1.5"><CalendarClock className="size-3.5" />{program.intakeLabel}</span>}
-            </div>
-            {program.fieldCategory && <p className="mt-3 text-[11px] text-[#99968f]">{program.fieldCategory}</p>}
-          </Link>
-        ))}
-      </div>
-      {result.programs.length === 0 && <div className="mt-4 rounded-xl border border-dashed border-[#dcdad4] bg-[#fbfbf9] p-10 text-center text-[13px] text-[#77746e]">No Japan programs match these filters.</div>}
-      <Pagination filters={filters} result={result} />
-      <p className="mt-4 text-[10.5px] leading-5 text-[#aaa7a0]">Japan programme existence and international-student context are source-verified separately from the current application window. Study in Japan/JASSO listings are not represented as programme-level accreditation.</p>
-    </section>
-  )
+export async function JpProgramsExplorer({ filters, result }: { filters: ProgramSearchFilters; result: JpProgramSearchResult }) {
+  const locale = await getLocale()
+  const ko = locale === "ko"
+  return <section className="mt-7 min-w-0">
+    <ProgramsSortControl filters={filters} total={result.total} />
+    <div className="mt-3 space-y-3">{result.programs.map((program) => {
+      const duration = durationLabel(program.durationMonths, locale)
+      return <Link key={program.id} href={localizePath(jpProgramDetailPath(program.slug), locale)} className="block rounded-xl border border-[#e7e6e3] bg-white p-5 transition hover:border-[#b9cdb2] hover:shadow-sm">
+        <div className="flex flex-wrap items-center gap-2 text-[10.5px] font-semibold"><span className="rounded-full bg-[#f3f4f1] px-2.5 py-1 text-[#686660]">{program.degreeLevel}</span><span className="inline-flex items-center gap-1 rounded-full bg-[#eef4ff] px-2.5 py-1 text-[#2563eb]"><ShieldCheck className="size-3" />{ko ? "출처 검증 완료" : "Source verified"}</span><span className={`rounded-full px-2.5 py-1 ${admissionClass(program.internationalAdmissionStatus)}`}>{admissionLabel(program.internationalAdmissionStatus, program.admissionVerificationStatus, locale)}</span></div>
+        <h2 className="mt-3 text-[17px] font-semibold tracking-[-0.015em] text-[#1b1b1b]">{program.title}</h2><p className="mt-1 text-[12.5px] font-medium text-[#585650]">{program.institutionName}</p>
+        <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-[11.5px] text-[#77746e]">{program.city && <span className="inline-flex items-center gap-1.5"><MapPin className="size-3.5" />{program.city}</span>}{program.languageContext && <span className="inline-flex items-center gap-1.5"><Languages className="size-3.5" />{program.languageContext}</span>}{duration && <span className="inline-flex items-center gap-1.5"><GraduationCap className="size-3.5" />{duration}</span>}{program.intakeLabel && <span className="inline-flex items-center gap-1.5"><CalendarClock className="size-3.5" />{program.intakeLabel}</span>}</div>
+        {program.fieldCategory && <p className="mt-3 text-[11px] text-[#99968f]">{program.fieldCategory}</p>}
+      </Link>
+    })}</div>
+    {result.programs.length === 0 && <div className="mt-4 rounded-xl border border-dashed border-[#dcdad4] bg-[#fbfbf9] p-10 text-center text-[13px] text-[#77746e]">{ko ? "이 필터와 일치하는 일본 과정이 없습니다." : "No Japan programs match these filters."}</div>}
+    <Pagination filters={filters} result={result} locale={locale} />
+    <p className="mt-4 text-[10.5px] leading-5 text-[#aaa7a0]">{ko ? "일본 과정 정보와 국제학생 관련 근거는 현재 모집 일정과 별도로 출처를 확인합니다. Study in Japan/JASSO 목록은 과정 단위 인증으로 표시하지 않습니다." : "Japan programme existence and international-study context are source-verified separately from the current application window. Study in Japan/JASSO listings are not represented as programme-level accreditation."}</p>
+  </section>
 }
