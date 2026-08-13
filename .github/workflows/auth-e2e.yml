@@ -1,0 +1,64 @@
+name: Auth E2E
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  authenticated-career-flow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      SUPABASE_WORKDIR: tests/e2e/auth-fixture
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - uses: supabase/setup-cli@v2.1.1
+        with:
+          version: 2.84.2
+          github-token: ${{ github.token }}
+
+      - name: Prepare isolated auth schema
+        run: |
+          mkdir -p tests/e2e/auth-fixture/supabase/migrations
+          cp tests/e2e/auth-fixture/user-preferences.sql \
+            tests/e2e/auth-fixture/supabase/migrations/20260813000000_user_preferences.sql
+          cp supabase/migrations/20260813115529_saved_career_results.sql \
+            tests/e2e/auth-fixture/supabase/migrations/20260813115529_saved_career_results.sql
+
+      - name: Start local Supabase
+        run: supabase start
+
+      - name: Export local Supabase environment
+        run: |
+          supabase status -o env \
+            --override-name api.url=NEXT_PUBLIC_SUPABASE_URL \
+            --override-name auth.anon_key=NEXT_PUBLIC_SUPABASE_ANON_KEY \
+            --override-name auth.service_role_key=SUPABASE_SERVICE_ROLE_KEY \
+            > .env.auth-e2e
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run authenticated career E2E
+        shell: bash
+        run: |
+          set -a
+          source .env.auth-e2e
+          set +a
+          npx playwright test tests/e2e/authenticated-career-flow.spec.ts --project=desktop-chromium
+
+      - name: Stop local Supabase
+        if: always()
+        run: supabase stop --no-backup
