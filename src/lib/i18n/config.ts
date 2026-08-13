@@ -27,6 +27,10 @@ export const LOCALE_META: Record<LocaleOption, { label: string; prefix: string |
   es: { label: 'Español', prefix: 'es-419' },
 }
 
+const REGION_DISPLAY_CODE_OVERRIDES: Record<string, string> = {
+  UK: 'GB',
+}
+
 export function isLocale(value: string | undefined | null): value is Locale {
   return !!value && (SUPPORTED_LOCALES as readonly string[]).includes(value)
 }
@@ -61,4 +65,23 @@ export function localizePath(pathname: string, locale: LocaleOption): string {
 
 export function localeForUi(locale: LocaleOption): Locale {
   return locale === 'ko' ? 'ko' : 'en'
+}
+
+/**
+ * Returns a visitor-facing country or region name for the active UI locale.
+ * Product country codes stay stable in URLs/storage while display names are
+ * derived at the edge. `UK` is the one public product code that needs the ISO
+ * `GB` alias understood by Intl.DisplayNames.
+ */
+export function countryDisplayName(locale: Locale, countryCode: string, fallbackName?: string): string {
+  const normalizedCode = countryCode.trim().toUpperCase()
+  if (!normalizedCode) return fallbackName ?? countryCode
+
+  const regionCode = REGION_DISPLAY_CODE_OVERRIDES[normalizedCode] ?? normalizedCode
+  try {
+    const displayNames = new Intl.DisplayNames(locale === 'ko' ? 'ko-KR' : 'en', { type: 'region' })
+    return displayNames.of(regionCode) ?? fallbackName ?? countryCode
+  } catch {
+    return fallbackName ?? countryCode
+  }
 }
