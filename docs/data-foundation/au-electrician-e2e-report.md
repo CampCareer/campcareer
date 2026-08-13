@@ -60,7 +60,7 @@ Primary sources:
 - JSA ANZSCO 341111 profile: https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupations/341111-electricians-general
 - National Training Register UEE30820: https://training.gov.au/training/details/UEE30820
 
-## Labour-market baseline — verified but not yet scored
+## Labour-market baseline — verified but not yet fully scored
 
 JSA's exact ANZSCO 341111 profile shows 128,300 employed; this exact six-digit employment figure is Census-based rather than the current Labour Force Survey trend series.
 
@@ -71,7 +71,7 @@ The broader ANZSCO 3411 Electricians profile is the current JSA Labour Force Sur
 - May 2025 median weekly earnings: AUD 2,191 versus AUD 1,852 for all occupations;
 - May 2025 median hourly earnings: AUD 55 versus AUD 47 for all occupations.
 
-These broader values are candidate inputs only. Before scoring, historical momentum and projection periods must be aligned to the same methodology used for AU Carpenter and the exact-vs-broader proxy relation must be explicit in lineage.
+These broader values are candidate inputs only where not already frozen below. The exact-vs-broader proxy relation must remain explicit in lineage.
 
 Source: https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupations/3411-electricians
 
@@ -161,6 +161,63 @@ Official corroboration for the May 2026 WA 3411 count:
 
 This 3/15 result is deliberately more conservative than AU Carpenter's 4/15 fallback because Carpenter had a directly captured same-period persistence comparator supporting a +1 bonus. Electrician does not receive that bonus without equivalent evidence.
 
+## Employment Momentum — frozen at 8.21 / 10
+
+The frozen methodology uses recent actual occupation employment growth relative to actual same-country all-employment growth over the same period:
+
+`occupation CAGR - national employment CAGR`.
+
+The Australian Jobs 2025 Occupation Matrix publishes the broader ANZSCO `3411 Electricians` five-year employment row:
+
+- November 2024 employment: 185.2k;
+- five-year change to November 2024: +30.4k;
+- five-year change: +19.6%;
+- period: November 2019 to November 2024.
+
+The source is based on ABS Labour Force, Australia, Detailed data trended by Jobs and Skills Australia. Because this historical series is published for ANZSCO 3411 rather than exact six-digit 341111, it is an explicit broader/medium-quality proxy for Electrician (General).
+
+Occupation CAGR:
+
+`(1 + 0.196)^(1/5) - 1 = 3.6445%/year`.
+
+For the national benchmark, the same ABS Labour Force trend series gives approximately:
+
+- November 2019 employment: 12,898.9k;
+- November 2024 employment: 14,495.9k.
+
+National employment CAGR:
+
+`(14,495.9 / 12,898.9)^(1/5) - 1 = 2.3619%/year`.
+
+Excess actual CAGR:
+
+`3.6445% - 2.3619% = +1.2826 percentage points/year`.
+
+Frozen score formula:
+
+`clamp(5 + excess CAGR pp/year × 2.5, 0, 10)`.
+
+Result:
+
+`5 + 1.2826 × 2.5 = 8.21 / 10`.
+
+Evidence treatment:
+
+- availability: `available`;
+- directness: `proxy`;
+- mapping quality: `medium`;
+- evidence status: `derived`;
+- normalized value: `+1.2826` excess CAGR percentage points/year;
+- proxy reason: the official five-year historical occupation series is published at broader ANZSCO 3411 rather than exact Electrician (General) 341111.
+
+Primary sources:
+
+- Australian Jobs 2025 Occupation Matrix: https://www.yourcareer.gov.au/resources/australian-jobs-report/occupation-matrix-tables
+- Australian Jobs 2025 sources/methodology: https://www.yourcareer.gov.au/resources/australian-jobs-report/sources
+- ABS Labour Force, Australia trend employment series: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia
+
+The February 2026 3411 employment level is not mixed into this calculation. The momentum component intentionally uses the comparable November 2019 → November 2024 five-year historical window already used by the Australian Jobs 2025 matrix and the AU Carpenter benchmark.
+
 ## Visa Accessibility — strong official evidence verified
 
 Department of Home Affairs lists Electrician (General) `341111` as eligible across multiple skilled routes, including:
@@ -210,7 +267,6 @@ This means licensing and overseas-recognition burden must be modelled explicitly
 ## Components still to freeze
 
 - industry distribution and whether a defensible HHI is available;
-- five-year actual employment history and aligned national benchmark;
 - final relative salary proxy/value;
 - 2025–2035 occupation projection and aligned national benchmark;
 - final Entry Accessibility rubric;
@@ -226,6 +282,7 @@ This means licensing and overseas-recognition burden must be modelled explicitly
 - Do not treat a live job listing as Vacancy Score evidence.
 - Do not describe ANZSCO 3411 values as exact six-digit Electrician (General) values.
 - Do not infer an occupation persistence bonus from economy-wide IVI changes or a single state-level count.
+- Do not mix the February 2026 3411 employment stock into the November 2019 → November 2024 historical momentum calculation.
 
 ## Next implementation checkpoint
 
