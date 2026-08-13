@@ -1,5 +1,4 @@
-import type { Locale } from "@/lib/i18n/config"
-import { countryDisplayName } from "@/lib/i18n/config"
+import { countryDisplayName, type Locale } from "@/lib/i18n/config"
 import type { LaunchCountry } from "@/data/launch-countries"
 import type { NavItem } from "./navigation"
 import type { CompareModeType } from "@/lib/compare-navigation"
