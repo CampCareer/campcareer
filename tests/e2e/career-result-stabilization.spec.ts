@@ -79,3 +79,20 @@ test("Korean occupation explorer keeps its locale while browsing", async ({ page
   await page.getByRole("button", { name: /보건/ }).first().click()
   await expect(page).toHaveURL(/\/ko\/occupation/)
 })
+
+test("Korean programs explorer keeps header, search and navigation localized", async ({ page }) => {
+  await page.goto("/ko/programs")
+
+  await expect(page.getByRole("heading", { name: "과정" })).toBeVisible()
+  await expect(page.getByRole("searchbox", { name: "과정 검색" })).toBeVisible()
+  await expect(page.getByText("Explore", { exact: true })).toHaveCount(0)
+  await expect(page.getByRole("button", { name: /오스트레일리아/ })).toBeVisible()
+})
+
+test("Korean institutions explorer keeps server-rendered UI localized", async ({ page }) => {
+  await page.goto("/ko/institutions")
+
+  await expect(page.getByRole("heading", { name: "교육기관" })).toBeVisible()
+  await expect(page.getByRole("searchbox", { name: "교육기관 이름 검색" })).toBeVisible()
+  await expect(page.getByText("Institutions", { exact: true })).toHaveCount(0)
+})
