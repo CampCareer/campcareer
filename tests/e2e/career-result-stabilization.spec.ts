@@ -48,3 +48,34 @@ test("Korean login keeps the authentication surface and saved pathway summary in
   await page.getByRole("button", { name: "비밀번호를 잊으셨나요?" }).click()
   await expect(page.getByRole("alert")).toHaveText("먼저 이메일을 입력해 주세요.")
 })
+
+test("Korean landing keeps labels and map navigation in Korean", async ({ page }) => {
+  await page.goto("/ko")
+
+  await expect(page.getByText("커리어 신호")).toBeVisible()
+  await expect(page.getByText("실시간")).toBeVisible()
+  await expect(page.getByText("CAREER SIGNALS")).toHaveCount(0)
+
+  const explore = page.getByRole("link", { name: "아직 정하지 못했나요? 세계를 탐색해보세요." })
+  await expect(explore).toHaveAttribute("href", "/ko/maps")
+})
+
+test("Korean countries explorer uses localized country UI", async ({ page }) => {
+  await page.goto("/ko/countries")
+
+  await expect(page.getByRole("heading", { name: "국가 둘러보기" })).toBeVisible()
+  await expect(page.getByRole("searchbox", { name: "국가 검색" })).toHaveAttribute("placeholder", "국가, 통화, 지역 또는 도시 검색…")
+  await expect(page.getByText("Explore countries")).toHaveCount(0)
+  await expect(page.getByRole("button", { name: /오스트레일리아/ })).toBeVisible()
+})
+
+test("Korean occupation explorer keeps its locale while browsing", async ({ page }) => {
+  await page.goto("/ko/occupation")
+
+  await expect(page.getByRole("heading", { name: "직업" })).toBeVisible()
+  await expect(page.getByPlaceholder("직업 검색, 예: 간호사 또는 전기기사…")).toBeVisible()
+  await expect(page.getByText("Start here")).toHaveCount(0)
+
+  await page.getByRole("button", { name: /보건/ }).first().click()
+  await expect(page).toHaveURL(/\/ko\/occupation/)
+})
