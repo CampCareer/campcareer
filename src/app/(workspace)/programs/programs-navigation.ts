@@ -2,6 +2,8 @@
 
 import { useCallback } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { localizePath } from "@/lib/i18n/config"
+import { useRouteLocale } from "@/lib/i18n/locale-provider"
 
 type FilterKey =
   | "country"
@@ -23,6 +25,7 @@ export function useProgramNavigation() {
   const pathname = usePathname()
   const router = useRouter()
   const searchParams = useSearchParams()
+  const locale = useRouteLocale()
   const currentQuery = searchParams.toString()
 
   return useCallback(
@@ -39,8 +42,8 @@ export function useProgramNavigation() {
 
       if (!params.get("country")) params.set("country", "AU")
       params.delete("page")
-      router.replace(`${pathname}?${params.toString()}`, { scroll: false })
+      router.replace(`${localizePath(pathname, locale)}?${params.toString()}`, { scroll: false })
     },
-    [currentQuery, pathname, router],
+    [currentQuery, locale, pathname, router],
   )
 }
