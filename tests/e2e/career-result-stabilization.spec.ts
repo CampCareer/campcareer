@@ -20,3 +20,14 @@ test("signed-out career result sends personalisation through login without losin
   expect(href).toContain("/login?next=")
   expect(decodeURIComponent(href ?? "")).toContain("/onboarding?country=AU&occupation=registered-nurse")
 })
+
+test("signed-out save returns to the same career result after login", async ({ page }) => {
+  await page.goto("/career?country=AU&occupation=registered-nurse")
+
+  const save = page.getByRole("link", { name: "Save path" })
+  await expect(save).toBeVisible()
+
+  const href = await save.getAttribute("href")
+  expect(href).toContain("/login?next=")
+  expect(decodeURIComponent(href ?? "")).toContain("/career?country=AU&occupation=registered-nurse")
+})
