@@ -4,7 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useMemo, useState } from "react"
 import type { User } from "@supabase/supabase-js"
-import { MapPinned, UserRound } from "lucide-react"
+import { LogIn, MapPinned } from "lucide-react"
 import { LanguageMenu } from "@/components/layout/language-menu"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { localeFromPathname, localizePath, withoutLocalePrefix } from "@/lib/i18n/config"
@@ -18,7 +18,6 @@ export function TopNav() {
   const isLanding = withoutLocalePrefix(pathname) === "/"
   const supabase = useMemo(() => createClient(), [])
   const [user, setUser] = useState<User | null>(null)
-  const [hasCompletedPersonalisation, setHasCompletedPersonalisation] = useState<boolean | null>(null)
   const isTransparent = false
 
   useEffect(() => {
@@ -29,18 +28,6 @@ export function TopNav() {
       if (!active) return
 
       setUser(user)
-      if (!user) {
-        setHasCompletedPersonalisation(null)
-        return
-      }
-
-      const { data } = await supabase
-        .from("user_preferences")
-        .select("career_personalisation_completed_at")
-        .eq("id", user.id)
-        .maybeSingle()
-
-      if (active) setHasCompletedPersonalisation(Boolean(data?.career_personalisation_completed_at))
     }
 
     void syncUser()
@@ -53,12 +40,14 @@ export function TopNav() {
     }
   }, [supabase])
 
-  const memberDestination = hasCompletedPersonalisation
-    ? localizePath("/home", pathLocale)
-    : localizePath("/onboarding", pathLocale)
+  const profileDestination = localizePath("/profile", pathLocale)
   const logoDestination = isLanding || !user
     ? localizePath("/", pathLocale)
     : localizePath("/home", pathLocale)
+  const displayName = user
+    ? ((user.user_metadata?.full_name as string | undefined) || (user.user_metadata?.name as string | undefined) || user.email?.split("@")[0] || "C")
+    : "C"
+  const accountInitial = Array.from(displayName.trim())[0]?.toLocaleUpperCase() || "C"
 
   const textColor = isTransparent ? "text-white" : "text-slate-900"
   const mutedColor = isTransparent ? "text-slate-200" : "text-slate-500"
@@ -97,10 +86,10 @@ export function TopNav() {
 
               <LanguageMenu buttonClassName={cn(mutedColor, hoverBg)} />
 
-              {user ? <Link href={memberDestination} aria-label={hasCompletedPersonalisation ? (pathLocale === "ko" ? "내 커리어 열기" : "Open my career") : (pathLocale === "ko" ? "커리어 경로 설정하기" : "Set up my career path")} className={cn("inline-flex rounded-lg border border-[#d8d8d4] bg-white p-1.5 text-sm font-semibold text-[#1b1b1b] transition hover:bg-[#f6f6f4]", isTransparent && "border-white/20 bg-white text-slate-950")}>
-                <span className="grid size-6 place-items-center rounded-full bg-blue-100 text-blue-700"><UserRound className="size-3.5" /></span>
+              {user ? <Link href={profileDestination} aria-label={pathLocale === "ko" ? "프로필 열기" : "Open profile"} className={cn("inline-flex rounded-lg border border-[#d8d8d4] bg-white p-1.5 text-sm font-semibold text-[#1b1b1b] transition hover:bg-[#f6f6f4]", isTransparent && "border-white/20 bg-white text-slate-950")}>
+                <span className="grid size-6 place-items-center rounded-full bg-blue-100 text-[10px] font-semibold text-blue-700" aria-hidden="true">{accountInitial}</span>
               </Link> : <Link href={`${localizePath("/login", pathLocale)}?next=${encodeURIComponent(localizePath("/home", pathLocale))}`} className={cn("inline-flex items-center gap-1.5 rounded-lg border border-[#d8d8d4] bg-white px-3 py-2 text-sm font-semibold text-[#1b1b1b] transition hover:bg-[#f6f6f4]", isTransparent && "border-white/20 bg-white text-slate-950")}>
-                <UserRound className="size-4" />
+                <LogIn className="size-4" />
                 {pathLocale === "ko" ? "로그인" : "Log in"}
               </Link>}
             </div>

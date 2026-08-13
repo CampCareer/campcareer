@@ -24,8 +24,6 @@ const nextConfig = {
       { source: "/planner/:path*", destination: "/", permanent: false },
       { source: "/myplan/:path*", destination: "/", permanent: false },
       { source: "/dashboard/:path*", destination: "/", permanent: false },
-      { source: "/profile/:path*", destination: "/", permanent: false },
-      { source: "/settings/:path*", destination: "/", permanent: false },
       { source: "/plans/:path*", destination: "/", permanent: false },
       { source: "/applications/:path*", destination: "/", permanent: false },
       { source: "/budget/:path*", destination: "/", permanent: false },

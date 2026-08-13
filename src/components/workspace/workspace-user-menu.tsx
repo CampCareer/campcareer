@@ -4,7 +4,7 @@ import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import type { User } from "@supabase/supabase-js"
-import { Bookmark, LogIn, LogOut, Settings, UserIcon } from "lucide-react"
+import { BriefcaseBusiness, LogIn, LogOut, Settings } from "lucide-react"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { localizePath } from "@/lib/i18n/config"
 import { createClient } from "@/lib/supabase-client"
@@ -97,12 +97,18 @@ export function WorkspaceUserMenu({ className, minimal = false }: WorkspaceUserM
     router.refresh()
   }
 
+  function openAccountPage(path: "/profile" | "/settings") {
+    setIsOpen(false)
+    router.push(localizePath(path, locale))
+  }
+
   if (user) {
     const displayName =
       (user.user_metadata?.full_name as string | undefined) ||
       (user.user_metadata?.name as string | undefined) ||
       user.email?.split("@")[0] ||
       (locale === "ko" ? "CampCareer 회원" : "CampCareer member")
+    const initial = Array.from(displayName.trim())[0]?.toLocaleUpperCase() || "C"
 
     return (
       <div className={cn("relative", className)} ref={menuRef}>
@@ -125,9 +131,7 @@ export function WorkspaceUserMenu({ className, minimal = false }: WorkspaceUserM
               onError={() => setAvatarFailed(true)}
             />
           ) : (
-            <div className="flex size-7 items-center justify-center rounded-full bg-blue-100">
-              <UserIcon className="size-4 text-blue-600" />
-            </div>
+            <div className="grid size-7 place-items-center rounded-full bg-blue-100 text-[11px] font-semibold text-blue-700" aria-hidden="true">{initial}</div>
           )}
         </button>
 
@@ -143,27 +147,27 @@ export function WorkspaceUserMenu({ className, minimal = false }: WorkspaceUserM
             </div>
 
             <div className="py-1.5">
-              <Link
-                href={localizePath("/profile", locale)}
+              <button
+                type="button"
                 role="menuitem"
-                onClick={() => setIsOpen(false)}
-                className="flex items-start gap-3 rounded-xl px-3 py-2.5 transition hover:bg-blue-50"
+                onClick={() => openAccountPage("/profile")}
+                className="flex w-full items-start gap-3 rounded-xl px-3 py-2.5 text-left transition hover:bg-blue-50"
               >
-                <Bookmark className="mt-0.5 size-4 shrink-0 text-blue-600" />
+                <BriefcaseBusiness className="mt-0.5 size-4 shrink-0 text-blue-600" />
                 <span>
-                  <span className="block text-sm font-semibold text-slate-800">{locale === "ko" ? "내 플랜과 저장 항목" : "My plan & saved items"}</span>
-                  <span className="mt-0.5 block text-xs leading-4 text-slate-500">{locale === "ko" ? "저장한 진로와 학교를 계속 살펴보세요." : "Return to the careers and schools you saved."}</span>
+                  <span className="block text-sm font-semibold text-slate-800">{locale === "ko" ? "프로필" : "Profile"}</span>
+                  <span className="mt-0.5 block text-xs leading-4 text-slate-500">{locale === "ko" ? "현재 방향과 저장한 커리어 탐색을 확인하세요." : "Review your direction and saved career research."}</span>
                 </span>
-              </Link>
-              <Link
-                href={localizePath("/settings", locale)}
+              </button>
+              <button
+                type="button"
                 role="menuitem"
-                onClick={() => setIsOpen(false)}
-                className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-800 transition hover:bg-slate-50"
+                onClick={() => openAccountPage("/settings")}
+                className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-semibold text-slate-800 transition hover:bg-slate-50"
               >
                 <Settings className="size-4 text-slate-500" />
                 {locale === "ko" ? "계정 관리" : "Manage your account"}
-              </Link>
+              </button>
             </div>
 
             <div className="border-t border-slate-100 pt-1.5">
