@@ -17,6 +17,11 @@ test("signed-out career result survives login, onboarding, save, Home reopen, an
     user = await provisionAuthE2eUser(testInfo)
 
     await page.goto(REGISTERED_NURSE_RESULT)
+    const privacyChoices = page.getByRole("complementary", { name: "Privacy choices" })
+    await expect(privacyChoices).toBeVisible()
+    await page.getByRole("button", { name: "Use essential only" }).click()
+    await expect(privacyChoices).toBeHidden()
+
     const signIn = page.getByRole("link", { name: "Sign in to see my path" })
     await expect(signIn).toBeVisible()
     await signIn.click()
