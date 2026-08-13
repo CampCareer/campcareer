@@ -2,7 +2,22 @@
 
 import { useEffect, useMemo, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { BriefcaseBusiness, ChevronDown, Factory, HandHeart, Hammer, HeartPulse, Landmark, Laptop, MousePointerClick, Palette, Plane, ShoppingBag, SlidersHorizontal, Sprout } from "lucide-react"
+import {
+  BriefcaseBusiness,
+  ChevronDown,
+  Factory,
+  HandHeart,
+  Hammer,
+  HeartPulse,
+  Landmark,
+  Laptop,
+  MousePointerClick,
+  Palette,
+  Plane,
+  ShoppingBag,
+  SlidersHorizontal,
+  Sprout,
+} from "lucide-react"
 import { CANONICAL_CAREERS, type CanonicalCareer } from "@/data/career-comparison-catalog"
 import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
 import { STUDY_CATEGORIES } from "@/data/study-concepts"
@@ -15,7 +30,6 @@ import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { CountryAwareOccupationDetail } from "./country-aware-occupation-detail"
 import { cn } from "@/lib/utils"
 
-const CATEGORY_LABELS = new Map<string, string>(STUDY_CATEGORIES.map((c) => [c.id, c.label]))
 const CATEGORY_ACCENT = new Map<string, string>([
   ["trades", "#c2691e"],
   ["health", "#2563eb"],
@@ -43,49 +57,65 @@ const CATEGORY_ICON = new Map([
 
 type CountryProfileStatus = "idle" | "loading" | "ready" | "missing" | "error"
 
-function OccupationDiscovery({ locale, onChoose, onBrowseAll }: { locale: string; onChoose: (categoryId: string) => void; onBrowseAll: () => void }) {
-  return <section className="mt-6" aria-labelledby="field-discovery-heading"><div className="flex items-end justify-between gap-4"><div><p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#c2691e]">Start here</p><h2 id="field-discovery-heading" className="mt-1 text-xl font-semibold tracking-[-0.03em] text-[#1b1b1b] sm:text-2xl">Find a field that fits you</h2></div><p className="hidden max-w-48 text-right text-[12px] leading-5 text-[#77746e] sm:block">Choose a field first, then compare the careers inside it.</p></div><div className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5 lg:gap-3">{STUDY_CATEGORIES.map((category) => { const careers = CANONICAL_CAREERS.filter((career) => career.categoryId === category.id); const example = careers[0]; const accent = CATEGORY_ACCENT.get(category.id) ?? "#c2691e"; const Icon = CATEGORY_ICON.get(category.id) ?? BriefcaseBusiness; const label = locale === "ko" ? category.labelKo : category.label; const exampleLabel = example ? (locale === "ko" ? example.labelKo : example.label) : null; return <button key={category.id} type="button" onClick={() => onChoose(category.id)} className="group min-h-36 rounded-2xl border border-[#e7e6e3] bg-white p-3.5 text-left transition duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2691e]/35 focus-visible:ring-offset-2 sm:min-h-40 sm:p-4"><span className="grid size-9 place-items-center rounded-xl" style={{ backgroundColor: `${accent}16`, color: accent }}><Icon className="size-[18px]" /></span><span className="mt-4 block text-[13px] font-semibold leading-[1.25] tracking-[-0.015em] text-[#1b1b1b] sm:text-[14px]">{label}</span><span className="mt-2 block text-[10.5px] font-medium text-[#8f8c85]">{careers.length} roles to explore</span>{exampleLabel ? <span className="mt-1 block truncate text-[10.5px] text-[#6f6d68]">e.g. {exampleLabel}</span> : null}</button> })}</div><button type="button" onClick={onBrowseAll} className="mt-4 inline-flex min-h-10 items-center gap-2 text-[12.5px] font-semibold text-[#c2691e] transition hover:text-[#9d4f0d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2691e]/35 focus-visible:ring-offset-2">Browse all occupations <ChevronDown className="size-4 -rotate-90" /></button></section>
+type UiLocale = "en" | "ko"
+
+function categoryName(categoryId: string, locale: UiLocale) {
+  const item = STUDY_CATEGORIES.find((category) => category.id === categoryId)
+  return item ? (locale === "ko" ? item.labelKo : item.label) : categoryId
+}
+
+function OccupationDiscovery({ locale, onChoose, onBrowseAll }: { locale: UiLocale; onChoose: (categoryId: string) => void; onBrowseAll: () => void }) {
+  const ko = locale === "ko"
+  return (
+    <section className="mt-6" aria-labelledby="field-discovery-heading">
+      <div className="flex items-end justify-between gap-4">
+        <div>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#c2691e]">{ko ? "여기서 시작" : "Start here"}</p>
+          <h2 id="field-discovery-heading" className="mt-1 text-xl font-semibold tracking-[-0.03em] text-[#1b1b1b] sm:text-2xl">{ko ? "나에게 맞는 분야를 찾아보세요" : "Find a field that fits you"}</h2>
+        </div>
+        <p className="hidden max-w-48 text-right text-[12px] leading-5 text-[#77746e] sm:block">{ko ? "먼저 분야를 고른 뒤 그 안의 직업을 비교해 보세요." : "Choose a field first, then compare the careers inside it."}</p>
+      </div>
+
+      <div className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5 lg:gap-3">
+        {STUDY_CATEGORIES.map((category) => {
+          const careers = CANONICAL_CAREERS.filter((career) => career.categoryId === category.id)
+          const example = careers[0]
+          const accent = CATEGORY_ACCENT.get(category.id) ?? "#c2691e"
+          const Icon = CATEGORY_ICON.get(category.id) ?? BriefcaseBusiness
+          return (
+            <button key={category.id} type="button" onClick={() => onChoose(category.id)} className="group min-h-36 rounded-2xl border border-[#e7e6e3] bg-white p-3.5 text-left transition duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2691e]/35 focus-visible:ring-offset-2 sm:min-h-40 sm:p-4">
+              <span className="grid size-9 place-items-center rounded-xl" style={{ backgroundColor: `${accent}16`, color: accent }}><Icon className="size-[18px]" /></span>
+              <span className="mt-4 block text-[13px] font-semibold leading-[1.25] tracking-[-0.015em] text-[#1b1b1b] sm:text-[14px]">{ko ? category.labelKo : category.label}</span>
+              <span className="mt-2 block text-[10.5px] font-medium text-[#8f8c85]">{ko ? `탐색할 직업 ${careers.length}개` : `${careers.length} roles to explore`}</span>
+              {example ? <span className="mt-1 block truncate text-[10.5px] text-[#6f6d68]">{ko ? "예:" : "e.g."} {ko ? example.labelKo : example.label}</span> : null}
+            </button>
+          )
+        })}
+      </div>
+      <button type="button" onClick={onBrowseAll} className="mt-4 inline-flex min-h-10 items-center gap-2 text-[12.5px] font-semibold text-[#c2691e] transition hover:text-[#9d4f0d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2691e]/35 focus-visible:ring-offset-2">{ko ? "전체 직업 보기" : "Browse all occupations"} <ChevronDown className="size-4 -rotate-90" /></button>
+    </section>
+  )
 }
 
 function matchCareer(career: CanonicalCareer, q: string) {
   const query = q.trim().toLowerCase()
   if (!query) return true
-  return (
-    career.label.toLowerCase().includes(query) ||
-    career.labelKo.toLowerCase().includes(query) ||
-    career.aliases.some((alias) => alias.toLowerCase().includes(query)) ||
-    career.aliasesKo.some((alias) => alias.toLowerCase().includes(query))
-  )
+  return career.label.toLowerCase().includes(query) || career.labelKo.toLowerCase().includes(query) || career.aliases.some((alias) => alias.toLowerCase().includes(query)) || career.aliasesKo.some((alias) => alias.toLowerCase().includes(query))
 }
 
-function initialSelection(
-  initialOccupation: string,
-  query: string,
-  matches: CanonicalCareer[]
-): string | undefined {
+function initialSelection(initialOccupation: string, query: string, matches: CanonicalCareer[]): string | undefined {
   if (initialOccupation && matches.some((c) => c.id === initialOccupation)) return initialOccupation
   if (!query.trim()) return undefined
   const normalizedQuery = query.trim().toLowerCase()
-  const exact = matches.find(
-    (c) => c.label.toLowerCase() === normalizedQuery || c.labelKo.toLowerCase() === normalizedQuery
-  )
+  const exact = matches.find((c) => c.label.toLowerCase() === normalizedQuery || c.labelKo.toLowerCase() === normalizedQuery)
   return exact?.id ?? matches[0]?.id
 }
 
-export function OccupationExplorer({
-  initialQuery,
-  initialOccupation,
-  initialCountry,
-  initialCategory,
-}: {
-  initialQuery: string
-  initialOccupation: string
-  initialCountry: string
-  initialCategory: string
-}) {
+export function OccupationExplorer({ initialQuery, initialOccupation, initialCountry, initialCategory }: { initialQuery: string; initialOccupation: string; initialCountry: string; initialCategory: string }) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const locale = useRouteLocale()
+  const ko = locale === "ko"
   const { selectedCountry, setSelectedCountry } = useSelectedCountry()
   const [query, setQuery] = useState(initialQuery)
   const [category, setCategory] = useState<string>(() => STUDY_CATEGORIES.some((item) => item.id === initialCategory) ? initialCategory : "all")
@@ -98,28 +128,12 @@ export function OccupationExplorer({
     if (!initialCountry) return
     const country = LAUNCH_COUNTRIES.find((item) => item.code === initialCountry)
     if (!country) return
-
-    setSelectedCountry({
-      code: country.code,
-      name: country.name,
-      currency: country.currency,
-    })
+    setSelectedCountry({ code: country.code, name: country.name, currency: country.currency })
   }, [initialCountry, setSelectedCountry])
 
-  const filtered = useMemo(() => {
-    return CANONICAL_CAREERS.filter((career) => {
-      if (category !== "all" && career.categoryId !== category) return false
-      return matchCareer(career, query)
-    })
-  }, [query, category])
-
-  const [selectedId, setSelectedId] = useState<string | undefined>(() =>
-    initialSelection(initialOccupation, initialQuery, filtered)
-  )
-
-  const selected = selectedId
-    ? CANONICAL_CAREERS.find((career) => career.id === selectedId)
-    : undefined
+  const filtered = useMemo(() => CANONICAL_CAREERS.filter((career) => (category === "all" || career.categoryId === category) && matchCareer(career, query)), [query, category])
+  const [selectedId, setSelectedId] = useState<string | undefined>(() => initialSelection(initialOccupation, initialQuery, filtered))
+  const selected = selectedId ? CANONICAL_CAREERS.find((career) => career.id === selectedId) : undefined
   const selectedDetail = selected ? getOccupationDetail(selected.id) : undefined
 
   useEffect(() => {
@@ -128,16 +142,10 @@ export function OccupationExplorer({
       setCountryProfileStatus("idle")
       return
     }
-
     const controller = new AbortController()
     setCountryProfile(null)
     setCountryProfileStatus("loading")
-
-    const params = new URLSearchParams({
-      country: selectedCountry.code,
-      career: selectedId,
-    })
-
+    const params = new URLSearchParams({ country: selectedCountry.code, career: selectedId })
     fetch(`/api/occupations/profile?${params.toString()}`, { signal: controller.signal })
       .then(async (response) => {
         if (response.status === 404) return { profile: null }
@@ -154,7 +162,6 @@ export function OccupationExplorer({
         setCountryProfile(null)
         setCountryProfileStatus("error")
       })
-
     return () => controller.abort()
   }, [selectedCountry?.code, selectedId])
 
@@ -181,9 +188,7 @@ export function OccupationExplorer({
     if (selectedId) params.set("occupation", selectedId)
     if (query.trim()) params.set("q", query.trim())
     else params.delete("q")
-
-    const nextQuery = params.toString()
-    router.replace(nextQuery ? `/occupation?${nextQuery}` : "/occupation", { scroll: false })
+    router.replace(`/occupation?${params.toString()}`, { scroll: false })
   }
 
   function select(career: CanonicalCareer) {
@@ -203,189 +208,34 @@ export function OccupationExplorer({
     setFiltersOpen(false)
   }
 
-  const selectedCategoryLabel = category === "all" ? "All occupations" : CATEGORY_LABELS.get(category) ?? "Filters"
+  const selectedCategoryLabel = category === "all" ? (ko ? "전체 직업" : "All occupations") : categoryName(category, locale)
   const isDiscoveryMode = !showAllOccupations && category === "all" && !query.trim() && !selectedId
 
   return (
     <>
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p className="hidden text-[11px] font-semibold uppercase tracking-[0.12em] text-[#c2691e] sm:block">
-            Explore
-          </p>
-          <div className="flex flex-wrap items-center gap-2 sm:mt-1.5 sm:gap-3">
-            <h1 className="text-xl font-semibold leading-tight tracking-[-0.02em] text-[#1b1b1b] sm:text-3xl">
-              Occupation
-            </h1>
-            <CountryPill onChange={updateCountry} />
-          </div>
-        </div>
-      </div>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"><div><p className="hidden text-[11px] font-semibold uppercase tracking-[0.12em] text-[#c2691e] sm:block">{ko ? "탐색" : "Explore"}</p><div className="flex flex-wrap items-center gap-2 sm:mt-1.5 sm:gap-3"><h1 className="text-xl font-semibold leading-tight tracking-[-0.02em] text-[#1b1b1b] sm:text-3xl">{ko ? "직업" : "Occupation"}</h1><CountryPill onChange={updateCountry} /></div></div></div>
 
-      <div className="mt-4 lg:mt-6 lg:max-w-xl">
-        <CategorySearch
-          value={query}
-          onChange={setQuery}
-          placeholder="Search occupations, e.g. Nurse or Electrician…"
-        />
-      </div>
+      <div className="mt-4 lg:mt-6 lg:max-w-xl"><CategorySearch value={query} onChange={setQuery} placeholder={ko ? "직업 검색, 예: 간호사 또는 전기기사…" : "Search occupations, e.g. Nurse or Electrician…"} /></div>
 
       <div className="relative mt-3 lg:hidden">
         <button type="button" onClick={() => setFiltersOpen((open) => !open)} aria-expanded={filtersOpen} className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-[#e0dfdb] bg-white px-3 text-[12.5px] font-semibold text-[#4d4c48] transition hover:border-[#c2691e]/50 hover:text-[#c2691e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2691e]/25"><SlidersHorizontal className="size-4" /><span>{selectedCategoryLabel}</span><ChevronDown className={cn("size-3.5 transition-transform", filtersOpen && "rotate-180")} /></button>
-        {filtersOpen ? <div className="absolute left-0 top-12 z-30 w-full rounded-2xl border border-[#e7e6e3] bg-white p-3 shadow-xl shadow-slate-900/10"><p className="px-1 pb-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#8f8c85]">Filter occupations</p><div className="flex flex-wrap gap-2"><button type="button" onClick={() => chooseCategory("all")} className={cn("rounded-lg border px-3 py-2 text-[12px] font-medium transition", category === "all" ? "border-[#c2691e] bg-[#c2691e] text-white" : "border-[#e0dfdb] text-[#6f6d68]")}>All</button>{STUDY_CATEGORIES.map((item) => <button key={item.id} type="button" onClick={() => chooseCategory(item.id)} className={cn("rounded-lg border px-3 py-2 text-[12px] font-medium transition", category === item.id ? "border-[#c2691e] bg-[#c2691e] text-white" : "border-[#e0dfdb] text-[#6f6d68]")}>{item.label}</button>)}</div></div> : null}
+        {filtersOpen ? <div className="absolute left-0 top-12 z-30 w-full rounded-2xl border border-[#e7e6e3] bg-white p-3 shadow-xl shadow-slate-900/10"><p className="px-1 pb-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#8f8c85]">{ko ? "직업 필터" : "Filter occupations"}</p><div className="flex flex-wrap gap-2"><button type="button" onClick={() => chooseCategory("all")} className={cn("rounded-lg border px-3 py-2 text-[12px] font-medium transition", category === "all" ? "border-[#c2691e] bg-[#c2691e] text-white" : "border-[#e0dfdb] text-[#6f6d68]")}>{ko ? "전체" : "All"}</button>{STUDY_CATEGORIES.map((item) => <button key={item.id} type="button" onClick={() => chooseCategory(item.id)} className={cn("rounded-lg border px-3 py-2 text-[12px] font-medium transition", category === item.id ? "border-[#c2691e] bg-[#c2691e] text-white" : "border-[#e0dfdb] text-[#6f6d68]")}>{ko ? item.labelKo : item.label}</button>)}</div></div> : null}
       </div>
 
-      <div className="mt-5 hidden flex-wrap gap-2 lg:flex">
-        <button
-          type="button"
-          onClick={() => chooseCategory("all")}
-          className={cn(
-            "rounded-lg border px-3 py-1.5 text-[12.5px] font-medium transition",
-            category === "all"
-              ? "border-[#c2691e] bg-[#c2691e] text-white"
-              : "border-[#e0dfdb] bg-white text-[#6f6d68] hover:border-[#c2691e]/50 hover:text-[#c2691e]"
-          )}
-        >
-          All
-        </button>
-        {STUDY_CATEGORIES.map((item) => (
-          <button
-            key={item.id}
-            type="button"
-            onClick={() => chooseCategory(item.id)}
-            className={cn(
-              "rounded-lg border px-3 py-1.5 text-[12.5px] font-medium transition",
-              category === item.id
-                ? "border-[#c2691e] bg-[#c2691e] text-white"
-                : "border-[#e0dfdb] bg-white text-[#6f6d68] hover:border-[#c2691e]/50 hover:text-[#c2691e]"
-            )}
-          >
-            {item.label}
-          </button>
-        ))}
-      </div>
+      <div className="mt-5 hidden flex-wrap gap-2 lg:flex"><button type="button" onClick={() => chooseCategory("all")} className={cn("rounded-lg border px-3 py-1.5 text-[12.5px] font-medium transition", category === "all" ? "border-[#c2691e] bg-[#c2691e] text-white" : "border-[#e0dfdb] bg-white text-[#6f6d68] hover:border-[#c2691e]/50 hover:text-[#c2691e]")}>{ko ? "전체" : "All"}</button>{STUDY_CATEGORIES.map((item) => <button key={item.id} type="button" onClick={() => chooseCategory(item.id)} className={cn("rounded-lg border px-3 py-1.5 text-[12.5px] font-medium transition", category === item.id ? "border-[#c2691e] bg-[#c2691e] text-white" : "border-[#e0dfdb] bg-white text-[#6f6d68] hover:border-[#c2691e]/50 hover:text-[#c2691e]")}>{ko ? item.labelKo : item.label}</button>)}</div>
 
       {isDiscoveryMode ? <OccupationDiscovery locale={locale} onChoose={chooseCategory} onBrowseAll={() => setShowAllOccupations(true)} /> : <>
-      <div className="mt-6 flex items-center justify-between">
-        <p className="text-[12.5px] font-medium text-[#a3a19b]">
-          {filtered.length} occupations
-        </p>
-      </div>
-
-      {filtered.length === 0 ? (
-        <div className="mt-4 flex h-56 flex-col items-center justify-center rounded-xl border border-dashed border-[#e7e6e3] bg-white/50 text-center">
-          <BriefcaseBusiness className="size-6 text-[#c4c2bc]" />
-          <p className="mt-3 text-[13.5px] font-medium text-[#6f6d68]">
-            No occupations match “{query}”.
-          </p>
-        </div>
-      ) : (
+        <div className="mt-6 flex items-center justify-between"><p className="text-[12.5px] font-medium text-[#a3a19b]">{ko ? `직업 ${filtered.length}개` : `${filtered.length} occupations`}</p></div>
+        {filtered.length === 0 ? <div className="mt-4 flex h-56 flex-col items-center justify-center rounded-xl border border-dashed border-[#e7e6e3] bg-white/50 text-center"><BriefcaseBusiness className="size-6 text-[#c4c2bc]" /><p className="mt-3 text-[13.5px] font-medium text-[#6f6d68]">{ko ? `“${query}”와 일치하는 직업이 없어요.` : `No occupations match “${query}”.`}</p></div> :
         <div className="mt-3 grid gap-4 lg:grid-cols-12 lg:items-start">
           {selected ? <section id="occupation-detail-mobile" className="min-w-0 scroll-mt-4 lg:hidden"><CountryAwareOccupationDetail career={selected} detail={selectedDetail} countryCode={selectedCountry?.code} countryName={selectedCountry?.name} countryProfile={countryProfile} countryProfileStatus={countryProfileStatus} /></section> : null}
 
-          <section className="lg:hidden">
-            <div className="flex items-center justify-between"><h2 className="text-[12.5px] font-semibold text-[#1b1b1b]">{selected ? `Browse ${filtered.length} related roles` : `${filtered.length} occupations`}</h2><span className="text-[11px] text-[#8f8c85]">Tap to view</span></div>
-            <div className="mt-2 space-y-1.5">{filtered.map((career) => { const detail = getOccupationDetail(career.id); const demand = selectedCountry ? detail?.demand.find((entry) => entry.countryCode === selectedCountry.code) : detail?.demand[0]; const isSelected = career.id === selectedId; const displayLabel = locale === "ko" ? career.labelKo : career.label; return <button key={career.id} type="button" onClick={() => select(career)} className={cn("flex w-full items-center gap-2.5 rounded-xl border bg-white px-3 py-2.5 text-left transition active:scale-[0.99]", isSelected ? "border-[#c2691e]/60 bg-[#fffaf5]" : "border-[#e7e6e3] hover:bg-[#fffaf5]")}><span className="size-2 shrink-0 rounded-full" style={{ backgroundColor: CATEGORY_ACCENT.get(career.categoryId) ?? "#c2691e" }} /><span className={cn("min-w-0 flex-1 truncate text-[13px] font-medium", isSelected ? "text-[#c2691e]" : "text-[#1b1b1b]")}>{displayLabel}</span>{demand ? <span className="shrink-0 text-[10px] font-bold text-[#3e7a2e]">{demand.rating.toUpperCase()}</span> : null}</button> })}</div>
-          </section>
+          <section className="lg:hidden"><div className="flex items-center justify-between"><h2 className="text-[12.5px] font-semibold text-[#1b1b1b]">{selected ? (ko ? `관련 직업 ${filtered.length}개 보기` : `Browse ${filtered.length} related roles`) : (ko ? `직업 ${filtered.length}개` : `${filtered.length} occupations`)}</h2><span className="text-[11px] text-[#8f8c85]">{ko ? "눌러서 보기" : "Tap to view"}</span></div><div className="mt-2 space-y-1.5">{filtered.map((career) => { const detail = getOccupationDetail(career.id); const demand = selectedCountry ? detail?.demand.find((entry) => entry.countryCode === selectedCountry.code) : detail?.demand[0]; const isSelected = career.id === selectedId; return <button key={career.id} type="button" onClick={() => select(career)} className={cn("flex w-full items-center gap-2.5 rounded-xl border bg-white px-3 py-2.5 text-left transition active:scale-[0.99]", isSelected ? "border-[#c2691e]/60 bg-[#fffaf5]" : "border-[#e7e6e3] hover:bg-[#fffaf5]")}><span className="size-2 shrink-0 rounded-full" style={{ backgroundColor: CATEGORY_ACCENT.get(career.categoryId) ?? "#c2691e" }} /><span className={cn("min-w-0 flex-1 truncate text-[13px] font-medium", isSelected ? "text-[#c2691e]" : "text-[#1b1b1b]")}>{ko ? career.labelKo : career.label}</span>{demand ? <span className="shrink-0 text-[10px] font-bold text-[#3e7a2e]">{demand.rating.toUpperCase()}</span> : null}</button> })}</div></section>
 
-          <aside className="hidden min-w-0 lg:sticky lg:top-20 lg:col-span-4 lg:block lg:max-h-[calc(100dvh-6.5rem)] lg:overflow-y-auto lg:pr-1 lg:pb-2">
-            <div className="space-y-4">
-              {grouped.map(([categoryId, careers]) => (
-                <div key={categoryId}>
-                  <div className="flex items-baseline justify-between">
-                    <h2 className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#a3a19b]">
-                      {CATEGORY_LABELS.get(categoryId)}
-                    </h2>
-                    <span className="text-[10.5px] font-medium text-[#c4c2bc]">
-                      {careers.length}
-                    </span>
-                  </div>
-                  <div className="mt-2 space-y-1">
-                    {careers.map((career) => {
-                      const detail = getOccupationDetail(career.id)
-                      const accent = CATEGORY_ACCENT.get(career.categoryId) ?? "#c2691e"
-                      const isSelected = career.id === selectedId
-                      const displayLabel = locale === "ko" ? career.labelKo : career.label
-                      const countryDemand = selectedCountry
-                        ? detail?.demand.find(
-                            (entry) => entry.countryCode === selectedCountry.code
-                          )
-                        : undefined
-                      const demand = selectedCountry ? countryDemand : detail?.demand[0]
-                      const selectedScore =
-                        isSelected && countryProfile?.canonicalCareerId === career.id
-                          ? countryProfile.metric.opportunityScore
-                          : null
+          <aside className="hidden min-w-0 lg:sticky lg:top-20 lg:col-span-4 lg:block lg:max-h-[calc(100dvh-6.5rem)] lg:overflow-y-auto lg:pr-1 lg:pb-2"><div className="space-y-4">{grouped.map(([categoryId, careers]) => <div key={categoryId}><div className="flex items-baseline justify-between"><h2 className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#a3a19b]">{categoryName(categoryId, locale)}</h2><span className="text-[10.5px] font-medium text-[#c4c2bc]">{careers.length}</span></div><div className="mt-2 space-y-1">{careers.map((career) => { const detail = getOccupationDetail(career.id); const accent = CATEGORY_ACCENT.get(career.categoryId) ?? "#c2691e"; const isSelected = career.id === selectedId; const countryDemand = selectedCountry ? detail?.demand.find((entry) => entry.countryCode === selectedCountry.code) : undefined; const demand = selectedCountry ? countryDemand : detail?.demand[0]; const selectedScore = isSelected && countryProfile?.canonicalCareerId === career.id ? countryProfile.metric.opportunityScore : null; return <button key={career.id} type="button" onClick={() => select(career)} className={cn("flex w-full items-center gap-2.5 rounded-xl border bg-white px-3 py-2.5 text-left transition", isSelected ? "border-[#c2691e]/60 bg-[#fffaf5] ring-1 ring-[#c2691e]/20" : "border-[#e7e6e3] hover:border-[#dfc4a9] hover:bg-[#fffaf5]")}><span className="size-2 shrink-0 rounded-full" style={{ backgroundColor: accent }} /><span className={cn("min-w-0 flex-1 truncate text-[13.5px] font-medium", isSelected ? "text-[#c2691e]" : "text-[#1b1b1b]")}>{ko ? career.labelKo : career.label}</span>{selectedScore != null ? <span className="shrink-0 rounded-full bg-[#eef4ff] px-2 py-0.5 text-[10px] font-bold text-[#2563eb]">{selectedScore}</span> : demand ? <span className="shrink-0 rounded-full bg-[#edf5ea] px-2 py-0.5 text-[10px] font-bold text-[#3e7a2e]">{demand.rating.toUpperCase()}</span> : null}</button> })}</div></div>)}</div></aside>
 
-                      return (
-                        <button
-                          key={career.id}
-                          type="button"
-                          onClick={() => select(career)}
-                          className={cn(
-                            "flex w-full items-center gap-2.5 rounded-xl border bg-white px-3 py-2.5 text-left transition",
-                            isSelected
-                              ? "border-[#c2691e]/60 bg-[#fffaf5] ring-1 ring-[#c2691e]/20"
-                              : "border-[#e7e6e3] hover:border-[#dfc4a9] hover:bg-[#fffaf5]"
-                          )}
-                        >
-                          <span
-                            className="size-2 shrink-0 rounded-full"
-                            style={{ backgroundColor: accent }}
-                          />
-                          <span
-                            className={cn(
-                              "min-w-0 flex-1 truncate text-[13.5px] font-medium",
-                              isSelected ? "text-[#c2691e]" : "text-[#1b1b1b]"
-                            )}
-                          >
-                            {displayLabel}
-                          </span>
-                          {selectedScore != null ? (
-                            <span className="shrink-0 rounded-full bg-[#eef4ff] px-2 py-0.5 text-[10px] font-bold text-[#2563eb]">
-                              {selectedScore}
-                            </span>
-                          ) : demand ? (
-                            <span className="shrink-0 rounded-full bg-[#edf5ea] px-2 py-0.5 text-[10px] font-bold text-[#3e7a2e]">
-                              {demand.rating.toUpperCase()}
-                            </span>
-                          ) : null}
-                        </button>
-                      )
-                    })}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </aside>
-
-          <section className="hidden min-w-0 lg:col-span-8 lg:block">
-            {selected ? (
-              <CountryAwareOccupationDetail
-                career={selected}
-                detail={selectedDetail}
-                countryCode={selectedCountry?.code}
-                countryName={selectedCountry?.name}
-                countryProfile={countryProfile}
-                countryProfileStatus={countryProfileStatus}
-              />
-            ) : (
-              <div className="flex min-h-[420px] flex-col items-center justify-center rounded-2xl border border-dashed border-[#e7e6e3] bg-white/50 p-10 text-center">
-                <span className="grid size-14 place-items-center rounded-2xl bg-[#fff4e8] text-[#c2691e]">
-                  <MousePointerClick className="size-6" />
-                </span>
-                <h2 className="mt-5 text-[18px] font-semibold tracking-[-0.01em] text-[#1b1b1b]">
-                  Pick an occupation to open its dashboard
-                </h2>
-                <p className="mt-2 max-w-sm text-[13.5px] leading-6 text-[#6f6d68]">
-                  Search or browse the list. Demand ratings, salary ranges and tasks update
-                  instantly here without a page reload.
-                </p>
-              </div>
-            )}
-          </section>
-        </div>
-      )}
+          <section className="hidden min-w-0 lg:col-span-8 lg:block">{selected ? <CountryAwareOccupationDetail career={selected} detail={selectedDetail} countryCode={selectedCountry?.code} countryName={selectedCountry?.name} countryProfile={countryProfile} countryProfileStatus={countryProfileStatus} /> : <div className="flex min-h-[420px] flex-col items-center justify-center rounded-2xl border border-dashed border-[#e7e6e3] bg-white/50 p-10 text-center"><span className="grid size-14 place-items-center rounded-2xl bg-[#fff4e8] text-[#c2691e]"><MousePointerClick className="size-6" /></span><h2 className="mt-5 text-[18px] font-semibold tracking-[-0.01em] text-[#1b1b1b]">{ko ? "직업을 선택해 대시보드를 열어보세요" : "Pick an occupation to open its dashboard"}</h2><p className="mt-2 max-w-sm text-[13.5px] leading-6 text-[#6f6d68]">{ko ? "검색하거나 목록에서 직업을 고르세요. 수요, 연봉 범위와 주요 업무가 새로고침 없이 바로 업데이트됩니다." : "Search or browse the list. Demand ratings, salary ranges and tasks update instantly here without a page reload."}</p></div>}</section>
+        </div>}
       </>}
     </>
   )
