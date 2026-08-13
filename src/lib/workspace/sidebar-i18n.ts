@@ -1,9 +1,9 @@
 import type { Locale } from "@/lib/i18n/config"
 import type { LaunchCountry } from "@/data/launch-countries"
-import type { WorkspaceNavItem } from "./navigation"
+import type { NavItem } from "./navigation"
 import type { CompareModeType } from "@/lib/compare-navigation"
 
-const NAV_LABELS: Record<Locale, Record<WorkspaceNavItem["id"], string>> = {
+const NAV_LABELS: Record<Locale, Record<string, string>> = {
   en: {
     home: "Home",
     map: "Map",
@@ -33,8 +33,8 @@ const COMPARE_LABELS: Record<Locale, Record<CompareModeType, string>> = {
 
 const REGION_CODE_OVERRIDES: Record<string, string> = { UK: "GB" }
 
-export function workspaceNavLabel(locale: Locale, item: WorkspaceNavItem) {
-  return NAV_LABELS[locale][item.id]
+export function workspaceNavLabel(locale: Locale, item: NavItem) {
+  return NAV_LABELS[locale][item.id] ?? item.label
 }
 
 export function compareModeLabel(locale: Locale, type: CompareModeType) {
