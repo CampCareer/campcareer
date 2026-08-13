@@ -6,7 +6,7 @@ import type { User } from "@supabase/supabase-js"
 import { ArrowRight, Bookmark, BriefcaseBusiness, Building2, Compass, Route, Settings, Sparkles } from "lucide-react"
 import { CANONICAL_CAREER_BY_ID } from "@/data/career-comparison-catalog"
 import { getLaunchCountry } from "@/data/launch-countries"
-import { localizePath } from "@/lib/i18n/config"
+import { countryDisplayName, localizePath } from "@/lib/i18n/config"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { createClient } from "@/lib/supabase-client"
 
@@ -97,7 +97,9 @@ export default function ProfilePage() {
   const initial = Array.from(displayName.trim())[0]?.toLocaleUpperCase() || "C"
   const country = preferences?.target_country ? getLaunchCountry(preferences.target_country) : null
   const career = preferences?.target_occupation ? CANONICAL_CAREER_BY_ID.get(preferences.target_occupation) : null
-  const countryLabel = country?.name ?? preferences?.target_country ?? null
+  const countryLabel = preferences?.target_country
+    ? countryDisplayName(locale, preferences.target_country, country?.name ?? preferences.target_country)
+    : null
   const careerLabel = career ? (isKo ? career.labelKo : career.label) : preferences?.target_occupation ?? null
   const hasDirection = Boolean(preferences?.career_personalisation_completed_at && (countryLabel || careerLabel))
   const homeHref = localizePath("/home", locale)
