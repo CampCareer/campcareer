@@ -10,6 +10,7 @@ import { COMPARE_MODE_NAV_ITEMS, type CompareModeType } from "@/lib/compare-navi
 import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
 import { localizePath } from "@/lib/i18n/config"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
+import { resolveCareerCompareHref } from "@/lib/workspace/career-compare-context"
 import {
   compareModeLabel,
   workspaceCountryLabel,
@@ -29,7 +30,10 @@ export function WorkspaceSidebar({ open, onClose }: WorkspaceSidebarProps) {
   const copy = workspaceSidebarCopy(locale)
   const { selectedCountry, setSelectedCountry } = useSelectedCountry()
   const comparePath = localizePath("/compare", locale)
+  const careerPath = localizePath("/career", locale)
   const isCompareRoute = pathname === comparePath || pathname.startsWith(comparePath + "/")
+  const isCareerRoute = pathname === careerPath || pathname.startsWith(careerPath + "/")
+  const [currentCareerCompareHref, setCurrentCareerCompareHref] = useState<string | null>(null)
   const [compareOpen, setCompareOpen] = useState(isCompareRoute)
   const [compareType, setCompareType] = useState<CompareModeType>("program")
   const selectedCountryProfile = selectedCountry
@@ -38,6 +42,18 @@ export function WorkspaceSidebar({ open, onClose }: WorkspaceSidebarProps) {
   const selectedCountryLabel = selectedCountryProfile
     ? workspaceCountryLabel(locale, selectedCountryProfile)
     : selectedCountry?.name ?? null
+
+  useEffect(() => {
+    if (!isCareerRoute) {
+      setCurrentCareerCompareHref(null)
+      return
+    }
+
+    const params = new URLSearchParams(window.location.search)
+    setCurrentCareerCompareHref(
+      resolveCareerCompareHref(params.get("country") ?? "", params.get("occupation") ?? ""),
+    )
+  }, [isCareerRoute, pathname])
 
   useEffect(() => {
     if (!isCompareRoute) return
@@ -119,10 +135,13 @@ export function WorkspaceSidebar({ open, onClose }: WorkspaceSidebarProps) {
                     <div id="workspace-compare-modes" className="mt-1 space-y-0.5 pl-8">
                       {COMPARE_MODE_NAV_ITEMS.map((mode) => {
                         const modeActive = isCompareRoute && compareType === mode.type
+                        const contextualHref = mode.type === "career" && currentCareerCompareHref
+                          ? currentCareerCompareHref
+                          : mode.href
                         return (
                           <Link
                             key={mode.type}
-                            href={localizePath(mode.href, locale)}
+                            href={localizePath(contextualHref, locale)}
                             onClick={() => {
                               setCompareType(mode.type)
                               onClose()
