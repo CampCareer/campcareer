@@ -22,7 +22,7 @@ No incomplete component receives a synthetic zero.
 | --- | ---: | --- |
 | Shortage Signal | 20 | candidate `12` |
 | Vacancy Intensity | 15 | candidate `3` fallback |
-| Industry Diversity | 5 | official SOC×SIC source fixed; HHI pending row extraction |
+| Industry Diversity | 5 | `0.00` research-fixed, `derived` |
 | Employment Momentum | 10 | `0.00` research-fixed |
 | Entry Accessibility | 15 | candidate `14` |
 | Relative Salary | 10 | `3.71` research-fixed; direct ONS occupation row required before migration |
@@ -30,7 +30,7 @@ No incomplete component receives a synthetic zero.
 | Visa Accessibility | 10 | `7` research-fixed |
 | Entry Burden / Licensing | 5 | `5` research-fixed for general employee path |
 
-The five research-fixed components currently contribute `17.72 / 45`. This is not a final Opportunity Score.
+The six research-fixed components currently contribute `17.72 / 50`. This is not a final Opportunity Score.
 
 ## Occupation mapping
 
@@ -141,28 +141,37 @@ Frozen rubric:
 
 Site operators, employers, clients and particular projects may still require competence evidence, qualifications or a relevant skills card in practice. Those conditions must remain visible as practical entry points and blockers, but they must not be relabelled as a nationwide statutory Carpenter licence.
 
-## Industry Diversity — authoritative source fixed, HHI pending
+## Industry Diversity — research fixed 0.00 / 5
 
-A defensible SOC-to-industry distribution exists in two official sources:
+Primary input: Skills England / DfE `Occupations in demand: 2025`, SOC 2020 `5316 Carpenters and joiners`, using the official broad `SIC_name` industry distribution derived from the Annual Population Survey.
 
-1. Skills England / DfE `Occupations in demand: 2025` supporting file `Mapping of occupations to industries`, distributing 4-digit SOC workers across 2-digit SIC industries from APS.
-2. ONS `Employment by 4-digit occupation and 2-digit industry codes, UK, 2011 to 2025`, released 19 March 2026, with SOC 2020 from 2021 onward.
+The 2025 official row set reports occupation employment of `180,400`. The 18 broad industry rows sum to `180,200`; the `200` difference is consistent with the source's rounded worker counts and leaves `99.89%` usable coverage.
 
-Preferred current input is the Skills England supporting CSV. Official file endpoint identified:
+Largest 2025 industry inputs:
 
-`https://content.explore-education-statistics.service.gov.uk/api/releases/b20e696c-8f0a-4dcc-a1e2-3cb4b963ab80/files/3a1245a3-04f8-45b5-8cf5-899ab8a50a3c`
+- Construction: `140,000`, or `77.61%` of occupation employment;
+- Manufacturing and production: `26,600`, or `14.75%`;
+- Trades: `3,400`, or `1.88%`;
+- Business administration and support services: `2,100`, or `1.16%`;
+- Health and social care: `1,900`, or `1.05%`;
+- all remaining broad industries combined: `6,200`, or about `3.44%`.
 
-The current research toolchain can resolve the official CSV but cannot expose its row content, so the SOC 5316 shares have not been extracted. No HHI is guessed.
+Frozen calculation uses each published broad-industry worker count divided by the reported occupation employment total:
 
-Once the row is ingested:
+`HHI = Σ(industry_workers / 180,400)^2 = 0.6247843`.
 
-1. extract 2-digit SIC shares for SOC 5316;
-2. map them to the frozen comparable broad-sector taxonomy;
-3. require roughly `>=80%` usable coverage;
-4. compute `HHI = Σ share²` and top-industry share;
-5. apply the frozen 0–5 HHI bands.
+Construction is also the top-industry share at `77.6053%`. Renormalizing the rounded covered rows to their `180,200` sum gives HHI `0.6261719`, which remains in the same scoring band.
 
-Tooling inability is not evidence of insufficient industry coverage, so this component remains pending rather than `0 + insufficient_industry_coverage`.
+Methodology checks:
+
+- comparable broad sectors: `true`;
+- usable coverage: `99.89%`;
+- HHI: `0.6248`;
+- top-industry share: `77.61%`;
+- evidence status: `derived`;
+- score: `0 / 5` because HHI is at least `0.60` and the top-industry share is at least `75%`.
+
+This zero means observed high industry concentration under a completed calculation. It is not an `insufficient_industry_coverage` fallback.
 
 ## Remaining gate
 
@@ -173,6 +182,6 @@ Of this research pass:
 - Projected Growth: fixed `2.01/10`;
 - Visa Accessibility: fixed `7/10`;
 - Entry Burden: fixed `5/5` for the general employee path;
-- Industry Diversity: official input fixed, row extraction / HHI unresolved.
+- Industry Diversity: fixed `0/5`, `derived` from `99.89%` covered official broad-industry rows.
 
-The only unresolved scoring research component is Industry Diversity. Do not seed a decision-ready foundation profile until that HHI is resolved. After the exact industry distribution is ingested, implement the full relational migration, raw-to-normalized regression tests, live Supabase validation and CI while keeping PR #239 Draft until all gates are green.
+There is no unresolved scoring research component left from this gate. The next implementation gate is to ingest the exact ONS salary occupation row, implement the full relational migration and raw-to-normalized regression tests, validate live Supabase lineage, and run final CI while keeping PR #239 Draft until all gates are green.
