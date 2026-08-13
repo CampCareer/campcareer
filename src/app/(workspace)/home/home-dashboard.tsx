@@ -10,7 +10,7 @@ import {
 
 type HomeDashboardProps = { pathways: DashboardPathway[]; loadError?: boolean }
 
-const exploreHref = "/?mode=explore"
+const exploreHref = "/home?mode=explore"
 const primaryLink = "inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/35 focus-visible:ring-offset-2"
 const secondaryLink = "inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#d5d3ce] bg-white px-4 text-sm font-semibold text-[#3a3935] transition hover:border-[#aaa8a1] hover:bg-[#fafaf9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/35 focus-visible:ring-offset-2"
 
@@ -39,7 +39,7 @@ function DashboardError() {
     <section className="mt-7 rounded-2xl border border-[#e7e6e3] bg-[#fafaf9] p-5 sm:p-6" aria-labelledby="dashboard-error-heading">
       <h2 id="dashboard-error-heading" className="text-xl font-semibold tracking-[-0.02em] text-[#1b1b1b]">We couldn’t load your saved pathways.</h2>
       <div className="mt-5 flex flex-col gap-3 sm:flex-row">
-        <Link href="/" className={primaryLink}><RefreshCw className="size-4" aria-hidden="true" />Try again</Link>
+        <Link href={exploreHref} className={primaryLink}><RefreshCw className="size-4" aria-hidden="true" />Try again</Link>
         <Link href={exploreHref} className={secondaryLink}>Explore a pathway</Link>
       </div>
     </section>

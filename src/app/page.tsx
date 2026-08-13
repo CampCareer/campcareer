@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { Suspense } from "react"
+import { RootOAuthCallbackFallback } from "@/components/auth/root-oauth-callback-fallback"
 import { HOME_CANONICAL_PATH } from "@/lib/seo-routes.mjs"
 import { HomeHub } from "./(workspace)/home/home-hub"
 
@@ -11,7 +12,12 @@ export const metadata: Metadata = {
 }
 
 export default function LandingPage() {
-  return <Suspense fallback={<LandingFallback />}><HomeHub /></Suspense>
+  return (
+    <Suspense fallback={<LandingFallback />}>
+      <RootOAuthCallbackFallback />
+      <HomeHub />
+    </Suspense>
+  )
 }
 
 function LandingFallback() {

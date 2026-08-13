@@ -110,12 +110,14 @@ function ResultUnavailable({ locale }: { locale: Locale }) {
 function CountryPriority({ insight, query, locale, authenticated, presentation }: { insight: CareerMarketInsight; query: OverviewSearchValues; locale: Locale; authenticated: boolean | null; presentation: "inline" | "page" }) {
   const t = (ko: string, en: string) => tr(locale, ko, en)
   return <section className={cn("mx-auto max-w-5xl", presentation === "page" ? "mt-5" : "mt-12")} aria-live="polite">
-    <div className="rounded-3xl border border-[#e1e5ec] bg-white p-6 sm:p-8">
-      <p className="text-xs font-bold tracking-[0.12em] text-blue-700">MARKET-FIRST COUNTRY SHORTLIST</p>
-      <h2 className="mt-3 text-2xl font-semibold tracking-[-0.045em] text-slate-950 sm:text-3xl">{locale === "ko" ? `${insight.career.labelKo}로 가능성을 볼 나라부터 골라보세요.` : `Start with countries that show signals for ${insight.career.label}.`}</h2>
-      <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">{locale === "ko" ? "아래 순서는 현재 직업 시장 데이터, 채용 신호, 진입 조건을 종합한 우선순위예요. 개인의 비자·경력·자격을 심사한 결과는 아니며, 선택 후 무료로 더 자세한 근거를 볼 수 있어요." : "This order combines available market, hiring and entry signals. It is not a personal visa or qualification assessment; choose a country to see the supporting evidence for free."}</p>
+    <div>
+      <header className="px-1 py-2 sm:px-2">
+        <p className="text-xs font-bold tracking-[0.12em] text-blue-700">MARKET-FIRST COUNTRY SHORTLIST</p>
+        <h2 className="mt-3 text-2xl font-semibold tracking-[-0.045em] text-slate-950 sm:text-3xl">{locale === "ko" ? `${insight.career.labelKo}로 가능성을 볼 나라부터 골라보세요.` : `Start with countries that show signals for ${insight.career.label}.`}</h2>
+        <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">{locale === "ko" ? "아래 순서는 현재 직업 시장 데이터, 채용 신호, 진입 조건을 종합한 우선순위예요. 개인의 비자·경력·자격을 심사한 결과는 아니며, 선택 후 무료로 더 자세한 근거를 볼 수 있어요." : "This order combines available market, hiring and entry signals. It is not a personal visa or qualification assessment; choose a country to see the supporting evidence for free."}</p>
+      </header>
       <div className="mt-7 grid gap-3 md:grid-cols-2">
-        {insight.recommendations.map((choice, index) => <Link key={choice.countryCode} href={`${localizePath("/career", locale)}?country=${choice.countryCode}&occupation=${query.occupation}&personalised=1`} className="group rounded-2xl border border-[#e2e5ec] bg-white p-5 transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-[0_16px_30px_-24px_rgba(30,64,175,.35)]">
+        {insight.recommendations.map((choice, index) => <Link key={choice.countryCode} href={`${localizePath("/career", locale)}?country=${choice.countryCode}&occupation=${query.occupation}&personalised=1`} className="cc-result-reveal group rounded-2xl border border-[#e2e8f0] bg-white p-5 transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-[0_18px_36px_-26px_rgba(30,64,175,.36)]">
           <div className="flex items-start justify-between gap-4"><div><p className="text-xs font-semibold text-slate-400">0{index + 1} · {englishSafeText(locale, choice.officialTitle, insight.career.label)}</p><h3 className="mt-1 text-lg font-semibold tracking-[-0.03em] text-slate-950">{choice.countryName}</h3></div>{choice.opportunityScore != null && <span className="rounded-full bg-[#f4f6fb] px-3 py-1.5 text-xs font-semibold text-[#334155]">{t("취업시장 점수", "Job market score")} {choice.opportunityScore}/100</span>}</div>
           <p className="mt-4 min-h-10 text-sm leading-5 text-slate-600">{locale === "ko" ? (choice.demand?.note ?? (choice.registrationRequired ? "자격 인정 또는 현지 등록 여부가 진입의 핵심 변수예요." : "직업별 수요·채용·비자 정보를 함께 확인해 보세요.")) : (choice.registrationRequired ? "Local registration or recognition is a key entry condition." : "Review role-specific demand, hiring and visa conditions.")}</p>
           <div className="mt-5 flex items-center justify-between text-xs text-slate-500"><span>{choice.registrationRequired ? t("자격·면허 확인 필요", "Registration or licence check") : t("진입 요건 확인", "Entry requirements")}</span><span className="inline-flex items-center gap-1 font-semibold text-blue-700">{t("무료 인사이트 보기", "View free insights")} <ArrowRight className="size-3.5 transition group-hover:translate-x-0.5" /></span></div>
@@ -152,26 +154,18 @@ function GenericCountryCareerInsight({ insight, query, locale, authenticated, pe
   const learningLinks = profile?.links.filter((link) => link.linkType === "entry_program" || link.linkType === "graduate_program") ?? []
   const programLinks = profile?.programLinks.filter((link) => link.program) ?? []
   const t = (ko: string, en: string) => tr(locale, ko, en)
-  const scoreConfidence = insight.foundation?.scoreConfidence ?? null
-  const scoreConfidenceLabel = scoreConfidence === "verified"
-    ? t("검증됨", "Verified")
-    : scoreConfidence === "estimated"
-      ? t("추정", "Estimated")
-      : scoreConfidence === "limited_evidence"
-        ? t("제한적 근거", "Limited evidence")
-        : null
   const registrationAuthority = englishSafeText(locale, profile?.registrationAuthority, locale === "ko" ? "현지 등록 기관" : "the local regulator")
 
   return <section className={cn("mx-auto max-w-5xl", presentation === "page" ? "mt-5" : "mt-12")} aria-live="polite">
-    <div className="rounded-3xl border border-[#dfe4ee] bg-white p-6 shadow-[0_20px_45px_-38px_rgba(15,23,42,.42)] sm:p-8">
-      <div className="flex flex-col gap-5 border-b border-[#eceee9] pb-7 sm:flex-row sm:items-start sm:justify-between">
+    <div>
+      <header className="flex flex-col gap-5 px-1 py-2 sm:flex-row sm:items-start sm:justify-between sm:px-2">
         <div><p className="text-xs font-bold tracking-[0.12em] text-blue-700">FREE CAREER MARKET BRIEF</p><h2 className="mt-3 text-2xl font-semibold tracking-[-0.05em] text-slate-950 sm:text-3xl">{locale === "ko" ? `${insight.country?.name}에서 ${insight.career.labelKo}로 일하기` : `Working as ${insight.career.label} in ${insight.country?.name}`}</h2><p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">{locale === "ko" ? (insight.demand?.note ?? insight.career.overview?.ko ?? "현지 직업 시장과 실제 진입 조건을 함께 확인하세요.") : (insight.career.overview?.en ?? "Review the local job market and real entry conditions together.")}</p></div>
-        {marketScore != null && <div className="w-fit rounded-2xl bg-[#f4f6fb] px-4 py-3 text-right"><p className="text-[11px] font-semibold tracking-[0.08em] text-slate-500">{t("취업시장 점수", "Job market score")}</p><p className="mt-1 text-2xl font-semibold tracking-[-0.06em] text-slate-950">{marketScore}<span className="text-sm text-slate-400">/100</span>{scoreConfidenceLabel && <span className="ml-2 text-xs font-semibold tracking-normal text-slate-500">· {scoreConfidenceLabel}</span>}</p></div>}
-      </div>
+        {marketScore != null && <div className="w-fit border-l-2 border-[#74b69e] pl-4 text-right"><p className="text-[11px] font-semibold tracking-[0.08em] text-slate-500">{t("취업시장 점수", "Job market score")}</p><p className="mt-1 text-2xl font-semibold tracking-[-0.06em] text-slate-950">{marketScore}<span className="text-sm text-slate-400">/100</span></p></div>}
+      </header>
 
       <p className="mt-5 flex gap-2 rounded-xl bg-[#f8f8f6] px-4 py-3 text-xs leading-5 text-slate-600"><CircleAlert className="mt-0.5 size-4 shrink-0 text-slate-500" />{locale === "ko" ? "이 점수는 수요·채용·진입 조건의 시장 신호입니다. 개인의 취업 가능성을 확정하지 않으며, 아래에서 내 조건을 더해 정확히 좁힐 수 있어요." : "This is a market signal based on demand, hiring and entry conditions. It does not confirm personal eligibility; add your profile below to narrow it down."}</p>
 
-      <div className="mt-7 grid gap-3 sm:grid-cols-3">
+      <div className="cc-result-reveal mt-7 grid gap-3 sm:grid-cols-3">
         <Metric label={t("최근 채용 수요", "Recent hiring demand")} value={profile?.metric.vacanciesThreeMonthAvg != null ? `${compactNumber(profile.metric.vacanciesThreeMonthAvg, locale)}${t("건", " roles")}` : insight.demand?.rating ?? t("확인 중", "Checking")} detail={profile?.metric.vacancyPeriod ? `${profile.metric.vacancyPeriod} ${t("기준", "snapshot")}` : insight.demand ? t("공식 수요 근거 연결", "Official demand evidence") : t("직업별 데이터 확인", "Role data check")} />
         <Metric label={t("연봉 데이터", "Salary data")} value={profile?.metric.annualisedMedianSalary != null ? `${profile.currency} ${compactNumber(profile.metric.annualisedMedianSalary, locale)}` : t("확인 중", "Checking")} detail={profile?.metric.annualisedMedianSalary != null ? t("연 환산 중위값", "Annualised median") : t("직종·지역에 따라 다름", "Varies by role and region")} />
         <Metric label={t("5년 고용 변화", "Five-year employment change")} value={percentage(profile?.metric.employmentGrowth5yPct, locale)} detail={profile?.metric.asOfDate ? `${profile.metric.asOfDate} ${t("스냅샷", "snapshot")}` : t("고용 성장 데이터 확인", "Employment growth data")} />
@@ -234,21 +228,20 @@ function AustraliaNursingStudyToWork({ insight, query, locale, authenticated, pe
   const marketScore = profile.metric.opportunityScore
 
   return <section className={cn("mx-auto max-w-5xl", presentation === "page" ? "mt-5" : "mt-12")} aria-live="polite">
-    <div className="overflow-hidden rounded-3xl border border-[#dfe4ee] bg-white shadow-[0_20px_45px_-38px_rgba(15,23,42,.42)]">
-      <header className="border-b border-[#e8ebe8] px-6 py-7 sm:px-8 sm:py-9">
+    <div>
+      <header className="px-1 py-2 sm:px-2">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <p className="text-xs font-bold tracking-[0.12em] text-blue-700">AUSTRALIA · REGISTERED NURSE</p>
             <h2 className="mt-3 text-3xl font-semibold tracking-[-0.06em] text-slate-950 sm:text-4xl">{locale === "ko" ? "호주 간호사, 학업부터 첫 취업까지" : "Australian nursing: study to first role"}</h2>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">{locale === "ko" ? "간호 자격이 아직 없다면, 승인 연결 과정을 선택해 현지 등록을 거친 뒤 첫 간호사 직장을 찾는 것이 기본 경로예요. 학업은 목적이 아니라 이 커리어에 진입하기 위한 관문으로 봅니다." : "If you do not yet hold a nursing qualification, the base route is an approved study pathway, local registration, then a first nursing role. Study is the entry gate, not the end goal."}</p>
           </div>
-          {marketScore != null && <div className="w-fit rounded-2xl border border-[#dbe5fa] bg-[#f5f8ff] px-4 py-3 text-right"><p className="text-[11px] font-semibold tracking-[0.08em] text-slate-500">{t("취업시장 점수", "Job market score")}</p><p className="mt-1 text-2xl font-semibold tracking-[-0.06em] text-slate-950">{marketScore}<span className="text-sm text-slate-400">/100</span></p></div>}
+          {marketScore != null && <div className="relative mx-auto w-fit text-center sm:mt-6 sm:ml-auto sm:mr-0 sm:text-right"><div className="cc-prominent-score"><div className="flex items-center justify-center gap-1.5 text-[11px] font-semibold tracking-[0.1em] text-slate-500 sm:justify-start">{t("취업시장 점수", "Job market score")} <ScoreExplanation>{t("이 수치는 현재 호주 간호 시장의 규모·채용·성장 신호입니다. 개인의 입학·등록·취업 가능성을 확정하지 않으며, 로그인 후 내 조건으로 좁힐 수 있어요.", "These figures reflect current Australian nursing market size, hiring and growth signals. They do not confirm personal study, registration or employment eligibility; sign in to narrow the path to your profile.")}</ScoreExplanation></div><p className="cc-prominent-score-value mt-1 text-4xl font-semibold leading-none tracking-[-0.08em] sm:text-5xl">{marketScore}<span className="ml-1 text-sm font-medium tracking-[-0.03em] text-slate-400 sm:text-base">/100</span></p></div></div>}
         </div>
-        <p className="mt-6 flex gap-2 rounded-xl border border-[#e7e9e5] bg-[#fafaf8] px-4 py-3 text-xs leading-5 text-slate-600"><CircleAlert className="mt-0.5 size-4 shrink-0 text-slate-500" />{t("이 수치는 현재 호주 간호 시장의 규모·채용·성장 신호입니다. 개인의 입학·등록·취업 가능성을 확정하지 않으며, 로그인 후 내 조건으로 좁힐 수 있어요.", "These figures reflect current Australian nursing market size, hiring and growth signals. They do not confirm personal study, registration or employment eligibility; sign in to narrow the path to your profile.")}</p>
       </header>
 
-      <div className="space-y-10 px-6 py-7 sm:px-8 sm:py-9">
-        <section aria-labelledby="nursing-market-heading">
+      <div className="space-y-10 py-8 sm:py-10">
+        <section aria-labelledby="nursing-market-heading" className="cc-result-reveal">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between"><div><p className="text-xs font-bold tracking-[0.1em] text-blue-700">CAREER MARKET</p><h3 id="nursing-market-heading" className="mt-2 text-xl font-semibold tracking-[-0.045em] text-slate-950">{t("먼저, 호주에서 간호사가 필요한 시장인지 보세요.", "First, see whether Australia needs nurses.")}</h3></div><p className="text-xs text-slate-500">{profile.metric.asOfDate} {t("데이터 스냅샷", "data snapshot")}</p></div>
           <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <NursingMetric label={t("연봉 중위값", "Median salary")} value={profile.metric.annualisedMedianSalary != null ? `A$${compactNumber(profile.metric.annualisedMedianSalary, locale)}` : t("확인 중", "Checking")} detail={t("연 환산 · 호주달러", "Annualised · Australian dollars")} />
@@ -260,7 +253,7 @@ function AustraliaNursingStudyToWork({ insight, query, locale, authenticated, pe
 
         {personalised && personalisation && <AustraliaNursingPersonalisedPlan personalisation={personalisation} profile={profile} visas={insight.visas} locale={locale} />}
 
-        <section aria-labelledby="nursing-route-heading">
+        <section aria-labelledby="nursing-route-heading" className="cc-result-reveal">
           <div><p className="text-xs font-bold tracking-[0.1em] text-blue-700">STUDY → REGISTRATION → WORK</p><h3 id="nursing-route-heading" className="mt-2 text-xl font-semibold tracking-[-0.045em] text-slate-950">{t("학업은 첫 간호사 직장으로 이어지는 세 단계 중 하나예요.", "Study is one of three stages that lead to a first nursing role.")}</h3></div>
           <ol className="mt-5 grid gap-3 md:grid-cols-3">
             <NursingRouteStep number="01" label={t("간호 학위", "Nursing degree")} title={t("간호학사 과정을 선택", "Choose a nursing bachelor’s degree")} detail={t("입학 전, 해당 과정이 현지 등록으로 연결되는지 확인합니다.", "Before enrolment, confirm that the course leads to local registration.")} />
@@ -270,29 +263,29 @@ function AustraliaNursingStudyToWork({ insight, query, locale, authenticated, pe
           {profile.registrationUrl && <ExternalResource href={profile.registrationUrl} label={`${profile.registrationAuthority ?? "NMBA"} ${t("등록 기준 확인", "registration requirements")}`} className="mt-4" />}
         </section>
 
-        {regionalSignals.length > 0 && <section aria-labelledby="nursing-region-heading" className="rounded-2xl border border-[#e4e7e4] bg-[#fbfbfa] p-5 sm:p-6">
+        {regionalSignals.length > 0 && <section aria-labelledby="nursing-region-heading" className="cc-result-reveal">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between"><div><p className="text-xs font-bold tracking-[0.1em] text-blue-700">WHERE THE SIGNALS ARE</p><h3 id="nursing-region-heading" className="mt-2 text-lg font-semibold tracking-[-0.035em] text-slate-950">{t("처음 일자리를 찾을 때 볼 지역 신호", "Regional signals for your first role")}</h3></div><p className="text-xs text-slate-500">{t("최근 3개월 평균 채용 신호", "Latest three-month average hiring signal")}</p></div>
           <div className="mt-5 grid gap-3 md:grid-cols-3">{regionalSignals.map((region) => <div key={region.regionCode} className="rounded-xl border border-[#e5e8e5] bg-white p-4"><div className="flex items-start justify-between gap-2"><p className="text-sm font-semibold text-slate-900">{AU_REGION_LABELS[region.regionCode]?.[locale] ?? region.regionCode}<span className="ml-1 text-xs font-medium text-slate-400">{region.regionCode}</span></p><p className="text-lg font-semibold tracking-[-0.04em] text-slate-950">{compactNumber(region.vacancyCount, locale)}</p></div><div className="mt-4 h-1.5 overflow-hidden rounded-full bg-[#edf0ed]"><div className="h-full rounded-full bg-[#5d86cf]" style={{ width: `${Math.round(((region.vacancyCount ?? 0) / largestRegionalSignal) * 100)}%` }} /></div><p className="mt-2 text-xs text-slate-500">{t("공개 채용 수요 지표", "Public hiring-demand indicator")}</p></div>)}</div>
           {regionalSignals[0]?.sourceUrl && <ExternalResource href={regionalSignals[0].sourceUrl} label={t("지역별 채용 수요 출처 보기", "View regional hiring-demand source")} className="mt-4" />}
         </section>}
 
-        <section aria-labelledby="nursing-employers-heading">
+        <section aria-labelledby="nursing-employers-heading" className="cc-result-reveal">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"><div><p className="text-xs font-bold tracking-[0.1em] text-blue-700">WHO HIRES</p><h3 id="nursing-employers-heading" className="mt-2 text-xl font-semibold tracking-[-0.045em] text-slate-950">{t("졸업 후, 실제로 채용 페이지를 볼 고용주", "Employers to check after graduation")}</h3><p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">{t("대형 공공 보건망과 민간 병원 그룹의 공식 채용 페이지예요. 직무명·지역·근무 형태를 직접 확인해 보세요.", "These are official hiring pages for large public health systems and private hospital groups. Check role title, location and work arrangement directly.")}</p></div>{jobSearch && <a href={jobSearch.url} target="_blank" rel="noreferrer" className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-xl border border-[#cfd8e9] bg-white px-3 text-sm font-semibold text-blue-700 transition hover:border-blue-400 hover:bg-blue-50">{t("현재 공고 보기", "View current roles")} <ExternalLink className="size-3.5" /></a>}</div>
           <div className="mt-5 grid gap-3 sm:grid-cols-2">{employers.slice(0, 4).map((employer) => <EmployerCard key={employer.url} employer={employer} locale={locale} />)}</div>
         </section>
 
-        <section aria-labelledby="nursing-job-checks-heading">
+        <section aria-labelledby="nursing-job-checks-heading" className="cc-result-reveal">
           <div><p className="text-xs font-bold tracking-[0.1em] text-blue-700">READING A JOB POSTING</p><h3 id="nursing-job-checks-heading" className="mt-2 text-xl font-semibold tracking-[-0.045em] text-slate-950">{t("채용 공고를 열면, 이 세 가지부터 확인하세요.", "When you open a job posting, start with these three checks.")}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{t("고용주와 직무마다 다르지만, 신규 간호사 지원 전에 가장 먼저 걸러야 할 조건입니다.", "They vary by employer and role, but these are the first conditions to check before applying as a new nurse.")}</p></div>
           <div className="mt-5 grid gap-3 md:grid-cols-3"><JobCheck title={t("등록 가능 시점", "Registration timing")} detail={t("NMBA 일반 등록이 필요한지, 입사 시점에 어떤 상태여야 하는지 확인합니다.", "Check whether NMBA general registration is required and what status you need at your start date.")} /><JobCheck title={t("근무 분야·지역", "Practice area and location")} detail={t("급성기·노인요양·정신건강 등 관심 분야와 주·도시를 함께 봅니다.", "Review your preferred area—acute care, aged care or mental health—along with the state and city.")} /><JobCheck title={t("근무 권한", "Work rights")} detail={t("비자 상태와 고용주의 지원 가능 여부는 개인 조건에 따라 달라집니다.", "Visa status and employer support depend on your individual circumstances.")} /></div>
         </section>
 
-        <section aria-labelledby="nursing-study-heading" className="border-t border-[#e8ebe8] pt-9">
+        <section aria-labelledby="nursing-study-heading" className="cc-result-reveal border-t border-[#e8ebe8] pt-9">
           <div><p className="text-xs font-bold tracking-[0.1em] text-blue-700">THE STUDY GATE</p><h3 id="nursing-study-heading" className="mt-2 text-xl font-semibold tracking-[-0.045em] text-slate-950">{t("간호사가 되기 위한 대학 과정", "University courses that lead to nursing")}</h3><p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">{t("아래는 간호 자격이 없는 사람의 기본 진입 경로로 연결된 과정이에요. 과정 이름만으로 판단하지 말고, 입학 전 해당 과정의 등록 연결 여부를 공식 기관에서 다시 확인하세요.", "These courses are linked to a foundational entry route for people without a nursing qualification. Do not rely on a course title alone—confirm its registration outcome with the official authority before enrolling.")}</p></div>
           <div className="mt-5 grid gap-4 md:grid-cols-2">{degreePrograms.map((program) => <NursingDegreeCard key={program.id} program={program} locale={locale} />)}</div>
           {degreePrograms.length === 0 && <p className="mt-5 rounded-xl bg-[#f7f7f5] p-4 text-sm leading-6 text-slate-600">{t("현재 직접 연결된 과정 정보를 정리하고 있어요. 로그인 후 학력과 영어 수준을 입력하면 비교할 과정을 더 정확히 좁힐 수 있어요.", "We are still consolidating directly linked course information. Sign in and add your education and English level to narrow the courses you can compare.")}</p>}
         </section>
 
-        {graduatePrograms.length > 0 && <section aria-labelledby="nursing-graduate-heading" className="rounded-2xl bg-[#f6f8fc] p-5 sm:p-6"><div><p className="text-xs font-bold tracking-[0.1em] text-blue-700">FIRST-ROLE PROGRAMS</p><h3 id="nursing-graduate-heading" className="mt-2 text-lg font-semibold tracking-[-0.035em] text-slate-950">{t("등록 뒤, 첫 근무지로 연결되는 신규 간호사 프로그램", "Graduate programs that lead to a first workplace after registration")}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{t("대학 과정이 아니라 졸업·등록 이후에 보게 될 고용주 경로예요.", "These are employer pathways to consider after graduation and registration, not university courses.")}</p></div><div className="mt-4 grid gap-3 md:grid-cols-2">{graduatePrograms.slice(0, 2).map((program) => <a key={program.url} href={program.url} target="_blank" rel="noreferrer" className="group rounded-xl border border-[#dbe2ef] bg-white p-4 transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-[0_12px_25px_-22px_rgba(37,99,235,.55)]"><p className="text-xs font-semibold text-blue-700">GRADUATE PROGRAM</p><p className="mt-2 text-sm font-semibold text-slate-900">{program.label}</p><span className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-blue-700">{t("프로그램 보기", "View program")} <ArrowRight className="size-3.5 transition group-hover:translate-x-0.5" /></span></a>)}</div></section>}
+        {graduatePrograms.length > 0 && <section aria-labelledby="nursing-graduate-heading" className="cc-result-reveal"><div><p className="text-xs font-bold tracking-[0.1em] text-blue-700">FIRST-ROLE PROGRAMS</p><h3 id="nursing-graduate-heading" className="mt-2 text-lg font-semibold tracking-[-0.035em] text-slate-950">{t("등록 뒤, 첫 근무지로 연결되는 신규 간호사 프로그램", "Graduate programs that lead to a first workplace after registration")}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{t("대학 과정이 아니라 졸업·등록 이후에 보게 될 고용주 경로예요.", "These are employer pathways to consider after graduation and registration, not university courses.")}</p></div><div className="mt-4 grid gap-3 md:grid-cols-2">{graduatePrograms.slice(0, 2).map((program) => <a key={program.url} href={program.url} target="_blank" rel="noreferrer" className="group rounded-xl border border-[#dbe2ef] bg-white p-4 transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-[0_12px_25px_-22px_rgba(37,99,235,.55)]"><p className="text-xs font-semibold text-blue-700">GRADUATE PROGRAM</p><p className="mt-2 text-sm font-semibold text-slate-900">{program.label}</p><span className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-blue-700">{t("프로그램 보기", "View program")} <ArrowRight className="size-3.5 transition group-hover:translate-x-0.5" /></span></a>)}</div></section>}
 
         {personalised && personalisation ? <Link href={onboardingPath(query, locale)} className="inline-flex h-11 items-center gap-2 rounded-xl border border-[#cfd8e9] bg-white px-4 text-sm font-semibold text-blue-700 transition hover:border-blue-400 hover:bg-blue-50">{t("내 조건 다시 입력하기", "Update my details")} <ArrowRight className="size-4" /></Link> : <PersonaliseCta query={query} authenticated={authenticated} locale={locale} className="mt-2" />}
 
@@ -381,7 +374,7 @@ function VisaStep({ number, title, detail, href }: { number: string; title: stri
 }
 
 function NursingMetric({ label, value, detail }: { label: string; value: string; detail: string }) {
-  return <div className="rounded-2xl border border-[#e3e7e4] bg-white p-4"><p className="text-xs font-semibold tracking-[0.05em] text-slate-500">{label}</p><p className="mt-2 text-2xl font-semibold tracking-[-0.055em] text-slate-950">{value}</p><p className="mt-1 text-xs text-slate-500">{detail}</p></div>
+  return <div className="cc-result-metric rounded-2xl border border-[#e2e8f0] bg-white p-4"><p className="text-xs font-semibold tracking-[0.05em] text-slate-500">{label}</p><p className="mt-2 text-2xl font-semibold tracking-[-0.055em] text-slate-950">{value}</p><p className="mt-1 text-xs text-slate-500">{detail}</p></div>
 }
 
 function NursingRouteStep({ number, label, title, detail }: { number: string; label: string; title: string; detail: string }) {
@@ -411,15 +404,22 @@ function PersonalisedSummary({ personalisation, profile, locale }: { personalisa
 }
 
 function PersonaliseCta({ query, authenticated, locale, className }: { query: OverviewSearchValues; authenticated: boolean | null; locale: Locale; className?: string }) {
-  return <div className={cn("rounded-2xl border border-[#dbe4f4] bg-[#f5f8fe] p-5 sm:flex sm:items-center sm:justify-between sm:gap-6", className)}><div><p className="text-base font-semibold text-slate-950">{tr(locale, "로그인하면, 내 조건에 맞는 경로로 더 좁힐 수 있어요.", "Sign in to narrow this down to a route that fits your profile.")}</p><p className="mt-1 max-w-2xl text-sm leading-6 text-slate-600">{tr(locale, "국적, 영어, 학위와 학업 가능 여부를 더해 비자·등록의 막힘 요소를 먼저 보고, 과정과 첫 취업 경로도 비교할 수 있어요.", "Add your nationality, English level, education and study availability to see visa and registration blockers first, then compare courses and routes to a first role.")}</p></div><Link href={personalisationHref(query, authenticated, locale)} className="mt-4 inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#2865c7] px-4 text-sm font-semibold text-white transition hover:bg-[#1f55aa] sm:mt-0">{tr(locale, "내 조건으로 정확히 보기", "See my exact path")} <ArrowRight className="size-4" /></Link></div>
+  return <div className={cn("border-l-2 border-[#74b69e] pl-5 sm:flex sm:items-center sm:justify-between sm:gap-6", className)}><div><p className="text-base font-semibold text-slate-950">{tr(locale, "로그인하면, 내 조건에 맞는 경로로 더 좁힐 수 있어요.", "Sign in to narrow this down to a route that fits your profile.")}</p><p className="mt-1 max-w-2xl text-sm leading-6 text-slate-600">{tr(locale, "국적, 영어, 학위와 학업 가능 여부를 더해 비자·등록의 막힘 요소를 먼저 보고, 과정과 첫 취업 경로도 비교할 수 있어요.", "Add your nationality, English level, education and study availability to see visa and registration blockers first, then compare courses and routes to a first role.")}</p></div><Link href={personalisationHref(query, authenticated, locale)} className="mt-4 inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#2865c7] px-4 text-sm font-semibold text-white transition hover:bg-[#1f55aa] sm:mt-0">{tr(locale, "내 조건으로 정확히 보기", "See my exact path")} <ArrowRight className="size-4" /></Link></div>
 }
 
 function Metric({ label, value, detail }: { label: string; value: string; detail: string }) {
-  return <div className="rounded-2xl border border-[#e5e7e3] p-4"><p className="text-xs font-semibold tracking-[0.06em] text-slate-500">{label}</p><p className="mt-2 text-xl font-semibold tracking-[-0.04em] text-slate-950">{value}</p><p className="mt-1 text-xs text-slate-500">{detail}</p></div>
+  return <div className="cc-result-metric rounded-2xl border border-[#e2e8f0] p-4"><p className="text-xs font-semibold tracking-[0.06em] text-slate-500">{label}</p><p className="mt-2 text-xl font-semibold tracking-[-0.04em] text-slate-950">{value}</p><p className="mt-1 text-xs text-slate-500">{detail}</p></div>
+}
+
+function ScoreExplanation({ children }: { children: ReactNode }) {
+  return <details className="cc-score-explanation relative inline-flex">
+    <summary aria-label="About this job market score" className="inline-flex cursor-pointer list-none text-slate-400 transition hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/30 [&::-webkit-details-marker]:hidden"><CircleAlert className="size-3" /></summary>
+    <div className="absolute right-0 top-5 z-10 w-64 border-l-2 border-[#74b69e] bg-white py-1 pl-3 text-left text-xs font-normal normal-case leading-5 tracking-normal text-slate-600 shadow-[0_14px_28px_-22px_rgba(31,75,145,.55)]">{children}</div>
+  </details>
 }
 
 function InsightCard({ icon, eyebrow, title, children }: { icon: ReactNode; eyebrow: string; title: string; children: ReactNode }) {
-  return <article className="rounded-2xl border border-[#e3e6ea] p-5"><div className="flex items-center gap-2 text-blue-700">{icon}<p className="text-[11px] font-bold tracking-[0.09em]">{eyebrow}</p></div><h3 className="mt-3 text-lg font-semibold tracking-[-0.035em] text-slate-950">{title}</h3><div className="mt-3 text-sm leading-6 text-slate-600">{children}</div></article>
+  return <article className="cc-result-reveal rounded-2xl border border-[#e3e6ea] p-5"><div className="flex items-center gap-2 text-blue-700">{icon}<p className="text-[11px] font-bold tracking-[0.09em]">{eyebrow}</p></div><h3 className="mt-3 text-lg font-semibold tracking-[-0.035em] text-slate-950">{title}</h3><div className="mt-3 text-sm leading-6 text-slate-600">{children}</div></article>
 }
 
 function RouteStep({ number, text }: { number: string; text: string }) {

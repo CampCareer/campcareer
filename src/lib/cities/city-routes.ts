@@ -27,6 +27,9 @@ export const PUBLISHED_UK_CITY_SLUGS = [
 ] as const
 export type PublishedUkCitySlug = (typeof PUBLISHED_UK_CITY_SLUGS)[number]
 
+export const PUBLISHED_IE_CITY_SLUGS = ["dublin", "cork", "galway", "limerick"] as const
+export type PublishedIeCitySlug = (typeof PUBLISHED_IE_CITY_SLUGS)[number]
+
 export const PUBLISHED_NZ_CITY_SLUGS = ["auckland", "christchurch", "hamilton", "wellington", "dunedin"] as const
 export type PublishedNzCitySlug = (typeof PUBLISHED_NZ_CITY_SLUGS)[number]
 
@@ -78,10 +81,20 @@ export type PublishedFiCitySlug = (typeof PUBLISHED_FI_CITY_SLUGS)[number]
 export const SUPPORTED_FI_CITY_SLUGS = PUBLISHED_FI_CITY_SLUGS
 export type SupportedFiCitySlug = PublishedFiCitySlug
 
+export const PUBLISHED_NO_CITY_SLUGS = ["oslo", "trondheim", "stavanger", "as", "tromso"] as const
+export type PublishedNoCitySlug = (typeof PUBLISHED_NO_CITY_SLUGS)[number]
+export const SUPPORTED_NO_CITY_SLUGS = PUBLISHED_NO_CITY_SLUGS
+export type SupportedNoCitySlug = PublishedNoCitySlug
+
 export const PUBLISHED_ES_CITY_SLUGS = ["madrid", "barcelona", "valencia", "sevilla", "granada", "malaga", "bilbao"] as const
 export type PublishedEsCitySlug = (typeof PUBLISHED_ES_CITY_SLUGS)[number]
 export const SUPPORTED_ES_CITY_SLUGS = PUBLISHED_ES_CITY_SLUGS
 export type SupportedEsCitySlug = PublishedEsCitySlug
+
+export const PUBLISHED_KR_CITY_SLUGS = ["seoul", "busan", "daejeon", "suwon", "yongin", "pohang"] as const
+export type PublishedKrCitySlug = (typeof PUBLISHED_KR_CITY_SLUGS)[number]
+export const SUPPORTED_KR_CITY_SLUGS = PUBLISHED_KR_CITY_SLUGS
+export type SupportedKrCitySlug = PublishedKrCitySlug
 
 export const PUBLISHED_AE_CITY_SLUGS = ["abu-dhabi", "sharjah", "al-ain", "dubai"] as const
 export type PublishedAeCitySlug = (typeof PUBLISHED_AE_CITY_SLUGS)[number]
@@ -106,6 +119,10 @@ export function isPublishedUsCitySlug(value: string): value is PublishedUsCitySl
 
 export function isPublishedUkCitySlug(value: string): value is PublishedUkCitySlug {
   return PUBLISHED_UK_CITY_SLUGS.includes(value as PublishedUkCitySlug)
+}
+
+export function isPublishedIeCitySlug(value: string): value is PublishedIeCitySlug {
+  return PUBLISHED_IE_CITY_SLUGS.includes(value as PublishedIeCitySlug)
 }
 
 export function isPublishedNzCitySlug(value: string): value is PublishedNzCitySlug {
@@ -140,8 +157,16 @@ export function isPublishedFiCitySlug(value: string): value is PublishedFiCitySl
   return PUBLISHED_FI_CITY_SLUGS.includes(value as PublishedFiCitySlug)
 }
 
+export function isPublishedNoCitySlug(value: string): value is PublishedNoCitySlug {
+  return PUBLISHED_NO_CITY_SLUGS.includes(value as PublishedNoCitySlug)
+}
+
 export function isPublishedEsCitySlug(value: string): value is PublishedEsCitySlug {
   return PUBLISHED_ES_CITY_SLUGS.includes(value as PublishedEsCitySlug)
+}
+
+export function isPublishedKrCitySlug(value: string): value is PublishedKrCitySlug {
+  return PUBLISHED_KR_CITY_SLUGS.includes(value as PublishedKrCitySlug)
 }
 
 export function isPublishedAeCitySlug(value: string): value is PublishedAeCitySlug {
@@ -152,8 +177,16 @@ export function isSupportedFiCitySlug(value: string): value is SupportedFiCitySl
   return isPublishedFiCitySlug(value)
 }
 
+export function isSupportedNoCitySlug(value: string): value is SupportedNoCitySlug {
+  return isPublishedNoCitySlug(value)
+}
+
 export function isSupportedEsCitySlug(value: string): value is SupportedEsCitySlug {
   return isPublishedEsCitySlug(value)
+}
+
+export function isSupportedKrCitySlug(value: string): value is SupportedKrCitySlug {
+  return isPublishedKrCitySlug(value)
 }
 
 export function isSupportedAeCitySlug(value: string): value is SupportedAeCitySlug {
@@ -176,6 +209,12 @@ export function ukCityPath(value: string | null | undefined) {
   const slug = normalizeCitySlug(value)
   if (!slug || !isPublishedUkCitySlug(slug)) return null
   return `/cities/uk/${slug}`
+}
+
+export function ieCityPath(value: string | null | undefined) {
+  const slug = normalizeCitySlug(value)
+  if (!slug || !isPublishedIeCitySlug(slug)) return null
+  return `/cities/ie/${slug}`
 }
 
 export function nzCityPath(value: string | null | undefined) {
@@ -226,10 +265,22 @@ export function fiCityPath(value: string | null | undefined) {
   return `/cities/fi/${slug}`
 }
 
+export function noCityPath(value: string | null | undefined) {
+  const slug = normalizeCitySlug(value)
+  if (!slug || !isPublishedNoCitySlug(slug)) return null
+  return `/cities/no/${slug}`
+}
+
 export function esCityPath(value: string | null | undefined) {
   const slug = normalizeCitySlug(value)
   if (!slug || !isPublishedEsCitySlug(slug)) return null
   return `/cities/es/${slug}`
+}
+
+export function krCityPath(value: string | null | undefined) {
+  const slug = normalizeCitySlug(value)
+  if (!slug || !isPublishedKrCitySlug(slug)) return null
+  return `/cities/kr/${slug}`
 }
 
 export function aeCityPath(value: string | null | undefined) {

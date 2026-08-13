@@ -11,6 +11,7 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
   const isLanding = pathname === "/"
   const isWorkspace = isWorkspaceRoute(pathname)
   const isAuthentication = pathname === "/login"
+  const isOnboarding = pathname === "/onboarding"
 
   // /maps is the public route-map explainer and should keep ordinary product
   // navigation. The legacy /map canvas remains an isolated interactive tool.
@@ -18,7 +19,7 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
 
   // Workspace routes have their own layout (sidebar, topbar, mobile nav).
   // Bypass the standard shell to avoid duplicate navigation chrome.
-  if (isWorkspace || isAuthentication) {
+  if (isWorkspace || isAuthentication || isOnboarding) {
     return <>{children}</>
   }
 

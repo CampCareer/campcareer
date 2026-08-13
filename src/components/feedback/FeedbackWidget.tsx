@@ -157,7 +157,6 @@ function FeedbackSuccess({ warning, onClose }: { warning: string | null; onClose
     </div>
   )
 }
-
 function FeedbackForm({
   type,
   onClose,
@@ -625,7 +624,7 @@ function FeedbackDialog({
   )
 }
 
-export function FeedbackWidget() {
+export function FeedbackWidget({ className, label = "Feedback" }: { className?: string; label?: string }) {
   const triggerRef = useRef<HTMLButtonElement>(null)
   const [open, setOpen] = useState(false)
   const [step, setStep] = useState<Step>("home")
@@ -648,9 +647,9 @@ export function FeedbackWidget() {
         onClick={handleOpen}
         aria-haspopup="dialog"
         aria-expanded={open}
-        className="transition-colors hover:text-slate-600 focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:hover:text-slate-200"
+        className={`transition-colors hover:text-slate-600 focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:hover:text-slate-200 ${className ?? ""}`}
       >
-        Feedback
+        {label}
       </button>
       <FeedbackDialog
         open={open}
