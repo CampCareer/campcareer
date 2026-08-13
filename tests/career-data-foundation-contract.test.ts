@@ -4,11 +4,12 @@ import test from "node:test"
 
 const baseMigration = readFileSync("supabase/migrations/20260812113315_career_data_foundation_us_carpenter.sql", "utf8")
 const methodologyMigration = readFileSync("supabase/migrations/20260812153156_career_data_foundation_methodology_v1.sql", "utf8")
-const migrations = `${baseMigration}\n${methodologyMigration}`
+const finalizedGrowthMigration = readFileSync("supabase/migrations/20260813015855_finalize_career_opportunity_growth_methodology_v1.sql", "utf8")
+const migrations = `${baseMigration}\n${methodologyMigration}\n${finalizedGrowthMigration}`
 const readModel = readFileSync("src/lib/workspace/career-market-read.ts", "utf8")
 const foundationRead = readFileSync("src/lib/career-data-foundation/read.ts", "utf8")
 
- test("foundation keeps raw, normalized, component and snapshot data in separate layers", () => {
+test("foundation keeps raw, normalized, component and snapshot data in separate layers", () => {
   for (const table of [
     "career_raw_observations",
     "career_normalized_metrics",
@@ -35,13 +36,13 @@ test("score values and final score remain calculated rather than manually stored
   assert.match(baseMigration, /score_value numeric generated always as/)
   assert.match(baseMigration, /case when e\.score_ready then round\(e\.score_sum,2\) else null::numeric end as opportunity_score/)
   assert.doesNotMatch(migrations, /opportunity_score\s+numeric\s+not null/i)
-  assert.match(methodologyMigration, /career-opportunity-v3-foundation/)
+  assert.match(finalizedGrowthMigration, /career-opportunity-v4-foundation/)
 })
 
-test("only US Carpenter is seeded into the foundation methodology update", () => {
-  assert.match(methodologyMigration, /'US:carpenter:2026-08-12:v3'/)
-  assert.doesNotMatch(methodologyMigration, /AU:registered-nurse/)
-  assert.doesNotMatch(methodologyMigration, /AU:carpenter/)
+test("only US Carpenter is seeded into the finalized foundation methodology", () => {
+  assert.match(finalizedGrowthMigration, /'US:carpenter:2026-08-13:v4'/)
+  assert.doesNotMatch(finalizedGrowthMigration, /AU:registered-nurse/)
+  assert.doesNotMatch(finalizedGrowthMigration, /AU:carpenter/)
 })
 
 test("canonical mapping remains exact SOC 47-2031 with exact O*NET companion mapping", () => {
@@ -100,9 +101,18 @@ test("entry accessibility treats paid employment-linked apprenticeship different
   assert.match(methodologyMigration, /14,'career-opportunity-v3-foundation'/)
 })
 
-test("rank read model can include a fully evaluated methodology-v1 foundation profile", () => {
+test("final 30-point methodology uses actual momentum, relative wage and projected CAGR", () => {
+  assert.match(finalizedGrowthMigration, /'us-bls-cps-aa-2020'/)
+  assert.match(finalizedGrowthMigration, /'us-bls-cps-aa-2025'/)
+  assert.match(finalizedGrowthMigration, /employment_momentum_excess_cagr_pp_v1/)
+  assert.match(finalizedGrowthMigration, /projected_growth_excess_cagr_pp_v1/)
+  assert.match(finalizedGrowthMigration, /p_normalized_value \* 2\.5/)
+  assert.match(finalizedGrowthMigration, /Relative salary remains unchanged/)
+})
+
+test("rank read model can include the final methodology-v1 foundation profile", () => {
   assert.match(baseMigration, /where score_ready=true and publish_ready=true and opportunity_score is not null/)
-  assert.match(methodologyMigration, /'US:carpenter:2026-08-12:v3'/)
+  assert.match(finalizedGrowthMigration, /'US:carpenter:2026-08-13:v4'/)
 })
 
 test("career insight suppresses legacy data whenever a foundation row exists", () => {
