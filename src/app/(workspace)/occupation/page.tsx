@@ -1,4 +1,6 @@
 import { permanentRedirect } from "next/navigation"
+import { localizePath } from "@/lib/i18n/config"
+import { getLocale } from "@/lib/i18n/server"
 import { getIndexableOccupationRoute } from "@/lib/workspace/occupation-routes"
 import { OccupationExplorer } from "./occupation-explorer"
 
@@ -13,6 +15,7 @@ export default async function OccupationPage({
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>
 }) {
+  const locale = await getLocale()
   const sp = await searchParams
   const q = typeof sp.q === "string" ? sp.q : ""
   const occupation = typeof sp.occupation === "string" ? sp.occupation : ""
@@ -22,7 +25,7 @@ export default async function OccupationPage({
     ? getIndexableOccupationRoute(country, occupation)
     : null
 
-  if (canonicalRoute) permanentRedirect(canonicalRoute.path)
+  if (canonicalRoute) permanentRedirect(localizePath(canonicalRoute.path, locale))
 
   return (
     <OccupationExplorer
