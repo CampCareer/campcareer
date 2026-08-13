@@ -75,13 +75,41 @@ These broader values are candidate inputs only. Before scoring, historical momen
 
 Source: https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupations/3411-electricians
 
-## Shortage Signal — source fixed, value pending direct row capture
+## Shortage Signal — frozen at 12 / 20
 
 Canonical source is the 2025 Jobs and Skills Australia Occupation Shortage List six-digit ANZSCO/OSCA workbook.
 
-The official workbook has been identified. The Electrician (General) row must be captured directly from that official dataset before the Shortage component is frozen; no secondary transcription will be used as the production fact source.
+The exact ANZSCO occupation row used for the component is:
 
-Source: https://www.jobsandskills.gov.au/data/occupation-shortage
+- code: `341111`;
+- title: `Electrician (General)`;
+- Australia: `S`;
+- ACT: `S`;
+- NSW: `S`;
+- NT: `S`;
+- QLD: `S`;
+- SA: `S`;
+- TAS: `S`;
+- VIC: `S`;
+- WA: `S`.
+
+JSA defines `Shortage` as an occupation in national or overall shortage. Therefore the scoring input is `severity=shortage`, `scope=national`. Under the frozen CampCareer rubric, shortage severity contributes 12 base points and national scope has a 1.00 multiplier:
+
+`12 × 1.00 = 12 / 20`.
+
+Evidence treatment:
+
+- availability: `available`;
+- directness: `direct`;
+- mapping quality: `high`;
+- evidence status: `direct_verified`;
+- normalized value: `12`.
+
+This is not a broader occupation proxy: ANZSCO 341111 is an exact companion mapping for Electrician (General). The primary current Australian identity remains OSCA 381231.
+
+Primary source: https://www.jobsandskills.gov.au/data/occupation-shortage
+
+Verification note: the JSA download is the production fact source. The row values were cross-checked against independent transcriptions of the 2025 JSA six-digit download because the current research toolchain does not render the XLSX binary directly; no secondary source is stored as the production source.
 
 ## Visa Accessibility — strong official evidence verified
 
@@ -131,7 +159,6 @@ This means licensing and overseas-recognition burden must be modelled explicitly
 
 ## Components still to freeze
 
-- direct 2025 OSL Electrician (General) row and shortage severity/scope;
 - JSA IVI vacancy evidence and persistence semantics;
 - industry distribution and whether a defensible HHI is available;
 - five-year actual employment history and aligned national benchmark;
