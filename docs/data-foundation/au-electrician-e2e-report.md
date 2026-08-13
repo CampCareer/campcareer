@@ -71,7 +71,7 @@ The broader ANZSCO 3411 Electricians profile is the current JSA Labour Force Sur
 - May 2025 median weekly earnings: AUD 2,191 versus AUD 1,852 for all occupations;
 - May 2025 median hourly earnings: AUD 55 versus AUD 47 for all occupations.
 
-These broader values are candidate inputs only. Before scoring, historical momentum, vacancy and projection periods must be aligned to the same methodology used for AU Carpenter and the exact-vs-broader proxy relation must be explicit in lineage.
+These broader values are candidate inputs only. Before scoring, historical momentum and projection periods must be aligned to the same methodology used for AU Carpenter and the exact-vs-broader proxy relation must be explicit in lineage.
 
 Source: https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupations/3411-electricians
 
@@ -110,6 +110,56 @@ This is not a broader occupation proxy: ANZSCO 341111 is an exact companion mapp
 Primary source: https://www.jobsandskills.gov.au/data/occupation-shortage
 
 Verification note: the JSA download is the production fact source. The row values were cross-checked against independent transcriptions of the 2025 JSA six-digit download because the current research toolchain does not render the XLSX binary directly; no secondary source is stored as the production source.
+
+## Vacancy Intensity — frozen at 3 / 15 fallback
+
+Canonical source is Jobs and Skills Australia's Internet Vacancy Index (IVI). The latest available release at this checkpoint is June 2026, released 22 July 2026.
+
+JSA defines the IVI as a monthly count of online job advertisements lodged on SEEK, CareerOne and Workforce Australia during the reference month. Public occupation detail is available down to the ANZSCO four-digit level, so the relevant occupation series is `3411 Electricians`, not exact six-digit `341111 Electrician (General)`.
+
+This makes the vacancy evidence an explicit broader occupation proxy:
+
+- target occupation: ANZSCO `341111 Electrician (General)`;
+- IVI occupation series: ANZSCO `3411 Electricians`;
+- relation: broader;
+- mapping quality: medium.
+
+The June 2026 JSA download set includes the official `Internet Vacancies, ANZSCO4 Occupations, States and Territories - June 2026` workbook. An independent Australian government publication also reproduces JSA IVI data for Western Australia and reports 746 Electricians job advertisements for May 2026, confirming substantial live recruitment activity in the 3411 series. The JSA occupation profile reports 197,300 employed for broader 3411 Electricians in February 2026.
+
+CampCareer vacancy methodology v1 has a stricter primary definition: distinct job postings over 90 days divided by occupation employment stock. The IVI monthly series, or a three-month average derived from it, is not a clean distinct 90-day posting numerator because the same recruitment episode may be represented across monthly periods and the published statistic is not a deduplicated 90-day inventory.
+
+Therefore no monthly or three-month IVI count is divided by 197,300 employment and presented as a precise vacancy-rate ratio.
+
+Frozen conservative fallback:
+
+- intensity band: `low` = 3;
+- persistence bonus: `0`;
+- source quality: `official_partial`;
+- employment denominator available: `true`;
+- Vacancy Intensity score: `3 / 15`.
+
+Persistence is intentionally not awarded at this checkpoint. The latest official occupation workbook is the correct source for a same-period occupation comparator, but the current research toolchain cannot render the XLSX binary row directly. A positive economy-wide annual IVI change, a shortage classification, or one state-level occupation count is not substituted for the required occupation-series persistence evidence.
+
+Evidence treatment:
+
+- availability: `available`;
+- directness: `proxy`;
+- mapping quality: `medium`;
+- evidence status: `fallback`;
+- normalized value: `3`;
+- proxy reason: IVI is published at broader ANZSCO 3411 and does not provide a clean distinct 90-day numerator for exact Electrician (General).
+
+Primary sources:
+
+- JSA IVI: https://www.jobsandskills.gov.au/data/internet-vacancy-index
+- JSA IVI methodology: https://www.jobsandskills.gov.au/data/internet-vacancy-index/methodology
+- JSA 3411 Electricians profile: https://www.jobsandskills.gov.au/data/occupation-and-industry-profiles/occupations/3411-electricians
+
+Official corroboration for the May 2026 WA 3411 count:
+
+- Government of Western Australia, SkillsWest Expo showcases pathways to WA's hottest trades: https://www.wa.gov.au/government/media-statements/Cook%20Labor%20Government/SkillsWest-Expo-showcases-pathways-to-WA%27s-hottest-trades-20260723
+
+This 3/15 result is deliberately more conservative than AU Carpenter's 4/15 fallback because Carpenter had a directly captured same-period persistence comparator supporting a +1 bonus. Electrician does not receive that bonus without equivalent evidence.
 
 ## Visa Accessibility — strong official evidence verified
 
@@ -159,7 +209,6 @@ This means licensing and overseas-recognition burden must be modelled explicitly
 
 ## Components still to freeze
 
-- JSA IVI vacancy evidence and persistence semantics;
 - industry distribution and whether a defensible HHI is available;
 - five-year actual employment history and aligned national benchmark;
 - final relative salary proxy/value;
@@ -176,6 +225,7 @@ This means licensing and overseas-recognition burden must be modelled explicitly
 - Do not treat a visa-list appearance as shortage evidence.
 - Do not treat a live job listing as Vacancy Score evidence.
 - Do not describe ANZSCO 3411 values as exact six-digit Electrician (General) values.
+- Do not infer an occupation persistence bonus from economy-wide IVI changes or a single state-level count.
 
 ## Next implementation checkpoint
 
