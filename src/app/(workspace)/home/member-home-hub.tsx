@@ -19,7 +19,7 @@ import {
 import { FeedbackWidget } from "@/components/feedback/FeedbackWidget";
 import { CANONICAL_CAREER_BY_ID } from "@/data/career-comparison-catalog";
 import { LAUNCH_COUNTRIES } from "@/data/launch-countries";
-import { localizePath, type Locale } from "@/lib/i18n/config";
+import { countryDisplayName, localizePath, type Locale } from "@/lib/i18n/config";
 import { useRouteLocale } from "@/lib/i18n/locale-provider";
 import { HomeSearchForm } from "./home-search-form";
 import type { OverviewSearchValues } from "./home-overview-config";
@@ -318,7 +318,7 @@ export function MemberHomeHub({
                 {copy.currentFocus}
               </p>
               <p className="mt-1 truncate text-sm font-semibold text-slate-950">
-                {country.name} ·{" "}
+                {countryDisplayName(locale, country.code, country.name)} ·{" "}
                 {locale === "ko" ? career.labelKo : career.label}
               </p>
             </div>
