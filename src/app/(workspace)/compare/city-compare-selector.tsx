@@ -3,6 +3,7 @@
 import { ArrowLeftRight } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { buildCityCompareCanonicalHref } from "@/lib/compare-routes"
+import { localizePath } from "@/lib/i18n/config"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 
 export type CityCompareOption = {
@@ -31,11 +32,14 @@ export function CityCompareSelector({
   function navigate(left: string, right: string) {
     if (!left || !right || left === right) return
     router.replace(
-      buildCityCompareCanonicalHref({
-        country: countryCode,
-        left,
-        right,
-      }),
+      localizePath(
+        buildCityCompareCanonicalHref({
+          country: countryCode,
+          left,
+          right,
+        }),
+        locale,
+      ),
       { scroll: false },
     )
   }
