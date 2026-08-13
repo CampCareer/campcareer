@@ -35,6 +35,11 @@ export type LoginCopy = {
   }
 }
 
+type AuthErrorMetadata = {
+  code?: string | null
+  status?: number | null
+}
+
 export const LOGIN_COPY = {
   en: {
     homeAria: 'CampCareer home',
@@ -105,3 +110,34 @@ export const LOGIN_COPY = {
     },
   },
 } satisfies Record<Locale, LoginCopy>
+
+export function getLoginAuthErrorMessage(
+  error: AuthErrorMetadata | null | undefined,
+  locale: Locale,
+  fallback: 'generic' | 'invalidCredentials' = 'generic',
+) {
+  const copy = LOGIN_COPY[locale].errors
+  if (!error) return copy[fallback]
+  if (error.status === 429) return copy.rateLimited
+
+  switch (error.code) {
+    case 'invalid_credentials':
+      return copy.invalidCredentials
+    case 'email_not_confirmed':
+      return copy.emailNotConfirmed
+    case 'user_already_exists':
+    case 'user_already_registered':
+      return copy.userAlreadyExists
+    case 'weak_password':
+      return copy.weakPassword
+    case 'email_address_invalid':
+      return copy.invalidEmail
+    case 'signup_disabled':
+      return copy.signupDisabled
+    case 'over_email_send_rate_limit':
+    case 'over_request_rate_limit':
+      return copy.rateLimited
+    default:
+      return copy[fallback]
+  }
+}
