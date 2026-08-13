@@ -40,7 +40,6 @@ export function HomeHub() {
       <section className="cc-landing-hero relative overflow-hidden border-b border-[#e6e8ef] px-5 pb-14 pt-8 sm:px-8 sm:pb-20 sm:pt-12">
         <div className="mx-auto max-w-6xl">
           <div className="relative px-1 py-7 text-[#1b1b1b] sm:px-4 sm:py-10 lg:px-8 lg:py-12">
-
             <div className="relative grid items-end gap-8 lg:grid-cols-[1.2fr_.8fr]">
               <div className="max-w-3xl">
                 <h1 className="text-[38px] font-semibold leading-[1.08] tracking-[-0.065em] text-[#131a2a] sm:text-5xl lg:text-[64px]">
@@ -50,7 +49,6 @@ export function HomeHub() {
                   {locale === "ko" ? "내 직업과 목표 국가를 고르면, 취업 수요부터 비자·자격 조건, 실제로 밟아야 할 다음 단계까지 한 번에 확인할 수 있어요." : "Choose your occupation and destination to see demand signals, visa and qualification conditions, and the steps toward working there."}
                 </p>
               </div>
-
               <CareerSignalPanel locale={locale} />
             </div>
           </div>
@@ -67,7 +65,7 @@ export function HomeHub() {
           </div>
 
           {!result && <LandingProof locale={locale} />}
-          {result && <div className="mt-10 h-40 animate-pulse rounded-3xl bg-[#f5f5f3]" aria-label="결과 페이지로 이동 중" />}
+          {result && <div className="mt-10 h-40 animate-pulse rounded-3xl bg-[#f5f5f3]" aria-label={locale === "ko" ? "결과 페이지로 이동 중" : "Moving to the results page"} />}
         </div>
       </section>
     </div>
@@ -116,8 +114,8 @@ function CareerSignalPanel({ locale }: { locale: Locale }) {
   return (
     <div className="cc-signal-panel rounded-2xl border border-white/70 p-4 shadow-[0_24px_52px_-36px_rgba(31,75,145,.62)] sm:p-5">
       <div className="flex items-center justify-between text-[11px] font-semibold tracking-[0.12em] text-[#56657c]">
-        <span>CAREER SIGNALS</span>
-        <span className="inline-flex items-center gap-1.5 tracking-[0.08em] text-[#36735a]"><i className="cc-signal-live-dot" aria-hidden />LIVE</span>
+        <span>{locale === "ko" ? "커리어 시장 신호" : "CAREER SIGNALS"}</span>
+        <span className="inline-flex items-center gap-1.5 tracking-[0.08em] text-[#36735a]"><i className="cc-signal-live-dot" aria-hidden />{locale === "ko" ? "실시간" : "LIVE"}</span>
       </div>
       <div className="cc-signal-rotator mt-4">
         <div key={signal.detail} className="cc-signal-slide">
@@ -146,7 +144,7 @@ function LandingProof({ locale }: { locale: Locale }) {
       ]
 
   return <div className="mx-auto max-w-5xl pb-2 pt-12 sm:pt-16">
-    <div className="max-w-2xl"><p className="text-xs font-bold tracking-[0.12em] text-blue-700">CAREER-FIRST, NOT SCHOOL-FIRST</p><h2 className="mt-3 text-2xl font-semibold tracking-[-0.045em] text-[#182033] sm:text-3xl">{locale === "ko" ? "해외 커리어의 시작은\n‘어디서 배울까’보다 ‘어디서 일할까’입니다." : "An overseas career starts with where you can work — not only where you can study."}</h2></div>
+    <div className="max-w-2xl"><p className="text-xs font-bold tracking-[0.12em] text-blue-700">{locale === "ko" ? "학교보다 커리어를 먼저" : "CAREER-FIRST, NOT SCHOOL-FIRST"}</p><h2 className="mt-3 text-2xl font-semibold tracking-[-0.045em] text-[#182033] sm:text-3xl">{locale === "ko" ? "해외 커리어의 시작은\n‘어디서 배울까’보다 ‘어디서 일할까’입니다." : "An overseas career starts with where you can work — not only where you can study."}</h2></div>
     <div className="mt-7 grid gap-3 md:grid-cols-3 sm:gap-4">
       {cards.map((card, index) => <div key={card.title} className="group rounded-2xl border border-[#e2e8f2] bg-white p-5 shadow-[0_12px_28px_-28px_rgba(31,71,130,.6)] transition duration-200 hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-[0_18px_36px_-24px_rgba(30,64,175,.35)]"><span className={cn("grid size-10 place-items-center rounded-xl", index === 0 ? "bg-blue-50 text-blue-700" : index === 1 ? "bg-emerald-50 text-emerald-700" : "bg-violet-50 text-violet-700")}>{card.icon}</span><p className="mt-5 text-xs font-semibold tracking-[0.1em] text-slate-400">0{index + 1}</p><h3 className="mt-1.5 text-lg font-semibold tracking-[-0.03em] text-[#202938]">{card.title}</h3><p className="mt-2 text-sm leading-6 text-slate-500">{card.description}</p></div>)}
     </div>
@@ -155,5 +153,5 @@ function LandingProof({ locale }: { locale: Locale }) {
 }
 
 function ExploreLink({ locale, className }: { locale: Locale; className?: string }) {
-  return <Link href="/maps" className={cn("mx-auto flex w-fit items-center gap-1.5 text-sm font-medium text-[#73737a] transition hover:text-blue-700", className)}><Compass className="size-4" />{locale === "ko" ? "아직 정하지 못했나요? 세계를 탐색해보세요." : "Not decided yet? Explore the world."}</Link>
+  return <Link href={localizePath("/maps", locale)} className={cn("mx-auto flex w-fit items-center gap-1.5 text-sm font-medium text-[#73737a] transition hover:text-blue-700", className)}><Compass className="size-4" />{locale === "ko" ? "아직 정하지 못했나요? 세계를 탐색해보세요." : "Not decided yet? Explore the world."}</Link>
 }
