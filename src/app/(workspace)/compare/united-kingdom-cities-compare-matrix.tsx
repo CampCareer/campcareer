@@ -1,154 +1,37 @@
 import Link from "next/link"
 import { ArrowRight, BriefcaseBusiness, Building2, Clock3, Info, MapPin, TrainFront, Users, Wallet } from "lucide-react"
 import type { UkCityProfile } from "@/lib/cities/uk-city-profile.server"
+import { localizePath, type Locale } from "@/lib/i18n/config"
+import { getLocale } from "@/lib/i18n/server"
 import { CityCompareSelector, type CityCompareOption } from "./city-compare-selector"
 
-type Props = {
-  left: UkCityProfile
-  right: UkCityProfile
-  options: readonly CityCompareOption[]
-}
+type Props = { left: UkCityProfile; right: UkCityProfile; options: readonly CityCompareOption[] }
 
-function money(value: number, currency = "GBP", decimals = 0) {
-  return new Intl.NumberFormat("en-GB", {
-    style: "currency",
-    currency,
-    minimumFractionDigits: decimals,
-    maximumFractionDigits: decimals,
-  }).format(value)
-}
+function money(value:number,currency:string,decimals:number,locale:Locale){return new Intl.NumberFormat(locale==="ko"?"ko-KR":"en-GB",{style:"currency",currency,minimumFractionDigits:decimals,maximumFractionDigits:decimals}).format(value)}
+function compact(value:number,locale:Locale){return new Intl.NumberFormat(locale==="ko"?"ko-KR":"en-GB",{notation:"compact",maximumFractionDigits:2}).format(value)}
+function period(value:string,locale:Locale){if(locale==="ko"){if(value==="month")return"월";if(value==="week")return"주";if(value==="term")return"학기"}return value.replaceAll("_"," ")}
+function living(profile:UkCityProfile,locale:Locale){const ko=locale==="ko";if(!profile.livingCost)return"—";if(Math.abs(profile.livingCost.high-profile.livingCost.low)<1)return`~${money(profile.livingCost.low,profile.livingCost.currency,0,locale)} / ${ko?"월":"month"}`;return`${money(profile.livingCost.low,profile.livingCost.currency,0,locale)}–${money(profile.livingCost.high,profile.livingCost.currency,0,locale)} / ${ko?"월":"month"}`}
+function transport(profile:UkCityProfile,locale:Locale){if(!profile.transport)return"—";const decimals=profile.transport.referenceAmount%1===0?0:2;return`${money(profile.transport.referenceAmount,profile.transport.currency,decimals,locale)} / ${period(profile.transport.period,locale)}`}
+function Row({icon,label,note,left,right,leftName,rightName}:{icon:React.ReactNode;label:string;note?:string;left:string;right:string;leftName:string;rightName:string}){return <div className="grid grid-cols-2 border-t border-[#ecebe7] md:grid-cols-[220px_minmax(0,1fr)_minmax(0,1fr)]"><div className="col-span-2 flex items-start gap-2 px-4 py-3.5 text-[12px] font-semibold text-[#5f5d57] md:col-span-1 md:px-5 md:py-4"><span className="mt-0.5 text-[#8f8c85]">{icon}</span><div><p>{label}</p>{note?<p className="mt-1 text-[10px] font-normal leading-4 text-[#9a978f]">{note}</p>:null}</div></div><div className="min-w-0 border-t border-[#f0efec] px-3 py-3.5 text-[13px] font-semibold leading-5 text-[#1b1b1b] md:border-l md:border-t-0 md:px-5 md:py-4 md:text-[14px]"><span className="mb-1 block text-[9.5px] uppercase tracking-[0.08em] text-[#9a978f] md:hidden">{leftName}</span>{left}</div><div className="min-w-0 border-l border-t border-[#f0efec] px-3 py-3.5 text-[13px] font-semibold leading-5 text-[#1b1b1b] md:px-5 md:py-4 md:text-[14px]"><span className="mb-1 block text-[9.5px] uppercase tracking-[0.08em] text-[#9a978f] md:hidden">{rightName}</span>{right}</div></div>}
+function Header({city,locale}:{city:UkCityProfile;locale:Locale}){const ko=locale==="ko";return <div className="min-w-0 px-3 py-4 sm:px-4 md:px-5 md:py-5"><p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-[#8f8c85]">{city.educationNation}</p><h2 className="mt-1 text-[20px] font-semibold tracking-[-0.03em] text-[#1b1b1b] md:text-[24px]">{city.name}</h2><p className="mt-1 text-[10.5px] text-[#77746e]">{city.scopeLabel}</p><Link href={localizePath(`/cities/uk/${city.slug}`,locale)} className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-[#2563eb] hover:underline">{ko?"도시 프로필":"City profile"} <ArrowRight className="size-3"/></Link></div>}
 
-function compact(value: number) {
-  return new Intl.NumberFormat("en-GB", { notation: "compact", maximumFractionDigits: 2 }).format(value)
-}
-
-function period(periodValue: string) {
-  return periodValue.replaceAll("_", " ")
-}
-
-function living(profile: UkCityProfile) {
-  if (!profile.livingCost) return "—"
-  if (Math.abs(profile.livingCost.high - profile.livingCost.low) < 1) {
-    return `~${money(profile.livingCost.low, profile.livingCost.currency)} / month`
-  }
-  return `${money(profile.livingCost.low, profile.livingCost.currency)}–${money(profile.livingCost.high, profile.livingCost.currency)} / month`
-}
-
-function transport(profile: UkCityProfile) {
-  if (!profile.transport) return "—"
-  const decimals = profile.transport.referenceAmount % 1 === 0 ? 0 : 2
-  return `${money(profile.transport.referenceAmount, profile.transport.currency, decimals)} / ${period(profile.transport.period)}`
-}
-
-function Row({
-  icon,
-  label,
-  note,
-  left,
-  right,
-  leftName,
-  rightName,
-}: {
-  icon: React.ReactNode
-  label: string
-  note?: string
-  left: string
-  right: string
-  leftName: string
-  rightName: string
-}) {
-  return (
-    <div className="grid grid-cols-2 border-t border-[#ecebe7] md:grid-cols-[220px_minmax(0,1fr)_minmax(0,1fr)]">
-      <div className="col-span-2 flex items-start gap-2 px-4 py-3.5 text-[12px] font-semibold text-[#5f5d57] md:col-span-1 md:px-5 md:py-4">
-        <span className="mt-0.5 text-[#8f8c85]">{icon}</span>
-        <div>
-          <p>{label}</p>
-          {note ? <p className="mt-1 text-[10px] font-normal leading-4 text-[#9a978f]">{note}</p> : null}
-        </div>
-      </div>
-      <div className="min-w-0 border-t border-[#f0efec] px-3 py-3.5 text-[13px] font-semibold leading-5 text-[#1b1b1b] md:border-l md:border-t-0 md:px-5 md:py-4 md:text-[14px]">
-        <span className="mb-1 block text-[9.5px] uppercase tracking-[0.08em] text-[#9a978f] md:hidden">{leftName}</span>
-        {left}
-      </div>
-      <div className="min-w-0 border-l border-t border-[#f0efec] px-3 py-3.5 text-[13px] font-semibold leading-5 text-[#1b1b1b] md:px-5 md:py-4 md:text-[14px]">
-        <span className="mb-1 block text-[9.5px] uppercase tracking-[0.08em] text-[#9a978f] md:hidden">{rightName}</span>
-        {right}
-      </div>
-    </div>
-  )
-}
-
-function Header({ city }: { city: UkCityProfile }) {
-  return (
-    <div className="min-w-0 px-3 py-4 sm:px-4 md:px-5 md:py-5">
-      <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-[#8f8c85]">{city.educationNation}</p>
-      <h2 className="mt-1 text-[20px] font-semibold tracking-[-0.03em] text-[#1b1b1b] md:text-[24px]">{city.name}</h2>
-      <p className="mt-1 text-[10.5px] text-[#77746e]">{city.scopeLabel}</p>
-      <Link href={`/cities/uk/${city.slug}`} className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-[#2563eb] hover:underline">
-        City profile <ArrowRight className="size-3" />
-      </Link>
-    </div>
-  )
-}
-
-export function UnitedKingdomCitiesCompareMatrix({ left, right, options }: Props) {
-  const leftMid = left.livingCost ? (left.livingCost.low + left.livingCost.high) / 2 : null
-  const rightMid = right.livingCost ? (right.livingCost.low + right.livingCost.high) / 2 : null
-  const lowerLiving =
-    leftMid == null || rightMid == null
-      ? "Compare the published references"
-      : Math.abs(leftMid - rightMid) < 1
-        ? "Current published midpoints are effectively the same"
-        : `${leftMid < rightMid ? left.name : right.name} has the lower current published midpoint`
-
-  return (
-    <div className="w-full">
-      <CityCompareSelector options={options} leftSlug={left.slug} rightSlug={right.slug} countryCode="UK" />
-
-      <header className="mt-4 rounded-2xl border border-[#d9e3f7] bg-gradient-to-br from-[#f7f9fe] via-white to-[#f7faf5] p-5 sm:p-8">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#2563eb]">United Kingdom city comparison</p>
-        <h2 className="mt-2 text-[30px] font-semibold leading-tight tracking-[-0.035em] text-[#1b1b1b] sm:text-[40px]">{left.name} vs {right.name}</h2>
-        <p className="mt-3 max-w-3xl text-[13px] leading-6 text-[#6f6d68]">
-          Compare verified student living, transport, Student visa work context, institution presence and career sectors. Each city keeps its approved study-destination boundary, so Greater London is not silently treated as the same geography type as a named-city local authority.
-        </p>
-        <div className="mt-5 flex flex-col gap-2 sm:flex-row">
-          <Link href={`/cities/uk/${left.slug}`} className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#2563eb] px-3.5 py-2.5 text-[11.5px] font-semibold text-white">
-            View {left.name} <ArrowRight className="size-3.5" />
-          </Link>
-          <Link href={`/cities/uk/${right.slug}`} className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#3e7a2e] px-3.5 py-2.5 text-[11.5px] font-semibold text-white">
-            View {right.name} <ArrowRight className="size-3.5" />
-          </Link>
-        </div>
-      </header>
-
-      <section className="mt-5 overflow-hidden rounded-2xl border border-[#e7e6e3] bg-white">
-        <div className="grid grid-cols-2 md:grid-cols-[220px_minmax(0,1fr)_minmax(0,1fr)]">
-          <div className="hidden md:block" />
-          <div className="border-r border-[#ecebe7] md:border-l md:border-r-0"><Header city={left} /></div>
-          <div className="md:border-l md:border-[#ecebe7]"><Header city={right} /></div>
-        </div>
-        <Row icon={<MapPin className="size-4" />} label="Study-destination scope" note="Scope labels are explicit because London uses Greater London while the other Tier A destinations use approved named-city/local-authority boundaries." left={left.scopeLabel} right={right.scopeLabel} leftName={left.name} rightName={right.name} />
-        <Row icon={<Wallet className="size-4" />} label="Student living" note="Indicative monthly GBP references from official university sources. Source scenarios differ, so use the figures directionally rather than as identical baskets." left={living(left)} right={living(right)} leftName={left.name} rightName={right.name} />
-        <Row icon={<TrainFront className="size-4" />} label="Student transport" note="Source-native fare periods and eligibility rules are preserved instead of converting every product into a synthetic monthly figure." left={transport(left)} right={transport(right)} leftName={left.name} rightName={right.name} />
-        <Row icon={<Clock3 className="size-4" />} label="Student visa work" note="The 20-hour figure applies to qualifying full-time degree-level study at a compliant higher education provider during term time. Other categories can differ or have no work permission." left={left.workRights ? `${left.workRights.hours} h / week during term` : "—"} right={right.workRights ? `${right.workRights.hours} h / week during term` : "—"} leftName={left.name} rightName={right.name} />
-        <Row icon={<Building2 className="size-4" />} label="Verified institutions" left={left.linkedInstitutionCount.toLocaleString("en-GB")} right={right.linkedInstitutionCount.toLocaleString("en-GB")} leftName={left.name} rightName={right.name} />
-        <Row icon={<MapPin className="size-4" />} label="Verified campus locations" left={left.linkedCampusCount.toLocaleString("en-GB")} right={right.linkedCampusCount.toLocaleString("en-GB")} leftName={left.name} rightName={right.name} />
-        <Row icon={<Users className="size-4" />} label="Population" note="Population follows each approved city scope. London is Greater London; other destinations use their documented local-authority/council boundary." left={left.population ? compact(left.population.amount) : "—"} right={right.population ? compact(right.population.amount) : "—"} leftName={left.name} rightName={right.name} />
-        <Row icon={<BriefcaseBusiness className="size-4" />} label="Career context" note="Official city or regional economic-development focus sectors, not shortage rankings or job guarantees." left={left.employmentSectors.slice(0, 5).join(" · ")} right={right.employmentSectors.slice(0, 5).join(" · ")} leftName={left.name} rightName={right.name} />
-      </section>
-
-      <div className="mt-5 grid gap-4 md:grid-cols-2">
-        <article className="rounded-xl border border-[#e7e6e3] bg-white p-5">
-          <p className="text-[10.5px] font-semibold uppercase tracking-[0.08em] text-[#c2691e]">Living-cost signal</p>
-          <p className="mt-2 text-[18px] font-semibold leading-6 text-[#1b1b1b]">{lowerLiving}</p>
-          <p className="mt-2 text-[11.5px] leading-5 text-[#77746e]">The underlying university budget methodologies are not identical, so this is a directional comparison rather than a guaranteed personal budget.</p>
-        </article>
-        <article className="rounded-xl border border-[#eadfca] bg-[#fffaf1] p-5">
-          <div className="flex items-center gap-2 text-[#a86514]"><Info className="size-4" /><p className="text-[10.5px] font-semibold uppercase tracking-[0.08em]">Programme coverage</p></div>
-          <p className="mt-2 text-[18px] font-semibold leading-6 text-[#1b1b1b]">Verified UK programme delivery is still pending</p>
-          <p className="mt-2 text-[11.5px] leading-5 text-[#7a5a31]">CampCareer does not infer programme delivery from institution presence. The current verified programme count is therefore not presented as “0 programmes” and does not block city comparison.</p>
-        </article>
-      </div>
-    </div>
-  )
+export async function UnitedKingdomCitiesCompareMatrix({left,right,options}:Props){
+  const locale=await getLocale();const ko=locale==="ko"
+  const leftMid=left.livingCost?(left.livingCost.low+left.livingCost.high)/2:null;const rightMid=right.livingCost?(right.livingCost.low+right.livingCost.high)/2:null
+  const lowerLiving=leftMid==null||rightMid==null?(ko?"공개된 참고값을 비교하세요":"Compare the published references"):Math.abs(leftMid-rightMid)<1?(ko?"현재 공개된 중간값은 사실상 같습니다":"Current published midpoints are effectively the same"):(ko?`${leftMid<rightMid?left.name:right.name}의 현재 공개 중간값이 더 낮습니다`:`${leftMid<rightMid?left.name:right.name} has the lower current published midpoint`)
+  return <div className="w-full">
+    <CityCompareSelector options={options} leftSlug={left.slug} rightSlug={right.slug} countryCode="UK"/>
+    <header className="mt-4 rounded-2xl border border-[#d9e3f7] bg-gradient-to-br from-[#f7f9fe] via-white to-[#f7faf5] p-5 sm:p-8"><p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#2563eb]">{ko?"영국 도시 비교":"United Kingdom city comparison"}</p><h2 className="mt-2 text-[30px] font-semibold leading-tight tracking-[-0.035em] text-[#1b1b1b] sm:text-[40px]">{left.name} vs {right.name}</h2><p className="mt-3 max-w-3xl text-[13px] leading-6 text-[#6f6d68]">{ko?"학생 생활비, 교통, 국가 단위 학생비자 근로시간 기준, 교육기관 분포와 지역 취업 분야를 비교합니다. 각 도시는 검토된 학업 목적지 경계를 그대로 사용합니다.":"Compare verified student living, transport, Student visa work context, institution presence and career sectors. Each city keeps its approved study-destination boundary."}</p><div className="mt-5 flex flex-col gap-2 sm:flex-row"><Link href={localizePath(`/cities/uk/${left.slug}`,locale)} className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#2563eb] px-3.5 py-2.5 text-[11.5px] font-semibold text-white">{ko?`${left.name} 보기`:`View ${left.name}`} <ArrowRight className="size-3.5"/></Link><Link href={localizePath(`/cities/uk/${right.slug}`,locale)} className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#3e7a2e] px-3.5 py-2.5 text-[11.5px] font-semibold text-white">{ko?`${right.name} 보기`:`View ${right.name}`} <ArrowRight className="size-3.5"/></Link></div></header>
+    <section className="mt-5 overflow-hidden rounded-2xl border border-[#e7e6e3] bg-white"><div className="grid grid-cols-2 md:grid-cols-[220px_minmax(0,1fr)_minmax(0,1fr)]"><div className="hidden md:block"/><div className="border-r border-[#ecebe7] md:border-l md:border-r-0"><Header city={left} locale={locale}/></div><div className="md:border-l md:border-[#ecebe7]"><Header city={right} locale={locale}/></div></div>
+      <Row icon={<MapPin className="size-4"/>} label={ko?"학업 목적지 범위":"Study-destination scope"} note={ko?"도시별로 승인된 지리 범위를 명시적으로 유지합니다.":"Approved destination boundaries are kept explicit for each city."} left={left.scopeLabel} right={right.scopeLabel} leftName={left.name} rightName={right.name}/>
+      <Row icon={<Wallet className="size-4"/>} label={ko?"학생 생활비":"Student living"} note={ko?"대학 공식 출처의 월 GBP 참고값이며 산정 방식이 달라 방향성 비교로 사용합니다.":"Indicative monthly GBP references from official university sources; source scenarios differ."} left={living(left,locale)} right={living(right,locale)} leftName={left.name} rightName={right.name}/>
+      <Row icon={<TrainFront className="size-4"/>} label={ko?"학생 교통비":"Student transport"} note={ko?"출처의 원래 요금 기간을 유지합니다.":"Source-native fare periods are preserved."} left={transport(left,locale)} right={transport(right,locale)} leftName={left.name} rightName={right.name}/>
+      <Row icon={<Clock3 className="size-4"/>} label={ko?"학생비자 근로시간 기준":"Student visa work"} note={ko?"표시된 시간은 출처에 기록된 국가 단위 학기 중 기준입니다. 세부 조건은 공식 출처에서 확인하세요.":"The displayed hours reflect the source-recorded national term-time reference; check official conditions."} left={left.workRights?`${left.workRights.hours}${ko?"시간 / 주 · 학기 중":" h / week during term"}`:"—"} right={right.workRights?`${right.workRights.hours}${ko?"시간 / 주 · 학기 중":" h / week during term"}`:"—"} leftName={left.name} rightName={right.name}/>
+      <Row icon={<Building2 className="size-4"/>} label={ko?"검증된 교육기관":"Verified institutions"} left={left.linkedInstitutionCount.toLocaleString(ko?"ko-KR":"en-GB")} right={right.linkedInstitutionCount.toLocaleString(ko?"ko-KR":"en-GB")} leftName={left.name} rightName={right.name}/>
+      <Row icon={<MapPin className="size-4"/>} label={ko?"검증된 캠퍼스 장소":"Verified campus locations"} left={left.linkedCampusCount.toLocaleString(ko?"ko-KR":"en-GB")} right={right.linkedCampusCount.toLocaleString(ko?"ko-KR":"en-GB")} leftName={left.name} rightName={right.name}/>
+      <Row icon={<Users className="size-4"/>} label={ko?"인구":"Population"} note={ko?"인구는 각 도시의 승인된 지리 범위를 따릅니다.":"Population follows each approved city scope."} left={left.population?compact(left.population.amount,locale):"—"} right={right.population?compact(right.population.amount,locale):"—"} leftName={left.name} rightName={right.name}/>
+      <Row icon={<BriefcaseBusiness className="size-4"/>} label={ko?"취업시장 맥락":"Career context"} note={ko?"공식 도시·지역 경제개발 중점 분야이며 인력부족 순위나 취업 보장이 아닙니다.":"Official city or regional economic-development focus sectors, not shortage rankings or job guarantees."} left={ko?`${left.employmentSectors.length}개 주요 분야`:left.employmentSectors.slice(0,5).join(" · ")} right={ko?`${right.employmentSectors.length}개 주요 분야`:right.employmentSectors.slice(0,5).join(" · ")} leftName={left.name} rightName={right.name}/>
+    </section>
+    <div className="mt-5 grid gap-4 md:grid-cols-2"><article className="rounded-xl border border-[#e7e6e3] bg-white p-5"><p className="text-[10.5px] font-semibold uppercase tracking-[0.08em] text-[#c2691e]">{ko?"생활비 신호":"Living-cost signal"}</p><p className="mt-2 text-[18px] font-semibold leading-6 text-[#1b1b1b]">{lowerLiving}</p><p className="mt-2 text-[11.5px] leading-5 text-[#77746e]">{ko?"대학별 예산 산정 방식이 같지 않으므로 개인 예산을 보장하는 값이 아니라 방향성 비교로 사용하세요.":"The underlying university budget methodologies are not identical, so this is a directional comparison rather than a guaranteed personal budget."}</p></article><article className="rounded-xl border border-[#eadfca] bg-[#fffaf1] p-5"><div className="flex items-center gap-2 text-[#a86514]"><Info className="size-4"/><p className="text-[10.5px] font-semibold uppercase tracking-[0.08em]">{ko?"과정 데이터 범위":"Programme coverage"}</p></div><p className="mt-2 text-[18px] font-semibold leading-6 text-[#1b1b1b]">{ko?"영국 과정별 교육 장소 검증은 아직 진행 중입니다":"Verified UK programme delivery is still pending"}</p><p className="mt-2 text-[11.5px] leading-5 text-[#7a5a31]">{ko?"교육기관이 도시에 있다는 사실만으로 특정 과정이 그 도시에서 제공된다고 추정하지 않습니다. 따라서 검증 전 과정 수를 0으로 표시하지 않습니다.":"CampCareer does not infer programme delivery from institution presence. Unverified programme counts are not presented as zero."}</p></article></div>
+  </div>
 }
