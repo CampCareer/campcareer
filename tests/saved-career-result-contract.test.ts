@@ -8,8 +8,8 @@ const home = readFileSync("src/app/(workspace)/home/member-home-hub.tsx", "utf8"
 const result = readFileSync("src/app/(workspace)/home/career-market-results.tsx", "utf8")
 
 test("saved career results are private, minimal and unique per member selection", () => {
-  assert.match(migration, /create table public\.saved_career_results/)
-  assert.match(migration, /unique \(user_id, country_code, occupation_id\)/)
+  assert.match(migration, /alter table public\.saved_career_results/)
+  assert.match(migration, /saved_career_results_user_country_occupation_unique/)
   assert.match(migration, /alter table public\.saved_career_results enable row level security/)
   assert.match(migration, /users_manage_own_saved_career_results/)
   assert.doesNotMatch(migration, /notes|email|citizenship_country|degree_level/)

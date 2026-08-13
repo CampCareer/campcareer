@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { CareerOnboardingReturnBridge } from "@/components/onboarding/career-onboarding-return";
 import { createClient } from "@/lib/supabase-server";
 import { MemberHomeHub } from "./member-home-hub";
 
@@ -50,14 +51,17 @@ export default async function MemberHomePage() {
   const targetCountry = preference?.target_country?.toUpperCase() ?? null;
   const targetOccupation = preference?.target_occupation ?? null;
   return (
-    <MemberHomeHub
-      targetCountry={targetCountry}
-      targetOccupation={targetOccupation}
-      savedCareerResults={
-        savedResultsResult.error
-          ? []
-          : ((savedResultsResult.data as SavedCareerResultRow[] | null) ?? [])
-      }
-    />
+    <>
+      <CareerOnboardingReturnBridge />
+      <MemberHomeHub
+        targetCountry={targetCountry}
+        targetOccupation={targetOccupation}
+        savedCareerResults={
+          savedResultsResult.error
+            ? []
+            : ((savedResultsResult.data as SavedCareerResultRow[] | null) ?? [])
+        }
+      />
+    </>
   );
 }

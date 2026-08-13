@@ -41,7 +41,7 @@ export default function ProfilePage() {
           .select("target_country,target_occupation,career_personalisation_completed_at")
           .eq("id", userId)
           .maybeSingle(),
-        supabase.from("saved_occupations").select("id", { count: "exact", head: true }).eq("user_id", userId),
+        supabase.from("saved_career_results").select("id", { count: "exact", head: true }).eq("user_id", userId),
         supabase.from("saved_universities").select("id", { count: "exact", head: true }).eq("user_id", userId),
         supabase.from("saved_pathways").select("id", { count: "exact", head: true }).eq("user_id", userId),
       ])

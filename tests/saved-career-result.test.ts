@@ -35,6 +35,7 @@ test("the database write contains no free-form or personalisation-answer fields"
   assert.ok(normalised)
   assert.deepEqual(toSavedCareerResultWrite(normalised, "2026-08-13T15:00:00.000Z"), {
     country_code: "AU",
+    career_id: "registered-nurse",
     occupation_id: "registered-nurse",
     personalised: true,
     evidence_checked_at: "2026-08-13",

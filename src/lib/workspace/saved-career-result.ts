@@ -18,6 +18,7 @@ export type SavedCareerResultInput = {
 
 export type SavedCareerResultWrite = {
   country_code: string
+  career_id: string
   occupation_id: string
   personalised: boolean
   evidence_checked_at: string | null
@@ -60,6 +61,7 @@ export function toSavedCareerResultWrite(
 ): SavedCareerResultWrite {
   return {
     country_code: input.countryCode,
+    career_id: input.occupationId,
     occupation_id: input.occupationId,
     personalised: input.personalised,
     evidence_checked_at: input.evidenceCheckedAt,
