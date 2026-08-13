@@ -160,9 +160,8 @@ export function scoreFoundationComponent(input: FoundationScoreInput): number | 
     case "relative_salary":
       return round2(clamp(5 + (input.normalizedValue - 1) * 10, 0, 10))
     case "projected_growth":
-      return round2(clamp(5 + input.normalizedValue / 2, 0, 10))
     case "employment_momentum":
-      return round2(clamp(5 + (input.normalizedValue - 1) * 5, 0, 10))
+      return round2(clamp(5 + input.normalizedValue * 2.5, 0, 10))
     default:
       return round2(clamp(input.normalizedValue, 0, FOUNDATION_COMPONENT_MAXIMA[input.componentKey]))
   }
