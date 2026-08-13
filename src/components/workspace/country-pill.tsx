@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { Check, ChevronDown, Globe2 } from "lucide-react"
 import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
+import { countryDisplayName } from "@/lib/i18n/config"
+import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { useSelectedCountry } from "./country-context"
 import { cn } from "@/lib/utils"
 
@@ -17,11 +19,20 @@ export function CountryPill({
 }) {
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
+  const locale = useRouteLocale()
   const { selectedCountry, setSelectedCountry } = useSelectedCountry()
+  const copy = locale === "ko"
+    ? { allCountries: "전체 국가", selectCountry: "국가 선택" }
+    : { allCountries: "All countries", selectCountry: "Select country" }
 
   const countries = useMemo(
-    () => [...LAUNCH_COUNTRIES].sort((a, b) => a.name.localeCompare(b.name)),
-    []
+    () => [...LAUNCH_COUNTRIES].sort((a, b) =>
+      countryDisplayName(locale, a.code, a.name).localeCompare(
+        countryDisplayName(locale, b.code, b.name),
+        locale === "ko" ? "ko" : "en",
+      )
+    ),
+    [locale]
   )
   const resolvedCode = value === undefined ? selectedCountry?.code ?? null : value
   const selected = resolvedCode
@@ -70,7 +81,9 @@ export function CountryPill({
             <Globe2 className="size-3 text-[#6d4fc4]" />
           </span>
         )}
-        <span className="max-w-28 truncate">{selected?.name ?? "All countries"}</span>
+        <span className="max-w-28 truncate">
+          {selected ? countryDisplayName(locale, selected.code, selected.name) : copy.allCountries}
+        </span>
         <ChevronDown
           className={cn("size-3.5 shrink-0 text-[#9c9a94] transition", open && "rotate-180")}
         />
@@ -79,7 +92,7 @@ export function CountryPill({
       {open && (
         <div
           role="listbox"
-          aria-label="Select country"
+          aria-label={copy.selectCountry}
           className="absolute left-0 top-[calc(100%+6px)] z-30 w-56 overflow-hidden rounded-xl border border-[#e7e6e3] bg-white p-1 shadow-xl shadow-black/5"
         >
           <ul className="max-h-72 overflow-y-auto">
@@ -96,7 +109,7 @@ export function CountryPill({
                   )}
                 >
                   <Globe2 className="size-4 shrink-0 text-[#9c9a94]" />
-                  All countries
+                  {copy.allCountries}
                   {!resolvedCode && <Check className="ml-auto size-3.5" />}
                 </button>
               </li>
@@ -122,7 +135,7 @@ export function CountryPill({
                     height={28}
                     className="size-4 shrink-0 rounded-full object-cover"
                   />
-                  <span className="truncate">{country.name}</span>
+                  <span className="truncate">{countryDisplayName(locale, country.code, country.name)}</span>
                   {resolvedCode === country.code && (
                     <Check className="ml-auto size-3.5" />
                   )}
