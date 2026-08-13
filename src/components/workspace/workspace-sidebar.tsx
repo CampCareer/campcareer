@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname, useSearchParams } from "next/navigation"
+import { usePathname } from "next/navigation"
 import { useEffect, useState, type CSSProperties } from "react"
 import { ChevronDown, Globe2 } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -26,7 +26,6 @@ type WorkspaceSidebarProps = {
 
 export function WorkspaceSidebar({ open, onClose }: WorkspaceSidebarProps) {
   const pathname = usePathname()
-  const searchParams = useSearchParams()
   const locale = useRouteLocale()
   const copy = workspaceSidebarCopy(locale)
   const { selectedCountry, setSelectedCountry } = useSelectedCountry()
@@ -34,9 +33,7 @@ export function WorkspaceSidebar({ open, onClose }: WorkspaceSidebarProps) {
   const careerPath = localizePath("/career", locale)
   const isCompareRoute = pathname === comparePath || pathname.startsWith(comparePath + "/")
   const isCareerRoute = pathname === careerPath || pathname.startsWith(careerPath + "/")
-  const currentCareerCompareHref = isCareerRoute
-    ? resolveCareerCompareHref(searchParams.get("country") ?? "", searchParams.get("occupation") ?? "")
-    : null
+  const [currentCareerCompareHref, setCurrentCareerCompareHref] = useState<string | null>(null)
   const [compareOpen, setCompareOpen] = useState(isCompareRoute)
   const [compareType, setCompareType] = useState<CompareModeType>("program")
   const selectedCountryProfile = selectedCountry
@@ -45,6 +42,18 @@ export function WorkspaceSidebar({ open, onClose }: WorkspaceSidebarProps) {
   const selectedCountryLabel = selectedCountryProfile
     ? workspaceCountryLabel(locale, selectedCountryProfile)
     : selectedCountry?.name ?? null
+
+  useEffect(() => {
+    if (!isCareerRoute) {
+      setCurrentCareerCompareHref(null)
+      return
+    }
+
+    const params = new URLSearchParams(window.location.search)
+    setCurrentCareerCompareHref(
+      resolveCareerCompareHref(params.get("country") ?? "", params.get("occupation") ?? ""),
+    )
+  }, [isCareerRoute, pathname])
 
   useEffect(() => {
     if (!isCompareRoute) return
