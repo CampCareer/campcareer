@@ -12,7 +12,7 @@ Scope: United Kingdom × Carpenter under frozen `career-opportunity-v4-foundatio
 | relational migration | authored and rollback-validated |
 | live foundation row | not yet seeded |
 | required components | `9` |
-| migration-candidate score | `47.16 / 100` |
+| migration-candidate score | `47.15 / 100` |
 
 ## Component results
 
