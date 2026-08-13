@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation"
 import { useRouteLocale, useRouteTranslations } from "@/lib/i18n/locale-provider"
 import { localeFromPathname, localizePath, withoutLocalePrefix } from "@/lib/i18n/config"
 import { cn } from "@/lib/utils"
-import { Search, Scale, ClipboardList, UserIcon, LogIn } from "lucide-react"
+import { Search, Scale, ClipboardList, LogIn } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 import type { User } from "@supabase/supabase-js"
 import { createClient } from "@/lib/supabase-client"
@@ -43,6 +43,10 @@ export function MobileBottomBar() {
   const isProfile = barePathname === "/profile" || barePathname.startsWith("/profile/")
 
   const avatarUrl = user?.user_metadata?.avatar_url as string | undefined
+  const displayName = user
+    ? ((user.user_metadata?.full_name as string | undefined) || (user.user_metadata?.name as string | undefined) || user.email?.split("@")[0] || "C")
+    : "C"
+  const accountInitial = Array.from(displayName.trim())[0]?.toLocaleUpperCase() || "C"
 
   return (
     <div className={cn("sm:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200 bg-white/95 backdrop-blur-sm safe-area-bottom transition-all duration-300", hidden ? "translate-y-full opacity-0 pointer-events-none" : "")}>
@@ -65,7 +69,7 @@ export function MobileBottomBar() {
         {/* Profile / Login */}
         {user ? (
           <Link href={localizePath("/profile", pathLocale)} aria-current={isProfile ? "page" : undefined} className={cn("flex flex-col items-center justify-center gap-0.5 px-1 py-1 text-[10px] font-medium transition", isProfile ? "text-blue-600" : "text-slate-400")}>
-            {avatarUrl ? <img src={avatarUrl} alt="" className="w-5 h-5 rounded-full object-cover" /> : <div className="w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center"><UserIcon className="w-3 h-3 text-blue-600" /></div>}
+            {avatarUrl ? <img src={avatarUrl} alt="" className="w-5 h-5 rounded-full object-cover" /> : <div className="grid size-5 place-items-center rounded-full bg-blue-100 text-[8px] font-semibold text-blue-700" aria-hidden="true">{accountInitial}</div>}
             <span>{locale === "ko" ? "프로필" : "Profile"}</span>
           </Link>
         ) : (

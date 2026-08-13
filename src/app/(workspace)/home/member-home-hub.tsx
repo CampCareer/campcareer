@@ -55,7 +55,6 @@ type HomeCopy = {
     ExploreCategory,
     {
       label: string;
-      description: string;
       searchDescription: string;
       action: string;
     }
@@ -127,34 +126,29 @@ const COPY: Record<Locale, HomeCopy> = {
     category: {
       countries: {
         label: "Countries",
-        description: "Country signals and destination context",
         searchDescription:
           "Choose a destination to open its country dashboard.",
         action: "Open country",
       },
       visas: {
         label: "Visas",
-        description: "Study and work routes by destination",
         searchDescription: "Choose a destination to filter its visa routes.",
         action: "Open visas",
       },
       occupation: {
         label: "Jobs",
-        description: "Demand, requirements and career signals",
         searchDescription:
           "Choose a destination and occupation to open the job-market view.",
         action: "Open jobs",
       },
       programs: {
         label: "Programs",
-        description: "Courses connected to a career direction",
         searchDescription:
           "Choose a destination and occupation to search related programs.",
         action: "Open programs",
       },
       institutions: {
         label: "Institutions",
-        description: "Verified universities and providers",
         searchDescription:
           "Choose a destination to browse verified institutions.",
         action: "Open institutions",
@@ -204,31 +198,26 @@ const COPY: Record<Locale, HomeCopy> = {
     category: {
       countries: {
         label: "국가",
-        description: "국가별 신호와 목적지 정보",
         searchDescription: "국가를 선택해 국가 대시보드를 열어보세요.",
         action: "국가 열기",
       },
       visas: {
         label: "비자",
-        description: "국가별 유학·취업 비자 경로",
         searchDescription: "국가를 선택해 해당 비자 경로를 필터링하세요.",
         action: "비자 열기",
       },
       occupation: {
         label: "직업",
-        description: "수요, 요건과 커리어 신호",
         searchDescription: "국가와 직업을 선택해 취업시장 화면을 열어보세요.",
         action: "직업 열기",
       },
       programs: {
         label: "프로그램",
-        description: "커리어 방향과 연결된 학업 과정",
         searchDescription: "국가와 직업을 선택해 관련 과정을 찾아보세요.",
         action: "프로그램 열기",
       },
       institutions: {
         label: "기관",
-        description: "검증된 대학과 교육기관",
         searchDescription: "국가를 선택해 검증된 기관을 둘러보세요.",
         action: "기관 열기",
       },
@@ -385,9 +374,6 @@ export function MemberHomeHub({
                 </span>
                 <span className="mt-3 block text-sm font-semibold text-slate-950">
                   {category.label}
-                </span>
-                <span className="mt-1 block min-h-9 text-[11px] leading-4 text-slate-500">
-                  {category.description}
                 </span>
               </button>
             );
