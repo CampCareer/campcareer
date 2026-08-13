@@ -1,6 +1,6 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
-import { DEFAULT_LOCALE, LOCALE_COOKIE, isPublishedLocaleOption, localeForUi, localeFromPathname, localizePath, withoutLocalePrefix } from '@/lib/i18n/config'
+import { DEFAULT_LOCALE, LOCALE_COOKIE, isPublishedLocaleOption, localeForUi, localeFromPathname, localizePath, withoutLocalePrefix, type LocaleOption } from '@/lib/i18n/config'
 import { getLegacyLocaleHomeRedirect } from '@/lib/i18n/legacy-locale-home'
 import { isLegacyGonePath } from '@/lib/seo-routes.mjs'
 
@@ -32,6 +32,11 @@ const DEDICATED_KOREAN_ROUTE_PATTERNS = [
 
 function isDedicatedKoreanRoute(pathname: string) {
   return DEDICATED_KOREAN_ROUTE_PATTERNS.some((pattern) => pattern.test(pathname))
+}
+
+function isIndexablePublishedLocaleRoute(pathname: string, routeLocale: LocaleOption | null) {
+  if (routeLocale !== "ko") return false
+  return pathname === "/ko" || pathname === "/ko/" || isDedicatedKoreanRoute(pathname)
 }
 
 export async function proxy(request: NextRequest) {
@@ -78,6 +83,7 @@ export async function proxy(request: NextRequest) {
     // every public response turns otherwise cacheable pages into per-visitor
     // responses and makes the Proxy run needlessly expensive.
     if (routeLocale) {
+      response.headers.set("Content-Language", locale)
       response.cookies.set(LOCALE_COOKIE, locale, {
         path: '/',
         maxAge: 60 * 60 * 24 * 365,
@@ -103,7 +109,7 @@ export async function proxy(request: NextRequest) {
     // Future locale prefixes exist to make a vetted launch URL-stable. Until
     // their catalogue has editorial approval, serve the safe English fallback
     // without allowing a thin duplicate page into search indexes.
-    if (routeLocale && !isPublishedLocaleOption(routeLocale)) {
+    if (routeLocale && (!isPublishedLocaleOption(routeLocale) || !isIndexablePublishedLocaleRoute(requestedPathname, routeLocale))) {
       response.headers.set('X-Robots-Tag', 'noindex, nofollow')
     }
     return response

@@ -20,12 +20,13 @@ function sitemapUrls() {
 
 test("the canonical home is root and /home is never emitted by the sitemap", () => {
   const urls = sitemapUrls()
-  const homeSource = readFileSync("src/app/(workspace)/page.tsx", "utf8")
-  const legacyHomeSource = readFileSync("src/app/(workspace)/home/page.tsx", "utf8")
+  const homeSource = readFileSync("src/app/page.tsx", "utf8")
+  const memberHomeSource = readFileSync("src/app/(workspace)/home/page.tsx", "utf8")
 
   assert.equal(HOME_CANONICAL_PATH, "/")
-  assert.ok(homeSource.includes("alternates: { canonical: HOME_CANONICAL_PATH }"))
-  assert.ok(legacyHomeSource.includes("permanentRedirect(HOME_CANONICAL_PATH)"))
+  assert.ok(homeSource.includes("generateMetadata"))
+  assert.ok(homeSource.includes("canonical = korean ? \"/ko\" : HOME_CANONICAL_PATH"))
+  assert.ok(memberHomeSource.includes('robots: { index: false, follow: false }'))
   assert.ok(urls.includes(`${SITE_URL}/`))
   assert.ok(!urls.includes(`${SITE_URL}/home`))
 })
@@ -69,10 +70,7 @@ test("Next redirects wire the centralized permanent SEO registry before broad le
 
   assert.deepEqual(redirects.slice(0, LEGACY_SEO_REDIRECTS.length), [...LEGACY_SEO_REDIRECTS])
   assert.ok(!redirects.some((redirect) => redirect.source === "/" && redirect.destination === "/home"))
-  assert.deepEqual(
-    redirects.find((redirect) => redirect.source === "/home"),
-    { source: "/home", destination: "/", permanent: true },
-  )
+  assert.equal(redirects.some((redirect) => redirect.source === "/home"), false)
 })
 
 test("legacy country roots redirect permanently to their canonical country pages", () => {
@@ -97,7 +95,10 @@ test("sitemap URLs are unique and the Programs base canonical matches the sitema
 test("robots points at the same production sitemap without blocking canonical country pages", () => {
   const value = robots()
 
-  assert.equal(value.sitemap, `${SITE_URL}/sitemap.xml`)
+  assert.deepEqual(value.sitemap, [
+    `${SITE_URL}/sitemap.xml`,
+    `${SITE_URL}/programs/ca/sitemap.xml`,
+  ])
   assert.ok(!JSON.stringify(value.rules).includes("/countries"))
 })
 

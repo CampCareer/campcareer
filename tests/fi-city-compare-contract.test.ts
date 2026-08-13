@@ -22,7 +22,7 @@ test("Finland Compare requires the full city readiness contract", () => {
 test("Finland Compare preserves national and source-native caveats", () => {
   assert.match(matrix, /not city rankings/)
   assert.match(matrix, /no synthetic monthly normalization/)
-  assert.match(matrix, /verified-partial programmes/)
+  assert.match(matrix, /verified-partial programme evidence/)
   assert.match(matrix, /full recognised HEI\/UAS universe/)
   assert.match(matrix, /does not score a winner/)
 })

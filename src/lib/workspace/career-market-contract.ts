@@ -16,6 +16,7 @@ export type CareerMarketRecommendation = {
   officialTitle: string | null
   opportunityScore: number | null
   scoreStatus: "provisional" | "reviewed" | "published" | "foundation_ready" | null
+  scoreMethodologyVersion: string | null
   registrationRequired: boolean | null
   publicationStatus: "review_required" | "profile_ready" | "decision_ready" | null
   demand: CareerMarketDemand | null

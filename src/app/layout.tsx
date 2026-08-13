@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
+import { headers } from "next/headers"
 import localFont from "next/font/local"
-import { Fraunces } from "next/font/google"
 import "./globals.css"
 import { LayoutShell } from "@/components/layout/layout-shell"
-import { DEFAULT_LOCALE } from "@/lib/i18n/config"
+import { DEFAULT_LOCALE, isLocale } from "@/lib/i18n/config"
 import { LocaleProvider } from "@/lib/i18n/locale-provider"
 import { LocaleInit } from "@/components/locale-init"
 import { PageViewTracker } from "@/components/analytics/page-view-tracker"
@@ -20,14 +20,6 @@ const geistMono = localFont({
   variable: "--font-geist-mono",
   weight: "100 900",
 })
-// Editorial serif display font for headings (body stays Geist).
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  variable: "--font-fraunces",
-  weight: ["400", "500", "600"],
-  display: "swap",
-})
-
 export const metadata: Metadata = {
   title: {
     default: "CampCareer | Source-backed work and study routes",
@@ -49,14 +41,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "CampCareer",
-    title: "CampCareer | 해외에서 일하는 경로를 찾다",
-    description: "직업, 국가, 비자, 실행 경로를 한 번에 확인하세요.",
-    images: [{ url: "/og-career-path.png", width: 1200, height: 630, alt: "CampCareer — 해외에서 일하는 내 커리어" }],
+    title: "CampCareer | Build your career abroad",
+    description: "Source-backed job demand, qualification conditions and practical routes for working abroad.",
+    images: [{ url: "/og-career-path.png", width: 1200, height: 630, alt: "CampCareer — Build your career abroad" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "CampCareer | 해외에서 일하는 경로를 찾다",
-    description: "직업, 국가, 비자, 실행 경로를 한 번에 확인하세요.",
+    title: "CampCareer | Build your career abroad",
+    description: "Source-backed job demand, qualification conditions and practical routes for working abroad.",
     images: ["/og-career-path.png"],
     creator: "@campcareer",
   },
@@ -67,15 +59,20 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const requestHeaders = await headers()
+  const routeLocale = requestHeaders.get("x-campcareer-locale")
+  const locale = isLocale(routeLocale) ? routeLocale : DEFAULT_LOCALE
+
   return (
-    <html lang={DEFAULT_LOCALE} suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} antialiased`}>
-        <LocaleProvider locale={DEFAULT_LOCALE}>
+    <html lang={locale} suppressHydrationWarning>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <LocaleProvider locale={locale}>
+          <a href="#main-content" className="cc-skip-link">Skip to main content</a>
           <LocaleInit />
           <PageViewTracker />
           <LayoutShell>{children}</LayoutShell>

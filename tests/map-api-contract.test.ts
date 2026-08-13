@@ -10,6 +10,7 @@ import {
 import type { MapData } from "../src/lib/map-data"
 import { buildMapsHref } from "../src/app/map/maps-route"
 import { buildMapsV1Envelope } from "../src/lib/maps-v1-contract"
+import { readFileSync } from "node:fs"
 
 test("legacy map redirects preserve deep-link state", () => {
   assert.equal(
@@ -34,6 +35,14 @@ test("map data envelopes expose versioned readiness metadata", () => {
   assert.equal(envelope.country, "AU")
   assert.equal(envelope.dataVersion, "test-version")
   assert.equal(envelope.readiness.map, "READY")
+})
+
+test("US map colleges read location from the canonical institution record", () => {
+  const source = readFileSync("src/lib/map-data.ts", "utf8")
+
+  assert.ok(source.includes('.from("roi_explorer_us")'))
+  assert.ok(!source.includes('"college_id, college_name, college_city, college_state'))
+  assert.ok(source.includes('>("colleges_us", "id, city, state")'))
 })
 
 test("Maps v1 envelopes carry transparent readiness, methodology, and evidence fields", () => {

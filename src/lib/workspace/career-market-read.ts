@@ -6,6 +6,7 @@ import { getCareerDataFoundation, getFoundationCountriesForCareer } from "@/lib/
 import { isFoundationRankable } from "@/lib/career-data-foundation/opportunity-score"
 import type { CareerDataFoundationResult } from "@/lib/career-data-foundation/types"
 import { supabase } from "@/lib/supabase"
+import { selectComparableCareerRecommendations } from "./career-market-safety"
 import { getCountryOccupationProfile } from "./country-occupation-read"
 import type {
   CareerMarketDemand,
@@ -201,6 +202,7 @@ type MetricRow = {
   profile_key: string
   as_of_date: string
   opportunity_score: number
+  score_methodology_version: string
   score_status: "provisional" | "reviewed" | "published"
 }
 
@@ -210,7 +212,7 @@ export async function getCareerCountryRecommendations(careerId: string): Promise
       .from("country_occupation_profiles")
       .select("profile_key,country_code,official_title,registration_required,publication_status")
       .eq("canonical_career_id", careerId)
-      .in("publication_status", ["profile_ready", "decision_ready"]),
+      .eq("publication_status", "decision_ready"),
     getFoundationCountriesForCareer(careerId),
   ])
 
@@ -224,7 +226,7 @@ export async function getCareerCountryRecommendations(careerId: string): Promise
   if (profileKeys.length) {
     const metricsResult = await supabase
       .from("country_occupation_metric_snapshots")
-      .select("profile_key,as_of_date,opportunity_score,score_status")
+      .select("profile_key,as_of_date,opportunity_score,score_methodology_version,score_status")
       .in("profile_key", profileKeys)
       .order("as_of_date", { ascending: false })
     if (metricsResult.error) throw metricsResult.error
@@ -248,6 +250,7 @@ export async function getCareerCountryRecommendations(careerId: string): Promise
       officialTitle: foundation.officialTitle,
       opportunityScore: foundation.opportunityScore,
       scoreStatus: "foundation_ready",
+      scoreMethodologyVersion: foundation.formulaVersion,
       registrationRequired: null,
       publicationStatus: "decision_ready",
       demand: null,
@@ -262,29 +265,14 @@ export async function getCareerCountryRecommendations(careerId: string): Promise
       officialTitle: profile.official_title,
       opportunityScore: metric?.opportunity_score ?? null,
       scoreStatus: metric?.score_status ?? null,
+      scoreMethodologyVersion: metric?.score_methodology_version ?? null,
       registrationRequired: profile.registration_required,
       publicationStatus: profile.publication_status,
       demand: toDemand(careerId, profile.country_code),
     })
   }
 
-  for (const demand of OCCUPATION_DETAILS.find((detail) => detail.id === careerId)?.demand ?? []) {
-    if (foundationCountries.has(demand.countryCode) || byCountry.has(demand.countryCode)) continue
-    byCountry.set(demand.countryCode, {
-      countryCode: demand.countryCode,
-      countryName: demand.countryLabel,
-      officialTitle: null,
-      opportunityScore: null,
-      scoreStatus: null,
-      registrationRequired: null,
-      publicationStatus: null,
-      demand: toDemand(careerId, demand.countryCode),
-    })
-  }
-
-  return [...byCountry.values()]
-    .sort((first, second) => (second.opportunityScore ?? -1) - (first.opportunityScore ?? -1) || first.countryName.localeCompare(second.countryName))
-    .slice(0, 8)
+  return selectComparableCareerRecommendations([...byCountry.values()])
 }
 
 type VisaRow = {

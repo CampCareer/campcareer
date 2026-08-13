@@ -26,7 +26,7 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
   return (
     <div className={`flex min-h-screen flex-col ${isLanding ? "bg-slate-950" : ""}`}>
       {!isInteractiveMap && <TopNav />}
-      <main className="flex-1">{children}</main>
+      <div className="flex-1">{children}</div>
       <SiteFooter className={isInteractiveMap ? "hidden" : undefined} />
     </div>
   )

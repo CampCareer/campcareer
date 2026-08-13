@@ -4,8 +4,10 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useMemo, useState } from "react"
 import { ArrowRight, Check, LoaderCircle, Search } from "lucide-react"
 import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
+import { getSafeNextPath } from "@/lib/auth/safe-next"
 import { localizePath } from "@/lib/i18n/config"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
+import { recordCareerFunnelEvent } from "@/lib/analytics"
 import { getCountryOptions } from "@/lib/study-product/countries"
 import { createClient } from "@/lib/supabase-client"
 
@@ -34,7 +36,7 @@ const copy = {
   ko: {
     back: "이전",
     next: "다음",
-    save: "내 커리어로 이동",
+    save: "내 맞춤 결과 보기",
     saving: "저장 중…",
     saveError: "저장하지 못했어요. 잠시 후 다시 시도해 주세요.",
     selected: "선택됨",
@@ -56,7 +58,7 @@ const copy = {
   en: {
     back: "Back",
     next: "Continue",
-    save: "Go to my home",
+    save: "See my tailored result",
     saving: "Saving…",
     saveError: "We could not save your details. Please try again.",
     selected: "Selected",
@@ -95,7 +97,11 @@ export function CareerPersonalisationOnboarding() {
   const rawCountry = (params.get("country") ?? "").toUpperCase()
   const country = rawCountry === "NOT-SURE" || LAUNCH_COUNTRIES.some((item) => item.code === rawCountry) ? rawCountry : "NOT-SURE"
   const occupation = params.get("occupation") ?? ""
-  const onboardingPath = `${localizePath("/onboarding", locale)}?country=${encodeURIComponent(country.toLowerCase())}&occupation=${encodeURIComponent(occupation)}`
+  const requestedReturnPath = params.get("return_to")
+  const safeReturnPath = getSafeNextPath(requestedReturnPath, "")
+  const onboardingParams = new URLSearchParams({ country: country.toLowerCase(), occupation })
+  if (safeReturnPath) onboardingParams.set("return_to", safeReturnPath)
+  const onboardingPath = `${localizePath("/onboarding", locale)}?${onboardingParams.toString()}`
   const returnPath = localizePath("/home", locale)
   const countries = useMemo(() => getCountryOptions(locale === "ko" ? "ko-KR" : "en"), [locale])
   const selectedCountry = countries.find((item) => item.code === form.citizenship)
@@ -171,7 +177,13 @@ export function CareerPersonalisationOnboarding() {
       setError(t.saveError)
       return
     }
-    router.push(returnPath)
+    recordCareerFunnelEvent("career_personalisation_completed", {
+      surface: "onboarding",
+      locale,
+      country: country.toLowerCase(),
+      career: occupation,
+    })
+    router.push(getSafeNextPath(requestedReturnPath, returnPath))
   }
 
   if (loading) return <main className="mx-auto flex min-h-[70vh] max-w-xl items-center justify-center px-5"><LoaderCircle className="size-6 animate-spin text-slate-400" /></main>

@@ -13,7 +13,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "npm run test:unit",
-    "test:unit": "tsx --test tests/**/*.test.ts",
+    "test:unit": "tsx --test $(find tests -type f -name '*.test.ts' -print)",
     "test:e2e": "playwright test",
     "policy:check": "tsx scripts/check-policy-sources.ts",
     "policy:snapshot": "tsx scripts/check-policy-sources.ts --update",

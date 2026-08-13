@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
+import { hasMeasurementConsent } from "@/lib/analytics-consent-shared"
 
 const OPTIONAL_MEASUREMENT_COOKIES = [
   "cc_sid",
@@ -69,7 +70,7 @@ function setOptionalMeasurementCookies(response: NextResponse, request: NextRequ
 
 /** Creates optional measurement identifiers only after the browser has consented. */
 export async function POST(request: NextRequest) {
-  if (request.cookies.get("cc_analytics_consent")?.value !== "granted") {
+  if (!hasMeasurementConsent(request.headers.get("cookie"))) {
     return new NextResponse(null, { status: 204 })
   }
 

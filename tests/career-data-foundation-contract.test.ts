@@ -145,7 +145,7 @@ test("foundation API read returns provenance, relational lineage, regulation, vi
     "career_foundation_entry_points",
     "career_official_sources",
   ]) {
-    assert.match(foundationRead, new RegExp(`from\\(\"${table}\"\)`))
+    assert.ok(foundationRead.includes(`from("${table}")`), `missing ${table} read`)
   }
   assert.match(foundationRead, /scoreConfidence/)
   assert.match(foundationRead, /evidenceStatus/)

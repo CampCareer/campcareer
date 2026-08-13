@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getStudyConcept } from "@/data/study-concepts"
+import { enforceRateLimit, hasSameOrigin, rateLimitResponse } from "@/lib/api-rate-limit"
 import { isIsoCountryCode } from "@/lib/study-product/countries"
 import { createPlanSaveIntent } from "@/lib/study-product/plan-service"
 import type { RecommendationInputV3, RecommendationPriority, StudyLocale } from "@/lib/study-product/types"
@@ -10,6 +11,9 @@ export const dynamic = "force-dynamic"
 const PRIORITIES = new Set<RecommendationPriority>(["CAREER_OUTCOME", "LOWER_COST", "POST_STUDY_OPTIONS"])
 
 export async function POST(request: NextRequest) {
+  if (!hasSameOrigin(request)) return NextResponse.json({ error: "Invalid request origin" }, { status: 403 })
+  const rateLimit = await enforceRateLimit(request, { endpoint: "decision_plan_save_intent", limit: 10, windowSeconds: 60 * 60 })
+  if (!rateLimit.ok) return rateLimitResponse(rateLimit)
   if (Number(request.headers.get("content-length") ?? 0) > 8_192) {
     return NextResponse.json({ error: "Request is too large" }, { status: 413 })
   }

@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState, type FormEvent } from "react"
+import { useEffect, useId, useMemo, useRef, useState, type FormEvent, type KeyboardEvent } from "react"
 import { ArrowRight, Check, ChevronDown, Search } from "lucide-react"
 import { cn } from "@/lib/utils"
 import {
@@ -29,6 +29,7 @@ type HomeSearchFormProps = {
   locale: CareerCheckLocale
   onValuesChange: (values: OverviewSearchValues) => void
   onSubmit: (values: OverviewSearchValues) => void
+  onInteractionStart?: () => void
   compact?: boolean
   className?: string
   /** Some workspace explorers only need a destination. */
@@ -36,7 +37,7 @@ type HomeSearchFormProps = {
   submitLabel?: string
 }
 
-export function HomeSearchForm({ values, locale, onValuesChange, onSubmit, compact = false, className, showOccupation = true, submitLabel }: HomeSearchFormProps) {
+export function HomeSearchForm({ values, locale, onValuesChange, onSubmit, onInteractionStart, compact = false, className, showOccupation = true, submitLabel }: HomeSearchFormProps) {
   const [errors, setErrors] = useState<OverviewSearchErrors>({})
   const countryOptions = useMemo(() => getCountryOptions(locale), [locale])
   const occupationOptions = useMemo(() => getOccupationOptions(locale), [locale])
@@ -58,7 +59,7 @@ export function HomeSearchForm({ values, locale, onValuesChange, onSubmit, compa
   }
 
   return (
-    <form onSubmit={submit} noValidate className={cn("grid gap-3 md:items-end", showOccupation ? "md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]" : "md:grid-cols-[minmax(0,1fr)_auto]", className)}>
+    <form onSubmit={submit} onFocusCapture={onInteractionStart} noValidate className={cn("grid gap-3 md:items-end", showOccupation ? "md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]" : "md:grid-cols-[minmax(0,1fr)_auto]", className)}>
       <SearchSelect id="country" label={copy.country} value={values.country} options={countryOptions} placeholder={copy.countryPlaceholder} error={errors.country} emptyText={copy.empty} onChange={(value) => update("country", value)} />
       {showOccupation && <SearchSelect id="occupation" label={copy.occupation} value={values.occupation} options={occupationOptions} placeholder={copy.occupationPlaceholder} error={errors.occupation} emptyText={copy.empty} recommendedIds={RECOMMENDED_OCCUPATION_IDS} recommendedLabel={locale === "ko" ? "추천 직종" : "Recommended occupations"} resultsLabel={locale === "ko" ? "관련 직종" : "Related occupations"} onChange={(value) => update("occupation", value)} />}
       <button type="submit" className={cn("inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-[#1d4ed8] px-5 text-sm font-semibold text-white transition hover:bg-[#1e40af] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-600/20", compact ? "md:min-w-36" : "md:min-w-44")}>
@@ -82,6 +83,10 @@ function SearchSelect({ id, label, value, options, placeholder, error, emptyText
 }) {
   const [query, setQuery] = useState("")
   const [open, setOpen] = useState(false)
+  const [activeIndex, setActiveIndex] = useState(-1)
+  const rootRef = useRef<HTMLDivElement | null>(null)
+  const listboxId = `${id}-options`
+  const errorId = useId()
   const selected = options.find((option) => option.value === value)
   const matches = useMemo(() => {
     const normalized = query.trim().toLocaleLowerCase()
@@ -100,8 +105,49 @@ function SearchSelect({ id, label, value, options, placeholder, error, emptyText
     setOpen(false)
   }
 
+  useEffect(() => {
+    const closeOnOutsidePointer = (event: PointerEvent) => {
+      if (rootRef.current?.contains(event.target as Node)) return
+      setOpen(false)
+      setActiveIndex(-1)
+    }
+
+    document.addEventListener("pointerdown", closeOnOutsidePointer)
+    return () => document.removeEventListener("pointerdown", closeOnOutsidePointer)
+  }, [])
+
+  useEffect(() => {
+    setActiveIndex((current) => current >= matches.length ? -1 : current)
+  }, [matches.length])
+
+  const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "ArrowDown") {
+      event.preventDefault()
+      setOpen(true)
+      if (!matches.length) return
+      setActiveIndex((current) => Math.min(current + 1, matches.length - 1))
+      return
+    }
+    if (event.key === "ArrowUp") {
+      event.preventDefault()
+      setOpen(true)
+      if (!matches.length) return
+      setActiveIndex((current) => Math.max(current - 1, 0))
+      return
+    }
+    if (event.key === "Enter" && open && activeIndex >= 0 && matches[activeIndex]) {
+      event.preventDefault()
+      choose(matches[activeIndex])
+      return
+    }
+    if (event.key === "Escape" || event.key === "Tab") {
+      setOpen(false)
+      setActiveIndex(-1)
+    }
+  }
+
   return (
-    <div className="relative min-w-0">
+    <div ref={rootRef} className="relative min-w-0">
       <label htmlFor={id} className="mb-1.5 block text-sm font-semibold text-[#27272a]">{label}</label>
       <div className="relative">
         <Search className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-[#9ca3af]" />
@@ -111,30 +157,34 @@ function SearchSelect({ id, label, value, options, placeholder, error, emptyText
           role="combobox"
           aria-autocomplete="list"
           aria-expanded={open}
-          aria-controls={`${id}-options`}
+          aria-controls={listboxId}
+          aria-activedescendant={open && activeIndex >= 0 ? `${id}-option-${activeIndex}` : undefined}
           aria-invalid={Boolean(error)}
+          aria-describedby={error ? errorId : undefined}
           value={open ? query : selected?.label ?? ""}
           placeholder={placeholder}
-          onFocus={() => setOpen(true)}
+          onFocus={() => {
+            setOpen(true)
+            setActiveIndex(-1)
+          }}
           onChange={(event) => {
             setQuery(event.target.value)
             setOpen(true)
+            setActiveIndex(-1)
           }}
-          onKeyDown={(event) => {
-            if (event.key === "Escape") setOpen(false)
-          }}
+          onKeyDown={onKeyDown}
           className={cn("h-12 w-full rounded-xl border bg-white py-2 pl-10 pr-10 text-[15px] text-[#18181b] outline-none transition placeholder:text-[#a1a1aa] focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10", error ? "border-red-500" : "border-[#dededb]")}
         />
         <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 size-4 -translate-y-1/2 text-[#a1a1aa]" />
       </div>
-      {error && <p className="mt-1.5 text-xs font-medium text-red-600">{error}</p>}
+      {error && <p id={errorId} className="mt-1.5 text-xs font-medium text-red-600">{error}</p>}
       {open && (
-        <div id={`${id}-options`} role="listbox" className="absolute z-40 mt-2 max-h-64 w-full overflow-y-auto rounded-xl border border-[#e4e4e1] bg-white p-1.5 shadow-xl">
+        <div id={listboxId} role="listbox" className="absolute z-40 mt-2 max-h-64 w-full overflow-y-auto rounded-xl border border-[#e4e4e1] bg-white p-1.5 shadow-xl">
           {(recommendedIds || query.trim()) && matches.length > 0 && (
             <p className="px-3 pb-1 pt-1.5 text-[11px] font-semibold tracking-[0.08em] text-[#8a8a90]">{query.trim() ? resultsLabel : recommendedLabel}</p>
           )}
-          {matches.length ? matches.map((option) => (
-            <button key={option.value} type="button" role="option" aria-selected={option.value === value} onMouseDown={(event) => event.preventDefault()} onClick={() => choose(option)} className="flex min-h-10 w-full items-center justify-between rounded-lg px-3 text-left text-sm text-[#27272a] transition hover:bg-blue-50">
+          {matches.length ? matches.map((option, index) => (
+            <button id={`${id}-option-${index}`} key={option.value} type="button" role="option" aria-selected={option.value === value} onMouseDown={(event) => event.preventDefault()} onMouseMove={() => setActiveIndex(index)} onClick={() => choose(option)} className={cn("flex min-h-10 w-full items-center justify-between rounded-lg px-3 text-left text-sm text-[#27272a] transition hover:bg-blue-50", activeIndex === index && "bg-blue-50")}>
               <span>{option.label}</span>
               {option.value === value && <Check className="size-4 text-blue-700" />}
             </button>

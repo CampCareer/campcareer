@@ -39,7 +39,7 @@ export function WorkspaceShell({ children }: WorkspaceShellProps) {
       {!isPathfinder && <WorkspaceSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />}
       <div className="flex min-w-0 flex-1 flex-col">
         <WorkspaceTopbar onMenuClick={() => setSidebarOpen((prev) => !prev)} />
-        <main
+        <div
           className={cn(
             "flex-1",
             !hasFullBleedHero && (isComparePage ? "px-4 py-4 sm:px-6 lg:px-8" : "px-4 py-8 sm:px-8 lg:px-10"),
@@ -53,7 +53,7 @@ export function WorkspaceShell({ children }: WorkspaceShellProps) {
           >
             {children}
           </div>
-        </main>
+        </div>
         {!hideSiteFooter && <SiteFooter />}
       </div>
     </div>

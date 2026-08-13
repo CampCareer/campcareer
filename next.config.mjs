@@ -46,7 +46,12 @@ const nextConfig = {
       // until it is assembled into a source-backed citizenship-to-work route.
       { source: "/au/:path*", destination: "/", permanent: false },
       { source: "/fields/:path*", destination: "/", permanent: false },
-      { source: "/study/:path*", destination: "/", permanent: false },
+      // `/study/au/:city/:field` is an explicitly quality-gated, canonical
+      // public collection. Retire only the older study landing and search
+      // surfaces; a broad `/study/:path*` redirect would otherwise send every
+      // indexed collection page to the homepage before its route can render.
+      { source: "/study", destination: "/", permanent: false },
+      { source: "/study/search", destination: "/", permanent: false },
       { source: "/study-options/:path*", destination: "/", permanent: false },
       { source: "/majors/:path*", destination: "/", permanent: false },
       { source: "/universities/:path*", destination: "/", permanent: false },

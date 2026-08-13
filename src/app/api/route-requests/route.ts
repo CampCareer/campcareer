@@ -1,5 +1,5 @@
-import { createHmac } from "node:crypto"
 import { NextRequest, NextResponse } from "next/server"
+import { enforceRateLimit, hasSameOrigin, requestRateLimitFingerprint } from "@/lib/api-rate-limit"
 import { isIsoCountryCode } from "@/lib/study-product/countries"
 import { normalizeCountryCode, normalizeRouteField, type RouteGoal } from "@/lib/route-search"
 
@@ -7,9 +7,7 @@ export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
 
 const MAX_BODY_BYTES = 4_096
-const MAX_REQUESTS_PER_HOUR = 8
 const NO_STORE_HEADERS = { "Cache-Control": "no-store" }
-const rateBuckets = new Map<string, { count: number; resetAt: number }>()
 
 type RequestKind = "route_research" | "guide_interest"
 
@@ -68,30 +66,6 @@ function parseInput(value: unknown): { input: ParsedRequest | null; honeypot: bo
   }
 }
 
-function fingerprint(request: NextRequest) {
-  const clientIp = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown"
-  const userAgent = request.headers.get("user-agent") ?? "unknown"
-  const secret = process.env.ROUTE_REQUEST_FINGERPRINT_SECRET
-    ?? process.env.SUPABASE_SERVICE_ROLE_KEY
-    ?? "route-request-local-development-only"
-  return createHmac("sha256", secret).update(`${clientIp}|${userAgent}`).digest("hex")
-}
-
-function allowRequest(key: string) {
-  const now = Date.now()
-  const current = rateBuckets.get(key)
-  if (!current || current.resetAt <= now) {
-    rateBuckets.set(key, { count: 1, resetAt: now + 60 * 60 * 1_000 })
-    return true
-  }
-  if (current.count >= MAX_REQUESTS_PER_HOUR) return false
-  current.count += 1
-  if (rateBuckets.size > 2_000) {
-    for (const [bucketKey, bucket] of rateBuckets) if (bucket.resetAt <= now) rateBuckets.delete(bucketKey)
-  }
-  return true
-}
-
 function sourcePath(request: NextRequest) {
   const referer = request.headers.get("referer")
   if (!referer) return "/"
@@ -104,6 +78,7 @@ function sourcePath(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  if (!hasSameOrigin(request)) return accepted()
   const contentLength = Number(request.headers.get("content-length") ?? "0")
   if (!Number.isFinite(contentLength) || contentLength > MAX_BODY_BYTES) return accepted()
 
@@ -115,8 +90,15 @@ export async function POST(request: NextRequest) {
   }
 
   const parsed = parseInput(payload)
-  const requestFingerprint = fingerprint(request)
-  if (parsed.honeypot || !parsed.input || !allowRequest(requestFingerprint)) return accepted()
+  if (parsed.honeypot || !parsed.input) return accepted()
+  const rateLimit = await enforceRateLimit(request, {
+    endpoint: "route_request",
+    limit: 8,
+    windowSeconds: 60 * 60,
+  })
+  if (!rateLimit.ok) return accepted()
+
+  const requestFingerprint = requestRateLimitFingerprint(request)
 
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) return accepted()
 

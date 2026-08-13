@@ -3,11 +3,10 @@
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { useEffect, useState } from "react"
+import { hasMeasurementConsent as hasGrantedMeasurementConsent } from "@/lib/analytics-consent-shared"
 
-const CONSENT_COOKIE = "cc_analytics_consent=granted"
-
-function hasMeasurementConsent() {
-  return document.cookie.split("; ").some((item) => item === CONSENT_COOKIE)
+function hasBrowserMeasurementConsent() {
+  return hasGrantedMeasurementConsent(document.cookie)
 }
 
 /**
@@ -18,7 +17,7 @@ export function ConsentGatedInsights() {
   const [enabled, setEnabled] = useState(false)
 
   useEffect(() => {
-    const refresh = () => setEnabled(hasMeasurementConsent())
+    const refresh = () => setEnabled(hasBrowserMeasurementConsent())
     refresh()
     window.addEventListener("campcareer-consent", refresh)
     return () => window.removeEventListener("campcareer-consent", refresh)

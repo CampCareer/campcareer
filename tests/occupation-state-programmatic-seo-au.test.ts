@@ -56,9 +56,9 @@ test("the occupation dashboard links AU regional demand cards through the state 
     "utf8",
   )
 
-  assert.ok(source.includes("getAuOccupationStatePageByRegionCode(region.regionCode, careerId)"))
-  assert.ok(source.includes('countryCode === "AU"'))
-  assert.ok(source.includes("href={statePage.path}"))
+  assert.ok(source.includes("getAuOccupationStatePageByRegionCode(region.regionCode, career.id)"))
+  assert.ok(source.includes('profile.countryCode === "AU"'))
+  assert.ok(source.includes("href={href}"))
   assert.ok(source.includes("<StateDemandCard"))
 })
 

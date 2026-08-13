@@ -11,6 +11,7 @@ import { getIndexableVisaRoutes } from "../src/lib/workspace/visa-routes"
 import { INDEXABLE_INSTITUTION_PATHS } from "../src/lib/institutions/institution-seo"
 import { canonicalCompareModeFromLegacyType } from "../src/lib/compare-routes"
 import { SITE_URL } from "../src/lib/seo-routes.mjs"
+import nextConfig from "../next.config.mjs"
 
 function sitemapUrls() {
   return sitemap().map((entry) => entry.url)
@@ -46,6 +47,18 @@ test("sitemap contains every explicit SEO inventory exactly once", () => {
   assert.ok(urlSet.has(`${SITE_URL}/cities/au/sydney`))
   assert.ok(urlSet.has(`${SITE_URL}/cities/au/adelaide`))
   assert.ok(!urls.some((url) => url.includes("/compare/")))
+})
+
+test("indexable study collections are not swallowed by retired-funnel redirects", async () => {
+  const redirects = await nextConfig.redirects?.()
+  assert.ok(redirects)
+  assert.ok(!redirects.some((redirect) => redirect.source === "/study/:path*"))
+  assert.ok(redirects.some((redirect) => redirect.source === "/study" && redirect.destination === "/"))
+  assert.ok(redirects.some((redirect) => redirect.source === "/study/search" && redirect.destination === "/"))
+
+  for (const page of AU_PROGRAMMATIC_STUDY_PAGES) {
+    assert.ok(page.path.startsWith("/study/au/"))
+  }
 })
 
 test("legacy compare type resolver still covers every root compare mode", () => {

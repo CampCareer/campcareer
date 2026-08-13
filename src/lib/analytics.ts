@@ -1,6 +1,7 @@
 "use client"
 
 import { track as vercelTrack } from "@vercel/analytics"
+import { hasMeasurementConsent } from "./analytics-consent-shared"
 
 type EventValue = string | number | boolean | undefined
 
@@ -35,14 +36,23 @@ const ALLOWED_EVENTS = new Set([
   "report_launch_interest_started",
   "report_launch_interest_submitted",
   "report_workspace_open",
+  "career_landing_view",
+  "career_search_started",
+  "career_search_submitted",
+  "career_result_viewed",
+  "career_result_unavailable",
+  "career_evidence_opened",
+  "career_result_saved",
+  "career_personalisation_started",
+  "career_personalisation_completed",
 ])
 
+function clientHasMeasurementConsent() {
+  return typeof window !== "undefined" && hasMeasurementConsent(document.cookie)
+}
+
 export function track(eventName: string, params?: Record<string, EventValue>) {
-  if (
-    typeof window === "undefined" ||
-    !ALLOWED_EVENTS.has(eventName) ||
-    !document.cookie.split("; ").some((item) => item === "cc_analytics_consent=granted")
-  ) return
+  if (!clientHasMeasurementConsent() || !ALLOWED_EVENTS.has(eventName)) return
   const properties = Object.fromEntries(
     Object.entries(params ?? {})
       .filter(([key, value]) => /^[a-z][a-z0-9_]{0,31}$/.test(key) && value !== undefined)
@@ -58,10 +68,7 @@ export function recordDiscoveryEvent(
   context: { surface: "landing" | "country_results"; country: string; major: string; goal: string },
 ) {
   track(eventName, context)
-  if (
-    typeof window === "undefined" ||
-    !document.cookie.split("; ").some((item) => item === "cc_analytics_consent=granted")
-  ) return
+  if (!clientHasMeasurementConsent()) return
 
   void fetch("/api/v1/discovery-events", {
     method: "POST",
@@ -76,10 +83,7 @@ export function recordReportEvent(
   context: { surface: "report_launch" | "report_workspace"; country: "AU"; locale: "en" | "ko" },
 ) {
   track(eventName, context)
-  if (
-    typeof window === "undefined" ||
-    !document.cookie.split("; ").some((item) => item === "cc_analytics_consent=granted")
-  ) return
+  if (!clientHasMeasurementConsent()) return
 
   void fetch("/api/v1/discovery-events", {
     method: "POST",
@@ -112,10 +116,44 @@ export function recordRouteEvent(
   },
 ) {
   track(eventName, context)
-  if (
-    typeof window === "undefined" ||
-    !document.cookie.split("; ").some((item) => item === "cc_analytics_consent=granted")
-  ) return
+  if (!clientHasMeasurementConsent()) return
+
+  void fetch("/api/v1/discovery-events", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ eventName, context }),
+    keepalive: true,
+  }).catch(() => undefined)
+}
+
+export type CareerFunnelEvent =
+  | "career_landing_view"
+  | "career_search_started"
+  | "career_search_submitted"
+  | "career_result_viewed"
+  | "career_result_unavailable"
+  | "career_evidence_opened"
+  | "career_result_saved"
+  | "career_personalisation_started"
+  | "career_personalisation_completed"
+
+/**
+ * The new landing-to-decision funnel deliberately records only low-cardinality
+ * route context. It never includes citizenship, free text, email, or a full URL.
+ */
+export function recordCareerFunnelEvent(
+  eventName: CareerFunnelEvent,
+  context: {
+    surface: "landing" | "career_result" | "onboarding"
+    locale: "en" | "ko"
+    country?: string
+    career?: string
+    result_status?: "released" | "under_review" | "comparison_unavailable" | "unavailable"
+    link_type?: "official_resource"
+  },
+) {
+  track(eventName, context)
+  if (!clientHasMeasurementConsent()) return
 
   void fetch("/api/v1/discovery-events", {
     method: "POST",

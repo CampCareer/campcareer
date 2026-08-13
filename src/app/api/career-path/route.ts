@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { enforceRateLimit, hasSameOrigin, rateLimitResponse } from '@/lib/api-rate-limit'
 import { FEATURE_FLAGS } from '@/lib/feature-flags'
 
 export async function POST(req: NextRequest) {
   if (!FEATURE_FLAGS.aiGeneration) {
     return NextResponse.json({ error: 'Not found' }, { status: 404 })
   }
+  if (!hasSameOrigin(req)) return NextResponse.json({ error: 'Invalid request origin' }, { status: 403 })
+  const rateLimit = await enforceRateLimit(req, { endpoint: 'career_path_generation', limit: 3, windowSeconds: 60 * 60 })
+  if (!rateLimit.ok) return rateLimitResponse(rateLimit)
   if (Number(req.headers.get('content-length') ?? 0) > 16_384) {
     return NextResponse.json({ error: 'Request is too large' }, { status: 413 })
   }

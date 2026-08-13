@@ -2,10 +2,11 @@
 
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { BadgeCheck, BriefcaseBusiness, Compass, GraduationCap, Route, ShieldCheck, TrendingUp } from "lucide-react"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { localizePath } from "@/lib/i18n/config"
+import { recordCareerFunnelEvent } from "@/lib/analytics"
 import { cn } from "@/lib/utils"
 import { HomeSearchForm } from "./home-search-form"
 import {
@@ -22,9 +23,22 @@ export function HomeHub() {
   const locale = useRouteLocale()
   const searchParams = useSearchParams()
   const [values, setValues] = useState<OverviewSearchValues>(() => readOverviewSearchValues(searchParams))
+  const trackedLanding = useRef(false)
+  const trackedSearchStart = useRef(false)
   const result = getOverviewSearchQuery(searchParams)
 
   useEffect(() => setValues(readOverviewSearchValues(searchParams)), [searchParams])
+
+  useEffect(() => {
+    const trackLanding = () => {
+      if (trackedLanding.current) return
+      recordCareerFunnelEvent("career_landing_view", { surface: "landing", locale })
+      if (document.cookie.includes("cc_analytics_consent=granted")) trackedLanding.current = true
+    }
+    trackLanding()
+    window.addEventListener("campcareer-consent", trackLanding)
+    return () => window.removeEventListener("campcareer-consent", trackLanding)
+  }, [locale])
 
   useEffect(() => {
     if (!result) return
@@ -32,11 +46,23 @@ export function HomeHub() {
   }, [locale, result, router])
 
   const submit = (nextValues: OverviewSearchValues) => {
+    recordCareerFunnelEvent("career_search_submitted", {
+      surface: "landing",
+      locale,
+      country: nextValues.country,
+      career: nextValues.occupation,
+    })
     router.push(`${localizePath("/career", locale)}?${toOverviewSearchQuery(nextValues).toString()}`)
   }
 
+  const startSearch = () => {
+    if (trackedSearchStart.current) return
+    recordCareerFunnelEvent("career_search_started", { surface: "landing", locale })
+    if (document.cookie.includes("cc_analytics_consent=granted")) trackedSearchStart.current = true
+  }
+
   return (
-    <div className="min-h-[calc(100vh-3.5rem)] bg-white text-[#171717]">
+    <main id="main-content" className="min-h-[calc(100vh-3.5rem)] bg-white text-[#171717]">
       <section className="cc-landing-hero relative overflow-hidden border-b border-[#e6e8ef] px-5 pb-14 pt-8 sm:px-8 sm:pb-20 sm:pt-12">
         <div className="mx-auto max-w-6xl">
           <div className="relative px-1 py-7 text-[#1b1b1b] sm:px-4 sm:py-10 lg:px-8 lg:py-12">
@@ -63,14 +89,14 @@ export function HomeHub() {
               </div>
               <p className="hidden items-center gap-1.5 text-xs font-medium text-slate-400 sm:flex"><BadgeCheck className="size-4 text-blue-600" /> {locale === "ko" ? "근거 기반으로 확인" : "Evidence-led guidance"}</p>
             </div>
-            <HomeSearchForm values={values} locale={locale} onValuesChange={setValues} onSubmit={submit} />
+            <HomeSearchForm values={values} locale={locale} onValuesChange={setValues} onSubmit={submit} onInteractionStart={startSearch} />
           </div>
 
           {!result && <LandingProof locale={locale} />}
           {result && <div className="mt-10 h-40 animate-pulse rounded-3xl bg-[#f5f5f3]" aria-label="결과 페이지로 이동 중" />}
         </div>
       </section>
-    </div>
+    </main>
   )
 }
 

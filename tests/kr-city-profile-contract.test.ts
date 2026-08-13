@@ -10,11 +10,11 @@ const sitemap = fs.readFileSync("src/app/sitemap.ts", "utf8")
 
 const exactSupported = '["seoul", "busan", "daejeon", "suwon", "yongin", "pohang"]'
 
-test("Korea Phase 5 locks exactly six supported non-published city routes", () => {
-  assert.ok(routes.includes(`SUPPORTED_KR_CITY_SLUGS = ${exactSupported}`))
-  assert.ok(routes.includes("isSupportedKrCitySlug"))
+test("Korea publishes exactly six reviewed city routes", () => {
+  assert.ok(routes.includes(`PUBLISHED_KR_CITY_SLUGS = ${exactSupported}`))
+  assert.ok(routes.includes("isPublishedKrCitySlug"))
   assert.ok(routes.includes("/cities/kr/${slug}"))
-  assert.ok(!routes.includes("PUBLISHED_KR_CITY_SLUGS"))
+  assert.ok(routes.includes("SUPPORTED_KR_CITY_SLUGS = PUBLISHED_KR_CITY_SLUGS"))
 })
 
 test("Korea profile loader consumes only the Phase 3 and 4 city read models", () => {
@@ -30,19 +30,19 @@ test("Korea profile loader consumes only the Phase 3 and 4 city read models", ()
   assert.ok(!loader.includes('.from("public.program_catalog_kr_staging")'))
 })
 
-test("Korea Phase 5 profiles remain noindex and reject unsupported slugs", () => {
-  assert.ok(page.includes("SUPPORTED_KR_CITY_SLUGS.map"))
-  assert.ok(page.includes("isSupportedKrCitySlug"))
-  assert.ok(page.includes("robots: { index: false, follow: true }"))
+test("Korea profiles index only reviewed slugs and reject unsupported slugs", () => {
+  assert.ok(page.includes("PUBLISHED_KR_CITY_SLUGS.map"))
+  assert.ok(page.includes("isPublishedKrCitySlug"))
+  assert.ok(page.includes("robots: { index: true, follow: true }"))
   assert.ok(page.includes("robots: { index: false, follow: false }"))
   assert.ok(page.includes("notFound()"))
   assert.ok(page.includes("/cities/kr/${normalized}"))
-  assert.ok(!page.includes("buildCityCompareCanonicalHref"))
+  assert.ok(page.includes("buildCityCompareCanonicalHref"))
 })
 
-test("Korea Phase 5 does not promote sitemap or Compare and discloses metric limits", () => {
-  assert.ok(!sitemap.includes("PUBLISHED_KR_CITY_SLUGS"))
-  assert.ok(!sitemap.includes("/cities/kr/"))
+test("Korea sitemap and Compare use the released cohort while disclosing metric limits", () => {
+  assert.ok(sitemap.includes("PUBLISHED_KR_CITY_SLUGS"))
+  assert.ok(sitemap.includes("...PUBLISHED_KR_CITY_SLUGS.map"))
   assert.ok(dashboard.includes("National Study in Korea baseline · not city-specific · not ranking-safe"))
   assert.ok(dashboard.includes("not a shortage ranking or job guarantee"))
   assert.ok(dashboard.includes("not an automatic entitlement"))

@@ -641,10 +641,12 @@ function getCACityCoords(): Map<string, { lat: number; lng: number }> {
 }
 
 async function getUSColleges(): Promise<USCollege[]> {
-  // roi_explorer_us 는 (대학 × 전공) 행이라 college_id 가 중복된다. 도시 컬럼명은 college_city.
+  // ROI projections are deliberately metric-only. Keep location data on the
+  // canonical institution record instead of relying on a non-contractual
+  // `college_city` projection column (which was absent in production).
   const { data, error } = await supabaseAdmin
     .from("roi_explorer_us")
-    .select("college_id, college_name, college_city, college_state, roi_score, net_salary, tuition, median_earnings, graduation_rate")
+    .select("college_id, college_name, college_state, roi_score, net_salary, tuition, median_earnings, graduation_rate")
     .gt("roi_score", 0)
     .order("roi_score", { ascending: false })
     .limit(3000)
@@ -657,7 +659,6 @@ async function getUSColleges(): Promise<USCollege[]> {
   const rows = (data ?? []) as Array<{
     college_id: string
     college_name: string
-    college_city: string
     college_state: string
     roi_score: number
     net_salary: number
@@ -665,21 +666,32 @@ async function getUSColleges(): Promise<USCollege[]> {
     median_earnings: number
     graduation_rate: number
   }>
+  if (rows.length === 0) return []
+
+  const locations = await fetchAll<{
+    id: string
+    city: string | null
+    state: string | null
+  }>("colleges_us", "id, city, state")
+  const locationByCollegeId = new Map(locations.map((location) => [location.id, location]))
 
   const coords = getCityCoords()
   // 대학 단위로 접되, ROI 최고값(첫 등장) 행만 남긴다.
   const byCollege = new Map<string, USCollege>()
 
   for (const r of rows) {
-    if (!r.college_city || byCollege.has(r.college_id)) continue
-    const key = `${r.college_city.toLowerCase()}|${r.college_state}`
+    const location = locationByCollegeId.get(r.college_id)
+    const city = location?.city
+    const state = location?.state ?? r.college_state
+    if (!city || !state || byCollege.has(r.college_id)) continue
+    const key = `${city.toLowerCase()}|${state}`
     const coord = coords.get(key)
     if (!coord) continue
     byCollege.set(r.college_id, {
       college_id: r.college_id,
       college_name: r.college_name,
-      city_name: r.college_city,
-      college_state: r.college_state,
+      city_name: city,
+      college_state: state,
       lat: coord.lat,
       lng: coord.lng,
       roi_score: r.roi_score,

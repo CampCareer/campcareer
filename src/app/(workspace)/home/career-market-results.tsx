@@ -2,15 +2,19 @@
 
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
-import { useEffect, useMemo, useState, type ReactNode } from "react"
+import { useEffect, useMemo, useRef, useState, type MouseEvent, type ReactNode } from "react"
 import { ArrowRight, BadgeCheck, Building2, CheckCircle2, CircleAlert, ExternalLink, GraduationCap, LoaderCircle, ShieldCheck, TrendingUp } from "lucide-react"
 import { AUSTRALIA_NURSING_PROGRAMS } from "@/data/programs/australia-nursing"
 import { CITIZENSHIP_OPTIONS } from "@/data/citizenship-countries"
 import { createClient } from "@/lib/supabase-client"
 import { localizePath } from "@/lib/i18n/config"
+import { recordCareerFunnelEvent } from "@/lib/analytics"
 import type { CareerMarketInsight } from "@/lib/workspace/career-market-contract"
+import { canShowPublicMarketScore } from "@/lib/workspace/career-market-safety"
+import type { SavedCareerResultInput } from "@/lib/workspace/saved-career-result"
 import { cn } from "@/lib/utils"
 import type { OverviewSearchValues } from "./home-overview-config"
+import { CareerResultSave } from "./career-result-save"
 
 type Locale = "en" | "ko"
 
@@ -39,8 +43,22 @@ const englishSafeText = (locale: Locale, value: string | null | undefined, fallb
 }
 
 function onboardingPath(query: OverviewSearchValues, locale: Locale) {
-  const params = new URLSearchParams({ country: query.country, occupation: query.occupation })
+  const params = new URLSearchParams({
+    country: query.country,
+    occupation: query.occupation,
+    return_to: careerResultsPath(query, locale),
+  })
   return `${localizePath("/onboarding", locale)}?${params.toString()}`
+}
+
+function careerResultsPath(query: OverviewSearchValues, locale: Locale) {
+  return careerResultPath(query, locale, true)
+}
+
+function careerResultPath(query: OverviewSearchValues, locale: Locale, personalised: boolean) {
+  const params = new URLSearchParams({ country: query.country, occupation: query.occupation, personalised: "1" })
+  if (!personalised) params.delete("personalised")
+  return `${localizePath("/career", locale)}?${params.toString()}`
 }
 
 function personalisationHref(query: OverviewSearchValues, authenticated: boolean | null, locale: Locale) {
@@ -54,6 +72,8 @@ export function CareerMarketResults({ query, locale, presentation = "inline" }: 
   const [loadError, setLoadError] = useState(false)
   const [authenticated, setAuthenticated] = useState<boolean | null>(null)
   const [personalisation, setPersonalisation] = useState<Personalisation | null>(null)
+  const trackedResult = useRef<string | null>(null)
+  const trackedFailure = useRef<string | null>(null)
   const personalised = searchParams.get("personalised") === "1"
   const supabase = useMemo(() => createClient(), [])
 
@@ -90,6 +110,36 @@ export function CareerMarketResults({ query, locale, presentation = "inline" }: 
     return () => { active = false }
   }, [personalised, supabase])
 
+  useEffect(() => {
+    if (!insight) return
+    const key = `${query.country}:${query.occupation}:${insight.readModelSource}:${insight.recommendations.length}`
+    if (trackedResult.current === key) return
+    trackedResult.current = key
+    recordCareerFunnelEvent("career_result_viewed", {
+      surface: "career_result",
+      locale,
+      country: query.country,
+      career: query.occupation,
+      result_status: insight.country
+        ? (canShowPublicMarketScore(insight.profile) ? "released" : "under_review")
+        : (insight.recommendations.length ? "released" : "comparison_unavailable"),
+    })
+  }, [insight, locale, query.country, query.occupation])
+
+  useEffect(() => {
+    if (!loadError) return
+    const key = `${query.country}:${query.occupation}`
+    if (trackedFailure.current === key) return
+    trackedFailure.current = key
+    recordCareerFunnelEvent("career_result_unavailable", {
+      surface: "career_result",
+      locale,
+      country: query.country,
+      career: query.occupation,
+      result_status: "unavailable",
+    })
+  }, [loadError, locale, query.country, query.occupation])
+
   if (loadError) return <ResultUnavailable locale={locale} />
   if (!insight) return <ResultLoading locale={locale} />
   if (!insight.country) {
@@ -109,21 +159,22 @@ function ResultUnavailable({ locale }: { locale: Locale }) {
 
 function CountryPriority({ insight, query, locale, authenticated, presentation }: { insight: CareerMarketInsight; query: OverviewSearchValues; locale: Locale; authenticated: boolean | null; presentation: "inline" | "page" }) {
   const t = (ko: string, en: string) => tr(locale, ko, en)
+  const hasComparableCountries = insight.recommendations.length > 0
   return <section className={cn("mx-auto max-w-5xl", presentation === "page" ? "mt-5" : "mt-12")} aria-live="polite">
     <div>
       <header className="px-1 py-2 sm:px-2">
-        <p className="text-xs font-bold tracking-[0.12em] text-blue-700">MARKET-FIRST COUNTRY SHORTLIST</p>
-        <h2 className="mt-3 text-2xl font-semibold tracking-[-0.045em] text-slate-950 sm:text-3xl">{locale === "ko" ? `${insight.career.labelKo}로 가능성을 볼 나라부터 골라보세요.` : `Start with countries that show signals for ${insight.career.label}.`}</h2>
-        <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">{locale === "ko" ? "아래 순서는 현재 직업 시장 데이터, 채용 신호, 진입 조건을 종합한 우선순위예요. 개인의 비자·경력·자격을 심사한 결과는 아니며, 선택 후 무료로 더 자세한 근거를 볼 수 있어요." : "This order combines available market, hiring and entry signals. It is not a personal visa or qualification assessment; choose a country to see the supporting evidence for free."}</p>
+        <p className="text-xs font-bold tracking-[0.12em] text-blue-700">{hasComparableCountries ? "RELEASED COUNTRY COMPARISON" : "COUNTRY COMPARISON STATUS"}</p>
+        <h2 className="mt-3 text-2xl font-semibold tracking-[-0.045em] text-slate-950 sm:text-3xl">{hasComparableCountries ? (locale === "ko" ? `${insight.career.labelKo}의 공개 비교 기준을 통과한 나라예요.` : `Countries with a released comparison for ${insight.career.label}.`) : (locale === "ko" ? `${insight.career.labelKo}는 아직 나라별 순위를 공개하지 않았어요.` : `We have not released a country ranking for ${insight.career.label} yet.`)}</h2>
+        <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">{hasComparableCountries ? (locale === "ko" ? "아래 순서는 동일 방법론과 공개 기준을 통과한 시장 점수만으로 만들었어요. 개인의 비자·경력·자격을 심사한 결과는 아니며, 선택 후 무료로 더 자세한 근거를 볼 수 있어요." : "This order uses only market scores that passed the same methodology and public release gate. It is not a personal visa or qualification assessment; choose a country to see the supporting evidence for free.") : (locale === "ko" ? "국가별 시장·자격 자료는 나라를 하나 선택해 확인할 수 있어요. 서로 다른 방법으로 계산된 점수나 검토 중인 값은 순위로 보여주지 않아요." : "Choose a country to review its available market and qualification evidence. We do not turn scores from different methods or values still under review into a ranking.")}</p>
       </header>
       <div className="mt-7 grid gap-3 md:grid-cols-2">
-        {insight.recommendations.map((choice, index) => <Link key={choice.countryCode} href={`${localizePath("/career", locale)}?country=${choice.countryCode}&occupation=${query.occupation}&personalised=1`} className="cc-result-reveal group rounded-2xl border border-[#e2e8f0] bg-white p-5 transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-[0_18px_36px_-26px_rgba(30,64,175,.36)]">
+        {insight.recommendations.map((choice, index) => <Link key={choice.countryCode} href={`${localizePath("/career", locale)}?country=${choice.countryCode}&occupation=${query.occupation}`} className="cc-result-reveal group rounded-2xl border border-[#e2e8f0] bg-white p-5 transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-[0_18px_36px_-26px_rgba(30,64,175,.36)]">
           <div className="flex items-start justify-between gap-4"><div><p className="text-xs font-semibold text-slate-400">0{index + 1} · {englishSafeText(locale, choice.officialTitle, insight.career.label)}</p><h3 className="mt-1 text-lg font-semibold tracking-[-0.03em] text-slate-950">{choice.countryName}</h3></div>{choice.opportunityScore != null && <span className="rounded-full bg-[#f4f6fb] px-3 py-1.5 text-xs font-semibold text-[#334155]">{t("취업시장 점수", "Job market score")} {choice.opportunityScore}/100</span>}</div>
           <p className="mt-4 min-h-10 text-sm leading-5 text-slate-600">{locale === "ko" ? (choice.demand?.note ?? (choice.registrationRequired ? "자격 인정 또는 현지 등록 여부가 진입의 핵심 변수예요." : "직업별 수요·채용·비자 정보를 함께 확인해 보세요.")) : (choice.registrationRequired ? "Local registration or recognition is a key entry condition." : "Review role-specific demand, hiring and visa conditions.")}</p>
           <div className="mt-5 flex items-center justify-between text-xs text-slate-500"><span>{choice.registrationRequired ? t("자격·면허 확인 필요", "Registration or licence check") : t("진입 요건 확인", "Entry requirements")}</span><span className="inline-flex items-center gap-1 font-semibold text-blue-700">{t("무료 인사이트 보기", "View free insights")} <ArrowRight className="size-3.5 transition group-hover:translate-x-0.5" /></span></div>
         </Link>)}
       </div>
-      {!insight.recommendations.length && <p className="mt-7 rounded-2xl bg-[#f7f7f5] p-5 text-sm leading-6 text-slate-600">{locale === "ko" ? "이 직종은 나라별 시장 순위를 만들 만큼의 직접 데이터가 아직 충분하지 않아요. 나라를 하나 고르면 현재 확인 가능한 고용·자격 경로부터 보여드릴게요." : "There is not enough directly comparable data yet to rank countries for this occupation. Pick a country to see the verified hiring and qualification route available now."}</p>}
+      {!hasComparableCountries && <p className="mt-7 rounded-2xl bg-[#f7f7f5] p-5 text-sm leading-6 text-slate-600">{locale === "ko" ? "국가 하나를 고르면, 해당 국가와 직종에 직접 연결된 고용·자격 자료부터 보여드릴게요." : "Pick a country to see the employment and qualification evidence directly connected to that country and occupation."}</p>}
       <PersonaliseCta query={query} authenticated={authenticated} locale={locale} className="mt-8" />
     </div>
   </section>
@@ -149,21 +200,22 @@ function CountryCareerInsight(props: CountryCareerInsightProps) {
 
 function GenericCountryCareerInsight({ insight, query, locale, authenticated, personalisation, personalised, presentation }: CountryCareerInsightProps) {
   const profile = insight.profile
-  const marketScore = profile?.metric.opportunityScore
+  const canShowScore = canShowPublicMarketScore(profile)
+  const marketScore = canShowScore ? profile?.metric.opportunityScore : null
   const workLinks = profile?.links.filter((link) => link.linkType === "job_search" || link.linkType === "employer") ?? []
   const learningLinks = profile?.links.filter((link) => link.linkType === "entry_program" || link.linkType === "graduate_program") ?? []
   const programLinks = profile?.programLinks.filter((link) => link.program) ?? []
   const t = (ko: string, en: string) => tr(locale, ko, en)
   const registrationAuthority = englishSafeText(locale, profile?.registrationAuthority, locale === "ko" ? "현지 등록 기관" : "the local regulator")
 
-  return <section className={cn("mx-auto max-w-5xl", presentation === "page" ? "mt-5" : "mt-12")} aria-live="polite">
+  return <section className={cn("mx-auto max-w-5xl", presentation === "page" ? "mt-5" : "mt-12")} aria-live="polite" onClickCapture={(event) => trackCareerEvidenceOpen(event, query, locale)}>
     <div>
       <header className="flex flex-col gap-5 px-1 py-2 sm:flex-row sm:items-start sm:justify-between sm:px-2">
         <div><p className="text-xs font-bold tracking-[0.12em] text-blue-700">FREE CAREER MARKET BRIEF</p><h2 className="mt-3 text-2xl font-semibold tracking-[-0.05em] text-slate-950 sm:text-3xl">{locale === "ko" ? `${insight.country?.name}에서 ${insight.career.labelKo}로 일하기` : `Working as ${insight.career.label} in ${insight.country?.name}`}</h2><p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">{locale === "ko" ? (insight.demand?.note ?? insight.career.overview?.ko ?? "현지 직업 시장과 실제 진입 조건을 함께 확인하세요.") : (insight.career.overview?.en ?? "Review the local job market and real entry conditions together.")}</p></div>
         {marketScore != null && <div className="w-fit border-l-2 border-[#74b69e] pl-4 text-right"><p className="text-[11px] font-semibold tracking-[0.08em] text-slate-500">{t("취업시장 점수", "Job market score")}</p><p className="mt-1 text-2xl font-semibold tracking-[-0.06em] text-slate-950">{marketScore}<span className="text-sm text-slate-400">/100</span></p></div>}
       </header>
 
-      <p className="mt-5 flex gap-2 rounded-xl bg-[#f8f8f6] px-4 py-3 text-xs leading-5 text-slate-600"><CircleAlert className="mt-0.5 size-4 shrink-0 text-slate-500" />{locale === "ko" ? "이 점수는 수요·채용·진입 조건의 시장 신호입니다. 개인의 취업 가능성을 확정하지 않으며, 아래에서 내 조건을 더해 정확히 좁힐 수 있어요." : "This is a market signal based on demand, hiring and entry conditions. It does not confirm personal eligibility; add your profile below to narrow it down."}</p>
+      {canShowScore ? <p className="mt-5 flex gap-2 rounded-xl bg-[#f8f8f6] px-4 py-3 text-xs leading-5 text-slate-600"><CircleAlert className="mt-0.5 size-4 shrink-0 text-slate-500" />{locale === "ko" ? "이 점수는 공개 비교 기준을 통과한 수요·채용·진입 조건의 시장 신호입니다. 개인의 취업 가능성을 확정하지 않아요." : "This score is a released market signal for demand, hiring and entry conditions. It does not confirm personal employability."}</p> : <DataReviewNotice locale={locale} profileAvailable={Boolean(profile)} />}
 
       <div className="cc-result-reveal mt-7 grid gap-3 sm:grid-cols-3">
         <Metric label={t("최근 채용 수요", "Recent hiring demand")} value={profile?.metric.vacanciesThreeMonthAvg != null ? `${compactNumber(profile.metric.vacanciesThreeMonthAvg, locale)}${t("건", " roles")}` : insight.demand?.rating ?? t("확인 중", "Checking")} detail={profile?.metric.vacancyPeriod ? `${profile.metric.vacancyPeriod} ${t("기준", "snapshot")}` : insight.demand ? t("공식 수요 근거 연결", "Official demand evidence") : t("직업별 데이터 확인", "Role data check")} />
@@ -172,10 +224,11 @@ function GenericCountryCareerInsight({ insight, query, locale, authenticated, pe
       </div>
 
       {personalised && personalisation && <PersonalisedSummary personalisation={personalisation} profile={profile} locale={locale} />}
+      <SaveCareerResultCta insight={insight} query={query} authenticated={authenticated} personalised={personalised} locale={locale} className="mt-5" />
 
       <div className="mt-8 grid gap-4 lg:grid-cols-2">
         <InsightCard icon={<ShieldCheck className="size-5" />} eyebrow="VISA · LICENCE · RECOGNITION" title={t("비자·면허·자격 인정의 막힘 요소", "Visa, licence and recognition blockers")}>
-          <p>{profile?.registrationRequired ? locale === "ko" ? `${registrationAuthority}의 등록·면허 또는 자격 인정 여부가 핵심이에요.` : `Registration, licensing or recognition with ${registrationAuthority} is a key condition.` : locale === "ko" ? (insight.career.registration?.ko ?? "직무별 자격, 영어, 근무 권한을 채용 공고와 공식 기관에서 함께 확인해야 해요.") : (insight.career.registration?.en ?? "Check role-specific qualifications, English requirements and work rights with employers and official authorities.")}</p>
+          <p>{profile?.registrationRequired ? locale === "ko" ? `${registrationAuthority}의 등록·면허 또는 자격 인정 여부가 핵심이에요.` : `Registration, licensing or recognition with ${registrationAuthority} is a key condition.` : profile ? t("현재 확인된 국가별 프로필에는 의무 등록 요건이 기록되어 있지 않아요. 다만 직무·지역·고용주별 자격과 근무 권한은 공식 기관에서 다시 확인하세요.", "The current country-specific profile does not record a mandatory registration requirement. Still verify role, regional and work-right conditions with the official authority and employer.") : t("이 국가와 직종을 함께 다룬 등록·자격 인정 프로필은 아직 공개 검토 중이에요. 다른 국가의 요건을 대신 적용하지 않으며, 공식 규제기관과 고용주 기준을 직접 확인해야 해요.", "A country-and-career registration profile is still under review. We do not substitute another country’s requirements; verify the relevant regulator and employer requirements directly.")}</p>
           {profile?.registrationUrl && <ExternalResource href={profile.registrationUrl} label={`${registrationAuthority} ${t("공식 요건", "official requirements")}`} />}
           <div className="mt-4 space-y-2">{insight.visas.slice(0, 3).map((visa) => <a key={visa.name} href={visa.sourceUrl} target="_blank" rel="noreferrer" className="block rounded-xl border border-[#e7e8e4] px-3 py-2.5 transition hover:border-blue-200 hover:bg-blue-50/40"><span className="text-xs font-semibold text-blue-700">{visa.kind}</span><p className="mt-0.5 text-sm font-semibold text-slate-800">{visa.name}</p><p className="mt-1 line-clamp-2 text-xs leading-5 text-slate-500">{visa.note}</p></a>)}</div>
         </InsightCard>
@@ -225,9 +278,9 @@ function AustraliaNursingStudyToWork({ insight, query, locale, authenticated, pe
     .sort((left, right) => (right.vacancyCount ?? 0) - (left.vacancyCount ?? 0))
     .slice(0, 3)
   const largestRegionalSignal = Math.max(...regionalSignals.map((region) => region.vacancyCount ?? 0), 1)
-  const marketScore = profile.metric.opportunityScore
+  const marketScore = canShowPublicMarketScore(profile) ? profile.metric.opportunityScore : null
 
-  return <section className={cn("mx-auto max-w-5xl", presentation === "page" ? "mt-5" : "mt-12")} aria-live="polite">
+  return <section className={cn("mx-auto max-w-5xl", presentation === "page" ? "mt-5" : "mt-12")} aria-live="polite" onClickCapture={(event) => trackCareerEvidenceOpen(event, query, locale)}>
     <div>
       <header className="px-1 py-2 sm:px-2">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
@@ -236,7 +289,7 @@ function AustraliaNursingStudyToWork({ insight, query, locale, authenticated, pe
             <h2 className="mt-3 text-3xl font-semibold tracking-[-0.06em] text-slate-950 sm:text-4xl">{locale === "ko" ? "호주 간호사, 학업부터 첫 취업까지" : "Australian nursing: study to first role"}</h2>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">{locale === "ko" ? "간호 자격이 아직 없다면, 승인 연결 과정을 선택해 현지 등록을 거친 뒤 첫 간호사 직장을 찾는 것이 기본 경로예요. 학업은 목적이 아니라 이 커리어에 진입하기 위한 관문으로 봅니다." : "If you do not yet hold a nursing qualification, the base route is an approved study pathway, local registration, then a first nursing role. Study is the entry gate, not the end goal."}</p>
           </div>
-          {marketScore != null && <div className="relative mx-auto w-fit text-center sm:mt-6 sm:ml-auto sm:mr-0 sm:text-right"><div className="cc-prominent-score"><div className="flex items-center justify-center gap-1.5 text-[11px] font-semibold tracking-[0.1em] text-slate-500 sm:justify-start">{t("취업시장 점수", "Job market score")} <ScoreExplanation>{t("이 수치는 현재 호주 간호 시장의 규모·채용·성장 신호입니다. 개인의 입학·등록·취업 가능성을 확정하지 않으며, 로그인 후 내 조건으로 좁힐 수 있어요.", "These figures reflect current Australian nursing market size, hiring and growth signals. They do not confirm personal study, registration or employment eligibility; sign in to narrow the path to your profile.")}</ScoreExplanation></div><p className="cc-prominent-score-value mt-1 text-4xl font-semibold leading-none tracking-[-0.08em] sm:text-5xl">{marketScore}<span className="ml-1 text-sm font-medium tracking-[-0.03em] text-slate-400 sm:text-base">/100</span></p></div></div>}
+          {marketScore != null ? <div className="relative mx-auto w-fit text-center sm:mt-6 sm:ml-auto sm:mr-0 sm:text-right"><div className="cc-prominent-score"><div className="flex items-center justify-center gap-1.5 text-[11px] font-semibold tracking-[0.1em] text-slate-500 sm:justify-start">{t("취업시장 점수", "Job market score")} <ScoreExplanation>{t("이 수치는 공개 비교 기준을 통과한 호주 간호 시장의 규모·채용·성장 신호입니다. 개인의 입학·등록·취업 가능성을 확정하지 않아요.", "This score passed the public comparison release gate for Australian nursing market size, hiring and growth signals. It does not confirm personal study, registration or employment eligibility.")}</ScoreExplanation></div><p className="cc-prominent-score-value mt-1 text-4xl font-semibold leading-none tracking-[-0.08em] sm:text-5xl">{marketScore}<span className="ml-1 text-sm font-medium tracking-[-0.03em] text-slate-400 sm:text-base">/100</span></p></div></div> : <span className="w-fit rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-900">{t("시장 자료 검토 중", "Market comparison under review")}</span>}
         </div>
       </header>
 
@@ -249,9 +302,12 @@ function AustraliaNursingStudyToWork({ insight, query, locale, authenticated, pe
             <NursingMetric label={t("고용 규모", "Employment")} value={compactNumber(profile.metric.employmentTotal, locale)} detail={t("호주 내 간호사 고용", "Nursing employment in Australia")} />
             <NursingMetric label={t("5년 고용 변화", "Five-year employment change")} value={percentage(profile.metric.employmentGrowth5yPct, locale)} detail={t("중장기 고용 성장", "Medium-term employment growth")} />
           </div>
+          <SaveCareerResultCta insight={insight} query={query} authenticated={authenticated} personalised={personalised} locale={locale} className="mt-5" />
         </section>
 
-        {personalised && personalisation && <AustraliaNursingPersonalisedPlan personalisation={personalisation} profile={profile} visas={insight.visas} locale={locale} />}
+        {personalised && personalisation
+          ? <><AustraliaNursingPersonalisedPlan personalisation={personalisation} profile={profile} visas={insight.visas} locale={locale} /><UpdatePersonalisationLink query={query} locale={locale} /></>
+          : <PersonaliseCta query={query} authenticated={authenticated} locale={locale} />}
 
         <section aria-labelledby="nursing-route-heading" className="cc-result-reveal">
           <div><p className="text-xs font-bold tracking-[0.1em] text-blue-700">STUDY → REGISTRATION → WORK</p><h3 id="nursing-route-heading" className="mt-2 text-xl font-semibold tracking-[-0.045em] text-slate-950">{t("학업은 첫 간호사 직장으로 이어지는 세 단계 중 하나예요.", "Study is one of three stages that lead to a first nursing role.")}</h3></div>
@@ -286,8 +342,6 @@ function AustraliaNursingStudyToWork({ insight, query, locale, authenticated, pe
         </section>
 
         {graduatePrograms.length > 0 && <section aria-labelledby="nursing-graduate-heading" className="cc-result-reveal"><div><p className="text-xs font-bold tracking-[0.1em] text-blue-700">FIRST-ROLE PROGRAMS</p><h3 id="nursing-graduate-heading" className="mt-2 text-lg font-semibold tracking-[-0.035em] text-slate-950">{t("등록 뒤, 첫 근무지로 연결되는 신규 간호사 프로그램", "Graduate programs that lead to a first workplace after registration")}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{t("대학 과정이 아니라 졸업·등록 이후에 보게 될 고용주 경로예요.", "These are employer pathways to consider after graduation and registration, not university courses.")}</p></div><div className="mt-4 grid gap-3 md:grid-cols-2">{graduatePrograms.slice(0, 2).map((program) => <a key={program.url} href={program.url} target="_blank" rel="noreferrer" className="group rounded-xl border border-[#dbe2ef] bg-white p-4 transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-[0_12px_25px_-22px_rgba(37,99,235,.55)]"><p className="text-xs font-semibold text-blue-700">GRADUATE PROGRAM</p><p className="mt-2 text-sm font-semibold text-slate-900">{program.label}</p><span className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-blue-700">{t("프로그램 보기", "View program")} <ArrowRight className="size-3.5 transition group-hover:translate-x-0.5" /></span></a>)}</div></section>}
-
-        {personalised && personalisation ? <Link href={onboardingPath(query, locale)} className="inline-flex h-11 items-center gap-2 rounded-xl border border-[#cfd8e9] bg-white px-4 text-sm font-semibold text-blue-700 transition hover:border-blue-400 hover:bg-blue-50">{t("내 조건 다시 입력하기", "Update my details")} <ArrowRight className="size-4" /></Link> : <PersonaliseCta query={query} authenticated={authenticated} locale={locale} className="mt-2" />}
 
         <div className="border-t border-[#e8ebe8] pt-5"><p className="text-xs leading-5 text-slate-500">{t(`입학·등록·지원 전에는 대학, ${profile.registrationAuthority ?? "등록 기관"}, 고용주의 최신 조건을 각각 확인하세요.`, `Before you enrol, register or apply, verify the latest conditions with the university, ${profile.registrationAuthority ?? "local regulator"} and employer.`)}</p>{insight.demand?.sourceUrl && <ExternalResource href={insight.demand.sourceUrl} label={locale === "ko" ? (insight.demand.sourceLabel ?? "호주 간호 시장 데이터 출처") : "Australian nursing market data source"} className="mt-3" />}</div>
       </div>
@@ -404,11 +458,50 @@ function PersonalisedSummary({ personalisation, profile, locale }: { personalisa
 }
 
 function PersonaliseCta({ query, authenticated, locale, className }: { query: OverviewSearchValues; authenticated: boolean | null; locale: Locale; className?: string }) {
-  return <div className={cn("border-l-2 border-[#74b69e] pl-5 sm:flex sm:items-center sm:justify-between sm:gap-6", className)}><div><p className="text-base font-semibold text-slate-950">{tr(locale, "로그인하면, 내 조건에 맞는 경로로 더 좁힐 수 있어요.", "Sign in to narrow this down to a route that fits your profile.")}</p><p className="mt-1 max-w-2xl text-sm leading-6 text-slate-600">{tr(locale, "국적, 영어, 학위와 학업 가능 여부를 더해 비자·등록의 막힘 요소를 먼저 보고, 과정과 첫 취업 경로도 비교할 수 있어요.", "Add your nationality, English level, education and study availability to see visa and registration blockers first, then compare courses and routes to a first role.")}</p></div><Link href={personalisationHref(query, authenticated, locale)} className="mt-4 inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#2865c7] px-4 text-sm font-semibold text-white transition hover:bg-[#1f55aa] sm:mt-0">{tr(locale, "내 조건으로 정확히 보기", "See my exact path")} <ArrowRight className="size-4" /></Link></div>
+  return <div className={cn("border-l-2 border-[#74b69e] pl-5 sm:flex sm:items-center sm:justify-between sm:gap-6", className)}><div><p className="text-base font-semibold text-slate-950">{tr(locale, "로그인하면, 내 조건에 맞는 경로로 더 좁힐 수 있어요.", "Sign in to narrow this down to a route that fits your profile.")}</p><p className="mt-1 max-w-2xl text-sm leading-6 text-slate-600">{tr(locale, "국적, 영어, 학위와 학업 가능 여부를 더해 비자·등록의 막힘 요소를 먼저 보고, 과정과 첫 취업 경로도 비교할 수 있어요.", "Add your nationality, English level, education and study availability to see visa and registration blockers first, then compare courses and routes to a first role.")}</p></div><Link href={personalisationHref(query, authenticated, locale)} onClick={() => recordCareerFunnelEvent("career_personalisation_started", { surface: "career_result", locale, country: query.country, career: query.occupation })} className="mt-4 inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#2865c7] px-4 text-sm font-semibold text-white transition hover:bg-[#1f55aa] sm:mt-0">{tr(locale, "내 조건으로 정확히 보기", "See my exact path")} <ArrowRight className="size-4" /></Link></div>
+}
+
+function UpdatePersonalisationLink({ query, locale }: { query: OverviewSearchValues; locale: Locale }) {
+  return <Link href={onboardingPath(query, locale)} className="inline-flex h-11 items-center gap-2 rounded-xl border border-[#cfd8e9] bg-white px-4 text-sm font-semibold text-blue-700 transition hover:border-blue-400 hover:bg-blue-50">{tr(locale, "내 조건 다시 입력하기", "Update my details")} <ArrowRight className="size-4" /></Link>
+}
+
+function SaveCareerResultCta({ insight, query, authenticated, personalised, locale, className }: {
+  insight: CareerMarketInsight
+  query: OverviewSearchValues
+  authenticated: boolean | null
+  personalised: boolean
+  locale: Locale
+  className?: string
+}) {
+  if (!insight.country) return null
+  const input: SavedCareerResultInput = {
+    countryCode: insight.country.code,
+    occupationId: insight.career.id,
+    personalised,
+    evidenceCheckedAt: insight.profile?.metric.sourceCheckedAt ?? insight.profile?.sourceCheckedAt ?? null,
+    nextAction: insight.profile?.registrationRequired ? "review_registration" : "review_evidence",
+  }
+  return <CareerResultSave input={input} authenticated={authenticated} locale={locale} resumePath={careerResultPath(query, locale, personalised)} className={className} />
+}
+
+function trackCareerEvidenceOpen(event: MouseEvent<HTMLElement>, query: OverviewSearchValues, locale: Locale) {
+  const target = event.target
+  if (!(target instanceof Element) || !target.closest("a[target='_blank']")) return
+  recordCareerFunnelEvent("career_evidence_opened", {
+    surface: "career_result",
+    locale,
+    country: query.country,
+    career: query.occupation,
+    link_type: "official_resource",
+  })
 }
 
 function Metric({ label, value, detail }: { label: string; value: string; detail: string }) {
   return <div className="cc-result-metric rounded-2xl border border-[#e2e8f0] p-4"><p className="text-xs font-semibold tracking-[0.06em] text-slate-500">{label}</p><p className="mt-2 text-xl font-semibold tracking-[-0.04em] text-slate-950">{value}</p><p className="mt-1 text-xs text-slate-500">{detail}</p></div>
+}
+
+function DataReviewNotice({ locale, profileAvailable }: { locale: Locale; profileAvailable: boolean }) {
+  return <p className="mt-5 flex gap-2 rounded-xl bg-[#fff8eb] px-4 py-3 text-xs leading-5 text-slate-700"><CircleAlert className="mt-0.5 size-4 shrink-0 text-amber-700" />{profileAvailable ? tr(locale, "국가별 시장·진입 자료는 확인할 수 있지만, 이 점수는 아직 공개 비교 기준을 통과하지 않았어요. 숫자 순위 대신 아래의 근거와 막힘 요소를 확인하세요.", "Country-specific market and entry information is available, but this score has not passed the public comparison release gate. Review the evidence and blockers below instead of treating it as a ranking.") : tr(locale, "이 국가와 직종을 함께 다룬 검증 프로필은 아직 공개 검토 중이에요. 현재는 일반 시장·비자 자료만 안내하며, 다른 국가의 자격 요건을 대신 적용하지 않아요.", "A verified country-and-career profile is still under review. We show only general market and visa resources and do not substitute another country’s qualification requirements.")}</p>
 }
 
 function ScoreExplanation({ children }: { children: ReactNode }) {

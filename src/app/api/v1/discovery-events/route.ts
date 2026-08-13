@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getServerAcquisitionContext } from "@/lib/acquisition"
+import { hasMeasurementConsent } from "@/lib/analytics-consent-shared"
 
 export const dynamic = "force-dynamic"
 
@@ -16,11 +17,20 @@ const EVENT_NAMES = new Set([
   "report_launch_view",
   "report_launch_interest_submitted",
   "report_workspace_open",
+  "career_landing_view",
+  "career_search_started",
+  "career_search_submitted",
+  "career_result_viewed",
+  "career_result_unavailable",
+  "career_evidence_opened",
+  "career_result_saved",
+  "career_personalisation_started",
+  "career_personalisation_completed",
 ])
-const CONTEXT_KEYS = ["surface", "country", "major", "goal", "report_products", "locale", "route_id", "link_type"] as const
+const CONTEXT_KEYS = ["surface", "country", "career", "major", "goal", "report_products", "locale", "route_id", "link_type", "result_status"] as const
 
 export async function POST(request: NextRequest) {
-  if (request.cookies.get("cc_analytics_consent")?.value !== "granted") {
+  if (!hasMeasurementConsent(request.headers.get("cookie"))) {
     return new NextResponse(null, { status: 204 })
   }
 
@@ -62,9 +72,9 @@ export async function POST(request: NextRequest) {
       context,
       referer: acquisition.referer,
     })
-    if (error) console.error("[discovery-events] write failed:", error.message)
+    if (error) console.error(JSON.stringify({ level: "error", msg: "discovery_event_write_failed", event_name: eventName, error: error.message }))
   } catch (error) {
-    console.error("[discovery-events] unexpected write failure:", error)
+    console.error(JSON.stringify({ level: "error", msg: "discovery_event_write_failed", event_name: eventName, error: error instanceof Error ? error.message : String(error) }))
   }
 
   return new NextResponse(null, { status: 204 })

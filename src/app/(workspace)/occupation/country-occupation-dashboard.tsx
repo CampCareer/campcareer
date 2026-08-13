@@ -10,6 +10,7 @@ import {
   TrendingUp,
   Users,
 } from "lucide-react"
+import Link from "next/link"
 import type { CanonicalCareer } from "@/data/career-comparison-catalog"
 import { AU_VOCATIONAL_PROGRAM_SHORTLIST } from "@/data/au-vocational-program-shortlist"
 import { getLaunchCountry } from "@/data/launch-countries"
@@ -20,6 +21,7 @@ import {
   type CountryOccupationProfile,
   type OpportunityScoreBreakdown,
 } from "@/lib/workspace/country-occupation-contract"
+import { getAuOccupationStatePageByRegionCode } from "@/lib/workspace/au-occupation-state-seo"
 
 const SCORE_LABELS: Array<{ key: keyof OpportunityScoreBreakdown; label: string }> = [
   { key: "shortage", label: "Official shortage" },
@@ -181,6 +183,34 @@ function LinkList({ links, hoverClass = "hover:border-[#cfd8ed]" }: { links: Pro
       ))}
     </div>
   )
+}
+
+function StateDemandCard({
+  rank,
+  regionCode,
+  vacancyCount,
+  shortageRating,
+  href,
+}: {
+  rank: number
+  regionCode: string
+  vacancyCount: number | null
+  shortageRating: number | null
+  href: string | null
+}) {
+  const rankTone = rank === 1 ? "border-[#ead29a] bg-[#fffaf0]" : rank === 2 ? "border-[#dce1e8] bg-[#f7f9fc]" : rank === 3 ? "border-[#d69a72] bg-[#fff4ed]" : "border-[#f0e5d9] bg-[#fffaf5]"
+  const rankLabelTone = rank === 1 ? "text-[#9c7a4f]" : rank === 2 ? "text-[#6d7787]" : rank === 3 ? "text-[#b86636]" : "text-[#9c7a4f]"
+  const content = <>
+    <span className={`absolute left-2 top-1.5 text-[9px] font-bold sm:left-2.5 sm:top-2 ${rankLabelTone}`}>#{rank}</span>
+    <p className="text-[11px] font-bold text-[#c2691e]">{regionCode}</p>
+    <p className="mt-1 text-[16px] font-semibold text-[#1b1b1b] sm:text-[18px]">{number(vacancyCount)}</p>
+    <p className="mt-0.5 text-[9px] leading-3 text-[#8f8c85] sm:text-[10px] sm:leading-normal">
+      3-mo vacancies · shortage {shortageRating ?? "—"}/3
+    </p>
+  </>
+  const className = `relative block rounded-xl border p-2.5 text-center sm:p-3 ${rankTone}`
+
+  return href ? <Link href={href} className={`${className} transition hover:border-[#c2691e]/60`}>{content}</Link> : <div className={className}>{content}</div>
 }
 
 export function CountryOccupationDashboard({
@@ -370,16 +400,17 @@ export function CountryOccupationDashboard({
         <div className="mt-4 grid grid-cols-3 gap-1.5 sm:grid-cols-4 sm:gap-2">
           {rankedRegions.map((region, index) => {
             const rank = index + 1
-            const rankTone = rank === 1 ? "border-[#ead29a] bg-[#fffaf0]" : rank === 2 ? "border-[#dce1e8] bg-[#f7f9fc]" : rank === 3 ? "border-[#d69a72] bg-[#fff4ed]" : "border-[#f0e5d9] bg-[#fffaf5]"
-            const rankLabelTone = rank === 1 ? "text-[#9c7a4f]" : rank === 2 ? "text-[#6d7787]" : rank === 3 ? "text-[#b86636]" : "text-[#9c7a4f]"
-            return <div key={region.regionCode} className={`relative rounded-xl border p-2.5 text-center sm:p-3 ${rankTone}`}>
-              <span className={`absolute left-2 top-1.5 text-[9px] font-bold sm:left-2.5 sm:top-2 ${rankLabelTone}`}>#{rank}</span>
-              <p className="text-[11px] font-bold text-[#c2691e]">{region.regionCode}</p>
-              <p className="mt-1 text-[16px] font-semibold text-[#1b1b1b] sm:text-[18px]">{number(region.vacancyCount)}</p>
-              <p className="mt-0.5 text-[9px] leading-3 text-[#8f8c85] sm:text-[10px] sm:leading-normal">
-                3-mo vacancies · shortage {region.shortageRating ?? "—"}/3
-              </p>
-            </div>
+            const statePage = profile.countryCode === "AU"
+              ? getAuOccupationStatePageByRegionCode(region.regionCode, career.id)
+              : null
+            return <StateDemandCard
+              key={region.regionCode}
+              rank={rank}
+              regionCode={region.regionCode}
+              vacancyCount={region.vacancyCount}
+              shortageRating={region.shortageRating}
+              href={statePage?.path ?? null}
+            />
           })}
         </div>
       </section>

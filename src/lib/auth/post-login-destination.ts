@@ -16,8 +16,44 @@ export function getPostLoginDestination(
   const bareNextPath = withoutLocalePrefix(next).split("?")[0]
 
   if (hasCompletedPersonalisation) {
-    return bareNextPath === "/onboarding" ? localizePath("/home", locale) : next
+    return bareNextPath === "/onboarding"
+      ? getSafeOnboardingReturnPath(next, localizePath("/home", locale))
+      : next
   }
 
-  return bareNextPath === "/onboarding" ? next : localizePath("/onboarding", locale)
+  if (bareNextPath === "/onboarding") return next
+  if (bareNextPath === "/career") return getCareerResultOnboardingPath(next, locale)
+
+  return localizePath("/onboarding", locale)
+}
+
+/**
+ * A guest saving a result has explicitly asked to resume that result. Keep the
+ * small, validated selection through onboarding and return to the
+ * personalised result, where the client can complete the pending save.
+ */
+function getCareerResultOnboardingPath(careerPath: string, locale: LocaleOption) {
+  try {
+    const career = new URL(careerPath, "https://campcareer.local")
+    const onboarding = new URLSearchParams()
+    const country = career.searchParams.get("country")
+    const occupation = career.searchParams.get("occupation")
+
+    if (country) onboarding.set("country", country)
+    if (occupation) onboarding.set("occupation", occupation)
+    career.searchParams.set("personalised", "1")
+    onboarding.set("return_to", `${career.pathname}${career.search}`)
+    return `${localizePath("/onboarding", locale)}?${onboarding}`
+  } catch {
+    return localizePath("/onboarding", locale)
+  }
+}
+
+function getSafeOnboardingReturnPath(onboardingPath: string, fallback: string) {
+  try {
+    const parsed = new URL(onboardingPath, "https://campcareer.local")
+    return getSafeNextPath(parsed.searchParams.get("return_to"), fallback)
+  } catch {
+    return fallback
+  }
 }

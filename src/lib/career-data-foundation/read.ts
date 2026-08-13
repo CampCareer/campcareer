@@ -542,7 +542,7 @@ export async function getCareerDataFoundation({
 export async function getFoundationCountriesForCareer(careerId: string) {
   const query = await supabase
     .from("career_foundation_result_v1")
-    .select("country_code,decision_ready,score_ready,publish_ready,opportunity_score,official_title")
+    .select("country_code,decision_ready,score_ready,publish_ready,opportunity_score,official_title,formula_version")
     .eq("canonical_occupation_id", careerId)
   if (query.error) throw query.error
   return (query.data ?? []).map((row) => ({
@@ -552,5 +552,6 @@ export async function getFoundationCountriesForCareer(careerId: string) {
     publishReady: Boolean(row.publish_ready),
     opportunityScore: numberOrNull(row.opportunity_score as number | string | null),
     officialTitle: String(row.official_title),
+    formulaVersion: String(row.formula_version),
   }))
 }

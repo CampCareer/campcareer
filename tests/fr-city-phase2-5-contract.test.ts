@@ -63,6 +63,6 @@ test("Phase 5 keeps programme and geography guardrails visible", () => {
   assert.ok(dashboard.includes("verification pending rather than “0 programmes”"))
   assert.ok(dashboard.includes("public geography contract"))
   assert.ok(dashboard.includes("964"))
-  assert.ok(page.includes("robots: { index: false, follow: true }"))
+  assert.ok(page.includes("robots: { index: true, follow: true }"))
   assert.ok(page.includes("robots: { index: false, follow: false }"))
 })

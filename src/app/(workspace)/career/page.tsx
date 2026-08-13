@@ -3,11 +3,11 @@ import { Suspense } from "react"
 import { CareerResultPage } from "./career-result-page"
 
 export const metadata: Metadata = {
-  title: "Career results | CampCareer",
+  title: "Career results",
   description: "Review local hiring demand, visa and qualification conditions, and realistic entry routes for your selected career and country.",
   robots: { index: false, follow: false },
 }
 
 export default function CareerPage() {
-  return <Suspense fallback={<main className="min-h-[calc(100vh-3.5rem)] bg-white" />}><CareerResultPage /></Suspense>
+  return <Suspense fallback={<main id="main-content" className="min-h-[calc(100vh-3.5rem)] bg-white" />}><CareerResultPage /></Suspense>
 }

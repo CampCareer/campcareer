@@ -8,6 +8,7 @@ import {
   type FeedbackScreenshotReference,
 } from "@/lib/feedback-contract"
 import { getFeedbackAdminClient, readJsonBody } from "@/lib/feedback-server"
+import { enforceRateLimit, hasSameOrigin, rateLimitResponse } from "@/lib/api-rate-limit"
 
 const FEEDBACK_REQUEST_MAX_BYTES = 16_384
 const NO_STORE_HEADERS = { "Cache-Control": "no-store" }
@@ -72,6 +73,14 @@ async function verifyScreenshot(
 
 export async function POST(request: Request) {
   try {
+    if (!hasSameOrigin(request)) return json({ ok: false, code: "INVALID_ORIGIN", error: "Invalid request origin" }, 403)
+    const rateLimit = await enforceRateLimit(request, {
+      endpoint: "feedback_submission",
+      limit: 8,
+      windowSeconds: 60 * 60,
+    })
+    if (!rateLimit.ok) return rateLimitResponse(rateLimit)
+
     const jsonBody = await readJsonBody(request, FEEDBACK_REQUEST_MAX_BYTES)
     if (!jsonBody.ok) return json({ ok: false, code: jsonBody.code, error: jsonBody.error }, jsonBody.status)
 

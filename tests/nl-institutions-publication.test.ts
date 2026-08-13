@@ -21,7 +21,7 @@ const nlSeo = readRepoFile("src/lib/institutions/institution-seo-nl.ts")
 const sitemap = readRepoFile("src/app/sitemap.ts")
 
 test("NL is enabled as an Institution country with dedicated read models", () => {
-  assert.match(search, /\["AU", "CA", "UK", "NL"\]/)
+  assert.match(search, /INSTITUTION_MVP_COUNTRIES = \[[\s\S]*"AU", "CA", "UK", "NL"/)
   assert.match(explorerServer, /institution_explorer_nl_v1/)
   assert.match(detailServer, /institution_detail_nl_v1/)
   assert.match(readModels, /Expected 13 NL explorer rows/)

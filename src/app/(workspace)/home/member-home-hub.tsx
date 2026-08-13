@@ -6,6 +6,7 @@ import { useMemo, useState, type ReactNode } from "react";
 import {
   ArrowRight,
   BadgeInfo,
+  BookmarkCheck,
   BriefcaseBusiness,
   Building2,
   CheckCircle2,
@@ -18,7 +19,7 @@ import {
 } from "lucide-react";
 import { FeedbackWidget } from "@/components/feedback/FeedbackWidget";
 import { CANONICAL_CAREER_BY_ID } from "@/data/career-comparison-catalog";
-import { LAUNCH_COUNTRIES } from "@/data/launch-countries";
+import { getLaunchCountry, LAUNCH_COUNTRIES } from "@/data/launch-countries";
 import { localizePath, type Locale } from "@/lib/i18n/config";
 import { useRouteLocale } from "@/lib/i18n/locale-provider";
 import { HomeSearchForm } from "./home-search-form";
@@ -30,6 +31,16 @@ type ExploreCategory =
 type MemberHomeHubProps = {
   targetCountry: string | null;
   targetOccupation: string | null;
+  savedCareerResults: SavedCareerResult[];
+};
+
+type SavedCareerResult = {
+  country_code: string;
+  occupation_id: string;
+  personalised: boolean;
+  evidence_checked_at: string | null;
+  next_action: "review_registration" | "review_evidence";
+  updated_at: string;
 };
 
 type HomeCopy = {
@@ -41,6 +52,11 @@ type HomeCopy = {
   searchAction: string;
   currentFocus: string;
   openJobMarket: string;
+  savedResults: string;
+  resume: string;
+  evidenceChecked: string;
+  registrationNext: string;
+  evidenceNext: string;
   updates: string;
   viewAll: string;
   news: string;
@@ -112,6 +128,11 @@ const COPY: Record<Locale, HomeCopy> = {
     searchAction: "Open explorer",
     currentFocus: "CURRENT FOCUS",
     openJobMarket: "Open job market",
+    savedResults: "SAVED CAREER RESULTS",
+    resume: "Resume result",
+    evidenceChecked: "Evidence checked",
+    registrationNext: "Next: confirm registration requirements",
+    evidenceNext: "Next: review current evidence",
     updates: "Updates",
     viewAll: "View more",
     news: "News and guides",
@@ -184,6 +205,11 @@ const COPY: Record<Locale, HomeCopy> = {
     searchAction: "탐색 화면 열기",
     currentFocus: "현재 관심 경로",
     openJobMarket: "취업시장 열기",
+    savedResults: "저장한 커리어 결과",
+    resume: "결과 이어보기",
+    evidenceChecked: "근거 확인일",
+    registrationNext: "다음: 등록·자격 인정 요건 확인",
+    evidenceNext: "다음: 최신 근거 확인",
     updates: "업데이트",
     viewAll: "더 보기",
     news: "뉴스와 가이드",
@@ -247,6 +273,7 @@ const COPY: Record<Locale, HomeCopy> = {
 export function MemberHomeHub({
   targetCountry,
   targetOccupation,
+  savedCareerResults,
 }: MemberHomeHubProps) {
   const locale = useRouteLocale();
   const router = useRouter();
@@ -289,9 +316,10 @@ export function MemberHomeHub({
 
   return (
     <main
+      id="main-content"
       className="mx-auto w-full max-w-6xl pb-12 pt-1 sm:pb-16"
-      id="home-search"
     >
+      <span id="home-search" className="sr-only" aria-hidden="true" />
       <header className="border-b border-[#e8e9ee] pb-7 pt-2 sm:pb-9">
         <p className="text-[11px] font-bold tracking-[0.13em] text-blue-700">
           {copy.eyebrow}
@@ -303,6 +331,26 @@ export function MemberHomeHub({
           {copy.description}
         </p>
       </header>
+
+      {savedCareerResults.length > 0 ? (
+        <section className="mt-7" aria-labelledby="saved-career-results-heading">
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <p className="text-[10px] font-bold tracking-[0.12em] text-blue-700">
+                {copy.savedResults}
+              </p>
+              <h2 id="saved-career-results-heading" className="mt-1 text-xl font-semibold tracking-[-0.04em] text-slate-950">
+                {locale === "ko" ? "중단한 곳에서 다시 시작하세요." : "Pick up where you left off."}
+              </h2>
+            </div>
+          </div>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            {savedCareerResults.map((result) => (
+              <SavedCareerResultCard key={`${result.country_code}:${result.occupation_id}`} result={result} locale={locale} copy={copy} />
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       {country && career && currentJobHref ? (
         <section
@@ -461,6 +509,51 @@ export function MemberHomeHub({
       </section>
     </main>
   );
+}
+
+function SavedCareerResultCard({ result, locale, copy }: { result: SavedCareerResult; locale: Locale; copy: HomeCopy }) {
+  const country = getLaunchCountry(result.country_code)
+  const career = CANONICAL_CAREER_BY_ID.get(result.occupation_id)
+  if (!country || !career) return null
+
+  const params = new URLSearchParams({ country: result.country_code, occupation: result.occupation_id })
+  if (result.personalised) params.set("personalised", "1")
+  const evidenceDate = formatEvidenceDate(result.evidence_checked_at, locale)
+  const nextAction = result.next_action === "review_registration" ? copy.registrationNext : copy.evidenceNext
+
+  return (
+    <Link
+      href={`${localizePath("/career", locale)}?${params.toString()}`}
+      className="group rounded-2xl border border-[#dce5f3] bg-white p-5 transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-[0_16px_30px_-24px_rgba(30,64,175,.34)]"
+    >
+      <div className="flex items-start justify-between gap-4">
+        <div className="min-w-0">
+          <p className="text-[10px] font-bold tracking-[0.1em] text-blue-700">{country.name.toUpperCase()}</p>
+          <h3 className="mt-1 truncate text-base font-semibold tracking-[-0.03em] text-slate-950">
+            {locale === "ko" ? career.labelKo : career.label}
+          </h3>
+        </div>
+        <BookmarkCheck className="mt-0.5 size-5 shrink-0 text-blue-700" aria-hidden="true" />
+      </div>
+      <p className="mt-4 text-xs leading-5 text-slate-600">{nextAction}</p>
+      <div className="mt-4 flex items-center justify-between gap-3 border-t border-[#edf0f4] pt-3 text-xs text-slate-500">
+        <span>{evidenceDate ? `${copy.evidenceChecked} · ${evidenceDate}` : copy.evidenceChecked}</span>
+        <span className="inline-flex items-center gap-1 font-semibold text-blue-700">{copy.resume} <ArrowRight className="size-3.5 transition group-hover:translate-x-0.5" /></span>
+      </div>
+    </Link>
+  )
+}
+
+function formatEvidenceDate(value: string | null, locale: Locale) {
+  if (!value || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return null
+  const date = new Date(`${value}T00:00:00Z`)
+  if (Number.isNaN(date.getTime())) return null
+  return new Intl.DateTimeFormat(locale === "ko" ? "ko-KR" : "en", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(date)
 }
 
 function toCategoryHref(

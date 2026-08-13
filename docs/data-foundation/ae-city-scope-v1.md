@@ -64,14 +64,14 @@ Total foundation represented by the locked scope:
 
 The following Cities from the original seven-City draft are now explicitly deferred:
 
-- Khor Fakkan — 3 current collection programmes
-- Ajman — 2 current collection programmes
-- Fujairah — 1 current collection programme
+- Khor Fakkan — `khor-fakkan` — 3 current collection programmes
+- Ajman — `ajman` — 2 current collection programmes
+- Fujairah — `fujairah` — 1 current collection programme
 
 Also deferred:
 
-- Ras Al Khaimah
-- Umm Al Quwain
+- Ras Al Khaimah — `ras-al-khaimah`
+- Umm Al Quwain — `umm-al-quwain`
 - every other UAE locality not in the exact four-City allowlist
 
 The six programmes attached to Khor Fakkan, Ajman and Fujairah remain valid country/programme foundation data. They must not enter Phase 2–5 City geography, linkage, metrics, routes or publication contracts.

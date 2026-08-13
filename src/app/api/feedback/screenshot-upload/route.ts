@@ -7,6 +7,7 @@ import {
   FEEDBACK_SCREENSHOT_MAX_BYTES,
   parseScreenshotUploadRequest,
 } from "@/lib/feedback-contract"
+import { enforceRateLimit, hasSameOrigin, rateLimitResponse } from "@/lib/api-rate-limit"
 import { getFeedbackAdminClient, readJsonBody } from "@/lib/feedback-server"
 
 const UPLOAD_REQUEST_MAX_BYTES = 2_048
@@ -18,6 +19,9 @@ function json(body: Record<string, unknown>, status = 200) {
 
 export async function POST(request: Request) {
   try {
+    if (!hasSameOrigin(request)) return json({ ok: false, code: "INVALID_ORIGIN", error: "Invalid request origin" }, 403)
+    const rateLimit = await enforceRateLimit(request, { endpoint: "feedback_screenshot_upload", limit: 6, windowSeconds: 60 * 60 })
+    if (!rateLimit.ok) return rateLimitResponse(rateLimit)
     const jsonBody = await readJsonBody(request, UPLOAD_REQUEST_MAX_BYTES)
     if (!jsonBody.ok) return json({ ok: false, code: jsonBody.code, error: jsonBody.error }, jsonBody.status)
 

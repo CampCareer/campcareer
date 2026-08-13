@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getServerAcquisitionContext } from "@/lib/acquisition"
+import { enforceRateLimit, hasSameOrigin, rateLimitResponse } from "@/lib/api-rate-limit"
 import { reportLaunchConfirmationEmail } from "@/lib/email/templates"
 import { reportLaunchConfirmUrl, reportLaunchUnsubscribeUrl } from "@/lib/email/links"
 import { sendEmail } from "@/lib/email/send"
@@ -39,8 +40,13 @@ async function readBody(request: Request) {
 }
 
 export async function POST(request: NextRequest) {
-  const requestOrigin = request.headers.get("origin")
-  if (requestOrigin && requestOrigin !== request.nextUrl.origin) return json({ error: "Invalid request origin." }, 403)
+  if (!hasSameOrigin(request)) return json({ error: "Invalid request origin." }, 403)
+  const rateLimit = await enforceRateLimit(request, {
+    endpoint: "report_launch_interest",
+    limit: 5,
+    windowSeconds: 60 * 60,
+  })
+  if (!rateLimit.ok) return rateLimitResponse(rateLimit)
 
   const payload = await readBody(request)
   const parsed = parseReportLaunchInterest(payload)

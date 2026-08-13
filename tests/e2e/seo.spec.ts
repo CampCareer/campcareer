@@ -13,10 +13,10 @@ test("sitemap exposes only canonical route-product and country URLs", async ({ r
   expect(xml).not.toContain("/au/majors/")
 })
 
-test("legacy Home and country roots redirect permanently to canonical URLs", async ({ request }) => {
+test("member Home stays private and legacy country roots redirect permanently", async ({ request }) => {
   const home = await request.get("/home", { maxRedirects: 0 })
-  expect(home.status()).toBe(308)
-  expect(home.headers().location).toBe("/")
+  expect(home.status()).toBe(307)
+  expect(home.headers().location).toContain("/login?next=%2Fhome")
 
   const australia = await request.get("/au", { maxRedirects: 0 })
   expect(australia.status()).toBe(308)
@@ -31,6 +31,19 @@ test("retired sitemap endpoints are not indexable", async ({ request }) => {
   const legacyIndex = await request.get("/sitemap-index.xml", { maxRedirects: 0 })
   expect(legacyIndex.status()).toBe(410)
   expect(legacyIndex.headers()["x-robots-tag"]).toContain("noindex")
+})
+
+test("an indexed study collection renders instead of redirecting to the retired study funnel", async ({ page }) => {
+  const response = await page.goto("/study/au/sydney/health")
+
+  expect(response?.status()).toBe(200)
+  await expect(page).toHaveURL(/\/study\/au\/sydney\/health$/)
+  await expect(page.getByRole("heading", { name: "Health courses in Sydney" })).toBeVisible()
+  await expect(page).toHaveTitle("Health Courses in Sydney, Australia | CampCareer")
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+    "href",
+    "https://www.campcareer.com/study/au/sydney/health",
+  )
 })
 
 test("map country bundles defer oversized detail datasets", async ({ request }) => {

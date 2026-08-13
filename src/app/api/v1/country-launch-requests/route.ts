@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto"
 import { NextResponse } from "next/server"
 import { getLaunchCountry, isLaunchCountry } from "@/data/launch-countries"
+import { enforceRateLimit, hasSameOrigin, rateLimitResponse } from "@/lib/api-rate-limit"
 import { sendEmail } from "@/lib/email/send"
 import { getFeedbackAdminClient, readJsonBody } from "@/lib/feedback-server"
 import { isPublicProductCountry } from "@/lib/product-scope"
@@ -11,14 +12,17 @@ export const dynamic = "force-dynamic"
 const MAX_REQUEST_BYTES = 2_048
 const NOTIFICATION_TO = process.env.COUNTRY_LAUNCH_NOTIFICATION_TO ?? "campcareer99@gmail.com"
 const NO_STORE_HEADERS = { "Cache-Control": "no-store" }
+const PUBLIC_COUNTS_CACHE_HEADERS = {
+  "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
+}
 
 type CountryLaunchRequestBody = {
   countryCode?: unknown
   browserRequestId?: unknown
 }
 
-function json(body: Record<string, unknown>, status = 200) {
-  return NextResponse.json(body, { status, headers: NO_STORE_HEADERS })
+function json(body: Record<string, unknown>, status = 200, headers = NO_STORE_HEADERS) {
+  return NextResponse.json(body, { status, headers })
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -53,11 +57,14 @@ export async function GET() {
     counts[row.country_code] = (counts[row.country_code] ?? 0) + 1
   }
 
-  return json({ ok: true, counts })
+  return json({ ok: true, counts }, 200, PUBLIC_COUNTS_CACHE_HEADERS)
 }
 
 export async function POST(request: Request) {
   try {
+    if (!hasSameOrigin(request)) return json({ ok: false, code: "INVALID_ORIGIN", error: "Invalid request origin" }, 403)
+    const rateLimit = await enforceRateLimit(request, { endpoint: "country_launch_request", limit: 8, windowSeconds: 60 * 60 })
+    if (!rateLimit.ok) return rateLimitResponse(rateLimit)
     const parsedBody = await readJsonBody(request, MAX_REQUEST_BYTES)
     if (!parsedBody.ok) return json({ ok: false, code: parsedBody.code, error: parsedBody.error }, parsedBody.status)
     if (!isRecord(parsedBody.data)) return json({ ok: false, code: "INVALID_REQUEST", error: "Invalid request body" }, 400)

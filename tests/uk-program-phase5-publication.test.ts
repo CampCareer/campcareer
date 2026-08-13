@@ -14,7 +14,7 @@ test("UK programme explorer is enabled on the shared Programs route", () => {
   assert.match(page, /searchUkPrograms/)
   assert.match(page, /filters\.country === "UK"/)
   assert.match(page, /<UkProgramsExplorer/)
-  assert.match(header, /PUBLISHED_PROGRAM_COUNTRIES = new Set\(\["AU", "CA", "UK"\]\)/)
+  assert.match(header, /PUBLISHED_PROGRAM_COUNTRIES = new Set\(\[[\s\S]*"AU", "CA", "UK"/)
   assert.match(header, /Search UK programmes or institutions/)
 })
 

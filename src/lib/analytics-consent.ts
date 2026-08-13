@@ -1,16 +1,13 @@
-export const ANALYTICS_CONSENT_COOKIE = "cc_analytics_consent"
+import { ANALYTICS_CONSENT_COOKIE, hasMeasurementConsent } from "./analytics-consent-shared"
+
+export { ANALYTICS_CONSENT_COOKIE } from "./analytics-consent-shared"
 
 export type AnalyticsConsent = "granted" | "denied" | null
 
 export function getAnalyticsConsent(): AnalyticsConsent {
   if (typeof document === "undefined") return null
-
-  const value = document.cookie
-    .split("; ")
-    .find((item) => item.startsWith(`${ANALYTICS_CONSENT_COOKIE}=`))
-    ?.split("=")[1]
-
-  return value === "granted" || value === "denied" ? value : null
+  if (hasMeasurementConsent(document.cookie)) return "granted"
+  return document.cookie.split(/;\s*/).some((item) => item === `${ANALYTICS_CONSENT_COOKIE}=denied`) ? "denied" : null
 }
 
 export function setAnalyticsConsent(value: Exclude<AnalyticsConsent, null>) {
