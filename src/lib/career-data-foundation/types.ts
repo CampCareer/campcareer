@@ -1,4 +1,4 @@
-export const FOUNDATION_FORMULA_VERSION = "career-opportunity-v3-foundation" as const
+export const FOUNDATION_FORMULA_VERSION = "career-opportunity-v4-foundation" as const
 
 export const FOUNDATION_COMPONENT_MAXIMA = {
   shortage_signal: 20,
