@@ -27,10 +27,10 @@ No incomplete component receives a synthetic zero.
 | Entry Accessibility | 15 | candidate `14` |
 | Relative Salary | 10 | `3.71` research-fixed; direct ONS occupation row required before migration |
 | Projected Growth | 10 | `2.01` research-fixed |
-| Visa Accessibility | 10 | rubric audit pending |
-| Entry Burden / Licensing | 5 | rubric audit pending |
+| Visa Accessibility | 10 | `7` research-fixed |
+| Entry Burden / Licensing | 5 | `5` research-fixed for general employee path |
 
-The three newly fixed labour-market components contribute `5.72 / 30`. This is not a final Opportunity Score.
+The five research-fixed components currently contribute `17.72 / 45`. This is not a final Opportunity Score.
 
 ## Occupation mapping
 
@@ -108,6 +108,39 @@ Derived:
 
 Evidence status should be `derived`. Mapping is SOC 5316, but confidence must reflect the Working Futures method where detailed 4-digit projections inherit the relevant broader occupational growth trajectory.
 
+## Visa Accessibility — research fixed 7 / 10
+
+Primary representative route: Skilled Worker.
+
+Current Home Office evidence lists SOC 2020 `5316 Carpenters and joiners` on the Immigration Salary List for all jobs across the UK. The occupation is therefore directly applicable to the current sponsored-worker route.
+
+Frozen rubric:
+
+- occupation applicability: `3 / 3` for exact SOC 5316 coverage;
+- employer dependency: `1 / 3` because an approved sponsor and Certificate of Sponsorship are required;
+- eligibility burden: `1 / 2` because salary and general Skilled Worker eligibility requirements remain material;
+- long-term pathway: `2 / 2` because Skilled Worker is settlement-capable after the qualifying residence period when settlement conditions are met;
+- total: `7 / 10`.
+
+This is an occupation-level structural accessibility score, not an individual immigration eligibility determination. Temporary Shortage List evidence remains policy context and is not double-counted into this component.
+
+## Entry Burden / Licensing — research fixed 5 / 5
+
+The frozen Entry Burden component evaluates the general employee path. Contractor or business rules and site-specific access policies remain separate decision warnings.
+
+Skills England classifies Carpentry and Joinery as not a regulated occupation. HSE guidance also makes clear that third-party conformity assessment is not itself required by law and that industry certification cards should not be treated as the sole evidence of worker competence.
+
+No UK-wide statutory personal Carpenter occupational licence or universal statutory skills-card requirement for the general employee path was validated in this audit.
+
+Frozen rubric:
+
+- geographic-scope burden: `0 / 2`;
+- legal-requirement burden: `0 / 1.5`;
+- acquisition-difficulty burden: `0 / 1.5`;
+- score: `5 - 0 - 0 - 0 = 5 / 5`.
+
+Site operators, employers, clients and particular projects may still require competence evidence, qualifications or a relevant skills card in practice. Those conditions must remain visible as practical entry points and blockers, but they must not be relabelled as a nationwide statutory Carpenter licence.
+
 ## Industry Diversity — authoritative source fixed, HHI pending
 
 A defensible SOC-to-industry distribution exists in two official sources:
@@ -138,6 +171,8 @@ Of this research pass:
 - Momentum: fixed `0.00/10`;
 - Salary: fixed `3.71/10` with direct ONS occupation-row ingestion guard;
 - Projected Growth: fixed `2.01/10`;
+- Visa Accessibility: fixed `7/10`;
+- Entry Burden: fixed `5/5` for the general employee path;
 - Industry Diversity: official input fixed, row extraction / HHI unresolved.
 
-Do not seed a decision-ready foundation profile until Industry Diversity is resolved and Visa Accessibility / Entry Burden are audited under the frozen rubric. Then implement the full relational migration, raw-to-normalized regression tests, live Supabase validation and CI while keeping PR #239 Draft until all gates are green.
+The only unresolved scoring research component is Industry Diversity. Do not seed a decision-ready foundation profile until that HHI is resolved. After the exact industry distribution is ingested, implement the full relational migration, raw-to-normalized regression tests, live Supabase validation and CI while keeping PR #239 Draft until all gates are green.
