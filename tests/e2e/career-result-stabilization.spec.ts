@@ -33,7 +33,7 @@ test("signed-out save returns to the same career result after login", async ({ p
 })
 
 test("Korean login keeps the authentication surface and saved pathway summary in Korean", async ({ page }) => {
-  const next = encodeURIComponent("/home?origin=KR&country=AU&field=health&status=choosing-school")
+  const next = encodeURIComponent("/ko/home?origin=KR&country=AU&field=health&status=choosing-school")
   await page.goto(`/ko/login?next=${next}`)
 
   await expect(page.getByRole("heading", { name: "다시 오신 것을 환영해요" })).toBeVisible()
