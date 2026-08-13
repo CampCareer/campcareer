@@ -40,9 +40,14 @@ export function useProgramNavigation() {
         }
       }
 
-      if (!params.get("country")) params.set("country", "AU")
+      const country = params.get("country")?.toUpperCase()
+      if (!country || country === "AU") params.delete("country")
+      else params.set("country", country)
+
       params.delete("page")
-      router.replace(`${localizePath(pathname, locale)}?${params.toString()}`, { scroll: false })
+      const query = params.toString()
+      const nextPath = localizePath(pathname, locale)
+      router.replace(query ? `${nextPath}?${query}` : nextPath, { scroll: false })
     },
     [currentQuery, locale, pathname, router],
   )
