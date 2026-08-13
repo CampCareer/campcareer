@@ -57,7 +57,7 @@ function ProgramCountryPicker({
                     <img src={country.image} alt="" width={40} height={28} className="size-4 shrink-0 rounded-full object-cover" />
                     <span className="truncate">{country.name}</span>
                     <span className="ml-auto flex items-center gap-2">
-                      {!isPublished && <span className="text-[10px] font-semibold uppercase text-[#b0ada6]">Soon</span>}
+                      {!isPublished && <span className="text-[10px] font-semibold uppercase text-[#b0ada6]">{locale === "ko" ? "준비 중" : "Soon"}</span>}
                       {isSelected && <Check className="size-3.5" />}
                     </span>
                   </button>
@@ -71,11 +71,7 @@ function ProgramCountryPicker({
   )
 }
 
-export function ProgramsHeader({
-  filters,
-}: {
-  filters: ProgramSearchFilters
-}) {
+export function ProgramsHeader({ filters }: { filters: ProgramSearchFilters }) {
   const locale = useRouteLocale()
   const replace = useProgramNavigation()
   const { setSelectedCountry } = useSelectedCountry()
@@ -84,29 +80,14 @@ export function ProgramsHeader({
 
   useEffect(() => setQuery(filters.q), [filters.q])
   useEffect(() => {
-    const country =
-      LAUNCH_COUNTRIES.find((item) => item.code === filters.country) ?? LAUNCH_COUNTRIES[0]
+    const country = LAUNCH_COUNTRIES.find((item) => item.code === filters.country) ?? LAUNCH_COUNTRIES[0]
     setSelectedCountry({ code: country.code, name: country.name, currency: country.currency })
   }, [filters.country, setSelectedCountry])
 
   function pickCountry(countryCode: string) {
     const country = LAUNCH_COUNTRIES.find((item) => item.code === countryCode)
     if (country) setSelectedCountry({ code: country.code, name: country.name, currency: country.currency })
-    replace({
-      country: countryCode,
-      level: null,
-      field: null,
-      city: null,
-      state: null,
-      province: null,
-      career: null,
-      institution: null,
-      pgwp: null,
-      duration: null,
-      fee: null,
-      source: null,
-      sort: null,
-    })
+    replace({ country: countryCode, level: null, field: null, city: null, state: null, province: null, career: null, institution: null, pgwp: null, duration: null, fee: null, source: null, sort: null })
   }
 
   function submitSearch(event: FormEvent<HTMLFormElement>) {
@@ -114,28 +95,15 @@ export function ProgramsHeader({
     replace({ q: query.trim() || null })
   }
 
-  const placeholder =
-    locale === "ko"
-      ? filters.country === "CA"
-        ? "과정·학교·도시로 검색하세요. 예: Nursing, Toronto"
-        : filters.country === "NZ"
-          ? "뉴질랜드 과정명 또는 대학명으로 검색하세요"
-          : "과정명 또는 학교명으로 검색하세요"
-      : filters.country === "CA"
-        ? "Search programs, institutions or cities…"
-        : filters.country === "UK"
-          ? "Search UK programmes or institutions…"
-          : filters.country === "NZ"
-            ? "Search New Zealand programmes or universities…"
-            : filters.country === "NL"
-              ? "Search Netherlands programmes or institutions…"
-              : "Search programs, e.g. Nursing or Data Science…"
+  const placeholder = locale === "ko"
+    ? filters.country === "CA" ? "과정·학교·도시로 검색하세요. 예: 간호학, 토론토" : filters.country === "NZ" ? "뉴질랜드 과정명 또는 대학명으로 검색하세요" : "과정명 또는 학교명으로 검색하세요"
+    : filters.country === "CA" ? "Search programs, institutions or cities…" : filters.country === "UK" ? "Search UK programmes or institutions…" : filters.country === "NZ" ? "Search New Zealand programmes or universities…" : filters.country === "NL" ? "Search Netherlands programmes or institutions…" : "Search programs, e.g. Nursing or Data Science…"
 
   return (
     <>
-      <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#3e7a2e]">Explore</p>
+      <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#3e7a2e]">{locale === "ko" ? "탐색" : "Explore"}</p>
       <div className="mt-1.5 flex flex-wrap items-center gap-3">
-        <h1 className="text-[28px] font-semibold leading-tight tracking-[-0.025em] text-[#1b1b1b] sm:text-3xl">Programs</h1>
+        <h1 className="text-[28px] font-semibold leading-tight tracking-[-0.025em] text-[#1b1b1b] sm:text-3xl">{locale === "ko" ? "과정" : "Programs"}</h1>
         <ProgramCountryPicker countryCode={filters.country} onPick={pickCountry} />
       </div>
 
@@ -143,10 +111,8 @@ export function ProgramsHeader({
         <form onSubmit={submitSearch} className="mt-6 max-w-3xl">
           <label className="relative block">
             <Search className="pointer-events-none absolute left-4 top-1/2 size-[18px] -translate-y-1/2 text-[#a3a19b]" />
-            <input type="search" value={query} onChange={(event: ChangeEvent<HTMLInputElement>) => setQuery(event.target.value)} placeholder={placeholder} className="h-[52px] w-full rounded-xl border border-[#deddd8] bg-white pl-11 pr-24 text-[14px] text-[#1b1b1b] outline-none transition placeholder:text-[#aaa8a2] focus:border-[#3e7a2e] focus:ring-2 focus:ring-[#3e7a2e]/10" />
-            <button type="submit" className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-lg bg-[#3e7a2e] px-4 py-2 text-[12px] font-semibold text-white transition hover:bg-[#326625]">
-              {locale === "ko" ? "검색" : "Search"}
-            </button>
+            <input type="search" value={query} onChange={(event: ChangeEvent<HTMLInputElement>) => setQuery(event.target.value)} placeholder={placeholder} aria-label={locale === "ko" ? "과정 검색" : "Search programs"} className="h-[52px] w-full rounded-xl border border-[#deddd8] bg-white pl-11 pr-24 text-[14px] text-[#1b1b1b] outline-none transition placeholder:text-[#aaa8a2] focus:border-[#3e7a2e] focus:ring-2 focus:ring-[#3e7a2e]/10" />
+            <button type="submit" className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-lg bg-[#3e7a2e] px-4 py-2 text-[12px] font-semibold text-white transition hover:bg-[#326625]">{locale === "ko" ? "검색" : "Search"}</button>
           </label>
         </form>
       )}
@@ -154,9 +120,7 @@ export function ProgramsHeader({
       {filters.country === "AU" && (
         <div className="mt-5 flex gap-2 overflow-x-auto pb-1">
           {PROGRAM_LEVELS.map((level) => (
-            <button key={level.value} type="button" onClick={() => replace({ level: level.value })} className={cn("shrink-0 rounded-lg border px-3.5 py-2 text-[12.5px] font-medium transition", filters.level === level.value ? "border-[#3e7a2e] bg-[#3e7a2e] text-white" : "border-[#dfded9] bg-white text-[#686660] hover:border-[#3e7a2e]/45 hover:text-[#3e7a2e]")}>
-              {locale === "ko" ? level.labelKo : level.label}
-            </button>
+            <button key={level.value} type="button" onClick={() => replace({ level: level.value })} className={cn("shrink-0 rounded-lg border px-3.5 py-2 text-[12.5px] font-medium transition", filters.level === level.value ? "border-[#3e7a2e] bg-[#3e7a2e] text-white" : "border-[#dfded9] bg-white text-[#686660] hover:border-[#3e7a2e]/45 hover:text-[#3e7a2e]")}>{locale === "ko" ? level.labelKo : level.label}</button>
           ))}
         </div>
       )}
