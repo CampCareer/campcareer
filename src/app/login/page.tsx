@@ -8,24 +8,31 @@ import { createClient } from '@/lib/supabase-client'
 import { getSafeNextPath } from '@/lib/auth/safe-next'
 import { getPostLoginDestination } from '@/lib/auth/post-login-destination'
 import { getPathwayBackPath, getPathwaySummaryFromNext } from '@/lib/auth/pathway-next'
-import { DEFAULT_LOCALE, localeFromPathname, localizePath } from '@/lib/i18n/config'
+import { DEFAULT_LOCALE, localeForUi, localeFromPathname, localizePath } from '@/lib/i18n/config'
 import { LOGIN_COPY } from './login-copy'
+
+type LoginNotice = {
+  tone: 'error' | 'success'
+  message: string
+}
 
 function LoginPageContent() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const requestedNext = searchParams.get('next')
-  const locale = localeFromPathname(pathname) ?? DEFAULT_LOCALE
-  const next = getSafeNextPath(requestedNext, localizePath('/home', locale))
+  const routeLocale = localeFromPathname(pathname) ?? DEFAULT_LOCALE
+  const uiLocale = localeForUi(routeLocale)
+  const copy = LOGIN_COPY[uiLocale]
+  const next = getSafeNextPath(requestedNext, localizePath('/home', routeLocale))
   const pathwaySummary = getPathwaySummaryFromNext(requestedNext)
-  const pathwayBackPath = getPathwayBackPath(requestedNext)
+  const pathwayBackPath = localizePath(getPathwayBackPath(requestedNext), routeLocale)
   const supabase = createClient()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [notice, setNotice] = useState<LoginNotice | null>(null)
   const [mode, setMode] = useState<'signin' | 'signup'>('signin')
 
   async function resolveSignedInDestination(userId: string) {
@@ -38,12 +45,13 @@ function LoginPageContent() {
     return getPostLoginDestination(
       next,
       Boolean(data?.career_personalisation_completed_at),
-      locale,
+      routeLocale,
     )
   }
 
   async function handleGoogle() {
     setIsLoading(true)
+    setNotice(null)
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
@@ -51,7 +59,7 @@ function LoginPageContent() {
       },
     })
     if (error) {
-      setError(error.message)
+      setNotice({ tone: 'error', message: copy.errors.generic })
       setIsLoading(false)
     }
   }
@@ -59,16 +67,19 @@ function LoginPageContent() {
   async function handleEmail(event: React.FormEvent) {
     event.preventDefault()
     setIsLoading(true)
-    setError(null)
+    setNotice(null)
 
     if (mode === 'signin') {
       const { error, data } = await supabase.auth.signInWithPassword({ email, password })
       if (error) {
-        setError(error.message)
+        setNotice({ tone: 'error', message: copy.errors.invalidCredentials })
         setIsLoading(false)
       } else if (data.user) {
         router.push(await resolveSignedInDestination(data.user.id))
         router.refresh()
+      } else {
+        setNotice({ tone: 'error', message: copy.errors.generic })
+        setIsLoading(false)
       }
       return
     }
@@ -79,10 +90,29 @@ function LoginPageContent() {
       options: { emailRedirectTo: `${location.origin}/auth/callback?next=${encodeURIComponent(next)}` },
     })
     if (error) {
-      setError(error.message)
+      setNotice({ tone: 'error', message: copy.errors.generic })
     } else {
-      setError('Check your email to confirm your account!')
+      setNotice({ tone: 'success', message: copy.notices.signupConfirmation })
     }
+    setIsLoading(false)
+  }
+
+  async function handlePasswordReset() {
+    if (!email) {
+      setNotice({ tone: 'error', message: copy.notices.enterEmailFirst })
+      return
+    }
+
+    setIsLoading(true)
+    setNotice(null)
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${location.origin}/auth/callback`,
+    })
+    setNotice(
+      error
+        ? { tone: 'error', message: copy.errors.generic }
+        : { tone: 'success', message: copy.notices.resetEmailSent },
+    )
     setIsLoading(false)
   }
 
@@ -91,41 +121,45 @@ function LoginPageContent() {
   return (
     <main className="min-h-screen bg-[#fafaf9] px-5 py-8 sm:px-6 sm:py-12">
       <div className="mx-auto w-full max-w-[460px]">
-        <Link href="/" className="campcareer-wordmark text-[#1b1b1b]" aria-label="campcareer home">
+        <Link
+          href={localizePath('/', routeLocale)}
+          className="campcareer-wordmark text-[#1b1b1b]"
+          aria-label={copy.homeAria}
+        >
           campcareer
         </Link>
 
         <section className="mt-8 sm:mt-10 sm:rounded-2xl sm:border sm:border-slate-200 sm:bg-white sm:p-8 sm:shadow-sm">
           <div className="mb-7">
             <h1 className="text-2xl font-semibold tracking-tight text-slate-950">
-              {isSignIn ? LOGIN_COPY.welcome : LOGIN_COPY.signup}
+              {isSignIn ? copy.welcome : copy.signup}
             </h1>
             <p className="mt-1.5 text-sm text-slate-600">
-              {isSignIn ? LOGIN_COPY.welcomeSupporting : LOGIN_COPY.signupSupporting}
+              {isSignIn ? copy.welcomeSupporting : copy.signupSupporting}
             </p>
           </div>
 
           {pathwaySummary && (
-            <div className="mb-6 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3" aria-label="Pathway to save">
-              <p className="text-xs font-medium text-slate-500">Save this pathway</p>
+            <div className="mb-6 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3" aria-label={copy.pathwayAria}>
+              <p className="text-xs font-medium text-slate-500">{copy.savePathway}</p>
               <p className="mt-1 text-sm font-medium text-slate-800">
                 {pathwaySummary.country} · {pathwaySummary.field} · {pathwaySummary.status}
               </p>
             </div>
           )}
 
-          {error && (
+          {notice && (
             <div
               id="login-message"
-              role="alert"
+              role={notice.tone === 'error' ? 'alert' : 'status'}
               aria-live="polite"
               className={`mb-5 rounded-xl border px-4 py-3 text-sm ${
-                error.includes('Check your email')
+                notice.tone === 'success'
                   ? 'border-green-200 bg-green-50 text-green-700'
                   : 'border-red-200 bg-red-50 text-red-600'
               }`}
             >
-              {error}
+              {notice.message}
             </div>
           )}
 
@@ -141,19 +175,19 @@ function LoginPageContent() {
               <path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0 1 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z" />
               <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002 6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z" />
             </svg>
-            {LOGIN_COPY.google}
+            {copy.google}
           </button>
 
           <div className="mb-5 flex items-center gap-3" aria-hidden="true">
             <div className="flex-1 border-t border-slate-200" />
-            <span className="whitespace-nowrap text-xs text-slate-500">{LOGIN_COPY.divider}</span>
+            <span className="whitespace-nowrap text-xs text-slate-500">{copy.divider}</span>
             <div className="flex-1 border-t border-slate-200" />
           </div>
 
           <form onSubmit={handleEmail} className="space-y-4" aria-busy={isLoading}>
             <div>
               <label htmlFor="email" className="mb-1.5 block text-xs font-medium text-slate-700">
-                {LOGIN_COPY.email}
+                {copy.email}
               </label>
               <input
                 id="email"
@@ -163,7 +197,7 @@ function LoginPageContent() {
                 placeholder="name@example.com"
                 required
                 autoComplete="email"
-                aria-describedby={error ? 'login-message' : undefined}
+                aria-describedby={notice ? 'login-message' : undefined}
                 className="min-h-12 w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-500 transition focus:border-transparent focus:outline-none focus:ring-2 focus:ring-brand"
               />
             </div>
@@ -171,22 +205,16 @@ function LoginPageContent() {
             <div>
               <div className="mb-1.5 flex items-center justify-between gap-3">
                 <label htmlFor="password" className="text-xs font-medium text-slate-700">
-                  {LOGIN_COPY.password}
+                  {copy.password}
                 </label>
                 {isSignIn && (
                   <button
                     type="button"
-                    onClick={async () => {
-                      if (!email) {
-                        setError('Enter your email first')
-                        return
-                      }
-                      await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${location.origin}/auth/callback` })
-                      setError('Password reset email sent!')
-                    }}
-                    className="shrink-0 text-xs font-medium text-brand transition-colors hover:text-brand-press focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2"
+                    onClick={handlePasswordReset}
+                    disabled={isLoading}
+                    className="shrink-0 text-xs font-medium text-brand transition-colors hover:text-brand-press focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2 disabled:opacity-50"
                   >
-                    {LOGIN_COPY.forgotPassword}
+                    {copy.forgotPassword}
                   </button>
                 )}
               </div>
@@ -199,7 +227,7 @@ function LoginPageContent() {
                 required
                 minLength={6}
                 autoComplete={isSignIn ? 'current-password' : 'new-password'}
-                aria-describedby={error ? 'login-message' : undefined}
+                aria-describedby={notice ? 'login-message' : undefined}
                 className="min-h-12 w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-500 transition focus:border-transparent focus:outline-none focus:ring-2 focus:ring-brand"
               />
             </div>
@@ -210,21 +238,21 @@ function LoginPageContent() {
               className="mt-1 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-brand bg-brand text-sm font-semibold tracking-tight text-brand-foreground shadow-sm transition-colors hover:bg-brand/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2 disabled:opacity-50"
             >
               {isLoading && <Loader2 className="size-4 animate-spin" aria-hidden="true" />}
-              {isSignIn ? LOGIN_COPY.signIn : LOGIN_COPY.createAccount}
+              {isSignIn ? copy.signIn : copy.createAccount}
             </button>
           </form>
 
           <p className="mt-6 text-center text-sm text-slate-600">
-            {isSignIn ? LOGIN_COPY.newAccount : LOGIN_COPY.existingAccount}{' '}
+            {isSignIn ? copy.newAccount : copy.existingAccount}{' '}
             <button
               type="button"
               onClick={() => {
                 setMode(isSignIn ? 'signup' : 'signin')
-                setError(null)
+                setNotice(null)
               }}
               className="inline-flex items-center gap-0.5 font-medium text-brand transition-colors hover:text-brand-press focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2"
             >
-              {isSignIn ? LOGIN_COPY.createAccount : LOGIN_COPY.signIn}
+              {isSignIn ? copy.createAccount : copy.signIn}
               <ArrowRight className="size-3.5" aria-hidden="true" />
             </button>
           </p>
@@ -234,7 +262,7 @@ function LoginPageContent() {
             className="mt-7 inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-brand transition-colors hover:text-brand-press focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2"
           >
             <ArrowLeft className="size-4" aria-hidden="true" />
-            {LOGIN_COPY.back}
+            {copy.back}
           </Link>
         </section>
       </div>
