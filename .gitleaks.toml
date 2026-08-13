@@ -1,0 +1,21 @@
+title = "CampCareer Gitleaks configuration"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "generic-api-key"
+
+[[rules.allowlists]]
+description = "AU Carpenter snapshot upsert SQL false positive"
+condition = "AND"
+regexTarget = "line"
+regexes = ['''required_component_keys\s*=\s*excluded\.required_component_keys,\s*explanation\s*=\s*excluded\.explanation;''']
+paths = ['''supabase/migrations/20260813023500_career_data_foundation_au_carpenter\.sql''']
+
+[[rules.allowlists]]
+description = "AU Carpenter vacancy observation key SQL false positive"
+condition = "AND"
+regexTarget = "line"
+regexes = ['''where\s+observation_key\s*=\s*'au-carpenters-joiners-ivi-may-2026';?''']
+paths = ['''supabase/migrations/20260813122259_strengthen_au_carpenter_vacancy_raw_evidence\.sql''']
