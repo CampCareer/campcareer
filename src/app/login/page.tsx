@@ -1,19 +1,23 @@
 'use client'
 
 import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Suspense, useState } from 'react'
 import { ArrowLeft, ArrowRight, Loader2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase-client'
 import { getSafeNextPath } from '@/lib/auth/safe-next'
+import { getPostLoginDestination } from '@/lib/auth/post-login-destination'
 import { getPathwayBackPath, getPathwaySummaryFromNext } from '@/lib/auth/pathway-next'
+import { DEFAULT_LOCALE, localeFromPathname, localizePath } from '@/lib/i18n/config'
 import { LOGIN_COPY } from './login-copy'
 
 function LoginPageContent() {
   const router = useRouter()
+  const pathname = usePathname()
   const searchParams = useSearchParams()
   const requestedNext = searchParams.get('next')
-  const next = getSafeNextPath(requestedNext)
+  const locale = localeFromPathname(pathname) ?? DEFAULT_LOCALE
+  const next = getSafeNextPath(requestedNext, localizePath('/home', locale))
   const pathwaySummary = getPathwaySummaryFromNext(requestedNext)
   const pathwayBackPath = getPathwayBackPath(requestedNext)
   const supabase = createClient()
@@ -23,6 +27,20 @@ function LoginPageContent() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [mode, setMode] = useState<'signin' | 'signup'>('signin')
+
+  async function resolveSignedInDestination(userId: string) {
+    const { data } = await supabase
+      .from('user_preferences')
+      .select('career_personalisation_completed_at')
+      .eq('id', userId)
+      .maybeSingle()
+
+    return getPostLoginDestination(
+      next,
+      Boolean(data?.career_personalisation_completed_at),
+      locale,
+    )
+  }
 
   async function handleGoogle() {
     setIsLoading(true)
@@ -44,12 +62,12 @@ function LoginPageContent() {
     setError(null)
 
     if (mode === 'signin') {
-      const { error } = await supabase.auth.signInWithPassword({ email, password })
+      const { error, data } = await supabase.auth.signInWithPassword({ email, password })
       if (error) {
         setError(error.message)
         setIsLoading(false)
-      } else {
-        router.push(next)
+      } else if (data.user) {
+        router.push(await resolveSignedInDestination(data.user.id))
         router.refresh()
       }
       return

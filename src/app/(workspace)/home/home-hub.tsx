@@ -37,14 +37,14 @@ export function HomeHub() {
 
   return (
     <div className="min-h-[calc(100vh-3.5rem)] bg-white text-[#171717]">
-      <section className="overflow-hidden border-b border-[#e6e8ef] bg-white px-5 pb-14 pt-8 sm:px-8 sm:pb-20 sm:pt-12">
+      <section className="cc-landing-hero relative overflow-hidden border-b border-[#e6e8ef] px-5 pb-14 pt-8 sm:px-8 sm:pb-20 sm:pt-12">
         <div className="mx-auto max-w-6xl">
           <div className="relative px-1 py-7 text-[#1b1b1b] sm:px-4 sm:py-10 lg:px-8 lg:py-12">
 
             <div className="relative grid items-end gap-8 lg:grid-cols-[1.2fr_.8fr]">
               <div className="max-w-3xl">
-                <h1 className="text-[38px] font-semibold leading-[1.08] tracking-[-0.065em] text-[#1b1b1b] sm:text-5xl lg:text-[64px]">
-                  {locale === "ko" ? <>유학 정보가 아니라,<br /><span className="text-[#3f3f3a]">해외에서 일하는 경로</span>를 찾습니다.</> : <>Not study information.<br />Build your <span className="text-[#3f3f3a]">career abroad.</span></>}
+                <h1 className="text-[38px] font-semibold leading-[1.08] tracking-[-0.065em] text-[#131a2a] sm:text-5xl lg:text-[64px]">
+                  {locale === "ko" ? <>유학 정보가 아니라,<br /><span className="cc-landing-highlight">해외에서 일하는 경로</span>를 찾습니다.</> : <>Not study information.<br />Build your <span className="cc-landing-highlight">career abroad.</span></>}
                 </h1>
                 <p className="mt-6 max-w-xl text-[15px] leading-7 text-slate-600 sm:text-base">
                   {locale === "ko" ? "내 직업과 목표 국가를 고르면, 취업 수요부터 비자·자격 조건, 실제로 밟아야 할 다음 단계까지 한 번에 확인할 수 있어요." : "Choose your occupation and destination to see demand signals, visa and qualification conditions, and the steps toward working there."}
@@ -55,7 +55,7 @@ export function HomeHub() {
             </div>
           </div>
 
-          <div className="relative mx-auto mt-4 max-w-5xl rounded-2xl border border-[#e1e5ee] bg-white p-4 shadow-[0_20px_48px_-26px_rgba(15,23,42,.3)] sm:mt-6 sm:p-6">
+          <div className="relative mx-auto mt-4 max-w-5xl rounded-2xl border border-[#dce4f0] bg-white p-4 shadow-[0_18px_42px_-30px_rgba(41,84,156,.3)] sm:mt-6 sm:p-6">
             <div className="mb-5 flex flex-wrap items-center justify-between gap-2">
               <div>
                 <p className="text-base font-semibold tracking-[-0.025em] text-[#1f2937]">{locale === "ko" ? "어느 나라에서, 어떤 일로 커리어를 만들고 싶나요?" : "Where do you want to build your career, and in what work?"}</p>
@@ -114,17 +114,17 @@ function CareerSignalPanel({ locale }: { locale: Locale }) {
   const signal = signals[activeSignal] ?? signals[0]
 
   return (
-    <div className="rounded-xl border border-[#e3e3df] bg-[#fbfbfa] p-4 sm:p-5">
-      <div className="flex items-center justify-between text-[11px] font-semibold tracking-[0.12em] text-[#73736d]">
+    <div className="cc-signal-panel rounded-2xl border border-white/70 p-4 shadow-[0_24px_52px_-36px_rgba(31,75,145,.62)] sm:p-5">
+      <div className="flex items-center justify-between text-[11px] font-semibold tracking-[0.12em] text-[#56657c]">
         <span>CAREER SIGNALS</span>
-        <span className="inline-flex items-center gap-1.5 tracking-[0.08em] text-[#4f7660]"><i className="cc-signal-live-dot" aria-hidden />LIVE</span>
+        <span className="inline-flex items-center gap-1.5 tracking-[0.08em] text-[#36735a]"><i className="cc-signal-live-dot" aria-hidden />LIVE</span>
       </div>
       <div className="cc-signal-rotator mt-4">
         <div key={signal.detail} className="cc-signal-slide">
-          <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-white text-[#51514c] shadow-[0_1px_2px_rgba(0,0,0,.04)]">{signal.icon}</span>
+          <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-white text-[#2c61bc] shadow-[0_8px_18px_-12px_rgba(30,76,148,.56)]">{signal.icon}</span>
           <div className="min-w-0">
-            <p className="text-sm font-semibold leading-5 tracking-[-0.02em] text-[#242421]">{signal.detail}</p>
-            <p className="mt-1 text-xs text-[#85857f]">{signal.source}</p>
+            <p className="text-sm font-semibold leading-5 tracking-[-0.02em] text-[#1d2c44]">{signal.detail}</p>
+            <p className="mt-1 text-xs text-[#6e7e95]">{signal.source}</p>
           </div>
         </div>
       </div>
@@ -148,7 +148,7 @@ function LandingProof({ locale }: { locale: Locale }) {
   return <div className="mx-auto max-w-5xl pb-2 pt-12 sm:pt-16">
     <div className="max-w-2xl"><p className="text-xs font-bold tracking-[0.12em] text-blue-700">CAREER-FIRST, NOT SCHOOL-FIRST</p><h2 className="mt-3 text-2xl font-semibold tracking-[-0.045em] text-[#182033] sm:text-3xl">{locale === "ko" ? "해외 커리어의 시작은\n‘어디서 배울까’보다 ‘어디서 일할까’입니다." : "An overseas career starts with where you can work — not only where you can study."}</h2></div>
     <div className="mt-7 grid gap-3 md:grid-cols-3 sm:gap-4">
-      {cards.map((card, index) => <div key={card.title} className="rounded-2xl border border-[#e2e5ec] bg-white p-5 transition duration-200 hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-[0_16px_30px_-24px_rgba(30,64,175,.5)]"><span className="grid size-10 place-items-center rounded-xl bg-blue-50 text-blue-700">{card.icon}</span><p className="mt-5 text-xs font-semibold tracking-[0.1em] text-slate-400">0{index + 1}</p><h3 className="mt-1.5 text-lg font-semibold tracking-[-0.03em] text-[#202938]">{card.title}</h3><p className="mt-2 text-sm leading-6 text-slate-500">{card.description}</p></div>)}
+      {cards.map((card, index) => <div key={card.title} className="group rounded-2xl border border-[#e2e8f2] bg-white p-5 shadow-[0_12px_28px_-28px_rgba(31,71,130,.6)] transition duration-200 hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-[0_18px_36px_-24px_rgba(30,64,175,.35)]"><span className={cn("grid size-10 place-items-center rounded-xl", index === 0 ? "bg-blue-50 text-blue-700" : index === 1 ? "bg-emerald-50 text-emerald-700" : "bg-violet-50 text-violet-700")}>{card.icon}</span><p className="mt-5 text-xs font-semibold tracking-[0.1em] text-slate-400">0{index + 1}</p><h3 className="mt-1.5 text-lg font-semibold tracking-[-0.03em] text-[#202938]">{card.title}</h3><p className="mt-2 text-sm leading-6 text-slate-500">{card.description}</p></div>)}
     </div>
     <ExploreLink locale={locale} className="mt-8" />
   </div>

@@ -110,6 +110,26 @@
   to   { transform: none; }
 }
 
+/* The career check moves one question at a time. Keep the transition subtle:
+   it should make the path feel considered, never interrupt the next answer. */
+@keyframes cc-onboarding-step-enter {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cc-onboarding-step-leave {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-6px); }
+}
+
+.cc-onboarding-step {
+  animation: cc-onboarding-step-enter 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.cc-onboarding-step--leaving {
+  animation: cc-onboarding-step-leave 150ms ease-in both;
+}
+
 /* Product motion is intentionally limited to focus, selection and short
    feedback transitions. Respect an OS-level reduced-motion preference across
    the Landing, Compare and Maps surfaces instead of relying on individual
@@ -124,6 +144,102 @@
 }
 
 @layer components {
+  /* Landing stays white and quiet; its energy comes from a few clear accents,
+     not a coloured page background. */
+  .cc-landing-hero {
+    background: #fff;
+  }
+
+  .cc-landing-highlight {
+    background: linear-gradient(100deg, #245cab 0%, #2865c7 65%, #36745f 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .cc-signal-panel {
+    background: linear-gradient(145deg, #f5f9ff, #f9fcfb);
+  }
+
+  /* The result carries the same white canvas as the landing page. The blue
+     tint is reserved for the report's orientation points: header, score and
+     market metrics. */
+  .cc-result-page {
+    background: linear-gradient(180deg, #fff 0, #fff 24rem, #fbfcff 100%);
+  }
+
+  .cc-result-back {
+    background: #f7f9fc;
+  }
+
+  .cc-result-back:hover {
+    background: #eef5ff;
+  }
+
+  .cc-result-surface {
+    box-shadow: 0 22px 48px -42px rgb(31 75 145 / 0.46);
+  }
+
+  .cc-result-metric {
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 12px 26px -28px rgb(31 75 145 / 0.58);
+  }
+
+  .cc-result-metric::before {
+    position: absolute;
+    top: 0;
+    left: 1rem;
+    right: 1rem;
+    height: 2px;
+    border-radius: 9999px;
+    background: linear-gradient(90deg, #4b84d8, #70b89d);
+    content: "";
+  }
+
+  .cc-prominent-score {
+    position: relative;
+    padding-right: 1rem;
+  }
+
+  .cc-prominent-score::after {
+    position: absolute;
+    inset: 0 0 0.15rem auto;
+    width: 3px;
+    border-radius: 9999px;
+    background: linear-gradient(#4b84d8, #70b89d);
+    content: "";
+  }
+
+  .cc-prominent-score-value {
+    background: linear-gradient(115deg, #174d9e, #2865c7 68%, #36745f);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* A quiet, scroll-linked reveal adds depth to the long career brief without
+     turning a research surface into a decorative animation. Unsupported
+     browsers simply render the complete report normally. */
+  @keyframes cc-result-view-reveal {
+    from {
+      opacity: 0.48;
+      transform: translateY(28px) scale(0.985);
+    }
+    55%, to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @supports (animation-timeline: view()) {
+    .cc-result-motion .cc-result-reveal {
+      animation: cc-result-view-reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 4% cover 36%;
+    }
+  }
+
   /* The landing signal panel communicates live analysis without introducing
      decorative motion. One signal is legible at a time, and the complete set
      remains available to assistive technology in the component. */

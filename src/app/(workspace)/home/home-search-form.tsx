@@ -31,9 +31,12 @@ type HomeSearchFormProps = {
   onSubmit: (values: OverviewSearchValues) => void
   compact?: boolean
   className?: string
+  /** Some workspace explorers only need a destination. */
+  showOccupation?: boolean
+  submitLabel?: string
 }
 
-export function HomeSearchForm({ values, locale, onValuesChange, onSubmit, compact = false, className }: HomeSearchFormProps) {
+export function HomeSearchForm({ values, locale, onValuesChange, onSubmit, compact = false, className, showOccupation = true, submitLabel }: HomeSearchFormProps) {
   const [errors, setErrors] = useState<OverviewSearchErrors>({})
   const countryOptions = useMemo(() => getCountryOptions(locale), [locale])
   const occupationOptions = useMemo(() => getOccupationOptions(locale), [locale])
@@ -49,21 +52,21 @@ export function HomeSearchForm({ values, locale, onValuesChange, onSubmit, compa
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const nextErrors = validateOverviewSearch(values, locale)
+    if (!showOccupation) delete nextErrors.occupation
     setErrors(nextErrors)
     if (!Object.keys(nextErrors).length) onSubmit(values)
   }
 
   return (
-    <form onSubmit={submit} noValidate className={cn("grid gap-3 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] md:items-end", className)}>
+    <form onSubmit={submit} noValidate className={cn("grid gap-3 md:items-end", showOccupation ? "md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]" : "md:grid-cols-[minmax(0,1fr)_auto]", className)}>
       <SearchSelect id="country" label={copy.country} value={values.country} options={countryOptions} placeholder={copy.countryPlaceholder} error={errors.country} emptyText={copy.empty} onChange={(value) => update("country", value)} />
-      <SearchSelect id="occupation" label={copy.occupation} value={values.occupation} options={occupationOptions} placeholder={copy.occupationPlaceholder} error={errors.occupation} emptyText={copy.empty} recommendedIds={RECOMMENDED_OCCUPATION_IDS} recommendedLabel={locale === "ko" ? "추천 직종" : "Recommended occupations"} resultsLabel={locale === "ko" ? "관련 직종" : "Related occupations"} onChange={(value) => update("occupation", value)} />
+      {showOccupation && <SearchSelect id="occupation" label={copy.occupation} value={values.occupation} options={occupationOptions} placeholder={copy.occupationPlaceholder} error={errors.occupation} emptyText={copy.empty} recommendedIds={RECOMMENDED_OCCUPATION_IDS} recommendedLabel={locale === "ko" ? "추천 직종" : "Recommended occupations"} resultsLabel={locale === "ko" ? "관련 직종" : "Related occupations"} onChange={(value) => update("occupation", value)} />}
       <button type="submit" className={cn("inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-[#1d4ed8] px-5 text-sm font-semibold text-white transition hover:bg-[#1e40af] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-600/20", compact ? "md:min-w-36" : "md:min-w-44")}>
-        {copy.submit} <ArrowRight className="size-4" />
+        {submitLabel ?? copy.submit} <ArrowRight className="size-4" />
       </button>
     </form>
   )
 }
-
 function SearchSelect({ id, label, value, options, placeholder, error, emptyText, recommendedIds, recommendedLabel, resultsLabel, onChange }: {
   id: string
   label: string

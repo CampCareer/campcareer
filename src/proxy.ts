@@ -142,7 +142,10 @@ export async function proxy(request: NextRequest) {
   if (!user && isProtected) {
     const loginPath = localizePath('/login', routeLocale ?? locale)
     const loginUrl = new URL(loginPath, request.url)
-    loginUrl.searchParams.set('next', `${pathname}${request.nextUrl.search}`)
+    // Preserve the visible locale in the complete auth round-trip. Using the
+    // locale-stripped pathname here sent /ko/onboarding back to English after
+    // sign-in, even though the login page itself remained Korean.
+    loginUrl.searchParams.set('next', `${requestedPathname}${request.nextUrl.search}`)
     return withLocale(NextResponse.redirect(loginUrl))
   }
 

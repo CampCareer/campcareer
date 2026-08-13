@@ -6,7 +6,7 @@ import { Menu } from "lucide-react"
 import { LanguageMenu } from "@/components/layout/language-menu"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { getWorkspaceNavItem } from "@/lib/workspace/navigation"
-import { withoutLocalePrefix } from "@/lib/i18n/config"
+import { localizePath, withoutLocalePrefix } from "@/lib/i18n/config"
 import { useSelectedCountry } from "./country-context"
 import { WorkspaceUserMenu } from "./workspace-user-menu"
 
@@ -38,13 +38,12 @@ export function WorkspaceTopbar({ onMenuClick }: WorkspaceTopbarProps) {
       <button
         type="button"
         onClick={onMenuClick}
-        className="-ml-1 inline-flex h-9 items-center gap-1.5 rounded-lg px-2.5 text-xs font-semibold text-[#5f5d57] transition hover:bg-[#f0f0ed] hover:text-[#1b1b1b] sm:hidden"
+        className="-ml-1 inline-flex size-9 items-center justify-center rounded-lg text-xs font-semibold text-[#5f5d57] transition hover:bg-[#f0f0ed] hover:text-[#1b1b1b] sm:hidden"
         aria-label={locale === "ko" ? "카테고리 메뉴 열기" : "Open navigation menu"}
       >
         <Menu className="size-4" />
-        <span>{locale === "ko" ? "카테고리" : "Menu"}</span>
       </button>
-      <Link href="/home" className="campcareer-wordmark text-[#1b1b1b]" aria-label="campcareer home">
+      <Link href={localizePath("/home", locale)} className="campcareer-wordmark text-[#1b1b1b]" aria-label="campcareer home">
         campcareer
       </Link>
 
