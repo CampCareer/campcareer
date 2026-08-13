@@ -1,4 +1,5 @@
 import type { Locale } from "@/lib/i18n/config"
+import { countryDisplayName } from "@/lib/i18n/config"
 import type { LaunchCountry } from "@/data/launch-countries"
 import type { NavItem } from "./navigation"
 import type { CompareModeType } from "@/lib/compare-navigation"
@@ -31,8 +32,6 @@ const COMPARE_LABELS: Record<Locale, Record<CompareModeType, string>> = {
   ko: { program: "과정", country: "국가", city: "도시", career: "직업" },
 }
 
-const REGION_CODE_OVERRIDES: Record<string, string> = { UK: "GB" }
-
 export function workspaceNavLabel(locale: Locale, item: NavItem) {
   return NAV_LABELS[locale][item.id] ?? item.label
 }
@@ -42,9 +41,7 @@ export function compareModeLabel(locale: Locale, type: CompareModeType) {
 }
 
 export function workspaceCountryLabel(locale: Locale, country: LaunchCountry) {
-  if (locale !== "ko") return country.name
-  const code = REGION_CODE_OVERRIDES[country.code] ?? country.code
-  return new Intl.DisplayNames("ko-KR", { type: "region" }).of(code) ?? country.name
+  return countryDisplayName(locale, country.code, country.name)
 }
 
 export function workspaceSidebarCopy(locale: Locale) {
