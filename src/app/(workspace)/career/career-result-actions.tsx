@@ -33,6 +33,7 @@ export function CareerResultActions({ query, locale }: { query: OverviewSearchVa
 
       setAuthState("signed-in")
       setUserId(user.id)
+      const saveIntent = new URLSearchParams(window.location.search).get("save") === "1"
       const { data } = await supabase
         .from("saved_career_results")
         .select("id")
@@ -41,10 +42,43 @@ export function CareerResultActions({ query, locale }: { query: OverviewSearchVa
         .eq("career_id", query.occupation)
         .maybeSingle()
 
-      if (active) setSaved(Boolean(data))
+      if (!active) return
+      if (data) {
+        setSaved(true)
+        if (saveIntent) window.history.replaceState(null, "", resultHref)
+        return
+      }
+
+      if (!saveIntent) {
+        setSaved(false)
+        return
+      }
+
+      setSaveBusy(true)
+      const { error } = await supabase
+        .from("saved_career_results")
+        .upsert(
+          {
+            user_id: user.id,
+            country_code: query.country.toUpperCase(),
+            career_id: query.occupation,
+            updated_at: new Date().toISOString(),
+          },
+          { onConflict: "user_id,country_code,career_id", ignoreDuplicates: false },
+        )
+
+      if (!active) return
+      setSaveBusy(false)
+      if (error) {
+        setSaveError(true)
+        return
+      }
+
+      setSaved(true)
+      window.history.replaceState(null, "", resultHref)
     })
     return () => { active = false }
-  }, [query.country, query.occupation, supabase])
+  }, [query.country, query.occupation, resultHref, supabase])
 
   async function toggleSaved() {
     if (!userId || saveBusy) return
@@ -79,7 +113,8 @@ export function CareerResultActions({ query, locale }: { query: OverviewSearchVa
     return <div className="mt-5 h-10 w-44 animate-pulse rounded-lg bg-slate-100" aria-hidden="true" />
   }
 
-  const signedOutSaveHref = `${localizePath("/login", locale)}?next=${encodeURIComponent(resultHref)}`
+  const saveIntentHref = `${resultHref}${resultHref.includes("?") ? "&" : "?"}save=1`
+  const signedOutSaveHref = `${localizePath("/login", locale)}?next=${encodeURIComponent(saveIntentHref)}`
 
   return (
     <div className="mt-6 border-t border-[hsl(var(--cc-border))] pt-5" aria-label={locale === "ko" ? "보조 작업" : "Secondary career actions"}>
