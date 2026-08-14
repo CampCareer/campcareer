@@ -147,6 +147,18 @@ This makes a `7/10` Pay score mean roughly the same kind of relative earning str
 
 The existing relative-salary evidence component is normalized to `0–10` and rounded to the nearest integer.
 
+Pay uses the best available official occupation earnings evidence compared with an all-occupations benchmark from the same country and a comparable source period.
+
+Evidence hierarchy:
+
+1. Prefer an official earnings measure that directly matches the canonical Career scope.
+2. If that is unavailable, the closest defensible official occupation-group earnings measure may be used.
+3. A broader official group lowers evidence confidence to `Estimated`; it does not by itself make Pay unavailable and does not receive a numeric score penalty.
+4. If no defensible official occupation or occupation-group earnings measure exists, Pay is unavailable and the total is `Score not ready yet`.
+5. Missing earnings evidence must never be interpreted as Pay `0`.
+
+The detailed operational hierarchy, Australia relative-pay bands, proxy disclosure rules and examples are defined in `docs/PAY_EVIDENCE_POLICY.md`.
+
 ### Interpretation
 
 - `9–10` — exceptionally strong relative earnings
@@ -308,7 +320,7 @@ If any required public dimension is unavailable:
 
 Show the verified evidence and pathway that do exist, together with the reason the score is incomplete.
 
-Do not silently substitute an average value for missing evidence.
+Do not silently substitute an arbitrary average value for missing evidence. A documented official occupation-group proxy allowed by an evidence policy is not an arbitrary substitution; its lower directness belongs in evidence confidence.
 
 ---
 
@@ -457,6 +469,8 @@ The following are product-contract changes and must not happen casually:
 - putting visa back into the total;
 - personalising the public score;
 - changing Entry so higher means harder;
-- publishing a total when a required dimension is not ready.
+- publishing a total when a required dimension is not ready;
+- changing Pay from country-relative earnings strength to an absolute cross-country salary measure;
+- treating missing Pay evidence as zero.
 
 Any such change requires a new score-contract version.
