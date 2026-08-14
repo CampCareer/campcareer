@@ -6,6 +6,7 @@ import { CANONICAL_CAREER_BY_ID } from "@/data/career-comparison-catalog"
 import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
 import { localizePath } from "@/lib/i18n/config"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
+import { getCareerRoute } from "@/lib/workspace/occupation-routes"
 
 export type SavedCareerResultSummary = {
   country_code: string
@@ -37,13 +38,16 @@ export function SavedCareerResultsSection({ rows }: { rows: SavedCareerResultSum
         {rows.map((row) => {
           const country = LAUNCH_COUNTRIES.find((item) => item.code === row.country_code.toUpperCase())
           const career = CANONICAL_CAREER_BY_ID.get(row.career_id)
+          const route = getCareerRoute(row.country_code, row.career_id)
           const countryName = country
             ? locale === "ko"
               ? new Intl.DisplayNames("ko-KR", { type: "region" }).of(country.code === "UK" ? "GB" : country.code) ?? country.name
               : country.name
             : row.country_code
           const careerName = career ? (locale === "ko" ? career.labelKo : career.label) : row.career_id
-          const href = localizePath(`/career?country=${encodeURIComponent(row.country_code)}&occupation=${encodeURIComponent(row.career_id)}&personalised=1`, locale)
+          const href = route
+            ? `${localizePath(route.path, locale)}?personalised=1`
+            : localizePath("/", locale)
 
           return (
             <Link key={`${row.country_code}:${row.career_id}`} href={href} className="group flex min-h-16 items-center justify-between gap-3 rounded-xl border border-[#e1e7ef] bg-[#fbfcff] px-4 py-3 transition hover:border-blue-300 hover:bg-blue-50">
