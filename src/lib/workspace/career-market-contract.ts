@@ -1,3 +1,4 @@
+import type { CampCareerScore } from "@/lib/campcareer-score"
 import type { CareerDataFoundationResult } from "@/lib/career-data-foundation/types"
 import type { CountryOccupationMetric, CountryOccupationProfile, OpportunityScoreBreakdown } from "./country-occupation-contract"
 
@@ -14,7 +15,9 @@ export type CareerMarketRecommendation = {
   countryCode: string
   countryName: string
   officialTitle: string | null
+  /** Compatibility total; mirrors campCareerScore.total when the public score is ready. */
   opportunityScore: number | null
+  campCareerScore: CampCareerScore | null
   scoreStatus: "provisional" | "reviewed" | "published" | "foundation_ready" | null
   registrationRequired: boolean | null
   publicationStatus: "review_required" | "profile_ready" | "decision_ready" | null
