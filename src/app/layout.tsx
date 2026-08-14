@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import localFont from "next/font/local"
-import { Fraunces } from "next/font/google"
+import { Inter } from "next/font/google"
 import "./globals.css"
 import { LayoutShell } from "@/components/layout/layout-shell"
 import { DEFAULT_LOCALE } from "@/lib/i18n/config"
@@ -10,22 +10,16 @@ import { PageViewTracker } from "@/components/analytics/page-view-tracker"
 import { AnalyticsConsent } from "@/components/analytics-consent"
 import { ConsentGatedInsights } from "@/components/consent-gated-insights"
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
 })
+
 const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
   weight: "100 900",
-})
-// Editorial serif display font for headings (body stays Geist).
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  variable: "--font-fraunces",
-  weight: ["400", "500", "600"],
-  display: "swap",
 })
 
 export const metadata: Metadata = {
@@ -42,8 +36,8 @@ export const metadata: Metadata = {
   creator: "CampCareer",
   metadataBase: new URL("https://www.campcareer.com"),
   icons: {
-    icon: '/favicon.svg',
-    shortcut: '/favicon.svg',
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
   },
   openGraph: {
     type: "website",
@@ -74,7 +68,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang={DEFAULT_LOCALE} suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} antialiased`}>
+      <body className={`${inter.variable} ${geistMono.variable} antialiased`}>
         <LocaleProvider locale={DEFAULT_LOCALE}>
           <LocaleInit />
           <PageViewTracker />
