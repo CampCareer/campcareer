@@ -25,7 +25,7 @@ These are part of the core product and may be first-class destinations or sectio
 | CampCareer Score | Career Page component/read model | Primary judgment object. Never compete with another public score. |
 | Study | `/study/*` and contextual Career Page study sections | Appears as a step in the path, not as the first decision. |
 | Programs | `/programs`, `/courses`, Career Page program links | Core action surface when a program helps enter the selected career. |
-| Jobs | country/job route families such as `/{country}/jobs` and Career Page job links | Core action surface in career context. |
+| Jobs | country/job route families and Career Page job links | Core action surface in career context. Career Page Jobs is primary; country routes may remain for SEO/discovery. |
 
 ### Secondary
 
@@ -35,7 +35,7 @@ These support retention or deliberate comparison after value has been delivered.
 | --- | --- | --- |
 | Save | `saved_career_results` and Career Page action | Show after the result. Signed-out users may be asked to log in only when they choose Save. |
 | Compare | `/compare` and contextual compare links | Keep accessible from relevant results. Do not present it as an equal top-level product. |
-| Login / Account | `/login`, `/profile`, `/settings` | Utility only. Login must not be required to see Score, Evidence or the basic Path. |
+| Login / Account | `/login`, `/profile`, `/settings` | Retention utility only. Login must not be required to see Score, Evidence or the basic Path. |
 
 ### Contextual
 
@@ -74,6 +74,7 @@ CampCareer should not expose a menu of every capability.
 4. Save, Compare and Login are secondary actions.
 5. Maps, Countries, Cities, Visa and Institutions may be linked when the current career/path requires them.
 6. Hidden routes must not be re-added to global navigation merely because the implementation exists.
+7. Secondary/contextual routes should explicitly describe their supporting role rather than presenting themselves as equal products.
 
 ## Account and personalisation policy
 
@@ -91,6 +92,8 @@ Allowed pre-account value:
 
 Account prompts are justified only by a user-initiated retention action such as Save, or a later pathway refinement that clearly benefits from personal information.
 
+Profile/account must not restore workspace, dashboard Home, early onboarding or “set your direction” as its primary purpose. Account exists to retain saved decisions and manage settings.
+
 ## Wave 1 implementation
 
 Wave 1 changed product perception without destructive deletion:
@@ -107,7 +110,7 @@ Wave 1 changed product perception without destructive deletion:
 
 ## Wave 2 implementation
 
-Wave 2 consolidates the full Career Page below the Hero.
+Wave 2 consolidated the full Career Page below the Hero.
 
 The primary Career Page now renders:
 
@@ -117,7 +120,7 @@ Implementation rules:
 
 - `career-core-sections.tsx` owns Evidence → Path → Study / Programs → Jobs.
 - `CareerMarketResults` is no longer rendered by the Career Page.
-- legacy `Job market score`, `FREE CAREER MARKET BRIEF`, duplicated market-score disclaimers and early personalisation blocks are therefore removed from the primary result experience without deleting their dormant implementation.
+- legacy `Job market score`, `FREE CAREER MARKET BRIEF`, duplicated market-score disclaimers and early personalisation blocks are removed from the primary result experience without deleting their dormant implementation.
 - Evidence explains Demand, Pay and Entry and surfaces official sources.
 - Path carries licensing, training, work-rights/visa and job-market conditions without changing the public Score.
 - Study / Programs uses verified career-relevant program, training and apprenticeship resources.
@@ -126,9 +129,33 @@ Implementation rules:
 
 See `docs/CAREER_PAGE_CORE_FLOW.md` for the canonical Career Page contract.
 
-## Future wave
+## Wave 3 implementation
 
-Wave 3: rework Programs, Jobs, Compare, account, Countries, Visa and Maps around the new hierarchy; delete dormant code only after usage and dependency audits show it is safe.
+Wave 3 reorganises the remaining secondary and contextual surfaces around the Career Page without destructive deletion.
+
+Implemented:
+
+- shared contextual-surface notice under workspace navigation for Programs/Study, Compare, Countries/Cities, Visa, Institutions and Occupation exploration
+- Programs header now frames study around a career outcome, uses CampCareer brand styling and preserves a selected career when changing country
+- Compare header now identifies comparison as a secondary decision tool rather than a parallel product
+- Profile is rewritten around saved careers and account settings; `/home`, onboarding and workspace CTAs are removed
+- account menu is rewritten around saved-career retention
+- Countries metadata and shared context are reframed around career evidence rather than destination dashboards
+- Visa metadata and explorer are reframed as work-rights/path context; purple independent-product styling is removed from the primary explorer
+- Maps is reframed as regional context and supports a `country + career` return path to Career Page
+- Jobs remains centered in the Career Page; existing country job routes are retained for SEO/discovery/compatibility rather than promoted as a new global board
+
+See `docs/SECONDARY_CONTEXTUAL_SURFACES.md` for the canonical Wave 3 contract.
+
+## Deletion policy after Wave 3
+
+The product hierarchy cleanup is complete enough to stop broad surface creation. Dormant implementation should now be deleted only through targeted dependency/usage audits.
+
+Default:
+
+`Hide first → observe dependencies and usage → delete later`
+
+Do not perform broad deletion merely because a route is no longer primary.
 
 ## Do not regress
 
@@ -142,3 +169,9 @@ Do not restore any of the following without an explicit product decision:
 - login as the destination after clicking the CampCareer wordmark
 - legacy `CareerMarketResults` on the primary Career Page
 - a second public career score below CampCareer Score
+- Programs as an unrelated education marketplace
+- Compare as a top-level tool suite
+- Account as a workspace/onboarding gateway
+- Visa as a Score dimension or independent attractiveness product
+- Maps as a global exploration entry point
+- Jobs as an unrelated board detached from Career context
