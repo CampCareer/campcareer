@@ -12,6 +12,7 @@ import type {
   CountryOccupationResolvedProgram,
   CountryOccupationSpecialisation,
 } from "@/lib/workspace/country-occupation-contract"
+import { isCareerScoreReady } from "./career-coverage"
 
 const numeric = (value: unknown): number | null => {
   if (value == null || value === "") return null
@@ -152,7 +153,7 @@ export async function getCountryOccupationProfile(
     entryBurden: numeric(metricRow.entry_burden_component),
   }
 
-  const campCareerScore = campCareerScoreFromLegacyBreakdown({
+  const scoreCandidate = campCareerScoreFromLegacyBreakdown({
     shortage: internalBreakdown.shortage,
     vacancyIntensity: internalBreakdown.vacancyIntensity,
     employerDiversity: internalBreakdown.employerDiversity,
@@ -162,6 +163,8 @@ export async function getCountryOccupationProfile(
     growth: internalBreakdown.growth,
     entryBurden: internalBreakdown.entryBurden,
   })
+  const scoreReady = isCareerScoreReady(country, career)
+  const campCareerScore = scoreReady ? scoreCandidate : null
 
   const metric: CountryOccupationMetric = {
     asOfDate: metricRow.as_of_date,
@@ -186,9 +189,10 @@ export async function getCountryOccupationProfile(
     scoreEvidence: {
       ...(metricRow.score_evidence ?? {}) as Record<string, unknown>,
       publicScore: campCareerScore,
+      publicScoreReady: scoreReady,
       internalOpportunityScore: numeric(metricRow.opportunity_score),
       internalScoreMethodologyVersion: metricRow.score_methodology_version,
-      scoringPolicy: "The public CampCareer Score excludes visa and uses Demand 40 / Pay 30 / Entry 30.",
+      scoringPolicy: "The public CampCareer Score excludes visa and uses Demand 40 / Pay 30 / Entry 30. Coverage readiness must also pass before the derived legacy score is public.",
     },
     score: {
       shortage: internalBreakdown.shortage ?? 0,
