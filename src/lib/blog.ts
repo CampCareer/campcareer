@@ -5,6 +5,16 @@ import blogManifest from "@/data/blog-manifest.json"
 
 const BLOG_DIR = path.join(process.cwd(), "content/blog")
 
+// These URLs remain directly readable while URL-level GSC/backlink evidence is
+// collected, but they are not promoted in the relaunch listing or sitemap.
+// See docs/BLOG_SEO_GEO_AUDIT_2026-08-14.md before changing this inventory.
+const BLOG_SEO_HOLDOUT_SLUGS = new Set([
+  "best-country-to-study-indian-students-2026",
+  "ielts-score-requirements-2026",
+  "ireland-language-school-guide-2026",
+  "study-abroad-checklist-korean-students-2026",
+])
+
 export type PostMeta = {
   slug: string
   title: string
@@ -33,6 +43,14 @@ export type PostMeta = {
 
 export function getAllPosts(): PostMeta[] {
   return blogManifest as PostMeta[]
+}
+
+export function isBlogSeoHoldout(slug: string) {
+  return BLOG_SEO_HOLDOUT_SLUGS.has(slug)
+}
+
+export function getPublishedBlogPosts(): PostMeta[] {
+  return getAllPosts().filter((post) => !isBlogSeoHoldout(post.slug))
 }
 
 // Strip markdown emphasis/links so FAQ answers are clean plain text for schema.
