@@ -2,6 +2,8 @@
 
 The authoritative product strategy is in [PRODUCT_DOCTRINE.md](./PRODUCT_DOCTRINE.md). This file is the concise execution rule for the initial CampCareer product.
 
+The canonical site structure and route disposition are in [INITIAL_INFORMATION_ARCHITECTURE.md](./INITIAL_INFORMATION_ARCHITECTURE.md).
+
 ## Product in one sentence
 
 > **CampCareer scores careers and shows you the path to get there.**
