@@ -245,10 +245,7 @@ export async function getCareerCountryRecommendations(careerId: string): Promise
 
   if (profilesResult.error) throw profilesResult.error
   const profiles = (profilesResult.data ?? []) as ProfileRow[]
-  const publicFoundationRows = foundationRows.filter(foundationHasPublicScore)
-  const publicFoundationCountries = new Set(publicFoundationRows.map((row) => row.countryCode))
-  const legacyProfiles = profiles.filter((profile) => !publicFoundationCountries.has(profile.country_code))
-  const profileKeys = legacyProfiles.map((profile) => profile.profile_key)
+  const profileKeys = profiles.map((profile) => profile.profile_key)
   const latestMetrics = new Map<string, MetricRow>()
 
   if (profileKeys.length) {
@@ -265,27 +262,10 @@ export async function getCareerCountryRecommendations(careerId: string): Promise
 
   const byCountry = new Map<string, CareerMarketRecommendation>()
 
-  for (const foundation of publicFoundationRows) {
-    if (!isFoundationRankable({
-      decisionReady: foundation.decisionReady,
-      scoreReady: foundation.scoreReady,
-      publishReady: foundation.publishReady,
-      opportunityScore: foundation.campCareerScore?.total ?? null,
-    })) continue
-    byCountry.set(foundation.countryCode, {
-      countryCode: foundation.countryCode,
-      countryName: countryName(foundation.countryCode),
-      officialTitle: foundation.officialTitle,
-      opportunityScore: foundation.campCareerScore?.total ?? null,
-      campCareerScore: foundation.campCareerScore,
-      scoreStatus: "foundation_ready",
-      registrationRequired: null,
-      publicationStatus: "decision_ready",
-      demand: null,
-    })
-  }
-
-  for (const profile of legacyProfiles) {
+  // Prefer the reviewed country_occupation profile when it exists. This keeps
+  // a newer internal foundation snapshot from changing a locked public score
+  // before that foundation evidence has separately passed coverage review.
+  for (const profile of profiles) {
     const metric = latestMetrics.get(profile.profile_key)
     const scoreCandidate = metric
       ? campCareerScoreFromLegacyBreakdown({
@@ -306,10 +286,34 @@ export async function getCareerCountryRecommendations(careerId: string): Promise
       officialTitle: profile.official_title,
       opportunityScore: campCareerScore?.total ?? null,
       campCareerScore,
-      scoreStatus: campCareerScore ? metric?.score_status ?? null : "not_ready",
+      scoreStatus: campCareerScore ? metric?.score_status ?? null : null,
       registrationRequired: profile.registration_required,
       publicationStatus: profile.publication_status,
       demand: toDemand(careerId, profile.country_code),
+    })
+  }
+
+  // Foundation summaries are used only when there is no reviewed legacy
+  // profile for the country and the pair is already in the explicit Ready pool.
+  for (const foundation of foundationRows) {
+    if (byCountry.has(foundation.countryCode)) continue
+    if (!isCareerScoreReady(foundation.countryCode, careerId)) continue
+    if (!isFoundationRankable({
+      decisionReady: foundation.decisionReady,
+      scoreReady: foundation.scoreReady,
+      publishReady: foundation.publishReady,
+      opportunityScore: foundation.campCareerScore?.total ?? null,
+    })) continue
+    byCountry.set(foundation.countryCode, {
+      countryCode: foundation.countryCode,
+      countryName: countryName(foundation.countryCode),
+      officialTitle: foundation.officialTitle,
+      opportunityScore: foundation.campCareerScore?.total ?? null,
+      campCareerScore: foundation.campCareerScore,
+      scoreStatus: "foundation_ready",
+      registrationRequired: null,
+      publicationStatus: "decision_ready",
+      demand: null,
     })
   }
 
