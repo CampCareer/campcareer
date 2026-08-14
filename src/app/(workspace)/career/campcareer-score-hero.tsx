@@ -174,8 +174,8 @@ export function CampCareerScoreHero({ query, locale }: { query: OverviewSearchVa
     return (
       <section className="mt-6 rounded-xl border border-campcareer-border bg-campcareer-surface px-5 py-6 sm:px-8 sm:py-8" aria-labelledby="career-heading">
         <header>
-          <p className="text-sm font-medium text-campcareer-muted">{insight.country.name}</p>
-          <h1 id="career-heading" className="mt-1 text-3xl font-bold tracking-[-0.045em] text-campcareer-ink sm:text-4xl">{careerName}</h1>
+          <h1 id="career-heading" className="text-3xl font-bold tracking-[-0.045em] text-campcareer-ink sm:text-4xl">{careerName}</h1>
+          <p className="mt-1 text-sm font-medium text-campcareer-muted">{insight.country.name}</p>
         </header>
         <div className="mt-8 border-t border-campcareer-border pt-6">
           <p className="text-sm font-semibold text-brand">CampCareer Score</p>
@@ -196,8 +196,8 @@ export function CampCareerScoreHero({ query, locale }: { query: OverviewSearchVa
   return (
     <section className="mt-6 rounded-xl border border-campcareer-border bg-campcareer-surface px-5 py-6 sm:px-8 sm:py-8" aria-labelledby="career-heading">
       <header>
-        <p className="text-sm font-medium text-campcareer-muted">{insight.country.name}</p>
-        <h1 id="career-heading" className="mt-1 text-3xl font-bold tracking-[-0.045em] text-campcareer-ink sm:text-4xl">{careerName}</h1>
+        <h1 id="career-heading" className="text-3xl font-bold tracking-[-0.045em] text-campcareer-ink sm:text-4xl">{careerName}</h1>
+        <p className="mt-1 text-sm font-medium text-campcareer-muted">{insight.country.name}</p>
       </header>
 
       <div className="mt-8 border-t border-campcareer-border pt-6">
