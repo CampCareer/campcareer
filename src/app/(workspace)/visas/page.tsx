@@ -2,8 +2,8 @@ import { loadVisaCatalog } from "@/lib/workspace/visa-catalog-loader"
 import { VisasExplorer } from "./visas-explorer"
 
 export const metadata = {
-  title: "Visas",
-  description: "Match a visa to your study, work or working-holiday plan with official source links.",
+  title: "Visa and work-rights context",
+  description: "Review visa and work-rights evidence as part of a career pathway. Visa does not change the public CampCareer Score.",
   robots: { index: false, follow: false } as const,
 }
 
