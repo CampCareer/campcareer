@@ -1,5 +1,6 @@
 import "server-only"
 
+import { CAMPCAREER_SCORE_VERSION, campCareerScoreFromLegacyBreakdown } from "@/lib/campcareer-score"
 import { supabase } from "@/lib/supabase"
 import { supabaseAdmin } from "@/lib/supabase-admin"
 import type {
@@ -139,6 +140,29 @@ export async function getCountryOccupationProfile(
     }
   }
 
+  const internalBreakdown = {
+    shortage: numeric(metricRow.shortage_component),
+    vacancyIntensity: numeric(metricRow.vacancy_intensity_component),
+    employerDiversity: numeric(metricRow.employer_diversity_component),
+    vacancyTrend: numeric(metricRow.vacancy_trend_component),
+    entryLevel: numeric(metricRow.entry_level_component),
+    salary: numeric(metricRow.salary_component),
+    growth: numeric(metricRow.growth_component),
+    visa: numeric(metricRow.visa_component),
+    entryBurden: numeric(metricRow.entry_burden_component),
+  }
+
+  const campCareerScore = campCareerScoreFromLegacyBreakdown({
+    shortage: internalBreakdown.shortage,
+    vacancyIntensity: internalBreakdown.vacancyIntensity,
+    employerDiversity: internalBreakdown.employerDiversity,
+    vacancyTrend: internalBreakdown.vacancyTrend,
+    entryLevel: internalBreakdown.entryLevel,
+    salary: internalBreakdown.salary,
+    growth: internalBreakdown.growth,
+    entryBurden: internalBreakdown.entryBurden,
+  })
+
   const metric: CountryOccupationMetric = {
     asOfDate: metricRow.as_of_date,
     employmentTotal: numeric(metricRow.employment_total),
@@ -155,20 +179,27 @@ export async function getCountryOccupationProfile(
     vacancyYoyPct: numeric(metricRow.vacancy_yoy_pct),
     employmentGrowth5yPct: numeric(metricRow.employment_growth_5y_pct),
     employmentGrowth10yPct: numeric(metricRow.employment_growth_10y_pct),
-    opportunityScore: Number(metricRow.opportunity_score),
-    scoreMethodologyVersion: metricRow.score_methodology_version,
+    opportunityScore: campCareerScore?.total ?? null,
+    campCareerScore,
+    scoreMethodologyVersion: CAMPCAREER_SCORE_VERSION,
     scoreStatus: metricRow.score_status,
-    scoreEvidence: (metricRow.score_evidence ?? {}) as Record<string, unknown>,
+    scoreEvidence: {
+      ...(metricRow.score_evidence ?? {}) as Record<string, unknown>,
+      publicScore: campCareerScore,
+      internalOpportunityScore: numeric(metricRow.opportunity_score),
+      internalScoreMethodologyVersion: metricRow.score_methodology_version,
+      scoringPolicy: "The public CampCareer Score excludes visa and uses Demand 40 / Pay 30 / Entry 30.",
+    },
     score: {
-      shortage: Number(metricRow.shortage_component),
-      vacancyIntensity: Number(metricRow.vacancy_intensity_component),
-      employerDiversity: Number(metricRow.employer_diversity_component),
-      vacancyTrend: Number(metricRow.vacancy_trend_component),
-      entryLevel: Number(metricRow.entry_level_component),
-      salary: Number(metricRow.salary_component),
-      growth: Number(metricRow.growth_component),
-      visa: Number(metricRow.visa_component),
-      entryBurden: Number(metricRow.entry_burden_component),
+      shortage: internalBreakdown.shortage ?? 0,
+      vacancyIntensity: internalBreakdown.vacancyIntensity ?? 0,
+      employerDiversity: internalBreakdown.employerDiversity ?? 0,
+      vacancyTrend: internalBreakdown.vacancyTrend ?? 0,
+      entryLevel: internalBreakdown.entryLevel ?? 0,
+      salary: internalBreakdown.salary ?? 0,
+      growth: internalBreakdown.growth ?? 0,
+      visa: internalBreakdown.visa ?? 0,
+      entryBurden: internalBreakdown.entryBurden ?? 0,
     },
     sourceCheckedAt: metricRow.source_checked_at,
   }
