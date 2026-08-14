@@ -41,8 +41,8 @@ export function HomeSearchForm({ values, locale, onValuesChange, onSubmit, compa
   const countryOptions = useMemo(() => getCountryOptions(locale), [locale])
   const occupationOptions = useMemo(() => getOccupationOptions(locale), [locale])
   const copy = locale === "ko"
-    ? { country: "어디에서", occupation: "어떤 일을", countryPlaceholder: "나라 선택", occupationPlaceholder: "직업 선택", submit: "내 가능성 확인", empty: "검색 결과가 없어요." }
-    : { country: "Where", occupation: "What work", countryPlaceholder: "Choose a country", occupationPlaceholder: "Choose an occupation", submit: "Check my fit", empty: "No matches found." }
+    ? { country: "어디에서", occupation: "어떤 일을", countryPlaceholder: "나라 선택", occupationPlaceholder: "직업 선택", submit: "커리어 평가하기", empty: "검색 결과가 없어요." }
+    : { country: "Where", occupation: "What work", countryPlaceholder: "Choose a country", occupationPlaceholder: "Choose an occupation", submit: "Evaluate career", empty: "No matches found." }
 
   const update = (key: keyof OverviewSearchValues, value: string) => {
     onValuesChange({ ...values, [key]: value })
@@ -61,7 +61,7 @@ export function HomeSearchForm({ values, locale, onValuesChange, onSubmit, compa
     <form onSubmit={submit} noValidate className={cn("grid gap-3 md:items-end", showOccupation ? "md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]" : "md:grid-cols-[minmax(0,1fr)_auto]", className)}>
       <SearchSelect id="country" label={copy.country} value={values.country} options={countryOptions} placeholder={copy.countryPlaceholder} error={errors.country} emptyText={copy.empty} onChange={(value) => update("country", value)} />
       {showOccupation && <SearchSelect id="occupation" label={copy.occupation} value={values.occupation} options={occupationOptions} placeholder={copy.occupationPlaceholder} error={errors.occupation} emptyText={copy.empty} recommendedIds={RECOMMENDED_OCCUPATION_IDS} recommendedLabel={locale === "ko" ? "추천 직종" : "Recommended occupations"} resultsLabel={locale === "ko" ? "관련 직종" : "Related occupations"} onChange={(value) => update("occupation", value)} />}
-      <button type="submit" className={cn("inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-[#1d4ed8] px-5 text-sm font-semibold text-white transition hover:bg-[#1e40af] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-600/20", compact ? "md:min-w-36" : "md:min-w-44")}>
+      <button type="submit" className={cn("inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-brand px-5 text-sm font-semibold text-white transition hover:bg-[hsl(var(--brand-press))] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/20", compact ? "md:min-w-36" : "md:min-w-44")}>
         {submitLabel ?? copy.submit} <ArrowRight className="size-4" />
       </button>
     </form>
@@ -123,7 +123,7 @@ function SearchSelect({ id, label, value, options, placeholder, error, emptyText
           onKeyDown={(event) => {
             if (event.key === "Escape") setOpen(false)
           }}
-          className={cn("h-12 w-full rounded-xl border bg-white py-2 pl-10 pr-10 text-[15px] text-[#18181b] outline-none transition placeholder:text-[#a1a1aa] focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10", error ? "border-red-500" : "border-[#dededb]")}
+          className={cn("h-12 w-full rounded-xl border bg-white py-2 pl-10 pr-10 text-[15px] text-[#18181b] outline-none transition placeholder:text-[#a1a1aa] focus:border-brand focus:ring-4 focus:ring-brand/10", error ? "border-red-500" : "border-[#dededb]")}
         />
         <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 size-4 -translate-y-1/2 text-[#a1a1aa]" />
       </div>
@@ -134,9 +134,9 @@ function SearchSelect({ id, label, value, options, placeholder, error, emptyText
             <p className="px-3 pb-1 pt-1.5 text-[11px] font-semibold tracking-[0.08em] text-[#8a8a90]">{query.trim() ? resultsLabel : recommendedLabel}</p>
           )}
           {matches.length ? matches.map((option) => (
-            <button key={option.value} type="button" role="option" aria-selected={option.value === value} onMouseDown={(event) => event.preventDefault()} onClick={() => choose(option)} className="flex min-h-10 w-full items-center justify-between rounded-lg px-3 text-left text-sm text-[#27272a] transition hover:bg-blue-50">
+            <button key={option.value} type="button" role="option" aria-selected={option.value === value} onMouseDown={(event) => event.preventDefault()} onClick={() => choose(option)} className="flex min-h-10 w-full items-center justify-between rounded-lg px-3 text-left text-sm text-[#27272a] transition hover:bg-[hsl(var(--brand-tint))]">
               <span>{option.label}</span>
-              {option.value === value && <Check className="size-4 text-blue-700" />}
+              {option.value === value && <Check className="size-4 text-brand" />}
             </button>
           )) : <p className="px-3 py-3 text-sm text-[#71717a]">{emptyText}</p>}
         </div>
