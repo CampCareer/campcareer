@@ -5,10 +5,11 @@ Status: **Canonical experience specification for the initial Career Page**
 Owner: CampCareer  
 Effective date: 2026-08-14
 
-This document translates the product doctrine and initial information architecture into the exact content hierarchy and interaction model for CampCareer's primary product surface.
+This document translates the product doctrine, score contract and information architecture into the page-level experience for CampCareer's primary product surface.
 
 See also:
 - [PRODUCT_DOCTRINE.md](./PRODUCT_DOCTRINE.md) — product purpose and scope
+- [CAMPCAREER_SCORE_CONTRACT.md](./CAMPCAREER_SCORE_CONTRACT.md) — canonical public score
 - [INITIAL_INFORMATION_ARCHITECTURE.md](./INITIAL_INFORMATION_ARCHITECTURE.md) — site hierarchy and route intent
 - [product-core.md](./product-core.md) — concise execution rules
 
@@ -18,15 +19,15 @@ See also:
 
 A Career Page has one job:
 
-> **Help the user decide whether this career is worth pursuing in this market, then move them toward the next practical action.**
+> **Help a person considering a new career or career change decide whether this career is worth pursuing in this country, then move them toward the next practical action.**
 
-The user should not have to choose which CampCareer tool to use.
+The user should not need to choose which CampCareer tool to use.
 
 The page itself carries the journey:
 
-`Verdict → Evidence → Pathway → Study / Programs → Jobs → Secondary actions`
+`Score + Verdict → Evidence → Pathway → Study / Programs → Jobs → Secondary actions`
 
-The Career Page is not a dashboard, report library, comparison workspace, university directory, job board, or onboarding funnel.
+The Career Page is not a dashboard, comparison workspace, university directory, job board, onboarding funnel, or raw data report.
 
 ---
 
@@ -35,27 +36,28 @@ The Career Page is not a dashboard, report library, comparison workspace, univer
 ### Within five seconds
 
 The user should understand:
-- which career they are viewing;
-- which country / market the result applies to;
-- the Career Score;
-- the short verdict.
+- the career;
+- the country / market;
+- CampCareer Score;
+- verdict;
+- Demand, Pay and Entry scores.
 
 ### Within thirty seconds
 
 The user should understand:
-- the strongest reasons for the score;
-- the biggest risk, blocker, or tradeoff;
-- whether the evidence is strong enough to trust as a decision signal.
+- the strongest reason the career scores well;
+- the main tradeoff or entry friction;
+- whether evidence confidence is Verified, Estimated or Limited.
 
 ### Within a few minutes
 
 The user should be able to:
-- understand the entry pathway;
-- inspect relevant training or programs;
+- understand the generic entry pathway;
+- inspect relevant study or training options;
 - inspect real employment opportunities or trusted job-search destinations;
-- take an external next action.
+- take a useful next action without first creating an account.
 
-If the page makes the user configure an account, compare tools, maps, countries, or a long questionnaire before these outcomes, the page has failed.
+If the page makes the user configure an account, map, comparison, country tool, or questionnaire before these outcomes, the page has failed.
 
 ---
 
@@ -63,8 +65,8 @@ If the page makes the user configure an account, compare tools, maps, countries,
 
 The default order is:
 
-1. **Career Hero / Verdict**
-2. **Score reasons**
+1. **Career Hero — Score + Verdict**
+2. **Why it scored this way — Demand / Pay / Entry**
 3. **Key evidence**
 4. **Pathway / requirements**
 5. **Study / Programs**
@@ -73,11 +75,11 @@ The default order is:
 8. **Save / Compare / Personalise / Share**
 9. **Related careers** only when useful
 
-Sections may collapse or be omitted when data is unavailable, but they must not be reordered merely because another dataset is easier to render.
+Sections may collapse or be omitted when data is unavailable, but the order must not change merely because another dataset is easier to render.
 
 ---
 
-# 4. Section A — Career Hero / Verdict
+# 4. Section A — Career Hero
 
 ## Purpose
 
@@ -85,67 +87,106 @@ Answer immediately:
 
 > **Is this career worth pursuing here?**
 
-This is the most important area of the entire product.
-
 ## Required content
 
-### Identity
+### Career identity
 - occupation name;
 - country / market;
-- optional official local occupation title when it aids trust;
-- last meaningful evidence update, shown quietly.
+- optional official local occupation title when useful;
+- evidence update date shown quietly.
 
-### Career Score
+### CampCareer Score
 
-The score must be the dominant visual element, not a small badge in the corner.
+The score is the dominant visual element.
 
 Required semantic structure:
 
 ```text
-87 / 100
+78 / 100
 STRONG CAREER
 ```
 
-Exact visual styling is defined in the brand phase, but layout hierarchy is fixed now:
+The total must use the score defined in `CAMPCAREER_SCORE_CONTRACT.md`, not the historical nine-factor Opportunity Score.
 
-1. score number;
-2. verdict label;
-3. one-sentence explanation.
+### Three public dimensions
 
-### Verdict
+Directly associated with the total:
 
-The verdict must be short and directional.
+```text
+Demand  9/10
+Pay     8/10
+Entry   6/10
+```
+
+These are the only public score dimensions.
+
+Do not add separate public scores for:
+- visa;
+- stability;
+- mobility;
+- employer diversity;
+- shortage;
+- growth;
+- personal fit.
+
+Those are evidence or pathway concepts underneath the three public dimensions.
+
+### Verdict sentence
+
+One short sentence explains the tradeoff.
 
 Example:
 
-> **Strong career. Demand and pay are attractive, but registration is a real entry gate.**
+> **Strong demand and good pay make this attractive, but becoming job-ready requires meaningful training and licensing.**
 
-Do not lead with generic descriptions such as “Review the local market and entry conditions.”
+Avoid generic copy such as “Review the local market and entry conditions.”
 
-The user needs CampCareer's conclusion first.
+CampCareer should give a conclusion.
 
-## Hero information budget
+### Evidence confidence
+
+Show separately from the score:
+
+```text
+Evidence: Verified
+```
+
+or:
+
+```text
+Evidence: Estimated
+```
+
+or:
+
+```text
+Evidence: Limited
+```
+
+Evidence confidence must never be represented as a fourth score dimension.
+
+## First-viewport information budget
 
 Above the first major scroll boundary, show no more than:
-- one score;
-- one verdict sentence;
-- three to four high-signal reasons;
-- one material warning / blocker when present;
+- career and country;
+- total score;
+- verdict;
+- Demand / Pay / Entry;
+- one material tradeoff or blocker;
+- evidence confidence;
 - one low-friction continuation cue.
 
-Do not put Save, Compare, personalisation, several links, and multiple tool CTAs beside the score.
+Do not put Save, Compare, login, personalisation and several external links beside the score.
 
 ## Primary interaction
 
-The default action is not login.
-
-Preferred continuation is an in-page action such as:
+The default continuation is in-page:
 
 > **Why this score ↓**
 
-or simply natural scrolling with a visible section cue.
+Natural scrolling is acceptable if the next section is clearly visible.
 
-If there is one immediately useful external action that is uniquely important for the career, it may appear later in the relevant section, not as a competing hero CTA.
+Login is not the primary CTA.
 
 ---
 
@@ -155,78 +196,73 @@ If there is one immediately useful external action that is uniquely important fo
 
 Answer:
 
-> **What drove the verdict?**
+> **Why are Demand, Pay and Entry what they are?**
 
-The user should be able to understand the score without reading raw methodology.
+The page must explain the score in the same three-language system used in social content.
 
-## Display model
+## Demand
 
-Do not expose all nine score inputs at equal visual weight by default.
+Display:
+- `Demand X/10`;
+- a plain-language state such as Very strong / Strong / Mixed / Weak;
+- one sentence explaining the main demand reason;
+- one or two strongest supporting signals.
 
-Group the underlying score system into four to five user-facing dimensions.
+Possible evidence underneath Demand includes:
+- shortage evidence;
+- vacancies;
+- employment base;
+- vacancy or employment momentum;
+- projected growth;
+- employer / industry breadth.
 
-Recommended initial dimensions:
+Do not expose these as equal public subscores by default.
 
-1. **Demand**
-   - shortage signal;
-   - vacancy intensity;
-   - vacancy trend / employment momentum;
-   - employer or industry diversity where useful.
+## Pay
 
-2. **Pay & growth**
-   - salary / relative salary;
-   - projected or historical growth.
+Display:
+- `Pay X/10`;
+- relative earning interpretation;
+- absolute salary evidence nearby.
 
-3. **Entry access**
-   - entry-level accessibility;
-   - education / training burden;
-   - registration or licensing burden.
+The user should understand both:
+- how the career pays relative to the local labour market; and
+- roughly what the actual earnings figure is.
 
-4. **Stability / outlook**
-   - employment base;
-   - growth and long-term signals;
-   - evidence-supported stability indicators.
+## Entry
 
-5. **Mobility / legal access** when materially relevant
-   - visa accessibility;
-   - work-rights constraints;
-   - must never be presented as a visa approval probability.
+Display:
+- `Entry X/10`;
+- explicit statement that higher means easier;
+- short explanation of the qualification / training / licensing burden.
 
-## Display rule
+Possible evidence includes:
+- degree or qualification requirement;
+- apprenticeship / training duration;
+- registration or licence;
+- prior experience expectations;
+- mandatory safety / certification requirements;
+- existence of a realistic newcomer route.
 
-The first view should show only the most decision-relevant three to five dimensions.
+Entry is about becoming job-ready from a newcomer baseline. It is not personal eligibility.
 
-Each dimension shows:
-- plain-language label;
-- concise strength / weakness state;
-- one number or signal when meaningful;
-- one sentence explaining why it matters.
+## Formula disclosure
 
-Example:
+A secondary interaction may say:
+
+> **How CampCareer Score works**
+
+and reveal:
 
 ```text
-Demand        Very strong
-Recent vacancy signals and shortage evidence are both positive.
-
-Pay           Strong
-Median annual earnings are above the market benchmark used in this score.
-
-Entry access  Harder
-Registration and approved training are required before normal practice.
+Demand 40%
+Pay    30%
+Entry  30%
 ```
 
-Do not make the user infer meaning from nine unlabeled numeric subscores.
+The formula should be understandable without exposing the internal evidence-engine schema.
 
-## Methodology disclosure
-
-A secondary `See how this score is calculated` interaction may reveal:
-- the detailed score components;
-- methodology version;
-- source mapping;
-- missing evidence;
-- confidence.
-
-This is progressive disclosure, not primary page content.
+Detailed internal evidence may be available under deeper methodology disclosure.
 
 ---
 
@@ -236,46 +272,31 @@ This is progressive disclosure, not primary page content.
 
 Answer:
 
-> **What real-world evidence supports this verdict?**
+> **What real-world evidence supports this score?**
 
 This is where CampCareer earns trust.
 
 ## Initial evidence budget
 
-Show approximately three to four evidence cards, selected by decision usefulness rather than database availability.
-
-Typical examples:
+Show approximately three to four evidence cards selected by decision usefulness, for example:
 - median salary / earnings;
-- recent hiring demand or vacancies;
+- recent vacancies or annual openings;
 - employment size;
-- projected or five-year growth.
+- projected or historical growth.
 
 Each card should contain:
 - metric;
 - plain-language meaning;
-- period / as-of date;
+- reference period / as-of date;
 - source access through a secondary details interaction.
 
-## Confidence
+## Confidence rule
 
-Evidence confidence is separate from the Career Score.
+Do not hide weak or proxy evidence.
 
-Recommended language:
-- **Verified evidence**
-- **Estimated from partial evidence**
-- **Limited evidence**
+If evidence is estimated or limited, say so once clearly and explain what is missing.
 
-Confidence must not masquerade as part of the career-quality score.
-
-## Missing evidence
-
-Do not fill missing values with average-looking placeholders.
-
-Prefer:
-
-> **Not enough verified vacancy data yet**
-
-rather than a neutral score that looks measured.
+Do not reduce the public score by an arbitrary confidence penalty. Score quality and evidence confidence remain separate.
 
 ---
 
@@ -287,63 +308,50 @@ Answer:
 
 > **What do I actually need to do to enter this career?**
 
-This section converts interest into a plan.
+The generic pathway is visible before login.
 
-## Default structure
+## Structure
 
-Use a short ordered pathway, normally three to five steps.
+Prefer three to five numbered steps.
 
-Example for Registered Nurse in Australia:
+Example:
 
 ```text
-1. Complete an approved nursing qualification
-2. Meet registration requirements
-3. Obtain / confirm work rights where applicable
-4. Apply for graduate or entry nursing roles
+01  Training / qualification
+02  Registration / licence
+03  Work rights if relevant
+04  First job
 ```
 
-Each step should contain:
-- action title;
-- one concise explanation;
-- official source link only when the user needs to verify or act.
+Only include steps that materially apply to the career.
 
-## Blockers
+## Requirement labels
 
-Material blockers must appear before optional detail.
+Requirements should be classified in plain language:
 
-Use explicit severity:
-- **Required** — hard prerequisite;
-- **Depends on your situation** — conditional;
-- **Good to know** — informational.
+- **Required**
+- **Depends on your situation**
+- **Good to know**
 
-Examples:
-- registration required;
-- occupational licence required;
-- mandatory safety training;
-- work-rights limitation;
-- specific education requirement.
+Hard blockers must never be hidden inside a strong score.
 
-Do not hide hard blockers inside the score.
+## Visa and work rights
 
-## Visa / work-rights rule
+Visa and work rights belong here or in a nearby personal-path subsection.
 
-Visa information belongs here only when it materially affects the route.
+They do not contribute to the public CampCareer Score.
 
-It should answer:
-
-> **Will legal work access change the path I need to take?**
-
-It must not become a standalone visa funnel or imply approval probability.
+This separation is non-negotiable for v1.
 
 ## Personalisation
 
-Only after the generic pathway is visible may CampCareer offer:
+After the generic pathway is clear, an optional CTA may appear:
 
 > **Check this path for my situation**
 
-This is optional enhancement.
+Personalisation may shorten, lengthen or qualify the pathway based on the user's circumstances.
 
-Signed-out users must not be forced to log in to understand the generic pathway.
+It must not recalculate the public CampCareer Score.
 
 ---
 
@@ -353,60 +361,38 @@ Signed-out users must not be forced to log in to understand the generic pathway.
 
 Answer:
 
-> **Where can I study or train for this career?**
+> **What should I study or train in, and where can I inspect real options?**
 
-This is an action section, not a directory dump.
+## Information order
 
-## Content hierarchy
-
-### First
-Explain the required type of education or training.
+First explain the typical education / training route.
 
 Example:
 
 > **Typical entry route: approved Bachelor of Nursing**
 
-### Then
-Show a curated first set of relevant programs, normally three to six.
+Then show a curated shortlist of relevant programs.
 
-Each program card should prioritise:
-- program title;
+## Program count
+
+Prefer approximately 3–6 strong options rather than exposing a large database.
+
+## Program card content
+
+Use only decision-relevant fields:
+- program;
 - institution / provider;
-- location;
-- duration when known;
-- tuition / cost when reliable and decision-relevant;
-- pathway relationship (`direct`, `graduate entry`, `progression`, `related`);
-- primary external action.
+- location when useful;
+- duration;
+- cost when reliable;
+- relationship to the career;
+- external CTA.
 
-### Primary CTA
+Example CTAs:
+- **View program**
+- **Check entry requirements**
 
-Use a concrete action such as:
-
-> **View program**
-
-or
-
-> **Check entry requirements**
-
-rather than a vague “Explore”.
-
-## Program safety rule
-
-A program relationship must not imply:
-- guaranteed professional registration;
-- guaranteed admission;
-- guaranteed visa eligibility;
-- guaranteed employment.
-
-If registration linkage is material, tell the user what must be verified before enrolment.
-
-## More results
-
-If there are many programs, show a small curated set first and then:
-
-> **See more programs for this career**
-
-The Career Page must not turn into an endless institution catalog.
+The page is not an exhaustive university directory.
 
 ---
 
@@ -416,358 +402,259 @@ The Career Page must not turn into an endless institution catalog.
 
 Answer:
 
-> **What real work opportunities can I inspect next?**
+> **What real work can I inspect next?**
 
-This section makes CampCareer feel connected to the real world rather than ending at education advice.
+## Preferred hierarchy
 
-## Preferred content order
+When data is available, prioritize:
 
-1. current / recently checked job opportunities when reliable;
-2. relevant official employer careers pages;
-3. trusted job-search destinations when exact listings are unavailable.
+1. active relevant job opportunities;
+2. official employer career pages;
+3. trusted job-search destinations.
 
-## Job card information
+## Job card content
 
-When exact job opportunities exist, show:
+When available:
 - role title;
 - employer;
 - location;
-- listing status;
-- posting / deadline when known;
-- last checked date;
-- direct listing or apply action.
+- posted date / deadline;
+- source;
+- View / Apply action.
 
-If a listing is expired, do not present it as current.
+Do not pretend CampCareer is the employer or a full job board.
 
-## Primary CTA
+## Freshness
 
-Examples:
-- **View job**
-- **View current roles**
-- **Search nursing jobs**
+Expired opportunities must not be presented as active.
 
-External actions should clearly indicate that the user is leaving CampCareer when appropriate.
-
-## Guidance
-
-One short `What to check in a job posting` disclosure may exist, but it must not push the actual jobs below a long educational section.
+If only general job-search links are available, label them honestly.
 
 ---
 
-# 10. Sources and trust
+# 10. Section G — Sources / methodology
 
 ## Purpose
 
-Keep evidence visible without turning the page into a research paper.
+Answer:
 
-## Default presentation
+> **Can I verify this?**
 
-Near the page end, provide:
-- evidence updated date;
-- key authorities / source categories;
+Keep this section compact by default.
+
+Include:
+- evidence update date;
 - score confidence;
-- `View sources` interaction;
-- `How CampCareer scores careers` link.
+- link to CampCareer Score methodology;
+- relevant official sources;
+- explanation of missing evidence when material.
 
-Individual metrics may also expose their direct source locally.
-
-## Rule
-
-Source detail is always reachable, but never the first thing the user must process.
+The detailed internal nine-factor evidence model may be disclosed for auditability, but it must be labeled as underlying evidence rather than as the public score.
 
 ---
 
-# 11. Secondary actions
+# 11. Section H — Secondary actions
 
-These actions come after the user has received core value.
-
-Priority:
-
-1. **Save career**
-2. **Compare with another career**
-3. **Personalise this path**
-4. **Share**
-
-These are not four primary CTAs.
-
-Recommended behavior:
-- one quiet Save affordance can remain accessible while scrolling;
-- Compare appears after the verdict/evidence or near the page end;
-- Personalisation appears after the generic pathway;
-- Share is utility-level.
-
-## Login rule
-
-If Save requires login:
-
-`Save → Sign in → return to the same Career Page`
-
-The user should not be redirected into onboarding unless they explicitly chose personalisation.
-
----
-
-# 12. Desktop wireframe
-
-Structural wireframe only; visual styling is defined later.
-
-```text
-┌───────────────────────────────────────────────────────────────┐
-│ CampCareer        Search careers        How scores work  Sign in │
-├───────────────────────────────────────────────────────────────┤
-│ Registered Nurse · Australia                                │
-│                                                               │
-│  87 / 100                                                     │
-│  STRONG CAREER                                                │
-│  Strong demand and pay; registration is the main entry gate. │
-│                                                               │
-│  Demand ↑   Pay ↑   Outlook ↑   Entry difficulty !           │
-│  Why this score ↓                                             │
-├───────────────────────────────────────────────────────────────┤
-│ WHY THIS SCORE                                                │
-│ Demand      Pay & growth      Entry access      Outlook       │
-├───────────────────────────────────────────────────────────────┤
-│ KEY EVIDENCE                                                  │
-│ Salary      Hiring demand     Employment        Growth        │
-│ Evidence confidence / updated date                            │
-├───────────────────────────────────────────────────────────────┤
-│ HOW TO BECOME A REGISTERED NURSE                              │
-│ 01 Qualification → 02 Registration → 03 Work rights → 04 Job │
-│ Required blocker / conditional notes                          │
-│ [Check this path for my situation]                            │
-├───────────────────────────────────────────────────────────────┤
-│ STUDY / PROGRAMS                                              │
-│ Required study route                                         │
-│ [Program] [Program] [Program]                                 │
-│ See more programs                                             │
-├───────────────────────────────────────────────────────────────┤
-│ JOBS                                                          │
-│ [Current role] [Current role] [Employer careers]              │
-│ View current roles                                            │
-├───────────────────────────────────────────────────────────────┤
-│ SOURCES / METHODOLOGY                                         │
-│ Updated · confidence · sources                                │
-├───────────────────────────────────────────────────────────────┤
-│ Save career   Compare   Personalise   Share                    │
-└───────────────────────────────────────────────────────────────┘
-```
-
-The page should feel like one editorial decision product, not a grid of independent app modules.
-
----
-
-# 13. Mobile wireframe
-
-Mobile is the primary acquisition experience because social traffic is expected to be significant.
-
-```text
-┌──────────────────────────┐
-│ CampCareer        Search │
-├──────────────────────────┤
-│ Registered Nurse         │
-│ Australia                │
-│                          │
-│ 87                       │
-│ /100                     │
-│ STRONG CAREER            │
-│                          │
-│ Strong demand and pay;   │
-│ registration is the      │
-│ main entry gate.         │
-│                          │
-│ Demand ↑  Pay ↑          │
-│ Outlook ↑ Entry !        │
-│                          │
-│ Why this score ↓         │
-├──────────────────────────┤
-│ Why this score           │
-│ [Demand]                 │
-│ [Pay & growth]           │
-│ [Entry access]           │
-│ [Outlook]                │
-├──────────────────────────┤
-│ Key evidence             │
-│ [Salary] [Demand]        │
-│ [Employment] [Growth]    │
-├──────────────────────────┤
-│ How to become one        │
-│ 01 ...                   │
-│ 02 ...                   │
-│ 03 ...                   │
-│ 04 ...                   │
-│                          │
-│ Check this path for me   │
-├──────────────────────────┤
-│ Programs                 │
-│ [Program card]           │
-│ [Program card]           │
-│ See more                 │
-├──────────────────────────┤
-│ Jobs                     │
-│ [Job card]               │
-│ [Job card]               │
-│ View current roles       │
-├──────────────────────────┤
-│ Sources                  │
-│ Save · Compare · Share   │
-└──────────────────────────┘
-```
-
-## Mobile rules
-
-- no multi-tool bottom navigation;
-- no sidebar;
-- no horizontally dense dashboard layout;
-- score and verdict fit comfortably in the first viewport;
-- cards stack naturally;
-- sticky UI, if used, may expose only one low-noise action such as Save or Search;
-- external CTAs must have touch-friendly targets;
-- avoid carousels for essential information.
-
----
-
-# 14. State model
-
-A Career Page must degrade honestly.
-
-## A. Decision-ready
-
-Show:
-- published / sufficiently covered score;
-- verdict;
-- evidence;
-- pathway;
-- programs and jobs when available.
-
-## B. Score available, evidence incomplete
-
-Show:
-- score with clear limited/estimated confidence;
-- what evidence is present;
-- what is missing;
-- pathway only where verified.
-
-Do not make the page visually identical to a highly verified result.
-
-## C. Evidence available, score not ready
-
-Do not invent a score.
-
-Lead with:
-
-> **Score not ready yet**
-
-then provide useful verified evidence and pathway information.
-
-## D. Career / market unsupported
-
-Do not route the user into a generic dashboard.
-
-Offer:
-- nearby supported career variants;
-- another country context;
-- career search.
-
----
-
-# 15. Current implementation disposition
-
-The existing implementation is a useful data and component source, but its current hierarchy is not the target hierarchy.
-
-## Reuse
-
-Reuse where appropriate:
-- career insight read model;
-- opportunity score and score breakdown;
-- evidence dates and sources;
-- foundation confidence;
-- blockers;
-- licensing evidence;
-- visa pathways;
-- entry points;
-- linked programs;
-- job opportunities;
-- employer and job-search links.
-
-## Recompose
-
-The following should be recomposed into the new page structure:
-- current `CareerMarketResults` market metrics;
-- Registered Nurse pathway steps;
-- regional signals when they are genuinely useful;
-- program cards;
-- employer/job links;
-- source components.
-
-## Move down / remove from the opening view
-
+Only after core value is visible:
 - Save;
 - Compare;
-- login-to-personalise CTA;
-- update-details actions;
-- generic disclaimer blocks that compete with the verdict;
-- country / tool navigation unrelated to the current career.
+- Personalise;
+- Share.
 
-## Important behavior change
+## Save
 
-The current result action component chooses `Sign in to see my path` as the signed-out primary action before the user has consumed the result. That is incompatible with this spec.
+Account creation may be requested here because the user has already received value.
 
-The generic pathway must be visible without login. Personalisation may require account state only after the user deliberately asks CampCareer to adapt the path to them.
+## Compare
+
+Compare uses the same public score system for both careers.
+
+Do not compare a v1 CampCareer Score against a legacy Opportunity Score.
+
+## Share
+
+Sharing should preserve:
+- career;
+- country;
+- total score;
+- Demand / Pay / Entry;
+- canonical Career Page URL.
+
+This supports the SNS acquisition loop.
 
 ---
 
-# 16. Reference implementation career
+# 12. Verdict bands
 
-The first implementation should use one career as the reference page before generalising the template.
+Career Page wording follows the score contract exactly:
 
-Recommended reference:
+| Score | Verdict |
+|---|---|
+| 80–100 | Excellent |
+| 65–79 | Strong |
+| 50–64 | Mixed |
+| 35–49 | Challenging |
+| 0–34 | Tough |
+
+Do not invent alternate bands on individual pages.
+
+---
+
+# 13. Score-not-ready state
+
+If Demand, Pay or Entry cannot be calculated from completed evidence, do not publish a guessed total.
+
+Hero state:
+
+```text
+SCORE NOT READY YET
+```
+
+Then show:
+- the verified evidence that exists;
+- which dimension is incomplete;
+- why it is incomplete;
+- the pathway if sufficiently verified.
+
+Do not use `0/100` to represent missing data.
+
+---
+
+# 14. Desktop structural wireframe
+
+```text
+┌───────────────────────────────────────────────────────┐
+│ CampCareer                  Search          Account   │
+├───────────────────────────────────────────────────────┤
+│ Registered Nurse · Australia                         │
+│                                                       │
+│  82 / 100       EXCELLENT CAREER                     │
+│                                                       │
+│  Demand 9        Pay 8        Entry 7                │
+│                                                       │
+│  One-sentence verdict                                │
+│  Evidence: Verified                                  │
+│  Why this score ↓                                    │
+├───────────────────────────────────────────────────────┤
+│ Why this score                                        │
+│ Demand             Pay              Entry             │
+├───────────────────────────────────────────────────────┤
+│ Key evidence                                          │
+├───────────────────────────────────────────────────────┤
+│ How to become one                                     │
+│ 01 → 02 → 03 → 04                                    │
+├───────────────────────────────────────────────────────┤
+│ Study / Programs                                      │
+├───────────────────────────────────────────────────────┤
+│ Jobs                                                  │
+├───────────────────────────────────────────────────────┤
+│ Sources                                               │
+│ Save · Compare · Personalise · Share                 │
+└───────────────────────────────────────────────────────┘
+```
+
+---
+
+# 15. Mobile structural wireframe
+
+Mobile is a primary acquisition surface because social traffic is expected to be significant.
+
+```text
+CampCareer       Search
+
+Registered Nurse
+Australia
+
+82 / 100
+EXCELLENT CAREER
+
+Demand 9   Pay 8   Entry 7
+
+One-sentence verdict
+Evidence: Verified
+
+Why this score ↓
+
+──────────────
+Why this score
+Demand
+Pay
+Entry
+
+──────────────
+Evidence
+
+──────────────
+How to become one
+01
+02
+03
+04
+
+──────────────
+Study / Programs
+
+──────────────
+Jobs
+
+──────────────
+Sources
+Save · Compare · Share
+```
+
+## Mobile prohibitions
+
+Do not use:
+- permanent workspace sidebar;
+- multi-tool bottom navigation;
+- horizontal carousels for essential score information;
+- login wall before score/pathway;
+- dense nine-factor score charts above the fold.
+
+---
+
+# 16. Reference implementation
+
+The first reference Career Page remains:
 
 > **Registered Nurse — Australia**
 
-Reasons:
-- current score / metric data exists;
-- registration is a meaningful real-world blocker;
-- study pathway is concrete;
-- linked programs exist;
-- employer / job-search paths exist;
-- the current code already contains a richer nursing-specific flow that can be recomposed instead of invented from scratch.
+It already has useful building blocks for:
+- labour-market evidence;
+- registration pathway;
+- study route;
+- programs;
+- employers / job-search links.
 
-The reference page must prove the full hierarchy on desktop and mobile before broad rollout.
+However, its score presentation must use CampCareer Score v1 and must not present the historical `Job market score` as the brand score.
 
----
+Australia Electrician is a useful secondary scoring sanity case because it demonstrates the intended tradeoff:
 
-# 17. Acceptance criteria for the design
+```text
+Demand 9
+Pay    8
+Entry  6
+Total  78 — Strong
+```
 
-The Career Page design is acceptable only if all are true:
-
-1. The occupation, country, score, and verdict are obvious in the first viewport.
-2. Career Score is visually dominant.
-3. The page states a conclusion, not only a collection of facts.
-4. A user can understand the main reasons for the score without opening methodology.
-5. Evidence confidence is visible but separate from career quality.
-6. Hard blockers are explicit.
-7. The generic pathway is accessible before login.
-8. Programs are shown in career context, not as an independent catalog.
-9. Jobs or job-search actions are present when reliable data exists.
-10. Save / Compare / Personalise do not compete with the verdict.
-11. The mobile flow does not require global tool navigation.
-12. Missing evidence is shown honestly rather than filled with neutral-looking values.
-13. Sources remain reachable.
-14. The page ends in a practical action, not merely more information.
+The strong demand/pay signal remains visible while qualification and licensing friction are no longer buried.
 
 ---
 
-# 18. Implementation boundary for the next step
+# 17. Acceptance criteria
 
-This specification defines information hierarchy and interaction priority only.
+A Career Page meets the initial product spec only when all are true:
 
-The next brand/design-system phase decides:
-- exact Career Score visual identity;
-- typography;
-- color system;
-- spacing scale;
-- card styling;
-- iconography;
-- motion;
-- final component appearance.
-
-Implementation should not begin by polishing the old workspace shell. The first build target is the Career Page itself, using Registered Nurse — Australia as the reference experience.
+1. Career + country + total score + verdict are visible immediately.
+2. Demand / Pay / Entry are the only public score dimensions.
+3. Displayed component scores reconstruct the displayed total.
+4. Visa does not contribute to the total.
+5. Personalisation does not change the public total.
+6. Evidence confidence is separate from score quality.
+7. A material entry blocker is visible even when the score is high.
+8. Generic pathway is visible without login.
+9. Study/program options are career-contextual and curated.
+10. Job actions are career-contextual and fresh enough to be useful.
+11. Save/Compare/Personalise do not dominate the hero.
+12. Missing required score evidence produces `Score not ready`, not a guessed number.
+13. The page can be summarized cleanly in short-form social content using the same score language.
