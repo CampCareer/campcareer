@@ -4,6 +4,12 @@ import { NextResponse } from 'next/server'
 import { getCareerSaveIntentFromNext } from '@/lib/auth/career-save-intent'
 import { getPostLoginDestination } from '@/lib/auth/post-login-destination'
 
+function withSaveError(destination: string) {
+  const url = new URL(destination, 'https://campcareer.local')
+  url.searchParams.set('saveError', '1')
+  return `${url.pathname}${url.search}${url.hash}`
+}
+
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
@@ -52,6 +58,7 @@ export async function GET(request: Request) {
 
     if (saveError) {
       console.error('Unable to complete career save after authentication', saveError)
+      response.headers.set('location', `${origin}${withSaveError(destination)}`)
     }
   }
 
