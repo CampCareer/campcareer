@@ -10,9 +10,10 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 # CampCareer product rules
 
-Before changing product navigation or user journeys, read:
+Before changing product navigation, Career Page structure or user journeys, read:
 
 - `docs/PRODUCT_SURFACE_INVENTORY.md`
+- `docs/CAREER_PAGE_CORE_FLOW.md`
 - `docs/INITIAL_INFORMATION_ARCHITECTURE.md`
 - `docs/CAMPCAREER_SCORE_CONTRACT.md`
 - `docs/CAMPCAREER_BRAND_SYSTEM.md`
@@ -24,6 +25,9 @@ Current product hierarchy is authoritative:
 Rules:
 
 - Career Page is the primary product surface.
+- Career Page renders one public score only: CampCareer Score.
+- Career Page below the Hero follows Evidence → Path → Study / Programs → Jobs.
+- Do not restore legacy `CareerMarketResults`, `Job market score`, `Career Opportunity Score` or other competing public totals to the Career Page.
 - Value first. Account second.
 - Save, Compare and Login are secondary.
 - Countries, Cities, Visa, Maps and Institutions are contextual capabilities, not equal top-level products.
