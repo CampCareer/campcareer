@@ -25,13 +25,13 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
   title: {
-    default: "CampCareer | Source-backed work and study routes",
+    default: "CampCareer | Career Scores, Evidence and Entry Paths",
     template: "%s | CampCareer",
   },
-  description: "Build an overseas career with verified job demand, visa conditions, qualifications and actionable routes.",
+  description: "Score careers by country, see the Demand, Pay and Entry evidence behind the verdict, and follow the path into qualifications, programs and jobs.",
   keywords: [
-    "international career route", "work abroad", "study abroad", "visa conditions", "international job search",
-    "working holiday visa", "overseas career",
+    "career score", "career demand", "career salary", "career entry requirements",
+    "career pathways", "work abroad", "international careers", "career programs",
   ],
   authors: [{ name: "CampCareer" }],
   creator: "CampCareer",
@@ -44,14 +44,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "CampCareer",
-    title: "CampCareer | 해외에서 일하는 경로를 찾다",
-    description: "직업, 국가, 비자, 실행 경로를 한 번에 확인하세요.",
-    images: [{ url: "/og-career-path.png", width: 1200, height: 630, alt: "CampCareer — 해외에서 일하는 내 커리어" }],
+    title: "CampCareer | Career Scores, Evidence and Entry Paths",
+    description: "Know if a career is worth it. See the evidence and exactly how to get there.",
+    images: [{ url: "/og-career-path.png", width: 1200, height: 630, alt: "CampCareer — career scores, evidence and entry paths" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "CampCareer | 해외에서 일하는 경로를 찾다",
-    description: "직업, 국가, 비자, 실행 경로를 한 번에 확인하세요.",
+    title: "CampCareer | Career Scores, Evidence and Entry Paths",
+    description: "Know if a career is worth it. See the evidence and exactly how to get there.",
     images: ["/og-career-path.png"],
     creator: "@campcareer",
   },
