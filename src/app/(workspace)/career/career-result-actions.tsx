@@ -22,6 +22,17 @@ export function CareerResultActions({ query, locale }: { query: OverviewSearchVa
   const resultHref = localizePath(buildCareerResultHref(query), locale)
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    if (params.get("saveError") !== "1") return
+
+    setSaveError(true)
+    params.delete("saveError")
+    const queryString = params.toString()
+    const cleanUrl = `${window.location.pathname}${queryString ? `?${queryString}` : ""}${window.location.hash}`
+    window.history.replaceState(null, "", cleanUrl)
+  }, [])
+
+  useEffect(() => {
     let active = true
     void supabase.auth.getUser().then(async ({ data: { user } }) => {
       if (!active) return
