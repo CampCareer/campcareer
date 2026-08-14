@@ -20,6 +20,7 @@ test("program search params default to Australia and safe filter values", () => 
     state: "all",
     province: "all",
     career: "all",
+    careerContext: "all",
     institution: "all",
     pgwp: "all",
     duration: "all",
@@ -52,6 +53,7 @@ test("program search params keep supported Australian filters and reject unknown
   assert.equal(parsed.state, "NSW")
   assert.equal(parsed.province, "all")
   assert.equal(parsed.career, "all")
+  assert.equal(parsed.careerContext, "all")
   assert.equal(parsed.institution, "all")
   assert.equal(parsed.pgwp, "all")
   assert.equal(parsed.duration, "2-3")
@@ -124,6 +126,36 @@ test("Canadian filters keep city, career, institution, province and PGWP inside 
   assert.equal(parseProgramSearchParams({ country: "CA", pgwp: "maybe" }).pgwp, "all")
   assert.equal(parseProgramSearchParams({ country: "AU", institution: "some-school" }).institution, "all")
   assert.equal(parseProgramSearchParams({ country: "AU", city: "toronto" }).city, "all")
+})
+
+test("Career Page context survives Programs pagination and filter changes without becoming a filter", () => {
+  const au = parseProgramSearchParams({
+    country: "AU",
+    careerContext: "electrician",
+    state: "NSW",
+    page: "2",
+  })
+
+  assert.equal(au.career, "all")
+  assert.equal(au.careerContext, "electrician")
+  assert.equal(
+    buildProgramsUrl(au),
+    "/programs?country=AU&state=NSW&careerContext=electrician&page=2",
+  )
+  assert.equal(
+    buildProgramsUrl(au, { state: "all", page: 1 }),
+    "/programs?country=AU&careerContext=electrician",
+  )
+
+  const ca = parseProgramSearchParams({
+    country: "CA",
+    career: "registered-nurse",
+    careerContext: "registered-nurse",
+  })
+  assert.equal(
+    buildProgramsUrl(ca),
+    "/programs?country=CA&career=registered-nurse&careerContext=registered-nurse",
+  )
 })
 
 test("Canada program city filter covers published geographic city values without exposing campus labels", () => {
