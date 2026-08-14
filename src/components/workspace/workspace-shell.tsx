@@ -1,5 +1,6 @@
 "use client"
 
+import { Suspense } from "react"
 import { usePathname } from "next/navigation"
 import { WorkspaceTopbar } from "./workspace-topbar"
 import { ContextualSurfaceNotice } from "./contextual-surface-notice"
@@ -32,7 +33,9 @@ export function WorkspaceShell({ children }: WorkspaceShellProps) {
   return (
     <div className="flex min-h-screen flex-col bg-white">
       <WorkspaceTopbar />
-      <ContextualSurfaceNotice pathname={pathname} />
+      <Suspense fallback={null}>
+        <ContextualSurfaceNotice pathname={pathname} />
+      </Suspense>
       <main
         className={cn(
           "flex-1",
