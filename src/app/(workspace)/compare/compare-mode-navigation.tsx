@@ -17,7 +17,7 @@ type ComparePageHeaderProps = {
   countryCode?: string | null
 }
 
-const TITLE: Record<Exclude<CompareModeType, "unsupported">, { en: string; ko: string }> = {
+const TITLE: Record<CompareModeType, { en: string; ko: string }> = {
   program: { en: "Compare programs", ko: "프로그램 비교" },
   country: { en: "Compare country context", ko: "국가 맥락 비교" },
   city: { en: "Compare city context", ko: "도시 맥락 비교" },
@@ -30,7 +30,7 @@ export function ComparePageHeader({ activeType, countryCode }: ComparePageHeader
   const locale = useRouteLocale()
   const showCountry = activeType === "program" || activeType === "career" || activeType === "city"
   const resolvedCountry = countryCode?.toUpperCase() || "AU"
-  const title = activeType === "unsupported" ? { en: "Compare", ko: "비교" } : TITLE[activeType]
+  const title = TITLE[activeType]
 
   function updateCountry(code: string | null) {
     if (!code) return
