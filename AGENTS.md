@@ -10,12 +10,13 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 # CampCareer product rules
 
-Before changing product navigation, Career Page structure, account flows or secondary/contextual surfaces, read:
+Before changing product navigation, Career Page structure, account flows, SEO URLs or secondary/contextual surfaces, read:
 
 - `docs/PRODUCT_SURFACE_INVENTORY.md`
 - `docs/CAREER_PAGE_CORE_FLOW.md`
 - `docs/SECONDARY_CONTEXTUAL_SURFACES.md`
 - `docs/AUTH_RETENTION_CONTRACT.md`
+- `docs/SEO_URL_DATA_CONTRACT.md`
 - `docs/INITIAL_INFORMATION_ARCHITECTURE.md`
 - `docs/CAMPCAREER_SCORE_CONTRACT.md`
 - `docs/CAMPCAREER_BRAND_SYSTEM.md`
@@ -27,6 +28,13 @@ Current product hierarchy is authoritative:
 Rules:
 
 - Career Page is the primary product surface.
+- Canonical Career URLs use `/career/{country-slug}/{career-id}`. Do not restore query-style or `/occupation/...` pages as competing indexable Career surfaces.
+- Durable Career identity is `country_code + career_id`; country slugs are a URL projection, not a replacement database key.
+- Career labels, translations, aliases and official occupation codes are not canonical Career identifiers.
+- Career Page canonical metadata, sitemap URLs, social links and internal Career links must use the same canonical route resolver.
+- Tracking/transient query parameters may be present on distributed URLs but never belong in `rel=canonical`.
+- Indexing requires the explicit Career publication gate and a ready public CampCareer Score. Valid-but-unpublished Career routes remain `noindex`.
+- Primary Career judgment and evidence must be present in server-rendered initial HTML. Client hydration may add retention actions but must not be required to expose Score/Evidence/Path.
 - Career Page renders one public score only: CampCareer Score.
 - Career Page below the Hero follows Evidence → Path → Study / Programs → Jobs.
 - Do not restore legacy `CareerMarketResults`, `Job market score`, `Career Opportunity Score` or other competing public totals to the Career Page.
