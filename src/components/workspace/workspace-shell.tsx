@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation"
 import { WorkspaceTopbar } from "./workspace-topbar"
+import { ContextualSurfaceNotice } from "./contextual-surface-notice"
 import { SiteFooter } from "@/components/layout/site-footer"
 import { withoutLocalePrefix } from "@/lib/i18n/config"
 import { cn } from "@/lib/utils"
@@ -26,12 +27,12 @@ export function WorkspaceShell({ children }: WorkspaceShellProps) {
   const isComparePage = pathname === "/compare"
   const hideSiteFooter = pathname === "/"
 
-  // Wave 1 product-surface cleanup intentionally removes the legacy workspace
-  // sidebar. Contextual routes remain available by direct/contextual links,
-  // but they no longer present themselves as equal top-level products.
+  // Wave 1 removed the equal-tool sidebar. Wave 3 keeps these routes available
+  // but explicitly frames them as contextual/secondary surfaces around Career.
   return (
     <div className="flex min-h-screen flex-col bg-white">
       <WorkspaceTopbar />
+      <ContextualSurfaceNotice pathname={pathname} />
       <main
         className={cn(
           "flex-1",
