@@ -5,6 +5,7 @@ import {
   type LaunchCountry,
   type LaunchCountryCode,
 } from "@/data/launch-countries"
+import { SCORE_READY_CAREER_PROFILES } from "./career-coverage"
 
 export type IndexableCareerProfile = {
   countryCode: LaunchCountryCode
@@ -18,19 +19,11 @@ export type IndexableOccupationProfile = IndexableCareerProfile
 /**
  * Explicit SEO publication inventory.
  *
- * This list must match the strict Ready pool in docs/CAREER_COVERAGE_INVENTORY.md.
- * A profile or provisional score is not enough to make a Career page indexable.
+ * For the current launch, every score-ready Career is intended to be indexed.
+ * Keep the type separate so indexing can become a deliberate subset later
+ * without changing public Score readiness.
  */
-export const INDEXABLE_CAREER_PROFILES: readonly IndexableCareerProfile[] = [
-  { countryCode: "AU", careerId: "care-worker", sourceCheckedAt: "2026-08-14" },
-  { countryCode: "AU", careerId: "carpenter", sourceCheckedAt: "2026-08-06" },
-  { countryCode: "AU", careerId: "electrician", sourceCheckedAt: "2026-08-06" },
-  { countryCode: "AU", careerId: "midwife", sourceCheckedAt: "2026-08-07" },
-  { countryCode: "AU", careerId: "occupational-therapist", sourceCheckedAt: "2026-08-08" },
-  { countryCode: "AU", careerId: "physiotherapist", sourceCheckedAt: "2026-08-07" },
-  { countryCode: "AU", careerId: "registered-nurse", sourceCheckedAt: "2026-08-06" },
-  { countryCode: "AU", careerId: "welder", sourceCheckedAt: "2026-08-14" },
-] as const
+export const INDEXABLE_CAREER_PROFILES: readonly IndexableCareerProfile[] = SCORE_READY_CAREER_PROFILES
 
 /** @deprecated Use INDEXABLE_CAREER_PROFILES. */
 export const INDEXABLE_OCCUPATION_PROFILES = INDEXABLE_CAREER_PROFILES
