@@ -260,11 +260,25 @@ function routeSteps(insight: CareerMarketInsight, locale: Locale) {
   return steps
 }
 
-export function CareerCoreSections({ query, locale }: { query: OverviewSearchValues; locale: Locale }) {
-  const [insight, setInsight] = useState<CareerMarketInsight | null>(null)
+export function CareerCoreSections({
+  query,
+  locale,
+  initialInsight = null,
+}: {
+  query: OverviewSearchValues
+  locale: Locale
+  initialInsight?: CareerMarketInsight | null
+}) {
+  const [insight, setInsight] = useState<CareerMarketInsight | null>(initialInsight)
   const [failed, setFailed] = useState(false)
 
   useEffect(() => {
+    if (initialInsight) {
+      setInsight(initialInsight)
+      setFailed(false)
+      return
+    }
+
     const controller = new AbortController()
     setInsight(null)
     setFailed(false)
@@ -279,7 +293,7 @@ export function CareerCoreSections({ query, locale }: { query: OverviewSearchVal
         setFailed(true)
       })
     return () => controller.abort()
-  }, [query.country, query.occupation])
+  }, [initialInsight, query.country, query.occupation])
 
   if (failed) {
     return (
