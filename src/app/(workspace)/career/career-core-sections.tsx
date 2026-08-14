@@ -1,20 +1,16 @@
 "use client"
 
 import Link from "next/link"
-import { useEffect, useMemo, useState, type ReactNode } from "react"
+import { useEffect, useState, type ReactNode } from "react"
 import {
   ArrowRight,
   BriefcaseBusiness,
   CircleAlert,
   ExternalLink,
   GraduationCap,
-  Route,
-  ShieldCheck,
 } from "lucide-react"
 import { localizePath } from "@/lib/i18n/config"
-import type { CareerDataFoundationResult } from "@/lib/career-data-foundation/types"
 import type { CareerMarketInsight } from "@/lib/workspace/career-market-contract"
-import type { CountryOccupationProfile } from "@/lib/workspace/country-occupation-contract"
 import type { OverviewSearchValues } from "../home/home-overview-config"
 
 type Locale = "en" | "ko"
@@ -56,7 +52,11 @@ function entryBlocker(insight: CareerMarketInsight, locale: Locale) {
   const foundationBlocker = insight.foundation?.blockers.find((blocker) =>
     ["licensing", "registration", "education_training", "safety_training"].includes(blocker.blockerType),
   )
-  if (foundationBlocker) return foundationBlocker.reason
+  if (foundationBlocker) {
+    return locale === "ko"
+      ? "공식 자격·면허·교육 요건이 진입 경로에 영향을 줍니다. 아래 경로에서 해당 기관의 최신 기준을 확인하세요."
+      : foundationBlocker.reason
+  }
 
   const profile = insight.profile
   if (profile?.registrationRequired) {
@@ -143,7 +143,7 @@ function studyResources(insight: CareerMarketInsight, locale: Locale): ResourceL
   }
 
   for (const link of profile?.links ?? []) {
-    if (![("entry_program"), ("graduate_program")].includes(link.linkType)) continue
+    if (!["entry_program", "graduate_program"].includes(link.linkType)) continue
     resources.push({
       key: `profile-${link.url}`,
       label: link.label,
@@ -208,7 +208,7 @@ function jobResources(insight: CareerMarketInsight): ResourceLink[] {
 function routeSteps(insight: CareerMarketInsight, locale: Locale) {
   const profile = insight.profile
   const foundation = insight.foundation
-  const hasStudy = studyResources(insight, locale).length > 0 || foundation?.blockers.some((blocker) => blocker.blockerType === "education_training")
+  const hasStudy = studyResources(insight, locale).length > 0 || Boolean(foundation?.blockers.some((blocker) => blocker.blockerType === "education_training"))
   const licensing = foundation?.licensingEvidence.find((item) => item.mandatory) ?? null
   const visa = foundation?.visaPathways.find((item) => item.routeRole === "primary") ?? null
   const legacyVisa = insight.visas[0] ?? null
@@ -346,7 +346,7 @@ export function CareerCoreSections({ query, locale }: { query: OverviewSearchVal
       <section id="study" className="scroll-mt-24 border-b border-campcareer-border py-10" aria-labelledby="study-heading">
         <SectionHeading
           eyebrow={tr(locale, "경로에 필요한 경우", "When the path requires it")}
-          title={tr(locale, "Study / Programs", "Study / Programs")}
+          title="Study / Programs"
           description={tr(locale, "학업은 독립적인 목적지가 아니라 이 커리어에 진입하는 데 필요한 경우에만 경로 안에서 제시합니다.", "Study is not a separate destination here. It appears when education or training helps you enter this career.")}
         />
         {study.length > 0 ? (
@@ -369,7 +369,7 @@ export function CareerCoreSections({ query, locale }: { query: OverviewSearchVal
       <section id="jobs" className="scroll-mt-24 py-10" aria-labelledby="jobs-heading">
         <SectionHeading
           eyebrow={tr(locale, "실제 노동시장", "Live labour market")}
-          title={tr(locale, "Jobs", "Jobs")}
+          title="Jobs"
           description={tr(locale, "점수와 경로를 확인한 뒤, 실제 고용주와 채용 공고에서 요구 조건을 검증하세요.", "After reviewing the score and path, validate the requirements in real employer and job listings.")}
         />
         {jobs.length > 0 ? (
