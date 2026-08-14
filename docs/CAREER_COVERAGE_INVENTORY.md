@@ -58,7 +58,7 @@ This is intentionally conservative and follows the public Score contract: missin
 
 | Country | Ready | Needs one gap | Profile ready | Not ready | Existing-profile avg blockers |
 |---|---:|---:|---:|---:|---:|
-| Australia | 6 | 5 | 69 | 0 | 3.1 |
+| Australia | 8 | 3 | 69 | 0 | 3.1 |
 | United Kingdom | 0 | 0 | 80 | 0 | 5.0 |
 | Canada | 0 | 0 | 80 | 0 | 6.2 |
 | United States | 0 | 0 | 64 | 16 | 4.1 |
@@ -81,18 +81,22 @@ This is intentionally conservative and follows the public Score contract: missin
 
 ## Australia
 
-### Ready — 6
+### Ready — 8
 
+- `care-worker` — Demand 9 · Pay 5 · Entry 9 → 78 · Strong
 - `carpenter`
 - `electrician`
 - `midwife`
 - `occupational-therapist`
 - `physiotherapist`
 - `registered-nurse`
+- `welder` — Demand 8 · Pay 4 · Entry 7 → 65 · Strong
 
 These are the current content-production pool.
 
-### Needs one gap — 5
+`care-worker` and `welder` passed publication review on 2026-08-14. Care Worker was rechecked against the official JSA Aged and Disabled Carers profile and current CHC33021 Ageing/Disability training route. Welder was rechecked against the official JSA ANZSCO 3223 profile; the CampCareer roll-up matches the full 3223 group of Metal Fabricators, Pressure Welders and Welders (First Class). The score remains transparent about provisional demand-source provenance where applicable.
+
+### Needs one gap — 3
 
 Pay only:
 
@@ -100,10 +104,7 @@ Pay only:
 - `pharmacist`
 - `radiographer`
 
-Publication review only:
-
-- `care-worker`
-- `welder`
+These remain blocked after review. JSA states that median weekly earnings are not produced for ANZSCO 6-digit occupations. The available 4-digit earnings groups are materially broader than each CampCareer canonical scope, so CampCareer will not substitute those group medians merely to make the score complete. Closing these rows requires a defensible, comparable Pay evidence policy or a new exact-scope source.
 
 ### Profile ready — 69
 
@@ -324,12 +325,11 @@ For each country below, all 80 canonical careers are `Not ready`:
 
 The expansion order should optimize for the smallest number of blockers before content publication.
 
-1. Australia Ready 6: publish/use for content now.
-2. Australia `care-worker`, `welder`: publication review only.
-3. Australia `medical-laboratory-technician`, `pharmacist`, `radiographer`: add defensible Pay evidence.
-4. Australia `social-worker`: employer-diversity evidence plus publication review.
-5. Australia `auditor`, `chemical-engineer`, `database-administrator`, `engineering-technician`, `environmental-engineer`, `human-resources-specialist`, `ict-support-technician`, `industrial-engineer`, `mechanical-engineer`, `wall-floor-tiler`: Pay evidence plus publication review.
-6. Then choose the next country based on evidence-system work, not raw profile count. UK/US/NZ have strong Pay coverage but still need several Demand inputs; Canada also needs Demand plus more Entry validation.
+1. Australia Ready 8: publish/use for content now.
+2. Australia `medical-laboratory-technician`, `pharmacist`, `radiographer`: solve the exact-scope Pay evidence gap without substituting a broader 4-digit median by default.
+3. Australia `social-worker`: employer-diversity evidence plus publication review.
+4. Australia `auditor`, `chemical-engineer`, `database-administrator`, `engineering-technician`, `environmental-engineer`, `human-resources-specialist`, `ict-support-technician`, `industrial-engineer`, `mechanical-engineer`, `wall-floor-tiler`: Pay evidence plus publication review.
+5. Then choose the next country based on evidence-system work, not raw profile count. UK/US/NZ have strong Pay coverage but still need several Demand inputs; Canada also needs Demand plus more Entry validation.
 
 ## Coverage KPI
 
@@ -341,8 +341,8 @@ Use:
 
 Current strict snapshot:
 
-- Ready: 6 / 1,600
-- Needs one gap: 5 / 1,600
+- Ready: 8 / 1,600
+- Needs one gap: 3 / 1,600
 - Profile ready: 660 / 1,600
 - Not ready: 929 / 1,600
 
