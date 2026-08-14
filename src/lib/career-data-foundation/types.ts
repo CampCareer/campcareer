@@ -1,5 +1,8 @@
+import type { CampCareerScore } from "@/lib/campcareer-score"
+
 export const FOUNDATION_FORMULA_VERSION = "career-opportunity-v4-foundation" as const
 
+/** Internal evidence-engine maxima. The public score is CampCareer Score v1. */
 export const FOUNDATION_COMPONENT_MAXIMA = {
   shortage_signal: 20,
   vacancy_intensity: 15,
@@ -249,7 +252,10 @@ export type CareerDataFoundationResult = {
     formulaVersion: string
     calculationTimestamp: string | null
   }
+  /** Historical/internal nine-factor total retained for evidence compatibility only. */
   opportunityScore: number | null
+  /** Public brand score used by Career Pages and social content. */
+  campCareerScore: CampCareerScore | null
   scoreConfidence: FoundationScoreConfidence
   scoreExplanation: string
   decisionMetrics: CareerFoundationDecisionMetrics
