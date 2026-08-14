@@ -4,6 +4,7 @@ import path from "node:path"
 import test from "node:test"
 import posts from "../src/data/blog-manifest.json"
 import {
+  buildCareerFirstHref,
   buildCompareHref,
   normalizeCompareCountries,
   resolveBlogCtaHref,
@@ -47,30 +48,43 @@ test("career intent wins over major and country selection is valid, deduplicated
   )
 })
 
-test("legacy blog CTA targets resolve to Compare while ordinary editorial links stay unchanged", () => {
-  const legacy = resolveBlogCtaHref("/degree-risk", { country: "ie", career: "accountant" })
-  assert.equal(new URL(legacy, APP_ORIGIN).pathname, "/compare")
-  assert.equal(paramsFor(legacy).get("countries"), "IE")
-  assert.equal(paramsFor(legacy).get("career"), "accountant")
+test("Career-first links use the canonical Career Page for one destination and Compare for multi-country intent", () => {
+  assert.equal(
+    buildCareerFirstHref({ country: "Australia", career: "Registered Nurse" }),
+    "/career/australia/registered-nurse",
+  )
+
+  const multi = buildCareerFirstHref({ countries: ["AU", "UK"], career: "Registered Nurse" })
+  assert.equal(new URL(multi, APP_ORIGIN).pathname, "/compare")
+  assert.equal(paramsFor(multi).get("countries"), "AU,UK")
+  assert.equal(paramsFor(multi).get("career"), "registered-nurse")
+})
+
+test("legacy blog product links resolve into the current Career-first journey while ordinary editorial links stay unchanged", () => {
+  assert.equal(
+    resolveBlogCtaHref("/degree-risk", { country: "ie", career: "accountant" }),
+    "/career/ireland/accountant",
+  )
+  assert.equal(
+    resolveBlogCtaHref("/au/jobs", { country: "AU", career: "electrician" }),
+    "/career/australia/electrician",
+  )
   assert.equal(
     resolveBlogCtaHref("/blog/study-in-ireland-2026", { country: "ie" }),
     "/blog/study-in-ireland-2026",
   )
 })
 
-test("a CTA pointing at Compare carries explicit blog intent and preserves safe existing query values", () => {
+test("a CTA pointing at Compare becomes a Career Page when explicit blog intent identifies one Career and country", () => {
   const href = resolveBlogCtaHref("/compare?countries=UK,IE&currency=EUR", {
     country: "Australia",
     career: "Registered Nurse",
   })
-  const params = paramsFor(href)
 
-  assert.equal(params.get("countries"), "AU")
-  assert.equal(params.get("career"), "registered-nurse")
-  assert.equal(params.get("currency"), "EUR")
+  assert.equal(href, "/career/australia/registered-nurse")
 })
 
-test("published blog CTAs contain no legacy funnel destinations or missing blog posts", () => {
+test("published blog CTAs contain no retired funnel destinations or missing blog posts", () => {
   const knownSlugs = new Set(posts.map((post) => post.slug))
   const contentDirectory = path.join(process.cwd(), "content/blog")
 
@@ -101,7 +115,26 @@ test("published blog CTAs contain no legacy funnel destinations or missing blog 
   }
 })
 
-test("the sitemap publishes source-backed routes instead of retired decision funnels", () => {
+test("the relaunch advertises an audited Blog sitemap without restoring destructive legacy redirects", () => {
+  const blogLibrary = fs.readFileSync(path.join(process.cwd(), "src/lib/blog.ts"), "utf8")
+  const blogSitemap = fs.readFileSync(path.join(process.cwd(), "src/app/blog/sitemap.ts"), "utf8")
+  const robots = fs.readFileSync(path.join(process.cwd(), "src/app/robots.ts"), "utf8")
+  const nextConfig = fs.readFileSync(path.join(process.cwd(), "next.config.mjs"), "utf8")
+
+  for (const holdout of [
+    "best-country-to-study-indian-students-2026",
+    "ielts-score-requirements-2026",
+    "ireland-language-school-guide-2026",
+    "study-abroad-checklist-korean-students-2026",
+  ]) {
+    assert.match(blogLibrary, new RegExp(holdout))
+  }
+  assert.match(blogSitemap, /getPublishedBlogPosts/)
+  assert.match(robots, /blog\/sitemap\.xml/)
+  assert.doesNotMatch(nextConfig, /source:\s*["']\/blog\/:path\*["']/)
+})
+
+test("the main sitemap publishes source-backed routes instead of retired decision funnels", () => {
   const sitemap = fs.readFileSync(path.join(process.cwd(), "src/app/sitemap.ts"), "utf8")
   assert.match(sitemap, /ROUTE_GUIDES/)
   assert.doesNotMatch(sitemap, /\$\{BASE\}\/compare/)
