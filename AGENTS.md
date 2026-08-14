@@ -10,13 +10,14 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 # CampCareer product rules
 
-Before changing product navigation, Career Page structure, account flows, SEO URLs or secondary/contextual surfaces, read:
+Before changing product navigation, Career Page structure, account flows, SEO URLs, Career coverage or secondary/contextual surfaces, read:
 
 - `docs/PRODUCT_SURFACE_INVENTORY.md`
 - `docs/CAREER_PAGE_CORE_FLOW.md`
 - `docs/SECONDARY_CONTEXTUAL_SURFACES.md`
 - `docs/AUTH_RETENTION_CONTRACT.md`
 - `docs/SEO_URL_DATA_CONTRACT.md`
+- `docs/CAREER_COVERAGE_INVENTORY.md`
 - `docs/INITIAL_INFORMATION_ARCHITECTURE.md`
 - `docs/CAMPCAREER_SCORE_CONTRACT.md`
 - `docs/CAMPCAREER_BRAND_SYSTEM.md`
@@ -38,6 +39,10 @@ Rules:
 - Career Page renders one public score only: CampCareer Score.
 - Career Page below the Hero follows Evidence → Path → Study / Programs → Jobs.
 - Do not restore legacy `CareerMarketResults`, `Job market score`, `Career Opportunity Score` or other competing public totals to the Career Page.
+- Career expansion is a coverage operation over `country_code + career_id`, not a new feature-development phase.
+- Before publishing or producing content for a country-career pair, check `docs/CAREER_COVERAGE_INVENTORY.md` and move the row to `Ready`; raw profile existence or a legacy/provisional total is not sufficient.
+- Missing evidence must never be interpreted as a zero component merely because a legacy snapshot contains `0`.
+- Use `Ready / Needs one gap / Profile ready / Not ready` as the operational coverage states. Prioritize `Needs one gap` rows before broad new-country expansion unless a deliberate product decision says otherwise.
 - Value first. Account second.
 - Score, Evidence, Path, Study / Programs, Jobs and Compare remain public by default.
 - Save, persistent personalisation, history, alerts, Profile and Settings may require an account because they persist user state.
