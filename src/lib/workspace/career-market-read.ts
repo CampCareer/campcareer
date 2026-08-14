@@ -2,6 +2,7 @@ import "server-only"
 
 import { CANONICAL_CAREER_BY_ID } from "@/data/career-comparison-catalog"
 import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
+import { CAMPCAREER_SCORE_VERSION, campCareerScoreFromLegacyBreakdown } from "@/lib/campcareer-score"
 import { getCareerDataFoundation, getFoundationCountriesForCareer } from "@/lib/career-data-foundation/read"
 import { isFoundationRankable } from "@/lib/career-data-foundation/opportunity-score"
 import type { CareerDataFoundationResult } from "@/lib/career-data-foundation/types"
@@ -45,7 +46,7 @@ const toFoundationDemand = (foundation: CareerDataFoundationResult): CareerMarke
     countryCode: foundation.countryCode,
     countryName: countryName(foundation.countryCode),
     rating: signal || null,
-    note: "BLS annual openings and employment growth are projection signals, not a live vacancy count, formal shortage finding, personal employment assessment, or visa outcome.",
+    note: "Annual openings and employment growth are market signals, not a personal employment assessment or visa outcome.",
     sourceLabel: source?.title ?? null,
     sourceUrl: source?.url ?? null,
   }
@@ -75,15 +76,15 @@ const foundationCareerContext = (foundation: CareerDataFoundationResult) => {
   const metrics = foundation.decisionMetrics
   const employment = metrics.employmentTotal == null
     ? "verified employment data"
-    : `${new Intl.NumberFormat("en-US").format(metrics.employmentTotal)} jobs in the BLS 2024 projection base`
+    : `${new Intl.NumberFormat("en-US").format(metrics.employmentTotal)} jobs in the published employment base`
   const openings = metrics.projectedAnnualOpenings == null
     ? "projected openings data"
-    : `${new Intl.NumberFormat("en-US").format(metrics.projectedAnnualOpenings)} projected annual openings through 2034`
+    : `${new Intl.NumberFormat("en-US").format(metrics.projectedAnnualOpenings)} projected annual openings`
   const growth = metrics.projectedGrowthPct == null
     ? "the published outlook"
-    : `${metrics.projectedGrowthPct}% projected employment growth through 2034`
+    : `${metrics.projectedGrowthPct}% projected employment growth`
   const blockerSummary = foundation.blockers
-    .filter((item) => item.blockerType === "licensing" || item.blockerType === "safety_training")
+    .filter((item) => item.blockerType === "licensing" || item.blockerType === "registration" || item.blockerType === "safety_training")
     .map((item) => item.reason)
     .join(" ")
 
@@ -93,8 +94,8 @@ const foundationCareerContext = (foundation: CareerDataFoundationResult) => {
       ko: `${foundation.mapping.officialTitle}에 대해 공식 데이터 기반 고용 규모, 연평균 채용 전망, 성장 전망을 제공합니다. 이는 시장 데이터이며 개인의 취업 가능성이나 비자 승인 여부를 판단하는 결과가 아닙니다.`,
     },
     registration: {
-      en: blockerSummary || "Licensing, registration and safety requirements must be checked for the intended state, municipality, employer and project.",
-      ko: "미국 전체에 단일 Carpenter 개인 면허 요건이 있다고 보지 않습니다. 주, 지방정부, 고용주, 프로젝트별 면허·등록·안전교육 요건을 실제 근무 지역 기준으로 확인해야 합니다.",
+      en: blockerSummary || "Licensing, registration and safety requirements must be checked for the intended jurisdiction, employer and role.",
+      ko: blockerSummary || "면허·등록·안전교육 요건은 실제 근무 지역과 고용주, 직무 기준으로 확인해야 합니다.",
     },
     sources: foundation.sources.map((source) => ({ label: source.title, url: source.url })),
   }
@@ -124,7 +125,7 @@ const toFoundationCompatibilityProfile = (foundation: CareerDataFoundationResult
     officialCodeVersion: foundation.mapping.officialTaxonomyVersion,
     officialUnitGroupCode: foundation.mapping.officialCode,
     currency: foundation.currency,
-    registrationRequired: false,
+    registrationRequired: foundation.blockers.some((item) => item.blockerType === "licensing" || item.blockerType === "registration"),
     registrationAuthority: null,
     registrationUrl: null,
     publicationStatus: "decision_ready",
@@ -145,12 +146,16 @@ const toFoundationCompatibilityProfile = (foundation: CareerDataFoundationResult
       vacancyYoyPct: null,
       employmentGrowth5yPct: null,
       employmentGrowth10yPct: foundation.decisionMetrics.projectedGrowthPct,
-      opportunityScore: foundation.opportunityScore,
-      scoreMethodologyVersion: foundation.readiness.formulaVersion,
-      scoreStatus: foundation.readiness.scoreReady ? "foundation_ready" : "not_ready",
+      opportunityScore: foundation.campCareerScore?.total ?? null,
+      campCareerScore: foundation.campCareerScore,
+      scoreMethodologyVersion: CAMPCAREER_SCORE_VERSION,
+      scoreStatus: foundation.readiness.scoreReady && foundation.campCareerScore ? "foundation_ready" : "not_ready",
       scoreEvidence: {
         source: "career_data_foundation",
         readiness: foundation.readiness,
+        publicScore: foundation.campCareerScore,
+        internalOpportunityScore: foundation.opportunityScore,
+        internalFormulaVersion: foundation.readiness.formulaVersion,
         components: foundation.scoreComponents.map((component) => ({
           componentKey: component.componentKey,
           availability: component.availability,
@@ -159,6 +164,7 @@ const toFoundationCompatibilityProfile = (foundation: CareerDataFoundationResult
           reason: component.reason,
           proxyReason: component.proxyReason,
         })),
+        scoringPolicy: "The public CampCareer Score excludes visa and uses Demand 40 / Pay 30 / Entry 30.",
       },
       score: {
         shortage: null,
@@ -200,6 +206,14 @@ type ProfileRow = {
 type MetricRow = {
   profile_key: string
   as_of_date: string
+  shortage_component: number | null
+  vacancy_intensity_component: number | null
+  employer_diversity_component: number | null
+  vacancy_trend_component: number | null
+  entry_level_component: number | null
+  salary_component: number | null
+  growth_component: number | null
+  entry_burden_component: number | null
   opportunity_score: number
   score_status: "provisional" | "reviewed" | "published"
 }
@@ -224,7 +238,7 @@ export async function getCareerCountryRecommendations(careerId: string): Promise
   if (profileKeys.length) {
     const metricsResult = await supabase
       .from("country_occupation_metric_snapshots")
-      .select("profile_key,as_of_date,opportunity_score,score_status")
+      .select("profile_key,as_of_date,shortage_component,vacancy_intensity_component,employer_diversity_component,vacancy_trend_component,entry_level_component,salary_component,growth_component,entry_burden_component,opportunity_score,score_status")
       .in("profile_key", profileKeys)
       .order("as_of_date", { ascending: false })
     if (metricsResult.error) throw metricsResult.error
@@ -240,13 +254,14 @@ export async function getCareerCountryRecommendations(careerId: string): Promise
       decisionReady: foundation.decisionReady,
       scoreReady: foundation.scoreReady,
       publishReady: foundation.publishReady,
-      opportunityScore: foundation.opportunityScore,
+      opportunityScore: foundation.campCareerScore?.total ?? null,
     })) continue
     byCountry.set(foundation.countryCode, {
       countryCode: foundation.countryCode,
       countryName: countryName(foundation.countryCode),
       officialTitle: foundation.officialTitle,
-      opportunityScore: foundation.opportunityScore,
+      opportunityScore: foundation.campCareerScore?.total ?? null,
+      campCareerScore: foundation.campCareerScore,
       scoreStatus: "foundation_ready",
       registrationRequired: null,
       publicationStatus: "decision_ready",
@@ -256,11 +271,24 @@ export async function getCareerCountryRecommendations(careerId: string): Promise
 
   for (const profile of legacyProfiles) {
     const metric = latestMetrics.get(profile.profile_key)
+    const campCareerScore = metric
+      ? campCareerScoreFromLegacyBreakdown({
+          shortage: metric.shortage_component,
+          vacancyIntensity: metric.vacancy_intensity_component,
+          employerDiversity: metric.employer_diversity_component,
+          vacancyTrend: metric.vacancy_trend_component,
+          entryLevel: metric.entry_level_component,
+          salary: metric.salary_component,
+          growth: metric.growth_component,
+          entryBurden: metric.entry_burden_component,
+        })
+      : null
     byCountry.set(profile.country_code, {
       countryCode: profile.country_code,
       countryName: countryName(profile.country_code),
       officialTitle: profile.official_title,
-      opportunityScore: metric?.opportunity_score ?? null,
+      opportunityScore: campCareerScore?.total ?? null,
+      campCareerScore,
       scoreStatus: metric?.score_status ?? null,
       registrationRequired: profile.registration_required,
       publicationStatus: profile.publication_status,
@@ -275,6 +303,7 @@ export async function getCareerCountryRecommendations(careerId: string): Promise
       countryName: demand.countryLabel,
       officialTitle: null,
       opportunityScore: null,
+      campCareerScore: null,
       scoreStatus: null,
       registrationRequired: null,
       publicationStatus: null,
