@@ -35,3 +35,9 @@
   --cc-caution: 43 73% 31%;      /* #8A6A16 */
   --cc-negative: 4 77% 40%;      /* #B42318 */
 }
+
+/* Product-surface cleanup Wave 1: onboarding still exists as dormant
+   capability, but the public Career Page must not advertise it before value. */
+.cc-result-page a[href*="onboarding"] {
+  display: none !important;
+}
