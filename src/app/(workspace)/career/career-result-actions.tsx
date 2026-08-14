@@ -33,7 +33,6 @@ export function CareerResultActions({ query, locale }: { query: OverviewSearchVa
 
       setAuthState("signed-in")
       setUserId(user.id)
-      const saveIntent = new URLSearchParams(window.location.search).get("save") === "1"
       const { data } = await supabase
         .from("saved_career_results")
         .select("id")
@@ -42,43 +41,10 @@ export function CareerResultActions({ query, locale }: { query: OverviewSearchVa
         .eq("career_id", query.occupation)
         .maybeSingle()
 
-      if (!active) return
-      if (data) {
-        setSaved(true)
-        if (saveIntent) window.history.replaceState(null, "", resultHref)
-        return
-      }
-
-      if (!saveIntent) {
-        setSaved(false)
-        return
-      }
-
-      setSaveBusy(true)
-      const { error } = await supabase
-        .from("saved_career_results")
-        .upsert(
-          {
-            user_id: user.id,
-            country_code: query.country.toUpperCase(),
-            career_id: query.occupation,
-            updated_at: new Date().toISOString(),
-          },
-          { onConflict: "user_id,country_code,career_id", ignoreDuplicates: false },
-        )
-
-      if (!active) return
-      setSaveBusy(false)
-      if (error) {
-        setSaveError(true)
-        return
-      }
-
-      setSaved(true)
-      window.history.replaceState(null, "", resultHref)
+      if (active) setSaved(Boolean(data))
     })
     return () => { active = false }
-  }, [query.country, query.occupation, resultHref, supabase])
+  }, [query.country, query.occupation, supabase])
 
   async function toggleSaved() {
     if (!userId || saveBusy) return
