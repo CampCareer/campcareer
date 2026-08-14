@@ -7,7 +7,10 @@ import { getCareerDataFoundation, getFoundationCountriesForCareer } from "@/lib/
 import { isFoundationRankable } from "@/lib/career-data-foundation/opportunity-score"
 import type { CareerDataFoundationResult } from "@/lib/career-data-foundation/types"
 import { supabase } from "@/lib/supabase"
-import { isCareerScoreReady } from "./career-coverage"
+import {
+  hasStrictFoundationPublicScoreEvidence,
+  isCareerScoreReady,
+} from "./career-coverage"
 import { getCountryOccupationProfile } from "./country-occupation-read"
 import type {
   CareerMarketDemand,
@@ -102,6 +105,16 @@ const foundationCareerContext = (foundation: CareerDataFoundationResult) => {
   }
 }
 
+const foundationHasPublicScore = (foundation: CareerDataFoundationResult) =>
+  Boolean(
+    isCareerScoreReady(foundation.countryCode, foundation.canonicalOccupationId)
+    && foundation.readiness.decisionReady
+    && foundation.readiness.scoreReady
+    && foundation.readiness.publishReady
+    && foundation.campCareerScore
+    && hasStrictFoundationPublicScoreEvidence(foundation.scoreComponents),
+  )
+
 const toFoundationCompatibilityProfile = (foundation: CareerDataFoundationResult): CareerMarketProfile => {
   const entryLinks: CareerMarketProfile["links"] = foundation.entryPoints
     .filter((entryPoint) => ["job_search", "employer", "apprenticeship", "training"].includes(entryPoint.entryType))
@@ -150,7 +163,7 @@ const toFoundationCompatibilityProfile = (foundation: CareerDataFoundationResult
       opportunityScore: foundation.campCareerScore?.total ?? null,
       campCareerScore: foundation.campCareerScore,
       scoreMethodologyVersion: CAMPCAREER_SCORE_VERSION,
-      scoreStatus: foundation.readiness.scoreReady && foundation.campCareerScore ? "foundation_ready" : "not_ready",
+      scoreStatus: "foundation_ready",
       scoreEvidence: {
         source: "career_data_foundation",
         readiness: foundation.readiness,
@@ -164,8 +177,9 @@ const toFoundationCompatibilityProfile = (foundation: CareerDataFoundationResult
           scoreValue: component.scoreValue,
           reason: component.reason,
           proxyReason: component.proxyReason,
+          evidenceStatus: component.evidenceStatus,
         })),
-        scoringPolicy: "The public CampCareer Score excludes visa and uses Demand 40 / Pay 30 / Entry 30.",
+        scoringPolicy: "The public CampCareer Score excludes visa and uses Demand 40 / Pay 30 / Entry 30. Foundation data is public only after strict evidence and coverage review.",
       },
       score: {
         shortage: null,
@@ -231,8 +245,9 @@ export async function getCareerCountryRecommendations(careerId: string): Promise
 
   if (profilesResult.error) throw profilesResult.error
   const profiles = (profilesResult.data ?? []) as ProfileRow[]
-  const foundationCountries = new Set(foundationRows.map((row) => row.countryCode))
-  const legacyProfiles = profiles.filter((profile) => !foundationCountries.has(profile.country_code))
+  const publicFoundationRows = foundationRows.filter(foundationHasPublicScore)
+  const publicFoundationCountries = new Set(publicFoundationRows.map((row) => row.countryCode))
+  const legacyProfiles = profiles.filter((profile) => !publicFoundationCountries.has(profile.country_code))
   const profileKeys = legacyProfiles.map((profile) => profile.profile_key)
   const latestMetrics = new Map<string, MetricRow>()
 
@@ -250,7 +265,7 @@ export async function getCareerCountryRecommendations(careerId: string): Promise
 
   const byCountry = new Map<string, CareerMarketRecommendation>()
 
-  for (const foundation of foundationRows) {
+  for (const foundation of publicFoundationRows) {
     if (!isFoundationRankable({
       decisionReady: foundation.decisionReady,
       scoreReady: foundation.scoreReady,
@@ -299,7 +314,7 @@ export async function getCareerCountryRecommendations(careerId: string): Promise
   }
 
   for (const demand of OCCUPATION_DETAILS.find((detail) => detail.id === careerId)?.demand ?? []) {
-    if (foundationCountries.has(demand.countryCode) || byCountry.has(demand.countryCode)) continue
+    if (byCountry.has(demand.countryCode)) continue
     byCountry.set(demand.countryCode, {
       countryCode: demand.countryCode,
       countryName: demand.countryLabel,
@@ -362,7 +377,7 @@ export async function getCareerMarketInsight({ countryCode, careerId }: { countr
     getCareerCountryRecommendations(careerId),
   ])
 
-  if (foundation?.readiness.decisionReady) {
+  if (foundation && foundationHasPublicScore(foundation)) {
     const context = foundationCareerContext(foundation)
     return {
       career: {
@@ -382,7 +397,18 @@ export async function getCareerMarketInsight({ countryCode, careerId }: { countr
     }
   }
 
-  if (foundation) {
+  const [profile, visaResult] = await Promise.all([
+    getCountryOccupationProfile(country, careerId),
+    supabase
+      .from("visa_pathways")
+      .select("visa_name,kind,note,authority,source_url,source_title,last_verified_on")
+      .eq("country_code", country)
+      .order("display_order", { ascending: true })
+      .limit(4),
+  ])
+  if (visaResult.error) throw visaResult.error
+
+  if (!profile && foundation) {
     return {
       career: base,
       country: { code: country, name: countryName(country) },
@@ -394,17 +420,6 @@ export async function getCareerMarketInsight({ countryCode, careerId }: { countr
       visas: [],
     }
   }
-
-  const [profile, visaResult] = await Promise.all([
-    getCountryOccupationProfile(country, careerId),
-    supabase
-      .from("visa_pathways")
-      .select("visa_name,kind,note,authority,source_url,source_title,last_verified_on")
-      .eq("country_code", country)
-      .order("display_order", { ascending: true })
-      .limit(4),
-  ])
-  if (visaResult.error) throw visaResult.error
 
   return {
     career: base,
