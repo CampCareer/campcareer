@@ -10,28 +10,13 @@ import {
   TrendingUp,
   Users,
 } from "lucide-react"
+import type { CampCareerScore, CampCareerVerdict } from "@/lib/campcareer-score"
 import type { CanonicalCareer } from "@/data/career-comparison-catalog"
 import { AU_VOCATIONAL_PROGRAM_SHORTLIST } from "@/data/au-vocational-program-shortlist"
 import { getLaunchCountry } from "@/data/launch-countries"
 import { getOccupationEditorial } from "@/data/occupation-editorial"
 import { AUSTRALIA_NURSING_PROGRAMS } from "@/data/programs/australia-nursing"
-import {
-  OPPORTUNITY_SCORE_MAXIMA,
-  type CountryOccupationProfile,
-  type OpportunityScoreBreakdown,
-} from "@/lib/workspace/country-occupation-contract"
-
-const SCORE_LABELS: Array<{ key: keyof OpportunityScoreBreakdown; label: string }> = [
-  { key: "shortage", label: "Official shortage" },
-  { key: "vacancyIntensity", label: "Vacancy intensity" },
-  { key: "employerDiversity", label: "Employer diversity" },
-  { key: "vacancyTrend", label: "Vacancy trend" },
-  { key: "entryLevel", label: "Entry-level access" },
-  { key: "salary", label: "Relative salary" },
-  { key: "growth", label: "Employment growth" },
-  { key: "visa", label: "Visa pathways" },
-  { key: "entryBurden", label: "Entry burden" },
-]
+import type { CountryOccupationProfile } from "@/lib/workspace/country-occupation-contract"
 
 const compact = (value: number | null) =>
   value == null
@@ -53,11 +38,12 @@ const money = (currency: string, value: number | null) =>
         maximumFractionDigits: 0,
       }).format(value)
 
-function scoreTone(score: number) {
-  if (score >= 85) return "Excellent"
-  if (score >= 70) return "Strong"
-  if (score >= 55) return "Moderate"
-  return "Limited"
+const VERDICT_LABEL: Record<CampCareerVerdict, string> = {
+  excellent: "Excellent",
+  strong: "Strong",
+  mixed: "Mixed",
+  challenging: "Challenging",
+  tough: "Tough",
 }
 
 function MetricCard({
@@ -82,6 +68,57 @@ function MetricCard({
       <p className="mt-3 text-[23px] font-semibold tracking-[-0.025em] text-[#1b1b1b]">{value}</p>
       <p className="mt-1.5 text-[11.5px] leading-5 text-[#77746e]">{hint}</p>
     </article>
+  )
+}
+
+function ScoreDimension({ label, value, description }: { label: string; value: number; description: string }) {
+  return (
+    <div className="rounded-xl border border-[#e7e6e3] bg-[#fafaf8] p-4">
+      <div className="flex items-end justify-between gap-3">
+        <p className="text-[12px] font-semibold text-[#4d4c48]">{label}</p>
+        <p className="text-[24px] font-semibold tracking-[-0.04em] text-[#1b1b1b]">
+          {value}<span className="ml-0.5 text-[10px] font-medium text-[#8f8c85]">/10</span>
+        </p>
+      </div>
+      <p className="mt-2 text-[10.5px] leading-4 text-[#77746e]">{description}</p>
+    </div>
+  )
+}
+
+function CampCareerScorePanel({ score }: { score: CampCareerScore | null }) {
+  if (!score) {
+    return (
+      <section className="rounded-2xl border border-[#e7e6e3] bg-white p-6">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.09em] text-[#2563eb]">CampCareer Score</p>
+        <h3 className="mt-2 text-[20px] font-semibold tracking-[-0.025em] text-[#1b1b1b]">Score not ready yet</h3>
+        <p className="mt-2 max-w-2xl text-[11.5px] leading-5 text-[#77746e]">
+          Demand, Pay and Entry all need usable evidence before CampCareer publishes a total. Missing evidence is not replaced with an average.
+        </p>
+      </section>
+    )
+  }
+
+  return (
+    <section className="rounded-2xl border border-[#e7e6e3] bg-white p-6">
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.09em] text-[#2563eb]">CampCareer Score</p>
+          <h3 className="mt-2 text-[20px] font-semibold tracking-[-0.025em] text-[#1b1b1b]">{VERDICT_LABEL[score.verdict]} career</h3>
+          <p className="mt-1 text-[11.5px] text-[#8f8c85]">Demand 40% · Pay 30% · Entry 30%</p>
+        </div>
+        <div className="text-right">
+          <p className="text-[44px] font-semibold leading-none tracking-[-0.06em] text-[#1b1b1b]">{score.total}<span className="ml-1 text-[13px] font-medium text-[#8f8c85]">/100</span></p>
+        </div>
+      </div>
+      <div className="mt-5 grid gap-3 sm:grid-cols-3">
+        <ScoreDimension label="Demand" value={score.demand} description="Current and forward labour-market demand." />
+        <ScoreDimension label="Pay" value={score.pay} description="Relative earnings in this country's labour market." />
+        <ScoreDimension label="Entry" value={score.entry} description="How easy it is for a newcomer to become job-ready." />
+      </div>
+      <p className="mt-4 text-[10.5px] leading-4 text-[#77746e]">
+        Visa and personal eligibility are handled in the pathway, not in the public score. The historical nine-factor model remains internal evidence only.
+      </p>
+    </section>
   )
 }
 
@@ -193,6 +230,7 @@ export function CountryOccupationDashboard({
   const editorial = getOccupationEditorial(career.id)
   const countryEditorial = editorial?.countries[profile.countryCode]
   const metric = profile.metric
+  const publicScore = metric.campCareerScore
   const countryName = getLaunchCountry(profile.countryCode)?.name ?? profile.countryCode
   const jobLinks = profile.links.filter((link) => link.linkType === "job_search")
   const employers = profile.links.filter((link) => link.linkType === "employer")
@@ -224,11 +262,15 @@ export function CountryOccupationDashboard({
             </p>
           </div>
           <div className="rounded-2xl bg-white/15 px-5 py-4 text-center backdrop-blur-sm">
-            <p className="text-[10.5px] font-semibold uppercase tracking-[0.09em] text-white/70">
-              Opportunity score
-            </p>
-            <p className="mt-1 text-[42px] font-semibold leading-none">{metric.opportunityScore}</p>
-            <p className="mt-1.5 text-[11px] font-semibold">{scoreTone(metric.opportunityScore)} · 100</p>
+            <p className="text-[10.5px] font-semibold uppercase tracking-[0.09em] text-white/70">CampCareer Score</p>
+            {publicScore ? (
+              <>
+                <p className="mt-1 text-[42px] font-semibold leading-none">{publicScore.total}</p>
+                <p className="mt-1.5 text-[11px] font-semibold">{VERDICT_LABEL[publicScore.verdict]} · 100</p>
+              </>
+            ) : (
+              <p className="mt-2 text-[13px] font-semibold">Not ready</p>
+            )}
           </div>
         </div>
       </section>
@@ -260,42 +302,7 @@ export function CountryOccupationDashboard({
         />
       </div>
 
-      <section className="rounded-2xl border border-[#e7e6e3] bg-white p-6">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <div>
-            <h3 className="text-[15px] font-semibold text-[#1b1b1b]">Career Opportunity Score</h3>
-            <p className="mt-1 text-[11.5px] text-[#8f8c85]">
-              {metric.scoreMethodologyVersion} · {metric.scoreStatus}
-            </p>
-          </div>
-          <span className="rounded-full bg-[#edf5ea] px-3 py-1 text-[11px] font-bold text-[#3e7a2e]">
-            {metric.opportunityScore}/100
-          </span>
-        </div>
-        <div className="mt-5 grid gap-x-6 gap-y-3 sm:grid-cols-2">
-          {SCORE_LABELS.map(({ key, label }) => {
-            const value = metric.score[key]
-            const maximum = OPPORTUNITY_SCORE_MAXIMA[key]
-            const width = maximum ? Math.round((value / maximum) * 100) : 0
-            return (
-              <div key={key}>
-                <div className="flex items-center justify-between text-[11.5px]">
-                  <span className="font-medium text-[#4d4c48]">{label}</span>
-                  <span className="font-semibold text-[#2563eb]">{value}/{maximum}</span>
-                </div>
-                <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-[#eef0f4]">
-                  <div className="h-full rounded-full bg-[#2563eb]" style={{ width: `${width}%` }} />
-                </div>
-              </div>
-            )
-          })}
-        </div>
-        {countryEditorial?.scoreCaveat && (
-          <p className="mt-5 rounded-xl bg-[#fff8ee] px-4 py-3 text-[11.5px] leading-5 text-[#795b34]">
-            {countryEditorial.scoreCaveat}
-          </p>
-        )}
-      </section>
+      <CampCareerScorePanel score={publicScore} />
 
       <div className="grid gap-4 lg:grid-cols-2">
         <section className="rounded-2xl border border-[#e7e6e3] bg-white p-6">
