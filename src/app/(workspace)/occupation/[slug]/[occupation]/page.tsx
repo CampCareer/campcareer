@@ -1,73 +1,30 @@
 import type { Metadata } from "next"
-import Link from "next/link"
+import { headers } from "next/headers"
 import { notFound, permanentRedirect } from "next/navigation"
-import { getCountryOccupationProfile } from "@/lib/workspace/country-occupation-read"
-import { getAuOccupationStatePagesForCareer } from "@/lib/workspace/au-occupation-state-seo"
-import { getIndexableOccupationRoute } from "@/lib/workspace/occupation-routes"
-import { OccupationExplorer } from "../../occupation-explorer"
+import { localizePath, type Locale } from "@/lib/i18n/config"
+import { getCareerRoute } from "@/lib/workspace/occupation-routes"
 
 export const dynamic = "force-dynamic"
+
+export const metadata: Metadata = {
+  title: "Career | CampCareer",
+  robots: { index: false, follow: true },
+}
 
 type OccupationDetailPageProps = {
   params: Promise<{ slug: string; occupation: string }>
 }
 
-export async function generateMetadata({ params }: OccupationDetailPageProps): Promise<Metadata> {
-  const { slug, occupation } = await params
-  const route = getIndexableOccupationRoute(slug, occupation)
-
-  if (!route) {
-    return {
-      title: "Occupation",
-      robots: { index: false, follow: false },
-    }
-  }
-
-  return {
-    title: `${route.career.label} in ${route.country.name}`,
-    description: `Explore source-backed salary, demand, registration and pathway data for ${route.career.label} in ${route.country.name}.`,
-    alternates: { canonical: route.path },
-    robots: { index: true, follow: true },
-  }
+async function getRouteLocale(): Promise<Locale> {
+  const routeLocale = (await headers()).get("x-campcareer-route-locale")
+  return routeLocale === "ko" ? "ko" : "en"
 }
 
-export default async function OccupationDetailPage({ params }: OccupationDetailPageProps) {
+export default async function LegacyOccupationDetailPage({ params }: OccupationDetailPageProps) {
   const { slug, occupation } = await params
-  const route = getIndexableOccupationRoute(slug, occupation)
+  const route = getCareerRoute(slug, occupation)
   if (!route) notFound()
 
-  if (slug !== route.country.code.toLowerCase() || occupation !== route.career.id) {
-    permanentRedirect(route.path)
-  }
-
-  const profile = await getCountryOccupationProfile(route.country.code, route.career.id)
-  if (!profile) notFound()
-
-  const statePages = route.country.code === "AU"
-    ? getAuOccupationStatePagesForCareer(route.career.id)
-    : []
-
-  return (
-    <>
-      <OccupationExplorer
-        initialQuery=""
-        initialOccupation={route.career.id}
-        initialCountry={route.country.code}
-        initialCategory={route.career.categoryId}
-      />
-      {statePages.length > 0 ? (
-        <section className="mt-6 rounded-2xl border border-[#e7e6e3] bg-white p-5 sm:p-6" aria-label={`${route.career.label} demand by Australian state`}>
-          <h2 className="text-[15px] font-semibold text-[#1b1b1b]">{route.career.label} demand by state and territory</h2>
-          <p className="mt-1.5 text-[11.5px] leading-5 text-[#77746e]">Compare the verified regional shortage and vacancy evidence used by CampCareer.</p>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {statePages.map((page) => (
-              <Link key={page.path} href={page.path} className="rounded-full border border-[#deddd8] px-3 py-1.5 text-[11px] font-semibold text-[#5f5d57] transition hover:border-[#2563eb]/40 hover:text-[#2563eb]">
-                {page.state.label}
-              </Link>
-            ))}
-          </div>
-        </section>
-      ) : null}
-    </>
-  )
+  const locale = await getRouteLocale()
+  permanentRedirect(localizePath(route.path, locale))
 }
