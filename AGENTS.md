@@ -15,6 +15,7 @@ Before changing product navigation, Career Page structure, account flows or seco
 - `docs/PRODUCT_SURFACE_INVENTORY.md`
 - `docs/CAREER_PAGE_CORE_FLOW.md`
 - `docs/SECONDARY_CONTEXTUAL_SURFACES.md`
+- `docs/AUTH_RETENTION_CONTRACT.md`
 - `docs/INITIAL_INFORMATION_ARCHITECTURE.md`
 - `docs/CAMPCAREER_SCORE_CONTRACT.md`
 - `docs/CAMPCAREER_BRAND_SYSTEM.md`
@@ -30,7 +31,11 @@ Rules:
 - Career Page below the Hero follows Evidence → Path → Study / Programs → Jobs.
 - Do not restore legacy `CareerMarketResults`, `Job market score`, `Career Opportunity Score` or other competing public totals to the Career Page.
 - Value first. Account second.
-- Save, Compare and Login are secondary.
+- Score, Evidence, Path, Study / Programs, Jobs and Compare remain public by default.
+- Save, persistent personalisation, history, alerts, Profile and Settings may require an account because they persist user state.
+- Signup or first sign-in must never force onboarding. Onboarding/personalisation begins only from explicit user intent.
+- A validated auth `next` destination must be preserved; login without `next` returns to public Career discovery.
+- Signed-out Save must return through authentication, complete the save, and return to the same Career Page without a second Save click.
 - Account/Profile is a retention utility for saved careers and settings, not a dashboard, workspace or onboarding gateway.
 - Programs should be framed around the career outcome and preserve career context when available.
 - Jobs are a Career Page action layer. Do not create or promote an unrelated global Jobs board merely because country job routes exist.
