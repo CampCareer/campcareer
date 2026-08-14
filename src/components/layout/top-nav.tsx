@@ -15,8 +15,14 @@ export function TopNav() {
   const pathname = usePathname()
   const routeLocale = useRouteLocale()
   const pathLocale = localeFromPathname(pathname) ?? routeLocale
+  const homeDestination = localizePath("/", pathLocale)
+  const profileDestination = localizePath("/profile", pathLocale)
+  const loginPath = localizePath("/login", pathLocale)
   const supabase = useMemo(() => createClient(), [])
   const [user, setUser] = useState<User | null>(null)
+  const [loginDestination, setLoginDestination] = useState(
+    `${loginPath}?next=${encodeURIComponent(homeDestination)}`,
+  )
 
   useEffect(() => {
     let active = true
@@ -37,9 +43,11 @@ export function TopNav() {
     }
   }, [supabase])
 
-  const homeDestination = localizePath("/", pathLocale)
-  const profileDestination = localizePath("/profile", pathLocale)
-  const loginDestination = `${localizePath("/login", pathLocale)}?next=${encodeURIComponent(pathname || homeDestination)}`
+  useEffect(() => {
+    const returnTo = `${window.location.pathname}${window.location.search}${window.location.hash}`
+    setLoginDestination(`${loginPath}?next=${encodeURIComponent(returnTo || homeDestination)}`)
+  }, [homeDestination, loginPath, pathname])
+
   const displayName = user
     ? ((user.user_metadata?.full_name as string | undefined) || (user.user_metadata?.name as string | undefined) || user.email?.split("@")[0] || "C")
     : "C"
