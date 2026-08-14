@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { CircleAlert } from "lucide-react"
 import type { CampCareerScore, CampCareerVerdict } from "@/lib/campcareer-score"
 import type { CareerMarketInsight } from "@/lib/workspace/career-market-contract"
 import type { OverviewSearchValues } from "../home/home-overview-config"
@@ -10,18 +9,18 @@ type Locale = "en" | "ko"
 
 type EvidenceConfidence = "verified" | "estimated" | "limited_evidence"
 
-const verdictLabel: Record<CampCareerVerdict, { en: string; ko: string }> = {
-  excellent: { en: "Excellent career", ko: "매우 매력적인 커리어" },
-  strong: { en: "Strong career", ko: "매력적인 커리어" },
-  mixed: { en: "Mixed career", ko: "장단점이 뚜렷한 커리어" },
-  challenging: { en: "Challenging career", ko: "진입 판단이 필요한 커리어" },
-  tough: { en: "Tough career", ko: "신중한 판단이 필요한 커리어" },
+const verdictLabel: Record<CampCareerVerdict, string> = {
+  excellent: "Excellent",
+  strong: "Strong",
+  mixed: "Mixed",
+  challenging: "Challenging",
+  tough: "Tough",
 }
 
 const confidenceLabel: Record<EvidenceConfidence, { en: string; ko: string }> = {
   verified: { en: "Verified", ko: "검증됨" },
   estimated: { en: "Estimated", ko: "추정 포함" },
-  limited_evidence: { en: "Limited", ko: "근거 제한" },
+  limited_evidence: { en: "Limited evidence", ko: "근거 제한" },
 }
 
 function publicScore(insight: CareerMarketInsight): CampCareerScore | null {
@@ -36,42 +35,96 @@ function evidenceConfidence(insight: CareerMarketInsight): EvidenceConfidence {
   return "limited_evidence"
 }
 
-function verdictSentence(score: CampCareerScore, locale: Locale) {
-  if (score.entry <= 4) {
-    return locale === "ko"
-      ? "시장 매력도에 비해 자격·교육·면허 등 취업 준비 장벽이 큰 편입니다."
-      : "The market can be attractive, but qualification, training or licensing makes the route to job-ready status harder."
+function demandCopy(value: number, locale: Locale) {
+  if (locale === "ko") {
+    if (value >= 8) return "높은 수요"
+    if (value >= 6) return "탄탄한 수요"
+    if (value >= 4) return "보통 수준의 수요"
+    if (value >= 2) return "약한 수요"
+    return "낮은 수요"
   }
-  if (score.demand >= 8 && score.pay >= 7) {
-    return locale === "ko"
-      ? "높은 수요와 좋은 보수가 이 직업의 가장 큰 강점입니다."
-      : "Strong demand and good relative pay are the biggest reasons this career scores well."
-  }
-  if (score.demand <= 4) {
-    return locale === "ko"
-      ? "진입 조건보다 현지 일자리 수요가 전체 점수를 더 크게 제한합니다."
-      : "Local job demand is the main factor holding this career back."
-  }
-  if (score.pay <= 4) {
-    return locale === "ko"
-      ? "일자리 기회가 있더라도 현지 기준 상대 보수가 전체 매력도를 낮춥니다."
-      : "Job opportunities may exist, but relative pay reduces the overall attractiveness."
-  }
-  return locale === "ko"
-    ? "수요, 보수, 진입 난이도를 함께 보면 장점과 비용이 비교적 균형적인 직업입니다."
-    : "Demand, pay and entry difficulty create a relatively balanced career tradeoff."
+  if (value >= 8) return "High demand"
+  if (value >= 6) return "Solid demand"
+  if (value >= 4) return "Moderate demand"
+  if (value >= 2) return "Weak demand"
+  return "Low demand"
 }
 
-function ScoreDimension({ label, value, helper }: { label: string; value: number; helper: string }) {
-  return (
-    <div className="rounded-2xl border border-slate-200 bg-white px-4 py-4">
-      <div className="flex items-end justify-between gap-3">
-        <p className="text-sm font-semibold text-slate-800">{label}</p>
-        <p className="text-2xl font-semibold tracking-[-0.05em] text-slate-950">{value}<span className="ml-0.5 text-xs font-medium text-slate-400">/10</span></p>
-      </div>
-      <p className="mt-2 text-xs leading-5 text-slate-500">{helper}</p>
-    </div>
-  )
+function payCopy(value: number, locale: Locale) {
+  if (locale === "ko") {
+    if (value >= 8) return "좋은 보수"
+    if (value >= 6) return "괜찮은 보수"
+    if (value >= 4) return "평균적인 보수"
+    if (value >= 2) return "낮은 편의 보수"
+    return "낮은 보수"
+  }
+  if (value >= 8) return "Strong pay"
+  if (value >= 6) return "Good pay"
+  if (value >= 4) return "Average pay"
+  if (value >= 2) return "Lower pay"
+  return "Weak pay"
+}
+
+function entryCopy(value: number, locale: Locale) {
+  if (locale === "ko") {
+    if (value >= 8) return "쉬운 진입"
+    if (value >= 7) return "관리 가능한 진입"
+    if (value >= 5) return "다소 어려운 진입"
+    if (value >= 3) return "어려운 진입"
+    return "매우 어려운 진입"
+  }
+  if (value >= 8) return "Easier entry"
+  if (value >= 7) return "Manageable entry"
+  if (value >= 5) return "Harder entry"
+  if (value >= 3) return "Difficult entry"
+  return "Very difficult entry"
+}
+
+function interpretation(score: CampCareerScore, locale: Locale) {
+  return `${demandCopy(score.demand, locale)}. ${payCopy(score.pay, locale)}. ${entryCopy(score.entry, locale)}.`
+}
+
+function mainReason(score: CampCareerScore, locale: Locale) {
+  if (score.demand >= 8 && score.pay >= 7) {
+    return locale === "ko"
+      ? "강한 노동시장 수요와 높은 상대 보수가 가장 큰 강점입니다."
+      : "Strong labour demand and above-average pay are the biggest positive drivers."
+  }
+  if (score.demand >= score.pay && score.demand >= score.entry) {
+    return locale === "ko"
+      ? "현지 노동시장 수요가 이 점수를 가장 크게 끌어올립니다."
+      : "Local labour demand is the strongest positive driver of this score."
+  }
+  if (score.pay >= score.entry) {
+    return locale === "ko"
+      ? "현지 노동시장 대비 보수가 이 점수를 가장 크게 끌어올립니다."
+      : "Relative pay is the strongest positive driver of this score."
+  }
+  return locale === "ko"
+    ? "취업 준비 상태에 도달하기 비교적 수월한 점이 이 점수를 뒷받침합니다."
+    : "A comparatively manageable route to job-ready status supports this score."
+}
+
+function mainBlocker(score: CampCareerScore, locale: Locale) {
+  const minimum = Math.min(score.demand, score.pay, score.entry)
+  if (minimum >= 8) {
+    return locale === "ko"
+      ? "공개 점수의 세 항목에서는 뚜렷한 주요 장벽이 없습니다."
+      : "There is no major blocker across the three public score dimensions."
+  }
+  if (score.entry === minimum) {
+    return locale === "ko"
+      ? "자격, 교육 또는 면허 요건 때문에 실제 진입 부담이 커집니다."
+      : "Qualification, training or licensing requirements make entry harder."
+  }
+  if (score.demand === minimum) {
+    return locale === "ko"
+      ? "상대적으로 약한 현지 일자리 수요가 가장 큰 제약입니다."
+      : "Weaker local job demand is the main constraint on this career."
+  }
+  return locale === "ko"
+    ? "현지 노동시장 대비 상대 보수가 가장 큰 제약입니다."
+    : "Relative pay is the main constraint on this career."
 }
 
 export function CampCareerScoreHero({ query, locale }: { query: OverviewSearchValues; locale: Locale }) {
@@ -98,7 +151,17 @@ export function CampCareerScoreHero({ query, locale }: { query: OverviewSearchVa
   if (failed) return null
 
   if (!insight) {
-    return <section className="mt-5 animate-pulse rounded-3xl border border-slate-200 bg-slate-50 p-6 sm:p-8"><div className="h-4 w-40 rounded bg-slate-200" /><div className="mt-5 h-16 w-48 rounded bg-slate-200" /><div className="mt-6 grid gap-3 sm:grid-cols-3">{[0, 1, 2].map((item) => <div key={item} className="h-24 rounded-2xl bg-slate-200" />)}</div></section>
+    return (
+      <section className="mt-6 animate-pulse rounded-xl border border-campcareer-border bg-campcareer-surface px-5 py-6 sm:px-8 sm:py-8">
+        <div className="h-4 w-24 rounded bg-slate-200" />
+        <div className="mt-3 h-10 w-56 rounded bg-slate-200" />
+        <div className="mt-8 border-t border-campcareer-border pt-6">
+          <div className="h-4 w-32 rounded bg-slate-200" />
+          <div className="mt-3 h-16 w-40 rounded bg-slate-200" />
+          <div className="mt-6 h-16 rounded bg-slate-100" />
+        </div>
+      </section>
+    )
   }
 
   if (!insight.country) return null
@@ -109,37 +172,67 @@ export function CampCareerScoreHero({ query, locale }: { query: OverviewSearchVa
 
   if (!score) {
     return (
-      <section className="mt-5 rounded-3xl border border-slate-200 bg-white p-6 sm:p-8" aria-labelledby="campcareer-score-heading">
-        <p className="text-xs font-bold tracking-[0.12em] text-blue-700">{insight.country.name} · {careerName}</p>
-        <h1 id="campcareer-score-heading" className="mt-4 text-3xl font-semibold tracking-[-0.055em] text-slate-950 sm:text-4xl">{locale === "ko" ? "점수 준비 중" : "Score not ready yet"}</h1>
-        <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">{locale === "ko" ? "Demand, Pay, Entry 중 하나 이상의 필수 근거가 아직 충분하지 않아 총점을 만들지 않았습니다. 확인된 근거와 진입 경로는 아래에서 계속 볼 수 있습니다." : "One or more required Demand, Pay or Entry evidence groups are not ready, so CampCareer does not manufacture a total. Verified evidence and the pathway remain available below."}</p>
-        <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-800"><CircleAlert className="size-3.5" /> {locale === "ko" ? "임의 평균값을 사용하지 않음" : "No guessed average used"}</div>
+      <section className="mt-6 rounded-xl border border-campcareer-border bg-campcareer-surface px-5 py-6 sm:px-8 sm:py-8" aria-labelledby="career-heading">
+        <header>
+          <p className="text-sm font-medium text-campcareer-muted">{insight.country.name}</p>
+          <h1 id="career-heading" className="mt-1 text-3xl font-bold tracking-[-0.045em] text-campcareer-ink sm:text-4xl">{careerName}</h1>
+        </header>
+        <div className="mt-8 border-t border-campcareer-border pt-6">
+          <p className="text-sm font-semibold text-brand">CampCareer Score</p>
+          <h2 className="mt-3 text-3xl font-bold tracking-[-0.045em] text-campcareer-ink">{locale === "ko" ? "점수 준비 중" : "Score not ready yet"}</h2>
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-campcareer-ink-secondary">{locale === "ko" ? "이 직업을 신뢰할 수 있게 평가하기 위한 Demand, Pay, Entry 근거가 아직 충분하지 않습니다." : "We don’t have enough evidence to score this career reliably yet."}</p>
+          <p className="mt-5 border-t border-campcareer-border pt-4 text-xs font-medium text-campcareer-muted">{locale === "ko" ? "근거 신뢰도" : "Evidence confidence"}: {confidenceLabel[confidence][locale]}</p>
+        </div>
       </section>
     )
   }
 
+  const dimensions = [
+    { label: "Demand", value: score.demand },
+    { label: "Pay", value: score.pay },
+    { label: "Entry", value: score.entry },
+  ]
+
   return (
-    <section className="mt-5 rounded-3xl border border-slate-200 bg-white p-6 sm:p-8" aria-labelledby="campcareer-score-heading">
-      <p className="text-xs font-bold tracking-[0.12em] text-blue-700">{insight.country.name} · {careerName}</p>
-      <div className="mt-4 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+    <section className="mt-6 rounded-xl border border-campcareer-border bg-campcareer-surface px-5 py-6 sm:px-8 sm:py-8" aria-labelledby="career-heading">
+      <header>
+        <p className="text-sm font-medium text-campcareer-muted">{insight.country.name}</p>
+        <h1 id="career-heading" className="mt-1 text-3xl font-bold tracking-[-0.045em] text-campcareer-ink sm:text-4xl">{careerName}</h1>
+      </header>
+
+      <div className="mt-8 border-t border-campcareer-border pt-6">
+        <p className="text-sm font-semibold text-brand">CampCareer Score</p>
+        <div className="mt-2 flex items-end gap-4">
+          <p className="text-[64px] font-bold leading-none tracking-[-0.07em] text-campcareer-ink tabular-nums sm:text-[76px]" aria-label={`${score.total} out of 100`}>{score.total}</p>
+          <div className="pb-1.5 sm:pb-2">
+            <p className="text-xl font-bold tracking-[-0.025em] text-campcareer-ink">{verdictLabel[score.verdict]}</p>
+            <p className="mt-0.5 text-xs font-medium text-campcareer-muted">{locale === "ko" ? "100점 만점" : "out of 100"}</p>
+          </div>
+        </div>
+        <p className="mt-4 max-w-2xl text-base font-medium leading-7 text-campcareer-ink-secondary sm:text-lg">{interpretation(score, locale)}</p>
+      </div>
+
+      <div className="mt-6 grid grid-cols-3 divide-x divide-campcareer-border border-y border-campcareer-border">
+        {dimensions.map((dimension) => (
+          <div key={dimension.label} className="min-w-0 px-3 py-4 first:pl-0 last:pr-0 sm:px-5 sm:py-5 sm:first:pl-0 sm:last:pr-0">
+            <p className="text-xs font-semibold text-campcareer-muted sm:text-sm">{dimension.label}</p>
+            <p className="mt-1 text-3xl font-bold tracking-[-0.045em] text-campcareer-ink tabular-nums sm:text-4xl">{dimension.value}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-6 grid gap-6 sm:grid-cols-2 sm:gap-8">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">CampCareer Score</p>
-          <h1 id="campcareer-score-heading" className="mt-1 text-6xl font-semibold leading-none tracking-[-0.09em] text-slate-950 sm:text-7xl">{score.total}<span className="ml-1 text-lg font-medium tracking-[-0.03em] text-slate-400">/100</span></h1>
+          <p className="text-xs font-semibold text-campcareer-muted">{locale === "ko" ? "주요 강점" : "Main reason"}</p>
+          <p className="mt-2 text-sm leading-6 text-campcareer-ink-secondary">{mainReason(score, locale)}</p>
         </div>
-        <div className="sm:max-w-lg sm:text-right">
-          <p className="text-lg font-bold uppercase tracking-[0.06em] text-slate-900">{verdictLabel[score.verdict][locale]}</p>
-          <p className="mt-2 text-sm leading-6 text-slate-600">{verdictSentence(score, locale)}</p>
-          <p className="mt-2 text-xs font-medium text-slate-500">{locale === "ko" ? "근거 신뢰도" : "Evidence"}: {confidenceLabel[confidence][locale]}</p>
+        <div>
+          <p className="text-xs font-semibold text-campcareer-muted">{locale === "ko" ? "주요 장벽" : "Main blocker"}</p>
+          <p className="mt-2 text-sm leading-6 text-campcareer-ink-secondary">{mainBlocker(score, locale)}</p>
         </div>
       </div>
 
-      <div className="mt-7 grid gap-3 sm:grid-cols-3">
-        <ScoreDimension label="Demand" value={score.demand} helper={locale === "ko" ? "현지에서 실제 일자리 수요가 얼마나 강한가" : "How strong is real local demand for this work?"} />
-        <ScoreDimension label="Pay" value={score.pay} helper={locale === "ko" ? "현지 노동시장과 비교해 보수가 얼마나 좋은가" : "How well does it pay relative to the local labour market?"} />
-        <ScoreDimension label="Entry" value={score.entry} helper={locale === "ko" ? "새로 시작해 취업 준비 상태가 되기 얼마나 쉬운가" : "How easy is it for a newcomer to become job-ready?"} />
-      </div>
-
-      <p className="mt-5 text-xs leading-5 text-slate-500">{locale === "ko" ? "공식: Demand 40% + Pay 30% + Entry 30%. 비자와 개인 자격은 이 점수에 포함하지 않고 아래 경로에서 별도로 다룹니다." : "Formula: Demand 40% + Pay 30% + Entry 30%. Visa and personal eligibility are excluded from this public score and handled in the pathway below."}</p>
+      <p className="mt-6 border-t border-campcareer-border pt-4 text-xs font-medium text-campcareer-muted">{locale === "ko" ? "근거 신뢰도" : "Evidence confidence"}: {confidenceLabel[confidence][locale]}</p>
     </section>
   )
 }
