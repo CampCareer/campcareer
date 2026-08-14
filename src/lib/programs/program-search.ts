@@ -154,6 +154,8 @@ export type ProgramSearchFilters = {
   state: ProgramState
   province: ProgramProvince
   career: ProgramCareer
+  /** Career Page context is not automatically a programme filter. */
+  careerContext?: ProgramCareer
   institution: ProgramInstitution
   pgwp: ProgramPgwp
   duration: ProgramDuration
@@ -229,6 +231,7 @@ export function parseProgramSearchParams(
         ? allowedValue(firstValue(params.province), provinceValues, "all")
         : "all",
     career: normalizedCountry === "CA" ? safeSlug(firstValue(params.career)) : "all",
+    careerContext: safeSlug(firstValue(params.careerContext)),
     institution: normalizedCountry === "CA" ? safeSlug(firstValue(params.institution)) : "all",
     pgwp:
       normalizedCountry === "CA"
@@ -280,6 +283,7 @@ export function buildProgramsUrl(
   if (next.city === "all" && next.state !== "all") params.set("state", next.state)
   if (next.province !== "all") params.set("province", next.province)
   if (next.career !== "all") params.set("career", next.career)
+  if (next.careerContext && next.careerContext !== "all") params.set("careerContext", next.careerContext)
   if (next.institution !== "all") params.set("institution", next.institution)
   if (next.pgwp !== "all") params.set("pgwp", next.pgwp)
   if (next.duration !== "all") params.set("duration", next.duration)
