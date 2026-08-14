@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { useEffect, useMemo, useState } from "react"
 import type { User } from "@supabase/supabase-js"
-import { ArrowRight, Bookmark, BriefcaseBusiness, Building2, Compass, Route, Settings, Sparkles } from "lucide-react"
+import { ArrowRight, Bookmark, BriefcaseBusiness, Building2, Route, Settings } from "lucide-react"
 import { CANONICAL_CAREER_BY_ID } from "@/data/career-comparison-catalog"
 import { getLaunchCountry } from "@/data/launch-countries"
 import { localizePath } from "@/lib/i18n/config"
@@ -13,7 +13,6 @@ import { createClient } from "@/lib/supabase-client"
 type Preferences = {
   target_country: string | null
   target_occupation: string | null
-  career_personalisation_completed_at: string | null
 }
 
 type SavedResearch = {
@@ -38,7 +37,7 @@ export default function ProfilePage() {
       const [preferenceResult, careersResult, institutionsResult, routesResult] = await Promise.all([
         supabase
           .from("user_preferences")
-          .select("target_country,target_occupation,career_personalisation_completed_at")
+          .select("target_country,target_occupation")
           .eq("id", userId)
           .maybeSingle(),
         supabase.from("saved_career_results").select("id", { count: "exact", head: true }).eq("user_id", userId),
@@ -99,99 +98,95 @@ export default function ProfilePage() {
   const career = preferences?.target_occupation ? CANONICAL_CAREER_BY_ID.get(preferences.target_occupation) : null
   const countryLabel = country?.name ?? preferences?.target_country ?? null
   const careerLabel = career ? (isKo ? career.labelKo : career.label) : preferences?.target_occupation ?? null
-  const hasDirection = Boolean(preferences?.career_personalisation_completed_at && (countryLabel || careerLabel))
-  const homeHref = localizePath("/home", locale)
-  const onboardingHref = localizePath("/onboarding", locale)
+  const careerHref = country && career
+    ? localizePath(`/career?country=${encodeURIComponent(country.code)}&occupation=${encodeURIComponent(career.id)}`, locale)
+    : null
 
   return (
-    <main className="min-h-screen bg-white">
-      <section className="border-b border-[#e7e7e3] bg-[#f7f7f6]">
-        <div className="mx-auto flex max-w-6xl flex-col justify-between gap-6 px-5 py-10 sm:flex-row sm:items-end sm:px-8 sm:py-12">
+    <main className="min-h-screen bg-[hsl(var(--cc-canvas))]">
+      <section className="border-b border-[hsl(var(--cc-border))] bg-white">
+        <div className="mx-auto flex max-w-5xl flex-col justify-between gap-6 px-5 py-10 sm:flex-row sm:items-end sm:px-8 sm:py-12">
           <div className="flex items-center gap-4">
             {avatarUrl ? (
-              <img src={avatarUrl} alt="" className="size-14 rounded-2xl border border-slate-200 bg-white object-cover shadow-sm" />
+              <img src={avatarUrl} alt="" className="size-14 rounded-xl border border-[hsl(var(--cc-border))] bg-white object-cover" />
             ) : (
-              <div className="grid size-14 place-items-center rounded-2xl border border-blue-100 bg-blue-50 text-lg font-semibold text-blue-700 shadow-sm" aria-hidden="true">{initial}</div>
+              <div className="grid size-14 place-items-center rounded-xl border border-[hsl(var(--cc-border))] bg-[hsl(var(--brand-tint))] text-lg font-semibold text-brand" aria-hidden="true">{initial}</div>
             )}
             <div>
-              <p className="text-xs font-semibold tracking-[0.14em] text-blue-700">{isKo ? "프로필" : "PROFILE"}</p>
-              <h1 className="mt-1 text-3xl font-semibold tracking-tight text-slate-950">{displayName}</h1>
-              <p className="mt-1 text-sm text-slate-500">{user.email}</p>
+              <p className="text-xs font-semibold tracking-[0.12em] text-brand">{isKo ? "계정" : "ACCOUNT"}</p>
+              <h1 className="mt-1 text-3xl font-semibold tracking-[-0.035em] text-[hsl(var(--cc-ink))]">{displayName}</h1>
+              <p className="mt-1 text-sm text-[hsl(var(--cc-muted))]">{user.email}</p>
             </div>
           </div>
-          <Link href={localizePath("/settings", locale)} className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-blue-200 hover:text-blue-700">
-            <Settings className="size-4" />
-            {isKo ? "계정 관리" : "Manage account"}
+          <Link href={localizePath("/settings", locale)} className="inline-flex items-center justify-center gap-2 rounded-lg border border-[hsl(var(--cc-border))] bg-white px-4 py-2.5 text-sm font-semibold text-[hsl(var(--cc-ink-secondary))] transition hover:border-brand/30 hover:text-brand">
+            <Settings className="size-4" /> {isKo ? "계정 설정" : "Account settings"}
           </Link>
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-5 py-8 sm:px-8 sm:py-10">
-        <section className="border-b border-slate-200 pb-8">
-          <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+      <div className="mx-auto max-w-5xl px-5 py-8 sm:px-8 sm:py-10">
+        <section className="rounded-xl border border-[hsl(var(--cc-border))] bg-white p-5 sm:p-6">
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-xs font-semibold tracking-[0.14em] text-blue-700">{isKo ? "현재 방향" : "CURRENT DIRECTION"}</p>
-              <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">{hasDirection ? (isKo ? "지금 탐색 중인 해외 커리어" : "Your global career direction") : (isKo ? "먼저 탐색할 방향을 정해보세요" : "Choose a direction to start exploring")}</h2>
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">{hasDirection ? (isKo ? "내 조건에 맞는 취업시장, 비자, 교육 경로를 이 방향에서 이어서 확인할 수 있어요." : "Continue from this direction to compare job markets, visas and study routes that fit your profile.") : (isKo ? "국가와 하고 싶은 일을 선택하면 개인화된 해외 커리어 탐색을 시작할 수 있어요." : "Choose a country and the work you want to do to start a personalised global-career search.")}</p>
+              <p className="text-xs font-semibold tracking-[0.12em] text-brand">{isKo ? "저장한 커리어" : "SAVED CAREERS"}</p>
+              <h2 className="mt-2 text-2xl font-semibold tracking-[-0.035em] text-[hsl(var(--cc-ink))]">
+                {isKo ? `${savedResearch.careers}개의 커리어를 저장했습니다` : `${savedResearch.careers} saved ${savedResearch.careers === 1 ? "career" : "careers"}`}
+              </h2>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-[hsl(var(--cc-muted))]">
+                {isKo ? "계정은 CampCareer를 사용하기 위한 전제가 아닙니다. 가치 있는 커리어 판단을 저장하고 나중에 이어보기 위해 사용합니다." : "An account is not required to use CampCareer. It exists to retain useful career decisions and return to them later."}
+              </p>
             </div>
-            <Link href={hasDirection ? homeHref : onboardingHref} className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">
-              {hasDirection ? (isKo ? "워크스페이스 열기" : "Open workspace") : (isKo ? "방향 설정하기" : "Set my direction")}
-              <ArrowRight className="size-4" />
+            <Link href={localizePath("/", locale)} className="inline-flex shrink-0 items-center gap-2 rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-white transition hover:opacity-90">
+              {isKo ? "커리어 탐색" : "Explore careers"} <ArrowRight className="size-4" />
             </Link>
           </div>
 
-          {hasDirection && (
-            <div className="mt-6 grid gap-3 sm:grid-cols-2">
-              <DirectionTile icon={Compass} label={isKo ? "희망 국가" : "Destination"} value={countryLabel ?? (isKo ? "아직 정하지 않음" : "Not decided yet")} />
-              <DirectionTile icon={BriefcaseBusiness} label={isKo ? "희망 직업" : "Career"} value={careerLabel ?? (isKo ? "아직 정하지 않음" : "Not decided yet")} />
-            </div>
-          )}
+          <div className="mt-6 grid gap-3 sm:grid-cols-3">
+            <ResearchCount icon={BriefcaseBusiness} label={isKo ? "저장한 커리어" : "Saved careers"} value={savedResearch.careers} primary />
+            <ResearchCount icon={Building2} label={isKo ? "저장한 교육기관" : "Saved providers"} value={savedResearch.institutions} />
+            <ResearchCount icon={Route} label={isKo ? "저장한 경로" : "Saved paths"} value={savedResearch.routes} />
+          </div>
         </section>
 
-        <section className="pt-8">
-          <div className="flex items-end justify-between gap-4">
+        {careerHref ? (
+          <section className="mt-5 rounded-xl border border-[hsl(var(--cc-border))] bg-white p-5 sm:p-6">
+            <p className="text-xs font-semibold tracking-[0.12em] text-[hsl(var(--cc-muted))]">{isKo ? "최근 커리어 맥락" : "RECENT CAREER CONTEXT"}</p>
+            <div className="mt-3 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="text-lg font-semibold text-[hsl(var(--cc-ink))]">{careerLabel}</p>
+                <p className="mt-1 text-sm text-[hsl(var(--cc-muted))]">{countryLabel}</p>
+              </div>
+              <Link href={careerHref} className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand hover:underline">
+                {isKo ? "Career Page로 돌아가기" : "Return to Career Page"} <ArrowRight className="size-4" />
+              </Link>
+            </div>
+          </section>
+        ) : null}
+
+        <section className="mt-5 rounded-xl border border-[hsl(var(--cc-border))] bg-white p-5 sm:p-6">
+          <div className="flex gap-3">
+            <Bookmark className="mt-0.5 size-5 shrink-0 text-brand" />
             <div>
-              <p className="text-xs font-semibold tracking-[0.14em] text-blue-700">{isKo ? "저장한 탐색" : "SAVED RESEARCH"}</p>
-              <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">{isKo ? "나중에 비교할 항목" : "Items to compare later"}</h2>
+              <p className="text-sm font-semibold text-[hsl(var(--cc-ink))]">{isKo ? "Save는 보조 기능입니다" : "Save is a secondary feature"}</p>
+              <p className="mt-1 text-sm leading-6 text-[hsl(var(--cc-muted))]">{isKo ? "먼저 공개 Score, 근거와 Path를 확인하세요. 저장은 그 판단을 유지하고 다시 찾기 위한 기능입니다." : "Review the public Score, evidence and Path first. Saving simply keeps that decision available for later."}</p>
             </div>
-            <Link href={homeHref} className="hidden items-center gap-1.5 text-sm font-semibold text-blue-700 transition hover:text-blue-800 sm:inline-flex">{isKo ? "새 탐색 시작" : "Explore more"}<ArrowRight className="size-4" /></Link>
-          </div>
-          <div className="mt-5 grid gap-3 sm:grid-cols-3">
-            <ResearchCount icon={BriefcaseBusiness} label={isKo ? "저장한 직업" : "Saved jobs"} value={savedResearch.careers} />
-            <ResearchCount icon={Building2} label={isKo ? "저장한 기관" : "Saved institutions"} value={savedResearch.institutions} />
-            <ResearchCount icon={Route} label={isKo ? "저장한 경로" : "Saved routes"} value={savedResearch.routes} />
-          </div>
-          <div className="mt-5 flex flex-col gap-3 rounded-2xl border border-slate-200 bg-[#fafbfc] p-5 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex gap-3"><Bookmark className="mt-0.5 size-5 shrink-0 text-blue-600" /><p className="text-sm leading-6 text-slate-600">{isKo ? "저장한 항목은 아직 확정이 아니에요. 홈에서 국가, 비자, 직업, 프로그램, 기관을 다시 비교하며 다음 결정을 이어가세요." : "Saved items are not commitments. Use Home to compare countries, visas, jobs, programs and institutions before your next decision."}</p></div>
-            <Link href={homeHref} className="inline-flex shrink-0 items-center gap-2 text-sm font-semibold text-blue-700 transition hover:text-blue-800">{isKo ? "홈으로 가기" : "Go to Home"}<ArrowRight className="size-4" /></Link>
           </div>
         </section>
-
-        <section className="mt-8 border-t border-slate-200 pt-8">
-          <div className="flex items-start justify-between gap-5 rounded-2xl bg-[#f7f7f6] p-5 sm:p-6">
-            <div><p className="text-sm font-semibold text-slate-950">{isKo ? "계정 설정" : "Account settings"}</p><p className="mt-1 text-sm leading-6 text-slate-600">{isKo ? "표시 이름, 개인정보와 이 브라우저의 로그인 상태를 관리할 수 있어요." : "Manage your display name, privacy preferences and this browser session."}</p></div>
-            <Link href={localizePath("/settings", locale)} className="inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold text-blue-700 transition hover:text-blue-800">{isKo ? "관리" : "Manage"}<ArrowRight className="size-4" /></Link>
-          </div>
-        </section>
-      </section>
+      </div>
     </main>
   )
 }
 
-function DirectionTile({ icon: Icon, label, value }: { icon: typeof Compass; label: string; value: string }) {
-  return <div className="rounded-2xl border border-slate-200 bg-white p-5"><div className="flex items-center gap-2 text-slate-500"><Icon className="size-4 text-blue-600" /><span className="text-xs font-semibold tracking-[0.12em]">{label}</span></div><p className="mt-3 text-lg font-semibold text-slate-950">{value}</p></div>
-}
-
-function ResearchCount({ icon: Icon, label, value }: { icon: typeof BriefcaseBusiness; label: string; value: number }) {
-  return <div className="rounded-2xl border border-slate-200 bg-white p-5"><Icon className="size-5 text-blue-600" /><p className="mt-5 text-3xl font-semibold tracking-tight text-slate-950">{value}</p><p className="mt-1 text-sm font-medium text-slate-600">{label}</p></div>
+function ResearchCount({ icon: Icon, label, value, primary = false }: { icon: typeof BriefcaseBusiness; label: string; value: number; primary?: boolean }) {
+  return <div className="rounded-lg border border-[hsl(var(--cc-border))] bg-white p-4"><Icon className={primary ? "size-5 text-brand" : "size-5 text-[hsl(var(--cc-muted))]"} /><p className="mt-4 text-3xl font-semibold tracking-[-0.04em] text-[hsl(var(--cc-ink))] tabular-nums">{value}</p><p className="mt-1 text-sm font-medium text-[hsl(var(--cc-muted))]">{label}</p></div>
 }
 
 function GuestProfile({ locale }: { locale: "en" | "ko" }) {
   const isKo = locale === "ko"
   const profilePath = localizePath("/profile", locale)
-  return <main className="flex min-h-[70vh] items-center justify-center bg-white px-5 py-12"><section className="max-w-md rounded-2xl border border-slate-200 bg-[#fafbfc] p-7 text-center sm:p-9"><div className="mx-auto grid size-12 place-items-center rounded-2xl bg-blue-50 text-blue-700"><Sparkles className="size-5" /></div><h1 className="mt-5 text-2xl font-semibold tracking-tight text-slate-950">{isKo ? "나의 해외 커리어 탐색을 한곳에" : "Keep your global-career research together."}</h1><p className="mt-2 text-sm leading-6 text-slate-600">{isKo ? "로그인하면 내 방향과 저장한 탐색을 이어서 볼 수 있어요." : "Sign in to return to your direction and saved research."}</p><Link href={`${localizePath("/login", locale)}?next=${encodeURIComponent(profilePath)}`} className="mt-6 inline-flex rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">{isKo ? "로그인" : "Log in"}</Link></section></main>
+  return <main className="flex min-h-[70vh] items-center justify-center bg-[hsl(var(--cc-canvas))] px-5 py-12"><section className="max-w-md rounded-xl border border-[hsl(var(--cc-border))] bg-white p-7 text-center sm:p-9"><Bookmark className="mx-auto size-6 text-brand" /><h1 className="mt-5 text-2xl font-semibold tracking-[-0.035em] text-[hsl(var(--cc-ink))]">{isKo ? "저장한 커리어를 다시 확인하세요" : "Return to your saved careers"}</h1><p className="mt-2 text-sm leading-6 text-[hsl(var(--cc-muted))]">{isKo ? "로그인은 Score를 보기 위한 조건이 아니라 저장한 판단을 유지하기 위한 기능입니다." : "Sign-in is for retaining saved decisions, not for accessing CampCareer Score."}</p><Link href={`${localizePath("/login", locale)}?next=${encodeURIComponent(profilePath)}`} className="mt-6 inline-flex rounded-lg bg-brand px-4 py-3 text-sm font-semibold text-white transition hover:opacity-90">{isKo ? "로그인" : "Log in"}</Link></section></main>
 }
 
 function ProfileSkeleton() {
-  return <main className="min-h-screen bg-white"><div className="mx-auto max-w-6xl space-y-7 px-5 py-12 sm:px-8"><div className="h-24 animate-pulse rounded-2xl bg-slate-100" /><div className="h-48 animate-pulse rounded-2xl bg-slate-100" /><div className="grid gap-3 sm:grid-cols-3">{[1, 2, 3].map((item) => <div key={item} className="h-36 animate-pulse rounded-2xl bg-slate-100" />)}</div></div></main>
+  return <main className="min-h-screen bg-[hsl(var(--cc-canvas))]"><div className="mx-auto max-w-5xl space-y-5 px-5 py-12 sm:px-8"><div className="h-24 animate-pulse rounded-xl bg-slate-100" /><div className="h-60 animate-pulse rounded-xl bg-slate-100" /></div></main>
 }
