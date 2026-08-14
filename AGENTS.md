@@ -10,10 +10,11 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 # CampCareer product rules
 
-Before changing product navigation, Career Page structure or user journeys, read:
+Before changing product navigation, Career Page structure, account flows or secondary/contextual surfaces, read:
 
 - `docs/PRODUCT_SURFACE_INVENTORY.md`
 - `docs/CAREER_PAGE_CORE_FLOW.md`
+- `docs/SECONDARY_CONTEXTUAL_SURFACES.md`
 - `docs/INITIAL_INFORMATION_ARCHITECTURE.md`
 - `docs/CAMPCAREER_SCORE_CONTRACT.md`
 - `docs/CAMPCAREER_BRAND_SYSTEM.md`
@@ -30,7 +31,13 @@ Rules:
 - Do not restore legacy `CareerMarketResults`, `Job market score`, `Career Opportunity Score` or other competing public totals to the Career Page.
 - Value first. Account second.
 - Save, Compare and Login are secondary.
+- Account/Profile is a retention utility for saved careers and settings, not a dashboard, workspace or onboarding gateway.
+- Programs should be framed around the career outcome and preserve career context when available.
+- Jobs are a Career Page action layer. Do not create or promote an unrelated global Jobs board merely because country job routes exist.
 - Countries, Cities, Visa, Maps and Institutions are contextual capabilities, not equal top-level products.
+- Visa/work rights belong in Path and never change the public CampCareer Score.
+- Maps are regional context and must not become a global opportunity-ranking product.
+- Compare is used to test a decision after the Career Page verdict, not replace it.
 - `/home` dashboard, early onboarding and early personalisation are dormant/hidden unless an explicit later product decision restores them.
 - Do not add a route to global navigation merely because the route exists.
 - Prefer hiding legacy capability before deleting data, APIs or route implementations.
