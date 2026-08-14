@@ -72,7 +72,7 @@ export function ProgramCard({ program }: { program: AuProgramListItem }) {
   })
 
   return (
-    <article className="group relative h-full cursor-pointer rounded-xl border border-[#e6e5e1] bg-white p-4 transition hover:border-[#bfcdb9] hover:shadow-[0_12px_30px_rgba(40,70,30,0.07)] focus-within:border-[#3e7a2e] focus-within:ring-4 focus-within:ring-[#3e7a2e]/15 sm:p-5">
+    <article className="group relative h-full cursor-pointer rounded-xl border border-[#e6e5e1] bg-white p-4 transition hover:border-blue-200 hover:shadow-[0_12px_30px_rgba(37,87,224,0.07)] focus-within:border-brand focus-within:ring-4 focus-within:ring-brand/10 sm:p-5">
       <Link
         href={detailHref}
         aria-label={`View ${program.title} at ${program.institutionName}`}
@@ -108,7 +108,7 @@ export function ProgramCard({ program }: { program: AuProgramListItem }) {
                 )}
               </div>
 
-              <h2 className="mt-2 text-[16px] font-semibold leading-snug tracking-[-0.015em] text-[#1b1b1b] transition group-hover:text-[#3e7a2e] sm:text-[17px]">
+              <h2 className="mt-2 text-[16px] font-semibold leading-snug tracking-[-0.015em] text-[#1b1b1b] transition group-hover:text-brand sm:text-[17px]">
                 {program.title}
               </h2>
 
@@ -117,7 +117,7 @@ export function ProgramCard({ program }: { program: AuProgramListItem }) {
                 {institutionHref ? (
                   <Link
                     href={institutionHref}
-                    className="pointer-events-auto relative z-20 truncate transition hover:text-[#3e7a2e] hover:underline"
+                    className="pointer-events-auto relative z-20 truncate transition hover:text-brand hover:underline"
                   >
                     {program.institutionName}
                   </Link>
