@@ -343,7 +343,7 @@ Current strict snapshot:
 
 - Ready: 6 / 1,600
 - Needs one gap: 5 / 1,600
-- Profile ready: 580 / 1,600
-- Not ready: 1,009 / 1,600
+- Profile ready: 660 / 1,600
+- Not ready: 929 / 1,600
 
 The purpose of the inventory is to move rows upward one state at a time while content production consumes the Ready queue immediately.
