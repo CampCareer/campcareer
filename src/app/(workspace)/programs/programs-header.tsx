@@ -1,9 +1,12 @@
 "use client"
 
+import Link from "next/link"
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "react"
-import { Check, ChevronDown, Search } from "lucide-react"
+import { ArrowLeft, Check, ChevronDown, Search } from "lucide-react"
+import { CANONICAL_CAREER_BY_ID } from "@/data/career-comparison-catalog"
 import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
 import { useSelectedCountry } from "@/components/workspace/country-context"
+import { localizePath } from "@/lib/i18n/config"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { PROGRAM_LEVELS, type ProgramSearchFilters } from "@/lib/programs/program-search"
 import { cn } from "@/lib/utils"
@@ -36,16 +39,16 @@ function ProgramCountryPicker({
 
   return (
     <div ref={rootRef} className="relative">
-      <button type="button" onClick={() => setOpen((current) => !current)} aria-haspopup="listbox" aria-expanded={open} className="inline-flex h-9 items-center gap-2 rounded-full border border-[#e0dfdb] bg-white pl-2 pr-3 text-[13px] font-medium text-[#1b1b1b] transition hover:border-[#3e7a2e]/50">
+      <button type="button" onClick={() => setOpen((current) => !current)} aria-haspopup="listbox" aria-expanded={open} className="inline-flex h-9 items-center gap-2 rounded-lg border border-[hsl(var(--cc-border))] bg-white pl-2 pr-3 text-[13px] font-medium text-[hsl(var(--cc-ink))] transition hover:border-brand/40">
         <img src={selected.image} alt="" width={40} height={28} className="size-5 shrink-0 rounded-full object-cover" />
         <span className="max-w-32 truncate">{selected.name}</span>
-        <ChevronDown className={cn("size-3.5 shrink-0 text-[#9c9a94] transition", open && "rotate-180")} />
+        <ChevronDown className={cn("size-3.5 shrink-0 text-[hsl(var(--cc-muted))] transition", open && "rotate-180")} />
       </button>
 
       {open && (
-        <div role="listbox" aria-label={locale === "ko" ? "프로그램 국가 선택" : "Select a program country"} className="absolute left-0 top-[calc(100%+6px)] z-40 w-64 overflow-hidden rounded-xl border border-[#e7e6e3] bg-white p-1 shadow-xl shadow-black/5">
-          <p className="px-2.5 pb-1 pt-2 text-[10.5px] font-semibold uppercase tracking-[0.08em] text-[#a3a19b]">
-            {locale === "ko" ? "검증 완료 국가부터 공개" : "Published after source review"}
+        <div role="listbox" aria-label={locale === "ko" ? "프로그램 국가 선택" : "Select a program country"} className="absolute left-0 top-[calc(100%+6px)] z-40 w-64 overflow-hidden rounded-xl border border-[hsl(var(--cc-border))] bg-white p-1 shadow-xl shadow-black/5">
+          <p className="px-2.5 pb-1 pt-2 text-[10.5px] font-semibold uppercase tracking-[0.08em] text-[hsl(var(--cc-muted))]">
+            {locale === "ko" ? "출처 검토 후 공개" : "Published after source review"}
           </p>
           <ul className="max-h-72 overflow-y-auto">
             {LAUNCH_COUNTRIES.map((country) => {
@@ -53,11 +56,11 @@ function ProgramCountryPicker({
               const isPublished = PUBLISHED_PROGRAM_COUNTRIES.has(country.code)
               return (
                 <li key={country.code}>
-                  <button type="button" role="option" aria-selected={isSelected} onClick={() => { onPick(country.code); setOpen(false) }} className={cn("flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-[13px] font-medium transition", isSelected ? "bg-[#edf5ea] text-[#3e7a2e]" : "text-[#4d4c48] hover:bg-[#fafaf8]")}>
+                  <button type="button" role="option" aria-selected={isSelected} onClick={() => { onPick(country.code); setOpen(false) }} className={cn("flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-[13px] font-medium transition", isSelected ? "bg-[hsl(var(--brand-tint))] text-brand" : "text-[hsl(var(--cc-ink-secondary))] hover:bg-[hsl(var(--cc-canvas))]")}>
                     <img src={country.image} alt="" width={40} height={28} className="size-4 shrink-0 rounded-full object-cover" />
                     <span className="truncate">{country.name}</span>
                     <span className="ml-auto flex items-center gap-2">
-                      {!isPublished && <span className="text-[10px] font-semibold uppercase text-[#b0ada6]">Soon</span>}
+                      {!isPublished && <span className="text-[10px] font-semibold uppercase text-[hsl(var(--cc-muted))]">Soon</span>}
                       {isSelected && <Check className="size-3.5" />}
                     </span>
                   </button>
@@ -81,6 +84,13 @@ export function ProgramsHeader({
   const { setSelectedCountry } = useSelectedCountry()
   const [query, setQuery] = useState(filters.q)
   const searchableCountry = PUBLISHED_PROGRAM_COUNTRIES.has(filters.country)
+  const career = filters.career && filters.career !== "all"
+    ? CANONICAL_CAREER_BY_ID.get(filters.career)
+    : null
+  const careerName = career ? (locale === "ko" ? career.labelKo : career.label) : null
+  const careerHref = career
+    ? localizePath(`/career?country=${encodeURIComponent(filters.country)}&occupation=${encodeURIComponent(career.id)}`, locale)
+    : null
 
   useEffect(() => setQuery(filters.q), [filters.q])
   useEffect(() => {
@@ -99,7 +109,7 @@ export function ProgramsHeader({
       city: null,
       state: null,
       province: null,
-      career: null,
+      career: filters.career && filters.career !== "all" ? filters.career : null,
       institution: null,
       pgwp: null,
       duration: null,
@@ -116,35 +126,47 @@ export function ProgramsHeader({
 
   const placeholder =
     locale === "ko"
-      ? filters.country === "CA"
-        ? "과정·학교·도시로 검색하세요. 예: Nursing, Toronto"
-        : filters.country === "NZ"
-          ? "뉴질랜드 과정명 또는 대학명으로 검색하세요"
-          : "과정명 또는 학교명으로 검색하세요"
-      : filters.country === "CA"
-        ? "Search programs, institutions or cities…"
-        : filters.country === "UK"
-          ? "Search UK programmes or institutions…"
-          : filters.country === "NZ"
-            ? "Search New Zealand programmes or universities…"
-            : filters.country === "NL"
-              ? "Search Netherlands programmes or institutions…"
-              : "Search programs, e.g. Nursing or Data Science…"
+      ? careerName
+        ? `${careerName} 진입에 관련된 과정 검색`
+        : "과정명 또는 학교명으로 검색하세요"
+      : careerName
+        ? `Search programs related to ${careerName}…`
+        : filters.country === "CA"
+          ? "Search programs, institutions or cities…"
+          : filters.country === "UK"
+            ? "Search UK programmes or institutions…"
+            : "Search programs or institutions…"
 
   return (
     <>
-      <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#3e7a2e]">Explore</p>
-      <div className="mt-1.5 flex flex-wrap items-center gap-3">
-        <h1 className="text-[28px] font-semibold leading-tight tracking-[-0.025em] text-[#1b1b1b] sm:text-3xl">Programs</h1>
-        <ProgramCountryPicker countryCode={filters.country} onPick={pickCountry} />
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-brand">{locale === "ko" ? "학업 · 프로그램" : "STUDY · PROGRAMS"}</p>
+          <div className="mt-1.5 flex flex-wrap items-center gap-3">
+            <h1 className="text-[28px] font-semibold leading-tight tracking-[-0.025em] text-[hsl(var(--cc-ink))] sm:text-3xl">
+              {careerName ? (locale === "ko" ? `${careerName} 진입 프로그램` : `Programs for ${careerName}`) : (locale === "ko" ? "프로그램" : "Programs")}
+            </h1>
+            <ProgramCountryPicker countryCode={filters.country} onPick={pickCountry} />
+          </div>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-[hsl(var(--cc-muted))]">
+            {careerName
+              ? locale === "ko" ? "목표 커리어에 실제로 연결되는 과정인지 확인하고, 입학·자격·등록 결과를 공식 출처로 검증하세요." : "Check whether each program actually supports entry to this career, then verify admission, qualification and registration outcomes with official sources."
+              : locale === "ko" ? "과정 자체보다 어떤 커리어로 이어지는지 먼저 확인하세요." : "Start with the career outcome, then use this catalogue to inspect relevant study options."}
+          </p>
+        </div>
+        {careerHref ? (
+          <Link href={careerHref} className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand hover:underline">
+            <ArrowLeft className="size-3.5" /> {locale === "ko" ? "Career Page" : "Career Page"}
+          </Link>
+        ) : null}
       </div>
 
       {searchableCountry && (
         <form onSubmit={submitSearch} className="mt-6 max-w-3xl">
           <label className="relative block">
-            <Search className="pointer-events-none absolute left-4 top-1/2 size-[18px] -translate-y-1/2 text-[#a3a19b]" />
-            <input type="search" value={query} onChange={(event: ChangeEvent<HTMLInputElement>) => setQuery(event.target.value)} placeholder={placeholder} className="h-[52px] w-full rounded-xl border border-[#deddd8] bg-white pl-11 pr-24 text-[14px] text-[#1b1b1b] outline-none transition placeholder:text-[#aaa8a2] focus:border-[#3e7a2e] focus:ring-2 focus:ring-[#3e7a2e]/10" />
-            <button type="submit" className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-lg bg-[#3e7a2e] px-4 py-2 text-[12px] font-semibold text-white transition hover:bg-[#326625]">
+            <Search className="pointer-events-none absolute left-4 top-1/2 size-[18px] -translate-y-1/2 text-[hsl(var(--cc-muted))]" />
+            <input type="search" value={query} onChange={(event: ChangeEvent<HTMLInputElement>) => setQuery(event.target.value)} placeholder={placeholder} className="h-[52px] w-full rounded-xl border border-[hsl(var(--cc-border))] bg-white pl-11 pr-24 text-[14px] text-[hsl(var(--cc-ink))] outline-none transition placeholder:text-[hsl(var(--cc-muted))] focus:border-brand focus:ring-2 focus:ring-brand/10" />
+            <button type="submit" className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-lg bg-brand px-4 py-2 text-[12px] font-semibold text-white transition hover:opacity-90">
               {locale === "ko" ? "검색" : "Search"}
             </button>
           </label>
@@ -154,7 +176,7 @@ export function ProgramsHeader({
       {filters.country === "AU" && (
         <div className="mt-5 flex gap-2 overflow-x-auto pb-1">
           {PROGRAM_LEVELS.map((level) => (
-            <button key={level.value} type="button" onClick={() => replace({ level: level.value })} className={cn("shrink-0 rounded-lg border px-3.5 py-2 text-[12.5px] font-medium transition", filters.level === level.value ? "border-[#3e7a2e] bg-[#3e7a2e] text-white" : "border-[#dfded9] bg-white text-[#686660] hover:border-[#3e7a2e]/45 hover:text-[#3e7a2e]")}>
+            <button key={level.value} type="button" onClick={() => replace({ level: level.value })} className={cn("shrink-0 rounded-lg border px-3.5 py-2 text-[12.5px] font-medium transition", filters.level === level.value ? "border-brand bg-brand text-white" : "border-[hsl(var(--cc-border))] bg-white text-[hsl(var(--cc-ink-secondary))] hover:border-brand/40 hover:text-brand")}>
               {locale === "ko" ? level.labelKo : level.label}
             </button>
           ))}
