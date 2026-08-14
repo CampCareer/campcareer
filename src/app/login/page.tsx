@@ -7,7 +7,7 @@ import { ArrowLeft, ArrowRight, Loader2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase-client'
 import { getSafeNextPath } from '@/lib/auth/safe-next'
 import { getPostLoginDestination } from '@/lib/auth/post-login-destination'
-import { getPathwayBackPath, getPathwaySummaryFromNext } from '@/lib/auth/pathway-next'
+import { getPathwayBackPath } from '@/lib/auth/pathway-next'
 import { DEFAULT_LOCALE, localeFromPathname, localizePath } from '@/lib/i18n/config'
 import { LOGIN_COPY } from './login-copy'
 
@@ -17,9 +17,10 @@ function LoginPageContent() {
   const searchParams = useSearchParams()
   const requestedNext = searchParams.get('next')
   const locale = localeFromPathname(pathname) ?? DEFAULT_LOCALE
-  const next = getSafeNextPath(requestedNext, localizePath('/home', locale))
-  const pathwaySummary = getPathwaySummaryFromNext(requestedNext)
-  const pathwayBackPath = getPathwayBackPath(requestedNext)
+  const next = getSafeNextPath(requestedNext, localizePath('/', locale))
+  const nextUrl = new URL(next, 'https://campcareer.local')
+  const isSaveIntent = nextUrl.searchParams.get('save') === '1'
+  const backPath = getPathwayBackPath(next)
   const supabase = createClient()
 
   const [email, setEmail] = useState('')
@@ -28,18 +29,8 @@ function LoginPageContent() {
   const [error, setError] = useState<string | null>(null)
   const [mode, setMode] = useState<'signin' | 'signup'>('signin')
 
-  async function resolveSignedInDestination(userId: string) {
-    const { data } = await supabase
-      .from('user_preferences')
-      .select('career_personalisation_completed_at')
-      .eq('id', userId)
-      .maybeSingle()
-
-    return getPostLoginDestination(
-      next,
-      Boolean(data?.career_personalisation_completed_at),
-      locale,
-    )
+  function signedInDestination() {
+    return getPostLoginDestination(next, locale)
   }
 
   async function handleGoogle() {
@@ -67,7 +58,7 @@ function LoginPageContent() {
         setError(error.message)
         setIsLoading(false)
       } else if (data.user) {
-        router.push(await resolveSignedInDestination(data.user.id))
+        router.push(signedInDestination())
         router.refresh()
       }
       return
@@ -87,30 +78,32 @@ function LoginPageContent() {
   }
 
   const isSignIn = mode === 'signin'
+  const heading = isSaveIntent ? LOGIN_COPY.saveTitle : isSignIn ? LOGIN_COPY.welcome : LOGIN_COPY.signup
+  const supporting = isSaveIntent
+    ? isSignIn ? LOGIN_COPY.saveSupporting : LOGIN_COPY.saveSignupSupporting
+    : isSignIn ? LOGIN_COPY.welcomeSupporting : LOGIN_COPY.signupSupporting
 
   return (
     <main className="min-h-screen bg-[#fafaf9] px-5 py-8 sm:px-6 sm:py-12">
       <div className="mx-auto w-full max-w-[460px]">
-        <Link href="/" className="campcareer-wordmark text-[#1b1b1b]" aria-label="campcareer home">
+        <Link href={localizePath('/', locale)} className="campcareer-wordmark text-[#1b1b1b]" aria-label="campcareer home">
           campcareer
         </Link>
 
-        <section className="mt-8 sm:mt-10 sm:rounded-2xl sm:border sm:border-slate-200 sm:bg-white sm:p-8 sm:shadow-sm">
+        <section className="mt-8 sm:mt-10 sm:rounded-xl sm:border sm:border-campcareer-border sm:bg-white sm:p-8">
           <div className="mb-7">
-            <h1 className="text-2xl font-semibold tracking-tight text-slate-950">
-              {isSignIn ? LOGIN_COPY.welcome : LOGIN_COPY.signup}
+            <h1 className="text-2xl font-semibold tracking-tight text-campcareer-ink">
+              {heading}
             </h1>
-            <p className="mt-1.5 text-sm text-slate-600">
-              {isSignIn ? LOGIN_COPY.welcomeSupporting : LOGIN_COPY.signupSupporting}
+            <p className="mt-1.5 text-sm leading-6 text-campcareer-muted">
+              {supporting}
             </p>
           </div>
 
-          {pathwaySummary && (
-            <div className="mb-6 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3" aria-label="Pathway to save">
-              <p className="text-xs font-medium text-slate-500">Save this pathway</p>
-              <p className="mt-1 text-sm font-medium text-slate-800">
-                {pathwaySummary.country} · {pathwaySummary.field} · {pathwaySummary.status}
-              </p>
+          {isSaveIntent && (
+            <div className="mb-6 rounded-lg border border-campcareer-border bg-campcareer-canvas px-4 py-3" aria-label="Career save intent">
+              <p className="text-xs font-semibold text-brand">SAVE</p>
+              <p className="mt-1 text-sm text-campcareer-ink-secondary">Your career will be saved automatically after sign-in.</p>
             </div>
           )}
 
@@ -119,7 +112,7 @@ function LoginPageContent() {
               id="login-message"
               role="alert"
               aria-live="polite"
-              className={`mb-5 rounded-xl border px-4 py-3 text-sm ${
+              className={`mb-5 rounded-lg border px-4 py-3 text-sm ${
                 error.includes('Check your email')
                   ? 'border-green-200 bg-green-50 text-green-700'
                   : 'border-red-200 bg-red-50 text-red-600'
@@ -133,7 +126,7 @@ function LoginPageContent() {
             type="button"
             onClick={handleGoogle}
             disabled={isLoading}
-            className="mb-5 flex min-h-12 w-full items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2"
+            className="mb-5 flex min-h-12 w-full items-center justify-center gap-3 rounded-lg border border-campcareer-border bg-white px-4 py-2.5 text-sm font-medium text-campcareer-ink-secondary transition-colors hover:bg-campcareer-canvas disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className="size-4 shrink-0" aria-hidden="true">
               <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z" />
@@ -145,14 +138,14 @@ function LoginPageContent() {
           </button>
 
           <div className="mb-5 flex items-center gap-3" aria-hidden="true">
-            <div className="flex-1 border-t border-slate-200" />
-            <span className="whitespace-nowrap text-xs text-slate-500">{LOGIN_COPY.divider}</span>
-            <div className="flex-1 border-t border-slate-200" />
+            <div className="flex-1 border-t border-campcareer-border" />
+            <span className="whitespace-nowrap text-xs text-campcareer-muted">{LOGIN_COPY.divider}</span>
+            <div className="flex-1 border-t border-campcareer-border" />
           </div>
 
           <form onSubmit={handleEmail} className="space-y-4" aria-busy={isLoading}>
             <div>
-              <label htmlFor="email" className="mb-1.5 block text-xs font-medium text-slate-700">
+              <label htmlFor="email" className="mb-1.5 block text-xs font-medium text-campcareer-ink-secondary">
                 {LOGIN_COPY.email}
               </label>
               <input
@@ -164,13 +157,13 @@ function LoginPageContent() {
                 required
                 autoComplete="email"
                 aria-describedby={error ? 'login-message' : undefined}
-                className="min-h-12 w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-500 transition focus:border-transparent focus:outline-none focus:ring-2 focus:ring-brand"
+                className="min-h-12 w-full rounded-lg border border-campcareer-border px-4 py-2.5 text-sm text-campcareer-ink placeholder:text-campcareer-muted transition focus:border-transparent focus:outline-none focus:ring-2 focus:ring-brand"
               />
             </div>
 
             <div>
               <div className="mb-1.5 flex items-center justify-between gap-3">
-                <label htmlFor="password" className="text-xs font-medium text-slate-700">
+                <label htmlFor="password" className="text-xs font-medium text-campcareer-ink-secondary">
                   {LOGIN_COPY.password}
                 </label>
                 {isSignIn && (
@@ -200,21 +193,21 @@ function LoginPageContent() {
                 minLength={6}
                 autoComplete={isSignIn ? 'current-password' : 'new-password'}
                 aria-describedby={error ? 'login-message' : undefined}
-                className="min-h-12 w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-500 transition focus:border-transparent focus:outline-none focus:ring-2 focus:ring-brand"
+                className="min-h-12 w-full rounded-lg border border-campcareer-border px-4 py-2.5 text-sm text-campcareer-ink placeholder:text-campcareer-muted transition focus:border-transparent focus:outline-none focus:ring-2 focus:ring-brand"
               />
             </div>
 
             <button
               type="submit"
               disabled={isLoading}
-              className="mt-1 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-brand bg-brand text-sm font-semibold tracking-tight text-brand-foreground shadow-sm transition-colors hover:bg-brand/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2 disabled:opacity-50"
+              className="mt-1 flex min-h-12 w-full items-center justify-center gap-2 rounded-lg border border-brand bg-brand text-sm font-semibold tracking-tight text-white transition-colors hover:bg-brand-press focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2 disabled:opacity-50"
             >
               {isLoading && <Loader2 className="size-4 animate-spin" aria-hidden="true" />}
               {isSignIn ? LOGIN_COPY.signIn : LOGIN_COPY.createAccount}
             </button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-slate-600">
+          <p className="mt-6 text-center text-sm text-campcareer-muted">
             {isSignIn ? LOGIN_COPY.newAccount : LOGIN_COPY.existingAccount}{' '}
             <button
               type="button"
@@ -230,11 +223,11 @@ function LoginPageContent() {
           </p>
 
           <Link
-            href={pathwayBackPath}
+            href={backPath}
             className="mt-7 inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-brand transition-colors hover:text-brand-press focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2"
           >
             <ArrowLeft className="size-4" aria-hidden="true" />
-            {LOGIN_COPY.back}
+            {isSaveIntent ? LOGIN_COPY.backToCareer : LOGIN_COPY.back}
           </Link>
         </section>
       </div>
