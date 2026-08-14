@@ -5,15 +5,15 @@ import { ArrowLeft, ArrowRight } from "lucide-react"
 import Image from "next/image"
 import { MDXRemote } from "next-mdx-remote/rsc"
 import remarkGfm from "remark-gfm"
-import { getAllPosts, getPostBySlug } from "@/lib/blog"
+import { getAllPosts, getPostBySlug, getPublishedBlogPosts } from "@/lib/blog"
 import { buildMdxComponents } from "@/components/blog/mdx-components"
 import { JsonLd, articleLd, breadcrumbLd, faqLd } from "@/components/seo/json-ld"
-import { buildCompareHref } from "@/lib/blog/compare-link"
+import { buildCareerFirstHref } from "@/lib/blog/compare-link"
 
-// Up to 3 internal links for the post foot — same tag first, topped up with the
-// most recent other posts so the block is never empty (internal-link graph).
+// Up to 3 internal links for the post foot. Audit holdouts remain directly
+// readable but are not promoted through the relaunch internal-link graph.
 function relatedPosts(slug: string, tag: string) {
-  const others = getAllPosts().filter((p) => p.slug !== slug)
+  const others = getPublishedBlogPosts().filter((p) => p.slug !== slug)
   const sameTag = others.filter((p) => p.tag === tag)
   const rest = others.filter((p) => p.tag !== tag)
   return [...sameTag, ...rest].slice(0, 3)
@@ -23,6 +23,8 @@ export const revalidate = 86400
 export const dynamicParams = false
 
 export function generateStaticParams() {
+  // Keep all 50 legacy URLs directly readable until URL-level GSC/backlink
+  // evidence approves any destructive 301/410 migration.
   return getAllPosts().map((post) => ({ slug: post.slug }))
 }
 
@@ -71,12 +73,13 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
     career: meta.ctaCareer,
     origin: meta.ctaOrigin,
   })
-  const compareHref = buildCompareHref({
+  const productHref = buildCareerFirstHref({
     country: meta.ctaCountry,
     major: meta.ctaMajor,
     career: meta.ctaCareer,
     origin: meta.ctaOrigin,
   })
+  const productLabel = productHref.startsWith("/career/") ? "Explore this career" : "Compare your options"
   const related = relatedPosts(params.slug, meta.tag)
 
   return (
@@ -101,7 +104,7 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
         href="/blog"
         className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition-colors mb-8"
       >
-        <ArrowLeft className="w-4 h-4" /> Back to blog
+        <ArrowLeft className="w-4 h-4" /> Back to career guides
       </Link>
 
       <div className="mb-8">
@@ -175,7 +178,7 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
 
       {related.length > 0 && (
         <section className="mt-14">
-          <h2 className="font-display text-lg font-semibold text-slate-900 mb-4">Related guides</h2>
+          <h2 className="font-display text-lg font-semibold text-slate-900 mb-4">Related career guides</h2>
           <div className="grid gap-3 sm:grid-cols-3">
             {related.map((p) => (
               <Link
@@ -200,13 +203,13 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
           href="/blog"
           className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition-colors"
         >
-          <ArrowLeft className="w-4 h-4" /> All articles
+          <ArrowLeft className="w-4 h-4" /> All career guides
         </Link>
         <Link
-          href={compareHref}
+          href={productHref}
           className="inline-flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
         >
-          Compare your options <ArrowRight className="w-3.5 h-3.5" />
+          {productLabel} <ArrowRight className="w-3.5 h-3.5" />
         </Link>
       </div>
     </div>
