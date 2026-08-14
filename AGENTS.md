@@ -20,6 +20,7 @@ Before changing product navigation, Career Page structure, account flows, SEO UR
 - `docs/CAREER_COVERAGE_INVENTORY.md`
 - `docs/INITIAL_INFORMATION_ARCHITECTURE.md`
 - `docs/CAMPCAREER_SCORE_CONTRACT.md`
+- `docs/PAY_EVIDENCE_POLICY.md`
 - `docs/CAMPCAREER_BRAND_SYSTEM.md`
 
 Current product hierarchy is authoritative:
@@ -42,6 +43,7 @@ Rules:
 - Career expansion is a coverage operation over `country_code + career_id`, not a new feature-development phase.
 - Before publishing or producing content for a country-career pair, check `docs/CAREER_COVERAGE_INVENTORY.md` and move the row to `Ready`; raw profile existence or a legacy/provisional total is not sufficient.
 - Missing evidence must never be interpreted as a zero component merely because a legacy snapshot contains `0`.
+- Pay is country-relative. Prefer exact official occupation earnings; when unavailable, the closest defensible official occupation-group earnings may be used with lower evidence confidence. A broader official group does not by itself make Pay unavailable. No defensible official earnings measure means Pay is missing, not zero.
 - Use `Ready / Needs one gap / Profile ready / Not ready` as the operational coverage states. Prioritize `Needs one gap` rows before broad new-country expansion unless a deliberate product decision says otherwise.
 - Value first. Account second.
 - Score, Evidence, Path, Study / Programs, Jobs and Compare remain public by default.
