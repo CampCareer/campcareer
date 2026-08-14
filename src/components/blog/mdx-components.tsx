@@ -3,7 +3,7 @@ import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import type { MDXComponents } from "mdx/types"
 import {
-  buildCompareHref,
+  buildCareerFirstHref,
   resolveBlogCtaHref,
   type CompareLinkInput,
 } from "@/lib/blog/compare-link"
@@ -115,10 +115,8 @@ function CTA({
   )
 }
 
-// ── ToolCTA ─────────────────────────────────────────────────────────────────
-// Conversion bridge from a blog post into the public Compare journey. Country,
-// major, and career can be set explicitly per tag or baked in from frontmatter
-// via buildMdxComponents (explicit props always win over defaults).
+// Conversion bridge from a blog post into the canonical Career Page whenever
+// country + career context is sufficient. Compare remains the generic fallback.
 type ToolCTAProps = CompareLinkInput & {
   variant?: "block" | "inline"
   title?: string
@@ -138,14 +136,15 @@ function ToolCTA({
   origin,
   currency,
 }: ToolCTAProps) {
-  const primaryHref = buildCompareHref({ country, countries, major, career, origin, currency })
-  const primaryLabel = label ?? "Compare my study options"
+  const primaryHref = buildCareerFirstHref({ country, countries, major, career, origin, currency })
+  const isCareerHref = primaryHref.startsWith("/career/")
+  const primaryLabel = label ?? (isCareerHref ? "Explore this career" : "Compare my options")
 
   if (variant === "inline") {
     return (
       <div className="not-prose my-6 flex flex-wrap items-center gap-x-3 gap-y-2 rounded-xl border border-blue-100 bg-blue-50/60 px-4 py-3">
         <span className="text-sm text-slate-600">
-          {description ?? "Compare career evidence, take-home pay, living costs, and post-study pathways before you choose."}
+          {description ?? "Review the career evidence first, then move into the study, program and job path that supports it."}
         </span>
         <Link
           href={primaryHref}
@@ -160,11 +159,11 @@ function ToolCTA({
   return (
     <div className="not-prose my-8 rounded-2xl border border-blue-100 bg-blue-50 p-6">
       <p className="mb-2 text-sm font-semibold text-blue-700">
-        {title ?? "See your study options side by side"}
+        {title ?? (isCareerHref ? "See the full Career evidence" : "Compare the evidence")}
       </p>
       <p className="mb-4 text-sm text-slate-600">
         {description ??
-          "Compare the current evidence for your career: salary after tax, living costs, first-year budget, and work or immigration pathways. CampCareer leaves incomplete results clearly marked as unavailable."}
+          "Start with the career outcome and evidence, then assess the path, Programs and Jobs. CampCareer keeps missing evidence clearly marked instead of turning it into a false score."}
       </p>
       <div className="flex flex-wrap gap-3">
         <Link
@@ -232,6 +231,32 @@ function BlogImage({
   )
 }
 
+function ArticleLink({
+  href,
+  children,
+  defaults,
+  ...props
+}: React.AnchorHTMLAttributes<HTMLAnchorElement> & {
+  defaults?: CompareLinkInput
+}) {
+  const resolvedHref = href ? resolveBlogCtaHref(href, defaults) : undefined
+  const className = "text-blue-600 hover:text-blue-800 underline underline-offset-2"
+
+  if (resolvedHref?.startsWith("/")) {
+    return (
+      <Link href={resolvedHref} className={className}>
+        {children}
+      </Link>
+    )
+  }
+
+  return (
+    <a href={resolvedHref} className={className} {...props}>
+      {children}
+    </a>
+  )
+}
+
 export const mdxComponents: MDXComponents = {
   DataCard,
   DataGrid,
@@ -268,20 +293,19 @@ export const mdxComponents: MDXComponents = {
   td: (props) => (
     <td className="px-4 py-3 text-slate-600 border-b border-slate-100" {...props} />
   ),
-  a: (props) => (
-    <a className="text-blue-600 hover:text-blue-800 underline underline-offset-2" {...props} />
-  ),
+  a: (props) => <ArticleLink {...props} />,
   code: (props) => (
     <code className="bg-slate-100 text-slate-800 px-1.5 py-0.5 rounded text-sm font-mono" {...props} />
   ),
 }
 
-// Bakes per-post defaults (from frontmatter) into <ToolCTA> so a bare tag
-// auto-targets the right country/major. Explicit props in the MDX still win.
+// Bakes per-post defaults (from frontmatter) into conversion components and
+// ordinary markdown links. Explicit props in the MDX always win.
 export function buildMdxComponents(defaults?: Pick<CompareLinkInput, "country" | "major" | "career" | "origin">): MDXComponents {
   if (!defaults?.country && !defaults?.major && !defaults?.career && !defaults?.origin) return mdxComponents
   return {
     ...mdxComponents,
+    a: (props) => <ArticleLink {...props} defaults={defaults} />,
     CTA: ({ country, major, career, origin, ...rest }: Parameters<typeof CTA>[0]) => (
       <CTA
         country={country ?? defaults.country}
