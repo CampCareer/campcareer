@@ -1,8 +1,11 @@
 export const LOGIN_COPY = {
-  welcome: "Welcome back",
-  welcomeSupporting: "Sign in to save your pathway",
-  signup: "Create account",
-  signupSupporting: "Start exploring for free",
+  welcome: "Sign in to CampCareer",
+  welcomeSupporting: "Save careers and keep your progress. Core career information stays available without an account.",
+  signup: "Create your CampCareer account",
+  signupSupporting: "Create an account to save decisions and return to them later.",
+  saveTitle: "Save this career",
+  saveSupporting: "Sign in to keep this career and come back to it anytime.",
+  saveSignupSupporting: "Create an account to save this career and return to it anytime.",
   google: "Continue with Google",
   divider: "or continue with email",
   email: "Email",
@@ -12,5 +15,6 @@ export const LOGIN_COPY = {
   forgotPassword: "Forgot password?",
   newAccount: "New to CampCareer?",
   existingAccount: "Already have an account?",
-  back: "Back to your pathway",
+  back: "Back to CampCareer",
+  backToCareer: "Back to career",
 } as const
