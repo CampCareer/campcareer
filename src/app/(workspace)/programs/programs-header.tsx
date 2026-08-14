@@ -1,7 +1,6 @@
 "use client"
 
 import Link from "next/link"
-import { useSearchParams } from "next/navigation"
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "react"
 import { ArrowLeft, Check, ChevronDown, Search } from "lucide-react"
 import { CANONICAL_CAREER_BY_ID } from "@/data/career-comparison-catalog"
@@ -81,12 +80,11 @@ export function ProgramsHeader({
   filters: ProgramSearchFilters
 }) {
   const locale = useRouteLocale()
-  const searchParams = useSearchParams()
   const replace = useProgramNavigation()
   const { setSelectedCountry } = useSelectedCountry()
   const [query, setQuery] = useState(filters.q)
   const searchableCountry = PUBLISHED_PROGRAM_COUNTRIES.has(filters.country)
-  const careerContextId = searchParams.get("careerContext")
+  const careerContextId = filters.careerContext && filters.careerContext !== "all" ? filters.careerContext : null
   const activeCareerId = careerContextId || (filters.career && filters.career !== "all" ? filters.career : null)
   const career = activeCareerId ? CANONICAL_CAREER_BY_ID.get(activeCareerId) : null
   const careerName = career ? (locale === "ko" ? career.labelKo : career.label) : null
@@ -158,7 +156,7 @@ export function ProgramsHeader({
         </div>
         {careerHref ? (
           <Link href={careerHref} className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand hover:underline">
-            <ArrowLeft className="size-3.5" /> {locale === "ko" ? "Career Page" : "Career Page"}
+            <ArrowLeft className="size-3.5" /> Career Page
           </Link>
         ) : null}
       </div>
