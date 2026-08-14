@@ -18,9 +18,12 @@ export const SCORE_READY_CAREER_PROFILES: readonly ScoreReadyCareerProfile[] = [
   { countryCode: "AU", careerId: "care-worker", sourceCheckedAt: "2026-08-14" },
   { countryCode: "AU", careerId: "carpenter", sourceCheckedAt: "2026-08-06" },
   { countryCode: "AU", careerId: "electrician", sourceCheckedAt: "2026-08-06" },
+  { countryCode: "AU", careerId: "medical-laboratory-technician", sourceCheckedAt: "2026-08-15" },
   { countryCode: "AU", careerId: "midwife", sourceCheckedAt: "2026-08-07" },
   { countryCode: "AU", careerId: "occupational-therapist", sourceCheckedAt: "2026-08-08" },
+  { countryCode: "AU", careerId: "pharmacist", sourceCheckedAt: "2026-08-15" },
   { countryCode: "AU", careerId: "physiotherapist", sourceCheckedAt: "2026-08-07" },
+  { countryCode: "AU", careerId: "radiographer", sourceCheckedAt: "2026-08-15" },
   { countryCode: "AU", careerId: "registered-nurse", sourceCheckedAt: "2026-08-06" },
   { countryCode: "AU", careerId: "welder", sourceCheckedAt: "2026-08-14" },
 ] as const
