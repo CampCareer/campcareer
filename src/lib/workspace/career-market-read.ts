@@ -7,6 +7,7 @@ import { getCareerDataFoundation, getFoundationCountriesForCareer } from "@/lib/
 import { isFoundationRankable } from "@/lib/career-data-foundation/opportunity-score"
 import type { CareerDataFoundationResult } from "@/lib/career-data-foundation/types"
 import { supabase } from "@/lib/supabase"
+import { isCareerScoreReady } from "./career-coverage"
 import { getCountryOccupationProfile } from "./country-occupation-read"
 import type {
   CareerMarketDemand,
@@ -271,7 +272,7 @@ export async function getCareerCountryRecommendations(careerId: string): Promise
 
   for (const profile of legacyProfiles) {
     const metric = latestMetrics.get(profile.profile_key)
-    const campCareerScore = metric
+    const scoreCandidate = metric
       ? campCareerScoreFromLegacyBreakdown({
           shortage: metric.shortage_component,
           vacancyIntensity: metric.vacancy_intensity_component,
@@ -283,13 +284,14 @@ export async function getCareerCountryRecommendations(careerId: string): Promise
           entryBurden: metric.entry_burden_component,
         })
       : null
+    const campCareerScore = isCareerScoreReady(profile.country_code, careerId) ? scoreCandidate : null
     byCountry.set(profile.country_code, {
       countryCode: profile.country_code,
       countryName: countryName(profile.country_code),
       officialTitle: profile.official_title,
       opportunityScore: campCareerScore?.total ?? null,
       campCareerScore,
-      scoreStatus: metric?.score_status ?? null,
+      scoreStatus: campCareerScore ? metric?.score_status ?? null : "not_ready",
       registrationRequired: profile.registration_required,
       publicationStatus: profile.publication_status,
       demand: toDemand(careerId, profile.country_code),
