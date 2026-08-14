@@ -18,11 +18,9 @@ export function TopNav() {
   const homeDestination = localizePath("/", pathLocale)
   const profileDestination = localizePath("/profile", pathLocale)
   const loginPath = localizePath("/login", pathLocale)
+  const fallbackLoginDestination = `${loginPath}?next=${encodeURIComponent(pathname || homeDestination)}`
   const supabase = useMemo(() => createClient(), [])
   const [user, setUser] = useState<User | null>(null)
-  const [loginDestination, setLoginDestination] = useState(
-    `${loginPath}?next=${encodeURIComponent(homeDestination)}`,
-  )
 
   useEffect(() => {
     let active = true
@@ -42,11 +40,6 @@ export function TopNav() {
       subscription.unsubscribe()
     }
   }, [supabase])
-
-  useEffect(() => {
-    const returnTo = `${window.location.pathname}${window.location.search}${window.location.hash}`
-    setLoginDestination(`${loginPath}?next=${encodeURIComponent(returnTo || homeDestination)}`)
-  }, [homeDestination, loginPath, pathname])
 
   const displayName = user
     ? ((user.user_metadata?.full_name as string | undefined) || (user.user_metadata?.name as string | undefined) || user.email?.split("@")[0] || "C")
@@ -80,7 +73,12 @@ export function TopNav() {
               </Link>
             ) : (
               <Link
-                href={loginDestination}
+                href={fallbackLoginDestination}
+                onClick={(event) => {
+                  event.preventDefault()
+                  const returnTo = `${window.location.pathname}${window.location.search}${window.location.hash}`
+                  window.location.assign(`${loginPath}?next=${encodeURIComponent(returnTo || homeDestination)}`)
+                }}
                 className={cn("inline-flex items-center gap-1.5 rounded-lg border border-[hsl(var(--cc-border))] bg-white px-3 py-2 text-sm font-semibold text-[hsl(var(--cc-ink))] transition hover:bg-slate-50")}
               >
                 <LogIn className="size-4" />
