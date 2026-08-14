@@ -7,6 +7,8 @@ Effective date: 2026-08-14
 
 This doctrine replaces earlier broad product descriptions when they conflict with the scope below, including descriptions of CampCareer as primarily a study-abroad ROI explorer, a generic cross-border career engine, or a multi-surface career-planning workspace.
 
+The canonical execution structure for the initial site is defined in [INITIAL_INFORMATION_ARCHITECTURE.md](./INITIAL_INFORMATION_ARCHITECTURE.md).
+
 ## Product definition
 
 > **CampCareer scores careers and shows you the path to get there.**
@@ -218,46 +220,4 @@ Start with the decision. Reveal deeper evidence and pathways as the user continu
 Show why CampCareer believes something without forcing the user to read a database dump.
 
 ### Action over accumulation
-The goal is not to maximize the amount of information displayed. The goal is to help the user make a career decision and take the next practical action.
-
-## Initial success metric
-
-The main product conversion is:
-
-> **Career Page → useful next action**
-
-Examples include:
-- opening a relevant program
-- opening a training option
-- opening a job opportunity or job-search destination
-- saving the career after receiving value
-
-Supporting funnel events should include:
-
-`Career Page visit → Score viewed → Evidence viewed → Pathway viewed → Study/Program action → Job action → Save/Account`
-
-Traffic and page views matter for acquisition, but they do not by themselves prove product value.
-
-## Build rule
-
-Before broadening the product again, make one representative Career Page excellent end to end. The reference journey should prove that a user can:
-
-1. understand the career verdict quickly,
-2. trust the evidence,
-3. understand the entry pathway,
-4. find a relevant study or training option,
-5. find a relevant employment next step,
-6. do all of this without mandatory login.
-
-Only after that experience works should CampCareer expand the same pattern across more careers and selectively reintroduce secondary surfaces based on real user behavior.
-
-## Feature admission test
-
-For the initial product, a proposed feature should answer yes to at least one of these questions:
-
-1. Does it help the user decide whether this career is worth pursuing?
-2. Does it help the user take the next practical step toward entering this career?
-
-It should also preserve evidence quality and keep the primary experience simple.
-
-If not, defer it.
+The purpose of data is to move the user toward a useful next step, not to maximize how much information the interface can display.
