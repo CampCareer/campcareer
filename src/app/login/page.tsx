@@ -5,6 +5,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Suspense, useState } from 'react'
 import { ArrowLeft, ArrowRight, Loader2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase-client'
+import { getCareerSaveIntentFromNext } from '@/lib/auth/career-save-intent'
 import { getSafeNextPath } from '@/lib/auth/safe-next'
 import { getPostLoginDestination } from '@/lib/auth/post-login-destination'
 import { getPathwayBackPath } from '@/lib/auth/pathway-next'
@@ -18,9 +19,9 @@ function LoginPageContent() {
   const requestedNext = searchParams.get('next')
   const locale = localeFromPathname(pathname) ?? DEFAULT_LOCALE
   const next = getSafeNextPath(requestedNext, localizePath('/', locale))
-  const nextUrl = new URL(next, 'https://campcareer.local')
-  const isSaveIntent = nextUrl.searchParams.get('save') === '1'
-  const backPath = getPathwayBackPath(next)
+  const saveIntent = getCareerSaveIntentFromNext(next)
+  const isSaveIntent = Boolean(saveIntent)
+  const backPath = saveIntent?.returnPath ?? getPathwayBackPath(next)
   const supabase = createClient()
 
   const [email, setEmail] = useState('')
@@ -30,7 +31,29 @@ function LoginPageContent() {
   const [mode, setMode] = useState<'signin' | 'signup'>('signin')
 
   function signedInDestination() {
-    return getPostLoginDestination(next, locale)
+    return saveIntent?.returnPath ?? getPostLoginDestination(next, locale)
+  }
+
+  async function completeSaveIntent(userId: string) {
+    if (!saveIntent) return true
+
+    const { error } = await supabase
+      .from('saved_career_results')
+      .upsert(
+        {
+          user_id: userId,
+          country_code: saveIntent.countryCode,
+          career_id: saveIntent.careerId,
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: 'user_id,country_code,career_id', ignoreDuplicates: false },
+      )
+
+    if (!error) return true
+
+    setError('You are signed in, but we could not save this career. Go back and try Save again.')
+    setIsLoading(false)
+    return false
   }
 
   async function handleGoogle() {
@@ -58,19 +81,25 @@ function LoginPageContent() {
         setError(error.message)
         setIsLoading(false)
       } else if (data.user) {
+        if (!(await completeSaveIntent(data.user.id))) return
         router.push(signedInDestination())
         router.refresh()
       }
       return
     }
 
-    const { error } = await supabase.auth.signUp({
+    const { error, data } = await supabase.auth.signUp({
       email,
       password,
       options: { emailRedirectTo: `${location.origin}/auth/callback?next=${encodeURIComponent(next)}` },
     })
     if (error) {
       setError(error.message)
+    } else if (data.user && data.session) {
+      if (!(await completeSaveIntent(data.user.id))) return
+      router.push(signedInDestination())
+      router.refresh()
+      return
     } else {
       setError('Check your email to confirm your account!')
     }
