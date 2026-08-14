@@ -15,24 +15,21 @@ export type IndexableCareerProfile = {
 /** @deprecated Use IndexableCareerProfile. Kept while legacy /occupation URLs redirect. */
 export type IndexableOccupationProfile = IndexableCareerProfile
 
-/** Explicit SEO publication inventory. Only source-reviewed AU profiles are listed. */
+/**
+ * Explicit SEO publication inventory.
+ *
+ * This list must match the strict Ready pool in docs/CAREER_COVERAGE_INVENTORY.md.
+ * A profile or provisional score is not enough to make a Career page indexable.
+ */
 export const INDEXABLE_CAREER_PROFILES: readonly IndexableCareerProfile[] = [
-  { countryCode: "AU", careerId: "bricklayer", sourceCheckedAt: "2026-08-07" },
-  { countryCode: "AU", careerId: "care-worker", sourceCheckedAt: "2026-08-07" },
+  { countryCode: "AU", careerId: "care-worker", sourceCheckedAt: "2026-08-14" },
   { countryCode: "AU", careerId: "carpenter", sourceCheckedAt: "2026-08-06" },
-  { countryCode: "AU", careerId: "construction-manager", sourceCheckedAt: "2026-08-07" },
   { countryCode: "AU", careerId: "electrician", sourceCheckedAt: "2026-08-06" },
-  { countryCode: "AU", careerId: "hvac-technician", sourceCheckedAt: "2026-08-07" },
-  { countryCode: "AU", careerId: "medical-laboratory-technician", sourceCheckedAt: "2026-08-08" },
   { countryCode: "AU", careerId: "midwife", sourceCheckedAt: "2026-08-07" },
   { countryCode: "AU", careerId: "occupational-therapist", sourceCheckedAt: "2026-08-08" },
-  { countryCode: "AU", careerId: "pharmacist", sourceCheckedAt: "2026-08-08" },
   { countryCode: "AU", careerId: "physiotherapist", sourceCheckedAt: "2026-08-07" },
-  { countryCode: "AU", careerId: "plumber", sourceCheckedAt: "2026-08-07" },
-  { countryCode: "AU", careerId: "radiographer", sourceCheckedAt: "2026-08-08" },
   { countryCode: "AU", careerId: "registered-nurse", sourceCheckedAt: "2026-08-06" },
-  { countryCode: "AU", careerId: "wall-floor-tiler", sourceCheckedAt: "2026-08-07" },
-  { countryCode: "AU", careerId: "welder", sourceCheckedAt: "2026-08-07" },
+  { countryCode: "AU", careerId: "welder", sourceCheckedAt: "2026-08-14" },
 ] as const
 
 /** @deprecated Use INDEXABLE_CAREER_PROFILES. */
