@@ -10,6 +10,7 @@ This document translates the product doctrine into a concrete site structure. Wh
 See also:
 - [PRODUCT_DOCTRINE.md](./PRODUCT_DOCTRINE.md) — product purpose and scope
 - [product-core.md](./product-core.md) — concise execution rules
+- [CAREER_PAGE_EXPERIENCE_SPEC.md](./CAREER_PAGE_EXPERIENCE_SPEC.md) — canonical Career Page hierarchy and interaction model
 
 ---
 
@@ -138,89 +139,18 @@ A future general occupation page such as `/career/registered-nurse` may exist on
 
 A Career Page is the product, not one tool inside the product.
 
-Its information order is fixed at the structural level:
+Its structural order is:
 
-### A. Verdict
+1. Career Hero / Verdict
+2. Score reasons
+3. Key evidence
+4. Pathway / requirements
+5. Study / Programs
+6. Jobs
+7. Sources / methodology
+8. Secondary actions
 
-Answer immediately:
-
-> Is this career worth pursuing in this context?
-
-Show:
-- occupation name;
-- country / market context;
-- Career Score;
-- short verdict;
-- a small number of important component signals.
-
-### B. Evidence
-
-Answer:
-
-> Why did CampCareer reach this verdict?
-
-Show only decision-relevant evidence first. Deeper source detail is progressively disclosed.
-
-Possible evidence includes:
-- earnings;
-- demand / vacancies;
-- outlook;
-- stability / growth;
-- early-career access;
-- entry difficulty;
-- evidence confidence and freshness.
-
-### C. Pathway
-
-Answer:
-
-> What do I need to enter this career?
-
-Show:
-- education / training requirements;
-- registration / licensing;
-- major prerequisites;
-- material blockers;
-- practical sequence and timing.
-
-Visa or legal-work information appears here when it materially affects the pathway. It is not a competing top-level product.
-
-### D. Study / Programs
-
-Answer:
-
-> Where can I study or train for this career?
-
-Show:
-- relevant study fields;
-- selected programs / training pathways;
-- selected institutions when useful;
-- external next-action links.
-
-This section does not try to expose the entire program database at once.
-
-### E. Jobs
-
-Answer:
-
-> What real employment opportunities can I inspect next?
-
-Show:
-- relevant employment context;
-- selected job opportunities or job-search destinations;
-- external job-search links.
-
-CampCareer does not need to become a full job board to provide this value.
-
-### F. Secondary actions
-
-Only after the core value is visible:
-- Save;
-- Compare;
-- Share;
-- personalise this result.
-
-These actions must not compete with the score or the next practical action.
+The detailed information budget, interaction hierarchy, desktop/mobile wireframes, state model, and current implementation disposition are defined in [CAREER_PAGE_EXPERIENCE_SPEC.md](./CAREER_PAGE_EXPERIENCE_SPEC.md).
 
 ---
 
@@ -258,256 +188,235 @@ Do not use a multi-destination bottom navigation for the initial public experien
 Prefer:
 - compact header;
 - career search access;
-- contextual sticky action only when it helps the current Career Page.
-
-The user should not be asked to switch between product modules while evaluating one career.
+- page-local actions;
+- account utility only when needed.
 
 ---
 
 ## 6. Existing route disposition
 
-The goal is not immediate deletion. It is removal of cognitive competition.
+Existing routes do not need to be deleted immediately. Their role changes first.
 
-| Existing surface | Initial product decision | Target role |
-|---|---|---|
-| `/` | **REBUILD / SIMPLIFY** | Career discovery entry, not a tool hub |
-| `/career` query result | **MIGRATE** | Become stable specific Career Page routes |
-| `/occupation` | **ABSORB / RENAME** | Career search/index; candidate migration to `/careers` |
-| `/home` | **REPURPOSE** | Signed-in saved/recent careers only |
-| `/dashboard` | **DEFER / REDIRECT** | No independent dashboard concept |
-| `/compare` | **SECONDARY** | Contextual action from a Career Page |
-| `/map` | **HIDE FROM PRIMARY NAV** | Advanced contextual map tool |
-| `/maps/*` | **KEEP AS SUPPORTING CONTENT** | SEO/context pages; link only when useful |
-| `/countries` | **HIDE FROM PRIMARY NAV** | Supporting evidence/context |
-| `/cities` | **HIDE FROM PRIMARY NAV** | Supporting evidence/context |
-| `/visas` | **HIDE / CONTEXTUALISE** | Pathway/legal context inside a career |
-| `/study` | **ABSORB** | Career Page study section |
-| `/programs` | **ABSORB** | Career Page program section; legacy discovery may remain |
-| `/courses` | **ABSORB / LEGACY** | Supporting study data, not primary navigation |
-| `/institutions` | **ABSORB / SUPPORTING** | Shown when relevant to a career/program |
-| `/planner` | **DEFER** | Not part of initial acquisition or core flow |
-| `/applications` | **DEFER** | Not an initial core surface |
-| `/budget` | **DEFER** | Supporting data only when relevant |
-| `/onboarding` | **MAKE OPTIONAL** | Contextual personalisation after value |
-| `/login` | **KEEP** | Retention/account action, never first-value gate |
-| `/profile` | **KEEP / SIMPLIFY LATER** | Account and saved-career management |
-| `/settings` | **KEEP** | Account utility |
-| `/blog` | **KEEP** | Acquisition content feeding Career Pages |
-| country landing routes such as `/au` | **KEEP AS SUPPORTING SEO** | Discovery/content, not primary app navigation |
-| ROI explorer / old study tools | **LEGACY / DEFER** | Preserve only where useful; do not define product identity |
+| Existing surface | Initial-product disposition |
+|---|---|
+| `/` | Keep, but simplify into career discovery / search entry |
+| `/career` | Replace query-led result concept with canonical career-page structure |
+| `/home` | Repurpose later for signed-in saved / recent careers; not public acquisition |
+| `/occupation` | Fold discovery value into `/careers`; avoid global-tool positioning |
+| `/programs` | Keep technically if useful, but remove from primary nav; feed Career Page program sections |
+| `/courses` | Secondary/legacy; fold useful content into career context |
+| `/institutions` | Secondary/legacy; primarily reached from relevant program/career context |
+| `/countries` | Secondary/SEO/supporting context; not a top-level product choice |
+| `/cities` | Supporting context inside career/pathway decisions |
+| `/visas` | Supporting pathway/blocker context; not primary nav |
+| `/compare` | Secondary career action; not primary nav |
+| `/maps` / `/map` | Contextual exploration only; not primary nav |
+| `/planner` | Deferred; do not use as the shell for the initial public product |
+| `/applications` | Deferred / non-core |
+| `/budget` | Deferred / non-core |
+| `/dashboard` | Do not use as the public destination |
+| `/onboarding` | Optional post-value personalisation only |
+| `/login` | Utility / retention entry; never required to see core career value |
+| `/profile` | Account / retention |
+| `/settings` | Account utility |
+| `/blog` | Keep as acquisition content feeding Career Pages |
+| `/roi-explorer` | Legacy/specialized; not product identity or primary navigation |
 
-### Important rule
+### Principle
 
-**Hidden is different from deleted.**
+Hide before deleting.
 
-Legacy routes may remain for SEO, existing links, data validation, or later reuse. The simplification work first removes them from the user's primary decision surface.
+Existing SEO equity, datasets, deep links, and useful tools should not be destroyed merely to simplify the visible product. First remove them from the user's default decision path. Redirect/deprecation decisions come later after traffic and SEO review.
 
 ---
 
-## 7. Country and personal context
+## 7. Core user flow
 
-The old product made passport, destination, city, study, and occupation feel like co-equal starting dimensions.
+The default public flow is:
 
-The initial product changes the hierarchy:
+```text
+External discovery or homepage
+        ↓
+Specific Career Page
+        ↓
+Career Score + verdict
+        ↓
+Why this score / evidence
+        ↓
+How to enter this career
+        ↓
+Study / Programs
+        ↓
+Jobs
+        ↓
+External next action
+        ↓ optional
+Save / Account / Personalise / Compare
+```
 
-1. Career is the question.
-2. Country / market provides the score context.
-3. Citizenship, education, experience, budget, language, and legal status personalise feasibility only when needed.
-
-### Country rule
-
-A numeric score that depends on country must always make the country context visible.
-
-Do not fabricate a generic global score when the evidence is country-specific.
-
-### Citizenship rule
-
-Do not require passport/citizenship before showing the first useful career result.
-
-Ask for citizenship only when it materially changes:
-- legal-work feasibility;
-- study eligibility;
-- visa options;
-- a personalised pathway.
+This is the primary funnel to optimise.
 
 ---
 
-## 8. Login and onboarding architecture
+## 8. Account and onboarding flow
 
-### Signed-out user can see
+### Wrong order
 
-- Career Score;
-- verdict;
-- evidence;
-- pathway;
-- study / programs;
-- jobs / job-search links.
+```text
+Career interest
+→ login
+→ onboarding
+→ dashboard
+→ find result
+```
 
-### Login is triggered by retention intent
+### Initial-product order
+
+```text
+Career interest
+→ Career Page
+→ useful score / evidence / generic pathway
+→ user chooses a retention or personalisation action
+→ login if required
+→ return to the same career context
+```
+
+Account creation must preserve `return_to` / `next` context.
+
+---
+
+## 9. Compare flow
+
+Compare is a child action of a career decision.
+
+Preferred flow:
+
+```text
+Registered Nurse — Australia
+→ Compare with another career
+→ select Physiotherapist
+→ focused comparison
+→ return to either Career Page
+```
+
+The user should not need to open a generic Compare tool from global navigation before having a career context.
+
+---
+
+## 10. Map flow
+
+Map is a contextual answer, not the site identity.
 
 Examples:
-- Save this career;
-- keep history;
-- receive alerts;
-- manage multiple careers;
-- preserve personalisation.
+- `Where are nursing jobs strongest?`
+- `Where can I study nursing?`
+- `Which regions have stronger hiring signals?`
 
-After authentication, return the user to the same Career Page and action context.
+A Career Page may open a career-filtered map or map section when geography genuinely improves the decision.
 
-### Onboarding
-
-There is no mandatory onboarding funnel before a Career Page.
-
-Personal questions are requested contextually, for example:
-
-> Personalise this pathway for my background
-
-The result should remain useful if the user declines.
+The raw interactive map may remain available via direct/legacy routes, but it does not receive top-level navigation priority.
 
 ---
 
-## 9. Secondary feature entry rules
+## 11. Study / Program flow
 
-### Compare
+Programs are downstream of career intent.
 
-Compare is entered from a Career Page, not from the global navigation.
+Preferred flow:
 
-Example:
+```text
+Career Page
+→ pathway says a qualification is needed
+→ relevant study / training section
+→ selected programs
+→ provider / official program page
+```
 
-`Registered Nurse → Compare with Physiotherapist`
-
-A comparison should preserve the original career context and make returning easy.
-
-### Map
-
-Map is entered from a concrete question such as:
-- where demand is strongest;
-- where a program is located;
-- where jobs are concentrated.
-
-Map is a visualisation of career context, not a separate starting product.
-
-### Programs and institutions
-
-A user should usually encounter a program or institution because it helps them enter the current career.
-
-Independent browse pages may remain for SEO or power users, but should not dominate primary navigation.
-
-### Visa / legal information
-
-Visa and legal-work evidence belongs beside pathway feasibility and blockers. It should not force every user into a separate visa product before they understand the career.
+Avoid making a new user choose a program database before understanding what qualification they need and why.
 
 ---
 
-## 10. Home and returning-user model
+## 12. Jobs flow
 
-### Public `/`
+Jobs are downstream proof and action.
 
-Purpose:
-- explain the product quickly;
-- let the user search/select a career;
-- optionally feature a small number of current Career Scores;
-- send the user into a Career Page.
+Preferred flow:
 
-It should not present a grid of every available tool.
+```text
+Career Page
+→ employment evidence / entry requirements
+→ selected current opportunities or trusted job-search destinations
+→ external job listing / employer site
+```
 
-### Signed-in `/home`
-
-Purpose:
-- saved careers;
-- recently viewed careers;
-- optional alerts / changed evidence later.
-
-It is a retention surface, not a second public product homepage.
-
-If signed-out users reach `/home`, the implementation may either show a lightweight public state or redirect to `/`. It must not create a mandatory account wall around career information.
+CampCareer may curate or link jobs without becoming the job board of record.
 
 ---
 
-## 11. Content hierarchy
+## 13. SEO and legacy content principle
 
-### Level 1 — Career decision
+Simplifying the product does not require immediately deleting older country, map, study, ROI, or blog content.
 
-The product foregrounds:
-- Career Score;
-- verdict;
-- why;
-- next step.
+Classify legacy content into:
 
-### Level 2 — Execution context
+### Feed the core
+Useful data or pages should link into Career Pages.
 
-Show when useful:
-- training;
-- programs;
-- jobs;
-- licensing;
-- legal-work constraints;
-- country/city evidence.
+### Support SEO
+Keep pages with genuine search value, but make the Career Page the preferred next step.
 
-### Level 3 — Deep exploration
+### Hide from primary UX
+Pages may remain directly accessible without appearing in header/sidebar navigation.
 
-Power-user or SEO surfaces:
-- maps;
-- institution directories;
-- city pages;
-- country pages;
-- detailed comparisons;
-- planners;
-- legacy research tools.
-
-Level 3 must not visually compete with Level 1.
+### Deprecate later
+Only after analytics, redirect mapping, and SEO impact are understood.
 
 ---
 
-## 12. Migration principles
+## 14. Analytics funnel implied by the architecture
 
-The structural migration should happen in this order:
+The main product journey should be measurable as:
 
-1. Build one production-quality Career Page under the new hierarchy.
-2. Make social/search links land directly on it.
-3. Simplify the public header/navigation around career discovery.
-4. Remove Workspace tool-grid navigation from the public core flow.
-5. Move Save/Login behind value.
-6. Repurpose `/home` for returning-user retention.
-7. Contextualise Compare, Map, Programs, Institutions, Visa, and city/country data.
-8. Preserve legacy routes with redirects or low-prominence access where needed.
-9. Only delete old routes after traffic, SEO, and dependency review.
+`career_page_view`
+→ `score_viewed`
+→ `evidence_engaged`
+→ `pathway_viewed`
+→ `program_clicked` or `job_clicked`
+→ optional `career_saved`
+→ optional `account_created`
 
-This avoids a dangerous big-bang deletion while still giving the user a dramatically simpler product early.
+The strongest initial success signal is not account creation by itself.
 
----
+A high-value event is:
 
-## 13. What the user should perceive
-
-A first-time user should perceive only three conceptual layers:
-
-### 1. Career
-
-> Is this worth it?
-
-### 2. Path
-
-> What do I need to do?
-
-### 3. Action
-
-> Where can I study, train, or find work next?
-
-They should not perceive CampCareer as eight separate tools sharing one sidebar.
+> **The user consumes a career decision and takes a relevant next action.**
 
 ---
 
-## 14. Stage-2 decisions now locked
+## 15. Implementation order implied by this architecture
 
-The following decisions are fixed for the initial product unless user evidence later justifies changing them:
+1. Build one canonical Career Page reference experience.
+2. Make it work without login.
+3. Connect its evidence, pathway, program and job sections to existing data.
+4. Simplify the public header/navigation around it.
+5. Simplify `/` into career discovery.
+6. Move Save/account/personalisation behind demonstrated value.
+7. Remove Map/Compare/Countries/Visas/Programs/Institutions from primary global navigation.
+8. Add redirects/canonical SEO changes only after route migration is deliberately planned.
+9. Generalise the reference Career Page across supported careers.
+10. Reintroduce secondary tools only when they reinforce the career-first flow.
 
-1. **Career Page is the primary public product surface.**
-2. **The global multi-tool workspace navigation is not the target information architecture.**
-3. **Career is the parent context; study, programs, jobs, country, city, visa, map, and institutions are supporting context.**
-4. **Public homepage becomes lightweight career discovery, not a dashboard.**
-5. **`/home` becomes a returning-user retention surface rather than the acquisition hub.**
-6. **Compare and Map are contextual secondary actions, not global primary navigation.**
-7. **Mandatory onboarding is removed from the first-value path.**
-8. **Login follows value and is primarily triggered by Save/retention intent.**
-9. **Legacy routes may remain during migration, but they do not define the visible product.**
-10. **The next design stage is the detailed Career Page information and interaction hierarchy.**
+---
+
+## 16. Architecture acceptance test
+
+A new visitor should be able to answer all of these without learning CampCareer's internal product structure:
+
+1. **What career am I looking at?**
+2. **Is it worth pursuing?**
+3. **Why?**
+4. **What do I need to do to enter it?**
+5. **Where can I study or train?**
+6. **Where can I find work?**
+
+If the user instead needs to understand the difference between Home, Occupation, Map, Compare, Programs, Institutions and Planner, the architecture has failed.
