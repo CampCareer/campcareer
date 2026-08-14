@@ -54,12 +54,13 @@ These capabilities remain useful but should normally be entered from a career, p
 
 Keep implementation/data unless deletion is clearly safe, but do not make these visible product destinations.
 
-| Surface | Current route/capability | Wave 1 behavior |
+| Surface | Current route/capability | Current behavior |
 | --- | --- | --- |
 | Member dashboard Home | `/home`, member hub/dashboard components | `/home` redirects to public Career discovery. Components remain in repo. |
 | Early onboarding | `/onboarding` | Remove Career Page entry points. Keep route/data for later pathway refinement. |
 | Early personalisation | `personalised=1`, user preference prompts | Do not ask before public Score/Evidence/basic Path. |
-| Workspace tool suite | legacy sidebar and equal-tool nav | Remove sidebar from the rendered shell. Routes remain directly accessible. |
+| Workspace tool suite | legacy sidebar and equal-tool nav | Sidebar is not rendered. Routes remain directly accessible. |
+| Legacy Career market brief | `CareerMarketResults` and related dashboard-era presentation | Keep implementation for compatibility/dormant surfaces, but do not render it on the primary Career Page. |
 | Legacy planner/application/budget surfaces | `/planner`, `/applications`, `/budget` and related tools | No primary navigation entry. Preserve until later audit. |
 | Legacy interactive map entry | `/map` | No primary navigation entry. Preserve implementation. |
 
@@ -92,21 +93,40 @@ Account prompts are justified only by a user-initiated retention action such as 
 
 ## Wave 1 implementation
 
-Wave 1 changes product perception without destructive deletion:
+Wave 1 changed product perception without destructive deletion:
 
-- remove Maps from public TopNav
-- make the wordmark return to `/` for signed-in and signed-out users
-- remove the legacy workspace sidebar from the rendered shell
-- reduce workspace topbar to brand + language + account utility
-- redirect `/home` to `/`
-- remove Career Page onboarding/personalisation actions
-- keep Save and Compare as secondary Career Page actions
-- hide remaining Career Page links whose destination is onboarding
-- simplify public Home around Career → Score → Evidence → Path
+- removed Maps from public TopNav
+- made the wordmark return to `/` for signed-in and signed-out users
+- removed the legacy workspace sidebar from the rendered shell
+- reduced workspace topbar to brand + language + account utility
+- redirected `/home` to `/`
+- removed Career Page onboarding/personalisation actions
+- kept Save and Compare as secondary Career Page actions
+- hid remaining Career Page links whose destination is onboarding
+- simplified public Home around Career → Score → Evidence → Path
 
-## Future waves
+## Wave 2 implementation
 
-Wave 2: consolidate the full Career Page below the Hero, remove legacy public score vocabulary, and make Evidence → Path → Study → Jobs one coherent page narrative.
+Wave 2 consolidates the full Career Page below the Hero.
+
+The primary Career Page now renders:
+
+`CampCareer Score Hero → Why this score → Path → Study / Programs → Jobs → Save / Compare`
+
+Implementation rules:
+
+- `career-core-sections.tsx` owns Evidence → Path → Study / Programs → Jobs.
+- `CareerMarketResults` is no longer rendered by the Career Page.
+- legacy `Job market score`, `FREE CAREER MARKET BRIEF`, duplicated market-score disclaimers and early personalisation blocks are therefore removed from the primary result experience without deleting their dormant implementation.
+- Evidence explains Demand, Pay and Entry and surfaces official sources.
+- Path carries licensing, training, work-rights/visa and job-market conditions without changing the public Score.
+- Study / Programs uses verified career-relevant program, training and apprenticeship resources.
+- Jobs uses verified live opportunities, employer entry points and official job-search resources.
+- missing program/job evidence produces an explicit not-ready state rather than fabricated recommendations.
+
+See `docs/CAREER_PAGE_CORE_FLOW.md` for the canonical Career Page contract.
+
+## Future wave
 
 Wave 3: rework Programs, Jobs, Compare, account, Countries, Visa and Maps around the new hierarchy; delete dormant code only after usage and dependency audits show it is safe.
 
@@ -120,3 +140,5 @@ Do not restore any of the following without an explicit product decision:
 - Maps/Countries/Visas/Institutions as equal primary products
 - sidebar navigation that presents every route as a user choice
 - login as the destination after clicking the CampCareer wordmark
+- legacy `CareerMarketResults` on the primary Career Page
+- a second public career score below CampCareer Score
