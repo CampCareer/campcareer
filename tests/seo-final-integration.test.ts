@@ -6,6 +6,10 @@ import { AU_PROGRAMMATIC_STUDY_PAGES } from "../src/lib/programs/au-programmatic
 import { INDEXABLE_AU_PROGRAMS } from "../src/lib/programs/program-routes"
 import { AU_OCCUPATION_STATE_PAGES } from "../src/lib/workspace/au-occupation-state-seo"
 import {
+  SCORE_READY_CAREER_PROFILES,
+  isCareerScoreReady,
+} from "../src/lib/workspace/career-coverage"
+import {
   INDEXABLE_OCCUPATION_PROFILES,
   getIndexableCareerRoute,
 } from "../src/lib/workspace/occupation-routes"
@@ -21,7 +25,8 @@ function sitemapUrls() {
 
 test("final SEO publication inventories remain intentionally bounded", () => {
   assert.equal(INDEXABLE_AU_PROGRAMS.length, 53)
-  assert.equal(INDEXABLE_OCCUPATION_PROFILES.length, 8)
+  assert.equal(SCORE_READY_CAREER_PROFILES.length, 8)
+  assert.equal(INDEXABLE_OCCUPATION_PROFILES.length, SCORE_READY_CAREER_PROFILES.length)
   assert.equal(AU_PROGRAMMATIC_STUDY_PAGES.length, 42)
   assert.equal(AU_OCCUPATION_STATE_PAGES.length, 40)
   assert.equal(INDEXABLE_INSTITUTION_PATHS.length, 74)
@@ -31,7 +36,14 @@ test("final SEO publication inventories remain intentionally bounded", () => {
   assert.equal(new Set(visaRoutes.map((route) => route.path)).size, visaRoutes.length)
 })
 
-test("Career indexing follows the strict Ready coverage pool", () => {
+test("Career Score and indexing follow the strict Ready coverage pool", () => {
+  assert.equal(isCareerScoreReady("AU", "care-worker"), true)
+  assert.equal(isCareerScoreReady("AU", "welder"), true)
+  assert.equal(isCareerScoreReady("AU", "pharmacist"), false)
+  assert.equal(isCareerScoreReady("AU", "radiographer"), false)
+  assert.equal(isCareerScoreReady("AU", "medical-laboratory-technician"), false)
+  assert.equal(isCareerScoreReady("AU", "bricklayer"), false)
+
   assert.ok(getIndexableCareerRoute("AU", "care-worker"))
   assert.ok(getIndexableCareerRoute("AU", "welder"))
   assert.equal(getIndexableCareerRoute("AU", "pharmacist"), null)
