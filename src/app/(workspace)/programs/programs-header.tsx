@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "react"
 import { ArrowLeft, Check, ChevronDown, Search } from "lucide-react"
 import { CANONICAL_CAREER_BY_ID } from "@/data/career-comparison-catalog"
@@ -80,13 +81,14 @@ export function ProgramsHeader({
   filters: ProgramSearchFilters
 }) {
   const locale = useRouteLocale()
+  const searchParams = useSearchParams()
   const replace = useProgramNavigation()
   const { setSelectedCountry } = useSelectedCountry()
   const [query, setQuery] = useState(filters.q)
   const searchableCountry = PUBLISHED_PROGRAM_COUNTRIES.has(filters.country)
-  const career = filters.career && filters.career !== "all"
-    ? CANONICAL_CAREER_BY_ID.get(filters.career)
-    : null
+  const careerContextId = searchParams.get("careerContext")
+  const activeCareerId = careerContextId || (filters.career && filters.career !== "all" ? filters.career : null)
+  const career = activeCareerId ? CANONICAL_CAREER_BY_ID.get(activeCareerId) : null
   const careerName = career ? (locale === "ko" ? career.labelKo : career.label) : null
   const careerHref = career
     ? localizePath(`/career?country=${encodeURIComponent(filters.country)}&occupation=${encodeURIComponent(career.id)}`, locale)
@@ -109,7 +111,7 @@ export function ProgramsHeader({
       city: null,
       state: null,
       province: null,
-      career: filters.career && filters.career !== "all" ? filters.career : null,
+      career: countryCode === "CA" && careerContextId && career ? career.id : null,
       institution: null,
       pgwp: null,
       duration: null,
@@ -127,10 +129,10 @@ export function ProgramsHeader({
   const placeholder =
     locale === "ko"
       ? careerName
-        ? `${careerName} 진입에 관련된 과정 검색`
+        ? `${careerName} 진입에 필요한 과정 검색`
         : "과정명 또는 학교명으로 검색하세요"
       : careerName
-        ? `Search programs related to ${careerName}…`
+        ? `Search study options while evaluating ${careerName}…`
         : filters.country === "CA"
           ? "Search programs, institutions or cities…"
           : filters.country === "UK"
@@ -150,7 +152,7 @@ export function ProgramsHeader({
           </div>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-[hsl(var(--cc-muted))]">
             {careerName
-              ? locale === "ko" ? "목표 커리어에 실제로 연결되는 과정인지 확인하고, 입학·자격·등록 결과를 공식 출처로 검증하세요." : "Check whether each program actually supports entry to this career, then verify admission, qualification and registration outcomes with official sources."
+              ? locale === "ko" ? "목표 커리어를 기준으로 두고, 각 과정이 실제 진입에 어떤 역할을 하는지 공식 출처로 확인하세요." : "Keep the target career in view, then verify how each study option actually supports entry using official sources."
               : locale === "ko" ? "과정 자체보다 어떤 커리어로 이어지는지 먼저 확인하세요." : "Start with the career outcome, then use this catalogue to inspect relevant study options."}
           </p>
         </div>
@@ -166,7 +168,7 @@ export function ProgramsHeader({
           <label className="relative block">
             <Search className="pointer-events-none absolute left-4 top-1/2 size-[18px] -translate-y-1/2 text-[hsl(var(--cc-muted))]" />
             <input type="search" value={query} onChange={(event: ChangeEvent<HTMLInputElement>) => setQuery(event.target.value)} placeholder={placeholder} className="h-[52px] w-full rounded-xl border border-[hsl(var(--cc-border))] bg-white pl-11 pr-24 text-[14px] text-[hsl(var(--cc-ink))] outline-none transition placeholder:text-[hsl(var(--cc-muted))] focus:border-brand focus:ring-2 focus:ring-brand/10" />
-            <button type="submit" className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-lg bg-brand px-4 py-2 text-[12px] font-semibold text-white transition hover:opacity-90">
+            <button type="submit" className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-lg bg-brand px-4 py-2 text-[12px] font-semibold text-white transition hover:bg-[hsl(var(--brand-press))]">
               {locale === "ko" ? "검색" : "Search"}
             </button>
           </label>
