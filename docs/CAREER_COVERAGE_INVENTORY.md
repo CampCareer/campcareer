@@ -1,6 +1,6 @@
 # Career Coverage Inventory
 
-Snapshot date: 2026-08-14
+Snapshot date: 2026-08-15
 
 This document is the operating inventory for expanding CampCareer from a reference Career Page into a country-by-country Career Score database plus action pathways.
 
@@ -14,7 +14,7 @@ This inventory covers the 20 launch countries x 80 canonical careers = 1,600 cou
 
 ### Ready
 
-The country-career profile exists, the legacy inputs needed by CampCareer Score v1 have evidence for all required public inputs, and the profile is already marked `decision_ready`.
+The country-career profile exists, the inputs needed by CampCareer Score v1 have usable evidence for all required public dimensions, and the profile is already marked `decision_ready`.
 
 A Ready row can be used for a public Career Page and content production, subject to the normal source freshness checks.
 
@@ -42,7 +42,7 @@ The audit does not treat a stored zero as evidence by itself. It checks whether 
 
 Blocker keys:
 
-- `pay`: no defensible pay measure for the canonical career scope.
+- `pay`: no defensible official occupation or occupation-group earnings measure that can be compared with the selected country's all-occupations earnings benchmark.
 - `shortage`: no defensible shortage/no-shortage evidence for the shortage input.
 - `vacancy_intensity`: no defensible vacancy-intensity input.
 - `employer_diversity`: no defensible employer-diversity evidence basis.
@@ -52,13 +52,13 @@ Blocker keys:
 - `entry_burden`: no defensible burden/licensing/registration evidence.
 - `publication_review`: evidence may exist, but the profile has not yet passed the final decision-ready review gate.
 
-This is intentionally conservative and follows the public Score contract: missing evidence means `Score not ready yet`; missing evidence must never silently become a zero score.
+For Pay, CampCareer prefers an exact official occupation earnings measure. If a more specific official median is unavailable, the closest defensible official occupation group may be used. Broader official-group evidence lowers Pay evidence confidence to `Estimated`; it does not make Pay missing. If no defensible official earnings measure exists, Pay remains unavailable. Missing Pay must never silently become a zero score.
 
 ## Country summary
 
 | Country | Ready | Needs one gap | Profile ready | Not ready | Existing-profile avg blockers |
 |---|---:|---:|---:|---:|---:|
-| Australia | 8 | 3 | 69 | 0 | 3.1 |
+| Australia | 11 | 8 | 61 | 0 | 2.2 |
 | United Kingdom | 0 | 0 | 80 | 0 | 5.0 |
 | Canada | 0 | 0 | 80 | 0 | 6.2 |
 | United States | 0 | 0 | 64 | 16 | 4.1 |
@@ -81,72 +81,121 @@ This is intentionally conservative and follows the public Score contract: missin
 
 ## Australia
 
-### Ready — 8
+### Pay reassessment policy and result
+
+Australia Pay v1 compares a usable occupation earnings median with the Australian all-occupations median weekly earnings benchmark.
+
+For the current JSA/ABS earnings dataset:
+
+`relative premium = occupation or official group median weekly earnings / all-occupations median weekly earnings - 1`
+
+The current Australian benchmark is AUD 1,852 per week.
+
+Current Pay bands:
+
+| Relative earnings vs all occupations | Pay |
+|---|---:|
+| below -20% | 1 |
+| -20% to below -15% | 2 |
+| -15% to below -10% | 3 |
+| -10% to below -5% | 4 |
+| -5% to below +5% | 5 |
+| +5% to below +10% | 6 |
+| +10% to below +15% | 7 |
+| +15% to below +20% | 8 |
+| +20% to below +25% | 9 |
+| +25% or more | 10 |
+
+A missing Pay measure is not Pay 0. It remains unavailable.
+
+On 2026-08-15, 62 of the 67 Australian profiles that previously had a placeholder `salary_component = 0` were reassessed using the closest defensible official Jobs and Skills Australia ANZSCO earnings group. The source dataset is the ABS Survey of Employee Earnings and Hours, May 2025, customised report used by JSA occupation profiles. Exact or effectively exact occupation groups may be `Verified`; broader official groups are `Estimated` and are disclosed in score evidence.
+
+Five Australian careers remain Pay-unresolved because no single defensible official median is currently available:
+
+- `engineering-technician` — CampCareer umbrella spans several ANZSCO technician groups with materially different medians.
+- `farm-manager` — relevant JSA farm-manager earnings groups do not publish a usable median.
+- `horticulturist` — closest relevant JSA group does not publish a usable median.
+- `hospitality-supervisor` — CampCareer umbrella spans several hospitality supervisor groups with materially different medians.
+- `wall-floor-tiler` — the relevant JSA earnings group does not publish a usable median.
+
+### Ready — 11
 
 - `care-worker` — Demand 9 · Pay 5 · Entry 9 → 78 · Strong
 - `carpenter`
-- `electrician`
+- `electrician` — Demand 9 · Pay 8 · Entry 6 → 78 · Strong
+- `medical-laboratory-technician` — Demand 1 · Pay 2 · Entry 7 → 31 · Tough
 - `midwife`
 - `occupational-therapist`
+- `pharmacist` — Demand 4 · Pay 6 · Entry 5 → 49 · Challenging
 - `physiotherapist`
+- `radiographer` — Demand 6 · Pay 10 · Entry 6 → 72 · Strong
 - `registered-nurse`
 - `welder` — Demand 8 · Pay 4 · Entry 7 → 65 · Strong
 
 These are the current content-production pool.
 
-`care-worker` and `welder` passed publication review on 2026-08-14. Care Worker was rechecked against the official JSA Aged and Disabled Carers profile and current CHC33021 Ageing/Disability training route. Welder was rechecked against the official JSA ANZSCO 3223 profile; the CampCareer roll-up matches the full 3223 group of Metal Fabricators, Pressure Welders and Welders (First Class). The score remains transparent about provisional demand-source provenance where applicable.
+`medical-laboratory-technician`, `pharmacist`, and `radiographer` became Ready on 2026-08-15 after Pay was recalculated relative to the Australian all-occupations benchmark using the closest defensible official JSA earnings group. Their broader-group Pay evidence is marked `Estimated`; their score is not penalised for lower evidence confidence.
 
-### Needs one gap — 3
+### Needs one gap — 8
 
-Pay only:
+Publication review only:
 
-- `medical-laboratory-technician`
-- `pharmacist`
-- `radiographer`
+- `auditor`
+- `chemical-engineer`
+- `database-administrator`
+- `environmental-engineer`
+- `human-resources-specialist`
+- `ict-support-technician`
+- `industrial-engineer`
+- `mechanical-engineer`
 
-These remain blocked after review. JSA states that median weekly earnings are not produced for ANZSCO 6-digit occupations. The available 4-digit earnings groups are materially broader than each CampCareer canonical scope, so CampCareer will not substitute those group medians merely to make the score complete. Closing these rows requires a defensible, comparable Pay evidence policy or a new exact-scope source.
+Their Pay blocker is now closed. No additional public Score input is currently missing under the revised Pay evidence policy; each needs final publication review before joining the Ready pool.
 
-### Profile ready — 69
+### Profile ready — 61
 
-`pay + vacancy_intensity + publication_review` — 15:
+`vacancy_intensity + publication_review` — 15:
 
 `accountant`, `business-analyst`, `civil-engineer`, `cloud-engineer`, `cybersecurity-analyst`, `data-analyst`, `data-engineer`, `electrical-engineer`, `financial-analyst`, `manufacturing-engineer`, `marketing-specialist`, `network-administrator`, `project-manager`, `software-developer`, `supply-chain-analyst`
 
-`pay + vacancy_intensity + employer_diversity + publication_review` — 13:
+`vacancy_intensity + employer_diversity + publication_review` — 13:
 
 `chef`, `cook`, `counsellor`, `early-childhood-teacher`, `event-planner`, `hotel-manager`, `interior-designer`, `primary-school-teacher`, `restaurant-manager`, `secondary-school-teacher`, `tourism-manager`, `warehouse-manager`, `youth-worker`
 
-`pay + employer_diversity + publication_review` — 12:
+`employer_diversity + publication_review` — 13:
 
-`aircraft-maintenance-technician`, `architect`, `automotive-service-technician`, `baker`, `commercial-pilot`, `deck-officer`, `film-editor`, `logistics-coordinator`, `marine-engineer`, `special-education-teacher`, `truck-driver`, `web-designer`
+`aircraft-maintenance-technician`, `architect`, `automotive-service-technician`, `baker`, `commercial-pilot`, `deck-officer`, `film-editor`, `logistics-coordinator`, `marine-engineer`, `social-worker`, `special-education-teacher`, `truck-driver`, `web-designer`
 
-`pay + publication_review` — 10:
+`pay + publication_review` — 2:
 
-`auditor`, `chemical-engineer`, `database-administrator`, `engineering-technician`, `environmental-engineer`, `human-resources-specialist`, `ict-support-technician`, `industrial-engineer`, `mechanical-engineer`, `wall-floor-tiler`
+`engineering-technician`, `wall-floor-tiler`
 
-`pay + vacancy_intensity + employer_diversity + entry_burden + publication_review` — 9:
+`vacancy_intensity + employer_diversity + entry_burden + publication_review` — 8:
 
-`agronomist`, `animal-science-technician`, `animator`, `forestry-technician`, `graphic-designer`, `horticulturist`, `multimedia-designer`, `sustainability-specialist`, `ux-designer`
+`agronomist`, `animal-science-technician`, `animator`, `forestry-technician`, `graphic-designer`, `multimedia-designer`, `sustainability-specialist`, `ux-designer`
 
 `vacancy_intensity + demand_trend + publication_review` — 4:
 
 `bricklayer`, `construction-manager`, `hvac-technician`, `plumber`
 
-`pay + vacancy_intensity + employer_diversity + demand_trend + growth + publication_review` — 2:
+`vacancy_intensity + employer_diversity + demand_trend + growth + publication_review` — 1:
 
-`community-worker`, `hospitality-supervisor`
+`community-worker`
 
-`pay + employer_diversity + entry_burden + publication_review` — 2:
+`pay + vacancy_intensity + employer_diversity + demand_trend + growth + publication_review` — 1:
+
+`hospitality-supervisor`
+
+`employer_diversity + entry_burden + publication_review` — 2:
 
 `environmental-scientist`, `food-technologist`
+
+`pay + vacancy_intensity + employer_diversity + entry_burden + publication_review` — 1:
+
+`horticulturist`
 
 `pay + vacancy_intensity + employer_diversity + demand_trend + growth + entry_burden + publication_review` — 1:
 
 `farm-manager`
-
-`employer_diversity + publication_review` — 1:
-
-`social-worker`
 
 ## United Kingdom
 
@@ -325,11 +374,11 @@ For each country below, all 80 canonical careers are `Not ready`:
 
 The expansion order should optimize for the smallest number of blockers before content publication.
 
-1. Australia Ready 8: publish/use for content now.
-2. Australia `medical-laboratory-technician`, `pharmacist`, `radiographer`: solve the exact-scope Pay evidence gap without substituting a broader 4-digit median by default.
-3. Australia `social-worker`: employer-diversity evidence plus publication review.
-4. Australia `auditor`, `chemical-engineer`, `database-administrator`, `engineering-technician`, `environmental-engineer`, `human-resources-specialist`, `ict-support-technician`, `industrial-engineer`, `mechanical-engineer`, `wall-floor-tiler`: Pay evidence plus publication review.
-5. Then choose the next country based on evidence-system work, not raw profile count. UK/US/NZ have strong Pay coverage but still need several Demand inputs; Canada also needs Demand plus more Entry validation.
+1. Australia Ready 11: publish/use for content now.
+2. Australia publication-review-only 8: `auditor`, `chemical-engineer`, `database-administrator`, `environmental-engineer`, `human-resources-specialist`, `ict-support-technician`, `industrial-engineer`, `mechanical-engineer`.
+3. Resolve the remaining five Australian Pay gaps only where a defensible official earnings measure can be chosen: `engineering-technician`, `farm-manager`, `horticulturist`, `hospitality-supervisor`, `wall-floor-tiler`.
+4. Then close the smallest remaining Demand/Entry blocker families before opening a new country batch.
+5. Choose the next country based on evidence-system work, not raw profile count. UK/US/NZ have strong Pay coverage but still need several Demand inputs; Canada also needs Demand plus more Entry validation.
 
 ## Coverage KPI
 
@@ -341,9 +390,9 @@ Use:
 
 Current strict snapshot:
 
-- Ready: 8 / 1,600
-- Needs one gap: 3 / 1,600
-- Profile ready: 660 / 1,600
+- Ready: 11 / 1,600
+- Needs one gap: 8 / 1,600
+- Profile ready: 652 / 1,600
 - Not ready: 929 / 1,600
 
 The purpose of the inventory is to move rows upward one state at a time while content production consumes the Ready queue immediately.
