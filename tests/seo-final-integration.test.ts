@@ -5,7 +5,10 @@ import sitemap from "../src/app/sitemap"
 import { AU_PROGRAMMATIC_STUDY_PAGES } from "../src/lib/programs/au-programmatic-seo"
 import { INDEXABLE_AU_PROGRAMS } from "../src/lib/programs/program-routes"
 import { AU_OCCUPATION_STATE_PAGES } from "../src/lib/workspace/au-occupation-state-seo"
-import { INDEXABLE_OCCUPATION_PROFILES } from "../src/lib/workspace/occupation-routes"
+import {
+  INDEXABLE_OCCUPATION_PROFILES,
+  getIndexableCareerRoute,
+} from "../src/lib/workspace/occupation-routes"
 import { getCompletedVisaCatalog } from "../src/lib/workspace/visa-catalog-complete"
 import { getIndexableVisaRoutes } from "../src/lib/workspace/visa-routes"
 import { INDEXABLE_INSTITUTION_PATHS } from "../src/lib/institutions/institution-seo"
@@ -18,7 +21,7 @@ function sitemapUrls() {
 
 test("final SEO publication inventories remain intentionally bounded", () => {
   assert.equal(INDEXABLE_AU_PROGRAMS.length, 53)
-  assert.equal(INDEXABLE_OCCUPATION_PROFILES.length, 16)
+  assert.equal(INDEXABLE_OCCUPATION_PROFILES.length, 8)
   assert.equal(AU_PROGRAMMATIC_STUDY_PAGES.length, 42)
   assert.equal(AU_OCCUPATION_STATE_PAGES.length, 40)
   assert.equal(INDEXABLE_INSTITUTION_PATHS.length, 74)
@@ -26,6 +29,15 @@ test("final SEO publication inventories remain intentionally bounded", () => {
   const visaRoutes = getIndexableVisaRoutes(getCompletedVisaCatalog())
   assert.ok(visaRoutes.length >= 100)
   assert.equal(new Set(visaRoutes.map((route) => route.path)).size, visaRoutes.length)
+})
+
+test("Career indexing follows the strict Ready coverage pool", () => {
+  assert.ok(getIndexableCareerRoute("AU", "care-worker"))
+  assert.ok(getIndexableCareerRoute("AU", "welder"))
+  assert.equal(getIndexableCareerRoute("AU", "pharmacist"), null)
+  assert.equal(getIndexableCareerRoute("AU", "radiographer"), null)
+  assert.equal(getIndexableCareerRoute("AU", "medical-laboratory-technician"), null)
+  assert.equal(getIndexableCareerRoute("AU", "bricklayer"), null)
 })
 
 test("sitemap contains every explicit SEO inventory exactly once", () => {
