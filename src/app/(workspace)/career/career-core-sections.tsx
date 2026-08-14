@@ -25,6 +25,20 @@ type ResourceLink = {
 
 const tr = (locale: Locale, ko: string, en: string) => (locale === "ko" ? ko : en)
 
+function careerProgramsHref(query: OverviewSearchValues, locale: Locale) {
+  const country = query.country.toUpperCase()
+  const params = new URLSearchParams({
+    country,
+    careerContext: query.occupation,
+  })
+
+  // Canada has a reviewed career-to-program relation that can be used as an
+  // actual catalogue filter. Other countries keep the career as context only.
+  if (country === "CA") params.set("career", query.occupation)
+
+  return `${localizePath("/programs", locale)}?${params.toString()}`
+}
+
 function compactNumber(value: number | null | undefined, locale: Locale) {
   if (value == null) return null
   return new Intl.NumberFormat(locale === "ko" ? "ko-KR" : "en-US", {
@@ -286,6 +300,7 @@ export function CareerCoreSections({ query, locale }: { query: OverviewSearchVal
   const study = studyResources(insight, locale)
   const jobs = jobResources(insight)
   const careerName = locale === "ko" ? insight.career.labelKo : insight.career.label
+  const programsHref = careerProgramsHref(query, locale)
 
   return (
     <div className="mt-10">
@@ -350,8 +365,13 @@ export function CareerCoreSections({ query, locale }: { query: OverviewSearchVal
           description={tr(locale, "학업은 독립적인 목적지가 아니라 이 커리어에 진입하는 데 필요한 경우에만 경로 안에서 제시합니다.", "Study is not a separate destination here. It appears when education or training helps you enter this career.")}
         />
         {study.length > 0 ? (
-          <div className="mt-7 grid gap-3 sm:grid-cols-2">
-            {study.map((resource) => <ResourceCard key={resource.key} resource={resource} icon={<GraduationCap className="size-4" />} />)}
+          <div className="mt-7">
+            <div className="grid gap-3 sm:grid-cols-2">
+              {study.map((resource) => <ResourceCard key={resource.key} resource={resource} icon={<GraduationCap className="size-4" />} />)}
+            </div>
+            <Link href={programsHref} className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-brand transition hover:opacity-80">
+              {tr(locale, "이 커리어의 프로그램 더 보기", "Explore more programs for this career")} <ArrowRight className="size-4" />
+            </Link>
           </div>
         ) : (
           <EmptyState
@@ -359,8 +379,8 @@ export function CareerCoreSections({ query, locale }: { query: OverviewSearchVal
             title={tr(locale, "검증된 직접 과정 링크를 더 정리하고 있습니다.", "We are still consolidating verified program links.")}
             detail={tr(locale, "직업 진입에 학업이 필요한 경우, 관련 과정만 연결합니다. 현재는 Programs에서 추가 옵션을 확인할 수 있습니다.", "When study is required for entry, CampCareer links only relevant routes. You can inspect additional options in Programs for now.")}
           >
-            <Link href={localizePath("/programs", locale)} className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-brand transition hover:opacity-80">
-              {tr(locale, "Programs 보기", "Explore Programs")} <ArrowRight className="size-4" />
+            <Link href={programsHref} className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-brand transition hover:opacity-80">
+              {tr(locale, "이 커리어의 Programs 보기", "Explore Programs for this career")} <ArrowRight className="size-4" />
             </Link>
           </EmptyState>
         )}
