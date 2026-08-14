@@ -88,6 +88,12 @@ export function ProgramsHeader({
   const activeCareerId = careerContextId || (filters.career && filters.career !== "all" ? filters.career : null)
   const career = activeCareerId ? CANONICAL_CAREER_BY_ID.get(activeCareerId) : null
   const careerName = career ? (locale === "ko" ? career.labelKo : career.label) : null
+  const careerFilterApplied = Boolean(
+    career &&
+    filters.country === "CA" &&
+    filters.career !== "all" &&
+    filters.career === career.id,
+  )
   const careerHref = career
     ? localizePath(`/career?country=${encodeURIComponent(filters.country)}&occupation=${encodeURIComponent(career.id)}`, locale)
     : null
@@ -126,11 +132,11 @@ export function ProgramsHeader({
 
   const placeholder =
     locale === "ko"
-      ? careerName
-        ? `${careerName} 진입에 필요한 과정 검색`
+      ? careerFilterApplied && careerName
+        ? `${careerName} 관련 과정 검색`
         : "과정명 또는 학교명으로 검색하세요"
-      : careerName
-        ? `Search study options while evaluating ${careerName}…`
+      : careerFilterApplied && careerName
+        ? `Search programs linked to ${careerName}…`
         : filters.country === "CA"
           ? "Search programs, institutions or cities…"
           : filters.country === "UK"
@@ -144,13 +150,21 @@ export function ProgramsHeader({
           <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-brand">{locale === "ko" ? "학업 · 프로그램" : "STUDY · PROGRAMS"}</p>
           <div className="mt-1.5 flex flex-wrap items-center gap-3">
             <h1 className="text-[28px] font-semibold leading-tight tracking-[-0.025em] text-[hsl(var(--cc-ink))] sm:text-3xl">
-              {careerName ? (locale === "ko" ? `${careerName} 진입 프로그램` : `Programs for ${careerName}`) : (locale === "ko" ? "프로그램" : "Programs")}
+              {careerFilterApplied && careerName
+                ? (locale === "ko" ? `${careerName} 관련 프로그램` : `Programs for ${careerName}`)
+                : (locale === "ko" ? "프로그램" : "Programs")}
             </h1>
             <ProgramCountryPicker countryCode={filters.country} onPick={pickCountry} />
           </div>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-[hsl(var(--cc-muted))]">
             {careerName
-              ? locale === "ko" ? "목표 커리어를 기준으로 두고, 각 과정이 실제 진입에 어떤 역할을 하는지 공식 출처로 확인하세요." : "Keep the target career in view, then verify how each study option actually supports entry using official sources."
+              ? careerFilterApplied
+                ? locale === "ko"
+                  ? `${careerName} 진입과의 연계가 검토된 과정만 필터링하고 있습니다.`
+                  : `Showing programs with a reviewed connection to entering ${careerName}.`
+                : locale === "ko"
+                  ? `${careerName}을 평가 중입니다. 이 카탈로그에서 학업 옵션을 확인하되, 직업 연계가 검토된 경우에만 관련 과정으로 해석하세요.`
+                  : `You’re evaluating ${careerName}. Use this catalogue to inspect study options; treat a program as career-linked only where CampCareer has reviewed that relationship.`
               : locale === "ko" ? "과정 자체보다 어떤 커리어로 이어지는지 먼저 확인하세요." : "Start with the career outcome, then use this catalogue to inspect relevant study options."}
           </p>
         </div>
