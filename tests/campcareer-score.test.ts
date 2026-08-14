@@ -23,7 +23,7 @@ test("CampCareer Score v1 is exactly Demand 40 + Pay 30 + Entry 30", () => {
 
   assert.deepEqual(score, {
     version: CAMPCAREER_SCORE_VERSION,
-    total: 72,
+    total: 74,
     demand: 8,
     pay: 8,
     entry: 6,
@@ -66,7 +66,7 @@ test("visa is not an input to the CampCareer Score", () => {
     entryBurden: 3,
   }
   const score = campCareerScoreFromLegacyBreakdown(input)
-  assert.equal(score?.total, 66)
+  assert.equal(score?.total, 63)
   assert.equal("visa" in input, false)
 })
 
