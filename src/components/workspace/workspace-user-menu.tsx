@@ -20,15 +20,13 @@ export function WorkspaceUserMenu({ className, minimal = false }: WorkspaceUserM
   const locale = useRouteLocale()
   const loginPath = localizePath("/login", locale)
   const homePath = localizePath("/", locale)
+  const fallbackLoginDestination = `${loginPath}?next=${encodeURIComponent(homePath)}`
   const supabaseRef = useRef<ReturnType<typeof createClient> | null>(null)
   const [user, setUser] = useState<User | null>(null)
   const [avatarFailed, setAvatarFailed] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [isSigningOut, setIsSigningOut] = useState(false)
   const [signOutError, setSignOutError] = useState<string | null>(null)
-  const [loginDestination, setLoginDestination] = useState(
-    `${loginPath}?next=${encodeURIComponent(homePath)}`,
-  )
   const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -50,11 +48,6 @@ export function WorkspaceUserMenu({ className, minimal = false }: WorkspaceUserM
       supabaseRef.current = null
     }
   }, [])
-
-  useEffect(() => {
-    const returnTo = `${window.location.pathname}${window.location.search}${window.location.hash}`
-    setLoginDestination(`${loginPath}?next=${encodeURIComponent(returnTo || homePath)}`)
-  }, [homePath, loginPath])
 
   const avatarUrl = user?.user_metadata?.avatar_url as string | undefined
   useEffect(() => setAvatarFailed(false), [avatarUrl])
@@ -153,7 +146,15 @@ export function WorkspaceUserMenu({ className, minimal = false }: WorkspaceUserM
   }
 
   return (
-    <Link href={loginDestination} className={cn("inline-flex items-center gap-1.5 rounded-lg border border-[hsl(var(--cc-border))] bg-white px-3 py-2 text-sm font-semibold text-[hsl(var(--cc-ink-secondary))] transition hover:bg-[hsl(var(--cc-canvas))]", minimal && "border-0 bg-transparent px-2 py-1", className)}>
+    <Link
+      href={fallbackLoginDestination}
+      onClick={(event) => {
+        event.preventDefault()
+        const returnTo = `${window.location.pathname}${window.location.search}${window.location.hash}`
+        window.location.assign(`${loginPath}?next=${encodeURIComponent(returnTo || homePath)}`)
+      }}
+      className={cn("inline-flex items-center gap-1.5 rounded-lg border border-[hsl(var(--cc-border))] bg-white px-3 py-2 text-sm font-semibold text-[hsl(var(--cc-ink-secondary))] transition hover:bg-[hsl(var(--cc-canvas))]", minimal && "border-0 bg-transparent px-2 py-1", className)}
+    >
       <LogIn className="size-4" /> {!minimal && <span>{locale === "ko" ? "로그인" : "Log in"}</span>}
     </Link>
   )
