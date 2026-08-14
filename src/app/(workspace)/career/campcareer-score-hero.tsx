@@ -127,11 +127,25 @@ function mainBlocker(score: CampCareerScore, locale: Locale) {
     : "Relative pay is the main constraint on this career."
 }
 
-export function CampCareerScoreHero({ query, locale }: { query: OverviewSearchValues; locale: Locale }) {
-  const [insight, setInsight] = useState<CareerMarketInsight | null>(null)
+export function CampCareerScoreHero({
+  query,
+  locale,
+  initialInsight = null,
+}: {
+  query: OverviewSearchValues
+  locale: Locale
+  initialInsight?: CareerMarketInsight | null
+}) {
+  const [insight, setInsight] = useState<CareerMarketInsight | null>(initialInsight)
   const [failed, setFailed] = useState(false)
 
   useEffect(() => {
+    if (initialInsight) {
+      setInsight(initialInsight)
+      setFailed(false)
+      return
+    }
+
     const controller = new AbortController()
     setInsight(null)
     setFailed(false)
@@ -146,7 +160,7 @@ export function CampCareerScoreHero({ query, locale }: { query: OverviewSearchVa
         setFailed(true)
       })
     return () => controller.abort()
-  }, [query.country, query.occupation])
+  }, [initialInsight, query.country, query.occupation])
 
   if (failed) return null
 
