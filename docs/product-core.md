@@ -1,34 +1,73 @@
 # CampCareer Product Core
 
-The authoritative product strategy is in [PRODUCT_DOCTRINE.md](./PRODUCT_DOCTRINE.md). This file is the concise execution rule.
+The authoritative product strategy is in [PRODUCT_DOCTRINE.md](./PRODUCT_DOCTRINE.md). This file is the concise execution rule for the initial CampCareer product.
 
-## Job to be done
+## Product in one sentence
 
-Help a prospective international student or worker answer:
+> **CampCareer scores careers and shows you the path to get there.**
 
-> What is the best realistic country–city–occupation–study route for my situation, and what should I do next?
+Consumer-facing promise:
 
-## Required result states
+> **Know if a career is worth it. See exactly how to get there.**
 
-- **General Overview:** country/city/occupation market evidence for users who are exploring or have incomplete inputs.
-- **Personalised Overview:** route ranking only after the necessary personal facts are collected.
-- **Evidence confidence:** always separate from opportunity and fit scores.
-- **Blocker state:** show legal, qualification, registration, or timing constraints plainly; never bury them in a score.
+## Primary user job
 
-## Required UX sequence
+Help a person answer two questions, in this order:
 
-`Light search → immediate useful Overview → contextual short questions → personal route ranking → save / monitor / explore`
+1. **Is this career worth pursuing?**
+2. **If yes, what should I do next to enter it?**
 
-Unknown destination and unknown occupation are valid starting states. Login follows value; it does not precede it.
+## Required product sequence
 
-## Data and publication rule
+`Career Score → Verdict → Evidence → Pathway → Study / Programs → Jobs`
 
-A strong recommendation requires linked, source-dated evidence for citizenship, destination, city, occupation, programme, institution, and legal/work pathway where applicable. If the evidence is incomplete, publish an exploration state with a lower confidence label rather than a fabricated complete result.
+The primary surface is the **Career Page**. A user arriving from social content or search should be able to land directly on a career, understand the verdict quickly, and continue to a concrete next action without first navigating a dashboard or completing onboarding.
 
-## Current build order
+## Account rule
 
-1. Lock the Home exploration and Overview experience.
-2. Make Market Opportunity understandable and explainable.
-3. Add progressive personalisation and My Pathway Fit.
-4. Connect scores to cities, occupations, programmes, institutions, and legal paths.
-5. Add saved scenarios and change alerts after the first useful result is proven.
+> **Value first. Account second.**
+
+Career Score, evidence, pathway, study/program information, and job links are available before login. Login is for retention features such as Save, history, personalisation, alerts, and managing multiple careers.
+
+## Product priority
+
+### P0 — Core
+- Career Score
+- Career Page
+- Evidence and source freshness
+- Entry pathway and requirements
+- Study and training options
+- Relevant programs
+- Jobs and job-search links
+
+### P1 — Retention
+- Save
+- Login/account
+- Recently viewed
+- Personalisation
+
+### P2 — Expansion
+- Compare
+- Map
+- Alerts
+- Dashboard
+- Advanced recommendations
+
+P2 must not make the P0 experience feel like a multi-tool portal.
+
+## UX rules
+
+1. **Answer first.** Show the verdict before asking the user to process detail.
+2. **One dominant action.** Do not make multiple product surfaces compete on the same screen.
+3. **Progressive depth.** Start simple; reveal deeper evidence when requested.
+4. **Evidence without overload.** Keep sources visible and trustworthy without turning the page into a raw database.
+5. **Career context first.** Study, programs, jobs, maps, legal requirements, cities, and other data are subordinate to the career being evaluated.
+
+## Feature admission test
+
+A feature belongs in the initial product only if it clearly helps the user either:
+
+- decide whether a career is worth pursuing, or
+- take the next practical step toward entering that career.
+
+Otherwise, keep it secondary or defer it.
