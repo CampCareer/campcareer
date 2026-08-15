@@ -10,6 +10,7 @@ import { localizePath } from "@/lib/i18n/config"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { PROGRAM_LEVELS, type ProgramSearchFilters } from "@/lib/programs/program-search"
 import { cn } from "@/lib/utils"
+import { getCareerRoute } from "@/lib/workspace/occupation-routes"
 import { useProgramNavigation } from "./programs-navigation"
 
 const PUBLISHED_PROGRAM_COUNTRIES = new Set([
@@ -94,9 +95,8 @@ export function ProgramsHeader({
     filters.career !== "all" &&
     filters.career === career.id,
   )
-  const careerHref = career
-    ? localizePath(`/career?country=${encodeURIComponent(filters.country)}&occupation=${encodeURIComponent(career.id)}`, locale)
-    : null
+  const careerRoute = career ? getCareerRoute(filters.country, career.id) : null
+  const careerHref = careerRoute ? localizePath(careerRoute.path, locale) : null
 
   useEffect(() => setQuery(filters.q), [filters.q])
   useEffect(() => {
