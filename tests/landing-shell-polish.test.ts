@@ -5,6 +5,7 @@ import test from "node:test"
 const landing = readFileSync("src/app/(workspace)/home/home-hub.tsx", "utf8")
 const search = readFileSync("src/app/(workspace)/home/home-search-form.tsx", "utf8")
 const topNav = readFileSync("src/components/layout/top-nav.tsx", "utf8")
+const workspaceTopbar = readFileSync("src/components/workspace/workspace-topbar.tsx", "utf8")
 const shell = readFileSync("src/components/layout/layout-shell.tsx", "utf8")
 const canonicalCareer = readFileSync("src/app/(workspace)/career/[country]/[career]/page.tsx", "utf8")
 const legacyCareer = readFileSync("src/app/(workspace)/career/career-result-page.tsx", "utf8")
@@ -26,8 +27,11 @@ test("landing dropdowns close when the user clicks outside the active selector",
 })
 
 test("public navigation and Career pages keep one opaque white canvas", () => {
-  assert.match(topNav, /border-\[hsl\(var\(--cc-border\)\)\] bg-white/)
+  assert.match(topNav, /h-16 border-b border-\[hsl\(var\(--cc-border\)\)\] bg-white/)
   assert.doesNotMatch(topNav, /bg-white\/95|backdrop-blur/)
+  assert.match(workspaceTopbar, /h-16 border-b border-\[hsl\(var\(--cc-border\)\)\] bg-white/)
+  assert.match(workspaceTopbar, /mx-auto flex h-16 w-full max-w-\[1240px\]/)
+  assert.doesNotMatch(workspaceTopbar, /bg-white\/95|backdrop-blur/)
   assert.match(shell, /flex min-h-screen flex-col bg-white/)
   assert.match(shell, /<main className="flex-1 bg-white">/)
   assert.match(canonicalCareer, /cc-result-motion min-h-\[calc\(100vh-4rem\)\] bg-white/)
