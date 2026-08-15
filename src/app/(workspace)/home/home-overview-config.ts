@@ -13,6 +13,9 @@ export type OverviewSearchErrors = Partial<Record<keyof OverviewSearchValues, st
 export type OverviewOpenMenu = keyof OverviewSearchValues | null
 export type SearchParamsLike = Pick<URLSearchParams, "get">
 
+// Retained only so legacy URLs can be parsed and rejected cleanly. The public
+// Career Page requires a concrete country because CampCareer Score is always
+// evaluated in a country-specific labour market.
 export const NOT_SURE_COUNTRY: OverviewOption = { value: "not-sure", label: "아직 모르겠어요" }
 
 // The default arrays also validate URL values. Visible labels come from the
@@ -32,10 +35,8 @@ export const OCCUPATION_OPTIONS: readonly OverviewOption[] = [
 ]
 
 export function getCountryOptions(locale: CareerCheckLocale): readonly OverviewOption[] {
-  return [
-    { value: NOT_SURE_COUNTRY.value, label: locale === "ko" ? "아직 모르겠어요" : "I'm not sure yet" },
-    ...LAUNCH_COUNTRIES.map((country) => ({ value: country.code, label: country.name })),
-  ]
+  void locale
+  return LAUNCH_COUNTRIES.map((country) => ({ value: country.code, label: country.name }))
 }
 
 export function getOccupationOptions(locale: CareerCheckLocale): readonly OverviewOption[] {
@@ -67,7 +68,9 @@ export function readOverviewSearchValues(searchParams: SearchParamsLike): Overvi
 
 export function validateOverviewSearch(values: OverviewSearchValues, locale: CareerCheckLocale = "ko"): OverviewSearchErrors {
   const errors: OverviewSearchErrors = {}
-  if (!values.country) errors.country = locale === "ko" ? "가고 싶은 나라를 선택해 주세요" : "Choose a destination."
+  if (!values.country || values.country === NOT_SURE_COUNTRY.value) {
+    errors.country = locale === "ko" ? "평가할 국가를 선택해 주세요" : "Choose a country to evaluate."
+  }
   if (!values.occupation) errors.occupation = locale === "ko" ? "하고 싶은 일을 선택해 주세요" : "Choose an occupation."
   return errors
 }

@@ -5,7 +5,14 @@ import sitemap from "../src/app/sitemap"
 import { AU_PROGRAMMATIC_STUDY_PAGES } from "../src/lib/programs/au-programmatic-seo"
 import { INDEXABLE_AU_PROGRAMS } from "../src/lib/programs/program-routes"
 import { AU_OCCUPATION_STATE_PAGES } from "../src/lib/workspace/au-occupation-state-seo"
-import { INDEXABLE_OCCUPATION_PROFILES } from "../src/lib/workspace/occupation-routes"
+import {
+  SCORE_READY_CAREER_PROFILES,
+  isCareerScoreReady,
+} from "../src/lib/workspace/career-coverage"
+import {
+  INDEXABLE_OCCUPATION_PROFILES,
+  getIndexableCareerRoute,
+} from "../src/lib/workspace/occupation-routes"
 import { getCompletedVisaCatalog } from "../src/lib/workspace/visa-catalog-complete"
 import { getIndexableVisaRoutes } from "../src/lib/workspace/visa-routes"
 import { INDEXABLE_INSTITUTION_PATHS } from "../src/lib/institutions/institution-seo"
@@ -18,7 +25,8 @@ function sitemapUrls() {
 
 test("final SEO publication inventories remain intentionally bounded", () => {
   assert.equal(INDEXABLE_AU_PROGRAMS.length, 53)
-  assert.equal(INDEXABLE_OCCUPATION_PROFILES.length, 16)
+  assert.equal(SCORE_READY_CAREER_PROFILES.length, 11)
+  assert.equal(INDEXABLE_OCCUPATION_PROFILES.length, SCORE_READY_CAREER_PROFILES.length)
   assert.equal(AU_PROGRAMMATIC_STUDY_PAGES.length, 42)
   assert.equal(AU_OCCUPATION_STATE_PAGES.length, 40)
   assert.equal(INDEXABLE_INSTITUTION_PATHS.length, 74)
@@ -26,6 +34,24 @@ test("final SEO publication inventories remain intentionally bounded", () => {
   const visaRoutes = getIndexableVisaRoutes(getCompletedVisaCatalog())
   assert.ok(visaRoutes.length >= 100)
   assert.equal(new Set(visaRoutes.map((route) => route.path)).size, visaRoutes.length)
+})
+
+test("Career Score and indexing follow the strict Ready coverage pool", () => {
+  assert.equal(isCareerScoreReady("AU", "care-worker"), true)
+  assert.equal(isCareerScoreReady("AU", "welder"), true)
+  assert.equal(isCareerScoreReady("AU", "pharmacist"), true)
+  assert.equal(isCareerScoreReady("AU", "radiographer"), true)
+  assert.equal(isCareerScoreReady("AU", "medical-laboratory-technician"), true)
+  assert.equal(isCareerScoreReady("AU", "auditor"), false)
+  assert.equal(isCareerScoreReady("AU", "bricklayer"), false)
+
+  assert.ok(getIndexableCareerRoute("AU", "care-worker"))
+  assert.ok(getIndexableCareerRoute("AU", "welder"))
+  assert.ok(getIndexableCareerRoute("AU", "pharmacist"))
+  assert.ok(getIndexableCareerRoute("AU", "radiographer"))
+  assert.ok(getIndexableCareerRoute("AU", "medical-laboratory-technician"))
+  assert.equal(getIndexableCareerRoute("AU", "auditor"), null)
+  assert.equal(getIndexableCareerRoute("AU", "bricklayer"), null)
 })
 
 test("sitemap contains every explicit SEO inventory exactly once", () => {

@@ -1,35 +1,36 @@
 import { CANONICAL_CAREERS } from "@/data/career-comparison-catalog"
-import { getLaunchCountry, type LaunchCountryCode } from "@/data/launch-countries"
+import {
+  getLaunchCountry,
+  getLaunchCountryBySlug,
+  type LaunchCountry,
+  type LaunchCountryCode,
+} from "@/data/launch-countries"
+import { SCORE_READY_CAREER_PROFILES } from "./career-coverage"
 
-export type IndexableOccupationProfile = {
+export type IndexableCareerProfile = {
   countryCode: LaunchCountryCode
   careerId: string
   sourceCheckedAt: string
 }
 
-/** Explicit SEO publication inventory. Only source-reviewed AU profiles are listed. */
-export const INDEXABLE_OCCUPATION_PROFILES: readonly IndexableOccupationProfile[] = [
-  { countryCode: "AU", careerId: "bricklayer", sourceCheckedAt: "2026-08-07" },
-  { countryCode: "AU", careerId: "care-worker", sourceCheckedAt: "2026-08-07" },
-  { countryCode: "AU", careerId: "carpenter", sourceCheckedAt: "2026-08-06" },
-  { countryCode: "AU", careerId: "construction-manager", sourceCheckedAt: "2026-08-07" },
-  { countryCode: "AU", careerId: "electrician", sourceCheckedAt: "2026-08-06" },
-  { countryCode: "AU", careerId: "hvac-technician", sourceCheckedAt: "2026-08-07" },
-  { countryCode: "AU", careerId: "medical-laboratory-technician", sourceCheckedAt: "2026-08-08" },
-  { countryCode: "AU", careerId: "midwife", sourceCheckedAt: "2026-08-07" },
-  { countryCode: "AU", careerId: "occupational-therapist", sourceCheckedAt: "2026-08-08" },
-  { countryCode: "AU", careerId: "pharmacist", sourceCheckedAt: "2026-08-08" },
-  { countryCode: "AU", careerId: "physiotherapist", sourceCheckedAt: "2026-08-07" },
-  { countryCode: "AU", careerId: "plumber", sourceCheckedAt: "2026-08-07" },
-  { countryCode: "AU", careerId: "radiographer", sourceCheckedAt: "2026-08-08" },
-  { countryCode: "AU", careerId: "registered-nurse", sourceCheckedAt: "2026-08-06" },
-  { countryCode: "AU", careerId: "wall-floor-tiler", sourceCheckedAt: "2026-08-07" },
-  { countryCode: "AU", careerId: "welder", sourceCheckedAt: "2026-08-07" },
-] as const
+/** @deprecated Use IndexableCareerProfile. Kept while legacy /occupation URLs redirect. */
+export type IndexableOccupationProfile = IndexableCareerProfile
+
+/**
+ * Explicit SEO publication inventory.
+ *
+ * For the current launch, every score-ready Career is intended to be indexed.
+ * Keep the type separate so indexing can become a deliberate subset later
+ * without changing public Score readiness.
+ */
+export const INDEXABLE_CAREER_PROFILES: readonly IndexableCareerProfile[] = SCORE_READY_CAREER_PROFILES
+
+/** @deprecated Use INDEXABLE_CAREER_PROFILES. */
+export const INDEXABLE_OCCUPATION_PROFILES = INDEXABLE_CAREER_PROFILES
 
 const careerById = new Map(CANONICAL_CAREERS.map((career) => [career.id, career]))
 const indexableProfileKeys = new Set(
-  INDEXABLE_OCCUPATION_PROFILES.map(({ countryCode, careerId }) => `${countryCode}:${careerId}`),
+  INDEXABLE_CAREER_PROFILES.map(({ countryCode, careerId }) => `${countryCode}:${careerId}`),
 )
 
 export function normalizeOccupationCountryCode(value: string) {
@@ -37,26 +38,56 @@ export function normalizeOccupationCountryCode(value: string) {
   return normalized === "GB" ? "UK" : normalized
 }
 
-export function occupationCanonicalPath(countryCode: string, careerId: string) {
-  return `/occupation/${normalizeOccupationCountryCode(countryCode).toLowerCase()}/${careerId.trim().toLowerCase()}`
+function resolveCareerCountry(value: string): LaunchCountry | null {
+  const trimmed = value.trim()
+  if (!trimmed) return null
+  return getLaunchCountry(normalizeOccupationCountryCode(trimmed))
+    ?? getLaunchCountryBySlug(trimmed.toLowerCase())
 }
 
-export function getIndexableOccupationRoute(countryCode: string, careerId: string) {
-  const normalizedCountry = normalizeOccupationCountryCode(countryCode)
+/**
+ * Stable public Career identity.
+ *
+ * Database/data joins keep `countryCode + careerId`; the URL projects the
+ * country to its human-readable launch slug so routing and storage can evolve
+ * independently.
+ */
+export function getCareerRoute(country: string, careerId: string) {
+  const resolvedCountry = resolveCareerCountry(country)
   const normalizedCareerId = careerId.trim().toLowerCase()
-  const country = getLaunchCountry(normalizedCountry)
   const career = careerById.get(normalizedCareerId)
-  if (!country || !career) return null
-  if (!indexableProfileKeys.has(`${country.code}:${career.id}`)) return null
+  if (!resolvedCountry || !career) return null
 
-  const profile = INDEXABLE_OCCUPATION_PROFILES.find(
-    (item) => item.countryCode === country.code && item.careerId === career.id,
+  return {
+    country: resolvedCountry,
+    career,
+    path: `/career/${resolvedCountry.slug}/${career.id}`,
+  }
+}
+
+export function careerCanonicalPath(country: string, careerId: string) {
+  const route = getCareerRoute(country, careerId)
+  if (!route) throw new Error(`Unsupported Career route: ${country}/${careerId}`)
+  return route.path
+}
+
+export function getIndexableCareerRoute(country: string, careerId: string) {
+  const route = getCareerRoute(country, careerId)
+  if (!route) return null
+  if (!indexableProfileKeys.has(`${route.country.code}:${route.career.id}`)) return null
+
+  const profile = INDEXABLE_CAREER_PROFILES.find(
+    (item) => item.countryCode === route.country.code && item.careerId === route.career.id,
   )!
 
   return {
-    country,
-    career,
+    ...route,
     sourceCheckedAt: profile.sourceCheckedAt,
-    path: occupationCanonicalPath(country.code, career.id),
   }
 }
+
+/** @deprecated Legacy name. Canonical URLs now live under /career. */
+export const occupationCanonicalPath = careerCanonicalPath
+
+/** @deprecated Legacy name. Canonical URLs now live under /career. */
+export const getIndexableOccupationRoute = getIndexableCareerRoute

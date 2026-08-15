@@ -1,23 +1,16 @@
-import { DEFAULT_LOCALE, localeFromPathname, localizePath, withoutLocalePrefix, type LocaleOption } from "@/lib/i18n/config"
+import { DEFAULT_LOCALE, localizePath, type LocaleOption } from "@/lib/i18n/config"
 import { getSafeNextPath } from "@/lib/auth/safe-next"
 
 /**
- * New members need the initial personalisation once. Returning members should
- * resume Home instead of being sent through the same setup after every sign-in.
- * An explicit in-app onboarding link still works while the user has a session.
+ * Authentication is a retention layer, not an onboarding gateway.
+ *
+ * - An explicit safe `next` destination always wins.
+ * - Without `next`, return to public Career discovery.
+ * - Onboarding is reached only when the user explicitly requested it.
  */
 export function getPostLoginDestination(
   requestedNext: string | null | undefined,
-  hasCompletedPersonalisation: boolean,
   fallbackLocale: LocaleOption = DEFAULT_LOCALE,
 ) {
-  const next = getSafeNextPath(requestedNext, localizePath("/home", fallbackLocale))
-  const locale = localeFromPathname(next) ?? fallbackLocale
-  const bareNextPath = withoutLocalePrefix(next).split("?")[0]
-
-  if (hasCompletedPersonalisation) {
-    return bareNextPath === "/onboarding" ? localizePath("/home", locale) : next
-  }
-
-  return bareNextPath === "/onboarding" ? next : localizePath("/onboarding", locale)
+  return getSafeNextPath(requestedNext, localizePath("/", fallbackLocale))
 }

@@ -2,8 +2,7 @@ import assert from "node:assert/strict"
 import test from "node:test"
 import { isWorkspaceRoute, WORKSPACE_NAV_ITEMS } from "../src/lib/workspace/navigation"
 
-test("isWorkspaceRoute returns true for workspace routes", () => {
-  assert.equal(isWorkspaceRoute("/"), true)
+test("isWorkspaceRoute returns true for active workspace routes", () => {
   assert.equal(isWorkspaceRoute("/compare"), true)
   assert.equal(isWorkspaceRoute("/countries"), true)
   assert.equal(isWorkspaceRoute("/cities"), true)
@@ -23,7 +22,8 @@ test("isWorkspaceRoute returns true for workspace sub-paths", () => {
   assert.equal(isWorkspaceRoute("/institutions/au/university-of-sydney"), true)
 })
 
-test("isWorkspaceRoute returns false for standalone tools and public pages", () => {
+test("isWorkspaceRoute returns false for dormant root, standalone tools and public pages", () => {
+  assert.equal(isWorkspaceRoute("/"), false)
   assert.equal(isWorkspaceRoute("/home"), false)
   assert.equal(isWorkspaceRoute("/maps"), false)
   assert.equal(isWorkspaceRoute("/map"), false)

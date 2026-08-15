@@ -11,8 +11,8 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-geist-sans)", ...fontFamily.sans],
-        display: ["var(--font-fraunces)", "var(--font-geist-sans)", ...fontFamily.serif],
+        sans: ["var(--font-inter)", ...fontFamily.sans],
+        display: ["var(--font-inter)", ...fontFamily.sans],
         mono: ["var(--font-geist-mono)", ...fontFamily.mono],
         pixel: ["var(--font-press-start)", "'Press Start 2P'", "monospace"],
       },
@@ -22,6 +22,19 @@ const config: Config = {
           foreground: "hsl(var(--brand-foreground))",
           press: "hsl(var(--brand-press))",
           tint: "hsl(var(--brand-tint))",
+          bright: "hsl(var(--brand-bright))",
+        },
+        campcareer: {
+          ink: "hsl(var(--cc-ink))",
+          "ink-secondary": "hsl(var(--cc-ink-secondary))",
+          muted: "hsl(var(--cc-muted))",
+          border: "hsl(var(--cc-border))",
+          canvas: "hsl(var(--cc-canvas))",
+          surface: "hsl(var(--cc-surface))",
+          "social-ink": "hsl(var(--cc-social-ink))",
+          success: "hsl(var(--cc-success))",
+          caution: "hsl(var(--cc-caution))",
+          negative: "hsl(var(--cc-negative))",
         },
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",

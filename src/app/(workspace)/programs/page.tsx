@@ -153,7 +153,7 @@ function Pagination({
       {page > 1 ? (
         <Link
           href={buildProgramsUrl(filters, { page: page - 1 })}
-          className="rounded-lg border border-[#deddd8] px-3 py-2 text-[12px] font-semibold text-[#4d4c48] transition hover:border-[#3e7a2e]/50 hover:text-[#3e7a2e]"
+          className="rounded-lg border border-[#deddd8] px-3 py-2 text-[12px] font-semibold text-[#4d4c48] transition hover:border-brand/40 hover:text-brand"
         >
           Previous
         </Link>
@@ -164,7 +164,7 @@ function Pagination({
       {page < pageCount ? (
         <Link
           href={buildProgramsUrl(filters, { page: page + 1 })}
-          className="rounded-lg bg-[#3e7a2e] px-3.5 py-2 text-[12px] font-semibold text-white transition hover:bg-[#326625]"
+          className="rounded-lg bg-brand px-3.5 py-2 text-[12px] font-semibold text-white transition hover:bg-[hsl(var(--brand-press))]"
         >
           Next
         </Link>
@@ -178,7 +178,7 @@ function Pagination({
 function EmptyResults({ filters }: { filters: ProgramSearchFilters }) {
   return (
     <div className="mt-4 flex min-h-72 flex-col items-center justify-center rounded-xl border border-dashed border-[#dcdad4] bg-[#fbfbf9] p-8 text-center">
-      <span className="grid size-12 place-items-center rounded-2xl bg-[#edf5ea] text-[#3e7a2e]">
+      <span className="grid size-12 place-items-center rounded-2xl bg-[hsl(var(--brand-tint))] text-brand">
         <GraduationCap className="size-5" />
       </span>
       <h2 className="mt-4 text-[17px] font-semibold text-[#1b1b1b]">No programs match these filters</h2>
@@ -200,7 +200,7 @@ function EmptyResults({ filters }: { filters: ProgramSearchFilters }) {
           sort: "recommended",
           page: 1,
         })}
-        className="mt-4 rounded-lg border border-[#cfd9ca] bg-white px-4 py-2 text-[12px] font-semibold text-[#3e7a2e] transition hover:bg-[#edf5ea]"
+        className="mt-4 rounded-lg border border-blue-200 bg-white px-4 py-2 text-[12px] font-semibold text-brand transition hover:bg-[hsl(var(--brand-tint))]"
       >
         Clear filters
       </Link>
@@ -218,7 +218,7 @@ function CountryComingSoon({ countryCode }: { countryCode: string }) {
       <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#2563eb]">{country?.name ?? countryCode}</p>
       <h2 className="mt-2 text-[22px] font-semibold tracking-[-0.02em] text-[#1b1b1b]">Program data is being prepared</h2>
       <p className="mt-3 max-w-lg text-[13px] leading-6 text-[#6f6d68]">Published catalogues are available after programme identities, official sources and international-admission evidence pass review.</p>
-      <Link href="/programs" className="mt-5 rounded-lg bg-[#3e7a2e] px-4 py-2.5 text-[12.5px] font-semibold text-white transition hover:bg-[#326625]">Browse Australia</Link>
+      <Link href="/programs" className="mt-5 rounded-lg bg-brand px-4 py-2.5 text-[12.5px] font-semibold text-white transition hover:bg-[hsl(var(--brand-press))]">Browse Australia</Link>
     </div>
   )
 }

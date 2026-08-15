@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getCareerMarketInsight } from "@/lib/workspace/career-market-read"
+import { getPublicCareerMarketInsight } from "@/lib/workspace/public-career-market-read"
 
 export const dynamic = "force-dynamic"
 
@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const insight = await getCareerMarketInsight({ countryCode: country, careerId: career })
+    const insight = await getPublicCareerMarketInsight(country, career)
     if (!insight) return NextResponse.json({ error: "This occupation could not be found." }, { status: 404 })
     return NextResponse.json(insight)
   } catch (error) {

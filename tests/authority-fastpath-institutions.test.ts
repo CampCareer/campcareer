@@ -15,7 +15,9 @@ const seo = read("src/lib/institutions/institution-seo-authority-fastpath.ts")
 const sitemap = read("src/app/sitemap.ts")
 
 test("authority fastpath publishes 40 universities and keeps programme linkage pending", () => {
-  const cohortRows = migration.match(/\('(FI|NO|JP|KR)','/g) ?? []
+  const cohort = migration.match(/insert into tmp_authority_fastpath values\n([\s\S]*?);\n\ninsert into catalog\.institutions/)
+  assert.ok(cohort)
+  const cohortRows = cohort[1].match(/\('(FI|NO|JP|KR)','/g) ?? []
   assert.equal(cohortRows.length, 40)
   assert.match(migration, /Expected 40 authority fastpath explorer rows/)
   assert.match(migration, /program_count<>0/)

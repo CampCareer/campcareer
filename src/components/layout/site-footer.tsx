@@ -2,10 +2,8 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useEffect, useMemo, useState } from "react"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
-import { localeFromPathname, localizePath, withoutLocalePrefix, type LocaleOption } from "@/lib/i18n/config"
-import { createClient } from "@/lib/supabase-client"
+import { localeFromPathname, localizePath, type LocaleOption } from "@/lib/i18n/config"
 import { cn } from "@/lib/utils"
 
 export function SiteFooter({ className }: { className?: string }) {
@@ -13,37 +11,26 @@ export function SiteFooter({ className }: { className?: string }) {
   const pathname = usePathname()
   const pathLocale = localeFromPathname(pathname) ?? locale
   const isKo = pathLocale === "ko"
-  const supabase = useMemo(() => createClient(), [])
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const isLanding = withoutLocalePrefix(pathname) === "/"
-
-  useEffect(() => {
-    void supabase.auth.getUser().then(({ data }) => setIsAuthenticated(Boolean(data.user)))
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => setIsAuthenticated(Boolean(session?.user)))
-    return () => subscription.unsubscribe()
-  }, [supabase])
-
-  const logoDestination = isAuthenticated && !isLanding
-    ? localizePath("/home", pathLocale)
-    : localizePath("/", pathLocale)
 
   return (
-    <footer className={cn("border-t border-slate-200 bg-slate-50", className)}>
+    <footer className={cn("border-t border-[hsl(var(--cc-border))] bg-white", className)}>
       <div className="mx-auto max-w-6xl px-5 py-12 sm:px-6 sm:py-16">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           <div>
-            <Link href={logoDestination} className="campcareer-wordmark text-slate-900">campcareer</Link>
-            <p className="mt-3 text-sm leading-6 text-slate-500">{isKo ? "목적지와 하고 싶은 일에 필요한 검증된 유학·취업 정보를 찾습니다." : "Find source-backed study and work information for the destination and career you are considering."}</p>
+            <Link href={localizePath("/", pathLocale)} className="campcareer-wordmark text-[hsl(var(--cc-ink))]">campcareer</Link>
+            <p className="mt-3 max-w-sm text-sm leading-6 text-[hsl(var(--cc-muted))]">
+              {isKo ? "커리어의 가치를 판단하고, 그곳까지 가는 실제 경로를 보여드립니다." : "Know if a career is worth it, then see the path to get there."}
+            </p>
           </div>
           <div>
-            <h4 className="text-sm font-semibold text-slate-900">{isKo ? "경로" : "Routes"}</h4>
+            <h4 className="text-sm font-semibold text-[hsl(var(--cc-ink))]">{isKo ? "제품" : "Product"}</h4>
             <ul className="mt-3 space-y-2.5">
-              <FooterLink href={isAuthenticated ? "/home#home-search" : "/"} locale={pathLocale} canonical={!isAuthenticated}>{isKo ? "경로 검색" : "Search routes"}</FooterLink>
-              <FooterLink href="/maps" locale={pathLocale} canonical>{isKo ? "지도" : "Maps"}</FooterLink>
+              <FooterLink href="/" locale={pathLocale}>{isKo ? "커리어 평가" : "Evaluate a career"}</FooterLink>
+              <FooterLink href="/programs" locale={pathLocale}>{isKo ? "프로그램" : "Programs"}</FooterLink>
             </ul>
           </div>
           <div>
-            <h4 className="text-sm font-semibold text-slate-900">{isKo ? "정보" : "Info"}</h4>
+            <h4 className="text-sm font-semibold text-[hsl(var(--cc-ink))]">{isKo ? "정보" : "Info"}</h4>
             <ul className="mt-3 space-y-2.5">
               <FooterLink href="/sources" locale={pathLocale}>{isKo ? "출처" : "Sources"}</FooterLink>
               <FooterLink href="/methodology" locale={pathLocale}>{isKo ? "방법론" : "Methodology"}</FooterLink>
@@ -52,15 +39,15 @@ export function SiteFooter({ className }: { className?: string }) {
             </ul>
           </div>
         </div>
-        <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-slate-200 pt-6 text-xs text-slate-400 sm:flex-row">
+        <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-[hsl(var(--cc-border))] pt-6 text-xs text-[hsl(var(--cc-muted))] sm:flex-row">
           <span>&copy; {new Date().getFullYear()} CampCareer</span>
-          <span>{isKo ? "검색부터, 근거를 바탕으로" : "Search first. Decide with evidence."}</span>
+          <span>{isKo ? "짧은 판단. 명확한 근거. 다음 행동." : "Short verdicts. Plain evidence. Clear next steps."}</span>
         </div>
       </div>
     </footer>
   )
 }
 
-function FooterLink({ href, locale, canonical = false, children }: { href: string; locale: LocaleOption; canonical?: boolean; children: React.ReactNode }) {
-  return <li><Link href={canonical ? href : localizePath(href, locale)} className="text-sm text-slate-500 transition hover:text-slate-900">{children}</Link></li>
+function FooterLink({ href, locale, children }: { href: string; locale: LocaleOption; children: React.ReactNode }) {
+  return <li><Link href={localizePath(href, locale)} className="text-sm text-[hsl(var(--cc-muted))] transition hover:text-[hsl(var(--cc-ink))]">{children}</Link></li>
 }

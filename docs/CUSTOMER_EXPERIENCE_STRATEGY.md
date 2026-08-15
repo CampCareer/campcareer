@@ -1,14 +1,26 @@
 # CampCareer Customer Experience Strategy
 
-Status: Active working strategy
+Status: **Superseded for the initial product where it conflicts with the current doctrine and information architecture**
 
-Updated: 2026-08-09
+Updated: 2026-08-14
 
-## The feeling we are designing for
+The current initial-product experience is governed by:
+
+- [PRODUCT_DOCTRINE.md](./PRODUCT_DOCTRINE.md)
+- [product-core.md](./product-core.md)
+- [INITIAL_INFORMATION_ARCHITECTURE.md](./INITIAL_INFORMATION_ARCHITECTURE.md)
+
+The earlier Home-first, passport/destination/career-first, and broad workspace flow below is retained as historical context only. It must not be used to override the career-first initial product architecture.
+
+---
+
+## Historical strategy retained for context
+
+## The feeling we were designing for
 
 "This is not another school or visa list. It is helping me work out the safest, strongest future I can realistically build abroad."
 
-## Experience principles
+## Earlier experience principles
 
 - Start with curiosity, not commitment.
 - Give value before asking for detailed personal information or login.
@@ -17,7 +29,7 @@ Updated: 2026-08-09
 - Treat uncertainty honestly. Confidence belongs beside the score, never inside hidden logic.
 - Make exploration safe: users can browse careers, cities, institutions, and programmes without signing in.
 
-## Interaction flow
+## Earlier interaction flow
 
 ### 1. Home: "Where could I build a career?"
 
@@ -47,7 +59,7 @@ Present a small number of ranked routes. Each route explains:
 
 Use account creation to save scenarios, compare alternatives, receive source/policy alerts, and revisit decisions. A secondary route lets non-sign-in users continue exploring relevant public pages.
 
-## Working sequence for the team
+## Earlier working sequence for the team
 
 1. Agree the user promise and score vocabulary.
 2. Design the Home-to-General-Overview flow for every input state.
@@ -57,7 +69,7 @@ Use account creation to save scenarios, compare alternatives, receive source/pol
 6. Implement one state at a time and test it on mobile first.
 7. Update the strategy only when user evidence or data capability changes the flow.
 
-## Non-negotiables
+## Principles that remain valid
 
 - Never call a score a job probability or visa approval probability.
 - Never require login before a user sees useful evidence.

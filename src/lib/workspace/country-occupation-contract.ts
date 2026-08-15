@@ -1,3 +1,5 @@
+import type { CampCareerScore } from "@/lib/campcareer-score"
+
 export type OpportunityScoreBreakdown = {
   shortage: number
   vacancyIntensity: number
@@ -26,10 +28,14 @@ export type CountryOccupationMetric = {
   vacancyYoyPct: number | null
   employmentGrowth5yPct: number | null
   employmentGrowth10yPct: number | null
-  opportunityScore: number
+  /** Compatibility total used by older surfaces. It now mirrors campCareerScore.total. */
+  opportunityScore: number | null
+  campCareerScore: CampCareerScore | null
   scoreMethodologyVersion: string
   scoreStatus: "provisional" | "reviewed" | "published"
+  /** Internal evidence details. The legacy nine-factor score is not a public CampCareer score. */
   scoreEvidence: Record<string, unknown>
+  /** Internal evidence-engine components retained for audit/backward compatibility. */
   score: OpportunityScoreBreakdown
   sourceCheckedAt: string | null
 }
@@ -103,6 +109,7 @@ export type CountryOccupationProfile = {
   programLinks: CountryOccupationProgramLink[]
 }
 
+/** Internal evidence-engine maxima. These are not the public CampCareer Score dimensions. */
 export const OPPORTUNITY_SCORE_MAXIMA: OpportunityScoreBreakdown = {
   shortage: 20,
   vacancyIntensity: 15,

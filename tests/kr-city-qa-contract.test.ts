@@ -22,13 +22,13 @@ test("South Korea QA keeps one exact six-city publication and compare cohort", (
 test("South Korea QA preserves strict programme locality boundaries", () => {
   assert.match(linkage, /KR strict city programme linkage expected 182 rows/)
   assert.match(linkage, /KR programme source-city mismatch detected/)
-  assert.match(linkage, /KR non-Tier-A city leakage detected/)
+  assert.match(linkage, /KR later-candidate programme leakage detected/)
   assert.match(linkage, /programme_assignment_verified/)
   assert.match(compareMatrix, /no inherited Seoul leakage from Suwon or Yongin/)
 })
 
 test("South Korea QA preserves five-metric methodology guards", () => {
-  assert.match(metrics, /KR Tier A metrics expected 30 verified rows/)
+  assert.match(metrics, /KR Phase 4 expected 30 verified metric rows/)
   assert.match(metrics, /ranking_safe/)
   assert.match(metrics, /city_specific/)
   assert.match(metrics, /not_shortage_ranking/)

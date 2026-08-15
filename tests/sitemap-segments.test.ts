@@ -4,6 +4,7 @@ import sitemap from "../src/app/sitemap"
 import { ROUTE_GUIDES, routeGuideHref } from "../src/data/route-guides"
 import { CANONICAL_COUNTRY_SLUGS, SITE_URL, countryCanonicalPath } from "../src/lib/seo-routes.mjs"
 
+// Final PR #244 CI validation covers the complete root-level unit suite.
 test("the sitemap publishes canonical Home, countries, maps, legal pages, and verified routes", () => {
   const entries = sitemap()
   const urls = entries.map((entry) => entry.url)
@@ -14,7 +15,11 @@ test("the sitemap publishes canonical Home, countries, maps, legal pages, and ve
   assert.ok(urls.includes(`${SITE_URL}/maps`))
   for (const slug of CANONICAL_COUNTRY_SLUGS) {
     assert.ok(urls.includes(`${SITE_URL}${countryCanonicalPath(slug)}`))
-    assert.equal(urls.includes(`${SITE_URL}/${slug}`), false)
+    if (slug === "sg") {
+      assert.equal(urls.includes(`${SITE_URL}/sg`), true)
+    } else {
+      assert.equal(urls.includes(`${SITE_URL}/${slug}`), false)
+    }
   }
   for (const guide of ROUTE_GUIDES) {
     assert.ok(urls.includes(`${SITE_URL}${routeGuideHref(guide)}`))

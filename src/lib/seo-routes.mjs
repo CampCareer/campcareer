@@ -39,8 +39,9 @@ export function programsCanonicalPath(countryCode = "AU") {
 
 // Exact legacy routes with a verified replacement. Keep these separate from
 // broad retired funnels so permanent SEO redirects never swallow active child routes.
+// /sg is an active Singapore study-destination root, so it is intentionally not legacy.
 export const LEGACY_SEO_REDIRECTS = Object.freeze([
-  ...CANONICAL_COUNTRY_SLUGS.map((slug) => ({
+  ...CANONICAL_COUNTRY_SLUGS.filter((slug) => slug !== "sg").map((slug) => ({
     source: `/${slug}`,
     destination: countryCanonicalPath(slug),
     permanent: true,

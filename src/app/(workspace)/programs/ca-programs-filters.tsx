@@ -33,14 +33,14 @@ function FilterButton({ active, label, onClick }: { active: boolean; label: stri
       className={cn(
         "flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-[12.5px] transition",
         active
-          ? "bg-[#edf5ea] font-semibold text-[#3e7a2e]"
+          ? "bg-[hsl(var(--brand-tint))] font-semibold text-brand"
           : "text-[#6f6d68] hover:bg-[#f7f7f5] hover:text-[#1b1b1b]",
       )}
     >
       <span
         className={cn(
           "grid size-4 shrink-0 place-items-center rounded border",
-          active ? "border-[#3e7a2e] bg-[#3e7a2e] text-white" : "border-[#d9d8d3] bg-white",
+          active ? "border-brand bg-brand text-white" : "border-[#d9d8d3] bg-white",
         )}
       >
         {active && <Check className="size-3" />}
@@ -70,7 +70,7 @@ function FiltersContent({ filters }: { filters: ProgramSearchFilters }) {
     <>
       <div className="flex items-center justify-between border-b border-[#ecebe7] pb-4">
         <div className="flex items-center gap-2">
-          <SlidersHorizontal className="size-4 text-[#3e7a2e]" />
+          <SlidersHorizontal className="size-4 text-brand" />
           <h2 className="text-[14px] font-semibold text-[#1b1b1b]">
             {locale === "ko" ? "캐나다 필터" : "Canada filters"}
           </h2>
@@ -78,7 +78,7 @@ function FiltersContent({ filters }: { filters: ProgramSearchFilters }) {
         <button
           type="button"
           onClick={clear}
-          className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#8a8882] transition hover:text-[#3e7a2e]"
+          className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#8a8882] transition hover:text-brand"
         >
           <RotateCcw className="size-3" />
           {locale === "ko" ? "초기화" : "Clear"}
@@ -86,13 +86,13 @@ function FiltersContent({ filters }: { filters: ProgramSearchFilters }) {
       </div>
 
       <FilterSection
-        icon={<BriefcaseBusiness className="size-3.5 text-[#3e7a2e]" />}
+        icon={<BriefcaseBusiness className="size-3.5 text-brand" />}
         title={locale === "ko" ? "관련 직종" : "Target career"}
       >
         <select
           value={filters.career}
           onChange={(event) => replace({ career: event.target.value })}
-          className="h-10 w-full rounded-lg border border-[#deddd8] bg-white px-3 text-[12px] font-medium text-[#4d4c48] outline-none focus:border-[#3e7a2e]"
+          className="h-10 w-full rounded-lg border border-[#deddd8] bg-white px-3 text-[12px] font-medium text-[#4d4c48] outline-none focus:border-brand focus:ring-2 focus:ring-brand/10"
           aria-label={locale === "ko" ? "관련 직종 선택" : "Select target career"}
         >
           <option value="all">{locale === "ko" ? "80개 직종 전체" : "All 80 target careers"}</option>
@@ -198,7 +198,7 @@ export function CaProgramsSidebar({ filters }: { filters: ProgramSearchFilters }
       <details className="rounded-xl border border-[#e7e6e3] bg-white p-4 lg:hidden">
         <summary className="flex cursor-pointer list-none items-center justify-between text-[13px] font-semibold text-[#1b1b1b]">
           <span className="inline-flex items-center gap-2">
-            <SlidersHorizontal className="size-4 text-[#3e7a2e]" />
+            <SlidersHorizontal className="size-4 text-brand" />
             {locale === "ko" ? "필터 열기" : "Open filters"}
           </span>
           <ChevronDown className="size-4 text-[#8a8882]" />

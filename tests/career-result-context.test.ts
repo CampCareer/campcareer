@@ -2,14 +2,14 @@ import assert from "node:assert/strict"
 import test from "node:test"
 import { buildCareerResultHref, getCareerResultCompareHref } from "../src/app/(workspace)/career/career-result-context"
 
-test("career result href preserves destination and canonical occupation", () => {
+test("career result href uses the canonical country slug and career identifier", () => {
   assert.equal(
     buildCareerResultHref({ country: "AU", occupation: "software-developer" }),
-    "/career?country=AU&occupation=software-developer",
+    "/career/australia/software-developer",
   )
   assert.equal(
     buildCareerResultHref({ country: "AU", occupation: "registered-nurse" }, true),
-    "/career?country=AU&occupation=registered-nurse&personalised=1",
+    "/career/australia/registered-nurse?personalised=1",
   )
 })
 

@@ -1,5 +1,5 @@
 /** Only allow same-origin relative paths to be used as an authentication return URL. */
-export function getSafeNextPath(requestedNext: string | null | undefined, fallback = "/home") {
+export function getSafeNextPath(requestedNext: string | null | undefined, fallback = "/") {
   if (!requestedNext || !requestedNext.startsWith("/") || requestedNext.startsWith("//") || requestedNext.includes("\\")) {
     return fallback
   }

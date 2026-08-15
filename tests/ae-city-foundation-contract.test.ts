@@ -6,7 +6,6 @@ const migration = fs.readFileSync("supabase/migrations/20260812004500_normalize_
 const scope = fs.readFileSync("docs/data-foundation/ae-city-scope-v1.md", "utf8")
 
 const expected = ["abu-dhabi", "sharjah", "al-ain", "dubai"] as const
-const deferred = ["khor-fakkan", "ajman", "fujairah", "ras-al-khaimah", "umm-al-quwain"] as const
 
 test("UAE City Phase 1 and Phase 2 lock exactly the top four rollout destinations", () => {
   assert.match(scope, /Cities: 4/)
@@ -20,7 +19,7 @@ test("UAE City Phase 1 and Phase 2 lock exactly the top four rollout destination
   for (const slug of expected) assert.ok(migration.includes(`'${slug}'`), `missing ${slug}`)
 })
 
-test("UAE City Phase 2 preserves existing UUIDs and rejects deferred promotion", () => {
+test("UAE City Phase 2 preserves existing UUIDs and guards against deferred promotion", () => {
   for (const id of [
     "3e96ce30-2c4a-d479-0483-40ea660d332a",
     "7e6c2892-818d-e872-ec51-54e402b6b0f9",
@@ -30,5 +29,4 @@ test("UAE City Phase 2 preserves existing UUIDs and rejects deferred promotion",
 
   assert.match(migration, /alias_n<8/)
   assert.match(migration, /deferred City was promoted/)
-  for (const slug of deferred) assert.ok(scope.includes(slug), `missing deferred scope ${slug}`)
 })

@@ -10,17 +10,19 @@ const dashboard = fs.readFileSync("src/app/(workspace)/cities/uae-city-dashboard
 const expected = ["abu-dhabi", "sharjah", "al-ain", "dubai"] as const
 const deferred = ["khor-fakkan", "ajman", "fujairah"] as const
 
-test("UAE Phase 5 supports exactly four City routes without publishing SEO allowlist", () => {
-  assert.match(routes, /SUPPORTED_AE_CITY_SLUGS = \["abu-dhabi", "sharjah", "al-ain", "dubai"\] as const/)
-  assert.doesNotMatch(routes, /PUBLISHED_AE_CITY_SLUGS/)
+test("UAE publication exposes exactly four indexed City routes", () => {
+  assert.match(routes, /PUBLISHED_AE_CITY_SLUGS = \["abu-dhabi", "sharjah", "al-ain", "dubai"\] as const/)
+  assert.match(routes, /SUPPORTED_AE_CITY_SLUGS = PUBLISHED_AE_CITY_SLUGS/)
   assert.match(routes, /return `\/cities\/ae\/\$\{slug\}`/)
-  assert.match(page, /SUPPORTED_AE_CITY_SLUGS\.map/)
-  assert.match(page, /robots: \{ index: false, follow: true \}/)
+  assert.match(page, /PUBLISHED_AE_CITY_SLUGS\.map/)
+  assert.match(page, /isPublishedAeCitySlug/)
+  assert.match(page, /robots: \{ index: true, follow: true \}/)
+  assert.match(page, /robots: \{ index: false, follow: false \}/)
   for (const slug of expected) assert.ok(routes.includes(`"${slug}"`), `missing ${slug}`)
-  for (const slug of deferred) assert.ok(!routes.match(new RegExp(`SUPPORTED_AE_CITY_SLUGS[^\n]*${slug}`)), `deferred route leaked: ${slug}`)
+  for (const slug of deferred) assert.ok(!routes.match(new RegExp(`PUBLISHED_AE_CITY_SLUGS[^\n]*${slug}`)), `deferred route leaked: ${slug}`)
 })
 
-test("UAE Phase 5 loader reads only UAE City read models and preserves conservative disclosures", () => {
+test("UAE loader reads only UAE City read models and preserves conservative disclosures", () => {
   assert.match(loader, /city_directory_ae_v1/)
   assert.match(loader, /city_institution_directory_ae_v1/)
   assert.match(loader, /city_programme_directory_ae_v1/)

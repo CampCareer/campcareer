@@ -15,7 +15,7 @@ test("NL programme explorer is enabled on the shared Programs route", () => {
   assert.match(page, /filters\.country === "NL"/)
   assert.match(page, /<NlProgramsExplorer/)
   assert.match(header, /"NL"/)
-  assert.match(header, /Search Netherlands programmes or institutions/)
+  assert.match(header, /Search programs or institutions/)
 })
 
 test("NL programme server reads the canonical Phase 4 detail model, not staging", () => {

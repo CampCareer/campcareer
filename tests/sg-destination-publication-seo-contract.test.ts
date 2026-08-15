@@ -6,6 +6,7 @@ const read = (path: string) => readFileSync(new URL(`../${path}`, import.meta.ur
 const page = read("src/app/sg/page.tsx")
 const sitemap = read("src/app/sitemap.ts")
 const profile = read("src/components/country-profiles/singapore-study-destination-profile.tsx")
+const loader = read("src/lib/destinations/sg-destination-profile.server.ts")
 const decision = read("docs/data-foundation/sg-destination-decision-v1.md")
 
 test("Phase 7 publishes /sg as the canonical Singapore study destination", () => {
@@ -23,8 +24,9 @@ test("Phase 7 keeps Singapore as one city-state destination", () => {
 })
 
 test("Phase 7 preserves programme verification and eligibility caveats", () => {
-  assert.match(profile, /programme/i)
-  assert.match(profile, /verification/i)
+  assert.match(loader, /Programme delivery verification pending/)
+  assert.match(loader, /Institution or campus presence is never used to infer programme delivery/)
+  assert.match(profile, /profile\.programmeCoverage/)
   assert.match(profile, /Eligibility conditions apply/)
   assert.match(profile, /not an unconditional allowance/)
 })

@@ -17,7 +17,8 @@ test("DE Tier A contains twelve continuing Excellence university entities withou
   const domains = identity.match(/\('[a-z0-9.-]+', '[a-z0-9-]+', '[^']+', 'https:\/\//g) ?? []
   assert.equal(domains.length, 12)
   assert.match(identity, /DE_HRK_VERIFIED_DOMAIN/)
-  assert.match(identity, /not presented as a regulatory number/)
+  assert.match(identity, /Germany has no single common UKPRN\/UEN-like national identifier used here/)
+  assert.match(identity, /regulatory number/)
   assert.match(identity, /ownership_type = null/)
   assert.match(identity, /Expected 12 DE Tier A university entities/)
 })

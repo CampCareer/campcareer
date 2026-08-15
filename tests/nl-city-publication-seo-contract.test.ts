@@ -52,7 +52,7 @@ test("publication keeps programme-delivery and HBO coverage gaps explicit", () =
   assert.ok(profile.includes("explicit verified offering-to-campus link"))
   assert.ok(profile.includes("Dutch HBO providers remain an explicit expansion gap"))
   assert.ok(dashboard.includes("verification pending rather than “0 programmes”"))
-  assert.ok(dashboard.includes("research-university core"))
+  assert.ok(dashboard.includes("verified research-university institutions"))
 })
 
 test("publication preserves Netherlands metric methodology disclosures", () => {

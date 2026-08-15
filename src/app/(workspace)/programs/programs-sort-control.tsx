@@ -28,7 +28,7 @@ export function ProgramsSortControl({
       </p>
       <label className="flex items-center gap-2 text-[11.5px] font-medium text-[#8f8c85]">
         {locale === "ko" ? "정렬" : "Sort by"}
-        <select value={filters.sort} onChange={(event: ChangeEvent<HTMLSelectElement>) => replace({ sort: event.target.value })} className="h-9 rounded-lg border border-[#deddd8] bg-white px-3 text-[12px] font-medium text-[#4d4c48] outline-none focus:border-[#3e7a2e]">
+        <select value={filters.sort} onChange={(event: ChangeEvent<HTMLSelectElement>) => replace({ sort: event.target.value })} className="h-9 rounded-lg border border-[#deddd8] bg-white px-3 text-[12px] font-medium text-[#4d4c48] outline-none focus:border-brand focus:ring-2 focus:ring-brand/10">
           {sorts.map((sort) => <option key={sort.value} value={sort.value}>{locale === "ko" ? sort.labelKo : sort.label}</option>)}
         </select>
       </label>

@@ -1,5 +1,6 @@
 import "server-only"
 
+import { campCareerScoreFromFoundationComponents } from "@/lib/campcareer-score"
 import { supabase } from "@/lib/supabase"
 import { foundationScoreConfidence } from "./opportunity-score"
 import type {
@@ -472,6 +473,7 @@ export async function getCareerDataFoundation({
   const projectedGrowth = rawObservation(rawObservations, "projected_growth_pct")
   const annualOpenings = rawObservation(rawObservations, "projected_annual_openings")
   const scoreConfidence = foundationScoreConfidence({ scoreReady: result.score_ready, components: scoreComponents })
+  const campCareerScore = result.score_ready ? campCareerScoreFromFoundationComponents(scoreComponents) : null
 
   return {
     profileKey: result.profile_key,
@@ -497,7 +499,7 @@ export async function getCareerDataFoundation({
     },
     readiness: {
       decisionReady: result.decision_ready,
-      scoreReady: result.score_ready,
+      scoreReady: result.score_ready && campCareerScore != null,
       publishReady: result.publish_ready,
       decisionReason: result.decision_readiness_reason,
       scoredComponents: result.scored_components,
@@ -507,6 +509,7 @@ export async function getCareerDataFoundation({
       calculationTimestamp: result.calculation_timestamp,
     },
     opportunityScore: numberOrNull(result.opportunity_score),
+    campCareerScore,
     scoreConfidence,
     scoreExplanation: result.score_explanation,
     decisionMetrics: {
@@ -542,15 +545,60 @@ export async function getCareerDataFoundation({
 export async function getFoundationCountriesForCareer(careerId: string) {
   const query = await supabase
     .from("career_foundation_result_v1")
-    .select("country_code,decision_ready,score_ready,publish_ready,opportunity_score,official_title")
+    .select("country_code,decision_ready,score_ready,publish_ready,opportunity_score,official_title,snapshot_key")
     .eq("canonical_occupation_id", careerId)
   if (query.error) throw query.error
-  return (query.data ?? []).map((row) => ({
-    countryCode: String(row.country_code),
-    decisionReady: Boolean(row.decision_ready),
-    scoreReady: Boolean(row.score_ready),
-    publishReady: Boolean(row.publish_ready),
-    opportunityScore: numberOrNull(row.opportunity_score as number | string | null),
-    officialTitle: String(row.official_title),
-  }))
+
+  const rows = (query.data ?? []) as Array<{
+    country_code: string
+    decision_ready: boolean
+    score_ready: boolean
+    publish_ready: boolean
+    opportunity_score: number | string | null
+    official_title: string
+    snapshot_key: string
+  }>
+  const snapshotKeys = rows.map((row) => row.snapshot_key).filter(Boolean)
+  const componentsBySnapshot = new Map<string, Array<{
+    componentKey: string
+    scoreValue: number | null
+    maxScore: number
+    availability: "available" | "unavailable"
+  }>>()
+
+  if (snapshotKeys.length) {
+    const componentQuery = await supabase
+      .from("career_score_components")
+      .select("snapshot_key,component_key,score_value,max_score,availability")
+      .in("snapshot_key", snapshotKeys)
+    if (componentQuery.error) throw componentQuery.error
+
+    for (const row of componentQuery.data ?? []) {
+      const snapshotKey = String(row.snapshot_key)
+      const items = componentsBySnapshot.get(snapshotKey) ?? []
+      items.push({
+        componentKey: String(row.component_key),
+        scoreValue: numberOrNull(row.score_value as number | string | null),
+        maxScore: Number(row.max_score),
+        availability: row.availability as "available" | "unavailable",
+      })
+      componentsBySnapshot.set(snapshotKey, items)
+    }
+  }
+
+  return rows.map((row) => {
+    const campCareerScore = row.score_ready
+      ? campCareerScoreFromFoundationComponents(componentsBySnapshot.get(row.snapshot_key) ?? [])
+      : null
+    return {
+      countryCode: String(row.country_code),
+      decisionReady: Boolean(row.decision_ready),
+      scoreReady: Boolean(row.score_ready) && campCareerScore != null,
+      publishReady: Boolean(row.publish_ready),
+      opportunityScore: campCareerScore?.total ?? null,
+      campCareerScore,
+      legacyOpportunityScore: numberOrNull(row.opportunity_score),
+      officialTitle: String(row.official_title),
+    }
+  })
 }

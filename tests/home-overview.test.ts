@@ -16,12 +16,14 @@ test("Career check uses country and occupation as its canonical query", () => {
   assert.equal(getHomeMode(new URLSearchParams("country=AU&occupation=electrician"), false), "result")
 })
 
-test("Career check allows an undecided country but requires an occupation", () => {
+test("Career check requires a concrete country and occupation", () => {
   const countryUndecided = getOverviewSearchQuery(new URLSearchParams("country=not-sure&occupation=electrician"))
   const occupationUndecided = getOverviewSearchQuery(new URLSearchParams("country=AU&occupation=not-sure"))
+  const legacyUndecidedValues = readOverviewSearchValues(new URLSearchParams("country=not-sure&occupation=electrician"))
 
-  assert.deepEqual(countryUndecided, { country: "not-sure", occupation: "electrician" })
+  assert.equal(countryUndecided, null)
   assert.equal(occupationUndecided, null)
+  assert.equal(validateOverviewSearch(legacyUndecidedValues, "en").country, "Choose a country to evaluate.")
 })
 
 test("Career check requires exactly the two decision inputs", () => {

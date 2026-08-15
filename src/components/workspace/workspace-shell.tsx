@@ -1,9 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { Suspense } from "react"
 import { usePathname } from "next/navigation"
-import { WorkspaceSidebar } from "./workspace-sidebar"
 import { WorkspaceTopbar } from "./workspace-topbar"
+import { ContextualSurfaceNotice } from "./contextual-surface-notice"
 import { SiteFooter } from "@/components/layout/site-footer"
 import { withoutLocalePrefix } from "@/lib/i18n/config"
 import { cn } from "@/lib/utils"
@@ -13,49 +13,45 @@ type WorkspaceShellProps = {
 }
 
 export function WorkspaceShell({ children }: WorkspaceShellProps) {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
   const pathname = withoutLocalePrefix(usePathname())
-  // The career result is a focused public reading surface. Its parent shell
-  // provides the shared product top navigation, so rendering the workspace
-  // topbar here would duplicate navigation chrome.
-  if (pathname === "/career") return <>{children}</>
+
+  // Career is the focused public product surface. The outer layout supplies
+  // the standard CampCareer navigation so no workspace chrome is rendered.
+  if (pathname === "/career" || pathname.startsWith("/career/")) return <>{children}</>
 
   const isCityProfile = pathname.startsWith("/cities/") && !pathname.endsWith("/compare")
-  // Pages with their own full-bleed hero manage their own content container,
-  // so they escape the standard padding to reach the sidebar and topbar.
   const hasFullBleedHero =
     pathname === "/" ||
     pathname === "/countries" ||
     pathname.startsWith("/countries/") ||
     isCityProfile
   const isComparePage = pathname === "/compare"
-  const isPathfinder = pathname === "/"
-  // Home owns both the authenticated dashboard and result experiences. Its
-  // application-style surfaces should end at their content, not a marketing footer.
   const hideSiteFooter = pathname === "/"
 
+  // Wave 1 removed the equal-tool sidebar. Wave 3 keeps these routes available
+  // but explicitly frames them as contextual/secondary surfaces around Career.
   return (
-    <div className="flex min-h-screen bg-white">
-      {!isPathfinder && <WorkspaceSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />}
-      <div className="flex min-w-0 flex-1 flex-col">
-        <WorkspaceTopbar onMenuClick={() => setSidebarOpen((prev) => !prev)} />
-        <main
+    <div className="flex min-h-screen flex-col bg-white">
+      <WorkspaceTopbar />
+      <Suspense fallback={null}>
+        <ContextualSurfaceNotice pathname={pathname} />
+      </Suspense>
+      <main
+        className={cn(
+          "flex-1",
+          !hasFullBleedHero && (isComparePage ? "px-4 py-4 sm:px-6 lg:px-8" : "px-4 py-8 sm:px-8 lg:px-10"),
+        )}
+      >
+        <div
           className={cn(
-            "flex-1",
-            !hasFullBleedHero && (isComparePage ? "px-4 py-4 sm:px-6 lg:px-8" : "px-4 py-8 sm:px-8 lg:px-10"),
+            !hasFullBleedHero &&
+              (isComparePage ? "mx-auto w-full max-w-[1440px]" : "mx-auto w-full max-w-6xl"),
           )}
         >
-          <div
-            className={cn(
-              !hasFullBleedHero &&
-                (isComparePage ? "mx-auto w-full max-w-[1440px]" : "mx-auto w-full max-w-6xl"),
-            )}
-          >
-            {children}
-          </div>
-        </main>
-        {!hideSiteFooter && <SiteFooter />}
-      </div>
+          {children}
+        </div>
+      </main>
+      {!hideSiteFooter && <SiteFooter />}
     </div>
   )
 }

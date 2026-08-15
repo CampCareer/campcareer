@@ -18,24 +18,28 @@ function sitemapUrls() {
   return sitemap().map((entry) => entry.url)
 }
 
-test("the canonical home is root and /home is never emitted by the sitemap", () => {
+test("the canonical home is root and dormant /home permanently returns there", () => {
   const urls = sitemapUrls()
-  const homeSource = readFileSync("src/app/(workspace)/page.tsx", "utf8")
+  const homeSource = readFileSync("src/app/page.tsx", "utf8")
   const legacyHomeSource = readFileSync("src/app/(workspace)/home/page.tsx", "utf8")
 
   assert.equal(HOME_CANONICAL_PATH, "/")
   assert.ok(homeSource.includes("alternates: { canonical: HOME_CANONICAL_PATH }"))
-  assert.ok(legacyHomeSource.includes("permanentRedirect(HOME_CANONICAL_PATH)"))
+  assert.ok(legacyHomeSource.includes("permanentRedirect(\"/\")"))
   assert.ok(urls.includes(`${SITE_URL}/`))
   assert.ok(!urls.includes(`${SITE_URL}/home`))
 })
 
-test("country sitemap entries use only /countries/{code}", () => {
+test("country sitemap entries use /countries/{code}, with /sg retained as the active Singapore destination", () => {
   const urls = sitemapUrls()
 
   for (const slug of CANONICAL_COUNTRY_SLUGS) {
     assert.ok(urls.includes(`${SITE_URL}${countryCanonicalPath(slug)}`))
-    assert.ok(!urls.includes(`${SITE_URL}/${slug}`))
+    if (slug === "sg") {
+      assert.ok(urls.includes(`${SITE_URL}/sg`))
+    } else {
+      assert.ok(!urls.includes(`${SITE_URL}/${slug}`))
+    }
   }
 })
 
@@ -57,6 +61,7 @@ test("legacy redirect sources never appear in the sitemap and targets do", () =>
     assert.ok(urls.has(redirect.destination === "/" ? `${SITE_URL}/` : `${SITE_URL}${redirect.destination}`))
     assert.equal(redirect.permanent, true)
   }
+  assert.ok(urls.has(`${SITE_URL}/sg`))
 })
 
 test("Next redirects wire the centralized permanent SEO registry before broad legacy rules", async () => {
@@ -69,16 +74,18 @@ test("Next redirects wire the centralized permanent SEO registry before broad le
 
   assert.deepEqual(redirects.slice(0, LEGACY_SEO_REDIRECTS.length), [...LEGACY_SEO_REDIRECTS])
   assert.ok(!redirects.some((redirect) => redirect.source === "/" && redirect.destination === "/home"))
-  assert.deepEqual(
-    redirects.find((redirect) => redirect.source === "/home"),
-    { source: "/home", destination: "/", permanent: true },
-  )
+  assert.ok(!redirects.some((redirect) => redirect.source === "/home"))
 })
 
-test("legacy country roots redirect permanently to their canonical country pages", () => {
+test("legacy country roots redirect permanently except the active /sg destination", () => {
   for (const slug of CANONICAL_COUNTRY_SLUGS) {
+    const redirect = LEGACY_SEO_REDIRECTS.find((entry) => entry.source === `/${slug}`)
+    if (slug === "sg") {
+      assert.equal(redirect, undefined)
+      continue
+    }
     assert.deepEqual(
-      LEGACY_SEO_REDIRECTS.find((redirect) => redirect.source === `/${slug}`),
+      redirect,
       { source: `/${slug}`, destination: countryCanonicalPath(slug), permanent: true },
     )
   }
@@ -94,10 +101,11 @@ test("sitemap URLs are unique and the Programs base canonical matches the sitema
   assert.ok(urls.includes(`${SITE_URL}${programsCanonicalPath("AU")}`))
 })
 
-test("robots points at the same production sitemap without blocking canonical country pages", () => {
+test("robots includes the production root sitemap without blocking canonical country pages", () => {
   const value = robots()
+  const sitemapReferences = Array.isArray(value.sitemap) ? value.sitemap : [value.sitemap]
 
-  assert.equal(value.sitemap, `${SITE_URL}/sitemap.xml`)
+  assert.ok(sitemapReferences.includes(`${SITE_URL}/sitemap.xml`))
   assert.ok(!JSON.stringify(value.rules).includes("/countries"))
 })
 

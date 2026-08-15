@@ -115,19 +115,22 @@ test("rank read model can include the final methodology-v1 foundation profile", 
   assert.match(finalizedGrowthMigration, /'US:carpenter:2026-08-13:v4'/)
 })
 
-test("career insight suppresses legacy data whenever a foundation row exists", () => {
-  assert.match(readModel, /const foundationCountries = new Set/)
-  assert.match(readModel, /profiles\.filter\(\(profile\) => !foundationCountries\.has\(profile\.country_code\)\)/)
-  assert.match(readModel, /if \(foundation\?\.readiness\.decisionReady\)/)
-  assert.match(readModel, /readModelSource: "career_data_foundation"/)
-  assert.match(readModel, /if \(foundation\) \{[\s\S]*?profile: null,[\s\S]*?readModelSource: "editorial_only"/)
+test("career insight exposes foundation data only after the explicit public Ready gate", () => {
+  assert.match(readModel, /const foundationHasPublicScore/)
+  assert.match(readModel, /if \(foundation && foundationHasPublicScore\(foundation\)\)/)
+  assert.match(readModel, /const campCareerScore = isCareerScoreReady\(profile\.country_code, careerId\) \? scoreCandidate : null/)
+  assert.match(readModel, /if \(byCountry\.has\(foundation\.countryCode\)\) continue/)
+  assert.match(readModel, /if \(!isCareerScoreReady\(foundation\.countryCode, careerId\)\) continue/)
+  assert.match(readModel, /if \(!profile && foundation\) \{[\s\S]*?profile: null,[\s\S]*?readModelSource: "editorial_only"/)
 })
 
-test("foundation compatibility profile still does not fake a clean vacancy count or five-year growth value", () => {
+test("foundation compatibility profile keeps unavailable legacy metrics null and exposes only the public CampCareer Score", () => {
   assert.match(readModel, /vacanciesThreeMonthAvg: null/)
   assert.match(readModel, /employmentGrowth5yPct: null/)
-  assert.match(readModel, /opportunityScore: foundation\.opportunityScore/)
-  assert.match(readModel, /scoreStatus: foundation\.readiness\.scoreReady \? "foundation_ready" : "not_ready"/)
+  assert.match(readModel, /opportunityScore: foundation\.campCareerScore\?\.total \?\? null/)
+  assert.match(readModel, /campCareerScore: foundation\.campCareerScore/)
+  assert.match(readModel, /internalOpportunityScore: foundation\.opportunityScore/)
+  assert.match(readModel, /scoreStatus: "foundation_ready"/)
 })
 
 test("foundation API read returns provenance, relational lineage, regulation, visa and live opportunities", () => {
@@ -145,7 +148,7 @@ test("foundation API read returns provenance, relational lineage, regulation, vi
     "career_foundation_entry_points",
     "career_official_sources",
   ]) {
-    assert.match(foundationRead, new RegExp(`from\\(\"${table}\"\)`))
+    assert.ok(foundationRead.includes(`.from("${table}")`), `missing foundation read for ${table}`)
   }
   assert.match(foundationRead, /scoreConfidence/)
   assert.match(foundationRead, /evidenceStatus/)

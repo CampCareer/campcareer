@@ -28,9 +28,9 @@ function FilterButton({ active, label, onClick }: { active: boolean; label: stri
   return (
     <button type="button" onClick={onClick} className={cn(
       "flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-[12.5px] transition",
-      active ? "bg-[#edf5ea] font-semibold text-[#3e7a2e]" : "text-[#6f6d68] hover:bg-[#f7f7f5] hover:text-[#1b1b1b]",
+      active ? "bg-[hsl(var(--brand-tint))] font-semibold text-brand" : "text-[#6f6d68] hover:bg-[#f7f7f5] hover:text-[#1b1b1b]",
     )}>
-      <span className={cn("grid size-4 shrink-0 place-items-center rounded border", active ? "border-[#3e7a2e] bg-[#3e7a2e] text-white" : "border-[#d9d8d3] bg-white")}>
+      <span className={cn("grid size-4 shrink-0 place-items-center rounded border", active ? "border-brand bg-brand text-white" : "border-[#d9d8d3] bg-white")}>
         {active && <Check className="size-3" />}
       </span>
       <span>{label}</span>
@@ -46,8 +46,8 @@ function FiltersContent({ filters }: { filters: ProgramSearchFilters }) {
   return (
     <>
       <div className="flex items-center justify-between border-b border-[#ecebe7] pb-4">
-        <div className="flex items-center gap-2"><SlidersHorizontal className="size-4 text-[#3e7a2e]" /><h2 className="text-[14px] font-semibold text-[#1b1b1b]">{locale === "ko" ? "필터" : "Filters"}</h2></div>
-        <button type="button" onClick={clear} className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#8a8882] transition hover:text-[#3e7a2e]"><RotateCcw className="size-3" />{locale === "ko" ? "초기화" : "Clear"}</button>
+        <div className="flex items-center gap-2"><SlidersHorizontal className="size-4 text-brand" /><h2 className="text-[14px] font-semibold text-[#1b1b1b]">{locale === "ko" ? "필터" : "Filters"}</h2></div>
+        <button type="button" onClick={clear} className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#8a8882] transition hover:text-brand"><RotateCcw className="size-3" />{locale === "ko" ? "초기화" : "Clear"}</button>
       </div>
 
       <FilterSection icon={<Search className="size-3.5 text-[#8a8882]" />} title={locale === "ko" ? "전공 분야" : "Field of study"}>
@@ -97,7 +97,7 @@ export function ProgramsSidebar({ filters }: { filters: ProgramSearchFilters }) 
   return (
     <>
       <details className="rounded-xl border border-[#e7e6e3] bg-white p-4 lg:hidden">
-        <summary className="flex cursor-pointer list-none items-center justify-between text-[13px] font-semibold text-[#1b1b1b]"><span className="inline-flex items-center gap-2"><SlidersHorizontal className="size-4 text-[#3e7a2e]" />{locale === "ko" ? "필터 열기" : "Open filters"}</span><ChevronDown className="size-4 text-[#8a8882]" /></summary>
+        <summary className="flex cursor-pointer list-none items-center justify-between text-[13px] font-semibold text-[#1b1b1b]"><span className="inline-flex items-center gap-2"><SlidersHorizontal className="size-4 text-brand" />{locale === "ko" ? "필터 열기" : "Open filters"}</span><ChevronDown className="size-4 text-[#8a8882]" /></summary>
         <div className="mt-5"><FiltersContent filters={filters} /></div>
       </details>
       <aside className="hidden self-start rounded-xl border border-[#e7e6e3] bg-white p-4 lg:sticky lg:top-20 lg:block"><FiltersContent filters={filters} /></aside>

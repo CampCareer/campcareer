@@ -1,13 +1,44 @@
 import type { Metadata } from "next"
-import { Suspense } from "react"
-import { CareerResultPage } from "./career-result-page"
+import { headers } from "next/headers"
+import { permanentRedirect, redirect } from "next/navigation"
+import { localizePath, type Locale } from "@/lib/i18n/config"
+import { getCareerRoute } from "@/lib/workspace/occupation-routes"
+import { getOverviewSearchQuery } from "../home/home-overview-config"
 
 export const metadata: Metadata = {
-  title: "Career results | CampCareer",
-  description: "Review local hiring demand, visa and qualification conditions, and realistic entry routes for your selected career and country.",
-  robots: { index: false, follow: false },
+  title: "Career | CampCareer",
+  description: "CampCareer canonical Career Pages use stable country and career identifiers.",
+  robots: { index: false, follow: true },
 }
 
-export default function CareerPage() {
-  return <Suspense fallback={<main className="min-h-[calc(100vh-3.5rem)] bg-white" />}><CareerResultPage /></Suspense>
+type LegacyCareerPageProps = {
+  searchParams: Promise<Record<string, string | string[] | undefined>>
+}
+
+async function getRouteLocale(): Promise<Locale> {
+  const routeLocale = (await headers()).get("x-campcareer-route-locale")
+  return routeLocale === "ko" ? "ko" : "en"
+}
+
+export default async function LegacyCareerPage({ searchParams }: LegacyCareerPageProps) {
+  const raw = await searchParams
+  const params = new URLSearchParams()
+  for (const [key, value] of Object.entries(raw)) {
+    if (Array.isArray(value)) value.forEach((item) => params.append(key, item))
+    else if (value != null) params.set(key, value)
+  }
+
+  const locale = await getRouteLocale()
+  const query = getOverviewSearchQuery(params)
+  if (!query) redirect(localizePath("/", locale))
+
+  const route = getCareerRoute(query.country, query.occupation)
+  if (!route) redirect(localizePath("/", locale))
+
+  params.delete("country")
+  params.delete("occupation")
+  const destination = localizePath(route.path, locale)
+  const remainingQuery = params.toString()
+
+  permanentRedirect(remainingQuery ? `${destination}?${remainingQuery}` : destination)
 }
