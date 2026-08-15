@@ -47,7 +47,7 @@ export function TopNav() {
   const accountInitial = Array.from(displayName.trim())[0]?.toLocaleUpperCase() || "C"
 
   return (
-    <header className="sticky top-0 z-40 h-16 border-b border-[hsl(var(--cc-border))] bg-white/95 backdrop-blur-md">
+    <header className="sticky top-0 z-40 h-16 border-b border-[hsl(var(--cc-border))] bg-white">
       <div className="mx-auto max-w-[1240px] px-6 max-sm:px-[18px]">
         <div className="flex h-16 items-center justify-between">
           <Link
