@@ -1,6 +1,8 @@
 "use client"
 
+import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
+import { ArrowRight } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { localizePath } from "@/lib/i18n/config"
@@ -13,6 +15,40 @@ import {
 } from "./home-overview-config"
 
 type Locale = "en" | "ko"
+
+type PreviewCareer = {
+  id: string
+  label: Record<Locale, string>
+  score: number
+  verdict: string
+}
+
+const PREVIEW_CAREERS: readonly PreviewCareer[] = [
+  {
+    id: "registered-nurse",
+    label: { en: "Registered Nurse", ko: "간호사" },
+    score: 82,
+    verdict: "Excellent",
+  },
+  {
+    id: "electrician",
+    label: { en: "Electrician", ko: "전기공" },
+    score: 78,
+    verdict: "Strong",
+  },
+  {
+    id: "midwife",
+    label: { en: "Midwife", ko: "조산사" },
+    score: 75,
+    verdict: "Strong",
+  },
+  {
+    id: "carpenter",
+    label: { en: "Carpenter", ko: "목수" },
+    score: 68,
+    verdict: "Strong",
+  },
+]
 
 export function HomeHub() {
   const router = useRouter()
@@ -36,65 +72,70 @@ export function HomeHub() {
     <div className="min-h-[calc(100vh-3.5rem)] bg-[hsl(var(--cc-canvas))] text-[hsl(var(--cc-ink))]">
       <section className="px-5 pb-16 pt-12 sm:px-8 sm:pb-24 sm:pt-20">
         <div className="mx-auto max-w-5xl">
-          <div className="max-w-3xl">
+          <div className="max-w-4xl">
             <p className="text-xs font-semibold tracking-[0.1em] text-brand">CAMPCAREER</p>
             <h1 className="mt-4 text-[42px] font-semibold leading-[1.02] tracking-[-0.055em] sm:text-6xl lg:text-[68px]">
-              {locale === "ko" ? (
-                <>이 커리어가 가치 있는지 알고,<br />정확히 어떻게 가는지 보세요.</>
-              ) : (
-                <>Know if a career is worth it.<br />See exactly how to get there.</>
-              )}
+              Explore. Compare. Find your future.
             </h1>
-            <p className="mt-6 max-w-2xl text-base leading-7 text-[hsl(var(--cc-muted))] sm:text-lg">
-              {locale === "ko"
-                ? "직업과 국가를 선택하면 CampCareer Score, 판단 근거, 그리고 실제 진입 경로를 바로 보여드립니다. 로그인은 필요하지 않습니다."
-                : "Choose a career and country to see the CampCareer Score, the evidence behind it, and the path to enter. No account required."}
-            </p>
           </div>
 
-          <div className="mt-10 rounded-xl border border-[hsl(var(--cc-border))] bg-white p-5 sm:p-7">
-            <div className="mb-5">
-              <p className="text-base font-semibold tracking-[-0.02em] text-[hsl(var(--cc-ink))]">
-                {locale === "ko" ? "어떤 커리어를 평가할까요?" : "Which career should we evaluate?"}
-              </p>
-              <p className="mt-1 text-sm text-[hsl(var(--cc-muted))]">
-                {locale === "ko" ? "직업과 국가를 고르면 바로 Career Page로 이동합니다." : "Choose a career and country to go straight to the Career Page."}
-              </p>
+          <div className="mt-9 max-w-4xl">
+            <HomeSearchForm
+              values={values}
+              locale={locale}
+              onValuesChange={setValues}
+              onSubmit={submit}
+              integrated
+              submitLabel={locale === "ko" ? "검색" : "Search"}
+            />
+          </div>
+
+          <section className="mt-14" aria-labelledby="career-previews-heading">
+            <div className="flex items-end justify-between gap-4">
+              <h2 id="career-previews-heading" className="text-lg font-semibold tracking-[-0.025em] text-[hsl(var(--cc-ink))] sm:text-xl">
+                {locale === "ko" ? "호주 커리어 둘러보기" : "Explore careers in Australia"}
+              </h2>
             </div>
-            <HomeSearchForm values={values} locale={locale} onValuesChange={setValues} onSubmit={submit} />
-          </div>
 
-          <div className="mt-12 grid border-t border-[hsl(var(--cc-border))] pt-8 sm:grid-cols-3 sm:gap-8">
-            <HomePrinciple
-              index="01"
-              title="Score"
-              body={locale === "ko" ? "먼저 커리어의 시장 매력도를 판단합니다." : "Start with a clear judgment of career attractiveness."}
-            />
-            <HomePrinciple
-              index="02"
-              title="Evidence"
-              body={locale === "ko" ? "Demand, Pay, Entry의 근거를 투명하게 보여줍니다." : "See the evidence behind Demand, Pay and Entry."}
-            />
-            <HomePrinciple
-              index="03"
-              title="Path"
-              body={locale === "ko" ? "Study, Programs, Jobs로 이어지는 실제 다음 단계를 봅니다." : "Move into the real next steps through Study, Programs and Jobs."}
-            />
-          </div>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {PREVIEW_CAREERS.map((career) => (
+                <Link
+                  key={career.id}
+                  href={localizePath(`/career/australia/${career.id}`, locale)}
+                  className="group rounded-2xl border border-[hsl(var(--cc-border))] bg-white p-5 transition hover:-translate-y-0.5 hover:border-brand/35 hover:shadow-[0_16px_36px_rgba(24,24,27,0.07)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/15"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="min-w-0">
+                      <p className="text-xs font-medium text-[hsl(var(--cc-muted))]">Australia</p>
+                      <h3 className="mt-2 text-lg font-semibold tracking-[-0.025em] text-[hsl(var(--cc-ink))]">
+                        {career.label[locale]}
+                      </h3>
+                    </div>
+                    <div className="shrink-0 text-right">
+                      <div className="text-3xl font-semibold leading-none tracking-[-0.05em] text-[hsl(var(--cc-ink))]">
+                        {career.score}
+                      </div>
+                      <div className="mt-1 text-[10px] font-medium uppercase tracking-[0.08em] text-[hsl(var(--cc-muted))]">Score</div>
+                    </div>
+                  </div>
+
+                  <div className="mt-6 border-t border-[hsl(var(--cc-border))] pt-4">
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="rounded-full bg-[hsl(var(--brand-tint))] px-2.5 py-1 text-xs font-semibold text-brand">
+                        {career.verdict}
+                      </span>
+                      <ArrowRight className="size-4 text-[hsl(var(--cc-muted))] transition group-hover:translate-x-0.5 group-hover:text-brand" />
+                    </div>
+                    <p className="mt-4 text-xs font-medium text-[hsl(var(--cc-muted))]">Demand · Pay · Entry</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
 
           {result ? <div className="mt-10 h-32 animate-pulse rounded-xl bg-white" aria-label="Career Page로 이동 중" /> : null}
         </div>
       </section>
-    </div>
-  )
-}
-
-function HomePrinciple({ index, title, body }: { index: string; title: string; body: string }) {
-  return (
-    <div className="border-b border-[hsl(var(--cc-border))] py-5 last:border-b-0 sm:border-b-0 sm:py-0">
-      <p className="text-xs font-semibold text-[hsl(var(--cc-muted))]">{index}</p>
-      <p className="mt-2 text-lg font-semibold tracking-[-0.025em] text-[hsl(var(--cc-ink))]">{title}</p>
-      <p className="mt-2 text-sm leading-6 text-[hsl(var(--cc-muted))]">{body}</p>
     </div>
   )
 }
