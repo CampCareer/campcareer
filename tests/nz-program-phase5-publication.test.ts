@@ -15,7 +15,7 @@ test("NZ programme explorer is enabled on the shared Programs route", () => {
   assert.match(page, /filters\.country === "NZ"/)
   assert.match(page, /<NzProgramsExplorer/)
   assert.match(header, /"NZ"/)
-  assert.match(header, /Search New Zealand programmes or universities/)
+  assert.match(header, /Search programs or institutions/)
 })
 
 test("NZ programme server reads the canonical Phase 4 detail model, not staging", () => {
