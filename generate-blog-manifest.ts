@@ -34,17 +34,17 @@ interface PostMeta {
 
 const curatedThumbnails: Record<string, Pick<PostMeta, "heroImage" | "heroImageAlt">> = {
   "best-high-demand-high-paying-careers-australia-2026": {
-    heroImage: "/blog/images/high-demand-careers-australia-2026.webp",
+    heroImage: "/blog/generated-image/high-demand-careers-australia-2026.avif",
     heroImageAlt:
       "Australian high-demand career professionals including an electrician, nurse, carpenter and care worker",
   },
   "how-to-become-an-electrician-in-australia-2026": {
-    heroImage: "/blog/images/how-to-become-electrician-australia-2026.webp",
+    heroImage: "/blog/generated-image/how-to-become-electrician-australia-2026.avif",
     heroImageAlt:
       "Electrical apprentice in high-visibility workwear training on an electrical switchboard",
   },
   "electrician-salary-australia-2026": {
-    heroImage: "/blog/images/electrician-salary-australia-2026.webp",
+    heroImage: "/blog/generated-image/electrician-salary-australia-2026.avif",
     heroImageAlt:
       "Experienced electrician reviewing electrical plans beside an industrial control panel",
   },
