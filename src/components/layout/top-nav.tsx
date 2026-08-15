@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useMemo, useState } from "react"
@@ -7,7 +8,7 @@ import type { User } from "@supabase/supabase-js"
 import { LogIn } from "lucide-react"
 import { LanguageMenu } from "@/components/layout/language-menu"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
-import { localeFromPathname, localizePath } from "@/lib/i18n/config"
+import { localeFromPathname, localizePath, withoutLocalePrefix } from "@/lib/i18n/config"
 import { createClient } from "@/lib/supabase-client"
 import { cn } from "@/lib/utils"
 
@@ -15,6 +16,7 @@ export function TopNav() {
   const pathname = usePathname()
   const routeLocale = useRouteLocale()
   const pathLocale = localeFromPathname(pathname) ?? routeLocale
+  const normalizedPath = withoutLocalePrefix(pathname || "/")
   const homeDestination = localizePath("/", pathLocale)
   const profileDestination = localizePath("/profile", pathLocale)
   const loginPath = localizePath("/login", pathLocale)
@@ -40,6 +42,54 @@ export function TopNav() {
       subscription.unsubscribe()
     }
   }, [supabase])
+
+  if (normalizedPath === "/") {
+    const nav = pathLocale === "ko"
+      ? [
+          { href: `${homeDestination}#fifo-jobs`, label: "FIFO 직업" },
+          { href: `${homeDestination}#tickets`, label: "티켓" },
+          { href: `${homeDestination}#fifo-report`, label: "FIFO 리포트" },
+          { href: localizePath("/blog", pathLocale), label: "Blog" },
+        ]
+      : [
+          { href: `${homeDestination}#fifo-jobs`, label: "FIFO Jobs" },
+          { href: `${homeDestination}#tickets`, label: "Tickets" },
+          { href: `${homeDestination}#fifo-report`, label: "FIFO Report" },
+          { href: localizePath("/blog", pathLocale), label: "Blog" },
+        ]
+
+    return (
+      <header className="sticky top-0 z-40 h-[68px] border-b border-[hsl(var(--cc-border))] bg-white/95 backdrop-blur">
+        <div className="mx-auto flex h-full max-w-[1240px] items-center px-5 sm:px-6">
+          <Link href={homeDestination} className="flex items-center gap-2.5" aria-label="CampCareer home">
+            <Image src="/brand/campcareer-c.svg" width={34} height={34} alt="" priority className="size-8 sm:size-[34px]" />
+            <span className="text-[20px] font-semibold tracking-[-0.035em] text-[hsl(var(--cc-ink))] sm:text-[22px]">
+              CampCareer
+            </span>
+          </Link>
+
+          <nav className="ml-auto hidden items-center gap-7 lg:flex" aria-label="FIFO navigation">
+            {nav.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="text-sm font-medium text-[hsl(var(--cc-ink-secondary))] transition hover:text-brand"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+
+          <Link
+            href={`${homeDestination}#fifo-report`}
+            className="ml-auto inline-flex min-h-10 items-center justify-center rounded-xl bg-brand px-4 py-2 text-sm font-semibold text-white transition hover:bg-[hsl(var(--brand-press))] lg:ml-8"
+          >
+            {pathLocale === "ko" ? "리포트 보기" : "Get the Report"}
+          </Link>
+        </div>
+      </header>
+    )
+  }
 
   const displayName = user
     ? ((user.user_metadata?.full_name as string | undefined) || (user.user_metadata?.name as string | undefined) || user.email?.split("@")[0] || "C")
