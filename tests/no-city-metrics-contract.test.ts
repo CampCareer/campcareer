@@ -26,7 +26,7 @@ test("Norway Phase 4 preserves national-vs-city metric semantics", () => {
   assert.match(migration, /'national_rule',true/)
   assert.match(migration, /not a city differentiator/)
   assert.match(migration, /'not_shortage_ranking',true/)
-  assert.match(migration, /student_specific,v\.student_specific/)
+  assert.match(migration, /'student_specific',v\.student_specific/)
   assert.match(migration, /\('tromso',265,'30_days','svipper_tromso_young_adult_30_day',false/)
 })
 
