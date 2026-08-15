@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { redirect } from "next/navigation"
+import { permanentRedirect } from "next/navigation"
 
 export const metadata: Metadata = {
   title: "CampCareer",
@@ -10,5 +10,5 @@ export const metadata: Metadata = {
 export default function LegacyMemberHomePage() {
   // The authenticated dashboard is intentionally dormant in Wave 1.
   // Preserve its components and data model, but do not make /home a product destination.
-  redirect("/")
+  permanentRedirect("/")
 }
