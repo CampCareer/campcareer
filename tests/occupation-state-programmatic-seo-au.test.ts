@@ -50,16 +50,18 @@ test("every quality-gated route is addressable from its regional demand code", (
   }
 })
 
-test("the occupation dashboard links AU regional demand cards through the state SEO registry", () => {
+test("the occupation dashboard keeps AU regional demand evidence visible without exposing the legacy Opportunity Score", () => {
   const source = readFileSync(
     "src/app/(workspace)/occupation/country-occupation-dashboard.tsx",
     "utf8",
   )
 
-  assert.ok(source.includes("getAuOccupationStatePageByRegionCode(region.regionCode, careerId)"))
-  assert.ok(source.includes('countryCode === "AU"'))
-  assert.ok(source.includes("href={statePage.path}"))
-  assert.ok(source.includes("<StateDemandCard"))
+  assert.ok(source.includes("rankedRegions.map"))
+  assert.ok(source.includes("region.regionCode"))
+  assert.ok(source.includes("region.vacancyCount"))
+  assert.ok(source.includes("State demand ranking"))
+  assert.ok(source.includes("CampCareer Score"))
+  assert.doesNotMatch(source, /Opportunity score/i)
 })
 
 test("unsupported states and non-gated careers do not create SEO routes", () => {
