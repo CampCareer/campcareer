@@ -91,14 +91,47 @@ export function buildCompareHref(input: CompareLinkInput = {}) {
   return `/compare?${params.toString()}`
 }
 
-const LEGACY_PRODUCT_PATHS = new Set(["/checklist", "/timeline", "/degree-risk"])
+/**
+ * Prefer the canonical Career Page whenever a blog post gives us both a
+ * supported Career and one destination. Compare remains the safe fallback for
+ * multi-country or generic articles.
+ */
+export function buildCareerFirstHref(input: CompareLinkInput = {}) {
+  const career = resolveCareer(input.career, input.major)
+  const countries = normalizeCompareCountries(input.countries ?? input.country)
+
+  if (career && countries.length === 1) {
+    const country = LAUNCH_COUNTRIES.find((item) => item.code === countries[0])
+    if (country) return `/career/${country.slug}/${career.id}`
+  }
+
+  return buildCompareHref(input)
+}
+
+const LEGACY_PRODUCT_PATHS = new Set([
+  "/checklist",
+  "/timeline",
+  "/degree-risk",
+  "/maps",
+  "/study",
+  "/study-options",
+  "/majors",
+  "/fields",
+  "/universities",
+  "/roi-explorer",
+])
+
+const LEGACY_COUNTRY_PRODUCT_RE = /^\/(?:au|ca|us|uk|de|nl|ie|be|sg|kr|jp|fr|es|nz|no|se|dk|fi|ch|ae)(?:\/|$)/
 
 function internalPath(href: string) {
   return href.split(/[?#]/, 1)[0]
 }
 
 export function isLegacyBlogJourneyHref(href: string) {
-  return LEGACY_PRODUCT_PATHS.has(internalPath(href))
+  const path = internalPath(href)
+  if (LEGACY_PRODUCT_PATHS.has(path)) return true
+  if (LEGACY_COUNTRY_PRODUCT_RE.test(path)) return true
+  return [...LEGACY_PRODUCT_PATHS].some((prefix) => path.startsWith(`${prefix}/`))
 }
 
 function comparisonInputFromHref(href: string, input: CompareLinkInput) {
@@ -116,11 +149,12 @@ function comparisonInputFromHref(href: string, input: CompareLinkInput) {
 }
 
 /**
- * Keeps editorial links intact, while ensuring a legacy blog CTA cannot send
- * visitors to a hidden page or the retired degree-risk funnel.
+ * Keeps external/editorial links intact while preventing old blog CTAs from
+ * sending readers into retired CampCareer surfaces. When enough context exists,
+ * those links now land on the canonical Career Page.
  */
 export function resolveBlogCtaHref(href: string, input: CompareLinkInput = {}) {
-  if (isLegacyBlogJourneyHref(href)) return buildCompareHref(input)
-  if (internalPath(href) === "/compare") return buildCompareHref(comparisonInputFromHref(href, input))
+  if (isLegacyBlogJourneyHref(href)) return buildCareerFirstHref(input)
+  if (internalPath(href) === "/compare") return buildCareerFirstHref(comparisonInputFromHref(href, input))
   return href
 }

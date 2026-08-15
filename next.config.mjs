@@ -17,10 +17,8 @@ const nextConfig = {
       // swallowed by temporary redirects.
       ...LEGACY_SEO_REDIRECTS,
 
-      // CampCareer is a route-search product. Retire every former workspace,
-      // comparison, onboarding, and broad-study funnel rather than presenting
-      // visitors with competing product promises. `/`, `/compare` and
-      // `/countries` now render inside the workspace shell.
+      // CampCareer is centered on the Career Page. Retire former workspace,
+      // onboarding, and broad-study funnels that compete with that core loop.
       { source: "/planner/:path*", destination: "/", permanent: false },
       { source: "/myplan/:path*", destination: "/", permanent: false },
       { source: "/dashboard/:path*", destination: "/", permanent: false },
@@ -42,8 +40,8 @@ const nextConfig = {
       { source: "/saved/:path*", destination: "/", permanent: false },
       { source: "/rankings/:path*", destination: "/", permanent: false },
 
-      // Raw country, university, and major research is not a public product
-      // until it is assembled into a source-backed citizenship-to-work route.
+      // Raw country, university, and major research is not a primary public
+      // product until it is assembled into a source-backed Career decision.
       { source: "/au/:path*", destination: "/", permanent: false },
       { source: "/fields/:path*", destination: "/", permanent: false },
       { source: "/study/:path*", destination: "/", permanent: false },
@@ -51,7 +49,6 @@ const nextConfig = {
       { source: "/majors/:path*", destination: "/", permanent: false },
       { source: "/universities/:path*", destination: "/", permanent: false },
       { source: "/roi-explorer/:path*", destination: "/", permanent: false },
-      { source: "/blog/:path*", destination: "/", permanent: false },
       { source: "/:country(au|ca|us|uk|de|nl|ie|be|sg|kr|jp|fr|es|nz|no|se|dk|fi|ch|ae)/:path*", destination: "/", permanent: false },
     ]
   },
