@@ -46,7 +46,7 @@ function components(
 test("coverage readiness is explicit and does not follow profile existence", () => {
   assert.equal(isCareerScoreReady("AU", "electrician"), true)
   assert.equal(isCareerScoreReady("AU", "care-worker"), true)
-  assert.equal(isCareerScoreReady("AU", "pharmacist"), false)
+  assert.equal(isCareerScoreReady("AU", "pharmacist"), true)
   assert.equal(isCareerScoreReady("UK", "carpenter"), false)
 })
 
