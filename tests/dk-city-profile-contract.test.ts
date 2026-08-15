@@ -62,9 +62,9 @@ test("work context stays monthly and is never presented as a weekly entitlement"
   assert.doesNotMatch(dashboard, /h \/ week/)
 })
 
-test("Phase 5 Denmark profiles remain noindex until publication and Compare is not enabled early", () => {
+test("published Denmark profiles are indexable while unsupported routes fail closed and Compare remains disabled", () => {
   assert.ok(page.includes("generateStaticParams"))
-  assert.ok(page.includes("robots: { index: false, follow: true }"))
+  assert.ok(page.includes("robots: { index: true, follow: true }"))
   assert.ok(page.includes("robots: { index: false, follow: false }"))
   assert.ok(page.includes("alternates: { canonical: `/cities/dk/${normalized}` }"))
   assert.ok(page.includes("notFound()"))
