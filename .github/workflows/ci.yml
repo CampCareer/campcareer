@@ -20,7 +20,18 @@ jobs:
       - run: npm audit --omit=dev --audit-level=high
       - run: npm run typecheck
       - run: npm run lint
-      - run: npm test
+      - name: Run unit tests
+        shell: bash
+        run: |
+          set -o pipefail
+          npm test 2>&1 | tee test-results.log
+      - name: Upload unit test log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-log
+          path: test-results.log
+          if-no-files-found: ignore
       - run: npm run build
       - name: Scan Git history for secrets
         uses: gitleaks/gitleaks-action@v2
