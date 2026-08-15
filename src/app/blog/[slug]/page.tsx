@@ -73,13 +73,19 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
     career: meta.ctaCareer,
     origin: meta.ctaOrigin,
   })
-  const productHref = buildCareerFirstHref({
+  const careerIntentHref = buildCareerFirstHref({
     country: meta.ctaCountry,
     major: meta.ctaMajor,
     career: meta.ctaCareer,
     origin: meta.ctaOrigin,
   })
-  const productLabel = productHref.startsWith("/career/") ? "Explore this career" : "Compare your options"
+  const hasCareerIntent = Boolean(meta.ctaCareer || meta.ctaMajor)
+  const productHref = hasCareerIntent ? careerIntentHref : "/"
+  const productLabel = careerIntentHref.startsWith("/career/")
+    ? "Explore this career"
+    : hasCareerIntent
+      ? "Compare your options"
+      : "Evaluate a career"
   const related = relatedPosts(params.slug, meta.tag)
 
   return (

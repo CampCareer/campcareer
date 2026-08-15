@@ -32,6 +32,7 @@ export function SiteFooter({ className }: { className?: string }) {
           <div>
             <h4 className="text-sm font-semibold text-[hsl(var(--cc-ink))]">{isKo ? "정보" : "Info"}</h4>
             <ul className="mt-3 space-y-2.5">
+              {pathLocale === "en" && <FooterLink href="/blog" locale={pathLocale}>Career guides</FooterLink>}
               <FooterLink href="/sources" locale={pathLocale}>{isKo ? "출처" : "Sources"}</FooterLink>
               <FooterLink href="/methodology" locale={pathLocale}>{isKo ? "방법론" : "Methodology"}</FooterLink>
               <FooterLink href="/privacy" locale={pathLocale}>{isKo ? "개인정보처리방침" : "Privacy policy"}</FooterLink>
