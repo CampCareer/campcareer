@@ -62,12 +62,13 @@ test("work context stays monthly and is never presented as a weekly entitlement"
   assert.doesNotMatch(dashboard, /h \/ week/)
 })
 
-test("published Denmark profiles are indexable while unsupported routes fail closed and Compare remains disabled", () => {
+test("published Denmark profiles are indexable, unsupported routes fail closed, and verified profiles can enter Compare", () => {
   assert.ok(page.includes("generateStaticParams"))
   assert.ok(page.includes("robots: { index: true, follow: true }"))
   assert.ok(page.includes("robots: { index: false, follow: false }"))
   assert.ok(page.includes("alternates: { canonical: `/cities/dk/${normalized}` }"))
   assert.ok(page.includes("notFound()"))
-  assert.doesNotMatch(dashboard, /buildCityCompareCanonicalHref/)
-  assert.doesNotMatch(dashboard, /Compare \{profile\.name\}/)
+  assert.match(dashboard, /buildCityCompareCanonicalHref/)
+  assert.match(dashboard, /country: "DK"/)
+  assert.match(dashboard, /Compare \{profile\.name\}/)
 })
