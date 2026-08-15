@@ -104,7 +104,7 @@ function evidenceRows(insight: CareerMarketInsight, locale: Locale) {
   const salary = profile?.metric.annualisedMedianSalary ?? decision?.medianAnnualWage ?? null
   const currency = profile?.currency ?? foundation?.currency ?? null
   const payDetail = salary != null
-    ? tr(locale, `확인된 연간 보수 지표: ${money(salary, currency, locale)}`, `Verified annual pay signal: ${money(salary, currency, locale)}`)
+    ? tr(locale, `연간 보수 지표: ${money(salary, currency, locale)}`, `Annual pay signal: ${money(salary, currency, locale)}`)
     : tr(locale, "직업과 국가에 맞는 상대 보수 근거를 확인합니다.", "Review relative pay evidence for this career and country.")
 
   return [
