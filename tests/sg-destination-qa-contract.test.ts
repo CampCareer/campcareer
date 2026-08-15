@@ -25,7 +25,8 @@ test("Phase 8 keeps bounded institution and programme-verification contracts", (
   assert.match(linkage, /programme_delivery_verified/)
   assert.match(loader, /study_destination_institution_sg_v1/)
   assert.match(loader, /Institution or campus presence is never used to infer programme delivery/)
-  assert.match(profile, /verification/i)
+  assert.match(loader, /Programme delivery verification pending/)
+  assert.match(profile, /profile\.programmeCoverage/)
 })
 
 test("Phase 8 keeps all Singapore destination metrics source-backed and conditional", () => {
