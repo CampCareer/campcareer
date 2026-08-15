@@ -41,6 +41,24 @@ export type PostMeta = {
   faqs?: { q: string; a: string }[]
 }
 
+const curatedThumbnails: Record<string, Pick<PostMeta, "heroImage" | "heroImageAlt">> = {
+  "best-high-demand-high-paying-careers-australia-2026": {
+    heroImage: "/blog/generated-image/high-demand-careers-australia-2026.avif",
+    heroImageAlt:
+      "Australian high-demand career professionals including an electrician, nurse, carpenter and care worker",
+  },
+  "how-to-become-an-electrician-in-australia-2026": {
+    heroImage: "/blog/generated-image/how-to-become-electrician-australia-2026.avif",
+    heroImageAlt:
+      "Electrical apprentice in high-visibility workwear training on an electrical switchboard",
+  },
+  "electrician-salary-australia-2026": {
+    heroImage: "/blog/generated-image/electrician-salary-australia-2026.avif",
+    heroImageAlt:
+      "Experienced electrician reviewing electrical plans beside an industrial control panel",
+  },
+}
+
 export function getAllPosts(): PostMeta[] {
   return blogManifest as PostMeta[]
 }
@@ -103,7 +121,13 @@ export function getPostBySlug(slug: string) {
 
   const raw = fs.readFileSync(filePath, "utf-8")
   const { data, content } = matter(raw)
-  const meta = { slug, ...data } as PostMeta
+  const curatedThumbnail = curatedThumbnails[slug]
+  const meta = {
+    slug,
+    ...data,
+    heroImage: data.heroImage ?? curatedThumbnail?.heroImage,
+    heroImageAlt: data.heroImageAlt ?? curatedThumbnail?.heroImageAlt,
+  } as PostMeta
   // Frontmatter faqs win; otherwise derive from the post's FAQ section.
   if (!meta.faqs?.length) {
     const derived = extractFaqs(content)
