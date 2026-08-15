@@ -2,7 +2,6 @@ import assert from "node:assert/strict"
 import fs from "node:fs"
 import path from "node:path"
 import test from "node:test"
-import posts from "../src/data/blog-manifest.json"
 import {
   buildCareerFirstHref,
   buildCompareHref,
@@ -85,10 +84,11 @@ test("a CTA pointing at Compare becomes a Career Page when explicit blog intent 
 })
 
 test("published blog CTAs contain no retired funnel destinations or missing blog posts", () => {
-  const knownSlugs = new Set(posts.map((post) => post.slug))
   const contentDirectory = path.join(process.cwd(), "content/blog")
+  const filenames = fs.readdirSync(contentDirectory).filter((file) => file.endsWith(".mdx"))
+  const knownSlugs = new Set(filenames.map((file) => file.replace(/\.mdx$/, "")))
 
-  for (const filename of fs.readdirSync(contentDirectory).filter((file) => file.endsWith(".mdx"))) {
+  for (const filename of filenames) {
     const content = fs.readFileSync(path.join(contentDirectory, filename), "utf8")
     const hrefs = [
       ...content.matchAll(/(?:href|secondaryHref)="([^"]+)"/g),
