@@ -10,18 +10,20 @@ export function WorkspaceTopbar() {
   const locale = useRouteLocale()
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-[hsl(var(--cc-border))] bg-white/95 px-4 backdrop-blur-md sm:px-6">
-      <Link
-        href={localizePath("/", locale)}
-        className="campcareer-wordmark text-[hsl(var(--cc-ink))]"
-        aria-label="CampCareer career search"
-      >
-        campcareer
-      </Link>
+    <header className="sticky top-0 z-30 h-16 border-b border-[hsl(var(--cc-border))] bg-white">
+      <div className="mx-auto flex h-16 w-full max-w-[1240px] items-center gap-3 px-6 max-sm:px-[18px]">
+        <Link
+          href={localizePath("/", locale)}
+          className="campcareer-wordmark shrink-0 text-[hsl(var(--cc-ink))]"
+          aria-label="CampCareer career search"
+        >
+          campcareer
+        </Link>
 
-      <div className="flex-1" />
-      <LanguageMenu />
-      <WorkspaceUserMenu />
+        <div className="flex-1" />
+        <LanguageMenu buttonClassName="text-[hsl(var(--cc-muted))] hover:bg-slate-100" />
+        <WorkspaceUserMenu />
+      </div>
     </header>
   )
 }
