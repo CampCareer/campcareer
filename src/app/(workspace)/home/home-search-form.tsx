@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState, type FormEvent } from "react"
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react"
 import { ArrowRight, Check, ChevronDown, Search } from "lucide-react"
 import { cn } from "@/lib/utils"
 import {
@@ -64,7 +64,7 @@ export function HomeSearchForm({ values, locale, onValuesChange, onSubmit, compa
         onSubmit={submit}
         noValidate
         className={cn(
-          "flex w-full flex-col rounded-2xl border border-[hsl(var(--cc-border))] bg-white shadow-[0_14px_40px_rgba(24,24,27,0.06)] md:flex-row md:items-stretch",
+          "flex w-full flex-col rounded-2xl border border-[hsl(var(--cc-border))] bg-white shadow-[0_16px_44px_rgba(16,24,40,0.07)] md:flex-row md:items-stretch",
           className,
         )}
       >
@@ -137,6 +137,7 @@ function SearchSelect({ id, label, value, options, placeholder, error, emptyText
 }) {
   const [query, setQuery] = useState("")
   const [open, setOpen] = useState(false)
+  const rootRef = useRef<HTMLDivElement>(null)
   const selected = options.find((option) => option.value === value)
   const matches = useMemo(() => {
     const normalized = query.trim().toLocaleLowerCase()
@@ -149,6 +150,18 @@ function SearchSelect({ id, label, value, options, placeholder, error, emptyText
       .some((term) => term.toLocaleLowerCase().includes(normalized))).slice(0, 12)
   }, [options, query, recommendedIds])
 
+  useEffect(() => {
+    if (!open) return
+
+    const closeOnOutsidePointer = (event: PointerEvent) => {
+      const target = event.target
+      if (target instanceof Node && !rootRef.current?.contains(target)) setOpen(false)
+    }
+
+    document.addEventListener("pointerdown", closeOnOutsidePointer)
+    return () => document.removeEventListener("pointerdown", closeOnOutsidePointer)
+  }, [open])
+
   const choose = (option: OverviewOption) => {
     onChange(option.value)
     setQuery("")
@@ -156,7 +169,7 @@ function SearchSelect({ id, label, value, options, placeholder, error, emptyText
   }
 
   return (
-    <div className={cn("relative min-w-0", integrated && "px-5 py-2.5", className)}>
+    <div ref={rootRef} className={cn("relative min-w-0", integrated && "px-5 py-2.5", className)}>
       <label
         htmlFor={id}
         className={cn(
@@ -184,7 +197,10 @@ function SearchSelect({ id, label, value, options, placeholder, error, emptyText
             setOpen(true)
           }}
           onKeyDown={(event) => {
-            if (event.key === "Escape") setOpen(false)
+            if (event.key === "Escape") {
+              event.stopPropagation()
+              setOpen(false)
+            }
           }}
           className={cn(
             "w-full text-[15px] text-[#18181b] outline-none transition placeholder:text-[#a1a1aa]",
