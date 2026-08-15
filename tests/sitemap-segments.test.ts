@@ -4,6 +4,7 @@ import sitemap from "../src/app/sitemap"
 import { ROUTE_GUIDES, routeGuideHref } from "../src/data/route-guides"
 import { CANONICAL_COUNTRY_SLUGS, SITE_URL, countryCanonicalPath } from "../src/lib/seo-routes.mjs"
 
+// Final PR #244 CI validation covers the complete root-level unit suite.
 test("the sitemap publishes canonical Home, countries, maps, legal pages, and verified routes", () => {
   const entries = sitemap()
   const urls = entries.map((entry) => entry.url)
