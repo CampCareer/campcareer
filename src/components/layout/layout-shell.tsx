@@ -8,7 +8,6 @@ import { isWorkspaceRoute } from "@/lib/workspace/navigation"
 
 export function LayoutShell({ children }: { children: React.ReactNode }) {
   const pathname = withoutLocalePrefix(usePathname())
-  const isLanding = pathname === "/"
   const isWorkspace = isWorkspaceRoute(pathname)
   const isAuthentication = pathname === "/login"
   const isOnboarding = pathname === "/onboarding"
@@ -24,9 +23,9 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className={`flex min-h-screen flex-col ${isLanding ? "bg-slate-950" : ""}`}>
+    <div className="flex min-h-screen flex-col bg-white">
       {!isInteractiveMap && <TopNav />}
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 bg-white">{children}</main>
       <SiteFooter className={isInteractiveMap ? "hidden" : undefined} />
     </div>
   )
