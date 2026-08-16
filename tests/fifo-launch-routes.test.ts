@@ -41,7 +41,7 @@ test("Driller's Offsider and Dump Truck Operator are the only verified launch pa
   assert.match(fifoData, /display: "A\$100k–A\$130k"/)
   assert.match(fifoData, /total: DRILLERS_OFFSIDER_SCORE/)
   assert.match(equipmentData, /slug: "dump-truck-operator"[\s\S]*?status: "verified"/)
-  assert.match(equipmentData, /display: "A\$110k–A\$140k"/)
+  assert.match(equipmentData, /display: "A\$90k–A\$140k"/)
   assert.match(equipmentData, /total: DUMP_TRUCK_SCORE/)
   assert.match(fifoVerifiedDetail, /research\.score\.total/)
   assert.match(equipmentVerifiedDetail, /research\.score\.total/)
@@ -63,7 +63,7 @@ test("broad Plant Operator, Excavator, Loader and Scaffolder remain evidence-gat
 test("Plant Operator is modeled as equipment-specific paths rather than one generic score", () => {
   assert.match(fifoData, /final CampCareer model designed to separate equipment-specific entry paths/)
   assert.match(fifoData, /Plant Operator will not receive one generic score/)
-  assert.match(equipmentData, /new-to-industry FIFO\/DIDO traineeship route/)
+  assert.match(equipmentData, /repeatable new-to-industry route/)
   assert.match(equipmentData, /ticket alone does not solve the first-job problem/)
   assert.match(equipmentData, /will not equate a short course with job readiness/)
 })
