@@ -48,9 +48,13 @@ test("homepage and FIFO navigation lead into the dedicated report route", () => 
   assert.match(sitemap, /`\$\{SITE_URL\}\/fifo\/report`/)
 })
 
-test("step 4 does not expose an unfinished payment integration", () => {
-  assert.match(sales, /disabled/)
-  assert.match(sales, /Secure checkout will be enabled before release/)
-  assert.doesNotMatch(sales, /stripe/i)
-  assert.doesNotMatch(sales, /checkoutUrl/)
+test("step 11 exposes the checkout handoff without moving payment authority into the sales page", () => {
+  assert.match(page, /<FifoReportEmailCapture \/>/)
+  assert.match(sales, /href="#report-checkout-email"/)
+  assert.match(sales, /secure Stripe Checkout/)
+  assert.doesNotMatch(sales, /disabled/)
+  assert.doesNotMatch(
+    sales,
+    /checkoutUrl|STRIPE_SECRET_KEY|STRIPE_FIFO_REPORT_PRICE_ID|SUPABASE_SERVICE_ROLE_KEY/,
+  )
 })
