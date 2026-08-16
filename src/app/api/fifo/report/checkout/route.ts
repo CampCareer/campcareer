@@ -128,7 +128,7 @@ async function ensureOrder(
     .select(ORDER_SELECT)
     .single()
 
-  if (!error && data) return data as OrderRow
+  if (!error && data) return data as unknown as OrderRow
   if (error?.code === "23505") {
     const raced = await findOrder(draft.checkoutAttemptId)
     if (!raced || !orderMatchesAttempt(raced, draft)) throw new Error("checkout_attempt_conflict")
