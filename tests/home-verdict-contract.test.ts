@@ -4,22 +4,28 @@ import { readFileSync } from "node:fs"
 import { resolve } from "node:path"
 
 const homePath = resolve(process.cwd(), "src/app/(workspace)/home/home-hub.tsx")
+const fifoDataPath = resolve(process.cwd(), "src/lib/fifo/fifo-paths.ts")
 const home = readFileSync(homePath, "utf8")
+const fifoData = readFileSync(fifoDataPath, "utf8")
 
 test("homepage uses the FIFO launch contract instead of the legacy public career verdict", () => {
   assert.ok(home.includes('headlineLead: "Find your fastest path into high-paying work"'))
   assert.ok(home.includes('reportTitle: "Australia FIFO Entry Report 2026"'))
   assert.ok(home.includes('verifying: "Verifying"'))
-  assert.ok(home.includes('research: "Researching"'))
+  assert.ok(home.includes('verified: "VERIFIED"'))
   assert.ok(home.includes('reportEyebrow: "COMING SOON"'))
   assert.ok(!home.includes("getHardcodedPublicCareerVerdict"))
 })
 
-test("homepage does not publish unverified FIFO pay or entry scores", () => {
-  assert.ok(home.includes('<Metric label={copy.score} value="—" />'))
-  assert.ok(home.includes('<Metric label={copy.pay} value={copy.verifying} muted />'))
-  assert.ok(!/A\$\d{2,3}k/.test(home))
-  assert.ok(!/Entry Score\s*[:=]\s*\d+/i.test(home))
+test("homepage publishes FIFO numbers only through the shared evidence-gated path model", () => {
+  assert.ok(home.includes('import { FIFO_PATHS } from "@/lib/fifo/fifo-paths"'))
+  assert.ok(home.includes('value={published ? String(published.score.total) : "—"}'))
+  assert.ok(home.includes('value={published ? published.pay.display : copy.verifying}'))
+  assert.ok(home.includes('published ? copy.verified : copy.research'))
+
+  assert.match(fifoData, /slug: "drillers-offsider"[\s\S]*?status: "verified"/)
+  assert.match(fifoData, /slug: "plant-operator"[\s\S]*?status: "researching"/)
+  assert.match(fifoData, /slug: "scaffolder"[\s\S]*?status: "researching"/)
 })
 
 test("homepage does not expose checkout before report verification is complete", () => {
