@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { deliverPaidFifoReport } from "@/lib/fifo/report-delivery"
 import {
   classifyFifoStripeEvent,
   verifyStripeWebhookSignature,
@@ -71,10 +72,30 @@ export async function POST(request: Request) {
   const result = data && typeof data === "object" && !Array.isArray(data)
     ? data as Record<string, unknown>
     : {}
+  const duplicate = result.duplicate === true
+  const applied = result.applied === true
+
+  if (action.paymentStatus === "paid" && (applied || duplicate)) {
+    try {
+      const delivery = await deliverPaidFifoReport(action.orderId)
+      if (!delivery.ok && delivery.reason === "recently_attempted") {
+        return json({ received: true, duplicate, applied, deliveryPending: true }, 503)
+      }
+      if (!delivery.ok && delivery.reason !== "order_not_found" && delivery.reason !== "not_paid") {
+        return json({ received: true, duplicate, applied, deliveryPending: true }, 503)
+      }
+    } catch (deliveryError) {
+      const message = deliveryError instanceof Error ? deliveryError.message : "unknown"
+      console.error("[fifo-report-webhook] delivery failed", message.split(":", 1)[0])
+      // Payment state is already durable. Returning 503 asks Stripe to retry the
+      // webhook so transient Storage/Resend/database delivery failures recover.
+      return json({ received: true, duplicate, applied, deliveryPending: true }, 503)
+    }
+  }
 
   return json({
     received: true,
-    duplicate: result.duplicate === true,
-    applied: result.applied === true,
+    duplicate,
+    applied,
   })
 }
