@@ -1,13 +1,14 @@
 # FIFO report order persistence
 
-`fifo_report_orders` is the single server-managed purchase state for the FIFO Construction Fast Entry Guide 2026. Checkout creation, Stripe webhook processing, delivery retries and successful fulfilment must all update the same order row rather than creating parallel payment/delivery records.
+`fifo_report_orders` is the single server-managed purchase state for the FIFO Construction Fast Entry Guide 2026. Checkout creation, Stripe webhook processing, delivery retries and successful fulfilment all update the same order row rather than creating parallel payment/delivery records.
 
 ## Idempotency boundaries
 
-- `checkout_attempt_id` is a client-generated UUID for one checkout attempt and is unique. Repeated submits with the same attempt ID must converge on the same order.
+- `checkout_attempt_id` is a client-generated UUID for one checkout attempt and is unique. Repeated submits with the same attempt ID converge on the same order.
 - `stripe_checkout_session_id` is unique once Stripe Checkout is created.
 - `stripe_payment_intent_id` is unique once Stripe supplies it.
-- Webhook event deduplication is intentionally left for the webhook step; the order table already provides the stable state target that webhook events will update.
+- Step 9 adds a unique `fifo_report_stripe_events.event_id` ledger plus the `apply_fifo_report_stripe_event` database function. Duplicate webhook deliveries are acknowledged without repeating a state transition, and older Stripe events cannot downgrade a newer order state.
+- A paid webhook transition moves `delivery_status` from `not_ready` to `pending` but does not send the guide. Fulfilment remains a separate later step.
 
 ## Purchase vs marketing
 
@@ -23,4 +24,4 @@ The bucket is not public. The master PDF should be uploaded once, and buyer acce
 
 ## Release sequencing
 
-The migration is committed with the feature branch but is not applied to the production Supabase project during this step. Applying production DDL and uploading the master PDF belong to the controlled release/payment sequence after the purchase flow has been fully verified.
+The migrations are committed with the feature branch but are not applied to the production Supabase project during steps 8–9. Stripe server routes are also kept behind an unconfigured environment boundary and the purchase UI remains locked. Production DDL, the master PDF upload, Stripe account secrets/Price configuration and live flow activation belong to the controlled connection step.
