@@ -13,9 +13,11 @@ export function SiteFooter({ className }: { className?: string }) {
   const pathLocale = localeFromPathname(pathname) ?? locale
   const normalizedPath = withoutLocalePrefix(pathname || "/")
   const isKo = pathLocale === "ko"
+  const isFifoSurface = normalizedPath === "/" || normalizedPath === "/fifo" || normalizedPath.startsWith("/fifo/")
 
-  if (normalizedPath === "/") {
+  if (isFifoSurface) {
     const home = localizePath("/", pathLocale)
+    const fifo = localizePath("/fifo", pathLocale)
 
     return (
       <footer className={cn("border-t border-[hsl(var(--cc-border))] bg-slate-50/60", className)}>
@@ -34,10 +36,10 @@ export function SiteFooter({ className }: { className?: string }) {
             </div>
 
             <div>
-              <h4 className="text-sm font-semibold text-[hsl(var(--cc-ink))]">{isKo ? "FIFO" : "FIFO"}</h4>
+              <h4 className="text-sm font-semibold text-[hsl(var(--cc-ink))]">FIFO</h4>
               <ul className="mt-3 space-y-2.5">
-                <li><Link href={`${home}#fifo-jobs`} className="text-sm text-[hsl(var(--cc-muted))] transition hover:text-brand">{isKo ? "FIFO 직업" : "FIFO Jobs"}</Link></li>
-                <li><Link href={`${home}#tickets`} className="text-sm text-[hsl(var(--cc-muted))] transition hover:text-brand">{isKo ? "티켓" : "Tickets"}</Link></li>
+                <li><Link href={fifo} className="text-sm text-[hsl(var(--cc-muted))] transition hover:text-brand">{isKo ? "FIFO 직업" : "FIFO Jobs"}</Link></li>
+                <li><Link href={`${fifo}#tickets`} className="text-sm text-[hsl(var(--cc-muted))] transition hover:text-brand">{isKo ? "티켓" : "Tickets"}</Link></li>
                 <li><Link href={`${home}#fifo-report`} className="text-sm text-[hsl(var(--cc-muted))] transition hover:text-brand">{isKo ? "2026 FIFO 리포트" : "2026 FIFO Report"}</Link></li>
               </ul>
             </div>
