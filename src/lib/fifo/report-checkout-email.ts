@@ -1,4 +1,5 @@
 export const FIFO_REPORT_CHECKOUT_SESSION_KEY = "cc_fifo_report_checkout_v1"
+export const FIFO_REPORT_CHECKOUT_ATTEMPT_SESSION_KEY = "cc_fifo_report_checkout_attempt_v1"
 
 export type FifoReportCheckoutIdentity = {
   email: string
@@ -6,6 +7,7 @@ export type FifoReportCheckoutIdentity = {
 }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 
 export function parseFifoReportCheckoutIdentity(payload: unknown):
   | { ok: true; value: FifoReportCheckoutIdentity }
@@ -23,4 +25,8 @@ export function parseFifoReportCheckoutIdentity(payload: unknown):
       marketingConsent: value.marketingConsent === true,
     },
   }
+}
+
+export function parseFifoReportCheckoutAttemptId(value: unknown): string | null {
+  return typeof value === "string" && UUID_RE.test(value) ? value : null
 }
