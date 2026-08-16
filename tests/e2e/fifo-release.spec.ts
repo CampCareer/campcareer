@@ -13,6 +13,13 @@ const RESEARCHING_PATHS = [
   ["loader-operator", "Loader Operator"],
 ] as const
 
+const REPORT_PREVIEWS = [
+  "Actual FIFO guide page showing Jobs You Can Actually Target",
+  "Actual FIFO guide page showing The FIFO Ticket Map",
+  "Actual FIFO guide page showing Fastest Entry Pathways",
+  "Actual FIFO guide page showing What Employers Are Actually Asking For",
+] as const
+
 test("FIFO launch renders the decision funnel at the active viewport", async ({ page }) => {
   await page.goto("/")
 
@@ -39,12 +46,22 @@ test("FIFO launch renders the decision funnel at the active viewport", async ({ 
   }
 })
 
-test("FIFO guide sales page renders the completed product without opening checkout early", async ({ page }) => {
+test("FIFO guide sales page renders the completed product and actual PDF previews without opening checkout early", async ({ page }) => {
   const response = await page.goto("/fifo/report")
   expect(response?.ok()).toBeTruthy()
   await expect(page).toHaveTitle("FIFO Construction Fast Entry Guide 2026 | CampCareer")
   await expect(page.getByRole("heading", { name: "FIFO Construction Fast Entry Guide 2026", exact: true })).toBeVisible()
   await expect(page.getByText("Complete digital guide", { exact: true })).toBeVisible()
+  await expect(page.getByRole("img", { name: "FIFO Construction Fast Entry Guide 2026 actual cover" })).toBeVisible()
+  await expect(page.getByRole("heading", { name: "See real pages from the finished Edition 1.0." })).toBeVisible()
+  await expect(page.getByText(/rendered directly from the completed 23-page PDF/)).toBeVisible()
+  for (const alt of REPORT_PREVIEWS) {
+    await expect(page.getByRole("img", { name: alt })).toBeVisible()
+  }
+  await expect(page.getByText("Actual page · P.4", { exact: true })).toBeVisible()
+  await expect(page.getByText("Actual page · P.6", { exact: true })).toBeVisible()
+  await expect(page.getByText("Actual page · P.8", { exact: true })).toBeVisible()
+  await expect(page.getByText("Actual page · P.14", { exact: true })).toBeVisible()
   await expect(page.getByText("Role → Tickets → Application strategy", { exact: true })).toBeVisible()
   await expect(page.getByText("95%", { exact: true })).toBeVisible()
   await expect(page.getByText("A$100–120", { exact: true })).toBeVisible()
