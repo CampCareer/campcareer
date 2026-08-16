@@ -51,4 +51,4 @@ jobs:
       - name: Install Chromium for Playwright
         run: npx playwright install --with-deps chromium
       - name: Run FIFO browser release gate
-        run: npm run test:e2e -- tests/e2e/fifo-release.spec.ts
+        run: npm run test:e2e -- tests/e2e/fifo-release.spec.ts tests/e2e/fifo-report-checkout.spec.ts
