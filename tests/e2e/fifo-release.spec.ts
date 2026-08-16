@@ -48,7 +48,7 @@ test("FIFO launch renders the decision funnel at the active viewport", async ({ 
   }
 })
 
-test("FIFO guide sales page renders the completed product and actual PDF previews without opening checkout early", async ({ page }) => {
+test("FIFO guide sales page renders the completed product, actual PDF previews and separate purchase email capture", async ({ page }) => {
   const response = await page.goto("/fifo/report")
   expect(response?.ok()).toBeTruthy()
   await expect(page).toHaveTitle("FIFO Construction Fast Entry Guide 2026 | CampCareer")
@@ -68,6 +68,28 @@ test("FIFO guide sales page renders the completed product and actual PDF preview
   await expect(page.getByText("95%", { exact: true })).toBeVisible()
   await expect(page.getByText("A$100–120", { exact: true })).toBeVisible()
   await expect(page.getByRole("button", { name: "Buy the guide — A$29" })).toBeDisabled()
+
+  const capture = page.getByTestId("fifo-report-email-capture")
+  await expect(capture).toBeVisible()
+  await expect(capture.getByRole("heading", { name: "Enter the email that should receive the guide." })).toBeVisible()
+  const emailInput = capture.getByLabel("Guide delivery email")
+  const marketing = capture.getByRole("checkbox")
+  await expect(marketing).not.toBeChecked()
+  await emailInput.fill("not-an-email")
+  await capture.getByRole("button", { name: "Save email for checkout" }).click()
+  await expect(capture.getByText("Enter a valid email address.", { exact: true })).toBeVisible()
+
+  await emailInput.fill("Buyer@Example.COM")
+  await capture.getByRole("button", { name: "Save email for checkout" }).click()
+  await expect(capture.getByRole("status")).toContainText("Saved for this browser session")
+  await expect(emailInput).toHaveValue("buyer@example.com")
+  const sessionValue = await page.evaluate(() => window.sessionStorage.getItem("cc_fifo_report_checkout_v1"))
+  expect(sessionValue).toBe('{"email":"buyer@example.com","marketingConsent":false}')
+
+  await page.reload()
+  const restoredCapture = page.getByTestId("fifo-report-email-capture")
+  await expect(restoredCapture.getByLabel("Guide delivery email")).toHaveValue("buyer@example.com")
+  await expect(restoredCapture.getByRole("checkbox")).not.toBeChecked()
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /index, follow/i)
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/fifo\/report$/)
 })

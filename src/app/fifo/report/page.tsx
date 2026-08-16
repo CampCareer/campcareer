@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { FifoReportEmailCapture } from "./fifo-report-email-capture"
 import { FifoReportSalesPage } from "./fifo-report-sales-page"
 
 export const metadata: Metadata = {
@@ -15,5 +16,10 @@ export const metadata: Metadata = {
 }
 
 export default function FifoReportPage() {
-  return <FifoReportSalesPage />
+  return (
+    <>
+      <FifoReportSalesPage />
+      <FifoReportEmailCapture />
+    </>
+  )
 }
