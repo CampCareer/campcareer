@@ -14,7 +14,7 @@ import {
   Ticket,
 } from "lucide-react"
 import type { FifoPath } from "@/lib/fifo/fifo-paths"
-import { FIFO_PATHS } from "@/lib/fifo/fifo-paths"
+import { ALL_FIFO_PATHS } from "@/lib/fifo/all-fifo-paths"
 import { FIFO_ENTRY_SCORE_WEIGHTS } from "@/lib/fifo/entry-score"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { localizePath } from "@/lib/i18n/config"
@@ -25,7 +25,9 @@ export function VerifiedFifoJobDetail({ path }: { path: FifoPath }) {
   const research = path.published
   if (!research) return null
 
-  const otherPaths = FIFO_PATHS.filter((candidate) => candidate.slug !== path.slug)
+  const otherPaths = ALL_FIFO_PATHS.filter(
+    (candidate) => candidate.slug !== path.slug && candidate.slug !== "plant-operator",
+  ).slice(0, 4)
   const copy = isKo
     ? {
         back: "FIFO 직업으로 돌아가기",
