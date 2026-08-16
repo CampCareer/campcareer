@@ -23,6 +23,7 @@ test("FIFO launch renders the decision funnel at the active viewport", async ({ 
   await expect(page.getByText("A$29", { exact: true })).toBeVisible()
   await expect(page.getByText(/23 pages · Western Australia · Data reviewed 16 Aug 2026/).first()).toBeVisible()
   await expect(page.getByText("COMING SOON", { exact: true })).toHaveCount(0)
+  await expect(page.getByRole("link", { name: "See the 2026 FIFO Guide" })).toHaveAttribute("href", "/fifo/report")
 
   for (const [, name] of VERIFIED_PATHS) {
     await expect(page.getByRole("heading", { name, exact: true })).toBeVisible()
@@ -36,6 +37,20 @@ test("FIFO launch renders the decision funnel at the active viewport", async ({ 
   for (const [, name] of [...VERIFIED_PATHS, ...RESEARCHING_PATHS]) {
     await expect(page.getByRole("heading", { name, exact: true })).toBeVisible()
   }
+})
+
+test("FIFO guide sales page renders the completed product without opening checkout early", async ({ page }) => {
+  const response = await page.goto("/fifo/report")
+  expect(response?.ok()).toBeTruthy()
+  await expect(page).toHaveTitle("FIFO Construction Fast Entry Guide 2026 | CampCareer")
+  await expect(page.getByRole("heading", { name: "FIFO Construction Fast Entry Guide 2026", exact: true })).toBeVisible()
+  await expect(page.getByText("Complete digital guide", { exact: true })).toBeVisible()
+  await expect(page.getByText("Role → Tickets → Application strategy", { exact: true })).toBeVisible()
+  await expect(page.getByText("95%", { exact: true })).toBeVisible()
+  await expect(page.getByText("A$100–120", { exact: true })).toBeVisible()
+  await expect(page.getByRole("button", { name: "Buy the guide — A$29" })).toBeDisabled()
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /index, follow/i)
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/fifo\/report$/)
 })
 
 test("verified FIFO pages render and remain indexable", async ({ page }) => {
@@ -61,12 +76,13 @@ test("researching FIFO pages render but stay out of the index", async ({ page })
   }
 })
 
-test("FIFO sitemap exposes only the hub and verified paths", async ({ request }) => {
+test("FIFO sitemap exposes the hub, guide and verified paths only", async ({ request }) => {
   const response = await request.get("/fifo/sitemap.xml")
   expect(response.ok()).toBeTruthy()
   const xml = await response.text()
 
   expect(xml).toContain("https://www.campcareer.com/fifo")
+  expect(xml).toContain("https://www.campcareer.com/fifo/report")
   for (const [slug] of VERIFIED_PATHS) {
     expect(xml).toContain(`https://www.campcareer.com/fifo/${slug}`)
   }
