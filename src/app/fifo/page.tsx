@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
-import { FifoHub } from "./fifo-hub"
+import { FifoLaunchHub } from "./fifo-launch-hub"
 
 export const metadata: Metadata = {
   title: "Australia FIFO Jobs & Entry Paths | CampCareer",
-  description: "Compare CampCareer research on Australian FIFO entry paths, tickets, training burden and pay evidence before choosing where to spend time and money.",
+  description: "Compare evidence-backed Australian FIFO entry paths, training burden, current hiring requirements and pay before choosing where to spend time and money.",
   alternates: { canonical: "/fifo" },
   robots: { index: true, follow: true },
   openGraph: {
@@ -13,5 +13,5 @@ export const metadata: Metadata = {
 }
 
 export default function FifoPage() {
-  return <FifoHub />
+  return <FifoLaunchHub />
 }
