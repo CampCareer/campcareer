@@ -35,6 +35,13 @@ const ALLOWED_EVENTS = new Set([
   "report_launch_interest_started",
   "report_launch_interest_submitted",
   "report_workspace_open",
+  // FIFO launch funnel. Keep names and properties intentionally low-cardinality.
+  "fifo_landing_view",
+  "fifo_hub_opened",
+  "fifo_hub_view",
+  "fifo_path_opened",
+  "fifo_path_view",
+  "fifo_report_cta_clicked",
 ])
 
 export function track(eventName: string, params?: Record<string, EventValue>) {
@@ -53,15 +60,12 @@ export function track(eventName: string, params?: Record<string, EventValue>) {
   vercelTrack(eventName, properties)
 }
 
-export function recordDiscoveryEvent(
-  eventName: "recommendation_start" | "recommendation_result_view",
-  context: { surface: "landing" | "country_results"; country: string; major: string; goal: string },
-) {
-  track(eventName, context)
-  if (
-    typeof window === "undefined" ||
-    !document.cookie.split("; ").some((item) => item === "cc_analytics_consent=granted")
-  ) return
+function analyticsConsentGranted() {
+  return typeof window !== "undefined" && document.cookie.split("; ").some((item) => item === "cc_analytics_consent=granted")
+}
+
+function persistEvent(eventName: string, context: Record<string, string | undefined>) {
+  if (!analyticsConsentGranted()) return
 
   void fetch("/api/v1/discovery-events", {
     method: "POST",
@@ -71,22 +75,40 @@ export function recordDiscoveryEvent(
   }).catch(() => undefined)
 }
 
+export type FifoAnalyticsEvent =
+  | "fifo_landing_view"
+  | "fifo_hub_opened"
+  | "fifo_hub_view"
+  | "fifo_path_opened"
+  | "fifo_path_view"
+  | "fifo_report_cta_clicked"
+
+export function recordFifoEvent(
+  eventName: FifoAnalyticsEvent,
+  context: {
+    surface: "landing" | "fifo_hub" | "fifo_path"
+    path_slug?: string
+    target?: "fifo_hub" | "fifo_path" | "fifo_report"
+  },
+) {
+  track(eventName, context)
+  persistEvent(eventName, context)
+}
+
+export function recordDiscoveryEvent(
+  eventName: "recommendation_start" | "recommendation_result_view",
+  context: { surface: "landing" | "country_results"; country: string; major: string; goal: string },
+) {
+  track(eventName, context)
+  persistEvent(eventName, context)
+}
+
 export function recordReportEvent(
   eventName: "report_launch_view" | "report_workspace_open",
   context: { surface: "report_launch" | "report_workspace"; country: "AU"; locale: "en" | "ko" },
 ) {
   track(eventName, context)
-  if (
-    typeof window === "undefined" ||
-    !document.cookie.split("; ").some((item) => item === "cc_analytics_consent=granted")
-  ) return
-
-  void fetch("/api/v1/discovery-events", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ eventName, context }),
-    keepalive: true,
-  }).catch(() => undefined)
+  persistEvent(eventName, context)
 }
 
 export type RouteAnalyticsEvent =
@@ -112,15 +134,5 @@ export function recordRouteEvent(
   },
 ) {
   track(eventName, context)
-  if (
-    typeof window === "undefined" ||
-    !document.cookie.split("; ").some((item) => item === "cc_analytics_consent=granted")
-  ) return
-
-  void fetch("/api/v1/discovery-events", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ eventName, context }),
-    keepalive: true,
-  }).catch(() => undefined)
+  persistEvent(eventName, context)
 }
