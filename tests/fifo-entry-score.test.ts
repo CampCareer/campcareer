@@ -4,7 +4,7 @@ import { calculateFifoEntryScore, fifoEntryScoreBand, FIFO_ENTRY_SCORE_WEIGHTS }
 
 test("FIFO Entry Score weights total 100 percent", () => {
   const total = Object.values(FIFO_ENTRY_SCORE_WEIGHTS).reduce((sum, value) => sum + value, 0)
-  assert.equal(total, 1)
+  assert.ok(Math.abs(total - 1) < Number.EPSILON * 4)
 })
 
 test("Driller's Offsider launch evidence produces a Strong score of 80", () => {
