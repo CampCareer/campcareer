@@ -6,17 +6,24 @@ import {
   BriefcaseBusiness,
   CircleDollarSign,
   FileText,
-  LockKeyhole,
   ShieldCheck,
   Ticket,
 } from "lucide-react"
 import { HOME_FIFO_PATHS } from "@/lib/fifo/all-fifo-paths"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { localizePath } from "@/lib/i18n/config"
+import {
+  FIFO_CONSTRUCTION_FAST_ENTRY_GUIDE,
+  formatAud,
+} from "@/lib/report-catalog"
 
 export function HomeHub() {
   const locale = useRouteLocale()
   const isKo = locale === "ko"
+  const reportTitle = isKo
+    ? FIFO_CONSTRUCTION_FAST_ENTRY_GUIDE.titleKo
+    : FIFO_CONSTRUCTION_FAST_ENTRY_GUIDE.title
+  const reportPrice = formatAud(FIFO_CONSTRUCTION_FAST_ENTRY_GUIDE.amountAudCents)
 
   const copy = isKo
     ? {
@@ -24,7 +31,7 @@ export function HomeHub() {
         headlineAccent: "가장 빠른 경로",
         description: "FIFO 직업, 필요한 티켓, 진입 난이도와 실제 보수를 비교해 잘못된 교육에 시간과 돈을 낭비하지 마세요.",
         explore: "FIFO 직업 보기",
-        report: "2026 FIFO 리포트 보기",
+        report: "2026 FIFO 가이드 보기",
         trust: "막연한 커리어 조언이 아니라, 실제 진입 경로를 찾는 사람을 위해 만듭니다.",
         panelTitle: "Top FIFO Paths",
         panelBadge: "4 verified",
@@ -41,18 +48,18 @@ export function HomeHub() {
         benefitTicketsText: "필수 자격, 도움이 되는 자격, 나중에 따도 되는 자격을 구분합니다.",
         benefitPay: "출처가 있는 FIFO 보수",
         benefitPayText: "공개 전 모든 보수 범위를 출처와 기준일로 검증합니다.",
-        reportEyebrow: "COMING SOON",
-        reportTitle: "Australia FIFO Entry Report 2026",
-        reportText: "15개 이상의 진입 경로, 필요한 티켓, 현실적인 보수, 처음부터 시작하는 추천 순서를 한 리포트에 정리합니다.",
-        launch: "출시가 $29",
-        launchNote: "첫 판의 데이터 검증이 끝나면 결제를 엽니다.",
+        reportEyebrow: "EDITION 1.0 · COMPLETE",
+        reportText: "현실적인 FIFO 직업 비교부터 티켓 비용과 교육시간, 빠른 진입 경로, 로스터 기준 보수, 실제 고용주 요구사항, 교육·채용 채널과 첫 지원 순서까지 한 가이드에 정리했습니다.",
+        reportProof: "23페이지 · Western Australia · 2026년 8월 16일 데이터 검토",
+        reportPriceLabel: "디지털 가이드 가격",
+        reportScope: "직업 → 티켓 → 지원 전략",
       }
     : {
         headlineLead: "Find your fastest path into high-paying work",
         headlineAccent: "in Australia.",
         description: "Compare FIFO jobs, required tickets, entry difficulty and real pay — without wasting years on the wrong training.",
         explore: "Explore FIFO Jobs",
-        report: "Get the 2026 FIFO Report",
+        report: "See the 2026 FIFO Guide",
         trust: "Built for people who want practical paths, not vague career advice.",
         panelTitle: "Top FIFO Paths",
         panelBadge: "4 verified",
@@ -69,11 +76,11 @@ export function HomeHub() {
         benefitTicketsText: "See which licences are required, which help, and which can wait until later.",
         benefitPay: "Real FIFO Pay",
         benefitPayText: "Every salary range is sourced and date-stamped before we publish it.",
-        reportEyebrow: "COMING SOON",
-        reportTitle: "Australia FIFO Entry Report 2026",
-        reportText: "15+ entry paths, required tickets, realistic salaries, and the best routes from zero — in one decision-ready report.",
-        launch: "$29 launch price",
-        launchNote: "Checkout opens when the first edition finishes verification.",
+        reportEyebrow: "EDITION 1.0 · COMPLETE",
+        reportText: "Compare realistic FIFO roles, ticket costs and training time, fastest entry pathways, salary and roster reality, employer requirements, training options, recruitment channels and the first-job application sequence.",
+        reportProof: "23 pages · Western Australia · Data reviewed 16 Aug 2026",
+        reportPriceLabel: "Digital guide price",
+        reportScope: "Role → Tickets → Application strategy",
       }
 
   return (
@@ -167,23 +174,35 @@ export function HomeHub() {
           </section>
 
           <section id="fifo-report" className="mt-5 scroll-mt-24 overflow-hidden rounded-[22px] border border-blue-100 bg-gradient-to-r from-blue-50/80 via-white to-blue-50/60 p-5 sm:mt-6 sm:p-7 lg:p-8" aria-labelledby="fifo-report-heading">
-            <div className="grid items-center gap-6 md:grid-cols-[150px_1fr_auto] md:gap-8">
-              <div className="mx-auto w-[124px] rounded-md bg-[hsl(var(--cc-ink))] px-4 py-5 text-left text-white shadow-[0_12px_30px_rgba(16,24,40,0.15)] md:mx-0">
-                <p className="text-[10px] font-semibold tracking-[0.12em] text-blue-200">AUSTRALIA</p>
-                <p className="mt-2 text-sm font-semibold leading-4">FIFO ENTRY REPORT</p>
-                <p className="mt-5 text-2xl font-semibold text-blue-300">2026</p>
-                <div className="mt-7 h-1 w-8 rounded-full bg-brand" />
+            <div className="grid items-center gap-6 md:grid-cols-[160px_1fr_auto] md:gap-8">
+              <div className="mx-auto w-[136px] rounded-md bg-[hsl(var(--cc-ink))] px-4 py-5 text-left text-white shadow-[0_12px_30px_rgba(16,24,40,0.15)] md:mx-0">
+                <p className="text-[9px] font-semibold tracking-[0.12em] text-blue-200">CAMPCAREER</p>
+                <p className="mt-4 text-[13px] font-semibold leading-4">FIFO CONSTRUCTION</p>
+                <p className="text-[13px] font-semibold leading-4 text-blue-200">FAST ENTRY GUIDE</p>
+                <p className="mt-5 text-[9px] font-semibold tracking-[0.1em] text-slate-300">WESTERN AUSTRALIA</p>
+                <div className="mt-6 flex items-end justify-between">
+                  <p className="text-2xl font-semibold text-blue-300">2026</p>
+                  <p className="text-[8px] font-semibold text-slate-400">ED. 1.0</p>
+                </div>
               </div>
 
               <div>
                 <span className="inline-flex rounded-full bg-brand px-2.5 py-1 text-[10px] font-semibold tracking-[0.08em] text-white">{copy.reportEyebrow}</span>
-                <h2 id="fifo-report-heading" className="mt-3 text-2xl font-semibold tracking-[-0.035em] sm:text-3xl">{copy.reportTitle}</h2>
+                <h2 id="fifo-report-heading" className="mt-3 text-2xl font-semibold tracking-[-0.035em] sm:text-3xl">{reportTitle}</h2>
                 <p className="mt-3 max-w-2xl text-sm leading-6 text-[hsl(var(--cc-ink-secondary))] sm:text-[15px]">{copy.reportText}</p>
+                <div className="mt-4 flex flex-wrap gap-2 text-[11px] font-semibold text-[hsl(var(--cc-muted))]">
+                  <span className="rounded-full border border-slate-200 bg-white px-2.5 py-1">{copy.reportScope}</span>
+                  <span className="rounded-full border border-slate-200 bg-white px-2.5 py-1">{copy.reportProof}</span>
+                </div>
               </div>
 
-              <div className="md:min-w-[210px] md:text-right">
-                <div className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-brand px-5 py-3 text-sm font-semibold text-white md:w-auto">{copy.launch}</div>
-                <p className="mt-2 flex items-center justify-center gap-1.5 text-[11px] text-[hsl(var(--cc-muted))] md:justify-end"><LockKeyhole className="size-3.5" aria-hidden="true" />{copy.launchNote}</p>
+              <div className="rounded-2xl border border-blue-100 bg-white/90 px-5 py-4 md:min-w-[190px] md:text-right">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-[hsl(var(--cc-muted))]">{copy.reportPriceLabel}</p>
+                <p className="mt-1 text-3xl font-semibold tracking-[-0.04em] text-brand">{reportPrice}</p>
+                <p className="mt-2 flex items-center gap-1.5 text-[11px] text-[hsl(var(--cc-muted))] md:justify-end">
+                  <FileText className="size-3.5" aria-hidden="true" />
+                  {copy.reportProof}
+                </p>
               </div>
             </div>
           </section>
