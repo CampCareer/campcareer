@@ -27,12 +27,13 @@ export function HomeHub() {
         report: "2026 FIFO 리포트 보기",
         trust: "막연한 커리어 조언이 아니라, 실제 진입 경로를 찾는 사람을 위해 만듭니다.",
         panelTitle: "Top FIFO Paths",
-        panelBadge: "2026 검증 중",
+        panelBadge: "1 verified · 2 researching",
         score: "ENTRY SCORE",
-        barrier: "ENTRY BARRIER",
+        barrier: "ENTRY",
         pay: "TYPICAL PAY (AUD)",
         verifying: "검증 중",
-        research: "Researching",
+        research: "RESEARCHING",
+        verified: "VERIFIED",
         methodology: "급여, 수요, 교육 부담, 첫 취업 현실성을 검증한 뒤에만 점수를 공개합니다.",
         benefitJobs: "초보자를 위한 현실적인 직업",
         benefitJobsText: "급여만이 아니라 진입 난이도와 첫 취업 가능성까지 함께 비교합니다.",
@@ -54,12 +55,13 @@ export function HomeHub() {
         report: "Get the 2026 FIFO Report",
         trust: "Built for people who want practical paths, not vague career advice.",
         panelTitle: "Top FIFO Paths",
-        panelBadge: "2026 research",
+        panelBadge: "1 verified · 2 researching",
         score: "ENTRY SCORE",
-        barrier: "ENTRY BARRIER",
+        barrier: "ENTRY",
         pay: "TYPICAL PAY (AUD)",
         verifying: "Verifying",
-        research: "Researching",
+        research: "RESEARCHING",
+        verified: "VERIFIED",
         methodology: "We publish scores only after pay, demand, training burden and first-job evidence are verified.",
         benefitJobs: "Best Jobs for Beginners",
         benefitJobsText: "Compare realistic entry paths by pay, training burden, demand and first-job difficulty.",
@@ -117,59 +119,41 @@ export function HomeHub() {
               </p>
             </div>
 
-            <section
-              id="fifo-jobs"
-              aria-labelledby="fifo-paths-heading"
-              className="scroll-mt-24 overflow-hidden rounded-[22px] border border-[hsl(var(--cc-border))] bg-white shadow-[0_22px_60px_rgba(16,24,40,0.09)]"
-            >
+            <section id="fifo-jobs" aria-labelledby="fifo-paths-heading" className="scroll-mt-24 overflow-hidden rounded-[22px] border border-[hsl(var(--cc-border))] bg-white shadow-[0_22px_60px_rgba(16,24,40,0.09)]">
               <div className="flex items-center justify-between gap-4 border-b border-[hsl(var(--cc-border))] px-5 py-5 sm:px-6">
                 <div className="flex min-w-0 items-center gap-3">
-                  <span className="grid size-9 shrink-0 place-items-center rounded-full bg-blue-50 text-brand">
-                    <BriefcaseBusiness className="size-4.5" aria-hidden="true" />
-                  </span>
-                  <h2 id="fifo-paths-heading" className="truncate text-lg font-semibold tracking-[-0.02em] sm:text-xl">
-                    {copy.panelTitle}
-                  </h2>
+                  <span className="grid size-9 shrink-0 place-items-center rounded-full bg-blue-50 text-brand"><BriefcaseBusiness className="size-4.5" aria-hidden="true" /></span>
+                  <h2 id="fifo-paths-heading" className="truncate text-lg font-semibold tracking-[-0.02em] sm:text-xl">{copy.panelTitle}</h2>
                 </div>
-                <Link
-                  href={localizePath("/fifo", locale)}
-                  className="shrink-0 rounded-full bg-blue-50 px-2.5 py-1 text-[11px] font-semibold text-brand transition hover:bg-blue-100"
-                >
-                  {copy.panelBadge}
-                </Link>
+                <Link href={localizePath("/fifo", locale)} className="shrink-0 rounded-full bg-blue-50 px-2.5 py-1 text-[11px] font-semibold text-brand transition hover:bg-blue-100">{copy.panelBadge}</Link>
               </div>
 
               <div className="hidden grid-cols-[1fr_88px_116px_134px] gap-3 border-b border-[hsl(var(--cc-border))] bg-slate-50/70 px-6 py-2.5 text-[10px] font-semibold tracking-[0.04em] text-[hsl(var(--cc-muted))] sm:grid">
-                <span />
-                <span>{copy.score}</span>
-                <span>{copy.barrier}</span>
-                <span>{copy.pay}</span>
+                <span /><span>{copy.score}</span><span>{copy.barrier}</span><span>{copy.pay}</span>
               </div>
 
               <div>
-                {FIFO_PATHS.map((path) => (
-                  <Link
-                    key={path.name}
-                    href={localizePath(`/fifo/${path.slug}`, locale)}
-                    className="group grid gap-4 border-b border-[hsl(var(--cc-border))] px-5 py-5 transition last:border-b-0 hover:bg-blue-50/35 sm:grid-cols-[1fr_88px_116px_134px] sm:items-center sm:gap-3 sm:px-6"
-                  >
-                    <div className="min-w-0">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <h3 className="text-[15px] font-semibold tracking-[-0.015em] transition group-hover:text-brand sm:text-base">{path.name}</h3>
-                        <span className="rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-semibold text-brand">{copy.research}</span>
+                {FIFO_PATHS.map((path) => {
+                  const published = path.published
+                  return (
+                    <Link key={path.name} href={localizePath(`/fifo/${path.slug}`, locale)} className="group grid gap-4 border-b border-[hsl(var(--cc-border))] px-5 py-5 transition last:border-b-0 hover:bg-blue-50/35 sm:grid-cols-[1fr_88px_116px_134px] sm:items-center sm:gap-3 sm:px-6">
+                      <div className="min-w-0">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <h3 className="text-[15px] font-semibold tracking-[-0.015em] transition group-hover:text-brand sm:text-base">{path.name}</h3>
+                          <span className={published ? "rounded-full bg-brand px-2 py-0.5 text-[10px] font-semibold text-white" : "rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-semibold text-brand"}>{published ? copy.verified : copy.research}</span>
+                        </div>
+                        <p className="mt-1 text-xs text-[hsl(var(--cc-muted))]">{isKo ? path.pathType.ko : path.pathType.en}</p>
                       </div>
-                      <p className="mt-1 text-xs text-[hsl(var(--cc-muted))]">{isKo ? path.pathType.ko : path.pathType.en}</p>
-                    </div>
-                    <Metric label={copy.score} value="—" />
-                    <Metric label={copy.barrier} value={copy.verifying} muted />
-                    <Metric label={copy.pay} value={copy.verifying} muted />
-                  </Link>
-                ))}
+                      <Metric label={copy.score} value={published ? String(published.score.total) : "—"} />
+                      <Metric label={copy.barrier} value={published ? `${published.accessibility.score.toFixed(1)}/10` : copy.verifying} muted={!published} />
+                      <Metric label={copy.pay} value={published ? published.pay.display : copy.verifying} muted={!published} />
+                    </Link>
+                  )
+                })}
               </div>
 
               <div className="flex items-start gap-2 border-t border-[hsl(var(--cc-border))] bg-slate-50/60 px-5 py-4 text-[11px] leading-5 text-[hsl(var(--cc-muted))] sm:px-6 sm:text-xs">
-                <ShieldCheck className="mt-0.5 size-4 shrink-0 text-brand" aria-hidden="true" />
-                {copy.methodology}
+                <ShieldCheck className="mt-0.5 size-4 shrink-0 text-brand" aria-hidden="true" />{copy.methodology}
               </div>
             </section>
           </div>
@@ -182,11 +166,7 @@ export function HomeHub() {
             </div>
           </section>
 
-          <section
-            id="fifo-report"
-            className="mt-5 scroll-mt-24 overflow-hidden rounded-[22px] border border-blue-100 bg-gradient-to-r from-blue-50/80 via-white to-blue-50/60 p-5 sm:mt-6 sm:p-7 lg:p-8"
-            aria-labelledby="fifo-report-heading"
-          >
+          <section id="fifo-report" className="mt-5 scroll-mt-24 overflow-hidden rounded-[22px] border border-blue-100 bg-gradient-to-r from-blue-50/80 via-white to-blue-50/60 p-5 sm:mt-6 sm:p-7 lg:p-8" aria-labelledby="fifo-report-heading">
             <div className="grid items-center gap-6 md:grid-cols-[150px_1fr_auto] md:gap-8">
               <div className="mx-auto w-[124px] rounded-md bg-[hsl(var(--cc-ink))] px-4 py-5 text-left text-white shadow-[0_12px_30px_rgba(16,24,40,0.15)] md:mx-0">
                 <p className="text-[10px] font-semibold tracking-[0.12em] text-blue-200">AUSTRALIA</p>
@@ -196,33 +176,21 @@ export function HomeHub() {
               </div>
 
               <div>
-                <span className="inline-flex rounded-full bg-brand px-2.5 py-1 text-[10px] font-semibold tracking-[0.08em] text-white">
-                  {copy.reportEyebrow}
-                </span>
-                <h2 id="fifo-report-heading" className="mt-3 text-2xl font-semibold tracking-[-0.035em] sm:text-3xl">
-                  {copy.reportTitle}
-                </h2>
-                <p className="mt-3 max-w-2xl text-sm leading-6 text-[hsl(var(--cc-ink-secondary))] sm:text-[15px]">
-                  {copy.reportText}
-                </p>
+                <span className="inline-flex rounded-full bg-brand px-2.5 py-1 text-[10px] font-semibold tracking-[0.08em] text-white">{copy.reportEyebrow}</span>
+                <h2 id="fifo-report-heading" className="mt-3 text-2xl font-semibold tracking-[-0.035em] sm:text-3xl">{copy.reportTitle}</h2>
+                <p className="mt-3 max-w-2xl text-sm leading-6 text-[hsl(var(--cc-ink-secondary))] sm:text-[15px]">{copy.reportText}</p>
               </div>
 
               <div className="md:min-w-[210px] md:text-right">
-                <div className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-brand px-5 py-3 text-sm font-semibold text-white md:w-auto">
-                  {copy.launch}
-                </div>
-                <p className="mt-2 flex items-center justify-center gap-1.5 text-[11px] text-[hsl(var(--cc-muted))] md:justify-end">
-                  <LockKeyhole className="size-3.5" aria-hidden="true" />
-                  {copy.launchNote}
-                </p>
+                <div className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-brand px-5 py-3 text-sm font-semibold text-white md:w-auto">{copy.launch}</div>
+                <p className="mt-2 flex items-center justify-center gap-1.5 text-[11px] text-[hsl(var(--cc-muted))] md:justify-end"><LockKeyhole className="size-3.5" aria-hidden="true" />{copy.launchNote}</p>
               </div>
             </div>
           </section>
 
           <div className="mt-7 text-center text-xs text-[hsl(var(--cc-muted))]">
             <Link href={localizePath("/blog", locale)} className="font-semibold text-brand transition hover:text-[hsl(var(--brand-press))]">
-              {isKo ? "CampCareer 리서치와 가이드 보기" : "Read CampCareer research and guides"}
-              <ArrowRight className="ml-1 inline size-3.5" aria-hidden="true" />
+              {isKo ? "CampCareer 리서치와 가이드 보기" : "Read CampCareer research and guides"}<ArrowRight className="ml-1 inline size-3.5" aria-hidden="true" />
             </Link>
           </div>
         </div>
@@ -235,9 +203,7 @@ function Metric({ label, value, muted = false }: { label: string; value: string;
   return (
     <div>
       <p className="text-[9px] font-semibold tracking-[0.04em] text-[hsl(var(--cc-muted))] sm:hidden">{label}</p>
-      <p className={muted ? "mt-1 text-xs font-semibold text-[hsl(var(--cc-muted))] sm:mt-0" : "mt-1 text-2xl font-semibold tracking-[-0.04em] text-brand sm:mt-0"}>
-        {value}
-      </p>
+      <p className={muted ? "mt-1 text-xs font-semibold text-[hsl(var(--cc-muted))] sm:mt-0" : "mt-1 text-xl font-semibold tracking-[-0.04em] text-brand sm:mt-0"}>{value}</p>
     </div>
   )
 }
@@ -246,13 +212,8 @@ function BenefitCard({ icon, title, text }: { icon: React.ReactNode; title: stri
   return (
     <article className="rounded-[18px] border border-[hsl(var(--cc-border))] bg-white p-5 shadow-[0_10px_30px_rgba(16,24,40,0.045)] sm:p-6">
       <div className="flex items-start gap-4">
-        <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-blue-50 text-brand" aria-hidden="true">
-          {icon}
-        </span>
-        <div>
-          <h3 className="text-base font-semibold tracking-[-0.02em]">{title}</h3>
-          <p className="mt-2 text-sm leading-6 text-[hsl(var(--cc-muted))]">{text}</p>
-        </div>
+        <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-blue-50 text-brand" aria-hidden="true">{icon}</span>
+        <div><h3 className="text-base font-semibold tracking-[-0.02em]">{title}</h3><p className="mt-2 text-sm leading-6 text-[hsl(var(--cc-muted))]">{text}</p></div>
       </div>
     </article>
   )
