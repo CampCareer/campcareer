@@ -75,7 +75,7 @@ test("FIFO guide sales page renders the completed product, actual PDF previews a
   await expect(page.getByText("Role → Tickets → Application strategy", { exact: true })).toBeVisible()
   await expect(page.getByText("95%", { exact: true })).toBeVisible()
   await expect(page.getByText("A$100–120", { exact: true })).toBeVisible()
-  await expect(page.getByRole("button", { name: "Buy the guide — A$29" })).toBeDisabled()
+  await expect(page.getByRole("link", { name: "Buy the guide — A$29" })).toHaveAttribute("href", "#report-checkout-email")
 
   const capture = page.getByTestId("fifo-report-email-capture")
   await expect(capture).toBeVisible()
