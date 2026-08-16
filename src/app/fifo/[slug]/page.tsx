@@ -4,6 +4,7 @@ import { ALL_FIFO_PATHS, getAllFifoPath } from "@/lib/fifo/all-fifo-paths"
 import { FifoJobDetail } from "./fifo-job-detail"
 import { VerifiedEquipmentJobDetail } from "./verified-equipment-job-detail"
 import { VerifiedFifoJobDetail } from "./verified-fifo-job-detail"
+import { VerifiedRiggerJobDetail } from "./verified-rigger-job-detail"
 import { VerifiedScaffolderJobDetail } from "./verified-scaffolder-job-detail"
 
 type PageProps = {
@@ -49,6 +50,9 @@ export default async function FifoJobPage({ params }: PageProps) {
     }
     if (path.slug === "scaffolder") {
       return <VerifiedScaffolderJobDetail path={path} />
+    }
+    if (path.slug === "rigger") {
+      return <VerifiedRiggerJobDetail path={path} />
     }
     return <VerifiedFifoJobDetail path={path} />
   }
