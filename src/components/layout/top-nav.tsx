@@ -18,6 +18,7 @@ export function TopNav() {
   const pathLocale = localeFromPathname(pathname) ?? routeLocale
   const normalizedPath = withoutLocalePrefix(pathname || "/")
   const homeDestination = localizePath("/", pathLocale)
+  const fifoDestination = localizePath("/fifo", pathLocale)
   const profileDestination = localizePath("/profile", pathLocale)
   const loginPath = localizePath("/login", pathLocale)
   const fallbackLoginDestination = `${loginPath}?next=${encodeURIComponent(pathname || homeDestination)}`
@@ -43,17 +44,19 @@ export function TopNav() {
     }
   }, [supabase])
 
-  if (normalizedPath === "/") {
+  const isFifoSurface = normalizedPath === "/" || normalizedPath === "/fifo" || normalizedPath.startsWith("/fifo/")
+
+  if (isFifoSurface) {
     const nav = pathLocale === "ko"
       ? [
-          { href: `${homeDestination}#fifo-jobs`, label: "FIFO 직업" },
-          { href: `${homeDestination}#tickets`, label: "티켓" },
+          { href: fifoDestination, label: "FIFO 직업" },
+          { href: `${fifoDestination}#tickets`, label: "티켓" },
           { href: `${homeDestination}#fifo-report`, label: "FIFO 리포트" },
           { href: localizePath("/blog", pathLocale), label: "Blog" },
         ]
       : [
-          { href: `${homeDestination}#fifo-jobs`, label: "FIFO Jobs" },
-          { href: `${homeDestination}#tickets`, label: "Tickets" },
+          { href: fifoDestination, label: "FIFO Jobs" },
+          { href: `${fifoDestination}#tickets`, label: "Tickets" },
           { href: `${homeDestination}#fifo-report`, label: "FIFO Report" },
           { href: localizePath("/blog", pathLocale), label: "Blog" },
         ]
