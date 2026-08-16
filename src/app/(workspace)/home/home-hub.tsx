@@ -10,14 +10,9 @@ import {
   ShieldCheck,
   Ticket,
 } from "lucide-react"
+import { FIFO_PATHS } from "@/lib/fifo/fifo-paths"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { localizePath } from "@/lib/i18n/config"
-
-const FIFO_PATHS = [
-  { name: "Driller's Offsider", note: "Entry path" },
-  { name: "Plant Operator", note: "Equipment path" },
-  { name: "Scaffolder", note: "High-risk work path" },
-] as const
 
 export function HomeHub() {
   const locale = useRouteLocale()
@@ -101,7 +96,7 @@ export function HomeHub() {
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link
-                  href="#fifo-jobs"
+                  href={localizePath("/fifo", locale)}
                   className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-[hsl(var(--brand-press))] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/20"
                 >
                   {copy.explore}
@@ -136,9 +131,12 @@ export function HomeHub() {
                     {copy.panelTitle}
                   </h2>
                 </div>
-                <span className="shrink-0 rounded-full bg-blue-50 px-2.5 py-1 text-[11px] font-semibold text-brand">
+                <Link
+                  href={localizePath("/fifo", locale)}
+                  className="shrink-0 rounded-full bg-blue-50 px-2.5 py-1 text-[11px] font-semibold text-brand transition hover:bg-blue-100"
+                >
                   {copy.panelBadge}
-                </span>
+                </Link>
               </div>
 
               <div className="hidden grid-cols-[1fr_88px_116px_134px] gap-3 border-b border-[hsl(var(--cc-border))] bg-slate-50/70 px-6 py-2.5 text-[10px] font-semibold tracking-[0.04em] text-[hsl(var(--cc-muted))] sm:grid">
@@ -150,21 +148,22 @@ export function HomeHub() {
 
               <div>
                 {FIFO_PATHS.map((path) => (
-                  <div
+                  <Link
                     key={path.name}
-                    className="grid gap-4 border-b border-[hsl(var(--cc-border))] px-5 py-5 last:border-b-0 sm:grid-cols-[1fr_88px_116px_134px] sm:items-center sm:gap-3 sm:px-6"
+                    href={localizePath(`/fifo/${path.slug}`, locale)}
+                    className="group grid gap-4 border-b border-[hsl(var(--cc-border))] px-5 py-5 transition last:border-b-0 hover:bg-blue-50/35 sm:grid-cols-[1fr_88px_116px_134px] sm:items-center sm:gap-3 sm:px-6"
                   >
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
-                        <h3 className="text-[15px] font-semibold tracking-[-0.015em] sm:text-base">{path.name}</h3>
+                        <h3 className="text-[15px] font-semibold tracking-[-0.015em] transition group-hover:text-brand sm:text-base">{path.name}</h3>
                         <span className="rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-semibold text-brand">{copy.research}</span>
                       </div>
-                      <p className="mt-1 text-xs text-[hsl(var(--cc-muted))]">{path.note}</p>
+                      <p className="mt-1 text-xs text-[hsl(var(--cc-muted))]">{isKo ? path.pathType.ko : path.pathType.en}</p>
                     </div>
                     <Metric label={copy.score} value="—" />
                     <Metric label={copy.barrier} value={copy.verifying} muted />
                     <Metric label={copy.pay} value={copy.verifying} muted />
-                  </div>
+                  </Link>
                 ))}
               </div>
 
