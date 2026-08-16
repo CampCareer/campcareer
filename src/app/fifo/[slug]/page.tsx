@@ -1,7 +1,8 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { FIFO_PATHS, getFifoPath } from "@/lib/fifo/fifo-paths"
+import { ALL_FIFO_PATHS, getAllFifoPath } from "@/lib/fifo/all-fifo-paths"
 import { FifoJobDetail } from "./fifo-job-detail"
+import { VerifiedEquipmentJobDetail } from "./verified-equipment-job-detail"
 import { VerifiedFifoJobDetail } from "./verified-fifo-job-detail"
 
 type PageProps = {
@@ -9,12 +10,12 @@ type PageProps = {
 }
 
 export function generateStaticParams() {
-  return FIFO_PATHS.map((path) => ({ slug: path.slug }))
+  return ALL_FIFO_PATHS.map((path) => ({ slug: path.slug }))
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
-  const path = getFifoPath(slug)
+  const path = getAllFifoPath(slug)
 
   if (!path) return {}
   const isVerified = path.status === "verified" && Boolean(path.published)
@@ -37,11 +38,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function FifoJobPage({ params }: PageProps) {
   const { slug } = await params
-  const path = getFifoPath(slug)
+  const path = getAllFifoPath(slug)
 
   if (!path) notFound()
 
   if (path.status === "verified" && path.published) {
+    if (path.slug === "dump-truck-operator") {
+      return <VerifiedEquipmentJobDetail path={path} />
+    }
     return <VerifiedFifoJobDetail path={path} />
   }
 
