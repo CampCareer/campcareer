@@ -26,13 +26,13 @@ export const RIGGER_PATH: FifoPath = {
     en: [
       "DG → RB → RI → RA high-risk-work licence progression",
       "Structured traineeship entry versus experienced FIFO hiring",
-      "Qualified FIFO, shutdown and high-end project pay",
+      "Local, qualified FIFO, shutdown and high-end project pay",
       "Current WA hiring strength versus official shortage status",
     ],
     ko: [
       "DG → RB → RI → RA High Risk Work Licence 단계",
       "정식 traineeship 진입과 경력자 FIFO 채용의 차이",
-      "자격 보유 FIFO·shutdown·고급 프로젝트 보수",
+      "로컬·자격 보유 FIFO·shutdown·고급 프로젝트 보수",
       "현재 WA 채용 강도와 공식 shortage 여부 구분",
     ],
   },
@@ -43,8 +43,8 @@ export const RIGGER_PATH: FifoPath = {
       display: "A$55–A$70/hr",
       score: RIGGER_COMPONENTS.pay,
       note: {
-        en: "A conservative comparison band for qualified WA FIFO riggers, not trainee pay and not an annual guarantee. Current FIFO/project ads cluster around A$55–A$70/hour. Shutdown campaigns commonly advertise A$62–A$70/hour plus travel. Experienced Advanced Rigger project arrangements can be much higher: current 2:1 examples show flat-rate equivalents around A$86.77–A$107.21/hour, which CampCareer excludes from the normal comparison band.",
-        ko: "trainee 급여나 연간 보장액이 아니라 현재 자격 보유 WA FIFO Rigger를 비교하기 위한 보수적 시급 범위입니다. 일반 FIFO·project 공고는 대체로 A$55–A$70/h에 모이고 shutdown 모집은 A$62–A$70/h + travel 사례가 반복됩니다. 경력 Advanced Rigger의 특정 2:1 프로젝트는 flat-rate equivalent가 약 A$86.77–A$107.21/h까지 올라가지만 일반 비교 밴드에서는 제외합니다.",
+        en: "CampCareer does not invent a trainee rate because the current Monadelphous traineeship does not publish one. Current Perth local examples sit around A$40–A$46/hour before overtime and penalties, including Dogman/Rigger and Sarens roles. Qualified WA FIFO/project ads cluster around A$55–A$70/hour, while shutdown campaigns commonly advertise A$62–A$70/hour plus travel. Experienced Advanced Rigger 2:1 project arrangements can be much higher at roughly A$86.77–A$107.21/hour flat-rate equivalent; those high-end outliers are excluded from the normal comparison band.",
+        ko: "현재 Monadelphous traineeship은 급여를 공개하지 않아 CampCareer가 trainee 시급을 임의로 만들지 않습니다. 현재 Perth 로컬 사례는 Dogman/Rigger와 Sarens 공고를 포함해 overtime·penalty 전 약 A$40–A$46/h 수준입니다. 자격 보유 WA FIFO·project 공고는 대체로 A$55–A$70/h, shutdown은 A$62–A$70/h + travel 사례가 반복됩니다. 경력 Advanced Rigger의 특정 2:1 프로젝트는 flat-rate equivalent가 약 A$86.77–A$107.21/h까지 올라가지만 이런 high-end outlier는 일반 비교 밴드에서 제외합니다.",
       },
     },
     accessibility: {
@@ -203,6 +203,13 @@ export const RIGGER_PATH: FifoPath = {
         type: "market",
         date: "8 Jul 2026",
         url: "https://au.indeed.com/viewjob?jk=a1d3b153c30b7621",
+      },
+      {
+        label: "Current Perth local Rigger and Dogman/Rigger rates",
+        publisher: "SEEK",
+        type: "market",
+        date: "Apr–Aug 2026",
+        url: "https://www.seek.com.au/basic-rigger-jobs/in-South-Perth-WA-6151",
       },
       {
         label: "Current WA FIFO rigging pay and project advertisements",
