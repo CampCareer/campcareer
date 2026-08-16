@@ -66,6 +66,9 @@ test("Driller's Offsider, Dump Truck Operator, Scaffolder and Rigger are verifie
   assert.match(riggerData, /CPCCLRG3001/)
   assert.match(riggerData, /CPCCLRG3002/)
   assert.match(riggerData, /CPCCLRG4001/)
+  assert.match(riggerData, /does not invent a trainee rate/)
+  assert.match(riggerData, /A\$40–A\$46\/hour/)
+  assert.match(riggerData, /A\$86\.77–A\$107\.21\/hour/)
   assert.match(riggerData, /DG or RB ticket alone is not a normal shortcut/)
   assert.match(riggerData, /No Shortage nationally and in WA/)
 
