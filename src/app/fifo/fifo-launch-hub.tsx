@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { ArrowRight, BriefcaseBusiness, CircleDollarSign, Gauge, ShieldCheck, Ticket } from "lucide-react"
-import { FIFO_PATHS } from "@/lib/fifo/fifo-paths"
+import { ALL_FIFO_PATHS } from "@/lib/fifo/all-fifo-paths"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { localizePath } from "@/lib/i18n/config"
 
@@ -16,7 +16,7 @@ export function FifoLaunchHub() {
         intro: "CampCareer는 급여만 보지 않습니다. 실제 첫 취업 가능성, 필요한 조건, 교육 부담과 현재 수요를 함께 봅니다.",
         report: "2026 FIFO 리포트",
         pathsTitle: "첫 FIFO 경로 비교",
-        pathsText: "Driller's Offsider는 첫 근거 검증을 마쳤습니다. 나머지 경로는 검증 전까지 점수를 공개하지 않습니다.",
+        pathsText: "Driller's Offsider와 Dump Truck Operator는 근거 검증을 통과했습니다. Plant Operator는 장비별로 분리하며 Excavator, Loader, Scaffolder는 검증 전까지 점수를 공개하지 않습니다.",
         entryScore: "ENTRY SCORE",
         pay: "PAY",
         access: "ENTRY",
@@ -28,7 +28,9 @@ export function FifoLaunchHub() {
         methodTitle: "Entry Score는 이렇게 계산합니다",
         methodText: "Pay 35% · Accessibility 30% · Demand 20% · Training burden 15%. 모든 항목이 0–10점이고, 근거가 부족하면 총점을 만들지 않습니다.",
         cautionTitle: "티켓보다 직업을 먼저 고르세요.",
-        cautionText: "Driller's Offsider 사례처럼 Cert II를 입사 후 고용주 지원으로 취득하는 경로가 있습니다. White Card나 여러 안전 티켓을 무작정 먼저 결제하는 방식은 기본 전략이 아닙니다.",
+        cautionText: "Driller's Offsider는 입사 후 Cert II, Dump Truck는 고용주 traineeship을 통한 Cert III 경로가 확인됩니다. White Card나 장비 티켓을 무작정 먼저 결제하는 방식은 기본 전략이 아닙니다.",
+        evidenceTitle: "근거가 있는 숫자만 공개합니다.",
+        evidenceText: "현재 Driller's Offsider와 Dump Truck Operator만 점수를 공개합니다. Plant Operator 전체, Excavator, Loader, Scaffolder는 동일한 evidence gate를 통과할 때까지 미평가 상태입니다.",
       }
     : {
         eyebrow: "AUSTRALIA FIFO · 2026",
@@ -36,7 +38,7 @@ export function FifoLaunchHub() {
         intro: "CampCareer compares first-job reality, entry requirements, training burden, pay and current demand — not headline salary alone.",
         report: "2026 FIFO Report",
         pathsTitle: "First FIFO paths",
-        pathsText: "Driller's Offsider has passed the first evidence gate. Other paths stay unrated until their evidence is strong enough.",
+        pathsText: "Driller's Offsider and Dump Truck Operator have passed the evidence gate. Plant Operator is split by equipment; Excavator, Loader and Scaffolder stay unrated until their evidence is strong enough.",
         entryScore: "ENTRY SCORE",
         pay: "PAY",
         access: "ENTRY",
@@ -48,7 +50,9 @@ export function FifoLaunchHub() {
         methodTitle: "How Entry Score works",
         methodText: "Pay 35% · Accessibility 30% · Demand 20% · Training burden 15%. Each component is scored 0–10 and no total is published until the evidence gate passes.",
         cautionTitle: "Choose the job before buying tickets.",
-        cautionText: "Driller's Offsider shows why: major employers can hire first and fund Certificate II training after entry. Buying a White Card and multiple safety tickets blindly is not the default strategy.",
+        cautionText: "Driller's Offsider can lead to employer-supported Cert II training after hire, while current Dump Truck traineeships can include Certificate III training. Buying a White Card or machine tickets blindly is not the default strategy.",
+        evidenceTitle: "Only evidence-backed numbers go live.",
+        evidenceText: "Only Driller's Offsider and Dump Truck Operator are rated today. Broad Plant Operator, Excavator, Loader and Scaffolder stay unrated until they pass the same evidence gate.",
       }
 
   return (
@@ -68,13 +72,13 @@ export function FifoLaunchHub() {
 
       <section className="px-5 py-14 sm:px-6 sm:py-16">
         <div className="mx-auto max-w-[1100px]">
-          <div className="max-w-2xl">
+          <div className="max-w-3xl">
             <h2 className="text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">{copy.pathsTitle}</h2>
             <p className="mt-3 text-sm leading-6 text-[hsl(var(--cc-muted))] sm:text-base">{copy.pathsText}</p>
           </div>
 
-          <div className="mt-8 grid gap-5 lg:grid-cols-3">
-            {FIFO_PATHS.map((path) => {
+          <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {ALL_FIFO_PATHS.map((path) => {
               const published = path.published
               return (
                 <article key={path.slug} className="flex min-h-[380px] flex-col rounded-[20px] border border-[hsl(var(--cc-border))] bg-white p-5 shadow-[0_14px_36px_rgba(16,24,40,0.055)] sm:p-6">
@@ -122,8 +126,8 @@ export function FifoLaunchHub() {
         <div className="mx-auto flex max-w-[1100px] items-start gap-4 rounded-[20px] border border-blue-100 bg-white p-5 sm:p-6">
           <span className="grid size-10 shrink-0 place-items-center rounded-full bg-blue-50 text-brand"><CircleDollarSign className="size-5" aria-hidden="true" /></span>
           <div>
-            <h2 className="text-lg font-semibold tracking-[-0.02em]">{isKo ? "근거가 있는 숫자만 공개합니다." : "Only evidence-backed numbers go live."}</h2>
-            <p className="mt-2 text-sm leading-6 text-[hsl(var(--cc-muted))]">{isKo ? "현재 Driller's Offsider만 점수가 공개되어 있으며, Plant Operator와 Scaffolder는 근거 검증이 끝날 때까지 비워둡니다." : "Driller's Offsider is the first rated path. Plant Operator and Scaffolder remain blank until their evidence passes the same gate."}</p>
+            <h2 className="text-lg font-semibold tracking-[-0.02em]">{copy.evidenceTitle}</h2>
+            <p className="mt-2 text-sm leading-6 text-[hsl(var(--cc-muted))]">{copy.evidenceText}</p>
           </div>
         </div>
       </section>
