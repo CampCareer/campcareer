@@ -49,7 +49,7 @@ test("researching FIFO pages render but stay out of the index", async ({ page })
     const response = await page.goto(`/fifo/${slug}`)
     expect(response?.ok()).toBeTruthy()
     await expect(page.getByRole("heading", { name, exact: true })).toBeVisible()
-    await expect(page.getByText("This path is not rated yet", { exact: true })).toBeVisible()
+    await expect(page.getByText("This path is not rated yet.", { exact: true })).toBeVisible()
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex, follow/i)
   }
 })
