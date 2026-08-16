@@ -74,10 +74,17 @@ export async function POST(request: Request) {
     : {}
   const duplicate = result.duplicate === true
   const applied = result.applied === true
+  const rpcOrderId = typeof result.order_id === "string" ? result.order_id : null
+  const deliveryOrderId = rpcOrderId ?? action.orderId
 
   if (action.paymentStatus === "paid" && (applied || duplicate)) {
+    if (!deliveryOrderId) {
+      console.error("[fifo-report-webhook] paid event missing delivery order id")
+      return json({ received: true, duplicate, applied, deliveryPending: true }, 503)
+    }
+
     try {
-      const delivery = await deliverPaidFifoReport(action.orderId)
+      const delivery = await deliverPaidFifoReport(deliveryOrderId)
       if (!delivery.ok && delivery.reason === "recently_attempted") {
         return json({ received: true, duplicate, applied, deliveryPending: true }, 503)
       }
