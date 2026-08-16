@@ -73,7 +73,7 @@ export function FifoReportSalesPage() {
         reviewed: "2026년 8월 16일 데이터 검토",
         region: "Western Australia",
         primary: `가이드 구매 — ${price}`,
-        checkoutNote: "결제 연결은 출시 전에 활성화됩니다. 가이드 자체는 완성되어 있습니다.",
+        checkoutNote: "이메일을 입력한 뒤 Stripe 보안 결제로 이동합니다.",
         back: "FIFO 직업으로 돌아가기",
         decisionEyebrow: "WHAT THIS GUIDE HELPS YOU DECIDE",
         decisionTitle: "정보를 더 모으는 것보다, 다음 행동을 정하는 데 초점을 맞췄습니다.",
@@ -129,7 +129,7 @@ export function FifoReportSalesPage() {
         reviewed: "Data reviewed 16 Aug 2026",
         region: "Western Australia",
         primary: `Buy the guide — ${price}`,
-        checkoutNote: "Secure checkout will be enabled before release. The guide itself is complete.",
+        checkoutNote: "Enter your delivery email below, then continue to secure Stripe Checkout.",
         back: "Back to FIFO jobs",
         decisionEyebrow: "WHAT THIS GUIDE HELPS YOU DECIDE",
         decisionTitle: "Built to help you choose the next move, not just collect more information.",
@@ -264,15 +264,13 @@ export function FifoReportSalesPage() {
                   </div>
                   <ShieldCheck className="mb-1 size-6 text-brand" aria-hidden="true" />
                 </div>
-                <button
-                  type="button"
-                  disabled
-                  aria-disabled="true"
-                  className="mt-5 inline-flex min-h-12 w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-brand px-5 py-3 text-sm font-semibold text-white opacity-70"
+                <a
+                  href="#report-checkout-email"
+                  className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-[hsl(var(--brand-press))] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/20"
                 >
                   {copy.primary}
                   <ArrowRight className="size-4" aria-hidden="true" />
-                </button>
+                </a>
                 <p className="mt-3 text-center text-[11px] leading-5 text-[hsl(var(--cc-muted))]">{copy.checkoutNote}</p>
               </div>
             </aside>
