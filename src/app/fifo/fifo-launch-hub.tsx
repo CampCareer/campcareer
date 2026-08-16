@@ -16,7 +16,7 @@ export function FifoLaunchHub() {
         intro: "CampCareer는 급여만 보지 않습니다. 실제 첫 취업 가능성, 필요한 조건, 교육 부담과 현재 수요를 함께 봅니다.",
         report: "2026 FIFO 리포트",
         pathsTitle: "첫 FIFO 경로 비교",
-        pathsText: "Driller's Offsider, Dump Truck Operator, Scaffolder는 근거 검증을 통과했습니다. Plant Operator는 장비별로 분리하며 Excavator와 Loader는 검증 전까지 점수를 공개하지 않습니다.",
+        pathsText: "Driller's Offsider, Dump Truck Operator, Scaffolder, Rigger는 근거 검증을 통과했습니다. Plant Operator는 장비별로 분리하며 Excavator와 Loader는 검증 전까지 점수를 공개하지 않습니다.",
         entryScore: "ENTRY SCORE",
         pay: "PAY",
         access: "ENTRY",
@@ -28,9 +28,9 @@ export function FifoLaunchHub() {
         methodTitle: "Entry Score는 이렇게 계산합니다",
         methodText: "Pay 35% · Accessibility 30% · Demand 20% · Training burden 15%. 모든 항목이 0–10점이고, 근거가 부족하면 총점을 만들지 않습니다.",
         cautionTitle: "티켓보다 직업을 먼저 고르세요.",
-        cautionText: "Driller's Offsider는 입사 후 Cert II, Dump Truck는 고용주 traineeship을 통한 Cert III 경로가 확인됩니다. Scaffolder는 SB만 따는 것보다 SB→SI/SA와 현장경력을 어떻게 쌓을지가 더 중요합니다.",
+        cautionText: "Driller's Offsider는 입사 후 Cert II, Dump Truck는 고용주 traineeship을 통한 Cert III 경로가 확인됩니다. Scaffolder는 SB→SI/SA와 현장경력이 중요하고, Rigger는 DG→RB→RI→RA의 순차 면허와 경력이 일반 시장의 핵심입니다. 단, Monadelphous에는 실제 무경력 FIFO Rigging traineeship 경로가 확인됩니다.",
         evidenceTitle: "근거가 있는 숫자만 공개합니다.",
-        evidenceText: "현재 Driller's Offsider, Dump Truck Operator, Scaffolder에만 점수를 공개합니다. Plant Operator 전체, Excavator, Loader는 동일한 evidence gate를 통과할 때까지 미평가 상태입니다.",
+        evidenceText: "현재 Driller's Offsider, Dump Truck Operator, Scaffolder, Rigger에만 점수를 공개합니다. Plant Operator 전체, Excavator, Loader는 동일한 evidence gate를 통과할 때까지 미평가 상태입니다.",
       }
     : {
         eyebrow: "AUSTRALIA FIFO · 2026",
@@ -38,7 +38,7 @@ export function FifoLaunchHub() {
         intro: "CampCareer compares first-job reality, entry requirements, training burden, pay and current demand — not headline salary alone.",
         report: "2026 FIFO Report",
         pathsTitle: "First FIFO paths",
-        pathsText: "Driller's Offsider, Dump Truck Operator and Scaffolder have passed the evidence gate. Plant Operator is split by equipment; Excavator and Loader stay unrated until their evidence is strong enough.",
+        pathsText: "Driller's Offsider, Dump Truck Operator, Scaffolder and Rigger have passed the evidence gate. Plant Operator is split by equipment; Excavator and Loader stay unrated until their evidence is strong enough.",
         entryScore: "ENTRY SCORE",
         pay: "PAY",
         access: "ENTRY",
@@ -50,9 +50,9 @@ export function FifoLaunchHub() {
         methodTitle: "How Entry Score works",
         methodText: "Pay 35% · Accessibility 30% · Demand 20% · Training burden 15%. Each component is scored 0–10 and no total is published until the evidence gate passes.",
         cautionTitle: "Choose the job before buying tickets.",
-        cautionText: "Driller's Offsider can lead to employer-supported Cert II training after hire, and Dump Truck traineeships can include Certificate III training. For Scaffolder, the real question is how to build from SB into SI/SA and site experience — not how fast you can buy one ticket.",
+        cautionText: "Driller's Offsider can lead to employer-supported Cert II training, and Dump Truck traineeships can include Certificate III. Scaffolder depends on SB→SI/SA plus site experience. Rigger follows DG→RB→RI→RA and mainstream FIFO hiring usually expects experience, although Monadelphous currently demonstrates a genuine zero-experience FIFO rigging traineeship route.",
         evidenceTitle: "Only evidence-backed numbers go live.",
-        evidenceText: "Driller's Offsider, Dump Truck Operator and Scaffolder are rated today. Broad Plant Operator, Excavator and Loader stay unrated until they pass the same evidence gate.",
+        evidenceText: "Driller's Offsider, Dump Truck Operator, Scaffolder and Rigger are rated today. Broad Plant Operator, Excavator and Loader stay unrated until they pass the same evidence gate.",
       }
 
   return (
