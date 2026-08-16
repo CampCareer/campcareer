@@ -26,6 +26,7 @@ test("FIFO launch renders the decision funnel at the active viewport", async ({ 
 
   await page.getByRole("link", { name: "Explore FIFO Jobs" }).click()
   await expect(page).toHaveURL(/\/fifo$/)
+  await expect(page).toHaveTitle("Australia FIFO Jobs & Entry Paths | CampCareer")
   await expect(page.getByRole("heading", { name: /Compare FIFO entry paths before you spend money on training/ })).toBeVisible()
 
   for (const [, name] of [...VERIFIED_PATHS, ...RESEARCHING_PATHS]) {
@@ -37,6 +38,7 @@ test("verified FIFO pages render and remain indexable", async ({ page }) => {
   for (const [slug, name] of VERIFIED_PATHS) {
     const response = await page.goto(`/fifo/${slug}`)
     expect(response?.ok()).toBeTruthy()
+    await expect(page).toHaveTitle(`${name} FIFO Entry Path Australia | CampCareer`)
     await expect(page.getByRole("heading", { name, exact: true })).toBeVisible()
     await expect(page.getByText(/VERIFIED · 2026/).first()).toBeVisible()
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /index, follow/i)
@@ -48,6 +50,7 @@ test("researching FIFO pages render but stay out of the index", async ({ page })
   for (const [slug, name] of RESEARCHING_PATHS) {
     const response = await page.goto(`/fifo/${slug}`)
     expect(response?.ok()).toBeTruthy()
+    await expect(page).toHaveTitle(`${name} FIFO Entry Path Australia | CampCareer`)
     await expect(page.getByRole("heading", { name, exact: true })).toBeVisible()
     await expect(page.getByText("This path is not rated yet.", { exact: true })).toBeVisible()
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex, follow/i)
