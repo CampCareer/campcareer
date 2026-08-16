@@ -25,6 +25,40 @@ type OrderForDelivery = {
   delivery_link_expires_at: string | null
 }
 
+type DeliveryLogEvent =
+  | 'attempt_started'
+  | 'claim_skipped'
+  | 'attempt_failed'
+  | 'completion_retry'
+  | 'attempt_delivered'
+
+type DeliveryLogReason =
+  | 'already_delivered'
+  | 'recently_attempted'
+  | 'order_not_found'
+  | 'not_paid'
+  | 'not_claimed'
+  | 'order_lookup_failed'
+  | 'signed_url_failed'
+  | 'email_send_failed'
+  | 'delivery_complete_failed'
+  | 'delivery_complete_rejected'
+  | 'unknown'
+
+const SAFE_DELIVERY_REASONS = new Set<DeliveryLogReason>([
+  'already_delivered',
+  'recently_attempted',
+  'order_not_found',
+  'not_paid',
+  'not_claimed',
+  'order_lookup_failed',
+  'signed_url_failed',
+  'email_send_failed',
+  'delivery_complete_failed',
+  'delivery_complete_rejected',
+  'unknown',
+])
+
 export type FifoReportDeliveryResult =
   | { ok: true; attempted: true; delivered: true }
   | { ok: true; attempted: false; delivered: true; reason: 'already_delivered' }
@@ -34,6 +68,16 @@ function asRecord(value: unknown): Record<string, unknown> {
   return value && typeof value === 'object' && !Array.isArray(value)
     ? value as Record<string, unknown>
     : {}
+}
+
+function safeDeliveryReason(value: unknown): DeliveryLogReason {
+  return typeof value === 'string' && SAFE_DELIVERY_REASONS.has(value as DeliveryLogReason)
+    ? value as DeliveryLogReason
+    : 'unknown'
+}
+
+function logDelivery(event: DeliveryLogEvent, reason?: DeliveryLogReason) {
+  console.info('[fifo-report-delivery]', event, reason ?? 'none')
 }
 
 async function markDeliveryFailed(orderId: string, code: string) {
@@ -134,27 +178,33 @@ export async function deliverPaidFifoReport(orderId: string): Promise<FifoReport
 
   if (claim.claimed !== true) {
     const reason = typeof claim.reason === 'string' ? claim.reason : 'not_claimed'
+    const safeReason = safeDeliveryReason(reason)
+    logDelivery('claim_skipped', safeReason)
     if (reason === 'already_delivered') {
       return { ok: true, attempted: false, delivered: true, reason }
     }
     return { ok: false, attempted: false, delivered: false, reason }
   }
 
+  logDelivery('attempt_started')
+
   let order: OrderForDelivery
   try {
     order = await loadDeliveryOrder(orderId)
     if (order.payment_status !== 'paid') throw new Error('order_not_paid')
-  } catch (error) {
+  } catch {
     await markDeliveryFailed(orderId, 'order_lookup_failed')
-    throw error
+    logDelivery('attempt_failed', 'order_lookup_failed')
+    throw new Error('order_lookup_failed')
   }
 
   let signed: { url: string; expiresAt: string }
   try {
     signed = await ensureSignedUrl(order)
-  } catch (error) {
+  } catch {
     await markDeliveryFailed(orderId, 'signed_url_failed')
-    throw error
+    logDelivery('attempt_failed', 'signed_url_failed')
+    throw new Error('signed_url_failed')
   }
 
   let providerMessageId = ''
@@ -166,9 +216,10 @@ export async function deliverPaidFifoReport(orderId: string): Promise<FifoReport
       idempotencyKey: `${DELIVERY_IDEMPOTENCY_PREFIX}/${order.id}`,
     })
     providerMessageId = sent.id
-  } catch (error) {
+  } catch {
     await markDeliveryFailed(orderId, 'email_send_failed')
-    throw error
+    logDelivery('attempt_failed', 'email_send_failed')
+    throw new Error('email_send_failed')
   }
 
   const { data: completedData, error: completedError } = await supabaseAdmin.rpc(
@@ -183,13 +234,16 @@ export async function deliverPaidFifoReport(orderId: string): Promise<FifoReport
     // Do not mark failed here: Resend may already have accepted the email. A
     // webhook retry reuses the stored signed URL and the same provider
     // idempotency key, then retries only the database completion step.
+    logDelivery('completion_retry', 'delivery_complete_failed')
     throw new Error(`delivery_complete_failed:${completedError.code ?? 'unknown'}`)
   }
 
   const completed = asRecord(completedData)
   if (completed.completed !== true) {
+    logDelivery('completion_retry', 'delivery_complete_rejected')
     throw new Error(`delivery_complete_rejected:${String(completed.reason ?? 'unknown')}`)
   }
 
+  logDelivery('attempt_delivered')
   return { ok: true, attempted: true, delivered: true }
 }

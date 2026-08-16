@@ -11,9 +11,23 @@ export const dynamic = "force-dynamic"
 
 const NO_STORE_HEADERS = { "Cache-Control": "no-store" }
 const MAX_WEBHOOK_BYTES = 1_048_576
+const SAFE_DELIVERY_FAILURE_CODES = new Set([
+  "delivery_claim_failed",
+  "order_lookup_failed",
+  "signed_url_failed",
+  "email_send_failed",
+  "delivery_complete_failed",
+  "delivery_complete_rejected",
+])
 
 function json(body: Record<string, unknown>, status = 200) {
   return NextResponse.json(body, { status, headers: NO_STORE_HEADERS })
+}
+
+function safeDeliveryFailureCode(error: unknown): string {
+  const message = error instanceof Error ? error.message : ""
+  const candidate = message.split(":", 1)[0]
+  return SAFE_DELIVERY_FAILURE_CODES.has(candidate) ? candidate : "unknown"
 }
 
 export async function POST(request: Request) {
@@ -83,17 +97,22 @@ export async function POST(request: Request) {
       return json({ received: true, duplicate, applied, deliveryPending: true }, 503)
     }
 
+    if (duplicate) {
+      console.info("[fifo-report-webhook] reconciling duplicate paid event delivery")
+    }
+
     try {
       const delivery = await deliverPaidFifoReport(deliveryOrderId)
       if (!delivery.ok && delivery.reason === "recently_attempted") {
+        console.info("[fifo-report-webhook] delivery retry deferred", "recently_attempted")
         return json({ received: true, duplicate, applied, deliveryPending: true }, 503)
       }
       if (!delivery.ok && delivery.reason !== "order_not_found" && delivery.reason !== "not_paid") {
+        console.info("[fifo-report-webhook] delivery retry requested")
         return json({ received: true, duplicate, applied, deliveryPending: true }, 503)
       }
     } catch (deliveryError) {
-      const message = deliveryError instanceof Error ? deliveryError.message : "unknown"
-      console.error("[fifo-report-webhook] delivery failed", message.split(":", 1)[0])
+      console.error("[fifo-report-webhook] delivery failed", safeDeliveryFailureCode(deliveryError))
       // Payment state is already durable. Returning 503 asks Stripe to retry the
       // webhook so transient Storage/Resend/database delivery failures recover.
       return json({ received: true, duplicate, applied, deliveryPending: true }, 503)
