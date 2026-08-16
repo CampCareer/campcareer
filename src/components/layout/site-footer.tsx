@@ -26,7 +26,7 @@ export function SiteFooter({ className }: { className?: string }) {
             <div>
               <Link href={home} className="inline-flex items-center gap-2.5" aria-label="CampCareer home">
                 <Image src="/brand/campcareer-c.svg" width={30} height={30} alt="" className="size-7.5" />
-                <span className="text-lg font-semibold tracking-[-0.035em] text-[hsl(var(--cc-ink))]">CampCareer</span>
+                <span className="text-lg font-semibold tracking-[-0.035em] text-black">CampCareer</span>
               </Link>
               <p className="mt-3 max-w-md text-sm leading-6 text-[hsl(var(--cc-muted))]">
                 {isKo
