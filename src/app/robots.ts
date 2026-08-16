@@ -28,6 +28,7 @@ export default function robots(): MetadataRoute.Robots {
     ],
     sitemap: [
       `${SITE_URL}/sitemap.xml`,
+      `${SITE_URL}/fifo/sitemap.xml`,
       `${SITE_URL}/blog/sitemap.xml`,
       `${SITE_URL}/programs/ca/sitemap.xml`,
     ],

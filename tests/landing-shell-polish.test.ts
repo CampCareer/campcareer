@@ -10,25 +10,29 @@ const shell = readFileSync("src/components/layout/layout-shell.tsx", "utf8")
 const canonicalCareer = readFileSync("src/app/(workspace)/career/[country]/[career]/page.tsx", "utf8")
 const legacyCareer = readFileSync("src/app/(workspace)/career/career-result-page.tsx", "utf8")
 
-test("landing search is centered and explains the locked CampCareer Score contract", () => {
-  assert.match(landing, /mx-auto mt-9 max-w-4xl/)
-  assert.match(landing, /CampCareer Score \/ 100/)
-  assert.match(landing, /Demand 40%/)
-  assert.match(landing, /Pay 30%/)
-  assert.match(landing, /Entry 30%/)
-  assert.match(landing, /required evidence is not ready/)
+test("FIFO landing keeps the conversion-first hero and evidence-first research panel", () => {
+  assert.match(landing, /Find your fastest path into high-paying work/)
+  assert.match(landing, /Compare FIFO jobs, required tickets, entry difficulty and real pay/)
+  assert.match(landing, /Explore FIFO Jobs/)
+  assert.match(landing, /Top FIFO Paths/)
+  assert.match(landing, /Best Jobs for Beginners/)
+  assert.match(landing, /Tickets That Matter/)
+  assert.match(landing, /Real FIFO Pay/)
+  assert.match(landing, /Australia FIFO Entry Report 2026/)
+  assert.match(landing, /We publish scores only after pay, demand, training burden and first-job evidence are verified/)
 })
 
-test("landing dropdowns close when the user clicks outside the active selector", () => {
+test("legacy landing dropdowns still close when the user clicks outside the active selector", () => {
   assert.match(search, /useRef<HTMLDivElement>/)
   assert.match(search, /document\.addEventListener\("pointerdown", closeOnOutsidePointer\)/)
   assert.match(search, /!rootRef\.current\?\.contains\(target\)/)
   assert.match(search, /document\.removeEventListener\("pointerdown", closeOnOutsidePointer\)/)
 })
 
-test("public navigation and Career pages keep one opaque white canvas", () => {
+test("homepage may use a sticky translucent FIFO nav while existing Career surfaces keep opaque white canvases", () => {
+  assert.match(topNav, /normalizedPath === "\/"/)
+  assert.match(topNav, /bg-white\/95 backdrop-blur/)
   assert.match(topNav, /h-16 border-b border-\[hsl\(var\(--cc-border\)\)\] bg-white/)
-  assert.doesNotMatch(topNav, /bg-white\/95|backdrop-blur/)
   assert.match(workspaceTopbar, /h-16 border-b border-\[hsl\(var\(--cc-border\)\)\] bg-white/)
   assert.match(workspaceTopbar, /mx-auto flex h-16 w-full max-w-\[1240px\]/)
   assert.doesNotMatch(workspaceTopbar, /bg-white\/95|backdrop-blur/)
