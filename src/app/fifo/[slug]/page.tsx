@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const isVerified = path.status === "verified" && Boolean(path.published)
 
   return {
-    title: `${path.name} FIFO Entry Path Australia | CampCareer`,
+    title: `${path.name} FIFO Entry Path Australia`,
     description: isVerified
       ? `Evidence-backed CampCareer analysis of the ${path.name} FIFO entry path in Australia, including entry requirements, pay, demand and Entry Score.`
       : `CampCareer research on the ${path.name} FIFO entry path in Australia, including entry burden, tickets, pay and demand evidence as verification is completed.`,
