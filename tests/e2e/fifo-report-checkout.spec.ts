@@ -1,10 +1,10 @@
 import { expect, test } from "@playwright/test"
 
 test("FIFO report checkout posts the purchase identity through the server boundary and handles cancel return", async ({ page }) => {
-  let checkoutPayload: Record<string, unknown> | null = null
+  const captured: { payload: Record<string, unknown> | null } = { payload: null }
 
   await page.route("**/api/fifo/report/checkout", async (route) => {
-    checkoutPayload = route.request().postDataJSON() as Record<string, unknown>
+    captured.payload = route.request().postDataJSON() as Record<string, unknown>
     await route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -32,10 +32,10 @@ test("FIFO report checkout posts the purchase identity through the server bounda
   await expect(capture.getByRole("checkbox")).not.toBeChecked()
   await capture.getByRole("button", { name: "Secure checkout · A$29" }).click()
 
-  await expect.poll(() => checkoutPayload).not.toBeNull()
-  expect(checkoutPayload?.email).toBe("buyer@example.com")
-  expect(checkoutPayload?.marketingConsent).toBe(false)
-  expect(checkoutPayload?.checkoutAttemptId).toMatch(
+  await expect.poll(() => captured.payload).not.toBeNull()
+  expect(captured.payload?.email).toBe("buyer@example.com")
+  expect(captured.payload?.marketingConsent).toBe(false)
+  expect(captured.payload?.checkoutAttemptId).toMatch(
     /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
   )
 
