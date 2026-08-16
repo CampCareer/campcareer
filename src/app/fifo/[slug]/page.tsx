@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { ALL_FIFO_PATHS, getAllFifoPath } from "@/lib/fifo/all-fifo-paths"
 import { FifoJobDetail } from "./fifo-job-detail"
+import { FifoReportContextCta } from "./fifo-report-context-cta"
 import { VerifiedEquipmentJobDetail } from "./verified-equipment-job-detail"
 import { VerifiedFifoJobDetail } from "./verified-fifo-job-detail"
 import { VerifiedRiggerJobDetail } from "./verified-rigger-job-detail"
@@ -44,18 +45,25 @@ export default async function FifoJobPage({ params }: PageProps) {
 
   if (!path) notFound()
 
+  let detail
   if (path.status === "verified" && path.published) {
     if (path.slug === "dump-truck-operator") {
-      return <VerifiedEquipmentJobDetail path={path} />
+      detail = <VerifiedEquipmentJobDetail path={path} />
+    } else if (path.slug === "scaffolder") {
+      detail = <VerifiedScaffolderJobDetail path={path} />
+    } else if (path.slug === "rigger") {
+      detail = <VerifiedRiggerJobDetail path={path} />
+    } else {
+      detail = <VerifiedFifoJobDetail path={path} />
     }
-    if (path.slug === "scaffolder") {
-      return <VerifiedScaffolderJobDetail path={path} />
-    }
-    if (path.slug === "rigger") {
-      return <VerifiedRiggerJobDetail path={path} />
-    }
-    return <VerifiedFifoJobDetail path={path} />
+  } else {
+    detail = <FifoJobDetail path={path} />
   }
 
-  return <FifoJobDetail path={path} />
+  return (
+    <>
+      {detail}
+      <FifoReportContextCta pathSlug={path.slug} pathName={path.name} />
+    </>
+  )
 }

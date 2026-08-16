@@ -40,6 +40,8 @@ test("FIFO launch renders the decision funnel at the active viewport", async ({ 
   await expect(page).toHaveURL(/\/fifo$/)
   await expect(page).toHaveTitle("Australia FIFO Jobs & Entry Paths | CampCareer")
   await expect(page.getByRole("heading", { name: /Compare FIFO entry paths before you spend money on training/ })).toBeVisible()
+  await expect(page.getByTestId("fifo-hub-report-bridge")).toBeVisible()
+  await expect(page.getByTestId("fifo-hub-report-bridge").getByRole("link")).toHaveAttribute("href", "/fifo/report")
 
   for (const [, name] of [...VERIFIED_PATHS, ...RESEARCHING_PATHS]) {
     await expect(page.getByRole("heading", { name, exact: true })).toBeVisible()
@@ -70,7 +72,7 @@ test("FIFO guide sales page renders the completed product and actual PDF preview
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/fifo\/report$/)
 })
 
-test("verified FIFO pages render and remain indexable", async ({ page }) => {
+test("verified FIFO pages render, remain indexable and hand off to the guide", async ({ page }) => {
   for (const [slug, name] of VERIFIED_PATHS) {
     const response = await page.goto(`/fifo/${slug}`)
     expect(response?.ok()).toBeTruthy()
@@ -79,10 +81,13 @@ test("verified FIFO pages render and remain indexable", async ({ page }) => {
     await expect(page.getByText(/VERIFIED · 2026/).first()).toBeVisible()
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /index, follow/i)
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", new RegExp(`/fifo/${slug}$`))
+    const reportBridge = page.getByTestId("fifo-context-report-cta")
+    await expect(reportBridge).toBeVisible()
+    await expect(reportBridge.getByRole("link")).toHaveAttribute("href", "/fifo/report")
   }
 })
 
-test("researching FIFO pages render but stay out of the index", async ({ page }) => {
+test("researching FIFO pages render, stay out of the index and still explain the guide handoff", async ({ page }) => {
   for (const [slug, name] of RESEARCHING_PATHS) {
     const response = await page.goto(`/fifo/${slug}`)
     expect(response?.ok()).toBeTruthy()
@@ -90,6 +95,9 @@ test("researching FIFO pages render but stay out of the index", async ({ page })
     await expect(page.getByRole("heading", { name, exact: true })).toBeVisible()
     await expect(page.getByText("This path is not rated yet.", { exact: true })).toBeVisible()
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex, follow/i)
+    const reportBridge = page.getByTestId("fifo-context-report-cta")
+    await expect(reportBridge).toBeVisible()
+    await expect(reportBridge.getByRole("link")).toHaveAttribute("href", "/fifo/report")
   }
 })
 
@@ -144,7 +152,8 @@ test("FIFO analytics stays silent without consent and emits the funnel after con
   await expect(page).toHaveURL(/\/fifo\/drillers-offsider$/)
   await expect.poll(() => eventNames).toEqual(expect.arrayContaining(["fifo_path_opened", "fifo_path_view"]))
 
-  await page.getByRole("link", { name: "See the 2026 FIFO Report" }).click()
-  await expect(page).toHaveURL(/#fifo-report$/)
+  const reportBridge = page.getByTestId("fifo-context-report-cta")
+  await reportBridge.getByRole("link").click()
+  await expect(page).toHaveURL(/\/fifo\/report$/)
   await expect.poll(() => eventNames).toContain("fifo_report_cta_clicked")
 })

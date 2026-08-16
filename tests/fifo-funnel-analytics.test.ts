@@ -37,6 +37,8 @@ test("public shell mounts the FIFO funnel observer and tracks funnel transitions
   assert.match(shell, /<FifoFunnelAnalytics \/>/)
   assert.match(funnel, /surfaceForPath/)
   assert.match(funnel, /fifo_report_cta_clicked/)
+  assert.match(funnel, /destination === "\/fifo\/report"/)
+  assert.match(funnel, /pathname === "\/fifo\/report"/)
   assert.match(funnel, /fifo_hub_opened/)
   assert.match(funnel, /fifo_path_opened/)
 })
