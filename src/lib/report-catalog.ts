@@ -1,17 +1,18 @@
 /**
  * CampCareer Australia report catalogue.
  *
- * This is a product contract, not a checkout implementation. A product must
- * remain `contracted` until payment, fulfilment, and the relevant data-quality
- * gates are implemented. Keeping the commercial facts here gives the future
- * catalogue UI, checkout, report generator, and support tooling one source of
- * truth.
+ * This is a product contract, not a checkout implementation. `contentStatus`
+ * describes whether the underlying report itself is finished; `salesStatus`
+ * stays `contracted` until payment and fulfilment are wired and verified.
  */
 
 export const REPORT_CATALOG_COUNTRY = "AU" as const
 export const REPORT_CATALOG_CURRENCY = "AUD" as const
 
+export const FIFO_CONSTRUCTION_FAST_ENTRY_GUIDE_PRODUCT_ID = "fifo-construction-fast-entry-guide-2026" as const
+
 export type ReportProductId =
+  | typeof FIFO_CONSTRUCTION_FAST_ENTRY_GUIDE_PRODUCT_ID
   | "australia-topic-deep-dive"
   | "australia-study-roi-index-2026"
   | "my-australia-roi-decision-report"
@@ -20,6 +21,7 @@ export type ReportProductId =
 export type TopicReportScope = "field" | "city" | "university"
 export type ReportFulfilment = "digital-report" | "expert-review"
 export type ReportSalesStatus = "contracted" | "available"
+export type ReportContentStatus = "planned" | "ready"
 
 export type ReportPageCount = {
   min: number
@@ -38,6 +40,10 @@ export type ReportProduct = {
   descriptionKo: string
   fulfilment: ReportFulfilment
   salesStatus: ReportSalesStatus
+  contentStatus?: ReportContentStatus
+  edition?: string
+  region?: string
+  dataReviewedOn?: string
   pageCount?: ReportPageCount
   topicScopes?: readonly TopicReportScope[]
   upgrade?: {
@@ -95,7 +101,26 @@ export const PERSONALIZED_ROI_REPORT_SECTIONS = [
   "Data confidence, sources and assumptions",
 ] as const
 
+export const FIFO_CONSTRUCTION_FAST_ENTRY_GUIDE: ReportProduct = {
+  id: FIFO_CONSTRUCTION_FAST_ENTRY_GUIDE_PRODUCT_ID,
+  country: "AU",
+  currency: "AUD",
+  amountAudCents: 2900,
+  title: "FIFO Construction Fast Entry Guide 2026",
+  titleKo: "FIFO 건설 빠른 진입 가이드 2026",
+  description: "A practical guide for people who want to minimise long-term study and reach credible FIFO construction work faster.",
+  descriptionKo: "장기간 학업을 최소화하고 신뢰할 수 있는 FIFO 건설 일자리까지 더 빠르게 가려는 사람을 위한 실전 가이드입니다.",
+  fulfilment: "digital-report",
+  salesStatus: "contracted",
+  contentStatus: "ready",
+  edition: "1.0",
+  region: "Western Australia",
+  dataReviewedOn: "2026-08-16",
+  pageCount: { min: 23, max: 23, target: 23 },
+}
+
 export const REPORT_PRODUCTS: readonly ReportProduct[] = [
+  FIFO_CONSTRUCTION_FAST_ENTRY_GUIDE,
   {
     id: "australia-topic-deep-dive",
     country: "AU",
