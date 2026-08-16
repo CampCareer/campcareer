@@ -29,6 +29,17 @@ test("Dump Truck Operator evidence produces a Strong score of 80", () => {
   assert.equal(fifoEntryScoreBand(score), "Strong")
 })
 
+test("Scaffolder evidence produces a Strong score of 72", () => {
+  const score = calculateFifoEntryScore({
+    pay: 9,
+    accessibility: 4.5,
+    demand: 9,
+    trainingBurden: 6,
+  })
+  assert.equal(score, 72)
+  assert.equal(fifoEntryScoreBand(score), "Strong")
+})
+
 test("FIFO Entry Score rejects out-of-range inputs", () => {
   assert.throws(
     () => calculateFifoEntryScore({ pay: 11, accessibility: 5, demand: 5, trainingBurden: 5 }),
