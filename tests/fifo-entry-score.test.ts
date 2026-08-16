@@ -18,14 +18,14 @@ test("Driller's Offsider launch evidence produces a Strong score of 80", () => {
   assert.equal(fifoEntryScoreBand(score), "Strong")
 })
 
-test("Dump Truck Operator evidence produces a Strong score of 82", () => {
+test("Dump Truck Operator evidence produces a Strong score of 80", () => {
   const score = calculateFifoEntryScore({
-    pay: 9,
+    pay: 8.5,
     accessibility: 7.5,
     demand: 8,
     trainingBurden: 8,
   })
-  assert.equal(score, 82)
+  assert.equal(score, 80)
   assert.equal(fifoEntryScoreBand(score), "Strong")
 })
 
