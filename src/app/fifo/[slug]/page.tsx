@@ -16,15 +16,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const path = getFifoPath(slug)
 
   if (!path) return {}
+  const isVerified = path.status === "verified" && Boolean(path.published)
 
   return {
     title: `${path.name} FIFO Entry Path Australia | CampCareer`,
-    description: `CampCareer research on the ${path.name} FIFO entry path in Australia, including entry burden, tickets, pay and demand evidence as verification is completed.`,
+    description: isVerified
+      ? `Evidence-backed CampCareer analysis of the ${path.name} FIFO entry path in Australia, including entry requirements, pay, demand and Entry Score.`
+      : `CampCareer research on the ${path.name} FIFO entry path in Australia, including entry burden, tickets, pay and demand evidence as verification is completed.`,
     alternates: { canonical: `/fifo/${path.slug}` },
-    robots: { index: false, follow: true },
+    robots: { index: isVerified, follow: true },
     openGraph: {
       title: `${path.name} FIFO Entry Path Australia | CampCareer`,
-      description: `Evidence-first research for people considering ${path.name} as an Australian FIFO entry path.`,
+      description: isVerified
+        ? `Evidence-backed entry score, pay and hiring requirements for ${path.name} FIFO work in Australia.`
+        : `Evidence-first research for people considering ${path.name} as an Australian FIFO entry path.`,
     },
   }
 }
