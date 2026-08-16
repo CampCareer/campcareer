@@ -18,7 +18,11 @@ test("FIFO launch renders the decision funnel at the active viewport", async ({ 
 
   await expect(page.getByRole("heading", { name: /Find your fastest path into high-paying work/ })).toBeVisible()
   await expect(page.getByRole("link", { name: "Explore FIFO Jobs" })).toBeVisible()
-  await expect(page.getByRole("heading", { name: "Australia FIFO Entry Report 2026" })).toBeVisible()
+  await expect(page.getByRole("heading", { name: "FIFO Construction Fast Entry Guide 2026" })).toBeVisible()
+  await expect(page.getByText("EDITION 1.0 · COMPLETE", { exact: true })).toBeVisible()
+  await expect(page.getByText("A$29", { exact: true })).toBeVisible()
+  await expect(page.getByText(/23 pages · Western Australia · Data reviewed 16 Aug 2026/).first()).toBeVisible()
+  await expect(page.getByText("COMING SOON", { exact: true })).toHaveCount(0)
 
   for (const [, name] of VERIFIED_PATHS) {
     await expect(page.getByRole("heading", { name, exact: true })).toBeVisible()
