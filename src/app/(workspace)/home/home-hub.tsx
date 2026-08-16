@@ -24,6 +24,7 @@ export function HomeHub() {
     ? FIFO_CONSTRUCTION_FAST_ENTRY_GUIDE.titleKo
     : FIFO_CONSTRUCTION_FAST_ENTRY_GUIDE.title
   const reportPrice = formatAud(FIFO_CONSTRUCTION_FAST_ENTRY_GUIDE.amountAudCents)
+  const reportHref = localizePath("/fifo/report", locale)
 
   const copy = isKo
     ? {
@@ -53,6 +54,7 @@ export function HomeHub() {
         reportProof: "23페이지 · Western Australia · 2026년 8월 16일 데이터 검토",
         reportPriceLabel: "디지털 가이드 가격",
         reportScope: "직업 → 티켓 → 지원 전략",
+        reportCta: "가이드 내용 보기",
       }
     : {
         headlineLead: "Find your fastest path into high-paying work",
@@ -81,6 +83,7 @@ export function HomeHub() {
         reportProof: "23 pages · Western Australia · Data reviewed 16 Aug 2026",
         reportPriceLabel: "Digital guide price",
         reportScope: "Role → Tickets → Application strategy",
+        reportCta: "See what is inside",
       }
 
   return (
@@ -112,7 +115,7 @@ export function HomeHub() {
                   <ArrowRight className="size-4" aria-hidden="true" />
                 </Link>
                 <Link
-                  href="#fifo-report"
+                  href={reportHref}
                   className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-[hsl(var(--cc-ink))] transition hover:border-blue-300 hover:bg-blue-50/40 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/15"
                 >
                   {copy.report}
@@ -203,6 +206,10 @@ export function HomeHub() {
                   <FileText className="size-3.5" aria-hidden="true" />
                   {copy.reportProof}
                 </p>
+                <Link href={reportHref} className="mt-4 inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-4 py-2 text-xs font-semibold text-brand transition hover:bg-blue-100 md:w-auto">
+                  {copy.reportCta}
+                  <ArrowRight className="size-3.5" aria-hidden="true" />
+                </Link>
               </div>
             </div>
           </section>
