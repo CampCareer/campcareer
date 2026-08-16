@@ -29,17 +29,18 @@ export function TopNav() {
 function FifoTopNav({ pathLocale }: { pathLocale: LocaleOption }) {
   const homeDestination = localizePath("/", pathLocale)
   const fifoDestination = localizePath("/fifo", pathLocale)
+  const reportDestination = localizePath("/fifo/report", pathLocale)
   const nav = pathLocale === "ko"
     ? [
         { href: fifoDestination, label: "FIFO 직업" },
         { href: `${fifoDestination}#tickets`, label: "티켓" },
-        { href: `${homeDestination}#fifo-report`, label: "FIFO 리포트" },
+        { href: reportDestination, label: "FIFO 리포트" },
         { href: localizePath("/blog", pathLocale), label: "Blog" },
       ]
     : [
         { href: fifoDestination, label: "FIFO Jobs" },
         { href: `${fifoDestination}#tickets`, label: "Tickets" },
-        { href: `${homeDestination}#fifo-report`, label: "FIFO Report" },
+        { href: reportDestination, label: "FIFO Report" },
         { href: localizePath("/blog", pathLocale), label: "Blog" },
       ]
 
@@ -66,7 +67,7 @@ function FifoTopNav({ pathLocale }: { pathLocale: LocaleOption }) {
         </nav>
 
         <Link
-          href={`${homeDestination}#fifo-report`}
+          href={reportDestination}
           className="ml-auto inline-flex min-h-10 items-center justify-center rounded-xl bg-brand px-4 py-2 text-sm font-semibold text-white transition hover:bg-[hsl(var(--brand-press))] lg:ml-8"
         >
           {pathLocale === "ko" ? "리포트 보기" : "Get the Report"}
