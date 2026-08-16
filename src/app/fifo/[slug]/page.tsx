@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { FIFO_PATHS, getFifoPath } from "@/lib/fifo/fifo-paths"
 import { FifoJobDetail } from "./fifo-job-detail"
+import { VerifiedFifoJobDetail } from "./verified-fifo-job-detail"
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -39,6 +40,10 @@ export default async function FifoJobPage({ params }: PageProps) {
   const path = getFifoPath(slug)
 
   if (!path) notFound()
+
+  if (path.status === "verified" && path.published) {
+    return <VerifiedFifoJobDetail path={path} />
+  }
 
   return <FifoJobDetail path={path} />
 }
