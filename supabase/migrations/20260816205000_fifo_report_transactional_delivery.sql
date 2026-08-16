@@ -1,5 +1,28 @@
 begin;
 
+-- Delivery-only fields stay server managed. The signed URL is a short-lived
+-- bearer secret and is never exposed through browser-readable tables.
+alter table public.fifo_report_orders
+  add column if not exists delivery_signed_url text,
+  add column if not exists delivery_link_expires_at timestamptz,
+  add column if not exists delivery_provider_message_id text;
+
+alter table public.fifo_report_orders
+  drop constraint if exists fifo_report_orders_delivery_signed_url_check,
+  drop constraint if exists fifo_report_orders_delivery_message_id_check;
+
+alter table public.fifo_report_orders
+  add constraint fifo_report_orders_delivery_signed_url_check
+    check (
+      delivery_signed_url is null
+      or (char_length(delivery_signed_url) between 20 and 4096 and left(delivery_signed_url, 8) = 'https://')
+    ),
+  add constraint fifo_report_orders_delivery_message_id_check
+    check (
+      delivery_provider_message_id is null
+      or char_length(delivery_provider_message_id) between 1 and 255
+    );
+
 -- Claim/complete/fail delivery attempts without letting duplicate Stripe events
 -- send the same guide concurrently. The existing order row remains the single
 -- source of truth for payment and fulfilment state.
@@ -65,7 +88,10 @@ begin
 end;
 $$;
 
-create or replace function public.complete_fifo_report_delivery(p_order_id uuid)
+create or replace function public.complete_fifo_report_delivery(
+  p_order_id uuid,
+  p_provider_message_id text default null
+)
 returns jsonb
 language plpgsql
 security definer
@@ -73,7 +99,12 @@ set search_path = public, pg_temp
 as $$
 declare
   v_order public.fifo_report_orders%rowtype;
+  v_message_id text := nullif(btrim(coalesce(p_provider_message_id, '')), '');
 begin
+  if v_message_id is not null and char_length(v_message_id) > 255 then
+    raise exception 'invalid FIFO delivery message id';
+  end if;
+
   select * into v_order
   from public.fifo_report_orders
   where id = p_order_id
@@ -94,6 +125,9 @@ begin
     delivery_status = 'delivered',
     delivered_at = coalesce(delivered_at, now()),
     delivery_error_code = null,
+    delivery_provider_message_id = coalesce(v_message_id, delivery_provider_message_id),
+    delivery_signed_url = null,
+    delivery_link_expires_at = null,
     updated_at = now()
   where id = p_order_id;
 
@@ -142,11 +176,11 @@ end;
 $$;
 
 revoke all on function public.claim_fifo_report_delivery(uuid, integer) from public, anon, authenticated;
-revoke all on function public.complete_fifo_report_delivery(uuid) from public, anon, authenticated;
+revoke all on function public.complete_fifo_report_delivery(uuid, text) from public, anon, authenticated;
 revoke all on function public.fail_fifo_report_delivery(uuid, text) from public, anon, authenticated;
 
 grant execute on function public.claim_fifo_report_delivery(uuid, integer) to service_role;
-grant execute on function public.complete_fifo_report_delivery(uuid) to service_role;
+grant execute on function public.complete_fifo_report_delivery(uuid, text) to service_role;
 grant execute on function public.fail_fifo_report_delivery(uuid, text) to service_role;
 
 commit;
