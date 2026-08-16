@@ -16,8 +16,25 @@ const EVENT_NAMES = new Set([
   "report_launch_view",
   "report_launch_interest_submitted",
   "report_workspace_open",
+  "fifo_landing_view",
+  "fifo_hub_opened",
+  "fifo_hub_view",
+  "fifo_path_opened",
+  "fifo_path_view",
+  "fifo_report_cta_clicked",
 ])
-const CONTEXT_KEYS = ["surface", "country", "major", "goal", "report_products", "locale", "route_id", "link_type"] as const
+const CONTEXT_KEYS = [
+  "surface",
+  "country",
+  "major",
+  "goal",
+  "report_products",
+  "locale",
+  "route_id",
+  "link_type",
+  "path_slug",
+  "target",
+] as const
 
 export async function POST(request: NextRequest) {
   if (request.cookies.get("cc_analytics_consent")?.value !== "granted") {
