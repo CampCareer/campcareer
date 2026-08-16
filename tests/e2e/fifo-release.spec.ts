@@ -48,7 +48,15 @@ test("FIFO launch renders the decision funnel at the active viewport", async ({ 
   }
 })
 
-test("FIFO guide sales page renders the completed product, actual PDF previews and separate purchase email capture", async ({ page }) => {
+test("FIFO guide sales page renders the completed product, actual PDF previews and separate purchase checkout", async ({ page }) => {
+  await page.route("**/api/fifo/report/checkout", async (route) => {
+    await route.fulfill({
+      status: 503,
+      contentType: "application/json",
+      body: JSON.stringify({ error: "checkout_unavailable" }),
+    })
+  })
+
   const response = await page.goto("/fifo/report")
   expect(response?.ok()).toBeTruthy()
   await expect(page).toHaveTitle("FIFO Construction Fast Entry Guide 2026 | CampCareer")
@@ -71,17 +79,19 @@ test("FIFO guide sales page renders the completed product, actual PDF previews a
 
   const capture = page.getByTestId("fifo-report-email-capture")
   await expect(capture).toBeVisible()
-  await expect(capture.getByRole("heading", { name: "Enter the email that should receive the guide." })).toBeVisible()
+  await expect(capture.getByRole("heading", { name: "Enter the email that should receive the guide, then continue to payment." })).toBeVisible()
   const emailInput = capture.getByLabel("Guide delivery email")
   const marketing = capture.getByRole("checkbox")
+  const checkoutButton = capture.getByRole("button", { name: "Secure checkout · A$29" })
   await expect(marketing).not.toBeChecked()
+
   await emailInput.fill("not-an-email")
-  await capture.getByRole("button", { name: "Save email for checkout" }).click()
+  await checkoutButton.click()
   await expect(capture.getByText("Enter a valid email address.", { exact: true })).toBeVisible()
 
   await emailInput.fill("Buyer@Example.COM")
-  await capture.getByRole("button", { name: "Save email for checkout" }).click()
-  await expect(capture.getByRole("status")).toContainText("Saved for this browser session")
+  await checkoutButton.click()
+  await expect(capture.getByRole("alert")).toContainText("Checkout could not be started")
   await expect(emailInput).toHaveValue("buyer@example.com")
   const sessionValue = await page.evaluate(() => window.sessionStorage.getItem("cc_fifo_report_checkout_v1"))
   expect(sessionValue).toBe('{"email":"buyer@example.com","marketingConsent":false}')
