@@ -56,6 +56,7 @@ test("Driller's Offsider, Dump Truck Operator and Scaffolder are verified launch
   assert.match(scaffolderData, /SB ticket alone does not make someone FIFO-ready/)
 
   assert.match(fifoVerifiedDetail, /research\.score\.total/)
+  assert.match(fifoVerifiedDetail, /import \{ ALL_FIFO_PATHS \} from "@\/lib\/fifo\/all-fifo-paths"/)
   assert.match(equipmentVerifiedDetail, /research\.score\.total/)
   assert.match(scaffolderVerifiedDetail, /Scaffolding has a three-step licence ladder/)
   assert.match(scaffolderVerifiedDetail, /Separate your first job from your first FIFO job/)
