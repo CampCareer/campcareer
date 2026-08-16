@@ -40,6 +40,17 @@ test("Scaffolder evidence produces a Strong score of 72", () => {
   assert.equal(fifoEntryScoreBand(score), "Strong")
 })
 
+test("Rigger evidence produces a Strong score of 74", () => {
+  const score = calculateFifoEntryScore({
+    pay: 9,
+    accessibility: 6,
+    demand: 8,
+    trainingBurden: 5.5,
+  })
+  assert.equal(score, 74)
+  assert.equal(fifoEntryScoreBand(score), "Strong")
+})
+
 test("FIFO Entry Score rejects out-of-range inputs", () => {
   assert.throws(
     () => calculateFifoEntryScore({ pay: 11, accessibility: 5, demand: 5, trainingBurden: 5 }),
