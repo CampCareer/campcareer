@@ -10,7 +10,7 @@ import {
   ShieldCheck,
   Ticket,
 } from "lucide-react"
-import { FIFO_PATHS } from "@/lib/fifo/fifo-paths"
+import { HOME_FIFO_PATHS } from "@/lib/fifo/all-fifo-paths"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { localizePath } from "@/lib/i18n/config"
 
@@ -27,7 +27,7 @@ export function HomeHub() {
         report: "2026 FIFO 리포트 보기",
         trust: "막연한 커리어 조언이 아니라, 실제 진입 경로를 찾는 사람을 위해 만듭니다.",
         panelTitle: "Top FIFO Paths",
-        panelBadge: "1 verified · 2 researching",
+        panelBadge: "2 verified · 1 researching",
         score: "ENTRY SCORE",
         barrier: "ENTRY",
         pay: "TYPICAL PAY (AUD)",
@@ -55,7 +55,7 @@ export function HomeHub() {
         report: "Get the 2026 FIFO Report",
         trust: "Built for people who want practical paths, not vague career advice.",
         panelTitle: "Top FIFO Paths",
-        panelBadge: "1 verified · 2 researching",
+        panelBadge: "2 verified · 1 researching",
         score: "ENTRY SCORE",
         barrier: "ENTRY",
         pay: "TYPICAL PAY (AUD)",
@@ -133,7 +133,7 @@ export function HomeHub() {
               </div>
 
               <div>
-                {FIFO_PATHS.map((path) => {
+                {HOME_FIFO_PATHS.map((path) => {
                   const published = path.published
                   return (
                     <Link key={path.name} href={localizePath(`/fifo/${path.slug}`, locale)} className="group grid gap-4 border-b border-[hsl(var(--cc-border))] px-5 py-5 transition last:border-b-0 hover:bg-blue-50/35 sm:grid-cols-[1fr_88px_116px_134px] sm:items-center sm:gap-3 sm:px-6">
