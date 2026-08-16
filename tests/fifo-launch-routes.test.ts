@@ -15,6 +15,8 @@ const fifoVerifiedDetail = readFileSync("src/app/fifo/[slug]/verified-fifo-job-d
 const equipmentVerifiedDetail = readFileSync("src/app/fifo/[slug]/verified-equipment-job-detail.tsx", "utf8")
 const scaffolderVerifiedDetail = readFileSync("src/app/fifo/[slug]/verified-scaffolder-job-detail.tsx", "utf8")
 const riggerVerifiedDetail = readFileSync("src/app/fifo/[slug]/verified-rigger-job-detail.tsx", "utf8")
+const fifoSitemap = readFileSync("src/app/fifo/sitemap.ts", "utf8")
+const robots = readFileSync("src/app/robots.ts", "utf8")
 const landing = readFileSync("src/app/(workspace)/home/home-hub.tsx", "utf8")
 const topNav = readFileSync("src/components/layout/top-nav.tsx", "utf8")
 const footer = readFileSync("src/components/layout/site-footer.tsx", "utf8")
@@ -40,6 +42,14 @@ test("homepage and FIFO chrome link into the launch routes", () => {
   assert.match(topNav, /normalizedPath\.startsWith\("\/fifo\/"\)/)
   assert.match(topNav, /const fifoDestination = localizePath\("\/fifo", pathLocale\)/)
   assert.match(footer, /const fifo = localizePath\("\/fifo", pathLocale\)/)
+})
+
+test("FIFO sitemap exposes the hub and only evidence-gated paths", () => {
+  assert.match(fifoSitemap, /path\.status === "verified"/)
+  assert.match(fifoSitemap, /Boolean\(path\.published\)/)
+  assert.match(fifoSitemap, /url: `\$\{SITE_URL\}\/fifo`/)
+  assert.match(fifoSitemap, /url: `\$\{SITE_URL\}\/fifo\/\$\{path\.slug\}`/)
+  assert.match(robots, /`\$\{SITE_URL\}\/fifo\/sitemap\.xml`/)
 })
 
 test("Driller's Offsider, Dump Truck Operator, Scaffolder and Rigger are verified launch paths", () => {
