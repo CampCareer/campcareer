@@ -42,6 +42,15 @@ const ALLOWED_EVENTS = new Set([
   "fifo_path_opened",
   "fifo_path_view",
   "fifo_report_cta_clicked",
+  // FIFO paid-guide commerce. Never attach purchase identity or payment identifiers.
+  "fifo_report_view",
+  "fifo_checkout_started",
+  "fifo_checkout_redirected",
+  "fifo_checkout_cancelled",
+  "fifo_checkout_completed",
+  "fifo_checkout_processing",
+  "fifo_checkout_failed",
+  "fifo_checkout_unverified",
 ])
 
 export function track(eventName: string, params?: Record<string, EventValue>) {
@@ -90,6 +99,36 @@ export function recordFifoEvent(
     path_slug?: string
     target?: "fifo_hub" | "fifo_path" | "fifo_report"
   },
+) {
+  track(eventName, context)
+  persistEvent(eventName, context)
+}
+
+export type FifoCommerceAnalyticsEvent =
+  | "fifo_report_view"
+  | "fifo_checkout_started"
+  | "fifo_checkout_redirected"
+  | "fifo_checkout_cancelled"
+  | "fifo_checkout_completed"
+  | "fifo_checkout_processing"
+  | "fifo_checkout_failed"
+  | "fifo_checkout_unverified"
+
+export type FifoCommerceAnalyticsContext = {
+  surface: "fifo_report" | "fifo_report_success"
+  locale: "en" | "ko"
+  status?: "delivered" | "paid" | "processing" | "problem" | "unverified"
+  reason?: "checkout_response" | "checkout_network" | "return_state"
+}
+
+/**
+ * Commerce analytics deliberately accepts only low-cardinality state.
+ * Never add purchase email, checkout-attempt UUIDs, Stripe identifiers, order IDs,
+ * checkout URLs or free text to this context.
+ */
+export function recordFifoCommerceEvent(
+  eventName: FifoCommerceAnalyticsEvent,
+  context: FifoCommerceAnalyticsContext,
 ) {
   track(eventName, context)
   persistEvent(eventName, context)

@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type FormEvent } from "react"
 import { ArrowRight, LoaderCircle, Mail, ShieldCheck } from "lucide-react"
+import { recordFifoCommerceEvent } from "@/lib/analytics"
 import {
   FIFO_REPORT_CHECKOUT_ATTEMPT_SESSION_KEY,
   FIFO_REPORT_CHECKOUT_SESSION_KEY,
@@ -41,8 +42,13 @@ export function FifoReportEmailCapture() {
       // Session storage is a convenience only. Checkout must never depend on it.
     }
 
-    setCheckoutCancelled(new URLSearchParams(window.location.search).get("checkout") === "cancelled")
-  }, [])
+    const cancelled = new URLSearchParams(window.location.search).get("checkout") === "cancelled"
+    setCheckoutCancelled(cancelled)
+    recordFifoCommerceEvent("fifo_report_view", { surface: "fifo_report", locale })
+    if (cancelled) {
+      recordFifoCommerceEvent("fifo_checkout_cancelled", { surface: "fifo_report", locale })
+    }
+  }, [locale])
 
   const copy = isKo
     ? {
@@ -122,6 +128,7 @@ export function FifoReportEmailCapture() {
     setError(null)
     setCheckoutCancelled(false)
     setIsSubmitting(true)
+    recordFifoCommerceEvent("fifo_checkout_started", { surface: "fifo_report", locale })
 
     try {
       const response = await fetch("/api/fifo/report/checkout", {
@@ -137,12 +144,23 @@ export function FifoReportEmailCapture() {
 
       const data = (await response.json().catch(() => null)) as CheckoutResponse | null
       if (!response.ok || !data?.checkoutUrl) {
+        recordFifoCommerceEvent("fifo_checkout_failed", {
+          surface: "fifo_report",
+          locale,
+          reason: "checkout_response",
+        })
         setError(copy.unavailable)
         return
       }
 
+      recordFifoCommerceEvent("fifo_checkout_redirected", { surface: "fifo_report", locale })
       window.location.assign(data.checkoutUrl)
     } catch {
+      recordFifoCommerceEvent("fifo_checkout_failed", {
+        surface: "fifo_report",
+        locale,
+        reason: "checkout_network",
+      })
       setError(copy.unavailable)
     } finally {
       setIsSubmitting(false)

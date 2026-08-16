@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { supabaseAdmin } from "@/lib/supabase-admin"
+import { FifoReportReturnAnalytics } from "./fifo-report-return-analytics"
 import { FifoReportSuccessPage, type FifoReportReturnStatus } from "./fifo-report-success-page"
 
 export const dynamic = "force-dynamic"
@@ -45,5 +46,10 @@ export default async function Page({ searchParams }: { searchParams: SuccessSear
   const rawSessionId = Array.isArray(params.session_id) ? params.session_id[0] : params.session_id
   const status = await resolveReturnStatus(rawSessionId ?? null)
 
-  return <FifoReportSuccessPage status={status} />
+  return (
+    <>
+      <FifoReportReturnAnalytics status={status} />
+      <FifoReportSuccessPage status={status} />
+    </>
+  )
 }
