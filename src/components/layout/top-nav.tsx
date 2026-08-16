@@ -66,7 +66,7 @@ export function TopNav() {
         <div className="mx-auto flex h-full max-w-[1240px] items-center px-5 sm:px-6">
           <Link href={homeDestination} className="flex items-center gap-2.5" aria-label="CampCareer home">
             <Image src="/brand/campcareer-c.svg" width={34} height={34} alt="" priority className="size-8 sm:size-[34px]" />
-            <span className="text-[20px] font-semibold tracking-[-0.035em] text-[hsl(var(--cc-ink))] sm:text-[22px]">
+            <span className="text-[20px] font-semibold tracking-[-0.035em] text-black sm:text-[22px]">
               CampCareer
             </span>
           </Link>
