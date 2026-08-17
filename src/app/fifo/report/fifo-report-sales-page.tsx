@@ -18,10 +18,6 @@ import {
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { localizePath } from "@/lib/i18n/config"
 import { FIFO_REPORT_COVER_PREVIEW } from "@/lib/fifo/report-preview-cover"
-import { FIFO_REPORT_EMPLOYERS_PREVIEW } from "@/lib/fifo/report-preview-employers"
-import { FIFO_REPORT_JOBS_PREVIEW } from "@/lib/fifo/report-preview-jobs"
-import { FIFO_REPORT_PATHWAYS_PREVIEW } from "@/lib/fifo/report-preview-pathways"
-import { FIFO_REPORT_TICKETS_PREVIEW } from "@/lib/fifo/report-preview-tickets"
 import {
   FIFO_CONSTRUCTION_FAST_ENTRY_GUIDE,
   formatAud,
@@ -183,33 +179,6 @@ export function FifoReportSalesPage() {
     { icon: <Users className="size-5" aria-hidden="true" />, title: copy.hireTitle, text: copy.hireText },
   ]
 
-  const previews = [
-    {
-      image: FIFO_REPORT_JOBS_PREVIEW,
-      page: 4,
-      title: "Jobs You Can Actually Target",
-      alt: "Actual FIFO guide page showing Jobs You Can Actually Target",
-    },
-    {
-      image: FIFO_REPORT_TICKETS_PREVIEW,
-      page: 6,
-      title: "The FIFO Ticket Map",
-      alt: "Actual FIFO guide page showing The FIFO Ticket Map",
-    },
-    {
-      image: FIFO_REPORT_PATHWAYS_PREVIEW,
-      page: 8,
-      title: "Fastest Entry Pathways",
-      alt: "Actual FIFO guide page showing Fastest Entry Pathways",
-    },
-    {
-      image: FIFO_REPORT_EMPLOYERS_PREVIEW,
-      page: 14,
-      title: "What Employers Are Actually Asking For",
-      alt: "Actual FIFO guide page showing What Employers Are Actually Asking For",
-    },
-  ]
-
   return (
     <main className="bg-white text-[hsl(var(--cc-ink))]">
       <section className="border-b border-[hsl(var(--cc-border))] bg-[linear-gradient(180deg,#f8fbff_0%,#ffffff_78%)] px-5 pb-14 pt-8 sm:px-8 sm:pb-18 sm:pt-10 lg:pb-20">
@@ -289,39 +258,6 @@ export function FifoReportSalesPage() {
                 <h3 className="mt-5 text-xl font-semibold tracking-[-0.025em]">{item.title}</h3>
                 <p className="mt-2 text-sm leading-6 text-[hsl(var(--cc-ink-secondary))]">{item.text}</p>
               </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="border-y border-[hsl(var(--cc-border))] bg-slate-50/60 px-5 py-16 sm:px-8 sm:py-20" aria-labelledby="actual-guide-preview-heading">
-        <div className="mx-auto max-w-[1180px]">
-          <div className="max-w-3xl">
-            <p className="text-xs font-semibold tracking-[0.12em] text-brand">{copy.previewEyebrow}</p>
-            <h2 id="actual-guide-preview-heading" className="mt-3 text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">{copy.previewTitle}</h2>
-            <p className="mt-4 max-w-2xl text-[15px] leading-7 text-[hsl(var(--cc-ink-secondary))]">{copy.previewText}</p>
-          </div>
-
-          <div className="mt-9 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {previews.map((preview) => (
-              <figure key={preview.page} className="overflow-hidden rounded-[20px] border border-[hsl(var(--cc-border))] bg-white shadow-[0_14px_38px_rgba(15,23,42,0.07)]">
-                <div className="bg-slate-100 p-3">
-                  <div className="overflow-hidden rounded-[10px] border border-slate-200 bg-white shadow-sm">
-                    <Image
-                      src={preview.image.src}
-                      width={preview.image.width}
-                      height={preview.image.height}
-                      unoptimized
-                      alt={preview.alt}
-                      className="h-auto w-full"
-                    />
-                  </div>
-                </div>
-                <figcaption className="border-t border-[hsl(var(--cc-border))] px-4 py-4">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.09em] text-brand">{copy.actualPage} · P.{preview.page}</p>
-                  <p className="mt-1.5 text-sm font-semibold leading-5 text-[hsl(var(--cc-ink))]">{preview.title}</p>
-                </figcaption>
-              </figure>
             ))}
           </div>
         </div>
