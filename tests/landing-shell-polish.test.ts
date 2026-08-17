@@ -18,7 +18,9 @@ test("FIFO landing keeps the conversion-first hero and evidence-first research p
   assert.match(landing, /Best Jobs for Beginners/)
   assert.match(landing, /Tickets That Matter/)
   assert.match(landing, /Real FIFO Pay/)
-  assert.match(landing, /Australia FIFO Entry Report 2026/)
+  assert.match(landing, /FIFO_CONSTRUCTION_FAST_ENTRY_GUIDE/)
+  assert.match(landing, /EDITION 1\.0 · COMPLETE/)
+  assert.doesNotMatch(landing, /COMING SOON|Australia FIFO Entry Report 2026/)
   assert.match(landing, /We publish scores only after pay, demand, training burden and first-job evidence are verified/)
 })
 

@@ -22,6 +22,14 @@ const EVENT_NAMES = new Set([
   "fifo_path_opened",
   "fifo_path_view",
   "fifo_report_cta_clicked",
+  "fifo_report_view",
+  "fifo_checkout_started",
+  "fifo_checkout_redirected",
+  "fifo_checkout_cancelled",
+  "fifo_checkout_completed",
+  "fifo_checkout_processing",
+  "fifo_checkout_failed",
+  "fifo_checkout_unverified",
 ])
 const CONTEXT_KEYS = [
   "surface",
@@ -34,6 +42,8 @@ const CONTEXT_KEYS = [
   "link_type",
   "path_slug",
   "target",
+  "status",
+  "reason",
 ] as const
 
 export async function POST(request: NextRequest) {

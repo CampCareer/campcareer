@@ -16,6 +16,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
       changeFrequency: "weekly",
     },
+    {
+      url: `${SITE_URL}/fifo/report`,
+      lastModified,
+      priority: 0.88,
+      changeFrequency: "monthly",
+    },
     ...verifiedPaths.map((path) => ({
       url: `${SITE_URL}/fifo/${path.slug}`,
       lastModified,

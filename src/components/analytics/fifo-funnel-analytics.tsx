@@ -8,12 +8,13 @@ import { withoutLocalePrefix } from "@/lib/i18n/config"
 function surfaceForPath(pathname: string) {
   if (pathname === "/") return "landing" as const
   if (pathname === "/fifo") return "fifo_hub" as const
+  if (pathname === "/fifo/report") return null
   if (pathname.startsWith("/fifo/")) return "fifo_path" as const
   return null
 }
 
 function pathSlug(pathname: string) {
-  if (!pathname.startsWith("/fifo/")) return undefined
+  if (!pathname.startsWith("/fifo/") || pathname === "/fifo/report") return undefined
   return pathname.split("/").filter(Boolean)[1]
 }
 
@@ -59,7 +60,7 @@ export function FifoFunnelAnalytics() {
       if (!currentSurface) return
       const destination = withoutLocalePrefix(url.pathname)
 
-      if (url.hash === "#fifo-report") {
+      if (destination === "/fifo/report" || url.hash === "#fifo-report") {
         recordFifoEvent("fifo_report_cta_clicked", {
           surface: currentSurface,
           path_slug: pathSlug(pathname),
