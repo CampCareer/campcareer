@@ -1,4 +1,5 @@
 import 'server-only'
+import { siteUrl } from '@/lib/email/links'
 import { sendEmail } from '@/lib/email/send'
 import { supabaseAdmin } from '@/lib/supabase-admin'
 import {
@@ -23,6 +24,7 @@ type OrderForDelivery = {
   delivery_status: string
   delivery_signed_url: string | null
   delivery_link_expires_at: string | null
+  digital_delivery_consent_at: string | null
 }
 
 type DeliveryLogEvent =
@@ -100,6 +102,7 @@ async function loadDeliveryOrder(orderId: string): Promise<OrderForDelivery> {
       'delivery_status',
       'delivery_signed_url',
       'delivery_link_expires_at',
+      'digital_delivery_consent_at',
     ].join(','))
     .eq('id', orderId)
     .single()
@@ -151,18 +154,28 @@ function escapeHtmlAttribute(value: string): string {
     .replaceAll('>', '&gt;')
 }
 
-function deliveryEmailHtml(url: string, expiresAt: string): string {
+function deliveryEmailHtml(url: string, expiresAt: string, hasImmediateDeliveryConsent: boolean): string {
   const safeUrl = escapeHtmlAttribute(url)
   const expiry = new Date(expiresAt).toUTCString()
+  const origin = siteUrl()
+  const safeTermsUrl = escapeHtmlAttribute(`${origin}/terms`)
+  const safePrivacyUrl = escapeHtmlAttribute(`${origin}/privacy`)
+  const consentConfirmation = hasImmediateDeliveryConsent
+    ? '<p style="font-size:14px;color:#4b5563">Before checkout, you requested immediate digital delivery after verified payment and acknowledged the related withdrawal-right notice.</p>'
+    : ''
+
   return `
     <div style="font-family:Arial,sans-serif;line-height:1.6;color:#111827;max-width:640px;margin:0 auto">
       <h1 style="font-size:24px;margin:0 0 16px">Your FIFO Construction Fast Entry Guide is ready</h1>
-      <p>Thanks for your purchase. Use the secure link below to download the CampCareer FIFO Construction Fast Entry Guide 2026.</p>
+      <p>Thanks for your purchase. Use the secure link below to download the CampCareer FIFO Construction Fast Entry Guide 2026, Edition 1.0.</p>
       <p style="margin:28px 0">
         <a href="${safeUrl}" style="display:inline-block;padding:12px 18px;background:#111827;color:#ffffff;text-decoration:none;border-radius:8px">Download your guide</a>
       </p>
       <p style="font-size:14px;color:#4b5563">This private download link expires on ${expiry}.</p>
+      ${consentConfirmation}
       <p style="font-size:14px;color:#4b5563">This email is part of your purchase and is separate from any optional marketing preference.</p>
+      <p style="font-size:14px;color:#4b5563">Purchase terms: <a href="${safeTermsUrl}">Terms of Service</a> · <a href="${safePrivacyUrl}">Privacy Policy</a></p>
+      <p style="font-size:14px;color:#4b5563">If the link expires or you have a delivery problem, contact leeyaehun@gmail.com so the purchase can be verified and the appropriate remedy provided.</p>
     </div>
   `.trim()
 }
@@ -212,7 +225,7 @@ export async function deliverPaidFifoReport(orderId: string): Promise<FifoReport
     const sent = await sendEmail({
       to: order.email,
       subject: 'Your CampCareer FIFO Construction Fast Entry Guide 2026',
-      html: deliveryEmailHtml(signed.url, signed.expiresAt),
+      html: deliveryEmailHtml(signed.url, signed.expiresAt, Boolean(order.digital_delivery_consent_at)),
       idempotencyKey: `${DELIVERY_IDEMPOTENCY_PREFIX}/${order.id}`,
     })
     providerMessageId = sent.id
