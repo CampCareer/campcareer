@@ -3,11 +3,14 @@ import { readFileSync } from "node:fs"
 import test from "node:test"
 import {
   FIFO_REPORT_DELIVERY_STATUSES,
+  FIFO_REPORT_DIGITAL_DELIVERY_CONSENT_VERSION,
   FIFO_REPORT_MARKETING_CONSENT_VERSION,
   FIFO_REPORT_ORDERS_TABLE,
   FIFO_REPORT_PAYMENT_STATUSES,
+  FIFO_REPORT_PRIVACY_VERSION,
   FIFO_REPORT_STORAGE_BUCKET,
   FIFO_REPORT_STORAGE_OBJECT_PATH,
+  FIFO_REPORT_TERMS_VERSION,
   buildFifoReportOrderDraft,
   parseFifoReportCheckoutAttempt,
 } from "../src/lib/fifo/report-order"
@@ -16,12 +19,17 @@ const migration = readFileSync(
   "supabase/migrations/20260816161500_fifo_report_order_persistence.sql",
   "utf8",
 )
+const consentMigration = readFileSync(
+  "supabase/migrations/20260817085000_fifo_report_purchase_consent.sql",
+  "utf8",
+)
 
-test("FIFO report order draft is canonical and marketing stays optional", () => {
+test("FIFO report order draft is canonical, requires digital delivery acknowledgement, and keeps marketing optional", () => {
   const draft = buildFifoReportOrderDraft({
     checkoutAttemptId: "8F9A0E3A-1D4E-4B40-A531-9B6DA790E16A",
     email: "  Buyer@Example.COM ",
     marketingConsent: false,
+    digitalDeliveryConsent: true,
   })
 
   assert.equal(draft.ok, true)
@@ -38,6 +46,10 @@ test("FIFO report order draft is canonical and marketing stays optional", () => 
     deliveryStatus: "not_ready",
     marketingOptInRequested: false,
     marketingConsentVersion: null,
+    digitalDeliveryConsent: true,
+    digitalDeliveryConsentVersion: FIFO_REPORT_DIGITAL_DELIVERY_CONSENT_VERSION,
+    termsVersion: FIFO_REPORT_TERMS_VERSION,
+    privacyVersion: FIFO_REPORT_PRIVACY_VERSION,
   })
 })
 
@@ -46,6 +58,7 @@ test("optional marketing preference is represented as a request, not a purchase 
     checkoutAttemptId: "2a824168-4188-46db-b4eb-c6a31cbcd44d",
     email: "buyer@example.com",
     marketingConsent: true,
+    digitalDeliveryConsent: true,
   })
 
   assert.equal(draft.ok, true)
@@ -54,17 +67,30 @@ test("optional marketing preference is represented as a request, not a purchase 
   assert.equal(draft.value.marketingConsentVersion, FIFO_REPORT_MARKETING_CONSENT_VERSION)
 })
 
-test("checkout attempts reject invalid identifiers and invalid email before persistence", () => {
+test("checkout attempts reject invalid identifiers, invalid email, and missing digital delivery acknowledgement", () => {
   assert.deepEqual(
-    parseFifoReportCheckoutAttempt({ checkoutAttemptId: "not-a-uuid", email: "buyer@example.com" }),
+    parseFifoReportCheckoutAttempt({
+      checkoutAttemptId: "not-a-uuid",
+      email: "buyer@example.com",
+      digitalDeliveryConsent: true,
+    }),
     { ok: false, code: "invalid_checkout_attempt" },
   )
   assert.deepEqual(
     parseFifoReportCheckoutAttempt({
       checkoutAttemptId: "2a824168-4188-46db-b4eb-c6a31cbcd44d",
       email: "not-an-email",
+      digitalDeliveryConsent: true,
     }),
     { ok: false, code: "invalid_email" },
+  )
+  assert.deepEqual(
+    parseFifoReportCheckoutAttempt({
+      checkoutAttemptId: "2a824168-4188-46db-b4eb-c6a31cbcd44d",
+      email: "buyer@example.com",
+      marketingConsent: false,
+    }),
+    { ok: false, code: "digital_delivery_consent_required" },
   )
 })
 
@@ -113,4 +139,16 @@ test("order row documents that marketing preference is not a mailing-list subscr
   assert.match(migration, /This is not itself a mailing-list subscription/)
   assert.match(migration, /marketing_opt_in_requested = false[\s\S]*marketing_opt_in_requested_at is null/)
   assert.match(migration, /marketing_opt_in_requested = true[\s\S]*marketing_opt_in_requested_at is not null/)
+})
+
+test("new purchase consent records preserve the exact policy and acknowledgement boundary without backfilling legacy orders", () => {
+  assert.equal(FIFO_REPORT_DIGITAL_DELIVERY_CONSENT_VERSION, "fifo-report-digital-delivery-v1")
+  assert.equal(FIFO_REPORT_TERMS_VERSION, "2026-08-17")
+  assert.equal(FIFO_REPORT_PRIVACY_VERSION, "2026-08-17")
+  assert.match(consentMigration, /digital_delivery_consent_at timestamptz/)
+  assert.match(consentMigration, /digital_withdrawal_acknowledged_at timestamptz/)
+  assert.match(consentMigration, /digital_delivery_consent_version text/)
+  assert.match(consentMigration, /terms_version text/)
+  assert.match(consentMigration, /privacy_version text/)
+  assert.match(consentMigration, /Legacy orders remain nullable/)
 })
