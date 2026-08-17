@@ -21,12 +21,19 @@ export default async function PrivacyPage() {
         <section>
           <h2 className="font-display text-lg font-semibold text-slate-800 mb-2">1. Who we are</h2>
           <p>
-            CampCareer (&quot;we&quot;, &quot;us&quot;) is operated by Yaehun Lee and provides study, career,
-            work-pathway, and related decision-support products at campcareer.com. Yaehun Lee is the
-            controller for the personal data described in this policy. This policy explains what personal
-            data we collect, why we collect it, how long we keep it, the service providers involved, and
-            the choices you have. For any privacy question or request, contact{" "}
-            <a href="mailto:leeyaehun@gmail.com" className="text-blue-600 hover:underline">leeyaehun@gmail.com</a>.
+            CampCareer (&quot;we&quot;, &quot;us&quot;) is operated by Yaehun Lee as an Australian business and
+            provides study, career, work-pathway, and related decision-support products at campcareer.com.
+            Yaehun Lee is responsible for the personal data described in this policy and, where EU or UK
+            data-protection law applies, acts as the controller. This policy explains what personal data we
+            collect, why we collect it, how long we keep it, the service providers involved, and the choices
+            you have. For privacy questions or rights requests, our preferred contact is{" "}
+            <a href="mailto:contact@campcareer.com" className="text-blue-600 hover:underline">contact@campcareer.com</a>.
+          </p>
+          <p className="mt-3">
+            Current correspondence address: 17 Cruise Park Ave, Tyrrelstown, Dublin 15, D15 EY8X, Ireland.
+            Phone: <a href="tel:+353892678444" className="text-blue-600 hover:underline">+353 89 267 8444</a>.
+            These are current contact details while the operator is temporarily in Ireland and do not change
+            CampCareer&apos;s Australian business registration.
           </p>
         </section>
 
@@ -212,7 +219,7 @@ export default async function PrivacyPage() {
             manage your profile and delete saved content where the product provides a delete control. You can
             also permanently delete your account in <Link href="/settings" className="text-blue-600 hover:underline">Account settings</Link>.
             For an access, correction, deletion, objection, or export request, email{" "}
-            <a href="mailto:leeyaehun@gmail.com" className="text-blue-600 hover:underline">leeyaehun@gmail.com</a>{" "}
+            <a href="mailto:contact@campcareer.com" className="text-blue-600 hover:underline">contact@campcareer.com</a>{" "}
             from an address we can use to verify the request. We aim to action verified requests within the
             period required by applicable law. Some purchase, payment, security, tax, dispute, or accounting
             records may need to be retained despite an account-deletion request where a legal basis requires
@@ -259,7 +266,11 @@ function KoreanPrivacyPage() {
       <h1 className="font-display text-3xl font-semibold tracking-tight text-slate-900">개인정보 처리방침</h1>
       <p className="mb-10 mt-2 text-sm text-slate-400">최종 업데이트: 2026년 8월 17일</p>
       <div className="space-y-8 text-sm leading-relaxed text-slate-600">
-        <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">1. 운영 주체와 문의</h2><p>CampCareer는 Yaehun Lee가 운영하는 유학·커리어·취업 경로 의사결정 서비스입니다. Yaehun Lee는 이 방침에서 설명하는 개인정보의 처리자입니다. 이 방침은 어떤 정보를 왜 수집하고, 얼마나 보관하며, 어떤 서비스 제공업체를 사용하고, 이용자에게 어떤 선택권이 있는지 설명합니다. 개인정보 관련 문의나 요청은 <a href="mailto:leeyaehun@gmail.com" className="text-blue-600 hover:underline">leeyaehun@gmail.com</a>으로 보내주세요.</p></section>
+        <section>
+          <h2 className="font-display mb-2 text-lg font-semibold text-slate-800">1. 운영 주체와 문의</h2>
+          <p>CampCareer는 Yaehun Lee가 호주 사업자로 운영하는 유학·커리어·취업 경로 의사결정 서비스입니다. Yaehun Lee는 이 방침에서 설명하는 개인정보에 대한 책임을 지며, EU 또는 영국 개인정보 보호법이 적용되는 경우 개인정보 처리의 컨트롤러 역할을 합니다. 이 방침은 어떤 정보를 왜 수집하고, 얼마나 보관하며, 어떤 서비스 제공업체를 사용하고, 이용자에게 어떤 선택권이 있는지 설명합니다. 개인정보 관련 문의나 권리 요청의 우선 연락처는 <a href="mailto:contact@campcareer.com" className="text-blue-600 hover:underline">contact@campcareer.com</a>입니다.</p>
+          <p className="mt-3">현재 우편 연락 주소: 17 Cruise Park Ave, Tyrrelstown, Dublin 15, D15 EY8X, Ireland. 전화: <a href="tel:+353892678444" className="text-blue-600 hover:underline">+353 89 267 8444</a>. 이 연락처는 운영자가 아일랜드에 일시 체류하는 동안 사용하는 현재 연락 정보이며 CampCareer의 호주 사업자 등록을 변경하는 정보가 아닙니다.</p>
+        </section>
         <section>
           <h2 className="font-display mb-2 text-lg font-semibold text-slate-800">2. 수집하는 정보</h2>
           <ul className="list-disc space-y-1.5 pl-5">
@@ -288,7 +299,7 @@ function KoreanPrivacyPage() {
         </section>
         <section>
           <h2 className="font-display mb-2 text-lg font-semibold text-slate-800">6. 이용자의 권리</h2>
-          <p>거주 지역에 따라 열람, 정정, 내보내기, 삭제, 처리 제한 또는 특정 처리에 대한 이의를 요청할 수 있습니다. 계정은 <Link href="/ko/settings" className="text-blue-600 hover:underline">계정 설정</Link>에서 삭제할 수 있으며, 그 밖의 요청은 확인 가능한 이메일 주소에서 <a href="mailto:leeyaehun@gmail.com" className="text-blue-600 hover:underline">leeyaehun@gmail.com</a>으로 보내주세요. 구매·결제·보안·세무·분쟁·회계 기록은 법적 근거가 있는 경우 계정 삭제 요청 후에도 필요한 기간 동안 보관될 수 있습니다. 거주 지역에 따라 관할 개인정보 감독기관에 민원을 제기할 권리도 있을 수 있습니다.</p>
+          <p>거주 지역에 따라 열람, 정정, 내보내기, 삭제, 처리 제한 또는 특정 처리에 대한 이의를 요청할 수 있습니다. 계정은 <Link href="/ko/settings" className="text-blue-600 hover:underline">계정 설정</Link>에서 삭제할 수 있으며, 그 밖의 요청은 확인 가능한 이메일 주소에서 <a href="mailto:contact@campcareer.com" className="text-blue-600 hover:underline">contact@campcareer.com</a>으로 보내주세요. 구매·결제·보안·세무·분쟁·회계 기록은 법적 근거가 있는 경우 계정 삭제 요청 후에도 필요한 기간 동안 보관될 수 있습니다. 거주 지역에 따라 관할 개인정보 감독기관에 민원을 제기할 권리도 있을 수 있습니다.</p>
         </section>
         <section id="cookies-and-measurement">
           <h2 className="font-display mb-2 text-lg font-semibold text-slate-800">7. 쿠키·Stripe Checkout·측정 선택</h2>
