@@ -119,6 +119,11 @@ async function ensureOrder(
     marketing_opt_in_requested: draft.marketingOptInRequested,
     marketing_opt_in_requested_at: draft.marketingOptInRequested ? nowIso : null,
     marketing_consent_version: draft.marketingConsentVersion,
+    digital_delivery_consent_at: nowIso,
+    digital_withdrawal_acknowledged_at: nowIso,
+    digital_delivery_consent_version: draft.digitalDeliveryConsentVersion,
+    terms_version: draft.termsVersion,
+    privacy_version: draft.privacyVersion,
     updated_at: nowIso,
   }
 

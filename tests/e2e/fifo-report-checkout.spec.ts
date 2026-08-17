@@ -29,12 +29,22 @@ test("FIFO report checkout posts the purchase identity through the server bounda
   await expect(capture.getByRole("status")).toContainText("previous Checkout ended before completion")
 
   await capture.getByLabel("Guide delivery email").fill("Buyer@Example.COM")
-  await expect(capture.getByRole("checkbox")).not.toBeChecked()
+  const deliveryConsent = capture.getByRole("checkbox", { name: /I request immediate delivery of the digital guide/i })
+  const marketing = capture.getByRole("checkbox", { name: /After purchase, also send me occasional CampCareer FIFO updates/i })
+  await expect(deliveryConsent).not.toBeChecked()
+  await expect(marketing).not.toBeChecked()
+
+  await capture.getByRole("button", { name: "Secure checkout · A$29" }).click()
+  await expect(capture.getByRole("alert")).toContainText("Confirm the immediate digital-delivery request")
+  expect(captured.payload).toBeNull()
+
+  await deliveryConsent.check()
   await capture.getByRole("button", { name: "Secure checkout · A$29" }).click()
 
   await expect.poll(() => captured.payload).not.toBeNull()
   expect(captured.payload?.email).toBe("buyer@example.com")
   expect(captured.payload?.marketingConsent).toBe(false)
+  expect(captured.payload?.digitalDeliveryConsent).toBe(true)
   expect(captured.payload?.checkoutAttemptId).toMatch(
     /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
   )
@@ -55,6 +65,7 @@ test("FIFO checkout failure stays on the guide and exposes a retryable non-PII e
   await page.goto("/fifo/report")
   const capture = page.getByTestId("fifo-report-email-capture")
   await capture.getByLabel("Guide delivery email").fill("buyer@example.com")
+  await capture.getByRole("checkbox", { name: /I request immediate delivery of the digital guide/i }).check()
   await capture.getByRole("button", { name: "Secure checkout · A$29" }).click()
 
   await expect(capture.getByRole("alert")).toContainText("Checkout could not be started")
@@ -106,6 +117,7 @@ test("FIFO commerce analytics is consent-gated and contains only low-cardinality
 
   const capture = page.getByTestId("fifo-report-email-capture")
   await capture.getByLabel("Guide delivery email").fill("buyer@example.com")
+  await capture.getByRole("checkbox", { name: /I request immediate delivery of the digital guide/i }).check()
   await capture.getByRole("button", { name: "Secure checkout · A$29" }).click()
   await expect.poll(() => payloads.map((payload) => payload.eventName)).toEqual(
     expect.arrayContaining(["fifo_checkout_started", "fifo_checkout_failed"]),
@@ -136,14 +148,20 @@ test("FIFO report checkout remains responsive and keyboard-usable on a mobile vi
   const capture = page.getByTestId("fifo-report-email-capture")
   await expect(capture).toBeInViewport()
   const emailInput = capture.getByLabel("Guide delivery email")
-  const marketing = capture.getByRole("checkbox")
+  const deliveryConsent = capture.getByRole("checkbox", { name: /I request immediate delivery of the digital guide/i })
+  const marketing = capture.getByRole("checkbox", { name: /After purchase, also send me occasional CampCareer FIFO updates/i })
   const checkoutButton = capture.getByRole("button", { name: "Secure checkout · A$29" })
 
   await emailInput.focus()
   await expect(emailInput).toBeFocused()
   await page.keyboard.press("Tab")
+  await expect(deliveryConsent).toBeFocused()
+  await page.keyboard.press("Tab")
+  await page.keyboard.press("Tab")
+  await page.keyboard.press("Tab")
   await expect(marketing).toBeFocused()
   await page.keyboard.press("Tab")
   await expect(checkoutButton).toBeFocused()
+  await expect(deliveryConsent).not.toBeChecked()
   await expect(marketing).not.toBeChecked()
 })

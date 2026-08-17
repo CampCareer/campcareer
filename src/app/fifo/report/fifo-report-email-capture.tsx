@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { useEffect, useState, type FormEvent } from "react"
 import { ArrowRight, LoaderCircle, Mail, ShieldCheck } from "lucide-react"
 import { recordFifoCommerceEvent } from "@/lib/analytics"
@@ -9,6 +10,7 @@ import {
   parseFifoReportCheckoutAttemptId,
   parseFifoReportCheckoutIdentity,
 } from "@/lib/fifo/report-checkout-email"
+import { localizePath } from "@/lib/i18n/config"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { FIFO_CONSTRUCTION_FAST_ENTRY_GUIDE, formatAud } from "@/lib/report-catalog"
 
@@ -22,9 +24,13 @@ export function FifoReportEmailCapture() {
   const locale = useRouteLocale()
   const isKo = locale === "ko"
   const price = formatAud(FIFO_CONSTRUCTION_FAST_ENTRY_GUIDE.amountAudCents)
+  const termsHref = localizePath("/terms", locale)
+  const privacyHref = localizePath("/privacy", locale)
   const [email, setEmail] = useState("")
   const [marketingConsent, setMarketingConsent] = useState(false)
+  const [digitalDeliveryConsent, setDigitalDeliveryConsent] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [consentError, setConsentError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [checkoutCancelled, setCheckoutCancelled] = useState(false)
 
@@ -60,7 +66,8 @@ export function FifoReportEmailCapture() {
         marketing: "구매 후 CampCareer의 FIFO 업데이트도 가끔 이메일로 받기",
         marketingNote: "선택 사항입니다. 체크하지 않아도 구매와 리포트 전달에는 영향이 없습니다.",
         invalid: "올바른 이메일 주소를 입력해 주세요.",
-        privacy: "결제 버튼을 누르면 구매 처리에 필요한 이메일과 선택한 마케팅 선호도만 CampCareer 서버로 전송됩니다. 카드 정보는 Stripe Checkout에서 처리됩니다.",
+        consentRequired: "결제로 이동하려면 즉시 디지털 전달 요청과 관련 고지를 확인해 주세요.",
+        privacy: "계속하면 구매 이메일, 필수 디지털 전달 확인, 선택한 마케팅 선호도가 CampCareer 서버로 전송됩니다. 카드 정보는 Stripe Checkout에서 처리됩니다.",
         checkout: `Secure checkout · ${price}`,
         opening: "Stripe Checkout 여는 중…",
         unavailable: "지금 결제를 시작할 수 없습니다. 잠시 후 다시 시도해 주세요.",
@@ -76,7 +83,8 @@ export function FifoReportEmailCapture() {
         marketing: "After purchase, also send me occasional CampCareer FIFO updates",
         marketingNote: "Optional. Leaving this unchecked does not affect checkout or guide delivery.",
         invalid: "Enter a valid email address.",
-        privacy: "When you continue, only the purchase email and your optional marketing preference are sent to CampCareer. Card details are handled on Stripe-hosted Checkout.",
+        consentRequired: "Confirm the immediate digital-delivery request and notice before continuing to payment.",
+        privacy: "When you continue, your purchase email, required digital-delivery confirmation, and optional marketing preference are sent to CampCareer. Card details are handled on Stripe-hosted Checkout.",
         checkout: `Secure checkout · ${price}`,
         opening: "Opening Stripe Checkout…",
         unavailable: "Checkout could not be started right now. Please try again shortly.",
@@ -116,6 +124,10 @@ export function FifoReportEmailCapture() {
       setError(copy.invalid)
       return
     }
+    if (!digitalDeliveryConsent) {
+      setConsentError(copy.consentRequired)
+      return
+    }
 
     try {
       window.sessionStorage.setItem(FIFO_REPORT_CHECKOUT_SESSION_KEY, JSON.stringify(parsed.value))
@@ -126,6 +138,7 @@ export function FifoReportEmailCapture() {
     setEmail(parsed.value.email)
     setMarketingConsent(parsed.value.marketingConsent)
     setError(null)
+    setConsentError(null)
     setCheckoutCancelled(false)
     setIsSubmitting(true)
     recordFifoCommerceEvent("fifo_checkout_started", { surface: "fifo_report", locale })
@@ -139,6 +152,7 @@ export function FifoReportEmailCapture() {
           checkoutAttemptId: checkoutAttemptId(),
           email: parsed.value.email,
           marketingConsent: parsed.value.marketingConsent,
+          digitalDeliveryConsent: true,
         }),
       })
 
@@ -223,7 +237,46 @@ export function FifoReportEmailCapture() {
             {error ? <span role="alert" className="font-medium text-red-700">{error}</span> : null}
           </div>
 
-          <label className="mt-4 flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 bg-slate-50/70 p-3.5">
+          <label className="mt-4 flex cursor-pointer items-start gap-3 rounded-xl border border-blue-200 bg-blue-50/60 p-3.5">
+            <input
+              type="checkbox"
+              name="digitalDeliveryConsent"
+              required
+              checked={digitalDeliveryConsent}
+              onChange={(event) => {
+                setDigitalDeliveryConsent(event.target.checked)
+                setConsentError(null)
+                resetCheckoutAttempt()
+              }}
+              aria-invalid={Boolean(consentError)}
+              aria-describedby="fifo-report-digital-consent-help"
+              className="mt-0.5 size-4 rounded border-slate-300"
+            />
+            <span className="text-[11px] leading-5 text-[hsl(var(--cc-ink-secondary))]">
+              {isKo ? (
+                <>
+                  결제가 확인되면 디지털 가이드를 즉시 제공해 달라고 요청합니다. {" "}
+                  <Link href={termsHref} className="font-semibold text-brand underline underline-offset-2">이용약관</Link>과 {" "}
+                  <Link href={privacyHref} className="font-semibold text-brand underline underline-offset-2">개인정보 처리방침</Link>을 읽었으며,
+                  적용 법률이 허용하는 경우 디지털 콘텐츠 제공이 시작된 후 단순 변심에 따른 철회권이 종료될 수 있음을 이해합니다.
+                  미제공·하자·계약 불일치 등에 관한 법정 권리는 제한되지 않습니다.
+                </>
+              ) : (
+                <>
+                  I request immediate delivery of the digital guide after verified payment. I have read the {" "}
+                  <Link href={termsHref} className="font-semibold text-brand underline underline-offset-2">Terms of Service</Link> and {" "}
+                  <Link href={privacyHref} className="font-semibold text-brand underline underline-offset-2">Privacy Policy</Link>. I understand that,
+                  where applicable law allows, my change-of-mind withdrawal right may end once the digital content is supplied.
+                  This does not limit statutory rights for non-delivery, faults, or other non-conformity.
+                </>
+              )}
+            </span>
+          </label>
+          <div id="fifo-report-digital-consent-help" className="mt-1.5 min-h-5 text-xs leading-5">
+            {consentError ? <span role="alert" className="font-medium text-red-700">{consentError}</span> : null}
+          </div>
+
+          <label className="mt-3 flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 bg-slate-50/70 p-3.5">
             <input
               type="checkbox"
               name="marketingConsent"
