@@ -175,6 +175,7 @@ function deliveryEmailHtml(url: string, expiresAt: string, hasImmediateDeliveryC
       ${consentConfirmation}
       <p style="font-size:14px;color:#4b5563">This email is part of your purchase and is separate from any optional marketing preference.</p>
       <p style="font-size:14px;color:#4b5563">Purchase terms: <a href="${safeTermsUrl}">Terms of Service</a> · <a href="${safePrivacyUrl}">Privacy Policy</a></p>
+      <p style="font-size:14px;color:#4b5563">Seller: CampCareer, operated by Yaehun Lee · ABN 59 377 057 202. CampCareer is not currently registered for Australian GST.</p>
       <p style="font-size:14px;color:#4b5563">If the link expires or you have a delivery problem, contact contact@campcareer.com so the purchase can be verified and the appropriate remedy provided.</p>
     </div>
   `.trim()
