@@ -14,6 +14,10 @@ const migration = readFileSync(
   "supabase/migrations/20260816172500_fifo_report_stripe_webhook_state.sql",
   "utf8",
 )
+const consentMigration = readFileSync(
+  "supabase/migrations/20260817085000_fifo_report_purchase_consent.sql",
+  "utf8",
+)
 
 function stripeSignature(payload: string, secret: string, timestamp: number) {
   const signature = createHmac("sha256", secret)
@@ -129,6 +133,15 @@ test("checkout creation is server-only, uses one Stripe Price and an idempotency
   assert.match(checkoutRoute, /stripe_checkout_url/)
   assert.match(checkoutRoute, /reused: true/)
   assert.match(checkoutRoute, /\{CHECKOUT_SESSION_ID\}/)
+})
+
+test("new FIFO checkout persists the immediate-delivery acknowledgement and linked policy versions", () => {
+  assert.match(checkoutRoute, /digital_delivery_consent_at: nowIso/)
+  assert.match(checkoutRoute, /digital_withdrawal_acknowledged_at: nowIso/)
+  assert.match(checkoutRoute, /digital_delivery_consent_version: draft\.digitalDeliveryConsentVersion/)
+  assert.match(checkoutRoute, /terms_version: draft\.termsVersion/)
+  assert.match(checkoutRoute, /privacy_version: draft\.privacyVersion/)
+  assert.match(consentMigration, /fifo_report_orders_digital_delivery_consent_check/)
 })
 
 test("webhook state transition is signature-gated, deduplicated and marks paid orders for delivery", () => {
