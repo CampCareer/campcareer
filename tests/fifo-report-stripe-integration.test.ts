@@ -15,7 +15,7 @@ const migration = readFileSync(
   "utf8",
 )
 const consentMigration = readFileSync(
-  "supabase/migrations/20260817085000_fifo_report_purchase_consent.sql",
+  "supabase/migrations/20260817080342_fifo_report_purchase_consent.sql",
   "utf8",
 )
 
