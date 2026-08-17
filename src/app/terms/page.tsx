@@ -21,7 +21,7 @@ export default async function TermsPage() {
         <section>
           <h2 className="font-display text-lg font-semibold text-slate-800 mb-2">1. Acceptance</h2>
           <p>
-            CampCareer is operated by Yaehun Lee as an Australian business. By using campcareer.com
+            CampCareer is operated by Yaehun Lee (ABN 59 377 057 202) as an Australian sole trader. By using campcareer.com
             (&quot;CampCareer&quot;, the &quot;Service&quot;), you agree to these terms. If you do not agree,
             please do not use the Service. A digital purchase is also subject to the version of these
             terms linked at checkout for that purchase. The Irish address listed in section 12 is a
@@ -88,6 +88,12 @@ export default async function TermsPage() {
             eligible local-currency amount in its hosted Checkout. The final amount and currency shown
             by Stripe before you confirm payment are the payment terms you authorise. Your bank or card
             provider may apply charges that CampCareer does not control.
+          </p>
+          <p className="mt-3">
+            CampCareer is not currently registered for Australian Goods and Services Tax (GST), so no
+            Australian GST is included in the listed A$29 price. This statement concerns Australian GST
+            only and does not determine any tax treatment that may apply to a transaction in another
+            jurisdiction.
           </p>
           <p className="mt-3">
             Card and payment-method details are entered on Stripe-hosted Checkout. CampCareer treats an
@@ -173,8 +179,8 @@ export default async function TermsPage() {
         <section>
           <h2 className="font-display text-lg font-semibold text-slate-800 mb-2">12. Business identity, contact, and purchase support</h2>
           <p>
-            CampCareer is operated by Yaehun Lee as an Australian business. For terms, guide-delivery,
-            purchase, or consumer-remedy questions, our preferred contact channel is{" "}
+            CampCareer is operated by Yaehun Lee (ABN 59 377 057 202), an Australian sole trader. For terms,
+            guide-delivery, purchase, or consumer-remedy questions, our preferred contact channel is{" "}
             <a href="mailto:contact@campcareer.com" className="text-blue-600 hover:underline">contact@campcareer.com</a>.
           </p>
           <p className="mt-3">
@@ -199,7 +205,7 @@ function KoreanTermsPage() {
       <h1 className="font-display text-3xl font-semibold tracking-tight text-slate-900">이용약관</h1>
       <p className="mb-10 mt-2 text-sm text-slate-400">최종 업데이트: 2026년 8월 17일</p>
       <div className="space-y-8 text-sm leading-relaxed text-slate-600">
-        <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">1. 약관 동의</h2><p>CampCareer는 Yaehun Lee가 호주 사업자로 운영합니다. campcareer.com과 CampCareer 서비스를 이용하면 본 약관에 동의하게 됩니다. 동의하지 않으면 서비스를 이용하지 마세요. 디지털 상품 구매에는 해당 구매 시 Checkout에서 연결된 약관 버전이 함께 적용됩니다. 제12조의 아일랜드 주소는 현재 우편·연락용 주소이며 CampCareer가 아일랜드 법인 또는 아일랜드 사업자로 등록되었다는 의미가 아닙니다.</p></section>
+        <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">1. 약관 동의</h2><p>CampCareer는 Yaehun Lee(ABN 59 377 057 202)가 호주 개인사업자(sole trader)로 운영합니다. campcareer.com과 CampCareer 서비스를 이용하면 본 약관에 동의하게 됩니다. 동의하지 않으면 서비스를 이용하지 마세요. 디지털 상품 구매에는 해당 구매 시 Checkout에서 연결된 약관 버전이 함께 적용됩니다. 제12조의 아일랜드 주소는 현재 우편·연락용 주소이며 CampCareer가 아일랜드 법인 또는 아일랜드 사업자로 등록되었다는 의미가 아닙니다.</p></section>
         <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">2. 데이터의 성격과 비조언·비보장 고지</h2><p>커리어 점수, FIFO 진입 경로 비교, 연봉, 교육비, 학비, 세금 추정, 투자회수기간, 비자·이민 정보는 출처 기반 데이터·추정치·시장 예시·미확인 항목으로 표시됩니다. 이는 일반 정보와 의사결정 보조 자료이며 금융·법률·세무·입학·이민·고용·안전 자문이 아닙니다. CampCareer는 입학, 취업, 스폰서십, 비자 승인, 영주권, 소득, 특정 로스터나 기타 결과를 보장하지 않습니다. 실제 결제·지원 전에는 가격, 자격, 라이선스, 고용주 요건과 법적 요건을 공식 기관·제공자·고용주에게 다시 확인해야 합니다.</p></section>
         <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">3. 계정과 제출 정보</h2><p>이용자는 계정 자격증명과 본인이 제출하는 저장 계획·지원 요청·피드백의 책임을 집니다. 이용자는 자신의 콘텐츠 권리를 보유하며, CampCareer에는 서비스 보관·검토·보안·운영에 필요한 범위의 권한만 부여합니다. 타인의 기밀 정보나 공유 권한이 없는 정보를 제출해서는 안 됩니다.</p></section>
         <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">4. 피드백과 외부 링크</h2><p>피드백은 서비스 개선에 사용되지만 별도의 지원 의무를 만들지 않습니다. 비밀번호, 여권번호, 결제 정보, 민감한 개인정보를 포함하지 마세요. 공식 출처·학교·채용·교육기관·제3자 링크는 편의를 위한 것이며 외부 사이트의 내용·가용성·가격·약관·개인정보 처리는 해당 사이트가 책임집니다.</p></section>
@@ -207,6 +213,7 @@ function KoreanTermsPage() {
         <section>
           <h2 className="font-display mb-2 text-lg font-semibold text-slate-800">6. 디지털 리포트 구매·결제·전달</h2>
           <p>FIFO Construction Fast Entry Guide 2026은 일회성으로 구매하는 디지털 PDF입니다. 상품 에디션, 표시 가격과 결제 통화는 결제 승인 전에 표시됩니다. 가이드는 호주 달러 기준으로 표시되며, Stripe hosted Checkout에서 대상 고객에게 현지 통화 금액이 표시될 수 있습니다. 결제 확정 직전 Stripe 화면에 표시되는 최종 금액과 통화가 이용자가 승인하는 결제 조건입니다. 은행이나 카드사가 별도의 환전·결제 수수료를 부과할 수 있으며 CampCareer는 이를 통제하지 않습니다.</p>
+          <p className="mt-3">CampCareer는 현재 호주 GST(Goods and Services Tax)에 등록되어 있지 않으므로 표시된 A$29 가격에는 호주 GST가 포함되어 있지 않습니다. 이 설명은 호주 GST에 관한 것이며 다른 국가에서 거래에 적용될 수 있는 세금 처리를 결정하는 문구는 아닙니다.</p>
           <p className="mt-3">카드 및 결제수단 정보는 Stripe hosted Checkout에서 입력합니다. CampCareer는 Stripe가 검증된 결제 처리 흐름을 통해 결제 완료를 확인한 뒤에만 주문을 결제 완료로 처리합니다. 확인 후 구매 시 입력한 이메일로 비공개 만료형 다운로드 링크를 신속히 전달하려고 시도합니다. 현재 다운로드 링크는 생성 시점부터 약 24시간 동안 유효합니다. 링크가 만료되거나 이메일이 도착하지 않거나 파일 접근에 문제가 있으면 구매 확인 후 적절한 전달 조치를 할 수 있도록 문의해 주세요.</p>
           <p className="mt-3">구매자는 구매한 에디션을 개인 참고 목적으로 사용할 수 있는 비독점적·양도 불가능한 이용권을 받습니다. 유료 가이드를 재판매·재게시·대량 배포하거나 공개적으로 제공해서는 안 됩니다. 판매 페이지에서 별도로 명시하지 않는 한 한 에디션의 구매에 향후 에디션이나 시장 데이터의 지속 업데이트가 포함되지는 않습니다.</p>
         </section>
@@ -221,7 +228,7 @@ function KoreanTermsPage() {
         <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">11. 책임 제한</h2><p>법이 허용하는 최대 범위에서 CampCareer는 추정치나 시의성이 있는 정보에 의존해 내린 결정 또는 서비스 이용으로 발생한 간접·결과적 손실에 책임지지 않습니다. 본 약관은 적용 법률이 배제·제한을 허용하지 않는 책임, 보증, 소비자 권리 또는 구제를 배제하거나 제한하지 않습니다.</p></section>
         <section>
           <h2 className="font-display mb-2 text-lg font-semibold text-slate-800">12. 사업자 정보·연락처·구매 지원</h2>
-          <p>CampCareer는 Yaehun Lee가 호주 사업자로 운영합니다. 약관, 가이드 전달, 구매 또는 소비자 구제 문의의 우선 연락처는 <a href="mailto:contact@campcareer.com" className="text-blue-600 hover:underline">contact@campcareer.com</a>입니다.</p>
+          <p>CampCareer는 Yaehun Lee(ABN 59 377 057 202)가 호주 개인사업자로 운영합니다. 약관, 가이드 전달, 구매 또는 소비자 구제 문의의 우선 연락처는 <a href="mailto:contact@campcareer.com" className="text-blue-600 hover:underline">contact@campcareer.com</a>입니다.</p>
           <p className="mt-3">현재 우편 연락 주소: 17 Cruise Park Ave, Tyrrelstown, Dublin 15, D15 EY8X, Ireland. 전화: <a href="tel:+353892678444" className="text-blue-600 hover:underline">+353 89 267 8444</a>. 이 주소와 전화번호는 운영자가 아일랜드에 일시 체류하는 동안 고객 연락을 위해 제공되며 CampCareer의 호주 사업자 등록을 변경하는 정보가 아닙니다.</p>
         </section>
       </div>
