@@ -21,7 +21,7 @@ export default async function PrivacyPage() {
         <section>
           <h2 className="font-display text-lg font-semibold text-slate-800 mb-2">1. Who we are</h2>
           <p>
-            CampCareer (&quot;we&quot;, &quot;us&quot;) is operated by Yaehun Lee as an Australian business and
+            CampCareer (&quot;we&quot;, &quot;us&quot;) is operated by Yaehun Lee (ABN 59 377 057 202) as an Australian sole trader and
             provides study, career, work-pathway, and related decision-support products at campcareer.com.
             Yaehun Lee is responsible for the personal data described in this policy and, where EU or UK
             data-protection law applies, acts as the controller. This policy explains what personal data we
@@ -268,7 +268,7 @@ function KoreanPrivacyPage() {
       <div className="space-y-8 text-sm leading-relaxed text-slate-600">
         <section>
           <h2 className="font-display mb-2 text-lg font-semibold text-slate-800">1. 운영 주체와 문의</h2>
-          <p>CampCareer는 Yaehun Lee가 호주 사업자로 운영하는 유학·커리어·취업 경로 의사결정 서비스입니다. Yaehun Lee는 이 방침에서 설명하는 개인정보에 대한 책임을 지며, EU 또는 영국 개인정보 보호법이 적용되는 경우 개인정보 처리의 컨트롤러 역할을 합니다. 이 방침은 어떤 정보를 왜 수집하고, 얼마나 보관하며, 어떤 서비스 제공업체를 사용하고, 이용자에게 어떤 선택권이 있는지 설명합니다. 개인정보 관련 문의나 권리 요청의 우선 연락처는 <a href="mailto:contact@campcareer.com" className="text-blue-600 hover:underline">contact@campcareer.com</a>입니다.</p>
+          <p>CampCareer는 Yaehun Lee(ABN 59 377 057 202)가 호주 개인사업자(sole trader)로 운영하는 유학·커리어·취업 경로 의사결정 서비스입니다. Yaehun Lee는 이 방침에서 설명하는 개인정보에 대한 책임을 지며, EU 또는 영국 개인정보 보호법이 적용되는 경우 개인정보 처리의 컨트롤러 역할을 합니다. 이 방침은 어떤 정보를 왜 수집하고, 얼마나 보관하며, 어떤 서비스 제공업체를 사용하고, 이용자에게 어떤 선택권이 있는지 설명합니다. 개인정보 관련 문의나 권리 요청의 우선 연락처는 <a href="mailto:contact@campcareer.com" className="text-blue-600 hover:underline">contact@campcareer.com</a>입니다.</p>
           <p className="mt-3">현재 우편 연락 주소: 17 Cruise Park Ave, Tyrrelstown, Dublin 15, D15 EY8X, Ireland. 전화: <a href="tel:+353892678444" className="text-blue-600 hover:underline">+353 89 267 8444</a>. 이 연락처는 운영자가 아일랜드에 일시 체류하는 동안 사용하는 현재 연락 정보이며 CampCareer의 호주 사업자 등록을 변경하는 정보가 아닙니다.</p>
         </section>
         <section>
