@@ -2,9 +2,7 @@
   "name": "campcareer",
   "version": "0.1.0",
   "private": true,
-  "engines": {
-    "node": ">=22.22.2 <23"
-  },
+  "engines": { "node": ">=22.22.2 <23" },
   "scripts": {
     "dev": "next dev",
     "prebuild": "npx tsx generate-blog-manifest.ts",
@@ -38,6 +36,7 @@
     "import:au-regulators": "npx tsx --env-file=.env.local scripts/import-au-regulatory-requirements.ts",
     "import:au-teqsa": "npx tsx --env-file=.env.local scripts/import-au-teqsa-provider-checks.ts",
     "import:au-program-page-facts": "npx tsx --env-file=.env.local scripts/import-au-program-page-facts.ts",
+    "import:au-campus-pilot": "npx tsx --env-file=.env.local scripts/import-au-campus-pilot.ts",
     "check:new-countries": "npx tsx scripts/check-new-country-readiness.ts",
     "check:switzerland": "npx tsx scripts/check-switzerland-data.ts",
     "check:pilot": "npx tsx scripts/check-pilot-readiness.ts",
@@ -114,9 +113,5 @@
     "typescript": "^5",
     "xlsx": "^0.18.5"
   },
-  "overrides": {
-    "gray-matter": {
-      "js-yaml": "3.15.1"
-    }
-  }
+  "overrides": { "gray-matter": { "js-yaml": "3.15.1" } }
 }

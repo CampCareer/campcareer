@@ -1,8 +1,10 @@
 # CampCareer Career Page Core Flow
 
-Status: canonical Career Page structure after product cleanup Wave 2.
+Status: canonical Career detail-page structure under the Campus × Career product architecture.
 
-The Career Page is the primary product surface. It must read as one decision narrative rather than a stack of legacy tools or market dashboards.
+Top-level product navigation and mode ownership are defined by `docs/CAMPUS_CAREER_PRODUCT_CONSTITUTION.md`. Career is one of two first-class CampCareer decision modes alongside Campus.
+
+Within Career mode, the Career detail page remains the primary decision surface. It must read as one decision narrative rather than a stack of legacy tools or market dashboards.
 
 Canonical order:
 
@@ -60,7 +62,11 @@ They answer:
 
 `What education or training, if any, helps me enter this career?`
 
-They are not presented as a separate school-discovery product inside the Career Page. Prefer verified program, training and apprenticeship links. If direct links are not ready, say so rather than inventing recommendations.
+They are not presented as a duplicate school-discovery product inside the Career detail page. Prefer verified programme, training and apprenticeship links.
+
+When a comparable Campus cohort is ready, the Career page should hand users into the relevant Campus results/value comparison rather than recreate Campus ranking logic locally.
+
+If direct links are not ready, say so rather than inventing recommendations.
 
 ## 5. Jobs
 
@@ -70,7 +76,9 @@ Prefer verified live opportunities, official employer entry points and official 
 
 ## 6. Secondary actions
 
-Save and Compare remain secondary and appear after the core value flow. Login is requested only when the user initiates an account-dependent action such as Save.
+Save and Compare remain secondary within the Career detail narrative, even though Compare is also a first-class shared product in top-level navigation.
+
+Login is requested only when the user initiates an account-dependent action such as Save.
 
 Onboarding and personalisation are not part of the default public Career Page flow. They may return later only as explicit pathway refinement after public value has already been delivered.
 
